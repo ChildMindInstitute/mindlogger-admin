@@ -14,7 +14,7 @@ import {
 import { SummaryRowProps } from './SummaryRow.types';
 import { getMatchOptions, getItemsOptions } from './SummaryRow.utils';
 
-export const SummaryRow = ({ name, error }: SummaryRowProps) => {
+export const SummaryRow = ({ name, error, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue, trigger } = useFormContext();
 
@@ -33,13 +33,14 @@ export const SummaryRow = ({ name, error }: SummaryRowProps) => {
 
   return (
     <>
-      <StyledSummaryRow>
+      <StyledSummaryRow data-testid={dataTestid}>
         <StyledTitleMedium>{t('if')}</StyledTitleMedium>
         <StyledSummarySelectController
           control={control}
           name={`${name}.match`}
           options={getMatchOptions()}
           placeholder={t('select')}
+          data-testid={`${dataTestid}-match`}
         />
         <StyledTitleMedium>{t('summaryRowDescription')}</StyledTitleMedium>
         <StyledSummarySelectController
@@ -58,6 +59,7 @@ export const SummaryRow = ({ name, error }: SummaryRowProps) => {
             },
           }}
           customChange={handleChangeItemKey}
+          data-testid={`${dataTestid}-item`}
         />
       </StyledSummaryRow>
       {error && (

@@ -16,4 +16,5 @@ export type SubscaleContentProps = {
   subscaleId: string;
   name: string;
   notUsedElements: ItemElement[];
+  'data-testid'?: string;
 };

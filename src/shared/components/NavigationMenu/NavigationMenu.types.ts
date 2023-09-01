@@ -8,6 +8,7 @@ export type NavigationItem = {
   param: string;
   tooltip?: string;
   disabled?: boolean;
+  'data-testid'?: string;
 };
 
 export type Item = {

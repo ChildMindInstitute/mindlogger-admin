@@ -8,9 +8,13 @@ export type ImportedFile = {
   data: Record<string, string | number>[];
 };
 
+export const enum FileError {
+  SchemaValidation = 'schema-validation',
+}
+
 export type FileUploaderProps = {
   uploadLabel: string | JSX.Element;
-  onFileReady: (file: ImportedFile | null) => void;
+  onFileReady: (file: ImportedFile | null) => void | FileError;
   invalidFileFormatError: JSX.Element;
   onDownloadTemplate?: () => void;
   onDownloadSecond?: () => void;

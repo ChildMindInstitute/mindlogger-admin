@@ -29,6 +29,7 @@ export const ConditionRow = ({
   type = ConditionRowType.Item,
   scoreId,
   autoTrigger,
+  'data-testid': dataTestid,
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
   const {
@@ -120,6 +121,7 @@ export const ConditionRow = ({
         onStateChange={handleChangeConditionType}
         onRemove={onRemove}
         type={type}
+        data-testid={dataTestid}
       />
       {errorMessage && (
         <StyledErrorText sx={{ mt: theme.spacing(0.6) }}>{errorMessage}</StyledErrorText>

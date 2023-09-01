@@ -21,4 +21,5 @@ export type ToggleItemProps = {
   isOpenDisabled?: boolean;
   tooltip?: string;
   error?: string | null;
+  'data-testid'?: string;
 };

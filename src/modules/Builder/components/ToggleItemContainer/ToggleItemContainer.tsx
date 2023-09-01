@@ -33,6 +33,7 @@ export const ToggleItemContainer = ({
   isOpenDisabled,
   tooltip,
   error,
+  'data-testid': dataTestid,
 }: ToggleItemProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(isOpenByDefault ?? true);
@@ -41,7 +42,7 @@ export const ToggleItemContainer = ({
   const titleErrorVisible = !open && !!error;
 
   return (
-    <StyledItemOption uiType={uiType}>
+    <StyledItemOption uiType={uiType} data-testid={dataTestid}>
       <StylesTitleWrapper open={open} uiType={uiType} isError={titleErrorVisible}>
         <StyledFlexTopCenter
           sx={{ flexGrow: 1, overflow: titleErrorVisible ? 'visible' : 'hidden' }}
@@ -51,6 +52,7 @@ export const ToggleItemContainer = ({
               onClick={handleToggle}
               sx={{ p: theme.spacing(0.8) }}
               disabled={isOpenDisabled}
+              data-testid={`${dataTestid}-collapse`}
             >
               <Svg id={open ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>

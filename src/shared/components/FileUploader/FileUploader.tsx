@@ -73,8 +73,8 @@ export const FileUploader = ({
       .then((data) => {
         setError(null);
         const importedFile = { name: file.name, data };
-        setFile(importedFile);
-        onFileReady(importedFile);
+        const hasError = onFileReady(importedFile);
+        !hasError && setFile(importedFile);
       })
       .catch(() => setError(parsingError || invalidFileFormatError));
   };

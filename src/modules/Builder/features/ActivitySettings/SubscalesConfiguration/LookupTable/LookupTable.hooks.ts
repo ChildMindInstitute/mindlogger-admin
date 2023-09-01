@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { DataTableItem, ImportedFile } from 'shared/components';
+import { DataTableItem, FileError, ImportedFile } from 'shared/components';
 import { exportTemplate } from 'shared/utils';
 
 import { ModalType, Steps, LookupTableSetupHookProps } from './LookupTable.types';
@@ -21,13 +21,13 @@ export const useSubscaleLookupTableSetup = ({
   const [error, setError] = useState<JSX.Element | null>(null);
 
   const onFileReady = (file: ImportedFile | null) => {
-    if (!file) {
-      setData([]);
+    if (!file) return setData([]);
 
-      return;
+    if (!schema.isValidSync(file.data, { stripUnknown: false })) {
+      setError(errors.fileCantBeParsed);
+
+      return FileError.SchemaValidation;
     }
-    if (!schema.isValidSync(file.data, { stripUnknown: false }))
-      return setError(errors.fileCantBeParsed);
 
     const mappedData = file.data.map(processImportedData);
     setError(null);

@@ -24,6 +24,7 @@ export const DeleteFlowModal = ({
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
+      data-testid="builder-activity-flows-remove-popup"
     >
       <StyledModalWrapper>
         <Trans i18nKey="deleteActivityFlowDescription">

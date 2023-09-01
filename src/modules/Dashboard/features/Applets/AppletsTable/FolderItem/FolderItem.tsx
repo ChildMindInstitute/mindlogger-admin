@@ -9,7 +9,7 @@ import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledCompo
 import { variables } from 'shared/styles/variables';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
 import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'api';
-import { useAppletsDnd } from 'modules/Dashboard/features/Applets/Table/Table.hooks';
+import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
 import { FolderItemProps } from './FolderItem.types';
@@ -80,10 +80,10 @@ export const FolderItem = ({ item }: FolderItemProps) => {
 
     const name = folder.displayName?.trim() || item.displayName;
 
-    if (!folder.isNew) {
-      await updateFolder({ ownerId, name, folderId: folder.id });
-    } else {
+    if (folder.isNew) {
       await saveFolder({ ownerId, name: folder.displayName });
+    } else {
+      await updateFolder({ ownerId, name, folderId: folder.id });
     }
     await reloadData();
   };
@@ -104,7 +104,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       onMouseEnter={() => setHasVisibleActions(true)}
       onMouseLeave={() => setHasVisibleActions(false)}
     >
-      <TableCell width="30%" onClick={() => (!folder?.isRenaming ? onFolderClick() : null)}>
+      <TableCell width="30%" onClick={() => (folder?.isRenaming ? null : onFolderClick())}>
         <StyledFlexTopCenter>
           <StyledFolderIcon>
             <Svg id={isFolderExpanded ? 'folder-opened' : 'folder'} />

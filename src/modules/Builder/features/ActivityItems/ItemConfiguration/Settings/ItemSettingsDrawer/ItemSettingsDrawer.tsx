@@ -38,6 +38,7 @@ export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDraw
           <StyledClearedButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
             onClick={onClose}
+            data-testid="builder-activity-items-item-settings-close"
           >
             <Svg id="cross" />
           </StyledClearedButton>

@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { format } from 'date-fns';
 
 import { DEFAULT_ROWS_PER_PAGE, Search } from 'shared/components';
-import { Table } from 'modules/Dashboard/components';
+import { DashboardTable } from 'modules/Dashboard/components';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Order } from 'shared/types';
 import { DateFormats } from 'shared/consts';
@@ -78,7 +78,7 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
     <Box sx={{ mt: theme.spacing(2.4) }}>
       <Search placeholder={t('search')} onSearch={handleSearch} />
       <StyledTableWrapper>
-        <Table
+        <DashboardTable
           page={page}
           order={order}
           orderBy={orderBy}

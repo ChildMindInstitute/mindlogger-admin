@@ -63,7 +63,11 @@ import { useCheckReportServer, useDefaultValues } from './ReportConfigSetting.ho
 import { usePrompt } from '../AppletSettings.hooks';
 import { REPORT_SERVER_INSTRUCTIONS_LINK } from './ReportConfigSetting.const';
 
-export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConfigSettingProps) => {
+export const ReportConfigSetting = ({
+  isDashboard,
+  onSubmitSuccess,
+  'data-testid': dataTestid,
+}: ReportConfigSettingProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -391,6 +395,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                 }),
               )
             }
+            data-testid={`${dataTestid}-configure-report`}
           >
             {t('configureServerForApplet')}
           </Button>
@@ -407,6 +412,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                     <Svg id={isSettingsOpen ? 'navigate-up' : 'navigate-down'} />
                   </StyledSvg>
                 }
+                data-testid={`${dataTestid}-server-config-collapse`}
               >
                 <StyledTitleMedium color={variables.palette.on_surface}>
                   {t('serverConfiguration')}
@@ -440,6 +446,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                   name="reportServerIp"
                   label={t('serverUrl')}
                   sx={{ marginTop: theme.spacing(2.4) }}
+                  data-testid={`${dataTestid}-server-url`}
                 />
                 <InputController
                   control={control}
@@ -448,6 +455,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                   sx={{ marginTop: theme.spacing(2.4) }}
                   multiline
                   rows={4}
+                  data-testid={`${dataTestid}-encrypt-key`}
                 />
               </Box>
             )}
@@ -468,6 +476,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
               uiType={UiType.Secondary}
               inputLabel={t('addRecipients')}
               disabled={isActivity || isActivityFlow}
+              data-testid={`${dataTestid}-recipients`}
             />
             <StyledTitleMedium
               color={variables.palette.on_surface}
@@ -481,6 +490,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
               name="reportIncludeUserId"
               disabled={isActivity || isActivityFlow}
               label={<StyledBodyLarge>{t('respondentId')}</StyledBodyLarge>}
+              data-testid={`${dataTestid}-report-includes-respondent`}
             />
             {(isActivity || isActivityFlow) && (
               <CheckboxController
@@ -489,6 +499,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                 name="itemValue"
                 label={<StyledBodyLarge>{t('itemValue')}</StyledBodyLarge>}
                 onCustomChange={handleChangeItemValue}
+                data-testid={`${dataTestid}-item-value`}
               />
             )}
             {itemValue && (
@@ -501,6 +512,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                     options={getActivitiesOptions(activityFlow, appletData)}
                     customChange={handleActivityChange}
                     sx={{ mr: theme.spacing(2.4) }}
+                    data-testid={`${dataTestid}-report-includes-activity-name`}
                   />
                 )}
                 <SelectController
@@ -510,6 +522,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
                   disabled={isActivityFlow && reportIncludedActivity === ''}
                   options={getActivityItemsOptions(activity ?? selectedActivity)}
                   sx={{ width: isActivity ? '50%' : '100%' }}
+                  data-testid={`${dataTestid}-report-includes-item-name`}
                 />
               </StyledActivities>
             )}
@@ -523,6 +536,7 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
               control={control}
               name="subject"
               sx={{ pointerEvents: 'none', backgroundColor: variables.palette.surface1 }}
+              data-testid={`${dataTestid}-subject`}
             />
             <StyledTitleMedium
               color={variables.palette.on_surface}
@@ -537,12 +551,14 @@ export const ReportConfigSetting = ({ isDashboard, onSubmitSuccess }: ReportConf
               control={control}
               name="reportEmailBody"
               disabled={isActivity || isActivityFlow}
+              data-testid={`${dataTestid}-report-email-body`}
             />
           </StyledFlexColumn>
           <StyledAppletSettingsButton
             variant="outlined"
             type="submit"
             startIcon={<Svg width="18" height="18" id="save" />}
+            data-testid={`${dataTestid}-save`}
           >
             {t('save')}
           </StyledAppletSettingsButton>

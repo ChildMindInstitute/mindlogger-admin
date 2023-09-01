@@ -20,6 +20,7 @@ export const SubscaleHeaderContent = ({
   title,
   open,
   onUpdate,
+  'data-testid': dataTestid,
 }: SubscaleHeaderContentProps) => {
   const { watch } = useFormContext();
   const subscaleName = watch(`${name}.name`);
@@ -37,12 +38,14 @@ export const SubscaleHeaderContent = ({
             onClick={() => {
               setIsSubscaleLookupTableOpened(true);
             }}
+            data-testid={`${dataTestid}-lookup-table`}
           >
             <StyledSvg isFilled={!!subscaleTableData?.length} id={iconId} width="20" height="20" />
           </StyledClearedButton>
           <StyledClearedButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
             onClick={onRemove}
+            data-testid={`${dataTestid}-remove`}
           >
             <Svg id="trash" width="20" height="20" />
           </StyledClearedButton>
@@ -61,6 +64,7 @@ export const SubscaleHeaderContent = ({
           onClose={() => {
             setIsSubscaleLookupTableOpened(false);
           }}
+          data-testid={`${dataTestid}-lookup-table-popup`}
         />
       )}
     </>

@@ -136,37 +136,48 @@ export const ActivityFlow = () => {
 
                   return (
                     <Draggable key={activityFlowKey} draggableId={activityFlowKey} index={index}>
-                      {(itemProvided, snapshot) => (
-                        <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef}>
-                          <Item
-                            dragHandleProps={itemProvided.dragHandleProps}
-                            isDragging={snapshot.isDragging}
-                            onItemClick={() => handleEditActivityFlow(activityFlowKey)}
-                            getActions={() =>
-                              getFlowsItemActions({
-                                activityFlowIndex: index,
-                                activityFlowId: activityFlowKey,
-                                activityFlowHidden: getActivityFlowVisible(flow.isHidden),
-                                removeActivityFlow: handleSetFlowToDeleteData(index, flow.name),
-                                editActivityFlow: handleEditActivityFlow,
-                                duplicateActivityFlow: handleDuplicateActivityFlow,
-                                toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
-                              })
-                            }
-                            isInactive={flow.isHidden}
-                            hasStaticActions={flow.isHidden}
-                            uiType={ItemUiType.Flow}
-                            hasError={errors[`activityFlows.${index}`]}
-                            {...flow}
-                          />
-                          <InsertItem
-                            isVisible={
-                              index >= 0 && index < activityFlows.length - 1 && !isDragging
-                            }
-                            onInsert={() => handleAddActivityFlow(index + 1)}
-                          />
-                        </Box>
-                      )}
+                      {(itemProvided, snapshot) => {
+                        const dataTestid = `builder-activity-flows-flow-${index}`;
+
+                        return (
+                          <Box
+                            {...itemProvided.draggableProps}
+                            ref={itemProvided.innerRef}
+                            data-testid={dataTestid}
+                          >
+                            <Item
+                              dragHandleProps={itemProvided.dragHandleProps}
+                              isDragging={snapshot.isDragging}
+                              onItemClick={() => handleEditActivityFlow(activityFlowKey)}
+                              getActions={() =>
+                                getFlowsItemActions({
+                                  activityFlowIndex: index,
+                                  activityFlowId: activityFlowKey,
+                                  activityFlowHidden: getActivityFlowVisible(flow.isHidden),
+                                  removeActivityFlow: handleSetFlowToDeleteData(index, flow.name),
+                                  editActivityFlow: handleEditActivityFlow,
+                                  duplicateActivityFlow: handleDuplicateActivityFlow,
+                                  toggleActivityFlowVisibility: handleToggleActivityFlowVisibility,
+                                  'data-testid': dataTestid,
+                                })
+                              }
+                              isInactive={flow.isHidden}
+                              hasStaticActions={flow.isHidden}
+                              uiType={ItemUiType.Flow}
+                              hasError={errors[`activityFlows.${index}`]}
+                              {...flow}
+                              data-testid={dataTestid}
+                            />
+                            <InsertItem
+                              isVisible={
+                                index >= 0 && index < activityFlows.length - 1 && !isDragging
+                              }
+                              onInsert={() => handleAddActivityFlow(index + 1)}
+                              data-testid={`${dataTestid}-insert`}
+                            />
+                          </Box>
+                        );
+                      }}
                     </Draggable>
                   );
                 })}

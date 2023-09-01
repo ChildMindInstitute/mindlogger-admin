@@ -10,11 +10,11 @@ import {
   StyledTableContainer,
 } from 'shared/components';
 
-import { TableProps } from './Table.types';
-import { StyledTableCell } from './Table.styles';
+import { DashboardTableProps } from './DashboardTable.types';
+import { StyledTableCell } from './DashboardTable.styles';
 
 // TODO: make rows rendering more strict
-export const Table = ({
+export const DashboardTable = ({
   columns,
   rows,
   maxHeight = '100%',
@@ -29,7 +29,7 @@ export const Table = ({
   count,
   rowsPerPage = DEFAULT_ROWS_PER_PAGE,
   'data-testid': dataTestid,
-}: TableProps) => {
+}: DashboardTableProps) => {
   const tableHeader = (
     <StyledTableCellContent uiType={uiType}>
       <TablePagination

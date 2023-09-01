@@ -6,8 +6,8 @@ import { Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledTitleBoldSmall, StyledIconButton, variables } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
-
 import { ItemFormValues } from 'modules/Builder/types';
+
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { StyledAlert, StyledRow, StyledDescription, StyledSelectController } from './Alert.styles';
 import { AlertProps } from './Alert.types';
@@ -22,10 +22,10 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   const rowName = `${alertName}.rowId`;
 
   const alert = watch(alertName);
+
   const continuousSliderMax = watch(`${alertName}.maxValue`);
 
   const { responseType, config: settings, responseValues } = watch(name);
-
   const dataTestid = `builder-activity-items-item-configuration-alerts-${index}`;
 
   const renderAlertContent = () => {

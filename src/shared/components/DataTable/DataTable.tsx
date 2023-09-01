@@ -25,6 +25,7 @@ export const DataTable = ({
   onSelectAll,
   hasError,
   isValueName = false,
+  'data-testid': dataTestid,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
 
@@ -55,7 +56,7 @@ export const DataTable = ({
   };
 
   return (
-    <StyledTableContainer hasError={hasError}>
+    <StyledTableContainer hasError={hasError} data-testid={dataTestid}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>

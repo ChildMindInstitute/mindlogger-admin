@@ -19,6 +19,7 @@ export const getActivityTabs = (
     activeIcon: <Svg id="more-info-filled" />,
     path: generatePath(page.builderAppletActivityAbout, params),
     hasError: hasAboutActivityErrors,
+    'data-testid': 'builder-tab-about-activity',
   },
   {
     id: 'simple-tabpanel-items',
@@ -27,6 +28,7 @@ export const getActivityTabs = (
     activeIcon: <Svg id="item-filled" />,
     path: generatePath(page.builderAppletActivityItems, params),
     hasError: hasActivityItemsErrors,
+    'data-testid': 'builder-tab-activity-items',
   },
   {
     id: 'simple-tabpanel-flow',
@@ -35,6 +37,7 @@ export const getActivityTabs = (
     activeIcon: <Svg id="flow-filled" />,
     path: generatePath(page.builderAppletActivityItemFlow, params),
     hasError: hasActivityItemsFlowErrors,
+    'data-testid': 'builder-tab-activity-item-flow',
   },
   {
     id: 'simple-tabpanel-settings',
@@ -43,5 +46,6 @@ export const getActivityTabs = (
     activeIcon: <Svg id="settings-filled" />,
     path: generatePath(page.builderAppletActivitySettings, params),
     hasError: hasActivitySubscalesErrors,
+    'data-testid': 'builder-tab-activity-settings',
   },
 ];

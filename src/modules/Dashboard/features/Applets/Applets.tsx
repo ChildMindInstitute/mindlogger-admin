@@ -18,7 +18,7 @@ import { useAppDispatch } from 'redux/store';
 import { getIsAddAppletBtnVisible } from 'shared/utils';
 import { StyledBody } from 'shared/styles';
 
-import { Table } from './Table';
+import { AppletsTable } from './AppletsTable';
 import { getHeadCells, getMenuItems } from './Applets.const';
 import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
@@ -165,7 +165,7 @@ export const Applets = () => {
             data-testid="dashboard-applets-search"
           />
         </AppletsTableHeader>
-        <Table
+        <AppletsTable
           columns={getHeadCells()}
           rows={rows}
           headerContent={headerContent}

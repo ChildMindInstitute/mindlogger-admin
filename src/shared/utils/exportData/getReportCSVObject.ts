@@ -11,6 +11,7 @@ import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
 import { parseOptions } from './parseOptions';
 import { getRawScores } from './getRowScores';
+import { convertDateStampToMs } from './convertDateStampToMs';
 
 export const getReportCSVObject = <T>({
   item,
@@ -34,17 +35,16 @@ export const getReportCSVObject = <T>({
     version,
     reviewedAnswerId,
   } = item;
-
   const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
     SliderItemResponseValues;
 
   return {
     id: item.id,
     activity_scheduled_time: scheduledDatetime
-      ? `${scheduledDatetime}`
+      ? convertDateStampToMs(scheduledDatetime)
       : ActivityStatus.NotScheduled,
-    activity_start_time: `${startDatetime}`,
-    activity_end_time: `${endDatetime}`,
+    activity_start_time: convertDateStampToMs(startDatetime),
+    activity_end_time: convertDateStampToMs(endDatetime),
     flag: getFlag(item),
     secret_user_id: respondentSecretId,
     userId: respondentId,

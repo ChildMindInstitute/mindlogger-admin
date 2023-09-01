@@ -13,23 +13,28 @@ export const getFlowsItemActions = ({
   editActivityFlow,
   duplicateActivityFlow,
   toggleActivityFlowVisibility,
+  'data-testid': dataTestid,
 }: GetActivityFlowActions) => [
   {
     icon: <Svg id="edit" />,
     action: () => editActivityFlow(activityFlowId),
+    'data-testid': `${dataTestid}-edit`,
   },
   {
     icon: <Svg id="duplicate" />,
     action: () => duplicateActivityFlow(activityFlowIndex),
+    'data-testid': `${dataTestid}-duplicate`,
   },
   {
     icon: <Svg id={activityFlowHidden ? 'visibility-off' : 'visibility-on'} />,
     action: () => toggleActivityFlowVisibility(activityFlowIndex),
     isStatic: activityFlowHidden,
+    'data-testid': `${dataTestid}-hide`,
   },
   {
     icon: <Svg id="trash" />,
     action: removeActivityFlow,
+    'data-testid': `${dataTestid}-remove`,
   },
 ];
 

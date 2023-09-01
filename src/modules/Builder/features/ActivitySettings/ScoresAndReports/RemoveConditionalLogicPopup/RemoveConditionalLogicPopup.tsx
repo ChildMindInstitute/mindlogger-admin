@@ -10,6 +10,7 @@ export const RemoveConditionalLogicPopup = ({
   onClose,
   onRemove,
   name,
+  'data-testid': dataTestid,
 }: RemoveConditionalLogicPopupProps) => {
   const { t } = useTranslation();
   const [isFirstScreen, setIsFirstScreen] = useState(true);
@@ -32,6 +33,7 @@ export const RemoveConditionalLogicPopup = ({
       submitBtnColor={isFirstScreen ? 'error' : 'primary'}
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge>

@@ -13,7 +13,11 @@ import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { StyledEditor } from './SectionScoreCommonFields.styles';
 import { ItemTypesToPrint, columns } from './SectionScoreCommonFields.const';
 
-export const SectionScoreCommonFields = ({ name, sectionId }: CommonFieldsProps) => {
+export const SectionScoreCommonFields = ({
+  name,
+  sectionId,
+  'data-testid': dataTestid,
+}: CommonFieldsProps) => {
   const { t } = useTranslation();
 
   const { control, getFieldState, watch, register, unregister, setValue } = useFormContext();
@@ -79,6 +83,7 @@ export const SectionScoreCommonFields = ({ name, sectionId }: CommonFieldsProps)
           label={t('showMessage')}
           tooltipText={t('showMessageTooltip')}
           {...commonProps}
+          data-testid={`${dataTestid}-show-message`}
         />
       </Box>
       {showMessage && (
@@ -87,6 +92,7 @@ export const SectionScoreCommonFields = ({ name, sectionId }: CommonFieldsProps)
           name={messageName}
           control={control}
           editorId={`editor-${sectionId}`}
+          data-testid={`${dataTestid}-show-message-text`}
         />
       )}
       <Switch
@@ -94,6 +100,7 @@ export const SectionScoreCommonFields = ({ name, sectionId }: CommonFieldsProps)
         label={t('printItems')}
         tooltipText={t('printItemsTooltip')}
         {...commonProps}
+        data-testid={`${dataTestid}-print-items`}
       />
       {printItems && (
         <TransferListController
@@ -103,6 +110,7 @@ export const SectionScoreCommonFields = ({ name, sectionId }: CommonFieldsProps)
           hasSearch={false}
           hasSelectedSection={false}
           isValueName
+          data-testid={`${dataTestid}-print-items-list`}
         />
       )}
     </>

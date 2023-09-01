@@ -4,12 +4,16 @@ import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 import { DEFAULT_ROWS_PER_PAGE, EmptyState, TableHead } from 'shared/components';
 
 import { Applet, Folder } from 'api';
-import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './Table.styles';
-import { TableProps } from './Table.types';
+import {
+  StyledCellItem,
+  StyledTableCellContent,
+  StyledTableContainer,
+} from './AppletsTable.styles';
+import { AppletsTableProps } from './AppletsTable.types';
 import { FolderItem } from './FolderItem';
 import { AppletItem } from './AppletItem';
 
-export const Table = ({
+export const AppletsTable = ({
   columns,
   rows,
   order,
@@ -23,7 +27,7 @@ export const Table = ({
   handleChangePage,
   handleReload,
   'data-testid': dataTestid,
-}: TableProps) => {
+}: AppletsTableProps) => {
   const perPage =
     rowsPerPage && rowsPerPage > DEFAULT_ROWS_PER_PAGE ? rowsPerPage : DEFAULT_ROWS_PER_PAGE;
 
