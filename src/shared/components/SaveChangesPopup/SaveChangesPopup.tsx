@@ -18,11 +18,12 @@ export const SaveChangesPopup = ({
   onDontSave,
   onCancel,
   onSave,
+  'data-testid': dataTestid,
 }: SaveChangesPopupProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledDialog onClose={onCancel} open={popupVisible}>
+    <StyledDialog onClose={onCancel} open={popupVisible} data-testid={dataTestid}>
       <StyledDialogTitle>
         {t('saveChanges')}
         <StyledCloseButton onClick={onCancel}>

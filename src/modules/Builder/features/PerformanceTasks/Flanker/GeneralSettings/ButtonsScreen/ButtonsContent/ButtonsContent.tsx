@@ -42,6 +42,7 @@ export const ButtonsContent = () => {
   const buttonNameFirstRef = useRef<string | null>(null);
   const buttonNameSecond = watch(`${buttonSecondField}.text`);
   const buttonNameSecondRef = useRef<string | null>(null);
+  const dataTestid = 'builder-activity-flanker-buttons';
 
   const handleActiveBtnChange = (activeValue: string | number) => {
     setActiveButton(activeValue as ButtonsQuantity);
@@ -84,6 +85,7 @@ export const ButtonsContent = () => {
           toggleButtons={buttonsQuantity}
           activeButton={activeButton}
           setActiveButton={handleActiveBtnChange}
+          data-testid={`${dataTestid}-available-buttons`}
         />
       </Box>
       <StyledFlexSpaceBetween>
@@ -91,6 +93,7 @@ export const ButtonsContent = () => {
           const currentBtnField = `${buttonsField}.${index}`;
           const currentBtnFieldImg = `${currentBtnField}.image`;
           const currentBtnFieldName = `${currentBtnField}.text`;
+          const currentDataTestid = `${dataTestid}-${index}`;
 
           return (
             <StyledRowWrapper key={index}>
@@ -111,6 +114,7 @@ export const ButtonsContent = () => {
                     )
                   }
                   disabled={!!button.text}
+                  data-testid={`${currentDataTestid}-image`}
                 />
               </StyledFlexTopCenter>
               <InputController
@@ -122,6 +126,7 @@ export const ButtonsContent = () => {
                 maxLength={SMALL_INPUT_LENGTH}
                 restrictExceededValueLength
                 disabled={!!button.image}
+                data-testid={`${currentDataTestid}-text`}
               />
             </StyledRowWrapper>
           );

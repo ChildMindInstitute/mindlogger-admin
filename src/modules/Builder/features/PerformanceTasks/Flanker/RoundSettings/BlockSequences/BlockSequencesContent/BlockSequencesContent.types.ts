@@ -8,4 +8,5 @@ export type SetUploadedTable = Dispatch<SetStateAction<UploadedTable>>;
 
 export type BlockSequencesContentProps = IsPracticeRoundType & {
   hasBlockSequencesErrors: boolean;
+  'data-testid'?: string;
 };

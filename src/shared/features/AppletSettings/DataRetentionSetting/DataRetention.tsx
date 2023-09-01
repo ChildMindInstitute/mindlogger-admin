@@ -62,6 +62,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   );
 
   const watchRetentionType = watch('retentionType');
+  const dataTestid = 'applet-settings-data-retention';
 
   const onSubmit = async ({ retentionPeriod, retentionType }: DataRetentionFormValues) => {
     if (id) {
@@ -112,6 +113,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
                 control={control}
                 type="number"
                 InputProps={{ inputProps: { min: 1 } }}
+                data-testid={`${dataTestid}-retention-period`}
               />
             </StyledInputWrapper>
           )}
@@ -120,9 +122,10 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
             control={control}
             fullWidth
             options={retentionTypes}
+            data-testid={`${dataTestid}-retention-type`}
           />
         </StyledContainer>
-        <StyledButton variant="outlined" type="submit">
+        <StyledButton variant="outlined" type="submit" data-testid={`${dataTestid}-save`}>
           {t('save')}
         </StyledButton>
       </form>
@@ -131,10 +134,15 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
           popupVisible={errorPopupVisible}
           setPopupVisible={setErrorPopupVisible}
           retryCallback={handleSubmit(onSubmit)}
+          data-testid={`${dataTestid}-error-popup`}
         />
       )}
       {successPopupVisible && (
-        <SuccessPopup popupVisible={successPopupVisible} onClose={handleCloseSuccessPopup} />
+        <SuccessPopup
+          popupVisible={successPopupVisible}
+          onClose={handleCloseSuccessPopup}
+          data-testid={`${dataTestid}-success-popup`}
+        />
       )}
       {promptVisible && (
         <SaveChangesPopup
@@ -142,6 +150,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
           onDontSave={handleDontSave}
           onCancel={handleCancel}
           onSave={handleSaveChanges}
+          data-testid={`${dataTestid}-save-changes-popup`}
         />
       )}
     </>

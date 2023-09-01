@@ -4,4 +4,5 @@ export type ErrorPopupProps = {
   popupVisible: boolean;
   setPopupVisible: Dispatch<SetStateAction<boolean>>;
   retryCallback: () => void;
+  'data-testid'?: string;
 };
