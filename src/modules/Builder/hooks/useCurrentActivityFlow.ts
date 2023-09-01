@@ -20,5 +20,6 @@ export const useCurrentActivityFlow = () => {
 
   return {
     activityFlow: activityFlows[flowIndex],
+    fieldName: `activityFlows.${flowIndex}`,
   };
 };
