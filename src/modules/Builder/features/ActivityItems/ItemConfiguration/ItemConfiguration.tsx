@@ -14,7 +14,7 @@ import {
 } from 'shared/styles';
 import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { StyledContent, StyledItemConfiguration } from './ItemConfiguration.styles';
