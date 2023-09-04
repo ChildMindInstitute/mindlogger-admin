@@ -11,8 +11,7 @@ import {
 } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { getEntityKey } from 'shared/utils';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import { useFilterConditionalLogicByItem } from 'shared/hooks';
+import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
 

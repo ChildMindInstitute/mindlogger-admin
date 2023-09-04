@@ -12,10 +12,9 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
-import { useFilterConditionalLogicByItem } from 'shared/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { StyledContent, StyledItemConfiguration } from './ItemConfiguration.styles';
