@@ -12,6 +12,7 @@ import {
 import { getEntityKey } from 'shared/utils';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useFilterConditionalLogicByItem } from 'shared/hooks';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
 
@@ -29,12 +30,12 @@ export const DeleteItemModal = ({
     name: `${fieldName}.items`,
   });
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
-  const conditionalLogic = watch(`${fieldName}.conditionalLogic`);
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
+  const filterConditionalLogicByItem = useFilterConditionalLogicByItem(itemToDelete);
   const conditionalLogicForItemToDelete = getItemConditionDependencies(
     itemToDelete,
     activity.conditionalLogic,
@@ -62,18 +63,7 @@ export const DeleteItemModal = ({
   };
 
   const handleRemoveModalSubmit = () => {
-    if (conditionalLogicForItemToDelete?.length) {
-      const conditionalLogicKeysToRemove = conditionalLogicForItemToDelete.map(
-        (condition: ConditionalLogic) => getEntityKey(condition),
-      );
-      setValue(
-        `${fieldName}.conditionalLogic`,
-        conditionalLogic?.filter(
-          (conditionalLogic: ConditionalLogic) =>
-            !conditionalLogicKeysToRemove.includes(getEntityKey(conditionalLogic)),
-        ),
-      );
-    }
+    filterConditionalLogicByItem();
     if (subscales.length) {
       setValue(
         subscalesField,

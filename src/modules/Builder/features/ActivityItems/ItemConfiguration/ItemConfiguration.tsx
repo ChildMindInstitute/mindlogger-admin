@@ -14,9 +14,8 @@ import {
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { ConditionalLogic } from 'shared/state';
-import { getEntityKey } from 'shared/utils';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { useFilterConditionalLogicByItem } from 'shared/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { StyledContent, StyledItemConfiguration } from './ItemConfiguration.styles';
@@ -40,11 +39,11 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
 
-  const { control, watch, setValue } = methods;
+  const { control, watch } = methods;
   const isReviewable = watch(`${fieldName}.isReviewable`);
   const responseType = watch(`${name}.responseType`) as ItemResponseTypeNoPerfTasks;
   const currentItem = watch(name);
-  const conditionalLogic = watch(`${fieldName}.conditionalLogic`);
+  const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
   const conditionalLogicForItem = getItemConditionDependencies(
     currentItem,
     activity.conditionalLogic,
@@ -67,19 +66,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
 
   const handleModalSubmit = () => {
     selectChangeRef.current?.();
-
-    if (conditionalLogicForItem?.length) {
-      const conditionalLogicKeysToRemove = conditionalLogicForItem.map(
-        (condition: ConditionalLogic) => getEntityKey(condition),
-      );
-      setValue(
-        `${fieldName}.conditionalLogic`,
-        conditionalLogic?.filter(
-          (conditionalLogic: ConditionalLogic) =>
-            !conditionalLogicKeysToRemove.includes(getEntityKey(conditionalLogic)),
-        ),
-      );
-    }
+    filterConditionalLogicByItem();
   };
 
   const prepareSelectChangePopup = (handleOnChange: () => void) => {
