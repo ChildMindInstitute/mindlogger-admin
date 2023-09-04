@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -55,7 +55,7 @@ export const AppletsCatalog = () => {
   const isLoading = loadingStatus === 'loading' || loadingCartStatus === 'loading';
 
   const debouncedDispatch = debounce(
-    async (pageIndex, search) =>
+    (pageIndex, search) =>
       dispatch(
         library.thunk.getPublishedApplets({
           page: pageIndex,

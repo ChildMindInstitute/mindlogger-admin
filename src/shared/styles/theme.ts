@@ -28,7 +28,7 @@ export const theme = createTheme({
           color: variables.palette.on_surface,
           height: '100vh',
           overflowY: 'hidden',
-          '.marked': {
+          '.highlighted-text': {
             backgroundColor: variables.palette.yellow,
             borderRadius: variables.borderRadius.xs,
           },

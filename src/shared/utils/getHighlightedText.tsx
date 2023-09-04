@@ -7,7 +7,7 @@ export const getHighlightedText = (text: string, search: string) => {
 
   const highlightedTextHtml = text.replace(
     searchPattern,
-    (searchValue) => `<mark class="marked">${searchValue}</mark>`,
+    (searchValue) => `<mark class="highlighted-text">${searchValue}</mark>`,
   );
 
   return <Box component="span" dangerouslySetInnerHTML={{ __html: highlightedTextHtml }} />;
