@@ -113,6 +113,7 @@ export const EditEventPopup = ({
           width="67.1"
           disabledSubmit={!!editedEvent && !isFormChanged}
           onTransitionEntered={handleTransitionEntered}
+          data-testid="dashboard-calendar-edit-event-popup"
         >
           <>
             <StyledContainer>
@@ -122,6 +123,7 @@ export const EditEventPopup = ({
                 onClick={onRemoveEventClick}
                 startIcon={<Svg width="18" height="18" id="clear-calendar" />}
                 disabled={editedEvent.alwaysAvailable}
+                data-testid="dashboard-calendar-edit-event-popup-remove"
               >
                 {t('removeEvent')}
               </StyledButton>
@@ -135,6 +137,7 @@ export const EditEventPopup = ({
               editedEvent={editedEvent}
               defaultStartDate={defaultStartDate}
               onFormChange={handleFormChanged}
+              data-testid="dashboard-calendar-edit-event-popup-form"
             />
           </>
         </Modal>

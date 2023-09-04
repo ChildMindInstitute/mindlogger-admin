@@ -1,3 +1,5 @@
+import { ExpandedListTypes } from '../Legend.const';
+
 type Button = {
   icon: JSX.Element;
   action: () => void;
@@ -11,4 +13,5 @@ export type ExpandedListProps = {
   buttons: Button[];
   isHiddenInLegend?: boolean;
   allAvailableScheduled?: boolean;
+  'data-testid'?: string;
 };

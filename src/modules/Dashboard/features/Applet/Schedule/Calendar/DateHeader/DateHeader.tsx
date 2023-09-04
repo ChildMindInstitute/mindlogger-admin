@@ -10,12 +10,19 @@ export const DateHeader = ({ date, drilldownView, onDrillDown }: DateHeaderProps
     date.getDate() === 1 ? `${getMonthName(date, NameLength.Short)} ` : ''
   }${date.getDate()}`;
 
+  console.log('datatestseta', dateText);
+
   if (!drilldownView) {
     return <span>{dateText}</span>;
   }
 
   return (
-    <StyledClearedButton onClick={onDrillDown} className="rbc-button-link" role="cell">
+    <StyledClearedButton
+      onClick={onDrillDown}
+      className="rbc-button-link"
+      role="cell"
+      data-testid={`dashboard-calendar-cell-date-${date.getDate()}-${date.getMonth()}`}
+    >
       {dateText}
     </StyledClearedButton>
   );

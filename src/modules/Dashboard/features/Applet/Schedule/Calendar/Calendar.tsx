@@ -135,7 +135,11 @@ export const Calendar = () => {
 
   return (
     <>
-      <StyledCalendarWrapper hasMoreBtn={hasWrapperMoreBtn} className={activeView}>
+      <StyledCalendarWrapper
+        hasMoreBtn={hasWrapperMoreBtn}
+        className={activeView}
+        data-testid="dashboard-calendar"
+      >
         <ReactCalendar
           date={date}
           onNavigate={onNavigate}
@@ -157,7 +161,7 @@ export const Calendar = () => {
           formats={formats as Formats}
           dayLayoutAlgorithm="no-overlap"
         />
-        <StyledAddBtn onClick={handleAddClick}>
+        <StyledAddBtn onClick={handleAddClick} data-testid="dashboard-calendar-create-event">
           <Svg id="add" />
         </StyledAddBtn>
       </StyledCalendarWrapper>

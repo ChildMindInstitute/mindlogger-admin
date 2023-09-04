@@ -12,6 +12,7 @@ export const AddIndividualSchedulePopup = ({
   onSubmit,
   respondentName,
   error,
+  'data-testid': dataTestid,
 }: AddIndividualSchedulePopupProps) => {
   const { t } = useTranslation('app');
 
@@ -25,6 +26,7 @@ export const AddIndividualSchedulePopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ marginTop: theme.spacing(-1) }}>

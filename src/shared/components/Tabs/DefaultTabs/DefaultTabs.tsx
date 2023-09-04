@@ -23,7 +23,16 @@ export const DefaultTabs = ({
   const { content, header } = tabs.reduce(
     (
       tabs: RenderTabs,
-      { icon, activeIcon, labelKey, onClick, content, isMinHeightAuto, hasError },
+      {
+        icon,
+        activeIcon,
+        labelKey,
+        onClick,
+        content,
+        isMinHeightAuto,
+        hasError,
+        'data-testid': dataTestid,
+      },
       index,
     ) => {
       tabs.header.push(
@@ -44,6 +53,7 @@ export const DefaultTabs = ({
           }
           label={t(labelKey)}
           onClick={onClick}
+          data-testid={dataTestid}
         />,
       );
       tabs.content.push(

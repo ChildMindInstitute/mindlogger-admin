@@ -68,6 +68,7 @@ export const CreateEventPopup = ({
           sxProps={{
             opacity: removeAllScheduledPopupVisible || removeAlwaysAvailablePopupVisible ? 0 : 1,
           }}
+          data-testid="dashboard-calendar-create-event-popup"
         >
           <EventForm
             ref={eventFormRef}
@@ -76,6 +77,7 @@ export const CreateEventPopup = ({
             setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
             setActivityName={setCurrentActivityName}
             defaultStartDate={defaultStartDate}
+            data-testid="dashboard-calendar-create-event-popup-form"
           />
         </Modal>
       )}

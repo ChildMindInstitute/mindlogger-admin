@@ -5,4 +5,5 @@ export type CreateAppletPasswordForm = {
 
 export type CreateAppletPasswordProps = {
   submitCallback: () => void;
+  'data-testid'?: string;
 };

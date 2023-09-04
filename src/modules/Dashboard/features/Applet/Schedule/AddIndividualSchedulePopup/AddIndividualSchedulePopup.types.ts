@@ -4,4 +4,5 @@ export type AddIndividualSchedulePopupProps = {
   onSubmit: () => void;
   respondentName: string;
   error: string | null;
+  'data-testid'?: string;
 };

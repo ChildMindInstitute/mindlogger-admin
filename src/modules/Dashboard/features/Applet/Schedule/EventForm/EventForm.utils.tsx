@@ -33,6 +33,7 @@ import {
   EventFormValues,
   NotificationTimeTestContext,
   SecondsManipulation,
+  GetEventFromTabs,
 } from './EventForm.types';
 
 const { t } = i18n;
@@ -42,21 +43,30 @@ export const getEventFormTabs = ({
   hasTimerErrors,
   hasNotificationsErrors,
   hasAlwaysAvailableOption,
-}: Record<string, boolean>) => [
+  'data-testid': dataTestid,
+}: GetEventFromTabs) => [
   {
     labelKey: 'availability',
-    content: <AvailabilityTab hasAlwaysAvailableOption={hasAlwaysAvailableOption} />,
+    content: (
+      <AvailabilityTab
+        hasAlwaysAvailableOption={hasAlwaysAvailableOption}
+        data-testid={`${dataTestid}-availability`}
+      />
+    ),
     hasError: hasAvailabilityErrors,
+    'data-testid': `${dataTestid}-availability-tab`,
   },
   {
     labelKey: 'timers',
-    content: <TimersTab />,
+    content: <TimersTab data-testid={`${dataTestid}-availability`} />,
     hasError: hasTimerErrors,
+    'data-testid': `${dataTestid}-timers-tab`,
   },
   {
     labelKey: 'notifications',
-    content: <NotificationsTab />,
+    content: <NotificationsTab data-testid={`${dataTestid}-availability`} />,
     hasError: hasNotificationsErrors,
+    'data-testid': `${dataTestid}-notifications-tab`,
   },
 ];
 

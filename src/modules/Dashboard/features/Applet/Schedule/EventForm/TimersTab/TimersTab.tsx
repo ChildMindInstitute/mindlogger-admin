@@ -9,8 +9,9 @@ import { TimerType } from 'modules/Dashboard/api';
 import { EventFormValues } from '../EventForm.types';
 import { timersButtons } from './TimersTab.const.';
 import { StyledTimePickerWrapper } from './TimersTab.styles';
+import { TimersTabProps } from './TimersTab.types';
 
-export const TimersTab = () => {
+export const TimersTab = ({ 'data-testid': dataTestid }: TimersTabProps) => {
   const { t } = useTranslation('app');
   const { watch, setValue } = useFormContext<EventFormValues>();
   const activeTimer = watch('timerType');
@@ -25,13 +26,18 @@ export const TimersTab = () => {
         toggleButtons={timersButtons}
         activeButton={activeTimer}
         setActiveButton={handleSetTimerType}
+        data-testid={`${dataTestid}-timer-type`}
       />
       {activeTimer === TimerType.Timer && (
         <>
           <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
             {t('timeToCompleteActivity')}
           </StyledBodyLarge>
-          <TimePicker name="timerDuration" label={t('duration')} />
+          <TimePicker
+            name="timerDuration"
+            label={t('duration')}
+            data-testid={`${dataTestid}-duration`}
+          />
         </>
       )}
       {activeTimer === TimerType.Idle && (
@@ -45,6 +51,7 @@ export const TimersTab = () => {
               label={t('duration')}
               minTime={setHours(setMinutes(new Date(), 15), 0)}
               maxTime={setHours(setMinutes(new Date(), 45), 0)}
+              data-testid={`${dataTestid}-idle-timer`}
             />
           </StyledTimePickerWrapper>
         </>

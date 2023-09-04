@@ -15,7 +15,7 @@ import { passwordFormSchema } from './EnterAppletPassword.schema';
 import { AppletPasswordRef } from '../Password.types';
 
 export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPasswordProps>(
-  ({ appletId, encryption, submitCallback }, ref) => {
+  ({ appletId, encryption, submitCallback, 'data-testid': dataTestid }, ref) => {
     const { t } = useTranslation('app');
     const { setAppletPrivateKey } = useEncryptionStorage();
     const { handleSubmit, control, setError, watch } = useForm<EnterAppletPasswordForm>({
@@ -75,6 +75,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
                 </StyledClearedButton>
               ),
             }}
+            data-testid={`${dataTestid}-password`}
           />
         </StyledController>
       </form>

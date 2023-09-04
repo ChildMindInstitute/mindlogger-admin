@@ -16,6 +16,7 @@ export type EventFormProps = {
   defaultStartDate: Date;
   editedEvent?: CalendarEvent;
   onFormChange?: (isChanged: boolean) => void;
+  'data-testid'?: string;
 };
 
 export type Warning = {
@@ -59,3 +60,11 @@ export const enum SecondsManipulation {
   AddSeconds,
   RemoveSeconds,
 }
+
+export type GetEventFromTabs = {
+  hasAvailabilityErrors?: boolean;
+  hasTimerErrors?: boolean;
+  hasNotificationsErrors?: boolean;
+  hasAlwaysAvailableOption?: boolean;
+  'data-testid'?: string;
+};

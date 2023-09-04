@@ -24,6 +24,7 @@ export const RemoveAllScheduledEventsPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
+      data-testid="dashboard-calendar-remove-all-scheduled-events-popup"
     >
       <StyledModalWrapper>
         <Trans i18nKey="confirmRemoveAllScheduledEventsForActivity">

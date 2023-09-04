@@ -42,9 +42,14 @@ export const AppletPasswordPopup = ({
             appletId={appletId}
             encryption={encryption}
             submitCallback={handleSubmitCallback}
+            data-testid={dataTestid}
           />
         ) : (
-          <CreateAppletPassword ref={appletPasswordRef} submitCallback={handleSubmitCallback} />
+          <CreateAppletPassword
+            ref={appletPasswordRef}
+            submitCallback={handleSubmitCallback}
+            data-testid={dataTestid}
+          />
         )}
       </StyledAppletPasswordContainer>
     </Modal>

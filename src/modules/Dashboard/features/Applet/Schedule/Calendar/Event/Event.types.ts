@@ -5,4 +5,8 @@ export enum UiType {
   TimeView = 'timeView',
 }
 
-export type EventProps = { title: string; event: CalendarEvent; uiType?: UiType };
+export type EventProps = {
+  title: string;
+  event: CalendarEvent;
+  uiType?: UiType;
+};
