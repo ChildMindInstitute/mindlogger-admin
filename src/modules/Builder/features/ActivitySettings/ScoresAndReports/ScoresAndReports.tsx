@@ -85,8 +85,11 @@ export const ScoresAndReports = () => {
 
   useEffect(() => {
     generateReport ?? setValue(generateReportName, false);
+  }, [generateReport]);
+
+  useEffect(() => {
     showScoreSummary ?? setValue(showScoreSummaryName, false);
-  }, [generateReport, showScoreSummary]);
+  }, [showScoreSummary]);
 
   useEffect(() => {
     if (reports?.length) return;
