@@ -146,6 +146,7 @@ export const ReportConfigSetting = ({
   const reportRecipients = watch('reportRecipients') || [];
   const includeRespondentId = watch('reportIncludeUserId');
   const reportIncludedActivity = watch('reportIncludedActivityName');
+  const reportIncludedItemName = watch('reportIncludedItemName');
   const itemValue = watch('itemValue');
   const reportServerUrl = watch('reportServerIp');
   const reportPublicKey = watch('reportPublicKey');
@@ -318,9 +319,21 @@ export const ReportConfigSetting = ({
     cancelNavigation();
   };
 
+  const subjectDataProps = {
+    setValue,
+    appletName: appletData?.displayName,
+    activityName: activity?.name,
+    flowName: activityFlow?.name,
+    flowActivityName: reportIncludedActivity,
+    respondentId: includeRespondentId,
+    hasActivityItemValue: isActivity && itemValue,
+    hasFlowItemValue: isActivityFlow && itemValue,
+    itemName: reportIncludedItemName,
+  };
+
   const handleDontSave = () => {
     reset(defaultValues);
-    setSubjectData(setValue, includeRespondentId);
+    setSubjectData(subjectDataProps);
     confirmNavigation();
   };
 
@@ -350,12 +363,12 @@ export const ReportConfigSetting = ({
 
   useEffect(() => {
     reset(defaultValues);
-    setSubjectData(setValue, includeRespondentId);
+    setSubjectData(subjectDataProps);
   }, [appletData]);
 
   useEffect(() => {
-    setSubjectData(setValue, includeRespondentId);
-  }, [includeRespondentId]);
+    setSubjectData(subjectDataProps);
+  }, [includeRespondentId, itemValue, reportIncludedItemName, reportIncludedActivity]);
 
   useEffect(() => {
     dispatch(setReportConfigChanges({ hasChanges: isDirty || hasErrors }));
