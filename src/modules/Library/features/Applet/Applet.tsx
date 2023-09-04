@@ -93,7 +93,7 @@ export const Applet = ({
       ) {
         setActivitiesVisible(true);
       }
-    }, []);
+    });
   }, [search]);
 
   useEffect(() => {
