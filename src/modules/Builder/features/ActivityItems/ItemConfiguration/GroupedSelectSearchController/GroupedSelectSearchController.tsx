@@ -78,7 +78,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         name={name}
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
-          const handleOnSelectChange = (...props: any[]) => {
+          const handleOnSelectChange = (...props: unknown[]) => {
             if (checkIfSelectChangePopupIsVisible) {
               checkIfSelectChangePopupIsVisible(() => onChange(...props));
 
