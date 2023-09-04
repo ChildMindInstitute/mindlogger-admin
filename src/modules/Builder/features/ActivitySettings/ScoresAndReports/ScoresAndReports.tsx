@@ -70,11 +70,6 @@ export const ScoresAndReports = () => {
     appendReport(getSectionDefaults());
   };
 
-  useEffect(() => {
-    generateReport ?? setValue(generateReportName, false);
-    showScoreSummary ?? setValue(showScoreSummaryName, false);
-  }, [generateReport, showScoreSummary]);
-
   const navigateToSettings = () =>
     navigate(
       generatePath(page.builderAppletSettingsItem, {
@@ -87,6 +82,21 @@ export const ScoresAndReports = () => {
     if (!destination) return;
     moveReport(source.index, destination.index);
   };
+
+  useEffect(() => {
+    generateReport ?? setValue(generateReportName, false);
+  }, [generateReport]);
+
+  useEffect(() => {
+    showScoreSummary ?? setValue(showScoreSummaryName, false);
+  }, [showScoreSummary]);
+
+  useEffect(() => {
+    if (reports?.length) return;
+
+    setValue(generateReportName, false);
+    setValue(showScoreSummaryName, false);
+  }, [reports]);
 
   return (
     <>

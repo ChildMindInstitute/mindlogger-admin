@@ -21,10 +21,11 @@ import {
   OptionCondition,
   ScoreCondition,
   ScoreReport,
+  ScoresAndReports,
   SectionReport,
-  SingleAndMultiSelectOption,
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
+  SingleAndMultiSelectOption,
   SingleApplet,
   SliderItemResponseValues,
   SliderRowsResponseValues,
@@ -182,6 +183,36 @@ export const getDuplicatedConditional = (
     };
   }) ?? [];
 
+const getDuplicatedScoresAndReports = (
+  oldItems: ItemFormValues[],
+  newItems: Record<string, unknown>[],
+  scoresAndReports?: ScoresAndReports,
+) => {
+  const reports = scoresAndReports?.reports.map((report) => {
+    const conditionalLogic =
+      report.type === ScoreReportType.Score
+        ? report.conditionalLogic
+        : {
+            ...report.conditionalLogic,
+            conditions: getDuplicatedConditions(
+              oldItems,
+              newItems,
+              report.conditionalLogic?.conditions,
+            ),
+          };
+
+    return {
+      ...report,
+      conditionalLogic,
+    };
+  });
+
+  return {
+    ...scoresAndReports,
+    reports,
+  };
+};
+
 export const getNewActivity = ({ name, activity }: GetNewActivity) => {
   const items = activity?.items?.map((item) => getNewActivityItem(item)) || [];
   const conditionalLogic = getDuplicatedConditional(
@@ -195,6 +226,12 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     newItems: items as ItemFormValues[],
   });
 
+  const scoresAndReports = getDuplicatedScoresAndReports(
+    activity?.items ?? [],
+    items,
+    activity?.scoresAndReports,
+  );
+
   return {
     name: name ?? t('newActivity'),
     description: '',
@@ -205,6 +242,7 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     ...activity,
     isReviewable: false,
     items,
+    scoresAndReports,
     conditionalLogic,
     subscaleSetting,
     id: undefined,
