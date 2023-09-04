@@ -213,20 +213,18 @@ MdEditor.config({
       name: 'align',
       level: 'inline',
       start(src) {
-        return src.match(/::: hljs-[center|left|right]/)?.index;
+        return src.match(/::: hljs-(center|left|right)/)?.index ?? -1;
       },
       tokenizer(src) {
-        const rule =
-          /^::: hljs-[center|left|right]([^=\r\n]*={0,2}=?[^=\r\n]*):::|^::: hljs-[center|left|right]([^=\r\n]*):::/;
+        const rule = /^::: hljs-(center|left|right)([^=\r\n]*={0,2}=?[^=\r\n]*):::/;
         const match = rule.exec(src);
         if (match) {
-          const alignType = src.match(/center|left|right/)?.[0] || [];
           const token = {
             type: 'align',
             raw: match[0],
-            text: match[1].trim(),
+            text: match[2].trim(),
             tokens: [],
-            alignType,
+            alignType: match[1],
           };
           this.lexer.inline(token.text, token.tokens);
 
