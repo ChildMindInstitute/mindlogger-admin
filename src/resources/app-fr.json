@@ -726,6 +726,7 @@
   "unsupportedResponseItem": "Ce type de données ne peut pas être affiché sur cette page",
   "messageDoesNotRequireResponse": "Le message ne nécessite pas de réponse",
   "deleteItem": "Effacer l'article",
+  "editItemDescription": "Êtes-vous sûr de vouloir modifier l'élément <1>{{ itemName }></1> ?",
   "deleteItemDescription": "Êtes-vous sûr de vouloir supprimer l'élément <1>{{ itemName }}</1>?",
   "deleteItemWithConditionalsDescription": "Cela supprimera également le(s) conditionnel(s) ci-dessous :",
   "variablesWarning": {
