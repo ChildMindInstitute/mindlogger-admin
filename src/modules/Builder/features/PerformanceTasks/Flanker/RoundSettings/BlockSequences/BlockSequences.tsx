@@ -8,46 +8,49 @@ import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/comp
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { FlankerItemPositions } from 'modules/Builder/types';
 
-import { IsPracticeRoundType } from '../RoundSettings.types';
 import { BlockSequencesContent } from './BlockSequencesContent';
+import { BlockSequencesProps } from './BlockSequences.types';
 
-export const BlockSequences = memo(({ isPracticeRound }: IsPracticeRoundType) => {
-  const { t } = useTranslation();
-  const {
-    watch,
-    formState: { errors },
-  } = useFormContext();
-  const { fieldName, activityObjField } = useCurrentActivity();
+export const BlockSequences = memo(
+  ({ isPracticeRound, 'data-testid': dataTestid }: BlockSequencesProps) => {
+    const { t } = useTranslation();
+    const {
+      watch,
+      formState: { errors },
+    } = useFormContext();
+    const { fieldName, activityObjField } = useCurrentActivity();
 
-  const stimulusTrials = watch(
-    `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`,
-  );
-  const hasStimulusErrors = !stimulusTrials?.some(
-    (trial: FlankerStimulusSettings) => !!trial.image,
-  );
+    const stimulusTrials = watch(
+      `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`,
+    );
+    const hasStimulusErrors = !stimulusTrials?.some(
+      (trial: FlankerStimulusSettings) => !!trial.image,
+    );
 
-  const blockSequencesObjField = `${activityObjField}.items[${
-    isPracticeRound ? FlankerItemPositions.PracticeFirst : FlankerItemPositions.TestFirst
-  }].config.blocks`;
-  const hasBlockSequencesErrors = !!get(errors, blockSequencesObjField);
+    const blockSequencesObjField = `${activityObjField}.items[${
+      isPracticeRound ? FlankerItemPositions.PracticeFirst : FlankerItemPositions.TestFirst
+    }].config.blocks`;
+    const hasBlockSequencesErrors = !!get(errors, blockSequencesObjField);
 
-  const getError = () => {
-    if (hasStimulusErrors) return 'flankerRound.addStimulus';
-    if (hasBlockSequencesErrors) return 'fillInAllRequired';
+    const getError = () => {
+      if (hasStimulusErrors) return 'flankerRound.addStimulus';
+      if (hasBlockSequencesErrors) return 'fillInAllRequired';
 
-    return null;
-  };
+      return null;
+    };
 
-  return (
-    <ToggleItemContainer
-      isOpenDisabled={hasStimulusErrors}
-      isOpenByDefault={!hasStimulusErrors}
-      error={getError()}
-      uiType={ToggleContainerUiType.PerformanceTask}
-      title={t('flankerRound.blockSequences')}
-      Content={BlockSequencesContent}
-      contentProps={{ isPracticeRound, hasBlockSequencesErrors }}
-      tooltip={t('flankerRound.sequencesTooltip')}
-    />
-  );
-});
+    return (
+      <ToggleItemContainer
+        isOpenDisabled={hasStimulusErrors}
+        isOpenByDefault={!hasStimulusErrors}
+        error={getError()}
+        uiType={ToggleContainerUiType.PerformanceTask}
+        title={t('flankerRound.blockSequences')}
+        Content={BlockSequencesContent}
+        contentProps={{ isPracticeRound, hasBlockSequencesErrors, 'data-testid': dataTestid }}
+        tooltip={t('flankerRound.sequencesTooltip')}
+        data-testid={dataTestid}
+      />
+    );
+  },
+);

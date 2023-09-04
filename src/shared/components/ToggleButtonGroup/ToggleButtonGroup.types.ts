@@ -10,4 +10,5 @@ export type ToggleButtonGroupProps = {
   activeButton: string | number;
   setActiveButton?: (value: string | number) => void;
   customChange?: (value: string | number) => void;
+  'data-testid'?: string;
 };

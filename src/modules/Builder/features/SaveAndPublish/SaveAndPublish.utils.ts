@@ -64,13 +64,10 @@ export const removeActivityExtraFields = () => ({
   performanceTaskType: undefined,
   isPerformanceTask: undefined,
   conditionalLogic: undefined,
-  reportIncludedItemName: undefined,
 });
 
 export const removeActivityFlowExtraFields = () => ({
   createdAt: undefined,
-  reportIncludedItemName: undefined,
-  reportIncludedActivityName: undefined,
 });
 
 const removeItemExtraFields = () => ({

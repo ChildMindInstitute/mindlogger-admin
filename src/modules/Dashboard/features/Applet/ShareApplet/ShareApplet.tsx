@@ -32,6 +32,7 @@ export const ShareApplet = ({
   isSubmitted,
   setIsSubmitted,
   showSuccess = true,
+  'data-testid': dataTestid,
 }: ShareAppletProps) => {
   const { t } = useTranslation('app');
 
@@ -140,11 +141,12 @@ export const ShareApplet = ({
       activitiesQuantity={applet.activityCount}
       appletLink={libraryUrl}
       img={applet.image || ''}
+      data-testid={`${dataTestid}-shared`}
     />
   ) : (
     <>
       {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground={showSuccess} />}
-      <form>
+      <form data-testid={`${dataTestid}-form`}>
         <StyledInputWrapper>
           <InputController
             fullWidth
@@ -154,6 +156,7 @@ export const ShareApplet = ({
             label={t('appletName')}
             required
             value={applet?.displayName}
+            data-testid={`${dataTestid}-applet-name`}
           />
           {showNameTakenError && (
             <StyledErrorText marginTop={ERROR_MARGIN_TOP}>
@@ -173,6 +176,7 @@ export const ShareApplet = ({
             tags={keywords}
             onAddTagClick={handleAddKeyword}
             onRemoveTagClick={handleRemoveKeyword}
+            data-testid={`${dataTestid}-keywords`}
           />
         </StyledInputWrapper>
         <StyledInputWrapper>
@@ -180,6 +184,7 @@ export const ShareApplet = ({
             name="checked"
             control={control}
             label={<StyledBodyMedium>{t('agreementAppletAvailability') || ''}</StyledBodyMedium>}
+            data-testid={`${dataTestid}-agreement`}
           />
         </StyledInputWrapper>
         {error && (

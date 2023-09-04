@@ -19,6 +19,8 @@ export const DuplicateAppletSettings = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const dispatch = useAppDispatch();
 
+  const dataTestid = 'applet-settings-duplicate-applet';
+
   const onCloseCallback = () => {
     navigate(page.dashboardApplets);
   };
@@ -38,10 +40,16 @@ export const DuplicateAppletSettings = () => {
             }),
           )
         }
+        data-testid={`${dataTestid}-duplicate`}
       >
         {t('duplicate')}
       </StyledAppletSettingsButton>
-      {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
+      {duplicatePopupsVisible && (
+        <DuplicatePopups
+          onCloseCallback={onCloseCallback}
+          data-testid={`${dataTestid}-duplicate-popup`}
+        />
+      )}
     </>
   );
 };

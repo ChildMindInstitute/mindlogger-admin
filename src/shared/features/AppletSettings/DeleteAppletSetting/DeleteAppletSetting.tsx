@@ -20,6 +20,8 @@ export const DeleteAppletSetting = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const { deletePopupVisible } = popups.useData();
 
+  const dataTestid = 'applet-settings-delete-applet';
+
   const onCloseCallback = () => {
     navigate(page.dashboardApplets);
   };
@@ -41,11 +43,14 @@ export const DeleteAppletSetting = () => {
           }
           variant="outlined"
           startIcon={<Svg width="18" height="18" id="trash" />}
+          data-testid={`${dataTestid}-delete`}
         >
           {t('deleteApplet')}
         </StyledAppletSettingsButton>
       </Box>
-      {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} />}
+      {deletePopupVisible && (
+        <DeletePopup onCloseCallback={onCloseCallback} data-testid={`${dataTestid}-delete-popup`} />
+      )}
     </>
   );
 };

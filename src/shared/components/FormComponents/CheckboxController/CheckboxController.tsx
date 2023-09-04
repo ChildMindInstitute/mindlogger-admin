@@ -42,11 +42,11 @@ export const CheckboxController = <T extends FieldValues>({
               onChange={(event) => {
                 handleCheckboxChange(event, onChange);
               }}
-              data-testid={dataTestid}
             />
           )}
         />
       }
+      data-testid={dataTestid}
     />
   );
 };

@@ -5,4 +5,5 @@ export type SuccessSharedProps = {
   appletLink: string;
   img?: string;
   activitiesQuantity?: number | null;
+  'data-testid'?: string;
 };

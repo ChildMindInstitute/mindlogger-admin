@@ -19,6 +19,8 @@ export const ShareAppletPopup = ({
   const [appletShared, setAppletShared] = useState(false);
   const [btnText, setBtnText] = useState(t('share'));
 
+  const dataTestid = 'dashboard-applets-share-to-library';
+
   useEffect(() => {
     if (appletShared) {
       setTitle(t('appletIsSharedWithLibrary'));
@@ -45,6 +47,7 @@ export const ShareAppletPopup = ({
       buttonText={btnText || ''}
       disabledSubmit={isDisabled}
       width="60"
+      data-testid={`${dataTestid}-popup`}
     >
       <ShareApplet
         applet={applet}
@@ -52,6 +55,7 @@ export const ShareAppletPopup = ({
         onDisableSubmit={setIsDisabled}
         isSubmitted={isSubmitted}
         setIsSubmitted={setIsSubmitted}
+        data-testid={`${dataTestid}-share`}
       />
     </Modal>
   );

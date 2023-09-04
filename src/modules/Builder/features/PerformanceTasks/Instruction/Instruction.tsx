@@ -11,6 +11,7 @@ export const Instruction = ({
   title,
   hasError,
   instructionId,
+  'data-testid': dataTestid,
 }: InstructionProps) => {
   const { t } = useTranslation();
 
@@ -20,8 +21,9 @@ export const Instruction = ({
       title={title || t('overviewInstruction')}
       isOpenByDefault={false}
       Content={InstructionContent}
-      contentProps={{ description, name, hasError, instructionId }}
+      contentProps={{ description, name, hasError, instructionId, 'data-testid': dataTestid }}
       error={hasError ? 'blockIsNecessary' : null}
+      data-testid={dataTestid}
     />
   );
 };
