@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 import {
   Chart as ChartJS,
   LinearScale,
@@ -19,7 +20,7 @@ import { locales } from 'shared/consts';
 import { getOptions, getData } from './MultiScatterChart.utils';
 import { MultiScatterChartProps } from './MultiScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
-import { TOOLTIP_OFFSET_TOP, TOOLTIP_OFFSET_LEFT } from '../Charts.const';
+import { TOOLTIP_OFFSET_TOP, TOOLTIP_OFFSET_LEFT, CANVAS_VERTICAL_OFFSETS } from '../Charts.const';
 
 export const MultiScatterChart = ({
   color,
@@ -45,6 +46,7 @@ export const MultiScatterChart = ({
   ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
   const lang = i18n.language as keyof typeof locales;
+  const maxHeight = height + CANVAS_VERTICAL_OFFSETS;
 
   const hideTooltip = () => {
     const tooltipEl = tooltipRef.current;
@@ -89,7 +91,6 @@ export const MultiScatterChart = ({
     () => (
       <Scatter
         ref={chartRef}
-        height={height}
         options={getOptions({
           lang,
           minY,
@@ -108,7 +109,7 @@ export const MultiScatterChart = ({
   );
 
   return (
-    <>
+    <Box sx={{ height: maxHeight }}>
       {renderChart}
       <ChartTooltip
         ref={tooltipRef}
@@ -118,6 +119,6 @@ export const MultiScatterChart = ({
         }}
         onMouseLeave={hideTooltip}
       />
-    </>
+    </Box>
   );
 };

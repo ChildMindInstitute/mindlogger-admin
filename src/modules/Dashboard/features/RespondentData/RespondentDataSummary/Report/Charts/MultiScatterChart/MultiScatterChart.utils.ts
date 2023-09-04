@@ -38,6 +38,7 @@ export const getOptions = ({
 
   return {
     responsive: true,
+    maintainAspectRatio: false,
     clip: false as const,
     plugins: {
       legend: {
