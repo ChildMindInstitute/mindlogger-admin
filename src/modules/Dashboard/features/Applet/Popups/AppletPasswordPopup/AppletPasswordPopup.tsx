@@ -34,6 +34,7 @@ export const AppletPasswordPopup = ({
       }
       buttonText={t('submit')}
       data-testid={dataTestid}
+      disabledSubmit={!!appletPasswordRef?.current}
     >
       <StyledAppletPasswordContainer>
         {popupType === AppletPasswordPopupType.Enter ? (
