@@ -28,6 +28,10 @@ export const theme = createTheme({
           color: variables.palette.on_surface,
           height: '100vh',
           overflowY: 'hidden',
+          '.marked': {
+            backgroundColor: variables.palette.yellow,
+            borderRadius: variables.borderRadius.xs,
+          },
         },
         '.medium-zoom-image--opened, .medium-zoom-overlay': {
           visibility: 'hidden',

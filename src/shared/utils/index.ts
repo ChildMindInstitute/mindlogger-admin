@@ -37,3 +37,4 @@ export * from './getSettingBreadcrumbs';
 export * from './mixpanel';
 export * from './concatIf';
 export * from './checkRole';
+export * from './getHighlightedText';

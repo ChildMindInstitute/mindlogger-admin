@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { renderToString } from 'react-dom/server';
-import { useTranslation } from 'react-i18next';
+
 import { Controller, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@mui/material';
 import 'md-editor-rt/lib/style.css';
 
 import { Svg } from 'shared/components';
 import { StyledSvgArrowContainer } from 'shared/styles';
-import { getDictionaryText } from 'shared/utils';
-import { getHighlightedText, updateSelectedItemsInStorage } from 'modules/Library/utils';
+import { updateSelectedItemsInStorage } from 'modules/Library/utils';
 import { useAppDispatch } from 'redux/store';
 import { library } from 'redux/modules';
+import { getHighlightedText, getDictionaryText } from 'shared/utils';
 
 import {
   StyledItemContainer,
@@ -19,23 +19,21 @@ import {
   StyledItemContent,
 } from './Item.styles';
 import { ItemProps } from './Item.types';
-import { renderItemContent } from './Item.utils';
+import { getSelector, renderItemContent } from './Item.utils';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
 export const Item = ({ item, appletId, activityName, activityKey, uiType, search }: ItemProps) => {
-  const {
-    i18n: { language },
-  } = useTranslation('app');
-
   const { control, getValues, setValue } = useFormContext<LibraryForm>();
   const dispatch = useAppDispatch();
   const [itemVisible, setItemVisible] = useState(false);
   const selectedItems = getValues()[appletId];
 
+  const itemNamePlusActivityName = getSelector(item.name, activityName);
+  const dictionaryText = getDictionaryText(item.question);
+
   const handleSelect = async () => {
     const selectedItems = getValues()[appletId];
-    const itemNamePlusActivityName = `${item.name}-${activityName}`;
-    const activityNamePlusId = `${activityName}-${appletId}`;
+    const activityNamePlusId = getSelector(activityName, appletId);
     const checked = !!selectedItems?.find(
       (item) => item.itemNamePlusActivityName === itemNamePlusActivityName,
     );
@@ -59,12 +57,12 @@ export const Item = ({ item, appletId, activityName, activityKey, uiType, search
   };
 
   const isChecked = !!selectedItems?.find(
-    ({ itemNamePlusActivityName }) => itemNamePlusActivityName === `${item.name}-${activityName}`,
+    (item) => item.itemNamePlusActivityName === itemNamePlusActivityName,
   );
 
   const highlightedTextHtml = search
-    ? renderToString(getHighlightedText(search, item.question[language]) as JSX.Element)
-    : item.question;
+    ? renderToString(getHighlightedText(dictionaryText, search) as JSX.Element)
+    : dictionaryText;
 
   return (
     <StyledItemContainer>
@@ -83,7 +81,7 @@ export const Item = ({ item, appletId, activityName, activityKey, uiType, search
         <StyledSvgArrowContainer>
           <Svg id={itemVisible ? 'navigate-up' : 'navigate-right'} />
         </StyledSvgArrowContainer>
-        <StyledMdEditor modelValue={getDictionaryText(highlightedTextHtml)} previewOnly />
+        <StyledMdEditor modelValue={highlightedTextHtml} previewOnly />
       </StyledItemHeader>
       {itemVisible && <StyledItemContent>{renderItemContent(item)}</StyledItemContent>}
     </StyledItemContainer>
