@@ -33,7 +33,7 @@ export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)
     uiType?: ToggleContainerUiType;
     isError?: boolean;
   }) => `
-    height: 4.8rem;
+    height: ${isError ? 'auto' : '4.8rem'};
     overflow: ${isError ? 'visible' : 'hidden'};
 		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
 	`};
