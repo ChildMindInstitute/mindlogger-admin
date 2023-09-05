@@ -9,6 +9,7 @@ import {
   RangeValueCondition,
   SingleAndMultipleSelectItemResponseValues,
   ScoreReport,
+  SliderItemResponseValues,
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
@@ -46,6 +47,7 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
               : `${t('conditionItem')}: ${item.name}`,
           value: getEntityKey(item),
           type: getConditionItemType(item),
+          responseValues: item.responseValues,
         },
       ];
     }
@@ -79,9 +81,14 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
     [],
   );
 
+const getDefaultPayload = (conditionPayload: SingleValueCondition['payload']) => ({
+  value: conditionPayload?.value ?? DEFAULT_PAYLOAD_MIN_VALUE,
+});
+
 export const getPayload = (
   conditionType: ConditionType,
   conditionPayload?: Condition['payload'],
+  selectedItem?: ItemFormValues,
 ) => {
   switch (conditionType) {
     case ConditionType.IncludesOption:
@@ -92,13 +99,22 @@ export const getPayload = (
         optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };
     case ConditionType.GreaterThan:
+      if (selectedItem?.responseType === ItemResponseType.Slider)
+        return {
+          value: (selectedItem.responseValues as SliderItemResponseValues).minValue,
+        };
+
+      return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.LessThan:
+      if (selectedItem?.responseType === ItemResponseType.Slider)
+        return {
+          value: (selectedItem.responseValues as SliderItemResponseValues).maxValue,
+        };
+
+      return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.Equal:
     case ConditionType.NotEqual:
-      return {
-        value:
-          (conditionPayload as SingleValueCondition['payload'])?.value ?? DEFAULT_PAYLOAD_MIN_VALUE,
-      };
+      return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.Between:
     case ConditionType.OutsideOf:
       return {
