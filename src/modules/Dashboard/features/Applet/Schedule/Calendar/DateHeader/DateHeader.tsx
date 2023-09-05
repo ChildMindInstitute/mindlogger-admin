@@ -10,8 +10,6 @@ export const DateHeader = ({ date, drilldownView, onDrillDown }: DateHeaderProps
     date.getDate() === 1 ? `${getMonthName(date, NameLength.Short)} ` : ''
   }${date.getDate()}`;
 
-  console.log('datatestseta', dateText);
-
   if (!drilldownView) {
     return <span>{dateText}</span>;
   }
