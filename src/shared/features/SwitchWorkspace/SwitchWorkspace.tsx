@@ -17,22 +17,34 @@ export const SwitchWorkspace = ({
   setVisibleDrawer,
   visibleDrawer,
   workspaces,
+  'data-testid': dataTestid,
 }: SwitchWorkspaceProps) => {
   const userData = auth.useData();
   const { id } = userData?.user || {};
   const workspacesGroups = getWorkspacesGroups(workspaces, id);
 
   return (
-    <StyledSwitchWorkspaceDrawer anchor="left" open={visibleDrawer} hideBackdrop>
+    <StyledSwitchWorkspaceDrawer
+      anchor="left"
+      open={visibleDrawer}
+      hideBackdrop
+      data-testid={dataTestid}
+    >
       <StyledCloseWrapper>
-        <StyledClearedButton onClick={() => setVisibleDrawer(false)}>
+        <StyledClearedButton
+          onClick={() => setVisibleDrawer(false)}
+          data-testid={`${dataTestid}-close`}
+        >
           <Svg id="close" />
         </StyledClearedButton>
       </StyledCloseWrapper>
       {workspacesGroups.map((workspacesGroup, index) => (
         <Fragment key={workspacesGroup.groupName}>
           {!!index && <StyledDivider />}
-          <WorkspaceGroup workspacesGroup={workspacesGroup} />
+          <WorkspaceGroup
+            workspacesGroup={workspacesGroup}
+            data-testid={`${dataTestid}-workspace-group-${index}`}
+          />
         </Fragment>
       ))}
     </StyledSwitchWorkspaceDrawer>
