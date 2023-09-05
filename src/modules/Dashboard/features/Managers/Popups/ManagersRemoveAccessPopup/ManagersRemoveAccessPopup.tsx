@@ -83,6 +83,7 @@ export const ManagersRemoveAccessPopup = ({
           control={control}
           name={`userApplets.${index}.value`}
           label={<></>}
+          data-testid={`dashboard-managers-remove-access-popup-checkbox-${index}`}
         />
       ),
       value: id,

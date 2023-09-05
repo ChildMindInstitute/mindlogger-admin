@@ -152,6 +152,7 @@ export const DataExportPopup = ({
               appletId={appletId ?? ''}
               encryption={encryption}
               submitCallback={handleDataExportSubmit}
+              data-testid={`${dataTestid}-enter-password`}
             />
           </StyledModalWrapper>
         </Modal>

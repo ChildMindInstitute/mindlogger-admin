@@ -22,6 +22,7 @@ export const SourceLinkModal = ({
   const { control, getValues } = useForm<SourceLinkModalForm>({
     defaultValues: { label: '', address: '' },
   });
+  const dataTestid = 'md-editor-source-link-popup';
   const onSubmit = () => {
     handleSubmit(getValues());
   };
@@ -34,7 +35,7 @@ export const SourceLinkModal = ({
       title={title}
       buttonText={t('ok')}
       width="32"
-      data-testid="md-editor-source-link-modal"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <form onSubmit={onSubmit} noValidate>
@@ -45,6 +46,7 @@ export const SourceLinkModal = ({
               control={control}
               label={t('description')}
               placeholder={t('enterDescription')}
+              data-testid={`${dataTestid}-description`}
             />
           </StyledController>
           <StyledController>
@@ -54,6 +56,7 @@ export const SourceLinkModal = ({
               control={control}
               label={t('link')}
               placeholder={t('enterLink')}
+              data-testid={`${dataTestid}-link`}
             />
           </StyledController>
         </form>
