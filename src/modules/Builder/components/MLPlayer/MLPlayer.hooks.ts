@@ -4,7 +4,7 @@ import ReactPlayer from 'react-player/lazy';
 
 import { MediaType } from '../MediaUploader';
 import { MLPlayerStateProps } from './MLPlayer.types';
-import { PLAYER_DEFAULTS } from './MLPlayer.const';
+import { VERY_LARGE_NUMBER, PLAYER_DEFAULTS } from './MLPlayer.const';
 
 const calculateTime = (secs: number) => {
   const minutes = Math.floor(secs / 60);
@@ -82,6 +82,12 @@ export const useMLPlayerSetup = (media: MediaType | null) => {
       ...prevState,
       duration,
     }));
+
+    // case with .webm audio wrong duration
+    if (duration === Infinity) {
+      playerRef.current?.seekTo(VERY_LARGE_NUMBER, 'seconds');
+      playerRef.current?.seekTo(0, 'seconds');
+    }
   };
 
   return {
