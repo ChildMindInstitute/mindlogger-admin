@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
@@ -9,6 +10,7 @@ import { StyledCondition, StyledSelectController, StyledInputController } from '
 import { ConditionProps } from './Condition.types';
 import { ConditionItemType } from './Condition.const';
 import {
+  getConditionMinMaxRangeValues,
   getConditionMinMaxValues,
   getScoreConditionOptions,
   getStateOptions,
@@ -34,6 +36,7 @@ export const Condition = ({
   'data-testid': dataTestid,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
+  const { watch } = useFormContext();
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 
@@ -52,6 +55,13 @@ export const Condition = ({
   const { minNumber, maxNumber } = getConditionMinMaxValues({
     item: selectedItem,
     state,
+  });
+  const minValue = watch(minValueName);
+  const maxValue = watch(maxValueName);
+  const { leftRange, rightRange } = getConditionMinMaxRangeValues({
+    item: selectedItem,
+    minValue,
+    maxValue,
   });
 
   return (
@@ -114,7 +124,8 @@ export const Condition = ({
             type="number"
             control={control}
             name={minValueName}
-            minNumberValue={Number.MIN_SAFE_INTEGER}
+            minNumberValue={leftRange.minNumber}
+            maxNumberValue={leftRange.maxNumber}
             data-testid={`${dataTestid}-min-value`}
           />
           <StyledInputController
@@ -122,7 +133,8 @@ export const Condition = ({
             type="number"
             control={control}
             name={maxValueName}
-            minNumberValue={Number.MIN_SAFE_INTEGER}
+            minNumberValue={rightRange.minNumber}
+            maxNumberValue={rightRange.maxNumber}
             data-testid={`${dataTestid}-max-value`}
           />
         </>

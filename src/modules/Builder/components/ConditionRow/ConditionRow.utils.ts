@@ -99,17 +99,19 @@ export const getPayload = (
         optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };
     case ConditionType.GreaterThan:
-      if (selectedItem?.responseType === ItemResponseType.Slider)
+      if (selectedItem?.responseType === ItemResponseType.Slider) {
         return {
           value: (selectedItem.responseValues as SliderItemResponseValues).minValue,
         };
+      }
 
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.LessThan:
-      if (selectedItem?.responseType === ItemResponseType.Slider)
+      if (selectedItem?.responseType === ItemResponseType.Slider) {
         return {
           value: (selectedItem.responseValues as SliderItemResponseValues).maxValue,
         };
+      }
 
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.Equal:
@@ -117,6 +119,13 @@ export const getPayload = (
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.Between:
     case ConditionType.OutsideOf:
+      if (selectedItem?.responseType === ItemResponseType.Slider) {
+        return {
+          minValue: (selectedItem.responseValues as SliderItemResponseValues).minValue,
+          maxValue: (selectedItem.responseValues as SliderItemResponseValues).maxValue,
+        };
+      }
+
       return {
         minValue:
           (conditionPayload as RangeValueCondition['payload'])?.minValue ??

@@ -74,3 +74,41 @@ export const getConditionMinMaxValues = ({
       return getDefaultMinMaxValues(state);
   }
 };
+
+const getDefaultMinMaxRangeValues = () => ({
+  leftRange: {
+    minNumber: Number.MIN_SAFE_INTEGER,
+    maxNumber: undefined,
+  },
+  rightRange: {
+    minNumber: Number.MIN_SAFE_INTEGER,
+    maxNumber: undefined,
+  },
+});
+export const getConditionMinMaxRangeValues = ({
+  item,
+  minValue,
+  maxValue,
+}: {
+  item?: ConditionItem;
+  minValue: number;
+  maxValue: number;
+}) => {
+  if (!item?.type) return getDefaultMinMaxRangeValues();
+
+  switch (item.type) {
+    case ConditionItemType.Slider:
+      return {
+        leftRange: {
+          minNumber: +(item.responseValues! as SliderItemResponseValues).minValue,
+          maxNumber: maxValue,
+        },
+        rightRange: {
+          minNumber: minValue,
+          maxNumber: +(item.responseValues! as SliderItemResponseValues).maxValue,
+        },
+      };
+    default:
+      return getDefaultMinMaxRangeValues();
+  }
+};
