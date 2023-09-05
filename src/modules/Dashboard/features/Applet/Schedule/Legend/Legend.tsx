@@ -231,6 +231,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           onClose={() => setExportDefaultSchedulePopupVisible(false)}
           onSubmit={handleExportScheduleSubmit(true, true)}
           scheduleTableRows={scheduleExportTableData}
+          data-testid={`${dataTestid}-export-default-schedule-popup`}
         />
       )}
       {exportIndividualSchedulePopupVisible && (
@@ -240,6 +241,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           onSubmit={handleExportScheduleSubmit(false, true)}
           respondentName={respondentName}
           scheduleTableRows={scheduleExportTableData}
+          data-testid={`${dataTestid}-export-individual-schedule-popup`}
         />
       )}
       {importSchedulePopupVisible && (
@@ -251,6 +253,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           onClose={() => setImportSchedulePopupVisible(false)}
           onDownloadTemplate={handleExportScheduleSubmit(!isIndividual, false)}
           scheduleExportData={scheduleExportCsv}
+          data-testid={`${dataTestid}-import-schedule-popup`}
         />
       )}
       {clearScheduledEventsPopupVisible && (
@@ -261,6 +264,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           isDefault={!isIndividual}
           name={respondentName}
           onClose={() => setClearScheduledEventsPopupVisible(false)}
+          data-testid={`${dataTestid}-clear-scheduled-events-popup`}
         />
       )}
       {removeIndividualSchedulePopupVisible && (
@@ -271,12 +275,14 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
           setSchedule={setSchedule}
           setSelectedRespondent={setSelectedRespondent}
+          data-testid={`${dataTestid}-remove-individual-schedule-popup`}
         />
       )}
       <CreateEventPopup
         open={createEventPopupVisible}
         setCreateEventPopupVisible={setCreateEventPopupVisible}
         defaultStartDate={new Date()}
+        data-testid={`${dataTestid}-create-event-popup`}
       />
     </StyledLegend>
   ) : (

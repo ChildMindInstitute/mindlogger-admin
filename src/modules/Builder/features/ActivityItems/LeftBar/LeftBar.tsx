@@ -187,6 +187,7 @@ export const LeftBar = ({
             secondBtnText={t('cancel')}
             hasSecondBtn
             submitBtnColor="error"
+            data-testid="builder-activity-items-item-remove-item-with-conditional-popup"
           >
             <StyledModalWrapper>
               <StyledBodyLarge>

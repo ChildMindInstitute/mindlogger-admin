@@ -28,6 +28,7 @@ export const ImportSchedulePopup = ({
   onClose,
   onDownloadTemplate,
   scheduleExportData,
+  'data-testid': dataTestid,
 }: ImportSchedulePopupProps) => {
   const { t } = useTranslation('app');
   const { appletId, respondentId } = useParams();
@@ -160,6 +161,7 @@ export const ImportSchedulePopup = ({
       onSecondBtnSubmit={onClose}
       disabledSubmit={isSubmitDisabled}
       width="66"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         {screens[step].component}

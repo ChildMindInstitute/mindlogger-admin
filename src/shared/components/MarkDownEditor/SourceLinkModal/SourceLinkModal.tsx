@@ -34,6 +34,7 @@ export const SourceLinkModal = ({
       title={title}
       buttonText={t('ok')}
       width="32"
+      data-testid="md-editor-source-link-modal"
     >
       <StyledModalWrapper>
         <form onSubmit={onSubmit} noValidate>

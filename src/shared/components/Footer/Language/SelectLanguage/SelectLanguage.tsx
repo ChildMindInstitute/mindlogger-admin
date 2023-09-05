@@ -35,6 +35,7 @@ export const SelectLanguage = ({
       titleAlign="center"
       buttonText={t('ok')}
       width="42"
+      data-testid="select-language-popup"
     >
       <StyledList>
         {languages.map((lang) => (

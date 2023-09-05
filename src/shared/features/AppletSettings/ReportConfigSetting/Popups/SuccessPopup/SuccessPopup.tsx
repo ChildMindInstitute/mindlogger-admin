@@ -15,6 +15,7 @@ export const SuccessPopup = ({ popupVisible, onClose }: SuccessPopupProps) => {
       onSubmit={onClose}
       title={t('reportConfiguration')}
       buttonText={t('ok')}
+      data-testid="builder-applet-settings-report-config-setting-success-popup"
     >
       <StyledModalWrapper>{t('saveReportConfigurationSuccess')}</StyledModalWrapper>
     </Modal>
