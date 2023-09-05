@@ -43,13 +43,13 @@ export const AppletPasswordPopup = ({
             appletId={appletId}
             encryption={encryption}
             submitCallback={handleSubmitCallback}
-            data-testid={dataTestid}
+            data-testid={`${dataTestid}-enter-password`}
           />
         ) : (
           <CreateAppletPassword
             ref={appletPasswordRef}
             submitCallback={handleSubmitCallback}
-            data-testid={dataTestid}
+            data-testid={`${dataTestid}-create-password`}
           />
         )}
       </StyledAppletPasswordContainer>

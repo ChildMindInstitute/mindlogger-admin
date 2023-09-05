@@ -6,4 +6,5 @@ export type ExportSchedulePopupProps = {
   onSubmit: () => void;
   scheduleTableRows: Row[] | undefined;
   respondentName?: string;
+  'data-testid'?: string;
 };

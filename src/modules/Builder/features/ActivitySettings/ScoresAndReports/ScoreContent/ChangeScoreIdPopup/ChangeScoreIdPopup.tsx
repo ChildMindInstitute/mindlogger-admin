@@ -6,7 +6,11 @@ import { Modal } from 'shared/components';
 
 import { ChangeScoreIdPopupProps } from './ChangeScoreIdPopup.types';
 
-export const ChangeScoreIdPopup = ({ onClose, onChange }: ChangeScoreIdPopupProps) => {
+export const ChangeScoreIdPopup = ({
+  onClose,
+  onChange,
+  'data-testid': dataTestid,
+}: ChangeScoreIdPopupProps) => {
   const { t } = useTranslation();
   const [isError, setIsError] = useState(false);
   const [isFirstScreen, setIsFirstScreen] = useState(true);
@@ -44,6 +48,7 @@ export const ChangeScoreIdPopup = ({ onClose, onChange }: ChangeScoreIdPopupProp
       submitBtnColor={isFirstScreen ? 'error' : 'primary'}
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         {isFirstScreen ? (

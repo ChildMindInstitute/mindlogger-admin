@@ -3,4 +3,5 @@ export type RemoveAllScheduledEventsPopupProps = {
   onClose: () => void;
   onSubmit: () => void;
   activityName: string;
+  'data-testid'?: string;
 };

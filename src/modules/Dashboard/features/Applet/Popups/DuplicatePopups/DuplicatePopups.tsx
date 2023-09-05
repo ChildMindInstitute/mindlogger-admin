@@ -147,7 +147,13 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       >
         <StyledModalWrapper>
           <form onSubmit={handleSubmit(setNameHandler)} noValidate>
-            <InputController fullWidth name="name" control={control} label={t('appletName')} />
+            <InputController
+              fullWidth
+              name="name"
+              control={control}
+              label={t('appletName')}
+              data-testid="dashboard-applets-duplicate-popup-name"
+            />
           </form>
         </StyledModalWrapper>
       </Modal>

@@ -86,13 +86,14 @@ export const LockForm = () => {
             control={control}
             label={t('password')}
             type="password"
+            data-testid="lock-form-password"
           />
         </StyledController>
         {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
-        <StyledButton variant="contained" type="submit" data-testid="submit-btn">
+        <StyledButton variant="contained" type="submit" data-testid="lock-form-login">
           {t('login')}
         </StyledButton>
-        <StyledButton variant="outlined" onClick={handleLogout}>
+        <StyledButton variant="outlined" onClick={handleLogout} data-testid="lock-form-logout">
           {t('logOut')}
         </StyledButton>
       </StyledForm>

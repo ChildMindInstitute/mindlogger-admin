@@ -30,6 +30,7 @@ export const WarningPopup = ({
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
       buttonText={t('saveAnyway')}
+      data-testid="builder-applet-settings-report-config-setting-save-anyway-popup"
     >
       <StyledModalWrapper>
         <Trans i18nKey="saveReportConfigurationWarning">

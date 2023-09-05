@@ -214,17 +214,23 @@ export const ScoreContent = ({
       <StyledButton
         startIcon={<Svg id="add" width="20" height="20" />}
         onClick={handleAddScoreConditional}
+        data-testid={`${dataTestid}-add-score-conditional`}
       >
         {t('addScoreCondition')}
       </StyledButton>
       {isChangeScoreIdPopupVisible && (
-        <ChangeScoreIdPopup onClose={onCancelChangeScoreId} onChange={onChangeScoreId} />
+        <ChangeScoreIdPopup
+          onClose={onCancelChangeScoreId}
+          onChange={onChangeScoreId}
+          data-testid={`${dataTestid}-change-score-id-popup`}
+        />
       )}
       {isRemoveConditionalPopupVisible && (
         <RemoveConditionalLogicPopup
           onClose={() => setIsRemoveConditionalPopupVisible(false)}
           onRemove={() => remove(removeConditionalIndex)}
           name={title}
+          data-testid={`${dataTestid}-remove-conditional-logic-popup`}
         />
       )}
     </StyledFlexColumn>

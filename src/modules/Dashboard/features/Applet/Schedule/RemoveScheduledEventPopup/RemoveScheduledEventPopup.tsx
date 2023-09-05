@@ -10,6 +10,7 @@ export const RemoveScheduledEventPopup = ({
   onClose,
   onSubmit,
   activityName,
+  'data-testid': dataTestid,
 }: RemoveScheduledEventPopupProps) => {
   const { t } = useTranslation();
 
@@ -24,7 +25,7 @@ export const RemoveScheduledEventPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      data-testid="dashboard-calendar-remove-scheduled-event-popup"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <Trans i18nKey="confirmRemoveScheduledEvent">

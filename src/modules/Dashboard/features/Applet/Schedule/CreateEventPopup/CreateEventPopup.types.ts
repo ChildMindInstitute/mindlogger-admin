@@ -4,4 +4,5 @@ export type CreateEventPopupProps = {
   open: boolean;
   setCreateEventPopupVisible: Dispatch<SetStateAction<boolean>>;
   defaultStartDate: Date;
+  'data-testid'?: string;
 };

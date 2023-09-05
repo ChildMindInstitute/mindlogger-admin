@@ -20,6 +20,7 @@ export const ClearScheduledEventsPopup = ({
   appletName,
   appletId,
   isDefault = true,
+  'data-testid': dataTestid,
 }: ClearScheduledEventsPopupProps) => {
   const { t } = useTranslation();
   const { respondentId } = useParams();
@@ -68,6 +69,7 @@ export const ClearScheduledEventsPopup = ({
       hasSecondBtn={screens[step].hasSecondBtn}
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         {screens[step].component}

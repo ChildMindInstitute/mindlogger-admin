@@ -8,6 +8,7 @@ export type ImportSchedulePopupProps = {
   onClose: () => void;
   onDownloadTemplate: () => void;
   scheduleExportData: ScheduleExportCsv;
+  'data-testid'?: string;
 };
 
 export type CheckFields = {
