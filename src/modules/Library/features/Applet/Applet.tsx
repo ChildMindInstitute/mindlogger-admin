@@ -45,6 +45,7 @@ export const Applet = ({
   uiType = AppletUiType.List,
   search = '',
   setSearch,
+  'data-testid': dataTestid,
 }: AppletProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -153,7 +154,11 @@ export const Applet = ({
       case AppletUiType.List:
         return (
           <>
-            <Button variant="text" onClick={() => navigate(APPLET_DETAILS)}>
+            <Button
+              variant="text"
+              onClick={() => navigate(APPLET_DETAILS)}
+              data-testid={`${dataTestid}-view-details`}
+            >
               {t('viewDetails')}
             </Button>
             <Button
@@ -162,6 +167,7 @@ export const Applet = ({
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleAddToCart}
+              data-testid={`${dataTestid}-add-to-cart`}
             >
               {t('addToCart')}
             </Button>
@@ -176,6 +182,7 @@ export const Applet = ({
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleAddToCart}
+              data-testid={`${dataTestid}-details-add-to-cart`}
             >
               {t('addToCart')}
             </Button>
@@ -189,6 +196,7 @@ export const Applet = ({
               startIcon={<Svg width="18" height="18" id="trash" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleRemove}
+              data-testid={`${dataTestid}-cart-remove`}
             >
               {t('remove')}
             </Button>
@@ -199,18 +207,19 @@ export const Applet = ({
 
   return (
     <>
-      <StyledAppletContainer>
+      <StyledAppletContainer data-testid={dataTestid}>
         <AppletImage image={image} name={displayName} />
         <Box>
           {renderAppletInfo()}
           {!!keywords.length && (
             <StyledAppletKeywordsContainer>
-              {keywords.map((keyword) => (
+              {keywords.map((keyword, index) => (
                 <StyledAppletKeyword
                   onClick={setSearch ? () => setSearch(keyword) : falseReturnFunc}
                   variant="contained"
                   key={keyword}
                   hasSearch={!!setSearch}
+                  data-testid={`${dataTestid}-keywords-${index}`}
                 >
                   {getHighlightedText(keyword, search)}
                 </StyledAppletKeyword>
@@ -233,15 +242,22 @@ export const Applet = ({
                       <Svg id={arrowSvgId} />
                     </StyledSvgContainer>
                   }
+                  data-testid={`${dataTestid}-activities-collapse`}
                 >
                   <StyledLabelBoldLarge>{t('activities')}</StyledLabelBoldLarge>
                 </StyledExpandedButton>
               )}
               {activitiesVisible && (
                 <StyledActivities>
-                  {activities.map((activity) => (
+                  {activities.map((activity, index) => (
                     <Fragment key={activity.name}>
-                      <Activity appletId={id} activity={activity} uiType={uiType} search={search} />
+                      <Activity
+                        appletId={id}
+                        activity={activity}
+                        uiType={uiType}
+                        search={search}
+                        data-testid={`${dataTestid}-activities-${index}`}
+                      />
                     </Fragment>
                   ))}
                 </StyledActivities>
@@ -258,6 +274,7 @@ export const Applet = ({
           setRemoveAppletPopupVisible={setRemoveAppletPopupVisible}
           isAuthorized={isAuthorized}
           cartItems={cartItems}
+          data-testid={`${dataTestid}-remove-popup`}
         />
       )}
     </>

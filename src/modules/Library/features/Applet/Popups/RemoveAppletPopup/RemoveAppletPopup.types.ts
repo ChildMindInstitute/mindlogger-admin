@@ -9,4 +9,5 @@ export type RemoveAppletPopupProps = {
   appletName: string;
   isAuthorized: boolean;
   cartItems: PublishedApplet[] | null;
+  'data-testid'?: string;
 };

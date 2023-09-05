@@ -22,7 +22,15 @@ import { ItemProps } from './Item.types';
 import { getSelector, renderItemContent } from './Item.utils';
 import { AppletUiType, LibraryForm } from '../Applet.types';
 
-export const Item = ({ item, appletId, activityName, activityKey, uiType, search }: ItemProps) => {
+export const Item = ({
+  item,
+  appletId,
+  activityName,
+  activityKey,
+  uiType,
+  search,
+  'data-testid': dataTestid,
+}: ItemProps) => {
   const { control, getValues, setValue } = useFormContext<LibraryForm>();
   const dispatch = useAppDispatch();
   const [itemVisible, setItemVisible] = useState(false);
@@ -65,7 +73,7 @@ export const Item = ({ item, appletId, activityName, activityKey, uiType, search
     : dictionaryText;
 
   return (
-    <StyledItemContainer>
+    <StyledItemContainer data-testid={dataTestid}>
       <Controller
         name={appletId}
         control={control}
@@ -74,10 +82,14 @@ export const Item = ({ item, appletId, activityName, activityKey, uiType, search
             sx={{ width: '4rem', height: '4rem' }}
             checked={isChecked}
             onChange={handleSelect}
+            data-testid={`${dataTestid}-checkbox`}
           />
         )}
       />
-      <StyledItemHeader onClick={() => setItemVisible((prevState) => !prevState)}>
+      <StyledItemHeader
+        onClick={() => setItemVisible((prevState) => !prevState)}
+        data-testid={`${dataTestid}-header`}
+      >
         <StyledSvgArrowContainer>
           <Svg id={itemVisible ? 'navigate-up' : 'navigate-right'} />
         </StyledSvgArrowContainer>

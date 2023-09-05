@@ -21,6 +21,7 @@ export const LeftBar = () => {
   const { result: workspacesData } = workspaces.useWorkspacesData() || {};
   const currentWorkspaceData = workspaces.useData();
   const [visibleDrawer, setVisibleDrawer] = useState(false);
+  const dataTestid = 'left-bar';
 
   useEffect(() => {
     dispatch(workspaces.thunk.getWorkspaces());
@@ -43,12 +44,15 @@ export const LeftBar = () => {
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
       <StyledDrawer>
-        <StyledDrawerLogo onClick={() => setVisibleDrawer((prevState) => !prevState)}>
+        <StyledDrawerLogo
+          onClick={() => setVisibleDrawer((prevState) => !prevState)}
+          data-testid={`${dataTestid}-collapse`}
+        >
           <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
         </StyledDrawerLogo>
         <List>
-          {links.map(({ labelKey, link, icon, activeIcon }) => (
-            <StyledDrawerItem key={labelKey}>
+          {links.map(({ labelKey, link, icon, activeIcon }, index) => (
+            <StyledDrawerItem key={labelKey} data-testid={`${dataTestid}-link-${index}`}>
               <NavLink
                 onClick={() => handleLinkClick(labelKey)}
                 to={link}
@@ -71,6 +75,7 @@ export const LeftBar = () => {
             setVisibleDrawer={setVisibleDrawer}
             visibleDrawer={visibleDrawer}
             workspaces={workspacesData || []}
+            data-testid={`${dataTestid}-workspaces-drawer`}
           />
         )}
       </StyledDrawer>

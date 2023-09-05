@@ -13,6 +13,7 @@ export type AppletProps = {
   applet: PublishedApplet;
   search?: string;
   setSearch?: Dispatch<SetStateAction<string>>;
+  'data-testid'?: string;
 };
 
 export type SelectedItem = {

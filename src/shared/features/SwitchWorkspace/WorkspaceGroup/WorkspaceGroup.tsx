@@ -20,6 +20,7 @@ import { WorkspaceGroupProps } from './WorkspaceGroup.types';
 
 export const WorkspaceGroup = ({
   workspacesGroup: { groupName, workspaces, emptyState = '' },
+  'data-testid': dataTestid,
 }: WorkspaceGroupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -39,11 +40,12 @@ export const WorkspaceGroup = ({
         {t(groupName)}
       </StyledBodyMedium>
       {workspaces.length ? (
-        workspaces.map((workspace) => (
+        workspaces.map((workspace, index) => (
           <StyledListItemButton
             key={workspace.ownerId}
             onClick={() => changeWorkspaceHandler(workspace)}
             selected={currentWorkspaceData?.ownerId === workspace.ownerId}
+            data-testid={`${dataTestid}-workspace-${index}`}
           >
             <StyledItemContent>
               <WorkspaceImage image={workspace?.image} workspaceName={workspace.workspaceName} />

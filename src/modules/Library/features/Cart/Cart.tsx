@@ -43,6 +43,7 @@ export const Cart = () => {
   const { result: workspacesData = [] } = workspaces.useWorkspacesData() || {};
   const workspacesWithRoles = workspaces.useWorkspacesRolesData();
   const handleClearCart = useClearCart();
+  const dataTestid = 'library-cart';
 
   const handleAddToBuilder = async () => {
     Mixpanel.track('Add to applet builder click');
@@ -115,7 +116,11 @@ export const Cart = () => {
     ) : (
       <EmptyState icon="empty-cart">
         <>
-          {t('emptyCart')} <StyledLink to={page.library}>{t('appletsCatalog')}</StyledLink>.
+          {t('emptyCart')}{' '}
+          <StyledLink to={page.library} data-testid="library-cart-go-to-library">
+            {t('appletsCatalog')}
+          </StyledLink>
+          .
         </>
       </EmptyState>
     );
@@ -145,13 +150,14 @@ export const Cart = () => {
           </StyledHeadlineLarge>
           <StyledAppletList>
             {pagedApplets?.length
-              ? pagedApplets.map((applet) => (
+              ? pagedApplets.map((applet, index) => (
                   <StyledAppletContainer key={applet.id}>
                     <Applet
                       uiType={AppletUiType.Cart}
                       applet={applet}
                       search={search}
                       setSearch={setSearchValue}
+                      data-testid={`${dataTestid}-applet-${index}`}
                     />
                   </StyledAppletContainer>
                 ))
@@ -166,12 +172,17 @@ export const Cart = () => {
               onPageChange={handleChangePage}
               labelRowsPerPage=""
               rowsPerPageOptions={[]}
+              data-testid={`${dataTestid}-pagination`}
             />
           )}
         </ContentContainer>
       </StyledBody>
       {authPopupVisible && (
-        <AuthPopup authPopupVisible={authPopupVisible} setAuthPopupVisible={setAuthPopupVisible} />
+        <AuthPopup
+          authPopupVisible={authPopupVisible}
+          setAuthPopupVisible={setAuthPopupVisible}
+          data-testid={`${dataTestid}-auth-popup`}
+        />
       )}
       {addToBuilderPopupVisible && (
         <AddToBuilderPopup
