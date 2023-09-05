@@ -19,7 +19,12 @@ import { Item } from '../Item';
 import { AppletUiType, LibraryForm, SelectedItem } from '../Applet.types';
 import { checkIfPerformanceTask } from './Activity.utils';
 
-export const Activity = ({ appletId, activity: { name, items, key }, uiType }: ActivityProps) => {
+export const Activity = ({
+  appletId,
+  activity: { name, items, key },
+  uiType,
+  'data-testid': dataTestid,
+}: ActivityProps) => {
   const { watch, setValue, getValues } = useFormContext<LibraryForm>();
   const dispatch = useAppDispatch();
   const watchApplet = watch(appletId);
@@ -93,12 +98,13 @@ export const Activity = ({ appletId, activity: { name, items, key }, uiType }: A
   }, [watchApplet]);
 
   return (
-    <StyledActivityContainer>
+    <StyledActivityContainer data-testid={dataTestid}>
       <Checkbox
         sx={{ width: '4rem', height: '4rem' }}
         checked={activityChecked}
         indeterminate={activityIndeterminate}
         onChange={handleActivityChecked}
+        data-testid={`${dataTestid}-checkbox`}
       />
       {isPerfTask ? (
         <StyledFlexTopCenter>
@@ -106,7 +112,10 @@ export const Activity = ({ appletId, activity: { name, items, key }, uiType }: A
           <StyledActivityName>{name}</StyledActivityName>
         </StyledFlexTopCenter>
       ) : (
-        <StyledActivityHeader onClick={() => setActivityVisible((prevState) => !prevState)}>
+        <StyledActivityHeader
+          onClick={() => setActivityVisible((prevState) => !prevState)}
+          data-testid={`${dataTestid}-header`}
+        >
           <StyledSvgArrowContainer>
             <Svg id={arrowSgvId} />
           </StyledSvgArrowContainer>
@@ -115,7 +124,7 @@ export const Activity = ({ appletId, activity: { name, items, key }, uiType }: A
       )}
       {activityVisible && !!items?.length && (
         <StyledItemsList>
-          {items?.map((item) => (
+          {items?.map((item, index) => (
             <Fragment key={item.name}>
               <Item
                 appletId={appletId}
@@ -123,6 +132,7 @@ export const Activity = ({ appletId, activity: { name, items, key }, uiType }: A
                 item={item}
                 activityKey={key}
                 uiType={uiType}
+                data-testid={`${dataTestid}-item-${index}`}
               />
             </Fragment>
           ))}

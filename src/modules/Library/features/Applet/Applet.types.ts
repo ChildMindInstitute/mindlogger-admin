@@ -12,6 +12,7 @@ export type AppletProps = {
   uiType?: AppletUiType;
   applet: PublishedApplet;
   setSearch?: Dispatch<SetStateAction<string>>;
+  'data-testid'?: string;
 };
 
 export type SelectedItem = {

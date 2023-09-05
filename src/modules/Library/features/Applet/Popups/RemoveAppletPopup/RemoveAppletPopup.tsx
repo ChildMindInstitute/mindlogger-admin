@@ -16,6 +16,7 @@ export const RemoveAppletPopup = ({
   appletName,
   isAuthorized,
   cartItems,
+  'data-testid': dataTestid,
 }: RemoveAppletPopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
@@ -50,6 +51,7 @@ export const RemoveAppletPopup = ({
       hasSecondBtn
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleModalClose}
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <Trans i18nKey="removeAppletConfirmation">

@@ -40,7 +40,12 @@ import { Activity } from './Activity';
 import { AppletImage } from './AppletImage';
 import { getUpdatedStorageData } from './Applet.utils';
 
-export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: AppletProps) => {
+export const Applet = ({
+  applet,
+  uiType = AppletUiType.List,
+  setSearch,
+  'data-testid': dataTestid,
+}: AppletProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -135,7 +140,11 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
       case AppletUiType.List:
         return (
           <>
-            <Button variant="text" onClick={() => navigate(APPLET_DETAILS)}>
+            <Button
+              variant="text"
+              onClick={() => navigate(APPLET_DETAILS)}
+              data-testid={`${dataTestid}-view-details`}
+            >
               {t('viewDetails')}
             </Button>
             <Button
@@ -144,6 +153,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleAddToCart}
+              data-testid={`${dataTestid}-add-to-cart`}
             >
               {t('addToCart')}
             </Button>
@@ -158,6 +168,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleAddToCart}
+              data-testid={`${dataTestid}-details-add-to-cart`}
             >
               {t('addToCart')}
             </Button>
@@ -171,6 +182,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
               startIcon={<Svg width="18" height="18" id="trash" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleRemove}
+              data-testid={`${dataTestid}-cart-remove`}
             >
               {t('remove')}
             </Button>
@@ -181,18 +193,19 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
 
   return (
     <>
-      <StyledAppletContainer>
+      <StyledAppletContainer data-testid={dataTestid}>
         <AppletImage image={image} name={displayName} />
         <Box>
           {renderAppletInfo()}
           {!!keywords.length && (
             <StyledAppletKeywordsContainer>
-              {keywords.map((keyword) => (
+              {keywords.map((keyword, index) => (
                 <StyledAppletKeyword
                   onClick={setSearch ? () => setSearch(keyword) : falseReturnFunc}
                   variant="contained"
                   key={keyword}
                   hasSearch={!!setSearch}
+                  data-testid={`${dataTestid}-keywords-${index}`}
                 >
                   {keyword}
                 </StyledAppletKeyword>
@@ -215,15 +228,21 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
                       <Svg id={arrowSvgId} />
                     </StyledSvgContainer>
                   }
+                  data-testid={`${dataTestid}-activities-collapse`}
                 >
                   <StyledLabelBoldLarge>{t('activities')}</StyledLabelBoldLarge>
                 </StyledExpandedButton>
               )}
               {activitiesVisible && (
                 <StyledActivities>
-                  {activities.map((activity) => (
+                  {activities.map((activity, index) => (
                     <Fragment key={activity.name}>
-                      <Activity appletId={id} activity={activity} uiType={uiType} />
+                      <Activity
+                        appletId={id}
+                        activity={activity}
+                        uiType={uiType}
+                        data-testid={`${dataTestid}-activities-${index}`}
+                      />
                     </Fragment>
                   ))}
                 </StyledActivities>
@@ -240,6 +259,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
           setRemoveAppletPopupVisible={setRemoveAppletPopupVisible}
           isAuthorized={isAuthorized}
           cartItems={cartItems}
+          data-testid={`${dataTestid}-remove-popup`}
         />
       )}
     </>

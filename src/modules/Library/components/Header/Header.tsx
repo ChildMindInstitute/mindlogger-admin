@@ -38,6 +38,7 @@ export const Header = ({
       endIcon={<Svg width="20" height="20" id="navigate-right" />}
       variant="outlined"
       onClick={rightButtonCallback}
+      data-testid="library-cart-button"
     >
       <Box sx={{ marginLeft: theme.spacing(1.2) }}>
         <StyledLabelLarge sx={{ textAlign: 'initial', color: variables.palette.on_surface }}>
@@ -56,6 +57,7 @@ export const Header = ({
       startIcon={<Svg width="18" height="18" id="builder" />}
       variant="contained"
       disabled={isRightButtonDisabled}
+      data-testid="library-add-to-builder"
     >
       {t('addToBuilder')}
     </StyledBuilderButton>
@@ -68,6 +70,7 @@ export const Header = ({
           <StyledBackButton
             startIcon={<Svg width="18" height="18" id="directory-up" />}
             onClick={handleNavigate}
+            data-testid="library-back-button"
           >
             <StyledLabelLarge> {t('appletsCatalog')}</StyledLabelLarge>
           </StyledBackButton>
@@ -81,6 +84,7 @@ export const Header = ({
             placeholder={t('search')}
             onSearch={handleSearch}
             width="100%"
+            data-testid="library-search"
           />
         )}
       </Box>

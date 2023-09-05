@@ -89,9 +89,13 @@ export const AppletsCatalog = () => {
           </StyledHeadlineLarge>
           <StyledAppletList>
             {appletsArray?.length
-              ? appletsArray.map((applet) => (
+              ? appletsArray.map((applet, index) => (
                   <StyledAppletContainer key={applet.id}>
-                    <Applet applet={applet} setSearch={setSearchValue} />
+                    <Applet
+                      applet={applet}
+                      setSearch={setSearchValue}
+                      data-testid={`library-applets-${index}`}
+                    />
                   </StyledAppletContainer>
                 ))
               : renderEmptyState()}
@@ -105,6 +109,7 @@ export const AppletsCatalog = () => {
               onPageChange={handleChangePage}
               labelRowsPerPage=""
               rowsPerPageOptions={[]}
+              data-testid="library-applets-pagination"
             />
           )}
         </>

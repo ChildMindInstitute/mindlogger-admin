@@ -44,7 +44,13 @@ export const AppletDetails = () => {
         rightButtonCallback={handleNavigateToLibraryCart}
       />
       <ContentContainer>
-        {!!applet && <Applet uiType={AppletUiType.Details} applet={applet} />}
+        {!!applet && (
+          <Applet
+            uiType={AppletUiType.Details}
+            applet={applet}
+            data-testid="library-applet-details"
+          />
+        )}
       </ContentContainer>
     </StyledBody>
   );
