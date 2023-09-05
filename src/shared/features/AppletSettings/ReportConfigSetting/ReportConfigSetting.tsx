@@ -363,12 +363,11 @@ export const ReportConfigSetting = ({
 
   useEffect(() => {
     reset(defaultValues);
-    setSubjectData(subjectDataProps);
   }, [appletData]);
 
   useEffect(() => {
     setSubjectData(subjectDataProps);
-  }, [includeRespondentId, itemValue, reportIncludedItemName, reportIncludedActivity]);
+  }, [appletData, includeRespondentId, itemValue, reportIncludedItemName, reportIncludedActivity]);
 
   useEffect(() => {
     dispatch(setReportConfigChanges({ hasChanges: isDirty || hasErrors }));
