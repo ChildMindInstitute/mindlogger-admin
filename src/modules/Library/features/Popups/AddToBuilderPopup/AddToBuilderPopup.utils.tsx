@@ -38,7 +38,7 @@ const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] =
 ];
 
 const getWorkspacesRows = (workspaces: Workspace[]) =>
-  workspaces?.map(({ ownerId, workspaceName, image }) => ({
+  workspaces?.map(({ ownerId, workspaceName, image }, index) => ({
     workspaceName: {
       content: () => (
         <StyledTableFormControlLabel
@@ -57,6 +57,7 @@ const getWorkspacesRows = (workspaces: Workspace[]) =>
               </StyledLabelLarge>
             </StyledFlexTopCenter>
           }
+          data-testid={`library-cart-add-to-builder-popup-select-workspaces-${index}`}
         />
       ),
       value: workspaceName,
@@ -64,7 +65,7 @@ const getWorkspacesRows = (workspaces: Workspace[]) =>
   }));
 
 const getAppletsRows = (applets: Applet[]) =>
-  applets?.map(({ id, appletName, image }) => ({
+  applets?.map(({ id, appletName, image }, index) => ({
     appletName: {
       content: () => (
         <StyledTableFormControlLabel
@@ -79,6 +80,7 @@ const getAppletsRows = (applets: Applet[]) =>
               </StyledLabelLarge>
             </StyledFlexTopCenter>
           }
+          data-testid={`library-cart-add-to-builder-popup-select-applet-${index}`}
         />
       ),
       value: appletName,
@@ -191,7 +193,12 @@ export const getSteps = ({
       stepId: AddToBuilderSteps.AddToBuilderActions,
       popupTitle: 'contentActions',
       render: () => (
-        <RadioGroupController name="addToBuilderAction" control={control} options={options} />
+        <RadioGroupController
+          name="addToBuilderAction"
+          control={control}
+          options={options}
+          data-testid="library-cart-add-to-builder-popup-select-action"
+        />
       ),
       buttonText: 'continue',
       hasSecondBtn: true,

@@ -178,6 +178,7 @@ export const AddToBuilderPopup = ({
       hasSecondBtn={steps[step].hasSecondBtn}
       secondBtnText={t(steps[step]?.secondBtnText || '')}
       onSecondBtnSubmit={steps[step].onSecondBtnSubmit}
+      data-testid="library-cart-add-to-builder-popup"
     >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
