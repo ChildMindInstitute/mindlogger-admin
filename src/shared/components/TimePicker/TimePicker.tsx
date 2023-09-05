@@ -21,6 +21,7 @@ export const TimePicker = <T extends FieldValues>({
   // TODO: check how to avoid using providedValue and use value from control (the issue is in the NotificationsTab of
   //  EventForm)
   providedValue,
+  'data-testid': dataTestid,
 }: TimePickerProps<T>) => (
   <Controller
     control={control}
@@ -30,7 +31,7 @@ export const TimePicker = <T extends FieldValues>({
       const selected = valueToPass ? parse(valueToPass, DateFormats.Time, new Date()) : valueToPass;
 
       return (
-        <StyledTimePickerWrapper sx={{ ...wrapperSx }}>
+        <StyledTimePickerWrapper sx={{ ...wrapperSx }} data-testid={dataTestid}>
           <ReactDatePicker
             className="date-picker"
             selected={selected as Date | null | undefined}

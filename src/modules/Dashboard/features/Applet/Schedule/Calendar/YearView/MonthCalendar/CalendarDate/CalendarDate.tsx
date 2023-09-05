@@ -59,7 +59,11 @@ export const CalendarDate = ({
     (event, index) =>
       ((showMoreText && index < MAX_EVENTS_IN_TOOLTIP) || !showMoreText) && (
         <StyledTooltipEventWrapper key={uniqueId()} bgColor={event.backgroundColor}>
-          <Event title={event.title} event={event} />
+          <Event
+            title={event.title}
+            event={event}
+            data-testid={`dashboard-calendar-event-${index}`}
+          />
         </StyledTooltipEventWrapper>
       ),
   );

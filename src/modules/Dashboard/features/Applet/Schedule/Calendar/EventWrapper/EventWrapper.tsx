@@ -46,7 +46,14 @@ export const EventWrapper = ({
   return timeView && isHiddenInTimeView ? (
     <Box ref={emptyRef} />
   ) : (
-    <Box className="event-wrapper" ref={childrenRef} data-id={id} data-start={start} data-end={end}>
+    <Box
+      className="event-wrapper"
+      ref={childrenRef}
+      data-id={id}
+      data-start={start}
+      data-end={end}
+      data-testid={`dashboard-calendar-${id}`}
+    >
       <Tooltip followCursor tooltipTitle={tooltipTitle} placement="top">
         {cloneElement(children, {
           ...children.props,

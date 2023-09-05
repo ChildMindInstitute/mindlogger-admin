@@ -31,6 +31,7 @@ export const Toolbar = ({
   const currentDateWeek = getISOWeek(currentDate);
   const dateMonth = onlyMonthDate(date);
   const currentDateMonth = onlyMonthDate(currentDate);
+  const dataTestid = 'schedule-calendar-current-date-toolbar';
 
   const handleViewChange = (value: CalendarViews) => {
     setActiveView(value);
@@ -76,17 +77,18 @@ export const Toolbar = ({
       variant="text"
       startIcon={isSelectedFutureDate() && <Svg id="triangle-left" />}
       endIcon={isSelectedPastDate() && <Svg id="triangle-right" />}
+      data-testid={`${dataTestid}-today`}
     >
       {t('today')}
     </StyledTodayBtn>
   );
 
   return (
-    <StyledToolbar data-testid="schedule-calendar-current-date-toolbar">
+    <StyledToolbar data-testid={dataTestid}>
       <StyledFlexTopCenter>
         {isSelectedFutureDate() && todayButton}
         <StyledFlexTopCenter>
-          <StyledIconBtn onClick={() => onNavigate('PREV')}>
+          <StyledIconBtn onClick={() => onNavigate('PREV')} data-testid={`${dataTestid}-prev`}>
             <Svg id="navigate-left" />
           </StyledIconBtn>
           <StyledTitleBoldMedium
@@ -94,7 +96,7 @@ export const Toolbar = ({
           >
             {label}
           </StyledTitleBoldMedium>
-          <StyledIconBtn onClick={() => onNavigate('NEXT')}>
+          <StyledIconBtn onClick={() => onNavigate('NEXT')} data-testid={`${dataTestid}-next`}>
             <Svg id="navigate-right" />
           </StyledIconBtn>
         </StyledFlexTopCenter>
@@ -105,6 +107,7 @@ export const Toolbar = ({
           toggleButtons={getCalendarViewButtons()}
           activeButton={activeView}
           setActiveButton={handleViewChange as SetActiveBtnFunc}
+          data-testid={`${dataTestid}-view-mode`}
         />
       </StyledViewsWrapper>
     </StyledToolbar>

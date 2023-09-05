@@ -71,6 +71,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { scheduleExportTableData = [], scheduleExportCsv = [] } = legendEvents ?? {};
   const boundingBox = searchContainerRef?.current?.getBoundingClientRect();
   const isIndividual = schedule === ScheduleOptions.IndividualSchedule;
+  const dataTestid = 'dashboard-calendar-schedule-legend';
 
   const respondentName = getRespondentName(
     selectedRespondent?.secretId || '',
@@ -167,10 +168,14 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
               autoWidth: true,
               IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
             }}
+            data-testid={`${dataTestid}-schedule`}
           />
         </StyledSelect>
         {isIndividual && (
-          <StyledIconBtn onClick={() => setRemoveIndividualSchedulePopupVisible(true)}>
+          <StyledIconBtn
+            onClick={() => setRemoveIndividualSchedulePopupVisible(true)}
+            data-testid={`${dataTestid}-individual-remove`}
+          >
             <Svg id="trash" />
           </StyledIconBtn>
         )}
@@ -180,6 +185,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           <StyledSearchContainer
             ref={searchContainerRef}
             onClick={() => setSearchPopupVisible(true)}
+            data-testid={`${dataTestid}-individual-search`}
           >
             <Search selectedRespondent={selectedRespondent} placeholder={t('selectRespondent')} />
           </StyledSearchContainer>
@@ -192,29 +198,33 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
             setSelectedRespondent={setSelectedRespondent}
             selectedRespondent={selectedRespondent}
             respondentsItems={respondentsItems}
+            data-testid={`${dataTestid}-individual-search-popup`}
           />
         </>
       )}
       <StyledBtnsRow>
-        <StyledBtn onClick={handleImportClick}>
+        <StyledBtn onClick={handleImportClick} data-testid={`${dataTestid}-import`}>
           <Svg width={18} height={18} id="export" />
           {t('import')}
         </StyledBtn>
-        <StyledBtn onClick={exportScheduleHandler}>
+        <StyledBtn onClick={exportScheduleHandler} data-testid={`${dataTestid}-export`}>
           <Svg width={18} height={18} id="export2" />
           {t('export')}
         </StyledBtn>
       </StyledBtnsRow>
-      {expandedLists?.map(({ buttons, items, title, allAvailableScheduled, isHiddenInLegend }) => (
-        <ExpandedList
-          key={title}
-          buttons={buttons}
-          items={items}
-          title={title}
-          isHiddenInLegend={isHiddenInLegend}
-          allAvailableScheduled={allAvailableScheduled}
-        />
-      ))}
+      {expandedLists?.map(
+        ({ buttons, items, title, allAvailableScheduled, isHiddenInLegend, type }) => (
+          <ExpandedList
+            key={title}
+            buttons={buttons}
+            items={items}
+            title={title}
+            isHiddenInLegend={isHiddenInLegend}
+            allAvailableScheduled={allAvailableScheduled}
+            data-testid={`${dataTestid}-${type}`}
+          />
+        ),
+      )}
       {exportDefaultSchedulePopupVisible && (
         <ExportSchedulePopup
           open={exportDefaultSchedulePopupVisible}

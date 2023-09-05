@@ -23,6 +23,7 @@ export const ConfirmScheduledAccessPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
+      data-testid="dashboard-calendar-confirm-scheduled-access-popup"
     >
       <StyledModalWrapper>
         <Trans i18nKey="confirmChangeOnScheduledAccess">

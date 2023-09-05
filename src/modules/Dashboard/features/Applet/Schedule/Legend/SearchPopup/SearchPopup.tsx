@@ -36,6 +36,7 @@ export const SearchPopup = ({
   setSelectedRespondent,
   selectedRespondent,
   respondentsItems,
+  'data-testid': dataTestid,
 }: SearchPopupProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
@@ -115,7 +116,12 @@ export const SearchPopup = ({
 
   return (
     <>
-      <StyledModal style={{ top, left }} open={open} onClose={handleSearchPopupClose}>
+      <StyledModal
+        style={{ top, left }}
+        open={open}
+        onClose={handleSearchPopupClose}
+        data-testid={dataTestid}
+      >
         <StyledModalInner>
           <StyledModalContent>
             <Box>
@@ -130,11 +136,12 @@ export const SearchPopup = ({
                   </StyledClearBtn>
                 }
                 onSearch={handleSearch}
+                data-testid={`${dataTestid}-search`}
               />
             </Box>
 
             <StyledItemsContainer>
-              {filteredRespondents?.map((item) => {
+              {filteredRespondents?.map((item, index) => {
                 const { id, secretId, nickname, icon } = item || {};
                 const isSelected = id === selectedRespondent?.id;
 
@@ -143,6 +150,7 @@ export const SearchPopup = ({
                     key={id}
                     background={isSelected ? variables.palette.surface_variant : undefined}
                     onClick={() => selectedRespondentHandler(item)}
+                    data-testid={`${dataTestid}-respondent-${index}`}
                   >
                     {icon || <Box sx={{ width: '2.4rem' }} />}
                     <Box sx={{ ml: theme.spacing(1.8) }}>
@@ -168,6 +176,7 @@ export const SearchPopup = ({
           onSubmit={handleAddIndividualScheduleSubmit}
           respondentName={respondentName}
           error={error ? getErrorMessage(error) : null}
+          data-testid={`${dataTestid}-add-inividual-schedule-popup`}
         />
       )}
     </>

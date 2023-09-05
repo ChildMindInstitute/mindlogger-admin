@@ -27,6 +27,7 @@ export const ExpandedList = ({
   buttons,
   isHiddenInLegend,
   allAvailableScheduled,
+  'data-testid': dataTestid,
 }: ExpandedListProps) => {
   const [listVisible, setListVisible] = useState(true);
   const { t } = useTranslation('app');
@@ -34,8 +35,11 @@ export const ExpandedList = ({
   const getIconBtnMargin = (index: number) => (index === 0 ? 'auto' : theme.spacing(0.4));
 
   return isHiddenInLegend ? null : (
-    <StyledCollapse>
-      <StyledCollapseBtn onClick={() => setListVisible((prevState) => !prevState)}>
+    <StyledCollapse data-testid={dataTestid}>
+      <StyledCollapseBtn
+        onClick={() => setListVisible((prevState) => !prevState)}
+        data-testid={`${dataTestid}-collapse`}
+      >
         <StyledFlexTopCenter sx={{ cursor: 'pointer' }}>
           <Svg id={collapseBtnId} />
           <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(1) }}>{title}</StyledLabelBoldLarge>
@@ -51,6 +55,7 @@ export const ExpandedList = ({
                     event.stopPropagation();
                     button.action();
                   }}
+                  data-testid={`${dataTestid}-${index}`}
                 >
                   {button.icon}
                 </StyledIconBtn>
@@ -70,8 +75,10 @@ export const ExpandedList = ({
             </StyledBodyMedium>
           )}
           <StyledChildren>
-            {items?.map((el) => (
-              <StyledItem key={uniqueId()}>{el}</StyledItem>
+            {items?.map((item, index) => (
+              <StyledItem key={uniqueId()} data-testid={`${dataTestid}-item-${index}`}>
+                {item}
+              </StyledItem>
             ))}
           </StyledChildren>
         </>

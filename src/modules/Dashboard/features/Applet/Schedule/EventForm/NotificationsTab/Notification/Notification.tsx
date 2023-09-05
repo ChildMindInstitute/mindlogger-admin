@@ -12,7 +12,7 @@ import { notificationTimeToggles } from './Notification.const';
 import { Header } from '../Header';
 import { NotificationProps } from './Notification.types';
 
-export const Notification = ({ index, remove }: NotificationProps) => {
+export const Notification = ({ index, remove, 'data-testid': dataTestid }: NotificationProps) => {
   const { t } = useTranslation('app');
   const { setValue, watch, trigger } = useFormContext();
 
@@ -46,32 +46,48 @@ export const Notification = ({ index, remove }: NotificationProps) => {
   }, [atTime, fromTime, toTime, startTime, endTime]);
 
   return (
-    <StyledNotificationWrapper>
+    <StyledNotificationWrapper data-testid={dataTestid}>
       <StyledLabelLarge sx={{ margin: theme.spacing(0, 0, 1.2, 1.1) }}>
         {t('notification')} {index + 1}
       </StyledLabelLarge>
       <StyledNotification>
-        <Header onClickHandler={handleRemoveNotification} />
+        <Header onClickHandler={handleRemoveNotification} data-testid={dataTestid} />
         <StyledFlexTopStart>
           <StyledLeftCol>
             <ToggleButtonGroup
               toggleButtons={notificationTimeToggles}
               activeButton={notification.triggerType}
               customChange={updateTime}
+              data-testid={`${dataTestid}-type`}
             />
           </StyledLeftCol>
           <StyledCol sx={{ marginLeft: theme.spacing(2.4) }}>
             {notification.triggerType === NotificationType.Fixed ? (
               <StyledColInner>
-                <TimePicker providedValue={atTime} name={atTimeFieldName} label={t('at')} />
+                <TimePicker
+                  providedValue={atTime}
+                  name={atTimeFieldName}
+                  label={t('at')}
+                  data-testid={`${dataTestid}-time`}
+                />
               </StyledColInner>
             ) : (
               <>
                 <StyledColInner>
-                  <TimePicker providedValue={fromTime} name={fromTimeFieldName} label={t('from')} />
+                  <TimePicker
+                    providedValue={fromTime}
+                    name={fromTimeFieldName}
+                    label={t('from')}
+                    data-testid={`${dataTestid}-from`}
+                  />
                 </StyledColInner>
                 <StyledColInner sx={{ marginLeft: theme.spacing(2.4) }}>
-                  <TimePicker providedValue={toTime} name={toTimeFieldName} label={t('to')} />
+                  <TimePicker
+                    providedValue={toTime}
+                    name={toTimeFieldName}
+                    label={t('to')}
+                    data-testid={`${dataTestid}-to`}
+                  />
                 </StyledColInner>
               </>
             )}

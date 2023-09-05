@@ -24,6 +24,7 @@ type DatePicker = {
   onMonthChange?: (date: Date) => void;
   disabled?: boolean;
   onCloseCallback?: () => void;
+  'data-testid'?: string;
 } & TextFieldProps;
 
 export type DatePickerProps<T extends FieldValues> = DatePicker & UseControllerProps<T>;

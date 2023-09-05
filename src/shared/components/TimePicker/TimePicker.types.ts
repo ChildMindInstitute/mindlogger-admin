@@ -11,6 +11,7 @@ type TimePicker = {
   minTime?: Date;
   maxTime?: Date;
   providedValue?: string | null;
+  'data-testid'?: string;
 } & TextFieldProps;
 
 export type TimePickerProps<T extends FieldValues> = TimePicker & UseControllerProps<T>;
