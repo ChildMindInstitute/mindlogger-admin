@@ -10,7 +10,9 @@ const NormalToolbar = MdEditor.NormalToolbar;
 export const AlignTextExtension = ({ onInsert, type, title }: AlignTextExtensionProps) => {
   const markHandler = () => {
     const generator: InsertContentGenerator = (selectedText) => ({
-      targetValue: `::: hljs-${type} ${selectedText} :::`,
+      targetValue: `::: hljs-${type}
+${selectedText} 
+:::`,
       select: true,
       deviationStart: 0,
       deviationEnd: 0,
