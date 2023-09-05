@@ -6,5 +6,6 @@ export type ActivityProps = {
   appletId: string;
   activity: PublishedActivity;
   uiType: AppletUiType;
+  search: string;
   'data-testid'?: string;
 };

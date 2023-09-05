@@ -21,7 +21,10 @@ import {
 import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
 
-export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabProps) => {
+export const AvailabilityTab = ({
+  hasAlwaysAvailableOption,
+  'data-testid': dataTestid,
+}: AvailabilityTabProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext<EventFormValues>();
   const alwaysAvailable = watch('alwaysAvailable');
@@ -50,6 +53,7 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabPro
         control={control}
         label={isOncePeriodicity ? t('date') : t('startDate')}
         onCloseCallback={onCloseCallback}
+        data-testid={`${dataTestid}-start-date`}
       />
       {!isOncePeriodicity && (
         <>
@@ -62,6 +66,7 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabPro
             value={endDate}
             control={control}
             label={t('endDate')}
+            data-testid={`${dataTestid}-end-date`}
           />
         </>
       )}
@@ -81,6 +86,7 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabPro
         fullWidth
         options={getAvailabilityOptions(hasAlwaysAvailableOption)}
         control={control}
+        data-testid={`${dataTestid}-always-available`}
       />
       {Object.keys(removeWarning).length !== 0 && (
         <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.6) }} color={variables.palette.primary}>
@@ -94,6 +100,7 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabPro
             name="oneTimeCompletion"
             control={control}
             label={<StyledBodyMedium>{t('oneTimeCompletion')}</StyledBodyMedium>}
+            data-testid={`${dataTestid}-one-time-completion`}
           />
         </StyledWrapper>
       ) : (
@@ -104,14 +111,25 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabPro
               toggleButtons={repeatsButtons}
               activeButton={periodicity}
               setActiveButton={handleSetPeriodicity}
+              data-testid={`${dataTestid}-periodicity`}
             />
           </StyledWrapper>
           <StyledTimeRow>
             <StyledTimeWrapper>
-              <TimePicker name="startTime" control={control} label={t('from')} />
+              <TimePicker
+                name="startTime"
+                control={control}
+                label={t('from')}
+                data-testid={`${dataTestid}-start-time`}
+              />
             </StyledTimeWrapper>
             <StyledTimeWrapper sx={{ marginLeft: theme.spacing(2.4) }}>
-              <TimePicker name="endTime" control={control} label={t('to')} />
+              <TimePicker
+                name="endTime"
+                control={control}
+                label={t('to')}
+                data-testid={`${dataTestid}-end-time`}
+              />
             </StyledTimeWrapper>
           </StyledTimeRow>
           <StyledWrapper>
@@ -120,6 +138,7 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption }: AvailabilityTabPro
               name="accessBeforeSchedule"
               control={control}
               label={<StyledBodyMedium>{t('allowAccessBeforeTime')}</StyledBodyMedium>}
+              data-testid={`${dataTestid}-access-before-schedule`}
             />
           </StyledWrapper>
           {datePicker}

@@ -9,8 +9,9 @@ import { EventFormValues } from '../../EventForm.types';
 import { Header } from '../Header';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { StyledReminder, StyledInputWrapper } from './Reminder.styles';
+import { ReminderProps } from './Reminder.types';
 
-export const Reminder = () => {
+export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
   const { t } = useTranslation('app');
   const { setValue, control } = useFormContext<EventFormValues>();
 
@@ -24,7 +25,7 @@ export const Reminder = () => {
         {t('reminder')}
       </StyledLabelLarge>
       <StyledReminder>
-        <Header onClickHandler={handleARemoveReminder} />
+        <Header onClickHandler={handleARemoveReminder} data-testid={dataTestid} />
         <StyledFlexTopStart>
           <StyledInputWrapper>
             <InputController
@@ -36,10 +37,15 @@ export const Reminder = () => {
               textAdornment="day"
               tooltip={t('numberOfConsecutiveDays')}
               minNumberValue={0}
+              data-testid={`${dataTestid}-activity-incomplete`}
             />
           </StyledInputWrapper>
           <StyledColInner>
-            <TimePicker name="reminder.reminderTime" label={t('reminderTime')} />
+            <TimePicker
+              name="reminder.reminderTime"
+              label={t('reminderTime')}
+              data-testid={`${dataTestid}-reminder-time`}
+            />
           </StyledColInner>
         </StyledFlexTopStart>
       </StyledReminder>

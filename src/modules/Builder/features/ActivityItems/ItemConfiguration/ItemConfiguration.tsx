@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Grid } from '@mui/material';
@@ -12,8 +12,9 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { StyledContent, StyledItemConfiguration } from './ItemConfiguration.styles';
@@ -24,20 +25,28 @@ import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSe
 import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
 import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
 import { ConfigurationHeader } from './ConfigurationHeader';
+import { EditItemModal } from './EditItemModal';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const { t } = useTranslation('app');
   const optionalItemsRef = useRef<OptionalItemsRef | null>(null);
+  const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
+  const selectChangeRef = useRef<undefined | (() => void)>();
 
   const methods = useFormContext();
-  const { fieldName } = useCurrentActivity();
+  const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
 
   const { control, watch } = methods;
-
-  const responseType = watch(`${name}.responseType`) as ItemResponseTypeNoPerfTasks;
   const isReviewable = watch(`${fieldName}.isReviewable`);
+  const responseType = watch(`${name}.responseType`) as ItemResponseTypeNoPerfTasks;
+  const currentItem = watch(name);
+  const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
+  const conditionalLogicForItem = getItemConditionDependencies(
+    currentItem,
+    activity.conditionalLogic,
+  );
 
   const availableItemsTypeOptions = isReviewable
     ? itemsTypeOptions.reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
@@ -54,6 +63,19 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
       }, [])
     : itemsTypeOptions;
 
+  const handleModalSubmit = () => {
+    selectChangeRef.current?.();
+    filterConditionalLogicByItem();
+  };
+
+  const prepareSelectChangePopup = (handleOnChange: () => void) => {
+    setIsEditItemPopupVisible(true);
+    selectChangeRef.current = handleOnChange;
+  };
+  const checkIfSelectChangePopupIsVisible = conditionalLogicForItem?.length
+    ? prepareSelectChangePopup
+    : undefined;
+
   return (
     <>
       <StyledItemConfiguration ref={containerRef}>
@@ -69,6 +91,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
               <GroupedSelectSearchController
                 name={`${name}.responseType`}
                 options={availableItemsTypeOptions}
+                checkIfSelectChangePopupIsVisible={checkIfSelectChangePopupIsVisible}
                 control={control}
                 data-testid="builder-activity-items-item-configuration-response-type"
               />
@@ -113,6 +136,12 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
       >
         <StyledModalWrapper>{t(message)}</StyledModalWrapper>
       </Modal>
+      <EditItemModal
+        itemFieldName={name}
+        isPopupVisible={isEditItemPopupVisible}
+        setIsPopupVisible={setIsEditItemPopupVisible}
+        onModalSubmit={handleModalSubmit}
+      />
     </>
   );
 };

@@ -73,18 +73,40 @@ export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
     const activity = appletData.activities?.find(
       ({ id, key }) => activityId === id || activityId === key,
     );
-    reportIncludedItemName = activity?.reportIncludedItemName || '';
+    const { reportIncludedItemName: activityIncludedItemName } = activity || {};
+    if (
+      activityIncludedItemName &&
+      activity?.items.some((item) => item.name === activityIncludedItemName)
+    ) {
+      reportIncludedItemName = activityIncludedItemName;
+    }
   }
 
   if (activityFlowId) {
     const activityFlow = appletData.activityFlows?.find(
       ({ id, key }) => activityFlowId === id || activityFlowId === key,
     );
-    reportIncludedItemName = activityFlow?.reportIncludedItemName || '';
-    reportIncludedActivityName = activityFlow?.reportIncludedActivityName || '';
+    const {
+      reportIncludedActivityName: flowIncludedActivityName,
+      reportIncludedItemName: flowIncludedItemName,
+    } = activityFlow || {};
+    const chosenActivity = appletData.activities?.find(
+      (activity) => activity.name === flowIncludedActivityName,
+    );
+
+    if (flowIncludedActivityName && chosenActivity) {
+      reportIncludedActivityName = flowIncludedActivityName;
+
+      if (
+        flowIncludedItemName &&
+        chosenActivity.items.some((item) => item.name === flowIncludedItemName)
+      ) {
+        reportIncludedItemName = flowIncludedItemName;
+      }
+    }
   }
 
-  const defaultValues = {
+  return {
     ...initialValues,
     reportServerIp,
     reportPublicKey,
@@ -93,8 +115,6 @@ export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
     reportIncludedItemName,
     reportIncludedActivityName,
     reportEmailBody: reportEmailBody || t('reportEmailBody'),
-    itemValue: !!reportIncludedItemName,
+    itemValue: !!reportIncludedActivityName || !!reportIncludedItemName,
   };
-
-  return defaultValues;
 };

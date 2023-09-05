@@ -7,6 +7,7 @@ import { StyledFlexTopCenter, StyledSvgArrowContainer } from 'shared/styles';
 import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
 import { useAppDispatch } from 'redux/store';
 import { library } from 'redux/modules';
+import { getHighlightedText } from 'shared/utils';
 
 import { ActivityProps } from './Activity.types';
 import {
@@ -23,6 +24,7 @@ export const Activity = ({
   appletId,
   activity: { name, items, key },
   uiType,
+  search,
   'data-testid': dataTestid,
 }: ActivityProps) => {
   const { watch, setValue, getValues } = useFormContext<LibraryForm>();
@@ -109,7 +111,7 @@ export const Activity = ({
       {isPerfTask ? (
         <StyledFlexTopCenter>
           <Box sx={{ width: '4rem', height: '4rem' }} />
-          <StyledActivityName>{name}</StyledActivityName>
+          <StyledActivityName>{getHighlightedText(name, search)}</StyledActivityName>
         </StyledFlexTopCenter>
       ) : (
         <StyledActivityHeader
@@ -119,7 +121,7 @@ export const Activity = ({
           <StyledSvgArrowContainer>
             <Svg id={arrowSgvId} />
           </StyledSvgArrowContainer>
-          <StyledActivityName>{name}</StyledActivityName>
+          <StyledActivityName>{getHighlightedText(name, search)}</StyledActivityName>
         </StyledActivityHeader>
       )}
       {activityVisible && !!items?.length && (
@@ -132,6 +134,7 @@ export const Activity = ({
                 item={item}
                 activityKey={key}
                 uiType={uiType}
+                search={search}
                 data-testid={`${dataTestid}-item-${index}`}
               />
             </Fragment>

@@ -33,6 +33,7 @@ export const DatePicker = <T extends FieldValues>({
   onMonthChange,
   disabled,
   onCloseCallback,
+  'data-testid': dataTestid,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -99,6 +100,7 @@ export const DatePicker = <T extends FieldValues>({
               </StyledIconBtn>
             ),
           },
+          'data-testid': dataTestid,
         };
 
         return (
@@ -109,6 +111,7 @@ export const DatePicker = <T extends FieldValues>({
                 {...textFieldProps}
                 label={label || t('date')}
                 value={getValue()}
+                data-testid={`${dataTestid}-date`}
               />
             ) : (
               <>
@@ -117,6 +120,7 @@ export const DatePicker = <T extends FieldValues>({
                   {...textFieldProps}
                   label={t('startDate')}
                   value={getValue()[0] || ''}
+                  data-testid={`${dataTestid}-start-date`}
                 />
                 <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
                   {t('smallTo')}
@@ -126,6 +130,7 @@ export const DatePicker = <T extends FieldValues>({
                   {...textFieldProps}
                   label={t('endDate')}
                   value={getValue()[1] || ''}
+                  data-testid={`${dataTestid}-end-date`}
                 />
               </>
             )}
@@ -142,6 +147,7 @@ export const DatePicker = <T extends FieldValues>({
                 vertical: 'bottom',
                 horizontal: 'center',
               }}
+              data-testid={`${dataTestid}-popover`}
             >
               {value && <PopoverHeader uiType={uiType} date={value as Date | Date[]} />}
               <ReactDatePicker

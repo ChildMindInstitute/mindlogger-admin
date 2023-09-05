@@ -9,8 +9,9 @@ import { EventFormValues } from '../EventForm.types';
 import { Notification } from './Notification';
 import { Reminder } from './Reminder';
 import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
+import { NotificationsTabProps } from './NotificationsTab.types';
 
-export const NotificationsTab = () => {
+export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTabProps) => {
   const { t } = useTranslation('app');
   const { setValue, control, watch } = useFormContext<EventFormValues>();
   const { fields, append, remove } = useFieldArray({
@@ -43,12 +44,18 @@ export const NotificationsTab = () => {
         </StyledTitleMedium>
       </StyledRowHeader>
       {fields?.map((item, index) => (
-        <Notification key={item.id} index={index} remove={remove} />
+        <Notification
+          key={item.id}
+          index={index}
+          remove={remove}
+          data-testid={`${dataTestid}-notification-${index}`}
+        />
       ))}
       <StyledAddBtn
         variant="text"
         startIcon={<Svg width="18" height="18" id="add" />}
         onClick={handleAddNotification}
+        data-testid={`${dataTestid}-add-notification`}
       >
         {t('addNotification')}
       </StyledAddBtn>
@@ -60,12 +67,13 @@ export const NotificationsTab = () => {
           </StyledTitleMedium>
         </StyledRowHeader>
         {reminder ? (
-          <Reminder />
+          <Reminder data-testid={`${dataTestid}-reminder`} />
         ) : (
           <StyledAddBtn
             variant="text"
             startIcon={<Svg width="18" height="18" id="add" />}
             onClick={handleAddReminder}
+            data-testid={`${dataTestid}-add-reminder`}
           >
             {t('addReminder')}
           </StyledAddBtn>

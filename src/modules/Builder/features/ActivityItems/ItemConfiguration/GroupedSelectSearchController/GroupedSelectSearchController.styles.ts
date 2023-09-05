@@ -25,11 +25,6 @@ export const StyledMenuItem = styled(MenuItem, shouldForwardProp)`
   color: ${palette.on_surface};
   display: ${({ isHidden }: { isHidden: boolean }) => (isHidden ? 'none' : 'flex')};
 
-  .marked {
-    background-color: ${variables.palette.yellow};
-    border-radius: ${variables.borderRadius.xs};
-  }
-
   svg {
     fill: ${palette.on_surface_variant};
   }

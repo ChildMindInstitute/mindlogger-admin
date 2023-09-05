@@ -12,6 +12,7 @@ import { PreparedEvents } from '../Schedule.types';
 import { Counter } from './Counter';
 import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Legend.styles';
 import { getTitle } from './Legend.utils';
+import { ExpandedListTypes } from './Legend.const';
 
 export const useExpandedLists = (
   legendEvents: PreparedEvents | null,
@@ -91,6 +92,7 @@ export const useExpandedLists = (
       ],
       items: scheduledItems,
       title: t('scheduled'),
+      type: ExpandedListTypes.Scheduled,
     },
     {
       buttons: [
@@ -107,6 +109,7 @@ export const useExpandedLists = (
       title: t('alwaysAvailable'),
       isHiddenInLegend: noScheduledEvents && noAvailableEvents,
       allAvailableScheduled: noAvailableEvents && !noScheduledEvents,
+      type: ExpandedListTypes.AlwaysAvailable,
     },
     {
       buttons: [
@@ -119,6 +122,7 @@ export const useExpandedLists = (
       items: deactivatedItems,
       title: t('deactivated'),
       isHiddenInLegend: noDeactivatedEvents,
+      type: ExpandedListTypes.Deactivated,
     },
   ];
 };

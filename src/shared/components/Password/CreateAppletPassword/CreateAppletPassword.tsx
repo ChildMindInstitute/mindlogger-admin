@@ -13,7 +13,7 @@ import { StyledController } from '../Password.styles';
 import { AppletPasswordRef } from '../Password.types';
 
 export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPasswordProps>(
-  ({ submitCallback }, ref) => {
+  ({ submitCallback, 'data-testid': dataTestid }, ref) => {
     const { t } = useTranslation('app');
     const { handleSubmit, control, watch } = useForm<CreateAppletPasswordForm>({
       resolver: yupResolver(createPasswordFormSchema()),
@@ -62,6 +62,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
                 </StyledClearedButton>
               ),
             }}
+            data-testid={`${dataTestid}-password`}
           />
         </StyledController>
         <StyledController>
@@ -82,6 +83,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
                 </StyledClearedButton>
               ),
             }}
+            data-testid={`${dataTestid}-repeat-password`}
           />
         </StyledController>
       </form>

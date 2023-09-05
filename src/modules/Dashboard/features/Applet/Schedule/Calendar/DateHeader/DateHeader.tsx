@@ -15,7 +15,12 @@ export const DateHeader = ({ date, drilldownView, onDrillDown }: DateHeaderProps
   }
 
   return (
-    <StyledClearedButton onClick={onDrillDown} className="rbc-button-link" role="cell">
+    <StyledClearedButton
+      onClick={onDrillDown}
+      className="rbc-button-link"
+      role="cell"
+      data-testid={`dashboard-calendar-cell-date-${date.getDate()}-${date.getMonth()}`}
+    >
       {dateText}
     </StyledClearedButton>
   );

@@ -136,7 +136,6 @@
   "appletDuplication": "Duplication de l'applet",
   "successDuplication": "L'applet est en cours de duplication. Nous vous enverrons un e-mail dans 10 minutes ou moins lorsque la duplication sera achevée.",
   "nameRequired": "Le nom est requis",
-  "enterAppletName": "Entrez le nom de l'applet",
   "transferOwnershipConfirmation": "<0>Êtes-vous sûr de vouloir transférer la propriété de l'applet <1>{{appletName}}</1> à un autre utilisateur ?</0><1>Cela ne fera que transférer l'applet. Aucun utilisateur les données seront transférées. Une fois que le nouveau propriétaire aura confirmé le transfert, vous n'aurez plus accès à cette applet ni à ses données.</1>",
   "ownerEmail": "E-mail du propriétaire",
   "transferOwnershipHelperText": "Entrez l'adresse e-mail du nouveau propriétaire",
@@ -726,6 +725,7 @@
   "unsupportedResponseItem": "Ce type de données ne peut pas être affiché sur cette page",
   "messageDoesNotRequireResponse": "Le message ne nécessite pas de réponse",
   "deleteItem": "Effacer l'article",
+  "editItemDescription": "Êtes-vous sûr de vouloir modifier l'élément <1>{{ itemName }></1> ?",
   "deleteItemDescription": "Êtes-vous sûr de vouloir supprimer l'élément <1>{{ itemName }}</1>?",
   "deleteItemWithConditionalsDescription": "Cela supprimera également le(s) conditionnel(s) ci-dessous :",
   "variablesWarning": {

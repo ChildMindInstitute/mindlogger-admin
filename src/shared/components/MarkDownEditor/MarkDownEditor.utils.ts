@@ -3,6 +3,7 @@ import MdEditor from 'md-editor-rt';
 import i18n from 'i18n';
 
 import {
+  ALIGN_RULE,
   LANGUAGE_BY_DEFAULT,
   VALID_VIDEO_FORMATS_REGEX,
   VIDEO_LINK_REGEX,
@@ -211,22 +212,21 @@ MdEditor.config({
     },
     {
       name: 'align',
-      level: 'inline',
+      level: 'block',
       start(src) {
-        return src.match(/::: hljs-[center|left|right]/)?.index;
+        const match = ALIGN_RULE.exec(src);
+
+        return match ? match.index : -1;
       },
       tokenizer(src) {
-        const rule =
-          /^::: hljs-[center|left|right]([^=\r\n]*={0,2}=?[^=\r\n]*):::|^::: hljs-[center|left|right]([^=\r\n]*):::/;
-        const match = rule.exec(src);
+        const match = ALIGN_RULE.exec(src);
         if (match) {
-          const alignType = src.match(/center|left|right/)?.[0] || [];
           const token = {
             type: 'align',
             raw: match[0],
-            text: match[1].trim(),
+            text: match[2].trim(),
             tokens: [],
-            alignType,
+            alignType: match[1],
           };
           this.lexer.inline(token.text, token.tokens);
 

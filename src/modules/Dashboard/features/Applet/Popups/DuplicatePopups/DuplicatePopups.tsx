@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Encryption, getEncryptionToServer } from 'shared/utils';
 import { Modal } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledModalWrapper } from 'shared/styles';
+import { StyledModalWrapper, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { popups, applet, auth } from 'redux/modules';
@@ -147,7 +147,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       >
         <StyledModalWrapper>
           <form onSubmit={handleSubmit(setNameHandler)} noValidate>
-            <InputController fullWidth name="name" control={control} label={t('enterAppletName')} />
+            <InputController fullWidth name="name" control={control} label={t('appletName')} />
           </form>
         </StyledModalWrapper>
       </Modal>
@@ -189,18 +189,12 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           onSecondBtnSubmit={errorModalClose}
           secondBtnText={t('cancel')}
           onSubmit={retryHandler}
-          buttonText={t('retry')}
+          buttonText={t('tryAgain')}
           hasSecondBtn
           data-testid="dashboard-applets-duplicate-popup-error-popup"
         >
-          <StyledModalWrapper>
-            <Trans i18nKey="errorDuplication">
-              Applet
-              <strong>
-                <>{{ appletName: currentApplet?.displayName }}</>
-              </strong>
-              has not been duplicated. Please try again.
-            </Trans>
+          <StyledModalWrapper sx={{ color: variables.palette.semantic.error }}>
+            {t('errorDuplication')}
           </StyledModalWrapper>
         </Modal>
       )}

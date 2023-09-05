@@ -135,11 +135,10 @@
   "noAlerts": "No Alerts",
   "confirmDeleteApplet": "Are you sure that you want to delete this Applet? You won’t be able to restore it.",
   "dismiss": "Dismiss",
-  "appletDuplication": "Applet Duplication",
+  "appletDuplication": "Duplicate Applet",
   "successDuplication": "Applet <1>{{appletName}}</1> has been duplicated successfully.",
-  "errorDuplication": "Applet <1>{{appletName}}</1> has not been duplicated. Please try again.",
+  "errorDuplication": "Applet has not been duplicated. Please try again.",
   "nameRequired": "Name is required",
-  "enterAppletName": "Enter Applet Name",
   "transferOwnershipConfirmation": "<0>Are you sure you want to transfer ownership of Applet <1>{{appletName}}</1> to another user?</0><1>This will only transfer the Applet. No user data will be transferred. After the new Owner confirms transfer, you will no longer have access to this Applet or its data.</1>",
   "ownerEmail": "Owner email",
   "transferOwnershipHelperText": "Enter the new Owner's email address",
@@ -248,7 +247,7 @@
   "editDescription": "Add, modify, or remove contents of the Applet using the Builder.",
   "editAppletInBuilder": "Edit Applet in Builder",
   "deleteDescription": "Once the Applet is deleted, you won't be able to restore it.",
-  "duplicateDescription": "Current Applet content will be duplicated and saved as a separate Applet.",
+  "duplicateDescription": "The current Applet's content will be copied and saved as a separate Applet.",
   "confirm": "Confirm",
   "requestTransferOwnershipSuccess": "<0>Your request has been successfully sent to <1>{{email}}</1>. Please wait for receiver to accept your request.</0>",
   "selectDataRetention": "Select how long Respondent's data will be stored:",
@@ -892,6 +891,7 @@
   "deleteActivityDescription": "Are you sure you want to delete the Activity <1>{{ activityName }}</1>?",
   "removeActivityDescription": "Are you sure you want to remove Activity <1>{{ activityName }}</1> from the Activity Flow?",
   "deleteActivityFlowDescription": "Are you sure you want to delete the Activity Flow <1>{{ activityFlowName }}</1>?",
+  "editItemDescription": "Are you sure you want to edit Item <1>{{ itemName }}</1>?",
   "deleteItemDescription": "Are you sure you want to delete the Item <1>{{ itemName }}</1>?",
   "deleteItemWithConditionalsDescription": "It will also remove the Conditional(s) below:",
   "variablesWarning": {
@@ -1080,6 +1080,7 @@
   "printItemsTooltip": "Respondent’s responses that will be displayed in the report",
   "addConditionalLogic": "Add Conditional Logic",
   "moveItem": "Move Item",
+  "editItem": "Edit Item",
   "removeConditionalsMoveItemPopupDescription": "Selected position of the Item <1>{{name}}</1> in the list contradicts the existing Item Flow. If you continue, the following Conditional(s) will be removed:",
   "conditionPanelItem": "[Item]",
   "conditionPanelType": "[State]",
@@ -1186,5 +1187,6 @@
   "pleaseSelectActivity": "Please select an Activity",
   "configureServerForApplet": "Configure Server (for Applet)",
   "selectScheduleType": "Select Schedule Type",
-  "hasTheFollowingRole": "has the following role(s) within the Applet"
+  "hasTheFollowingRole": "has the following role(s) within the Applet",
+  "tryAgain": "Try again"
 }

@@ -8,5 +8,6 @@ export type ItemProps = {
   activityName: string;
   activityKey: string;
   uiType: AppletUiType;
+  search: string;
   'data-testid'?: string;
 };

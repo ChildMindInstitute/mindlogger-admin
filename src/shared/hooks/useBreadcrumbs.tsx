@@ -38,7 +38,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const activityLabel = currentActivityName ?? t('newActivity');
   const performanceTaskLabel =
     currentActivityName ??
-    Object.entries(checkCurrentPerformanceTaskPage(pathname)).find(([_, value]) => value)?.[0];
+    Object.entries(checkCurrentPerformanceTaskPage(pathname)).find(([, value]) => value)?.[0];
   const activityFlowLabel =
     appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
       ?.name ?? t('newActivityFlow');
@@ -66,9 +66,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
     if (workspaceName && isBuilder) {
       newBreadcrumbs.push({
-        icon: 'builder',
-        label: t('userBuilder', { userName: workspaceName }),
-        navPath: generatePath(page.builderAppletAbout, { appletId }),
+        icon: 'dashboard',
+        label: t('userDashboard', { userName: workspaceName }),
+        navPath: page.dashboard,
       });
     }
     if (isLibrary) {

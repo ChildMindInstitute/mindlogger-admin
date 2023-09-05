@@ -11,4 +11,5 @@ export type SearchPopupProps = {
   setSelectedRespondent: Dispatch<SetStateAction<SelectedRespondent>>;
   selectedRespondent: SelectedRespondent;
   respondentsItems?: SelectedRespondent[];
+  'data-testid'?: string;
 };

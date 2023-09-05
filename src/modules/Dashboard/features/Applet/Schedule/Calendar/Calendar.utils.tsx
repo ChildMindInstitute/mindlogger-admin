@@ -7,6 +7,7 @@ import {
   EventProps,
   HeaderProps,
   ToolbarProps,
+  DateCellWrapperProps,
 } from 'react-big-calendar';
 import { format, getISOWeek } from 'date-fns';
 

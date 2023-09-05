@@ -34,6 +34,7 @@ export const AppletPasswordPopup = ({
       }
       buttonText={t('submit')}
       data-testid={dataTestid}
+      disabledSubmit={!!appletPasswordRef?.current}
     >
       <StyledAppletPasswordContainer>
         {popupType === AppletPasswordPopupType.Enter ? (
@@ -42,9 +43,14 @@ export const AppletPasswordPopup = ({
             appletId={appletId}
             encryption={encryption}
             submitCallback={handleSubmitCallback}
+            data-testid={dataTestid}
           />
         ) : (
-          <CreateAppletPassword ref={appletPasswordRef} submitCallback={handleSubmitCallback} />
+          <CreateAppletPassword
+            ref={appletPasswordRef}
+            submitCallback={handleSubmitCallback}
+            data-testid={dataTestid}
+          />
         )}
       </StyledAppletPasswordContainer>
     </Modal>

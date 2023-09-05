@@ -54,15 +54,17 @@ export const AppletsCatalog = () => {
 
   const isLoading = loadingStatus === 'loading' || loadingCartStatus === 'loading';
 
-  const debouncedDispatch = debounce((pageIndex, search) => {
-    dispatch(
-      library.thunk.getPublishedApplets({
-        page: pageIndex,
-        search,
-        limit: DEFAULT_APPLETS_PER_PAGE,
-      }),
-    );
-  }, SEARCH_DEBOUNCE_VALUE);
+  const debouncedDispatch = debounce(
+    (pageIndex, search) =>
+      dispatch(
+        library.thunk.getPublishedApplets({
+          page: pageIndex,
+          search,
+          limit: DEFAULT_APPLETS_PER_PAGE,
+        }),
+      ),
+    SEARCH_DEBOUNCE_VALUE,
+  );
 
   useEffect(() => {
     debouncedDispatch(pageIndex, search);
@@ -93,6 +95,7 @@ export const AppletsCatalog = () => {
                   <StyledAppletContainer key={applet.id}>
                     <Applet
                       applet={applet}
+                      search={search}
                       setSearch={setSearchValue}
                       data-testid={`library-applets-${index}`}
                     />

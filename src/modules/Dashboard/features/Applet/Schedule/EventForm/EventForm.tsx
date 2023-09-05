@@ -37,6 +37,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       defaultStartDate,
       editedEvent,
       onFormChange,
+      'data-testid': dataTestid,
     },
     ref,
   ) => {
@@ -80,6 +81,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       hasTimerErrors: !!errors.timerDuration,
       hasNotificationsErrors: !!errors.notifications || !!errors.reminder,
       hasAlwaysAvailableOption,
+      'data-testid': dataTestid,
     };
 
     const getEvents = () => {
@@ -206,6 +208,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
                 InputLabelProps={{ shrink: true }}
                 disabled={!!editedEvent}
                 autoFocus={!editedEvent}
+                data-testid={`${dataTestid}-activity`}
               />
             )}
           </StyledModalWrapper>
