@@ -9,7 +9,7 @@ import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/Colla
 import { getDictionaryText } from 'shared/utils';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
-import { SUMMARY_UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
+import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
 
 import { COLORS } from '../Charts/Charts.const';
 import { FormattedResponse } from '../Report.types';
@@ -23,7 +23,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   const renderResponseOption = ({ activityItem, answers }: FormattedResponse, index: number) => {
-    if (SUMMARY_UNSUPPORTED_ITEMS.includes(activityItem.responseType))
+    if (UNSUPPORTED_ITEMS.includes(activityItem.responseType))
       return <UnsupportedItemResponse itemType={activityItem.responseType} />;
 
     const color = COLORS[index % COLORS.length];
