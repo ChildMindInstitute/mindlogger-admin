@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import get from 'lodash.get';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
@@ -101,6 +102,11 @@ export const ConditionRow = ({
         ? 'setUpAtLeastOneCondition'
         : 'setUpCorrectCondition',
     );
+
+  useEffect(() => {
+    if (!scoreId) return;
+    setValue(conditionItemName, scoreId);
+  }, [scoreId]);
 
   return (
     <>

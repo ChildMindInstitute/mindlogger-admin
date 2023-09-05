@@ -652,7 +652,7 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
     const relatedItem = items?.find((item) => item.name === itemName);
     const payload =
       type === ScoreConditionType
-        ? { value: String((condition as ScoreCondition).payload.value) }
+        ? { value: String((condition as ScoreCondition).payload?.value) }
         : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
 
     return {

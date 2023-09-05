@@ -27,7 +27,7 @@ export const getScoreRangeLabel = (minScore: number, maxScore: number) =>
   `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}`;
 
 const getItemScoreRange = (item: Item) => {
-  let scores: number[] = [];
+  let scores: number[];
   if (
     item.responseType === ItemResponseType.SingleSelection ||
     item.responseType === ItemResponseType.MultipleSelection
@@ -95,7 +95,7 @@ export const getDefaultConditionalValue = (scoreId: string) => ({
   printItems: false,
   itemsPrint: [],
   match: ConditionalLogicMatch.All,
-  conditions: [{ itemName: scoreId }],
+  conditions: [{ itemName: scoreId, type: '' }],
 });
 
 const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>
