@@ -74,13 +74,13 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
       <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(2.4) }}>
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
-      {!url ? (
+      {url ? (
+        <MLPlayer media={media} onRemove={() => setRemoveAudioPopupOpened(true)} />
+      ) : (
         <AddAudio
           onUploadAudio={() => setUploadPopupOpened(true)}
           onRecordAudio={() => setRecordPopupOpened(true)}
         />
-      ) : (
-        <MLPlayer media={media} onRemove={() => setRemoveAudioPopupOpened(true)} />
       )}
       {error && (
         <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error?.message}</StyledBodyErrorText>

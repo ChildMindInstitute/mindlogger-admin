@@ -15,3 +15,5 @@ export const PLAYER_DEFAULTS = {
   loop: false,
   seeking: false,
 };
+
+export const VERY_LARGE_NUMBER = 1.0e101;
