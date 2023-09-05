@@ -1,8 +1,8 @@
 import { KeyboardEvent } from 'react';
-import Highlighter from 'react-highlight-words';
 
 import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
+import { getHighlightedText } from 'shared/utils';
 
 import { ItemsOption } from '../ItemConfiguration.types';
 import { EmptySearch } from './EmptySearch';
@@ -56,14 +56,7 @@ export const getGroupValueText = (searchTerm: string, groupValue: string) => {
 
   if (!searchTerm) return text;
 
-  return (
-    <Highlighter
-      highlightClassName="marked"
-      searchWords={[searchTerm]}
-      autoEscape={true}
-      textToHighlight={text}
-    />
-  );
+  return getHighlightedText(text, searchTerm);
 };
 
 export const getIsOnlyMobileValue = (value: ItemResponseType): boolean =>

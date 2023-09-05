@@ -16,10 +16,10 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { falseReturnFunc, getDictionaryText, Mixpanel } from 'shared/utils';
+import { falseReturnFunc, getDictionaryText, getHighlightedText, Mixpanel } from 'shared/utils';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { auth, library } from 'redux/modules';
+import { PublishedActivity, auth, library } from 'redux/modules';
 import { STORAGE_LIBRARY_KEY } from 'modules/Library/consts';
 import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
 
@@ -40,7 +40,12 @@ import { Activity } from './Activity';
 import { AppletImage } from './AppletImage';
 import { getUpdatedStorageData } from './Applet.utils';
 
-export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: AppletProps) => {
+export const Applet = ({
+  applet,
+  uiType = AppletUiType.List,
+  search = '',
+  setSearch,
+}: AppletProps) => {
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -79,6 +84,19 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
   };
 
   useEffect(() => {
+    if (!search) return;
+
+    activities.forEach(({ name, items }: PublishedActivity) => {
+      if (
+        getDictionaryText(name).includes(search) ||
+        items.some(({ question }) => getDictionaryText(question).includes(search))
+      ) {
+        setActivitiesVisible(true);
+      }
+    });
+  }, [search]);
+
+  useEffect(() => {
     if (uiType === AppletUiType.Details) return;
     const selectedAppletItems = getSelectedAppletFromStorage(id);
     selectedAppletItems && setActivitiesVisible(true);
@@ -87,7 +105,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
   const renderAppletInfoListView = () => (
     <>
       <StyledAppletName>
-        <StyledTitleBoldMedium>{displayName}</StyledTitleBoldMedium>
+        <StyledTitleBoldMedium>{getHighlightedText(displayName, search)}</StyledTitleBoldMedium>
         {version && (
           <>
             <StyledTitleMedium sx={{ margin: theme.spacing(0, 0.8) }}>∙</StyledTitleMedium>
@@ -100,7 +118,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
           color={variables.palette.on_surface}
           sx={{ marginTop: theme.spacing(0.4) }}
         >
-          {getDictionaryText(description)}
+          {getHighlightedText(getDictionaryText(description), search)}
         </StyledBodyMedium>
       )}
     </>
@@ -114,7 +132,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
         <StyledBodyLarge
           sx={{ marginTop: theme.spacing(1.4), color: variables.palette.on_surface_variant }}
         >
-          {getDictionaryText(description)}
+          {getHighlightedText(getDictionaryText(description), search)}
         </StyledBodyLarge>
       )}
     </>
@@ -194,7 +212,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
                   key={keyword}
                   hasSearch={!!setSearch}
                 >
-                  {keyword}
+                  {getHighlightedText(keyword, search)}
                 </StyledAppletKeyword>
               ))}
             </StyledAppletKeywordsContainer>
@@ -223,7 +241,7 @@ export const Applet = ({ applet, uiType = AppletUiType.List, setSearch }: Applet
                 <StyledActivities>
                   {activities.map((activity) => (
                     <Fragment key={activity.name}>
-                      <Activity appletId={id} activity={activity} uiType={uiType} />
+                      <Activity appletId={id} activity={activity} uiType={uiType} search={search} />
                     </Fragment>
                   ))}
                 </StyledActivities>
