@@ -170,6 +170,7 @@ export const Calendar = () => {
           open={createEventPopupVisible}
           setCreateEventPopupVisible={setCreateEventPopupVisible}
           defaultStartDate={defaultStartDate}
+          data-testid="dashboard-calendar-create-event-popup"
         />
       )}
       {editedEvent && (

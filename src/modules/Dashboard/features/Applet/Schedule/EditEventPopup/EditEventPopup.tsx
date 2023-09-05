@@ -32,6 +32,7 @@ export const EditEventPopup = ({
   const [isClosable, setIsClosable] = useState(false);
   const { appletId, respondentId } = useParams();
   const dispatch = useAppDispatch();
+  const dataTestid = 'dashboard-calendar-edit-event';
 
   const { execute: removeEvent } = useAsync(
     deleteEventApi,
@@ -113,7 +114,7 @@ export const EditEventPopup = ({
           width="67.1"
           disabledSubmit={!!editedEvent && !isFormChanged}
           onTransitionEntered={handleTransitionEntered}
-          data-testid="dashboard-calendar-edit-event-popup"
+          data-testid={`${dataTestid}-popup`}
         >
           <>
             <StyledContainer>
@@ -123,7 +124,7 @@ export const EditEventPopup = ({
                 onClick={onRemoveEventClick}
                 startIcon={<Svg width="18" height="18" id="clear-calendar" />}
                 disabled={editedEvent.alwaysAvailable}
-                data-testid="dashboard-calendar-edit-event-popup-remove"
+                data-testid={`${dataTestid}-popup-remove`}
               >
                 {t('removeEvent')}
               </StyledButton>
@@ -137,7 +138,7 @@ export const EditEventPopup = ({
               editedEvent={editedEvent}
               defaultStartDate={defaultStartDate}
               onFormChange={handleFormChanged}
-              data-testid="dashboard-calendar-edit-event-popup-form"
+              data-testid={`${dataTestid}-popup-form`}
             />
           </>
         </Modal>
@@ -148,6 +149,7 @@ export const EditEventPopup = ({
           onClose={onRemoveScheduledEventClose}
           onSubmit={handleRemoveEvent}
           activityName={currentActivityName}
+          data-testid={`${dataTestid}-remove-scheduled-event-popup`}
         />
       )}
       {removeAllScheduledPopupVisible && (
@@ -156,6 +158,7 @@ export const EditEventPopup = ({
           onClose={handleRemoveAllScheduledClose}
           onSubmit={handleRemoveAllScheduledSubmit}
           activityName={currentActivityName}
+          data-testid={`${dataTestid}-remove-all-scheduled-events-popup`}
         />
       )}
       {removeAlwaysAvailablePopupVisible && (
@@ -164,6 +167,7 @@ export const EditEventPopup = ({
           onClose={handleRemoveAlwaysAvailableClose}
           onSubmit={handleRemoveAlwaysAvailableSubmit}
           activityName={currentActivityName}
+          data-testid={`${dataTestid}-confirm-scheduled-access-popup`}
         />
       )}
     </>

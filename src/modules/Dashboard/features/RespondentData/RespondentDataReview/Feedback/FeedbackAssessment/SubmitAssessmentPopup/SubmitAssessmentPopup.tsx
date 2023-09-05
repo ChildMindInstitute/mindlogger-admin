@@ -22,6 +22,7 @@ export const SubmitAssessmentPopup = ({
       buttonText={t('submit')}
       secondBtnText={t('cancel')}
       hasSecondBtn
+      data-testid="dataviz-submit-assessment-popup"
     >
       <StyledModalWrapper>{t('submitAssessmentDescription')}</StyledModalWrapper>
     </Modal>

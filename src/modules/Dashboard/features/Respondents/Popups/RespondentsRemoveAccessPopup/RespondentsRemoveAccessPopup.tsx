@@ -38,8 +38,8 @@ export const RespondentsRemoveAccessPopup = ({
   const { execute: handleAccessRemove, error } = useAsync(removeRespondentAccessApi);
 
   const isRemoved = !error;
-
   const isFirstStepWithAppletId = !!appletId && step === 1;
+  const dataTestid = 'dashboard-respondents-remove-access-popup';
 
   useEffect(() => {
     if (chosenAppletData) {
@@ -115,6 +115,7 @@ export const RespondentsRemoveAccessPopup = ({
       appletId={chosenAppletData?.appletId ?? ''}
       encryption={chosenAppletData?.encryption}
       submitCallback={() => getStep('next')}
+      data-testid={`${dataTestid}-enter-password`}
     />
   );
 
@@ -177,7 +178,7 @@ export const RespondentsRemoveAccessPopup = ({
       secondBtnText={t(isFirstStepWithAppletId ? 'cancel' : 'back')}
       disabledSubmit={disabledSubmit}
       submitBtnColor={screens[step]?.submitBtnColor}
-      data-testid="dashboard-respondents-remove-access-popup"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>

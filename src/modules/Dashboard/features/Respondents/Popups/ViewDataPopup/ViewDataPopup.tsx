@@ -39,6 +39,7 @@ export const ViewDataPopup = ({
     callback: handleSubmitCallback,
   });
   const showSecondScreen = !!chosenAppletData && !hasEncryptionCheck;
+  const dataTestid = 'dashboard-respondents-view-data-popup';
 
   return (
     <Modal
@@ -47,7 +48,7 @@ export const ViewDataPopup = ({
       onSubmit={submitForm}
       title={showSecondScreen ? t('enterAppletPassword') : t('viewData')}
       buttonText={showSecondScreen ? t('submit') : ''}
-      data-testid="dashboard-respondents-view-data-popup"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         {showSecondScreen ? (
@@ -56,6 +57,7 @@ export const ViewDataPopup = ({
             appletId={chosenAppletData?.appletId}
             encryption={chosenAppletData?.encryption}
             submitCallback={handleSubmitCallback}
+            data-testid={`${dataTestid}-enter-password`}
           />
         ) : (
           <>

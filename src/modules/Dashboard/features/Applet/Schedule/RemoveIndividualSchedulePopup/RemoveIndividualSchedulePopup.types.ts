@@ -9,4 +9,5 @@ export type RemoveIndividualScheduleProps = {
   isEmpty: boolean;
   setSchedule: Dispatch<SetStateAction<null | string>>;
   setSelectedRespondent: Dispatch<SetStateAction<SelectedRespondent>>;
+  'data-testid'?: string;
 };

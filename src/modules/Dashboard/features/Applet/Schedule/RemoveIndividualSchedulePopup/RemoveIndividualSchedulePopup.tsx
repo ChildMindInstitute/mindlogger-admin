@@ -23,6 +23,7 @@ export const RemoveIndividualSchedulePopup = ({
   isEmpty,
   setSchedule,
   setSelectedRespondent,
+  'data-testid': dataTestid,
 }: RemoveIndividualScheduleProps) => {
   const { t } = useTranslation();
   const [step, setStep] = useState<Steps>(0);
@@ -76,6 +77,7 @@ export const RemoveIndividualSchedulePopup = ({
       submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         {screens[step].component}

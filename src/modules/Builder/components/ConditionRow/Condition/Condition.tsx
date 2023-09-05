@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
@@ -7,8 +8,13 @@ import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 import { ConditionRowType } from 'modules/Builder/types';
 import { StyledCondition, StyledSelectController, StyledInputController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
-import { ConditionItemType, DEFAULT_NUMBER_MIN_VALUE } from './Condition.const';
-import { getScoreConditionOptions, getStateOptions } from './Condition.utils';
+import { ConditionItemType } from './Condition.const';
+import {
+  getConditionMinMaxRangeValues,
+  getConditionMinMaxValues,
+  getScoreConditionOptions,
+  getStateOptions,
+} from './Condition.utils';
 
 export const Condition = ({
   control,
@@ -30,6 +36,7 @@ export const Condition = ({
   'data-testid': dataTestid,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
+  const { watch } = useFormContext();
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 
@@ -45,6 +52,17 @@ export const Condition = ({
   const isNumberValueShown =
     (isItemSlider || isItemScore) && !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = (isItemSlider || isItemScore) && !isNumberValueShown;
+  const { minNumber, maxNumber } = getConditionMinMaxValues({
+    item: selectedItem,
+    state,
+  });
+  const minValue = watch(minValueName);
+  const maxValue = watch(maxValueName);
+  const { leftRange, rightRange } = getConditionMinMaxRangeValues({
+    item: selectedItem,
+    minValue,
+    maxValue,
+  });
 
   return (
     <StyledCondition data-testid={dataTestid}>
@@ -94,7 +112,8 @@ export const Condition = ({
           type="number"
           control={control}
           name={numberValueName}
-          minNumberValue={state ? Number.MIN_SAFE_INTEGER : DEFAULT_NUMBER_MIN_VALUE}
+          minNumberValue={minNumber}
+          maxNumberValue={maxNumber}
           data-testid={`${dataTestid}-slider-value`}
         />
       )}
@@ -105,7 +124,8 @@ export const Condition = ({
             type="number"
             control={control}
             name={minValueName}
-            minNumberValue={Number.MIN_SAFE_INTEGER}
+            minNumberValue={leftRange.minNumber}
+            maxNumberValue={leftRange.maxNumber}
             data-testid={`${dataTestid}-min-value`}
           />
           <StyledInputController
@@ -113,7 +133,8 @@ export const Condition = ({
             type="number"
             control={control}
             name={maxValueName}
-            minNumberValue={Number.MIN_SAFE_INTEGER}
+            minNumberValue={rightRange.minNumber}
+            maxNumberValue={rightRange.maxNumber}
             data-testid={`${dataTestid}-max-value`}
           />
         </>

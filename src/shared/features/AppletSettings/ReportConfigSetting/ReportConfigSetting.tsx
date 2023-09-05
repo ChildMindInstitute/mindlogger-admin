@@ -620,6 +620,7 @@ export const ReportConfigSetting = ({
           onDontSave={handleDontSave}
           onCancel={handleCancel}
           onSave={handleSaveChanges}
+          data-testid={`${dataTestid}-save-changes-popup`}
         />
       )}
     </>

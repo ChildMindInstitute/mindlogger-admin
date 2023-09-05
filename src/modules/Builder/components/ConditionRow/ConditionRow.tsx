@@ -20,7 +20,7 @@ import {
   getScoreOptions,
   getValueOptionsList,
 } from './ConditionRow.utils';
-import { Condition } from './Condition';
+import { Condition, ConditionItem } from './Condition';
 import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 
 export const ConditionRow = ({
@@ -64,6 +64,15 @@ export const ConditionRow = ({
   )?.responseType;
 
   const selectedItem = items?.find((item: ItemFormValues) => getEntityKey(item) === conditionItem);
+  const options = {
+    [ConditionRowType.Item]: getItemOptions(items, type),
+    [ConditionRowType.Section]: [
+      ...getItemOptions(items, type),
+      ...((scores?.length && getScoreOptions(scores)) || []),
+      ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
+    ],
+    [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
+  } as Record<ConditionRowType, ConditionItem[]>;
 
   const handleChangeConditionItemName = (e: SelectEvent) => {
     const itemResponseType = items?.find(
@@ -79,19 +88,9 @@ export const ConditionRow = ({
   };
 
   const handleChangeConditionType = (e: SelectEvent) => {
-    const payload = getPayload(e.target.value as ConditionType, conditionPayload);
+    const payload = getPayload(e.target.value as ConditionType, conditionPayload, selectedItem);
 
     setValue(conditionPayloadName, payload);
-  };
-
-  const options = {
-    [ConditionRowType.Item]: getItemOptions(items, type),
-    [ConditionRowType.Section]: [
-      ...getItemOptions(items, type),
-      ...((scores?.length && getScoreOptions(scores)) || []),
-      ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
-    ],
-    [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
   };
 
   const error = get(errors, `${conditionsName}[${index}]`);

@@ -75,6 +75,7 @@ export const EditRespondentPopup = ({
   }, [chosenAppletData]);
 
   const hasServerError = error && isServerErrorVisible;
+  const dataTestid = 'dashboard-respondents-edit-popup';
 
   return (
     <Modal
@@ -86,7 +87,7 @@ export const EditRespondentPopup = ({
       hasSecondBtn={!isSuccessVisible}
       onSecondBtnSubmit={handlePopupClose}
       secondBtnText={t('cancel')}
-      data-testid="dashboard-respondents-edit-popup"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         {isSuccessVisible ? (
@@ -100,6 +101,7 @@ export const EditRespondentPopup = ({
                   name="nickname"
                   control={control}
                   label={t('nickname')}
+                  data-testid={`${dataTestid}-nickname`}
                 />
               </StyledController>
               <StyledController>
@@ -109,6 +111,7 @@ export const EditRespondentPopup = ({
                   control={control}
                   label={t('secretUserId')}
                   onChange={handleChangeSecredId}
+                  data-testid={`${dataTestid}-secret-user-id`}
                 />
               </StyledController>
             </form>

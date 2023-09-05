@@ -32,7 +32,7 @@ export const SelectRespondents = ({
     searchValue.current = value;
   };
 
-  const rows = respondents?.map(({ secretId, nickname, id }) => ({
+  const rows = respondents?.map(({ secretId, nickname, id }, index) => ({
     select: {
       content: () => (
         <CheckboxController
@@ -50,6 +50,7 @@ export const SelectRespondents = ({
               rows,
             );
           }}
+          data-testid={`dashboard-managers-select-respondents-respondent-${index}`}
         />
       ),
       value: id,
