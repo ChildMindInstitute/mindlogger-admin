@@ -1,3 +1,5 @@
+import { UseFormSetValue } from 'react-hook-form';
+
 export type ReportConfigFormValues = {
   email: string;
   reportRecipients: string[];
@@ -34,4 +36,16 @@ export type ReportConfigSettingProps = {
   isDashboard?: boolean;
   onSubmitSuccess?: (values: Partial<ReportConfigFormValues>) => void;
   'data-testid'?: string;
+};
+
+export type SetSubjectData = {
+  setValue: UseFormSetValue<ReportConfigFormValues>;
+  appletName?: string;
+  activityName?: string;
+  flowName?: string;
+  flowActivityName?: string;
+  respondentId?: boolean;
+  hasActivityItemValue?: boolean;
+  hasFlowItemValue?: boolean;
+  itemName?: string;
 };

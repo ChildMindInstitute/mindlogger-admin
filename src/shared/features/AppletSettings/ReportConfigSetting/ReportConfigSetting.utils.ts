@@ -1,12 +1,10 @@
-import { UseFormSetValue } from 'react-hook-form';
-
 import { SingleApplet } from 'shared/state';
 import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
 
 import {
   VerifyReportServer,
   SetPasswordReportServer,
-  ReportConfigFormValues,
+  SetSubjectData,
 } from './ReportConfigSetting.types';
 
 const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
@@ -66,15 +64,30 @@ export const setPasswordReportServer = async ({
   });
 };
 
-export const setSubjectData = (
-  setValue: UseFormSetValue<ReportConfigFormValues>,
-  respondentId?: boolean,
-) => {
+export const setSubjectData = ({
+  setValue,
+  appletName,
+  activityName,
+  flowName,
+  flowActivityName,
+  respondentId,
+  hasActivityItemValue,
+  hasFlowItemValue,
+  itemName,
+}: SetSubjectData) => {
   let subject = 'REPORT';
   if (respondentId) {
     subject += ' by [Respondent ID]';
   }
-  subject += ': [Applet Name] / [Activity Name]';
+  subject += `: ${appletName || '[Applet Name]'} / ${
+    activityName || flowName || '[Activity Name]'
+  }`;
+  if (hasActivityItemValue) {
+    subject += ` / [${itemName || 'Item name'}]`;
+  }
+  if (hasFlowItemValue) {
+    subject += ` / ${flowActivityName || '[Activity Flow Name]'} / [${itemName || 'Item name'}]`;
+  }
 
   setValue('subject', subject);
 };
