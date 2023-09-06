@@ -16,6 +16,7 @@ import { ItemTypesToPrint, columns } from './SectionScoreCommonFields.const';
 export const SectionScoreCommonFields = ({
   name,
   sectionId,
+  tableHeadBackground,
   'data-testid': dataTestid,
 }: CommonFieldsProps) => {
   const { t } = useTranslation();
@@ -95,13 +96,15 @@ export const SectionScoreCommonFields = ({
           data-testid={`${dataTestid}-show-message-text`}
         />
       )}
-      <Switch
-        name={`${name}.printItems`}
-        label={t('printItems')}
-        tooltipText={t('printItemsTooltip')}
-        {...commonProps}
-        data-testid={`${dataTestid}-print-items`}
-      />
+      <Box sx={{ m: theme.spacing(0.5, 0, 1) }}>
+        <Switch
+          name={`${name}.printItems`}
+          label={t('printItems')}
+          tooltipText={t('printItemsTooltip')}
+          {...commonProps}
+          data-testid={`${dataTestid}-print-items`}
+        />
+      </Box>
       {printItems && (
         <TransferListController
           name={itemsPrintName}
@@ -110,6 +113,7 @@ export const SectionScoreCommonFields = ({
           hasSearch={false}
           hasSelectedSection={false}
           isValueName
+          tableHeadBackground={tableHeadBackground}
           data-testid={`${dataTestid}-print-items-list`}
         />
       )}

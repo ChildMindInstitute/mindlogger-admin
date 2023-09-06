@@ -2,7 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
-import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg, theme } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledFlexTopCenter,
+  StyledTooltipSvg,
+  theme,
+  variables,
+} from 'shared/styles';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import { Tooltip } from 'shared/components';
 import { ConditionRowType } from 'modules/Builder/types';
@@ -71,7 +77,12 @@ export const ScoreCondition = ({
         }
         data-testid={`${dataTestid}-flag-score`}
       />
-      <SectionScoreCommonFields name={name} sectionId={scoreKey} data-testid={dataTestid} />
+      <SectionScoreCommonFields
+        tableHeadBackground={variables.palette.surface3}
+        name={name}
+        sectionId={scoreKey}
+        data-testid={dataTestid}
+      />
     </>
   );
 };

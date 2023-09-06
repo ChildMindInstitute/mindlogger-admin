@@ -20,6 +20,7 @@ export type ToggleItemProps = {
   isOpenByDefault?: boolean;
   isOpenDisabled?: boolean;
   tooltip?: string;
-  error?: string | null;
+  errorMessage?: string | null;
+  hasError?: boolean;
   'data-testid'?: string;
 };

@@ -169,7 +169,8 @@ export const ScoresAndReports = () => {
                           <ToggleItemContainer
                             HeaderContent={SectionScoreHeader}
                             Content={isSection ? SectionContent : ScoreContent}
-                            error={getFieldState(reportName).error?.message || null}
+                            errorMessage={getFieldState(reportName).error?.message || null}
+                            hasError={!!getFieldState(reportName).error}
                             headerContentProps={{
                               onRemove: () => {
                                 removeReport(index);

@@ -22,7 +22,7 @@ export const StimulusScreen = () => {
 
   return (
     <ToggleItemContainer
-      error={error ? 'fillInAllRequired' : null}
+      errorMessage={error ? 'fillInAllRequired' : null}
       uiType={ToggleContainerUiType.PerformanceTask}
       title={t('flankerStimulus.title')}
       Content={StimulusContent}

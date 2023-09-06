@@ -10,7 +10,10 @@ export const columns = [
   },
   {
     key: t('question'),
-    label: t('displayedContent'),
+    label: t('itemBody'),
+    styles: {
+      width: '65%',
+    },
   },
 ];
 

@@ -25,6 +25,7 @@ export const DataTable = ({
   onSelectAll,
   hasError,
   isValueName = false,
+  tableHeadBackground,
   'data-testid': dataTestid,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
@@ -61,7 +62,7 @@ export const DataTable = ({
         <TableHead>
           <TableRow>
             {selectable && selectAll && data?.length ? (
-              <StyledHeadCell sx={{ width: '2.8rem' }}>
+              <StyledHeadCell tableHeadBackground={tableHeadBackground} sx={{ width: '2.8rem' }}>
                 <StyledCheckbox
                   checked={isAllSelected}
                   onChange={handleSelectAll}
@@ -70,7 +71,11 @@ export const DataTable = ({
               </StyledHeadCell>
             ) : null}
             {dataTableColumns?.map(({ key, label, styles = {} }) => (
-              <StyledHeadCell sx={styles} key={`data-table-head-${key}`}>
+              <StyledHeadCell
+                tableHeadBackground={tableHeadBackground}
+                sx={styles}
+                key={`data-table-head-${key}`}
+              >
                 <StyledBodyMedium sx={{ color: variables.palette.outline }}>
                   {label}
                 </StyledBodyMedium>

@@ -4,7 +4,7 @@ import { theme, variables } from 'shared/styles';
 
 export const StyledButton = styled(Button)`
   width: 19.6rem;
-  margin-top: ${theme.spacing(0.8)};
+  margin: ${theme.spacing(0.8, 0, 1.5)};
   padding: ${theme.spacing(1.6)};
 
   svg {

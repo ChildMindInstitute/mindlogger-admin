@@ -43,7 +43,7 @@ export const BlockSequences = memo(
       <ToggleItemContainer
         isOpenDisabled={hasStimulusErrors}
         isOpenByDefault={!hasStimulusErrors}
-        error={getError()}
+        errorMessage={getError()}
         uiType={ToggleContainerUiType.PerformanceTask}
         title={t('flankerRound.blockSequences')}
         Content={BlockSequencesContent}

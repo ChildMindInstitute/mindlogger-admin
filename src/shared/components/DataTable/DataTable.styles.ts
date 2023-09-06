@@ -42,15 +42,18 @@ export const StyledCheckbox = styled(Checkbox)`
 
 export const StyledTableCell = styled(TableCell)`
   position: relative;
+
   &:before {
     content: ' ';
     visibility: hidden;
   }
+
   padding-bottom: ${theme.spacing(2)};
 `;
 
-export const StyledHeadCell = styled(TableCell)`
+export const StyledHeadCell = styled(TableCell, shouldForwardProp)`
   &.MuiTableCell-head {
-    background-color: ${variables.palette.surface1};
+    background-color: ${({ tableHeadBackground }: { tableHeadBackground?: string }) =>
+      tableHeadBackground ?? variables.palette.surface1};
   }
 `;
