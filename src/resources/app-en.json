@@ -510,6 +510,7 @@
   "itemType": "Item Type",
   "itemName": "Item Name",
   "displayedContent": "Displayed Content",
+  "itemBody": "Item Body",
   "responseOptions": "Response Options",
   "responseOptionsTooltip": "The respondent completed the Activity at these times",
   "settings": "Settings",

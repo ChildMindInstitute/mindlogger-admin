@@ -127,7 +127,7 @@ export const ScoreContent = ({
   return (
     <StyledFlexColumn>
       <StyledFlexTopStart sx={{ mt: theme.spacing(1.6) }}>
-        <Box sx={{ mr: theme.spacing(4.8), width: '50%' }}>
+        <Box sx={{ mr: theme.spacing(2.4), width: '50%' }}>
           <InputController
             control={control}
             key={`${name}.name`}
@@ -147,7 +147,7 @@ export const ScoreContent = ({
             data-testid={`${dataTestid}-calculation-type`}
           />
         </Box>
-        <Box>
+        <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
           <CopyId
             title={t('scoreId')}
             value={scoreId}

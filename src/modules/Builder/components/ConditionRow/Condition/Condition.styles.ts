@@ -8,6 +8,7 @@ export const StyledCondition = styled(StyledFlexTopCenter)`
   padding: ${theme.spacing(0.8, 1.2)};
   border-radius: ${variables.borderRadius.xs};
   position: relative;
+  flex-wrap: wrap;
 
   & > .MuiTypography-root,
   & > .MuiBox-root {

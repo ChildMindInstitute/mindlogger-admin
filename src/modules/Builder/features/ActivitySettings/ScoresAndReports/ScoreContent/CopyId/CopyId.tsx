@@ -1,8 +1,8 @@
-import { StyledBodyLarge, StyledFlexTopCenter, StyledTitleSmall, theme } from 'shared/styles';
+import { StyledFlexTopCenter, StyledTitleSmall, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 
 import { CopyIdProps } from './CopyId.types';
-import { StyledDuplicateButton } from './CopyId.styles';
+import { StyledDuplicateButton, StyledValue } from './CopyId.styles';
 
 export const CopyId = ({
   title,
@@ -18,7 +18,7 @@ export const CopyId = ({
     <>
       <StyledTitleSmall sx={{ mb: theme.spacing(1.2) }}>{title}</StyledTitleSmall>
       <StyledFlexTopCenter>
-        <StyledBodyLarge>{value}</StyledBodyLarge>
+        <StyledValue>{value}</StyledValue>
         {showCopy && (
           <StyledDuplicateButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}

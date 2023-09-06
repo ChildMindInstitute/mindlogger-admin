@@ -22,7 +22,7 @@ export const Instruction = ({
       isOpenByDefault={false}
       Content={InstructionContent}
       contentProps={{ description, name, hasError, instructionId, 'data-testid': dataTestid }}
-      error={hasError ? 'blockIsNecessary' : null}
+      errorMessage={hasError ? 'blockIsNecessary' : null}
       data-testid={dataTestid}
     />
   );

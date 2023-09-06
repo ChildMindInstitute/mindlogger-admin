@@ -27,6 +27,7 @@ export const TransferListController = <T extends FieldValues>({
   hasSearch = true,
   hasSelectedSection = true,
   isValueName = false,
+  tableHeadBackground,
   'data-testid': dataTestid,
 }: TransferListControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -87,6 +88,7 @@ export const TransferListController = <T extends FieldValues>({
                 noDataPlaceholder={t('noSelectedItemsYet')}
                 isValueName={isValueName}
                 data-testid={`${dataTestid}-unselected`}
+                tableHeadBackground={tableHeadBackground}
               />
               {hasSelectedSection && (
                 <DataTable

@@ -32,14 +32,16 @@ export const ToggleItemContainer = ({
   isOpenByDefault,
   isOpenDisabled,
   tooltip,
-  error,
+  errorMessage,
+  hasError,
   'data-testid': dataTestid,
 }: ToggleItemProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(isOpenByDefault ?? true);
   const handleToggle = () => setOpen((prevState) => !prevState);
 
-  const titleErrorVisible = !open && !!error;
+  const hasErrorMessage = !open && !!errorMessage;
+  const titleErrorVisible = !open && (!!errorMessage || hasError);
 
   return (
     <StyledItemOption uiType={uiType} data-testid={dataTestid}>
@@ -64,12 +66,12 @@ export const ToggleItemContainer = ({
                     <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
                   </StyledFlexTopCenter>
                 </StyledTitleContainer>
-                {titleErrorVisible && (
+                {hasErrorMessage && (
                   <StyledBodyMedium
                     sx={{ p: theme.spacing(0.5, 0, 0, 1.5) }}
                     color={variables.palette.semantic.error}
                   >
-                    {t(error)}
+                    {t(errorMessage)}
                   </StyledBodyMedium>
                 )}
               </StyledFlexColumn>

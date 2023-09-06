@@ -16,10 +16,6 @@ i18next
     detection: {
       order: ['navigator'],
     },
-    // TODO: add the ability to define the language
-    // and take the already saved language as well
-    // from the route (as was done in the vue project), store, localStorage - clarifications are needed.
-
     interpolation: {
       escapeValue: false,
     },

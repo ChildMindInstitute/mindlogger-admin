@@ -22,7 +22,7 @@ export const FixationScreen = () => {
 
   return (
     <ToggleItemContainer
-      error={error ? 'fillInAllRequired' : null}
+      errorMessage={error ? 'fillInAllRequired' : null}
       uiType={ToggleContainerUiType.PerformanceTask}
       title={t('flankerFixation.title')}
       Content={FixationContent}
