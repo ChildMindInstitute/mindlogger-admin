@@ -1,6 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
-export const SUMMARY_UNSUPPORTED_ITEMS = [
+export const UNSUPPORTED_ITEMS = [
   ItemResponseType.Date,
   ItemResponseType.Audio,
   ItemResponseType.AudioPlayer,
@@ -20,5 +20,3 @@ export const SUMMARY_UNSUPPORTED_ITEMS = [
   ItemResponseType.TouchTest,
   ItemResponseType.ABTrails,
 ];
-
-export const REVIEW_UNSUPPORTED_ITEMS = [...SUMMARY_UNSUPPORTED_ITEMS, ItemResponseType.Time];

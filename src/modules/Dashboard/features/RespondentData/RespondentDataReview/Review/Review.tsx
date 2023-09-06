@@ -8,7 +8,7 @@ import { getDictionaryText } from 'shared/utils';
 import { Spinner } from 'shared/components';
 import { ActivityItemAnswer } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { REVIEW_UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
+import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';
@@ -42,7 +42,7 @@ export const Review = ({ answerId, activityId }: ReviewProps) => {
           {activityItemAnswers.map(({ activityItem, answer }) => (
             <Box sx={{ mb: 4.8 }} key={activityItem.id}>
               <CollapsedMdText text={getDictionaryText(activityItem.question)} maxHeight={120} />
-              {REVIEW_UNSUPPORTED_ITEMS.includes(activityItem.responseType) ? (
+              {UNSUPPORTED_ITEMS.includes(activityItem.responseType) ? (
                 <UnsupportedItemResponse itemType={activityItem.responseType} />
               ) : (
                 <>{getResponseItem({ activityItem, answer })}</>

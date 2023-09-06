@@ -1,5 +1,5 @@
 import { ItemResponseType } from 'shared/consts';
-import { ActivityItemAnswer } from 'shared/types';
+import { ActivityItemAnswer, DecryptedTimeAnswer } from 'shared/types';
 
 import {
   MultiSelectItemAnswer,
@@ -11,6 +11,7 @@ import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
 import { TextResponseItem } from '../TextResponseItem';
 import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
+import { getTimeResponseItem } from './Review.utils';
 
 export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
   switch (activityItemAnswer.activityItem.responseType) {
@@ -22,5 +23,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
       return <SliderResponseItem {...(activityItemAnswer as SliderItemAnswer)} />;
     case ItemResponseType.Text:
       return <TextResponseItem {...(activityItemAnswer as TextItemAnswer)} />;
+    case ItemResponseType.Time:
+      return getTimeResponseItem(activityItemAnswer.answer as DecryptedTimeAnswer);
   }
 };
