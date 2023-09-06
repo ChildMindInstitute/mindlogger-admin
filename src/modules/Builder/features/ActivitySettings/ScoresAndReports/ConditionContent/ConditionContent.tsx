@@ -22,18 +22,22 @@ export const ConditionContent = ({
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
-  const { control, watch, getFieldState } = useFormContext();
-  const { append: appendCondition, remove: removeCondition } = useFieldArray({
+  const { control, getFieldState } = useFormContext();
+  const {
+    fields: conditions,
+    append: appendCondition,
+    remove: removeCondition,
+  } = useFieldArray<Record<string, Condition[]>>({
     control,
     name: conditionsName,
   });
   const error = getFieldState(`${name}.conditions`).error;
 
-  const conditions = watch(conditionsName);
-
   const handleAddCondition = () => {
     appendCondition(
-      type === ConditionRowType.Score && scoreId ? getDefaultScoreCondition(scoreId) : {},
+      type === ConditionRowType.Score && scoreId
+        ? getDefaultScoreCondition(scoreId)
+        : ({} as Condition),
     );
   };
 

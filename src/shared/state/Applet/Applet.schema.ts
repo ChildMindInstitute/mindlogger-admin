@@ -383,9 +383,9 @@ export type BaseCondition = {
 
 export type ScoreCondition = {
   key?: string;
-  type: typeof ScoreConditionType;
+  type: typeof ScoreConditionType | string;
   itemName: string;
-  payload: {
+  payload?: {
     value: boolean;
   };
 };
