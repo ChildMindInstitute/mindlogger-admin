@@ -22,8 +22,8 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
   const endDate = watch('endDate');
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
-
   const identifiersOptions = getUniqueIdentifierOptions(identifiers);
+  const dataTestid = 'respondents-summary-filters';
 
   const moreFiltersHandler = () => {
     setValue('moreFiltersVisible', !moreFiltersVisible);
@@ -46,6 +46,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             inputSx={{ width: '19rem' }}
             onCloseCallback={onCloseCallback}
             label={t('startDate')}
+            data-testid={`${dataTestid}-start-date`}
           />
           <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
           <DatePicker
@@ -54,6 +55,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             control={control}
             inputSx={{ width: '19rem' }}
             label={t('endDate')}
+            data-testid={`${dataTestid}-end-date`}
           />
         </StyledFlexTopCenter>
 
@@ -63,6 +65,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             control={control}
             label={t('startTime')}
             wrapperSx={{ width: '13rem' }}
+            data-testid={`${dataTestid}-start-time`}
           />
           <StyledTimeText>{t('timeIsShownInUTC')}</StyledTimeText>
 
@@ -72,12 +75,14 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             control={control}
             label={t('endTime')}
             wrapperSx={{ width: '13rem' }}
+            data-testid={`${dataTestid}-end-time`}
           />
           <StyledMoreFilters
             onClick={moreFiltersHandler}
             sx={{
               backgroundColor: moreFiltersVisible ? variables.palette.primary_alfa12 : '',
             }}
+            data-testid={`${dataTestid}-more`}
           >
             {t('moreFilters')}
           </StyledMoreFilters>
@@ -86,7 +91,12 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
       {moreFiltersVisible && (
         <Box sx={{ mb: theme.spacing(4.8) }}>
           {!!identifiersOptions?.length && (
-            <Switch name="filterByIdentifier" control={control} label={t('filterByIdentifier')} />
+            <Switch
+              name="filterByIdentifier"
+              control={control}
+              label={t('filterByIdentifier')}
+              data-testid={`${dataTestid}-filter-by-identifier`}
+            />
           )}
           <StyledFlexTopCenter sx={{ mt: theme.spacing(0.8) }}>
             <Box sx={{ width: '36rem' }}>
@@ -99,6 +109,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 noOptionsText={t('noRespondentIdentifier')}
                 labelAllSelect={t('selectAll')}
                 disabled={!filterByIdentifier}
+                data-testid={`${dataTestid}-respondent-identifier`}
               />
             </Box>
             <Box sx={{ width: '36rem', ml: theme.spacing(2.4) }}>
@@ -110,6 +121,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 control={control}
                 noOptionsText={t('noVersions')}
                 labelAllSelect={t('selectAll')}
+                data-testid={`${dataTestid}-versions`}
               />
             </Box>
           </StyledFlexTopCenter>

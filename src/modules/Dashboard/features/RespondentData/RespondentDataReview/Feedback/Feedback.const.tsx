@@ -13,30 +13,37 @@ export const getTabs = (
   assessment: AssessmentActivityItem[] | undefined,
   assessmentStep: number,
   setAssessmentStep: Dispatch<SetStateAction<number>>,
-) => [
-  {
-    labelKey: 'notes',
-    content: <FeedbackNotes activity={selectedActivity} />,
-  },
-  ...(assessment?.length
-    ? [
-        {
-          labelKey: 'assessment',
-          content: (
-            <FeedbackAssessment
-              setActiveTab={setActiveTab}
-              assessmentStep={assessmentStep}
-              setAssessmentStep={setAssessmentStep}
-            />
-          ),
-        },
-        {
-          labelKey: 'reviewed',
-          content: <FeedbackReviewed />,
-        },
-      ]
-    : []),
-];
+) => {
+  const dataTestid = 'respondents-summary-feedback-tab';
+
+  return [
+    {
+      labelKey: 'notes',
+      content: <FeedbackNotes activity={selectedActivity} />,
+      'data-testid': `${dataTestid}-notes`,
+    },
+    ...(assessment?.length
+      ? [
+          {
+            labelKey: 'assessment',
+            content: (
+              <FeedbackAssessment
+                setActiveTab={setActiveTab}
+                assessmentStep={assessmentStep}
+                setAssessmentStep={setAssessmentStep}
+              />
+            ),
+            'data-testid': `${dataTestid}-assessment`,
+          },
+          {
+            labelKey: 'reviewed',
+            content: <FeedbackReviewed />,
+            'data-testid': `${dataTestid}-reviewed`,
+          },
+        ]
+      : []),
+  ];
+};
 
 export const enum FeedbackTabs {
   Notes = 0,

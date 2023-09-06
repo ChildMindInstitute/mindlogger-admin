@@ -41,6 +41,7 @@ export const RespondentDataReview = () => {
   const [assessment, setAssessment] = useState<AssessmentActivityItem[]>([]);
   const [itemIds, setItemIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const dataTestid = 'respondents-review';
 
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getAssessment } = useAsync(getAssessmentApi);
@@ -117,12 +118,17 @@ export const RespondentDataReview = () => {
               onClick={() => setIsFeedbackOpen(true)}
               disabled={!selectedAnswer}
               startIcon={<Svg id="item-outlined" width="18" height="18" />}
+              data-testid={`${dataTestid}-feedback`}
             >
               {t('feedback')}
             </StyledTextBtn>
           </StyledHeader>
           {selectedActivity && selectedAnswer ? (
-            <Review answerId={selectedAnswer.answerId} activityId={selectedActivity.id} />
+            <Review
+              answerId={selectedAnswer.answerId}
+              activityId={selectedActivity.id}
+              data-testid={`${dataTestid}-answer-review`}
+            />
           ) : (
             <StyledWrapper>
               <StyledEmptyReview>{renderEmptyState()}</StyledEmptyReview>

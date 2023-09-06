@@ -111,7 +111,6 @@ export const DatePicker = <T extends FieldValues>({
                 {...textFieldProps}
                 label={label || t('date')}
                 value={getValue()}
-                data-testid={`${dataTestid}-date`}
               />
             ) : (
               <>
@@ -120,7 +119,7 @@ export const DatePicker = <T extends FieldValues>({
                   {...textFieldProps}
                   label={t('startDate')}
                   value={getValue()[0] || ''}
-                  data-testid={`${dataTestid}-start-date`}
+                  data-testid={`${dataTestid}-start`}
                 />
                 <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
                   {t('smallTo')}
@@ -130,7 +129,7 @@ export const DatePicker = <T extends FieldValues>({
                   {...textFieldProps}
                   label={t('endDate')}
                   value={getValue()[1] || ''}
-                  data-testid={`${dataTestid}-end-date`}
+                  data-testid={`${dataTestid}-end`}
                 />
               </>
             )}

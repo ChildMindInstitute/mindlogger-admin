@@ -27,11 +27,12 @@ export const ReportMenu = ({ activities }: ReportMenuProps) => {
         <StyledHeadlineLarge>{t('activities')}</StyledHeadlineLarge>
         <StyledLabelLarge>{respondentLabel}</StyledLabelLarge>
       </Box>
-      {activities?.map((activity) => (
+      {activities?.map((activity, index) => (
         <StyledActivity
           key={String(activity.id)}
           isSelected={selectedActivity?.id === activity.id}
           onClick={() => setSelectedActivity(activity)}
+          data-testid={`respondents-summary-activity-${index}`}
         >
           <StyledBodyLarge color={variables.palette.on_surface}>{activity.name}</StyledBodyLarge>
         </StyledActivity>

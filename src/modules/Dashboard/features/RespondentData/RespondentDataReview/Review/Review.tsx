@@ -16,7 +16,7 @@ import { StyledReview } from './Review.styles';
 import { ReviewProps } from './Review.types';
 import { getResponseItem } from './Review.const';
 
-export const Review = ({ answerId, activityId }: ReviewProps) => {
+export const Review = ({ answerId, activityId, 'data-testid': dataTestid }: ReviewProps) => {
   const { appletId } = useParams();
   const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
   const getDecryptedActivityData = useDecryptedActivityData();
@@ -39,9 +39,13 @@ export const Review = ({ answerId, activityId }: ReviewProps) => {
       {isLoading && <Spinner />}
       {answerId && activityItemAnswers && (
         <StyledReview>
-          {activityItemAnswers.map(({ activityItem, answer }) => (
+          {activityItemAnswers.map(({ activityItem, answer }, index) => (
             <Box sx={{ mb: 4.8 }} key={activityItem.id}>
-              <CollapsedMdText text={getDictionaryText(activityItem.question)} maxHeight={120} />
+              <CollapsedMdText
+                text={getDictionaryText(activityItem.question)}
+                maxHeight={120}
+                data-testid={`${dataTestid}-displayed-content-${index}`}
+              />
               {UNSUPPORTED_ITEMS.includes(activityItem.responseType) ? (
                 <UnsupportedItemResponse itemType={activityItem.responseType} />
               ) : (

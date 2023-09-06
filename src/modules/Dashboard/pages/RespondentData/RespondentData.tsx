@@ -82,6 +82,7 @@ export const RespondentData = () => {
         variant="text"
         onClick={navigateUp}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
+        data-testid="respondents-summary-back-to-applet"
       >
         {t('appletPage')}
       </StyledDirectoryUpButton>

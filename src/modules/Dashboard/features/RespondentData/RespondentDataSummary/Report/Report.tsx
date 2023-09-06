@@ -185,6 +185,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
                   variant="text"
                   startIcon={<Svg id="export" width="18" height="18" />}
                   disabled={disabledLatestReport}
+                  data-testid="respondents-summary-download-report"
                 >
                   {t('downloadLatestReport')}
                 </StyledTextBtn>

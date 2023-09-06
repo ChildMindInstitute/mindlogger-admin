@@ -15,6 +15,7 @@ export const ActivityCardItem = ({
   toPrevStep,
   isActive,
   onSubmit,
+  'data-testid': dataTestid,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isSkippable: activityItem.activityItem.config.skippableItem,
@@ -38,6 +39,7 @@ export const ActivityCardItem = ({
       <CollapsedMdText
         text={getDictionaryText(activityItem.activityItem.question)}
         maxHeight={120}
+        data-testid={`${dataTestid}-question`}
       />
       <ItemPicker activityItem={activityItem} isDisabled={!isActive} />
       {isActive && (
@@ -48,6 +50,7 @@ export const ActivityCardItem = ({
           onNextButtonClick={onNextButtonClick}
           onBackButtonClick={onBackButtonClick}
           onSubmit={onSubmit}
+          data-testid={`${dataTestid}-item`}
         />
       )}
     </StyledCardItemContainer>

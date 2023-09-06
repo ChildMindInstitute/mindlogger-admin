@@ -5,6 +5,7 @@ import { ActivityCartProps } from '../ActivityCartItemList.types';
 export type ActivityCardItemProps = ActivityCartProps & {
   isActive: boolean;
   activityItem: AssessmentActivityItem;
+  'data-testid'?: string;
 };
 
 export type ItemCardButtonsConfig = {

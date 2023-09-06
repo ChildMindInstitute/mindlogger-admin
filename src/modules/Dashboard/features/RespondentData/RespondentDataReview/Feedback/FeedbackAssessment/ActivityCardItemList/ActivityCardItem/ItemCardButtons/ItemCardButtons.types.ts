@@ -7,4 +7,5 @@ export type ItemCardButtonsProps = {
   onBackButtonClick?: () => void;
   onNextButtonClick?: () => void;
   onSubmit?: () => void;
+  'data-testid'?: string;
 };

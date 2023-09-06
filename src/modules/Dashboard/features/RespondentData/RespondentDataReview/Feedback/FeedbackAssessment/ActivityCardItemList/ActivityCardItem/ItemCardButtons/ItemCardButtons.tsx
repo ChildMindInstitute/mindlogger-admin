@@ -15,6 +15,7 @@ export const ItemCardButtons = ({
   onBackButtonClick,
   onNextButtonClick,
   onSubmit,
+  'data-testid': dataTestid,
 }: ItemCardButtonsProps) => {
   const { t } = useTranslation();
   const { watch } = useFormContext();
@@ -30,7 +31,11 @@ export const ItemCardButtons = ({
   return (
     <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', mt: theme.spacing(1.6) }}>
       {config.isBackVisible && (
-        <Button sx={{ minWidth: '10rem' }} onClick={onBackButtonClick}>
+        <Button
+          sx={{ minWidth: '10rem' }}
+          onClick={onBackButtonClick}
+          data-testid={`${dataTestid}-back`}
+        >
           {t('back')}
         </Button>
       )}
@@ -39,6 +44,7 @@ export const ItemCardButtons = ({
         variant="contained"
         disabled={!config.isSkippable && isNextDisable}
         onClick={isSubmitVisible ? onSubmit : onNextButtonClick}
+        data-testid={`${dataTestid}-${isSubmitVisible ? 'submit' : 'next'}`}
       >
         {isSubmitVisible ? t('submit') : t('next')}
       </Button>
