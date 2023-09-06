@@ -16,7 +16,6 @@ i18next
     detection: {
       order: ['navigator'],
     },
-
     interpolation: {
       escapeValue: false,
     },
