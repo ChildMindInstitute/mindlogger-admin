@@ -77,6 +77,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
               appletId={currentApplet?.id ?? ''}
               encryption={currentApplet?.encryption}
               submitCallback={handleDeleteApplet}
+              data-testid={`${dataTestid}-enter-password`}
             />
           </StyledModalWrapper>
         </Modal>
