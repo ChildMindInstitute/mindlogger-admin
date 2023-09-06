@@ -9,24 +9,29 @@ export const ActivityCardItemList = ({
   toNextStep,
   toPrevStep,
   onSubmit,
-}: ActivityCardItemListProps) => (
-  <>
-    {activityItems.map((item, index) => {
-      const isActive = index === 0;
+}: ActivityCardItemListProps) => {
+  const dataTestid = 'respondents-summary-feedback-assessment';
 
-      return (
-        <ActivityCardItem
-          key={item.activityItem.id}
-          activityItem={item}
-          isBackVisible={isBackVisible}
-          isSubmitVisible={isSubmitVisible}
-          step={step}
-          toNextStep={toNextStep}
-          toPrevStep={toPrevStep}
-          isActive={isActive}
-          onSubmit={onSubmit}
-        />
-      );
-    })}
-  </>
-);
+  return (
+    <>
+      {activityItems.map((item, index) => {
+        const isActive = index === 0;
+
+        return (
+          <ActivityCardItem
+            key={item.activityItem.id}
+            activityItem={item}
+            isBackVisible={isBackVisible}
+            isSubmitVisible={isSubmitVisible}
+            step={step}
+            toNextStep={toNextStep}
+            toPrevStep={toPrevStep}
+            isActive={isActive}
+            onSubmit={onSubmit}
+            data-testid={`${dataTestid}-activity-${index}`}
+          />
+        );
+      })}
+    </>
+  );
+};

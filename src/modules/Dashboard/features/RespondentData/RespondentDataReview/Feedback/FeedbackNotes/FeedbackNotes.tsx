@@ -29,6 +29,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const answerId = searchParams.get('answerId');
   const containerRef = useRef<HTMLElement | null>(null);
   const isFormSticky = useHeaderSticky(containerRef);
+  const dataTestid = 'respondents-summary-feedback-notes';
 
   const { control, setValue, handleSubmit } = useFormContext<FeedbackForm>();
 
@@ -87,20 +88,22 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
           placeholder={t('addNotePlaceholder')}
           multiline
           rows={NOTE_ROWS_COUNT}
+          data-testid={`${dataTestid}-add-note`}
         />
         <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', m: theme.spacing(0.8, 0, 0) }}>
-          <Button variant="contained" type="submit">
+          <Button variant="contained" type="submit" data-testid={`${dataTestid}-save`}>
             {t('save')}
           </Button>
         </StyledFlexTopCenter>
       </StyledForm>
       <Box sx={{ padding: theme.spacing(2.4) }}>
-        {notes.map((note) => (
+        {notes.map((note, index) => (
           <FeedbackNote
             key={note.id}
             note={note}
             onEdit={handleNoteEdit}
             onDelete={handleNoteDelete}
+            data-testid={`${dataTestid}-note-${index}`}
           />
         ))}
       </Box>

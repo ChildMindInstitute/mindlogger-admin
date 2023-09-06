@@ -11,4 +11,5 @@ export type ReviewMenuItemProps = {
   selectedAnswer: Answer | null;
   setSelectedActivity: Dispatch<SetStateAction<ReviewActivity | null>>;
   setSelectedAnswer: Dispatch<SetStateAction<Answer | null>>;
+  'data-testid'?: string;
 };

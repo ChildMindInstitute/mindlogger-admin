@@ -22,6 +22,7 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   const { assessment, isFeedbackOpen } = useContext(RespondentDataReviewContext);
   const [assessmentStep, setAssessmentStep] = useState(0);
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
+  const dataTestid = 'respondents-review-feedback';
 
   const methods = useForm<FeedbackForm>({
     defaultValues: getDefaultFormValues(assessment),
@@ -49,7 +50,7 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
             {t('feedback')}
           </StyledLabelBoldLarge>
         </StyledFlexTopStart>
-        <StyledButton onClick={onClose}>
+        <StyledButton onClick={onClose} data-testid={`${dataTestid}-close`}>
           <Svg id="cross" />
         </StyledButton>
       </StyledFlexAllCenter>

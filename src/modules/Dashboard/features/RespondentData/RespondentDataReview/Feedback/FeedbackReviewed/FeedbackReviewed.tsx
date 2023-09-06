@@ -22,6 +22,7 @@ export const FeedbackReviewed = () => {
   const { execute: getReviews } = useAsync(getReviewsApi);
   const [isLoading, setIsLoading] = useState(true);
   const [reviewers, setReviewers] = useState<ReviewData[]>([]);
+  const dataTestid = 'respondents-data-summary-feedback-reviewed';
 
   useEffect(() => {
     if (!appletId || !answerId) return;
@@ -55,9 +56,12 @@ export const FeedbackReviewed = () => {
       {!isLoading && (
         <>
           {reviewers.length ? (
-            reviewers.map((reviewer) => (
+            reviewers.map((reviewer, index) => (
               <Fragment key={uniqueId()}>
-                <FeedbackReviewer reviewer={reviewer} />
+                <FeedbackReviewer
+                  reviewer={reviewer}
+                  data-testid={`${dataTestid}-reviewer-${index}`}
+                />
               </Fragment>
             ))
           ) : (

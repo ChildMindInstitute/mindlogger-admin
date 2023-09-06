@@ -12,6 +12,7 @@ export const Switch = <T extends FieldValues>({
   name,
   label,
   tooltipText,
+  'data-testid': dataTestid,
   ...props
 }: SwitchControllerProps<T>) => (
   <StyledFlexTopCenter>
@@ -22,6 +23,7 @@ export const Switch = <T extends FieldValues>({
         <StyledFormControlLabel
           label={label}
           control={<CustomSwitch {...props} {...field} checked={field.value} />}
+          data-testid={dataTestid}
         />
       )}
     />

@@ -34,6 +34,7 @@ export const ReviewMenu = ({
       ? new Date(selectedDateParam!)
       : null;
   const defaultDate = selectedDate || new Date();
+  const dataTestid = 'respondents-review';
 
   const { control } = useForm({
     defaultValues: { date: defaultDate },
@@ -111,12 +112,13 @@ export const ReviewMenu = ({
           includeDates={submitDates}
           onMonthChange={onMonthChange}
           disabled={!submitDates?.length}
+          data-testid={`${dataTestid}-review-date`}
         />
       </StyledHeader>
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
         {t('selectActivityAndResponse')}
       </StyledLabelLarge>
-      {activities.map((activity) => (
+      {activities.map((activity, index) => (
         <ReviewMenuItem
           key={activity.id}
           selectedDate={date}
@@ -125,6 +127,7 @@ export const ReviewMenu = ({
           setSelectedActivity={setSelectedActivity}
           selectedAnswer={selectedAnswer}
           setSelectedAnswer={setSelectedAnswer}
+          data-testid={`${dataTestid}-activity-${index}`}
         />
       ))}
     </StyledMenu>

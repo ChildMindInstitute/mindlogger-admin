@@ -15,7 +15,10 @@ import { StyledButton, StyledEdited, StyledItem, StyledReviewer } from './Feedba
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';
 import { getResponseItem } from './FeedbackReviewer.const';
 
-export const FeedbackReviewer = ({ reviewer: { review, reviewer } }: FeedbackReviewerProps) => {
+export const FeedbackReviewer = ({
+  reviewer: { review, reviewer },
+  'data-testid': dataTestid,
+}: FeedbackReviewerProps) => {
   const { t } = useTranslation('app');
 
   const [isOpen, setIsOpen] = useState(false);
@@ -25,17 +28,20 @@ export const FeedbackReviewer = ({ reviewer: { review, reviewer } }: FeedbackRev
   };
 
   return (
-    <StyledReviewer>
+    <StyledReviewer data-testid={dataTestid}>
       <StyledFlexTopStart sx={{ justifyContent: 'space-between' }}>
         <StyledTitleBoldMedium>{`${reviewer.firstName} ${reviewer.lastName}`}</StyledTitleBoldMedium>
-        <StyledButton onClick={toggleIsOpen}>
+        <StyledButton onClick={toggleIsOpen} data-testid={`${dataTestid}-collapse`}>
           <Svg id={isOpen ? 'navigate-up' : 'navigate-down'} />
         </StyledButton>
       </StyledFlexTopStart>
       {isOpen && (
         <>
-          {review.map((activityItemAnswer) => (
-            <StyledItem key={activityItemAnswer.activityItem.id}>
+          {review.map((activityItemAnswer, index) => (
+            <StyledItem
+              key={activityItemAnswer.activityItem.id}
+              data-testid={`${dataTestid}-review-${index}`}
+            >
               {activityItemAnswer.answer?.edited && (
                 <StyledEdited>
                   <StyledBodyMedium color={variables.palette.on_secondary_container}>

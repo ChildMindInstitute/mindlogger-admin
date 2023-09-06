@@ -15,6 +15,7 @@ export const useRespondentDataTabs = () => {
         appletId,
         respondentId,
       }),
+      'data-testid': 'respondents-summary-tab-summary',
     },
     {
       labelKey: 'review',
@@ -24,6 +25,7 @@ export const useRespondentDataTabs = () => {
         appletId,
         respondentId,
       }),
+      'data-testid': 'respondents-summary-tab-review',
     },
   ];
 };

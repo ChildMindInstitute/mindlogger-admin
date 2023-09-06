@@ -28,7 +28,12 @@ import {
 import { FeedbackNoteProps } from './FeedbackNote.types';
 import { NOTE_ROWS_COUNT } from '../FeedbackNotes.const';
 
-export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
+export const FeedbackNote = ({
+  note,
+  onEdit,
+  onDelete,
+  'data-testid': dataTestid,
+}: FeedbackNoteProps) => {
   const { t } = useTranslation();
   const timeAgo = useTimeAgo();
   const [isVisibleActions, setIsVisibleActions] = useState(false);
@@ -73,6 +78,7 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
       <StyledNoteHeader
         onMouseEnter={() => !isEditMode && setIsVisibleActions(true)}
         onMouseLeave={() => setIsVisibleActions(false)}
+        data-testid={`${dataTestid}-header`}
       >
         <StyledFlexTopStart>
           <StyledAuthorLabel color={variables.palette.outline}>{userName}</StyledAuthorLabel>
@@ -82,10 +88,10 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
         </StyledFlexTopStart>
         {!isEditMode && isVisibleActions && (
           <StyledActions>
-            <StyledButton onClick={handleNoteEdit}>
+            <StyledButton onClick={handleNoteEdit} data-testid={`${dataTestid}-edit`}>
               <Svg id="edit" {...commonSvgProps} />
             </StyledButton>
-            <StyledButton onClick={() => onDelete(note.id)}>
+            <StyledButton onClick={() => onDelete(note.id)} data-testid={`${dataTestid}-remove`}>
               <Svg id="trash" {...commonSvgProps} />
             </StyledButton>
           </StyledActions>
@@ -100,16 +106,24 @@ export const FeedbackNote = ({ note, onEdit, onDelete }: FeedbackNoteProps) => {
             control={control}
             multiline
             rows={NOTE_ROWS_COUNT}
+            data-testid={`${dataTestid}-text`}
           />
           <StyledFlexTopCenter sx={{ justifyContent: 'end', m: theme.spacing(0.8, 0) }}>
-            <Button onClick={() => setIsEditMode(false)}>{t('cancel')}</Button>
-            <Button type="submit" variant="contained" sx={{ ml: theme.spacing(0.8) }}>
+            <Button onClick={() => setIsEditMode(false)} data-testid={`${dataTestid}-cancel`}>
+              {t('cancel')}
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ ml: theme.spacing(0.8) }}
+              data-testid={`${dataTestid}-save`}
+            >
               {t('save')}
             </Button>
           </StyledFlexTopCenter>
         </StyledForm>
       ) : (
-        <StyledNote>
+        <StyledNote data-testid={`${dataTestid}-note`}>
           <StyledBodyLarge>{note.note}</StyledBodyLarge>
         </StyledNote>
       )}
