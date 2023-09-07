@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { updateManagersPinApi } from 'api';
-import { Actions, DEFAULT_ROWS_PER_PAGE, Pin, Search, Spinner } from 'shared/components';
+import { Actions, Pin, Search, Spinner } from 'shared/components';
 import { users, workspaces, Manager } from 'redux/modules';
 import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { useAppDispatch } from 'redux/store';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
-import { Roles } from 'shared/consts';
+import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup, EditAccessSuccessPopup } from './Popups';

@@ -3,11 +3,12 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { useAsync } from 'shared/hooks';
-import { applet, popups } from 'redux/modules';
+import { alerts, applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { Modals, DeletePopupProps } from './DeletePopup.types';
 
@@ -34,6 +35,8 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     deleteAppletApi,
     () => {
       setActiveModal(Modals.Confirmation);
+      dispatch(alerts.actions.resetAlerts());
+      dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
     },
     () => {
       setActiveModal(Modals.DeleteError);

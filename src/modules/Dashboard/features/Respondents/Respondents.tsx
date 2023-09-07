@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, DEFAULT_ROWS_PER_PAGE, Row, Spinner } from 'shared/components';
+import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
 import { Respondent, users, workspaces } from 'redux/modules';
 import {
   useTimeAgo,
@@ -17,7 +17,7 @@ import { updateRespondentsPinApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
-import { Roles } from 'shared/consts';
+import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 
 import {

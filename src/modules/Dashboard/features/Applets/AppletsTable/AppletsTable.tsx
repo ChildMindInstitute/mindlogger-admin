@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
-import { DEFAULT_ROWS_PER_PAGE, EmptyState, TableHead } from 'shared/components';
+import { EmptyState, TableHead } from 'shared/components';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { Applet, Folder } from 'api';
 import {
