@@ -65,6 +65,15 @@ export const postFileDownloadApi = (key: string, signal?: AbortSignal) =>
     },
   );
 
+export const postFilePresignApi = (appletId: string, privateUrls: string[], signal?: AbortSignal) =>
+  authApiClient.post(
+    `/file/${appletId}/presign`,
+    { privateUrls },
+    {
+      signal,
+    },
+  );
+
 export const getWorkspaceRolesApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
   authApiClient.get(`/workspaces/${ownerId}/roles`, { params: {}, signal });
 

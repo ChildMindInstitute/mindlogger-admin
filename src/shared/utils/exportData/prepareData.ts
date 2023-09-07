@@ -29,6 +29,7 @@ import {
   getStabilityTrackerCsvName,
 } from 'shared/utils';
 import { FlankerConfig, Item } from 'shared/state';
+import { postFilePresignApi } from 'shared/api';
 
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
@@ -69,26 +70,90 @@ const getReportData = (
   return reportData.concat(answers);
 };
 
+const checkIfDrawingMediaConditionPassed = (
+  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+) => item.activityItem?.responseType === ItemResponseType.Drawing && item.answer;
+const getDrawingUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
+  (item.answer as DecryptedDrawingAnswer).value.uri;
+const getMediaUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
+  (item.answer as DecryptedMediaAnswer).value || '';
+
+const getAnswersWithPublicUrls = async (
+  parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
+) => {
+  const privateUrls = parsedAnswers.reduce((acc, data) => {
+    const decryptedAnswers = data.decryptedAnswers.reduce((urlsAcc, item) => {
+      if (checkIfDrawingMediaConditionPassed(item)) {
+        return urlsAcc.concat(getDrawingUrl(item));
+      }
+      const responseType = item.activityItem?.responseType;
+      if (!ItemsWithFileResponses.includes(responseType)) return urlsAcc;
+
+      return urlsAcc.concat(getMediaUrl(item));
+    }, [] as string[]);
+
+    return acc.concat(decryptedAnswers);
+  }, [] as string[]);
+
+  let publicUrls: string[] = [];
+  try {
+    const appletId = parsedAnswers[0].decryptedAnswers[0].appletId;
+    publicUrls = (await postFilePresignApi(appletId, privateUrls)).data?.result ?? [];
+  } catch (e) {
+    console.warn(e);
+  }
+  let publicUrlIndex = 0;
+
+  return parsedAnswers.reduce((acc, data) => {
+    const decryptedAnswers = data.decryptedAnswers.reduce((decryptedAnswersAcc, item) => {
+      if (checkIfDrawingMediaConditionPassed(item)) {
+        return decryptedAnswersAcc.concat({
+          ...item,
+          answer: {
+            ...(item.answer as DecryptedDrawingAnswer),
+            value: {
+              ...(item.answer as DecryptedDrawingAnswer).value,
+              uri: publicUrls[publicUrlIndex++] ?? '',
+            },
+          },
+        });
+      }
+      const responseType = item.activityItem?.responseType;
+      if (!ItemsWithFileResponses.includes(responseType)) return decryptedAnswersAcc;
+
+      return decryptedAnswersAcc.concat({
+        ...item,
+        answer: {
+          ...(item.answer as DecryptedMediaAnswer),
+          value: publicUrls[publicUrlIndex++] ?? '',
+        },
+      });
+    }, [] as DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[]);
+
+    return acc.concat({
+      ...data,
+      decryptedAnswers,
+    });
+  }, [] as DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[]);
+};
+
 const getMediaData = (
   mediaData: AppletExportData['mediaData'],
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
   const mediaAnswers = decryptedAnswers.reduce((filteredAcc, item) => {
-    const responseType = item.activityItem?.responseType;
-    if (responseType === ItemResponseType.Drawing && item.answer)
+    if (checkIfDrawingMediaConditionPassed(item))
       return filteredAcc.concat({
         fileName: getMediaFileName(item, 'svg'),
-        url: (item.answer as DecryptedDrawingAnswer).value.uri,
+        url: getDrawingUrl(item),
       });
-
+    const responseType = item.activityItem?.responseType;
     if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
+    const url = getMediaUrl(item);
 
     return filteredAcc.concat({
-      fileName: getMediaFileName(
-        item,
-        getFileExtension((item.answer as DecryptedMediaAnswer).value),
-      ),
-      url: (item.answer as DecryptedMediaAnswer).value || '',
+      fileName: getMediaFileName(item, getFileExtension(url)),
+      url,
     });
   }, [] as ExportMediaData[]);
 
@@ -205,15 +270,16 @@ const getFlankerItemsData = (
   return flankerItemsData.concat(...flankerAnswers);
 };
 
-export const prepareData = (
+export const prepareData = async (
   data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
   getDecryptedAnswers: (
     data: ExtendedExportAnswer,
   ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,
 ) => {
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
+  const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(parsedAnswers);
 
-  return parsedAnswers.reduce(
+  return parsedAnswersWithPublicUrls.reduce(
     (acc, data) => {
       const rawAnswersObject = getObjectFromList(
         data.decryptedAnswers,

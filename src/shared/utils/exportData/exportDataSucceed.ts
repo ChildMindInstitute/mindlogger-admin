@@ -35,7 +35,7 @@ export const exportDataSucceed =
       stabilityTrackerItemsData,
       abTrailsItemsData,
       flankerItemsData,
-    } = prepareData(response.data.result, getDecryptedAnswers);
+    } = await prepareData(response.data.result, getDecryptedAnswers);
 
     await exportTemplate({
       data: reportData,
