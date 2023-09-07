@@ -179,7 +179,7 @@ export const Applets = () => {
         {deletePopupVisible && (
           <DeletePopup
             onCloseCallback={onCloseCallback}
-            data-testid="dashobard-applets-delete-popup"
+            data-testid="dashboard-applets-delete-popup"
           />
         )}
         {transferOwnershipPopupVisible && <TransferOwnershipPopup />}

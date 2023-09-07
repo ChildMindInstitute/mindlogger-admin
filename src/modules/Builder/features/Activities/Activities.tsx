@@ -5,7 +5,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
 
-import { StyledFlexColumn, StyledTitleMedium, theme } from 'shared/styles';
+import { StyledMaxWidthWrapper, StyledTitleMedium, theme } from 'shared/styles';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
@@ -178,12 +178,12 @@ export const Activities = () => {
   };
 
   return (
-    <BuilderContainer
-      title={t('activities')}
-      Header={ActivitiesHeader}
-      headerProps={{ onAddActivity: handleActivityAdd }}
-    >
-      <StyledFlexColumn>
+    <StyledMaxWidthWrapper hasParentColumnDirection>
+      <BuilderContainer
+        title={t('activities')}
+        Header={ActivitiesHeader}
+        headerProps={{ onAddActivity: handleActivityAdd }}
+      >
         {activities?.length ? (
           <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
             <DndDroppable droppableId="activities-dnd" direction="vertical">
@@ -266,7 +266,7 @@ export const Activities = () => {
             {t('activityIsRequired')}
           </StyledTitleMedium>
         )}
-      </StyledFlexColumn>
-    </BuilderContainer>
+      </BuilderContainer>
+    </StyledMaxWidthWrapper>
   );
 };
