@@ -5,7 +5,7 @@ import { useAppDispatch } from 'redux/store';
 import { workspaces, auth, alerts } from 'redux/modules';
 import { Footer } from 'shared/components';
 import { useAlertsWebsocket } from 'shared/hooks';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/state/Alerts/Alerts.const';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';

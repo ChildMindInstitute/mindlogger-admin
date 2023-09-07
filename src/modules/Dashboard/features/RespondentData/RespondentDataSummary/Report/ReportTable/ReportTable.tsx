@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { format } from 'date-fns';
 
-import { DEFAULT_ROWS_PER_PAGE, Search } from 'shared/components';
+import { Search } from 'shared/components';
 import { DashboardTable } from 'modules/Dashboard/components';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Order } from 'shared/types';
-import { DateFormats } from 'shared/consts';
+import { DateFormats, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { getHeadCells } from './ReportTable.const';
 import { StyledTableWrapper } from './ReportTable.styles';

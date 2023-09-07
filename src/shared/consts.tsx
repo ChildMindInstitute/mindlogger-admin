@@ -2,6 +2,7 @@ import { enUS, fr } from 'date-fns/locale';
 
 import { Svg } from 'shared/components/Svg';
 
+export const DEFAULT_ROWS_PER_PAGE = 20;
 export const TABS_HEIGHT = '6.1rem';
 export const TOP_BAR_HEIGHT = '6rem';
 export const FOOTER_HEIGHT = '4.8rem';

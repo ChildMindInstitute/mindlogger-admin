@@ -3,9 +3,10 @@ import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } fr
 
 import { Order } from 'shared/types/table';
 import { EmptyState } from 'shared/components/EmptyState';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { TableHead } from './TableHead';
-import { DEFAULT_ROWS_PER_PAGE, SEVEN_ROWS_PER_PAGE, UNLIMITED_ROWS_PER_PAGE } from './Table.const';
+import { SEVEN_ROWS_PER_PAGE, UNLIMITED_ROWS_PER_PAGE } from './Table.const';
 import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { Row, TableProps, UiType } from './Table.types';
 

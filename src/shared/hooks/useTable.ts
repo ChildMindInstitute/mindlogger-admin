@@ -2,7 +2,7 @@ import { useState, useEffect, MouseEvent } from 'react';
 
 import { Order } from 'shared/types';
 import { workspaces } from 'redux/modules';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { GetAppletsParams } from 'api';
 import { formattedOrder } from 'shared/utils';
 

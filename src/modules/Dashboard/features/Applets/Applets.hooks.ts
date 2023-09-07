@@ -11,7 +11,7 @@ import {
   getFilteredWorkspaceAppletsApi,
   DashboardAppletType,
 } from 'api';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/components';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
 import { workspaces } from 'shared/state';
 import { getObjectFromList } from 'shared/utils';

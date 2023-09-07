@@ -1,7 +1,7 @@
 import { useAppDispatch } from 'redux/store';
 import { alerts } from 'shared/state';
 import { getInfinityScrollData } from 'shared/utils';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/state/Alerts/Alerts.const';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { useIntersectionObserver } from 'shared/hooks';
 
 import { ALERT_END_ITEM_CLASS, ALERT_LIST_CLASS } from './Notifications.const';
