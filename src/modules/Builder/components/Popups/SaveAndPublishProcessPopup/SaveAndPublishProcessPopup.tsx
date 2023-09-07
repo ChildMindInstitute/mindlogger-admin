@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 
 import { Modal } from 'shared/components';
 import { StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { concatIf } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { reportConfig } from 'modules/Builder/state';
 
@@ -11,6 +12,7 @@ import {
   SaveAndPublishSteps,
 } from './SaveAndPublishProcessPopup.types';
 import { Description } from './Description';
+import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
 
 export const SaveAndPublishProcessPopup = ({
   isPopupVisible,
@@ -37,7 +39,6 @@ export const SaveAndPublishProcessPopup = ({
   if (step === SaveAndPublishSteps.BeingCreated) {
     modalProps = {
       hasActions: false,
-      'data-testid': 'builder-save-and-publish-loading-popup',
     };
   }
   if (step === SaveAndPublishSteps.Failed) {
@@ -47,7 +48,6 @@ export const SaveAndPublishProcessPopup = ({
       hasSecondBtn: true,
       secondBtnText: t('back'),
       onSecondBtnSubmit: onClose,
-      'data-testid': 'builder-save-and-publish-failed-popup',
     };
   }
   if (step === SaveAndPublishSteps.ReportConfigSave) {
@@ -65,7 +65,6 @@ export const SaveAndPublishProcessPopup = ({
       hasThirdBtn: true,
       thirdBtnText: t('cancel'),
       onThirdBtnSubmit: onClose,
-      'data-testid': 'builder-save-and-publish-report-config-popup',
     };
   }
 
@@ -76,6 +75,7 @@ export const SaveAndPublishProcessPopup = ({
       title={t('saveAndPublish')}
       buttonText={t('ok')}
       onSubmit={onClose}
+      data-testid={concatIf('builder-save-and-publish-popup', saveAndPublishProcessTestIds[step])}
       {...modalProps}
     >
       <StyledModalWrapper>
