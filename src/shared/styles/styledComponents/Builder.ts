@@ -29,7 +29,7 @@ export const StyledMaxWidthWrapper = styled(Box, shouldForwardProp)`
     }
 
     return `
-     margin: 0 auto;
+      margin: 0 auto;
     `;
   }}
 `;
