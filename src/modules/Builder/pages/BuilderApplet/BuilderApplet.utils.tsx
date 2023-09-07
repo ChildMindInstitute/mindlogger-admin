@@ -188,7 +188,7 @@ const getDuplicatedScoresAndReports = (
   newItems: Record<string, unknown>[],
   scoresAndReports?: ScoresAndReports,
 ) => {
-  const reports = scoresAndReports?.reports.map((report) => {
+  const reports = scoresAndReports?.reports?.map((report) => {
     const conditionalLogic =
       report.type === ScoreReportType.Score
         ? report.conditionalLogic
