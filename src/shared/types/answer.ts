@@ -23,12 +23,20 @@ export type ExportActivity = {
   version: string;
 };
 
+export type MigratedAnswer = {
+  id?: string;
+  key?: string;
+  answerItemId: string;
+  fileUrl: string;
+};
+
 export type EncryptedAnswerSharedProps = {
   userPublicKey: string;
   answer: string;
   itemIds: string[];
   items: Item[];
   events?: string;
+  migratedData?: { decryptedFileAnswers?: MigratedAnswer[] };
 };
 
 export type ExportAnswer = {
@@ -53,7 +61,12 @@ export type ExportAnswer = {
 
 export type ExtendedExportAnswer = ExportAnswer & EncryptedAnswerSharedProps;
 
-export type EncryptionAnswerDataTypes = 'userPublicKey' | 'itemIds' | 'answer' | 'events';
+export type EncryptionAnswerDataTypes =
+  | 'userPublicKey'
+  | 'itemIds'
+  | 'answer'
+  | 'events'
+  | 'migratedData';
 
 export type DecryptedAnswerData<T> = Omit<T, EncryptionAnswerDataTypes> & ActivityItemAnswer;
 

@@ -1,11 +1,18 @@
 import { useParams } from 'react-router-dom';
 
-import { applet } from 'shared/state';
-import { decryptData, Encryption, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
+import { applet, Item } from 'shared/state';
+import {
+  decryptData,
+  Encryption,
+  getAESKey,
+  getObjectFromList,
+  getParsedEncryptionFromServer,
+} from 'shared/utils';
 import { useEncryptionStorage } from 'shared/hooks';
 import {
   AnswerDTO,
   DecryptedActivityData,
+  DecryptedDrawingAnswer,
   EncryptedAnswerSharedProps,
   EventDTO,
 } from 'shared/types';
@@ -31,7 +38,11 @@ export const useDecryptedActivityData = (
   return <T extends EncryptedAnswerSharedProps>(
     answersApiResponse: T,
   ): DecryptedActivityData<T> => {
-    const { userPublicKey, answer, itemIds, events, ...rest } = answersApiResponse;
+    const { userPublicKey, answer, itemIds, events, migratedData, ...rest } = answersApiResponse;
+
+    const migratedUrls =
+      migratedData?.decryptedFileAnswers &&
+      getObjectFromList(migratedData.decryptedFileAnswers, (item) => item.answerItemId);
 
     let answersDecrypted: AnswerDTO[] = [];
     let eventsDecrypted: EventDTO[] = [];
@@ -71,10 +82,41 @@ export const useDecryptedActivityData = (
       }
     }
 
+    const getAnswer = (activityItem: Item, index: number): AnswerDTO => {
+      const answer = answersDecrypted[index];
+
+      if (!migratedUrls) {
+        return answer;
+      }
+
+      const migratedUrl = migratedUrls[activityItem?.id as keyof typeof migratedUrls];
+
+      if (migratedUrl && typeof answer === 'object') {
+        if (typeof answer?.value === 'object') {
+          const drawerAnswer = answer as DecryptedDrawingAnswer;
+
+          return {
+            ...drawerAnswer,
+            value: {
+              ...drawerAnswer.value,
+              ...(drawerAnswer.value?.uri && { uri: migratedUrl.fileUrl }),
+            },
+          };
+        }
+
+        return {
+          ...answer,
+          value: migratedUrl.fileUrl,
+        };
+      }
+
+      return answer;
+    };
+
     const answerDataDecrypted: DecryptedActivityData<T>['decryptedAnswers'] = rest.items.map(
       (activityItem, index) => ({
         activityItem,
-        answer: answersDecrypted[index],
+        answer: getAnswer(activityItem, index),
         ...rest,
       }),
     );
