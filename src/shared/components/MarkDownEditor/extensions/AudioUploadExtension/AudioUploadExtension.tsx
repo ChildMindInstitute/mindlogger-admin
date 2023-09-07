@@ -23,7 +23,7 @@ export const AudioUploadExtension = ({
   const { t } = useTranslation('app');
   const insertHandler = ({ label, address }: SourceLinkModalForm) => {
     const generator: InsertContentGenerator = () => ({
-      targetValue: `<figure><figcaption>${label}:</figcaption><audio controls src="${address}"></audio></figure>`,
+      targetValue: `![${label}](${address})`,
       select: false,
       deviationStart: 0,
       deviationEnd: 0,

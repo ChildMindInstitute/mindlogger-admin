@@ -1,11 +1,11 @@
 import MdEditor from 'md-editor-rt';
 
 import i18n from 'i18n';
+import { VALID_VIDEO_FILE_TYPES, VALID_AUDIO_FILE_TYPES } from 'shared/consts';
 
 import {
   ALIGN_RULE,
   LANGUAGE_BY_DEFAULT,
-  VALID_VIDEO_FORMATS_REGEX,
   VIDEO_LINK_REGEX,
   VideoSourcePlayerLinks,
   VideoSources,
@@ -13,6 +13,12 @@ import {
 } from './MarkDownEditor.const';
 
 const { t } = i18n;
+
+export const getValidMediaFormatsRegex = (validFileTypesArray: string[]) => {
+  const validFormatsArray = validFileTypesArray.map((format) => format.slice(1));
+
+  return new RegExp(`\\.(${validFormatsArray.join('|')})$`, 'i');
+};
 
 const getVideoIframe = (videoId: string, type: VideoSources, text?: string) =>
   `${text ? `<figure><figcaption>${text}:</figcaption>` : ''}
@@ -74,11 +80,17 @@ MdEditor.config({
   },
   markedRenderer(renderer) {
     renderer.image = (href, title, text) => {
-      const videoExtensionMatch = href?.match(VALID_VIDEO_FORMATS_REGEX);
+      const videoExtensionMatch = href?.match(getValidMediaFormatsRegex(VALID_VIDEO_FILE_TYPES));
+      const audioExtensionMatch = href?.match(getValidMediaFormatsRegex(VALID_AUDIO_FILE_TYPES));
       if (videoExtensionMatch) {
         return `${
           text ? `<figure><figcaption>${text}:</figcaption>` : ''
         }<video controls width="250"><source src="${href}"></video></figure>`;
+      }
+      if (audioExtensionMatch) {
+        return `${
+          text ? `<figure><figcaption>${text}:</figcaption>` : ''
+        }<audio controls><source src="${href}"></audio></figure>`;
       }
 
       const videoMatch = href?.match(VIDEO_LINK_REGEX);
