@@ -22,7 +22,7 @@ import { checkIfPerformanceTask } from './Activity.utils';
 
 export const Activity = ({
   appletId,
-  activity: { name, items, key },
+  activity: { name, items, key, expanded },
   uiType,
   search,
   'data-testid': dataTestid,
@@ -98,6 +98,10 @@ export const Activity = ({
   useEffect(() => {
     getCheckedActivity(watchApplet);
   }, [watchApplet]);
+
+  useEffect(() => {
+    setActivityVisible(!!expanded);
+  }, [expanded]);
 
   return (
     <StyledActivityContainer data-testid={dataTestid}>

@@ -76,7 +76,7 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
 
   return (
     <Box sx={{ mt: theme.spacing(2.4) }}>
-      <Search placeholder={t('search')} onSearch={handleSearch} />
+      <Search withDebounce placeholder={t('search')} onSearch={handleSearch} />
       <StyledTableWrapper>
         <DashboardTable
           page={page}

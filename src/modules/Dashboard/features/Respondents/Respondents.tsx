@@ -285,6 +285,7 @@ export const Respondents = () => {
           </StyledLeftBox>
         )}
         <Search
+          withDebounce
           placeholder={t('searchRespondents')}
           onSearch={handleSearch}
           data-testid="dashboard-respondents-search"

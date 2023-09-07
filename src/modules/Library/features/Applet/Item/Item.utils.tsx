@@ -3,12 +3,14 @@ import uniqueId from 'lodash.uniqueid';
 import { ItemResponseType } from 'shared/consts';
 import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 import { variables, StyledBodyLarge } from 'shared/styles';
+import { getHighlightedText } from 'shared/utils';
+
 import i18n from 'i18n';
 
 import { StyledItemContentRow, StyledItemImage, StyledItemSvg } from './Item.styles';
 import { ItemResponseTypes } from '../../AppletsCatalog/AppletsCatalog.conts';
 
-export const renderItemContent = (item: Item) => {
+export const renderItemContent = (item: Item, search: string) => {
   const { t } = i18n;
 
   switch (item.responseType) {
@@ -22,7 +24,7 @@ export const renderItemContent = (item: Item) => {
                 <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
                 {image && <StyledItemImage src={image} alt="Option image" />}
                 <StyledBodyLarge sx={{ color: variables.palette.on_surface }}>
-                  {text}
+                  {getHighlightedText(text, search)}
                 </StyledBodyLarge>
               </StyledItemContentRow>
             ),

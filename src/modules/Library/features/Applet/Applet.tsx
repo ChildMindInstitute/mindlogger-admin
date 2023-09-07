@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ import {
 import { falseReturnFunc, getDictionaryText, getHighlightedText, Mixpanel } from 'shared/utils';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
-import { PublishedActivity, auth, library } from 'redux/modules';
+import { auth, library } from 'redux/modules';
 import { STORAGE_LIBRARY_KEY } from 'modules/Library/consts';
 import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
 
@@ -38,7 +38,7 @@ import { AppletProps, AppletUiType, LibraryForm } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
 import { Activity } from './Activity';
 import { AppletImage } from './AppletImage';
-import { getUpdatedStorageData } from './Applet.utils';
+import { getActivities, getUpdatedStorageData } from './Applet.utils';
 
 export const Applet = ({
   applet,
@@ -84,18 +84,12 @@ export const Applet = ({
     Mixpanel.track('Add to Basket click');
   };
 
-  useEffect(() => {
-    if (!search) return;
+  const updatedActivities = useMemo(() => {
+    if (!search) return activities;
+    setActivitiesVisible(false);
 
-    activities.forEach(({ name, items }: PublishedActivity) => {
-      if (
-        getDictionaryText(name).includes(search) ||
-        items.some(({ question }) => getDictionaryText(question).includes(search))
-      ) {
-        setActivitiesVisible(true);
-      }
-    });
-  }, [search]);
+    return getActivities(activities, search, setActivitiesVisible);
+  }, [search, activities]);
 
   useEffect(() => {
     if (uiType === AppletUiType.Details) return;
@@ -229,7 +223,7 @@ export const Applet = ({
         </Box>
         <StyledButtonsContainer>{renderButtons()}</StyledButtonsContainer>
         <FormProvider {...methods}>
-          {activities?.length && (
+          {updatedActivities?.length && (
             <StyledActivitiesContainer uiType={uiType}>
               {uiType === AppletUiType.Details ? (
                 <StyledHeadline>{`${t('appletActivities')}:`}</StyledHeadline>
@@ -249,7 +243,7 @@ export const Applet = ({
               )}
               {activitiesVisible && (
                 <StyledActivities>
-                  {activities.map((activity, index) => (
+                  {updatedActivities.map((activity, index) => (
                     <Fragment key={activity.name}>
                       <Activity
                         appletId={id}

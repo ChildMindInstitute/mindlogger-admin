@@ -35,7 +35,6 @@ export const Cart = () => {
   const loadingStatus = library.useCartAppletsStatus();
   const isAddBtnDisabled = library.useIsCartBtnDisabled() || !cartItems?.length;
   const [searchValue, setSearchValue] = useState('');
-  const [search, setSearch] = useState('');
   const [addToBuilderPopupVisible, setAddToBuilderPopupVisible] = useState(false);
   const [authPopupVisible, setAuthPopupVisible] = useState(false);
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE);
@@ -68,7 +67,7 @@ export const Cart = () => {
   };
 
   const handleSearch = (searchText: string) => {
-    setSearch(searchText);
+    setSearchValue(searchText);
     setPageIndex(DEFAULT_PAGE);
   };
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -87,17 +86,18 @@ export const Cart = () => {
   const filteredApplets =
     cartItems?.reduce((renderedApplets: PublishedApplet[], applet) => {
       const { displayName, description, activities, keywords } = applet;
-      const appletNameSearch = getSearchIncludes(displayName, search);
+      const appletNameSearch = getSearchIncludes(displayName, searchValue);
       const appletDescriptionSearch =
-        description && getSearchIncludes(getDictionaryText(description), search);
+        description && getSearchIncludes(getDictionaryText(description), searchValue);
       const activitySearch = activities.some((activity) => {
         const itemsSearch = activity.items.some(
-          (item) => item?.question && getSearchIncludes(getDictionaryText(item.question), search),
+          (item) =>
+            item?.question && getSearchIncludes(getDictionaryText(item.question), searchValue),
         );
 
-        return getSearchIncludes(activity.name, search) || itemsSearch;
+        return getSearchIncludes(activity.name, searchValue) || itemsSearch;
       });
-      const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, search));
+      const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, searchValue));
 
       if (appletNameSearch || appletDescriptionSearch || keywordsSearch || activitySearch) {
         renderedApplets.push(applet);
@@ -111,7 +111,7 @@ export const Cart = () => {
   );
 
   const renderEmptyState = () =>
-    search ? (
+    searchValue ? (
       <EmptyState>{t('notFound')}</EmptyState>
     ) : (
       <EmptyState icon="empty-cart">
@@ -155,7 +155,7 @@ export const Cart = () => {
                     <Applet
                       uiType={AppletUiType.Cart}
                       applet={applet}
-                      search={search}
+                      search={searchValue}
                       setSearch={setSearchValue}
                       data-testid={`${dataTestid}-applet-${index}`}
                     />
