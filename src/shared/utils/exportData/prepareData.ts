@@ -76,7 +76,7 @@ const checkIfDrawingMediaConditionPassed = (
 const getDrawingUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
   (item.answer as DecryptedDrawingAnswer).value.uri;
 const getMediaUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
-  (item.answer as DecryptedMediaAnswer).value || '';
+  (item.answer as DecryptedMediaAnswer)?.value || '';
 
 const getAnswersWithPublicUrls = async (
   parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
