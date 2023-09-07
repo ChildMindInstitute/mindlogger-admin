@@ -13,19 +13,20 @@ import {
   ExportMediaData,
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
+  UserActionType,
 } from 'shared/types';
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
-  getObjectFromList,
   convertJsonToCsv,
+  getABTrailsCsvName,
+  getFileExtension,
+  getFlankerCsvName,
+  getFlankerRecords,
+  getMediaFileName,
+  getObjectFromList,
+  getSplashScreen,
   getStabilityRecords,
   getStabilityTrackerCsvName,
-  getABTrailsCsvName,
-  getMediaFileName,
-  getFileExtension,
-  getSplashScreen,
-  getFlankerRecords,
-  getFlankerCsvName,
 } from 'shared/utils';
 import { FlankerConfig, Item } from 'shared/state';
 
@@ -101,6 +102,7 @@ const getActivityJourneyData = (
   decryptedEvents: EventDTO[],
 ) => {
   const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers);
+  let indexForABTrailsFiles = 0;
   const events = decryptedEvents.map((event, index, events) => {
     if (index === 0 && !decryptedAnswersObject[event.screen] && events[index + 1])
       return getSplashScreen(event, {
@@ -114,7 +116,8 @@ const getActivityJourneyData = (
         ...decryptedAnswersObject[event.screen],
       },
       rawAnswersObject,
-      index,
+      index:
+        event.type === UserActionType.SetAnswer ? indexForABTrailsFiles++ : indexForABTrailsFiles,
     });
   });
 
