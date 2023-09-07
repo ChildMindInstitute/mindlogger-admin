@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { ExpandedActivity } from 'modules/Library/features/Applet/Applet.types';
 import { PublishedActivity, PublishedApplet } from 'modules/Library/state';
 import { ItemResponseType } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+import { ExpandedActivity } from './Applet.types';
 
 export const getUpdatedStorageData = (
   applets: PublishedApplet[] | null,
