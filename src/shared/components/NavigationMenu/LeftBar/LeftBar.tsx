@@ -48,7 +48,7 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                           onItemClick({ label, component, param, icon, disabled, tooltip })
                         }
                         isCompact={hasActiveItem}
-                        isSelected={setting === param}
+                        isSelected={!disabled && setting === param}
                         disabled={disabled}
                         data-testid={dataTestid}
                       >

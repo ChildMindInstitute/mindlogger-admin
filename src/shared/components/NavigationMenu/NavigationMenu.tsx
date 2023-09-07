@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { LeftBar } from './LeftBar';
-import { StyledWrapper } from './NavigationMenu.styles';
 import { Container } from './Container';
+import { StyledWrapper } from './NavigationMenu.styles';
 import { NavigationMenuProps } from './NavigationMenu.types';
 import { getActiveItem } from './NavigationMenu.utils';
+import { useSettingsRedirection } from './NavigationMenu.hooks';
 
 export const NavigationMenu = ({ title, items, onClose, onSetActiveItem }: NavigationMenuProps) => {
   const { setting } = useParams();
@@ -13,6 +14,8 @@ export const NavigationMenu = ({ title, items, onClose, onSetActiveItem }: Navig
 
   const activeItem = getActiveItem(items, setting);
   const hasActiveItem = !!activeItem && !activeItem?.disabled;
+
+  useSettingsRedirection(items);
 
   return (
     <StyledWrapper>
