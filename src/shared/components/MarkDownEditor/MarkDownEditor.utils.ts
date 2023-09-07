@@ -81,6 +81,7 @@ MdEditor.config({
   markedRenderer(renderer) {
     renderer.image = (href, title, text) => {
       const videoExtensionMatch = href?.match(getValidMediaFormatsRegex(VALID_VIDEO_FILE_TYPES));
+      const videoLinkMatch = href?.match(VIDEO_LINK_REGEX);
       const audioExtensionMatch = href?.match(getValidMediaFormatsRegex(VALID_AUDIO_FILE_TYPES));
       if (videoExtensionMatch) {
         return `${
@@ -92,12 +93,10 @@ MdEditor.config({
           text ? `<figure><figcaption>${text}:</figcaption>` : ''
         }<audio controls><source src="${href}"></audio></figure>`;
       }
-
-      const videoMatch = href?.match(VIDEO_LINK_REGEX);
-      if (videoMatch) {
+      if (videoLinkMatch) {
         const defaultReturn = href ? `<a href="${href}" target="_blank">${text || href}</a>` : '';
-        const videoSource = videoMatch[1];
-        const videoUrl = videoMatch[3];
+        const videoSource = videoLinkMatch[1];
+        const videoUrl = videoLinkMatch[3];
         if (!videoSource || !videoUrl) return defaultReturn;
 
         if (
