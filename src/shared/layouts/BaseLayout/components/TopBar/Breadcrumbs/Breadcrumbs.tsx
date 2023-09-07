@@ -36,7 +36,7 @@ export const Breadcrumbs = () => {
         ) : (
           <StyledPlaceholder>
             <StyledLabelSmall color={variables.palette.on_surface}>
-              {label.substring(0, 1).toUpperCase()}
+              {label?.substring(0, 1).toUpperCase()}
             </StyledLabelSmall>
           </StyledPlaceholder>
         )}
