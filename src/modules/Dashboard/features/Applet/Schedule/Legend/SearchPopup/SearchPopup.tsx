@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Search, Svg } from 'shared/components';
-import { theme, variables, StyledModalContent } from 'shared/styles';
+import { theme, variables, StyledModalContent, StyledIconButton } from 'shared/styles';
 import { page } from 'resources';
 import { getRespondentName, getErrorMessage } from 'shared/utils';
 import { useAsync } from 'shared/hooks';
@@ -21,7 +21,6 @@ import {
   StyledModalInner,
   StyledItemsContainer,
   StyledItem,
-  StyledClearBtn,
   StyledChecked,
 } from './SearchPopup.styles';
 import { SearchPopupProps } from './SearchPopup.types';
@@ -131,9 +130,9 @@ export const SearchPopup = ({
                 background={variables.palette.surface2}
                 placeholder={t('searchOrSelectRespondent')}
                 endAdornment={
-                  <StyledClearBtn onClick={handleSearchPopupClose}>
-                    <Svg id="cross" />
-                  </StyledClearBtn>
+                  <StyledIconButton onClick={handleSearchPopupClose}>
+                    <Svg id="cross" width="4rem" />
+                  </StyledIconButton>
                 }
                 onSearch={handleSearch}
                 data-testid={`${dataTestid}-search`}

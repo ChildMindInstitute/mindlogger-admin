@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { StyledClearedButton } from 'shared/styles/styledComponents';
+import { StyledIconButton, theme } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { Svg, EnterAppletPasswordForm, EnterAppletPasswordProps } from 'shared/components';
@@ -67,12 +67,13 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
             autoComplete="new-password"
             InputProps={{
               endAdornment: (
-                <StyledClearedButton
+                <StyledIconButton
                   aria-label="toggle password visibility"
+                  sx={{ p: theme.spacing(0.9) }}
                   onClick={() => setShowPassword((prevState) => !prevState)}
                 >
                   <Svg id={showPassword ? 'visibility-off' : 'visibility-on'} />
-                </StyledClearedButton>
+                </StyledIconButton>
               ),
             }}
             data-testid={`${dataTestid}-password`}
