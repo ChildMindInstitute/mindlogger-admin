@@ -1,6 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
-
-import { PublishedApplet } from 'redux/modules';
+import { Item, PublishedActivity, PublishedApplet } from 'redux/modules';
 
 export enum AppletUiType {
   List = 'list',
@@ -12,7 +10,7 @@ export type AppletProps = {
   uiType?: AppletUiType;
   applet: PublishedApplet;
   search?: string;
-  setSearch?: Dispatch<SetStateAction<string>>;
+  setSearch?: (value: string) => void;
   'data-testid'?: string;
 };
 
@@ -26,3 +24,7 @@ export type SelectedItem = {
 export type LibraryForm = {
   [key: string]: SelectedItem[];
 };
+
+export type ExpandedItem = Item & { expanded?: boolean };
+
+export type ExpandedActivity = PublishedActivity & { items: ExpandedItem[]; expanded?: boolean };

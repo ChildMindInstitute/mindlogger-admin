@@ -160,6 +160,7 @@ export const Applets = () => {
             )}
           </Box>
           <Search
+            withDebounce
             placeholder={t('searchApplets')}
             onSearch={handleSearch}
             data-testid="dashboard-applets-search"

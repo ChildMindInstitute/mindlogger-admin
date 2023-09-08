@@ -1,10 +1,8 @@
-import { PublishedActivity } from 'redux/modules';
-
-import { AppletUiType } from '../Applet.types';
+import { AppletUiType, ExpandedActivity } from '../Applet.types';
 
 export type ActivityProps = {
   appletId: string;
-  activity: PublishedActivity;
+  activity: ExpandedActivity;
   uiType: AppletUiType;
   search: string;
   'data-testid'?: string;

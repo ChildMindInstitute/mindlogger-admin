@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 
 import { Controller, useFormContext } from 'react-hook-form';
@@ -72,6 +72,10 @@ export const Item = ({
     ? renderToString(getHighlightedText(dictionaryText, search) as JSX.Element)
     : dictionaryText;
 
+  useEffect(() => {
+    setItemVisible(!!item.expanded);
+  }, [item]);
+
   return (
     <StyledItemContainer data-testid={dataTestid}>
       <Controller
@@ -95,7 +99,7 @@ export const Item = ({
         </StyledSvgArrowContainer>
         <StyledMdEditor modelValue={highlightedTextHtml} previewOnly />
       </StyledItemHeader>
-      {itemVisible && <StyledItemContent>{renderItemContent(item)}</StyledItemContent>}
+      {itemVisible && <StyledItemContent>{renderItemContent(item, search)}</StyledItemContent>}
     </StyledItemContainer>
   );
 };

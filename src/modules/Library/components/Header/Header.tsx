@@ -79,8 +79,8 @@ export const Header = ({
       <Box sx={{ m: theme.spacing(0, 1.6) }}>
         {handleSearch && (
           <Search
+            withDebounce
             value={searchValue}
-            setValue={setSearchValue}
             placeholder={t('search')}
             onSearch={handleSearch}
             width="100%"
