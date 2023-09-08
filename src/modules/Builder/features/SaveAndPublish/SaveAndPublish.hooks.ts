@@ -206,7 +206,7 @@ export const useUpdatedAppletNavigate = () => {
   const { activityId, activityFlowId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { getValues } = useFormContext();
+  const { getValues, reset } = useFormContext();
 
   const { getAppletWithItems } = applet.thunk;
 
@@ -222,6 +222,7 @@ export const useUpdatedAppletNavigate = () => {
       });
       const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
       await navigate(url);
+      reset(undefined, { keepDirty: false });
     }
   };
 };
