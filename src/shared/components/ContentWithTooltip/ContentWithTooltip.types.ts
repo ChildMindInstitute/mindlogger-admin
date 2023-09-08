@@ -7,4 +7,5 @@ export type ContentWithTooltipProps = {
   value: TooltipProps['tooltipTitle'];
   item: DataTableItem;
   styles?: SxProps;
+  tooltipByDefault?: boolean;
 };

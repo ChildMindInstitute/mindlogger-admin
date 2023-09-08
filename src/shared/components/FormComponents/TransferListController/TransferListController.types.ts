@@ -18,4 +18,5 @@ export type TransferListControllerProps<T extends FieldValues> = {
   isValueName?: boolean;
   tableHeadBackground?: string;
   'data-testid'?: string;
+  tooltipByDefault?: boolean;
 } & UseControllerProps<T>;

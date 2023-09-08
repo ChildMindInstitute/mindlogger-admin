@@ -172,6 +172,7 @@ export const ScoreContent = ({
         sxProps={{ mb: theme.spacing(2.5) }}
         isValueName
         data-testid={`${dataTestid}-items-score`}
+        tooltipByDefault
       />
       <SectionScoreCommonFields name={name} sectionId={`score-${index}`} data-testid={dataTestid} />
       {!!scoreConditionals?.length && (

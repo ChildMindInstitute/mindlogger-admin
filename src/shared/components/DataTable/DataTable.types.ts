@@ -30,4 +30,5 @@ export type DataTableProps = {
   isValueName?: boolean;
   tableHeadBackground?: string;
   'data-testid'?: string;
+  tooltipByDefault?: boolean;
 };
