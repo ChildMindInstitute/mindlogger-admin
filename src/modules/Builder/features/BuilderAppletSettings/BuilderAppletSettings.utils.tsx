@@ -36,7 +36,7 @@ export const getSettings = ({
           param: SettingParam.ExportData,
           disabled: isNewApplet,
           tooltip,
-          visibility: isManagerOrOwner(roles?.[0]),
+          isVisible: isManagerOrOwner(roles?.[0]),
           'data-testid': `${dataTestid}-export-data`,
         },
         {
@@ -46,7 +46,7 @@ export const getSettings = ({
           param: SettingParam.DataRetention,
           disabled: isNewApplet,
           tooltip,
-          visibility: isManagerOrOwner(roles?.[0]),
+          isVisible: isManagerOrOwner(roles?.[0]),
           'data-testid': `${dataTestid}-data-retention`,
         },
         {
@@ -86,10 +86,9 @@ export const getSettings = ({
           param: SettingParam.TransferOwnership,
           disabled: isNewApplet,
           tooltip,
-          visibility: roles?.[0] === Roles.Owner,
+          isVisible: roles?.[0] === Roles.Owner,
           'data-testid': `${dataTestid}-transfer-ownership`,
         },
-
         {
           icon: <Svg id="trash" />,
           label: 'deleteApplet',
@@ -97,14 +96,13 @@ export const getSettings = ({
           param: SettingParam.DeleteApplet,
           disabled: isNewApplet,
           tooltip,
-          visibility: isManagerOrOwner(roles?.[0]),
+          isVisible: isManagerOrOwner(roles?.[0]),
           'data-testid': `${dataTestid}-delete-applet`,
         },
       ],
     },
     {
       label: 'reports',
-      visibility: true,
       items: [
         {
           icon: <Svg id="report-configuration" />,
@@ -125,7 +123,7 @@ export const getSettings = ({
 
     {
       label: 'sharing',
-      visibility: !isNewApplet,
+      isVisible: !isNewApplet,
       items: [
         {
           icon: <Svg id="share" />,
@@ -141,7 +139,7 @@ export const getSettings = ({
           param: SettingParam.PublishConceal,
           disabled: isNewApplet,
           tooltip,
-          visibility: roles?.includes(Roles.SuperAdmin),
+          isVisible: roles?.includes(Roles.SuperAdmin),
           'data-testid': `${dataTestid}-publish-conceal`,
         },
       ],

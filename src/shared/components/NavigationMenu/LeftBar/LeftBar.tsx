@@ -28,8 +28,8 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
       <StyledHeader isSticky={isHeaderSticky}>{t(title)}</StyledHeader>
       <StyledContent isCompact={hasActiveItem}>
         {items.map(
-          ({ label, items, visibility = true }) =>
-            visibility && (
+          ({ label, items, isVisible = true }) =>
+            isVisible && (
               <StyledSettingsGroup key={label} isCompact={hasActiveItem}>
                 <StyledTitleSmall>{t(label)}</StyledTitleSmall>
                 <StyledSettings isCompact={hasActiveItem}>
@@ -41,10 +41,10 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                       param,
                       disabled,
                       tooltip,
-                      visibility: itemVisibility = true,
+                      isVisible: isItemVisible = true,
                       'data-testid': dataTestid,
                     }) =>
-                      itemVisibility && (
+                      isItemVisible && (
                         <Tooltip
                           tooltipTitle={tooltip ? t(tooltip) : null}
                           key={`item-setting-${label}`}
