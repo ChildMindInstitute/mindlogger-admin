@@ -46,9 +46,10 @@ export const auth = {
         },
       }) =>
         data
-          ? `${data.user.firstName.substring(0, 1).toUpperCase()}${data.user.lastName
-              .substring(0, 1)
-              .toUpperCase()}`
+          ? `${data.user.firstName.substring(0, 1)}${data.user.lastName.substring(
+              0,
+              1,
+            )}`.toUpperCase()
           : '',
     ),
   useLogoutInProgress: (): AuthSchema['isLogoutInProgress'] =>
