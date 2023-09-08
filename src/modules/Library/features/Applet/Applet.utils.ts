@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { PublishedActivity, PublishedApplet } from 'modules/Library/state';
 import { ItemResponseType } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+
 import { ExpandedActivity } from './Applet.types';
 
 export const getUpdatedStorageData = (
