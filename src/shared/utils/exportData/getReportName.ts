@@ -29,7 +29,7 @@ export const getMediaFileName = (
 ) => `${item.id}-${item.respondentId}-${item.activityItem.name}.${extension}`;
 
 export const getFileExtension = (fileUrl: string) => {
-  const extension = fileUrl.split('/').pop()?.split('.').pop() ?? '';
+  const extension = (fileUrl.split('/').pop()?.split('.').pop() ?? '').split('?')[0] ?? '';
   if (extension === 'quicktime') return 'MOV';
 
   return extension;
