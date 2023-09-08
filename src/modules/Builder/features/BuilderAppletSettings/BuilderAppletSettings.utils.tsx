@@ -54,7 +54,6 @@ export const getSettings = ({
           label: 'liveResponseStreaming',
           component: <LiveResponseStreamingSetting />,
           param: SettingParam.LiveResponseStreaming,
-          tooltip,
           'data-testid': `${dataTestid}-live-response-streaming`,
         },
       ],
