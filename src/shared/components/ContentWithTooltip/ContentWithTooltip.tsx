@@ -17,7 +17,7 @@ export const ContentWithTooltip = ({
   const hasTooltip = useIsTextNodeEllipsed(elementRef, [elementRef.current, width, value]);
 
   return (
-    <Tooltip placement={'top'} tooltipTitle={tooltipByDefault || hasTooltip ? value : undefined}>
+    <Tooltip placement="top" tooltipTitle={tooltipByDefault || hasTooltip ? value : undefined}>
       <StyledCellText sx={styles} ref={elementRef}>
         {item.label || value}
       </StyledCellText>
