@@ -2,8 +2,9 @@ import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { CheckboxController } from 'shared/components/FormComponents';
-import { StyledAppletSettingsDescription } from 'shared/features/AppletSettings/AppletSettings.styles';
 import { StyledBodyLarge, theme } from 'shared/styles';
+
+import { StyledAppletSettingsDescription } from '../AppletSettings.styles';
 
 export const LiveResponseStreamingSetting = () => {
   const { t } = useTranslation('app');
