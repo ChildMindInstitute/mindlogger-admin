@@ -15,9 +15,9 @@ import {
   StyledErrorText,
 } from 'shared/styles';
 import { getErrorMessage } from 'shared/utils';
-import avatarSrc from 'assets/images/avatar.png';
 import { auth, User } from 'redux/modules';
 import { useLogout } from 'shared/hooks';
+import { Avatar } from 'shared/components';
 
 import { loginFormSchema } from '../Login.schema';
 import {
@@ -29,7 +29,6 @@ import {
   StyledButton,
   StyledImageContainer,
   StyledUserInfo,
-  StyledImage,
 } from '../Login.styles';
 
 export const LockForm = () => {
@@ -37,6 +36,7 @@ export const LockForm = () => {
   const { t } = useTranslation('app');
 
   const { email, firstName, lastName } = auth.useData()?.user as User;
+  const userInitials = auth.useUserInitials();
   const fullName = `${firstName} ${lastName}`;
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -67,8 +67,7 @@ export const LockForm = () => {
         </StyledLoginSubheader>
         <StyledUserInfoController>
           <StyledImageContainer>
-            {/* TODO: get user image url */}
-            <StyledImage src={avatarSrc} alt="Avatar" />
+            <Avatar caption={userInitials} />
           </StyledImageContainer>
           <StyledUserInfo>
             <StyledTitleMedium sx={{ color: variables.palette.on_surface }}>

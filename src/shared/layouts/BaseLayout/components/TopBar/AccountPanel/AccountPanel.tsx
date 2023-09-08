@@ -2,9 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { Box, ClickAwayListener } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 
-import { Svg } from 'shared/components';
+import { Avatar, Svg } from 'shared/components';
 import { alerts, auth } from 'redux/modules';
-import avatarSrc from 'assets/images/avatar.png';
 import {
   StyledLabelBoldSmall,
   StyledLabelSmall,
@@ -22,7 +21,6 @@ import {
   StyledAccountDrawer,
   StyledHeader,
   StyledHeaderInfo,
-  StyledImage,
   StyledAvatarWrapper,
   StyledFooter,
   StyledLogOutBtn,
@@ -34,6 +32,7 @@ import { AccountPanelProps } from './AccountPanel.types';
 export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelProps) => {
   const { t } = useTranslation('app');
   const authData = auth.useData();
+  const userInitials = auth.useUserInitials();
   const { pathname } = useLocation();
   const handleLogout = useLogout();
   const dispatch = useAppDispatch();
@@ -56,7 +55,7 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
           <StyledHeader>
             <StyledFlexTopCenter>
               <StyledAvatarWrapper>
-                <StyledImage src={avatarSrc} alt="Avatar" />
+                <Avatar caption={userInitials} />
                 {notWatched > 0 && (
                   <StyledQuantity>
                     <StyledLabelBoldSmall color={variables.palette.white}>
