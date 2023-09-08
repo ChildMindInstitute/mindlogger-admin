@@ -1,25 +1,29 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
-import debounce from 'lodash.debounce';
 
 import { page } from 'resources';
-import { applet } from 'shared/state';
+import { useCheckIfNewApplet } from 'shared/hooks';
+import { getEntityKey } from 'shared/utils';
 
-import { getActivityFlowIndex } from '../features/ActivityFlowBuilder/ActivityFlowBuilder.utils';
+import { ActivityFlowFormValues } from '../types';
 
 export const useActivityFlowsRedirection = () => {
   const { appletId, activityFlowId } = useParams();
   const navigate = useNavigate();
+  const isNewApplet = useCheckIfNewApplet();
   const { watch } = useFormContext();
 
-  const loadingStatus = applet.useResponseStatus() ?? {};
+  const activities = watch('activities');
   const activityFlows = watch('activityFlows');
-  const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
+  const activityFlow = activityFlows?.find(
+    (flow: ActivityFlowFormValues) => activityFlowId === getEntityKey(flow),
+  );
+  const shouldRedirect = (isNewApplet || activities?.length > 0) && activityFlowId && !activityFlow;
 
   useEffect(() => {
-    if (loadingStatus !== 'loading' && activityFlowIndex === -1) {
-      debounce(() => navigate(generatePath(page.builderAppletActivityFlow, { appletId })));
-    }
-  }, [activityFlowIndex, loadingStatus]);
+    if (!shouldRedirect) return;
+
+    navigate(generatePath(page.builderAppletActivityFlow, { appletId }));
+  }, [shouldRedirect]);
 };

@@ -1,23 +1,26 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
-import debounce from 'lodash.debounce';
+import { useFormContext } from 'react-hook-form';
 
 import { page } from 'resources';
-import { applet } from 'shared/state';
+import { useCheckIfNewApplet } from 'shared/hooks';
 
 import { useCurrentActivity } from './useCurrentActivity';
 
 export const useActivitiesRedirection = () => {
-  const { appletId } = useParams();
-  const { activity } = useCurrentActivity();
+  const { appletId, activityId } = useParams();
   const navigate = useNavigate();
+  const { activity } = useCurrentActivity();
+  const isNewApplet = useCheckIfNewApplet();
 
-  const loadingStatus = applet.useResponseStatus() ?? {};
+  const { watch } = useFormContext();
+
+  const activities = watch('activities');
+  const shouldRedirect = (isNewApplet || activities?.length > 0) && activityId && !activity;
 
   useEffect(() => {
-    if (loadingStatus !== 'loading' && !activity) {
-      //sometimes redirection can be called before the data updated in sessionStorage, so we need to use debounce to put redirection calling after all macrotasks
-      debounce(() => navigate(generatePath(page.builderAppletActivities, { appletId })));
-    }
-  }, [activity, loadingStatus]);
+    if (!shouldRedirect) return;
+
+    navigate(generatePath(page.builderAppletActivities, { appletId }));
+  }, [shouldRedirect]);
 };
