@@ -37,6 +37,7 @@ export const enum SettingParam {
   PublishConceal = 'publish-conceal',
   ScoresAndReports = 'scores-and-reports',
   SubscalesConfiguration = 'subscales-configuration',
+  LiveResponseStreaming = 'live-response-streaming',
 }
 
 const uuidRegexp = '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})';

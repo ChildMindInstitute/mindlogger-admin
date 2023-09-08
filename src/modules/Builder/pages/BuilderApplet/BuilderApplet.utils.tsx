@@ -796,6 +796,7 @@ export const getDefaultValues = (appletData?: SingleApplet) => {
         }))
       : [],
     activityFlows: getActivityFlows(appletData.activityFlows),
+    streamEnabled: !!appletData.streamEnabled,
   };
 
   return {

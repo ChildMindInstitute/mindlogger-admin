@@ -25,41 +25,49 @@ export const LeftBar = ({ title, items, activeItem, isCompact, onItemClick }: Le
     <StyledBar ref={containerRef} hasItem={!!activeItem}>
       <StyledHeader isSticky={isHeaderSticky}>{t(title)}</StyledHeader>
       <StyledContent isCompact={isCompact}>
-        {items.map(({ label, items }) => (
-          <StyledSettingsGroup key={label} isCompact={!!activeItem}>
-            <StyledTitleSmall>{t(label)}</StyledTitleSmall>
-            <StyledSettings isCompact={!!activeItem}>
-              {items.map(
-                ({
-                  icon,
-                  label,
-                  component,
-                  param,
-                  disabled,
-                  tooltip,
-                  'data-testid': dataTestid,
-                }) => (
-                  <Tooltip tooltipTitle={tooltip ? t(tooltip) : null} key={`item-setting-${label}`}>
-                    <span>
-                      <StyledSetting
-                        onClick={() =>
-                          onItemClick({ label, component, param, icon, disabled, tooltip })
-                        }
-                        isCompact={!!activeItem}
-                        isSelected={activeItem?.label === label}
-                        disabled={disabled}
-                        data-testid={dataTestid}
-                      >
-                        {icon}
-                        <StyledTitle>{t(label)}</StyledTitle>
-                      </StyledSetting>
-                    </span>
-                  </Tooltip>
-                ),
-              )}
-            </StyledSettings>
-          </StyledSettingsGroup>
-        ))}
+        {items.map(
+          ({ label, items, visibility = true }) =>
+            visibility && (
+              <StyledSettingsGroup key={label} isCompact={!!activeItem}>
+                <StyledTitleSmall>{t(label)}</StyledTitleSmall>
+                <StyledSettings isCompact={!!activeItem}>
+                  {items.map(
+                    ({
+                      icon,
+                      label,
+                      component,
+                      param,
+                      disabled,
+                      tooltip,
+                      'data-testid': dataTestid,
+                      visibility: itemVisibility = true,
+                    }) =>
+                      itemVisibility && (
+                        <Tooltip
+                          tooltipTitle={tooltip ? t(tooltip) : null}
+                          key={`item-setting-${label}`}
+                        >
+                          <span>
+                            <StyledSetting
+                              onClick={() =>
+                                onItemClick({ label, component, param, icon, disabled, tooltip })
+                              }
+                              isCompact={!!activeItem}
+                              isSelected={activeItem?.label === label}
+                              disabled={disabled}
+                              data-testid={dataTestid}
+                            >
+                              {icon}
+                              <StyledTitle>{t(label)}</StyledTitle>
+                            </StyledSetting>
+                          </span>
+                        </Tooltip>
+                      ),
+                  )}
+                </StyledSettings>
+              </StyledSettingsGroup>
+            ),
+        )}
       </StyledContent>
     </StyledBar>
   );

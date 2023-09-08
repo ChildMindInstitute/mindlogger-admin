@@ -1189,5 +1189,8 @@
   "configureServerForApplet": "Configure Server (for Applet)",
   "selectScheduleType": "Select Schedule Type",
   "hasTheFollowingRole": "has the following role(s) within the Applet",
-  "tryAgain": "Try again"
+  "tryAgain": "Try again",
+  "liveResponseStreaming": "Live Response Streaming",
+  "liveResponseStreamingDescription": "Send responses to a server of your choice, as they are being entered.<br/>You can configure the server in the MindLogger app.",
+  "liveResponseStreamingLabel": "Enable streaming of response data"
 }

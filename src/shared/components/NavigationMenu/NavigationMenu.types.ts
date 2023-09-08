@@ -8,12 +8,14 @@ export type NavigationItem = {
   param: string;
   tooltip?: string;
   disabled?: boolean;
+  visibility?: boolean;
   'data-testid'?: string;
 };
 
 export type Item = {
   label: string;
   items: NavigationItem[];
+  visibility?: boolean;
 };
 
 export type NavigationMenuProps = {
