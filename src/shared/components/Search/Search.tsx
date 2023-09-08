@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
 import debounce from 'lodash.debounce';
 
 import { Svg } from 'shared/components/Svg';
@@ -8,35 +8,34 @@ import { StyledTextField, StyledIcon } from './Search.styles';
 import { SearchProps } from './Search.types';
 
 export const Search = ({
+  withDebounce = false,
+  value = '',
   onSearch,
-  value,
-  setValue,
   'data-testid': dataTestId,
   ...props
 }: SearchProps) => {
-  const handleControlledSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    const searchValue = event.target.value;
-    setValue?.(searchValue);
+  const inputRef = useRef<HTMLInputElement | null>();
+
+  const debouncedHandleChange = debounce((event: ChangeEvent<HTMLInputElement>) => {
+    onSearch?.(event.target.value);
+  }, SEARCH_DEBOUNCE_VALUE);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onSearch?.(event.target.value);
   };
 
-  const debounceSearch = debounce((searchValue: string) => {
-    onSearch(searchValue);
-  }, SEARCH_DEBOUNCE_VALUE);
-
-  const handleUncontrolledSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
-    onSearch(event.target.value);
-  }, SEARCH_DEBOUNCE_VALUE);
-
   useEffect(() => {
-    if (value === undefined || !setValue) return;
-    debounceSearch(value);
-  }, [value, setValue]);
+    if (inputRef.current?.value === value) return;
+    if (inputRef?.current) {
+      inputRef.current.value = value;
+    }
+  }, [value]);
 
   return (
     <StyledTextField
       {...props}
-      value={value}
-      onChange={value !== undefined && setValue ? handleControlledSearch : handleUncontrolledSearch}
+      onChange={withDebounce ? debouncedHandleChange : handleChange}
+      inputRef={inputRef}
       startAdornment={
         <StyledIcon>
           <Svg id="search" height="18" width="18" />

@@ -1,9 +1,7 @@
-import { Item } from 'shared/state';
-
-import { AppletUiType } from '../Applet.types';
+import { AppletUiType, ExpandedItem } from '../Applet.types';
 
 export type ItemProps = {
-  item: Item;
+  item: ExpandedItem;
   appletId: string;
   activityName: string;
   activityKey: string;

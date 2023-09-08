@@ -27,6 +27,7 @@ export const DataTable = ({
   isValueName = false,
   tableHeadBackground,
   'data-testid': dataTestid,
+  tooltipByDefault,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
 
@@ -102,7 +103,11 @@ export const DataTable = ({
                     sx={{ backgroundColor: 'inherit' }}
                     key={`data-table-cell-${key}`}
                   >
-                    <ContentWithTooltip value={item[key]} item={item} />
+                    <ContentWithTooltip
+                      value={item[key]}
+                      item={item}
+                      tooltipByDefault={tooltipByDefault}
+                    />
                   </StyledTableCell>
                 ))}
               </TableRow>

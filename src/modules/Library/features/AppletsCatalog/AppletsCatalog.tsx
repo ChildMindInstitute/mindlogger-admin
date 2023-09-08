@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import debounce from 'lodash.debounce';
 
 import { useBreadcrumbs } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
@@ -16,7 +15,6 @@ import {
   StyledAppletContainer,
   StyledAppletList,
 } from 'shared/styles';
-import { SEARCH_DEBOUNCE_VALUE } from 'shared/consts';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 
@@ -37,42 +35,40 @@ export const AppletsCatalog = () => {
   const loadingStatus = library.usePublishedAppletsStatus();
   const loadingCartStatus = library.useCartAppletsStatus();
 
+  const isLoading = loadingStatus === 'loading' || loadingCartStatus === 'loading';
+
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE);
   const [searchValue, setSearchValue] = useState('');
-  const [search, setSearch] = useState('');
 
   const handleSearch = (searchText: string) => {
-    setSearch(searchText);
     setPageIndex(DEFAULT_PAGE);
+
+    dispatch(
+      library.thunk.getPublishedApplets({
+        page: DEFAULT_PAGE,
+        search: searchText,
+        limit: DEFAULT_APPLETS_PER_PAGE,
+      }),
+    ).finally(() => {
+      setSearchValue(searchText);
+    });
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPageIndex(newPage + 1);
   };
 
-  const renderEmptyState = () => !!search && <EmptyState>{t('notFound')}</EmptyState>;
-
-  const isLoading = loadingStatus === 'loading' || loadingCartStatus === 'loading';
-
-  const debouncedDispatch = debounce(
-    (pageIndex, search) =>
-      dispatch(
-        library.thunk.getPublishedApplets({
-          page: pageIndex,
-          search,
-          limit: DEFAULT_APPLETS_PER_PAGE,
-        }),
-      ),
-    SEARCH_DEBOUNCE_VALUE,
-  );
+  const renderEmptyState = () => !!searchValue && <EmptyState>{t('notFound')}</EmptyState>;
 
   useEffect(() => {
-    debouncedDispatch(pageIndex, search);
-
-    return () => {
-      debouncedDispatch.cancel();
-    };
-  }, [pageIndex, search]);
+    dispatch(
+      library.thunk.getPublishedApplets({
+        page: pageIndex,
+        search: searchValue,
+        limit: DEFAULT_APPLETS_PER_PAGE,
+      }),
+    );
+  }, []);
 
   return (
     <StyledBody sx={{ position: 'relative' }}>
@@ -95,8 +91,8 @@ export const AppletsCatalog = () => {
                   <StyledAppletContainer key={applet.id}>
                     <Applet
                       applet={applet}
-                      search={search}
-                      setSearch={setSearchValue}
+                      search={searchValue}
+                      setSearch={handleSearch}
                       data-testid={`library-applets-${index}`}
                     />
                   </StyledAppletContainer>
