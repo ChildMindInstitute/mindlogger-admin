@@ -119,7 +119,7 @@ const getAnswersWithPublicUrls = async (
         });
       }
       const responseType = item.activityItem?.responseType;
-      if (!ItemsWithFileResponses.includes(responseType)) return decryptedAnswersAcc;
+      if (!ItemsWithFileResponses.includes(responseType)) return decryptedAnswersAcc.concat(item);
 
       return decryptedAnswersAcc.concat({
         ...item,
