@@ -226,11 +226,13 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     newItems: items as ItemFormValues[],
   });
 
-  const scoresAndReports = getDuplicatedScoresAndReports(
-    activity?.items ?? [],
-    items,
-    activity?.scoresAndReports,
-  );
+  const scoresAndReports = Object.keys(activity?.scoresAndReports || {})?.length
+    ? getDuplicatedScoresAndReports(activity?.items ?? [], items, activity?.scoresAndReports)
+    : {
+        generateReport: false,
+        reports: [],
+        showScoreSummary: false,
+      };
 
   return {
     name: name ?? t('newActivity'),

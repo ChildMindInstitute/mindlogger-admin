@@ -56,9 +56,6 @@ export const ScoresAndReports = () => {
   });
 
   const reports: ScoresAndReportsType['reports'] = watch(reportsName);
-
-  const showScoreSummary = watch(scoresAndReportsName);
-  const generateReport = watch(generateReportName);
   const isCheckboxesDisabled = !reports?.length;
   const dataTestid = 'builder-activity-settings-scores-and-reports';
 
@@ -82,14 +79,6 @@ export const ScoresAndReports = () => {
     if (!destination) return;
     moveReport(source.index, destination.index);
   };
-
-  useEffect(() => {
-    generateReport ?? setValue(generateReportName, false);
-  }, [generateReport]);
-
-  useEffect(() => {
-    showScoreSummary ?? setValue(showScoreSummaryName, false);
-  }, [showScoreSummary]);
 
   useEffect(() => {
     if (reports?.length) return;
