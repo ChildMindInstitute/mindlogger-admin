@@ -31,4 +31,9 @@ export const StyledHeader = styled(StyledFlexTopStart)`
 
 export const StyledSvg = styled(Svg)`
   margin-left: ${theme.spacing(2.4)};
+  border-radius: ${variables.borderRadius.half};
+
+  :hover {
+    background-color: ${variables.palette.on_surface_alfa8};
+  }
 `;

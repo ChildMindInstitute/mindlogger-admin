@@ -10,8 +10,8 @@ import {
   StyledLabelSmall,
   StyledTitleSmall,
   StyledFlexTopCenter,
-  StyledClearedButton,
   variables,
+  StyledIconButton,
 } from 'shared/styles';
 import { useLogout } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
@@ -75,9 +75,9 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
               </StyledHeaderInfo>
             </StyledFlexTopCenter>
             <StyledCloseWrapper>
-              <StyledClearedButton onClick={() => setVisibleDrawer(false)}>
+              <StyledIconButton onClick={() => setVisibleDrawer(false)}>
                 <Svg id="close" />
-              </StyledClearedButton>
+              </StyledIconButton>
             </StyledCloseWrapper>
           </StyledHeader>
           <Notifications />
