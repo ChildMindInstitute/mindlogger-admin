@@ -44,15 +44,10 @@ export const StyledHeaderInfo = styled(Box)`
 export const StyledAvatarWrapper = styled(StyledFlexAllCenter)`
   margin-right: ${theme.spacing(1.2)};
   border-radius: ${variables.borderRadius.half};
-  background-color: ${variables.palette.outline_variant};
+  background-color: ${variables.palette.primary_container};
   height: 4rem;
   width: 4rem;
   position: relative;
-`;
-
-export const StyledImage = styled('img')`
-  width: 3.2rem;
-  height: 3.2rem;
 `;
 
 export const StyledFooter = styled(Box)`
