@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useHeaderSticky } from 'shared/hooks';
@@ -16,19 +17,20 @@ import {
 } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
 
-export const LeftBar = ({ title, items, activeItem, isCompact, onItemClick }: LeftBarProps) => {
+export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarProps) => {
+  const { setting } = useParams();
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
 
   return (
-    <StyledBar ref={containerRef} hasItem={!!activeItem}>
+    <StyledBar ref={containerRef} hasItem={hasActiveItem}>
       <StyledHeader isSticky={isHeaderSticky}>{t(title)}</StyledHeader>
-      <StyledContent isCompact={isCompact}>
+      <StyledContent isCompact={hasActiveItem}>
         {items.map(({ label, items }) => (
-          <StyledSettingsGroup key={label} isCompact={!!activeItem}>
+          <StyledSettingsGroup key={label} isCompact={hasActiveItem}>
             <StyledTitleSmall>{t(label)}</StyledTitleSmall>
-            <StyledSettings isCompact={!!activeItem}>
+            <StyledSettings isCompact={hasActiveItem}>
               {items.map(
                 ({
                   icon,
@@ -45,8 +47,8 @@ export const LeftBar = ({ title, items, activeItem, isCompact, onItemClick }: Le
                         onClick={() =>
                           onItemClick({ label, component, param, icon, disabled, tooltip })
                         }
-                        isCompact={!!activeItem}
-                        isSelected={activeItem?.label === label}
+                        isCompact={hasActiveItem}
+                        isSelected={!disabled && setting === param}
                         disabled={disabled}
                         data-testid={dataTestid}
                       >

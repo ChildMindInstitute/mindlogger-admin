@@ -29,6 +29,8 @@ export const Breadcrumbs = () => {
       <Svg id={icon} width={BREADCRUMB_ICON_SIZE} height={BREADCRUMB_ICON_SIZE} />
     );
 
+    if (!icon && !label) return null;
+
     return (
       <StyledIconWrapper>
         {icon ? (
