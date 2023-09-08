@@ -29,10 +29,13 @@ export const Breadcrumbs = () => {
       <Svg id={icon} width={BREADCRUMB_ICON_SIZE} height={BREADCRUMB_ICON_SIZE} />
     );
 
+    if (!icon && !label) return null;
+
     return (
       <StyledIconWrapper>
-        {icon && iconComponent}
-        {!icon && label && (
+        {icon ? (
+          iconComponent
+        ) : (
           <StyledPlaceholder>
             <StyledLabelSmall color={variables.palette.on_surface}>
               {label.substring(0, 1).toUpperCase()}
