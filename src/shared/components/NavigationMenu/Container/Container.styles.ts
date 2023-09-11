@@ -21,7 +21,7 @@ export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
 
   box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
     isSticky ? variables.boxShadow.light0 : 'none'};
-  padding: ${theme.spacing(4.8, 6.4, 2)};
+  padding: ${theme.spacing(2.4, 6.4, 2)};
   justify-content: space-between;
 `;
 
