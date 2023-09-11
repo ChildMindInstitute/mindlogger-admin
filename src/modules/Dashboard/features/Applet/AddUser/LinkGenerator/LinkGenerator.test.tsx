@@ -8,8 +8,10 @@ import { LinkGenerator } from './LinkGenerator';
 
 const response = {
   data: {
-    requireLogin: true,
-    inviteId: 'inviteId',
+    result: {
+      requireLogin: true,
+      link: 'inviteId',
+    },
   },
 };
 
@@ -22,9 +24,13 @@ describe('LinkGenerator component tests', () => {
     jest.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
     renderWithProviders(<LinkGenerator />);
 
-    fireEvent.click(screen.getByTestId('dashboard-add-users-generate-link'));
-    await waitFor(() => expect(screen.queryByTestId('modal')).toBeInTheDocument());
-    await waitFor(() => fireEvent.click(screen.getByTestId('generate-with-login')));
+    fireEvent.click(screen.getByTestId('dashboard-add-users-generate-link-generate'));
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId('dashboard-add-users-generate-link-generate-popup'),
+      ).toBeInTheDocument(),
+    );
+    await waitFor(() => fireEvent.click(screen.getByText('Yes, account is required')));
     await waitFor(() =>
       expect(screen.getByTestId('dashboard-add-users-generate-link-url')).toBeInTheDocument(),
     );
