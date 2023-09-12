@@ -44,6 +44,14 @@ export const users = {
         },
       }) => data,
     ),
+  useAllRespondentsStatus: (): UsersSchema['allRespondents']['status'] =>
+    useAppSelector(
+      ({
+        users: {
+          allRespondents: { status },
+        },
+      }) => status,
+    ),
   useRespondent: (id: string): Respondent | undefined =>
     useAppSelector(
       ({
