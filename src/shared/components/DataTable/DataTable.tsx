@@ -104,7 +104,7 @@ export const DataTable = ({
                     key={`data-table-cell-${key}`}
                   >
                     <ContentWithTooltip
-                      value={item[key]}
+                      value={item.tooltip ?? item[key]}
                       item={item}
                       tooltipByDefault={tooltipByDefault}
                     />
