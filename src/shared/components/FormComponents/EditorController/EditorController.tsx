@@ -24,7 +24,7 @@ import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType, UploadFileError } from 'shared/consts';
 import { StyledFlexColumn } from 'shared/styles';
-import { concatIf } from 'shared/utils';
+import { concatIf, getSanitizedContent } from 'shared/utils';
 
 import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
@@ -62,6 +62,7 @@ export const EditorController = <T extends FieldValues>({
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>
             <StyledMdEditor
+              sanitize={(content: string) => getSanitizedContent(content)}
               editorId={editorId}
               className={`${uiType} ${disabled ? 'disabled' : ''} ${error ? 'has-error' : ''}`}
               ref={editorRef}

@@ -305,3 +305,5 @@ export const enum ScoreReportType {
   Section = 'section',
   Score = 'score',
 }
+
+export const URL_REGEX = /(https?:\/\/)?(www\.)?/g;
