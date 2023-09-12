@@ -6,6 +6,8 @@ import { useBreadcrumbs, usePermissions } from 'shared/hooks';
 import { applet, workspaces } from 'shared/state';
 import { applets, users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
+import { Spinner } from 'shared/components';
+import { StyledBody } from 'shared/styles';
 
 import { Calendar } from './Calendar';
 import { Legend } from './Legend';
@@ -16,8 +18,11 @@ export const Schedule = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { respondentId, appletId } = useParams();
+
   const { result: appletData } = applet.useAppletData() ?? {};
   const { ownerId } = workspaces.useData() || {};
+  const loadingStatus = users.useAllRespondentsStatus();
+  const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
   const { getAllWorkspaceRespondents } = users.thunk;
   const preparedEvents = usePreparedEvents(appletData);
 
@@ -50,7 +55,11 @@ export const Schedule = () => {
 
   if (isForbidden) return noPermissionsComponent;
 
-  return (
+  return isLoading ? (
+    <StyledBody>
+      <Spinner />
+    </StyledBody>
+  ) : (
     <StyledSchedule>
       <StyledLeftPanel>
         <Legend
