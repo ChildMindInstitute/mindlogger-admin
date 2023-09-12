@@ -18,7 +18,7 @@ export const getTableScoreItems = (items: Item[]) =>
     id: getEntityKey(item),
     name: item.name,
     tooltip: `${item.question}`,
-    label: item.name,
+    label: `${item.name}: ${item.question}`,
   }));
 
 export const getScoreId = (name: string, calculationType: CalculationType) =>
