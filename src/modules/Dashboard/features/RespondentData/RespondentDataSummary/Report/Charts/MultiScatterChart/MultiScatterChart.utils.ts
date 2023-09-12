@@ -5,7 +5,7 @@ import { variables } from 'shared/styles';
 import { ItemResponseType, locales } from 'shared/consts';
 
 import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
-import { getStepSize, getTimeConfig, truncateString } from '../Charts.utils';
+import { getTimelineStepSize, getTimeConfig, truncateString } from '../Charts.utils';
 import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
 import { ItemOption } from '../../Report.types';
 
@@ -31,7 +31,7 @@ export const getOptions = ({
   );
 
   const timeConfig = getTimeConfig(min, max);
-  const stepSize = getStepSize(min, max);
+  const timelineStepSize = getTimelineStepSize(min, max);
 
   const crossAlign =
     responseType === ItemResponseType.Slider ? ('near' as const) : ('far' as const);
@@ -63,6 +63,7 @@ export const getOptions = ({
         ticks: {
           crossAlign,
           stepSize: 1,
+          autoSkip: false,
           callback: (value: string | number) => {
             if (value === maxY + 1) return;
             const label = mapper[value]?.text;
@@ -104,7 +105,7 @@ export const getOptions = ({
         ...timeConfig,
         ticks: {
           autoSkip: false,
-          stepSize,
+          stepSize: timelineStepSize,
           font: {
             size: 11,
           },

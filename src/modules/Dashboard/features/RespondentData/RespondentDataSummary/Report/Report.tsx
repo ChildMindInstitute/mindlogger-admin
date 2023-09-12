@@ -60,6 +60,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityCompletion[]>([]);
   const [responseOptions, setResponseOptions] = useState<Record<string, FormattedResponse[]>>();
+  const [areSubscalesVisible, setAreSubscalesVisible] = useState(false);
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
   const { control, getValues } = useFormContext<SummaryFiltersForm>();
@@ -148,8 +149,10 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
         );
 
         setAnswers(sortedDecryptedAnswers);
-        const formattedResponses = getFormattedResponses(sortedDecryptedAnswers);
+        const { areSubscalesVisible, formattedResponses } =
+          getFormattedResponses(sortedDecryptedAnswers);
 
+        setAreSubscalesVisible(areSubscalesVisible);
         setResponseOptions(formattedResponses);
       } finally {
         setIsLoading(false);
@@ -164,8 +167,9 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       ? answers.filter(({ answerId }) => answerId === currentActivityCompletionData.answerId)
       : answers;
 
-    const formattedResponses = getFormattedResponses(responses);
+    const { areSubscalesVisible, formattedResponses } = getFormattedResponses(responses);
 
+    setAreSubscalesVisible(areSubscalesVisible);
     setResponseOptions(formattedResponses);
   }, [currentActivityCompletionData]);
 
@@ -204,7 +208,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
             {!isLoading && answers.length > 0 && (
               <>
                 <ActivityCompleted answers={answers} versions={versions} />
-                <Subscales answers={answers} versions={versions} />
+                {areSubscalesVisible && <Subscales answers={answers} versions={versions} />}
                 {responseOptions && !!Object.values(responseOptions).length && (
                   <ResponseOptions responseOptions={responseOptions} versions={versions} />
                 )}

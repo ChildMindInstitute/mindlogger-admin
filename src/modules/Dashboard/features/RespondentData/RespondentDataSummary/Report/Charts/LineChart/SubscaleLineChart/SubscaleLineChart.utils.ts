@@ -13,13 +13,12 @@ import { pluck } from 'shared/utils';
 
 import {
   SUBSCALES_CHART_LABEL_WIDTH_Y,
-  OFFSET_Y_MAX,
   locales,
   POINT_RADIUS_DEFAULT,
   POINT_RADIUS_SECONDARY,
   COLORS,
 } from '../../Charts.const';
-import { getStepSize, getTimeConfig } from '../../Charts.utils';
+import { getTimelineStepSize, getTimeConfig, getTicksStepSize } from '../../Charts.utils';
 import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
 
 export const getOptions = (
@@ -36,7 +35,8 @@ export const getOptions = (
   const max = maxDate.getTime();
 
   const timeConfig = getTimeConfig(min, max);
-  const stepSize = getStepSize(min, max);
+  const timelineStepSize = getTimelineStepSize(min, max);
+  const ticksStepSize = getTicksStepSize(maxScore);
 
   return {
     maintainAspectRatio: false,
@@ -88,7 +88,7 @@ export const getOptions = (
           scaleInstance.width = SUBSCALES_CHART_LABEL_WIDTH_Y;
         },
         ticks: {
-          stepSize: Math.ceil(maxScore / 16),
+          stepSize: ticksStepSize,
           color: (value: Tick) => {
             const lastTickIndex = value.chart.scales.y.ticks.length - 1;
             if (lastTickIndex === value.index) {
@@ -102,7 +102,7 @@ export const getOptions = (
             size: 14,
           },
         },
-        suggestedMax: maxScore + OFFSET_Y_MAX,
+        suggestedMax: maxScore + ticksStepSize,
       },
       x: {
         adapters: {
@@ -132,7 +132,7 @@ export const getOptions = (
         ...timeConfig,
         ticks: {
           autoSkip: false,
-          stepSize,
+          stepSize: timelineStepSize,
           font: {
             size: 11,
           },
