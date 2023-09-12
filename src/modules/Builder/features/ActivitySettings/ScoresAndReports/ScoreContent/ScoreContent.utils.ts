@@ -16,7 +16,8 @@ import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 export const getTableScoreItems = (items: Item[]) =>
   items?.map((item) => ({
     id: getEntityKey(item),
-    name: `${item.question}`,
+    name: item.name,
+    tooltip: `${item.question}`,
     label: item.name,
   }));
 
