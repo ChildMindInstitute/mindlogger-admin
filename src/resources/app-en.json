@@ -1025,7 +1025,7 @@
   "dropAudio": "Please upload file in one of the following formats: <1>.mp3, .wav</1>.",
   "mediaUploaderPlaceholder": "Drop <1>.mp3</1> or <3>.wav</3> here <br /> or <7>click to browse</7>.",
   "activityUnavailableAtTime": "Activity is unavailable at this time",
-  "repeatPasswordRequired": "Repeat Password is Required",
+  "repeatPasswordRequired": "Repeat Password is required",
   "finalSubscaleScore": "Final Subscale Score",
   "additionalInformation": "Additional Information",
   "activityItemsFlow": "Item Flow",
