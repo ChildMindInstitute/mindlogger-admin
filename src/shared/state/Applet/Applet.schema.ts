@@ -169,7 +169,7 @@ export type GeolocationConfig = {
 export type MessageConfig = {
   skippableItem?: boolean;
   removeBackButton: boolean;
-  timer: number;
+  timer: number | null;
 };
 
 export type SliderRowsConfig = {
@@ -205,7 +205,7 @@ export type FlankerConfig = {
   stimulusTrials: Array<FlankerStimulusSettings>;
   blocks: Array<FlankerBlockSettings>;
   buttons: Array<FlankerButtonSetting>;
-  nextButton: string;
+  nextButton?: string;
   showFixation: boolean;
   fixationDuration: number | null;
   fixationScreen: { value?: string; image: string } | null;
@@ -242,7 +242,10 @@ export type SliderItemResponseValues = {
   alerts?: ItemAlert[];
 };
 
-export type SliderRowsItemResponseValues = SliderItemResponseValues & { id: string; label: string };
+export type SliderRowsItemResponseValues = SliderItemResponseValues & {
+  id?: string;
+  label?: string;
+};
 
 export type SingleAndMultiSelectOption = {
   id: string;

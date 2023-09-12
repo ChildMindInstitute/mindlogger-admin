@@ -33,6 +33,7 @@ import {
   removeAppletExtraFields,
   removeActivityExtraFields,
   removeActivityFlowExtraFields,
+  removeActivityFlowItemExtraFields,
   remapSubscaleSettings,
   getActivityItems,
   getScoresAndReports,
@@ -71,7 +72,10 @@ export const useAppletData = () => {
           ({
             ...flow,
             description: getDictionaryObject(flow.description),
-            items: flow.items?.map(({ key, ...item }) => item),
+            items: flow.items?.map(({ key, ...item }) => ({
+              ...item,
+              ...removeActivityFlowItemExtraFields(),
+            })),
             ...removeActivityFlowExtraFields(),
           } as ActivityFlow),
       ),

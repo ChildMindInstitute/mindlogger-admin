@@ -13,8 +13,9 @@ import { getUniqueName, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/types';
+import { AppletFormValues } from 'modules/Builder/types';
 import { useActivitiesRedirection } from 'modules/Builder/hooks';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import {
@@ -35,10 +36,10 @@ export const ActivityFlow = () => {
   const { appletId } = useParams();
   const navigate = useNavigate();
 
-  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activities: AppletFormValues['activities'] = watch('activities');
 
   const {
+    fields: activityFlows,
     remove: removeActivityFlow,
     append: appendActivityFlow,
     insert: insertActivityFlow,
@@ -47,15 +48,10 @@ export const ActivityFlow = () => {
   } = useFieldArray({
     control,
     name: 'activityFlows',
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  const errors = activityFlows?.reduce(
-    (err: Record<string, boolean>, _: ActivityFlowFormValues, index: number) => ({
-      ...err,
-      [`activityFlows.${index}`]: !!getFieldState(`activityFlows.${index}`).error,
-    }),
-    {},
-  );
+  const errors = activityFlows?.map((_, index) => !!getFieldState(`activityFlows.${index}`).error);
 
   const handleFlowDelete = () => {
     if (!flowToDeleteData) return;
@@ -166,7 +162,7 @@ export const ActivityFlow = () => {
                                 isInactive={flow.isHidden}
                                 hasStaticActions={flow.isHidden}
                                 uiType={ItemUiType.Flow}
-                                hasError={errors[`activityFlows.${index}`]}
+                                hasError={errors[index]}
                                 {...flow}
                                 data-testid={dataTestid}
                               />

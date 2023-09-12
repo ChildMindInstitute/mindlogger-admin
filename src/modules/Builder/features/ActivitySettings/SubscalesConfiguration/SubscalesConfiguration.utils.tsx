@@ -30,7 +30,7 @@ export const getItemNameInSubscale = (item: ItemFormValues) =>
   capitalize(`${t('item_one')}: ${t(item.name)}`);
 
 export const getItemElementName = (item: ItemFormValues) =>
-  `${getItemNameInSubscale(item)}: ${t(item.question)}`;
+  `${getItemNameInSubscale(item)}: ${t(item.question!)}`;
 
 export const getSubscaleElementName = (
   subscale: SubscaleFormValue,

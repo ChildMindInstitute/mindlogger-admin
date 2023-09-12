@@ -13,7 +13,7 @@ import {
   variables,
 } from 'shared/styles';
 import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
-import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { ActivityItemPath, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
@@ -122,7 +122,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
             control={control}
             data-testid="builder-activity-items-item-configuration-description"
           />
-          <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />
+          <OptionalItemsAndSettings name={name as ActivityItemPath} ref={optionalItemsRef} />
         </StyledContent>
       </StyledItemConfiguration>
       <Modal

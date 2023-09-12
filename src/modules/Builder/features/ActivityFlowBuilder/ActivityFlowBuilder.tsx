@@ -9,11 +9,12 @@ import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautifu
 import { Menu } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
-import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
-import { ActivityFlowFormValues, ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
-import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
-import { getObjectFromList } from 'shared/utils';
 import { StyledMaxWidthWrapper } from 'shared/styles';
+import { getObjectFromList } from 'shared/utils';
+import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
+import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
+import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 import {
@@ -33,17 +34,22 @@ export const ActivityFlowBuilder = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [indexToUpdate, setIndexToUpdate] = useState<null | number>(null);
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext();
+  const { control, watch } = useFormContext<AppletFormValues>();
   const { activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
-  const { remove, append, insert, update, move } = useFieldArray({
+  const {
+    fields: activityFlowItems,
+    remove,
+    append,
+    insert,
+    update,
+    move,
+  } = useFieldArray({
     control,
     name: `activityFlows.${activityFlowIndex}.items`,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
-  const activityFlowItems: ActivityFlowFormValues['items'] = watch(
-    `activityFlows.${activityFlowIndex}.items`,
-  );
   const activities: AppletFormValues['activities'] = watch('activities');
   const dataTestid = 'builder-activity-flows-builder';
 

@@ -7,7 +7,8 @@ import { StyledContainer } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ItemFormValues } from 'modules/Builder/types';
+import { ActivityItemsPath, AppletFormValues, ItemFormValues } from 'modules/Builder/types';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -20,15 +21,18 @@ export const ActivityItems = () => {
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
   const { fieldName, activity } = useCurrentActivity();
-  const { control, watch, trigger } = useFormContext();
+  const { control, trigger } = useFormContext<AppletFormValues>();
+  const itemsName = `${fieldName}.items` as ActivityItemsPath;
 
   const {
+    fields: items,
     append: appendItem,
     insert: insertItem,
     move: moveItem,
   } = useFieldArray({
     control,
-    name: `${fieldName}.items`,
+    name: itemsName,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
   useBreadcrumbs();
@@ -36,7 +40,6 @@ export const ActivityItems = () => {
 
   if (!activity) return null;
 
-  const items: ItemFormValues[] = watch(`${fieldName}.items`);
   const activeItem = items?.find((_, index) => index === activeItemIndex);
 
   const handleRemoveClick = (id: string) => {
@@ -49,9 +52,11 @@ export const ActivityItems = () => {
 
     const indexListToTrigger = getIndexListToTrigger(items, item.name);
     for (const itemIndex of indexListToTrigger) {
-      trigger(`${fieldName}.items.${itemIndex}`);
+      trigger(`${itemsName}.${itemIndex}`);
     }
-    firstSystemIndex === -1 ? appendItem(item) : insertItem(firstSystemIndex, item);
+    firstSystemIndex === -1
+      ? appendItem(item as ItemFormValues)
+      : insertItem(firstSystemIndex, item as ItemFormValues);
     setActiveItemIndex(firstSystemIndex === -1 ? items?.length : firstSystemIndex);
   };
 
@@ -61,9 +66,9 @@ export const ActivityItems = () => {
 
     const indexListToTrigger = getIndexListToTrigger(items, itemToInsert.name);
     for (const itemIndex of indexListToTrigger) {
-      trigger(`${fieldName}.items.${itemIndex}`);
+      trigger(`${itemsName}.${itemIndex}`);
     }
-    insertItem(index + 1, itemToInsert);
+    insertItem(index + 1, itemToInsert as ItemFormValues);
     shouldBecomeActive && setActiveItemIndex(index + 1);
   };
 

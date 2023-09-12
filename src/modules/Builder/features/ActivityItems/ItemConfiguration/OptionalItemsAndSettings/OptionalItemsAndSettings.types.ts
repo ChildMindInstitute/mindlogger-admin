@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { ItemResponseType } from 'shared/consts';
+import { ActivityItemPath } from 'modules/Builder/types';
 
 export type OptionalItemsProps = {
-  name: string;
+  name: ActivityItemPath;
 };
 
 export type OptionalItemsRef = {
@@ -12,7 +13,7 @@ export type OptionalItemsRef = {
 
 export type ActiveItemHookProps = {
   name: string;
-  responseType: ItemResponseType;
+  responseType: ItemResponseType | '';
 };
 
 export type SettingsSetupProps = {

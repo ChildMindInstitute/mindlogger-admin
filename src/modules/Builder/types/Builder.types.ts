@@ -14,12 +14,12 @@ export type ItemFormValues = {
   id?: string;
   key?: string;
   name: string;
-  question: string;
+  question?: string;
   config: Config;
   responseType: ItemResponseType | '';
-  responseValues: ResponseValues;
+  responseValues?: ResponseValues;
   alerts?: ItemAlert[];
-  allowEdit: boolean;
+  allowEdit?: boolean;
   isHidden?: boolean;
 };
 
@@ -90,8 +90,8 @@ export type GetNewActivity = {
 };
 
 export type GetNewPerformanceTask = {
-  name?: string;
-  description?: string;
+  name: string;
+  description: string;
   performanceTask?: ActivityFormValues;
   performanceTaskType?: PerfTaskType;
 };
@@ -197,3 +197,7 @@ export type GetActivitySubscaleSettingDuplicated = {
   oldItems: ItemFormValues[];
   newItems: ItemFormValues[];
 };
+
+export type ActivityPath = `activities.${number}`;
+export type ActivityItemsPath = `activities.${number}.items`;
+export type ActivityItemPath = `activities.${number}.items.${number}`;

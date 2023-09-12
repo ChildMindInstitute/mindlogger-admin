@@ -17,6 +17,7 @@ import {
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
 import { pluck, getUniqueName, Mixpanel } from 'shared/utils';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
@@ -26,13 +27,14 @@ import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch, getFieldState, setValue } = useFormContext();
+  const { control, watch, getFieldState, setValue } = useFormContext<AppletFormValues>();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
 
   const {
+    fields: activities,
     append: appendActivity,
     insert: insertActivity,
     remove: removeActivity,
@@ -41,19 +43,12 @@ export const Activities = () => {
   } = useFieldArray({
     control,
     name: 'activities',
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  const activities: ActivityFormValues[] = watch('activities');
   const activityNames = pluck(activities, 'name');
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-
-  const errors = activities?.reduce(
-    (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
-      ...err,
-      [`activities[${index}]`]: !!getFieldState(`activities[${index}]`).error,
-    }),
-    {},
-  );
+  const errors = activities?.map((_, index) => !!getFieldState(`activities.${index}`).error);
 
   useBreadcrumbs([
     {
@@ -142,6 +137,8 @@ export const Activities = () => {
 
     const newActivity = isPerformanceTask
       ? getNewPerformanceTask({
+          name,
+          description: activityToDuplicate.description,
           performanceTask: activityToDuplicate,
         })
       : getNewActivity({ activity: activityToDuplicate });
@@ -196,7 +193,7 @@ export const Activities = () => {
                     const isEditVisible =
                       !isPerformanceTask ||
                       EditablePerformanceTasks.includes(activity.performanceTaskType || '');
-                    const hasError = errors[`activities[${index}]`];
+                    const hasError = errors[index];
                     const dataTestid = `builder-activities-activity-${index}`;
 
                     return (

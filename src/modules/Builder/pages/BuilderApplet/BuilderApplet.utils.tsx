@@ -99,7 +99,7 @@ export const isPerfTaskResponseType = (responseType: ItemResponseType) =>
   responseType === ItemResponseType.ABTrails;
 
 export const getNewActivityItem = (item?: ItemFormValues) => ({
-  responseType: '',
+  responseType: '' as const,
   name: t('newItem'),
   question: '',
   config: {} as Config,
@@ -422,7 +422,7 @@ export const getNewPerformanceTask = ({
   description,
   performanceTask,
   performanceTaskType,
-}: GetNewPerformanceTask) => {
+}: GetNewPerformanceTask): ActivityFormValues => {
   const itemsByType = {
     [PerfTaskType.Flanker]: flankerItems,
     [PerfTaskType.Gyroscope]: getGyroscopeOrTouchItems(GyroscopeOrTouch.Gyroscope),
@@ -433,7 +433,7 @@ export const getNewPerformanceTask = ({
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
 
-  const getItems = () => {
+  const getItems = (): ItemFormValues[] => {
     if (items?.length) {
       return items.map((item) => ({
         ...item,
