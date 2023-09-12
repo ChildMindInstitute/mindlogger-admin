@@ -6,6 +6,7 @@ import * as thunk from './Workspaces.thunk';
 import { state as initialState } from './Workspaces.state';
 import { reducers, extraReducers } from './Workspaces.reducer';
 import { WorkspacesSchema } from './Workspaces.schema';
+import { MetaStatus } from '../Base';
 
 export * from './Workspaces.schema';
 
@@ -26,6 +27,14 @@ export const workspaces = {
     useAppSelector(({ workspaces: { currentWorkspace } }) => currentWorkspace?.data),
   useRolesData: (): WorkspacesSchema['roles'] =>
     useAppSelector(({ workspaces: { roles } }) => roles),
+  useRolesResponseStatus: (): MetaStatus =>
+    useAppSelector(
+      ({
+        workspaces: {
+          roles: { status },
+        },
+      }) => status,
+    ),
   useWorkspacesRolesData: (): WorkspacesSchema['workspacesRoles']['data'] =>
     useAppSelector(({ workspaces: { workspacesRoles } }) => workspacesRoles?.data),
 };

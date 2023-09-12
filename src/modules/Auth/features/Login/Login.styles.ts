@@ -7,6 +7,7 @@ import {
   StyledHeadline,
   StyledClearedButton,
   StyledBodyMedium,
+  StyledFlexAllCenter,
 } from 'shared/styles';
 
 export const StyledWelcome = styled(StyledHeadline)`
@@ -55,15 +56,10 @@ export const StyledForgotPasswordLink = styled(StyledClearedButton)`
   }
 `;
 
-export const StyledImageContainer = styled(Box)`
+export const StyledImageContainer = styled(StyledFlexAllCenter)`
   width: 4rem;
   height: 4rem;
-`;
-
-export const StyledImage = styled('img')`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  background-color: ${variables.palette.primary_container};
   border-radius: ${variables.borderRadius.half};
 `;
 

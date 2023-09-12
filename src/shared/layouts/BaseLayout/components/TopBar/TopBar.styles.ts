@@ -21,11 +21,7 @@ export const StyledAvatarBtn = styled(StyledClearedButton)`
   height: 3rem;
   width: 3rem;
   position: relative;
-`;
-
-export const StyledImage = styled('img')`
-  width: 3.2rem;
-  height: 3.2rem;
+  background-color: ${variables.palette.primary_container};
 `;
 
 export const StyledQuantity = styled(StyledQuantityCircle)`

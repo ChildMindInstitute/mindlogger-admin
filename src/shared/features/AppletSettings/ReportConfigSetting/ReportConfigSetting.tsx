@@ -40,6 +40,7 @@ import {
   getParsedEncryptionFromServer,
   getPrivateKey,
   publicEncrypt,
+  getSanitizedContent,
 } from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
 import { useCurrentActivity, useCurrentActivityFlow } from 'modules/Builder/hooks';
@@ -211,7 +212,7 @@ export const ReportConfigSetting = ({
       reportPublicKey,
       reportRecipients,
       reportIncludeUserId,
-      reportEmailBody,
+      reportEmailBody: getSanitizedContent(reportEmailBody, true),
     };
 
     await postReportConfig({

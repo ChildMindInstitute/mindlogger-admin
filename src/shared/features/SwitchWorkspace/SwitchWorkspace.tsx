@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
 import { Svg } from 'shared/components';
-import { StyledClearedButton } from 'shared/styles';
+import { StyledIconButton } from 'shared/styles';
 import { auth } from 'redux/modules';
 
 import {
@@ -31,12 +31,12 @@ export const SwitchWorkspace = ({
       data-testid={dataTestid}
     >
       <StyledCloseWrapper>
-        <StyledClearedButton
+        <StyledIconButton
           onClick={() => setVisibleDrawer(false)}
           data-testid={`${dataTestid}-close`}
         >
           <Svg id="close" />
-        </StyledClearedButton>
+        </StyledIconButton>
       </StyledCloseWrapper>
       {workspacesGroups.map((workspacesGroup, index) => (
         <Fragment key={workspacesGroup.groupName}>
