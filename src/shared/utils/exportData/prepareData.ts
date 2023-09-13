@@ -37,6 +37,7 @@ import { getJourneyCSVObject } from './getJourneyCSVObject';
 import { getSubscales } from './getSubscales';
 import { getDrawingLines } from './getDrawingLines';
 import { getABTrailsRecords } from './getABTrailsRecords';
+import { convertDateStampToMs } from './convertDateStampToMs';
 
 const getDecryptedAnswersObject = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
@@ -261,7 +262,7 @@ const getFlankerItemsData = (
         getFlankerRecords(
           flankerValue,
           item.activityItem as Item<FlankerConfig>,
-          new Date(item.startDatetime).getTime(),
+          convertDateStampToMs(item.startDatetime),
         ),
       ),
     });
