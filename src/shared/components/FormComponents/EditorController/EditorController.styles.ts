@@ -10,7 +10,6 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   color: ${variables.palette.on_surface_variant};
   font-size: ${variables.font.size.lg};
   box-shadow: unset;
-  margin-bottom: ${theme.spacing(2)};
   height: 24rem;
 
   &.disabled {
@@ -63,10 +62,4 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   & .md-editor-dropdown-overlay {
     margin-top: 0;
   }
-`;
-
-export const StyledErrorText = styled(StyledBodyMedium)`
-  color: ${variables.palette.semantic.error};
-  font-size: ${variables.font.size.md};
-  margin: ${theme.spacing(0.3, 0, 2, 1.4)};
 `;

@@ -11,7 +11,7 @@ export const CharacterCounter = ({ inputSize }: CharacterCounterProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledTitleSmall sx={{ m: theme.spacing(0, 1) }}>
+    <StyledTitleSmall sx={{ m: theme.spacing(0, 1.6) }}>
       {counter} {t('characters')}
     </StyledTitleSmall>
   );
