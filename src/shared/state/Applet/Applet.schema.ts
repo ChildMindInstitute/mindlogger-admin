@@ -369,8 +369,8 @@ export type Config =
 export type ItemAlert = {
   key?: string;
   value?: number | string;
-  minValue?: number | null;
-  maxValue?: number | null;
+  minValue?: number | string | null;
+  maxValue?: number | string | null;
   rowId?: string | null;
   optionId?: string | null;
   sliderId?: string | null;

@@ -201,3 +201,4 @@ export type GetActivitySubscaleSettingDuplicated = {
 export type ActivityPath = `activities.${number}`;
 export type ActivityItemsPath = `activities.${number}.items`;
 export type ActivityItemPath = `activities.${number}.items.${number}`;
+export type ActivityConditionalLogicPath = `activities.${number}.conditionalLogic`;
