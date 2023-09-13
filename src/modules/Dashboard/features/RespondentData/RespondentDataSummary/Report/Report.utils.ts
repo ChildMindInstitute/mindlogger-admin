@@ -436,14 +436,14 @@ export const formatActivityItemAnswers = (
 };
 
 export const getFormattedResponses = (activityResponses: ActivityCompletion[]) => {
-  let areSubscalesVisible = false;
+  let subscalesFrequency = 0;
   const formattedResponses = activityResponses.reduce(
     (
       items: Record<string, FormattedResponse[]>,
       { decryptedAnswer, endDatetime, subscaleSetting }: ActivityCompletion,
     ) => {
-      if (!areSubscalesVisible && subscaleSetting?.subscales?.length) {
-        areSubscalesVisible = true;
+      if (subscaleSetting?.subscales?.length) {
+        subscalesFrequency++;
       }
       const subscalesItems = subscaleSetting?.subscales?.reduce(
         (items: string[], subscale: ActivitySettingsSubscale) => {
@@ -530,7 +530,7 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
   );
 
   return {
-    areSubscalesVisible,
+    subscalesFrequency,
     formattedResponses,
   };
 };

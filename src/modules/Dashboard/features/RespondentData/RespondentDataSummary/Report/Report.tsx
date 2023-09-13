@@ -60,7 +60,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityCompletion[]>([]);
   const [responseOptions, setResponseOptions] = useState<Record<string, FormattedResponse[]>>();
-  const [areSubscalesVisible, setAreSubscalesVisible] = useState(false);
+  const [subscalesFrequency, setSubscalesFrequency] = useState(0);
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
   const { control, getValues } = useFormContext<SummaryFiltersForm>();
@@ -149,10 +149,10 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
         );
 
         setAnswers(sortedDecryptedAnswers);
-        const { areSubscalesVisible, formattedResponses } =
+        const { subscalesFrequency, formattedResponses } =
           getFormattedResponses(sortedDecryptedAnswers);
 
-        setAreSubscalesVisible(areSubscalesVisible);
+        setSubscalesFrequency(subscalesFrequency);
         setResponseOptions(formattedResponses);
       } finally {
         setIsLoading(false);
@@ -167,9 +167,9 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       ? answers.filter(({ answerId }) => answerId === currentActivityCompletionData.answerId)
       : answers;
 
-    const { areSubscalesVisible, formattedResponses } = getFormattedResponses(responses);
+    const { subscalesFrequency, formattedResponses } = getFormattedResponses(responses);
 
-    setAreSubscalesVisible(areSubscalesVisible);
+    setSubscalesFrequency(subscalesFrequency);
     setResponseOptions(formattedResponses);
   }, [currentActivityCompletionData]);
 
@@ -208,7 +208,13 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
             {!isLoading && answers.length > 0 && (
               <>
                 <ActivityCompleted answers={answers} versions={versions} />
-                {areSubscalesVisible && <Subscales answers={answers} versions={versions} />}
+                {!!subscalesFrequency && (
+                  <Subscales
+                    answers={answers}
+                    versions={versions}
+                    subscalesFrequency={subscalesFrequency}
+                  />
+                )}
                 {responseOptions && !!Object.values(responseOptions).length && (
                   <ResponseOptions responseOptions={responseOptions} versions={versions} />
                 )}
