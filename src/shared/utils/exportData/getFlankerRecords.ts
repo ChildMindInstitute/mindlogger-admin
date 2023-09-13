@@ -177,7 +177,7 @@ const DEFAULT_VALUE = '.';
 export const getFlankerRecords = (
   responses: DecryptedFlankerAnswer['value'],
   item: Item<FlankerConfig>,
-  experimentClock: number,
+  experimentClock: string,
 ) => {
   const result: any[] = [];
   let trialStartTimestamp = 0;
