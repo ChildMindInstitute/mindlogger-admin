@@ -12,7 +12,7 @@ import {
 } from 'shared/styles';
 import { DateFormats } from 'shared/consts';
 
-import { StyledBackground, StyledMdEditor, StyledTooltip } from './ChartTooltip.styles';
+import { StyledBackground, StyledMdPreview, StyledTooltip } from './ChartTooltip.styles';
 import { ChartTooltipProps } from './ChartTooltip.types';
 
 export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
@@ -34,7 +34,7 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
               </StyledLabelMedium>
             </StyledFlexTopCenter>
             {optionText && (
-              <StyledMdEditor sx={{ mt: theme.spacing(1) }} modelValue={optionText} previewOnly />
+              <StyledMdPreview sx={{ mt: theme.spacing(1) }} modelValue={optionText} />
             )}
           </StyledFlexColumn>
         ))}

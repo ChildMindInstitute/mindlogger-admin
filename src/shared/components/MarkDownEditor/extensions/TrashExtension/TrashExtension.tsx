@@ -1,12 +1,10 @@
-import MdEditor from 'md-editor-rt';
+import { NormalToolbar } from 'md-editor-rt';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 
 import { TrashExtensionProps } from './TrashExtension.types';
 import { StyledIconCenter } from '../Extensions.styles';
-
-const NormalToolbar = MdEditor.NormalToolbar;
 
 export const TrashExtension = ({ onClick }: TrashExtensionProps) => {
   const { t } = useTranslation('app');

@@ -7,6 +7,8 @@ module.exports = function override(config) {
     buffer: require.resolve('buffer'),
     stream: require.resolve('stream-browserify'),
     process: false,
+    fs: false,
+    path: false,
   };
   config.plugins.push(
     new webpack.ProvidePlugin({
