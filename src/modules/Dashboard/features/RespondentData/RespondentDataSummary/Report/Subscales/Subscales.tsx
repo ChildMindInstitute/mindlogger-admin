@@ -15,7 +15,6 @@ import {
   SubscaleScore,
   SubscalesProps,
 } from './Subscales.types';
-import { FREQUENCY } from './Subscales.consts';
 import { AllScores } from './AllScores';
 import {
   getSubscalesToRender,
@@ -24,7 +23,7 @@ import {
   formatCurrentSubscales,
 } from './Subscales.utils';
 
-export const Subscales = ({ answers, versions }: SubscalesProps) => {
+export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesProps) => {
   const { currentActivityCompletionData } = useContext(ReportContext);
 
   const { finalScores, latestFinalScore, allSubscalesScores, allSubscalesToRender } = useMemo(
@@ -152,7 +151,7 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
       additionalInformation: {
         description: calculatedTotalScore?.optionText,
       },
-      frequency: FREQUENCY,
+      frequency: subscalesFrequency,
       subscaleScores: [
         ...activityCompletionScores,
         ...(calculatedTotalScore?.score
@@ -184,7 +183,7 @@ export const Subscales = ({ answers, versions }: SubscalesProps) => {
 
   const allScores = {
     latestFinalScore,
-    frequency: answers.length,
+    frequency: subscalesFrequency,
     data: { subscales: lineChartSubscales || [] },
   };
 

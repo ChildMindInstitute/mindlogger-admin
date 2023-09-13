@@ -21,7 +21,6 @@ export const Header = ({
   rightButtonType,
   rightButtonCallback,
   searchValue,
-  setSearchValue,
   isRightButtonDisabled,
 }: HeaderProps) => {
   const { t } = useTranslation('app');

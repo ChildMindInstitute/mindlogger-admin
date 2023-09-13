@@ -431,12 +431,16 @@ export const formatActivityItemAnswers = (
   }
 };
 
-export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =>
-  activityResponses.reduce(
+export const getFormattedResponses = (activityResponses: ActivityCompletion[]) => {
+  let subscalesFrequency = 0;
+  const formattedResponses = activityResponses.reduce(
     (
       items: Record<string, FormattedResponse[]>,
       { decryptedAnswer, endDatetime, subscaleSetting }: ActivityCompletion,
     ) => {
+      if (subscaleSetting?.subscales?.length) {
+        subscalesFrequency++;
+      }
       const subscalesItems = subscaleSetting?.subscales?.reduce(
         (items: string[], subscale: ActivitySettingsSubscale) => {
           subscale?.items?.forEach((item) => {
@@ -520,5 +524,11 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
     },
     {},
   );
+
+  return {
+    subscalesFrequency,
+    formattedResponses,
+  };
+};
 
 export const getLatestReportUrl = (base64Str: string) => `data:application/pdf;base64,${base64Str}`;
