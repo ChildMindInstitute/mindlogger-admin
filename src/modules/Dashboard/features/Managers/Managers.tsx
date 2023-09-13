@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { updateManagersPinApi } from 'api';
+import { getWorkspaceManagersApi, updateManagersPinApi } from 'api';
 import { Actions, Pin, Search, Spinner } from 'shared/components';
-import { users, workspaces, Manager } from 'redux/modules';
+import { workspaces } from 'redux/modules';
 import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
-import { useAppDispatch } from 'redux/store';
+import { Manager } from 'modules/Dashboard/types';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
@@ -19,7 +19,9 @@ import { getActions, getHeadCells } from './Managers.const';
 export const Managers = () => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
-  const dispatch = useAppDispatch();
+  const [managersData, setManagersData] = useState<{ result: Manager[]; count: number } | null>(
+    null,
+  );
 
   useBreadcrumbs([
     {
@@ -29,21 +31,22 @@ export const Managers = () => {
   ]);
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
-  const managersData = users.useManagersData();
-  const loadingStatus = users.useManagersStatus();
-  const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
-  const { getWorkspaceManagers } = users.thunk;
+
+  const { execute: executeWorkspaceManagers, isLoading } = useAsync(
+    getWorkspaceManagersApi,
+    (response) => {
+      setManagersData(response?.data || null);
+    },
+  );
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    dispatch(
-      getWorkspaceManagers({
-        params: {
-          ownerId,
-          limit: DEFAULT_ROWS_PER_PAGE,
-          ...(appletId && { appletId }),
-        },
-      }),
-    ),
+    executeWorkspaceManagers({
+      params: {
+        ownerId,
+        limit: DEFAULT_ROWS_PER_PAGE,
+        ...(appletId && { appletId }),
+      },
+    }),
   );
 
   const { searchValue, handleSearch, handleReload, ...tableProps } = useTable((args) => {
@@ -55,7 +58,7 @@ export const Managers = () => {
       },
     };
 
-    return dispatch(getWorkspaceManagers(params));
+    return executeWorkspaceManagers(params);
   });
 
   const filterAppletsByRoles = (user: Manager) => ({
@@ -158,7 +161,7 @@ export const Managers = () => {
 
   useEffect(
     () => () => {
-      dispatch(users.actions.resetManagersData());
+      setManagersData(null);
     },
     [],
   );

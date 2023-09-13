@@ -1,4 +1,4 @@
-import { RespondentDetail } from 'redux/modules';
+import { RespondentDetail } from 'modules/Dashboard/types';
 import { Encryption } from 'shared/utils';
 
 export type RespondentsActions = {

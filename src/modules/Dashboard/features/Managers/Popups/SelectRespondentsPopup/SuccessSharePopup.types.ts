@@ -1,4 +1,4 @@
-import { Manager } from 'redux/modules';
+import { Manager } from 'modules/Dashboard/types';
 
 export type SelectRespondentsPopupProps = {
   appletName: string;

@@ -2,20 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { ApiError } from 'redux/modules';
-import { getWorkspaceRespondentsApi, getWorkspaceManagersApi, GetAppletsParams } from 'api';
+import { getWorkspaceRespondentsApi, GetAppletsParams } from 'api';
 
 import { RESPONDENTS_WITHOUT_LIMIT } from './Users.const';
-
-export const getWorkspaceRespondents = createAsyncThunk(
-  'users/getWorkspaceRespondents',
-  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
-    try {
-      return await getWorkspaceRespondentsApi({ params }, signal);
-    } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
-    }
-  },
-);
 
 export const getAllWorkspaceRespondents = createAsyncThunk(
   'users/getAllWorkspaceRespondents',
@@ -25,17 +14,6 @@ export const getAllWorkspaceRespondents = createAsyncThunk(
         { params: { ...params, limit: RESPONDENTS_WITHOUT_LIMIT } },
         signal,
       );
-    } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
-    }
-  },
-);
-
-export const getWorkspaceManagers = createAsyncThunk(
-  'users/getWorkspaceManagers',
-  async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
-    try {
-      return await getWorkspaceManagersApi({ params }, signal);
     } catch (exception) {
       return rejectWithValue(exception as AxiosError<ApiError>);
     }

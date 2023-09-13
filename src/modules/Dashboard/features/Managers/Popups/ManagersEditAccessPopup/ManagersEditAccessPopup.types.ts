@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { Roles } from 'shared/consts';
-import { Manager, ManagerApplet } from 'redux/modules';
+import { Manager, ManagerApplet } from 'modules/Dashboard/types';
 
 export type EditAccessPopupProps = {
   onClose: () => void;
