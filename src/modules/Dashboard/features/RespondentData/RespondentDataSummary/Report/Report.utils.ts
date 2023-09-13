@@ -129,20 +129,16 @@ export const compareActivityItem = (
 
       let prevAnswers: Answer[] = prevActivityItem.answers;
       let updatedAnswers: Answer[] = [];
-      const currAnswers = answers.reduce(
-        (answers: Record<string, Answer>, curr) => {
-          const value = curr.answer.value;
+      const currAnswers = answers.reduce((answers: Record<string, Answer>, curr) => {
+        const value = curr.answer.value;
 
-          return value === null || value === undefined
-            ? answers
-            : {
-                ...answers,
-                [value]: curr,
-              };
-        },
-
-        {},
-      );
+        return value === null || value === undefined
+          ? answers
+          : {
+              ...answers,
+              [value]: curr,
+            };
+      }, {});
 
       const sortedCurrOptions = getSortedOptions(activityItem.responseValues.options);
       const updatedOptions = sortedCurrOptions.reduce(

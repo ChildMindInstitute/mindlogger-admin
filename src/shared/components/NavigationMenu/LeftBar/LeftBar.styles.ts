@@ -60,12 +60,11 @@ export const StyledSettings = styled(Box, shouldForwardProp)`
 `;
 
 export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
-  justify-content: flex-end;
   flex-basis: 12rem;
   align-items: center;
   width: 12rem;
   height: 12rem;
-  padding: ${theme.spacing(0, 2.6, 1.2)};
+  padding: ${theme.spacing(3.2, 1.4, 1.6)};
   text-align: center;
   cursor: pointer;
   border-radius: ${variables.borderRadius.lg};

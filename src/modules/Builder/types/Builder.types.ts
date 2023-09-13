@@ -82,6 +82,7 @@ export type AppletFormValues = {
   themeId?: string | null;
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];
+  streamEnabled: boolean;
 };
 
 export type GetNewActivity = {

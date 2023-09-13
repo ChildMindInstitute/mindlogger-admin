@@ -27,14 +27,18 @@ export const BuilderAppletSettings = () => {
   };
 
   return (
-    <AppletSettings
-      isBuilder
-      settings={getSettings({
-        isNewApplet,
-        isPublished,
-        roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
-        onReportConfigSubmit: handleReportConfigSubmit,
-      })}
-    />
+    <>
+      {(isNewApplet || appletData) && (
+        <AppletSettings
+          isBuilder
+          settings={getSettings({
+            isNewApplet,
+            isPublished,
+            roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
+            onReportConfigSubmit: handleReportConfigSubmit,
+          })}
+        />
+      )}
+    </>
   );
 };
