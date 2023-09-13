@@ -18,6 +18,8 @@ import {
   TrashExtension,
   UnderlineExtension,
   VideoUploadExtension,
+  OrderedListExtension,
+  UnorderedListExtension,
 } from 'shared/components/MarkDownEditor';
 import { FileSizeExceededPopup } from 'shared/components/MarkDownEditor/FileSizeExceededPopup';
 import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
@@ -116,6 +118,8 @@ export const EditorController = <T extends FieldValues>({
                 <StrikethroughExtension key="strikethrough-extension" onInsert={onInsert} />,
                 <SubscriptExtension key="subscript-extension" onInsert={onInsert} />,
                 <SuperscriptExtension key="superscript-extension" onInsert={onInsert} />,
+                <OrderedListExtension key="orderedList-extension" onInsert={onInsert} />,
+                <UnorderedListExtension key="unorderedList-extension" onInsert={onInsert} />,
               ]}
               toolbars={[
                 'bold',
@@ -132,8 +136,8 @@ export const EditorController = <T extends FieldValues>({
                 4, // AlignTextExtension: right
                 '-',
                 'quote',
-                'orderedList',
-                'unorderedList',
+                12, // OrderedListExtension
+                13, // UnorderedListExtension
                 'link',
                 'codeRow',
                 'table',
