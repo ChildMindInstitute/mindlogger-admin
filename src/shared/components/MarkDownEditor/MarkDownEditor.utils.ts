@@ -1,5 +1,4 @@
 import { config } from 'md-editor-rt';
-
 import emoji from 'markdown-it-emoji';
 import sub from 'markdown-it-sub';
 import sup from 'markdown-it-sup';
