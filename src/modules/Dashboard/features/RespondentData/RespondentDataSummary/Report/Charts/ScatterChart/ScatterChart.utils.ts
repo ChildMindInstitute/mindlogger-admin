@@ -6,7 +6,7 @@ import { locales } from 'shared/consts';
 import { Version } from 'api';
 import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 
-import { getStepSize, getTimeConfig } from '../Charts.utils';
+import { getTimelineStepSize, getTimeConfig } from '../Charts.utils';
 import { POINT_RADIUS_DEFAULT } from '../Charts.const';
 
 export const getOptions = (
@@ -19,7 +19,7 @@ export const getOptions = (
   const max = maxDate.getTime();
 
   const timeConfig = getTimeConfig(min, max);
-  const stepSize = getStepSize(min, max);
+  const timelineStepSize = getTimelineStepSize(min, max);
 
   return {
     maintainAspectRatio: false,
@@ -77,7 +77,7 @@ export const getOptions = (
         ...timeConfig,
         ticks: {
           autoSkip: false,
-          stepSize,
+          stepSize: timelineStepSize,
           font: {
             size: 11,
           },
@@ -125,7 +125,7 @@ export const getData = (answers: ActivityCompletion[], versions: Version[]) => (
         x: new Date(endDatetime),
         y: 0,
         answerId,
-        isSubscalesVisible: !!subscaleSetting,
+        areSubscalesVisible: !!subscaleSetting?.subscales?.length,
       })),
       backgroundColor: variables.palette.primary,
       borderColor: variables.palette.primary,

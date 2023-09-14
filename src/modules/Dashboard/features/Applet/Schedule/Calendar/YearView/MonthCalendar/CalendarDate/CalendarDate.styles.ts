@@ -53,8 +53,8 @@ export const StyledDotsWrapper = styled(StyledFlexAllCenter)`
 `;
 
 export const StyledEventDot = styled(Box, shouldForwardProp)`
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 0.4rem;
+  height: 0.4rem;
   flex-shrink: 0;
   margin: ${theme.spacing(0, 0.1)};
   background-color: ${({ bgColor }: { bgColor: string; isRounded: boolean }) => bgColor};

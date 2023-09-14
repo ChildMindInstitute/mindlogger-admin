@@ -13,6 +13,7 @@ import {
   SLIDER_VALUE_LABEL_MAX_LENGTH,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { concatIf } from 'shared/utils';
 
 import { Header } from './Header';
 import { SliderInputType, SliderPanelProps } from './SliderPanel.types';
@@ -39,7 +40,13 @@ const commonUploaderProps = {
   uiType: UploaderUiType.Secondary,
 };
 
-export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: SliderPanelProps) => {
+export const SliderPanel = ({
+  name,
+  label,
+  index,
+  isMultiple = false,
+  onRemove,
+}: SliderPanelProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [error, setError] = useState<FieldError | undefined>();
 
@@ -133,7 +140,11 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
   };
 
   const marks = hasTickMarks && getMarks(minValue, maxValue, hasTickMarksLabels);
-  const dataTestid = 'builder-activity-items-item-configuration-slider';
+  const dataTestid = concatIf(
+    'builder-activity-items-item-configuration-slider',
+    `-rows-${index}`,
+    isMultiple,
+  );
 
   useEffect(() => {
     const errors = scoresError.error as unknown as FieldError[] | undefined;
@@ -242,7 +253,7 @@ export const SliderPanel = ({ name, label, index, isMultiple, onRemove }: Slider
                 />
                 <Table
                   columns={getHeadCells(minValue, maxValue)}
-                  rows={getTableRows(scores, sliderName)}
+                  rows={getTableRows(scores, sliderName, `${dataTestid}-scores-table`)}
                   orderBy="0"
                   uiType={UiType.Secondary}
                   data-testid={`${dataTestid}-scores-table`}

@@ -1,4 +1,10 @@
-import { MAX_LABEL_CHARS_Y, MS_PER_DAY, MS_PER_HOUR } from './Charts.const';
+import {
+  MAX_TICKS_LENGTH,
+  MIN_TICKS_LENGTH,
+  MAX_LABEL_CHARS_Y,
+  MS_PER_DAY,
+  MS_PER_HOUR,
+} from './Charts.const';
 
 export const truncateString = (label: string) =>
   label?.length > MAX_LABEL_CHARS_Y ? `${label.substring(0, MAX_LABEL_CHARS_Y)}...` : label;
@@ -33,7 +39,7 @@ export const getTimeConfig = (minMs: number, maxMs: number) => {
   };
 };
 
-export const getStepSize = (minMs: number, maxMs: number) => {
+export const getTimelineStepSize = (minMs: number, maxMs: number) => {
   const msDiff = maxMs - minMs;
   const days = msDiff / MS_PER_DAY;
   if (days > 365) return 21; // step is 21d
@@ -49,3 +55,6 @@ export const getStepSize = (minMs: number, maxMs: number) => {
 
   return 15; // step is 15m
 };
+
+export const getTicksStepSize = (maxScore: number) =>
+  maxScore > 2 ? Math.ceil(maxScore / MAX_TICKS_LENGTH) : maxScore / MIN_TICKS_LENGTH;

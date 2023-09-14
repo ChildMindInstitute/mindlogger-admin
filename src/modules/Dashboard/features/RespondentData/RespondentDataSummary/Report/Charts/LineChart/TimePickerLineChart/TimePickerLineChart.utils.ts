@@ -10,7 +10,7 @@ import {
 } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.const';
 
 import { locales, POINT_RADIUS_DEFAULT, LABEL_WIDTH_Y } from '../../Charts.const';
-import { getStepSize, getTimeConfig } from '../../Charts.utils';
+import { getTimelineStepSize, getTimeConfig } from '../../Charts.utils';
 import { DataProps } from './TimePickerLineChart.types';
 
 export const getOptions = (
@@ -23,7 +23,7 @@ export const getOptions = (
   const max = maxDate.getTime();
 
   const timeConfig = getTimeConfig(min, max);
-  const stepSize = getStepSize(min, max);
+  const timelineStepSize = getTimelineStepSize(min, max);
 
   return {
     responsive: true,
@@ -110,7 +110,7 @@ export const getOptions = (
         ...timeConfig,
         ticks: {
           autoSkip: false,
-          stepSize,
+          stepSize: timelineStepSize,
           font: {
             size: 11,
           },

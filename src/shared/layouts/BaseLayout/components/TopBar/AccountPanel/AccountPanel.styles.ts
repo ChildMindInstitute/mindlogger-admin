@@ -17,7 +17,7 @@ export const StyledAccountDrawer = styled(Drawer)`
   .MuiPaper-root {
     height: 100%;
     width: 40rem;
-    padding: ${theme.spacing(1.6, 0)};
+    padding: ${theme.spacing(1.6, 0, 1.2)};
     background-color: ${variables.palette.surface1};
     display: flex;
     flex-direction: column;
@@ -52,17 +52,16 @@ export const StyledAvatarWrapper = styled(StyledFlexAllCenter)`
 
 export const StyledFooter = styled(Box)`
   height: ${ACCOUNT_FOOTER_HEIGHT};
-  margin: ${theme.spacing(0, 1.6)};
-  padding: ${theme.spacing(2.7, 0, 0.8)};
-  border-top: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
+  padding: ${theme.spacing(1.6, 0, 0, 1.6)};
 `;
 
 export const StyledLogOutBtn = styled(Button)`
-  padding: ${theme.spacing(0.8, 0.4)};
-  border-radius: ${variables.borderRadius.lg};
-  height: auto;
   color: ${variables.palette.on_surface_variant};
-  font-weight: ${variables.font.weight.bold};
+  font-weight: ${variables.font.weight.regular};
+
+  svg {
+    fill: ${variables.palette.on_surface_variant};
+  }
 `;
 
 export const StyledQuantity = styled(StyledQuantityCircle)`
@@ -76,4 +75,11 @@ export const StyledCloseWrapper = styled(Box)`
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
+`;
+
+export const StyledDivider = styled('hr')`
+  background-color: ${variables.palette.surface_variant};
+  height: 0.1rem;
+  border: 0;
+  margin: ${theme.spacing(0, 1.6)};
 `;

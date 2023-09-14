@@ -10,3 +10,4 @@ export * from './TransferOwnershipSetting';
 export * from './AppletSettings';
 export * from './PublishConcealAppletSetting';
 export * from './VersionHistorySetting';
+export * from './LiveResponseStreamingSetting';

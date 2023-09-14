@@ -20,7 +20,7 @@ import { locales } from 'shared/consts';
 import { getOptions, getData } from './MultiScatterChart.utils';
 import { MultiScatterChartProps } from './MultiScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
-import { TOOLTIP_OFFSET_TOP, TOOLTIP_OFFSET_LEFT, CANVAS_VERTICAL_OFFSETS } from '../Charts.const';
+import { TOOLTIP_OFFSET_TOP, TOOLTIP_OFFSET_LEFT } from '../Charts.const';
 
 export const MultiScatterChart = ({
   color,
@@ -46,7 +46,6 @@ export const MultiScatterChart = ({
   ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
   const lang = i18n.language as keyof typeof locales;
-  const maxHeight = height + CANVAS_VERTICAL_OFFSETS;
 
   const hideTooltip = () => {
     const tooltipEl = tooltipRef.current;
@@ -109,7 +108,7 @@ export const MultiScatterChart = ({
   );
 
   return (
-    <Box sx={{ height: maxHeight }}>
+    <Box sx={{ height }}>
       {renderChart}
       <ChartTooltip
         ref={tooltipRef}
