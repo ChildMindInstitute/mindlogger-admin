@@ -27,7 +27,7 @@ export enum SelectUiType {
   Secondary = 'secondary',
 }
 
-export type FormInputProps = {
+type FormSelectProps = {
   options: Option[];
   value?: string;
   customChange?: (e: SelectEvent) => void;
@@ -38,4 +38,4 @@ export type FormInputProps = {
   'data-testid'?: string;
 } & TextFieldProps;
 
-export type SelectControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;
+export type SelectControllerProps<T extends FieldValues> = FormSelectProps & UseControllerProps<T>;
