@@ -8,7 +8,7 @@ type CounterProps = {
   counterProps?: Record<string, unknown>;
 };
 
-type FormInputProps = {
+export type FormInputProps = {
   textAdornment?: string;
   tooltip?: string;
   maxLength?: number;
@@ -17,10 +17,10 @@ type FormInputProps = {
   isEmptyStringAllowed?: boolean;
   isErrorVisible?: boolean;
   restrictExceededValueLength?: boolean;
-  onAddNumber?: (value: number) => void;
-  onDistractNumber?: (value: number) => void;
+  onArrowPress?: (value: number) => void;
   Counter?: FC<PropsWithChildren<CounterProps>>;
   counterProps?: Record<string, unknown>;
+  withDebounce?: boolean;
   'data-testid'?: string;
 } & TextFieldProps;
 
