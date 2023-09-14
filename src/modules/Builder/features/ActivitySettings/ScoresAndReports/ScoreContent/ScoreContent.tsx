@@ -32,12 +32,10 @@ import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 import { Title } from '../Title';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
 import { ScoreCondition } from './ScoreCondition';
+import { calculationTypes } from './ScoreContent.const';
 import {
-  calculationTypes,
   getScoreItemsColumns,
   getSelectedItemsColumns,
-} from './ScoreContent.const';
-import {
   getDefaultConditionalValue,
   getIsScoreIdVariable,
   getScoreId,

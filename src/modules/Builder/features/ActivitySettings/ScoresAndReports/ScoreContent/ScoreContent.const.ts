@@ -1,21 +1,4 @@
-import i18n from 'i18n';
 import { CalculationType } from 'shared/consts';
-
-const { t } = i18n;
-
-export const getScoreItemsColumns = () => [
-  {
-    key: 'name',
-    label: t('availableItems'),
-  },
-];
-
-export const getSelectedItemsColumns = () => [
-  {
-    key: 'name',
-    label: t('selectedItems'),
-  },
-];
 
 export const calculationTypes = [
   {

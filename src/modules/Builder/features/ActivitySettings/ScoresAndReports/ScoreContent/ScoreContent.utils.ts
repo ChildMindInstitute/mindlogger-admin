@@ -1,5 +1,6 @@
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
+import i18n from 'i18n';
 import {
   ScoreReport,
   Item,
@@ -12,6 +13,22 @@ import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared
 import { getEntityKey } from 'shared/utils';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
+
+const { t } = i18n;
+
+export const getScoreItemsColumns = () => [
+  {
+    key: 'name',
+    label: t('availableItems'),
+  },
+];
+
+export const getSelectedItemsColumns = () => [
+  {
+    key: 'name',
+    label: t('selectedItems'),
+  },
+];
 
 export const getTableScoreItems = (items: Item[]) =>
   items?.map((item) => ({

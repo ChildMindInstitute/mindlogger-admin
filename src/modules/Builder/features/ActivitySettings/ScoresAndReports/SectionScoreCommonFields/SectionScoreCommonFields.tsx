@@ -11,7 +11,8 @@ import { DataTableItem } from 'shared/components';
 
 import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { StyledEditor } from './SectionScoreCommonFields.styles';
-import { ItemTypesToPrint, getColumns } from './SectionScoreCommonFields.const';
+import { ItemTypesToPrint } from './SectionScoreCommonFields.const';
+import { getColumns } from './SectionScoreCommonFields.utils';
 
 export const SectionScoreCommonFields = ({
   name,
