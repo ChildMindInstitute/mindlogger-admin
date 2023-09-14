@@ -100,19 +100,4 @@ config({
       })
       .use(markdownItImSize);
   },
-  markdownItPlugins(plugins) {
-    return plugins.map((p) => {
-      if (p.type === 'image') {
-        return {
-          ...p,
-          options: {
-            ...p.options,
-            classes: 'my-class',
-          },
-        };
-      }
-
-      return p;
-    });
-  },
 });
