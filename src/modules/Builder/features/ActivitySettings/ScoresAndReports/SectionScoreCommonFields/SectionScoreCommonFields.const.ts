@@ -3,7 +3,7 @@ import { ItemResponseType } from 'shared/consts';
 
 const { t } = i18n;
 
-export const columns = [
+export const getColumns = () => [
   {
     key: t('name'),
     label: t('itemName'),

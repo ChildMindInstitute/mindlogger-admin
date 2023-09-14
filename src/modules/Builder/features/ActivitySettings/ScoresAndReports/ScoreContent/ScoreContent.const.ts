@@ -3,14 +3,14 @@ import { CalculationType } from 'shared/consts';
 
 const { t } = i18n;
 
-export const scoreItemsColumns = [
+export const getScoreItemsColumns = () => [
   {
     key: 'name',
     label: t('availableItems'),
   },
 ];
 
-export const selectedItemsColumns = [
+export const getSelectedItemsColumns = () => [
   {
     key: 'name',
     label: t('selectedItems'),

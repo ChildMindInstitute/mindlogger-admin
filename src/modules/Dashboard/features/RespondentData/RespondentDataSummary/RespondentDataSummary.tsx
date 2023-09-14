@@ -50,7 +50,7 @@ export const RespondentDataSummary = () => {
     }
 
     return <Report activity={selectedActivity!} identifiers={identifiers} versions={versions} />;
-  }, [selectedActivity, isLoading]);
+  }, [selectedActivity, isLoading, t]);
 
   useEffect(() => {
     const fetchFiltersData = async () => {
