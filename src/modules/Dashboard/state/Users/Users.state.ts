@@ -8,7 +8,5 @@ const initialStateData = {
 };
 
 export const state: UsersSchema = {
-  respondents: initialStateData,
   allRespondents: initialStateData,
-  managers: initialStateData,
 };

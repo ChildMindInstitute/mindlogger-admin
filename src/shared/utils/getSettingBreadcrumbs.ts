@@ -58,6 +58,10 @@ export const getSettingBreadcrumbs = (param: SettingParam, isPublished = false) 
       icon: 'grid-outlined',
       label: t('subscalesConfiguration'),
     },
+    [SettingParam.LiveResponseStreaming]: {
+      icon: 'live-response-streaming',
+      label: t('liveResponseStreaming'),
+    },
   };
 
   return settingBreadcrumbs[param];

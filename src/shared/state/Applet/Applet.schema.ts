@@ -609,6 +609,7 @@ export type SingleApplet = {
   encryption?: Encryption;
   isPublished?: boolean;
   activityCount?: number | null;
+  streamEnabled?: boolean | null;
 };
 
 export type AppletSchema = {

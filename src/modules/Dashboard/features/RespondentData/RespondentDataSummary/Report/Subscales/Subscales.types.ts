@@ -20,6 +20,7 @@ export type AdditionalInformation = {
 export type SubscalesProps = {
   answers: ActivityCompletion[];
   versions: Version[];
+  subscalesFrequency: number;
 };
 
 export type ParsedSubscale = {

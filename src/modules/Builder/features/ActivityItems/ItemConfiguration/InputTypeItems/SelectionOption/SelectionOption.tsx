@@ -9,10 +9,10 @@ import { InputController } from 'shared/components/FormComponents';
 import {
   theme,
   StyledBodyLarge,
-  StyledClearedButton,
   StyledFlexColumn,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
+  StyledIconButton,
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
@@ -175,12 +175,13 @@ export const SelectionOption = ({
       >
         <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
           <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-            <StyledClearedButton
+            <StyledIconButton
               onClick={handleOptionToggle}
+              sx={{ ml: theme.spacing(-0.8) }}
               data-testid={`${dataTestid}-collapse`}
             >
               <Svg id={optionOpen ? 'navigate-up' : 'navigate-down'} />
-            </StyledClearedButton>
+            </StyledIconButton>
             <StyledLabelBoldLarge sx={{ ml: theme.spacing(2) }}>{`${t('option')} ${
               index + 1
             }`}</StyledLabelBoldLarge>

@@ -839,5 +839,8 @@
   "configureServerForReport": "État du serveur: non configuré. Le rapport ne peut pas être généré.",
   "true": "Vrai",
   "false": "Faux",
-  "credits": "Crédits"
+  "credits": "Crédits",
+  "liveResponseStreaming": "Diffusion de réponses en direct",
+  "liveResponseStreamingDescription": "Envoyez les réponses à un serveur de votre choix, au fur et à mesure de leur saisie.<br/>Vous pouvez configurer le serveur dans l'application MindLogger.",
+  "liveResponseStreamingLabel": "Activer le streaming des données de réponse"
 }

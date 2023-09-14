@@ -38,6 +38,20 @@ export const auth = {
         },
       }) => data,
     ),
+  useUserInitials: (): string =>
+    useAppSelector(
+      ({
+        auth: {
+          authentication: { data },
+        },
+      }) =>
+        data
+          ? `${data.user.firstName.substring(0, 1)}${data.user.lastName.substring(
+              0,
+              1,
+            )}`.toUpperCase()
+          : '',
+    ),
   useLogoutInProgress: (): AuthSchema['isLogoutInProgress'] =>
     useAppSelector(({ auth: { isLogoutInProgress } }) => isLogoutInProgress),
 };

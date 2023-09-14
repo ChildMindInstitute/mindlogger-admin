@@ -8,7 +8,6 @@ import {
   DuplicateAppletSettings,
   DeleteAppletSetting,
   ReportConfigSetting,
-  DownloadSchemaSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
   ShareAppletSetting,
@@ -21,29 +20,26 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
   const dataTestid = 'dashboard-applet-settings';
 
   return [
-    ...(isManagerOrOwner(roles?.[0])
-      ? [
-          {
-            label: 'usersAndData',
-            items: [
-              {
-                icon: <Svg id="export" />,
-                label: 'exportData',
-                component: <ExportDataSetting />,
-                param: SettingParam.ExportData,
-                'data-testid': `${dataTestid}-export-data`,
-              },
-              {
-                icon: <Svg id="data-retention" />,
-                label: 'dataRetention',
-                component: <DataRetention isDashboard />,
-                param: SettingParam.DataRetention,
-                'data-testid': `${dataTestid}-data-retention`,
-              },
-            ],
-          },
-        ]
-      : []),
+    {
+      label: 'usersAndData',
+      isVisible: isManagerOrOwner(roles?.[0]),
+      items: [
+        {
+          icon: <Svg id="export" />,
+          label: 'exportData',
+          component: <ExportDataSetting />,
+          param: SettingParam.ExportData,
+          'data-testid': `${dataTestid}-export-data`,
+        },
+        {
+          icon: <Svg id="data-retention" />,
+          label: 'dataRetention',
+          component: <DataRetention isDashboard />,
+          param: SettingParam.DataRetention,
+          'data-testid': `${dataTestid}-data-retention`,
+        },
+      ],
+    },
     {
       label: 'appletContent',
       items: [
@@ -54,13 +50,14 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           param: SettingParam.EditApplet,
           'data-testid': `${dataTestid}-edit-applet`,
         },
-        {
-          icon: <Svg id="schema" />,
-          label: 'downloadSchema',
-          component: <DownloadSchemaSetting />,
-          param: SettingParam.DownloadSchema,
-          'data-testid': `${dataTestid}-download-schema`,
-        },
+        // Description: hid "Download Schema" logic until it will be used in future features
+        // {
+        //   icon: <Svg id="schema" />,
+        //   label: 'downloadSchema',
+        //   component: <DownloadSchemaSetting />,
+        //   param: SettingParam.DownloadSchema,
+        //   'data-testid': `${dataTestid}-download-schema`,
+        // },
         {
           icon: <Svg id="version-history" />,
           label: 'versionHistory',
@@ -68,17 +65,14 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           param: SettingParam.VersionHistory,
           'data-testid': `${dataTestid}-version-history`,
         },
-        ...(roles?.[0] === Roles.Owner
-          ? [
-              {
-                icon: <Svg id="transfer-ownership" />,
-                label: 'transferOwnership',
-                component: <TransferOwnershipSetting />,
-                param: SettingParam.TransferOwnership,
-                'data-testid': `${dataTestid}-transfer-ownership`,
-              },
-            ]
-          : []),
+        {
+          icon: <Svg id="transfer-ownership" />,
+          label: 'transferOwnership',
+          component: <TransferOwnershipSetting />,
+          param: SettingParam.TransferOwnership,
+          isVisible: roles?.[0] === Roles.Owner,
+          'data-testid': `${dataTestid}-transfer-ownership`,
+        },
         {
           icon: <Svg id="duplicate" />,
           label: 'duplicateApplet',
@@ -86,7 +80,6 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           param: SettingParam.DuplicateApplet,
           'data-testid': `${dataTestid}-duplicate-applet`,
         },
-
         {
           icon: <Svg id="trash" />,
           label: 'deleteApplet',
@@ -113,9 +106,6 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
     {
       label: 'sharing',
       items: [
-        // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
-        // introduced. (Story: AUS-4.1.4.10)
-        // Temporarily unhided for testing purposes
         {
           icon: <Svg id="share" />,
           label: 'shareToLibrary',
@@ -123,17 +113,15 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           param: SettingParam.ShareApplet,
           'data-testid': `${dataTestid}-share-to-library`,
         },
-        ...(roles?.includes(Roles.SuperAdmin)
-          ? [
-              {
-                icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
-                label: isPublished ? 'concealApplet' : 'publishApplet',
-                component: <PublishConcealAppletSetting isDashboard />,
-                param: SettingParam.PublishConceal,
-                'data-testid': `${dataTestid}-publish-conceal`,
-              },
-            ]
-          : []),
+
+        {
+          icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
+          label: isPublished ? 'concealApplet' : 'publishApplet',
+          component: <PublishConcealAppletSetting isDashboard />,
+          param: SettingParam.PublishConceal,
+          isVisible: roles?.includes(Roles.SuperAdmin),
+          'data-testid': `${dataTestid}-publish-conceal`,
+        },
       ],
     },
   ];

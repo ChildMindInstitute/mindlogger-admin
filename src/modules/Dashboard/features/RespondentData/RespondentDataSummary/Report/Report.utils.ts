@@ -129,20 +129,16 @@ export const compareActivityItem = (
 
       let prevAnswers: Answer[] = prevActivityItem.answers;
       let updatedAnswers: Answer[] = [];
-      const currAnswers = answers.reduce(
-        (answers: Record<string, Answer>, curr) => {
-          const value = curr.answer.value;
+      const currAnswers = answers.reduce((answers: Record<string, Answer>, curr) => {
+        const value = curr.answer.value;
 
-          return value === null || value === undefined
-            ? answers
-            : {
-                ...answers,
-                [value]: curr,
-              };
-        },
-
-        {},
-      );
+        return value === null || value === undefined
+          ? answers
+          : {
+              ...answers,
+              [value]: curr,
+            };
+      }, {});
 
       const sortedCurrOptions = getSortedOptions(activityItem.responseValues.options);
       const updatedOptions = sortedCurrOptions.reduce(
@@ -435,12 +431,16 @@ export const formatActivityItemAnswers = (
   }
 };
 
-export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =>
-  activityResponses.reduce(
+export const getFormattedResponses = (activityResponses: ActivityCompletion[]) => {
+  let subscalesFrequency = 0;
+  const formattedResponses = activityResponses.reduce(
     (
       items: Record<string, FormattedResponse[]>,
       { decryptedAnswer, endDatetime, subscaleSetting }: ActivityCompletion,
     ) => {
+      if (subscaleSetting?.subscales?.length) {
+        subscalesFrequency++;
+      }
       const subscalesItems = subscaleSetting?.subscales?.reduce(
         (items: string[], subscale: ActivitySettingsSubscale) => {
           subscale?.items?.forEach((item) => {
@@ -524,5 +524,11 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
     },
     {},
   );
+
+  return {
+    subscalesFrequency,
+    formattedResponses,
+  };
+};
 
 export const getLatestReportUrl = (base64Str: string) => `data:application/pdf;base64,${base64Str}`;

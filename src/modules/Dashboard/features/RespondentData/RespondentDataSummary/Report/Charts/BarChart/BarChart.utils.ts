@@ -3,7 +3,8 @@ import { LinearScale, ScriptableTooltipContext } from 'chart.js';
 import { pluck } from 'shared/utils';
 import { variables } from 'shared/styles';
 
-import { COLORS, OFFSET_Y_MAX, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
+import { COLORS, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
+import { getTicksStepSize } from '../Charts.utils';
 import { ChartData } from './BarChart.types';
 import { BORDER_RADIUS } from './BarChart.const';
 
@@ -22,6 +23,7 @@ export const getOptions = (
   tooltipHandler: (context: ScriptableTooltipContext<'bar'>) => void,
 ) => {
   const maxScore = Math.max(...pluck(chartData, 'score'));
+  const ticksStepSize = getTicksStepSize(maxScore);
 
   return {
     maintainAspectRatio: false,
@@ -57,14 +59,14 @@ export const getOptions = (
           scaleInstance.width = SUBSCALES_CHART_LABEL_WIDTH_Y;
         },
         ticks: {
-          stepSize: Math.ceil(maxScore / 16),
+          stepSize: ticksStepSize,
           color: variables.palette.on_surface,
           font: {
             family: 'Atkinson',
             size: 14,
           },
         },
-        suggestedMax: maxScore + OFFSET_Y_MAX,
+        suggestedMax: maxScore + ticksStepSize,
       },
       x: {
         grid: {

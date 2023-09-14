@@ -1,41 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store';
+import { Respondent } from 'modules/Dashboard/types';
 
 import * as thunk from './Users.thunk';
 import { state as initialState } from './Users.state';
-import { extraReducers, reducers } from './Users.reducer';
-import { Respondent, UsersSchema } from './Users.schema';
+import { extraReducers } from './Users.reducer';
+import { UsersSchema } from './Users.schema';
 
 export * from './Users.schema';
 
 const slice = createSlice({
   name: 'users',
   initialState,
-  reducers,
   extraReducers,
+  reducers: {},
 });
 
 export const users = {
   thunk,
   slice,
   actions: slice.actions,
-  useManagersData: (): UsersSchema['managers']['data'] =>
-    useAppSelector(
-      ({
-        users: {
-          managers: { data },
-        },
-      }) => data,
-    ),
-  useRespondentsData: (): UsersSchema['respondents']['data'] =>
-    useAppSelector(
-      ({
-        users: {
-          respondents: { data },
-        },
-      }) => data,
-    ),
   useAllRespondentsData: (): UsersSchema['allRespondents']['data'] =>
     useAppSelector(
       ({
@@ -44,6 +29,14 @@ export const users = {
         },
       }) => data,
     ),
+  useAllRespondentsStatus: (): UsersSchema['allRespondents']['status'] =>
+    useAppSelector(
+      ({
+        users: {
+          allRespondents: { status },
+        },
+      }) => status,
+    ),
   useRespondent: (id: string): Respondent | undefined =>
     useAppSelector(
       ({
@@ -51,21 +44,5 @@ export const users = {
           allRespondents: { data },
         },
       }) => data?.result.find((respondent: Respondent) => respondent.id === id),
-    ),
-  useRespondentsStatus: (): UsersSchema['respondents']['status'] =>
-    useAppSelector(
-      ({
-        users: {
-          respondents: { status },
-        },
-      }) => status,
-    ),
-  useManagersStatus: (): UsersSchema['managers']['status'] =>
-    useAppSelector(
-      ({
-        users: {
-          managers: { status },
-        },
-      }) => status,
     ),
 };

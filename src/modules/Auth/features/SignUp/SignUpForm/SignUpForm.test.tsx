@@ -25,7 +25,7 @@ describe('SignUp component tests', () => {
 
   test('should be able to disable submit button', async () => {
     await fireEvent.click(screen.getByLabelText(/I agree to the/i));
-    expect(screen.getByTestId('submit-btn')).toBeEnabled();
+    expect(screen.getByTestId('signup-form-signup')).toBeEnabled();
   });
 
   test('should be able to validate SignUp form', async () => {

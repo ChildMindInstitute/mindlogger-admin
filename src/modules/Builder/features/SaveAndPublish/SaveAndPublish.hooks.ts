@@ -16,6 +16,7 @@ import {
   Encryption,
   getDictionaryObject,
   getEncryptionToServer,
+  getSanitizedContent,
   getUpdatedAppletUrl,
   Mixpanel,
   SettingParam,
@@ -51,6 +52,7 @@ export const useAppletData = () => {
 
     return {
       ...appletInfo,
+      displayName: getSanitizedContent(appletInfo.displayName, true, true),
       activities: appletInfo?.activities.map(
         (activity) =>
           ({

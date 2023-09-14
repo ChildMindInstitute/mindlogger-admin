@@ -23,10 +23,10 @@ import { FileSizeExceededPopup } from 'shared/components/MarkDownEditor/FileSize
 import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType, UploadFileError } from 'shared/consts';
-import { StyledFlexColumn } from 'shared/styles';
-import { concatIf } from 'shared/utils';
+import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
+import { concatIf, getSanitizedContent } from 'shared/utils';
 
-import { StyledErrorText, StyledMdEditor } from './EditorController.styles';
+import { StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
 
 export const EditorController = <T extends FieldValues>({
@@ -62,6 +62,7 @@ export const EditorController = <T extends FieldValues>({
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>
             <StyledMdEditor
+              sanitize={(content: string) => getSanitizedContent(content)}
               editorId={editorId}
               className={`${uiType} ${disabled ? 'disabled' : ''} ${error ? 'has-error' : ''}`}
               ref={editorRef}
@@ -149,14 +150,15 @@ export const EditorController = <T extends FieldValues>({
                 'pageFullscreen',
                 'htmlPreview',
               ]}
-              footers={[0, '=', 1]}
-              defFooters={[
-                <FooterMessage inputSize={(value ?? '').length} key="footer-message" />,
-                <CharacterCounter inputSize={(value ?? '').length} key="character-counter" />,
-              ]}
+              footers={[]}
             />
+            <StyledFlexSpaceBetween sx={{ m: theme.spacing(0.4, 0, 2) }}>
+              <FooterMessage inputSize={(value ?? '').length} key="footer-message" error={error} />
+              {!error?.message && (
+                <CharacterCounter inputSize={(value ?? '').length} key="character-counter" />
+              )}
+            </StyledFlexSpaceBetween>
             {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
-            {error?.message && <StyledErrorText>{error.message}</StyledErrorText>}
           </StyledFlexColumn>
         )}
       />

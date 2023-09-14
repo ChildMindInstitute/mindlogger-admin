@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-admin",
-  "version": "0.42.0",
+  "version": "0.43.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -24,6 +24,7 @@
     "color-blend": "^4.0.0",
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.29.3",
+    "dompurify": "^3.0.5",
     "downloadjs": "^1.4.7",
     "file-saver": "^2.0.5",
     "history": "^5.3.0",
@@ -31,6 +32,7 @@
     "i18next-browser-languagedetector": "^7.0.0",
     "javascript-time-ago": "^2.5.9",
     "jszip": "^3.10.1",
+    "linkifyjs": "^4.1.1",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
@@ -87,6 +89,7 @@
     ]
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.2",
     "@types/downloadjs": "^1.4.3",
     "@types/file-saver": "^2.0.5",
     "@types/lodash.debounce": "^4.0.7",

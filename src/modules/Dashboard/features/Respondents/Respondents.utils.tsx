@@ -9,7 +9,7 @@ import {
   StyledLabelLarge,
   StyledFlexTopCenter,
 } from 'shared/styles';
-import { RespondentDetail } from 'redux/modules';
+import { RespondentDetail } from 'modules/Dashboard/types';
 
 import { RespondentsActions, ChosenAppletData, FilteredApplets } from './Respondents.types';
 

@@ -1,5 +1,5 @@
 import { Roles } from 'shared/consts';
-import { Manager } from 'redux/modules';
+import { Manager } from 'modules/Dashboard/types';
 
 import { Applet } from '../ManagersEditAccessPopup.types';
 

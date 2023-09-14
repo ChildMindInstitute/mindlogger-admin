@@ -5,8 +5,8 @@ import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import {
   StyledFlexTopCenter,
-  StyledClearedButton,
   StyledFlexAllCenter,
+  StyledIconButton,
 } from 'shared/styles/styledComponents';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/AccountPanel.const';
@@ -30,7 +30,7 @@ export const StyledIconWrapper = styled(StyledFlexTopCenter)`
   }
 `;
 
-export const StyledCollapseBtn = styled(StyledClearedButton)`
+export const StyledCollapseBtn = styled(StyledIconButton)`
   display: flex;
   align-items: center;
   margin-left: ${theme.spacing(1.4)};
