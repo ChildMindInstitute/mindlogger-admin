@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
-import { Respondent, users, workspaces } from 'redux/modules';
+import { workspaces } from 'redux/modules';
 import {
   useTimeAgo,
   useBreadcrumbs,
@@ -13,12 +13,12 @@ import {
   useEncryptionStorage,
 } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
-import { updateRespondentsPinApi } from 'api';
-import { useAppDispatch } from 'redux/store';
+import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
+import { Respondent } from 'modules/Dashboard/types';
 
 import {
   RespondentsTableHeader,
@@ -28,7 +28,12 @@ import {
 } from './Respondents.styles';
 import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
 import { getHeadCells } from './Respondents.const';
-import { ChosenAppletData, FilteredApplets, FilteredRespondents } from './Respondents.types';
+import {
+  ChosenAppletData,
+  FilteredApplets,
+  FilteredRespondents,
+  RespondentsData,
+} from './Respondents.types';
 import {
   DataExportPopup,
   ScheduleSetupPopup,
@@ -38,30 +43,32 @@ import {
 } from './Popups';
 
 export const Respondents = () => {
-  const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
   useBreadcrumbs();
 
+  const [respondentsData, setRespondentsData] = useState<RespondentsData | null>(null);
+
   const rolesData = workspaces.useRolesData();
-  const respondentsData = users.useRespondentsData();
-  const loadingStatus = users.useRespondentsStatus();
-  const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
   const { ownerId } = workspaces.useData() || {};
-  const { getWorkspaceRespondents } = users.thunk;
+
+  const { execute: getWorkspaceRespondents, isLoading } = useAsync(
+    getWorkspaceRespondentsApi,
+    (response) => {
+      setRespondentsData(response?.data || null);
+    },
+  );
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    dispatch(
-      getWorkspaceRespondents({
-        params: {
-          ownerId,
-          limit: DEFAULT_ROWS_PER_PAGE,
-          ...(appletId && { appletId }),
-        },
-      }),
-    ),
+    getWorkspaceRespondents({
+      params: {
+        ownerId,
+        limit: DEFAULT_ROWS_PER_PAGE,
+        ...(appletId && { appletId }),
+      },
+    }),
   );
 
   const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
@@ -73,7 +80,7 @@ export const Respondents = () => {
       },
     };
 
-    return dispatch(getWorkspaceRespondents(params));
+    return getWorkspaceRespondents(params);
   });
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
@@ -134,10 +141,10 @@ export const Respondents = () => {
     },
   };
 
-  const { execute } = useAsync(updateRespondentsPinApi, handleReload);
+  const { execute: updateRespondentsPin } = useAsync(updateRespondentsPinApi, handleReload);
 
   const handlePinClick = (userId: string) => {
-    execute({ ownerId, userId });
+    updateRespondentsPin({ ownerId, userId });
   };
 
   const formatRow = (user: Respondent): Row => {
@@ -235,7 +242,7 @@ export const Respondents = () => {
 
   useEffect(
     () => () => {
-      dispatch(users.actions.resetRespondentsData());
+      setRespondentsData(null);
     },
     [],
   );
