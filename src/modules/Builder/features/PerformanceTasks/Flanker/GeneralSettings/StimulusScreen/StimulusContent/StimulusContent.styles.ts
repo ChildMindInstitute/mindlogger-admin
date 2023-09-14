@@ -4,6 +4,7 @@ import {
   StyledBodyMedium,
   StyledClearedButton,
   StyledFlexTopCenter,
+  commonEllipsisStyles,
   theme,
   variables,
 } from 'shared/styles';
@@ -40,10 +41,8 @@ export const StyledBtmSection = styled(StyledFlexTopCenter)`
 `;
 
 export const StyledFileName = styled(StyledBodyMedium)`
+  ${commonEllipsisStyles};
   margin-left: ${theme.spacing(1)};
   color: ${variables.palette.on_surface_variant};
   width: 27rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
