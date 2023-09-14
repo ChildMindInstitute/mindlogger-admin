@@ -1,4 +1,4 @@
-import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
+import { DropdownToolbar, InsertContentGenerator } from 'md-editor-rt';
 import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -10,8 +10,6 @@ import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.
 import { SourceLinkModal } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
 import { MediaContentExtensionProps } from '../Extensions.types';
-
-const DropdownToolbar = MdEditor.DropdownToolbar;
 
 export const AudioUploadExtension = ({
   onInsert,

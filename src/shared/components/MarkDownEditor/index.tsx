@@ -12,5 +12,7 @@ export * from './extensions/UnderlineExtension';
 export * from './extensions/StrikethroughExtension';
 export * from './extensions/SubscriptExtension';
 export * from './extensions/SuperscriptExtension';
+export * from './extensions/OrderedListExtension';
+export * from './extensions/UnorderedListExtension';
 export * from './MarkDownEditor.utils';
 export * from './MarkDownEditor.const';

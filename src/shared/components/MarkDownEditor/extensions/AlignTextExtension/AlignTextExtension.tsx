@@ -1,11 +1,9 @@
-import MdEditor, { InsertContentGenerator } from 'md-editor-rt';
+import { NormalToolbar, InsertContentGenerator } from 'md-editor-rt';
 
 import { Svg } from 'shared/components/Svg';
 
 import { AlignTextExtensionProps } from './AlignTextExtension.types';
 import { StyledIconCenter } from '../Extensions.styles';
-
-const NormalToolbar = MdEditor.NormalToolbar;
 
 export const AlignTextExtension = ({ onInsert, type, title }: AlignTextExtensionProps) => {
   const markHandler = () => {
