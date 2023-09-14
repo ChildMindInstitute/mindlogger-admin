@@ -28,6 +28,7 @@ import {
   StyledWrapper,
   StyledHeader,
   StyledRow,
+  StyledFileName,
 } from './StimulusContent.styles';
 
 export const StimulusContent = () => {
@@ -131,14 +132,7 @@ export const StimulusContent = () => {
                     hasError={hasImgError}
                     data-testid={`${currentDataTestid}-image`}
                   />
-                  {text && (
-                    <StyledBodyLarge
-                      sx={{ ml: theme.spacing(1) }}
-                      color={variables.palette.on_surface_variant}
-                    >
-                      {text}
-                    </StyledBodyLarge>
-                  )}
+                  {text && <StyledFileName>{text}</StyledFileName>}
                 </StyledFlexTopCenter>
                 {hasImgError && (
                   <StyledBodyMedium
