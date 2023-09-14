@@ -12,16 +12,13 @@ export const getHeadCells = (min: number, max: number): HeadCell[] =>
     label: `${min + index}`,
   }));
 
-export const getTableRows = (scores: number[] = [], name: string) => [
+export const getTableRows = (scores: number[] = [], name: string, dataTestid: string) => [
   scores.reduce(
     (result, score, index) => ({
       ...result,
       [`${name}.scores[${index}]`]: {
         content: () => (
-          <ScoreCell
-            name={`${name}.scores[${index}]`}
-            data-testid={`builder-activity-items-item-configuration-slider-scores-table-score-${index}`}
-          />
+          <ScoreCell name={`${name}.scores[${index}]`} data-testid={`${dataTestid}-${index}`} />
         ),
         value: `${score}`,
       },
