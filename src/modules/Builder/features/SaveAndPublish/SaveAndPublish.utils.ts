@@ -134,6 +134,7 @@ const getScore = (score: ScoreReport, items: ActivityFormValues['items']) => ({
 const getSection = (section: SectionReport, items: ActivityFormValues['items']) => ({
   ...section,
   ...removeReportsFields(),
+  id: undefined,
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
       ...section.conditionalLogic,

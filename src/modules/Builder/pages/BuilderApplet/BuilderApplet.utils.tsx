@@ -681,6 +681,7 @@ const getScore = (score: ScoreReport, items: Activity['items']) => ({
 
 const getSection = (section: SectionReport, items: Activity['items']) => ({
   ...section,
+  id: uuidv4(),
   ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
