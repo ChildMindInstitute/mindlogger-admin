@@ -20,3 +20,8 @@ jest.mock('react-secure-storage', () => ({
   removeItem: jest.fn(() => Promise.resolve()),
   clear: jest.fn(() => Promise.resolve()),
 }));
+
+jest.mock('shared/utils/encryption', () => ({
+  __esModule: true,
+  ...jest.requireActual('shared/utils/encryption'),
+}));
