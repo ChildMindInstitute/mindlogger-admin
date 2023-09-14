@@ -22,6 +22,7 @@ import { CalculationType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { StyledButton } from '../ScoresAndReports.styles';
@@ -59,7 +60,6 @@ export const ScoreContent = ({
 
   const scoreConditionalsName = `${name}.conditionalLogic`;
 
-  const scoreConditionals = watch(scoreConditionalsName);
   const score = watch(name);
   const scoreName = watch(`${name}.name`);
   const scoreId = watch(`${name}.id`);
@@ -70,9 +70,18 @@ export const ScoreContent = ({
   const [scoreRangeLabel, setScoreRangeLabel] = useState<string>('-');
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
 
-  const { append, remove } = useFieldArray({
+  const {
+    fields: scoreConditionals,
+    append,
+    remove,
+  } = useFieldArray<
+    Record<string, ScoreConditionalLogic[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
     control,
     name: scoreConditionalsName,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
   const removeScoreConditional = (index: number) => {

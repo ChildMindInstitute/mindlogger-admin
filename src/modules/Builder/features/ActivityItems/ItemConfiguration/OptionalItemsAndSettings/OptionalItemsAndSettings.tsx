@@ -11,7 +11,6 @@ import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { AppletFormValues } from 'modules/Builder/types';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
@@ -47,7 +46,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
     const [optionsOpen, setOptionsOpen] = useState<boolean[]>([]);
 
-    const { control, setValue } = useFormContext<AppletFormValues>();
+    const { control, setValue } = useFormContext();
     const [settings, responseType, responseValues, palette] = useWatch({
       control,
       name: [
@@ -78,7 +77,11 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       append: appendOption,
       remove: removeOptions,
       update: updateOptions,
-    } = useFieldArray({
+    } = useFieldArray<
+      Record<string, SingleAndMultiSelectOption[]>,
+      string,
+      typeof REACT_HOOK_FORM_KEY_NAME
+    >({
       control,
       name: `${name}.responseValues.options`,
       keyName: REACT_HOOK_FORM_KEY_NAME,

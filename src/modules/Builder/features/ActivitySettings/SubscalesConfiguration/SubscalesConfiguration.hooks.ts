@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/types';
@@ -9,15 +9,18 @@ import { ageItem, genderItem } from './SubscalesConfiguration.const';
 
 export const useSubscalesSystemItemsSetup = () => {
   const { fieldName: activityFieldName } = useCurrentActivity();
-  const { control, watch } = useFormContext();
+  const { watch, setValue } = useFormContext();
   const itemsFieldName = `${activityFieldName}.items`;
-  const items: ItemFormValues[] = watch(itemsFieldName);
-  const { append: appendItem, remove: removeItem } = useFieldArray({
-    control,
-    name: itemsFieldName,
-  });
+  const items: ItemFormValues[] = watch(itemsFieldName) ?? [];
   const subscalesField = `${activityFieldName}.subscaleSetting.subscales`;
-  const subscales: ActivitySettingsSubscale[] = watch(subscalesField) ?? [];
+  const subscales: ActivitySettingsSubscale[] = watch(subscalesField);
+
+  const appendItem = (item: ItemFormValues) => setValue(itemsFieldName, [...items, item]);
+  const removeItem = (index: number | number[]) =>
+    setValue(
+      itemsFieldName,
+      items.filter((_, key) => (Array.isArray(index) ? index.includes(key) : index !== key)),
+    );
 
   useEffect(() => {
     const hasSubscaleLookupTable = subscales.some((subscale) => !!subscale.subscaleTableData);
@@ -30,8 +33,8 @@ export const useSubscalesSystemItemsSetup = () => {
     const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !subscaleSystemItems.length;
 
     if (shouldAddSubscaleSystemItems) {
-      appendItem(genderItem);
-      appendItem(ageItem);
+      appendItem(genderItem as ItemFormValues);
+      appendItem(ageItem as ItemFormValues);
 
       return;
     }

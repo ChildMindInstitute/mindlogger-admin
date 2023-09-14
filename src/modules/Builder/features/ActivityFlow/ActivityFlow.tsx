@@ -13,9 +13,9 @@ import { getUniqueName, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { AppletFormValues } from 'modules/Builder/types';
 import { useActivitiesRedirection } from 'modules/Builder/hooks';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import {
@@ -32,11 +32,11 @@ export const ActivityFlow = () => {
   } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const { t } = useTranslation('app');
-  const { watch, control, getFieldState } = useFormContext<AppletFormValues>();
+  const { watch, control, getFieldState } = useFormContext();
   const { appletId } = useParams();
   const navigate = useNavigate();
 
-  const activities: AppletFormValues['activities'] = watch('activities');
+  const activities: ActivityFormValues[] = watch('activities');
 
   const {
     fields: activityFlows,
@@ -45,10 +45,13 @@ export const ActivityFlow = () => {
     insert: insertActivityFlow,
     update: updateActivityFlow,
     move: moveActivityFlow,
-  } = useFieldArray({
+  } = useFieldArray<
+    Record<string, ActivityFlowFormValues[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
     control,
     name: 'activityFlows',
-    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
   const errors = activityFlows?.map((_, index) => !!getFieldState(`activityFlows.${index}`).error);

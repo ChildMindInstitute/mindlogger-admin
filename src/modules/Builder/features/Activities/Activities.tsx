@@ -10,6 +10,7 @@ import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
   getNewActivity,
   getNewPerformanceTask,
@@ -17,7 +18,6 @@ import {
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
 import { pluck, getUniqueName, Mixpanel } from 'shared/utils';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
@@ -27,7 +27,7 @@ import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch, getFieldState, setValue } = useFormContext<AppletFormValues>();
+  const { control, watch, getFieldState, setValue } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
@@ -40,7 +40,7 @@ export const Activities = () => {
     remove: removeActivity,
     update: updateActivity,
     move: moveActivity,
-  } = useFieldArray({
+  } = useFieldArray<Record<string, ActivityFormValues[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
     name: 'activities',
     keyName: REACT_HOOK_FORM_KEY_NAME,

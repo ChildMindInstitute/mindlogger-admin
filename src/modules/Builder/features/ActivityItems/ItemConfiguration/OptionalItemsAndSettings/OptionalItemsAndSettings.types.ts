@@ -1,10 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { ItemResponseType } from 'shared/consts';
-import { ActivityItemPath } from 'modules/Builder/types';
 
 export type OptionalItemsProps = {
-  name: ActivityItemPath;
+  name: string;
 };
 
 export type OptionalItemsRef = {

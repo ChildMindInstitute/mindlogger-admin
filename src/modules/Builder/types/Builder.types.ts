@@ -201,5 +201,11 @@ export type GetActivitySubscaleSettingDuplicated = {
 
 export type ActivityPath = `activities.${number}`;
 export type ActivityItemsPath = `activities.${number}.items`;
-export type ActivityItemPath = `activities.${number}.items.${number}`;
+export type ActivityItemPath = `${ActivityItemsPath}.${number}`;
 export type ActivityConditionalLogicPath = `activities.${number}.conditionalLogic`;
+export type ActivityScoresAndReportsPath = `activities.${number}.scoresAndReports`;
+export type ActivityReportsPath = `${ActivityScoresAndReportsPath}.reports`;
+export type ActivityReportPath = `${ActivityReportsPath}.${number}`;
+export type ActivityReportsGenerateReportPath = `${ActivityScoresAndReportsPath}.generateReport`;
+export type ActivityReportsShowScoreSummaryPath =
+  `${ActivityScoresAndReportsPath}.showScoreSummary`;

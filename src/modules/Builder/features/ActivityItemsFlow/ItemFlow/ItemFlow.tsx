@@ -38,12 +38,15 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const itemName = `${name}.${index}`;
   const conditionsName = `${itemName}.conditions`;
 
-  const { control, watch, getFieldState } = useFormContext();
-  const { append: appendCondition, remove: removeCondition } = useFieldArray({
+  const { control, getFieldState } = useFormContext();
+  const {
+    fields: conditions,
+    append: appendCondition,
+    remove: removeCondition,
+  } = useFieldArray({
     control,
     name: conditionsName,
   });
-  const conditions = watch(conditionsName);
 
   const handleAddCondition = () => {
     appendCondition(getEmptyCondition());

@@ -34,7 +34,7 @@ export const ActivityFlowBuilder = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [indexToUpdate, setIndexToUpdate] = useState<null | number>(null);
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext<AppletFormValues>();
+  const { control, watch } = useFormContext();
   const { activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
@@ -45,10 +45,9 @@ export const ActivityFlowBuilder = () => {
     insert,
     update,
     move,
-  } = useFieldArray({
+  } = useFieldArray<Record<string, ActivityFlowItem[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
     name: `activityFlows.${activityFlowIndex}.items`,
-    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
   const activities: AppletFormValues['activities'] = watch('activities');
   const dataTestid = 'builder-activity-flows-builder';

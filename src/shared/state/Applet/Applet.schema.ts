@@ -544,8 +544,8 @@ export type ScoreReport = {
   itemsScore: string[];
   itemsPrint?: string[];
   message?: string;
-  minScore: number;
-  maxScore: number;
+  minScore?: number;
+  maxScore?: number;
   conditionalLogic?: ScoreConditionalLogic[];
 };
 

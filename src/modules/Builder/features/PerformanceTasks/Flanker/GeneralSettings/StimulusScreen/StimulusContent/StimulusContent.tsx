@@ -18,6 +18,7 @@ import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/compone
 import { FlankerButtonSetting, FlankerStimulusSettings } from 'shared/state';
 import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
 import { getUploadedMediaName, getIsRequiredValidateMessage } from 'shared/utils';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { DeleteStimulusPopup } from './DeleteStimulusPopup';
 import { pressOptions } from './StimulusContent.const';
@@ -49,13 +50,22 @@ export const StimulusContent = () => {
   const buttonsField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.buttons`;
   const buttons: FlankerButtonSetting[] = watch(buttonsField);
   const hasTwoButtons = buttons?.length === 2;
-  const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
   const hasStimulusErrors = !!get(errors, stimulusObjField);
   const dataTestid = 'builder-activity-flanker-stimulus-screen';
 
-  const { append, remove, update } = useFieldArray({
+  const {
+    fields: stimulusTrials,
+    append,
+    remove,
+    update,
+  } = useFieldArray<
+    Record<string, FlankerStimulusSettings[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
     control,
     name: stimulusField,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
   const handleStimulusAdd = () =>
@@ -76,7 +86,7 @@ export const StimulusContent = () => {
     update(index, {
       ...stimulusTrials[index],
       value,
-    });
+    } as FlankerStimulusSettings);
   };
 
   useEffect(() => {
