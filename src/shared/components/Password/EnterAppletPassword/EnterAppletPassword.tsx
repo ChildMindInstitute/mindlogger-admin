@@ -26,6 +26,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
       const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
+
       if (!encryptionInfoFromServer) return;
 
       const { publicKey: publicKeyFromServer, ...restEncryption } = encryptionInfoFromServer;
@@ -39,7 +40,8 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
           .getPublicKey()
           .equals(Buffer.from(publicKeyFromServer as unknown as WithImplicitCoercion<string>))
       ) {
-        setAppletPrivateKey(appletId, Array.from(encryptionInfoGenerated.getPrivateKey()));
+        encryptionInfoGenerated?.getPrivateKey &&
+          setAppletPrivateKey(appletId, Array.from(encryptionInfoGenerated.getPrivateKey()));
         submitCallback();
 
         Mixpanel.track('Password added successfully');

@@ -12,14 +12,20 @@ import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { Modals, DeletePopupProps } from './DeletePopup.types';
 
-export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: DeletePopupProps) => {
+export const DeletePopup = ({
+  onCloseCallback,
+  'data-testid': dataTestid,
+  testApplet,
+  visibleByDefault,
+}: DeletePopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const { deletePopupVisible, applet: appletData } = popups.useData();
+  const { applet: appletData, ...popupsData } = popups.useData();
   const [activeModal, setActiveModal] = useState(Modals.PasswordCheck);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const { result } = applet.useAppletData() || {};
-  const currentApplet = appletData || result;
+  const currentApplet = testApplet || appletData || result;
+  const deletePopupVisible = visibleByDefault || popupsData?.deletePopupVisible;
 
   const deletePopupClose = () => {
     dispatch(
