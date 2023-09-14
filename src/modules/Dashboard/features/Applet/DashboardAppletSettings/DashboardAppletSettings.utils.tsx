@@ -8,7 +8,6 @@ import {
   DuplicateAppletSettings,
   DeleteAppletSetting,
   ReportConfigSetting,
-  DownloadSchemaSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
   ShareAppletSetting,
@@ -51,13 +50,14 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           param: SettingParam.EditApplet,
           'data-testid': `${dataTestid}-edit-applet`,
         },
-        {
-          icon: <Svg id="schema" />,
-          label: 'downloadSchema',
-          component: <DownloadSchemaSetting />,
-          param: SettingParam.DownloadSchema,
-          'data-testid': `${dataTestid}-download-schema`,
-        },
+        // Description: hid "Download Schema" logic until it will be used in future features
+        // {
+        //   icon: <Svg id="schema" />,
+        //   label: 'downloadSchema',
+        //   component: <DownloadSchemaSetting />,
+        //   param: SettingParam.DownloadSchema,
+        //   'data-testid': `${dataTestid}-download-schema`,
+        // },
         {
           icon: <Svg id="version-history" />,
           label: 'versionHistory',

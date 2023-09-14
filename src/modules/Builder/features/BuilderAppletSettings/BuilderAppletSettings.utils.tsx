@@ -4,7 +4,6 @@ import {
   DataRetention,
   TransferOwnershipSetting,
   ShareAppletSetting,
-  DownloadSchemaSetting,
   DeleteAppletSetting,
   ExportDataSetting,
   PublishConcealAppletSetting,
@@ -61,15 +60,16 @@ export const getSettings = ({
     {
       label: 'appletContent',
       items: [
-        {
-          icon: <Svg id="schema" />,
-          label: 'downloadSchema',
-          component: <DownloadSchemaSetting />,
-          param: SettingParam.DownloadSchema,
-          disabled: isNewApplet,
-          tooltip,
-          'data-testid': `${dataTestid}-download-schema`,
-        },
+        // Description: hid "Download Schema" logic until it will be used in future features
+        // {
+        //   icon: <Svg id="schema" />,
+        //   label: 'downloadSchema',
+        //   component: <DownloadSchemaSetting />,
+        //   param: SettingParam.DownloadSchema,
+        //   disabled: isNewApplet,
+        //   tooltip,
+        //   'data-testid': `${dataTestid}-download-schema`,
+        // },
         {
           icon: <Svg id="version-history" />,
           label: 'versionHistory',
