@@ -72,7 +72,7 @@ config({
         html: true, // Enable HTML tags in source
         xhtmlOut: true, // Use '/' to close single tags (<br />).
         breaks: true, // Convert '\n' in paragraphs into <br>
-        langPrefix: 'lang-', // CSS language prefix for fenced blocks. Can be
+        langPrefix: 'lang-', // CSS language prefix for fenced blocks.
         linkify: false,
         typographer: true,
         quotes: '“”‘’',

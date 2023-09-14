@@ -28,6 +28,15 @@ const commonStyles = `
   .md-editor-preview-wrapper .hljs-right {
     text-align: right;
   }
+  
+  .md-editor-preview-wrapper img {
+    max-width: 50%;
+  }
+  
+  .md-editor-preview-wrapper video {
+    max-width: 50%;
+    display: block;
+  }
 
 `;
 
