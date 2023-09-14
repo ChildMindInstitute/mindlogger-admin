@@ -28,7 +28,12 @@ import {
 } from './Respondents.styles';
 import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
 import { getHeadCells } from './Respondents.const';
-import { ChosenAppletData, FilteredApplets, FilteredRespondents } from './Respondents.types';
+import {
+  ChosenAppletData,
+  FilteredApplets,
+  FilteredRespondents,
+  RespondentsData,
+} from './Respondents.types';
 import {
   DataExportPopup,
   ScheduleSetupPopup,
@@ -44,15 +49,12 @@ export const Respondents = () => {
   const timeAgo = useTimeAgo();
   useBreadcrumbs();
 
-  const [respondentsData, setRespondentsData] = useState<{
-    result: Respondent[];
-    count: number;
-  } | null>(null);
+  const [respondentsData, setRespondentsData] = useState<RespondentsData | null>(null);
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: executeWorkspaceRespondents, isLoading } = useAsync(
+  const { execute: getWorkspaceRespondents, isLoading } = useAsync(
     getWorkspaceRespondentsApi,
     (response) => {
       setRespondentsData(response?.data || null);
@@ -60,7 +62,7 @@ export const Respondents = () => {
   );
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    executeWorkspaceRespondents({
+    getWorkspaceRespondents({
       params: {
         ownerId,
         limit: DEFAULT_ROWS_PER_PAGE,
@@ -78,7 +80,7 @@ export const Respondents = () => {
       },
     };
 
-    return executeWorkspaceRespondents(params);
+    return getWorkspaceRespondents(params);
   });
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
@@ -139,13 +141,10 @@ export const Respondents = () => {
     },
   };
 
-  const { execute: executeUpdateRespondentsPinApi } = useAsync(
-    updateRespondentsPinApi,
-    handleReload,
-  );
+  const { execute: updateRespondentsPin } = useAsync(updateRespondentsPinApi, handleReload);
 
   const handlePinClick = (userId: string) => {
-    executeUpdateRespondentsPinApi({ ownerId, userId });
+    updateRespondentsPin({ ownerId, userId });
   };
 
   const formatRow = (user: Respondent): Row => {

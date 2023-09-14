@@ -1,4 +1,4 @@
-import { RespondentDetail } from 'modules/Dashboard/types';
+import { Respondent, RespondentDetail } from 'modules/Dashboard/types';
 import { Encryption } from 'shared/utils';
 
 export type RespondentsActions = {
@@ -29,4 +29,9 @@ export type FilteredApplets = {
 
 export type FilteredRespondents = {
   [key: string]: FilteredApplets;
+};
+
+export type RespondentsData = {
+  result: Respondent[];
+  count: number;
 };

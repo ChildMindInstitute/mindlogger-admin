@@ -15,13 +15,12 @@ import { StyledBody } from 'shared/styles';
 import { ManagersRemoveAccessPopup, EditAccessPopup, EditAccessSuccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
 import { getActions, getHeadCells } from './Managers.const';
+import { ManagersData } from './Managers.types';
 
 export const Managers = () => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
-  const [managersData, setManagersData] = useState<{ result: Manager[]; count: number } | null>(
-    null,
-  );
+  const [managersData, setManagersData] = useState<ManagersData | null>(null);
 
   useBreadcrumbs([
     {
@@ -32,7 +31,7 @@ export const Managers = () => {
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: executeWorkspaceManagers, isLoading } = useAsync(
+  const { execute: getWorkspaceManagers, isLoading } = useAsync(
     getWorkspaceManagersApi,
     (response) => {
       setManagersData(response?.data || null);
@@ -40,7 +39,7 @@ export const Managers = () => {
   );
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    executeWorkspaceManagers({
+    getWorkspaceManagers({
       params: {
         ownerId,
         limit: DEFAULT_ROWS_PER_PAGE,
@@ -58,7 +57,7 @@ export const Managers = () => {
       },
     };
 
-    return executeWorkspaceManagers(params);
+    return getWorkspaceManagers(params);
   });
 
   const filterAppletsByRoles = (user: Manager) => ({
