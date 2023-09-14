@@ -60,6 +60,7 @@ export const getSettings = ({
     {
       label: 'appletContent',
       items: [
+        // Description: hid "Download Schema" logic until it will be used in future features
         // {
         //   icon: <Svg id="schema" />,
         //   label: 'downloadSchema',

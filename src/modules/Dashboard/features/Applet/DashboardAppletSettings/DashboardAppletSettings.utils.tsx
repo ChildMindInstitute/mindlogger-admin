@@ -50,6 +50,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           param: SettingParam.EditApplet,
           'data-testid': `${dataTestid}-edit-applet`,
         },
+        // Description: hid "Download Schema" logic until it will be used in future features
         // {
         //   icon: <Svg id="schema" />,
         //   label: 'downloadSchema',
