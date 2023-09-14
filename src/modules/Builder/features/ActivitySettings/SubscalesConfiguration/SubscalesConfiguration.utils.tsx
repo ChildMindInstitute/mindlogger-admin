@@ -192,21 +192,21 @@ export const getUsedWithinSubscalesElements = (
   );
 };
 
-export const columns = [
+export const getColumns = () => [
   {
     key: SubscaleColumns.Name,
     label: t('availableElements'),
   },
 ];
 
-export const notUsedElementsTableColumns = [
+export const getNotUsedElementsTableColumns = () => [
   {
     key: SubscaleColumns.Name,
     label: t('elementsNotIncludedInSubscale'),
   },
 ];
 
-export const allElementsTableColumns: DataTableColumn[] = [
+export const getAllElementsTableColumns = (): DataTableColumn[] => [
   {
     key: SharedElementColumns.Element,
     label: t('element'),

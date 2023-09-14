@@ -65,7 +65,7 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false
     );
 
     return { tabIndex, content, header };
-  }, [pathname]);
+  }, [pathname, t]);
 
   return (
     <>
