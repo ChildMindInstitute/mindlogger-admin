@@ -5,6 +5,4 @@ import { ConditionalLogicMatch } from 'shared/consts';
 export const defaultConditionalValue = {
   id: uuidv4(),
   name: 'section-condition',
-  match: ConditionalLogicMatch.All,
-  conditions: [{}],
 };
