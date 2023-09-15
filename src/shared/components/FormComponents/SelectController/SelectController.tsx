@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
 import { Box } from '@mui/material';
@@ -37,7 +36,6 @@ export const SelectController = <T extends FieldValues>({
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
-  const [selectOpen, setSelectOpen] = useState(false);
 
   const getMenuItem = ({
     labelKey,
@@ -130,11 +128,7 @@ export const SelectController = <T extends FieldValues>({
           MenuProps: {
             PaperProps: { sx: { ...selectDropdownStyles, ...dropdownStyles } },
           },
-          IconComponent: () => (
-            <Svg className="navigate-arrow" id={selectOpen ? 'navigate-up' : 'navigate-down'} />
-          ),
-          onClose: () => setSelectOpen(false),
-          onOpen: () => setSelectOpen(true),
+          IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
         }}
         data-testid={dataTestid}
       >

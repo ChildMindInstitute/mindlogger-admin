@@ -6,9 +6,21 @@ import { shouldForwardProp } from 'shared/utils';
 import { SelectUiType } from './SelectController.types';
 
 export const StyledTextField = styled(TextField)`
-  .navigate-arrow {
-    margin-right: ${theme.spacing(1.2)};
+  && {
+    .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+      padding-right: 4rem;
+    }
+  }
+
+  .MuiSelect-icon {
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
     fill: ${variables.palette.on_surface_variant};
+
+    &.MuiSelect-iconOpen {
+      transform: translateY(-50%) rotate(180deg);
+    }
   }
 `;
 

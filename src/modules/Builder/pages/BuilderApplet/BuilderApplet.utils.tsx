@@ -460,7 +460,6 @@ export const getNewPerformanceTask = ({
 export const getNewApplet = () => ({
   displayName: '',
   description: '',
-  // themeId: 'default',
   themeId: '',
   about: '',
   image: '',
