@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -8,6 +9,7 @@ import { getEntityKey } from 'shared/utils';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
+import { page } from 'resources';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -21,6 +23,8 @@ export const ActivityItems = () => {
 
   const { fieldName, activity } = useCurrentActivity();
   const { control, watch, trigger } = useFormContext();
+  const { appletId, activityId } = useParams();
+  const navigate = useNavigate();
 
   const {
     append: appendItem,
@@ -34,10 +38,29 @@ export const ActivityItems = () => {
   useBreadcrumbs();
   useActivitiesRedirection();
 
-  if (!activity) return null;
-
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
   const activeItem = items?.find((_, index) => index === activeItemIndex);
+
+  useEffect(() => {
+    if (activeItem) {
+      return navigate(
+        generatePath(page.builderAppletActivityItem, {
+          appletId,
+          activityId,
+          item: getEntityKey(activeItem),
+        }),
+      );
+    }
+
+    navigate(
+      generatePath(page.builderAppletActivityItems, {
+        appletId,
+        activityId,
+      }),
+    );
+  }, [activeItem]);
+
+  if (!activity) return null;
 
   const handleRemoveClick = (id: string) => {
     setItemIdToDelete(id);
