@@ -18,7 +18,7 @@ import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { InsertItem, DndDroppable } from 'modules/Builder/components';
-import { AppletFormValues, ActivityConditionalLogicPath } from 'modules/Builder/types';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { StyledBar, StyledHeaderTitle, StyledContent, StyledBtnWrapper } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
@@ -27,7 +27,6 @@ import { ConditionalPanel } from '../ConditionalPanel';
 import { getConditionsToRemove } from '../ActivityItems.utils';
 
 export const LeftBar = ({
-  items,
   activeItemIndex,
   onSetActiveItemIndex,
   onAddItem,
@@ -37,7 +36,7 @@ export const LeftBar = ({
   onMoveItem,
 }: LeftBarProps) => {
   const { t } = useTranslation('app');
-  const { setValue } = useFormContext<AppletFormValues>();
+  const { watch, setValue } = useFormContext();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const [isDragging, setIsDragging] = useState(false);
@@ -48,6 +47,7 @@ export const LeftBar = ({
   const [destinationIndex, setDestinationIndex] = useState(-1);
 
   const { fieldName, activity } = useCurrentActivity();
+  const items: ItemFormValues[] = watch(`${fieldName}.items`);
   const activeItemId = getEntityKey(items?.[activeItemIndex]);
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
@@ -78,7 +78,7 @@ export const LeftBar = ({
   };
   const handleConfirmRemoveConditionals = () => {
     setValue(
-      `${fieldName}.conditionalLogic` as ActivityConditionalLogicPath,
+      `${fieldName}.conditionalLogic`,
       activity.conditionalLogic?.filter(
         (condition: ConditionalLogic) =>
           !conditionalLogicKeysToRemove?.includes(getEntityKey(condition)),

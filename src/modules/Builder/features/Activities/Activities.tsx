@@ -97,11 +97,11 @@ export const Activities = () => {
 
     const newActivity =
       performanceTaskName && performanceTaskDesc && performanceTaskType
-        ? getNewPerformanceTask({
+        ? (getNewPerformanceTask({
             name,
             description: performanceTaskDesc,
             performanceTaskType,
-          })
+          }) as ActivityFormValues)
         : getNewActivity({ name });
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
@@ -144,7 +144,7 @@ export const Activities = () => {
       : getNewActivity({ activity: activityToDuplicate });
 
     insertActivity(index + 1, {
-      ...newActivity,
+      ...(newActivity as ActivityFormValues),
       name,
     });
   };

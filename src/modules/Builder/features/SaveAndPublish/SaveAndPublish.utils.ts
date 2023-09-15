@@ -33,7 +33,6 @@ import {
   RoundTypeEnum,
 } from 'modules/Builder/types';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ElementType } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
@@ -65,23 +64,16 @@ export const removeActivityExtraFields = () => ({
   performanceTaskType: undefined,
   isPerformanceTask: undefined,
   conditionalLogic: undefined,
-  [REACT_HOOK_FORM_KEY_NAME]: undefined,
 });
 
 export const removeActivityFlowExtraFields = () => ({
   createdAt: undefined,
-  [REACT_HOOK_FORM_KEY_NAME]: undefined,
-});
-
-export const removeActivityFlowItemExtraFields = () => ({
-  [REACT_HOOK_FORM_KEY_NAME]: undefined,
 });
 
 const removeItemExtraFields = () => ({
   key: undefined,
   settings: undefined,
   alerts: undefined,
-  [REACT_HOOK_FORM_KEY_NAME]: undefined,
 });
 
 export const remapSubscaleSettings = (activity: ActivityFormValues) => {

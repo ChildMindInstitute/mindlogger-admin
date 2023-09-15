@@ -91,8 +91,8 @@ export type GetNewActivity = {
 };
 
 export type GetNewPerformanceTask = {
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   performanceTask?: ActivityFormValues;
   performanceTaskType?: PerfTaskType;
 };
@@ -198,14 +198,3 @@ export type GetActivitySubscaleSettingDuplicated = {
   oldItems: ItemFormValues[];
   newItems: ItemFormValues[];
 };
-
-export type ActivityPath = `activities.${number}`;
-export type ActivityItemsPath = `activities.${number}.items`;
-export type ActivityItemPath = `${ActivityItemsPath}.${number}`;
-export type ActivityConditionalLogicPath = `activities.${number}.conditionalLogic`;
-export type ActivityScoresAndReportsPath = `activities.${number}.scoresAndReports`;
-export type ActivityReportsPath = `${ActivityScoresAndReportsPath}.reports`;
-export type ActivityReportPath = `${ActivityReportsPath}.${number}`;
-export type ActivityReportsGenerateReportPath = `${ActivityScoresAndReportsPath}.generateReport`;
-export type ActivityReportsShowScoreSummaryPath =
-  `${ActivityScoresAndReportsPath}.showScoreSummary`;

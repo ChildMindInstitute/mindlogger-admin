@@ -97,7 +97,6 @@ export const ActivityItems = () => {
   return (
     <StyledContainer>
       <LeftBar
-        items={items}
         activeItemIndex={activeItemIndex}
         onSetActiveItemIndex={setActiveItemIndex}
         onAddItem={handleAddItem}
