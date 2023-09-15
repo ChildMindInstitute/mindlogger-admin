@@ -23,9 +23,9 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AlertsSchema>): v
     alerts.requestId = initialState.alerts.requestId;
     alerts.status = 'success';
     alerts.data = {
-      notWatched: payload.data.notWatched,
-      count: payload.data.count,
-      result: uniqBy((alerts.data?.result ?? []).concat(payload.data.result), 'id'),
+      notWatched: payload?.data.notWatched,
+      count: payload?.data.count,
+      result: uniqBy((alerts.data?.result ?? []).concat(payload?.data.result), 'id'),
     };
   });
 

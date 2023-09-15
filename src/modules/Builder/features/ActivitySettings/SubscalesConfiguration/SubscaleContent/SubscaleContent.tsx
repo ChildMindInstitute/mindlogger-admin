@@ -15,8 +15,8 @@ import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
 import {
   getItemElements,
-  columns,
-  notUsedElementsTableColumns,
+  getColumns,
+  getNotUsedElementsTableColumns,
 } from '../SubscalesConfiguration.utils';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { StyledWrapper } from './SubscaleContent.styles';
@@ -63,13 +63,13 @@ export const SubscaleContent = ({
         <TransferListController
           name={`${name}.items`}
           items={items}
-          columns={columns}
+          columns={getColumns()}
           hasSearch={false}
           hasSelectedSection={false}
           data-testid={`${dataTestid}-items`}
         />
         <DataTable
-          columns={notUsedElementsTableColumns}
+          columns={getNotUsedElementsTableColumns()}
           data={notUsedElements}
           noDataPlaceholder={t('noElementsYet')}
           data-testid={`${dataTestid}-unused-items`}

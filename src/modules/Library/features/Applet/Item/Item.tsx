@@ -15,8 +15,8 @@ import { getHighlightedText, getDictionaryText } from 'shared/utils';
 import {
   StyledItemContainer,
   StyledItemHeader,
-  StyledMdEditor,
   StyledItemContent,
+  StyledMdPreview,
 } from './Item.styles';
 import { ItemProps } from './Item.types';
 import { getSelector, renderItemContent } from './Item.utils';
@@ -97,7 +97,7 @@ export const Item = ({
         <StyledSvgArrowContainer>
           <Svg id={itemVisible ? 'navigate-up' : 'navigate-right'} />
         </StyledSvgArrowContainer>
-        <StyledMdEditor modelValue={highlightedTextHtml} previewOnly />
+        <StyledMdPreview modelValue={highlightedTextHtml} />
       </StyledItemHeader>
       {itemVisible && <StyledItemContent>{renderItemContent(item, search)}</StyledItemContent>}
     </StyledItemContainer>

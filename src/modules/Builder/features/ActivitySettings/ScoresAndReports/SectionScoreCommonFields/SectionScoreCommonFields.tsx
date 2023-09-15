@@ -11,7 +11,8 @@ import { DataTableItem } from 'shared/components';
 
 import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { StyledEditor } from './SectionScoreCommonFields.styles';
-import { ItemTypesToPrint, columns } from './SectionScoreCommonFields.const';
+import { ItemTypesToPrint } from './SectionScoreCommonFields.const';
+import { getColumns } from './SectionScoreCommonFields.utils';
 
 export const SectionScoreCommonFields = ({
   name,
@@ -109,7 +110,7 @@ export const SectionScoreCommonFields = ({
         <TransferListController
           name={itemsPrintName}
           items={items as unknown as DataTableItem[]}
-          columns={columns}
+          columns={getColumns()}
           hasSearch={false}
           hasSelectedSection={false}
           isValueName

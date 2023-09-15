@@ -21,7 +21,7 @@ import {
 } from './SubscalesConfiguration.const';
 import {
   getSubscalesDefaults,
-  allElementsTableColumns,
+  getAllElementsTableColumns,
   getNotUsedElements,
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
@@ -169,7 +169,7 @@ export const SubscalesConfiguration = () => {
           <StyledTitleMedium>{t('elementsAssociatedWithSubscales')}</StyledTitleMedium>
           <DataTable
             tableHeadBackground={variables.palette.surface}
-            columns={allElementsTableColumns}
+            columns={getAllElementsTableColumns()}
             data={usedWithinSubscalesElements}
             noDataPlaceholder={t('noElementsYet')}
             data-testid="builder-activity-settings-subscales-elements-associated-with-subscales"

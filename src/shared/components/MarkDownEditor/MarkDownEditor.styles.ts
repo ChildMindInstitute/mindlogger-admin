@@ -1,9 +1,9 @@
-import MdEditor from 'md-editor-rt';
+import { MdEditor, MdPreview } from 'md-editor-rt';
 import { styled } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
 
-export const MarkDownEditor = styled(MdEditor)`
+const commonStyles = `
   &.md-editor-fullscreen {
     z-index: ${theme.zIndex.fab};
   }
@@ -16,4 +16,34 @@ export const MarkDownEditor = styled(MdEditor)`
       font-size: ${variables.font.size.lrg};
     }
   }
+  
+  .md-editor-preview-wrapper .hljs-left {
+    text-align: left;
+  }
+
+  .md-editor-preview-wrapper .hljs-center {
+    text-align: center;
+  }
+  
+  .md-editor-preview-wrapper .hljs-right {
+    text-align: right;
+  }
+  
+  .md-editor-preview-wrapper img {
+    max-width: 50%;
+  }
+  
+  .md-editor-preview-wrapper video {
+    max-width: 50%;
+    display: block;
+  }
+
+`;
+
+export const MarkDownEditor = styled(MdEditor)`
+  ${commonStyles}
+`;
+
+export const MarkDownPreview = styled(MdPreview)`
+  ${commonStyles}
 `;

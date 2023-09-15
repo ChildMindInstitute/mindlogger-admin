@@ -237,7 +237,7 @@ export const Respondents = () => {
           },
           { rows: [], filteredRespondents: {} },
         ) || { rows: undefined, filteredRespondents: {} },
-      [respondentsData],
+      [respondentsData, t],
     );
 
   useEffect(

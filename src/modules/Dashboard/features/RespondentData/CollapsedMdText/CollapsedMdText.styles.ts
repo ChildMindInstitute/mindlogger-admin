@@ -1,10 +1,10 @@
 import { Button, styled, Box } from '@mui/material';
 
-import { MarkDownEditor } from 'shared/components/MarkDownEditor';
+import { MarkDownPreview } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
-export const StyledMdEditor = styled(MarkDownEditor)`
+export const StyledMdPreview = styled(MarkDownPreview)`
   --md-bk-color: transparent;
   margin-bottom: ${theme.spacing(2.4)};
 

@@ -8,7 +8,7 @@ import { StyledHeadline, theme } from 'shared/styles';
 import { AdditionalInformation as AdditionalInformationProps } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
 
 import { LINK_PATTERN } from '../../Charts/Charts.const';
-import { StyledHeader, StyledContent, StyledMdEditor } from './AdditionalInformation.styles';
+import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInformation.styles';
 
 export const AdditionalInformation = ({ optionText }: AdditionalInformationProps) => {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ export const AdditionalInformation = ({ optionText }: AdditionalInformationProps
         </StyledHeadline>
       </StyledHeader>
       <StyledContent>
-        <StyledMdEditor modelValue={additionalInformation} previewOnly />
+        <StyledMdPreview modelValue={additionalInformation} />
       </StyledContent>
     </>
   );

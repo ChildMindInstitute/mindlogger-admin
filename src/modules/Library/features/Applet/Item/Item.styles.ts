@@ -1,7 +1,7 @@
 import styled from '@emotion/styled/macro';
 import { Box } from '@mui/material';
 
-import { MarkDownEditor } from 'shared/components';
+import { MarkDownPreview } from 'shared/components';
 import {
   theme,
   variables,
@@ -38,7 +38,7 @@ export const StyledItemHeader = styled(Box)`
   }
 `;
 
-export const StyledMdEditor = styled(MarkDownEditor)`
+export const StyledMdPreview = styled(MarkDownPreview)`
   background-color: transparent;
   color: ${variables.palette.on_surface_variant};
   font-size: ${variables.font.size.md};

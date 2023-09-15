@@ -32,8 +32,10 @@ import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 import { Title } from '../Title';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
 import { ScoreCondition } from './ScoreCondition';
-import { calculationTypes, scoreItemsColumns, selectedItemsColumns } from './ScoreContent.const';
+import { calculationTypes } from './ScoreContent.const';
 import {
+  getScoreItemsColumns,
+  getSelectedItemsColumns,
   getDefaultConditionalValue,
   getIsScoreIdVariable,
   getScoreId,
@@ -164,8 +166,8 @@ export const ScoreContent = ({
       <TransferListController
         name={`${name}.itemsScore`}
         items={tableItems}
-        columns={scoreItemsColumns}
-        selectedItemsColumns={selectedItemsColumns}
+        columns={getScoreItemsColumns()}
+        selectedItemsColumns={getSelectedItemsColumns()}
         hasSelectedSection
         searchKey="label"
         hasSearch

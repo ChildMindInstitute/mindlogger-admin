@@ -1,38 +1,26 @@
-import MdEditor from 'md-editor-rt';
+import { config } from 'md-editor-rt';
+import emoji from 'markdown-it-emoji';
+import sub from 'markdown-it-sub';
+import sup from 'markdown-it-sup';
+import deflist from 'markdown-it-deflist';
+import abbr from 'markdown-it-abbr';
+import footnote from 'markdown-it-footnote';
+import insert from 'markdown-it-ins';
+import mark from 'markdown-it-mark';
+import taskLists from 'markdown-it-task-lists';
+import container from 'markdown-it-container';
+import katex from 'markdown-it-katex-external';
+import miip from 'markdown-it-images-preview';
+import html5Embed from 'markdown-it-html5-embed';
+import markdownItImSize from 'markdown-it-imsize';
 
 import i18n from 'i18n';
-import { VALID_VIDEO_FILE_TYPES, VALID_AUDIO_FILE_TYPES } from 'shared/consts';
 
-import {
-  ALIGN_RULE,
-  LANGUAGE_BY_DEFAULT,
-  VIDEO_LINK_REGEX,
-  VideoSourcePlayerLinks,
-  VideoSources,
-  YOUTUBE_VIDEO_ID_REGEX,
-} from './MarkDownEditor.const';
+import { LANGUAGE_BY_DEFAULT } from './MarkDownEditor.const';
 
 const { t } = i18n;
 
-export const getValidMediaFormatsRegex = (validFileTypesArray: string[]) => {
-  const validFormatsArray = validFileTypesArray.map((format) => format.slice(1));
-
-  return new RegExp(`\\.(${validFormatsArray.join('|')})$`, 'i');
-};
-
-const getVideoIframe = (videoId: string, type: VideoSources, text?: string) =>
-  `${text ? `<figure><figcaption>${text}:</figcaption>` : ''}
-    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-      <iframe src="${
-        type === VideoSources.Youtube
-          ? VideoSourcePlayerLinks.Youtube
-          : VideoSourcePlayerLinks.Vimeo
-      }${videoId}" allowfullscreen
-        style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe>
-    </div>
-  `;
-
-MdEditor.config({
+config({
   editorConfig: {
     languageUserDefined: {
       [LANGUAGE_BY_DEFAULT]: {
@@ -78,177 +66,38 @@ MdEditor.config({
       },
     },
   },
-  markedRenderer(renderer) {
-    renderer.image = (href, title, text) => {
-      const videoExtensionMatch = href?.match(getValidMediaFormatsRegex(VALID_VIDEO_FILE_TYPES));
-      const videoLinkMatch = href?.match(VIDEO_LINK_REGEX);
-      const audioExtensionMatch = href?.match(getValidMediaFormatsRegex(VALID_AUDIO_FILE_TYPES));
-      if (videoExtensionMatch) {
-        return `${
-          text ? `<figure><figcaption>${text}:</figcaption>` : ''
-        }<video controls width="250"><source src="${href}"></video></figure>`;
-      }
-      if (audioExtensionMatch) {
-        return `${
-          text ? `<figure><figcaption>${text}:</figcaption>` : ''
-        }<audio controls><source src="${href}"></audio></figure>`;
-      }
-      if (videoLinkMatch) {
-        const defaultReturn = href ? `<a href="${href}" target="_blank">${text || href}</a>` : '';
-        const videoSource = videoLinkMatch[1];
-        const videoUrl = videoLinkMatch[3];
-        if (!videoSource || !videoUrl) return defaultReturn;
-
-        if (
-          videoSource.includes(VideoSources.Youtube) ||
-          videoSource.includes(VideoSources.Youtu)
-        ) {
-          const videoId = videoUrl.match(YOUTUBE_VIDEO_ID_REGEX)?.[1];
-
-          return videoId ? getVideoIframe(videoId, VideoSources.Youtube, text) : defaultReturn;
-        } else if (videoSource.includes(VideoSources.Vimeo)) {
-          const videoId = videoUrl.replace(/\D/g, '');
-
-          return videoId ? getVideoIframe(videoId, VideoSources.Vimeo, text) : defaultReturn;
-        }
-      }
-
-      return `<img src="${href}" alt="${text}" title="${title}" />`;
-    };
-    renderer.link = (href, title, text) =>
-      `<a href="${href}" title="${title ?? 'link-title'}" target="_blank">${text || href}</a>`;
-
-    return renderer;
+  markdownItConfig(mdit) {
+    mdit
+      .set({
+        html: true, // Enable HTML tags in source
+        xhtmlOut: true, // Use '/' to close single tags (<br />).
+        breaks: true, // Convert '\n' in paragraphs into <br>
+        langPrefix: 'lang-', // CSS language prefix for fenced blocks.
+        linkify: false,
+        typographer: true,
+        quotes: '“”‘’',
+      })
+      .use(emoji)
+      .use(taskLists)
+      .use(sup)
+      .use(sub)
+      .use(container)
+      .use(container, 'hljs-left') /* align left */
+      .use(container, 'hljs-center') /* align center */
+      .use(container, 'hljs-right') /* align right */
+      .use(deflist)
+      .use(abbr)
+      .use(footnote)
+      .use(insert)
+      .use(mark)
+      .use(container)
+      .use(miip)
+      .use(katex)
+      .use(html5Embed, {
+        html5embed: {
+          useImageSyntax: true,
+        },
+      })
+      .use(markdownItImSize);
   },
-  markedExtensions: [
-    {
-      name: 'mark',
-      level: 'inline',
-      start(src) {
-        return src.match(/==/)?.index;
-      },
-      tokenizer(src) {
-        const rule = /^==([^=\r\n]*={0,2}=?[^=\r\n]*)==|^==([^=\r\n]*)==/;
-        const match = rule.exec(src);
-        if (match) {
-          const token = {
-            type: 'mark',
-            raw: match[0],
-            text: (match[1] ?? match[2]).trim(),
-            tokens: [],
-          };
-          this.lexer.inline(token.text, token.tokens);
-
-          return token;
-        }
-      },
-      renderer(token) {
-        return `<mark>${this.parser.parseInline(token.tokens ?? [])}</mark>`;
-      },
-    },
-    {
-      name: 'underline',
-      level: 'inline',
-      start(src) {
-        return src.match(/\+\+/)?.index;
-      },
-      tokenizer(src) {
-        const rule = /^\+\+([^+\r\n]*\+{0,2}=?[^+\r\n]*)\+\+|^\+\+([^+\r\n]*)\+\+/;
-        const match = rule.exec(src);
-        if (match) {
-          const token = {
-            type: 'underline',
-            raw: match[0],
-            text: (match[1] ?? match[2]).trim(),
-            tokens: [],
-          };
-          this.lexer.inline(token.text, token.tokens);
-
-          return token;
-        }
-      },
-      renderer(token) {
-        return `<ins>${this.parser.parseInline(token.tokens ?? [])}</ins>`;
-      },
-    },
-    {
-      name: 'superscript',
-      level: 'inline',
-      start(src) {
-        return src.match(/\^/)?.index;
-      },
-      tokenizer(src) {
-        const rule = /^\^([^^]+)\^/;
-        const match = rule.exec(src);
-        if (match) {
-          const token = {
-            type: 'superscript',
-            raw: match[0],
-            text: match[1].trim(),
-            tokens: [],
-          };
-          this.lexer.inline(token.text, token.tokens);
-
-          return token;
-        }
-      },
-      renderer(token) {
-        return `<sup>${this.parser.parseInline(token.tokens ?? [])}</sup>`;
-      },
-    },
-    {
-      name: 'subscript',
-      level: 'inline',
-      start(src) {
-        return src.match(/\^/)?.index;
-      },
-      tokenizer(src) {
-        const rule = /^~([^~]+)~/;
-        const match = rule.exec(src);
-        if (match) {
-          const token = {
-            type: 'subscript',
-            raw: match[0],
-            text: match[1].trim(),
-            tokens: [],
-          };
-          this.lexer.inline(token.text, token.tokens);
-
-          return token;
-        }
-      },
-      renderer(token) {
-        return `<sub>${this.parser.parseInline(token.tokens ?? [])}</sub>`;
-      },
-    },
-    {
-      name: 'align',
-      level: 'block',
-      start(src) {
-        const match = ALIGN_RULE.exec(src);
-
-        return match ? match.index : -1;
-      },
-      tokenizer(src) {
-        const match = ALIGN_RULE.exec(src);
-        if (match) {
-          const token = {
-            type: 'align',
-            raw: match[0],
-            text: match[2].trim(),
-            tokens: [],
-            alignType: match[1],
-          };
-          this.lexer.inline(token.text, token.tokens);
-
-          return token;
-        }
-      },
-      renderer(token) {
-        return `<div style="text-align: ${token.alignType}">${this.parser.parseInline(
-          token.tokens ?? [],
-        )}</div>`;
-      },
-    },
-  ],
 });

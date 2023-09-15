@@ -1,1 +1,1 @@
-export { MarkDownEditor } from './MarkDownEditor.styles';
+export { MarkDownEditor, MarkDownPreview } from './MarkDownEditor.styles';

@@ -21,3 +21,11 @@ export const StyledMenuItem = styled(MenuItem)`
 export const StyledIconCenter = styled(StyledFlexAllCenter)`
   transform: translate(20%, 20%);
 `;
+
+export const StyledOrderedListIcon = styled(StyledFlexAllCenter)`
+  transform: translate(10%, 10%);
+`;
+
+export const StyledUnorderedListIcon = styled(StyledFlexAllCenter)`
+  transform: translate(-10%, -10%);
+`;

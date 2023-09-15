@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { StyledTitleLargish, variables } from 'shared/styles';
 import { useComponentSize } from 'shared/hooks';
 
-import { StyledBtn, StyledCollapsedContainer, StyledMdEditor } from './CollapsedMdText.styles';
+import { StyledBtn, StyledCollapsedContainer, StyledMdPreview } from './CollapsedMdText.styles';
 import { CollapsedMdTextProps } from './CollapsedMdText.types';
 
 export const CollapsedMdText = ({ text, maxHeight }: CollapsedMdTextProps) => {
@@ -27,7 +27,7 @@ export const CollapsedMdText = ({ text, maxHeight }: CollapsedMdTextProps) => {
     <>
       <StyledCollapsedContainer isOpen={isOpen} maxHeight={maxHeight} isLarge={isLarge}>
         <Box ref={containerRef}>
-          <StyledMdEditor modelValue={text} previewOnly />
+          <StyledMdPreview modelValue={text} />
         </Box>
       </StyledCollapsedContainer>
       {isLarge && (

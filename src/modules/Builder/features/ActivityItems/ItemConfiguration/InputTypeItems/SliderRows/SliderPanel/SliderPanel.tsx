@@ -1,37 +1,37 @@
-import { useState, ChangeEvent, useEffect } from 'react';
-import { useFormContext, FieldError } from 'react-hook-form';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { FieldError, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 
-import { UploaderUiType, Uploader, Table, UiType } from 'shared/components';
+import { Table, UiType, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { theme, StyledFlexTopCenter, StyledBodyMedium, variables } from 'shared/styles';
+import { StyledBodyMedium, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import {
-  SLIDER_LABEL_MAX_LENGTH,
   DEFAULT_SLIDER_MIN_NUMBER,
-  SLIDER_VALUE_LABEL_MAX_LENGTH,
-  DEFAULT_SLIDER_MAX_VALUE,
-  DEFAULT_SLIDER_MAX_NUMBER,
   DEFAULT_SLIDER_ROWS_MIN_NUMBER,
+  SLIDER_LABEL_MAX_LENGTH,
+  SLIDER_VALUE_LABEL_MAX_LENGTH,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { ItemAlert } from 'shared/state';
 import { concatIf } from 'shared/utils';
 
 import { Header } from './Header';
-import { SliderPanelProps } from './SliderPanel.types';
+import { SliderInputType, SliderPanelProps } from './SliderPanel.types';
 import {
-  StyledSliderPanelContainer,
   StyledInputContainer,
   StyledScoresContainer,
   StyledSlider,
+  StyledSliderPanelContainer,
 } from './SliderPanel.styles';
 import {
   getHeadCells,
-  getTableRows,
-  getStaticHeadRow,
-  getStaticBodyRow,
   getMarks,
+  getStaticBodyRow,
+  getStaticHeadRow,
+  getTableRows,
+  getMaxValue,
+  getMinValue,
+  setScoresAndAlertsChange,
 } from './SliderPanel.utils';
 
 const commonUploaderProps = {
@@ -51,119 +51,105 @@ export const SliderPanel = ({
   const [error, setError] = useState<FieldError | undefined>();
 
   const sliderName = `${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`;
+  const alertsName = `${name}.alerts`;
+  const minValueName = `${sliderName}.minValue`;
+  const maxValueName = `${sliderName}.maxValue`;
+  const scoresName = `${sliderName}.scores`;
 
   const { t } = useTranslation('app');
 
-  const { control, watch, setValue, getValues, getFieldState, formState } = useFormContext();
+  const { control, watch, setValue, getFieldState, formState } = useFormContext();
 
   const scoresError = getFieldState(`${sliderName}.scores`, formState);
 
   const { id, minValue, maxValue, scores } = watch(sliderName) || {};
   const settings = watch(`${name}.config`);
+  const alerts = watch(alertsName);
 
   const hasTickMarks = get(settings, ItemConfigurationSettings.HasTickMarks);
   const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-
-  useEffect(() => {
-    const subscription = watch((data, { name: attributeName }: { name?: string }) => {
-      const option = getValues(sliderName);
-
-      if (!option) return;
-
-      const { minValue, maxValue, scores } = option;
-
-      const scoresQuantity = maxValue - minValue + 1;
-
-      if (attributeName === `${sliderName}.minValue`) {
-        if (scores?.length < scoresQuantity) {
-          setValue(`${sliderName}.scores`, [Math.min(...scores) - 1].concat(scores));
-        }
-
-        if (scores?.length > scoresQuantity) {
-          setValue(`${sliderName}.scores`, scores?.slice(1));
-        }
-
-        if (hasAlerts) {
-          const alerts = getValues(`${name}.alerts`);
-
-          alerts?.forEach((alert: ItemAlert, index: number) => {
-            if (alert.value! < minValue) setValue(`${name}.alerts.${index}.value`, minValue);
-          });
-        }
-      }
-
-      if (attributeName === `${sliderName}.maxValue`) {
-        if (scores?.length < scoresQuantity) {
-          setValue(`${sliderName}.scores`, scores.concat(Math.max(...scores) + 1));
-        }
-
-        if (scores?.length > scoresQuantity) {
-          setValue(`${sliderName}.scores`, scores?.slice(0, scoresQuantity));
-        }
-
-        if (hasAlerts) {
-          const alerts = getValues(`${name}.alerts`);
-
-          alerts?.forEach((alert: ItemAlert, index: number) => {
-            if (alert.value! > maxValue) setValue(`${name}.alerts.${index}.value`, maxValue);
-          });
-        }
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
+  const defaultMinNumberValue = isMultiple
+    ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
+    : DEFAULT_SLIDER_MIN_NUMBER;
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
-
-  const handleChangeMinScore = (event: ChangeEvent<HTMLInputElement>) => {
-    const minScoreName = `${sliderName}.minValue`;
-    const value = event.target.value;
-
-    if (value === '') return setValue(minScoreName, DEFAULT_SLIDER_MIN_NUMBER);
-
-    if (+value > maxValue - 1) return setValue(minScoreName, maxValue - 1);
-
-    if (+value < DEFAULT_SLIDER_MIN_NUMBER)
-      return setValue(minScoreName, DEFAULT_SLIDER_MIN_NUMBER);
-
-    setValue(minScoreName, +value);
-  };
-
-  const handleChangeMaxScore = (event: ChangeEvent<HTMLInputElement>) => {
-    const maxScoreName = `${sliderName}.maxValue`;
-    const value = event.target.value;
-
-    if (value === '') return setValue(maxScoreName, minValue);
-
-    if (+value > DEFAULT_SLIDER_MAX_VALUE) return setValue(maxScoreName, DEFAULT_SLIDER_MAX_VALUE);
-
-    if (+value < minValue + 1) return setValue(maxScoreName, minValue + 1);
-
-    setValue(maxScoreName, +value);
-  };
 
   const commonInputProps = {
     control,
     type: 'number',
   };
+  const commonSetScoresProps = {
+    scores,
+    alerts,
+    setValue,
+    scoresName,
+    alertsName,
+    hasAlerts,
+  };
+  const commonSetScoresMinProps = {
+    maxValue,
+    type: SliderInputType.MinValue,
+  };
+  const commonSetScoresMaxProps = {
+    minValue,
+    type: SliderInputType.MaxValue,
+  };
+
+  const handleMinValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    let value = event.target.value === '' ? DEFAULT_SLIDER_MIN_NUMBER : +event.target.value;
+    value = getMinValue(value, maxValue, defaultMinNumberValue);
+    setValue(minValueName, value);
+    setScoresAndAlertsChange({
+      minValue: value,
+      ...commonSetScoresMinProps,
+      ...commonSetScoresProps,
+    });
+  };
+
+  const handleMinValueArrowPress = (value: number) => {
+    const newValue = getMinValue(value, maxValue, defaultMinNumberValue);
+    setValue(minValueName, newValue);
+    setScoresAndAlertsChange({
+      minValue: newValue,
+      ...commonSetScoresMinProps,
+      ...commonSetScoresProps,
+    });
+  };
+
+  const handleMaxValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    let value = event.target.value === '' ? minValue : +event.target.value;
+    value = getMaxValue(value, minValue);
+    setValue(maxValueName, value);
+    setScoresAndAlertsChange({
+      maxValue: value,
+      ...commonSetScoresMaxProps,
+      ...commonSetScoresProps,
+    });
+  };
+
+  const handleMaxValueArrowPress = (value: number) => {
+    const newValue = getMaxValue(value, minValue);
+    setValue(maxValueName, newValue);
+    setScoresAndAlertsChange({
+      maxValue: newValue,
+      ...commonSetScoresMaxProps,
+      ...commonSetScoresProps,
+    });
+  };
 
   const marks = hasTickMarks && getMarks(minValue, maxValue, hasTickMarksLabels);
-
-  useEffect(() => {
-    const errors = scoresError.error as unknown as FieldError[] | undefined;
-    setError(errors?.filter((error) => error)?.[0]);
-  }, [scoresError]);
-
   const dataTestid = concatIf(
     'builder-activity-items-item-configuration-slider',
     `-rows-${index}`,
     isMultiple,
   );
+
+  useEffect(() => {
+    const errors = scoresError.error as unknown as FieldError[] | undefined;
+    setError(errors?.filter((error) => error)?.[0]);
+  }, [scoresError]);
 
   return (
     <StyledSliderPanelContainer
@@ -232,11 +218,9 @@ export const SliderPanel = ({
                 {...commonInputProps}
                 name={`${sliderName}.minValue`}
                 label={t('minValue')}
-                maxNumberValue={maxValue - 1}
-                onChange={handleChangeMinScore}
-                minNumberValue={
-                  isMultiple ? DEFAULT_SLIDER_ROWS_MIN_NUMBER : DEFAULT_SLIDER_MIN_NUMBER
-                }
+                onChange={handleMinValueChange}
+                onArrowPress={handleMinValueArrowPress}
+                withDebounce
                 data-testid={`${dataTestid}-min-value`}
               />
             </StyledFlexTopCenter>
@@ -251,9 +235,9 @@ export const SliderPanel = ({
                 {...commonInputProps}
                 name={`${sliderName}.maxValue`}
                 label={t('maxValue')}
-                onChange={handleChangeMaxScore}
-                maxNumberValue={DEFAULT_SLIDER_MAX_NUMBER}
-                minNumberValue={minValue + 1}
+                onChange={handleMaxValueChange}
+                onArrowPress={handleMaxValueArrowPress}
+                withDebounce
                 data-testid={`${dataTestid}-max-value`}
               />
             </StyledFlexTopCenter>
