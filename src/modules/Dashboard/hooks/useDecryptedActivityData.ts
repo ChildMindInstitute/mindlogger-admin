@@ -99,7 +99,7 @@ export const useDecryptedActivityData = (
             ...drawerAnswer,
             value: {
               ...drawerAnswer.value,
-              ...(drawerAnswer.value?.uri && { uri: migratedUrl.fileUrl }),
+              uri: migratedUrl?.fileUrl,
             },
           };
         }
