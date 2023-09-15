@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 
 import { MarkDownEditor } from 'shared/components/MarkDownEditor';
-import { StyledBodyMedium, theme, variables } from 'shared/styles';
+import { variables } from 'shared/styles';
 
 export const StyledMdEditor = styled(MarkDownEditor)`
   border-radius: ${variables.borderRadius.lg2};

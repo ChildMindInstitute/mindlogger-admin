@@ -460,7 +460,8 @@ export const getNewPerformanceTask = ({
 export const getNewApplet = () => ({
   displayName: '',
   description: '',
-  themeId: 'default',
+  // themeId: 'default',
+  themeId: '',
   about: '',
   image: '',
   watermark: '',
@@ -779,14 +780,14 @@ const getActivitySubscaleSetting = (
   };
 };
 
-export const getDefaultValues = (appletData?: SingleApplet) => {
+export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: string) => {
   if (!appletData) return getNewApplet();
 
   const processedApplet = {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
-    themeId: appletData.themeId === null ? 'default' : appletData.themeId,
+    themeId: appletData.themeId ?? defaultThemeId ?? '',
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,

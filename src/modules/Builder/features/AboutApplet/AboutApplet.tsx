@@ -10,30 +10,32 @@ import {
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
 import { Tooltip, Uploader } from 'shared/components';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_25MB, MAX_NAME_LENGTH } from 'shared/consts';
+import {
+  MAX_DESCRIPTION_LENGTH_LONG,
+  MAX_FILE_SIZE_25MB,
+  MAX_NAME_LENGTH,
+  TEXTAREA_ROWS_COUNT,
+} from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
+import { themes } from 'modules/Builder/state';
 import { BuilderContainer } from 'shared/features';
 
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
-import { colorThemeOptions } from './AboutApplet.const';
-
-const commonUploaderProps = {
-  width: 20,
-  height: 20,
-};
+import { getColorThemeOptions } from './AboutApplet.utils';
+import { commonUploaderProps } from './AboutApplet.const';
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
-
+  const { result: themesArr = [] } = themes.useThemesData() || {};
+  const themesOptions = getColorThemeOptions(themesArr);
+  const { control, setValue, watch } = useFormContext();
   useBreadcrumbs([
     {
       icon: 'more-info-outlined',
       label: t('aboutApplet'),
     },
   ]);
-
-  const { control, setValue, watch } = useFormContext();
 
   const commonInputProps = {
     control,
@@ -91,20 +93,26 @@ export const AboutApplet = () => {
               restrictExceededValueLength
               label={t('appletDescription')}
               multiline
-              rows={5}
+              rows={TEXTAREA_ROWS_COUNT}
               data-testid="about-applet-description"
             />
           </Box>
-          <StyledFlexTopCenter sx={{ position: 'relative' }}>
-            <SelectController
-              {...commonInputProps}
-              name="themeId"
-              label={t('appletColorTheme')}
-              options={colorThemeOptions}
-              sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
-              data-testid="about-applet-theme"
-            />
-          </StyledFlexTopCenter>
+          {!!themesArr.length && (
+            <StyledFlexTopCenter sx={{ position: 'relative' }}>
+              <SelectController
+                {...commonInputProps}
+                name="themeId"
+                label={t('appletColorTheme')}
+                options={themesOptions}
+                sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
+                dropdownStyles={{
+                  maxHeight: '25rem',
+                  width: '55rem',
+                }}
+                data-testid="about-applet-theme"
+              />
+            </StyledFlexTopCenter>
+          )}
         </StyledContainer>
         <Uploads uploads={uploads} />
       </StyledFlexTopCenter>

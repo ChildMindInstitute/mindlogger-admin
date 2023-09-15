@@ -368,11 +368,6 @@ export type Version = {
   createdAt: string;
 };
 
-export type Response<T> = {
-  count: number;
-  result: T[];
-};
-
 export type LatestReport = {
   appletId: string;
   activityId: string;

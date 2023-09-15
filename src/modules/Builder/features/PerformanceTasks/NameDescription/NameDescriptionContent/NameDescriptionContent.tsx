@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import { theme } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
-import { MAX_NAME_LENGTH, MAX_DESCRIPTION_LENGTH, TEXTAREA_ROWS } from 'shared/consts';
+import { MAX_NAME_LENGTH, MAX_DESCRIPTION_LENGTH, TEXTAREA_ROWS_COUNT } from 'shared/consts';
 
 export const NameDescriptionContent = () => {
   const { t } = useTranslation();
@@ -39,7 +39,7 @@ export const NameDescriptionContent = () => {
           label={t('activityDescription')}
           maxLength={MAX_DESCRIPTION_LENGTH}
           multiline
-          rows={TEXTAREA_ROWS}
+          rows={TEXTAREA_ROWS_COUNT}
           data-testid={`${dataTestid}-description`}
         />
       </Box>

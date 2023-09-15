@@ -1,9 +1,16 @@
-import { MenuItem, styled } from '@mui/material';
+import { MenuItem, styled, TextField } from '@mui/material';
 
 import { StyledBodyLarge, StyledFlexTopCenter, variables, theme } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 import { SelectUiType } from './SelectController.types';
+
+export const StyledTextField = styled(TextField)`
+  .navigate-arrow {
+    margin-right: ${theme.spacing(1.2)};
+    fill: ${variables.palette.on_surface_variant};
+  }
+`;
 
 export const StyledPlaceholder = styled(StyledBodyLarge)`
   position: absolute;
