@@ -1,4 +1,4 @@
-import { styled, Box } from '@mui/system';
+import { styled, Box } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import { StyledFlexColumn, StyledTitleMedium, theme, variables } from 'shared/styles';
