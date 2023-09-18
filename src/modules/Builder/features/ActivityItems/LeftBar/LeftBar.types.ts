@@ -1,7 +1,4 @@
-import { ItemFormValues } from 'modules/Builder/types';
-
 export type LeftBarProps = {
-  items: ItemFormValues[];
   activeItemIndex: number;
   onSetActiveItemIndex: (index: number) => void;
   onAddItem: () => void;

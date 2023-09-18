@@ -18,10 +18,11 @@ import { CheckboxController } from 'shared/components/FormComponents';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
 import { SettingParam, getEntityKey } from 'shared/utils';
-import { ScoresAndReports as ScoresAndReportsType } from 'shared/state';
 import { useIsServerConfigured } from 'shared/hooks';
+import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import { page } from 'resources';
 import { ScoreReportType } from 'shared/consts';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';
@@ -36,7 +37,7 @@ export const ScoresAndReports = () => {
   const { appletId } = useParams();
   const navigate = useNavigate();
   const { fieldName } = useCurrentActivity();
-  const { control, watch, setValue, getFieldState } = useFormContext();
+  const { control, setValue, getFieldState } = useFormContext();
 
   useActivitiesRedirection();
 
@@ -47,24 +48,25 @@ export const ScoresAndReports = () => {
   const isServerConfigured = useIsServerConfigured();
 
   const {
+    fields: reports,
     append: appendReport,
     remove: removeReport,
     move: moveReport,
-  } = useFieldArray({
+  } = useFieldArray<Record<string, ScoreOrSection[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
     name: reportsName,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  const reports: ScoresAndReportsType['reports'] = watch(reportsName);
   const isCheckboxesDisabled = !reports?.length;
   const dataTestid = 'builder-activity-settings-scores-and-reports';
 
   const handleAddScore = () => {
-    appendReport(getScoreDefaults());
+    appendReport(getScoreDefaults() as ScoreReport);
   };
 
   const handleAddSection = () => {
-    appendReport(getSectionDefaults());
+    appendReport(getSectionDefaults() as SectionReport);
   };
 
   const navigateToSettings = () =>

@@ -1,7 +1,7 @@
 import { ColorResult } from 'react-color';
 import { FieldValues, Path } from 'react-hook-form';
 
-import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 export enum ItemConfigurationSettings {
   HasScores = 'addScores',
@@ -63,3 +63,5 @@ export type ItemConfigurationProps = {
   name: string;
   onClose: () => void;
 };
+
+export type GetEmptyAlert = Partial<ItemFormValues>;

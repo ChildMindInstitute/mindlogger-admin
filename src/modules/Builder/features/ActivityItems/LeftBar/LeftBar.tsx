@@ -18,6 +18,7 @@ import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { InsertItem, DndDroppable } from 'modules/Builder/components';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { StyledBar, StyledHeaderTitle, StyledContent, StyledBtnWrapper } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
@@ -26,7 +27,6 @@ import { ConditionalPanel } from '../ConditionalPanel';
 import { getConditionsToRemove } from '../ActivityItems.utils';
 
 export const LeftBar = ({
-  items,
   activeItemIndex,
   onSetActiveItemIndex,
   onAddItem,
@@ -36,7 +36,7 @@ export const LeftBar = ({
   onMoveItem,
 }: LeftBarProps) => {
   const { t } = useTranslation('app');
-  const { setValue } = useFormContext();
+  const { watch, setValue } = useFormContext();
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
   const [isDragging, setIsDragging] = useState(false);
@@ -46,8 +46,9 @@ export const LeftBar = ({
   const [sourceIndex, setSourceIndex] = useState(-1);
   const [destinationIndex, setDestinationIndex] = useState(-1);
 
-  const activeItemId = getEntityKey(items?.[activeItemIndex]);
   const { fieldName, activity } = useCurrentActivity();
+  const items: ItemFormValues[] = watch(`${fieldName}.items`);
+  const activeItemId = getEntityKey(items?.[activeItemIndex]);
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
   const groupedConditions = getObjectFromList<ConditionalLogic>(activity.conditionalLogic ?? []);

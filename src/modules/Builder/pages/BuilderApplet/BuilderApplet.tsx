@@ -41,6 +41,7 @@ export const BuilderApplet = () => {
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
   const [isFromLibrary, setIsFromLibrary] = useState(false);
+  const [isAppletInitialized, setAppletInitialized] = useState(false);
   const { data: dataFromLibrary } = location.state ?? {};
   const hasLibraryData = isFromLibrary && dataFromLibrary;
   const isLoading =
@@ -124,6 +125,12 @@ export const BuilderApplet = () => {
     return removeAppletData;
   }, []);
 
+  useEffect(() => {
+    if (isAppletInitialized) return;
+
+    setAppletInitialized(isAppletLoaded || isNewApplet);
+  }, [isAppletLoaded, isNewApplet]);
+
   const { errors } = useFormState({
     control,
     name: ['displayName', 'activityFlows', 'activities'],
@@ -140,9 +147,18 @@ export const BuilderApplet = () => {
   return (
     <FormProvider {...methods}>
       <StyledBody sx={{ position: 'relative' }}>
-        {isLoading && <Spinner />}
-        <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
-        <SaveAndPublish hasPrompt={isDirty || isFromLibrary} setIsFromLibrary={setIsFromLibrary} />
+        {isAppletInitialized ? (
+          <>
+            {isLoading && <Spinner />}
+            <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
+            <SaveAndPublish
+              hasPrompt={isDirty || isFromLibrary}
+              setIsFromLibrary={setIsFromLibrary}
+            />
+          </>
+        ) : (
+          <Spinner />
+        )}
       </StyledBody>
     </FormProvider>
   );

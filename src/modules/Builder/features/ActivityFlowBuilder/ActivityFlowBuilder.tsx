@@ -9,11 +9,12 @@ import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautifu
 import { Menu } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
-import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
-import { ActivityFlowFormValues, ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
-import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
-import { getObjectFromList } from 'shared/utils';
 import { StyledMaxWidthWrapper } from 'shared/styles';
+import { getObjectFromList } from 'shared/utils';
+import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
+import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
+import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 import {
@@ -37,13 +38,17 @@ export const ActivityFlowBuilder = () => {
   const { activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
-  const { remove, append, insert, update, move } = useFieldArray({
+  const {
+    fields: activityFlowItems,
+    remove,
+    append,
+    insert,
+    update,
+    move,
+  } = useFieldArray<Record<string, ActivityFlowItem[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
     name: `activityFlows.${activityFlowIndex}.items`,
   });
-  const activityFlowItems: ActivityFlowFormValues['items'] = watch(
-    `activityFlows.${activityFlowIndex}.items`,
-  );
   const activities: AppletFormValues['activities'] = watch('activities');
   const dataTestid = 'builder-activity-flows-builder';
 

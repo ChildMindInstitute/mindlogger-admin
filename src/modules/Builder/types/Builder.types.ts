@@ -14,12 +14,12 @@ export type ItemFormValues = {
   id?: string;
   key?: string;
   name: string;
-  question: string;
+  question?: string;
   config: Config;
   responseType: ItemResponseType | '';
-  responseValues: ResponseValues;
+  responseValues?: ResponseValues;
   alerts?: ItemAlert[];
-  allowEdit: boolean;
+  allowEdit?: boolean;
   isHidden?: boolean;
 };
 

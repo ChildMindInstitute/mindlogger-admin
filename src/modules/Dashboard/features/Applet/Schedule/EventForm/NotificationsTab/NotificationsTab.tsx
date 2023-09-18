@@ -14,7 +14,11 @@ import { NotificationsTabProps } from './NotificationsTab.types';
 export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTabProps) => {
   const { t } = useTranslation('app');
   const { setValue, control, watch } = useFormContext<EventFormValues>();
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: notifications,
+    append,
+    remove,
+  } = useFieldArray({
     control,
     name: 'notifications',
   });
@@ -43,7 +47,7 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
           {t('sendNotifications')}
         </StyledTitleMedium>
       </StyledRowHeader>
-      {fields?.map((item, index) => (
+      {notifications?.map((item, index) => (
         <Notification
           key={item.id}
           index={index}

@@ -10,7 +10,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   color: ${variables.palette.on_surface_variant};
   font-size: ${variables.font.size.lg};
   box-shadow: unset;
-  height: 24rem;
+  height: 32rem;
 
   &.disabled {
     opacity: ${variables.opacity.disabled};
