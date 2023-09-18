@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { Svg, Chip } from 'shared/components';
+import { Svg, Chip, AppletImage } from 'shared/components';
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
 import {
@@ -16,11 +17,9 @@ import {
   StyledSuccessShared,
   StyledApplet,
   StyledLinkBtn,
-  StyledImg,
-  StyledImgPlaceholder,
-  StyledAppletContent,
   StyledText,
 } from './SuccessShared.styles';
+import { appletImageProps } from './SuccessShared.const';
 
 export const SuccessShared = ({
   title,
@@ -42,14 +41,24 @@ export const SuccessShared = ({
   return (
     <StyledSuccessShared>
       <StyledApplet>
-        {img ? <StyledImg src={img} alt="Applet image" /> : <StyledImgPlaceholder />}
-        <StyledAppletContent>
-          <StyledTitleLarge sx={{ flexBasis: '100%' }} color={variables.palette.on_surface_variant}>
+        <AppletImage image={img} appletName={title} {...appletImageProps} />
+        <Box>
+          <StyledTitleLarge
+            sx={{ wordBreak: 'break-word' }}
+            color={variables.palette.on_surface_variant}
+          >
             {title}
           </StyledTitleLarge>
-          {text && <StyledText color={variables.palette.on_surface_variant}>{text}</StyledText>}
+          {text && (
+            <StyledText
+              sx={{ wordBreak: 'break-word' }}
+              color={variables.palette.on_surface_variant}
+            >
+              {text}
+            </StyledText>
+          )}
           {keywords?.length > 0 && (
-            <StyledFlexWrap sx={{ marginTop: theme.spacing(0.8), flexBasis: '100%' }}>
+            <StyledFlexWrap sx={{ width: '100%', marginTop: theme.spacing(0.8) }}>
               {keywords.map((word, i) => (
                 <Chip color="secondary" key={i} title={word} />
               ))}
@@ -60,7 +69,7 @@ export const SuccessShared = ({
               sx={{ marginTop: theme.spacing(1.6) }}
             >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleBoldSmall>
           ) : null}
-        </StyledAppletContent>
+        </Box>
       </StyledApplet>
       <StyledLinkBtn
         startIcon={<Svg width="18" height="18" id="duplicate" />}

@@ -1,26 +1,18 @@
 import { styled, Box, Button } from '@mui/material';
 
-import {
-  theme,
-  variables,
-  StyledFlexWrap,
-  StyledBodyLarge,
-  StyledFlexSpaceBetween,
-} from 'shared/styles';
+import { theme, variables, StyledBodyLarge } from 'shared/styles';
 
 export const StyledSuccessShared = styled(Box)`
   padding: ${theme.spacing(2.4)};
 `;
 
-export const StyledApplet = styled(StyledFlexSpaceBetween)`
+export const StyledApplet = styled(Box)`
+  display: grid;
+  grid-template-columns: 9.2rem 39.6rem;
+  grid-column-gap: 1.6rem;
   padding: ${theme.spacing(2.4)};
   background-color: ${variables.palette.surface5};
   border-radius: ${variables.borderRadius.lg2};
-`;
-
-export const StyledAppletContent = styled(StyledFlexWrap)`
-  flex-grow: 1;
-  margin-left: ${theme.spacing(1.6)};
 `;
 
 export const StyledText = styled(StyledBodyLarge)`
@@ -31,21 +23,6 @@ export const StyledText = styled(StyledBodyLarge)`
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-`;
-
-const commonImgStyles = `
-  width: 9.2rem;
-  height: 9.2rem;
-  border-radius: ${variables.borderRadius.lg};
-`;
-
-export const StyledImg = styled('img')`
-  ${commonImgStyles};
-`;
-
-export const StyledImgPlaceholder = styled(Box)`
-  ${commonImgStyles};
-  background-color: ${variables.palette.primary_container};
 `;
 
 export const StyledLinkBtn = styled(Button)`
