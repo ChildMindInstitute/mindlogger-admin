@@ -30,7 +30,7 @@ export const BuilderApplet = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getAppletWithItems } = applet.thunk;
-  const { result: themesArr = [] } = themes.useThemesData() || {};
+  const { result: themesList = [] } = themes.useThemesData() || {};
   const loadingStatus = applet.useResponseStatus();
   const themesLoadingStatus = themes.useThemesStatus();
   const appletResponseType = applet.useResponseTypePrefix();
@@ -48,8 +48,8 @@ export const BuilderApplet = () => {
     (!isNewApplet && loadingStatus === 'idle') ||
     loadingStatus === 'loading' ||
     themesLoadingStatus === 'loading';
-  // TODO: check if themesArr[0].id is the default theme after back-end task (M2-3399) is done
-  const defaultThemeId = themesArr[0]?.id;
+  // TODO: check if themesList[0].id is the default theme after back-end task (M2-3399) is done
+  const defaultThemeId = themesList[0]?.id;
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     appletId && ownerId && !isNewApplet
