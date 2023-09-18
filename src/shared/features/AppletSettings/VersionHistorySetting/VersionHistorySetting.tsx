@@ -20,14 +20,16 @@ export const VersionHistorySetting = () => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
 
-  const [isLoading, setIsLoading] = useState(true);
   const [selectOpen, setSelectOpen] = useState(false);
   const [versions, setVersions] = useState<string[]>([]);
   const [currentVersion, setCurrentVersion] = useState<string>();
   const [versionChanges, setVersionChanges] = useState<VersionChanges | null>(null);
 
-  const { execute: getAppletVersions } = useAsync(getAppletVersionsApi);
-  const { execute: getAppletVersionChanges } = useAsync(getAppletVersionChangesApi);
+  const { execute: getAppletVersions, isLoading: areAppletVersionsLoaded } =
+    useAsync(getAppletVersionsApi);
+  const { execute: getAppletVersionChanges, isLoading: areAppletVersionChangesLoaded } = useAsync(
+    getAppletVersionChangesApi,
+  );
 
   const hasAppletChanges = !!versionChanges?.changes.length;
   const hasActivitiesChanges = !!versionChanges?.activities.length;
@@ -51,40 +53,28 @@ export const VersionHistorySetting = () => {
 
   useEffect(() => {
     if (!appletId) return;
-
     (async () => {
-      try {
-        setIsLoading(true);
-        const result = await getAppletVersions({ appletId });
-        const versions = result?.data.result.map(({ version }: { version: string }) => version);
-        setVersions(versions);
-        setCurrentVersion(versions[0]);
-      } finally {
-        setIsLoading(false);
-      }
+      const result = await getAppletVersions({ appletId });
+      const versions = result?.data.result.map(({ version }: { version: string }) => version);
+      setVersions(versions);
+      setCurrentVersion(versions[0]);
     })();
   }, [appletId]);
 
   useEffect(() => {
     if (!appletId || !currentVersion) return;
-
     (async () => {
-      try {
-        setIsLoading(true);
-        const changesResult = await getAppletVersionChanges({
-          appletId,
-          version: currentVersion,
-        });
-        setVersionChanges(changesResult?.data.result);
-      } finally {
-        setIsLoading(false);
-      }
+      const changesResult = await getAppletVersionChanges({
+        appletId,
+        version: currentVersion,
+      });
+      setVersionChanges(changesResult?.data.result);
     })();
   }, [appletId, currentVersion]);
 
   return (
     <StyledVersionHistotyContainer>
-      {!isLoading || !!versions?.length ? (
+      {!areAppletVersionsLoaded || !!versions?.length ? (
         <>
           <StyledVersionSelect
             value={currentVersion}
@@ -108,7 +98,7 @@ export const VersionHistorySetting = () => {
             ))}
           </StyledVersionSelect>
           <StyledChangesContainer>
-            {isLoading && <Spinner />}
+            {areAppletVersionChangesLoaded && <Spinner />}
             {!hasAppletChanges && !hasActivitiesChanges && (
               <StyledBodyLarge color={variables.palette.on_surface_variant}>
                 {t('noChanges')}
