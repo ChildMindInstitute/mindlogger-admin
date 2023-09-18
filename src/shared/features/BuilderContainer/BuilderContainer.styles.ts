@@ -13,4 +13,5 @@ export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
 
   justify-content: space-between;
   padding: ${theme.spacing(2.4, 6.4)};
+  z-index: ${theme.zIndex.appBar};
 `;

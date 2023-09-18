@@ -29,7 +29,7 @@ export const StyledCondition = styled(StyledFlexTopCenter)`
     }
   }
 
-  && .MuiTypography-root {
+  .MuiTypography-root {
     top: 0.6rem;
     z-index: ${theme.zIndex.fab};
   }
