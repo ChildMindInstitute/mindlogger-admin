@@ -19,6 +19,7 @@ export const variables = {
   },
   borderWidth: {
     xl: '0.4rem', //4px
+    lg2: '0.3rem', //3px
     lg: '0.2rem', //2px
     md: '0.1rem', //1px
   },

@@ -31,7 +31,7 @@ export const ConfigurationHeader = ({
             onClick={() => optionalItemsRef.current?.setSettingsDrawerVisible(true)}
             data-testid="builder-activity-items-item-configuration-settings"
           >
-            <Svg id="report-configuration" />
+            <Svg id="configure" />
           </StyledClearedButton>
         )}
         <StyledClearedButton
