@@ -13,7 +13,7 @@ import {
 } from 'modules/Dashboard/features/Applet/Popups';
 import { auth, popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
-import { useBreadcrumbs, useTable, useCheckIfAppletHasNotFoundError } from 'shared/hooks';
+import { useBreadcrumbs, useTable } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { getIsAddAppletBtnVisible } from 'shared/utils';
 import { StyledBody } from 'shared/styles';
@@ -34,7 +34,6 @@ export const Applets = () => {
   const rolesData = workspaces.useRolesData();
   const currentWorkspace = workspaces.useData();
   const { user } = auth.useData() || {};
-  const hasAppletNotFoundError = useCheckIfAppletHasNotFoundError();
 
   const [rows, setRows] = useState<(Folder | Applet)[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -130,11 +129,6 @@ export const Applets = () => {
   useEffect(() => {
     if (expandedFolders.length) tableProps.handleReload();
   }, [expandedFolders]);
-
-  useEffect(() => {
-    if (!hasAppletNotFoundError) return;
-    fetchData();
-  }, [hasAppletNotFoundError]);
 
   return (
     <StyledBody>

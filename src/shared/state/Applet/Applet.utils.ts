@@ -1,9 +1,4 @@
 import { AppletSchema, UpdateActivityData, UpdateActivityFlowData } from './Applet.schema';
-import { state as initialState } from './Applet.state';
-
-export const resetApplet = (state: AppletSchema): void => {
-  state.applet = initialState.applet;
-};
 
 export const removeApplet = ({ applet }: AppletSchema): void => {
   if (applet.data) {

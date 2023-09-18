@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store';
-import { MetaSchema } from 'shared/state/Base';
+import { MetaStatus } from 'shared/state/Base';
 
 import * as thunk from './Applet.thunk';
 import { state as initialState } from './Applet.state';
@@ -12,7 +12,6 @@ import {
   updateAppletData,
   updateActivityData,
   updateActivityFlowData,
-  resetApplet,
 } from './Applet.utils';
 
 export * from './Applet.schema';
@@ -20,13 +19,7 @@ export * from './Applet.schema';
 const slice = createSlice({
   name: 'applet',
   initialState,
-  reducers: {
-    removeApplet,
-    updateAppletData,
-    updateActivityData,
-    updateActivityFlowData,
-    resetApplet,
-  },
+  reducers: { removeApplet, updateAppletData, updateActivityData, updateActivityFlowData },
   extraReducers,
 });
 
@@ -42,7 +35,7 @@ export const applet = {
         },
       }) => data,
     ),
-  useResponseStatus: (): MetaSchema['status'] =>
+  useResponseStatus: (): MetaStatus =>
     useAppSelector(
       ({
         applet: {
@@ -50,20 +43,12 @@ export const applet = {
         },
       }) => status,
     ),
-  useResponseTypePrefix: (): MetaSchema['typePrefix'] =>
+  useResponseTypePrefix: (): string =>
     useAppSelector(
       ({
         applet: {
           applet: { typePrefix },
         },
       }) => typePrefix,
-    ),
-  useResponseError: (): MetaSchema['error'] =>
-    useAppSelector(
-      ({
-        applet: {
-          applet: { error },
-        },
-      }) => error,
     ),
 };
