@@ -1,1 +1,0 @@
-export const RESPONDENTS_WITHOUT_LIMIT = 10000;

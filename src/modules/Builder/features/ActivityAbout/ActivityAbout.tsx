@@ -18,6 +18,7 @@ import {
   MAX_DESCRIPTION_LENGTH,
   MAX_FILE_SIZE_25MB,
   MAX_NAME_LENGTH,
+  TEXTAREA_ROWS_COUNT_SM,
 } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
@@ -167,7 +168,7 @@ export const ActivityAbout = () => {
             maxLength={MAX_DESCRIPTION_LENGTH}
             label={t('activityDescription')}
             multiline
-            rows={4}
+            rows={TEXTAREA_ROWS_COUNT_SM}
             data-testid="builder-activity-about-description"
           />
         </StyledContainer>

@@ -3,10 +3,10 @@ import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } fr
 
 import { Order } from 'shared/types/table';
 import { EmptyState } from 'shared/components/EmptyState';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts';
 
 import { TableHead } from './TableHead';
-import { SEVEN_ROWS_PER_PAGE, UNLIMITED_ROWS_PER_PAGE } from './Table.const';
+import { SEVEN_ROWS_PER_PAGE } from './Table.const';
 import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { Row, TableProps, UiType } from './Table.types';
 
@@ -24,7 +24,7 @@ export const Table = ({
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
   const [page, setPage] = useState(0);
   const getRowsPerPage = () => {
-    if (uiType === UiType.Secondary) return UNLIMITED_ROWS_PER_PAGE;
+    if (uiType === UiType.Secondary) return MAX_LIMIT;
     if (uiType === UiType.Tertiary || uiType === UiType.Quaternary) return SEVEN_ROWS_PER_PAGE;
 
     return DEFAULT_ROWS_PER_PAGE;

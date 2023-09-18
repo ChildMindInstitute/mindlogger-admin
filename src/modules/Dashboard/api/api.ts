@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { authApiClient } from 'shared/api/api.client';
-import { AppletId, ActivityId, ActivityFlowId } from 'shared/api';
+import { AppletId, ActivityId, ActivityFlowId, Response } from 'shared/api';
 
 import {
   TransferOwnershipType,
@@ -35,7 +35,6 @@ import {
   AppletVersionChanges,
   RemoveAccess,
   ActivityAnswer,
-  Response,
   Folder,
   Applet,
   EditManagerAccess,

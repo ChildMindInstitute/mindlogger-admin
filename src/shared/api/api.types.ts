@@ -25,3 +25,8 @@ export type AlertListParams = {
   limit?: number;
   ordering?: string;
 };
+
+export type Response<T> = {
+  count: number;
+  result: T[];
+};

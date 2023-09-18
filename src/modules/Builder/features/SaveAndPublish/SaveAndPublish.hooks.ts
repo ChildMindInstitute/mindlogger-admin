@@ -67,7 +67,7 @@ export const useAppletData = () => {
       encryption,
       description: appletDescription,
       about: appletAbout,
-      themeId: null, // TODO: create real themeId
+      themeId: appletInfo.themeId || null,
       activityFlows: appletInfo?.activityFlows.map(
         ({ key, ...flow }) =>
           ({

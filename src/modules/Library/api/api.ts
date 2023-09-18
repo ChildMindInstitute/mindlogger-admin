@@ -1,9 +1,9 @@
 import { AppletId } from 'api';
 import { apiClient, authApiClient } from 'shared/api/api.client';
+import { MAX_LIMIT } from 'shared/consts';
 
 import { PublishedApplet } from '../state';
 import { PublishedAppletsType } from './api.types';
-import { CART_ITEMS_WITHOUT_LIMIT } from './api.const';
 
 export const getPublishedAppletsApi = (
   { page, search, limit }: PublishedAppletsType,
@@ -34,6 +34,6 @@ export const postAppletsToCartApi = (cartItems: PublishedApplet[], signal?: Abor
 
 export const getAppletsFromCartApi = (signal?: AbortSignal) =>
   authApiClient.get('/library/cart', {
-    params: { limit: CART_ITEMS_WITHOUT_LIMIT },
+    params: { limit: MAX_LIMIT },
     signal,
   });

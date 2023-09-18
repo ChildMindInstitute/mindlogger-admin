@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
-import { TextField, Box } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
@@ -14,6 +14,7 @@ import {
   StyledItem,
   StyledMenuItem,
   selectDropdownStyles,
+  StyledTextField,
 } from './SelectController.styles';
 
 export const SelectController = <T extends FieldValues>({
@@ -30,6 +31,7 @@ export const SelectController = <T extends FieldValues>({
   uiType = SelectUiType.Primary,
   disabled,
   sx,
+  dropdownStyles,
   'data-testid': dataTestid,
   ...props
 }: SelectControllerProps<T>) => {
@@ -114,7 +116,7 @@ export const SelectController = <T extends FieldValues>({
   ) => (
     <Box sx={{ position: 'relative', width: '100%', ...sx }}>
       {placeholder && !selectValue && <StyledPlaceholder>{placeholder}</StyledPlaceholder>}
-      <TextField
+      <StyledTextField
         {...props}
         select
         onChange={onChange}
@@ -124,13 +126,14 @@ export const SelectController = <T extends FieldValues>({
         disabled={disabled}
         SelectProps={{
           MenuProps: {
-            PaperProps: { sx: selectDropdownStyles },
+            PaperProps: { sx: { ...selectDropdownStyles, ...dropdownStyles } },
           },
+          IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
         }}
         data-testid={dataTestid}
       >
         {renderGroupedOptions()}
-      </TextField>
+      </StyledTextField>
     </Box>
   );
 

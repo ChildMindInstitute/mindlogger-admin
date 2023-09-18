@@ -44,6 +44,7 @@ import {
 } from 'shared/utils';
 import { reportConfig } from 'modules/Builder/state';
 import { useCurrentActivity, useCurrentActivityFlow } from 'modules/Builder/hooks';
+import { TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
@@ -471,7 +472,7 @@ export const ReportConfigSetting = ({
                   label={t('publicEncryptionKey')}
                   sx={{ marginTop: theme.spacing(2.4) }}
                   multiline
-                  rows={4}
+                  rows={TEXTAREA_ROWS_COUNT_SM}
                   data-testid={`${dataTestid}-encrypt-key`}
                 />
               </Box>
