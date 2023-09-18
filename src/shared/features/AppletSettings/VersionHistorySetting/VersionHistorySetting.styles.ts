@@ -2,7 +2,7 @@ import { Box, Select, styled } from '@mui/material';
 
 import { theme } from 'shared/styles';
 
-export const StyledVersionHistotyContainer = styled(Box)`
+export const StyledVersionHistoryContainer = styled(Box)`
   position: relative;
   width: 100%;
   height: 100%;

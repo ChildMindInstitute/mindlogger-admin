@@ -11,7 +11,7 @@ import { Spinner, Svg } from 'shared/components';
 
 import {
   StyledChangesContainer,
-  StyledVersionHistotyContainer,
+  StyledVersionHistoryContainer,
   StyledVersionSelect,
 } from './VersionHistorySetting.styles';
 import { VersionChanges } from './VersionHistorySetting.types';
@@ -73,7 +73,7 @@ export const VersionHistorySetting = () => {
   }, [appletId, currentVersion]);
 
   return (
-    <StyledVersionHistotyContainer>
+    <StyledVersionHistoryContainer>
       {!areAppletVersionsLoaded || !!versions?.length ? (
         <>
           <StyledVersionSelect
@@ -180,6 +180,6 @@ export const VersionHistorySetting = () => {
       ) : (
         <Spinner />
       )}
-    </StyledVersionHistotyContainer>
+    </StyledVersionHistoryContainer>
   );
 };
