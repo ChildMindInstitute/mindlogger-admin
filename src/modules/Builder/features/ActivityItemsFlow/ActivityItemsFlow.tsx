@@ -18,20 +18,22 @@ export const ActivityItemsFlow = () => {
 
   const { control, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
+  useActivitiesRedirection();
 
   const conditionalLogicName = `${fieldName}.conditionalLogic`;
-  const { append: appendFlowItem, remove: removeFlowItem } = useFieldArray({
+  const {
+    fields: flowItems,
+    append: appendFlowItem,
+    remove: removeFlowItem,
+  } = useFieldArray<Record<string, ConditionalLogic[]>>({
     control,
     name: conditionalLogicName,
   });
 
-  useActivitiesRedirection();
-
-  const flowItems = watch(conditionalLogicName);
   const items = watch(`${fieldName}.items`);
 
   const handleAddItemFlow = () => {
-    appendFlowItem(getEmptyFlowItem());
+    appendFlowItem(getEmptyFlowItem() as ConditionalLogic);
   };
   const handleRemoveItemFlow = (index: number) => {
     setItemIndexToDelete(index);

@@ -10,6 +10,7 @@ import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/ho
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { page } from 'resources';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { ItemConfiguration } from './ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -22,23 +23,25 @@ export const ActivityItems = () => {
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
   const { fieldName, activity } = useCurrentActivity();
-  const { control, watch, trigger } = useFormContext();
   const { appletId, activityId } = useParams();
+  const { control, trigger } = useFormContext();
+  const itemsName = `${fieldName}.items`;
   const navigate = useNavigate();
 
   const {
+    fields: items,
     append: appendItem,
     insert: insertItem,
     move: moveItem,
-  } = useFieldArray({
+  } = useFieldArray<Record<string, ItemFormValues[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
-    name: `${fieldName}.items`,
+    name: itemsName,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
   useBreadcrumbs();
   useActivitiesRedirection();
 
-  const items: ItemFormValues[] = watch(`${fieldName}.items`);
   const activeItem = items?.find((_, index) => index === activeItemIndex);
 
   useEffect(() => {
@@ -67,12 +70,12 @@ export const ActivityItems = () => {
   };
 
   const handleAddItem = () => {
-    const item = getNewActivityItem();
+    const item = getNewActivityItem() as ItemFormValues;
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
     const indexListToTrigger = getIndexListToTrigger(items, item.name);
     for (const itemIndex of indexListToTrigger) {
-      trigger(`${fieldName}.items.${itemIndex}`);
+      trigger(`${itemsName}.${itemIndex}`);
     }
     firstSystemIndex === -1 ? appendItem(item) : insertItem(firstSystemIndex, item);
     setActiveItemIndex(firstSystemIndex === -1 ? items?.length : firstSystemIndex);
@@ -84,9 +87,9 @@ export const ActivityItems = () => {
 
     const indexListToTrigger = getIndexListToTrigger(items, itemToInsert.name);
     for (const itemIndex of indexListToTrigger) {
-      trigger(`${fieldName}.items.${itemIndex}`);
+      trigger(`${itemsName}.${itemIndex}`);
     }
-    insertItem(index + 1, itemToInsert);
+    insertItem(index + 1, itemToInsert as ItemFormValues);
     shouldBecomeActive && setActiveItemIndex(index + 1);
   };
 
@@ -117,7 +120,6 @@ export const ActivityItems = () => {
   return (
     <StyledContainer>
       <LeftBar
-        items={items}
         activeItemIndex={activeItemIndex}
         onSetActiveItemIndex={setActiveItemIndex}
         onAddItem={handleAddItem}
@@ -129,7 +131,7 @@ export const ActivityItems = () => {
       {activeItemIndex !== -1 && (
         <ItemConfiguration
           key={`item-${activeItemIndex}`}
-          name={`${fieldName}.items.${activeItemIndex}`}
+          name={`${itemsName}.${activeItemIndex}`}
           onClose={() => setActiveItemIndex(-1)}
         />
       )}

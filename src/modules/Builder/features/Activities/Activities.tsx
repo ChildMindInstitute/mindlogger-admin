@@ -10,6 +10,7 @@ import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
   getNewActivity,
   getNewPerformanceTask,
@@ -33,27 +34,21 @@ export const Activities = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   const {
+    fields: activities,
     append: appendActivity,
     insert: insertActivity,
     remove: removeActivity,
     update: updateActivity,
     move: moveActivity,
-  } = useFieldArray({
+  } = useFieldArray<Record<string, ActivityFormValues[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
     name: 'activities',
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  const activities: ActivityFormValues[] = watch('activities');
   const activityNames = pluck(activities, 'name');
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-
-  const errors = activities?.reduce(
-    (err: Record<string, boolean>, _: ActivityFormValues, index: number) => ({
-      ...err,
-      [`activities[${index}]`]: !!getFieldState(`activities[${index}]`).error,
-    }),
-    {},
-  );
+  const errors = activities?.map((_, index) => !!getFieldState(`activities.${index}`).error);
 
   useBreadcrumbs([
     {
@@ -102,11 +97,11 @@ export const Activities = () => {
 
     const newActivity =
       performanceTaskName && performanceTaskDesc && performanceTaskType
-        ? getNewPerformanceTask({
+        ? (getNewPerformanceTask({
             name,
             description: performanceTaskDesc,
             performanceTaskType,
-          })
+          }) as ActivityFormValues)
         : getNewActivity({ name });
 
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
@@ -142,12 +137,14 @@ export const Activities = () => {
 
     const newActivity = isPerformanceTask
       ? getNewPerformanceTask({
+          name,
+          description: activityToDuplicate.description,
           performanceTask: activityToDuplicate,
         })
       : getNewActivity({ activity: activityToDuplicate });
 
     insertActivity(index + 1, {
-      ...newActivity,
+      ...(newActivity as ActivityFormValues),
       name,
     });
   };
@@ -196,7 +193,7 @@ export const Activities = () => {
                     const isEditVisible =
                       !isPerformanceTask ||
                       EditablePerformanceTasks.includes(activity.performanceTaskType || '');
-                    const hasError = errors[`activities[${index}]`];
+                    const hasError = errors[index];
                     const dataTestid = `builder-activities-activity-${index}`;
 
                     return (

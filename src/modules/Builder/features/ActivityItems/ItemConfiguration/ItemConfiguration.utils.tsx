@@ -5,7 +5,7 @@ import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { Config, Item, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
+import { Config, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
 
 import {
   DEFAULT_EMPTY_SLIDER,
@@ -17,7 +17,7 @@ import {
   DEFAULT_SLIDER_MIN_NUMBER,
 } from './ItemConfiguration.const';
 import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
-import { ItemConfigurationSettings } from './ItemConfiguration.types';
+import { ItemConfigurationSettings, GetEmptyAlert } from './ItemConfiguration.types';
 import { DEFAULT_SLIDER_MAX_VALUE } from './ItemConfiguration.const';
 
 const { t } = i18n;
@@ -96,7 +96,7 @@ export const getEmptyFlowItem = () => ({
   conditions: getEmptyCondition(),
 });
 
-export const getEmptyAlert = ({ config, responseType, responseValues }: Partial<Item>) => {
+export const getEmptyAlert = ({ config, responseType, responseValues }: GetEmptyAlert) => {
   const isSlider = responseType === ItemResponseType.Slider;
   const alert = {
     key: uuidv4(),

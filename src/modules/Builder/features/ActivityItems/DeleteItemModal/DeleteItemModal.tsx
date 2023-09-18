@@ -1,4 +1,4 @@
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
@@ -23,11 +23,7 @@ export const DeleteItemModal = ({
 }: DeleteItemModalProps) => {
   const { t } = useTranslation('app');
   const { fieldName, activity } = useCurrentActivity();
-  const { control, watch, setValue, trigger } = useFormContext();
-  const { remove: removeItem } = useFieldArray({
-    control,
-    name: `${fieldName}.items`,
-  });
+  const { watch, setValue, trigger } = useFormContext();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
@@ -45,7 +41,11 @@ export const DeleteItemModal = ({
     .join(', ');
 
   const handleRemoveItem = (index: number) => {
-    removeItem(index);
+    setValue(
+      `${fieldName}.items`,
+      items?.filter((_, key) => key !== index),
+    );
+
     if (itemsWithVariablesToRemove.length) {
       for (const item of itemsWithVariablesToRemove) {
         trigger(`${fieldName}.items.${index < item.index ? item.index - 1 : item.index}`);

@@ -40,7 +40,7 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
 
         return [
           ...result,
-          { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id },
+          { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id! },
         ];
       }, []) || []
     );
@@ -65,7 +65,7 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
 
       return [
         ...result,
-        { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id },
+        { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id! },
       ];
     }, []);
   }
@@ -74,7 +74,7 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
     return (
       (responseValues as SliderRowsResponseValues)?.rows?.map(({ id, label }, index) => ({
         labelKey: getOptionName(OptionTypes.Slider, index, label),
-        value: id,
+        value: id!,
       })) || []
     );
   }
