@@ -121,7 +121,6 @@ export const useDecryptedActivityData = (
         ...rest,
       }),
     );
-    console.log(answerDataDecrypted);
 
     return {
       decryptedAnswers: answerDataDecrypted,
