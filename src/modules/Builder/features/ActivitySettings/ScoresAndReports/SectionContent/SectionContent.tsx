@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
+import { Condition } from 'shared/state';
 import { StyledFlexColumn, theme } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components';
@@ -26,6 +27,12 @@ export const SectionContent = ({
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext();
   const conditionalLogicName = `${name}.conditionalLogic`;
+  const conditionsName = `${name}.conditions`;
+
+  const { append: appendCondition } = useFieldArray<Record<string, Condition[]>>({
+    control,
+    name: conditionsName,
+  });
   const conditionalLogic = watch(conditionalLogicName);
   const [isContainConditional, setIsContainConditional] = useState(!!conditionalLogic);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
@@ -33,7 +40,10 @@ export const SectionContent = ({
 
   useEffect(() => {
     if (isContainConditional) {
-      !conditionalLogic && setValue(conditionalLogicName, defaultConditionalValue);
+      if (!conditionalLogic) {
+        setValue(conditionalLogicName, defaultConditionalValue);
+        appendCondition({} as Condition);
+      }
 
       return;
     }
