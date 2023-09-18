@@ -37,6 +37,7 @@ export const LinkPopup = ({ open, onClose, setInviteLink }: LinkPopupProps) => {
         fontWeight: variables.font.weight.bold,
       }}
       data-testid="dashboard-add-users-generate-link-generate-popup"
+      width="70"
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>
