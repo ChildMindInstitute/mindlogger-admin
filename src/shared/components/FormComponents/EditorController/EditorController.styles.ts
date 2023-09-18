@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 
 import { MarkDownEditor } from 'shared/components/MarkDownEditor';
-import { StyledBodyMedium, theme, variables } from 'shared/styles';
+import { variables } from 'shared/styles';
 
 export const StyledMdEditor = styled(MarkDownEditor)`
   border-radius: ${variables.borderRadius.lg2};
@@ -10,7 +10,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   color: ${variables.palette.on_surface_variant};
   font-size: ${variables.font.size.lg};
   box-shadow: unset;
-  height: 24rem;
+  height: 32rem;
 
   &.disabled {
     opacity: ${variables.opacity.disabled};
