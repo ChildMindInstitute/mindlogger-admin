@@ -1,11 +1,11 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { FieldError, useFormContext } from 'react-hook-form';
+import { ChangeEvent, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 
 import { Table, UiType, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledBodyMedium, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { StyledFlexTopCenter, theme } from 'shared/styles';
 import {
   DEFAULT_SLIDER_MIN_NUMBER,
   DEFAULT_SLIDER_ROWS_MIN_NUMBER,
@@ -48,7 +48,6 @@ export const SliderPanel = ({
   onRemove,
 }: SliderPanelProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  const [error, setError] = useState<FieldError | undefined>();
 
   const sliderName = `${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`;
   const alertsName = `${name}.alerts`;
@@ -59,8 +58,6 @@ export const SliderPanel = ({
   const { t } = useTranslation('app');
 
   const { control, watch, setValue, getFieldState, formState } = useFormContext();
-
-  const scoresError = getFieldState(`${sliderName}.scores`, formState);
 
   const { id, minValue, maxValue, scores } = watch(sliderName) || {};
   const settings = watch(`${name}.config`);
@@ -145,11 +142,6 @@ export const SliderPanel = ({
     `-rows-${index}`,
     isMultiple,
   );
-
-  useEffect(() => {
-    const errors = scoresError.error as unknown as FieldError[] | undefined;
-    setError(errors?.filter((error) => error)?.[0]);
-  }, [scoresError]);
 
   return (
     <StyledSliderPanelContainer
@@ -259,11 +251,6 @@ export const SliderPanel = ({
                   data-testid={`${dataTestid}-scores-table`}
                 />
               </StyledScoresContainer>
-              {error && (
-                <StyledBodyMedium color={variables.palette.semantic.error}>
-                  {error.message}
-                </StyledBodyMedium>
-              )}
             </>
           )}
         </>
