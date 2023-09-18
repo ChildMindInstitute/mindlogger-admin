@@ -13,8 +13,9 @@ import { getUniqueName, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { ActivityFlowFormValues, AppletFormValues } from 'modules/Builder/types';
 import { useActivitiesRedirection } from 'modules/Builder/hooks';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import {
@@ -31,31 +32,29 @@ export const ActivityFlow = () => {
   } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const { t } = useTranslation('app');
-  const { watch, control, getFieldState } = useFormContext<AppletFormValues>();
+  const { watch, control, getFieldState } = useFormContext();
   const { appletId } = useParams();
   const navigate = useNavigate();
 
-  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
-  const activities: AppletFormValues['activities'] = watch('activities');
+  const activities: ActivityFormValues[] = watch('activities');
 
   const {
+    fields: activityFlows,
     remove: removeActivityFlow,
     append: appendActivityFlow,
     insert: insertActivityFlow,
     update: updateActivityFlow,
     move: moveActivityFlow,
-  } = useFieldArray({
+  } = useFieldArray<
+    Record<string, ActivityFlowFormValues[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
     control,
     name: 'activityFlows',
   });
 
-  const errors = activityFlows?.reduce(
-    (err: Record<string, boolean>, _: ActivityFlowFormValues, index: number) => ({
-      ...err,
-      [`activityFlows.${index}`]: !!getFieldState(`activityFlows.${index}`).error,
-    }),
-    {},
-  );
+  const errors = activityFlows?.map((_, index) => !!getFieldState(`activityFlows.${index}`).error);
 
   const handleFlowDelete = () => {
     if (!flowToDeleteData) return;
@@ -166,7 +165,7 @@ export const ActivityFlow = () => {
                                 isInactive={flow.isHidden}
                                 hasStaticActions={flow.isHidden}
                                 uiType={ItemUiType.Flow}
-                                hasError={errors[`activityFlows.${index}`]}
+                                hasError={errors[index]}
                                 {...flow}
                                 data-testid={dataTestid}
                               />

@@ -10,7 +10,7 @@ const checkIfItemsHaveVariables = (items: ItemFormValues[]) => {
   const itemsObject = getObjectFromList(items, ({ name }) => name);
 
   return items.some(({ question }) => {
-    const variableNames = getTextBetweenBrackets(question);
+    const variableNames = getTextBetweenBrackets(question!);
 
     return variableNames.some((variable) => !!itemsObject[variable]);
   });

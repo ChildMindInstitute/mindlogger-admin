@@ -53,14 +53,14 @@ const checkIfQuestionIncludesItem = (question: string, itemName: string) => {
 
 export const getIndexListToTrigger = (items: ItemFormValues[], itemName: string) =>
   items.reduce((acc, { question }, index) => {
-    if (checkIfQuestionIncludesItem(question, itemName)) return acc.concat(index);
+    if (checkIfQuestionIncludesItem(question!, itemName)) return acc.concat(index);
 
     return acc;
   }, [] as number[]);
 
 export const getItemsWithVariable = (name: string, items: ItemFormValues[]) =>
   items.reduce((acc, item, index) => {
-    const variableNames = getTextBetweenBrackets(item.question);
+    const variableNames = getTextBetweenBrackets(item.question!);
     if (!variableNames?.includes(name)) return acc;
 
     return [

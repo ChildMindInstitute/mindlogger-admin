@@ -433,7 +433,7 @@ export const getNewPerformanceTask = ({
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
 
-  const getItems = () => {
+  const getItems = (): ItemFormValues[] => {
     if (items?.length) {
       return items.map((item) => ({
         ...item,

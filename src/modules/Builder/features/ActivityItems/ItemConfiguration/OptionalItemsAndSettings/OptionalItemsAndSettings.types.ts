@@ -12,7 +12,7 @@ export type OptionalItemsRef = {
 
 export type ActiveItemHookProps = {
   name: string;
-  responseType: ItemResponseType;
+  responseType: ItemResponseType | '';
 };
 
 export type SettingsSetupProps = {
