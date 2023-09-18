@@ -18,6 +18,7 @@ export const palette = {
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
   inverse_surface: '#2f3033',
+  inverse_on_surface: '#f0f0f4',
   error_container: '#ffdad6',
   on_error_container: '#410002',
 
