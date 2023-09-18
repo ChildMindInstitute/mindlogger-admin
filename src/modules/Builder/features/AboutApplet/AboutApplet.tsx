@@ -27,8 +27,8 @@ import { commonUploaderProps } from './AboutApplet.const';
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
-  const { result: themesArr = [] } = themes.useThemesData() || {};
-  const themesOptions = getColorThemeOptions(themesArr);
+  const { result: themesList = [] } = themes.useThemesData() || {};
+  const themesOptions = getColorThemeOptions(themesList);
   const { control, setValue, watch } = useFormContext();
   useBreadcrumbs([
     {
@@ -97,7 +97,7 @@ export const AboutApplet = () => {
               data-testid="about-applet-description"
             />
           </Box>
-          {!!themesArr.length && (
+          {!!themesOptions.length && (
             <StyledFlexTopCenter sx={{ position: 'relative' }}>
               <SelectController
                 {...commonInputProps}
