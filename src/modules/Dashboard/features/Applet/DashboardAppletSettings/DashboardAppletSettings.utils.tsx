@@ -93,7 +93,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
       label: 'reports',
       items: [
         {
-          icon: <Svg id="report-configuration" />,
+          icon: <Svg id="configure" />,
           label: 'reportConfiguration',
           component: (
             <ReportConfigSetting isDashboard data-testid={`${dataTestid}-report-config-form`} />
