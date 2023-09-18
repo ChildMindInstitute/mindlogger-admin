@@ -16,6 +16,7 @@ import {
   EncryptedAnswerSharedProps,
   EventDTO,
 } from 'shared/types';
+import { ItemResponseType } from 'shared/consts';
 
 export const getEmptyDecryptedActivityData = () => ({
   decryptedAnswers: [],
@@ -92,7 +93,7 @@ export const useDecryptedActivityData = (
       const migratedUrl = migratedUrls[activityItem?.id as keyof typeof migratedUrls];
 
       if (migratedUrl && typeof answer === 'object') {
-        if (typeof answer?.value === 'object') {
+        if (activityItem.responseType === ItemResponseType.Drawing) {
           const drawerAnswer = answer as DecryptedDrawingAnswer;
 
           return {
@@ -120,6 +121,7 @@ export const useDecryptedActivityData = (
         ...rest,
       }),
     );
+    console.log(answerDataDecrypted);
 
     return {
       decryptedAnswers: answerDataDecrypted,
