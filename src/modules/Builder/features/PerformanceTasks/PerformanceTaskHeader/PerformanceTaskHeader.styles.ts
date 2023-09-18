@@ -15,7 +15,18 @@ export const StyledContentWrapper = styled(StyledFlexAllCenter)`
   flex-direction: column;
   flex-grow: 1;
   padding: ${theme.spacing(0.85)};
-  border-bottom: ${variables.borderWidth.lg2} solid ${variables.palette.primary};
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 0.3rem;
+    width: 100%;
+    border-radius: 10rem 10rem 0 0;
+    background-color: ${variables.palette.primary};
+  }
 
   svg {
     fill: ${variables.palette.primary};
