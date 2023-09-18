@@ -12,7 +12,8 @@ export const LEFT_BAR_WIDTH = '8rem';
 export const MAX_NAME_LENGTH = 55;
 export const MAX_DESCRIPTION_LENGTH = 150;
 export const SMALL_INPUT_LENGTH = 5;
-export const TEXTAREA_ROWS = 5;
+export const TEXTAREA_ROWS_COUNT_SM = 4;
+export const TEXTAREA_ROWS_COUNT = 5;
 export const MAX_DESCRIPTION_LENGTH_LONG = 150;
 export const MAX_SELECT_OPTION_TEXT_LENGTH = 75;
 export const MAX_SLIDER_LABEL_TEXT_LENGTH = 20;
@@ -46,6 +47,7 @@ export const MAX_SLOPE = 99;
 export const DEFAULT_NUMBER_OF_TRIALS = 3;
 export const DEFAULT_LENGTH_OF_TEST = 5;
 export const DEFAULT_LAMBDA_SLOPE = 20;
+export const MAX_LIMIT = 10000;
 
 export const BUILDER_PAGES = {
   activities: 'activities',

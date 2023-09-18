@@ -18,7 +18,7 @@ export const getSettings = (activityFlow: ActivityFlowFormValues) => {
           name: 'reportConfiguration',
           label: t('reportConfiguration'),
           component: <ReportConfigSetting data-testid={`${dataTestid}-form`} />,
-          icon: <Svg id="report-configuration" />,
+          icon: <Svg id="configure" />,
           param: SettingParam.ReportConfiguration,
           disabled: isNewActivityFlow,
           tooltip: isNewActivityFlow ? 'saveAndPublishFirst' : undefined,

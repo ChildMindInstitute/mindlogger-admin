@@ -25,7 +25,7 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
         },
         {
           label: 'reportConfiguration',
-          icon: <Svg id="report-configuration" />,
+          icon: <Svg id="configure" />,
           component: <ReportConfigSetting data-testid={`${dataTestid}-report-config-form`} />,
           param: SettingParam.ReportConfiguration,
           disabled: isNewActivity,
