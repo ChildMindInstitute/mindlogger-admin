@@ -1,4 +1,4 @@
-import { ErrorResponseType } from 'shared/api';
+import { ErrorResponseType } from 'shared/types';
 
 export type MetaStatus = 'idle' | 'loading' | 'success' | 'error';
 

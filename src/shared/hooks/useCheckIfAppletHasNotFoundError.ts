@@ -1,5 +1,5 @@
 import { applet } from 'shared/state';
-import { ErrorResponseType } from 'shared/api';
+import { ErrorResponseType } from 'shared/types';
 
 export const useCheckIfAppletHasNotFoundError = () => {
   const appletError = applet.useResponseError() ?? [];

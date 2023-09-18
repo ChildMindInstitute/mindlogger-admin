@@ -19,6 +19,7 @@ export const useNotFoundPopup = () => {
   const handleSubmit = () => {
     setAppletNotFoundPopupVisible(false);
     dispatch(applet.actions.resetApplet());
+    dispatch(alerts.actions.resetAlerts());
     dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
     navigate(page.dashboardApplets);
   };
