@@ -30,6 +30,7 @@ import { concatIf, getSanitizedContent } from 'shared/utils';
 
 import { StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
+import { getValueLength } from './EditorController.utils';
 
 export const EditorController = <T extends FieldValues>({
   name,
@@ -157,7 +158,7 @@ export const EditorController = <T extends FieldValues>({
               footers={[]}
             />
             <StyledFlexSpaceBetween sx={{ m: theme.spacing(0.4, 0, 2) }}>
-              <FooterMessage inputSize={(value ?? '').length} key="footer-message" error={error} />
+              <FooterMessage inputSize={getValueLength(value)} key="footer-message" error={error} />
               {!error?.message && (
                 <CharacterCounter inputSize={(value ?? '').length} key="character-counter" />
               )}
