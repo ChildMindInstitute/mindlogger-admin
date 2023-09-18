@@ -55,7 +55,7 @@ export const builderRoutes = () => (
           ))}
           <Route path={Path.Items} element={<ActivityItems />}>
             <Route
-              path=":item"
+              path=":itemId"
               element={
                 <PrivateRoute>
                   <ActivityItems />

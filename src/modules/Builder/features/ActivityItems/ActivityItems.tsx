@@ -23,7 +23,7 @@ export const ActivityItems = () => {
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
   const { fieldName, activity } = useCurrentActivity();
-  const { appletId, activityId } = useParams();
+  const { appletId, activityId, itemId } = useParams();
   const { control, trigger } = useFormContext();
   const itemsName = `${fieldName}.items`;
   const navigate = useNavigate();
@@ -45,23 +45,10 @@ export const ActivityItems = () => {
   const activeItem = items?.find((_, index) => index === activeItemIndex);
 
   useEffect(() => {
-    if (activeItem) {
-      return navigate(
-        generatePath(page.builderAppletActivityItem, {
-          appletId,
-          activityId,
-          item: getEntityKey(activeItem),
-        }),
-      );
+    if (!activeItem && itemId) {
+      navigateToActiveItem(itemId);
     }
-
-    navigate(
-      generatePath(page.builderAppletActivityItems, {
-        appletId,
-        activityId,
-      }),
-    );
-  }, [activeItem]);
+  }, [itemId]);
 
   if (!activity) return null;
 
@@ -117,11 +104,37 @@ export const ActivityItems = () => {
     setActiveItemIndex(destinationIndex);
   };
 
+  const navigateToActiveItem = (id: string) => {
+    const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === id);
+    if (activeItemIndex === -1) {
+      return navigateToItems();
+    }
+
+    setActiveItemIndex(activeItemIndex);
+    navigate(
+      generatePath(page.builderAppletActivityItem, {
+        appletId,
+        activityId,
+        itemId: id,
+      }),
+    );
+  };
+
+  const navigateToItems = () => {
+    navigate(
+      generatePath(page.builderAppletActivityItems, {
+        appletId,
+        activityId,
+      }),
+    );
+    setActiveItemIndex(-1);
+  };
+
   return (
     <StyledContainer>
       <LeftBar
         activeItemIndex={activeItemIndex}
-        onSetActiveItemIndex={setActiveItemIndex}
+        onSetActiveItem={navigateToActiveItem}
         onAddItem={handleAddItem}
         onInsertItem={handleInsertItem}
         onDuplicateItem={handleDuplicateItem}
@@ -132,7 +145,7 @@ export const ActivityItems = () => {
         <ItemConfiguration
           key={`item-${activeItemIndex}`}
           name={`${itemsName}.${activeItemIndex}`}
-          onClose={() => setActiveItemIndex(-1)}
+          onClose={navigateToItems}
         />
       )}
       <DeleteItemModal

@@ -28,7 +28,7 @@ import { getConditionsToRemove } from '../ActivityItems.utils';
 
 export const LeftBar = ({
   activeItemIndex,
-  onSetActiveItemIndex,
+  onSetActiveItem,
   onAddItem,
   onInsertItem,
   onDuplicateItem,
@@ -88,12 +88,6 @@ export const LeftBar = ({
     handleCancelRemoveConditionals();
   };
 
-  const handleSetActiveItem = (id: string) => {
-    const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === id);
-
-    onSetActiveItemIndex(activeItemIndex);
-  };
-
   const addItemBtn = (
     <StyledBtnWrapper>
       <Button
@@ -142,7 +136,7 @@ export const LeftBar = ({
                                 name={`${fieldName}.items[${index}]`}
                                 index={index}
                                 activeItemId={activeItemId}
-                                onSetActiveItem={handleSetActiveItem}
+                                onSetActiveItem={onSetActiveItem}
                                 onDuplicateItem={onDuplicateItem}
                                 onRemoveItem={onRemoveItem}
                               />
@@ -168,7 +162,7 @@ export const LeftBar = ({
                 key={`item-${getEntityKey(item)}`}
                 item={item}
                 activeItemId={activeItemId}
-                onSetActiveItem={handleSetActiveItem}
+                onSetActiveItem={onSetActiveItem}
                 onDuplicateItem={onDuplicateItem}
                 onRemoveItem={onRemoveItem}
               />

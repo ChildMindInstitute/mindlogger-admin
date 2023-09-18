@@ -25,7 +25,7 @@
   "builderAppletActivity": "/builder/:appletId/activities/:activityId",
   "builderAppletActivityAbout": "/builder/:appletId/activities/:activityId/about",
   "builderAppletActivityItems": "/builder/:appletId/activities/:activityId/items",
-  "builderAppletActivityItem": "/builder/:appletId/activities/:activityId/items/:item",
+  "builderAppletActivityItem": "/builder/:appletId/activities/:activityId/items/:itemId",
   "builderAppletActivityItemFlow": "/builder/:appletId/activities/:activityId/item-flow",
   "builderAppletActivitySettings": "/builder/:appletId/activities/:activityId/settings",
   "builderAppletActivitySettingsItem": "/builder/:appletId/activities/:activityId/settings/:setting",
