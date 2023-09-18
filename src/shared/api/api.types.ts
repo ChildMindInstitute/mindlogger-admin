@@ -30,3 +30,7 @@ export type Response<T> = {
   count: number;
   result: T[];
 };
+
+export const enum ErrorResponseType {
+  NotFound = 'NOT_FOUND',
+}

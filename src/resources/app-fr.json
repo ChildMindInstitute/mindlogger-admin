@@ -1192,5 +1192,8 @@
   "yesAuthorize": "Oui, autoriser",
   "yesRemove": "Yes, remove",
   "youNeedToAuthorize": "Vous devez autoriser",
-  "youNeedToAuthorizeHint": "Pour créer une nouvelle applet ou la fusionner avec d'autres, vous devez autoriser."
+  "youNeedToAuthorizeHint": "Pour créer une nouvelle applet ou la fusionner avec d'autres, vous devez autoriser.",
+  "appletNotFoundPopupTitle": "Applet introuvable",
+  "appletNotFoundPopupText": "Applet introuvable ; elle a peut-être été supprimée. Pour actualiser les données, veuillez cliquer sur le bouton ci-dessous.",
+  "refresh": "Actualiser"
 }
