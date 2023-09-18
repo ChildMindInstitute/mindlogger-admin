@@ -1,1 +1,1 @@
-export const getUploadedMediaName = (url: string) => url.substring(url.lastIndexOf('/') + 1);
+export const getUploadedMediaName = (url: string) => url && url.substring(url.lastIndexOf('/') + 1);
