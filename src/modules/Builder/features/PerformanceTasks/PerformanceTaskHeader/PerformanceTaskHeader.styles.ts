@@ -16,7 +16,6 @@ export const StyledContentWrapper = styled(StyledFlexAllCenter)`
   flex-grow: 1;
   padding: ${theme.spacing(0.85)};
   border-bottom: ${variables.borderWidth.lg2} solid ${variables.palette.primary};
-  position: relative;
 
   svg {
     fill: ${variables.palette.primary};
