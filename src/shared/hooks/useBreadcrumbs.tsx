@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 import uniqueId from 'lodash.uniqueid';
 
-import { Breadcrumb, breadcrumbs, applet, workspaces } from 'redux/modules';
+import { Breadcrumb, breadcrumbs, applet, workspaces, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import {
@@ -29,7 +30,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
   const respondentLabel = useRespondentLabel();
   const { workspaceName } = workspaces.useData() ?? {};
-  const { result: appletData } = applet.useAppletData() ?? {};
+  const { result } = applet.useAppletData() ?? {};
+  const { getValues } = useFormContext() ?? {};
+  const appletData = (getValues?.() ?? result) as SingleApplet;
   const isNewApplet = useCheckIfNewApplet();
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
   const currentActivityName = appletData?.activities?.find(
