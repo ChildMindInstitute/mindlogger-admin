@@ -16,7 +16,7 @@ export const AppletNotFoundPopup = () => {
       onSubmit={handleSubmit}
       title={t('appletNotFoundPopupTitle')}
       buttonText={t('refresh')}
-      data-testid={'applet-not-found-popup'}
+      data-testid="applet-not-found-popup"
     >
       <StyledModalWrapper>
         <StyledBodyLarge>{t('appletNotFoundPopupText')}</StyledBodyLarge>
