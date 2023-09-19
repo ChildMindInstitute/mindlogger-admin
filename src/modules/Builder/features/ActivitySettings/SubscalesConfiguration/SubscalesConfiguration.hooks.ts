@@ -19,11 +19,11 @@ export const useSubscalesSystemItemsSetup = () => {
   const removeItem = (index: number | number[]) =>
     setValue(
       itemsFieldName,
-      items.filter((_, key) => (Array.isArray(index) ? !index.includes(key) : index !== key)),
+      items.filter((_, key) => (Array.isArray(index) ? index.includes(key) : index !== key)),
     );
 
   useEffect(() => {
-    const hasSubscaleLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
+    const hasSubscaleLookupTable = subscales.some((subscale) => !!subscale.subscaleTableData);
     const subscaleSystemItems =
       items?.reduce((acc, item, index) => {
         if (!item.allowEdit) return acc.concat({ ...item, index });
