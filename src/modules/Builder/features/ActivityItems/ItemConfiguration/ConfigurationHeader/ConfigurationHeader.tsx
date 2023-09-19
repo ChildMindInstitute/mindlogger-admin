@@ -4,7 +4,7 @@ import { Svg } from 'shared/components';
 import {
   StyledClearedButton,
   StyledFlexTopCenter,
-  StyledHeadlineLarge,
+  StyledStickyHeadline,
   theme,
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
@@ -23,7 +23,9 @@ export const ConfigurationHeader = ({
 
   return (
     <StyledHeader isSticky={isHeaderSticky}>
-      <StyledHeadlineLarge>{t('itemConfiguration')}</StyledHeadlineLarge>
+      <StyledStickyHeadline isSticky={isHeaderSticky}>
+        {t('itemConfiguration')}
+      </StyledStickyHeadline>
       <StyledFlexTopCenter>
         {responseType && (
           <StyledClearedButton
