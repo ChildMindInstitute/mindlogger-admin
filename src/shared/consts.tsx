@@ -309,3 +309,5 @@ export const enum ScoreReportType {
 }
 
 export const URL_REGEX = /(https?:\/\/)?(www\.)?/g;
+
+export const AUTH_BOX_WIDTH = '39.2rem';

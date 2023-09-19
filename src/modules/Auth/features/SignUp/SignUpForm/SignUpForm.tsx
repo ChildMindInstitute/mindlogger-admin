@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
-import { variables, StyledErrorText } from 'shared/styles';
+import { variables, StyledErrorText, StyledLinkBtn } from 'shared/styles';
 import { getErrorMessage, Mixpanel, navigateToLibrary } from 'shared/utils';
 import { auth } from 'modules/Auth/state';
 
@@ -19,7 +19,6 @@ import {
   StyledLink,
   StyledButton,
   StyledBackWrapper,
-  StyledBack,
 } from './SignUpForm.styles';
 import { SignUpFormSchema } from './SignUpForm.schema';
 import { SignUpData } from './SignUpForm.types';
@@ -133,9 +132,9 @@ export const SignUpForm = () => {
         {t('createAccount')}
       </StyledButton>
       <StyledBackWrapper>
-        <StyledBack onClick={() => navigate(page.login)} data-testid="signup-form-back">
+        <StyledLinkBtn onClick={() => navigate(page.login)} data-testid="signup-form-back">
           {t('backToLogin')}
-        </StyledBack>
+        </StyledLinkBtn>
       </StyledBackWrapper>
     </StyledForm>
   );

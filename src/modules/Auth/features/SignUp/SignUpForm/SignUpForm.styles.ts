@@ -1,21 +1,16 @@
 import { styled } from '@mui/system';
 import { Button, Box, Link } from '@mui/material';
 
-import {
-  theme,
-  variables,
-  StyledHeadline,
-  StyledClearedButton,
-  StyledBodyMedium,
-} from 'shared/styles';
+import { theme, variables, StyledHeadline, StyledBodyMedium } from 'shared/styles';
+import { AUTH_BOX_WIDTH } from 'shared/consts';
 
 export const StyledSignUpHeader = styled(StyledHeadline)`
   margin: ${theme.spacing(0, 0, 2.4)};
 `;
 
 export const StyledForm = styled('form')`
+  width: ${AUTH_BOX_WIDTH};
   padding: ${theme.spacing(2.4)};
-  background-color: ${variables.palette.white};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   border-radius: ${variables.borderRadius.xl};
 `;
@@ -45,17 +40,4 @@ export const StyledButton = styled(Button)`
 
 export const StyledBackWrapper = styled(Box)`
   text-align: center;
-`;
-
-export const StyledBack = styled(StyledClearedButton)`
-  color: ${variables.palette.primary};
-  text-align: center;
-  font-size: ${variables.font.size.md};
-  font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.font.lineHeight.sm};
-  text-decoration: underline;
-
-  &.MuiButton-text:hover {
-    background-color: transparent;
-  }
 `;
