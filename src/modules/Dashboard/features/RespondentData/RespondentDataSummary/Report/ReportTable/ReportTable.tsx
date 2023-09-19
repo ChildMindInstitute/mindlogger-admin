@@ -23,6 +23,8 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
   const [orderBy, setOrderBy] = useState('');
   const [searchValue, setSearchValue] = useState('');
 
+  const emptyState = t('noMatchWasFound', { searchValue });
+
   const handleSearch = (searchValue: string) => {
     setSearchValue(searchValue);
   };
@@ -87,7 +89,7 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
           handleRequestSort={handleRequestSort}
           handleChangePage={handleChangePage}
           count={answers.length}
-          emptyComponent={visibleRows.length ? undefined : <>{t('noData')}</>}
+          emptyComponent={visibleRows.length ? undefined : emptyState}
         />
       </StyledTableWrapper>
     </Box>
