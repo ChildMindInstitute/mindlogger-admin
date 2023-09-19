@@ -481,7 +481,7 @@ export const ConditionalLogicSchema = () =>
     match: yup.string().required(getIsRequiredValidateMessage('conditionMatch')),
     itemKey: yup
       .string()
-      .required(getIsRequiredValidateMessage('conditionTarget'))
+      .required(t('fillInAllRequired') as string)
       .test(
         'item-flow-contradiction',
         t('appletHasItemFlowContradictions') as string,

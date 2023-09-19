@@ -30,6 +30,7 @@ export const ConditionRow = ({
   type = ConditionRowType.Item,
   scoreId,
   autoTrigger,
+  showError = true,
   'data-testid': dataTestid,
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
@@ -95,6 +96,7 @@ export const ConditionRow = ({
 
   const error = get(errors, `${conditionsName}[${index}]`);
   const errorMessage =
+    showError &&
     error &&
     t(
       Object.keys(error).length === VALIDATED_ITEMS_COUNT

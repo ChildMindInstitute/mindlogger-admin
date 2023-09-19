@@ -79,15 +79,6 @@ export const theme = createTheme({
         },
       },
     },
-    MuiTypography: {
-      styleOverrides: {
-        root: {
-          '&&.MuiTypography-root': {
-            zIndex: 'auto',
-          },
-        },
-      },
-    },
     MuiDialogActions: {
       styleOverrides: {
         root: {
