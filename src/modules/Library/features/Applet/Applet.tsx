@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { AppletImage, Svg } from 'shared/components';
 import {
   StyledBodyLarge,
   StyledBodyMedium,
@@ -37,8 +37,8 @@ import {
 import { AppletProps, AppletUiType, LibraryForm } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
 import { Activity } from './Activity';
-import { AppletImage } from './AppletImage';
 import { getActivities, getUpdatedStorageData } from './Applet.utils';
+import { appletImageProps } from './Applet.const';
 
 export const Applet = ({
   applet,
@@ -202,7 +202,7 @@ export const Applet = ({
   return (
     <>
       <StyledAppletContainer data-testid={dataTestid}>
-        <AppletImage image={image} name={displayName} />
+        <AppletImage image={image} appletName={displayName} {...appletImageProps} />
         <Box>
           {renderAppletInfo()}
           {!!keywords.length && (

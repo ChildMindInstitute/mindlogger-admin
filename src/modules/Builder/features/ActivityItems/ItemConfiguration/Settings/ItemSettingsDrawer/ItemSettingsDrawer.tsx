@@ -33,7 +33,7 @@ export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDraw
             p: theme.spacing(0, 1.4),
           }}
         >
-          <Svg id="report-configuration" />
+          <Svg id="configure" />
           <StyledTitleBoldSmall sx={{ flexGrow: 1 }}>{t('settings')}</StyledTitleBoldSmall>
           <StyledClearedButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}

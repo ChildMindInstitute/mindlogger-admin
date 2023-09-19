@@ -30,6 +30,10 @@ export const StyledMdEditor = styled(MarkDownEditor)`
     }
   }
 
+  .cm-editor {
+    background-color: transparent;
+  }
+
   & .md-editor-toolbar-wrapper {
     background-color: ${variables.palette.surface1};
     height: auto;

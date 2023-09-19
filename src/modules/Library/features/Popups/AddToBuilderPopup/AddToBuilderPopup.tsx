@@ -9,6 +9,7 @@ import { StyledModalWrapper } from 'shared/styles';
 import { SingleApplet, workspaces as workspacesState } from 'shared/state';
 import { useAsync, useNetwork } from 'shared/hooks';
 import { authStorage, isManagerOrOwnerOrEditor, Path } from 'shared/utils';
+import { MAX_LIMIT } from 'shared/consts';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
 import { useAppDispatch } from 'redux/store';
@@ -25,7 +26,6 @@ import {
 import { getArrayFromApplets, getSteps } from './AddToBuilderPopup.utils';
 import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
 import { StyledContainer } from './AddToBuilderPopup.styles';
-import { APPLETS_WITHOUT_LIMIT } from './AddToBuilderPopup.const';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,
@@ -163,7 +163,7 @@ export const AddToBuilderPopup = ({
       const { selectedWorkspace: ownerId } = getValues();
       if (!ownerId) return;
       getWorkspaceApplets({
-        params: { ownerId, limit: APPLETS_WITHOUT_LIMIT, flatList: true },
+        params: { ownerId, limit: MAX_LIMIT, flatList: true },
       });
     }
   }, [step]);

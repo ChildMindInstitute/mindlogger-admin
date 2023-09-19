@@ -2,6 +2,7 @@ import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
 
 import { SelectEvent } from 'shared/types/event';
+import { SxProps } from '@mui/material';
 
 export type Option = {
   value: string | boolean;
@@ -35,6 +36,7 @@ type FormSelectProps = {
   withGroups?: boolean;
   isLabelNeedTranslation?: boolean;
   uiType?: SelectUiType;
+  dropdownStyles?: SxProps;
   'data-testid'?: string;
 } & TextFieldProps;
 

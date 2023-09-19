@@ -105,7 +105,7 @@ export const getSettings = ({
       label: 'reports',
       items: [
         {
-          icon: <Svg id="report-configuration" />,
+          icon: <Svg id="configure" />,
           label: 'reportConfiguration',
           component: (
             <ReportConfigSetting

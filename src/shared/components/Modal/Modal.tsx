@@ -105,7 +105,7 @@ export const Modal = ({
                 {thirdBtnText}
               </StyledButton>
             )}
-            <Box>
+            <Box sx={{ display: 'flex' }}>
               {hasSecondBtn && (
                 <StyledButton
                   fontWeight="regular"

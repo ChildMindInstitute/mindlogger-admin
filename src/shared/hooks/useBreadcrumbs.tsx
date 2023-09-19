@@ -155,7 +155,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           disabledLink: true,
         },
         {
-          icon: 'report-configuration',
+          icon: 'configure',
           label: t('configure'),
         },
       );

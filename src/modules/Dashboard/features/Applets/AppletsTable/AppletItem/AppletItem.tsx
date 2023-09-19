@@ -6,7 +6,7 @@ import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { auth, popups, workspaces } from 'redux/modules';
-import { StyledBodyMedium } from 'shared/styles';
+import { StyledBodyMedium, theme } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import {
   AppletPasswordPopup,
@@ -204,7 +204,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
               </StyledPinContainer>
             )}
             <AppletImage image={item.image} appletName={item.displayName} />
-            <StyledBodyMedium>{item.displayName}</StyledBodyMedium>
+            <StyledBodyMedium sx={{ ml: theme.spacing(1.2) }}>{item.displayName}</StyledBodyMedium>
           </StyledAppletName>
         </TableCell>
         <TableCell width="20%" onClick={handleAppletClick}>

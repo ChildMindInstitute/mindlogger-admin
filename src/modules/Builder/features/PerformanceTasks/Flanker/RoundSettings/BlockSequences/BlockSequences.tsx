@@ -24,7 +24,7 @@ export const BlockSequences = memo(
       `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`,
     );
     const hasStimulusErrors = !stimulusTrials?.some(
-      (trial: FlankerStimulusSettings) => !!trial.image,
+      (trial: FlankerStimulusSettings) => !!trial.image || !!trial.text,
     );
 
     const blockSequencesObjField = `${activityObjField}.items[${

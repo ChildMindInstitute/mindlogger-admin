@@ -13,7 +13,7 @@ import {
   StyledTitleMedium,
 } from 'shared/styles';
 import { useBreadcrumbs } from 'shared/hooks';
-import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from 'shared/consts';
+import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
 import { AppletFormValues } from 'modules/Builder/types';
 import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
@@ -59,7 +59,7 @@ export const ActivityFlowAbout = () => {
             label={t('activityFlowDescription')}
             maxLength={MAX_DESCRIPTION_LENGTH}
             multiline
-            rows={4}
+            rows={TEXTAREA_ROWS_COUNT_SM}
             data-testid={`${dataTestid}-description`}
           />
         </Box>

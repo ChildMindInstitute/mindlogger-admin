@@ -39,7 +39,7 @@ export const getSettingBreadcrumbs = (param: SettingParam, isPublished = false) 
       label: t('deleteApplet'),
     },
     [SettingParam.ReportConfiguration]: {
-      icon: 'report-configuration',
+      icon: 'configure',
       label: t('reportConfiguration'),
     },
     [SettingParam.ShareApplet]: {

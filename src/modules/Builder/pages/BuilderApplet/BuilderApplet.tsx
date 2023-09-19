@@ -11,6 +11,7 @@ import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
+import { themes } from 'modules/Builder/state';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import {
@@ -29,7 +30,9 @@ export const BuilderApplet = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getAppletWithItems } = applet.thunk;
+  const { result: themesList = [] } = themes.useThemesData() || {};
   const loadingStatus = applet.useResponseStatus();
+  const themesLoadingStatus = themes.useThemesStatus();
   const appletResponseType = applet.useResponseTypePrefix();
   const isAppletLoaded =
     loadingStatus === 'success' &&
@@ -41,7 +44,12 @@ export const BuilderApplet = () => {
   const [isAppletInitialized, setAppletInitialized] = useState(false);
   const { data: dataFromLibrary } = location.state ?? {};
   const hasLibraryData = isFromLibrary && dataFromLibrary;
-  const isLoading = (!isNewApplet && loadingStatus === 'idle') || loadingStatus === 'loading';
+  const isLoading =
+    (!isNewApplet && loadingStatus === 'idle') ||
+    loadingStatus === 'loading' ||
+    themesLoadingStatus === 'loading';
+  // TODO: check if themesList[0].id is the default theme after back-end task (M2-3399) is done
+  const defaultThemeId = themesList[0]?.id;
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     appletId && ownerId && !isNewApplet
@@ -50,13 +58,14 @@ export const BuilderApplet = () => {
   );
 
   const methods = useForm<AppletFormValues>({
-    defaultValues: getDefaultValues(appletData),
+    defaultValues: getDefaultValues(appletData, defaultThemeId),
     resolver: yupResolver(AppletSchema()),
     mode: 'onChange',
   });
   const {
     reset,
     control,
+    setValue,
     getValues,
     formState: { isDirty },
   } = methods;
@@ -69,7 +78,7 @@ export const BuilderApplet = () => {
     if (!isAppletLoaded) return;
 
     (async () => {
-      await reset(getDefaultValues(appletData));
+      await reset(getDefaultValues(appletData, defaultThemeId));
 
       if (!dataFromLibrary) return;
 
@@ -105,7 +114,16 @@ export const BuilderApplet = () => {
     }
   }, [hasLibraryData, isNewApplet]);
 
-  useEffect(() => removeAppletData, []);
+  useEffect(() => {
+    if (!isNewApplet || !defaultThemeId) return;
+    setValue('themeId', defaultThemeId);
+  }, [defaultThemeId, isNewApplet]);
+
+  useEffect(() => {
+    dispatch(themes.thunk.getThemes({}));
+
+    return removeAppletData;
+  }, []);
 
   useEffect(() => {
     if (isAppletInitialized) return;
