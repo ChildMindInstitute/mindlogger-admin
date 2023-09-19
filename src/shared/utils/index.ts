@@ -38,3 +38,4 @@ export * from './mixpanel';
 export * from './concatIf';
 export * from './checkRole';
 export * from './getHighlightedText';
+export * from './removeMarkdown';
