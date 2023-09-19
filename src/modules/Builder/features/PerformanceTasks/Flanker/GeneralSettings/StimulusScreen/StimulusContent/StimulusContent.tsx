@@ -51,6 +51,7 @@ export const StimulusContent = () => {
   const buttons: FlankerButtonSetting[] = watch(buttonsField);
   const hasTwoButtons = buttons?.length === 2;
   const hasStimulusErrors = !!get(errors, stimulusObjField);
+  const correctPressText = hasTwoButtons ? t('flankerStimulus.correctPress') : '';
   const dataTestid = 'builder-activity-flanker-stimulus-screen';
 
   const {
@@ -109,7 +110,7 @@ export const StimulusContent = () => {
               {t('flankerStimulus.fileName')}
             </StyledBodyMedium>
             <StyledBodyMedium color={variables.palette.outline} sx={{ flex: '0 0 55%' }}>
-              {hasTwoButtons ? t('flankerStimulus.correctPress') : ''}
+              {correctPressText}
             </StyledBodyMedium>
           </StyledHeader>
         ) : (
@@ -129,7 +130,7 @@ export const StimulusContent = () => {
               <Box sx={{ flex: '0 0 45%' }}>
                 <StyledFlexTopCenter>
                   <Uploader
-                    uiType={UploaderUiType.Secondary}
+                    uiType={UploaderUiType.Tertiary}
                     width={5.6}
                     height={5.6}
                     setValue={(image: string) => {
