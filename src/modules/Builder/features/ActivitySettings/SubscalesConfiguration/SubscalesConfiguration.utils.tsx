@@ -5,7 +5,7 @@ import { StyledTitleSmall, variables } from 'shared/styles';
 
 import i18n from 'i18n';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
-import { SubscaleTotalScore } from 'shared/consts';
+import { LookupTableItems, SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 import { DataTableColumn } from 'shared/components';
 
@@ -14,7 +14,6 @@ import {
   SharedElementColumns,
   SubscaleColumns,
   SubscaleContentProps,
-  SubscaleSystemItemNames,
 } from './SubscalesConfiguration.types';
 import { LabelsObject, ModalType } from './LookupTable';
 
@@ -338,4 +337,4 @@ export const getAddTotalScoreModalLabels = (): LabelsObject => {
 };
 
 export const isSystemItem = (name: string) =>
-  name === SubscaleSystemItemNames.Gender || name === SubscaleSystemItemNames.Age;
+  name === LookupTableItems.Age_screen || name === LookupTableItems.Gender_screen;
