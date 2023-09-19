@@ -92,7 +92,7 @@ export const ShareApplet = ({
         if (prevState.some((item) => item === keyword)) {
           return prevState;
         }
-        const newKeywords = prevState.concat(keyword);
+        const newKeywords = prevState.concat(keyword.trim());
         setValue('keywords', newKeywords);
 
         return newKeywords;
