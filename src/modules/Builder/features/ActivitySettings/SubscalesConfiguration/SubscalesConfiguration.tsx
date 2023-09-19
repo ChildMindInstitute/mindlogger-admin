@@ -116,7 +116,7 @@ export const SubscalesConfiguration = () => {
     setCalculateTotalScoreSwitch(!!calculateTotalScore);
   }, [!!calculateTotalScore]);
 
-  useSubscalesSystemItemsSetup();
+  useSubscalesSystemItemsSetup(subscales);
 
   return (
     <StyledButtonsContainer>

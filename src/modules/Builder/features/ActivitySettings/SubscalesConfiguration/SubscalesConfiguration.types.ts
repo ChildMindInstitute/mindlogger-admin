@@ -18,3 +18,8 @@ export type SubscaleContentProps = {
   notUsedElements: ItemElement[];
   'data-testid'?: string;
 };
+
+export enum SubscaleSystemItemNames {
+  Gender = 'gender_screen',
+  Age = 'age_screen',
+}

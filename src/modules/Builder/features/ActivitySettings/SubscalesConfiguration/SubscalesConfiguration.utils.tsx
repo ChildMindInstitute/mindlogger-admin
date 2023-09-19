@@ -14,6 +14,7 @@ import {
   SharedElementColumns,
   SubscaleColumns,
   SubscaleContentProps,
+  SubscaleSystemItemNames,
 } from './SubscalesConfiguration.types';
 import { LabelsObject, ModalType } from './LookupTable';
 
@@ -335,3 +336,6 @@ export const getAddTotalScoreModalLabels = (): LabelsObject => {
     },
   };
 };
+
+export const isSystemItem = (name: string) =>
+  name === SubscaleSystemItemNames.Gender || name === SubscaleSystemItemNames.Age;
