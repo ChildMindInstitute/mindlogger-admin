@@ -1,8 +1,8 @@
 import { Condition } from 'shared/state';
 
 export type ItemFlowContentProps = {
-  items: Condition[];
   name: string;
-  'data-testid'?: string;
+  conditions: Condition[];
   onRemove: (index: number) => void;
+  'data-testid'?: string;
 };

@@ -4,7 +4,7 @@ import { Badge } from '@mui/material';
 
 import { ToggleItemContainer } from 'modules/Builder/components';
 
-import { Actions } from './Actions';
+import { ItemFlowActions } from './ItemFlowActions';
 import { ItemFlowProps } from './ItemFlow.types';
 import { getEmptyCondition } from './ItemFlow.utils';
 import { StyledTitle } from './ItemFlow.styles';
@@ -47,12 +47,12 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
     <ToggleItemContainer
       title={title}
       Content={ItemFlowContent}
-      HeaderContent={Actions}
+      HeaderContent={ItemFlowActions}
       contentProps={{
-        items: conditions,
         name: itemName,
-        'data-testid': dataTestid,
+        conditions,
         onRemove: handleRemoveCondition,
+        'data-testid': dataTestid,
       }}
       headerContentProps={{
         name: itemName,

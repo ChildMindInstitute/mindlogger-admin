@@ -9,10 +9,10 @@ import { ItemFlowContentProps } from './ItemFlowContent.types';
 import { SummaryRow } from '../SummaryRow';
 
 export const ItemFlowContent = ({
-  items,
   name,
-  'data-testid': dataTestid,
+  conditions,
   onRemove,
+  'data-testid': dataTestid,
 }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
   const { watch, getFieldState } = useFormContext();
@@ -25,7 +25,7 @@ export const ItemFlowContent = ({
 
   return (
     <StyledFlexColumn sx={{ gap: '1.2rem' }}>
-      {items?.map((condition: Condition, index: number) => (
+      {conditions?.map((condition: Condition, index: number) => (
         <ConditionRow
           key={`item-flow-condition-${condition.key}`}
           name={name}
