@@ -9,7 +9,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
 import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
+import { StyledErrorText, StyledHeadline, StyledLinkBtn } from 'shared/styles/styledComponents';
 import { getErrorMessage } from 'shared/utils/errors';
 import { variables } from 'shared/styles';
 
@@ -19,7 +19,6 @@ import {
   StyledController,
   StyledButton,
   StyledBackWrapper,
-  StyledBack,
 } from './ResetForm.styles';
 import { resetSchema } from './ResetForm.schema';
 import { ResetFormProps } from './ResetForm.types';
@@ -66,9 +65,9 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
         {t('sendResetLink')}
       </StyledButton>
       <StyledBackWrapper>
-        <StyledBack onClick={() => navigate(page.login)} data-testid="reset-form-back">
+        <StyledLinkBtn onClick={() => navigate(page.login)} data-testid="reset-form-back">
           {t('backToLogin')}
-        </StyledBack>
+        </StyledLinkBtn>
       </StyledBackWrapper>
     </StyledForm>
   );
