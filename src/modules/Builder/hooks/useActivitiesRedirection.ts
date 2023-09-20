@@ -12,15 +12,14 @@ export const useActivitiesRedirection = () => {
   const navigate = useNavigate();
   const { activity } = useCurrentActivity();
   const isNewApplet = useCheckIfNewApplet();
-
-  const { watch } = useFormContext();
-
-  const activities = watch('activities');
-  const shouldRedirect = (isNewApplet || activities?.length > 0) && activityId && !activity;
+  const { getValues } = useFormContext();
 
   useEffect(() => {
+    const activities = getValues('activities');
+    const shouldRedirect = (isNewApplet || activities?.length > 0) && activityId && !activity;
+
     if (!shouldRedirect) return;
 
     navigate(generatePath(page.builderAppletActivities, { appletId }));
-  }, [shouldRedirect]);
+  }, [activityId]);
 };
