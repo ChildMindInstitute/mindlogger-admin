@@ -1,15 +1,24 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { PreloadedState, configureStore } from '@reduxjs/toolkit';
+import { RenderOptions } from '@testing-library/react';
 
-import reducer from './reducers';
+import { rootReducer } from './reducers';
 
-export const store = configureStore({
-  reducer,
-  devTools: process.env.NODE_ENV !== 'production',
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      // TODO: remove serializable check and fix errors
-      serializableCheck: false,
-    }),
-});
+export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
+  configureStore({
+    reducer: rootReducer,
+    devTools: process.env.NODE_ENV !== 'production',
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        // TODO: remove serializable check and fix errors
+        serializableCheck: false,
+      }),
+    preloadedState,
+  });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof setupStore>;
+
+export type ExtendedRenderOptions = Omit<RenderOptions, 'queries'> & {
+  preloadedState?: PreloadedState<RootState>;
+  store?: AppStore;
+};
