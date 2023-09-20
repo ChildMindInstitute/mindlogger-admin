@@ -12,10 +12,10 @@ export const useActivitiesRedirection = () => {
   const navigate = useNavigate();
   const { activity } = useCurrentActivity();
   const isNewApplet = useCheckIfNewApplet();
-  const { watch } = useFormContext();
+  const { getValues } = useFormContext();
 
   useEffect(() => {
-    const activities = watch('activities');
+    const activities = getValues('activities');
     const shouldRedirect = (isNewApplet || activities?.length > 0) && activityId && !activity;
 
     if (!shouldRedirect) return;
