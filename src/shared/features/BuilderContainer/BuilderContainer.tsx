@@ -11,6 +11,8 @@ export const BuilderContainer = ({
   Header,
   children,
   headerProps,
+  sxProps,
+  contentSxProps,
   hasMaxWidth,
 }: BuilderContainerProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
@@ -19,11 +21,13 @@ export const BuilderContainer = ({
   const HeaderComponent = Header || StyledHeader;
 
   return (
-    <StyledBuilderWrapper ref={containerRef} hasMaxWidth={hasMaxWidth}>
+    <StyledBuilderWrapper ref={containerRef} hasMaxWidth={hasMaxWidth} sx={sxProps}>
       <HeaderComponent isSticky={isHeaderSticky} headerProps={headerProps}>
         <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
       </HeaderComponent>
-      <StyledFlexColumn sx={{ padding: theme.spacing(1.6, 6.4, 2.4) }}>{children}</StyledFlexColumn>
+      <StyledFlexColumn sx={{ padding: theme.spacing(1.6, 6.4, 2.4), ...contentSxProps }}>
+        {children}
+      </StyledFlexColumn>
     </StyledBuilderWrapper>
   );
 };

@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
@@ -11,7 +11,7 @@ export const Alerts = ({ name, appendAlert, removeAlert, alerts }: AlertProps) =
   const { t } = useTranslation('app');
 
   return (
-    <>
+    <Box>
       <StyledTitleLarge sx={{ m: theme.spacing(4, 0, 2.4) }}>{t('alerts')}</StyledTitleLarge>
       {alerts?.map((alert, i: number) => (
         <Alert key={alert.id} name={name} index={i} removeAlert={() => removeAlert(i)} />
@@ -25,6 +25,6 @@ export const Alerts = ({ name, appendAlert, removeAlert, alerts }: AlertProps) =
       >
         {t('addAlert')}
       </Button>
-    </>
+    </Box>
   );
 };

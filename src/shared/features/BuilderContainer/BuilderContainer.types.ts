@@ -1,5 +1,6 @@
 import { ReactNode, FC } from 'react';
 import { DefaultTFuncReturn } from 'i18next';
+import { SxProps } from '@mui/material';
 
 export type HeaderProps = {
   isSticky: boolean;
@@ -12,5 +13,7 @@ export type BuilderContainerProps = {
   Header?: FC<HeaderProps>;
   headerProps?: Record<string, unknown>;
   children?: ReactNode;
+  sxProps?: SxProps;
+  contentSxProps?: SxProps;
   hasMaxWidth?: boolean;
 };

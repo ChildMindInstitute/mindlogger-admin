@@ -8,11 +8,6 @@ import { blendColorsNormal } from 'shared/utils/colors';
 
 declare module '@mui/system/createTheme/createBreakpoints' {
   interface BreakpointOverrides {
-    xs: true;
-    sm: true;
-    md: true;
-    lg: true;
-    xl: true;
     xxl: true;
   }
 }
