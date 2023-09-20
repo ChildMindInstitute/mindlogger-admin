@@ -23,7 +23,7 @@ const commonLogoStyles = `
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 100%;
-  border: ${variables.borderWidth.lg} solid ${variables.palette.surface1};
+  outline: ${variables.borderWidth.lg} solid ${variables.palette.surface1};
   position: absolute;
   bottom: -0.75rem;
   right: -0.75rem;
