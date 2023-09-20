@@ -68,7 +68,7 @@ export const AppletsCatalog = () => {
         limit: DEFAULT_APPLETS_PER_PAGE,
       }),
     );
-  }, []);
+  }, [pageIndex]);
 
   return (
     <StyledBody sx={{ position: 'relative' }}>
