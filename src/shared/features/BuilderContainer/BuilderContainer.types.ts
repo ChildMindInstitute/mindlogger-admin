@@ -12,4 +12,5 @@ export type BuilderContainerProps = {
   Header?: FC<HeaderProps>;
   headerProps?: Record<string, unknown>;
   children?: ReactNode;
+  hasMaxWidth?: boolean;
 };

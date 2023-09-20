@@ -11,6 +11,7 @@ export const BuilderContainer = ({
   Header,
   children,
   headerProps,
+  hasMaxWidth,
 }: BuilderContainerProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
@@ -18,7 +19,7 @@ export const BuilderContainer = ({
   const HeaderComponent = Header || StyledHeader;
 
   return (
-    <StyledBuilderWrapper ref={containerRef} sx={{ position: 'relative' }}>
+    <StyledBuilderWrapper ref={containerRef} hasMaxWidth={hasMaxWidth}>
       <HeaderComponent isSticky={isHeaderSticky} headerProps={headerProps}>
         <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
       </HeaderComponent>

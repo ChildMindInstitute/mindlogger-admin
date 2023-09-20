@@ -8,8 +8,8 @@ import {
   theme,
 } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
+import { StyledHeader } from 'shared/features';
 
-import { StyledHeader } from './ConfigurationHeader.styles';
 import { ConfigurationHeaderProps } from './ConfigurationHeader.types';
 
 export const ConfigurationHeader = ({

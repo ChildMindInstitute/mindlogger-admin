@@ -5,9 +5,20 @@ import { variables } from 'shared/styles/variables';
 import { Svg } from 'shared/components/Svg';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
-export const StyledBuilderWrapper = styled(Box)`
+export const StyledBuilderWrapper = styled(Box, shouldForwardProp)`
   overflow-y: auto;
   margin: ${theme.spacing(-2.4, -2.4, 0)};
+
+  ${({ hasMaxWidth }: { hasMaxWidth?: boolean }) =>
+    hasMaxWidth &&
+    `
+    > .MuiBox-root {
+      ${theme.breakpoints.up('xl')} {
+        padding-left: calc((100% - 123.2rem) / 2);
+        padding-right: calc((100% - 123.2rem) / 2);
+      }
+    }
+  `}
 `;
 
 export const StyledTooltipSvg = styled(Svg)`
@@ -16,20 +27,4 @@ export const StyledTooltipSvg = styled(Svg)`
   }
 
   margin-left: ${theme.spacing(0.6)};
-`;
-
-export const StyledMaxWidthWrapper = styled(Box, shouldForwardProp)`
-  max-width: 123.2rem;
-  ${({ hasParentColumnDirection }: { hasParentColumnDirection?: boolean }) => {
-    if (hasParentColumnDirection) {
-      return `
-        width: 100%;
-        align-self: center;
-      `;
-    }
-
-    return `
-      margin: 0 auto;
-    `;
-  }}
 `;
