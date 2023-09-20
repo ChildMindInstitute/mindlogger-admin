@@ -10,14 +10,14 @@ import { LinkPopupProps } from './LinkPopup.types';
 
 export const LinkPopup = ({ open, onClose, setInviteLink }: LinkPopupProps) => {
   const { t } = useTranslation('app');
-  const { appletId: id } = useParams();
+  const { appletId } = useParams() || {};
   const { execute } = useAsync(postAppletPublicLinkApi, async (res) => {
     await setInviteLink(res?.data.result);
     onClose();
   });
 
-  const postAppletLink = async (requireLogin: boolean) => {
-    await execute({ appletId: id || '', requireLogin });
+  const postAppletLink = (requireLogin: boolean) => {
+    appletId && execute({ appletId, requireLogin });
   };
 
   return (

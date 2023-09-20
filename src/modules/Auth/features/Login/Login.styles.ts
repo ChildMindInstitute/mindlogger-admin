@@ -5,7 +5,7 @@ import {
   theme,
   variables,
   StyledHeadline,
-  StyledClearedButton,
+  StyledLinkBtn,
   StyledBodyMedium,
   StyledFlexAllCenter,
 } from 'shared/styles';
@@ -23,7 +23,6 @@ export const StyledLoginSubheader = styled(StyledBodyMedium)`
 export const StyledForm = styled('form')`
   margin-top: ${theme.spacing(3.2)};
   padding: ${theme.spacing(2.4)};
-  background: ${variables.palette.white};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   border-radius: ${variables.borderRadius.xl};
 `;
@@ -42,18 +41,8 @@ export const StyledButton = styled(Button)`
   margin-top: ${theme.spacing(2.4)};
 `;
 
-export const StyledForgotPasswordLink = styled(StyledClearedButton)`
-  width: fit-content;
+export const StyledForgotPasswordLink = styled(StyledLinkBtn)`
   margin: ${theme.spacing(1.2, 0, 0.8)};
-  color: ${variables.palette.primary};
-  font-size: ${variables.font.size.md};
-  font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.font.lineHeight.md};
-  text-decoration: underline;
-
-  &.MuiButton-text:hover {
-    background-color: transparent;
-  }
 `;
 
 export const StyledImageContainer = styled(StyledFlexAllCenter)`

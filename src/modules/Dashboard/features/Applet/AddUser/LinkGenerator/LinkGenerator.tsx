@@ -17,7 +17,7 @@ import { LinkPopup } from '../Popups/LinkPopup';
 
 export const LinkGenerator = () => {
   const { t } = useTranslation('app');
-  const { appletId: id } = useParams();
+  const { appletId } = useParams() || {};
   const [inviteLink, setInviteLink] = useState<InviteLink | null>(null);
   const [linkPopupVisible, setLinkPopupVisible] = useState(false);
 
@@ -31,7 +31,7 @@ export const LinkGenerator = () => {
   };
 
   useEffect(() => {
-    execute({ appletId: id || '' });
+    appletId && execute({ appletId });
   }, []);
 
   return (

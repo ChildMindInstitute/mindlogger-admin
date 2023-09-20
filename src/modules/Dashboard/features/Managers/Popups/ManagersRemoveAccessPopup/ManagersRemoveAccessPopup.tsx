@@ -31,13 +31,14 @@ export const ManagersRemoveAccessPopup = ({
 }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
+
   const { firstName, lastName, email, applets } = user;
 
   const [step, setStep] = useState<number>(appletId ? 1 : 0);
   const incrementStep = () => setStep((prevStep) => prevStep + 1);
   const decrementStep = () => setStep((prevStep) => prevStep - 1);
 
-  const defaultValues = applets.map(({ displayName, id, image }) => ({
+  const defaultValues = applets?.map(({ displayName, id, image }) => ({
     displayName,
     id,
     image,
@@ -137,7 +138,7 @@ export const ManagersRemoveAccessPopup = ({
     const { displayName } = selectedApplets[0];
 
     return (
-      <StyledBodyLarge>
+      <StyledBodyLarge data-testid="dashboard-managers-remove-access-popup-second-screen">
         <Trans i18nKey="confirmRemoveAccess">
           Are you sure that you want to remove the access for the
           <strong>

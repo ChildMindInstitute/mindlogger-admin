@@ -38,10 +38,21 @@ import { getSubscales } from './getSubscales';
 import { getDrawingLines } from './getDrawingLines';
 import { getABTrailsRecords } from './getABTrailsRecords';
 import { convertDateStampToMs } from './convertDateStampToMs';
+import { checkIfHasMigratedAnswers, getIdBeforeMigration } from './migratedData';
 
 const getDecryptedAnswersObject = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
-) => getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
+  hasMigratedAnswers?: boolean,
+) =>
+  getObjectFromList(decryptedAnswers, (item) => {
+    if (hasMigratedAnswers) {
+      return `${getIdBeforeMigration(item.activityId)}/${getIdBeforeMigration(
+        item.activityItem.id,
+      )}`;
+    }
+
+    return `${item.activityId}/${item.activityItem.id}`;
+  });
 
 const getReportData = (
   reportData: AppletExportData['reportData'],
@@ -167,7 +178,8 @@ const getActivityJourneyData = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
   decryptedEvents: EventDTO[],
 ) => {
-  const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers);
+  const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);
+  const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers, hasMigratedAnswers);
   let indexForABTrailsFiles = 0;
   const events = decryptedEvents.map((event, index, events) => {
     if (index === 0 && !decryptedAnswersObject[event.screen] && events[index + 1])

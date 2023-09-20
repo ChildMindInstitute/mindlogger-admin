@@ -67,8 +67,8 @@ export const StyledLogOutBtn = styled(Button)`
 export const StyledQuantity = styled(StyledQuantityCircle)`
   top: -0.1rem;
   right: -0.1rem;
-  min-width: 1.6rem;
-  padding: ${theme.spacing(0.3)};
+  width: 1.6rem;
+  height: 1.6rem;
 `;
 
 export const StyledCloseWrapper = styled(Box)`

@@ -1,8 +1,12 @@
 import { Svg } from 'shared/components';
 
-import { ActionsType } from './Actions.types';
+import { ItemFlowActionsType } from './ItemFlowActions.types';
 
-export const getActions = ({ onAdd, onRemove, 'data-testid': dataTestid }: ActionsType) => [
+export const getItemFlowActions = ({
+  onAdd,
+  onRemove,
+  'data-testid': dataTestid,
+}: ItemFlowActionsType) => [
   {
     icon: <Svg id="add" />,
     action: () => onAdd(),

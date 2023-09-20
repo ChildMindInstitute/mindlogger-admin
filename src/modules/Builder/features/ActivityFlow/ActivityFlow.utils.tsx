@@ -38,8 +38,6 @@ export const getFlowsItemActions = ({
   },
 ];
 
-export const getActivityFlowKey = (flow: ActivityFlowFormValues) => flow.id ?? flow.key ?? '';
-
 export const getDuplicatedActivityFlow = (flow: ActivityFlowFormValues, name: string) => {
   const duplicatedItems =
     flow.items?.map((item) => ({

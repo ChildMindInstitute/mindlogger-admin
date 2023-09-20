@@ -111,7 +111,7 @@ export const Applet = ({
       {description && (
         <StyledBodyMedium
           color={variables.palette.on_surface}
-          sx={{ marginTop: theme.spacing(0.4) }}
+          sx={{ marginTop: theme.spacing(0.4), wordBreak: 'break-word' }}
         >
           {getHighlightedText(getDictionaryText(description), search)}
         </StyledBodyMedium>
@@ -201,8 +201,10 @@ export const Applet = ({
 
   return (
     <>
-      <StyledAppletContainer data-testid={dataTestid}>
-        <AppletImage image={image} appletName={displayName} {...appletImageProps} />
+      <StyledAppletContainer data-testid={dataTestid} uiType={uiType}>
+        <Box sx={{ gridArea: 'appletImage' }}>
+          <AppletImage image={image} appletName={displayName} {...appletImageProps} />
+        </Box>
         <Box>
           {renderAppletInfo()}
           {!!keywords.length && (
@@ -224,7 +226,7 @@ export const Applet = ({
         <StyledButtonsContainer>{renderButtons()}</StyledButtonsContainer>
         <FormProvider {...methods}>
           {updatedActivities?.length && (
-            <StyledActivitiesContainer uiType={uiType}>
+            <StyledActivitiesContainer>
               {uiType === AppletUiType.Details ? (
                 <StyledHeadline>{`${t('appletActivities')}:`}</StyledHeadline>
               ) : (
