@@ -17,7 +17,6 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
-
 export type ExtendedRenderOptions = Omit<RenderOptions, 'queries'> & {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;
