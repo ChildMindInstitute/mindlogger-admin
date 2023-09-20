@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { AppletImage, Svg } from 'shared/components';
 import {
   StyledBodyLarge,
   StyledBodyMedium,
@@ -37,8 +37,8 @@ import {
 import { AppletProps, AppletUiType, LibraryForm } from './Applet.types';
 import { RemoveAppletPopup } from './Popups';
 import { Activity } from './Activity';
-import { AppletImage } from './AppletImage';
 import { getActivities, getUpdatedStorageData } from './Applet.utils';
+import { appletImageProps } from './Applet.const';
 
 export const Applet = ({
   applet,
@@ -111,7 +111,7 @@ export const Applet = ({
       {description && (
         <StyledBodyMedium
           color={variables.palette.on_surface}
-          sx={{ marginTop: theme.spacing(0.4) }}
+          sx={{ marginTop: theme.spacing(0.4), wordBreak: 'break-word' }}
         >
           {getHighlightedText(getDictionaryText(description), search)}
         </StyledBodyMedium>
@@ -201,8 +201,10 @@ export const Applet = ({
 
   return (
     <>
-      <StyledAppletContainer data-testid={dataTestid}>
-        <AppletImage image={image} name={displayName} />
+      <StyledAppletContainer data-testid={dataTestid} uiType={uiType}>
+        <Box sx={{ gridArea: 'appletImage' }}>
+          <AppletImage image={image} appletName={displayName} {...appletImageProps} />
+        </Box>
         <Box>
           {renderAppletInfo()}
           {!!keywords.length && (
@@ -224,7 +226,7 @@ export const Applet = ({
         <StyledButtonsContainer>{renderButtons()}</StyledButtonsContainer>
         <FormProvider {...methods}>
           {updatedActivities?.length && (
-            <StyledActivitiesContainer uiType={uiType}>
+            <StyledActivitiesContainer>
               {uiType === AppletUiType.Details ? (
                 <StyledHeadline>{`${t('appletActivities')}:`}</StyledHeadline>
               ) : (

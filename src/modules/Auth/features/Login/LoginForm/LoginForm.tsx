@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@mui/material';
 
 import { SignIn } from 'api';
 import { page } from 'resources';
@@ -12,6 +13,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
 import { getErrorMessage, Mixpanel, navigateToLibrary } from 'shared/utils';
 import { variables } from 'shared/styles';
+import { AUTH_BOX_WIDTH } from 'shared/consts';
 
 import {
   StyledWelcome,
@@ -63,7 +65,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <>
+    <Box sx={{ width: AUTH_BOX_WIDTH }}>
       <StyledWelcome>
         <Trans i18nKey="welcome">
           Welcome to the MindLogger <br /> Admin Panel
@@ -118,6 +120,6 @@ export const LoginForm = () => {
           {t('createAccount')}
         </StyledButton>
       </StyledForm>
-    </>
+    </Box>
   );
 };

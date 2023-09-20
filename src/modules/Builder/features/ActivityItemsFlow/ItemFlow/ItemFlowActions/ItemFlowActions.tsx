@@ -1,23 +1,23 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation, Trans } from 'react-i18next';
 
-import { Actions as CommonActions } from 'shared/components';
+import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/types';
 
-import { ActionsProps } from './Actions.types';
-import { getActions } from './Actions.utils';
+import { ItemFlowActionsProps } from './ItemFlowActions.types';
+import { getItemFlowActions } from './ItemFlowActions.utils';
 
-export const Actions = ({
+export const ItemFlowActions = ({
   open,
   name,
   onAdd,
   onRemove,
   onToggle,
   'data-testid': dataTestid,
-}: ActionsProps) => {
+}: ItemFlowActionsProps) => {
   const { t } = useTranslation('app');
   const { fieldName } = useCurrentActivity();
   const { watch } = useFormContext();
@@ -52,8 +52,8 @@ export const Actions = ({
           </Trans>
         </StyledTitleMedium>
       )}
-      <CommonActions
-        items={getActions({ onAdd: handleAdd, onRemove, 'data-testid': dataTestid })}
+      <Actions
+        items={getItemFlowActions({ onAdd: handleAdd, onRemove, 'data-testid': dataTestid })}
         context={name}
         visibleByDefault={open}
         sxProps={{ width: 'unset' }}

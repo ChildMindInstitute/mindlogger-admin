@@ -46,6 +46,10 @@ export const StyledMdPreview = styled(MarkDownPreview)`
   text-align: initial;
   padding: ${theme.spacing(0.7, 0)};
 
+  .md-editor-preview-wrapper {
+    padding: 0;
+  }
+
   .default-theme {
     p {
       padding: 0;

@@ -9,6 +9,7 @@ export type ConditionRowProps = {
   type?: ConditionRowType;
   scoreId?: string;
   autoTrigger?: boolean;
+  showError?: boolean;
   'data-testid'?: string;
 };
 

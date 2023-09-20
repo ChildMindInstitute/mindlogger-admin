@@ -25,3 +25,8 @@ jest.mock('shared/utils/encryption', () => ({
   __esModule: true,
   ...jest.requireActual('shared/utils/encryption'),
 }));
+
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useParams: jest.fn(),
+}));

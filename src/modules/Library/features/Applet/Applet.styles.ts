@@ -12,10 +12,26 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { AppletUiType } from './Applet.types';
 
-export const StyledAppletContainer = styled(Box)`
+export const StyledAppletContainer = styled(Box, shouldForwardProp)`
   display: grid;
   grid-template-columns: 10.4rem 1fr auto;
   column-gap: 2.4rem;
+
+  ${({ uiType }: { uiType: AppletUiType }) => {
+    switch (uiType) {
+      case AppletUiType.Details:
+        return `
+        grid-template-areas:
+        'appletImage . . '
+        'activities activities activities';`;
+      case AppletUiType.List:
+      case AppletUiType.Cart:
+        return `
+        grid-template-areas:
+        'appletImage . . '
+        'appletImage activities activities';`;
+    }
+  }}
 `;
 
 export const StyledAppletName = styled(Box)`
@@ -37,6 +53,7 @@ export const StyledAppletKeyword = styled(Button, shouldForwardProp)`
   height: auto;
   margin-bottom: ${theme.spacing(0.8)};
   transition: ${variables.transitions.opacity};
+  word-break: break-word;
   cursor: ${({ hasSearch }: { hasSearch: boolean }) => (hasSearch ? 'pointer' : 'default')};
 
   && {
@@ -58,21 +75,8 @@ export const StyledButtonsContainer = styled(Box)`
   justify-content: space-between;
 `;
 
-export const StyledActivitiesContainer = styled(Box, shouldForwardProp)`
-  ${({ uiType }: { uiType: AppletUiType }) => {
-    switch (uiType) {
-      case AppletUiType.Details:
-        return `
-          grid-column-start: 1;
-          grid-column-end: 4;
-          margin-top: 4.6rem;`;
-      case AppletUiType.List:
-      case AppletUiType.Cart:
-        return `
-          grid-column-start: 2;
-          grid-column-end: 4;`;
-    }
-  }}
+export const StyledActivitiesContainer = styled(Box)`
+  grid-area: activities;
   margin-top: ${theme.spacing(0.8)};
 `;
 

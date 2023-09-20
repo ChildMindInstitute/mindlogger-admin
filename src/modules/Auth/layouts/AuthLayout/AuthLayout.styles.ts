@@ -30,6 +30,5 @@ export const StyledAuthWrapper = styled(StyledFlexAllCenter)`
 `;
 
 export const StyledAuthWrapperInner = styled(Box)`
-  width: 37.6rem;
   margin: ${theme.spacing(2.4, 0)};
 `;

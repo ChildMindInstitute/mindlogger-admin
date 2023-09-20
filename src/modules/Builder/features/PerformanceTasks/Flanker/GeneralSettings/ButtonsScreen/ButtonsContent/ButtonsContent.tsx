@@ -99,7 +99,7 @@ export const ButtonsContent = () => {
             <StyledRowWrapper key={index}>
               <StyledFlexTopCenter sx={{ mr: theme.spacing(0.8) }}>
                 <Uploader
-                  uiType={UploaderUiType.Secondary}
+                  uiType={UploaderUiType.Tertiary}
                   width={5.6}
                   height={5.6}
                   setValue={(val: string) => {

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
 
+import { Applet } from 'api';
 import { DeletePopup } from './DeletePopup';
 
 const testId = 'dashboard-applets-delete-popup';
@@ -19,9 +20,21 @@ const mockedApplet = {
     base: '[2]',
     accountId: '8a1f6b52-a00f-4adb-83be-461bc2e4f119',
   },
+} as Applet;
+const preloadedState = {
+  popups: {
+    data: {
+      applet: mockedApplet,
+      encryption: null,
+      popupProps: undefined,
+      deletePopupVisible: true,
+      duplicatePopupsVisible: false,
+      transferOwnershipPopupVisible: false,
+      publishConcealPopupVisible: false,
+    },
+  },
 };
-
-const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet.encryption.publicKey));
+const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
 
 const fakeRequest = () => new Promise((res) => res(null));
 
@@ -31,9 +44,9 @@ describe('DeletePopup component tests', () => {
   const mockedAxios = axios.create();
 
   test('DeletePopup should open the password check modal initially', async () => {
-    renderWithProviders(
-      <DeletePopup onCloseCallback={onCloseMock} data-testid={testId} visibleByDefault />,
-    );
+    renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />, {
+      preloadedState,
+    });
     expect(screen.getByTestId(`${testId}-enter-password-password`)).toBeInTheDocument();
   });
 
@@ -43,14 +56,9 @@ describe('DeletePopup component tests', () => {
       getPublicKey: getPublicKeyMock,
     }));
 
-    renderWithProviders(
-      <DeletePopup
-        onCloseCallback={onCloseMock}
-        data-testid={testId}
-        testApplet={mockedApplet}
-        visibleByDefault
-      />,
-    );
+    renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />, {
+      preloadedState,
+    });
 
     fireEvent.change(screen.getByLabelText(/Password/), {
       target: { value: password },

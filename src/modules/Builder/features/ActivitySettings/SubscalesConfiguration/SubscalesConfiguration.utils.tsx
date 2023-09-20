@@ -5,7 +5,7 @@ import { StyledTitleSmall, variables } from 'shared/styles';
 
 import i18n from 'i18n';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
-import { SubscaleTotalScore } from 'shared/consts';
+import { LookupTableItems, SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 import { DataTableColumn } from 'shared/components';
 
@@ -335,3 +335,6 @@ export const getAddTotalScoreModalLabels = (): LabelsObject => {
     },
   };
 };
+
+export const isSystemItem = (name: string) =>
+  name === LookupTableItems.Age_screen || name === LookupTableItems.Gender_screen;

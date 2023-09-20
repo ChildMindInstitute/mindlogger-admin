@@ -12,6 +12,7 @@ import {
   StyledFlexColumn,
   variables,
   StyledBodySmall,
+  StyledBodyLarge,
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, Uploader, UploaderUiType } from 'shared/components';
@@ -36,7 +37,7 @@ export const FixationContent = () => {
   const fixationImageField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.fixationScreen`;
   const fixationDurationField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.fixationDuration`;
   const fixationShowField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.showFixation`;
-  const fixationImage = watch(`${fixationImageField}.image`);
+  const fixationImage = watch(fixationImageField);
   const fixationShow = watch(fixationShowField);
   const imgErrorPath = `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.fixationScreen`;
   const hasImgError = !!get(errors, imgErrorPath);
@@ -63,15 +64,27 @@ export const FixationContent = () => {
     <>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(2.4), justifyContent: 'space-between' }}>
         <StyledFlexColumn>
-          <Uploader
-            uiType={UploaderUiType.Secondary}
-            width={5.6}
-            height={5.6}
-            setValue={handleImageSet}
-            getValue={() => fixationImage || ''}
-            hasError={hasImgError}
-            data-testid={`${dataTestid}-image`}
-          />
+          <StyledFlexTopCenter>
+            <Uploader
+              uiType={UploaderUiType.Tertiary}
+              width={5.6}
+              height={5.6}
+              setValue={handleImageSet}
+              getValue={() => fixationImage?.image || ''}
+              hasError={hasImgError}
+              data-testid={`${dataTestid}-image`}
+            />
+            {fixationImage?.value && (
+              <StyledBodyLarge
+                sx={{
+                  ml: theme.spacing(1),
+                  color: variables.palette.on_surface_variant,
+                }}
+              >
+                {fixationImage.value}
+              </StyledBodyLarge>
+            )}
+          </StyledFlexTopCenter>
           {hasImgError && (
             <StyledBodySmall
               sx={{ pt: theme.spacing(0.5) }}

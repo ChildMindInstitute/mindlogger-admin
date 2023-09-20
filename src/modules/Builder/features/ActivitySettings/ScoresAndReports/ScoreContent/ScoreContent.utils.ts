@@ -3,14 +3,13 @@ import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import i18n from 'i18n';
 import {
   ScoreReport,
-  Item,
-  MultiSelectItem,
   SingleAndMultiSelectOption,
-  SingleSelectItem,
-  SliderItem,
+  SingleAndMultipleSelectItemResponseValues,
+  SliderItemResponseValues,
 } from 'shared/state';
 import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
-import { getEntityKey } from 'shared/utils';
+import { ItemFormValues } from 'modules/Builder/types';
+import { getEntityKey, removeMarkdown } from 'shared/utils';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 
@@ -30,12 +29,12 @@ export const getSelectedItemsColumns = () => [
   },
 ];
 
-export const getTableScoreItems = (items: Item[]) =>
+export const getTableScoreItems = (items: ItemFormValues[]) =>
   items?.map((item) => ({
     id: getEntityKey(item),
     name: item.name,
-    tooltip: `${item.question}`,
-    label: `${item.name}: ${item.question}`,
+    tooltip: removeMarkdown(item.question),
+    label: `${item.name}: ${removeMarkdown(item.question)}`,
   }));
 
 export const getScoreId = (name: string, calculationType: CalculationType) =>
@@ -44,13 +43,13 @@ export const getScoreId = (name: string, calculationType: CalculationType) =>
 export const getScoreRangeLabel = (minScore: number, maxScore: number) =>
   `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}`;
 
-const getItemScoreRange = (item: Item) => {
+const getItemScoreRange = (item: ItemFormValues) => {
   let scores: number[];
   if (
     item.responseType === ItemResponseType.SingleSelection ||
     item.responseType === ItemResponseType.MultipleSelection
   ) {
-    scores = (item as SingleSelectItem | MultiSelectItem).responseValues.options?.reduce(
+    scores = (item.responseValues as SingleAndMultipleSelectItemResponseValues).options?.reduce(
       (result: number[], option: SingleAndMultiSelectOption) => {
         if (!option.isHidden && typeof option.score === 'number') {
           return [...result, option.score];
@@ -61,7 +60,7 @@ const getItemScoreRange = (item: Item) => {
       [],
     ) as number[];
   } else {
-    scores = (item as SliderItem).responseValues.scores as number[];
+    scores = (item.responseValues as SliderItemResponseValues).scores as number[];
   }
 
   let maxScore = 0;
@@ -78,7 +77,7 @@ const getItemScoreRange = (item: Item) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = (itemsScore: Item[], calculationType: CalculationType) => {
+export const getScoreRange = (itemsScore: ItemFormValues[], calculationType: CalculationType) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
   const count = itemsScore.length;

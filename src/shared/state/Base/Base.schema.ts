@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import { ErrorResponseType } from 'shared/types';
 
 export type MetaStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -7,13 +7,13 @@ export type ErrorResponse = {
     en: string;
   };
   path: string[];
-  type: string;
+  type: ErrorResponseType;
 };
 
 export type MetaSchema = {
   requestId: string;
   status: MetaStatus;
-  error?: AxiosError<ErrorResponse[]>;
+  error?: ErrorResponse[];
   typePrefix?: string;
 };
 

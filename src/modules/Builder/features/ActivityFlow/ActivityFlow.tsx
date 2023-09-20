@@ -9,7 +9,7 @@ import { Box } from '@mui/material';
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { useBreadcrumbs } from 'shared/hooks';
-import { getUniqueName, pluck } from 'shared/utils';
+import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -18,11 +18,7 @@ import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
-import {
-  getActivityFlowKey,
-  getDuplicatedActivityFlow,
-  getFlowsItemActions,
-} from './ActivityFlow.utils';
+import { getDuplicatedActivityFlow, getFlowsItemActions } from './ActivityFlow.utils';
 import { ActivityFlowHeader } from './ActivityFlowHeader';
 
 export const ActivityFlow = () => {
@@ -52,6 +48,7 @@ export const ActivityFlow = () => {
   >({
     control,
     name: 'activityFlows',
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
   const errors = activityFlows?.map((_, index) => !!getFieldState(`activityFlows.${index}`).error);
@@ -74,7 +71,7 @@ export const ActivityFlow = () => {
   const handleAddActivityFlow = (positionToAdd?: number) => {
     const flowItems = activities.map((activity) => ({
       key: uuidv4(),
-      activityKey: activity.id || activity.key || '',
+      activityKey: getEntityKey(activity),
     }));
 
     const newActivityFlow = { ...getNewActivityFlow(), items: flowItems };
@@ -132,7 +129,7 @@ export const ActivityFlow = () => {
             {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activityFlows.map((flow, index) => {
-                  const activityFlowKey = getActivityFlowKey(flow);
+                  const activityFlowKey = getEntityKey(flow);
 
                   return (
                     <Draggable key={activityFlowKey} draggableId={activityFlowKey} index={index}>

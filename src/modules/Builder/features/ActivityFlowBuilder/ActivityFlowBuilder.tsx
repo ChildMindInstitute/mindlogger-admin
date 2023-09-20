@@ -47,6 +47,7 @@ export const ActivityFlowBuilder = () => {
   } = useFieldArray<Record<string, ActivityFlowItem[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
     name: `activityFlows.${activityFlowIndex}.items`,
+    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
   const activities: AppletFormValues['activities'] = watch('activities');
   const dataTestid = 'builder-activity-flows-builder';
