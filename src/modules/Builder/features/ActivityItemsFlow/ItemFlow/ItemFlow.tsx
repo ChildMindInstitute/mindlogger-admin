@@ -2,41 +2,20 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { Badge } from '@mui/material';
 
-import { ConditionRow, ToggleItemContainer } from 'modules/Builder/components';
-import { StyledFlexColumn } from 'shared/styles';
-import { Condition } from 'shared/state';
+import { ToggleItemContainer } from 'modules/Builder/components';
 
-import { Actions } from './Actions';
-import { SummaryRow } from './SummaryRow';
-import { ItemFlowProps, ContentProps } from './ItemFlow.types';
+import { ItemFlowActions } from './ItemFlowActions';
+import { ItemFlowProps } from './ItemFlow.types';
 import { getEmptyCondition } from './ItemFlow.utils';
 import { StyledTitle } from './ItemFlow.styles';
-
-const Content = ({ items, name, conditionalError, onRemove }: ContentProps) => (
-  <StyledFlexColumn sx={{ gap: '1.2rem' }}>
-    {items?.map((condition: Condition, index: number) => (
-      <ConditionRow
-        key={`item-flow-condition-${condition.key}`}
-        name={name}
-        index={index}
-        onRemove={() => onRemove(index)}
-        autoTrigger={!!conditionalError}
-        data-testid={`builder-activity-item-flow-condition-${index}`}
-      />
-    ))}
-    <SummaryRow
-      name={name}
-      error={conditionalError}
-      data-testid="builder-activity-item-flow-summary"
-    />
-  </StyledFlexColumn>
-);
+import { ItemFlowContent } from './ItemFlowContent';
 
 export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const { t } = useTranslation('app');
 
   const itemName = `${name}.${index}`;
   const conditionsName = `${itemName}.conditions`;
+  const dataTestid = `builder-activity-item-flow-${index}`;
 
   const { control, getFieldState } = useFormContext();
   const {
@@ -56,7 +35,6 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   };
 
   const { error } = getFieldState(itemName);
-  const { error: conditionalError } = getFieldState(`${itemName}.itemKey`);
 
   const title = (
     <StyledTitle component="span" sx={{ position: 'relative' }}>
@@ -68,21 +46,21 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   return (
     <ToggleItemContainer
       title={title}
-      Content={Content}
-      HeaderContent={Actions}
+      Content={ItemFlowContent}
+      HeaderContent={ItemFlowActions}
       contentProps={{
-        items: conditions,
         name: itemName,
+        conditions,
         onRemove: handleRemoveCondition,
-        conditionalError,
+        'data-testid': dataTestid,
       }}
       headerContentProps={{
         name: itemName,
         onAdd: handleAddCondition,
         onRemove,
-        'data-testid': `builder-activity-item-flow-${index}`,
+        'data-testid': dataTestid,
       }}
-      data-testid={`builder-activity-item-flow-${index}`}
+      data-testid={dataTestid}
     />
   );
 };

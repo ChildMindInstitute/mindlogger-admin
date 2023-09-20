@@ -25,6 +25,7 @@ import {
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType, ScoreReportType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
   ActivityFormValues,
   FlankerItemPositions,
@@ -37,6 +38,10 @@ import { ElementType } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
 import { GetItemCommonFields } from './SaveAndPublish.types';
+
+const removeReactHookFormKey = () => ({
+  [REACT_HOOK_FORM_KEY_NAME]: undefined,
+});
 
 export const removeAppletExtraFields = () => ({
   isPublished: undefined,
@@ -64,16 +69,23 @@ export const removeActivityExtraFields = () => ({
   performanceTaskType: undefined,
   isPerformanceTask: undefined,
   conditionalLogic: undefined,
+  ...removeReactHookFormKey(),
 });
 
 export const removeActivityFlowExtraFields = () => ({
   createdAt: undefined,
+  ...removeReactHookFormKey(),
+});
+
+export const removeActivityFlowItemExtraFields = () => ({
+  ...removeReactHookFormKey(),
 });
 
 const removeItemExtraFields = () => ({
   key: undefined,
   settings: undefined,
   alerts: undefined,
+  ...removeReactHookFormKey(),
 });
 
 export const remapSubscaleSettings = (activity: ActivityFormValues) => {
@@ -99,6 +111,7 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
           type: ElementType.Subscale,
         };
       }),
+      ...removeReactHookFormKey(),
     })),
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
 };
@@ -119,6 +132,7 @@ const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition |
 const removeReportsFields = () => ({
   printItems: undefined,
   showMessage: undefined,
+  ...removeReactHookFormKey(),
 });
 
 const getScore = (score: ScoreReport, items: ActivityFormValues['items']) => ({
@@ -139,6 +153,7 @@ const getSection = (section: SectionReport, items: ActivityFormValues['items']) 
     conditionalLogic: {
       ...section.conditionalLogic,
       conditions: getConditions(items, section?.conditionalLogic?.conditions),
+      ...removeReactHookFormKey(),
     },
   }),
 });
@@ -180,6 +195,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
           ...option,
           color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
           alert: hasAlerts ? alerts?.find(({ value }) => value === option.id)?.alert : undefined,
+          ...removeReactHookFormKey(),
         }),
       ),
     };
