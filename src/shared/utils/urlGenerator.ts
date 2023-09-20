@@ -61,12 +61,18 @@ export const getAppletPerformanceActivityPageRegexp = (path: string) =>
 
 export const getBuilderAppletUrl = (id: string) => `/${Path.Builder}/${id}`;
 
-export const getUpdatedAppletUrl = (appletId: string, entityId: string, url: string) => {
+export const getUpdatedAppletUrl = (
+  appletId: string,
+  activityOrFlowId: string,
+  itemId: string,
+  url: string,
+) => {
   const matchedPath =
     [
       page.builderAppletFlanker,
       page.builderAppletGyroscope,
       page.builderAppletTouch,
+      page.builderAppletActivityItem,
       page.builderAppletActivity,
       page.builderAppletActivityFlowItem,
       page.builderApplet,
@@ -79,8 +85,9 @@ export const getUpdatedAppletUrl = (appletId: string, entityId: string, url: str
   return generatePath(match.pattern.path, {
     ...match?.params,
     appletId,
-    activityId: entityId,
-    activityFlowId: entityId,
+    activityId: activityOrFlowId,
+    activityFlowId: activityOrFlowId,
+    itemId,
   });
 };
 

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -8,6 +9,7 @@ import { getEntityKey } from 'shared/utils';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
+import { page } from 'resources';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { ItemConfiguration } from './ItemConfiguration';
@@ -16,13 +18,10 @@ import { getIndexListToTrigger } from './ActivityItems.utils';
 import { DeleteItemModal } from './DeleteItemModal';
 
 export const ActivityItems = () => {
-  const [activeItemIndex, setActiveItemIndex] = useState(-1);
-  const [itemIdToDelete, setItemIdToDelete] = useState('');
-  const [, setDuplicateIndexes] = useState<Record<string, number>>({});
-
   const { fieldName, activity } = useCurrentActivity();
   const { control, trigger } = useFormContext();
   const itemsName = `${fieldName}.items`;
+  const navigate = useNavigate();
 
   const {
     fields: items,
@@ -35,12 +34,36 @@ export const ActivityItems = () => {
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
+  const { appletId, activityId, itemId } = useParams();
+  const [activeItemIndex, setActiveItemIndex] = useState(() =>
+    itemId ? items?.findIndex((item) => getEntityKey(item) === itemId) : -1,
+  );
+  const [activeItem, setActiveItem] = useState<ItemFormValues | undefined>(undefined);
+  const [itemIdToDelete, setItemIdToDelete] = useState('');
+  const [, setDuplicateIndexes] = useState<Record<string, number>>({});
+
   useBreadcrumbs();
   useActivitiesRedirection();
 
-  if (!activity) return null;
+  useEffect(() => {
+    setActiveItem(items?.find((_, index) => index === activeItemIndex));
+  }, [activeItemIndex]);
 
-  const activeItem = items?.find((_, index) => index === activeItemIndex);
+  useEffect(() => {
+    navigate(
+      generatePath(activeItem ? page.builderAppletActivityItem : page.builderAppletActivityItems, {
+        appletId,
+        activityId,
+        ...(activeItem
+          ? {
+              itemId: getEntityKey(activeItem),
+            }
+          : {}),
+      }),
+    );
+  }, [activeItem]);
+
+  if (!activity) return null;
 
   const handleRemoveClick = (id: string) => {
     setItemIdToDelete(id);
