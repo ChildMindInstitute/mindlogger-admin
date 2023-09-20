@@ -552,7 +552,7 @@
   "incorrectAppletPassword": "Incorrect password",
   "incorrectAudioFormat": "Incorrect audio format.",
   "incorrectEmail": "Email must be valid",
-  "incorrectImageFormat": "Incorrect image format.",
+  "incorrectImageFormat": "Image format must be JPEG or PNG.",
   "incorrectImageSize": "Image is more than {{size}}.",
   "incorrectVideoFormat": "Incorrect video format.",
   "indefinitely": "Indefinitely",
