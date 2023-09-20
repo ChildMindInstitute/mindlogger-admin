@@ -14,16 +14,17 @@ export const useActivityFlowsRedirection = () => {
   const isNewApplet = useCheckIfNewApplet();
   const { watch } = useFormContext();
 
-  const activities = watch('activities');
-  const activityFlows = watch('activityFlows');
-  const activityFlow = activityFlows?.find(
-    (flow: ActivityFlowFormValues) => activityFlowId === getEntityKey(flow),
-  );
-  const shouldRedirect = (isNewApplet || activities?.length > 0) && activityFlowId && !activityFlow;
-
   useEffect(() => {
+    const activities = watch('activities');
+    const activityFlows = watch('activityFlows');
+    const activityFlow = activityFlows?.find(
+      (flow: ActivityFlowFormValues) => activityFlowId === getEntityKey(flow),
+    );
+    const shouldRedirect =
+      (isNewApplet || activities?.length > 0) && activityFlowId && !activityFlow;
+
     if (!shouldRedirect) return;
 
     navigate(generatePath(page.builderAppletActivityFlow, { appletId }));
-  }, [shouldRedirect]);
+  }, [activityFlowId]);
 };
