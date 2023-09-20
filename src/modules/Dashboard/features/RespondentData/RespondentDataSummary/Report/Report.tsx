@@ -10,7 +10,7 @@ import { Spinner, Svg, Tooltip } from 'shared/components';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
 import {
   StyledErrorText,
-  StyledHeadlineLarge,
+  StyledStickyHeadline,
   StyledTitleLarge,
   theme,
   variables,
@@ -178,9 +178,9 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       {(isLoading || latestReportLoading) && <Spinner />}
       <StyledReport ref={containerRef}>
         <StyledHeader isSticky={isHeaderSticky}>
-          <StyledHeadlineLarge color={variables.palette.on_surface}>
+          <StyledStickyHeadline isSticky={isHeaderSticky} color={variables.palette.on_surface}>
             {activity.name}
-          </StyledHeadlineLarge>
+          </StyledStickyHeadline>
           <Box>
             <Tooltip tooltipTitle={t('configureServer')}>
               <span>

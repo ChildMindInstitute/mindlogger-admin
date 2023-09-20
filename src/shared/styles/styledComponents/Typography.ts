@@ -30,6 +30,12 @@ export const StyledHeadline = styled(Typography)`
   color: ${({ color }: StyledProps) => color || variables.palette.black};
 `;
 
+export const StyledStickyHeadline = styled(StyledHeadlineLarge, shouldForwardProp)`
+  transition: ${variables.transitions.fontSize};
+  font-size: ${({ isSticky }: { isSticky: boolean }) =>
+    isSticky ? variables.font.size.lrg : variables.font.size.xxxl};
+`;
+
 export const StyledTitleLarge = styled(Typography)`
   font-size: ${variables.font.size.xl};
   line-height: ${variables.font.lineHeight.xl};
