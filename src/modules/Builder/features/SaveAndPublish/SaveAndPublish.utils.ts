@@ -22,6 +22,7 @@ import {
   ActivityFlow,
   ScoreReport,
   SectionReport,
+  Item,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType, ScoreReportType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
@@ -388,15 +389,26 @@ export const getActivityItems = (activity: ActivityFormValues) => {
   }));
 };
 
-export const getCurrentEntityId = (
+export const getCurrentEntitiesIds = (
   oldApplet: FieldValues,
   newApplet: SingleApplet,
-  { isActivity, id }: { isActivity: boolean; id?: string },
+  {
+    isActivity,
+    activityOrFlowId,
+    itemId,
+  }: { isActivity: boolean; activityOrFlowId?: string; itemId?: string },
 ) => {
-  const itemsSelector = isActivity ? 'activities' : 'activityFlows';
-  const index = oldApplet?.[itemsSelector]?.findIndex(
-    (entity: Activity | ActivityFlow) => getEntityKey(entity) === id,
+  const activityOrFlowSelector = isActivity ? 'activities' : 'activityFlows';
+  const activityOrFlowIndex = oldApplet?.[activityOrFlowSelector]?.findIndex(
+    (entity: Activity | ActivityFlow) => getEntityKey(entity) === activityOrFlowId,
   );
+  const itemIndex = oldApplet?.[activityOrFlowSelector]?.[activityOrFlowIndex]?.items?.findIndex(
+    (item: Item) => getEntityKey(item) === itemId,
+  );
+  const newActivityOrFlow = newApplet?.[activityOrFlowSelector]?.[activityOrFlowIndex];
 
-  return getEntityKey(newApplet?.[itemsSelector]?.[index]);
+  return {
+    newActivityOrFlowId: getEntityKey(newActivityOrFlow),
+    newItemId: isActivity ? getEntityKey((newActivityOrFlow as Activity)?.items?.[itemIndex]) : '',
+  };
 };
