@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';

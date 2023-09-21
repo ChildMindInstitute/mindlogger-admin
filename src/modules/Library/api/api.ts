@@ -1,5 +1,5 @@
 import { AppletId } from 'api';
-import { apiClient, authApiClient } from 'shared/api/api.client';
+import { apiClient, authApiClient } from 'shared/api/api';
 import { MAX_LIMIT } from 'shared/consts';
 
 import { PublishedApplet } from '../state';

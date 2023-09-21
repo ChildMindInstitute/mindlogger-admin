@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import 'md-editor-rt/lib/style.css';
 
 import { getOptionTextApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { StyledHeadline, theme } from 'shared/styles';
 import { AdditionalInformation as AdditionalInformationProps } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
 

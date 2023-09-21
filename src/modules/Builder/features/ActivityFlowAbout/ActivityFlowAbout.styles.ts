@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { theme, variables } from 'shared/styles';
 
 export const StyledWrapper = styled(Box)`

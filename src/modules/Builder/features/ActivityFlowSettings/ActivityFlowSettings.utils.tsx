@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 import { ActivityFlowFormValues } from 'modules/Builder/types';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
 import { SettingParam } from 'shared/utils';
 

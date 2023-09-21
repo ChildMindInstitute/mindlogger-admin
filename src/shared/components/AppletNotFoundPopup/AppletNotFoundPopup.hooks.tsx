@@ -5,7 +5,7 @@ import { alerts, applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { useCheckIfAppletHasNotFoundError } from 'shared/hooks';
+import { useCheckIfAppletHasNotFoundError } from 'shared/hooks/useCheckIfAppletHasNotFoundError';
 
 export const useNotFoundPopup = () => {
   const [appletNotFoundPopupVisible, setAppletNotFoundPopupVisible] = useState(false);
