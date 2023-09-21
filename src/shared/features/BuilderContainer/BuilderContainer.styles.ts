@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
 import { StyledFlexTopCenter, theme, variables, commonStickyStyles } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
   ${({ isSticky }: { isSticky?: boolean }) =>

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
 import { MediaType, VALID_IMAGE_TYPES } from 'shared/consts';
-import { joinWihComma } from 'shared/utils';
+import { joinWihComma } from 'shared/utils/joinWihComma';
 
 import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';

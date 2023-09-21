@@ -5,7 +5,7 @@ import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { itemsTypeIcons } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, removeMarkdown } from 'shared/utils';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { getActions } from './Item.utils';

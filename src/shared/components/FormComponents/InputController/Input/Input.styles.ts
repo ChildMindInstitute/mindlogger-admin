@@ -1,9 +1,10 @@
 import { styled, Box, TextField } from '@mui/material';
 
-import { StyledBodyMedium, StyledFlexColumn } from 'shared/styles/styledComponents';
+import { StyledBodyMedium } from 'shared/styles/styledComponents/Typography';
+import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledTextField = styled(TextField)`
   width: 100%;

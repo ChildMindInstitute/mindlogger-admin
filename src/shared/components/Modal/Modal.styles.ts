@@ -3,7 +3,8 @@ import { Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { FontWeight, StyledClearedButton } from 'shared/styles/styledComponents';
+import { FontWeight } from 'shared/styles/styledComponents/Typography';
+import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { ActionsAlign } from './Modal.types';

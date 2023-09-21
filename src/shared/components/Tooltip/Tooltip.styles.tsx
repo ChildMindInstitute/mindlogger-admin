@@ -1,6 +1,7 @@
 import { styled, Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { theme } from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledTooltip = styled(({ className, children, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} children={children} />

@@ -6,7 +6,7 @@ import { Svg } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { workspaces as currentWorkspace, Workspace } from 'redux/modules';
-import { authStorage } from 'shared/utils';
+import { authStorage } from 'shared/utils/authStorage';
 import { page } from 'resources';
 
 import { WorkspaceImage } from '../WorkspaceImage';

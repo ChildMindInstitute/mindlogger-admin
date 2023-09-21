@@ -1,6 +1,6 @@
 import { useAppDispatch } from 'redux/store';
 import { applet } from 'redux/modules';
-import { storage, LocalStorageKeys } from 'shared/utils';
+import { storage, LocalStorageKeys } from 'shared/utils/storage';
 
 export const useRemoveAppletData = () => {
   const dispatch = useAppDispatch();

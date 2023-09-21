@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import { applet } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
-import { ShareApplet, OnAppletShared } from 'modules/Dashboard/features/Applet';
+import { ShareApplet, OnAppletShared } from 'modules/Dashboard/features/Applet/ShareApplet';
 import { SuccessSharePopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import { StyledButton, StyledContainer } from './ShareAppletSetting.styles';

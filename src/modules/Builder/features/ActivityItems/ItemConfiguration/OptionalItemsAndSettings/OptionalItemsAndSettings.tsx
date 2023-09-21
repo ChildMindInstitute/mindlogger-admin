@@ -29,7 +29,7 @@ import {
   ResponseDataIdentifier,
 } from '../Settings';
 import { Alerts } from '../Alerts';
-import { SelectionOption } from '../InputTypeItems';
+import { SelectionOption } from '../InputTypeItems/SelectionOption';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
 import { SkippedItemInVariablesModal } from './SkippedItemInVariablesModal';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';

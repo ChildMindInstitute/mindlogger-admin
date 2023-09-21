@@ -17,7 +17,7 @@ import {
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
 import { SingleAndMultiSelectOption, ConditionalLogic, ItemAlert } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { SELECTION_OPTION_TEXT_MAX_LENGTH } from '../../ItemConfiguration.const';

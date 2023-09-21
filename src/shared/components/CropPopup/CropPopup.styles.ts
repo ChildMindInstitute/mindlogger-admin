@@ -1,7 +1,7 @@
 import { Box, styled } from '@mui/material';
 
 import { variables } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledCropWrapper = styled(Box, shouldForwardProp)`
   border-radius: ${variables.borderRadius.lg2};

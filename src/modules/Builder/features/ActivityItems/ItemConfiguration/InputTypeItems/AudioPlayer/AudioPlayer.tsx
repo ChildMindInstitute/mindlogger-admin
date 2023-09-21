@@ -5,12 +5,12 @@ import { useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledBodyErrorText, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components';
+import { MLPlayer } from 'modules/Builder/components/MLPlayer';
+import { MediaType } from 'modules/Builder/components/MediaUploader';
 import {
-  MLPlayer,
-  MediaType,
   SharedToggleItemProps,
   ToggleItemContainer,
-} from 'modules/Builder/components';
+} from 'modules/Builder/components/ToggleItemContainer';
 
 import { AddAudio } from './AddAudio';
 import { UploadAudio } from './UploadAudio';
