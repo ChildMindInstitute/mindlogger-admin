@@ -1,8 +1,4 @@
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
-import { parseResponseValue } from 'shared/utils/exportData/parseResponseValue';
-import { parseOptions } from 'shared/utils/exportData/parseOptions';
-import { replaceItemVariableWithName } from 'shared/utils/exportData/replaceItemVariableWithName';
-
 import { ActivityStatus } from 'shared/consts';
 import {
   AnswerDTO,
@@ -12,6 +8,9 @@ import {
   UserActionType,
 } from 'shared/types';
 
+import { parseOptions } from './parseOptions';
+import { parseResponseValue } from './parseResponseValue';
+import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { convertDateStampToMs } from './convertDateStampToMs';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';

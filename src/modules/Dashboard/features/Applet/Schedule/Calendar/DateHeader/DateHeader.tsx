@@ -1,7 +1,7 @@
 import { DateHeaderProps } from 'react-big-calendar';
 
 import { StyledClearedButton } from 'shared/styles';
-import { getMonthName } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { getMonthName } from 'shared/utils/dateFormat';
 
 import { NameLength } from '../Calendar.types';
 

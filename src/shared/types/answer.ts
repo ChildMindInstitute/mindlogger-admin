@@ -1,7 +1,7 @@
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
-import { getJourneyCSVObject, getReportCSVObject } from 'shared/utils/exportData';
+import { getJourneyCSVObject } from 'shared/utils/exportData/getJourneyCSVObject';
+import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
 import { CorrectPress } from 'modules/Builder/types';
-import { FlankerRecordFields } from 'shared/utils/exportData/getFlankerRecords';
 
 export type ExportActivity = {
   createdAt: string;
@@ -369,4 +369,23 @@ export const enum FlankerResponseValue {
 export const enum FlankerResponseAccuracy {
   Correct = '1',
   Incorrect = '0',
+}
+
+export const enum FlankerRecordFields {
+  ExperimentClock = 'experimentClock',
+  BlockClock = 'blockClock',
+  TrialStartTimestamp = 'trialStartTimestamp',
+  EventStartTimestamp = 'eventStartTimestamp',
+  VideoDisplayRequestTimestamp = 'videoDisplayRequestTimestamp',
+  ResponseTouchTimestamp = 'responseTouchTimestamp',
+  TrialOffset = 'trialOffset',
+  EventOffset = 'eventOffset',
+  ResponseTime = 'responseTime',
+  BlockNumber = 'blockNumber',
+  TrialNumber = 'trialNumber',
+  TrialType = 'trialType',
+  EventType = 'eventType',
+  ResponseValue = 'responseValue',
+  ResponseAccuracy = 'responseAccuracy',
+  FailedPractice = 'failedPractice',
 }
