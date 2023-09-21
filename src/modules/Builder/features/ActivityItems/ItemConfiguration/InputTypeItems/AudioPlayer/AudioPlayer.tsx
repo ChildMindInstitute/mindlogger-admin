@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledBodyErrorText, theme, variables } from 'shared/styles';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { MLPlayer } from 'modules/Builder/components/MLPlayer';
 import { MediaType } from 'modules/Builder/components/MediaUploader';
 import {

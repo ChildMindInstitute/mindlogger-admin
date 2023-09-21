@@ -7,7 +7,7 @@ import { Search, Svg } from 'shared/components';
 import { theme, variables, StyledModalContent, StyledIconButton } from 'shared/styles';
 import { page } from 'resources';
 import { getRespondentName, getErrorMessage } from 'shared/utils';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { createIndividualEventsApi } from 'api';
 import { applets, users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';

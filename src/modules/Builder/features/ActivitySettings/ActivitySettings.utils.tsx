@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType } from 'shared/consts';
 import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';

@@ -1,7 +1,7 @@
 import { FormControlLabel, Switch } from '@mui/material';
 
 import { StyledFlexTopCenter, StyledTooltipSvg } from 'shared/styles';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import { SwitchWithStateProps } from './SwitchWithState.types';
 

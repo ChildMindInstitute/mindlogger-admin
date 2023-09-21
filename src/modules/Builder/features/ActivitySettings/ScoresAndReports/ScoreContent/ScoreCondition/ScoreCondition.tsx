@@ -10,7 +10,7 @@ import {
   variables,
 } from 'shared/styles';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 import { ConditionRowType } from 'modules/Builder/types';
 
 import { ScoreConditionProps } from './ScoreCondition.types';

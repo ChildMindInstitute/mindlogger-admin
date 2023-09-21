@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { Condition } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { ConditionRow } from 'modules/Builder/components';

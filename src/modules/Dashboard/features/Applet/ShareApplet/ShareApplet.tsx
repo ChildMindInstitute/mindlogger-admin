@@ -16,7 +16,7 @@ import {
 } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyMedium } from 'shared/styles/styledComponents';
 import { getErrorMessage } from 'shared/utils/errors';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { getDictionaryText } from 'shared/utils';
 
 import { ERROR_MARGIN_TOP, shareAppletDefaultValues } from './ShareApplet.const';

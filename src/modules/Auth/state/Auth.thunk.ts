@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { authStorage } from 'shared/utils';
+import { authStorage } from 'shared/utils/authStorage';
 import { ApiError } from 'redux/modules';
 import {
   signInApi,

@@ -5,7 +5,7 @@ import uniqueId from 'lodash.uniqueid';
 
 import { EmptyState, Spinner } from 'shared/components';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { getReviewsApi } from 'api';
 
 import { StyledContainer } from './FeedbackReviewed.styles';

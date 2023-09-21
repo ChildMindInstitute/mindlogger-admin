@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController } from 'shared/components/FormComponents';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledBodyLarge, StyledClearedButton, variables, theme } from 'shared/styles';
 
 import { CreateAppletPasswordForm, CreateAppletPasswordProps } from './CreateAppletPassword.types';

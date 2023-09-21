@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { NavigateFunction } from 'react-router-dom';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { HeadCell } from 'shared/types/table';
 import { getBuilderAppletUrl, Mixpanel, Path } from 'shared/utils';
 import { page } from 'resources';

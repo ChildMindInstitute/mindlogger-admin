@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
 import get from 'lodash.get';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { theme, StyledFlexColumn } from 'shared/styles';
 import { SliderItemResponseValues } from 'shared/state';
 

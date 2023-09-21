@@ -1,8 +1,15 @@
-import { SingleApplet } from 'shared/state';
-import { AlertListParams, OwnerId } from 'api';
+import axios from 'axios';
 
-import { apiClient, authApiClient } from './api.client';
+import { SingleApplet } from 'shared/state/Applet';
+import { AlertListParams } from 'shared/api/api.types';
+import { DEFAULT_CONFIG } from 'shared/api/api.const';
+import { OwnerId } from 'modules/Dashboard/api/api.types';
+
 import { SignInRefreshTokenArgs, AppletId, AppletBody } from './api.types';
+
+export const apiClient = axios.create(DEFAULT_CONFIG);
+export const authApiClient = axios.create(DEFAULT_CONFIG);
+export const authApiClientWithoutRefresh = axios.create(DEFAULT_CONFIG);
 
 export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,

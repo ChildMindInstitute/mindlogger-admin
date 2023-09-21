@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 import { Applet, Folder, setFolderApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 
 export const useAppletsDnd = () => {
   const { rows, fetchData } = useContext(AppletsContext) as AppletContextType;

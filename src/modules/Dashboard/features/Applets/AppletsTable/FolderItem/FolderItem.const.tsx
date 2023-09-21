@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { Folder } from 'api';
 
 export const getActions = (

@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledIconButton } from 'shared/styles';
 import { auth } from 'redux/modules';
 

@@ -5,7 +5,7 @@ import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { alerts, auth, workspaces } from 'redux/modules';
-import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth';
+import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();

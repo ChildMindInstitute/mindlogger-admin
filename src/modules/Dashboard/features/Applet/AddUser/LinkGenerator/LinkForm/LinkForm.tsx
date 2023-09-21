@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { deleteAppletPublicLinkApi } from 'api';
 import { getErrorMessage } from 'shared/utils/errors';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';

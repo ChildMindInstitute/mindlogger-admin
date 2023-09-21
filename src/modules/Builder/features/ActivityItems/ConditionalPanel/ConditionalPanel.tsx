@@ -12,7 +12,7 @@ import {
   SingleValueCondition,
 } from 'shared/state';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyLarge,
   StyledClearedButton,

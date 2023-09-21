@@ -16,7 +16,7 @@ import {
   SelectController,
   TransferListController,
 } from 'shared/components/FormComponents';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { ScoreConditionalLogic } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
