@@ -2,7 +2,7 @@ import { styled } from '@mui/system';
 import { Typography } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export type FontWeight = keyof typeof variables.font.weight;
 type LetterSpacing = keyof typeof variables.font.letterSpacing;

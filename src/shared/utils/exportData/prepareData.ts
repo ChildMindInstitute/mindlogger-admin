@@ -14,20 +14,20 @@ import {
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
   UserActionType,
-} from 'shared/types';
+} from 'shared/types/answer';
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
+import { convertJsonToCsv } from 'shared/utils/exportTemplate';
+import { getObjectFromList } from 'shared/utils/builderHelpers';
 import {
-  convertJsonToCsv,
   getABTrailsCsvName,
   getFileExtension,
   getFlankerCsvName,
-  getFlankerRecords,
   getMediaFileName,
-  getObjectFromList,
-  getSplashScreen,
-  getStabilityRecords,
   getStabilityTrackerCsvName,
-} from 'shared/utils';
+} from 'shared/utils/exportData/getReportName';
+import { getFlankerRecords } from 'shared/utils/exportData/getFlankerRecords';
+import { getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
+import { getStabilityRecords } from 'shared/utils/exportData/getStabilityRecords';
 import { FlankerConfig, Item } from 'shared/state';
 import { postFilePresignApi } from 'shared/api';
 

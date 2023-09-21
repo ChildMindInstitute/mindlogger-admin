@@ -1,5 +1,5 @@
 import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
-import { getJourneyCSVObject, getReportCSVObject } from 'shared/utils';
+import { getJourneyCSVObject, getReportCSVObject } from 'shared/utils/exportData';
 import { CorrectPress } from 'modules/Builder/types';
 import { FlankerRecordFields } from 'shared/utils/exportData/getFlankerRecords';
 

@@ -1,4 +1,4 @@
-import { getObjectFromList } from 'shared/utils';
+import { getObjectFromList } from 'shared/utils/builderHelpers';
 import {
   DecryptedActivityData,
   ExportActivity,

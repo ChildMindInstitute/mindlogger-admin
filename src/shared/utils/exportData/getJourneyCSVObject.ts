@@ -1,5 +1,8 @@
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
-import { parseResponseValue, parseOptions, replaceItemVariableWithName } from 'shared/utils';
+import { parseResponseValue } from 'shared/utils/exportData/parseResponseValue';
+import { parseOptions } from 'shared/utils/exportData/parseOptions';
+import { replaceItemVariableWithName } from 'shared/utils/exportData/replaceItemVariableWithName';
+
 import { ActivityStatus } from 'shared/consts';
 import {
   AnswerDTO,

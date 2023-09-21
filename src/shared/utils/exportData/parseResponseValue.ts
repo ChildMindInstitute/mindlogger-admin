@@ -23,7 +23,7 @@ import {
   getFlankerCsvName,
   getMediaFileName,
   getStabilityTrackerCsvName,
-} from 'shared/utils';
+} from 'shared/utils/exportData/getReportName';
 
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';

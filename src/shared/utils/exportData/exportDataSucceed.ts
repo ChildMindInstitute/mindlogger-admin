@@ -1,13 +1,11 @@
 import { AxiosResponse } from 'axios';
 
-import {
-  exportCsvZip,
-  exportMediaZip,
-  exportTemplate,
-  getReportZipName,
-  prepareData,
-  ZipFile,
-} from 'shared/utils';
+import { exportTemplate } from 'shared/utils/exportTemplate';
+import { exportCsvZip } from 'shared/utils/exportData/exportCsvZip';
+import { exportMediaZip } from 'shared/utils/exportData/exportMediaZip';
+import { getReportZipName, ZipFile } from 'shared/utils/exportData/getReportName';
+import { prepareData } from 'shared/utils/exportData/prepareData';
+
 import {
   activityJourneyHeader,
   GENERAL_REPORT_NAME,
