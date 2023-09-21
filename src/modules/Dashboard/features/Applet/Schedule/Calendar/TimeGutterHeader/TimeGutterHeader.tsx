@@ -3,10 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components';
 import { theme, variables, StyledLabelBoldMedium, StyledClearedButton } from 'shared/styles';
 import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
-import {
-  formatToWeekYear,
-  formatToYearMonthDate,
-} from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { formatToWeekYear, formatToYearMonthDate } from 'shared/utils/dateFormat';
 
 import { CalendarViews } from '../Calendar.types';
 import { StyledTimeGutterHeader } from './TimeGutterHeader.styles';

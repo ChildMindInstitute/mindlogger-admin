@@ -2,7 +2,7 @@ import { ActionReducerMapBuilder, AsyncThunk, PayloadAction } from '@reduxjs/too
 import { AxiosError, AxiosResponse } from 'axios';
 import get from 'lodash.get';
 
-import { getApiError } from 'shared/utils';
+import { getApiError } from 'shared/utils/getApiError';
 
 import { BaseSchema } from '../state';
 
