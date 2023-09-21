@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { AuthSchema } from './Auth.schema';
 import { signIn, getUserDetails } from './Auth.thunk';

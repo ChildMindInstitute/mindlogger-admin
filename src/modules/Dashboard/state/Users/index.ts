@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppSelector } from 'redux/store';
+import { useAppSelector } from 'redux/store/hooks';
 import { Respondent } from 'modules/Dashboard/types';
 
 import * as thunk from './Users.thunk';
