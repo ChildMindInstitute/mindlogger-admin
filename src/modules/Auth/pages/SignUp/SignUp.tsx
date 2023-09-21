@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { SignUpForm } from '../../features/SignUp/SignUpForm';
 

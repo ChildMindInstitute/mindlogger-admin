@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppSelector } from 'redux/store';
+import { useAppSelector } from 'redux/store/hooks';
 import { MetaSchema } from 'shared/state/Base';
 
 import * as thunk from './Applet.thunk';
