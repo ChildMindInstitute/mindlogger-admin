@@ -4,7 +4,7 @@ import { getISOWeek } from 'date-fns';
 import { ToggleButtonGroup, Svg } from 'shared/components';
 import i18n from 'i18n';
 import { theme, variables, StyledTitleBoldMedium, StyledFlexTopCenter } from 'shared/styles';
-import { formatToYearMonthDate } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { formatToYearMonthDate } from 'shared/utils/dateFormat';
 
 import { CalendarViews } from '../Calendar.types';
 import { StyledToolbar, StyledIconBtn, StyledViewsWrapper, StyledTodayBtn } from './Toolbar.styles';

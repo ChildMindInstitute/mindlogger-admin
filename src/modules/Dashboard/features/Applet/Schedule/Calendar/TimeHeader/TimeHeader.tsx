@@ -7,7 +7,7 @@ import {
   getDayName,
   getMonthName,
   getMoreText,
-} from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+} from 'shared/utils/dateFormat';
 import { calendarEvents } from 'modules/Dashboard/state';
 
 import { NameLength } from '../Calendar.types';

@@ -8,43 +8,29 @@ import {
   HeaderProps,
   ToolbarProps,
 } from 'react-big-calendar';
-import { format, getISOWeek } from 'date-fns';
 
 import { DateFormats } from 'shared/consts';
-import i18n from 'i18n';
-import { variables } from 'shared/styles';
+import { variables } from 'shared/styles/variables';
 import { CalendarEvent, AllDayEventsSortedByDaysItem } from 'modules/Dashboard/state';
+import { formatToWeekYear, formatToYearMonthDate, getMoreText } from 'shared/utils/dateFormat';
 
 import { Toolbar } from './Toolbar';
 import { MonthHeader } from './MonthHeader';
 import { Event, UiType } from './Event';
 import { MonthView } from './MonthView';
 import { YearView } from './YearView';
-import {
-  AllDayEventsVisible,
-  CalendarEventWrapperProps,
-  CalendarViews,
-  NameLength,
-} from './Calendar.types';
+import { AllDayEventsVisible, CalendarEventWrapperProps, CalendarViews } from './Calendar.types';
 import { TimeHeader, UiType as TimeHeaderUiType } from './TimeHeader';
 import { TimeGutterHeader } from './TimeGutterHeader';
 import { EventWrapper, UiType as EventWrapperUiType } from './EventWrapper';
 import { DateHeader } from './DateHeader';
 import { EventContainerWrapper } from './EventContainerWrapper';
 
-const { t } = i18n;
-
-export const getMoreText = () => `${t('more').toLowerCase()}...`;
-
 export const getDefaultStartDate = (date: Date) => {
   const newDate = new Date();
 
   return date && newDate > date ? newDate : date || undefined;
 };
-
-export const formatToYearMonthDate = (date: Date) => format(date, DateFormats.DayMonthYear);
-
-export const formatToWeekYear = (date: Date) => `${getISOWeek(date)} ${date.getFullYear()}`;
 
 export const getHasWrapperMoreBtn = (
   activeView: CalendarViews,
@@ -76,12 +62,6 @@ export const getHasWrapperMoreBtn = (
       return false;
   }
 };
-
-export const getDayName = (date: Date) =>
-  date.toLocaleDateString(i18n.language, { weekday: NameLength.Long });
-
-export const getMonthName = (date: Date, length?: NameLength) =>
-  date.toLocaleString(i18n.language, { month: length || NameLength.Long });
 
 export const getCalendarComponents = (
   activeView: CalendarViews,

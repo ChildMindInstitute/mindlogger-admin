@@ -3,10 +3,7 @@ import uniqueId from 'lodash.uniqueid';
 
 import { theme, StyledBodySmall, StyledHeadline } from 'shared/styles';
 import { Event } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Event';
-import {
-  formatToYearMonthDate,
-  getDayName,
-} from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { formatToYearMonthDate, getDayName } from 'shared/utils/dateFormat';
 import { falseReturnFunc } from 'shared/utils';
 
 import { CalendarDateProps, TooltipPosition } from './CalendarDate.types';

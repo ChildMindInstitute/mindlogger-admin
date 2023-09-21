@@ -17,14 +17,14 @@ import {
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
+
 import {
   getABTrailsCsvName,
   getFileExtension,
   getFlankerCsvName,
   getMediaFileName,
   getStabilityTrackerCsvName,
-} from 'shared/utils';
-
+} from './getReportName';
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
