@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { authApiClient } from 'shared/api/api';
+import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response } from 'shared/api';
 
 import {
