@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { Modal } from 'shared/components';
-import { MediaUploader } from 'modules/Builder/components';
+import { MediaUploader } from 'modules/Builder/components/MediaUploader';
 
 import { UploadAudioProps } from './UploadAudio.types';
 

@@ -1,7 +1,7 @@
 import { styled, TextField } from '@mui/material';
 
 import { variables, theme } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledTextField = styled(TextField, shouldForwardProp)`
   width: 100%;

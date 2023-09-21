@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Encryption } from 'shared/utils';
+import { Encryption } from 'shared/utils/encryption';
 import { AlertType } from 'shared/state';
 
 export type NotificationProps = {

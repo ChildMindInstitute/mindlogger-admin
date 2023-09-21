@@ -6,7 +6,8 @@ import debounce from 'lodash.debounce';
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 
-import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
 
 import { InputProps } from './Input.types';
 import {

@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import i18n from 'i18n';
 import { CalendarEvent } from 'modules/Dashboard/state';
-import {
-  formatToYearMonthDate,
-  getMonthName,
-} from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
+import { formatToYearMonthDate, getMonthName } from 'shared/utils/dateFormat';
 import { StyledFlexSpaceBetween } from 'shared/styles';
 
 import { CalendarViews } from '../../Calendar.types';

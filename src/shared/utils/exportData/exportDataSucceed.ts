@@ -1,20 +1,18 @@
 import { AxiosResponse } from 'axios';
 
 import {
-  exportCsvZip,
-  exportMediaZip,
-  exportTemplate,
-  getReportZipName,
-  prepareData,
-  ZipFile,
-} from 'shared/utils';
-import {
   activityJourneyHeader,
   GENERAL_REPORT_NAME,
   JOURNEY_REPORT_NAME,
   reportHeader,
 } from 'shared/consts';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+
+import { exportTemplate } from '../exportTemplate';
+import { exportCsvZip } from './exportCsvZip';
+import { exportMediaZip } from './exportMediaZip';
+import { getReportZipName, ZipFile } from './getReportName';
+import { prepareData } from './prepareData';
 
 export const exportDataSucceed =
   ({

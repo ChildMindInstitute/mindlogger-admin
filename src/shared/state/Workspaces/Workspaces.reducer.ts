@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 
-import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils';
+import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { Workspace, WorkspacesSchema } from './Workspaces.schema';
 import { getWorkspaceRoles, getWorkspaces, getWorkspacesRoles } from './Workspaces.thunk';

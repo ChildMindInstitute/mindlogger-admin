@@ -6,7 +6,7 @@ import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 import { SelectEvent } from 'shared/types';
 import { StyledFlexTopCenter, StyledLabelBoldMedium, theme, variables } from 'shared/styles';
-import { groupBy } from 'shared/utils';
+import { groupBy } from 'shared/utils/array';
 
 import { SelectControllerProps, SelectUiType, GetMenuItem, Option } from './SelectController.types';
 import {

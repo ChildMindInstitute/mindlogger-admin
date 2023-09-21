@@ -1,7 +1,7 @@
 import { Checkbox, styled, TableCell, TableContainer } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 const height = '29.2rem';
 

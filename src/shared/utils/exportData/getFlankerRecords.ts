@@ -3,6 +3,7 @@ import {
   DecryptedFlankerAnswer,
   DecryptedFlankerAnswerItemValue,
   DotType,
+  FlankerRecordFields,
   FlankerResponseAccuracy,
   FlankerResponseValue,
   FlankerTag,
@@ -140,25 +141,6 @@ const getResponseObj = ({
     [FlankerRecordFields.FailedPractice]: '',
   };
 };
-
-export const enum FlankerRecordFields {
-  ExperimentClock = 'experimentClock',
-  BlockClock = 'blockClock',
-  TrialStartTimestamp = 'trialStartTimestamp',
-  EventStartTimestamp = 'eventStartTimestamp',
-  VideoDisplayRequestTimestamp = 'videoDisplayRequestTimestamp',
-  ResponseTouchTimestamp = 'responseTouchTimestamp',
-  TrialOffset = 'trialOffset',
-  EventOffset = 'eventOffset',
-  ResponseTime = 'responseTime',
-  BlockNumber = 'blockNumber',
-  TrialNumber = 'trialNumber',
-  TrialType = 'trialType',
-  EventType = 'eventType',
-  ResponseValue = 'responseValue',
-  ResponseAccuracy = 'responseAccuracy',
-  FailedPractice = 'failedPractice',
-}
 
 const TIME_FIELDS = [
   FlankerRecordFields.ExperimentClock,

@@ -12,7 +12,7 @@ import { ItemFormValues } from 'modules/Builder/types';
 import { page } from 'resources';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
-import { ItemConfiguration } from './ItemConfiguration';
+import { ItemConfiguration } from './ItemConfiguration/ItemConfiguration';
 import { LeftBar } from './LeftBar';
 import { getIndexListToTrigger } from './ActivityItems.utils';
 import { DeleteItemModal } from './DeleteItemModal';

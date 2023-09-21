@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { theme, variables, StyledClearedButton } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledHeader = styled(Box, shouldForwardProp)`
   align-items: center;

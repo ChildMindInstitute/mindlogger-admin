@@ -2,9 +2,9 @@ import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useHeaderSticky } from 'shared/hooks';
-import { StyledTitleSmall } from 'shared/styles';
-import { Tooltip } from 'shared/components';
+import { useHeaderSticky } from 'shared/hooks/useHeaderSticky';
+import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import {
   StyledBar,

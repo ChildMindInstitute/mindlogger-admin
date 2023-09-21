@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { workspaces, auth } from 'redux/modules';
-import { authStorage, Mixpanel } from 'shared/utils';
+import { authStorage } from 'shared/utils/authStorage';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { useAppDispatch } from 'redux/store';
 
 import { links } from './LeftBar.const';
