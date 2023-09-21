@@ -1,3 +1,6 @@
+import { Chart as ChartJS } from 'chart.js/dist/types';
+
+import { CustomLegend } from './Chart.types';
 import {
   MAX_TICKS_LENGTH,
   MIN_TICKS_LENGTH,
@@ -58,3 +61,14 @@ export const getTimelineStepSize = (minMs: number, maxMs: number) => {
 
 export const getTicksStepSize = (maxScore: number) =>
   maxScore > 2 ? Math.ceil(maxScore / MAX_TICKS_LENGTH) : maxScore / MIN_TICKS_LENGTH;
+
+export const legendMargin = {
+  id: 'legendMargin',
+  beforeInit: (chart: ChartJS) => {
+    const originalFit = (chart.legend as CustomLegend)?.fit;
+    (chart.legend as CustomLegend).fit = function fit() {
+      originalFit.bind(chart.legend)();
+      this.height += 42;
+    };
+  },
+};

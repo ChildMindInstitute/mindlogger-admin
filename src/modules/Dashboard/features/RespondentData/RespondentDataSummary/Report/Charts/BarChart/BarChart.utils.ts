@@ -3,7 +3,7 @@ import { LinearScale, ScriptableTooltipContext } from 'chart.js';
 import { pluck } from 'shared/utils';
 import { variables } from 'shared/styles';
 
-import { COLORS, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
+import { COLORS, commonLabelsProps, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
 import { getTicksStepSize } from '../Charts.utils';
 import { ChartData } from './BarChart.types';
 import { BORDER_RADIUS } from './BarChart.const';
@@ -31,13 +31,7 @@ export const getOptions = (
     plugins: {
       legend: {
         align: 'start' as const,
-        labels: {
-          color: variables.palette.on_surface,
-          font: {
-            family: 'Atkinson',
-            size: 14,
-          },
-        },
+        labels: commonLabelsProps,
       },
       tooltip: {
         enabled: false,

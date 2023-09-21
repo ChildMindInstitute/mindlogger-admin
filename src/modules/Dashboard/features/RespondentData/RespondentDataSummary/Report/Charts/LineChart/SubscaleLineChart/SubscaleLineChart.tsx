@@ -12,11 +12,12 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
+import { legendMargin } from '../../Charts.utils';
 import { LINK_PATTERN, locales, TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../../Charts.const';
+import { StyledChartContainer } from '../../Chart.styles';
 import { ChartTooltip } from './ChartTooltip';
 import { getOptions, getData } from './SubscaleLineChart.utils';
 import {
-  CustomLegend,
   SubscaleLineDataPointRaw,
   SubscaleLineChartProps,
   TooltipData,
@@ -96,17 +97,6 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
     }
   };
 
-  const legendMargin = {
-    id: 'legendMargin',
-    beforeInit: (chart: ChartJS) => {
-      const originalFit = (chart.legend as CustomLegend).fit;
-      (chart.legend as CustomLegend).fit = function fit() {
-        originalFit.bind(chart.legend)();
-        this.height += 42;
-      };
-    },
-  };
-
   const renderChart = useMemo(
     () => (
       <Line
@@ -121,7 +111,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
   return (
     <>
-      {renderChart}
+      <StyledChartContainer>{renderChart}</StyledChartContainer>
       <ChartTooltip
         ref={tooltipRef}
         dataPoints={tooltipData}
