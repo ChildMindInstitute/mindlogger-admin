@@ -13,11 +13,8 @@ import {
 } from 'date-fns';
 
 import { Periodicity } from 'modules/Dashboard/api';
-import {
-  formatToWeekYear,
-  formatToYearMonthDate,
-} from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.utils';
-import { getNormalizedTimezoneDate } from 'shared/utils';
+import { formatToWeekYear, formatToYearMonthDate } from 'shared/utils/dateFormat';
+import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 
 import {
   CalendarEvent,
