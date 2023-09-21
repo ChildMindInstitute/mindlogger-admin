@@ -32,7 +32,7 @@ import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
   AppletPasswordPopupProps,
-} from 'modules/Dashboard/features/Applet';
+} from 'modules/Dashboard/features/Applet/Popups';
 import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
 import { SettingParam } from 'shared/utils/urlGenerator';
