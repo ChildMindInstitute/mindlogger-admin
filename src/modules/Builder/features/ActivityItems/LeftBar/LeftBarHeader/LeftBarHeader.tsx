@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
-import { StyledHeader } from 'shared/features';
 import { Svg } from 'shared/components';
+import { StyledBuilderContainerHeader } from 'shared/features';
 
 import { LeftBarHeaderProps } from './LeftBarHeader.types';
 
@@ -23,9 +23,9 @@ export const LeftBarHeader = ({ isSticky, children, headerProps }: LeftBarHeader
   );
 
   return (
-    <StyledHeader isSticky={isSticky} sx={{ maxHeight: '9.6rem' }}>
+    <StyledBuilderContainerHeader isSticky={isSticky}>
       {children}
       {!hasActiveItem && addItemBtn}
-    </StyledHeader>
+    </StyledBuilderContainerHeader>
   );
 };

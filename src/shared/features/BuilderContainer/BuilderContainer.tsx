@@ -4,7 +4,7 @@ import { useHeaderSticky } from 'shared/hooks';
 import { StyledBuilderWrapper, StyledFlexColumn, StyledHeadlineLarge, theme } from 'shared/styles';
 
 import { BuilderContainerProps } from './BuilderContainer.types';
-import { StyledHeader } from './BuilderContainer.styles';
+import { StyledBuilderContainerHeader } from './BuilderContainer.styles';
 
 export const BuilderContainer = ({
   title,
@@ -18,7 +18,7 @@ export const BuilderContainer = ({
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
 
-  const HeaderComponent = Header || StyledHeader;
+  const HeaderComponent = Header || StyledBuilderContainerHeader;
 
   return (
     <StyledBuilderWrapper ref={containerRef} hasMaxWidth={hasMaxWidth} sx={sxProps}>

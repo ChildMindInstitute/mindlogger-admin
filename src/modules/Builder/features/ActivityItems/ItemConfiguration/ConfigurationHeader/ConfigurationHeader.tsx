@@ -1,6 +1,6 @@
 import { Svg } from 'shared/components';
 import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
-import { StyledHeader } from 'shared/features';
+import { StyledBuilderContainerHeader } from 'shared/features';
 
 import { ConfigurationHeaderProps } from './ConfigurationHeader.types';
 
@@ -12,7 +12,7 @@ export const ConfigurationHeader = ({
   const { responseType, optionalItemsRef, onClose } = headerProps ?? {};
 
   return (
-    <StyledHeader isSticky={isSticky}>
+    <StyledBuilderContainerHeader isSticky={isSticky}>
       {children}
       <StyledFlexTopCenter>
         {responseType && (
@@ -32,6 +32,6 @@ export const ConfigurationHeader = ({
           <Svg id="close" />
         </StyledClearedButton>
       </StyledFlexTopCenter>
-    </StyledHeader>
+    </StyledBuilderContainerHeader>
   );
 };
