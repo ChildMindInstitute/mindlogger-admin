@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -23,9 +23,7 @@ import { getHeadCells, getMenuItems } from './Applets.const';
 import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
 import { useAppletsWithFolders } from './Applets.hooks';
-import { AppletContextType } from './Applets.types';
-
-export const AppletsContext = createContext<AppletContextType | null>(null);
+import { AppletsContext } from './Applets.context';
 
 export const Applets = () => {
   const { t } = useTranslation('app');

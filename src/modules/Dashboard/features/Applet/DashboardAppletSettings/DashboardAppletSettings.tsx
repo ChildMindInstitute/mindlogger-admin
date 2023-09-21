@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { AppletSettings } from 'shared/features/AppletSettings';
+import { AppletSettings } from 'shared/features/AppletSettings/AppletSettings';
 import { workspaces, applet } from 'redux/modules';
 import { EmptyState, Spinner } from 'shared/components';
 import { isManagerOrOwner } from 'shared/utils';

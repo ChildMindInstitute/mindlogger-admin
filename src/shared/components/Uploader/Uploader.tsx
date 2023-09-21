@@ -13,7 +13,7 @@ import { concatIf } from 'shared/utils/concatIf';
 import { joinWihComma } from 'shared/utils/joinWihComma';
 
 import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadFileError, MediaType } from 'shared/consts';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 
 import {
   StyledContainer,
