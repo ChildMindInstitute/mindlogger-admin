@@ -78,7 +78,7 @@ export const Applets = () => {
   };
 
   const headerContent = (
-    <Box onClick={() => addFolder()}>
+    <Box onClick={addFolder}>
       <Svg id="add-folder" />
     </Box>
   );

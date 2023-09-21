@@ -1,6 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import axios from 'axios';
-import { act } from 'react-dom/test-utils';
 import Router from 'react-router';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -22,6 +21,10 @@ const fakeRequest = () => new Promise((res) => res(response));
 describe('LinkGenerator component tests', () => {
   const mockedAxios = axios.create();
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test('LinkGenerator should generate link', async () => {
     jest.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
     jest.spyOn(Router, 'useParams').mockReturnValue({ appletId });
@@ -41,9 +44,7 @@ describe('LinkGenerator component tests', () => {
   });
 
   test('LinkGenerator should get link', async () => {
-    jest
-      .spyOn(mockedAxios, 'get')
-      .mockImplementation(async () => await act(fakeRequest as () => Promise<void>));
+    jest.spyOn(mockedAxios, 'get').mockImplementation(fakeRequest);
     jest.spyOn(Router, 'useParams').mockReturnValue({ appletId });
 
     renderWithProviders(<LinkGenerator />);
