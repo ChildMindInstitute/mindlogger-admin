@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Spinner, Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
-import { getDateInUserTimezone } from 'shared/utils';
+import { getDateInUserTimezone } from 'shared/utils/dateTimezone';
 import {
   variables,
   StyledLabelBoldLarge,

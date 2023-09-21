@@ -12,8 +12,9 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { BuilderContainer } from 'shared/features';
-import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
+import { BuilderContainer } from 'shared/features/BuilderContainer';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems';
 

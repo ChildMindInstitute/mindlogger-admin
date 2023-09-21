@@ -35,13 +35,13 @@ import {
 } from 'modules/Dashboard/features/Applet';
 import { useAsync, useIsServerConfigured } from 'shared/hooks';
 import { page } from 'resources';
+import { SettingParam } from 'shared/utils/urlGenerator';
 import {
-  SettingParam,
   getParsedEncryptionFromServer,
   getPrivateKey,
   publicEncrypt,
-  getSanitizedContent,
-} from 'shared/utils';
+} from 'shared/utils/encryption';
+import { getSanitizedContent } from 'shared/utils/forms';
 import { reportConfig } from 'modules/Builder/state';
 import { useCurrentActivity, useCurrentActivityFlow } from 'modules/Builder/hooks';
 import { TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';

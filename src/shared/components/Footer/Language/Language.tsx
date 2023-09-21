@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledLabelMedium, variables } from 'shared/styles';
-import { LocalStorageKeys, storage } from 'shared/utils';
+import { LocalStorageKeys, storage } from 'shared/utils/storage';
 
 import { SelectLanguage } from './SelectLanguage';
 import { LanguageItem, Languages } from './Language.types';

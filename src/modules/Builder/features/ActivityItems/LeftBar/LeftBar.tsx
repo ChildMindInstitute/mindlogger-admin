@@ -16,8 +16,9 @@ import {
 import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
 import { BuilderContainer } from 'shared/features';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import { InsertItem, DndDroppable } from 'modules/Builder/components';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { InsertItem } from 'modules/Builder/components/InsertItem';
+import { DndDroppable } from 'modules/Builder/components/DndDroppable';
 import { ItemFormValues } from 'modules/Builder/types';
 
 import { LeftBarProps } from './LeftBar.types';

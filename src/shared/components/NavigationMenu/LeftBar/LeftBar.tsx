@@ -1,9 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { StyledTitleSmall, variables } from 'shared/styles';
+import { variables } from 'shared/styles/variables';
 import { Tooltip } from 'shared/components/Tooltip';
 import { BuilderContainer } from 'shared/features/BuilderContainer';
+import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
 
 import {
   StyledContent,

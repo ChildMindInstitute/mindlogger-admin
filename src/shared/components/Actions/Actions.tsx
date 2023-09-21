@@ -2,7 +2,7 @@ import { MouseEvent, useState } from 'react';
 
 import { Tooltip } from 'shared/components/Tooltip';
 import { Svg } from 'shared/components/Svg';
-import { concatIf } from 'shared/utils';
+import { concatIf } from 'shared/utils/concatIf';
 
 import {
   StyledActions,

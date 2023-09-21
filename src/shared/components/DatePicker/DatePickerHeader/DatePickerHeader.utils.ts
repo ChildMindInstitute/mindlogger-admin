@@ -1,5 +1,6 @@
 import { TFunction } from 'i18next';
-import { createArray } from 'shared/utils';
+
+import { createArray } from 'shared/utils/array';
 
 export const getMonthsArr = (t: TFunction) => [
   t('jan'),

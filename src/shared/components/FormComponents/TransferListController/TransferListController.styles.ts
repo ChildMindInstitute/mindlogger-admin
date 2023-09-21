@@ -1,7 +1,7 @@
 import { TextField, styled } from '@mui/material';
 
 import { StyledBodySmall, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledTransferListController = styled(StyledFlexTopCenter, shouldForwardProp)`
   position: relative;

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
-import { byteFormatter } from 'shared/utils';
+import { byteFormatter } from 'shared/utils/fileSystem';
 
 import { FileSizeExceededPopupProps } from './FileSizeExceededPopup.types';
 

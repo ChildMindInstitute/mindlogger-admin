@@ -14,7 +14,7 @@ import {
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
   UserActionType,
-} from 'shared/types';
+} from 'shared/types/answer';
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import { FlankerConfig, Item } from 'shared/state';
 import { postFilePresignApi } from 'shared/api';

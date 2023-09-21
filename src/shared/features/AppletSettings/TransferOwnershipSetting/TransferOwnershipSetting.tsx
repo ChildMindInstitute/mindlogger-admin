@@ -3,10 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { applet } from 'shared/state';
-import {
-  SuccessTransferOwnershipPopup,
-  TransferOwnership,
-} from 'modules/Dashboard/features/Applet';
+import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
+import { SuccessTransferOwnershipPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { TransferOwnershipRef } from 'modules/Dashboard/features/Applet/TransferOwnership/TransferOwnership.types';
 
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';

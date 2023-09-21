@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { authStorage } from 'shared/utils';
+import { authStorage } from 'shared/utils/authStorage';
 import { SingleApplet } from 'shared/state';
 
 import { verifyReportServer, setPasswordReportServer } from './ReportConfigSetting.utils';

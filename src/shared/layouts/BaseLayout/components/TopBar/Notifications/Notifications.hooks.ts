@@ -1,6 +1,6 @@
 import { useAppDispatch } from 'redux/store';
 import { alerts } from 'shared/state';
-import { getInfinityScrollData } from 'shared/utils';
+import { getInfinityScrollData } from 'shared/utils/getInfinityScrollData';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { useIntersectionObserver } from 'shared/hooks';
 
