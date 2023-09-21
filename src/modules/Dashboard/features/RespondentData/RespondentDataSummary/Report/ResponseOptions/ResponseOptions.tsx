@@ -49,18 +49,12 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
         </Tooltip>
       </StyledHeadline>
       {Object.values(responseOptions).map((responseOption, responseOptionIndex) =>
-        responseOption.map(
-          (item, index) =>
-            !item.activityItem?.responseDataIdentifier && (
-              <Box key={`${item.activityItem.id}-${index}`} sx={{ mb: theme.spacing(6.4) }}>
-                <CollapsedMdText
-                  text={getDictionaryText(item.activityItem.question)}
-                  maxHeight={120}
-                />
-                {renderResponseOption(item, responseOptionIndex)}
-              </Box>
-            ),
-        ),
+        responseOption.map((item, index) => (
+          <Box key={`${item.activityItem.id}-${index}`} sx={{ mb: theme.spacing(6.4) }}>
+            <CollapsedMdText text={getDictionaryText(item.activityItem.question)} maxHeight={120} />
+            {renderResponseOption(item, responseOptionIndex)}
+          </Box>
+        )),
       )}
     </>
   );

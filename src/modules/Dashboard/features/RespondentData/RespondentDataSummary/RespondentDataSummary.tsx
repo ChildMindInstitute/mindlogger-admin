@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useAsync, useBreadcrumbs } from 'shared/hooks';
+import { useAsync } from 'shared/hooks';
 import { Spinner } from 'shared/components';
 import { useDecryptedIdentifiers } from 'modules/Dashboard/hooks';
 import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
@@ -31,13 +31,6 @@ export const RespondentDataSummary = () => {
 
   const { execute: getIdentifiers } = useAsync(getIdentifiersApi);
   const { execute: getVersions } = useAsync(getVersionsApi);
-
-  useBreadcrumbs([
-    {
-      icon: 'chart',
-      label: t('summary'),
-    },
-  ]);
 
   const reportContent = useMemo(() => {
     if (selectedActivity && isLoading) return <Spinner />;
