@@ -44,7 +44,7 @@ export const getOptions = (
     clip: false as const,
     plugins: {
       legend: {
-        align: 'start' as const,
+        display: false,
         labels: {
           filter: (legendItem: LegendItem, chart: ChartData<'line'>) => {
             const versionIndex = chart.datasets.findIndex((dataset) => dataset.xAxisID === 'x2');
@@ -53,11 +53,6 @@ export const getOptions = (
             return (
               legendItem.datasetIndex !== versionIndex && legendItem.datasetIndex !== dateIndex
             );
-          },
-          color: variables.palette.on_surface,
-          font: {
-            family: 'Atkinson',
-            size: 14,
           },
         },
       },

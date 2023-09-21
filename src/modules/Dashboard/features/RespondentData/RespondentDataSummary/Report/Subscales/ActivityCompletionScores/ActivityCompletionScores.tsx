@@ -4,7 +4,13 @@ import { format } from 'date-fns';
 import { Box } from '@mui/material';
 
 import { DateFormats } from 'shared/consts';
-import { StyledBodyMedium, StyledFlexSpaceBetween, StyledHeadline, theme } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledFlexSpaceBetween,
+  StyledHeadline,
+  theme,
+  variables,
+} from 'shared/styles';
 import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
 import { StyledTextBtn } from 'modules/Dashboard/features/RespondentData/RespondentData.styles';
 import { Svg } from 'shared/components';
@@ -60,7 +66,7 @@ export const ActivityCompletionScores = ({
   return (
     <>
       <StyledFlexSpaceBetween sx={{ mt: theme.spacing(6) }}>
-        <StyledHeadline>{t('subscaleScores')}</StyledHeadline>
+        <StyledHeadline color={variables.palette.on_surface}>{t('subscaleScores')}</StyledHeadline>
         {showAllSubscaleResultsVisible && (
           <StyledTextBtn
             onClick={() => setCurrentActivityCompletionData(null)}
