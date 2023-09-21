@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
 
 export const dashboardTabs = [

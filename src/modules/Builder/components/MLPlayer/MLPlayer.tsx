@@ -1,7 +1,7 @@
 import ReactPlayer from 'react-player/lazy';
 
 import { StyledClearedButton, StyledTitleSmall, theme } from 'shared/styles';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import {
   StyledFooter,

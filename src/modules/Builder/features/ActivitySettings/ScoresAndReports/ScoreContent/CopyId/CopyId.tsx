@@ -1,5 +1,5 @@
 import { StyledFlexTopCenter, StyledTitleSmall, theme } from 'shared/styles';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { CopyIdProps } from './CopyId.types';
 import { StyledDuplicateButton, StyledValue } from './CopyId.styles';

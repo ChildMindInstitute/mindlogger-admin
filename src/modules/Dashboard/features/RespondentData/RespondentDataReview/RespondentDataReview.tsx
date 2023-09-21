@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { ReviewActivity, getAssessmentApi } from 'api';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { useAsync, useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
 import {
   StyledContainer,

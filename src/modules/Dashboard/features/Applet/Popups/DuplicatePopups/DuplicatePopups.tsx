@@ -8,7 +8,7 @@ import { Encryption, getEncryptionToServer } from 'shared/utils';
 import { Modal } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledModalWrapper, variables } from 'shared/styles';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { popups, applet, auth } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';

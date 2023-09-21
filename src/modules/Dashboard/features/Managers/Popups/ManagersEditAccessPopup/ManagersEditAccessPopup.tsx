@@ -6,7 +6,7 @@ import { Modal } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { Roles } from 'shared/consts';
 import { workspaces } from 'redux/modules';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { editManagerAccessApi, removeManagerAccessApi } from 'api';
 import { getErrorMessage, pluck } from 'shared/utils';
 

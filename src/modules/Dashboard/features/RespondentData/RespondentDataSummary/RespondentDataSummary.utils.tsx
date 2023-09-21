@@ -1,6 +1,6 @@
 import i18n from 'i18n';
 import { DatavizActivity } from 'api';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledTitleLarge, theme, variables } from 'shared/styles';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 

@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { createAssessmentApi } from 'api';
 import {
   FeedbackTabs,

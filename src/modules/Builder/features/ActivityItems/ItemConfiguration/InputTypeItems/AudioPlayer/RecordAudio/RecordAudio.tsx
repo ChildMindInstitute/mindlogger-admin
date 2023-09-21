@@ -5,7 +5,7 @@ import { Box, Button } from '@mui/material';
 import { postFileUploadApi } from 'api';
 import { StyledLinearProgress, StyledTitleMedium, theme } from 'shared/styles';
 import { Modal, Svg } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { getUploadFormData } from 'shared/utils';
 import { MLPlayer } from 'modules/Builder/components';
 

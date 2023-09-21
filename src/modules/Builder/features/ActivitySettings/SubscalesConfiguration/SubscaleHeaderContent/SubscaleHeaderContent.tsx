@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 
 import { StyledClearedButton, theme } from 'shared/styles';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { SubscaleTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
 import { TitleComponent } from '../../TitleComponent';

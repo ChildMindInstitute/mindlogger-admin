@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { getBuilderAppletUrl } from 'shared/utils/urlGenerator';
 
 import {

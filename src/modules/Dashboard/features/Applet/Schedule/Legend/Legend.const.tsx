@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 export const ScheduleOptions = {
   DefaultSchedule: 'defaultSchedule',

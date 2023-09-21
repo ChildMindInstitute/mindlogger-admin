@@ -1,6 +1,6 @@
 import { Box, Button, styled } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledFlexTopStart, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 

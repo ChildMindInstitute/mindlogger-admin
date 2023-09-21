@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { page } from 'resources';
 import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { DuplicatePopups } from 'modules/Dashboard/features/Applet/Popups';
 
 import {

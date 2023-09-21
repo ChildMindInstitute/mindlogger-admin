@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { SaveChangesPopup } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { RetentionPeriods } from 'shared/types';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
