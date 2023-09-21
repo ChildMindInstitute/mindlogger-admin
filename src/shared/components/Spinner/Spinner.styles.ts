@@ -3,7 +3,6 @@ import { styled } from '@mui/system';
 import { theme } from 'shared/styles/theme';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents/Flex';
 import { variables } from 'shared/styles/variables';
-
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledSpinner = styled(StyledFlexAllCenter, shouldForwardProp)`

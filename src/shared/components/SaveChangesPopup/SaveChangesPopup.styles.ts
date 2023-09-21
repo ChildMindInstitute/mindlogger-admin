@@ -4,7 +4,6 @@ import { Button, DialogTitle, Dialog, DialogActions, Box } from '@mui/material';
 import { theme } from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { FontWeight, StyledClearedButton } from 'shared/styles/styledComponents';
-
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledDialog = styled(Dialog)`

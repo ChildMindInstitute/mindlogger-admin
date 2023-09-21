@@ -20,7 +20,7 @@ import {
   checkIfAppletSettingsUrlPassed,
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
-import { useRespondentLabel } from 'modules/Dashboard/hooks';
+import { useRespondentLabel } from 'modules/Dashboard/hooks/useRespondentLabel';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();

@@ -74,7 +74,7 @@ import {
   RoundTypeEnum,
   TouchItemNames,
 } from 'modules/Builder/types';
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,

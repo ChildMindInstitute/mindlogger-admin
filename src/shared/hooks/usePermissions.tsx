@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { workspaces } from 'redux/modules';
 import { EmptyState } from 'shared/components';
-import { getErrorMessage } from 'shared/utils/errors';
+import { getErrorMessage } from 'shared/utils';
 import { ApiResponseCodes } from 'shared/api';
 
 export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
