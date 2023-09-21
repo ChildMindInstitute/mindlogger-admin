@@ -16,7 +16,7 @@ import { StyledTextBtn } from 'modules/Dashboard/features/RespondentData/Respond
 import { Svg } from 'shared/components';
 
 import { AdditionalInformation } from '../AdditionalInformation';
-import { StyledChartContainer, StyledDescription } from './ActivityCompletionScores.styles';
+import { StyledDescription } from './ActivityCompletionScores.styles';
 import { ScoresProps } from './ActivityCompletionScores.types';
 import { ReportContext } from '../../Report.context';
 
@@ -78,9 +78,7 @@ export const ActivityCompletionScores = ({
         )}
       </StyledFlexSpaceBetween>
       {renderChartDescription()}
-      <StyledChartContainer>
-        <BarChart chartData={subscaleScores} />
-      </StyledChartContainer>
+      <BarChart chartData={subscaleScores} />
       {optionText && (
         <Box sx={{ m: theme.spacing(6.4, 0) }}>
           <AdditionalInformation optionText={optionText} />

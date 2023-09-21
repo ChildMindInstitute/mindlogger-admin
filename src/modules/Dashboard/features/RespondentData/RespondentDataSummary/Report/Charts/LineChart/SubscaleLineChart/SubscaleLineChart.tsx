@@ -1,14 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import {
-  Chart as ChartJS,
-  Tooltip,
-  TimeScale,
-  Legend,
-  ScriptableTooltipContext,
-  LegendItem,
-} from 'chart.js';
+import { Chart as ChartJS, Tooltip, TimeScale, Legend, ScriptableTooltipContext } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
@@ -19,7 +12,9 @@ import { useAsync } from 'shared/hooks';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
+import { CustomLegend } from '../../BarChart/BarChart.types';
 import { LINK_PATTERN, locales, TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../../Charts.const';
+import { StyledChartContainer } from '../../Chart.styles';
 import { ChartTooltip } from './ChartTooltip';
 import { getOptions, getData } from './SubscaleLineChart.utils';
 import {
@@ -27,8 +22,6 @@ import {
   SubscaleLineChartProps,
   TooltipData,
 } from './SubscaleLineChart.types';
-import { ChartLegend } from './ChartLegend';
-import { StyledChartContainer } from './SubscaleLineChart.styles';
 
 ChartJS.register(Tooltip, TimeScale, Legend);
 
@@ -40,7 +33,6 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
   const isHovered = useRef(false);
 
   const [tooltipData, setTooltipData] = useState<TooltipData[] | null>(null);
-  const [legendData, setLegendData] = useState<LegendItem[] | null>(null);
 
   const { execute: getOptionText } = useAsync(getOptionTextApi);
   const { watch } = useFormContext<SummaryFiltersForm>();
@@ -105,10 +97,14 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
     }
   };
 
-  const getLegendData = {
-    id: 'getLegendData',
-    afterUpdate(chart: ChartJS) {
-      setLegendData(chart.legend?.legendItems || null);
+  const legendMargin = {
+    id: 'legendMargin',
+    beforeInit: (chart: ChartJS) => {
+      const originalFit = (chart.legend as CustomLegend)?.fit;
+      (chart.legend as CustomLegend).fit = function fit() {
+        originalFit.bind(chart.legend)();
+        this.height += 42;
+      };
     },
   };
 
@@ -118,7 +114,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
         ref={chartRef}
         options={getOptions(lang, minDate, maxDate, data, tooltipHandler)}
         data={getData(data, filteredVersions)}
-        plugins={[ChartDataLabels, getLegendData]}
+        plugins={[ChartDataLabels, legendMargin]}
       />
     ),
     [lang, minDate, maxDate, filteredVersions],
@@ -126,7 +122,6 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
   return (
     <>
-      {legendData && <ChartLegend legendData={legendData} />}
       <StyledChartContainer>{renderChart}</StyledChartContainer>
       <ChartTooltip
         ref={tooltipRef}

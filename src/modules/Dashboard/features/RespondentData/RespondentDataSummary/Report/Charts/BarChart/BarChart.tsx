@@ -9,6 +9,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 
 import { TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../Charts.const';
+import { StyledChartContainer } from '../Chart.styles';
 import { getDatasets, getOptions } from './BarChart.utils';
 import { BarChartProps, CustomLegend, TooltipData } from './BarChart.types';
 import { ChartTooltip } from './ChartTooltip';
@@ -94,7 +95,7 @@ export const BarChart = ({ chartData }: BarChartProps) => {
 
   return (
     <>
-      {renderChart}
+      <StyledChartContainer>{renderChart}</StyledChartContainer>
       <ChartTooltip
         ref={tooltipRef}
         data={tooltipData}

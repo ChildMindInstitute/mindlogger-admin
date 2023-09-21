@@ -17,6 +17,7 @@ import {
   POINT_RADIUS_DEFAULT,
   POINT_RADIUS_SECONDARY,
   COLORS,
+  commonLabelsProps,
 } from '../../Charts.const';
 import { getTimelineStepSize, getTimeConfig, getTicksStepSize } from '../../Charts.utils';
 import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
@@ -44,7 +45,7 @@ export const getOptions = (
     clip: false as const,
     plugins: {
       legend: {
-        display: false,
+        align: 'start' as const,
         labels: {
           filter: (legendItem: LegendItem, chart: ChartData<'line'>) => {
             const versionIndex = chart.datasets.findIndex((dataset) => dataset.xAxisID === 'x2');
@@ -54,6 +55,7 @@ export const getOptions = (
               legendItem.datasetIndex !== versionIndex && legendItem.datasetIndex !== dateIndex
             );
           },
+          ...commonLabelsProps,
         },
       },
       tooltip: {
