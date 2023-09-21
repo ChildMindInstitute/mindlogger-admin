@@ -47,5 +47,6 @@ export const variables = {
     boxShadow: 'box-shadow 0.3s',
     width: 'width 0.3s ease-in',
     fontWeight: 'font-weight 0.3s',
+    fontSize: 'font-size 0.3s',
   },
 };

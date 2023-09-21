@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 import { Svg } from 'shared/components';
-import { StyledClearedButton, StyledHeadlineLarge, theme } from 'shared/styles';
+import { StyledClearedButton, StyledStickyHeadline, theme } from 'shared/styles';
 import { useHeaderSticky } from 'shared/hooks';
 
 import { StyledHeader, StyledContent, StyledActivitySettingsContainer } from './Container.styles';
@@ -15,7 +15,7 @@ export const Container = ({ title, onClose, children }: ActivitySettingsContaine
   return (
     <StyledActivitySettingsContainer ref={containerRef}>
       <StyledHeader isSticky={isHeaderSticky}>
-        <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
+        <StyledStickyHeadline isSticky={isHeaderSticky}>{title}</StyledStickyHeadline>
         <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onClose}>
           <Svg id="close" />
         </StyledClearedButton>

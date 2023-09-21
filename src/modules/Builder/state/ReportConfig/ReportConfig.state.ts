@@ -1,4 +1,4 @@
-import { base } from 'shared/state';
+import { base } from 'shared/state/Base';
 
 import { ReportConfigSchema } from './ReportConfig.schema';
 

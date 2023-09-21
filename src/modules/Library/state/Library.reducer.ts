@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 
-import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils';
+import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { LibrarySchema, PublishedApplet } from './Library.schema';
 import { getAppletsFromCart, getPublishedApplets, postAppletsToCart } from './Library.thunk';
