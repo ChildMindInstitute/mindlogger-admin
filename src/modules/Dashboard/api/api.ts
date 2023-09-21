@@ -50,6 +50,7 @@ import {
   AssessmentReview,
   AppletName,
   LatestReport,
+  Identifiers,
 } from './api.types';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
@@ -504,12 +505,15 @@ export const getSummaryActivitiesApi = (
   });
 
 export const getIdentifiersApi = (
-  { appletId, activityId }: AppletId & { activityId: string },
+  { appletId, activityId, respondentId }: Identifiers,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Identifier>>(
     `/answers/applet/${appletId}/summary/activities/${activityId}/identifiers`,
     {
+      params: {
+        respondentId,
+      },
       signal,
     },
   );

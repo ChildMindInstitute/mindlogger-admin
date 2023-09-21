@@ -373,3 +373,5 @@ export type LatestReport = {
   activityId: string;
   respondentId: string;
 };
+
+export type Identifiers = LatestReport;

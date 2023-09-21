@@ -7,7 +7,8 @@ import { Svg } from 'shared/components';
 import { useAsync, useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
 import {
   StyledContainer,
-  StyledHeadlineLarge,
+  StyledStickyHeader,
+  StyledStickyHeadline,
   StyledTitleLarge,
   theme,
   variables,
@@ -18,7 +19,6 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { StyledTextBtn } from '../RespondentData.styles';
 import {
   StyledEmptyReview,
-  StyledHeader,
   StyledReviewContainer,
   StyledWrapper,
 } from './RespondentDataReview.styles';
@@ -108,11 +108,15 @@ export const RespondentDataReview = () => {
         value={{ isFeedbackOpen, assessment, itemIds, setItemIds }}
       >
         <StyledReviewContainer ref={containerRef}>
-          <StyledHeader
+          <StyledStickyHeader
             isSticky={isHeaderSticky}
             sx={{ justifyContent: selectedAnswer ? 'space-between' : 'flex-end' }}
           >
-            {selectedAnswer && <StyledHeadlineLarge>{selectedActivity?.name}</StyledHeadlineLarge>}
+            {selectedAnswer && (
+              <StyledStickyHeadline isSticky={isHeaderSticky}>
+                {selectedActivity?.name}
+              </StyledStickyHeadline>
+            )}
             <StyledTextBtn
               variant="text"
               onClick={() => setIsFeedbackOpen(true)}
@@ -122,7 +126,7 @@ export const RespondentDataReview = () => {
             >
               {t('feedback')}
             </StyledTextBtn>
-          </StyledHeader>
+          </StyledStickyHeader>
           {selectedActivity && selectedAnswer ? (
             <Review
               answerId={selectedAnswer.answerId}

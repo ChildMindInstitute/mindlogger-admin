@@ -1,12 +1,6 @@
 import { styled } from '@mui/material';
 
-import {
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-  theme,
-  variables,
-  commonStickyStyles,
-} from 'shared/styles';
+import { StyledFlexColumn, theme, StyledStickyHeader } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledActivitySettingsContainer = styled(StyledFlexColumn)`
@@ -16,12 +10,7 @@ export const StyledActivitySettingsContainer = styled(StyledFlexColumn)`
   flex-grow: 1;
 `;
 
-export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
-  ${commonStickyStyles};
-
-  box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
-    isSticky ? variables.boxShadow.light0 : 'none'};
-  padding: ${theme.spacing(2.4, 6.4, 2)};
+export const StyledHeader = styled(StyledStickyHeader, shouldForwardProp)`
   justify-content: space-between;
 `;
 

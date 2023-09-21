@@ -57,6 +57,7 @@ export const RespondentDataSummary = () => {
       try {
         if (
           !appletId ||
+          !respondentId ||
           !selectedActivity ||
           !selectedActivity?.hasAnswer ||
           selectedActivity?.isPerformanceTask
@@ -67,6 +68,7 @@ export const RespondentDataSummary = () => {
         const identifiers = await getIdentifiers({
           appletId,
           activityId: selectedActivity.id,
+          respondentId,
         });
         const decryptedIdentifiers = getDecryptedIdentifiers(identifiers.data.result);
         const identifiersFilter = getUniqueIdentifierOptions(decryptedIdentifiers);
