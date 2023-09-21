@@ -8,10 +8,11 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
+import { legendMargin } from '../Charts.utils';
 import { TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../Charts.const';
 import { StyledChartContainer } from '../Chart.styles';
 import { getDatasets, getOptions } from './BarChart.utils';
-import { BarChartProps, CustomLegend, TooltipData } from './BarChart.types';
+import { BarChartProps, TooltipData } from './BarChart.types';
 import { ChartTooltip } from './ChartTooltip';
 
 ChartJS.register(BarElement, CategoryScale, Legend);
@@ -63,17 +64,6 @@ export const BarChart = ({ chartData }: BarChartProps) => {
       tooltipEl.style.top = `${top - TOOLTIP_OFFSET_TOP}px`;
       tooltipEl.style.left = `${left - TOOLTIP_OFFSET_LEFT}px`;
     }
-  };
-
-  const legendMargin = {
-    id: 'legendMargin',
-    beforeInit: (chart: ChartJS) => {
-      const originalFit = (chart.legend as CustomLegend)?.fit;
-      (chart.legend as CustomLegend).fit = function fit() {
-        originalFit.bind(chart.legend)();
-        this.height += 42;
-      };
-    },
   };
 
   const data = {
