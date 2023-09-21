@@ -27,6 +27,7 @@ import {
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
   getAddTotalScoreModalLabels,
+  checkOnItemTypeAndScore,
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
@@ -36,7 +37,6 @@ import {
   StyledSvgButton,
 } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
-import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 import { LookupTable } from './LookupTable';
 import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
 
