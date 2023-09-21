@@ -11,7 +11,7 @@ import {
   StyledBodyLarge,
   variables,
 } from 'shared/styles';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 
 export const PublishConcealAppletPopup = () => {
   const { t } = useTranslation('app');

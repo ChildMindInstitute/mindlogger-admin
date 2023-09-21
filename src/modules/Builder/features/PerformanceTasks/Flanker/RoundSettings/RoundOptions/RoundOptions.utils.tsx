@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 import { StyledBodyMedium, StyledCheckboxTooltipSvg } from 'shared/styles';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import { GetCheckboxes } from './RoundOptions.types';
 

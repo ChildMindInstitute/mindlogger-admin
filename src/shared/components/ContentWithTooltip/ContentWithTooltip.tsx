@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 
-import { useIsTextNodeEllipsed, useWindowSize } from 'shared/hooks';
 import { Tooltip } from 'shared/components/Tooltip';
+import { useIsTextNodeEllipsed } from 'shared/hooks/useIsTextNodeEllipsed';
+import { useWindowSize } from 'shared/hooks/useWindowSize';
 
 import { StyledCellText } from './ContentWithTooltip.styles';
 import { ContentWithTooltipProps } from './ContentWithTooltip.types';

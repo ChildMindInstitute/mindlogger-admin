@@ -6,7 +6,7 @@ import { Modal, SubmitBtnColor, Error } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
 import { removeIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { applets, users } from 'modules/Dashboard/state';
 import { page } from 'resources';
 import { workspaces } from 'shared/state';

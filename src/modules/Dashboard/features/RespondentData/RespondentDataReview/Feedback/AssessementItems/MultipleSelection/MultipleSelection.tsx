@@ -1,7 +1,7 @@
 import { Checkbox } from '@mui/material';
 
 import { StyledBodyLarge, StyledFlexColumn, StyledFlexTopCenter, variables } from 'shared/styles';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import { MultipleSelectionProps } from './MultipleSelection.types';
 import {

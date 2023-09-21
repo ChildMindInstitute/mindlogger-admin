@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { Modal, SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { deleteScheduledEventsApi, deleteIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { applets } from 'modules/Dashboard/state';

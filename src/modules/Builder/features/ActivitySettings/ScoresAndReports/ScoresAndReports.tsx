@@ -13,7 +13,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController } from 'shared/components/FormComponents';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
@@ -150,7 +150,11 @@ export const ScoresAndReports = () => {
                   const key = `data-section-${getEntityKey(report) || index}`;
                   const sectionDataTestid = `${dataTestid}-section-${index}`;
                   const headerTitle = (
-                    <Title title={title} name={report?.name} data-testid={sectionDataTestid} />
+                    <Title
+                      title={title}
+                      reportFieldName={reportName}
+                      data-testid={sectionDataTestid}
+                    />
                   );
 
                   return (

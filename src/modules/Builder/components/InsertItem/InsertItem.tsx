@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { StyledInsertWrapper, StyledInsert } from './InsertItem.styles';
 import { InsertItemProps } from './InsertItem.types';

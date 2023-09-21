@@ -8,7 +8,7 @@ import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 import { getOptionTextApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 

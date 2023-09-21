@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { ActivityFormValues } from 'modules/Builder/types';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
 import { SettingParam } from 'shared/utils';

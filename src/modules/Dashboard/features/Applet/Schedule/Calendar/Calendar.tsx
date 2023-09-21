@@ -10,7 +10,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, getDay, getYear, parse, startOfWeek } from 'date-fns';
 
 import i18n from 'i18n';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { locales } from 'shared/consts';

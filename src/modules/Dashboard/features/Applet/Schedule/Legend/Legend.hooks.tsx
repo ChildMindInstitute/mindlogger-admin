@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
 import { BUILDER_PAGES } from 'shared/consts';
 import { calendarEvents } from 'modules/Dashboard/state';

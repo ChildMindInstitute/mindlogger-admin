@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 import { getAppletPublicLinkApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { StyledFlexTopCenter, StyledTitleBoldMedium, theme } from 'shared/styles';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 import { Mixpanel } from 'shared/utils';
 
 import { StyledTitle } from '../AddUser.styles';

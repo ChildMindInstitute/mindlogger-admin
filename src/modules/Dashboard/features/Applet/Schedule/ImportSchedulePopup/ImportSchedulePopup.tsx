@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Error, FileUploader, Modal, SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
 import {
   deleteIndividualEventsApi,

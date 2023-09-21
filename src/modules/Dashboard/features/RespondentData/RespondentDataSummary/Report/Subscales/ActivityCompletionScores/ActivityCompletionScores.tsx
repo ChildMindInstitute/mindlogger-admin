@@ -7,7 +7,7 @@ import { DateFormats } from 'shared/consts';
 import { StyledBodyMedium, StyledFlexSpaceBetween, StyledHeadline, theme } from 'shared/styles';
 import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
 import { StyledTextBtn } from 'modules/Dashboard/features/RespondentData/RespondentData.styles';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { AdditionalInformation } from '../AdditionalInformation';
 import { StyledChartContainer, StyledDescription } from './ActivityCompletionScores.styles';

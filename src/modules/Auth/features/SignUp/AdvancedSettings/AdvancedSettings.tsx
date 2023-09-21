@@ -4,7 +4,7 @@ import { FilterOptionsState, TextField, Autocomplete } from '@mui/material';
 
 import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
 import { StyledLabelSmall } from 'shared/styles/styledComponents';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { variables } from 'shared/styles/variables';
 import { LocalStorageKeys, storage } from 'shared/utils';
 

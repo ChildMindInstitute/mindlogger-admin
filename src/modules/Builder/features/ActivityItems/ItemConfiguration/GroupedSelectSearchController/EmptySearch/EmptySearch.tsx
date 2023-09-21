@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledTitleLarge, variables } from 'shared/styles';
 
 import { EmptySearchProps } from './EmptySearch.types';

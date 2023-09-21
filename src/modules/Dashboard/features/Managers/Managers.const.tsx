@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { HeadCell } from 'shared/types/table';
 
 import { ManagersActions } from './Managers.types';
