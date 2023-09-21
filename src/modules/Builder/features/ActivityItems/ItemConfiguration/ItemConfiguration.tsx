@@ -12,7 +12,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { BuilderContainer } from 'shared/features/BuilderContainer';
+import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';

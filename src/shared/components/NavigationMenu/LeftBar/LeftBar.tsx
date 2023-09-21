@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { variables } from 'shared/styles/variables';
-import { Tooltip } from 'shared/components/Tooltip';
 import { BuilderContainer } from 'shared/features/BuilderContainer';
+import { Tooltip } from 'shared/components/Tooltip';
 import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
 
 import {

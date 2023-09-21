@@ -1,7 +1,10 @@
 import { useRef } from 'react';
 
 import { useHeaderSticky } from 'shared/hooks';
-import { StyledBuilderWrapper, StyledFlexColumn, StyledHeadlineLarge, theme } from 'shared/styles';
+import { StyledBuilderWrapper } from 'shared/styles/styledComponents/Builder';
+import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
+import { StyledHeadlineLarge } from 'shared/styles/styledComponents/Typography';
+import { theme } from 'shared/styles/theme';
 
 import { BuilderContainerProps } from './BuilderContainer.types';
 import { StyledBuilderContainerHeader } from './BuilderContainer.styles';
