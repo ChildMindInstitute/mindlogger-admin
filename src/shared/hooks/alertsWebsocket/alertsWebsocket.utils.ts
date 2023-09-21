@@ -1,5 +1,5 @@
 import { AlertType } from 'shared/state';
-import { authStorage } from 'shared/utils';
+import { authStorage } from 'shared/utils/authStorage';
 
 import { WebsocketAlertType } from './alertsWebsocket.types';
 

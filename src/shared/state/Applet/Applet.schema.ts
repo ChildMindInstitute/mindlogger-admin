@@ -13,7 +13,7 @@ import {
   GyroscopeOrTouch,
   ScoreReportType,
 } from 'shared/consts';
-import { Encryption } from 'shared/utils';
+import { Encryption } from 'shared/utils/encryption';
 import {
   CorrectPress,
   RoundTypeEnum,

@@ -1,7 +1,7 @@
 import { styled, TableContainer } from '@mui/material';
 
 import { StyledFlexTopCenter, variables } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { UiType } from './Table.types';
 

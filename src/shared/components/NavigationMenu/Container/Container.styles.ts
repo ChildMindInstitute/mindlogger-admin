@@ -1,7 +1,9 @@
 import { styled } from '@mui/material';
 
-import { StyledFlexColumn, theme, StyledStickyHeader } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { theme } from 'shared/styles/theme';
+import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
+import { StyledStickyHeader } from 'shared/styles/styledComponents/StickyHeader';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledActivitySettingsContainer = styled(StyledFlexColumn)`
   position: relative;

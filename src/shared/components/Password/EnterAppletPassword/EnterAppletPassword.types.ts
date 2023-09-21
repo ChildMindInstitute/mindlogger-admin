@@ -1,4 +1,4 @@
-import { Encryption } from 'shared/utils';
+import { Encryption } from 'shared/utils/encryption';
 
 export type EnterAppletPasswordForm = { appletPassword: string };
 

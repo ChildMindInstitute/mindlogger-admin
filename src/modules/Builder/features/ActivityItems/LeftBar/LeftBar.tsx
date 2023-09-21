@@ -16,8 +16,9 @@ import {
 import { useHeaderSticky } from 'shared/hooks';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import { InsertItem, DndDroppable } from 'modules/Builder/components';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { InsertItem } from 'modules/Builder/components/InsertItem';
+import { DndDroppable } from 'modules/Builder/components/DndDroppable';
 import { ItemFormValues } from 'modules/Builder/types';
 
 import { StyledBar, StyledHeaderTitle, StyledContent, StyledBtnWrapper } from './LeftBar.styles';

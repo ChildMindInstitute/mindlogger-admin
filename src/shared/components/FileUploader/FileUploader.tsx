@@ -12,11 +12,11 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { FileUploaderUiType, Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { DownloadTemplate } from './DownloadTemlate';
 import { StyledButton, StyledLabel, StyledSvg, StyledTextField } from './FileUploader.styles';
-import { FileUploaderProps, ImportedFile } from './FileUploader.types';
+import { FileUploaderProps, ImportedFile, FileUploaderUiType } from './FileUploader.types';
 import { importTable, getDropText, getAcceptedFormats } from './FileUploader.utils';
 import { MimeType } from './FileUploader.const';
 

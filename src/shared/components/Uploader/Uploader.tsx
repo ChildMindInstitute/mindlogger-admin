@@ -8,7 +8,10 @@ import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { byteFormatter, concatIf, joinWihComma } from 'shared/utils';
+import { byteFormatter } from 'shared/utils/fileSystem';
+import { concatIf } from 'shared/utils/concatIf';
+import { joinWihComma } from 'shared/utils/joinWihComma';
+
 import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadFileError, MediaType } from 'shared/consts';
 import { useAsync } from 'shared/hooks';
 

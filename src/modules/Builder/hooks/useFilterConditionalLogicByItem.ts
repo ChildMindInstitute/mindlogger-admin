@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { ConditionalLogic } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
-import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems';
+import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
