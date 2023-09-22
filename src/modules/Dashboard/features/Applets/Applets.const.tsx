@@ -11,13 +11,13 @@ export const getHeadCells = (): HeadCell[] => [
     id: 'displayName',
     label: t('appletName'),
     enableSort: true,
-    width: '30%',
+    width: '40rem',
   },
   {
     id: 'updatedAt',
     label: t('lastEdit'),
     enableSort: true,
-    width: '15%',
+    width: '20rem',
   },
   {
     id: 'actions',

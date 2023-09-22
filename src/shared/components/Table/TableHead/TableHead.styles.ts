@@ -8,6 +8,8 @@ import { UiType } from '../Table.types';
 const HEAD_ROW_HEIGHT = '5.3rem';
 
 export const StyledTableHead = styled(TableHead, shouldForwardProp)`
+  display: block;
+
   .MuiTableCell-root {
     ${({ uiType }: { uiType?: UiType }) => {
       if (uiType === UiType.Secondary || uiType === UiType.Tertiary) {
@@ -19,12 +21,17 @@ export const StyledTableHead = styled(TableHead, shouldForwardProp)`
       }
 
       return `background-color: ${variables.palette.surface}`;
-    }}
+    }};
+  }
 `;
 
 export const StyledTableCell = styled(TableCell, shouldForwardProp)`
-  top: ${({ uiType }: { uiType?: UiType }) =>
+  top: ${({ uiType }: { uiType?: UiType; width?: string }) =>
     uiType === UiType.Secondary || uiType === UiType.Tertiary ? 0 : HEAD_ROW_HEIGHT};
+  display: flex;
+  align-items: center;
+  flex-basis: ${({ width }) => width};
+  flex-grow: ${({ width }) => (width ? 'unset' : 1)};
 
   &.MuiTableCell-head {
     ${({ uiType }) =>

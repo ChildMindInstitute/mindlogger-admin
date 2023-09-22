@@ -20,7 +20,9 @@ export const TableHead = ({
     <StyledTableHead uiType={uiType}>
       {(uiType === UiType.Primary || uiType === UiType.Quaternary) && (
         <TableRow>
-          <TableCell colSpan={headCells.length}>{tableHeader}</TableCell>
+          <TableCell sx={{ flexGrow: 1 }} colSpan={headCells.length}>
+            {tableHeader}
+          </TableCell>
         </TableRow>
       )}
       <TableRow>

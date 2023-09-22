@@ -1,6 +1,5 @@
 import { useState, DragEvent, useContext, useRef } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { TableCell } from '@mui/material';
 
 import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
@@ -28,6 +27,7 @@ import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.conte
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
+import { StyledTableCell } from '../AppletsTable.styles';
 import { StyledAppletName, StyledPinContainer, StyledTableRow } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
@@ -190,7 +190,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         onMouseEnter={() => setHasVisibleActions(true)}
         onMouseLeave={() => setHasVisibleActions(false)}
       >
-        <TableCell width="30%" onClick={handleAppletClick}>
+        <StyledTableCell width="40rem" onClick={handleAppletClick}>
           <StyledAppletName applet={item}>
             {item.parentId && (
               <StyledPinContainer>
@@ -206,19 +206,19 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             <AppletImage image={item.image} appletName={item.displayName} />
             <StyledBodyMedium sx={{ ml: theme.spacing(1.2) }}>{item.displayName}</StyledBodyMedium>
           </StyledAppletName>
-        </TableCell>
-        <TableCell width="20%" onClick={handleAppletClick}>
+        </StyledTableCell>
+        <StyledTableCell width="20rem" onClick={handleAppletClick}>
           <StyledBodyMedium>
             {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
           </StyledBodyMedium>
-        </TableCell>
-        <TableCell>
+        </StyledTableCell>
+        <StyledTableCell>
           <Actions
             items={getActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
             context={item}
             visibleByDefault={hasVisibleActions}
           />
-        </TableCell>
+        </StyledTableCell>
       </StyledTableRow>
       {sharePopupVisible && (
         <ShareAppletPopup
