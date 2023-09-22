@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -29,27 +29,38 @@ export const SectionContent = ({
   const conditionalLogicName = `${name}.conditionalLogic`;
   const conditionsName = `${name}.conditions`;
 
-  const { append: appendCondition } = useFieldArray<Record<string, Condition[]>>({
+  const {
+    fields: conditions,
+    append: appendCondition,
+    remove: removeCondition,
+  } = useFieldArray<Record<string, Condition[]>>({
     control,
     name: conditionsName,
   });
+
+  // const { fields, append: appendCondition } = useFieldArray<Record<string, Condition[]>>({
+  //   control,
+  //   name: conditionsName,
+  // });
+
+  // console.log('section conditions', fields);
   const conditionalLogic = watch(conditionalLogicName);
   const [isContainConditional, setIsContainConditional] = useState(!!conditionalLogic);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const conditionalDataTestid = `${dataTestid}-conditional`;
 
-  useEffect(() => {
-    if (isContainConditional) {
-      if (!conditionalLogic) {
-        setValue(conditionalLogicName, defaultConditionalValue);
-        appendCondition({} as Condition);
-      }
-
-      return;
-    }
-
-    setValue(conditionalLogicName, undefined);
-  }, [isContainConditional]);
+  // useEffect(() => {
+  //   if (isContainConditional) {
+  //     if (!conditionalLogic) {
+  //       setValue(conditionalLogicName, defaultConditionalValue);
+  //       appendCondition({} as Condition);
+  //     }
+  //
+  //     return;
+  //   }
+  //
+  //   setValue(conditionalLogicName, undefined);
+  // }, [isContainConditional]);
 
   const removeConditional = () => {
     setIsRemoveConditionalPopupVisible(true);
@@ -72,6 +83,9 @@ export const SectionContent = ({
             contentProps={{
               name: conditionalLogicName,
               type: ConditionRowType.Section,
+              conditions,
+              onAddCondition: appendCondition,
+              onRemoveCondition: removeCondition,
               'data-testid': conditionalDataTestid,
             }}
             headerContentProps={{

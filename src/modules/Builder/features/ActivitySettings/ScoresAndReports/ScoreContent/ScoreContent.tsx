@@ -47,6 +47,7 @@ import {
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 import { checkOnItemTypeAndScore } from '../../SubscalesConfiguration/SubscalesConfiguration.utils';
+import { SelectEvent } from '../../../../../../shared/types';
 
 export const ScoreContent = ({
   name,
@@ -96,6 +97,7 @@ export const ScoreContent = ({
     append(getDefaultConditionalValue(scoreId));
   };
 
+  // TODO: replace this useEffect with onChange
   useEffect(() => {
     const selectedItems = items?.filter((item) => itemsScore.includes(item.name));
     if (selectedItems?.length) {
@@ -119,9 +121,10 @@ export const ScoreContent = ({
     setValue(`${name}.name`, prevScoreName);
   };
 
-  useEffect(() => {
+  const handleCalculationChange = (event: SelectEvent) => {
+    const calculationType = event.target.value as CalculationType;
     setValue(`${name}.id`, getScoreId(scoreName, calculationType));
-  }, [calculationType]);
+  };
 
   const handleNameBlur = () => {
     const isVariable = getIsScoreIdVariable(score);
@@ -157,6 +160,7 @@ export const ScoreContent = ({
             label={t('scoreCalculationType')}
             fullWidth
             data-testid={`${dataTestid}-calculation-type`}
+            customChange={handleCalculationChange}
           />
         </Box>
         <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
@@ -197,7 +201,7 @@ export const ScoreContent = ({
             const title = t('scoreConditional', {
               index: key + 1,
             });
-            const headerTitle = <Title title={title} name={conditional?.name} />;
+            const headerTitle = <Title title={title} reportFieldName={conditionalName} />;
             const conditionalDataTestid = `${dataTestid}-conditional-${key}`;
 
             return (

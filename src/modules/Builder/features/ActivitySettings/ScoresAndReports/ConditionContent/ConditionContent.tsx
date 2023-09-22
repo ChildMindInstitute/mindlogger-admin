@@ -17,29 +17,32 @@ export const ConditionContent = ({
   name,
   type,
   scoreId,
+  conditions,
+  onAddCondition,
+  onRemoveCondition,
   'data-testid': dataTestid,
 }: ConditionContentProps) => {
   const { t } = useTranslation();
-  const conditionsName = `${name}.conditions`;
-
-  const { control, getFieldState } = useFormContext();
-  const {
-    fields: conditions,
-    append: appendCondition,
-    remove: removeCondition,
-  } = useFieldArray<Record<string, Condition[]>>({
-    control,
-    name: conditionsName,
-  });
+  const { getFieldState } = useFormContext();
   const error = getFieldState(`${name}.conditions`).error;
 
-  const handleAddCondition = () => {
-    appendCondition(
-      type === ConditionRowType.Score && scoreId
-        ? getDefaultScoreCondition(scoreId)
-        : ({} as Condition),
-    );
-  };
+  // const conditionsName = `${name}.conditions`;
+  // const {
+  //   fields: conditions,
+  //   append: appendCondition,
+  //   remove: removeCondition,
+  // } = useFieldArray<Record<string, Condition[]>>({
+  //   control,
+  //   name: conditionsName,
+  // });
+  //
+  // const handleAddCondition = () => {
+  //   appendCondition(
+  //     type === ConditionRowType.Score && scoreId
+  //       ? getDefaultScoreCondition(scoreId)
+  //       : ({} as Condition),
+  //   );
+  // };
 
   return (
     <>
@@ -50,7 +53,8 @@ export const ConditionContent = ({
           index={index}
           type={type}
           scoreId={type === ConditionRowType.Score ? scoreId : ''}
-          onRemove={() => removeCondition(index)}
+          // onRemove={() => removeCondition(index)}
+          onRemove={() => onRemoveCondition(index)}
           data-testid={`${dataTestid}-condition-${index}`}
         />
       ))}
@@ -61,7 +65,8 @@ export const ConditionContent = ({
       )}
       <StyledButton
         startIcon={<Svg id="add" width="20" height="20" />}
-        onClick={handleAddCondition}
+        // onClick={handleAddCondition}
+        onClick={onAddCondition}
         sx={{ m: theme.spacing(1.2, 0, 1.2, -2.4) }}
         data-testid={`${dataTestid}-add-condition`}
       >
