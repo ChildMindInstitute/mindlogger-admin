@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { styled } from '@mui/material';
 
 import { StyledTitleSmall } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';

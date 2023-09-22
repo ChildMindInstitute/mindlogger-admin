@@ -1,5 +1,4 @@
-import { Button, ButtonGroup } from '@mui/material';
-import { styled } from '@mui/system';
+import { styled, Button, ButtonGroup } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
