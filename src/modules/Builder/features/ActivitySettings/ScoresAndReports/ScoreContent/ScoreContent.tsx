@@ -197,7 +197,7 @@ export const ScoreContent = ({
             const title = t('scoreConditional', {
               index: key + 1,
             });
-            const headerTitle = <Title title={title} name={conditional?.name} />;
+            const headerTitle = <Title title={title} reportFieldName={conditional?.name} />;
             const conditionalDataTestid = `${dataTestid}-conditional-${key}`;
 
             return (
