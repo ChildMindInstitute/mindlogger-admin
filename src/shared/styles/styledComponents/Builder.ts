@@ -5,6 +5,8 @@ import { variables } from 'shared/styles/variables';
 import { Svg } from 'shared/components/Svg';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
+const maxWidthBuilderPadding = 'calc((100% - 123.2rem) / 2)';
+
 export const StyledBuilderWrapper = styled(Box, shouldForwardProp)`
   overflow-y: auto;
   margin: ${theme.spacing(-2.4, -2.4, 0)};
@@ -14,8 +16,8 @@ export const StyledBuilderWrapper = styled(Box, shouldForwardProp)`
     `
     > .MuiBox-root {
       ${theme.breakpoints.up('xl')} {
-        padding-left: calc((100% - 123.2rem) / 2);
-        padding-right: calc((100% - 123.2rem) / 2);
+        padding-left: ${maxWidthBuilderPadding};
+        padding-right: ${maxWidthBuilderPadding};
       }
     }
   `}
