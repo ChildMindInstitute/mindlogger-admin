@@ -16,7 +16,7 @@ import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems';
+import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import { ItemConfigurationProps, ItemsOptionGroup } from './ItemConfiguration.types';

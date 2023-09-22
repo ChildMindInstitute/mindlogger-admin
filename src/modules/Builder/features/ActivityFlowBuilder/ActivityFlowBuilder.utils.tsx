@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { ItemType } from 'modules/Builder/components';
 import { ActivityFlowFormValues } from 'modules/Builder/types';
 

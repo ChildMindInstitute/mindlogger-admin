@@ -6,7 +6,7 @@ import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { ConditionalLogic } from 'shared/state';
 import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems';
+import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 
 import { EditItemModalProps } from './EditItemModal.types';
 

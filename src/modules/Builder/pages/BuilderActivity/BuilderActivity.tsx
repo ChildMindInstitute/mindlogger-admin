@@ -49,7 +49,9 @@ export const BuilderActivity = () => {
         {t('activities')}
         <Badge variant="dot" invisible={!hasAppletErrors} color="error" />
       </StyledDirectoryUpButton>
-      {activityId && <LinkedTabs tabs={getActivityTabs({ activityId, appletId }, tabErrors)} />}
+      {activityId && (
+        <LinkedTabs tabs={getActivityTabs({ activityId, appletId }, tabErrors)} isBuilder />
+      )}
     </StyledBuilderActivityBody>
   );
 };

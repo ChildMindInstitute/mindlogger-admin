@@ -6,7 +6,7 @@ import { TestContext } from 'yup';
 
 import i18n from 'i18n';
 import { page } from 'resources';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import {
   Activity,
   ActivityFlow,

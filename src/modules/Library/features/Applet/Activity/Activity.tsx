@@ -2,7 +2,7 @@ import { Fragment, SyntheticEvent, useEffect, useState, useReducer } from 'react
 import { useFormContext } from 'react-hook-form';
 import { Box, Checkbox } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledFlexTopCenter, StyledSvgArrowContainer } from 'shared/styles';
 import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
 import { useAppDispatch } from 'redux/store';

@@ -17,6 +17,7 @@ import {
   POINT_RADIUS_DEFAULT,
   POINT_RADIUS_SECONDARY,
   COLORS,
+  commonLabelsProps,
 } from '../../Charts.const';
 import { getTimelineStepSize, getTimeConfig, getTicksStepSize } from '../../Charts.utils';
 import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
@@ -54,11 +55,7 @@ export const getOptions = (
               legendItem.datasetIndex !== versionIndex && legendItem.datasetIndex !== dateIndex
             );
           },
-          color: variables.palette.on_surface,
-          font: {
-            family: 'Atkinson',
-            size: 14,
-          },
+          ...commonLabelsProps,
         },
       },
       tooltip: {

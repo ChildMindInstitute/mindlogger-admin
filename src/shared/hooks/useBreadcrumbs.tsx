@@ -118,6 +118,22 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
+    if (pathname.includes('summary')) {
+      newBreadcrumbs.push({
+        icon: 'chart',
+        label: t('summary'),
+        disabledLink: true,
+      });
+    }
+
+    if (pathname.includes('review')) {
+      newBreadcrumbs.push({
+        icon: 'checkbox-outlined',
+        label: t('review'),
+        disabledLink: true,
+      });
+    }
+
     if (checkIfAppletSettingsUrlPassed(pathname)) {
       newBreadcrumbs.push({
         icon: 'settings',

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { StyledBuilderContainerHeader } from 'shared/features';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { falseReturnFunc } from 'shared/utils';
 
 import { ActivityFlowHeaderProps } from './ActivityFlowHeader.types';

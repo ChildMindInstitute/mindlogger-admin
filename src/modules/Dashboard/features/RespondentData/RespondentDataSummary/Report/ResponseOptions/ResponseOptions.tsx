@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
@@ -49,18 +49,12 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
         </Tooltip>
       </StyledHeadline>
       {Object.values(responseOptions).map((responseOption, responseOptionIndex) =>
-        responseOption.map(
-          (item, index) =>
-            !item.activityItem?.responseDataIdentifier && (
-              <Box key={`${item.activityItem.id}-${index}`} sx={{ mb: theme.spacing(6.4) }}>
-                <CollapsedMdText
-                  text={getDictionaryText(item.activityItem.question)}
-                  maxHeight={120}
-                />
-                {renderResponseOption(item, responseOptionIndex)}
-              </Box>
-            ),
-        ),
+        responseOption.map((item, index) => (
+          <Box key={`${item.activityItem.id}-${index}`} sx={{ mb: theme.spacing(6.4) }}>
+            <CollapsedMdText text={getDictionaryText(item.activityItem.question)} maxHeight={120} />
+            {renderResponseOption(item, responseOptionIndex)}
+          </Box>
+        )),
       )}
     </>
   );

@@ -16,7 +16,7 @@ import {
   SelectController,
   TransferListController,
 } from 'shared/components/FormComponents';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { ScoreConditionalLogic } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
@@ -25,7 +25,6 @@ import { getEntityKey } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ItemFormValues } from 'modules/Builder/types';
 
-import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
 import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
@@ -47,6 +46,7 @@ import {
   updateMessagesWithVariable,
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
+import { checkOnItemTypeAndScore } from '../../SubscalesConfiguration/SubscalesConfiguration.utils';
 
 export const ScoreContent = ({
   name,

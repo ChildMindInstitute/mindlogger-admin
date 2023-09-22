@@ -2,7 +2,7 @@ import { MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { SelectProps } from './Select.types';
 import { StyledTextField, StyledLabel, StyledSvgContainer } from './Select.styles';

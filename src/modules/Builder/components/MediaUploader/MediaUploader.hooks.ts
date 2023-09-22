@@ -1,7 +1,7 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 
 import { AudioFileFormats, MAX_FILE_SIZE_150MB, VALID_AUDIO_FILE_TYPES } from 'shared/consts';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { getUploadFormData } from 'shared/utils';
 import { postFileUploadApi } from 'api';
 

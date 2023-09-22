@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import {
   theme,
   variables,

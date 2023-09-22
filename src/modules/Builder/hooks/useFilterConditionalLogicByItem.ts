@@ -4,7 +4,7 @@ import { ConditionalLogic } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemFormValues } from 'modules/Builder/types';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 
 export const useFilterConditionalLogicByItem = (item: ItemFormValues) => {
   const { fieldName, activity } = useCurrentActivity();

@@ -13,9 +13,10 @@ import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import { StyledButton, StyledContainer } from './Feedback.styles';
-import { FeedbackTabs, getTabs } from './Feedback.const';
+import { getTabs } from './Feedback.const';
 import { FeedbackForm, FeedbackProps } from './Feedback.types';
 import { getDefaultFormValues } from './Feedback.utils';
+import { FeedbackTabs } from './FeedbackAssessment/FeedbackAssessment.const';
 
 export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   const { t } = useTranslation();

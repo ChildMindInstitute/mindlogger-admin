@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { variables, StyledTitleSmall } from 'shared/styles';
 import { page } from 'resources';
 

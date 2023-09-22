@@ -3,8 +3,8 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { ReviewActivity, getAssessmentApi } from 'api';
-import { Svg } from 'shared/components';
-import { useAsync, useBreadcrumbs, useHeaderSticky } from 'shared/hooks';
+import { Svg } from 'shared/components/Svg';
+import { useAsync, useHeaderSticky } from 'shared/hooks';
 import {
   StyledContainer,
   StyledStickyHeader,
@@ -45,13 +45,6 @@ export const RespondentDataReview = () => {
 
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getAssessment } = useAsync(getAssessmentApi);
-
-  useBreadcrumbs([
-    {
-      icon: 'checkbox-outlined',
-      label: t('review'),
-    },
-  ]);
 
   const renderEmptyState = () => {
     if (!selectedAnswer) {

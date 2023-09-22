@@ -14,7 +14,7 @@ import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
 import { getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
 import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { users, workspaces } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useAppDispatch } from 'redux/store';

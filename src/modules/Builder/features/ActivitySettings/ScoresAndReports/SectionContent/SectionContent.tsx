@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import { Condition } from 'shared/state';
 import { StyledFlexColumn, theme } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
 

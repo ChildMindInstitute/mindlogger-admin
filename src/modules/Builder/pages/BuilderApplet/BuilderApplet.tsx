@@ -150,7 +150,7 @@ export const BuilderApplet = () => {
         {isAppletInitialized ? (
           <>
             {isLoading && <Spinner />}
-            <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} />
+            <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} isBuilder />
             <SaveAndPublish
               hasPrompt={isDirty || isFromLibrary}
               setIsFromLibrary={setIsFromLibrary}

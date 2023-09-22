@@ -16,7 +16,7 @@ import {
   StyledErrorText,
 } from 'shared/styles';
 import { Table, UiType, Modal } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { removeManagerAccessApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 

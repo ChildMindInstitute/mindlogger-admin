@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppSelector } from 'redux/store';
+import { useAppSelector } from 'redux/store/hooks';
 
 import { reducers, extraReducers } from './Alerts.reducer';
 import { state as initialState } from './Alerts.state';

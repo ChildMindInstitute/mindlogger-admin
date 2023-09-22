@@ -20,8 +20,13 @@ const user = {
 };
 
 describe('ManagersRemoveAccessPopup component tests', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test('ManagersRemoveAccessPopup should appear second screen', async () => {
     jest.spyOn(Router, 'useParams').mockReturnValue({ appletId });
+
     renderWithProviders(
       <ManagersRemoveAccessPopup
         onClose={onCloseMock}
@@ -30,6 +35,7 @@ describe('ManagersRemoveAccessPopup component tests', () => {
         user={user}
       />,
     );
+
     await waitFor(() =>
       expect(
         screen.getByText(`${user.firstName} ${user.lastName} (${user.email})`),

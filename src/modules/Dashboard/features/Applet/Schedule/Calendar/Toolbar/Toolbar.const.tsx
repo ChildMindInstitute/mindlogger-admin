@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import i18n from 'i18n';
 
 import { CalendarViews } from '../Calendar.types';

@@ -5,7 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@mui/material';
 import 'md-editor-rt/lib/style.css';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledSvgArrowContainer } from 'shared/styles';
 import { updateSelectedItemsInStorage } from 'modules/Library/utils';
 import { useAppDispatch } from 'redux/store';

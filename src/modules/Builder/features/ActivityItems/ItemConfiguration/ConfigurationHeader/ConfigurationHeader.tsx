@@ -1,4 +1,4 @@
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 import { StyledBuilderContainerHeader } from 'shared/features';
 

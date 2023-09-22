@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppSelector } from 'redux/store';
+import { useAppSelector } from 'redux/store/hooks';
 
 import { state as initialState } from './Breadcrumbs.state';
 import { reducers } from './Breadcrumbs.reducer';

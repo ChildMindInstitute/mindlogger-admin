@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
+import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles';
 
 import { RemoveImagePopupProps } from './RemoveImagePopup.types';
