@@ -6,6 +6,7 @@ import { StyledBodyLarge } from 'shared/styles/styledComponents';
 
 import { StyledMenu } from './Menu.styles';
 import { MenuProps } from './Menu.types';
+import { MenuUiType } from './Menu.const';
 
 export const Menu = ({
   anchorEl,
@@ -14,6 +15,7 @@ export const Menu = ({
   anchorOrigin,
   transformOrigin,
   width = 'auto',
+  uiType = MenuUiType.Primary,
 }: MenuProps) => {
   const { t } = useTranslation('app');
   const open = Boolean(anchorEl);
@@ -38,6 +40,7 @@ export const Menu = ({
           horizontal: 'left',
         }
       }
+      uiType={uiType}
     >
       {menuItems.map(({ icon, title, action, 'data-testid': dataTestId }, i) => (
         <MenuItem key={i} onClick={() => action(title)} data-testid={dataTestId}>

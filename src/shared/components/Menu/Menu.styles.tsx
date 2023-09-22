@@ -1,8 +1,9 @@
-import { Menu } from '@mui/material';
-import { styled } from '@mui/system';
+import { Menu, styled } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
+
+import { MenuUiType } from './Menu.const';
 
 export const StyledMenu = styled(Menu)`
   .MuiPaper-root {
@@ -14,7 +15,8 @@ export const StyledMenu = styled(Menu)`
   }
 
   .MuiMenuItem-root {
-    text-transform: capitalize;
+    ${({ uiType }: { uiType?: MenuUiType }) =>
+      uiType === MenuUiType.Primary && 'text-transform: capitalize;'}
     border-radius: ${variables.borderRadius.xxs};
 
     &:hover {

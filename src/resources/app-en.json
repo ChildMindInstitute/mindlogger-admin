@@ -775,6 +775,13 @@
   "passwordRequired": "Password is required",
   "passwordSpecialChar": "At least one special character must be included.",
   "pendingInvitations": "Pending Invitations",
+  "performanceTasks": {
+    "abTrailsIpad": "A/B Trails iPad",
+    "abTrailsMobile": "A/B Trails Mobile",
+    "flanker": "Simple & Choice Reaction Time Task Builder",
+    "gyroscope": "CST Gyroscope",
+    "touch": "CST  Touch"
+  },
   "performanceTasksDesc": {
     "abTrails": "A/B Trails",
     "flanker": "This Activity contains Flanker Item. The timestamps collected for an android are not as accurate as iOS devices.",
