@@ -30,3 +30,8 @@ export type Response<T> = {
   count: number;
   result: T[];
 };
+
+export type ResponseWithObject<T> = {
+  count: number;
+  result: T;
+};
