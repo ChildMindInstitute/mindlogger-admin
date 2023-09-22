@@ -1,5 +1,4 @@
-import { Box, Button } from '@mui/material';
-import { styled } from '@mui/system';
+import { styled, Box, Button } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 

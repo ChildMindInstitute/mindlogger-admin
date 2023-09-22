@@ -1,4 +1,4 @@
-import { Box } from '@mui/system';
+import { Box } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { theme } from 'shared/styles';
