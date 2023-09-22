@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Typography } from '@mui/material';
+import { styled, Typography } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
