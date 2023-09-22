@@ -45,6 +45,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           startIcon={<Svg id="add" width={18} height={18} />}
           menuListWidth="44rem"
           data-testid="builder-activities-add-perf-task"
+          menuProps={{ uiType: MenuUiType.Secondary }}
         />
       </Box>
     </StyledHeader>

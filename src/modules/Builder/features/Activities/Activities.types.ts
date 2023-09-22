@@ -26,9 +26,9 @@ export enum EditablePerformanceTasksType {
 }
 
 export const enum PerformanceTasks {
-  AbTrailsIpad = 'A/B Trails iPad',
-  AbTrailsMobile = 'A/B Trails Mobile',
-  Flanker = 'Simple & Choice Reaction Time Task Builder',
-  Gyroscope = 'CST Gyroscope',
-  Touch = 'CST Touch',
+  AbTrailsIpad = 'abTrailsIpad',
+  AbTrailsMobile = 'abTrailsMobile',
+  Flanker = 'flanker',
+  Gyroscope = 'gyroscope',
+  Touch = 'touch',
 }

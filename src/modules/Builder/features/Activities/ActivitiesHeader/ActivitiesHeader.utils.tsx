@@ -5,6 +5,8 @@ import { ActivityAddProps, PerformanceTasks } from '../Activities.types';
 
 const { t } = i18n;
 
+const getMenuItemTitle = (perfTask: string) => `performanceTasks.${perfTask}`;
+
 export const getPerformanceTasksMenu = (
   onAddActivity: (props: ActivityAddProps) => void,
   setAnchorEl: (el: null | HTMLElement) => void,
@@ -16,10 +18,10 @@ export const getPerformanceTasksMenu = (
 
   return [
     {
-      title: PerformanceTasks.AbTrailsIpad,
+      title: getMenuItemTitle(PerformanceTasks.AbTrailsIpad),
       action: () =>
         getAction({
-          performanceTaskName: PerformanceTasks.AbTrailsIpad,
+          performanceTaskName: t(getMenuItemTitle(PerformanceTasks.AbTrailsIpad)),
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
           performanceTaskType: PerfTaskType.ABTrailsTablet,
           isNavigationBlocked: true,
@@ -27,10 +29,10 @@ export const getPerformanceTasksMenu = (
       'data-testid': 'builder-activities-add-perf-task-abtrails',
     },
     {
-      title: PerformanceTasks.AbTrailsMobile,
+      title: getMenuItemTitle(PerformanceTasks.AbTrailsMobile),
       action: () =>
         getAction({
-          performanceTaskName: PerformanceTasks.AbTrailsMobile,
+          performanceTaskName: t(getMenuItemTitle(PerformanceTasks.AbTrailsMobile)),
           performanceTaskType: PerfTaskType.ABTrailsMobile,
           performanceTaskDesc: t('performanceTasksDesc.abTrails'),
           isNavigationBlocked: true,
@@ -38,30 +40,30 @@ export const getPerformanceTasksMenu = (
       'data-testid': 'builder-activities-add-perf-task-abtrails-mobile',
     },
     {
-      title: PerformanceTasks.Flanker,
+      title: getMenuItemTitle(PerformanceTasks.Flanker),
       action: () =>
         getAction({
-          performanceTaskName: PerformanceTasks.Flanker,
+          performanceTaskName: t(getMenuItemTitle(PerformanceTasks.Flanker)),
           performanceTaskType: PerfTaskType.Flanker,
           performanceTaskDesc: t('performanceTasksDesc.flanker'),
         }),
       'data-testid': 'builder-activities-add-perf-task-flanker',
     },
     {
-      title: PerformanceTasks.Gyroscope,
+      title: getMenuItemTitle(PerformanceTasks.Gyroscope),
       action: () =>
         getAction({
-          performanceTaskName: PerformanceTasks.Gyroscope,
+          performanceTaskName: t(getMenuItemTitle(PerformanceTasks.Gyroscope)),
           performanceTaskType: PerfTaskType.Gyroscope,
           performanceTaskDesc: t('performanceTasksDesc.gyroscope'),
         }),
       'data-testid': 'builder-activities-add-perf-task-gyroscope',
     },
     {
-      title: PerformanceTasks.Touch,
+      title: getMenuItemTitle(PerformanceTasks.Touch),
       action: () =>
         getAction({
-          performanceTaskName: PerformanceTasks.Touch,
+          performanceTaskName: t(getMenuItemTitle(PerformanceTasks.Touch)),
           performanceTaskType: PerfTaskType.Touch,
           performanceTaskDesc: t('performanceTasksDesc.touch'),
         }),
