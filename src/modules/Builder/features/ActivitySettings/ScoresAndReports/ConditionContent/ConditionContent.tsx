@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';
 import { Condition } from 'shared/state';
@@ -12,6 +12,7 @@ import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
 import { StyledButton } from '../ScoresAndReports.styles';
 import { getDefaultScoreCondition } from './ConditionContent.utils';
+import { defaultSectionCondition } from './CondtitionContent.const';
 
 export const ConditionContent = ({
   name,
@@ -37,7 +38,7 @@ export const ConditionContent = ({
     appendCondition(
       type === ConditionRowType.Score && scoreId
         ? getDefaultScoreCondition(scoreId)
-        : ({} as Condition),
+        : (defaultSectionCondition as Condition),
     );
   };
 

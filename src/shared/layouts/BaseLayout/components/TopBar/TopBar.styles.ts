@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Button } from '@mui/material';
+import { styled, Button } from '@mui/material';
 
 import { TOP_BAR_HEIGHT } from 'shared/consts';
 import {

@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Box, Link } from '@mui/material';
+import { styled, Box, Link } from '@mui/material';
 
 import { FOOTER_HEIGHT } from 'shared/consts';
 import { theme, variables, StyledFlexSpaceBetween } from 'shared/styles';

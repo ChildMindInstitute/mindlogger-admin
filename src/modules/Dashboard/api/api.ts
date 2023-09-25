@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 import { authApiClient } from 'shared/api/api.client';
-import { AppletId, ActivityId, ActivityFlowId, Response } from 'shared/api';
+import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
+import { ExportDataResult } from 'shared/types';
 
 import {
   TransferOwnershipType,
@@ -52,6 +53,7 @@ import {
   LatestReport,
   Identifiers,
 } from './api.types';
+import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
 export const getUserDetailsApi = (signal?: AbortSignal) =>
   authApiClient.get('/users/me', { signal });
@@ -619,10 +621,15 @@ export const getAppletVersionChangesApi = (
   signal?: AbortSignal,
 ) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
 
-export const getExportDataApi = ({ appletId, respondentIds }: ExportData, signal?: AbortSignal) =>
-  authApiClient.get(`/answers/applet/${appletId}/data`, {
+export const getExportDataApi = (
+  { appletId, respondentIds, page = 1, limit = DEFAULT_ROWS_PER_PAGE }: ExportData,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<ResponseWithObject<ExportDataResult>>(`/answers/applet/${appletId}/data`, {
     params: {
       respondentIds,
+      page,
+      limit,
     },
     signal,
   });

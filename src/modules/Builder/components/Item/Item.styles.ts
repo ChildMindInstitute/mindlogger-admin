@@ -54,6 +54,10 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
           font-weight: ${uiType === ItemUiType.Flow ? variables.font.weight.bold : 'inherit'};
         } 
       }
+
+      &:active {
+        background-color: ${variables.palette.on_surface_alfa12};
+      }
   `;
   }}
 `;

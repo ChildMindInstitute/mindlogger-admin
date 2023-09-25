@@ -1,5 +1,4 @@
-import { Button } from '@mui/material';
-import { styled } from '@mui/system';
+import { styled, Button } from '@mui/material';
 
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';

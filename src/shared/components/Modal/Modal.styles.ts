@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
+import { styled, Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';

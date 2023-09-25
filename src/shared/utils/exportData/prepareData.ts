@@ -8,8 +8,8 @@ import {
   DecryptedMediaAnswer,
   DecryptedStabilityTrackerAnswer,
   EventDTO,
-  ExportActivity,
   ExportCsvData,
+  ExportDataResult,
   ExportMediaData,
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
@@ -284,7 +284,7 @@ const getFlankerItemsData = (
 };
 
 export const prepareData = async (
-  data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
+  data: ExportDataResult,
   getDecryptedAnswers: (
     data: ExtendedExportAnswer,
   ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,

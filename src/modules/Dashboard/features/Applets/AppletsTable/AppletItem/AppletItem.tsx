@@ -1,6 +1,6 @@
 import { useState, DragEvent, useContext, useRef } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { TableCell } from '@mui/material';
+import { TableCell, TableRow } from '@mui/material';
 
 import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
@@ -28,7 +28,7 @@ import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.conte
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
-import { StyledAppletName, StyledPinContainer, StyledTableRow } from './AppletItem.styles';
+import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
 
@@ -178,7 +178,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   return (
     <>
-      <StyledTableRow
+      <TableRow
         className={isDragOver ? 'dragged-over' : ''}
         draggable
         onDragStart={onDragStart}
@@ -219,7 +219,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             visibleByDefault={hasVisibleActions}
           />
         </TableCell>
-      </StyledTableRow>
+      </TableRow>
       {sharePopupVisible && (
         <ShareAppletPopup
           sharePopupVisible={sharePopupVisible}

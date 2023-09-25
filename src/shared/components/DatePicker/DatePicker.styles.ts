@@ -1,5 +1,4 @@
-import { Box, Button, Popover, TextField } from '@mui/material';
-import { styled } from '@mui/system';
+import { styled, Box, Button, Popover, TextField } from '@mui/material';
 
 import { variables, StyledClearedButton, theme } from 'shared/styles';
 
