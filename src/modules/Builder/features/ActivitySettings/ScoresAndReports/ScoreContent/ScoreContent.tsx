@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -34,7 +34,7 @@ import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 import { Title } from '../Title';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
 import { ScoreCondition } from './ScoreCondition';
-import { calculationTypes } from './ScoreContent.const';
+import { EMPTY_SCORE_RANGE_LABEL, calculationTypes } from './ScoreContent.const';
 import {
   getScoreItemsColumns,
   getSelectedItemsColumns,
@@ -71,8 +71,11 @@ export const ScoreContent = ({
   const itemsScore: string[] = watch(`${name}.itemsScore`);
   const items: ItemFormValues[] = activity?.items.filter(checkOnItemTypeAndScore);
   const tableItems = getTableScoreItems(items);
-  const [scoreRangeLabel, setScoreRangeLabel] = useState<string>('-');
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
+  const selectedItems = items?.filter((item) => itemsScore.includes(item.name));
+  const scoreRangeLabel = selectedItems?.length
+    ? getScoreRangeLabel(getScoreRange(selectedItems, calculationType))
+    : EMPTY_SCORE_RANGE_LABEL;
 
   const {
     fields: scoreConditionals,
@@ -96,17 +99,6 @@ export const ScoreContent = ({
   const handleAddScoreConditional = () => {
     append(getDefaultConditionalValue(scoreId));
   };
-
-  // TODO: replace this useEffect with onChange
-  useEffect(() => {
-    const selectedItems = items?.filter((item) => itemsScore.includes(item.name));
-    if (selectedItems?.length) {
-      const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
-      setScoreRangeLabel(getScoreRangeLabel(minScore as number, maxScore as number));
-    } else {
-      setScoreRangeLabel('-');
-    }
-  }, [itemsScore, calculationType]);
 
   const onChangeScoreId = () => {
     const updatedScoreId = getScoreId(scoreName, calculationType);

@@ -12,6 +12,7 @@ import { ItemFormValues } from 'modules/Builder/types';
 import { getEntityKey, removeMarkdown } from 'shared/utils';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
+import { GetScoreRangeLabel } from './ScoreContent.types';
 
 const { t } = i18n;
 
@@ -42,7 +43,7 @@ export const getScoreId = (name: string, calculationType: CalculationType) =>
     .toLowerCase()
     .replaceAll(ForbiddenScoreIdSymbols, '_')}`;
 
-export const getScoreRangeLabel = (minScore: number, maxScore: number) =>
+export const getScoreRangeLabel = ({ minScore, maxScore }: GetScoreRangeLabel) =>
   `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}`;
 
 const getItemScoreRange = (item: ItemFormValues) => {
