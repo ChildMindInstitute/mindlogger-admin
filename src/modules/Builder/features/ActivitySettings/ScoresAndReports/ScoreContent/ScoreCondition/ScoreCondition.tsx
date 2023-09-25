@@ -27,7 +27,6 @@ export const ScoreCondition = ({
   'data-testid': dataTestid,
 }: ScoreConditionProps) => {
   const { t } = useTranslation();
-
   const { control, setValue, watch } = useFormContext();
   const conditionName = watch(`${name}.name`);
   const conditionId = watch(`${name}.id`);

@@ -24,6 +24,7 @@ import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/comp
 import { getEntityKey } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ItemFormValues } from 'modules/Builder/types';
+import { SelectEvent } from 'shared/types';
 
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
@@ -96,6 +97,7 @@ export const ScoreContent = ({
     append(getDefaultConditionalValue(scoreId));
   };
 
+  // TODO: replace this useEffect with onChange
   useEffect(() => {
     const selectedItems = items?.filter((item) => itemsScore.includes(item.name));
     if (selectedItems?.length) {
@@ -119,9 +121,10 @@ export const ScoreContent = ({
     setValue(`${name}.name`, prevScoreName);
   };
 
-  useEffect(() => {
+  const handleCalculationChange = (event: SelectEvent) => {
+    const calculationType = event.target.value as CalculationType;
     setValue(`${name}.id`, getScoreId(scoreName, calculationType));
-  }, [calculationType]);
+  };
 
   const handleNameBlur = () => {
     const isVariable = getIsScoreIdVariable(score);
@@ -157,6 +160,7 @@ export const ScoreContent = ({
             label={t('scoreCalculationType')}
             fullWidth
             data-testid={`${dataTestid}-calculation-type`}
+            customChange={handleCalculationChange}
           />
         </Box>
         <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
