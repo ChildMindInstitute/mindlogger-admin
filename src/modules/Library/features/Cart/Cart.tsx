@@ -75,12 +75,7 @@ export const Cart = () => {
   };
 
   useAppletsFromCart();
-  useBreadcrumbs([
-    {
-      icon: 'cart-outlined',
-      label: t('cart'),
-    },
-  ]);
+  useBreadcrumbs();
   useReturnToLibraryPath(page.libraryCart);
 
   const filteredApplets =

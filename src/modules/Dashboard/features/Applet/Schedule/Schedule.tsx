@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useBreadcrumbs, usePermissions } from 'shared/hooks';
@@ -15,7 +14,6 @@ import { StyledLeftPanel, StyledSchedule } from './Schedule.styles';
 import { usePreparedEvents } from './Schedule.hooks';
 
 export const Schedule = () => {
-  const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { respondentId, appletId } = useParams();
 
@@ -34,12 +32,7 @@ export const Schedule = () => {
     ),
   );
 
-  useBreadcrumbs([
-    {
-      icon: 'schedule-outlined',
-      label: t('schedule'),
-    },
-  ]);
+  useBreadcrumbs();
 
   useEffect(() => {
     if (!appletId) return;

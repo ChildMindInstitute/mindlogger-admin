@@ -108,12 +108,7 @@ export const ActivityFlow = () => {
     moveActivityFlow(source.index, destination.index);
   };
 
-  useBreadcrumbs([
-    {
-      icon: 'flow',
-      label: t('activityFlows'),
-    },
-  ]);
+  useBreadcrumbs();
   useActivitiesRedirection();
 
   return (

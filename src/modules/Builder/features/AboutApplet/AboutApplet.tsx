@@ -30,12 +30,7 @@ export const AboutApplet = () => {
   const { result: themesList = [] } = themes.useThemesData() || {};
   const themesOptions = getColorThemeOptions(themesList);
   const { control, setValue, watch } = useFormContext();
-  useBreadcrumbs([
-    {
-      icon: 'more-info-outlined',
-      label: t('aboutApplet'),
-    },
-  ]);
+  useBreadcrumbs();
 
   const commonInputProps = {
     control,

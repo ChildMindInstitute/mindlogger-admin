@@ -25,12 +25,7 @@ export const AddUser = () => {
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
   const { execute } = useAsync(getInvitationsApi, (res) => res?.data && setInvitations(res.data));
-  useBreadcrumbs([
-    {
-      icon: 'users-outlined',
-      label: t('addUser'),
-    },
-  ]);
+  useBreadcrumbs();
 
   const getInvitationsHandler = () => {
     execute({

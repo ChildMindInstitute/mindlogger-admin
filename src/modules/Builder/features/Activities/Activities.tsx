@@ -50,12 +50,7 @@ export const Activities = () => {
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const errors = activities?.map((_, index) => !!getFieldState(`activities.${index}`).error);
 
-  useBreadcrumbs([
-    {
-      icon: 'checklist-filled',
-      label: t('activities'),
-    },
-  ]);
+  useBreadcrumbs();
 
   const navigateToActivity = (activityId?: string) =>
     activityId &&

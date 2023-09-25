@@ -18,6 +18,8 @@ import {
   checkCurrentPerformanceTaskPage,
   SettingParam,
   checkIfAppletSettingsUrlPassed,
+  checkIfAppletUrlPassed,
+  checkCurrentAppletPage,
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'modules/Dashboard/hooks/useRespondentLabel';
@@ -80,6 +82,12 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         label: t('appletLibrary'),
         navPath: page.library,
       });
+
+      if (pathname.includes('cart'))
+        newBreadcrumbs.push({
+          icon: 'cart-outlined',
+          label: t('cart'),
+        });
     }
 
     if (appletId && (isDashboard || isBuilder)) {
@@ -94,6 +102,22 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
+    if (pathname.includes('applets')) {
+      newBreadcrumbs.push({
+        icon: 'applet-outlined',
+        label: t('applets'),
+        navPath: page.dashboardApplets,
+      });
+    }
+    if (pathname.includes('managers')) {
+      newBreadcrumbs.push({
+        icon: 'manager-outlined',
+        label: t('managers'),
+        navPath: appletId
+          ? generatePath(page.appletManagers, { appletId })
+          : page.dashboardManagers,
+      });
+    }
     if (pathname.includes('respondents')) {
       newBreadcrumbs.push({
         icon: 'respondent-outlined',
@@ -133,7 +157,43 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         disabledLink: true,
       });
     }
+    if (pathname.includes('schedule')) {
+      newBreadcrumbs.push({
+        icon: 'schedule-outlined',
+        label: t('schedule'),
+        disabledLink: true,
+      });
+    }
+    if (pathname.includes('add-user')) {
+      newBreadcrumbs.push({
+        icon: 'users-outlined',
+        label: t('addUser'),
+        disabledLink: true,
+      });
+    }
 
+    if (checkIfAppletUrlPassed(pathname)) {
+      const { isAbout, isActivityFlow, isActivities } = checkCurrentAppletPage(pathname);
+
+      if (isAbout) {
+        newBreadcrumbs.push({
+          icon: 'more-info-outlined',
+          label: t('aboutApplet'),
+        });
+      }
+      if (isActivities) {
+        newBreadcrumbs.push({
+          icon: 'checklist-filled',
+          label: t('activities'),
+        });
+      }
+      if (isActivityFlow) {
+        newBreadcrumbs.push({
+          icon: 'flow',
+          label: t('activityFlows'),
+        });
+      }
+    }
     if (checkIfAppletSettingsUrlPassed(pathname)) {
       newBreadcrumbs.push({
         icon: 'settings',

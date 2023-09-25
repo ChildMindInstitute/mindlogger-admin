@@ -53,12 +53,7 @@ export const Applets = () => {
     async (params) => await fetchData(params),
   );
 
-  useBreadcrumbs([
-    {
-      icon: 'applet-outlined',
-      label: t('applets'),
-    },
-  ]);
+  useBreadcrumbs();
 
   const folders = rows.filter((row) => row.isFolder) as Folder[];
 

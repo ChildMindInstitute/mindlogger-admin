@@ -22,12 +22,7 @@ export const Managers = () => {
   const { appletId } = useParams();
   const [managersData, setManagersData] = useState<ManagersData | null>(null);
 
-  useBreadcrumbs([
-    {
-      icon: 'manager-outlined',
-      label: t('managers'),
-    },
-  ]);
+  useBreadcrumbs();
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 
