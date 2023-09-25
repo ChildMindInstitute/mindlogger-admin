@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import uniqueId from 'lodash.uniqueid';
 
-import { Breadcrumb, breadcrumbs, applet, workspaces, SingleApplet } from 'redux/modules';
+import { applet, workspaces, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
@@ -23,6 +23,7 @@ import {
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'modules/Dashboard/hooks/useRespondentLabel';
+import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();
@@ -56,7 +57,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         : '',
   };
 
-  useEffect(() => {
+  return useMemo(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
     const isDashboard = pathname.includes(page.dashboard);
     const isBuilder = pathname.includes(page.builder);
@@ -286,7 +287,8 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       ...crumb,
       key: uniqueId(),
     }));
-    dispatch(breadcrumbs.actions.setBreadcrumbs(updatedBreadcrumbs));
+
+    return updatedBreadcrumbs;
   }, [
     t,
     workspaceName,

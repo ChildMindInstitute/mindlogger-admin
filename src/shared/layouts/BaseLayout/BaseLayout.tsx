@@ -4,7 +4,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import { useAppDispatch } from 'redux/store';
 import { workspaces, auth, alerts } from 'redux/modules';
 import { Footer } from 'shared/components';
-import { useAlertsWebsocket, useBreadcrumbs } from 'shared/hooks';
+import { useAlertsWebsocket } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { LeftBar, TopBar } from './components';
@@ -18,7 +18,6 @@ export const BaseLayout = () => {
   const { ownerId } = workspaces.useData() || {};
 
   useAlertsWebsocket();
-  useBreadcrumbs();
 
   useEffect(() => {
     if (!isAuthorized) return;
