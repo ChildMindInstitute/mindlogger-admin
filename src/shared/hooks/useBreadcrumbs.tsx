@@ -181,13 +181,13 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           label: t('aboutApplet'),
         });
       }
-      if (isActivities) {
+      if (isActivities && !activityId) {
         newBreadcrumbs.push({
           icon: 'checklist-filled',
           label: t('activities'),
         });
       }
-      if (isActivityFlow) {
+      if (isActivityFlow && !activityFlowId) {
         newBreadcrumbs.push({
           icon: 'flow',
           label: t('activityFlows'),

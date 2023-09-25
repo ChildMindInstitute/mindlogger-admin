@@ -8,7 +8,6 @@ import {
   SelectController,
 } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
-import { useBreadcrumbs } from 'shared/hooks';
 import { Tooltip, Uploader } from 'shared/components';
 import {
   MAX_DESCRIPTION_LENGTH_LONG,
@@ -30,7 +29,6 @@ export const AboutApplet = () => {
   const { result: themesList = [] } = themes.useThemesData() || {};
   const themesOptions = getColorThemeOptions(themesList);
   const { control, setValue, watch } = useFormContext();
-  useBreadcrumbs();
 
   const commonInputProps = {
     control,

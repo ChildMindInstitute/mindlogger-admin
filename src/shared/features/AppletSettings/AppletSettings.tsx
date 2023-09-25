@@ -1,6 +1,5 @@
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 import { NavigationItem, NavigationMenu } from 'shared/components';
 
@@ -15,8 +14,6 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
   const DASHBOARD_SETTINGS = generatePath(page.appletSettings, {
     appletId,
   });
-
-  useBreadcrumbs();
 
   const handleSettingClick = (setting: NavigationItem) => {
     navigateTo(setting.param);

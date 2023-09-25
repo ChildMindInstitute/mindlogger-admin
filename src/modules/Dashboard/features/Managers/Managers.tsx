@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { getWorkspaceManagersApi, updateManagersPinApi } from 'api';
 import { Actions, Pin, Search, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
-import { useAsync, useBreadcrumbs, usePermissions, useTable } from 'shared/hooks';
+import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { Manager } from 'modules/Dashboard/types';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
@@ -22,7 +22,6 @@ export const Managers = () => {
   const { appletId } = useParams();
   const [managersData, setManagersData] = useState<ManagersData | null>(null);
 
-  useBreadcrumbs();
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 

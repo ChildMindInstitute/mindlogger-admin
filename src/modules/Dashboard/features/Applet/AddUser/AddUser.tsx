@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useAsync, useBreadcrumbs } from 'shared/hooks';
+import { useAsync } from 'shared/hooks';
 import { getInvitationsApi } from 'api';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
 import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyState } from 'shared/components';
@@ -25,7 +25,6 @@ export const AddUser = () => {
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
   const { execute } = useAsync(getInvitationsApi, (res) => res?.data && setInvitations(res.data));
-  useBreadcrumbs();
 
   const getInvitationsHandler = () => {
     execute({

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useBreadcrumbs } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { library } from 'redux/modules';
 import { page } from 'resources';
@@ -27,7 +26,6 @@ export const AppletsCatalog = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  useBreadcrumbs();
   useAppletsFromCart();
   useReturnToLibraryPath(page.library);
 

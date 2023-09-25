@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
-import { useBreadcrumbs } from 'shared/hooks';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { PerformanceTaskHeader } from '../PerformanceTaskHeader';
@@ -14,7 +13,6 @@ import { GyroscopeAndTouchProps } from './GyroscopeAndTouch.types';
 export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
   const { t } = useTranslation();
   const { fieldName } = useCurrentActivity();
-  useBreadcrumbs();
 
   const dataTestid = 'builder-activity-gyroscope-and-touch';
 

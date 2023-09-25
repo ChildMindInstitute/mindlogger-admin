@@ -13,7 +13,7 @@ import {
 } from 'modules/Dashboard/features/Applet/Popups';
 import { auth, popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
-import { useBreadcrumbs, useTable, useCheckIfAppletHasNotFoundError } from 'shared/hooks';
+import { useTable, useCheckIfAppletHasNotFoundError } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { getIsAddAppletBtnVisible } from 'shared/utils';
 import { StyledBody } from 'shared/styles';
@@ -52,8 +52,6 @@ export const Applets = () => {
   const { handleSearch, searchValue, ...tableProps } = useTable(
     async (params) => await fetchData(params),
   );
-
-  useBreadcrumbs();
 
   const folders = rows.filter((row) => row.isFolder) as Folder[];
 

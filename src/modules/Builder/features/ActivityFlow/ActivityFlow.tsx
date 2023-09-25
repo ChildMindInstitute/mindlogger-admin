@@ -8,7 +8,6 @@ import { Box } from '@mui/material';
 
 import { StyledMaxWidthWrapper, StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
-import { useBreadcrumbs } from 'shared/hooks';
 import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
@@ -108,7 +107,6 @@ export const ActivityFlow = () => {
     moveActivityFlow(source.index, destination.index);
   };
 
-  useBreadcrumbs();
   useActivitiesRedirection();
 
   return (

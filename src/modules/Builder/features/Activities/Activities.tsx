@@ -7,7 +7,6 @@ import { Box } from '@mui/material';
 
 import { StyledMaxWidthWrapper, StyledTitleMedium, theme } from 'shared/styles';
 import { page } from 'resources';
-import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
@@ -49,8 +48,6 @@ export const Activities = () => {
   const activityNames = pluck(activities, 'name');
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const errors = activities?.map((_, index) => !!getFieldState(`activities.${index}`).error);
-
-  useBreadcrumbs();
 
   const navigateToActivity = (activityId?: string) =>
     activityId &&

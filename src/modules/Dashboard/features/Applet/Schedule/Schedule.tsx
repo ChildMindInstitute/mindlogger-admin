@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useBreadcrumbs, usePermissions } from 'shared/hooks';
+import { usePermissions } from 'shared/hooks';
 import { applet, workspaces } from 'shared/state';
 import { applets, users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
@@ -31,8 +31,6 @@ export const Schedule = () => {
       }),
     ),
   );
-
-  useBreadcrumbs();
 
   useEffect(() => {
     if (!appletId) return;
