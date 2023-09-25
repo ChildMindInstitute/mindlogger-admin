@@ -22,6 +22,7 @@ export const StyledSummaryRow = styled(StyledFlexTopCenter)`
   .MuiTypography-root {
     top: 0.6rem;
     z-index: ${theme.zIndex.fab};
+    pointer-events: none;
   }
 `;
 

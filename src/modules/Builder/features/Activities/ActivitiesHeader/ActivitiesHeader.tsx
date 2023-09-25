@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
-import { StyledHeader } from 'shared/features';
+import { StyledBuilderContainerHeader } from 'shared/features';
 import { ButtonWithMenu, Svg } from 'shared/components';
 import { theme } from 'shared/styles';
 import { falseReturnFunc, Mixpanel } from 'shared/utils';
@@ -21,7 +21,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
   };
 
   return (
-    <StyledHeader isSticky={isSticky}>
+    <StyledBuilderContainerHeader isSticky={isSticky}>
       {children}
       <Box>
         <Button
@@ -47,6 +47,6 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           data-testid="builder-activities-add-perf-task"
         />
       </Box>
-    </StyledHeader>
+    </StyledBuilderContainerHeader>
   );
 };

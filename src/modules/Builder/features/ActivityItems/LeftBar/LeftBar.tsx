@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Button, Box } from '@mui/material';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
@@ -8,22 +8,22 @@ import { Modal, Svg } from 'shared/components';
 import {
   StyledBodyLarge,
   StyledFlexAllCenter,
-  StyledMaxWidthWrapper,
   StyledModalWrapper,
   StyledTitleMedium,
   theme,
+  variables,
 } from 'shared/styles';
-import { useHeaderSticky } from 'shared/hooks';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
+import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { InsertItem } from 'modules/Builder/components/InsertItem';
 import { DndDroppable } from 'modules/Builder/components/DndDroppable';
 import { ItemFormValues } from 'modules/Builder/types';
 
-import { StyledBar, StyledHeaderTitle, StyledContent, StyledBtnWrapper } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
+import { LeftBarHeader } from './LeftBarHeader';
 import { ConditionalPanel } from '../ConditionalPanel';
 import { getConditionsToRemove } from '../ActivityItems.utils';
 
@@ -38,8 +38,6 @@ export const LeftBar = ({
 }: LeftBarProps) => {
   const { t } = useTranslation('app');
   const { watch, setValue } = useFormContext();
-  const containerRef = useRef<HTMLElement | null>(null);
-  const isHeaderSticky = useHeaderSticky(containerRef);
   const [isDragging, setIsDragging] = useState(false);
   const [conditionalLogicKeysToRemove, setConditionalLogicKeysToRemove] = useState<string[] | null>(
     null,
@@ -96,125 +94,133 @@ export const LeftBar = ({
   };
 
   const addItemBtn = (
-    <StyledBtnWrapper>
-      <Button
-        variant="outlined"
-        startIcon={<Svg id="add" width={18} height={18} />}
-        onClick={onAddItem}
-        data-testid="builder-activity-items-add-item"
-      >
-        {t('addItem')}
-      </Button>
-    </StyledBtnWrapper>
+    <Button
+      variant="outlined"
+      startIcon={<Svg id="add" width={18} height={18} />}
+      onClick={onAddItem}
+      data-testid="builder-activity-items-add-item"
+    >
+      {t('addItem')}
+    </Button>
   );
 
-  return (
-    <StyledBar hasActiveItem={hasActiveItem} ref={containerRef}>
-      <StyledMaxWidthWrapper>
-        <StyledFlexAllCenter sx={{ justifyContent: 'space-between' }}>
-          <StyledHeaderTitle isSticky={isHeaderSticky}>{t('items')}</StyledHeaderTitle>
-          {!hasActiveItem && addItemBtn}
-        </StyledFlexAllCenter>
-        <StyledContent>
-          {!!draggableItems?.length && (
-            <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
-              <DndDroppable droppableId="activity-items-dnd" direction="vertical">
-                {(listProvided) => (
-                  <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                    {draggableItems?.map((item, index) => {
-                      const dataTestid = `builder-activity-items-item-${index}`;
+  const containerSxProps = {
+    width: hasActiveItem ? '40rem' : '100%',
+    flexShrink: 0,
+    borderRight: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+    height: '100%',
+    transition: variables.transitions.width,
+    margin: 0,
+  };
 
-                      return (
-                        <Draggable
-                          key={`item-${getEntityKey(item)}`}
-                          draggableId={getEntityKey(item)}
-                          index={index}
+  return (
+    <BuilderContainer
+      title={t('items')}
+      Header={LeftBarHeader}
+      headerProps={{ hasActiveItem, onAddItem }}
+      sxProps={containerSxProps}
+      contentSxProps={{
+        padding: theme.spacing(0, 1.6, 2.8),
+      }}
+      hasMaxWidth={!hasActiveItem}
+    >
+      {!!draggableItems?.length && (
+        <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
+          <DndDroppable droppableId="activity-items-dnd" direction="vertical">
+            {(listProvided) => (
+              <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
+                {draggableItems?.map((item, index) => {
+                  const dataTestid = `builder-activity-items-item-${index}`;
+
+                  return (
+                    <Draggable
+                      key={`item-${getEntityKey(item)}`}
+                      draggableId={getEntityKey(item)}
+                      index={index}
+                    >
+                      {(itemProvided, snapshot) => (
+                        <Box
+                          {...itemProvided.draggableProps}
+                          ref={itemProvided.innerRef}
+                          data-testid={dataTestid}
                         >
-                          {(itemProvided, snapshot) => (
-                            <Box
-                              {...itemProvided.draggableProps}
-                              ref={itemProvided.innerRef}
-                              data-testid={dataTestid}
-                            >
-                              <Item
-                                dragHandleProps={itemProvided.dragHandleProps}
-                                isDragging={snapshot.isDragging}
-                                item={item}
-                                name={`${fieldName}.items[${index}]`}
-                                index={index}
-                                activeItemId={activeItemId}
-                                onSetActiveItem={handleSetActiveItem}
-                                onDuplicateItem={onDuplicateItem}
-                                onRemoveItem={onRemoveItem}
-                              />
-                              <InsertItem
-                                isVisible={index >= 0 && index < items.length - 1 && !isDragging}
-                                onInsert={() => onInsertItem(index)}
-                                data-testid={`${dataTestid}-insert`}
-                              />
-                            </Box>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {listProvided.placeholder}
-                  </Box>
-                )}
-              </DndDroppable>
-            </DragDropContext>
-          )}
-          {!!systemItems?.length &&
-            systemItems.map((item) => (
-              <Item
-                key={`item-${getEntityKey(item)}`}
-                item={item}
-                activeItemId={activeItemId}
-                onSetActiveItem={handleSetActiveItem}
-                onDuplicateItem={onDuplicateItem}
-                onRemoveItem={onRemoveItem}
-              />
-            ))}
-          {!items?.length && (
-            <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
-              {t('itemIsRequired')}
-            </StyledTitleMedium>
-          )}
-          {hasActiveItem && addItemBtn}
-          {conditionalLogicKeysToRemove && (
-            <Modal
-              open
-              onClose={handleCancelRemoveConditionals}
-              onSubmit={handleConfirmRemoveConditionals}
-              onSecondBtnSubmit={handleCancelRemoveConditionals}
-              title={t('moveItem')}
-              buttonText={t('continue')}
-              secondBtnText={t('cancel')}
-              hasSecondBtn
-              submitBtnColor="error"
-              data-testid="builder-activity-items-item-remove-item-with-conditional-popup"
-            >
-              <StyledModalWrapper>
-                <StyledBodyLarge>
-                  <Trans i18nKey="removeConditionalsMoveItemPopupDescription">
-                    Selected position of the Item
-                    <strong>
-                      {' '}
-                      <>{{ name: movingItemSourceName }}</>{' '}
-                    </strong>
-                    in the list contradicts the existing Item Flow. If you continue, the following
-                    Conditional(s) will be removed:
-                  </Trans>
-                </StyledBodyLarge>
-                <Box sx={{ mt: theme.spacing(2.4) }}>
-                  {conditionalLogicKeysToRemove.map((conditionalLogicKey) => (
-                    <ConditionalPanel condition={groupedConditions[conditionalLogicKey]} />
-                  ))}
-                </Box>
-              </StyledModalWrapper>
-            </Modal>
-          )}
-        </StyledContent>
-      </StyledMaxWidthWrapper>
-    </StyledBar>
+                          <Item
+                            dragHandleProps={itemProvided.dragHandleProps}
+                            isDragging={snapshot.isDragging}
+                            item={item}
+                            name={`${fieldName}.items[${index}]`}
+                            index={index}
+                            activeItemId={activeItemId}
+                            onSetActiveItem={handleSetActiveItem}
+                            onDuplicateItem={onDuplicateItem}
+                            onRemoveItem={onRemoveItem}
+                          />
+                          <InsertItem
+                            isVisible={index >= 0 && index < items.length - 1 && !isDragging}
+                            onInsert={() => onInsertItem(index)}
+                            data-testid={`${dataTestid}-insert`}
+                          />
+                        </Box>
+                      )}
+                    </Draggable>
+                  );
+                })}
+                {listProvided.placeholder}
+              </Box>
+            )}
+          </DndDroppable>
+        </DragDropContext>
+      )}
+      {!!systemItems?.length &&
+        systemItems.map((item) => (
+          <Item
+            key={`item-${getEntityKey(item)}`}
+            item={item}
+            activeItemId={activeItemId}
+            onSetActiveItem={handleSetActiveItem}
+            onDuplicateItem={onDuplicateItem}
+            onRemoveItem={onRemoveItem}
+          />
+        ))}
+      {!items?.length && (
+        <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
+          {t('itemIsRequired')}
+        </StyledTitleMedium>
+      )}
+      {hasActiveItem && <StyledFlexAllCenter>{addItemBtn}</StyledFlexAllCenter>}
+      {conditionalLogicKeysToRemove && (
+        <Modal
+          open
+          onClose={handleCancelRemoveConditionals}
+          onSubmit={handleConfirmRemoveConditionals}
+          onSecondBtnSubmit={handleCancelRemoveConditionals}
+          title={t('moveItem')}
+          buttonText={t('continue')}
+          secondBtnText={t('cancel')}
+          hasSecondBtn
+          submitBtnColor="error"
+          data-testid="builder-activity-items-item-remove-item-with-conditional-popup"
+        >
+          <StyledModalWrapper>
+            <StyledBodyLarge>
+              <Trans i18nKey="removeConditionalsMoveItemPopupDescription">
+                Selected position of the Item
+                <strong>
+                  {' '}
+                  <>{{ name: movingItemSourceName }}</>{' '}
+                </strong>
+                in the list contradicts the existing Item Flow. If you continue, the following
+                Conditional(s) will be removed:
+              </Trans>
+            </StyledBodyLarge>
+            <Box sx={{ mt: theme.spacing(2.4) }}>
+              {conditionalLogicKeysToRemove.map((conditionalLogicKey) => (
+                <ConditionalPanel condition={groupedConditions[conditionalLogicKey]} />
+              ))}
+            </Box>
+          </StyledModalWrapper>
+        </Modal>
+      )}
+    </BuilderContainer>
   );
 };
