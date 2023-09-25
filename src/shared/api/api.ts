@@ -1,5 +1,6 @@
-import { SingleApplet } from 'shared/state';
-import { AlertListParams, OwnerId } from 'api';
+import { SingleApplet } from 'shared/state/Applet';
+import { AlertListParams } from 'shared/api/api.types';
+import { OwnerId } from 'modules/Dashboard/api/api.types';
 
 import { apiClient, authApiClient } from './api.client';
 import { SignInRefreshTokenArgs, AppletId, AppletBody } from './api.types';

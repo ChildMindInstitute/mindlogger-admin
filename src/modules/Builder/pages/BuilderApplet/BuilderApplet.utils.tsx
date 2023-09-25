@@ -6,7 +6,7 @@ import { TestContext } from 'yup';
 
 import i18n from 'i18n';
 import { page } from 'resources';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import {
   Activity,
   ActivityFlow,
@@ -74,7 +74,7 @@ import {
   RoundTypeEnum,
   TouchItemNames,
 } from 'modules/Builder/types';
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,
@@ -460,7 +460,7 @@ export const getNewPerformanceTask = ({
 export const getNewApplet = () => ({
   displayName: '',
   description: '',
-  themeId: 'default',
+  themeId: '',
   about: '',
   image: '',
   watermark: '',
@@ -780,14 +780,14 @@ const getActivitySubscaleSetting = (
   };
 };
 
-export const getDefaultValues = (appletData?: SingleApplet) => {
+export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: string) => {
   if (!appletData) return getNewApplet();
 
   const processedApplet = {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
-    themeId: appletData.themeId === null ? 'default' : appletData.themeId,
+    themeId: appletData.themeId ?? defaultThemeId ?? '',
     activities: appletData.activities
       ? appletData.activities.map((activity) => ({
           ...activity,

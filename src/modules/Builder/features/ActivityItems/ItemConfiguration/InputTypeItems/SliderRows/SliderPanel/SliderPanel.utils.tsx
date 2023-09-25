@@ -2,7 +2,7 @@ import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
 import { createArray } from 'shared/utils';
 import { ItemAlert } from 'shared/state';
-import { DEFAULT_SLIDER_MAX_NUMBER } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { DEFAULT_SLIDER_MAX_NUMBER } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 
 import { ScoreCell } from './ScoreCell';
 import { SetScoresAndAlertsChange, SliderInputType } from './SliderPanel.types';

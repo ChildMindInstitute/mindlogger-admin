@@ -45,6 +45,7 @@ export const BlockSequencesContent = ({
   const blockSequencesField = `${roundField}.blocks`;
   const stimulusTrials: FlankerStimulusSettings[] = watch(stimulusField);
   const blockSequences = watch(blockSequencesField);
+  const hasStimulusTrials = stimulusTrials?.some((trial) => !!trial.image || !!trial.text);
 
   const prevStimulusTrialsLength = useRef(stimulusTrials?.length);
 
@@ -83,7 +84,7 @@ export const BlockSequencesContent = ({
     prevStimulusTrialsLength.current = stimulusTrials?.length;
   }, [stimulusTrials]);
 
-  return stimulusTrials?.some((trial) => !!trial.image) ? (
+  return hasStimulusTrials ? (
     <>
       <Box>
         {!uploadedTable && (

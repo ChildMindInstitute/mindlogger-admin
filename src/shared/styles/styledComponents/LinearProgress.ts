@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { LinearProgress } from '@mui/material';
+import { styled, LinearProgress } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 

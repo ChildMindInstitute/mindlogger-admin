@@ -7,7 +7,7 @@ import { Modal } from 'shared/components';
 import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
 import { page } from 'resources';
 import { getErrorMessage } from 'shared/utils';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { createIndividualEventsApi } from 'api';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';

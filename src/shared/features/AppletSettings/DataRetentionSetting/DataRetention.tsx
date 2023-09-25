@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, KeyboardEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { SaveChangesPopup } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { RetentionPeriods } from 'shared/types';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
@@ -93,6 +93,13 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
     cancelNavigation();
   };
 
+  const handlePeriodKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    // Prevent the dot key from being entered
+    if (event.code === 'NumpadDecimal' || event.code === 'Period') {
+      event.preventDefault();
+    }
+  };
+
   useEffect(() => {
     if (watchRetentionType === RetentionPeriods.Indefinitely) {
       unregister('retentionPeriod', { keepDefaultValue: true });
@@ -113,6 +120,8 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
                 control={control}
                 type="number"
                 InputProps={{ inputProps: { min: 1 } }}
+                minNumberValue={DEFAULT_RETENTION_PERIOD}
+                onKeyDown={handlePeriodKeyDown}
                 data-testid={`${dataTestid}-retention-period`}
               />
             </StyledInputWrapper>

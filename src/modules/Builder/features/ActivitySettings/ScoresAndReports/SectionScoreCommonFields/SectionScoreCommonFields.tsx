@@ -92,6 +92,7 @@ export const SectionScoreCommonFields = ({
         <StyledEditor
           uiType={EditorUiType.Secondary}
           name={messageName}
+          key={messageName}
           control={control}
           editorId={`editor-${sectionId}`}
           data-testid={`${dataTestid}-show-message-text`}

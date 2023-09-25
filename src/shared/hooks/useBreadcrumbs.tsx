@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 import uniqueId from 'lodash.uniqueid';
 
-import { Breadcrumb, breadcrumbs, applet, workspaces } from 'redux/modules';
+import { Breadcrumb, breadcrumbs, applet, workspaces, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
+import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
+import { getEntityKey } from 'shared/utils/builderHelpers';
 import {
-  getEntityKey,
   checkCurrentActivityPage,
   checkCurrentActivityFlowPage,
   checkIfAppletActivityUrlPassed,
@@ -16,10 +18,9 @@ import {
   checkCurrentPerformanceTaskPage,
   SettingParam,
   checkIfAppletSettingsUrlPassed,
-  getSettingBreadcrumbs,
-} from 'shared/utils';
+} from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
-import { useRespondentLabel } from 'modules/Dashboard/hooks';
+import { useRespondentLabel } from 'modules/Dashboard/hooks/useRespondentLabel';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();
@@ -29,7 +30,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
   const respondentLabel = useRespondentLabel();
   const { workspaceName } = workspaces.useData() ?? {};
-  const { result: appletData } = applet.useAppletData() ?? {};
+  const { result } = applet.useAppletData() ?? {};
+  const { getValues } = useFormContext() ?? {};
+  const appletData = (getValues?.() ?? result) as SingleApplet;
   const isNewApplet = useCheckIfNewApplet();
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
   const currentActivityName = appletData?.activities?.find(
@@ -111,6 +114,22 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       newBreadcrumbs.push({
         icon: '',
         label: t('viewData'),
+        disabledLink: true,
+      });
+    }
+
+    if (pathname.includes('summary')) {
+      newBreadcrumbs.push({
+        icon: 'chart',
+        label: t('summary'),
+        disabledLink: true,
+      });
+    }
+
+    if (pathname.includes('review')) {
+      newBreadcrumbs.push({
+        icon: 'checkbox-outlined',
+        label: t('review'),
         disabledLink: true,
       });
     }

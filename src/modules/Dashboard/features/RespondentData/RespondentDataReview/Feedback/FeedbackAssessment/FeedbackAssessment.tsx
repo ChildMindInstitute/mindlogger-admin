@@ -4,15 +4,12 @@ import { useFormContext } from 'react-hook-form';
 
 import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { createAssessmentApi } from 'api';
-import {
-  FeedbackTabs,
-  AssessmentFormItem,
-  FeedbackForm,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
 import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
+import { AssessmentFormItem, FeedbackForm } from '../Feedback.types';
+import { FeedbackTabs } from './FeedbackAssessment.const';
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
 import { formatAssessmentAnswers } from './FeedbackAssessment.utils';

@@ -1,5 +1,3 @@
-import { Encryption } from 'shared/utils';
-
 export const enum Modals {
   PasswordCheck = 'passwordCheck',
   Confirmation = 'confirmation',
@@ -9,6 +7,4 @@ export const enum Modals {
 export type DeletePopupProps = {
   onCloseCallback?: () => void;
   'data-testid'?: string;
-  testApplet?: { id: string; encryption: Encryption; displayName?: string };
-  visibleByDefault?: boolean;
 };

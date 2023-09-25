@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { styled } from '@mui/material';
 
 import { StyledModalWrapper, StyledTitleSmall } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';

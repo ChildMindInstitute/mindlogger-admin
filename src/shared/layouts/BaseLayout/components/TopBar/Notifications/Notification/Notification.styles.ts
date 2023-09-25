@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Box, Button } from '@mui/material';
+import { styled, Box, Button } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
@@ -23,7 +22,7 @@ const commonLogoStyles = `
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 100%;
-  border: ${variables.borderWidth.lg} solid ${variables.palette.surface1};
+  outline: ${variables.borderWidth.lg} solid ${variables.palette.surface1};
   position: absolute;
   bottom: -0.75rem;
   right: -0.75rem;

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -13,7 +13,7 @@ import {
 } from 'modules/Dashboard/features/Applet/Popups';
 import { auth, popups, workspaces } from 'redux/modules';
 import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
-import { useBreadcrumbs, useTable } from 'shared/hooks';
+import { useBreadcrumbs, useTable, useCheckIfAppletHasNotFoundError } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { getIsAddAppletBtnVisible } from 'shared/utils';
 import { StyledBody } from 'shared/styles';
@@ -23,9 +23,7 @@ import { getHeadCells, getMenuItems } from './Applets.const';
 import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
 import { useAppletsWithFolders } from './Applets.hooks';
-import { AppletContextType } from './Applets.types';
-
-export const AppletsContext = createContext<AppletContextType | null>(null);
+import { AppletsContext } from './Applets.context';
 
 export const Applets = () => {
   const { t } = useTranslation('app');
@@ -34,6 +32,7 @@ export const Applets = () => {
   const rolesData = workspaces.useRolesData();
   const currentWorkspace = workspaces.useData();
   const { user } = auth.useData() || {};
+  const hasAppletNotFoundError = useCheckIfAppletHasNotFoundError();
 
   const [rows, setRows] = useState<(Folder | Applet)[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -77,7 +76,7 @@ export const Applets = () => {
   };
 
   const headerContent = (
-    <Box onClick={() => addFolder()}>
+    <Box onClick={addFolder}>
       <Svg id="add-folder" />
     </Box>
   );
@@ -129,6 +128,11 @@ export const Applets = () => {
   useEffect(() => {
     if (expandedFolders.length) tableProps.handleReload();
   }, [expandedFolders]);
+
+  useEffect(() => {
+    if (!hasAppletNotFoundError) return;
+    fetchData();
+  }, [hasAppletNotFoundError]);
 
   return (
     <StyledBody>

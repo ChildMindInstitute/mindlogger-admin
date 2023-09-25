@@ -1,7 +1,12 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Uploads, SharedToggleItemProps, ToggleItemContainer } from 'modules/Builder/components';
+import { Uploads } from 'modules/Builder/components/Uploads';
+import {
+  SharedToggleItemProps,
+  ToggleItemContainer,
+} from 'modules/Builder/components/ToggleItemContainer';
+
 import { Uploader } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_25MB } from 'shared/consts';

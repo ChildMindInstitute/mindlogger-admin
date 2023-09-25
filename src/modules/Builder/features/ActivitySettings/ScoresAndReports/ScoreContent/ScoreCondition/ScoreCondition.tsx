@@ -10,7 +10,7 @@ import {
   variables,
 } from 'shared/styles';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 import { ConditionRowType } from 'modules/Builder/types';
 
 import { ScoreConditionProps } from './ScoreCondition.types';
@@ -27,7 +27,6 @@ export const ScoreCondition = ({
   'data-testid': dataTestid,
 }: ScoreConditionProps) => {
   const { t } = useTranslation();
-
   const { control, setValue, watch } = useFormContext();
   const conditionName = watch(`${name}.name`);
   const conditionId = watch(`${name}.id`);

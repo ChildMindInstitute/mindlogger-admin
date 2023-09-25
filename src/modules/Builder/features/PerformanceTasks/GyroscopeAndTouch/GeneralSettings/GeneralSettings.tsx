@@ -14,7 +14,7 @@ import {
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 import {
   MAX_LENGTH_OF_TEST,
   MAX_NUMBER_OF_TRIALS,

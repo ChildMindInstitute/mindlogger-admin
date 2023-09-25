@@ -16,15 +16,16 @@ import {
   SelectController,
   TransferListController,
 } from 'shared/components/FormComponents';
-import { Svg } from 'shared/components';
-import { Item, ScoreConditionalLogic } from 'shared/state';
+import { Svg } from 'shared/components/Svg';
+import { ScoreConditionalLogic } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { ItemFormValues } from 'modules/Builder/types';
+import { SelectEvent } from 'shared/types';
 
-import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
 import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
@@ -46,6 +47,7 @@ import {
   updateMessagesWithVariable,
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
+import { checkOnItemTypeAndScore } from '../../SubscalesConfiguration/SubscalesConfiguration.utils';
 
 export const ScoreContent = ({
   name,
@@ -67,7 +69,7 @@ export const ScoreContent = ({
   const scoreId = watch(`${name}.id`);
   const calculationType: CalculationType = watch(`${name}.calculationType`);
   const itemsScore: string[] = watch(`${name}.itemsScore`);
-  const items: Item[] = activity?.items.filter(checkOnItemTypeAndScore);
+  const items: ItemFormValues[] = activity?.items.filter(checkOnItemTypeAndScore);
   const tableItems = getTableScoreItems(items);
   const [scoreRangeLabel, setScoreRangeLabel] = useState<string>('-');
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
@@ -95,6 +97,7 @@ export const ScoreContent = ({
     append(getDefaultConditionalValue(scoreId));
   };
 
+  // TODO: replace this useEffect with onChange
   useEffect(() => {
     const selectedItems = items?.filter((item) => itemsScore.includes(item.name));
     if (selectedItems?.length) {
@@ -118,9 +121,10 @@ export const ScoreContent = ({
     setValue(`${name}.name`, prevScoreName);
   };
 
-  useEffect(() => {
+  const handleCalculationChange = (event: SelectEvent) => {
+    const calculationType = event.target.value as CalculationType;
     setValue(`${name}.id`, getScoreId(scoreName, calculationType));
-  }, [calculationType]);
+  };
 
   const handleNameBlur = () => {
     const isVariable = getIsScoreIdVariable(score);
@@ -156,6 +160,7 @@ export const ScoreContent = ({
             label={t('scoreCalculationType')}
             fullWidth
             data-testid={`${dataTestid}-calculation-type`}
+            customChange={handleCalculationChange}
           />
         </Box>
         <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
@@ -196,7 +201,7 @@ export const ScoreContent = ({
             const title = t('scoreConditional', {
               index: key + 1,
             });
-            const headerTitle = <Title title={title} name={conditional?.name} />;
+            const headerTitle = <Title title={title} reportFieldName={conditionalName} />;
             const conditionalDataTestid = `${dataTestid}-conditional-${key}`;
 
             return (

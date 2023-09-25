@@ -1,4 +1,4 @@
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 import { StyledTitleTooltipIcon } from 'shared/styles';
 
 import { StyledTitle, StyledUploadImg, StyledUploadImgs } from './Uploads.styles';

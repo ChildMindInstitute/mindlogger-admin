@@ -7,7 +7,7 @@ export const commonStickyStyles = `
   top: 0;
   background-color: ${variables.palette.surface};
   z-index: ${theme.zIndex.fab};
-  transition: ${variables.transitions.boxShadow};
+  transition: ${variables.transitions.all};
 `;
 
 export const commonEllipsisStyles = `

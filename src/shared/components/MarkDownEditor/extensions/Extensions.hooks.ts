@@ -1,8 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
 
 import { postFileUploadApi } from 'api';
-import { useAsync } from 'shared/hooks';
-import { falseReturnFunc, getUploadFormData } from 'shared/utils';
+import { useAsync } from 'shared/hooks/useAsync';
+import { falseReturnFunc } from 'shared/utils/func';
+import { getUploadFormData } from 'shared/utils/getUploadFormData';
 import { MediaType } from 'shared/consts';
 
 import { SourceLinkModalForm } from '../SourceLinkModal';

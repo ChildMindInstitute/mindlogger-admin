@@ -2,7 +2,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledTitleBoldSmall, StyledIconButton, variables } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';

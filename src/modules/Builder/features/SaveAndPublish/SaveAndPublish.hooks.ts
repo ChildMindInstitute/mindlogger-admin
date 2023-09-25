@@ -34,10 +34,11 @@ import {
   removeAppletExtraFields,
   removeActivityExtraFields,
   removeActivityFlowExtraFields,
+  removeActivityFlowItemExtraFields,
   remapSubscaleSettings,
   getActivityItems,
   getScoresAndReports,
-  getCurrentEntityId,
+  getCurrentEntitiesIds,
 } from './SaveAndPublish.utils';
 
 export const useAppletData = () => {
@@ -67,13 +68,16 @@ export const useAppletData = () => {
       encryption,
       description: appletDescription,
       about: appletAbout,
-      themeId: null, // TODO: create real themeId
+      themeId: appletInfo.themeId || null,
       activityFlows: appletInfo?.activityFlows.map(
         ({ key, ...flow }) =>
           ({
             ...flow,
             description: getDictionaryObject(flow.description),
-            items: flow.items?.map(({ key, ...item }) => item),
+            items: flow.items?.map(({ key, ...item }) => ({
+              ...item,
+              ...removeActivityFlowItemExtraFields(),
+            })),
             ...removeActivityFlowExtraFields(),
           } as ActivityFlow),
       ),
@@ -205,7 +209,7 @@ export const usePrompt = (isFormChanged: boolean) => {
 
 export const useUpdatedAppletNavigate = () => {
   const { ownerId = '' } = workspaces.useData() ?? {};
-  const { activityId, activityFlowId } = useParams();
+  const { activityId, activityFlowId, itemId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { getValues, reset } = useFormContext();
@@ -218,11 +222,12 @@ export const useUpdatedAppletNavigate = () => {
 
     if (getAppletWithItems.fulfilled.match(newAppletResult)) {
       const newApplet = newAppletResult.payload.data.result;
-      const newEntityId = getCurrentEntityId(oldApplet, newApplet, {
+      const { newActivityOrFlowId, newItemId } = getCurrentEntitiesIds(oldApplet, newApplet, {
         isActivity: !!activityId,
-        id: activityId ?? activityFlowId,
+        activityOrFlowId: activityId ?? activityFlowId,
+        itemId,
       });
-      const url = getUpdatedAppletUrl(appletId, newEntityId, location.pathname);
+      const url = getUpdatedAppletUrl(appletId, newActivityOrFlowId, newItemId, location.pathname);
       await navigate(url);
       reset(undefined, { keepDirty: false });
     }

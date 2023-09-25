@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { styled } from '@mui/material';
 
 import { MarkDownEditor } from 'shared/components/MarkDownEditor';
 import { variables } from 'shared/styles';
@@ -28,6 +28,10 @@ export const StyledMdEditor = styled(MarkDownEditor)`
       background-color: transparent;
       border-bottom-color: ${variables.palette.outline_variant};
     }
+  }
+
+  .cm-editor {
+    background-color: transparent;
   }
 
   & .md-editor-toolbar-wrapper {

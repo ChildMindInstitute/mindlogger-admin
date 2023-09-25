@@ -164,9 +164,9 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
             options={scheduleOptions}
             withChecked
             withGroups
+            fullWidth
             SelectProps={{
               autoWidth: true,
-              IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
             }}
             data-testid={`${dataTestid}-schedule`}
           />

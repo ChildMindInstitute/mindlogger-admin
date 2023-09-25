@@ -1,13 +1,3 @@
-import { AxiosResponse } from 'axios';
-
-import {
-  exportCsvZip,
-  exportMediaZip,
-  exportTemplate,
-  getReportZipName,
-  prepareData,
-  ZipFile,
-} from 'shared/utils';
 import {
   activityJourneyHeader,
   GENERAL_REPORT_NAME,
@@ -15,6 +5,13 @@ import {
   reportHeader,
 } from 'shared/consts';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { ExportDataResult } from 'shared/types';
+
+import { exportTemplate } from '../exportTemplate';
+import { exportCsvZip } from './exportCsvZip';
+import { exportMediaZip } from './exportMediaZip';
+import { getReportZipName, ZipFile } from './getReportName';
+import { prepareData } from './prepareData';
 
 export const exportDataSucceed =
   ({
@@ -24,8 +21,8 @@ export const exportDataSucceed =
     callback?: () => void;
     getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
   }) =>
-  async (response: AxiosResponse | null) => {
-    if (!response?.data?.result) return;
+  async (result: ExportDataResult) => {
+    if (!result) return;
 
     const {
       reportData,
@@ -35,7 +32,7 @@ export const exportDataSucceed =
       stabilityTrackerItemsData,
       abTrailsItemsData,
       flankerItemsData,
-    } = await prepareData(response.data.result, getDecryptedAnswers);
+    } = await prepareData(result, getDecryptedAnswers);
 
     await exportTemplate({
       data: reportData,

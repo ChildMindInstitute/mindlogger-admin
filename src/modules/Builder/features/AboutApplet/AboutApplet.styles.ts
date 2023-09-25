@@ -1,7 +1,8 @@
-import { styled } from '@mui/system';
+import { styled, Box } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleMedium, theme, variables } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 export const StyledContainer = styled(StyledFlexColumn)`
   width: 55rem;
@@ -19,4 +20,11 @@ export const StyledTitle = styled(StyledTitleMedium)`
     height: 2.4rem;
     margin-left: ${theme.spacing(0.4)};
   }
+`;
+
+export const StyledCircle = styled(Box, shouldForwardProp)`
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: ${variables.borderRadius.half};
+  background-color: ${({ bgColor }: { bgColor: string }) => bgColor};
 `;

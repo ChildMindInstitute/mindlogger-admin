@@ -37,7 +37,6 @@ export const StimulusContent = () => {
   const {
     control,
     watch,
-    setValue,
     trigger,
     formState: { errors },
     clearErrors,
@@ -52,6 +51,7 @@ export const StimulusContent = () => {
   const buttons: FlankerButtonSetting[] = watch(buttonsField);
   const hasTwoButtons = buttons?.length === 2;
   const hasStimulusErrors = !!get(errors, stimulusObjField);
+  const correctPressText = hasTwoButtons ? t('flankerStimulus.correctPress') : '';
   const dataTestid = 'builder-activity-flanker-stimulus-screen';
 
   const {
@@ -59,6 +59,7 @@ export const StimulusContent = () => {
     append,
     remove,
     update,
+    replace,
   } = useFieldArray<
     Record<string, FlankerStimulusSettings[]>,
     string,
@@ -97,7 +98,7 @@ export const StimulusContent = () => {
       ...trial,
       value: CorrectPress.Left,
     }));
-    setValue(stimulusField, newTrials);
+    replace(newTrials);
   }, [hasTwoButtons]);
 
   return (
@@ -109,7 +110,7 @@ export const StimulusContent = () => {
               {t('flankerStimulus.fileName')}
             </StyledBodyMedium>
             <StyledBodyMedium color={variables.palette.outline} sx={{ flex: '0 0 55%' }}>
-              {hasTwoButtons ? t('flankerStimulus.correctPress') : ''}
+              {correctPressText}
             </StyledBodyMedium>
           </StyledHeader>
         ) : (
@@ -119,9 +120,8 @@ export const StimulusContent = () => {
             </StyledBodyLarge>
           </StyledInfoSection>
         )}
-        {stimulusTrials?.map(({ id, image, text, value }, index) => {
-          const imageField = `${stimulusField}.${index}.image`;
-          const textField = `${stimulusField}.${index}.text`;
+        {stimulusTrials?.map((trial, index) => {
+          const { id, image, text, value } = trial;
           const hasImgError = !!get(errors, `${stimulusObjField}[${index}].image`);
           const currentDataTestid = `${dataTestid}-${index}`;
 
@@ -130,12 +130,15 @@ export const StimulusContent = () => {
               <Box sx={{ flex: '0 0 45%' }}>
                 <StyledFlexTopCenter>
                   <Uploader
-                    uiType={UploaderUiType.Secondary}
+                    uiType={UploaderUiType.Tertiary}
                     width={5.6}
                     height={5.6}
-                    setValue={(val: string) => {
-                      setValue(imageField, val ?? '');
-                      setValue(textField, val ? getUploadedMediaName(val) : '');
+                    setValue={(image: string) => {
+                      update(index, {
+                        ...trial,
+                        image,
+                        text: getUploadedMediaName(image),
+                      });
                       trigger([stimulusField]);
                     }}
                     getValue={() => image || ''}
@@ -154,7 +157,7 @@ export const StimulusContent = () => {
                 )}
               </Box>
               <Box sx={{ flex: '0 0 45%' }}>
-                {hasTwoButtons && !!image && (
+                {hasTwoButtons && (!!image || !!text) && (
                   <Box sx={{ width: '18.3rem' }}>
                     <ToggleButtonGroup
                       toggleButtons={pressOptions}

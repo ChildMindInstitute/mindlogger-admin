@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
-import { getBuilderAppletUrl } from 'shared/utils';
+import { Svg } from 'shared/components/Svg';
+import { getBuilderAppletUrl } from 'shared/utils/urlGenerator';
 
 import {
   StyledAppletSettingsButton,

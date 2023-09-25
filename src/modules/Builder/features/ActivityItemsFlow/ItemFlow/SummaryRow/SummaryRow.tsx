@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { StyledBodyLarge, StyledTitleMedium, variables, theme } from 'shared/styles';
+import { StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
 import { useCurrentActivity } from 'modules/Builder/hooks';
@@ -14,7 +14,7 @@ import {
 import { SummaryRowProps } from './SummaryRow.types';
 import { getMatchOptions, getItemsOptions } from './SummaryRow.utils';
 
-export const SummaryRow = ({ name, error, 'data-testid': dataTestid }: SummaryRowProps) => {
+export const SummaryRow = ({ name, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control, watch, setValue, trigger } = useFormContext();
 
@@ -48,7 +48,6 @@ export const SummaryRow = ({ name, error, 'data-testid': dataTestid }: SummaryRo
           name={`${name}.itemKey`}
           options={getItemsOptions(items)}
           placeholder={t('conditionItemNamePlaceholder')}
-          error={error}
           SelectProps={{
             renderValue: (value: unknown) => {
               const itemName = items?.find(
@@ -62,11 +61,6 @@ export const SummaryRow = ({ name, error, 'data-testid': dataTestid }: SummaryRo
           data-testid={`${dataTestid}-item`}
         />
       </StyledSummaryRow>
-      {error && (
-        <StyledBodyLarge sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}>
-          {error?.message ?? ''}
-        </StyledBodyLarge>
-      )}
     </>
   );
 };

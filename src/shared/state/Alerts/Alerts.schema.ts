@@ -1,5 +1,5 @@
 import { BaseSchema } from 'shared/state/Base';
-import { Encryption } from 'shared/utils';
+import { Encryption } from 'shared/utils/encryption';
 
 export type AlertType = {
   id: string;

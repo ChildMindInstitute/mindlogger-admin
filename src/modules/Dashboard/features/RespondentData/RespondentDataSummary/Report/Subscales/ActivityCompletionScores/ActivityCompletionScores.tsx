@@ -4,13 +4,19 @@ import { format } from 'date-fns';
 import { Box } from '@mui/material';
 
 import { DateFormats } from 'shared/consts';
-import { StyledBodyMedium, StyledFlexSpaceBetween, StyledHeadline, theme } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledFlexSpaceBetween,
+  StyledHeadline,
+  theme,
+  variables,
+} from 'shared/styles';
 import { BarChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
 import { StyledTextBtn } from 'modules/Dashboard/features/RespondentData/RespondentData.styles';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { AdditionalInformation } from '../AdditionalInformation';
-import { StyledChartContainer, StyledDescription } from './ActivityCompletionScores.styles';
+import { StyledDescription } from './ActivityCompletionScores.styles';
 import { ScoresProps } from './ActivityCompletionScores.types';
 import { ReportContext } from '../../Report.context';
 
@@ -60,7 +66,7 @@ export const ActivityCompletionScores = ({
   return (
     <>
       <StyledFlexSpaceBetween sx={{ mt: theme.spacing(6) }}>
-        <StyledHeadline>{t('subscaleScores')}</StyledHeadline>
+        <StyledHeadline color={variables.palette.on_surface}>{t('subscaleScores')}</StyledHeadline>
         {showAllSubscaleResultsVisible && (
           <StyledTextBtn
             onClick={() => setCurrentActivityCompletionData(null)}
@@ -72,9 +78,7 @@ export const ActivityCompletionScores = ({
         )}
       </StyledFlexSpaceBetween>
       {renderChartDescription()}
-      <StyledChartContainer>
-        <BarChart chartData={subscaleScores} />
-      </StyledChartContainer>
+      <BarChart chartData={subscaleScores} />
       {optionText && (
         <Box sx={{ m: theme.spacing(6.4, 0) }}>
           <AdditionalInformation optionText={optionText} />

@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { deleteAppletPublicLinkApi } from 'api';
 import { getErrorMessage } from 'shared/utils/errors';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 import { StyledButton, StyledInput } from './LinkForm.styles';
 import { LinkGeneratorProps } from '../LinkGenerator.types';
 import { DeletePublicLinkPopup } from '../../Popups';
 
 export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
-  const { appletId: id } = useParams();
+  const { appletId } = useParams() || {};
   const { t } = useTranslation('app');
 
   const [deletePopupVisible, setDeletePopupVisible] = useState(false);
@@ -21,8 +21,8 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
 
   const deleteAppletPublicLink = async () => {
     try {
-      if (id) {
-        await deleteAppletPublicLinkApi({ appletId: id });
+      if (appletId) {
+        await deleteAppletPublicLinkApi({ appletId });
         setInviteLink(null);
       }
     } catch (e) {

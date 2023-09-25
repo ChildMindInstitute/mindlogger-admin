@@ -14,7 +14,7 @@ import {
 } from 'shared/styles';
 import { useLogout } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
-import { checkIfAppletUrlPassed } from 'shared/utils';
+import { checkIfAppletUrlPassed } from 'shared/utils/urlGenerator';
 
 import { Notifications } from '../Notifications';
 import {

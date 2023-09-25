@@ -1,7 +1,7 @@
 import { Radio, RadioGroup } from '@mui/material';
 
 import { StyledBodyLarge, StyledFlexTopCenter, variables } from 'shared/styles';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import { SingleSelectionProps } from './SingleSelection.types';
 import {

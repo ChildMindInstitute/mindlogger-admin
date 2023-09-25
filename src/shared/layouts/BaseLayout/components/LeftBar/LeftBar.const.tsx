@@ -1,5 +1,5 @@
 import { page } from 'resources';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 export const links = [
   {

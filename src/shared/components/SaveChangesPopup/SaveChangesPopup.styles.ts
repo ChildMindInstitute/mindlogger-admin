@@ -1,8 +1,9 @@
-import { styled } from '@mui/system';
-import { Button, DialogTitle, Dialog, DialogActions, Box } from '@mui/material';
+import { styled, Button, DialogTitle, Dialog, DialogActions, Box } from '@mui/material';
 
-import { theme, variables, FontWeight, StyledClearedButton } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { theme } from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
+import { FontWeight, StyledClearedButton } from 'shared/styles/styledComponents';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {

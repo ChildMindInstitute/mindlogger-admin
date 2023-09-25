@@ -30,6 +30,7 @@ export const ConditionRow = ({
   type = ConditionRowType.Item,
   scoreId,
   autoTrigger,
+  showError = true,
   'data-testid': dataTestid,
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
@@ -74,9 +75,9 @@ export const ConditionRow = ({
     [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
   } as Record<ConditionRowType, ConditionItem[]>;
 
-  const handleChangeConditionItemName = (e: SelectEvent) => {
+  const handleChangeConditionItemName = (event: SelectEvent) => {
     const itemResponseType = items?.find(
-      (item: ItemFormValues) => getEntityKey(item) === e.target.value,
+      (item: ItemFormValues) => getEntityKey(item) === event.target.value,
     )?.responseType;
 
     if (conditionItemResponseType !== itemResponseType) {
@@ -95,6 +96,7 @@ export const ConditionRow = ({
 
   const error = get(errors, `${conditionsName}[${index}]`);
   const errorMessage =
+    showError &&
     error &&
     t(
       Object.keys(error).length === VALIDATED_ITEMS_COUNT

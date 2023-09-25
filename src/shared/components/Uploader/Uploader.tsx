@@ -1,5 +1,4 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
-import { Button } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { postFileUploadApi } from 'api';
@@ -9,14 +8,15 @@ import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
-import { byteFormatter, concatIf, joinWihComma } from 'shared/utils';
+import { byteFormatter } from 'shared/utils/fileSystem';
+import { concatIf } from 'shared/utils/concatIf';
+import { joinWihComma } from 'shared/utils/joinWihComma';
+
 import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadFileError, MediaType } from 'shared/consts';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 
 import {
-  StyledButtonGroup,
   StyledContainer,
-  StyledDeleteBtn,
   StyledError,
   StyledImgContainer,
   StyledName,
@@ -26,6 +26,7 @@ import {
 } from './Uploader.styles';
 import { UploaderProps, UploaderUiType } from './Uploader.types';
 import { RemoveImagePopup } from './RemoveImagePopup';
+import { ActionButtons } from './ActionButtons';
 
 export const Uploader = ({
   uiType = UploaderUiType.Primary,
@@ -48,6 +49,7 @@ export const Uploader = ({
   const [error, setError] = useState<UploadFileError | null>(null);
   const [isRemovePopupOpen, setRemovePopupOpen] = useState(false);
   const isPrimaryUiType = uiType === UploaderUiType.Primary;
+  const isTertiaryUiType = uiType === UploaderUiType.Tertiary;
 
   const { execute: executeImgUpload, isLoading } = useAsync(
     postFileUploadApi,
@@ -109,8 +111,8 @@ export const Uploader = ({
     clearInput();
   };
 
-  const onEditImg = (e: MouseEvent) => {
-    stopDefaults(e);
+  const handleEditImg = (event: MouseEvent) => {
+    stopDefaults(event);
     handleRemoveImg();
     uploadInputRef?.current?.click();
   };
@@ -119,8 +121,8 @@ export const Uploader = ({
     setRemovePopupOpen(false);
   };
 
-  const handleDeleteClick = (e: MouseEvent) => {
-    stopDefaults(e);
+  const handleDeleteClick = (event: MouseEvent) => {
+    stopDefaults(event);
     setRemovePopupOpen(true);
   };
 
@@ -146,7 +148,6 @@ export const Uploader = ({
 
   const placeholderImgId = isPrimaryUiType ? 'img-filled' : 'img-outlined';
   const placeholderImgSize = isPrimaryUiType ? 32 : 24;
-  const deleteSvgSize = isPrimaryUiType ? '18' : '24';
   const hasSizeError = error === UploadFileError.Size;
   const hasFormatError = error === UploadFileError.Format;
   const spinnerUiType = isPrimaryUiType ? SpinnerUiType.Primary : SpinnerUiType.Secondary;
@@ -172,21 +173,13 @@ export const Uploader = ({
           <UploadedImgContainer isPrimaryUiType={isPrimaryUiType} width={width} height={height}>
             <StyledUploadImg alt="file upload" src={imageField} isPrimaryUiType={isPrimaryUiType} />
             {isMouseOver && (
-              <StyledButtonGroup
+              <ActionButtons
                 isPrimaryUiType={isPrimaryUiType}
-                variant="outlined"
-                aria-label="button group"
-              >
-                {isPrimaryUiType && (
-                  <Button
-                    startIcon={<Svg width="18" height="18" id="edit" />}
-                    onClick={onEditImg}
-                  />
-                )}
-                <StyledDeleteBtn isPrimaryUiType={isPrimaryUiType} onClick={handleDeleteClick}>
-                  <Svg width={deleteSvgSize} height={deleteSvgSize} id="trash" />
-                </StyledDeleteBtn>
-              </StyledButtonGroup>
+                showFirstButton={isPrimaryUiType || isTertiaryUiType}
+                showSecondButton={!isTertiaryUiType}
+                onEditImg={handleEditImg}
+                onDeleteImg={handleDeleteClick}
+              />
             )}
           </UploadedImgContainer>
         ) : (

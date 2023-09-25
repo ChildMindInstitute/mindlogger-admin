@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { DateFormats } from 'shared/consts';
 import { theme, StyledBodySmall, StyledLabelMedium, variables } from 'shared/styles';
 

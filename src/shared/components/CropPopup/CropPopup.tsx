@@ -5,7 +5,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
-import { getUploadFormData } from 'shared/utils';
+import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
 import { cropImage, initPercentCrop } from './CropPopup.utils';
 import { SIZE_TO_SET_IMG_SMALL, CropRatio } from './CropPopup.const';

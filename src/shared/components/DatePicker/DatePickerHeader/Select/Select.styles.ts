@@ -1,5 +1,4 @@
-import { FormControl } from '@mui/material';
-import { styled } from '@mui/system';
+import { styled, FormControl } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';

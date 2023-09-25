@@ -6,7 +6,7 @@ import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
 import { ReviewActivity, getReviewActivitiesApi, getAppletSubmitDateListApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { DateFormats } from 'shared/consts';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
 import { useRespondentLabel } from 'modules/Dashboard/hooks';

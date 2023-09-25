@@ -14,7 +14,7 @@ export const StyledCounter = styled(Counter, shouldForwardProp)`
   ${({ isShortenedVisible }: { isShortenedVisible?: boolean }) =>
     isShortenedVisible &&
     `
-    ${theme.breakpoints.down('xl')} {
+    ${theme.breakpoints.down('xxl')} {
       .shortened-counter {
         display: inline;
        }

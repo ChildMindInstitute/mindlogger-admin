@@ -4,8 +4,8 @@ import { useFormContext } from 'react-hook-form';
 import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { itemsTypeIcons } from 'shared/consts';
-import { falseReturnFunc, getEntityKey } from 'shared/utils';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { falseReturnFunc, getEntityKey, removeMarkdown } from 'shared/utils';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { getActions } from './Item.utils';
@@ -56,7 +56,7 @@ export const Item = ({
       </StyledFlexTopCenter>
       <StyledCol {...hiddenProps}>
         <StyledTitle>{item.name}</StyledTitle>
-        <StyledDescription>{item.question}</StyledDescription>
+        <StyledDescription>{removeMarkdown(item.question)}</StyledDescription>
       </StyledCol>
       {item.allowEdit && (
         <Actions

@@ -1,12 +1,12 @@
 import { useState, DragEvent, useContext, useRef } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { TableCell } from '@mui/material';
+import { TableCell, TableRow } from '@mui/material';
 
 import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { auth, popups, workspaces } from 'redux/modules';
-import { StyledBodyMedium } from 'shared/styles';
+import { StyledBodyMedium, theme } from 'shared/styles';
 import { Pin, Actions, AppletImage } from 'shared/components';
 import {
   AppletPasswordPopup,
@@ -24,11 +24,11 @@ import {
 } from 'shared/utils';
 import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
-import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
+import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
-import { StyledAppletName, StyledPinContainer, StyledTableRow } from './AppletItem.styles';
+import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
 
@@ -178,7 +178,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   return (
     <>
-      <StyledTableRow
+      <TableRow
         className={isDragOver ? 'dragged-over' : ''}
         draggable
         onDragStart={onDragStart}
@@ -204,7 +204,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
               </StyledPinContainer>
             )}
             <AppletImage image={item.image} appletName={item.displayName} />
-            <StyledBodyMedium>{item.displayName}</StyledBodyMedium>
+            <StyledBodyMedium sx={{ ml: theme.spacing(1.2) }}>{item.displayName}</StyledBodyMedium>
           </StyledAppletName>
         </TableCell>
         <TableCell width="20%" onClick={handleAppletClick}>
@@ -219,7 +219,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             visibleByDefault={hasVisibleActions}
           />
         </TableCell>
-      </StyledTableRow>
+      </TableRow>
       {sharePopupVisible && (
         <ShareAppletPopup
           sharePopupVisible={sharePopupVisible}

@@ -1,6 +1,6 @@
-import { Box } from '@mui/system';
+import { Box } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { theme } from 'shared/styles';
 
 export const getTitle = (name: string, isFlow?: boolean) => {

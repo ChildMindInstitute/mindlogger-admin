@@ -2,7 +2,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { Switch as CustomSwitch } from '@mui/material';
 
 import { StyledFlexTopCenter, StyledTooltipSvg } from 'shared/styles';
-import { Tooltip } from 'shared/components';
+import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledFormControlLabel } from './Switch.styles';
 import { SwitchControllerProps } from './Switch.types';

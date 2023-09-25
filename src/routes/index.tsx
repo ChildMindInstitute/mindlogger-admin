@@ -11,6 +11,7 @@ import { builderRoutes } from 'modules/Builder/routes';
 import { libraryRoutes } from 'modules/Library/routes';
 import { authRoutes } from 'modules/Auth/routes';
 import { auth } from 'redux/modules';
+import { AppletNotFoundPopup } from 'shared/components';
 
 import history from './history';
 
@@ -46,6 +47,7 @@ export const AppRoutes = () => {
             <Route path="*" element={<Navigate to={page.dashboard} replace />} />
           </Routes>
         )}
+        <AppletNotFoundPopup />
       </Router>
     </>
   );

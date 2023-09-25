@@ -1,46 +1,46 @@
 import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FieldArrayWithId, useFormContext } from 'react-hook-form';
 
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/types';
 import { ActivitySettingsSubscale } from 'shared/state';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { ageItem, genderItem } from './SubscalesConfiguration.const';
+import { isSystemItem } from './SubscalesConfiguration.utils';
 
-export const useSubscalesSystemItemsSetup = () => {
+export const useSubscalesSystemItemsSetup = (
+  subscales: FieldArrayWithId<
+    Record<string, ActivitySettingsSubscale<string>[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >[],
+) => {
   const { fieldName: activityFieldName } = useCurrentActivity();
   const { watch, setValue } = useFormContext();
   const itemsFieldName = `${activityFieldName}.items`;
   const items: ItemFormValues[] = watch(itemsFieldName) ?? [];
-  const subscalesField = `${activityFieldName}.subscaleSetting.subscales`;
-  const subscales: ActivitySettingsSubscale[] = watch(subscalesField);
 
-  const appendItem = (item: ItemFormValues) => setValue(itemsFieldName, [...items, item]);
-  const removeItem = (index: number | number[]) =>
+  const appendSystemItems = (newItems: ItemFormValues[]) =>
+    setValue(itemsFieldName, [...items, ...newItems]);
+  const removeSystemItems = () =>
     setValue(
       itemsFieldName,
-      items.filter((_, key) => (Array.isArray(index) ? index.includes(key) : index !== key)),
+      items.filter((item) => !isSystemItem(item.name)),
     );
-
   useEffect(() => {
-    const hasSubscaleLookupTable = subscales.some((subscale) => !!subscale.subscaleTableData);
-    const subscaleSystemItems =
-      items?.reduce((acc, item, index) => {
-        if (!item.allowEdit) return acc.concat({ ...item, index });
-
-        return acc;
-      }, [] as (ItemFormValues & { index: number })[]) ?? [];
-    const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !subscaleSystemItems.length;
+    const hasSubscaleLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
+    const hasSystemItems = items?.some((item) => isSystemItem(item.name));
+    const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !hasSystemItems;
 
     if (shouldAddSubscaleSystemItems) {
-      appendItem(genderItem as ItemFormValues);
-      appendItem(ageItem as ItemFormValues);
+      appendSystemItems([genderItem, ageItem] as ItemFormValues[]);
 
       return;
     }
 
     if (hasSubscaleLookupTable) return;
 
-    removeItem(subscaleSystemItems.map((item) => item.index));
+    removeSystemItems();
   }, [subscales]);
 };

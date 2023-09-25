@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { alerts, applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
@@ -12,20 +12,14 @@ import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { Modals, DeletePopupProps } from './DeletePopup.types';
 
-export const DeletePopup = ({
-  onCloseCallback,
-  'data-testid': dataTestid,
-  testApplet,
-  visibleByDefault,
-}: DeletePopupProps) => {
+export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: DeletePopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
-  const { applet: appletData, ...popupsData } = popups.useData();
+  const { applet: appletData, deletePopupVisible } = popups.useData();
   const [activeModal, setActiveModal] = useState(Modals.PasswordCheck);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const { result } = applet.useAppletData() || {};
-  const currentApplet = testApplet || appletData || result;
-  const deletePopupVisible = visibleByDefault || popupsData?.deletePopupVisible;
+  const currentApplet = appletData || result;
 
   const deletePopupClose = () => {
     dispatch(

@@ -1,8 +1,7 @@
-import { styled } from '@mui/system';
-import { Typography } from '@mui/material';
+import { styled, Typography } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export type FontWeight = keyof typeof variables.font.weight;
 type LetterSpacing = keyof typeof variables.font.letterSpacing;
@@ -28,6 +27,12 @@ export const StyledHeadline = styled(Typography)`
   font-weight: ${({ fontWeight }: StyledProps) =>
     fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.regular};
   color: ${({ color }: StyledProps) => color || variables.palette.black};
+`;
+
+export const StyledStickyHeadline = styled(StyledHeadlineLarge, shouldForwardProp)`
+  transition: ${variables.transitions.fontSize};
+  font-size: ${({ isSticky }: { isSticky: boolean }) =>
+    isSticky ? variables.font.size.lrg : variables.font.size.xxxl};
 `;
 
 export const StyledTitleLarge = styled(Typography)`

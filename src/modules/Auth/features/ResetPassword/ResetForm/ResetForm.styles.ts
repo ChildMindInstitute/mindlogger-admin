@@ -1,12 +1,12 @@
-import { styled } from '@mui/system';
-import { Button, Box } from '@mui/material';
+import { styled, Button, Box } from '@mui/material';
 
-import { theme, variables, StyledBodyMedium, StyledClearedButton } from 'shared/styles';
+import { theme, variables, StyledBodyMedium } from 'shared/styles';
+import { AUTH_BOX_WIDTH } from 'shared/consts';
 
 export const StyledForm = styled('form')`
+  width: ${AUTH_BOX_WIDTH};
   margin-top: ${theme.spacing(3.2)};
   padding: ${theme.spacing(2.4)};
-  background: ${variables.palette.white};
   border-radius: ${variables.borderRadius.xl};
   border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
 `;
@@ -27,17 +27,4 @@ export const StyledButton = styled(Button)`
 export const StyledBackWrapper = styled(Box)`
   text-align: center;
   margin: ${theme.spacing(2.4, 0, 0)};
-`;
-
-export const StyledBack = styled(StyledClearedButton)`
-  color: ${variables.palette.primary};
-  text-align: center;
-  font-size: ${variables.font.size.md};
-  font-weight: ${variables.font.weight.regular};
-  line-height: ${variables.font.lineHeight.md};
-  text-decoration: underline;
-
-  &.MuiButton-text:hover {
-    background-color: transparent;
-  }
 `;

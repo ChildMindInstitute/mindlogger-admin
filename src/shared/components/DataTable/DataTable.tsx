@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey } from 'shared/utils/builderHelpers';
 import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
 
 import { DataTableItem, DataTableProps } from './DataTable.types';

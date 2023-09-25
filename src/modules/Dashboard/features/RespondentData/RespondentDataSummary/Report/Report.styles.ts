@@ -1,12 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import {
-  commonStickyStyles,
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-  theme,
-  variables,
-} from 'shared/styles';
+import { StyledFlexColumn, StyledStickyHeader, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledReport = styled(Box)`
@@ -16,11 +10,7 @@ export const StyledReport = styled(Box)`
   min-width: 90rem;
 `;
 
-export const StyledHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
-  ${commonStickyStyles};
-  padding: ${theme.spacing(2.4, 6.4)};
-  box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
-    isSticky ? variables.boxShadow.light0 : 'none'};
+export const StyledHeader = styled(StyledStickyHeader, shouldForwardProp)`
   justify-content: space-between;
 `;
 

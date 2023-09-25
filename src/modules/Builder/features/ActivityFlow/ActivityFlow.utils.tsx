@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { ActivityFlowFormValues } from 'modules/Builder/types';
 
 import { GetActivityFlowActions } from './ActivityFlow.types';
@@ -37,8 +37,6 @@ export const getFlowsItemActions = ({
     'data-testid': `${dataTestid}-remove`,
   },
 ];
-
-export const getActivityFlowKey = (flow: ActivityFlowFormValues) => flow.id ?? flow.key ?? '';
 
 export const getDuplicatedActivityFlow = (flow: ActivityFlowFormValues, name: string) => {
   const duplicatedItems =

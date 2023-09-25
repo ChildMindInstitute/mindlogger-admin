@@ -1,9 +1,28 @@
-import { MenuItem, styled } from '@mui/material';
+import { MenuItem, styled, TextField } from '@mui/material';
 
 import { StyledBodyLarge, StyledFlexTopCenter, variables, theme } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { SelectUiType } from './SelectController.types';
+
+export const StyledTextField = styled(TextField)`
+  && {
+    .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+      padding-right: 4rem;
+    }
+  }
+
+  .MuiSelect-icon {
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    fill: ${variables.palette.on_surface_variant};
+
+    &.MuiSelect-iconOpen {
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+`;
 
 export const StyledPlaceholder = styled(StyledBodyLarge)`
   position: absolute;

@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { List } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { workspaces as currentWorkspace, Workspace } from 'redux/modules';
-import { authStorage } from 'shared/utils';
+import { authStorage } from 'shared/utils/authStorage';
 import { page } from 'resources';
 
 import { WorkspaceImage } from '../WorkspaceImage';

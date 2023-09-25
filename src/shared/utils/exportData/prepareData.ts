@@ -8,29 +8,29 @@ import {
   DecryptedMediaAnswer,
   DecryptedStabilityTrackerAnswer,
   EventDTO,
-  ExportActivity,
   ExportCsvData,
+  ExportDataResult,
   ExportMediaData,
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
   UserActionType,
-} from 'shared/types';
+} from 'shared/types/answer';
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
-import {
-  convertJsonToCsv,
-  getABTrailsCsvName,
-  getFileExtension,
-  getFlankerCsvName,
-  getFlankerRecords,
-  getMediaFileName,
-  getObjectFromList,
-  getSplashScreen,
-  getStabilityRecords,
-  getStabilityTrackerCsvName,
-} from 'shared/utils';
 import { FlankerConfig, Item } from 'shared/state';
 import { postFilePresignApi } from 'shared/api';
 
+import {
+  getStabilityTrackerCsvName,
+  getFlankerCsvName,
+  getABTrailsCsvName,
+  getFileExtension,
+  getMediaFileName,
+} from './getReportName';
+import { getFlankerRecords } from './getFlankerRecords';
+import { getStabilityRecords } from './getStabilityRecords';
+import { getSplashScreen } from './getJourneyCSVObject';
+import { getObjectFromList } from '../builderHelpers';
+import { convertJsonToCsv } from '../exportTemplate';
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
@@ -38,10 +38,21 @@ import { getSubscales } from './getSubscales';
 import { getDrawingLines } from './getDrawingLines';
 import { getABTrailsRecords } from './getABTrailsRecords';
 import { convertDateStampToMs } from './convertDateStampToMs';
+import { checkIfHasMigratedAnswers, getIdBeforeMigration } from './migratedData';
 
 const getDecryptedAnswersObject = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
-) => getObjectFromList(decryptedAnswers, (item) => `${item.activityId}/${item.activityItem.id}`);
+  hasMigratedAnswers?: boolean,
+) =>
+  getObjectFromList(decryptedAnswers, (item) => {
+    if (hasMigratedAnswers) {
+      return `${getIdBeforeMigration(item.activityId)}/${getIdBeforeMigration(
+        item.activityItem.id,
+      )}`;
+    }
+
+    return `${item.activityId}/${item.activityItem.id}`;
+  });
 
 const getReportData = (
   reportData: AppletExportData['reportData'],
@@ -167,7 +178,8 @@ const getActivityJourneyData = (
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
   decryptedEvents: EventDTO[],
 ) => {
-  const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers);
+  const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);
+  const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers, hasMigratedAnswers);
   let indexForABTrailsFiles = 0;
   const events = decryptedEvents.map((event, index, events) => {
     if (index === 0 && !decryptedAnswersObject[event.screen] && events[index + 1])
@@ -272,7 +284,7 @@ const getFlankerItemsData = (
 };
 
 export const prepareData = async (
-  data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
+  data: ExportDataResult,
   getDecryptedAnswers: (
     data: ExtendedExportAnswer,
   ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,

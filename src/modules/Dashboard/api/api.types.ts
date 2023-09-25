@@ -341,7 +341,7 @@ export type ReportConfig = {
 
 export type AppletVersionChanges = AppletId & { version: string };
 
-export type ExportData = AppletId & { respondentIds?: string };
+export type ExportData = AppletId & { respondentIds?: string; page?: number; limit?: number };
 
 export type Folder = {
   id: string;
@@ -368,13 +368,10 @@ export type Version = {
   createdAt: string;
 };
 
-export type Response<T> = {
-  count: number;
-  result: T[];
-};
-
 export type LatestReport = {
   appletId: string;
   activityId: string;
   respondentId: string;
 };
+
+export type Identifiers = LatestReport;

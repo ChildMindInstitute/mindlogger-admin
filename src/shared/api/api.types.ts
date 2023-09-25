@@ -25,3 +25,13 @@ export type AlertListParams = {
   limit?: number;
   ordering?: string;
 };
+
+export type Response<T> = {
+  count: number;
+  result: T[];
+};
+
+export type ResponseWithObject<T> = {
+  count: number;
+  result: T;
+};

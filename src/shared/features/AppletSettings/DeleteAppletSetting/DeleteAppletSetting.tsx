@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import { page } from 'resources';
 import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { DeletePopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import {

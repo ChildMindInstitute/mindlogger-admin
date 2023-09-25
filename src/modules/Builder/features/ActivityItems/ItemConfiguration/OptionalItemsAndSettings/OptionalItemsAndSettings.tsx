@@ -9,7 +9,7 @@ import get from 'lodash.get';
 import { SingleAndMultiSelectOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
@@ -29,7 +29,7 @@ import {
   ResponseDataIdentifier,
 } from '../Settings';
 import { Alerts } from '../Alerts';
-import { SelectionOption } from '../InputTypeItems';
+import { SelectionOption } from '../InputTypeItems/SelectionOption';
 import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
 import { SkippedItemInVariablesModal } from './SkippedItemInVariablesModal';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';

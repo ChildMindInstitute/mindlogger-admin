@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Button } from '@mui/material';
+import { styled, Button } from '@mui/material';
 
 import { TOP_BAR_HEIGHT } from 'shared/consts';
 import {
@@ -27,8 +26,8 @@ export const StyledAvatarBtn = styled(StyledClearedButton)`
 export const StyledQuantity = styled(StyledQuantityCircle)`
   top: -0.2rem;
   right: -0.2rem;
-  min-width: 1.6rem;
-  padding: ${theme.spacing(0.2)};
+  width: 1.6rem;
+  height: 1.6rem;
 `;
 
 export const StyledLoginButton = styled(Button)`

@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Modal, CreateAppletPassword, EnterAppletPassword } from 'shared/components';
+import { Modal } from 'shared/components/Modal';
+import { CreateAppletPassword, EnterAppletPassword } from 'shared/components/Password';
+
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';

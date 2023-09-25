@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { useTimeAgo } from 'shared/hooks';
 import { getDateInUserTimezone } from 'shared/utils';
 import {
