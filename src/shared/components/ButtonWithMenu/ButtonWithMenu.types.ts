@@ -1,4 +1,4 @@
-import { MenuItem } from 'shared/components/Menu/Menu.types';
+import { MenuItem, MenuProps } from 'shared/components/Menu/Menu.types';
 
 export type ButtonWithMenuProps = {
   menuItems: MenuItem[];
@@ -9,5 +9,6 @@ export type ButtonWithMenuProps = {
   variant?: 'text' | 'outlined';
   disabled?: boolean;
   menuListWidth?: string;
+  menuProps?: Partial<MenuProps>;
   'data-testid'?: string;
 };
