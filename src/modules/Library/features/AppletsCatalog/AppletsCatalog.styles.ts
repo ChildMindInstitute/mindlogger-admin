@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { TablePagination } from '@mui/material';
+import { styled, TablePagination } from '@mui/material';
 
 import { variables } from 'shared/styles';
 

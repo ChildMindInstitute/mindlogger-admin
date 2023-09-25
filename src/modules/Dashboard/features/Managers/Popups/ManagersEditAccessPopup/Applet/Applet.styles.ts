@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Box, Link } from '@mui/material';
+import { styled, Box, Link } from '@mui/material';
 
 import { theme, commonEllipsisStyles } from 'shared/styles';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
