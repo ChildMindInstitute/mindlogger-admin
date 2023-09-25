@@ -109,11 +109,6 @@ export const ConditionRow = ({
     setValue(conditionItemName, scoreId);
   }, [scoreId]);
 
-  // useEffect(() => {
-  //   console.log('condition item', conditionItem);
-  //   console.log('--------');
-  // }, [conditionItem]);
-
   return (
     <>
       <Condition
