@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
-import { StyledHeader } from 'shared/features';
 import { Svg, Tooltip } from 'shared/components';
+import { StyledBuilderContainerHeader } from 'shared/features/BuilderContainer';
 
 import { ActivityItemsFlowHeaderProps } from './ActivityItemsFlowHeader.types';
 
@@ -16,7 +16,7 @@ export const ActivityItemsFlowHeader = ({
   const isAddButtonDisabled = headerProps?.isAddItemFlowDisabled;
 
   return (
-    <StyledHeader isSticky={isSticky}>
+    <StyledBuilderContainerHeader isSticky={isSticky}>
       <Box>{children}</Box>
       <Tooltip tooltipTitle={isAddButtonDisabled ? t('addActivityItemsFlowTooltip') : null}>
         <span>
@@ -31,6 +31,6 @@ export const ActivityItemsFlowHeader = ({
           </Button>
         </span>
       </Tooltip>
-    </StyledHeader>
+    </StyledBuilderContainerHeader>
   );
 };
