@@ -18,7 +18,7 @@ export const AuthLayout = () => {
     <StyledAuthLayout>
       {status === 'loading' && <Spinner />}
       <StyledHeader>
-        <Svg id="header-logo" width={224} height={44} />
+        <Svg id="header-logo" width={250} height={44} />
       </StyledHeader>
       <StyledOutlet>
         <StyledAuthWrapper>

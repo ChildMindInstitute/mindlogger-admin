@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Box, OutlinedInput } from '@mui/material';
+import { styled, Box, OutlinedInput } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
@@ -39,7 +38,7 @@ export const StyledTextField = styled(OutlinedInput)`
 
 export const StyledIcon = styled(Box)`
   display: flex;
-  margin-right: ${theme.spacing(1)};
+  margin-right: ${theme.spacing(0.8)};
 
   svg {
     fill: ${variables.palette.outline};

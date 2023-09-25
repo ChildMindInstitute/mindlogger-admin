@@ -53,6 +53,7 @@ import {
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
   ItemTestFunctions,
   alphanumericAndHyphenRegexp,
+  conditionsMatch,
 } from './BuilderApplet.const';
 
 const { t } = i18n;
@@ -550,7 +551,7 @@ export const ScoreConditionalLogic = () =>
       .min(1, <string>t('validationMessages.atLeastOneCondition')),
     flagScore: yup.boolean(),
     ...getReportCommonFields(),
-    match: yup.string(),
+    match: conditionsMatch,
   });
 
 export const ScoreSchema = () => ({
@@ -580,7 +581,7 @@ export const SectionConditionalLogic = () =>
       .array()
       .of(ConditionSchema())
       .min(1, <string>t('validationMessages.atLeastOneCondition')),
-    match: yup.string(),
+    match: conditionsMatch,
   });
 
 export const TotalScoresTableDataSchema = yup

@@ -32,7 +32,7 @@ export const BuilderActivityFlow = () => {
       >
         {t('activityFlows')}
       </StyledDirectoryUpButton>
-      <LinkedTabs tabs={getActivityFlowTabs({ appletId, activityFlowId })} />
+      <LinkedTabs tabs={getActivityFlowTabs({ appletId, activityFlowId })} isBuilder />
     </StyledBody>
   );
 };

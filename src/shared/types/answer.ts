@@ -389,3 +389,5 @@ export const enum FlankerRecordFields {
   ResponseAccuracy = 'responseAccuracy',
   FailedPractice = 'failedPractice',
 }
+
+export type ExportDataResult = { activities: ExportActivity[]; answers: ExtendedExportAnswer[] };

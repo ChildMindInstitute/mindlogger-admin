@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { MenuItem, MenuList } from '@mui/material';
+import { styled, MenuItem, MenuList } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';

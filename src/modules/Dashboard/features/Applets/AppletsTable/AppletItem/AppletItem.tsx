@@ -1,5 +1,6 @@
 import { useState, DragEvent, useContext, useRef } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
+import { TableRow } from '@mui/material';
 
 import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
@@ -28,7 +29,7 @@ import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.ty
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
 import { StyledTableCell } from '../AppletsTable.styles';
-import { StyledAppletName, StyledPinContainer, StyledTableRow } from './AppletItem.styles';
+import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
 
@@ -178,7 +179,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   return (
     <>
-      <StyledTableRow
+      <TableRow
         className={isDragOver ? 'dragged-over' : ''}
         draggable
         onDragStart={onDragStart}
@@ -219,7 +220,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             visibleByDefault={hasVisibleActions}
           />
         </StyledTableCell>
-      </StyledTableRow>
+      </TableRow>
       {sharePopupVisible && (
         <ShareAppletPopup
           sharePopupVisible={sharePopupVisible}

@@ -1,6 +1,7 @@
 import {
   DecryptedActivityData,
   ExportActivity,
+  ExportDataResult,
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
@@ -8,7 +9,7 @@ import {
 import { getObjectFromList } from './builderHelpers';
 
 export const getParsedAnswers = (
-  result: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
+  result: ExportDataResult,
   getDecryptedActivityData: (
     data: ExtendedExportAnswer,
   ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,

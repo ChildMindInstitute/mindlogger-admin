@@ -1,14 +1,12 @@
-import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useHeaderSticky } from 'shared/hooks/useHeaderSticky';
-import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
+import { variables } from 'shared/styles/variables';
+import { BuilderContainer } from 'shared/features/BuilderContainer';
 import { Tooltip } from 'shared/components/Tooltip';
+import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
 
 import {
-  StyledBar,
-  StyledHeader,
   StyledContent,
   StyledSettingsGroup,
   StyledSettings,
@@ -20,12 +18,18 @@ import { LeftBarProps } from './LeftBar.types';
 export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarProps) => {
   const { setting } = useParams();
   const { t } = useTranslation('app');
-  const containerRef = useRef<HTMLElement | null>(null);
-  const isHeaderSticky = useHeaderSticky(containerRef);
+
+  const containerSxProps = {
+    width: hasActiveItem ? '40rem' : '100%',
+    flexShrink: 0,
+    borderRight: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+    height: '100%',
+    transition: variables.transitions.width,
+    margin: 0,
+  };
 
   return (
-    <StyledBar ref={containerRef} hasItem={hasActiveItem}>
-      <StyledHeader isSticky={isHeaderSticky}>{t(title)}</StyledHeader>
+    <BuilderContainer title={t(title)} sxProps={containerSxProps}>
       <StyledContent isCompact={hasActiveItem}>
         {items.map(
           ({ label, items, isVisible = true }) =>
@@ -71,6 +75,6 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
             ),
         )}
       </StyledContent>
-    </StyledBar>
+    </BuilderContainer>
   );
 };
