@@ -75,9 +75,9 @@ export const ConditionRow = ({
     [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
   } as Record<ConditionRowType, ConditionItem[]>;
 
-  const handleChangeConditionItemName = (e: SelectEvent) => {
+  const handleChangeConditionItemName = (event: SelectEvent) => {
     const itemResponseType = items?.find(
-      (item: ItemFormValues) => getEntityKey(item) === e.target.value,
+      (item: ItemFormValues) => getEntityKey(item) === event.target.value,
     )?.responseType;
 
     if (conditionItemResponseType !== itemResponseType) {
