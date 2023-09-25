@@ -47,7 +47,7 @@ export const StyledSelectionBox = styled(StyledFlexColumn, shouldForwardProp)`
     ${({ isErrorShortened }: { isErrorShortened?: boolean }) =>
       isErrorShortened &&
       `
-        ${theme.breakpoints.down('xl')} {
+        ${theme.breakpoints.down('xxl')} {
           white-space: nowrap;
           right: 0;
         }
