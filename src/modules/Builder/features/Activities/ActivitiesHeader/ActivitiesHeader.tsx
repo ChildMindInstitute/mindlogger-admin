@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
 import { StyledHeader } from 'shared/features';
-import { ButtonWithMenu, Svg } from 'shared/components';
+import { ButtonWithMenu, MenuUiType, Svg } from 'shared/components';
 import { theme } from 'shared/styles';
 import { falseReturnFunc, Mixpanel } from 'shared/utils';
 
