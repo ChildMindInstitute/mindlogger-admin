@@ -94,8 +94,9 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   };
 
   const handlePeriodKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    // Prevent the dot key from being entered
-    if (event.code === 'NumpadDecimal' || event.code === 'Period') {
+    // Prevent the dot/comma key from being entered
+    const preventedCodes = ['NumpadDecimal', 'Period', 'Comma'];
+    if (preventedCodes.includes(event.code)) {
       event.preventDefault();
     }
   };
