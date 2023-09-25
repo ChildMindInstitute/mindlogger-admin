@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Box } from '@mui/material';
+import { styled, Box } from '@mui/material';
 
 import { LEFT_BAR_WIDTH } from 'shared/consts';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';

@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Button, Box, Link } from '@mui/material';
+import { styled, Button, Box, Link } from '@mui/material';
 
 import { theme, variables, StyledHeadline, StyledBodyMedium } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';

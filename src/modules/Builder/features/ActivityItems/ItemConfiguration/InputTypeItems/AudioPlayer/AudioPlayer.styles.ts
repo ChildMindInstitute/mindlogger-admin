@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { styled } from '@mui/material';
 
 import { variables, theme, StyledFlexTopCenter, StyledEllipsisText } from 'shared/styles';
 

@@ -1,5 +1,4 @@
-import { styled } from '@mui/system';
-import { Box } from '@mui/material';
+import { styled, Box } from '@mui/material';
 
 export const StyledFlexAllCenter = styled(Box)`
   display: flex;
