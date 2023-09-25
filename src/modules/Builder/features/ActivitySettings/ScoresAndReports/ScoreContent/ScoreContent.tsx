@@ -24,6 +24,7 @@ import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/comp
 import { getEntityKey } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ItemFormValues } from 'modules/Builder/types';
+import { SelectEvent } from 'shared/types';
 
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
@@ -47,7 +48,6 @@ import {
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 import { checkOnItemTypeAndScore } from '../../SubscalesConfiguration/SubscalesConfiguration.utils';
-import { SelectEvent } from '../../../../../../shared/types';
 
 export const ScoreContent = ({
   name,

@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Condition } from 'shared/state';
 import { StyledFlexColumn, theme } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
@@ -27,42 +26,19 @@ export const SectionContent = ({
   const { t } = useTranslation('app');
   const { control, watch, setValue } = useFormContext();
   const conditionalLogicName = `${name}.conditionalLogic`;
-  const conditionsName = `${name}.conditions`;
-
-  const {
-    fields: conditions,
-    append: appendCondition,
-    remove: removeCondition,
-  } = useFieldArray<Record<string, Condition[]>>({
-    control,
-    name: conditionsName,
-  });
-
-  // const { fields, append: appendCondition } = useFieldArray<Record<string, Condition[]>>({
-  //   control,
-  //   name: conditionsName,
-  // });
-
-  // console.log('section conditions', fields);
   const conditionalLogic = watch(conditionalLogicName);
-  const [isContainConditional, setIsContainConditional] = useState(!!conditionalLogic);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const conditionalDataTestid = `${dataTestid}-conditional`;
 
-  // useEffect(() => {
-  //   if (isContainConditional) {
-  //     if (!conditionalLogic) {
-  //       setValue(conditionalLogicName, defaultConditionalValue);
-  //       appendCondition({} as Condition);
-  //     }
-  //
-  //     return;
-  //   }
-  //
-  //   setValue(conditionalLogicName, undefined);
-  // }, [isContainConditional]);
+  const handleAddConditionalLogic = () => {
+    setValue(conditionalLogicName, defaultConditionalValue);
+  };
 
-  const removeConditional = () => {
+  const handleRemoveConditionalLogic = () => {
+    setValue(conditionalLogicName, undefined);
+  };
+
+  const handleRemoveConditional = () => {
     setIsRemoveConditionalPopupVisible(true);
   };
 
@@ -76,20 +52,17 @@ export const SectionContent = ({
         data-testid={`${dataTestid}-name`}
       />
       <Box sx={{ mt: theme.spacing(2.4) }}>
-        {isContainConditional ? (
+        {conditionalLogic ? (
           <ToggleItemContainer
             HeaderContent={SectionScoreHeader}
             Content={ConditionContent}
             contentProps={{
               name: conditionalLogicName,
               type: ConditionRowType.Section,
-              conditions,
-              onAddCondition: appendCondition,
-              onRemoveCondition: removeCondition,
               'data-testid': conditionalDataTestid,
             }}
             headerContentProps={{
-              onRemove: removeConditional,
+              onRemove: handleRemoveConditional,
               title: t('conditionalLogic'),
               name: conditionalLogicName,
               'data-testid': conditionalDataTestid,
@@ -101,7 +74,7 @@ export const SectionContent = ({
           <StyledButton
             sx={{ mt: 0 }}
             startIcon={<Svg id="add" width="20" height="20" />}
-            onClick={() => setIsContainConditional(true)}
+            onClick={handleAddConditionalLogic}
             data-testid={`${dataTestid}-add-condition`}
           >
             {t('addConditionalLogic')}
@@ -112,7 +85,7 @@ export const SectionContent = ({
       {isRemoveConditionalPopupVisible && (
         <RemoveConditionalLogicPopup
           onClose={() => setIsRemoveConditionalPopupVisible(false)}
-          onRemove={() => setIsContainConditional(false)}
+          onRemove={handleRemoveConditionalLogic}
           name={title}
           data-testid={`${dataTestid}-remove-condition-popup`}
         />

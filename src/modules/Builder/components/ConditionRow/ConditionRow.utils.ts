@@ -53,7 +53,7 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
     }
 
     return optionList;
-  }, []);
+  }, []) || [];
 
 export const getScoreOptions = (scores: ScoreReport[]) =>
   scores?.map((score) => ({
