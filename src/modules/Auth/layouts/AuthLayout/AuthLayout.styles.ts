@@ -19,11 +19,6 @@ export const StyledHeader = styled(StyledFlexAllCenter)`
   z-index: ${theme.zIndex.fab};
 `;
 
-export const StyledImage = styled('img')`
-  width: 3.2rem;
-  height: 3.2rem;
-`;
-
 export const StyledOutlet = styled(Box)`
   display: flex;
   flex: 1;

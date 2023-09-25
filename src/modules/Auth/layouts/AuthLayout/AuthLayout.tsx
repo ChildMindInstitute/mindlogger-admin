@@ -1,15 +1,13 @@
 import { Outlet } from 'react-router-dom';
 
 import { auth } from 'modules/Auth/state';
-import { Spinner, Footer } from 'shared/components';
-import mindLoggerSrc from 'assets/images/mindlogger.png';
+import { Spinner, Svg, Footer } from 'shared/components';
 
 import {
   StyledAuthLayout,
   StyledAuthWrapper,
   StyledAuthWrapperInner,
   StyledHeader,
-  StyledImage,
   StyledOutlet,
 } from './AuthLayout.styles';
 
@@ -20,7 +18,7 @@ export const AuthLayout = () => {
     <StyledAuthLayout>
       {status === 'loading' && <Spinner />}
       <StyledHeader>
-        <StyledImage src={mindLoggerSrc} />
+        <Svg id="header-logo" width={250} height={44} />
       </StyledHeader>
       <StyledOutlet>
         <StyledAuthWrapper>
