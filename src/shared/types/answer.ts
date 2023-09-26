@@ -319,6 +319,7 @@ export type ActivityItemAnswer = {
   id?: string;
   activityItem: Item;
   answer: AnswerDTO;
+  'data-testid'?: string;
 };
 
 export const enum ElementType {

@@ -39,20 +39,33 @@ export const Review = ({ answerId, activityId, 'data-testid': dataTestid }: Revi
       {isLoading && <Spinner />}
       {answerId && activityItemAnswers && (
         <StyledReview>
-          {activityItemAnswers.map(({ activityItem, answer }, index) => (
-            <Box sx={{ mb: 4.8 }} key={activityItem.id}>
-              <CollapsedMdText
-                text={getDictionaryText(activityItem.question)}
-                maxHeight={120}
-                data-testid={`${dataTestid}-displayed-content-${index}`}
-              />
-              {UNSUPPORTED_ITEMS.includes(activityItem.responseType) ? (
-                <UnsupportedItemResponse itemType={activityItem.responseType} />
-              ) : (
-                <>{getResponseItem({ activityItem, answer })}</>
-              )}
-            </Box>
-          ))}
+          {activityItemAnswers.map(({ activityItem, answer }, index) => {
+            const testId = `${dataTestid}-${index}`;
+
+            return (
+              <Box sx={{ mb: 4.8 }} key={activityItem.id} data-testid={testId}>
+                <CollapsedMdText
+                  text={getDictionaryText(activityItem.question)}
+                  maxHeight={120}
+                  data-testid={`${testId}-question`}
+                />
+                {UNSUPPORTED_ITEMS.includes(activityItem.responseType) ? (
+                  <UnsupportedItemResponse
+                    itemType={activityItem.responseType}
+                    data-testid={`${testId}-response`}
+                  />
+                ) : (
+                  <>
+                    {getResponseItem({
+                      activityItem,
+                      answer,
+                      'data-testid': `${testId}-response`,
+                    })}
+                  </>
+                )}
+              </Box>
+            );
+          })}
         </StyledReview>
       )}
     </>
