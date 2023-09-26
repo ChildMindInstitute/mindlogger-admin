@@ -14,7 +14,7 @@ import { StyledBody } from 'shared/styles';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup, EditAccessSuccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
-import { getActions, getHeadCells } from './Managers.const';
+import { getActions, getHeadCells, ManagersColumnsWidth } from './Managers.const';
 import { ManagersData } from './Managers.types';
 
 export const Managers = () => {
@@ -101,23 +101,28 @@ export const Managers = () => {
             content: () => <Pin isPinned={isPinned} data-testid="dashboard-managers-pin" />,
             value: '',
             onClick: () => handlePinClick(id),
+            width: ManagersColumnsWidth.Pin,
           },
           firstName: {
             content: () => firstName,
             value: firstName,
+            width: ManagersColumnsWidth.FirstName,
           },
           lastName: {
             content: () => lastName,
             value: lastName,
+            width: ManagersColumnsWidth.LastName,
           },
           email: {
             content: () => email,
             value: email,
+            width: ManagersColumnsWidth.Email,
           },
           ...(appletId && {
             roles: {
               content: () => stringRoles,
               value: stringRoles,
+              width: ManagersColumnsWidth.Roles,
             },
           }),
           actions: {
@@ -135,7 +140,6 @@ export const Managers = () => {
               );
             },
             value: '',
-            width: '20%',
           },
         };
       }),
@@ -176,6 +180,7 @@ export const Managers = () => {
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}
+        hasColFixedWidth
         data-testid="dashboard-managers-table"
         {...tableProps}
       />

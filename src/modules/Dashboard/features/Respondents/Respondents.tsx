@@ -20,7 +20,7 @@ import {
   StyledRightBox,
 } from './Respondents.styles';
 import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
-import { getHeadCells } from './Respondents.const';
+import { getHeadCells, RespondentsColumnsWidth } from './Respondents.const';
 import {
   ChosenAppletData,
   FilteredApplets,
@@ -154,24 +154,28 @@ export const Respondents = () => {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-respondents-pin" />,
         value: '',
         onClick: () => handlePinClick(id),
+        width: RespondentsColumnsWidth.Pin,
       },
       secretId: {
         content: () => stringSecretIds,
         value: stringSecretIds,
-        width: '30%',
+        width: RespondentsColumnsWidth.SecretId,
       },
       nickname: {
         content: () => stringNicknames,
         value: stringNicknames,
+        width: RespondentsColumnsWidth.Nickname,
       },
       latestActive: {
         content: () => latestActive,
         value: latestActive,
+        width: RespondentsColumnsWidth.LatestActive,
       },
       ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
+          width: RespondentsColumnsWidth.Schedule,
         },
       }),
       actions: {
@@ -183,7 +187,6 @@ export const Respondents = () => {
           />
         ),
         value: '',
-        width: '330',
       },
     };
   };
@@ -296,6 +299,7 @@ export const Respondents = () => {
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}
+        hasColFixedWidth
         data-testid="dashboard-respondents-table"
         {...tableProps}
       />

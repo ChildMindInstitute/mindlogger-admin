@@ -6,18 +6,24 @@ import { HeadCell } from 'shared/types/table';
 import { getBuilderAppletUrl, Mixpanel, Path } from 'shared/utils';
 import { page } from 'resources';
 
+export enum AppletsColumnsWidth {
+  AppletName = '40rem',
+  LastEdit = '20rem',
+  Folder = '60rem',
+}
+
 export const getHeadCells = (): HeadCell[] => [
   {
     id: 'displayName',
     label: t('appletName'),
     enableSort: true,
-    width: '30%',
+    width: AppletsColumnsWidth.AppletName,
   },
   {
     id: 'updatedAt',
     label: t('lastEdit'),
     enableSort: true,
-    width: '15%',
+    width: AppletsColumnsWidth.LastEdit,
   },
   {
     id: 'actions',
