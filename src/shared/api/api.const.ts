@@ -1,5 +1,15 @@
 import { ServerUrlOption } from './api.types';
 
+export enum Languages {
+  EN = 'en',
+  FR = 'fr',
+}
+
+export const regionalLangFormats = {
+  [Languages.EN]: 'en-US',
+  [Languages.FR]: 'fr-FR',
+};
+
 export const DEFAULT_CONFIG = {
   headers: {
     'Mindlogger-Content-Source': 'admin',
