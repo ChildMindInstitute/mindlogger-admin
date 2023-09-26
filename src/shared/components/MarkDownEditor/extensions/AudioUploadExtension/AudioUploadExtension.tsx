@@ -2,7 +2,8 @@ import { DropdownToolbar, InsertContentGenerator } from 'md-editor-rt';
 import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { SourceLinkModalForm, Svg } from 'shared/components';
+import { SourceLinkModalForm } from 'shared/components/MarkDownEditor/SourceLinkModal';
+import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles';
 import { ALLOWED_AUDIO_FILE_TYPES, MediaType } from 'shared/consts';
 

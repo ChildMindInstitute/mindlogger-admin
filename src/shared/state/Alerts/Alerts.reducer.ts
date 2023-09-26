@@ -1,7 +1,7 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 import uniqBy from 'lodash.uniqby';
 
-import { getPendingData, getRejectedData } from 'shared/utils';
+import { getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { AlertsSchema } from './Alerts.schema';
 import { state as initialState } from './Alerts.state';

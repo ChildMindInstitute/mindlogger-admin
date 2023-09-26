@@ -8,29 +8,29 @@ import {
   DecryptedMediaAnswer,
   DecryptedStabilityTrackerAnswer,
   EventDTO,
-  ExportActivity,
   ExportCsvData,
+  ExportDataResult,
   ExportMediaData,
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
   UserActionType,
-} from 'shared/types';
+} from 'shared/types/answer';
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
-import {
-  convertJsonToCsv,
-  getABTrailsCsvName,
-  getFileExtension,
-  getFlankerCsvName,
-  getFlankerRecords,
-  getMediaFileName,
-  getObjectFromList,
-  getSplashScreen,
-  getStabilityRecords,
-  getStabilityTrackerCsvName,
-} from 'shared/utils';
 import { FlankerConfig, Item } from 'shared/state';
 import { postFilePresignApi } from 'shared/api';
 
+import {
+  getStabilityTrackerCsvName,
+  getFlankerCsvName,
+  getABTrailsCsvName,
+  getFileExtension,
+  getMediaFileName,
+} from './getReportName';
+import { getFlankerRecords } from './getFlankerRecords';
+import { getStabilityRecords } from './getStabilityRecords';
+import { getSplashScreen } from './getJourneyCSVObject';
+import { getObjectFromList } from '../builderHelpers';
+import { convertJsonToCsv } from '../exportTemplate';
 import { getParsedAnswers } from '../getParsedAnswers';
 import { getReportCSVObject } from './getReportCSVObject';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
@@ -284,7 +284,7 @@ const getFlankerItemsData = (
 };
 
 export const prepareData = async (
-  data: { activities: ExportActivity[]; answers: ExtendedExportAnswer[] },
+  data: ExportDataResult,
   getDecryptedAnswers: (
     data: ExtendedExportAnswer,
   ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,

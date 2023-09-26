@@ -27,3 +27,16 @@ export const POINT_RADIUS_DEFAULT = 6;
 export const POINT_RADIUS_SECONDARY = 4;
 
 export const LINK_PATTERN = new RegExp('^(http|https)://', 'i');
+
+export const commonLabelsProps = {
+  boxWidth: 24,
+  boxHeight: 9,
+  padding: 25,
+  color: variables.palette.on_surface,
+  font: {
+    family: 'Atkinson',
+    size: 14,
+  },
+  useBorderRadius: true,
+  borderRadius: 2,
+};

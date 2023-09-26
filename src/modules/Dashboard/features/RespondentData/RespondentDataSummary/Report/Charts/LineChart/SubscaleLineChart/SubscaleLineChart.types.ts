@@ -1,4 +1,4 @@
-import { Chart, ChartTypeRegistry, LegendElement } from 'chart.js';
+import { Chart } from 'chart.js';
 
 import { Version } from 'api';
 
@@ -15,10 +15,6 @@ export type Subscale = {
 
 export type SubscaleChartData = {
   subscales: Subscale[];
-};
-
-export type CustomLegend = LegendElement<keyof ChartTypeRegistry> & {
-  fit: () => void;
 };
 
 export type Tick = { index: number; chart: Chart };

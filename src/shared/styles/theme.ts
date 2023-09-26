@@ -6,8 +6,24 @@ import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
 
+declare module '@mui/system/createTheme/createBreakpoints' {
+  interface BreakpointOverrides {
+    xxl: true;
+  }
+}
+
 export const theme = createTheme({
   spacing: 10,
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1440,
+      xxl: 1536,
+    },
+  },
   typography: {
     fontFamily: 'Atkinson',
     htmlFontSize: 10,
@@ -130,11 +146,11 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiTableRow-root:hover': {
-            backgroundColor: blendColorsNormal(
-              'transparent',
-              variables.palette.on_surface_variant_alfa12,
-            ),
+            backgroundColor: blendColorsNormal('transparent', variables.palette.on_surface_alfa8),
             cursor: 'pointer',
+          },
+          '.MuiTableRow-root:active': {
+            backgroundColor: blendColorsNormal('transparent', variables.palette.on_surface_alfa12),
           },
           '.MuiTableRow-root:last-child': {
             '.MuiTableCell-body': {

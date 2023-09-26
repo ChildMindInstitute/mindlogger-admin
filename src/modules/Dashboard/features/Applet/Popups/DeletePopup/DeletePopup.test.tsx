@@ -43,10 +43,15 @@ const onCloseMock = jest.fn();
 describe('DeletePopup component tests', () => {
   const mockedAxios = axios.create();
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test('DeletePopup should open the password check modal initially', async () => {
     renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />, {
       preloadedState,
     });
+
     expect(screen.getByTestId(`${testId}-enter-password-password`)).toBeInTheDocument();
   });
 
@@ -64,7 +69,6 @@ describe('DeletePopup component tests', () => {
       target: { value: password },
     });
     fireEvent.click(screen.getByText('Delete'));
-
     await waitFor(() =>
       expect(screen.getByText('Applet has been deleted successfully.')).toBeInTheDocument(),
     );

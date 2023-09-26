@@ -4,7 +4,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { page } from 'resources';
 import { useBreadcrumbs } from 'shared/hooks';
 import { StyledBody, ContentContainer } from 'shared/styles';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { Spinner } from 'shared/components';
 import { getPublishedAppletApi } from 'modules/Library/api';
 import { Header, RightButtonType } from 'modules/Library/components';

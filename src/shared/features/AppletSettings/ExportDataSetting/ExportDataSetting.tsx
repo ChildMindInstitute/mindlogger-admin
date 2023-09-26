@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { applet } from 'shared/state';
 
 import {

@@ -1,6 +1,6 @@
 import { ButtonPropsVariantOverrides } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 
 export const commonButtonProps = {
   variant: 'outlined' as keyof ButtonPropsVariantOverrides,

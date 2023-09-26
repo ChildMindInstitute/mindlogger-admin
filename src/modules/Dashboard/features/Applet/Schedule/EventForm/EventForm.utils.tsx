@@ -5,7 +5,7 @@ import { AnyObject } from 'yup/lib/types';
 
 import i18n from 'i18n';
 import { DateFormats } from 'shared/consts';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { Activity, ActivityFlow } from 'shared/state';
 import {
   CreateEventType,

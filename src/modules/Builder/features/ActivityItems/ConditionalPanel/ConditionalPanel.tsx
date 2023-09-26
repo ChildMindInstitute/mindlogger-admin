@@ -12,7 +12,7 @@ import {
   SingleValueCondition,
 } from 'shared/state';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyLarge,
   StyledClearedButton,
@@ -26,7 +26,7 @@ import {
   CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
   ConditionType,
 } from 'shared/consts';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemFormValues } from 'modules/Builder/types';
 
 export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }) => {

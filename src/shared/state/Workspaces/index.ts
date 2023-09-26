@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppSelector } from 'redux/store';
+import { useAppSelector } from 'redux/store/hooks';
 
 import * as thunk from './Workspaces.thunk';
 import { state as initialState } from './Workspaces.state';

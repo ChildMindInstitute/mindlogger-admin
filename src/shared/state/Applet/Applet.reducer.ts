@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils';
+import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { AppletSchema } from './Applet.schema';
 import { createApplet, getApplet, getAppletWithItems, updateApplet } from './Applet.thunk';

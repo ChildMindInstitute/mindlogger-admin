@@ -1,11 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { StyledBodyMedium, StyledFlexTopStart, StyledHeadline, theme } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledFlexTopStart,
+  StyledHeadline,
+  theme,
+  variables,
+} from 'shared/styles';
 
 import { SubscaleLineChart } from '../../Charts/LineChart';
 import { AllScoresProps } from './AllScores.types';
-import { StyledChartContainer } from './AllScores.styles';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 
@@ -16,7 +21,9 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
 
   return (
     <Box sx={{ mb: theme.spacing(2.4) }}>
-      <StyledHeadline sx={{ mb: theme.spacing(0.8) }}>{t('subscaleScores')}</StyledHeadline>
+      <StyledHeadline sx={{ mb: theme.spacing(0.8), color: variables.palette.on_surface }}>
+        {t('subscaleScores')}
+      </StyledHeadline>
       <StyledFlexTopStart>
         {latestFinalScore && (
           <>
@@ -32,9 +39,7 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
           </StyledBodyMedium>
         )}
       </StyledFlexTopStart>
-      <StyledChartContainer>
-        <SubscaleLineChart data={data} versions={versions} />
-      </StyledChartContainer>
+      <SubscaleLineChart data={data} versions={versions} />
     </Box>
   );
 };

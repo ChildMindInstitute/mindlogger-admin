@@ -8,8 +8,14 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import { UiType } from './Tabs.types';
 
 export const StyledTabs = styled(Tabs, shouldForwardProp)`
-  height: ${({ uiType }: { uiType: UiType; hiddenHeader?: boolean; defaultTabs?: boolean }) =>
-    uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem'};
+  height: ${({
+    uiType,
+  }: {
+    uiType: UiType;
+    hiddenHeader?: boolean;
+    defaultTabs?: boolean;
+    isBuilder?: boolean;
+  }) => (uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem')};
   flex-shrink: 0;
 
   ${({ uiType }) =>
@@ -18,6 +24,12 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
       width: 90rem;
       margin: 0 auto;
   `};
+
+  ${({ isBuilder }) =>
+    isBuilder &&
+    `
+      max-width: calc(100% - 40rem);
+  `}
 
   ${({ hiddenHeader }) =>
     hiddenHeader &&
@@ -83,7 +95,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
   }
 
   .MuiButtonBase-root.Mui-selected {
-    color: ${({ uiType }: { uiType: UiType }) =>
+    color: ${({ uiType }) =>
       uiType === UiType.Primary ? variables.palette.on_surface : variables.palette.primary};
     font-weight: ${variables.font.weight.regular};
     color: ${variables.palette.primary};

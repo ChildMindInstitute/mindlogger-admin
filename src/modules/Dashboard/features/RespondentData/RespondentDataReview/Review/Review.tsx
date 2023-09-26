@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/system';
+import { Box } from '@mui/material';
 
 import { getActivityAnswerApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { getDictionaryText } from 'shared/utils';
 import { Spinner } from 'shared/components';
 import { ActivityItemAnswer } from 'shared/types';

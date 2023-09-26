@@ -26,7 +26,8 @@ import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType, UploadFileError } from 'shared/consts';
 import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
-import { concatIf, getSanitizedContent } from 'shared/utils';
+import { concatIf } from 'shared/utils/concatIf';
+import { getSanitizedContent } from 'shared/utils/forms';
 
 import { StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';

@@ -7,7 +7,12 @@ import { StyledTabs } from '../Tabs.styles';
 import { TabPanel } from '../TabPanel';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false }: TabsProps) => {
+export const LinkedTabs = ({
+  tabs,
+  uiType = UiType.Primary,
+  hiddenHeader = false,
+  isBuilder = false,
+}: TabsProps) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
@@ -75,6 +80,7 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false
         TabIndicatorProps={{ children: <span /> }}
         centered
         hiddenHeader={hiddenHeader}
+        isBuilder={isBuilder}
       >
         {!hiddenHeader && header}
       </StyledTabs>

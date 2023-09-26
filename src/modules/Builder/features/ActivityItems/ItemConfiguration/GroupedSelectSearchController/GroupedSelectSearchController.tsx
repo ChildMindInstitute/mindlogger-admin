@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { StyledBodyMedium, StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 import { falseReturnFunc } from 'shared/utils';
 import { itemsTypeIcons } from 'shared/consts';

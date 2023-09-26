@@ -2,12 +2,12 @@ import { useEffect, useState, KeyboardEvent, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/material';
 
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'redux/modules';
 import { Svg, Actions } from 'shared/components';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
-import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets';
+import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
 import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'api';
 import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';

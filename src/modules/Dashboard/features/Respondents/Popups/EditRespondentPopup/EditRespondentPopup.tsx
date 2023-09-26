@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Modal } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { editRespondentApi } from 'api';
 import { falseReturnFunc, getErrorMessage } from 'shared/utils';
 

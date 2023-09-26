@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 
@@ -11,9 +11,10 @@ import {
   variables,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { falseReturnFunc, exportDataSucceed, Mixpanel } from 'shared/utils';
-import { useAsync, useSetupEnterAppletPassword } from 'shared/hooks';
+import { exportDataSucceed, Mixpanel, createArrayFromMinToMax } from 'shared/utils';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { getPageAmount } from 'modules/Dashboard/api/api.utils';
 
 import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -49,7 +50,7 @@ export const DataExportPopup = ({
       setDataIsExporting(true);
 
       try {
-        await execute({ appletId, respondentIds: respondentId });
+        await executeAllPagesOfExportData({ appletId, respondentIds: respondentId });
 
         Mixpanel.track('Export Data Successful');
       } catch {
@@ -68,21 +69,53 @@ export const DataExportPopup = ({
   const showEnterPwdScreen = !!chosenAppletData && !dataIsExporting && !hasEncryptionCheck;
   const getDecryptedAnswers = useDecryptedActivityData(appletId, encryption);
 
-  const { execute } = useAsync(
-    getExportDataApi,
-    exportDataSucceed({
-      getDecryptedAnswers,
-      callback: () => {
+  const executeAllPagesOfExportData = useCallback(
+    async ({
+      appletId,
+      respondentIds: respondentId,
+    }: {
+      appletId: string;
+      respondentIds?: string;
+    }) => {
+      try {
+        const firstPageResponse = await getExportDataApi({
+          appletId,
+          respondentIds: respondentId,
+        });
+        const { result, count = 0 } = firstPageResponse.data;
+        let allPagesData = result;
+        const pageLimit = getPageAmount(count);
+        if (pageLimit > 1) {
+          const otherPages = await Promise.allSettled(
+            createArrayFromMinToMax(2, pageLimit).map((page) =>
+              getExportDataApi({ appletId, respondentIds: respondentId, page }),
+            ),
+          );
+          allPagesData = otherPages.reduce((acc, pageResponse) => {
+            if (pageResponse.status === 'rejected') return acc;
+            const pageResult = pageResponse.value.data?.result;
+
+            return {
+              ...acc,
+              activities: acc.activities.concat(pageResult.activities),
+              answers: acc.answers.concat(pageResult.answers),
+            };
+          }, allPagesData);
+        }
+
+        await exportDataSucceed({
+          getDecryptedAnswers,
+          callback: () => {
+            setDataIsExporting(false);
+            handlePopupClose();
+          },
+        })(allPagesData);
+      } catch (error) {
+        console.warn(error);
         setDataIsExporting(false);
-        handlePopupClose();
-      },
-    }),
-    (error) => {
-      console.warn(error);
-      setDataIsExporting(false);
-      setActiveModal(Modals.ExportError);
+        setActiveModal(Modals.ExportError);
+      }
     },
-    falseReturnFunc,
     [getDecryptedAnswers],
   );
 

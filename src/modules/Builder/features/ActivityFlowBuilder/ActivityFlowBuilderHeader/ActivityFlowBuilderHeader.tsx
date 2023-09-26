@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { Svg, ButtonWithMenu } from 'shared/components';
-import { StyledHeader } from 'shared/features';
+import { StyledBuilderContainerHeader } from 'shared/features';
 import { falseReturnFunc } from 'shared/utils';
 import { AppletFormValues } from 'modules/Builder/types';
 
@@ -37,7 +37,7 @@ export const ActivityFlowBuilderHeader = ({
 
   return (
     <>
-      <StyledHeader isSticky={isSticky}>
+      <StyledBuilderContainerHeader isSticky={isSticky}>
         {children}
         <StyledButtons>
           <ButtonWithMenu
@@ -64,7 +64,7 @@ export const ActivityFlowBuilderHeader = ({
             {t('clearFlow')}
           </Button>
         </StyledButtons>
-      </StyledHeader>
+      </StyledBuilderContainerHeader>
       {clearFlowModalVisible && (
         <ClearFlowModal
           isOpen={clearFlowModalVisible}

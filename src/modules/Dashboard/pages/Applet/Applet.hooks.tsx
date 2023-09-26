@@ -1,6 +1,6 @@
 import { generatePath, useParams } from 'react-router-dom';
 
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
 
 export const useAppletTabs = () => {

@@ -1,5 +1,5 @@
-import { StyledBodyLarge } from 'shared/styles';
 import i18n from 'i18n';
+import { StyledBodyLarge } from 'shared/styles/styledComponents/Typography';
 
 const { t } = i18n;
 

@@ -9,7 +9,7 @@ import {
   variables,
   StyledTitleSmall,
 } from 'shared/styles';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_150MB, ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 

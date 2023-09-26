@@ -6,7 +6,7 @@ import * as yup from 'yup';
 
 import { getErrorMessage } from 'shared/utils';
 import { transferOwnershipApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyLarge, theme } from 'shared/styles';
 

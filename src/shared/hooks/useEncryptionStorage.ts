@@ -1,5 +1,5 @@
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
-import { auth } from 'modules/Auth';
+import { auth } from 'modules/Auth/state';
 
 const getKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
 

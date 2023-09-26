@@ -5,7 +5,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 
 import { page } from 'resources';
 import { useEncryptionStorage } from 'shared/hooks';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet';
 import { useAppDispatch } from 'redux/store';
 import { StyledLabelMedium, StyledLabelSmall, variables } from 'shared/styles';

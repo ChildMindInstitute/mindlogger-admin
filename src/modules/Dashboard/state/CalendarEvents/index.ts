@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppSelector } from 'redux/store';
+import { useAppSelector } from 'redux/store/hooks';
 
 import { state as initialState } from './CalendarEvents.state';
 import { reducers } from './CalendarEvents.reducer';

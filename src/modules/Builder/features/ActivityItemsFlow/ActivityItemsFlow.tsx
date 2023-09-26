@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 
-import { StyledMaxWidthWrapper, StyledTitleMedium, theme } from 'shared/styles';
+import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { ConditionalLogic } from 'shared/state';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
@@ -54,35 +54,34 @@ export const ActivityItemsFlow = () => {
   const isRemovePopupOpened = itemIndexToDelete !== -1;
 
   return (
-    <StyledMaxWidthWrapper hasParentColumnDirection>
-      <BuilderContainer
-        title={t('activityItemsFlow')}
-        Header={ActivityItemsFlowHeader}
-        headerProps={headerProps}
-      >
-        {flowItems?.length ? (
-          flowItems.map((flowItem: ConditionalLogic, index: number) => (
-            <ItemFlow
-              key={`item-flow-${flowItem.key}`}
-              name={conditionalLogicName}
-              index={index}
-              onRemove={() => handleRemoveItemFlow(index)}
-            />
-          ))
-        ) : (
-          <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
-            {t('activityItemsFlowDescription')}
-          </StyledTitleMedium>
-        )}
-        {isRemovePopupOpened && (
-          <RemoveItemFlowPopup
-            open={isRemovePopupOpened}
-            index={itemIndexToDelete + 1}
-            onClose={handleCloseRemovePopup}
-            onSubmit={handleConfirmRemoveItem}
+    <BuilderContainer
+      title={t('activityItemsFlow')}
+      Header={ActivityItemsFlowHeader}
+      headerProps={headerProps}
+      hasMaxWidth
+    >
+      {flowItems?.length ? (
+        flowItems.map((flowItem: ConditionalLogic, index: number) => (
+          <ItemFlow
+            key={`item-flow-${flowItem.key}`}
+            name={conditionalLogicName}
+            index={index}
+            onRemove={() => handleRemoveItemFlow(index)}
           />
-        )}
-      </BuilderContainer>
-    </StyledMaxWidthWrapper>
+        ))
+      ) : (
+        <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
+          {t('activityItemsFlowDescription')}
+        </StyledTitleMedium>
+      )}
+      {isRemovePopupOpened && (
+        <RemoveItemFlowPopup
+          open={isRemovePopupOpened}
+          index={itemIndexToDelete + 1}
+          onClose={handleCloseRemovePopup}
+          onSubmit={handleConfirmRemoveItem}
+        />
+      )}
+    </BuilderContainer>
   );
 };

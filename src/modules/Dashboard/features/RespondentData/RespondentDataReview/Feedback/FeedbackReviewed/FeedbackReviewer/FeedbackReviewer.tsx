@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getDictionaryText } from 'shared/utils';
-import { Svg } from 'shared/components';
+import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyMedium,
   StyledFlexTopStart,
