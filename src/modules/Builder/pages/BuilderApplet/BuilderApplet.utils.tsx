@@ -231,7 +231,7 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     : {
         generateReport: false,
         reports: [],
-        showScoreSummary: false,
+        showScoreSummary: true,
       };
 
   return {

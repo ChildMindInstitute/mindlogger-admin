@@ -999,7 +999,7 @@
   "showMore": "Afficher plus...",
   "showOnCalendar": "Afficher sur le calendrier",
   "showScoreSummary": "Afficher le résumé des scores",
-  "showScoreSummaryTooltip": "Une fois que le répondant a terminé l'activité, l'écran récapitulatif avec ses résultats de score s'affichera sur la première page du rapport PDF.",
+  "showScoreSummaryTooltip": "Une fois que le répondant a terminé l'activité, l'écran récapitulatif avec ses résultats de score sera affiché dans l'application mobile/web. De plus, il sera affiché sur la première page du rapport PDF, si configuré.",
   "showSubscaleResult": "Afficher le résultat de la sous-échelle",
   "singleSelect": "Sélection simple",
   "singleSelectionHint": "Une liste de choix avec une seule réponse",
