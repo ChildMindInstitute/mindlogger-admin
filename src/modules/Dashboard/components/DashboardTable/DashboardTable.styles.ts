@@ -8,12 +8,18 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
   line-height: ${variables.font.lineHeight.md};
   letter-spacing: ${variables.font.letterSpacing.sm};
 
-  ${({ hasColFixedWidth, width }: { hasColFixedWidth?: boolean; width?: string }) =>
-    hasColFixedWidth &&
-    `
-    display: flex;
-    align-items: center;
-    flex-basis: ${width ?? 'auto'};
-    flex-grow: ${width ? 'unset' : 1};
-  `};
+  ${({ hasColFixedWidth, width }: { hasColFixedWidth?: boolean; width?: string }) => {
+    if (hasColFixedWidth) {
+      return `
+        display: flex;
+        align-items: center;
+        flex-basis: ${width ?? 'auto'};
+        flex-grow: ${width ? 'unset' : 1};
+      `;
+    }
+
+    return `
+      height: 4.8rem;
+    `;
+  }}
 `;
