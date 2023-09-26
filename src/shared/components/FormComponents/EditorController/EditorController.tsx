@@ -12,7 +12,6 @@ import {
   ImageUploadExtension,
   LANGUAGE_BY_DEFAULT,
   MarkExtension,
-  StrikethroughExtension,
   SubscriptExtension,
   SuperscriptExtension,
   TrashExtension,
@@ -28,8 +27,9 @@ import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType, UploadFileError } f
 import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
 import { concatIf } from 'shared/utils/concatIf';
 import { getSanitizedContent } from 'shared/utils/forms';
+import { Svg } from 'shared/components/Svg';
 
-import { StyledMdEditor } from './EditorController.styles';
+import { StyledCenteredIcon, StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
 
 export const EditorController = <T extends FieldValues>({
@@ -116,29 +116,37 @@ export const EditorController = <T extends FieldValues>({
                   fileSizeExceeded={MAX_FILE_SIZE_150MB}
                 />,
                 <UnderlineExtension key="underline-extension" onInsert={onInsert} />,
-                <StrikethroughExtension key="strikethrough-extension" onInsert={onInsert} />,
                 <SubscriptExtension key="subscript-extension" onInsert={onInsert} />,
                 <SuperscriptExtension key="superscript-extension" onInsert={onInsert} />,
                 <OrderedListExtension key="orderedList-extension" onInsert={onInsert} />,
                 <UnorderedListExtension key="unorderedList-extension" onInsert={onInsert} />,
               ]}
+              customIcon={{
+                'strike-through': {
+                  component: () => (
+                    <StyledCenteredIcon>
+                      <Svg id="md-editor-strikeThrough" />
+                    </StyledCenteredIcon>
+                  ),
+                },
+              }}
               toolbars={[
                 'bold',
                 'italic',
                 'title',
                 '-',
                 8, // UnderlineExtension
-                9, // StrikethroughExtension
+                'strikeThrough',
                 0, // MarkExtension
-                10, // SubscriptExtension
-                11, // SuperscriptExtension
+                9, // SubscriptExtension
+                10, // SuperscriptExtension
                 2, // AlignTextExtension: left
                 3, // AlignTextExtension: center
                 4, // AlignTextExtension: right
                 '-',
                 'quote',
-                12, // OrderedListExtension
-                13, // UnorderedListExtension
+                11, // OrderedListExtension
+                12, // UnorderedListExtension
                 'link',
                 'codeRow',
                 'table',
