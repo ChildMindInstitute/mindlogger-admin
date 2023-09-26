@@ -775,6 +775,13 @@
   "passwordRequired": "Mot de passe requis",
   "passwordSpecialChar": "Au moins un caractère spécial doit être inclus.",
   "pendingInvitations": "Invitations en attente",
+  "performanceTasks": {
+    "abTrailsIpad": "Suivis A/B sur iPad",
+    "abTrailsMobile": "Pistes A/B mobiles",
+    "flanker": "Générateur de tâches de temps de réaction simple et de choix",
+    "gyroscope": "Gyroscope CST",
+    "touch": "CST Tactile"
+  },
   "performanceTasksDesc": {
     "abTrails": "Pistes A/B",
     "flanker": "Cette activité contient un élément Flanker. Les horodatages collectés pour un Android ne sont pas aussi précis que pour les appareils iOS.",

@@ -17,6 +17,7 @@ export const ButtonWithMenu = ({
   variant,
   disabled = false,
   menuListWidth,
+  menuProps,
   'data-testid': dataTestid,
 }: ButtonWithMenuProps) => {
   const { t } = useTranslation('app');
@@ -49,6 +50,7 @@ export const ButtonWithMenu = ({
         onClose={handleMenuClose}
         menuItems={menuItems}
         width={menuListWidth}
+        uiType={menuProps?.uiType}
       />
     </>
   );
