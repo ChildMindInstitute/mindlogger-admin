@@ -31,7 +31,7 @@ export const Applet = () => {
 
   if (isForbidden) return noPermissionsComponent;
 
-  const isLoading = appletLoadingStatus !== 'success';
+  const isLoading = appletLoadingStatus === 'loading' || appletLoadingStatus === 'idle';
 
   return (
     <StyledBody>
