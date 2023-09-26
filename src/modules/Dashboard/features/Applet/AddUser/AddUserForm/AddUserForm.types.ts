@@ -1,5 +1,9 @@
+import { AxiosError } from 'axios';
+import { UseFormSetError, FieldValues } from 'react-hook-form';
+
 import { Option } from 'shared/components/FormComponents';
 import { Roles } from 'shared/consts';
+import { ApiError } from 'shared/state';
 
 export type FormValues = {
   firstName: string;
@@ -23,4 +27,9 @@ export type AddUserFormProps = {
 export type WorkspaceInfo = {
   hasManagers: boolean;
   name: string;
+};
+
+export type UseFormError<T extends FieldValues> = {
+  error: AxiosError<ApiError> | null;
+  setError: UseFormSetError<T>;
 };
