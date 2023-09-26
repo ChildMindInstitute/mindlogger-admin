@@ -2,9 +2,11 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import { ApiError } from 'shared/state';
 
+type ErrorData = Error | AxiosError<ApiError> | unknown;
+
 export const isError = (error: unknown): error is Error => error instanceof Error;
 
-export const getErrorData = (error: Error | AxiosError<ApiError> | unknown) => {
+export const getErrorData = (error: ErrorData) => {
   if (isError(error)) {
     if (axios.isAxiosError(error) && error?.response?.data?.result?.length) {
       return error.response?.data?.result[0];
@@ -20,7 +22,7 @@ export const getErrorData = (error: Error | AxiosError<ApiError> | unknown) => {
   return error;
 };
 
-export const getErrorMessage = (error: Error | AxiosError<ApiError> | unknown) => {
+export const getErrorMessage = (error: ErrorData) => {
   const errorData = getErrorData(error);
 
   return errorData?.message ?? String(errorData);
