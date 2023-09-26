@@ -29,7 +29,12 @@ import { concatIf } from 'shared/utils/concatIf';
 import { getSanitizedContent } from 'shared/utils/forms';
 import { Svg } from 'shared/components/Svg';
 
-import { StyledCenteredIcon, StyledMdEditor } from './EditorController.styles';
+import {
+  StyledStrikeThroughIcon,
+  StyledIcon,
+  StyledMdEditor,
+  StyledPageFullscreenIcon,
+} from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
 
 export const EditorController = <T extends FieldValues>({
@@ -122,11 +127,102 @@ export const EditorController = <T extends FieldValues>({
                 <UnorderedListExtension key="unorderedList-extension" onInsert={onInsert} />,
               ]}
               customIcon={{
+                bold: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-bold" />
+                    </StyledIcon>
+                  ),
+                },
+                italic: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-italic" />
+                    </StyledIcon>
+                  ),
+                },
+                title: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-title" />
+                    </StyledIcon>
+                  ),
+                },
                 'strike-through': {
                   component: () => (
-                    <StyledCenteredIcon>
+                    <StyledStrikeThroughIcon>
                       <Svg id="md-editor-strikeThrough" />
-                    </StyledCenteredIcon>
+                    </StyledStrikeThroughIcon>
+                  ),
+                },
+                quote: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-quote" />
+                    </StyledIcon>
+                  ),
+                },
+                link: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-link" />
+                    </StyledIcon>
+                  ),
+                },
+                'code-row': {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-codeRow" />
+                    </StyledIcon>
+                  ),
+                },
+                table: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-table" />
+                    </StyledIcon>
+                  ),
+                },
+                revoke: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-revoke" />
+                    </StyledIcon>
+                  ),
+                },
+                next: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-next" />
+                    </StyledIcon>
+                  ),
+                },
+                catalog: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-catalog" />
+                    </StyledIcon>
+                  ),
+                },
+                preview: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-preview" />
+                    </StyledIcon>
+                  ),
+                },
+                fangda: {
+                  component: () => (
+                    <StyledPageFullscreenIcon>
+                      <Svg id="md-editor-pageFullscreen" />
+                    </StyledPageFullscreenIcon>
+                  ),
+                },
+                coding: {
+                  component: () => (
+                    <StyledIcon>
+                      <Svg id="md-editor-htmlPreview" />
+                    </StyledIcon>
                   ),
                 },
               }}

@@ -68,6 +68,14 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   }
 `;
 
-export const StyledCenteredIcon = styled(StyledFlexAllCenter)`
+export const StyledStrikeThroughIcon = styled(StyledFlexAllCenter)`
   transform: translate(20%, 25%);
+`;
+
+export const StyledIcon = styled(StyledFlexAllCenter)`
+  transform: translate(10%, 15%);
+`;
+
+export const StyledPageFullscreenIcon = styled(StyledFlexAllCenter)`
+  transform: translate(-15%, -10%);
 `;
