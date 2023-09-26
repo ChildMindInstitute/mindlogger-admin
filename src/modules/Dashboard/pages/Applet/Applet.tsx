@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
-import { LinkedTabs } from 'shared/components';
+import { LinkedTabs, Spinner } from 'shared/components';
 import { StyledBody } from 'shared/styles';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
@@ -17,6 +17,7 @@ export const Applet = () => {
   const { appletId } = useParams();
 
   const { result: appletData } = applet.useAppletData() ?? {};
+  const appletLoadingStatus = applet.useResponseStatus();
   const removeAppletData = useRemoveAppletData();
 
   const hiddenHeader = location.pathname.includes('dataviz');
@@ -30,8 +31,11 @@ export const Applet = () => {
 
   if (isForbidden) return noPermissionsComponent;
 
+  const isLoading = appletLoadingStatus === 'loading' || appletLoadingStatus === 'idle';
+
   return (
     <StyledBody>
+      {isLoading && <Spinner />}
       {appletData && <LinkedTabs hiddenHeader={hiddenHeader} tabs={appletTabs} />}
     </StyledBody>
   );

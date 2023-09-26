@@ -21,28 +21,34 @@ export const Managers = () => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
   const [managersData, setManagersData] = useState<ManagersData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: getWorkspaceManagers, isLoading } = useAsync(
+  const { execute: getWorkspaceManagers } = useAsync(
     getWorkspaceManagersApi,
     (response) => {
       setManagersData(response?.data || null);
     },
+    undefined,
+    () => setIsLoading(false),
   );
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    getWorkspaceManagers({
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    setIsLoading(true);
+
+    return getWorkspaceManagers({
       params: {
         ownerId,
         limit: DEFAULT_ROWS_PER_PAGE,
         ...(appletId && { appletId }),
       },
-    }),
-  );
+    });
+  });
 
   const { searchValue, handleSearch, handleReload, ...tableProps } = useTable((args) => {
+    setIsLoading(true);
     const params = {
       ...args,
       params: {
@@ -72,7 +78,9 @@ export const Managers = () => {
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
-  const { execute: handlePinUpdate } = useAsync(updateManagersPinApi, handleReload);
+  const { execute: handlePinUpdate } = useAsync(updateManagersPinApi, handleReload, undefined, () =>
+    setIsLoading(false),
+  );
 
   const actions = {
     removeAccessAction: (user: Manager) => {
@@ -86,6 +94,7 @@ export const Managers = () => {
   };
 
   const handlePinClick = (userId: string) => {
+    setIsLoading(true);
     handlePinUpdate({ ownerId, userId });
   };
 
