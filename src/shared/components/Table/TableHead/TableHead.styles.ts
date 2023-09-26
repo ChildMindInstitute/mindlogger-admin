@@ -1,6 +1,7 @@
 import { styled, TableCell, TableHead } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { theme } from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { UiType } from '../Table.types';
