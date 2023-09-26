@@ -1,7 +1,4 @@
-export enum Languages {
-  EN = 'en',
-  FR = 'fr',
-}
+import { Languages } from 'shared/api';
 
 export type LanguageItem = {
   value: Languages;

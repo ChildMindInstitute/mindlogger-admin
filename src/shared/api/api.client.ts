@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { getBaseUrl, getRequestTokenData, refreshTokenAndReattemptRequest } from './api.utils';
+import { getCommonConfig, getRequestTokenData, refreshTokenAndReattemptRequest } from './api.utils';
 import { ApiResponseCodes, DEFAULT_CONFIG } from './api.const';
 
 export const apiClient = axios.create(DEFAULT_CONFIG);
@@ -8,11 +8,7 @@ export const authApiClient = axios.create(DEFAULT_CONFIG);
 export const authApiClientWithoutRefresh = axios.create(DEFAULT_CONFIG);
 
 [apiClient, authApiClient, authApiClientWithoutRefresh].forEach((client) =>
-  client.interceptors.request.use((config: AxiosRequestConfig) => {
-    config.baseURL = getBaseUrl();
-
-    return config;
-  }),
+  client.interceptors.request.use((config: AxiosRequestConfig) => getCommonConfig(config)),
 );
 
 [authApiClient, authApiClientWithoutRefresh].forEach((client) =>
