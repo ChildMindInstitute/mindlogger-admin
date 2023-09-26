@@ -1,6 +1,6 @@
 import { styled, TableCell, TableHead } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
+import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { UiType } from '../Table.types';
@@ -8,10 +8,18 @@ import { UiType } from '../Table.types';
 const HEAD_ROW_HEIGHT = '5.3rem';
 
 export const StyledTableHead = styled(TableHead, shouldForwardProp)`
-  display: block;
+  ${({ hasColFixedWidth }: { hasColFixedWidth?: boolean; uiType?: UiType }) =>
+    hasColFixedWidth &&
+    `
+    display: block;
+    top: 0;
+    position: sticky;
+    background-color: ${variables.palette.surface};
+    z-index: ${theme.zIndex.fab};
+  `};
 
   .MuiTableCell-root {
-    ${({ uiType }: { uiType?: UiType }) => {
+    ${({ uiType }) => {
       if (uiType === UiType.Secondary || uiType === UiType.Tertiary) {
         return `background-color: ${variables.palette.surface3}`;
       }
@@ -26,12 +34,17 @@ export const StyledTableHead = styled(TableHead, shouldForwardProp)`
 `;
 
 export const StyledTableCell = styled(TableCell, shouldForwardProp)`
-  top: ${({ uiType }: { uiType?: UiType; width?: string }) =>
+  top: ${({ uiType }: { uiType?: UiType; width?: string; hasColFixedWidth?: boolean }) =>
     uiType === UiType.Secondary || uiType === UiType.Tertiary ? 0 : HEAD_ROW_HEIGHT};
-  display: flex;
-  align-items: center;
-  flex-basis: ${({ width }) => width};
-  flex-grow: ${({ width }) => (width ? 'unset' : 1)};
+
+  ${({ hasColFixedWidth, width }) =>
+    hasColFixedWidth &&
+    `
+    display: flex;
+    align-items: center;
+    flex-basis: ${width ?? 'auto'};
+    flex-grow: ${width ? 'unset' : 1};
+  `};
 
   &.MuiTableCell-head {
     ${({ uiType }) =>

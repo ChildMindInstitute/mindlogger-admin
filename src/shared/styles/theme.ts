@@ -163,7 +163,7 @@ export const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          height: '4.8rem',
+          minHeight: '4.8rem',
           padding: '0 1.2rem',
           fontSize: variables.font.size.sm,
           lineHeight: variables.font.lineHeight.sm,

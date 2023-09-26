@@ -61,13 +61,14 @@ export const AppletsTable = ({
   return (
     <StyledTableContainer>
       {!!rows?.length && (
-        <MuiTable stickyHeader data-testid={dataTestid}>
+        <MuiTable data-testid={dataTestid}>
           <TableHead
             headCells={columns}
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             tableHeader={tableHeader}
+            hasColFixedWidth
           />
           <TableBody>
             {rows.map((row, index) => (

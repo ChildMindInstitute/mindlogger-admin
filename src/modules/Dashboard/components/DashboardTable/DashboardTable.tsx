@@ -27,6 +27,7 @@ export const DashboardTable = ({
   handleRequestSort,
   handleChangePage,
   count,
+  hasColFixedWidth,
   rowsPerPage = DEFAULT_ROWS_PER_PAGE,
   'data-testid': dataTestid,
 }: DashboardTableProps) => {
@@ -47,7 +48,12 @@ export const DashboardTable = ({
 
   return (
     <>
-      <StyledTableContainer className={className} maxHeight={maxHeight} uiType={uiType}>
+      <StyledTableContainer
+        className={className}
+        maxHeight={maxHeight}
+        uiType={uiType}
+        hasColFixedWidth={hasColFixedWidth}
+      >
         {!!rows?.length && (
           <MuiTable stickyHeader data-testid={dataTestid}>
             <TableHead
@@ -57,6 +63,7 @@ export const DashboardTable = ({
               onRequestSort={handleRequestSort}
               tableHeader={tableHeader}
               uiType={uiType}
+              hasColFixedWidth={hasColFixedWidth}
             />
             <TableBody>
               {rows.map((row, index) => (
@@ -72,6 +79,7 @@ export const DashboardTable = ({
                       key={key}
                       align={row[key].align}
                       width={row[key].width}
+                      hasColFixedWidth={hasColFixedWidth}
                     >
                       {row[key].content(row, hoveredRowIndex === index)}
                     </StyledTableCell>

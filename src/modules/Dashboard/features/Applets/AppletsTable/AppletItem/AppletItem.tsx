@@ -26,6 +26,7 @@ import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/A
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
+import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.const';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
 import { StyledTableCell } from '../AppletsTable.styles';
@@ -191,7 +192,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         onMouseEnter={() => setHasVisibleActions(true)}
         onMouseLeave={() => setHasVisibleActions(false)}
       >
-        <StyledTableCell width="40rem" onClick={handleAppletClick}>
+        <StyledTableCell width={AppletsColumnsWidth.AppletName} onClick={handleAppletClick}>
           <StyledAppletName applet={item}>
             {item.parentId && (
               <StyledPinContainer>
@@ -208,7 +209,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             <StyledBodyMedium sx={{ ml: theme.spacing(1.2) }}>{item.displayName}</StyledBodyMedium>
           </StyledAppletName>
         </StyledTableCell>
-        <StyledTableCell width="20rem" onClick={handleAppletClick}>
+        <StyledTableCell width={AppletsColumnsWidth.LastEdit} onClick={handleAppletClick}>
           <StyledBodyMedium>
             {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
           </StyledBodyMedium>
