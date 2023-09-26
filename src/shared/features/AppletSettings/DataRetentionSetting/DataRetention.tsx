@@ -18,6 +18,7 @@ import {
   retentionTypes,
   DEFAULT_RETENTION_TYPE,
   DEFAULT_RETENTION_PERIOD,
+  PREVENTED_CODES,
 } from './DataRetention.const';
 import { dataRetentionSchema } from './DataRetention.schema';
 import { StyledButton, StyledContainer, StyledInputWrapper } from './DataRetention.styles';
@@ -95,8 +96,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
 
   const handlePeriodKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     // Prevent the dot/comma key from being entered
-    const preventedCodes = ['NumpadDecimal', 'Period', 'Comma'];
-    if (preventedCodes.includes(event.code)) {
+    if (PREVENTED_CODES.includes(event.code)) {
       event.preventDefault();
     }
   };
