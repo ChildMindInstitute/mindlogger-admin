@@ -8,11 +8,7 @@ export const authApiClient = axios.create(DEFAULT_CONFIG);
 export const authApiClientWithoutRefresh = axios.create(DEFAULT_CONFIG);
 
 [apiClient, authApiClient, authApiClientWithoutRefresh].forEach((client) =>
-  client.interceptors.request.use((config: AxiosRequestConfig) => {
-    getCommonConfig(config);
-
-    return config;
-  }),
+  client.interceptors.request.use((config: AxiosRequestConfig) => getCommonConfig(config)),
 );
 
 [authApiClient, authApiClientWithoutRefresh].forEach((client) =>
