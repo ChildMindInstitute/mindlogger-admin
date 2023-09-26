@@ -3,7 +3,6 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
-import { useBreadcrumbs } from 'shared/hooks';
 import { StyledContainer } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
@@ -42,7 +41,6 @@ export const ActivityItems = () => {
   const [itemIdToDelete, setItemIdToDelete] = useState('');
   const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
-  useBreadcrumbs();
   useActivitiesRedirection();
 
   useEffect(() => {

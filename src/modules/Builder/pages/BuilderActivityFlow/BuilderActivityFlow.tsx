@@ -4,7 +4,6 @@ import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
 import { StyledDirectoryUpButton, StyledBody } from 'shared/styles/styledComponents';
 import { LinkedTabs, Svg } from 'shared/components';
-import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 
 import { getActivityFlowTabs } from './BuilderActivityFlow.utils';
@@ -14,7 +13,6 @@ export const BuilderActivityFlow = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { trigger } = useFormContext();
-  useBreadcrumbs();
 
   const appletActivityFlowUrl = generatePath(page.builderAppletActivityFlow, { appletId });
 

@@ -8,7 +8,6 @@ export const enum Path {
   Dashboard = 'dashboard',
   Builder = 'builder',
   NewApplet = 'new-applet',
-  NewActivityFlow = 'new-activity-flow',
   About = 'about',
   Activities = 'activities',
   Items = 'items',
@@ -116,6 +115,13 @@ export const checkCurrentPerformanceTaskPage = (url: string) => ({
   [PerformanceTasks.Touch]: new RegExp(
     `${getAppletPerformanceActivityPageRegexp(Path.Touch)}`,
   ).test(url),
+});
+
+export const checkCurrentAppletPage = (url: string) => ({
+  isAbout: new RegExp(`${getAppletPageRegexp(Path.About)}`).test(url),
+  isActivities: new RegExp(`${getAppletPageRegexp(Path.Activities)}`).test(url),
+  isActivityFlow: new RegExp(`${getAppletPageRegexp(Path.ActivityFlow)}`).test(url),
+  isAppletSettings: new RegExp(`${getAppletPageRegexp(Path.Settings)}`).test(url),
 });
 
 export const checkCurrentActivityPage = (url: string) => ({

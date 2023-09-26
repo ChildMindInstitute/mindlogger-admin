@@ -4,14 +4,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
-import {
-  useTimeAgo,
-  useBreadcrumbs,
-  useTable,
-  useAsync,
-  usePermissions,
-  useEncryptionStorage,
-} from 'shared/hooks';
+import { useTimeAgo, useTable, useAsync, usePermissions, useEncryptionStorage } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
 import { page } from 'resources';
@@ -47,7 +40,6 @@ export const Respondents = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
-  useBreadcrumbs();
 
   const [respondentsData, setRespondentsData] = useState<RespondentsData | null>(null);
 

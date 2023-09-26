@@ -1,7 +1,6 @@
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import { breadcrumbs } from 'redux/modules';
 import {
   StyledLabelSmall,
   StyledLabelMedium,
@@ -18,9 +17,10 @@ import {
   StyledChip,
 } from './Breadcrumbs.styles';
 import { BREADCRUMB_ICON_SIZE } from './Breadcrumbs.const';
+import { useBreadcrumbs } from './Breadcrumbs.hooks';
 
 export const Breadcrumbs = () => {
-  const breadcrumbsData = breadcrumbs.useData();
+  const breadcrumbsData = useBreadcrumbs();
 
   const getBreadcrumbIcon = (icon: string, label: string, hasUrl = false) => {
     const iconComponent = hasUrl ? (

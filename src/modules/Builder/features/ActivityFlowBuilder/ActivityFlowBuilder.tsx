@@ -8,7 +8,6 @@ import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautifu
 
 import { Menu } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
-import { useBreadcrumbs } from 'shared/hooks';
 import { getObjectFromList } from 'shared/utils';
 import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
@@ -92,7 +91,6 @@ export const ActivityFlowBuilder = () => {
 
   const activitiesIdsObjects = getObjectFromList(activities);
 
-  useBreadcrumbs();
   useActivityFlowsRedirection();
 
   return (
