@@ -18,9 +18,10 @@ export const useFormError = <T extends FieldValues>({
     if (!error) return setHasCommonError(false);
 
     const errorData = getErrorData(error);
-    const fieldName = errorData?.path?.at?.(-1) as keyof typeof Fields;
+    const fieldName = errorData?.path?.at?.(-1);
 
-    if (!fieldName || (fieldName && !Fields[fieldName])) return setHasCommonError(true);
+    if (!fieldName || (fieldName && !Fields[fieldName as keyof typeof Fields]))
+      return setHasCommonError(true);
 
     setError(fieldName, { message: getErrorMessage(error) });
   }, [error]);
