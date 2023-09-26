@@ -38,14 +38,20 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
   top: ${({ uiType }: { uiType?: UiType; width?: string; hasColFixedWidth?: boolean }) =>
     uiType === UiType.Secondary || uiType === UiType.Tertiary ? 0 : HEAD_ROW_HEIGHT};
 
-  ${({ hasColFixedWidth, width }) =>
-    hasColFixedWidth &&
-    `
-    display: flex;
-    align-items: center;
-    flex-basis: ${width ?? 'auto'};
-    flex-grow: ${width ? 'unset' : 1};
-  `};
+  ${({ hasColFixedWidth, width }) => {
+    if (hasColFixedWidth) {
+      return `
+        display: flex;
+        align-items: center;
+        flex-basis: ${width ?? 'auto'};
+        flex-grow: ${width ? 'unset' : 1};
+      `;
+    }
+
+    return `
+      height: 4.8rem;
+    `;
+  }};
 
   &.MuiTableCell-head {
     ${({ uiType }) =>
