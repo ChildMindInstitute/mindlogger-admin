@@ -60,7 +60,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       }
     },
     () => {
-      setPasswordModalVisible(false);
       setErrorModalVisible(true);
     },
   );
