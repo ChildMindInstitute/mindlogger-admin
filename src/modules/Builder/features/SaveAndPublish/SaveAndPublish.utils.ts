@@ -117,7 +117,11 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
 };
 
-const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition | Condition)[]) =>
+const getConditions = (
+  items: ItemFormValues[],
+  conditions?: (SectionCondition | Condition)[],
+  score?: ScoreReport,
+) =>
   conditions?.map((condition) => {
     const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
 
@@ -126,13 +130,46 @@ const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition |
       payload: relatedItem
         ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
         : condition['payload'],
-      itemName: relatedItem?.name ?? condition.itemName,
+      itemName: relatedItem?.name ?? score?.id ?? condition.itemName,
+    };
+  });
+
+const findRelatedScore = (entityKey: string, scores?: ScoreReport[]) => {
+  if (!scores) return;
+
+  const relatedScore = scores.find((score) => getEntityKey(score, false) === entityKey);
+
+  if (relatedScore) return relatedScore;
+
+  const relatedScoreConditional = scores?.flatMap((score) => score.conditionalLogic);
+
+  return relatedScoreConditional?.find(
+    (conditional) => conditional && getEntityKey(conditional, false) === entityKey,
+  );
+};
+
+const getSectionConditions = (
+  items: ItemFormValues[],
+  conditions?: SectionCondition[],
+  scores?: ScoreReport[],
+) =>
+  conditions?.map((condition) => {
+    const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
+    const relatedScore = findRelatedScore(condition.itemName, scores);
+
+    return {
+      type: condition.type,
+      payload: relatedItem
+        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
+        : condition['payload'],
+      itemName: relatedItem?.name ?? relatedScore?.id ?? condition.itemName,
     };
   });
 
 const removeReportsFields = () => ({
   printItems: undefined,
   showMessage: undefined,
+  key: undefined,
   ...removeReactHookFormKey(),
 });
 
@@ -142,18 +179,22 @@ const getScore = (score: ScoreReport, items: ActivityFormValues['items']) => ({
   conditionalLogic: score.conditionalLogic?.map((conditional) => ({
     ...conditional,
     ...removeReportsFields(),
-    conditions: getConditions(items, conditional.conditions),
+    conditions: getConditions(items, conditional.conditions, score),
   })),
 });
 
-const getSection = (section: SectionReport, items: ActivityFormValues['items']) => ({
+const getSection = (
+  section: SectionReport,
+  items: ActivityFormValues['items'],
+  scores?: ScoreReport[],
+) => ({
   ...section,
   ...removeReportsFields(),
   id: undefined,
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
       ...section.conditionalLogic,
-      conditions: getConditions(items, section?.conditionalLogic?.conditions),
+      conditions: getSectionConditions(items, section?.conditionalLogic?.conditions, scores),
       ...removeReactHookFormKey(),
     },
   }),
@@ -165,9 +206,10 @@ export const getScoresAndReports = (activity: ActivityFormValues) => {
 
   const { reports: initialReports } = scoresAndReports;
 
+  const scores = initialReports?.filter((report) => report.type === ScoreReportType.Score);
   const reports = initialReports?.map((report) => {
     if (report.type === ScoreReportType.Section) {
-      return getSection(report as SectionReport, items);
+      return getSection(report as SectionReport, items, scores as ScoreReport[]);
     }
 
     return getScore(report as ScoreReport, items);

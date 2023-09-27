@@ -106,16 +106,16 @@ export const getScoreRange = (itemsScore: ItemFormValues[], calculationType: Cal
   }
 };
 
-export const getDefaultConditionalValue = (scoreId: string) => ({
+export const getDefaultConditionalValue = (id: string, key: string) => ({
   name: '',
-  id: scoreId,
+  id,
   showMessage: true,
   flagScore: false,
   message: undefined,
   printItems: false,
   itemsPrint: [],
   match: ConditionalLogicMatch.All,
-  conditions: [{ itemName: scoreId, type: '' }],
+  conditions: [{ itemName: key, type: '' }],
 });
 
 const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>

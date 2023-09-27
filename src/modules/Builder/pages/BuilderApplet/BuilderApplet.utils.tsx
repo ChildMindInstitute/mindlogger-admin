@@ -648,7 +648,7 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
-const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
+const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?: string) =>
   conditions?.map((condition) => {
     const { itemName, type } = condition;
     const relatedItem = items?.find((item) => item.name === itemName);
@@ -660,7 +660,36 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
     return {
       ...condition,
       payload,
-      itemName: relatedItem ? getEntityKey(relatedItem) : condition.itemName,
+      itemName: relatedItem ? getEntityKey(relatedItem) : scoreName ?? condition.itemName,
+    };
+  });
+
+const findRelatedScore = (itemName: string, scores?: ScoreReport[]) => {
+  if (!scores) return;
+
+  const relatedScore = scores.find((score) => score.id === itemName);
+
+  if (relatedScore) return relatedScore;
+
+  const relatedScoreConditional = scores?.flatMap((score) => score.conditionalLogic);
+
+  return relatedScoreConditional?.find((conditional) => conditional && conditional.id === itemName);
+};
+
+const getSectionConditions = (items?: Item[], conditions?: Condition[], scores?: ScoreReport[]) =>
+  conditions?.map((condition) => {
+    const { itemName, type } = condition;
+    const relatedItem = items?.find((item) => item.name === itemName);
+    const relatedScore = findRelatedScore(itemName, scores);
+    const payload =
+      type === ScoreConditionType
+        ? { value: String((condition as ScoreCondition).payload?.value) }
+        : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
+
+    return {
+      ...condition,
+      payload,
+      itemName: relatedItem ? getEntityKey(relatedItem) : getEntityKey(relatedScore ?? {}, false),
     };
   });
 
@@ -669,24 +698,30 @@ const getShowMessageAndPrintItems = (message?: string, itemsPrint?: string[]) =>
   printItems: !!itemsPrint?.length,
 });
 
-const getScore = (score: ScoreReport, items: Activity['items']) => ({
-  ...score,
-  ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
-  conditionalLogic: score.conditionalLogic?.map((conditional) => ({
-    ...conditional,
-    ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
-    conditions: getScoreConditions(items, conditional.conditions),
-  })),
-});
+const getScore = (score: ScoreReport, items: Activity['items']) => {
+  const scoreKey = uuidv4();
 
-const getSection = (section: SectionReport, items: Activity['items']) => ({
+  return {
+    ...score,
+    key: scoreKey,
+    ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
+    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+      ...conditional,
+      key: uuidv4(),
+      ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
+      conditions: getScoreConditions(items, conditional.conditions, scoreKey),
+    })),
+  };
+};
+
+const getSection = (section: SectionReport, items: Activity['items'], scores: ScoreReport[]) => ({
   ...section,
   id: uuidv4(),
   ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
       ...section.conditionalLogic,
-      conditions: getScoreConditions(items, section?.conditionalLogic?.conditions),
+      conditions: getSectionConditions(items, section?.conditionalLogic?.conditions, scores),
     },
   }),
 });
@@ -696,12 +731,16 @@ const getScoresAndReports = (activity: Activity) => {
   if (!scoresAndReports) return;
 
   const { reports: initialReports } = scoresAndReports;
-  const reports = initialReports?.map((report) => {
-    if (report.type === ScoreReportType.Section) {
-      return getSection(report as SectionReport, items);
-    }
+  const reportsWithMappedScores = initialReports?.map((report) => {
+    if (report.type === ScoreReportType.Section) return report;
 
     return getScore(report as ScoreReport, items);
+  });
+  const scores = reportsWithMappedScores?.filter((report) => report.type === ScoreReportType.Score);
+  const reports = reportsWithMappedScores?.map((report) => {
+    if (report.type === ScoreReportType.Score) return report;
+
+    return getSection(report as SectionReport, items, scores as ScoreReport[]);
   });
 
   return {
