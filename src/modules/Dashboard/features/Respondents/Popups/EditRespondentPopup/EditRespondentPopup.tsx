@@ -16,10 +16,8 @@ import { StyledController } from './EditRespondentsPopup.styles';
 
 export const EditRespondentPopup = ({
   popupVisible,
-  setPopupVisible,
+  onClose,
   chosenAppletData,
-  setChosenAppletData,
-  reFetchRespondents,
 }: EditRespondentPopupProps) => {
   const { t } = useTranslation('app');
 
@@ -41,12 +39,6 @@ export const EditRespondentPopup = ({
       setIsServerErrorVisible(true);
     },
   );
-
-  const handlePopupClose = () => {
-    setChosenAppletData(null);
-    setPopupVisible(false);
-    reFetchRespondents();
-  };
 
   const submitForm = () => {
     if (!chosenAppletData) return;
@@ -80,12 +72,12 @@ export const EditRespondentPopup = ({
   return (
     <Modal
       open={popupVisible}
-      onClose={handlePopupClose}
-      onSubmit={isSuccessVisible ? handlePopupClose : handleSubmit(submitForm)}
+      onClose={onClose}
+      onSubmit={isSuccessVisible ? onClose : handleSubmit(submitForm)}
       title={t('editRespondent')}
       buttonText={t(isSuccessVisible ? 'ok' : 'save')}
       hasSecondBtn={!isSuccessVisible}
-      onSecondBtnSubmit={handlePopupClose}
+      onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
       data-testid={dataTestid}
     >

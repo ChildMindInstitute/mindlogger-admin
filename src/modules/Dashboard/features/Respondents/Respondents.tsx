@@ -139,6 +139,12 @@ export const Respondents = () => {
     updateRespondentsPin({ ownerId, userId });
   };
 
+  const editRespondentOnClose = () => {
+    setEditRespondentPopupVisible(false);
+    setChosenAppletData(null);
+    handleReload();
+  };
+
   const formatRow = (user: Respondent): Row => {
     const { secretIds, nicknames, lastSeen, id, details, isPinned, isAnonymousRespondent } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
@@ -340,10 +346,8 @@ export const Respondents = () => {
       {editRespondentPopupVisible && (
         <EditRespondentPopup
           popupVisible={editRespondentPopupVisible}
-          setPopupVisible={setEditRespondentPopupVisible}
+          onClose={editRespondentOnClose}
           chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-          reFetchRespondents={handleReload}
         />
       )}
     </StyledBody>

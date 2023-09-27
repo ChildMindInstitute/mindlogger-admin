@@ -33,7 +33,7 @@ export const useAsync = <T, K>(
           setError(error);
           errorCallback && errorCallback(error);
 
-          throw error.response;
+          return error;
         })
         .finally(() => {
           setIsLoading(false);
