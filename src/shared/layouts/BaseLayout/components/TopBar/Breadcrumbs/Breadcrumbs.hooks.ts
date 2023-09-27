@@ -94,6 +94,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     if (appletId && (isDashboard || isBuilder)) {
       newBreadcrumbs.push({
         icon: appletData?.image || '',
+        useCustomIcon: true,
         label: appletLabel,
         chip: isBuilder ? t('editing') : undefined,
         navPath: generatePath(isDashboard ? page.appletRespondents : page.builderApplet, {
@@ -137,7 +138,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
     if (pathname.includes('dataviz')) {
       newBreadcrumbs.push({
-        icon: '',
         label: t('viewData'),
         disabledLink: true,
       });
@@ -210,7 +210,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         checkCurrentActivityPage(pathname);
 
       newBreadcrumbs.push(activitiesBreadcrumb, {
-        icon: '',
+        icon: 'checklist-outlined',
         label: activityLabel!,
         navPath: generatePath(page.builderAppletActivity, { appletId, activityId }),
       });
@@ -230,7 +230,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       newBreadcrumbs.push(
         activitiesBreadcrumb,
         {
-          icon: '',
           label: performanceTaskLabel || '',
           disabledLink: true,
         },
@@ -253,7 +252,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           }),
         },
         {
-          icon: '',
           label: activityFlowLabel!,
           navPath: generatePath(page.builderAppletActivityFlowItem, { appletId, activityFlowId }),
         },
