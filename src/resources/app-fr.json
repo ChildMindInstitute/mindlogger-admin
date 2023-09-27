@@ -1202,5 +1202,6 @@
   "youNeedToAuthorizeHint": "Pour créer une nouvelle applet ou la fusionner avec d'autres, vous devez autoriser.",
   "appletNotFoundPopupTitle": "Applet introuvable",
   "appletNotFoundPopupText": "Applet introuvable ; elle a peut-être été supprimée. Pour actualiser les données, veuillez cliquer sur le bouton ci-dessous.",
+  "footerText": "MindLogger est un produit de",
   "refresh": "Actualiser"
 }
