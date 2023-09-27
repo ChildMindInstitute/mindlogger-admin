@@ -136,6 +136,8 @@ export type DecryptedTimeAnswer = AdditionalTextType & {
   value: {
     hours: number;
     minutes: number;
+    hour?: number;
+    minute?: number;
   };
 };
 

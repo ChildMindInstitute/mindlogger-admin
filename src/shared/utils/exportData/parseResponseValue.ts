@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import {
   AdditionalEdited,
@@ -86,8 +87,10 @@ export const parseResponseValueRaw = <
         (value as DecryptedDateAnswer['value'])?.month
       }/${(value as DecryptedDateAnswer['value'])?.year}`;
     case ItemResponseType.Time:
-      return `time: hr ${(value as DecryptedTimeAnswer['value'])?.hours}, min ${
-        (value as DecryptedTimeAnswer['value'])?.minutes
+      const timeValue = value as DecryptedTimeAnswer['value'];
+
+      return `time: hr ${timeValue?.hours || timeValue?.hour}, min ${
+        timeValue?.minutes || timeValue?.minute
       }`;
     case ItemResponseType.Geolocation:
       return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${
