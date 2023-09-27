@@ -213,7 +213,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     },
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
-      groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      groupOptions: [ItemConfigurationSettings.HasAlerts],
       collapsedByDefault: true,
     },
   ],
@@ -232,7 +232,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     },
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
-      groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      groupOptions: [ItemConfigurationSettings.HasAlerts],
       collapsedByDefault: true,
     },
   ],
@@ -247,7 +247,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     },
     {
       groupName: ItemSettingsGroupNames.ScoresAndAlerts,
-      groupOptions: [ItemConfigurationSettings.HasScores, ItemConfigurationSettings.HasAlerts],
+      groupOptions: [ItemConfigurationSettings.HasAlerts],
       collapsedByDefault: true,
     },
   ],
