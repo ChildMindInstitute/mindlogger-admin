@@ -85,10 +85,13 @@ export const parseResponseValueRaw = <
       return `date: ${(value as DecryptedDateAnswer['value'])?.day}/${
         (value as DecryptedDateAnswer['value'])?.month
       }/${(value as DecryptedDateAnswer['value'])?.year}`;
-    case ItemResponseType.Time:
-      return `time: hr ${(value as DecryptedTimeAnswer['value'])?.hours}, min ${
-        (value as DecryptedTimeAnswer['value'])?.minutes
+    case ItemResponseType.Time: {
+      const timeValue = value as DecryptedTimeAnswer['value'];
+
+      return `time: hr ${timeValue?.hours || timeValue?.hour}, min ${
+        timeValue?.minutes || timeValue?.minute
       }`;
+    }
     case ItemResponseType.Geolocation:
       return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${
         (value as DecryptedGeolocationAnswer['value'])?.longitude
