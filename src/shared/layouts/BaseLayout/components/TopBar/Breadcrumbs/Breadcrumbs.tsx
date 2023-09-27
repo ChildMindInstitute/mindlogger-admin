@@ -18,23 +18,25 @@ import {
 } from './Breadcrumbs.styles';
 import { BREADCRUMB_ICON_SIZE } from './Breadcrumbs.const';
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
+import { Breadcrumb } from './Breadcrumbs.types';
 
 export const Breadcrumbs = () => {
   const breadcrumbsData = useBreadcrumbs();
 
-  const getBreadcrumbIcon = (icon: string, label: string, hasUrl = false) => {
-    const iconComponent = hasUrl ? (
+  const getIconComponent = (icon: string, hasUrl?: boolean) =>
+    hasUrl ? (
       <StyledIconImg src={icon} alt="Icon" />
     ) : (
       <Svg id={icon} width={BREADCRUMB_ICON_SIZE} height={BREADCRUMB_ICON_SIZE} />
     );
 
-    if (!icon && !label) return null;
+  const getBreadcrumbIcon = ({ icon, useCustomIcon, label, hasUrl }: Breadcrumb) => {
+    if (!icon && !useCustomIcon) return null;
 
     return (
       <StyledIconWrapper>
         {icon ? (
-          iconComponent
+          getIconComponent(icon, hasUrl)
         ) : (
           <StyledPlaceholder>
             <StyledLabelSmall color={variables.palette.on_surface}>
@@ -48,31 +50,34 @@ export const Breadcrumbs = () => {
 
   return (
     <MuiBreadcrumbs separator={<Svg id="separator" width="8" height="12" />}>
-      {breadcrumbsData?.map(({ icon, label, chip, navPath, disabledLink, hasUrl, key }, index) =>
-        index === breadcrumbsData.length - 1 || disabledLink ? (
-          <StyledBox key={key}>
-            {getBreadcrumbIcon(icon, label, hasUrl)}
-            {disabledLink ? (
+      {breadcrumbsData?.map(
+        ({ icon, useCustomIcon, label, chip, navPath, disabledLink, hasUrl, key }, index) =>
+          index === breadcrumbsData.length - 1 || disabledLink ? (
+            <StyledBox key={key}>
+              {getBreadcrumbIcon({ icon, useCustomIcon, label, hasUrl })}
+              {disabledLink ? (
+                <StyledBodySmall color={variables.palette.on_surface_variant}>
+                  {label}
+                </StyledBodySmall>
+              ) : (
+                <StyledLabelMedium color={variables.palette.on_surface}>{label}</StyledLabelMedium>
+              )}
+            </StyledBox>
+          ) : (
+            <StyledLink key={key} to={navPath || ''}>
+              {getBreadcrumbIcon({ icon, useCustomIcon, label, hasUrl })}
               <StyledBodySmall color={variables.palette.on_surface_variant}>
                 {label}
               </StyledBodySmall>
-            ) : (
-              <StyledLabelMedium color={variables.palette.on_surface}>{label}</StyledLabelMedium>
-            )}
-          </StyledBox>
-        ) : (
-          <StyledLink key={key} to={navPath || ''}>
-            {getBreadcrumbIcon(icon, label, hasUrl)}
-            <StyledBodySmall color={variables.palette.on_surface_variant}>{label}</StyledBodySmall>
-            {chip && (
-              <StyledChip>
-                <StyledBodySmall color={variables.palette.on_surface_variant}>
-                  {chip}
-                </StyledBodySmall>
-              </StyledChip>
-            )}
-          </StyledLink>
-        ),
+              {chip && (
+                <StyledChip>
+                  <StyledBodySmall color={variables.palette.on_surface_variant}>
+                    {chip}
+                  </StyledBodySmall>
+                </StyledChip>
+              )}
+            </StyledLink>
+          ),
       )}
     </MuiBreadcrumbs>
   );
