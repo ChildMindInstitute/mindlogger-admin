@@ -286,10 +286,6 @@ export type Identifier = {
   userPublicKey: string;
 };
 
-export type AppletUniqueName = {
-  name: string;
-};
-
 export type NoteId = { noteId: string };
 
 export type Note = { note: string };

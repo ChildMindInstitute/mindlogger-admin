@@ -19,7 +19,6 @@ import {
   CreateEventType,
   OwnerId,
   Answers,
-  AppletUniqueName,
   GetAnswersNotesParams,
   NoteId,
   Note,
@@ -257,15 +256,6 @@ export const duplicateAppletApi = ({ appletId, options }: DuplicateApplet, signa
   authApiClient.post(
     `/applets/${appletId}/duplicate`,
     { ...options },
-    {
-      signal,
-    },
-  );
-
-export const getAppletUniqueNameApi = ({ name }: AppletUniqueName, signal?: AbortSignal) =>
-  authApiClient.post(
-    '/applets/unique_name',
-    { name },
     {
       signal,
     },

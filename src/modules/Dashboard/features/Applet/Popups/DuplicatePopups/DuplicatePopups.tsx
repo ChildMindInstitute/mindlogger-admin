@@ -5,14 +5,14 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Encryption, getEncryptionToServer } from 'shared/utils';
-import { Modal } from 'shared/components';
+import { Modal, Spinner } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledModalWrapper, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { popups, applet, auth } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
+import { ApiResponseCodes, duplicateAppletApi, getAppletUniqueNameApi } from 'api';
 
 import {
   AppletPasswordPopupType,
@@ -29,6 +29,8 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   const { duplicatePopupsVisible, applet: appletData } = popups.useData();
   const { result } = applet.useAppletData() || {};
   const currentApplet = appletData || result;
+  const currentAppletName = currentApplet?.displayName ?? '';
+  const currentAppletId = currentApplet?.id ?? '';
   const encryptionDataRef = useRef<{
     encryption?: Encryption;
     password?: string;
@@ -45,21 +47,51 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         name: yup.string().required(t('nameRequired')!),
       }),
     ),
-    defaultValues: { name: '' },
+    defaultValues: { name: '', nameFromApi: '' },
   });
 
-  const { execute: executeDuplicate } = useAsync(
+  const { execute: executeGetName, isLoading: isGetNameLoading } = useAsync(
+    getAppletUniqueNameApi,
+    (res) => {
+      if (res?.data?.result) {
+        const nameFromApi = res.data.result.name ?? '';
+        setValue('name', nameFromApi);
+        setValue('nameFromApi', nameFromApi);
+      }
+    },
+    () => {
+      setPasswordModalVisible(false);
+      setErrorModalVisible(true);
+    },
+  );
+
+  const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
     () => {
       setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
         encryption: encryptionDataRef.current.encryption!,
-        appletId: currentApplet?.id as string,
+        appletId: currentAppletId,
       });
       setPasswordModalVisible(false);
       setSuccessModalVisible(true);
     },
-    () => {
+    (error) => {
+      const { status, data } = error.response || {};
+      if (
+        status === ApiResponseCodes.BadRequest &&
+        data?.result?.[0]?.message === 'Applet already exists.'
+      ) {
+        return (async () => {
+          await executeDuplicate({
+            appletId: currentAppletId,
+            options: {
+              encryption: encryptionDataRef.current.encryption!,
+              displayName: getValues('nameFromApi'),
+            },
+          });
+        })();
+      }
       setPasswordModalVisible(false);
       setErrorModalVisible(true);
     },
@@ -67,10 +99,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       encryptionDataRef.current = {};
     },
   );
-
-  const { execute: executeGetName } = useAsync(getAppletUniqueNameApi, (res) => {
-    res?.data?.result && setValue('name', res.data.result.name);
-  });
 
   const duplicatePopupsClose = () =>
     dispatch(
@@ -110,10 +138,10 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       password,
     };
     executeDuplicate({
-      appletId: currentApplet?.id as string,
+      appletId: currentAppletId,
       options: {
         encryption,
-        displayName: getValues().name,
+        displayName: getValues('name'),
       },
     });
   };
@@ -129,14 +157,16 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   };
 
   useEffect(() => {
-    if (duplicatePopupsVisible) {
-      executeGetName({ name: currentApplet?.displayName || '' });
+    if (!duplicatePopupsVisible) return;
+    (async () => {
+      await executeGetName({ name: currentAppletName });
       setNameModalVisible(true);
-    }
+    })();
   }, [duplicatePopupsVisible]);
 
   return (
     <>
+      {isGetNameLoading && <Spinner />}
       <Modal
         open={nameModalVisible}
         onClose={nameModalClose}
@@ -159,11 +189,12 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       </Modal>
       {passwordModalVisible && (
         <AppletPasswordPopup
-          appletId={currentApplet?.id ?? ''}
+          appletId={currentAppletId}
           onClose={passwordModalClose}
           popupType={AppletPasswordPopupType.Create}
           popupVisible={passwordModalVisible}
           submitCallback={submitCallback}
+          isLoading={isDuplicateLoading}
           data-testid="dashboard-applets-duplicate-popup-password-popup"
         />
       )}
@@ -180,7 +211,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
             <Trans i18nKey="successDuplication">
               Applet
               <strong>
-                <>{{ appletName: currentApplet?.displayName }}</>
+                <>{{ appletName: currentAppletName }}</>
               </strong>
               has been duplicated successfully.
             </Trans>
