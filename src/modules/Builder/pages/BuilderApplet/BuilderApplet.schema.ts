@@ -702,7 +702,6 @@ export const ActivitySchema = () =>
     isSkippable: yup.boolean(),
     isReviewable: yup.boolean(),
     responseIsEditable: yup.boolean(),
-    // items: yup.array().of(ItemSchema()).min(1),
     items: yup
       .array()
       .when(
