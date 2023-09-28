@@ -29,9 +29,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
       const answer = activityItemAnswer.answer as DecryptedTimeAnswer;
 
       return (
-        <Box data-testid={activityItemAnswer['data-testid']}>
-          {getTimeResponseItem(answer?.value ?? answer)}
-        </Box>
+        <Box data-testid={activityItemAnswer['data-testid']}>{getTimeResponseItem(answer)}</Box>
       );
     }
   }
