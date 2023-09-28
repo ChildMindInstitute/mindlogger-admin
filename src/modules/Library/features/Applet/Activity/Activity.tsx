@@ -18,7 +18,7 @@ import {
 } from './Activity.styles';
 import { Item } from '../Item';
 import { AppletUiType, LibraryForm, SelectedItem } from '../Applet.types';
-import { checkIfPerformanceTask } from './Activity.utils';
+import { checkIfPerformanceTask } from '../Applet.utils';
 
 export const Activity = ({
   appletId,
@@ -77,7 +77,7 @@ export const Activity = ({
     updateSelectedItems();
   };
 
-  const isPerfTask = checkIfPerformanceTask(items);
+  const isPerformanceTask = checkIfPerformanceTask(items);
   const arrowSgvId = activityVisible ? 'navigate-up' : 'navigate-down';
 
   const getCheckedActivity = (currentItems: SelectedItem[]) => {
@@ -112,7 +112,7 @@ export const Activity = ({
         onChange={handleActivityChecked}
         data-testid={`${dataTestid}-checkbox`}
       />
-      {isPerfTask ? (
+      {isPerformanceTask ? (
         <StyledFlexTopCenter>
           <Box sx={{ width: '4rem', height: '4rem' }} />
           <StyledActivityName>{getHighlightedText(name, search)}</StyledActivityName>
