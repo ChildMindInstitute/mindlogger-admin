@@ -88,16 +88,6 @@ const { t } = i18n;
 
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
-export const isTouchOrGyroscopeRespType = (responseType: ItemResponseType) =>
-  responseType === ItemResponseType.StabilityTracker ||
-  responseType === ItemResponseType.TouchTest ||
-  responseType === ItemResponseType.TouchPractice;
-
-export const isPerfTaskResponseType = (responseType: ItemResponseType) =>
-  isTouchOrGyroscopeRespType(responseType) ||
-  responseType === ItemResponseType.Flanker ||
-  responseType === ItemResponseType.ABTrails;
-
 export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
   name: t('newItem'),
@@ -257,11 +247,12 @@ const defaultMessageConfig = {
   timer: null,
 };
 
-const getMessageItem = (name: string, question: string) => ({
+const getMessageItem = (name: string, question: string, order?: number) => ({
   name,
   config: defaultMessageConfig,
   question,
   responseType: ItemResponseType.Message,
+  order,
 });
 
 const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
@@ -280,10 +271,12 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
           isGyroscope ? 'instructionGyroscope' : 'instructionTouch'
         }`,
       ),
+      1,
     ),
     getMessageItem(
       isGyroscope ? GyroscopeItemNames.PracticeInstruction : TouchItemNames.PracticeInstruction,
       t('gyroscopeAndTouchInstructions.practice.instruction'),
+      2,
     ),
     {
       name: isGyroscope ? GyroscopeItemNames.PracticeRound : TouchItemNames.PracticeRound,
@@ -293,10 +286,12 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
         phase: RoundTypeEnum.Practice,
       },
       responseType: ItemResponseType.StabilityTracker,
+      order: 3,
     },
     getMessageItem(
       isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
       t('gyroscopeAndTouchInstructions.test.instruction'),
+      4,
     ),
     {
       name: isGyroscope ? GyroscopeItemNames.TestRound : TouchItemNames.TestRound,
@@ -306,6 +301,7 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
         phase: RoundTypeEnum.Test,
       },
       responseType: ItemResponseType.StabilityTracker,
+      order: 5,
     },
   ];
 };
@@ -339,8 +335,9 @@ const defaultFlankerTestConfig = {
 };
 
 const flankerItems = [
-  getMessageItem(FlankerItemNames.GeneralInstruction, t('flankerInstructions.general')), //0 General Instruction
-  getMessageItem(FlankerItemNames.PracticeInstructionFirst, t('flankerInstructions.practice')), //1 Practice Instruction
+  getMessageItem(FlankerItemNames.GeneralInstruction, t('flankerInstructions.general'), 1), //0 General Instruction
+  getMessageItem(FlankerItemNames.PracticeInstructionFirst, t('flankerInstructions.practice'), 2), //1 Practice
+  // Instruction
   {
     name: FlankerItemNames.PracticeFirst,
     config: {
@@ -350,8 +347,9 @@ const flankerItems = [
       isLastPractice: false,
     },
     responseType: ItemResponseType.Flanker,
+    order: 3,
   }, //2
-  getMessageItem(FlankerItemNames.PracticeInstructionSecond, t('flankerInstructions.next')), //3
+  getMessageItem(FlankerItemNames.PracticeInstructionSecond, t('flankerInstructions.next'), 4), //3
   {
     name: FlankerItemNames.PracticeSecond,
     config: {
@@ -361,8 +359,9 @@ const flankerItems = [
       isLastPractice: false,
     },
     responseType: ItemResponseType.Flanker,
+    order: 5,
   }, //4
-  getMessageItem(FlankerItemNames.PracticeInstructionThird, t('flankerInstructions.next')), //5
+  getMessageItem(FlankerItemNames.PracticeInstructionThird, t('flankerInstructions.next'), 6), //5
   {
     name: FlankerItemNames.PracticeThird,
     config: {
@@ -372,8 +371,9 @@ const flankerItems = [
       isLastPractice: true,
     },
     responseType: ItemResponseType.Flanker,
+    order: 7,
   }, //6
-  getMessageItem(FlankerItemNames.TestInstructionFirst, t('flankerInstructions.test')), //7 Test Instruction
+  getMessageItem(FlankerItemNames.TestInstructionFirst, t('flankerInstructions.test'), 8), //7 Test Instruction
   {
     name: FlankerItemNames.TestFirst,
     config: {
@@ -382,8 +382,9 @@ const flankerItems = [
       isLastTest: false,
     },
     responseType: ItemResponseType.Flanker,
+    order: 9,
   }, //8
-  getMessageItem(FlankerItemNames.TestInstructionSecond, t('flankerInstructions.next')), //9
+  getMessageItem(FlankerItemNames.TestInstructionSecond, t('flankerInstructions.next'), 10), //9
   {
     name: FlankerItemNames.TestSecond,
     config: {
@@ -392,8 +393,9 @@ const flankerItems = [
       isLastTest: false,
     },
     responseType: ItemResponseType.Flanker,
+    order: 11,
   }, //10
-  getMessageItem(FlankerItemNames.TestInstructionThird, t('flankerInstructions.next')), //11
+  getMessageItem(FlankerItemNames.TestInstructionThird, t('flankerInstructions.next'), 12), //11
   {
     name: FlankerItemNames.TestThird,
     config: {
@@ -402,6 +404,7 @@ const flankerItems = [
       isLastTest: true,
     },
     responseType: ItemResponseType.Flanker,
+    order: 13,
   }, //12
 ];
 
@@ -595,6 +598,7 @@ const getActivityItems = (items: Item[]) =>
         alerts: getAlerts(item),
         allowEdit: item.allowEdit,
         isHidden: item.isHidden,
+        order: item.order,
       }))
     : [];
 

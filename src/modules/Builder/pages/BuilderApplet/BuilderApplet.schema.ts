@@ -19,15 +19,10 @@ import {
   MIN_LENGTH_OF_TEST,
   MIN_NUMBER_OF_TRIALS,
   MIN_SLOPE,
+  PerfTaskType,
   ScoreReportType,
 } from 'shared/consts';
-import {
-  AppletFormValues,
-  FlankerItemNames,
-  GyroscopeItemNames,
-  RoundTypeEnum,
-  TouchItemNames,
-} from 'modules/Builder/types';
+import { RoundTypeEnum } from 'modules/Builder/types';
 import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
 import {
   ItemConfigurationSettings,
@@ -39,8 +34,6 @@ import {
   checkScoreRegexp,
   getRegexForIndexedField,
   getTestFunctionForSubscaleScore,
-  isPerfTaskResponseType,
-  isTouchOrGyroscopeRespType,
   testFunctionForNotExistedItems,
   testFunctionForNotSupportedItems,
   testFunctionForSkippedItems,
@@ -128,22 +121,28 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     ),
 });
 
-const getFlankerButtonsSchema = (type: 'name' | 'image') =>
+const flankerImageOrNameValidation = (validateMessage?: string) =>
   yup
     .string()
-    .test(
-      'has-image-or-name',
-      type === 'name' ? getIsRequiredValidateMessage('flankerButtons.nameOrImage') : '',
-      function () {
-        const { image, text } = this.parent;
+    .test('has-image-or-name', validateMessage ?? '', function () {
+      const { image, text } = this.parent;
 
-        return !(!image && !text);
-      },
-    )
+      return !(!image && !text);
+    })
+    .nullable();
+
+const flankerImageOrValueValidation = () =>
+  yup
+    .string()
+    .test('has-image-or-value', '', function () {
+      const { image, value } = this.parent;
+
+      return !(!image && !value);
+    })
     .nullable();
 
 export const getFlankerGeneralSchema = (
-  schema: yup.SchemaOf<AppletFormValues>,
+  schema: yup.SchemaOf<yup.AnySchema>,
   type: RoundTypeEnum,
 ) => {
   const isPractice = type === RoundTypeEnum.Practice;
@@ -156,14 +155,17 @@ export const getFlankerGeneralSchema = (
         .array()
         .of(
           yup.object({
-            image: yup.string().required(),
+            image: flankerImageOrNameValidation(),
+            text: flankerImageOrNameValidation(),
           }),
         )
         .min(1),
       buttons: yup.array().of(
         yup.object({
-          text: getFlankerButtonsSchema('name'),
-          image: getFlankerButtonsSchema('image'),
+          text: flankerImageOrNameValidation(
+            getIsRequiredValidateMessage('flankerButtons.nameOrImage'),
+          ),
+          image: flankerImageOrNameValidation(),
         }),
       ),
       fixationScreen: yup
@@ -172,7 +174,8 @@ export const getFlankerGeneralSchema = (
           if (!showFixation) return schema;
 
           return schema.shape({
-            image: yup.string().required(),
+            image: flankerImageOrValueValidation(),
+            value: flankerImageOrValueValidation(),
           });
         })
         .nullable(),
@@ -226,39 +229,7 @@ export const ItemSchema = () =>
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup
         .string()
-        .when('responseType', (responseType, schema) => {
-          if (isPerfTaskResponseType(responseType)) {
-            return schema;
-          }
-
-          return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
-            if (
-              name === GyroscopeItemNames.GeneralInstruction ||
-              name === TouchItemNames.GeneralInstruction ||
-              name === FlankerItemNames.GeneralInstruction
-            ) {
-              return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
-            }
-
-            if (
-              name === GyroscopeItemNames.PracticeInstruction ||
-              name === TouchItemNames.PracticeInstruction ||
-              name === FlankerItemNames.PracticeInstructionFirst
-            ) {
-              return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
-            }
-
-            if (
-              name === GyroscopeItemNames.TestInstruction ||
-              name === TouchItemNames.TestInstruction ||
-              name === FlankerItemNames.TestInstructionFirst
-            ) {
-              return schema.required(getIsRequiredValidateMessage('testInstruction'));
-            }
-
-            return schema.required(getIsRequiredValidateMessage('displayedContent'));
-          });
-        })
+        .required(getIsRequiredValidateMessage('displayedContent'))
         .test(
           ItemTestFunctions.VariableInTheSameItem,
           t('validationMessages.variableInTheSameItem') as string,
@@ -375,36 +346,76 @@ export const ItemSchema = () =>
             ),
           otherwise: (schema) => schema,
         }),
-      config: yup.object({}).when('responseType', (responseType, schema) => {
-        if (isTouchOrGyroscopeRespType(responseType)) {
+      config: yup.object({
+        correctAnswerRequired: yup.boolean().nullable(),
+        correctAnswer: yup
+          .string()
+          .nullable()
+          .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+            correctAnswerRequired
+              ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+              : schema,
+          ),
+      }),
+    })
+    .required();
+
+export const FlankerSchema = () =>
+  yup
+    .object({
+      question: yup.string().when('order', (order, schema) => {
+        if (order === 1) {
+          return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+        }
+
+        if (order === 2) {
+          return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
+        }
+
+        if (order === 8) {
+          return schema.required(getIsRequiredValidateMessage('testInstruction'));
+        }
+
+        return schema;
+      }),
+      config: yup.object({}).when('order', (order, schema) => {
+        if (order === 3) {
+          return getFlankerGeneralSchema(schema, RoundTypeEnum.Practice);
+        }
+
+        if (order === 9) {
+          return getFlankerGeneralSchema(schema, RoundTypeEnum.Test);
+        }
+
+        return schema;
+      }),
+    })
+    .required();
+
+export const GyroscopeAndTouchSchema = () =>
+  yup
+    .object({
+      question: yup.string().when('order', (order, schema) => {
+        if (order === 1) {
+          return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+        }
+
+        if (order === 2) {
+          return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
+        }
+
+        if (order === 4) {
+          return schema.required(getIsRequiredValidateMessage('testInstruction'));
+        }
+
+        return schema;
+      }),
+      config: yup.object({}).when('order', (order, schema) => {
+        if (order === 3 || order === 5) {
           return schema.shape(GyroscopeAndTouchConfigSchema());
         }
 
-        if (responseType === ItemResponseType.Flanker) {
-          return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
-            if (name === FlankerItemNames.PracticeFirst) {
-              return getFlankerGeneralSchema(schema, RoundTypeEnum.Practice);
-            }
-
-            if (name === FlankerItemNames.TestFirst) {
-              return getFlankerGeneralSchema(schema, RoundTypeEnum.Test);
-            }
-
-            return schema;
-          });
-        }
-
-        return schema.shape({
-          correctAnswerRequired: yup.boolean().nullable(),
-          correctAnswer: yup
-            .string()
-            .nullable()
-            .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
-              correctAnswerRequired
-                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-                : schema,
-            ),
-        });
+        return schema;
       }),
     })
     .required();
@@ -691,7 +702,26 @@ export const ActivitySchema = () =>
     isSkippable: yup.boolean(),
     isReviewable: yup.boolean(),
     responseIsEditable: yup.boolean(),
-    items: yup.array().of(ItemSchema()).min(1),
+    // items: yup.array().of(ItemSchema()).min(1),
+    items: yup
+      .array()
+      .when(
+        'performanceTaskType',
+        (performanceTaskType: string, schema: yup.ArraySchema<yup.AnySchema>) => {
+          if (performanceTaskType === PerfTaskType.Flanker) {
+            return schema.of(FlankerSchema());
+          }
+          if (
+            performanceTaskType === PerfTaskType.Gyroscope ||
+            performanceTaskType === PerfTaskType.Touch
+          ) {
+            return schema.of(GyroscopeAndTouchSchema());
+          }
+
+          return schema.of(ItemSchema());
+        },
+      )
+      .min(1),
     isHidden: yup.boolean(),
     subscaleSetting: yup
       .object({
