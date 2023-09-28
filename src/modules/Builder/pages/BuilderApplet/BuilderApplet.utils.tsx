@@ -98,6 +98,34 @@ export const isPerformanceTaskResponseType = (responseType: ItemResponseType) =>
   responseType === ItemResponseType.Flanker ||
   responseType === ItemResponseType.ABTrails;
 
+const getDuplicatedOptionsAndAlertsForSingleAndMultipleSelect = (item?: ItemFormValues) => {
+  const options = (item?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
+    (option: SingleAndMultiSelectOption) => ({
+      ...option,
+      oldId: option.id,
+      id: uuidv4(),
+    }),
+  );
+
+  const alerts = item?.alerts
+    ? {
+        alerts: item.alerts.map((alert) => ({
+          ...alert,
+          value: options.find((option) => option.oldId === alert.value)?.id,
+          key: uuidv4(),
+        })),
+      }
+    : {};
+
+  return {
+    responseValues: {
+      ...item?.responseValues,
+      options: options?.map(({ oldId, ...option }) => option),
+    },
+    ...alerts,
+  };
+};
+
 export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
   name: t('newItem'),
@@ -109,22 +137,17 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   id: undefined,
   key: uuidv4(),
   ...((item?.responseType === ItemResponseType.SingleSelection ||
-    item?.responseType === ItemResponseType.MultipleSelection) && {
-    responseValues: {
-      ...item.responseValues,
-      options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-        (option: SingleAndMultiSelectOption) => ({
-          ...option,
-          id: uuidv4(),
-        }),
-      ),
-    },
-  }),
+    item?.responseType === ItemResponseType.MultipleSelection) &&
+    getDuplicatedOptionsAndAlertsForSingleAndMultipleSelect(item)),
   ...(item?.responseType === ItemResponseType.Slider && {
     responseValues: {
       ...item.responseValues,
       id: uuidv4(),
     },
+    alerts: item?.alerts?.map((alert) => ({
+      ...alert,
+      key: uuidv4(),
+    })),
   }),
 });
 
