@@ -25,11 +25,14 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
       return <SliderResponseItem {...(activityItemAnswer as SliderItemAnswer)} />;
     case ItemResponseType.Text:
       return <TextResponseItem {...(activityItemAnswer as TextItemAnswer)} />;
-    case ItemResponseType.Time:
+    case ItemResponseType.Time: {
+      const answer = activityItemAnswer.answer as DecryptedTimeAnswer;
+
       return (
         <Box data-testid={activityItemAnswer['data-testid']}>
-          {getTimeResponseItem(activityItemAnswer.answer as DecryptedTimeAnswer)}
+          {getTimeResponseItem(answer?.value ?? answer)}
         </Box>
       );
+    }
   }
 };
