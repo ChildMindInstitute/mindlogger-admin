@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
+import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { ImportedFile } from 'shared/components';
 
 import { ImportScheduleHookProps } from './ImportSchedulePopup.types';
 import { getInvalidActivitiesError, getUploadedScheduleErrors } from './ImportSchedulePopup.utils';
+import { commonErrorBoxProps } from './ImportSchedule.const';
 
 export const useImportSchedule = ({ appletName, scheduleExportData }: ImportScheduleHookProps) => {
+  const { t } = useTranslation('app');
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<null | ImportedFile>(null);
   const [validationError, setValidationError] = useState<JSX.Element | null>(null);
@@ -23,32 +27,27 @@ export const useImportSchedule = ({ appletName, scheduleExportData }: ImportSche
   const handleFileReady = (file: ImportedFile | null) => {
     if (!file) return handleUploadClear();
 
-    const {
-      notExistentActivities,
-      invalidStartTimeField,
-      invalidEndTimeField,
-      invalidNotification,
-      invalidFrequency,
-      invalidDate,
-      invalidStartEndTime,
-      invalidNotificationTime,
-    } = getUploadedScheduleErrors(scheduleExportData, file?.data) || {};
+    const { notExistentActivities, hasInvalidData, ...otherErrors } =
+      getUploadedScheduleErrors(scheduleExportData, file?.data) || {};
 
-    if (notExistentActivities?.length) {
-      return setValidationError(getInvalidActivitiesError(notExistentActivities, appletName));
-    }
+    if (hasInvalidData || notExistentActivities?.length) {
+      const invalidErrors = (
+        <>
+          {!!notExistentActivities?.length &&
+            getInvalidActivitiesError(notExistentActivities, appletName)}
+          {hasInvalidData && (
+            <>
+              <Box {...commonErrorBoxProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
+              {Object.values(otherErrors).map(
+                ({ data, id }) => data && <Fragment key={id}>{data}</Fragment>,
+              )}
+              <Box {...commonErrorBoxProps}>{t('importScheduleErrors.updateReupload')}</Box>
+            </>
+          )}
+        </>
+      );
 
-    const invalidError =
-      invalidStartTimeField ||
-      invalidEndTimeField ||
-      invalidNotification ||
-      invalidFrequency ||
-      invalidDate ||
-      invalidStartEndTime ||
-      invalidNotificationTime;
-
-    if (invalidError) {
-      return setValidationError(invalidError);
+      return setValidationError(invalidErrors);
     }
 
     return handleSuccessfullyUploaded(file);

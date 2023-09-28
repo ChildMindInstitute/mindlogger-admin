@@ -93,7 +93,7 @@ export const isTouchOrGyroscopeRespType = (responseType: ItemResponseType) =>
   responseType === ItemResponseType.TouchTest ||
   responseType === ItemResponseType.TouchPractice;
 
-export const isPerfTaskResponseType = (responseType: ItemResponseType) =>
+export const isPerformanceTaskResponseType = (responseType: ItemResponseType) =>
   isTouchOrGyroscopeRespType(responseType) ||
   responseType === ItemResponseType.Flanker ||
   responseType === ItemResponseType.ABTrails;
