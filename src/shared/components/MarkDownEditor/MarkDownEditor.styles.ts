@@ -30,6 +30,7 @@ const commonStyles = `
   }
   
   .md-editor-preview-wrapper video {
+    max-width: 50%;
     display: block;
   }
 
