@@ -48,6 +48,8 @@ export const SectionScoreCommonFields = ({
   );
 
   useEffect(() => {
+    if (!activity) return;
+
     printItems ?? setValue(printItemsName, !!itemsPrint.length);
     showMessage ?? setValue(showMessageName, !!message.length);
   }, []);
