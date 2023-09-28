@@ -1,4 +1,4 @@
-export const enum RetentionPeriods {
+export enum RetentionPeriods {
   Indefinitely = 'indefinitely',
   Days = 'days',
   Weeks = 'weeks',

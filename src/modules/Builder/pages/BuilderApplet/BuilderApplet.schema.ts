@@ -22,7 +22,6 @@ import {
   ScoreReportType,
 } from 'shared/consts';
 import {
-  AppletFormValues,
   FlankerItemNames,
   GyroscopeItemNames,
   RoundTypeEnum,
@@ -120,7 +119,7 @@ export const ResponseValuesAudioPlayer = () => ({
 export const ResponseValuesNumberSelectionSchema = () => ({
   minValue: yup
     .number()
-    .when('maxValue', (maxValue, schema) =>
+    .when('maxValue', ([maxValue], schema) =>
       schema.lessThan(
         maxValue,
         t('validationMessages.lessThan', { less: t('minValue'), than: t('maxValue') }),
@@ -142,10 +141,7 @@ const getFlankerButtonsSchema = (type: 'name' | 'image') =>
     )
     .nullable();
 
-export const getFlankerGeneralSchema = (
-  schema: yup.SchemaOf<AppletFormValues>,
-  type: RoundTypeEnum,
-) => {
+export const getFlankerGeneralSchema = (schema: yup.ObjectSchema<Config>, type: RoundTypeEnum) => {
   const isPractice = type === RoundTypeEnum.Practice;
 
   return schema.shape({
@@ -226,12 +222,12 @@ export const ItemSchema = () =>
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup
         .string()
-        .when('responseType', (responseType, schema) => {
+        .when('responseType', ([responseType], schema) => {
           if (isPerfTaskResponseType(responseType)) {
             return schema;
           }
 
-          return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
+          return schema.when('name', ([name], schema) => {
             if (
               name === GyroscopeItemNames.GeneralInstruction ||
               name === TouchItemNames.GeneralInstruction ||
@@ -280,7 +276,7 @@ export const ItemSchema = () =>
           t('validationMessages.variableReferringToNotExistedItem') as string,
           (itemName, context) => testFunctionForNotExistedItems(itemName ?? '', context),
         ),
-      responseValues: yup.object({}).when('responseType', (responseType, schema) => {
+      responseValues: yup.object({}).when('responseType', ([responseType], schema) => {
         if (
           responseType === ItemResponseType.SingleSelection ||
           responseType === ItemResponseType.MultipleSelection
@@ -315,7 +311,7 @@ export const ItemSchema = () =>
       }),
       alerts: yup
         .array()
-        .when('responseType', (responseType, schema) => {
+        .when('responseType', ([responseType], schema) => {
           if (
             responseType === ItemResponseType.SingleSelection ||
             responseType === ItemResponseType.MultipleSelection
@@ -375,37 +371,40 @@ export const ItemSchema = () =>
             ),
           otherwise: (schema) => schema,
         }),
-      config: yup.object({}).when('responseType', (responseType, schema) => {
-        if (isTouchOrGyroscopeRespType(responseType)) {
-          return schema.shape(GyroscopeAndTouchConfigSchema());
-        }
+      config: (yup.object({}) as yup.ObjectSchema<Config>).when(
+        'responseType',
+        ([responseType], schema) => {
+          if (isTouchOrGyroscopeRespType(responseType)) {
+            return schema.shape(GyroscopeAndTouchConfigSchema());
+          }
 
-        if (responseType === ItemResponseType.Flanker) {
-          return schema.when('name', (name: string, schema: yup.SchemaOf<AppletFormValues>) => {
-            if (name === FlankerItemNames.PracticeFirst) {
-              return getFlankerGeneralSchema(schema, RoundTypeEnum.Practice);
-            }
+          if (responseType === ItemResponseType.Flanker) {
+            return schema.when('name', ([name], schema) => {
+              if (name === FlankerItemNames.PracticeFirst) {
+                return getFlankerGeneralSchema(schema, RoundTypeEnum.Practice);
+              }
 
-            if (name === FlankerItemNames.TestFirst) {
-              return getFlankerGeneralSchema(schema, RoundTypeEnum.Test);
-            }
+              if (name === FlankerItemNames.TestFirst) {
+                return getFlankerGeneralSchema(schema, RoundTypeEnum.Test);
+              }
 
-            return schema;
+              return schema;
+            });
+          }
+
+          return schema.shape({
+            correctAnswerRequired: yup.boolean().nullable(),
+            correctAnswer: yup
+              .string()
+              .nullable()
+              .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+                correctAnswerRequired
+                  ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+                  : schema,
+              ),
           });
-        }
-
-        return schema.shape({
-          correctAnswerRequired: yup.boolean().nullable(),
-          correctAnswer: yup
-            .string()
-            .nullable()
-            .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
-              correctAnswerRequired
-                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-                : schema,
-            ),
-        });
-      }),
+        },
+      ),
     })
     .required();
 
@@ -467,7 +466,7 @@ export const ConditionSchema = () =>
   yup.object({
     itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
     type: yup.string().required(getIsRequiredValidateMessage('conditionType')),
-    payload: yup.object({}).when('type', (type, schema) => {
+    payload: yup.object({}).when('type', ([type], schema) => {
       if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
         return schema.shape({
           optionValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
@@ -505,9 +504,8 @@ const getReportCommonFields = (isScoreReport = false) => ({
   showMessage: yup.boolean(),
   printItems: yup.boolean().when('showMessage', {
     is: false,
-    then: yup
-      .boolean()
-      .test(
+    then: (shema) =>
+      shema.test(
         'required-report-common-fields',
         <string>t('validationMessages.mustShowMessageOrItems'),
         (printItemsName, context) =>
@@ -518,15 +516,12 @@ const getReportCommonFields = (isScoreReport = false) => ({
     .string()
     .when('showMessage', {
       is: true,
-      then: yup.string().required(getIsRequiredValidateMessage('message')),
+      then: (shema) => shema.required(getIsRequiredValidateMessage('message')),
     })
     .nullable(),
   itemsPrint: yup.array().when('printItems', {
     is: true,
-    then: yup
-      .array()
-      .min(1, <string>t('validationMessages.atLeastOneItem'))
-      .nullable(),
+    then: (shema) => shema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
   }),
 });
 
@@ -616,33 +611,33 @@ export const ScoreOrSectionSchema = () =>
     type: yup.string(),
     name: yup.string().when('type', {
       is: ScoreReportType.Section,
-      then: SectionSchema().name,
-      otherwise: ScoreSchema().name,
+      then: () => SectionSchema().name,
+      otherwise: () => ScoreSchema().name,
     }),
     conditionalLogic: yup.mixed().when('type', {
       is: ScoreReportType.Section,
-      then: SectionSchema().conditionalLogic,
-      otherwise: ScoreSchema().conditionalLogic,
+      then: () => SectionSchema().conditionalLogic,
+      otherwise: () => ScoreSchema().conditionalLogic,
     }),
     calculationType: yup.string().when('type', {
       is: ScoreReportType.Score,
-      then: yup.string().required(),
-      otherwise: yup.string().nullable(),
+      then: (shema) => shema.required(),
+      otherwise: (shema) => shema.nullable(),
     }),
     id: yup.string().when('type', {
       is: ScoreReportType.Score,
-      then: yup.string().required(),
-      otherwise: yup.string().nullable(),
+      then: (shema) => shema.required(),
+      otherwise: (shema) => shema.nullable(),
     }),
     itemsScore: yup.array().when('type', {
       is: ScoreReportType.Score,
-      then: yup.array().min(1, <string>t('validationMessages.atLeastOneItem')),
-      otherwise: yup.array().nullable(),
+      then: (shema) => shema.min(1, <string>t('validationMessages.atLeastOneItem')),
+      otherwise: (shema) => shema.nullable(),
     }),
     showMessage: yup.boolean(),
     printItems: yup.boolean().when('showMessage', (showMessage, schema) => {
       if (!showMessage)
-        return schema.when('type', (type: ScoreReportType, schema: yup.BooleanSchema) =>
+        return schema.when('type', ([type]: ScoreReportType[], schema: yup.BooleanSchema) =>
           schema.test(
             'required-report-common-fields',
             <string>t('validationMessages.mustShowMessageOrItems'),
@@ -661,15 +656,12 @@ export const ScoreOrSectionSchema = () =>
       .string()
       .when('showMessage', {
         is: true,
-        then: yup.string().required(getIsRequiredValidateMessage('message')),
+        then: (shema) => shema.required(getIsRequiredValidateMessage('message')),
       })
       .nullable(),
     itemsPrint: yup.array().when('printItems', {
       is: true,
-      then: yup
-        .array()
-        .min(1, <string>t('validationMessages.atLeastOneItem'))
-        .nullable(),
+      then: (shema) => shema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
     }),
   });
 

@@ -11,7 +11,7 @@ import {
   TagsInputController,
 } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
-import { getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
+import { AppletInvitationOptions, getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
 import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -71,7 +71,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     const options = {
       ...values,
       ...(values.respondents && { respondents: values.respondents.map((item) => item.id) }),
-    };
+    } as AppletInvitationOptions;
 
     if (appletId) {
       executePostAppletInvitationApi({

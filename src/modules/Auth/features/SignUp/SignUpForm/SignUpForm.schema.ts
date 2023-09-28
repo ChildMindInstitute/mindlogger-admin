@@ -23,6 +23,7 @@ export const SignUpFormSchema = () => {
         .required(passwordRequired)
         .min(ACCOUNT_PASSWORD_MIN_LENGTH, passwordMinLength)
         .matches(/^(\S+$)/, passwordBlankSpaces),
+      termsOfService: yup.boolean(),
     })
     .required();
 };

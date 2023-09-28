@@ -15,8 +15,6 @@ export const enum Path {
   ItemsFlow = 'item-flow',
   Settings = 'settings',
   ActivityFlow = 'activity-flows',
-  FlowBuilder = 'builder',
-  FlowSettings = 'settings',
   Flanker = 'flanker',
   PerformanceTask = 'performance-task',
   Gyroscope = 'gyroscope',
@@ -127,8 +125,8 @@ export const checkCurrentActivityPage = (url: string) => ({
 
 export const checkCurrentActivityFlowPage = (url: string) => ({
   isAbout: new RegExp(`${getAppletActivityFlowPageRegexp(Path.About)}`).test(url),
-  isBuilder: new RegExp(`${getAppletActivityFlowPageRegexp(Path.FlowBuilder)}`).test(url),
-  isSettings: new RegExp(`${getAppletActivityFlowPageRegexp(Path.FlowSettings)}`).test(url),
+  isBuilder: new RegExp(`${getAppletActivityFlowPageRegexp(Path.Builder)}`).test(url),
+  isSettings: new RegExp(`${getAppletActivityFlowPageRegexp(Path.Settings)}`).test(url),
 });
 
 export const isNewApplet = (appletId?: string) => appletId === Path.NewApplet;

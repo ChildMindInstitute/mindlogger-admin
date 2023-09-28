@@ -1,5 +1,4 @@
 import { ReactNode, FC } from 'react';
-import { DefaultTFuncReturn } from 'i18next';
 import { SxProps } from '@mui/material';
 
 export type HeaderProps = {
@@ -9,7 +8,7 @@ export type HeaderProps = {
 };
 
 export type BuilderContainerProps = {
-  title: string | DefaultTFuncReturn;
+  title: string;
   Header?: FC<HeaderProps>;
   headerProps?: Record<string, unknown>;
   children?: ReactNode;

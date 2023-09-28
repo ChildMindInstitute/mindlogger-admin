@@ -136,7 +136,7 @@ export const ReportConfigSetting = ({
     setError,
     clearErrors,
   } = useForm<ReportConfigFormValues>({
-    resolver: yupResolver(reportConfigSchema(isActivity, isActivityFlow)),
+    resolver: yupResolver(reportConfigSchema()),
     defaultValues,
     mode: 'onSubmit',
   });

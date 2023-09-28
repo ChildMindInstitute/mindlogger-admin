@@ -71,7 +71,9 @@ export const AdvancedSettings = () => {
               renderOption={(props, option) => (
                 <StyledMenuItem {...props}>{option.name}</StyledMenuItem>
               )}
-              renderInput={(params) => <TextField {...params} label={t('serverUrl')} />}
+              renderInput={({ InputLabelProps, ...params }) => (
+                <TextField {...params} label={t('serverUrl')} />
+              )}
               freeSolo
             />
           </StyledFormControl>
