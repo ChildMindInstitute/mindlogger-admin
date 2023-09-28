@@ -17,7 +17,7 @@ export const getReportZipName = (name: ZipFile) =>
 
 export const getStabilityTrackerCsvName = (
   id: string,
-  phaseType: DecryptedStabilityTrackerAnswer['value']['phaseType'],
+  phaseType: DecryptedStabilityTrackerAnswer['phaseType'],
 ) => `${id}_${phaseType}.csv`;
 
 export const getABTrailsCsvName = (index: number, id?: string) =>

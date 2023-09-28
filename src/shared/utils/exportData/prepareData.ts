@@ -228,7 +228,7 @@ const getStabilityTrackerItemsData = (
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.StabilityTracker) return acc;
 
-    const stabilityTrackerValue = (item.answer as DecryptedStabilityTrackerAnswer).value;
+    const stabilityTrackerValue = item.answer as DecryptedStabilityTrackerAnswer;
 
     return acc.concat({
       name: getStabilityTrackerCsvName(item.id, stabilityTrackerValue.phaseType),

@@ -228,11 +228,9 @@ export const enum StabilityTrackerPhaseType {
 }
 
 export type DecryptedStabilityTrackerAnswer = {
-  value: {
-    maxLambda: number;
-    phaseType: StabilityTrackerPhaseType;
-    value: DecryptedStabilityTrackerCalcValue[];
-  };
+  maxLambda: number;
+  phaseType: StabilityTrackerPhaseType;
+  value: DecryptedStabilityTrackerCalcValue[];
 };
 
 export const enum FlankerTag {
@@ -296,7 +294,7 @@ export type AnswerValue =
   | DecryptedMultiSelectionPerRowAnswer['value']
   | DecryptedSliderRowsAnswer['value']
   | DecryptedABTrailsAnswer['value']
-  | DecryptedStabilityTrackerAnswer['value']
+  | DecryptedStabilityTrackerAnswer
   | DecryptedFlankerAnswer['value'];
 
 export const enum UserActionType {

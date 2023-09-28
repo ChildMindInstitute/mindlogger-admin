@@ -137,7 +137,7 @@ export const parseResponseValueRaw = <
     case ItemResponseType.StabilityTracker:
       return getStabilityTrackerCsvName(
         answerId,
-        (value as DecryptedStabilityTrackerAnswer['value']).phaseType,
+        (value as DecryptedStabilityTrackerAnswer).phaseType,
       );
     case ItemResponseType.Flanker:
       return getFlankerCsvName(item);

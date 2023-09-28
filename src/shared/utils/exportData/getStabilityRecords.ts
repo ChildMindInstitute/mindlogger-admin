@@ -12,9 +12,7 @@ const getPointStr = (
 
   return `${pos[0]}`;
 };
-export const getStabilityRecords = (
-  responses: DecryptedStabilityTrackerAnswer['value']['value'],
-) => {
+export const getStabilityRecords = (responses: DecryptedStabilityTrackerAnswer['value']) => {
   const result = [];
   let startTime = 0;
 
