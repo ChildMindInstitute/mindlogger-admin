@@ -1,5 +1,5 @@
-import { Trans } from 'react-i18next';
 import { ElementType } from 'react';
+import { Trans } from 'react-i18next';
 
 export const getScreens = (
   type: 'individual' | 'default',
