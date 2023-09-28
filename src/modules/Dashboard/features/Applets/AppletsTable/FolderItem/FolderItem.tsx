@@ -1,6 +1,6 @@
-import { useEffect, useState, KeyboardEvent, useContext } from 'react';
+import { useEffect, useState, KeyboardEvent, useContext, ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputAdornment, OutlinedInput, TableCell, TableRow } from '@mui/material';
+import { InputAdornment, TableRow } from '@mui/material';
 
 import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'redux/modules';
@@ -8,17 +8,19 @@ import { Svg, Actions } from 'shared/components';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
+import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.const';
 import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'api';
 import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
+import { StyledTableCell } from '../AppletsTable.styles';
 import { FolderItemProps } from './FolderItem.types';
 import {
   StyledFolderIcon,
   StyledCountApplets,
   StyledFolderName,
-  StyledCell,
   StyledCloseButton,
+  StyledOutlinedInput,
 } from './FolderItem.styles';
 import { getActions } from './FolderItem.const';
 
@@ -53,7 +55,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     await reloadData();
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFolder((folder) => ({ ...folder, displayName: event.target.value }));
   };
 
@@ -93,6 +95,10 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     handleFolderClick(item);
   };
 
+  const folderAppletCount = item?.foldersAppletCount
+    ? `${item?.foldersAppletCount} ${t('applets')}`
+    : `${t('empty')}`;
+
   useEffect(() => setFolder(item), [item]);
 
   return (
@@ -104,14 +110,17 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       onMouseEnter={() => setHasVisibleActions(true)}
       onMouseLeave={() => setHasVisibleActions(false)}
     >
-      <TableCell width="30%" onClick={() => (folder?.isRenaming ? null : onFolderClick())}>
+      <StyledTableCell
+        width={AppletsColumnsWidth.Folder}
+        onClick={() => (folder?.isRenaming ? null : onFolderClick())}
+      >
         <StyledFlexTopCenter>
           <StyledFolderIcon>
             <Svg id={isFolderExpanded ? 'folder-opened' : 'folder'} />
           </StyledFolderIcon>
           <StyledFolderName>
             {folder?.isRenaming ? (
-              <OutlinedInput
+              <StyledOutlinedInput
                 autoFocus
                 error={!folder.displayName}
                 placeholder={t('newFolder')}
@@ -137,26 +146,19 @@ export const FolderItem = ({ item }: FolderItemProps) => {
                 <StyledBodyMedium color={variables.palette.on_surface}>
                   {folder.displayName ?? folder.name}
                 </StyledBodyMedium>
-                <StyledCountApplets>
-                  (
-                  {item?.foldersAppletCount
-                    ? `${item?.foldersAppletCount} ${t('applets')}`
-                    : `${t('empty')}`}
-                  )
-                </StyledCountApplets>
+                <StyledCountApplets>{folderAppletCount}</StyledCountApplets>
               </>
             )}
           </StyledFolderName>
         </StyledFlexTopCenter>
-      </TableCell>
-      <TableCell width="20%"></TableCell>
-      <StyledCell>
+      </StyledTableCell>
+      <StyledTableCell>
         <Actions
           items={getActions(folder, handleRenameFolder, onDeleteFolder)}
           context={item}
           visibleByDefault={hasVisibleActions}
         />
-      </StyledCell>
+      </StyledTableCell>
     </TableRow>
   );
 };

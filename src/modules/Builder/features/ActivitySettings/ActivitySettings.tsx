@@ -1,7 +1,6 @@
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
 import { page } from 'resources';
-import { useBreadcrumbs } from 'shared/hooks';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { NavigationItem, NavigationMenu } from 'shared/components';
 
@@ -13,7 +12,6 @@ export const ActivitySettings = () => {
 
   const navigate = useNavigate();
 
-  useBreadcrumbs();
   useActivitiesRedirection();
 
   const handleSetActiveSetting = (setting: NavigationItem) => {

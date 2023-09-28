@@ -4,3 +4,8 @@ export type ScoreContentProps = {
   index: number;
   'data-testid'?: string;
 };
+
+export type GetScoreRangeLabel = {
+  minScore: number;
+  maxScore: number;
+};

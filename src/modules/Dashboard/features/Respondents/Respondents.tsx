@@ -4,14 +4,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
-import {
-  useTimeAgo,
-  useBreadcrumbs,
-  useTable,
-  useAsync,
-  usePermissions,
-  useEncryptionStorage,
-} from 'shared/hooks';
+import { useTimeAgo, useTable, useAsync, usePermissions, useEncryptionStorage } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
 import { page } from 'resources';
@@ -27,7 +20,7 @@ import {
   StyledRightBox,
 } from './Respondents.styles';
 import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
-import { getHeadCells } from './Respondents.const';
+import { getHeadCells, RespondentsColumnsWidth } from './Respondents.const';
 import {
   ChosenAppletData,
   FilteredApplets,
@@ -47,31 +40,36 @@ export const Respondents = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
-  useBreadcrumbs();
 
   const [respondentsData, setRespondentsData] = useState<RespondentsData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: getWorkspaceRespondents, isLoading } = useAsync(
+  const { execute: getWorkspaceRespondents } = useAsync(
     getWorkspaceRespondentsApi,
     (response) => {
       setRespondentsData(response?.data || null);
     },
+    undefined,
+    () => setIsLoading(false),
   );
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    getWorkspaceRespondents({
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    setIsLoading(true);
+
+    return getWorkspaceRespondents({
       params: {
         ownerId,
         limit: DEFAULT_ROWS_PER_PAGE,
         ...(appletId && { appletId }),
       },
-    }),
-  );
+    });
+  });
 
   const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
+    setIsLoading(true);
     const params = {
       ...args,
       params: {
@@ -141,9 +139,15 @@ export const Respondents = () => {
     },
   };
 
-  const { execute: updateRespondentsPin } = useAsync(updateRespondentsPinApi, handleReload);
+  const { execute: updateRespondentsPin } = useAsync(
+    updateRespondentsPinApi,
+    handleReload,
+    undefined,
+    () => setIsLoading(false),
+  );
 
   const handlePinClick = (userId: string) => {
+    setIsLoading(true);
     updateRespondentsPin({ ownerId, userId });
   };
 
@@ -162,24 +166,28 @@ export const Respondents = () => {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-respondents-pin" />,
         value: '',
         onClick: () => handlePinClick(id),
+        width: RespondentsColumnsWidth.Pin,
       },
       secretId: {
         content: () => stringSecretIds,
         value: stringSecretIds,
-        width: '30%',
+        width: RespondentsColumnsWidth.SecretId,
       },
       nickname: {
         content: () => stringNicknames,
         value: stringNicknames,
+        width: RespondentsColumnsWidth.Nickname,
       },
       latestActive: {
         content: () => latestActive,
         value: latestActive,
+        width: RespondentsColumnsWidth.LatestActive,
       },
       ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
+          width: RespondentsColumnsWidth.Schedule,
         },
       }),
       actions: {
@@ -191,7 +199,6 @@ export const Respondents = () => {
           />
         ),
         value: '',
-        width: '330',
       },
     };
   };
@@ -304,6 +311,7 @@ export const Respondents = () => {
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}
+        hasColFixedWidth
         data-testid="dashboard-respondents-table"
         {...tableProps}
       />

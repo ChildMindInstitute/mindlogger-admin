@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { EmptyState, LinkedTabs, Svg } from 'shared/components';
-import { useAsync, useBreadcrumbs } from 'shared/hooks';
+import { useAsync } from 'shared/hooks';
 import { page } from 'resources';
 import { users, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
@@ -25,7 +25,6 @@ export const RespondentData = () => {
   const { ownerId } = workspaces.useData() || {};
   const respondentsData = users.useAllRespondentsData();
   const dispatch = useAppDispatch();
-  useBreadcrumbs();
   const respondentDataTabs = useRespondentDataTabs();
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi);
 

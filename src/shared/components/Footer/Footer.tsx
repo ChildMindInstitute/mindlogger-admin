@@ -25,10 +25,11 @@ export const Footer = () => {
     <StyledFooter>
       <Box>
         <StyledText>
-          MindLogger {version} {buildVersion} &#169; {year}
+          {t('footerText')}
           <StyledUnderlineLink target="_blank" href={CMI_LINK}>
             Child Mind Institute
           </StyledUnderlineLink>
+          &#169; {year} {version} {buildVersion}
         </StyledText>
       </Box>
       <StyledBox>

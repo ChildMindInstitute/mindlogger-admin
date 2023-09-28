@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { useLocation, useParams, generatePath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import uniqueId from 'lodash.uniqueid';
 
-import { Breadcrumb, breadcrumbs, applet, workspaces, SingleApplet } from 'redux/modules';
+import { applet, workspaces, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
@@ -18,9 +18,12 @@ import {
   checkCurrentPerformanceTaskPage,
   SettingParam,
   checkIfAppletSettingsUrlPassed,
+  checkIfAppletUrlPassed,
+  checkCurrentAppletPage,
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'modules/Dashboard/hooks/useRespondentLabel';
+import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();
@@ -54,7 +57,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         : '',
   };
 
-  useEffect(() => {
+  return useMemo(() => {
     const newBreadcrumbs: Breadcrumb[] = [];
     const isDashboard = pathname.includes(page.dashboard);
     const isBuilder = pathname.includes(page.builder);
@@ -80,11 +83,18 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         label: t('appletLibrary'),
         navPath: page.library,
       });
+
+      if (pathname.includes('cart'))
+        newBreadcrumbs.push({
+          icon: 'cart-outlined',
+          label: t('cart'),
+        });
     }
 
     if (appletId && (isDashboard || isBuilder)) {
       newBreadcrumbs.push({
         icon: appletData?.image || '',
+        useCustomIcon: true,
         label: appletLabel,
         chip: isBuilder ? t('editing') : undefined,
         navPath: generatePath(isDashboard ? page.appletRespondents : page.builderApplet, {
@@ -94,6 +104,22 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
+    if (pathname.includes('applets')) {
+      newBreadcrumbs.push({
+        icon: 'applet-outlined',
+        label: t('applets'),
+        navPath: page.dashboardApplets,
+      });
+    }
+    if (pathname.includes('managers')) {
+      newBreadcrumbs.push({
+        icon: 'manager-outlined',
+        label: t('managers'),
+        navPath: appletId
+          ? generatePath(page.appletManagers, { appletId })
+          : page.dashboardManagers,
+      });
+    }
     if (pathname.includes('respondents')) {
       newBreadcrumbs.push({
         icon: 'respondent-outlined',
@@ -112,7 +138,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
     if (pathname.includes('dataviz')) {
       newBreadcrumbs.push({
-        icon: '',
         label: t('viewData'),
         disabledLink: true,
       });
@@ -133,7 +158,43 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         disabledLink: true,
       });
     }
+    if (pathname.includes('schedule')) {
+      newBreadcrumbs.push({
+        icon: 'schedule-outlined',
+        label: t('schedule'),
+        disabledLink: true,
+      });
+    }
+    if (pathname.includes('add-user')) {
+      newBreadcrumbs.push({
+        icon: 'users-outlined',
+        label: t('addUser'),
+        disabledLink: true,
+      });
+    }
 
+    if (checkIfAppletUrlPassed(pathname)) {
+      const { isAbout, isActivityFlow, isActivities } = checkCurrentAppletPage(pathname);
+
+      if (isAbout) {
+        newBreadcrumbs.push({
+          icon: 'more-info-outlined',
+          label: t('aboutApplet'),
+        });
+      }
+      if (isActivities && !activityId) {
+        newBreadcrumbs.push({
+          icon: 'checklist-filled',
+          label: t('activities'),
+        });
+      }
+      if (isActivityFlow && !activityFlowId) {
+        newBreadcrumbs.push({
+          icon: 'flow',
+          label: t('activityFlows'),
+        });
+      }
+    }
     if (checkIfAppletSettingsUrlPassed(pathname)) {
       newBreadcrumbs.push({
         icon: 'settings',
@@ -149,7 +210,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         checkCurrentActivityPage(pathname);
 
       newBreadcrumbs.push(activitiesBreadcrumb, {
-        icon: '',
+        icon: 'checklist-outlined',
         label: activityLabel!,
         navPath: generatePath(page.builderAppletActivity, { appletId, activityId }),
       });
@@ -169,7 +230,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       newBreadcrumbs.push(
         activitiesBreadcrumb,
         {
-          icon: '',
           label: performanceTaskLabel || '',
           disabledLink: true,
         },
@@ -192,7 +252,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           }),
         },
         {
-          icon: '',
           label: activityFlowLabel!,
           navPath: generatePath(page.builderAppletActivityFlowItem, { appletId, activityFlowId }),
         },
@@ -226,7 +285,8 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       ...crumb,
       key: uniqueId(),
     }));
-    dispatch(breadcrumbs.actions.setBreadcrumbs(updatedBreadcrumbs));
+
+    return updatedBreadcrumbs;
   }, [
     t,
     workspaceName,

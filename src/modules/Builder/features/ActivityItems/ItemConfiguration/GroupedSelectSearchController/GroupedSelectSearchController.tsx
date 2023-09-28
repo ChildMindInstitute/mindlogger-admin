@@ -100,7 +100,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 onChange={handleOnSelectChange}
                 value={value}
                 labelId="input-type-label"
-                label={t('inputType')}
+                label={t('itemType')}
                 renderValue={() => (
                   <StyledFlexTopCenter sx={{ maxHeight: '2.3rem' }}>
                     <StyledFlexTopCenter sx={{ overflow: 'hidden' }}>

@@ -25,3 +25,4 @@ export const retentionTypes = [
 
 export const DEFAULT_RETENTION_PERIOD = 1;
 export const DEFAULT_RETENTION_TYPE = RetentionPeriods.Indefinitely;
+export const PREVENTED_CODES = ['NumpadDecimal', 'Period', 'Comma'];

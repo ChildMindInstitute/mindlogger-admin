@@ -136,6 +136,8 @@ export type DecryptedTimeAnswer = AdditionalTextType & {
   value: {
     hours: number;
     minutes: number;
+    hour?: number;
+    minute?: number;
   };
 };
 
@@ -319,6 +321,7 @@ export type ActivityItemAnswer = {
   id?: string;
   activityItem: Item;
   answer: AnswerDTO;
+  'data-testid'?: string;
 };
 
 export const enum ElementType {

@@ -24,6 +24,7 @@ import { Fields, fields, defaultValues, langs, getRoles } from './AddUserForm.co
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl } from './AddUserForm.utils';
+import { useFormError } from './AddUserForm.hooks';
 
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
   const { appletId } = useParams();
@@ -40,11 +41,12 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     label: `${details?.[0].accessId} (${details?.[0].respondentNickname})`,
     id,
   }));
-  const { handleSubmit, control, watch, reset, register, unregister } = useForm<FormValues>({
-    resolver: yupResolver(AddUserSchema(workspaceNameVisible)),
-    defaultValues,
-    mode: 'onChange',
-  });
+  const { handleSubmit, control, watch, reset, register, unregister, setError } =
+    useForm<FormValues>({
+      resolver: yupResolver(AddUserSchema(workspaceNameVisible)),
+      defaultValues,
+      mode: 'onChange',
+    });
 
   const role = watch(Fields.role);
 
@@ -119,6 +121,8 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
       );
     }
   }, [ownerId]);
+
+  const hasCommonError = useFormError({ error, setError });
 
   return (
     <>
@@ -227,7 +231,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           </StyledResetButton>
         </StyledRow>
       </form>
-      {error && (
+      {hasCommonError && (
         <StyledErrorText sx={{ mt: theme.spacing(2) }}>{getErrorMessage(error)}</StyledErrorText>
       )}
     </>

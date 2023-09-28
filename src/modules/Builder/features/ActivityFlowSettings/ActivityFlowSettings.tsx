@@ -1,7 +1,6 @@
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { NavigationItem, NavigationMenu } from 'shared/components';
-import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
 
@@ -13,7 +12,6 @@ export const ActivityFlowSettings = () => {
   const { appletId, activityFlowId } = useParams();
   const activityFlow = useActivityFlow();
 
-  useBreadcrumbs();
   useActivityFlowsRedirection();
 
   const handleItemClose = () => {

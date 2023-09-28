@@ -10,15 +10,10 @@ import { ScoreCellProps } from './ScoreCell.types';
 export const ScoreCell = ({ name, 'data-testid': dataTestid }: ScoreCellProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { control, getValues, getFieldState, setValue } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
 
   const handleClick = () => setIsEditing(true);
-
-  const handleClickAway = () => {
-    const { error } = getFieldState(name);
-
-    if (!error) setIsEditing(false);
-  };
+  const handleClickAway = () => setIsEditing(false);
 
   if (!isEditing)
     return (

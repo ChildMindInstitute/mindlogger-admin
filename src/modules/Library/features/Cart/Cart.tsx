@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useBreadcrumbs } from 'shared/hooks';
 import { EmptyState, Spinner } from 'shared/components';
 import {
   theme,
@@ -75,12 +74,6 @@ export const Cart = () => {
   };
 
   useAppletsFromCart();
-  useBreadcrumbs([
-    {
-      icon: 'cart-outlined',
-      label: t('cart'),
-    },
-  ]);
   useReturnToLibraryPath(page.libraryCart);
 
   const filteredApplets =

@@ -12,7 +12,6 @@ import {
   StyledFlexColumn,
   StyledTitleMedium,
 } from 'shared/styles';
-import { useBreadcrumbs } from 'shared/hooks';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
 import { AppletFormValues } from 'modules/Builder/types';
@@ -35,7 +34,6 @@ export const ActivityFlowAbout = () => {
     control,
   };
 
-  useBreadcrumbs();
   useActivityFlowsRedirection();
 
   return (
