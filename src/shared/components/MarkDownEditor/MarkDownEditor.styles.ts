@@ -29,10 +29,6 @@ const commonStyles = `
     text-align: right;
   }
   
-  .md-editor-preview-wrapper img {
-    max-width: 50%;
-  }
-  
   .md-editor-preview-wrapper video {
     max-width: 50%;
     display: block;

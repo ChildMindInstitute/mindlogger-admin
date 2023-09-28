@@ -133,12 +133,12 @@ export type DecryptedDateAnswer = AdditionalTextType & {
 };
 
 export type DecryptedTimeAnswer = AdditionalTextType & {
-  value: {
+  value?: {
     hours: number;
     minutes: number;
-    hour?: number;
-    minute?: number;
   };
+  hour?: number;
+  minute?: number;
 };
 
 export type DecryptedGeolocationAnswer = AdditionalTextType & {

@@ -13,7 +13,7 @@ const parseValue = (value: unknown) => {
 
 export const getAnswerValue = (answerValue?: AnswerDTO) => {
   if (typeof answerValue === 'object') {
-    return parseValue(answerValue?.value ?? answerValue);
+    return parseValue(answerValue?.value);
   }
 
   return parseValue(answerValue);
