@@ -101,51 +101,49 @@ export const EditAccessPopup = ({
   };
 
   return (
-    <>
-      <Modal
-        open={editAccessPopupVisible}
-        onClose={onClose}
-        onSubmit={handleSubmit}
-        title={t('editAccess')}
-        buttonText={t('save')}
-        disabledSubmit={!applets.length}
-        data-testid="dashboard-managers-edit-access-popup"
-      >
-        <>
-          <StyledModalWrapper>
-            <StyledBodyLarge sx={{ margin: theme.spacing(-1.8, 0, 1.2) }}>
-              <strong>
-                {firstName} {lastName} ({email})
-              </strong>
-              {appletId
-                ? ` ${t('hasTheFollowingRole')} ${applets?.[0]?.displayName}`
-                : t('userHasAccess')}
-            </StyledBodyLarge>
-          </StyledModalWrapper>
-          <StyledApplets>
-            {applets.map((applet) => (
-              <Applet
-                key={applet.id}
-                addRole={handleAddRole}
-                removeRole={handleRemoveRole}
-                applet={applet}
-                user={user}
-                handleAddSelectedRespondents={handleAddSelectedRespondents}
-                appletsWithoutRespondents={appletsWithoutRespondents}
-              />
-            ))}
-          </StyledApplets>
-          {appletsWithoutRespondents?.length > 0 && (
-            <StyledError>
-              <Trans
-                i18nKey="editAccessNoRespondent"
-                values={{ titles: appletsWithoutRespondents.map((el) => el).join(', ') }}
-              />
-            </StyledError>
-          )}
-          {error && <StyledError>{getErrorMessage(error)}</StyledError>}
-        </>
-      </Modal>
-    </>
+    <Modal
+      open={editAccessPopupVisible}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      title={t('editAccess')}
+      buttonText={t('save')}
+      disabledSubmit={!applets.length}
+      data-testid="dashboard-managers-edit-access-popup"
+    >
+      <>
+        <StyledModalWrapper>
+          <StyledBodyLarge sx={{ margin: theme.spacing(-1.8, 0, 1.2) }}>
+            <strong>
+              {firstName} {lastName} ({email})
+            </strong>
+            {appletId
+              ? ` ${t('hasTheFollowingRole')} ${applets?.[0]?.displayName}`
+              : t('userHasAccess')}
+          </StyledBodyLarge>
+        </StyledModalWrapper>
+        <StyledApplets>
+          {applets.map((applet) => (
+            <Applet
+              key={applet.id}
+              addRole={handleAddRole}
+              removeRole={handleRemoveRole}
+              applet={applet}
+              user={user}
+              handleAddSelectedRespondents={handleAddSelectedRespondents}
+              appletsWithoutRespondents={appletsWithoutRespondents}
+            />
+          ))}
+        </StyledApplets>
+        {appletsWithoutRespondents?.length > 0 && (
+          <StyledError>
+            <Trans
+              i18nKey="editAccessNoRespondent"
+              values={{ titles: appletsWithoutRespondents.map((el) => el).join(', ') }}
+            />
+          </StyledError>
+        )}
+        {error && <StyledError>{getErrorMessage(error)}</StyledError>}
+      </>
+    </Modal>
   );
 };
