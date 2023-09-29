@@ -16,5 +16,6 @@ export type AppletPasswordPopupProps = {
   appletId: string;
   encryption?: Encryption | null;
   submitCallback?: (ref: AppletPasswordRefType) => void;
+  isLoading?: boolean;
   'data-testid'?: string;
 };
