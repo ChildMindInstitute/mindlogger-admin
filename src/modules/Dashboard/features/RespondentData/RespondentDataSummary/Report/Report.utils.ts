@@ -396,13 +396,14 @@ export const formatActivityItemAnswers = (
         };
       }
 
-      const {
-        value: { hours, minutes },
-      } = currentAnswer.answer as DecryptedTimeAnswer;
+      const answer = currentAnswer.answer as DecryptedTimeAnswer;
+
+      const hours = answer?.value?.hours ?? answer?.hour;
+      const minutes = answer?.value?.minutes ?? answer?.minute;
 
       const fullDateValue = new Date(DEFAULT_DATE_MAX);
-      fullDateValue.setHours(hours);
-      fullDateValue.setMinutes(minutes);
+      fullDateValue.setHours(hours!);
+      fullDateValue.setMinutes(minutes!);
 
       const answers = [
         {

@@ -38,7 +38,7 @@ import {
   checkScoreRegexp,
   getRegexForIndexedField,
   getTestFunctionForSubscaleScore,
-  isPerfTaskResponseType,
+  isPerformanceTaskResponseType,
   isTouchOrGyroscopeRespType,
   testFunctionForNotExistedItems,
   testFunctionForNotSupportedItems,
@@ -223,7 +223,7 @@ export const ItemSchema = () =>
       question: yup
         .string()
         .when('responseType', ([responseType], schema) => {
-          if (isPerfTaskResponseType(responseType)) {
+          if (isPerformanceTaskResponseType(responseType)) {
             return schema;
           }
 

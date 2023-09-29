@@ -86,10 +86,10 @@ export const parseResponseValueRaw = <
       )?.month}/${(value as DecryptedDateAnswer['value'])?.year}`;
     case ItemResponseType.Time: {
       const timeValue = value as DecryptedTimeAnswer['value'];
+      const hours = timeValue?.hours ?? (answer as DecryptedTimeAnswer)?.hour;
+      const minutes = timeValue?.minutes ?? (answer as DecryptedTimeAnswer)?.minute;
 
-      return `time: hr ${timeValue?.hours || timeValue?.hour}, min ${
-        timeValue?.minutes || timeValue?.minute
-      }`;
+      return `time: hr ${hours}, min ${minutes}`;
     }
     case ItemResponseType.Geolocation:
       return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${(
