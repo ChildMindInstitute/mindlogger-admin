@@ -59,17 +59,20 @@ const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
-  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
-    if (item.answer === null) return filteredAcc;
+  const answers = decryptedAnswers.reduce(
+    (filteredAcc, item, index) => {
+      if (item.answer === null) return filteredAcc;
 
-    return filteredAcc.concat(
-      getReportCSVObject({
-        item,
-        rawAnswersObject,
-        index,
-      }),
-    );
-  }, [] as ReturnType<typeof getReportCSVObject>[]);
+      return filteredAcc.concat(
+        getReportCSVObject({
+          item,
+          rawAnswersObject,
+          index,
+        }),
+      );
+    },
+    [] as ReturnType<typeof getReportCSVObject>[],
+  );
 
   const subscaleSetting = decryptedAnswers?.[0]?.subscaleSetting;
   if (subscaleSetting?.subscales?.length) {
@@ -160,8 +163,8 @@ const getMediaData = (
         url: getDrawingUrl(item),
       });
     const responseType = item.activityItem?.responseType;
-    if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
     const url = getMediaUrl(item);
+    if (!ItemsWithFileResponses.includes(responseType) || !url) return filteredAcc;
 
     return filteredAcc.concat({
       fileName: getMediaFileName(item, getFileExtension(url)),

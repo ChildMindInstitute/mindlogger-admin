@@ -8,13 +8,13 @@ import { ApiError } from 'shared/state';
 export type FormValues = {
   firstName: string;
   lastName: string;
-  nickname: string;
+  nickname?: string;
   email: string;
-  secretUserId: string;
-  workspacePrefix: string;
+  secretUserId?: string;
+  workspacePrefix?: string;
   role: string;
-  language: string;
-  respondents: { label: string; id: string }[];
+  language?: string;
+  respondents?: { label: string; id: string }[];
 };
 
 export type Field = { name: keyof FormValues; options?: Option[]; 'data-testid'?: string };

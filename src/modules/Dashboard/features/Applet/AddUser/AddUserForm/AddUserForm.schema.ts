@@ -17,18 +17,27 @@ export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
       email: yup.string().required(emailRequired).email(incorrectEmail),
       firstName: yup.string().required(firstNameRequired),
       lastName: yup.string().required(lastNameRequired),
+      nickName: yup.string(),
+      role: yup.string().required(),
       secretUserId: yup
         .string()
-        .when('role', (role, schema) =>
+        .when('role', ([role], schema) =>
           role === Roles.Respondent ? schema.required(secretUserIdRequired) : schema,
         ),
       workspacePrefix: yup
         .string()
-        .when('role', (role, schema) =>
+        .when('role', ([role], schema) =>
           role !== Roles.Respondent && isWorkspaceName
             ? schema.required(workspaceNameRequired)
             : schema,
         ),
+      language: yup.string(),
+      respondents: yup.array().of(
+        yup.object({
+          label: yup.string().required(),
+          id: yup.string().required(),
+        }),
+      ),
     })
     .required();
 };

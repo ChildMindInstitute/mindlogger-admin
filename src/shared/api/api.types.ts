@@ -35,3 +35,7 @@ export type ResponseWithObject<T> = {
   count: number;
   result: T;
 };
+
+export type AppletUniqueName = {
+  name: string;
+};

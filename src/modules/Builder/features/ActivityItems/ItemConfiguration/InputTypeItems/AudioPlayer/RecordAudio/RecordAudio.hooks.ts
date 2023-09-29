@@ -8,7 +8,7 @@ export const useAudioRecorder: () => RecorderControls = () => {
   const [isStopped, setIsStopped] = useState(true);
   const [recordingTime, setRecordingTime] = useState(0);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>();
-  const [timerInterval, setTimerInterval] = useState<NodeJS.Timer>();
+  const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout>();
   const [recordingBlob, setRecordingBlob] = useState<Blob[]>([]);
 
   const startTimer = () => {

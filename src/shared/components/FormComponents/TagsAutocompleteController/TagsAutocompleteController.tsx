@@ -71,7 +71,7 @@ export const TagsInputController = <T extends FieldValues>({
             value={value || []}
             onChange={handleChange}
             disabled={disabled}
-            renderInput={(params) => <TextField {...params} {...props} />}
+            renderInput={({ InputLabelProps, ...params }) => <TextField {...params} {...props} />}
             renderOption={(props, option, { selected }) => (
               <ListItem {...props}>
                 <Checkbox checked={selected} />
@@ -83,23 +83,25 @@ export const TagsInputController = <T extends FieldValues>({
 
               return (
                 <Paper {...restPaperProps}>
-                  {options?.length ? (
-                    <ListItem
-                      onMouseDown={(event) => event.preventDefault()} // prevent blur
-                      sx={{ pl: theme.spacing(2.8) }}
-                    >
-                      <FormControlLabel
-                        onClick={handleToggleSelectAll}
-                        label={labelAllSelect}
-                        sx={{
-                          width: '100%',
-                        }}
-                        control={<Checkbox id="select-all-checkbox" checked={selectedAll} />}
-                      />
-                    </ListItem>
-                  ) : null}
-                  <Divider />
-                  {children}
+                  <>
+                    {options?.length ? (
+                      <ListItem
+                        onMouseDown={(event) => event.preventDefault()} // prevent blur
+                        sx={{ pl: theme.spacing(2.8) }}
+                      >
+                        <FormControlLabel
+                          onClick={handleToggleSelectAll}
+                          label={labelAllSelect}
+                          sx={{
+                            width: '100%',
+                          }}
+                          control={<Checkbox id="select-all-checkbox" checked={selectedAll} />}
+                        />
+                      </ListItem>
+                    ) : null}
+                    <Divider />
+                    {children}
+                  </>
                 </Paper>
               );
             }}

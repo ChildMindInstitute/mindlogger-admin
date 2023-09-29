@@ -31,6 +31,7 @@ export const AppRoutes = () => {
 
   return (
     <>
+      {/* @ts-expect-error history-router now unstable and it's a known error https://github.com/remix-run/react-router/issues/9630 */}
       <Router history={history}>
         {loaded && (
           <Routes>

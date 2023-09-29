@@ -22,6 +22,7 @@ import {
   SettingParam,
 } from 'shared/utils';
 import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
+import { getAppletUniqueNameApi } from 'shared/api';
 import { auth, workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
@@ -41,7 +42,7 @@ import {
   getCurrentEntitiesIds,
 } from './SaveAndPublish.utils';
 
-export const useAppletData = () => {
+export const useAppletDataFromForm = () => {
   const { getValues } = useFormContext();
 
   return (encryption?: Encryption): SingleApplet => {
@@ -63,7 +64,7 @@ export const useAppletData = () => {
             subscaleSetting: remapSubscaleSettings(activity),
             scoresAndReports: getScoresAndReports(activity),
             ...removeActivityExtraFields(),
-          } as Activity),
+          }) as Activity,
       ),
       encryption,
       description: appletDescription,
@@ -79,7 +80,7 @@ export const useAppletData = () => {
               ...removeActivityFlowItemExtraFields(),
             })),
             ...removeActivityFlowExtraFields(),
-          } as ActivityFlow),
+          }) as ActivityFlow,
       ),
       ...removeAppletExtraFields(),
     };
@@ -87,7 +88,7 @@ export const useAppletData = () => {
 };
 
 export const useCheckIfHasAtLeastOneActivity = () => {
-  const getAppletData = useAppletData();
+  const getAppletData = useAppletDataFromForm();
 
   return () => {
     const body = getAppletData();
@@ -97,7 +98,7 @@ export const useCheckIfHasAtLeastOneActivity = () => {
 };
 
 export const useCheckIfHasAtLeastOneItem = () => {
-  const getAppletData = useAppletData();
+  const getAppletData = useAppletDataFromForm();
 
   return () => {
     const body = getAppletData();
@@ -238,9 +239,12 @@ export const useSaveAndPublishSetup = (
   hasPrompt: boolean,
   setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
 ) => {
-  const { trigger } = useFormContext();
+  const {
+    trigger,
+    formState: { dirtyFields },
+  } = useFormContext();
   const { pathname } = useLocation();
-  const getAppletData = useAppletData();
+  const getAppletData = useAppletDataFromForm();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
   const checkIfHasAtLeastOneItem = useCheckIfHasAtLeastOneItem();
   const checkIfHasEmptyRequiredFields = useCheckIfHasEmptyRequiredFields();
@@ -262,6 +266,7 @@ export const useSaveAndPublishSetup = (
     isLogoutInProgress,
   } = usePrompt(hasPrompt);
   const shouldNavigateRef = useRef(false);
+  const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
   const checkIfAppletBeingCreatedOrUpdatedRef = useRef(false);
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -270,6 +275,7 @@ export const useSaveAndPublishSetup = (
   const removeAppletData = useRemoveAppletData();
   const handleLogout = useLogout();
   const { hasChanges: hasReportConfigChanges } = reportConfig.useReportConfigChanges() || {};
+  const isDisplayNameDirty = dirtyFields?.displayName;
 
   useEffect(() => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
@@ -376,17 +382,30 @@ export const useSaveAndPublishSetup = (
   const sendRequest = async (password?: string) => {
     const encryptionData = password ? getEncryptionToServer(password, ownerId!) : appletEncryption;
     setPublishProcessPopupOpened(true);
-    const body = getAppletData(encryptionData);
-
+    const appletData = getAppletData(encryptionData);
     let result;
-    checkIfAppletBeingCreatedOrUpdatedRef.current = true;
-    if ((isNewApplet || !appletId) && ownerId) {
-      result = await dispatch(createApplet({ ownerId, body }));
+    try {
+      const uniqueNameResult =
+        isDisplayNameDirty && (await getAppletUniqueNameApi({ name: appletData.displayName }));
+      appletUniqueNameRef.current = uniqueNameResult?.data?.result?.name || null;
+    } catch (error) {
+      appletUniqueNameRef.current = null;
+      console.warn(error);
+    } finally {
+      const body = {
+        ...appletData,
+        displayName: appletUniqueNameRef.current || appletData.displayName,
+      };
+      checkIfAppletBeingCreatedOrUpdatedRef.current = true;
+      if ((isNewApplet || !appletId) && ownerId) {
+        result = await dispatch(createApplet({ ownerId, body }));
+      }
+      if (!isNewApplet && appletId) {
+        result = await dispatch(updateApplet({ appletId, body }));
+      }
+      checkIfAppletBeingCreatedOrUpdatedRef.current = false;
     }
-    if (!isNewApplet && appletId) {
-      result = await dispatch(updateApplet({ appletId, body }));
-    }
-    checkIfAppletBeingCreatedOrUpdatedRef.current = false;
+
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {

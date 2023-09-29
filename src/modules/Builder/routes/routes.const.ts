@@ -28,7 +28,7 @@ export const appletActivityRoutes = [
 
 export const appletActivityFlowRoutes = [
   { path: Path.About, Component: ActivityFlowAbout },
-  { path: Path.FlowBuilder, Component: ActivityFlowBuilder },
+  { path: Path.Builder, Component: ActivityFlowBuilder },
 ];
 
 export const performanceTasksRoutes = [
