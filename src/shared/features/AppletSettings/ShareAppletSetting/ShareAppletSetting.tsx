@@ -35,7 +35,7 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
   }, [appletData]);
 
   return (
-    <>
+    <Box sx={{ position: 'relative' }}>
       <StyledContainer>
         <ShareApplet
           applet={appletData}
@@ -70,6 +70,6 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
           </Box>
         </Tooltip>
       </StyledContainer>
-    </>
+    </Box>
   );
 };
