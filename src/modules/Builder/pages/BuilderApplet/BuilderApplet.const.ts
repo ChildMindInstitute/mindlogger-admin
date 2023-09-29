@@ -40,5 +40,5 @@ export const enum ItemTestFunctions {
 export const conditionsMatch = yup.string().when('conditions', {
   is: (conditions: Condition[]) => conditions?.length > 0,
   then: (schema) => schema.required(),
-  otherwise: (shema) => shema,
+  otherwise: (schema) => schema,
 });

@@ -15,8 +15,8 @@ export const getSequencesData = (stimulusTrials: FlankerStimulusSettings[] = [])
   const defaultTableRows: Row[] = [];
 
   for (const trial of stimulusTrials) {
-    if (trial?.image) {
-      const imageName = getUploadedMediaName(trial.image);
+    if (trial && (trial.image || trial.text)) {
+      const imageName = trial.text || getUploadedMediaName(trial.image);
       const exportRow: Record<string, string> = {};
       const tableRow: Row = {};
 

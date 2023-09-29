@@ -49,7 +49,6 @@ export const BuilderApplet = () => {
     (!isNewApplet && loadingStatus === 'idle') ||
     loadingStatus === 'loading' ||
     themesLoadingStatus === 'loading';
-  // TODO: check if themesList[0].id is the default theme after back-end task (M2-3399) is done
   const defaultThemeId = themesList[0]?.id;
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>

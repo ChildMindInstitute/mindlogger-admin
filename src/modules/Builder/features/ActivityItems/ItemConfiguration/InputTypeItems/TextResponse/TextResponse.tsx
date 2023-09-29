@@ -32,6 +32,7 @@ export const TextResponse = ({ name }: TextResponseProps) => {
             control={control}
             type="number"
             label={t('maxCharacters')}
+            minNumberValue={1}
             data-testid="builder-activity-items-item-configuration-text-response-max-length"
           />
         </StyledMaxCharacters>

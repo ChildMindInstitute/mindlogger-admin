@@ -7,12 +7,10 @@ export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean)
   const incorrectEmail = t('incorrectEmail');
 
   const reportIncludedItemName = {
-    reportIncludedItemName: yup
-      .string()
-      .when('itemValue', {
-        is: true,
-        then: (shema) => shema.required(<string>t('pleaseSelectItem')),
-      }),
+    reportIncludedItemName: yup.string().when('itemValue', {
+      is: true,
+      then: (schema) => schema.required(<string>t('pleaseSelectItem')),
+    }),
   };
 
   return yup
