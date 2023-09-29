@@ -11,7 +11,7 @@ import {
   DecryptedMultiSelectionPerRowAnswer,
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
-  DecryptedStabilityTrackerAnswer,
+  DecryptedStabilityTrackerAnswerObject,
   DecryptedTimeAnswer,
   ExtendedEvent,
   ExtendedExportAnswerWithoutEncryption,
@@ -78,14 +78,15 @@ export const parseResponseValueRaw = <
 
   switch (inputType) {
     case ItemResponseType.TimeRange:
-      return `time_range: from (hr ${(value as DecryptedDateRangeAnswer['value'])?.from
-        ?.hour}, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
+      return `time_range: from (hr ${
+        (value as DecryptedDateRangeAnswer['value'])?.from?.hour
+      }, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
         (value as DecryptedDateRangeAnswer['value'])?.to?.hour ?? 0
       }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute ?? 0})`;
     case ItemResponseType.Date:
-      return `date: ${(value as DecryptedDateAnswer['value'])?.day}/${(
-        value as DecryptedDateAnswer['value']
-      )?.month}/${(value as DecryptedDateAnswer['value'])?.year}`;
+      return `date: ${(value as DecryptedDateAnswer['value'])?.day}/${
+        (value as DecryptedDateAnswer['value'])?.month
+      }/${(value as DecryptedDateAnswer['value'])?.year}`;
     case ItemResponseType.Time: {
       const timeValue = value as DecryptedTimeAnswer['value'];
       const hours = timeValue?.hours ?? (answer as DecryptedTimeAnswer)?.hour;
@@ -94,9 +95,9 @@ export const parseResponseValueRaw = <
       return `time: hr ${hours}, min ${minutes}`;
     }
     case ItemResponseType.Geolocation:
-      return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${(
-        value as DecryptedGeolocationAnswer['value']
-      )?.longitude})`;
+      return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${
+        (value as DecryptedGeolocationAnswer['value'])?.longitude
+      })`;
     case ItemResponseType.Drawing:
       return getMediaFileName(item, 'svg');
     case ItemResponseType.ABTrails:
@@ -138,7 +139,7 @@ export const parseResponseValueRaw = <
     case ItemResponseType.StabilityTracker:
       return getStabilityTrackerCsvName(
         answerId,
-        (value as DecryptedStabilityTrackerAnswer['value']).phaseType,
+        (value as DecryptedStabilityTrackerAnswerObject).phaseType,
       );
     case ItemResponseType.Flanker:
       return getFlankerCsvName(item);

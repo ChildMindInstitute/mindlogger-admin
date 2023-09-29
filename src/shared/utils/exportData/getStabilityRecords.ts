@@ -1,4 +1,7 @@
-import { DecryptedStabilityTrackerAnswer, DecryptedStabilityTrackerCalcValue } from 'shared/types';
+import {
+  DecryptedStabilityTrackerAnswerObject,
+  DecryptedStabilityTrackerCalcValue,
+} from 'shared/types';
 
 const getPointStr = (
   pos:
@@ -12,9 +15,7 @@ const getPointStr = (
 
   return `${pos[0]}`;
 };
-export const getStabilityRecords = (
-  responses: DecryptedStabilityTrackerAnswer['value']['value'],
-) => {
+export const getStabilityRecords = (responses: DecryptedStabilityTrackerAnswerObject['value']) => {
   const result = [];
   let startTime = 0;
 

@@ -227,13 +227,16 @@ export const enum StabilityTrackerPhaseType {
   Challenge = 'challenge-phase',
 }
 
-export type DecryptedStabilityTrackerAnswer = {
-  value: {
-    maxLambda: number;
-    phaseType: StabilityTrackerPhaseType;
-    value: DecryptedStabilityTrackerCalcValue[];
-  };
+export type DecryptedStabilityTrackerAnswerObject = {
+  maxLambda: number;
+  phaseType: StabilityTrackerPhaseType;
+  value: DecryptedStabilityTrackerCalcValue[];
 };
+export type DecryptedStabilityTrackerAnswer =
+  | {
+      value: DecryptedStabilityTrackerAnswerObject;
+    }
+  | DecryptedStabilityTrackerAnswerObject;
 
 export const enum FlankerTag {
   Response = 'response',
