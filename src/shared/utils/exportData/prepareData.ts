@@ -7,6 +7,7 @@ import {
   DecryptedFlankerAnswer,
   DecryptedMediaAnswer,
   DecryptedStabilityTrackerAnswer,
+  DecryptedStabilityTrackerAnswerObject,
   EventDTO,
   ExportCsvData,
   ExportDataResult,
@@ -228,7 +229,10 @@ const getStabilityTrackerItemsData = (
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.StabilityTracker) return acc;
 
-    const stabilityTrackerValue = (item.answer as DecryptedStabilityTrackerAnswer).value;
+    const answer = <DecryptedStabilityTrackerAnswer>item.answer;
+    const stabilityTrackerValue = (answer as DecryptedStabilityTrackerAnswerObject).phaseType
+      ? <DecryptedStabilityTrackerAnswerObject>answer
+      : (answer.value as DecryptedStabilityTrackerAnswerObject);
 
     return acc.concat({
       name: getStabilityTrackerCsvName(item.id, stabilityTrackerValue.phaseType),
