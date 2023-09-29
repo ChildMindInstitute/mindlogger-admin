@@ -253,7 +253,7 @@ export const ReportConfigSetting = ({
 
     const body = {
       reportIncludedItemName: itemValue ? reportIncludedItemName : '',
-      reportIncludedActivityName,
+      reportIncludedActivityName: itemValue ? reportIncludedActivityName : '',
     };
 
     await postActivityFlowReportConfig({

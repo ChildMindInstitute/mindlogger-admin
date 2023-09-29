@@ -691,17 +691,19 @@ export const ActivitySchema = () =>
     items: yup
       .array()
       .when('performanceTaskType', ([performanceTaskType], schema) => {
-        if (performanceTaskType === PerfTaskType.Flanker) {
-          return schema.of(FlankerSchema());
+        switch (performanceTaskType) {
+          case PerfTaskType.Flanker:
+            return schema.of(FlankerSchema());
+          case PerfTaskType.Gyroscope:
+          case PerfTaskType.Touch:
+            return schema.of(GyroscopeAndTouchSchema());
+          case PerfTaskType.ABTrailsMobile:
+          case PerfTaskType.ABTrailsTablet:
+          case 'ABTrails':
+            return schema;
+          default:
+            return schema.of(ItemSchema());
         }
-        if (
-          performanceTaskType === PerfTaskType.Gyroscope ||
-          performanceTaskType === PerfTaskType.Touch
-        ) {
-          return schema.of(GyroscopeAndTouchSchema());
-        }
-
-        return schema.of(ItemSchema());
       })
       .min(1),
     isHidden: yup.boolean(),
