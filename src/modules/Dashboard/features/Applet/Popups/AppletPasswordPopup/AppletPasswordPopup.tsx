@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components/Modal';
 import { CreateAppletPassword, EnterAppletPassword } from 'shared/components/Password';
+import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 
-import { AppletPasswordPopupType, AppletPasswordPopupProps } from './AppletPasswordPopup.types';
+import { AppletPasswordPopupProps, AppletPasswordPopupType } from './AppletPasswordPopup.types';
 import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 
 export const AppletPasswordPopup = ({
@@ -15,6 +16,7 @@ export const AppletPasswordPopup = ({
   appletId,
   encryption,
   submitCallback = () => onClose(),
+  isLoading,
   'data-testid': dataTestid,
 }: AppletPasswordPopupProps) => {
   const { t } = useTranslation('app');
@@ -38,23 +40,26 @@ export const AppletPasswordPopup = ({
       data-testid={dataTestid}
       disabledSubmit={!!appletPasswordRef?.current?.password}
     >
-      <StyledAppletPasswordContainer>
-        {popupType === AppletPasswordPopupType.Enter ? (
-          <EnterAppletPassword
-            ref={appletPasswordRef}
-            appletId={appletId}
-            encryption={encryption}
-            submitCallback={handleSubmitCallback}
-            data-testid={`${dataTestid}-enter-password`}
-          />
-        ) : (
-          <CreateAppletPassword
-            ref={appletPasswordRef}
-            submitCallback={handleSubmitCallback}
-            data-testid={`${dataTestid}-create-password`}
-          />
-        )}
-      </StyledAppletPasswordContainer>
+      <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        <StyledAppletPasswordContainer>
+          {popupType === AppletPasswordPopupType.Enter ? (
+            <EnterAppletPassword
+              ref={appletPasswordRef}
+              appletId={appletId}
+              encryption={encryption}
+              submitCallback={handleSubmitCallback}
+              data-testid={`${dataTestid}-enter-password`}
+            />
+          ) : (
+            <CreateAppletPassword
+              ref={appletPasswordRef}
+              submitCallback={handleSubmitCallback}
+              data-testid={`${dataTestid}-create-password`}
+            />
+          )}
+        </StyledAppletPasswordContainer>
+      </>
     </Modal>
   );
 };
