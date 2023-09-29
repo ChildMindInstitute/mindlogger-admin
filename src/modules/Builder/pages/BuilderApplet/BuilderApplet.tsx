@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ObjectSchema } from 'yup';
 
 import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features';
@@ -58,7 +59,7 @@ export const BuilderApplet = () => {
 
   const methods = useForm<AppletFormValues>({
     defaultValues: getDefaultValues(appletData, defaultThemeId),
-    resolver: yupResolver(AppletSchema()),
+    resolver: yupResolver(AppletSchema() as ObjectSchema<AppletFormValues>),
     mode: 'onChange',
   });
   const {

@@ -121,7 +121,7 @@ const getResponseObj = ({
     responseTouchTimestamp =
       'response_touch_timestamp' in response
         ? response.response_touch_timestamp || DEFAULT_VALUE
-        : videoDisplayRequestTimestamp + response.duration;
+        : videoDisplayRequestTimestamp + (<DecryptedFlankerAnswerItemValue>response).duration;
     responseTime = response.duration;
     videoDisplayRequestTimestamp = DEFAULT_VALUE;
   }

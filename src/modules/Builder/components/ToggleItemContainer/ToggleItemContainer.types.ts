@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { DefaultTFuncReturn } from 'i18next';
 
 export type SharedToggleItemProps = {
   open?: boolean;
@@ -11,7 +10,7 @@ export enum ToggleContainerUiType {
 }
 
 export type ToggleItemProps = {
-  title?: string | JSX.Element | DefaultTFuncReturn;
+  title?: string | JSX.Element;
   HeaderContent?: FC<SharedToggleItemProps & any>;
   Content: FC<SharedToggleItemProps & any>;
   headerContentProps?: Record<string, unknown>;

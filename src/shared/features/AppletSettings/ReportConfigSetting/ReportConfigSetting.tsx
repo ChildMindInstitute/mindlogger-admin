@@ -4,6 +4,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { useForm, useFormContext } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button } from '@mui/material';
+import { ObjectSchema } from 'yup';
 
 import {
   postReportConfigApi,
@@ -136,7 +137,9 @@ export const ReportConfigSetting = ({
     setError,
     clearErrors,
   } = useForm<ReportConfigFormValues>({
-    resolver: yupResolver(reportConfigSchema(isActivity, isActivityFlow)),
+    resolver: yupResolver(
+      reportConfigSchema(isActivity, isActivityFlow) as ObjectSchema<ReportConfigFormValues>,
+    ),
     defaultValues,
     mode: 'onSubmit',
   });
@@ -506,7 +509,7 @@ export const ReportConfigSetting = ({
               control={control}
               sx={{ ml: theme.spacing(1.4) }}
               name="reportIncludeUserId"
-              disabled={isActivity || isActivityFlow}
+              disabled={isActivity || isActivityFlow || undefined}
               label={<StyledBodyLarge>{t('respondentId')}</StyledBodyLarge>}
               data-testid={`${dataTestid}-report-includes-respondent`}
             />

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Control } from 'react-hook-form';
-import { AnyObjectSchema, SchemaOf } from 'yup';
+import { AnyObjectSchema, ObjectSchema } from 'yup';
 
 import { HeadCell } from 'shared/types/table';
 import { Row } from 'shared/components';
@@ -69,8 +69,8 @@ export type TableController = {
 };
 
 export type AddToBuilderPopupSchemaType = {
-  [AddToBuilderSteps.SelectWorkspace]: SchemaOf<{ selectedWorkspace: string }>;
-  [AddToBuilderSteps.AddToBuilderActions]: SchemaOf<{ addToBuilderAction: string }>;
-  [AddToBuilderSteps.SelectApplet]: SchemaOf<{ selectedApplet?: string }>;
+  [AddToBuilderSteps.SelectWorkspace]: ObjectSchema<{ selectedWorkspace: string }>;
+  [AddToBuilderSteps.AddToBuilderActions]: ObjectSchema<{ addToBuilderAction: string }>;
+  [AddToBuilderSteps.SelectApplet]: ObjectSchema<{ selectedApplet?: string }>;
   [AddToBuilderSteps.Error]: AnyObjectSchema;
 };

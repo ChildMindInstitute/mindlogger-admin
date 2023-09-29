@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 import { authStorage } from 'shared/utils/authStorage';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
@@ -9,11 +9,8 @@ import { signInRefreshTokenApi } from './api';
 export const getBaseUrl = () =>
   (storage.getItem(LocalStorageKeys.ApiUrl) as string) || BASE_API_URL || '';
 
-export const getCommonConfig = (config: AxiosRequestConfig) => {
+export const getCommonConfig = (config: InternalAxiosRequestConfig) => {
   config.baseURL = getBaseUrl();
-  if (!config.headers) {
-    config.headers = {};
-  }
   const langFromStorage = storage.getItem(LocalStorageKeys.Language) || Languages.EN;
   config.headers['Content-Language'] =
     regionalLangFormats[langFromStorage as Languages] || (langFromStorage as string);
@@ -21,11 +18,8 @@ export const getCommonConfig = (config: AxiosRequestConfig) => {
   return config;
 };
 
-export const getRequestTokenData = (config: AxiosRequestConfig) => {
+export const getRequestTokenData = (config: InternalAxiosRequestConfig) => {
   const accessToken = authStorage.getAccessToken();
-  if (!config.headers) {
-    config.headers = {};
-  }
   config.headers['Authorization'] = `bearer ${accessToken}`;
 };
 

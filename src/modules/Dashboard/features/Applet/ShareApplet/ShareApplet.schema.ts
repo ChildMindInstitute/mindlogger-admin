@@ -9,6 +9,9 @@ export const ShareAppletSchema = () => {
   return yup
     .object({
       appletName: yup.string().required(appletNameRequired),
+      keywords: yup.array().of(yup.string().required()),
+      keyword: yup.string(),
+      checked: yup.boolean(),
     })
     .required();
 };

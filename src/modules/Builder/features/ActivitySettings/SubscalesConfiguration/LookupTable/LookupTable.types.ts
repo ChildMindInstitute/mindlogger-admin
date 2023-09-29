@@ -1,5 +1,4 @@
-import { BaseSchema } from 'yup';
-import { AnyObject } from 'yup/lib/types';
+import { AnyObject, Schema } from 'yup';
 
 import { DataTableItem, FileUploaderProps, ImportedFile, ModalProps } from 'shared/components';
 
@@ -10,7 +9,7 @@ export type LookupTableProps = {
   tableData?: DataTableItem[];
   template: Record<string, string | number | undefined>[];
   templatePrefix?: string;
-  schema: BaseSchema<any, AnyObject, any>;
+  schema: Schema<any, AnyObject, any>;
   onClose: () => void;
   onUpdate: (lookupTableData?: DataTableItem[]) => void;
   'data-testid'?: string;
