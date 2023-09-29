@@ -7,6 +7,6 @@ export type EditRespondentForm = {
 
 export type EditRespondentPopupProps = {
   popupVisible: boolean;
-  onClose: () => void;
+  onClose: (isSuccessVisible: boolean) => void;
   chosenAppletData: ChosenAppletData | null;
 };

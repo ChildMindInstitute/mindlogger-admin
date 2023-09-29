@@ -1,15 +1,11 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { Row, SubmitBtnColor } from 'shared/components';
 import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 
 export type RespondentAccessPopupProps = {
   popupVisible: boolean;
-  setPopupVisible: Dispatch<SetStateAction<boolean>>;
   tableRows: Row[] | undefined;
   chosenAppletData: ChosenAppletData | null;
-  setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;
-  reFetchRespondents: () => void;
+  onClose: (shouldRefetch?: boolean) => void;
 };
 
 export type GetScreen = (respondentName: string, appletName: string) => JSX.Element;
@@ -26,8 +22,7 @@ export type ScreensParams = {
   isRemoved: boolean;
   submitPassword: () => void;
   removeAccess: () => void;
-  handlePopupClose: () => void;
-  reFetchRespondents: () => void;
+  onClose: (shouldRefetch?: boolean) => void;
 };
 
 export type Screen = {

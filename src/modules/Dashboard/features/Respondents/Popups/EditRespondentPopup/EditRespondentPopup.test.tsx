@@ -5,6 +5,10 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { EditRespondentPopup } from '.';
 
+const onCloseMock = jest.fn();
+const successFakeRequest = () => new Promise((res) => res(null));
+const failedFakeRequest = () => Promise.reject(errorText);
+
 const chosenAppletData = {
   appletId: '12312',
   respondentSecretId: '12312',
@@ -13,11 +17,6 @@ const chosenAppletData = {
   ownerId: '1',
 };
 const errorText = 'error';
-
-const onCloseMock = jest.fn();
-const successFakeRequest = () => new Promise((res) => res(null));
-const failedFakeRequest = () => Promise.reject(errorText);
-
 const commonProps = {
   onClose: onCloseMock,
   popupVisible: true,

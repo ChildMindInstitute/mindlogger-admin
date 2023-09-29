@@ -139,10 +139,16 @@ export const Respondents = () => {
     updateRespondentsPin({ ownerId, userId });
   };
 
-  const editRespondentOnClose = () => {
+  const editRespondentOnClose = (shouldRefetch: boolean) => {
     setEditRespondentPopupVisible(false);
     setChosenAppletData(null);
-    handleReload();
+    shouldRefetch && handleReload();
+  };
+
+  const removeRespondentAccessOnClose = (shouldRefetch?: boolean) => {
+    setRemoveAccessPopupVisible(false);
+    setChosenAppletData(null);
+    shouldRefetch && handleReload();
   };
 
   const formatRow = (user: Respondent): Row => {
@@ -326,11 +332,9 @@ export const Respondents = () => {
       {removeAccessPopupVisible && (
         <RespondentsRemoveAccessPopup
           popupVisible={removeAccessPopupVisible}
-          setPopupVisible={setRemoveAccessPopupVisible}
-          tableRows={editableAppletsSmallTableRows}
+          onClose={removeRespondentAccessOnClose}
           chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-          reFetchRespondents={handleReload}
+          tableRows={editableAppletsSmallTableRows}
         />
       )}
       {dataExportPopupVisible && (

@@ -24,6 +24,8 @@ export const EditRespondentPopup = ({
   const [isSuccessVisible, setIsSuccessVisible] = useState(false);
   const [isServerErrorVisible, setIsServerErrorVisible] = useState(true);
 
+  const onCloseHandler = () => onClose(isSuccessVisible);
+
   const { handleSubmit, control, setValue, getValues, trigger } = useForm<EditRespondentForm>({
     resolver: yupResolver(editRespondentFormSchema()),
     defaultValues: { secretUserId: '', nickname: '' },
@@ -72,12 +74,12 @@ export const EditRespondentPopup = ({
   return (
     <Modal
       open={popupVisible}
-      onClose={onClose}
-      onSubmit={isSuccessVisible ? onClose : handleSubmit(submitForm)}
+      onClose={onCloseHandler}
+      onSubmit={isSuccessVisible ? onCloseHandler : handleSubmit(submitForm)}
       title={t('editRespondent')}
       buttonText={t(isSuccessVisible ? 'ok' : 'save')}
       hasSecondBtn={!isSuccessVisible}
-      onSecondBtnSubmit={onClose}
+      onSecondBtnSubmit={onCloseHandler}
       secondBtnText={t('cancel')}
       data-testid={dataTestid}
     >
