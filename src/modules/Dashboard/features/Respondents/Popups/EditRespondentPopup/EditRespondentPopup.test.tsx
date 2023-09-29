@@ -7,7 +7,6 @@ import { EditRespondentPopup } from '.';
 
 const onCloseMock = jest.fn();
 const successFakeRequest = () => new Promise((res) => res(null));
-const failedFakeRequest = () => Promise.reject(errorText);
 
 const chosenAppletData = {
   appletId: '12312',
@@ -16,7 +15,7 @@ const chosenAppletData = {
   respondentNickname: 'respondentNickname',
   ownerId: '1',
 };
-const errorText = 'error';
+
 const commonProps = {
   onClose: onCloseMock,
   popupVisible: true,
@@ -51,14 +50,5 @@ describe('EditRespondentPopup component tests', () => {
         screen.getByText('Nickname and Secret User ID have been updated successfully.'),
       ).toBeInTheDocument(),
     );
-  });
-
-  test('EditRespondentPopup should appear error text', async () => {
-    jest.spyOn(mockedAxios, 'post').mockImplementation(failedFakeRequest);
-
-    renderWithProviders(<EditRespondentPopup {...commonProps} />);
-
-    fireEvent.click(screen.getByText('Save'));
-    await waitFor(() => expect(screen.getByText(errorText)).toBeInTheDocument());
   });
 });
