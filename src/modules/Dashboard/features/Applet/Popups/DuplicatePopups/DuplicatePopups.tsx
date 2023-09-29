@@ -19,6 +19,7 @@ import {
   AppletPasswordPopup,
   AppletPasswordRefType,
 } from '../AppletPasswordPopup';
+import { DuplicatePopupsFormValues } from './DuplicatePopups.types';
 
 export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => void }) => {
   const { t } = useTranslation('app');
@@ -41,10 +42,11 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
 
-  const { handleSubmit, control, getValues, setValue } = useForm({
+  const { handleSubmit, control, getValues, setValue } = useForm<DuplicatePopupsFormValues>({
     resolver: yupResolver(
       yup.object({
         name: yup.string().required(t('nameRequired')!),
+        nameFromApi: yup.string(),
       }),
     ),
     defaultValues: { name: '', nameFromApi: '' },
@@ -86,7 +88,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
             appletId: currentAppletId,
             options: {
               encryption: encryptionDataRef.current.encryption!,
-              displayName: getValues('nameFromApi'),
+              displayName: getValues('nameFromApi') ?? '',
             },
           });
         })();

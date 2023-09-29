@@ -10,7 +10,7 @@ import {
   ReportConfigSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
-  ShareAppletSetting,
+  // ShareAppletSetting,
 } from 'shared/features/AppletSettings';
 import { SettingParam, isManagerOrOwner } from 'shared/utils';
 
@@ -105,15 +105,18 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
     },
     {
       label: 'sharing',
+      //remove after uncommenting Share to Library functionality
+      isVisible: roles?.includes(Roles.SuperAdmin),
       items: [
-        {
-          icon: <Svg id="share" />,
-          label: 'shareToLibrary',
-          component: <ShareAppletSetting />,
-          param: SettingParam.ShareApplet,
-          'data-testid': `${dataTestid}-share-to-library`,
-        },
-
+        // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
+        // introduced. (Story: AUS-4.1.4.10).
+        // {
+        //   icon: <Svg id="share" />,
+        //   label: 'shareToLibrary',
+        //   component: <ShareAppletSetting />,
+        //   param: SettingParam.ShareApplet,
+        //   'data-testid': `${dataTestid}-share-to-library`,
+        // },
         {
           icon: <Svg id={isPublished ? 'conceal' : 'publish'} />,
           label: isPublished ? 'concealApplet' : 'publishApplet',
