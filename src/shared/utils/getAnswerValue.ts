@@ -13,9 +13,9 @@ const parseValue = (value: unknown) => {
 
 export const getAnswerValue = (answerValue?: AnswerDTO) => {
   if (typeof answerValue === 'object') {
-    if ((answerValue as DecryptedStabilityTrackerAnswerObject).phaseType) return answerValue;
+    if ((answerValue as DecryptedStabilityTrackerAnswerObject)?.phaseType) return answerValue;
 
-    return parseValue(answerValue?.value ?? answerValue);
+    return parseValue((answerValue as { value: unknown })?.value ?? answerValue);
   }
 
   return parseValue(answerValue);
