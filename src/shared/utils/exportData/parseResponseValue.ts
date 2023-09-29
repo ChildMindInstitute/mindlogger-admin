@@ -68,6 +68,8 @@ export const parseResponseValueRaw = <
 
   if (ItemsWithFileResponses.includes(inputType)) {
     try {
+      if (!(item.answer as DecryptedMediaAnswer)?.value) return '';
+
       return getMediaFileName(item, getFileExtension((item.answer as DecryptedMediaAnswer).value));
     } catch (error) {
       console.warn(error);
