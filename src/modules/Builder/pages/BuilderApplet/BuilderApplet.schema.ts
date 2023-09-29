@@ -364,30 +364,26 @@ export const FlankerSchema = () =>
   yup
     .object({
       question: yup.string().when('order', (order, schema) => {
-        if (order === 1) {
-          return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+        switch (order) {
+          case 1:
+            return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+          case 2:
+            return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
+          case 8:
+            return schema.required(getIsRequiredValidateMessage('testInstruction'));
+          default:
+            return schema;
         }
-
-        if (order === 2) {
-          return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
-        }
-
-        if (order === 8) {
-          return schema.required(getIsRequiredValidateMessage('testInstruction'));
-        }
-
-        return schema;
       }),
       config: yup.object({}).when('order', (order, schema) => {
-        if (order === 3) {
-          return getFlankerGeneralSchema(schema, RoundTypeEnum.Practice);
+        switch (order) {
+          case 3:
+            return getFlankerGeneralSchema(schema, RoundTypeEnum.Practice);
+          case 9:
+            return getFlankerGeneralSchema(schema, RoundTypeEnum.Test);
+          default:
+            return schema;
         }
-
-        if (order === 9) {
-          return getFlankerGeneralSchema(schema, RoundTypeEnum.Test);
-        }
-
-        return schema;
       }),
     })
     .required();
@@ -396,19 +392,16 @@ export const GyroscopeAndTouchSchema = () =>
   yup
     .object({
       question: yup.string().when('order', (order, schema) => {
-        if (order === 1) {
-          return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+        switch (order) {
+          case 1:
+            return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
+          case 2:
+            return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
+          case 4:
+            return schema.required(getIsRequiredValidateMessage('testInstruction'));
+          default:
+            return schema;
         }
-
-        if (order === 2) {
-          return schema.required(getIsRequiredValidateMessage('practiceInstruction'));
-        }
-
-        if (order === 4) {
-          return schema.required(getIsRequiredValidateMessage('testInstruction'));
-        }
-
-        return schema;
       }),
       config: yup.object({}).when('order', (order, schema) => {
         if (order === 3 || order === 5) {

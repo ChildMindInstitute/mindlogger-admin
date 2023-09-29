@@ -83,6 +83,7 @@ import {
   ordinalStrings,
   SAMPLE_SIZE,
 } from './BuilderApplet.const';
+import { GetMessageItem } from './BuilderApplet.types';
 
 const { t } = i18n;
 
@@ -247,7 +248,7 @@ const defaultMessageConfig = {
   timer: null,
 };
 
-const getMessageItem = (name: string, question: string, order?: number) => ({
+const getMessageItem = ({ name, question, order }: GetMessageItem) => ({
   name,
   config: defaultMessageConfig,
   question,
@@ -264,20 +265,22 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
   const isGyroscope = type === GyroscopeOrTouch.Gyroscope;
 
   return [
-    getMessageItem(
-      isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
-      t(
+    getMessageItem({
+      name: isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
+      question: t(
         `gyroscopeAndTouchInstructions.overview.${
           isGyroscope ? 'instructionGyroscope' : 'instructionTouch'
         }`,
       ),
-      1,
-    ),
-    getMessageItem(
-      isGyroscope ? GyroscopeItemNames.PracticeInstruction : TouchItemNames.PracticeInstruction,
-      t('gyroscopeAndTouchInstructions.practice.instruction'),
-      2,
-    ),
+      order: 1,
+    }),
+    getMessageItem({
+      name: isGyroscope
+        ? GyroscopeItemNames.PracticeInstruction
+        : TouchItemNames.PracticeInstruction,
+      question: t('gyroscopeAndTouchInstructions.practice.instruction'),
+      order: 2,
+    }),
     {
       name: isGyroscope ? GyroscopeItemNames.PracticeRound : TouchItemNames.PracticeRound,
       config: {
@@ -288,11 +291,11 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
       responseType: ItemResponseType.StabilityTracker,
       order: 3,
     },
-    getMessageItem(
-      isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
-      t('gyroscopeAndTouchInstructions.test.instruction'),
-      4,
-    ),
+    getMessageItem({
+      name: isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
+      question: t('gyroscopeAndTouchInstructions.test.instruction'),
+      order: 4,
+    }),
     {
       name: isGyroscope ? GyroscopeItemNames.TestRound : TouchItemNames.TestRound,
       config: {
@@ -335,9 +338,16 @@ const defaultFlankerTestConfig = {
 };
 
 const flankerItems = [
-  getMessageItem(FlankerItemNames.GeneralInstruction, t('flankerInstructions.general'), 1), //0 General Instruction
-  getMessageItem(FlankerItemNames.PracticeInstructionFirst, t('flankerInstructions.practice'), 2), //1 Practice
-  // Instruction
+  getMessageItem({
+    name: FlankerItemNames.GeneralInstruction,
+    question: t('flankerInstructions.general'),
+    order: 1,
+  }), //0 General Instruction
+  getMessageItem({
+    name: FlankerItemNames.PracticeInstructionFirst,
+    question: t('flankerInstructions.practice'),
+    order: 2,
+  }), //1 Practice Instruction
   {
     name: FlankerItemNames.PracticeFirst,
     config: {
@@ -348,8 +358,12 @@ const flankerItems = [
     },
     responseType: ItemResponseType.Flanker,
     order: 3,
-  }, //2
-  getMessageItem(FlankerItemNames.PracticeInstructionSecond, t('flankerInstructions.next'), 4), //3
+  }, //2 PracticeFirst
+  getMessageItem({
+    name: FlankerItemNames.PracticeInstructionSecond,
+    question: t('flankerInstructions.next'),
+    order: 4,
+  }), //3
   {
     name: FlankerItemNames.PracticeSecond,
     config: {
@@ -360,8 +374,12 @@ const flankerItems = [
     },
     responseType: ItemResponseType.Flanker,
     order: 5,
-  }, //4
-  getMessageItem(FlankerItemNames.PracticeInstructionThird, t('flankerInstructions.next'), 6), //5
+  }, //4 PracticeSecond
+  getMessageItem({
+    name: FlankerItemNames.PracticeInstructionThird,
+    question: t('flankerInstructions.next'),
+    order: 6,
+  }), //5
   {
     name: FlankerItemNames.PracticeThird,
     config: {
@@ -372,8 +390,12 @@ const flankerItems = [
     },
     responseType: ItemResponseType.Flanker,
     order: 7,
-  }, //6
-  getMessageItem(FlankerItemNames.TestInstructionFirst, t('flankerInstructions.test'), 8), //7 Test Instruction
+  }, //6 PracticeThird
+  getMessageItem({
+    name: FlankerItemNames.TestInstructionFirst,
+    question: t('flankerInstructions.test'),
+    order: 8,
+  }), //7 Test Instruction
   {
     name: FlankerItemNames.TestFirst,
     config: {
@@ -383,8 +405,12 @@ const flankerItems = [
     },
     responseType: ItemResponseType.Flanker,
     order: 9,
-  }, //8
-  getMessageItem(FlankerItemNames.TestInstructionSecond, t('flankerInstructions.next'), 10), //9
+  }, //8 TestFirst
+  getMessageItem({
+    name: FlankerItemNames.TestInstructionSecond,
+    question: t('flankerInstructions.next'),
+    order: 10,
+  }), //9
   {
     name: FlankerItemNames.TestSecond,
     config: {
@@ -394,8 +420,12 @@ const flankerItems = [
     },
     responseType: ItemResponseType.Flanker,
     order: 11,
-  }, //10
-  getMessageItem(FlankerItemNames.TestInstructionThird, t('flankerInstructions.next'), 12), //11
+  }, //10 TestSecond
+  getMessageItem({
+    name: FlankerItemNames.TestInstructionThird,
+    question: t('flankerInstructions.next'),
+    order: 12,
+  }), //11
   {
     name: FlankerItemNames.TestThird,
     config: {
@@ -405,7 +435,7 @@ const flankerItems = [
     },
     responseType: ItemResponseType.Flanker,
     order: 13,
-  }, //12
+  }, //12 TestThird
 ];
 
 const getABTrailsItems = (deviceType: DeviceType) =>
