@@ -89,6 +89,37 @@ const { t } = i18n;
 
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
+const getDuplicatedOptionsAndAlerts = (item?: ItemFormValues) => {
+  const { responseValues, alerts } = item || {};
+  const newIdsObject: Record<string, string> = {};
+  const options = (responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
+    (option: SingleAndMultiSelectOption) => {
+      const id = uuidv4();
+      newIdsObject[option.id] = id;
+
+      return { ...option, id };
+    },
+  );
+
+  const mappedAlerts = alerts
+    ? {
+        alerts: alerts.map((alert) => ({
+          ...alert,
+          value: newIdsObject[alert.value ?? ''],
+          key: uuidv4(),
+        })),
+      }
+    : {};
+
+  return {
+    responseValues: {
+      ...responseValues,
+      options,
+    },
+    ...mappedAlerts,
+  };
+};
+
 export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
   name: t('newItem'),
@@ -100,22 +131,17 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   id: undefined,
   key: uuidv4(),
   ...((item?.responseType === ItemResponseType.SingleSelection ||
-    item?.responseType === ItemResponseType.MultipleSelection) && {
-    responseValues: {
-      ...item.responseValues,
-      options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-        (option: SingleAndMultiSelectOption) => ({
-          ...option,
-          id: uuidv4(),
-        }),
-      ),
-    },
-  }),
+    item?.responseType === ItemResponseType.MultipleSelection) &&
+    getDuplicatedOptionsAndAlerts(item)),
   ...(item?.responseType === ItemResponseType.Slider && {
     responseValues: {
       ...item.responseValues,
       id: uuidv4(),
     },
+    alerts: item?.alerts?.map((alert) => ({
+      ...alert,
+      key: uuidv4(),
+    })),
   }),
 });
 
