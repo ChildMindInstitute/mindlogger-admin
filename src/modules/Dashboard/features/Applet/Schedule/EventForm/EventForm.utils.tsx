@@ -91,8 +91,8 @@ export const getBetweenStartEndComparison = (
 export const getTimeComparison = (message: string) =>
   yup.string().when('alwaysAvailable', {
     is: false,
-    then: (shema) =>
-      shema.test('is-valid-period', message, function () {
+    then: (schema) =>
+      schema.test('is-valid-period', message, function () {
         const { startTime, endTime } = this.parent;
         if (!startTime || !endTime) {
           return true;
@@ -100,7 +100,7 @@ export const getTimeComparison = (message: string) =>
 
         return getStartEndComparison(startTime, endTime);
       }),
-    otherwise: (shema) => shema,
+    otherwise: (schema) => schema,
   });
 
 export const getTimerDurationCheck = () => {

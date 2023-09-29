@@ -142,10 +142,9 @@ const flankerImageOrValueValidation = () =>
     .nullable();
 
 export const getFlankerGeneralSchema = (
-  schema: yup.SchemaOf<yup.AnySchema>,
+  schema: yup.ObjectSchema<yup.AnyObject>,
   type: RoundTypeEnum,
 ) => {
-  //export const getFlankerGeneralSchema = (schema: yup.ObjectSchema<Config>, type: RoundTypeEnum) => {
   const isPractice = type === RoundTypeEnum.Practice;
 
   return schema.shape({
@@ -171,7 +170,7 @@ export const getFlankerGeneralSchema = (
       ),
       fixationScreen: yup
         .object()
-        .when('showFixation', (showFixation, schema) => {
+        .when('showFixation', ([showFixation], schema) => {
           if (!showFixation) return schema;
 
           return schema.shape({
@@ -182,7 +181,7 @@ export const getFlankerGeneralSchema = (
         .nullable(),
       fixationDuration: yup
         .number()
-        .when('showFixation', (showFixation, schema) => {
+        .when('showFixation', ([showFixation], schema) => {
           if (!showFixation) return schema;
 
           return schema.required(getIsRequiredValidateMessage('positiveInteger'));
@@ -352,7 +351,7 @@ export const ItemSchema = () =>
         correctAnswer: yup
           .string()
           .nullable()
-          .when('correctAnswerRequired', (correctAnswerRequired, schema) =>
+          .when('correctAnswerRequired', ([correctAnswerRequired], schema) =>
             correctAnswerRequired
               ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
               : schema,
@@ -364,7 +363,7 @@ export const ItemSchema = () =>
 export const FlankerSchema = () =>
   yup
     .object({
-      question: yup.string().when('order', (order, schema) => {
+      question: yup.string().when('order', ([order], schema) => {
         switch (order) {
           case 1:
             return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
@@ -376,7 +375,7 @@ export const FlankerSchema = () =>
             return schema;
         }
       }),
-      config: yup.object({}).when('order', (order, schema) => {
+      config: yup.object({}).when('order', ([order], schema) => {
         switch (order) {
           case 3:
             return getFlankerGeneralSchema(schema, RoundTypeEnum.Practice);
@@ -392,7 +391,7 @@ export const FlankerSchema = () =>
 export const GyroscopeAndTouchSchema = () =>
   yup
     .object({
-      question: yup.string().when('order', (order, schema) => {
+      question: yup.string().when('order', ([order], schema) => {
         switch (order) {
           case 1:
             return schema.required(getIsRequiredValidateMessage('overviewInstruction'));
@@ -404,7 +403,7 @@ export const GyroscopeAndTouchSchema = () =>
             return schema;
         }
       }),
-      config: yup.object({}).when('order', (order, schema) => {
+      config: yup.object({}).when('order', ([order], schema) => {
         if (order === 3 || order === 5) {
           return schema.shape(GyroscopeAndTouchConfigSchema());
         }
@@ -510,8 +509,8 @@ const getReportCommonFields = (isScoreReport = false) => ({
   showMessage: yup.boolean(),
   printItems: yup.boolean().when('showMessage', {
     is: false,
-    then: (shema) =>
-      shema.test(
+    then: (schema) =>
+      schema.test(
         'required-report-common-fields',
         <string>t('validationMessages.mustShowMessageOrItems'),
         (printItemsName, context) =>
@@ -522,12 +521,12 @@ const getReportCommonFields = (isScoreReport = false) => ({
     .string()
     .when('showMessage', {
       is: true,
-      then: (shema) => shema.required(getIsRequiredValidateMessage('message')),
+      then: (schema) => schema.required(getIsRequiredValidateMessage('message')),
     })
     .nullable(),
   itemsPrint: yup.array().when('printItems', {
     is: true,
-    then: (shema) => shema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
+    then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
   }),
 });
 
@@ -627,21 +626,21 @@ export const ScoreOrSectionSchema = () =>
     }),
     calculationType: yup.string().when('type', {
       is: ScoreReportType.Score,
-      then: (shema) => shema.required(),
-      otherwise: (shema) => shema.nullable(),
+      then: (schema) => schema.required(),
+      otherwise: (schema) => schema.nullable(),
     }),
     id: yup.string().when('type', {
       is: ScoreReportType.Score,
-      then: (shema) => shema.required(),
-      otherwise: (shema) => shema.nullable(),
+      then: (schema) => schema.required(),
+      otherwise: (schema) => schema.nullable(),
     }),
     itemsScore: yup.array().when('type', {
       is: ScoreReportType.Score,
-      then: (shema) => shema.min(1, <string>t('validationMessages.atLeastOneItem')),
-      otherwise: (shema) => shema.nullable(),
+      then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')),
+      otherwise: (schema) => schema.nullable(),
     }),
     showMessage: yup.boolean(),
-    printItems: yup.boolean().when('showMessage', (showMessage, schema) => {
+    printItems: yup.boolean().when('showMessage', ([showMessage], schema) => {
       if (!showMessage)
         return schema.when('type', ([type]: ScoreReportType[], schema: yup.BooleanSchema) =>
           schema.test(
@@ -662,12 +661,12 @@ export const ScoreOrSectionSchema = () =>
       .string()
       .when('showMessage', {
         is: true,
-        then: (shema) => shema.required(getIsRequiredValidateMessage('message')),
+        then: (schema) => schema.required(getIsRequiredValidateMessage('message')),
       })
       .nullable(),
     itemsPrint: yup.array().when('printItems', {
       is: true,
-      then: (shema) => shema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
+      then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
     }),
   });
 
@@ -691,22 +690,19 @@ export const ActivitySchema = () =>
     responseIsEditable: yup.boolean(),
     items: yup
       .array()
-      .when(
-        'performanceTaskType',
-        (performanceTaskType: string, schema: yup.ArraySchema<yup.AnySchema>) => {
-          if (performanceTaskType === PerfTaskType.Flanker) {
-            return schema.of(FlankerSchema());
-          }
-          if (
-            performanceTaskType === PerfTaskType.Gyroscope ||
-            performanceTaskType === PerfTaskType.Touch
-          ) {
-            return schema.of(GyroscopeAndTouchSchema());
-          }
+      .when('performanceTaskType', ([performanceTaskType], schema) => {
+        if (performanceTaskType === PerfTaskType.Flanker) {
+          return schema.of(FlankerSchema());
+        }
+        if (
+          performanceTaskType === PerfTaskType.Gyroscope ||
+          performanceTaskType === PerfTaskType.Touch
+        ) {
+          return schema.of(GyroscopeAndTouchSchema());
+        }
 
-          return schema.of(ItemSchema());
-        },
-      )
+        return schema.of(ItemSchema());
+      })
       .min(1),
     isHidden: yup.boolean(),
     subscaleSetting: yup
