@@ -1,6 +1,6 @@
 import { useState, DragEvent, useContext, useRef } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { TableCell, TableRow } from '@mui/material';
+import { TableRow } from '@mui/material';
 
 import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
 import { useAsync, useTimeAgo } from 'shared/hooks';
@@ -26,8 +26,10 @@ import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/A
 import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
+import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.const';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
+import { StyledTableCell } from '../AppletsTable.styles';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
@@ -190,7 +192,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         onMouseEnter={() => setHasVisibleActions(true)}
         onMouseLeave={() => setHasVisibleActions(false)}
       >
-        <TableCell width="30%" onClick={handleAppletClick}>
+        <StyledTableCell width={AppletsColumnsWidth.AppletName} onClick={handleAppletClick}>
           <StyledAppletName applet={item}>
             {item.parentId && (
               <StyledPinContainer>
@@ -206,19 +208,19 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             <AppletImage image={item.image} appletName={item.displayName} />
             <StyledBodyMedium sx={{ ml: theme.spacing(1.2) }}>{item.displayName}</StyledBodyMedium>
           </StyledAppletName>
-        </TableCell>
-        <TableCell width="20%" onClick={handleAppletClick}>
+        </StyledTableCell>
+        <StyledTableCell width={AppletsColumnsWidth.LastEdit} onClick={handleAppletClick}>
           <StyledBodyMedium>
             {item.updatedAt ? timeAgo.format(getDateInUserTimezone(item.updatedAt)) : ''}
           </StyledBodyMedium>
-        </TableCell>
-        <TableCell>
+        </StyledTableCell>
+        <StyledTableCell>
           <Actions
             items={getActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
             context={item}
             visibleByDefault={hasVisibleActions}
           />
-        </TableCell>
+        </StyledTableCell>
       </TableRow>
       {sharePopupVisible && (
         <ShareAppletPopup

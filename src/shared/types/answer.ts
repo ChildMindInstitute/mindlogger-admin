@@ -133,10 +133,12 @@ export type DecryptedDateAnswer = AdditionalTextType & {
 };
 
 export type DecryptedTimeAnswer = AdditionalTextType & {
-  value: {
+  value?: {
     hours: number;
     minutes: number;
   };
+  hour?: number;
+  minute?: number;
 };
 
 export type DecryptedGeolocationAnswer = AdditionalTextType & {
@@ -319,6 +321,7 @@ export type ActivityItemAnswer = {
   id?: string;
   activityItem: Item;
   answer: AnswerDTO;
+  'data-testid'?: string;
 };
 
 export const enum ElementType {

@@ -160,8 +160,8 @@ const getMediaData = (
         url: getDrawingUrl(item),
       });
     const responseType = item.activityItem?.responseType;
-    if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
     const url = getMediaUrl(item);
+    if (!ItemsWithFileResponses.includes(responseType) || !url) return filteredAcc;
 
     return filteredAcc.concat({
       fileName: getMediaFileName(item, getFileExtension(url)),

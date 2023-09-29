@@ -13,7 +13,7 @@ export const StyledPopover = styled(Popover)`
     font-size: ${variables.font.size.md};
     line-height: ${variables.font.lineHeight.md};
     letter-spacing: ${variables.font.letterSpacing.lg};
-    font-family: 'Atkinson';
+    font-family: 'Atkinson', helvetica, arial, sans-serif;
     background-color: transparent;
     border: none;
     border-radius: unset;
@@ -138,6 +138,10 @@ export const StyledTextField = styled(TextField)`
 
   .Mui-disabled {
     -webkit-text-fill-color: ${variables.palette.on_surface_alfa38};
+
+    .MuiOutlinedInput-notchedOutline {
+      border-color: ${variables.palette.on_surface_alfa12};
+    }
   }
 
   .MuiOutlinedInput-notchedOutline {

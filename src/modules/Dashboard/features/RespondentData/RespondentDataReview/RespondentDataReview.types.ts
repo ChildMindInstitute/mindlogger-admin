@@ -15,6 +15,7 @@ export type Answer = {
 export type TextItemAnswer = {
   activityItem: TextItem;
   answer: DecryptedTextAnswer;
+  'data-testid'?: string;
 };
 
 export type SliderActivityItem = SliderItem & {
@@ -32,16 +33,19 @@ export type MultiSelectActivityItem = MultiSelectItem & {
 export type SliderItemAnswer = {
   activityItem: SliderActivityItem;
   answer: DecryptedSliderAnswer | null;
+  'data-testid'?: string;
 };
 
 export type SingleSelectItemAnswer = {
   activityItem: SingleSelectActivityItem;
   answer: DecryptedSingleSelectionAnswer | null;
+  'data-testid'?: string;
 };
 
 export type MultiSelectItemAnswer = {
   activityItem: MultiSelectActivityItem;
   answer: DecryptedMultiSelectionAnswer | null;
+  'data-testid'?: string;
 };
 
 export type RespondentDataReviewContextType = {

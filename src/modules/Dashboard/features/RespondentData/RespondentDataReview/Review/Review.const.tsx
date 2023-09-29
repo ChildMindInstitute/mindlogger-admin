@@ -1,3 +1,5 @@
+import { Box } from '@mui/material';
+
 import { ItemResponseType } from 'shared/consts';
 import { ActivityItemAnswer, DecryptedTimeAnswer } from 'shared/types';
 
@@ -23,7 +25,12 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
       return <SliderResponseItem {...(activityItemAnswer as SliderItemAnswer)} />;
     case ItemResponseType.Text:
       return <TextResponseItem {...(activityItemAnswer as TextItemAnswer)} />;
-    case ItemResponseType.Time:
-      return getTimeResponseItem(activityItemAnswer.answer as DecryptedTimeAnswer);
+    case ItemResponseType.Time: {
+      const answer = activityItemAnswer.answer as DecryptedTimeAnswer;
+
+      return (
+        <Box data-testid={activityItemAnswer['data-testid']}>{getTimeResponseItem(answer)}</Box>
+      );
+    }
   }
 };

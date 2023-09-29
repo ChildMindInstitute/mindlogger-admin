@@ -100,7 +100,7 @@ export const RespondentDataReview = () => {
       <RespondentDataReviewContext.Provider
         value={{ isFeedbackOpen, assessment, itemIds, setItemIds }}
       >
-        <StyledReviewContainer ref={containerRef}>
+        <StyledReviewContainer ref={containerRef} data-testid={`${dataTestid}-activity-items`}>
           <StyledStickyHeader
             isSticky={isHeaderSticky}
             sx={{ justifyContent: selectedAnswer ? 'space-between' : 'flex-end' }}
@@ -124,7 +124,7 @@ export const RespondentDataReview = () => {
             <Review
               answerId={selectedAnswer.answerId}
               activityId={selectedActivity.id}
-              data-testid={`${dataTestid}-answer-review`}
+              data-testid={`${dataTestid}-activity-items`}
             />
           ) : (
             <StyledWrapper>

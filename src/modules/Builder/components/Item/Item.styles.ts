@@ -8,7 +8,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { blendColorsNormal, shouldForwardProp } from 'shared/utils';
 
 import { ItemUiType } from './Item.types';
 
@@ -26,7 +26,10 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
   }) => {
     let bgColor = 'inherit';
     if (isDragging) {
-      bgColor = variables.palette.surface;
+      bgColor = blendColorsNormal(
+        variables.palette.surface,
+        variables.palette.on_surface_alfa16,
+      ) as string;
     }
     if (hasError) {
       bgColor = variables.palette.error_container;
@@ -45,10 +48,13 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       cursor: ${onClick ? 'pointer' : 'default'};
       background-color: ${bgColor};
       pointer-events: ${isDragging ? 'none' : 'auto'};
-      box-shadow: ${isDragging ? variables.boxShadow.light5 : 'inherit'};
+      box-shadow: ${isDragging ? variables.boxShadow.light3 : 'inherit'};
     
       &:hover {
-        background-color: ${variables.palette.on_surface_alfa8};
+        background-color:  ${blendColorsNormal(
+          variables.palette.surface,
+          variables.palette.on_surface_alfa8,
+        )};
         
         .item-name {
           font-weight: ${uiType === ItemUiType.Flow ? variables.font.weight.bold : 'inherit'};
@@ -56,7 +62,10 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       }
 
       &:active {
-        background-color: ${variables.palette.on_surface_alfa12};
+        background-color: ${blendColorsNormal(
+          variables.palette.surface,
+          variables.palette.on_surface_alfa12,
+        )};
       }
   `;
   }}

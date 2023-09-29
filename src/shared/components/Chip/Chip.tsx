@@ -12,6 +12,7 @@ export const Chip = ({
   canRemove = true,
   onClick,
   sxProps,
+  'data-testid': dataTestid,
 }: ChipProps) => (
   <StyledChip
     shape={shape}
@@ -28,5 +29,6 @@ export const Chip = ({
     onDelete={onRemove}
     onClick={onClick}
     sx={sxProps}
+    data-testid={dataTestid}
   />
 );

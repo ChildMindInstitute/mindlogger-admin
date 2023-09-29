@@ -7,8 +7,22 @@ import { UiType } from './Table.types';
 
 export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
   height: 100%;
-  max-height: ${({ maxHeight }: { maxHeight: string; uiType: UiType }) => maxHeight};
+  max-height: ${({
+    maxHeight,
+  }: {
+    maxHeight: string;
+    uiType: UiType;
+    hasColFixedWidth?: boolean;
+  }) => maxHeight};
   border-radius: ${variables.borderRadius.lg2};
+
+  ${({ hasColFixedWidth }) =>
+    hasColFixedWidth &&
+    `
+    .MuiTableRow-root {
+      display: flex;
+    }
+  `};
 
   ${({ uiType }) => {
     if (uiType === UiType.Secondary || uiType === UiType.Tertiary) {

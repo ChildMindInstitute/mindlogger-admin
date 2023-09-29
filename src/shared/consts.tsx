@@ -69,7 +69,7 @@ export enum DateFormats {
 export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
 export const APPLET_PASSWORD_MIN_LENGTH = 8;
 
-export const enum Roles {
+export enum Roles {
   Manager = 'manager',
   Coordinator = 'coordinator',
   Editor = 'editor',

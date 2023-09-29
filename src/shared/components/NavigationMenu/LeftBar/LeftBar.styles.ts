@@ -60,7 +60,7 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
   flex-basis: 12rem;
   align-items: center;
   width: 12rem;
-  height: 12rem;
+  height: 100%;
   padding: ${theme.spacing(3.2, 1.4, 1.6)};
   text-align: center;
   cursor: pointer;
@@ -71,14 +71,15 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
+  p {
+    text-align: center;
+  }
   ${({ isCompact }: { isSelected: boolean; isCompact: boolean; disabled?: boolean }) =>
     isCompact &&
     `
-    flex-basis: unset;
     flex-direction: row;
-    justify-content: flex-start;
     width: 27.4rem;
-    height: 4.8rem;
+    min-height: 4.8rem;
     padding: ${theme.spacing(0, 1.8)};
     margin: ${theme.spacing(0.2, 0, 0, 1.6)};
     border-radius: ${variables.borderRadius.xxxl};
@@ -86,6 +87,7 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
       margin-right: ${theme.spacing(1.6)};
     }
     p {
+      text-align: start;
       margin-top: 0;
     }
     :hover {
