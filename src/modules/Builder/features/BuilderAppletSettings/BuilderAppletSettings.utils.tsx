@@ -123,7 +123,7 @@ export const getSettings = ({
 
     {
       label: 'sharing',
-      //remove if roles?.includes(Roles.SuperAdmin) is visible after uncommenting Share to Library functionality
+      //remove roles?.includes(Roles.SuperAdmin) check after uncommenting Share to Library functionality
       isVisible: !isNewApplet && roles?.includes(Roles.SuperAdmin),
       items: [
         // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is
