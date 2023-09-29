@@ -1,6 +1,5 @@
 import { FlankerConfig, Item } from 'shared/state';
 import {
-  DecryptedFlankerAnswer,
   DecryptedFlankerAnswerItemValue,
   DotType,
   FlankerRecordFields,
@@ -157,7 +156,7 @@ const TIME_FIELDS = [
 const DEFAULT_VALUE = '.';
 
 export const getFlankerRecords = (
-  responses: DecryptedFlankerAnswer['value'],
+  responses: DecryptedFlankerAnswerItemValue[],
   item: Item<FlankerConfig>,
   experimentClock: string,
 ) => {

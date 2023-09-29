@@ -1,10 +1,11 @@
 import {
+  AnswerWithWrapper,
   AppletExportData,
   DecryptedABTrailsAnswer,
   DecryptedActivityData,
   DecryptedAnswerData,
   DecryptedDrawingAnswer,
-  DecryptedFlankerAnswer,
+  DecryptedFlankerAnswerItemValue,
   DecryptedMediaAnswer,
   DecryptedStabilityTrackerAnswer,
   DecryptedStabilityTrackerAnswerObject,
@@ -273,7 +274,8 @@ const getFlankerItemsData = (
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.Flanker || !item.answer) return acc;
 
-    const flankerValue = (item.answer as DecryptedFlankerAnswer).value;
+    const flankerValue =
+      (item.answer as AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>)?.value ?? item.answer;
 
     return acc.concat({
       name: getFlankerCsvName(item),

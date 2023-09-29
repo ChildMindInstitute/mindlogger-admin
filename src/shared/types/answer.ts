@@ -233,9 +233,7 @@ export type DecryptedStabilityTrackerAnswerObject = {
   value: DecryptedStabilityTrackerCalcValue[];
 };
 export type DecryptedStabilityTrackerAnswer =
-  | {
-      value: DecryptedStabilityTrackerAnswerObject;
-    }
+  | AnswerWithWrapper<DecryptedStabilityTrackerAnswerObject>
   | DecryptedStabilityTrackerAnswerObject;
 
 export const enum FlankerTag {
@@ -258,8 +256,12 @@ export type DecryptedFlankerAnswerItemValue = {
   trial_index: number;
 };
 
-export type DecryptedFlankerAnswer = {
-  value: DecryptedFlankerAnswerItemValue[];
+export type DecryptedFlankerAnswer =
+  | AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>
+  | DecryptedFlankerAnswerItemValue[];
+
+export type AnswerWithWrapper<T> = {
+  value: T;
 };
 
 export type AnswerDTO =
@@ -299,8 +301,8 @@ export type AnswerValue =
   | DecryptedMultiSelectionPerRowAnswer['value']
   | DecryptedSliderRowsAnswer['value']
   | DecryptedABTrailsAnswer['value']
-  | DecryptedStabilityTrackerAnswer['value']
-  | DecryptedFlankerAnswer['value'];
+  | DecryptedStabilityTrackerAnswerObject
+  | DecryptedFlankerAnswerItemValue[];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
