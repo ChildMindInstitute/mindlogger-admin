@@ -41,6 +41,7 @@ export const ShareApplet = ({
   const [libraryUrl, setLibraryUrl] = useState('');
   const [keywords, setKeywords] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAppletNameDisabled, setIsAppletNameDisabled] = useState(false);
 
   const { execute: checkAppletNameInLibrary, error: nameError } = useAsync(
     checkAppletNameInLibraryApi,
@@ -133,6 +134,22 @@ export const ShareApplet = ({
     setValue('appletName', applet.displayName);
   }, [applet]);
 
+  useEffect(() => {
+    (async () => {
+      if (applet) {
+        setIsLoading(true);
+        try {
+          await checkAppletNameInLibrary({ appletName: applet.displayName });
+          setIsAppletNameDisabled(true);
+        } catch (error) {
+          setIsAppletNameDisabled(false);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    })();
+  }, []);
+
   return appletShared && showSuccess && applet ? (
     <SuccessShared
       title={appletName || applet.displayName || ''}
@@ -150,12 +167,12 @@ export const ShareApplet = ({
         <StyledInputWrapper>
           <InputController
             fullWidth
+            disabled={isAppletNameDisabled}
             name="appletName"
             error={showNameTakenError}
             control={control}
             label={t('appletName')}
             required
-            value={applet?.displayName}
             data-testid={`${dataTestid}-applet-name`}
           />
           {showNameTakenError && (
