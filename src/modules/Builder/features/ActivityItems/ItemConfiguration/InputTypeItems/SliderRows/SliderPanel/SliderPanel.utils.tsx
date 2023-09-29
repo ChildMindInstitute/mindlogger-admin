@@ -75,7 +75,7 @@ export const setScoresAndAlertsChange = ({
 
     if (alertsCondition) {
       alerts.forEach((alert: ItemAlert, index: number) => {
-        if (alert.value! < minValue) setValue(`${alertsName}.${index}.value`, minValue);
+        if (Number(alert.value!) < minValue) setValue(`${alertsName}.${index}.value`, minValue);
       });
     }
   }
@@ -96,7 +96,7 @@ export const setScoresAndAlertsChange = ({
 
     if (alertsCondition) {
       alerts.forEach((alert: ItemAlert, index: number) => {
-        if (alert.value! > maxValue) setValue(`${alertsName}.${index}.value`, maxValue);
+        if (Number(alert.value!) > maxValue) setValue(`${alertsName}.${index}.value`, maxValue);
       });
     }
   }

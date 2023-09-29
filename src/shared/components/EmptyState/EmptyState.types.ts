@@ -1,7 +1,5 @@
-import { DefaultTFuncReturn } from 'i18next';
-
 export type EmptyStateProps = {
-  children?: JSX.Element | DefaultTFuncReturn | string;
+  children?: JSX.Element | string;
   icon?: string;
   width?: string;
 };

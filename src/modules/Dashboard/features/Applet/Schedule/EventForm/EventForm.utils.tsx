@@ -1,7 +1,6 @@
 import { UseFormWatch } from 'react-hook-form';
 import { endOfYear, format } from 'date-fns';
 import * as yup from 'yup';
-import { AnyObject } from 'yup/lib/types';
 
 import i18n from 'i18n';
 import { DateFormats } from 'shared/consts';
@@ -92,15 +91,16 @@ export const getBetweenStartEndComparison = (
 export const getTimeComparison = (message: string) =>
   yup.string().when('alwaysAvailable', {
     is: false,
-    then: yup.string().test('is-valid-period', message, function () {
-      const { startTime, endTime } = this.parent;
-      if (!startTime || !endTime) {
-        return true;
-      }
+    then: (shema) =>
+      shema.test('is-valid-period', message, function () {
+        const { startTime, endTime } = this.parent;
+        if (!startTime || !endTime) {
+          return true;
+        }
 
-      return getStartEndComparison(startTime, endTime);
-    }),
-    otherwise: yup.string(),
+        return getStartEndComparison(startTime, endTime);
+      }),
+    otherwise: (shema) => shema,
   });
 
 export const getTimerDurationCheck = () => {
@@ -118,8 +118,8 @@ export const getTimerDurationCheck = () => {
 
 export const getNotificationTimeComparison = (
   schema:
-    | yup.SchemaOf<EventFormValues>
-    | yup.StringSchema<string | null | undefined, AnyObject, string | null | undefined>,
+    | yup.Schema<EventReminder>
+    | yup.StringSchema<string | null | undefined, yup.AnyObject, string | null | undefined>,
   field: string,
   showValidPeriodMessage: boolean,
 ) => {
@@ -165,7 +165,7 @@ export const getNotificationsValidation = (
   yup
     .string()
     .nullable()
-    .when('triggerType', (triggerType: NotificationType, schema) => {
+    .when('triggerType', ([triggerType]: NotificationType[], schema) => {
       if (triggerType === notificationType) {
         return getNotificationTimeComparison(schema, field, showValidPeriodMessage);
       }

@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { DefaultTFuncReturn } from 'i18next';
 import { SxProps } from '@mui/material';
 
 import { TooltipProps } from 'shared/components/Tooltip';
@@ -12,7 +11,7 @@ export type DataTableItem = Record<string, TooltipProps['tooltipTitle']> & {
 
 export type DataTableColumn = {
   key: string;
-  label?: string | DefaultTFuncReturn | JSX.Element;
+  label?: string | JSX.Element;
   styles?: SxProps;
 };
 
