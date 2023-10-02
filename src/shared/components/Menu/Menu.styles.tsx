@@ -1,5 +1,4 @@
-import styled from '@emotion/styled/macro';
-import { Menu } from '@mui/material';
+import { styled, Menu } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
