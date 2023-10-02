@@ -990,7 +990,7 @@ export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) =
       ...result,
       {
         ...activity,
-        name: getUniqueName(activity.name, pluck(result, 'name')),
+        name: getUniqueName({ name: activity.name, existingNames: pluck(result, 'name') }),
       },
     ],
     [],
@@ -1000,7 +1000,10 @@ export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormV
   activityFlows.reduce(
     (result: ActivityFlowFormValues[], activityFlow) => [
       ...result,
-      { ...activityFlow, name: getUniqueName(activityFlow.name, pluck(result, 'name')) },
+      {
+        ...activityFlow,
+        name: getUniqueName({ name: activityFlow.name, existingNames: pluck(result, 'name') }),
+      },
     ],
     [],
   );

@@ -4,7 +4,7 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import { StyledContainer } from 'shared/styles';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
@@ -39,7 +39,6 @@ export const ActivityItems = () => {
   );
   const [activeItem, setActiveItem] = useState<ItemFormValues | undefined>(undefined);
   const [itemIdToDelete, setItemIdToDelete] = useState('');
-  const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
   useActivitiesRedirection();
 
@@ -92,21 +91,18 @@ export const ActivityItems = () => {
   };
 
   const handleDuplicateItem = (index: number) => {
-    const itemToDuplicate = getValues(itemsName)[index];
-    setDuplicateIndexes((prevState) => {
-      const numberToInsert = (prevState[getEntityKey(itemToDuplicate)] || 0) + 1;
+    const itemsValues = getValues(itemsName);
+    const itemToDuplicate = itemsValues[index];
 
-      handleInsertItem(index, {
-        ...itemToDuplicate,
-        id: undefined,
-        key: uuidv4(),
-        name: `${itemToDuplicate.name}_${numberToInsert}`,
-      });
-
-      return {
-        ...prevState,
-        [getEntityKey(itemToDuplicate)]: numberToInsert,
-      };
+    handleInsertItem(index, {
+      ...itemToDuplicate,
+      id: undefined,
+      key: uuidv4(),
+      name: getUniqueName({
+        name: itemToDuplicate.name,
+        existingNames: pluck(itemsValues, 'name'),
+        withUnderscore: true,
+      }),
     });
   };
 

@@ -302,6 +302,8 @@ export const enum FinalSubscale {
 
 export const INDEX_IN_NAME_REGEXP = /\((\d+)\)$/g;
 
+export const INDEX_IN_NAME_WITH_UNDERSCORE_REGEXP = /_(\d+)/g;
+
 export const enum ScoreReportType {
   Section = 'section',
   Score = 'score',
