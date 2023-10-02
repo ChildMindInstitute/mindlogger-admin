@@ -75,6 +75,7 @@ import {
   TouchItemNames,
 } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { findRelatedScore } from 'modules/Builder/utils';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,
@@ -83,6 +84,7 @@ import {
   ordinalStrings,
   SAMPLE_SIZE,
 } from './BuilderApplet.const';
+import { GetSectionConditions } from './BuilderApplet.types';
 
 const { t } = i18n;
 
@@ -664,23 +666,11 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?
     };
   });
 
-const findRelatedScore = (itemName: string, scores?: ScoreReport[]) => {
-  if (!scores) return;
-
-  const relatedScore = scores.find((score) => score.id === itemName);
-
-  if (relatedScore) return relatedScore;
-
-  const relatedScoreConditional = scores?.flatMap((score) => score.conditionalLogic);
-
-  return relatedScoreConditional?.find((conditional) => conditional && conditional.id === itemName);
-};
-
-const getSectionConditions = (items?: Item[], conditions?: Condition[], scores?: ScoreReport[]) =>
+const getSectionConditions = ({ items, conditions, scores }: GetSectionConditions) =>
   conditions?.map((condition) => {
     const { itemName, type } = condition;
     const relatedItem = items?.find((item) => item.name === itemName);
-    const relatedScore = findRelatedScore(itemName, scores);
+    const relatedScore = findRelatedScore({ entityKey: itemName, scores });
     const payload =
       type === ScoreConditionType
         ? { value: String((condition as ScoreCondition).payload?.value) }
@@ -721,7 +711,11 @@ const getSection = (section: SectionReport, items: Activity['items'], scores: Sc
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
       ...section.conditionalLogic,
-      conditions: getSectionConditions(items, section?.conditionalLogic?.conditions, scores),
+      conditions: getSectionConditions({
+        items,
+        conditions: section?.conditionalLogic?.conditions,
+        scores,
+      }),
     },
   }),
 });
