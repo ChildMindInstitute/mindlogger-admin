@@ -52,8 +52,12 @@ export const StyledActionBtn = styled(Button, shouldForwardProp)`
         width: 4.8rem;
         height: 4.8rem;
     
-        && svg {
-          fill: ${variables.palette.on_surface_variant};
+        && {
+          border-radius: ${variables.borderRadius.half};
+          
+          svg {
+            fill: ${variables.palette.on_surface_variant};
+          }
         }
     `};
 `;

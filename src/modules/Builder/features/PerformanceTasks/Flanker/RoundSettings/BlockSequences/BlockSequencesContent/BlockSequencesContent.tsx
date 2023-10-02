@@ -81,8 +81,30 @@ export const BlockSequencesContent = ({
       setValue(blockSequencesField, []);
     }
 
+    if (
+      stimulusTrials?.length === prevStimulusTrialsLength.current &&
+      stimulusTrials.some((trial) => !(trial.image || trial.text))
+    ) {
+      setUploadedTable(null);
+      setValue(blockSequencesField, []);
+    }
+
     prevStimulusTrialsLength.current = stimulusTrials?.length;
   }, [stimulusTrials]);
+
+  // useEffect(() => {
+  //   if (
+  //     stimulusTrials?.length === prevStimulusTrialsLength.current ||
+  //     stimulusTrials.some((trial) => !(trial.image || trial.text))
+  //   ) {
+  //
+  //   }
+  //
+  //   // console.log('stimulus trials', stimulusTrials);
+  //   // console.log('block sequences', blockSequences);
+  //   // console.log('uploadedTable', uploadedTable);
+  //   // console.log('----------------');
+  // }, [blockSequences, stimulusTrials]);
 
   return hasStimulusTrials ? (
     <>
