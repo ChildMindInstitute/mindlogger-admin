@@ -113,7 +113,6 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
           type: ElementType.Subscale,
         };
       }),
-      ...removeReactHookFormKey(),
     })),
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
 };

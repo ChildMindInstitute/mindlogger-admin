@@ -1,21 +1,13 @@
 import { useEffect } from 'react';
-import { FieldArrayWithId, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder/types';
-import { ActivitySettingsSubscale } from 'shared/state';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 
 import { ageItem, genderItem } from './SubscalesConfiguration.const';
 import { isSystemItem } from './SubscalesConfiguration.utils';
 
-export const useSubscalesSystemItemsSetup = (
-  subscales: FieldArrayWithId<
-    Record<string, ActivitySettingsSubscale<string>[]>,
-    string,
-    typeof REACT_HOOK_FORM_KEY_NAME
-  >[],
-) => {
+export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => {
   const { fieldName: activityFieldName } = useCurrentActivity();
   const { watch, setValue } = useFormContext();
   const itemsFieldName = `${activityFieldName}.items`;
