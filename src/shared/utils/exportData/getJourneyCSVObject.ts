@@ -7,6 +7,7 @@ import {
   ExtendedExportAnswerWithoutEncryption,
   UserActionType,
 } from 'shared/types';
+import { getDictionaryText } from 'shared/utils/forms';
 
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
@@ -108,7 +109,7 @@ export const getJourneyCSVObject = <T>({
     activity_name: activityName,
     item: activityItem.name,
     prompt: replaceItemVariableWithName({
-      markdown: activityItem.question?.en ?? '',
+      markdown: getDictionaryText(activityItem.question),
       items: event.items,
       rawAnswersObject,
     }),
