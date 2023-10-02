@@ -61,17 +61,20 @@ const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
-  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
-    if (item.answer === null) return filteredAcc;
+  const answers = decryptedAnswers.reduce(
+    (filteredAcc, item, index) => {
+      if (item.answer === null) return filteredAcc;
 
-    return filteredAcc.concat(
-      getReportCSVObject({
-        item,
-        rawAnswersObject,
-        index,
-      }),
-    );
-  }, [] as ReturnType<typeof getReportCSVObject>[]);
+      return filteredAcc.concat(
+        getReportCSVObject({
+          item,
+          rawAnswersObject,
+          index,
+        }),
+      );
+    },
+    [] as ReturnType<typeof getReportCSVObject>[],
+  );
 
   const subscaleSetting = decryptedAnswers?.[0]?.subscaleSetting;
   if (subscaleSetting?.subscales?.length) {
@@ -95,6 +98,8 @@ const getMediaUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryp
 const getAnswersWithPublicUrls = async (
   parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
+  if (!parsedAnswers.length) return [];
+
   const privateUrls = parsedAnswers.reduce((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce((urlsAcc, item) => {
       if (checkIfDrawingMediaConditionPassed(item)) {
@@ -110,11 +115,13 @@ const getAnswersWithPublicUrls = async (
   }, [] as string[]);
 
   let publicUrls: string[] = [];
-  try {
-    const appletId = parsedAnswers[0].decryptedAnswers[0].appletId;
-    publicUrls = (await postFilePresignApi(appletId, privateUrls)).data?.result ?? [];
-  } catch (e) {
-    console.warn(e);
+  if (privateUrls.length) {
+    try {
+      const appletId = parsedAnswers[0].decryptedAnswers[0].appletId;
+      publicUrls = (await postFilePresignApi(appletId, privateUrls)).data?.result ?? [];
+    } catch (e) {
+      console.warn(e);
+    }
   }
   let publicUrlIndex = 0;
 
