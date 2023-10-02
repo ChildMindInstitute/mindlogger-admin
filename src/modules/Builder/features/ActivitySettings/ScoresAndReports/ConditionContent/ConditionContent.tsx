@@ -17,7 +17,7 @@ import { defaultSectionCondition } from './CondtitionContent.const';
 export const ConditionContent = ({
   name,
   type,
-  scoreId,
+  score,
   'data-testid': dataTestid,
 }: ConditionContentProps) => {
   const { t } = useTranslation();
@@ -36,8 +36,8 @@ export const ConditionContent = ({
 
   const handleAddCondition = () => {
     appendCondition(
-      type === ConditionRowType.Score && scoreId
-        ? getDefaultScoreCondition(scoreId)
+      type === ConditionRowType.Score && score
+        ? getDefaultScoreCondition(score)
         : (defaultSectionCondition as Condition),
     );
   };
@@ -50,7 +50,7 @@ export const ConditionContent = ({
           name={name}
           index={index}
           type={type}
-          scoreId={type === ConditionRowType.Score ? scoreId : ''}
+          scoreKey={type === ConditionRowType.Score ? score?.key : ''}
           onRemove={() => removeCondition(index)}
           data-testid={`${dataTestid}-condition-${index}`}
         />

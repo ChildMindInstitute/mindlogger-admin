@@ -7,7 +7,7 @@ export type ConditionRowProps = {
   index: number;
   onRemove: () => void;
   type?: ConditionRowType;
-  scoreId?: string;
+  scoreKey?: string;
   autoTrigger?: boolean;
   showError?: boolean;
   'data-testid'?: string;

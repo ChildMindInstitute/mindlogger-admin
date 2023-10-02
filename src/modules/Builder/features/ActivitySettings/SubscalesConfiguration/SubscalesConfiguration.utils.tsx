@@ -6,7 +6,7 @@ import { StyledTitleSmall, variables } from 'shared/styles';
 import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { LookupTableItems, SubscaleTotalScore, ItemResponseType } from 'shared/consts';
-import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
+import { capitalize, getEntityKey, getObjectFromList, removeMarkdown } from 'shared/utils';
 import { DataTableColumn } from 'shared/components';
 
 import {
@@ -30,7 +30,7 @@ export const getItemNameInSubscale = (item: ItemFormValues) =>
   capitalize(`${t('item_one')}: ${t(item.name)}`);
 
 export const getItemElementName = (item: ItemFormValues) =>
-  `${getItemNameInSubscale(item)}: ${t(item.question!)}`;
+  `${getItemNameInSubscale(item)}: ${removeMarkdown(item.question)}`;
 
 export const getSubscaleElementName = (
   subscale: SubscaleFormValue,

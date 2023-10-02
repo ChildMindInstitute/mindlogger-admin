@@ -537,6 +537,7 @@ export type ScoreConditionalLogic = {
 
 export type ScoreReport = {
   id: string;
+  key: string;
   name: string;
   type: ScoreReportType.Score;
   calculationType: CalculationType;

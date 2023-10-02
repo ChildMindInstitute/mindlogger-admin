@@ -97,7 +97,7 @@ export const ScoreContent = ({
   };
 
   const handleAddScoreConditional = () => {
-    append(getDefaultConditionalValue(scoreId));
+    append(getDefaultConditionalValue(scoreId, score?.key));
   };
 
   const onChangeScoreId = () => {
@@ -203,7 +203,7 @@ export const ScoreContent = ({
                 Content={ScoreCondition}
                 contentProps={{
                   name: conditionalName,
-                  scoreId,
+                  score,
                   scoreKey: `score-condition-${index}-${key}`,
                   'data-testid': conditionalDataTestid,
                 }}
