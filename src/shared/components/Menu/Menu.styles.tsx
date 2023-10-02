@@ -1,11 +1,13 @@
-import { styled, Menu } from '@mui/material';
+import styled from '@emotion/styled/macro';
+import { Menu } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { MenuUiType } from './Menu.const';
 
-export const StyledMenu = styled(Menu)`
+export const StyledMenu = styled(Menu, shouldForwardProp)`
   .MuiPaper-root {
     background-color: ${variables.palette.surface2};
     border-radius: ${variables.borderRadius.lg};

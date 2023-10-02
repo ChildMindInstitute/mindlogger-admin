@@ -6,7 +6,8 @@ export const shouldForwardProp = {
       prop === 'TabIndicatorProps' ||
       prop === 'InputProps' ||
       prop === 'error' ||
-      prop === 'helperText'
+      prop === 'helperText' ||
+      prop === 'anchorEl'
     )
       return true;
 
