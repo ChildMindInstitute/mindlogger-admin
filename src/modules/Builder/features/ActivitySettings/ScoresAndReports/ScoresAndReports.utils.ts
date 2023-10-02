@@ -8,6 +8,7 @@ import { getScoreId } from './ScoreContent/ScoreContent.utils';
 export const getScoreDefaults = () => ({
   name: '',
   type: ScoreReportType.Score,
+  key: uuidv4(),
   id: getScoreId('', CalculationType.Sum),
   calculationType: CalculationType.Sum,
   itemsScore: [],

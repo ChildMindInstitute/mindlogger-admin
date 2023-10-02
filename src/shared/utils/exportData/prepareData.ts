@@ -61,20 +61,17 @@ const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
-  const answers = decryptedAnswers.reduce(
-    (filteredAcc, item, index) => {
-      if (item.answer === null) return filteredAcc;
+  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
+    if (item.answer === null) return filteredAcc;
 
-      return filteredAcc.concat(
-        getReportCSVObject({
-          item,
-          rawAnswersObject,
-          index,
-        }),
-      );
-    },
-    [] as ReturnType<typeof getReportCSVObject>[],
-  );
+    return filteredAcc.concat(
+      getReportCSVObject({
+        item,
+        rawAnswersObject,
+        index,
+      }),
+    );
+  }, [] as ReturnType<typeof getReportCSVObject>[]);
 
   const subscaleSetting = decryptedAnswers?.[0]?.subscaleSetting;
   if (subscaleSetting?.subscales?.length) {

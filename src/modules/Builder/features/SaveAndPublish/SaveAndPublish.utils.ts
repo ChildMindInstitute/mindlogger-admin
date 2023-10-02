@@ -16,7 +16,6 @@ import {
   SliderItemResponseValues,
   SliderRowsResponseValues,
   OptionCondition,
-  SectionCondition,
   SingleApplet,
   Activity,
   ActivityFlow,
@@ -35,10 +34,16 @@ import {
   RoundTypeEnum,
 } from 'modules/Builder/types';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
+import { findRelatedScore } from 'modules/Builder/utils';
 import { ElementType } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
-import { GetItemCommonFields } from './SaveAndPublish.types';
+import {
+  GetConditions,
+  GetItemCommonFields,
+  GetSection,
+  GetSectionConditions,
+} from './SaveAndPublish.types';
 
 const removeReactHookFormKey = () => ({
   [REACT_HOOK_FORM_KEY_NAME]: undefined,
@@ -117,7 +122,7 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
 };
 
-const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition | Condition)[]) =>
+const getConditions = ({ items, conditions, score }: GetConditions) =>
   conditions?.map((condition) => {
     const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
 
@@ -126,13 +131,32 @@ const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition |
       payload: relatedItem
         ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
         : condition['payload'],
-      itemName: relatedItem?.name ?? condition.itemName,
+      itemName: relatedItem?.name ?? score?.id ?? condition.itemName,
+    };
+  });
+
+const getSectionConditions = ({ items, conditions, scores }: GetSectionConditions) =>
+  conditions?.map((condition) => {
+    const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
+    const relatedScore = findRelatedScore({
+      entityKey: condition.itemName,
+      scores,
+      isSaving: true,
+    });
+
+    return {
+      type: condition.type,
+      payload: relatedItem
+        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
+        : condition['payload'],
+      itemName: relatedItem?.name ?? relatedScore?.id ?? condition.itemName,
     };
   });
 
 const removeReportsFields = () => ({
   printItems: undefined,
   showMessage: undefined,
+  key: undefined,
   ...removeReactHookFormKey(),
 });
 
@@ -142,18 +166,22 @@ const getScore = (score: ScoreReport, items: ActivityFormValues['items']) => ({
   conditionalLogic: score.conditionalLogic?.map((conditional) => ({
     ...conditional,
     ...removeReportsFields(),
-    conditions: getConditions(items, conditional.conditions),
+    conditions: getConditions({ items, conditions: conditional.conditions, score }),
   })),
 });
 
-const getSection = (section: SectionReport, items: ActivityFormValues['items']) => ({
+const getSection = ({ section, items, scores }: GetSection) => ({
   ...section,
   ...removeReportsFields(),
   id: undefined,
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
       ...section.conditionalLogic,
-      conditions: getConditions(items, section?.conditionalLogic?.conditions),
+      conditions: getSectionConditions({
+        items,
+        conditions: section?.conditionalLogic?.conditions,
+        scores,
+      }),
       ...removeReactHookFormKey(),
     },
   }),
@@ -165,9 +193,12 @@ export const getScoresAndReports = (activity: ActivityFormValues) => {
 
   const { reports: initialReports } = scoresAndReports;
 
+  const scores = initialReports?.filter(
+    (report) => report.type === ScoreReportType.Score,
+  ) as ScoreReport[];
   const reports = initialReports?.map((report) => {
     if (report.type === ScoreReportType.Section) {
-      return getSection(report as SectionReport, items);
+      return getSection({ section: report as SectionReport, items, scores });
     }
 
     return getScore(report as ScoreReport, items);
@@ -309,7 +340,7 @@ export const getItemConditionalLogic = (
 
   return {
     match: result.match,
-    conditions: getConditions(items, result.conditions),
+    conditions: getConditions({ items, conditions: result.conditions }),
   };
 };
 

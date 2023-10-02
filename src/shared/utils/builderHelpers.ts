@@ -1,7 +1,13 @@
 import { INDEX_IN_NAME_REGEXP, INDEX_IN_NAME_WITH_UNDERSCORE_REGEXP } from 'shared/consts';
 
-export const getEntityKey = <T extends { id?: string; key?: string }>(entity: T) =>
-  entity?.id ?? entity?.key ?? '';
+export const getEntityKey = <T extends { id?: string; key?: string }>(
+  entity: T,
+  useIdFirst = true,
+) => {
+  if (useIdFirst) return entity?.id ?? entity?.key ?? '';
+
+  return entity?.key ?? entity?.id ?? '';
+};
 
 export const getObjectFromList = <T extends { id?: string; key?: string }>(
   items: T[] = [],
