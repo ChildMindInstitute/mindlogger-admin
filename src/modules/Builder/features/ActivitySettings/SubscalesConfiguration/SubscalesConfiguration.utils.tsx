@@ -339,9 +339,6 @@ export const getAddTotalScoreModalLabels = (): LabelsObject => {
   };
 };
 
-export const isSystemItem = (name: string) =>
-  name === LookupTableItems.Age_screen || name === LookupTableItems.Gender_screen;
-
 export const checkOnItemTypeAndScore = (item: ItemFormValues | Item) =>
   (item.config as SingleAndMultipleSelectionConfig | SliderConfig).addScores &&
   [
