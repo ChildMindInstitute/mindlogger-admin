@@ -81,13 +81,13 @@ export type Event = {
 
 export type TransferOwnershipType = AppletId & { email: string };
 
-export const enum TimerType {
+export enum TimerType {
   NotSet = 'NOT_SET',
   Timer = 'TIMER',
   Idle = 'IDLE',
 }
 
-export const enum Periodicity {
+export enum Periodicity {
   Once = 'ONCE',
   Daily = 'DAILY',
   Weekly = 'WEEKLY',
@@ -96,7 +96,7 @@ export const enum Periodicity {
   Always = 'ALWAYS',
 }
 
-export const enum NotificationType {
+export enum NotificationType {
   Fixed = 'FIXED',
   Random = 'RANDOM',
 }
@@ -172,18 +172,20 @@ export type EditRespondent = {
   };
 };
 
+export type AppletInvitationOptions = {
+  role: string;
+  firstName: string;
+  lastName: string;
+  nickname: string;
+  email: string;
+  secretUserId: string;
+  workspacePrefix: string;
+  respondents: string[];
+};
+
 export type AppletInvitationData = AppletId & {
   url: string;
-  options: {
-    role: string;
-    firstName: string;
-    lastName: string;
-    nickname: string;
-    email: string;
-    secretUserId: string;
-    workspacePrefix: string;
-    respondents: string[];
-  };
+  options: AppletInvitationOptions;
 };
 
 export type DuplicateApplet = AppletId & {
@@ -284,10 +286,6 @@ export type SummaryAnswers = AppletId & {
 export type Identifier = {
   identifier: string;
   userPublicKey: string;
-};
-
-export type AppletUniqueName = {
-  name: string;
 };
 
 export type NoteId = { noteId: string };

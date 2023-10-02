@@ -134,7 +134,9 @@ export const BlockSequencesContent = ({
             })
           }
           uiType={importSequencesUiType}
-          uploadedImages={stimulusTrials.map((trial) => getUploadedMediaName(trial.image))}
+          uploadedImages={stimulusTrials.map(
+            (trial) => trial.text || getUploadedMediaName(trial.image),
+          )}
           setUploadedTable={setUploadedTable}
         />
       )}

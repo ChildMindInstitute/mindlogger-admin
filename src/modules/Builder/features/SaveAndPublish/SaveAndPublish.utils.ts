@@ -91,6 +91,7 @@ const removeItemExtraFields = () => ({
   key: undefined,
   settings: undefined,
   alerts: undefined,
+  order: undefined,
   ...removeReactHookFormKey(),
 });
 

@@ -13,6 +13,7 @@ i18next
     supportedLngs: ['en', 'fr'],
     ns: ['app'],
     defaultNS: 'app',
+    returnObjects: false,
     detection: {
       order: ['navigator'],
     },

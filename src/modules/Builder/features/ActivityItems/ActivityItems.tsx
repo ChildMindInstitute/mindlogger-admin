@@ -18,7 +18,7 @@ import { DeleteItemModal } from './DeleteItemModal';
 
 export const ActivityItems = () => {
   const { fieldName, activity } = useCurrentActivity();
-  const { control, trigger } = useFormContext();
+  const { control, trigger, getValues } = useFormContext();
   const itemsName = `${fieldName}.items`;
   const navigate = useNavigate();
 
@@ -92,7 +92,7 @@ export const ActivityItems = () => {
   };
 
   const handleDuplicateItem = (index: number) => {
-    const itemToDuplicate = items[index];
+    const itemToDuplicate = getValues(itemsName)[index];
     setDuplicateIndexes((prevState) => {
       const numberToInsert = (prevState[getEntityKey(itemToDuplicate)] || 0) + 1;
 

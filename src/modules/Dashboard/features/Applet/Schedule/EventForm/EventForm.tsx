@@ -4,6 +4,7 @@ import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import isEqual from 'lodash.isequal';
 import { useParams } from 'react-router-dom';
+import { ObjectSchema } from 'yup';
 
 import { Option, SelectController } from 'shared/components/FormComponents';
 import { DefaultTabs as Tabs } from 'shared/components';
@@ -52,7 +53,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const eventsData = calendarEvents.useCreateEventsData() || [];
 
     const methods = useForm<EventFormValues>({
-      resolver: yupResolver(EventFormSchema()),
+      resolver: yupResolver(EventFormSchema() as ObjectSchema<EventFormValues>),
       defaultValues,
       mode: 'onChange',
     });

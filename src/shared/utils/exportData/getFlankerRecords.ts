@@ -1,6 +1,5 @@
 import { FlankerConfig, Item } from 'shared/state';
 import {
-  DecryptedFlankerAnswer,
   DecryptedFlankerAnswerItemValue,
   DotType,
   FlankerRecordFields,
@@ -121,7 +120,7 @@ const getResponseObj = ({
     responseTouchTimestamp =
       'response_touch_timestamp' in response
         ? response.response_touch_timestamp || DEFAULT_VALUE
-        : videoDisplayRequestTimestamp + response.duration;
+        : videoDisplayRequestTimestamp + (<DecryptedFlankerAnswerItemValue>response).duration;
     responseTime = response.duration;
     videoDisplayRequestTimestamp = DEFAULT_VALUE;
   }
@@ -157,7 +156,7 @@ const TIME_FIELDS = [
 const DEFAULT_VALUE = '.';
 
 export const getFlankerRecords = (
-  responses: DecryptedFlankerAnswer['value'],
+  responses: DecryptedFlankerAnswerItemValue[],
   item: Item<FlankerConfig>,
   experimentClock: string,
 ) => {

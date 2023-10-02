@@ -11,10 +11,11 @@ import {
   DecryptedMultiSelectionPerRowAnswer,
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
-  DecryptedStabilityTrackerAnswer,
+  DecryptedStabilityTrackerAnswerObject,
   DecryptedTimeAnswer,
   ExtendedEvent,
   ExtendedExportAnswerWithoutEncryption,
+  UserActionType,
 } from 'shared/types';
 import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
 
@@ -35,9 +36,17 @@ export const parseResponseValue = <
   index: number,
   isEvent = false,
 ) => {
-  const answer: AnswerDTO | undefined = isEvent
-    ? (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response
-    : item.answer;
+  let answer: AnswerDTO | undefined;
+  if (!isEvent) {
+    answer = item.answer;
+  }
+  if (
+    isEvent &&
+    (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).type === UserActionType.SetAnswer
+  ) {
+    answer = (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response ?? item.answer;
+  }
+
   const answerEdited = (answer as AdditionalEdited)?.edited;
   const editedWithLabel = answerEdited ? ` | edited: ${answerEdited}` : '';
 
@@ -68,6 +77,8 @@ export const parseResponseValueRaw = <
 
   if (ItemsWithFileResponses.includes(inputType)) {
     try {
+      if (!(item.answer as DecryptedMediaAnswer)?.value) return '';
+
       return getMediaFileName(item, getFileExtension((item.answer as DecryptedMediaAnswer).value));
     } catch (error) {
       console.warn(error);
@@ -87,10 +98,10 @@ export const parseResponseValueRaw = <
       }/${(value as DecryptedDateAnswer['value'])?.year}`;
     case ItemResponseType.Time: {
       const timeValue = value as DecryptedTimeAnswer['value'];
+      const hours = timeValue?.hours ?? (answer as DecryptedTimeAnswer)?.hour;
+      const minutes = timeValue?.minutes ?? (answer as DecryptedTimeAnswer)?.minute;
 
-      return `time: hr ${timeValue?.hours || timeValue?.hour}, min ${
-        timeValue?.minutes || timeValue?.minute
-      }`;
+      return `time: hr ${hours}, min ${minutes}`;
     }
     case ItemResponseType.Geolocation:
       return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${
@@ -137,7 +148,7 @@ export const parseResponseValueRaw = <
     case ItemResponseType.StabilityTracker:
       return getStabilityTrackerCsvName(
         answerId,
-        (value as DecryptedStabilityTrackerAnswer['value']).phaseType,
+        (value as DecryptedStabilityTrackerAnswerObject).phaseType,
       );
     case ItemResponseType.Flanker:
       return getFlankerCsvName(item);

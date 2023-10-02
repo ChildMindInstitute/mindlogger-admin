@@ -1,12 +1,14 @@
 import {
+  AnswerWithWrapper,
   AppletExportData,
   DecryptedABTrailsAnswer,
   DecryptedActivityData,
   DecryptedAnswerData,
   DecryptedDrawingAnswer,
-  DecryptedFlankerAnswer,
+  DecryptedFlankerAnswerItemValue,
   DecryptedMediaAnswer,
   DecryptedStabilityTrackerAnswer,
+  DecryptedStabilityTrackerAnswerObject,
   EventDTO,
   ExportCsvData,
   ExportDataResult,
@@ -160,8 +162,8 @@ const getMediaData = (
         url: getDrawingUrl(item),
       });
     const responseType = item.activityItem?.responseType;
-    if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
     const url = getMediaUrl(item);
+    if (!ItemsWithFileResponses.includes(responseType) || !url) return filteredAcc;
 
     return filteredAcc.concat({
       fileName: getMediaFileName(item, getFileExtension(url)),
@@ -228,7 +230,10 @@ const getStabilityTrackerItemsData = (
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.StabilityTracker) return acc;
 
-    const stabilityTrackerValue = (item.answer as DecryptedStabilityTrackerAnswer).value;
+    const answer = <DecryptedStabilityTrackerAnswer>item.answer;
+    const stabilityTrackerValue = (answer as DecryptedStabilityTrackerAnswerObject).phaseType
+      ? <DecryptedStabilityTrackerAnswerObject>answer
+      : (answer.value as DecryptedStabilityTrackerAnswerObject);
 
     return acc.concat({
       name: getStabilityTrackerCsvName(item.id, stabilityTrackerValue.phaseType),
@@ -266,7 +271,8 @@ const getFlankerItemsData = (
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.Flanker || !item.answer) return acc;
 
-    const flankerValue = (item.answer as DecryptedFlankerAnswer).value;
+    const flankerValue =
+      (item.answer as AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>)?.value ?? item.answer;
 
     return acc.concat({
       name: getFlankerCsvName(item),

@@ -67,7 +67,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       fields: alerts,
       append: appendAlert,
       remove: removeAlert,
-      fields: fieldAlerts,
     } = useFieldArray({
       control,
       name: `${name}.alerts`,
@@ -255,7 +254,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         )}
         {hasAlerts && (
           <Alerts
-            alerts={fieldAlerts}
+            alerts={alerts}
             appendAlert={handleAddAlert}
             removeAlert={handleRemoveAlert}
             name={name}

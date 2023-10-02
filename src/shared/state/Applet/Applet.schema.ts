@@ -439,6 +439,7 @@ export type Item<T = Config> = {
   conditionalLogic?: ConditionalLogic;
   allowEdit: boolean;
   isHidden?: boolean;
+  order?: number;
 };
 
 export interface TextItem extends Item {

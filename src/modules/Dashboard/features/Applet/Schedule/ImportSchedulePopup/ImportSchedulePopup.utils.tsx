@@ -1,9 +1,7 @@
-import { ElementType } from 'react';
 import { Trans } from 'react-i18next';
 import { endOfYear, format } from 'date-fns';
 import { Box } from '@mui/material';
 
-import i18n from 'i18n';
 import { SingleApplet } from 'shared/state';
 import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
@@ -22,10 +20,9 @@ import {
   timeValidationRegex,
   EMPTY_TIME,
   ALWAYS_FREQUENCY,
+  commonErrorBoxProps,
 } from './ImportSchedule.const';
 import { CheckFields, ImportScheduleErrors, UploadedEvent } from './ImportSchedulePopup.types';
-
-const { t } = i18n;
 
 export const getInvalidActivitiesError = (activityNames: string[], appletName: string) =>
   activityNames.length === 1 ? (
@@ -54,95 +51,68 @@ export const getInvalidActivitiesError = (activityNames: string[], appletName: s
     </Trans>
   );
 
-const commonProps = { component: 'span' as ElementType, sx: { display: 'block' } };
 export const getInvalidError = (type: ImportScheduleErrors) => {
   switch (type) {
     case ImportScheduleErrors.StartTime:
       return (
-        <>
-          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box {...commonProps}>
-            <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartTime}]`}>
-              <strong>Activity Start Time</strong>. Valid data format:{' '}
-              <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
-            </Trans>
-          </Box>
-          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
-        </>
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartTime}]`}>
+            <strong>Activity Start Time</strong>. Valid data format:{' '}
+            <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
+          </Trans>
+        </Box>
       );
     case ImportScheduleErrors.EndTime:
       return (
-        <>
-          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box {...commonProps}>
-            <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.EndTime}]`}>
-              <strong>Activity End Time</strong>. Valid data format:{' '}
-              <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
-            </Trans>
-          </Box>
-          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
-        </>
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.EndTime}]`}>
+            <strong>Activity End Time</strong>. Valid data format:{' '}
+            <strong>HH:mm for Scheduled activity and - for Always available activity</strong>.
+          </Trans>
+        </Box>
       );
     case ImportScheduleErrors.NotificationTime:
       return (
-        <>
-          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box {...commonProps}>
-            <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.NotificationTime}]`}>
-              <strong>Notification Time</strong>. Valid data format: <strong>HH:mm or -</strong>.
-            </Trans>
-          </Box>
-          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
-        </>
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.NotificationTime}]`}>
+            <strong>Notification Time</strong>. Valid data format: <strong>HH:mm or -</strong>.
+          </Trans>
+        </Box>
       );
     case ImportScheduleErrors.Frequency:
       return (
-        <>
-          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box {...commonProps}>
-            <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Frequency}]`}>
-              <strong>Frequency</strong>. Valid data format:{' '}
-              <strong>Always, Once, Daily, Weekly, Monthly, Weekdays</strong>.
-            </Trans>
-          </Box>
-          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
-        </>
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Frequency}]`}>
+            <strong>Frequency</strong>. Valid data format:{' '}
+            <strong>Always, Once, Daily, Weekly, Monthly, Weekdays</strong>.
+          </Trans>
+        </Box>
       );
     case ImportScheduleErrors.Date:
       return (
-        <>
-          <Box {...commonProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
-          <Box {...commonProps}>
-            <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Date}]`}>
-              <strong>Date</strong>. Valid data format: <strong>DD Month YYYY</strong>.
-            </Trans>
-          </Box>
-          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
-        </>
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.Date}]`}>
+            <strong>Date</strong>. Valid data format: <strong>DD Month YYYY</strong>.
+          </Trans>
+        </Box>
       );
     case ImportScheduleErrors.StartEndTime:
       return (
-        <>
-          <Box {...commonProps}>
-            <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartEndTime}]`}>
-              <strong>Activity End Time</strong> should be greater than{' '}
-              <strong>Activity Start Time</strong>.
-            </Trans>
-          </Box>
-          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
-        </>
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartEndTime}]`}>
+            <strong>Activity End Time</strong> should be greater than{' '}
+            <strong>Activity Start Time</strong>.
+          </Trans>
+        </Box>
       );
     case ImportScheduleErrors.BetweenStartEndTime:
       return (
-        <>
-          <Box {...commonProps}>
-            <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.BetweenStartEndTime}]`}>
-              <strong>Notification Time</strong> should be between{' '}
-              <strong>Activity Start Time</strong> and <strong>Activity End Time</strong>.
-            </Trans>
-          </Box>
-          <Box {...commonProps}>{t('importScheduleErrors.updateReupload')}</Box>
-        </>
+        <Box {...commonErrorBoxProps}>
+          <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.BetweenStartEndTime}]`}>
+            <strong>Notification Time</strong> should be between{' '}
+            <strong>Activity Start Time</strong> and <strong>Activity End Time</strong>.
+          </Trans>
+        </Box>
       );
     default:
       return null;
@@ -180,33 +150,39 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
           (isAlwaysFrequency && startTime !== EMPTY_TIME) ||
           (!isAlwaysFrequency && !timeValidationRegex.test(getUploadedTime(startTime)))
         ) {
-          acc.invalidStartTimeField = getInvalidError(ImportScheduleErrors.StartTime);
+          acc.invalidStartTimeField.data = getInvalidError(ImportScheduleErrors.StartTime);
+          acc.hasInvalidData = true;
         }
 
         if (
           (isAlwaysFrequency && endTime !== EMPTY_TIME) ||
           (!isAlwaysFrequency && !timeValidationRegex.test(getUploadedTime(endTime)))
         ) {
-          acc.invalidEndTimeField = getInvalidError(ImportScheduleErrors.EndTime);
+          acc.invalidEndTimeField.data = getInvalidError(ImportScheduleErrors.EndTime);
+          acc.hasInvalidData = true;
         }
 
         if (!notificationValidationRegex.test(getUploadedTime(notificationTime))) {
-          acc.invalidNotification = getInvalidError(ImportScheduleErrors.NotificationTime);
+          acc.invalidNotification.data = getInvalidError(ImportScheduleErrors.NotificationTime);
+          acc.hasInvalidData = true;
         }
 
         if (!frequencyArray.includes(frequency)) {
-          acc.invalidFrequency = getInvalidError(ImportScheduleErrors.Frequency);
+          acc.invalidFrequency.data = getInvalidError(ImportScheduleErrors.Frequency);
+          acc.hasInvalidData = true;
         }
 
         if (!(getUploadedDate(date) instanceof Date)) {
-          acc.invalidDate = getInvalidError(ImportScheduleErrors.Date);
+          acc.invalidDate.data = getInvalidError(ImportScheduleErrors.Date);
+          acc.hasInvalidData = true;
         }
 
         if (
           !isAlwaysFrequency &&
           !getStartEndComparison(getUploadedTime(startTime), getUploadedTime(endTime))
         ) {
-          acc.invalidStartEndTime = getInvalidError(ImportScheduleErrors.StartEndTime);
+          acc.invalidStartEndTime.data = getInvalidError(ImportScheduleErrors.StartEndTime);
+          acc.hasInvalidData = true;
         }
 
         if (
@@ -218,7 +194,10 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
             getUploadedTime(endTime),
           )
         ) {
-          acc.invalidNotificationTime = getInvalidError(ImportScheduleErrors.BetweenStartEndTime);
+          acc.invalidNotificationTime.data = getInvalidError(
+            ImportScheduleErrors.BetweenStartEndTime,
+          );
+          acc.hasInvalidData = true;
         }
       }
 
@@ -226,13 +205,14 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
     },
     {
       activityNames: [],
-      invalidStartTimeField: null,
-      invalidEndTimeField: null,
-      invalidNotification: null,
-      invalidFrequency: null,
-      invalidDate: null,
-      invalidStartEndTime: null,
-      invalidNotificationTime: null,
+      invalidStartTimeField: { data: null, id: 'invalid-start-time' },
+      invalidEndTimeField: { data: null, id: 'invalid-end-time' },
+      invalidNotification: { data: null, id: 'invalid-notification' },
+      invalidFrequency: { data: null, id: 'invalid-frequency' },
+      invalidDate: { data: null, id: 'invalid-date' },
+      invalidStartEndTime: { data: null, id: 'invalid-start-end-time' },
+      invalidNotificationTime: { data: null, id: 'invalid-notification-time' },
+      hasInvalidData: false,
     },
   );
 

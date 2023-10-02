@@ -1,4 +1,4 @@
-import { AnswerDTO } from 'shared/types';
+import { AnswerDTO, DecryptedStabilityTrackerAnswerObject } from 'shared/types';
 
 const parseValue = (value: unknown) => {
   if (value === 0) {
@@ -13,7 +13,9 @@ const parseValue = (value: unknown) => {
 
 export const getAnswerValue = (answerValue?: AnswerDTO) => {
   if (typeof answerValue === 'object') {
-    return parseValue(answerValue?.value ?? answerValue);
+    if ((answerValue as DecryptedStabilityTrackerAnswerObject)?.phaseType) return answerValue;
+
+    return parseValue((answerValue as { value: unknown })?.value ?? answerValue);
   }
 
   return parseValue(answerValue);
