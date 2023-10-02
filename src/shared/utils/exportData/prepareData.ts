@@ -270,7 +270,7 @@ const getFlankerItemsData = (
   flankerItemsData: AppletExportData['flankerItemsData'],
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
-  const flankerAnswers = decryptedAnswers.reduce((acc, item) => {
+  const flankerAnswers = decryptedAnswers.reduce((acc, item, itemIndex) => {
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.Flanker || !item.answer) return acc;
 
@@ -280,11 +280,12 @@ const getFlankerItemsData = (
     return acc.concat({
       name: getFlankerCsvName(item),
       data: convertJsonToCsv(
-        getFlankerRecords(
-          flankerValue,
-          item.activityItem as Item<FlankerConfig>,
-          convertDateStampToMs(item.startDatetime),
-        ),
+        getFlankerRecords({
+          responses: flankerValue,
+          item: item.activityItem as Item<FlankerConfig>,
+          experimentClock: convertDateStampToMs(item.startDatetime),
+          itemIndex,
+        }),
       ),
     });
   }, [] as ExportCsvData[]);
