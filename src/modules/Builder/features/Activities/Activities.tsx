@@ -85,7 +85,7 @@ export const Activities = () => {
         ? performanceTaskName
         : t('newActivity');
 
-    const name = getUniqueName(newActivityName, activityNames);
+    const name = getUniqueName({ name: newActivityName, existingNames: activityNames });
 
     const newActivity =
       performanceTaskName && performanceTaskDesc && performanceTaskType
@@ -125,7 +125,7 @@ export const Activities = () => {
 
   const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
-    const name = getUniqueName(activityToDuplicate.name, activityNames);
+    const name = getUniqueName({ name: activityToDuplicate.name, existingNames: activityNames });
 
     const newActivity = isPerformanceTask
       ? getNewPerformanceTask({

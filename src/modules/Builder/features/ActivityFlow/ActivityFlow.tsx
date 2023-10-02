@@ -84,7 +84,10 @@ export const ActivityFlow = () => {
   };
 
   const handleDuplicateActivityFlow = (index: number) => {
-    const name = getUniqueName(activityFlows[index].name, pluck(activityFlows, 'name'));
+    const name = getUniqueName({
+      name: activityFlows[index].name,
+      existingNames: pluck(activityFlows, 'name'),
+    });
 
     insertActivityFlow(index + 1, getDuplicatedActivityFlow(activityFlows[index], name));
   };
