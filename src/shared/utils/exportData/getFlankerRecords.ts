@@ -57,17 +57,28 @@ const getTrialType = ({
   return tag === FlankerTag.Feedback ? 0 : -1;
 };
 
-const getBlockNumber = (itemName: string) => {
-  switch (itemName) {
-    case FlankerItemNames.PracticeFirst:
-    case FlankerItemNames.PracticeSecond:
-    case FlankerItemNames.PracticeThird:
-      return 0;
-    case FlankerItemNames.TestFirst:
+/* Item's indexes in flanker activity:
+  0 vsr-instructions
+  1 practice-instructions
+  2 trial
+  3 trial2-instructions
+  4 trial2
+  5 trial3-instructions
+  6 trial3
+  7 test-instructions
+  8 test1
+  9 test2-instructions
+  10 test2
+  11 test3-instructions
+  12 test3
+*/
+const getBlockNumber = (itemIndex: number) => {
+  switch (itemIndex) {
+    case 8: // test1
       return 1;
-    case FlankerItemNames.TestSecond:
+    case 10: // test2
       return 2;
-    case FlankerItemNames.TestThird:
+    case 12: // test3
       return 3;
     default:
       return 0;
@@ -77,18 +88,18 @@ const getBlockNumber = (itemName: string) => {
 const getResponseObj = ({
   response,
   tag,
-  itemName,
+  itemIndex,
   trialStartTimestamp,
   types,
 }: {
   response: DecryptedFlankerAnswerItemValue;
   tag: FlankerTag;
-  itemName: Item['name'];
+  itemIndex: number;
   trialStartTimestamp: number;
   types: ReturnType<typeof getTypes>;
 }) => {
   const trialNumber = response.trial_index;
-  const blockNumber = getBlockNumber(itemName);
+  const blockNumber = getBlockNumber(itemIndex);
   const trialType: number | string = getTrialType({
     tag,
     types,
@@ -155,11 +166,17 @@ const TIME_FIELDS = [
 
 const DEFAULT_VALUE = '.';
 
-export const getFlankerRecords = (
-  responses: DecryptedFlankerAnswerItemValue[],
-  item: Item<FlankerConfig>,
-  experimentClock: string,
-) => {
+export const getFlankerRecords = ({
+  responses,
+  item,
+  experimentClock,
+  itemIndex,
+}: {
+  responses: DecryptedFlankerAnswerItemValue[];
+  item: Item<FlankerConfig>;
+  experimentClock: string;
+  itemIndex: number;
+}) => {
   const result: any[] = [];
   let trialStartTimestamp = 0;
   let lastIndex = 1e6;
@@ -209,7 +226,7 @@ export const getFlankerRecords = (
       ...getResponseObj({
         response,
         tag: response.tag,
-        itemName: item.name,
+        itemIndex,
         trialStartTimestamp,
         types,
       }),
@@ -225,7 +242,7 @@ export const getFlankerRecords = (
         ...getResponseObj({
           response,
           tag: FlankerTag.Response,
-          itemName: item.name,
+          itemIndex,
           trialStartTimestamp,
           types,
         }),
