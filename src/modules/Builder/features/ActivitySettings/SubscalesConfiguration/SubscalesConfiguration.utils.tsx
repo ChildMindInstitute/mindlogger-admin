@@ -103,31 +103,34 @@ export const getNotUsedElements = (
   mergedIds: string[],
   markedUniqueElementsIds: ReturnType<typeof getPropertiesToFilterByIds>['markedUniqueElementsIds'],
 ) =>
-  mergedIds.reduce((acc, id) => {
-    if (markedUniqueElementsIds.includes(id)) return acc;
+  mergedIds.reduce(
+    (acc, id) => {
+      if (markedUniqueElementsIds.includes(id)) return acc;
 
-    const subscale = subscalesMap[id];
-    const item = itemsMap[id];
+      const subscale = subscalesMap[id];
+      const item = itemsMap[id];
 
-    if (item)
-      return [
-        ...acc,
-        {
-          id,
-          [SubscaleColumns.Name]: getItemElementName(item),
-        },
-      ];
-    if (subscale)
-      return [
-        ...acc,
-        {
-          id,
-          [SubscaleColumns.Name]: getSubscaleElementName(subscale, subscalesMap, itemsMap),
-        },
-      ];
+      if (item)
+        return [
+          ...acc,
+          {
+            id,
+            [SubscaleColumns.Name]: getItemElementName(item),
+          },
+        ];
+      if (subscale)
+        return [
+          ...acc,
+          {
+            id,
+            [SubscaleColumns.Name]: getSubscaleElementName(subscale, subscalesMap, itemsMap),
+          },
+        ];
 
-    return acc;
-  }, [] as SubscaleContentProps['notUsedElements']);
+      return acc;
+    },
+    [] as SubscaleContentProps['notUsedElements'],
+  );
 
 const getElementName =
   (id: string) => (acc: string[], subscale: { name: string; itemsSet: Set<string> }) => {
@@ -335,9 +338,6 @@ export const getAddTotalScoreModalLabels = (): LabelsObject => {
     },
   };
 };
-
-export const isSystemItem = (name: string) =>
-  name === LookupTableItems.Age_screen || name === LookupTableItems.Gender_screen;
 
 export const checkOnItemTypeAndScore = (item: ItemFormValues | Item) =>
   (item.config as SingleAndMultipleSelectionConfig | SliderConfig).addScores &&

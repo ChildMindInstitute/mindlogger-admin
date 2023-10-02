@@ -5,9 +5,9 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/types';
 import { ActivitySettingsSubscale } from 'shared/state';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { isSystemItem } from 'shared/utils';
 
 import { ageItem, genderItem } from './SubscalesConfiguration.const';
-import { isSystemItem } from './SubscalesConfiguration.utils';
 
 export const useSubscalesSystemItemsSetup = (
   subscales: FieldArrayWithId<

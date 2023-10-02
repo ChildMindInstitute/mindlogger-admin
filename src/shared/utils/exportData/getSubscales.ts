@@ -25,6 +25,7 @@ import {
 
 import { getObjectFromList } from '../builderHelpers';
 import { createArrayFromMinToMax } from '../array';
+import { isSystemItem } from '../isSystemItem';
 
 export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore, length: number) =>
   type === SubscaleTotalScore.Sum ? subscalesSum : subscalesSum / length;
@@ -93,7 +94,8 @@ export const calcScores = <T>(
     return acc + value;
   }, 0);
 
-  const calculatedScore = getSubScaleScore(sumScore, data.scoring, data.items.length);
+  const filteredItems = data.items.filter((item) => !isSystemItem(item.name));
+  const calculatedScore = getSubScaleScore(sumScore, data.scoring, filteredItems.length);
 
   if (data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {
