@@ -2,6 +2,7 @@ import 'mock-local-storage';
 import '@testing-library/jest-dom';
 
 jest.mock('axios', () => ({
+  isAxiosError: jest.fn(),
   create: jest.fn().mockReturnValue({
     interceptors: {
       request: { use: jest.fn(), eject: jest.fn() },

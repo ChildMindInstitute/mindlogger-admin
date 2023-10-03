@@ -64,7 +64,7 @@ export const useAppletDataFromForm = () => {
             subscaleSetting: remapSubscaleSettings(activity),
             scoresAndReports: getScoresAndReports(activity),
             ...removeActivityExtraFields(),
-          } as Activity),
+          }) as Activity,
       ),
       encryption,
       description: appletDescription,
@@ -80,7 +80,7 @@ export const useAppletDataFromForm = () => {
               ...removeActivityFlowItemExtraFields(),
             })),
             ...removeActivityFlowExtraFields(),
-          } as ActivityFlow),
+          }) as ActivityFlow,
       ),
       ...removeAppletExtraFields(),
     };
