@@ -76,6 +76,7 @@ export const Uploader = ({
     if (notAllowableSize || notAllowableType) return;
 
     setImage(imageFile);
+    setIsMouseOver(false);
     setCropPopupVisible(true);
   };
 

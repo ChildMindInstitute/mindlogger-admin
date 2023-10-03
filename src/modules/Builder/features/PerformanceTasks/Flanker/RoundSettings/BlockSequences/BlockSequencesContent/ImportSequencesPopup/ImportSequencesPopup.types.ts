@@ -5,12 +5,14 @@ export enum ImportSequencesType {
   Update,
 }
 
+export type UploadedImages = Record<string, string>;
+
 export type ImportSequencesPopupProps = {
   open: boolean;
   onClose: () => void;
   onDownloadCsv: () => void;
   onDownloadXlsx: () => void;
   uiType: ImportSequencesType;
-  uploadedImages: string[];
+  uploadedImages: UploadedImages;
   setUploadedTable: SetUploadedTable;
 };

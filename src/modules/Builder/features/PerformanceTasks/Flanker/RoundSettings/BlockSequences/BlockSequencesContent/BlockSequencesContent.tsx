@@ -13,14 +13,16 @@ import {
 } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { FlankerStimulusSettings } from 'shared/state';
-import { exportTemplate, getUploadedMediaName } from 'shared/utils';
+import { exportTemplate } from 'shared/utils';
 import { FlankerItemPositions } from 'modules/Builder/types';
 
 import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
 import {
+  getExportData,
   getRoundBlocks,
   getSequencesData,
   getSequencesHeadCells,
+  getStimulusObject,
   getTableFromSequences,
   getUploadedTableRows,
 } from './BlockSequencesContent.utils';
@@ -50,7 +52,9 @@ export const BlockSequencesContent = ({
   const prevStimulusTrialsLength = useRef(stimulusTrials?.length);
 
   const { defaultExportTable, defaultTableRows } = getSequencesData(stimulusTrials);
-  const tableRows = uploadedTable ? getUploadedTableRows(uploadedTable) : defaultTableRows || [];
+  const tableRows = uploadedTable
+    ? getUploadedTableRows(uploadedTable?.data)
+    : defaultTableRows || [];
 
   const tableWrapperStyles = { opacity: uploadedTable ? '1' : '0.5' };
   const importSequencesUiType = uploadedTable
@@ -58,53 +62,37 @@ export const BlockSequencesContent = ({
     : ImportSequencesType.Upload;
   const btnIconId = uploadedTable ? 'edit' : 'add';
   const btnText = t(`${uploadedTable ? 'update' : 'upload'}`);
+  const exportData = getExportData(uploadedTable?.data) || defaultExportTable;
 
   useEffect(() => {
-    if (!uploadedTable?.length) return;
-    const blocks = getRoundBlocks(stimulusTrials, uploadedTable);
+    if (uploadedTable?.isInitial || !uploadedTable?.data?.length) return;
+    const blocks = getRoundBlocks(stimulusTrials, uploadedTable?.data);
     if (!blocks) return;
 
     clearErrors(blockSequencesField);
     setValue(blockSequencesField, blocks);
-  }, [uploadedTable, stimulusTrials]);
+  }, [uploadedTable]);
 
   useEffect(() => {
-    if (!blockSequences?.length || !stimulusTrials?.length) return;
+    const stimulusTrialsLength = stimulusTrials?.length;
+    if (!stimulusTrialsLength) return;
 
-    const initialUploadedTable = getTableFromSequences(stimulusTrials, blockSequences);
-    initialUploadedTable && setUploadedTable(initialUploadedTable);
-  }, []);
-
-  useEffect(() => {
-    if (stimulusTrials?.length < prevStimulusTrialsLength.current) {
+    if (stimulusTrialsLength < prevStimulusTrialsLength.current) {
       setUploadedTable(null);
       setValue(blockSequencesField, []);
     }
 
     if (
-      stimulusTrials?.length === prevStimulusTrialsLength.current &&
-      stimulusTrials.some((trial) => !(trial.image || trial.text))
+      blockSequences?.length &&
+      stimulusTrialsLength === prevStimulusTrialsLength.current &&
+      stimulusTrials.every((trial) => !!(trial.image || trial.text))
     ) {
-      setUploadedTable(null);
-      setValue(blockSequencesField, []);
+      const newUploadedTable = getTableFromSequences(stimulusTrials, blockSequences);
+      newUploadedTable && setUploadedTable({ isInitial: true, data: newUploadedTable });
     }
 
-    prevStimulusTrialsLength.current = stimulusTrials?.length;
+    prevStimulusTrialsLength.current = stimulusTrialsLength;
   }, [stimulusTrials]);
-
-  // useEffect(() => {
-  //   if (
-  //     stimulusTrials?.length === prevStimulusTrialsLength.current ||
-  //     stimulusTrials.some((trial) => !(trial.image || trial.text))
-  //   ) {
-  //
-  //   }
-  //
-  //   // console.log('stimulus trials', stimulusTrials);
-  //   // console.log('block sequences', blockSequences);
-  //   // console.log('uploadedTable', uploadedTable);
-  //   // console.log('----------------');
-  // }, [blockSequences, stimulusTrials]);
 
   return hasStimulusTrials ? (
     <>
@@ -116,7 +104,7 @@ export const BlockSequencesContent = ({
         )}
         <Box sx={tableWrapperStyles}>
           <Table
-            columns={getSequencesHeadCells(uploadedTable)}
+            columns={getSequencesHeadCells(uploadedTable?.data)}
             rows={tableRows}
             orderBy=""
             uiType={UiType.Quaternary}
@@ -146,19 +134,20 @@ export const BlockSequencesContent = ({
           open={importTableVisible}
           onClose={() => setImportTableVisible(false)}
           onDownloadCsv={() =>
-            exportTemplate({ data: uploadedTable || defaultExportTable, fileName: 'template' })
+            exportTemplate({
+              data: exportData,
+              fileName: 'template',
+            })
           }
           onDownloadXlsx={() =>
             exportTemplate({
-              data: uploadedTable || defaultExportTable,
+              data: exportData,
               fileName: 'template',
               isXlsx: true,
             })
           }
           uiType={importSequencesUiType}
-          uploadedImages={stimulusTrials.map(
-            (trial) => trial.text || getUploadedMediaName(trial.image),
-          )}
+          uploadedImages={getStimulusObject(stimulusTrials, 'imageKey')}
           setUploadedTable={setUploadedTable}
         />
       )}
