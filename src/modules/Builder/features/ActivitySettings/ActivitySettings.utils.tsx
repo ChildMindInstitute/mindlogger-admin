@@ -1,20 +1,16 @@
 import { Svg } from 'shared/components/Svg';
-import { ActivityFormValues } from 'modules/Builder/types';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
 import { SettingParam } from 'shared/utils';
 
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
+import { GetActivitySettings } from './ActivitySettings.types';
 
-export const getSettings = ({
+export const getActivitySettings = ({
   activity,
   activityFieldName,
   settingsErrors: { hasActivityReportsErrors, hasActivitySubscalesErrors },
-}: {
-  activityFieldName?: string;
-  activity?: ActivityFormValues;
-  settingsErrors: Record<string, boolean>;
-}) => {
+}: GetActivitySettings) => {
   const isNewActivity = !activity?.id;
   const dataTestid = 'builder-activity-settings';
 

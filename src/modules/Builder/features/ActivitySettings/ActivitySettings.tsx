@@ -5,7 +5,7 @@ import { page } from 'resources';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { NavigationItem, NavigationMenu } from 'shared/components';
 
-import { getSettings } from './ActivitySettings.utils';
+import { getActivitySettings } from './ActivitySettings.utils';
 
 export const ActivitySettings = () => {
   const { fieldName, activity } = useCurrentActivity();
@@ -38,7 +38,7 @@ export const ActivitySettings = () => {
   return (
     <NavigationMenu
       title="activitySettings"
-      items={getSettings({ activityFieldName: fieldName, activity, settingsErrors })}
+      items={getActivitySettings({ activityFieldName: fieldName, activity, settingsErrors })}
       onClose={handleClose}
       onSetActiveItem={handleSetActiveSetting}
     />
