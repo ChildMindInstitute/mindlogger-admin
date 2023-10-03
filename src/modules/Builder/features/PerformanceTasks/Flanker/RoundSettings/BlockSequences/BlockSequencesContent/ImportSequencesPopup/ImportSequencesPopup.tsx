@@ -20,7 +20,7 @@ export const ImportSequencesPopup = ({
 }: ImportSequencesPopupProps) => {
   const { t } = useTranslation('app');
   const [step, setStep] = useState<number>(0);
-  const { isSubmitDisabled, validationError, handleFileReady, uploadedFile } =
+  const { isSubmitDisabled, validationError, handleFileReady, uploadedData } =
     useImportSequence(uploadedImages);
 
   const isUpload = uiType === ImportSequencesType.Upload;
@@ -51,9 +51,9 @@ export const ImportSequencesPopup = ({
   const onSubmit = () => {
     switch (step) {
       case 0:
-        return uploadedFile ? incrementStep() : setStep(2);
+        return uploadedData ? incrementStep() : setStep(2);
       case 1:
-        uploadedFile && setUploadedTable({ data: uploadedFile, isInitial: false });
+        uploadedData && setUploadedTable({ data: uploadedData, isInitial: false });
 
         return onClose();
       case 2:
@@ -62,8 +62,8 @@ export const ImportSequencesPopup = ({
   };
 
   const handleModalClose = () => {
-    if (step === 1 && uploadedFile) {
-      setUploadedTable({ data: uploadedFile, isInitial: false });
+    if (step === 1 && uploadedData) {
+      setUploadedTable({ data: uploadedData, isInitial: false });
     }
 
     onClose();

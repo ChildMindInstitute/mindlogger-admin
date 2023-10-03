@@ -9,17 +9,17 @@ import { UploadedImages } from './ImportSequencesPopup.types';
 
 export const useImportSequence = (uploadedImages: UploadedImages) => {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  const [uploadedFile, setUploadedFile] = useState<UploadedDataOrNull>(null);
+  const [uploadedData, setUploadedData] = useState<UploadedDataOrNull>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleSuccessfullyUploaded = (file: UploadedData) => {
-    setUploadedFile(file);
+    setUploadedData(file);
     setIsSubmitDisabled(!file);
     setValidationError(null);
   };
 
   const handleUploadClear = () => {
-    setUploadedFile(null);
+    setUploadedData(null);
     setIsSubmitDisabled(true);
     setValidationError(null);
   };
@@ -39,7 +39,7 @@ export const useImportSequence = (uploadedImages: UploadedImages) => {
   return {
     isSubmitDisabled,
     setIsSubmitDisabled,
-    uploadedFile,
+    uploadedData,
     validationError,
     setValidationError,
     handleFileReady,
