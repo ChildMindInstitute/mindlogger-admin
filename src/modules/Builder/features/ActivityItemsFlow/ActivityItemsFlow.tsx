@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { Box } from '@mui/material';
 
-import { StyledTitleMedium, theme } from 'shared/styles';
+import { StyledObserverTarget, StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { ConditionalLogic } from 'shared/state';
+import { Spinner } from 'shared/components';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 
 import { ItemFlow } from './ItemFlow';
 import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
 import { RemoveItemFlowPopup } from './RemoveItemFlowPopup';
 import { getEmptyFlowItem } from './ActivityItemsFlow.utils';
+import { useItemsFlowSlicedData } from './ActivityItemsFlow.hooks';
+import {
+  ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS,
+  ACTIVITY_ITEMS_FLOW_LIST_CLASS,
+} from './ActivityItemsFlow.const';
 
 export const ActivityItemsFlow = () => {
   const { t } = useTranslation('app');
@@ -53,15 +60,18 @@ export const ActivityItemsFlow = () => {
 
   const isRemovePopupOpened = itemIndexToDelete !== -1;
 
+  const { data, isPending } = useItemsFlowSlicedData(flowItems);
+
   return (
     <BuilderContainer
       title={t('activityItemsFlow')}
       Header={ActivityItemsFlowHeader}
       headerProps={headerProps}
       hasMaxWidth
+      contentClassName={ACTIVITY_ITEMS_FLOW_LIST_CLASS}
     >
-      {flowItems?.length ? (
-        flowItems.map((flowItem: ConditionalLogic, index: number) => (
+      {data?.length ? (
+        data.map((flowItem: ConditionalLogic, index: number) => (
           <ItemFlow
             key={`item-flow-${flowItem.key}`}
             name={conditionalLogicName}
@@ -73,6 +83,12 @@ export const ActivityItemsFlow = () => {
         <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
           {t('activityItemsFlowDescription')}
         </StyledTitleMedium>
+      )}
+      <StyledObserverTarget className={ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS} />
+      {isPending && (
+        <Box sx={{ position: 'relative' }}>
+          <Spinner />
+        </Box>
       )}
       {isRemovePopupOpened && (
         <RemoveItemFlowPopup
