@@ -6,7 +6,15 @@ import { SettingParam } from 'shared/utils';
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
 
-export const getSettings = (activityFieldName?: string, activity?: ActivityFormValues) => {
+export const getSettings = ({
+  activity,
+  activityFieldName,
+  settingsErrors: { hasActivityReportsErrors, hasActivitySubscalesErrors },
+}: {
+  activityFieldName?: string;
+  activity?: ActivityFormValues;
+  settingsErrors: Record<string, boolean>;
+}) => {
   const isNewActivity = !activity?.id;
   const dataTestid = 'builder-activity-settings';
 
@@ -19,6 +27,7 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
           icon: <Svg id="scores-and-reports" />,
           component: <ScoresAndReports />,
           param: SettingParam.ScoresAndReports,
+          hasError: hasActivityReportsErrors,
           'data-testid': `${dataTestid}-scores-and-reports`,
         },
         {
@@ -42,6 +51,7 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
             <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />
           ),
           param: SettingParam.SubscalesConfiguration,
+          hasError: hasActivitySubscalesErrors,
           'data-testid': `${dataTestid}-subscales-config`,
         },
       ],
