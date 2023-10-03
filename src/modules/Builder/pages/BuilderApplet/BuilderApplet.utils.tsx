@@ -209,7 +209,7 @@ const getDuplicatedScoresAndReports = (
     const conditionalLogic =
       report.type === ScoreReportType.Score
         ? report.conditionalLogic
-        : {
+        : report.conditionalLogic && {
             ...report.conditionalLogic,
             conditions: getDuplicatedConditions(
               oldItems,
