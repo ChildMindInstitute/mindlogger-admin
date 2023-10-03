@@ -120,7 +120,7 @@ export const BuilderApplet = () => {
   }, [defaultThemeId, isNewApplet]);
 
   useEffect(() => {
-    dispatch(themes.thunk.getThemes({}));
+    dispatch(themes.thunk.getThemes({ ordering: 'name' }));
 
     return removeAppletData;
   }, []);
