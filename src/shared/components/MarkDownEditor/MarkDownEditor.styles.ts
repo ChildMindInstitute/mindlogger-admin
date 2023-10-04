@@ -5,7 +5,7 @@ import { theme, variables } from 'shared/styles';
 
 const commonStyles = `
   &.md-editor-fullscreen {
-    z-index: ${theme.zIndex.fab};
+    z-index: ${theme.zIndex.modal};
   }
 
   .md-editor-preview-wrapper {
