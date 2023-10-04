@@ -140,6 +140,8 @@
   "appletName": "Applet Name",
   "appletNameAlreadyTaken": "This Applet name is already taken in the Library. Please rename the Applet to share it. <br />Note: This will change the name of the Applet for your users.",
   "appletNameRequired": "Applet Name is required",
+  "appletNotFoundPopupText": "Applet not found; it may have been deleted. To refresh the data, please click the button below.",
+  "appletNotFoundPopupTitle": "Applet Not Found",
   "appletNotSavedAndPublished": "<0>Applet <1>{{name}}</1> has not been saved and published. Please try again.</0>",
   "appletPage": "Applet Page",
   "appletPasswordRequirementsError": "Password does not meet the password requirements.",
@@ -483,6 +485,7 @@
     "tooltip": "Stimulus screens require action from the respondent"
   },
   "flowDeactivated": "Activity flow is deactivated in the builder",
+  "footerText": "MindLogger is a product of the",
   "forgotPassword": "Forgot Password?",
   "fr": "French",
   "frequency": "Frequency",
@@ -773,6 +776,7 @@
   "passwordMinLength": "Password must be at least {{chars}} characters.",
   "passwordNumber": "At least one number must be included.",
   "passwordRequired": "Password is required",
+  "passwordResetLink": "A password reset link is sent to {{email}} <br /> if that email is associated with a MindLogger account.",
   "passwordSpecialChar": "At least one special character must be included.",
   "pendingInvitations": "Pending Invitations",
   "performanceTasks": {
@@ -822,6 +826,7 @@
   "record": "Record",
   "recordAudio": "Record <br /> Audio",
   "redo": "Redo",
+  "refresh": "Refresh",
   "reminder": "Reminder",
   "reminderTime": "Reminder time",
   "remove": "Remove",
@@ -1186,7 +1191,6 @@
   "weekdays": "Weekdays",
   "weekly": "Weekly",
   "weeks": "Weeks",
-  "passwordResetLink": "A password reset link is sent to {{email}} <br /> if that email is associated with a MindLogger account.",
   "welcome": "Welcome to the MindLogger <br /> Admin Panel",
   "workspaceName": "Workspace Name",
   "workspaceNameRequired": "Workspace Name is required",
@@ -1199,9 +1203,5 @@
   "yesAuthorize": "Yes, authorize",
   "yesRemove": "Yes, Remove",
   "youNeedToAuthorize": "You Need to Authorize",
-  "youNeedToAuthorizeHint": "To create a new Applet or merge it with others you have to authorize.",
-  "appletNotFoundPopupTitle": "Applet Not Found",
-  "appletNotFoundPopupText": "Applet not found; it may have been deleted. To refresh the data, please click the button below.",
-  "footerText": "MindLogger is a product of the",
-  "refresh": "Refresh"
+  "youNeedToAuthorizeHint": "To create a new Applet or merge it with others you have to authorize."
 }
