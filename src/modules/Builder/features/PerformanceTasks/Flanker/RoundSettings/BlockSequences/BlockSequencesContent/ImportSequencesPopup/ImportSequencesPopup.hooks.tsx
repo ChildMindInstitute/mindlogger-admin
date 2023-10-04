@@ -2,22 +2,24 @@ import { useState } from 'react';
 
 import { ImportedFile } from 'shared/components';
 
-import { hasUploadedFileError } from './ImportSequencesPopup.utils';
+import { getUploadedDataWithIds } from './ImportSequencesPopup.utils';
 import { invalidFieldError } from './ImportSequencesPopup.const';
+import { UploadedData, UploadedDataOrNull } from '../BlockSequencesContent.types';
+import { UploadedImages } from './ImportSequencesPopup.types';
 
-export const useImportSequence = (imageNames: string[]) => {
+export const useImportSequence = (uploadedImages: UploadedImages) => {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  const [uploadedFile, setUploadedFile] = useState<null | ImportedFile>(null);
+  const [uploadedData, setUploadedData] = useState<UploadedDataOrNull>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const handleSuccessfullyUploaded = (file: ImportedFile) => {
-    setUploadedFile(file);
+  const handleSuccessfullyUploaded = (file: UploadedData) => {
+    setUploadedData(file);
     setIsSubmitDisabled(!file);
     setValidationError(null);
   };
 
   const handleUploadClear = () => {
-    setUploadedFile(null);
+    setUploadedData(null);
     setIsSubmitDisabled(true);
     setValidationError(null);
   };
@@ -25,17 +27,19 @@ export const useImportSequence = (imageNames: string[]) => {
   const handleFileReady = (file: ImportedFile | null) => {
     if (!file) return handleUploadClear();
 
-    if (hasUploadedFileError(file.data, imageNames)) {
+    const { invalidData, uploadedDataWithIds } = getUploadedDataWithIds(file.data, uploadedImages);
+
+    if (invalidData) {
       return setValidationError(invalidFieldError);
     }
 
-    return handleSuccessfullyUploaded(file);
+    return handleSuccessfullyUploaded(uploadedDataWithIds);
   };
 
   return {
     isSubmitDisabled,
     setIsSubmitDisabled,
-    uploadedFile,
+    uploadedData,
     validationError,
     setValidationError,
     handleFileReady,
