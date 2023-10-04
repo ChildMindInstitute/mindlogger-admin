@@ -58,7 +58,7 @@ export const Actions = ({
                     isActive={active}
                     disabled={disabled}
                     onClick={onClick(action)}
-                    onMouseDown={(e) => e.preventDefault()}
+                    onMouseDown={(e) => e.preventDefault()} // prevent onBlur actions for folders
                     isVisible={isVisible || (hasStaticActions && !isVisible && isStatic)}
                     data-testid={dataTestid}
                   >
