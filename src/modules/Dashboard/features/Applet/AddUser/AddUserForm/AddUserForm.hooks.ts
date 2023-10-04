@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 
 import { ErrorResponse } from 'shared/state';
-
 import { getErrorData, getErrorMessage } from 'shared/utils';
 
 import { Fields } from './AddUserForm.const';

@@ -1,12 +1,12 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import axios from 'axios';
-import Router from 'react-router';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { page } from 'resources';
+import { mockedAppletId } from 'shared/mock';
 
 import { LinkGenerator } from './LinkGenerator';
 
-const appletId = 'c0b1de97';
 const response = {
   data: {
     result: {
@@ -15,6 +15,8 @@ const response = {
     },
   },
 };
+const route = `/dashboard/${mockedAppletId}/add-user`;
+const routePath = page.appletAddUser;
 
 const fakeRequest = () => new Promise((res) => res(response));
 
@@ -27,14 +29,16 @@ describe('LinkGenerator component tests', () => {
 
   test('LinkGenerator should generate link', async () => {
     jest.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
-    jest.spyOn(Router, 'useParams').mockReturnValue({ appletId });
 
-    renderWithProviders(<LinkGenerator />);
+    renderWithProviders(<LinkGenerator />, {
+      route,
+      routePath,
+    });
 
     fireEvent.click(screen.getByTestId('dashboard-add-users-generate-link-generate'));
     await waitFor(() =>
       expect(
-        screen.queryByTestId('dashboard-add-users-generate-link-generate-popup'),
+        screen.getByTestId('dashboard-add-users-generate-link-generate-popup'),
       ).toBeInTheDocument(),
     );
     await waitFor(() => fireEvent.click(screen.getByText('Yes, account is required')));
@@ -45,9 +49,11 @@ describe('LinkGenerator component tests', () => {
 
   test('LinkGenerator should get link', async () => {
     jest.spyOn(mockedAxios, 'get').mockImplementation(fakeRequest);
-    jest.spyOn(Router, 'useParams').mockReturnValue({ appletId });
 
-    renderWithProviders(<LinkGenerator />);
+    renderWithProviders(<LinkGenerator />, {
+      route,
+      routePath,
+    });
 
     await waitFor(() =>
       expect(screen.getByTestId('dashboard-add-users-generate-link-url')).toBeInTheDocument(),

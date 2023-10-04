@@ -30,7 +30,7 @@ export const ManagersRemoveAccessPopup = ({
   refetchManagers,
 }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { appletId } = useParams() || {};
 
   const { firstName, lastName, email, applets } = user;
 
