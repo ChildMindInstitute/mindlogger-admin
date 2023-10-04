@@ -58,6 +58,7 @@ export const Actions = ({
                     isActive={active}
                     disabled={disabled}
                     onClick={onClick(action)}
+                    onMouseDown={(e) => e.preventDefault()}
                     isVisible={isVisible || (hasStaticActions && !isVisible && isStatic)}
                     data-testid={dataTestid}
                   >
