@@ -7,6 +7,7 @@ import { TestContext } from 'yup';
 import i18n from 'i18n';
 import { page } from 'resources';
 import { Svg } from 'shared/components/Svg';
+import { Theme } from 'modules/Builder/api';
 import {
   Activity,
   ActivityFlow,
@@ -87,6 +88,9 @@ import {
 import { GetSectionConditions, GetMessageItem } from './BuilderApplet.types';
 
 const { t } = i18n;
+
+export const getDefaultThemeId = (themesList: Theme[]) =>
+  themesList.find((theme) => theme.name === 'Default')?.id || '';
 
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
