@@ -2,9 +2,9 @@ import { Applet } from 'api';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
-
+export const mockedAppletId = '2e46fa32-ea7c-4a76-b49b-1c97d795bb9a';
 export const mockedApplet = {
-  id: '2e46fa32-ea7c-4a76-b49b-1c97d795bb9a',
+  id: mockedAppletId,
   displayName: 'displayName',
   encryption: {
     publicKey:

@@ -1,12 +1,13 @@
 import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { Route, Routes, MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-
 import { ExtendedRenderOptions, setupStore } from 'redux/store';
 
 export const renderWithProviders = (
   ui: React.ReactElement,
   {
+    route = '/',
+    routePath = '/',
     preloadedState = {},
     store = setupStore(preloadedState),
     ...options
@@ -14,9 +15,13 @@ export const renderWithProviders = (
 ) => {
   const Providers = ({ children }: { children: JSX.Element }) => (
     <Provider store={store}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <MemoryRouter initialEntries={[route]}>
+        <Routes>
+          <Route path={routePath} element={children} />
+        </Routes>
+      </MemoryRouter>
     </Provider>
   );
 
-  return { store, ...render(ui, { wrapper: Providers, ...options }) };
+  return { ...render(ui, { wrapper: Providers, ...options }), store };
 };
