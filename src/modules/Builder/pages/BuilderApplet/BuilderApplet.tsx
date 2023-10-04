@@ -20,6 +20,7 @@ import {
   getAppletTabs,
   prepareActivitiesFromLibrary,
   prepareActivityFlowsFromLibrary,
+  getDefaultThemeId,
 } from './BuilderApplet.utils';
 
 export const BuilderApplet = () => {
@@ -49,7 +50,7 @@ export const BuilderApplet = () => {
     (!isNewApplet && loadingStatus === 'idle') ||
     loadingStatus === 'loading' ||
     themesLoadingStatus === 'loading';
-  const defaultThemeId = themesList[0]?.id;
+  const defaultThemeId = getDefaultThemeId(themesList);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     appletId && ownerId && !isNewApplet
