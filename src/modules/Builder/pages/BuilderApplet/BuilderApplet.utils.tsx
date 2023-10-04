@@ -530,6 +530,7 @@ export const getNewApplet = () => ({
   watermark: '',
   activities: [],
   activityFlows: [],
+  reportEmailBody: t('reportEmailBody'),
 });
 
 export const getNewActivityFlow = () => ({

@@ -49,14 +49,13 @@ const removeReactHookFormKey = () => ({
   [REACT_HOOK_FORM_KEY_NAME]: undefined,
 });
 
-export const removeAppletExtraFields = () => ({
+export const removeAppletExtraFields = (isNewApplet: boolean) => ({
   isPublished: undefined,
   reportServerIp: undefined,
   reportPublicKey: undefined,
   reportRecipients: undefined,
   reportIncludeUserId: undefined,
   reportIncludeCaseId: undefined,
-  reportEmailBody: undefined,
   retentionPeriod: undefined,
   retentionType: undefined,
   createdAt: undefined,
@@ -64,6 +63,7 @@ export const removeAppletExtraFields = () => ({
   id: undefined,
   theme: undefined,
   version: undefined,
+  ...(!isNewApplet && { reportEmailBody: undefined }),
   //for the newly created activities/activityFlow to avoid { undefined: { items: [] }} problem
   //for the case when updated activityId/activityFlowId comes from the server but storage is still not updated
   undefined,
