@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { StyledObserverTarget, StyledTitleMedium, theme } from 'shared/styles';
@@ -8,12 +8,12 @@ import { BuilderContainer } from 'shared/features';
 import { ConditionalLogic } from 'shared/state';
 import { Spinner } from 'shared/components';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
 
 import { ItemFlow } from './ItemFlow';
 import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
 import { RemoveItemFlowPopup } from './RemoveItemFlowPopup';
 import { getEmptyFlowItem } from './ActivityItemsFlow.utils';
-import { useItemsFlowSlicedData } from './ActivityItemsFlow.hooks';
 import {
   ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS,
   ACTIVITY_ITEMS_FLOW_LIST_CLASS,
@@ -23,11 +23,13 @@ export const ActivityItemsFlow = () => {
   const { t } = useTranslation('app');
   const [itemIndexToDelete, setItemIndexToDelete] = useState(-1);
 
-  const { control, watch } = useFormContext();
+  const { control } = useFormContext();
   const { fieldName } = useCurrentActivity();
   useActivitiesRedirection();
 
   const conditionalLogicName = `${fieldName}.conditionalLogic`;
+  const items = useWatch({ name: `${fieldName}.items` });
+
   const {
     fields: flowItems,
     append: appendFlowItem,
@@ -36,8 +38,6 @@ export const ActivityItemsFlow = () => {
     control,
     name: conditionalLogicName,
   });
-
-  const items = watch(`${fieldName}.items`);
 
   const handleAddItemFlow = () => {
     appendFlowItem(getEmptyFlowItem() as ConditionalLogic);
@@ -53,14 +53,18 @@ export const ActivityItemsFlow = () => {
     handleCloseRemovePopup();
   };
 
+  const { data, isPending } = useDataPreloader<ConditionalLogic>({
+    data: flowItems,
+    rootSelector: `.${ACTIVITY_ITEMS_FLOW_LIST_CLASS}`,
+    targetSelector: `.${ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS}`,
+  });
+
   const headerProps = {
-    isAddItemFlowDisabled: items?.length < 2,
+    isAddItemFlowDisabled: items?.length < 2 || isPending,
     onAddItemFlow: handleAddItemFlow,
   };
 
   const isRemovePopupOpened = itemIndexToDelete !== -1;
-
-  const { data, isPending } = useItemsFlowSlicedData(flowItems);
 
   return (
     <BuilderContainer
@@ -69,8 +73,9 @@ export const ActivityItemsFlow = () => {
       headerProps={headerProps}
       hasMaxWidth
       contentClassName={ACTIVITY_ITEMS_FLOW_LIST_CLASS}
+      contentSxProps={{ minHeight: '15rem', gap: '2.4rem' }}
     >
-      {data?.length ? (
+      {!!data?.length &&
         data.map((flowItem: ConditionalLogic, index: number) => (
           <ItemFlow
             key={`item-flow-${flowItem.key}`}
@@ -78,8 +83,8 @@ export const ActivityItemsFlow = () => {
             index={index}
             onRemove={() => handleRemoveItemFlow(index)}
           />
-        ))
-      ) : (
+        ))}
+      {!data?.length && !isPending && (
         <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
           {t('activityItemsFlowDescription')}
         </StyledTitleMedium>
