@@ -51,7 +51,7 @@ export const TransferListController = <T extends FieldValues>({
           if (isSelected)
             return onChange(value?.filter((key: string | number) => key !== selectedKey));
 
-          onChange([...value, selectedKey]);
+          onChange([...(value || []), selectedKey]);
         };
 
         const handleSelectAll = (isAllSelected: boolean) => {
