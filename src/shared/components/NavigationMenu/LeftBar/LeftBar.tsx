@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Badge } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { BuilderContainer } from 'shared/features/BuilderContainer';
@@ -47,6 +48,7 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                       disabled,
                       tooltip,
                       isVisible: isItemVisible = true,
+                      hasError = false,
                       'data-testid': dataTestid,
                     }) =>
                       isItemVisible && (
@@ -66,6 +68,9 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                             >
                               <StyledFlexAllCenter>{icon}</StyledFlexAllCenter>
                               <StyledTitle>{t(label)}</StyledTitle>
+                              {hasError && (
+                                <Badge variant="dot" invisible={!hasError} color="error" />
+                              )}
                             </StyledSetting>
                           </span>
                         </Tooltip>
