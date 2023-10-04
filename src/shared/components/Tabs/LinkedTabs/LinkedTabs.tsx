@@ -37,7 +37,7 @@ export const LinkedTabs = ({
       ) => {
         tabs.header.push(
           <Tab
-            key={index}
+            key={id}
             component={Link}
             label={t(labelKey)}
             to={path || ''}
@@ -54,7 +54,7 @@ export const LinkedTabs = ({
         tabs.content.push(
           <TabPanel
             id={id}
-            key={index}
+            key={id}
             value={tabIndex}
             index={index}
             isMinHeightAuto={isMinHeightAuto}
