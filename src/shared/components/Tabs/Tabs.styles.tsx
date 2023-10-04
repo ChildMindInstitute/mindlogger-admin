@@ -47,11 +47,10 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     opacity: 1;
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
-    padding: ${({ uiType }: { uiType: UiType }) =>
+    padding: ${({ uiType }) =>
       uiType === UiType.Primary ? theme.spacing(0.8, 0, 0.7) : theme.spacing(1.4, 2.2)};
     justify-content: space-between;
-    min-height: ${({ uiType }: { uiType: UiType }) =>
-      uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem'};
+    min-height: ${({ uiType }) => (uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem')};
 
     ${({ uiType }) =>
       uiType === UiType.Primary &&

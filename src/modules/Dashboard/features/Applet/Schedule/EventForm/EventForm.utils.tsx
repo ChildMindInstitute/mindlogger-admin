@@ -46,6 +46,7 @@ export const getEventFormTabs = ({
 }: GetEventFromTabs) => [
   {
     labelKey: 'availability',
+    id: 'event-form-availability',
     content: (
       <AvailabilityTab
         hasAlwaysAvailableOption={hasAlwaysAvailableOption}
@@ -57,12 +58,14 @@ export const getEventFormTabs = ({
   },
   {
     labelKey: 'timers',
+    id: 'event-form-timers',
     content: <TimersTab data-testid={`${dataTestid}-availability`} />,
     hasError: hasTimerErrors,
     'data-testid': `${dataTestid}-timers-tab`,
   },
   {
     labelKey: 'notifications',
+    id: 'event-form-notifications',
     content: <NotificationsTab data-testid={`${dataTestid}-availability`} />,
     hasError: hasNotificationsErrors,
     'data-testid': `${dataTestid}-notifications-tab`,

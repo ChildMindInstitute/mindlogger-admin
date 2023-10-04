@@ -70,7 +70,7 @@ export const LinkedTabs = ({
     );
 
     return { tabIndex, content, header };
-  }, [pathname, t]);
+  }, [pathname, t, tabs]);
 
   return (
     <>
