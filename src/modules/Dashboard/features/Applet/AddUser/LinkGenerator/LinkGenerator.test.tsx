@@ -3,8 +3,8 @@ import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
-
 import { mockedAppletId } from 'shared/mock';
+
 import { LinkGenerator } from './LinkGenerator';
 
 const response = {

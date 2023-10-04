@@ -23,11 +23,11 @@ describe('AddUserForm component tests', () => {
       routePath,
     });
 
-    const select = screen.getByTestId('dashboard-add-users-role').childNodes[1].childNodes[0];
-
-    userEvent.click(select as Element);
-    const optionsPopupEl = await waitFor(() => screen.findByRole('listbox'));
-    userEvent.click(within(optionsPopupEl).getByText(/reviewer/i));
+    const selectWrapper = screen.getByTestId('dashboard-add-users-role').childNodes[1]
+      .childNodes[0];
+    userEvent.click(selectWrapper as Element);
+    const optionsWrapper = await waitFor(() => screen.findByRole('listbox'));
+    userEvent.click(within(optionsWrapper).getByText(/reviewer/i));
     await waitFor(() => expect(screen.getByLabelText('Respondents')).toBeInTheDocument());
   });
 });
