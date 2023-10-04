@@ -44,6 +44,7 @@ import {
 
 export const useAppletDataFromForm = () => {
   const { getValues } = useFormContext();
+  const isNewApplet = useCheckIfNewApplet();
 
   return (encryption?: Encryption): SingleApplet => {
     const appletInfo = getValues() as AppletFormValues;
@@ -82,7 +83,7 @@ export const useAppletDataFromForm = () => {
             ...removeActivityFlowExtraFields(),
           }) as ActivityFlow,
       ),
-      ...removeAppletExtraFields(),
+      ...removeAppletExtraFields(isNewApplet),
     };
   };
 };
