@@ -13,8 +13,7 @@ export const StyledTimeText = styled(StyledBodyMedium)`
   color: ${variables.palette.on_surface_variant};
   position: absolute;
   text-align: left;
-  width: 14rem;
-  bottom: -2rem;
+  top: 5.8rem;
   left: 1rem;
 `;
 
