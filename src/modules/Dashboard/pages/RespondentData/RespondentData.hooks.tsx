@@ -9,6 +9,7 @@ export const useRespondentDataTabs = () => {
   return [
     {
       labelKey: 'summary',
+      id: 'respondent-data-summary',
       icon: <Svg id="chart" />,
       activeIcon: <Svg id="chart" />,
       path: generatePath(page.appletRespondentDataSummary, {
@@ -19,6 +20,7 @@ export const useRespondentDataTabs = () => {
     },
     {
       labelKey: 'review',
+      id: 'respondent-data-review',
       icon: <Svg id="checkbox-outlined" />,
       activeIcon: <Svg id="checkbox-filled" />,
       path: generatePath(page.appletRespondentDataReview, {

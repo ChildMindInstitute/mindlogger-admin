@@ -919,6 +919,7 @@ export const getAppletTabs = ({
 }: Record<string, boolean>) => [
   {
     labelKey: 'aboutApplet',
+    id: 'builder-about-applet',
     icon: <Svg id="more-info-outlined" />,
     activeIcon: <Svg id="more-info-filled" />,
     path: Path.About,
@@ -927,6 +928,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'activities',
+    id: 'builder-activities',
     icon: <Svg id="checklist-outlined" />,
     activeIcon: <Svg id="checklist-filled" />,
     path: Path.Activities,
@@ -935,6 +937,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'activityFlows',
+    id: 'builder-activity-flows',
     icon: <Svg id="flow-outlined" />,
     activeIcon: <Svg id="flow-filled" />,
     path: Path.ActivityFlow,
@@ -943,6 +946,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'appletSettings',
+    id: 'builder-settings',
     icon: <Svg id="settings" />,
     activeIcon: <Svg id="settings-filled" />,
     path: Path.Settings,

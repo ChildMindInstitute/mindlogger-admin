@@ -9,6 +9,7 @@ export const useAppletTabs = () => {
   return [
     {
       labelKey: 'respondents',
+      id: 'applet-respondents',
       icon: <Svg id="respondent-outlined" />,
       activeIcon: <Svg id="respondent-filled" />,
       path: generatePath(page.appletRespondents, {
@@ -18,6 +19,7 @@ export const useAppletTabs = () => {
     },
     {
       labelKey: 'managers',
+      id: 'applet-managers',
       icon: <Svg id="manager-outlined" />,
       activeIcon: <Svg id="manager-filled" />,
       path: generatePath(page.appletManagers, {
@@ -27,6 +29,7 @@ export const useAppletTabs = () => {
     },
     {
       labelKey: 'addUsers',
+      id: 'applet-add-users',
       icon: <Svg id="add-users-outlined" />,
       activeIcon: <Svg id="add-users-filled" />,
       isMinHeightAuto: true,
@@ -37,6 +40,7 @@ export const useAppletTabs = () => {
     },
     {
       labelKey: 'schedule',
+      id: 'applet-schedule',
       icon: <Svg id="schedule-outlined" />,
       activeIcon: <Svg id="schedule-filled" />,
       path: generatePath(page.appletSchedule, {
@@ -46,6 +50,7 @@ export const useAppletTabs = () => {
     },
     {
       labelKey: 'appletSettings',
+      id: 'applet-settings',
       icon: <Svg id="settings" />,
       activeIcon: <Svg id="settings-filled" />,
       path: generatePath(page.appletSettings, {
