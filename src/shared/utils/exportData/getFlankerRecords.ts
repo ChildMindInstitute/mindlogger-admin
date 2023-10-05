@@ -8,7 +8,7 @@ import {
   FlankerTag,
   NumberWithDotType,
 } from 'shared/types';
-import { CorrectPress, FlankerItemNames } from 'modules/Builder/types';
+import { CorrectPress } from 'modules/Builder/types';
 
 const getImage = (image: string, alt: string) => {
   if (image) {
@@ -100,7 +100,7 @@ const getResponseObj = ({
 }) => {
   const trialNumber = response.trial_index;
   const blockNumber = getBlockNumber(itemIndex);
-  const trialType: number | string = getTrialType({
+  const trialType = getTrialType({
     tag,
     types,
     response,
@@ -177,7 +177,7 @@ export const getFlankerRecords = ({
   experimentClock: string;
   itemIndex: number;
 }) => {
-  const result: any[] = [];
+  const result: Record<FlankerRecordFields, unknown>[] = [];
   let trialStartTimestamp = 0;
   let lastIndex = 1e6;
   let totalCount = 0;
