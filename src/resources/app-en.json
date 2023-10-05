@@ -1092,7 +1092,7 @@
   "time": "Time",
   "timeDescription": "The respondent will be prompted to select a time.",
   "timeHint": "Time selection in the format HH:MM",
-  "timeIsShownInUTC": "Time is shown in UTC",
+  "timeIsShownInUTC": "Time is<br />shown in UTC",
   "timeNotificationsError": "The time selected on the Notifications tab is outside the Activity's availability time. Please, update.",
   "timer": "Timer",
   "timeRange": "Time Range",
