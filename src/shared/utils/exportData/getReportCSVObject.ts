@@ -35,6 +35,7 @@ export const getReportCSVObject = <T>({
     flowName,
     version,
     reviewedAnswerId,
+    legacyProfileId,
   } = item;
   const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
     SliderItemResponseValues;
@@ -67,5 +68,6 @@ export const getReportCSVObject = <T>({
     version,
     rawScore: getRawScores(responseValues) || '',
     reviewing_id: reviewedAnswerId,
+    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
   };
 };
