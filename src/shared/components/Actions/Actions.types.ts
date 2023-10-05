@@ -2,9 +2,9 @@ import { MouseEvent } from 'react';
 import { SxProps } from '@mui/material';
 import { DraggableProvided } from 'react-beautiful-dnd';
 
-export type Action = {
+export type Action<T> = {
   icon: JSX.Element;
-  action: (item?: any, event?: MouseEvent<HTMLElement>) => any | void;
+  action: (context: ActionsProps<T>['context'], event?: MouseEvent<HTMLElement>) => void;
   disabled?: boolean;
   tooltipTitle?: string;
   isDisplayed?: boolean;
@@ -13,9 +13,9 @@ export type Action = {
   'data-testid'?: string;
 };
 
-export type ActionsProps = {
-  items: Action[];
-  context: unknown;
+export type ActionsProps<T> = {
+  items: Action<T>[];
+  context: T;
   visibleByDefault?: boolean;
   hasStaticActions?: boolean;
   sxProps?: SxProps;
