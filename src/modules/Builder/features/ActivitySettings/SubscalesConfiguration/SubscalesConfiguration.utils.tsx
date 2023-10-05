@@ -3,9 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
 import { StyledTitleSmall, variables } from 'shared/styles';
-import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
-import { LookupTableItems, SubscaleTotalScore, ItemResponseType } from 'shared/consts';
+import { SubscaleTotalScore } from 'shared/consts';
 import { capitalize, getEntityKey, getObjectFromList, removeMarkdown } from 'shared/utils';
 import { DataTableColumn } from 'shared/components';
 
@@ -338,11 +337,3 @@ export const getAddTotalScoreModalLabels = (): LabelsObject => {
     },
   };
 };
-
-export const checkOnItemTypeAndScore = (item: ItemFormValues | Item) =>
-  (item.config as SingleAndMultipleSelectionConfig | SliderConfig).addScores &&
-  [
-    ItemResponseType.SingleSelection,
-    ItemResponseType.MultipleSelection,
-    ItemResponseType.Slider,
-  ].includes(item.responseType as ItemResponseType);

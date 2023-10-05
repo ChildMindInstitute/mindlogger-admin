@@ -1,18 +1,13 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { EditorUiType, Switch, TransferListController } from 'shared/components/FormComponents';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import { DataTableItem } from 'shared/components';
-import { removeMarkdown } from 'shared/utils';
-import { ItemFormValues } from 'modules/Builder/types';
 
 import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { StyledEditor } from './SectionScoreCommonFields.styles';
-import { ItemTypesToPrint } from './SectionScoreCommonFields.const';
 import { getColumns } from './SectionScoreCommonFields.utils';
 
 export const SectionScoreCommonFields = ({
@@ -20,39 +15,24 @@ export const SectionScoreCommonFields = ({
   sectionId,
   tableHeadBackground,
   'data-testid': dataTestid,
+  items,
 }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, getFieldState, watch, register, unregister, setValue } = useFormContext();
-  const { activity } = useCurrentActivity();
+  const { control, getFieldState, register, unregister, setValue, getValues } = useFormContext();
 
   const showMessageName = `${name}.showMessage`;
   const printItemsName = `${name}.printItems`;
   const itemsPrintName = `${name}.itemsPrint`;
   const messageName = `${name}.message`;
-  const showMessage: boolean = watch(showMessageName);
-  const printItems: boolean = watch(printItemsName);
-  const message = watch(messageName);
-  const itemsPrint = watch(itemsPrintName);
+  const [showMessage, printItems] = useWatch({ name: [showMessageName, printItemsName] });
   const printItemsError = getFieldState(printItemsName).error;
 
-  const commonProps = { control };
-
-  const items = activity?.items.reduce(
-    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item: ItemFormValues) => {
-      if (item.responseType === '' || !ItemTypesToPrint.includes(item.responseType)) return items;
-      const { id, name, question } = item;
-
-      return [...items, { id, name, question: removeMarkdown(question) }];
-    },
-    [],
-  );
-
   useEffect(() => {
-    if (!activity) return;
-
-    printItems ?? setValue(printItemsName, !!itemsPrint.length);
-    showMessage ?? setValue(showMessageName, !!message.length);
+    const itemsPrint = getValues(itemsPrintName);
+    const message = getValues(messageName);
+    printItems ?? setValue(printItemsName, !!itemsPrint?.length);
+    showMessage ?? setValue(showMessageName, !!message?.length);
   }, []);
 
   useEffect(() => {
@@ -87,7 +67,7 @@ export const SectionScoreCommonFields = ({
           name={`${name}.showMessage`}
           label={t('showMessage')}
           tooltipText={t('showMessageTooltip')}
-          {...commonProps}
+          control={control}
           data-testid={`${dataTestid}-show-message`}
         />
       </Box>
@@ -106,14 +86,14 @@ export const SectionScoreCommonFields = ({
           name={`${name}.printItems`}
           label={t('printItems')}
           tooltipText={t('printItemsTooltip')}
-          {...commonProps}
+          control={control}
           data-testid={`${dataTestid}-print-items`}
         />
       </Box>
       {printItems && (
         <TransferListController
           name={itemsPrintName}
-          items={items as unknown as DataTableItem[]}
+          items={items}
           columns={getColumns()}
           hasSearch={false}
           hasSelectedSection={false}

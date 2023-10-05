@@ -1,6 +1,9 @@
 import { Svg } from 'shared/components/Svg';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
 import { SettingParam } from 'shared/utils';
+import { ItemFormValues } from 'modules/Builder/types';
+import { ItemResponseType } from 'shared/consts';
+import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';
 
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
@@ -54,3 +57,11 @@ export const getActivitySettings = ({
     },
   ];
 };
+
+export const checkOnItemTypeAndScore = (item: ItemFormValues | Item) =>
+  (item.config as SingleAndMultipleSelectionConfig | SliderConfig).addScores &&
+  [
+    ItemResponseType.SingleSelection,
+    ItemResponseType.MultipleSelection,
+    ItemResponseType.Slider,
+  ].includes(item.responseType as ItemResponseType);
