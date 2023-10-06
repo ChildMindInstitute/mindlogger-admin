@@ -24,6 +24,7 @@ export const getSplashScreen = (event: EventDTO, nextExtendedEvent: ExtendedEven
     activityName,
     flowId,
     version,
+    legacyProfileId,
   } = nextExtendedEvent;
   const getTime = getTimeByCondition(event.time.toString());
 
@@ -50,6 +51,7 @@ export const getSplashScreen = (event: EventDTO, nextExtendedEvent: ExtendedEven
     response: '',
     options: '',
     version,
+    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
   };
 };
 
@@ -73,6 +75,7 @@ export const getJourneyCSVObject = <T>({
     activityName,
     flowName,
     version,
+    legacyProfileId,
   } = event;
   if (!activityItem) return;
 
@@ -111,5 +114,6 @@ export const getJourneyCSVObject = <T>({
       rawAnswersObject,
     }),
     version,
+    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
   };
 };

@@ -17,20 +17,28 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController } from 'shared/components/FormComponents';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
-import { SettingParam, getEntityKey } from 'shared/utils';
+import { SettingParam, getEntityKey, removeMarkdown } from 'shared/utils';
 import { useIsServerConfigured } from 'shared/hooks';
 import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import { page } from 'resources';
 import { ScoreReportType } from 'shared/consts';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';
 import { SectionContent } from './SectionContent';
-import { getReportIndex, getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
+import {
+  getReportIndex,
+  getScoreDefaults,
+  getSectionDefaults,
+  getTableScoreItems,
+} from './ScoresAndReports.utils';
 import { ScoreContent } from './ScoreContent';
 import { Title } from './Title';
 import { StyledConfigureBtn } from './ScoresAndReports.styles';
+import { ItemTypesToPrint } from './ScoresAndReports.const';
+import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const ScoresAndReports = () => {
   const { t } = useTranslation('app');
@@ -38,6 +46,7 @@ export const ScoresAndReports = () => {
   const navigate = useNavigate();
   const { fieldName } = useCurrentActivity();
   const { control, setValue, getFieldState } = useFormContext();
+  const { activity } = useCurrentActivity();
 
   useActivitiesRedirection();
 
@@ -57,6 +66,19 @@ export const ScoresAndReports = () => {
     name: reportsName,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
+
+  const items = activity?.items.reduce(
+    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item: ItemFormValues) => {
+      if (!ItemTypesToPrint.includes(item.responseType)) return items;
+      const { id, name, question } = item;
+
+      return [...items, { id, name, question: removeMarkdown(question) }];
+    },
+    [],
+  );
+
+  const scoreItems = activity?.items.filter(checkOnItemTypeAndScore);
+  const tableItems = getTableScoreItems(scoreItems);
 
   const isCheckboxesDisabled = !reports?.length;
   const dataTestid = 'builder-activity-settings-scores-and-reports';
@@ -147,7 +169,7 @@ export const ScoresAndReports = () => {
                   const title = t(isSection ? 'sectionHeader' : 'scoreHeader', {
                     index: getReportIndex(reports, report) + 1,
                   });
-                  const key = `data-section-${getEntityKey(report) || index}`;
+                  const key = `data-section-${getEntityKey(report, false) || index}`;
                   const sectionDataTestid = `${dataTestid}-section-${index}`;
                   const headerTitle = (
                     <Title
@@ -178,8 +200,9 @@ export const ScoresAndReports = () => {
                               name: reportName,
                               title,
                               ...(isSection && { sectionId: report.id }),
-                              ...(!isSection && { index }),
+                              ...(!isSection && { index, tableItems, scoreItems }),
                               'data-testid': sectionDataTestid,
+                              items,
                             }}
                             data-testid={sectionDataTestid}
                           />

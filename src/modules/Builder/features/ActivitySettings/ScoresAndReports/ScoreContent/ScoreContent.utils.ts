@@ -4,7 +4,6 @@ import i18n from 'i18n';
 import { ScoreReport, SingleAndMultiSelectOption, SliderItemResponseValues } from 'shared/state';
 import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
 import { ItemFormValues } from 'modules/Builder/types';
-import { getEntityKey, removeMarkdown } from 'shared/utils';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 import { GetScoreRangeLabel } from './ScoreContent.types';
@@ -24,14 +23,6 @@ export const getSelectedItemsColumns = () => [
     label: t('selectedItems'),
   },
 ];
-
-export const getTableScoreItems = (items: ItemFormValues[]) =>
-  items?.map((item) => ({
-    id: getEntityKey(item),
-    name: item.name,
-    tooltip: removeMarkdown(item.question),
-    label: `${item.name}: ${removeMarkdown(item.question)}`,
-  }));
 
 export const getScoreId = (name: string, calculationType: CalculationType) =>
   `${scoreIdBase[calculationType]}_${(name || '')
