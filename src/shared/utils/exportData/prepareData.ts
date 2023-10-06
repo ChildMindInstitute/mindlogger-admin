@@ -42,11 +42,17 @@ import { getABTrailsRecords } from './getABTrailsRecords';
 import { convertDateStampToMs } from './convertDateStampToMs';
 import { checkIfHasMigratedAnswers, getIdBeforeMigration } from './migratedData';
 
-const getDecryptedAnswersObject = (
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
-  hasMigratedAnswers?: boolean,
-) =>
+const getDecryptedAnswersObject = ({
+  decryptedAnswers,
+  hasMigratedAnswers,
+  hasUrlEventScreen,
+}: {
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[];
+  hasMigratedAnswers?: boolean;
+  hasUrlEventScreen?: boolean;
+}) =>
   getObjectFromList(decryptedAnswers, (item) => {
+    if (hasUrlEventScreen) return item.activityItem.name;
     if (hasMigratedAnswers) {
       return `${getIdBeforeMigration(item.activityId)}/${getIdBeforeMigration(
         item.activityItem.id,
@@ -181,6 +187,23 @@ const getMediaData = (
   return mediaData.concat(...mediaAnswers);
 };
 
+export const searchItemNameInUrlScreen = (screen: string) => screen.split('/').pop() ?? '';
+export const checkIfScreenHasUrl = (screen: string) => /^https?:\/\//.test(screen);
+// For ex.:
+// screen: "https://raw.githubusercontent.com/ChildMindInstitute/NIMH_EMA_applet/master/activities/<activity_name>/items/<item_name>"
+export const checkIfHasJsonLdEventScreen = (decryptedEvents: EventDTO[]) => {
+  if (!decryptedEvents.length) return false;
+
+  return checkIfScreenHasUrl(decryptedEvents[0]?.screen);
+};
+export const getEventScreenWrapper =
+  ({ hasUrlEventScreen }: { hasUrlEventScreen: boolean }) =>
+  (screen: string) => {
+    if (!hasUrlEventScreen) return screen;
+
+    return searchItemNameInUrlScreen(screen);
+  };
+
 const getActivityJourneyData = (
   activityJourneyData: AppletExportData['activityJourneyData'],
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
@@ -188,19 +211,25 @@ const getActivityJourneyData = (
   decryptedEvents: EventDTO[],
 ) => {
   const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);
-  const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers, hasMigratedAnswers);
+  const hasUrlEventScreen = checkIfHasJsonLdEventScreen(decryptedEvents);
+  const getEventScreen = getEventScreenWrapper({ hasUrlEventScreen });
+  const decryptedAnswersObject = getDecryptedAnswersObject({
+    decryptedAnswers,
+    hasMigratedAnswers,
+    hasUrlEventScreen,
+  });
   let indexForABTrailsFiles = 0;
   const events = decryptedEvents.map((event, index, events) => {
-    if (index === 0 && !decryptedAnswersObject[event.screen] && events[index + 1])
+    if (index === 0 && !decryptedAnswersObject[getEventScreen(event.screen)] && events[index + 1])
       return getSplashScreen(event, {
         ...events[index + 1],
-        ...decryptedAnswersObject[events[index + 1].screen],
+        ...decryptedAnswersObject[getEventScreen(events[index + 1].screen)],
       });
 
     return getJourneyCSVObject({
       event: {
         ...event,
-        ...decryptedAnswersObject[event.screen],
+        ...decryptedAnswersObject[getEventScreen(event.screen)],
       },
       rawAnswersObject,
       index:
