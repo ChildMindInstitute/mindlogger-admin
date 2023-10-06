@@ -13,7 +13,6 @@ import {
   DecryptedStabilityTrackerAnswerObject,
   DecryptedTimeAnswer,
   ExtendedEvent,
-  ExtendedExportAnswerWithoutEncryption,
   isMediaAnswerData,
   UserActionType,
 } from 'shared/types';
@@ -37,11 +36,8 @@ export const parseResponseValue = <T extends DecryptedAnswerData>(
   if (!isEvent) {
     answer = item.answer;
   }
-  if (
-    isEvent &&
-    (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).type === UserActionType.SetAnswer
-  ) {
-    answer = (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response ?? item.answer;
+  if (isEvent && (item as ExtendedEvent).type === UserActionType.SetAnswer) {
+    answer = (item as ExtendedEvent).response ?? item.answer;
   }
 
   const answerEdited = (answer as AdditionalEdited)?.edited;
