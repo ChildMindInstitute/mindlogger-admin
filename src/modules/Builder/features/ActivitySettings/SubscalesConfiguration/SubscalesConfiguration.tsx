@@ -15,8 +15,8 @@ import { SubscaleFormValue } from 'modules/Builder/types';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
-  options,
-  totalScoreTableColumnData,
+  getOptions,
+  getTotalScoreTableColumnData,
   totalScoreTableTemplate,
 } from './SubscalesConfiguration.const';
 import {
@@ -199,7 +199,7 @@ export const SubscalesConfiguration = () => {
             key={calculateTotalScoreField}
             name={calculateTotalScoreField}
             control={control}
-            options={options}
+            options={getOptions()}
             defaultValue={SubscaleTotalScore.Sum}
             data-testid="builder-activity-settings-subscales-calculate-total-score-value"
           />
@@ -209,7 +209,7 @@ export const SubscalesConfiguration = () => {
         <LookupTable
           open={isLookupTableOpened}
           labelsObject={getAddTotalScoreModalLabels()}
-          columnData={totalScoreTableColumnData}
+          columnData={getTotalScoreTableColumnData()}
           tableData={tableData}
           template={totalScoreTableTemplate}
           templatePrefix={'total_score_'}
