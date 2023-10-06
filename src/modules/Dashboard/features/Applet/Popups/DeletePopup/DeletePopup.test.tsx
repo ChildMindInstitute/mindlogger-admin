@@ -1,5 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
-import axios from 'axios';
+import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
@@ -8,7 +8,6 @@ import { mockedApplet, mockedPassword } from 'shared/mock';
 import { DeletePopup } from '.';
 
 const testId = 'dashboard-applets-delete-popup';
-
 const preloadedState = {
   popups: {
     data: {
@@ -22,16 +21,13 @@ const preloadedState = {
     },
   },
 };
+
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
-
-const fakeRequest = () => new Promise((res) => res(null));
-
 const onCloseMock = jest.fn();
 
 describe('DeletePopup component tests', () => {
-  const mockedAxios = axios.create();
-
   afterEach(() => {
+    mockAxios.reset();
     jest.restoreAllMocks();
   });
 
@@ -44,7 +40,7 @@ describe('DeletePopup component tests', () => {
   });
 
   test('DeletePopup should open success modal', async () => {
-    jest.spyOn(mockedAxios, 'delete').mockImplementation(fakeRequest);
+    mockAxios.delete.mockResolvedValueOnce(null);
     jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() => ({
       getPublicKey: getPublicKeyMock,
     }));
