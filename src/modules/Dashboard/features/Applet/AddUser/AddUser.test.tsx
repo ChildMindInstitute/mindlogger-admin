@@ -5,8 +5,8 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedEmail, mockedCurrentWorkspace } from 'shared/mock';
 import { page } from 'resources';
 import { base } from 'shared/state/Base';
-
 import { Roles } from 'shared/consts';
+
 import { AddUser } from './AddUser';
 
 // TODO: move initialStateData to shared

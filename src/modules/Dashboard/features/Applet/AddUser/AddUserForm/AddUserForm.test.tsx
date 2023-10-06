@@ -49,6 +49,7 @@ describe('AddUserForm component tests', () => {
       route,
       routePath,
     });
+
     const selectWrapper = screen.getByTestId('dashboard-add-users-role').childNodes[1]
       .childNodes[0];
     userEvent.click(selectWrapper as Element);
