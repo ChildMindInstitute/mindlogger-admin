@@ -1,7 +1,7 @@
 import get from 'lodash.get';
 
 type Mapper<T> = {
-  (item: T): string;
+  (item: T): string | number;
 };
 
 export const createArray = <T>(length: number, mapper: (index: number) => T): T[] =>
