@@ -10,7 +10,7 @@ export type ItemSettingsGroupProps = {
   onChange: (event: Config) => void;
   itemName: string;
   groupName: ItemSettingsGroupNames;
-  inputType: ItemResponseType | '';
+  inputType?: ItemResponseType;
   groupOptions: ItemConfigurationSettings[];
   collapsedByDefault?: boolean;
 };

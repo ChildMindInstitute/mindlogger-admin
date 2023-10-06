@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
-import { ExportDataResult } from 'shared/types';
+import { EncryptedAnswerSharedProps, ExportDataResult } from 'shared/types';
 
 import {
   TransferOwnershipType,
@@ -406,9 +406,12 @@ export const getActivityAnswerApi = (
   { appletId, answerId, activityId }: ActivityAnswer,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`, {
-    signal,
-  });
+  authApiClient.get<ResponseWithObject<EncryptedAnswerSharedProps>>(
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`,
+    {
+      signal,
+    },
+  );
 
 export const getAnswersNotesApi = (
   { appletId, answerId, activityId, params }: ActivityAnswer & GetAnswersNotesParams,

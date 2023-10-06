@@ -10,26 +10,19 @@ import { Svg } from 'shared/components/Svg';
 import {
   Activity,
   ActivityFlow,
-  AudioPlayerResponseValues,
   Condition,
   ConditionalLogic,
   Config,
-  DrawingResponseValues,
   Item,
   ItemAlert,
-  NumberItemResponseValues,
   OptionCondition,
   ScoreCondition,
   ScoreReport,
   ScoresAndReports,
   SectionReport,
   SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectRowsResponseValues,
   SingleAndMultiSelectOption,
   SingleApplet,
-  SliderItemResponseValues,
-  SliderRowsResponseValues,
-  SubscaleSetting,
 } from 'shared/state';
 import {
   createArray,
@@ -84,7 +77,7 @@ import {
   ordinalStrings,
   SAMPLE_SIZE,
 } from './BuilderApplet.const';
-import { GetSectionConditions, GetMessageItem } from './BuilderApplet.types';
+import { GetSectionConditions, GetMessageItem, PerformanceTaskItems } from './BuilderApplet.types';
 
 const { t } = i18n;
 
@@ -283,7 +276,7 @@ const getMessageItem = ({ name, question, order }: GetMessageItem) => ({
   order,
 });
 
-const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
+export const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
   const commonConfigProps = {
     trialsNumber: DEFAULT_NUMBER_OF_TRIALS,
     durationMinutes: DEFAULT_LENGTH_OF_TEST,
@@ -364,7 +357,7 @@ const defaultFlankerTestConfig = {
   blockType: RoundTypeEnum.Test,
 };
 
-const flankerItems = [
+export const flankerItems = [
   getMessageItem({
     name: FlankerItemNames.GeneralInstruction,
     question: t('flankerInstructions.general'),
@@ -465,7 +458,7 @@ const flankerItems = [
   }, //12 TestThird
 ];
 
-const getABTrailsItems = (deviceType: DeviceType) =>
+export const getABTrailsItems = (deviceType: DeviceType) =>
   createArray(4, (index) => ({
     id: undefined,
     key: uuidv4(),
@@ -493,7 +486,7 @@ export const getNewPerformanceTask = ({
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
 
-  const getItems = (): ItemFormValues[] => {
+  const getItems = (): ItemFormValues[] | PerformanceTaskItems => {
     if (items?.length) {
       return items.map((item) => ({
         ...item,
@@ -542,15 +535,11 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
       return {
-        options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-          (option) => ({
-            ...option,
-            color: option.color ? ({ hex: option.color } as ColorResult) : undefined,
-          }),
-        ),
-        paletteName:
-          (item.responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ??
-          undefined,
+        options: item.responseValues?.options?.map((option) => ({
+          ...option,
+          color: option.color ? ({ hex: option.color } as ColorResult) : undefined,
+        })),
+        paletteName: item.responseValues.paletteName ?? undefined,
       };
     case ItemResponseType.SliderRows:
     case ItemResponseType.Slider:
@@ -559,12 +548,7 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.NumberSelection:
     case ItemResponseType.Drawing:
       return {
-        ...(item.responseValues as
-          | SliderRowsResponseValues
-          | SliderItemResponseValues
-          | NumberItemResponseValues
-          | DrawingResponseValues
-          | AudioPlayerResponseValues),
+        ...item.responseValues,
         options: undefined,
       };
     case ItemResponseType.SingleSelectionPerRow:
@@ -575,13 +559,14 @@ const getActivityItemResponseValues = (item: Item) => {
   }
 };
 
-const getAlerts = (item: Item) => {
+const getAlerts = (item: Item): ItemAlert[] | undefined => {
   const { responseType, responseValues, config } = item;
 
   if (
-    ~[ItemResponseType.SingleSelection, ItemResponseType.MultipleSelection].indexOf(responseType)
+    responseType === ItemResponseType.SingleSelection ||
+    responseType === ItemResponseType.MultipleSelection
   ) {
-    const options = (responseValues as SingleAndMultipleSelectItemResponseValues).options;
+    const options = responseValues.options;
     const optionsWithAlert = options?.filter(({ alert }) => typeof alert === 'string');
 
     if (!optionsWithAlert?.length) return [];
@@ -594,7 +579,7 @@ const getAlerts = (item: Item) => {
   }
 
   if (responseType === ItemResponseType.Slider) {
-    const { alerts } = (responseValues || {}) as SliderItemResponseValues;
+    const { alerts } = responseValues || {};
     const isContinuous = get(config, ItemConfigurationSettings.IsContinuous);
 
     if (!alerts?.length) return [];
@@ -608,7 +593,7 @@ const getAlerts = (item: Item) => {
   }
 
   if (responseType === ItemResponseType.SliderRows) {
-    const { rows } = (responseValues || {}) as SliderRowsResponseValues;
+    const { rows } = responseValues || {};
 
     return (
       rows?.flatMap(
@@ -619,11 +604,10 @@ const getAlerts = (item: Item) => {
   }
 
   if (
-    ~[ItemResponseType.SingleSelectionPerRow, ItemResponseType.MultipleSelectionPerRow].indexOf(
-      responseType,
-    )
+    responseType === ItemResponseType.SingleSelectionPerRow ||
+    responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const { dataMatrix } = responseValues as SingleAndMultipleSelectRowsResponseValues;
+    const { dataMatrix } = responseValues;
 
     return (
       dataMatrix?.reduce(
@@ -643,20 +627,23 @@ const getAlerts = (item: Item) => {
 
 const getActivityItems = (items: Item[]) =>
   items
-    ? items.map((item) => ({
-        id: item.id,
-        key: item.key,
-        name: item.name,
-        question: getDictionaryText(item.question),
-        responseType: item.responseType,
-        responseValues: getActivityItemResponseValues(item),
-        config: item.config,
-        conditionalLogic: undefined,
-        alerts: getAlerts(item),
-        allowEdit: item.allowEdit,
-        isHidden: item.isHidden,
-        order: item.order,
-      }))
+    ? items.map(
+        (item) =>
+          ({
+            id: item.id,
+            key: item.key,
+            name: item.name,
+            question: getDictionaryText(item.question),
+            responseType: item.responseType,
+            responseValues: getActivityItemResponseValues(item),
+            config: item.config,
+            conditionalLogic: undefined,
+            alerts: getAlerts(item),
+            allowEdit: item.allowEdit,
+            isHidden: item.isHidden,
+            order: item.order,
+          }) as ItemFormValues,
+      )
     : [];
 
 const getActivityFlows = (activityFlows: ActivityFlow[]) =>
@@ -841,7 +828,7 @@ const getActivitySubscaleSettingDuplicated = ({
 };
 
 const getActivitySubscaleSetting = (
-  subscaleSetting: SubscaleSetting,
+  subscaleSetting: Activity['subscaleSetting'],
   activityItems: ItemFormValues[],
 ) => {
   if (!subscaleSetting) return subscaleSetting;
@@ -875,36 +862,33 @@ const getActivitySubscaleSetting = (
 export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: string) => {
   if (!appletData) return getNewApplet();
 
-  const processedApplet = {
+  const processedApplet: AppletFormValues = {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
     themeId: appletData.themeId ?? defaultThemeId ?? '',
     activities: appletData.activities
-      ? appletData.activities.map((activity) => ({
-          ...activity,
-          description: getDictionaryText(activity.description),
-          items: getActivityItems(activity.items),
-          //TODO: for frontend purposes - should be reviewed after refactoring phase
-          conditionalLogic: getActivityConditionalLogic(activity.items),
-          scoresAndReports: getScoresAndReports(activity),
-        }))
+      ? appletData.activities.map((activity) => {
+          const items = getActivityItems(activity.items);
+
+          return {
+            ...activity,
+            description: getDictionaryText(activity.description),
+            items,
+            //TODO: for frontend purposes - should be reviewed after refactoring phase
+            conditionalLogic: getActivityConditionalLogic(activity.items),
+            scoresAndReports: getScoresAndReports(activity),
+            ...(activity.subscaleSetting && {
+              subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, items),
+            }),
+          } as ActivityFormValues;
+        })
       : [],
     activityFlows: getActivityFlows(appletData.activityFlows),
     streamEnabled: !!appletData.streamEnabled,
   };
 
-  return {
-    ...processedApplet,
-    activities: processedApplet.activities
-      ? processedApplet.activities.map((activity) => ({
-          ...activity,
-          ...(activity.subscaleSetting && {
-            subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, activity.items),
-          }),
-        }))
-      : [],
-  } as AppletFormValues;
+  return processedApplet;
 };
 
 export const getAppletTabs = ({

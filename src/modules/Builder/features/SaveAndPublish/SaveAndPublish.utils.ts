@@ -3,27 +3,26 @@ import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 
 import {
+  Activity,
+  ActivityFlow,
   AudioPlayerResponseValues,
   AudioResponseValues,
   Condition,
   ConditionalLogic,
   DrawingResponseValues,
   FlankerConfig,
+  Item,
   ItemAlert,
   NumberItemResponseValues,
+  OptionCondition,
+  ScoreReport,
   SingleAndMultipleSelectItemResponseValues,
   SingleAndMultipleSelectRowsResponseValues,
+  SingleApplet,
   SliderItemResponseValues,
   SliderRowsResponseValues,
-  OptionCondition,
-  SingleApplet,
-  Activity,
-  ActivityFlow,
-  ScoreReport,
-  SectionReport,
-  Item,
 } from 'shared/state';
-import { ConditionType, ItemResponseType, PerfTaskType, ScoreReportType } from 'shared/consts';
+import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
@@ -35,7 +34,7 @@ import {
 } from 'modules/Builder/types';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { findRelatedScore } from 'modules/Builder/utils';
-import { ElementType } from 'shared/types';
+import { ElementType, isScoreReport, isSectionReport } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
 import {
@@ -128,9 +127,7 @@ const getConditions = ({ items, conditions, score }: GetConditions) =>
 
     return {
       type: condition.type,
-      payload: relatedItem
-        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
-        : condition['payload'],
+      payload: relatedItem ? getConditionPayload(relatedItem, condition) : condition['payload'],
       itemName: relatedItem?.name ?? score?.id ?? condition.itemName,
     };
   });
@@ -146,9 +143,7 @@ const getSectionConditions = ({ items, conditions, scores }: GetSectionCondition
 
     return {
       type: condition.type,
-      payload: relatedItem
-        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
-        : condition['payload'],
+      payload: relatedItem ? getConditionPayload(relatedItem, condition) : condition['payload'],
       itemName: relatedItem?.name ?? relatedScore?.id ?? condition.itemName,
     };
   });
@@ -193,15 +188,13 @@ export const getScoresAndReports = (activity: ActivityFormValues) => {
 
   const { reports: initialReports } = scoresAndReports;
 
-  const scores = initialReports?.filter(
-    (report) => report.type === ScoreReportType.Score,
-  ) as ScoreReport[];
+  const scores = initialReports?.filter(isScoreReport);
   const reports = initialReports?.map((report) => {
-    if (report.type === ScoreReportType.Section) {
-      return getSection({ section: report as SectionReport, items, scores });
+    if (isSectionReport(report)) {
+      return getSection({ section: report, items, scores });
     }
 
-    return getScore(report as ScoreReport, items);
+    return getScore(report, items);
   });
 
   return {

@@ -1,4 +1,4 @@
-import { FlankerConfig, Item } from 'shared/state';
+import { FlankerConfig, FlankerItem } from 'shared/state';
 import {
   DecryptedFlankerAnswerItemValue,
   DotType,
@@ -173,7 +173,7 @@ export const getFlankerRecords = ({
   itemIndex,
 }: {
   responses: DecryptedFlankerAnswerItemValue[];
-  item: Item<FlankerConfig>;
+  item: FlankerItem;
   experimentClock: string;
   itemIndex: number;
 }) => {
