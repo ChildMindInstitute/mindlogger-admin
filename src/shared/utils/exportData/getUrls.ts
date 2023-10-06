@@ -1,11 +1,6 @@
-import {
-  DecryptedAnswerData,
-  DecryptedDrawingAnswer,
-  DecryptedMediaAnswer,
-  ExtendedExportAnswerWithoutEncryption,
-} from 'shared/types';
+import { DecryptedAnswerData, DecryptedDrawingAnswer, DecryptedMediaAnswer } from 'shared/types';
 
-export const getDrawingUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
+export const getDrawingUrl = (item: DecryptedAnswerData) =>
   (item.answer as DecryptedDrawingAnswer).value.uri;
-export const getMediaUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
+export const getMediaUrl = (item: DecryptedAnswerData) =>
   (item.answer as DecryptedMediaAnswer)?.value || '';

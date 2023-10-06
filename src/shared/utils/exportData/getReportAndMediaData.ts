@@ -3,7 +3,6 @@ import {
   DecryptedAnswerData,
   EventDTO,
   ExportMediaData,
-  ExtendedExportAnswerWithoutEncryption,
   isDrawingAnswerData,
   UserActionType,
 } from 'shared/types';
@@ -20,7 +19,7 @@ import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/ge
 import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
 
 const getDecryptedAnswersObject = (
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+  decryptedAnswers: DecryptedAnswerData[],
   hasMigratedAnswers?: boolean,
 ) =>
   getObjectFromList(decryptedAnswers, (item) => {
@@ -35,8 +34,8 @@ const getDecryptedAnswersObject = (
 
 export const getReportData = (
   reportData: AppletExportData['reportData'],
-  rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+  rawAnswersObject: Record<string, DecryptedAnswerData>,
+  decryptedAnswers: DecryptedAnswerData[],
 ) => {
   const answers = decryptedAnswers.reduce(
     (filteredAcc, item, index) => {
@@ -66,7 +65,7 @@ export const getReportData = (
 
 export const getMediaData = (
   mediaData: AppletExportData['mediaData'],
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+  decryptedAnswers: DecryptedAnswerData[],
 ) => {
   const mediaAnswers = decryptedAnswers.reduce((filteredAcc, item) => {
     if (isDrawingAnswerData(item))
@@ -89,8 +88,8 @@ export const getMediaData = (
 
 export const getActivityJourneyData = (
   activityJourneyData: AppletExportData['activityJourneyData'],
-  rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+  rawAnswersObject: Record<string, DecryptedAnswerData>,
+  decryptedAnswers: DecryptedAnswerData[],
   decryptedEvents: EventDTO[],
 ) => {
   const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);

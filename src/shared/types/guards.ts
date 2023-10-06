@@ -15,11 +15,11 @@ export const isSectionReport = (report: ScoreOrSection): report is SectionReport
   report.type === ScoreReportType.Section;
 
 export const isDrawingAnswerData = (
-  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+  item: DecryptedAnswerData,
 ): item is DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption, DrawingItemAnswer> =>
   item.activityItem?.responseType === ItemResponseType.Drawing && Boolean(item.answer);
 export const isMediaAnswerData = (
-  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+  item: DecryptedAnswerData,
 ): item is DecryptedAnswerData<
   ExtendedExportAnswerWithoutEncryption,
   AudioItemAnswer | PhotoItemAnswer | VideoItemAnswer

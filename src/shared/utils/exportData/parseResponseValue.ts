@@ -28,9 +28,7 @@ import {
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
-export const parseResponseValue = <
-  T extends DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
->(
+export const parseResponseValue = <T extends DecryptedAnswerData>(
   item: T,
   index: number,
   isEvent = false,
@@ -58,9 +56,7 @@ export const parseResponseValue = <
   return `${parseResponseValueRaw(item, index, answer)}${editedWithLabel}`;
 };
 
-export const parseResponseValueRaw = <
-  T extends DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
->(
+export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
   item: T,
   index: number,
   answer?: AnswerDTO,

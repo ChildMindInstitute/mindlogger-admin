@@ -1,12 +1,10 @@
-import { DecryptedAnswerData, ExtendedExportAnswerWithoutEncryption } from 'shared/types';
+import { DecryptedAnswerData } from 'shared/types';
 
 const END_OF_LINE_OF_MIGRATED_ID = '00000000';
 const END_OF_LINE_OF_MIGRATED_ID_SIZE = END_OF_LINE_OF_MIGRATED_ID.length;
 const checkIfIdWasMigrated = (id: string) => id.endsWith(END_OF_LINE_OF_MIGRATED_ID);
 
-export const checkIfHasMigratedAnswers = (
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
-) => {
+export const checkIfHasMigratedAnswers = (decryptedAnswers: DecryptedAnswerData[]) => {
   if (!decryptedAnswers.length) return false;
 
   return checkIfIdWasMigrated(decryptedAnswers[0]?.id);

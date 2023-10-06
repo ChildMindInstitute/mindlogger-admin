@@ -8,7 +8,6 @@ import {
   DecryptedStabilityTrackerAnswer,
   DecryptedStabilityTrackerAnswerObject,
   ExportCsvData,
-  ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 import { ItemResponseType } from 'shared/consts';
 import {
@@ -26,7 +25,7 @@ import { convertDateStampToMs } from 'shared/utils/exportData/convertDateStampTo
 
 export const getDrawingItemsData = (
   drawingItemsData: AppletExportData['drawingItemsData'],
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+  decryptedAnswers: DecryptedAnswerData[],
 ) => {
   const drawingAnswers = decryptedAnswers.reduce((acc, item) => {
     const responseType = item.activityItem?.responseType;
@@ -44,7 +43,7 @@ export const getDrawingItemsData = (
 
 export const getStabilityTrackerItemsData = (
   stabilityTrackerItemsData: AppletExportData['stabilityTrackerItemsData'],
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+  decryptedAnswers: DecryptedAnswerData[],
 ) => {
   const stabilityTrackerAnswers = decryptedAnswers.reduce((acc, item) => {
     const responseType = item.activityItem?.responseType;
@@ -66,7 +65,7 @@ export const getStabilityTrackerItemsData = (
 
 export const getABTrailsItemsData = (
   abTrackerItemsData: AppletExportData['abTrailsItemsData'],
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+  decryptedAnswers: DecryptedAnswerData[],
 ) => {
   const abTrackerAnswers = decryptedAnswers.reduce((acc, item, index) => {
     const responseType = item.activityItem?.responseType;
@@ -85,7 +84,7 @@ export const getABTrailsItemsData = (
 
 export const getFlankerItemsData = (
   flankerItemsData: AppletExportData['flankerItemsData'],
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
+  decryptedAnswers: DecryptedAnswerData[],
 ) => {
   const flankerAnswers = decryptedAnswers.reduce((acc, item, itemIndex) => {
     const responseType = item.activityItem?.responseType;

@@ -1,10 +1,7 @@
 import {
-  AnswerDTO,
   DecryptedAnswerData,
-  EventDTO,
   ExportActivity,
   ExportDataResult,
-  ExtendedExportAnswerWithoutEncryption,
   isDrawingAnswerData,
   isMediaAnswerData,
 } from 'shared/types';
@@ -66,12 +63,7 @@ export const getAnswersWithPublicUrls = async (
 
   return parsedAnswers.reduce<ReturnType<typeof getParsedAnswers>>((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce(
-      (
-        decryptedAnswersAcc: DecryptedAnswerData<
-          ExtendedExportAnswerWithoutEncryption<AnswerDTO, EventDTO>
-        >[],
-        item,
-      ) => {
+      (decryptedAnswersAcc: DecryptedAnswerData[], item) => {
         if (isDrawingAnswerData(item)) {
           return decryptedAnswersAcc.concat({
             ...item,

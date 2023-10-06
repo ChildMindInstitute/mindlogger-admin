@@ -96,10 +96,13 @@ export type EncryptionAnswerDataTypes =
   | 'events'
   | 'migratedData';
 
-export type DecryptedAnswerData<T, P = ActivityItemAnswer> = Omit<T, EncryptionAnswerDataTypes> & P;
+export type DecryptedAnswerData<
+  T = ExtendedExportAnswerWithoutEncryption,
+  P = ActivityItemAnswer,
+> = Omit<T, EncryptionAnswerDataTypes> & P;
 
-export type ExtendedExportAnswerWithoutEncryption<A = string, E = string> = Omit<
-  ExtendedExportAnswer<A, E>,
+export type ExtendedExportAnswerWithoutEncryption = Omit<
+  ExtendedExportAnswer<AnswerDTO, EventDTO>,
   EncryptionAnswerDataTypes
 >;
 
