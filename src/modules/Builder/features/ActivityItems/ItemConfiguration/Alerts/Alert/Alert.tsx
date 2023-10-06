@@ -85,7 +85,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 name={`${alertName}.value`}
                 control={control}
                 placeholder={t('option')}
-                options={getSliderRowsItemList(getValues(name) as ItemFormValues, alert)}
+                options={getSliderRowsItemList(getValues(name), alert)}
                 data-testid={`${dataTestid}-slider-rows-value`}
               />,
             ]}

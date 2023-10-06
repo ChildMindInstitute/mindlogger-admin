@@ -6,7 +6,7 @@ import {
   ExportDataResult,
   ExtendedExportAnswerWithoutEncryption,
   isDrawingAnswerData,
-  isNotMediaAnswerData,
+  isMediaAnswerData,
 } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { ItemsWithFileResponses } from 'shared/consts';
@@ -80,7 +80,7 @@ export const getAnswersWithPublicUrls = async (
             },
           });
         }
-        if (isNotMediaAnswerData(item)) return decryptedAnswersAcc.concat(item);
+        if (!isMediaAnswerData(item)) return decryptedAnswersAcc.concat(item);
 
         return decryptedAnswersAcc.concat({
           ...item,

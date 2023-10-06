@@ -5,22 +5,15 @@ import get from 'lodash.get';
 import {
   Activity,
   ActivityFlow,
-  AudioPlayerResponseValues,
-  AudioResponseValues,
   Condition,
   ConditionalLogic,
-  DrawingResponseValues,
   FlankerConfig,
   Item,
   ItemAlert,
-  NumberItemResponseValues,
   OptionCondition,
   ScoreReport,
   SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectRowsResponseValues,
   SingleApplet,
-  SliderItemResponseValues,
-  SliderRowsResponseValues,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
@@ -213,16 +206,13 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.MultipleSelection
   )
     return {
-      paletteName:
-        (responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ?? undefined,
-      options: (responseValues as SingleAndMultipleSelectItemResponseValues).options?.map(
-        (option) => ({
-          ...option,
-          color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
-          alert: hasAlerts ? alerts?.find(({ value }) => value === option.id)?.alert : undefined,
-          ...removeReactHookFormKey(),
-        }),
-      ),
+      paletteName: responseValues.paletteName ?? undefined,
+      options: responseValues.options?.map((option) => ({
+        ...option,
+        color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
+        alert: hasAlerts ? alerts?.find(({ value }) => value === option.id)?.alert : undefined,
+        ...removeReactHookFormKey(),
+      })),
     };
 
   if (
@@ -230,7 +220,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     get(item.config, ItemConfigurationSettings.IsContinuous)
   ) {
     return {
-      ...(responseValues as SliderItemResponseValues),
+      ...responseValues,
       options: undefined,
       alerts: hasAlerts
         ? alerts?.map(({ minValue, maxValue, alert }) => ({
@@ -244,17 +234,17 @@ const mapItemResponseValues = (item: ItemFormValues) => {
 
   if (responseType === ItemResponseType.Slider) {
     return {
-      ...(responseValues as SliderItemResponseValues),
+      ...responseValues,
       options: undefined,
       alerts: hasAlerts ? alerts : undefined,
     };
   }
 
   if (responseType === ItemResponseType.SliderRows) {
-    const { rows } = responseValues as SliderRowsResponseValues;
+    const { rows } = responseValues;
 
     return {
-      ...(responseValues as SliderRowsResponseValues),
+      ...responseValues,
       options: undefined,
       rows: rows?.map((row) => ({
         ...row,
@@ -276,11 +266,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.Drawing
   )
     return {
-      ...(responseValues as
-        | AudioResponseValues
-        | AudioPlayerResponseValues
-        | NumberItemResponseValues
-        | DrawingResponseValues),
+      ...responseValues,
       options: undefined,
     };
 
@@ -288,7 +274,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.SingleSelectionPerRow ||
     responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const { dataMatrix, ...other } = responseValues as SingleAndMultipleSelectRowsResponseValues;
+    const { dataMatrix, ...other } = responseValues;
 
     const groupedAlerts = groupBy(alerts ?? [], (alert) => `${alert.optionId}-${alert.rowId}`);
 

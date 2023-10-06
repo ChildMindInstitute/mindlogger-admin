@@ -2,7 +2,6 @@ import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
 import {
   ActivitySettingsSubscale,
-  SingleAndMultipleSelectItemResponseValues,
   SliderItemResponseValues,
   TextInputConfig,
 } from 'shared/state/Applet/Applet.schema';
@@ -231,11 +230,10 @@ export const compareActivityItem = (
     }
     case ItemResponseType.Slider: {
       const prevResponseValues = prevActivityItem.activityItem.responseValues;
-      const currResponseValues = currActivityItem.activityItem
-        .responseValues as SliderItemResponseValues;
+      const currResponseValues = currActivityItem.activityItem.responseValues;
 
       const sliderOptions = getSliderOptions(
-        currResponseValues as SliderItemResponseValues,
+        currResponseValues,
         currActivityItem.activityItem.id!,
       ).reduce((options: Record<string, ItemOption>, currentOption) => {
         if (options[currentOption.id]) return options;
@@ -284,13 +282,11 @@ export const formatActivityItemAnswers = (
       const activityItem = {
         ...formattedActivityItem,
         responseValues: {
-          options: (responseValues as SingleAndMultipleSelectItemResponseValues).options.map(
-            ({ id, text, value }) => ({
-              id,
-              text,
-              value: optionsValuesMapper[value!],
-            }),
-          ),
+          options: currentAnswer.activityItem.responseValues.options.map(({ id, text, value }) => ({
+            id,
+            text,
+            value: optionsValuesMapper[value!],
+          })),
         },
       };
 
@@ -318,9 +314,11 @@ export const formatActivityItemAnswers = (
       const activityItem = {
         ...formattedActivityItem,
         responseValues: {
-          options: (responseValues as SingleAndMultipleSelectItemResponseValues).options.map(
-            ({ id, text, value }) => ({ id, text, value: optionsValuesMapper[value!] }),
-          ),
+          options: currentAnswer.activityItem.responseValues.options.map(({ id, text, value }) => ({
+            id,
+            text,
+            value: optionsValuesMapper[value!],
+          })),
         },
       };
 
@@ -344,7 +342,7 @@ export const formatActivityItemAnswers = (
         ...formattedActivityItem,
         responseValues: {
           options: getSliderOptions(
-            responseValues as SliderItemResponseValues,
+            currentAnswer.activityItem.responseValues,
             formattedActivityItem.id!,
           ),
         },
@@ -382,8 +380,7 @@ export const formatActivityItemAnswers = (
       return {
         activityItem: {
           ...formattedActivityItem,
-          responseDataIdentifier: (currentActivityItem.config as TextInputConfig)
-            .responseDataIdentifier,
+          responseDataIdentifier: currentAnswer.activityItem.config.responseDataIdentifier,
         },
         answers,
       };
@@ -418,7 +415,7 @@ export const formatActivityItemAnswers = (
       return {
         activityItem: {
           ...formattedActivityItem,
-          responseDataIdentifier: (currentActivityItem.config as TextInputConfig)
+          responseDataIdentifier: (currentActivityItem.config as TextInputConfig) // TODO: need to remove the type cast and check config for ItemResponseType.Time
             .responseDataIdentifier,
         },
         answers,

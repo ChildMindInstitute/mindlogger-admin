@@ -1,12 +1,7 @@
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
 import i18n from 'i18n';
-import {
-  ScoreReport,
-  SingleAndMultiSelectOption,
-  SingleAndMultipleSelectItemResponseValues,
-  SliderItemResponseValues,
-} from 'shared/state';
+import { ScoreReport, SingleAndMultiSelectOption, SliderItemResponseValues } from 'shared/state';
 import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
 import { ItemFormValues } from 'modules/Builder/types';
 import { getEntityKey, removeMarkdown } from 'shared/utils';
@@ -52,7 +47,7 @@ const getItemScoreRange = (item: ItemFormValues) => {
     item.responseType === ItemResponseType.SingleSelection ||
     item.responseType === ItemResponseType.MultipleSelection
   ) {
-    scores = (item.responseValues as SingleAndMultipleSelectItemResponseValues).options?.reduce(
+    scores = item.responseValues.options?.reduce(
       (result: number[], option: SingleAndMultiSelectOption) => {
         if (!option.isHidden && typeof option.score === 'number') {
           return [...result, option.score];
@@ -63,7 +58,7 @@ const getItemScoreRange = (item: ItemFormValues) => {
       [],
     ) as number[];
   } else {
-    scores = (item.responseValues as SliderItemResponseValues).scores as number[];
+    scores = (item.responseValues as SliderItemResponseValues).scores as number[]; // TODO: need to remove the type cast and check scores
   }
 
   let maxScore = 0;

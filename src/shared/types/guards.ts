@@ -1,7 +1,6 @@
 import { ItemResponseType, ItemsWithFileResponses, ScoreReportType } from 'shared/consts';
 import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import {
-  ActivityItemAnswer,
   AudioItemAnswer,
   DecryptedAnswerData,
   DrawingItemAnswer,
@@ -19,9 +18,9 @@ export const isDrawingAnswerData = (
   item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
 ): item is DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption, DrawingItemAnswer> =>
   item.activityItem?.responseType === ItemResponseType.Drawing && Boolean(item.answer);
-export const isNotMediaAnswerData = (
+export const isMediaAnswerData = (
   item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
 ): item is DecryptedAnswerData<
   ExtendedExportAnswerWithoutEncryption,
-  Exclude<ActivityItemAnswer, AudioItemAnswer | PhotoItemAnswer | VideoItemAnswer>
-> => !ItemsWithFileResponses.includes(item.activityItem?.responseType);
+  AudioItemAnswer | PhotoItemAnswer | VideoItemAnswer
+> => ItemsWithFileResponses.includes(item.activityItem?.responseType);

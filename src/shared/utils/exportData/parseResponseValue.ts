@@ -1,4 +1,4 @@
-import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
+import { ItemResponseType } from 'shared/consts';
 import {
   AdditionalEdited,
   AdditionalTextType,
@@ -7,7 +7,6 @@ import {
   DecryptedDateAnswer,
   DecryptedDateRangeAnswer,
   DecryptedGeolocationAnswer,
-  DecryptedMediaAnswer,
   DecryptedMultiSelectionPerRowAnswer,
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
@@ -15,9 +14,9 @@ import {
   DecryptedTimeAnswer,
   ExtendedEvent,
   ExtendedExportAnswerWithoutEncryption,
+  isMediaAnswerData,
   UserActionType,
 } from 'shared/types';
-import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
 
 import {
   getABTrailsCsvName,
@@ -75,11 +74,11 @@ export const parseResponseValueRaw = <
 
   if (!key) return answer || '';
 
-  if (ItemsWithFileResponses.includes(inputType)) {
+  if (isMediaAnswerData(item)) {
     try {
-      if (!(item.answer as DecryptedMediaAnswer)?.value) return '';
+      if (!item.answer?.value) return '';
 
-      return getMediaFileName(item, getFileExtension((item.answer as DecryptedMediaAnswer).value));
+      return getMediaFileName(item, getFileExtension(item.answer.value));
     } catch (error) {
       console.warn(error);
     }
@@ -87,15 +86,14 @@ export const parseResponseValueRaw = <
 
   switch (inputType) {
     case ItemResponseType.TimeRange:
-      return `time_range: from (hr ${
-        (value as DecryptedDateRangeAnswer['value'])?.from?.hour
-      }, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
+      return `time_range: from (hr ${(value as DecryptedDateRangeAnswer['value'])?.from
+        ?.hour}, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
         (value as DecryptedDateRangeAnswer['value'])?.to?.hour ?? 0
       }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute ?? 0})`;
     case ItemResponseType.Date:
-      return `date: ${(value as DecryptedDateAnswer['value'])?.day}/${
-        (value as DecryptedDateAnswer['value'])?.month
-      }/${(value as DecryptedDateAnswer['value'])?.year}`;
+      return `date: ${(value as DecryptedDateAnswer['value'])?.day}/${(
+        value as DecryptedDateAnswer['value']
+      )?.month}/${(value as DecryptedDateAnswer['value'])?.year}`;
     case ItemResponseType.Time: {
       const timeValue = value as DecryptedTimeAnswer['value'];
       const hours = timeValue?.hours ?? (answer as DecryptedTimeAnswer)?.hour;
@@ -104,15 +102,15 @@ export const parseResponseValueRaw = <
       return `time: hr ${hours}, min ${minutes}`;
     }
     case ItemResponseType.Geolocation:
-      return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${
-        (value as DecryptedGeolocationAnswer['value'])?.longitude
-      })`;
+      return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${(
+        value as DecryptedGeolocationAnswer['value']
+      )?.longitude})`;
     case ItemResponseType.Drawing:
       return getMediaFileName(item, 'svg');
     case ItemResponseType.ABTrails:
       return getABTrailsCsvName(index, item.id);
     case ItemResponseType.SingleSelectionPerRow: {
-      const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
+      const rows = activityItem?.responseValues.rows;
 
       return rows
         .map(
@@ -124,7 +122,7 @@ export const parseResponseValueRaw = <
         .join('\n');
     }
     case ItemResponseType.MultipleSelectionPerRow: {
-      const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
+      const rows = activityItem?.responseValues.rows;
 
       return rows
         .map(
@@ -136,7 +134,7 @@ export const parseResponseValueRaw = <
         .join('\n');
     }
     case ItemResponseType.SliderRows: {
-      const rows = (activityItem?.responseValues as SliderRowsResponseValues).rows;
+      const rows = activityItem?.responseValues.rows;
 
       return rows
         .map(
