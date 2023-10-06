@@ -17,7 +17,7 @@ describe('createArray', () => {
 });
 
 describe('groupBy', () => {
-  test('groups an array of objects by a key', () => {
+  test('groups an array of objects by key', () => {
     const array = [
       { id: 1, category: 'A' },
       { id: 2, category: 'B' },
