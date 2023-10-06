@@ -19,6 +19,7 @@ import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 export type ItemFormValuesCommonType = ItemCommonType & {
   question?: string;
+  responseType: ItemResponseType | '';
 };
 
 export type ItemFormValues = Item<ItemFormValuesCommonType>;

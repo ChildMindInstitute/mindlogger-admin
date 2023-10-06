@@ -4,7 +4,7 @@ import { HeadCell } from 'shared/types';
 import { createArray, getTableCell, getUploadedMediaName } from 'shared/utils';
 import { FlankerStimulusSettings, FlankerBlockSettings } from 'shared/state';
 
-import { UploadedTable } from './BlockSequencesContent.types';
+import { UploadedData, UploadedDataOrNull } from './BlockSequencesContent.types';
 
 const { t } = i18n;
 
@@ -33,9 +33,9 @@ export const getSequencesData = (stimulusTrials: FlankerStimulusSettings[] = [])
   return { defaultExportTable, defaultTableRows };
 };
 
-export const getSequencesHeadCells = (uploadedTable: UploadedTable | null): HeadCell[] =>
-  uploadedTable
-    ? Object.keys(uploadedTable[0]).map((label) => ({
+export const getSequencesHeadCells = (uploadedData?: UploadedDataOrNull): HeadCell[] =>
+  uploadedData
+    ? Object.keys(uploadedData[0]).map((label) => ({
         id: label.toLowerCase().replace(/\s+/g, '-'),
         label,
       }))
@@ -44,21 +44,24 @@ export const getSequencesHeadCells = (uploadedTable: UploadedTable | null): Head
         label: `${t('flankerRound.block')} ${index + 1}`,
       }));
 
-export const getUploadedTableRows = (uploadedTable: UploadedTable) =>
-  uploadedTable?.map((obj) => {
+export const getUploadedTableRows = (uploadedData?: UploadedDataOrNull) =>
+  uploadedData?.map((obj) => {
     const updatedObj: Row = {};
     // eslint-disable-next-line no-restricted-syntax
     for (const key in obj) {
       // eslint-disable-next-line no-prototype-builtins
       if (obj.hasOwnProperty(key)) {
-        updatedObj[key] = getTableCell(obj[key]);
+        updatedObj[key] = getTableCell(obj[key].text);
       }
     }
 
     return updatedObj;
   });
 
-const getStimulusObject = (stimulusTrials: FlankerStimulusSettings[], type: 'imageKey' | 'idKey') =>
+export const getStimulusObject = (
+  stimulusTrials: FlankerStimulusSettings[],
+  type: 'imageKey' | 'idKey',
+) =>
   stimulusTrials?.reduce((result: Record<string, string>, item) => {
     const trialName = item.text || getUploadedMediaName(item.image);
     const key = type === 'imageKey' ? trialName : item.id;
@@ -69,22 +72,18 @@ const getStimulusObject = (stimulusTrials: FlankerStimulusSettings[], type: 'ima
 
 export const getRoundBlocks = (
   stimulusTrials: FlankerStimulusSettings[],
-  uploadedTable: UploadedTable,
+  uploadedData?: UploadedDataOrNull,
 ) => {
-  if (!uploadedTable?.length) return;
-  const imagesIds = getStimulusObject(stimulusTrials, 'imageKey');
+  if (!uploadedData?.length) return;
 
-  return Object.keys(uploadedTable[0]).reduce(
-    (result: { order: (string | number)[]; name: string }[], key) => {
-      result.push({
-        order: uploadedTable.map((obj) => imagesIds?.[obj?.[key]]),
-        name: key,
-      });
+  return Object.keys(uploadedData[0]).reduce((result: { order: string[]; name: string }[], key) => {
+    result.push({
+      order: uploadedData.map((obj) => obj?.[key]?.id),
+      name: key,
+    });
 
-      return result;
-    },
-    [],
-  );
+    return result;
+  }, []);
 };
 
 export const getTableFromSequences = (
@@ -94,14 +93,24 @@ export const getTableFromSequences = (
   if (!blockSequences?.length) return;
   const imagesNames = getStimulusObject(stimulusTrials, 'idKey');
 
-  return blockSequences.reduce((result: Record<string, string>[], { name, order }) => {
+  return blockSequences.reduce((result: UploadedData, { name, order }) => {
     order.forEach((id, index) => {
       if (!result[index]) {
         result[index] = {};
       }
-      result[index][name] = imagesNames[id];
+      result[index][name] = { id, text: imagesNames[id] };
     });
 
     return result;
   }, []);
 };
+
+export const getExportData = (uploadedData?: UploadedDataOrNull) =>
+  uploadedData?.map((obj) => {
+    const transformedObj: Record<string, string> = {};
+    Object.keys(obj).forEach((key) => {
+      transformedObj[key] = obj[key].text;
+    });
+
+    return transformedObj;
+  });

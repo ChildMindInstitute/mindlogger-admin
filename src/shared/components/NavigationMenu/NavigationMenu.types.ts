@@ -9,6 +9,7 @@ export type NavigationItem = {
   tooltip?: string;
   disabled?: boolean;
   isVisible?: boolean;
+  hasError?: boolean;
   'data-testid'?: string;
 };
 

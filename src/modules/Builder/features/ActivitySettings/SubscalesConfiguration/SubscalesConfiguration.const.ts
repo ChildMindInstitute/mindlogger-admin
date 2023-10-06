@@ -10,7 +10,7 @@ import {
 
 const { t } = i18n;
 
-export const options = [
+export const getOptions = () => [
   {
     value: SubscaleTotalScore.Sum,
     label: t('sumOfScores'),
@@ -21,7 +21,7 @@ export const options = [
   },
 ];
 
-export const totalScoreTableColumnData = [
+export const getTotalScoreTableColumnData = () => [
   {
     key: 'rawScore',
     label: t('subscaleLookupTable.column.rawScore'),

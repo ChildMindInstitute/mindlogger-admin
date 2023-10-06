@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 type Tab = {
+  id: string;
   labelKey: string;
   icon?: JSX.Element;
   activeIcon?: JSX.Element;
@@ -8,7 +9,6 @@ type Tab = {
   onClick?: () => void;
   isMinHeightAuto?: boolean;
   path?: string;
-  id?: string;
   hasError?: boolean;
   'data-testid'?: string;
 };

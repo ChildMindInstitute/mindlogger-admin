@@ -37,6 +37,8 @@ export const getParsedAnswers = (
 export const getAnswersWithPublicUrls = async (
   parsedAnswers: ReturnType<typeof getParsedAnswers>,
 ) => {
+  if (!parsedAnswers.length) return [];
+
   const privateUrls = parsedAnswers.reduce((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce((urlsAcc, item) => {
       if (isDrawingAnswerData(item)) {
@@ -52,11 +54,13 @@ export const getAnswersWithPublicUrls = async (
   }, [] as string[]);
 
   let publicUrls: string[] = [];
-  try {
-    const appletId = parsedAnswers[0].decryptedAnswers[0].appletId;
-    publicUrls = (await postFilePresignApi(appletId, privateUrls)).data?.result ?? [];
-  } catch (e) {
-    console.warn(e);
+  if (privateUrls.length) {
+    try {
+      const appletId = parsedAnswers[0].decryptedAnswers[0].appletId;
+      publicUrls = (await postFilePresignApi(appletId, privateUrls)).data?.result ?? [];
+    } catch (e) {
+      console.warn(e);
+    }
   }
   let publicUrlIndex = 0;
 

@@ -3,9 +3,9 @@ import { useFormContext } from 'react-hook-form';
 
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
+import { isSystemItem } from 'shared/utils';
 
 import { ageItem, genderItem } from './SubscalesConfiguration.const';
-import { isSystemItem } from './SubscalesConfiguration.utils';
 
 export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => {
   const { fieldName: activityFieldName } = useCurrentActivity();

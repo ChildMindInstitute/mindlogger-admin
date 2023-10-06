@@ -2,6 +2,7 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
+import { mockedEmail, mockedPassword } from 'shared/mock';
 
 import { SignUpForm } from '.';
 
@@ -17,8 +18,8 @@ describe('SignUp component tests', () => {
   renderComponentForEachTest(<SignUpForm />);
 
   test('SignUp inputs should accept values', () => {
-    inputAcceptsValue('Email', 'test@gmail.com');
-    inputAcceptsValue('Password', 'password');
+    inputAcceptsValue('Email', mockedEmail);
+    inputAcceptsValue('Password', mockedPassword);
     inputAcceptsValue('First Name', 'fname');
     inputAcceptsValue('Last Name', 'lname');
   });
@@ -33,7 +34,7 @@ describe('SignUp component tests', () => {
     submitForm('test', 'password', 'fname', 'lname');
     await waitFor(() => expect(screen.getByText('Email must be valid')).toBeInTheDocument());
 
-    submitForm('test@gmail.com', '   password', 'fname', 'lname');
+    submitForm(mockedEmail, ` ${mockedPassword}`, 'fname', 'lname');
     await waitFor(() =>
       expect(screen.getByText('Password must not contain spaces.')).toBeInTheDocument(),
     );

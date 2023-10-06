@@ -20,4 +20,6 @@ export type AppStore = ReturnType<typeof setupStore>;
 export type ExtendedRenderOptions = Omit<RenderOptions, 'queries'> & {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;
+  route?: string;
+  routePath?: string;
 };

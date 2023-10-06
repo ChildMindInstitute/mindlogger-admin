@@ -2,6 +2,7 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
+import { mockedEmail, mockedPassword } from 'shared/mock';
 
 import { LoginForm } from '.';
 
@@ -15,15 +16,15 @@ describe('Login component tests', () => {
   renderComponentForEachTest(<LoginForm />);
 
   test('login inputs should accept values', () => {
-    inputAcceptsValue('Email', 'test@gmail.com');
-    inputAcceptsValue('Password', 'password');
+    inputAcceptsValue('Email', mockedEmail);
+    inputAcceptsValue('Password', mockedPassword);
   });
 
   test('should be able to validate login form', async () => {
-    submitForm('test', 'password');
+    submitForm('test', mockedPassword);
     await waitFor(() => expect(screen.getByText('Email must be valid')).toBeInTheDocument());
 
-    submitForm('test@gmail.com', '   password');
+    submitForm(mockedEmail, ` ${mockedPassword}`);
     await waitFor(() =>
       expect(screen.getByText('Password must not contain spaces.')).toBeInTheDocument(),
     );

@@ -5,9 +5,10 @@ import { Box } from '@mui/material';
 
 import { EditorUiType, Switch, TransferListController } from 'shared/components/FormComponents';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
-import { Item } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { DataTableItem } from 'shared/components';
+import { removeMarkdown } from 'shared/utils';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { StyledEditor } from './SectionScoreCommonFields.styles';
@@ -38,11 +39,11 @@ export const SectionScoreCommonFields = ({
   const commonProps = { control };
 
   const items = activity?.items.reduce(
-    (items: Pick<Item, 'id' | 'name' | 'question'>[], item: Item) => {
+    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item: ItemFormValues) => {
       if (!ItemTypesToPrint.includes(item.responseType)) return items;
       const { id, name, question } = item;
 
-      return [...items, { id, name, question }];
+      return [...items, { id, name, question: removeMarkdown(question) }];
     },
     [],
   );

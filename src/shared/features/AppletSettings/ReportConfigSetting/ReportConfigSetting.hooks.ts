@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 import { authStorage } from 'shared/utils/authStorage';
 import { SingleApplet } from 'shared/state';
@@ -54,7 +53,6 @@ export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) =
 };
 
 export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
-  const { t } = useTranslation();
   const { activityId, activityFlowId } = useParams();
   if (!appletData) return initialValues;
 
@@ -114,7 +112,7 @@ export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
     reportIncludeUserId,
     reportIncludedItemName,
     reportIncludedActivityName,
-    reportEmailBody: reportEmailBody || t('reportEmailBody'),
+    reportEmailBody,
     itemValue: !!reportIncludedActivityName || !!reportIncludedItemName,
   };
 };

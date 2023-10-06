@@ -7,6 +7,7 @@ import { TestContext } from 'yup';
 import i18n from 'i18n';
 import { page } from 'resources';
 import { Svg } from 'shared/components/Svg';
+import { Theme } from 'modules/Builder/api';
 import {
   Activity,
   ActivityFlow,
@@ -80,6 +81,9 @@ import {
 import { GetSectionConditions, GetMessageItem, PerformanceTaskItems } from './BuilderApplet.types';
 
 const { t } = i18n;
+
+export const getDefaultThemeId = (themesList: Theme[]) =>
+  themesList.find((theme) => theme.name === 'Default')?.id || '';
 
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
@@ -203,7 +207,7 @@ const getDuplicatedScoresAndReports = (
     const conditionalLogic =
       report.type === ScoreReportType.Score
         ? report.conditionalLogic
-        : {
+        : report.conditionalLogic && {
             ...report.conditionalLogic,
             conditions: getDuplicatedConditions(
               oldItems,
@@ -519,6 +523,7 @@ export const getNewApplet = () => ({
   watermark: '',
   activities: [],
   activityFlows: [],
+  reportEmailBody: t('reportEmailBody'),
 });
 
 export const getNewActivityFlow = () => ({
@@ -898,6 +903,7 @@ export const getAppletTabs = ({
 }: Record<string, boolean>) => [
   {
     labelKey: 'aboutApplet',
+    id: 'builder-about-applet',
     icon: <Svg id="more-info-outlined" />,
     activeIcon: <Svg id="more-info-filled" />,
     path: Path.About,
@@ -906,6 +912,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'activities',
+    id: 'builder-activities',
     icon: <Svg id="checklist-outlined" />,
     activeIcon: <Svg id="checklist-filled" />,
     path: Path.Activities,
@@ -914,6 +921,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'activityFlows',
+    id: 'builder-activity-flows',
     icon: <Svg id="flow-outlined" />,
     activeIcon: <Svg id="flow-filled" />,
     path: Path.ActivityFlow,
@@ -922,6 +930,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'appletSettings',
+    id: 'builder-settings',
     icon: <Svg id="settings" />,
     activeIcon: <Svg id="settings-filled" />,
     path: Path.Settings,
