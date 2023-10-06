@@ -26,7 +26,6 @@ import {
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
   getAddTotalScoreModalLabels,
-  checkOnItemTypeAndScore,
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
@@ -38,6 +37,7 @@ import {
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { LookupTable } from './LookupTable';
 import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
+import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
