@@ -65,6 +65,7 @@ export type EncryptedAnswerSharedProps<A = string, E = string> = {
   events?: E;
   migratedData?: { decryptedFileAnswers?: MigratedAnswer[] };
   legacyProfileId?: string;
+  migratedDate?: string;
 };
 
 export type ExportAnswer = {
