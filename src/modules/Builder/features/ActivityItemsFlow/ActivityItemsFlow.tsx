@@ -63,6 +63,7 @@ export const ActivityItemsFlow = () => {
     isAddItemFlowDisabled: items?.length < 2 || isPending,
     onAddItemFlow: handleAddItemFlow,
   };
+  const contentSx = { minHeight: '15rem', gap: '2.4rem', position: 'relative' };
 
   const isRemovePopupOpened = itemIndexToDelete !== -1;
 
@@ -73,7 +74,7 @@ export const ActivityItemsFlow = () => {
       headerProps={headerProps}
       hasMaxWidth
       contentClassName={ACTIVITY_ITEMS_FLOW_LIST_CLASS}
-      contentSxProps={{ minHeight: '15rem', gap: '2.4rem' }}
+      contentSxProps={contentSx}
     >
       {!!data?.length &&
         data.map((flowItem: ConditionalLogic, index: number) => (
@@ -89,7 +90,10 @@ export const ActivityItemsFlow = () => {
           {t('activityItemsFlowDescription')}
         </StyledTitleMedium>
       )}
-      <StyledObserverTarget className={ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS} />
+      <StyledObserverTarget
+        className={ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS}
+        sx={{ position: 'absolute', bottom: '5rem' }}
+      />
       {isPending && (
         <Box sx={{ position: 'relative' }}>
           <Spinner />

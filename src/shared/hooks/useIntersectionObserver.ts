@@ -3,24 +3,30 @@ import { useEffect } from 'react';
 interface Props {
   rootSelector?: string;
   targetSelector: string;
-  loadNextPage(): void;
+  onAppear?(): void;
+  onHide?(): void;
 }
-export const useIntersectionObserver = ({ rootSelector, targetSelector, loadNextPage }: Props) => {
+export const useIntersectionObserver = ({
+  rootSelector,
+  targetSelector,
+  onAppear,
+  onHide,
+}: Props) => {
   useEffect(() => {
     const callback: IntersectionObserverCallback = (entries: IntersectionObserverEntry[]) => {
       if (entries.length === 0) return;
 
       const intersection = entries[0];
-      if (intersection.intersectionRatio !== 1) return;
+      if (!intersection.isIntersecting) return onHide?.();
 
-      loadNextPage();
+      onAppear?.();
     };
 
     const root = rootSelector === undefined ? null : document.querySelector(rootSelector);
     const options = {
       root,
       rootMargin: '0px',
-      threshold: 1,
+      threshold: 0,
     };
 
     const observer = new IntersectionObserver(callback, options);
@@ -33,5 +39,5 @@ export const useIntersectionObserver = ({ rootSelector, targetSelector, loadNext
     return () => {
       observer.unobserve(target);
     };
-  }, [targetSelector, loadNextPage, rootSelector]);
+  }, [targetSelector, onAppear, onHide, rootSelector]);
 };

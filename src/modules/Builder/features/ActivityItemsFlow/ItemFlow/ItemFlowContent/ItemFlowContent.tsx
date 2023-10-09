@@ -6,10 +6,12 @@ import { StyledFlexColumn, StyledBodyLarge, theme, variables } from 'shared/styl
 import { ConditionRow } from 'modules/Builder/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
+import { StaticConditionRow } from './StaticConditionRow';
 import { ItemFlowContentProps } from './ItemFlowContent.types';
 import { SummaryRow } from '../SummaryRow';
 
 export const ItemFlowContent = ({
+  isStatic,
   name,
   onRemove,
   'data-testid': dataTestid,
@@ -18,7 +20,9 @@ export const ItemFlowContent = ({
   const { getFieldState } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const [itemKey, conditions] = useWatch({ name: [`${name}.itemKey`, `${name}.conditions`] });
+  const [itemKey, conditions] = useWatch({
+    name: [`${name}.itemKey`, `${name}.conditions`],
+  });
 
   const { error } = getFieldState(name);
   const { error: conditionalError } = getFieldState(`${name}.itemKey`);
@@ -27,24 +31,32 @@ export const ItemFlowContent = ({
 
   return (
     <StyledFlexColumn sx={{ gap: '1.2rem' }}>
-      {conditions?.map((condition: Condition, index: number) => (
-        <ConditionRow
-          key={`item-flow-condition-${condition.key}`}
+      {conditions?.map((condition: Condition, index: number) =>
+        isStatic ? (
+          <StaticConditionRow />
+        ) : (
+          <ConditionRow
+            key={`item-flow-condition-${condition.key}`}
+            name={name}
+            activityName={fieldName}
+            index={index}
+            onRemove={() => onRemove(index)}
+            autoTrigger={!!itemKey}
+            data-testid={`${dataTestid}-condition-${index}`}
+            showError={false}
+          />
+        ),
+      )}
+      {isStatic ? (
+        <StaticConditionRow isSummary />
+      ) : (
+        <SummaryRow
+          key={`item-flow-condition-${name}`}
           name={name}
           activityName={fieldName}
-          index={index}
-          onRemove={() => onRemove(index)}
-          autoTrigger={!!itemKey}
-          data-testid={`${dataTestid}-condition-${index}`}
-          showError={false}
+          data-testid={`${dataTestid}-summary`}
         />
-      ))}
-      <SummaryRow
-        key={`item-flow-condition-${name}`}
-        name={name}
-        activityName={fieldName}
-        data-testid={`${dataTestid}-summary`}
-      />
+      )}
       {error && (
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}>
           {errorMessage}

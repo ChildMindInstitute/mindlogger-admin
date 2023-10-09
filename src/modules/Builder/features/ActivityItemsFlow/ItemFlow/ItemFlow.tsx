@@ -1,25 +1,28 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { Badge } from '@mui/material';
+import { Badge, Box } from '@mui/material';
 
 import { Svg } from 'shared/components';
 import {
   StyledClearedButton,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
+  StyledObserverTarget,
   theme,
 } from 'shared/styles';
+import { useIntersectionObserver } from 'shared/hooks';
 
 import { ItemFlowActions } from './ItemFlowActions';
 import { ItemFlowProps } from './ItemFlow.types';
-import { getEmptyCondition } from './ItemFlow.utils';
+import { getEmptyCondition, getObserverSelector } from './ItemFlow.utils';
 import { StyledTitle, StyledCollapse } from './ItemFlow.styles';
 import { ItemFlowContent } from './ItemFlowContent';
 
 export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const { t } = useTranslation('app');
   const [isExpanded, setExpanded] = useState(true);
+  const [isStatic, setStatic] = useState(true);
 
   const itemName = `${name}.${index}`;
   const conditionsName = `${itemName}.conditions`;
@@ -46,34 +49,45 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
       {t('activityItemsFlowItemTitle', { index: index + 1 })}
     </StyledTitle>
   );
+  const observerSx = { position: 'absolute', height: '700px', bottom: 0 };
+
+  useIntersectionObserver({
+    targetSelector: `.${getObserverSelector(index)}`,
+    onAppear: () => setStatic(false),
+    onHide: () => setStatic(true),
+  });
 
   return (
-    <StyledCollapse in={isExpanded} timeout={0} collapsedSize="8rem" data-testid={dataTestid}>
-      <StyledFlexTopCenter sx={{ minHeight: '4.8rem' }}>
-        <StyledClearedButton
-          sx={{ p: theme.spacing(1) }}
-          onClick={() => setExpanded((prev) => !prev)}
-          data-testid={`${dataTestid}-collapse`}
-        >
-          <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
-        </StyledClearedButton>
-        <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
-        <ItemFlowActions
-          name={itemName}
-          onAdd={handleAddCondition}
-          onRemove={onRemove}
-          data-testid={dataTestid}
-          open={isExpanded}
-          onToggle={() => setExpanded((prev) => !prev)}
-        />
-      </StyledFlexTopCenter>
-      {isExpanded && (
-        <ItemFlowContent
-          name={itemName}
-          onRemove={handleRemoveCondition}
-          data-testid={dataTestid}
-        />
-      )}
-    </StyledCollapse>
+    <Box sx={{ position: 'relative' }}>
+      <StyledObserverTarget className={getObserverSelector(index)} sx={observerSx} />
+      <StyledCollapse in={isExpanded} timeout={0} collapsedSize="8rem" data-testid={dataTestid}>
+        <StyledFlexTopCenter sx={{ minHeight: '4.8rem' }}>
+          <StyledClearedButton
+            sx={{ p: theme.spacing(1) }}
+            onClick={() => setExpanded(false)}
+            data-testid={`${dataTestid}-collapse`}
+          >
+            <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
+          </StyledClearedButton>
+          <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
+          <ItemFlowActions
+            name={itemName}
+            onAdd={handleAddCondition}
+            onRemove={onRemove}
+            data-testid={dataTestid}
+            open={isExpanded}
+            onToggle={() => setExpanded((prev) => !prev)}
+          />
+        </StyledFlexTopCenter>
+        {isExpanded && (
+          <ItemFlowContent
+            name={itemName}
+            onRemove={handleRemoveCondition}
+            data-testid={dataTestid}
+            isStatic={isStatic}
+          />
+        )}
+      </StyledCollapse>
+    </Box>
   );
 };

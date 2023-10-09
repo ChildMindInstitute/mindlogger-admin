@@ -8,3 +8,5 @@ export const getEmptyCondition = () => ({
     optionValue: '',
   },
 });
+
+export const getObserverSelector = (index: number) => `item-flow-${index}`;

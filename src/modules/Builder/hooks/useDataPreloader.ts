@@ -34,7 +34,7 @@ export const useDataPreloader = <T>({
   useIntersectionObserver({
     rootSelector,
     targetSelector,
-    loadNextPage,
+    onAppear: loadNextPage,
   });
 
   return {
