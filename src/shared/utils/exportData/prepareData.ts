@@ -96,6 +96,8 @@ const getReportData = (
 const checkIfDrawingMediaConditionPassed = (
   item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
 ) => item.activityItem?.responseType === ItemResponseType.Drawing && item.answer;
+const checkIfNotMediaItem = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
+  !ItemsWithFileResponses.includes(item.activityItem?.responseType) || !item.answer;
 const getDrawingUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
   (item.answer as DecryptedDrawingAnswer).value.uri;
 const getMediaUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
@@ -111,8 +113,7 @@ const getAnswersWithPublicUrls = async (
       if (checkIfDrawingMediaConditionPassed(item)) {
         return urlsAcc.concat(getDrawingUrl(item));
       }
-      const responseType = item.activityItem?.responseType;
-      if (!ItemsWithFileResponses.includes(responseType)) return urlsAcc;
+      if (checkIfNotMediaItem(item)) return urlsAcc;
 
       return urlsAcc.concat(getMediaUrl(item));
     }, [] as string[]);
@@ -145,8 +146,7 @@ const getAnswersWithPublicUrls = async (
           },
         });
       }
-      const responseType = item.activityItem?.responseType;
-      if (!ItemsWithFileResponses.includes(responseType)) return decryptedAnswersAcc.concat(item);
+      if (checkIfNotMediaItem(item)) return decryptedAnswersAcc.concat(item);
 
       return decryptedAnswersAcc.concat({
         ...item,
