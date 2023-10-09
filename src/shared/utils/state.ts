@@ -47,7 +47,7 @@ export const getFulfilledData = <T extends Record<string, BaseSchema>, K>({
     ) {
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'success';
-      selectedProperty.data = mapper(action.payload.data);
+      selectedProperty.data = mapper(action.payload?.data);
     }
   });
 

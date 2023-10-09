@@ -15,3 +15,9 @@ export const mockedApplet = {
     accountId: '8a1f6b52-a00f-4adb-83be-461bc2e4f119',
   },
 } as Applet;
+export const mockedCurrentWorkspace = {
+  data: {
+    ownerId: '123123',
+    workspaceName: 'name',
+  },
+};

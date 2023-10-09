@@ -1,5 +1,5 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
-import axios from 'axios';
+import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
@@ -7,7 +7,7 @@ import { mockedAppletId } from 'shared/mock';
 
 import { LinkGenerator } from './LinkGenerator';
 
-const response = {
+const mockedResponse = {
   data: {
     result: {
       requireLogin: true,
@@ -18,17 +18,13 @@ const response = {
 const route = `/dashboard/${mockedAppletId}/add-user`;
 const routePath = page.appletAddUser;
 
-const fakeRequest = () => new Promise((res) => res(response));
-
 describe('LinkGenerator component tests', () => {
-  const mockedAxios = axios.create();
-
   afterEach(() => {
-    jest.restoreAllMocks();
+    mockAxios.reset();
   });
 
   test('LinkGenerator should generate link', async () => {
-    jest.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
+    mockAxios.post.mockResolvedValueOnce(mockedResponse);
 
     renderWithProviders(<LinkGenerator />, {
       route,
@@ -48,7 +44,7 @@ describe('LinkGenerator component tests', () => {
   });
 
   test('LinkGenerator should get link', async () => {
-    jest.spyOn(mockedAxios, 'get').mockImplementation(fakeRequest);
+    mockAxios.get.mockResolvedValueOnce(mockedResponse);
 
     renderWithProviders(<LinkGenerator />, {
       route,
