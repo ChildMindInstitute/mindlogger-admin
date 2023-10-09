@@ -3,7 +3,6 @@ import { styled, Box, Button } from '@mui/material';
 import { variables } from 'shared/styles/variables';
 
 export const StyledContainer = styled(Box)`
-  position: relative;
   width: 54.6rem;
   form > div {
     padding: 0;

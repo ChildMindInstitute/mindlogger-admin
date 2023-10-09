@@ -37,6 +37,7 @@ export type EncryptedAnswerSharedProps = {
   items: Item[];
   events?: string;
   migratedData?: { decryptedFileAnswers?: MigratedAnswer[] };
+  legacyProfileId?: string;
 };
 
 export type ExportAnswer = {
@@ -133,10 +134,12 @@ export type DecryptedDateAnswer = AdditionalTextType & {
 };
 
 export type DecryptedTimeAnswer = AdditionalTextType & {
-  value: {
+  value?: {
     hours: number;
     minutes: number;
   };
+  hour?: number;
+  minute?: number;
 };
 
 export type DecryptedGeolocationAnswer = AdditionalTextType & {
@@ -225,13 +228,14 @@ export const enum StabilityTrackerPhaseType {
   Challenge = 'challenge-phase',
 }
 
-export type DecryptedStabilityTrackerAnswer = {
-  value: {
-    maxLambda: number;
-    phaseType: StabilityTrackerPhaseType;
-    value: DecryptedStabilityTrackerCalcValue[];
-  };
+export type DecryptedStabilityTrackerAnswerObject = {
+  maxLambda: number;
+  phaseType: StabilityTrackerPhaseType;
+  value: DecryptedStabilityTrackerCalcValue[];
 };
+export type DecryptedStabilityTrackerAnswer =
+  | AnswerWithWrapper<DecryptedStabilityTrackerAnswerObject>
+  | DecryptedStabilityTrackerAnswerObject;
 
 export const enum FlankerTag {
   Response = 'response',
@@ -253,8 +257,12 @@ export type DecryptedFlankerAnswerItemValue = {
   trial_index: number;
 };
 
-export type DecryptedFlankerAnswer = {
-  value: DecryptedFlankerAnswerItemValue[];
+export type DecryptedFlankerAnswer =
+  | AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>
+  | DecryptedFlankerAnswerItemValue[];
+
+export type AnswerWithWrapper<T> = {
+  value: T;
 };
 
 export type AnswerDTO =
@@ -294,8 +302,8 @@ export type AnswerValue =
   | DecryptedMultiSelectionPerRowAnswer['value']
   | DecryptedSliderRowsAnswer['value']
   | DecryptedABTrailsAnswer['value']
-  | DecryptedStabilityTrackerAnswer['value']
-  | DecryptedFlankerAnswer['value'];
+  | DecryptedStabilityTrackerAnswerObject
+  | DecryptedFlankerAnswerItemValue[];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
@@ -319,6 +327,7 @@ export type ActivityItemAnswer = {
   id?: string;
   activityItem: Item;
   answer: AnswerDTO;
+  'data-testid'?: string;
 };
 
 export const enum ElementType {

@@ -1,10 +1,14 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { Item } from 'redux/modules';
 import { PublishedActivity, PublishedApplet } from 'modules/Library/state';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, performanceTaskResponseTypes } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 
 import { ExpandedActivity } from './Applet.types';
+
+export const checkIfPerformanceTask = (items: Item[]) =>
+  items?.some(({ responseType }) => performanceTaskResponseTypes.includes(responseType));
 
 export const getUpdatedStorageData = (
   applets: PublishedApplet[] | null,
@@ -32,6 +36,16 @@ export const getActivities = (
 
     if (includesSearchValue(activity.name, search)) {
       isActivitiesExpanded = true;
+    }
+
+    const isPerformanceTask = checkIfPerformanceTask(activity.items);
+    if (isPerformanceTask) {
+      acc.push({
+        ...activity,
+        expanded: isActivityExpanded,
+      });
+
+      return acc;
     }
 
     const items = activity.items.map((item) => {

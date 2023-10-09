@@ -5,9 +5,10 @@ import { Box } from '@mui/material';
 import { Svg } from 'shared/components/Svg';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
+import { Languages } from 'shared/api';
 
 import { SelectLanguage } from './SelectLanguage';
-import { LanguageItem, Languages } from './Language.types';
+import { LanguageItem } from './Language.types';
 import { StyledLanguage, StyledFlag } from './Language.styles';
 
 export const languages: LanguageItem[] = [
@@ -36,8 +37,9 @@ export const Language = () => {
   const handleClose = (language?: LanguageItem) => {
     setOpen(false);
     if (language) {
-      i18n.changeLanguage(language.value);
-      storage.setItem(LocalStorageKeys.Language, language.value);
+      const languageValue = language.value;
+      i18n.changeLanguage(languageValue);
+      storage.setItem(LocalStorageKeys.Language, languageValue);
       setCurrentLanguage(language);
     }
   };

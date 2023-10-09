@@ -122,7 +122,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
             respondentId,
             fromDatetime: getDateISO(startDate, startTime),
             toDatetime: getDateISO(endDate || addDays(startDate, 1), endTime),
-            emptyIdentifiers: !!filterByIdentifier && !selectedIdentifiers?.length,
+            emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,
             identifiers: selectedIdentifiers,
             versions: versions.map(({ id }) => id),
           },

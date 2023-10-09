@@ -15,4 +15,5 @@ export type ChipProps = {
   canRemove?: boolean;
   onClick?: () => void;
   sxProps?: SxProps;
+  'data-testid'?: string;
 };

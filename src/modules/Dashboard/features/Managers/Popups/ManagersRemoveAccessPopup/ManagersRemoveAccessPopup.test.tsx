@@ -1,14 +1,16 @@
 import { waitFor, screen } from '@testing-library/react';
-import Router from 'react-router';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { mockedAppletId } from 'shared/mock';
+import { page } from 'resources';
 
 import { ManagersRemoveAccessPopup } from './ManagersRemoveAccessPopup';
 
 const refetchManagersMock = jest.fn();
 const onCloseMock = jest.fn();
 
-const appletId = 'c0b1de97';
+const route = `/dashboard/${mockedAppletId}/managers`;
+const routePath = page.appletManagers;
 const user = {
   id: '1',
   firstName: 'firstName',
@@ -25,8 +27,6 @@ describe('ManagersRemoveAccessPopup component tests', () => {
   });
 
   test('ManagersRemoveAccessPopup should appear second screen', async () => {
-    jest.spyOn(Router, 'useParams').mockReturnValue({ appletId });
-
     renderWithProviders(
       <ManagersRemoveAccessPopup
         onClose={onCloseMock}
@@ -34,6 +34,10 @@ describe('ManagersRemoveAccessPopup component tests', () => {
         refetchManagers={refetchManagersMock}
         user={user}
       />,
+      {
+        route,
+        routePath,
+      },
     );
 
     await waitFor(() =>

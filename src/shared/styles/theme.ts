@@ -146,11 +146,17 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiTableRow-root:hover': {
-            backgroundColor: blendColorsNormal('transparent', variables.palette.on_surface_alfa8),
+            backgroundColor: blendColorsNormal(
+              variables.palette.surface,
+              variables.palette.on_surface_alfa8,
+            ),
             cursor: 'pointer',
           },
           '.MuiTableRow-root:active': {
-            backgroundColor: blendColorsNormal('transparent', variables.palette.on_surface_alfa12),
+            backgroundColor: blendColorsNormal(
+              variables.palette.surface,
+              variables.palette.on_surface_alfa12,
+            ),
           },
           '.MuiTableRow-root:last-child': {
             '.MuiTableCell-body': {
@@ -163,7 +169,7 @@ export const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          height: '4.8rem',
+          minHeight: '4.8rem',
           padding: '0 1.2rem',
           fontSize: variables.font.size.sm,
           lineHeight: variables.font.lineHeight.sm,

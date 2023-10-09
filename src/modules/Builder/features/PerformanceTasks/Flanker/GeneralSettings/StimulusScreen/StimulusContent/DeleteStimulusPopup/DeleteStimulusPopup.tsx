@@ -26,7 +26,7 @@ export const DeleteStimulusPopup = ({
       submitBtnColor="error"
       data-testid="builder-activity-flanker-stimulus-screen-delete-popup"
     >
-      <StyledModalWrapper>
+      <StyledModalWrapper sx={{ wordBreak: 'break-word' }}>
         <Trans i18nKey="flankerStimulus.deleteDescription">
           Are you sure you want to delete the Stimulus Screen
           <strong>

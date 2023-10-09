@@ -18,5 +18,6 @@ export type DashboardTableProps = {
   searchValue?: string;
   handleChangePage: (event: unknown, newPage: number) => void;
   rowsPerPage?: number;
+  hasColFixedWidth?: boolean;
   'data-testid'?: string;
 };

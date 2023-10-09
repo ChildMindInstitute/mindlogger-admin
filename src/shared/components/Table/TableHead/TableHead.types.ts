@@ -9,4 +9,5 @@ export type TableHeadProps = {
   order: Order;
   orderBy?: string;
   uiType?: UiType;
+  hasColFixedWidth?: boolean;
 };

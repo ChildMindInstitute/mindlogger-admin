@@ -89,7 +89,7 @@ export const ReviewMenuItem = ({
               key={answer.answerId}
               title={String(format(new Date(answer.createdAt), DateFormats.TimeSeconds))}
               onClick={() => handleAnswerClick(answer)}
-              data-testid={`${dataTestid}-answer-${index}`}
+              data-testid={`${dataTestid}-completion-time-${index}`}
             />
           ))}
         </StyledFlexWrap>

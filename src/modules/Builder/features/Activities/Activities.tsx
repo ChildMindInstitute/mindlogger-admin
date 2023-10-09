@@ -7,7 +7,6 @@ import { Box } from '@mui/material';
 
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { page } from 'resources';
-import { useBreadcrumbs } from 'shared/hooks';
 import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
@@ -50,13 +49,6 @@ export const Activities = () => {
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const errors = activities?.map((_, index) => !!getFieldState(`activities.${index}`).error);
 
-  useBreadcrumbs([
-    {
-      icon: 'checklist-filled',
-      label: t('activities'),
-    },
-  ]);
-
   const navigateToActivity = (activityId?: string) =>
     activityId &&
     navigate(
@@ -93,7 +85,7 @@ export const Activities = () => {
         ? performanceTaskName
         : t('newActivity');
 
-    const name = getUniqueName(newActivityName, activityNames);
+    const name = getUniqueName({ name: newActivityName, existingNames: activityNames });
 
     const newActivity =
       performanceTaskName && performanceTaskDesc && performanceTaskType
@@ -133,7 +125,7 @@ export const Activities = () => {
 
   const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
-    const name = getUniqueName(activityToDuplicate.name, activityNames);
+    const name = getUniqueName({ name: activityToDuplicate.name, existingNames: activityNames });
 
     const newActivity = isPerformanceTask
       ? getNewPerformanceTask({

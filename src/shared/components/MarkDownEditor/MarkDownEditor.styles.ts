@@ -5,7 +5,7 @@ import { theme, variables } from 'shared/styles';
 
 const commonStyles = `
   &.md-editor-fullscreen {
-    z-index: ${theme.zIndex.fab};
+    z-index: ${theme.zIndex.modal};
   }
 
   .md-editor-preview-wrapper {
@@ -27,10 +27,6 @@ const commonStyles = `
   
   .md-editor-preview-wrapper .hljs-right {
     text-align: right;
-  }
-  
-  .md-editor-preview-wrapper img {
-    max-width: 50%;
   }
   
   .md-editor-preview-wrapper video {

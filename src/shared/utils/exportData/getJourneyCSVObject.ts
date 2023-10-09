@@ -7,13 +7,14 @@ import {
   ExtendedExportAnswerWithoutEncryption,
   UserActionType,
 } from 'shared/types';
+import { getDictionaryText } from 'shared/utils/forms';
 
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { convertDateStampToMs } from './convertDateStampToMs';
 
-const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';
+const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
 
 const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
 
@@ -32,6 +33,7 @@ export const getSplashScreen = (
     activityName,
     flowId,
     version,
+    legacyProfileId,
   } = nextExtendedEvent;
   const getTime = getTimeByCondition(event.time.toString());
 
@@ -58,6 +60,7 @@ export const getSplashScreen = (
     response: '',
     options: '',
     version,
+    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
   };
 };
 
@@ -81,6 +84,7 @@ export const getJourneyCSVObject = <T>({
     activityName,
     flowName,
     version,
+    legacyProfileId,
   } = event;
   if (!activityItem) return;
 
@@ -108,7 +112,7 @@ export const getJourneyCSVObject = <T>({
     activity_name: activityName,
     item: activityItem.name,
     prompt: replaceItemVariableWithName({
-      markdown: activityItem.question?.en ?? '',
+      markdown: getDictionaryText(activityItem.question),
       items: event.items,
       rawAnswersObject,
     }),
@@ -119,5 +123,6 @@ export const getJourneyCSVObject = <T>({
       rawAnswersObject,
     }),
     version,
+    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
   };
 };

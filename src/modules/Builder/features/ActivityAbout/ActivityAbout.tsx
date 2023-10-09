@@ -11,7 +11,6 @@ import {
   StyledFlexColumn,
   StyledCheckboxTooltipSvg,
 } from 'shared/styles';
-import { useBreadcrumbs } from 'shared/hooks';
 import { Tooltip, Uploader, CropRatio } from 'shared/components';
 import {
   ItemResponseType,
@@ -36,7 +35,6 @@ import {
 export const ActivityAbout = () => {
   const { t } = useTranslation();
 
-  useBreadcrumbs();
   useActivitiesRedirection();
 
   const { control, setValue, watch } = useFormContext();

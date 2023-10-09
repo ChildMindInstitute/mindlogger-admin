@@ -1,12 +1,14 @@
 import {
+  AnswerWithWrapper,
   AppletExportData,
   DecryptedABTrailsAnswer,
   DecryptedActivityData,
   DecryptedAnswerData,
   DecryptedDrawingAnswer,
-  DecryptedFlankerAnswer,
+  DecryptedFlankerAnswerItemValue,
   DecryptedMediaAnswer,
   DecryptedStabilityTrackerAnswer,
+  DecryptedStabilityTrackerAnswerObject,
   EventDTO,
   ExportCsvData,
   ExportDataResult,
@@ -40,11 +42,17 @@ import { getABTrailsRecords } from './getABTrailsRecords';
 import { convertDateStampToMs } from './convertDateStampToMs';
 import { checkIfHasMigratedAnswers, getIdBeforeMigration } from './migratedData';
 
-const getDecryptedAnswersObject = (
-  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
-  hasMigratedAnswers?: boolean,
-) =>
+const getDecryptedAnswersObject = ({
+  decryptedAnswers,
+  hasMigratedAnswers,
+  hasUrlEventScreen,
+}: {
+  decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[];
+  hasMigratedAnswers?: boolean;
+  hasUrlEventScreen?: boolean;
+}) =>
   getObjectFromList(decryptedAnswers, (item) => {
+    if (hasUrlEventScreen) return item.activityItem.name;
     if (hasMigratedAnswers) {
       return `${getIdBeforeMigration(item.activityId)}/${getIdBeforeMigration(
         item.activityItem.id,
@@ -59,17 +67,20 @@ const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
-  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
-    if (item.answer === null) return filteredAcc;
+  const answers = decryptedAnswers.reduce(
+    (filteredAcc, item, index) => {
+      if (item.answer === null) return filteredAcc;
 
-    return filteredAcc.concat(
-      getReportCSVObject({
-        item,
-        rawAnswersObject,
-        index,
-      }),
-    );
-  }, [] as ReturnType<typeof getReportCSVObject>[]);
+      return filteredAcc.concat(
+        getReportCSVObject({
+          item,
+          rawAnswersObject,
+          index,
+        }),
+      );
+    },
+    [] as ReturnType<typeof getReportCSVObject>[],
+  );
 
   const subscaleSetting = decryptedAnswers?.[0]?.subscaleSetting;
   if (subscaleSetting?.subscales?.length) {
@@ -93,6 +104,8 @@ const getMediaUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryp
 const getAnswersWithPublicUrls = async (
   parsedAnswers: DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
+  if (!parsedAnswers.length) return [];
+
   const privateUrls = parsedAnswers.reduce((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce((urlsAcc, item) => {
       if (checkIfDrawingMediaConditionPassed(item)) {
@@ -108,11 +121,13 @@ const getAnswersWithPublicUrls = async (
   }, [] as string[]);
 
   let publicUrls: string[] = [];
-  try {
-    const appletId = parsedAnswers[0].decryptedAnswers[0].appletId;
-    publicUrls = (await postFilePresignApi(appletId, privateUrls)).data?.result ?? [];
-  } catch (e) {
-    console.warn(e);
+  if (privateUrls.length) {
+    try {
+      const appletId = parsedAnswers[0].decryptedAnswers[0].appletId;
+      publicUrls = (await postFilePresignApi(appletId, privateUrls)).data?.result ?? [];
+    } catch (e) {
+      console.warn(e);
+    }
   }
   let publicUrlIndex = 0;
 
@@ -160,8 +175,8 @@ const getMediaData = (
         url: getDrawingUrl(item),
       });
     const responseType = item.activityItem?.responseType;
-    if (!ItemsWithFileResponses.includes(responseType)) return filteredAcc;
     const url = getMediaUrl(item);
+    if (!ItemsWithFileResponses.includes(responseType) || !url) return filteredAcc;
 
     return filteredAcc.concat({
       fileName: getMediaFileName(item, getFileExtension(url)),
@@ -172,6 +187,23 @@ const getMediaData = (
   return mediaData.concat(...mediaAnswers);
 };
 
+export const searchItemNameInUrlScreen = (screen: string) => screen.split('/').pop() ?? '';
+export const checkIfScreenHasUrl = (screen: string) => /^https?:\/\//.test(screen);
+// For ex.:
+// screen: "https://raw.githubusercontent.com/ChildMindInstitute/NIMH_EMA_applet/master/activities/<activity_name>/items/<item_name>"
+export const checkIfHasJsonLdEventScreen = (decryptedEvents: EventDTO[]) => {
+  if (!decryptedEvents.length) return false;
+
+  return checkIfScreenHasUrl(decryptedEvents[0]?.screen);
+};
+export const getEventScreenWrapper =
+  ({ hasUrlEventScreen }: { hasUrlEventScreen: boolean }) =>
+  (screen: string) => {
+    if (!hasUrlEventScreen) return screen;
+
+    return searchItemNameInUrlScreen(screen);
+  };
+
 const getActivityJourneyData = (
   activityJourneyData: AppletExportData['activityJourneyData'],
   rawAnswersObject: Record<string, DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>>,
@@ -179,19 +211,25 @@ const getActivityJourneyData = (
   decryptedEvents: EventDTO[],
 ) => {
   const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);
-  const decryptedAnswersObject = getDecryptedAnswersObject(decryptedAnswers, hasMigratedAnswers);
+  const hasUrlEventScreen = checkIfHasJsonLdEventScreen(decryptedEvents);
+  const getEventScreen = getEventScreenWrapper({ hasUrlEventScreen });
+  const decryptedAnswersObject = getDecryptedAnswersObject({
+    decryptedAnswers,
+    hasMigratedAnswers,
+    hasUrlEventScreen,
+  });
   let indexForABTrailsFiles = 0;
   const events = decryptedEvents.map((event, index, events) => {
-    if (index === 0 && !decryptedAnswersObject[event.screen] && events[index + 1])
+    if (index === 0 && !decryptedAnswersObject[getEventScreen(event.screen)] && events[index + 1])
       return getSplashScreen(event, {
         ...events[index + 1],
-        ...decryptedAnswersObject[events[index + 1].screen],
+        ...decryptedAnswersObject[getEventScreen(events[index + 1].screen)],
       });
 
     return getJourneyCSVObject({
       event: {
         ...event,
-        ...decryptedAnswersObject[event.screen],
+        ...decryptedAnswersObject[getEventScreen(event.screen)],
       },
       rawAnswersObject,
       index:
@@ -228,7 +266,10 @@ const getStabilityTrackerItemsData = (
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.StabilityTracker) return acc;
 
-    const stabilityTrackerValue = (item.answer as DecryptedStabilityTrackerAnswer).value;
+    const answer = <DecryptedStabilityTrackerAnswer>item.answer;
+    const stabilityTrackerValue = (answer as DecryptedStabilityTrackerAnswerObject).phaseType
+      ? <DecryptedStabilityTrackerAnswerObject>answer
+      : (answer.value as DecryptedStabilityTrackerAnswerObject);
 
     return acc.concat({
       name: getStabilityTrackerCsvName(item.id, stabilityTrackerValue.phaseType),
@@ -262,20 +303,22 @@ const getFlankerItemsData = (
   flankerItemsData: AppletExportData['flankerItemsData'],
   decryptedAnswers: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>[],
 ) => {
-  const flankerAnswers = decryptedAnswers.reduce((acc, item) => {
+  const flankerAnswers = decryptedAnswers.reduce((acc, item, itemIndex) => {
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.Flanker || !item.answer) return acc;
 
-    const flankerValue = (item.answer as DecryptedFlankerAnswer).value;
+    const flankerValue =
+      (item.answer as AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>)?.value ?? item.answer;
 
     return acc.concat({
       name: getFlankerCsvName(item),
       data: convertJsonToCsv(
-        getFlankerRecords(
-          flankerValue,
-          item.activityItem as Item<FlankerConfig>,
-          convertDateStampToMs(item.startDatetime),
-        ),
+        getFlankerRecords({
+          responses: flankerValue,
+          item: item.activityItem as Item<FlankerConfig>,
+          experimentClock: convertDateStampToMs(item.startDatetime),
+          itemIndex,
+        }),
       ),
     });
   }, [] as ExportCsvData[]);

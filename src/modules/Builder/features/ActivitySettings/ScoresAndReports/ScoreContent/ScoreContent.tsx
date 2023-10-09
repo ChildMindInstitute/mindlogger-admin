@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useState } from 'react';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -19,11 +19,9 @@ import {
 import { Svg } from 'shared/components/Svg';
 import { ScoreConditionalLogic } from 'shared/state';
 import { CalculationType } from 'shared/consts';
-import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { ItemFormValues } from 'modules/Builder/types';
 import { SelectEvent } from 'shared/types';
 
 import { StyledButton } from '../ScoresAndReports.styles';
@@ -34,7 +32,7 @@ import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 import { Title } from '../Title';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
 import { ScoreCondition } from './ScoreCondition';
-import { calculationTypes } from './ScoreContent.const';
+import { EMPTY_SCORE_RANGE_LABEL, calculationTypes } from './ScoreContent.const';
 import {
   getScoreItemsColumns,
   getSelectedItemsColumns,
@@ -43,36 +41,34 @@ import {
   getScoreId,
   getScoreRange,
   getScoreRangeLabel,
-  getTableScoreItems,
   updateMessagesWithVariable,
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
-import { checkOnItemTypeAndScore } from '../../SubscalesConfiguration/SubscalesConfiguration.utils';
 
 export const ScoreContent = ({
   name,
   title,
   index,
   'data-testid': dataTestid,
+  items,
+  tableItems,
+  scoreItems,
 }: ScoreContentProps) => {
   const { t } = useTranslation('app');
-  const { control, watch, setValue } = useFormContext();
-  const { activity } = useCurrentActivity();
+  const { control, setValue } = useFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
 
   const scoreConditionalsName = `${name}.conditionalLogic`;
 
-  const score = watch(name);
-  const scoreName = watch(`${name}.name`);
-  const scoreId = watch(`${name}.id`);
-  const calculationType: CalculationType = watch(`${name}.calculationType`);
-  const itemsScore: string[] = watch(`${name}.itemsScore`);
-  const items: ItemFormValues[] = activity?.items.filter(checkOnItemTypeAndScore);
-  const tableItems = getTableScoreItems(items);
-  const [scoreRangeLabel, setScoreRangeLabel] = useState<string>('-');
+  const score = useWatch({ name });
+  const { name: scoreName, id: scoreId, calculationType, itemsScore } = score;
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
+  const selectedItems = scoreItems?.filter((item) => itemsScore.includes(item.name));
+  const scoreRangeLabel = selectedItems?.length
+    ? getScoreRangeLabel(getScoreRange(selectedItems, calculationType))
+    : EMPTY_SCORE_RANGE_LABEL;
 
   const {
     fields: scoreConditionals,
@@ -94,19 +90,8 @@ export const ScoreContent = ({
   };
 
   const handleAddScoreConditional = () => {
-    append(getDefaultConditionalValue(scoreId));
+    append(getDefaultConditionalValue(scoreId, score?.key));
   };
-
-  // TODO: replace this useEffect with onChange
-  useEffect(() => {
-    const selectedItems = items?.filter((item) => itemsScore.includes(item.name));
-    if (selectedItems?.length) {
-      const { minScore, maxScore } = getScoreRange(selectedItems, calculationType);
-      setScoreRangeLabel(getScoreRangeLabel(minScore as number, maxScore as number));
-    } else {
-      setScoreRangeLabel('-');
-    }
-  }, [itemsScore, calculationType]);
 
   const onChangeScoreId = () => {
     const updatedScoreId = getScoreId(scoreName, calculationType);
@@ -190,7 +175,12 @@ export const ScoreContent = ({
         data-testid={`${dataTestid}-items-score`}
         tooltipByDefault
       />
-      <SectionScoreCommonFields name={name} sectionId={`score-${index}`} data-testid={dataTestid} />
+      <SectionScoreCommonFields
+        name={name}
+        sectionId={`score-${index}`}
+        data-testid={dataTestid}
+        items={items}
+      />
       {!!scoreConditionals?.length && (
         <>
           <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
@@ -211,9 +201,10 @@ export const ScoreContent = ({
                 Content={ScoreCondition}
                 contentProps={{
                   name: conditionalName,
-                  scoreId,
+                  score,
                   scoreKey: `score-condition-${index}-${key}`,
                   'data-testid': conditionalDataTestid,
+                  items,
                 }}
                 headerContentProps={{
                   onRemove: () => removeScoreConditional(key),

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ObjectSchema } from 'yup';
 
 import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features';
@@ -19,6 +20,7 @@ import {
   getAppletTabs,
   prepareActivitiesFromLibrary,
   prepareActivityFlowsFromLibrary,
+  getDefaultThemeId,
 } from './BuilderApplet.utils';
 
 export const BuilderApplet = () => {
@@ -48,8 +50,7 @@ export const BuilderApplet = () => {
     (!isNewApplet && loadingStatus === 'idle') ||
     loadingStatus === 'loading' ||
     themesLoadingStatus === 'loading';
-  // TODO: check if themesList[0].id is the default theme after back-end task (M2-3399) is done
-  const defaultThemeId = themesList[0]?.id;
+  const defaultThemeId = getDefaultThemeId(themesList);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     appletId && ownerId && !isNewApplet
@@ -59,7 +60,7 @@ export const BuilderApplet = () => {
 
   const methods = useForm<AppletFormValues>({
     defaultValues: getDefaultValues(appletData, defaultThemeId),
-    resolver: yupResolver(AppletSchema()),
+    resolver: yupResolver(AppletSchema() as ObjectSchema<AppletFormValues>),
     mode: 'onChange',
   });
   const {
@@ -120,7 +121,7 @@ export const BuilderApplet = () => {
   }, [defaultThemeId, isNewApplet]);
 
   useEffect(() => {
-    dispatch(themes.thunk.getThemes({}));
+    dispatch(themes.thunk.getThemes({ ordering: 'name' }));
 
     return removeAppletData;
   }, []);

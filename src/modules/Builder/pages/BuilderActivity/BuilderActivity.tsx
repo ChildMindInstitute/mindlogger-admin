@@ -5,7 +5,6 @@ import { Badge } from '@mui/material';
 
 import { StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { LinkedTabs, Svg } from 'shared/components';
-import { useBreadcrumbs } from 'shared/hooks';
 import { page } from 'resources';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
@@ -16,7 +15,6 @@ export const BuilderActivity = () => {
   const { t } = useTranslation();
   const { activityId, appletId } = useParams();
   const navigate = useNavigate();
-  useBreadcrumbs();
 
   const { fieldName = '' } = useCurrentActivity();
 
@@ -36,6 +34,7 @@ export const BuilderActivity = () => {
     hasAboutActivityErrors: !!getFieldState(`${fieldName}.name`).error,
     hasActivityItemsErrors: !!getFieldState(`${fieldName}.items`).error,
     hasActivitySubscalesErrors: !!getFieldState(`${fieldName}.subscaleSetting`).error,
+    hasActivityReportsErrors: !!getFieldState(`${fieldName}.scoresAndReports`).error,
     hasActivityItemsFlowErrors: !!getFieldState(`${fieldName}.conditionalLogic`).error,
   };
 

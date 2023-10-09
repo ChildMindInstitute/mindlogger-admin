@@ -3,7 +3,7 @@ import { AlertListParams } from 'shared/api/api.types';
 import { OwnerId } from 'modules/Dashboard/api/api.types';
 
 import { apiClient, authApiClient } from './api.client';
-import { SignInRefreshTokenArgs, AppletId, AppletBody } from './api.types';
+import { SignInRefreshTokenArgs, AppletId, AppletBody, AppletUniqueName } from './api.types';
 
 export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,
@@ -83,3 +83,12 @@ export const getAlertsApi = (params: AlertListParams, signal?: AbortSignal) =>
 
 export const setAlertWatchedApi = (alertId: string, signal?: AbortSignal) =>
   authApiClient.post(`/alerts/${alertId}/is_watched`, { signal });
+
+export const getAppletUniqueNameApi = ({ name }: AppletUniqueName, signal?: AbortSignal) =>
+  authApiClient.post(
+    '/applets/unique_name',
+    { name },
+    {
+      signal,
+    },
+  );

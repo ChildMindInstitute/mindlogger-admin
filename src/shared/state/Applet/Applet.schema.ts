@@ -439,6 +439,7 @@ export type Item<T = Config> = {
   conditionalLogic?: ConditionalLogic;
   allowEdit: boolean;
   isHidden?: boolean;
+  order?: number;
 };
 
 export interface TextItem extends Item {
@@ -536,6 +537,7 @@ export type ScoreConditionalLogic = {
 
 export type ScoreReport = {
   id: string;
+  key: string;
   name: string;
   type: ScoreReportType.Score;
   calculationType: CalculationType;

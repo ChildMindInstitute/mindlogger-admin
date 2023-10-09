@@ -11,13 +11,12 @@ import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/ho
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { SubscaleFormValue } from 'modules/Builder/types';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
-  options,
-  totalScoreTableColumnData,
+  getOptions,
+  getTotalScoreTableColumnData,
   totalScoreTableTemplate,
 } from './SubscalesConfiguration.const';
 import {
@@ -27,7 +26,6 @@ import {
   getUsedWithinSubscalesElements,
   getPropertiesToFilterByIds,
   getAddTotalScoreModalLabels,
-  checkOnItemTypeAndScore,
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
@@ -39,6 +37,7 @@ import {
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { LookupTable } from './LookupTable';
 import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
+import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
@@ -51,14 +50,12 @@ export const SubscalesConfiguration = () => {
   const calculateTotalScoreField = `${fieldName}.subscaleSetting.calculateTotalScore`;
   const totalScoresTableDataField = `${fieldName}.subscaleSetting.totalScoresTableData`;
   const {
-    fields: subscales,
     append: appendSubscale,
     remove: removeSubscale,
     update: updateSubscale,
-  } = useFieldArray<Record<string, SubscaleFormValue[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
+  } = useFieldArray({
     control,
     name: subscalesField,
-    keyName: REACT_HOOK_FORM_KEY_NAME,
   });
   const calculateTotalScore = watch(calculateTotalScoreField);
   const [calculateTotalScoreSwitch, setCalculateTotalScoreSwitch] = useState(!!calculateTotalScore);
@@ -69,6 +66,7 @@ export const SubscalesConfiguration = () => {
   };
   const iconId = `lookup-table${tableData?.length ? '-filled' : ''}`;
 
+  const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const subscalesLength = subscales.length;
   const filteredItems = (activity?.items ?? []).filter(checkOnItemTypeAndScore);
   const { subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds } = getPropertiesToFilterByIds(
@@ -143,7 +141,7 @@ export const SubscalesConfiguration = () => {
                 updateSubscale(index, {
                   ...subscale,
                   subscaleTableData,
-                } as SubscaleFormValue);
+                });
               },
               'data-testid': dataTestid,
             }}
@@ -201,7 +199,7 @@ export const SubscalesConfiguration = () => {
             key={calculateTotalScoreField}
             name={calculateTotalScoreField}
             control={control}
-            options={options}
+            options={getOptions()}
             defaultValue={SubscaleTotalScore.Sum}
             data-testid="builder-activity-settings-subscales-calculate-total-score-value"
           />
@@ -211,7 +209,7 @@ export const SubscalesConfiguration = () => {
         <LookupTable
           open={isLookupTableOpened}
           labelsObject={getAddTotalScoreModalLabels()}
-          columnData={totalScoreTableColumnData}
+          columnData={getTotalScoreTableColumnData()}
           tableData={tableData}
           template={totalScoreTableTemplate}
           templatePrefix={'total_score_'}

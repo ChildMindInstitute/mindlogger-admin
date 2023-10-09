@@ -1,12 +1,19 @@
 import { Svg } from 'shared/components/Svg';
-import { ActivityFormValues } from 'modules/Builder/types';
 import { ReportConfigSetting } from 'shared/features/AppletSettings';
 import { SettingParam } from 'shared/utils';
+import { ItemFormValues } from 'modules/Builder/types';
+import { ItemResponseType } from 'shared/consts';
+import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/state';
 
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
+import { GetActivitySettings } from './ActivitySettings.types';
 
-export const getSettings = (activityFieldName?: string, activity?: ActivityFormValues) => {
+export const getActivitySettings = ({
+  activity,
+  activityFieldName,
+  settingsErrors: { hasActivityReportsErrors, hasActivitySubscalesErrors },
+}: GetActivitySettings) => {
   const isNewActivity = !activity?.id;
   const dataTestid = 'builder-activity-settings';
 
@@ -19,6 +26,7 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
           icon: <Svg id="scores-and-reports" />,
           component: <ScoresAndReports />,
           param: SettingParam.ScoresAndReports,
+          hasError: hasActivityReportsErrors,
           'data-testid': `${dataTestid}-scores-and-reports`,
         },
         {
@@ -42,9 +50,18 @@ export const getSettings = (activityFieldName?: string, activity?: ActivityFormV
             <SubscalesConfiguration key={`subscales-configuration-${activityFieldName}`} />
           ),
           param: SettingParam.SubscalesConfiguration,
+          hasError: hasActivitySubscalesErrors,
           'data-testid': `${dataTestid}-subscales-config`,
         },
       ],
     },
   ];
 };
+
+export const checkOnItemTypeAndScore = (item: ItemFormValues | Item) =>
+  (item.config as SingleAndMultipleSelectionConfig | SliderConfig).addScores &&
+  [
+    ItemResponseType.SingleSelection,
+    ItemResponseType.MultipleSelection,
+    ItemResponseType.Slider,
+  ].includes(item.responseType as ItemResponseType);

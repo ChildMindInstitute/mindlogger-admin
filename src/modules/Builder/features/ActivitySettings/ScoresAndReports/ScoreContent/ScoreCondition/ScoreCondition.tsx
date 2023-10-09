@@ -22,9 +22,10 @@ import { StyledLabel } from './ScoreCondition.styles';
 
 export const ScoreCondition = ({
   name,
-  scoreId,
+  score,
   scoreKey,
   'data-testid': dataTestid,
+  items,
 }: ScoreConditionProps) => {
   const { t } = useTranslation();
   const { control, setValue, watch } = useFormContext();
@@ -32,7 +33,7 @@ export const ScoreCondition = ({
   const conditionId = watch(`${name}.id`);
 
   const handleConditionNameBlur = () => {
-    setValue(`${name}.id`, getScoreConditionId(scoreId, conditionName));
+    setValue(`${name}.id`, getScoreConditionId(score?.id, conditionName));
   };
 
   return (
@@ -58,7 +59,7 @@ export const ScoreCondition = ({
       <ConditionContent
         name={name}
         type={ConditionRowType.Score}
-        scoreId={scoreId}
+        score={score}
         data-testid={dataTestid}
       />
       <CheckboxController
@@ -81,6 +82,7 @@ export const ScoreCondition = ({
         name={name}
         sectionId={scoreKey}
         data-testid={dataTestid}
+        items={items}
       />
     </>
   );

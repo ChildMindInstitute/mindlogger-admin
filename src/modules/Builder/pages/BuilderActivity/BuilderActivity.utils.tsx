@@ -8,6 +8,7 @@ export const getActivityTabs = (
   {
     hasAboutActivityErrors,
     hasActivityItemsErrors,
+    hasActivityReportsErrors,
     hasActivitySubscalesErrors,
     hasActivityItemsFlowErrors,
   }: Record<string, boolean>,
@@ -45,7 +46,7 @@ export const getActivityTabs = (
     icon: <Svg id="settings" />,
     activeIcon: <Svg id="settings-filled" />,
     path: generatePath(page.builderAppletActivitySettings, params),
-    hasError: hasActivitySubscalesErrors,
+    hasError: hasActivitySubscalesErrors || hasActivityReportsErrors,
     'data-testid': 'builder-tab-activity-settings',
   },
 ];

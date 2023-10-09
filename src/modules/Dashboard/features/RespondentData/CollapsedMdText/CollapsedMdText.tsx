@@ -8,7 +8,11 @@ import { useComponentSize } from 'shared/hooks';
 import { StyledBtn, StyledCollapsedContainer, StyledMdPreview } from './CollapsedMdText.styles';
 import { CollapsedMdTextProps } from './CollapsedMdText.types';
 
-export const CollapsedMdText = ({ text, maxHeight }: CollapsedMdTextProps) => {
+export const CollapsedMdText = ({
+  text,
+  maxHeight,
+  'data-testid': dataTestid,
+}: CollapsedMdTextProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { height } = useComponentSize(containerRef);
   const { t } = useTranslation();
@@ -25,13 +29,18 @@ export const CollapsedMdText = ({ text, maxHeight }: CollapsedMdTextProps) => {
 
   return (
     <>
-      <StyledCollapsedContainer isOpen={isOpen} maxHeight={maxHeight} isLarge={isLarge}>
+      <StyledCollapsedContainer
+        isOpen={isOpen}
+        maxHeight={maxHeight}
+        isLarge={isLarge}
+        data-testid={dataTestid}
+      >
         <Box ref={containerRef}>
           <StyledMdPreview modelValue={text} />
         </Box>
       </StyledCollapsedContainer>
       {isLarge && (
-        <StyledBtn onClick={toggleOpen}>
+        <StyledBtn onClick={toggleOpen} data-testid={`${dataTestid}-collapse`}>
           <StyledTitleLargish color={variables.palette.primary}>
             {t(isOpen ? 'showLess' : 'showMore')}
           </StyledTitleLargish>

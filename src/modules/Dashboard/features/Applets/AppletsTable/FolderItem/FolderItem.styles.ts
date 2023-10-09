@@ -1,4 +1,4 @@
-import { styled, TableCell } from '@mui/material';
+import { OutlinedInput, styled } from '@mui/material';
 
 import {
   StyledFlexAllCenter,
@@ -34,12 +34,8 @@ export const StyledCountApplets = styled(StyledLabelSmall)`
   margin-left: ${theme.spacing(0.4)};
 `;
 
-export const StyledCell = styled(TableCell)`
-  position: relative;
-
-  &:hover {
-    .cell-actions {
-      display: flex;
-    }
+export const StyledOutlinedInput = styled(OutlinedInput)`
+  .MuiInputBase-input {
+    padding: ${theme.spacing(1, 1.4)};
   }
 `;

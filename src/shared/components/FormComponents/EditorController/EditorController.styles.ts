@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
 import { MarkDownEditor } from 'shared/components/MarkDownEditor';
-import { variables } from 'shared/styles';
+import { StyledFlexAllCenter, variables } from 'shared/styles';
 
 export const StyledMdEditor = styled(MarkDownEditor)`
   border-radius: ${variables.borderRadius.lg2};
@@ -66,4 +66,16 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   & .md-editor-dropdown-overlay {
     margin-top: 0;
   }
+`;
+
+export const StyledStrikeThroughIcon = styled(StyledFlexAllCenter)`
+  transform: translate(20%, 25%);
+`;
+
+export const StyledIcon = styled(StyledFlexAllCenter)`
+  transform: translate(10%, 15%);
+`;
+
+export const StyledPageFullscreenIcon = styled(StyledFlexAllCenter)`
+  transform: translate(-15%, -10%);
 `;

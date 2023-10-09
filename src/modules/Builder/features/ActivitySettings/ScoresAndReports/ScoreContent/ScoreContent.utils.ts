@@ -9,9 +9,9 @@ import {
 } from 'shared/state';
 import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
 import { ItemFormValues } from 'modules/Builder/types';
-import { getEntityKey, removeMarkdown } from 'shared/utils';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
+import { GetScoreRangeLabel } from './ScoreContent.types';
 
 const { t } = i18n;
 
@@ -29,20 +29,12 @@ export const getSelectedItemsColumns = () => [
   },
 ];
 
-export const getTableScoreItems = (items: ItemFormValues[]) =>
-  items?.map((item) => ({
-    id: getEntityKey(item),
-    name: item.name,
-    tooltip: removeMarkdown(item.question),
-    label: `${item.name}: ${removeMarkdown(item.question)}`,
-  }));
-
 export const getScoreId = (name: string, calculationType: CalculationType) =>
   `${scoreIdBase[calculationType]}_${(name || '')
     .toLowerCase()
     .replaceAll(ForbiddenScoreIdSymbols, '_')}`;
 
-export const getScoreRangeLabel = (minScore: number, maxScore: number) =>
+export const getScoreRangeLabel = ({ minScore, maxScore }: GetScoreRangeLabel) =>
   `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}`;
 
 const getItemScoreRange = (item: ItemFormValues) => {
@@ -105,16 +97,16 @@ export const getScoreRange = (itemsScore: ItemFormValues[], calculationType: Cal
   }
 };
 
-export const getDefaultConditionalValue = (scoreId: string) => ({
+export const getDefaultConditionalValue = (id: string, key: string) => ({
   name: '',
-  id: scoreId,
+  id,
   showMessage: true,
   flagScore: false,
   message: undefined,
   printItems: false,
   itemsPrint: [],
   match: ConditionalLogicMatch.All,
-  conditions: [{ itemName: scoreId, type: '' }],
+  conditions: [{ itemName: key, type: '' }],
 });
 
 const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>

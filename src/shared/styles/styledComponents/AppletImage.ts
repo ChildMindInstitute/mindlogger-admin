@@ -8,6 +8,7 @@ const commonImgStyles = `
   height: 3.2rem;
   margin-right: ${theme.spacing(1.2)};
   border-radius: ${variables.borderRadius.xxs};
+  flex-shrink: 0;
 `;
 
 export const StyledSmallAppletImg = styled('img')`

@@ -20,10 +20,9 @@ export const ImportSequencesPopup = ({
 }: ImportSequencesPopupProps) => {
   const { t } = useTranslation('app');
   const [step, setStep] = useState<number>(0);
-  const { isSubmitDisabled, validationError, handleFileReady, uploadedFile } =
+  const { isSubmitDisabled, validationError, handleFileReady, uploadedData } =
     useImportSequence(uploadedImages);
 
-  const uploadedData = uploadedFile?.data;
   const isUpload = uiType === ImportSequencesType.Upload;
   const downloadText = t(isUpload ? 'downloadTemplate' : 'flankerRound.downloadExistingSequence');
 
@@ -54,7 +53,7 @@ export const ImportSequencesPopup = ({
       case 0:
         return uploadedData ? incrementStep() : setStep(2);
       case 1:
-        uploadedData && setUploadedTable(uploadedData);
+        uploadedData && setUploadedTable({ data: uploadedData, isInitial: false });
 
         return onClose();
       case 2:
@@ -64,7 +63,7 @@ export const ImportSequencesPopup = ({
 
   const handleModalClose = () => {
     if (step === 1 && uploadedData) {
-      setUploadedTable(uploadedData);
+      setUploadedTable({ data: uploadedData, isInitial: false });
     }
 
     onClose();

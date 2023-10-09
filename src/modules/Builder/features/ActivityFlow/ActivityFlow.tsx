@@ -8,7 +8,6 @@ import { Box } from '@mui/material';
 
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
-import { useBreadcrumbs } from 'shared/hooks';
 import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
@@ -85,7 +84,10 @@ export const ActivityFlow = () => {
   };
 
   const handleDuplicateActivityFlow = (index: number) => {
-    const name = getUniqueName(activityFlows[index].name, pluck(activityFlows, 'name'));
+    const name = getUniqueName({
+      name: activityFlows[index].name,
+      existingNames: pluck(activityFlows, 'name'),
+    });
 
     insertActivityFlow(index + 1, getDuplicatedActivityFlow(activityFlows[index], name));
   };
@@ -108,12 +110,6 @@ export const ActivityFlow = () => {
     moveActivityFlow(source.index, destination.index);
   };
 
-  useBreadcrumbs([
-    {
-      icon: 'flow',
-      label: t('activityFlows'),
-    },
-  ]);
   useActivitiesRedirection();
 
   return (

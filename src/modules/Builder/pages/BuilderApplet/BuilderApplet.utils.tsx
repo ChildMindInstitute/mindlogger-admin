@@ -7,6 +7,7 @@ import { TestContext } from 'yup';
 import i18n from 'i18n';
 import { page } from 'resources';
 import { Svg } from 'shared/components/Svg';
+import { Theme } from 'modules/Builder/api';
 import {
   Activity,
   ActivityFlow,
@@ -75,6 +76,7 @@ import {
   TouchItemNames,
 } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { findRelatedScore } from 'modules/Builder/utils';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,
@@ -83,20 +85,45 @@ import {
   ordinalStrings,
   SAMPLE_SIZE,
 } from './BuilderApplet.const';
+import { GetSectionConditions, GetMessageItem } from './BuilderApplet.types';
 
 const { t } = i18n;
 
+export const getDefaultThemeId = (themesList: Theme[]) =>
+  themesList.find((theme) => theme.name === 'Default')?.id || '';
+
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
-export const isTouchOrGyroscopeRespType = (responseType: ItemResponseType) =>
-  responseType === ItemResponseType.StabilityTracker ||
-  responseType === ItemResponseType.TouchTest ||
-  responseType === ItemResponseType.TouchPractice;
+const getDuplicatedOptionsAndAlerts = (item?: ItemFormValues) => {
+  const { responseValues, alerts } = item || {};
+  const newIdsObject: Record<string, string> = {};
+  const options = (responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
+    (option: SingleAndMultiSelectOption) => {
+      const id = uuidv4();
+      newIdsObject[option.id] = id;
 
-export const isPerfTaskResponseType = (responseType: ItemResponseType) =>
-  isTouchOrGyroscopeRespType(responseType) ||
-  responseType === ItemResponseType.Flanker ||
-  responseType === ItemResponseType.ABTrails;
+      return { ...option, id };
+    },
+  );
+
+  const mappedAlerts = alerts
+    ? {
+        alerts: alerts.map((alert) => ({
+          ...alert,
+          value: newIdsObject[alert.value ?? ''],
+          key: uuidv4(),
+        })),
+      }
+    : {};
+
+  return {
+    responseValues: {
+      ...responseValues,
+      options,
+    },
+    ...mappedAlerts,
+  };
+};
 
 export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
@@ -109,22 +136,17 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   id: undefined,
   key: uuidv4(),
   ...((item?.responseType === ItemResponseType.SingleSelection ||
-    item?.responseType === ItemResponseType.MultipleSelection) && {
-    responseValues: {
-      ...item.responseValues,
-      options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-        (option: SingleAndMultiSelectOption) => ({
-          ...option,
-          id: uuidv4(),
-        }),
-      ),
-    },
-  }),
+    item?.responseType === ItemResponseType.MultipleSelection) &&
+    getDuplicatedOptionsAndAlerts(item)),
   ...(item?.responseType === ItemResponseType.Slider && {
     responseValues: {
       ...item.responseValues,
       id: uuidv4(),
     },
+    alerts: item?.alerts?.map((alert) => ({
+      ...alert,
+      key: uuidv4(),
+    })),
   }),
 });
 
@@ -192,7 +214,7 @@ const getDuplicatedScoresAndReports = (
     const conditionalLogic =
       report.type === ScoreReportType.Score
         ? report.conditionalLogic
-        : {
+        : report.conditionalLogic && {
             ...report.conditionalLogic,
             conditions: getDuplicatedConditions(
               oldItems,
@@ -257,11 +279,12 @@ const defaultMessageConfig = {
   timer: null,
 };
 
-const getMessageItem = (name: string, question: string) => ({
+const getMessageItem = ({ name, question, order }: GetMessageItem) => ({
   name,
   config: defaultMessageConfig,
   question,
   responseType: ItemResponseType.Message,
+  order,
 });
 
 const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
@@ -273,18 +296,22 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
   const isGyroscope = type === GyroscopeOrTouch.Gyroscope;
 
   return [
-    getMessageItem(
-      isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
-      t(
+    getMessageItem({
+      name: isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
+      question: t(
         `gyroscopeAndTouchInstructions.overview.${
           isGyroscope ? 'instructionGyroscope' : 'instructionTouch'
         }`,
       ),
-    ),
-    getMessageItem(
-      isGyroscope ? GyroscopeItemNames.PracticeInstruction : TouchItemNames.PracticeInstruction,
-      t('gyroscopeAndTouchInstructions.practice.instruction'),
-    ),
+      order: 1,
+    }),
+    getMessageItem({
+      name: isGyroscope
+        ? GyroscopeItemNames.PracticeInstruction
+        : TouchItemNames.PracticeInstruction,
+      question: t('gyroscopeAndTouchInstructions.practice.instruction'),
+      order: 2,
+    }),
     {
       name: isGyroscope ? GyroscopeItemNames.PracticeRound : TouchItemNames.PracticeRound,
       config: {
@@ -293,11 +320,13 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
         phase: RoundTypeEnum.Practice,
       },
       responseType: ItemResponseType.StabilityTracker,
+      order: 3,
     },
-    getMessageItem(
-      isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
-      t('gyroscopeAndTouchInstructions.test.instruction'),
-    ),
+    getMessageItem({
+      name: isGyroscope ? GyroscopeItemNames.TestInstruction : TouchItemNames.TestInstruction,
+      question: t('gyroscopeAndTouchInstructions.test.instruction'),
+      order: 4,
+    }),
     {
       name: isGyroscope ? GyroscopeItemNames.TestRound : TouchItemNames.TestRound,
       config: {
@@ -306,6 +335,7 @@ const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
         phase: RoundTypeEnum.Test,
       },
       responseType: ItemResponseType.StabilityTracker,
+      order: 5,
     },
   ];
 };
@@ -339,8 +369,16 @@ const defaultFlankerTestConfig = {
 };
 
 const flankerItems = [
-  getMessageItem(FlankerItemNames.GeneralInstruction, t('flankerInstructions.general')), //0 General Instruction
-  getMessageItem(FlankerItemNames.PracticeInstructionFirst, t('flankerInstructions.practice')), //1 Practice Instruction
+  getMessageItem({
+    name: FlankerItemNames.GeneralInstruction,
+    question: t('flankerInstructions.general'),
+    order: 1,
+  }), //0 General Instruction
+  getMessageItem({
+    name: FlankerItemNames.PracticeInstructionFirst,
+    question: t('flankerInstructions.practice'),
+    order: 2,
+  }), //1 Practice Instruction
   {
     name: FlankerItemNames.PracticeFirst,
     config: {
@@ -350,8 +388,13 @@ const flankerItems = [
       isLastPractice: false,
     },
     responseType: ItemResponseType.Flanker,
-  }, //2
-  getMessageItem(FlankerItemNames.PracticeInstructionSecond, t('flankerInstructions.next')), //3
+    order: 3,
+  }, //2 PracticeFirst
+  getMessageItem({
+    name: FlankerItemNames.PracticeInstructionSecond,
+    question: t('flankerInstructions.next'),
+    order: 4,
+  }), //3
   {
     name: FlankerItemNames.PracticeSecond,
     config: {
@@ -361,8 +404,13 @@ const flankerItems = [
       isLastPractice: false,
     },
     responseType: ItemResponseType.Flanker,
-  }, //4
-  getMessageItem(FlankerItemNames.PracticeInstructionThird, t('flankerInstructions.next')), //5
+    order: 5,
+  }, //4 PracticeSecond
+  getMessageItem({
+    name: FlankerItemNames.PracticeInstructionThird,
+    question: t('flankerInstructions.next'),
+    order: 6,
+  }), //5
   {
     name: FlankerItemNames.PracticeThird,
     config: {
@@ -372,8 +420,13 @@ const flankerItems = [
       isLastPractice: true,
     },
     responseType: ItemResponseType.Flanker,
-  }, //6
-  getMessageItem(FlankerItemNames.TestInstructionFirst, t('flankerInstructions.test')), //7 Test Instruction
+    order: 7,
+  }, //6 PracticeThird
+  getMessageItem({
+    name: FlankerItemNames.TestInstructionFirst,
+    question: t('flankerInstructions.test'),
+    order: 8,
+  }), //7 Test Instruction
   {
     name: FlankerItemNames.TestFirst,
     config: {
@@ -382,8 +435,13 @@ const flankerItems = [
       isLastTest: false,
     },
     responseType: ItemResponseType.Flanker,
-  }, //8
-  getMessageItem(FlankerItemNames.TestInstructionSecond, t('flankerInstructions.next')), //9
+    order: 9,
+  }, //8 TestFirst
+  getMessageItem({
+    name: FlankerItemNames.TestInstructionSecond,
+    question: t('flankerInstructions.next'),
+    order: 10,
+  }), //9
   {
     name: FlankerItemNames.TestSecond,
     config: {
@@ -392,8 +450,13 @@ const flankerItems = [
       isLastTest: false,
     },
     responseType: ItemResponseType.Flanker,
-  }, //10
-  getMessageItem(FlankerItemNames.TestInstructionThird, t('flankerInstructions.next')), //11
+    order: 11,
+  }, //10 TestSecond
+  getMessageItem({
+    name: FlankerItemNames.TestInstructionThird,
+    question: t('flankerInstructions.next'),
+    order: 12,
+  }), //11
   {
     name: FlankerItemNames.TestThird,
     config: {
@@ -402,7 +465,8 @@ const flankerItems = [
       isLastTest: true,
     },
     responseType: ItemResponseType.Flanker,
-  }, //12
+    order: 13,
+  }, //12 TestThird
 ];
 
 const getABTrailsItems = (deviceType: DeviceType) =>
@@ -466,6 +530,7 @@ export const getNewApplet = () => ({
   watermark: '',
   activities: [],
   activityFlows: [],
+  reportEmailBody: t('reportEmailBody'),
 });
 
 export const getNewActivityFlow = () => ({
@@ -595,6 +660,7 @@ const getActivityItems = (items: Item[]) =>
         alerts: getAlerts(item),
         allowEdit: item.allowEdit,
         isHidden: item.isHidden,
+        order: item.order,
       }))
     : [];
 
@@ -648,7 +714,7 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
-const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
+const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?: string) =>
   conditions?.map((condition) => {
     const { itemName, type } = condition;
     const relatedItem = items?.find((item) => item.name === itemName);
@@ -660,7 +726,24 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
     return {
       ...condition,
       payload,
-      itemName: relatedItem ? getEntityKey(relatedItem) : condition.itemName,
+      itemName: relatedItem ? getEntityKey(relatedItem) : scoreName ?? condition.itemName,
+    };
+  });
+
+const getSectionConditions = ({ items, conditions, scores }: GetSectionConditions) =>
+  conditions?.map((condition) => {
+    const { itemName, type } = condition;
+    const relatedItem = items?.find((item) => item.name === itemName);
+    const relatedScore = findRelatedScore({ entityKey: itemName, scores });
+    const payload =
+      type === ScoreConditionType
+        ? { value: String((condition as ScoreCondition).payload?.value) }
+        : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
+
+    return {
+      ...condition,
+      payload,
+      itemName: relatedItem ? getEntityKey(relatedItem) : getEntityKey(relatedScore ?? {}, false),
     };
   });
 
@@ -669,24 +752,34 @@ const getShowMessageAndPrintItems = (message?: string, itemsPrint?: string[]) =>
   printItems: !!itemsPrint?.length,
 });
 
-const getScore = (score: ScoreReport, items: Activity['items']) => ({
-  ...score,
-  ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
-  conditionalLogic: score.conditionalLogic?.map((conditional) => ({
-    ...conditional,
-    ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
-    conditions: getScoreConditions(items, conditional.conditions),
-  })),
-});
+const getScore = (score: ScoreReport, items: Activity['items']) => {
+  const scoreKey = uuidv4();
 
-const getSection = (section: SectionReport, items: Activity['items']) => ({
+  return {
+    ...score,
+    key: scoreKey,
+    ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
+    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+      ...conditional,
+      key: uuidv4(),
+      ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
+      conditions: getScoreConditions(items, conditional.conditions, scoreKey),
+    })),
+  };
+};
+
+const getSection = (section: SectionReport, items: Activity['items'], scores: ScoreReport[]) => ({
   ...section,
   id: uuidv4(),
   ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
       ...section.conditionalLogic,
-      conditions: getScoreConditions(items, section?.conditionalLogic?.conditions),
+      conditions: getSectionConditions({
+        items,
+        conditions: section?.conditionalLogic?.conditions,
+        scores,
+      }),
     },
   }),
 });
@@ -696,12 +789,16 @@ const getScoresAndReports = (activity: Activity) => {
   if (!scoresAndReports) return;
 
   const { reports: initialReports } = scoresAndReports;
-  const reports = initialReports?.map((report) => {
-    if (report.type === ScoreReportType.Section) {
-      return getSection(report as SectionReport, items);
-    }
+  const reportsWithMappedScores = initialReports?.map((report) => {
+    if (report.type === ScoreReportType.Section) return report;
 
     return getScore(report as ScoreReport, items);
+  });
+  const scores = reportsWithMappedScores?.filter((report) => report.type === ScoreReportType.Score);
+  const reports = reportsWithMappedScores?.map((report) => {
+    if (report.type === ScoreReportType.Score) return report;
+
+    return getSection(report as SectionReport, items, scores as ScoreReport[]);
   });
 
   return {
@@ -822,6 +919,7 @@ export const getAppletTabs = ({
 }: Record<string, boolean>) => [
   {
     labelKey: 'aboutApplet',
+    id: 'builder-about-applet',
     icon: <Svg id="more-info-outlined" />,
     activeIcon: <Svg id="more-info-filled" />,
     path: Path.About,
@@ -830,6 +928,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'activities',
+    id: 'builder-activities',
     icon: <Svg id="checklist-outlined" />,
     activeIcon: <Svg id="checklist-filled" />,
     path: Path.Activities,
@@ -838,6 +937,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'activityFlows',
+    id: 'builder-activity-flows',
     icon: <Svg id="flow-outlined" />,
     activeIcon: <Svg id="flow-filled" />,
     path: Path.ActivityFlow,
@@ -846,6 +946,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'appletSettings',
+    id: 'builder-settings',
     icon: <Svg id="settings" />,
     activeIcon: <Svg id="settings-filled" />,
     path: Path.Settings,
@@ -930,7 +1031,7 @@ export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) =
       ...result,
       {
         ...activity,
-        name: getUniqueName(activity.name, pluck(result, 'name')),
+        name: getUniqueName({ name: activity.name, existingNames: pluck(result, 'name') }),
       },
     ],
     [],
@@ -940,7 +1041,10 @@ export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormV
   activityFlows.reduce(
     (result: ActivityFlowFormValues[], activityFlow) => [
       ...result,
-      { ...activityFlow, name: getUniqueName(activityFlow.name, pluck(result, 'name')) },
+      {
+        ...activityFlow,
+        name: getUniqueName({ name: activityFlow.name, existingNames: pluck(result, 'name') }),
+      },
     ],
     [],
   );

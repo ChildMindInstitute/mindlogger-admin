@@ -11,15 +11,21 @@ export type ImportSchedulePopupProps = {
   'data-testid'?: string;
 };
 
+type InvalidField = {
+  data: null | JSX.Element;
+  id: string;
+};
+
 export type CheckFields = {
   activityNames: string[];
-  invalidStartTimeField: null | JSX.Element;
-  invalidEndTimeField: null | JSX.Element;
-  invalidNotification: null | JSX.Element;
-  invalidFrequency: null | JSX.Element;
-  invalidDate: null | JSX.Element;
-  invalidStartEndTime: null | JSX.Element;
-  invalidNotificationTime: null | JSX.Element;
+  invalidStartTimeField: InvalidField;
+  invalidEndTimeField: InvalidField;
+  invalidNotification: InvalidField;
+  invalidFrequency: InvalidField;
+  invalidDate: InvalidField;
+  invalidStartEndTime: InvalidField;
+  invalidNotificationTime: InvalidField;
+  hasInvalidData: boolean;
 };
 
 export type ImportScheduleHookProps = {

@@ -3,5 +3,5 @@ export type SignUpData = {
   firstName: string;
   lastName: string;
   password: string;
-  termsOfService: boolean;
+  termsOfService?: boolean;
 };

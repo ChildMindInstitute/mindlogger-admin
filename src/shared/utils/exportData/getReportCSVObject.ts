@@ -5,6 +5,7 @@ import {
 } from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
+import { getDictionaryText } from 'shared/utils/forms';
 
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { parseResponseValue } from './parseResponseValue';
@@ -34,6 +35,7 @@ export const getReportCSVObject = <T>({
     flowName,
     version,
     reviewedAnswerId,
+    legacyProfileId,
   } = item;
   const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
     SliderItemResponseValues;
@@ -54,7 +56,7 @@ export const getReportCSVObject = <T>({
     item: activityItem.name,
     response: parseResponseValue(item, index),
     prompt: replaceItemVariableWithName({
-      markdown: activityItem.question?.en ?? '',
+      markdown: getDictionaryText(activityItem.question),
       items: item.items,
       rawAnswersObject,
     }),
@@ -66,5 +68,6 @@ export const getReportCSVObject = <T>({
     version,
     rawScore: getRawScores(responseValues) || '',
     reviewing_id: reviewedAnswerId,
+    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
   };
 };

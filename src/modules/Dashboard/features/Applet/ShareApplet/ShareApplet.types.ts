@@ -4,9 +4,9 @@ import { SingleApplet } from 'shared/state';
 
 export type ShareAppletData = {
   appletName: string;
-  keywords: string[];
-  keyword: string;
-  checked: boolean;
+  keywords?: string[];
+  keyword?: string;
+  checked?: boolean;
 };
 
 export type OnAppletShared = { keywords: string[]; libraryUrl: string; appletName: string };

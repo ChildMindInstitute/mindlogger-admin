@@ -30,7 +30,7 @@ export const ManagersRemoveAccessPopup = ({
   refetchManagers,
 }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { appletId } = useParams() || {};
 
   const { firstName, lastName, email, applets } = user;
 
@@ -82,6 +82,7 @@ export const ManagersRemoveAccessPopup = ({
         <CheckboxController
           key={id}
           control={control}
+          onCustomChange={() => setError(null)}
           name={`userApplets.${index}.value`}
           label={<></>}
           data-testid={`dashboard-managers-remove-access-popup-checkbox-${index}`}
@@ -97,7 +98,7 @@ export const ManagersRemoveAccessPopup = ({
     onClose();
   };
 
-  const { execute, error } = useAsync(removeManagerAccessApi, () => {
+  const { execute, error, setError } = useAsync(removeManagerAccessApi, () => {
     incrementStep();
   });
 
@@ -240,6 +241,7 @@ export const ManagersRemoveAccessPopup = ({
       title={t('removeAccess')}
       hasSecondBtn={step === 1}
       secondBtnText={t('back')}
+      disabledSecondBtn={!!appletId}
       onSecondBtnSubmit={decrementStep}
       buttonText={t(buttonTextByStep[step as keyof typeof buttonTextByStep])}
       disabledSubmit={!selectedApplets.length}

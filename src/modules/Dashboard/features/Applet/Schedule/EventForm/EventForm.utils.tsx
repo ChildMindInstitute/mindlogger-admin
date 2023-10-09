@@ -1,7 +1,6 @@
 import { UseFormWatch } from 'react-hook-form';
 import { endOfYear, format } from 'date-fns';
 import * as yup from 'yup';
-import { AnyObject } from 'yup/lib/types';
 
 import i18n from 'i18n';
 import { DateFormats } from 'shared/consts';
@@ -47,6 +46,7 @@ export const getEventFormTabs = ({
 }: GetEventFromTabs) => [
   {
     labelKey: 'availability',
+    id: 'event-form-availability',
     content: (
       <AvailabilityTab
         hasAlwaysAvailableOption={hasAlwaysAvailableOption}
@@ -58,12 +58,14 @@ export const getEventFormTabs = ({
   },
   {
     labelKey: 'timers',
+    id: 'event-form-timers',
     content: <TimersTab data-testid={`${dataTestid}-availability`} />,
     hasError: hasTimerErrors,
     'data-testid': `${dataTestid}-timers-tab`,
   },
   {
     labelKey: 'notifications',
+    id: 'event-form-notifications',
     content: <NotificationsTab data-testid={`${dataTestid}-availability`} />,
     hasError: hasNotificationsErrors,
     'data-testid': `${dataTestid}-notifications-tab`,
@@ -92,15 +94,16 @@ export const getBetweenStartEndComparison = (
 export const getTimeComparison = (message: string) =>
   yup.string().when('alwaysAvailable', {
     is: false,
-    then: yup.string().test('is-valid-period', message, function () {
-      const { startTime, endTime } = this.parent;
-      if (!startTime || !endTime) {
-        return true;
-      }
+    then: (schema) =>
+      schema.test('is-valid-period', message, function () {
+        const { startTime, endTime } = this.parent;
+        if (!startTime || !endTime) {
+          return true;
+        }
 
-      return getStartEndComparison(startTime, endTime);
-    }),
-    otherwise: yup.string(),
+        return getStartEndComparison(startTime, endTime);
+      }),
+    otherwise: (schema) => schema,
   });
 
 export const getTimerDurationCheck = () => {
@@ -118,8 +121,8 @@ export const getTimerDurationCheck = () => {
 
 export const getNotificationTimeComparison = (
   schema:
-    | yup.SchemaOf<EventFormValues>
-    | yup.StringSchema<string | null | undefined, AnyObject, string | null | undefined>,
+    | yup.Schema<EventReminder>
+    | yup.StringSchema<string | null | undefined, yup.AnyObject, string | null | undefined>,
   field: string,
   showValidPeriodMessage: boolean,
 ) => {
@@ -165,7 +168,7 @@ export const getNotificationsValidation = (
   yup
     .string()
     .nullable()
-    .when('triggerType', (triggerType: NotificationType, schema) => {
+    .when('triggerType', ([triggerType]: NotificationType[], schema) => {
       if (triggerType === notificationType) {
         return getNotificationTimeComparison(schema, field, showValidPeriodMessage);
       }

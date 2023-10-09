@@ -12,6 +12,7 @@ export const getActivityFlowTabs = ({
 }) => [
   {
     labelKey: 'aboutActivityFlow',
+    id: 'about-activity-flow',
     icon: <Svg id="more-info-outlined" />,
     activeIcon: <Svg id="more-info-filled" />,
     path: generatePath(page.builderAppletActivityFlowItemAbout, { appletId, activityFlowId }),
@@ -19,6 +20,7 @@ export const getActivityFlowTabs = ({
   },
   {
     labelKey: 'activityFlowBuilder',
+    id: 'activity-flow-builder',
     icon: <Svg id="checklist-outlined" />,
     activeIcon: <Svg id="checklist-filled" />,
     path: generatePath(page.builderAppletActivityFlowItemBuilder, { appletId, activityFlowId }),
@@ -26,6 +28,7 @@ export const getActivityFlowTabs = ({
   },
   {
     labelKey: 'activityFlowSettings',
+    id: 'activity-flow-settings',
     icon: <Svg id="settings" />,
     activeIcon: <Svg id="settings-filled" />,
     path: generatePath(page.builderAppletActivityFlowItemSettings, { appletId, activityFlowId }),

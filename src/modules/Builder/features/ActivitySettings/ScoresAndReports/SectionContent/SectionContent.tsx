@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -22,11 +22,12 @@ export const SectionContent = ({
   title,
   sectionId,
   'data-testid': dataTestid,
+  items,
 }: SectionContentProps) => {
   const { t } = useTranslation('app');
-  const { control, watch, setValue } = useFormContext();
+  const { control, setValue } = useFormContext();
   const conditionalLogicName = `${name}.conditionalLogic`;
-  const conditionalLogic = watch(conditionalLogicName);
+  const conditionalLogic = useWatch({ name: conditionalLogicName });
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const conditionalDataTestid = `${dataTestid}-conditional`;
 
@@ -81,7 +82,12 @@ export const SectionContent = ({
           </StyledButton>
         )}
       </Box>
-      <SectionScoreCommonFields name={name} sectionId={sectionId} data-testid={dataTestid} />
+      <SectionScoreCommonFields
+        name={name}
+        sectionId={sectionId}
+        data-testid={dataTestid}
+        items={items}
+      />
       {isRemoveConditionalPopupVisible && (
         <RemoveConditionalLogicPopup
           onClose={() => setIsRemoveConditionalPopupVisible(false)}

@@ -3,9 +3,13 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 import { MultiSelectItemAnswer } from '../RespondentDataReview.types';
 import { StyledContainer } from './MultiSelectResponseItem.styles';
 
-export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectItemAnswer) => (
-  <StyledContainer>
-    {activityItem.responseValues.options.map(({ id, text, value }) => {
+export const MultiSelectResponseItem = ({
+  activityItem,
+  answer,
+  'data-testid': dataTestid,
+}: MultiSelectItemAnswer) => (
+  <StyledContainer data-testid={dataTestid}>
+    {activityItem.responseValues.options.map(({ id, text, value }, index) => {
       const values = answer?.value.map((value) => +value) || [];
       const checked = values.includes(value!);
 
@@ -15,6 +19,7 @@ export const MultiSelectResponseItem = ({ activityItem, answer }: MultiSelectIte
           disabled
           label={text}
           control={<Checkbox checked={checked} value={value} />}
+          data-testid={`${dataTestid}-option-${index}`}
         />
       );
     })}
