@@ -91,10 +91,12 @@ export const parseResponseValueRaw = <
         ?.hour}, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
         (value as DecryptedDateRangeAnswer['value'])?.to?.hour ?? 0
       }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute ?? 0})`;
-    case ItemResponseType.Date:
-      return `date: ${(value as DecryptedDateAnswer['value'])?.day}/${(
-        value as DecryptedDateAnswer['value']
-      )?.month}/${(value as DecryptedDateAnswer['value'])?.year}`;
+    case ItemResponseType.Date: {
+      const { day, month, year } = value as DecryptedDateAnswer['value'];
+      const calculatedMonth = item?.migratedDate ? month + 1 : month; // for migrated date + 1
+
+      return `date: ${day}/${calculatedMonth}/${year}`;
+    }
     case ItemResponseType.Time: {
       const timeValue = value as DecryptedTimeAnswer['value'];
       const hours = timeValue?.hours ?? (answer as DecryptedTimeAnswer)?.hour;
