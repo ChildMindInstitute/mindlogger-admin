@@ -13,8 +13,6 @@ import {
   MAX_LENGTH_OF_TEST,
   MAX_NAME_LENGTH,
   MAX_NUMBER_OF_TRIALS,
-  MAX_SELECT_OPTION_TEXT_LENGTH,
-  MAX_SLIDER_LABEL_TEXT_LENGTH,
   MAX_SLOPE,
   MIN_LENGTH_OF_TEST,
   MIN_NUMBER_OF_TRIALS,
@@ -27,6 +25,7 @@ import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
 import {
   ItemConfigurationSettings,
   SLIDER_LABEL_MAX_LENGTH,
+  SLIDER_VALUE_LABEL_MAX_LENGTH,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import {
@@ -54,8 +53,8 @@ const { t } = i18n;
 export const ResponseValuesSliderRowsSchema = () =>
   yup.array().of(
     yup.object({
-      minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
-      maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
+      minLabel: yup.string().max(SLIDER_VALUE_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+      maxLabel: yup.string().max(SLIDER_VALUE_LABEL_MAX_LENGTH, getMaxLengthValidationError),
       label: yup
         .string()
         .required(getIsRequiredValidateMessage('sliderLabel'))
@@ -64,8 +63,8 @@ export const ResponseValuesSliderRowsSchema = () =>
   );
 
 export const ResponseValuesSliderSchema = () => ({
-  minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
-  maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
+  minLabel: yup.string().max(SLIDER_VALUE_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+  maxLabel: yup.string().max(SLIDER_VALUE_LABEL_MAX_LENGTH, getMaxLengthValidationError),
 });
 
 export const ResponseValuesSelectionRowsSchema = () =>
@@ -95,10 +94,7 @@ export const ResponseValuesSelectionOptionsSchema = () =>
 export const ResponseValuesOptionsSchema = () =>
   yup.array().of(
     yup.object({
-      text: yup
-        .string()
-        .required(getIsRequiredValidateMessage('optionText'))
-        .max(MAX_SELECT_OPTION_TEXT_LENGTH, getMaxLengthValidationError),
+      text: yup.string().required(getIsRequiredValidateMessage('optionText')),
     }),
   );
 

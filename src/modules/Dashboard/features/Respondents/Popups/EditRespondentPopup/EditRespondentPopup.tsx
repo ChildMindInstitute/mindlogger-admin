@@ -62,7 +62,7 @@ export const EditRespondentPopup = ({
     });
   };
 
-  const handleChangeSecredId = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSecretId = (event: ChangeEvent<HTMLInputElement>) => {
     setValue('secretUserId', event.target.value);
     setIsServerErrorVisible(false);
     trigger('secretUserId');
@@ -110,7 +110,7 @@ export const EditRespondentPopup = ({
                   name="secretUserId"
                   control={control}
                   label={t('secretUserId')}
-                  onChange={handleChangeSecredId}
+                  onChange={handleChangeSecretId}
                   data-testid={`${dataTestid}-secret-user-id`}
                 />
               </StyledController>
