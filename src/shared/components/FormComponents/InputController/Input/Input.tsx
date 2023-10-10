@@ -121,8 +121,13 @@ export const Input = <T extends FieldValues>({
               : InputProps
           }
         />
-        {maxLength && !error && (
-          <Counter value={value?.length || 0} maxLength={maxLength} counterProps={counterProps}>
+        {maxLength && (
+          <Counter
+            hasError={!!error}
+            value={value?.length || 0}
+            maxLength={maxLength}
+            counterProps={counterProps}
+          >
             {value?.length || 0}/{maxLength} {t('characters')}
           </Counter>
         )}
