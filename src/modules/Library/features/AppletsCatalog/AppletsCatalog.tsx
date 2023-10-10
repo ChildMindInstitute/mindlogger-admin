@@ -16,7 +16,7 @@ import {
   StyledAppletList,
 } from 'shared/styles';
 import { SEARCH_DEBOUNCE_VALUE } from 'shared/consts';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 

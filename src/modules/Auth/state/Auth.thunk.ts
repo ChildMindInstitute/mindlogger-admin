@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { Mixpanel, authStorage } from 'shared/utils';
+import { authStorage } from 'shared/utils/authStorage';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { ApiError } from 'redux/modules';
 import {
   signInApi,

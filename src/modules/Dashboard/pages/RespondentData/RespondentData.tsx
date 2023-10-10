@@ -8,7 +8,7 @@ import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledCompone
 import { EmptyState, LinkedTabs, Svg } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { Roles } from 'shared/consts';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { page } from 'resources';
 import { users, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';

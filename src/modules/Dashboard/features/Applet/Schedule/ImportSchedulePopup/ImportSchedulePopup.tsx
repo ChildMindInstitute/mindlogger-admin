@@ -7,7 +7,7 @@ import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { applet } from 'shared/state';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 import {
   deleteIndividualEventsApi,

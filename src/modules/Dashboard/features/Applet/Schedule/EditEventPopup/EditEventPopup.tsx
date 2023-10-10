@@ -7,7 +7,7 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { deleteEventApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EditEventPopupProps } from './EditEventPopup.types';

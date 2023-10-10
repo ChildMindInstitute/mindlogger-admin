@@ -7,7 +7,7 @@ import { getAppletPublicLinkApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { StyledFlexTopCenter, StyledTitleBoldMedium, theme } from 'shared/styles';
 import { Tooltip } from 'shared/components/Tooltip';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { StyledTitle } from '../AddUser.styles';
 import { LinkForm } from './LinkForm';

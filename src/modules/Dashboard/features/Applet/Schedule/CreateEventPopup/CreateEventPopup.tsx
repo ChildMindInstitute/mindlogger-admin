@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EventForm, EventFormRef } from '../EventForm';
