@@ -49,7 +49,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
       {t('activityItemsFlowItemTitle', { index: index + 1 })}
     </StyledTitle>
   );
-  const observerSx = { position: 'absolute', height: '700px', bottom: 0 };
+  const observerSx = { position: 'absolute', height: 'calc(100% + 20rem)', bottom: 0 };
 
   useIntersectionObserver({
     targetSelector: `.${getObserverSelector(index)}`,
