@@ -1,13 +1,10 @@
 import mixpanel, { Dict } from 'mixpanel-browser';
 
-const isProduction = process.env.REACT_APP_ENV === 'PRODUCTION';
-const isStaging = process.env.REACT_APP_ENV === 'STAGE';
-const shouldEnableMixpanel = isProduction || isStaging;
+const PROJECT_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
 
-// A project's token is not a secret value.
-// In front-end implementation this token will be available to anyone visiting the website.
-// More on this topic: https://developer.mixpanel.com/reference/project-token;
-const PROJECT_TOKEN = '075d1512e69a60bfcd9f7352b21cc4a2';
+const isProduction = process.env.REACT_APP_ENV === 'prod';
+const isStaging = process.env.REACT_APP_ENV === 'stage';
+const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging);
 
 export const Mixpanel = {
   init() {
