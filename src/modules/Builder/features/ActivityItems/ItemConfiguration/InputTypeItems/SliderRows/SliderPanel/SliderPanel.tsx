@@ -147,7 +147,7 @@ export const SliderPanel = ({
     isMultiple,
   );
 
-  const handleOptionTextChange = useFieldLengthError();
+  const handleLabelChange = useFieldLengthError();
 
   return (
     <StyledSliderPanelContainer
@@ -174,7 +174,7 @@ export const SliderPanel = ({
                 name={sliderLabelName}
                 label={t('sliderLabel')}
                 onChange={(event) =>
-                  handleOptionTextChange({
+                  handleLabelChange({
                     event,
                     fieldName: sliderLabelName,
                     maxLength: SLIDER_LABEL_MAX_LENGTH,
@@ -191,7 +191,7 @@ export const SliderPanel = ({
               name={sliderMinLabelName}
               label={t('minLabel')}
               onChange={(event) =>
-                handleOptionTextChange({
+                handleLabelChange({
                   event,
                   fieldName: sliderMinLabelName,
                   maxLength: SLIDER_VALUE_LABEL_MAX_LENGTH,
@@ -205,7 +205,7 @@ export const SliderPanel = ({
               name={sliderMaxLabelName}
               label={t('maxLabel')}
               onChange={(event) =>
-                handleOptionTextChange({
+                handleLabelChange({
                   event,
                   fieldName: sliderMaxLabelName,
                   maxLength: SLIDER_VALUE_LABEL_MAX_LENGTH,
