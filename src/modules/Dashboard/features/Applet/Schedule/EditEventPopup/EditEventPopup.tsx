@@ -8,6 +8,7 @@ import { deleteEventApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { Mixpanel } from 'shared/utils';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EditEventPopupProps } from './EditEventPopup.types';
 import { EventForm, EventFormRef } from '../EventForm';
@@ -35,7 +36,9 @@ export const EditEventPopup = ({
   const dataTestid = 'dashboard-calendar-edit-event';
 
   const isIndividualCalendar = !!respondentId;
-  const analyticsPrefix = isIndividualCalendar ? 'IC' : 'GC';
+  const analyticsPrefix = isIndividualCalendar
+    ? AnalyticsCalendarPrefix.IndividualCalendar
+    : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const { execute: removeEvent } = useAsync(
     deleteEventApi,

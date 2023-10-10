@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { applet } from 'shared/state';
 import { Mixpanel } from 'shared/utils';
-
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 import {
   deleteIndividualEventsApi,
   deleteScheduledEventsApi,
@@ -48,7 +48,9 @@ export const ImportSchedulePopup = ({
   const apiError = importScheduleError || deleteScheduledError || deleteIndividualScheduledError;
   const [step, setStep] = useState<Steps>(0);
 
-  const analyticsPrefix = isIndividual ? 'IC' : 'GC';
+  const analyticsPrefix = isIndividual
+    ? AnalyticsCalendarPrefix.IndividualCalendar
+    : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } =
     useImportSchedule({ appletName, scheduleExportData });

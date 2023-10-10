@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { Modal } from 'shared/components';
 import { Mixpanel } from 'shared/utils';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EventForm, EventFormRef } from '../EventForm';
 import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
@@ -26,7 +27,9 @@ export const CreateEventPopup = ({
   const handleCreateEventClose = () => setCreateEventPopupVisible(false);
 
   const isIndividualCalendar = !!respondentId;
-  const analyticsPrefix = isIndividualCalendar ? 'IC' : 'GC';
+  const analyticsPrefix = isIndividualCalendar
+    ? AnalyticsCalendarPrefix.IndividualCalendar
+    : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const onCreateActivitySubmit = () => {
     if (eventFormRef?.current) {

@@ -17,6 +17,7 @@ import { Periodicity, createEventApi, updateEventApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
 import { calendarEvents, users } from 'modules/Dashboard/state';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
 import { EventFormSchema } from './EventForm.schema';
@@ -53,7 +54,9 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const eventsData = calendarEvents.useCreateEventsData() || [];
 
     const isIndividualCalendar = !!respondentId;
-    const analyticsPrefix = isIndividualCalendar ? 'IC' : 'GC';
+    const analyticsPrefix = isIndividualCalendar
+      ? AnalyticsCalendarPrefix.IndividualCalendar
+      : AnalyticsCalendarPrefix.GeneralCalendar;
 
     const methods = useForm<EventFormValues>({
       resolver: yupResolver(EventFormSchema() as ObjectSchema<EventFormValues>),
