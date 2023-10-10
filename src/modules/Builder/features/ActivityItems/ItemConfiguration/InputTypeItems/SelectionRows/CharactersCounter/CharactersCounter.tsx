@@ -9,12 +9,13 @@ export const CharactersCounter = ({
   maxLength,
   counterProps,
   children,
+  hasError,
 }: PropsWithChildren<CharactersCounterProps>) => {
   const { t } = useTranslation('app');
   const shortenedText = `${value}/${maxLength} ${t('chars')}`;
 
   return (
-    <StyledCounter isShortenedVisible={counterProps?.isShortenedVisible}>
+    <StyledCounter hasError={hasError} isShortenedVisible={counterProps?.isShortenedVisible}>
       <span className="primary-counter">{children}</span>
       <span className="shortened-counter">{shortenedText}</span>
     </StyledCounter>

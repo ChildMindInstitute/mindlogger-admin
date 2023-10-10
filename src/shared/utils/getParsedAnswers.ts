@@ -3,10 +3,9 @@ import {
   ExportActivity,
   ExportDataResult,
   isDrawingAnswerData,
-  isMediaAnswerData,
+  isNotMediaAnswerData,
 } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { ItemsWithFileResponses } from 'shared/consts';
 import { postFilePresignApi } from 'shared/api';
 
 import { getDrawingUrl, getMediaUrl } from './exportData/getUrls';
@@ -41,8 +40,7 @@ export const getAnswersWithPublicUrls = async (
       if (isDrawingAnswerData(item)) {
         return urlsAcc.concat(getDrawingUrl(item));
       }
-      const responseType = item.activityItem?.responseType;
-      if (!ItemsWithFileResponses.includes(responseType)) return urlsAcc;
+      if (isNotMediaAnswerData(item)) return urlsAcc;
 
       return urlsAcc.concat(getMediaUrl(item));
     }, [] as string[]);
@@ -76,7 +74,7 @@ export const getAnswersWithPublicUrls = async (
             },
           });
         }
-        if (!isMediaAnswerData(item)) return decryptedAnswersAcc.concat(item);
+        if (isNotMediaAnswerData(item)) return decryptedAnswersAcc.concat(item);
 
         return decryptedAnswersAcc.concat({
           ...item,
