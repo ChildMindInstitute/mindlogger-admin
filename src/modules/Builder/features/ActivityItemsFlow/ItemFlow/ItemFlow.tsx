@@ -12,6 +12,7 @@ import {
   theme,
 } from 'shared/styles';
 import { useIntersectionObserver } from 'shared/hooks';
+import { Condition } from 'shared/state';
 
 import { ItemFlowActions } from './ItemFlowActions';
 import { ItemFlowProps } from './ItemFlow.types';
@@ -29,13 +30,17 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const dataTestid = `builder-activity-item-flow-${index}`;
 
   const { control, getFieldState } = useFormContext();
-  const { append: appendCondition, remove: removeCondition } = useFieldArray({
+  const {
+    fields: conditions,
+    append: appendCondition,
+    remove: removeCondition,
+  } = useFieldArray<Record<string, Condition[]>>({
     control,
     name: conditionsName,
   });
 
   const handleAddCondition = () => {
-    appendCondition(getEmptyCondition());
+    appendCondition(getEmptyCondition() as Condition);
   };
   const handleRemoveCondition = (index: number) => {
     removeCondition(index);
@@ -85,6 +90,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
             onRemove={handleRemoveCondition}
             data-testid={dataTestid}
             isStatic={isStatic}
+            conditions={conditions}
           />
         )}
       </StyledCollapse>

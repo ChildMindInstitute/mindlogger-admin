@@ -93,7 +93,7 @@ export const ConditionRow = ({
 
       if (autoTrigger) trigger(`${name}.itemKey`);
     },
-    [items, name, autoTrigger],
+    [items, conditionItemResponseType, name, autoTrigger],
   );
 
   const handleChangeConditionType = useCallback(
@@ -105,7 +105,7 @@ export const ConditionRow = ({
     [name, conditionPayload, selectedItem],
   );
 
-  const handleRemove = useCallback(onRemove, []);
+  const handleRemove = useCallback(onRemove, [index]);
 
   const itemOptions = useMemo(() => options[type], [type, scores, items, selectedScore]);
   const valueOptions = useMemo(() => getValueOptionsList(selectedItem), [selectedItem]);

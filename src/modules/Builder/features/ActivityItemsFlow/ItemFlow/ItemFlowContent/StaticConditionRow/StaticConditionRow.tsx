@@ -14,7 +14,7 @@ const commonSkeletonProps = {
   height: 36,
 };
 
-export const StaticConditionRow = ({ isSummary, condition }: StaticConditionRowProps) => {
+export const StaticConditionRow = ({ isSummary }: StaticConditionRowProps) => {
   const { t } = useTranslation('app');
 
   if (isSummary)
