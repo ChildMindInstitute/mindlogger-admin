@@ -55,7 +55,7 @@ describe('useTable hook tests', () => {
   test('useTable should sort', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));
     act(() => {
-      result.current.handleRequestSort({}, 'name');
+      result.current.handleRequestSort({} as React.MouseEvent<unknown>, 'name');
     });
 
     expect(mockAsyncFn).toBeCalled();

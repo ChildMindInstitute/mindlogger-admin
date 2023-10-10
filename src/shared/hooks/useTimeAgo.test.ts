@@ -1,3 +1,4 @@
+import { add } from 'date-fns';
 import { renderHook } from '@testing-library/react';
 
 import { useTimeAgo } from './useTimeAgo';
@@ -16,9 +17,10 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('useTimeAgo hook tests', () => {
-  test('timeAgo locale should be "en"', () => {
+  test('useTimeAgo should format date', () => {
     const { result } = renderHook(() => useTimeAgo());
+    const yesterdayDate = new Date(add(new Date(), { days: -1 }));
 
-    expect(result.current.locale).toBe('en');
+    expect(result.current.format(yesterdayDate)).toBe('1 day ago');
   });
 });
