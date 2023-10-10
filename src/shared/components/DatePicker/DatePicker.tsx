@@ -5,6 +5,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import fr from 'date-fns/locale/fr';
 
 import { Svg } from 'shared/components/Svg';
+import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { StyledBodyLarge, theme } from 'shared/styles';
 
 import {
@@ -33,6 +34,7 @@ export const DatePicker = <T extends FieldValues>({
   onMonthChange,
   disabled,
   onCloseCallback,
+  isLoading,
   'data-testid': dataTestid,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
@@ -87,7 +89,7 @@ export const DatePicker = <T extends FieldValues>({
 
         const textFieldProps = {
           fullWidth: true,
-          disabled: true,
+          disabled: disabled ?? true,
           onClick: handlePickerShow,
           className: isOpen ? 'active' : '',
           sx: { ...inputSx },
@@ -148,6 +150,7 @@ export const DatePicker = <T extends FieldValues>({
               }}
               data-testid={`${dataTestid}-popover`}
             >
+              {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
               {value && <PopoverHeader uiType={uiType} date={value as Date | Date[]} />}
               <ReactDatePicker
                 locale={i18n.language === 'fr' ? fr : undefined}
@@ -163,7 +166,8 @@ export const DatePicker = <T extends FieldValues>({
                 onChange={(date) => onChange(date)}
                 monthsShown={isStartEndingDate ? 2 : 1}
                 formatWeekDay={(nameOfDay) => nameOfDay[0]}
-                minDate={minDate !== undefined ? minDate : new Date()}
+                minDate={minDate === undefined ? new Date() : minDate}
+                focusSelectedMonth
                 onMonthChange={onMonthChange}
                 includeDates={includeDates}
               />

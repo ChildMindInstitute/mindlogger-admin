@@ -45,12 +45,10 @@ export const ReviewMenu = ({
     name: 'date',
   });
 
-  const [startDate, setStartDate] = useState(selectedDate || startOfMonth(new Date()));
-  const [endDate, setEndDate] = useState(endOfMonth(new Date()));
   const [submitDates, setSubmitDates] = useState<Date[] | undefined>(undefined);
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
 
-  const { execute: getAppletSubmitDateList } = useAsync(getAppletSubmitDateListApi);
+  const { execute: getAppletSubmitDateList, isLoading } = useAsync(getAppletSubmitDateListApi);
 
   const { execute: getReviewActivities } = useAsync(getReviewActivitiesApi, (res) => {
     res?.data?.result && setActivities(res.data.result);
@@ -63,23 +61,36 @@ export const ReviewMenu = ({
     setSelectedAnswer(null);
   });
 
-  useEffect(() => {
-    (async () => {
-      if (appletId && respondentId) {
-        const datesResult = await getAppletSubmitDateList({
-          appletId,
-          respondentId,
-          fromDate: String(startDate.getTime()),
-          toDate: String(endDate.getTime()),
-        });
+  const setSubmitDatesFromApi = async (fromDate: string, toDate: string) => {
+    if (!appletId || !respondentId) return;
 
-        if (datesResult?.data?.result) {
-          const dates = datesResult.data.result.dates.map((date: string) => new Date(date));
-          setSubmitDates(dates);
-        }
-      }
-    })();
-  }, [startDate, endDate]);
+    const datesApiResult = await getAppletSubmitDateList({
+      appletId,
+      respondentId,
+      fromDate,
+      toDate,
+    });
+
+    const datesResult = datesApiResult?.data?.result;
+
+    if (datesResult) {
+      const submitDates = datesResult.dates.map((date: string) => new Date(date));
+      setSubmitDates(submitDates);
+    }
+  };
+
+  const onMonthChange = (date: Date) => {
+    const startDate = startOfMonth(date);
+    const endDate = endOfMonth(date);
+    setSubmitDatesFromApi(String(startDate.getTime()), String(endDate.getTime()));
+  };
+
+  useEffect(() => {
+    const initialDate = selectedDate || new Date();
+    const startDate = startOfMonth(initialDate);
+    const endDate = endOfMonth(initialDate);
+    setSubmitDatesFromApi(String(startDate.getTime()), String(endDate.getTime()));
+  }, []);
 
   useEffect(() => {
     if (appletId && respondentId && date) {
@@ -90,11 +101,6 @@ export const ReviewMenu = ({
       });
     }
   }, [date]);
-
-  const onMonthChange = (date: Date) => {
-    setStartDate(startOfMonth(date));
-    setEndDate(endOfMonth(date));
-  };
 
   return (
     <StyledMenu>
@@ -111,7 +117,8 @@ export const ReviewMenu = ({
           minDate={null}
           includeDates={submitDates}
           onMonthChange={onMonthChange}
-          disabled={!submitDates?.length}
+          disabled={false}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-review-date`}
         />
       </StyledHeader>
