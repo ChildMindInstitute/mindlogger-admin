@@ -8,7 +8,6 @@ import {
   StyledClearedButton,
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
-  variables,
   theme,
 } from 'shared/styles';
 import {
@@ -24,13 +23,6 @@ import { getMultipleSelectionRowsOptions } from './Header.utils';
 import { getEmptySelectionItemOptions } from '../../../ItemConfiguration.utils';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../../../ItemConfiguration.const';
-
-const commonSelectArrowProps = {
-  id: 'navigate-down',
-  sx: {
-    fill: variables.palette.primary,
-  },
-};
 
 const commonButtonProps = {
   sx: { p: theme.spacing(1) },
@@ -120,9 +112,6 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
             customChange={handleChange}
             variant="standard"
             value={`${options?.length || ''}`}
-            SelectProps={{
-              IconComponent: (props) => <Svg {...commonSelectArrowProps} {...props} />,
-            }}
             disabled={!isExpanded}
             data-testid={`${dataTestid}-options-select`}
           />
