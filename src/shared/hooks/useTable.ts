@@ -20,7 +20,7 @@ export const useTable = (
   const [searchValue, setSearchValue] = useState(defaultParams.searchValue);
   const [page, setPage] = useState(defaultParams.page);
   const [orderBy, setOrderBy] = useState(defaultParams.orderBy);
-  const [order, setOrder] = useState<Order>(defaultParams.orderBy as Order);
+  const [order, setOrder] = useState<Order>(defaultParams.order as Order);
 
   const ordering = formattedOrder(orderBy, order);
 
