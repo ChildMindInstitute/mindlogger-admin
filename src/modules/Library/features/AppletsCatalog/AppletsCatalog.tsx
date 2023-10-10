@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'redux/store';
 import { library } from 'redux/modules';
 import { page } from 'resources';
-
 import { useBreadcrumbs } from 'shared/hooks';
 import { EmptyState, Spinner } from 'shared/components';
 import {
@@ -18,7 +17,6 @@ import {
 } from 'shared/styles';
 import { SEARCH_DEBOUNCE_VALUE } from 'shared/consts';
 import { Mixpanel } from 'shared/utils';
-
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 
