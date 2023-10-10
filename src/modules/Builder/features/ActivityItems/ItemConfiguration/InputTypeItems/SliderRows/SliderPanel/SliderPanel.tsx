@@ -6,6 +6,7 @@ import get from 'lodash.get';
 import { Table, UiType, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { concatIf } from 'shared/utils';
 import {
   DEFAULT_SLIDER_MIN_NUMBER,
   DEFAULT_SLIDER_ROWS_MIN_NUMBER,
@@ -13,7 +14,7 @@ import {
   SLIDER_VALUE_LABEL_MAX_LENGTH,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { concatIf } from 'shared/utils';
+import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
 
 import { Header } from './Header';
 import { SliderInputType, SliderPanelProps } from './SliderPanel.types';
@@ -54,10 +55,13 @@ export const SliderPanel = ({
   const minValueName = `${sliderName}.minValue`;
   const maxValueName = `${sliderName}.maxValue`;
   const scoresName = `${sliderName}.scores`;
+  const sliderLabelName = `${sliderName}.label`;
+  const sliderMinLabelName = `${sliderName}.minLabel`;
+  const sliderMaxLabelName = `${sliderName}.maxLabel`;
 
   const { t } = useTranslation('app');
 
-  const { control, watch, setValue, getFieldState, formState } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   const { id, minValue, maxValue, scores } = watch(sliderName) || {};
   const settings = watch(`${name}.config`);
@@ -143,6 +147,8 @@ export const SliderPanel = ({
     isMultiple,
   );
 
+  const handleLabelChange = useFieldLengthError();
+
   return (
     <StyledSliderPanelContainer
       in={isExpanded}
@@ -165,8 +171,15 @@ export const SliderPanel = ({
             <StyledInputContainer sx={{ mb: theme.spacing(2.4) }}>
               <InputController
                 control={control}
-                name={`${sliderName}.label`}
+                name={sliderLabelName}
                 label={t('sliderLabel')}
+                onChange={(event) =>
+                  handleLabelChange({
+                    event,
+                    fieldName: sliderLabelName,
+                    maxLength: SLIDER_LABEL_MAX_LENGTH,
+                  })
+                }
                 maxLength={SLIDER_LABEL_MAX_LENGTH}
                 data-testid={`${dataTestid}-label`}
               />
@@ -175,15 +188,29 @@ export const SliderPanel = ({
           <StyledInputContainer>
             <InputController
               control={control}
-              name={`${sliderName}.minLabel`}
+              name={sliderMinLabelName}
               label={t('minLabel')}
+              onChange={(event) =>
+                handleLabelChange({
+                  event,
+                  fieldName: sliderMinLabelName,
+                  maxLength: SLIDER_VALUE_LABEL_MAX_LENGTH,
+                })
+              }
               maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
               data-testid={`${dataTestid}-min-label`}
             />
             <InputController
               control={control}
-              name={`${sliderName}.maxLabel`}
+              name={sliderMaxLabelName}
               label={t('maxLabel')}
+              onChange={(event) =>
+                handleLabelChange({
+                  event,
+                  fieldName: sliderMaxLabelName,
+                  maxLength: SLIDER_VALUE_LABEL_MAX_LENGTH,
+                })
+              }
               maxLength={SLIDER_VALUE_LABEL_MAX_LENGTH}
               data-testid={`${dataTestid}-max-label`}
             />

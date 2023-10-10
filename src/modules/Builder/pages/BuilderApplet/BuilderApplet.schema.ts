@@ -22,11 +22,7 @@ import {
 } from 'shared/consts';
 import { RoundTypeEnum } from 'modules/Builder/types';
 import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
-import {
-  ItemConfigurationSettings,
-  SLIDER_LABEL_MAX_LENGTH,
-  SLIDER_VALUE_LABEL_MAX_LENGTH,
-} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 import {
   checkRawScoreRegexp,
@@ -53,19 +49,9 @@ const { t } = i18n;
 export const ResponseValuesSliderRowsSchema = () =>
   yup.array().of(
     yup.object({
-      minLabel: yup.string().max(SLIDER_VALUE_LABEL_MAX_LENGTH, getMaxLengthValidationError),
-      maxLabel: yup.string().max(SLIDER_VALUE_LABEL_MAX_LENGTH, getMaxLengthValidationError),
-      label: yup
-        .string()
-        .required(getIsRequiredValidateMessage('sliderLabel'))
-        .max(SLIDER_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+      label: yup.string().required(getIsRequiredValidateMessage('sliderLabel')),
     }),
   );
-
-export const ResponseValuesSliderSchema = () => ({
-  minLabel: yup.string().max(SLIDER_VALUE_LABEL_MAX_LENGTH, getMaxLengthValidationError),
-  maxLabel: yup.string().max(SLIDER_VALUE_LABEL_MAX_LENGTH, getMaxLengthValidationError),
-});
 
 export const ResponseValuesSelectionRowsSchema = () =>
   yup.object({
@@ -256,9 +242,6 @@ export const ItemSchema = () =>
 
         if (responseType === ItemResponseType.NumberSelection)
           return schema.shape(ResponseValuesNumberSelectionSchema());
-
-        if (responseType === ItemResponseType.Slider)
-          return schema.shape(ResponseValuesSliderSchema());
 
         if (
           responseType === ItemResponseType.SingleSelectionPerRow ||
