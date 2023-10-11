@@ -122,7 +122,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       if (!appletId) {
         return;
       }
-      const body = getEventPayload(defaultStartDate, watch, respondentId);
+      const body = getEventPayload(defaultStartDate, getValues, respondentId);
 
       if (editedEvent) {
         const { activityId, flowId, respondentId, ...updateEventBody } = body;
