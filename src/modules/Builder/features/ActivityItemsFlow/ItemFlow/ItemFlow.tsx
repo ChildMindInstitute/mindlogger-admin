@@ -69,7 +69,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
         <StyledFlexTopCenter sx={{ minHeight: '4.8rem' }}>
           <StyledClearedButton
             sx={{ p: theme.spacing(1) }}
-            onClick={() => setExpanded(false)}
+            onClick={() => setExpanded((prev) => !prev)}
             data-testid={`${dataTestid}-collapse`}
           >
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
