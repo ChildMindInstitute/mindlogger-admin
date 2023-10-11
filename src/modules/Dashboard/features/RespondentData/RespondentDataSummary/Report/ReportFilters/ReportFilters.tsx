@@ -46,6 +46,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             inputSx={{ width: '19rem' }}
             onCloseCallback={onCloseCallback}
             label={t('startDate')}
+            disabled={false}
             data-testid={`${dataTestid}-start-date`}
           />
           <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
@@ -55,6 +56,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             control={control}
             inputSx={{ width: '19rem' }}
             label={t('endDate')}
+            disabled={false}
             data-testid={`${dataTestid}-end-date`}
           />
         </StyledFlexTopCenter>
