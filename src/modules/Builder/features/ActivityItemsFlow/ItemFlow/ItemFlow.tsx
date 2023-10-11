@@ -19,6 +19,7 @@ import { ItemFlowProps } from './ItemFlow.types';
 import { getEmptyCondition, getObserverSelector } from './ItemFlow.utils';
 import { StyledTitle, StyledCollapse } from './ItemFlow.styles';
 import { ItemFlowContent } from './ItemFlowContent';
+import { observerStyles } from './ItemFlow.const';
 
 export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const { t } = useTranslation('app');
@@ -54,7 +55,6 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
       {t('activityItemsFlowItemTitle', { index: index + 1 })}
     </StyledTitle>
   );
-  const observerSx = { position: 'absolute', height: 'calc(100% + 20rem)', bottom: 0 };
 
   useIntersectionObserver({
     targetSelector: `.${getObserverSelector(index)}`,
@@ -64,7 +64,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
 
   return (
     <Box sx={{ position: 'relative' }}>
-      <StyledObserverTarget className={getObserverSelector(index)} sx={observerSx} />
+      <StyledObserverTarget className={getObserverSelector(index)} sx={observerStyles} />
       <StyledCollapse in={isExpanded} timeout={0} collapsedSize="8rem" data-testid={dataTestid}>
         <StyledFlexTopCenter sx={{ minHeight: '4.8rem' }}>
           <StyledClearedButton

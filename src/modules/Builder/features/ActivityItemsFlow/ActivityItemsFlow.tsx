@@ -17,6 +17,7 @@ import { getEmptyFlowItem } from './ActivityItemsFlow.utils';
 import {
   ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS,
   ACTIVITY_ITEMS_FLOW_LIST_CLASS,
+  contentStyles,
 } from './ActivityItemsFlow.const';
 
 export const ActivityItemsFlow = () => {
@@ -53,7 +54,7 @@ export const ActivityItemsFlow = () => {
     handleCloseRemovePopup();
   };
 
-  const { data, isPending } = useDataPreloader<ConditionalLogic>({
+  const { data: flowItemsData, isPending } = useDataPreloader<ConditionalLogic>({
     data: flowItems,
     rootSelector: `.${ACTIVITY_ITEMS_FLOW_LIST_CLASS}`,
     targetSelector: `.${ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS}`,
@@ -63,7 +64,6 @@ export const ActivityItemsFlow = () => {
     isAddItemFlowDisabled: items?.length < 2 || isPending,
     onAddItemFlow: handleAddItemFlow,
   };
-  const contentSx = { minHeight: '15rem', gap: '2.4rem', position: 'relative' };
 
   const isRemovePopupOpened = itemIndexToDelete !== -1;
 
@@ -74,10 +74,10 @@ export const ActivityItemsFlow = () => {
       headerProps={headerProps}
       hasMaxWidth
       contentClassName={ACTIVITY_ITEMS_FLOW_LIST_CLASS}
-      contentSxProps={contentSx}
+      contentSxProps={contentStyles}
     >
-      {!!data?.length &&
-        data.map((flowItem: ConditionalLogic, index: number) => (
+      {!!flowItemsData?.length &&
+        flowItemsData.map((flowItem: ConditionalLogic, index: number) => (
           <ItemFlow
             key={`item-flow-${flowItem.key}`}
             name={conditionalLogicName}
@@ -85,7 +85,7 @@ export const ActivityItemsFlow = () => {
             onRemove={() => handleRemoveItemFlow(index)}
           />
         ))}
-      {!data?.length && !isPending && (
+      {!flowItemsData?.length && !isPending && (
         <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
           {t('activityItemsFlowDescription')}
         </StyledTitleMedium>

@@ -27,8 +27,9 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
         (item: ItemFormValues) => getEntityKey(item) === e.target.value,
       );
 
-      if (itemIndex !== -1 && items[itemIndex]?.isHidden)
+      if (itemIndex !== -1 && items[itemIndex]?.isHidden) {
         setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
+      }
     },
     [items],
   );

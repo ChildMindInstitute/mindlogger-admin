@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
 
-interface Props {
+type UseIntersectionObserver = {
   rootSelector?: string;
   targetSelector: string;
   onAppear?(): void;
   onHide?(): void;
-}
+};
+
 export const useIntersectionObserver = ({
   rootSelector,
   targetSelector,
   onAppear,
   onHide,
-}: Props) => {
+}: UseIntersectionObserver) => {
   useEffect(() => {
     const callback: IntersectionObserverCallback = (entries: IntersectionObserverEntry[]) => {
       if (entries.length === 0) return;
