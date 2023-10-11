@@ -70,13 +70,11 @@ export const ReviewMenu = ({
       fromDate,
       toDate,
     });
-
     const datesResult = datesApiResult?.data?.result;
+    if (!datesResult) return;
 
-    if (datesResult) {
-      const submitDates = datesResult.dates.map((date: string) => new Date(date));
-      setSubmitDates(submitDates);
-    }
+    const submitDates = datesResult.dates.map((date: string) => new Date(date));
+    setSubmitDates(submitDates);
   };
 
   const onMonthChange = (date: Date) => {
@@ -86,10 +84,7 @@ export const ReviewMenu = ({
   };
 
   useEffect(() => {
-    const initialDate = selectedDate || new Date();
-    const startDate = startOfMonth(initialDate);
-    const endDate = endOfMonth(initialDate);
-    setSubmitDatesFromApi(String(startDate.getTime()), String(endDate.getTime()));
+    onMonthChange(selectedDate || new Date());
   }, []);
 
   useEffect(() => {

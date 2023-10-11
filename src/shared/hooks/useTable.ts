@@ -8,7 +8,7 @@ import { formattedOrder } from 'shared/utils/table';
 
 const defaultParams = {
   searchValue: '',
-  order: 'desc',
+  order: 'desc' as Order,
   orderBy: '',
   page: 1,
 };
@@ -20,7 +20,7 @@ export const useTable = (
   const [searchValue, setSearchValue] = useState(defaultParams.searchValue);
   const [page, setPage] = useState(defaultParams.page);
   const [orderBy, setOrderBy] = useState(defaultParams.orderBy);
-  const [order, setOrder] = useState<Order>(defaultParams.order as Order);
+  const [order, setOrder] = useState<Order>(defaultParams.order);
 
   const ordering = formattedOrder(orderBy, order);
 
@@ -80,7 +80,7 @@ export const useTable = (
     if (ownerId) {
       setPage(defaultParams.page);
       setSearchValue(defaultParams.searchValue);
-      setOrder(defaultParams.order as Order);
+      setOrder(defaultParams.order);
       setOrderBy(defaultParams.orderBy);
     }
   }, [ownerId]);
