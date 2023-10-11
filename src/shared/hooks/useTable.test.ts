@@ -11,7 +11,7 @@ jest.mock('redux/modules', () => ({
 describe('useTable hook tests', () => {
   const mockAsyncFn = jest.fn();
 
-  test('useTable should return initial searchValue, order and page', () => {
+  test('should return initial searchValue, order and page', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));
 
     expect(result.current.searchValue).toBe('');
@@ -20,7 +20,7 @@ describe('useTable hook tests', () => {
     expect(result.current.page).toBe(1);
   });
 
-  test('useTable should reload', () => {
+  test('should reload', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));
     act(() => {
       result.current.handleReload();
@@ -30,7 +30,7 @@ describe('useTable hook tests', () => {
     expect(mockAsyncFn).toBeCalledTimes(1);
   });
 
-  test('useTable should search', () => {
+  test('should search', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));
     act(() => {
       result.current.handleSearch('mockSearch');
@@ -41,7 +41,7 @@ describe('useTable hook tests', () => {
     expect(result.current.searchValue).toBe('mockSearch');
   });
 
-  test('useTable should change page', () => {
+  test('should change page', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));
     act(() => {
       result.current.handleChangePage({}, 2);
@@ -52,7 +52,7 @@ describe('useTable hook tests', () => {
     expect(result.current.page).toBe(3);
   });
 
-  test('useTable should sort', () => {
+  test('should sort', () => {
     const { result } = renderHook(() => useTable(mockAsyncFn));
     act(() => {
       result.current.handleRequestSort({} as React.MouseEvent<unknown>, 'name');

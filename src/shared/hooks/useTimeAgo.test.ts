@@ -1,23 +1,14 @@
 import { add } from 'date-fns';
 import { renderHook } from '@testing-library/react';
 
+import { mockI18Next } from '__mocks__/i18next';
+
 import { useTimeAgo } from './useTimeAgo';
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    i18n: {
-      changeLanguage: () => new Promise(() => {}),
-      language: 'en',
-    },
-  }),
-  initReactI18next: {
-    type: '3rdParty',
-    init: () => {},
-  },
-}));
+jest.mock('react-i18next', () => mockI18Next);
 
 describe('useTimeAgo hook tests', () => {
-  test('useTimeAgo should format date', () => {
+  test('should format date', () => {
     const { result } = renderHook(() => useTimeAgo());
     const today = new Date();
     const yesterday = new Date(add(today, { days: -1 }));
