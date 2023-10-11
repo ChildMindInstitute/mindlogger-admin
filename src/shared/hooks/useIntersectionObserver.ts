@@ -17,10 +17,11 @@ export const useIntersectionObserver = ({
     const callback: IntersectionObserverCallback = (entries: IntersectionObserverEntry[]) => {
       if (entries.length === 0) return;
 
-      const intersection = entries[0];
-      if (!intersection.isIntersecting) return onHide?.();
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) return onAppear?.();
 
-      onAppear?.();
+        return onHide?.();
+      });
     };
 
     const root = rootSelector === undefined ? null : document.querySelector(rootSelector);
