@@ -1,7 +1,7 @@
 import { add } from 'date-fns';
 import { renderHook } from '@testing-library/react';
 
-import { mockI18Next } from '__mocks__/i18next';
+import { mockI18Next } from 'shared/tests';
 
 import { useTimeAgo } from './useTimeAgo';
 
