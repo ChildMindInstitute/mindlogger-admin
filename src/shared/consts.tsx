@@ -310,3 +310,7 @@ export const enum ScoreReportType {
 export const URL_REGEX = /(https?:\/\/)?(www\.)?/g;
 
 export const AUTH_BOX_WIDTH = '39.2rem';
+export const enum AnalyticsCalendarPrefix {
+  IndividualCalendar = 'IC',
+  GeneralCalendar = 'GC',
+}

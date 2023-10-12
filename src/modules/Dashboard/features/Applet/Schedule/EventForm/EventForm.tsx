@@ -9,7 +9,7 @@ import { ObjectSchema } from 'yup';
 import { Option, SelectController } from 'shared/components/FormComponents';
 import { DefaultTabs as Tabs } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { getErrorMessage } from 'shared/utils';
+import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
 import { applet, workspaces } from 'shared/state';
@@ -17,6 +17,7 @@ import { Periodicity, createEventApi, updateEventApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
 import { calendarEvents, users } from 'modules/Dashboard/state';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
 import { EventFormSchema } from './EventForm.schema';
@@ -51,6 +52,11 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const appletId = appletData?.result.id;
     const defaultValues = getDefaultValues(defaultStartDate, editedEvent);
     const eventsData = calendarEvents.useCreateEventsData() || [];
+
+    const isIndividualCalendar = !!respondentId;
+    const analyticsPrefix = isIndividualCalendar
+      ? AnalyticsCalendarPrefix.IndividualCalendar
+      : AnalyticsCalendarPrefix.GeneralCalendar;
 
     const methods = useForm<EventFormValues>({
       resolver: yupResolver(EventFormSchema() as ObjectSchema<EventFormValues>),
@@ -134,6 +140,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       } else {
         await createEvent({ appletId, body });
       }
+
+      Mixpanel.track(`${analyticsPrefix} Schedule successful`);
     };
 
     const submitForm = async () => {
