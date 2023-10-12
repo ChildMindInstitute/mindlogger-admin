@@ -1,6 +1,6 @@
-const MINUTES_TO_MILLISECONDS_MULTIPLIER = 60 * 1000;
+export const MINUTES_TO_MILLISECONDS_MULTIPLIER = 60 * 1000;
 
-const getNormalizeTimezoneData = (dateString: string) => {
+export const getNormalizeTimezoneData = (dateString: string) => {
   const dateTime = new Date(dateString).getTime();
   const userDateOffsetMilliseconds =
     new Date().getTimezoneOffset() * MINUTES_TO_MILLISECONDS_MULTIPLIER;
