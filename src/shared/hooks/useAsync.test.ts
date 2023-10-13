@@ -3,74 +3,65 @@ import { renderHook, act } from '@testing-library/react';
 
 import { useAsync } from './useAsync';
 
-// Mock async function for testing
-const mockAsyncFunction = jest.fn(
-  () => Promise.resolve({ data: 'mock data' }) as Promise<AxiosResponse<unknown>>,
-);
+const mockedData = { data: 'mock data' };
+const errorResponse = { response: { data: 'error data' } };
+const mockAsyncFunction = () => Promise.resolve(mockedData) as Promise<AxiosResponse<unknown>>;
+const mockAsyncFunctionReject = () =>
+  Promise.reject(errorResponse) as Promise<AxiosResponse<unknown>>;
 
-// Mock callback functions
 const mockCallback = jest.fn();
 const mockErrorCallback = jest.fn();
 const mockFinallyCallback = jest.fn();
 
 describe('useAsync', () => {
   test('should execute async function and update state on success', async () => {
-    const { result /*, waitForNextUpdate*/ } = renderHook(() =>
-      useAsync(mockAsyncFunction, mockCallback),
-    );
+    const { result } = renderHook(() => useAsync(mockAsyncFunction, mockCallback));
 
-    act(() => {
-      result.current.execute({
-        /* your arguments here */
-      });
+    await act(async () => {
+      await result.current.execute({});
     });
 
-    // await waitForNextUpdate();
+    const updatedResult = result.current;
 
-    expect(result.current.value).toEqual({ data: 'mock data' });
-    expect(result.current.error).toBeNull();
-    expect(result.current.isLoading).toBe(false);
-    expect(mockCallback).toHaveBeenCalledWith({ data: 'mock data' });
+    expect(updatedResult.value).toEqual(mockedData);
+    expect(updatedResult.error).toBeNull();
+    expect(updatedResult.isLoading).toBe(false);
+    expect(mockCallback).toHaveBeenCalledWith(mockedData);
   });
 
   test('should handle errors and update state accordingly', async () => {
-    const errorResponse = { response: { data: 'error data' } };
-    mockAsyncFunction.mockRejectedValueOnce(errorResponse);
-    // mockAsyncFunction.mockRejectedValueOnce({ response: { data: 'error data' } } as AxiosError);
-
-    const { result /*, waitForNextUpdate*/ } = renderHook(() =>
-      useAsync(mockAsyncFunction, undefined, mockErrorCallback),
+    const { result } = renderHook(() =>
+      useAsync(mockAsyncFunctionReject, undefined, mockErrorCallback),
     );
 
-    act(() => {
-      result.current.execute({
-        /* your arguments here */
-      });
+    await act(async () => {
+      try {
+        await result.current.execute({});
+      } catch (error) {
+        //handle the error case, because function inside of catch throws an error
+      }
     });
 
-    // await waitForNextUpdate();
+    const updatedResult = result.current;
 
-    expect(result.current.value).toBeNull();
-    expect(result.current.error).toEqual(errorResponse);
-    expect(result.current.isLoading).toBe(false);
+    expect(updatedResult.value).toBeNull();
+    expect(updatedResult.error).toEqual(errorResponse);
+    expect(updatedResult.isLoading).toBe(false);
     expect(mockErrorCallback).toHaveBeenCalledWith(errorResponse);
   });
 
   test('should call finally callback regardless of success or failure', async () => {
-    const { result /*, waitForNextUpdate*/ } = renderHook(() =>
+    const { result } = renderHook(() =>
       useAsync(mockAsyncFunction, undefined, undefined, mockFinallyCallback),
     );
 
-    act(() => {
-      result.current.execute({
-        /* your arguments here */
-      });
+    await act(async () => {
+      await result.current.execute({});
     });
 
-    // await waitForNextUpdate();
+    const updatedResult = result.current;
 
+    expect(updatedResult.isLoading).toBe(false);
     expect(mockFinallyCallback).toHaveBeenCalled();
   });
-
-  // Add more test cases for different scenarios, including handling dependencies
 });
