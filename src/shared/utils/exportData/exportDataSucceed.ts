@@ -17,9 +17,11 @@ export const exportDataSucceed =
   ({
     callback,
     getDecryptedAnswers,
+    suffix,
   }: {
     callback?: () => void;
     getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
+    suffix: string;
   }) =>
   async (result: ExportDataResult) => {
     if (!result) return;
@@ -36,21 +38,21 @@ export const exportDataSucceed =
 
     await exportTemplate({
       data: reportData,
-      fileName: GENERAL_REPORT_NAME,
+      fileName: GENERAL_REPORT_NAME + suffix,
       defaultData: reportData.length > 0 ? null : reportHeader,
     });
     await exportTemplate({
       data: activityJourneyData,
-      fileName: JOURNEY_REPORT_NAME,
+      fileName: JOURNEY_REPORT_NAME + suffix,
       defaultData: activityJourneyData.length > 0 ? null : activityJourneyHeader,
     });
 
     await Promise.allSettled([
-      exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing)),
-      exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker)),
-      exportCsvZip(abTrailsItemsData, getReportZipName(ZipFile.ABTrails)),
-      exportCsvZip(flankerItemsData, getReportZipName(ZipFile.Flanker)),
-      exportMediaZip(mediaData, getReportZipName(ZipFile.Media)),
+      exportCsvZip(drawingItemsData, getReportZipName(ZipFile.Drawing, suffix)),
+      exportCsvZip(stabilityTrackerItemsData, getReportZipName(ZipFile.StabilityTracker, suffix)),
+      exportCsvZip(abTrailsItemsData, getReportZipName(ZipFile.ABTrails, suffix)),
+      exportCsvZip(flankerItemsData, getReportZipName(ZipFile.Flanker, suffix)),
+      exportMediaZip(mediaData, getReportZipName(ZipFile.Media, suffix)),
     ]);
     callback?.();
   };
