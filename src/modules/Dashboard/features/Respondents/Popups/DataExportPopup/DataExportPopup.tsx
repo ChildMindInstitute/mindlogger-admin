@@ -20,6 +20,7 @@ import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popup.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
+import { getExportDataSuffix } from './DataExportPopup.utils';
 
 export const DataExportPopup = ({
   popupVisible,
@@ -82,34 +83,35 @@ export const DataExportPopup = ({
           appletId,
           respondentIds: respondentId,
         });
-        const { result, count = 0 } = firstPageResponse.data;
-        let allPagesData = result;
+        const { result: firstPageData, count = 0 } = firstPageResponse.data;
         const pageLimit = getPageAmount(count);
-        if (pageLimit > 1) {
-          const otherPages = await Promise.allSettled(
-            createArrayFromMinToMax(2, pageLimit).map((page) =>
-              getExportDataApi({ appletId, respondentIds: respondentId, page }),
-            ),
-          );
-          allPagesData = otherPages.reduce((acc, pageResponse) => {
-            if (pageResponse.status === 'rejected') return acc;
-            const pageResult = pageResponse.value.data?.result;
-
-            return {
-              ...acc,
-              activities: acc.activities.concat(pageResult.activities),
-              answers: acc.answers.concat(pageResult.answers),
-            };
-          }, allPagesData);
-        }
-
         await exportDataSucceed({
           getDecryptedAnswers,
           callback: () => {
             setDataIsExporting(false);
             handlePopupClose();
           },
-        })(allPagesData);
+          suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
+        })(firstPageData);
+
+        if (pageLimit > 1) {
+          for (let page = 2; page <= pageLimit; page++) {
+            const nextPageResponse = await getExportDataApi({
+              appletId,
+              respondentIds: respondentId,
+              page,
+            });
+            const { result: nextPageData } = nextPageResponse.data;
+            await exportDataSucceed({
+              getDecryptedAnswers,
+              callback: () => {
+                setDataIsExporting(false);
+                handlePopupClose();
+              },
+              suffix: getExportDataSuffix(page),
+            })(nextPageData);
+          }
+        }
       } catch (error) {
         console.warn(error);
         setDataIsExporting(false);
