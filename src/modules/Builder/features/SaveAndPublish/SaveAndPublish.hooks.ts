@@ -359,6 +359,8 @@ export const useSaveAndPublishSetup = (
 
     setPublishProcessPopupOpened(false);
 
+    Mixpanel.track('Applet Save click');
+
     await sendRequestWithPasswordCheck();
   };
 
@@ -410,6 +412,8 @@ export const useSaveAndPublishSetup = (
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
+      Mixpanel.track('Applet edit successful');
+
       setIsFromLibrary?.(false);
       if (shouldNavigateRef.current) {
         confirmNavigation();

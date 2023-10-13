@@ -9,7 +9,7 @@ import { getPublishedAppletApi } from 'modules/Library/api';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 import { library } from 'modules/Library/state';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { Applet, AppletUiType } from '../Applet';
 

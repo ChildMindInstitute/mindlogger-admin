@@ -1,4 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 import { ApiError } from 'shared/state';
 
@@ -26,4 +27,11 @@ export const getErrorMessage = (error: ErrorData) => {
   const errorData = getErrorData(error);
 
   return errorData?.message ?? String(errorData);
+};
+
+export const getApiError = (action: PayloadAction<AxiosError>) => {
+  const axiosError = action.payload as AxiosError;
+  const axiosResponse = axiosError?.response as AxiosResponse;
+
+  return axiosResponse?.data.result;
 };
