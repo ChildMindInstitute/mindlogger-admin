@@ -1,7 +1,7 @@
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
 import { page } from 'resources';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { NavigationItem, NavigationMenu } from 'shared/components';
 
 import { getSettings } from './ActivitySettings.utils';
@@ -12,7 +12,7 @@ export const ActivitySettings = () => {
 
   const navigate = useNavigate();
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const handleSetActiveSetting = (setting: NavigationItem) => {
     navigate(

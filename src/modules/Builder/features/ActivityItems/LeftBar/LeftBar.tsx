@@ -21,7 +21,7 @@ import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { DndDroppable } from 'modules/Builder/components/DndDroppable';
 import { ItemFormValues } from 'modules/Builder/types';
 import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
-import { useActivityItemsRedirection } from 'modules/Builder/hooks/useActivityItemsRedirection';
+import { useRedirectIfNoMatchedActivityItem } from 'modules/Builder/hooks/useRedirectIfNoMatchedActivityItem';
 
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
@@ -64,7 +64,7 @@ export const LeftBar = ({
   const draggableItems = itemsData.filter((item) => item.allowEdit);
   const systemItems = itemsData.filter((item) => !item.allowEdit);
 
-  useActivityItemsRedirection();
+  useRedirectIfNoMatchedActivityItem();
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);

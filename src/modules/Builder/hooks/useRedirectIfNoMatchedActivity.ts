@@ -7,7 +7,7 @@ import { useCheckIfNewApplet } from 'shared/hooks';
 
 import { useCurrentActivity } from './useCurrentActivity';
 
-export const useActivitiesRedirection = () => {
+export const useRedirectIfNoMatchedActivity = () => {
   const { appletId, activityId } = useParams();
   const navigate = useNavigate();
   const { activity } = useCurrentActivity();

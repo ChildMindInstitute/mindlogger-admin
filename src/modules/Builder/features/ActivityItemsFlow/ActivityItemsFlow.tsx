@@ -7,7 +7,7 @@ import { StyledObserverTarget, StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { ConditionalLogic } from 'shared/state';
 import { Spinner } from 'shared/components';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
 
 import { ItemFlow } from './ItemFlow';
@@ -26,7 +26,7 @@ export const ActivityItemsFlow = () => {
 
   const { control } = useFormContext();
   const { fieldName } = useCurrentActivity();
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const conditionalLogicName = `${fieldName}.conditionalLogic`;
   const items = useWatch({ name: `${fieldName}.items` });

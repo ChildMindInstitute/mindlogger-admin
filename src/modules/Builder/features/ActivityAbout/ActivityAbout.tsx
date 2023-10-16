@@ -22,7 +22,7 @@ import {
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
 import { ItemFormValues } from 'modules/Builder/types';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
@@ -35,7 +35,7 @@ import {
 export const ActivityAbout = () => {
   const { t } = useTranslation();
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const { control, setValue, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();

@@ -11,7 +11,7 @@ import { BuilderContainer } from 'shared/features';
 import { getObjectFromList } from 'shared/utils';
 import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
-import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
@@ -91,7 +91,7 @@ export const ActivityFlowBuilder = () => {
 
   const activitiesIdsObjects = getObjectFromList(activities);
 
-  useActivityFlowsRedirection();
+  useRedirectIfNoMatchedActivityFlow();
 
   return (
     <BuilderContainer

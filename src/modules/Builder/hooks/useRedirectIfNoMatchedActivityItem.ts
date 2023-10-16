@@ -9,7 +9,7 @@ import { getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from './useCurrentActivity';
 import { ItemFormValues } from '../types';
 
-export const useActivityItemsRedirection = () => {
+export const useRedirectIfNoMatchedActivityItem = () => {
   const { appletId, activityId, itemId } = useParams();
   const navigate = useNavigate();
   const { fieldName } = useCurrentActivity();

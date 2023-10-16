@@ -15,7 +15,7 @@ import {
 } from 'shared/styles';
 import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController } from 'shared/components/FormComponents';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
 import { SettingParam, getEntityKey } from 'shared/utils';
 import { useIsServerConfigured } from 'shared/hooks';
@@ -39,7 +39,7 @@ export const ScoresAndReports = () => {
   const { fieldName } = useCurrentActivity();
   const { control, setValue, getFieldState } = useFormContext();
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const scoresAndReportsName = `${fieldName}.scoresAndReports`;
   const generateReportName = `${scoresAndReportsName}.generateReport`;

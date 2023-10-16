@@ -8,7 +8,7 @@ import { getEntityKey } from 'shared/utils';
 
 import { ActivityFlowFormValues } from '../types';
 
-export const useActivityFlowsRedirection = () => {
+export const useRedirectIfNoMatchedActivityFlow = () => {
   const { appletId, activityFlowId } = useParams();
   const navigate = useNavigate();
   const isNewApplet = useCheckIfNewApplet();

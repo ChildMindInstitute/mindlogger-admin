@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { page } from 'resources';
 import { StyledContainer } from 'shared/styles';
 import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
@@ -39,7 +39,7 @@ export const ActivityItems = () => {
   const activeItem = activeItemIndex !== -1 ? items[activeItemIndex] : undefined;
   const [itemIdToDelete, setItemIdToDelete] = useState('');
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const navigateToItem = (item?: ItemFormValues) => {
     const path = item ? page.builderAppletActivityItem : page.builderAppletActivityItems;
