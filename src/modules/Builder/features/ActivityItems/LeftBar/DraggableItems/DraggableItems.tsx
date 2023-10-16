@@ -52,6 +52,7 @@ export const DraggableItems = ({
                   {...itemProvided.draggableProps}
                   ref={itemProvided.innerRef}
                   data-testid={dataTestid}
+                  sx={{ position: 'relative' }}
                 >
                   <Item
                     dragHandleProps={itemProvided.dragHandleProps}
@@ -69,6 +70,7 @@ export const DraggableItems = ({
                     onInsert={() => onInsertItem(index)}
                     data-testid={`${dataTestid}-insert`}
                   />
+                  <StyledObserverTarget sx={{ position: 'absolute' }} />
                 </Box>
               )}
             </Draggable>
