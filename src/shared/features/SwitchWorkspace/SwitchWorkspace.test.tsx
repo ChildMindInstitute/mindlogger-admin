@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils';
 import { base } from 'shared/state/Base';
@@ -55,5 +55,21 @@ describe('SwitchWorkspace component tests', () => {
       screen.getByTestId(`${mockedDataTestId}-workspace-group-1-workspace-0`),
     ).toBeInTheDocument();
     expect(screen.getByText('Mocked Workspace')).toBeInTheDocument();
+  });
+
+  test('should close drawer', () => {
+    const setVisibleDrawerMockFn = jest.fn();
+    renderWithProviders(
+      <SwitchWorkspace
+        setVisibleDrawer={setVisibleDrawerMockFn}
+        visibleDrawer={true}
+        workspaces={mockedWorkspaces}
+        data-testid={mockedDataTestId}
+      />,
+      { preloadedState },
+    );
+
+    fireEvent.click(screen.getByTestId(`${mockedDataTestId}-close`));
+    expect(setVisibleDrawerMockFn).nthCalledWith(1, false);
   });
 });
