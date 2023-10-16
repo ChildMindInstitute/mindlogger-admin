@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
-export const getEmptyCondition = () => ({
+import { Condition } from 'shared/state';
+
+export const getEmptyCondition = (): Condition => ({
   key: uuidv4(),
   type: '',
   itemName: '',
