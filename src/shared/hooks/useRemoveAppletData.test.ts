@@ -16,9 +16,7 @@ describe('useRemoveAppletData hook tests', () => {
       result.current();
     });
 
-    expect(spyStorage).toBeCalled();
-    expect(spyStorage).toBeCalledTimes(2);
-    expect(spyStorage).toBeCalledWith(LocalStorageKeys.IsFromLibrary);
-    expect(spyStorage).toBeCalledWith(LocalStorageKeys.LibraryPreparedData);
+    expect(spyStorage).nthCalledWith(1, LocalStorageKeys.IsFromLibrary);
+    expect(spyStorage).nthCalledWith(2, LocalStorageKeys.LibraryPreparedData);
   });
 });
