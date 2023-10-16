@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Button, Box } from '@mui/material';
-import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
-import { useFormContext } from 'react-hook-form';
+import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { Modal, Svg } from 'shared/components';
+import { Modal, Spinner, Svg } from 'shared/components';
 import {
   StyledBodyLarge,
   StyledFlexAllCenter,
   StyledModalWrapper,
+  StyledObserverTarget,
   StyledTitleMedium,
   theme,
   variables,
@@ -17,19 +18,22 @@ import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
 import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
-import { InsertItem } from 'modules/Builder/components/InsertItem';
 import { DndDroppable } from 'modules/Builder/components/DndDroppable';
 import { ItemFormValues } from 'modules/Builder/types';
+import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
+import { useActivityItemsRedirection } from 'modules/Builder/hooks/useActivityItemsRedirection';
 
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
 import { LeftBarHeader } from './LeftBarHeader';
+import { ACTIVITY_ITEMS_LIST_CLASS, ACTIVITY_ITEMS_END_ITEM_CLASS } from './LeftBar.const';
 import { ConditionalPanel } from '../ConditionalPanel';
 import { getConditionsToRemove } from '../ActivityItems.utils';
+import { DraggableItems } from './DraggableItems';
 
 export const LeftBar = ({
   activeItemIndex,
-  onSetActiveItemIndex,
+  onSetActiveItem,
   onAddItem,
   onInsertItem,
   onDuplicateItem,
@@ -37,7 +41,7 @@ export const LeftBar = ({
   onMoveItem,
 }: LeftBarProps) => {
   const { t } = useTranslation('app');
-  const { watch, setValue } = useFormContext();
+  const { setValue } = useFormContext();
   const [isDragging, setIsDragging] = useState(false);
   const [conditionalLogicKeysToRemove, setConditionalLogicKeysToRemove] = useState<string[] | null>(
     null,
@@ -46,13 +50,21 @@ export const LeftBar = ({
   const [destinationIndex, setDestinationIndex] = useState(-1);
 
   const { fieldName, activity } = useCurrentActivity();
-  const items: ItemFormValues[] = watch(`${fieldName}.items`);
+  const items: ItemFormValues[] = useWatch({ name: `${fieldName}.items` });
   const activeItemId = getEntityKey(items?.[activeItemIndex]);
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
   const groupedConditions = getObjectFromList<ConditionalLogic>(activity.conditionalLogic ?? []);
-  const draggableItems = items.filter((item) => item.allowEdit);
-  const systemItems = items.filter((item) => !item.allowEdit);
+
+  const { data: itemsData, isPending } = useDataPreloader<ItemFormValues>({
+    data: items,
+    rootSelector: `.${ACTIVITY_ITEMS_LIST_CLASS}`,
+    targetSelector: `.${ACTIVITY_ITEMS_END_ITEM_CLASS}`,
+  });
+  const draggableItems = itemsData.filter((item) => item.allowEdit);
+  const systemItems = itemsData.filter((item) => !item.allowEdit);
+
+  useActivityItemsRedirection();
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
@@ -87,10 +99,8 @@ export const LeftBar = ({
     handleCancelRemoveConditionals();
   };
 
-  const handleSetActiveItem = (id: string) => {
-    const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === id);
-
-    onSetActiveItemIndex(activeItemIndex);
+  const handleSetActiveItem = (item: ItemFormValues) => {
+    onSetActiveItem(item);
   };
 
   const addItemBtn = (
@@ -122,70 +132,48 @@ export const LeftBar = ({
       contentSxProps={{
         padding: theme.spacing(0, 1.6, 2.8),
       }}
+      contentClassName={ACTIVITY_ITEMS_LIST_CLASS}
       hasMaxWidth={!hasActiveItem}
     >
       {!!draggableItems?.length && (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-items-dnd" direction="vertical">
             {(listProvided) => (
-              <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                {draggableItems?.map((item, index) => {
-                  const dataTestid = `builder-activity-items-item-${index}`;
-
-                  return (
-                    <Draggable
-                      key={`item-${getEntityKey(item)}`}
-                      draggableId={getEntityKey(item)}
-                      index={index}
-                    >
-                      {(itemProvided, snapshot) => (
-                        <Box
-                          {...itemProvided.draggableProps}
-                          ref={itemProvided.innerRef}
-                          data-testid={dataTestid}
-                        >
-                          <Item
-                            dragHandleProps={itemProvided.dragHandleProps}
-                            isDragging={snapshot.isDragging}
-                            item={item}
-                            name={`${fieldName}.items[${index}]`}
-                            index={index}
-                            activeItemId={activeItemId}
-                            onSetActiveItem={handleSetActiveItem}
-                            onDuplicateItem={onDuplicateItem}
-                            onRemoveItem={onRemoveItem}
-                          />
-                          <InsertItem
-                            isVisible={index >= 0 && index < items.length - 1 && !isDragging}
-                            onInsert={() => onInsertItem(index)}
-                            data-testid={`${dataTestid}-insert`}
-                          />
-                        </Box>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {listProvided.placeholder}
-              </Box>
+              <DraggableItems
+                items={draggableItems}
+                listProvided={listProvided}
+                isDragging={isDragging}
+                onRemoveItem={onRemoveItem}
+                onInsertItem={onInsertItem}
+                onSetActiveItem={handleSetActiveItem}
+                onDuplicateItem={onDuplicateItem}
+              />
             )}
           </DndDroppable>
         </DragDropContext>
       )}
       {!!systemItems?.length &&
-        systemItems.map((item) => (
+        systemItems.map((item, index) => (
           <Item
             key={`item-${getEntityKey(item)}`}
             item={item}
+            index={index}
             activeItemId={activeItemId}
             onSetActiveItem={handleSetActiveItem}
             onDuplicateItem={onDuplicateItem}
             onRemoveItem={onRemoveItem}
           />
         ))}
-      {!items?.length && (
+      {!itemsData?.length && (
         <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
           {t('itemIsRequired')}
         </StyledTitleMedium>
+      )}
+      <StyledObserverTarget className={ACTIVITY_ITEMS_END_ITEM_CLASS} />
+      {isPending && (
+        <Box sx={{ position: 'relative' }}>
+          <Spinner />
+        </Box>
       )}
       {hasActiveItem && <StyledFlexAllCenter>{addItemBtn}</StyledFlexAllCenter>}
       {conditionalLogicKeysToRemove && (

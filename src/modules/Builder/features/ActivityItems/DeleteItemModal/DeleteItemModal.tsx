@@ -17,9 +17,10 @@ import { DeleteItemModalProps } from './DeleteItemModal.types';
 
 export const DeleteItemModal = ({
   itemIdToDelete,
-  setItemIdToDelete,
   activeItemIndex,
-  setActiveItemIndex,
+  onClose,
+  onRemoveItem,
+  onSetActiveItem,
 }: DeleteItemModalProps) => {
   const { t } = useTranslation('app');
   const { fieldName, activity } = useCurrentActivity();
@@ -41,10 +42,7 @@ export const DeleteItemModal = ({
     .join(', ');
 
   const handleRemoveItem = (index: number) => {
-    setValue(
-      `${fieldName}.items`,
-      items?.filter((_, key) => key !== index),
-    );
+    onRemoveItem(index);
 
     if (itemsWithVariablesToRemove.length) {
       for (const item of itemsWithVariablesToRemove) {
@@ -52,13 +50,9 @@ export const DeleteItemModal = ({
       }
     }
 
-    if (activeItemIndex === index && items?.length !== 1) return setActiveItemIndex(-1);
-
-    if (activeItemIndex === items?.length - 1) setActiveItemIndex((prev) => prev - 1);
-  };
-
-  const handleRemoveModalClose = () => {
-    setItemIdToDelete('');
+    if (activeItemIndex === index && items?.length !== 1) {
+      onSetActiveItem();
+    }
   };
 
   const handleRemoveModalSubmit = () => {
@@ -75,7 +69,7 @@ export const DeleteItemModal = ({
     }
 
     handleRemoveItem(itemIndexToDelete);
-    handleRemoveModalClose();
+    onClose();
   };
 
   if (!itemIdToDelete) return null;
@@ -83,9 +77,9 @@ export const DeleteItemModal = ({
   return (
     <Modal
       open={!!itemIdToDelete}
-      onClose={handleRemoveModalClose}
+      onClose={onClose}
       onSubmit={handleRemoveModalSubmit}
-      onSecondBtnSubmit={handleRemoveModalClose}
+      onSecondBtnSubmit={onClose}
       title={itemsWithVariablesToRemove.length ? t('variablesWarning.title') : t('deleteItem')}
       buttonText={t('delete')}
       secondBtnText={t('cancel')}

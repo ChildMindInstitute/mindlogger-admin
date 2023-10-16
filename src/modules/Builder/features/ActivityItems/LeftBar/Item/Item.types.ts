@@ -7,11 +7,11 @@ import { LeftBarProps } from '../LeftBar.types';
 export type ItemProps = {
   item: ItemFormValues;
   name?: string;
-  index?: number;
+  index: number;
   dragHandleProps?: DraggableProvided['dragHandleProps'];
   isDragging?: boolean;
   activeItemId: string;
-  onSetActiveItem: (id: string) => void;
+  onSetActiveItem: (item: ItemFormValues) => void;
 } & Omit<
   LeftBarProps,
   'items' | 'onAddItem' | 'onInsertItem' | 'onMoveItem' | 'activeItemIndex' | 'onSetActiveItemIndex'
