@@ -9,6 +9,7 @@ import {
 import { getObjectFromList } from 'shared/utils';
 import {
   ActivityItemAnswer,
+  AnswerDTO,
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
@@ -27,9 +28,31 @@ import {
 } from './Report.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
 
-const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
+const isValueDefined = (value?: string | number | (string | number)[] | null) =>
+  value !== null && value !== undefined;
 
-const isValueDefined = (value?: string | number | null) => value !== null && value !== undefined;
+const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemResponseType) => {
+  switch (responseType) {
+    case ItemResponseType.SingleSelection:
+    case ItemResponseType.Slider: {
+      return (
+        typeof (answer as DecryptedSingleSelectionAnswer)?.value === 'number' &&
+        ((answer as DecryptedSingleSelectionAnswer)?.value as number) >= 0
+      );
+    }
+    case ItemResponseType.MultipleSelection: {
+      return (
+        Array.isArray((answer as DecryptedMultiSelectionAnswer)?.value) &&
+        (answer as DecryptedMultiSelectionAnswer)?.value.every((item) => typeof item === 'number')
+      );
+    }
+    case ItemResponseType.Text: {
+      return typeof (answer as DecryptedTextAnswer) === 'string';
+    }
+  }
+};
+
+const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
 
 const shiftAnswerValues = (answers: Answer[]) =>
   answers.map((item) => ({
@@ -294,9 +317,11 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const value = isValueDefined((currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value)
-        ? +(currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value
-        : null;
+      const value =
+        isValueDefined((currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value) &&
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.SingleSelection)
+          ? +(currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value
+          : null;
 
       const answers = [
         {
@@ -324,7 +349,13 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const answers = currentAnswer.answer
+      const value =
+        isValueDefined((currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value) &&
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.MultipleSelection)
+          ? (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value
+          : null;
+
+      const answers = value
         ? (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value.map((value) => ({
             answer: {
               value: optionsValuesMapper[+value],
@@ -349,9 +380,12 @@ export const formatActivityItemAnswers = (
           ),
         },
       };
-      const value = isValueDefined((currentAnswer.answer as DecryptedSliderAnswer)?.value)
-        ? +(currentAnswer.answer as DecryptedSliderAnswer)?.value
-        : null;
+
+      const value =
+        isValueDefined((currentAnswer.answer as DecryptedSliderAnswer)?.value) &&
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.Slider)
+          ? +(currentAnswer.answer as DecryptedSliderAnswer)?.value
+          : null;
 
       const answers = [
         {
@@ -369,10 +403,16 @@ export const formatActivityItemAnswers = (
       };
     }
     case ItemResponseType.Text: {
+      const value =
+        isValueDefined(currentAnswer.answer as DecryptedTextAnswer) &&
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.Text)
+          ? currentAnswer.answer
+          : null;
+
       const answers = [
         {
           answer: {
-            value: currentAnswer.answer as DecryptedTextAnswer,
+            value: value as DecryptedTextAnswer,
             text: null,
           },
           date,
