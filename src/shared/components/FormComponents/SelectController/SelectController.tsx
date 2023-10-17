@@ -141,10 +141,10 @@ export const SelectController = <T extends FieldValues>({
         data-testid={dataTestid}
       >
         {rootSelector && targetSelector ? (
-          <div className={rootSelector} style={{ overflowY: 'auto' }}>
+          <Box className={rootSelector} sx={{ overflowY: 'auto' }}>
             {renderGroupedOptions()}
             <StyledObserverTarget className={targetSelector} />
-          </div>
+          </Box>
         ) : (
           renderGroupedOptions()
         )}
