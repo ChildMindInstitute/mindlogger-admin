@@ -1,0 +1,56 @@
+import { renderHook, act } from '@testing-library/react';
+import { Action } from 'history';
+
+import history from 'routes/history';
+
+import { useBlocker } from './useBlocker';
+
+const mockBlocker = jest.fn();
+const spyHistoryBlock = jest.spyOn(history, 'block');
+
+describe('useBlocker', () => {
+  test('should call history.block when "when" is true', () => {
+    renderHook(() => useBlocker(mockBlocker, true));
+    expect(spyHistoryBlock).toHaveBeenCalled();
+    spyHistoryBlock.mockRestore();
+  });
+
+  test('should not call history.block when "when" is false', () => {
+    renderHook(() => useBlocker(mockBlocker, false));
+    expect(spyHistoryBlock).not.toHaveBeenCalled();
+    spyHistoryBlock.mockRestore();
+  });
+
+  test('should call the blocker function with the correct parameters', () => {
+    renderHook(() => useBlocker(mockBlocker, true));
+    const blockingFunction = spyHistoryBlock.mock.calls[0][0];
+    const mockTransition = {
+      retry: jest.fn(),
+      action: Action.Pop,
+      location: {
+        state: 'some-state',
+        key: 'some-key',
+        pathname: 'some-pathname',
+        search: 'some-search',
+        hash: 'some-hash',
+      },
+    };
+
+    blockingFunction(mockTransition);
+    expect(mockBlocker).toHaveBeenCalledWith({
+      ...mockTransition,
+      retry: expect.any(Function),
+    });
+    spyHistoryBlock.mockRestore();
+  });
+
+  test('should unblock when the component unmounts', () => {
+    const { unmount } = renderHook(() => useBlocker(mockBlocker, true));
+    expect(spyHistoryBlock).toHaveBeenCalled();
+    act(() => {
+      unmount();
+    });
+    expect(spyHistoryBlock).toHaveBeenCalledTimes(2); // One for mounting, one for unmounting
+    spyHistoryBlock.mockRestore();
+  });
+});
