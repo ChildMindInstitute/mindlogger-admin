@@ -65,9 +65,9 @@ describe('DataRetention component tests', () => {
       route,
       routePath,
     });
+    const [retentionPeriodInput, retentionTypeInput] = container.querySelectorAll('input');
 
     expect(screen.getByTestId(`${dataTestid}-retention-period`)).toBeInTheDocument();
-    const [retentionPeriodInput, retentionTypeInput] = container.querySelectorAll('input');
     expect(retentionPeriodInput?.value).toBe('2');
     expect(retentionTypeInput?.value).toBe(RetentionPeriods.Days);
   });
@@ -102,7 +102,6 @@ describe('DataRetention component tests', () => {
     const retentionTypeInput = container.querySelector('input');
     retentionTypeInput &&
       fireEvent.change(retentionTypeInput, { target: { value: retentionType } });
-
     fireEvent.click(screen.getByTestId(`${dataTestid}-save`));
 
     await waitFor(() => {
