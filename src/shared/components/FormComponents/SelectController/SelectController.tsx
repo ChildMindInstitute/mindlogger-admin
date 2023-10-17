@@ -5,7 +5,13 @@ import { Box } from '@mui/material';
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 import { SelectEvent } from 'shared/types';
-import { StyledFlexTopCenter, StyledLabelBoldMedium, theme, variables } from 'shared/styles';
+import {
+  StyledFlexTopCenter,
+  StyledLabelBoldMedium,
+  StyledObserverTarget,
+  theme,
+  variables,
+} from 'shared/styles';
 import { groupBy } from 'shared/utils/array';
 
 import { SelectControllerProps, SelectUiType, GetMenuItem, Option } from './SelectController.types';
@@ -33,6 +39,8 @@ export const SelectController = <T extends FieldValues>({
   sx,
   dropdownStyles,
   'data-testid': dataTestid,
+  rootSelector,
+  targetSelector,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -132,7 +140,14 @@ export const SelectController = <T extends FieldValues>({
         }}
         data-testid={dataTestid}
       >
-        {renderGroupedOptions()}
+        {rootSelector && targetSelector ? (
+          <div className={rootSelector} style={{ overflowY: 'auto' }}>
+            {renderGroupedOptions()}
+            <StyledObserverTarget className={targetSelector} />
+          </div>
+        ) : (
+          renderGroupedOptions()
+        )}
       </StyledTextField>
     </Box>
   );

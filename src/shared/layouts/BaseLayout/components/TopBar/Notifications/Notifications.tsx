@@ -13,6 +13,8 @@ import {
   StyledObserverTarget,
 } from 'shared/styles';
 import { alerts } from 'shared/state';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { useInfinityData } from 'shared/hooks/useInfinityData';
 
 import { Notification, NotificationProps } from './Notification';
 import {
@@ -25,17 +27,17 @@ import {
   StyledBox,
 } from './Notifications.styles';
 import { ALERT_LIST_CLASS, ALERT_END_ITEM_CLASS } from './Notifications.const';
-import { useInfinityData } from './Notifications.hooks';
 
 export const Notifications = () => {
   const { t } = useTranslation('app');
-  const { result: alertList = [], notWatched = 0 } = alerts.useAlertsData() ?? {};
+  const { result: alertList = [], notWatched = 0, count = 0 } = alerts.useAlertsData() ?? {};
   const alertListStatus = alerts.useAlertsStatus() ?? {};
   const [showList, setShowList] = useState(true);
   const [notifications, setNotifications] = useState<
     Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null
   >(null);
   const [currentId, setCurrentId] = useState('');
+  const isLoading = alertListStatus === 'loading';
 
   const timeAgo = useTimeAgo();
 
@@ -50,7 +52,15 @@ export const Notifications = () => {
     setNotifications(alerts);
   }, [alertList]);
 
-  useInfinityData();
+  useInfinityData({
+    rootSelector: `.${ALERT_LIST_CLASS}`,
+    targetSelector: `.${ALERT_END_ITEM_CLASS}`,
+    totalSize: count,
+    listSize: alertList.length,
+    isLoading,
+    limitPerPage: DEFAULT_ROWS_PER_PAGE,
+    getListThunk: alerts.thunk.getAlerts,
+  });
 
   return (
     <Box>
@@ -87,7 +97,7 @@ export const Notifications = () => {
               {...item}
             />
           ))}
-          {alertListStatus === 'loading' && (
+          {isLoading && (
             <StyledBox>
               <Spinner />
             </StyledBox>

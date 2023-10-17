@@ -121,7 +121,8 @@ export const BuilderApplet = () => {
   }, [defaultThemeId, isNewApplet]);
 
   useEffect(() => {
-    dispatch(themes.thunk.getThemes({ ordering: 'name' }));
+    dispatch(themes.actions.resetThemes());
+    dispatch(themes.thunk.getThemes({ ordering: 'name', page: 1 }));
 
     return removeAppletData;
   }, []);

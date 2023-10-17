@@ -10,6 +10,7 @@ import {
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { Tooltip, Uploader } from 'shared/components';
 import {
+  DEFAULT_ROWS_PER_PAGE,
   MAX_DESCRIPTION_LENGTH_LONG,
   MAX_FILE_SIZE_25MB,
   MAX_NAME_LENGTH,
@@ -19,16 +20,18 @@ import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { themes } from 'modules/Builder/state';
 import { BuilderContainer } from 'shared/features';
+import { useInfinityData } from 'shared/hooks/useInfinityData';
 
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { getColorThemeOptions } from './AboutApplet.utils';
-import { commonUploaderProps } from './AboutApplet.const';
+import { commonUploaderProps, THEME_END_ITEM_CLASS, THEME_LIST_CLASS } from './AboutApplet.const';
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
-  const { result: themesList = [] } = themes.useThemesData() || {};
+  const { result: themesList = [], count = 0 } = themes.useThemesData() || {};
   const themesOptions = getColorThemeOptions(themesList);
   const { control, setValue, watch } = useFormContext();
+  const themesLoadingStatus = themes.useThemesStatus();
 
   const commonInputProps = {
     control,
@@ -63,6 +66,16 @@ export const AboutApplet = () => {
       ),
     },
   ];
+
+  useInfinityData({
+    rootSelector: `.${THEME_LIST_CLASS}`,
+    targetSelector: `.${THEME_END_ITEM_CLASS}`,
+    totalSize: count,
+    listSize: themesList.length,
+    isLoading: themesLoadingStatus === 'loading',
+    limitPerPage: DEFAULT_ROWS_PER_PAGE,
+    getListThunk: themes.thunk.getThemes,
+  });
 
   return (
     <BuilderContainer title={t('aboutApplet')}>
@@ -102,6 +115,8 @@ export const AboutApplet = () => {
                   maxHeight: '25rem',
                   width: '55rem',
                 }}
+                rootSelector={THEME_LIST_CLASS}
+                targetSelector={THEME_END_ITEM_CLASS}
                 data-testid="about-applet-theme"
               />
             </StyledFlexTopCenter>
