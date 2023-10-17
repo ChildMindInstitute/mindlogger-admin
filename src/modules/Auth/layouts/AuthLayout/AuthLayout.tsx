@@ -1,13 +1,14 @@
 import { Outlet } from 'react-router-dom';
 
 import { auth } from 'modules/Auth/state';
-import { Spinner, Svg, Footer } from 'shared/components';
+import { Spinner, Svg, Footer, Banner } from 'shared/components';
 
 import {
   StyledAuthLayout,
   StyledAuthWrapper,
   StyledAuthWrapperInner,
   StyledHeader,
+  StyledLogoWrapper,
   StyledOutlet,
 } from './AuthLayout.styles';
 
@@ -18,7 +19,10 @@ export const AuthLayout = () => {
     <StyledAuthLayout>
       {status === 'loading' && <Spinner />}
       <StyledHeader>
-        <Svg id="header-logo" width={250} height={44} />
+        <StyledLogoWrapper>
+          <Svg id="header-logo" width={250} height={44} />
+        </StyledLogoWrapper>
+        <Banner />
       </StyledHeader>
       <StyledOutlet>
         <StyledAuthWrapper>
