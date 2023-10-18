@@ -15,7 +15,6 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 describe('usePromptSetup', () => {
   test('should initialize with default values', () => {
     const { result } = renderHook(() => usePromptSetup(), { wrapper });
-
     expect(result.current.location).toBeDefined();
     expect(result.current.promptVisible).toBe(false);
     expect(result.current.lastLocation).toBe(null);
