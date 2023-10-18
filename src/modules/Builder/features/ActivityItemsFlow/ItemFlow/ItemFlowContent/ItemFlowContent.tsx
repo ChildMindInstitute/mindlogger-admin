@@ -36,7 +36,7 @@ export const ItemFlowContent = ({
           showError={false}
         />
       ))}
-      <SummaryRow name={name} data-testid={`${dataTestid}-summary`} />
+      <SummaryRow key={itemKey} name={name} data-testid={`${dataTestid}-summary`} />
       {error && (
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}>
           {errorMessage}
