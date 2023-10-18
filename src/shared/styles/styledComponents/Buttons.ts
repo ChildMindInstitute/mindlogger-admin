@@ -12,8 +12,10 @@ export const StyledIconButton = styled(StyledClearedButton)`
   width: 4rem;
   height: 4rem;
 
-  svg:hover {
-    fill: ${variables.palette.primary};
+  &:hover {
+    svg {
+      fill: ${variables.palette.primary};
+    }
   }
 `;
 

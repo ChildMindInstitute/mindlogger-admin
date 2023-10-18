@@ -10,12 +10,16 @@ export const StyledAuthLayout = styled(StyledFlexColumn)`
   overflow: auto;
 `;
 
-export const StyledHeader = styled(StyledFlexAllCenter)`
+export const StyledHeader = styled(Box)`
   position: sticky;
   top: 0;
+  z-index: ${theme.zIndex.fab};
+`;
+
+export const StyledLogoWrapper = styled(StyledFlexAllCenter)`
+  width: 100%;
   background-color: ${variables.palette.primary};
   padding: ${theme.spacing(1, 2.4)};
-  z-index: ${theme.zIndex.fab};
 `;
 
 export const StyledOutlet = styled(Box)`
