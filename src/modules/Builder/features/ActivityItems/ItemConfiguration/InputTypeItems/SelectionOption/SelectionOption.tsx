@@ -235,6 +235,7 @@ export const SelectionOption = ({
               </StyledFlexTopCenter>
               <StyledTextInputWrapper hasScores={!!scoreString}>
                 <InputController
+                  withDebounce
                   {...commonInputProps}
                   name={`${optionName}.text`}
                   label={t('optionText')}
@@ -259,6 +260,7 @@ export const SelectionOption = ({
             {hasTooltipsChecked && (
               <StyledTooltipWrapper>
                 <InputController
+                  withDebounce
                   {...commonInputProps}
                   label={t('tooltip')}
                   name={`${optionName}.tooltip`}

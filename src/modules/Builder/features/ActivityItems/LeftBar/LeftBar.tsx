@@ -177,7 +177,7 @@ export const LeftBar = ({
               name={name}
               index={index}
               onSetActiveItem={handleSetActiveItem}
-              onDuplicateItem={onDuplicateItem}
+              onDuplicateItem={() => onDuplicateItem(itemIndex)}
               onRemoveItem={onRemoveItem}
             />
           );

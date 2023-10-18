@@ -41,7 +41,7 @@ export const Item = ({
 
   const actions = getActions({
     onRemoveItem,
-    onDuplicateItem: () => onDuplicateItem(index!),
+    onDuplicateItem,
     onChangeVisibility: () => onChangeItemVisibility?.(),
     isItemHidden,
     hasHiddenOption,

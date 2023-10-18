@@ -10,11 +10,10 @@ export type ItemProps = {
   dragHandleProps?: DraggableProvided['dragHandleProps'];
   isDragging?: boolean;
   onSetActiveItem: (item: ItemFormValues) => void;
+  onDuplicateItem: () => void;
   onChangeItemVisibility?: () => void;
-} & Omit<
-  LeftBarProps,
-  'items' | 'onAddItem' | 'onInsertItem' | 'onMoveItem' | 'activeItemIndex' | 'onSetActiveItemIndex'
->;
+  onRemoveItem: (id: string) => void;
+};
 
 export type ActionsType = {
   onRemoveItem: LeftBarProps['onRemoveItem'];
