@@ -5,13 +5,12 @@ import { ItemFormValues } from 'modules/Builder/types';
 import { LeftBarProps } from '../LeftBar.types';
 
 export type ItemProps = {
-  item: ItemFormValues;
   name?: string;
   index: number;
   dragHandleProps?: DraggableProvided['dragHandleProps'];
   isDragging?: boolean;
-  activeItemId: string;
   onSetActiveItem: (item: ItemFormValues) => void;
+  onChangeItemVisibility?: () => void;
 } & Omit<
   LeftBarProps,
   'items' | 'onAddItem' | 'onInsertItem' | 'onMoveItem' | 'activeItemIndex' | 'onSetActiveItemIndex'

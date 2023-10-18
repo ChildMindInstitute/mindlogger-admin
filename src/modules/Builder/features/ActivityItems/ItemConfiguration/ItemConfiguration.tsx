@@ -130,23 +130,27 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         />
         <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />
       </BuilderContainer>
-      <Modal
-        open={isPopupVisible}
-        onClose={onPopupConfirm}
-        onSubmit={onPopupConfirm}
-        width={'62'}
-        title={t('variablesWarning.title')}
-        buttonText={t('ok')}
-        data-testid="builder-activity-items-item-configuration-variables-warning-popup"
-      >
-        <StyledModalWrapper>{t(message)}</StyledModalWrapper>
-      </Modal>
-      <EditItemModal
-        itemFieldName={name}
-        isPopupVisible={isEditItemPopupVisible}
-        setIsPopupVisible={setIsEditItemPopupVisible}
-        onModalSubmit={handleModalSubmit}
-      />
+      {isPopupVisible && (
+        <Modal
+          open
+          onClose={onPopupConfirm}
+          onSubmit={onPopupConfirm}
+          width={'62'}
+          title={t('variablesWarning.title')}
+          buttonText={t('ok')}
+          data-testid="builder-activity-items-item-configuration-variables-warning-popup"
+        >
+          <StyledModalWrapper>{t(message)}</StyledModalWrapper>
+        </Modal>
+      )}
+      {isEditItemPopupVisible && (
+        <EditItemModal
+          open
+          itemFieldName={name}
+          onClose={() => setIsEditItemPopupVisible(false)}
+          onSubmit={handleModalSubmit}
+        />
+      )}
     </>
   );
 };

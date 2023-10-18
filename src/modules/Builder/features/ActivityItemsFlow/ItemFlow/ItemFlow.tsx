@@ -13,13 +13,13 @@ import {
 } from 'shared/styles';
 import { useIntersectionObserver } from 'shared/hooks';
 import { Condition } from 'shared/state';
+import { observerStyles } from 'modules/Builder/consts';
 
 import { ItemFlowActions } from './ItemFlowActions';
 import { ItemFlowProps } from './ItemFlow.types';
 import { getEmptyCondition, getObserverSelector } from './ItemFlow.utils';
 import { StyledTitle, StyledCollapse } from './ItemFlow.styles';
 import { ItemFlowContent } from './ItemFlowContent';
-import { observerStyles } from './ItemFlow.const';
 
 export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const { t } = useTranslation('app');

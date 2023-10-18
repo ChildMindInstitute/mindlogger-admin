@@ -1,17 +1,15 @@
-import { useParams } from 'react-router-dom';
-import { Draggable } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
 
 import { Spinner } from 'shared/components';
 import { getEntityKey } from 'shared/utils';
-import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
 import { StyledObserverTarget } from 'shared/styles';
+import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { InsertItem } from 'modules/Builder/components';
+import { observerStyles } from 'modules/Builder/consts';
 
 import { DraggableItemsProps } from './DraggableItems.types';
-import { Item } from '../Item';
 import { DRAGGABLE_ITEMS_LIST_CLASS, DRAGGABLE_ITEMS_END_ITEM_CLASS } from './DraggableItems.const';
+import { DraggableItem } from './DraggableItem';
 
 export const DraggableItems = ({
   items,
@@ -21,8 +19,8 @@ export const DraggableItems = ({
   onInsertItem,
   onSetActiveItem,
   onDuplicateItem,
+  onChangeItemVisibility,
 }: DraggableItemsProps) => {
-  const { itemId } = useParams();
   const { fieldName: activityName } = useCurrentActivity();
 
   const { data: draggableItems, isPending } = useDataPreloader({
@@ -36,47 +34,31 @@ export const DraggableItems = ({
       {...listProvided.droppableProps}
       ref={listProvided.innerRef}
       className={DRAGGABLE_ITEMS_LIST_CLASS}
+      sx={{ position: 'relative' }}
     >
       {!isPending &&
         draggableItems.map((item, index) => {
           const dataTestid = `builder-activity-items-item-${index}`;
+          const itemName = `${activityName}.items.${index}`;
+          const itemId = getEntityKey(item);
 
           return (
-            <Draggable
-              key={`draggable-item-${getEntityKey(item)}`}
-              draggableId={getEntityKey(item)}
+            <DraggableItem
+              key={`draggable-item-${itemId}`}
+              itemName={itemName}
               index={index}
-            >
-              {(itemProvided, snapshot) => (
-                <Box
-                  {...itemProvided.draggableProps}
-                  ref={itemProvided.innerRef}
-                  data-testid={dataTestid}
-                  sx={{ position: 'relative' }}
-                >
-                  <Item
-                    dragHandleProps={itemProvided.dragHandleProps}
-                    isDragging={snapshot.isDragging}
-                    item={item}
-                    name={`${activityName}.items[${index}]`}
-                    index={index}
-                    activeItemId={itemId ?? ''}
-                    onSetActiveItem={onSetActiveItem}
-                    onDuplicateItem={onDuplicateItem}
-                    onRemoveItem={onRemoveItem}
-                  />
-                  <InsertItem
-                    isVisible={index >= 0 && index < items.length - 1 && !isDragging}
-                    onInsert={() => onInsertItem(index)}
-                    data-testid={`${dataTestid}-insert`}
-                  />
-                  <StyledObserverTarget sx={{ position: 'absolute' }} />
-                </Box>
-              )}
-            </Draggable>
+              itemId={itemId}
+              isInsertVisible={index >= 0 && index < draggableItems.length - 1 && !isDragging}
+              onSetActiveItem={() => onSetActiveItem(item)}
+              onDuplicateItem={() => onDuplicateItem(index)}
+              onRemoveItem={() => onRemoveItem(itemId)}
+              onChangeItemVisibility={() => onChangeItemVisibility(itemName)}
+              onInsertItem={onInsertItem}
+              data-testid={dataTestid}
+            />
           );
         })}
-      <StyledObserverTarget className={DRAGGABLE_ITEMS_END_ITEM_CLASS} />
+      <StyledObserverTarget className={DRAGGABLE_ITEMS_END_ITEM_CLASS} sx={observerStyles} />
       {isPending && (
         <Box sx={{ position: 'relative' }}>
           <Spinner />

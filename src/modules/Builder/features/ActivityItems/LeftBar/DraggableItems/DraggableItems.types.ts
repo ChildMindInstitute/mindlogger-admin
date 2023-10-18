@@ -10,4 +10,5 @@ export type DraggableItemsProps = {
   onDuplicateItem: (index: number) => void;
   onRemoveItem: (id: string) => void;
   onInsertItem: (index: number) => void;
+  onChangeItemVisibility: (itemName: string) => void;
 };

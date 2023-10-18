@@ -1,2 +1,2 @@
-export const DRAGGABLE_ITEMS_LIST_CLASS = 'activity-items-flow-list';
-export const DRAGGABLE_ITEMS_END_ITEM_CLASS = 'activity-items-flow-end-item';
+export const DRAGGABLE_ITEMS_LIST_CLASS = 'draggable-activity-items-list';
+export const DRAGGABLE_ITEMS_END_ITEM_CLASS = 'draggable-activity-items-end-item';
