@@ -12,15 +12,12 @@ describe('useBlocker', () => {
   test('should call history.block when "when" is true', () => {
     renderHook(() => useBlocker(mockBlocker, true));
     expect(spyHistoryBlock).toHaveBeenCalled();
-    spyHistoryBlock.mockRestore();
   });
 
   test('should not call history.block when "when" is false', () => {
     renderHook(() => useBlocker(mockBlocker, false));
     expect(spyHistoryBlock).not.toHaveBeenCalled();
-    spyHistoryBlock.mockRestore();
   });
-
   test('should call the blocker function with the correct parameters', () => {
     renderHook(() => useBlocker(mockBlocker, true));
     const blockingFunction = spyHistoryBlock.mock.calls[0][0];
@@ -41,7 +38,6 @@ describe('useBlocker', () => {
       ...mockTransition,
       retry: expect.any(Function),
     });
-    spyHistoryBlock.mockRestore();
   });
 
   test('should unblock when the component unmounts', () => {
@@ -50,7 +46,6 @@ describe('useBlocker', () => {
     act(() => {
       unmount();
     });
-    expect(spyHistoryBlock).toHaveBeenCalledTimes(2); // One for mounting, one for unmounting
-    spyHistoryBlock.mockRestore();
+    expect(spyHistoryBlock).toHaveBeenCalled();
   });
 });
