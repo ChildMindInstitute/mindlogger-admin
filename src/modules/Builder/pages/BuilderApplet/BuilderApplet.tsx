@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -56,9 +56,13 @@ export const BuilderApplet = () => {
       ? dispatch(getAppletWithItems({ ownerId, appletId }))
       : undefined,
   );
+  const defaultValues = useMemo(
+    () => getDefaultValues(appletData, defaultThemeId),
+    [appletData, defaultThemeId],
+  );
 
   const methods = useForm<AppletFormValues>({
-    defaultValues: getDefaultValues(appletData, defaultThemeId),
+    defaultValues,
     resolver: yupResolver(AppletSchema() as ObjectSchema<AppletFormValues>),
     mode: 'onChange',
   });
