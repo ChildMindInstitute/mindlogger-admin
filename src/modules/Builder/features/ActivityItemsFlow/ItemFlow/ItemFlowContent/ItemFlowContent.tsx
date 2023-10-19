@@ -10,13 +10,14 @@ import { SummaryRow } from '../SummaryRow';
 
 export const ItemFlowContent = ({
   name,
-  conditions,
   onRemove,
   'data-testid': dataTestid,
 }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
   const { watch, getFieldState } = useFormContext();
 
+  const conditionsName = `${name}.conditions`;
+  const conditions = watch(conditionsName);
   const itemKey = watch(`${name}.itemKey`);
   const { error } = getFieldState(name);
   const { error: conditionalError } = getFieldState(`${name}.itemKey`);
@@ -36,7 +37,7 @@ export const ItemFlowContent = ({
           showError={false}
         />
       ))}
-      <SummaryRow name={name} data-testid={`${dataTestid}-summary`} />
+      <SummaryRow key={itemKey} name={name} data-testid={`${dataTestid}-summary`} />
       {error && (
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}>
           {errorMessage}
