@@ -10,7 +10,6 @@ import {
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { Tooltip, Uploader } from 'shared/components';
 import {
-  DEFAULT_ROWS_PER_PAGE,
   MAX_DESCRIPTION_LENGTH_LONG,
   MAX_FILE_SIZE_25MB,
   MAX_NAME_LENGTH,
@@ -73,7 +72,6 @@ export const AboutApplet = () => {
     totalSize: count,
     listSize: themesList.length,
     isLoading: themesLoadingStatus === 'loading',
-    limitPerPage: DEFAULT_ROWS_PER_PAGE,
     getListThunk: themes.thunk.getThemes,
   });
 

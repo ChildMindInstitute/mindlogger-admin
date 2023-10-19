@@ -13,7 +13,6 @@ import {
   StyledObserverTarget,
 } from 'shared/styles';
 import { alerts } from 'shared/state';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { useInfinityData } from 'shared/hooks/useInfinityData';
 
 import { Notification, NotificationProps } from './Notification';
@@ -58,7 +57,6 @@ export const Notifications = () => {
     totalSize: count,
     listSize: alertList.length,
     isLoading,
-    limitPerPage: DEFAULT_ROWS_PER_PAGE,
     getListThunk: alerts.thunk.getAlerts,
   });
 

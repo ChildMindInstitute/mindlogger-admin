@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios';
 
 import { getInfinityScrollData } from 'shared/utils/getInfinityScrollData';
 import { useIntersectionObserver } from 'shared/hooks';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 export type UseInfinityDataType = {
   rootSelector: string;
@@ -11,8 +12,8 @@ export type UseInfinityDataType = {
   listSize: number;
   totalSize: number;
   isLoading: boolean;
-  limitPerPage: number;
-  getListThunk: AsyncThunk<AxiosResponse, any, any>;
+  limitPerPage?: number;
+  getListThunk: AsyncThunk<AxiosResponse, Record<string, unknown>, Record<string, unknown>>;
 };
 export const useInfinityData = ({
   rootSelector,
@@ -20,7 +21,7 @@ export const useInfinityData = ({
   totalSize,
   listSize,
   isLoading,
-  limitPerPage,
+  limitPerPage = DEFAULT_ROWS_PER_PAGE,
   getListThunk,
 }: UseInfinityDataType) => {
   const dispatch = useAppDispatch();
