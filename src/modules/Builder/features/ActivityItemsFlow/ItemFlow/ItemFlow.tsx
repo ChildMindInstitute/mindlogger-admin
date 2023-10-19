@@ -41,7 +41,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   });
 
   const handleAddCondition = () => {
-    appendCondition(getEmptyCondition() as Condition);
+    appendCondition(getEmptyCondition());
   };
   const handleRemoveCondition = (index: number) => {
     removeCondition(index);
