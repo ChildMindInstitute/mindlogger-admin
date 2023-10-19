@@ -9,6 +9,7 @@ import {
 import { getObjectFromList } from 'shared/utils';
 import {
   ActivityItemAnswer,
+  AnswerDTO,
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
@@ -27,9 +28,31 @@ import {
 } from './Report.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
 
-const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
+export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
+  value !== null && value !== undefined;
 
-const isValueDefined = (value?: string | number | null) => value !== null && value !== undefined;
+export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemResponseType) => {
+  switch (responseType) {
+    case ItemResponseType.SingleSelection:
+    case ItemResponseType.Slider: {
+      return (
+        typeof (answer as DecryptedSingleSelectionAnswer)?.value === 'number' &&
+        ((answer as DecryptedSingleSelectionAnswer)?.value as number) >= 0
+      );
+    }
+    case ItemResponseType.MultipleSelection: {
+      return (
+        Array.isArray((answer as DecryptedMultiSelectionAnswer)?.value) &&
+        (answer as DecryptedMultiSelectionAnswer)?.value.every((item) => typeof item === 'number')
+      );
+    }
+    case ItemResponseType.Text: {
+      return typeof (answer as DecryptedTextAnswer) === 'string';
+    }
+  }
+};
+
+const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
 
 const shiftAnswerValues = (answers: Answer[]) =>
   answers.map((item) => ({
@@ -80,7 +103,7 @@ export const getIdentifiers = (
   );
 };
 
-const getSliderOptions = (
+export const getSliderOptions = (
   { minValue, maxValue }: SliderItemResponseValues,
   itemId: string,
   step = 1,
