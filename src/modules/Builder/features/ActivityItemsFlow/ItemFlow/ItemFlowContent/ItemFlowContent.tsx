@@ -10,13 +10,14 @@ import { SummaryRow } from '../SummaryRow';
 
 export const ItemFlowContent = ({
   name,
-  conditions,
   onRemove,
   'data-testid': dataTestid,
 }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
   const { watch, getFieldState } = useFormContext();
 
+  const conditionsName = `${name}.conditions`;
+  const conditions = watch(conditionsName);
   const itemKey = watch(`${name}.itemKey`);
   const { error } = getFieldState(name);
   const { error: conditionalError } = getFieldState(`${name}.itemKey`);
