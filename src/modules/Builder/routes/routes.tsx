@@ -1,11 +1,13 @@
 import { lazy } from 'react';
 import { Route, Navigate, generatePath } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
 import { Path } from 'shared/utils';
 import BuilderAppletSettings from 'modules/Builder/features/BuilderAppletSettings';
 import ActivitySettings from 'modules/Builder/features/ActivitySettings';
+import { ErrorFallback } from 'shared/components';
 
 import {
   appletRoutes,
@@ -28,7 +30,17 @@ export const builderRoutes = () => (
         <Route
           key={path}
           path={path}
-          element={<PrivateRoute>{Component ? <Component /> : <></>}</PrivateRoute>}
+          element={
+            <PrivateRoute>
+              {Component ? (
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <Component />
+                </ErrorBoundary>
+              ) : (
+                <></>
+              )}
+            </PrivateRoute>
+          }
         />
       ))}
       <Route path={Path.Settings}>
@@ -37,7 +49,9 @@ export const builderRoutes = () => (
             path=":setting"
             element={
               <PrivateRoute>
-                <BuilderAppletSettings />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <BuilderAppletSettings />
+                </ErrorBoundary>
               </PrivateRoute>
             }
           />
@@ -50,7 +64,17 @@ export const builderRoutes = () => (
             <Route
               key={path}
               path={path}
-              element={<PrivateRoute>{Component ? <Component /> : <></>}</PrivateRoute>}
+              element={
+                <PrivateRoute>
+                  {Component ? (
+                    <ErrorBoundary FallbackComponent={ErrorFallback}>
+                      <Component />
+                    </ErrorBoundary>
+                  ) : (
+                    <></>
+                  )}
+                </PrivateRoute>
+              }
             />
           ))}
           <Route path={Path.Items} element={<ActivityItems />}>
@@ -58,7 +82,9 @@ export const builderRoutes = () => (
               path=":itemId"
               element={
                 <PrivateRoute>
-                  <ActivityItems />
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                    <ActivityItems />
+                  </ErrorBoundary>
                 </PrivateRoute>
               }
             />
@@ -68,7 +94,9 @@ export const builderRoutes = () => (
               path=":setting"
               element={
                 <PrivateRoute>
-                  <ActivitySettings />
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                    <ActivitySettings />
+                  </ErrorBoundary>
                 </PrivateRoute>
               }
             />
@@ -81,7 +109,9 @@ export const builderRoutes = () => (
                 path=":activityId"
                 element={
                   <PrivateRoute>
-                    <Component {...props} />
+                    <ErrorBoundary FallbackComponent={ErrorFallback}>
+                      <Component {...props} />
+                    </ErrorBoundary>
                   </PrivateRoute>
                 }
               />
@@ -96,7 +126,17 @@ export const builderRoutes = () => (
             <Route
               key={path}
               path={path}
-              element={<PrivateRoute>{Component ? <Component /> : <></>}</PrivateRoute>}
+              element={
+                <PrivateRoute>
+                  {Component ? (
+                    <ErrorBoundary FallbackComponent={ErrorFallback}>
+                      <Component />
+                    </ErrorBoundary>
+                  ) : (
+                    <></>
+                  )}
+                </PrivateRoute>
+              }
             />
           ))}
           <Route path={Path.Settings} element={<ActivityFlowSettings />}>
@@ -104,7 +144,9 @@ export const builderRoutes = () => (
               path=":setting"
               element={
                 <PrivateRoute>
-                  <ActivityFlowSettings />
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                    <ActivityFlowSettings />
+                  </ErrorBoundary>
                 </PrivateRoute>
               }
             />
