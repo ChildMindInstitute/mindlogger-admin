@@ -27,7 +27,7 @@ describe('isAnswerTypeCorrect', () => {
     ${{ value: 'string' }}  | ${ItemResponseType.SingleSelection}   | ${false}       | ${'should return false for an incorrect single selection/slider answer'}
     ${{ value: [1, 2, 3] }} | ${ItemResponseType.MultipleSelection} | ${true}        | ${'should return true for a correct multiple selection answer'}
     ${{ value: 'string' }}  | ${ItemResponseType.MultipleSelection} | ${false}       | ${'should return false for an incorrect multiple selection answer'}
-    ${{ value: 'string' }}  | ${ItemResponseType.Text}              | ${true}        | ${'should return true for a correct text answer'}
+    ${'string'}             | ${ItemResponseType.Text}              | ${true}        | ${'should return true for a correct text answer'}
     ${{ value: 'string' }}  | ${ItemResponseType.Text}              | ${false}       | ${'should return false for an incorrect text answer'}
   `('$description', ({ answer, responseType, expectedOutput }) => {
     const result = isAnswerTypeCorrect(answer, responseType);

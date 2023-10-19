@@ -1,42 +1,27 @@
 import { formatToNumberArray, hasAnswerValue, getUpdatedValues } from './FeedbackAssessment.utils';
 
 describe('formatToNumberArray', () => {
-  it('should return an empty array when the input array is empty', () => {
-    const result = formatToNumberArray([]);
-    expect(result).toEqual([]);
-  });
-
-  it('should convert an array of strings to an array of numbers', () => {
-    const stringArray = ['1', '2', '3', '4'];
+  test.each`
+    stringArray             | expected        | description
+    ${[]}                   | ${[]}           | ${'should return an empty array when the input array is empty'}
+    ${['1', '2', '3', '4']} | ${[1, 2, 3, 4]} | ${'should convert an array of strings to an array of numbers'}
+  `('$description', ({ stringArray, expected }) => {
     const result = formatToNumberArray(stringArray);
-    expect(result).toEqual([1, 2, 3, 4]);
+    expect(result).toEqual(expected);
   });
 });
 
 describe('hasAnswerValue', () => {
-  it('should return false for an empty string', () => {
-    const result = hasAnswerValue('');
-    expect(result).toBe(false);
-  });
-
-  it('should return false for an empty array', () => {
-    const result = hasAnswerValue([]);
-    expect(result).toBe(false);
-  });
-
-  it('should return true for a non-empty string', () => {
-    const result = hasAnswerValue('Hello World!');
-    expect(result).toBe(true);
-  });
-
-  it('should return true for a non-empty number', () => {
-    const result = hasAnswerValue(12);
-    expect(result).toBe(true);
-  });
-
-  it('should return true for a non-empty array', () => {
-    const result = hasAnswerValue(['item1', 'item2']);
-    expect(result).toBe(true);
+  test.each`
+    value                 | expected | description
+    ${''}                 | ${false} | ${'should return false for an empty string'}
+    ${[]}                 | ${false} | ${'should return false for an empty array'}
+    ${'Hello World!'}     | ${true}  | ${'should return true for a non-empty string'}
+    ${12}                 | ${true}  | ${'should return true for a non-empty number'}
+    ${['item1', 'item2']} | ${true}  | ${'should return true for a non-empty array'}
+  `('$description', ({ value, expected }) => {
+    const result = hasAnswerValue(value);
+    expect(result).toBe(expected);
   });
 });
 
