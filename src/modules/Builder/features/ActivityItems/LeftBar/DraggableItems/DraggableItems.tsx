@@ -44,7 +44,7 @@ export const DraggableItems = ({
 
           return (
             <DraggableItem
-              key={`draggable-item-${itemId}`}
+              key={`draggable-item-${itemId}-${index}`}
               itemName={itemName}
               index={index}
               itemId={itemId}

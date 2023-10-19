@@ -128,6 +128,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         </Grid>
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('displayedContent')}</StyledTitleLarge>
         <EditorController
+          withDebounce
           name={`${name}.question`}
           control={control}
           data-testid="builder-activity-items-item-configuration-description"
