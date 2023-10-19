@@ -317,14 +317,20 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const value = isValueDefined((currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value)
-        ? +(currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value
+      const isValueCorrect =
+        isValueDefined((currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value) &&
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.SingleSelection);
+
+      const value = isValueCorrect
+        ? optionsValuesMapper[
+            (currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value as number
+          ]
         : null;
 
       const answers = [
         {
           answer: {
-            value: optionsValuesMapper[value!],
+            value,
             text: null,
           },
           date,
@@ -347,7 +353,11 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const answers = currentAnswer.answer
+      const isValueCorrect =
+        isValueDefined((currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value) &&
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.MultipleSelection);
+
+      const answers = isValueCorrect
         ? (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value.map((value) => ({
             answer: {
               value: optionsValuesMapper[+value],
@@ -372,9 +382,12 @@ export const formatActivityItemAnswers = (
           ),
         },
       };
-      const value = isValueDefined((currentAnswer.answer as DecryptedSliderAnswer)?.value)
-        ? +(currentAnswer.answer as DecryptedSliderAnswer)?.value
-        : null;
+
+      const isValueCorrect =
+        isValueDefined((currentAnswer.answer as DecryptedSliderAnswer)?.value) &&
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.Slider);
+
+      const value = isValueCorrect ? (currentAnswer.answer as DecryptedSliderAnswer)?.value : null;
 
       const answers = [
         {
@@ -392,10 +405,16 @@ export const formatActivityItemAnswers = (
       };
     }
     case ItemResponseType.Text: {
+      const value =
+        isValueDefined(currentAnswer.answer as DecryptedTextAnswer) &&
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.Text)
+          ? currentAnswer.answer
+          : null;
+
       const answers = [
         {
           answer: {
-            value: currentAnswer.answer as DecryptedTextAnswer,
+            value: value as DecryptedTextAnswer,
             text: null,
           },
           date,
