@@ -1,25 +1,15 @@
 import { ItemResponseType } from 'shared/consts';
-
 import { getDefaultValue } from './Feedback.utils';
 
 describe('getDefaultValue', () => {
-  it('should return null for ItemResponseType.Slider', () => {
-    const result = getDefaultValue(ItemResponseType.Slider);
-    expect(result).toBeNull();
-  });
-
-  it('should return an empty array for ItemResponseType.MultipleSelection', () => {
-    const result = getDefaultValue(ItemResponseType.MultipleSelection);
-    expect(result).toEqual([]);
-  });
-
-  it('should return an empty string for other response types', () => {
-    const result = getDefaultValue(ItemResponseType.Text);
-    expect(result).toBe('');
-  });
-
-  it('should return an empty string for an unknown response type', () => {
-    const result = getDefaultValue(ItemResponseType.Message);
-    expect(result).toBe('');
+  test.each`
+    responseType                          | expected | description
+    ${ItemResponseType.SingleSelection}   | ${null}  | ${'should return null for ItemResponseType.SingleSelection'}
+    ${ItemResponseType.MultipleSelection} | ${[]}    | ${'should return an empty array for ItemResponseType.MultipleSelection'}
+    ${ItemResponseType.Slider}            | ${null}  | ${'should return null for ItemResponseType.Slider'}
+    ${ItemResponseType.Text}              | ${''}    | ${'should return an empty string for other response types'}
+  `('$description', ({ responseType, expected }) => {
+    const result = getDefaultValue(responseType);
+    expect(result).toEqual(expected);
   });
 });
