@@ -317,16 +317,20 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const value =
+      const isValueCorrect =
         isValueDefined((currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value) &&
-        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.SingleSelection)
-          ? +(currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value
-          : null;
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.SingleSelection);
+
+      const value = isValueCorrect
+        ? optionsValuesMapper[
+            (currentAnswer.answer as DecryptedSingleSelectionAnswer)?.value as number
+          ]
+        : null;
 
       const answers = [
         {
           answer: {
-            value: optionsValuesMapper[value!],
+            value,
             text: null,
           },
           date,
@@ -349,13 +353,11 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const value =
+      const isValueCorrect =
         isValueDefined((currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value) &&
-        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.MultipleSelection)
-          ? (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value
-          : null;
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.MultipleSelection);
 
-      const answers = value
+      const answers = isValueCorrect
         ? (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value.map((value) => ({
             answer: {
               value: optionsValuesMapper[+value],
@@ -381,11 +383,11 @@ export const formatActivityItemAnswers = (
         },
       };
 
-      const value =
+      const isValueCorrect =
         isValueDefined((currentAnswer.answer as DecryptedSliderAnswer)?.value) &&
-        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.Slider)
-          ? +(currentAnswer.answer as DecryptedSliderAnswer)?.value
-          : null;
+        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.Slider);
+
+      const value = isValueCorrect ? (currentAnswer.answer as DecryptedSliderAnswer)?.value : null;
 
       const answers = [
         {
