@@ -143,6 +143,7 @@ export const FileUploader = ({
                 inputProps={{ accept: getAcceptedFormats({ isPrimaryUiType, csvOnly }) }}
                 type="file"
                 name="uploadFile"
+                data-testid="upload-file"
               />
             }
           />
