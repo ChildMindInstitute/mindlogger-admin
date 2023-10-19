@@ -326,17 +326,27 @@ const getFlankerItemsData = (
   return flankerItemsData.concat(...flankerAnswers);
 };
 
+const getDefaultExportData = (): AppletExportData => ({
+  reportData: [],
+  activityJourneyData: [],
+  mediaData: [],
+  drawingItemsData: [],
+  stabilityTrackerItemsData: [],
+  abTrailsItemsData: [],
+  flankerItemsData: [],
+});
+
 export const prepareData = async (
   data: ExportDataResult,
   getDecryptedAnswers: (
     data: ExtendedExportAnswer,
   ) => DecryptedActivityData<ExtendedExportAnswerWithoutEncryption>,
-) => {
-  const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
-  const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(parsedAnswers);
+): Promise<AppletExportData> => {
+  try {
+    const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
+    const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(parsedAnswers);
 
-  return parsedAnswersWithPublicUrls.reduce(
-    (acc, data) => {
+    return parsedAnswersWithPublicUrls.reduce<AppletExportData>((acc, data) => {
       const rawAnswersObject = getObjectFromList(
         data.decryptedAnswers,
         (item) => item.activityItem.name,
@@ -367,15 +377,10 @@ export const prepareData = async (
         abTrailsItemsData,
         flankerItemsData,
       };
-    },
-    {
-      reportData: [],
-      activityJourneyData: [],
-      mediaData: [],
-      drawingItemsData: [],
-      stabilityTrackerItemsData: [],
-      abTrailsItemsData: [],
-      flankerItemsData: [],
-    } as AppletExportData,
-  );
+    }, getDefaultExportData());
+  } catch (error) {
+    console.warn('Error while export data', error);
+
+    return getDefaultExportData();
+  }
 };
