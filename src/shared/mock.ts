@@ -28,9 +28,9 @@ export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
 export const mockedRespondent = {
   id: mockedRespondentId,
   nicknames: ['Mocked Respondent'],
-  secretIds: ['mockedSecretIds'],
+  secretIds: ['mockedSecretId'],
   isAnonymousRespondent: false,
-  lastSeen: '2023-10-19T07:43:50.542631',
+  lastSeen: new Date().toDateString(),
   isPinned: false,
   details: [
     {
