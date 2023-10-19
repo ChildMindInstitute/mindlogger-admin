@@ -139,6 +139,31 @@ describe('Respondents component tests', () => {
     });
   });
 
+  describe('should appear popup when click on respondent action for ', () => {
+    test.each`
+      actionDataTestId                         | popupDataTestId                                       | description
+      ${'dashboard-respondents-view-data'}     | ${'dashboard-respondents-view-data-popup'}            | ${'view data'}
+      ${'dashboard-respondents-view-calendar'} | ${'dashboard-respondents-view-calendar-popup'}        | ${'view calendar'}
+      ${'dashboard-respondents-export-data'}   | ${'dashboard-respondents-export-data-popup-password'} | ${'export data'}
+      ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}                 | ${'edit respondents'}
+      ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access'}              | ${'remove access'}
+    `('$description', async ({ actionDataTestId, popupDataTestId }) => {
+      mockAxios.get.mockResolvedValue(mockedGetWithRespondents);
+      renderWithProviders(<Respondents />, { preloadedState, route, routePath });
+
+      const actionsDots = await waitFor(() =>
+        screen.getByTestId('dashboard-respondents-table-actions-dots'),
+      );
+      fireEvent.mouseEnter(actionsDots);
+      const action = await waitFor(() => screen.getByTestId(actionDataTestId));
+      fireEvent.click(action);
+
+      await waitFor(() => {
+        expect(screen.getByTestId(popupDataTestId)).toBeInTheDocument();
+      });
+    });
+  });
+
   test('should search respondents', async () => {
     mockAxios.get.mockResolvedValueOnce(mockedGetWithRespondents);
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
