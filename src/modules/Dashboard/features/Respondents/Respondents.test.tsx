@@ -58,10 +58,6 @@ const getMockedGetWithRespondents = (isAnonymousRespondent = false) => ({
 });
 
 describe('Respondents component tests', () => {
-  afterEach(() => {
-    mockAxios.reset();
-  });
-
   test('should render empty table', async () => {
     const successfulGetMock = {
       status: ApiResponseCodes.SuccessfulResponse,
@@ -143,7 +139,7 @@ describe('Respondents component tests', () => {
     });
   });
 
-  test('should appear ractions on respondent hover for anonymous respondent', async () => {
+  test('should appear actions on respondent hover for anonymous respondent', async () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithRespondents(true));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
