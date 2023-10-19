@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
+import { ItemFormValues } from 'modules/Builder/types';
 
 export type DeleteItemModalProps = {
   itemIdToDelete: string;
-  setItemIdToDelete: Dispatch<SetStateAction<string>>;
   activeItemIndex: number;
-  setActiveItemIndex: Dispatch<SetStateAction<number>>;
+  onClose: () => void;
+  onRemoveItem: (index: number) => void;
+  onSetActiveItem: (item?: ItemFormValues) => void;
 };

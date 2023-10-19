@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
+import { page } from 'resources';
 import { StyledContainer } from 'shared/styles';
 import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
-import { page } from 'resources';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { ItemConfiguration } from './ItemConfiguration/ItemConfiguration';
@@ -26,6 +26,7 @@ export const ActivityItems = () => {
     fields: items,
     append: appendItem,
     insert: insertItem,
+    remove: removeItem,
     move: moveItem,
   } = useFieldArray<Record<string, ItemFormValues[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
@@ -34,31 +35,23 @@ export const ActivityItems = () => {
   });
 
   const { appletId, activityId, itemId } = useParams();
-  const [activeItemIndex, setActiveItemIndex] = useState(() =>
-    itemId ? items?.findIndex((item) => getEntityKey(item) === itemId) : -1,
-  );
-  const [activeItem, setActiveItem] = useState<ItemFormValues | undefined>(undefined);
+  const activeItemIndex = itemId ? items?.findIndex((item) => getEntityKey(item) === itemId) : -1;
+  const activeItem = activeItemIndex !== -1 ? items[activeItemIndex] : undefined;
   const [itemIdToDelete, setItemIdToDelete] = useState('');
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
-  useEffect(() => {
-    setActiveItem(items?.find((_, index) => index === activeItemIndex));
-  }, [activeItemIndex]);
+  const navigateToItem = (item?: ItemFormValues) => {
+    const path = item ? page.builderAppletActivityItem : page.builderAppletActivityItems;
 
-  useEffect(() => {
     navigate(
-      generatePath(activeItem ? page.builderAppletActivityItem : page.builderAppletActivityItems, {
+      generatePath(path, {
         appletId,
         activityId,
-        ...(activeItem
-          ? {
-              itemId: getEntityKey(activeItem),
-            }
-          : {}),
+        ...(item && { itemId: getEntityKey(item) }),
       }),
     );
-  }, [activeItem]);
+  };
 
   if (!activity) return null;
 
@@ -67,15 +60,17 @@ export const ActivityItems = () => {
   };
 
   const handleAddItem = () => {
-    const item = getNewActivityItem() as ItemFormValues;
+    const item = getNewActivityItem();
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
     const indexListToTrigger = getIndexListToTrigger(items, item.name);
     for (const itemIndex of indexListToTrigger) {
       trigger(`${itemsName}.${itemIndex}`);
     }
+
     firstSystemIndex === -1 ? appendItem(item) : insertItem(firstSystemIndex, item);
-    setActiveItemIndex(firstSystemIndex === -1 ? items?.length : firstSystemIndex);
+
+    navigateToItem(item);
   };
 
   const handleInsertItem = (index: number, item?: ItemFormValues) => {
@@ -86,8 +81,8 @@ export const ActivityItems = () => {
     for (const itemIndex of indexListToTrigger) {
       trigger(`${itemsName}.${itemIndex}`);
     }
-    insertItem(index + 1, itemToInsert as ItemFormValues);
-    shouldBecomeActive && setActiveItemIndex(index + 1);
+    insertItem(index + 1, itemToInsert);
+    shouldBecomeActive && navigateToItem(itemToInsert);
   };
 
   const handleDuplicateItem = (index: number) => {
@@ -108,14 +103,21 @@ export const ActivityItems = () => {
 
   const handleMoveItem = (sourceIndex: number, destinationIndex: number) => {
     moveItem(sourceIndex, destinationIndex);
-    setActiveItemIndex(destinationIndex);
+  };
+
+  const handleRemoveItem = (index: number) => {
+    removeItem(index);
+  };
+
+  const handleDeleteModalClose = () => {
+    setItemIdToDelete('');
   };
 
   return (
     <StyledContainer>
       <LeftBar
         activeItemIndex={activeItemIndex}
-        onSetActiveItemIndex={setActiveItemIndex}
+        onSetActiveItem={navigateToItem}
         onAddItem={handleAddItem}
         onInsertItem={handleInsertItem}
         onDuplicateItem={handleDuplicateItem}
@@ -126,15 +128,18 @@ export const ActivityItems = () => {
         <ItemConfiguration
           key={`item-${activeItemIndex}`}
           name={`${itemsName}.${activeItemIndex}`}
-          onClose={() => setActiveItemIndex(-1)}
+          onClose={() => navigateToItem()}
         />
       )}
-      <DeleteItemModal
-        itemIdToDelete={itemIdToDelete}
-        setItemIdToDelete={setItemIdToDelete}
-        activeItemIndex={activeItemIndex}
-        setActiveItemIndex={setActiveItemIndex}
-      />
+      {!!itemIdToDelete && (
+        <DeleteItemModal
+          itemIdToDelete={itemIdToDelete}
+          activeItemIndex={activeItemIndex}
+          onClose={handleDeleteModalClose}
+          onRemoveItem={handleRemoveItem}
+          onSetActiveItem={navigateToItem}
+        />
+      )}
     </StyledContainer>
   );
 };

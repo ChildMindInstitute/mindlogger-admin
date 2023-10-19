@@ -28,3 +28,5 @@ export const getActions = ({
     'data-testid': `${dataTestid}-remove`,
   },
 ];
+
+export const getObserverSelector = (index: number) => `activity-item-${index}`;
