@@ -8,7 +8,7 @@ import {
   mockedCurrentWorkspace,
   mockedOwnerId,
   mockedRespondentId,
-  mockedRespondents,
+  mockedRespondent,
 } from 'shared/mock';
 import { base } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
@@ -47,13 +47,15 @@ const preloadedState = {
   },
 };
 
-const mockedGetWithRespondents = {
+const getMockedGetWithRespondents = (isAnonymousRespondent = false) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
-    result: mockedRespondents,
+    result: isAnonymousRespondent
+      ? [{ ...mockedRespondent, isAnonymousRespondent: true }]
+      : [mockedRespondent],
     count: 1,
   },
-};
+});
 
 describe('Respondents component tests', () => {
   afterEach(() => {
@@ -91,21 +93,18 @@ describe('Respondents component tests', () => {
   });
 
   test('should render table with respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithRespondents);
+    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
+    const tableColumns = ['Secret User ID', 'Nickname', 'Latest active', 'Schedule', 'Actions'];
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-respondents-table')).toBeInTheDocument();
-      expect(screen.getByText('Secret User ID')).toBeInTheDocument();
-      expect(screen.getByText('Nickname')).toBeInTheDocument();
-      expect(screen.getByText('Latest active')).toBeInTheDocument();
-      expect(screen.getByText('Schedule')).toBeInTheDocument();
-      expect(screen.getByText('Actions')).toBeInTheDocument();
+      tableColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
     });
   });
 
   test('should pin respondent', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithRespondents);
+    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     const respondentPin = await waitFor(() => screen.getByTestId('dashboard-respondents-pin'));
@@ -122,7 +121,30 @@ describe('Respondents component tests', () => {
   });
 
   test('should appear respondents actions on respondent hover', async () => {
-    mockAxios.get.mockResolvedValue(mockedGetWithRespondents);
+    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
+    renderWithProviders(<Respondents />, { preloadedState, route, routePath });
+
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-respondents-table-actions-dots'),
+    );
+    fireEvent.mouseEnter(actionsDots);
+    const actionsDataTestIds = [
+      'dashboard-respondents-view-calendar',
+      'dashboard-respondents-view-data',
+      'dashboard-respondents-export-data',
+      'dashboard-respondents-edit',
+      'dashboard-respondents-remove-access',
+    ];
+
+    await waitFor(() => {
+      actionsDataTestIds.forEach((dataTestId) =>
+        expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
+      );
+    });
+  });
+
+  test('should appear ractions on respondent hover for anonymous respondent', async () => {
+    mockAxios.get.mockResolvedValue(getMockedGetWithRespondents(true));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     const actionsDots = await waitFor(() =>
@@ -130,12 +152,17 @@ describe('Respondents component tests', () => {
     );
     fireEvent.mouseEnter(actionsDots);
 
+    const actionsDataTestIds = [
+      'dashboard-respondents-view-data',
+      'dashboard-respondents-export-data',
+      'dashboard-respondents-edit',
+      'dashboard-respondents-remove-access',
+    ];
+
     await waitFor(() => {
-      expect(screen.getByTestId('dashboard-respondents-view-calendar')).toBeInTheDocument();
-      expect(screen.getByTestId('dashboard-respondents-view-data')).toBeInTheDocument();
-      expect(screen.getByTestId('dashboard-respondents-export-data')).toBeInTheDocument();
-      expect(screen.getByTestId('dashboard-respondents-edit')).toBeInTheDocument();
-      expect(screen.getByTestId('dashboard-respondents-remove-access')).toBeInTheDocument();
+      actionsDataTestIds.forEach((dataTestId) =>
+        expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
+      );
     });
   });
 
@@ -148,7 +175,7 @@ describe('Respondents component tests', () => {
       ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}                 | ${'edit respondents'}
       ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access'}              | ${'remove access'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
-      mockAxios.get.mockResolvedValue(mockedGetWithRespondents);
+      mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
       renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
       const actionsDots = await waitFor(() =>
@@ -165,7 +192,7 @@ describe('Respondents component tests', () => {
   });
 
   test('should search respondents', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithRespondents);
+    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 

@@ -25,25 +25,23 @@ export const mockedCurrentWorkspace = {
 };
 
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
-export const mockedRespondents = [
-  {
-    id: mockedRespondentId,
-    nicknames: ['Mocked Respondent'],
-    secretIds: ['mockedSecretIds'],
-    isAnonymousRespondent: false,
-    lastSeen: '2023-10-19T07:43:50.542631',
-    isPinned: false,
-    details: [
-      {
-        appletId: mockedAppletId,
-        appletDisplayName: 'Mocked Applet',
-        appletImage: '',
-        accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-        respondentNickname: 'Mocked Respondent',
-        respondentSecretId: '3921968c-3903-4872-8f30-a6e6a10cef36',
-        hasIndividualSchedule: false,
-        encryption: mockedEncryption,
-      },
-    ],
-  },
-];
+export const mockedRespondent = {
+  id: mockedRespondentId,
+  nicknames: ['Mocked Respondent'],
+  secretIds: ['mockedSecretIds'],
+  isAnonymousRespondent: false,
+  lastSeen: '2023-10-19T07:43:50.542631',
+  isPinned: false,
+  details: [
+    {
+      appletId: mockedAppletId,
+      appletDisplayName: 'Mocked Applet',
+      appletImage: '',
+      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+      respondentNickname: 'Mocked Respondent',
+      respondentSecretId: '3921968c-3903-4872-8f30-a6e6a10cef36',
+      hasIndividualSchedule: false,
+      encryption: mockedEncryption,
+    },
+  ],
+};
