@@ -18,6 +18,7 @@ describe('useBlocker', () => {
     renderHook(() => useBlocker(mockBlocker, false));
     expect(spyHistoryBlock).not.toHaveBeenCalled();
   });
+
   test('should call the blocker function with the correct parameters', () => {
     renderHook(() => useBlocker(mockBlocker, true));
     const blockingFunction = spyHistoryBlock.mock.calls[0][0];
