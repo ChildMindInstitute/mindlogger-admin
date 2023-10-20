@@ -38,37 +38,37 @@ const Observed = ({ callback = () => {} }: { callback?: () => void }) => {
   );
 };
 
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-beforeEach(() => {
-  // @ts-ignore
-  global.IntersectionObserver = jest.fn((cb, options = {}) => {
-    const instance = {
-      thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
-      root: options.root,
-      rootMargin: options.rootMargin,
-      observe: jest.fn((element: Element) => {
-        instanceMap.set(element, instance);
-        observerMap.set(element, cb);
-      }),
-      unobserve: jest.fn((element: Element) => {
-        instanceMap.delete(element);
-        observerMap.delete(element);
-      }),
-      disconnect: jest.fn(),
-    };
-
-    return instance;
-  });
-});
-
-afterEach(() => {
-  // @ts-ignore
-  global.IntersectionObserver.mockReset();
-  instanceMap.clear();
-  observerMap.clear();
-});
-
 describe('useIntersectionObserver', () => {
+  /* eslint-disable @typescript-eslint/ban-ts-comment */
+  beforeEach(() => {
+    // @ts-ignore
+    global.IntersectionObserver = jest.fn((cb, options = {}) => {
+      const instance = {
+        thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
+        root: options.root,
+        rootMargin: options.rootMargin,
+        observe: jest.fn((element: Element) => {
+          instanceMap.set(element, instance);
+          observerMap.set(element, cb);
+        }),
+        unobserve: jest.fn((element: Element) => {
+          instanceMap.delete(element);
+          observerMap.delete(element);
+        }),
+        disconnect: jest.fn(),
+      };
+
+      return instance;
+    });
+  });
+
+  afterEach(() => {
+    // @ts-ignore
+    global.IntersectionObserver.mockReset();
+    instanceMap.clear();
+    observerMap.clear();
+  });
+
   test('hook subscribes to the element on the page', () => {
     const { getByTestId } = render(<Observed />);
     const target = getByTestId('observed');
