@@ -10,7 +10,14 @@ import {
   StyledUnderlineLink,
   StyledBox,
 } from './Footer.styles';
-import { ABOUT_LINK, CMI_LINK, CREDITS_LINK, PRIVACY_LINK, TERMS_LINK } from './Footer.const';
+import {
+  ABOUT_LINK,
+  CMI_LINK,
+  CREDITS_LINK,
+  PRIVACY_LINK,
+  SUPPORT_LINK,
+  TERMS_LINK,
+} from './Footer.const';
 
 const version = `v ${packageJson.version}`;
 const year = new Date().getFullYear();
@@ -44,6 +51,9 @@ export const Footer = () => {
         </StyledLink>
         <StyledLink target="_blank" href={CREDITS_LINK}>
           {t('credits')}
+        </StyledLink>
+        <StyledLink target="_blank" href={SUPPORT_LINK}>
+          {t('support')}
         </StyledLink>
         <Language />
       </StyledBox>
