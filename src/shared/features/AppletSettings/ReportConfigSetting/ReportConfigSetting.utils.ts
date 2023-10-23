@@ -12,17 +12,29 @@ const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
 export const getActivitiesOptions = (
   activityFlow?: ActivityFlowFormValues,
   appletData?: Partial<SingleApplet>,
-) =>
-  activityFlow?.items?.map(({ activityKey }) => {
-    const activityName = appletData?.activities?.find(
-      (activity) => activityKey === activity.id,
-    )?.name;
+) => {
+  const uniqueValuesSet = new Set<string>();
+  const uniqueActivities = activityFlow?.items?.reduce(
+    (acc: { value: string; labelKey: string }[], { activityKey }) => {
+      const activityName = appletData?.activities?.find((activity) => activityKey === activity.id)
+        ?.name;
+      const value = activityName ?? '';
 
-    return {
-      value: activityName ?? '',
-      labelKey: activityName ?? '',
-    };
-  }) ?? [];
+      if (!uniqueValuesSet.has(value)) {
+        uniqueValuesSet.add(value);
+        acc.push({
+          value,
+          labelKey: activityName ?? '',
+        });
+      }
+
+      return acc;
+    },
+    [],
+  );
+
+  return uniqueActivities ?? [];
+};
 
 export const getActivityItemsOptions = (activity?: ActivityFormValues) =>
   activity?.items?.map(({ name }) => ({

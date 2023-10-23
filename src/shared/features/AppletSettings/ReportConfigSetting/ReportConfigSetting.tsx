@@ -230,10 +230,11 @@ export const ReportConfigSetting = ({
   };
 
   const handleSaveActivityReportConfig = async () => {
-    const { itemValue, reportIncludedItemName } = getValues() ?? {};
+    const { itemValue, reportIncludedItemName: formIncludedItemName } = getValues() ?? {};
+    const reportIncludedItemName = itemValue ? formIncludedItemName : '';
 
     const body = {
-      reportIncludedItemName: itemValue ? reportIncludedItemName : '',
+      reportIncludedItemName,
     };
 
     await postActivityReportConfig({
@@ -249,11 +250,17 @@ export const ReportConfigSetting = ({
   };
 
   const handleSaveActivityFlowReportConfig = async () => {
-    const { itemValue, reportIncludedActivityName, reportIncludedItemName } = getValues() ?? {};
+    const {
+      itemValue,
+      reportIncludedActivityName: formIncludedActivityName,
+      reportIncludedItemName: formIncludedItemName,
+    } = getValues() ?? {};
+    const reportIncludedActivityName = itemValue ? formIncludedActivityName : '';
+    const reportIncludedItemName = itemValue ? formIncludedItemName : '';
 
     const body = {
-      reportIncludedItemName: itemValue ? reportIncludedItemName : '',
-      reportIncludedActivityName: itemValue ? reportIncludedActivityName : '',
+      reportIncludedItemName,
+      reportIncludedActivityName,
     };
 
     await postActivityFlowReportConfig({
