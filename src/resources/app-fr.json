@@ -287,6 +287,7 @@
   "createNewApplet": "Créer une nouvelle Applet avec les activités sélectionnées",
   "createNewAppletHint": "Tout le contenu du panier sera ajouté à la nouvelle Applet",
   "credits": "Crédits",
+  "support": "Soutien",
   "current": "({{version}}) actuelle",
   "daily": "Quotidiennement",
   "dashboard": "Tableau de bord",
