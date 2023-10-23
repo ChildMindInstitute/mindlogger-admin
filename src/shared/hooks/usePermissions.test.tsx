@@ -4,6 +4,7 @@ import { mockI18Next } from 'shared/tests';
 import { ApiResponseCodes } from 'api';
 import { Workspace, workspaces } from 'shared/state';
 import { mockedOwnerId } from 'shared/mock';
+import * as utils from 'shared/utils';
 
 import { usePermissions } from './usePermissions';
 
@@ -20,7 +21,7 @@ describe('usePermissions hook tests', () => {
     const { result } = renderHook(() => usePermissions(mockAsyncFunc));
 
     await waitFor(() => {
-      expect(mockAsyncFunc).not.toHaveBeenCalled();
+      expect(mockAsyncFunc).not.toBeCalled();
       expect(result.current.isForbidden).toBe(false);
       expect(result.current.isLoading).toBe(false);
     });
@@ -39,6 +40,7 @@ describe('usePermissions hook tests', () => {
     const { result } = renderHook(() => usePermissions(mockAsyncFunc));
 
     await waitFor(() => {
+      expect(mockAsyncFunc).toBeCalled();
       expect(result.current.isForbidden).toBe(false);
       expect(result.current.isLoading).toBe(false);
       expect(result.current.noPermissionsComponent).toBeTruthy();
@@ -58,7 +60,22 @@ describe('usePermissions hook tests', () => {
     const { result } = renderHook(() => usePermissions(mockAsyncFunc));
 
     await waitFor(() => {
+      expect(mockAsyncFunc).toBeCalled();
       expect(result.current.isForbidden).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+
+  test('should get error message for rejected asyncFn', async () => {
+    jest.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
+    const getErrorMessageSpy = jest.spyOn(utils, 'getErrorMessage');
+    mockAsyncFunc.mockRejectedValue({});
+    const { result } = renderHook(() => usePermissions(mockAsyncFunc));
+
+    await waitFor(() => {
+      expect(mockAsyncFunc).toBeCalled();
+      expect(getErrorMessageSpy).toBeCalled();
+      expect(result.current.isForbidden).toBe(false);
       expect(result.current.isLoading).toBe(false);
     });
   });
