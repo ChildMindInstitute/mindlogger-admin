@@ -35,6 +35,10 @@ export const DataExportPopup = ({
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const [activeModal, setActiveModal] = useState(Modals.DataExport);
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
+  const [{ currentPage, limit }, setRequestedPage] = useState({
+    currentPage: 1,
+    limit: 1,
+  });
 
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
   const respondentId = !isAppletSetting
@@ -87,15 +91,15 @@ export const DataExportPopup = ({
         const pageLimit = getPageAmount(count);
         await exportDataSucceed({
           getDecryptedAnswers,
-          callback: () => {
-            setDataIsExporting(false);
-            handlePopupClose();
-          },
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
         })(firstPageData);
 
         if (pageLimit > 1) {
           for (let page = 2; page <= pageLimit; page++) {
+            setRequestedPage({
+              currentPage: page,
+              limit: pageLimit,
+            });
             const nextPageResponse = await getExportDataApi({
               appletId,
               respondentIds: respondentId,
@@ -104,14 +108,13 @@ export const DataExportPopup = ({
             const { result: nextPageData } = nextPageResponse.data;
             await exportDataSucceed({
               getDecryptedAnswers,
-              callback: () => {
-                setDataIsExporting(false);
-                handlePopupClose();
-              },
               suffix: getExportDataSuffix(page),
             })(nextPageData);
           }
         }
+
+        setDataIsExporting(false);
+        handlePopupClose();
       } catch (error) {
         console.warn(error);
         setDataIsExporting(false);
@@ -137,6 +140,16 @@ export const DataExportPopup = ({
         <>
           <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
             {t('waitForRespondentDataDownload')}
+            {limit > 1 && (
+              <>
+                <br />
+                <br />
+                {t('dataProcessing', {
+                  currentPage,
+                  limit,
+                })}
+              </>
+            )}
           </StyledBodyLarge>
           <StyledLinearProgress />
         </>
