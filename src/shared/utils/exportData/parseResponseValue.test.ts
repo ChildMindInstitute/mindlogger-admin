@@ -665,9 +665,9 @@ describe('parseResponseValue', () => {
         ${single}    | ${singleAnswer}                   | ${setAnswerEvent} | ${'value: 1'} | ${'SET_ANSWER event'}
         ${single}    | ${singleWithEditionAnswer}        | ${prevEvent}      | ${''}         | ${'PREV event'}
         ${single}    | ${singleWithAdditionalTextAnswer} | ${nextEvent}      | ${''}         | ${'NEXT event'}
-        ${single}    | ${multiAnswer}                    | ${doneEvent}      | ${''}         | ${'DONE event'}
-        ${single}    | ${sliderAnswer}                   | ${undoEvent}      | ${''}         | ${'UNDO event'}
-        ${single}    | ${sliderAnswer}                   | ${skipEvent}      | ${''}         | ${'SKIP event'}
+        ${slider}    | ${sliderAnswer}                   | ${undoEvent}      | ${''}         | ${'UNDO event'}
+        ${slider}    | ${sliderAnswer}                   | ${skipEvent}      | ${''}         | ${'SKIP event'}
+        ${multi}     | ${multiAnswer}                    | ${doneEvent}      | ${''}         | ${'DONE event'}
       `('$description: "$expected"', ({ activityItem, answer, event, expected }) => {
         const item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption> = {
           ...mockedSharedDecryptedAnswerData,
