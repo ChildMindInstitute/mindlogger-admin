@@ -11,7 +11,7 @@ import {
   postActivityReportConfigApi,
   postActivityFlowReportConfigApi,
 } from 'api';
-import { applet } from 'redux/modules';
+import { applet, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { SaveChangesPopup, Svg } from 'shared/components';
 import {
@@ -82,7 +82,9 @@ export const ReportConfigSetting = ({
   const isServerConfigured = useIsServerConfigured();
   const isActivity = !!activity;
   const isActivityFlow = !!activityFlow;
-  const defaultValues = useDefaultValues(appletData);
+  const { setValue: setAppletFormValue, getValues: getAppletFormValues } = useFormContext() || {};
+  const appletFormValues = getAppletFormValues && (getAppletFormValues() as Partial<SingleApplet>);
+  const defaultValues = useDefaultValues(appletFormValues ?? appletData);
 
   const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -144,8 +146,6 @@ export const ReportConfigSetting = ({
     mode: 'onSubmit',
   });
   const hasErrors = !!Object.keys(errors).length;
-  const { setValue: setAppletFormValue } = useFormContext() || {};
-
   const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
 
   const reportRecipients = watch('reportRecipients') || [];
@@ -158,7 +158,7 @@ export const ReportConfigSetting = ({
 
   const selectedActivity =
     isActivityFlow && reportIncludedActivity
-      ? appletData?.activities?.find((activity) => activity.name === reportIncludedActivity)
+      ? appletFormValues?.activities?.find((activity) => activity.name === reportIncludedActivity)
       : null;
 
   const { onVerify, onSetPassword } = useCheckReportServer({
@@ -230,10 +230,11 @@ export const ReportConfigSetting = ({
   };
 
   const handleSaveActivityReportConfig = async () => {
-    const { itemValue, reportIncludedItemName } = getValues() ?? {};
+    const { itemValue, reportIncludedItemName: formIncludedItemName } = getValues() ?? {};
+    const reportIncludedItemName = itemValue ? formIncludedItemName : '';
 
     const body = {
-      reportIncludedItemName: itemValue ? reportIncludedItemName : '',
+      reportIncludedItemName,
     };
 
     await postActivityReportConfig({
@@ -249,11 +250,17 @@ export const ReportConfigSetting = ({
   };
 
   const handleSaveActivityFlowReportConfig = async () => {
-    const { itemValue, reportIncludedActivityName, reportIncludedItemName } = getValues() ?? {};
+    const {
+      itemValue,
+      reportIncludedActivityName: formIncludedActivityName,
+      reportIncludedItemName: formIncludedItemName,
+    } = getValues() ?? {};
+    const reportIncludedActivityName = itemValue ? formIncludedActivityName : '';
+    const reportIncludedItemName = itemValue ? formIncludedItemName : '';
 
     const body = {
-      reportIncludedItemName: itemValue ? reportIncludedItemName : '',
-      reportIncludedActivityName: itemValue ? reportIncludedActivityName : '',
+      reportIncludedItemName,
+      reportIncludedActivityName,
     };
 
     await postActivityFlowReportConfig({
@@ -530,7 +537,7 @@ export const ReportConfigSetting = ({
                     {...commonSelectProps}
                     name="reportIncludedActivityName"
                     label={t('activity')}
-                    options={getActivitiesOptions(activityFlow, appletData)}
+                    options={getActivitiesOptions(activityFlow, appletFormValues)}
                     customChange={handleActivityChange}
                     sx={{ mr: theme.spacing(2.4) }}
                     data-testid={`${dataTestid}-report-includes-activity-name`}
