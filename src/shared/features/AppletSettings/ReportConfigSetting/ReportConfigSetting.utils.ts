@@ -1,5 +1,6 @@
 import { SingleApplet } from 'shared/state';
 import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+import { getEntityKey } from 'shared/utils';
 
 import {
   VerifyReportServer,
@@ -14,9 +15,10 @@ export const getActivitiesOptions = (
   appletData?: Partial<SingleApplet>,
 ) => {
   const uniqueValuesSet = new Set<string>();
+  const activities = appletData?.activities;
   const uniqueActivities = activityFlow?.items?.reduce(
     (acc: { value: string; labelKey: string }[], { activityKey }) => {
-      const activityName = appletData?.activities?.find((activity) => activityKey === activity.id)
+      const activityName = activities?.find((activity) => activityKey === getEntityKey(activity))
         ?.name;
       const value = activityName ?? '';
 

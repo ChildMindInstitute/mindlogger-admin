@@ -10,7 +10,7 @@ import {
   getItemsWithVariable,
 } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { getEntityKey } from 'shared/utils';
-import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
+import { ActivityFlowFormValues, ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
@@ -27,6 +27,7 @@ export const DeleteItemModal = ({
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
+  const activityFlows: ActivityFlowFormValues[] = watch('activityFlows');
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
@@ -41,10 +42,19 @@ export const DeleteItemModal = ({
     .join(', ');
 
   const handleRemoveItem = (index: number) => {
-    setValue(
-      `${fieldName}.items`,
-      items?.filter((_, key) => key !== index),
+    setValue(`${fieldName}.items`, items?.filter((_, key) => key !== index));
+
+    const activityFlowWithItemIndex = activityFlows.findIndex(
+      (flow) => flow.reportIncludedItemName === itemToDelete.name,
     );
+
+    if (activityFlowWithItemIndex !== -1) {
+      setValue(`activityFlows.${activityFlowWithItemIndex}`, {
+        ...activityFlows[activityFlowWithItemIndex],
+        reportIncludedItemName: '',
+        reportIncludedActivityName: '',
+      });
+    }
 
     if (itemsWithVariablesToRemove.length) {
       for (const item of itemsWithVariablesToRemove) {
