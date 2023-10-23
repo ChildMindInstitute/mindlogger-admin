@@ -196,6 +196,7 @@ export const Respondents = () => {
             items={getActions(actions, filteredRespondents?.[id], isAnonymousRespondent, appletId)}
             context={id}
             visibleByDefault={hasVisibleActions}
+            data-testid="dashboard-respondents-table-actions"
           />
         ),
         value: '',
