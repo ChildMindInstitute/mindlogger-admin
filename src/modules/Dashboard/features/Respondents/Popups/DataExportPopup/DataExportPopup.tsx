@@ -145,8 +145,7 @@ export const DataExportPopup = ({
                 <br />
                 <br />
                 {t('dataProcessing', {
-                  currentPage,
-                  limit,
+                  percentages: Math.floor((currentPage / limit) * 100),
                 })}
               </>
             )}
