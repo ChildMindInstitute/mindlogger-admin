@@ -1,0 +1,65 @@
+import { renderHook, waitFor } from '@testing-library/react';
+import { mockI18Next } from 'shared/tests';
+
+import { ApiResponseCodes } from 'api';
+import { Workspace, workspaces } from 'shared/state';
+import { mockedOwnerId } from 'shared/mock';
+
+import { usePermissions } from './usePermissions';
+
+jest.mock('react-i18next', () => mockI18Next);
+jest.mock('shared/utils', () => ({
+  getErrorMessage: jest.fn(),
+}));
+
+describe('usePermissions hook tests', () => {
+  const mockAsyncFunc = jest.fn();
+
+  test('should not call asyncFn without owner', async () => {
+    jest.spyOn(workspaces, 'useData').mockReturnValue({} as Workspace);
+    const { result } = renderHook(() => usePermissions(mockAsyncFunc));
+
+    await waitFor(() => {
+      expect(mockAsyncFunc).not.toHaveBeenCalled();
+      expect(result.current.isForbidden).toBe(false);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+
+  test('should not be forbidden for successful response', async () => {
+    jest.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
+    mockAsyncFunc.mockResolvedValue({
+      payload: {
+        response: {
+          status: ApiResponseCodes.SuccessfulResponse,
+          data: null,
+        },
+      },
+    });
+    const { result } = renderHook(() => usePermissions(mockAsyncFunc));
+
+    await waitFor(() => {
+      expect(result.current.isForbidden).toBe(false);
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.noPermissionsComponent).toBeTruthy();
+    });
+  });
+
+  test('should be forbidden for forbidden response', async () => {
+    jest.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
+    mockAsyncFunc.mockResolvedValue({
+      payload: {
+        response: {
+          status: ApiResponseCodes.Forbidden,
+          data: null,
+        },
+      },
+    });
+    const { result } = renderHook(() => usePermissions(mockAsyncFunc));
+
+    await waitFor(() => {
+      expect(result.current.isForbidden).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
