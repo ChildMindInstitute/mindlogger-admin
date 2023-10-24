@@ -20,7 +20,7 @@ export const ReviewMenu = ({
   selectedActivity,
   selectedAnswer,
   setSelectedActivity,
-  setSelectedAnswer,
+  onSelectAnswer,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
@@ -58,7 +58,7 @@ export const ReviewMenu = ({
     if (!activity) {
       setSelectedActivity(null);
     }
-    setSelectedAnswer(null);
+    onSelectAnswer(null);
   });
 
   const setSubmitDatesFromApi = async (fromDate: string, toDate: string) => {
@@ -128,7 +128,7 @@ export const ReviewMenu = ({
           activity={activity}
           setSelectedActivity={setSelectedActivity}
           selectedAnswer={selectedAnswer}
-          setSelectedAnswer={setSelectedAnswer}
+          onSelectAnswer={onSelectAnswer}
           data-testid={`${dataTestid}-activity-${index}`}
         />
       ))}

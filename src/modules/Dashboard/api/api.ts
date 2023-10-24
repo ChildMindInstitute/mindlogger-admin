@@ -3,6 +3,7 @@ import axios from 'axios';
 import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
 import { ExportDataResult } from 'shared/types';
+import { MAX_LIMIT } from 'shared/consts';
 
 import {
   TransferOwnershipType,
@@ -395,6 +396,7 @@ export const getReviewActivitiesApi = (
     params: {
       respondentId,
       createdDate,
+      limit: MAX_LIMIT,
     },
     signal,
   });
@@ -407,6 +409,7 @@ export const getActivityAnswerApi = (
   signal?: AbortSignal,
 ) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`, {
+    params: { limit: MAX_LIMIT },
     signal,
   });
 
@@ -416,7 +419,13 @@ export const getAnswersNotesApi = (
 ) =>
   authApiClient.get(
     `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
-    { params, signal },
+    {
+      params: {
+        ...params,
+        limit: MAX_LIMIT,
+      },
+      signal,
+    },
   );
 
 export const createAnswerNoteApi = (
@@ -492,6 +501,7 @@ export const getSummaryActivitiesApi = (
   authApiClient.get<Response<DatavizActivity>>(`/answers/applet/${appletId}/summary/activities`, {
     params: {
       respondentId,
+      limit: MAX_LIMIT,
     },
     signal,
   });
