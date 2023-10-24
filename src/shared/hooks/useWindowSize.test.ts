@@ -3,15 +3,16 @@ import { act, renderHook } from '@testing-library/react';
 import { useWindowSize } from './useWindowSize';
 
 describe('useWindowSize', () => {
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+
   test('should return correct height and width for window', () => {
     const { result } = renderHook(() => useWindowSize());
 
-    expect(result.current.width).toEqual(window.innerWidth);
-    expect(result.current.height).toEqual(window.innerHeight);
+    expect(result.current.width).toEqual(windowWidth);
+    expect(result.current.height).toEqual(windowHeight);
   });
 
-  const windowWidth = window.innerWidth;
-  const windowHeight = window.innerHeight;
   test.each`
     width          | height          | expectedSize                             | description
     ${windowWidth} | ${1000}         | ${{ width: windowWidth, height: 1000 }}  | ${'should update height after resize'}
