@@ -19,7 +19,7 @@ export const importTable = async (file: File, isPrimaryUiType: boolean) => {
   const fileBuffer = await new Response(file).arrayBuffer();
   const workbook = XLSX.read(fileBuffer, {
     cellDates: true,
-    dateNF: `${DateFormats.DayMonthYear}`,
+    ...(fileExtension !== 'csv' && { dateNF: `${DateFormats.DayMonthYear}` }),
   });
   const worksheet = Object.values(workbook.Sheets)[0];
   const data = XLSX.utils.sheet_to_json(worksheet, { raw: false, defval: '' });
