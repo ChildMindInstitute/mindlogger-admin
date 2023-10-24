@@ -63,6 +63,7 @@ export const RespondentDataSummary = () => {
           activityId: selectedActivity.id,
           respondentId,
         });
+        if (!getDecryptedIdentifiers) return;
         const decryptedIdentifiers = getDecryptedIdentifiers(identifiers.data.result);
         const identifiersFilter = getUniqueIdentifierOptions(decryptedIdentifiers);
         setValue('identifier', identifiersFilter);
