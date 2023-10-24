@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-
 import { t } from 'i18next';
+
 import { users } from 'redux/modules';
 import { getRespondentName } from 'shared/utils';
 

@@ -1,12 +1,12 @@
 import { getUniqueIdentifierOptions } from './RespondentDataSummary.utils';
 
 describe('getUniqueIdentifierOptions', () => {
-  it('should return an empty array for an empty identifiers array', () => {
+  test('should return an empty array for an empty identifiers array', () => {
     const result = getUniqueIdentifierOptions([]);
     expect(result).toEqual([]);
   });
 
-  it('should return unique identifier options', () => {
+  test('should return unique identifier options', () => {
     const identifiers = [
       { decryptedValue: 'decryptedValue_id1', encryptedValue: 'encryptedValue_id1' },
       { decryptedValue: 'decryptedValue_id2', encryptedValue: 'encryptedValue_id2' },
