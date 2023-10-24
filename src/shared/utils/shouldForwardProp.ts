@@ -7,7 +7,10 @@ export const shouldForwardProp = {
       prop === 'InputProps' ||
       prop === 'error' ||
       prop === 'helperText' ||
-      prop === 'anchorEl'
+      prop === 'anchorEl' ||
+      prop === 'anchorOrigin' ||
+      prop === 'transformOrigin' ||
+      prop === 'MenuListProps'
     )
       return true;
 
