@@ -28,10 +28,10 @@ import {
 } from './Report.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
 
-const isValueDefined = (value?: string | number | (string | number)[] | null) =>
+export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
   value !== null && value !== undefined;
 
-const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemResponseType) => {
+export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemResponseType) => {
   switch (responseType) {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.Slider: {
@@ -103,7 +103,7 @@ export const getIdentifiers = (
   );
 };
 
-const getSliderOptions = (
+export const getSliderOptions = (
   { minValue, maxValue }: SliderItemResponseValues,
   itemId: string,
   step = 1,

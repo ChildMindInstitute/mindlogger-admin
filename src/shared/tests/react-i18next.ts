@@ -4,6 +4,7 @@ export const mockI18Next = {
       changeLanguage: () => new Promise(() => {}),
       language: 'en',
     },
+    t: () => {},
   }),
   initReactI18next: {
     type: '3rdParty',
