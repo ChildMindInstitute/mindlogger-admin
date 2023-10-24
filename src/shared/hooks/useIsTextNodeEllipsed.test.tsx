@@ -14,9 +14,9 @@ const TextNode = forwardRef(({ text }: { text: string }, ref) => {
 
 describe('useIsTextNodeEllipsed', () => {
   test.each`
-    text                                                                                  | expected | description
-    ${'very very long text ewfafeawafwefawefewafeawfewafeawfaewfewafewafewafeawfewafewa'} | ${true}  | ${'long text is ellipsed'}
-    ${'short text'}                                                                       | ${false} | ${'short text is not ellipsed'}
+    text                          | expected | description
+    ${'very very very long text'} | ${true}  | ${'long text is ellipsed'}
+    ${'short text'}               | ${false} | ${'short text is not ellipsed'}
   `('$description', ({ text, expected }) => {
     const ref = createRef<HTMLElement>();
 
