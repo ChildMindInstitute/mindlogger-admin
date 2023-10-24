@@ -41,10 +41,7 @@ export const DeleteItemModal = ({
     .join(', ');
 
   const handleRemoveItem = (index: number) => {
-    setValue(
-      `${fieldName}.items`,
-      items?.filter((_, key) => key !== index),
-    );
+    setValue(`${fieldName}.items`, items?.filter((_, key) => key !== index));
 
     if (itemsWithVariablesToRemove.length) {
       for (const item of itemsWithVariablesToRemove) {
