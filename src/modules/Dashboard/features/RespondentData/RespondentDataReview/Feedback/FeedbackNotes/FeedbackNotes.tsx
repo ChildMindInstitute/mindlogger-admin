@@ -100,8 +100,9 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
         </StyledFlexTopCenter>
       </StyledForm>
       <StyledNoteListContainer>
-        {isLoading && <Spinner noBackground />}
-        {!isLoading && (
+        {isLoading ? (
+          <Spinner noBackground />
+        ) : (
           <Box sx={{ padding: theme.spacing(0, 2.4) }}>
             {notes.map((note, index) => (
               <FeedbackNote
