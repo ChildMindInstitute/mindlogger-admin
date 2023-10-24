@@ -1,5 +1,7 @@
 import { format } from 'date-fns';
+
 import { DateFormats } from 'shared/consts';
+
 import { getTimeResponseItem } from './Review.utils';
 
 const timeResponse1 = { value: { hours: 9, minutes: 15 } };

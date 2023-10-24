@@ -1,4 +1,5 @@
 import { ItemResponseType } from 'shared/consts';
+
 import { getDefaultValue } from './Feedback.utils';
 
 describe('getDefaultValue', () => {
