@@ -17,7 +17,7 @@ describe('useIsTextNodeEllipsed', () => {
     text                                                                                  | expected | description
     ${'very very long text ewfafeawafwefawefewafeawfewafeawfaewfewafewafewafeawfewafewa'} | ${true}  | ${'long text is ellipsed'}
     ${'short text'}                                                                       | ${false} | ${'short text is not ellipsed'}
-  `('$description', ({ text, sxProps, expected }) => {
+  `('$description', ({ text, expected }) => {
     const ref = createRef<HTMLElement>();
 
     render(<TextNode text={text} ref={ref} />);
