@@ -15,11 +15,9 @@ import { prepareData } from './prepareData';
 
 export const exportDataSucceed =
   ({
-    callback,
     getDecryptedAnswers,
     suffix,
   }: {
-    callback?: () => void;
     getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>;
     suffix: string;
   }) =>
@@ -54,5 +52,4 @@ export const exportDataSucceed =
       exportCsvZip(flankerItemsData, getReportZipName(ZipFile.Flanker, suffix)),
       exportMediaZip(mediaData, getReportZipName(ZipFile.Media, suffix)),
     ]);
-    callback?.();
   };
