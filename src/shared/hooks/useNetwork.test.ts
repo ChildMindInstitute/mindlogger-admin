@@ -15,7 +15,7 @@ describe('useNetwork', () => {
     ${false} | ${false} | ${'default value "false" if navigator offline'}
   `('$description', ({ onLine, expected }) => {
     spyNavigatorOnline.mockReturnValueOnce(onLine);
-    const { result } = renderHook(() => useNetwork());
+    const { result } = renderHook(useNetwork);
 
     expect(result.current).toBe(expected);
   });
@@ -26,7 +26,7 @@ describe('useNetwork', () => {
     ${false} | ${true}  | ${'changes value if online listener was triggered'}
   `('$description', ({ onLine, expected }) => {
     spyNavigatorOnline.mockReturnValueOnce(onLine);
-    const { result } = renderHook(() => useNetwork());
+    const { result } = renderHook(useNetwork);
 
     act(() => {
       spyNavigatorOnline.mockReturnValueOnce(!onLine);
