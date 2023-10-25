@@ -217,6 +217,7 @@ export const Uploader = ({
         type="file"
         name="uploadFile"
         hidden
+        data-testid="upload-file"
       />
       {isPrimaryUiType && (
         <StyledNameWrapper>
