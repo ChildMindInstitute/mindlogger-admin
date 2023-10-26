@@ -80,7 +80,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build --project tsconfig.build.json",
-    "test": "TZ=UTC react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@uiw/react-md-editor)/\"",
+    "test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@uiw/react-md-editor)/\"",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
   },
@@ -89,6 +89,9 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest": {
+    "globalSetup": "./global-setup.js"
   },
   "browserslist": {
     "production": [
