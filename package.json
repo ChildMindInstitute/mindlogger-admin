@@ -80,7 +80,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build --project tsconfig.build.json",
-    "test": "TZ=UTC react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@uiw/react-md-editor)/\"",
+    "test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@uiw/react-md-editor)/\"",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
   },
@@ -133,5 +133,8 @@
     "mock-local-storage": "^1.1.24",
     "prettier": "^3.0.3",
     "react-app-rewired": "^2.2.1"
+  },
+  "jest": {
+    "globalSetup": "./global-setup.js"
   }
 }
