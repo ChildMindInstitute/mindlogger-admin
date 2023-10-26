@@ -15,7 +15,7 @@ const mockSummaryFiltersForm = {
 };
 
 describe('useDatavizFilters', () => {
-  test('should calculate minDate, maxDate correctly and returrn empty versions', () => {
+  test('should calculate minDate, maxDate correctly and return empty versions', () => {
     const versions: Version[] = [];
 
     mockWatch.mockReturnValue(mockSummaryFiltersForm);
@@ -26,7 +26,7 @@ describe('useDatavizFilters', () => {
     expect(result.current.filteredVersions).toEqual([]);
   });
 
-  test('should calculate minDate, maxDate correctly and returrn all versions', () => {
+  test('should calculate minDate, maxDate correctly and return all versions', () => {
     const versions = [
       {
         version: '1.0.0',
@@ -51,7 +51,7 @@ describe('useDatavizFilters', () => {
     ]);
   });
 
-  test('should calculate minDate, maxDate correctly and returrn filtered versions', () => {
+  test('should calculate minDate, maxDate correctly and return filtered versions', () => {
     const versions = [
       {
         version: '1.0.0',
