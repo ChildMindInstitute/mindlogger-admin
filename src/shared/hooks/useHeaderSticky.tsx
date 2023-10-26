@@ -1,7 +1,7 @@
 import { useState, useEffect, MutableRefObject } from 'react';
 
-const OFFSET_TO_SET_STICKY = 50;
-const OFFSET_TO_UNSET_STICKY = 100;
+export const OFFSET_TO_SET_STICKY = 100;
+export const OFFSET_TO_UNSET_STICKY = 50;
 
 export const useHeaderSticky = (containerRef: MutableRefObject<HTMLElement | null>) => {
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
@@ -12,7 +12,7 @@ export const useHeaderSticky = (containerRef: MutableRefObject<HTMLElement | nul
       if (containerEl) {
         setIsHeaderSticky(
           (prevSticky) =>
-            containerEl.scrollTop >= (prevSticky ? OFFSET_TO_SET_STICKY : OFFSET_TO_UNSET_STICKY),
+            containerEl.scrollTop >= (prevSticky ? OFFSET_TO_UNSET_STICKY : OFFSET_TO_SET_STICKY),
         );
       }
     };

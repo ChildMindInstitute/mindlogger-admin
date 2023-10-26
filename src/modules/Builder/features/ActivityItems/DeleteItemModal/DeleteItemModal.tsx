@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
-import { ConditionalLogic } from 'shared/state';
+import { ConditionalLogic, ScoreReport } from 'shared/state';
 import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 import { Modal } from 'shared/components';
 import {
@@ -25,7 +25,9 @@ export const DeleteItemModal = ({
   const { fieldName, activity } = useCurrentActivity();
   const { watch, setValue, trigger } = useFormContext();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
+  const reportsField = `${fieldName}.scoresAndReports.reports`;
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
+  const reports: ScoreReport[] = watch(reportsField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
   const itemToDelete = items[itemIndexToDelete];
@@ -69,6 +71,25 @@ export const DeleteItemModal = ({
         })),
       );
       trigger(subscalesField);
+    }
+
+    if (reports.length) {
+      reports.forEach((report, index) => {
+        const { itemsPrint, itemsScore } = report;
+
+        if (itemsPrint?.includes(itemName)) {
+          setValue(
+            `${reportsField}.${index}.itemsPrint`,
+            itemsPrint?.filter((name) => name !== itemName),
+          );
+        }
+        if (itemsScore?.includes(itemName)) {
+          setValue(
+            `${reportsField}.${index}.itemsScore`,
+            itemsScore?.filter((name) => name !== itemName),
+          );
+        }
+      });
     }
 
     handleRemoveItem(itemIndexToDelete);

@@ -90,6 +90,9 @@
       "react-app/jest"
     ]
   },
+  "jest": {
+    "globalSetup": "./global-setup.js"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
