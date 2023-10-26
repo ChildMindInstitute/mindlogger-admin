@@ -30,15 +30,15 @@ export const parseOptions = (
     );
   }
 
-  if (responseValues?.options?.length) {
-    return joinWihComma(
-      responseValues?.options?.map(({ text, value, score }) => {
-        const stringifiedValue = `${value ?? ''}`;
+  if (!responseValues?.options?.length) return;
 
-        return `${text}${stringifiedValue ? `: ${stringifiedValue}` : ''}${
-          typeof score === 'number' ? ` (score: ${score})` : ''
-        }`;
-      }) || [],
-    );
-  }
+  return joinWihComma(
+    responseValues.options.map(({ text, value, score }) => {
+      const stringifiedValue = `${value ?? ''}`;
+
+      return `${text}${stringifiedValue ? `: ${stringifiedValue}` : ''}${
+        typeof score === 'number' ? ` (score: ${score})` : ''
+      }`;
+    }),
+  );
 };
