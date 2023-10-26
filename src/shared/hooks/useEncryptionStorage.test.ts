@@ -30,7 +30,7 @@ describe('useEncryptionStorage', () => {
   test('private key is empty for applet hasn\'t opened yet', () => {
     const { result } = renderHook(useEncryptionStorage);
 
-    expect(result.current.getAppletPrivateKey('')).toBe(EMPTY_PRIVATE_KEY);
+    expect(result.current.getAppletPrivateKey(mockedAppletId)).toBe(null);
   });
 
   test('private key stores correctly', () => {
