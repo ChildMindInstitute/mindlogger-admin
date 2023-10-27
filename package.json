@@ -136,8 +136,5 @@
     "mock-local-storage": "^1.1.24",
     "prettier": "^3.0.3",
     "react-app-rewired": "^2.2.1"
-  },
-  "jest": {
-    "globalSetup": "./global-setup.js"
   }
 }
