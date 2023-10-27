@@ -71,6 +71,8 @@ export const mockedRespondent = {
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
+  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+  role: Roles.Respondent,
   details: [
     {
       appletId: mockedAppletId,
@@ -92,6 +94,8 @@ export const mockedRespondent2 = {
   isAnonymousRespondent: false,
   lastSeen: new Date().toDateString(),
   isPinned: false,
+  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+  role: Roles.Respondent,
   details: [
     {
       appletId: mockedAppletId,

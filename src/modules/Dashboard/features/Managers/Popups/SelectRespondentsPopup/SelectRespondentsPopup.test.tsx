@@ -10,7 +10,6 @@ import {
   mockedRespondent,
   mockedRespondent2,
   mockedRespondentId,
-  mockedRespondentId2,
 } from 'shared/mock';
 import { base } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
