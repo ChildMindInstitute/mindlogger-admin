@@ -1,5 +1,7 @@
 import { Applet } from 'api';
 
+import { Roles } from './consts';
+
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
 export const mockedAppletId = '2e46fa32-ea7c-4a76-b49b-1c97d795bb9a';
@@ -384,6 +386,32 @@ export const mockedAppletData = {
       ],
       order: 1,
       createdAt: '2023-10-27T13:34:22.037875',
+    },
+  ],
+};
+
+export const mockedManagerId = '097f4161-a7e4-4ea9-8836-79149dsda74ff';
+export const mockedManager = {
+  id: mockedManagerId,
+  firstName: 'TestFirstName',
+  lastName: 'TestLastName',
+  email: mockedEmail,
+  roles: [Roles.Reviewer],
+  lastSeen: '2023-08-15T13:39:24.058402',
+  isPinned: false,
+  applets: [
+    {
+      id: mockedAppletId,
+      displayName: 'displayName',
+      image: '',
+      roles: [
+        {
+          accessId: '17ba7d95-f766-42ae-9ce6-2f8fcc3l24a',
+          role: Roles.Reviewer,
+          reviewerRespondents: [mockedRespondentId],
+        },
+      ],
+      encryption: mockedEncryption,
     },
   ],
 };

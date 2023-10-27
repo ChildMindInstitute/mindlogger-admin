@@ -34,3 +34,9 @@ describe('getNormalizedTimezoneDate', () => {
     expect(getNormalizedTimezoneDate(dateString).getTime()).toEqual(expected.getTime());
   });
 });
+
+describe('Timezones', () => {
+  test('should always be UTC', () => {
+    expect(new Date().getTimezoneOffset()).toBe(0);
+  });
+});
