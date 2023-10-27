@@ -8,18 +8,19 @@ import { Path } from 'shared/utils';
 
 import { useActivitiesRedirection } from './useActivitiesRedirection';
 
-const mockedAppletIdParams = {
+const mockedParamsWithActivity = {
   appletId: mockedAppletId,
-};
-const mockedParamsWithExistingActivity = {
-  ...mockedAppletIdParams,
   activityId: mockedAppletData.activities[0].id,
 };
 const mockedParamsWithoutActivity = {
-  ...mockedAppletIdParams,
+  appletId: mockedAppletId,
   activityId: uuidv4(),
 };
-const mockedParamsNewApplet = {
+const mockedParamsNewAppletWithActivity = {
+  appletId: Path.NewApplet,
+  activityId: mockedAppletData.activities[0].id,
+};
+const mockedParamsNewAppletWithoutActivity = {
   appletId: Path.NewApplet,
   activityId: uuidv4(),
 };
@@ -27,7 +28,7 @@ const pathToActivities = generatePath(page.builderAppletActivities, {
   appletId: mockedParamsWithoutActivity.appletId,
 });
 const pathToActivitiesNewApplet = generatePath(page.builderAppletActivities, {
-  appletId: mockedParamsNewApplet.appletId,
+  appletId: mockedParamsNewAppletWithActivity.appletId,
 });
 
 const mockedUseNavigate = jest.fn();
@@ -53,10 +54,11 @@ describe('useActivitiesRedirection', () => {
   });
 
   test.each`
-    params                              | activities                     | toBeCalledWith               | description
-    ${mockedParamsWithExistingActivity} | ${mockedAppletData.activities} | ${undefined}                 | ${'doesnt redirect if activity exists'}
-    ${mockedParamsWithoutActivity}      | ${mockedAppletData.activities} | ${pathToActivities}          | ${'should redirect if activity doesn\'t exist'}
-    ${mockedParamsNewApplet}            | ${[]}                          | ${pathToActivitiesNewApplet} | ${'should redirect if applet is new and there are no activities'}
+    params                                  | activities                     | toBeCalledWith               | description
+    ${mockedParamsWithActivity}             | ${mockedAppletData.activities} | ${undefined}                 | ${'doesnt redirect if activity exists'}
+    ${mockedParamsNewAppletWithActivity}    | ${mockedAppletData.activities} | ${undefined}                 | ${'doesnt redirect if applet is new and activity exists'}
+    ${mockedParamsWithoutActivity}          | ${mockedAppletData.activities} | ${pathToActivities}          | ${'should redirect if activity doesn\'t exist'}
+    ${mockedParamsNewAppletWithoutActivity} | ${mockedAppletData.activities} | ${pathToActivitiesNewApplet} | ${'should redirect if applet is new and activity doesn\'t exist'}
   `('$description', ({ params, activities, toBeCalledWith }) => {
     mockedUseParams.mockReturnValue(params);
     mockedGetValues.mockReturnValue(activities);
