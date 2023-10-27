@@ -84,6 +84,27 @@ export const mockedRespondent = {
     },
   ],
 };
+export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
+export const mockedRespondent2 = {
+  id: mockedRespondentId2,
+  nicknames: ['Test Respondent'],
+  secretIds: ['testSecretId'],
+  isAnonymousRespondent: false,
+  lastSeen: new Date().toDateString(),
+  isPinned: false,
+  details: [
+    {
+      appletId: mockedAppletId,
+      appletDisplayName: 'Mocked Applet',
+      appletImage: '',
+      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+      respondentNickname: 'Test Respondent',
+      respondentSecretId: '39ff968c-3903-4872-8f30-a6e6a10cef36',
+      hasIndividualSchedule: false,
+      encryption: mockedEncryption,
+    },
+  ],
+};
 export const mockedManagerId = '097f4161-a7e4-4ea9-8836-79149dsda74ff';
 export const mockedManager = {
   id: mockedManagerId,
