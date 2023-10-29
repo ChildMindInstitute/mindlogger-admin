@@ -24,7 +24,7 @@ describe('useRespondentLabel', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     users.useRespondent = jest.fn().mockReturnValue({ details: undefined });
 
-    const { result } = renderHook(() => useRespondentLabel());
+    const { result } = renderHook(useRespondentLabel);
 
     expect(result.current).toBe('');
   });
@@ -39,7 +39,7 @@ describe('useRespondentLabel', () => {
     ];
     users.useRespondent = jest.fn().mockReturnValue({ details });
 
-    const { result } = renderHook(() => useRespondentLabel());
+    const { result } = renderHook(useRespondentLabel);
 
     expect(result.current).toBe('User: secret123');
   });
@@ -54,7 +54,7 @@ describe('useRespondentLabel', () => {
     ];
     users.useRespondent = jest.fn().mockReturnValue({ details });
 
-    const { result } = renderHook(() => useRespondentLabel());
+    const { result } = renderHook(useRespondentLabel);
 
     expect(result.current).toBe('User: secret123 (John Doe)');
   });
