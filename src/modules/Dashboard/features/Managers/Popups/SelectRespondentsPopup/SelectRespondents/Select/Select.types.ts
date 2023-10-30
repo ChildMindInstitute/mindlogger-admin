@@ -10,4 +10,5 @@ export type SelectProps = {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   value: string;
   options: Options[];
+  'data-testid'?: string;
 };
