@@ -85,7 +85,7 @@ describe('useEncryptionStorage', () => {
     appletId          | privateKey          | ownerId              | expected     | description
     ${''}             | ${mockedPrivateKey} | ${mockedUserData.id} | ${undefined} | ${'setAppletPrivateKey doesn\'t set private key if there is no appletId'}
     ${mockedAppletId} | ${mockedPrivateKey} | ${''}                | ${undefined} | ${'setAppletPrivateKey doesn\'t set private key if there is no ownerId'}
-    ${mockedAppletId} | ${undefined}        | ${mockedUserData.id} | ${undefined} | ${'setAppletPrivateKey doesn\'t set private key if there is privateKey'}
+    ${mockedAppletId} | ${undefined}        | ${mockedUserData.id} | ${undefined} | ${'setAppletPrivateKey doesn\'t set private key if there is no privateKey'}
   `('$description', ({ appletId, privateKey, ownerId }) => {
     spyUseData.mockReturnValue({ user: { ...mockedUserData, id: ownerId } });
 
