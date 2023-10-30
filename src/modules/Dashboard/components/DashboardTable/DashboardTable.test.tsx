@@ -43,8 +43,8 @@ const mockDataTestId = 'mockDataTestId';
 const getTable = (props: Partial<DashboardTableProps> = {}) => (
   <DashboardTable
     columns={mockColumns}
-    order={'asc'}
-    orderBy={''}
+    order="asc"
+    orderBy=""
     rows={getMockRows()}
     handleRequestSort={mockSortFn}
     page={1}
