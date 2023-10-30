@@ -46,6 +46,11 @@ export const RespondentDataReview = () => {
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getAssessment } = useAsync(getAssessmentApi);
 
+  const handleSelectAnswer = (answer: Answer | null) => {
+    setIsFeedbackOpen(false);
+    setSelectedAnswer(answer);
+  };
+
   const renderEmptyState = () => {
     if (!selectedAnswer) {
       return (
@@ -69,7 +74,6 @@ export const RespondentDataReview = () => {
   };
 
   useEffect(() => {
-    setIsFeedbackOpen(false);
     if (!appletId || !answerId) return;
     (async () => {
       try {
@@ -95,7 +99,7 @@ export const RespondentDataReview = () => {
         selectedActivity={selectedActivity}
         selectedAnswer={selectedAnswer}
         setSelectedActivity={setSelectedActivity}
-        setSelectedAnswer={setSelectedAnswer}
+        onSelectAnswer={handleSelectAnswer}
       />
       <RespondentDataReviewContext.Provider
         value={{ isFeedbackOpen, assessment, itemIds, setItemIds }}

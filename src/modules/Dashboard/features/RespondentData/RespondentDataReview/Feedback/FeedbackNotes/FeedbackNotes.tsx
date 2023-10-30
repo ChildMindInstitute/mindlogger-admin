@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { Box, Button } from '@mui/material';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
+import { Spinner } from 'shared/components';
 import {
   DatavizActivity,
   createAnswerNoteApi,
@@ -15,10 +16,11 @@ import {
   getAnswersNotesApi,
 } from 'api';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
 import { FeedbackNote } from './FeedbackNote';
 import { NOTE_ROWS_COUNT } from './FeedbackNotes.const';
-import { StyledContainer, StyledForm } from './FeedbackNotes.styles';
+import { StyledContainer, StyledForm, StyledNoteListContainer } from './FeedbackNotes.styles';
 import { FeedbackNote as FeedbackNoteType } from './FeedbackNotes.types';
 
 export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
@@ -31,9 +33,10 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const isFormSticky = useHeaderSticky(containerRef);
   const dataTestid = 'respondents-summary-feedback-notes';
 
+  const { isFeedbackOpen } = useContext(RespondentDataReviewContext);
   const { control, setValue, handleSubmit } = useFormContext<FeedbackForm>();
 
-  const { execute: getAnswersNotes } = useAsync(
+  const { execute: getAnswersNotes, isLoading } = useAsync(
     getAnswersNotesApi,
     (res) => res?.data?.result && setNotes(res.data.result),
   );
@@ -72,10 +75,10 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   };
 
   useEffect(() => {
-    if (appletId && answerId) {
+    if (appletId && answerId && isFeedbackOpen) {
       getAnswersNotes({ appletId, answerId, activityId, params: {} });
     }
-  }, [appletId, answerId]);
+  }, [appletId, answerId, isFeedbackOpen]);
 
   return (
     <StyledContainer ref={containerRef}>
@@ -96,17 +99,23 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
           </Button>
         </StyledFlexTopCenter>
       </StyledForm>
-      <Box sx={{ padding: theme.spacing(2.4) }}>
-        {notes.map((note, index) => (
-          <FeedbackNote
-            key={note.id}
-            note={note}
-            onEdit={handleNoteEdit}
-            onDelete={handleNoteDelete}
-            data-testid={`${dataTestid}-note-${index}`}
-          />
-        ))}
-      </Box>
+      <StyledNoteListContainer>
+        {isLoading ? (
+          <Spinner noBackground />
+        ) : (
+          <Box sx={{ padding: theme.spacing(0, 2.4) }}>
+            {notes.map((note, index) => (
+              <FeedbackNote
+                key={note.id}
+                note={note}
+                onEdit={handleNoteEdit}
+                onDelete={handleNoteDelete}
+                data-testid={`${dataTestid}-note-${index}`}
+              />
+            ))}
+          </Box>
+        )}
+      </StyledNoteListContainer>
     </StyledContainer>
   );
 };

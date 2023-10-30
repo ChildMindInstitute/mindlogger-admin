@@ -6,6 +6,7 @@ import { SelectController } from 'shared/components/FormComponents';
 import { Spinner, Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types';
 import { exportTemplate, getRespondentName, Mixpanel } from 'shared/utils';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 import { page } from 'resources';
 import { users } from 'modules/Dashboard/state';
 
@@ -72,6 +73,9 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const boundingBox = searchContainerRef?.current?.getBoundingClientRect();
   const isIndividual = schedule === ScheduleOptions.IndividualSchedule;
   const dataTestid = 'dashboard-calendar-schedule-legend';
+  const analyticsPrefix = isIndividual
+    ? AnalyticsCalendarPrefix.IndividualCalendar
+    : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const respondentName = getRespondentName(
     selectedRespondent?.secretId || '',
@@ -128,15 +132,13 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
 
     await exportTemplate({ data: scheduleExportCsv, fileName: getFileName() });
 
-    Mixpanel.track('Schedule import successful');
-
     isExport && setExportDefaultSchedulePopupVisible(false);
   };
 
   const handleImportClick = () => {
     setImportSchedulePopupVisible(true);
 
-    Mixpanel.track('Schedule Import click');
+    Mixpanel.track(`${analyticsPrefix} Schedule Import click`);
   };
 
   useEffect(() => {

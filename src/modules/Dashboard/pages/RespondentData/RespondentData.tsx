@@ -7,10 +7,11 @@ import { DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { EmptyState, LinkedTabs, Svg } from 'shared/components';
 import { useAsync } from 'shared/hooks';
+import { Roles } from 'shared/consts';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { page } from 'resources';
 import { users, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { Roles } from 'shared/consts';
 
 import { useRespondentDataTabs } from './RespondentData.hooks';
 import { RespondentDataContext } from './RespondentData.context';
@@ -68,6 +69,10 @@ export const RespondentData = () => {
       }),
     );
   }, [ownerId, appletId, respondentsData]);
+
+  useEffect(() => {
+    Mixpanel.trackPageView('Data Viz');
+  }, []);
 
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;

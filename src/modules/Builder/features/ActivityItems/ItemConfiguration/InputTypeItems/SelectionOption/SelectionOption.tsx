@@ -18,9 +18,10 @@ import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
 import { SingleAndMultiSelectOption, ConditionalLogic, ItemAlert } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
 
+import { SELECT_OPTION_TEXT_MAX_LENGTH } from '../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
-import { SELECTION_OPTION_TEXT_MAX_LENGTH } from '../../ItemConfiguration.const';
 import { getPaletteColor } from '../../ItemConfiguration.utils';
 import { ColorPicker } from './ColorPicker';
 import {
@@ -47,6 +48,8 @@ export const SelectionOption = ({
   setOptionsOpen,
 }: SelectionOptionProps) => {
   const optionName = `${name}.responseValues.options.${index}`;
+  const optionTextName = `${optionName}.text`;
+  const scoreName = `${optionName}.score`;
   const { t } = useTranslation('app');
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [visibleActions, setVisibleActions] = useState(false);
@@ -96,13 +99,14 @@ export const SelectionOption = ({
     }
   };
 
-  const scoreName = `${optionName}.score`;
-
   const handleScoreChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') return setValue(scoreName, 0);
 
     setValue(scoreName, +event.target.value);
   };
+
+  const handleOptionTextChange = useFieldLengthError();
+
   const handleRemoveOption = (index: number) => {
     if (hasAlerts) {
       const option = getValues(`${name}.responseValues.options.${index}`);
@@ -236,9 +240,16 @@ export const SelectionOption = ({
               <StyledTextInputWrapper hasScores={!!scoreString}>
                 <InputController
                   {...commonInputProps}
-                  name={`${optionName}.text`}
+                  name={optionTextName}
                   label={t('optionText')}
-                  maxLength={SELECTION_OPTION_TEXT_MAX_LENGTH}
+                  onChange={(event) =>
+                    handleOptionTextChange({
+                      event,
+                      fieldName: optionTextName,
+                      maxLength: SELECT_OPTION_TEXT_MAX_LENGTH,
+                    })
+                  }
+                  maxLength={SELECT_OPTION_TEXT_MAX_LENGTH}
                   data-testid={`${dataTestid}-text`}
                 />
               </StyledTextInputWrapper>

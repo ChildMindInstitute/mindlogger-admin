@@ -8,11 +8,11 @@ import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/st
 
 import { LinkPopupProps } from './LinkPopup.types';
 
-export const LinkPopup = ({ open, onClose, setInviteLink }: LinkPopupProps) => {
+export const LinkPopup = ({ open, onClose, onSubmit }: LinkPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams() || {};
-  const { execute } = useAsync(postAppletPublicLinkApi, async (res) => {
-    await setInviteLink(res?.data.result);
+  const { execute } = useAsync(postAppletPublicLinkApi, (res) => {
+    onSubmit(res?.data.result);
     onClose();
   });
 

@@ -132,9 +132,8 @@ export const AvailabilityTab = ({
               />
             </StyledTimeWrapper>
           </StyledTimeRow>
-          <StyledWrapper>
+          <StyledWrapper isCheckboxDisabled={startTime === '00:00'}>
             <CheckboxController
-              disabled={startTime === '00:00'}
               name="accessBeforeSchedule"
               control={control}
               label={<StyledBodyMedium>{t('allowAccessBeforeTime')}</StyledBodyMedium>}

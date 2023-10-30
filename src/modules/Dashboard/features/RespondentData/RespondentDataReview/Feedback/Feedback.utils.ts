@@ -3,6 +3,7 @@ import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentDat
 
 export const getDefaultValue = (responseType: ItemResponseType): string | number[] | null => {
   switch (responseType) {
+    case ItemResponseType.SingleSelection:
     case ItemResponseType.Slider:
       return null;
     case ItemResponseType.MultipleSelection:

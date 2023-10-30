@@ -6,6 +6,7 @@ type CounterProps = {
   value: number;
   maxLength?: number;
   counterProps?: Record<string, unknown>;
+  hasError?: boolean;
 };
 
 export type FormInputProps = {
