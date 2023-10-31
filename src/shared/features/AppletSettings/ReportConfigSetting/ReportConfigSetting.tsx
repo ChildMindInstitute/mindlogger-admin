@@ -220,12 +220,14 @@ export const ReportConfigSetting = ({
       reportEmailBody,
     } = getValues() ?? {};
 
+    const sanitizedReportEmailBody = getSanitizedContent(reportEmailBody, true);
+
     const body = {
       reportServerIp,
       reportPublicKey,
       reportRecipients,
       reportIncludeUserId,
-      reportEmailBody: getSanitizedContent(reportEmailBody, true),
+      reportEmailBody: sanitizedReportEmailBody,
     };
 
     await postReportConfig({
@@ -233,7 +235,12 @@ export const ReportConfigSetting = ({
       ...body,
     });
 
-    if (!isDashboard) dispatch(updateAppletData(body));
+    if (!isDashboard) {
+      dispatch(updateAppletData(body));
+      Object.entries(body).forEach(([key, value]) => {
+        setAppletFormValue(key, value);
+      });
+    }
 
     reset(defaultValues);
   };
