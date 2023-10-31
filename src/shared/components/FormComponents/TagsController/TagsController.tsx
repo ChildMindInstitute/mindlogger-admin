@@ -32,7 +32,7 @@ export const TagsController = <T extends FieldValues>({
           color={isPrimaryUiType ? 'secondary' : 'primary'}
           key={index}
           title={tag}
-          onRemove={() => onRemoveTagClick(index)}
+          onRemove={disabled ? undefined : () => onRemoveTagClick(index)}
           sxProps={
             isSecondaryUiType
               ? { m: theme.spacing(0.2), ...(disabled && { pointerEvents: 'none' }) }
