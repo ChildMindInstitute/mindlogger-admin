@@ -80,7 +80,6 @@ export const ScoresAndReports = () => {
   const scoreItems = activity?.items.filter(checkOnItemTypeAndScore);
   const tableItems = getTableScoreItems(scoreItems);
 
-  const isCheckboxesDisabled = !reports?.length;
   const dataTestid = 'builder-activity-settings-scores-and-reports';
 
   const handleAddScore = () => {
@@ -108,7 +107,7 @@ export const ScoresAndReports = () => {
     if (reports?.length) return;
 
     setValue(generateReportName, false);
-    setValue(showScoreSummaryName, true);
+    setValue(showScoreSummaryName, false);
   }, [reports]);
 
   return (
@@ -134,7 +133,7 @@ export const ScoresAndReports = () => {
         )}
       </StyledBodyLarge>
       <CheckboxController
-        disabled={isCheckboxesDisabled}
+        disabled={!reports?.length}
         control={control}
         key={generateReportName}
         name={generateReportName}
@@ -142,7 +141,6 @@ export const ScoresAndReports = () => {
         data-testid={`${dataTestid}-generate-report`}
       />
       <CheckboxController
-        disabled={isCheckboxesDisabled}
         control={control}
         key={showScoreSummaryName}
         name={showScoreSummaryName}
