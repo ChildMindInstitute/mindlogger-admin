@@ -19,15 +19,15 @@ const resetAuthorizationPayload = {
   type: 'auth/resetAuthorization',
 };
 
-const mockedDispatch = jest.fn();
-const mockedNavigate = jest.fn();
+const mockedUseAppDispatch = jest.fn();
+const mockedUseNavigate = jest.fn();
 
 jest.mock('redux/store', () => ({
-  useAppDispatch: () => mockedDispatch,
+  useAppDispatch: () => mockedUseAppDispatch,
 }));
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedNavigate,
+  useNavigate: () => mockedUseNavigate,
 }));
 
 describe('useLogout', () => {
@@ -43,7 +43,7 @@ describe('useLogout', () => {
       result.current();
     });
 
-    expect(mockedNavigate).toBeCalledWith(page.login);
+    expect(mockedUseNavigate).toBeCalledWith(page.login);
   });
 
   test('deleting access token resets all data', async () => {
@@ -54,9 +54,9 @@ describe('useLogout', () => {
       result.current();
     });
 
-    expect(mockedDispatch).nthCalledWith(1, clearWorkspacePayload);
-    expect(mockedDispatch).nthCalledWith(2, resetAlertsPayload);
-    expect(mockedDispatch).nthCalledWith(3, resetAuthorizationPayload);
+    expect(mockedUseAppDispatch).nthCalledWith(1, clearWorkspacePayload);
+    expect(mockedUseAppDispatch).nthCalledWith(2, resetAlertsPayload);
+    expect(mockedUseAppDispatch).nthCalledWith(3, resetAuthorizationPayload);
   });
 
   test('delete refresh token api is called if delete access token rejects with Unauthorized status code', async () => {
@@ -75,9 +75,9 @@ describe('useLogout', () => {
       result.current();
     });
 
-    expect(mockedDispatch).nthCalledWith(1, clearWorkspacePayload);
-    expect(mockedDispatch).nthCalledWith(2, resetAlertsPayload);
-    expect(mockedDispatch).nthCalledWith(3, resetAuthorizationPayload);
-    expect(mockedNavigate).toBeCalledWith(page.login);
+    expect(mockedUseAppDispatch).nthCalledWith(1, clearWorkspacePayload);
+    expect(mockedUseAppDispatch).nthCalledWith(2, resetAlertsPayload);
+    expect(mockedUseAppDispatch).nthCalledWith(3, resetAuthorizationPayload);
+    expect(mockedUseNavigate).toBeCalledWith(page.login);
   });
 });
