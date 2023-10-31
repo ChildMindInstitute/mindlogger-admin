@@ -96,7 +96,7 @@ export const ReportConfigSetting = ({
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
 
   const { getApplet } = applet.thunk;
-  const { updateAppletData, updateActivityData, updateActivityFlowData } = applet.actions;
+  const { updateAppletData } = applet.actions;
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
   const { accountId = '' } = encryptionInfoFromServer ?? {};
@@ -158,11 +158,6 @@ export const ReportConfigSetting = ({
   const reportServerUrl = watch('reportServerIp');
   const reportPublicKey = watch('reportPublicKey');
 
-  // const selectedActivity =
-  //   isActivityFlow && reportIncludedActivity
-  //     ? appletFormValues?.activities?.find((activity) => activity.name === reportIncludedActivity)
-  //     : null;
-
   const selectedActivity =
     isActivityFlow && reportIncludedActivity
       ? appletFormValues?.activities?.find(
@@ -187,8 +182,11 @@ export const ReportConfigSetting = ({
     }
   };
 
-  const handleRemoveEmail = (index: number) => {
-    setValue('reportRecipients', reportRecipients.filter((_, i) => i !== index) as string[]);
+  const handleRemoveEmail = async (index: number) => {
+    setValue('reportRecipients', reportRecipients.filter((_, i) => i !== index) as string[], {
+      shouldDirty: true,
+    });
+    await trigger('reportRecipients');
   };
 
   const onSubmit = (values: ReportConfigFormValues) => {
@@ -241,56 +239,7 @@ export const ReportConfigSetting = ({
         setAppletFormValue(key, value);
       });
     }
-
-    reset(defaultValues);
   };
-
-  // const handleSaveActivityReportConfig = async () => {
-  //   const { itemValue, reportIncludedItemName: formIncludedItemName } = getValues() ?? {};
-  //   const reportIncludedItemName = itemValue ? formIncludedItemName : '';
-  //
-  //   const body = {
-  //     reportIncludedItemName,
-  //   };
-  //
-  //   await postActivityReportConfig({
-  //     appletId: appletData?.id ?? '',
-  //     activityId: activity?.id ?? '',
-  //     ...body,
-  //   });
-  //
-  //   dispatch(updateActivityData({ activityId: activity?.id, ...body }));
-  //   setAppletFormValue(`${activityFieldName}.reportIncludedItemName`, reportIncludedItemName);
-  //
-  //   reset(defaultValues);
-  // };
-
-  // const handleSaveActivityFlowReportConfig = async () => {
-  //   const {
-  //     itemValue,
-  //     reportIncludedActivityName: formIncludedActivityName,
-  //     reportIncludedItemName: formIncludedItemName,
-  //   } = getValues() ?? {};
-  //   const reportIncludedActivityName = itemValue ? formIncludedActivityName : '';
-  //   const reportIncludedItemName = itemValue ? formIncludedItemName : '';
-  //
-  //   const body = {
-  //     reportIncludedItemName,
-  //     reportIncludedActivityName,
-  //   };
-  //
-  //   await postActivityFlowReportConfig({
-  //     appletId: appletData?.id ?? '',
-  //     activityFlowId: activityFlow?.id ?? '',
-  //     ...body,
-  //   });
-  //
-  //   dispatch(updateActivityFlowData({ flowId: activityFlow?.id, ...body }));
-  //   setAppletFormValue(`${flowFieldName}.reportIncludedActivityName`, reportIncludedActivityName);
-  //   setAppletFormValue(`${flowFieldName}.reportIncludedItemName`, reportIncludedItemName);
-  //
-  //   reset(defaultValues);
-  // };
 
   const handleSaveActivityReportConfig = async () => {
     const { itemValue, reportIncludedItemName: reportIncludedItemKey } = getValues() ?? {};
@@ -308,10 +257,6 @@ export const ReportConfigSetting = ({
       `${activityFieldName}.reportIncludedItemName`,
       itemValue && reportIncludedItemKey ? reportIncludedItemKey : '',
     );
-
-    // TODO: remove ???
-    // dispatch(updateActivityData({ activityId: activity?.id, ...body }));
-    // reset(defaultValues);
   };
 
   const handleSaveActivityFlowReportConfig = async () => {
@@ -339,10 +284,6 @@ export const ReportConfigSetting = ({
       `${flowFieldName}.reportIncludedItemName`,
       itemValue && reportIncludedItemKey ? reportIncludedItemKey : '',
     );
-
-    // TODO: remove ???
-    // dispatch(updateActivityFlowData({ flowId: activityFlow?.id, ...body }));
-    // reset(defaultValues);
   };
 
   const handleVerify = async () => {
@@ -400,16 +341,25 @@ export const ReportConfigSetting = ({
     cancelNavigation();
   };
 
+  const getActivityItems = () => {
+    if (isActivity) return activity?.items;
+    if (isActivityFlow) return selectedActivity?.items;
+
+    return null;
+  };
+  const itemName = getActivityItems()?.find((item) => getEntityKey(item) === reportIncludedItemName)
+    ?.name;
+
   const subjectDataProps = {
     setValue,
     appletName: appletData?.displayName,
     activityName: activity?.name,
     flowName: activityFlow?.name,
-    flowActivityName: reportIncludedActivity,
+    flowActivityName: selectedActivity?.name,
     respondentId: includeRespondentId,
     hasActivityItemValue: isActivity && itemValue,
     hasFlowItemValue: isActivityFlow && itemValue,
-    itemName: reportIncludedItemName,
+    itemName,
   };
 
   const handleDontSave = () => {

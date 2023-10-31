@@ -5,10 +5,11 @@ export enum FlowReportFieldsPrepareType {
   NameToKey,
 }
 
-export type GetEntityReportFields<T> = {
-  reportActivity: string;
+export type GetEntityReportFields<T, K> = {
+  reportActivity?: string;
   reportItem?: string;
-  activities: T;
+  activities?: T;
+  activityItems?: K;
   type: FlowReportFieldsPrepareType;
 };
 
@@ -19,20 +20,22 @@ export const getEntityReportFields = <
     key?: string;
     items: { name: string; id?: string; key?: string }[];
   }[],
+  K extends { name: string; id?: string; key?: string }[],
 >({
   reportActivity,
   reportItem,
   activities,
+  activityItems,
   type,
-}: GetEntityReportFields<T>) => {
+}: GetEntityReportFields<T, K>) => {
   const isKeyToName = type === FlowReportFieldsPrepareType.KeyToName;
   let reportIncludedActivityName = reportActivity;
 
   const selectedReportActivity =
-    reportIncludedActivityName &&
-    activities.find(
-      (activity) =>
-        (isKeyToName ? getEntityKey(activity) : activity.name) === reportIncludedActivityName,
+    !activityItems &&
+    reportActivity &&
+    activities?.find(
+      (activity) => (isKeyToName ? getEntityKey(activity) : activity.name) === reportActivity,
     );
   if (selectedReportActivity) {
     reportIncludedActivityName = isKeyToName
@@ -40,20 +43,27 @@ export const getEntityReportFields = <
       : getEntityKey(selectedReportActivity);
   }
 
-  if (!reportItem) return { reportIncludedActivityName };
-
+  let selectedReportItem;
+  if (activityItems) {
+    selectedReportItem =
+      reportItem &&
+      activityItems.find((item) => (isKeyToName ? getEntityKey(item) : item.name) === reportItem);
+  } else {
+    selectedReportItem =
+      selectedReportActivity &&
+      reportItem &&
+      selectedReportActivity.items.find(
+        (item) => (isKeyToName ? getEntityKey(item) : item.name) === reportItem,
+      );
+  }
   let reportIncludedItemName = reportItem;
-  const selectedReportItem =
-    selectedReportActivity &&
-    reportIncludedItemName &&
-    selectedReportActivity.items.find(
-      (item) => (isKeyToName ? getEntityKey(item) : item.name) === reportIncludedItemName,
-    );
   if (selectedReportItem) {
     reportIncludedItemName = isKeyToName
       ? selectedReportItem.name
       : getEntityKey(selectedReportItem);
   }
 
-  return { reportIncludedActivityName, reportIncludedItemName };
+  return activityItems
+    ? { reportIncludedItemName }
+    : { reportIncludedActivityName, reportIncludedItemName };
 };

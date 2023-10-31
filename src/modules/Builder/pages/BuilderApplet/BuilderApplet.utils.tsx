@@ -900,6 +900,11 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
           ...activity,
           description: getDictionaryText(activity.description),
           items: getActivityItems(activity.items),
+          ...getEntityReportFields({
+            reportItem: activity.reportIncludedItemName,
+            activityItems: activity.items,
+            type: FlowReportFieldsPrepareType.NameToKey,
+          }),
           //TODO: for frontend purposes - should be reviewed after refactoring phase
           conditionalLogic: getActivityConditionalLogic(activity.items),
           scoresAndReports: getScoresAndReports(activity),

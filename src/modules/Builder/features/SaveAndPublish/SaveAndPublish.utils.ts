@@ -55,6 +55,7 @@ export const removeAppletExtraFields = (isNewApplet: boolean) => ({
   reportPublicKey: undefined,
   reportRecipients: undefined,
   reportIncludeUserId: undefined,
+  reportIncludeCaseId: undefined,
   retentionPeriod: undefined,
   retentionType: undefined,
   createdAt: undefined,

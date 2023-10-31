@@ -31,8 +31,8 @@ import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.
 import { AppletFormValues } from 'modules/Builder/types';
 import { reportConfig } from 'modules/Builder/state';
 import {
-  getEntityReportFields,
   FlowReportFieldsPrepareType,
+  getEntityReportFields,
 } from 'modules/Builder/utils/getEntityReportFields';
 
 import {
@@ -68,6 +68,11 @@ export const useAppletDataFromForm = () => {
             items: getActivityItems(activity),
             subscaleSetting: remapSubscaleSettings(activity),
             scoresAndReports: getScoresAndReports(activity),
+            ...getEntityReportFields({
+              reportItem: activity.reportIncludedItemName,
+              activityItems: activity.items,
+              type: FlowReportFieldsPrepareType.KeyToName,
+            }),
             ...removeActivityExtraFields(),
           }) as Activity,
       ),

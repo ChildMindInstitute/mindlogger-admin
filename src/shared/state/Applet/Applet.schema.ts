@@ -599,6 +599,7 @@ export type SingleApplet = {
   reportPublicKey?: string;
   reportRecipients?: string[];
   reportIncludeUserId?: boolean;
+  reportIncludeCaseId?: boolean;
   reportEmailBody?: string;
   retentionPeriod?: number | null;
   retentionType?: RetentionPeriods | null;
@@ -615,15 +616,4 @@ export type SingleApplet = {
 
 export type AppletSchema = {
   applet: BaseSchema<{ result: SingleApplet } | null>;
-};
-
-export type UpdateActivityData = {
-  activityId?: string;
-  reportIncludedItemName?: string;
-};
-
-export type UpdateActivityFlowData = {
-  flowId?: string;
-  reportIncludedItemName?: string;
-  reportIncludedActivityName?: string;
 };
