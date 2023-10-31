@@ -847,8 +847,6 @@ describe('getSubscales', () => {
       ${{}}              | ${{}}            | ${{}}                            | ${'should return empty object'}
       ${null}            | ${null}          | ${{}}                            | ${'should return empty object'}
     `('$description', ({ subscaleSetting, activityItems, expected }) => {
-      /* eslint-disable @typescript-eslint/ban-ts-comment */
-      // @ts-ignore
       expect(calcTotalScore(subscaleSetting, activityItems)).toEqual(expected);
     });
   });
@@ -867,8 +865,6 @@ describe('getSubscales', () => {
         ...subscaleSetting,
         subscales,
       };
-      /* eslint-disable @typescript-eslint/ban-ts-comment */
-      // @ts-ignore
       expect(getSubscales(settings, activityItems)).toEqual(expected);
     });
   });
