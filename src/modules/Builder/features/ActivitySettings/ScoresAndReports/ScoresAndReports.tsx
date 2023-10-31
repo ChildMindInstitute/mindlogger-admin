@@ -107,7 +107,6 @@ export const ScoresAndReports = () => {
     if (reports?.length) return;
 
     setValue(generateReportName, false);
-    setValue(showScoreSummaryName, false);
   }, [reports]);
 
   return (
