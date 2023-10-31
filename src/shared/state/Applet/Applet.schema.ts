@@ -599,7 +599,6 @@ export type SingleApplet = {
   reportPublicKey?: string;
   reportRecipients?: string[];
   reportIncludeUserId?: boolean;
-  reportIncludeCaseId?: boolean;
   reportEmailBody?: string;
   retentionPeriod?: number | null;
   retentionType?: RetentionPeriods | null;

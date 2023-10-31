@@ -35,7 +35,7 @@ export const DeleteItemModal = ({
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(itemToDelete);
   const conditionalLogicForItemToDelete = getItemConditionDependencies(
     itemToDelete,
-    activity.conditionalLogic,
+    activity?.conditionalLogic,
   );
   const itemsWithVariablesToRemove = getItemsWithVariable(itemToDelete?.name, items);
   const itemsWithVariablesToRemoveString = itemsWithVariablesToRemove

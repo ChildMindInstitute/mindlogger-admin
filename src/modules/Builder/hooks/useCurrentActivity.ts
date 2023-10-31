@@ -19,7 +19,7 @@ export const useCurrentActivity = () => {
   if (!~currentActivityIndex) return {};
 
   return {
-    activity: activities[currentActivityIndex],
+    activity: activities[currentActivityIndex] as ActivityFormValues,
     fieldName: `activities.${currentActivityIndex}`,
     activityObjField: `activities[${currentActivityIndex}]`,
   };

@@ -1,5 +1,8 @@
-import { SingleApplet } from 'shared/state';
-import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+import {
+  ActivityFlowFormValues,
+  ActivityFormValues,
+  AppletFormValues,
+} from 'modules/Builder/types';
 import { getEntityKey } from 'shared/utils';
 
 import {
@@ -10,38 +13,69 @@ import {
 
 const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
 
+// export const getActivitiesOptions = (
+//   activityFlow?: ActivityFlowFormValues,
+//   appletData?: Partial<SingleApplet>,
+// ) => {
+//   const uniqueValuesSet = new Set<string>();
+//   const activities = appletData?.activities;
+//   const uniqueActivities = activityFlow?.items?.reduce(
+//     (acc: { value: string; labelKey: string }[], { activityKey }) => {
+//       const activityName = activities?.find((activity) => activityKey === getEntityKey(activity))
+//         ?.name;
+//       const value = activityName ?? '';
+//
+//       if (!uniqueValuesSet.has(value)) {
+//         uniqueValuesSet.add(value);
+//         acc.push({
+//           value,
+//           labelKey: activityName ?? '',
+//         });
+//       }
+//
+//       return acc;
+//     },
+//     [],
+//   );
+//
+//   return uniqueActivities ?? [];
+// };
+
+// export const getActivityItemsOptions = (activity?: ActivityFormValues) =>
+//   activity?.items?.map(({ name }) => ({
+//     value: name,
+//     labelKey: name,
+//   })) || [];
+
 export const getActivitiesOptions = (
   activityFlow?: ActivityFlowFormValues,
-  appletData?: Partial<SingleApplet>,
+  appletData?: AppletFormValues,
 ) => {
   const uniqueValuesSet = new Set<string>();
   const activities = appletData?.activities;
-  const uniqueActivities = activityFlow?.items?.reduce(
-    (acc: { value: string; labelKey: string }[], { activityKey }) => {
-      const activityName = activities?.find((activity) => activityKey === getEntityKey(activity))
-        ?.name;
-      const value = activityName ?? '';
+  const activityFlowItems = activityFlow?.items;
+  if (!activities || !activityFlowItems) return [];
 
-      if (!uniqueValuesSet.has(value)) {
-        uniqueValuesSet.add(value);
-        acc.push({
-          value,
-          labelKey: activityName ?? '',
-        });
-      }
+  return activityFlowItems.reduce((acc: { value: string; labelKey: string }[], { activityKey }) => {
+    const activity = activities.find((activity) => activityKey === getEntityKey(activity));
+    const activityName = activity?.name;
 
-      return acc;
-    },
-    [],
-  );
+    if (activityName && !uniqueValuesSet.has(activityKey)) {
+      uniqueValuesSet.add(activityKey);
+      acc.push({
+        value: activityKey,
+        labelKey: activityName,
+      });
+    }
 
-  return uniqueActivities ?? [];
+    return acc;
+  }, []);
 };
 
-export const getActivityItemsOptions = (activity?: ActivityFormValues) =>
-  activity?.items?.map(({ name }) => ({
-    value: name,
-    labelKey: name,
+export const getActivityItemsOptions = (activity?: ActivityFormValues | null) =>
+  activity?.items?.map((item) => ({
+    value: getEntityKey(item),
+    labelKey: item.name,
   })) || [];
 
 export const verifyReportServer = async ({ url, publicKey, token }: VerifyReportServer) => {

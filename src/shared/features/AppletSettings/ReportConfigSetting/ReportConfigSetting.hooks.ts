@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { authStorage } from 'shared/utils/authStorage';
 import { SingleApplet } from 'shared/state';
+import { AppletFormValues } from 'modules/Builder/types';
 
 import { verifyReportServer, setPasswordReportServer } from './ReportConfigSetting.utils';
 import { UseCheckReportServer } from './ReportConfigSetting.types';
@@ -52,7 +53,72 @@ export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) =
   };
 };
 
-export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
+// export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
+//   const { activityId, activityFlowId } = useParams();
+//   if (!appletData) return initialValues;
+//
+//   const {
+//     reportServerIp,
+//     reportPublicKey,
+//     reportRecipients,
+//     reportIncludeUserId,
+//     reportEmailBody,
+//   } = appletData;
+//
+//   let reportIncludedItemName = '';
+//   let reportIncludedActivityName = '';
+//
+//   if (activityId) {
+//     const activity = appletData.activities?.find(
+//       ({ id, key }) => activityId === id || activityId === key,
+//     );
+//     const { reportIncludedItemName: activityIncludedItemName } = activity || {};
+//     if (
+//       activityIncludedItemName &&
+//       activity?.items.some((item) => item.name === activityIncludedItemName)
+//     ) {
+//       reportIncludedItemName = activityIncludedItemName;
+//     }
+//   }
+//
+//   if (activityFlowId) {
+//     const activityFlow = appletData.activityFlows?.find(
+//       ({ id, key }) => activityFlowId === id || activityFlowId === key,
+//     );
+//     const {
+//       reportIncludedActivityName: flowIncludedActivityName,
+//       reportIncludedItemName: flowIncludedItemName,
+//     } = activityFlow || {};
+//     const chosenActivity = appletData.activities?.find(
+//       (activity) => activity.name === flowIncludedActivityName,
+//     );
+//
+//     if (flowIncludedActivityName && chosenActivity) {
+//       reportIncludedActivityName = flowIncludedActivityName;
+//
+//       if (
+//         flowIncludedItemName &&
+//         chosenActivity.items.some((item) => item.name === flowIncludedItemName)
+//       ) {
+//         reportIncludedItemName = flowIncludedItemName;
+//       }
+//     }
+//   }
+//
+//   return {
+//     ...initialValues,
+//     reportServerIp,
+//     reportPublicKey,
+//     reportRecipients,
+//     reportIncludeUserId,
+//     reportIncludedItemName,
+//     reportIncludedActivityName,
+//     reportEmailBody,
+//     itemValue: !!reportIncludedActivityName || !!reportIncludedItemName,
+//   };
+// };
+
+export const useDefaultValues = (appletData?: SingleApplet | AppletFormValues) => {
   const { activityId, activityFlowId } = useParams();
   if (!appletData) return initialValues;
 
@@ -68,39 +134,31 @@ export const useDefaultValues = (appletData?: Partial<SingleApplet>) => {
   let reportIncludedActivityName = '';
 
   if (activityId) {
-    const activity = appletData.activities?.find(
+    const activity = (appletData as SingleApplet).activities?.find(
       ({ id, key }) => activityId === id || activityId === key,
     );
-    const { reportIncludedItemName: activityIncludedItemName } = activity || {};
-    if (
-      activityIncludedItemName &&
-      activity?.items.some((item) => item.name === activityIncludedItemName)
-    ) {
-      reportIncludedItemName = activityIncludedItemName;
+    const { reportIncludedItemName: activityIncludedItemNameKey } = activity || {};
+
+    if (activityIncludedItemNameKey) {
+      reportIncludedItemName = activityIncludedItemNameKey;
     }
   }
 
   if (activityFlowId) {
-    const activityFlow = appletData.activityFlows?.find(
+    const activityFlow = (appletData as SingleApplet).activityFlows?.find(
       ({ id, key }) => activityFlowId === id || activityFlowId === key,
     );
     const {
-      reportIncludedActivityName: flowIncludedActivityName,
-      reportIncludedItemName: flowIncludedItemName,
+      reportIncludedActivityName: flowIncludedActivityNameKey,
+      reportIncludedItemName: flowIncludedItemNameKey,
     } = activityFlow || {};
-    const chosenActivity = appletData.activities?.find(
-      (activity) => activity.name === flowIncludedActivityName,
-    );
 
-    if (flowIncludedActivityName && chosenActivity) {
-      reportIncludedActivityName = flowIncludedActivityName;
+    if (flowIncludedActivityNameKey) {
+      reportIncludedActivityName = flowIncludedActivityNameKey ?? '';
+    }
 
-      if (
-        flowIncludedItemName &&
-        chosenActivity.items.some((item) => item.name === flowIncludedItemName)
-      ) {
-        reportIncludedItemName = flowIncludedItemName;
-      }
+    if (flowIncludedItemNameKey) {
+      reportIncludedItemName = flowIncludedItemNameKey ?? '';
     }
   }
 
