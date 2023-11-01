@@ -11,7 +11,7 @@ export const useFilterConditionalLogicByItem = (item: ItemFormValues) => {
   const { watch, setValue } = useFormContext();
   const conditionalLogicForItemToDelete = getItemConditionDependencies(
     item,
-    activity.conditionalLogic,
+    activity?.conditionalLogic,
   );
   const conditionalLogic = watch(`${fieldName}.conditionalLogic`);
 
