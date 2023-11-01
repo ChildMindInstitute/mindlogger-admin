@@ -162,7 +162,128 @@ export const mockedAppletData = {
       subscaleSetting: null,
       reportIncludedItemName: null,
       id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
-      items: [],
+      items: [
+        {
+          question: {
+            en: 'ss',
+          },
+          responseType: 'singleSelect',
+          responseValues: {
+            options: [
+              {
+                id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
+                text: 's1',
+                score: 2,
+                value: 0,
+              },
+              {
+                id: 'e3ca9405-71e9-4627-8311-d405f383246e',
+                text: 's23333333',
+                score: 4,
+                value: 1,
+              },
+            ],
+          },
+          config: {},
+          name: 'Item1',
+          id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
+          order: 1,
+        },
+        {
+          question: {
+            en: 'ms',
+          },
+          responseType: 'multiSelect',
+          responseValues: {
+            options: [
+              {
+                id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
+                text: 'm1',
+                score: 1,
+                value: 0,
+              },
+              {
+                id: '188fc535-1e45-444d-88ec-91cb29737b03',
+                text: 'm2',
+                score: 1,
+                value: 1,
+              },
+              {
+                id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
+                text: 'm3',
+                score: 1,
+                value: 2,
+              },
+            ],
+          },
+          config: {},
+          name: 'Item2',
+          conditionalLogic: {
+            match: 'any',
+            conditions: [
+              {
+                itemName: 'Item1',
+                type: 'EQUAL_TO_OPTION',
+                payload: {
+                  optionValue: '0',
+                },
+              },
+            ],
+          },
+          id: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
+          order: 2,
+        },
+        {
+          question: {
+            en: 'slider',
+          },
+          responseType: 'slider',
+          responseValues: {
+            minLabel: 'min',
+            maxLabel: 'max',
+            minValue: 1,
+            maxValue: 4,
+          },
+          config: {},
+          name: 'Item3',
+          conditionalLogic: {
+            match: 'any',
+            conditions: [
+              {
+                itemName: 'Item2',
+                type: 'NOT_INCLUDES_OPTION',
+                payload: {
+                  optionValue: '0',
+                },
+              },
+            ],
+          },
+          id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
+          order: 3,
+        },
+        {
+          question: {
+            en: 'time',
+          },
+          responseType: 'time',
+          responseValues: null,
+          config: {},
+          name: 'Item4',
+          id: '4b334484-947b-4287-941c-ed4cbf0dc955',
+          order: 4,
+        },
+        {
+          question: {
+            en: 'text',
+          },
+          responseType: 'text',
+          responseValues: null,
+          config: {},
+          name: 'Item5',
+          id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
+          order: 5,
+        },
+      ],
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
       performanceTaskType: null,
@@ -261,6 +382,151 @@ export const mockedManager = {
         },
       ],
       encryption: mockedEncryption,
+    },
+  ],
+};
+
+export const mockedAppletFormData = {
+  displayName: 'dataviz',
+  description: '',
+  about: '',
+  id: '2e46fa32-ea7c-4a76-b49b-1c97d795bb9a',
+  activities: [
+    {
+      name: 'New Activity',
+      id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
+      items: [
+        {
+          id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
+          name: 'Item1',
+          responseType: 'singleSelect',
+          responseValues: {
+            options: [
+              {
+                id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
+                text: 's1',
+                score: 2,
+                value: 0,
+              },
+              {
+                id: 'e3ca9405-71e9-4627-8311-d405f383246e',
+                text: 's23333333',
+                score: 4,
+                value: 1,
+              },
+            ],
+          },
+          order: 1,
+        },
+        {
+          id: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
+          name: 'Item2',
+          responseType: 'multiSelect',
+          responseValues: {
+            options: [
+              {
+                id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
+                text: 'm1',
+                score: 1,
+                value: 0,
+              },
+              {
+                id: '188fc535-1e45-444d-88ec-91cb29737b03',
+                text: 'm2',
+                score: 1,
+                value: 1,
+              },
+              {
+                id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
+                text: 'm3',
+                score: 1,
+                value: 2,
+              },
+            ],
+          },
+          order: 2,
+        },
+        {
+          id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
+          name: 'Item3',
+          responseType: 'slider',
+          responseValues: {
+            minLabel: 'min',
+            maxLabel: 'max',
+            minValue: 1,
+            maxValue: 4,
+          },
+          order: 3,
+        },
+        {
+          id: '4b334484-947b-4287-941c-ed4cbf0dc955',
+          name: 'Item4',
+          responseType: 'time',
+          responseValues: null,
+          order: 4,
+        },
+        {
+          id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
+          name: 'Item5',
+          responseType: 'text',
+          responseValues: null,
+          order: 5,
+        },
+      ],
+      createdAt: '2023-10-19T08:29:43.180317',
+      isPerformanceTask: false,
+      performanceTaskType: null,
+      conditionalLogic: [
+        {
+          key: '597ffffb-9bce-4c73-9627-cc1bab064b7e',
+          itemKey: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
+          match: 'any',
+          conditions: [
+            {
+              key: '25616abd-799b-4aff-90d5-74c3cd956d54',
+              type: 'EQUAL_TO_OPTION',
+              payload: {
+                optionValue: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
+              },
+              itemName: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
+            },
+          ],
+        },
+        {
+          key: 'a420fd93-5576-4d99-9394-403cd4a00390',
+          itemKey: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
+          match: 'any',
+          conditions: [
+            {
+              key: '296f9140-f283-4040-b9e7-5c43221d5a5e',
+              type: 'NOT_INCLUDES_OPTION',
+              payload: {
+                optionValue: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
+              },
+              itemName: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  activityFlows: [
+    {
+      name: 'af1',
+      description: 'afd',
+      isSingleReport: false,
+      hideBadge: false,
+      reportIncludedActivityName: null,
+      reportIncludedItemName: null,
+      isHidden: false,
+      id: 'c109d25c-7ecc-4dae-b8c9-7334bc427c34',
+      items: [
+        {
+          id: 'e9194ba5-d997-4580-b989-144e8b4a2692',
+          activityKey: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
+        },
+      ],
+      createdAt: '2023-10-27T13:34:22.037875',
     },
   ],
 };
