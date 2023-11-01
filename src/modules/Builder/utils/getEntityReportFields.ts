@@ -29,7 +29,7 @@ export const getEntityReportFields = <
   type,
 }: GetEntityReportFields<T, K>) => {
   const isKeyToName = type === FlowReportFieldsPrepareType.KeyToName;
-  let reportIncludedActivityName = reportActivity;
+  let reportIncludedActivityName = '';
 
   const selectedReportActivity =
     !activityItems &&
@@ -56,7 +56,7 @@ export const getEntityReportFields = <
         (item) => (isKeyToName ? getEntityKey(item) : item.name) === reportItem,
       );
   }
-  let reportIncludedItemName = reportItem;
+  let reportIncludedItemName = '';
   if (selectedReportItem) {
     reportIncludedItemName = isKeyToName
       ? selectedReportItem.name
