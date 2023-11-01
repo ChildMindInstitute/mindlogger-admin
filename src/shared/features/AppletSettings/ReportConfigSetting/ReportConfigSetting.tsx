@@ -182,11 +182,10 @@ export const ReportConfigSetting = ({
     }
   };
 
-  const handleRemoveEmail = async (index: number) => {
+  const handleRemoveEmail = (index: number) => {
     setValue('reportRecipients', reportRecipients.filter((_, i) => i !== index) as string[], {
       shouldDirty: true,
     });
-    await trigger('reportRecipients');
   };
 
   const onSubmit = (values: ReportConfigFormValues) => {

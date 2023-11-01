@@ -13,40 +13,6 @@ import {
 
 const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
 
-// export const getActivitiesOptions = (
-//   activityFlow?: ActivityFlowFormValues,
-//   appletData?: Partial<SingleApplet>,
-// ) => {
-//   const uniqueValuesSet = new Set<string>();
-//   const activities = appletData?.activities;
-//   const uniqueActivities = activityFlow?.items?.reduce(
-//     (acc: { value: string; labelKey: string }[], { activityKey }) => {
-//       const activityName = activities?.find((activity) => activityKey === getEntityKey(activity))
-//         ?.name;
-//       const value = activityName ?? '';
-//
-//       if (!uniqueValuesSet.has(value)) {
-//         uniqueValuesSet.add(value);
-//         acc.push({
-//           value,
-//           labelKey: activityName ?? '',
-//         });
-//       }
-//
-//       return acc;
-//     },
-//     [],
-//   );
-//
-//   return uniqueActivities ?? [];
-// };
-
-// export const getActivityItemsOptions = (activity?: ActivityFormValues) =>
-//   activity?.items?.map(({ name }) => ({
-//     value: name,
-//     labelKey: name,
-//   })) || [];
-
 export const getActivitiesOptions = (
   activityFlow?: ActivityFlowFormValues,
   appletData?: AppletFormValues,
