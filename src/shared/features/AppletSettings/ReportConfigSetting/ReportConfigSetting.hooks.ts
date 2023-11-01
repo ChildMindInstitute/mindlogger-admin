@@ -89,11 +89,11 @@ export const useDefaultValues = (appletData?: SingleApplet | AppletFormValues) =
     } = activityFlow || {};
 
     if (flowIncludedActivityNameKey) {
-      reportIncludedActivityName = flowIncludedActivityNameKey ?? '';
+      reportIncludedActivityName = flowIncludedActivityNameKey;
     }
 
     if (flowIncludedItemNameKey) {
-      reportIncludedItemName = flowIncludedItemNameKey ?? '';
+      reportIncludedItemName = flowIncludedItemNameKey;
     }
   }
 
