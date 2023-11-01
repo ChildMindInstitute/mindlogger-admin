@@ -44,12 +44,9 @@ export const DeleteItemModal = ({
     .join(', ');
 
   const handleRemoveItem = (index: number) => {
-    const flowWithReportItemToDeleteIndex = activityFlows.findIndex(
-      (flow) => flow.reportIncludedItemName === itemIdToDelete,
-    );
-    if (flowWithReportItemToDeleteIndex !== -1) {
-      const newActivityFlows = activityFlows.map((flow, index) => {
-        if (index === flowWithReportItemToDeleteIndex) {
+    if (activityFlows.some((flow) => flow.reportIncludedItemName === itemIdToDelete)) {
+      const newActivityFlows = activityFlows.map((flow) => {
+        if (flow.reportIncludedItemName === itemIdToDelete) {
           return {
             ...flow,
             reportIncludedActivityName: '',
