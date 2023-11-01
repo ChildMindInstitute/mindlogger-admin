@@ -41,57 +41,55 @@ export const DashboardTable = ({
         onPageChange={handleChangePage}
         labelRowsPerPage=""
         rowsPerPageOptions={[]}
+        data-testid={`${dataTestid}-table-pagination`}
       />
     </StyledTableCellContent>
   );
   const [hoveredRowIndex, setHoveredRowIndex] = useState(-1);
 
   return (
-    <>
-      <StyledTableContainer
-        className={className}
-        maxHeight={maxHeight}
-        uiType={uiType}
-        hasColFixedWidth={hasColFixedWidth}
-      >
-        {!!rows?.length && (
-          <MuiTable stickyHeader data-testid={dataTestid}>
-            <TableHead
-              headCells={columns}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              tableHeader={tableHeader}
-              uiType={uiType}
-              hasColFixedWidth={hasColFixedWidth}
-            />
-            <TableBody>
-              {rows.map((row, index) => (
-                <TableRow
-                  key={`row-${index}`}
-                  onMouseEnter={() => setHoveredRowIndex(index)}
-                  onMouseLeave={() => setHoveredRowIndex(-1)}
-                >
-                  {Object.keys(row)?.map((key) => (
-                    <StyledTableCell
-                      onClick={row[key].onClick}
-                      scope="row"
-                      key={key}
-                      align={row[key].align}
-                      width={row[key].width}
-                      hasColFixedWidth={hasColFixedWidth}
-                    >
-                      {row[key].content(row, hoveredRowIndex === index)}
-                    </StyledTableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </MuiTable>
-        )}
-        {emptyComponent && <EmptyState>{emptyComponent}</EmptyState>}
-      </StyledTableContainer>
-      {uiType === UiType.Tertiary && tableHeader}
-    </>
+    <StyledTableContainer
+      className={className}
+      maxHeight={maxHeight}
+      uiType={uiType}
+      hasColFixedWidth={hasColFixedWidth}
+    >
+      {!!rows?.length && (
+        <MuiTable stickyHeader data-testid={dataTestid}>
+          <TableHead
+            headCells={columns}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            tableHeader={tableHeader}
+            uiType={uiType}
+            hasColFixedWidth={hasColFixedWidth}
+          />
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow
+                key={`row-${index}`}
+                onMouseEnter={() => setHoveredRowIndex(index)}
+                onMouseLeave={() => setHoveredRowIndex(-1)}
+              >
+                {Object.keys(row)?.map((key) => (
+                  <StyledTableCell
+                    onClick={row[key].onClick}
+                    scope="row"
+                    key={key}
+                    align={row[key].align}
+                    width={row[key].width}
+                    hasColFixedWidth={hasColFixedWidth}
+                  >
+                    {row[key].content(row, hoveredRowIndex === index)}
+                  </StyledTableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </MuiTable>
+      )}
+      {emptyComponent && <EmptyState>{emptyComponent}</EmptyState>}
+    </StyledTableContainer>
   );
 };
