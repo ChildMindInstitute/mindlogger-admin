@@ -80,7 +80,7 @@ export const ReportConfigSetting = ({
   const { activityFlow, fieldName: flowFieldName } = useCurrentActivityFlow();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
-  const { setReportConfigChanges } = reportConfig.actions;
+  const { setReportConfigChanges, resetReportConfigChanges } = reportConfig.actions;
   const isServerConfigured = useIsServerConfigured();
   const isActivity = !!activity;
   const isActivityFlow = !!activityFlow;
@@ -239,6 +239,8 @@ export const ReportConfigSetting = ({
         setAppletFormValue(key, value);
       });
     }
+
+    reset({ ...defaultValues, ...body });
   };
 
   const handleSaveActivityReportConfig = async () => {
@@ -253,10 +255,9 @@ export const ReportConfigSetting = ({
       reportIncludedItemName: itemValue && selectedItem ? selectedItem.name : '',
     });
 
-    setAppletFormValue(
-      `${activityFieldName}.reportIncludedItemName`,
-      itemValue && reportIncludedItemKey ? reportIncludedItemKey : '',
-    );
+    const reportIncludedItemName = itemValue && reportIncludedItemKey ? reportIncludedItemKey : '';
+    await setAppletFormValue(`${activityFieldName}.reportIncludedItemName`, reportIncludedItemName);
+    reset({ ...defaultValues, itemValue, reportIncludedItemName });
   };
 
   const handleSaveActivityFlowReportConfig = async () => {
@@ -276,14 +277,16 @@ export const ReportConfigSetting = ({
       reportIncludedItemName: itemValue && selectedItem ? selectedItem.name : '',
     });
 
-    setAppletFormValue(
+    const reportIncludedActivityName =
+      itemValue && reportIncludedActivityKey ? reportIncludedActivityKey : '';
+    const reportIncludedItemName = itemValue && reportIncludedItemKey ? reportIncludedItemKey : '';
+
+    await setAppletFormValue(
       `${flowFieldName}.reportIncludedActivityName`,
-      itemValue && reportIncludedActivityKey ? reportIncludedActivityKey : '',
+      reportIncludedActivityName,
     );
-    setAppletFormValue(
-      `${flowFieldName}.reportIncludedItemName`,
-      itemValue && reportIncludedItemKey ? reportIncludedItemKey : '',
-    );
+    await setAppletFormValue(`${flowFieldName}.reportIncludedItemName`, reportIncludedItemName);
+    reset({ ...defaultValues, itemValue, reportIncludedActivityName, reportIncludedItemName });
   };
 
   const handleVerify = async () => {
@@ -398,7 +401,14 @@ export const ReportConfigSetting = ({
 
   useEffect(() => {
     setSubjectData(subjectDataProps);
-  }, [appletData, includeRespondentId, itemValue, reportIncludedItemName, reportIncludedActivity]);
+  }, [
+    appletFormValues,
+    appletData,
+    includeRespondentId,
+    itemValue,
+    reportIncludedItemName,
+    reportIncludedActivity,
+  ]);
 
   useEffect(() => {
     dispatch(setReportConfigChanges({ hasChanges: isDirty || hasErrors }));
@@ -408,12 +418,14 @@ export const ReportConfigSetting = ({
     if (!saveChanges) return;
 
     handleSaveChanges();
+    dispatch(resetReportConfigChanges());
   }, [saveChanges]);
 
   useEffect(() => {
     if (!doNotSaveChanges) return;
 
     handleDontSave();
+    dispatch(resetReportConfigChanges());
   }, [doNotSaveChanges]);
 
   return (
