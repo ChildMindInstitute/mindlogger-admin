@@ -24,4 +24,5 @@ export type NavigationMenuProps = {
   items: Item[];
   onClose: () => void;
   onSetActiveItem: (item: NavigationItem) => void;
+  'data-testid'?: string;
 };
