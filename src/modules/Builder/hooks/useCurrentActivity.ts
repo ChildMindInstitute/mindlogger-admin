@@ -16,7 +16,7 @@ export const useCurrentActivity = () => {
     (activity: ActivityFormValues) => getEntityKey(activity) === activityId,
   );
 
-  if (!~currentActivityIndex) return {};
+  if (typeof currentActivityIndex !== 'number' || !~currentActivityIndex) return {};
 
   return {
     activity: activities[currentActivityIndex],
