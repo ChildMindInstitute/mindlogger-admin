@@ -51,6 +51,7 @@ const getTable = (props: Partial<DashboardTableProps> = {}) => (
     count={15}
     handleChangePage={mockChangePageFn}
     data-testid={mockDataTestId}
+    rowsPerPage={10}
     {...props}
   />
 );
@@ -97,5 +98,12 @@ describe('DashboardTable component tests', () => {
     fireEvent.click(screen.getByText('First Name'));
 
     expect(mockSortFn).toBeCalledTimes(1);
+  });
+
+  test('should request change page', () => {
+    renderWithProviders(getTable());
+    fireEvent.click(screen.getByTitle('Go to next page'));
+
+    expect(mockChangePageFn).toBeCalledTimes(1);
   });
 });
