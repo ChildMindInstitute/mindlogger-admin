@@ -37,7 +37,8 @@ export const enum SettingParam {
   LiveResponseStreaming = 'live-response-streaming',
 }
 
-const uuidRegexp = '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})';
+export const uuidRegexp =
+  '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})';
 export const APPLET_DASHBOARD_PAGE_REGEXP_STRING = `\\/${Path.Dashboard}\\/(${uuidRegexp})`;
 export const APPLET_PAGE_REGEXP_STRING = `\\/${Path.Builder}\\/(${uuidRegexp}|${Path.NewApplet})`;
 export const APPLET_SETTINGS_PAGE_REGEXP_STRING = `(${APPLET_DASHBOARD_PAGE_REGEXP_STRING}|${APPLET_PAGE_REGEXP_STRING})\\/${Path.Settings}`;
@@ -52,7 +53,7 @@ export const getAppletPageRegexp = (path?: string) =>
 export const getAppletActivityPageRegexp = (path?: string) =>
   path ? `${ACTIVITY_PAGE_REGEXP_STRING}\\/${path}` : ACTIVITY_PAGE_REGEXP_STRING;
 export const getAppletActivityFlowPageRegexp = (path?: string) =>
-  path ? `${ACTIVITY_FLOW_PAGE_REGEXP_STRING}\\/${path}` : ACTIVITY_PAGE_REGEXP_STRING;
+  path ? `${ACTIVITY_FLOW_PAGE_REGEXP_STRING}\\/${path}` : ACTIVITY_FLOW_PAGE_REGEXP_STRING;
 export const getAppletPerformanceActivityPageRegexp = (path: string) =>
   `${ACTIVITIES_PAGE_REGEXP_STRING}\\/${Path.PerformanceTask}\\/${path}/(${uuidRegexp})`;
 
