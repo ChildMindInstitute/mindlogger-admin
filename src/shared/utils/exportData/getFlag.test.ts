@@ -17,7 +17,7 @@ const missedSingleItem = {
   scheduledDatetime: 1689755822,
   startDatetime: null,
 };
-describe('getRawScores', () => {
+describe('getFlag', () => {
   test.each`
     item                | expected                    | description
     ${singleItem}       | ${ActivityStatus.Completed} | ${'should return flag comleted'}
