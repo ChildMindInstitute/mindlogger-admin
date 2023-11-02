@@ -109,3 +109,21 @@ export const mockedManager = {
     },
   ],
 };
+
+export const mockedInvitation = {
+  result: [
+    {
+      email: mockedEmail,
+      appletId: mockedAppletId,
+      appletName: 'Mocked Applet',
+      role: Roles.Editor,
+      key: 'e6fdab42-412d-312c-a1e6-a6ee3a72a777',
+      status: 'pending',
+      firstName: 'Jane',
+      lastName: 'Doe',
+      createdAt: '2023-11-02T08:37:13.652256',
+      meta: {},
+    },
+  ],
+  count: 1,
+};
