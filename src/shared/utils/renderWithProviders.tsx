@@ -3,6 +3,8 @@ import { Route, Routes, MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import { ExtendedRenderOptions, setupStore } from 'redux/store';
+import { page } from 'resources';
+import Login from 'modules/Auth/pages/Login';
 
 export const renderWithProviders = (
   ui: React.ReactElement,
@@ -19,6 +21,7 @@ export const renderWithProviders = (
       <MemoryRouter initialEntries={[route]}>
         <Routes>
           <Route path={routePath} element={children} />
+          <Route path={page.login} element={<Login />} />
         </Routes>
       </MemoryRouter>
     </Provider>
