@@ -1,5 +1,5 @@
-import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
+
 import { renderWithProviders } from 'shared/utils';
 
 import { Header } from './Header';
