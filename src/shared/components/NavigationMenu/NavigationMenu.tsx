@@ -8,7 +8,13 @@ import { NavigationMenuProps } from './NavigationMenu.types';
 import { getActiveItem } from './NavigationMenu.utils';
 import { useSettingsRedirection } from './NavigationMenu.hooks';
 
-export const NavigationMenu = ({ title, items, onClose, onSetActiveItem }: NavigationMenuProps) => {
+export const NavigationMenu = ({
+  title,
+  items,
+  onClose,
+  onSetActiveItem,
+  'data-testid': dataTestid,
+}: NavigationMenuProps) => {
   const { setting } = useParams();
   const { t } = useTranslation('app');
 
@@ -18,7 +24,7 @@ export const NavigationMenu = ({ title, items, onClose, onSetActiveItem }: Navig
   useSettingsRedirection(items);
 
   return (
-    <StyledWrapper>
+    <StyledWrapper data-testid={dataTestid}>
       <LeftBar
         title={title}
         items={items}
