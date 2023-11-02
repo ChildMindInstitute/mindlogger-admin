@@ -3,7 +3,7 @@ import { UseFormSetError, FieldValues } from 'react-hook-form';
 
 import { Option } from 'shared/components/FormComponents';
 import { Roles } from 'shared/consts';
-import { ApiError } from 'shared/state';
+import { ApiErrorResponse } from 'shared/state';
 
 export type FormValues = {
   firstName: string;
@@ -30,6 +30,6 @@ export type WorkspaceInfo = {
 };
 
 export type UseFormError<T extends FieldValues> = {
-  error: AxiosError<ApiError> | null;
+  error: AxiosError<ApiErrorResponse> | null;
   setError: UseFormSetError<T>;
 };

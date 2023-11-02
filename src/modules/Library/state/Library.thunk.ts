@@ -1,21 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { ApiError, PublishedApplet } from 'redux/modules';
+import { ApiErrorResponse, PublishedApplet } from 'redux/modules';
 import {
   PublishedAppletsType,
   getPublishedAppletsApi,
   postAppletsToCartApi,
   getAppletsFromCartApi,
 } from 'api';
+import { getApiErrorResult } from 'shared/utils/errors';
 
 export const getPublishedApplets = createAsyncThunk(
   'library/getPublishedApplets',
   async (publishedApplets: PublishedAppletsType, { rejectWithValue, signal }) => {
     try {
-      return await getPublishedAppletsApi(publishedApplets, signal);
+      const { data } = await getPublishedAppletsApi(publishedApplets, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
@@ -24,9 +29,13 @@ export const postAppletsToCart = createAsyncThunk(
   'library/postAppletsToCart',
   async (cartItems: PublishedApplet[], { rejectWithValue, signal }) => {
     try {
-      return await postAppletsToCartApi(cartItems, signal);
+      const { data } = await postAppletsToCartApi(cartItems, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
@@ -35,9 +44,13 @@ export const getAppletsFromCart = createAsyncThunk(
   'library/getAppletsFromCart',
   async (_, { rejectWithValue, signal }) => {
     try {
-      return await getAppletsFromCartApi(signal);
+      const { data } = await getAppletsFromCartApi(signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
