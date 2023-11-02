@@ -55,10 +55,6 @@ jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
 }));
 
-jest.mock('shared/components/Table/Table.const', () => ({
-  DEFAULT_INVITATIONS_ROWS_PER_PAGE: 1,
-}));
-
 describe('InvitationsTable', () => {
   test('Render empty InvitationsTable', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
