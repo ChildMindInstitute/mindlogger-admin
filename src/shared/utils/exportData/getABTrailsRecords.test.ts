@@ -1,6 +1,6 @@
 import { getABTrailsRecords } from './getABTrailsRecords';
 
-const abTrailLines = [
+const abTrailsLines = [
   {
     points: [
       {
@@ -273,9 +273,9 @@ const regularResult = [
 
 describe('getABTrailsRecords', () => {
   test.each`
-    lines           | width  | expected         | description
-    ${abTrailLines} | ${362} | ${regularResult} | ${'should generate records for width = 300'}
-    ${abTrailLines} | ${0}   | ${[]}            | ${'should return empty array for width = 0'}
+    lines            | width  | expected         | description
+    ${abTrailsLines} | ${362} | ${regularResult} | ${'should generate records'}
+    ${abTrailsLines} | ${0}   | ${[]}            | ${'should return empty array for width = 0'}
   `('$description', ({ lines, width, expected }) => {
     expect(getABTrailsRecords(lines, width)).toEqual(expected);
   });
