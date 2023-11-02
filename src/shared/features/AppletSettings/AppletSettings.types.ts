@@ -14,4 +14,5 @@ export type NavigationSetting = {
 export type AppletSettingsProps = {
   settings: Item[];
   isBuilder?: boolean;
+  'data-testid'?: string;
 };
