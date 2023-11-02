@@ -1,10 +1,10 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
+import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedOwnerId } from 'shared/mock';
 import { base } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
-import mockAxios from '__mocks__/axios';
 
 import { FolderItem } from './FolderItem';
 import { AppletsContext } from '../../Applets.context';
