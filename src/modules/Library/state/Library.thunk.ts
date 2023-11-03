@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { ApiErrorResponse, PublishedApplet } from 'redux/modules';
+import { ApiErrorResponse } from 'shared/state/Base';
 import {
   PublishedAppletsType,
   getPublishedAppletsApi,
@@ -9,6 +9,8 @@ import {
   getAppletsFromCartApi,
 } from 'api';
 import { getApiErrorResult } from 'shared/utils/errors';
+
+import { PublishedApplet } from './Library.schema';
 
 export const getPublishedApplets = createAsyncThunk(
   'library/getPublishedApplets',
