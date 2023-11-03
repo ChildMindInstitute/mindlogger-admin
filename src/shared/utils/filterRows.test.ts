@@ -6,23 +6,13 @@ const mockedItem = {
 };
 
 describe('filterRows function', () => {
-  test('should return true when searchValue matches item value', () => {
-    const searchValue = 'Mocked Value';
-    expect(filterRows(mockedItem, searchValue)).toBe(true);
-  });
-
-  test('should return true when searchValue partially matches item value', () => {
-    const searchValue = 'mocked';
-    expect(filterRows(mockedItem, searchValue)).toBe(true);
-  });
-
-  test('should return true when searchValue matches item value (case-insensitive)', () => {
-    const searchValue = 'mocked value';
-    expect(filterRows(mockedItem, searchValue)).toBe(true);
-  });
-
-  test('should return false when searchValue does not match item value', () => {
-    const searchValue = 'Non-Matching Value';
-    expect(filterRows(mockedItem, searchValue)).toBe(false);
+  test.each`
+    searchValue             | expected | description
+    ${'Mocked Value'}       | ${true}  | ${'return true when searchValue matches item value'}
+    ${'mocked'}             | ${true}  | ${'return true when searchValue partially matches item value'}
+    ${'mocked value'}       | ${true}  | ${'return true when searchValue matches item value (case-insensitive)'}
+    ${'Non-Matching Value'} | ${false} | ${'return false when searchValue does not match item value'}
+  `('$description', ({ searchValue, expected }) => {
+    expect(filterRows(mockedItem, searchValue)).toEqual(expected);
   });
 });
