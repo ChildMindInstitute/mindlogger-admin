@@ -24,7 +24,6 @@ export const RespondentData = () => {
   const { appletId, respondentId } = useParams();
 
   const { ownerId } = workspaces.useData() || {};
-  const respondentsData = users.useAllRespondentsData();
   const dispatch = useAppDispatch();
   const respondentDataTabs = useRespondentDataTabs();
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi);
@@ -61,14 +60,14 @@ export const RespondentData = () => {
   }, [appletId, respondentId]);
 
   useEffect(() => {
-    if (respondentsData || !(ownerId && appletId)) return;
+    if (!ownerId || !appletId) return;
 
     dispatch(
       users.thunk.getAllWorkspaceRespondents({
         params: { ownerId, appletId },
       }),
     );
-  }, [ownerId, appletId, respondentsData]);
+  }, [ownerId, appletId]);
 
   useEffect(() => {
     Mixpanel.trackPageView('Data Viz');
