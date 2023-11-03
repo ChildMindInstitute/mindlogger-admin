@@ -20,15 +20,16 @@ export const TimePicker = <T extends FieldValues>({
   maxTime,
   // TODO: check how to avoid using providedValue and use value from control (the issue is in the NotificationsTab of
   //  EventForm)
-  providedValue,
+  // providedValue,
   'data-testid': dataTestid,
 }: TimePickerProps<T>) => (
   <Controller
     control={control}
     name={name}
     render={({ field: { onChange, value }, fieldState: { error } }) => {
-      const valueToPass = providedValue || value;
-      const selected = valueToPass ? parse(valueToPass, DateFormats.Time, new Date()) : valueToPass;
+      // const valueToPass = providedValue || value;
+      // const selected = valueToPass ? parse(valueToPass, DateFormats.Time, new Date()) : valueToPass;
+      const selected = value ? parse(value, DateFormats.Time, new Date()) : value;
 
       return (
         <StyledTimePickerWrapper sx={{ ...wrapperSx }} data-testid={dataTestid}>
