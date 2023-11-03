@@ -1,12 +1,15 @@
-import { Alert, Box, Link, styled } from '@mui/material';
+import { Box, Link, styled } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 
-export const StyledAlert = styled(Alert)`
-  position: relative;
+export const StyledAlert = styled(Box)`
+  background-color: ${variables.palette.surface};
+`;
+
+export const StyledWrapper = styled(Box)`
   min-height: 7.2rem;
-  border-radius: unset;
+  position: relative;
   color: ${variables.palette.on_surface};
   background-color: ${variables.palette.yellow_alfa30};
   padding: ${theme.spacing(1.2, 5, 1.2, 1.6)};

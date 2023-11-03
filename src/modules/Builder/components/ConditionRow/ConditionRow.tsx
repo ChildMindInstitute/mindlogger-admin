@@ -77,16 +77,22 @@ export const ConditionRow = ({
   } as Record<ConditionRowType, ConditionItem[]>;
 
   const handleChangeConditionItemName = (event: SelectEvent) => {
-    const itemResponseType = items?.find(
-      (item: ItemFormValues) => getEntityKey(item) === event.target.value,
-    )?.responseType;
+    const selectedItemKey = event.target.value;
+    const selectedItem = items?.find(
+      (item: ItemFormValues) => getEntityKey(item) === selectedItemKey,
+    );
+    const selectedItemIndex = items?.indexOf(selectedItem);
 
-    if (conditionItemResponseType !== itemResponseType) {
+    if (conditionItemResponseType !== selectedItem?.responseType) {
       setValue(conditionTypeName, '');
       setValue(conditionPayloadName, {});
     }
-
-    if (autoTrigger) trigger(`${name}.itemKey`);
+    if (selectedItemIndex !== undefined && selectedItemIndex !== -1) {
+      setValue(`${fieldName}.items.${selectedItemIndex}.isHidden`, false);
+    }
+    if (autoTrigger) {
+      trigger(`${name}.itemKey`);
+    }
   };
 
   const handleChangeConditionType = (e: SelectEvent) => {

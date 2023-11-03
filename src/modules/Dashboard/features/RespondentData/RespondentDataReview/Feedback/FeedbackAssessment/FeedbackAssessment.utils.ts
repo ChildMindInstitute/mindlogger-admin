@@ -6,10 +6,10 @@ import { AssessmentFormItem } from '../Feedback.types';
 
 export const formatToNumberArray = (stringArray: string[]) => stringArray.map((item) => +item);
 
-export const checkAnswerValue = (value: string | number | string[]) => {
-  if (Array.isArray(value)) return !value.length;
+export const hasAnswerValue = (value: string | number | string[]) => {
+  if (Array.isArray(value)) return !!value.length;
 
-  return !value?.toString().length;
+  return !!value?.toString().length;
 };
 
 export const getUpdatedValues = (
