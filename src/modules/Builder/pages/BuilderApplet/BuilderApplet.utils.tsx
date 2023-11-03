@@ -890,7 +890,6 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
           ...activity,
           description: getDictionaryText(activity.description),
           items: getActivityItems(activity.items),
-          //TODO: for frontend purposes - should be reviewed after refactoring phase
           conditionalLogic: getActivityConditionalLogic(activity.items),
           scoresAndReports: getScoresAndReports(activity),
         }))
@@ -968,7 +967,6 @@ export const testIsReportCommonFieldsRequired = (
   return printItemsValue;
 };
 
-//TODO: find a way to validate nested properties for objects in arrays for uniqueness
 export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
   items?.filter((item) => item.name === value).length < 2 ?? true;
 

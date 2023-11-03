@@ -29,7 +29,6 @@ export const AvailabilityTab = ({
   const { control, watch, setValue } = useFormContext<EventFormValues>();
   const alwaysAvailable = watch('alwaysAvailable');
   const periodicity = watch('periodicity');
-  const date = watch('date');
   const startDate = watch('startDate');
   const endDate = watch('endDate');
   const startTime = watch('startTime');
@@ -49,7 +48,7 @@ export const AvailabilityTab = ({
     <StyledDatePickerWrapper>
       <DatePicker
         name={isOncePeriodicity ? 'date' : 'startDate'}
-        value={isOncePeriodicity ? date : startDate}
+        key={isOncePeriodicity ? 'date' : 'startDate'}
         control={control}
         label={isOncePeriodicity ? t('date') : t('startDate')}
         onCloseCallback={onCloseCallback}
@@ -62,8 +61,8 @@ export const AvailabilityTab = ({
           </StyledBodyLarge>
           <DatePicker
             name="endDate"
+            key="endDate"
             minDate={typeof startDate === 'string' ? null : startDate}
-            value={endDate}
             control={control}
             label={t('endDate')}
             data-testid={`${dataTestid}-end-date`}
