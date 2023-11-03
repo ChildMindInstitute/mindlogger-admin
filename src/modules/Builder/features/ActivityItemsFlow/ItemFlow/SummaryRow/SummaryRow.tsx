@@ -21,14 +21,16 @@ export const SummaryRow = ({ name, 'data-testid': dataTestid }: SummaryRowProps)
   const { fieldName } = useCurrentActivity();
   const items = watch(`${fieldName}.items`);
 
-  const handleChangeItemKey = (e: SelectEvent) => {
+  const handleChangeItemKey = (event: SelectEvent) => {
     trigger(`${name}.itemKey`);
 
     const itemIndex = items?.findIndex(
-      (item: ItemFormValues) => getEntityKey(item) === e.target.value,
+      (item: ItemFormValues) => getEntityKey(item) === event.target.value,
     );
 
-    if (itemIndex !== -1) setValue(`${fieldName}.items.${itemIndex}.isHidden`, false);
+    if (itemIndex !== undefined && itemIndex !== -1) {
+      setValue(`${fieldName}.items.${itemIndex}.isHidden`, false);
+    }
   };
 
   return (
@@ -50,9 +52,8 @@ export const SummaryRow = ({ name, 'data-testid': dataTestid }: SummaryRowProps)
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
             renderValue: (value: unknown) => {
-              const itemName = items?.find(
-                (item: ItemFormValues) => getEntityKey(item) === value,
-              )?.name;
+              const itemName = items?.find((item: ItemFormValues) => getEntityKey(item) === value)
+                ?.name;
 
               return <span>{t('conditionItemSelected', { value: itemName })}</span>;
             },

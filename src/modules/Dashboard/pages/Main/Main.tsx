@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { LinkedTabs } from 'shared/components';
 import { StyledBody } from 'shared/styles/styledComponents';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { dashboardTabs } from './Main.const';
 

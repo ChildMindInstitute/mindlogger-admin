@@ -1,4 +1,4 @@
-import { UseFormWatch } from 'react-hook-form';
+import { UseFormGetValues } from 'react-hook-form';
 import { endOfYear, format } from 'date-fns';
 import * as yup from 'yup';
 
@@ -290,7 +290,7 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
   const periodicity =
     editedEvent && !isPeriodicityAlways ? editedEvent.periodicity : Periodicity.Once;
   const oneTimeCompletion = eventOneTimeCompletion || false;
-  const accessBeforeSchedule = eventAccessBeforeSchedule || false;
+  const accessBeforeSchedule = eventAccessBeforeSchedule ?? false;
   const timerType = eventTimerType || TimerType.NotSet;
   const timerHHmmString = timer && convertSecondsToHHmmString(timer);
   const timerDuration =
@@ -362,25 +362,43 @@ export const getIdWithoutRegex = (activityOrFlowId: string) => {
 
 export const getEventPayload = (
   defaultStartDate: Date,
-  watch: UseFormWatch<EventFormValues>,
+  getValues: UseFormGetValues<EventFormValues>,
   respondentId?: string,
 ) => {
-  const activityOrFlowId = watch('activityOrFlowId');
-  const alwaysAvailable = watch('alwaysAvailable');
-  const oneTimeCompletion = watch('oneTimeCompletion');
-  const timerType = watch('timerType');
-  const timerDuration = watch('timerDuration');
-  const idleTime = watch('idleTime');
-  const periodicity = watch('periodicity');
-  const startTime = watch('startTime');
-  const endTime = watch('endTime');
-  const accessBeforeSchedule = watch('accessBeforeSchedule');
-  const date = watch('date');
-  const startDate = watch('startDate');
-  const endDate = watch('endDate');
-  const notificationsFromForm = watch('notifications');
+  const [
+    activityOrFlowId,
+    alwaysAvailable,
+    oneTimeCompletion,
+    timerType,
+    timerDuration,
+    idleTime,
+    periodicity,
+    startTime,
+    endTime,
+    accessBeforeSchedule,
+    date,
+    startDate,
+    endDate,
+    notificationsFromForm,
+    reminderFromForm,
+  ] = getValues([
+    'activityOrFlowId',
+    'alwaysAvailable',
+    'oneTimeCompletion',
+    'timerType',
+    'timerDuration',
+    'idleTime',
+    'periodicity',
+    'startTime',
+    'endTime',
+    'accessBeforeSchedule',
+    'date',
+    'startDate',
+    'endDate',
+    'notifications',
+    'reminder',
+  ]);
   const notifications = getNotifications(SecondsManipulation.AddSeconds, notificationsFromForm);
-  const reminderFromForm = watch('reminder');
   const reminder = getReminder(SecondsManipulation.AddSeconds, reminderFromForm);
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 

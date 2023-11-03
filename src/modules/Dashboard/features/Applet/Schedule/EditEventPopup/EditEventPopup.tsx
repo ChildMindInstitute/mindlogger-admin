@@ -7,7 +7,8 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { deleteEventApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EditEventPopupProps } from './EditEventPopup.types';
 import { EventForm, EventFormRef } from '../EventForm';
@@ -34,6 +35,11 @@ export const EditEventPopup = ({
   const dispatch = useAppDispatch();
   const dataTestid = 'dashboard-calendar-edit-event';
 
+  const isIndividualCalendar = !!respondentId;
+  const analyticsPrefix = isIndividualCalendar
+    ? AnalyticsCalendarPrefix.IndividualCalendar
+    : AnalyticsCalendarPrefix.GeneralCalendar;
+
   const { execute: removeEvent } = useAsync(
     deleteEventApi,
     () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
@@ -48,7 +54,7 @@ export const EditEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track('Schedule save click');
+    Mixpanel.track(`${analyticsPrefix} Schedule save click`);
   };
 
   const handleRemoveEvent = async () => {

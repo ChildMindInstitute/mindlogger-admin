@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-admin",
-  "version": "0.45.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -72,7 +72,6 @@
     "react-secure-storage": "^1.3.0",
     "stream-browserify": "^3.0.0",
     "typescript": "^4.9.5",
-    "ua-parser-js": "^1.0.36",
     "uuid": "^9.0.1",
     "web-vitals": "^3.5.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz",
@@ -80,7 +79,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "react-app-rewired build --project tsconfig.build.json",
     "test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@uiw/react-md-editor)/\"",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
@@ -90,6 +89,9 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest": {
+    "globalSetup": "./global-setup.js"
   },
   "browserslist": {
     "production": [
@@ -121,7 +123,6 @@
     "@types/react-big-calendar": "^1.6.5",
     "@types/react-color": "^3.0.7",
     "@types/react-datepicker": "^4.15.1",
-    "@types/ua-parser-js": "^0.7.37",
     "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",

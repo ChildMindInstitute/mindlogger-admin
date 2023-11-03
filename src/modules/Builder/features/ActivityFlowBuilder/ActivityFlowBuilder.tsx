@@ -30,12 +30,17 @@ export const ActivityFlowBuilder = () => {
     name: string;
   } | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [indexToUpdate, setIndexToUpdate] = useState<null | number>(null);
+  const [flowActivityToUpdate, setFlowActivityToUpdate] = useState<{
+    index: number;
+    name: string;
+  } | null>(null);
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
   const { activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
+  const currentActivityFlow = activityFlows[activityFlowIndex];
+  const activityFlowName = `activityFlows.${activityFlowIndex}`;
   const {
     fields: activityFlowItems,
     remove,
@@ -45,7 +50,7 @@ export const ActivityFlowBuilder = () => {
     move,
   } = useFieldArray<Record<string, ActivityFlowItem[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
-    name: `activityFlows.${activityFlowIndex}.items`,
+    name: `${activityFlowName}.items`,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
   const activities: AppletFormValues['activities'] = watch('activities');
@@ -59,17 +64,34 @@ export const ActivityFlowBuilder = () => {
   const handleFlowActivityToDeleteSet = (index: number, name: string) => () =>
     setFlowActivityToDeleteData({ index, name });
 
+  const removeReportConfigItemValue = () => {
+    setValue(`${activityFlowName}.reportIncludedActivityName`, '');
+    setValue(`${activityFlowName}.reportIncludedItemName`, '');
+  };
+
   const handleFlowActivityDelete = () => {
     if (!flowActivityToDeleteData) return;
 
     remove(flowActivityToDeleteData.index);
     setFlowActivityToDeleteData(null);
+    if (currentActivityFlow.reportIncludedActivityName === flowActivityToDeleteData.name) {
+      removeReportConfigItemValue();
+    }
+  };
+
+  const handleClearFlow = () => {
+    remove();
+    removeReportConfigItemValue();
   };
 
   const handleFlowActivityAdd = (activityKey: string) => append({ key: uuidv4(), activityKey });
 
-  const handleFlowActivityToUpdateSet = (event: MouseEvent<HTMLElement>, index: number) => {
-    setIndexToUpdate(index);
+  const handleFlowActivityToUpdateSet = (
+    event: MouseEvent<HTMLElement>,
+    index: number,
+    name: string,
+  ) => {
+    setFlowActivityToUpdate({ index, name });
     let parentElement = event.currentTarget.parentNode as HTMLElement;
     while (parentElement && !parentElement.classList.contains(builderItemClassName)) {
       parentElement = parentElement.parentNode as HTMLElement;
@@ -78,8 +100,11 @@ export const ActivityFlowBuilder = () => {
   };
 
   const handleFlowActivityUpdate = (index: number, obj: ActivityFlowItem) => {
+    if (currentActivityFlow.reportIncludedActivityName === flowActivityToUpdate?.name) {
+      removeReportConfigItemValue();
+    }
     update(index, obj);
-    setIndexToUpdate(null);
+    setFlowActivityToUpdate(null);
   };
 
   const handleMenuClose = () => setAnchorEl(null);
@@ -100,7 +125,7 @@ export const ActivityFlowBuilder = () => {
       headerProps={{
         clearFlowBtnDisabled: activityFlowItems?.length === 0,
         onAddFlowActivity: handleFlowActivityAdd,
-        onClearFlow: remove,
+        onClearFlow: handleClearFlow,
       }}
       hasMaxWidth
     >
@@ -134,14 +159,15 @@ export const ActivityFlowBuilder = () => {
                               replaceItem: handleFlowActivityToUpdateSet,
                               duplicateItem: handleFlowActivityDuplicate,
                               removeItem: handleFlowActivityToDeleteSet(index, activityName || ''),
-                              replaceItemActionActive: !!anchorEl && indexToUpdate === index,
+                              replaceItemActionActive:
+                                !!anchorEl && flowActivityToUpdate?.index === index,
                               'data-testid': itemDataTestid,
                             })
                           }
                           uiType={ItemUiType.FlowBuilder}
                           name={activityName || ''}
                           description={activityDescription || ''}
-                          visibleByDefault={!!anchorEl && indexToUpdate === index}
+                          visibleByDefault={!!anchorEl && flowActivityToUpdate?.index === index}
                           {...item}
                           data-testid={itemDataTestid}
                         />
@@ -169,7 +195,7 @@ export const ActivityFlowBuilder = () => {
           onClose={handleMenuClose}
           menuItems={getMenuItems({
             type: GetMenuItemsType.ChangeActivity,
-            index: indexToUpdate ?? undefined,
+            index: flowActivityToUpdate?.index ?? undefined,
             onMenuClose: () => setAnchorEl(null),
             activities,
             onUpdateFlowActivity: handleFlowActivityUpdate,

@@ -139,13 +139,19 @@ export const SelectRespondents = ({
         </Trans>
       </StyledBodyMedium>
       <StyledFilterContainer>
-        <Search withDebounce placeholder={t('searchRespondents')} onSearch={handleSearch} />
+        <Search
+          withDebounce
+          placeholder={t('searchRespondents')}
+          onSearch={handleSearch}
+          data-testid="dashboard-select-respondents-search"
+        />
         <StyledSelectContainer>
           <Select
             label={'searchAcross'}
             options={options}
             onChange={handleFilterChange}
             value={searchAcrossValue.current}
+            data-testid="select-respondents-popup-search-across"
           />
         </StyledSelectContainer>
       </StyledFilterContainer>

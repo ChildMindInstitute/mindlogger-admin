@@ -14,7 +14,7 @@ export const useEncryptedAnswers = () => {
   const encryption = appletData?.encryption || null;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
   const { getAppletPrivateKey } = useEncryptionStorage();
-  if (!encryptionInfoFromServer) return () => [];
+  if (!encryptionInfoFromServer) return null;
 
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);

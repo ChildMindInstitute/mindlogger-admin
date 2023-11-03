@@ -6,10 +6,9 @@ import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
 import { ReviewActivity, getReviewActivitiesApi, getAppletSubmitDateListApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
+import { useAsync, useRespondentLabel } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
-import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledHeader } from './ReviewMenu.styles';
@@ -20,7 +19,7 @@ export const ReviewMenu = ({
   selectedActivity,
   selectedAnswer,
   setSelectedActivity,
-  setSelectedAnswer,
+  onSelectAnswer,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
@@ -45,12 +44,10 @@ export const ReviewMenu = ({
     name: 'date',
   });
 
-  const [startDate, setStartDate] = useState(selectedDate || startOfMonth(new Date()));
-  const [endDate, setEndDate] = useState(endOfMonth(new Date()));
   const [submitDates, setSubmitDates] = useState<Date[] | undefined>(undefined);
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
 
-  const { execute: getAppletSubmitDateList } = useAsync(getAppletSubmitDateListApi);
+  const { execute: getAppletSubmitDateList, isLoading } = useAsync(getAppletSubmitDateListApi);
 
   const { execute: getReviewActivities } = useAsync(getReviewActivitiesApi, (res) => {
     res?.data?.result && setActivities(res.data.result);
@@ -60,26 +57,34 @@ export const ReviewMenu = ({
     if (!activity) {
       setSelectedActivity(null);
     }
-    setSelectedAnswer(null);
+    onSelectAnswer(null);
   });
 
-  useEffect(() => {
-    (async () => {
-      if (appletId && respondentId) {
-        const datesResult = await getAppletSubmitDateList({
-          appletId,
-          respondentId,
-          fromDate: String(startDate.getTime()),
-          toDate: String(endDate.getTime()),
-        });
+  const setSubmitDatesFromApi = async (fromDate: string, toDate: string) => {
+    if (!appletId || !respondentId) return;
 
-        if (datesResult?.data?.result) {
-          const dates = datesResult.data.result.dates.map((date: string) => new Date(date));
-          setSubmitDates(dates);
-        }
-      }
-    })();
-  }, [startDate, endDate]);
+    const datesApiResult = await getAppletSubmitDateList({
+      appletId,
+      respondentId,
+      fromDate,
+      toDate,
+    });
+    const datesResult = datesApiResult?.data?.result;
+    if (!datesResult) return;
+
+    const submitDates = datesResult.dates.map((date: string) => new Date(date));
+    setSubmitDates(submitDates);
+  };
+
+  const onMonthChange = (date: Date) => {
+    const startDate = startOfMonth(date);
+    const endDate = endOfMonth(date);
+    setSubmitDatesFromApi(String(startDate.getTime()), String(endDate.getTime()));
+  };
+
+  useEffect(() => {
+    onMonthChange(selectedDate || new Date());
+  }, []);
 
   useEffect(() => {
     if (appletId && respondentId && date) {
@@ -90,11 +95,6 @@ export const ReviewMenu = ({
       });
     }
   }, [date]);
-
-  const onMonthChange = (date: Date) => {
-    setStartDate(startOfMonth(date));
-    setEndDate(endOfMonth(date));
-  };
 
   return (
     <StyledMenu>
@@ -111,7 +111,8 @@ export const ReviewMenu = ({
           minDate={null}
           includeDates={submitDates}
           onMonthChange={onMonthChange}
-          disabled={!submitDates?.length}
+          disabled={false}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-review-date`}
         />
       </StyledHeader>
@@ -126,7 +127,7 @@ export const ReviewMenu = ({
           activity={activity}
           setSelectedActivity={setSelectedActivity}
           selectedAnswer={selectedAnswer}
-          setSelectedAnswer={setSelectedAnswer}
+          onSelectAnswer={onSelectAnswer}
           data-testid={`${dataTestid}-activity-${index}`}
         />
       ))}

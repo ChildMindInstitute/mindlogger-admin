@@ -18,11 +18,7 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const dataTestid = `builder-activity-item-flow-${index}`;
 
   const { control, getFieldState } = useFormContext();
-  const {
-    fields: conditions,
-    append: appendCondition,
-    remove: removeCondition,
-  } = useFieldArray({
+  const { append: appendCondition, remove: removeCondition } = useFieldArray({
     control,
     name: conditionsName,
   });
@@ -50,7 +46,6 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
       HeaderContent={ItemFlowActions}
       contentProps={{
         name: itemName,
-        conditions,
         onRemove: handleRemoveCondition,
         'data-testid': dataTestid,
       }}

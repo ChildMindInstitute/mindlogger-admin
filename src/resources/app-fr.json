@@ -287,6 +287,7 @@
   "createNewApplet": "Créer une nouvelle Applet avec les activités sélectionnées",
   "createNewAppletHint": "Tout le contenu du panier sera ajouté à la nouvelle Applet",
   "credits": "Crédits",
+  "support": "Soutien",
   "current": "({{version}}) actuelle",
   "daily": "Quotidiennement",
   "dashboard": "Tableau de bord",
@@ -1187,6 +1188,7 @@
   "viewUsers": "Voir les utilisateurs",
   "visibilityDecreasesOverMaxCharacters": "La visibilité diminue au-delà de {{max}} caractères",
   "waitForRespondentDataDownload": "Veuillez patienter pendant le téléchargement. Cela peut prendre jusqu'à 5 minutes en fonction de la quantité de données collectées. Ne quittez pas cette page.",
+  "dataProcessing": "Traitement de {{ percentages  }}%...",
   "week": "Semaine",
   "weekdays": "Jours de la semaine",
   "weekly": "Hebdomadaire",
@@ -1203,5 +1205,6 @@
   "yesAuthorize": "Oui, autoriser",
   "yesRemove": "Oui, supprimer",
   "youNeedToAuthorize": "Vous devez autoriser",
+  "bannerText": "<0>Vous utilisez la nouvelle version de MindLogger!</0><1>Les utilisateurs finaux doivent mettre à jour vers la nouvelle application.</1><2>Prenez ces mesures dès maintenant pour vous assurer que les données de réponse des participants ne sont pas perdues.</2>",
   "youNeedToAuthorizeHint": "Pour créer une nouvelle applet ou la fusionner avec d'autres, vous devez autoriser."
 }

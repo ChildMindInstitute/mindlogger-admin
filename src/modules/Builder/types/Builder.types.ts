@@ -71,6 +71,8 @@ export type ActivityFlowFormValues = {
   hideBadge?: boolean;
   items?: ActivityFlowItem[];
   isHidden?: boolean;
+  reportIncludedItemName?: string;
+  reportIncludedActivityName?: string;
 };
 
 export type AppletFormValues = {

@@ -4,6 +4,8 @@ export const getDrawingLines = (
   lines: DecryptedDrawingValue['lines'],
   width: DecryptedDrawingValue['width'],
 ) => {
+  if (!width) return [];
+
   const result = [];
   let startTime = 0,
     firstPoint = true;

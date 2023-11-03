@@ -2,7 +2,6 @@ export * from './colors';
 export * from './encryption';
 export * from './errors';
 export * from './filterRows';
-export * from './getApiError';
 export * from './getAppletData';
 export * from './renderComponentForEachTest';
 export * from './renderWithProviders';
