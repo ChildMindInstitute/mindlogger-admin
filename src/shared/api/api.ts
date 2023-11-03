@@ -3,7 +3,14 @@ import { AlertListParams } from 'shared/api/api.types';
 import { OwnerId } from 'modules/Dashboard/api/api.types';
 
 import { apiClient, authApiClient } from './api.client';
-import { SignInRefreshTokenArgs, AppletId, AppletBody, AppletUniqueName } from './api.types';
+import { ResponseWithObject } from './api.types';
+import {
+  SignInRefreshTokenArgs,
+  AppletId,
+  AppletBody,
+  AppletUniqueName,
+  Response,
+} from './api.types';
 
 export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,
@@ -92,3 +99,55 @@ export const getAppletUniqueNameApi = ({ name }: AppletUniqueName, signal?: Abor
       signal,
     },
   );
+
+export const postLogFile = (
+  { deviceId, fileId, file }: { deviceId: string; fileId: string; file: FormData },
+  signal?: AbortSignal,
+) =>
+  authApiClient.post<
+    ResponseWithObject<{
+      key: `logfiles/${string}`;
+      url: string;
+      fileId: string;
+    }>
+  >(`/file/log-file/${deviceId}`, file, {
+    params: {
+      fileId,
+    },
+    signal,
+  });
+
+export const postLogFileCheck = (
+  {
+    deviceId,
+    body,
+  }: {
+    deviceId: string;
+    body: {
+      files: string[];
+    };
+  },
+  signal?: AbortSignal,
+) =>
+  authApiClient.post<
+    Response<{
+      key: `logfiles/${string}`;
+      uploaded: boolean;
+      url: string;
+      fileId: string;
+      fileSize: number;
+    }>
+  >(`/file/log-file/${deviceId}/check`, body, {
+    signal,
+  });
+
+export const getLogFile = (
+  { userEmail, deviceId, days }: { userEmail: string; deviceId: string; days: number },
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<string>>(`/file/log-file/${userEmail}/${deviceId}`, {
+    params: {
+      days,
+    },
+    signal,
+  });

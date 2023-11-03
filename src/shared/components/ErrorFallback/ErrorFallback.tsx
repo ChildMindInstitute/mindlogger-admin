@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { FallbackProps } from 'react-error-boundary';
 import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { StyledLabelMedium, StyledLinkBtn, StyledTitleLarge } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
-import { useTranslation } from 'react-i18next';
+import { sendLogFile } from 'shared/utils';
 
 export const ErrorFallback = ({ error }: FallbackProps) => {
   const { t } = useTranslation('app');
@@ -11,6 +13,10 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
   const onClick = () => {
     window.location.reload();
   };
+
+  useEffect(() => {
+    sendLogFile({ error });
+  }, [error]);
 
   return (
     <Box>
