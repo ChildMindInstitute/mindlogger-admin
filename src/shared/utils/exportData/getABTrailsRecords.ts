@@ -4,6 +4,8 @@ export const getABTrailsRecords = (
   lines: DecryptedABTrailsValue['lines'],
   width: DecryptedABTrailsValue['width'],
 ) => {
+  if (!width) return [];
+
   const result = [];
   let totalTime = 0,
     errorCount = 0,
