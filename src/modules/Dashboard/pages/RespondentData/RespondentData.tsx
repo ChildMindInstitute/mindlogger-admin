@@ -62,6 +62,7 @@ export const RespondentData = () => {
   useEffect(() => {
     if (!ownerId || !appletId) return;
 
+    // TODO: Add getRespondentDetails endpoint on the BE side and replace getAllWorkspaceRespondents API call with it
     dispatch(
       users.thunk.getAllWorkspaceRespondents({
         params: { ownerId, appletId },
