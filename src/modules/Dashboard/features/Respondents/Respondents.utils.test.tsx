@@ -3,69 +3,29 @@ import { mockedAppletId } from 'shared/mock';
 
 import { getActions } from './Respondents.utils';
 
+const applets = [
+  {
+    appletId: 'fbc90304-3fc9-4a71-a85f-aa7944278107',
+    appletDisplayName: 'Applet 1',
+    accessId: '8ee2c3ba-513a-4d1e-913d-fb69f0333ea4',
+    respondentNickname: 'Jane Doe',
+    respondentSecretId: 'janedoe',
+    hasIndividualSchedule: false,
+  },
+  {
+    appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
+    appletDisplayName: 'Applet 2',
+    accessId: '115cd54d-17f0-43f4-8469-9f1802e2da5b',
+    respondentNickname: 'Jane Doe',
+    respondentSecretId: 'janedoe',
+    hasIndividualSchedule: false,
+  },
+];
+
 const filteredApplets = {
-  scheduling: [
-    {
-      appletId: 'fbc90304-3fc9-4a71-a85f-aa7944278107',
-      appletDisplayName: 'Identifiers Test',
-      accessId: '8ee2c3ba-513a-4d1e-913d-fb69f0333ea4',
-      respondentNickname: 'Mindlogger ChildMindInstitute',
-      respondentSecretId: 'Guest Account Submission',
-      hasIndividualSchedule: false,
-    },
-    {
-      appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
-      appletDisplayName: 'Test Markdown 2',
-      appletImage:
-        'https://media-dev.cmiml.net/mindlogger/631291780372103632/c0f5d0e6-3250-42a1-b1c2-b5c0a9b7066d/1555780815170653117.jpg',
-      accessId: '115cd54d-17f0-43f4-8469-9f1802e2da5b',
-      respondentNickname: 'Mindlogger ChildMindInstitute',
-      respondentSecretId: 'Guest Account Submission',
-      hasIndividualSchedule: false,
-    },
-  ],
-  editable: [
-    {
-      appletId: 'fbc90304-3fc9-4a71-a85f-aa7944278107',
-      appletDisplayName: 'Identifiers Test',
-      appletImage: '',
-      accessId: '8ee2c3ba-513a-4d1e-913d-fb69f0333ea4',
-      respondentNickname: 'Mindlogger ChildMindInstitute',
-      respondentSecretId: 'Guest Account Submission',
-      hasIndividualSchedule: false,
-    },
-    {
-      appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
-      appletDisplayName: 'Test Markdown 2',
-      appletImage:
-        'https://media-dev.cmiml.net/mindlogger/631291780372103632/c0f5d0e6-3250-42a1-b1c2-b5c0a9b7066d/1555780815170653117.jpg',
-      accessId: '115cd54d-17f0-43f4-8469-9f1802e2da5b',
-      respondentNickname: 'Mindlogger ChildMindInstitute',
-      respondentSecretId: 'Guest Account Submission',
-      hasIndividualSchedule: false,
-    },
-  ],
-  viewable: [
-    {
-      appletId: 'fbc90304-3fc9-4a71-a85f-aa7944278107',
-      appletDisplayName: 'Identifiers Test',
-      appletImage: '',
-      accessId: '8ee2c3ba-513a-4d1e-913d-fb69f0333ea4',
-      respondentNickname: 'Mindlogger ChildMindInstitute',
-      respondentSecretId: 'Guest Account Submission',
-      hasIndividualSchedule: false,
-    },
-    {
-      appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
-      appletDisplayName: 'Test Markdown 2',
-      appletImage:
-        'https://media-dev.cmiml.net/mindlogger/631291780372103632/c0f5d0e6-3250-42a1-b1c2-b5c0a9b7066d/1555780815170653117.jpg',
-      accessId: '115cd54d-17f0-43f4-8469-9f1802e2da5b',
-      respondentNickname: 'Mindlogger ChildMindInstitute',
-      respondentSecretId: 'Guest Account Submission',
-      hasIndividualSchedule: false,
-    },
-  ],
+  scheduling: applets,
+  editable: applets,
+  viewable: applets,
 };
 
 describe('getActions function', () => {
