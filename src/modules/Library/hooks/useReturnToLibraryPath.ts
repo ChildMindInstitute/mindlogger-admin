@@ -1,7 +1,6 @@
-import { auth } from 'modules/Auth';
 import { useEffect } from 'react';
 
-// import { auth } from 'redux/modules';
+import { auth } from 'redux/modules';
 import { storage, LocalStorageKeys } from 'shared/utils';
 
 export const useReturnToLibraryPath = (path: string) => {

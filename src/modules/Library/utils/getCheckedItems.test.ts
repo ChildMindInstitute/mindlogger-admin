@@ -1,4 +1,4 @@
-import { getFilteredSelectedItems, getUpdatedSelectedItems } from './getCheckedItems'; // Adjust the path to where the functions are actually located.
+import { getFilteredSelectedItems, getUpdatedSelectedItems } from './getCheckedItems';
 
 const mockedStorageItems = {
   '1': [
