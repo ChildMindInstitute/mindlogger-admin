@@ -1,5 +1,4 @@
 import { STORAGE_LIBRARY_KEY, STORAGE_SELECTED_KEY } from '../consts';
-import { LibraryForm } from '../features';
 import {
   getAppletsFromStorage,
   getSelectedAppletFromStorage,
@@ -30,7 +29,7 @@ Object.defineProperty(window, 'sessionStorage', {
   value: mockedSessionStorage,
 });
 
-const mockedSelectedItems: LibraryForm = {
+const mockedSelectedItems = {
   applet1: [
     {
       itemNamePlusActivityName: 'Item1',

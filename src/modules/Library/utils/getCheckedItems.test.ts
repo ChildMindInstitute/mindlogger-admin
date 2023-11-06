@@ -1,7 +1,6 @@
-import { SelectedItem } from '../features';
 import { getFilteredSelectedItems, getUpdatedSelectedItems } from './getCheckedItems'; // Adjust the path to where the functions are actually located.
 
-const mockedStorageItems: { [key: string]: SelectedItem[] } = {
+const mockedStorageItems = {
   '1': [
     {
       itemNamePlusActivityName: 'Item1Activity1',
@@ -39,7 +38,7 @@ describe('getFilteredSelectedItems', () => {
 
 describe('getUpdatedSelectedItems', () => {
   test('should return combined items when other items exist besides the selected one', () => {
-    const selectedItems: { [key: string]: SelectedItem[] } = {
+    const selectedItems = {
       '2': [
         {
           itemNamePlusActivityName: 'Item2Activity3',
@@ -71,7 +70,7 @@ describe('getUpdatedSelectedItems', () => {
   });
 
   test('should return only selected items if no other items are selected', () => {
-    const selectedItems: { [key: string]: SelectedItem[] } = {
+    const selectedItems = {
       '3': [
         {
           itemNamePlusActivityName: 'Item3Activity4',
