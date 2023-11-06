@@ -1,5 +1,35 @@
-import { ChartTypeRegistry, LegendElement } from 'chart.js';
+import { ChartTypeRegistry, LegendElement, ScriptableTooltipContext } from 'chart.js';
+import { TooltipItem } from 'chart.js/dist/types';
+import { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 export type CustomLegend = LegendElement<keyof ChartTypeRegistry> & {
   fit: () => void;
+};
+
+export type SetTooltipStyles = {
+  tooltipEl: HTMLDivElement;
+  positionX: number;
+  positionY: number;
+};
+
+type ScatterTooltipData = TooltipItem<'scatter'>;
+
+type MultiScatterTooltipData = TooltipItem<'scatter'>[];
+
+type TooltipDataAction = ScatterTooltipData | MultiScatterTooltipData | null;
+
+export type SetTooltipData = Dispatch<SetStateAction<TooltipDataAction>>;
+
+export type ChartTooltipHandler = {
+  context: ScriptableTooltipContext<'scatter'>;
+  tooltipRef: MutableRefObject<HTMLDivElement | null>;
+  isHovered: MutableRefObject<boolean>;
+  chartRef: MutableRefObject<ChartJSOrUndefined<
+    'scatter',
+    { x: Date; y: number }[],
+    unknown
+  > | null>;
+  setTooltipData: SetTooltipData;
+  type: 'scatterChart' | 'multiScatterChart';
 };

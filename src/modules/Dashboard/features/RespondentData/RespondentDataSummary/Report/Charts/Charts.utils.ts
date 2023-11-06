@@ -1,6 +1,6 @@
 import { Chart as ChartJS } from 'chart.js/dist/types';
 
-import { CustomLegend } from './Chart.types';
+import { ChartTooltipHandler, CustomLegend, SetTooltipStyles } from './Chart.types';
 import {
   MAX_TICKS_LENGTH,
   MIN_TICKS_LENGTH,
@@ -71,4 +71,43 @@ export const legendMargin = {
       this.height += 42;
     };
   },
+};
+
+export const setTooltipStyles = ({ tooltipEl, positionX, positionY }: SetTooltipStyles) => {
+  tooltipEl.style.display = 'block';
+  tooltipEl.style.top = `${positionY}px`;
+  tooltipEl.style.left = `${positionX}px`;
+};
+
+export const scatterChartTooltipHandler = ({
+  context,
+  tooltipRef,
+  isHovered,
+  chartRef,
+  setTooltipData,
+  type,
+}: ChartTooltipHandler) => {
+  if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
+  const tooltipEl = tooltipRef.current;
+
+  if (!tooltipEl) return;
+
+  const { tooltip } = context;
+  const { dataPoints } = tooltip;
+
+  if (!tooltip.opacity && !isHovered.current) {
+    tooltipEl.style.display = 'none';
+
+    return;
+  }
+
+  const chart = chartRef.current;
+
+  if (chart) {
+    setTooltipData(type === 'scatterChart' ? dataPoints[0] : dataPoints);
+    const {
+      element: { x: positionX, y: positionY },
+    } = dataPoints[0];
+    setTooltipStyles({ tooltipEl, positionX, positionY });
+  }
 };
