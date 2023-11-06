@@ -1,10 +1,15 @@
 import { Chart as ChartJS } from 'chart.js/dist/types';
 
-import { ChartTooltipHandler, CustomLegend, SetTooltipStyles } from './Chart.types';
 import {
+  CustomLegend,
+  ScatterChartTooltipHandler,
+  ScatterChartType,
+  SetTooltipStyles,
+} from './Chart.types';
+import {
+  MAX_LABEL_CHARS_Y,
   MAX_TICKS_LENGTH,
   MIN_TICKS_LENGTH,
-  MAX_LABEL_CHARS_Y,
   MS_PER_DAY,
   MS_PER_HOUR,
 } from './Charts.const';
@@ -86,7 +91,7 @@ export const scatterChartTooltipHandler = ({
   chartRef,
   setTooltipData,
   type,
-}: ChartTooltipHandler) => {
+}: ScatterChartTooltipHandler) => {
   if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
   const tooltipEl = tooltipRef.current;
 
@@ -104,7 +109,7 @@ export const scatterChartTooltipHandler = ({
   const chart = chartRef.current;
 
   if (chart) {
-    setTooltipData(type === 'scatterChart' ? dataPoints[0] : dataPoints);
+    setTooltipData(type === ScatterChartType.ScatterChart ? dataPoints[0] : dataPoints);
     const {
       element: { x: positionX, y: positionY },
     } = dataPoints[0];

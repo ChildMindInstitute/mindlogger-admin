@@ -4,11 +4,11 @@ import { Box } from '@mui/material';
 import {
   Chart as ChartJS,
   LinearScale,
-  PointElement,
   LineElement,
-  Tooltip,
-  TimeScale,
+  PointElement,
   ScriptableTooltipContext,
+  TimeScale,
+  Tooltip,
   TooltipItem,
 } from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
@@ -18,8 +18,8 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { locales } from 'shared/consts';
 
 import { scatterChartTooltipHandler } from '../Charts.utils';
-import { SetTooltipData } from '../Chart.types';
-import { getOptions, getData } from './MultiScatterChart.utils';
+import { ScatterChartType, SetTooltipData } from '../Chart.types';
+import { getData, getOptions } from './MultiScatterChart.utils';
 import { MultiScatterChartProps } from './MultiScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
 
@@ -64,7 +64,7 @@ export const MultiScatterChart = ({
       isHovered,
       chartRef,
       setTooltipData: setTooltipData as SetTooltipData,
-      type: 'multiScatterChart',
+      type: ScatterChartType.MultiScatterChart,
     });
 
   const renderChart = useMemo(

@@ -2,12 +2,12 @@ import { useMemo, useRef, useState } from 'react';
 import {
   Chart as ChartJS,
   LinearScale,
-  PointElement,
   LineElement,
-  Tooltip,
-  TimeScale,
-  TooltipItem,
+  PointElement,
   ScriptableTooltipContext,
+  TimeScale,
+  Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { locales } from 'shared/consts';
 
 import { scatterChartTooltipHandler } from '../Charts.utils';
-import { SetTooltipData } from '../Chart.types';
+import { ScatterChartType, SetTooltipData } from '../Chart.types';
 import { getData, getOptions } from './ScatterChart.utils';
 import { ScatterChartProps } from './ScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
@@ -60,7 +60,7 @@ export const ScatterChart = ({
       isHovered,
       chartRef,
       setTooltipData: setTooltipData as SetTooltipData,
-      type: 'scatterChart',
+      type: ScatterChartType.ScatterChart,
     });
 
   const renderChart = useMemo(

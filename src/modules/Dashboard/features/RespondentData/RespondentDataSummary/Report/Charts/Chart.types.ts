@@ -1,6 +1,6 @@
+import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { ChartTypeRegistry, LegendElement, ScriptableTooltipContext } from 'chart.js';
 import { TooltipItem } from 'chart.js/dist/types';
-import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 export type CustomLegend = LegendElement<keyof ChartTypeRegistry> & {
@@ -21,7 +21,12 @@ type TooltipDataAction = ScatterTooltipData | MultiScatterTooltipData | null;
 
 export type SetTooltipData = Dispatch<SetStateAction<TooltipDataAction>>;
 
-export type ChartTooltipHandler = {
+export enum ScatterChartType {
+  ScatterChart,
+  MultiScatterChart,
+}
+
+export type ScatterChartTooltipHandler = {
   context: ScriptableTooltipContext<'scatter'>;
   tooltipRef: MutableRefObject<HTMLDivElement | null>;
   isHovered: MutableRefObject<boolean>;
@@ -31,5 +36,5 @@ export type ChartTooltipHandler = {
     unknown
   > | null>;
   setTooltipData: SetTooltipData;
-  type: 'scatterChart' | 'multiScatterChart';
+  type: ScatterChartType;
 };
