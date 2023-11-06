@@ -63,10 +63,11 @@ export const useTable = (
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
-
+    setPage(defaultParams.page);
     asyncFunc({
       params: {
         ...params,
+        page: defaultParams.page,
         search: value,
       },
     });
