@@ -29,6 +29,6 @@ describe('RemoveAppletPopup library component tests', () => {
 
     const confirmBtn = await waitFor(() => screen.getByText('Yes, Remove'));
     fireEvent.click(confirmBtn);
-    expect(onCloseMock.mock.calls[0]);
+    expect(onCloseMock).toHaveBeenCalledWith(false);
   });
 });

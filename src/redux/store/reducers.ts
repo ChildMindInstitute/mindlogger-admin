@@ -18,7 +18,7 @@ export const rootReducer = combineReducers({
   alerts: alerts.slice.reducer,
   applet: applet.slice.reducer,
   applets: applets.slice.reducer,
-  auth: auth.slice.reducer,
+  auth: auth?.slice.reducer,
   calendarEvents: calendarEvents.slice.reducer,
   library: library.slice.reducer,
   popups: popups.slice.reducer,
