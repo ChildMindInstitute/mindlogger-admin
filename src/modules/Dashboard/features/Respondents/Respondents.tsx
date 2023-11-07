@@ -158,8 +158,8 @@ export const Respondents = () => {
       appletId && details?.[0]?.hasIndividualSchedule
         ? t('individualSchedule')
         : t('defaultSchedule');
-    const stringNicknames = joinWihComma(nicknames);
-    const stringSecretIds = joinWihComma(secretIds);
+    const stringNicknames = joinWihComma(nicknames, true);
+    const stringSecretIds = joinWihComma(secretIds, true);
 
     return {
       pin: {
