@@ -11,6 +11,7 @@ import {
   StyledFlexTopCenter,
   variables,
   StyledIconButton,
+  StyledBadge,
 } from 'shared/styles';
 import { useLogout } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
@@ -24,7 +25,6 @@ import {
   StyledAvatarWrapper,
   StyledFooter,
   StyledLogOutBtn,
-  StyledQuantity,
   StyledCloseWrapper,
   StyledDivider,
 } from './AccountPanel.styles';
@@ -55,16 +55,11 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
         <Box>
           <StyledHeader>
             <StyledFlexTopCenter>
-              <StyledAvatarWrapper>
-                <Avatar caption={userInitials} />
-                {notWatched > 0 && (
-                  <StyledQuantity>
-                    <StyledLabelBoldSmall color={variables.palette.white}>
-                      {notWatched}
-                    </StyledLabelBoldSmall>
-                  </StyledQuantity>
-                )}
-              </StyledAvatarWrapper>
+              <StyledBadge badgeContent={notWatched} outlineColor={variables.palette.surface1}>
+                <StyledAvatarWrapper>
+                  <Avatar caption={userInitials} />
+                </StyledAvatarWrapper>
+              </StyledBadge>
               <StyledHeaderInfo>
                 <StyledTitleSmall>{t('myAccount')}</StyledTitleSmall>
                 {authData?.user && (

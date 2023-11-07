@@ -1,12 +1,6 @@
 import { styled, Drawer, Box, Button } from '@mui/material';
 
-import {
-  theme,
-  variables,
-  StyledFlexAllCenter,
-  StyledFlexSpaceBetween,
-  StyledQuantityCircle,
-} from 'shared/styles';
+import { theme, variables, StyledFlexAllCenter, StyledFlexSpaceBetween } from 'shared/styles';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from './AccountPanel.const';
 
@@ -31,7 +25,7 @@ export const StyledHeader = styled(StyledFlexSpaceBetween)`
 `;
 
 export const StyledHeaderInfo = styled(Box)`
-  margin-right: ${theme.spacing(1.2)};
+  margin: ${theme.spacing(0, 1.2)};
   overflow: hidden;
   max-width: 27.5rem;
 
@@ -41,7 +35,6 @@ export const StyledHeaderInfo = styled(Box)`
 `;
 
 export const StyledAvatarWrapper = styled(StyledFlexAllCenter)`
-  margin-right: ${theme.spacing(1.2)};
   border-radius: ${variables.borderRadius.half};
   background-color: ${variables.palette.primary_container};
   height: 4rem;
@@ -61,13 +54,6 @@ export const StyledLogOutBtn = styled(Button)`
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
-`;
-
-export const StyledQuantity = styled(StyledQuantityCircle)`
-  top: -0.1rem;
-  right: -0.1rem;
-  width: 1.6rem;
-  height: 1.6rem;
 `;
 
 export const StyledCloseWrapper = styled(Box)`
