@@ -10,7 +10,7 @@ import {
 } from './ScoresAndReports.utils';
 
 jest.mock('uuid', () => ({
-  ...jest.requireActual('react-hook-form'),
+  ...jest.requireActual('uuid'),
   v4: () => 'mockedUudv4',
 }));
 
