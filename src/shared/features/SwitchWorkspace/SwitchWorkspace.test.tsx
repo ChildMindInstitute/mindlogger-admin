@@ -1,14 +1,9 @@
 import { fireEvent, screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils';
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state';
 
 import { SwitchWorkspace } from './SwitchWorkspace';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 const preloadedState = {
   workspaces: {
