@@ -663,7 +663,6 @@ export const ActivitySchema = () =>
     description: yup.string(),
     image: yup.string(),
     splashScreen: yup.string(),
-    showAllAtOnce: yup.boolean(),
     isSkippable: yup.boolean(),
     isReviewable: yup.boolean(),
     responseIsEditable: yup.boolean(),
