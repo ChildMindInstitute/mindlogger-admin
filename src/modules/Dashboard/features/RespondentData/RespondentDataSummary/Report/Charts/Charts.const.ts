@@ -12,9 +12,6 @@ export const locales = {
   fr,
 };
 
-export const TOOLTIP_OFFSET_TOP = 120;
-export const TOOLTIP_OFFSET_LEFT = 70;
-
 export const SUBSCALES_CHART_LABEL_WIDTH_Y = 64;
 export const LABEL_WIDTH_Y = 180;
 export const MAX_LABEL_CHARS_Y = 24;
