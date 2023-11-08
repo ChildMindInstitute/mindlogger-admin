@@ -1,16 +1,23 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosResponse } from 'axios';
 
-import { ApiError, Workspace } from 'redux/modules';
+import { ApiErrorResponse } from 'shared/state/Base';
 import { OwnerId, getWorkspaceRolesApi, getWorkspacesApi } from 'api';
+import { getApiErrorResult } from 'shared/utils/errors';
+
+import { Workspace } from './Workspaces.schema';
 
 export const getWorkspaceRoles = createAsyncThunk(
   'workspace/roles',
   async ({ ownerId }: OwnerId, { rejectWithValue, signal }) => {
     try {
-      return await getWorkspaceRolesApi({ ownerId }, signal);
+      const { data } = await getWorkspaceRolesApi({ ownerId }, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
@@ -31,7 +38,9 @@ export const getWorkspacesRoles = createAsyncThunk(
         })),
       };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 ) as unknown as AsyncThunk<AxiosResponse, Workspace[], Record<string, never>>;
@@ -40,9 +49,13 @@ export const getWorkspaces = createAsyncThunk(
   'workspaces/getWorkspaces',
   async (_, { rejectWithValue, signal }) => {
     try {
-      return await getWorkspacesApi(signal);
+      const { data } = await getWorkspacesApi(signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );

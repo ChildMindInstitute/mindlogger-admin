@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { ApiError } from 'redux/modules';
+import { ApiErrorResponse } from 'shared/state/Base';
 import { getEventsApi, AppletId, RespondentId } from 'api';
+import { getApiErrorResult } from 'shared/utils/errors';
 
 export const getEvents = createAsyncThunk(
   'applets/getEvents',
@@ -11,9 +12,13 @@ export const getEvents = createAsyncThunk(
     { rejectWithValue, signal },
   ) => {
     try {
-      return await getEventsApi({ appletId, respondentId }, signal);
+      const { data } = await getEventsApi({ appletId, respondentId }, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
