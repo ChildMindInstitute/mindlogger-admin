@@ -54,9 +54,9 @@ export const EditEventPopup = ({
     setIsLoading(isLoading);
   };
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (eventFormRef?.current) {
-      await eventFormRef.current.submitForm();
+      eventFormRef.current.submitForm();
     }
 
     Mixpanel.track(`${analyticsPrefix} Schedule save click`);
