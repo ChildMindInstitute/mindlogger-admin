@@ -46,7 +46,7 @@ export const getFlowBuilderActions = ({
   {
     icon: <Svg id="replace" />,
     action: (item?: ItemType, event?: MouseEvent<HTMLElement>) =>
-      event && replaceItem(event, index, item?.name ?? ''),
+      event && replaceItem(event, index),
     active: replaceItemActionActive,
     'data-testid': `${dataTestid}-replace`,
   },

@@ -10,7 +10,7 @@ import {
   getItemsWithVariable,
 } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { getEntityKey } from 'shared/utils';
-import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
+import { ActivityFlowFormValues, ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
@@ -29,13 +29,14 @@ export const DeleteItemModal = ({
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const reports: ScoreReport[] = watch(reportsField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
+  const activityFlows: ActivityFlowFormValues[] = watch('activityFlows');
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(itemToDelete);
   const conditionalLogicForItemToDelete = getItemConditionDependencies(
     itemToDelete,
-    activity.conditionalLogic,
+    activity?.conditionalLogic,
   );
   const itemsWithVariablesToRemove = getItemsWithVariable(itemToDelete?.name, items);
   const itemsWithVariablesToRemoveString = itemsWithVariablesToRemove
@@ -43,6 +44,24 @@ export const DeleteItemModal = ({
     .join(', ');
 
   const handleRemoveItem = (index: number) => {
+    if (activityFlows.some((flow) => flow.reportIncludedItemName === itemIdToDelete)) {
+      const newActivityFlows = activityFlows.map((flow) => {
+        if (flow.reportIncludedItemName === itemIdToDelete) {
+          return {
+            ...flow,
+            reportIncludedActivityName: '',
+            reportIncludedItemName: '',
+          };
+        }
+
+        return flow;
+      });
+
+      setValue('activityFlows', newActivityFlows);
+    }
+    if (activity?.reportIncludedItemName === itemIdToDelete) {
+      setValue(`${fieldName}.reportIncludedItemName`, '');
+    }
     setValue(`${fieldName}.items`, items?.filter((_, key) => key !== index));
 
     if (itemsWithVariablesToRemove.length) {

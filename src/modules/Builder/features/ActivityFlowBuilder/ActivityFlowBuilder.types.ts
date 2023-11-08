@@ -18,7 +18,7 @@ export type GetMenuItems = {
 
 export type GetFlowBuilderActions = {
   index: number;
-  replaceItem: (event: MouseEvent<HTMLElement>, index: number, name: string) => void;
+  replaceItem: (event: MouseEvent<HTMLElement>, index: number) => void;
   duplicateItem: (index: number) => void;
   removeItem: () => void;
   replaceItemActionActive: boolean;
