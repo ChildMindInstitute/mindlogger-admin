@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 
-import { Roles } from './consts';
+import { ItemResponseType, Roles } from './consts';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -564,30 +564,30 @@ export const mockedAppletFormData = {
 
 export const mockedSingleActivityItem = {
   question: 'single [[text_last]]',
-  responseType: 'singleSelect',
+  responseType: ItemResponseType.SingleSelection,
   responseValues: {
-    paletteName: null,
+    paletteName: undefined,
     options: [
       {
         id: 'b9a71359-467a-4bb8-84a5-6a8fe61da246',
         text: 'opt1',
-        image: null,
+        image: undefined,
         score: 4,
-        tooltip: null,
+        tooltip: undefined,
         isHidden: false,
-        color: null,
-        alert: null,
+        color: undefined,
+        alert: undefined,
         value: 1,
       },
       {
         id: '000394a5-2963-4f12-8b5f-e9340051512a',
         text: 'opt2',
-        image: null,
+        image: undefined,
         score: 2,
-        tooltip: null,
+        tooltip: undefined,
         isHidden: false,
-        color: null,
-        alert: null,
+        color: undefined,
+        alert: undefined,
         value: 2,
       },
     ],
@@ -609,36 +609,36 @@ export const mockedSingleActivityItem = {
   },
   name: 'single_text_score',
   isHidden: false,
-  conditionalLogic: null,
+  conditionalLogic: undefined,
   allowEdit: true,
   id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
 };
 export const mockedMultiActivityItem = {
   question: 'multi [[single_text_score]]',
-  responseType: 'multiSelect',
+  responseType: ItemResponseType.MultipleSelection,
   responseValues: {
-    paletteName: null,
+    paletteName: undefined,
     options: [
       {
         id: '19c1af9b-c9d1-4b33-819a-9eff33b6d300',
         text: 'opt1',
-        image: null,
+        image: undefined,
         score: 2,
-        tooltip: null,
+        tooltip: undefined,
         isHidden: false,
-        color: null,
-        alert: null,
+        color: undefined,
+        alert: undefined,
         value: 1,
       },
       {
         id: 'abf02196-916c-4b0c-84ae-0381d4a98cb9',
         text: 'opt2',
-        image: null,
+        image: undefined,
         score: 1,
-        tooltip: null,
+        tooltip: undefined,
         isHidden: false,
-        color: null,
-        alert: null,
+        color: undefined,
+        alert: undefined,
         value: 2,
       },
     ],
@@ -654,13 +654,13 @@ export const mockedMultiActivityItem = {
     setPalette: false,
     addTokens: null,
     additionalResponseOption: {
-      textInputOption: true,
+      textInputOption: undefined,
       textInputRequired: false,
     },
   },
   name: 'multi_text_score',
   isHidden: false,
-  conditionalLogic: null,
+  conditionalLogic: undefined,
   allowEdit: true,
   id: '63b765ff-73aa-453f-8d0d-fc7bca72fd1f',
 };
