@@ -97,7 +97,10 @@ describe('AppletItem component tests', () => {
       'dashboard-applets-applet-delete',
     ];
     const ownerActionsTestIds = [...commonActionsTestIds, 'dashboard-applets-applet-transfer'];
-    const superAdminActionsTestIds = ['dashboard-applets-applet-publish-conceal'];
+    const superAdminActionsTestIds = [
+      ...ownerActionsTestIds,
+      'dashboard-applets-applet-publish-conceal',
+    ];
 
     test.each`
       role                | actionsDataTestIds          | description
