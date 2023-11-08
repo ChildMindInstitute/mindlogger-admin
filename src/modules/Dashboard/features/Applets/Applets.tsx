@@ -69,7 +69,7 @@ export const Applets = () => {
   };
 
   const headerContent = (
-    <Box onClick={addFolder}>
+    <Box onClick={addFolder} data-testid="dashboard-applets-add-folder">
       <Svg id="add-folder" />
     </Box>
   );
