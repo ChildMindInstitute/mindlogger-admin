@@ -1,6 +1,8 @@
 import JSZip from 'jszip';
 
-import { getUploadFormData } from 'shared/utils';
+import { getUploadFormData } from 'shared/utils/getUploadFormData';
+
+import { BLOB_ZIP_OPTIONS } from './exportZip';
 import { postLogFile } from '../api/api';
 
 const DEVICE_ID = 'browser';
@@ -58,11 +60,7 @@ export const sendLogFile = async ({
   const fileId = `${pathname.replace(/\//g, '_')}_${time}`;
   const zip = new JSZip();
   zip.file(`${fileId}.txt`, file);
-  const content = await zip.generateAsync({
-    type: 'blob',
-    compression: 'DEFLATE',
-    compressionOptions: { level: 3 },
-  });
+  const content = await zip.generateAsync(BLOB_ZIP_OPTIONS);
   const fileFormData = getUploadFormData(content);
 
   try {
