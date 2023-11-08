@@ -66,7 +66,8 @@ describe('useLogout', () => {
         status: ApiResponseCodes.Unauthorized,
       },
     });
-    // @ts-expect-error TODO: fix type
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     mockAxios.post.mockImplementation((url: string) => {
       expect(url).toBe('auth/logout2');
     });

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ToggleButtonGroup, TimePicker } from 'shared/components';
 import { StyledFlexTopStart, StyledLabelLarge, theme } from 'shared/styles';
@@ -14,19 +14,24 @@ import { NotificationProps } from './Notification.types';
 
 export const Notification = ({ index, remove, 'data-testid': dataTestid }: NotificationProps) => {
   const { t } = useTranslation('app');
-  const { setValue, watch, trigger } = useFormContext();
+  const { setValue, trigger, control } = useFormContext();
 
   const notificationFieldName = `notifications.${index}`;
   const atTimeFieldName = `${notificationFieldName}.atTime`;
   const fromTimeFieldName = `${notificationFieldName}.fromTime`;
   const toTimeFieldName = `${notificationFieldName}.toTime`;
 
-  const notification = watch(notificationFieldName);
-  const startTime = watch('startTime');
-  const endTime = watch('endTime');
-  const atTime = watch(atTimeFieldName);
-  const fromTime = watch(fromTimeFieldName);
-  const toTime = watch(toTimeFieldName);
+  const [notification, startTime, endTime, atTime, fromTime, toTime] = useWatch({
+    control,
+    name: [
+      notificationFieldName,
+      'startTime',
+      'endTime',
+      atTimeFieldName,
+      fromTimeFieldName,
+      toTimeFieldName,
+    ],
+  });
 
   const handleRemoveNotification = () => {
     remove(index);
@@ -65,8 +70,8 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
             {notification.triggerType === NotificationType.Fixed ? (
               <StyledColInner>
                 <TimePicker
-                  providedValue={atTime}
                   name={atTimeFieldName}
+                  key={atTimeFieldName}
                   label={t('at')}
                   data-testid={`${dataTestid}-time`}
                 />
@@ -75,16 +80,16 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
               <>
                 <StyledColInner>
                   <TimePicker
-                    providedValue={fromTime}
                     name={fromTimeFieldName}
+                    key={fromTimeFieldName}
                     label={t('from')}
                     data-testid={`${dataTestid}-from`}
                   />
                 </StyledColInner>
                 <StyledColInner sx={{ marginLeft: theme.spacing(2.4) }}>
                   <TimePicker
-                    providedValue={toTime}
                     name={toTimeFieldName}
+                    key={toTimeFieldName}
                     label={t('to')}
                     data-testid={`${dataTestid}-to`}
                   />
