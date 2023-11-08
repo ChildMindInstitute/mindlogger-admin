@@ -13,7 +13,6 @@ import {
   StyledHeadCell,
 } from './DataTable.styles';
 
-//TODO: add pagination, sort
 export const DataTable = ({
   data,
   columns: dataTableColumns,
