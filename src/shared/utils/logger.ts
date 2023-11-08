@@ -1,3 +1,5 @@
+import JSZip from 'jszip';
+
 import { getUploadFormData } from 'shared/utils';
 import { postLogFile } from '../api/api';
 
@@ -45,19 +47,30 @@ export const sendLogFile = async ({
     },
     href: location.href,
     formData: formData ?? '',
-    errorMessage: error.message ?? '',
-    errorStack: error.stack ?? '',
+    errorMessage: error?.message ?? '',
+    errorStack: error?.stack ?? '',
   };
   const logString = JSON.stringify(logObject, undefined, 4);
   const file = new File([logString], `log_${time}.txt`, {
     type: 'text/plain',
     lastModified: time,
   });
-  const fileFormData = getUploadFormData(file);
   const fileId = `${pathname.replace(/\//g, '_')}_${time}`;
+  const zip = new JSZip();
+  zip.file(`${fileId}.txt`, file);
+  const content = await zip.generateAsync({
+    type: 'blob',
+    compression: 'DEFLATE',
+    compressionOptions: { level: 3 },
+  });
+  const fileFormData = getUploadFormData(content);
 
   try {
-    const result = await postLogFile({ deviceId: DEVICE_ID, fileId, file: fileFormData });
+    const result = await postLogFile({
+      deviceId: DEVICE_ID,
+      fileId: `${fileId}.zip`,
+      file: fileFormData,
+    });
     console.warn('[LOGGER]', result);
   } catch (error) {
     console.warn('Error while file logging:', error);

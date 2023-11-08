@@ -4,13 +4,7 @@ import { OwnerId } from 'modules/Dashboard/api/api.types';
 
 import { apiClient, authApiClient } from './api.client';
 import { ResponseWithObject } from './api.types';
-import {
-  SignInRefreshTokenArgs,
-  AppletId,
-  AppletBody,
-  AppletUniqueName,
-  Response,
-} from './api.types';
+import { SignInRefreshTokenArgs, AppletId, AppletBody, AppletUniqueName } from './api.types';
 
 export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,
@@ -113,41 +107,6 @@ export const postLogFile = (
   >(`/file/log-file/${deviceId}`, file, {
     params: {
       fileId,
-    },
-    signal,
-  });
-
-export const postLogFileCheck = (
-  {
-    deviceId,
-    body,
-  }: {
-    deviceId: string;
-    body: {
-      files: string[];
-    };
-  },
-  signal?: AbortSignal,
-) =>
-  authApiClient.post<
-    Response<{
-      key: `logfiles/${string}`;
-      uploaded: boolean;
-      url: string;
-      fileId: string;
-      fileSize: number;
-    }>
-  >(`/file/log-file/${deviceId}/check`, body, {
-    signal,
-  });
-
-export const getLogFile = (
-  { userEmail, deviceId, days }: { userEmail: string; deviceId: string; days: number },
-  signal?: AbortSignal,
-) =>
-  authApiClient.get<Response<string>>(`/file/log-file/${userEmail}/${deviceId}`, {
-    params: {
-      days,
     },
     signal,
   });
