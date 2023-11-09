@@ -79,8 +79,9 @@ export const legendMargin = {
 };
 
 export const setTooltipStyles = ({ tooltipEl, positionX, positionY }: SetTooltipStyles) => {
+  const VERTICAL_OFFSET = 2;
   tooltipEl.style.display = 'block';
-  tooltipEl.style.top = `${positionY}px`;
+  tooltipEl.style.top = `${positionY + VERTICAL_OFFSET}px`;
   tooltipEl.style.left = `${positionX}px`;
 };
 
