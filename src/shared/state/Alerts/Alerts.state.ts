@@ -1,5 +1,4 @@
-import { initialStateData } from 'shared/state';
-
+import { initialStateData } from '../Base';
 import { AlertsSchema } from './Alerts.schema';
 
 export const state: AlertsSchema = {
