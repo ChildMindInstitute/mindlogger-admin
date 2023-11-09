@@ -2,7 +2,7 @@ import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
 import { createArray } from 'shared/utils';
 import { ItemAlert } from 'shared/state';
-import { DEFAULT_SLIDER_MAX_NUMBER } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
+// import { DEFAULT_SLIDER_MAX_NUMBER } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
 
 import { ScoreCell } from './ScoreCell';
 import { SetScoresAndAlertsChange, SliderInputType } from './SliderPanel.types';
@@ -102,27 +102,27 @@ export const setScoresAndAlertsChange = ({
   }
 };
 
-export const getMinValue = (value: number, maxValue: number, defaultMinNumberValue: number) => {
-  let newValue = value;
-  if (newValue > maxValue - 1) {
-    newValue = maxValue - 1;
-  }
-  if (newValue < defaultMinNumberValue) {
-    newValue = defaultMinNumberValue;
-  }
-
-  return newValue;
-};
-
-export const getMaxValue = (value: number, minValue: number) => {
-  let newValue = value;
-
-  if (newValue > DEFAULT_SLIDER_MAX_NUMBER) {
-    newValue = DEFAULT_SLIDER_MAX_NUMBER;
-  }
-  if (newValue < minValue + 1) {
-    newValue = minValue + 1;
-  }
-
-  return newValue;
-};
+// export const getMinValue = (value: number, maxValue: number, defaultMinNumberValue: number) => {
+//   let newValue = value;
+//   if (newValue > maxValue - 1) {
+//     newValue = maxValue - 1;
+//   }
+//   if (newValue < defaultMinNumberValue) {
+//     newValue = defaultMinNumberValue;
+//   }
+//
+//   return newValue;
+// };
+//
+// export const getMaxValue = (value: number, minValue: number) => {
+//   let newValue = value;
+//
+//   if (newValue > DEFAULT_SLIDER_MAX_NUMBER) {
+//     newValue = DEFAULT_SLIDER_MAX_NUMBER;
+//   }
+//   if (newValue < minValue + 1) {
+//     newValue = minValue + 1;
+//   }
+//
+//   return newValue;
+// };

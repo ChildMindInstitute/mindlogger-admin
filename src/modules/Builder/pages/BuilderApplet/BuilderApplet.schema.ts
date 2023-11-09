@@ -50,6 +50,15 @@ export const ResponseValuesSliderRowsSchema = () =>
   yup.array().of(
     yup.object({
       label: yup.string().required(getIsRequiredValidateMessage('sliderLabel')),
+      minValue: yup
+        .mixed()
+        .test(
+          'is-number',
+          t('positiveIntegerRequired'),
+          (value) => typeof value === 'number' || value === undefined,
+        )
+        .required(getIsRequiredValidateMessage('minValue')),
+      maxValue: yup.number().required(getIsRequiredValidateMessage('maxValue')),
     }),
   );
 

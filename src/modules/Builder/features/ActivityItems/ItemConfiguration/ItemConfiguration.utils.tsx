@@ -6,6 +6,7 @@ import { ItemResponseType } from 'shared/consts';
 import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Config, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
+import { DEFAULT_SLIDER_MAX_VALUE, DEFAULT_SLIDER_MIN_NUMBER } from 'modules/Builder/consts';
 
 import {
   DEFAULT_EMPTY_SLIDER,
@@ -14,11 +15,11 @@ import {
   SELECTION_OPTIONS_COLOR_PALETTE,
   DEFAULT_NUMBER_MIN_VALUE,
   DEFAULT_NUMBER_MAX_VALUE,
-  DEFAULT_SLIDER_MIN_NUMBER,
+  // DEFAULT_SLIDER_MIN_NUMBER,
+  // DEFAULT_SLIDER_MAX_VALUE
 } from './ItemConfiguration.const';
 import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
 import { ItemConfigurationSettings, GetEmptyAlert } from './ItemConfiguration.types';
-import { DEFAULT_SLIDER_MAX_VALUE } from './ItemConfiguration.const';
 
 const { t } = i18n;
 

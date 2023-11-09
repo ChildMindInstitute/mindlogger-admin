@@ -43,24 +43,27 @@ export const Input = <T extends FieldValues>({
   const { t } = useTranslation('app');
   const inputRef = useRef<HTMLInputElement | null>();
   const isNumberType = textFieldProps.type === 'number';
-  const getTextFieldValue = () => {
-    if (!isNumberType) return value ?? '';
-
-    if (
-      (typeof value !== 'number' && !isEmptyStringAllowed) ||
-      (minNumberValue !== undefined && value < minNumberValue)
-    ) {
-      return String(minNumberValue);
-    }
-
-    if (maxNumberValue !== undefined && value > maxNumberValue) {
-      return String(maxNumberValue);
-    }
-
-    return String(value);
-  };
+  // const getTextFieldValue = () => {
+  //   // if (!isNumberType) return value ?? '';
+  //
+  //   // if (
+  //   //   (typeof value !== 'number' && !isEmptyStringAllowed) ||
+  //   //   (minNumberValue !== undefined && value < minNumberValue)
+  //   // ) {
+  //   //   return String(minNumberValue);
+  //   // }
+  //   //
+  //   // if (maxNumberValue !== undefined && value > maxNumberValue) {
+  //   //   return String(maxNumberValue);
+  //   // }
+  //
+  //   // return String(value);
+  //
+  //   return value ?? '';
+  // };
 
   const numberValue = isNaN(+value) ? 0 : +value;
+  // const numberValue = isNaN(+value) ? '' : +value;
 
   const handleAddNumber = () => {
     if (onArrowPress) return onArrowPress(numberValue + 1);
@@ -96,7 +99,7 @@ export const Input = <T extends FieldValues>({
       <StyledTextFieldContainer>
         <StyledTextField
           {...textFieldProps}
-          {...(withDebounce ? { inputRef } : { value: getTextFieldValue() })}
+          {...(withDebounce ? { inputRef } : { value })}
           onChange={withDebounce ? handleDebouncedChange : handleChange}
           error={error}
           helperText={helperText}

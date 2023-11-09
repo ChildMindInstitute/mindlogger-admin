@@ -8,8 +8,8 @@ import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { concatIf } from 'shared/utils';
 import {
-  DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
+  // DEFAULT_SLIDER_MIN_NUMBER,
+  // DEFAULT_SLIDER_ROWS_MIN_NUMBER,
   SLIDER_LABEL_MAX_LENGTH,
   SLIDER_VALUE_LABEL_MAX_LENGTH,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.const';
@@ -30,8 +30,8 @@ import {
   getStaticBodyRow,
   getStaticHeadRow,
   getTableRows,
-  getMaxValue,
-  getMinValue,
+  // getMaxValue,
+  // getMinValue,
   setScoresAndAlertsChange,
 } from './SliderPanel.utils';
 
@@ -71,9 +71,9 @@ export const SliderPanel = ({
   const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-  const defaultMinNumberValue = isMultiple
-    ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
-    : DEFAULT_SLIDER_MIN_NUMBER;
+  // const defaultMinNumberValue = isMultiple
+  //   ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
+  //   : DEFAULT_SLIDER_MIN_NUMBER;
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
@@ -99,8 +99,21 @@ export const SliderPanel = ({
   };
 
   const handleMinValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-    let value = event.target.value === '' ? DEFAULT_SLIDER_MIN_NUMBER : +event.target.value;
-    value = getMinValue(value, maxValue, defaultMinNumberValue);
+    // let value = event.target.value === '' ? DEFAULT_SLIDER_MIN_NUMBER : +event.target.value;
+    // value = getMinValue(value, maxValue, defaultMinNumberValue);
+    const value = event.target.value === '' ? '' : +event.target.value;
+    setValue(minValueName, value);
+    if (value !== '') {
+      setScoresAndAlertsChange({
+        minValue: value,
+        ...commonSetScoresMinProps,
+        ...commonSetScoresProps,
+      });
+    }
+  };
+
+  const handleMinValueArrowPress = (value: number) => {
+    // const newValue = getMinValue(value, maxValue, defaultMinNumberValue);
     setValue(minValueName, value);
     setScoresAndAlertsChange({
       minValue: value,
@@ -109,19 +122,10 @@ export const SliderPanel = ({
     });
   };
 
-  const handleMinValueArrowPress = (value: number) => {
-    const newValue = getMinValue(value, maxValue, defaultMinNumberValue);
-    setValue(minValueName, newValue);
-    setScoresAndAlertsChange({
-      minValue: newValue,
-      ...commonSetScoresMinProps,
-      ...commonSetScoresProps,
-    });
-  };
-
   const handleMaxValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-    let value = event.target.value === '' ? minValue : +event.target.value;
-    value = getMaxValue(value, minValue);
+    // let value = event.target.value === '' ? minValue : +event.target.value;
+    // value = getMaxValue(value, minValue);
+    const value = +event.target.value;
     setValue(maxValueName, value);
     setScoresAndAlertsChange({
       maxValue: value,
@@ -131,10 +135,10 @@ export const SliderPanel = ({
   };
 
   const handleMaxValueArrowPress = (value: number) => {
-    const newValue = getMaxValue(value, minValue);
-    setValue(maxValueName, newValue);
+    // const newValue = getMaxValue(value, minValue);
+    setValue(maxValueName, value);
     setScoresAndAlertsChange({
-      maxValue: newValue,
+      maxValue: value,
       ...commonSetScoresMaxProps,
       ...commonSetScoresProps,
     });
@@ -217,9 +221,9 @@ export const SliderPanel = ({
           </StyledInputContainer>
           <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
             <StyledSlider
-              min={minValue}
-              max={maxValue}
-              value={minValue}
+              min={minValue === '' ? 0 : minValue}
+              max={maxValue === '' ? 0 : maxValue}
+              value={minValue === '' ? 0 : minValue}
               marks={marks}
               disabled
               data-testid={`${dataTestid}-slider`}
@@ -239,7 +243,7 @@ export const SliderPanel = ({
                 label={t('minValue')}
                 onChange={handleMinValueChange}
                 onArrowPress={handleMinValueArrowPress}
-                withDebounce
+                // withDebounce
                 data-testid={`${dataTestid}-min-value`}
               />
             </StyledFlexTopCenter>
@@ -256,7 +260,7 @@ export const SliderPanel = ({
                 label={t('maxValue')}
                 onChange={handleMaxValueChange}
                 onArrowPress={handleMaxValueArrowPress}
-                withDebounce
+                // withDebounce
                 data-testid={`${dataTestid}-max-value`}
               />
             </StyledFlexTopCenter>
