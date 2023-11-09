@@ -56,7 +56,7 @@ export const Applets = () => {
   const folders = rows.filter((row) => row.isFolder) as Folder[];
 
   const addFolder = () => {
-    const newFolderName = generateNewFolderName(folders, t);
+    const newFolderName = generateNewFolderName(folders);
     const folderRow = {
       foldersAppletCount: 0,
       id: uuidv4(),
