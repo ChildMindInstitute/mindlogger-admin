@@ -41,7 +41,7 @@ const mockedSelectedItems = {
 };
 
 describe('Storage functions', () => {
-  beforeEach(() => {
+  afterEach(() => {
     window.sessionStorage.clear();
   });
 
