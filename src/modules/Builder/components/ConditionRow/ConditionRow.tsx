@@ -34,7 +34,6 @@ export const ConditionRow = ({
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
   const {
-    control,
     setValue,
     watch,
     trigger,
@@ -114,7 +113,6 @@ export const ConditionRow = ({
   return (
     <>
       <Condition
-        control={control}
         itemName={conditionItemName}
         stateName={conditionTypeName}
         optionValueName={conditionPayloadSelectionName}
