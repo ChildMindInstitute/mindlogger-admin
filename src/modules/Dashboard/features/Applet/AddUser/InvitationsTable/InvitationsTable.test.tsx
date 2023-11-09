@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import { format } from 'date-fns';
 
-import { base } from 'shared/state/Base';
 import {
   mockedApplet,
   mockedAppletId,
@@ -12,14 +11,10 @@ import {
 import { DateFormats, Roles } from 'shared/consts';
 import { renderWithProviders } from 'shared/utils';
 import { page } from 'resources';
+import { initialStateData } from 'shared/state';
 
 import { InvitationsTable } from './InvitationsTable';
 import { InvitationsTableProps } from './InvitationsTable.types';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 const preloadedState = {
   workspaces: {

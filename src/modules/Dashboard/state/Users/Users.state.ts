@@ -1,11 +1,6 @@
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state';
 
 import { UsersSchema } from './Users.schema';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 export const state: UsersSchema = {
   allRespondents: initialStateData,

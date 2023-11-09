@@ -27,7 +27,7 @@ import { StyledWrapper } from './ScatterChart.styles';
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
 export const ScatterChart = ({
-  height = '5rem',
+  height = '6rem',
   answers,
   versions,
   minDate,
