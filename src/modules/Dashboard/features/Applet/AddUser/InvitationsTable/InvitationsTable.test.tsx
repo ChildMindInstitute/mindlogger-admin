@@ -2,7 +2,6 @@ import { screen } from '@testing-library/react';
 import * as routerDom from 'react-router-dom';
 import { format } from 'date-fns';
 
-import { base } from 'shared/state/Base';
 import {
   mockedApplet,
   mockedAppletId,
@@ -12,14 +11,10 @@ import {
 } from 'shared/mock';
 import { DateFormats, Roles } from 'shared/consts';
 import { renderWithProviders } from 'shared/utils';
+import { initialStateData } from 'shared/state';
 
 import { InvitationsTable } from './InvitationsTable';
 import { InvitationsTableProps } from './InvitationsTable.types';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 const preloadedState = {
   workspaces: {

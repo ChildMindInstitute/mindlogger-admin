@@ -11,16 +11,13 @@ import {
   mockedEmail,
   mockedManagerId,
 } from 'shared/mock';
-import { base } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
+import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
+
 import { Managers } from './Managers';
 
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 const route = `/dashboard/${mockedAppletId}/managers`;
 const routePath = page.appletManagers;
 const preloadedState = {

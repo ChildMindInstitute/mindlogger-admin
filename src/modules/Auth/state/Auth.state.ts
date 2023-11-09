@@ -1,12 +1,9 @@
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state';
 
 import { AuthSchema } from './Auth.schema';
 
 export const state: AuthSchema = {
-  authentication: {
-    ...base.state,
-    data: null,
-  },
+  authentication: initialStateData,
   isAuthorized: false,
   isLogoutInProgress: false,
 };
