@@ -1,13 +1,7 @@
 import { styled, Button } from '@mui/material';
 
 import { TOP_BAR_HEIGHT } from 'shared/consts';
-import {
-  theme,
-  variables,
-  StyledClearedButton,
-  StyledFlexSpaceBetween,
-  StyledQuantityCircle,
-} from 'shared/styles';
+import { theme, variables, StyledClearedButton, StyledFlexSpaceBetween } from 'shared/styles';
 
 export const StyledTopBar = styled(StyledFlexSpaceBetween)`
   height: ${TOP_BAR_HEIGHT};
@@ -17,17 +11,9 @@ export const StyledTopBar = styled(StyledFlexSpaceBetween)`
 
 export const StyledAvatarBtn = styled(StyledClearedButton)`
   border-radius: ${variables.borderRadius.half};
-  height: 3rem;
-  width: 3rem;
-  position: relative;
+  height: 3.2rem;
+  width: 3.2rem;
   background-color: ${variables.palette.primary_container};
-`;
-
-export const StyledQuantity = styled(StyledQuantityCircle)`
-  top: -0.2rem;
-  right: -0.2rem;
-  width: 1.6rem;
-  height: 1.6rem;
 `;
 
 export const StyledLoginButton = styled(Button)`

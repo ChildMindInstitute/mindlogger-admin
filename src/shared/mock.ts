@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 
-import { Roles } from './consts';
+import { ItemResponseType, Roles } from './consts';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -56,6 +56,19 @@ export const mockedPrivateKey = [
   239, 191, 189, 25, 239, 191, 189, 57, 239, 191, 189, 27, 30, 94, 239, 191, 189, 11, 239, 191, 189,
   109, 92, 15, 90, 239, 191, 189, 239, 191, 189, 239, 191, 189, 239, 191, 189, 239, 191, 189, 67,
   239, 191, 189, 63,
+];
+export const mockedPrivateKey2 = [
+  88, 239, 191, 189, 15, 91, 94, 58, 113, 28, 239, 191, 189, 2, 16, 194, 139, 239, 191, 189, 239,
+  191, 189, 14, 63, 28, 239, 191, 189, 239, 191, 189, 239, 191, 189, 116, 239, 191, 189, 239, 191,
+  189, 75, 239, 191, 189, 239, 191, 189, 119, 101, 239, 191, 189, 102, 239, 191, 189, 42, 239, 191,
+  189, 50, 113, 88, 102, 239, 191, 189, 88, 239, 191, 189, 25, 210, 143, 239, 191, 189, 239, 191,
+  189, 99, 239, 191, 189, 4, 239, 191, 189, 208, 188, 18, 80, 91, 239, 191, 189, 222, 181, 239, 191,
+  189, 202, 142, 65, 239, 191, 189, 50, 239, 191, 189, 80, 239, 191, 189, 55, 67, 239, 191, 189, 64,
+  239, 191, 189, 34, 239, 191, 189, 239, 191, 189, 239, 191, 189, 44, 4, 239, 191, 189, 53, 14, 16,
+  28, 14, 239, 191, 189, 118, 85, 30, 32, 239, 191, 189, 239, 191, 189, 5, 239, 191, 189, 50, 87,
+  239, 191, 189, 31, 239, 191, 189, 4, 100, 99, 49, 239, 191, 189, 25, 239, 191, 189, 57, 239, 191,
+  189, 27, 30, 94, 239, 191, 189, 11, 239, 191, 189, 109, 92, 15, 90, 239, 191, 189, 239, 191, 189,
+  239, 191, 189, 239, 191, 189, 239, 191, 189, 67, 239, 191, 189, 63,
 ];
 
 export const mockedOwnerId = '123123';
@@ -458,12 +471,31 @@ export const mockedTimeFormValues = {
   responseValues: null,
   order: 4,
 };
+
 export const mockedTextFormValues = {
   id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
   name: 'Item5',
   responseType: 'text',
   responseValues: null,
   order: 5,
+};
+
+export const mockedInvitation = {
+  result: [
+    {
+      email: mockedEmail,
+      appletId: mockedAppletId,
+      appletName: 'Mocked Applet',
+      role: Roles.Editor,
+      key: 'e6fdab42-412d-312c-a1e6-a6ee3a72a777',
+      status: 'pending',
+      firstName: 'Jane',
+      lastName: 'Doe',
+      createdAt: '2023-11-02T08:37:13.652256',
+      meta: {},
+    },
+  ],
+  count: 1,
 };
 
 export const mockedAppletFormData = {
@@ -538,4 +570,553 @@ export const mockedAppletFormData = {
       createdAt: '2023-10-27T13:34:22.037875',
     },
   ],
+};
+
+export const mockedSingleActivityItem = {
+  question: 'single [[text_last]]',
+  responseType: ItemResponseType.SingleSelection,
+  responseValues: {
+    paletteName: undefined,
+    options: [
+      {
+        id: 'b9a71359-467a-4bb8-84a5-6a8fe61da246',
+        text: 'opt1',
+        image: undefined,
+        score: 4,
+        tooltip: undefined,
+        isHidden: false,
+        color: undefined,
+        alert: undefined,
+        value: 1,
+      },
+      {
+        id: '000394a5-2963-4f12-8b5f-e9340051512a',
+        text: 'opt2',
+        image: undefined,
+        score: 2,
+        tooltip: undefined,
+        isHidden: false,
+        color: undefined,
+        alert: undefined,
+        value: 2,
+      },
+    ],
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    randomizeOptions: false,
+    timer: 0,
+    addScores: true,
+    setAlerts: false,
+    addTooltip: false,
+    setPalette: false,
+    addTokens: null,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+  },
+  name: 'single_text_score',
+  isHidden: false,
+  conditionalLogic: undefined,
+  allowEdit: true,
+  id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
+};
+
+export const mockedMultiActivityItem = {
+  question: 'multi [[single_text_score]]',
+  responseType: ItemResponseType.MultipleSelection,
+  responseValues: {
+    paletteName: undefined,
+    options: [
+      {
+        id: '19c1af9b-c9d1-4b33-819a-9eff33b6d300',
+        text: 'opt1',
+        image: undefined,
+        score: 2,
+        tooltip: undefined,
+        isHidden: false,
+        color: undefined,
+        alert: undefined,
+        value: 1,
+      },
+      {
+        id: 'abf02196-916c-4b0c-84ae-0381d4a98cb9',
+        text: 'opt2',
+        image: undefined,
+        score: 1,
+        tooltip: undefined,
+        isHidden: false,
+        color: undefined,
+        alert: undefined,
+        value: 2,
+      },
+    ],
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    randomizeOptions: false,
+    timer: 0,
+    addScores: true,
+    setAlerts: false,
+    addTooltip: false,
+    setPalette: false,
+    addTokens: null,
+    additionalResponseOption: {
+      textInputOption: undefined,
+      textInputRequired: false,
+    },
+  },
+  name: 'multi_text_score',
+  isHidden: false,
+  conditionalLogic: undefined,
+  allowEdit: true,
+  id: '63b765ff-73aa-453f-8d0d-fc7bca72fd1f',
+};
+
+export const mockedSliderActivityItem = {
+  question: 'slider [[multi_text_score]]',
+  responseType: 'slider',
+  responseValues: {
+    minLabel: 'min',
+    maxLabel: 'max',
+    minValue: 0,
+    maxValue: 5,
+    minImage: null,
+    maxImage: null,
+    scores: [1, 2, 3, 4, 5, 6],
+    alerts: null,
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    addScores: true,
+    setAlerts: false,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    showTickMarks: false,
+    showTickLabels: false,
+    continuousSlider: false,
+    timer: 0,
+  },
+  name: 'slider_text_score',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '29788e14-4118-47d5-b29e-f22263259e0f',
+};
+
+export const mockedDateActivityItem = {
+  question: 'date [[slider_text_score]]',
+  responseType: 'date',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    timer: 0,
+  },
+  name: 'date_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '4b2c282b-4597-44d9-aefb-d8ccc927c50b',
+};
+
+export const mockedNumberSelectActivityItem = {
+  question: 'number_selection_text \n[[date_text]]',
+  responseType: 'numberSelect',
+  responseValues: {
+    minValue: 0,
+    maxValue: 7,
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+  },
+  name: 'number_selection_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '1b50376d-d4c7-4bd5-8dfc-bab04e2e1ab5',
+};
+
+export const mockedTimeActivityItem = {
+  question: 'time_text [[number_selection_text]]',
+  responseType: 'time',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    timer: 0,
+  },
+  name: 'time_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '396c7e8d-6599-4258-8c3e-3ef91205292b',
+};
+
+export const mockedTimeRangeActivityItem = {
+  question: 'time_range_text',
+  responseType: 'timeRange',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    timer: 0,
+  },
+  name: 'time_range_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: 'c551530e-c718-43ea-a045-287211bee95e',
+};
+
+export const mockedSingleSelectRowsActivityItem = {
+  question: 'single_row_score [[time_range_text]]',
+  responseType: 'singleSelectRows',
+  responseValues: {
+    rows: [
+      {
+        id: '52c21500-99db-4a65-a257-c2e54e7370d3',
+        rowName: 'row1',
+        rowImage: null,
+        tooltip: null,
+      },
+    ],
+    options: [
+      {
+        id: '8747ed38-f4b3-4fde-855e-20471ca0aa8e',
+        text: 'opt1',
+        image: null,
+        tooltip: null,
+      },
+      {
+        id: 'd79a44c2-78b6-4fdd-b6fa-8bf41d0b3760',
+        text: 'opt1',
+        image: null,
+        tooltip: null,
+      },
+    ],
+    dataMatrix: [
+      {
+        rowId: '52c21500-99db-4a65-a257-c2e54e7370d3',
+        options: [
+          {
+            optionId: '8747ed38-f4b3-4fde-855e-20471ca0aa8e',
+            score: 2,
+            alert: null,
+            value: 1,
+          },
+          {
+            optionId: 'd79a44c2-78b6-4fdd-b6fa-8bf41d0b3760',
+            score: 4,
+            alert: null,
+            value: 2,
+          },
+        ],
+      },
+    ],
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    timer: 0,
+    addScores: true,
+    setAlerts: false,
+    addTooltip: false,
+    addTokens: null,
+  },
+  name: 'single_row_score',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '7daf4dce-d323-4c64-9e13-e843283fa280',
+};
+
+export const mockedMultiSelectRowsActivityItem = {
+  question: 'multi_row_score',
+  responseType: 'multiSelectRows',
+  responseValues: {
+    rows: [
+      {
+        id: '1248a537-218e-4285-99ca-d435a79fea39',
+        rowName: 'row1',
+        rowImage: null,
+        tooltip: null,
+      },
+    ],
+    options: [
+      {
+        id: '95fdad7a-a94b-46ca-907c-5ef858df8535',
+        text: 'opt1',
+        image: null,
+        tooltip: null,
+      },
+      {
+        id: '6c1aa535-34f3-424f-bde4-40d937b0013b',
+        text: 'opt1',
+        image: null,
+        tooltip: null,
+      },
+    ],
+    dataMatrix: [
+      {
+        rowId: '1248a537-218e-4285-99ca-d435a79fea39',
+        options: [
+          {
+            optionId: '95fdad7a-a94b-46ca-907c-5ef858df8535',
+            score: 3,
+            alert: null,
+            value: 1,
+          },
+          {
+            optionId: '6c1aa535-34f3-424f-bde4-40d937b0013b',
+            score: 5,
+            alert: null,
+            value: 2,
+          },
+        ],
+      },
+    ],
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    timer: 0,
+    addScores: true,
+    setAlerts: false,
+    addTooltip: false,
+    addTokens: null,
+  },
+  name: 'multi_row_score',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: 'f81599a0-bd06-4453-8ea7-2c2a51aa510e',
+};
+
+export const mockedSliderRowsActivityItem = {
+  question: 'slider_row_score',
+  responseType: 'sliderRows',
+  responseValues: {
+    rows: [
+      {
+        minLabel: 'min',
+        maxLabel: 'max',
+        minValue: 1,
+        maxValue: 5,
+        minImage: null,
+        maxImage: null,
+        scores: [1, 2, 3, 4, 5],
+        alerts: null,
+        id: '87ff7de0-3552-4a14-b748-d6bcb12f4d87',
+        label: 'slider',
+      },
+    ],
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    addScores: true,
+    setAlerts: false,
+    timer: 0,
+  },
+  name: 'slider_row_score',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '9361e8b1-2fd8-42b3-8f28-a3d7150334bb',
+};
+
+export const mockedTextActivityItem = {
+  question: 'text',
+  responseType: 'text',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    maxResponseLength: 300,
+    correctAnswerRequired: false,
+    correctAnswer: '',
+    numericalResponseRequired: false,
+    responseDataIdentifier: false,
+    responseRequired: false,
+    isIdentifier: null,
+  },
+  name: 'text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '5bad6e4a-7035-4ddd-9c54-375604025a1f',
+};
+
+export const mockedDrawingActivityItem = {
+  question: 'drawing_text [[text]]',
+  responseType: 'drawing',
+  responseValues: {
+    drawingExample:
+      'https://media-dev.cmiml.net/mindlogger/391962851007982489/91c9d624-3ab1-45ca-8f68-4cfc94cdd195/Transfer Ownership - 1.png',
+    drawingBackground:
+      'https://media-dev.cmiml.net/mindlogger/391962851007982489/3374a78e-0a46-4add-b89e-d5bff79e9678/Transfer Ownership - 1.png',
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    timer: 0,
+    removeUndoButton: false,
+    navigationToTop: false,
+  },
+  name: 'drawing_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: 'ebc231b0-4a1c-4717-99de-0504b04d0e25',
+};
+
+export const mockedPhotoActivityItem = {
+  question: 'photo_text',
+  responseType: 'photo',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    timer: 0,
+  },
+  name: 'photo_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '129a20df-5330-494c-8c4c-eb3c7847fe95',
+};
+
+export const mockedVideoActivityItem = {
+  question: 'video_text',
+  responseType: 'video',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    timer: 0,
+  },
+  name: 'video_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: 'b66763bc-2890-46db-9e55-8dc43829c9c6',
+};
+
+export const mockedAudioActivityItem = {
+  question: 'audio_text',
+  responseType: 'audio',
+  responseValues: {
+    maxDuration: 300,
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: true,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    timer: 0,
+  },
+  name: 'audio_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '2a56ef07-18ed-4102-8a5d-be69edf12968',
+};
+
+export const mockedMessageActivityItem = {
+  question: 'message ',
+  responseType: 'message',
+  responseValues: null,
+  config: {
+    removeBackButton: false,
+    timer: 0,
+  },
+  name: 'message',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: '2f317638-d0a7-42ed-961f-e701d340aa03',
+};
+
+export const mockedAudioPlayerActivityItem = {
+  question: 'audio_player_text',
+  responseType: 'audioPlayer',
+  responseValues: {
+    file: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/b6d8573c-8174-41cb-b0fa-ad9fb0d237ff/t-rex-roar.mp3',
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: true,
+    additionalResponseOption: {
+      textInputOption: true,
+      textInputRequired: false,
+    },
+    playOnce: false,
+  },
+  name: 'audio_player_text',
+  isHidden: false,
+  conditionalLogic: null,
+  allowEdit: true,
+  id: 'e171deee-b161-4140-9dae-77c70765c031',
+};
+
+export const mockedExportContextItemData = {
+  id: '949f248c-1a4b-4a35-a5a2-898dfef72050',
+  submitId: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',
+  version: '2.0.0',
+  respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+  respondentSecretId: 'respondentSecretId',
+  legacyProfileId: null,
+  scheduledDatetime: null,
+  startDatetime: 1689755822,
+  endDatetime: 1689756087,
+  migratedDate: null,
+  appletHistoryId: '7aa07032-93f5-41aa-a4e1-b24d92405bc0_2.0.0',
+  activityHistoryId: '62e7e2c2-9fdb-4f2f-8460-78375a657f57_2.0.0',
+  flowHistoryId: null,
+  flowName: null,
+  reviewedAnswerId: null,
+  createdAt: '2023-07-19T08:41:37.130943',
+  appletId: '7aa07032-93f5-41aa-a4e1-b24d92405bc0',
+  activityId: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
+  flowId: null,
+  activityName: 'New Activity#1',
+  subscaleSetting: null,
 };

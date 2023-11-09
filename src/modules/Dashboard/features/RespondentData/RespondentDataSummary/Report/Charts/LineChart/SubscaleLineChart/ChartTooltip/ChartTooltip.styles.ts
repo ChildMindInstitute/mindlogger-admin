@@ -4,14 +4,10 @@ import { MarkDownPreview } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 
 export const StyledTooltip = styled(Box)`
-  position: absolute;
-  display: none;
   min-width: 20rem;
   max-width: 32rem;
   max-height: 32rem;
   overflow-y: auto;
-  transform: translate(-50%, 0);
-  z-index: ${theme.zIndex.fab};
   background-color: ${variables.palette.surface2};
   border-radius: ${variables.borderRadius.lg};
   box-shadow: ${variables.boxShadow.light2};

@@ -24,7 +24,6 @@ import { PopoverHeader } from './PopoverHeader';
 
 export const DatePicker = <T extends FieldValues>({
   control,
-  value: providedValue,
   name,
   uiType = UiType.OneDate,
   inputSx = {},
@@ -59,8 +58,7 @@ export const DatePicker = <T extends FieldValues>({
     <Controller
       control={control}
       name={name}
-      render={({ field: { onChange, value: fieldValue }, fieldState: { error } }) => {
-        const value = providedValue || fieldValue;
+      render={({ field: { onChange, value }, fieldState: { error } }) => {
         const singleDate = value as DateType;
         const startEndingValue = value as DateArrayType;
 

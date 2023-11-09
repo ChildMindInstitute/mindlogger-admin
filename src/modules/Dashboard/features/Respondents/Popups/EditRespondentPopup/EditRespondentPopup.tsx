@@ -51,11 +51,14 @@ export const EditRespondentPopup = ({
   const submitForm = () => {
     if (!chosenAppletData) return;
 
-    const values = getValues();
+    const { secretUserId, nickname } = getValues();
     const { appletId, ownerId, respondentId } = chosenAppletData;
 
     editRespondent({
-      values,
+      values: {
+        secretUserId: secretUserId.trim(),
+        nickname: nickname?.trim(),
+      },
       appletId,
       ownerId,
       respondentId,

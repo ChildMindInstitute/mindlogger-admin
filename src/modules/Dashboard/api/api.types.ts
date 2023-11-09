@@ -168,7 +168,7 @@ export type EditRespondent = {
   appletId: string;
   values: {
     secretUserId: string;
-    nickname: string;
+    nickname?: string;
   };
 };
 

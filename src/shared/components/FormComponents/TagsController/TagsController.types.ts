@@ -7,6 +7,7 @@ export type TagsControllerProps = {
   onRemoveTagClick: (index: number) => void;
   uiType?: UiType;
   inputLabel?: string;
+  disable?: boolean;
 } & TextFieldProps;
 
 export type TagsInputControllerProps<T extends FieldValues> = TagsControllerProps &

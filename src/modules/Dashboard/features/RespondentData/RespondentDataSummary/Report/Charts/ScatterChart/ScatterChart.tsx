@@ -2,31 +2,32 @@ import { useMemo, useRef, useState } from 'react';
 import {
   Chart as ChartJS,
   LinearScale,
-  PointElement,
   LineElement,
-  Tooltip,
-  TimeScale,
-  TooltipItem,
+  PointElement,
   ScriptableTooltipContext,
+  TimeScale,
+  Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { Scatter } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
 import { locales } from 'shared/consts';
 
-import { TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from './ScatterChart.const';
+import { scatterChartTooltipHandler } from '../Charts.utils';
+import { ScatterChartType, SetTooltipData } from '../Chart.types';
 import { getData, getOptions } from './ScatterChart.utils';
 import { ScatterChartProps } from './ScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
+import { StyledWrapper } from './ScatterChart.styles';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
 export const ScatterChart = ({
-  height = '5rem',
+  height = '6rem',
   answers,
   versions,
   minDate,
@@ -52,34 +53,15 @@ export const ScatterChart = ({
     tooltipEl.style.display = 'none';
   };
 
-  const tooltipHandler = (context: ScriptableTooltipContext<'scatter'>) => {
-    if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
-    const tooltipEl = tooltipRef.current;
-
-    if (!tooltipEl) return;
-
-    const { tooltip } = context;
-    const { dataPoints } = tooltip;
-
-    if (!tooltip.opacity && !isHovered.current) {
-      tooltipEl.style.display = 'none';
-
-      return;
-    }
-
-    const chart = chartRef.current;
-
-    if (chart) {
-      setTooltipData(dataPoints[0]);
-      const position = chart.canvas.getBoundingClientRect();
-      const left = position.left + tooltip.caretX;
-      const top = position.top + tooltip.caretY;
-
-      tooltipEl.style.display = 'block';
-      tooltipEl.style.top = `${top - TOOLTIP_OFFSET_TOP}px`;
-      tooltipEl.style.left = `${left - TOOLTIP_OFFSET_LEFT}px`;
-    }
-  };
+  const tooltipHandler = (context: ScriptableTooltipContext<'scatter'>) =>
+    scatterChartTooltipHandler({
+      context,
+      tooltipRef,
+      isHovered,
+      chartRef,
+      setTooltipData: setTooltipData as SetTooltipData,
+      type: ScatterChartType.ScatterChart,
+    });
 
   const renderChart = useMemo(
     () => (
@@ -94,7 +76,7 @@ export const ScatterChart = ({
   );
 
   return (
-    <Box sx={{ height, width: '100%' }}>
+    <StyledWrapper sx={{ height }}>
       {renderChart}
       <ChartTooltip
         ref={tooltipRef}
@@ -104,6 +86,6 @@ export const ScatterChart = ({
         }}
         onMouseLeave={hideTooltip}
       />
-    </Box>
+    </StyledWrapper>
   );
 };
