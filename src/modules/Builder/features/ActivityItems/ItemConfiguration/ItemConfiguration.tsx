@@ -45,7 +45,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
   const conditionalLogicForItem = getItemConditionDependencies(
     currentItem,
-    activity.conditionalLogic,
+    activity?.conditionalLogic,
   );
 
   const availableItemsTypeOptions = isReviewable

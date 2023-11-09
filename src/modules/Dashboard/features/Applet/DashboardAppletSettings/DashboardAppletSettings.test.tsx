@@ -45,7 +45,7 @@ describe('DashboardAppletSettings component tests', () => {
     expect(screen.getByTestId('dashboard-applet-settings')).toBeInTheDocument();
   });
 
-  test('should render no permission withoud applet', () => {
+  test('should render no permission without applet', () => {
     renderWithProviders(<DashboardAppletSettings />, {
       preloadedState: getPreloadedState(Roles.Editor, false),
       route,

@@ -198,6 +198,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
               <StyledPinContainer>
                 <Pin
                   isPinned={item?.isPinned}
+                  data-testid="dashboard-applets-pin"
                   onClick={(event) => {
                     event.stopPropagation();
                     handleTogglePin();
@@ -219,6 +220,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             items={getActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
             context={item}
             visibleByDefault={hasVisibleActions}
+            data-testid="dashboard-applets-table-applet-actions"
           />
         </StyledTableCell>
       </TableRow>

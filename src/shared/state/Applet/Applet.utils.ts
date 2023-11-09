@@ -1,4 +1,4 @@
-import { AppletSchema, UpdateActivityData, UpdateActivityFlowData } from './Applet.schema';
+import { AppletSchema } from './Applet.schema';
 import { state as initialState } from './Applet.state';
 
 export const resetApplet = (state: AppletSchema): void => {
@@ -23,53 +23,6 @@ export const updateAppletData = (
     applet.data.result = {
       ...applet.data.result,
       ...payload,
-    };
-  }
-};
-
-export const updateActivityData = (
-  { applet }: AppletSchema,
-  {
-    payload,
-  }: {
-    payload: UpdateActivityData;
-  },
-): void => {
-  const appletData = applet.data;
-
-  if (appletData?.result) {
-    appletData.result = {
-      ...appletData.result,
-      activities: appletData.result.activities?.map((activity) => ({
-        ...activity,
-        ...(activity.id === payload.activityId && {
-          reportIncludedItemName: payload.reportIncludedItemName,
-        }),
-      })),
-    };
-  }
-};
-
-export const updateActivityFlowData = (
-  { applet }: AppletSchema,
-  {
-    payload,
-  }: {
-    payload: UpdateActivityFlowData;
-  },
-): void => {
-  const appletData = applet.data;
-
-  if (appletData?.result) {
-    appletData.result = {
-      ...appletData.result,
-      activityFlows: appletData.result.activityFlows?.map((activityFlow) => ({
-        ...activityFlow,
-        ...(activityFlow.id === payload.flowId && {
-          reportIncludedItemName: payload.reportIncludedItemName,
-          reportIncludedActivityName: payload.reportIncludedActivityName,
-        }),
-      })),
     };
   }
 };

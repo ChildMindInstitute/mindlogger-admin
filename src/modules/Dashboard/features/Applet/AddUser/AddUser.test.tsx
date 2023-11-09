@@ -48,7 +48,8 @@ describe('AddUser component tests', () => {
   test('AddUser should submit form and get invitations', async () => {
     let callCount = 0;
     mockAxios.post.mockResolvedValueOnce(null);
-    // @ts-expect-error TODO: fix type
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     mockAxios.get.mockImplementation((url: string) => {
       if (url === '/invitations') {
         callCount += 1;

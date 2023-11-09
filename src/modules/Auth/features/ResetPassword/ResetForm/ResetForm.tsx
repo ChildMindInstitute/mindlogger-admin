@@ -10,7 +10,6 @@ import { auth } from 'modules/Auth/state';
 import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline, StyledLinkBtn } from 'shared/styles/styledComponents';
-import { getErrorMessage } from 'shared/utils/errors';
 import { variables } from 'shared/styles';
 
 import {
@@ -41,7 +40,7 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
     if (resetPassword.fulfilled.match(result) && setEmail) {
       setEmail(email);
     } else if (resetPassword.rejected.match(result)) {
-      setErrorMessage(getErrorMessage(result.payload));
+      setErrorMessage(result.payload as string);
     }
   };
 
