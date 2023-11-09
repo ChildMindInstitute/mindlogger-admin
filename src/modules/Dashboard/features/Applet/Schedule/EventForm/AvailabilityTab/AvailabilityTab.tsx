@@ -36,7 +36,7 @@ export const AvailabilityTab = ({
   const isOncePeriodicity = periodicity === Periodicity.Once;
 
   const handleSetPeriodicity = (period: string | number) =>
-    setValue('periodicity', period as Periodicity);
+    setValue('periodicity', period as Periodicity, { shouldDirty: true });
 
   const onCloseCallback = () => {
     if (typeof startDate !== 'string' && startDate && endDate && endDate < startDate) {
