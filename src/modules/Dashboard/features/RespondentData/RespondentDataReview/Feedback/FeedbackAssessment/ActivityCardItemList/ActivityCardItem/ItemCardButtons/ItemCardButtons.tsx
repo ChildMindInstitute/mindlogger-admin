@@ -22,10 +22,10 @@ export const ItemCardButtons = ({
 
   const answerValue = watch(`assessmentItems.${step}.answers`);
 
-  const [isNextDisable, setIsNextDisable] = useState(!hasAnswerValue(answerValue));
+  const [hasAnswer, hasSetAnswer] = useState(hasAnswerValue(answerValue));
 
   useEffect(() => {
-    setIsNextDisable(!hasAnswerValue(answerValue));
+    hasSetAnswer(hasAnswerValue(answerValue));
   }, [answerValue]);
 
   return (
@@ -42,7 +42,7 @@ export const ItemCardButtons = ({
       <Button
         sx={{ minWidth: '10rem', ml: theme.spacing(1.6) }}
         variant="contained"
-        disabled={!config.isSkippable && isNextDisable}
+        disabled={!config.isSkippable && hasAnswer}
         onClick={isSubmitVisible ? onSubmit : onNextButtonClick}
         data-testid={`${dataTestid}-${isSubmitVisible ? 'submit' : 'next'}`}
       >

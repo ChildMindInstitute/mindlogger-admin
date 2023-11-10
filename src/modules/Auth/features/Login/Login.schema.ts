@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { ACCOUNT_PASSWORD_MIN_LENGTH } from 'shared/consts';
+import { ACCOUNT_PASSWORD_MIN_LENGTH, EMAIL_REGEXP } from 'shared/consts';
 
 export const loginFormSchema = () => {
   const { t } = i18n;
@@ -13,7 +13,7 @@ export const loginFormSchema = () => {
 
   return yup
     .object({
-      email: yup.string().required(emailRequired).email(incorrectEmail),
+      email: yup.string().required(emailRequired).matches(EMAIL_REGEXP, incorrectEmail),
       password: yup
         .string()
         .required(passwordRequired)

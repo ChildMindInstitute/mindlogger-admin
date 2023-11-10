@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { Roles } from 'shared/consts';
+import { EMAIL_REGEXP, Roles } from 'shared/consts';
 
 export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
   const { t } = i18n;
@@ -14,7 +14,7 @@ export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
 
   return yup
     .object({
-      email: yup.string().required(emailRequired).email(incorrectEmail),
+      email: yup.string().required(emailRequired).matches(EMAIL_REGEXP, incorrectEmail),
       firstName: yup.string().required(firstNameRequired),
       lastName: yup.string().required(lastNameRequired),
       nickName: yup.string(),

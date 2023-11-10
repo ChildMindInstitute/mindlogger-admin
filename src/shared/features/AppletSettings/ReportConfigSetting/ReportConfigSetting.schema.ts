@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
+import { EMAIL_REGEXP } from 'shared/consts';
 
 export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean) => {
   const { t } = i18n;
@@ -15,7 +16,7 @@ export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean)
 
   return yup
     .object({
-      email: yup.string().email(incorrectEmail),
+      email: yup.string().matches(EMAIL_REGEXP, incorrectEmail),
       ...(isActivity ? reportIncludedItemName : {}),
       ...(isActivityFlow
         ? {
