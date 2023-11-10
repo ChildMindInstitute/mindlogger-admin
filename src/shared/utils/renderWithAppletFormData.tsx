@@ -5,8 +5,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { mockedAppletFormData } from 'shared/mock';
 import { ExtendedRenderOptions } from 'redux/store';
-
 import { AppletFormValues } from 'modules/Builder/types';
+
 import { renderWithProviders } from './renderWithProviders';
 
 type FormComponentProps = {
