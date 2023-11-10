@@ -12,9 +12,9 @@ import {
 } from 'shared/mock';
 import { getEntityKey } from 'shared/utils';
 import { ConditionRowType } from 'modules/Builder/types';
-
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { ConditionType } from 'shared/consts';
+
 import { getItemOptions, getValueOptionsList } from '../ConditionRow.utils';
 import { Condition } from './Condition';
 import { ConditionItemType } from './Condition.const';
