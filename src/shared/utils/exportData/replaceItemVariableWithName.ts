@@ -45,7 +45,6 @@ export const replaceItemVariableWithName = <T>({
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
 }) => {
   try {
-    console.log('TEST');
     const variableNames = getTextBetweenBrackets(markdown);
     if (!variableNames?.length) return markdown;
 
