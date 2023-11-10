@@ -80,7 +80,10 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build --project tsconfig.build.json",
-    "test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@uiw/react-md-editor)/\"",
+    "test": "react-app-rewired test",
+    "test:coverage": "npm run test --coverage --colors",
+    "test:nowatch": "npm run test --colors --watchAll=false",
+    "test:related": "test-related.sh",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
   },
