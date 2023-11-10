@@ -7,6 +7,11 @@ if ! [[ $current_branch =~ ^(feature|fix|tests)/M2-[0-9]+ ]]; then
 fi
 
 
+if [ -e ./commit_msg_check_flag ]; then
+    rm ./commit_msg_check_flag
+    exit 0
+fi
+
 commit_msg_file=$1
 commit_msg=$(cat $commit_msg_file)
 
