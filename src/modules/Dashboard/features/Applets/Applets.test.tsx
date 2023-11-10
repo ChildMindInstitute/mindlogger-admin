@@ -9,16 +9,11 @@ import {
   mockedEncryption,
   mockedOwnerId,
 } from 'shared/mock';
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
 
 import { ApiResponseCodes } from 'api';
 import { Applets } from './Applets';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 const getPreloadedState = (role = Roles.Manager) => ({
   workspaces: {
