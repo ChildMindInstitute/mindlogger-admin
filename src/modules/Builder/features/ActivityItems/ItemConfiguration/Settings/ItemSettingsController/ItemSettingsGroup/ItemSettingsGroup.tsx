@@ -66,6 +66,7 @@ export const ItemSettingsGroup = ({
       timeout={0}
       collapsedSize="4.8rem"
       sx={{ flexShrink: 0 }}
+      data-testid={`builder-activity-items-item-settings-group-container-${groupName}`}
     >
       <StyledFormControl>
         <StyledItemSettingsGroupHeader sx={{ justifyContent: 'space-between' }}>
