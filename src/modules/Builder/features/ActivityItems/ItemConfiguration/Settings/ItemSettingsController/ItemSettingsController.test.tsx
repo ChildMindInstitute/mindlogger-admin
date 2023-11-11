@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { ItemResponseType } from 'shared/consts';
-
 import {
   mockedAppletFormData,
   mockedAudioPlayerFormValues,
@@ -18,9 +17,10 @@ import {
   mockedSliderRowsFormValues,
   mockedTextFormValues,
 } from 'shared/mock';
+
 import { ItemSettingsController } from './ItemSettingsController';
-import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { ItemSettingsGroupNames } from './ItemSettingsController.const';
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 const getMockedAppletFormData = (item) => ({
   ...mockedAppletFormData,
