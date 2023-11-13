@@ -107,10 +107,9 @@ export const Activities = () => {
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {
-    const activityToRemoveName = activities[index].name;
     const newActivityFlows = activityFlows.reduce(
       (acc: AppletFormValues['activityFlows'], flow) => {
-        if (flow.reportIncludedActivityName === activityToRemoveName) {
+        if (flow.reportIncludedActivityName === activityKey) {
           flow.reportIncludedActivityName = '';
           flow.reportIncludedItemName = '';
         }

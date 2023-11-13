@@ -5,14 +5,10 @@ import mockAxios from 'jest-mock-axios';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { page } from 'resources';
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state';
 
 import { AddUserForm } from '.';
 
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 const route = `/dashboard/${mockedAppletId}/add-user`;
 const routePath = page.appletAddUser;
 const preloadedState = {

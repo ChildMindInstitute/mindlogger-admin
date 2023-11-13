@@ -2,26 +2,26 @@ import { ErrorResponseType } from 'shared/types';
 
 export type MetaStatus = 'idle' | 'loading' | 'success' | 'error';
 
-export type ErrorResponse = {
-  message: {
-    en: string;
-  };
-  path: string[];
+export type ApiError = {
+  message: string;
   type: ErrorResponseType;
+  path: string[];
 };
+
+export type ApiErrorResponse = {
+  result?: ApiError[];
+  detail?: string;
+};
+
+export type ApiErrorReturn = ApiError[] | string;
 
 export type MetaSchema = {
   requestId: string;
   status: MetaStatus;
-  error?: ErrorResponse[];
+  error?: ApiErrorReturn;
   typePrefix?: string;
 };
 
 export type BaseSchema<DataType = unknown> = MetaSchema & {
   data: DataType;
-};
-
-export type ApiError = {
-  message: string;
-  type: string;
 };

@@ -5,8 +5,10 @@ import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { Box } from '@mui/material';
 
-import { TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP, locales } from '../../Charts.const';
+import { locales } from '../../Charts.const';
+import { setTooltipStyles } from '../../Charts.utils';
 import { getOptions, getData } from './TimePickerLineChart.utils';
 import { TimePickerDataPointRaw, TimePickerLineChartProps } from './TimePickerLineChart.types';
 import { ChartTooltip } from './ChartTooltip';
@@ -56,15 +58,11 @@ export const TimePickerLineChart = ({
     const chart = chartRef.current;
 
     if (chart && dataPoints.length) {
-      const tooltipDataPoints = dataPoints;
-      setTooltipData(tooltipDataPoints.map(({ raw }) => raw as TimePickerDataPointRaw));
-      const position = chart.canvas.getBoundingClientRect();
-      const left = position.left + tooltip.caretX;
-      const top = position.top + tooltip.caretY;
-
-      tooltipEl.style.display = 'block';
-      tooltipEl.style.top = `${top - TOOLTIP_OFFSET_TOP}px`;
-      tooltipEl.style.left = `${left - TOOLTIP_OFFSET_LEFT}px`;
+      setTooltipData(dataPoints.map(({ raw }) => raw as TimePickerDataPointRaw));
+      const {
+        element: { x: positionX, y: positionY },
+      } = dataPoints[0];
+      setTooltipStyles({ tooltipEl, positionX, positionY });
     }
   };
 
@@ -82,7 +80,7 @@ export const TimePickerLineChart = ({
   );
 
   return (
-    <>
+    <Box sx={{ position: 'relative' }}>
       {renderChart}
       <ChartTooltip
         ref={tooltipRef}
@@ -92,6 +90,6 @@ export const TimePickerLineChart = ({
         }}
         onMouseLeave={hideTooltip}
       />
-    </>
+    </Box>
   );
 };

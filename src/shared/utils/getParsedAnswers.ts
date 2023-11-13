@@ -1,7 +1,9 @@
 import {
   DecryptedAnswerData,
+  DrawingItemAnswer,
   ExportActivity,
   ExportDataResult,
+  ExtendedExportAnswerWithoutEncryption,
   isDrawingAnswerData,
   isNotMediaAnswerData,
 } from 'shared/types';
@@ -30,6 +32,11 @@ export const getParsedAnswers = (
   );
 };
 
+const shouldConvertPrivateDrawingUrl = (
+  item: DecryptedAnswerData,
+): item is DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption, DrawingItemAnswer> =>
+  isDrawingAnswerData(item) && Boolean(item.answer.value.uri);
+
 export const getAnswersWithPublicUrls = async (
   parsedAnswers: ReturnType<typeof getParsedAnswers>,
 ) => {
@@ -37,7 +44,7 @@ export const getAnswersWithPublicUrls = async (
 
   const privateUrls = parsedAnswers.reduce((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce((urlsAcc, item) => {
-      if (isDrawingAnswerData(item)) {
+      if (shouldConvertPrivateDrawingUrl(item)) {
         return urlsAcc.concat(getDrawingUrl(item));
       }
       if (isNotMediaAnswerData(item)) return urlsAcc;
@@ -62,7 +69,7 @@ export const getAnswersWithPublicUrls = async (
   return parsedAnswers.reduce<ReturnType<typeof getParsedAnswers>>((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce(
       (decryptedAnswersAcc: DecryptedAnswerData[], item) => {
-        if (isDrawingAnswerData(item)) {
+        if (shouldConvertPrivateDrawingUrl(item)) {
           return decryptedAnswersAcc.concat({
             ...item,
             answer: {

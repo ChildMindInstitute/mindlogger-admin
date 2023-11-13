@@ -22,6 +22,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AlertsSchema>): v
   builder.addCase(getAlerts.fulfilled, ({ alerts }, { payload }) => {
     alerts.requestId = initialState.alerts.requestId;
     alerts.status = 'success';
+    alerts.error = undefined;
     alerts.data = {
       notWatched: payload?.data.notWatched,
       count: payload?.data.count,

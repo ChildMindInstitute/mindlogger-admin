@@ -17,6 +17,10 @@ export const StyledDrawer = styled(Drawer)`
     box-sizing: border-box;
     box-shadow: unset;
   }
+
+  .MuiBackdrop-root {
+    background-color: transparent;
+  }
 `;
 
 export const StyledDrawerContent = styled(StyledFlexColumn)`

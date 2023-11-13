@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 
-import { Roles } from './consts';
+import { ItemResponseType, Roles } from './consts';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -564,30 +564,30 @@ export const mockedAppletFormData = {
 
 export const mockedSingleActivityItem = {
   question: 'single [[text_last]]',
-  responseType: 'singleSelect',
+  responseType: ItemResponseType.SingleSelection,
   responseValues: {
-    paletteName: null,
+    paletteName: undefined,
     options: [
       {
         id: 'b9a71359-467a-4bb8-84a5-6a8fe61da246',
         text: 'opt1',
-        image: null,
+        image: undefined,
         score: 4,
-        tooltip: null,
+        tooltip: undefined,
         isHidden: false,
-        color: null,
-        alert: null,
+        color: undefined,
+        alert: undefined,
         value: 1,
       },
       {
         id: '000394a5-2963-4f12-8b5f-e9340051512a',
         text: 'opt2',
-        image: null,
+        image: undefined,
         score: 2,
-        tooltip: null,
+        tooltip: undefined,
         isHidden: false,
-        color: null,
-        alert: null,
+        color: undefined,
+        alert: undefined,
         value: 2,
       },
     ],
@@ -609,36 +609,37 @@ export const mockedSingleActivityItem = {
   },
   name: 'single_text_score',
   isHidden: false,
-  conditionalLogic: null,
+  conditionalLogic: undefined,
   allowEdit: true,
   id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
 };
+
 export const mockedMultiActivityItem = {
   question: 'multi [[single_text_score]]',
-  responseType: 'multiSelect',
+  responseType: ItemResponseType.MultipleSelection,
   responseValues: {
-    paletteName: null,
+    paletteName: undefined,
     options: [
       {
         id: '19c1af9b-c9d1-4b33-819a-9eff33b6d300',
         text: 'opt1',
-        image: null,
+        image: undefined,
         score: 2,
-        tooltip: null,
+        tooltip: undefined,
         isHidden: false,
-        color: null,
-        alert: null,
+        color: undefined,
+        alert: undefined,
         value: 1,
       },
       {
         id: 'abf02196-916c-4b0c-84ae-0381d4a98cb9',
         text: 'opt2',
-        image: null,
+        image: undefined,
         score: 1,
-        tooltip: null,
+        tooltip: undefined,
         isHidden: false,
-        color: null,
-        alert: null,
+        color: undefined,
+        alert: undefined,
         value: 2,
       },
     ],
@@ -654,16 +655,17 @@ export const mockedMultiActivityItem = {
     setPalette: false,
     addTokens: null,
     additionalResponseOption: {
-      textInputOption: true,
+      textInputOption: undefined,
       textInputRequired: false,
     },
   },
   name: 'multi_text_score',
   isHidden: false,
-  conditionalLogic: null,
+  conditionalLogic: undefined,
   allowEdit: true,
   id: '63b765ff-73aa-453f-8d0d-fc7bca72fd1f',
 };
+
 export const mockedSliderActivityItem = {
   question: 'slider [[multi_text_score]]',
   responseType: 'slider',
@@ -697,6 +699,7 @@ export const mockedSliderActivityItem = {
   allowEdit: true,
   id: '29788e14-4118-47d5-b29e-f22263259e0f',
 };
+
 export const mockedDateActivityItem = {
   question: 'date [[slider_text_score]]',
   responseType: 'date',
@@ -716,6 +719,7 @@ export const mockedDateActivityItem = {
   allowEdit: true,
   id: '4b2c282b-4597-44d9-aefb-d8ccc927c50b',
 };
+
 export const mockedNumberSelectActivityItem = {
   question: 'number_selection_text \n[[date_text]]',
   responseType: 'numberSelect',
@@ -737,6 +741,7 @@ export const mockedNumberSelectActivityItem = {
   allowEdit: true,
   id: '1b50376d-d4c7-4bd5-8dfc-bab04e2e1ab5',
 };
+
 export const mockedTimeActivityItem = {
   question: 'time_text [[number_selection_text]]',
   responseType: 'time',
@@ -756,6 +761,7 @@ export const mockedTimeActivityItem = {
   allowEdit: true,
   id: '396c7e8d-6599-4258-8c3e-3ef91205292b',
 };
+
 export const mockedTimeRangeActivityItem = {
   question: 'time_range_text',
   responseType: 'timeRange',
@@ -775,6 +781,7 @@ export const mockedTimeRangeActivityItem = {
   allowEdit: true,
   id: 'c551530e-c718-43ea-a045-287211bee95e',
 };
+
 export const mockedSingleSelectRowsActivityItem = {
   question: 'single_row_score [[time_range_text]]',
   responseType: 'singleSelectRows',
@@ -836,6 +843,7 @@ export const mockedSingleSelectRowsActivityItem = {
   allowEdit: true,
   id: '7daf4dce-d323-4c64-9e13-e843283fa280',
 };
+
 export const mockedMultiSelectRowsActivityItem = {
   question: 'multi_row_score',
   responseType: 'multiSelectRows',
@@ -897,6 +905,7 @@ export const mockedMultiSelectRowsActivityItem = {
   allowEdit: true,
   id: 'f81599a0-bd06-4453-8ea7-2c2a51aa510e',
 };
+
 export const mockedSliderRowsActivityItem = {
   question: 'slider_row_score',
   responseType: 'sliderRows',
@@ -929,6 +938,7 @@ export const mockedSliderRowsActivityItem = {
   allowEdit: true,
   id: '9361e8b1-2fd8-42b3-8f28-a3d7150334bb',
 };
+
 export const mockedTextActivityItem = {
   question: 'text',
   responseType: 'text',
@@ -950,6 +960,7 @@ export const mockedTextActivityItem = {
   allowEdit: true,
   id: '5bad6e4a-7035-4ddd-9c54-375604025a1f',
 };
+
 export const mockedDrawingActivityItem = {
   question: 'drawing_text [[text]]',
   responseType: 'drawing',
@@ -976,6 +987,7 @@ export const mockedDrawingActivityItem = {
   allowEdit: true,
   id: 'ebc231b0-4a1c-4717-99de-0504b04d0e25',
 };
+
 export const mockedPhotoActivityItem = {
   question: 'photo_text',
   responseType: 'photo',
@@ -995,6 +1007,7 @@ export const mockedPhotoActivityItem = {
   allowEdit: true,
   id: '129a20df-5330-494c-8c4c-eb3c7847fe95',
 };
+
 export const mockedVideoActivityItem = {
   question: 'video_text',
   responseType: 'video',
@@ -1014,6 +1027,7 @@ export const mockedVideoActivityItem = {
   allowEdit: true,
   id: 'b66763bc-2890-46db-9e55-8dc43829c9c6',
 };
+
 export const mockedAudioActivityItem = {
   question: 'audio_text',
   responseType: 'audio',
@@ -1035,6 +1049,7 @@ export const mockedAudioActivityItem = {
   allowEdit: true,
   id: '2a56ef07-18ed-4102-8a5d-be69edf12968',
 };
+
 export const mockedMessageActivityItem = {
   question: 'message ',
   responseType: 'message',
@@ -1049,6 +1064,7 @@ export const mockedMessageActivityItem = {
   allowEdit: true,
   id: '2f317638-d0a7-42ed-961f-e701d340aa03',
 };
+
 export const mockedAudioPlayerActivityItem = {
   question: 'audio_player_text',
   responseType: 'audioPlayer',
@@ -1070,6 +1086,7 @@ export const mockedAudioPlayerActivityItem = {
   allowEdit: true,
   id: 'e171deee-b161-4140-9dae-77c70765c031',
 };
+
 export const mockedExportContextItemData = {
   id: '949f248c-1a4b-4a35-a5a2-898dfef72050',
   submitId: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',

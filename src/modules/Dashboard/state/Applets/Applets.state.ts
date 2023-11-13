@@ -1,11 +1,6 @@
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state/Base';
 
 import { AppletsSchema } from './Applets.schema';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 export const state: AppletsSchema = {
   events: initialStateData,

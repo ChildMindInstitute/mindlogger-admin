@@ -69,7 +69,11 @@ import {
   TouchItemNames,
 } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { findRelatedScore } from 'modules/Builder/utils';
+import {
+  findRelatedScore,
+  FlowReportFieldsPrepareType,
+  getEntityReportFields,
+} from 'modules/Builder/utils';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,
@@ -651,7 +655,7 @@ const getActivityItems = (items: Item[]) =>
       )
     : [];
 
-const getActivityFlows = (activityFlows: ActivityFlow[]) =>
+const getActivityFlows = (activityFlows: ActivityFlow[], activities: Activity[]) =>
   activityFlows.map(({ order, ...activityFlow }) => ({
     ...activityFlow,
     description: getDictionaryText(activityFlow.description),
@@ -660,6 +664,12 @@ const getActivityFlows = (activityFlows: ActivityFlow[]) =>
       key,
       activityKey: activityKey || activityId || '',
     })),
+    ...getEntityReportFields({
+      reportActivity: activityFlow.reportIncludedActivityName ?? '',
+      reportItem: activityFlow.reportIncludedItemName ?? '',
+      activities,
+      type: FlowReportFieldsPrepareType.NameToKey,
+    }),
   }));
 
 const getConditionPayload = (item: Item, condition: Condition) => {
@@ -880,7 +890,11 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
             ...activity,
             description: getDictionaryText(activity.description),
             items,
-            //TODO: for frontend purposes - should be reviewed after refactoring phase
+            ...getEntityReportFields({
+              reportItem: activity.reportIncludedItemName,
+              activityItems: activity.items,
+              type: FlowReportFieldsPrepareType.NameToKey,
+            }),
             conditionalLogic: getActivityConditionalLogic(activity.items),
             scoresAndReports: getScoresAndReports(activity),
             ...(activity.subscaleSetting && {
@@ -889,7 +903,7 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
           } as ActivityFormValues;
         })
       : [],
-    activityFlows: getActivityFlows(appletData.activityFlows),
+    activityFlows: getActivityFlows(appletData.activityFlows, appletData.activities),
     streamEnabled: !!appletData.streamEnabled,
   };
 
@@ -952,7 +966,6 @@ export const testIsReportCommonFieldsRequired = (
   return printItemsValue;
 };
 
-//TODO: find a way to validate nested properties for objects in arrays for uniqueness
 export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
   items?.filter((item) => item.name === value).length < 2 ?? true;
 

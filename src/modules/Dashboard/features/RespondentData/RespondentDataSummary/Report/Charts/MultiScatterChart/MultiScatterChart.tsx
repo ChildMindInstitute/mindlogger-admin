@@ -4,11 +4,11 @@ import { Box } from '@mui/material';
 import {
   Chart as ChartJS,
   LinearScale,
-  PointElement,
   LineElement,
-  Tooltip,
-  TimeScale,
+  PointElement,
   ScriptableTooltipContext,
+  TimeScale,
+  Tooltip,
   TooltipItem,
 } from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
@@ -17,10 +17,11 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 import { locales } from 'shared/consts';
 
-import { getOptions, getData } from './MultiScatterChart.utils';
+import { scatterChartTooltipHandler } from '../Charts.utils';
+import { ScatterChartType, SetTooltipData } from '../Chart.types';
+import { getData, getOptions } from './MultiScatterChart.utils';
 import { MultiScatterChartProps } from './MultiScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
-import { TOOLTIP_OFFSET_TOP, TOOLTIP_OFFSET_LEFT } from '../Charts.const';
 
 export const MultiScatterChart = ({
   color,
@@ -56,35 +57,15 @@ export const MultiScatterChart = ({
     tooltipEl.style.display = 'none';
   };
 
-  const tooltipHandler = (context: ScriptableTooltipContext<'scatter'>) => {
-    if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
-
-    const tooltipEl = tooltipRef.current;
-
-    if (!tooltipEl) return;
-
-    const { tooltip } = context;
-    const { dataPoints } = tooltip;
-
-    if (!tooltip.opacity && !isHovered.current) {
-      tooltipEl.style.display = 'none';
-
-      return;
-    }
-
-    const chart = chartRef.current;
-
-    if (chart) {
-      setTooltipData(dataPoints);
-      const position = chart.canvas.getBoundingClientRect();
-      const left = position.left + tooltip.caretX;
-      const top = position.top + tooltip.caretY;
-
-      tooltipEl.style.display = 'block';
-      tooltipEl.style.top = `${top - TOOLTIP_OFFSET_TOP}px`;
-      tooltipEl.style.left = `${left - TOOLTIP_OFFSET_LEFT}px`;
-    }
-  };
+  const tooltipHandler = (context: ScriptableTooltipContext<'scatter'>) =>
+    scatterChartTooltipHandler({
+      context,
+      tooltipRef,
+      isHovered,
+      chartRef,
+      setTooltipData: setTooltipData as SetTooltipData,
+      type: ScatterChartType.MultiScatterChart,
+    });
 
   const renderChart = useMemo(
     () => (
@@ -108,7 +89,7 @@ export const MultiScatterChart = ({
   );
 
   return (
-    <Box sx={{ height }}>
+    <Box sx={{ height, position: 'relative' }}>
       {renderChart}
       <ChartTooltip
         ref={tooltipRef}
