@@ -17,7 +17,7 @@ import { ItemResponseType, PerfTaskType, SubscaleTotalScore } from 'shared/const
 import { ArrayElement } from 'shared/types';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
-export type ItemFormValuesCommonType = ItemCommonType & {
+export type ItemFormValuesCommonType = Omit<ItemCommonType, 'question'> & {
   question?: string;
   responseType: ItemResponseType | '';
 };

@@ -2,7 +2,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 
+import { ItemFormValuesCommonType } from 'modules/Builder/types';
+
 import { ItemResponseType, Roles } from './consts';
+import { MultiSelectItem, SingleSelectItem } from './state';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -562,7 +565,7 @@ export const mockedAppletFormData = {
   ],
 };
 
-export const mockedSingleActivityItem = {
+export const mockedSingleActivityItem: SingleSelectItem<ItemFormValuesCommonType> = {
   question: 'single [[text_last]]',
   responseType: ItemResponseType.SingleSelection,
   responseValues: {
@@ -614,7 +617,7 @@ export const mockedSingleActivityItem = {
   id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
 };
 
-export const mockedMultiActivityItem = {
+export const mockedMultiActivityItem: MultiSelectItem<ItemFormValuesCommonType> = {
   question: 'multi [[single_text_score]]',
   responseType: ItemResponseType.MultipleSelection,
   responseValues: {

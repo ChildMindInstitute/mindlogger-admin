@@ -67,9 +67,10 @@ export type SingleAndMultipleSelectionConfig = {
   setPalette: boolean;
   timer: number;
   additionalResponseOption: {
-    textInputOption: boolean;
+    textInputOption?: boolean;
     textInputRequired: boolean;
   };
+  addTokens?: null | boolean;
 };
 
 export type SliderConfig = {

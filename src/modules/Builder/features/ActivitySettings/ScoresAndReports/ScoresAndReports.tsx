@@ -68,7 +68,7 @@ export const ScoresAndReports = () => {
   });
 
   const items = activity?.items.reduce(
-    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item: ItemFormValues) => {
+    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item) => {
       if (!ItemTypesToPrint.includes(item.responseType)) return items;
       const { id, name, question } = item;
 
