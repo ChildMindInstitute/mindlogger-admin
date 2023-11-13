@@ -4,7 +4,7 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 import i18n from 'i18n';
 import { HeadCell } from 'shared/types/table';
 import { Row } from 'shared/components';
-import { filterRows } from 'shared/utils';
+import { filterRows } from 'modules/Dashboard/utils';
 
 import { SearchAcross } from './SelectRespondents.const';
 

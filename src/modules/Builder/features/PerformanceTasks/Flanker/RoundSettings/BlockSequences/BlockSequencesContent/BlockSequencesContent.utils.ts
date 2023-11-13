@@ -1,8 +1,9 @@
 import i18n from 'i18next';
 import { Row } from 'shared/components';
 import { HeadCell } from 'shared/types';
-import { createArray, getTableCell, getUploadedMediaName } from 'shared/utils';
+import { createArray, getTableCell } from 'shared/utils';
 import { FlankerStimulusSettings, FlankerBlockSettings } from 'shared/state';
+import { getUploadedMediaName } from 'modules/Builder/utils';
 
 import { UploadedData, UploadedDataOrNull } from './BlockSequencesContent.types';
 

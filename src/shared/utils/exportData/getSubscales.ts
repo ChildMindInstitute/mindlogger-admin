@@ -23,9 +23,9 @@ import {
   ElementType,
 } from 'shared/types';
 
-import { getObjectFromList } from '../builderHelpers';
 import { createArrayFromMinToMax } from '../array';
 import { isSystemItem } from '../isSystemItem';
+import { getObjectFromList } from '../getObjectFromList';
 
 export const getSubScaleScore = (
   subscalesSum: number,

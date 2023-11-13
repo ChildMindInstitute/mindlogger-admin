@@ -1,6 +1,6 @@
 import { ExportMediaData } from 'shared/types';
 
-import { exportZip } from '../exportZip';
+import { exportZip } from './exportZip';
 
 export const exportMediaZip = async (mediaData: ExportMediaData[], reportName: string) => {
   if (!mediaData.length) return;

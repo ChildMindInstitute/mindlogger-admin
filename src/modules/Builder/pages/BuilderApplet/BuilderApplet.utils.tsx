@@ -38,7 +38,6 @@ import {
   getEntityKey,
   getObjectFromList,
   getTextBetweenBrackets,
-  getUniqueName,
   INTERVAL_SYMBOL,
   Path,
   pluck,
@@ -80,6 +79,7 @@ import {
   findRelatedScore,
   FlowReportFieldsPrepareType,
   getEntityReportFields,
+  getUniqueName,
 } from 'modules/Builder/utils';
 
 import {
