@@ -70,6 +70,8 @@ export type ActivityFlowFormValues = {
   hideBadge?: boolean;
   items?: ActivityFlowItem[];
   isHidden?: boolean;
+  reportIncludedItemName?: string;
+  reportIncludedActivityName?: string;
 };
 
 export type AppletFormValues = {
@@ -83,6 +85,11 @@ export type AppletFormValues = {
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];
   streamEnabled: boolean;
+  reportServerIp?: string;
+  reportPublicKey?: string;
+  reportRecipients?: string[];
+  reportIncludeUserId?: boolean;
+  reportEmailBody?: string;
 };
 
 export type GetNewActivity = {

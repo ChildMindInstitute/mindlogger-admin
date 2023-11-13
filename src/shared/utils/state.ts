@@ -1,9 +1,7 @@
-import { ActionReducerMapBuilder, AsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { AxiosError, AxiosResponse } from 'axios';
+import { ActionReducerMapBuilder, AsyncThunk } from '@reduxjs/toolkit';
+import { AxiosResponse } from 'axios';
 import get from 'lodash.get';
 import uniqBy from 'lodash.uniqby';
-
-import { getApiError } from 'shared/utils/errors';
 
 import { BaseSchema } from '../state';
 
@@ -13,7 +11,7 @@ export const getPendingData = <T extends Record<string, BaseSchema>, K>({
   key,
 }: {
   builder: ActionReducerMapBuilder<T>;
-  thunk: AsyncThunk<AxiosResponse, K, Record<string, never>>;
+  thunk: AsyncThunk<AxiosResponse['data'], K, Record<string, never>>;
   key: keyof T;
 }) =>
   builder.addCase(thunk.pending, (state, action) => {
@@ -34,7 +32,7 @@ export const getFulfilledData = <T extends Record<string, BaseSchema>, K>({
   mapper = (payloadData) => payloadData,
 }: {
   builder: ActionReducerMapBuilder<T>;
-  thunk: AsyncThunk<AxiosResponse, K, Record<string, never>>;
+  thunk: AsyncThunk<AxiosResponse['data'], K, Record<string, never>>;
   key: keyof T;
   initialState: T;
   mapper?: (responseData: T) => unknown;
@@ -49,6 +47,7 @@ export const getFulfilledData = <T extends Record<string, BaseSchema>, K>({
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'success';
       selectedProperty.data = mapper(action.payload?.data);
+      selectedProperty.error = undefined;
     }
   });
 
@@ -60,7 +59,7 @@ export const getFulfilledDataWithConcatenatedResult = <T extends Record<string, 
   mapper = (payloadData) => payloadData,
 }: {
   builder: ActionReducerMapBuilder<T>;
-  thunk: AsyncThunk<AxiosResponse, K, Record<string, never>>;
+  thunk: AsyncThunk<AxiosResponse['data'], K, Record<string, never>>;
   key: keyof T;
   initialState: T;
   mapper?: (responseData: T) => unknown;
@@ -74,6 +73,7 @@ export const getFulfilledDataWithConcatenatedResult = <T extends Record<string, 
     ) {
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'success';
+      selectedProperty.error = undefined;
       selectedProperty.data = mapper({
         ...(action.payload?.data ?? {}),
         result: uniqBy(
@@ -91,7 +91,7 @@ export const getRejectedData = <T extends Record<string, BaseSchema>, K>({
   initialState,
 }: {
   builder: ActionReducerMapBuilder<T>;
-  thunk: AsyncThunk<AxiosResponse, K, Record<string, never>>;
+  thunk: AsyncThunk<AxiosResponse['data'], K, Record<string, never>>;
   key: keyof T;
   initialState: T;
 }) =>
@@ -104,6 +104,6 @@ export const getRejectedData = <T extends Record<string, BaseSchema>, K>({
     ) {
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'error';
-      selectedProperty.error = getApiError(action as PayloadAction<AxiosError>);
+      selectedProperty.error = action.payload;
     }
   });

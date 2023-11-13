@@ -140,7 +140,10 @@ export const FileUploader = ({
             control={
               <StyledTextField
                 onChange={handleChange}
-                inputProps={{ accept: getAcceptedFormats({ isPrimaryUiType, csvOnly }) }}
+                inputProps={{
+                  accept: getAcceptedFormats({ isPrimaryUiType, csvOnly }),
+                  'data-testid': 'upload-file-input',
+                }}
                 type="file"
                 name="uploadFile"
               />

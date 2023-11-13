@@ -58,7 +58,10 @@ export const FeedbackAssessment = ({
     );
 
     const answersToEncrypt = answers.map(({ answer }) => answer);
-    const answer = getEncryptedAnswers(answersToEncrypt) as string;
+
+    if (!getEncryptedAnswers) return;
+
+    const answer = getEncryptedAnswers(answersToEncrypt);
 
     if (!appletId || !answerId) return;
 

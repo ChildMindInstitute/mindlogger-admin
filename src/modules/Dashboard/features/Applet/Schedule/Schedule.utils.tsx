@@ -2,7 +2,8 @@ import { format } from 'date-fns';
 
 import { variables } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
-import { DateFormats } from 'shared/consts';
+import { DateFormats, Roles } from 'shared/consts';
+import { without } from 'shared/utils';
 
 import { ActivitiesFlowsWithColors } from './Schedule.types';
 
@@ -60,3 +61,6 @@ export const removeSecondsFromTime = (time?: string | null) => {
 
   return `${hours}:${minutes}`;
 };
+
+export const checkIfHasAccessToSchedule = (roles?: Roles[]) =>
+  without(roles, [Roles.Editor, Roles.Reviewer, Roles.Respondent]).length > 0;

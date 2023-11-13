@@ -27,8 +27,15 @@ import { getObjectFromList } from '../builderHelpers';
 import { createArrayFromMinToMax } from '../array';
 import { isSystemItem } from '../isSystemItem';
 
-export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore, length: number) =>
-  type === SubscaleTotalScore.Sum ? subscalesSum : subscalesSum / length;
+export const getSubScaleScore = (
+  subscalesSum: number,
+  type: SubscaleTotalScore,
+  length: number,
+) => {
+  if (type === SubscaleTotalScore.Average && length === 0) return 0;
+
+  return type === SubscaleTotalScore.Sum ? subscalesSum : subscalesSum / length;
+};
 
 export const parseSex = (sex: string) => (sex === Sex.M ? '0' : '1');
 
@@ -170,7 +177,7 @@ export const getSubscales = (
   subscaleSetting: SubscaleSetting,
   activityItems: Record<string, { activityItem: Item; answer: AnswerDTO }>,
 ) => {
-  if (!subscaleSetting?.subscales?.length) return {};
+  if (!subscaleSetting?.subscales?.length || !Object.keys(activityItems).length) return {};
 
   const subscalesObject = getObjectFromList<ActivitySettingsSubscale>(
     subscaleSetting.subscales,

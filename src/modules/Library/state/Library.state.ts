@@ -1,28 +1,24 @@
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state';
 
 import { LibrarySchema } from './Library.schema';
 
-const initialStateData = {
-  ...base.state,
-  data: {
-    result: [],
-    count: 0,
-  },
-};
-
-const cartStateData = {
-  ...base.state,
-  data: {
-    result: [],
-    count: 0,
-  },
-};
-
 export const state: LibrarySchema = {
-  publishedApplets: initialStateData,
-  cartApplets: cartStateData,
+  publishedApplets: {
+    ...initialStateData,
+    data: {
+      result: [],
+      count: 0,
+    },
+  },
+  cartApplets: {
+    ...initialStateData,
+    data: {
+      result: [],
+      count: 0,
+    },
+  },
   isCartBtnDisabled: {
-    ...base.state,
+    ...initialStateData,
     data: false,
   },
 };

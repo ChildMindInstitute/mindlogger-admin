@@ -13,7 +13,7 @@ export type UseInfinityDataType = {
   totalSize: number;
   isLoading: boolean;
   limitPerPage?: number;
-  getListThunk: AsyncThunk<AxiosResponse, Record<string, unknown>, Record<string, unknown>>;
+  getListThunk: AsyncThunk<AxiosResponse['data'], Record<string, unknown>, Record<string, never>>;
 };
 export const useInfinityData = ({
   rootSelector,

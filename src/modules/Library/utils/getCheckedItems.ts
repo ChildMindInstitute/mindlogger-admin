@@ -20,7 +20,7 @@ export const getUpdatedSelectedItems = (
     return { ...otherAppletSelectedItems, ...(selectedItems[id].length && selectedItems) };
   }
 
-  if (selectedItems[id].length) return selectedItems;
+  if (selectedItems[id]?.length) return selectedItems;
 
   return null;
 };

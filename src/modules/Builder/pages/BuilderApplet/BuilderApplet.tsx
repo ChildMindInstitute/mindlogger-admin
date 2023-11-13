@@ -45,7 +45,7 @@ export const BuilderApplet = () => {
   const [isFromLibrary, setIsFromLibrary] = useState(false);
   const [isAppletInitialized, setAppletInitialized] = useState(false);
   const { data: dataFromLibrary } = location.state ?? {};
-  const hasLibraryData = isFromLibrary && dataFromLibrary;
+  const hasLibraryData = isFromLibrary && !!dataFromLibrary;
   const isLoading =
     (!isNewApplet && loadingStatus === 'idle') ||
     loadingStatus === 'loading' ||
@@ -81,7 +81,7 @@ export const BuilderApplet = () => {
     (async () => {
       await reset(getDefaultValues(appletData, defaultThemeId));
 
-      if (!dataFromLibrary) return;
+      if (!hasLibraryData) return;
 
       const formValues = await getValues();
       const libraryConvertedValues = await getDefaultValues(dataFromLibrary);

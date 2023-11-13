@@ -19,6 +19,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<WorkspacesSchema>
       roles.requestId = initialState.roles.requestId;
       roles.status = 'success';
       roles.data = action.payload.data?.result;
+      roles.error = undefined;
     }
   });
   getRejectedData({ builder, thunk: getWorkspaceRoles, key: 'roles', initialState });

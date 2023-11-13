@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import isEqual from 'lodash.isequal';
 import { useParams } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
 
@@ -38,6 +37,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       setActivityName,
       defaultStartDate,
       editedEvent,
+      onFormIsLoading,
       onFormChange,
       'data-testid': dataTestid,
     },
@@ -64,7 +64,15 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       mode: 'onChange',
     });
 
-    const { handleSubmit, control, watch, getValues, setValue, trigger } = methods;
+    const {
+      handleSubmit,
+      control,
+      watch,
+      getValues,
+      setValue,
+      trigger,
+      formState: { isDirty },
+    } = methods;
 
     const { errors } = useFormState({
       control,
@@ -106,8 +114,18 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       }
     };
 
-    const { execute: createEvent, error: createEventError } = useAsync(createEventApi, getEvents);
-    const { execute: updateEvent, error: updateEventError } = useAsync(updateEventApi, getEvents);
+    const {
+      execute: createEvent,
+      error: createEventError,
+      isLoading: createEventIsLoading,
+    } = useAsync(createEventApi, getEvents);
+    const {
+      execute: updateEvent,
+      error: updateEventError,
+      isLoading: updateEventIsLoading,
+    } = useAsync(updateEventApi, getEvents);
+
+    const isLoading = createEventIsLoading || updateEventIsLoading;
 
     const removeWarning: Warning = eventsData.reduce((acc, event) => {
       const idWithoutFlowRegex = getIdWithoutRegex(activityOrFlowId)?.id;
@@ -184,9 +202,13 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
 
     useEffect(() => {
       if (onFormChange) {
-        onFormChange(!isEqual(getValues(), defaultValues));
+        onFormChange(isDirty);
       }
-    }, [watch()]);
+    }, [isDirty]);
+
+    useEffect(() => {
+      onFormIsLoading(isLoading);
+    }, [isLoading]);
 
     useEffect(() => {
       setValue('removeWarning', removeWarning);

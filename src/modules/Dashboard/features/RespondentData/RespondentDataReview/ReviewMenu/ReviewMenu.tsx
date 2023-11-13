@@ -6,10 +6,9 @@ import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
 import { ReviewActivity, getReviewActivitiesApi, getAppletSubmitDateListApi } from 'api';
 import { DatePicker, DatePickerUiType } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
+import { useAsync, useRespondentLabel } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
-import { useRespondentLabel } from 'modules/Dashboard/hooks';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledHeader } from './ReviewMenu.styles';
@@ -20,7 +19,7 @@ export const ReviewMenu = ({
   selectedActivity,
   selectedAnswer,
   setSelectedActivity,
-  setSelectedAnswer,
+  onSelectAnswer,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
@@ -58,7 +57,7 @@ export const ReviewMenu = ({
     if (!activity) {
       setSelectedActivity(null);
     }
-    setSelectedAnswer(null);
+    onSelectAnswer(null);
   });
 
   const setSubmitDatesFromApi = async (fromDate: string, toDate: string) => {
@@ -128,7 +127,7 @@ export const ReviewMenu = ({
           activity={activity}
           setSelectedActivity={setSelectedActivity}
           selectedAnswer={selectedAnswer}
-          setSelectedAnswer={setSelectedAnswer}
+          onSelectAnswer={onSelectAnswer}
           data-testid={`${dataTestid}-activity-${index}`}
         />
       ))}

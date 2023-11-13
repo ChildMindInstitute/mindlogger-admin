@@ -1,11 +1,5 @@
-import { base } from 'shared/state/Base';
-
+import { initialStateData } from '../Base';
 import { WorkspacesSchema } from './Workspaces.schema';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 export const state: WorkspacesSchema = {
   workspaces: initialStateData,

@@ -46,6 +46,8 @@ import { getSanitizedContent } from 'shared/utils/forms';
 import { reportConfig } from 'modules/Builder/state';
 import { useCurrentActivity, useCurrentActivityFlow } from 'modules/Builder/hooks';
 import { TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
+import { getEntityKey } from 'shared/utils';
+import { AppletFormValues } from 'modules/Builder/types';
 
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
 import { reportConfigSchema } from './ReportConfigSetting.schema';
@@ -78,11 +80,13 @@ export const ReportConfigSetting = ({
   const { activityFlow, fieldName: flowFieldName } = useCurrentActivityFlow();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { saveChanges, doNotSaveChanges } = reportConfig.useReportConfigChanges() || {};
-  const { setReportConfigChanges } = reportConfig.actions;
+  const { setReportConfigChanges, resetReportConfigChanges } = reportConfig.actions;
   const isServerConfigured = useIsServerConfigured();
   const isActivity = !!activity;
   const isActivityFlow = !!activityFlow;
-  const defaultValues = useDefaultValues(appletData);
+  const { setValue: setAppletFormValue, getValues: getAppletFormValues } = useFormContext() || {};
+  const appletFormValues = getAppletFormValues?.() as AppletFormValues;
+  const defaultValues = useDefaultValues(appletFormValues ?? appletData);
 
   const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -92,7 +96,7 @@ export const ReportConfigSetting = ({
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
 
   const { getApplet } = applet.thunk;
-  const { updateAppletData, updateActivityData, updateActivityFlowData } = applet.actions;
+  const { updateAppletData } = applet.actions;
   const encryption = appletData?.encryption;
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
   const { accountId = '' } = encryptionInfoFromServer ?? {};
@@ -144,8 +148,6 @@ export const ReportConfigSetting = ({
     mode: 'onSubmit',
   });
   const hasErrors = !!Object.keys(errors).length;
-  const { setValue: setAppletFormValue } = useFormContext() || {};
-
   const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
 
   const reportRecipients = watch('reportRecipients') || [];
@@ -158,7 +160,9 @@ export const ReportConfigSetting = ({
 
   const selectedActivity =
     isActivityFlow && reportIncludedActivity
-      ? appletData?.activities?.find((activity) => activity.name === reportIncludedActivity)
+      ? appletFormValues?.activities?.find(
+          (activity) => getEntityKey(activity) === reportIncludedActivity,
+        )
       : null;
 
   const { onVerify, onSetPassword } = useCheckReportServer({
@@ -179,7 +183,9 @@ export const ReportConfigSetting = ({
   };
 
   const handleRemoveEmail = (index: number) => {
-    setValue('reportRecipients', reportRecipients.filter((_, i) => i !== index) as string[]);
+    setValue('reportRecipients', reportRecipients.filter((_, i) => i !== index) as string[], {
+      shouldDirty: true,
+    });
   };
 
   const onSubmit = (values: ReportConfigFormValues) => {
@@ -211,12 +217,14 @@ export const ReportConfigSetting = ({
       reportEmailBody,
     } = getValues() ?? {};
 
+    const sanitizedReportEmailBody = getSanitizedContent(reportEmailBody, true);
+
     const body = {
       reportServerIp,
       reportPublicKey,
       reportRecipients,
       reportIncludeUserId,
-      reportEmailBody: getSanitizedContent(reportEmailBody, true),
+      reportEmailBody: sanitizedReportEmailBody,
     };
 
     await postReportConfig({
@@ -224,49 +232,60 @@ export const ReportConfigSetting = ({
       ...body,
     });
 
-    if (!isDashboard) dispatch(updateAppletData(body));
+    if (!isDashboard) {
+      dispatch(updateAppletData(body));
+      Object.entries(body).forEach(([key, value]) => {
+        setAppletFormValue(key, value);
+      });
+    }
 
-    reset(defaultValues);
+    reset({ ...defaultValues, ...body });
   };
 
   const handleSaveActivityReportConfig = async () => {
-    const { itemValue, reportIncludedItemName } = getValues() ?? {};
-
-    const body = {
-      reportIncludedItemName: itemValue ? reportIncludedItemName : '',
-    };
+    const { itemValue, reportIncludedItemName: reportIncludedItemKey } = getValues() ?? {};
+    const selectedItem = activity?.items.find(
+      (item) => getEntityKey(item) === reportIncludedItemKey,
+    );
 
     await postActivityReportConfig({
       appletId: appletData?.id ?? '',
       activityId: activity?.id ?? '',
-      ...body,
+      reportIncludedItemName: itemValue && selectedItem ? selectedItem.name : '',
     });
 
-    dispatch(updateActivityData({ activityId: activity?.id, ...body }));
-    setAppletFormValue(`${activityFieldName}.reportIncludedItemName`, reportIncludedItemName);
-
-    reset(defaultValues);
+    const reportIncludedItemName = itemValue && reportIncludedItemKey ? reportIncludedItemKey : '';
+    await setAppletFormValue(`${activityFieldName}.reportIncludedItemName`, reportIncludedItemName);
+    reset({ ...defaultValues, itemValue, reportIncludedItemName });
   };
 
   const handleSaveActivityFlowReportConfig = async () => {
-    const { itemValue, reportIncludedActivityName, reportIncludedItemName } = getValues() ?? {};
-
-    const body = {
-      reportIncludedItemName: itemValue ? reportIncludedItemName : '',
-      reportIncludedActivityName: itemValue ? reportIncludedActivityName : '',
-    };
+    const {
+      itemValue,
+      reportIncludedActivityName: reportIncludedActivityKey,
+      reportIncludedItemName: reportIncludedItemKey,
+    } = getValues() ?? {};
+    const selectedItem = selectedActivity?.items.find(
+      (item) => getEntityKey(item) === reportIncludedItemKey,
+    );
 
     await postActivityFlowReportConfig({
       appletId: appletData?.id ?? '',
       activityFlowId: activityFlow?.id ?? '',
-      ...body,
+      reportIncludedActivityName: itemValue && selectedActivity ? selectedActivity.name : '',
+      reportIncludedItemName: itemValue && selectedItem ? selectedItem.name : '',
     });
 
-    dispatch(updateActivityFlowData({ flowId: activityFlow?.id, ...body }));
-    setAppletFormValue(`${flowFieldName}.reportIncludedActivityName`, reportIncludedActivityName);
-    setAppletFormValue(`${flowFieldName}.reportIncludedItemName`, reportIncludedItemName);
+    const reportIncludedActivityName =
+      itemValue && reportIncludedActivityKey ? reportIncludedActivityKey : '';
+    const reportIncludedItemName = itemValue && reportIncludedItemKey ? reportIncludedItemKey : '';
 
-    reset(defaultValues);
+    await setAppletFormValue(
+      `${flowFieldName}.reportIncludedActivityName`,
+      reportIncludedActivityName,
+    );
+    await setAppletFormValue(`${flowFieldName}.reportIncludedItemName`, reportIncludedItemName);
+    reset({ ...defaultValues, itemValue, reportIncludedActivityName, reportIncludedItemName });
   };
 
   const handleVerify = async () => {
@@ -324,16 +343,25 @@ export const ReportConfigSetting = ({
     cancelNavigation();
   };
 
+  const getActivityItems = () => {
+    if (isActivity) return activity?.items;
+    if (isActivityFlow) return selectedActivity?.items;
+
+    return null;
+  };
+  const itemName = getActivityItems()?.find((item) => getEntityKey(item) === reportIncludedItemName)
+    ?.name;
+
   const subjectDataProps = {
     setValue,
     appletName: appletData?.displayName,
     activityName: activity?.name,
     flowName: activityFlow?.name,
-    flowActivityName: reportIncludedActivity,
+    flowActivityName: selectedActivity?.name,
     respondentId: includeRespondentId,
     hasActivityItemValue: isActivity && itemValue,
     hasFlowItemValue: isActivityFlow && itemValue,
-    itemName: reportIncludedItemName,
+    itemName,
   };
 
   const handleDontSave = () => {
@@ -372,7 +400,14 @@ export const ReportConfigSetting = ({
 
   useEffect(() => {
     setSubjectData(subjectDataProps);
-  }, [appletData, includeRespondentId, itemValue, reportIncludedItemName, reportIncludedActivity]);
+  }, [
+    appletFormValues,
+    appletData,
+    includeRespondentId,
+    itemValue,
+    reportIncludedItemName,
+    reportIncludedActivity,
+  ]);
 
   useEffect(() => {
     dispatch(setReportConfigChanges({ hasChanges: isDirty || hasErrors }));
@@ -382,12 +417,14 @@ export const ReportConfigSetting = ({
     if (!saveChanges) return;
 
     handleSaveChanges();
+    dispatch(resetReportConfigChanges());
   }, [saveChanges]);
 
   useEffect(() => {
     if (!doNotSaveChanges) return;
 
     handleDontSave();
+    dispatch(resetReportConfigChanges());
   }, [doNotSaveChanges]);
 
   return (
@@ -530,7 +567,7 @@ export const ReportConfigSetting = ({
                     {...commonSelectProps}
                     name="reportIncludedActivityName"
                     label={t('activity')}
-                    options={getActivitiesOptions(activityFlow, appletData)}
+                    options={getActivitiesOptions(activityFlow, appletFormValues)}
                     customChange={handleActivityChange}
                     sx={{ mr: theme.spacing(2.4) }}
                     data-testid={`${dataTestid}-report-includes-activity-name`}

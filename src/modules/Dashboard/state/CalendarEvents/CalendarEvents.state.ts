@@ -1,14 +1,9 @@
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state';
 
 import { CalendarEventsSchema } from './CalendarEvents.schema';
 
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
-
 const visibilityStateData = {
-  ...base.state,
+  ...initialStateData,
   data: true,
 };
 

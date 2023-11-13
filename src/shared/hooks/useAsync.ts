@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
 
-import { ApiError } from 'redux/modules';
+import { ApiErrorResponse } from 'shared/state/Base';
 
 export const useAsync = <T, K>(
   asyncFunction: (args: T) => Promise<AxiosResponse<K>>,
@@ -11,7 +11,7 @@ export const useAsync = <T, K>(
   dependencies?: unknown[],
 ) => {
   const [value, setValue] = useState<AxiosResponse<K> | null>(null);
-  const [error, setError] = useState<AxiosError<ApiError> | null>(null);
+  const [error, setError] = useState<AxiosError<ApiErrorResponse> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const deps = dependencies ?? [];
 

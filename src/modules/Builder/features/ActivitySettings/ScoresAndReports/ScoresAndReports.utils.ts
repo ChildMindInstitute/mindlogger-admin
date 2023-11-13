@@ -41,7 +41,7 @@ export const getReportIndex = (reports: ScoreOrSection[], report: ScoreOrSection
     { index: 0, done: false },
   ).index;
 
-export const getTableScoreItems = (items: ItemFormValues[]) =>
+export const getTableScoreItems = (items?: ItemFormValues[]) =>
   items?.map((item) => ({
     id: getEntityKey(item),
     name: item.name,

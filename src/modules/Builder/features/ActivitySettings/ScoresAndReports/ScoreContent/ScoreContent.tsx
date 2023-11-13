@@ -63,9 +63,9 @@ export const ScoreContent = ({
   const scoreConditionalsName = `${name}.conditionalLogic`;
 
   const score = useWatch({ name });
-  const { name: scoreName, id: scoreId, calculationType, itemsScore } = score;
+  const { name: scoreName, id: scoreId, calculationType, itemsScore } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
-  const selectedItems = scoreItems?.filter((item) => itemsScore.includes(item.name));
+  const selectedItems = scoreItems?.filter((item) => itemsScore?.includes(item.name));
   const scoreRangeLabel = selectedItems?.length
     ? getScoreRangeLabel(getScoreRange(selectedItems, calculationType))
     : EMPTY_SCORE_RANGE_LABEL;

@@ -9,8 +9,8 @@ import {
   StyledBodyLarge,
   variables,
 } from 'shared/styles';
-import { useRespondentLabel } from 'modules/Dashboard/hooks';
 import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
+import { useRespondentLabel } from 'shared/hooks';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyledActivity } from './ReportMenu.styles';

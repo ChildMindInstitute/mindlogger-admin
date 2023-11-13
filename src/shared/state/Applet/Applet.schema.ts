@@ -232,8 +232,8 @@ type ABTrailsConfig = {
 
 export type SliderItemResponseValues = {
   id?: string;
-  minLabel: string;
-  maxLabel: string;
+  minLabel?: string;
+  maxLabel?: string;
   minValue: number | string;
   maxValue: number | string;
   minImage?: string;
@@ -616,15 +616,4 @@ export type SingleApplet = {
 
 export type AppletSchema = {
   applet: BaseSchema<{ result: SingleApplet } | null>;
-};
-
-export type UpdateActivityData = {
-  activityId?: string;
-  reportIncludedItemName?: string;
-};
-
-export type UpdateActivityFlowData = {
-  flowId?: string;
-  reportIncludedItemName?: string;
-  reportIncludedActivityName?: string;
 };

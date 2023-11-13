@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-admin",
-  "version": "0.45.0",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -80,7 +80,10 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build --project tsconfig.build.json",
-    "test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@uiw/react-md-editor)/\"",
+    "test": "react-app-rewired test",
+    "test:coverage": "npm run test --coverage --colors",
+    "test:nowatch": "CI=true npm run test --colors --watchAll=false",
+    "test:related": "test-related.sh",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
   },
@@ -89,6 +92,9 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest": {
+    "globalSetup": "./global-setup.js"
   },
   "browserslist": {
     "production": [

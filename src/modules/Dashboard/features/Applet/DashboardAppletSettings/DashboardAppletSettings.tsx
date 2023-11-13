@@ -23,6 +23,7 @@ export const DashboardAppletSettings = () => {
         isPublished: appletData?.isPublished,
         roles: appletRoles,
       })}
+      data-testid="dashboard-applet-settings"
     />
   ) : (
     <Spinner />

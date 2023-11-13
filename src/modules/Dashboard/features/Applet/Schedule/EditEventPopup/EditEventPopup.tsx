@@ -2,7 +2,7 @@ import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Modal, Svg } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType, Svg } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
 import { deleteEventApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
@@ -31,6 +31,7 @@ export const EditEventPopup = ({
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [isFormChanged, setIsFormChanged] = useState(false);
   const [isClosable, setIsClosable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { appletId, respondentId } = useParams();
   const dispatch = useAppDispatch();
   const dataTestid = 'dashboard-calendar-edit-event';
@@ -40,13 +41,17 @@ export const EditEventPopup = ({
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
-  const { execute: removeEvent } = useAsync(
+  const { execute: removeEvent, isLoading: removeEventIsLoading } = useAsync(
     deleteEventApi,
     () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
   );
 
   const handleFormChanged = (isChanged: boolean) => {
     setIsFormChanged(isChanged);
+  };
+
+  const handleFormIsLoading = (isLoading: boolean) => {
+    setIsLoading(isLoading);
   };
 
   const onSubmit = () => {
@@ -118,11 +123,12 @@ export const EditEventPopup = ({
           title={t('editActivitySchedule')}
           buttonText={t('save')}
           width="67.1"
-          disabledSubmit={!!editedEvent && !isFormChanged}
+          disabledSubmit={(!!editedEvent && !isFormChanged) || isLoading}
           onTransitionEntered={handleTransitionEntered}
           data-testid={`${dataTestid}-popup`}
         >
           <>
+            {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
             <StyledContainer>
               <StyledButton
                 variant="outlined"
@@ -143,6 +149,7 @@ export const EditEventPopup = ({
               setActivityName={setCurrentActivityName}
               editedEvent={editedEvent}
               defaultStartDate={defaultStartDate}
+              onFormIsLoading={handleFormIsLoading}
               onFormChange={handleFormChanged}
               data-testid={`${dataTestid}-popup-form`}
             />
@@ -155,6 +162,7 @@ export const EditEventPopup = ({
           onClose={onRemoveScheduledEventClose}
           onSubmit={handleRemoveEvent}
           activityName={currentActivityName}
+          isLoading={removeEventIsLoading}
           data-testid={`${dataTestid}-remove-scheduled-event-popup`}
         />
       )}
@@ -164,6 +172,7 @@ export const EditEventPopup = ({
           onClose={handleRemoveAllScheduledClose}
           onSubmit={handleRemoveAllScheduledSubmit}
           activityName={currentActivityName}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-remove-all-scheduled-events-popup`}
         />
       )}
@@ -173,6 +182,7 @@ export const EditEventPopup = ({
           onClose={handleRemoveAlwaysAvailableClose}
           onSubmit={handleRemoveAlwaysAvailableSubmit}
           activityName={currentActivityName}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-confirm-scheduled-access-popup`}
         />
       )}

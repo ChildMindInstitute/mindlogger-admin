@@ -168,7 +168,7 @@ export type EditRespondent = {
   appletId: string;
   values: {
     secretUserId: string;
-    nickname: string;
+    nickname?: string;
   };
 };
 
@@ -285,7 +285,7 @@ export type SummaryAnswers = AppletId & {
 
 export type Identifier = {
   identifier: string;
-  userPublicKey: string;
+  userPublicKey: string | null;
 };
 
 export type NoteId = { noteId: string };

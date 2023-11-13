@@ -131,6 +131,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
                 endAdornment={
                   <InputAdornment position="end">
                     <StyledCloseButton
+                      data-testid="folder-clear-button"
                       onMouseDown={(event) => {
                         event.preventDefault();
                         handleClearClick();
@@ -157,6 +158,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
           items={getActions(folder, handleRenameFolder, onDeleteFolder)}
           context={item}
           visibleByDefault={hasVisibleActions}
+          data-testid="dashboard-applets-table-folder-actions"
         />
       </StyledTableCell>
     </TableRow>

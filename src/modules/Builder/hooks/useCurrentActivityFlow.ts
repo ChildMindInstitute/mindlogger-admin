@@ -16,7 +16,7 @@ export const useCurrentActivityFlow = () => {
     (activityFlow: ActivityFlowFormValues) => getEntityKey(activityFlow) === activityFlowId,
   );
 
-  if (!~flowIndex) return {};
+  if (typeof flowIndex !== 'number' || !~flowIndex) return {};
 
   return {
     activityFlow: activityFlows[flowIndex],
