@@ -3,7 +3,6 @@ import { ItemResponseType } from 'shared/consts';
 import {
   ActivitySettingsSubscale,
   SliderItemResponseValues,
-  TextInputConfig,
 } from 'shared/state/Applet/Applet.schema';
 import { getObjectFromList } from 'shared/utils';
 import {
@@ -455,11 +454,7 @@ export const formatActivityItemAnswers = (
       ];
 
       return {
-        activityItem: {
-          ...formattedActivityItem,
-          responseDataIdentifier: (currentActivityItem.config as TextInputConfig) // TODO: need to remove the type cast and check config for ItemResponseType.Time
-            .responseDataIdentifier,
-        },
+        activityItem: formattedActivityItem,
         answers,
       };
     }
