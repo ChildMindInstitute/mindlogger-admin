@@ -24,7 +24,7 @@ describe('TransferOwnership', () => {
     render(transferOwnershipComponent);
   });
 
-  test('transfers ownership on form submission with invalid email', async () => {
+  test('not transfers ownership on form submission with invalid email', async () => {
     const { getByTestId } = render(transferOwnershipComponent);
     fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'invalid@email' } });
     fireEvent.submit(getByTestId(dataTestid));
