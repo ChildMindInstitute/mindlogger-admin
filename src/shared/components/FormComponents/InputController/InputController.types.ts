@@ -15,13 +15,12 @@ export type FormInputProps = {
   maxLength?: number;
   minNumberValue?: number;
   maxNumberValue?: number;
-  isEmptyStringAllowed?: boolean;
   isErrorVisible?: boolean;
   restrictExceededValueLength?: boolean;
   onArrowPress?: (value: number) => void;
   Counter?: FC<PropsWithChildren<CounterProps>>;
   counterProps?: Record<string, unknown>;
-  withDebounce?: boolean;
+  hintText?: string;
   'data-testid'?: string;
 } & TextFieldProps;
 

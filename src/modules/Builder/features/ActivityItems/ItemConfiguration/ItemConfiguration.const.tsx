@@ -12,18 +12,13 @@ import { ItemsOptionGroup } from './ItemConfiguration.types';
 export const DEFAULT_TIMER_VALUE = 100;
 export const DEFAULT_DISABLED_TIMER_VALUE = 0;
 export const DEFAULT_SCORE_VALUE = 0;
-export const DEFAULT_MIN_NUMBER = 1;
 export const DEFAULT_MAX_NUMBER = 30;
-export const SLIDER_LABEL_MAX_LENGTH = 11;
-export const SLIDER_VALUE_LABEL_MAX_LENGTH = 20;
 export const SELECT_OPTION_TEXT_MAX_LENGTH = 75;
 export const DEFAULT_SLIDER_SCORE = createArray(DEFAULT_SLIDER_MAX_VALUE + 1, (i: number) => i + 1);
 export const DEFAULT_SLIDER_ROWS_SCORE = createArray(
   DEFAULT_SLIDER_MAX_VALUE,
   (i: number) => i + 1,
 );
-export const DEFAULT_NUMBER_MIN_VALUE = 0;
-export const DEFAULT_NUMBER_MAX_VALUE = 1;
 
 export const DEFAULT_EMPTY_SLIDER = {
   minValue: DEFAULT_SLIDER_MIN_NUMBER,

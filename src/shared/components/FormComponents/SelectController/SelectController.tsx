@@ -32,6 +32,7 @@ export const SelectController = <T extends FieldValues>({
   disabled,
   sx,
   dropdownStyles,
+  isErrorVisible = true,
   'data-testid': dataTestid,
   ...props
 }: SelectControllerProps<T>) => {
@@ -122,7 +123,7 @@ export const SelectController = <T extends FieldValues>({
         onChange={onChange}
         value={selectValue}
         error={!!error || providedError}
-        helperText={error?.message || null}
+        helperText={isErrorVisible ? error?.message || null : ''}
         disabled={disabled}
         SelectProps={{
           MenuProps: {

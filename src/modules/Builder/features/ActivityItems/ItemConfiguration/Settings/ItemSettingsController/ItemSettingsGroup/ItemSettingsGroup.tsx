@@ -15,6 +15,7 @@ import {
   SingleAndMultipleSelectRow,
   SliderRowsItemResponseValues,
 } from 'shared/state';
+import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 
 import {
   StyledFormControl,
@@ -36,11 +37,7 @@ import {
   DEFAULT_SCORE_VALUE,
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
-import {
-  checkIfItemHasRequiredOptions,
-  getDefaultSliderScores,
-  getEmptyAlert,
-} from '../../../ItemConfiguration.utils';
+import { checkIfItemHasRequiredOptions, getEmptyAlert } from '../../../ItemConfiguration.utils';
 
 export const ItemSettingsGroup = ({
   name,

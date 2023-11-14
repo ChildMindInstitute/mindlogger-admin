@@ -2,7 +2,7 @@ import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
-import { TestContext } from 'yup';
+import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { page } from 'resources';
@@ -81,6 +81,12 @@ import {
   FlowReportFieldsPrepareType,
   getEntityReportFields,
 } from 'modules/Builder/utils';
+import {
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_SLIDER_MAX_NUMBER,
+  DEFAULT_SLIDER_MIN_NUMBER,
+  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
+} from 'modules/Builder/consts';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,
@@ -988,7 +994,7 @@ export const testFunctionForUniqueness = (value: string, items: { name: string }
 export const testFunctionForTheSameVariable = (
   field: string,
   value: string,
-  context: TestContext,
+  context: yup.TestContext,
 ) => {
   const itemName = get(context, 'parent.name');
   const variableNames = getTextBetweenBrackets(value);
@@ -996,7 +1002,7 @@ export const testFunctionForTheSameVariable = (
   return !variableNames.includes(itemName);
 };
 
-export const testFunctionForNotSupportedItems = (value: string, context: TestContext) => {
+export const testFunctionForNotSupportedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
   const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
@@ -1004,14 +1010,14 @@ export const testFunctionForNotSupportedItems = (value: string, context: TestCon
   return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };
 
-export const testFunctionForSkippedItems = (value: string, context: TestContext) => {
+export const testFunctionForSkippedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
 
   return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
 };
 
-export const testFunctionForNotExistedItems = (value: string, context: TestContext) => {
+export const testFunctionForNotExistedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
 
@@ -1064,3 +1070,60 @@ export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormV
 
 export const getRegexForIndexedField = (fieldName: string) =>
   new RegExp(`\\[(\\d+)\\].${fieldName}$`);
+
+export const isNumberTest = (value?: unknown) => typeof value === 'number' || value === undefined;
+export const isNumberAtLeastOne = (value?: unknown) =>
+  typeof value === 'number' && value >= DEFAULT_MIN_NUMBER;
+
+export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') => {
+  const isSlider = type === 'slider';
+  const minNumber = isSlider ? DEFAULT_SLIDER_MIN_NUMBER : DEFAULT_SLIDER_ROWS_MIN_NUMBER;
+
+  return {
+    minValue: yup
+      .mixed()
+      .test('is-number', t('positiveIntegerRequired'), isNumberTest)
+      .test('min-max-interval', t('selectValidInterval'), function (value) {
+        if (!value && value !== 0) return;
+        const { maxValue } = this.parent;
+
+        return value < maxValue && value >= minNumber && value < DEFAULT_SLIDER_MAX_NUMBER;
+      }),
+    maxValue: yup
+      .mixed()
+      .test('is-number', t('positiveIntegerRequired'), isNumberTest)
+      .test('min-max-interval', t('selectValidInterval'), function (value) {
+        if (!value && value !== 0) return;
+        const { minValue } = this.parent;
+
+        return value > minValue && value > minNumber && value <= DEFAULT_SLIDER_MAX_NUMBER;
+      }),
+    ...(isSlider && {
+      scores: yup
+        .array()
+        .of(
+          yup
+            .mixed()
+            .test('is-number', t('numberValueIsRequired'), isNumberTest)
+            .required(t('numberValueIsRequired')),
+        )
+        .nullable(),
+    }),
+  };
+};
+
+export const getSliderAlertValueValidation = (isContinuous: boolean) =>
+  yup
+    .mixed()
+    .test('is-number', t('selectValueWithinInterval'), isNumberTest)
+    .test('min-max-interval', t('selectValueWithinInterval'), function (value) {
+      if (!value && value !== 0) return;
+      const { minValue, maxValue } = this.from?.[1]?.value?.responseValues || {};
+      const isWithinInterval = value >= minValue && value <= maxValue;
+
+      if (!isContinuous) return isWithinInterval;
+
+      const { minValue: minAlertValue, maxValue: maxAlertValue } = this.parent || {};
+
+      return isWithinInterval && maxAlertValue > minAlertValue;
+    });
