@@ -9,7 +9,7 @@ import { transferOwnershipApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyLarge, theme } from 'shared/styles';
-import { EMAIL_REGEXP } from 'shared/consts';
+import { getEmailValidationSchema } from 'shared/utils';
 
 import { StyledInputWrapper } from './TransferOwnership.styles';
 import {
@@ -36,10 +36,7 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
       useForm<TransferOwnershipFormValues>({
         resolver: yupResolver(
           yup.object({
-            email: yup
-              .string()
-              .required(t('emailRequired')!)
-              .matches(EMAIL_REGEXP, t('incorrectEmail')!),
+            email: getEmailValidationSchema(),
           }),
         ),
         defaultValues,
