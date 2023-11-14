@@ -37,12 +37,4 @@ export const workspaces = {
     ),
   useWorkspacesRolesData: (): WorkspacesSchema['workspacesRoles']['data'] =>
     useAppSelector(({ workspaces: { workspacesRoles } }) => workspacesRoles?.data),
-  useWorkspacesRolesResponseStatus: (): MetaStatus =>
-    useAppSelector(
-      ({
-        workspaces: {
-          workspacesRoles: { status },
-        },
-      }) => status,
-    ),
 };
