@@ -126,7 +126,10 @@ export const SelectController = <T extends FieldValues>({
         disabled={disabled}
         SelectProps={{
           MenuProps: {
-            PaperProps: { sx: { ...selectDropdownStyles, ...dropdownStyles } },
+            PaperProps: {
+              sx: { ...selectDropdownStyles, ...dropdownStyles },
+              'data-testid': `${dataTestid}-dropdown`,
+            },
           },
           IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
         }}
