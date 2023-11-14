@@ -96,10 +96,20 @@ const getReportData = (
 const checkIfDrawingMediaConditionPassed = (
   item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
 ) => item.activityItem?.responseType === ItemResponseType.Drawing && item.answer;
+const shouldConvertPrivateDrawingUrl = (
+  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
+) => checkIfDrawingMediaConditionPassed(item) && (item.answer as DecryptedDrawingAnswer).value.uri;
 const checkIfNotMediaItem = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
   !ItemsWithFileResponses.includes(item.activityItem?.responseType) || !item.answer;
-const getDrawingUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
-  (item.answer as DecryptedDrawingAnswer).value.uri;
+const getDrawingUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) => {
+  const drawingAnswer = item.answer as DecryptedDrawingAnswer;
+  if (drawingAnswer.value.uri) return drawingAnswer.value.uri;
+
+  const blob = new Blob([drawingAnswer.value.svgString], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+
+  return url;
+};
 const getMediaUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>) =>
   (item.answer as DecryptedMediaAnswer)?.value || '';
 
@@ -110,7 +120,7 @@ const getAnswersWithPublicUrls = async (
 
   const privateUrls = parsedAnswers.reduce((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce((urlsAcc, item) => {
-      if (checkIfDrawingMediaConditionPassed(item)) {
+      if (shouldConvertPrivateDrawingUrl(item)) {
         return urlsAcc.concat(getDrawingUrl(item));
       }
       if (checkIfNotMediaItem(item)) return urlsAcc;
@@ -134,7 +144,7 @@ const getAnswersWithPublicUrls = async (
 
   return parsedAnswers.reduce((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce((decryptedAnswersAcc, item) => {
-      if (checkIfDrawingMediaConditionPassed(item)) {
+      if (shouldConvertPrivateDrawingUrl(item)) {
         return decryptedAnswersAcc.concat({
           ...item,
           answer: {

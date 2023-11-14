@@ -14,6 +14,7 @@ export type EventFormProps = {
   setRemoveAlwaysAvailablePopupVisible: Dispatch<SetStateAction<boolean>>;
   setActivityName: Dispatch<SetStateAction<string>>;
   defaultStartDate: Date;
+  onFormIsLoading: (isLoading: boolean) => void;
   editedEvent?: CalendarEvent;
   onFormChange?: (isChanged: boolean) => void;
   'data-testid'?: string;

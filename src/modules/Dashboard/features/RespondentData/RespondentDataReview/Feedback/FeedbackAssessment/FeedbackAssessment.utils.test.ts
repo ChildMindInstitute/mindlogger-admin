@@ -1,3 +1,7 @@
+import { format } from 'date-fns';
+
+import { DateFormats } from 'shared/consts';
+
 import { formatToNumberArray, hasAnswerValue, getUpdatedValues } from './FeedbackAssessment.utils';
 
 const multiSelectWithoutAnswersNonEdited = { itemId: 'item1', answers: [], edited: null };
@@ -79,9 +83,18 @@ describe('getUpdatedValues', () => {
     const prevItemIds: string[] = ['item1'];
     const updatedItemIds: string[] = [];
 
-    const result = getUpdatedValues(defaultValues, currentItem, prevItemIds, updatedItemIds);
+    const { edited, itemIds } = getUpdatedValues(
+      defaultValues,
+      currentItem,
+      prevItemIds,
+      updatedItemIds,
+    );
 
-    expect(result).toEqual({ edited: new Date().getTime(), itemIds: ['item1'] });
+    const editedDate = format(new Date(edited as number), DateFormats.MonthDayTime);
+    const expectedDate = format(new Date(), DateFormats.MonthDayTime);
+
+    expect(editedDate).toEqual(expectedDate);
+    expect(itemIds).toEqual(['item1']);
   });
 
   test('should return values for a single selection/slider item when answers are the same(skipped) and has not been edited before', () => {
@@ -129,15 +142,21 @@ describe('getUpdatedValues', () => {
   });
 
   test('should return values for a single selection/slider item when answers are different and has been edited before', () => {
-    // const defaultValues = [{ itemId: 'item1', answers: 3, edited: 1697703435095 }];
-    // const prevItemIds: string[] = ['item1'];
-    // const updatedItemIds: string[] = [];
-    // const result = getUpdatedValues(
-    //   defaultValues,
-    //   singleSelectWithAnswersNonEdited,
-    //   prevItemIds,
-    //   updatedItemIds,
-    // );
-    // expect(result).toEqual({ edited: new Date().getTime(), itemIds: ['item1'] });
+    const defaultValues = [{ itemId: 'item1', answers: 3, edited: 1697703435095 }];
+    const prevItemIds: string[] = ['item1'];
+    const updatedItemIds: string[] = [];
+
+    const { edited, itemIds } = getUpdatedValues(
+      defaultValues,
+      singleSelectWithAnswersNonEdited,
+      prevItemIds,
+      updatedItemIds,
+    );
+
+    const editedDate = format(new Date(edited as number), DateFormats.MonthDayTime);
+    const expectedDate = format(new Date(), DateFormats.MonthDayTime);
+
+    expect(editedDate).toEqual(expectedDate);
+    expect(itemIds).toEqual(['item1']);
   });
 });

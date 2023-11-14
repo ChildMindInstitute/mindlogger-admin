@@ -10,17 +10,13 @@ import {
   mockedRespondentId,
   mockedRespondent,
 } from 'shared/mock';
-import { base } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
+import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
 
 import { Respondents } from './Respondents';
 
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 const route = `/dashboard/${mockedAppletId}/respondents`;
 const routePath = page.appletRespondents;
 const preloadedState = {
@@ -89,15 +85,16 @@ describe('Respondents component tests', () => {
   });
 
   test('should render table with respondents', async () => {
-    // mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
-    // renderWithProviders(<Respondents />, { preloadedState, route, routePath });
-    // const tableColumnNames = ['Secret User ID', 'Nickname', 'Latest active', 'Schedule', 'Actions'];
-    // const respondentColumns = ['MockedSecretId', 'Mocked Respondent', 'Default Schedule'];
-    // await waitFor(() => {
-    //   expect(screen.getByTestId('dashboard-respondents-table')).toBeInTheDocument();
-    //   tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
-    //   respondentColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
-    // });
+    mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
+    renderWithProviders(<Respondents />, { preloadedState, route, routePath });
+    const tableColumnNames = ['Secret User ID', 'Nickname', 'Latest active', 'Schedule', 'Actions'];
+    const respondentColumns = ['mockedSecretId', 'Mocked Respondent', 'Default Schedule'];
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dashboard-respondents-table')).toBeInTheDocument();
+      tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
+      respondentColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
+    });
   });
 
   test('should pin respondent', async () => {

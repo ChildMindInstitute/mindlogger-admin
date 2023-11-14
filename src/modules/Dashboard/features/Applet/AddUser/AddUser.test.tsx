@@ -4,16 +4,11 @@ import mockAxios from 'jest-mock-axios';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedEmail, mockedCurrentWorkspace } from 'shared/mock';
 import { page } from 'resources';
-import { base } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
+import { initialStateData } from 'shared/state';
 
 import { AddUser } from './AddUser';
 
-// TODO: move initialStateData to shared
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 const route = `/dashboard/${mockedAppletId}/add-user`;
 const routePath = page.appletAddUser;
 const preloadedState = {
@@ -53,7 +48,8 @@ describe('AddUser component tests', () => {
   test('AddUser should submit form and get invitations', async () => {
     let callCount = 0;
     mockAxios.post.mockResolvedValueOnce(null);
-    // @ts-expect-error TODO: fix type
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     mockAxios.get.mockImplementation((url: string) => {
       if (url === '/invitations') {
         callCount += 1;

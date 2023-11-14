@@ -1,8 +1,6 @@
 import { screen } from '@testing-library/react';
-import * as routerDom from 'react-router-dom';
 import { format } from 'date-fns';
 
-import { base } from 'shared/state/Base';
 import {
   mockedApplet,
   mockedAppletId,
@@ -12,14 +10,11 @@ import {
 } from 'shared/mock';
 import { DateFormats, Roles } from 'shared/consts';
 import { renderWithProviders } from 'shared/utils';
+import { page } from 'resources';
+import { initialStateData } from 'shared/state';
 
 import { InvitationsTable } from './InvitationsTable';
 import { InvitationsTableProps } from './InvitationsTable.types';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 const preloadedState = {
   workspaces: {
@@ -45,21 +40,20 @@ const preloadedState = {
   },
 };
 
+const route = `/dashboard/${mockedAppletId}/add-user`;
+const routePath = page.appletAddUser;
+
 const defaultProps: InvitationsTableProps = {
   invitations: mockedInvitation,
   setInvitations: jest.fn(),
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
-}));
-
 describe('InvitationsTable', () => {
   test('Render empty InvitationsTable', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
     renderWithProviders(<InvitationsTable invitations={null} setInvitations={jest.fn()} />, {
       preloadedState,
+      route,
+      routePath,
     });
 
     expect(screen.queryByTestId('dashboard-add-users-table')).not.toBeInTheDocument();
@@ -67,9 +61,10 @@ describe('InvitationsTable', () => {
   });
 
   test('InvitationsTable for Editor', () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
     renderWithProviders(<InvitationsTable {...defaultProps} />, {
       preloadedState,
+      route,
+      routePath,
     });
 
     const tableColumnNames = [

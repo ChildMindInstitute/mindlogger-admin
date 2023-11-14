@@ -1,5 +1,4 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 
 import { Chip } from './Chip';
 
@@ -14,8 +13,8 @@ describe('Chip component tests', () => {
 
   test('remove button click calls onRemove', () => {
     const handleRemove = jest.fn();
-    render(<Chip title="Removable Chip" onRemove={handleRemove} canRemove />);
-    fireEvent.click(screen.getByTestId('close-icon'));
+    render(<Chip title="Removable Chip" data-testid="chip" onRemove={handleRemove} canRemove />);
+    fireEvent.click(screen.getByTestId('chip-close-button'));
     expect(handleRemove).toHaveBeenCalledTimes(1);
   });
 });

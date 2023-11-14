@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
 
 import { ConfirmScheduledAccessPopupProps } from './ConfirmScheduledAccess.types';
@@ -10,6 +10,7 @@ export const ConfirmScheduledAccessPopup = ({
   onClose,
   onSubmit,
   activityName,
+  isLoading,
 }: ConfirmScheduledAccessPopupProps) => {
   const { t } = useTranslation();
 
@@ -23,18 +24,22 @@ export const ConfirmScheduledAccessPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
+      disabledSubmit={isLoading}
       data-testid="dashboard-calendar-confirm-scheduled-access-popup"
     >
-      <StyledModalWrapper>
-        <Trans i18nKey="confirmChangeOnScheduledAccess">
-          Activity
-          <strong>
-            <> {{ activityName }} </>
-          </strong>
-          will no longer be always available, and the Activity will be a scheduled event. Are you
-          sure you want to continue?
-        </Trans>
-      </StyledModalWrapper>
+      <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        <StyledModalWrapper>
+          <Trans i18nKey="confirmChangeOnScheduledAccess">
+            Activity
+            <strong>
+              <> {{ activityName }} </>
+            </strong>
+            will no longer be always available, and the Activity will be a scheduled event. Are you
+            sure you want to continue?
+          </Trans>
+        </StyledModalWrapper>
+      </>
     </Modal>
   );
 };

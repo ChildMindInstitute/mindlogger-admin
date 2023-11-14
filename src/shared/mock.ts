@@ -399,6 +399,87 @@ export const mockedManager = {
   ],
 };
 
+export const mockedSingleSelectFormValues = {
+  id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
+  name: 'Item1',
+  responseType: 'singleSelect',
+  responseValues: {
+    options: [
+      {
+        id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
+        text: 's1',
+        score: 2,
+        value: 0,
+      },
+      {
+        id: 'e3ca9405-71e9-4627-8311-d405f383246e',
+        text: 's23333333',
+        score: 4,
+        value: 1,
+      },
+    ],
+  },
+  order: 1,
+};
+
+export const mockedMultiSelectFormValues = {
+  id: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
+  name: 'Item2',
+  responseType: 'multiSelect',
+  responseValues: {
+    options: [
+      {
+        id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
+        text: 'm1',
+        score: 1,
+        value: 0,
+      },
+      {
+        id: '188fc535-1e45-444d-88ec-91cb29737b03',
+        text: 'm2',
+        score: 1,
+        value: 1,
+      },
+      {
+        id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
+        text: 'm3',
+        score: 1,
+        value: 2,
+      },
+    ],
+  },
+  order: 2,
+};
+
+export const mockedSliderFormValues = {
+  id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
+  name: 'Item3',
+  responseType: 'slider',
+  responseValues: {
+    minLabel: 'min',
+    maxLabel: 'max',
+    minValue: 1,
+    maxValue: 4,
+  },
+  order: 3,
+};
+
+export const mockedTimeFormValues = {
+  id: '4b334484-947b-4287-941c-ed4cbf0dc955',
+  name: 'Item4',
+  responseType: 'time',
+  responseValues: null,
+  order: 4,
+};
+
+export const mockedTextFormValues = {
+  id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
+  name: 'Item5',
+  responseType: 'text',
+  responseValues: null,
+  order: 5,
+};
+
 export const mockedInvitation = {
   result: [
     {
@@ -427,82 +508,11 @@ export const mockedAppletFormData = {
       name: 'New Activity',
       id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
       items: [
-        {
-          id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
-          name: 'Item1',
-          responseType: 'singleSelect',
-          responseValues: {
-            options: [
-              {
-                id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
-                text: 's1',
-                score: 2,
-                value: 0,
-              },
-              {
-                id: 'e3ca9405-71e9-4627-8311-d405f383246e',
-                text: 's23333333',
-                score: 4,
-                value: 1,
-              },
-            ],
-          },
-          order: 1,
-        },
-        {
-          id: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
-          name: 'Item2',
-          responseType: 'multiSelect',
-          responseValues: {
-            options: [
-              {
-                id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
-                text: 'm1',
-                score: 1,
-                value: 0,
-              },
-              {
-                id: '188fc535-1e45-444d-88ec-91cb29737b03',
-                text: 'm2',
-                score: 1,
-                value: 1,
-              },
-              {
-                id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
-                text: 'm3',
-                score: 1,
-                value: 2,
-              },
-            ],
-          },
-          order: 2,
-        },
-        {
-          id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
-          name: 'Item3',
-          responseType: 'slider',
-          responseValues: {
-            minLabel: 'min',
-            maxLabel: 'max',
-            minValue: 1,
-            maxValue: 4,
-          },
-          order: 3,
-        },
-        {
-          id: '4b334484-947b-4287-941c-ed4cbf0dc955',
-          name: 'Item4',
-          responseType: 'time',
-          responseValues: null,
-          order: 4,
-        },
-        {
-          id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
-          name: 'Item5',
-          responseType: 'text',
-          responseValues: null,
-          order: 5,
-        },
+        mockedSingleSelectFormValues,
+        mockedMultiSelectFormValues,
+        mockedSliderFormValues,
+        mockedTimeFormValues,
+        mockedTextFormValues,
       ],
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
@@ -613,6 +623,7 @@ export const mockedSingleActivityItem = {
   allowEdit: true,
   id: 'ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
 };
+
 export const mockedMultiActivityItem = {
   question: 'multi [[single_text_score]]',
   responseType: ItemResponseType.MultipleSelection,
@@ -664,6 +675,7 @@ export const mockedMultiActivityItem = {
   allowEdit: true,
   id: '63b765ff-73aa-453f-8d0d-fc7bca72fd1f',
 };
+
 export const mockedSliderActivityItem = {
   question: 'slider [[multi_text_score]]',
   responseType: 'slider',
@@ -697,6 +709,7 @@ export const mockedSliderActivityItem = {
   allowEdit: true,
   id: '29788e14-4118-47d5-b29e-f22263259e0f',
 };
+
 export const mockedDateActivityItem = {
   question: 'date [[slider_text_score]]',
   responseType: 'date',
@@ -716,6 +729,7 @@ export const mockedDateActivityItem = {
   allowEdit: true,
   id: '4b2c282b-4597-44d9-aefb-d8ccc927c50b',
 };
+
 export const mockedNumberSelectActivityItem = {
   question: 'number_selection_text \n[[date_text]]',
   responseType: 'numberSelect',
@@ -737,6 +751,7 @@ export const mockedNumberSelectActivityItem = {
   allowEdit: true,
   id: '1b50376d-d4c7-4bd5-8dfc-bab04e2e1ab5',
 };
+
 export const mockedTimeActivityItem = {
   question: 'time_text [[number_selection_text]]',
   responseType: 'time',
@@ -756,6 +771,7 @@ export const mockedTimeActivityItem = {
   allowEdit: true,
   id: '396c7e8d-6599-4258-8c3e-3ef91205292b',
 };
+
 export const mockedTimeRangeActivityItem = {
   question: 'time_range_text',
   responseType: 'timeRange',
@@ -775,6 +791,7 @@ export const mockedTimeRangeActivityItem = {
   allowEdit: true,
   id: 'c551530e-c718-43ea-a045-287211bee95e',
 };
+
 export const mockedSingleSelectRowsActivityItem = {
   question: 'single_row_score [[time_range_text]]',
   responseType: 'singleSelectRows',
@@ -836,6 +853,7 @@ export const mockedSingleSelectRowsActivityItem = {
   allowEdit: true,
   id: '7daf4dce-d323-4c64-9e13-e843283fa280',
 };
+
 export const mockedMultiSelectRowsActivityItem = {
   question: 'multi_row_score',
   responseType: 'multiSelectRows',
@@ -897,6 +915,7 @@ export const mockedMultiSelectRowsActivityItem = {
   allowEdit: true,
   id: 'f81599a0-bd06-4453-8ea7-2c2a51aa510e',
 };
+
 export const mockedSliderRowsActivityItem = {
   question: 'slider_row_score',
   responseType: 'sliderRows',
@@ -929,6 +948,7 @@ export const mockedSliderRowsActivityItem = {
   allowEdit: true,
   id: '9361e8b1-2fd8-42b3-8f28-a3d7150334bb',
 };
+
 export const mockedTextActivityItem = {
   question: 'text',
   responseType: 'text',
@@ -950,6 +970,7 @@ export const mockedTextActivityItem = {
   allowEdit: true,
   id: '5bad6e4a-7035-4ddd-9c54-375604025a1f',
 };
+
 export const mockedDrawingActivityItem = {
   question: 'drawing_text [[text]]',
   responseType: 'drawing',
@@ -976,6 +997,7 @@ export const mockedDrawingActivityItem = {
   allowEdit: true,
   id: 'ebc231b0-4a1c-4717-99de-0504b04d0e25',
 };
+
 export const mockedPhotoActivityItem = {
   question: 'photo_text',
   responseType: 'photo',
@@ -995,6 +1017,7 @@ export const mockedPhotoActivityItem = {
   allowEdit: true,
   id: '129a20df-5330-494c-8c4c-eb3c7847fe95',
 };
+
 export const mockedVideoActivityItem = {
   question: 'video_text',
   responseType: 'video',
@@ -1014,6 +1037,7 @@ export const mockedVideoActivityItem = {
   allowEdit: true,
   id: 'b66763bc-2890-46db-9e55-8dc43829c9c6',
 };
+
 export const mockedAudioActivityItem = {
   question: 'audio_text',
   responseType: 'audio',
@@ -1035,6 +1059,7 @@ export const mockedAudioActivityItem = {
   allowEdit: true,
   id: '2a56ef07-18ed-4102-8a5d-be69edf12968',
 };
+
 export const mockedMessageActivityItem = {
   question: 'message ',
   responseType: 'message',
@@ -1049,6 +1074,7 @@ export const mockedMessageActivityItem = {
   allowEdit: true,
   id: '2f317638-d0a7-42ed-961f-e701d340aa03',
 };
+
 export const mockedAudioPlayerActivityItem = {
   question: 'audio_player_text',
   responseType: 'audioPlayer',
@@ -1070,6 +1096,7 @@ export const mockedAudioPlayerActivityItem = {
   allowEdit: true,
   id: 'e171deee-b161-4140-9dae-77c70765c031',
 };
+
 export const mockedExportContextItemData = {
   id: '949f248c-1a4b-4a35-a5a2-898dfef72050',
   submitId: 'becbb3e7-3e29-4b27-a224-85ee4db54c86',

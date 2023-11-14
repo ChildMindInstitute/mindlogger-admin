@@ -11,7 +11,7 @@ import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
-import { getErrorMessage, Mixpanel, navigateToLibrary } from 'shared/utils';
+import { Mixpanel, navigateToLibrary } from 'shared/utils';
 import { variables } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
 
@@ -50,7 +50,7 @@ export const LoginForm = () => {
     }
 
     if (signIn.rejected.match(result)) {
-      setErrorMessage(getErrorMessage(result.payload));
+      setErrorMessage(result.payload as string);
     }
   };
 

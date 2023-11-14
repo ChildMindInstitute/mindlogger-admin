@@ -8,6 +8,7 @@ const mockOnSecondBtnSubmit = jest.fn();
 const mockOnThirdBtnSubmit = jest.fn();
 
 const commonProps = {
+  'data-testid': 'modal-test-id',
   onClose: mockOnClose,
   open: true,
   title: 'Modal Title',
@@ -36,7 +37,7 @@ describe('Modal Component', () => {
   test('clicking the close button triggers onClose', async () => {
     render(<Modal {...commonProps} />);
 
-    fireEvent.click(screen.getByTestId('modal-close-btn'));
+    fireEvent.click(screen.getByTestId(`${commonProps['data-testid']}-close-button`));
     await waitFor(() => {
       expect(mockOnClose).toHaveBeenCalled();
     });
@@ -45,7 +46,7 @@ describe('Modal Component', () => {
   test('clicking the submit button triggers onSubmit', async () => {
     render(<Modal {...commonProps} />);
 
-    fireEvent.click(screen.getByTestId('modal-submit-btn'));
+    fireEvent.click(screen.getByTestId(`${commonProps['data-testid']}-submit-button`));
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalled();
     });

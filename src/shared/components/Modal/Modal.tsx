@@ -57,7 +57,7 @@ export const Modal = ({
         disabled={disabledSubmit}
         onClick={onSubmit}
         color={submitBtnColor}
-        data-testid="modal-submit-btn"
+        data-testid={`${dataTestId}-submit-button`}
       >
         {buttonText}
       </StyledButton>
@@ -89,7 +89,7 @@ export const Modal = ({
       <StyledModalContent>
         <StyledDialogTitle align={titleAlign}>
           {title}
-          <StyledCloseButton onClick={onClose} data-testid="modal-close-btn">
+          <StyledCloseButton onClick={onClose} data-testid={`${dataTestId}-close-button`}>
             <Svg id="cross" />
           </StyledCloseButton>
         </StyledDialogTitle>

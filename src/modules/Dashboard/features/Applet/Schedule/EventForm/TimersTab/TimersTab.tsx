@@ -17,7 +17,7 @@ export const TimersTab = ({ 'data-testid': dataTestid }: TimersTabProps) => {
   const activeTimer = watch('timerType');
 
   const handleSetTimerType = (timerType: string | number) =>
-    setValue('timerType', timerType as TimerType);
+    setValue('timerType', timerType as TimerType, { shouldDirty: true });
 
   return (
     <>

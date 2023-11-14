@@ -42,7 +42,11 @@ export const SearchPopup = ({
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const { ownerId } = workspaces.useData() || {};
-  const { execute: createIndividualEvents, error } = useAsync(createIndividualEventsApi, () => {
+  const {
+    execute: createIndividualEvents,
+    error,
+    isLoading,
+  } = useAsync(createIndividualEventsApi, () => {
     if (!appletId) return;
     selectedRespondent &&
       dispatch(applets.thunk.getEvents({ appletId, respondentId: selectedRespondent.id }));
@@ -175,6 +179,7 @@ export const SearchPopup = ({
           onSubmit={handleAddIndividualScheduleSubmit}
           respondentName={respondentName}
           error={error ? getErrorMessage(error) : null}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-add-inividual-schedule-popup`}
         />
       )}

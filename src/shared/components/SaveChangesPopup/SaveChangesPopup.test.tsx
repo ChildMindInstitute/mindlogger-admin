@@ -11,13 +11,14 @@ const commonProps = {
   onDontSave: mockOnDontSave,
   onCancel: mockOnCancel,
   onSave: mockOnSave,
+  'data-testid': 'save-changes-popup',
 };
 
 describe('SaveChangesPopup component tests', () => {
   test('closes when the cancel button is clicked', () => {
     render(<SaveChangesPopup {...commonProps} />);
 
-    fireEvent.click(screen.getByText('Cancel'));
+    fireEvent.click(screen.getByText(/cancel/i));
     expect(mockOnCancel).toHaveBeenCalled();
   });
 
@@ -31,7 +32,7 @@ describe('SaveChangesPopup component tests', () => {
   test('triggers onSave when the save button is clicked', () => {
     render(<SaveChangesPopup {...commonProps} />);
 
-    fireEvent.click(screen.getByText('Save'));
+    fireEvent.click(screen.getByTestId(`${commonProps['data-testid']}-save-button`));
     expect(mockOnSave).toHaveBeenCalled();
   });
 });
