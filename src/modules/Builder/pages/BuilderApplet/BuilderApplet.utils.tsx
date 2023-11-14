@@ -229,15 +229,19 @@ const getDuplicatedScoresAndReports = (
   const reports = scoresAndReports?.reports?.map((report) => {
     let conditionalLogic;
     if (report.type === ScoreReportType.Section) {
-      const scoreReports = scoresAndReports?.reports.filter(
-        ({ type }) => type === ScoreReportType.Score,
-      ) as ScoreReport[];
-      const scoreConditionals = scoreReports.reduce(
-        (scoreConditionals: ScoreConditionalLogic[], score: ScoreReport) => [
-          ...scoreConditionals,
-          ...(score.conditionalLogic || []),
-        ],
-        [],
+      const { scoreReports, scoreConditionals } = (scoresAndReports?.reports || []).reduce(
+        (
+          result: { scoreReports: ScoreReport[]; scoreConditionals: ScoreConditionalLogic[] },
+          report,
+        ) => {
+          if (report.type === ScoreReportType.Score) {
+            result.scoreReports.push(report);
+            result.scoreConditionals.push(...(report.conditionalLogic || []));
+          }
+
+          return result;
+        },
+        { scoreReports: [], scoreConditionals: [] },
       );
       conditionalLogic = report.conditionalLogic && {
         ...report.conditionalLogic,
