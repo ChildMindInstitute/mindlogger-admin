@@ -37,4 +37,5 @@ export type GetSection = {
   section: SectionReport;
   items: ActivityFormValues['items'];
   scores?: ScoreReport[];
+  itemsObjectById: Record<string, ItemFormValues>;
 };
