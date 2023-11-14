@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 
-import { ItemResponseType, Roles } from './consts';
+import { CalculationType, ItemResponseType, Roles, ScoreReportType } from './consts';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -1109,4 +1109,45 @@ export const mockedExportContextItemData = {
   flowId: null,
   activityName: 'New Activity#1',
   subscaleSetting: null,
+};
+
+export const mockedScoreReport = {
+  type: ScoreReportType.Score,
+  name: 'firstScore',
+  id: 'sumScore_firstscore',
+  key: '5bad6e4a-7035-4ddd-9c54-375604025a',
+  calculationType: CalculationType.Sum,
+  itemsScore: ['multiple', 'slider'],
+  showMessage: true,
+  message: 'message [[sumScore_firstscore]]',
+  printItems: false,
+  itemsPrint: [],
+  conditionalLogic: [
+    {
+      name: 'cnsdsd',
+      id: 'sumScore_firstscore_cnsdsd',
+      flagScore: false,
+      showMessage: true,
+      message: 'message',
+      printItems: false,
+      itemsPrint: [],
+      match: 'all',
+      conditions: [
+        {
+          itemName: 'sumScore_firstscore',
+          type: 'EQUAL',
+          payload: {
+            value: 0,
+          },
+        },
+        {
+          itemName: 'sumScore_firstscore',
+          type: 'LESS_THAN',
+          payload: {
+            value: 2,
+          },
+        },
+      ],
+    },
+  ],
 };
