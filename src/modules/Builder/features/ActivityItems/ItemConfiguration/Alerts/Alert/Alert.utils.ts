@@ -9,9 +9,9 @@ import {
 } from 'shared/state';
 import { createArray, groupBy } from 'shared/utils';
 import { Option } from 'shared/components/FormComponents';
+import { DEFAULT_SLIDER_MAX_NUMBER, DEFAULT_SLIDER_ROWS_MIN_NUMBER } from 'modules/Builder/consts';
 
 import { OptionTypes } from './Alert.types';
-import { DEFAULT_SLIDER_MAX_NUMBER, DEFAULT_SLIDER_ROWS_MIN_NUMBER } from '../../../../../consts';
 
 const getOptionName = (type: OptionTypes, index: number, optionText = '') => {
   const { t } = i18n;
