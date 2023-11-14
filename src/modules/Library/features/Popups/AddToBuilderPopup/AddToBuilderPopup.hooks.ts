@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react';
 
 import { getWorkspacesApi, getWorkspaceRolesApi } from 'api';
-import { useAsync } from 'shared/hooks';
 import { WorkspaceWithRoles } from 'redux/modules';
 import { isManagerOrOwnerOrEditor } from 'shared/utils';
 
 export const useWorkspaceList = () => {
   const [workspaces, setWorkspaces] = useState<WorkspaceWithRoles[]>([]);
   const [isLoading, setLoading] = useState(true);
-
-  const { execute: getWorkspaces } = useAsync(getWorkspacesApi);
-  const { execute: getWorkspacesRoles } = useAsync(getWorkspaceRolesApi);
 
   const getWorkspaceWithRole = async ({
     ownerId,
@@ -19,7 +15,7 @@ export const useWorkspaceList = () => {
     ownerId: string;
     workspaceName?: string;
   }) => {
-    const { data } = await getWorkspacesRoles({ ownerId });
+    const { data } = await getWorkspaceRolesApi({ ownerId });
 
     return {
       ownerId,
@@ -32,7 +28,7 @@ export const useWorkspaceList = () => {
     setLoading(true);
 
     try {
-      const { data: workspacesData = [] } = await getWorkspaces(undefined);
+      const { data: workspacesData = [] } = await getWorkspacesApi();
 
       const workspacesRoles = await Promise.all(
         ownerId

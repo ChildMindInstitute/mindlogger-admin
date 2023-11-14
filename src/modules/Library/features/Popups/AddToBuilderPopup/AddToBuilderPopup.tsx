@@ -108,6 +108,11 @@ export const AddToBuilderPopup = ({
     }
 
     if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
+      const hasAccess = await checkIfHasAccessToWorkspace(ownerId);
+      if (!hasAccess) {
+        return setStep(AddToBuilderSteps.AccessError);
+      }
+
       await handleAddToBuilder(false, ownerId, null);
     }
 
@@ -119,20 +124,22 @@ export const AddToBuilderPopup = ({
       return setStep(AddToBuilderSteps.Error);
     }
 
-    const hasAccessToWorkspace = await checkIfHasAccessToWorkspace(ownerId);
-    if (!hasAccessToWorkspace) {
-      return setStep(AddToBuilderSteps.AccessError);
-    }
+    if (workspaces.length > 1) {
+      const hasAccessToWorkspace = await checkIfHasAccessToWorkspace(ownerId);
+      if (!hasAccessToWorkspace) {
+        return setStep(AddToBuilderSteps.AccessError);
+      }
 
-    const { data } = await getWorkspaceApplets({
-      params: { ownerId, limit: MAX_LIMIT, flatList: true },
-    });
-    const applets = getArrayFromApplets(data?.result);
+      const { data } = await getWorkspaceApplets({
+        params: { ownerId, limit: MAX_LIMIT, flatList: true },
+      });
+      const applets = getArrayFromApplets(data?.result);
 
-    if (!applets.some((applet) => applet.id === selectedApplet)) {
-      setAppletAccessError(true);
+      if (!applets.some((applet) => applet.id === selectedApplet)) {
+        setAppletAccessError(true);
 
-      return setStep(AddToBuilderSteps.AccessError);
+        return setStep(AddToBuilderSteps.AccessError);
+      }
     }
 
     await handleAddToBuilder(true, ownerId, selectedApplet);
