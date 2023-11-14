@@ -8,7 +8,7 @@ import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
 import { SingleApplet, workspaces as workspacesState } from 'shared/state';
 import { useAsync, useNetwork } from 'shared/hooks';
-import { authStorage, isManagerOrOwnerOrEditor, Path } from 'shared/utils';
+import { authStorage, Path } from 'shared/utils';
 import { MAX_LIMIT } from 'shared/consts';
 import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
@@ -26,6 +26,7 @@ import {
 import { getArrayFromApplets, getSteps } from './AddToBuilderPopup.utils';
 import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
 import { StyledContainer } from './AddToBuilderPopup.styles';
+import { useWorkspaceList } from './AddToBuilderPopup.hooks';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,
@@ -37,21 +38,17 @@ export const AddToBuilderPopup = ({
   const isOnline = useNetwork();
   const handleClearCart = useClearCart();
   const [applets, setApplets] = useState<Applet[]>([]);
-  const workspacesWithRoles = workspacesState.useWorkspacesRolesData();
-  const workspaces =
-    workspacesWithRoles?.filter(
-      (workspace) =>
-        Object.keys(workspace.workspaceRoles).length === 0 || //in case there are no applets yet in the main Workspace
-        Object.values(workspace.workspaceRoles).some((roles) => isManagerOrOwnerOrEditor(roles[0])),
-    ) || [];
+  const [hasAppletAccessError, setAppletAccessError] = useState(false);
+  const {
+    workspaces,
+    isLoading: isWorkspacesLoading,
+    checkIfHasAccessToWorkspace,
+  } = useWorkspaceList();
+
   const currentWorkspace = workspacesState.useData();
   const { result: cartItems } = library.useCartApplets() || {};
   const isWorkspacesModalVisible = workspaces.length > 1;
-  const [step, setStep] = useState(
-    isWorkspacesModalVisible
-      ? AddToBuilderSteps.SelectWorkspace
-      : AddToBuilderSteps.AddToBuilderActions,
-  );
+  const [step, setStep] = useState(AddToBuilderSteps.LoadingWorkspaces);
 
   const validationSchema = addToBuilderPopupSchema();
   const { trigger, control, getValues, setValue } = useForm<AddToBuilderForm>({
@@ -105,6 +102,11 @@ export const AddToBuilderPopup = ({
       return setStep(AddToBuilderSteps.Error);
     }
 
+    const hasAccess = await checkIfHasAccessToWorkspace(ownerId);
+    if (!hasAccess) {
+      return setStep(AddToBuilderSteps.AccessError);
+    }
+
     if (addToBuilderAction === AddToBuilderActions.CreateNewApplet) {
       await handleAddToBuilder(false, ownerId, null);
     }
@@ -115,6 +117,22 @@ export const AddToBuilderPopup = ({
     const { selectedWorkspace: ownerId, selectedApplet } = getValues();
     if (!isOnline || !ownerId || !selectedApplet) {
       return setStep(AddToBuilderSteps.Error);
+    }
+
+    const hasAccessToWorkspace = await checkIfHasAccessToWorkspace(ownerId);
+    if (!hasAccessToWorkspace) {
+      return setStep(AddToBuilderSteps.AccessError);
+    }
+
+    const { data } = await getWorkspaceApplets({
+      params: { ownerId, limit: MAX_LIMIT, flatList: true },
+    });
+    const applets = getArrayFromApplets(data?.result);
+
+    if (!applets.some((applet) => applet.id === selectedApplet)) {
+      setAppletAccessError(true);
+
+      return setStep(AddToBuilderSteps.AccessError);
     }
 
     await handleAddToBuilder(true, ownerId, selectedApplet);
@@ -142,6 +160,7 @@ export const AddToBuilderPopup = ({
       getSteps({
         control,
         isWorkspacesModalVisible,
+        hasAppletAccessError,
         workspaces,
         applets,
         setStep,
@@ -155,8 +174,16 @@ export const AddToBuilderPopup = ({
   );
 
   useEffect(() => {
-    if (workspaces.length === 1) setValue('selectedWorkspace', workspaces[0].ownerId);
-  }, [workspaces]);
+    if (step !== AddToBuilderSteps.LoadingWorkspaces || isWorkspacesLoading) return;
+
+    if (workspaces.length === 1) {
+      setValue('selectedWorkspace', workspaces[0].ownerId);
+
+      return setStep(AddToBuilderSteps.AddToBuilderActions);
+    }
+
+    setStep(AddToBuilderSteps.SelectWorkspace);
+  }, [workspaces, isWorkspacesLoading]);
 
   useEffect(() => {
     if (step === AddToBuilderSteps.AddToBuilderActions) {
@@ -167,6 +194,9 @@ export const AddToBuilderPopup = ({
       });
     }
   }, [step]);
+
+  const isSpinnerVisible =
+    isLoading || (isWorkspacesLoading && step !== AddToBuilderSteps.LoadingWorkspaces);
 
   return (
     <Modal
@@ -181,7 +211,7 @@ export const AddToBuilderPopup = ({
       data-testid="library-cart-add-to-builder-popup"
     >
       <>
-        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        {isSpinnerVisible && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
           <StyledContainer>{steps[step].render()}</StyledContainer>
         </StyledModalWrapper>
