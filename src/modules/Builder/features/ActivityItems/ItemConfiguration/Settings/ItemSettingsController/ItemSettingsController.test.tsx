@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import get from 'lodash.get';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -26,6 +26,13 @@ const getMockedAppletFormData = (item) => ({
   ...mockedAppletFormData,
   activities: [{ ...mockedAppletFormData.activities[0], items: [item] }],
 });
+const expandAllPanels = () => {
+  const collapseButtons = document.querySelectorAll('.svg-navigate-down');
+
+  collapseButtons.forEach((button) => {
+    fireEvent.click(button);
+  });
+};
 
 const mockedSingleSelectWithTextInputRequired = {
   ...mockedSingleSelectFormValues,
@@ -367,28 +374,26 @@ describe('ItemSettingsController', () => {
     ${ItemResponseType.Message}                 | ${'settings and order for Message are correct'}
     ${ItemResponseType.AudioPlayer}             | ${'settings and order for AudioPlayer are correct'}
     ${ItemResponseType.Time}                    | ${'settings and order for Time are correct'}
-  `('$description', async ({ inputType }) => {
-    const container = renderWithAppletFormData({
+  `('$description', ({ inputType }) => {
+    renderWithAppletFormData({
       children: <ItemSettingsController itemName="" inputType={inputType} name="" />,
     });
 
-    const collapseButtons = container.container.querySelectorAll('.svg-navigate-down');
-
-    await Promise.all([...collapseButtons].map(async (button) => await fireEvent.click(button)));
+    expandAllPanels();
 
     const mockedSettings = mockedSettingsByType[inputType];
-    const settings = container.container.querySelectorAll(
+    const settings = document.querySelectorAll(
       'label[data-testid^="builder-activity-items-item-settings"]',
     );
 
     expect(settings.length).toEqual(mockedSettings.length);
 
-    [...settings].map(async (setting, index) => {
+    settings.forEach((setting, index) => {
       const mockedSetting = mockedSettings[index];
 
-      expect(
-        await container.findByTestId(`builder-activity-items-item-settings-${mockedSetting}`),
-      ).toEqual(setting);
+      expect(screen.getByTestId(`builder-activity-items-item-settings-${mockedSetting}`)).toEqual(
+        setting,
+      );
     });
   });
 
@@ -412,25 +417,23 @@ describe('ItemSettingsController', () => {
     ${ItemResponseType.Message}                 | ${'setting groups and order for Message are correct'}
     ${ItemResponseType.AudioPlayer}             | ${'setting groups and order for AudioPlayer are correct'}
     ${ItemResponseType.Time}                    | ${'setting groups and order for Time are correct'}
-  `('$description', async ({ inputType }) => {
-    const container = renderWithAppletFormData({
+  `('$description', ({ inputType }) => {
+    renderWithAppletFormData({
       children: <ItemSettingsController itemName="" inputType={inputType} name="" />,
     });
 
     const mockedGroups = mockedSettingGroupsByType[inputType];
-    const groups = container.queryAllByTestId((content) =>
+    const groups = screen.queryAllByTestId((content) =>
       content.startsWith('builder-activity-items-item-settings-group-container'),
     );
 
     expect(groups.length).toEqual(mockedGroups.length);
 
-    [...groups].map(async (group, index) => {
+    groups.forEach((group, index) => {
       const mockedGroup = mockedGroups[index];
 
       expect(
-        await container.findByTestId(
-          `builder-activity-items-item-settings-group-container-${mockedGroup}`,
-        ),
+        screen.getByTestId(`builder-activity-items-item-settings-group-container-${mockedGroup}`),
       ).toEqual(group);
     });
   });
@@ -457,10 +460,10 @@ describe('ItemSettingsController', () => {
     ${ItemConfigurationSettings.IsPlayAudioOnce}           | ${mockedAudioPlayerFormValues}  | ${'IsPlayAudioOnce set data in config correctly'}
     ${ItemConfigurationSettings.IsUndoRemoved}             | ${mockedDrawingFormValues}      | ${'IsUndoRemoved set data in config correctly'}
     ${ItemConfigurationSettings.IsNavigationMovedToTheTop} | ${mockedDrawingFormValues}      | ${'IsNavigationMovedToTheTop set data in config correctly'}
-  `('$description', async ({ settingKey, item }) => {
+  `('$description', ({ settingKey, item }) => {
     const ref = createRef();
 
-    const container = renderWithAppletFormData({
+    renderWithAppletFormData({
       formRef: ref,
       children: (
         <ItemSettingsController
@@ -472,26 +475,22 @@ describe('ItemSettingsController', () => {
       appletFormData: getMockedAppletFormData(item),
     });
 
-    const collapseButtons = container.container.querySelectorAll('.svg-navigate-down');
+    expandAllPanels();
 
-    await Promise.all([...collapseButtons].map(async (button) => await fireEvent.click(button)));
-
-    const setting = await container.findByTestId(
-      `builder-activity-items-item-settings-${settingKey}`,
-    );
+    const setting = screen.getByTestId(`builder-activity-items-item-settings-${settingKey}`);
 
     const prevValue = get(item, `config.${settingKey}`);
 
     if (settingKey === ItemConfigurationSettings.IsTextInputRequired) {
       expect(setting.querySelector('input')).toHaveAttribute('disabled');
 
-      const textInputOption = await container.findByTestId(
+      const textInputOption = screen.getByTestId(
         `builder-activity-items-item-settings-${ItemConfigurationSettings.HasTextInput}`,
       );
-      await fireEvent.click(textInputOption);
+      fireEvent.click(textInputOption);
     }
 
-    await fireEvent.click(setting);
+    fireEvent.click(setting);
 
     const changedItemConfig = ref.current?.getValues('activities.0.items.0.config');
 
@@ -529,10 +528,10 @@ describe('ItemSettingsController', () => {
     ${ItemConfigurationSettings.HasAlerts}               | ${'activities.0.items.0.alerts.0.sliderId'}                                 | ${mockedSliderRowsFormValues}              | ${undefined}                                              | ${''}                                                     | ${'opting in HasAlerts sets "sliderId" prop for alerts for sliderrows correctly'}
     ${ItemConfigurationSettings.HasAlerts}               | ${'activities.0.items.0.alerts.0.value'}                                    | ${mockedSliderRowsFormValues}              | ${undefined}                                              | ${''}                                                     | ${'opting in HasAlerts sets "value" prop for alerts for sliderrows correctly'}
     ${ItemConfigurationSettings.HasAlerts}               | ${'activities.0.items.0.alerts'}                                            | ${mockedSliderRowsFormValuesWithAlerts}    | ${mockedSliderRowsFormValuesWithAlerts.alerts}            | ${undefined}                                              | ${'opting out HasAlerts sets alerts as undefined for sliderrows'}
-  `('$description', async ({ settingKey, propToCheck, prevValue, item, expected }) => {
+  `('$description', ({ settingKey, propToCheck, prevValue, item, expected }) => {
     const ref = createRef();
 
-    const container = renderWithAppletFormData({
+    renderWithAppletFormData({
       formRef: ref,
       children: (
         <ItemSettingsController
@@ -550,15 +549,11 @@ describe('ItemSettingsController', () => {
 
     expect(initialValue).toEqual(prevValue);
 
-    const collapseButtons = container.container.querySelectorAll('.svg-navigate-down');
+    expandAllPanels();
 
-    await Promise.all([...collapseButtons].map(async (button) => await fireEvent.click(button)));
+    const setting = screen.getByTestId(`builder-activity-items-item-settings-${settingKey}`);
 
-    const setting = await container.findByTestId(
-      `builder-activity-items-item-settings-${settingKey}`,
-    );
-
-    await fireEvent.click(setting);
+    fireEvent.click(setting);
 
     const changedValue = getValues(propToCheck);
     expect(changedValue).toStrictEqual(expected);
@@ -586,8 +581,8 @@ describe('ItemSettingsController', () => {
     ${ItemConfigurationSettings.IsPlayAudioOnce}           | ${mockedAudioPlayerFormValues}  | ${true}  | ${'IsPlayAudioOnce has tooltip'}
     ${ItemConfigurationSettings.IsUndoRemoved}             | ${mockedDrawingFormValues}      | ${true}  | ${'IsUndoRemoved has tooltip'}
     ${ItemConfigurationSettings.IsNavigationMovedToTheTop} | ${mockedDrawingFormValues}      | ${true}  | ${'IsNavigationMovedToTheTop has tooltip'}
-  `('$description', async ({ settingKey, item, expected }) => {
-    const container = renderWithAppletFormData({
+  `('$description', ({ settingKey, item, expected }) => {
+    renderWithAppletFormData({
       children: (
         <ItemSettingsController
           itemName="activities.0.items.0"
@@ -598,20 +593,16 @@ describe('ItemSettingsController', () => {
       appletFormData: getMockedAppletFormData(item),
     });
 
-    const collapseButtons = container.container.querySelectorAll('.svg-navigate-down');
+    expandAllPanels();
 
-    await Promise.all([...collapseButtons].map(async (button) => await fireEvent.click(button)));
-
-    const setting = await container.findByTestId(
-      `builder-activity-items-item-settings-${settingKey}`,
-    );
+    const setting = screen.getByTestId(`builder-activity-items-item-settings-${settingKey}`);
     const tooltip = setting.querySelector('.svg-more-info-outlined');
 
     expected ? expect(tooltip).toBeInTheDocument() : expect(tooltip).not.toBeInTheDocument();
   });
 
-  test('HasTimer: renders additional number input', async () => {
-    const container = renderWithAppletFormData({
+  test('HasTimer: renders additional number input', () => {
+    renderWithAppletFormData({
       children: (
         <ItemSettingsController
           itemName="activities.0.items.0"
@@ -621,11 +612,9 @@ describe('ItemSettingsController', () => {
       ),
     });
 
-    const collapseButtons = container.container.querySelectorAll('.svg-navigate-down');
+    expandAllPanels();
 
-    await Promise.all([...collapseButtons].map(async (button) => await fireEvent.click(button)));
-
-    const timerInput = await container.findByTestId(
+    const timerInput = screen.getByTestId(
       `builder-activity-items-item-settings-${ItemConfigurationSettings.HasTimer}-input`,
     );
 
@@ -637,10 +626,10 @@ describe('ItemSettingsController', () => {
     ${'manual'} | ${200}   | ${'HasTimer: manual input sets correct value'}
     ${'inc'}    | ${101}   | ${'HasTimer: increment sets correct value'}
     ${'dec'}    | ${99}    | ${'HasTimer: decrement sets correct value'}
-  `('$description', async ({ action, expected }) => {
+  `('$description', ({ action, expected }) => {
     const ref = createRef();
 
-    const container = renderWithAppletFormData({
+    renderWithAppletFormData({
       children: (
         <ItemSettingsController
           itemName="activities.0.items.0"
@@ -651,16 +640,14 @@ describe('ItemSettingsController', () => {
       formRef: ref,
     });
 
-    const collapseButtons = container.container.querySelectorAll('.svg-navigate-down');
+    expandAllPanels();
 
-    await Promise.all([...collapseButtons].map(async (button) => await fireEvent.click(button)));
-
-    const timerSetting = await container.findByTestId(
+    const timerSetting = screen.getByTestId(
       `builder-activity-items-item-settings-${ItemConfigurationSettings.HasTimer}`,
     );
-    await fireEvent.click(timerSetting);
+    fireEvent.click(timerSetting);
 
-    const timerInput = await container.findByTestId(
+    const timerInput = screen.getByTestId(
       `builder-activity-items-item-settings-${ItemConfigurationSettings.HasTimer}-input`,
     );
     const input = timerInput.querySelector('input');
@@ -668,12 +655,12 @@ describe('ItemSettingsController', () => {
     const decrement = timerInput.querySelector('button:last-child');
 
     const mockedEventByAction = {
-      manual: async () => await fireEvent.change(input, { target: { value: 200 } }),
-      inc: async () => await fireEvent.click(increment),
-      dec: async () => await fireEvent.click(decrement),
+      manual: () => fireEvent.change(input, { target: { value: 200 } }),
+      inc: () => fireEvent.click(increment),
+      dec: () => fireEvent.click(decrement),
     };
 
-    await mockedEventByAction[action]();
+    mockedEventByAction[action]();
 
     expect(
       ref.current.getValues(`activities.0.items.0.config.${ItemConfigurationSettings.HasTimer}`),
