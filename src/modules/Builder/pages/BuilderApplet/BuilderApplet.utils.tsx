@@ -21,6 +21,7 @@ import {
   NumberItemResponseValues,
   OptionCondition,
   ScoreCondition,
+  ScoreConditionalLogic,
   ScoreReport,
   ScoresAndReports,
   SectionReport,
@@ -158,13 +159,24 @@ export const getDuplicatedConditions = (
   oldItems: ItemFormValues[],
   newItems: Record<string, unknown>[],
   conditions?: Condition[],
+  scores?: ScoreReport[],
+  scoreConditionalLogic?: ScoreConditionalLogic[],
 ) =>
   conditions?.map((condition) => {
     const optionValue = (condition as OptionCondition)?.payload.optionValue;
     const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
+    const score = scores?.find((score) => condition.itemName === getEntityKey(score, false));
+    const scoreCondition = scoreConditionalLogic?.find(
+      (scoreCondition) => condition.itemName === getEntityKey(scoreCondition, false),
+    );
+    const itemName =
+      (getEntityKey(newItems[itemIndex]) ||
+        (score && getEntityKey(score, false)) ||
+        (scoreCondition && getEntityKey(scoreCondition, false))) ??
+      '';
     const result = {
       ...condition,
-      itemName: getEntityKey(newItems[itemIndex]) ?? '',
+      itemName,
       key: uuidv4(),
     };
 
@@ -215,17 +227,31 @@ const getDuplicatedScoresAndReports = (
   scoresAndReports?: ScoresAndReports,
 ) => {
   const reports = scoresAndReports?.reports?.map((report) => {
-    const conditionalLogic =
-      report.type === ScoreReportType.Score
-        ? report.conditionalLogic
-        : report.conditionalLogic && {
-            ...report.conditionalLogic,
-            conditions: getDuplicatedConditions(
-              oldItems,
-              newItems,
-              report.conditionalLogic?.conditions,
-            ),
-          };
+    let conditionalLogic;
+    if (report.type === ScoreReportType.Section) {
+      const scoreReports = scoresAndReports?.reports.filter(
+        ({ type }) => type === ScoreReportType.Score,
+      ) as ScoreReport[];
+      const scoreConditionals = scoreReports.reduce(
+        (scoreConditionals: ScoreConditionalLogic[], score: ScoreReport) => [
+          ...scoreConditionals,
+          ...(score.conditionalLogic || []),
+        ],
+        [],
+      );
+      conditionalLogic = report.conditionalLogic && {
+        ...report.conditionalLogic,
+        conditions: getDuplicatedConditions(
+          oldItems,
+          newItems,
+          report.conditionalLogic?.conditions,
+          scoreReports,
+          scoreConditionals,
+        ),
+      };
+    } else {
+      conditionalLogic = report.conditionalLogic;
+    }
 
     return {
       ...report,
