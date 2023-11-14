@@ -159,56 +159,56 @@ describe('Condition', () => {
     jest.clearAllMocks();
   });
 
-  test('empty condition is rendered', async () => {
-    const container = renderWithAppletFormData({
+  test('empty condition is rendered', () => {
+    renderWithAppletFormData({
       children: <Condition {...mockedPropsForEmptyCondition} />,
     });
 
-    expect(await container.findByTestId('empty-condition')).toBeInTheDocument();
+    expect(screen.getByTestId('empty-condition')).toBeInTheDocument();
   });
 
-  test('condition has default fields', async () => {
-    const container = renderWithAppletFormData({
+  test('condition has default fields', () => {
+    renderWithAppletFormData({
       children: <Condition {...mockedPropsForEmptyCondition} />,
     });
 
-    expect(await container.findByTestId('empty-condition-name')).toBeInTheDocument();
-    expect(await container.findByTestId('empty-condition-type')).toBeInTheDocument();
-    expect(await container.findByTestId('empty-condition-selection-value')).toBeInTheDocument();
-    expect(await container.queryByTestId('empty-condition-remove')).not.toBeInTheDocument();
+    expect(screen.getByTestId('empty-condition-name')).toBeInTheDocument();
+    expect(screen.getByTestId('empty-condition-type')).toBeInTheDocument();
+    expect(screen.getByTestId('empty-condition-selection-value')).toBeInTheDocument();
+    expect(screen.queryByTestId('empty-condition-remove')).not.toBeInTheDocument();
   });
 
-  test('empty condition has remove button if isRemoveVisible is true', async () => {
-    const container = renderWithAppletFormData({
+  test('empty condition has remove button if isRemoveVisible is true', () => {
+    renderWithAppletFormData({
       children: <Condition {...mockedPropsForEmptyCondition} isRemoveVisible />,
     });
 
-    expect(await container.findByTestId('empty-condition-remove')).toBeInTheDocument();
+    expect(screen.getByTestId('empty-condition-remove')).toBeInTheDocument();
   });
 
-  test('onRemove callback is invoked after click remove button', async () => {
-    const container = renderWithAppletFormData({
+  test('onRemove callback is invoked after click remove button', () => {
+    renderWithAppletFormData({
       children: <Condition {...mockedPropsForEmptyCondition} isRemoveVisible />,
     });
 
-    const removeButton = await container.findByTestId('empty-condition-remove');
+    const removeButton = screen.getByTestId('empty-condition-remove');
 
     fireEvent.click(removeButton);
 
     expect(mockedRemove).toBeCalled();
   });
 
-  test('empty condition has filled in with item name options', async () => {
-    const container = renderWithAppletFormData({
+  test('empty condition has filled in with item name options', () => {
+    renderWithAppletFormData({
       children: <Condition {...mockedPropsForEmptyCondition} />,
     });
 
-    const itemNameSelect = await container.getByTestId('empty-condition-name');
+    const itemNameSelect = screen.getByTestId('empty-condition-name');
     const itemNameSelectButton = itemNameSelect.querySelector('[role="button"]');
 
-    await fireEvent.mouseDown(itemNameSelectButton!);
+    fireEvent.mouseDown(itemNameSelectButton!);
 
-    const itemNameDropdown = await screen.findByTestId('empty-condition-name-dropdown');
+    const itemNameDropdown = screen.getByTestId('empty-condition-name-dropdown');
     expect(itemNameDropdown).toBeInTheDocument();
 
     const itemNameDropdownOptions = itemNameDropdown.querySelectorAll('li');
@@ -222,17 +222,17 @@ describe('Condition', () => {
     testId               | description
     ${'type'}            | ${'empty condition has no state options'}
     ${'selection-value'} | ${'empty condition has no value options'}
-  `('$description', async ({ testId }) => {
-    const container = renderWithAppletFormData({
+  `('$description', ({ testId }) => {
+    renderWithAppletFormData({
       children: <Condition {...mockedPropsForEmptyCondition} />,
     });
 
-    const select = await container.getByTestId(`empty-condition-${testId}`);
+    const select = screen.getByTestId(`empty-condition-${testId}`);
     const selectButton = select.querySelector('[role="button"]');
 
-    await fireEvent.mouseDown(selectButton);
+    fireEvent.mouseDown(selectButton);
 
-    const selectDropdown = await container.getByTestId(`empty-condition-${testId}-dropdown`);
+    const selectDropdown = screen.getByTestId(`empty-condition-${testId}-dropdown`);
     const options = selectDropdown.querySelectorAll('li');
 
     expect(options.length).toBe(0);
@@ -245,8 +245,8 @@ describe('Condition', () => {
     ${mockedMultiSelectFormValues.id}  | ${ConditionItemType.MultiSelection}  | ${mockedPropsForEmptyCondition.itemOptions} | ${'condition state options for multiSelection should be includesOption/notIncludesOption'}
     ${mockedScoreConditionId}          | ${ConditionItemType.ScoreCondition}  | ${mockedScoreConditionOptions}              | ${'condition state options for scoreCondition should be equal'}
     ${mockedScoreId}                   | ${ConditionItemType.Score}           | ${mockedScoreOptions}                       | ${'condition state options for score should be greaterThan/lessThan/equal/notEqual/between/outsideOf'}
-  `('$description', async ({ item, type, itemOptions }) => {
-    const container = renderWithAppletFormData({
+  `('$description', ({ item, type, itemOptions }) => {
+    renderWithAppletFormData({
       children: (
         <Condition
           {...mockedPropsForEmptyCondition}
@@ -258,23 +258,23 @@ describe('Condition', () => {
     });
 
     if (type !== ConditionItemType.Score) {
-      const selectItem = await container.getByTestId('empty-condition-name');
+      const selectItem = screen.getByTestId('empty-condition-name');
       const selectItemButton = selectItem.querySelector('[role="button"]');
 
-      await fireEvent.mouseDown(selectItemButton);
+      fireEvent.mouseDown(selectItemButton);
 
-      const selectItemDropdown = await container.getByTestId('empty-condition-name-dropdown');
+      const selectItemDropdown = screen.getByTestId('empty-condition-name-dropdown');
       const itemSelectOptions = selectItemDropdown.querySelectorAll('li');
 
-      await fireEvent.click([...itemSelectOptions].find((option) => option.dataset.value === item));
+      fireEvent.click([...itemSelectOptions].find((option) => option.dataset.value === item));
     }
 
-    const selectState = await container.getByTestId('empty-condition-type');
+    const selectState = screen.getByTestId('empty-condition-type');
     const selectStateButton = selectState.querySelector('[role="button"]');
 
-    await fireEvent.mouseDown(selectStateButton);
+    fireEvent.mouseDown(selectStateButton);
 
-    const selectStateDropdown = await container.getByTestId('empty-condition-type-dropdown');
+    const selectStateDropdown = screen.getByTestId('empty-condition-type-dropdown');
     const selectStateOptions = selectStateDropdown.querySelectorAll('li');
 
     selectStateOptions.forEach((stateOption, index) => {
@@ -286,20 +286,20 @@ describe('Condition', () => {
     testId    | handler                 | description
     ${'name'} | ${mockedItemNameChange} | ${'onItemChange should be invoked if item name is changed'}
     ${'type'} | ${mockedStateChange}    | ${'onStateChange should be invoked if state is changed'}
-  `('$description', async ({ testId, handler }) => {
-    const container = renderWithAppletFormData({
+  `('$description', ({ testId, handler }) => {
+    renderWithAppletFormData({
       children: <Condition {...mockedPropsForEditingCondition} />,
     });
 
-    const select = await container.getByTestId(`editing-condition-${testId}`);
+    const select = screen.getByTestId(`editing-condition-${testId}`);
     const selectButton = select.querySelector('[role="button"]');
 
-    await fireEvent.mouseDown(selectButton);
+    fireEvent.mouseDown(selectButton);
 
-    const selectDropdown = await container.getByTestId(`editing-condition-${testId}-dropdown`);
+    const selectDropdown = screen.getByTestId(`editing-condition-${testId}-dropdown`);
     const selectOption = selectDropdown.querySelector('li:last-child');
 
-    await fireEvent.click(selectOption);
+    fireEvent.click(selectOption);
 
     expect(handler).toBeCalled();
   });
@@ -322,8 +322,8 @@ describe('Condition', () => {
     ${['min-value', 'max-value']} | ${mockedSliderFormValues.id}       | ${ConditionType.OutsideOf}   | ${mockedItemOptions}           | ${'range value is shown if item is slider and state is "outside of"'}
     ${['min-value', 'max-value']} | ${mockedScoreId}                   | ${ConditionType.Between}     | ${mockedScoreOptions}          | ${'range value is shown if item is score and state is "between"'}
     ${['min-value', 'max-value']} | ${mockedScoreId}                   | ${ConditionType.OutsideOf}   | ${mockedScoreOptions}          | ${'range value is shown if item is score and state is "between"'}
-  `('$description', async ({ testIds, item, state, options }) => {
-    const container = await renderWithAppletFormData({
+  `('$description', ({ testIds, item, state, options }) => {
+    renderWithAppletFormData({
       children: (
         <Condition
           {...mockedPropsForEditingCondition}
@@ -334,9 +334,8 @@ describe('Condition', () => {
       ),
     });
 
-    expect(await container.getByTestId(`editing-condition-${testIds[0]}`)).toBeInTheDocument();
-    testIds[1] &&
-      expect(await container.getByTestId(`editing-condition-${testIds[1]}`)).toBeInTheDocument();
+    expect(screen.getByTestId(`editing-condition-${testIds[0]}`)).toBeInTheDocument();
+    testIds[1] && expect(screen.getByTestId(`editing-condition-${testIds[1]}`)).toBeInTheDocument();
   });
 
   test.each`
@@ -347,8 +346,8 @@ describe('Condition', () => {
     ${mockedSliderRangeCondition}     | ${ConditionRowType.Item}    | ${mockedItemOptions}           | ${['min-value', 'max-value']} | ${[`${mockedSliderRangeCondition.payload.minValue}`, `${mockedSliderRangeCondition.payload.maxValue}`]} | ${'filled condition with slider range renders correctly'}
     ${mockedScoreCondition}           | ${ConditionRowType.Score}   | ${mockedScoreOptions}          | ${['slider-value']}           | ${[`${mockedScoreCondition.payload.value}`]}                                                            | ${'filled condition with score render correctly'}
     ${mockedScoreConditionCondition}  | ${ConditionRowType.Section} | ${mockedScoreConditionOptions} | ${['selection-value']}        | ${[`${mockedScoreConditionCondition.payload.optionValue}`]}                                             | ${'filled condition with score condition render correctly'}
-  `('$description', async ({ condition, rowType, itemOptions, valueTestIds, expectedValues }) => {
-    const container = renderWithAppletFormData({
+  `('$description', ({ condition, rowType, itemOptions, valueTestIds, expectedValues }) => {
+    renderWithAppletFormData({
       children: (
         <Condition
           {...mockedPropsForEditingCondition}
@@ -361,20 +360,18 @@ describe('Condition', () => {
       appletFormData: getAppletFormData(condition),
     });
 
-    expect(await container.getByTestId('editing-condition-name').querySelector('input').value).toBe(
+    expect(screen.getByTestId('editing-condition-name').querySelector('input').value).toBe(
       condition.itemName,
     );
-    expect(await container.getByTestId('editing-condition-type').querySelector('input').value).toBe(
+    expect(screen.getByTestId('editing-condition-type').querySelector('input').value).toBe(
       condition.type,
     );
     expect(
-      await container.getByTestId(`editing-condition-${valueTestIds[0]}`).querySelector('input')
-        .value,
+      screen.getByTestId(`editing-condition-${valueTestIds[0]}`).querySelector('input').value,
     ).toBe(expectedValues[0]);
     valueTestIds[1] &&
       expect(
-        await container.getByTestId(`editing-condition-${valueTestIds[1]}`).querySelector('input')
-          .value,
+        screen.getByTestId(`editing-condition-${valueTestIds[1]}`).querySelector('input').value,
       ).toBe(expectedValues[1]);
   });
 });
