@@ -26,7 +26,7 @@ import {
 import { getArrayFromApplets, getSteps } from './AddToBuilderPopup.utils';
 import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
 import { StyledContainer } from './AddToBuilderPopup.styles';
-import { useWorkspaceList } from './AddToBuilderPopup.hooks';
+import { useWorkspaceList } from '../../../hooks';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,

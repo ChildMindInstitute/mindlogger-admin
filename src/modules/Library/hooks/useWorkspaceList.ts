@@ -4,7 +4,7 @@ import { getWorkspacesApi, getWorkspaceRolesApi } from 'api';
 import { WorkspaceWithRoles } from 'redux/modules';
 import { isManagerOrOwnerOrEditor } from 'shared/utils';
 
-export const useWorkspaceList = () => {
+export const useWorkspaceList = (isAuthorized?: boolean) => {
   const [workspaces, setWorkspaces] = useState<WorkspaceWithRoles[]>([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -65,12 +65,14 @@ export const useWorkspaceList = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      const workspaces = await getWorkspaceList();
+    if (typeof isAuthorized === 'undefined' || isAuthorized === true) {
+      (async () => {
+        const workspaces = await getWorkspaceList();
 
-      setWorkspaces(workspaces);
-    })();
-  }, []);
+        setWorkspaces(workspaces);
+      })();
+    }
+  }, [isAuthorized]);
 
   return {
     workspaces,
