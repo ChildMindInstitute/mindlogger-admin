@@ -2,16 +2,25 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { Pin } from './Pin';
 
+const testId = 'test-pin';
+
 const mockOnClick = jest.fn();
 
 describe('Pin component tests', () => {
-  test('clicking the close button hides the banner', async () => {
-    render(<Pin onClick={mockOnClick} data-testid="test-pin" />);
+  test('calls onClick event handler when clicked', async () => {
+    render(<Pin onClick={mockOnClick} data-testid={testId} />);
 
-    const pin = screen.getByTestId('test-pin');
+    const pin = screen.getByTestId(testId);
     fireEvent.click(pin);
     await waitFor(() => {
       expect(mockOnClick).toHaveBeenCalled();
     });
+  });
+
+  test('renders correctly with isPinned set to true', () => {
+    const { getByTestId } = render(<Pin isPinned />);
+
+    const pinButton = getByTestId(testId);
+    expect(pinButton).toHaveAttribute('isPinned', 'true');
   });
 });
