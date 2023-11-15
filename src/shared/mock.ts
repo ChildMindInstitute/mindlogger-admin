@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 
-import { ItemResponseType, Roles } from './consts';
+import { CalculationType, ItemResponseType, Roles, ScoreReportType } from './consts';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -420,6 +420,7 @@ export const mockedSingleSelectFormValues = {
     ],
   },
   order: 1,
+  question: '',
 };
 
 export const mockedMultiSelectFormValues = {
@@ -462,6 +463,7 @@ export const mockedSliderFormValues = {
     maxValue: 4,
   },
   order: 3,
+  question: '',
 };
 
 export const mockedTimeFormValues = {
@@ -498,6 +500,19 @@ export const mockedInvitation = {
   count: 1,
 };
 
+export const mockedScoreReport = {
+  type: ScoreReportType.Score,
+  name: 'firstScore',
+  id: 'sumScore_firstscore',
+  key: '5bad6e4a-7035-4ddd-9c54-375604025a',
+  calculationType: CalculationType.Sum,
+  itemsScore: ['Item1', 'Item3'],
+  showMessage: false,
+  message: '',
+  printItems: true,
+  itemsPrint: ['Item1', 'Item3'],
+};
+
 export const mockedAppletFormData = {
   displayName: 'dataviz',
   description: '',
@@ -517,6 +532,11 @@ export const mockedAppletFormData = {
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
       performanceTaskType: null,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [mockedScoreReport],
+      },
       conditionalLogic: [
         {
           key: '597ffffb-9bce-4c73-9627-cc1bab064b7e',
