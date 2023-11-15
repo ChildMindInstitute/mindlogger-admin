@@ -17,10 +17,12 @@ describe('Pin component tests', () => {
     });
   });
 
-  test('renders correctly with isPinned set to true', () => {
+  test('renders correctly with isPinned set to true', async () => {
     const { getByTestId } = render(<Pin data-testid={testId} isPinned />);
 
     const pinButton = getByTestId(testId);
-    expect(pinButton).toHaveAttribute('isPinned', 'true');
+    await waitFor(() => {
+      expect(pinButton).toHaveAttribute('isPinned', 'true');
+    });
   });
 });
