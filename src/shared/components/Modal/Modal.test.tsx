@@ -23,7 +23,7 @@ const commonProps = {
   hasThirdBtn: true,
 };
 
-describe('Modal Component', () => {
+describe('Modal', () => {
   test('should render the modal with all elements', () => {
     render(<Modal {...commonProps} />);
 

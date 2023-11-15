@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Banner } from './Banner';
 import { BANNER_LINK } from './Banner.const';
 
-describe('Banner component tests', () => {
+describe('Banner', () => {
   test('clicking the close button hides the banner', async () => {
     render(<Banner />);
 

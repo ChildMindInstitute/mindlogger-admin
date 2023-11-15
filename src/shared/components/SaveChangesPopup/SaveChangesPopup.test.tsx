@@ -14,7 +14,7 @@ const commonProps = {
   'data-testid': 'save-changes-popup',
 };
 
-describe('SaveChangesPopup component tests', () => {
+describe('SaveChangesPopup', () => {
   test('closes when the cancel button is clicked', () => {
     render(<SaveChangesPopup {...commonProps} />);
 

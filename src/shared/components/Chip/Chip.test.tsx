@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import { Chip } from './Chip';
 
-describe('Chip component tests', () => {
+describe('Chip', () => {
   test('handles click event', () => {
     const handleClick = jest.fn();
     render(<Chip title="Clickable Chip" onClick={handleClick} />);
@@ -14,6 +14,7 @@ describe('Chip component tests', () => {
   test('remove button click calls onRemove', () => {
     const handleRemove = jest.fn();
     render(<Chip title="Removable Chip" data-testid="chip" onRemove={handleRemove} canRemove />);
+
     fireEvent.click(screen.getByTestId('chip-close-button'));
     expect(handleRemove).toHaveBeenCalledTimes(1);
   });

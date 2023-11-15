@@ -6,7 +6,7 @@ const testId = 'test-pin';
 
 const mockOnClick = jest.fn();
 
-describe('Pin component tests', () => {
+describe('Pin', () => {
   test('calls onClick event handler when clicked', async () => {
     render(<Pin onClick={mockOnClick} data-testid={testId} />);
 
