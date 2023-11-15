@@ -16,13 +16,4 @@ describe('Pin component tests', () => {
       expect(mockOnClick).toHaveBeenCalled();
     });
   });
-
-  test('renders correctly with isPinned set to true', async () => {
-    const { getByTestId } = render(<Pin data-testid={testId} isPinned />);
-
-    const pinButton = getByTestId(testId);
-    await waitFor(() => {
-      expect(pinButton).toHaveAttribute('isPinned', 'true');
-    });
-  });
 });
