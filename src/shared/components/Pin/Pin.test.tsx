@@ -18,7 +18,7 @@ describe('Pin component tests', () => {
   });
 
   test('renders correctly with isPinned set to true', () => {
-    const { getByTestId } = render(<Pin isPinned />);
+    const { getByTestId } = render(<Pin data-testid={testId} isPinned />);
 
     const pinButton = getByTestId(testId);
     expect(pinButton).toHaveAttribute('isPinned', 'true');
