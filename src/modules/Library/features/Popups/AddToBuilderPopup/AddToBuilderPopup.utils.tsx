@@ -9,6 +9,7 @@ import {
   StyledErrorText,
   StyledFlexTopCenter,
   StyledLabelLarge,
+  StyledLinearProgress,
   theme,
   variables,
 } from 'shared/styles';
@@ -156,6 +157,7 @@ const getTableController = ({
 export const getSteps = ({
   control,
   isWorkspacesModalVisible,
+  hasAppletAccessError,
   workspaces,
   applets,
   setStep,
@@ -169,6 +171,13 @@ export const getSteps = ({
   const options = getActions(applets);
 
   return [
+    {
+      stepId: AddToBuilderSteps.LoadingWorkspaces,
+      popupTitle: 'workspacesLoading',
+      render: () => <StyledLinearProgress />,
+      buttonText: 'cancel',
+      onSubmitStep: () => setAddToBuilderPopupVisible(false),
+    },
     {
       stepId: AddToBuilderSteps.SelectWorkspace,
       popupTitle: 'workspaceSelection',
@@ -250,6 +259,21 @@ export const getSteps = ({
       secondBtnText: 'cancel',
       onSecondBtnSubmit: () => setAddToBuilderPopupVisible(false),
       onSubmitStep: () => errorCallback(),
+    },
+    {
+      stepId: AddToBuilderSteps.AccessError,
+      popupTitle: 'addToBuilderAccessError',
+      render: () => (
+        <StyledBodyLarge color={variables.palette.semantic.error}>
+          {t(
+            hasAppletAccessError
+              ? 'addToBuilderAppletAccessError'
+              : 'addToBuilderWorkspaceAccessError',
+          )}
+        </StyledBodyLarge>
+      ),
+      buttonText: 'ok',
+      onSubmitStep: () => setAddToBuilderPopupVisible(false),
     },
   ];
 };
