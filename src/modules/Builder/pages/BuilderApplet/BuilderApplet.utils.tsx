@@ -842,7 +842,7 @@ const getSection = (
 
 const getScoresAndReports = (activity: Activity) => {
   const { items, scoresAndReports } = activity;
-  if (!scoresAndReports) return;
+  if (!scoresAndReports || !items) return;
 
   const itemsObject = getObjectFromList(items, (item) => item.name);
   const { reports: initialReports } = scoresAndReports;
