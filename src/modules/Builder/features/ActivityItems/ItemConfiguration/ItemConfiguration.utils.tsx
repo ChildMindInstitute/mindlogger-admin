@@ -6,19 +6,21 @@ import { ItemResponseType } from 'shared/consts';
 import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Config, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
+import {
+  DEFAULT_SLIDER_MAX_VALUE,
+  DEFAULT_SLIDER_MIN_NUMBER,
+  DEFAULT_NUMBER_SELECT_MIN_VALUE,
+  DEFAULT_NUMBER_SELECT_MAX_VALUE,
+} from 'modules/Builder/consts';
 
 import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
   DEFAULT_AUDIO_DURATION_SEC,
   SELECTION_OPTIONS_COLOR_PALETTE,
-  DEFAULT_NUMBER_MIN_VALUE,
-  DEFAULT_NUMBER_MAX_VALUE,
-  DEFAULT_SLIDER_MIN_NUMBER,
 } from './ItemConfiguration.const';
 import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
 import { ItemConfigurationSettings, GetEmptyAlert } from './ItemConfiguration.types';
-import { DEFAULT_SLIDER_MAX_VALUE } from './ItemConfiguration.const';
 
 const { t } = i18n;
 
@@ -83,12 +85,9 @@ export const getEmptyAudioResponse = () => ({
 });
 
 export const getEmptyNumberSelection = () => ({
-  minValue: DEFAULT_NUMBER_MIN_VALUE,
-  maxValue: DEFAULT_NUMBER_MAX_VALUE,
+  minValue: DEFAULT_NUMBER_SELECT_MIN_VALUE,
+  maxValue: DEFAULT_NUMBER_SELECT_MAX_VALUE,
 });
-
-export const getDefaultSliderScores = ({ minValue, maxValue }: SliderRowsItemResponseValues) =>
-  createArray(Number(maxValue) - Number(minValue) + 1, (index) => index + 1);
 
 export const getEmptyFlowItem = () => ({
   match: '',
