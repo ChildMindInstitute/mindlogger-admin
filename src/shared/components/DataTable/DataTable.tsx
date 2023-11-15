@@ -23,14 +23,13 @@ export const DataTable = ({
   onSelect,
   onSelectAll,
   hasError,
-  isValueName = false,
   tableHeadBackground,
   'data-testid': dataTestid,
   tooltipByDefault,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
 
-  const getItemKey = (item: DataTableItem) => (isValueName ? item.name || '' : item.id);
+  const getItemKey = (item: DataTableItem) => item.id;
 
   useEffect(() => {
     if (selectedItems) setSelected(selectedItems);

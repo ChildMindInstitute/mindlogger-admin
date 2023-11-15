@@ -2,11 +2,10 @@ import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { Roles } from 'shared/consts';
+import { getEmailValidationSchema } from 'shared/utils';
 
 export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
   const { t } = i18n;
-  const emailRequired = t('emailRequired');
-  const incorrectEmail = t('incorrectEmail');
   const firstNameRequired = t('firstNameRequired');
   const lastNameRequired = t('lastNameRequired');
   const secretUserIdRequired = t('secretUserIdRequired');
@@ -14,7 +13,7 @@ export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
 
   return yup
     .object({
-      email: yup.string().required(emailRequired).email(incorrectEmail),
+      email: getEmailValidationSchema(),
       firstName: yup.string().required(firstNameRequired),
       lastName: yup.string().required(lastNameRequired),
       nickName: yup.string(),

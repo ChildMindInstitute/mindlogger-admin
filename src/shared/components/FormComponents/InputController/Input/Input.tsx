@@ -1,7 +1,6 @@
-import { ChangeEvent, useEffect, useRef } from 'react';
+import { ChangeEvent } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import debounce from 'lodash.debounce';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
@@ -12,17 +11,16 @@ import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
 import { InputProps } from './Input.types';
 import {
   StyledCounter,
+  StyledHint,
   StyledTextField,
   StyledTextFieldContainer,
   StyledUpDown,
 } from './Input.styles';
 import { getTextAdornment } from './Input.utils';
-import { INPUT_DEBOUNCE_VALUE } from './Input.const';
 
 export const Input = <T extends FieldValues>({
   onChange,
   value,
-  isEmptyStringAllowed,
   minNumberValue,
   maxNumberValue,
   onArrowPress,
@@ -36,20 +34,17 @@ export const Input = <T extends FieldValues>({
   Counter = StyledCounter,
   counterProps,
   textAdornment,
-  withDebounce,
+  hintText,
   'data-testid': dataTestid,
   ...textFieldProps
 }: InputProps<T>) => {
   const { t } = useTranslation('app');
-  const inputRef = useRef<HTMLInputElement | null>();
   const isNumberType = textFieldProps.type === 'number';
+  const isControlledNumberValue = !!minNumberValue || !!maxNumberValue;
   const getTextFieldValue = () => {
-    if (!isNumberType) return value ?? '';
+    if (!isNumberType || !isControlledNumberValue) return value ?? '';
 
-    if (
-      (typeof value !== 'number' && !isEmptyStringAllowed) ||
-      (minNumberValue !== undefined && value < minNumberValue)
-    ) {
+    if (minNumberValue !== undefined && value < minNumberValue) {
       return String(minNumberValue);
     }
 
@@ -64,40 +59,37 @@ export const Input = <T extends FieldValues>({
 
   const handleAddNumber = () => {
     if (onArrowPress) return onArrowPress(numberValue + 1);
-    if (typeof maxNumberValue !== 'number') return onChange?.(numberValue + 1);
-
-    if (numberValue < maxNumberValue) onChange?.(numberValue + 1);
+    if (maxNumberValue === undefined || numberValue < maxNumberValue) {
+      onChange?.(numberValue + 1);
+    }
   };
   const handleDistractNumber = () => {
     if (onArrowPress) return onArrowPress(numberValue - 1);
-    if (minNumberValue === undefined || numberValue > minNumberValue) onChange?.(numberValue - 1);
+    if (minNumberValue === undefined || numberValue > minNumberValue) {
+      onChange?.(numberValue - 1);
+    }
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (onCustomChange) return onCustomChange(event);
-
     const newValue = event.target.value;
+    if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength) return;
+    const getNumberValue = () => {
+      if (!isNumberType) return undefined;
+      if (isControlledNumberValue) return +newValue;
 
-    if (newValue && maxLength && restrictExceededValueLength && newValue.length > maxLength) return;
+      return newValue === '' ? '' : +newValue;
+    };
 
-    onChange?.(isNumberType ? +newValue : newValue);
+    onChange?.(getNumberValue() ?? newValue);
   };
-  const handleDebouncedChange = debounce(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(event),
-    INPUT_DEBOUNCE_VALUE,
-  );
-
-  useEffect(() => {
-    if (!withDebounce || !inputRef.current || inputRef.current?.value === String(value)) return;
-    inputRef.current.value = value;
-  });
 
   return (
     <Tooltip tooltipTitle={tooltip}>
-      <StyledTextFieldContainer>
+      <StyledTextFieldContainer hasCounter={!!maxLength}>
         <StyledTextField
           {...textFieldProps}
-          {...(withDebounce ? { inputRef } : { value: getTextFieldValue() })}
-          onChange={withDebounce ? handleDebouncedChange : handleChange}
+          value={getTextFieldValue()}
+          onChange={handleChange}
           error={error}
           helperText={helperText}
           data-testid={dataTestid}
@@ -131,6 +123,7 @@ export const Input = <T extends FieldValues>({
             {value?.length || 0}/{maxLength} {t('characters')}
           </Counter>
         )}
+        {!maxLength && !error && hintText && <StyledHint>{hintText}</StyledHint>}
       </StyledTextFieldContainer>
     </Tooltip>
   );

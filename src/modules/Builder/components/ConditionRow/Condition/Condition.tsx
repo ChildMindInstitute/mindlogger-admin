@@ -17,7 +17,6 @@ import {
 } from './Condition.utils';
 
 export const Condition = ({
-  control,
   itemName,
   stateName,
   optionValueName,
@@ -36,7 +35,7 @@ export const Condition = ({
   'data-testid': dataTestid,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
-  const { watch } = useFormContext();
+  const { control, watch } = useFormContext();
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 

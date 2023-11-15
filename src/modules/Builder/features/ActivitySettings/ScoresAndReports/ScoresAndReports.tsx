@@ -71,9 +71,9 @@ export const ScoresAndReports = () => {
   const items = activity?.items.reduce(
     (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item: ItemFormValues) => {
       if (item.responseType === '' || !ItemTypesToPrint.includes(item.responseType)) return items;
-      const { id, name, question } = item;
+      const { name, question } = item;
 
-      return [...items, { id, name, question: removeMarkdown(question) }];
+      return [...items, { id: getEntityKey(item), name, question: removeMarkdown(question) }];
     },
     [],
   );

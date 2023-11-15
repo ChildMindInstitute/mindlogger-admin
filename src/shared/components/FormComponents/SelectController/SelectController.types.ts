@@ -37,6 +37,7 @@ type FormSelectProps = {
   isLabelNeedTranslation?: boolean;
   uiType?: SelectUiType;
   dropdownStyles?: SxProps;
+  isErrorVisible?: boolean;
   'data-testid'?: string;
 } & TextFieldProps;
 

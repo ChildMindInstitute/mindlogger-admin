@@ -171,7 +171,6 @@ export const ScoreContent = ({
         searchKey="label"
         hasSearch
         sxProps={{ mb: theme.spacing(2.5) }}
-        isValueName
         data-testid={`${dataTestid}-items-score`}
         tooltipByDefault
       />

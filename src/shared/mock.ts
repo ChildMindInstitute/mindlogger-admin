@@ -399,6 +399,199 @@ export const mockedManager = {
   ],
 };
 
+export const mockedSingleSelectFormValues = {
+  id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
+  name: 'Item1',
+  responseType: 'singleSelect',
+  responseValues: {
+    options: [
+      {
+        id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
+        text: 's1',
+        score: 0,
+        value: 0,
+      },
+      {
+        id: 'e3ca9405-71e9-4627-8311-d405f383246e',
+        text: 's23333333',
+        score: 0,
+        value: 1,
+      },
+    ],
+  },
+  order: 1,
+  config: {
+    addScores: true,
+    addTooltip: false,
+    setAlerts: false,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
+    setPalette: false,
+    timer: 0,
+    skippableItem: false,
+    removeBackButton: false,
+    randomizeOptions: false,
+  },
+};
+
+export const mockedMultiSelectFormValues = {
+  id: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
+  name: 'Item2',
+  responseType: 'multiSelect',
+  responseValues: {
+    options: [
+      {
+        id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
+        text: 'm1',
+        score: 1,
+        value: 0,
+      },
+      {
+        id: '188fc535-1e45-444d-88ec-91cb29737b03',
+        text: 'm2',
+        score: 1,
+        value: 1,
+      },
+      {
+        id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
+        text: 'm3',
+        score: 1,
+        value: 2,
+      },
+    ],
+  },
+  order: 2,
+};
+
+export const mockedSliderFormValues = {
+  id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
+  name: 'Item3',
+  responseType: 'slider',
+  responseValues: {
+    minLabel: 'min',
+    maxLabel: 'max',
+    minValue: 1,
+    maxValue: 4,
+  },
+  order: 3,
+  condig: {
+    showTickMarks: false,
+    showTickLabels: false,
+    continuousSlider: false,
+  },
+};
+
+export const mockedTimeFormValues = {
+  id: '4b334484-947b-4287-941c-ed4cbf0dc955',
+  name: 'Item4',
+  responseType: 'time',
+  responseValues: null,
+  order: 4,
+};
+
+export const mockedTextFormValues = {
+  id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
+  name: 'Item5',
+  responseType: 'text',
+  responseValues: null,
+  order: 5,
+  config: {
+    responseDataIdentifier: false,
+    correctAnswerRequired: false,
+    numericalResponseRequired: false,
+    responseRequired: false,
+    skippableItem: true,
+  },
+};
+
+export const mockedAudioPlayerFormValues = {
+  id: 'ec6aea37-4ca2-4360-b7ca-15a3c6f78513',
+  name: 'audioplayer',
+  responseType: 'audioPlayer',
+  responseValues: {
+    file: 'file.mp3',
+  },
+  order: 6,
+  config: {
+    playOnce: false,
+  },
+};
+
+export const mockedDrawingFormValues = {
+  id: '4a176a2c-86c0-4f63-94ba-37fe016d9009',
+  name: 'drawing',
+  responseType: 'drawing',
+  responseValues: {
+    drawingExample: null,
+    drawingBackground: null,
+  },
+  config: {
+    removeUndoButton: false,
+    navigationToTop: false,
+  },
+  order: 7,
+};
+
+export const mockedSingleSelectPerRowFormValues = {
+  id: '1b6e9916-e0f6-4bbe-b30f-11cf53722804',
+  name: 'sspr',
+  responseType: 'singleSelectRows',
+  responseValues: {
+    rows: [
+      {
+        id: '97aaab63-ccc2-44c6-bd39-4aea6e521726',
+        rowName: 'r1',
+      },
+      {
+        id: '063814d7-f16b-4568-a5c3-ab22230bc00d',
+        rowName: 'r2',
+      },
+    ],
+    options: [
+      {
+        id: '1879ab0a-d12c-4d8e-bef2-2f430c1ff826',
+        text: 'o1',
+      },
+      {
+        id: '3efa00c2-71f9-4f2e-a9ad-7da3a087e294',
+        text: 'o2',
+      },
+    ],
+  },
+  order: 9,
+};
+
+export const mockedSliderRowsFormValues = {
+  id: '209618c3-7d3b-4b51-89b1-14af64c212ec',
+  name: 'sliderrows',
+  responseType: 'sliderRows',
+  responseValues: {
+    rows: [
+      {
+        minLabel: 'min',
+        maxLabel: 'max',
+        minValue: 1,
+        maxValue: 5,
+        id: '54fb94f8-6932-420e-b068-b20ab32337c5',
+        label: 'slider1',
+      },
+      {
+        minLabel: 'min',
+        maxLabel: 'max',
+        minValue: 1,
+        maxValue: 6,
+        id: '83ca156f-3802-4912-9242-47ae9be3c5d9',
+        label: 'slider2',
+      },
+    ],
+    options: [],
+  },
+  config: {},
+  order: 8,
+};
+
 export const mockedInvitation = {
   result: [
     {
@@ -427,82 +620,15 @@ export const mockedAppletFormData = {
       name: 'New Activity',
       id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
       items: [
-        {
-          id: 'c17b7b59-8074-4c69-b787-88ea9ea3df5d',
-          name: 'Item1',
-          responseType: 'singleSelect',
-          responseValues: {
-            options: [
-              {
-                id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
-                text: 's1',
-                score: 2,
-                value: 0,
-              },
-              {
-                id: 'e3ca9405-71e9-4627-8311-d405f383246e',
-                text: 's23333333',
-                score: 4,
-                value: 1,
-              },
-            ],
-          },
-          order: 1,
-        },
-        {
-          id: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
-          name: 'Item2',
-          responseType: 'multiSelect',
-          responseValues: {
-            options: [
-              {
-                id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
-                text: 'm1',
-                score: 1,
-                value: 0,
-              },
-              {
-                id: '188fc535-1e45-444d-88ec-91cb29737b03',
-                text: 'm2',
-                score: 1,
-                value: 1,
-              },
-              {
-                id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
-                text: 'm3',
-                score: 1,
-                value: 2,
-              },
-            ],
-          },
-          order: 2,
-        },
-        {
-          id: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
-          name: 'Item3',
-          responseType: 'slider',
-          responseValues: {
-            minLabel: 'min',
-            maxLabel: 'max',
-            minValue: 1,
-            maxValue: 4,
-          },
-          order: 3,
-        },
-        {
-          id: '4b334484-947b-4287-941c-ed4cbf0dc955',
-          name: 'Item4',
-          responseType: 'time',
-          responseValues: null,
-          order: 4,
-        },
-        {
-          id: '8fa4788f-54a5-40c4-82c5-2c297a94b959',
-          name: 'Item5',
-          responseType: 'text',
-          responseValues: null,
-          order: 5,
-        },
+        mockedSingleSelectFormValues,
+        mockedMultiSelectFormValues,
+        mockedSliderFormValues,
+        mockedTimeFormValues,
+        mockedTextFormValues,
+        mockedAudioPlayerFormValues,
+        mockedDrawingFormValues,
+        mockedSliderRowsFormValues,
+        mockedSingleSelectPerRowFormValues,
       ],
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
