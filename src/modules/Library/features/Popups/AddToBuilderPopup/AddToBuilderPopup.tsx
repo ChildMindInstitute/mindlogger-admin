@@ -15,6 +15,7 @@ import { library } from 'modules/Library/state';
 import { useAppDispatch } from 'redux/store';
 import { navigateToBuilder, getAddToBuilderData } from 'modules/Library/features/Cart/Cart.utils';
 import { useClearCart } from 'modules/Library/features/Cart/Cart.hooks';
+import { useWorkspaceList } from 'modules/Library/hooks';
 
 import {
   AddToBuilderActions,
@@ -26,7 +27,6 @@ import {
 import { getArrayFromApplets, getSteps } from './AddToBuilderPopup.utils';
 import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
 import { StyledContainer } from './AddToBuilderPopup.styles';
-import { useWorkspaceList } from '../../../hooks';
 
 export const AddToBuilderPopup = ({
   addToBuilderPopupVisible,
