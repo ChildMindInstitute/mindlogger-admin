@@ -14,7 +14,7 @@ import {
 import { page } from 'resources';
 import { PublishedApplet, auth, library, SingleApplet } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
-import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
+import { useAppletsFromCart, useReturnToLibraryPath, useWorkspaceList } from 'modules/Library/hooks';
 import { getDictionaryText, Mixpanel, Path } from 'shared/utils';
 
 import { Applet, AppletUiType } from '../Applet';
@@ -24,7 +24,6 @@ import { StyledTablePagination } from '../AppletsCatalog/AppletsCatalog.styles';
 import { DEFAULT_APPLETS_PER_PAGE, DEFAULT_PAGE } from '../AppletsCatalog/AppletsCatalog.conts';
 import { getSearchIncludes, getAddToBuilderData, navigateToBuilder } from './Cart.utils';
 import { useClearCart } from './Cart.hooks';
-import { useWorkspaceList } from '../../hooks';
 
 export const Cart = () => {
   const { t } = useTranslation('app');
