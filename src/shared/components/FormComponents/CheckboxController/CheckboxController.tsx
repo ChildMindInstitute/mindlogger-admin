@@ -26,15 +26,15 @@ export const CheckboxController = <T extends FieldValues>({
   };
 
   return (
-    <FormControlLabel
-      disabled={disabled}
-      sx={{ opacity: disabled ? variables.opacity.disabled : 1 }}
-      label={label}
-      control={
-        <Controller
-          name={name}
-          control={control}
-          render={({ field: { onChange, value } }) => (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { onChange, value } }) => (
+        <FormControlLabel
+          disabled={disabled}
+          sx={{ opacity: disabled ? variables.opacity.disabled : 1 }}
+          label={label}
+          control={
             <Checkbox
               {...checkboxProps}
               disabled={disabled}
@@ -43,10 +43,10 @@ export const CheckboxController = <T extends FieldValues>({
                 handleCheckboxChange(event, onChange);
               }}
             />
-          )}
+          }
+          data-testid={dataTestid}
         />
-      }
-      data-testid={dataTestid}
+      )}
     />
   );
 };
