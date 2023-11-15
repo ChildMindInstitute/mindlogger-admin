@@ -4,12 +4,13 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import { StyledContainer } from 'shared/styles';
-import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
+import { getEntityKey, pluck } from 'shared/utils';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { page } from 'resources';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { getUniqueName } from 'modules/Builder/utils';
 
 import { ItemConfiguration } from './ItemConfiguration/ItemConfiguration';
 import { LeftBar } from './LeftBar';

@@ -82,8 +82,8 @@
     "build": "react-app-rewired build --project tsconfig.build.json",
     "test": "react-app-rewired test",
     "test:coverage": "npm run test --coverage --colors",
-    "test:nowatch": "CI=true npm run test --colors --watchAll=false",
-    "test:related": "test-related.sh",
+    "test:related": "sh test-related.sh",
+    "test:nowatch": "cross-env CI=true npm run test --colors --watchAll=false",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
   },
@@ -129,6 +129,7 @@
     "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
+    "cross-env": "^7.0.3",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",

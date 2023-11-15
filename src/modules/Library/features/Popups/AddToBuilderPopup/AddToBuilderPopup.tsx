@@ -10,12 +10,12 @@ import { SingleApplet, workspaces as workspacesState } from 'shared/state';
 import { useAsync, useNetwork } from 'shared/hooks';
 import { authStorage, Path } from 'shared/utils';
 import { MAX_LIMIT } from 'shared/consts';
-import { getWorkspaceAppletsApi } from 'modules/Dashboard';
 import { library } from 'modules/Library/state';
 import { useAppDispatch } from 'redux/store';
 import { navigateToBuilder, getAddToBuilderData } from 'modules/Library/features/Cart/Cart.utils';
 import { useClearCart } from 'modules/Library/features/Cart/Cart.hooks';
 import { useWorkspaceList } from 'modules/Library/hooks';
+import { getWorkspaceAppletsApi } from 'api';
 
 import {
   AddToBuilderActions,

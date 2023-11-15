@@ -1,0 +1,2 @@
+export const SLIDER_LABEL_MAX_LENGTH = 11;
+export const SLIDER_VALUE_LABEL_MAX_LENGTH = 20;

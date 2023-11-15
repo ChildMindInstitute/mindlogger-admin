@@ -5,8 +5,7 @@ import {
   ExtendedExportAnswer,
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
-
-import { getObjectFromList } from './builderHelpers';
+import { getObjectFromList } from './getObjectFromList';
 
 export const getParsedAnswers = (
   result: ExportDataResult,

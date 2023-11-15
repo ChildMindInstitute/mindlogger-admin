@@ -97,7 +97,6 @@ export const SectionScoreCommonFields = ({
           columns={getColumns()}
           hasSearch={false}
           hasSelectedSection={false}
-          isValueName
           tableHeadBackground={tableHeadBackground}
           data-testid={`${dataTestid}-print-items-list`}
         />

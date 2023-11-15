@@ -1,5 +1,3 @@
-import { Control } from 'react-hook-form';
-
 import { ConditionType } from 'shared/consts';
 import { SelectEvent } from 'shared/types';
 import { ConditionRowType } from 'modules/Builder/types';
@@ -15,7 +13,6 @@ export type ConditionItem = {
 };
 
 export type ConditionProps = {
-  control: Control;
   itemName: string;
   stateName: string;
   optionValueName: string;

@@ -53,7 +53,7 @@ export const LockForm = () => {
     const result = await dispatch(signIn(data));
 
     if (signIn.rejected.match(result)) {
-      setErrorMessage(getErrorMessage(result.payload));
+      setErrorMessage(result.payload as string);
     }
   };
 
