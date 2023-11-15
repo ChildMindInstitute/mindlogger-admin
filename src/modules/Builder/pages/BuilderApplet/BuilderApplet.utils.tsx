@@ -792,8 +792,15 @@ const getShowMessageAndPrintItems = (message?: string, itemsPrint?: string[]) =>
   printItems: !!itemsPrint?.length,
 });
 
-const getScore = (score: ScoreReport, items: Activity['items']) => {
+const remapItemsById = (itemsObject: Record<string, Item>) => (name: string) =>
+  itemsObject[name].id;
+const getScore = (
+  score: ScoreReport,
+  items: Activity['items'],
+  itemsObject: Record<string, Item>,
+) => {
   const scoreKey = uuidv4();
+  const remapperFunction = remapItemsById(itemsObject);
 
   return {
     ...score,
@@ -804,11 +811,19 @@ const getScore = (score: ScoreReport, items: Activity['items']) => {
       key: uuidv4(),
       ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
       conditions: getScoreConditions(items, conditional.conditions, scoreKey),
+      itemsPrint: conditional.itemsPrint?.map(remapperFunction),
     })),
+    itemsScore: score.itemsScore.map(remapperFunction),
+    itemsPrint: score.itemsPrint?.map(remapperFunction),
   };
 };
 
-const getSection = (section: SectionReport, items: Activity['items'], scores: ScoreReport[]) => ({
+const getSection = (
+  section: SectionReport,
+  items: Activity['items'],
+  scores: ScoreReport[],
+  itemsObject: Record<string, Item>,
+) => ({
   ...section,
   id: uuidv4(),
   ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
@@ -822,23 +837,25 @@ const getSection = (section: SectionReport, items: Activity['items'], scores: Sc
       }),
     },
   }),
+  itemsPrint: section.itemsPrint?.map(remapItemsById(itemsObject)),
 });
 
 const getScoresAndReports = (activity: Activity) => {
   const { items, scoresAndReports } = activity;
   if (!scoresAndReports) return;
 
+  const itemsObject = getObjectFromList(items, (item) => item.name);
   const { reports: initialReports } = scoresAndReports;
   const reportsWithMappedScores = initialReports?.map((report) => {
     if (report.type === ScoreReportType.Section) return report;
 
-    return getScore(report as ScoreReport, items);
+    return getScore(report as ScoreReport, items, itemsObject);
   });
   const scores = reportsWithMappedScores?.filter((report) => report.type === ScoreReportType.Score);
   const reports = reportsWithMappedScores?.map((report) => {
     if (report.type === ScoreReportType.Score) return report;
 
-    return getSection(report as SectionReport, items, scores as ScoreReport[]);
+    return getSection(report as SectionReport, items, scores as ScoreReport[], itemsObject);
   });
 
   return {
