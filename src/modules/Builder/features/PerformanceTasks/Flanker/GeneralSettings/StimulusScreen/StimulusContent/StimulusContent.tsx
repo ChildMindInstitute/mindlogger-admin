@@ -17,8 +17,9 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { FlankerButtonSetting, FlankerStimulusSettings } from 'shared/state';
 import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
-import { getUploadedMediaName, getIsRequiredValidateMessage } from 'shared/utils';
+import { getIsRequiredValidateMessage } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { getUploadedMediaName } from 'modules/Builder/utils';
 
 import { DeleteStimulusPopup } from './DeleteStimulusPopup';
 import { pressOptions } from './StimulusContent.const';

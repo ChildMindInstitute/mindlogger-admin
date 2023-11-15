@@ -17,13 +17,14 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController } from 'shared/components/FormComponents';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
-import { SettingParam, getEntityKey, removeMarkdown } from 'shared/utils';
+import { SettingParam, getEntityKey } from 'shared/utils';
 import { useIsServerConfigured } from 'shared/hooks';
 import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import { page } from 'resources';
 import { ScoreReportType } from 'shared/consts';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ItemFormValues } from 'modules/Builder/types';
+import { removeMarkdown } from 'modules/Builder/utils';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';

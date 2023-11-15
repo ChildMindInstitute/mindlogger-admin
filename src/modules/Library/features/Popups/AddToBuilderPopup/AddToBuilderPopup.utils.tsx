@@ -15,8 +15,8 @@ import {
 import { HeadCell } from 'shared/types/table';
 import i18n from 'i18n';
 import { Workspace } from 'shared/state';
-import { Applet as FullApplet, DashboardAppletType } from 'modules/Dashboard';
 import { Roles } from 'shared/consts';
+import { DashboardAppletType, Applet as FullApplet } from 'api';
 import { isManagerOrOwnerOrEditor } from 'shared/utils';
 
 import {

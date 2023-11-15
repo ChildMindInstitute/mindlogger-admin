@@ -2,14 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
+
+import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
+import { SaveChangesPopup } from 'modules/Builder/components';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
   AppletPasswordRefType,
-} from 'modules/Dashboard';
-import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
-import { SaveChangesPopup } from 'modules/Builder/components';
-import { Mixpanel } from 'shared/utils/mixpanel';
+} from 'modules/Dashboard/features';
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
