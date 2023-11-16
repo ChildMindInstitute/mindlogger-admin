@@ -1,0 +1,1 @@
+export const INPUT_DEBOUNCE_VALUE = 500;

@@ -1,0 +1,58 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { Avatar, AvatarUiType, Svg, Banner } from 'shared/components';
+import { StyledBadge, StyledFlexTopCenter } from 'shared/styles';
+import { page } from 'resources';
+import { auth } from 'modules/Auth/state';
+import { alerts } from 'shared/state';
+
+import { AccountPanel } from './AccountPanel';
+import { Breadcrumbs } from './Breadcrumbs';
+import { StyledAvatarBtn, StyledLoginButton, StyledTopBar } from './TopBar.styles';
+
+export const TopBar = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation('app');
+  const isAuthorized = auth.useAuthorized();
+  const userInitials = auth.useUserInitials();
+  const { notWatched = 0 } = alerts.useAlertsData() ?? {};
+  const [visibleAccountDrawer, setVisibleAccountDrawer] = useState(false);
+
+  const handleLoginClick = () => navigate(page.login);
+
+  return (
+    <>
+      <StyledTopBar>
+        <StyledFlexTopCenter>
+          <Breadcrumbs />
+        </StyledFlexTopCenter>
+        {isAuthorized ? (
+          <StyledBadge badgeContent={notWatched}>
+            <StyledAvatarBtn
+              onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
+              variant="text"
+            >
+              <Avatar caption={userInitials} uiType={AvatarUiType.Secondary} />
+            </StyledAvatarBtn>
+          </StyledBadge>
+        ) : (
+          <StyledLoginButton
+            startIcon={<Svg width="18" height="18" id="profile" />}
+            onClick={handleLoginClick}
+          >
+            {t('loginLink')}
+          </StyledLoginButton>
+        )}
+      </StyledTopBar>
+      <Banner />
+      {visibleAccountDrawer && (
+        <AccountPanel
+          setVisibleDrawer={setVisibleAccountDrawer}
+          visibleDrawer={visibleAccountDrawer}
+        />
+      )}
+    </>
+  );
+};

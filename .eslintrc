@@ -1,0 +1,78 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["import", "prettier", "react-hooks", "@typescript-eslint"],
+  "env": {
+    "node": true
+  },
+  "extends": [
+    "prettier",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "arrow-body-style": ["error", "as-needed"],
+    "react/react-in-jsx-scope": "off",
+    "no-trailing-spaces": "error",
+    "react/no-children-prop": "off",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "quotes": ["error", "single"],
+    "import/order": [
+      "error",
+      {
+        "groups": [["builtin", "external"], ["internal"], ["index", "parent", "sibling"]]
+      }
+    ],
+    "import/no-cycle": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "off",
+    "constructor-super": "error",
+    "no-this-before-super": "error",
+    "no-useless-computed-key": "error",
+    "no-useless-constructor": "off",
+    "no-useless-rename": "error",
+    "no-var": "error",
+    "object-shorthand": "error",
+    "prefer-template": "error",
+    "prefer-destructuring": 0,
+    "no-restricted-syntax": ["error", "ForInStatement", "SequenceExpression"],
+    "no-caller": "error",
+    "no-template-curly-in-string": "error",
+    "array-callback-return": "error",
+    "no-eval": "error",
+    "no-extend-native": "error",
+    "eqeqeq": ["error", "always"],
+    "no-lone-blocks": "error",
+    "no-proto": "error",
+    "no-script-url": "error",
+    "no-self-compare": "error",
+    "no-sequences": "error",
+    "no-throw-literal": "error",
+    "no-undef-init": "error",
+    "no-nested-ternary": "error",
+    "no-unneeded-ternary": "error",
+    "camelcase": "off",
+    "arrow-parens": ["off", "as-needed"],
+    "no-debugger": "error",
+    "no-empty": "error",
+    "no-underscore-dangle": "error",
+    "no-unused-labels": "error",
+    "prefer-const": "error",
+    "no-unused-vars": "off",
+    "jsx-quotes": ["error", "prefer-double"],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "ignoreRestSiblings": true
+      }
+    ],
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-duplicate-enum-values": "warn",
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": "return" }
+    ]
+  }
+}
