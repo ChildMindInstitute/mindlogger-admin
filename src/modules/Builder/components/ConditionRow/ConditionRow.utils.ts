@@ -7,7 +7,6 @@ import {
   OptionCondition,
   SingleValueCondition,
   RangeValueCondition,
-  SingleAndMultipleSelectItemResponseValues,
   ScoreReport,
   SliderItemResponseValues,
 } from 'shared/state';
@@ -140,9 +139,17 @@ export const getPayload = (
 };
 
 export const getValueOptionsList = (item: ItemFormValues) => {
-  const responseValues = item?.responseValues as SingleAndMultipleSelectItemResponseValues;
+  if (!item) return [];
 
-  if (!responseValues?.options) return [];
+  const { responseValues, responseType } = item;
+  if (
+    responseType !== ItemResponseType.SingleSelection &&
+    responseType !== ItemResponseType.MultipleSelection &&
+    responseType !== ItemResponseType.SingleSelectionPerRow &&
+    responseType !== ItemResponseType.MultipleSelectionPerRow
+  ) {
+    return [];
+  }
 
   return responseValues.options.map(({ id, text }) => ({
     value: id,

@@ -55,15 +55,13 @@ export const getActivities = (
         item.responseType === ItemResponseType.SingleSelection ||
         item.responseType === ItemResponseType.MultipleSelection
       ) {
-        (item?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.forEach(
-          (option) => {
-            if (includesSearchValue(option.text, search)) {
-              isActivitiesExpanded = true;
-              isItemExpanded = true;
-              isActivityExpanded = true;
-            }
-          },
-        );
+        item?.responseValues?.options?.forEach((option) => {
+          if (includesSearchValue(option.text, search)) {
+            isActivitiesExpanded = true;
+            isItemExpanded = true;
+            isActivityExpanded = true;
+          }
+        });
       }
 
       if (includesSearchValue(item.question.en, search)) {

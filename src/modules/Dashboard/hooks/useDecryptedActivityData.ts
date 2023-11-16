@@ -114,16 +114,14 @@ export const useDecryptedActivityData = (
       return answer;
     };
 
-    const answerDataDecrypted: DecryptedActivityData<T>['decryptedAnswers'] = rest.items.map(
-      (activityItem, index) => ({
-        activityItem,
-        answer: getAnswer(activityItem, index),
-        ...rest,
-      }),
-    );
+    const answerDataDecrypted = rest.items.map((activityItem, index) => ({
+      activityItem,
+      answer: getAnswer(activityItem, index),
+      ...rest,
+    }));
 
     return {
-      decryptedAnswers: answerDataDecrypted,
+      decryptedAnswers: answerDataDecrypted as DecryptedActivityData<T>['decryptedAnswers'],
       decryptedEvents: eventsDecrypted,
     };
   };

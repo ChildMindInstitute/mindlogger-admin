@@ -1,4 +1,4 @@
-import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
+import { ItemResponseType } from 'shared/consts';
 import {
   AdditionalEdited,
   AdditionalTextType,
@@ -7,17 +7,15 @@ import {
   DecryptedDateAnswer,
   DecryptedDateRangeAnswer,
   DecryptedGeolocationAnswer,
-  DecryptedMediaAnswer,
   DecryptedMultiSelectionPerRowAnswer,
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
   DecryptedStabilityTrackerAnswerObject,
   DecryptedTimeAnswer,
   ExtendedEvent,
-  ExtendedExportAnswerWithoutEncryption,
+  isMediaAnswerData,
   UserActionType,
 } from 'shared/types';
-import { SingleAndMultipleSelectRowsResponseValues, SliderRowsResponseValues } from 'shared/state';
 
 import {
   getABTrailsCsvName,
@@ -29,9 +27,7 @@ import {
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
-export const parseResponseValue = <
-  T extends DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
->(
+export const parseResponseValue = <T extends DecryptedAnswerData>(
   item: T,
   index: number,
   isEvent = false,
@@ -40,11 +36,8 @@ export const parseResponseValue = <
   if (!isEvent) {
     answer = item.answer;
   }
-  if (
-    isEvent &&
-    (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).type === UserActionType.SetAnswer
-  ) {
-    answer = (item as ExtendedEvent<ExtendedExportAnswerWithoutEncryption>).response ?? item.answer;
+  if (isEvent && (item as ExtendedEvent).type === UserActionType.SetAnswer) {
+    answer = (item as ExtendedEvent).response ?? item.answer;
   }
 
   const answerEdited = (answer as AdditionalEdited)?.edited;
@@ -59,9 +52,7 @@ export const parseResponseValue = <
   return `${parseResponseValueRaw(item, index, answer)}${editedWithLabel}`;
 };
 
-export const parseResponseValueRaw = <
-  T extends DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>,
->(
+export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
   item: T,
   index: number,
   answer?: AnswerDTO,
@@ -75,11 +66,11 @@ export const parseResponseValueRaw = <
 
   if (!key) return answer || '';
 
-  if (ItemsWithFileResponses.includes(inputType)) {
+  if (isMediaAnswerData(item)) {
     try {
-      if (!(item.answer as DecryptedMediaAnswer)?.value) return '';
+      if (!item.answer?.value) return '';
 
-      return getMediaFileName(item, getFileExtension((item.answer as DecryptedMediaAnswer).value));
+      return getMediaFileName(item, getFileExtension(item.answer.value));
     } catch (error) {
       console.warn(error);
     }
@@ -113,7 +104,7 @@ export const parseResponseValueRaw = <
     case ItemResponseType.ABTrails:
       return getABTrailsCsvName(index, item.id);
     case ItemResponseType.SingleSelectionPerRow: {
-      const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
+      const rows = activityItem?.responseValues.rows;
 
       return rows
         .map(
@@ -125,7 +116,7 @@ export const parseResponseValueRaw = <
         .join('\n');
     }
     case ItemResponseType.MultipleSelectionPerRow: {
-      const rows = (activityItem?.responseValues as SingleAndMultipleSelectRowsResponseValues).rows;
+      const rows = activityItem?.responseValues.rows;
 
       return rows
         .map(
@@ -137,7 +128,7 @@ export const parseResponseValueRaw = <
         .join('\n');
     }
     case ItemResponseType.SliderRows: {
-      const rows = (activityItem?.responseValues as SliderRowsResponseValues).rows;
+      const rows = activityItem?.responseValues.rows;
 
       return rows
         .map(

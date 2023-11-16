@@ -73,6 +73,9 @@
   "addSubscales": "Ajouter une sous-échelle",
   "addToBuilder": "Ajouter au créateur",
   "addToBuilderError": "Le contenu du panier n'a pas été ajouté au créateur. Veuillez réessayer.",
+  "addToBuilderAccessError": "Pas d'accès",
+  "addToBuilderAppletAccessError": "Votre accès à l'applet a été supprimé.",
+  "addToBuilderWorkspaceAccessError": "Votre accès à l'espace de travail a été supprimé.",
   "addToCart": "Ajouter au panier",
   "addToExistingApplet": "Ajouter à une applet existante",
   "addTotalScoreLookupTable": {
@@ -1200,6 +1203,7 @@
   "workspaceNameRequired": "Le nom de l'espace de travail est requis",
   "workspaceRequired": "Veuillez sélectionner l'espace de travail pour continuer.",
   "workspaceSelection": "Sélectionnez l'espace de travail",
+  "workspacesLoading": "Vérification de vos espaces de travail",
   "workspaceTooltip": "Le nom de l'espace de travail s'affiche pour les gestionnaires que vous avez invités à votre applet dans leur interface.",
   "year": "Année",
   "years": "Années",
@@ -1212,5 +1216,10 @@
   "selectValidInterval": "Sélectionnez un intervalle valide",
   "selectValueWithinInterval": "Sélectionnez une valeur dans un intervalle",
   "bannerText": "<0>Vous utilisez la nouvelle version de MindLogger!</0><1>Les utilisateurs finaux doivent mettre à jour vers la nouvelle application.</1><2>Prenez ces mesures dès maintenant pour vous assurer que les données de réponse des participants ne sont pas perdues.</2>",
-  "youNeedToAuthorizeHint": "Pour créer une nouvelle applet ou la fusionner avec d'autres, vous devez autoriser."
+  "youNeedToAuthorizeHint": "Pour créer une nouvelle applet ou la fusionner avec d'autres, vous devez autoriser.",
+  "errorFallback": {
+    "somethingWentWrong": "Quelque chose s'est mal passé.",
+    "details": "Détails",
+    "refreshPage": "Rafraîchir la page"
+  }
 }

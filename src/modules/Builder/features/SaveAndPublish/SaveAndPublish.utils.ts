@@ -3,30 +3,23 @@ import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 
 import {
-  AudioPlayerResponseValues,
-  AudioResponseValues,
-  Condition,
-  ConditionalLogic,
-  DrawingResponseValues,
-  FlankerConfig,
-  ItemAlert,
-  NumberItemResponseValues,
-  SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectRowsResponseValues,
-  SliderItemResponseValues,
-  SliderRowsResponseValues,
-  OptionCondition,
-  SingleApplet,
   Activity,
   ActivityFlow,
-  ScoreReport,
-  SectionReport,
+  Condition,
+  ConditionalLogic,
+  FlankerConfig,
   Item,
+  ItemAlert,
+  OptionCondition,
+  ScoreReport,
+  SingleAndMultipleSelectItemResponseValues,
+  SingleApplet,
 } from 'shared/state';
-import { ConditionType, ItemResponseType, PerfTaskType, ScoreReportType } from 'shared/consts';
+import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
+  ABTrailsItemQuestions,
   ActivityFormValues,
   FlankerItemPositions,
   FlankerNextButton,
@@ -35,7 +28,7 @@ import {
 } from 'modules/Builder/types';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { findRelatedScore } from 'modules/Builder/utils';
-import { ElementType } from 'shared/types';
+import { ElementType, isScoreReport, isSectionReport } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
 import {
@@ -128,9 +121,7 @@ const getConditions = ({ items, conditions, score }: GetConditions) =>
 
     return {
       type: condition.type,
-      payload: relatedItem
-        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
-        : condition['payload'],
+      payload: relatedItem ? getConditionPayload(relatedItem, condition) : condition['payload'],
       itemName: relatedItem?.name ?? score?.id ?? condition.itemName,
     };
   });
@@ -146,9 +137,7 @@ const getSectionConditions = ({ items, conditions, scores }: GetSectionCondition
 
     return {
       type: condition.type,
-      payload: relatedItem
-        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
-        : condition['payload'],
+      payload: relatedItem ? getConditionPayload(relatedItem, condition) : condition['payload'],
       itemName: relatedItem?.name ?? relatedScore?.id ?? condition.itemName,
     };
   });
@@ -208,15 +197,13 @@ export const getScoresAndReports = (activity: ActivityFormValues) => {
   const itemsObjectById = getObjectFromList(items, (item) => getEntityKey(item));
   const { reports: initialReports } = scoresAndReports;
 
-  const scores = initialReports?.filter(
-    (report) => report.type === ScoreReportType.Score,
-  ) as ScoreReport[];
+  const scores = initialReports?.filter(isScoreReport);
   const reports = initialReports?.map((report) => {
-    if (report.type === ScoreReportType.Section) {
-      return getSection({ section: report as SectionReport, items, scores, itemsObjectById });
+    if (isSectionReport(report)) {
+      return getSection({ section: report, items, scores, itemsObjectById });
     }
 
-    return getScore(report as ScoreReport, items, itemsObjectById);
+    return getScore(report, items, itemsObjectById);
   });
 
   return {
@@ -235,16 +222,13 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.MultipleSelection
   )
     return {
-      paletteName:
-        (responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ?? undefined,
-      options: (responseValues as SingleAndMultipleSelectItemResponseValues).options?.map(
-        (option) => ({
-          ...option,
-          color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
-          alert: hasAlerts ? alerts?.find(({ value }) => value === option.id)?.alert : undefined,
-          ...removeReactHookFormKey(),
-        }),
-      ),
+      paletteName: responseValues.paletteName ?? undefined,
+      options: responseValues.options?.map((option) => ({
+        ...option,
+        color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
+        alert: hasAlerts ? alerts?.find(({ value }) => value === option.id)?.alert : undefined,
+        ...removeReactHookFormKey(),
+      })),
     };
 
   if (
@@ -252,7 +236,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     get(item.config, ItemConfigurationSettings.IsContinuous)
   ) {
     return {
-      ...(responseValues as SliderItemResponseValues),
+      ...responseValues,
       options: undefined,
       alerts: hasAlerts
         ? alerts?.map(({ minValue, maxValue, alert }) => ({
@@ -266,17 +250,17 @@ const mapItemResponseValues = (item: ItemFormValues) => {
 
   if (responseType === ItemResponseType.Slider) {
     return {
-      ...(responseValues as SliderItemResponseValues),
+      ...responseValues,
       options: undefined,
       alerts: hasAlerts ? alerts : undefined,
     };
   }
 
   if (responseType === ItemResponseType.SliderRows) {
-    const { rows } = responseValues as SliderRowsResponseValues;
+    const { rows } = responseValues;
 
     return {
-      ...(responseValues as SliderRowsResponseValues),
+      ...responseValues,
       options: undefined,
       rows: rows?.map((row) => ({
         ...row,
@@ -298,11 +282,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.Drawing
   )
     return {
-      ...(responseValues as
-        | AudioResponseValues
-        | AudioPlayerResponseValues
-        | NumberItemResponseValues
-        | DrawingResponseValues),
+      ...responseValues,
       options: undefined,
     };
 
@@ -310,7 +290,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.SingleSelectionPerRow ||
     responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const { dataMatrix, ...other } = responseValues as SingleAndMultipleSelectRowsResponseValues;
+    const { dataMatrix, ...other } = responseValues;
 
     const groupedAlerts = groupBy(alerts ?? [], (alert) => `${alert.optionId}-${alert.rowId}`);
 
@@ -369,6 +349,11 @@ const getItemCommonFields = ({ id, item, items, conditionalLogic }: GetItemCommo
 
 export const getActivityItems = (activity: ActivityFormValues) => {
   const { items, conditionalLogic, isPerformanceTask, performanceTaskType } = activity;
+
+  const isABTrails =
+    isPerformanceTask &&
+    (performanceTaskType === PerfTaskType.ABTrailsMobile ||
+      performanceTaskType === PerfTaskType.ABTrailsTablet);
 
   if (isPerformanceTask && performanceTaskType === PerfTaskType.Flanker) {
     const firstPracticeItemConfig = items[FlankerItemPositions.PracticeFirst]
@@ -429,9 +414,12 @@ export const getActivityItems = (activity: ActivityFormValues) => {
     });
   }
 
-  return items?.map(({ id, ...item }) => ({
+  return items?.map(({ id, ...item }, index) => ({
     ...item,
     ...getItemCommonFields({ id, item, items, conditionalLogic }),
+    ...(isABTrails && {
+      question: getDictionaryObject(item.question ?? ABTrailsItemQuestions[index]),
+    }),
   }));
 };
 
