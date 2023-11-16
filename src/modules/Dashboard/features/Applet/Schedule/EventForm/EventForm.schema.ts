@@ -34,8 +34,8 @@ export const EventFormSchema = () => {
       activityOrFlowId: yup.string().required(activityRequired),
       timerDuration: getTimerDurationCheck(),
       idleTime: getTimerDurationCheck(),
-      startTime: getTimeComparison(selectValidPeriod),
-      endTime: getTimeComparison(''),
+      // startTime: getTimeComparison(selectValidPeriod),
+      // endTime: getTimeComparison(''),
       notifications: yup.array().of(notificationSchema),
       reminder: yup
         .object()
@@ -63,8 +63,19 @@ export const EventFormSchema = () => {
                 }
                 if (periodicity === Periodicity.Weekly) {
                   const dayOfWeek = getDay(getNormalizedTimezoneDate(startDate));
-                  const weeklyDays = daysInPeriod.filter((date) => getDay(date) === dayOfWeek);
-                  console.log('weekly days', weeklyDays);
+                  let weeklyDaysCount = 0;
+                  const weeklyDays = daysInPeriod.reduce((acc: number[], date) => {
+                    if (getDay(date) === dayOfWeek) {
+                      acc.push(weeklyDaysCount * 7);
+                      weeklyDaysCount++;
+                    }
+
+                    return acc;
+                  }, []);
+
+                  return weeklyDays.includes(value);
+                  // console.log('day of week', dayOfWeek);
+                  // console.log('weekly days', weeklyDays);
                   // const weeks = eachWeekOfInterval({ start: startDate, end: endDate });
                   // console.log('weeks', weeks);
                   // const indicesArray = weeks.map((_, index) => index * 7);

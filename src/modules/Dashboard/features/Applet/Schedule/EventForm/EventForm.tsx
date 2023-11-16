@@ -183,8 +183,11 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       if (eventFormConfig.hasNotificationsErrors) {
         return t('timeNotificationsError');
       }
+      if (apiError) {
+        return getErrorMessage(apiError);
+      }
 
-      return getErrorMessage(apiError) || null;
+      return null;
     };
 
     const errorMessage = getError();
