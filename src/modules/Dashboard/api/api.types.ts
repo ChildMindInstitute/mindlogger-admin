@@ -373,3 +373,5 @@ export type LatestReport = {
 };
 
 export type Identifiers = LatestReport;
+
+export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;

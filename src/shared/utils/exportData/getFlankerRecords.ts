@@ -8,7 +8,7 @@ import {
   FlankerTag,
   NumberWithDotType,
 } from 'shared/types';
-import { CorrectPress, FlankerItemNames } from 'modules/Builder/types';
+import { CorrectPress } from 'modules/Builder/types';
 
 const getImage = (image: string, alt: string) => {
   if (image) {

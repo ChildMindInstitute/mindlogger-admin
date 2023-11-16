@@ -52,6 +52,7 @@ import {
   AppletName,
   LatestReport,
   Identifiers,
+  GetRespondentDetailsParams,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -638,4 +639,12 @@ export const getOptionTextApi = (url: string) =>
   axios({
     method: 'get',
     url,
+  });
+
+export const getRespondentDetailsApi = (
+  { ownerId, appletId, respondentId }: GetRespondentDetailsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/workspaces/${ownerId}/applets/${appletId}/respondents/${respondentId}`, {
+    signal,
   });

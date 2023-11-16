@@ -42,6 +42,9 @@ const preloadedState = {
         count: 2,
       },
     },
+    respondentDetails: {
+      ...initialStateData,
+    },
   },
 };
 

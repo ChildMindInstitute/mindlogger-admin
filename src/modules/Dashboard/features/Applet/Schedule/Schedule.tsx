@@ -23,7 +23,7 @@ export const Schedule = () => {
   const { ownerId } = workspaces.useData() || {};
   const loadingStatus = users.useAllRespondentsStatus();
   const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
-  const { getAllWorkspaceRespondents } = users.thunk;
+  const { getAllWorkspaceRespondents, getRespondentDetails } = users.thunk;
   const preparedEvents = usePreparedEvents(appletData);
   const hasAccess = checkIfHasAccessToSchedule(workspaceRoles?.[appletId!]);
 
@@ -36,16 +36,17 @@ export const Schedule = () => {
   );
 
   useEffect(() => {
-    if (!appletId || !hasAccess) return;
+    if (!appletId || !hasAccess || !respondentId || !ownerId) return;
 
     const { getEvents } = applets.thunk;
 
     dispatch(getEvents({ appletId, respondentId }));
+    dispatch(getRespondentDetails({ ownerId, appletId, respondentId }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, respondentId, hasAccess]);
+  }, [appletId, respondentId, hasAccess, ownerId]);
 
   if (isForbidden || !hasAccess) return noPermissionsComponent;
 
