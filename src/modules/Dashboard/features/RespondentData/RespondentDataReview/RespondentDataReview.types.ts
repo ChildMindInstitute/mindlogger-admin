@@ -1,11 +1,16 @@
 import { Dispatch, SetStateAction } from 'react';
 import { TextItem, SliderItem, SingleSelectItem, MultiSelectItem, Item } from 'shared/state';
 import {
+  DecryptedAnswerData,
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
+  MultiSelectionItemAnswer,
+  SingleSelectionItemAnswer,
 } from 'shared/types';
+
+import { Review } from './Feedback/FeedbackReviewed/FeedbackReviewed.types';
 
 export type Answer = {
   createdAt: string;
@@ -63,10 +68,14 @@ export type AssessmentAnswer = (
   edited?: number | null;
 };
 
-export type AssessmentActivityItem = {
-  activityItem: Item;
-  answer: AssessmentAnswer;
+export type AssessmentActivityItem<T = Review> = DecryptedAnswerData<
+  T,
+  MultiSelectionItemAnswer | SingleSelectionItemAnswer | SliderItemAnswer
+> & {
   items: Item[];
+  answer: {
+    edited: number | null;
+  };
 };
 
 export type FormattedAssessmentAnswer = {

@@ -71,9 +71,7 @@ export const replaceItemVariableWithName = <T>({
       } else if (rawAnswer && typeof rawAnswer === 'object') {
         switch (itemValue.responseType) {
           case ItemResponseType.SingleSelection: {
-            const item = (
-              itemValue.responseValues as SingleAndMultipleSelectItemResponseValues
-            ).options.find(
+            const item = itemValue.responseValues.options.find(
               (option) =>
                 String(option.value) ===
                 String((rawAnswer as DecryptedSingleSelectionAnswer).value),

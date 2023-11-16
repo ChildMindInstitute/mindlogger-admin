@@ -126,7 +126,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 name={alertValueName}
                 control={control}
                 placeholder={t('option')}
-                options={getSliderRowsItemList(getValues(name) as ItemFormValues, alert)}
+                options={getSliderRowsItemList(getValues(name), alert)}
                 isErrorVisible={false}
                 data-testid={`${dataTestid}-slider-rows-value`}
               />,

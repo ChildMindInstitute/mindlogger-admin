@@ -23,7 +23,6 @@ export * from './getParsedAnswers';
 export * from './exportData';
 export * from './getAnswerValue';
 export * from './getDateTime';
-export * from './exportData/exportZip';
 export * from './state';
 export * from './authStorage';
 export * from './getInfinityScrollData';
