@@ -1,7 +1,7 @@
 import { ActivityStatus } from 'shared/consts';
-import { DecryptedAnswerData, ExportAnswer } from 'shared/types';
+import { DecryptedAnswerData } from 'shared/types';
 
-export const getFlag = (item: DecryptedAnswerData<ExportAnswer>) => {
+export const getFlag = (item: DecryptedAnswerData) => {
   if (item.scheduledDatetime && !item.startDatetime) {
     return ActivityStatus.Missed;
   }

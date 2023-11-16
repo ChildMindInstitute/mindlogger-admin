@@ -8,6 +8,7 @@ import { Item, SingleAndMultipleSelectionConfig, SliderConfig } from 'shared/sta
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
 import { GetActivitySettings } from './ActivitySettings.types';
+import { ItemsWithScore } from './ScoresAndReports/ScoreContent/ScoreContent.types';
 
 export const getActivitySettings = ({
   activity,
@@ -58,7 +59,7 @@ export const getActivitySettings = ({
   ];
 };
 
-export const checkOnItemTypeAndScore = (item: ItemFormValues | Item) =>
+export const checkOnItemTypeAndScore = (item: ItemFormValues | Item): item is ItemsWithScore =>
   (item.config as SingleAndMultipleSelectionConfig | SliderConfig).addScores &&
   [
     ItemResponseType.SingleSelection,
