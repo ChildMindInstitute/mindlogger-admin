@@ -175,6 +175,20 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       submitCallback();
     };
 
+    const apiError = createEventError || updateEventError;
+    const getError = () => {
+      if (errors.reminder?.activityIncomplete) {
+        return t('activityIncompleteError');
+      }
+      if (eventFormConfig.hasNotificationsErrors) {
+        return t('timeNotificationsError');
+      }
+
+      return getErrorMessage(apiError) || null;
+    };
+
+    const errorMessage = getError();
+
     useImperativeHandle(ref, () => ({
       submitForm() {
         handleSubmit(submitForm)();
@@ -243,14 +257,12 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
             )}
           </StyledModalWrapper>
           <Tabs tabs={getEventFormTabs(eventFormConfig)} uiType={UiType.Secondary} />
-          {(createEventError || updateEventError || eventFormConfig.hasNotificationsErrors) && (
+          {errorMessage && (
             <StyledBodyLarge
               color={variables.palette.semantic.error}
               sx={{ m: theme.spacing(1, 2.6) }}
             >
-              {eventFormConfig.hasNotificationsErrors
-                ? t('timeNotificationsError')
-                : getErrorMessage(createEventError || updateEventError)}
+              {errorMessage}
             </StyledBodyLarge>
           )}
         </form>

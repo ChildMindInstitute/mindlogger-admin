@@ -1095,6 +1095,8 @@
   "timeHint": "Time selection in the format HH:MM",
   "timeIsShownInUTC": "Time is<br />shown in UTC",
   "timeNotificationsError": "The time selected on the Notifications tab is outside the Activity's availability time. Please, update.",
+  "activityIncompleteError": "The reminder selected on the Notifications tab is outside the Activity's availability time. Please, update",
+  "activityIsUnavailable": "Activity is unavailable at this day",
   "timer": "Timer",
   "timeRange": "Time Range",
   "timeRangeDescription": "The respondent will be prompted to take a time range.",

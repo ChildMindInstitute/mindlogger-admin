@@ -35,6 +35,7 @@ export const Input = <T extends FieldValues>({
   counterProps,
   textAdornment,
   hintText,
+  disabled,
   'data-testid': dataTestid,
   ...textFieldProps
 }: InputProps<T>) => {
@@ -93,17 +94,18 @@ export const Input = <T extends FieldValues>({
           error={error}
           helperText={helperText}
           data-testid={dataTestid}
+          disabled={disabled}
           InputProps={
             isNumberType
               ? {
                   endAdornment: (
                     <StyledFlexTopCenter>
-                      {getTextAdornment(value, textAdornment)}
+                      {getTextAdornment({ value, textAdornment, disabled })}
                       <StyledUpDown>
-                        <StyledClearedButton onClick={handleAddNumber}>
+                        <StyledClearedButton disabled={disabled} onClick={handleAddNumber}>
                           <Svg width={18} height={18} id="navigate-up" />
                         </StyledClearedButton>
-                        <StyledClearedButton onClick={handleDistractNumber}>
+                        <StyledClearedButton disabled={disabled} onClick={handleDistractNumber}>
                           <Svg width={18} height={18} id="navigate-down" />
                         </StyledClearedButton>
                       </StyledUpDown>

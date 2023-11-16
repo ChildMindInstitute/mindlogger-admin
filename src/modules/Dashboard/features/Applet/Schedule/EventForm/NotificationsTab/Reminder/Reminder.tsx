@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TimePicker } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, StyledLabelLarge, StyledFlexTopStart } from 'shared/styles';
+import { Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../../EventForm.types';
 import { Header } from '../Header';
@@ -15,7 +16,13 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
   const { t } = useTranslation('app');
   const { setValue, control } = useFormContext<EventFormValues>();
 
-  const handleARemoveReminder = () => {
+  const [periodicity] = useWatch({
+    control,
+    name: ['periodicity'],
+  });
+  const isOncePeriodicity = periodicity === Periodicity.Once;
+
+  const handleRemoveReminder = () => {
     setValue('reminder', null);
   };
 
@@ -25,7 +32,7 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
         {t('reminder')}
       </StyledLabelLarge>
       <StyledReminder>
-        <Header onClickHandler={handleARemoveReminder} data-testid={dataTestid} />
+        <Header onClickHandler={handleRemoveReminder} data-testid={dataTestid} />
         <StyledFlexTopStart>
           <StyledInputWrapper>
             <InputController
@@ -37,6 +44,7 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
               textAdornment="day"
               tooltip={t('numberOfConsecutiveDays')}
               minNumberValue={0}
+              disabled={isOncePeriodicity}
               data-testid={`${dataTestid}-activity-incomplete`}
             />
           </StyledInputWrapper>

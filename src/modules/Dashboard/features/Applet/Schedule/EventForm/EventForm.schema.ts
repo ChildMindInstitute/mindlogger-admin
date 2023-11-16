@@ -1,7 +1,15 @@
 import * as yup from 'yup';
+import {
+  differenceInDays,
+  eachDayOfInterval,
+  eachWeekOfInterval,
+  getDay,
+  startOfWeek,
+} from 'date-fns';
 
 import i18n from 'i18n';
-import { NotificationType } from 'modules/Dashboard/api';
+import { NotificationType, Periodicity } from 'modules/Dashboard/api';
+import { getNormalizedTimezoneDate } from 'shared/utils';
 
 import {
   getTimeComparison,
@@ -33,6 +41,47 @@ export const EventFormSchema = () => {
         .object()
         .nullable()
         .shape({
+          activityIncomplete: yup
+            .number()
+            .test(
+              'activity-availability-at-day',
+              t('activityIsUnavailable'),
+              function activityAvailabilityAtDayTest(value) {
+                if (!value || value === 0) return true;
+                const startDate = this.from?.[1]?.value?.startDate;
+                const endDate = this.from?.[1]?.value?.endDate;
+                const periodicity = this.from?.[1]?.value?.periodicity;
+                const daysInPeriod =
+                  startDate && endDate && endDate > startDate
+                    ? eachDayOfInterval({ start: startDate, end: endDate })
+                    : [];
+                console.log('form values', this.from?.[1]?.value);
+
+                // const daysDifference = startDate && endDate && differenceInDays(endDate, startDate);
+                if (periodicity === Periodicity.Daily) {
+                  return value < daysInPeriod.length;
+                }
+                if (periodicity === Periodicity.Weekly) {
+                  const dayOfWeek = getDay(getNormalizedTimezoneDate(startDate));
+                  const weeklyDays = daysInPeriod.filter((date) => getDay(date) === dayOfWeek);
+                  console.log('weekly days', weeklyDays);
+                  // const weeks = eachWeekOfInterval({ start: startDate, end: endDate });
+                  // console.log('weeks', weeks);
+                  // const indicesArray = weeks.map((_, index) => index * 7);
+                  // console.log('Array of indices:', indicesArray);
+                  // return false;
+                }
+
+                return true;
+
+                //
+                // if (!startTimeValue || !endTimeValue || !value) {
+                //   return true;
+                // }
+                //
+                // return getBetweenStartEndComparison(value, startTimeValue, endTimeValue);
+              },
+            ),
           reminderTime: getNotificationTimeComparison(
             yup.string().nullable(),
             'reminderTime',

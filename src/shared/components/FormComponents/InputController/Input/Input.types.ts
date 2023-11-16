@@ -9,3 +9,9 @@ export type InputProps<T extends FieldValues> = FormInputProps & {
   value: FieldPathValue<T, Path<T>>;
   onCustomChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
+
+export type GetTextAdornment = {
+  value: number;
+  textAdornment?: string;
+  disabled?: boolean;
+};

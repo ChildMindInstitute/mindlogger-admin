@@ -2,7 +2,7 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { theme, StyledTitleMedium } from 'shared/styles';
+import { theme, StyledTitleMedium, variables } from 'shared/styles';
 import { NotificationType } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
@@ -47,7 +47,9 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     <>
       <StyledRowHeader>
         <Svg id="alert" width="16" height="20" />
-        <StyledTitleMedium sx={{ marginLeft: theme.spacing(1.5) }}>
+        <StyledTitleMedium
+          sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}
+        >
           {t('sendNotifications')}
         </StyledTitleMedium>
       </StyledRowHeader>
@@ -70,7 +72,9 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
       <StyledRow>
         <StyledRowHeader>
           <Svg id="clock" width="20" height="20" />
-          <StyledTitleMedium sx={{ marginLeft: theme.spacing(1.5) }}>
+          <StyledTitleMedium
+            sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}
+          >
             {t('sendReminder')}
           </StyledTitleMedium>
         </StyledRowHeader>
