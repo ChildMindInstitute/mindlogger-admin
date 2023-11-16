@@ -6,7 +6,6 @@ import {
   isDrawingAnswerData,
   UserActionType,
 } from 'shared/types';
-import { getObjectFromList } from 'shared/utils/builderHelpers';
 import {
   checkIfHasMigratedAnswers,
   getIdBeforeMigration,
@@ -17,6 +16,8 @@ import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getR
 import { ItemsWithFileResponses } from 'shared/consts';
 import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
 import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
+
+import { getObjectFromList } from '../getObjectFromList';
 
 const getDecryptedAnswersObject = ({
   decryptedAnswers,
