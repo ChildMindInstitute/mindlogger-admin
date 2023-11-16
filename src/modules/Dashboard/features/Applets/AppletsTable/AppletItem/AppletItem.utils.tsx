@@ -27,7 +27,7 @@ export const getActions = ({
   const isOwner = roles?.includes(Roles.Owner);
   const isCoordinator = roles?.includes(Roles.Coordinator);
   const isSuperAdmin = roles?.includes(Roles.SuperAdmin);
-  const commonCondition = isManagerOrOwner(roles?.[0]) || isEditor;
+  const commonCondition = isManagerOrOwner(roles?.[0]) || isEditor || isSuperAdmin;
 
   return [
     {
@@ -41,14 +41,14 @@ export const getActions = ({
       icon: <Svg id="users" />,
       action: viewUsers,
       tooltipTitle: t('viewUsers'),
-      isDisplayed: isManagerOrOwner(roles?.[0]) || isReviewer || isCoordinator,
+      isDisplayed: isManagerOrOwner(roles?.[0]) || isReviewer || isCoordinator || isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-view-users',
     },
     {
       icon: <Svg id="calendar" />,
       action: viewCalendar,
       tooltipTitle: t('viewGeneralCalendar'),
-      isDisplayed: isManagerOrOwner(roles?.[0]) || isCoordinator,
+      isDisplayed: isManagerOrOwner(roles?.[0]) || isCoordinator || isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-view-calendar',
     },
     {
@@ -76,7 +76,7 @@ export const getActions = ({
       icon: <Svg id="switch-account" />,
       action: transferOwnership,
       tooltipTitle: t('transferOwnership'),
-      isDisplayed: isOwner,
+      isDisplayed: isOwner || isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-transfer',
     },
     // Share to Library functionality shall be hidden on UI until the Moderation process within MindLogger is

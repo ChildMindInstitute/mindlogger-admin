@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
 
@@ -8,9 +8,9 @@ import { useAppDispatch } from 'redux/store';
 import {
   useCallbackPrompt,
   useCheckIfNewApplet,
+  useLogout,
   usePromptSetup,
   useRemoveAppletData,
-  useLogout,
 } from 'shared/hooks';
 import {
   Encryption,
@@ -21,7 +21,7 @@ import {
   Mixpanel,
   SettingParam,
 } from 'shared/utils';
-import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
+import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
 import { auth, workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
@@ -30,16 +30,20 @@ import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { AppletFormValues } from 'modules/Builder/types';
 import { reportConfig } from 'modules/Builder/state';
+import {
+  FlowReportFieldsPrepareType,
+  getEntityReportFields,
+} from 'modules/Builder/utils/getEntityReportFields';
 
 import {
-  removeAppletExtraFields,
+  getActivityItems,
+  getCurrentEntitiesIds,
+  getScoresAndReports,
+  remapSubscaleSettings,
   removeActivityExtraFields,
   removeActivityFlowExtraFields,
   removeActivityFlowItemExtraFields,
-  remapSubscaleSettings,
-  getActivityItems,
-  getScoresAndReports,
-  getCurrentEntitiesIds,
+  removeAppletExtraFields,
 } from './SaveAndPublish.utils';
 
 export const useAppletDataFromForm = () => {
@@ -64,6 +68,11 @@ export const useAppletDataFromForm = () => {
             items: getActivityItems(activity),
             subscaleSetting: remapSubscaleSettings(activity),
             scoresAndReports: getScoresAndReports(activity),
+            ...getEntityReportFields({
+              reportItem: activity.reportIncludedItemName,
+              activityItems: activity.items,
+              type: FlowReportFieldsPrepareType.KeyToName,
+            }),
             ...removeActivityExtraFields(),
           }) as Activity,
       ),
@@ -80,6 +89,12 @@ export const useAppletDataFromForm = () => {
               ...item,
               ...removeActivityFlowItemExtraFields(),
             })),
+            ...getEntityReportFields({
+              reportActivity: flow.reportIncludedActivityName ?? '',
+              reportItem: flow.reportIncludedItemName ?? '',
+              activities: appletInfo.activities,
+              type: FlowReportFieldsPrepareType.KeyToName,
+            }),
             ...removeActivityFlowExtraFields(),
           }) as ActivityFlow,
       ),

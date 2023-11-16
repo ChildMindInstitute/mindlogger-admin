@@ -2,16 +2,12 @@ import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
-import { base } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
 import { page } from 'resources';
+import { initialStateData } from 'shared/state';
 
 import { DashboardAppletSettings } from './DashboardAppletSettings';
 
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 const route = `/dashboard/${mockedAppletId}/settings`;
 const routePath = page.appletSettings;
 const getPreloadedState = (role = Roles.Manager, isAppletExist = true) => ({
@@ -49,7 +45,7 @@ describe('DashboardAppletSettings component tests', () => {
     expect(screen.getByTestId('dashboard-applet-settings')).toBeInTheDocument();
   });
 
-  test('should render no permission withoud applet', () => {
+  test('should render no permission without applet', () => {
     renderWithProviders(<DashboardAppletSettings />, {
       preloadedState: getPreloadedState(Roles.Editor, false),
       route,

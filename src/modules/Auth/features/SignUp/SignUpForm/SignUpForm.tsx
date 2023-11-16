@@ -8,8 +8,9 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText, StyledLinkBtn } from 'shared/styles';
-import { getErrorMessage, Mixpanel, navigateToLibrary } from 'shared/utils';
+import { Mixpanel } from 'shared/utils';
 import { auth } from 'modules/Auth/state';
+import { navigateToLibrary } from 'modules/Auth/utils';
 
 import {
   StyledSignUpHeader,
@@ -60,7 +61,7 @@ export const SignUpForm = () => {
     }
 
     if (signUp.rejected.match(result)) {
-      setErrorMessage(getErrorMessage(result.payload));
+      setErrorMessage(result.payload as string);
     }
   };
 

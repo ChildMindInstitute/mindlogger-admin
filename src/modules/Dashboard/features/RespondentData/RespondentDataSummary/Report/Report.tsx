@@ -54,7 +54,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const getDecryptedActivityData = useDecryptedActivityData();
   const { result: appletData } = applet.useAppletData() ?? {};
   const currentActivity = appletData?.activities.find(({ id }) => id === activity.id);
-  const disabledLatestReport = !currentActivity?.scoresAndReports?.generateReport;
+  const disabledLatestReport =
+    !currentActivity?.scoresAndReports?.generateReport || !appletData?.reportPublicKey;
 
   const [latestReportError, setLatestReportError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

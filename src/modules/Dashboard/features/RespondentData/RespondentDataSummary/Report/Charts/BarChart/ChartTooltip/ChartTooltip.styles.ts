@@ -6,7 +6,7 @@ export const StyledTooltip = styled(Box)`
   max-width: 20rem;
   position: absolute;
   display: none;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -100%);
   z-index: ${theme.zIndex.fab};
   background-color: ${variables.palette.on_surface};
   border-radius: ${variables.borderRadius.xs};

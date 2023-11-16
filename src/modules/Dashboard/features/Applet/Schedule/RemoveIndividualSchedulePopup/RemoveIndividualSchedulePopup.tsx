@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Modal, SubmitBtnColor, Error } from 'shared/components';
+import { Modal, SubmitBtnColor, Error, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
 import { removeIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
@@ -32,15 +32,9 @@ export const RemoveIndividualSchedulePopup = ({
   const navigate = useNavigate();
   const { getAllWorkspaceRespondents } = users.thunk;
   const { ownerId } = workspaces.useData() || {};
-  const { execute, error } = useAsync(removeIndividualEventsApi, () => {
+  const { execute, error, isLoading } = useAsync(removeIndividualEventsApi, () => {
     if (!appletId) return;
     dispatch(applets.thunk.getEvents({ appletId, respondentId }));
-    if (!ownerId) return;
-    dispatch(
-      getAllWorkspaceRespondents({
-        params: { ownerId, appletId },
-      }),
-    );
   });
 
   const getNextStep = () =>
@@ -62,6 +56,12 @@ export const RemoveIndividualSchedulePopup = ({
     setSelectedRespondent(null);
     navigate(generatePath(page.appletSchedule, { appletId }));
     onClose();
+    if (!appletId || !ownerId) return;
+    dispatch(
+      getAllWorkspaceRespondents({
+        params: { ownerId, appletId },
+      }),
+    );
   };
 
   const screens = getScreens({ name, isEmpty, onSubmit, handleRemovedScheduleClose, getNextStep });
@@ -77,12 +77,16 @@ export const RemoveIndividualSchedulePopup = ({
       submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
+      disabledSubmit={isLoading}
       data-testid={dataTestid}
     >
-      <StyledModalWrapper>
-        {screens[step].component}
-        {error && <Error error={error} />}
-      </StyledModalWrapper>
+      <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        <StyledModalWrapper>
+          {screens[step].component}
+          {error && <Error error={error} />}
+        </StyledModalWrapper>
+      </>
     </Modal>
   );
 };

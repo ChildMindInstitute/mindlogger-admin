@@ -9,6 +9,7 @@ import {
 } from 'shared/state';
 import { createArray, groupBy } from 'shared/utils';
 import { Option } from 'shared/components/FormComponents';
+import { DEFAULT_SLIDER_MAX_NUMBER, DEFAULT_SLIDER_ROWS_MIN_NUMBER } from 'modules/Builder/consts';
 
 import { OptionTypes } from './Alert.types';
 
@@ -129,10 +130,14 @@ export const getSliderRowsItemList = (formValues: ItemFormValues, { sliderId }: 
   }, []);
 
   if ([minValue, maxValue].includes(undefined)) return [];
-  const maxValueNumber = Number(maxValue);
-  const minValueNumber = Number(minValue);
+  const maxValueNumber =
+    Number(maxValue) > DEFAULT_SLIDER_MAX_NUMBER ? DEFAULT_SLIDER_MAX_NUMBER : Number(maxValue);
+  const minValueNumber =
+    Number(minValue) < DEFAULT_SLIDER_ROWS_MIN_NUMBER
+      ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
+      : Number(minValue);
 
-  return createArray(Number(maxValueNumber) - Number(minValueNumber) + 1, (index) => {
+  return createArray(maxValueNumber - minValueNumber + 1, (index) => {
     const value = `${minValueNumber + index}`;
 
     return {

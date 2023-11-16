@@ -33,10 +33,14 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
   };
 
   const handleAddReminder = () => {
-    setValue('reminder', {
-      activityIncomplete: 0,
-      reminderTime: startTime,
-    });
+    setValue(
+      'reminder',
+      {
+        activityIncomplete: 0,
+        reminderTime: startTime,
+      },
+      { shouldDirty: true },
+    );
   };
 
   return (

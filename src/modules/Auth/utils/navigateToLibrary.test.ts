@@ -1,5 +1,6 @@
+import { LocalStorageKeys, storage } from 'shared/utils/storage';
+
 import { navigateToLibrary } from './navigateToLibrary';
-import { LocalStorageKeys, storage } from './storage';
 
 describe('navigateToLibrary', () => {
   test('should navigate to the library URL when it is present in storage', () => {

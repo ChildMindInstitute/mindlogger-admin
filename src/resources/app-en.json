@@ -73,6 +73,9 @@
   "addSubscales": "Add Subscale",
   "addToBuilder": "Add to Builder",
   "addToBuilderError": " Cart content has not been added to the builder. Please try again.",
+  "addToBuilderAccessError": "No Access",
+  "addToBuilderAppletAccessError": "Your access to the applet was removed.",
+  "addToBuilderWorkspaceAccessError": "Your access to the workspace was removed.",
   "addToCart": "Add to cart",
   "addToExistingApplet": "Add to an existing Applet",
   "addTotalScoreLookupTable": {
@@ -1198,6 +1201,7 @@
   "workspaceNameRequired": "Workspace Name is required",
   "workspaceRequired": "Please select the Workspace to proceed.",
   "workspaceSelection": "Select Workspace",
+  "workspacesLoading": "Checking your workspaces",
   "workspaceTooltip": "Workspace name displays to the managers you have invited to your applet within their interface.",
   "year": "Year",
   "years": "Years",
@@ -1205,6 +1209,10 @@
   "yesAuthorize": "Yes, authorize",
   "yesRemove": "Yes, Remove",
   "youNeedToAuthorize": "You Need to Authorize",
+  "positiveIntegerRequired": "A positive integer is required",
+  "fromToHint": "From {{min}} to {{max}}",
+  "selectValidInterval": "Select valid interval",
+  "selectValueWithinInterval": "Select a value within an interval",
   "bannerText": "<0>You are using the new version of MindLogger!</0><1>End users must update to the new app.</1><2>Take these steps now to ensure participant response data is not lost.</2>",
   "youNeedToAuthorizeHint": "To create a new Applet or merge it with others you have to authorize.",
   "errorFallback": {

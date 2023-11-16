@@ -2,19 +2,14 @@ import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { SettingParam, renderWithProviders } from 'shared/utils';
-
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
-import { base } from 'shared/state/Base';
+import { initialStateData } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
 import { page } from 'resources';
 import { RetentionPeriods } from 'shared/types';
 
 import { DataRetention } from './DataRetention';
 
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 const route = `/dashboard/${mockedAppletId}/settings/${SettingParam.DataRetention}`;
 const routePath = page.appletSettingsItem;
 const getPreloadedState = (

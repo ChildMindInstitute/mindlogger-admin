@@ -16,7 +16,8 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, getUniqueName, Mixpanel } from 'shared/utils';
+import { pluck, Mixpanel } from 'shared/utils';
+import { getUniqueName } from 'modules/Builder/utils';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
@@ -107,10 +108,9 @@ export const Activities = () => {
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {
-    const activityToRemoveName = activities[index].name;
     const newActivityFlows = activityFlows.reduce(
       (acc: AppletFormValues['activityFlows'], flow) => {
-        if (flow.reportIncludedActivityName === activityToRemoveName) {
+        if (flow.reportIncludedActivityName === activityKey) {
           flow.reportIncludedActivityName = '';
           flow.reportIncludedItemName = '';
         }
