@@ -52,7 +52,7 @@ export const getEntityReportFields = <
     selectedReportItem =
       selectedReportActivity &&
       reportItem &&
-      selectedReportActivity.items.find(
+      selectedReportActivity.items?.find(
         (item) => (isKeyToName ? getEntityKey(item) : item.name) === reportItem,
       );
   }

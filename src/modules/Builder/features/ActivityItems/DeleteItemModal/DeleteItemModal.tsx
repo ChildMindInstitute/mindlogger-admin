@@ -82,33 +82,52 @@ export const DeleteItemModal = ({
   const handleRemoveModalSubmit = () => {
     filterConditionalLogicByItem();
     if (subscales.length) {
-      setValue(
-        subscalesField,
-        subscales.map((subscale) => ({
-          ...subscale,
-          items: subscale.items.filter((item) => item !== itemIdToDelete),
-        })),
-      );
-      trigger(subscalesField);
-    }
+      let shouldTriggerSubscales = false;
+      subscales.forEach((subscale, subscaleIndex) => {
+        const subscaleItemsField = `${subscalesField}.${subscaleIndex}.items`;
+        const { items: subscaleItems } = subscale;
 
-    if (reports.length) {
-      reports.forEach((report, index) => {
-        const { itemsPrint, itemsScore } = report;
-
-        if (itemsPrint?.includes(itemName)) {
+        if (subscaleItems?.includes(itemIdToDelete)) {
+          shouldTriggerSubscales = true;
           setValue(
-            `${reportsField}.${index}.itemsPrint`,
-            itemsPrint?.filter((name) => name !== itemName),
-          );
-        }
-        if (itemsScore?.includes(itemName)) {
-          setValue(
-            `${reportsField}.${index}.itemsScore`,
-            itemsScore?.filter((name) => name !== itemName),
+            subscaleItemsField,
+            subscaleItems.filter((id) => id !== itemIdToDelete),
           );
         }
       });
+      shouldTriggerSubscales && trigger(subscalesField);
+    }
+
+    if (reports.length) {
+      let shouldTriggerReports = false;
+
+      reports.forEach((report, index) => {
+        const { itemsPrint, itemsScore, conditionalLogic } = report;
+        const reportField = `${reportsField}.${index}`;
+
+        if (itemsPrint?.includes(itemIdToDelete)) {
+          shouldTriggerReports = true;
+          setValue(`${reportField}.itemsPrint`, itemsPrint?.filter((id) => id !== itemIdToDelete));
+        }
+        if (itemsScore?.includes(itemIdToDelete)) {
+          shouldTriggerReports = true;
+          setValue(`${reportField}.itemsScore`, itemsScore?.filter((id) => id !== itemIdToDelete));
+        }
+
+        conditionalLogic?.forEach((conditional, conditionalIndex) => {
+          const { itemsPrint: conditionalItemsPrint } = conditional;
+          const conditionalLogicField = `${reportField}.conditionalLogic.${conditionalIndex}`;
+
+          if (conditionalItemsPrint?.includes(itemIdToDelete)) {
+            shouldTriggerReports = true;
+            setValue(
+              `${conditionalLogicField}.itemsPrint`,
+              conditionalItemsPrint?.filter((id) => id !== itemIdToDelete),
+            );
+          }
+        });
+      });
+      shouldTriggerReports && trigger(reportsField);
     }
 
     handleRemoveItem(itemIndexToDelete);

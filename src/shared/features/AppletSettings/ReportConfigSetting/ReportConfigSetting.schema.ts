@@ -3,6 +3,8 @@ import * as yup from 'yup';
 import i18n from 'i18n';
 import { EMAIL_REGEXP } from 'shared/consts';
 
+const REPORT_CONFIG_EMAIL_REGEXP = new RegExp(`^$|${EMAIL_REGEXP.source}`);
+
 export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean) => {
   const { t } = i18n;
   const incorrectEmail = t('incorrectEmail');
@@ -16,7 +18,7 @@ export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean)
 
   return yup
     .object({
-      email: yup.string().matches(EMAIL_REGEXP, incorrectEmail),
+      email: yup.string().matches(REPORT_CONFIG_EMAIL_REGEXP, incorrectEmail),
       ...(isActivity ? reportIncludedItemName : {}),
       ...(isActivityFlow
         ? {

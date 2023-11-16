@@ -2,7 +2,7 @@ import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
-import { TestContext } from 'yup';
+import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { page } from 'resources';
@@ -39,7 +39,6 @@ import {
   getEntityKey,
   getObjectFromList,
   getTextBetweenBrackets,
-  getUniqueName,
   INTERVAL_SYMBOL,
   Path,
   pluck,
@@ -81,7 +80,14 @@ import {
   findRelatedScore,
   FlowReportFieldsPrepareType,
   getEntityReportFields,
+  getUniqueName,
 } from 'modules/Builder/utils';
+import {
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_SLIDER_MAX_NUMBER,
+  DEFAULT_SLIDER_MIN_NUMBER,
+  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
+} from 'modules/Builder/consts';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,
@@ -792,8 +798,15 @@ const getShowMessageAndPrintItems = (message?: string, itemsPrint?: string[]) =>
   printItems: !!itemsPrint?.length,
 });
 
-const getScore = (score: ScoreReport, items: Activity['items']) => {
+const remapItemsById = (itemsObject: Record<string, Item>) => (name: string) =>
+  itemsObject[name].id;
+const getScore = (
+  score: ScoreReport,
+  items: Activity['items'],
+  itemsObject: Record<string, Item>,
+) => {
   const scoreKey = uuidv4();
+  const remapperFunction = remapItemsById(itemsObject);
 
   return {
     ...score,
@@ -804,11 +817,19 @@ const getScore = (score: ScoreReport, items: Activity['items']) => {
       key: uuidv4(),
       ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
       conditions: getScoreConditions(items, conditional.conditions, scoreKey),
+      itemsPrint: conditional.itemsPrint?.map(remapperFunction),
     })),
+    itemsScore: score.itemsScore.map(remapperFunction),
+    itemsPrint: score.itemsPrint?.map(remapperFunction),
   };
 };
 
-const getSection = (section: SectionReport, items: Activity['items'], scores: ScoreReport[]) => ({
+const getSection = (
+  section: SectionReport,
+  items: Activity['items'],
+  scores: ScoreReport[],
+  itemsObject: Record<string, Item>,
+) => ({
   ...section,
   id: uuidv4(),
   ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
@@ -822,23 +843,25 @@ const getSection = (section: SectionReport, items: Activity['items'], scores: Sc
       }),
     },
   }),
+  itemsPrint: section.itemsPrint?.map(remapItemsById(itemsObject)),
 });
 
 const getScoresAndReports = (activity: Activity) => {
   const { items, scoresAndReports } = activity;
-  if (!scoresAndReports) return;
+  if (!scoresAndReports || !items) return;
 
+  const itemsObject = getObjectFromList(items, (item) => item.name);
   const { reports: initialReports } = scoresAndReports;
   const reportsWithMappedScores = initialReports?.map((report) => {
     if (report.type === ScoreReportType.Section) return report;
 
-    return getScore(report as ScoreReport, items);
+    return getScore(report as ScoreReport, items, itemsObject);
   });
   const scores = reportsWithMappedScores?.filter((report) => report.type === ScoreReportType.Score);
   const reports = reportsWithMappedScores?.map((report) => {
     if (report.type === ScoreReportType.Score) return report;
 
-    return getSection(report as SectionReport, items, scores as ScoreReport[]);
+    return getSection(report as SectionReport, items, scores as ScoreReport[], itemsObject);
   });
 
   return {
@@ -1018,7 +1041,7 @@ export const testFunctionForUniqueness = (value: string, items: { name: string }
 export const testFunctionForTheSameVariable = (
   field: string,
   value: string,
-  context: TestContext,
+  context: yup.TestContext,
 ) => {
   const itemName = get(context, 'parent.name');
   const variableNames = getTextBetweenBrackets(value);
@@ -1026,7 +1049,7 @@ export const testFunctionForTheSameVariable = (
   return !variableNames.includes(itemName);
 };
 
-export const testFunctionForNotSupportedItems = (value: string, context: TestContext) => {
+export const testFunctionForNotSupportedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
   const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
@@ -1034,14 +1057,14 @@ export const testFunctionForNotSupportedItems = (value: string, context: TestCon
   return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };
 
-export const testFunctionForSkippedItems = (value: string, context: TestContext) => {
+export const testFunctionForSkippedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
 
   return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
 };
 
-export const testFunctionForNotExistedItems = (value: string, context: TestContext) => {
+export const testFunctionForNotExistedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
 
@@ -1094,3 +1117,60 @@ export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormV
 
 export const getRegexForIndexedField = (fieldName: string) =>
   new RegExp(`\\[(\\d+)\\].${fieldName}$`);
+
+export const isNumberTest = (value?: unknown) => typeof value === 'number' || value === undefined;
+export const isNumberAtLeastOne = (value?: unknown) =>
+  typeof value === 'number' && value >= DEFAULT_MIN_NUMBER;
+
+export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') => {
+  const isSlider = type === 'slider';
+  const minNumber = isSlider ? DEFAULT_SLIDER_MIN_NUMBER : DEFAULT_SLIDER_ROWS_MIN_NUMBER;
+
+  return {
+    minValue: yup
+      .mixed()
+      .test('is-number', t('positiveIntegerRequired'), isNumberTest)
+      .test('min-max-interval', t('selectValidInterval'), function (value) {
+        if (!value && value !== 0) return;
+        const { maxValue } = this.parent;
+
+        return value < maxValue && value >= minNumber && value < DEFAULT_SLIDER_MAX_NUMBER;
+      }),
+    maxValue: yup
+      .mixed()
+      .test('is-number', t('positiveIntegerRequired'), isNumberTest)
+      .test('min-max-interval', t('selectValidInterval'), function (value) {
+        if (!value && value !== 0) return;
+        const { minValue } = this.parent;
+
+        return value > minValue && value > minNumber && value <= DEFAULT_SLIDER_MAX_NUMBER;
+      }),
+    ...(isSlider && {
+      scores: yup
+        .array()
+        .of(
+          yup
+            .mixed()
+            .test('is-number', t('numberValueIsRequired'), isNumberTest)
+            .required(t('numberValueIsRequired')),
+        )
+        .nullable(),
+    }),
+  };
+};
+
+export const getSliderAlertValueValidation = (isContinuous: boolean) =>
+  yup
+    .mixed()
+    .test('is-number', t('selectValueWithinInterval'), isNumberTest)
+    .test('min-max-interval', t('selectValueWithinInterval'), function (value) {
+      if (!value && value !== 0) return;
+      const { minValue, maxValue } = this.from?.[1]?.value?.responseValues || {};
+      const isWithinInterval = value >= minValue && value <= maxValue;
+
+      if (!isContinuous) return isWithinInterval;
+
+      const { minValue: minAlertValue, maxValue: maxAlertValue } = this.parent || {};
+
+      return isWithinInterval && maxAlertValue > minAlertValue;
+    });

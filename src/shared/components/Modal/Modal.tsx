@@ -57,6 +57,7 @@ export const Modal = ({
         disabled={disabledSubmit}
         onClick={onSubmit}
         color={submitBtnColor}
+        data-testid={`${dataTestId}-submit-button`}
       >
         {buttonText}
       </StyledButton>

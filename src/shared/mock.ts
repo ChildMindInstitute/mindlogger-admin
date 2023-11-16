@@ -408,19 +408,33 @@ export const mockedSingleSelectFormValues = {
       {
         id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
         text: 's1',
-        score: 2,
+        score: 0,
         value: 0,
       },
       {
         id: 'e3ca9405-71e9-4627-8311-d405f383246e',
         text: 's23333333',
-        score: 4,
+        score: 0,
         value: 1,
       },
     ],
   },
   order: 1,
   question: '',
+  config: {
+    addScores: true,
+    addTooltip: false,
+    setAlerts: false,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
+    setPalette: false,
+    timer: 0,
+    skippableItem: false,
+    removeBackButton: false,
+    randomizeOptions: false,
+  },
 };
 
 export const mockedMultiSelectFormValues = {
@@ -464,6 +478,11 @@ export const mockedSliderFormValues = {
   },
   order: 3,
   question: '',
+  condig: {
+    showTickMarks: false,
+    showTickLabels: false,
+    continuousSlider: false,
+  },
 };
 
 export const mockedTimeFormValues = {
@@ -480,6 +499,99 @@ export const mockedTextFormValues = {
   responseType: 'text',
   responseValues: null,
   order: 5,
+  config: {
+    responseDataIdentifier: false,
+    correctAnswerRequired: false,
+    numericalResponseRequired: false,
+    responseRequired: false,
+    skippableItem: true,
+  },
+};
+
+export const mockedAudioPlayerFormValues = {
+  id: 'ec6aea37-4ca2-4360-b7ca-15a3c6f78513',
+  name: 'audioplayer',
+  responseType: 'audioPlayer',
+  responseValues: {
+    file: 'file.mp3',
+  },
+  order: 6,
+  config: {
+    playOnce: false,
+  },
+};
+
+export const mockedDrawingFormValues = {
+  id: '4a176a2c-86c0-4f63-94ba-37fe016d9009',
+  name: 'drawing',
+  responseType: 'drawing',
+  responseValues: {
+    drawingExample: null,
+    drawingBackground: null,
+  },
+  config: {
+    removeUndoButton: false,
+    navigationToTop: false,
+  },
+  order: 7,
+};
+
+export const mockedSingleSelectPerRowFormValues = {
+  id: '1b6e9916-e0f6-4bbe-b30f-11cf53722804',
+  name: 'sspr',
+  responseType: 'singleSelectRows',
+  responseValues: {
+    rows: [
+      {
+        id: '97aaab63-ccc2-44c6-bd39-4aea6e521726',
+        rowName: 'r1',
+      },
+      {
+        id: '063814d7-f16b-4568-a5c3-ab22230bc00d',
+        rowName: 'r2',
+      },
+    ],
+    options: [
+      {
+        id: '1879ab0a-d12c-4d8e-bef2-2f430c1ff826',
+        text: 'o1',
+      },
+      {
+        id: '3efa00c2-71f9-4f2e-a9ad-7da3a087e294',
+        text: 'o2',
+      },
+    ],
+  },
+  order: 9,
+};
+
+export const mockedSliderRowsFormValues = {
+  id: '209618c3-7d3b-4b51-89b1-14af64c212ec',
+  name: 'sliderrows',
+  responseType: 'sliderRows',
+  responseValues: {
+    rows: [
+      {
+        minLabel: 'min',
+        maxLabel: 'max',
+        minValue: 1,
+        maxValue: 5,
+        id: '54fb94f8-6932-420e-b068-b20ab32337c5',
+        label: 'slider1',
+      },
+      {
+        minLabel: 'min',
+        maxLabel: 'max',
+        minValue: 1,
+        maxValue: 6,
+        id: '83ca156f-3802-4912-9242-47ae9be3c5d9',
+        label: 'slider2',
+      },
+    ],
+    options: [],
+  },
+  config: {},
+  order: 8,
 };
 
 export const mockedInvitation = {
@@ -528,6 +640,10 @@ export const mockedAppletFormData = {
         mockedSliderFormValues,
         mockedTimeFormValues,
         mockedTextFormValues,
+        mockedAudioPlayerFormValues,
+        mockedDrawingFormValues,
+        mockedSliderRowsFormValues,
+        mockedSingleSelectPerRowFormValues,
       ],
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
@@ -1139,4 +1255,45 @@ export const mockedExportContextItemData = {
   flowId: null,
   activityName: 'New Activity#1',
   subscaleSetting: null,
+};
+
+export const mockedScoreReport = {
+  type: ScoreReportType.Score,
+  name: 'firstScore',
+  id: 'sumScore_firstscore',
+  key: '5bad6e4a-7035-4ddd-9c54-375604025a',
+  calculationType: CalculationType.Sum,
+  itemsScore: ['multiple', 'slider'],
+  showMessage: true,
+  message: 'message [[sumScore_firstscore]]',
+  printItems: false,
+  itemsPrint: [],
+  conditionalLogic: [
+    {
+      name: 'cnsdsd',
+      id: 'sumScore_firstscore_cnsdsd',
+      flagScore: false,
+      showMessage: true,
+      message: 'message',
+      printItems: false,
+      itemsPrint: [],
+      match: 'all',
+      conditions: [
+        {
+          itemName: 'sumScore_firstscore',
+          type: 'EQUAL',
+          payload: {
+            value: 0,
+          },
+        },
+        {
+          itemName: 'sumScore_firstscore',
+          type: 'LESS_THAN',
+          payload: {
+            value: 2,
+          },
+        },
+      ],
+    },
+  ],
 };

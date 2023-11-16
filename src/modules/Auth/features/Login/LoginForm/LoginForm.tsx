@@ -9,9 +9,10 @@ import { SignIn } from 'api';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
+import { navigateToLibrary } from 'modules/Auth/utils';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
-import { Mixpanel, navigateToLibrary } from 'shared/utils';
+import { Mixpanel } from 'shared/utils';
 import { variables } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
 
