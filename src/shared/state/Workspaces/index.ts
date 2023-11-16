@@ -35,6 +35,4 @@ export const workspaces = {
         },
       }) => status,
     ),
-  useWorkspacesRolesData: (): WorkspacesSchema['workspacesRoles']['data'] =>
-    useAppSelector(({ workspaces: { workspacesRoles } }) => workspacesRoles?.data),
 };

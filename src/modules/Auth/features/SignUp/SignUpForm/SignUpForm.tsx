@@ -8,8 +8,9 @@ import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText, StyledLinkBtn } from 'shared/styles';
-import { Mixpanel, navigateToLibrary } from 'shared/utils';
+import { Mixpanel } from 'shared/utils';
 import { auth } from 'modules/Auth/state';
+import { navigateToLibrary } from 'modules/Auth/utils';
 
 import {
   StyledSignUpHeader,

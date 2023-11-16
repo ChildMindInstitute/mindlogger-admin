@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 
 import { postFileUploadApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
-import { falseReturnFunc } from 'shared/utils/func';
+import { falseReturnFunc } from 'shared/utils/falseReturnFunc';
 import { getUploadFormData } from 'shared/utils/getUploadFormData';
 import { MediaType } from 'shared/consts';
 

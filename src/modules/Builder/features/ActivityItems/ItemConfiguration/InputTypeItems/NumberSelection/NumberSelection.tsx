@@ -17,7 +17,6 @@ export const NumberSelection = ({ name }: NumberSelectionProps) => {
   const commonProps = {
     control,
     type: 'number',
-    minNumberValue: 0,
   };
 
   const minValueName = `${name}.responseValues.minValue`;

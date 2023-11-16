@@ -5,8 +5,9 @@ import i18n from 'i18n';
 import { StyledTitleSmall, variables } from 'shared/styles';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { SubscaleTotalScore } from 'shared/consts';
-import { capitalize, getEntityKey, getObjectFromList, removeMarkdown } from 'shared/utils';
+import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 import { DataTableColumn } from 'shared/components';
+import { removeMarkdown } from 'modules/Builder/utils';
 
 import {
   ItemElement,

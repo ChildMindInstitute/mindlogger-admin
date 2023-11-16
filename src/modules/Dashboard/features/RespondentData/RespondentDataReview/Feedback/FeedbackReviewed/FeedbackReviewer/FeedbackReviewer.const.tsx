@@ -1,4 +1,5 @@
 import {
+  AssessmentActivityItem,
   MultiSelectActivityItem,
   SingleSelectActivityItem,
   SliderActivityItem,
@@ -10,13 +11,12 @@ import {
   Slider,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessementItems';
 import {
-  ActivityItemAnswer,
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
 } from 'shared/types';
 
-export const getResponseItem = ({ activityItem, answer }: ActivityItemAnswer) => {
+export const getResponseItem = ({ activityItem, answer }: AssessmentActivityItem) => {
   const responseType = activityItem.responseType;
   switch (responseType) {
     case ItemResponseType.SingleSelection:

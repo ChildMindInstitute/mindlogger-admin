@@ -18,8 +18,9 @@ import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { DEFAULT_MILLISECONDS_DURATION, MIN_MILLISECONDS_DURATION } from 'shared/consts';
-import { getIsRequiredValidateMessage, getUploadedMediaName } from 'shared/utils';
+import { getIsRequiredValidateMessage } from 'shared/utils';
 import { FlankerItemPositions } from 'modules/Builder/types';
+import { getUploadedMediaName } from 'modules/Builder/utils';
 
 import { StyledRemoveButton } from './FixationContent.styles';
 

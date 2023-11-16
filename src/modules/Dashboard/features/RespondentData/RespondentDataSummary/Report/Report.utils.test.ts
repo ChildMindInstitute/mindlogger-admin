@@ -1,5 +1,5 @@
 import { ItemResponseType } from 'shared/consts';
-import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+import { SingleAndMultipleSelectItemResponseValues, SingleSelectItem } from 'shared/state';
 import { ActivityItemAnswer } from 'shared/types';
 
 import {
@@ -157,7 +157,7 @@ const currActivityItem = {
     allowEdit: true,
     id: 'e77acf6b-0938-45c8-a254-da620941daf3',
     order: 1,
-  },
+  } as SingleSelectItem,
   answer: {
     value: 2,
     text: null,

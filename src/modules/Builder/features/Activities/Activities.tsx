@@ -7,7 +7,7 @@ import { Box } from '@mui/material';
 
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { page } from 'resources';
-import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
+import { ActivityFormValues, AppletFormValues, GetNewPerformanceTask } from 'modules/Builder/types';
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
@@ -16,7 +16,8 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, getUniqueName, Mixpanel } from 'shared/utils';
+import { pluck, Mixpanel } from 'shared/utils';
+import { getUniqueName } from 'modules/Builder/utils';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
@@ -135,7 +136,7 @@ export const Activities = () => {
       ? getNewPerformanceTask({
           name,
           description: activityToDuplicate.description,
-          performanceTask: activityToDuplicate,
+          performanceTask: activityToDuplicate as GetNewPerformanceTask['performanceTask'],
         })
       : getNewActivity({ activity: activityToDuplicate });
 

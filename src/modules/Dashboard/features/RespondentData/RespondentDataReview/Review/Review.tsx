@@ -6,7 +6,7 @@ import { getActivityAnswerApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { getDictionaryText } from 'shared/utils';
 import { Spinner } from 'shared/components';
-import { ActivityItemAnswer } from 'shared/types';
+import { EncryptedAnswerSharedProps } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
 
@@ -18,7 +18,10 @@ import { getResponseItem } from './Review.const';
 
 export const Review = ({ answerId, activityId, 'data-testid': dataTestid }: ReviewProps) => {
   const { appletId } = useParams();
-  const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswer[] | null>(null);
+  const [activityItemAnswers, setActivityItemAnswers] = useState<
+    | ReturnType<typeof getDecryptedActivityData<EncryptedAnswerSharedProps>>['decryptedAnswers']
+    | null
+  >(null);
   const getDecryptedActivityData = useDecryptedActivityData();
 
   const { execute: getActivityAnswer, isLoading } = useAsync(getActivityAnswerApi, (res) => {
@@ -39,26 +42,28 @@ export const Review = ({ answerId, activityId, 'data-testid': dataTestid }: Revi
       {isLoading && <Spinner />}
       {answerId && activityItemAnswers && (
         <StyledReview>
-          {activityItemAnswers.map(({ activityItem, answer }, index) => {
+          {activityItemAnswers.map((activityItemAnswer, index) => {
             const testId = `${dataTestid}-${index}`;
+            const {
+              activityItem: { id, question, responseType },
+            } = activityItemAnswer;
 
             return (
-              <Box sx={{ mb: 4.8 }} key={activityItem.id} data-testid={testId}>
+              <Box sx={{ mb: 4.8 }} key={id} data-testid={testId}>
                 <CollapsedMdText
-                  text={getDictionaryText(activityItem.question)}
+                  text={getDictionaryText(question)}
                   maxHeight={120}
                   data-testid={`${testId}-question`}
                 />
-                {UNSUPPORTED_ITEMS.includes(activityItem.responseType) ? (
+                {UNSUPPORTED_ITEMS.includes(responseType) ? (
                   <UnsupportedItemResponse
-                    itemType={activityItem.responseType}
+                    itemType={responseType}
                     data-testid={`${testId}-response`}
                   />
                 ) : (
                   <>
                     {getResponseItem({
-                      activityItem,
-                      answer,
+                      ...activityItemAnswer,
                       'data-testid': `${testId}-response`,
                     })}
                   </>

@@ -12,7 +12,7 @@ import {
 } from './Actions.styles';
 import { Action, ActionsProps } from './Actions.types';
 
-export const Actions = ({
+export const Actions = <T = unknown,>({
   items,
   context,
   visibleByDefault = false,
@@ -21,10 +21,10 @@ export const Actions = ({
   dragHandleProps,
   isDragging,
   'data-testid': dataTestid,
-}: ActionsProps) => {
+}: ActionsProps<T>) => {
   const [visibleActions, setVisibleActions] = useState(false);
 
-  const onClick = (action: Action['action']) => (event: MouseEvent<HTMLElement>) => {
+  const onClick = (action: Action<T>['action']) => (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     action(context, event);
   };
