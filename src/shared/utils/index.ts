@@ -35,3 +35,4 @@ export * from './isSystemItem';
 export * from './getObjectFromList';
 export * from './getEntityKey';
 export * from './validationSchemas';
+export * from './logger';
