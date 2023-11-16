@@ -2,11 +2,13 @@
 // @ts-nocheck
 import { ReactNode, useImperativeHandle, forwardRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { mockedAppletFormData } from 'shared/mock';
 import { ExtendedRenderOptions } from 'redux/store';
 import { AppletFormValues } from 'modules/Builder/types';
 
+import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { renderWithProviders } from './renderWithProviders';
 
 type FormComponentProps = {
@@ -24,6 +26,7 @@ const FormComponent = forwardRef(({ defaultValues, children }: FormComponentProp
   const methods = useForm<AppletFormValues>({
     defaultValues: defaultValues ?? mockedAppletFormData,
     mode: 'onChange',
+    resolver: yupResolver(AppletSchema()),
   });
 
   useImperativeHandle(ref, () => methods, [ref]);
