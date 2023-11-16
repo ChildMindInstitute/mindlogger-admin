@@ -150,6 +150,13 @@ export enum OrderName {
   Fourth = 'fourth',
 }
 
+export enum ABTrailsItemQuestions {
+  'Sample A',
+  'Test A',
+  'Sample B',
+  'Test B',
+}
+
 export enum GyroscopeItemNames {
   GeneralInstruction = 'Gyroscope_General_instruction',
   PracticeInstruction = 'Gyroscope_Calibration_Practice_instruction',

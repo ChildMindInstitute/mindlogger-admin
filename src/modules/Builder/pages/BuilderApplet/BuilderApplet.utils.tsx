@@ -50,6 +50,7 @@ import {
   ScoreReportType,
 } from 'shared/consts';
 import {
+  ABTrailsItemQuestions,
   ActivityFlowFormValues,
   ActivityFormValues,
   AppletFormValues,
@@ -508,6 +509,7 @@ export const getABTrailsItems = (deviceType: DeviceType) =>
     key: uuidv4(),
     responseType: ItemResponseType.ABTrails,
     name: `${ItemResponseType.ABTrails}_${deviceType}_${index + 1}`,
+    question: ABTrailsItemQuestions[index],
     config: {
       deviceType,
       orderName: OrderName[ordinalStrings[index] as keyof typeof OrderName],
