@@ -29,52 +29,38 @@ export const prepareData = async (
     const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
     const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(parsedAnswers);
 
-    return parsedAnswersWithPublicUrls.reduce(
-      (acc, data) => {
-        const rawAnswersObject = getObjectFromList(
-          data.decryptedAnswers,
-          (item) => item.activityItem.name,
-        );
+    return parsedAnswersWithPublicUrls.reduce((acc, data) => {
+      const rawAnswersObject = getObjectFromList(
+        data.decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
 
-        const reportData = getReportData(acc.reportData, rawAnswersObject, data.decryptedAnswers);
-        const mediaData = getMediaData(acc.mediaData, data.decryptedAnswers);
-        const activityJourneyData = getActivityJourneyData(
-          acc.activityJourneyData,
-          rawAnswersObject,
-          data.decryptedAnswers,
-          data.decryptedEvents,
-        );
-        const drawingItemsData = getDrawingItemsData(acc.drawingItemsData, data.decryptedAnswers);
-        const stabilityTrackerItemsData = getStabilityTrackerItemsData(
-          acc.stabilityTrackerItemsData,
-          data.decryptedAnswers,
-        );
-        const abTrailsItemsData = getABTrailsItemsData(
-          acc.abTrailsItemsData,
-          data.decryptedAnswers,
-        );
-        const flankerItemsData = getFlankerItemsData(acc.flankerItemsData, data.decryptedAnswers);
+      const reportData = getReportData(acc.reportData, rawAnswersObject, data.decryptedAnswers);
+      const mediaData = getMediaData(acc.mediaData, data.decryptedAnswers);
+      const activityJourneyData = getActivityJourneyData(
+        acc.activityJourneyData,
+        rawAnswersObject,
+        data.decryptedAnswers,
+        data.decryptedEvents,
+      );
+      const drawingItemsData = getDrawingItemsData(acc.drawingItemsData, data.decryptedAnswers);
+      const stabilityTrackerItemsData = getStabilityTrackerItemsData(
+        acc.stabilityTrackerItemsData,
+        data.decryptedAnswers,
+      );
+      const abTrailsItemsData = getABTrailsItemsData(acc.abTrailsItemsData, data.decryptedAnswers);
+      const flankerItemsData = getFlankerItemsData(acc.flankerItemsData, data.decryptedAnswers);
 
-        return {
-          reportData,
-          activityJourneyData,
-          mediaData,
-          drawingItemsData,
-          stabilityTrackerItemsData,
-          abTrailsItemsData,
-          flankerItemsData,
-        };
-      },
-      {
-        reportData: [],
-        activityJourneyData: [],
-        mediaData: [],
-        drawingItemsData: [],
-        stabilityTrackerItemsData: [],
-        abTrailsItemsData: [],
-        flankerItemsData: [],
-      } as AppletExportData,
-    );
+      return {
+        reportData,
+        activityJourneyData,
+        mediaData,
+        drawingItemsData,
+        stabilityTrackerItemsData,
+        abTrailsItemsData,
+        flankerItemsData,
+      };
+    }, getDefaultExportData() as AppletExportData);
   } catch (error) {
     console.warn('Error while export data', error);
 
