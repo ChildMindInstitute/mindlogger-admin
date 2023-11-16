@@ -123,7 +123,11 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       await fetchData();
     },
     viewUsers: () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS)),
-    viewCalendar: () => checkAppletEncryption(() => navigate(APPLET_SCHEDULE)),
+    viewCalendar: () =>
+      checkAppletEncryption(() => {
+        navigate(APPLET_SCHEDULE);
+        Mixpanel.track('View General calendar click');
+      }),
     deleteAction: () =>
       checkAppletEncryption(() =>
         dispatch(
