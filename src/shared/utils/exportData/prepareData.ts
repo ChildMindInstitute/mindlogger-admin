@@ -10,6 +10,7 @@ import {
   getStabilityTrackerItemsData,
 } from './getItemsData';
 import { getActivityJourneyData, getMediaData, getReportData } from './getReportAndMediaData';
+import { sendLogFile } from '../logger';
 
 const getDefaultExportData = (): AppletExportData => ({
   reportData: [],
@@ -61,7 +62,9 @@ export const prepareData = async (
         flankerItemsData,
       };
     }, getDefaultExportData());
-  } catch (error) {
+  } catch (e) {
+    const error = e as TypeError;
+    await sendLogFile({ error });
     console.warn('Error while export data', error);
 
     return getDefaultExportData();
