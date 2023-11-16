@@ -83,7 +83,7 @@
     "test": "react-app-rewired test",
     "test:coverage": "npm run test --coverage --colors",
     "test:related": "sh test-related.sh",
-    "test:nowatch": "cross-env CI=true npm run test --colors --watchAll=false",
+    "test:nowatch": "cross-env CI=true npm run test -- --colors --watchAll=false --passWithNoTests",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
   },
