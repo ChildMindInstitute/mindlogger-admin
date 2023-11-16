@@ -11,7 +11,7 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { postFilePresignApi } from 'shared/api';
 
 import { getDrawingUrl, getMediaUrl } from './exportData/getUrls';
-import { getObjectFromList } from './builderHelpers';
+import { getObjectFromList } from './getObjectFromList';
 
 export const getParsedAnswers = (
   result: ExportDataResult,

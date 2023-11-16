@@ -16,7 +16,8 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, getUniqueName, Mixpanel } from 'shared/utils';
+import { pluck, Mixpanel } from 'shared/utils';
+import { getUniqueName } from 'modules/Builder/utils';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';

@@ -148,17 +148,30 @@ const removeReportsFields = () => ({
   ...removeReactHookFormKey(),
 });
 
-const getScore = (score: ScoreReport, items: ActivityFormValues['items']) => ({
+const remapItemsByName = (itemsObject: Record<string, ItemFormValues>) => (name: string) =>
+  itemsObject[name].name;
+const getScore = (
+  score: ScoreReport,
+  items: ActivityFormValues['items'],
+  itemsObjectById: Record<string, ItemFormValues>,
+) => ({
   ...score,
   ...removeReportsFields(),
   conditionalLogic: score.conditionalLogic?.map((conditional) => ({
     ...conditional,
     ...removeReportsFields(),
-    conditions: getConditions({ items, conditions: conditional.conditions, score }),
+    conditions: getConditions({
+      items,
+      conditions: conditional.conditions,
+      score,
+    }),
+    itemsPrint: conditional.itemsPrint?.map(remapItemsByName(itemsObjectById)),
   })),
+  itemsScore: score.itemsScore.map(remapItemsByName(itemsObjectById)),
+  itemsPrint: score.itemsPrint?.map(remapItemsByName(itemsObjectById)),
 });
 
-const getSection = ({ section, items, scores }: GetSection) => ({
+const getSection = ({ section, items, scores, itemsObjectById }: GetSection) => ({
   ...section,
   ...removeReportsFields(),
   id: undefined,
@@ -173,21 +186,23 @@ const getSection = ({ section, items, scores }: GetSection) => ({
       ...removeReactHookFormKey(),
     },
   }),
+  itemsPrint: section.itemsPrint?.map(remapItemsByName(itemsObjectById)),
 });
 
 export const getScoresAndReports = (activity: ActivityFormValues) => {
   const { items, scoresAndReports } = activity;
   if (!scoresAndReports) return;
 
+  const itemsObjectById = getObjectFromList(items, (item) => getEntityKey(item));
   const { reports: initialReports } = scoresAndReports;
 
   const scores = initialReports?.filter(isScoreReport);
   const reports = initialReports?.map((report) => {
     if (isSectionReport(report)) {
-      return getSection({ section: report, items, scores });
+      return getSection({ section: report, items, scores, itemsObjectById });
     }
 
-    return getScore(report, items);
+    return getScore(report, items, itemsObjectById);
   });
 
   return {

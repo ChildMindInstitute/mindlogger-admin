@@ -7,8 +7,9 @@ import {
   DecryptedSliderAnswer,
 } from 'shared/types';
 import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
-import { getObjectFromList } from 'shared/utils/builderHelpers';
 import { ItemResponseType } from 'shared/consts';
+
+import { getObjectFromList } from '../getObjectFromList';
 
 const getTimeString = (obj?: DecryptedDateRangeAnswer['value']['from' | 'to']) => {
   if (!obj) return '';

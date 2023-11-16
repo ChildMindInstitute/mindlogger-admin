@@ -1,7 +1,7 @@
 import { AppletExportData, ExportDataResult } from 'shared/types/answer';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
-import { getObjectFromList } from '../builderHelpers';
+import { getObjectFromList } from '../getObjectFromList';
 import { getAnswersWithPublicUrls, getParsedAnswers } from '../getParsedAnswers';
 import {
   getABTrailsItemsData,

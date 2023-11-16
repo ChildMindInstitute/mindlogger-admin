@@ -10,7 +10,8 @@ export const shouldForwardProp = {
       prop === 'anchorEl' ||
       prop === 'anchorOrigin' ||
       prop === 'transformOrigin' ||
-      prop === 'MenuListProps'
+      prop === 'MenuListProps' ||
+      prop === 'badgeContent'
     )
       return true;
 

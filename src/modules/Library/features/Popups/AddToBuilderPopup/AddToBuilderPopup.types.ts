@@ -17,10 +17,12 @@ export enum AddToBuilderActions {
 }
 
 export enum AddToBuilderSteps {
+  LoadingWorkspaces,
   SelectWorkspace,
   AddToBuilderActions,
   SelectApplet,
   Error,
+  AccessError,
 }
 
 export type Step = {
@@ -49,6 +51,7 @@ export type Applet = {
 export type GetStep = {
   control: Control<AddToBuilderForm>;
   isWorkspacesModalVisible: boolean;
+  hasAppletAccessError: boolean;
   workspaces: WorkspaceWithRoles[];
   applets: Applet[];
   setStep: Dispatch<SetStateAction<AddToBuilderSteps>>;
@@ -69,8 +72,10 @@ export type TableController = {
 };
 
 export type AddToBuilderPopupSchemaType = {
+  [AddToBuilderSteps.LoadingWorkspaces]: AnyObjectSchema;
   [AddToBuilderSteps.SelectWorkspace]: ObjectSchema<{ selectedWorkspace: string }>;
   [AddToBuilderSteps.AddToBuilderActions]: ObjectSchema<{ addToBuilderAction: string }>;
   [AddToBuilderSteps.SelectApplet]: ObjectSchema<{ selectedApplet?: string }>;
   [AddToBuilderSteps.Error]: AnyObjectSchema;
+  [AddToBuilderSteps.AccessError]: AnyObjectSchema;
 };

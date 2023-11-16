@@ -108,9 +108,12 @@ const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: str
 
 export const getIsScoreIdVariable = (score: ScoreReport) => {
   const { id } = score;
-  let isVariable = false;
 
-  isVariable = isMessageIncludeScoreId(score.showMessage, id, score.message);
+  if (isMessageIncludeScoreId(score.showMessage, id, score.message)) {
+    return true;
+  }
+
+  let isVariable = false;
   score.conditionalLogic?.forEach((condition) => {
     isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message);
   });
