@@ -2,7 +2,7 @@ import JSZip from 'jszip';
 
 import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
-import { BLOB_ZIP_OPTIONS } from './exportZip';
+import { BLOB_ZIP_OPTIONS } from './exportData/exportZip';
 import { postLogFile } from '../api/api';
 
 const DEVICE_ID = 'browser';
