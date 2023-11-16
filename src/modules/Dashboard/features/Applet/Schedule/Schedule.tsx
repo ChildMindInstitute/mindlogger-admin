@@ -36,11 +36,11 @@ export const Schedule = () => {
   );
 
   useEffect(() => {
-    if (!appletId || !hasAccess || !respondentId || !ownerId) return;
-
+    if (!appletId || !hasAccess) return;
     const { getEvents } = applets.thunk;
-
     dispatch(getEvents({ appletId, respondentId }));
+
+    if (!respondentId || !ownerId) return;
     dispatch(getRespondentDetails({ ownerId, appletId, respondentId }));
 
     return () => {
