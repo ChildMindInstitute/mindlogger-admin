@@ -15,6 +15,8 @@ import {
   updateMessagesWithVariable,
 } from './ScoreContent.utils';
 
+const report = { ...mockedScoreReport, showMessage: true };
+
 describe('getScoreId', () => {
   test.each`
     name               | calculationType               | expectedResult                  | description
@@ -50,11 +52,11 @@ describe('getScoreRange', () => {
 });
 
 describe('getIsScoreIdVariable', () => {
-  const reportWithoutVariable = { ...mockedScoreReport, message: 'regular message' };
+  const reportWithoutVariable = { ...report, message: 'regular message' };
 
   test.each`
     score                    | expectedResult | description
-    ${mockedScoreReport}     | ${true}        | ${'should be true'}
+    ${report}                | ${true}        | ${'should be true'}
     ${reportWithoutVariable} | ${false}       | ${'should be false'}
   `('$description', async ({ score, expectedResult }) => {
     expect(getIsScoreIdVariable(score)).toBe(expectedResult);
@@ -69,7 +71,7 @@ describe('updateMessagesWithVariable', () => {
     ${'scoreFirst'} | ${'scoreSecond'} | ${'should set new message with scoreSecond variable'}
     ${'score_F'}    | ${'score'}       | ${'should set new message with score variable'}
   `('$description', async ({ name, newScoreId }) => {
-    updateMessagesWithVariable(mockedSetValue, name, mockedScoreReport as ScoreReport, newScoreId);
+    updateMessagesWithVariable(mockedSetValue, name, report as ScoreReport, newScoreId);
 
     expect(mockedSetValue).toBeCalledWith(`${name}.message`, `message [[${newScoreId}]]`);
   });

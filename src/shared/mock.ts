@@ -420,6 +420,7 @@ export const mockedSingleSelectFormValues = {
     ],
   },
   order: 1,
+  question: '',
   config: {
     addScores: true,
     addTooltip: false,
@@ -476,6 +477,7 @@ export const mockedSliderFormValues = {
     maxValue: 4,
   },
   order: 3,
+  question: '',
   condig: {
     showTickMarks: false,
     showTickLabels: false,
@@ -610,6 +612,47 @@ export const mockedInvitation = {
   count: 1,
 };
 
+export const mockedScoreReport = {
+  type: ScoreReportType.Score,
+  name: 'firstScore',
+  id: 'sumScore_firstscore',
+  key: '5bad6e4a-7035-4ddd-9c54-375604025a',
+  calculationType: CalculationType.Sum,
+  itemsScore: ['Item1', 'Item3'],
+  showMessage: false,
+  message: 'message [[sumScore_firstscore]]',
+  printItems: true,
+  itemsPrint: ['Item1', 'Item3'],
+  conditionalLogic: [
+    {
+      name: 'cnsdsd',
+      id: 'sumScore_firstscore_cnsdsd',
+      flagScore: false,
+      showMessage: true,
+      message: 'message',
+      printItems: false,
+      itemsPrint: [],
+      match: 'all',
+      conditions: [
+        {
+          itemName: 'sumScore_firstscore',
+          type: 'EQUAL',
+          payload: {
+            value: 0,
+          },
+        },
+        {
+          itemName: 'sumScore_firstscore',
+          type: 'LESS_THAN',
+          payload: {
+            value: 2,
+          },
+        },
+      ],
+    },
+  ],
+};
+
 export const mockedAppletFormData = {
   displayName: 'dataviz',
   description: '',
@@ -633,6 +676,11 @@ export const mockedAppletFormData = {
       createdAt: '2023-10-19T08:29:43.180317',
       isPerformanceTask: false,
       performanceTaskType: null,
+      scoresAndReports: {
+        generateReport: false,
+        showScoreSummary: false,
+        reports: [mockedScoreReport],
+      },
       conditionalLogic: [
         {
           key: '597ffffb-9bce-4c73-9627-cc1bab064b7e',
@@ -1235,45 +1283,4 @@ export const mockedExportContextItemData = {
   flowId: null,
   activityName: 'New Activity#1',
   subscaleSetting: null,
-};
-
-export const mockedScoreReport = {
-  type: ScoreReportType.Score,
-  name: 'firstScore',
-  id: 'sumScore_firstscore',
-  key: '5bad6e4a-7035-4ddd-9c54-375604025a',
-  calculationType: CalculationType.Sum,
-  itemsScore: ['multiple', 'slider'],
-  showMessage: true,
-  message: 'message [[sumScore_firstscore]]',
-  printItems: false,
-  itemsPrint: [],
-  conditionalLogic: [
-    {
-      name: 'cnsdsd',
-      id: 'sumScore_firstscore_cnsdsd',
-      flagScore: false,
-      showMessage: true,
-      message: 'message',
-      printItems: false,
-      itemsPrint: [],
-      match: 'all',
-      conditions: [
-        {
-          itemName: 'sumScore_firstscore',
-          type: 'EQUAL',
-          payload: {
-            value: 0,
-          },
-        },
-        {
-          itemName: 'sumScore_firstscore',
-          type: 'LESS_THAN',
-          payload: {
-            value: 2,
-          },
-        },
-      ],
-    },
-  ],
 };

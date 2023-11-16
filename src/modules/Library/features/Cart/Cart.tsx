@@ -14,7 +14,11 @@ import {
 import { page } from 'resources';
 import { PublishedApplet, auth, library, SingleApplet } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
-import { useAppletsFromCart, useReturnToLibraryPath, useWorkspaceList } from 'modules/Library/hooks';
+import {
+  useAppletsFromCart,
+  useReturnToLibraryPath,
+  useWorkspaceList,
+} from 'modules/Library/hooks';
 import { getDictionaryText, Mixpanel, Path } from 'shared/utils';
 
 import { Applet, AppletUiType } from '../Applet';
