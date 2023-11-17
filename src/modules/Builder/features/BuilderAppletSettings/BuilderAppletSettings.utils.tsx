@@ -11,7 +11,7 @@ import {
   VersionHistorySetting,
   LiveResponseStreamingSetting,
 } from 'shared/features/AppletSettings';
-import { SettingParam, isManagerOrOwner } from 'shared/utils';
+import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './BuilderAppletSettings.types';
 
@@ -32,6 +32,7 @@ export const getSettings = ({
           icon: <Svg id="export" />,
           label: 'exportData',
           component: <ExportDataSetting />,
+          onClick: () => Mixpanel.track('Export Data click'),
           param: SettingParam.ExportData,
           disabled: isNewApplet,
           tooltip,

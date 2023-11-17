@@ -5,7 +5,7 @@ import { Box, Button } from '@mui/material';
 import { StyledBuilderContainerHeader } from 'shared/features';
 import { ButtonWithMenu, Svg, MenuUiType } from 'shared/components';
 import { theme } from 'shared/styles';
-import { falseReturnFunc, Mixpanel } from 'shared/utils';
+import { falseReturnFunc } from 'shared/utils';
 
 import { ActivitiesHeaderProps } from './ActivitiesHeader.types';
 import { getPerformanceTasksMenu } from './ActivitiesHeader.utils';
@@ -16,8 +16,6 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
 
   const handleActivityAdd = () => {
     headerProps?.onAddActivity && headerProps.onAddActivity(null);
-
-    Mixpanel.track('Add Activity click');
   };
 
   return (

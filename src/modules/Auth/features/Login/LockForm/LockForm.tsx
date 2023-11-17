@@ -14,7 +14,6 @@ import {
   StyledTitleMedium,
   StyledErrorText,
 } from 'shared/styles';
-import { getErrorMessage } from 'shared/utils';
 import { auth, User } from 'redux/modules';
 import { useLogout } from 'shared/hooks/useLogout';
 import { Avatar } from 'shared/components';
