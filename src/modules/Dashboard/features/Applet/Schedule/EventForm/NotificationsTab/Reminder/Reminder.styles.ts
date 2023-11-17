@@ -14,4 +14,14 @@ export const StyledReminder = styled(Box)`
 export const StyledInputWrapper = styled(Box)`
   width: 50%;
   margin-right: ${theme.spacing(2)};
+
+  && {
+    .MuiTextField-root .Mui-disabled {
+      -webkit-text-fill-color: ${variables.palette.on_surface_variant};
+    }
+
+    .MuiInputBase-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+      border-color: ${variables.palette.outline_variant};
+    }
+  }
 `;

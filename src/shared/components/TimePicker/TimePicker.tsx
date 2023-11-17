@@ -18,6 +18,7 @@ export const TimePicker = <T extends FieldValues>({
   wrapperSx = {},
   minTime,
   maxTime,
+  onCustomChange,
   'data-testid': dataTestid,
 }: TimePickerProps<T>) => (
   <Controller
@@ -25,13 +26,18 @@ export const TimePicker = <T extends FieldValues>({
     name={name}
     render={({ field: { onChange, value }, fieldState: { error } }) => {
       const selected = value ? parse(value, DateFormats.Time, new Date()) : value;
+      const handleChange = (date: Date) => {
+        const newTime = dateFnsFormat(date, DateFormats.Time);
+        onCustomChange?.(newTime);
+        onChange(newTime);
+      };
 
       return (
         <StyledTimePickerWrapper sx={{ ...wrapperSx }} data-testid={dataTestid}>
           <ReactDatePicker
             className="date-picker"
             selected={selected as Date | null | undefined}
-            onChange={(date: Date) => onChange(dateFnsFormat(date, DateFormats.Time))}
+            onChange={handleChange}
             showTimeSelect
             showTimeSelectOnly
             timeIntervals={timeIntervals}

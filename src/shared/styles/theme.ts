@@ -408,6 +408,9 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: variables.borderRadius.sm,
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: variables.palette.outline_variant,
+          },
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,

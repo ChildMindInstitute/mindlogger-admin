@@ -1,5 +1,5 @@
 import { UseFormGetValues } from 'react-hook-form';
-import { endOfYear, format } from 'date-fns';
+import { addDays, differenceInDays, endOfYear, format } from 'date-fns';
 import * as yup from 'yup';
 
 import i18n from 'i18n';
@@ -30,9 +30,10 @@ import {
 } from './EventForm.const';
 import {
   EventFormValues,
+  FormReminder,
+  GetEventFromTabs,
   NotificationTimeTestContext,
   SecondsManipulation,
-  GetEventFromTabs,
 } from './EventForm.types';
 
 const { t } = i18n;
@@ -78,6 +79,9 @@ export const getStartEndComparison = (startTime: string, endTime: string) => {
 
   return startDate < endDate;
 };
+
+export const getNextDayComparison = (startTime: string, endTime: string) =>
+  !getStartEndComparison(startTime, endTime) && startTime !== endTime;
 
 export const getBetweenStartEndComparison = (
   notificationTime: string,
@@ -244,15 +248,35 @@ const getNotifications = (type: SecondsManipulation, notifications?: EventNotifi
     };
   }) || null;
 
-const getReminder = (type: SecondsManipulation, reminder?: EventReminder) => {
+const getReminder = ({
+  type,
+  reminder,
+  isMonthlyPeriodicity,
+  startDate,
+}: {
+  type: SecondsManipulation;
+  reminder?: FormReminder;
+  isMonthlyPeriodicity: boolean;
+  startDate?: Date;
+}) => {
   if (!reminder) return null;
+  const isFromForm = type === SecondsManipulation.AddSeconds;
+  const activityIncompleteDate =
+    isMonthlyPeriodicity && !isFromForm && startDate
+      ? addDays(startDate, reminder.activityIncomplete)
+      : undefined;
+  const activityIncomplete =
+    isMonthlyPeriodicity && isFromForm && startDate && reminder.activityIncompleteDate
+      ? differenceInDays(startDate, reminder.activityIncompleteDate)
+      : reminder.activityIncomplete;
 
   return {
-    ...reminder,
-    reminderTime:
-      type === SecondsManipulation.AddSeconds
-        ? addSecondsToHourMinutes(reminder.reminderTime)
-        : removeSecondsFromTime(reminder.reminderTime),
+    // ...reminder,
+    activityIncomplete,
+    activityIncompleteDate,
+    reminderTime: isFromForm
+      ? addSecondsToHourMinutes(reminder.reminderTime)
+      : removeSecondsFromTime(reminder.reminderTime),
   };
 };
 
@@ -298,7 +322,13 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
   const idleTime = (timerType === TimerType.Idle && timerHHmmString) || DEFAULT_IDLE_TIME;
   const notifications =
     getNotifications(SecondsManipulation.RemoveSeconds, notification?.notifications) || [];
-  const reminder = getReminder(SecondsManipulation.RemoveSeconds, notification?.reminder) || null;
+  const reminder =
+    getReminder({
+      type: SecondsManipulation.RemoveSeconds,
+      reminder: notification?.reminder,
+      isMonthlyPeriodicity: periodicity === Periodicity.Monthly,
+      startDate,
+    }) || null;
 
   return {
     activityOrFlowId,
@@ -399,7 +429,11 @@ export const getEventPayload = (
     'reminder',
   ]);
   const notifications = getNotifications(SecondsManipulation.AddSeconds, notificationsFromForm);
-  const reminder = getReminder(SecondsManipulation.AddSeconds, reminderFromForm);
+  const reminder = getReminder({
+    type: SecondsManipulation.AddSeconds,
+    reminder: reminderFromForm,
+    isMonthlyPeriodicity: periodicity === Periodicity.Monthly,
+  });
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 
   const body: CreateEventType['body'] = {

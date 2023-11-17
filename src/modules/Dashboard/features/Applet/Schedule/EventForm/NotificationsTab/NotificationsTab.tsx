@@ -10,6 +10,7 @@ import { Notification } from './Notification';
 import { Reminder } from './Reminder';
 import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
 import { NotificationsTabProps } from './NotificationsTab.types';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE } from '../EventForm.const';
 
 export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTabProps) => {
   const { t } = useTranslation('app');
@@ -36,7 +37,7 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     setValue(
       'reminder',
       {
-        activityIncomplete: 0,
+        activityIncomplete: DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
         reminderTime: startTime,
       },
       { shouldDirty: true },

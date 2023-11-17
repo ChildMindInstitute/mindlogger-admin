@@ -1099,6 +1099,7 @@
   "timeIsShownInUTC": "Time is<br />shown in UTC",
   "timeNotificationsError": "The time selected on the Notifications tab is outside the Activity's availability time. Please, update.",
   "activityIncompleteError": "The reminder selected on the Notifications tab is outside the Activity's availability time. Please, update",
+  "weekdaysReminderMessage": "Note: System won't send reminders on weekends, as the activity is limited to weekdays.",
   "activityIsUnavailable": "Activity is unavailable at this day",
   "timer": "Timer",
   "timeRange": "Time Range",

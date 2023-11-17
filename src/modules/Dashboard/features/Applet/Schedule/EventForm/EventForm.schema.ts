@@ -1,11 +1,5 @@
 import * as yup from 'yup';
-import {
-  differenceInDays,
-  eachDayOfInterval,
-  eachWeekOfInterval,
-  getDay,
-  startOfWeek,
-} from 'date-fns';
+import { addDays, eachDayOfInterval, getDay } from 'date-fns';
 
 import i18n from 'i18n';
 import { NotificationType, Periodicity } from 'modules/Dashboard/api';
@@ -16,7 +10,9 @@ import {
   getNotificationTimeComparison,
   getNotificationsValidation,
   getTimerDurationCheck,
+  getNextDayComparison,
 } from './EventForm.utils';
+import { ONCE_ACTIVITY_INCOMPLETE_LIMITATION } from './EventForm.const';
 
 export const EventFormSchema = () => {
   const { t } = i18n;
@@ -50,15 +46,23 @@ export const EventFormSchema = () => {
                 if (!value || value === 0) return true;
                 const startDate = this.from?.[1]?.value?.startDate;
                 const endDate = this.from?.[1]?.value?.endDate;
+                const startTime = this.from?.[1]?.value?.startTime;
+                const endTime = this.from?.[1]?.value?.endTime;
                 const periodicity = this.from?.[1]?.value?.periodicity;
+                const isCrossDayEvent = getNextDayComparison(startTime, endTime);
+                const end = isCrossDayEvent ? addDays(endDate, 1) : endDate;
                 const daysInPeriod =
                   startDate && endDate && endDate > startDate
-                    ? eachDayOfInterval({ start: startDate, end: endDate })
+                    ? eachDayOfInterval({
+                        start: startDate,
+                        end,
+                      })
                     : [];
-                console.log('form values', this.from?.[1]?.value);
-
-                // const daysDifference = startDate && endDate && differenceInDays(endDate, startDate);
-                if (periodicity === Periodicity.Daily) {
+                // console.log('form values', this.from?.[1]?.value);
+                if (periodicity === Periodicity.Once) {
+                  return value < ONCE_ACTIVITY_INCOMPLETE_LIMITATION;
+                }
+                if (periodicity === Periodicity.Daily || periodicity === Periodicity.Weekdays) {
                   return value < daysInPeriod.length;
                 }
                 if (periodicity === Periodicity.Weekly) {
@@ -74,23 +78,9 @@ export const EventFormSchema = () => {
                   }, []);
 
                   return weeklyDays.includes(value);
-                  // console.log('day of week', dayOfWeek);
-                  // console.log('weekly days', weeklyDays);
-                  // const weeks = eachWeekOfInterval({ start: startDate, end: endDate });
-                  // console.log('weeks', weeks);
-                  // const indicesArray = weeks.map((_, index) => index * 7);
-                  // console.log('Array of indices:', indicesArray);
-                  // return false;
                 }
 
                 return true;
-
-                //
-                // if (!startTimeValue || !endTimeValue || !value) {
-                //   return true;
-                // }
-                //
-                // return getBetweenStartEndComparison(value, startTimeValue, endTimeValue);
               },
             ),
           reminderTime: getNotificationTimeComparison(

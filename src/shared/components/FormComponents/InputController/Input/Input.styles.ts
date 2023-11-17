@@ -16,6 +16,14 @@ const commonHintProps = `
 export const StyledTextField = styled(TextField)`
   width: 100%;
 
+  && {
+    &:hover {
+      .Mui-disabled .MuiOutlinedInput-notchedOutline {
+        border-color: ${variables.palette.on_surface_alfa12};
+      }
+    }
+  }
+
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;

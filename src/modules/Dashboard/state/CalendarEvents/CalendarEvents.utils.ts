@@ -321,3 +321,31 @@ export const createEvents = ({
 
   return [];
 };
+
+// export const getDaysInMonthlyPeriodicity = ({
+//   chosenDate,
+//   eventEnd,
+//   eventStart,
+// }: {
+//   chosenDate: number;
+//   eventEnd: Date;
+//   eventStart: Date;
+// }) => {
+//   const endDate = getDate(eventEnd);
+//   const end =
+//     chosenDate <= endDate ? eventEnd : new Date(eventEnd.getFullYear(), eventEnd.getMonth(), 0);
+//   const monthsBetween =
+//     end && eventStart && end > eventStart
+//       ? eachMonthOfInterval({
+//           start: eventStart,
+//           end,
+//         })
+//       : [];
+//
+//   return monthsBetween.map((month) => {
+//     const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+//     const dayOfMonth = Math.min(chosenDate, lastDayOfMonth.getDate());
+//
+//     return new Date(month.getFullYear(), month.getMonth(), dayOfMonth);
+//   });
+// };
