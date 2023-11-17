@@ -1,11 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
 
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { TimePicker, DatePicker, ToggleButtonGroup } from 'shared/components';
-import { theme, variables, StyledBodyMedium, StyledBodyLarge } from 'shared/styles';
+import {
+  theme,
+  variables,
+  StyledBodyMedium,
+  StyledBodyLarge,
+  StyledTitleSmall,
+} from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
@@ -20,6 +26,7 @@ import {
 } from './AvailabilityTab.styles';
 import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
+import { getNextDayComparison } from '../EventForm.utils';
 
 export const AvailabilityTab = ({
   hasAlwaysAvailableOption,
@@ -32,7 +39,9 @@ export const AvailabilityTab = ({
   const startDate = watch('startDate');
   const endDate = watch('endDate');
   const startTime = watch('startTime');
+  const endTime = watch('endTime');
   const removeWarning = watch('removeWarning');
+  const [hasNextDayLabel, setHasNextDayLabel] = useState(getNextDayComparison(startTime, endTime));
   const isOncePeriodicity = periodicity === Periodicity.Once;
 
   const handleSetPeriodicity = (period: string | number) =>
@@ -77,6 +86,10 @@ export const AvailabilityTab = ({
       setValue('accessBeforeSchedule', false);
     }
   }, [startTime]);
+
+  useEffect(() => {
+    setHasNextDayLabel(getNextDayComparison(startTime, endTime));
+  }, [startTime, endTime]);
 
   return (
     <>
@@ -129,6 +142,15 @@ export const AvailabilityTab = ({
                 label={t('to')}
                 data-testid={`${dataTestid}-end-time`}
               />
+              {hasNextDayLabel && (
+                <StyledTitleSmall
+                  sx={{
+                    mx: theme.spacing(1.6),
+                  }}
+                >
+                  {t('nextDay')}
+                </StyledTitleSmall>
+              )}
             </StyledTimeWrapper>
           </StyledTimeRow>
           <StyledWrapper isCheckboxDisabled={startTime === '00:00'}>
