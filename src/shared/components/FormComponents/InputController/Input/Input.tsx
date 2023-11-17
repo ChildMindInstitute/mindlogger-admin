@@ -40,7 +40,7 @@ export const Input = <T extends FieldValues>({
 }: InputProps<T>) => {
   const { t } = useTranslation('app');
   const isNumberType = textFieldProps.type === 'number';
-  const isControlledNumberValue = !!minNumberValue || !!maxNumberValue;
+  const isControlledNumberValue = minNumberValue !== undefined || maxNumberValue !== undefined;
   const getTextFieldValue = () => {
     if (!isNumberType || !isControlledNumberValue) return value ?? '';
 

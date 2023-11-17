@@ -19,6 +19,7 @@ import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
+  ABTrailsItemQuestions,
   ActivityFormValues,
   FlankerItemPositions,
   FlankerNextButton,
@@ -349,6 +350,11 @@ const getItemCommonFields = ({ id, item, items, conditionalLogic }: GetItemCommo
 export const getActivityItems = (activity: ActivityFormValues) => {
   const { items, conditionalLogic, isPerformanceTask, performanceTaskType } = activity;
 
+  const isABTrails =
+    isPerformanceTask &&
+    (performanceTaskType === PerfTaskType.ABTrailsMobile ||
+      performanceTaskType === PerfTaskType.ABTrailsTablet);
+
   if (isPerformanceTask && performanceTaskType === PerfTaskType.Flanker) {
     const firstPracticeItemConfig = items[FlankerItemPositions.PracticeFirst]
       .config as FlankerConfig;
@@ -408,9 +414,12 @@ export const getActivityItems = (activity: ActivityFormValues) => {
     });
   }
 
-  return items?.map(({ id, ...item }) => ({
+  return items?.map(({ id, ...item }, index) => ({
     ...item,
     ...getItemCommonFields({ id, item, items, conditionalLogic }),
+    ...(isABTrails && {
+      question: getDictionaryObject(item.question ?? ABTrailsItemQuestions[index]),
+    }),
   }));
 };
 
