@@ -223,6 +223,5 @@ export type GetActivitySubscaleItems = {
 
 export type GetActivitySubscaleSettingDuplicated = {
   oldSubscaleSetting: ActivityFormValues['subscaleSetting'];
-  oldItems: ItemFormValues[];
-  newItems: ItemFormValues[];
+  newItemsObjectByOldId: Record<string, string>;
 };
