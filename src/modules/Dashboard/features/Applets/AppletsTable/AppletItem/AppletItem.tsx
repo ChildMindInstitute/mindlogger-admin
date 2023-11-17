@@ -110,6 +110,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     });
     await fetchData();
     setPasswordPopupVisible(false);
+    Mixpanel.track('Applet Created Successfully');
   };
 
   const checkAppletEncryption = (callback: () => void) =>
