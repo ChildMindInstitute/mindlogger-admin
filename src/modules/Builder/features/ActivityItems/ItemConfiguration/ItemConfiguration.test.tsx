@@ -1,10 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { screen, fireEvent, act } from '@testing-library/react';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
 import { ItemResponseType } from 'shared/consts';
+import { createArray } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
@@ -31,7 +32,7 @@ const removeUuidValues = (item) => {
             }),
           }),
           ...(item.responseValues.rows && {
-            rows: item.rows?.map((row) => {
+            rows: item.responseValues.rows.map((row) => {
               const newRow = { ...row };
 
               delete newRow.id;
@@ -108,6 +109,7 @@ const mockedOptionTestid = 'builder-activity-items-item-configuration-response-t
 const mockedGroupTestid = 'builder-activity-items-item-configuration-response-type-group';
 const mockedSearchTestid = 'builder-activity-items-item-configuration-response-type-search';
 const mockedNameTestid = 'builder-activity-items-item-configuration-name';
+const mockedDisplayedContentTestid = 'builder-activity-items-item-configuration-description';
 
 const mockedEmptySingleSelection = {
   responseType: 'singleSelect',
@@ -131,6 +133,7 @@ const mockedEmptySingleSelection = {
   allowEdit: true,
   alerts: [],
   responseValues: {
+    paletteName: undefined,
     options: [
       {
         text: '',
@@ -162,6 +165,7 @@ const mockedEmptyMultiSelection = {
   allowEdit: true,
   alerts: [],
   responseValues: {
+    paletteName: undefined,
     options: [
       {
         text: '',
@@ -197,6 +201,7 @@ const mockedEmptySlider = {
     maxValue: 5,
     minLabel: '',
     maxLabel: '',
+    scores: undefined,
   },
 };
 const mockedEmptyDate = {
@@ -352,6 +357,7 @@ const mockedEmptySliderRows = {
         minLabel: '',
         maxLabel: '',
         label: '',
+        scores: undefined,
       },
       {
         minValue: 1,
@@ -359,6 +365,7 @@ const mockedEmptySliderRows = {
         minLabel: '',
         maxLabel: '',
         label: '',
+        scores: undefined,
       },
     ],
   },
@@ -511,10 +518,6 @@ const mockedEmptyAudioPlayer = {
 };
 
 describe('ItemConfiguration', () => {
-  beforeAll(() => {
-    jest.useFakeTimers();
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -640,7 +643,7 @@ describe('ItemConfiguration', () => {
       ${ItemResponseType.Message}                 | ${mockedEmptyMessage}          | ${'selecting Message sets correct data to the form'}
       ${ItemResponseType.AudioPlayer}             | ${mockedEmptyAudioPlayer}      | ${'selecting AudioPlayer sets correct data to the form'}
       ${ItemResponseType.Time}                    | ${mockedEmptyTime}             | ${'selecting Time sets correct data to the form'}
-    `('$description', ({ itemType, expected }) => {
+    `('$description', async ({ itemType, expected }) => {
       const ref = createRef();
 
       renderWithAppletFormData({
@@ -658,14 +661,12 @@ describe('ItemConfiguration', () => {
 
       expect(ref.current.getValues(`${mockedItemName}.responseType`)).toEqual(itemType);
 
-      const item = ref.current.watch(mockedItemName);
+      const itemValues = ref.current.getValues(mockedItemName);
 
-      setTimeout(() => {
-        expect(removeUuidValues(item)).toStrictEqual(expected);
-      });
+      expect(removeUuidValues(itemValues)).toStrictEqual(expected);
     });
 
-    test('when submit with empty value should show validation error', () => {
+    test('when submit with empty value should show validation error', async () => {
       const ref = createRef();
 
       renderWithAppletFormData({
@@ -674,12 +675,10 @@ describe('ItemConfiguration', () => {
         formRef: ref,
       });
 
-      act(() => {
-        ref.current.handleSubmit();
-      });
+      await ref.current.trigger(`${mockedItemName}.responseType`);
 
-      setTimeout(() => {
-        expect(screen.getByLabelText('Item type is required')).toBeVisible();
+      await waitFor(() => {
+        expect(screen.getByText('Item Type is required')).toBeVisible();
       });
     });
   });
@@ -701,14 +700,76 @@ describe('ItemConfiguration', () => {
       expect(name.querySelector('input')).toHaveValue(expected);
     });
 
-    //validations
     test.each`
-      text  | description
-      ${''} | ${''}
-    `('$description', ({ text }) => {});
+      text         | expected                                                                         | description
+      ${''}        | ${'Item Name is required'}                                                       | ${'empty name is not allowed'}
+      ${'Item1!'}  | ${'Item Name must contain only alphanumeric characters, underscores, or hyphen'} | ${'other symbols than a-zA-Z0-9_- are not allowed'}
+      ${'Item2'}   | ${'That Item Name is already in use. Please use a different name'}               | ${'name should be unique among the others in activity'}
+      ${'Item1_-'} | ${''}                                                                            | ${'name with a-zA-Z0-9_- is allowed'}
+    `('$description', async ({ text, expected }) => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: <ItemConfiguration name={mockedItemName} onClose={mockedOnClose} />,
+        appletFormData: mockedAppletFormData,
+        formRef: ref,
+      });
+
+      const name = screen.getByTestId(mockedNameTestid);
+      const input = name.querySelector('input');
+      const error = name.querySelector('.Mui-error');
+
+      fireEvent.change(input, { target: { value: text } });
+
+      await ref.current.trigger(`${mockedItemName}.name`);
+
+      await waitFor(() => {
+        expected
+          ? expect(screen.getByText(expected)).toBeVisible()
+          : expect(error).not.toBeInTheDocument();
+      });
+    });
   });
 
-  afterAll(() => {
-    jest.useRealTimers();
+  describe('Displayed Content', () => {
+    test.each`
+      item                            | description
+      ${mockedEmptyItem}              | ${'is rendered for newly created item'}
+      ${mockedSingleSelectFormValues} | ${'is rendered for existing item'}
+    `('$description', ({ item }) => {
+      renderWithAppletFormData({
+        children: <ItemConfiguration name={mockedItemName} onClose={mockedOnClose} />,
+        appletFormData: getAppletFormDataWithItem(item),
+      });
+
+      const displayedContent = screen.getByTestId(mockedDisplayedContentTestid);
+
+      expect(displayedContent).toBeVisible();
+    });
+
+    test.each`
+      text                                    | expected                                                        | description
+      ${''}                                   | ${'Displayed Content is required'}                              | ${'cannot be empty'}
+      ${createArray(175, () => 'i').join('')} | ${'Visibility decreases over 75 characters'}                    | ${'shows warning for text more than 75 chars'}
+      ${'[[Item1]]'}                          | ${'* You cannot use item name in the same item. Please remove'} | ${'cannot have item variable with the same name as current item'}
+      ${'[[sliderrows]]'}                     | ${'* This item is not supported, please remove it.'}            | ${'item type of selected variable is not supported'}
+      ${'[[Item5]]'}                          | ${'Remove the variable referring to the skipped item.'}         | ${'cannot have item variable which is skippable'}
+      ${'[[ItemItem]]'}                       | ${'Remove the variable referring to the nonexistent item.'}     | ${'cannot refer to non-existent item'}
+    `('$description', async ({ text, expected }) => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: <ItemConfiguration name={mockedItemName} onClose={mockedOnClose} />,
+        formRef: ref,
+      });
+
+      ref.current.setValue(`${mockedItemName}.question`, text);
+
+      await ref.current.trigger(`${mockedItemName}.question`);
+
+      await waitFor(() => {
+        expect(screen.getByText(expected)).toBeVisible();
+      });
+    });
   });
 });
