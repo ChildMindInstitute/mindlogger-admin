@@ -1210,6 +1210,7 @@
   "yesRemove": "Yes, Remove",
   "youNeedToAuthorize": "You Need to Authorize",
   "positiveIntegerRequired": "A positive integer is required",
+  "positiveIntegerOrZeroRequired": "A positive integer or 0 is required",
   "fromToHint": "From {{min}} to {{max}}",
   "selectValidInterval": "Select valid interval",
   "selectValueWithinInterval": "Select a value within an interval",
