@@ -254,10 +254,11 @@ export const useUpdatedAppletNavigate = () => {
 export const useSaveAndPublishSetup = (
   hasPrompt: boolean,
   setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
+  setAppletWithoutChangesPopupVisible?: (val: boolean) => void,
 ) => {
   const {
     trigger,
-    formState: { dirtyFields },
+    formState: { dirtyFields, isDirty },
   } = useFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletDataFromForm();
@@ -390,6 +391,13 @@ export const useSaveAndPublishSetup = (
 
       return;
     }
+
+    if (!isDirty) {
+      setAppletWithoutChangesPopupVisible?.(true);
+
+      return;
+    }
+
     await sendRequest();
   };
 

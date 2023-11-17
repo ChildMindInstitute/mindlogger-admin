@@ -1219,5 +1219,6 @@
     "somethingWentWrong": "Something went wrong.",
     "details": "Details",
     "refreshPage": "Refresh page"
-  }
+  },
+  "pleaseMakeChangesToApplet": "Please make changes to update applet."
 }
