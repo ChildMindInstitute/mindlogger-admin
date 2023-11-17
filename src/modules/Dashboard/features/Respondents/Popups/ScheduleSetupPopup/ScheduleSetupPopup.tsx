@@ -6,7 +6,7 @@ import { Trans } from 'react-i18next';
 import { Modal } from 'shared/components';
 import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
 import { page } from 'resources';
-import { getErrorMessage } from 'shared/utils';
+import { Mixpanel, getErrorMessage } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
 import { createIndividualEventsApi } from 'api';
 
@@ -48,6 +48,7 @@ export const ScheduleSetupPopup = ({
         respondentId,
       }),
     );
+    Mixpanel.track('View Individual calendar click');
   };
 
   useEffect(() => {
