@@ -60,12 +60,13 @@ export const AvailabilityTab = ({
 
   const handleSetPeriodicity = (periodicity: string | number) => {
     setValue('periodicity', periodicity as Periodicity, { shouldDirty: true });
-    if (reminder) {
+    if (!reminder) return;
+    if (periodicity === Periodicity.Monthly) {
+      setValue('reminder.activityIncompleteDate', startDate as Date);
+    } else {
       setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE);
-      periodicity === Periodicity.Monthly &&
-        setValue('reminder.activityIncompleteDate', startDate as Date);
-      trigger(['reminder']);
     }
+    trigger(['reminder']);
   };
 
   const onCloseStartDateCallback = () => {
@@ -80,7 +81,11 @@ export const AvailabilityTab = ({
   };
 
   const handleTimeCustomChange = (time: string, type: TimeType) => {
-    if (!isOncePeriodicity || reminder?.activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE)
+    if (
+      !reminder ||
+      !isOncePeriodicity ||
+      reminder.activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE
+    )
       return;
     const isFromTime = type === TimeType.FromTime;
     const fromTime = isFromTime ? time : startTime;
