@@ -32,7 +32,7 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
   const isCrossDayEvent = getNextDayComparison(startTime, endTime);
 
   const handleRemoveReminder = () => {
-    setValue('reminder', null);
+    setValue('reminder', null, { shouldDirty: true });
   };
 
   const includedMonthlyDates = isMonthlyPeriodicity
