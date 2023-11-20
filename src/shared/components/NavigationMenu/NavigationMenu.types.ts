@@ -10,6 +10,7 @@ export type NavigationItem = {
   disabled?: boolean;
   isVisible?: boolean;
   hasError?: boolean;
+  onClick?: () => void;
   'data-testid'?: string;
 };
 

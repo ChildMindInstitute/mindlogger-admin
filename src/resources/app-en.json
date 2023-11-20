@@ -754,6 +754,7 @@
   "nov": "November",
   "noVersions": "No versions yet.",
   "numberOfConsecutiveDays": "Number of consecutive days the user does not complete the activity",
+  "deadlineForActivityCompletion": "Deadline for Activity completion, otherwise the Reminder will be sent",
   "numberOfTrials": "Number Of Trials:",
   "numberOfTrialsTooltip": "Number of practice rounds before the test round",
   "numberSelect": "Number Selection",
@@ -1099,6 +1100,9 @@
   "timeHint": "Time selection in the format HH:MM",
   "timeIsShownInUTC": "Time is<br />shown in UTC",
   "timeNotificationsError": "The time selected on the Notifications tab is outside the Activity's availability time. Please, update.",
+  "activityIncompleteError": "The reminder selected on the Notifications tab is outside the Activity's availability time. Please, update",
+  "weekdaysReminderMessage": "Note: System won't send reminders on weekends, as the activity is limited to weekdays.",
+  "activityIsUnavailable": "Activity is unavailable at this day",
   "timer": "Timer",
   "timeRange": "Time Range",
   "timeRangeDescription": "The respondent will be prompted to take a time range.",
@@ -1211,6 +1215,7 @@
   "yesRemove": "Yes, Remove",
   "youNeedToAuthorize": "You Need to Authorize",
   "positiveIntegerRequired": "A positive integer is required",
+  "positiveIntegerOrZeroRequired": "A positive integer or 0 is required",
   "fromToHint": "From {{min}} to {{max}}",
   "selectValidInterval": "Select valid interval",
   "selectValueWithinInterval": "Select a value within an interval",
@@ -1220,5 +1225,6 @@
     "somethingWentWrong": "Something went wrong.",
     "details": "Details",
     "refreshPage": "Refresh page"
-  }
+  },
+  "pleaseMakeChangesToApplet": "Please make changes to update applet."
 }

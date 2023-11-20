@@ -42,3 +42,8 @@ export type Respondent = {
   details: RespondentDetail[];
   isAnonymousRespondent: boolean;
 };
+
+export type RespondentDetails = {
+  nickname: string;
+  secretUserId: string;
+};

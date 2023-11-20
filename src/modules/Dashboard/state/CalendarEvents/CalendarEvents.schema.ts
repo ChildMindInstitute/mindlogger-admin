@@ -61,6 +61,13 @@ export type AllDayEventsSortedByDaysItem = {
   eventsIds: { id: string; isHiddenInTimeView: boolean }[];
 };
 
+export type GetDaysInMonthlyPeriodicity = {
+  chosenDate: number;
+  eventEnd: Date;
+  eventStart: Date;
+  returnStringDate?: boolean;
+};
+
 export type CalendarEventsSchema = {
   events: BaseSchema<CalendarEvent[] | null>;
   alwaysAvailableVisible: BaseSchema<boolean>;

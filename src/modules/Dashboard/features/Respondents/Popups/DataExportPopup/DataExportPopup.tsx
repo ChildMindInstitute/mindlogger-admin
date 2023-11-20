@@ -11,7 +11,7 @@ import {
   variables,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { exportDataSucceed, Mixpanel, createArrayFromMinToMax } from 'shared/utils';
+import { exportDataSucceed, Mixpanel } from 'shared/utils';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getPageAmount } from 'modules/Dashboard/api/api.utils';

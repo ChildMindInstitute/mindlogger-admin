@@ -5,7 +5,6 @@ import { Box, ClickAwayListener } from '@mui/material';
 import { Avatar, Svg } from 'shared/components';
 import { alerts, auth } from 'redux/modules';
 import {
-  StyledLabelBoldSmall,
   StyledLabelSmall,
   StyledTitleSmall,
   StyledFlexTopCenter,

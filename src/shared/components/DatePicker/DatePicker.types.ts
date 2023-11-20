@@ -25,6 +25,7 @@ type DatePicker = {
   disabled?: boolean;
   onCloseCallback?: () => void;
   isLoading?: boolean;
+  tooltip?: string;
   'data-testid'?: string;
 } & TextFieldProps;
 
