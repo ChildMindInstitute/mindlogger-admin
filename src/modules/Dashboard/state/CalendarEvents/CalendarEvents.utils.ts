@@ -16,6 +16,7 @@ import {
 import { Periodicity } from 'modules/Dashboard/api';
 import { formatToWeekYear, formatToYearMonthDate } from 'shared/utils/dateFormat';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
+import { DateFormats } from 'shared/consts';
 
 import {
   CalendarEvent,
@@ -23,7 +24,6 @@ import {
   AllDayEventsSortedByDaysItem,
   GetDaysInMonthlyPeriodicity,
 } from './CalendarEvents.schema';
-import { DateFormats } from '../../../../shared/consts';
 
 const LENGTH_TO_SET_ID_IS_HIDDEN = 2;
 const LENGTH_TO_FILTER_DAYS_EVENTS = 3;

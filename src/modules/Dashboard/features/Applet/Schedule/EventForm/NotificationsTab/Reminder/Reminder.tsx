@@ -10,6 +10,7 @@ import { getDaysInMonthlyPeriodicity } from 'modules/Dashboard/state/CalendarEve
 
 import { EventFormValues } from '../../EventForm.types';
 import { getDaysInPeriod, getNextDayComparison, getWeeklyDays } from '../../EventForm.utils';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE } from '../../EventForm.const';
 import { Header } from '../Header';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { StyledInputWrapper, StyledReminder } from './Reminder.styles';
@@ -109,10 +110,9 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
                 type="number"
                 name="reminder.activityIncomplete"
                 control={control}
-                InputProps={{ inputProps: { min: 0 } }}
                 textAdornment="day"
                 tooltip={t('numberOfConsecutiveDays')}
-                minNumberValue={0}
+                minNumberValue={DEFAULT_ACTIVITY_INCOMPLETE_VALUE}
                 disabled={isOncePeriodicity && !isCrossDayEvent}
                 onArrowPress={onArrowPress}
                 data-testid={`${dataTestid}-activity-incomplete`}
