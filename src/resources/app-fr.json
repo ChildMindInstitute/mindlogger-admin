@@ -114,6 +114,7 @@
   "allDay": "Toute la journée",
   "allowAccessBeforeTime": "Autoriser l'accès avant l'heure “À partir de“",
   "allowToSkipAllItems": "Autoriser à ignorer tous les éléments",
+  "nextDay": "Le prochain jour",
   "alwaysAvailable": "Toujours disponible",
   "alwaysAvailableWarning": "Si vous définissez cet événement comme toujours disponible, tous les événements programmés pour cette activité seront supprimés.",
   "any": "N'importe lequel",
