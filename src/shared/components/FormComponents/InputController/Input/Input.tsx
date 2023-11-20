@@ -8,6 +8,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
 
+import { ArrowPressType } from '../InputController.types';
 import { InputProps } from './Input.types';
 import {
   StyledCounter,
@@ -59,13 +60,13 @@ export const Input = <T extends FieldValues>({
   const numberValue = isNaN(+value) ? 0 : +value;
 
   const handleAddNumber = () => {
-    if (onArrowPress) return onArrowPress(numberValue + 1);
+    if (onArrowPress) return onArrowPress(numberValue + 1, ArrowPressType.Add);
     if (maxNumberValue === undefined || numberValue < maxNumberValue) {
       onChange?.(numberValue + 1);
     }
   };
-  const handleDistractNumber = () => {
-    if (onArrowPress) return onArrowPress(numberValue - 1);
+  const handleSubtractNumber = () => {
+    if (onArrowPress) return onArrowPress(numberValue - 1, ArrowPressType.Subtract);
     if (minNumberValue === undefined || numberValue > minNumberValue) {
       onChange?.(numberValue - 1);
     }
@@ -105,7 +106,7 @@ export const Input = <T extends FieldValues>({
                         <StyledClearedButton disabled={disabled} onClick={handleAddNumber}>
                           <Svg width={18} height={18} id="navigate-up" />
                         </StyledClearedButton>
-                        <StyledClearedButton disabled={disabled} onClick={handleDistractNumber}>
+                        <StyledClearedButton disabled={disabled} onClick={handleSubtractNumber}>
                           <Svg width={18} height={18} id="navigate-down" />
                         </StyledClearedButton>
                       </StyledUpDown>

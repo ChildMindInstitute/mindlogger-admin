@@ -753,6 +753,7 @@
   "nov": "November",
   "noVersions": "No versions yet.",
   "numberOfConsecutiveDays": "Number of consecutive days the user does not complete the activity",
+  "deadlineForActivityCompletion": "Deadline for Activity completion, otherwise the Reminder will be sent",
   "numberOfTrials": "Number Of Trials:",
   "numberOfTrialsTooltip": "Number of practice rounds before the test round",
   "numberSelect": "Number Selection",

@@ -7,9 +7,14 @@ import { CheckboxController, SelectController } from 'shared/components/FormComp
 import { DatePicker, TimePicker, ToggleButtonGroup } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
+import { SelectEvent } from 'shared/types';
 
 import { EventFormValues } from '../EventForm.types';
-import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_START_TIME } from '../EventForm.const';
+import {
+  DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
+  DEFAULT_END_TIME,
+  DEFAULT_START_TIME,
+} from '../EventForm.const';
 import { repeatsButtons, TimeType } from './Availability.const';
 import {
   StyledButtonsTitle,
@@ -27,7 +32,7 @@ export const AvailabilityTab = ({
   'data-testid': dataTestid,
 }: AvailabilityTabProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue } = useFormContext<EventFormValues>();
+  const { control, setValue, trigger } = useFormContext<EventFormValues>();
   const [
     alwaysAvailable,
     periodicity,
@@ -51,6 +56,7 @@ export const AvailabilityTab = ({
     ],
   });
   const isOncePeriodicity = periodicity === Periodicity.Once;
+  const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
   const handleSetPeriodicity = (periodicity: string | number) => {
     setValue('periodicity', periodicity as Periodicity, { shouldDirty: true });
@@ -58,12 +64,18 @@ export const AvailabilityTab = ({
       setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE);
       periodicity === Periodicity.Monthly &&
         setValue('reminder.activityIncompleteDate', startDate as Date);
+      trigger(['reminder']);
     }
   };
 
-  const onCloseCallback = () => {
-    if (typeof startDate !== 'string' && startDate && endDate && endDate < startDate) {
+  const onCloseStartDateCallback = () => {
+    if (typeof startDate === 'string' || !startDate || !endDate) return;
+    if (endDate < startDate) {
       setValue('endDate', addDays(startDate, 1));
+    }
+    if (reminder) {
+      isMonthlyPeriodicity && setValue('reminder.activityIncompleteDate', startDate);
+      trigger(['reminder']);
     }
   };
 
@@ -79,6 +91,19 @@ export const AvailabilityTab = ({
     }
   };
 
+  const handleAvailabilityCustomChange = (event: SelectEvent) => {
+    const availability = event.target.value;
+    if (availability) {
+      setValue('periodicity', Periodicity.Always);
+      setValue('startTime', DEFAULT_START_TIME);
+      setValue('endTime', DEFAULT_END_TIME);
+
+      return;
+    }
+
+    setValue('periodicity', Periodicity.Once);
+  };
+
   const datePicker = (
     <StyledDatePickerWrapper>
       <DatePicker
@@ -86,7 +111,7 @@ export const AvailabilityTab = ({
         key={isOncePeriodicity ? 'date' : 'startDate'}
         control={control}
         label={isOncePeriodicity ? t('date') : t('startDate')}
-        onCloseCallback={onCloseCallback}
+        onCloseCallback={onCloseStartDateCallback}
         data-testid={`${dataTestid}-start-date`}
       />
       {!isOncePeriodicity && (
@@ -100,6 +125,7 @@ export const AvailabilityTab = ({
             minDate={typeof startDate === 'string' ? null : startDate}
             control={control}
             label={t('endDate')}
+            onCloseCallback={() => reminder && trigger(['reminder'])}
             data-testid={`${dataTestid}-end-date`}
           />
         </>
@@ -120,6 +146,7 @@ export const AvailabilityTab = ({
         fullWidth
         options={getAvailabilityOptions(hasAlwaysAvailableOption)}
         control={control}
+        customChange={handleAvailabilityCustomChange}
         data-testid={`${dataTestid}-always-available`}
       />
       {Object.keys(removeWarning).length !== 0 && (

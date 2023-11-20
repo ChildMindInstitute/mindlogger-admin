@@ -1,5 +1,13 @@
 import { UseFormGetValues } from 'react-hook-form';
-import { addDays, differenceInDays, endOfYear, format } from 'date-fns';
+import {
+  addDays,
+  differenceInDays,
+  eachDayOfInterval,
+  endOfYear,
+  format,
+  getDate,
+  getDay,
+} from 'date-fns';
 import * as yup from 'yup';
 
 import i18n from 'i18n';
@@ -16,6 +24,7 @@ import {
 } from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 import { getIsRequiredValidateMessage } from 'shared/utils';
+import { getDaysInMonthlyPeriodicity } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { convertDateToYearMonthDay, removeSecondsFromTime } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
@@ -26,12 +35,15 @@ import {
   DEFAULT_IDLE_TIME,
   DEFAULT_START_TIME,
   DEFAULT_TIMER_DURATION,
+  ONCE_ACTIVITY_INCOMPLETE_LIMITATION,
   SECONDS_TO_MILLISECONDS_MULTIPLIER,
 } from './EventForm.const';
 import {
   EventFormValues,
   FormReminder,
+  GetDaysInPeriod,
   GetEventFromTabs,
+  GetWeeklyDays,
   NotificationTimeTestContext,
   SecondsManipulation,
 } from './EventForm.types';
@@ -257,7 +269,7 @@ const getReminder = ({
   type: SecondsManipulation;
   reminder?: FormReminder;
   isMonthlyPeriodicity: boolean;
-  startDate?: Date;
+  startDate: Date;
 }) => {
   if (!reminder) return null;
   const isFromForm = type === SecondsManipulation.AddSeconds;
@@ -267,11 +279,10 @@ const getReminder = ({
       : undefined;
   const activityIncomplete =
     isMonthlyPeriodicity && isFromForm && startDate && reminder.activityIncompleteDate
-      ? differenceInDays(startDate, reminder.activityIncompleteDate)
+      ? differenceInDays(reminder.activityIncompleteDate, startDate)
       : reminder.activityIncomplete;
 
   return {
-    // ...reminder,
     activityIncomplete,
     activityIncompleteDate,
     reminderTime: isFromForm
@@ -311,8 +322,7 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
   );
   const startTime = start ? format(start, DateFormats.Time) : DEFAULT_START_TIME;
   const endTime = end ? format(end, DateFormats.Time) : DEFAULT_END_TIME;
-  const periodicity =
-    editedEvent && !isPeriodicityAlways ? editedEvent.periodicity : Periodicity.Once;
+  const periodicity = editedEvent?.periodicity || Periodicity.Once;
   const oneTimeCompletion = eventOneTimeCompletion || false;
   const accessBeforeSchedule = eventAccessBeforeSchedule ?? false;
   const timerType = eventTimerType || TimerType.NotSet;
@@ -433,6 +443,7 @@ export const getEventPayload = (
     type: SecondsManipulation.AddSeconds,
     reminder: reminderFromForm,
     isMonthlyPeriodicity: periodicity === Periodicity.Monthly,
+    startDate: startDate as Date,
   });
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 
@@ -488,3 +499,104 @@ export const getEventPayload = (
 
   return body;
 };
+
+export const getDaysInPeriod = ({ isCrossDayEvent, startDate, endDate }: GetDaysInPeriod) => {
+  const end = isCrossDayEvent ? addDays(endDate, 1) : endDate;
+
+  return startDate && endDate && endDate > startDate
+    ? eachDayOfInterval({
+        start: startDate,
+        end,
+      })
+    : [];
+};
+
+export const getWeeklyDays = ({ daysInPeriod, startDate, isCrossDayEvent }: GetWeeklyDays) => {
+  const dayOfWeek = getDay(startDate);
+  let weeklyDaysCount = 0;
+
+  return daysInPeriod.reduce((acc: number[], date) => {
+    if (getDay(date) === dayOfWeek) {
+      const weeklyDayNumber = weeklyDaysCount * 7;
+      acc.push(weeklyDayNumber);
+      isCrossDayEvent && acc.push(weeklyDayNumber + 1);
+      weeklyDaysCount++;
+    }
+
+    return acc;
+  }, []);
+};
+
+const getActivityIncompleteCommonFields = (formContext: yup.TestContext<yup.AnyObject>) => {
+  const startDate = formContext.from?.[1]?.value?.startDate;
+  const endDate = formContext.from?.[1]?.value?.endDate;
+  const startTime = formContext.from?.[1]?.value?.startTime;
+  const endTime = formContext.from?.[1]?.value?.endTime;
+  const periodicity = formContext.from?.[1]?.value?.periodicity;
+  const isCrossDayEvent = getNextDayComparison(startTime, endTime);
+
+  return { startDate, endDate, periodicity, isCrossDayEvent };
+};
+
+export const getActivityIncompleteValidation = () =>
+  yup
+    .number()
+    .test(
+      'activity-availability-at-day',
+      t('activityIsUnavailable'),
+      function activityAvailabilityAtDayTest(value) {
+        if (!value || value === 0) return true;
+        const { startDate, endDate, periodicity, isCrossDayEvent } =
+          getActivityIncompleteCommonFields(this);
+        const daysInPeriod = getDaysInPeriod({ isCrossDayEvent, startDate, endDate });
+        if (periodicity === Periodicity.Once) {
+          return value < ONCE_ACTIVITY_INCOMPLETE_LIMITATION;
+        }
+        if (periodicity === Periodicity.Daily || periodicity === Periodicity.Weekdays) {
+          return value < daysInPeriod.length;
+        }
+        if (periodicity === Periodicity.Weekly) {
+          const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
+
+          return weeklyDays.includes(value);
+        }
+
+        return true;
+      },
+    );
+
+export const getActivityIncompleteDateValidation = () =>
+  yup
+    .date()
+    .test(
+      'activity-incomplete-date',
+      t('activityIsUnavailable'),
+      function activityIncompleteDateTest(value) {
+        if (!value) return true;
+        const { startDate, endDate, periodicity, isCrossDayEvent } =
+          getActivityIncompleteCommonFields(this);
+        if (periodicity === Periodicity.Monthly) {
+          const testedDate = format(value, DateFormats.YearMonthDay);
+          const includedMonthlyDates = getDaysInMonthlyPeriodicity({
+            chosenDate: getDate(startDate),
+            eventStart: startDate,
+            eventEnd: endDate,
+            returnStringDate: true,
+          }) as string[];
+          const includedMonthlyDatesCrossDay = isCrossDayEvent
+            ? includedMonthlyDates.reduce(
+                (acc: string[], date) => [
+                  ...acc,
+                  date,
+                  format(addDays(new Date(date), 1), DateFormats.YearMonthDay),
+                ],
+                [],
+              )
+            : null;
+
+          return (includedMonthlyDatesCrossDay || includedMonthlyDates).includes(testedDate);
+        }
+
+        return true;
+      },
+    );

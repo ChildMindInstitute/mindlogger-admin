@@ -1,20 +1,20 @@
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { theme, StyledTitleMedium, variables } from 'shared/styles';
-import { NotificationType } from 'modules/Dashboard/api';
+import { NotificationType, Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
 import { Notification } from './Notification';
 import { Reminder } from './Reminder';
 import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
 import { NotificationsTabProps } from './NotificationsTab.types';
-import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE } from '../EventForm.const';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_REMINDER_TIME } from '../EventForm.const';
 
 export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTabProps) => {
   const { t } = useTranslation('app');
-  const { setValue, control, watch } = useFormContext<EventFormValues>();
+  const { setValue, control } = useFormContext<EventFormValues>();
   const {
     fields: notifications,
     append,
@@ -23,8 +23,13 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     control,
     name: 'notifications',
   });
-  const reminder = watch('reminder');
-  const startTime = watch('startTime');
+
+  const [periodicity, startTime, reminder] = useWatch({
+    control,
+    name: ['periodicity', 'startTime', 'reminder'],
+  });
+
+  const isAlwaysAvailable = periodicity === Periodicity.Always;
 
   const handleAddNotification = () => {
     append({
@@ -38,7 +43,7 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
       'reminder',
       {
         activityIncomplete: DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
-        reminderTime: startTime,
+        reminderTime: isAlwaysAvailable ? DEFAULT_REMINDER_TIME : startTime,
       },
       { shouldDirty: true },
     );

@@ -1,27 +1,31 @@
 import { useTranslation } from 'react-i18next';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { addDays, getDate } from 'date-fns';
 
 import { DatePicker, TimePicker } from 'shared/components';
-import { InputController } from 'shared/components/FormComponents';
-import { theme, StyledLabelLarge, StyledFlexTopStart, StyledBodyMedium } from 'shared/styles';
+import { ArrowPressType, InputController } from 'shared/components/FormComponents';
+import { StyledBodyMedium, StyledFlexTopStart, StyledLabelLarge, theme } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
+import { getDaysInMonthlyPeriodicity } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { EventFormValues } from '../../EventForm.types';
-import { getNextDayComparison } from '../../EventForm.utils';
+import { getDaysInPeriod, getNextDayComparison, getWeeklyDays } from '../../EventForm.utils';
 import { Header } from '../Header';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
-import { StyledReminder, StyledInputWrapper } from './Reminder.styles';
+import { StyledInputWrapper, StyledReminder } from './Reminder.styles';
+import { findClosestValues } from './Reminder.utils';
 import { ReminderProps } from './Reminder.types';
 
 export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
   const { t } = useTranslation('app');
-  const { setValue, control } = useFormContext<EventFormValues>();
+  const { setValue, control, trigger } = useFormContext<EventFormValues>();
 
-  const [periodicity, startDate, startTime, endTime] = useWatch({
+  const [periodicity, startDate, endDate, startTime, endTime] = useWatch({
     control,
-    name: ['periodicity', 'startDate', 'startTime', 'endTime'],
+    name: ['periodicity', 'startDate', 'endDate', 'startTime', 'endTime'],
   });
   const isOncePeriodicity = periodicity === Periodicity.Once;
+  const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
   const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
   const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
   const isCrossDayEvent = getNextDayComparison(startTime, endTime);
@@ -30,7 +34,55 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
     setValue('reminder', null);
   };
 
-  const minDate = typeof startDate === 'string' ? null : startDate;
+  const includedMonthlyDates = isMonthlyPeriodicity
+    ? (getDaysInMonthlyPeriodicity({
+        chosenDate: getDate(startDate as Date),
+        eventStart: startDate as Date,
+        eventEnd: endDate as Date,
+      }) as Date[])
+    : undefined;
+  const includedMonthlyDatesCrossDay =
+    includedMonthlyDates && isCrossDayEvent
+      ? includedMonthlyDates.reduce((acc: Date[], date) => [...acc, date, addDays(date, 1)], [])
+      : undefined;
+
+  const daysInPeriod =
+    isWeeklyPeriodicity &&
+    startDate &&
+    endDate &&
+    getDaysInPeriod({
+      isCrossDayEvent,
+      startDate: startDate as Date,
+      endDate: endDate as Date,
+    });
+
+  const weeklyDays =
+    daysInPeriod && getWeeklyDays({ daysInPeriod, startDate: startDate as Date, isCrossDayEvent });
+  const handleArrowPress = (value: number, type: ArrowPressType) => {
+    if (!weeklyDays) return;
+    const isAddType = type === ArrowPressType.Add;
+    const prevValue = isAddType ? value - 1 : value + 1;
+    let currentIndex = weeklyDays.indexOf(prevValue);
+
+    if (currentIndex === -1) {
+      const { closestBefore, closestAfter } = findClosestValues(weeklyDays, prevValue);
+      const prevIndex = weeklyDays.indexOf(isAddType ? closestAfter : closestBefore);
+      currentIndex = isAddType ? prevIndex - 1 : prevIndex + 1;
+    }
+
+    if (type === ArrowPressType.Add) {
+      const addResult =
+        currentIndex === weeklyDays.length - 1 ? weeklyDays[0] : weeklyDays[currentIndex + 1];
+      setValue('reminder.activityIncomplete', addResult);
+    } else {
+      const subtractResult =
+        currentIndex === 0 ? weeklyDays[weeklyDays.length - 1] : weeklyDays[currentIndex - 1];
+      setValue('reminder.activityIncomplete', subtractResult);
+    }
+
+    trigger('reminder.activityIncomplete');
+  };
+  const onArrowPress = isWeeklyPeriodicity ? handleArrowPress : undefined;
 
   return (
     <StyledNotificationWrapper>
@@ -45,10 +97,10 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
               <DatePicker
                 name="reminder.activityIncompleteDate"
                 key="activityIncompleteDate"
-                minDate={minDate}
                 control={control}
                 label={t('activityIncomplete')}
-                // includeDates={submitDates}
+                includeDates={includedMonthlyDatesCrossDay || includedMonthlyDates}
+                tooltip={t('deadlineForActivityCompletion')}
                 data-testid={`${dataTestid}-activity-incomplete-monthly-date`}
               />
             ) : (
@@ -62,6 +114,7 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
                 tooltip={t('numberOfConsecutiveDays')}
                 minNumberValue={0}
                 disabled={isOncePeriodicity && !isCrossDayEvent}
+                onArrowPress={onArrowPress}
                 data-testid={`${dataTestid}-activity-incomplete`}
               />
             )}

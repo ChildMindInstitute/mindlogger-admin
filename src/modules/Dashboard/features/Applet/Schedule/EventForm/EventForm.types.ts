@@ -71,3 +71,15 @@ export type GetEventFromTabs = {
   hasAlwaysAvailableOption?: boolean;
   'data-testid'?: string;
 };
+
+export type GetDaysInPeriod = {
+  isCrossDayEvent: boolean;
+  startDate: Date;
+  endDate: Date;
+};
+
+export type GetWeeklyDays = {
+  daysInPeriod: Date[];
+  startDate: Date;
+  isCrossDayEvent: boolean;
+};
