@@ -1,11 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
 
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { DatePicker, TimePicker, ToggleButtonGroup } from 'shared/components';
-import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledBodyMedium,
+  StyledTitleSmall,
+  theme,
+  variables,
+} from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 import { SelectEvent } from 'shared/types';
 
@@ -55,6 +61,7 @@ export const AvailabilityTab = ({
       'removeWarning',
     ],
   });
+  const [hasNextDayLabel, setHasNextDayLabel] = useState(getNextDayComparison(startTime, endTime));
   const isOncePeriodicity = periodicity === Periodicity.Once;
   const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
@@ -139,6 +146,10 @@ export const AvailabilityTab = ({
     }
   }, [startTime]);
 
+  useEffect(() => {
+    setHasNextDayLabel(getNextDayComparison(startTime, endTime));
+  }, [startTime, endTime]);
+
   return (
     <>
       <SelectController
@@ -193,6 +204,15 @@ export const AvailabilityTab = ({
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.ToTime)}
                 data-testid={`${dataTestid}-end-time`}
               />
+              {hasNextDayLabel && (
+                <StyledTitleSmall
+                  sx={{
+                    mx: theme.spacing(1.6),
+                  }}
+                >
+                  {t('nextDay')}
+                </StyledTitleSmall>
+              )}
             </StyledTimeWrapper>
           </StyledTimeRow>
           <StyledWrapper isCheckboxDisabled={startTime === '00:00'}>

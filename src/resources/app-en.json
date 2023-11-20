@@ -114,6 +114,7 @@
   "allDay": "All Day",
   "allowAccessBeforeTime": "Allow access before “From” time",
   "allowToSkipAllItems": "Allow to skip all items",
+  "nextDay": "Next day",
   "alwaysAvailable": "Always available",
   "alwaysAvailableWarning": "Once you set this event to always available, all scheduled events for this activity will be removed.",
   "any": "Any",

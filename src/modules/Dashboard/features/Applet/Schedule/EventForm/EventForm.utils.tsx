@@ -111,13 +111,13 @@ export const getTimeComparison = (message: string) =>
   yup.string().when('alwaysAvailable', {
     is: false,
     then: (schema) =>
-      schema.test('is-valid-period', message, function () {
+      schema.test('is-valid-period', message, function scheduledStartEnd() {
         const { startTime, endTime } = this.parent;
         if (!startTime || !endTime) {
           return true;
         }
 
-        return getStartEndComparison(startTime, endTime);
+        return startTime !== endTime;
       }),
     otherwise: (schema) => schema,
   });
