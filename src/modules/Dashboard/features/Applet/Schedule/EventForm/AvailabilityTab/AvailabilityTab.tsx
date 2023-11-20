@@ -26,7 +26,7 @@ import {
 } from './AvailabilityTab.styles';
 import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
-import { getNextDayComparison } from '../EventForm.utils';
+import { useNextDayLabel } from '../EventForm.hooks';
 
 export const AvailabilityTab = ({
   hasAlwaysAvailableOption,
@@ -41,7 +41,7 @@ export const AvailabilityTab = ({
   const startTime = watch('startTime');
   const endTime = watch('endTime');
   const removeWarning = watch('removeWarning');
-  const [hasNextDayLabel, setHasNextDayLabel] = useState(getNextDayComparison(startTime, endTime));
+  const hasNextDayLabel = useNextDayLabel({ startTime, endTime });
   const isOncePeriodicity = periodicity === Periodicity.Once;
 
   const handleSetPeriodicity = (period: string | number) =>
@@ -86,10 +86,6 @@ export const AvailabilityTab = ({
       setValue('accessBeforeSchedule', false);
     }
   }, [startTime]);
-
-  useEffect(() => {
-    setHasNextDayLabel(getNextDayComparison(startTime, endTime));
-  }, [startTime, endTime]);
 
   return (
     <>

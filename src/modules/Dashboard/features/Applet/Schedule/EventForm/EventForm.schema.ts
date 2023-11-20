@@ -16,9 +16,24 @@ export const EventFormSchema = () => {
   const selectValidPeriod = t('selectValidPeriod');
 
   const notificationSchema = yup.object().shape({
-    atTime: getNotificationsValidation('atTime', NotificationType.Fixed, false),
-    fromTime: getNotificationsValidation('fromTime', NotificationType.Random, true),
-    toTime: getNotificationsValidation('toTime', NotificationType.Random, false),
+    atTime: getNotificationsValidation({
+      field: 'atTime',
+      notificationType: NotificationType.Fixed,
+      showValidPeriodMessage: false,
+      isSingleTime: true,
+    }),
+    fromTime: getNotificationsValidation({
+      field: 'fromTime',
+      notificationType: NotificationType.Random,
+      showValidPeriodMessage: true,
+      isSingleTime: false,
+    }),
+    toTime: getNotificationsValidation({
+      field: 'toTime',
+      notificationType: NotificationType.Random,
+      showValidPeriodMessage: false,
+      isSingleTime: false,
+    }),
   });
 
   return yup
@@ -33,11 +48,12 @@ export const EventFormSchema = () => {
         .object()
         .nullable()
         .shape({
-          reminderTime: getNotificationTimeComparison(
-            yup.string().nullable(),
-            'reminderTime',
-            false,
-          ),
+          reminderTime: getNotificationTimeComparison({
+            schema: yup.string().nullable(),
+            field: 'reminderTime',
+            showValidPeriodMessage: false,
+            isSingleTime: true,
+          }),
         }),
     })
     .required();

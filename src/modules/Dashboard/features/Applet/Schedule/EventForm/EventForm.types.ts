@@ -69,3 +69,6 @@ export type GetEventFromTabs = {
   hasAlwaysAvailableOption?: boolean;
   'data-testid'?: string;
 };
+
+/** For ex., startTime: '00:00', endTime: '23:59' */
+export type UseNextDayLabelProps = { startTime: string; endTime: string };

@@ -20,8 +20,8 @@ export type CalendarEvent = {
   startFlowIcon?: boolean;
   endAlertIcon?: boolean;
   isOffRange?: boolean;
-  eventSpanBefore?: boolean; // TODO
-  eventSpanAfter?: boolean; // TODO
+  eventSpanBefore?: boolean;
+  eventSpanAfter?: boolean;
   periodicity: Periodicity;
   eventStart: Date;
   eventEnd: Date | null;
