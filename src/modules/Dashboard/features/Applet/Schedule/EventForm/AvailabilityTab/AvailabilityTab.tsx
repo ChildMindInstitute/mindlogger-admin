@@ -32,6 +32,7 @@ import {
 import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
 import { useNextDayLabel } from '../EventForm.hooks';
+import { getNextDayComparison } from '../EventForm.utils';
 
 export const AvailabilityTab = ({
   hasAlwaysAvailableOption,
