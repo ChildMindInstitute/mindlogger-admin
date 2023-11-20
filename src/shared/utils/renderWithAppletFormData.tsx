@@ -7,8 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { mockedAppletFormData } from 'shared/mock';
 import { ExtendedRenderOptions } from 'redux/store';
 import { AppletFormValues } from 'modules/Builder/types';
-
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
+
 import { renderWithProviders } from './renderWithProviders';
 
 type FormComponentProps = {
