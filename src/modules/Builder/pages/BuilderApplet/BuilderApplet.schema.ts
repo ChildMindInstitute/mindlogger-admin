@@ -23,6 +23,7 @@ import {
 import { RoundTypeEnum } from 'modules/Builder/types';
 import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
 
 import {
   checkRawScoreRegexp,
@@ -110,7 +111,11 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     }),
   minValue: yup
     .mixed()
-    .test('is-number', t('positiveIntegerRequired'), isNumberAtLeastOne)
+    .test(
+      'is-number-at-least-zero',
+      t('positiveIntegerOrZeroRequired'),
+      (value) => typeof value === 'number' && value >= DEFAULT_NUMBER_SELECT_MIN_VALUE,
+    )
     .test(
       'min-max-interval',
       t('validationMessages.lessThan', {

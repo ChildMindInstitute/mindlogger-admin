@@ -22,11 +22,11 @@ export const RespondentData = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { appletId, respondentId } = useParams();
+  const dispatch = useAppDispatch();
 
   const { ownerId } = workspaces.useData() || {};
-  const respondentsData = users.useAllRespondentsData();
-  const dispatch = useAppDispatch();
   const respondentDataTabs = useRespondentDataTabs();
+
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi);
 
   const [summaryActivities, setSummaryActivities] = useState<DatavizActivity[]>();
@@ -48,9 +48,9 @@ export const RespondentData = () => {
   }, [selectedActivity]);
 
   useEffect(() => {
-    const fetchActivities = async () => {
-      if (!appletId || !respondentId) return;
+    if (!appletId || !respondentId || !ownerId) return;
 
+    const fetchActivities = async () => {
       const result = await getSummaryActivities({
         appletId,
         respondentId,
@@ -58,17 +58,17 @@ export const RespondentData = () => {
       setSummaryActivities(result.data?.result);
     };
     fetchActivities();
-  }, [appletId, respondentId]);
 
-  useEffect(() => {
-    if (respondentsData || !(ownerId && appletId)) return;
+    const { getRespondentDetails } = users.thunk;
 
     dispatch(
-      users.thunk.getAllWorkspaceRespondents({
-        params: { ownerId, appletId },
+      getRespondentDetails({
+        ownerId,
+        appletId,
+        respondentId,
       }),
     );
-  }, [ownerId, appletId, respondentsData]);
+  }, [appletId, respondentId, ownerId]);
 
   useEffect(() => {
     Mixpanel.trackPageView('Data Viz');

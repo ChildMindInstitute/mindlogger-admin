@@ -73,6 +73,7 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
+    Mixpanel.track('Add Activity click');
     const {
       index,
       performanceTaskName,
