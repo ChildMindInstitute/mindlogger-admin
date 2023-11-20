@@ -27,3 +27,7 @@ jest.spyOn(global.console, 'error').mockImplementation((message) => {
 
   return message;
 });
+
+jest.mock('shared/components/FormComponents/EditorController/EditorController.styles', () => ({
+  ...jest.requireActual('__mocks__/EditorController'),
+}));

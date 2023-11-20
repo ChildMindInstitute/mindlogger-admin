@@ -81,7 +81,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build --project tsconfig.build.json",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules react-app-rewired test",
+    "test": "react-app-rewired test",
     "test:coverage": "npm run test --coverage --colors",
     "test:related": "sh test-related.sh",
     "test:nowatch": "cross-env CI=true npm run test -- --colors --watchAll=false --passWithNoTests",
@@ -95,10 +95,7 @@
     ]
   },
   "jest": {
-    "globalSetup": "./global-setup.js",
-    "moduleNameMapper": {
-      "https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.1.0/mermaid.esm.min.mjs": "<rootDir>/node_modules/mermaid/dist/mermaid.esm.min.mjs"
-    }
+    "globalSetup": "./global-setup.js"
   },
   "browserslist": {
     "production": [
@@ -141,7 +138,6 @@
     "husky": "^8.0.3",
     "jest-mock-axios": "^4.7.3",
     "lint-staged": "^14.0.1",
-    "mermaid": "^10.1.0",
     "mock-local-storage": "^1.1.24",
     "prettier": "^3.0.3",
     "react-app-rewired": "^2.2.1"
