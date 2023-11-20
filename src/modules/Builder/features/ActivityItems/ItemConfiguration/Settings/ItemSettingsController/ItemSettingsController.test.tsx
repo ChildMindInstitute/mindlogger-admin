@@ -5,7 +5,7 @@ import { screen, fireEvent } from '@testing-library/react';
 import get from 'lodash.get';
 import { v4 as uuidv4 } from 'uuid';
 
-import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { renderWithAppletFormData } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 import {
   mockedAppletFormData,

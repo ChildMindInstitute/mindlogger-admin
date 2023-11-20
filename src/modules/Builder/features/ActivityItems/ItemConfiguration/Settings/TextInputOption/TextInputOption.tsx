@@ -32,7 +32,7 @@ export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
   const requiredContext = isTextInputOptionRequired ? { context: 'required' } : undefined;
 
   return (
-    <StyledContainerWithBg>
+    <StyledContainerWithBg data-testid="builder-activity-items-item-configuration-text-input-option">
       <StyledTextInputOptionHeader>
         <StyledLabelBoldLarge>{t('textInputOptionLabel', requiredContext)}</StyledLabelBoldLarge>
         <StyledClearedButton

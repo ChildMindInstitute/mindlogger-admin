@@ -186,9 +186,10 @@ export const SelectionOption = ({
             >
               <Svg id={optionOpen ? 'navigate-up' : 'navigate-down'} />
             </StyledIconButton>
-            <StyledLabelBoldLarge sx={{ ml: theme.spacing(2) }}>{`${t('option')} ${
-              index + 1
-            }`}</StyledLabelBoldLarge>
+            <StyledLabelBoldLarge
+              sx={{ ml: theme.spacing(2) }}
+              data-testid={`${dataTestid}-title`}
+            >{`${t('option')} ${index + 1}`}</StyledLabelBoldLarge>
             {!optionOpen && (
               <StyledCollapsedWrapper>
                 <StyledSvgWrapper sx={{ m: theme.spacing(0, 2, 0, 6) }}>
