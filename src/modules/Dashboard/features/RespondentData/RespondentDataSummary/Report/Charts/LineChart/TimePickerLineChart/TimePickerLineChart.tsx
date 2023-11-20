@@ -8,6 +8,7 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { Box } from '@mui/material';
 
 import { locales } from '../../Charts.const';
+import { ChartType } from '../../Chart.types';
 import { setTooltipStyles } from '../../Charts.utils';
 import { getOptions, getData } from './TimePickerLineChart.utils';
 import { TimePickerDataPointRaw, TimePickerLineChartProps } from './TimePickerLineChart.types';
@@ -62,7 +63,12 @@ export const TimePickerLineChart = ({
       const {
         element: { x: positionX, y: positionY },
       } = dataPoints[0];
-      setTooltipStyles({ tooltipEl, positionX, positionY });
+      setTooltipStyles({
+        chartType: ChartType.TimePickerLineChart,
+        tooltipEl,
+        positionX,
+        positionY,
+      });
     }
   };
 

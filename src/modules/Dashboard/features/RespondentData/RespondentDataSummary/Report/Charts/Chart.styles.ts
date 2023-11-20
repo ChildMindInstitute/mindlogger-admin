@@ -17,6 +17,6 @@ export const StyledTooltipWrapper = styled(Box)`
 export const StyledIndent = styled(Box)`
   opacity: 0;
   width: 100%;
-  height: 0.4rem;
+  height: 0.2rem;
   pointer-events: none;
 `;
