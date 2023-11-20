@@ -221,11 +221,20 @@ export const getDuplicatedConditional = (
     };
   }) ?? [];
 
-const getDuplicatedScoresAndReports = (
-  oldItems: ItemFormValues[],
-  newItems: Record<string, unknown>[],
-  scoresAndReports?: ScoresAndReports,
-) => {
+const oldToNewIdRemapper = (newItemsObjectByOldId: Record<string, string>) => (id: string) =>
+  newItemsObjectByOldId[id] ?? id;
+
+const getDuplicatedScoresAndReports = ({
+  oldItems,
+  newItems,
+  scoresAndReports,
+  newItemsObjectByOldId,
+}: {
+  oldItems: ItemFormValues[];
+  newItems: Record<string, unknown>[];
+  scoresAndReports?: ScoresAndReports;
+  newItemsObjectByOldId: Record<string, string>;
+}) => {
   const reports = scoresAndReports?.reports?.map((report) => {
     let conditionalLogic;
     if (report.type === ScoreReportType.Section) {
@@ -253,13 +262,22 @@ const getDuplicatedScoresAndReports = (
           scoreConditionals,
         ),
       };
-    } else {
-      conditionalLogic = report.conditionalLogic;
+
+      return {
+        ...report,
+        conditionalLogic,
+        itemsPrint: report.itemsPrint?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
+      };
     }
 
     return {
       ...report,
-      conditionalLogic,
+      itemsPrint: report.itemsPrint?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
+      itemsScore: report.itemsScore?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
+      conditionalLogic: report.conditionalLogic?.map((conditional) => ({
+        ...conditional,
+        itemsPrint: conditional.itemsPrint?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
+      })),
     };
   });
 
@@ -276,14 +294,25 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     items,
     activity?.conditionalLogic,
   );
+  const newItemsObjectByOldId =
+    activity?.items?.reduce(
+      (acc, item, currentIndex) => ({
+        ...acc,
+        [getEntityKey(item)]: getEntityKey(items[currentIndex]),
+      }),
+      {} as Record<string, string>,
+    ) ?? {};
   const subscaleSetting = getActivitySubscaleSettingDuplicated({
     oldSubscaleSetting: activity?.subscaleSetting,
-    oldItems: activity?.items as ItemFormValues[],
-    newItems: items as ItemFormValues[],
+    newItemsObjectByOldId,
   });
-
   const scoresAndReports = Object.keys(activity?.scoresAndReports || {})?.length
-    ? getDuplicatedScoresAndReports(activity?.items ?? [], items, activity?.scoresAndReports)
+    ? getDuplicatedScoresAndReports({
+        oldItems: activity?.items ?? [],
+        newItems: items,
+        scoresAndReports: activity?.scoresAndReports,
+        newItemsObjectByOldId,
+      })
     : {
         generateReport: false,
         reports: [],
@@ -875,24 +904,15 @@ const getActivitySubscaleItems = ({
 
 const getActivitySubscaleSettingDuplicated = ({
   oldSubscaleSetting,
-  oldItems,
-  newItems,
+  newItemsObjectByOldId,
 }: GetActivitySubscaleSettingDuplicated) => {
   if (!oldSubscaleSetting) return oldSubscaleSetting;
-
-  const mappedIndexObject = oldItems.reduce(
-    (acc, item, currentIndex) => ({
-      ...acc,
-      [getEntityKey(item)]: getEntityKey(newItems[currentIndex]),
-    }),
-    {} as Record<string, string>,
-  );
 
   return {
     ...oldSubscaleSetting,
     subscales: oldSubscaleSetting?.subscales?.map((subscale) => ({
       ...subscale,
-      items: subscale.items.map((subscaleItem) => mappedIndexObject[subscaleItem] ?? subscaleItem),
+      items: subscale.items.map(oldToNewIdRemapper(newItemsObjectByOldId)),
     })),
   };
 };
