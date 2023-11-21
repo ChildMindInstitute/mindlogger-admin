@@ -1,8 +1,10 @@
 import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
-import { Modal } from 'shared/components';
-import { Mixpanel } from 'shared/utils';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { Mixpanel } from 'shared/utils/mixpanel';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EventForm, EventFormRef } from '../EventForm';
 import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
@@ -17,18 +19,24 @@ export const CreateEventPopup = ({
 }: CreateEventPopupProps) => {
   const { t } = useTranslation('app');
   const eventFormRef = useRef() as RefObject<EventFormRef>;
+  const { respondentId } = useParams();
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleCreateEventClose = () => setCreateEventPopupVisible(false);
+
+  const isIndividualCalendar = !!respondentId;
+  const analyticsPrefix = isIndividualCalendar
+    ? AnalyticsCalendarPrefix.IndividualCalendar
+    : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const onCreateActivitySubmit = () => {
     if (eventFormRef?.current) {
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track('Schedule save click');
+    Mixpanel.track(`${analyticsPrefix} Schedule save click`);
   };
 
   const handleRemoveAlwaysAvailableClose = () => {
@@ -55,6 +63,10 @@ export const CreateEventPopup = ({
     }
   };
 
+  const handleFormIsLoading = (isLoading: boolean) => {
+    setIsLoading(isLoading);
+  };
+
   return (
     <>
       {open && (
@@ -62,6 +74,7 @@ export const CreateEventPopup = ({
           open={open}
           onClose={handleCreateEventClose}
           onSubmit={onCreateActivitySubmit}
+          disabledSubmit={isLoading}
           title={t('createActivitySchedule')}
           buttonText={t('save')}
           width="67.1"
@@ -71,15 +84,19 @@ export const CreateEventPopup = ({
           }}
           data-testid={dataTestid}
         >
-          <EventForm
-            ref={eventFormRef}
-            submitCallback={handleCreateEventClose}
-            setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
-            setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
-            setActivityName={setCurrentActivityName}
-            defaultStartDate={defaultStartDate}
-            data-testid={`${dataTestid}-form`}
-          />
+          <>
+            {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+            <EventForm
+              ref={eventFormRef}
+              submitCallback={handleCreateEventClose}
+              setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
+              setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
+              setActivityName={setCurrentActivityName}
+              defaultStartDate={defaultStartDate}
+              onFormIsLoading={handleFormIsLoading}
+              data-testid={`${dataTestid}-form`}
+            />
+          </>
         </Modal>
       )}
       {removeAllScheduledPopupVisible && (
@@ -88,6 +105,7 @@ export const CreateEventPopup = ({
           onClose={handleRemoveAllScheduledClose}
           onSubmit={handleRemoveAllScheduledSubmit}
           activityName={currentActivityName}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-remove-all-scheduled-events-popup`}
         />
       )}
@@ -97,6 +115,7 @@ export const CreateEventPopup = ({
           onClose={handleRemoveAlwaysAvailableClose}
           onSubmit={handleRemoveAlwaysAvailableSubmit}
           activityName={currentActivityName}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-confirm-scheduled-access-popup`}
         />
       )}

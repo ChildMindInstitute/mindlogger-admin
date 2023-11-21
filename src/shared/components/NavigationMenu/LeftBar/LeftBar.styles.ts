@@ -65,6 +65,7 @@ export const StyledSetting = styled(StyledFlexColumn, shouldForwardProp)`
   text-align: center;
   cursor: pointer;
   border-radius: ${variables.borderRadius.lg};
+  position: relative;
   :hover {
     background-color: ${variables.palette.on_surface_alfa12};
   }

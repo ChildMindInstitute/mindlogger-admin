@@ -7,7 +7,7 @@ import { Box } from '@mui/material';
 
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { page } from 'resources';
-import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
+import { ActivityFormValues, AppletFormValues, GetNewPerformanceTask } from 'modules/Builder/types';
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
@@ -16,7 +16,8 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, getUniqueName, Mixpanel } from 'shared/utils';
+import { pluck, Mixpanel } from 'shared/utils';
+import { getUniqueName } from 'modules/Builder/utils';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
@@ -72,6 +73,7 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
+    Mixpanel.track('Add Activity click');
     const {
       index,
       performanceTaskName,
@@ -85,7 +87,7 @@ export const Activities = () => {
         ? performanceTaskName
         : t('newActivity');
 
-    const name = getUniqueName(newActivityName, activityNames);
+    const name = getUniqueName({ name: newActivityName, existingNames: activityNames });
 
     const newActivity =
       performanceTaskName && performanceTaskDesc && performanceTaskType
@@ -109,6 +111,10 @@ export const Activities = () => {
   const handleActivityRemove = (index: number, activityKey: string) => {
     const newActivityFlows = activityFlows.reduce(
       (acc: AppletFormValues['activityFlows'], flow) => {
+        if (flow.reportIncludedActivityName === activityKey) {
+          flow.reportIncludedActivityName = '';
+          flow.reportIncludedItemName = '';
+        }
         const items = flow.items?.filter((item) => item.activityKey !== activityKey);
         if (items && items.length > 0) {
           acc.push({ ...flow, items });
@@ -125,13 +131,13 @@ export const Activities = () => {
 
   const handleDuplicateActivity = (index: number, isPerformanceTask: boolean) => {
     const activityToDuplicate = activities[index];
-    const name = getUniqueName(activityToDuplicate.name, activityNames);
+    const name = getUniqueName({ name: activityToDuplicate.name, existingNames: activityNames });
 
     const newActivity = isPerformanceTask
       ? getNewPerformanceTask({
           name,
           description: activityToDuplicate.description,
-          performanceTask: activityToDuplicate,
+          performanceTask: activityToDuplicate as GetNewPerformanceTask['performanceTask'],
         })
       : getNewActivity({ activity: activityToDuplicate });
 

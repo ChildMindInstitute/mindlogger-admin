@@ -40,6 +40,7 @@ export const MediaUploader = ({
         accept={ALLOWED_AUDIO_FILE_TYPES}
         type="file"
         name="uploadFile"
+        data-testid="media-uploader-input"
         hidden
       />
       {!media && (

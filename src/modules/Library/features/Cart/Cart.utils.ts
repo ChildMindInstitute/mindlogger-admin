@@ -9,16 +9,10 @@ import {
 } from 'modules/Library/state';
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
 import { SelectedItem } from 'modules/Library/features/Applet';
-import {
-  ItemResponseType,
-  performanceTaskResponseTypes,
-  PerfTaskType,
-  responseTypeToHaveOptions,
-} from 'shared/consts';
+import { ItemResponseType, performanceTaskResponseTypes, PerfTaskType } from 'shared/consts';
 import {
   Item,
   SingleAndMultipleSelectMatrix,
-  SingleAndMultipleSelectRowsResponseValues,
   SingleAndMultiSelectOption,
   SingleAndMultiSelectRowOption,
   SingleApplet,
@@ -116,10 +110,13 @@ const getSelectedAppletData = (
         }
 
         //for security reasons there is no 'id' in responseValues.options for Single/Multi selection (+ per row)
-        if (responseTypeToHaveOptions.includes(newItem.responseType)) {
-          newItem.responseValues = mapResponseValues(
-            newItem.responseValues as SingleAndMultipleSelectRowsResponseValues,
-          );
+        if (
+          newItem.responseType === ItemResponseType.SingleSelection ||
+          newItem.responseType === ItemResponseType.MultipleSelection ||
+          newItem.responseType === ItemResponseType.SingleSelectionPerRow ||
+          newItem.responseType === ItemResponseType.MultipleSelectionPerRow
+        ) {
+          newItem.responseValues = mapResponseValues(newItem.responseValues);
         }
 
         // per requirements if not all the items which are in conditional logic were selected, conditional logic

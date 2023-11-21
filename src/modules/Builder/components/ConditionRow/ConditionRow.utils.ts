@@ -7,7 +7,6 @@ import {
   OptionCondition,
   SingleValueCondition,
   RangeValueCondition,
-  SingleAndMultipleSelectItemResponseValues,
   ScoreReport,
   SliderItemResponseValues,
 } from 'shared/state';
@@ -58,13 +57,13 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
 export const getScoreOptions = (scores: ScoreReport[]) =>
   scores?.map((score) => ({
     labelKey: `${t('score')}: ${score.name}`,
-    value: score.id,
+    value: score.key,
     type: ConditionItemType.Score,
   }));
 
-export const getScoreIdOption = (scoreId: string) => ({
-  labelKey: `${t('score')}: ${scoreId}`,
-  value: scoreId,
+export const getScoreIdOption = (score: ScoreReport) => ({
+  labelKey: `${t('score')}: ${score?.id}`,
+  value: getEntityKey(score, false),
   type: ConditionItemType.Score,
 });
 
@@ -74,7 +73,7 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
       ...scoreConditionals,
       ...(score.conditionalLogic?.map((conditional) => ({
         labelKey: `${t('scoreConditionals')}: ${conditional.name}`,
-        value: getEntityKey(conditional),
+        value: getEntityKey(conditional, false),
         type: ConditionItemType.ScoreCondition,
       })) || []),
     ],
@@ -140,9 +139,17 @@ export const getPayload = (
 };
 
 export const getValueOptionsList = (item: ItemFormValues) => {
-  const responseValues = item?.responseValues as SingleAndMultipleSelectItemResponseValues;
+  if (!item) return [];
 
-  if (!responseValues?.options) return [];
+  const { responseValues, responseType } = item;
+  if (
+    responseType !== ItemResponseType.SingleSelection &&
+    responseType !== ItemResponseType.MultipleSelection &&
+    responseType !== ItemResponseType.SingleSelectionPerRow &&
+    responseType !== ItemResponseType.MultipleSelectionPerRow
+  ) {
+    return [];
+  }
 
   return responseValues.options.map(({ id, text }) => ({
     value: id,

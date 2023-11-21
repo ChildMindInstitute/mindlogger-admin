@@ -2,6 +2,7 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
+import { mockedEmail } from 'shared/mock';
 
 import { ResetForm } from '.';
 
@@ -14,7 +15,7 @@ describe('ResetForm component tests', () => {
   renderComponentForEachTest(<ResetForm />);
 
   test('ResetForm inputs should accept values', () => {
-    inputAcceptsValue('Email', 'test@gmail.com');
+    inputAcceptsValue('Email', mockedEmail);
   });
 
   test('should be able to validate ResetForm form', async () => {

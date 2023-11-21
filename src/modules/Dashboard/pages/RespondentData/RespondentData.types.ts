@@ -16,7 +16,7 @@ export type SummaryFiltersForm = {
 
 export type RespondentDataContextType = {
   summaryActivities?: DatavizActivity[];
-  setSummaryActivities: Dispatch<SetStateAction<DatavizActivity[] | undefined>>;
+  setSummaryActivities?: Dispatch<SetStateAction<DatavizActivity[] | undefined>>;
   selectedActivity?: DatavizActivity;
   setSelectedActivity: Dispatch<SetStateAction<DatavizActivity | undefined>>;
 };

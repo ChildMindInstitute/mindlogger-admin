@@ -1,23 +1,34 @@
 import { styled, TextField } from '@mui/material';
 
-import { variables, theme } from 'shared/styles';
+import { variables, theme, StyledBodyLarge } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledTextField = styled(TextField, shouldForwardProp)`
   width: 100%;
 
-  ${({ isSecondaryUiType }: { isSecondaryUiType: boolean }) =>
+  ${({
+    isSecondaryUiType,
+    showInputLabel,
+    setMinWidth,
+  }: {
+    isSecondaryUiType: boolean;
+    showInputLabel: boolean;
+    setMinWidth: boolean;
+  }) =>
     isSecondaryUiType &&
     `
     .MuiInputBase-root {
       min-height: 5.6rem;
       padding: ${theme.spacing(0.4, 1, 0.4, 4)};
-      flex-wrap: wrap;
+      display: flex;
+      flex-wrap: ${showInputLabel ? 'unset' : 'wrap'};
     }
 
     .MuiInputBase-input {
       padding: ${theme.spacing(0.6)};
-      width: auto;
+      flex: 1;
+      width: 0;
+      min-width: ${setMinWidth ? '50%' : '0.01rem'};
     }
     .email {
       position: absolute;
@@ -34,4 +45,10 @@ export const StyledTextField = styled(TextField, shouldForwardProp)`
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
+`;
+
+export const StyledInputLabel = styled(StyledBodyLarge, shouldForwardProp)`
+  flex-shrink: ${({ showInputLabel }: { showInputLabel: boolean }) =>
+    showInputLabel ? 0 : 'unset'};
+  color: ${variables.palette.outline};
 `;

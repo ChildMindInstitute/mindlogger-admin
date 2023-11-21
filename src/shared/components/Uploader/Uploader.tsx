@@ -76,6 +76,7 @@ export const Uploader = ({
     if (notAllowableSize || notAllowableType) return;
 
     setImage(imageFile);
+    setIsMouseOver(false);
     setCropPopupVisible(true);
   };
 
@@ -216,6 +217,7 @@ export const Uploader = ({
         type="file"
         name="uploadFile"
         hidden
+        data-testid="upload-file"
       />
       {isPrimaryUiType && (
         <StyledNameWrapper>

@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
-import { ConditionalLogic } from 'shared/state';
+import { ConditionalLogic, ScoreReport } from 'shared/state';
 import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 import { Modal } from 'shared/components';
 import {
@@ -10,7 +10,7 @@ import {
   getItemsWithVariable,
 } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { getEntityKey } from 'shared/utils';
-import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
+import { ActivityFlowFormValues, ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
@@ -25,15 +25,18 @@ export const DeleteItemModal = ({
   const { fieldName, activity } = useCurrentActivity();
   const { watch, setValue, trigger } = useFormContext();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
+  const reportsField = `${fieldName}.scoresAndReports.reports`;
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
+  const reports: ScoreReport[] = watch(reportsField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
+  const activityFlows: ActivityFlowFormValues[] = watch('activityFlows');
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
   const itemToDelete = items[itemIndexToDelete];
   const itemName = itemToDelete?.name;
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(itemToDelete);
   const conditionalLogicForItemToDelete = getItemConditionDependencies(
     itemToDelete,
-    activity.conditionalLogic,
+    activity?.conditionalLogic,
   );
   const itemsWithVariablesToRemove = getItemsWithVariable(itemToDelete?.name, items);
   const itemsWithVariablesToRemoveString = itemsWithVariablesToRemove
@@ -41,10 +44,25 @@ export const DeleteItemModal = ({
     .join(', ');
 
   const handleRemoveItem = (index: number) => {
-    setValue(
-      `${fieldName}.items`,
-      items?.filter((_, key) => key !== index),
-    );
+    if (activityFlows.some((flow) => flow.reportIncludedItemName === itemIdToDelete)) {
+      const newActivityFlows = activityFlows.map((flow) => {
+        if (flow.reportIncludedItemName === itemIdToDelete) {
+          return {
+            ...flow,
+            reportIncludedActivityName: '',
+            reportIncludedItemName: '',
+          };
+        }
+
+        return flow;
+      });
+
+      setValue('activityFlows', newActivityFlows);
+    }
+    if (activity?.reportIncludedItemName === itemIdToDelete) {
+      setValue(`${fieldName}.reportIncludedItemName`, '');
+    }
+    setValue(`${fieldName}.items`, items?.filter((_, key) => key !== index));
 
     if (itemsWithVariablesToRemove.length) {
       for (const item of itemsWithVariablesToRemove) {
@@ -64,14 +82,52 @@ export const DeleteItemModal = ({
   const handleRemoveModalSubmit = () => {
     filterConditionalLogicByItem();
     if (subscales.length) {
-      setValue(
-        subscalesField,
-        subscales.map((subscale) => ({
-          ...subscale,
-          items: subscale.items.filter((item) => item !== itemIdToDelete),
-        })),
-      );
-      trigger(subscalesField);
+      let shouldTriggerSubscales = false;
+      subscales.forEach((subscale, subscaleIndex) => {
+        const subscaleItemsField = `${subscalesField}.${subscaleIndex}.items`;
+        const { items: subscaleItems } = subscale;
+
+        if (subscaleItems?.includes(itemIdToDelete)) {
+          shouldTriggerSubscales = true;
+          setValue(
+            subscaleItemsField,
+            subscaleItems.filter((id) => id !== itemIdToDelete),
+          );
+        }
+      });
+      shouldTriggerSubscales && trigger(subscalesField);
+    }
+
+    if (reports.length) {
+      let shouldTriggerReports = false;
+
+      reports.forEach((report, index) => {
+        const { itemsPrint, itemsScore, conditionalLogic } = report;
+        const reportField = `${reportsField}.${index}`;
+
+        if (itemsPrint?.includes(itemIdToDelete)) {
+          shouldTriggerReports = true;
+          setValue(`${reportField}.itemsPrint`, itemsPrint?.filter((id) => id !== itemIdToDelete));
+        }
+        if (itemsScore?.includes(itemIdToDelete)) {
+          shouldTriggerReports = true;
+          setValue(`${reportField}.itemsScore`, itemsScore?.filter((id) => id !== itemIdToDelete));
+        }
+
+        conditionalLogic?.forEach((conditional, conditionalIndex) => {
+          const { itemsPrint: conditionalItemsPrint } = conditional;
+          const conditionalLogicField = `${reportField}.conditionalLogic.${conditionalIndex}`;
+
+          if (conditionalItemsPrint?.includes(itemIdToDelete)) {
+            shouldTriggerReports = true;
+            setValue(
+              `${conditionalLogicField}.itemsPrint`,
+              conditionalItemsPrint?.filter((id) => id !== itemIdToDelete),
+            );
+          }
+        });
+      });
+      shouldTriggerReports && trigger(reportsField);
     }
 
     handleRemoveItem(itemIndexToDelete);

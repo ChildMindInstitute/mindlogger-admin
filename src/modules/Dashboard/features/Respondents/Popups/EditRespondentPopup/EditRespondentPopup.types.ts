@@ -2,7 +2,7 @@ import { ChosenAppletData } from '../../Respondents.types';
 
 export type EditRespondentForm = {
   secretUserId: string;
-  nickname: string;
+  nickname?: string;
 };
 
 export type EditRespondentPopupProps = {

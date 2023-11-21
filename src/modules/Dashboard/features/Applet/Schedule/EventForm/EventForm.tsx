@@ -2,14 +2,13 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import isEqual from 'lodash.isequal';
 import { useParams } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
 
 import { Option, SelectController } from 'shared/components/FormComponents';
 import { DefaultTabs as Tabs } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { getErrorMessage } from 'shared/utils';
+import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { applets } from 'modules/Dashboard/state';
 import { applet, workspaces } from 'shared/state';
@@ -17,6 +16,7 @@ import { Periodicity, createEventApi, updateEventApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
 import { calendarEvents, users } from 'modules/Dashboard/state';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
 import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
 import { EventFormSchema } from './EventForm.schema';
@@ -37,6 +37,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       setActivityName,
       defaultStartDate,
       editedEvent,
+      onFormIsLoading,
       onFormChange,
       'data-testid': dataTestid,
     },
@@ -52,13 +53,26 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     const defaultValues = getDefaultValues(defaultStartDate, editedEvent);
     const eventsData = calendarEvents.useCreateEventsData() || [];
 
+    const isIndividualCalendar = !!respondentId;
+    const analyticsPrefix = isIndividualCalendar
+      ? AnalyticsCalendarPrefix.IndividualCalendar
+      : AnalyticsCalendarPrefix.GeneralCalendar;
+
     const methods = useForm<EventFormValues>({
       resolver: yupResolver(EventFormSchema() as ObjectSchema<EventFormValues>),
       defaultValues,
       mode: 'onChange',
     });
 
-    const { handleSubmit, control, watch, getValues, setValue, trigger } = methods;
+    const {
+      handleSubmit,
+      control,
+      watch,
+      getValues,
+      setValue,
+      trigger,
+      formState: { isDirty },
+    } = methods;
 
     const { errors } = useFormState({
       control,
@@ -100,8 +114,18 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       }
     };
 
-    const { execute: createEvent, error: createEventError } = useAsync(createEventApi, getEvents);
-    const { execute: updateEvent, error: updateEventError } = useAsync(updateEventApi, getEvents);
+    const {
+      execute: createEvent,
+      error: createEventError,
+      isLoading: createEventIsLoading,
+    } = useAsync(createEventApi, getEvents);
+    const {
+      execute: updateEvent,
+      error: updateEventError,
+      isLoading: updateEventIsLoading,
+    } = useAsync(updateEventApi, getEvents);
+
+    const isLoading = createEventIsLoading || updateEventIsLoading;
 
     const removeWarning: Warning = eventsData.reduce((acc, event) => {
       const idWithoutFlowRegex = getIdWithoutRegex(activityOrFlowId)?.id;
@@ -122,7 +146,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       if (!appletId) {
         return;
       }
-      const body = getEventPayload(defaultStartDate, watch, respondentId);
+      const body = getEventPayload(defaultStartDate, getValues, respondentId);
 
       if (editedEvent) {
         const { activityId, flowId, respondentId, ...updateEventBody } = body;
@@ -134,6 +158,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       } else {
         await createEvent({ appletId, body });
       }
+
+      Mixpanel.track(`${analyticsPrefix} Schedule successful`);
     };
 
     const submitForm = async () => {
@@ -148,6 +174,23 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       await handleProcessEvent();
       submitCallback();
     };
+
+    const apiError = createEventError || updateEventError;
+    const getError = () => {
+      if (errors.reminder?.activityIncomplete) {
+        return t('activityIncompleteError');
+      }
+      if (eventFormConfig.hasNotificationsErrors) {
+        return t('timeNotificationsError');
+      }
+      if (apiError) {
+        return getErrorMessage(apiError);
+      }
+
+      return null;
+    };
+
+    const errorMessage = getError();
 
     useImperativeHandle(ref, () => ({
       submitForm() {
@@ -176,9 +219,13 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
 
     useEffect(() => {
       if (onFormChange) {
-        onFormChange(!isEqual(getValues(), defaultValues));
+        onFormChange(isDirty);
       }
-    }, [watch()]);
+    }, [isDirty]);
+
+    useEffect(() => {
+      onFormIsLoading(isLoading);
+    }, [isLoading]);
 
     useEffect(() => {
       setValue('removeWarning', removeWarning);
@@ -213,14 +260,12 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
             )}
           </StyledModalWrapper>
           <Tabs tabs={getEventFormTabs(eventFormConfig)} uiType={UiType.Secondary} />
-          {(createEventError || updateEventError || eventFormConfig.hasNotificationsErrors) && (
+          {errorMessage && (
             <StyledBodyLarge
               color={variables.palette.semantic.error}
               sx={{ m: theme.spacing(1, 2.6) }}
             >
-              {eventFormConfig.hasNotificationsErrors
-                ? t('timeNotificationsError')
-                : getErrorMessage(createEventError || updateEventError)}
+              {errorMessage}
             </StyledBodyLarge>
           )}
         </form>

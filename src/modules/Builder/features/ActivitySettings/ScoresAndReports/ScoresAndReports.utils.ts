@@ -2,12 +2,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { CalculationType, ScoreReportType } from 'shared/consts';
 import { ScoreOrSection } from 'shared/state';
+import { ItemFormValues } from 'modules/Builder/types';
+import { getEntityKey } from 'shared/utils';
+import { removeMarkdown } from 'modules/Builder/utils';
 
 import { getScoreId } from './ScoreContent/ScoreContent.utils';
 
 export const getScoreDefaults = () => ({
   name: '',
   type: ScoreReportType.Score,
+  key: uuidv4(),
   id: getScoreId('', CalculationType.Sum),
   calculationType: CalculationType.Sum,
   itemsScore: [],
@@ -37,3 +41,11 @@ export const getReportIndex = (reports: ScoreOrSection[], report: ScoreOrSection
     },
     { index: 0, done: false },
   ).index;
+
+export const getTableScoreItems = (items?: ItemFormValues[]) =>
+  items?.map((item) => ({
+    id: getEntityKey(item),
+    name: item.name,
+    tooltip: removeMarkdown(item.question),
+    label: `${item.name}: ${removeMarkdown(item.question)}`,
+  }));

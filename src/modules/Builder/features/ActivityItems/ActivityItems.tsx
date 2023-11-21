@@ -4,12 +4,13 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import { StyledContainer } from 'shared/styles';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, pluck } from 'shared/utils';
 import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { page } from 'resources';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { getUniqueName } from 'modules/Builder/utils';
 
 import { ItemConfiguration } from './ItemConfiguration/ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -18,7 +19,7 @@ import { DeleteItemModal } from './DeleteItemModal';
 
 export const ActivityItems = () => {
   const { fieldName, activity } = useCurrentActivity();
-  const { control, trigger } = useFormContext();
+  const { control, trigger, getValues } = useFormContext();
   const itemsName = `${fieldName}.items`;
   const navigate = useNavigate();
 
@@ -39,7 +40,6 @@ export const ActivityItems = () => {
   );
   const [activeItem, setActiveItem] = useState<ItemFormValues | undefined>(undefined);
   const [itemIdToDelete, setItemIdToDelete] = useState('');
-  const [, setDuplicateIndexes] = useState<Record<string, number>>({});
 
   useActivitiesRedirection();
 
@@ -92,21 +92,18 @@ export const ActivityItems = () => {
   };
 
   const handleDuplicateItem = (index: number) => {
-    const itemToDuplicate = items[index];
-    setDuplicateIndexes((prevState) => {
-      const numberToInsert = (prevState[getEntityKey(itemToDuplicate)] || 0) + 1;
+    const itemsValues = getValues(itemsName);
+    const itemToDuplicate = itemsValues[index];
 
-      handleInsertItem(index, {
-        ...itemToDuplicate,
-        id: undefined,
-        key: uuidv4(),
-        name: `${itemToDuplicate.name}_${numberToInsert}`,
-      });
-
-      return {
-        ...prevState,
-        [getEntityKey(itemToDuplicate)]: numberToInsert,
-      };
+    handleInsertItem(index, {
+      ...itemToDuplicate,
+      id: undefined,
+      key: uuidv4(),
+      name: getUniqueName({
+        name: itemToDuplicate.name,
+        existingNames: pluck(itemsValues, 'name'),
+        withUnderscore: true,
+      }),
     });
   };
 

@@ -9,8 +9,15 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-        // TODO: remove serializable check and fix errors
-        serializableCheck: false,
+        serializableCheck: {
+          ignoredActions: ['calendarEvents/createCalendarEvents'],
+          ignoredPaths: [
+            /^calendarEvents\.(events\.data|processedEvents\.data\.eventsToShow)\.\d+\.start$/,
+            /^calendarEvents\.(events\.data|processedEvents\.data\.eventsToShow)\.\d+\.eventStart$/,
+            /^calendarEvents\.(events\.data|processedEvents\.data\.eventsToShow)\.\d+\.eventEnd$/,
+            /^calendarEvents\.(events\.data|processedEvents\.data\.eventsToShow)\.\d+\.end$/,
+          ],
+        },
       }),
     preloadedState,
   });
@@ -20,4 +27,6 @@ export type AppStore = ReturnType<typeof setupStore>;
 export type ExtendedRenderOptions = Omit<RenderOptions, 'queries'> & {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;
+  route?: string;
+  routePath?: string;
 };

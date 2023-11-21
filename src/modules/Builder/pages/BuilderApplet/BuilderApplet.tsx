@@ -20,6 +20,7 @@ import {
   getAppletTabs,
   prepareActivitiesFromLibrary,
   prepareActivityFlowsFromLibrary,
+  getDefaultThemeId,
 } from './BuilderApplet.utils';
 
 export const BuilderApplet = () => {
@@ -44,12 +45,12 @@ export const BuilderApplet = () => {
   const [isFromLibrary, setIsFromLibrary] = useState(false);
   const [isAppletInitialized, setAppletInitialized] = useState(false);
   const { data: dataFromLibrary } = location.state ?? {};
-  const hasLibraryData = isFromLibrary && dataFromLibrary;
+  const hasLibraryData = isFromLibrary && !!dataFromLibrary;
   const isLoading =
     (!isNewApplet && loadingStatus === 'idle') ||
     loadingStatus === 'loading' ||
     themesLoadingStatus === 'loading';
-  const defaultThemeId = themesList[0]?.id;
+  const defaultThemeId = getDefaultThemeId(themesList);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     appletId && ownerId && !isNewApplet
@@ -80,7 +81,7 @@ export const BuilderApplet = () => {
     (async () => {
       await reset(getDefaultValues(appletData, defaultThemeId));
 
-      if (!dataFromLibrary) return;
+      if (!hasLibraryData) return;
 
       const formValues = await getValues();
       const libraryConvertedValues = await getDefaultValues(dataFromLibrary);
@@ -120,7 +121,7 @@ export const BuilderApplet = () => {
   }, [defaultThemeId, isNewApplet]);
 
   useEffect(() => {
-    dispatch(themes.thunk.getThemes({}));
+    dispatch(themes.thunk.getThemes({ ordering: 'name' }));
 
     return removeAppletData;
   }, []);

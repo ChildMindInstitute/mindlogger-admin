@@ -2,34 +2,29 @@ import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
-import { TestContext } from 'yup';
+import * as yup from 'yup';
 
 import i18n from 'i18n';
 import { page } from 'resources';
 import { Svg } from 'shared/components/Svg';
+import { Theme } from 'modules/Builder/api';
 import {
   Activity,
   ActivityFlow,
-  AudioPlayerResponseValues,
   Condition,
   ConditionalLogic,
   Config,
-  DrawingResponseValues,
   Item,
   ItemAlert,
-  NumberItemResponseValues,
   OptionCondition,
   ScoreCondition,
+  ScoreConditionalLogic,
   ScoreReport,
   ScoresAndReports,
   SectionReport,
   SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectRowsResponseValues,
   SingleAndMultiSelectOption,
   SingleApplet,
-  SliderItemResponseValues,
-  SliderRowsResponseValues,
-  SubscaleSetting,
 } from 'shared/state';
 import {
   createArray,
@@ -37,7 +32,6 @@ import {
   getEntityKey,
   getObjectFromList,
   getTextBetweenBrackets,
-  getUniqueName,
   INTERVAL_SYMBOL,
   Path,
   pluck,
@@ -56,6 +50,7 @@ import {
   ScoreReportType,
 } from 'shared/consts';
 import {
+  ABTrailsItemQuestions,
   ActivityFlowFormValues,
   ActivityFormValues,
   AppletFormValues,
@@ -75,6 +70,18 @@ import {
   TouchItemNames,
 } from 'modules/Builder/types';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import {
+  findRelatedScore,
+  FlowReportFieldsPrepareType,
+  getEntityReportFields,
+  getUniqueName,
+} from 'modules/Builder/utils';
+import {
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_SLIDER_MAX_NUMBER,
+  DEFAULT_SLIDER_MIN_NUMBER,
+  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
+} from 'modules/Builder/consts';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,
@@ -83,11 +90,45 @@ import {
   ordinalStrings,
   SAMPLE_SIZE,
 } from './BuilderApplet.const';
-import { GetMessageItem } from './BuilderApplet.types';
+import { GetSectionConditions, GetMessageItem, PerformanceTaskItems } from './BuilderApplet.types';
 
 const { t } = i18n;
 
+export const getDefaultThemeId = (themesList: Theme[]) =>
+  themesList.find((theme) => theme.name === 'Default')?.id || '';
+
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
+
+const getDuplicatedOptionsAndAlerts = (item?: ItemFormValues) => {
+  const { responseValues, alerts } = item || {};
+  const newIdsObject: Record<string, string> = {};
+  const options = (responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
+    (option: SingleAndMultiSelectOption) => {
+      const id = uuidv4();
+      newIdsObject[option.id] = id;
+
+      return { ...option, id };
+    },
+  );
+
+  const mappedAlerts = alerts
+    ? {
+        alerts: alerts.map((alert) => ({
+          ...alert,
+          value: newIdsObject[alert.value ?? ''],
+          key: uuidv4(),
+        })),
+      }
+    : {};
+
+  return {
+    responseValues: {
+      ...responseValues,
+      options,
+    },
+    ...mappedAlerts,
+  };
+};
 
 export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
@@ -100,22 +141,17 @@ export const getNewActivityItem = (item?: ItemFormValues) => ({
   id: undefined,
   key: uuidv4(),
   ...((item?.responseType === ItemResponseType.SingleSelection ||
-    item?.responseType === ItemResponseType.MultipleSelection) && {
-    responseValues: {
-      ...item.responseValues,
-      options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-        (option: SingleAndMultiSelectOption) => ({
-          ...option,
-          id: uuidv4(),
-        }),
-      ),
-    },
-  }),
+    item?.responseType === ItemResponseType.MultipleSelection) &&
+    getDuplicatedOptionsAndAlerts(item)),
   ...(item?.responseType === ItemResponseType.Slider && {
     responseValues: {
       ...item.responseValues,
       id: uuidv4(),
     },
+    alerts: item?.alerts?.map((alert) => ({
+      ...alert,
+      key: uuidv4(),
+    })),
   }),
 });
 
@@ -123,13 +159,24 @@ export const getDuplicatedConditions = (
   oldItems: ItemFormValues[],
   newItems: Record<string, unknown>[],
   conditions?: Condition[],
+  scores?: ScoreReport[],
+  scoreConditionalLogic?: ScoreConditionalLogic[],
 ) =>
   conditions?.map((condition) => {
     const optionValue = (condition as OptionCondition)?.payload.optionValue;
     const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
+    const score = scores?.find((score) => condition.itemName === getEntityKey(score, false));
+    const scoreCondition = scoreConditionalLogic?.find(
+      (scoreCondition) => condition.itemName === getEntityKey(scoreCondition, false),
+    );
+    const itemName =
+      (getEntityKey(newItems[itemIndex]) ||
+        (score && getEntityKey(score, false)) ||
+        (scoreCondition && getEntityKey(scoreCondition, false))) ??
+      '';
     const result = {
       ...condition,
-      itemName: getEntityKey(newItems[itemIndex]) ?? '',
+      itemName,
       key: uuidv4(),
     };
 
@@ -174,27 +221,63 @@ export const getDuplicatedConditional = (
     };
   }) ?? [];
 
-const getDuplicatedScoresAndReports = (
-  oldItems: ItemFormValues[],
-  newItems: Record<string, unknown>[],
-  scoresAndReports?: ScoresAndReports,
-) => {
+const oldToNewIdRemapper = (newItemsObjectByOldId: Record<string, string>) => (id: string) =>
+  newItemsObjectByOldId[id] ?? id;
+
+const getDuplicatedScoresAndReports = ({
+  oldItems,
+  newItems,
+  scoresAndReports,
+  newItemsObjectByOldId,
+}: {
+  oldItems: ItemFormValues[];
+  newItems: Record<string, unknown>[];
+  scoresAndReports?: ScoresAndReports;
+  newItemsObjectByOldId: Record<string, string>;
+}) => {
   const reports = scoresAndReports?.reports?.map((report) => {
-    const conditionalLogic =
-      report.type === ScoreReportType.Score
-        ? report.conditionalLogic
-        : {
-            ...report.conditionalLogic,
-            conditions: getDuplicatedConditions(
-              oldItems,
-              newItems,
-              report.conditionalLogic?.conditions,
-            ),
-          };
+    let conditionalLogic;
+    if (report.type === ScoreReportType.Section) {
+      const { scoreReports, scoreConditionals } = (scoresAndReports?.reports || []).reduce(
+        (
+          result: { scoreReports: ScoreReport[]; scoreConditionals: ScoreConditionalLogic[] },
+          report,
+        ) => {
+          if (report.type === ScoreReportType.Score) {
+            result.scoreReports.push(report);
+            result.scoreConditionals.push(...(report.conditionalLogic || []));
+          }
+
+          return result;
+        },
+        { scoreReports: [], scoreConditionals: [] },
+      );
+      conditionalLogic = report.conditionalLogic && {
+        ...report.conditionalLogic,
+        conditions: getDuplicatedConditions(
+          oldItems,
+          newItems,
+          report.conditionalLogic?.conditions,
+          scoreReports,
+          scoreConditionals,
+        ),
+      };
+
+      return {
+        ...report,
+        conditionalLogic,
+        itemsPrint: report.itemsPrint?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
+      };
+    }
 
     return {
       ...report,
-      conditionalLogic,
+      itemsPrint: report.itemsPrint?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
+      itemsScore: report.itemsScore?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
+      conditionalLogic: report.conditionalLogic?.map((conditional) => ({
+        ...conditional,
+        itemsPrint: conditional.itemsPrint?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
+      })),
     };
   });
 
@@ -211,14 +294,25 @@ export const getNewActivity = ({ name, activity }: GetNewActivity) => {
     items,
     activity?.conditionalLogic,
   );
+  const newItemsObjectByOldId =
+    activity?.items?.reduce(
+      (acc, item, currentIndex) => ({
+        ...acc,
+        [getEntityKey(item)]: getEntityKey(items[currentIndex]),
+      }),
+      {} as Record<string, string>,
+    ) ?? {};
   const subscaleSetting = getActivitySubscaleSettingDuplicated({
     oldSubscaleSetting: activity?.subscaleSetting,
-    oldItems: activity?.items as ItemFormValues[],
-    newItems: items as ItemFormValues[],
+    newItemsObjectByOldId,
   });
-
   const scoresAndReports = Object.keys(activity?.scoresAndReports || {})?.length
-    ? getDuplicatedScoresAndReports(activity?.items ?? [], items, activity?.scoresAndReports)
+    ? getDuplicatedScoresAndReports({
+        oldItems: activity?.items ?? [],
+        newItems: items,
+        scoresAndReports: activity?.scoresAndReports,
+        newItemsObjectByOldId,
+      })
     : {
         generateReport: false,
         reports: [],
@@ -256,7 +350,7 @@ const getMessageItem = ({ name, question, order }: GetMessageItem) => ({
   order,
 });
 
-const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
+export const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
   const commonConfigProps = {
     trialsNumber: DEFAULT_NUMBER_OF_TRIALS,
     durationMinutes: DEFAULT_LENGTH_OF_TEST,
@@ -337,7 +431,7 @@ const defaultFlankerTestConfig = {
   blockType: RoundTypeEnum.Test,
 };
 
-const flankerItems = [
+export const flankerItems = [
   getMessageItem({
     name: FlankerItemNames.GeneralInstruction,
     question: t('flankerInstructions.general'),
@@ -438,12 +532,13 @@ const flankerItems = [
   }, //12 TestThird
 ];
 
-const getABTrailsItems = (deviceType: DeviceType) =>
+export const getABTrailsItems = (deviceType: DeviceType) =>
   createArray(4, (index) => ({
     id: undefined,
     key: uuidv4(),
     responseType: ItemResponseType.ABTrails,
     name: `${ItemResponseType.ABTrails}_${deviceType}_${index + 1}`,
+    question: ABTrailsItemQuestions[index],
     config: {
       deviceType,
       orderName: OrderName[ordinalStrings[index] as keyof typeof OrderName],
@@ -466,7 +561,7 @@ export const getNewPerformanceTask = ({
 
   const { items, ...restPerfTaskParams } = performanceTask || {};
 
-  const getItems = (): ItemFormValues[] => {
+  const getItems = (): ItemFormValues[] | PerformanceTaskItems => {
     if (items?.length) {
       return items.map((item) => ({
         ...item,
@@ -499,6 +594,7 @@ export const getNewApplet = () => ({
   watermark: '',
   activities: [],
   activityFlows: [],
+  reportEmailBody: t('reportEmailBody'),
 });
 
 export const getNewActivityFlow = () => ({
@@ -515,15 +611,11 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
       return {
-        options: (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-          (option) => ({
-            ...option,
-            color: option.color ? ({ hex: option.color } as ColorResult) : undefined,
-          }),
-        ),
-        paletteName:
-          (item.responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ??
-          undefined,
+        options: item.responseValues?.options?.map((option) => ({
+          ...option,
+          color: option.color ? ({ hex: option.color } as ColorResult) : undefined,
+        })),
+        paletteName: item.responseValues.paletteName ?? undefined,
       };
     case ItemResponseType.SliderRows:
     case ItemResponseType.Slider:
@@ -532,12 +624,7 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.NumberSelection:
     case ItemResponseType.Drawing:
       return {
-        ...(item.responseValues as
-          | SliderRowsResponseValues
-          | SliderItemResponseValues
-          | NumberItemResponseValues
-          | DrawingResponseValues
-          | AudioPlayerResponseValues),
+        ...item.responseValues,
         options: undefined,
       };
     case ItemResponseType.SingleSelectionPerRow:
@@ -548,13 +635,14 @@ const getActivityItemResponseValues = (item: Item) => {
   }
 };
 
-const getAlerts = (item: Item) => {
+const getAlerts = (item: Item): ItemAlert[] | undefined => {
   const { responseType, responseValues, config } = item;
 
   if (
-    ~[ItemResponseType.SingleSelection, ItemResponseType.MultipleSelection].indexOf(responseType)
+    responseType === ItemResponseType.SingleSelection ||
+    responseType === ItemResponseType.MultipleSelection
   ) {
-    const options = (responseValues as SingleAndMultipleSelectItemResponseValues).options;
+    const options = responseValues.options;
     const optionsWithAlert = options?.filter(({ alert }) => typeof alert === 'string');
 
     if (!optionsWithAlert?.length) return [];
@@ -567,7 +655,7 @@ const getAlerts = (item: Item) => {
   }
 
   if (responseType === ItemResponseType.Slider) {
-    const { alerts } = (responseValues || {}) as SliderItemResponseValues;
+    const { alerts } = responseValues || {};
     const isContinuous = get(config, ItemConfigurationSettings.IsContinuous);
 
     if (!alerts?.length) return [];
@@ -581,7 +669,7 @@ const getAlerts = (item: Item) => {
   }
 
   if (responseType === ItemResponseType.SliderRows) {
-    const { rows } = (responseValues || {}) as SliderRowsResponseValues;
+    const { rows } = responseValues || {};
 
     return (
       rows?.flatMap(
@@ -592,11 +680,10 @@ const getAlerts = (item: Item) => {
   }
 
   if (
-    ~[ItemResponseType.SingleSelectionPerRow, ItemResponseType.MultipleSelectionPerRow].indexOf(
-      responseType,
-    )
+    responseType === ItemResponseType.SingleSelectionPerRow ||
+    responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const { dataMatrix } = responseValues as SingleAndMultipleSelectRowsResponseValues;
+    const { dataMatrix } = responseValues;
 
     return (
       dataMatrix?.reduce(
@@ -616,23 +703,26 @@ const getAlerts = (item: Item) => {
 
 const getActivityItems = (items: Item[]) =>
   items
-    ? items.map((item) => ({
-        id: item.id,
-        key: item.key,
-        name: item.name,
-        question: getDictionaryText(item.question),
-        responseType: item.responseType,
-        responseValues: getActivityItemResponseValues(item),
-        config: item.config,
-        conditionalLogic: undefined,
-        alerts: getAlerts(item),
-        allowEdit: item.allowEdit,
-        isHidden: item.isHidden,
-        order: item.order,
-      }))
+    ? items.map(
+        (item) =>
+          ({
+            id: item.id,
+            key: item.key,
+            name: item.name,
+            question: getDictionaryText(item.question),
+            responseType: item.responseType,
+            responseValues: getActivityItemResponseValues(item),
+            config: item.config,
+            conditionalLogic: undefined,
+            alerts: getAlerts(item),
+            allowEdit: item.allowEdit,
+            isHidden: item.isHidden,
+            order: item.order,
+          }) as ItemFormValues,
+      )
     : [];
 
-const getActivityFlows = (activityFlows: ActivityFlow[]) =>
+const getActivityFlows = (activityFlows: ActivityFlow[], activities: Activity[]) =>
   activityFlows.map(({ order, ...activityFlow }) => ({
     ...activityFlow,
     description: getDictionaryText(activityFlow.description),
@@ -641,6 +731,12 @@ const getActivityFlows = (activityFlows: ActivityFlow[]) =>
       key,
       activityKey: activityKey || activityId || '',
     })),
+    ...getEntityReportFields({
+      reportActivity: activityFlow.reportIncludedActivityName ?? '',
+      reportItem: activityFlow.reportIncludedItemName ?? '',
+      activities,
+      type: FlowReportFieldsPrepareType.NameToKey,
+    }),
   }));
 
 const getConditionPayload = (item: Item, condition: Condition) => {
@@ -682,7 +778,7 @@ const getActivityConditionalLogic = (items: Item[]) =>
     return result;
   }, []);
 
-const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
+const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?: string) =>
   conditions?.map((condition) => {
     const { itemName, type } = condition;
     const relatedItem = items?.find((item) => item.name === itemName);
@@ -694,7 +790,24 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[]) =>
     return {
       ...condition,
       payload,
-      itemName: relatedItem ? getEntityKey(relatedItem) : condition.itemName,
+      itemName: relatedItem ? getEntityKey(relatedItem) : scoreName ?? condition.itemName,
+    };
+  });
+
+const getSectionConditions = ({ items, conditions, scores }: GetSectionConditions) =>
+  conditions?.map((condition) => {
+    const { itemName, type } = condition;
+    const relatedItem = items?.find((item) => item.name === itemName);
+    const relatedScore = findRelatedScore({ entityKey: itemName, scores });
+    const payload =
+      type === ScoreConditionType
+        ? { value: String((condition as ScoreCondition).payload?.value) }
+        : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
+
+    return {
+      ...condition,
+      payload,
+      itemName: relatedItem ? getEntityKey(relatedItem) : getEntityKey(relatedScore ?? {}, false),
     };
   });
 
@@ -703,39 +816,70 @@ const getShowMessageAndPrintItems = (message?: string, itemsPrint?: string[]) =>
   printItems: !!itemsPrint?.length,
 });
 
-const getScore = (score: ScoreReport, items: Activity['items']) => ({
-  ...score,
-  ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
-  conditionalLogic: score.conditionalLogic?.map((conditional) => ({
-    ...conditional,
-    ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
-    conditions: getScoreConditions(items, conditional.conditions),
-  })),
-});
+const remapItemsById = (itemsObject: Record<string, Item>) => (name: string) =>
+  itemsObject[name].id;
+const getScore = (
+  score: ScoreReport,
+  items: Activity['items'],
+  itemsObject: Record<string, Item>,
+) => {
+  const scoreKey = uuidv4();
+  const remapperFunction = remapItemsById(itemsObject);
 
-const getSection = (section: SectionReport, items: Activity['items']) => ({
+  return {
+    ...score,
+    key: scoreKey,
+    ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
+    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
+      ...conditional,
+      key: uuidv4(),
+      ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
+      conditions: getScoreConditions(items, conditional.conditions, scoreKey),
+      itemsPrint: conditional.itemsPrint?.map(remapperFunction),
+    })),
+    itemsScore: score.itemsScore.map(remapperFunction),
+    itemsPrint: score.itemsPrint?.map(remapperFunction),
+  };
+};
+
+const getSection = (
+  section: SectionReport,
+  items: Activity['items'],
+  scores: ScoreReport[],
+  itemsObject: Record<string, Item>,
+) => ({
   ...section,
   id: uuidv4(),
   ...getShowMessageAndPrintItems(section.message, section.itemsPrint),
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
       ...section.conditionalLogic,
-      conditions: getScoreConditions(items, section?.conditionalLogic?.conditions),
+      conditions: getSectionConditions({
+        items,
+        conditions: section?.conditionalLogic?.conditions,
+        scores,
+      }),
     },
   }),
+  itemsPrint: section.itemsPrint?.map(remapItemsById(itemsObject)),
 });
 
 const getScoresAndReports = (activity: Activity) => {
   const { items, scoresAndReports } = activity;
-  if (!scoresAndReports) return;
+  if (!scoresAndReports || !items) return;
 
+  const itemsObject = getObjectFromList(items, (item) => item.name);
   const { reports: initialReports } = scoresAndReports;
-  const reports = initialReports?.map((report) => {
-    if (report.type === ScoreReportType.Section) {
-      return getSection(report as SectionReport, items);
-    }
+  const reportsWithMappedScores = initialReports?.map((report) => {
+    if (report.type === ScoreReportType.Section) return report;
 
-    return getScore(report as ScoreReport, items);
+    return getScore(report as ScoreReport, items, itemsObject);
+  });
+  const scores = reportsWithMappedScores?.filter((report) => report.type === ScoreReportType.Score);
+  const reports = reportsWithMappedScores?.map((report) => {
+    if (report.type === ScoreReportType.Score) return report;
+
+    return getSection(report as SectionReport, items, scores as ScoreReport[], itemsObject);
   });
 
   return {
@@ -760,30 +904,21 @@ const getActivitySubscaleItems = ({
 
 const getActivitySubscaleSettingDuplicated = ({
   oldSubscaleSetting,
-  oldItems,
-  newItems,
+  newItemsObjectByOldId,
 }: GetActivitySubscaleSettingDuplicated) => {
   if (!oldSubscaleSetting) return oldSubscaleSetting;
-
-  const mappedIndexObject = oldItems.reduce(
-    (acc, item, currentIndex) => ({
-      ...acc,
-      [getEntityKey(item)]: getEntityKey(newItems[currentIndex]),
-    }),
-    {} as Record<string, string>,
-  );
 
   return {
     ...oldSubscaleSetting,
     subscales: oldSubscaleSetting?.subscales?.map((subscale) => ({
       ...subscale,
-      items: subscale.items.map((subscaleItem) => mappedIndexObject[subscaleItem] ?? subscaleItem),
+      items: subscale.items.map(oldToNewIdRemapper(newItemsObjectByOldId)),
     })),
   };
 };
 
 const getActivitySubscaleSetting = (
-  subscaleSetting: SubscaleSetting,
+  subscaleSetting: Activity['subscaleSetting'],
   activityItems: ItemFormValues[],
 ) => {
   if (!subscaleSetting) return subscaleSetting;
@@ -817,36 +952,37 @@ const getActivitySubscaleSetting = (
 export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: string) => {
   if (!appletData) return getNewApplet();
 
-  const processedApplet = {
+  const processedApplet: AppletFormValues = {
     ...appletData,
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
     themeId: appletData.themeId ?? defaultThemeId ?? '',
     activities: appletData.activities
-      ? appletData.activities.map((activity) => ({
-          ...activity,
-          description: getDictionaryText(activity.description),
-          items: getActivityItems(activity.items),
-          //TODO: for frontend purposes - should be reviewed after refactoring phase
-          conditionalLogic: getActivityConditionalLogic(activity.items),
-          scoresAndReports: getScoresAndReports(activity),
-        }))
+      ? appletData.activities.map((activity) => {
+          const items = getActivityItems(activity.items);
+
+          return {
+            ...activity,
+            description: getDictionaryText(activity.description),
+            items,
+            ...getEntityReportFields({
+              reportItem: activity.reportIncludedItemName,
+              activityItems: activity.items,
+              type: FlowReportFieldsPrepareType.NameToKey,
+            }),
+            conditionalLogic: getActivityConditionalLogic(activity.items),
+            scoresAndReports: getScoresAndReports(activity),
+            ...(activity.subscaleSetting && {
+              subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, items),
+            }),
+          } as ActivityFormValues;
+        })
       : [],
-    activityFlows: getActivityFlows(appletData.activityFlows),
+    activityFlows: getActivityFlows(appletData.activityFlows, appletData.activities),
     streamEnabled: !!appletData.streamEnabled,
   };
 
-  return {
-    ...processedApplet,
-    activities: processedApplet.activities
-      ? processedApplet.activities.map((activity) => ({
-          ...activity,
-          ...(activity.subscaleSetting && {
-            subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, activity.items),
-          }),
-        }))
-      : [],
-  } as AppletFormValues;
+  return processedApplet;
 };
 
 export const getAppletTabs = ({
@@ -856,6 +992,7 @@ export const getAppletTabs = ({
 }: Record<string, boolean>) => [
   {
     labelKey: 'aboutApplet',
+    id: 'builder-about-applet',
     icon: <Svg id="more-info-outlined" />,
     activeIcon: <Svg id="more-info-filled" />,
     path: Path.About,
@@ -864,6 +1001,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'activities',
+    id: 'builder-activities',
     icon: <Svg id="checklist-outlined" />,
     activeIcon: <Svg id="checklist-filled" />,
     path: Path.Activities,
@@ -872,6 +1010,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'activityFlows',
+    id: 'builder-activity-flows',
     icon: <Svg id="flow-outlined" />,
     activeIcon: <Svg id="flow-filled" />,
     path: Path.ActivityFlow,
@@ -880,6 +1019,7 @@ export const getAppletTabs = ({
   },
   {
     labelKey: 'appletSettings',
+    id: 'builder-settings',
     icon: <Svg id="settings" />,
     activeIcon: <Svg id="settings-filled" />,
     path: Path.Settings,
@@ -901,14 +1041,13 @@ export const testIsReportCommonFieldsRequired = (
   return printItemsValue;
 };
 
-//TODO: find a way to validate nested properties for objects in arrays for uniqueness
 export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
   items?.filter((item) => item.name === value).length < 2 ?? true;
 
 export const testFunctionForTheSameVariable = (
   field: string,
   value: string,
-  context: TestContext,
+  context: yup.TestContext,
 ) => {
   const itemName = get(context, 'parent.name');
   const variableNames = getTextBetweenBrackets(value);
@@ -916,7 +1055,7 @@ export const testFunctionForTheSameVariable = (
   return !variableNames.includes(itemName);
 };
 
-export const testFunctionForNotSupportedItems = (value: string, context: TestContext) => {
+export const testFunctionForNotSupportedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
   const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
@@ -924,14 +1063,14 @@ export const testFunctionForNotSupportedItems = (value: string, context: TestCon
   return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };
 
-export const testFunctionForSkippedItems = (value: string, context: TestContext) => {
+export const testFunctionForSkippedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
 
   return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
 };
 
-export const testFunctionForNotExistedItems = (value: string, context: TestContext) => {
+export const testFunctionForNotExistedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items');
   const variableNames = getTextBetweenBrackets(value);
 
@@ -964,7 +1103,7 @@ export const prepareActivitiesFromLibrary = (activities: ActivityFormValues[]) =
       ...result,
       {
         ...activity,
-        name: getUniqueName(activity.name, pluck(result, 'name')),
+        name: getUniqueName({ name: activity.name, existingNames: pluck(result, 'name') }),
       },
     ],
     [],
@@ -974,10 +1113,70 @@ export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormV
   activityFlows.reduce(
     (result: ActivityFlowFormValues[], activityFlow) => [
       ...result,
-      { ...activityFlow, name: getUniqueName(activityFlow.name, pluck(result, 'name')) },
+      {
+        ...activityFlow,
+        name: getUniqueName({ name: activityFlow.name, existingNames: pluck(result, 'name') }),
+      },
     ],
     [],
   );
 
 export const getRegexForIndexedField = (fieldName: string) =>
   new RegExp(`\\[(\\d+)\\].${fieldName}$`);
+
+export const isNumberTest = (value?: unknown) => typeof value === 'number' || value === undefined;
+export const isNumberAtLeastOne = (value?: unknown) =>
+  typeof value === 'number' && value >= DEFAULT_MIN_NUMBER;
+
+export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') => {
+  const isSlider = type === 'slider';
+  const minNumber = isSlider ? DEFAULT_SLIDER_MIN_NUMBER : DEFAULT_SLIDER_ROWS_MIN_NUMBER;
+
+  return {
+    minValue: yup
+      .mixed()
+      .test('is-number', t('positiveIntegerRequired'), isNumberTest)
+      .test('min-max-interval', t('selectValidInterval'), function (value) {
+        if (!value && value !== 0) return;
+        const { maxValue } = this.parent;
+
+        return value < maxValue && value >= minNumber && value < DEFAULT_SLIDER_MAX_NUMBER;
+      }),
+    maxValue: yup
+      .mixed()
+      .test('is-number', t('positiveIntegerRequired'), isNumberTest)
+      .test('min-max-interval', t('selectValidInterval'), function (value) {
+        if (!value && value !== 0) return;
+        const { minValue } = this.parent;
+
+        return value > minValue && value > minNumber && value <= DEFAULT_SLIDER_MAX_NUMBER;
+      }),
+    ...(isSlider && {
+      scores: yup
+        .array()
+        .of(
+          yup
+            .mixed()
+            .test('is-number', t('numberValueIsRequired'), isNumberTest)
+            .required(t('numberValueIsRequired')),
+        )
+        .nullable(),
+    }),
+  };
+};
+
+export const getSliderAlertValueValidation = (isContinuous: boolean) =>
+  yup
+    .mixed()
+    .test('is-number', t('selectValueWithinInterval'), isNumberTest)
+    .test('min-max-interval', t('selectValueWithinInterval'), function (value) {
+      if (!value && value !== 0) return;
+      const { minValue, maxValue } = this.from?.[1]?.value?.responseValues || {};
+      const isWithinInterval = value >= minValue && value <= maxValue;
+
+      if (!isContinuous) return isWithinInterval;
+
+      const { minValue: minAlertValue, maxValue: maxAlertValue } = this.parent || {};
+
+      return isWithinInterval && maxAlertValue > minAlertValue;
+    });

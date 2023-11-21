@@ -170,8 +170,8 @@ export const Respondents = () => {
       appletId && details?.[0]?.hasIndividualSchedule
         ? t('individualSchedule')
         : t('defaultSchedule');
-    const stringNicknames = joinWihComma(nicknames);
-    const stringSecretIds = joinWihComma(secretIds);
+    const stringNicknames = joinWihComma(nicknames, true);
+    const stringSecretIds = joinWihComma(secretIds, true);
 
     return {
       pin: {
@@ -208,6 +208,7 @@ export const Respondents = () => {
             items={getActions(actions, filteredRespondents?.[id], isAnonymousRespondent, appletId)}
             context={id}
             visibleByDefault={hasVisibleActions}
+            data-testid="dashboard-respondents-table-actions"
           />
         ),
         value: '',

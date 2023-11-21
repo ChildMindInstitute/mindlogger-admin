@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { ApiError, SingleApplet } from 'redux/modules';
+import { ApiErrorResponse, SingleApplet } from 'redux/modules';
 import {
   getAppletApi,
   AppletId,
@@ -11,6 +11,7 @@ import {
   getAppletWithItemsApi,
   OwnerId,
 } from 'api';
+import { getApiErrorResult } from 'shared/utils/errors';
 
 export const enum AppletThunkTypePrefix {
   Create = 'applet/createApplet',
@@ -21,9 +22,13 @@ export const getApplet = createAsyncThunk(
   'applet/getApplet',
   async ({ appletId }: AppletId, { rejectWithValue, signal }) => {
     try {
-      return await getAppletApi({ appletId }, signal);
+      const { data } = await getAppletApi({ appletId }, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
@@ -32,9 +37,13 @@ export const getAppletWithItems = createAsyncThunk(
   'applet/getAppletWithItems',
   async ({ ownerId, appletId }: OwnerId & AppletId, { rejectWithValue, signal }) => {
     try {
-      return await getAppletWithItemsApi({ ownerId, appletId }, signal);
+      const { data } = await getAppletWithItemsApi({ ownerId, appletId }, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
@@ -43,9 +52,13 @@ export const createApplet = createAsyncThunk(
   AppletThunkTypePrefix.Create,
   async ({ ownerId, body }: OwnerId & { body: SingleApplet }, { rejectWithValue, signal }) => {
     try {
-      return await postAppletApi({ ownerId, body }, signal);
+      const { data } = await postAppletApi({ ownerId, body }, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
@@ -54,9 +67,13 @@ export const updateApplet = createAsyncThunk(
   AppletThunkTypePrefix.Update,
   async ({ appletId, body }: AppletBody, { rejectWithValue, signal }) => {
     try {
-      return await putAppletApi({ appletId, body }, signal);
+      const { data } = await putAppletApi({ appletId, body }, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );

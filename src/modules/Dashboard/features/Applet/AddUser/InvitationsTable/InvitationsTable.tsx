@@ -37,8 +37,8 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
 
       return {
         secretUserId: {
-          content: () => meta?.secret_user_id,
-          value: meta?.secret_user_id,
+          content: () => meta?.secret_user_id ?? '',
+          value: meta?.secret_user_id ?? '',
         },
         firstName: {
           content: () => firstName,

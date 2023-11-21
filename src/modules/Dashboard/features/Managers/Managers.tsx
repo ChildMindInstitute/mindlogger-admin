@@ -158,6 +158,7 @@ export const Managers = () => {
                   items={getActions(actions)}
                   context={filteredManager}
                   visibleByDefault={hasVisibleActions}
+                  data-testid="dashboard-managers-table-actions"
                 />
               );
             },

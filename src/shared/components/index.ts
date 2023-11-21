@@ -1,6 +1,7 @@
 export * from './Actions';
 export * from './AppletImage';
 export * from './Avatar';
+export * from './Banner';
 export * from './ButtonWithMenu';
 export * from './Chip';
 export * from './CropPopup';
@@ -29,3 +30,4 @@ export * from './Error';
 export * from './ContentWithTooltip';
 export * from './NavigationMenu';
 export * from './AppletNotFoundPopup';
+export * from './ErrorFallback';

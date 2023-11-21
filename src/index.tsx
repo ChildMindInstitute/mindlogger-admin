@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-// todo: add after Mixpanel token is received - M2-3000
-// import { Mixpanel } from 'shared/utils';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import svgBuilder from 'shared/utils/svgBuilder';
 import { svgSprite } from 'svgSprite';
 
@@ -14,8 +13,7 @@ document.body.appendChild(svgBuilder(svgSprite));
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
-// todo: add after Mixpanel token is received - M2-3000
-// Mixpanel.init();
+Mixpanel.init();
 
 root.render(
   <React.StrictMode>

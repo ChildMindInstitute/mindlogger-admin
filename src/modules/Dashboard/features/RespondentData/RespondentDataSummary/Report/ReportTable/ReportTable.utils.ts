@@ -2,8 +2,8 @@ import { Order } from 'shared/types';
 
 import { TextItemAnswer } from './ReportTable.types';
 
-export const filterReportTable = (item: string | number | null, searchValue: string) =>
-  item ? String(item).toLowerCase().includes(searchValue.toLowerCase()) : null;
+export const filterReportTable = (item: string | null, searchValue: string) =>
+  item ? String(item).toLowerCase().includes(searchValue.toLowerCase()) : false;
 
 export const descendingComparator = <T>(a: T, b: T, orderBy: keyof T) => {
   if (b[orderBy] < a[orderBy]) {

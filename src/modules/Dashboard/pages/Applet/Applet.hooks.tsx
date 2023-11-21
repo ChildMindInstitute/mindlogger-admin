@@ -2,6 +2,7 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
+import { Mixpanel } from 'shared/utils';
 
 export const useAppletTabs = () => {
   const { appletId } = useParams();
@@ -9,6 +10,7 @@ export const useAppletTabs = () => {
   return [
     {
       labelKey: 'respondents',
+      id: 'applet-respondents',
       icon: <Svg id="respondent-outlined" />,
       activeIcon: <Svg id="respondent-filled" />,
       path: generatePath(page.appletRespondents, {
@@ -18,6 +20,7 @@ export const useAppletTabs = () => {
     },
     {
       labelKey: 'managers',
+      id: 'applet-managers',
       icon: <Svg id="manager-outlined" />,
       activeIcon: <Svg id="manager-filled" />,
       path: generatePath(page.appletManagers, {
@@ -27,6 +30,7 @@ export const useAppletTabs = () => {
     },
     {
       labelKey: 'addUsers',
+      id: 'applet-add-users',
       icon: <Svg id="add-users-outlined" />,
       activeIcon: <Svg id="add-users-filled" />,
       isMinHeightAuto: true,
@@ -37,8 +41,10 @@ export const useAppletTabs = () => {
     },
     {
       labelKey: 'schedule',
+      id: 'applet-schedule',
       icon: <Svg id="schedule-outlined" />,
       activeIcon: <Svg id="schedule-filled" />,
+      onClick: () => Mixpanel.track('View General calendar click'),
       path: generatePath(page.appletSchedule, {
         appletId,
       }),
@@ -46,6 +52,7 @@ export const useAppletTabs = () => {
     },
     {
       labelKey: 'appletSettings',
+      id: 'applet-settings',
       icon: <Svg id="settings" />,
       activeIcon: <Svg id="settings-filled" />,
       path: generatePath(page.appletSettings, {

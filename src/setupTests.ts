@@ -1,20 +1,6 @@
 import 'mock-local-storage';
 import '@testing-library/jest-dom';
 
-jest.mock('axios', () => ({
-  isAxiosError: jest.fn(),
-  create: jest.fn().mockReturnValue({
-    interceptors: {
-      request: { use: jest.fn(), eject: jest.fn() },
-      response: { use: jest.fn(), eject: jest.fn() },
-    },
-    post: jest.fn(),
-    get: jest.fn(),
-    put: jest.fn(),
-    delete: jest.fn(),
-  }),
-}));
-
 jest.mock('react-secure-storage', () => ({
   setItem: jest.fn(() => Promise.resolve()),
   getItem: jest.fn(() => Promise.resolve('')),
@@ -27,7 +13,21 @@ jest.mock('shared/utils/encryption', () => ({
   ...jest.requireActual('shared/utils/encryption'),
 }));
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
-  useParams: jest.fn(),
+jest.spyOn(global.console, 'warn').mockImplementation((message) => {
+  if (message?.includes('You have provided an out-of-range value')) return;
+
+  return message;
+});
+jest.spyOn(global.console, 'error').mockImplementation((message) => {
+  if (
+    message?.includes('A component is changing an uncontrolled input to be controlled') ||
+    message?.includes('`children` must be passed')
+  )
+    return;
+
+  return message;
+});
+
+jest.mock('shared/components/FormComponents/EditorController/EditorController.styles', () => ({
+  ...jest.requireActual('__mocks__/EditorController'),
 }));

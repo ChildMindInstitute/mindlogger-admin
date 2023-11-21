@@ -14,8 +14,6 @@ export const SMALL_INPUT_LENGTH = 5;
 export const TEXTAREA_ROWS_COUNT_SM = 4;
 export const TEXTAREA_ROWS_COUNT = 5;
 export const MAX_DESCRIPTION_LENGTH_LONG = 150;
-export const MAX_SELECT_OPTION_TEXT_LENGTH = 75;
-export const MAX_SLIDER_LABEL_TEXT_LENGTH = 20;
 export const MAX_FILE_SIZE_5MB = 5_242_880;
 export const MAX_FILE_SIZE_2MB = 2_097_152;
 
@@ -65,6 +63,8 @@ export enum DateFormats {
   YearMonthDay = 'yyyy-MM-dd',
   MonthDayTime = 'MMM dd, HH:mm',
 }
+
+export const EMAIL_REGEXP = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
 export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
 export const APPLET_PASSWORD_MIN_LENGTH = 8;
@@ -302,6 +302,8 @@ export const enum FinalSubscale {
 
 export const INDEX_IN_NAME_REGEXP = /\((\d+)\)$/g;
 
+export const INDEX_IN_NAME_WITH_UNDERSCORE_REGEXP = /_(\d+)/g;
+
 export const enum ScoreReportType {
   Section = 'section',
   Score = 'score',
@@ -310,3 +312,7 @@ export const enum ScoreReportType {
 export const URL_REGEX = /(https?:\/\/)?(www\.)?/g;
 
 export const AUTH_BOX_WIDTH = '39.2rem';
+export const enum AnalyticsCalendarPrefix {
+  IndividualCalendar = 'IC',
+  GeneralCalendar = 'GC',
+}

@@ -5,7 +5,11 @@ import { NavigationItem, NavigationMenu } from 'shared/components';
 
 import { AppletSettingsProps } from './AppletSettings.types';
 
-export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsProps) => {
+export const AppletSettings = ({
+  settings,
+  isBuilder = false,
+  'data-testid': dataTestid,
+}: AppletSettingsProps) => {
   const { appletId } = useParams();
   const navigate = useNavigate();
   const BUILDER_SETTINGS = generatePath(page.builderAppletSettings, {
@@ -17,6 +21,8 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
 
   const handleSettingClick = (setting: NavigationItem) => {
     navigateTo(setting.param);
+
+    setting.onClick?.();
   };
 
   const navigateTo = (param = '') => {
@@ -32,6 +38,7 @@ export const AppletSettings = ({ settings, isBuilder = false }: AppletSettingsPr
       items={settings}
       onClose={() => navigateTo()}
       onSetActiveItem={handleSettingClick}
+      data-testid={dataTestid}
     />
   );
 };

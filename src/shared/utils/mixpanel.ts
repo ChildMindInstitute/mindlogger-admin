@@ -1,21 +1,14 @@
 import mixpanel, { Dict } from 'mixpanel-browser';
-import UAParser from 'ua-parser-js';
 
-mixpanel.init('YOUR_MIXPANEL_TOKEN');
+const PROJECT_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
 
-const isProduction = process.env.REACT_APP_ENV === 'PRODUCTION';
-const isStaging = process.env.REACT_APP_ENV === 'STAGE';
-const shouldEnableMixpanel = isProduction || isStaging;
-
-const uaParser = new UAParser();
+const isProduction = process.env.REACT_APP_ENV === 'prod';
+const isStaging = process.env.REACT_APP_ENV === 'stage';
+const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging);
 
 export const Mixpanel = {
   init() {
-    this.track('INFO', {
-      os: uaParser.getOS().name,
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
+    if (shouldEnableMixpanel) mixpanel.init(PROJECT_TOKEN);
   },
   trackPageView(pageName: string) {
     if (shouldEnableMixpanel) mixpanel.track_pageview({ page: `[Admin] ${pageName}` });
@@ -23,7 +16,10 @@ export const Mixpanel = {
   track(action: string, payload?: Dict) {
     if (shouldEnableMixpanel) mixpanel.track(`[Admin] ${action}`, payload);
   },
+  login(userId: string) {
+    if (shouldEnableMixpanel) mixpanel.identify(userId);
+  },
   logout() {
-    mixpanel.reset();
+    if (shouldEnableMixpanel) mixpanel.reset();
   },
 };

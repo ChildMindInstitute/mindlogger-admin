@@ -4,11 +4,11 @@ const { t } = i18n;
 
 export const getColumns = () => [
   {
-    key: t('name'),
+    key: 'name',
     label: t('itemName'),
   },
   {
-    key: t('question'),
+    key: 'question',
     label: t('itemBody'),
     styles: {
       width: '65%',

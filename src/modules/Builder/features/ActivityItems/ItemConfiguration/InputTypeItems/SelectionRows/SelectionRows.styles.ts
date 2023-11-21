@@ -41,7 +41,6 @@ export const StyledSelectionBox = styled(StyledFlexColumn, shouldForwardProp)`
     position: absolute;
     top: 5.3rem;
     bottom: unset;
-    white-space: normal;
     font-size: ${variables.font.size.md};
 
     ${({ isErrorShortened }: { isErrorShortened?: boolean }) =>

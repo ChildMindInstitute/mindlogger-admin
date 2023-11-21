@@ -1,27 +1,24 @@
 import { itemsTypeIcons } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
+import {
+  DEFAULT_SLIDER_MAX_VALUE,
+  DEFAULT_SLIDER_MIN_NUMBER,
+  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
+} from 'modules/Builder/consts';
 
 import { ItemsOptionGroup } from './ItemConfiguration.types';
 
 export const DEFAULT_TIMER_VALUE = 100;
 export const DEFAULT_DISABLED_TIMER_VALUE = 0;
 export const DEFAULT_SCORE_VALUE = 0;
-export const DEFAULT_MIN_NUMBER = 1;
 export const DEFAULT_MAX_NUMBER = 30;
-export const DEFAULT_SLIDER_MIN_NUMBER = 0;
-export const DEFAULT_SLIDER_ROWS_MIN_NUMBER = 1;
-export const DEFAULT_SLIDER_MAX_NUMBER = 12;
-export const SLIDER_LABEL_MAX_LENGTH = 11;
-export const SLIDER_VALUE_LABEL_MAX_LENGTH = 20;
-export const DEFAULT_SLIDER_MAX_VALUE = 5;
+export const SELECT_OPTION_TEXT_MAX_LENGTH = 75;
 export const DEFAULT_SLIDER_SCORE = createArray(DEFAULT_SLIDER_MAX_VALUE + 1, (i: number) => i + 1);
 export const DEFAULT_SLIDER_ROWS_SCORE = createArray(
   DEFAULT_SLIDER_MAX_VALUE,
   (i: number) => i + 1,
 );
-export const DEFAULT_NUMBER_MIN_VALUE = 0;
-export const DEFAULT_NUMBER_MAX_VALUE = 1;
 
 export const DEFAULT_EMPTY_SLIDER = {
   minValue: DEFAULT_SLIDER_MIN_NUMBER,
@@ -39,7 +36,6 @@ export const DEFAULT_EMPTY_SLIDER_ROWS = {
 export const DEFAULT_AUDIO_DURATION_SEC = 300;
 export const DEFAULT_MAX_CHARACTERS = 300;
 export const SELECTION_ROW_OPTION_LABEL_MAX_LENGTH = 11;
-export const SELECTION_OPTION_TEXT_MAX_LENGTH = 75;
 
 export const itemsTypeOptions: ItemsOptionGroup[] = [
   {
@@ -152,141 +148,141 @@ export const SELECTION_OPTIONS_COLOR_PALETTE = [
   {
     name: 'palette1',
     colors: [
-      '#FFADAD',
-      '#FFD6A5',
-      '#FDFFB6',
-      '#CAFFBF',
-      '#9BF6FF',
-      '#A0C4FF',
-      '#BDB2FF',
-      '#FFC6FF',
-      '#FFFFFC',
+      '#ffadad',
+      '#ffd6a5',
+      '#fdffb6',
+      '#caffbf',
+      '#9bf6ff',
+      '#a0c4ff',
+      '#bdb2ff',
+      '#ffc6ff',
+      '#fffffc',
     ],
   },
   {
     name: 'palette2',
     colors: [
-      '#005F73',
-      '#0A9396',
-      '#94D2BD',
-      '#E9D8A6',
-      '#EE9B00',
-      '#CA6702',
-      '#BB3E03',
-      '#AE2012',
-      '#9B2226',
+      '#005f73',
+      '#0a9396',
+      '#94d2bd',
+      '#e9d8a6',
+      '#ee9b00',
+      '#ca6702',
+      '#bb3e03',
+      '#ae2012',
+      '#9b2226',
     ],
   },
   {
     name: 'palette3',
     colors: [
-      '#F94144',
-      '#F3722C',
-      '#F8961E',
-      '#F9844A',
-      '#F9C74F',
-      '#90BE6D',
-      '#43AA8B',
-      '#4D908E',
+      '#f94144',
+      '#f3722c',
+      '#f8961e',
+      '#f9844a',
+      '#f9c74f',
+      '#90be6d',
+      '#43aa8b',
+      '#4d908e',
       '#577590',
     ],
   },
   {
     name: 'palette4',
     colors: [
-      '#112F45',
-      '#C53A32',
-      '#E78431',
-      '#EC8A33',
-      '#F4B941',
-      '#E9E1BC',
-      '#9BC8E3',
-      '#4D9CB9',
+      '#112f45',
+      '#c53a32',
+      '#e78431',
+      '#ec8a33',
+      '#f4b941',
+      '#e9e1bc',
+      '#9bc8e3',
+      '#4d9cb9',
       '#577590',
     ],
   },
   {
     name: 'palette5',
     colors: [
-      '#320A17',
+      '#320a17',
       '#611214',
-      '#901C16',
-      '#BF281B',
-      '#CA4021',
-      '#D7652A',
-      '#E69035',
-      '#EEA63C',
-      '#F5BC42',
+      '#901c16',
+      '#bf281b',
+      '#ca4021',
+      '#d7652a',
+      '#e69035',
+      '#eea63c',
+      '#f5bc42',
     ],
   },
   {
     name: 'palette6',
     colors: [
-      '#EE8132',
-      '#EF8D34',
-      '#F19937',
-      '#F2A53B',
-      '#F3AD3D',
-      '#F4B940',
-      '#F6C443',
-      '#F8D147',
-      '#F9DD4B',
+      '#ee8132',
+      '#ef8d34',
+      '#f19937',
+      '#f2a53b',
+      '#f3ad3d',
+      '#f4b940',
+      '#f6c443',
+      '#f8d147',
+      '#f9dd4b',
     ],
   },
   {
     name: 'palette7',
     colors: [
-      '#007F5F',
-      '#2B9348',
-      '#55A630',
-      '#8CB63D',
-      '#B1CA40',
-      '#C3D043',
-      '#D5D646',
-      '#DDDE49',
-      '#EEEE55',
+      '#007f5f',
+      '#2b9348',
+      '#55a630',
+      '#8cb63d',
+      '#b1ca40',
+      '#c3d043',
+      '#d5d646',
+      '#ddde49',
+      '#ee5',
     ],
   },
   {
     name: 'palette8',
     colors: [
-      '#6A1CB1',
-      '#6238BC',
-      '#5E62C7',
-      '#608FD3',
-      '#66A7D9',
-      '#6BBDDF',
-      '#78CCDE',
-      '#85DCDE',
-      '#93ECDD',
+      '#6a1cb1',
+      '#6238bc',
+      '#5e62c7',
+      '#608fd3',
+      '#66a7d9',
+      '#6bbddf',
+      '#78ccde',
+      '#85dcde',
+      '#93ecdd',
     ],
   },
   {
     name: 'palette9',
     colors: [
-      '#284E74',
-      '#32608D',
-      '#38749B',
-      '#4088A9',
-      '#559EA3',
-      '#6DB49B',
-      '#89C597',
-      '#A7D694',
-      '#BEE296',
+      '#284e74',
+      '#32608d',
+      '#38749b',
+      '#4088a9',
+      '#559ea3',
+      '#6db49b',
+      '#89c597',
+      '#a7d694',
+      '#bee296',
     ],
   },
   {
     name: 'palette10',
     colors: [
       '#222529',
-      '#353A3F',
-      '#4A5056',
-      '#6E757C',
-      '#AEB5BC',
-      '#CFD4D9',
-      '#DFE2E6',
-      '#EAECEF',
-      '#F8F9FA',
+      '#353a3f',
+      '#4a5056',
+      '#6e757c',
+      '#aeb5bc',
+      '#cfd4d9',
+      '#dfe2e6',
+      '#eaecef',
+      '#f8f9fa',
     ],
   },
 ];

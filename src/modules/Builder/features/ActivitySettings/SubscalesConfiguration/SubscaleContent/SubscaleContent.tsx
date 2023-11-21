@@ -18,8 +18,8 @@ import {
   getColumns,
   getNotUsedElementsTableColumns,
 } from '../SubscalesConfiguration.utils';
-import { checkOnItemTypeAndScore } from '../SubscalesConfiguration.utils';
 import { StyledWrapper } from './SubscaleContent.styles';
+import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 
 export const SubscaleContent = ({
   subscaleId,

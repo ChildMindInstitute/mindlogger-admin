@@ -1,14 +1,16 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
-import axios from 'axios';
-import Router from 'react-router';
+import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { mockedAppletId } from 'shared/mock';
+import { page } from 'resources';
 
 import { RespondentsRemoveAccessPopup } from '.';
 
-const appletId = '12313211';
+const route = `/dashboard/${mockedAppletId}/respondents`;
+const routePath = page.appletRespondents;
 const chosenAppletData = {
-  appletId,
+  appletId: mockedAppletId,
   respondentSecretId: '1231222',
   respondentId: '1231256',
   respondentNickname: 'respondentNickname',
@@ -17,7 +19,6 @@ const chosenAppletData = {
 };
 
 const onCloseMock = jest.fn();
-const fakeRequest = () => new Promise((res) => res(null));
 
 const commonProps = {
   onClose: onCloseMock,
@@ -45,10 +46,8 @@ const commonProps = {
 };
 
 describe('RespondentsRemoveAccessPopup component tests', () => {
-  const mockedAxios = axios.create();
-
   afterEach(() => {
-    jest.restoreAllMocks();
+    mockAxios.reset();
   });
 
   test('RespondentsRemoveAccessPopup should open with applets list', async () => {
@@ -65,10 +64,12 @@ describe('RespondentsRemoveAccessPopup component tests', () => {
   });
 
   test('RespondentsRemoveAccessPopup should remove access with appletId', async () => {
-    jest.spyOn(Router, 'useParams').mockReturnValue({ appletId });
-    jest.spyOn(mockedAxios, 'post').mockImplementation(fakeRequest);
+    mockAxios.post.mockResolvedValueOnce(null);
 
-    renderWithProviders(<RespondentsRemoveAccessPopup {...commonProps} />);
+    renderWithProviders(<RespondentsRemoveAccessPopup {...commonProps} />, {
+      route,
+      routePath,
+    });
 
     fireEvent.click(screen.getAllByText('Remove Access')[1]);
     fireEvent.click(screen.getByText('Yes, Remove'));

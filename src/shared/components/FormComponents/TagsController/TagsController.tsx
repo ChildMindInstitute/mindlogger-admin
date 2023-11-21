@@ -3,17 +3,10 @@ import { Controller, FieldValues } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';
 import { Chip, ChipShape } from 'shared/components/Chip';
-import {
-  StyledBodyLarge,
-  StyledClearedButton,
-  StyledFlexTopCenter,
-  StyledFlexWrap,
-  theme,
-  variables,
-} from 'shared/styles';
+import { StyledClearedButton, StyledFlexTopCenter, StyledFlexWrap, theme } from 'shared/styles';
 
 import { TagsInputControllerProps, UiType } from './TagsController.types';
-import { StyledTextField } from './TagsController.styles';
+import { StyledInputLabel, StyledTextField } from './TagsController.styles';
 
 export const TagsController = <T extends FieldValues>({
   name,
@@ -25,6 +18,7 @@ export const TagsController = <T extends FieldValues>({
   onRemoveTagClick,
   uiType = UiType.Primary,
   inputLabel,
+  disabled,
   ...props
 }: TagsInputControllerProps<T>) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -38,8 +32,12 @@ export const TagsController = <T extends FieldValues>({
           color={isPrimaryUiType ? 'secondary' : 'primary'}
           key={index}
           title={tag}
-          onRemove={() => onRemoveTagClick(index)}
-          sxProps={isSecondaryUiType ? { m: theme.spacing(0.2) } : null}
+          onRemove={disabled ? undefined : () => onRemoveTagClick(index)}
+          sxProps={
+            isSecondaryUiType
+              ? { m: theme.spacing(0.2), ...(disabled && { pointerEvents: 'none' }) }
+              : null
+          }
         />
       ))}
     </>
@@ -49,50 +47,57 @@ export const TagsController = <T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <>
-          <StyledTextField
-            {...props}
-            isSecondaryUiType={isSecondaryUiType}
-            onBlur={() => {
-              onAddTagClick(value);
-              setIsFocused(false);
-            }}
-            onFocus={() => setIsFocused(true)}
-            onChange={onChange}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
+      render={({ field: { onChange, value }, fieldState: { error } }) => {
+        const showInputLabel = !!(inputLabel && !isFocused && !tags?.length && !value);
+
+        return (
+          <>
+            <StyledTextField
+              {...props}
+              disabled={disabled}
+              isSecondaryUiType={isSecondaryUiType}
+              onBlur={() => {
                 onAddTagClick(value);
-              }
-            }}
-            error={!!error || providedError}
-            helperText={error?.message || helperText}
-            value={value}
-            InputProps={{
-              startAdornment: isSecondaryUiType && (
-                <>
-                  <StyledFlexTopCenter className="email" sx={{ mr: theme.spacing(1) }}>
-                    <Svg id="email-outlined" />
-                  </StyledFlexTopCenter>
-                  {inputLabel && !isFocused && !tags?.length && !value && (
-                    <StyledBodyLarge color={variables.palette.outline}>
-                      {inputLabel}
-                    </StyledBodyLarge>
-                  )}
-                  {chips}
-                </>
-              ),
-              endAdornment: isPrimaryUiType && (
-                <StyledClearedButton onClick={() => onAddTagClick(value)}>
-                  <Svg id="check" />
-                </StyledClearedButton>
-              ),
-            }}
-          />
-          {isPrimaryUiType && <StyledFlexWrap>{chips}</StyledFlexWrap>}
-        </>
-      )}
+                setIsFocused(false);
+              }}
+              onFocus={() => setIsFocused(true)}
+              onChange={onChange}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  onAddTagClick(value);
+                }
+              }}
+              error={!!error || providedError}
+              helperText={error?.message || helperText}
+              value={value}
+              showInputLabel={showInputLabel}
+              setMinWidth={!!(isFocused || error)}
+              InputProps={{
+                startAdornment: isSecondaryUiType && (
+                  <>
+                    <StyledFlexTopCenter className="email" sx={{ mr: theme.spacing(1) }}>
+                      <Svg id="email-outlined" />
+                    </StyledFlexTopCenter>
+                    {showInputLabel && (
+                      <StyledInputLabel showInputLabel={showInputLabel}>
+                        {inputLabel}
+                      </StyledInputLabel>
+                    )}
+                    {chips}
+                  </>
+                ),
+                endAdornment: isPrimaryUiType && (
+                  <StyledClearedButton onClick={() => onAddTagClick(value)}>
+                    <Svg id="check" />
+                  </StyledClearedButton>
+                ),
+              }}
+            />
+            {isPrimaryUiType && <StyledFlexWrap>{chips}</StyledFlexWrap>}
+          </>
+        );
+      }}
     />
   );
 };

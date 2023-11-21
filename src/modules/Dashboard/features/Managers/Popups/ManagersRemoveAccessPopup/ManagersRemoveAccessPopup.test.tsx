@@ -1,16 +1,17 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
-import Router from 'react-router';
-import axios from 'axios';
+import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { mockedAppletId } from 'shared/mock';
+import { page } from 'resources';
 
 import { ManagersRemoveAccessPopup } from '.';
 
 const refetchManagersMock = jest.fn();
 const onCloseMock = jest.fn();
-const fakeRequest = () => new Promise((res) => res(null));
 
-const appletId = 'c0b1de97';
+const route = `/dashboard/${mockedAppletId}/managers`;
+const routePath = page.appletManagers;
 const user = {
   id: '1',
   firstName: 'firstName',
@@ -18,7 +19,7 @@ const user = {
   email: 'email@gmail.com',
   lastSeen: '',
   roles: [],
-  applets: [{ displayName: 'displayName', id: appletId, roles: [] }],
+  applets: [{ displayName: 'displayName', id: mockedAppletId, roles: [] }],
 };
 const commonProps = {
   onClose: onCloseMock,
@@ -28,10 +29,8 @@ const commonProps = {
 };
 
 describe('ManagersRemoveAccessPopup component tests', () => {
-  const mockedAxios = axios.create();
-
   afterEach(() => {
-    jest.restoreAllMocks();
+    mockAxios.reset();
   });
 
   test('ManagersRemoveAccessPopup should open with applets list', async () => {
@@ -41,10 +40,12 @@ describe('ManagersRemoveAccessPopup component tests', () => {
   });
 
   test('ManagersRemoveAccessPopup should remove access with appletId', async () => {
-    jest.spyOn(Router, 'useParams').mockReturnValue({ appletId });
-    jest.spyOn(mockedAxios, 'delete').mockImplementation(fakeRequest);
+    mockAxios.delete.mockResolvedValueOnce(null);
 
-    renderWithProviders(<ManagersRemoveAccessPopup {...commonProps} />);
+    renderWithProviders(<ManagersRemoveAccessPopup {...commonProps} />, {
+      route,
+      routePath,
+    });
 
     fireEvent.click(screen.getByText('Remove'));
     await waitFor(() => expect(screen.getByText('Ok')).toBeInTheDocument());

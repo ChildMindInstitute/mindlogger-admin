@@ -16,6 +16,7 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
 
   .MuiTableCell-root {
     background-color: transparent;
+    height: 4.8rem;
   }
 
   .MuiTableRow-root {

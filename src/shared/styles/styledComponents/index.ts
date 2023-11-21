@@ -4,7 +4,7 @@ export * from './Buttons';
 export * from './ErrorText';
 export * from './Flex';
 export * from './Modal';
-export * from './QuantityCircle';
+export * from './Badge';
 export * from './Typography';
 export * from './Builder';
 export * from './Library';

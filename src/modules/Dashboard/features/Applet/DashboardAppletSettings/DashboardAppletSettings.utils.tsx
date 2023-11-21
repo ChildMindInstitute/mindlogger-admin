@@ -12,7 +12,7 @@ import {
   VersionHistorySetting,
   // ShareAppletSetting,
 } from 'shared/features/AppletSettings';
-import { SettingParam, isManagerOrOwner } from 'shared/utils';
+import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
@@ -29,6 +29,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           label: 'exportData',
           component: <ExportDataSetting />,
           param: SettingParam.ExportData,
+          onClick: () => Mixpanel.track('Export Data click'),
           'data-testid': `${dataTestid}-export-data`,
         },
         {

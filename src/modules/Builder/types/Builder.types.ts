@@ -1,29 +1,30 @@
+import { FieldArrayWithId } from 'react-hook-form';
+
 import {
-  ItemAlert,
-  Config,
-  ResponseValues,
   ConditionalLogic,
   SubscaleSetting,
   ScoresAndReports,
   ActivitySettingsSubscale,
+  ABTrailsItem,
+  FlankerItem,
+  StabilityTrackerItem,
+  TouchPracticeItem,
+  TouchTestItem,
+  ItemCommonType,
+  Item,
 } from 'shared/state';
 import { ItemResponseType, PerfTaskType, SubscaleTotalScore } from 'shared/consts';
 import { ArrayElement } from 'shared/types';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
-export type ItemFormValues = {
-  id?: string;
-  key?: string;
-  name: string;
+export type ItemFormValuesCommonType = Omit<ItemCommonType, 'question'> & {
   question?: string;
-  config: Config;
   responseType: ItemResponseType | '';
-  responseValues?: ResponseValues;
-  alerts?: ItemAlert[];
-  allowEdit?: boolean;
-  isHidden?: boolean;
 };
 
-export type ActivityFormValues = {
+export type ItemFormValues = Item<ItemFormValuesCommonType>;
+
+export type ActivityFormValues<T = ItemFormValues> = {
   id?: string;
   key?: string;
   name: string;
@@ -35,7 +36,7 @@ export type ActivityFormValues = {
   responseIsEditable?: boolean;
   isReviewable?: boolean;
   isHidden?: boolean;
-  items: ItemFormValues[];
+  items: T[];
   subscaleSetting?: SubscaleSetting<string> | null;
   scoresAndReports?: ScoresAndReports;
   calculateTotalScore?: SubscaleTotalScore;
@@ -70,6 +71,8 @@ export type ActivityFlowFormValues = {
   hideBadge?: boolean;
   items?: ActivityFlowItem[];
   isHidden?: boolean;
+  reportIncludedItemName?: string;
+  reportIncludedActivityName?: string;
 };
 
 export type AppletFormValues = {
@@ -83,6 +86,11 @@ export type AppletFormValues = {
   activityFlows: ActivityFlowFormValues[];
   activities: ActivityFormValues[];
   streamEnabled: boolean;
+  reportServerIp?: string;
+  reportPublicKey?: string;
+  reportRecipients?: string[];
+  reportIncludeUserId?: boolean;
+  reportEmailBody?: string;
 };
 
 export type GetNewActivity = {
@@ -93,7 +101,20 @@ export type GetNewActivity = {
 export type GetNewPerformanceTask = {
   name?: string;
   description?: string;
-  performanceTask?: ActivityFormValues;
+  performanceTask?: FieldArrayWithId<
+    Record<
+      string,
+      ActivityFormValues<
+        | ABTrailsItem<ItemFormValuesCommonType>
+        | FlankerItem<ItemFormValuesCommonType>
+        | StabilityTrackerItem<ItemFormValuesCommonType>
+        | TouchPracticeItem<ItemFormValuesCommonType>
+        | TouchTestItem<ItemFormValuesCommonType>
+      >[]
+    >,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >;
   performanceTaskType?: PerfTaskType;
 };
 
@@ -127,6 +148,13 @@ export enum OrderName {
   Second = 'second',
   Third = 'third',
   Fourth = 'fourth',
+}
+
+export enum ABTrailsItemQuestions {
+  'Sample A',
+  'Test A',
+  'Sample B',
+  'Test B',
 }
 
 export enum GyroscopeItemNames {
@@ -195,6 +223,5 @@ export type GetActivitySubscaleItems = {
 
 export type GetActivitySubscaleSettingDuplicated = {
   oldSubscaleSetting: ActivityFormValues['subscaleSetting'];
-  oldItems: ItemFormValues[];
-  newItems: ItemFormValues[];
+  newItemsObjectByOldId: Record<string, string>;
 };

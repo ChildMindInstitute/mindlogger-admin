@@ -1,4 +1,31 @@
-import { Item, ScoresAndReports, SubscaleSetting } from 'shared/state';
+import {
+  ABTrailsItem,
+  AudioItem,
+  AudioPlayerItem,
+  DateItem,
+  DrawingItem,
+  FlankerItem,
+  GeolocationItem,
+  Item,
+  MessageItem,
+  MultipleSelectionPerRowItem,
+  MultiSelectItem,
+  NumberSelectionItem,
+  PhotoItem,
+  ScoresAndReports,
+  SingleSelectionPerRowItem,
+  SingleSelectItem,
+  SliderItem,
+  SliderRowsItem,
+  StabilityTrackerItem,
+  SubscaleSetting,
+  TextItem,
+  TimeItem,
+  TimeRangeItem,
+  TouchPracticeItem,
+  TouchTestItem,
+  VideoItem,
+} from 'shared/state';
 import { getJourneyCSVObject } from 'shared/utils/exportData/getJourneyCSVObject';
 import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
 import { CorrectPress } from 'modules/Builder/types';
@@ -30,20 +57,22 @@ export type MigratedAnswer = {
   fileUrl: string;
 };
 
-export type EncryptedAnswerSharedProps = {
+export type EncryptedAnswerSharedProps<A = string, E = string> = {
   userPublicKey: string;
-  answer: string;
+  answer: A;
   itemIds: string[];
   items: Item[];
-  events?: string;
+  events?: E;
   migratedData?: { decryptedFileAnswers?: MigratedAnswer[] };
+  legacyProfileId?: string;
+  migratedDate?: string | null;
 };
 
 export type ExportAnswer = {
   id: string;
   version?: string;
-  activityName?: string;
-  subscaleSetting?: SubscaleSetting | null;
+  activityName: string;
+  subscaleSetting: SubscaleSetting | null;
   respondentId?: string;
   respondentSecretId?: string;
   activityHistoryId: string;
@@ -59,7 +88,8 @@ export type ExportAnswer = {
   endDatetime: string;
 };
 
-export type ExtendedExportAnswer = ExportAnswer & EncryptedAnswerSharedProps;
+export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &
+  EncryptedAnswerSharedProps<A, E>;
 
 export type EncryptionAnswerDataTypes =
   | 'userPublicKey'
@@ -68,15 +98,18 @@ export type EncryptionAnswerDataTypes =
   | 'events'
   | 'migratedData';
 
-export type DecryptedAnswerData<T> = Omit<T, EncryptionAnswerDataTypes> & ActivityItemAnswer;
+export type DecryptedAnswerData<
+  T = ExtendedExportAnswerWithoutEncryption,
+  P = ActivityItemAnswer,
+> = Omit<T, EncryptionAnswerDataTypes> & P;
 
 export type ExtendedExportAnswerWithoutEncryption = Omit<
-  ExtendedExportAnswer,
+  ExtendedExportAnswer<AnswerDTO, EventDTO>,
   EncryptionAnswerDataTypes
 >;
 
-export type DecryptedActivityData<T> = {
-  decryptedAnswers: DecryptedAnswerData<T>[];
+export type DecryptedActivityData<T, P = ActivityItemAnswer> = {
+  decryptedAnswers: DecryptedAnswerData<T, P>[];
   decryptedEvents: EventDTO[];
 };
 
@@ -233,9 +266,7 @@ export type DecryptedStabilityTrackerAnswerObject = {
   value: DecryptedStabilityTrackerCalcValue[];
 };
 export type DecryptedStabilityTrackerAnswer =
-  | {
-      value: DecryptedStabilityTrackerAnswerObject;
-    }
+  | AnswerWithWrapper<DecryptedStabilityTrackerAnswerObject>
   | DecryptedStabilityTrackerAnswerObject;
 
 export const enum FlankerTag {
@@ -258,8 +289,12 @@ export type DecryptedFlankerAnswerItemValue = {
   trial_index: number;
 };
 
-export type DecryptedFlankerAnswer = {
-  value: DecryptedFlankerAnswerItemValue[];
+export type DecryptedFlankerAnswer =
+  | AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>
+  | DecryptedFlankerAnswerItemValue[];
+
+export type AnswerWithWrapper<T> = {
+  value: T;
 };
 
 export type AnswerDTO =
@@ -299,8 +334,8 @@ export type AnswerValue =
   | DecryptedMultiSelectionPerRowAnswer['value']
   | DecryptedSliderRowsAnswer['value']
   | DecryptedABTrailsAnswer['value']
-  | DecryptedStabilityTrackerAnswer['value']
-  | DecryptedFlankerAnswer['value'];
+  | DecryptedStabilityTrackerAnswerObject
+  | DecryptedFlankerAnswerItemValue[];
 
 export const enum UserActionType {
   SetAnswer = 'SET_ANSWER',
@@ -318,13 +353,129 @@ export type EventDTO = {
   type: UserActionType;
 };
 
-export type ExtendedEvent<T> = EventDTO & DecryptedAnswerData<T>;
+export type ExtendedEvent = EventDTO & DecryptedAnswerData;
 
-export type ActivityItemAnswer = {
+export type ActivityItemAnswer =
+  | TextItemAnswer
+  | MultiSelectionItemAnswer
+  | SingleSelectionItemAnswer
+  | SliderItemAnswer
+  | NumberSelectionItemAnswer
+  | DateRangeItemAnswer
+  | DateItemAnswer
+  | TimeItemAnswer
+  | AudioPlayerItemAnswer
+  | AudioItemAnswer
+  | PhotoItemAnswer
+  | VideoItemAnswer
+  | GeolocationItemAnswer
+  | DrawingItemAnswer
+  | SingleSelectionPerRowItemAnswer
+  | MultipleSelectionPerRowItemAnswer
+  | SliderRowsItemAnswer
+  | ABTrailsItemAnswer
+  | StabilityTrackerItemAnswer
+  | FlankerItemAnswer
+  | MessageItemAnswer
+  | TouchPracticeItemAnswer
+  | TouchTestItemAnswer;
+
+type ActivityItemAnswerCommonType = {
   id?: string;
-  activityItem: Item;
-  answer: AnswerDTO;
   'data-testid'?: string;
+};
+
+export type TextItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: TextItem;
+  answer: DecryptedTextAnswer;
+};
+export type MultiSelectionItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: MultiSelectItem;
+  answer: DecryptedMultiSelectionAnswer;
+};
+export type SingleSelectionItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: SingleSelectItem;
+  answer: DecryptedSingleSelectionAnswer;
+};
+export type SliderItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: SliderItem;
+  answer: DecryptedSliderAnswer;
+};
+export type NumberSelectionItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: NumberSelectionItem;
+  answer: DecryptedNumberSelectionAnswer;
+};
+export type DateRangeItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: TimeRangeItem;
+  answer: DecryptedDateRangeAnswer;
+};
+export type DateItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: DateItem;
+  answer: DecryptedDateAnswer;
+};
+export type TimeItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: TimeItem;
+  answer: DecryptedTimeAnswer;
+};
+export type AudioPlayerItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: AudioPlayerItem;
+  answer: null;
+};
+export type AudioItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: AudioItem;
+  answer: DecryptedMediaAnswer;
+};
+export type PhotoItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: PhotoItem;
+  answer: DecryptedMediaAnswer;
+};
+export type VideoItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: VideoItem;
+  answer: DecryptedMediaAnswer;
+};
+export type GeolocationItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: GeolocationItem;
+  answer: DecryptedGeolocationAnswer;
+};
+export type DrawingItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: DrawingItem;
+  answer: DecryptedDrawingAnswer;
+};
+export type SingleSelectionPerRowItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: SingleSelectionPerRowItem;
+  answer: DecryptedSingleSelectionPerRowAnswer;
+};
+export type MultipleSelectionPerRowItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: MultipleSelectionPerRowItem;
+  answer: DecryptedMultiSelectionPerRowAnswer;
+};
+export type SliderRowsItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: SliderRowsItem;
+  answer: DecryptedSliderRowsAnswer;
+};
+export type ABTrailsItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: ABTrailsItem;
+  answer: DecryptedABTrailsAnswer;
+};
+export type StabilityTrackerItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: StabilityTrackerItem;
+  answer: DecryptedStabilityTrackerAnswer;
+};
+export type FlankerItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: FlankerItem;
+  answer: DecryptedFlankerAnswer;
+};
+export type MessageItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: MessageItem;
+  answer: null;
+};
+export type TouchPracticeItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: TouchPracticeItem;
+  answer: null;
+};
+export type TouchTestItemAnswer = ActivityItemAnswerCommonType & {
+  activityItem: TouchTestItem;
+  answer: null;
 };
 
 export const enum ElementType {

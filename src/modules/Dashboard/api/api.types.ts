@@ -115,7 +115,7 @@ export type EventNotifications =
     }[]
   | null;
 
-export type EventReminder = { activityIncomplete: number; reminderTime: string | null } | null;
+export type EventReminder = { activityIncomplete: number; reminderTime: string | null };
 
 type CreateEvent = {
   startTime?: string;
@@ -135,7 +135,7 @@ type CreateEvent = {
   flowId?: string;
   notification: {
     notifications: EventNotifications;
-    reminder: EventReminder;
+    reminder: EventReminder | null;
   } | null;
 };
 
@@ -168,7 +168,7 @@ export type EditRespondent = {
   appletId: string;
   values: {
     secretUserId: string;
-    nickname: string;
+    nickname?: string;
   };
 };
 
@@ -285,7 +285,7 @@ export type SummaryAnswers = AppletId & {
 
 export type Identifier = {
   identifier: string;
-  userPublicKey: string;
+  userPublicKey: string | null;
 };
 
 export type NoteId = { noteId: string };
@@ -373,3 +373,5 @@ export type LatestReport = {
 };
 
 export type Identifiers = LatestReport;
+
+export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;

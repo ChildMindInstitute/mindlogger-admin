@@ -10,10 +10,10 @@ export const useDecryptedIdentifiers = () => {
   const { appletId = '' } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption;
-  const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
+  const encryptionInfoFromServer = encryption ? getParsedEncryptionFromServer(encryption) : null;
   const { getAppletPrivateKey } = useEncryptionStorage();
 
-  if (!encryptionInfoFromServer) return () => [];
+  if (!encryptionInfoFromServer) return null;
 
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);
@@ -30,12 +30,13 @@ export const useDecryptedIdentifiers = () => {
 
       try {
         const key = getAESKey(privateKey, JSON.parse(userPublicKey), prime, base);
+        const decryptedValue = decryptData({
+          text: identifier,
+          key,
+        });
 
         return {
-          decryptedValue: decryptData({
-            text: identifier,
-            key,
-          }),
+          decryptedValue,
           encryptedValue: identifier,
         };
       } catch {

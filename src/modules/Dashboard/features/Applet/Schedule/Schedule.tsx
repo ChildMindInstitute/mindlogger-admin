@@ -12,17 +12,20 @@ import { Calendar } from './Calendar';
 import { Legend } from './Legend';
 import { StyledLeftPanel, StyledSchedule } from './Schedule.styles';
 import { usePreparedEvents } from './Schedule.hooks';
+import { checkIfHasAccessToSchedule } from './Schedule.utils';
 
 export const Schedule = () => {
   const dispatch = useAppDispatch();
   const { respondentId, appletId } = useParams();
 
   const { result: appletData } = applet.useAppletData() ?? {};
+  const { data: workspaceRoles } = workspaces.useRolesData() ?? {};
   const { ownerId } = workspaces.useData() || {};
   const loadingStatus = users.useAllRespondentsStatus();
   const isLoading = loadingStatus === 'loading' || loadingStatus === 'idle';
-  const { getAllWorkspaceRespondents } = users.thunk;
+  const { getAllWorkspaceRespondents, getRespondentDetails } = users.thunk;
   const preparedEvents = usePreparedEvents(appletData);
+  const hasAccess = checkIfHasAccessToSchedule(workspaceRoles?.[appletId!]);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     dispatch(
@@ -33,18 +36,19 @@ export const Schedule = () => {
   );
 
   useEffect(() => {
-    if (!appletId) return;
-
+    if (!appletId || !hasAccess) return;
     const { getEvents } = applets.thunk;
-
     dispatch(getEvents({ appletId, respondentId }));
+
+    if (!respondentId || !ownerId) return;
+    dispatch(getRespondentDetails({ ownerId, appletId, respondentId }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, respondentId]);
+  }, [appletId, respondentId, hasAccess, ownerId]);
 
-  if (isForbidden) return noPermissionsComponent;
+  if (isForbidden || !hasAccess) return noPermissionsComponent;
 
   return isLoading ? (
     <StyledBody>

@@ -1,7 +1,7 @@
 import get from 'lodash.get';
 
 type Mapper<T> = {
-  (item: T): string;
+  (item: T): string | number;
 };
 
 export const createArray = <T>(length: number, mapper: (index: number) => T): T[] =>
@@ -25,3 +25,9 @@ export const pluck = (array: unknown[], attribute: string) =>
 
 export const createArrayFromMinToMax = (min: number, max: number) =>
   Array.from({ length: max - min + 1 }, (_, i) => i + min);
+
+export const without = <T>(source?: T[], data?: T | T[]): T[] => {
+  if (Array.isArray(data)) return source?.filter((item) => !data?.includes(item)) ?? [];
+
+  return source?.filter((item) => item !== data) ?? [];
+};

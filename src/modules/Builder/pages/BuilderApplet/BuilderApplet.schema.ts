@@ -13,8 +13,6 @@ import {
   MAX_LENGTH_OF_TEST,
   MAX_NAME_LENGTH,
   MAX_NUMBER_OF_TRIALS,
-  MAX_SELECT_OPTION_TEXT_LENGTH,
-  MAX_SLIDER_LABEL_TEXT_LENGTH,
   MAX_SLOPE,
   MIN_LENGTH_OF_TEST,
   MIN_NUMBER_OF_TRIALS,
@@ -24,16 +22,17 @@ import {
 } from 'shared/consts';
 import { RoundTypeEnum } from 'modules/Builder/types';
 import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
-import {
-  ItemConfigurationSettings,
-  SLIDER_LABEL_MAX_LENGTH,
-} from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
 
 import {
   checkRawScoreRegexp,
   checkScoreRegexp,
+  getCommonSliderValidationProps,
   getRegexForIndexedField,
+  getSliderAlertValueValidation,
   getTestFunctionForSubscaleScore,
+  isNumberAtLeastOne,
   testFunctionForNotExistedItems,
   testFunctionForNotSupportedItems,
   testFunctionForSkippedItems,
@@ -51,22 +50,15 @@ import {
 
 const { t } = i18n;
 
+export const ResponseValuesSliderSchema = () => getCommonSliderValidationProps('slider');
+
 export const ResponseValuesSliderRowsSchema = () =>
   yup.array().of(
     yup.object({
-      minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
-      maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
-      label: yup
-        .string()
-        .required(getIsRequiredValidateMessage('sliderLabel'))
-        .max(SLIDER_LABEL_MAX_LENGTH, getMaxLengthValidationError),
+      label: yup.string().required(getIsRequiredValidateMessage('sliderLabel')),
+      ...getCommonSliderValidationProps('sliderRows'),
     }),
   );
-
-export const ResponseValuesSliderSchema = () => ({
-  minLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
-  maxLabel: yup.string().max(MAX_SLIDER_LABEL_TEXT_LENGTH, getMaxLengthValidationError),
-});
 
 export const ResponseValuesSelectionRowsSchema = () =>
   yup.object({
@@ -95,15 +87,12 @@ export const ResponseValuesSelectionOptionsSchema = () =>
 export const ResponseValuesOptionsSchema = () =>
   yup.array().of(
     yup.object({
-      text: yup
-        .string()
-        .required(getIsRequiredValidateMessage('optionText'))
-        .max(MAX_SELECT_OPTION_TEXT_LENGTH, getMaxLengthValidationError),
+      text: yup.string().required(getIsRequiredValidateMessage('optionText')),
     }),
   );
 
 export const ResponseValuesAudio = () => ({
-  maxDuration: yup.number(),
+  maxDuration: yup.mixed().test('is-number', t('positiveIntegerRequired'), isNumberAtLeastOne),
 });
 
 export const ResponseValuesAudioPlayer = () => ({
@@ -111,13 +100,34 @@ export const ResponseValuesAudioPlayer = () => ({
 });
 
 export const ResponseValuesNumberSelectionSchema = () => ({
+  maxValue: yup
+    .mixed()
+    .test('is-number', t('positiveIntegerRequired'), isNumberAtLeastOne)
+    .test('min-max-interval', '', function (value) {
+      if (!value && value !== 0) return;
+      const { minValue } = this.parent;
+
+      return value > minValue;
+    }),
   minValue: yup
-    .number()
-    .when('maxValue', ([maxValue], schema) =>
-      schema.lessThan(
-        maxValue,
-        t('validationMessages.lessThan', { less: t('minValue'), than: t('maxValue') }),
-      ),
+    .mixed()
+    .test(
+      'is-number-at-least-zero',
+      t('positiveIntegerOrZeroRequired'),
+      (value) => typeof value === 'number' && value >= DEFAULT_NUMBER_SELECT_MIN_VALUE,
+    )
+    .test(
+      'min-max-interval',
+      t('validationMessages.lessThan', {
+        less: t('minValue'),
+        than: t('maxValue'),
+      }),
+      function (value) {
+        if (!value && value !== 0) return;
+        const { maxValue } = this.parent;
+
+        return value < maxValue;
+      },
     ),
 });
 
@@ -261,9 +271,6 @@ export const ItemSchema = () =>
         if (responseType === ItemResponseType.NumberSelection)
           return schema.shape(ResponseValuesNumberSelectionSchema());
 
-        if (responseType === ItemResponseType.Slider)
-          return schema.shape(ResponseValuesSliderSchema());
-
         if (
           responseType === ItemResponseType.SingleSelectionPerRow ||
           responseType === ItemResponseType.MultipleSelectionPerRow
@@ -278,6 +285,9 @@ export const ItemSchema = () =>
           return schema.shape(ResponseValuesAudioPlayer());
 
         if (responseType === ItemResponseType.Audio) return schema.shape(ResponseValuesAudio());
+
+        if (responseType === ItemResponseType.Slider)
+          return schema.shape(ResponseValuesSliderSchema());
 
         if (responseType === ItemResponseType.SliderRows)
           return schema.shape({ rows: ResponseValuesSliderRowsSchema() });
@@ -301,7 +311,7 @@ export const ItemSchema = () =>
           if (responseType === ItemResponseType.Slider) {
             return schema.of(
               yup.object({
-                value: yup.number().required(''),
+                value: getSliderAlertValueValidation(false),
                 alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
               }),
             );
@@ -323,8 +333,8 @@ export const ItemSchema = () =>
           if (responseType === ItemResponseType.SliderRows) {
             return schema.of(
               yup.object({
-                value: yup.string().required(''),
-                sliderId: yup.string().required(''),
+                value: yup.string().required(t('fillInAllRequired')),
+                sliderId: yup.string().required(t('fillInAllRequired')),
                 alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
               }),
             );
@@ -339,24 +349,35 @@ export const ItemSchema = () =>
           then: (schema) =>
             schema.of(
               yup.object({
-                minValue: yup.number().required(''),
-                maxValue: yup.number().required(''),
+                minValue: getSliderAlertValueValidation(true),
+                maxValue: getSliderAlertValueValidation(true),
                 alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
               }),
             ),
           otherwise: (schema) => schema,
         }),
-      config: yup.object({
-        correctAnswerRequired: yup.boolean().nullable(),
-        correctAnswer: yup
-          .string()
-          .nullable()
-          .when('correctAnswerRequired', ([correctAnswerRequired], schema) =>
-            correctAnswerRequired
-              ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-              : schema,
-          ),
-      }),
+      config: yup
+        .object({
+          correctAnswerRequired: yup.boolean().nullable(),
+          correctAnswer: yup
+            .string()
+            .nullable()
+            .when('correctAnswerRequired', ([correctAnswerRequired], schema) =>
+              correctAnswerRequired
+                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+                : schema,
+            ),
+        })
+        .when('responseType', {
+          is: (responseType: ItemResponseType) => responseType === ItemResponseType.Text,
+          then: (schema) =>
+            schema.shape({
+              maxResponseLength: yup
+                .mixed()
+                .test('is-positive-integer', t('positiveIntegerRequired'), isNumberAtLeastOne),
+            }),
+          otherwise: (schema) => schema,
+        }),
     })
     .required();
 
@@ -691,17 +712,19 @@ export const ActivitySchema = () =>
     items: yup
       .array()
       .when('performanceTaskType', ([performanceTaskType], schema) => {
-        if (performanceTaskType === PerfTaskType.Flanker) {
-          return schema.of(FlankerSchema());
+        switch (performanceTaskType) {
+          case PerfTaskType.Flanker:
+            return schema.of(FlankerSchema());
+          case PerfTaskType.Gyroscope:
+          case PerfTaskType.Touch:
+            return schema.of(GyroscopeAndTouchSchema());
+          case PerfTaskType.ABTrailsMobile:
+          case PerfTaskType.ABTrailsTablet:
+          case 'ABTrails':
+            return schema;
+          default:
+            return schema.of(ItemSchema());
         }
-        if (
-          performanceTaskType === PerfTaskType.Gyroscope ||
-          performanceTaskType === PerfTaskType.Touch
-        ) {
-          return schema.of(GyroscopeAndTouchSchema());
-        }
-
-        return schema.of(ItemSchema());
       })
       .min(1),
     isHidden: yup.boolean(),

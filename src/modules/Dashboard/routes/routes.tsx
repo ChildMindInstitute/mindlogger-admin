@@ -1,8 +1,10 @@
 import { lazy } from 'react';
 import { Navigate, Route } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
+import { ErrorFallback } from 'shared/components';
 
 import { appletRoutes, mainRoutes } from './routes.const';
 import { RespondentDataReview, RespondentDataSummary } from '../features';
@@ -21,7 +23,9 @@ export const dashboardRoutes = () => (
           path={path}
           element={
             <PrivateRoute>
-              <Component />
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Component />
+              </ErrorBoundary>
             </PrivateRoute>
           }
         />
@@ -30,7 +34,9 @@ export const dashboardRoutes = () => (
     <Route
       element={
         <PrivateRoute>
-          <Applet />
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Applet />
+          </ErrorBoundary>
         </PrivateRoute>
       }
     >
@@ -40,7 +46,9 @@ export const dashboardRoutes = () => (
           path={path}
           element={
             <PrivateRoute>
-              <Component />
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Component />
+              </ErrorBoundary>
             </PrivateRoute>
           }
         />
@@ -55,7 +63,9 @@ export const dashboardRoutes = () => (
             path={page.appletRespondentDataSummary}
             element={
               <PrivateRoute>
-                <RespondentDataSummary />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <RespondentDataSummary />
+                </ErrorBoundary>
               </PrivateRoute>
             }
           />
@@ -65,7 +75,9 @@ export const dashboardRoutes = () => (
             path={page.appletRespondentDataReview}
             element={
               <PrivateRoute>
-                <RespondentDataReview />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <RespondentDataReview />
+                </ErrorBoundary>
               </PrivateRoute>
             }
           />

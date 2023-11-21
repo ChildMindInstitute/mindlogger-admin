@@ -26,7 +26,6 @@ export const TransferListController = <T extends FieldValues>({
   readOnly = false,
   hasSearch = true,
   hasSelectedSection = true,
-  isValueName = false,
   tableHeadBackground,
   'data-testid': dataTestid,
   tooltipByDefault,
@@ -37,7 +36,7 @@ export const TransferListController = <T extends FieldValues>({
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => setSearch(event.target.value);
 
-  const getItemKey = (item: DataTableItem) => (isValueName ? item.name || '' : item.id);
+  const getItemKey = (item: DataTableItem) => item.id;
 
   return (
     <Controller
@@ -51,7 +50,7 @@ export const TransferListController = <T extends FieldValues>({
           if (isSelected)
             return onChange(value?.filter((key: string | number) => key !== selectedKey));
 
-          onChange([...value, selectedKey]);
+          onChange([...(value || []), selectedKey]);
         };
 
         const handleSelectAll = (isAllSelected: boolean) => {
@@ -87,7 +86,6 @@ export const TransferListController = <T extends FieldValues>({
                 onSelectAll={handleSelectAll}
                 hasError={!!error}
                 noDataPlaceholder={t('noSelectedItemsYet')}
-                isValueName={isValueName}
                 data-testid={`${dataTestid}-unselected`}
                 tableHeadBackground={tableHeadBackground}
                 tooltipByDefault={tooltipByDefault}
@@ -97,7 +95,6 @@ export const TransferListController = <T extends FieldValues>({
                   columns={selectedItemsColumns || columns}
                   data={selectionSectionItems}
                   noDataPlaceholder={t('noSelectedItemsYet')}
-                  isValueName={isValueName}
                   data-testid={`${dataTestid}-selected`}
                 />
               )}

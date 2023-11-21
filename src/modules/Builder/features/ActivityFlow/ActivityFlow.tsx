@@ -8,13 +8,14 @@ import { Box } from '@mui/material';
 
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
-import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
+import { getEntityKey, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { useActivitiesRedirection } from 'modules/Builder/hooks';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+import { getUniqueName } from 'modules/Builder/utils';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import { getDuplicatedActivityFlow, getFlowsItemActions } from './ActivityFlow.utils';
@@ -84,7 +85,10 @@ export const ActivityFlow = () => {
   };
 
   const handleDuplicateActivityFlow = (index: number) => {
-    const name = getUniqueName(activityFlows[index].name, pluck(activityFlows, 'name'));
+    const name = getUniqueName({
+      name: activityFlows[index].name,
+      existingNames: pluck(activityFlows, 'name'),
+    });
 
     insertActivityFlow(index + 1, getDuplicatedActivityFlow(activityFlows[index], name));
   };

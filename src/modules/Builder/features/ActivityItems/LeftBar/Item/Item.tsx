@@ -4,14 +4,15 @@ import { useFormContext } from 'react-hook-form';
 import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { itemsTypeIcons } from 'shared/consts';
-import { falseReturnFunc, getEntityKey, removeMarkdown } from 'shared/utils';
+import { falseReturnFunc, getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { removeMarkdown } from 'modules/Builder/utils';
 
 import { getActions } from './Item.utils';
 import { StyledCol, StyledItem, StyledDescription, StyledTitle } from './Item.styles';
 import { ItemProps } from './Item.types';
-import { getSummaryRowDependencies } from '../../ActivityItems.utils';
+import { getItemConditionDependencies } from '../../ActivityItems.utils';
 
 export const Item = ({
   item,
@@ -28,7 +29,7 @@ export const Item = ({
   const [visibleActions, setVisibleActions] = useState(false);
   const { activity } = useCurrentActivity();
 
-  const hasHiddenOption = !!getSummaryRowDependencies(item, activity?.conditionalLogic)?.length;
+  const hasHiddenOption = !!getItemConditionDependencies(item, activity?.conditionalLogic)?.length;
   const isItemHidden = name ? watch(`${name}.isHidden`) : false;
   const hiddenProps = { sx: { opacity: isItemHidden ? variables.opacity.disabled : 1 } };
   const invalidField = name ? !!getFieldState(name).error : false;

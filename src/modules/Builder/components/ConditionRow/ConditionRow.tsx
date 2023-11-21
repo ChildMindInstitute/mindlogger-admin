@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import get from 'lodash.get';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
@@ -6,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
 import { ConditionType, ScoreReportType } from 'shared/consts';
-import { ScoreOrSection } from 'shared/state';
+import { ScoreOrSection, ScoreReport } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 
@@ -28,14 +27,13 @@ export const ConditionRow = ({
   index,
   onRemove,
   type = ConditionRowType.Item,
-  scoreId,
+  scoreKey,
   autoTrigger,
   showError = true,
   'data-testid': dataTestid,
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
   const {
-    control,
     setValue,
     watch,
     trigger,
@@ -65,6 +63,8 @@ export const ConditionRow = ({
   )?.responseType;
 
   const selectedItem = items?.find((item: ItemFormValues) => getEntityKey(item) === conditionItem);
+  const selectedScore =
+    scores?.find((score: ScoreReport) => getEntityKey(score, false) === scoreKey) ?? {};
   const options = {
     [ConditionRowType.Item]: getItemOptions(items, type),
     [ConditionRowType.Section]: [
@@ -72,20 +72,26 @@ export const ConditionRow = ({
       ...((scores?.length && getScoreOptions(scores)) || []),
       ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
     ],
-    [ConditionRowType.Score]: [getScoreIdOption(scoreId!)],
+    [ConditionRowType.Score]: [getScoreIdOption(selectedScore)],
   } as Record<ConditionRowType, ConditionItem[]>;
 
   const handleChangeConditionItemName = (event: SelectEvent) => {
-    const itemResponseType = items?.find(
-      (item: ItemFormValues) => getEntityKey(item) === event.target.value,
-    )?.responseType;
+    const selectedItemKey = event.target.value;
+    const selectedItem = items?.find(
+      (item: ItemFormValues) => getEntityKey(item) === selectedItemKey,
+    );
+    const selectedItemIndex = items?.indexOf(selectedItem);
 
-    if (conditionItemResponseType !== itemResponseType) {
+    if (conditionItemResponseType !== selectedItem?.responseType) {
       setValue(conditionTypeName, '');
       setValue(conditionPayloadName, {});
     }
-
-    if (autoTrigger) trigger(`${name}.itemKey`);
+    if (selectedItemIndex !== undefined && selectedItemIndex !== -1) {
+      setValue(`${fieldName}.items.${selectedItemIndex}.isHidden`, false);
+    }
+    if (autoTrigger) {
+      trigger(`${name}.itemKey`);
+    }
   };
 
   const handleChangeConditionType = (e: SelectEvent) => {
@@ -104,15 +110,9 @@ export const ConditionRow = ({
         : 'setUpCorrectCondition',
     );
 
-  useEffect(() => {
-    if (!scoreId) return;
-    setValue(conditionItemName, scoreId);
-  }, [scoreId]);
-
   return (
     <>
       <Condition
-        control={control}
         itemName={conditionItemName}
         stateName={conditionTypeName}
         optionValueName={conditionPayloadSelectionName}

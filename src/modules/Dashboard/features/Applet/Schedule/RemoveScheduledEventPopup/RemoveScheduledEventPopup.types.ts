@@ -3,5 +3,6 @@ export type RemoveScheduledEventPopupProps = {
   onClose: () => void;
   onSubmit: () => void;
   activityName: string;
+  isLoading: boolean;
   'data-testid'?: string;
 };

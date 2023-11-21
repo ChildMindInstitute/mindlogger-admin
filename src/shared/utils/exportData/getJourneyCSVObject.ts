@@ -1,26 +1,18 @@
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
-import {
-  AnswerDTO,
-  EventDTO,
-  ExtendedEvent,
-  ExtendedExportAnswerWithoutEncryption,
-  UserActionType,
-} from 'shared/types';
+import { AnswerDTO, EventDTO, ExtendedEvent, UserActionType } from 'shared/types';
+import { getDictionaryText } from 'shared/utils/forms';
 
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { convertDateStampToMs } from './convertDateStampToMs';
 
-const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';
+const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
 
 const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
 
-export const getSplashScreen = (
-  event: EventDTO,
-  nextExtendedEvent: ExtendedEvent<ExtendedExportAnswerWithoutEncryption>,
-) => {
+export const getSplashScreen = (event: EventDTO, nextExtendedEvent: ExtendedEvent) => {
   const {
     id,
     scheduledDatetime,
@@ -32,6 +24,7 @@ export const getSplashScreen = (
     activityName,
     flowId,
     version,
+    legacyProfileId,
   } = nextExtendedEvent;
   const getTime = getTimeByCondition(event.time.toString());
 
@@ -58,6 +51,7 @@ export const getSplashScreen = (
     response: '',
     options: '',
     version,
+    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
   };
 };
 
@@ -66,7 +60,7 @@ export const getJourneyCSVObject = <T>({
   rawAnswersObject,
   index,
 }: {
-  event: ExtendedEvent<ExtendedExportAnswerWithoutEncryption>;
+  event: ExtendedEvent;
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
   index: number;
 }) => {
@@ -81,6 +75,7 @@ export const getJourneyCSVObject = <T>({
     activityName,
     flowName,
     version,
+    legacyProfileId,
   } = event;
   if (!activityItem) return;
 
@@ -108,7 +103,7 @@ export const getJourneyCSVObject = <T>({
     activity_name: activityName,
     item: activityItem.name,
     prompt: replaceItemVariableWithName({
-      markdown: activityItem.question?.en ?? '',
+      markdown: getDictionaryText(activityItem.question),
       items: event.items,
       rawAnswersObject,
     }),
@@ -119,5 +114,6 @@ export const getJourneyCSVObject = <T>({
       rawAnswersObject,
     }),
     version,
+    ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
   };
 };

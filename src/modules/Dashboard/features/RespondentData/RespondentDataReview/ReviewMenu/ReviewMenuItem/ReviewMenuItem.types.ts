@@ -10,6 +10,6 @@ export type ReviewMenuItemProps = {
   isSelected: boolean;
   selectedAnswer: Answer | null;
   setSelectedActivity: Dispatch<SetStateAction<ReviewActivity | null>>;
-  setSelectedAnswer: Dispatch<SetStateAction<Answer | null>>;
+  onSelectAnswer: (answer: Answer | null) => void;
   'data-testid'?: string;
 };

@@ -3,31 +3,23 @@ import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 
 import {
-  AudioPlayerResponseValues,
-  AudioResponseValues,
-  Condition,
-  ConditionalLogic,
-  DrawingResponseValues,
-  FlankerConfig,
-  ItemAlert,
-  NumberItemResponseValues,
-  SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectRowsResponseValues,
-  SliderItemResponseValues,
-  SliderRowsResponseValues,
-  OptionCondition,
-  SectionCondition,
-  SingleApplet,
   Activity,
   ActivityFlow,
-  ScoreReport,
-  SectionReport,
+  Condition,
+  ConditionalLogic,
+  FlankerConfig,
   Item,
+  ItemAlert,
+  OptionCondition,
+  ScoreReport,
+  SingleAndMultipleSelectItemResponseValues,
+  SingleApplet,
 } from 'shared/state';
-import { ConditionType, ItemResponseType, PerfTaskType, ScoreReportType } from 'shared/consts';
+import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
+  ABTrailsItemQuestions,
   ActivityFormValues,
   FlankerItemPositions,
   FlankerNextButton,
@@ -35,23 +27,28 @@ import {
   RoundTypeEnum,
 } from 'modules/Builder/types';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
-import { ElementType } from 'shared/types';
+import { findRelatedScore } from 'modules/Builder/utils';
+import { ElementType, isScoreReport, isSectionReport } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
-import { GetItemCommonFields } from './SaveAndPublish.types';
+import {
+  GetConditions,
+  GetItemCommonFields,
+  GetSection,
+  GetSectionConditions,
+} from './SaveAndPublish.types';
 
 const removeReactHookFormKey = () => ({
   [REACT_HOOK_FORM_KEY_NAME]: undefined,
 });
 
-export const removeAppletExtraFields = () => ({
+export const removeAppletExtraFields = (isNewApplet: boolean) => ({
   isPublished: undefined,
   reportServerIp: undefined,
   reportPublicKey: undefined,
   reportRecipients: undefined,
   reportIncludeUserId: undefined,
   reportIncludeCaseId: undefined,
-  reportEmailBody: undefined,
   retentionPeriod: undefined,
   retentionType: undefined,
   createdAt: undefined,
@@ -59,6 +56,7 @@ export const removeAppletExtraFields = () => ({
   id: undefined,
   theme: undefined,
   version: undefined,
+  ...(!isNewApplet && { reportEmailBody: undefined }),
   //for the newly created activities/activityFlow to avoid { undefined: { items: [] }} problem
   //for the case when updated activityId/activityFlowId comes from the server but storage is still not updated
   undefined,
@@ -113,65 +111,99 @@ export const remapSubscaleSettings = (activity: ActivityFormValues) => {
           type: ElementType.Subscale,
         };
       }),
-      ...removeReactHookFormKey(),
     })),
   } as NonNullable<ActivityFormValues['subscaleSetting']>;
 };
 
-const getConditions = (items: ItemFormValues[], conditions?: (SectionCondition | Condition)[]) =>
+const getConditions = ({ items, conditions, score }: GetConditions) =>
   conditions?.map((condition) => {
     const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
 
     return {
       type: condition.type,
-      payload: relatedItem
-        ? (getConditionPayload(relatedItem, condition) as keyof Condition['payload'])
-        : condition['payload'],
-      itemName: relatedItem?.name ?? condition.itemName,
+      payload: relatedItem ? getConditionPayload(relatedItem, condition) : condition['payload'],
+      itemName: relatedItem?.name ?? score?.id ?? condition.itemName,
+    };
+  });
+
+const getSectionConditions = ({ items, conditions, scores }: GetSectionConditions) =>
+  conditions?.map((condition) => {
+    const relatedItem = items.find((item) => getEntityKey(item) === condition.itemName);
+    const relatedScore = findRelatedScore({
+      entityKey: condition.itemName,
+      scores,
+      isSaving: true,
+    });
+
+    return {
+      type: condition.type,
+      payload: relatedItem ? getConditionPayload(relatedItem, condition) : condition['payload'],
+      itemName: relatedItem?.name ?? relatedScore?.id ?? condition.itemName,
     };
   });
 
 const removeReportsFields = () => ({
   printItems: undefined,
   showMessage: undefined,
+  key: undefined,
   ...removeReactHookFormKey(),
 });
 
-const getScore = (score: ScoreReport, items: ActivityFormValues['items']) => ({
+const remapItemsByName = (itemsObject: Record<string, ItemFormValues>) => (name: string) =>
+  itemsObject[name].name;
+const getScore = (
+  score: ScoreReport,
+  items: ActivityFormValues['items'],
+  itemsObjectById: Record<string, ItemFormValues>,
+) => ({
   ...score,
   ...removeReportsFields(),
   conditionalLogic: score.conditionalLogic?.map((conditional) => ({
     ...conditional,
     ...removeReportsFields(),
-    conditions: getConditions(items, conditional.conditions),
+    conditions: getConditions({
+      items,
+      conditions: conditional.conditions,
+      score,
+    }),
+    itemsPrint: conditional.itemsPrint?.map(remapItemsByName(itemsObjectById)),
   })),
+  itemsScore: score.itemsScore.map(remapItemsByName(itemsObjectById)),
+  itemsPrint: score.itemsPrint?.map(remapItemsByName(itemsObjectById)),
 });
 
-const getSection = (section: SectionReport, items: ActivityFormValues['items']) => ({
+const getSection = ({ section, items, scores, itemsObjectById }: GetSection) => ({
   ...section,
   ...removeReportsFields(),
   id: undefined,
   ...(!!Object.keys(section.conditionalLogic || {}).length && {
     conditionalLogic: {
       ...section.conditionalLogic,
-      conditions: getConditions(items, section?.conditionalLogic?.conditions),
+      conditions: getSectionConditions({
+        items,
+        conditions: section?.conditionalLogic?.conditions,
+        scores,
+      }),
       ...removeReactHookFormKey(),
     },
   }),
+  itemsPrint: section.itemsPrint?.map(remapItemsByName(itemsObjectById)),
 });
 
 export const getScoresAndReports = (activity: ActivityFormValues) => {
   const { items, scoresAndReports } = activity;
   if (!scoresAndReports) return;
 
+  const itemsObjectById = getObjectFromList(items, (item) => getEntityKey(item));
   const { reports: initialReports } = scoresAndReports;
 
+  const scores = initialReports?.filter(isScoreReport);
   const reports = initialReports?.map((report) => {
-    if (report.type === ScoreReportType.Section) {
-      return getSection(report as SectionReport, items);
+    if (isSectionReport(report)) {
+      return getSection({ section: report, items, scores, itemsObjectById });
     }
 
-    return getScore(report as ScoreReport, items);
+    return getScore(report, items, itemsObjectById);
   });
 
   return {
@@ -190,16 +222,13 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.MultipleSelection
   )
     return {
-      paletteName:
-        (responseValues as SingleAndMultipleSelectItemResponseValues).paletteName ?? undefined,
-      options: (responseValues as SingleAndMultipleSelectItemResponseValues).options?.map(
-        (option) => ({
-          ...option,
-          color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
-          alert: hasAlerts ? alerts?.find(({ value }) => value === option.id)?.alert : undefined,
-          ...removeReactHookFormKey(),
-        }),
-      ),
+      paletteName: responseValues.paletteName ?? undefined,
+      options: responseValues.options?.map((option) => ({
+        ...option,
+        color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,
+        alert: hasAlerts ? alerts?.find(({ value }) => value === option.id)?.alert : undefined,
+        ...removeReactHookFormKey(),
+      })),
     };
 
   if (
@@ -207,7 +236,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     get(item.config, ItemConfigurationSettings.IsContinuous)
   ) {
     return {
-      ...(responseValues as SliderItemResponseValues),
+      ...responseValues,
       options: undefined,
       alerts: hasAlerts
         ? alerts?.map(({ minValue, maxValue, alert }) => ({
@@ -221,17 +250,17 @@ const mapItemResponseValues = (item: ItemFormValues) => {
 
   if (responseType === ItemResponseType.Slider) {
     return {
-      ...(responseValues as SliderItemResponseValues),
+      ...responseValues,
       options: undefined,
       alerts: hasAlerts ? alerts : undefined,
     };
   }
 
   if (responseType === ItemResponseType.SliderRows) {
-    const { rows } = responseValues as SliderRowsResponseValues;
+    const { rows } = responseValues;
 
     return {
-      ...(responseValues as SliderRowsResponseValues),
+      ...responseValues,
       options: undefined,
       rows: rows?.map((row) => ({
         ...row,
@@ -253,11 +282,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.Drawing
   )
     return {
-      ...(responseValues as
-        | AudioResponseValues
-        | AudioPlayerResponseValues
-        | NumberItemResponseValues
-        | DrawingResponseValues),
+      ...responseValues,
       options: undefined,
     };
 
@@ -265,7 +290,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.SingleSelectionPerRow ||
     responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const { dataMatrix, ...other } = responseValues as SingleAndMultipleSelectRowsResponseValues;
+    const { dataMatrix, ...other } = responseValues;
 
     const groupedAlerts = groupBy(alerts ?? [], (alert) => `${alert.optionId}-${alert.rowId}`);
 
@@ -310,7 +335,7 @@ export const getItemConditionalLogic = (
 
   return {
     match: result.match,
-    conditions: getConditions(items, result.conditions),
+    conditions: getConditions({ items, conditions: result.conditions }),
   };
 };
 
@@ -324,6 +349,11 @@ const getItemCommonFields = ({ id, item, items, conditionalLogic }: GetItemCommo
 
 export const getActivityItems = (activity: ActivityFormValues) => {
   const { items, conditionalLogic, isPerformanceTask, performanceTaskType } = activity;
+
+  const isABTrails =
+    isPerformanceTask &&
+    (performanceTaskType === PerfTaskType.ABTrailsMobile ||
+      performanceTaskType === PerfTaskType.ABTrailsTablet);
 
   if (isPerformanceTask && performanceTaskType === PerfTaskType.Flanker) {
     const firstPracticeItemConfig = items[FlankerItemPositions.PracticeFirst]
@@ -384,9 +414,12 @@ export const getActivityItems = (activity: ActivityFormValues) => {
     });
   }
 
-  return items?.map(({ id, ...item }) => ({
+  return items?.map(({ id, ...item }, index) => ({
     ...item,
     ...getItemCommonFields({ id, item, items, conditionalLogic }),
+    ...(isABTrails && {
+      question: getDictionaryObject(item.question ?? ABTrailsItemQuestions[index]),
+    }),
   }));
 };
 
