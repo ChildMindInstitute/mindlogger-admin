@@ -82,6 +82,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 placeholder={t('option')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
                 data-testid={`${dataTestid}-selection-option`}
+                isErrorVisible={false}
               />,
             ]}
           />
@@ -98,6 +99,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 placeholder={t('option')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
                 data-testid={`${dataTestid}-selection-per-row-option`}
+                isErrorVisible={false}
               />,
               <StyledSelectController
                 name={`${rowName}`}
@@ -105,6 +107,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 placeholder={t('row')}
                 options={getItemsList(getValues(name) as ItemFormValues, alert)}
                 data-testid={`${dataTestid}-selection-per-row-row`}
+                isErrorVisible={false}
               />,
             ]}
           />

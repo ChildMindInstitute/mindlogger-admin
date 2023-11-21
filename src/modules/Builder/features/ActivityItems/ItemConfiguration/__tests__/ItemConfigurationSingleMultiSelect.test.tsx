@@ -4,7 +4,11 @@ import { createRef } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import get from 'lodash.get';
 
-import { mockedAppletFormData } from 'shared/mock';
+import {
+  mockedAppletFormData,
+  mockedMultiSelectFormValues,
+  mockedSingleSelectFormValues,
+} from 'shared/mock';
 import { ItemResponseType } from 'shared/consts';
 import { createArray, renderWithAppletFormData } from 'shared/utils';
 
@@ -18,6 +22,7 @@ import {
   setItemConfigSetting,
   getAppletFormDataWithItemWithPalette,
   mockedTextInputOptionTestid,
+  mockedAlertsTestid,
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 
@@ -167,6 +172,24 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       const config = ref.current.getValues(`${mockedItemName}.config`);
       expect(get(config, setting)).toBeFalsy();
     }
+  });
+
+  test('Validation message is visible if Option Text is empty', async () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.SingleSelection);
+
+    await ref.current.trigger(`${mockedItemName}.responseValues.options.0`);
+
+    await waitFor(() => {
+      expect(screen.getByText('Option Text is required')).toBeVisible();
+    });
   });
 
   describe('Color Palette:', () => {
@@ -354,6 +377,267 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       expect(
         ref.current.getValues(`${mockedItemName}.config.additionalResponseOption.textInputOption`),
       ).toBeFalsy();
+    });
+  });
+
+  describe('Add Tooltips:', () => {
+    test('Sets correct data when changed', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTooltips);
+
+      const tooltipInput = screen
+        .getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-tooltip`)
+        .querySelector('input');
+      fireEvent.change(tooltipInput, { target: { value: 'tooltip' } });
+
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.tooltip`)).toEqual(
+        'tooltip',
+      );
+    });
+
+    test('Is removed from document if checkbox is unchecked', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTooltips);
+
+      expect(screen.getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-tooltip`)).toBeVisible();
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTooltips);
+
+      expect(
+        screen.queryByTestId(`${mockedSingleAndMultiSelectOptionTestid}-tooltip`),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Add Scores:', () => {
+    test('Sets correct data when changed', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasScores);
+
+      const scoreInput = screen
+        .getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`)
+        .querySelector('input');
+      expect(scoreInput).toHaveValue(0);
+
+      fireEvent.change(scoreInput, { target: { value: 13 } });
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(13);
+
+      fireEvent.change(scoreInput, { target: { value: -5 } });
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(-5);
+
+      fireEvent.change(scoreInput, { target: { value: 0.4 } });
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(
+        0.4,
+      );
+    });
+
+    test('Is removed from document when checkbox is unchecked', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasScores);
+
+      const scoreInput = screen
+        .getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`)
+        .querySelector('input');
+      fireEvent.change(scoreInput, { target: { value: 13 } });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasScores);
+
+      expect(
+        ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`),
+      ).toBeUndefined();
+      expect(
+        screen.queryByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Set Alerts:', () => {
+    test('Is rendered correctly', async () => {
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      expect(screen.getByText('Alert 1')).toBeVisible();
+      expect(
+        screen.getByText('If Respondent selected when answering this question then send:'),
+      ).toBeVisible();
+      expect(screen.getByTestId(`${mockedAlertsTestid}-0-text`)).toHaveTextContent('Alert Message');
+    });
+
+    test('Add/remove works correctly', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+      fireEvent.click(addAlert);
+
+      expect(screen.getByTestId(`${mockedAlertsTestid}-1-panel`)).toBeVisible();
+      expect(ref.current.getValues(`${mockedItemName}.alerts.1.alert`)).toEqual('');
+
+      const removeAlert = screen.getByTestId(`${mockedAlertsTestid}-0-remove`);
+      fireEvent.click(removeAlert);
+
+      expect(screen.queryByTestId(`${mockedAlertsTestid}-1-panel`)).not.toBeInTheDocument();
+      expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toBeUndefined();
+    });
+
+    test('Sets correct data when changed', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+      fireEvent.click(addAlert);
+
+      const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
+      fireEvent.change(alertInput, { target: { value: 'text' } });
+
+      const optionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
+      const optionsSelectButton = optionsSelect.querySelector('[role="button"]');
+      fireEvent.mouseDown(optionsSelectButton);
+
+      const option = screen
+        .getByTestId(`${mockedAlertsTestid}-1-selection-option-dropdown`)
+        .querySelector('li');
+      fireEvent.click(option);
+
+      expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
+        alert: 'text',
+        value: mockedMultiSelectFormValues.responseValues.options[0].id,
+        key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
+      });
+    });
+
+    test('Options in list are filtered if already used', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedSingleSelectFormValues),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+      fireEvent.click(addAlert);
+      fireEvent.click(addAlert);
+
+      const alert1OptionsSelect = screen.getByTestId(`${mockedAlertsTestid}-0-selection-option`);
+      const alert1OptionsSelectButton = alert1OptionsSelect.querySelector('[role="button"]');
+      fireEvent.mouseDown(alert1OptionsSelectButton);
+
+      const alert1Options = screen
+        .getByTestId(`${mockedAlertsTestid}-0-selection-option-dropdown`)
+        .querySelectorAll('li');
+      expect(alert1Options).toHaveLength(2);
+      fireEvent.click(alert1Options[0]);
+
+      const alert2OptionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
+      const alert2OptionsSelectButton = alert2OptionsSelect.querySelector('[role="button"]');
+      fireEvent.mouseDown(alert2OptionsSelectButton);
+
+      const alert2Options = screen
+        .getByTestId(`${mockedAlertsTestid}-1-selection-option-dropdown`)
+        .querySelectorAll('li');
+      expect(alert2Options).toHaveLength(1);
+      fireEvent.click(alert2Options[0]);
+
+      const alert3OptionsSelect = screen.getByTestId(`${mockedAlertsTestid}-2-selection-option`);
+      const alert3OptionsSelectButton = alert3OptionsSelect.querySelector('[role="button"]');
+      fireEvent.mouseDown(alert3OptionsSelectButton);
+
+      const alert3Options = screen
+        .getByTestId(`${mockedAlertsTestid}-2-selection-option-dropdown`)
+        .querySelectorAll('li');
+      expect(alert3Options).toHaveLength(0);
+    });
+
+    test('Removes alerts if the last Alert was removed', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedSingleSelectFormValues),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const removeAlert = screen.getByTestId(`${mockedAlertsTestid}-0-remove`);
+      fireEvent.click(removeAlert);
+
+      expect(screen.queryByTestId(`${mockedAlertsTestid}-0-panel`)).not.toBeInTheDocument();
+      expect(
+        ref.current.getValues(`${mockedItemName}.config.${ItemConfigurationSettings.HasAlerts}`),
+      ).toBeFalsy();
+      expect(ref.current.getValues(`${mockedItemName}.alerts`)).toEqual([]);
+    });
+
+    test.each`
+      message                        | attribute  | description
+      ${'Alert Message is required'} | ${'alert'} | ${'Validation error: empty message'}
+      ${''}                          | ${'value'} | ${'Validation error: empty option'}
+    `('$description', async ({ message, attribute }) => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(mockedSingleSelectFormValues),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+      await ref.current.trigger(`${mockedItemName}.alerts.0.${attribute}`);
+
+      await waitFor(() => {
+        if (message) expect(screen.getByText(message)).toBeVisible();
+      });
+
+      const { error } = ref.current.getFieldState(`${mockedItemName}.alerts.0.${attribute}`);
+      expect(error.type).toEqual('required');
     });
   });
 });
