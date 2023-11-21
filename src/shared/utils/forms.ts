@@ -34,7 +34,9 @@ export const getSanitizedContent = (
           FORBID_ATTR: ['href'],
         }
       : {},
-  );
+  )
+    .replace(/&lt;/g, '<') // fix because DOMPurify replaces <,> symbols
+    .replace(/&gt;/g, '>');
 };
 
 export const getDictionaryText = (description?: string | Record<string, string>) => {
