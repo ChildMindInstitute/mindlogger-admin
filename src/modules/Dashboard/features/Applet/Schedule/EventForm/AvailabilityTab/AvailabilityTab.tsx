@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
@@ -31,6 +31,7 @@ import {
 } from './AvailabilityTab.styles';
 import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
+import { useNextDayLabel } from '../EventForm.hooks';
 import { getNextDayComparison } from '../EventForm.utils';
 
 export const AvailabilityTab = ({
@@ -61,7 +62,7 @@ export const AvailabilityTab = ({
       'removeWarning',
     ],
   });
-  const [hasNextDayLabel, setHasNextDayLabel] = useState(getNextDayComparison(startTime, endTime));
+  const hasNextDayLabel = useNextDayLabel({ startTime, endTime });
   const isOncePeriodicity = periodicity === Periodicity.Once;
   const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
@@ -150,10 +151,6 @@ export const AvailabilityTab = ({
       setValue('accessBeforeSchedule', false);
     }
   }, [startTime]);
-
-  useEffect(() => {
-    setHasNextDayLabel(getNextDayComparison(startTime, endTime));
-  }, [startTime, endTime]);
 
   return (
     <>
