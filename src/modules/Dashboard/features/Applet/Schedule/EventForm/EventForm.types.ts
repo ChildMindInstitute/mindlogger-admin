@@ -1,6 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
+import * as yup from 'yup';
 
-import { TimerType, Periodicity, EventNotifications, EventReminder } from 'modules/Dashboard/api';
+import {
+  TimerType,
+  Periodicity,
+  EventNotifications,
+  EventReminder,
+  NotificationType,
+} from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 
 export type EventFormRef = {
@@ -86,3 +93,33 @@ export type GetWeeklyDays = {
 
 /** For ex., startTime: '00:00', endTime: '23:59' */
 export type UseNextDayLabelProps = { startTime: string; endTime: string };
+
+export type GetBetweenStartEndNextDaySingleComparisonProps = {
+  time: string;
+  rangeStartTime: string;
+  rangeEndTime: string;
+};
+
+export type GetBetweenStartEndNextDayComparisonProps = {
+  time: string;
+  fromTime: string;
+  toTime: string;
+  rangeStartTime: string;
+  rangeEndTime: string;
+};
+
+export type GetNotificationTimeComparisonProps = {
+  schema:
+    | yup.Schema<EventReminder>
+    | yup.StringSchema<string | null | undefined, yup.AnyObject, string | null | undefined>;
+  field: string;
+  showValidPeriodMessage: boolean;
+  isSingleTime: boolean;
+};
+
+export type GetNotificationsValidationProps = {
+  field: string;
+  notificationType: NotificationType;
+  showValidPeriodMessage: boolean;
+  isSingleTime: boolean;
+};

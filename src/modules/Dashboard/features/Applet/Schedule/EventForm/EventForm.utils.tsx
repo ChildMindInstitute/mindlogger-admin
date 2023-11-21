@@ -17,7 +17,6 @@ import { Activity, ActivityFlow } from 'shared/state';
 import {
   CreateEventType,
   EventNotifications,
-  EventReminder,
   NotificationType,
   Periodicity,
   TimerType,
@@ -41,8 +40,12 @@ import {
 import {
   EventFormValues,
   FormReminder,
+  GetBetweenStartEndNextDayComparisonProps,
+  GetBetweenStartEndNextDaySingleComparisonProps,
   GetDaysInPeriod,
   GetEventFromTabs,
+  GetNotificationTimeComparisonProps,
+  GetNotificationsValidationProps,
   GetWeeklyDays,
   NotificationTimeTestContext,
   SecondsManipulation,
@@ -111,11 +114,7 @@ export const getBetweenStartEndNextDaySingleComparison = ({
   time,
   rangeStartTime,
   rangeEndTime,
-}: {
-  time: string;
-  rangeStartTime: string;
-  rangeEndTime: string;
-}) => {
+}: GetBetweenStartEndNextDaySingleComparisonProps) => {
   const timeDate = new Date(`1970-01-01T${time}:00.000Z`);
   const startTimeDate = new Date(`1970-01-01T${rangeStartTime}:00.000Z`);
   const endTimeDate = new Date(`1970-01-01T${rangeEndTime}:00.000Z`);
@@ -137,13 +136,7 @@ export const getBetweenStartEndNextDayComparison = ({
   toTime,
   rangeStartTime,
   rangeEndTime,
-}: {
-  time: string;
-  fromTime: string;
-  toTime: string;
-  rangeStartTime: string;
-  rangeEndTime: string;
-}) => {
+}: GetBetweenStartEndNextDayComparisonProps) => {
   const isFromTime = time === fromTime;
   const isCrossDay = getNextDayComparison(fromTime, toTime);
   const timeDate = new Date(`1970-01-01T${time}:00.000Z`);
@@ -214,14 +207,7 @@ export const getNotificationTimeComparison = ({
   field,
   showValidPeriodMessage,
   isSingleTime = false,
-}: {
-  schema:
-    | yup.Schema<EventReminder>
-    | yup.StringSchema<string | null | undefined, yup.AnyObject, string | null | undefined>;
-  field: string;
-  showValidPeriodMessage: boolean;
-  isSingleTime: boolean;
-}) => {
+}: GetNotificationTimeComparisonProps) => {
   const selectValidPeriod = t('selectValidPeriod');
   const activityUnavailableAtTime = t('activityUnavailableAtTime');
 
@@ -280,12 +266,7 @@ export const getNotificationsValidation = ({
   notificationType,
   showValidPeriodMessage,
   isSingleTime = false,
-}: {
-  field: string;
-  notificationType: NotificationType;
-  showValidPeriodMessage: boolean;
-  isSingleTime: boolean;
-}) =>
+}: GetNotificationsValidationProps) =>
   yup
     .string()
     .nullable()
