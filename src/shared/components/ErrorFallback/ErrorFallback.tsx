@@ -15,7 +15,6 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
   };
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') return;
     sendLogFile({ error });
   }, [error]);
 
