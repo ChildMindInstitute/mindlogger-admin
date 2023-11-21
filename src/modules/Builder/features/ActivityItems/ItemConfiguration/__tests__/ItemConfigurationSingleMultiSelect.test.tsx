@@ -17,6 +17,7 @@ import {
   setItemResponseType,
   setItemConfigSetting,
   getAppletFormDataWithItemWithPalette,
+  mockedTextInputOptionTestid,
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 
@@ -294,6 +295,65 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         ref.current.getValues(`${mockedItemName}.responseValues.options.0.color`),
       ).toStrictEqual(mockedChangeColorEvent);
       expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toEqual('');
+    });
+  });
+
+  describe('Additional Response Options:', () => {
+    test('Is rendered correctly when Add Text Input Option is selected', async () => {
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTextInput);
+
+      expect(screen.getByTestId(mockedTextInputOptionTestid)).toBeVisible();
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-title`)).toHaveTextContent(
+        'Additional Text Input Option',
+      );
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-remove`)).toBeVisible();
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-description`)).toHaveTextContent(
+        'The respondent will be able to enter an additional text response',
+      );
+    });
+
+    test('Is rendered correctly when Required is selected additionally', async () => {
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTextInput);
+      await setItemConfigSetting(ItemConfigurationSettings.IsTextInputRequired);
+
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-title`)).toHaveTextContent(
+        'Additional Text Input Option (Required)',
+      );
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-description`)).toHaveTextContent(
+        'The respondent will be required to enter an additional text response',
+      );
+      expect(
+        screen.getByTestId(
+          'builder-activity-items-item-configuration-text-input-option-description-required',
+        ),
+      ).toHaveTextContent('*Required');
+    });
+
+    test('Is removed when click on Trash icon', async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        formRef: ref,
+      });
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTextInput);
+
+      const removeButton = screen.getByTestId(`${mockedTextInputOptionTestid}-remove`);
+      fireEvent.click(removeButton);
+
+      expect(screen.queryByTestId(mockedTextInputOptionTestid)).not.toBeInTheDocument();
+      expect(
+        ref.current.getValues(`${mockedItemName}.config.additionalResponseOption.textInputOption`),
+      ).toBeFalsy();
     });
   });
 });

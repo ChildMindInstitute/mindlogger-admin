@@ -18,6 +18,8 @@ export const mockedNameTestid = 'builder-activity-items-item-configuration-name'
 export const mockedDisplayedContentTestid = 'builder-activity-items-item-configuration-description';
 export const mockedSingleAndMultiSelectOptionTestid =
   'builder-activity-items-item-configuration-options-0';
+export const mockedTextInputOptionTestid =
+  'builder-activity-items-item-configuration-text-input-option';
 
 export const mockedPalette1Color = [
   '#ffadad',
