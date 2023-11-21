@@ -25,6 +25,8 @@ export type Warning = {
   showRemoveAllScheduled?: boolean;
 };
 
+export type FormReminder = (EventReminder & { activityIncompleteDate?: Date }) | null;
+
 export type EventFormValues = {
   activityOrFlowId: string;
   alwaysAvailable: boolean;
@@ -40,7 +42,7 @@ export type EventFormValues = {
   timerDuration: string;
   idleTime: string;
   notifications: EventNotifications;
-  reminder: EventReminder;
+  reminder: FormReminder;
   removeWarning: Warning;
 };
 
@@ -68,4 +70,16 @@ export type GetEventFromTabs = {
   hasNotificationsErrors?: boolean;
   hasAlwaysAvailableOption?: boolean;
   'data-testid'?: string;
+};
+
+export type GetDaysInPeriod = {
+  isCrossDayEvent: boolean;
+  startDate: Date;
+  endDate: Date;
+};
+
+export type GetWeeklyDays = {
+  daysInPeriod: Date[];
+  startDate: Date;
+  isCrossDayEvent: boolean;
 };

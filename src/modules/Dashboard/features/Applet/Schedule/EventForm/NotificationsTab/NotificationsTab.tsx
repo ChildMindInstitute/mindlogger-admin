@@ -1,19 +1,20 @@
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { theme, StyledTitleMedium } from 'shared/styles';
-import { NotificationType } from 'modules/Dashboard/api';
+import { theme, StyledTitleMedium, variables } from 'shared/styles';
+import { NotificationType, Periodicity } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
 import { Notification } from './Notification';
 import { Reminder } from './Reminder';
 import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
 import { NotificationsTabProps } from './NotificationsTab.types';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_REMINDER_TIME } from '../EventForm.const';
 
 export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTabProps) => {
   const { t } = useTranslation('app');
-  const { setValue, control, watch } = useFormContext<EventFormValues>();
+  const { setValue, control } = useFormContext<EventFormValues>();
   const {
     fields: notifications,
     append,
@@ -22,8 +23,14 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     control,
     name: 'notifications',
   });
-  const reminder = watch('reminder');
-  const startTime = watch('startTime');
+
+  const [periodicity, startDate, startTime, reminder] = useWatch({
+    control,
+    name: ['periodicity', 'startDate', 'startTime', 'reminder'],
+  });
+
+  const isAlwaysAvailable = periodicity === Periodicity.Always;
+  const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
   const handleAddNotification = () => {
     append({
@@ -36,8 +43,9 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     setValue(
       'reminder',
       {
-        activityIncomplete: 0,
-        reminderTime: startTime,
+        ...(isMonthlyPeriodicity && { activityIncompleteDate: startDate as Date }),
+        activityIncomplete: DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
+        reminderTime: isAlwaysAvailable ? DEFAULT_REMINDER_TIME : startTime,
       },
       { shouldDirty: true },
     );
@@ -47,7 +55,9 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     <>
       <StyledRowHeader>
         <Svg id="alert" width="16" height="20" />
-        <StyledTitleMedium sx={{ marginLeft: theme.spacing(1.5) }}>
+        <StyledTitleMedium
+          sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}
+        >
           {t('sendNotifications')}
         </StyledTitleMedium>
       </StyledRowHeader>
@@ -70,7 +80,9 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
       <StyledRow>
         <StyledRowHeader>
           <Svg id="clock" width="20" height="20" />
-          <StyledTitleMedium sx={{ marginLeft: theme.spacing(1.5) }}>
+          <StyledTitleMedium
+            sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}
+          >
             {t('sendReminder')}
           </StyledTitleMedium>
         </StyledRowHeader>

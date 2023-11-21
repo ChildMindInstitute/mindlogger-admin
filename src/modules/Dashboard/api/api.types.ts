@@ -115,7 +115,7 @@ export type EventNotifications =
     }[]
   | null;
 
-export type EventReminder = { activityIncomplete: number; reminderTime: string | null } | null;
+export type EventReminder = { activityIncomplete: number; reminderTime: string | null };
 
 type CreateEvent = {
   startTime?: string;
@@ -135,7 +135,7 @@ type CreateEvent = {
   flowId?: string;
   notification: {
     notifications: EventNotifications;
-    reminder: EventReminder;
+    reminder: EventReminder | null;
   } | null;
 };
 
