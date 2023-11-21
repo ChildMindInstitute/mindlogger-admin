@@ -11,7 +11,7 @@ import {
   variables,
 } from 'shared/styles';
 import { getExportDataApi } from 'api';
-import { exportDataSucceed, Mixpanel, createArrayFromMinToMax } from 'shared/utils';
+import { exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getPageAmount } from 'modules/Dashboard/api/api.utils';
@@ -115,10 +115,12 @@ export const DataExportPopup = ({
 
         setDataIsExporting(false);
         handlePopupClose();
-      } catch (error) {
-        console.warn(error);
+      } catch (e) {
+        const error = e as TypeError;
+        console.warn('Error while export data', error);
         setDataIsExporting(false);
         setActiveModal(Modals.ExportError);
+        await sendLogFile({ error });
       }
     },
     [getDecryptedAnswers],
