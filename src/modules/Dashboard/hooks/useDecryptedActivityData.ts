@@ -65,8 +65,8 @@ export const useDecryptedActivityData = (
             key,
           }),
         );
-      } catch {
-        console.warn('Error while answer parsing');
+      } catch (error) {
+        console.warn('Error while answer parsing:', error);
       }
 
       if (events) {
@@ -77,8 +77,8 @@ export const useDecryptedActivityData = (
               key,
             }),
           );
-        } catch {
-          console.warn('Error while answer parsing');
+        } catch (error) {
+          console.warn('Error while answer parsing:', error);
         }
       }
     }
