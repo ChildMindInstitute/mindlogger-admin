@@ -23,6 +23,7 @@ import {
   SubscaleLineChartProps,
   TooltipData,
 } from './SubscaleLineChart.types';
+import { ChartType } from '../../Chart.types';
 
 ChartJS.register(Tooltip, TimeScale, Legend);
 
@@ -91,7 +92,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
       const {
         element: { x: positionX, y: positionY },
       } = tooltipsPoint[0];
-      setTooltipStyles({ tooltipEl, positionX, positionY });
+      setTooltipStyles({ chartType: ChartType.SubscaleLineChart, tooltipEl, positionX, positionY });
     }
   };
 

@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { locales } from 'shared/consts';
 
 import { scatterChartTooltipHandler } from '../Charts.utils';
-import { ScatterChartType, SetTooltipData } from '../Chart.types';
+import { ChartType, SetTooltipData } from '../Chart.types';
 import { getData, getOptions } from './ScatterChart.utils';
 import { ScatterChartProps } from './ScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
@@ -60,7 +60,7 @@ export const ScatterChart = ({
       isHovered,
       chartRef,
       setTooltipData: setTooltipData as SetTooltipData,
-      type: ScatterChartType.ScatterChart,
+      chartType: ChartType.ScatterChart,
     });
 
   const renderChart = useMemo(
