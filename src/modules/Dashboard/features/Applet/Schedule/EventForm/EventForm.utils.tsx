@@ -98,18 +98,6 @@ export const getStartEndComparison = (startTime: string, endTime: string) => {
 export const getNextDayComparison = (startTime: string, endTime: string) =>
   !getStartEndComparison(startTime, endTime) && startTime !== endTime;
 
-export const getBetweenStartEndComparison = (
-  notificationTime: string,
-  startTime: string,
-  endTime: string,
-) => {
-  const timeDate = new Date(`1970-01-01T${notificationTime}:00.000Z`);
-  const startTimeDate = new Date(`1970-01-01T${startTime}:00.000Z`);
-  const endTimeDate = new Date(`1970-01-01T${endTime}:00.000Z`);
-
-  return timeDate >= startTimeDate && timeDate <= endTimeDate;
-};
-
 export const getBetweenStartEndNextDaySingleComparison = ({
   time,
   rangeStartTime,

@@ -9,9 +9,8 @@ import { DateFormats } from 'shared/consts';
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { ScheduleExportCsv } from '../Schedule.types';
 import {
-  getStartEndComparison,
-  getBetweenStartEndComparison,
   addSecondsToHourMinutes,
+  getBetweenStartEndNextDaySingleComparison,
 } from '../EventForm/EventForm.utils';
 import {
   dateValidationRegex,
@@ -100,7 +99,7 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
       return (
         <Box {...commonErrorBoxProps}>
           <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartEndTime}]`}>
-            <strong>Activity End Time</strong> should be greater than{' '}
+            <strong>Activity End Time</strong> should not be equal to{' '}
             <strong>Activity Start Time</strong>.
           </Trans>
         </Box>
@@ -177,10 +176,7 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
           acc.hasInvalidData = true;
         }
 
-        if (
-          !isAlwaysFrequency &&
-          !getStartEndComparison(getUploadedTime(startTime), getUploadedTime(endTime))
-        ) {
+        if (!isAlwaysFrequency && startTime === endTime) {
           acc.invalidStartEndTime.data = getInvalidError(ImportScheduleErrors.StartEndTime);
           acc.hasInvalidData = true;
         }
@@ -188,11 +184,12 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
         if (
           !isAlwaysFrequency &&
           notificationTime !== EMPTY_TIME &&
-          !getBetweenStartEndComparison(
-            getUploadedTime(notificationTime),
-            getUploadedTime(startTime),
-            getUploadedTime(endTime),
-          )
+          startTime !== endTime &&
+          !getBetweenStartEndNextDaySingleComparison({
+            time: getUploadedTime(notificationTime),
+            rangeStartTime: getUploadedTime(startTime),
+            rangeEndTime: getUploadedTime(endTime),
+          })
         ) {
           acc.invalidNotificationTime.data = getInvalidError(
             ImportScheduleErrors.BetweenStartEndTime,
