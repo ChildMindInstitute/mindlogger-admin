@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
-import { mockedAppletFormData } from 'shared/mock';
+import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ItemConfiguration } from '../ItemConfiguration';
@@ -42,6 +42,27 @@ export const getAppletFormDataWithItem = (item = mockedEmptyItem, activity) => (
     },
   ],
 });
+export const getAppletFormDataWithItemWithPalette = (paletteName) => {
+  const item = {
+    ...mockedSingleSelectFormValues,
+    responseValues: {
+      ...mockedSingleSelectFormValues.responseValues,
+      paletteName,
+      options: mockedSingleSelectFormValues.responseValues.options
+        .slice(0, 2)
+        .map((option, index) => ({
+          ...option,
+          color: { hex: index === 0 ? '#005f73' : '#0a9396' },
+        })),
+    },
+    config: {
+      ...mockedSingleSelectFormValues.config,
+      setPalette: true,
+    },
+  };
+
+  return getAppletFormDataWithItem(item);
+};
 export const removeUuidValues = (item) => {
   const newItem = { ...item };
 

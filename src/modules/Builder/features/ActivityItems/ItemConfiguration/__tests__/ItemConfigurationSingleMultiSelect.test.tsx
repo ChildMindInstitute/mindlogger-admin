@@ -16,6 +16,7 @@ import {
   getAppletFormDataWithItem,
   setItemResponseType,
   setItemConfigSetting,
+  getAppletFormDataWithItemWithPalette,
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 
@@ -27,7 +28,17 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('Single Selection & Multiple Selection', () => {
+const mockedChangeColorEvent = { hex: '#fff' };
+jest.mock('react-color', () => ({
+  ChromePicker: ({ onChangeComplete }) => (
+    <div
+      data-testid={'color-picker'}
+      onClick={() => onChangeComplete(mockedChangeColorEvent)}
+    ></div>
+  ),
+}));
+
+describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -49,7 +60,7 @@ describe('Single Selection & Multiple Selection', () => {
 
     await waitFor(() => {
       const options = screen.getAllByTestId(
-        /^builder-activity-items-item-configuration-options-\d{1}-option$/,
+        /^builder-activity-items-item-configuration-options-\d+-option$/,
       );
       expect(options).toHaveLength(1);
 
@@ -157,63 +168,132 @@ describe('Single Selection & Multiple Selection', () => {
     }
   });
 
-  test('Color Palette: add/remove', async () => {
-    const ref = createRef();
+  describe('Color Palette:', () => {
+    test('Add/Remove works correctly', async () => {
+      const ref = createRef();
 
-    renderWithAppletFormData({
-      children: renderItemConfiguration(),
-      appletFormData: getAppletFormDataWithItem(),
-      formRef: ref,
-    });
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(),
+        formRef: ref,
+      });
 
-    setItemResponseType(ItemResponseType.SingleSelection);
+      setItemResponseType(ItemResponseType.SingleSelection);
 
-    const addOption = screen.getByTestId('builder-activity-items-item-configuration-add-option');
+      const addOption = screen.getByTestId('builder-activity-items-item-configuration-add-option');
 
-    createArray(9, () => fireEvent.click(addOption));
+      createArray(9, () => fireEvent.click(addOption));
 
-    const options = screen.getAllByTestId(
-      /^builder-activity-items-item-configuration-options-\d+-option$/,
-    );
+      const options = screen.getAllByTestId(
+        /^builder-activity-items-item-configuration-options-\d+-option$/,
+      );
 
-    await setItemConfigSetting(ItemConfigurationSettings.HasColorPalette);
+      await setItemConfigSetting(ItemConfigurationSettings.HasColorPalette);
 
-    const paletteButton = screen.getByTestId(
-      'builder-activity-items-item-configuration-set-color-palette',
-    );
-    fireEvent.click(paletteButton);
+      const paletteButton = screen.getByTestId(
+        'builder-activity-items-item-configuration-set-color-palette',
+      );
+      fireEvent.click(paletteButton);
 
-    const paletteContainer = screen.getByTestId(
-      'builder-activity-items-item-configuration-color-palette',
-    );
-    expect(paletteContainer).toBeVisible();
+      const paletteContainer = screen.getByTestId(
+        'builder-activity-items-item-configuration-color-palette',
+      );
+      expect(paletteContainer).toBeVisible();
 
-    options.forEach((_, index) => {
+      options.forEach((_, index) => {
+        expect(
+          ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
+        ).toStrictEqual({ hex: '' });
+      });
+
+      const palette1 = screen.getByTestId(
+        'builder-activity-items-item-configuration-color-palette-picker-0',
+      );
+      fireEvent.click(palette1);
+
+      options.forEach((option, index) => {
+        const color = mockedPalette1Color[index % mockedPalette1Color.length];
+        expect(
+          ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
+        ).toEqual({ hex: color });
+      });
+
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toEqual(
+        'palette1',
+      );
+
+      const removePalette = screen.getByTestId(
+        'builder-activity-items-item-configuration-color-palette-remove',
+      );
+      fireEvent.click(removePalette);
+
+      options.forEach((_, index) => {
+        const color = mockedPalette1Color[index % mockedPalette1Color.length];
+        expect(
+          ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
+        ).toEqual({ hex: color });
+      });
+
       expect(
-        ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
-      ).toStrictEqual({ hex: '' });
-    });
-
-    const palette1 = screen.getByTestId(
-      'builder-activity-items-item-configuration-color-palette-picker-0',
-    );
-    fireEvent.click(palette1);
-
-    options.forEach((option, index) => {
-      const color = mockedPalette1Color[index % mockedPalette1Color.length];
+        screen.queryByTestId('builder-activity-items-item-configuration-color-palette'),
+      ).not.toBeInTheDocument();
       expect(
-        ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
-      ).toEqual({ hex: color });
-
-      //   const optionColor = window
-      //     .getComputedStyle(option, '::before')
-      //     .getPropertyValue('background-color');
-      //   console.log(optionColor, color);
-      //   expect(rgbToHex(optionColor)).toEqual(color);
+        screen.getByTestId('builder-activity-items-item-configuration-set-color-palette'),
+      ).toBeVisible();
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toBeUndefined();
     });
 
-    expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toEqual(
-      'palette1',
-    );
+    test('Is initialized correctly for item with paletteName', () => {
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItemWithPalette('palette2'),
+      });
+
+      expect(
+        screen.getByTestId('builder-activity-items-item-configuration-color-palette'),
+      ).toBeVisible();
+
+      const palette2 = screen.getByTestId(
+        'builder-activity-items-item-configuration-color-palette-picker-1',
+      );
+      expect(palette2.querySelector('input')).toBeChecked();
+    });
+
+    test('Is initialized correctly for item with Set Palette Color checked and without paletteName', () => {
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItemWithPalette(),
+      });
+
+      expect(
+        screen.queryByTestId('builder-activity-items-item-configuration-color-palette'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByTestId('builder-activity-items-item-configuration-set-color-palette'),
+      ).toBeVisible();
+    });
+
+    test('Value for paletteName is removed if palette is already selected and color for option is changed', async () => {
+      const ref = createRef();
+
+      const container = renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        formRef: ref,
+        appletFormData: getAppletFormDataWithItemWithPalette('palette2'),
+      });
+
+      const colorPickerButton = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-0-palette',
+      );
+      fireEvent.click(colorPickerButton);
+
+      const colorPicker = screen.getByTestId('color-picker');
+      fireEvent.click(colorPicker);
+
+      expect(
+        ref.current.getValues(`${mockedItemName}.responseValues.options.0.color`),
+      ).toStrictEqual(mockedChangeColorEvent);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toEqual('');
+    });
   });
 });

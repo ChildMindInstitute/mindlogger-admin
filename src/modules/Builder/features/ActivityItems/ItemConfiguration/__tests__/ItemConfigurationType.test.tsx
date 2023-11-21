@@ -48,7 +48,7 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('Item Type', () => {
+describe('ItemConfiguration: Item Type', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

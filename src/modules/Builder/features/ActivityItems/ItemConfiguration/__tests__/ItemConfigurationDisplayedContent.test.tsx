@@ -22,7 +22,7 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('Displayed Content', () => {
+describe('ItemConfiguration: Displayed Content', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
