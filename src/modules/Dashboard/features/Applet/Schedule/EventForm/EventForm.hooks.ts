@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { getNextDayComparison } from './EventForm.utils';
+import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+
 import { UseNextDayLabelProps } from './EventForm.types';
 
 export const useNextDayLabel = ({ startTime, endTime }: UseNextDayLabelProps) => {

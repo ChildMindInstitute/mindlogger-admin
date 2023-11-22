@@ -2,7 +2,6 @@ import { Periodicity } from 'modules/Dashboard/api';
 import { BaseSchema } from 'shared/state';
 import { Event } from 'modules/Dashboard/state';
 
-// Calendar Day | Week => Events : got 1 event => 2 events
 export type CalendarEvent = {
   id: string;
   activityOrFlowId: string;
@@ -26,6 +25,8 @@ export type CalendarEvent = {
   eventStart: Date;
   eventEnd: Date | null;
   eventCurrentDate?: string;
+  startTime: string | null;
+  endTime: string | null;
 } & Pick<
   Event,
   'oneTimeCompletion' | 'accessBeforeSchedule' | 'timerType' | 'timer' | 'notification'
@@ -79,4 +80,32 @@ export type CalendarEventsSchema = {
     allDayEventsSortedByDays: AllDayEventsSortedByDaysItem[] | null;
     hiddenEventsIds: string[] | null;
   } | null>;
+};
+
+export type GetDateFromDateStringTimeString = { date: string | null; time: string };
+
+export type GetEventStartDateTime = {
+  periodicity: Periodicity;
+  selectedDate: string | null;
+  startDate: string | null;
+  startTime: string;
+  nextYearDateString: string | null;
+};
+
+export type GetEventEndDateTime = {
+  periodicity: Periodicity;
+  selectedDate: string | null;
+  endDate: string | null;
+  endTime: string;
+  currentYear: number;
+  eventStart: Date;
+  isCrossDayEvent: boolean;
+};
+
+export type GetEventsArrayFromDates = {
+  dates: Date[];
+  commonProps: Omit<CalendarEvent, 'id' | 'start' | 'end'>;
+  startTime?: string;
+  endTime?: string;
+  isCrossDayEvent: boolean;
 };

@@ -6,10 +6,13 @@ import { DatePicker, TimePicker } from 'shared/components';
 import { ArrowPressType, InputController } from 'shared/components/FormComponents';
 import { StyledBodyMedium, StyledFlexTopStart, StyledLabelLarge, theme } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
-import { getDaysInMonthlyPeriodicity } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import {
+  getDaysInMonthlyPeriodicity,
+  getNextDayComparison,
+} from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { EventFormValues } from '../../EventForm.types';
-import { getDaysInPeriod, getNextDayComparison, getWeeklyDays } from '../../EventForm.utils';
+import { getDaysInPeriod, getWeeklyDays } from '../../EventForm.utils';
 import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE } from '../../EventForm.const';
 import { Header } from '../Header';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';

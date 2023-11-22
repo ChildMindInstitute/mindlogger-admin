@@ -14,6 +14,7 @@ import {
 } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 import { SelectEvent } from 'shared/types';
+import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { EventFormValues } from '../EventForm.types';
 import {
@@ -32,7 +33,6 @@ import {
 import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
 import { useNextDayLabel } from '../EventForm.hooks';
-import { getNextDayComparison } from '../EventForm.utils';
 
 export const AvailabilityTab = ({
   hasAlwaysAvailableOption,
