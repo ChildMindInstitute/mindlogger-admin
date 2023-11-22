@@ -1,32 +1,28 @@
-import * as routerDom from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { page } from 'resources';
 
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
 
 const dataTestid = 'clear-scheduled-events-popup';
-const onCloseMock = jest.fn();
 const basicProps = {
   open: true,
-  onClose: onCloseMock,
+  onClose: jest.fn,
   appletName: 'Displayed Applet Name',
   appletId: mockedAppletId,
   name: 'Displayed Respondent Name',
   'data-testid': dataTestid,
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => jest.fn,
-}));
-
 describe('ClearScheduledEventsPopup', () => {
   test('should delete events for default schedule', async () => {
+    const route = `/dashboard/${mockedAppletId}/schedule`;
+    const routePath = page.appletSchedule;
     mockAxios.delete.mockResolvedValueOnce(null);
-    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} />);
+    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} />, { route, routePath });
 
     const popupText = screen.getByTestId(`${dataTestid}-text`);
     expect(popupText).toHaveTextContent(
@@ -49,9 +45,13 @@ describe('ClearScheduledEventsPopup', () => {
   });
 
   test('should delete events for individual schedule', async () => {
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: mockedRespondentId });
+    const route = `/dashboard/${mockedAppletId}/schedule/${mockedRespondentId}`;
+    const routePath = page.appletScheduleIndividual;
     mockAxios.delete.mockResolvedValueOnce(null);
-    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} isDefault={false} />);
+    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} isDefault={false} />, {
+      route,
+      routePath,
+    });
 
     const popupText = screen.getByTestId(`${dataTestid}-text`);
     expect(popupText).toHaveTextContent(
@@ -60,6 +60,16 @@ describe('ClearScheduledEventsPopup', () => {
 
     fireEvent.click(screen.getByText('Clear All'));
 
+    expect(
+      expect(mockAxios.delete).nthCalledWith(
+        1,
+        `/applets/${mockedAppletId}/events/delete_individual/${mockedRespondentId}`,
+        {
+          signal: undefined,
+        },
+      ),
+    );
+    await waitFor(() => expect(screen.getByTestId('spinner')).toBeInTheDocument());
     await waitFor(() =>
       expect(popupText).toHaveTextContent(
         'Please note that Respondent Displayed Respondent Name is still using an individual schedule. You may revert this Respondent back to the default schedule by pressing the trash icon on the top-left.',
