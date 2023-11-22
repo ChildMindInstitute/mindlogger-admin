@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 
 import { CalendarViews } from '../Calendar.types';
+import { EVENT_CLASSNAME } from '../Calendar.const';
 import { EventContainerWrapperProps, EventsStartEndDates } from './EventContainerWrapper.types';
 import { getEventClassNames, getOverlappingEvents } from './EventContainerWrapper.utils';
 import {
@@ -66,7 +67,7 @@ export const EventContainerWrapper = ({
                 const currEventWrapper = eventsWrapper.querySelector(
                   `[data-id='${id}']`,
                 ) as HTMLElement;
-                const currEventEl = currEventWrapper?.querySelector('.rbc-event') as HTMLElement;
+                const currEventEl = currEventWrapper?.querySelector(EVENT_CLASSNAME) as HTMLElement;
                 const showMoreEl = currEventWrapper.querySelector('.more');
 
                 if (currEventEl) {
@@ -112,7 +113,7 @@ export const EventContainerWrapper = ({
 
       // adding class names for event wrapper to show/hide event info by its width and height
       containerEvents.forEach((eventWrapper) => {
-        const event = eventWrapper.querySelector('.rbc-event') as HTMLElement;
+        const event = eventWrapper.querySelector(EVENT_CLASSNAME) as HTMLElement;
         if (!event) return;
 
         const { offsetWidth: width, offsetHeight: height } = event;
