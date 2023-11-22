@@ -1,4 +1,7 @@
+import { format } from 'date-fns';
+
 import { Svg } from 'shared/components/Svg';
+import { DateFormats } from 'shared/consts';
 import { theme, StyledBodySmall, StyledLabelMedium, variables } from 'shared/styles';
 
 import { EventProps, UiType } from './Event.types';
@@ -16,6 +19,8 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
   const {
     scheduledColor,
     startFlowIcon,
+    start,
+    end,
     allDay,
     endAlertIcon,
     alwaysAvailable,
@@ -44,10 +49,10 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
           {isTimeView && !isAllDayEvent && (
             <>
               <StyledBodySmall className="event-start-time" sx={{ flexShrink: 0 }}>
-                {startTime}
+                {startTime ?? format(start, DateFormats.Time)}
               </StyledBodySmall>
               <StyledBodySmall className="event-end-time" sx={{ flexShrink: 0 }}>
-                - {endTime}
+                - {endTime ?? format(end, DateFormats.Time)}
               </StyledBodySmall>
             </>
           )}

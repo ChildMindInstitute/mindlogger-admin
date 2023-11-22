@@ -33,6 +33,7 @@ export const EventContainerWrapper = ({
       const timeContent = (await eventsWrapper?.closest('.rbc-day-slot')) as HTMLElement;
 
       if (!eventsWrapper || !containerEvents?.length) {
+        if (!timeContent) return;
         timeContent.style.minWidth = '';
 
         return;
@@ -98,14 +99,14 @@ export const EventContainerWrapper = ({
           );
           const largestArrayOfEventsIdsLength = largestArrayOfEventsIds.eventIds.length;
 
-          if (largestArrayOfEventsIdsLength) {
+          if (largestArrayOfEventsIdsLength && timeContent) {
             timeContent.style.minWidth = `${
               largestArrayOfEventsIdsLength * MIN_EVENT_WIDTH_DAY_VIEW +
               largestArrayOfEventsIdsLength * OFFSET_BETWEEN_EVENTS
             }px`;
           }
         }
-      } else {
+      } else if (timeContent) {
         timeContent.style.minWidth = '';
       }
 

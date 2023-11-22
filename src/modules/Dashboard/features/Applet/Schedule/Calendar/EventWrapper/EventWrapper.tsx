@@ -1,7 +1,9 @@
 import { cloneElement, useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
+import { format } from 'date-fns';
 
 import { Tooltip } from 'shared/components/Tooltip';
+import { DateFormats } from 'shared/consts';
 
 import { EventWrapperProps, UiType } from './EventWrapper.types';
 
@@ -18,7 +20,9 @@ export const EventWrapper = ({
 
   const tooltipTitle = (
     <>
-      <Box>{`${startTime} - ${endTime}`}</Box>
+      <Box>{`${startTime ?? format(start, DateFormats.Time)} - ${
+        endTime ?? format(end, DateFormats.Time)
+      }`}</Box>
       <Box>{title}</Box>
     </>
   );
