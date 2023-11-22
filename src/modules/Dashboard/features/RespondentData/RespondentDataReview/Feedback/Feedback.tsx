@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -33,12 +33,6 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
     () => getTabs(selectedActivity, setActiveTab, assessment, assessmentStep, setAssessmentStep),
     [selectedActivity, assessment, assessmentStep],
   );
-
-  useEffect(() => {
-    setActiveTab(FeedbackTabs.Notes);
-    setAssessmentStep(0);
-    methods.reset(getDefaultFormValues(assessment));
-  }, [assessment]);
 
   return (
     <StyledContainer sx={{ display: isFeedbackOpen ? 'flex' : 'none' }}>

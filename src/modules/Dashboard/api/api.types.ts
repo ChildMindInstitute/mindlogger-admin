@@ -252,12 +252,22 @@ export type ActivityAnswer = AppletId & { answerId: string; activityId: string }
 
 export type AssessmentReview = AppletId & { answerId: string };
 
+export type AssessmentResult = {
+  answer: string | null;
+  itemIds: string[];
+  items: Item[];
+  itemsLast: Item[] | null;
+  reviewerPublicKey: string | null;
+  versions: string[];
+};
+
 export type SaveAssessment = AppletId & {
   answerId: string;
 } & {
   answer: string;
   itemIds: string[];
   reviewerPublicKey: string;
+  assessmentVersionId: string;
 };
 
 export type Review = {

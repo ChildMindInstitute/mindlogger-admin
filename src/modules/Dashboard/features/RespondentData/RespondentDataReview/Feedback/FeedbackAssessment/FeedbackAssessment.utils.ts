@@ -94,3 +94,6 @@ export const formatAssessmentAnswers = (
 
   return { answers, updatedItemIds };
 };
+
+export const getAssessmentVersion = (isLastVersion: boolean, assessmentVersions: string[]) =>
+  isLastVersion && assessmentVersions.length > 1 ? assessmentVersions[1] : assessmentVersions[0];

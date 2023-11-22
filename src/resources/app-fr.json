@@ -1224,5 +1224,10 @@
     "somethingWentWrong": "Quelque chose s'est mal passé.",
     "details": "Détails",
     "refreshPage": "Rafraîchir la page"
+  },
+  "assessmentBanner": {
+    "header": "Une nouvelle version de l'évaluation est désormais disponible.",
+    "text": "Choisir de procéder avec la nouvelle version entraînera la perte des données de la complétion précédente.",
+    "button": "Procéder avec la nouvelle version"
   }
 }
