@@ -6,7 +6,7 @@ import { mockedAppletData, mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
 import { Path } from 'shared/utils';
 
-import { useActivitiesRedirection } from './useActivitiesRedirection';
+import { useRedirectIfNoMatchedActivity } from './useRedirectIfNoMatchedActivity';
 
 const mockedParamsWithActivity = {
   appletId: mockedAppletId,
@@ -48,7 +48,7 @@ jest.mock('react-hook-form', () => ({
   }),
 }));
 
-describe('useActivitiesRedirection', () => {
+describe('useRedirectIfNoMatchedActivity', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -63,7 +63,7 @@ describe('useActivitiesRedirection', () => {
     mockedUseParams.mockReturnValue(params);
     mockedGetValues.mockReturnValue(activities);
 
-    renderHook(useActivitiesRedirection);
+    renderHook(useRedirectIfNoMatchedActivity);
 
     toBeCalledWith
       ? expect(mockedUseNavigate).toBeCalledWith(toBeCalledWith)

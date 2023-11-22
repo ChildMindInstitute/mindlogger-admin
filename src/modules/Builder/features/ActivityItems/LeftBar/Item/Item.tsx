@@ -13,6 +13,7 @@ import { removeMarkdown } from 'modules/Builder/utils';
 import { StyledCol, StyledDescription, StyledItem, StyledTitle } from './Item.styles';
 import { ItemProps } from './Item.types';
 import { getActions } from './Item.utils';
+import { getItemConditionDependencies } from '../../ActivityItems.utils';
 
 export const Item = ({
   name,
@@ -30,8 +31,8 @@ export const Item = ({
   const { activity } = useCurrentActivity();
   const item: ItemFormValues = useWatch({ name: name! });
 
-  const hasHiddenOption = !!getSummaryRowDependencies(item, activity?.conditionalLogic)?.length;
-  const isItemHidden = !!item?.isHidden;
+  const hasHiddenOption = !!getItemConditionDependencies(item, activity?.conditionalLogic)?.length;
+  const isItemHidden = name ? item?.isHidden : false;
 
   const actionsSxProps = {
     justifyContent: 'flex-end',

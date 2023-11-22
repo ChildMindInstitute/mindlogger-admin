@@ -1,6 +1,7 @@
-import { ChangeEvent } from 'react';
+import { useEffect, useRef, ChangeEvent } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import debounce from 'lodash.debounce';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
@@ -18,6 +19,7 @@ import {
   StyledUpDown,
 } from './Input.styles';
 import { getTextAdornment } from './Input.utils';
+import { INPUT_DEBOUNCE_VALUE } from './Input.const';
 
 export const Input = <T extends FieldValues>({
   onChange,
@@ -35,12 +37,14 @@ export const Input = <T extends FieldValues>({
   Counter = StyledCounter,
   counterProps,
   textAdornment,
+  withDebounce = false,
   hintText,
   disabled,
   'data-testid': dataTestid,
   ...textFieldProps
 }: InputProps<T>) => {
   const { t } = useTranslation('app');
+  const inputRef = useRef<HTMLInputElement | null>();
   const isNumberType = textFieldProps.type === 'number';
   const isControlledNumberValue = minNumberValue !== undefined || maxNumberValue !== undefined;
   const getTextFieldValue = () => {
@@ -84,14 +88,23 @@ export const Input = <T extends FieldValues>({
 
     onChange?.(getNumberValue() ?? newValue);
   };
+  const handleDebouncedChange = debounce(
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(event),
+    INPUT_DEBOUNCE_VALUE,
+  );
+
+  useEffect(() => {
+    if (!withDebounce || !inputRef.current || inputRef.current?.value === String(value)) return;
+    inputRef.current.value = value;
+  });
 
   return (
     <Tooltip tooltipTitle={tooltip}>
       <StyledTextFieldContainer hasCounter={!!maxLength}>
         <StyledTextField
           {...textFieldProps}
-          value={getTextFieldValue()}
-          onChange={handleChange}
+          {...(withDebounce ? { inputRef } : { value: getTextFieldValue() })}
+          onChange={withDebounce ? handleDebouncedChange : handleChange}
           error={error}
           helperText={helperText}
           data-testid={dataTestid}

@@ -19,7 +19,7 @@ export type ActionsType = {
   onRemoveItem: LeftBarProps['onRemoveItem'];
   onDuplicateItem: () => void;
   onChangeVisibility: () => void;
-  isItemHidden: boolean;
+  isItemHidden?: boolean;
   hasHiddenOption: boolean;
   'data-testid'?: string;
 };

@@ -5,10 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
 import { StyledContainer } from 'shared/styles';
-import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
+import { getEntityKey, pluck } from 'shared/utils';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
+import { getUniqueName } from 'modules/Builder/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
 import { ItemConfiguration } from './ItemConfiguration/ItemConfiguration';
@@ -60,7 +61,7 @@ export const ActivityItems = () => {
   };
 
   const handleAddItem = () => {
-    const item = getNewActivityItem();
+    const item = getNewActivityItem() as ItemFormValues;
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
     const indexListToTrigger = getIndexListToTrigger(items, item.name);
@@ -74,7 +75,7 @@ export const ActivityItems = () => {
   };
 
   const handleInsertItem = (index: number, item?: ItemFormValues) => {
-    const itemToInsert = item ?? getNewActivityItem();
+    const itemToInsert = (item ?? getNewActivityItem()) as ItemFormValues;
     const shouldBecomeActive = !item || (item && getEntityKey(activeItem ?? {}));
 
     const indexListToTrigger = getIndexListToTrigger(items, itemToInsert.name);

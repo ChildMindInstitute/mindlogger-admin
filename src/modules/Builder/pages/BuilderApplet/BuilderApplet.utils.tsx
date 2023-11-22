@@ -130,7 +130,7 @@ const getDuplicatedOptionsAndAlerts = (item?: ItemFormValues) => {
   };
 };
 
-export const getNewActivityItem = (item?: ItemFormValues): ItemFormValues => ({
+export const getNewActivityItem = (item?: ItemFormValues) => ({
   responseType: '',
   name: t('newItem'),
   question: '',
@@ -147,7 +147,7 @@ export const getNewActivityItem = (item?: ItemFormValues): ItemFormValues => ({
     responseValues: {
       ...item.responseValues,
       id: uuidv4(),
-    } as SliderItemResponseValues,
+    },
     alerts: item?.alerts?.map((alert) => ({
       ...alert,
       key: uuidv4(),
