@@ -222,7 +222,7 @@ const mapItemResponseValues = (item: ItemFormValues) => {
     responseType === ItemResponseType.MultipleSelection
   )
     return {
-      paletteName: responseValues.paletteName ?? undefined,
+      paletteName: responseValues.paletteName || undefined,
       options: responseValues.options?.map((option) => ({
         ...option,
         color: ((option.color as ColorResult)?.hex ?? option.color) || undefined,

@@ -1224,5 +1224,6 @@
     "somethingWentWrong": "Quelque chose s'est mal passé.",
     "details": "Détails",
     "refreshPage": "Rafraîchir la page"
-  }
+  },
+  "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet."
 }

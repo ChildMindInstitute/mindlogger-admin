@@ -1,14 +1,10 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { Roles } from 'shared/consts';
 import { Manager, ManagerApplet } from 'modules/Dashboard/types';
 
 export type EditAccessPopupProps = {
-  onClose: () => void;
-  editAccessPopupVisible: boolean;
-  setEditAccessSuccessPopupVisible: Dispatch<SetStateAction<boolean>>;
+  onClose: (shouldRefetch?: boolean) => void;
+  popupVisible: boolean;
   user: Manager;
-  reFetchManagers: () => void;
 };
 
 export type Role = {
