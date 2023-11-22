@@ -623,7 +623,7 @@ export const mockedScoreReport = {
   key: '5bad6e4a-7035-4ddd-9c54-375604025a',
   calculationType: CalculationType.Sum,
   itemsScore: ['Item1', 'Item3'],
-  showMessage: false,
+  showMessage: true,
   message: 'message [[sumScore_firstscore]]',
   printItems: true,
   itemsPrint: ['Item1', 'Item3'],
@@ -657,6 +657,41 @@ export const mockedScoreReport = {
   ],
 };
 
+export const mockedSectionReport = {
+  type: ScoreReportType.Section,
+  name: 'firstSection',
+  showMessage: true,
+  message: 'section message',
+  printItems: true,
+  itemsPrint: ['Item1', 'Item3'],
+  conditionalLogic: {
+    match: 'any',
+    conditions: [
+      {
+        itemName: 'Item1',
+        type: 'GREATER_THAN',
+        payload: {
+          value: 1,
+        },
+      },
+      {
+        itemName: 'sumScore_firstscore_cnsdsd',
+        type: 'EQUAL_TO_SCORE',
+        payload: {
+          value: false,
+        },
+      },
+      {
+        itemName: 'averageScore_secondscore',
+        type: 'EQUAL',
+        payload: {
+          value: 1,
+        },
+      },
+    ],
+  },
+};
+
 export const mockedAppletFormData = {
   displayName: 'dataviz',
   description: '',
@@ -683,7 +718,7 @@ export const mockedAppletFormData = {
       scoresAndReports: {
         generateReport: false,
         showScoreSummary: false,
-        reports: [mockedScoreReport],
+        reports: [mockedScoreReport, mockedSectionReport],
       },
       conditionalLogic: [
         {
