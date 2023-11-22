@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json", 
   "exclude": [
     "src/shared/tests/**",
+    "src/shared/mock.ts",
     "src/**/*.test.ts",
     "src/__mocks__"
   ]
