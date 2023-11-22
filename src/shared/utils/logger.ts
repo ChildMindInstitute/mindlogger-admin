@@ -31,6 +31,8 @@ export const sendLogFile = async ({
   error: TypeError;
   formData?: Record<string, unknown>;
 }) => {
+  if (process.env.NODE_ENV !== 'production') return;
+
   const { platform, appVersion, appName, userAgent, hardwareConcurrency, language } = navigator;
   const time = new Date().getTime();
   const { href } = location;

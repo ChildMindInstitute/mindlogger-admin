@@ -10,6 +10,7 @@ import { Bar } from 'react-chartjs-2';
 import { Box } from '@mui/material';
 
 import { legendMargin, setTooltipStyles } from '../Charts.utils';
+import { ChartType } from '../Chart.types';
 import { StyledChartContainer } from '../Chart.styles';
 import { getDatasets, getOptions } from './BarChart.utils';
 import { BarChartProps, TooltipData } from './BarChart.types';
@@ -59,7 +60,7 @@ export const BarChart = ({ chartData }: BarChartProps) => {
       const {
         element: { x: positionX, y: positionY },
       } = dataPoint;
-      setTooltipStyles({ tooltipEl, positionX, positionY });
+      setTooltipStyles({ chartType: ChartType.BarChart, tooltipEl, positionX, positionY });
     }
   };
 
