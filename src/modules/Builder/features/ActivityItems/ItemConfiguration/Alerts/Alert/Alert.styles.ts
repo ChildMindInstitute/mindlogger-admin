@@ -9,6 +9,11 @@ export const StyledAlert = styled(Box)`
   background-color: ${variables.palette.surface1};
   border-radius: ${variables.borderRadius.lg2};
   margin-bottom: ${theme.spacing(2.4)};
+
+  .MuiTypography-root {
+    z-index: ${theme.zIndex.fab};
+    pointer-events: none;
+  }
 `;
 
 export const StyledRow = styled(StyledFlexTopCenter)`
@@ -61,4 +66,8 @@ export const StyledDescription = styled(StyledFlexTopCenter)`
 
 export const StyledSelectController = styled(SelectController)`
   min-width: 10rem;
+
+  & .Mui-error {
+    background: ${variables.palette.error_container};
+  }
 `;
