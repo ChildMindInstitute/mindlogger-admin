@@ -4,11 +4,7 @@ import { createRef } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import get from 'lodash.get';
 
-import {
-  mockedAppletFormData,
-  mockedMultiSelectFormValues,
-  mockedSingleSelectFormValues,
-} from 'shared/mock';
+import { mockedMultiSelectFormValues, mockedSingleSelectFormValues } from 'shared/mock';
 import { ItemResponseType } from 'shared/consts';
 import { createArray, renderWithAppletFormData } from 'shared/utils';
 
@@ -23,16 +19,9 @@ import {
   getAppletFormDataWithItemWithPalette,
   mockedTextInputOptionTestid,
   mockedAlertsTestid,
+  mockedUseParams,
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    appletId: mockedAppletFormData.id,
-    activityId: mockedAppletFormData.activities[0].id,
-  }),
-}));
 
 const mockedChangeColorEvent = { hex: '#fff' };
 jest.mock('react-color', () => ({
@@ -42,6 +31,11 @@ jest.mock('react-color', () => ({
       onClick={() => onChangeComplete(mockedChangeColorEvent)}
     ></div>
   ),
+}));
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => mockedUseParams(),
 }));
 
 describe('ItemConfiguration: Single Selection & Multiple Selection', () => {

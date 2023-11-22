@@ -3,7 +3,7 @@
 import { createRef } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
-import { mockedSingleSelectFormValues, mockedAppletFormData } from 'shared/mock';
+import { mockedSingleSelectFormValues } from 'shared/mock';
 import { createArray, renderWithAppletFormData } from 'shared/utils';
 
 import {
@@ -12,14 +12,12 @@ import {
   mockedEmptyItem,
   renderItemConfiguration,
   getAppletFormDataWithItem,
+  mockedUseParams,
 } from '../__mocks__';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    appletId: mockedAppletFormData.id,
-    activityId: mockedAppletFormData.activities[0].id,
-  }),
+  useParams: () => mockedUseParams(),
 }));
 
 describe('ItemConfiguration: Displayed Content', () => {

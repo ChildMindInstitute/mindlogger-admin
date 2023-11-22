@@ -7,7 +7,10 @@ import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderA
 
 import { ItemConfiguration } from '../ItemConfiguration';
 
-const mockedOnClose = jest.fn();
+export const mockedUseParams = () => ({
+  appletId: mockedAppletFormData.id,
+  activityId: mockedAppletFormData.activities[0].id,
+});
 
 export const mockedItemName = 'activities.0.items.0';
 export const mockedTypeTestid = 'builder-activity-items-item-configuration-response-type';
@@ -128,7 +131,7 @@ export const setItemConfigSetting = async (setting) => {
 };
 
 export const renderItemConfiguration = (name = mockedItemName) => (
-  <ItemConfiguration name={name} onClose={mockedOnClose} />
+  <ItemConfiguration name={name} onClose={jest.fn()} />
 );
 
 export const mockedEmptySingleSelection = {

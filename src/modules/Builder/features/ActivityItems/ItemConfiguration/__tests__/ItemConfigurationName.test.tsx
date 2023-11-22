@@ -11,14 +11,12 @@ import {
   mockedNameTestid,
   getAppletFormDataWithItem,
   mockedItemName,
+  mockedUseParams,
 } from '../__mocks__';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    appletId: mockedAppletFormData.id,
-    activityId: mockedAppletFormData.activities[0].id,
-  }),
+  useParams: () => mockedUseParams(),
 }));
 
 describe('ItemConfiguration: Item Name', () => {
