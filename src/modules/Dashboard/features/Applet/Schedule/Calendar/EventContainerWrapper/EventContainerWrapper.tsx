@@ -26,7 +26,6 @@ export const EventContainerWrapper = ({
   const isWeekView = activeView === CalendarViews.Week;
 
   useEffect(() => {
-    //TODO: Try to find a better solution for the hide/show many events, and responsive breakpoints logic in the day/week view
     const updateEventsLayout = async () => {
       const eventsWrapper = await wrapperRef.current;
       const containerEvents: NodeListOf<HTMLElement> | undefined =
@@ -43,15 +42,9 @@ export const EventContainerWrapper = ({
 
       await containerEvents.forEach((eventWrapper) => {
         const { id, start, end } = eventWrapper.dataset;
-        const event = eventWrapper.querySelector('.rbc-event') as HTMLElement;
 
         if (id && start && end) {
           arrayOfEventsDates.push({ id, start, end });
-        }
-
-        if (event) {
-          const { offsetWidth: width, offsetHeight: height } = event;
-          eventWrapper.classList.add(...getEventClassNames(width, height));
         }
       });
 
@@ -60,6 +53,7 @@ export const EventContainerWrapper = ({
         maxEventsQuantity: isWeekView ? MAX_VISIBLE_EVENTS_WEEK_VIEW : MAX_EVENTS_DAY_VIEW,
       });
 
+      // hiding overlapping events in week/day views and adding hidden events quantity info
       if (overlappingEvents.length) {
         if (isWeekView) {
           overlappingEvents.forEach(({ eventIds }) => {
@@ -114,6 +108,15 @@ export const EventContainerWrapper = ({
       } else {
         timeContent.style.minWidth = '';
       }
+
+      // adding class names for event wrapper to show/hide event info by its width and height
+      containerEvents.forEach((eventWrapper) => {
+        const event = eventWrapper.querySelector('.rbc-event') as HTMLElement;
+        if (!event) return;
+
+        const { offsetWidth: width, offsetHeight: height } = event;
+        eventWrapper.classList.add(...getEventClassNames(width, height));
+      });
     };
 
     updateEventsLayout();

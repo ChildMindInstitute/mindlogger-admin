@@ -24,9 +24,14 @@ import {
 } from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 import { getIsRequiredValidateMessage } from 'shared/utils';
-import { getDaysInMonthlyPeriodicity } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import {
+  getDaysInMonthlyPeriodicity,
+  getNextDayComparison,
+  getStartEndComparison,
+  removeSecondsFromTime,
+} from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
-import { convertDateToYearMonthDay, removeSecondsFromTime } from '../Schedule.utils';
+import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
 import { NotificationsTab } from './NotificationsTab';
 import { TimersTab } from './TimersTab';
@@ -84,16 +89,6 @@ export const getEventFormTabs = ({
     'data-testid': `${dataTestid}-notifications-tab`,
   },
 ];
-
-export const getStartEndComparison = (startTime: string, endTime: string) => {
-  const startDate = new Date(`2000-01-01T${startTime}:00`);
-  const endDate = new Date(`2000-01-01T${endTime}:00`);
-
-  return startDate < endDate;
-};
-
-export const getNextDayComparison = (startTime: string, endTime: string) =>
-  !getStartEndComparison(startTime, endTime) && startTime !== endTime;
 
 export const getBetweenStartEndComparison = (
   notificationTime: string,
@@ -294,8 +289,6 @@ const getReminder = ({
 export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarEvent) => {
   const {
     alwaysAvailable: eventAlwaysAvailable,
-    start,
-    end,
     eventStart,
     eventEnd,
     periodicity: eventPeriodicity,
@@ -306,6 +299,8 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     timerType: eventTimerType,
     timer,
     notification,
+    startTime: eventStartTime,
+    endTime: eventEndTime,
   } = editedEvent || {};
   const activityOrFlowId = getActivityOrFlowId(editedEvent, startFlowIcon, eventActivityOrFlowId);
   const isPeriodicityAlways = eventPeriodicity === Periodicity.Always;
@@ -320,8 +315,8 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     eventEnd,
     editedEvent,
   );
-  const startTime = start ? format(start, DateFormats.Time) : DEFAULT_START_TIME;
-  const endTime = end ? format(end, DateFormats.Time) : DEFAULT_END_TIME;
+  const startTime = eventStartTime ?? DEFAULT_START_TIME;
+  const endTime = eventEndTime ?? DEFAULT_END_TIME;
   const periodicity = editedEvent?.periodicity || Periodicity.Once;
   const oneTimeCompletion = eventOneTimeCompletion || false;
   const accessBeforeSchedule = eventAccessBeforeSchedule ?? false;

@@ -2,7 +2,6 @@ import { Periodicity } from 'modules/Dashboard/api';
 import { BaseSchema } from 'shared/state';
 import { Event } from 'modules/Dashboard/state';
 
-// Calendar Day | Week => Events : got 1 event => 2 events
 export type CalendarEvent = {
   id: string;
   activityOrFlowId: string;
@@ -20,12 +19,14 @@ export type CalendarEvent = {
   startFlowIcon?: boolean;
   endAlertIcon?: boolean;
   isOffRange?: boolean;
-  eventSpanBefore?: boolean; // TODO
-  eventSpanAfter?: boolean; // TODO
+  eventSpanBefore?: boolean;
+  eventSpanAfter?: boolean;
   periodicity: Periodicity;
   eventStart: Date;
   eventEnd: Date | null;
   eventCurrentDate?: string;
+  startTime: string | null;
+  endTime: string | null;
 } & Pick<
   Event,
   'oneTimeCompletion' | 'accessBeforeSchedule' | 'timerType' | 'timer' | 'notification'

@@ -1,14 +1,12 @@
 import { cloneElement, useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
-import { format } from 'date-fns';
 
 import { Tooltip } from 'shared/components/Tooltip';
-import { DateFormats } from 'shared/consts';
 
 import { EventWrapperProps, UiType } from './EventWrapper.types';
 
 export const EventWrapper = ({
-  event: { title, id, start, end, isHiddenInTimeView },
+  event: { title, id, start, end, isHiddenInTimeView, startTime, endTime },
   children,
   components,
   uiType = UiType.TimeView,
@@ -20,10 +18,40 @@ export const EventWrapper = ({
 
   const tooltipTitle = (
     <>
-      <Box>{`${format(start, DateFormats.Time)} - ${format(end, DateFormats.Time)}`}</Box>
+      <Box>{`${startTime} - ${endTime}`}</Box>
       <Box>{title}</Box>
     </>
   );
+
+  const renderEventWrapper = () => {
+    if (timeView && isHiddenInTimeView) {
+      return <Box ref={emptyRef} />;
+    }
+
+    return (
+      <Box
+        className="event-wrapper"
+        ref={childrenRef}
+        data-id={id}
+        data-start={start}
+        data-end={end}
+        data-testid={`dashboard-calendar-${id}`}
+      >
+        <Tooltip followCursor tooltipTitle={tooltipTitle} placement="top">
+          {cloneElement(children, {
+            ...children.props,
+            title: '',
+            style: {
+              ...children.props.style,
+              marginTop: '2px',
+              height: `calc(${children.props.style.height} - 1px)`,
+              minWidth: '18px',
+            },
+          })}
+        </Tooltip>
+      </Box>
+    );
+  };
 
   useEffect(() => {
     if (timeView) {
@@ -43,29 +71,5 @@ export const EventWrapper = ({
     }
   }, [isVisible]);
 
-  return timeView && isHiddenInTimeView ? (
-    <Box ref={emptyRef} />
-  ) : (
-    <Box
-      className="event-wrapper"
-      ref={childrenRef}
-      data-id={id}
-      data-start={start}
-      data-end={end}
-      data-testid={`dashboard-calendar-${id}`}
-    >
-      <Tooltip followCursor tooltipTitle={tooltipTitle} placement="top">
-        {cloneElement(children, {
-          ...children.props,
-          title: '',
-          style: {
-            ...children.props.style,
-            marginTop: '2px',
-            height: `calc(${children.props.style.height} - 1px)`,
-            minWidth: '18px',
-          },
-        })}
-      </Tooltip>
-    </Box>
-  );
+  return renderEventWrapper();
 };

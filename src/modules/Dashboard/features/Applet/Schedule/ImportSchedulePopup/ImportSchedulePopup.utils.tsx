@@ -5,11 +5,11 @@ import { Box } from '@mui/material';
 import { SingleApplet } from 'shared/state';
 import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
+import { getStartEndComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { ScheduleExportCsv } from '../Schedule.types';
 import {
-  getStartEndComparison,
   getBetweenStartEndComparison,
   addSecondsToHourMinutes,
 } from '../EventForm/EventForm.utils';

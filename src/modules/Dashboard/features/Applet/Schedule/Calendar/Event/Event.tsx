@@ -1,7 +1,4 @@
-import { format } from 'date-fns';
-
 import { Svg } from 'shared/components/Svg';
-import { DateFormats } from 'shared/consts';
 import { theme, StyledBodySmall, StyledLabelMedium, variables } from 'shared/styles';
 
 import { EventProps, UiType } from './Event.types';
@@ -19,12 +16,12 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
   const {
     scheduledColor,
     startFlowIcon,
-    start,
-    end,
     allDay,
     endAlertIcon,
     alwaysAvailable,
     isOffRange,
+    startTime,
+    endTime,
   } = event;
   const isAllDayEvent = allDay || alwaysAvailable;
   const isDefaultView = uiType === UiType.DefaultView;
@@ -43,16 +40,14 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
           {!isAllDayEvent && isDefaultView && scheduledColor && (
             <StyledIndicator bgColor={scheduledColor} />
           )}
-          {isDefaultView && !isAllDayEvent && (
-            <StyledLabelMedium>{format(start, DateFormats.Time)}</StyledLabelMedium>
-          )}
+          {isDefaultView && !isAllDayEvent && <StyledLabelMedium>{startTime}</StyledLabelMedium>}
           {isTimeView && !isAllDayEvent && (
             <>
               <StyledBodySmall className="event-start-time" sx={{ flexShrink: 0 }}>
-                {format(start, DateFormats.Time)}
+                {startTime}
               </StyledBodySmall>
               <StyledBodySmall className="event-end-time" sx={{ flexShrink: 0 }}>
-                - {format(end, DateFormats.Time)}
+                - {endTime}
               </StyledBodySmall>
             </>
           )}
