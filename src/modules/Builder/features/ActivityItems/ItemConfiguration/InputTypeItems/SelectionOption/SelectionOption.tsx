@@ -95,7 +95,7 @@ export const SelectionOption = ({
     const settings = getValues(`${name}.config`);
 
     if (get(settings, ItemConfigurationSettings.HasColorPalette)) {
-      setValue(`${name}.responseValues.paletteName`, '');
+      setValue(`${name}.responseValues.paletteName`, undefined);
     }
   };
 
