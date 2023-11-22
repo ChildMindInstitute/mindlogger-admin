@@ -17,7 +17,6 @@ import { Activity, ActivityFlow } from 'shared/state';
 import {
   CreateEventType,
   EventNotifications,
-  EventReminder,
   NotificationType,
   Periodicity,
   TimerType,
@@ -27,7 +26,6 @@ import { getIsRequiredValidateMessage } from 'shared/utils';
 import {
   getDaysInMonthlyPeriodicity,
   getNextDayComparison,
-  getStartEndComparison,
   removeSecondsFromTime,
 } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
@@ -46,8 +44,12 @@ import {
 import {
   EventFormValues,
   FormReminder,
+  GetBetweenStartEndNextDayComparisonProps,
+  GetBetweenStartEndNextDaySingleComparisonProps,
   GetDaysInPeriod,
   GetEventFromTabs,
+  GetNotificationTimeComparisonProps,
+  GetNotificationsValidationProps,
   GetWeeklyDays,
   NotificationTimeTestContext,
   SecondsManipulation,
@@ -90,16 +92,68 @@ export const getEventFormTabs = ({
   },
 ];
 
-export const getBetweenStartEndComparison = (
-  notificationTime: string,
-  startTime: string,
-  endTime: string,
-) => {
-  const timeDate = new Date(`1970-01-01T${notificationTime}:00.000Z`);
-  const startTimeDate = new Date(`1970-01-01T${startTime}:00.000Z`);
-  const endTimeDate = new Date(`1970-01-01T${endTime}:00.000Z`);
+export const getBetweenStartEndNextDaySingleComparison = ({
+  time,
+  rangeStartTime,
+  rangeEndTime,
+}: GetBetweenStartEndNextDaySingleComparisonProps) => {
+  const timeDate = new Date(`1970-01-01T${time}:00.000Z`);
+  const startTimeDate = new Date(`1970-01-01T${rangeStartTime}:00.000Z`);
+  const endTimeDate = new Date(`1970-01-01T${rangeEndTime}:00.000Z`);
+  const endOfCurrentDay = new Date('1970-01-01T23:59:00.000Z');
+  const startOfCurrentDay = new Date('1970-01-01T00:00:00.000Z');
 
-  return timeDate >= startTimeDate && timeDate <= endTimeDate;
+  if (startTimeDate > endTimeDate)
+    return (
+      (startTimeDate <= timeDate && timeDate <= endOfCurrentDay) ||
+      (startOfCurrentDay <= timeDate && timeDate <= endTimeDate)
+    );
+
+  return startTimeDate <= timeDate && timeDate <= endTimeDate;
+};
+
+export const getBetweenStartEndNextDayComparison = ({
+  time,
+  fromTime,
+  toTime,
+  rangeStartTime,
+  rangeEndTime,
+}: GetBetweenStartEndNextDayComparisonProps) => {
+  const isFromTime = time === fromTime;
+  const isCrossDay = getNextDayComparison(fromTime, toTime);
+  const timeDate = new Date(`1970-01-01T${time}:00.000Z`);
+  const startTimeDate = new Date(`1970-01-01T${rangeStartTime}:00.000Z`);
+  const endTimeDate = new Date(`1970-01-01T${rangeEndTime}:00.000Z`);
+  const fromTimeDate = new Date(`1970-01-01T${fromTime}:00.000Z`);
+  const toTimeDate = new Date(`1970-01-01T${toTime}:00.000Z`);
+  const endOfCurrentDay = new Date('1970-01-01T23:59:00.000Z');
+  const startOfCurrentDay = new Date('1970-01-01T00:00:00.000Z');
+
+  if (startTimeDate > endTimeDate) {
+    if (isFromTime) {
+      if (isCrossDay) {
+        return startTimeDate <= timeDate && timeDate <= endOfCurrentDay;
+      }
+
+      return startTimeDate <= timeDate || timeDate <= endTimeDate;
+    }
+
+    if (isCrossDay) {
+      return startOfCurrentDay <= timeDate && timeDate <= endTimeDate;
+    }
+
+    return startTimeDate <= timeDate || timeDate <= endTimeDate;
+  }
+
+  if (isCrossDay) {
+    return false;
+  }
+
+  if (isFromTime) {
+    return startTimeDate <= timeDate && timeDate <= toTimeDate && timeDate <= endTimeDate;
+  }
+
+  return startTimeDate <= timeDate && fromTimeDate <= timeDate && timeDate <= endTimeDate;
 };
 
 export const getTimeComparison = (message: string) =>
@@ -130,13 +184,12 @@ export const getTimerDurationCheck = () => {
   });
 };
 
-export const getNotificationTimeComparison = (
-  schema:
-    | yup.Schema<EventReminder>
-    | yup.StringSchema<string | null | undefined, yup.AnyObject, string | null | undefined>,
-  field: string,
-  showValidPeriodMessage: boolean,
-) => {
+export const getNotificationTimeComparison = ({
+  schema,
+  field,
+  showValidPeriodMessage,
+  isSingleTime = false,
+}: GetNotificationTimeComparisonProps) => {
   const selectValidPeriod = t('selectValidPeriod');
   const activityUnavailableAtTime = t('activityUnavailableAtTime');
 
@@ -152,7 +205,7 @@ export const getNotificationTimeComparison = (
           return true;
         }
 
-        return getStartEndComparison(fromTime, toTime);
+        return fromTime !== toTime;
       },
     )
     .test(
@@ -161,27 +214,52 @@ export const getNotificationTimeComparison = (
       function notificationStartEndTest(value: string, testContext: NotificationTimeTestContext) {
         const startTimeValue = testContext.from[1].value.startTime;
         const endTimeValue = testContext.from[1].value.endTime;
+        const { fromTime, toTime } = testContext.parent;
 
-        if (!startTimeValue || !endTimeValue || !value) {
+        if (
+          !startTimeValue ||
+          !endTimeValue ||
+          !value ||
+          (fromTime === toTime && typeof toTime === 'string')
+        ) {
           return true;
         }
 
-        return getBetweenStartEndComparison(value, startTimeValue, endTimeValue);
+        if (isSingleTime)
+          return getBetweenStartEndNextDaySingleComparison({
+            time: value,
+            rangeStartTime: startTimeValue,
+            rangeEndTime: endTimeValue,
+          });
+
+        return getBetweenStartEndNextDayComparison({
+          time: value,
+          fromTime,
+          toTime,
+          rangeStartTime: startTimeValue,
+          rangeEndTime: endTimeValue,
+        });
       },
     );
 };
 
-export const getNotificationsValidation = (
-  field: string,
-  notificationType: NotificationType,
-  showValidPeriodMessage: boolean,
-) =>
+export const getNotificationsValidation = ({
+  field,
+  notificationType,
+  showValidPeriodMessage,
+  isSingleTime = false,
+}: GetNotificationsValidationProps) =>
   yup
     .string()
     .nullable()
     .when('triggerType', ([triggerType]: NotificationType[], schema) => {
       if (triggerType === notificationType) {
-        return getNotificationTimeComparison(schema, field, showValidPeriodMessage);
+        return getNotificationTimeComparison({
+          schema,
+          field,
+          showValidPeriodMessage,
+          isSingleTime,
+        });
       }
 
       return schema;

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ToggleButtonGroup, TimePicker } from 'shared/components';
-import { StyledFlexTopStart, StyledLabelLarge, theme } from 'shared/styles';
+import { StyledFlexTopStart, StyledLabelLarge, StyledTitleSmall, theme } from 'shared/styles';
 import { NotificationType } from 'modules/Dashboard/api';
 
 import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
@@ -11,6 +11,7 @@ import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.s
 import { notificationTimeToggles } from './Notification.const';
 import { Header } from '../Header';
 import { NotificationProps } from './Notification.types';
+import { useNextDayLabel } from '../../EventForm.hooks';
 
 export const Notification = ({ index, remove, 'data-testid': dataTestid }: NotificationProps) => {
   const { t } = useTranslation('app');
@@ -32,6 +33,9 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
       toTimeFieldName,
     ],
   });
+  const hasNextDayLabel =
+    useNextDayLabel({ startTime: fromTime, endTime: toTime }) &&
+    notification.triggerType === NotificationType.Random;
 
   const handleRemoveNotification = () => {
     remove(index);
@@ -93,6 +97,15 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
                     label={t('to')}
                     data-testid={`${dataTestid}-to`}
                   />
+                  {hasNextDayLabel && (
+                    <StyledTitleSmall
+                      sx={{
+                        mx: theme.spacing(1.6),
+                      }}
+                    >
+                      {t('nextDay')}
+                    </StyledTitleSmall>
+                  )}
                 </StyledColInner>
               </>
             )}
