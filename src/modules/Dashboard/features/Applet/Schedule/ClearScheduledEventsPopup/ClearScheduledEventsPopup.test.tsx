@@ -8,9 +8,10 @@ import { page } from 'resources';
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
 
 const dataTestid = 'clear-scheduled-events-popup';
+const onCloseMock = jest.fn();
 const basicProps = {
   open: true,
-  onClose: jest.fn,
+  onClose: onCloseMock,
   appletName: 'Displayed Applet Name',
   appletId: mockedAppletId,
   name: 'Displayed Respondent Name',
@@ -77,5 +78,7 @@ describe('ClearScheduledEventsPopup', () => {
     );
 
     fireEvent.click(screen.getByText('Ok'));
+
+    expect(onCloseMock).toBeCalled();
   });
 });
