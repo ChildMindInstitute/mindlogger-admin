@@ -190,6 +190,17 @@ export const getTimerDurationCheck = () => {
   });
 };
 
+export const notificationValidPeriodTest =
+  (field: string) => (_: string, testContext: NotificationTimeTestContext) => {
+    const { fromTime, toTime } = testContext.parent;
+
+    if ((field !== 'fromTime' && field !== 'toTime') || !fromTime || !toTime) {
+      return true;
+    }
+
+    return fromTime !== toTime;
+  };
+
 export const getNotificationTimeComparison = ({
   schema,
   field,
@@ -204,15 +215,7 @@ export const getNotificationTimeComparison = ({
     .test(
       'is-valid-period',
       showValidPeriodMessage ? selectValidPeriod : '',
-      function notificationValidPeriodTest(_: string, testContext: NotificationTimeTestContext) {
-        const { fromTime, toTime } = testContext.parent;
-
-        if ((field !== 'fromTime' && field !== 'toTime') || !fromTime || !toTime) {
-          return true;
-        }
-
-        return fromTime !== toTime;
-      },
+      notificationValidPeriodTest(field),
     )
     .test(
       'after-start-time-before-end-time',
