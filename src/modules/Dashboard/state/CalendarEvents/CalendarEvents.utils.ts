@@ -25,6 +25,10 @@ import {
   CreateEventsData,
   AllDayEventsSortedByDaysItem,
   GetDaysInMonthlyPeriodicity,
+  GetDateFromDateStringTimeString,
+  GetEventStartDateTime,
+  GetEventEndDateTime,
+  GetEventsArrayFromDates,
 } from './CalendarEvents.schema';
 
 const LENGTH_TO_SET_ID_IS_HIDDEN = 2;
@@ -105,7 +109,7 @@ export const getDateFromDateTimeString = (date: Date, time: string) => {
   return setSeconds(setMinutes(setHours(date, Number(hours)), Number(minutes)), Number(seconds));
 };
 
-const getDateFromDateStringTimeString = ({ date, time }: { date: string | null; time: string }) => {
+const getDateFromDateStringTimeString = ({ date, time }: GetDateFromDateStringTimeString) => {
   if (!date) return null;
 
   return new Date(`${date}T${time}`);
@@ -117,13 +121,7 @@ const getEventStartDateTime = ({
   startDate,
   startTime,
   nextYearDateString,
-}: {
-  periodicity: Periodicity;
-  selectedDate: string | null;
-  startDate: string | null;
-  startTime: string;
-  nextYearDateString: string | null;
-}) => {
+}: GetEventStartDateTime) => {
   const nextYearDate =
     nextYearDateString &&
     getDateFromDateStringTimeString({ date: nextYearDateString, time: DEFAULT_START_TIME });
@@ -187,15 +185,7 @@ const getEventEndDateTime = ({
   currentYear,
   eventStart,
   isCrossDayEvent,
-}: {
-  periodicity: Periodicity;
-  selectedDate: string | null;
-  endDate: string | null;
-  endTime: string;
-  currentYear: number;
-  eventStart: Date;
-  isCrossDayEvent: boolean;
-}) => {
+}: GetEventEndDateTime) => {
   const endOfYearDateTime = getEndOfYearDateTime(currentYear);
   const calculatedEndDate =
     eventStart > endOfYearDateTime ? eventStart : getEndOfYearDateTime(currentYear);
@@ -228,13 +218,7 @@ const getEventsArrayFromDates = ({
   startTime,
   endTime,
   isCrossDayEvent,
-}: {
-  dates: Date[];
-  commonProps: Omit<CalendarEvent, 'id' | 'start' | 'end'>;
-  startTime?: string;
-  endTime?: string;
-  isCrossDayEvent: boolean;
-}) =>
+}: GetEventsArrayFromDates) =>
   dates.flatMap((date) => {
     const nextDay = addDays(date, 1);
 
@@ -247,7 +231,6 @@ const getEventsArrayFromDates = ({
           end: getDateFromDateTimeString(date, DEFAULT_END_TIME),
           eventCurrentDate: formatToYearMonthDate(date),
           eventSpanAfter: true,
-          allDay: false,
         },
         {
           ...commonProps,
@@ -256,7 +239,6 @@ const getEventsArrayFromDates = ({
           end: getDateFromDateTimeString(nextDay, endTime || DEFAULT_END_TIME),
           eventCurrentDate: formatToYearMonthDate(nextDay),
           eventSpanBefore: true,
-          allDay: false,
         },
       ];
     } else {
