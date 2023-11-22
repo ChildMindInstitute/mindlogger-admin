@@ -98,6 +98,19 @@ export const Managers = () => {
     handlePinUpdate({ ownerId, userId });
   };
 
+  const removeManagerAccessOnClose = (step?: number) => {
+    setRemoveAccessPopupVisible(false);
+    step === 2 && handleReload();
+  };
+
+  const editManagerAccessOnClose = (shouldRefetch?: boolean) => {
+    setEditAccessPopupVisible(false);
+    if (shouldRefetch) {
+      setEditAccessSuccessPopupVisible(true);
+      handleReload();
+    }
+  };
+
   const rows: DashboardTableProps['rows'] = useMemo(
     () =>
       managersData?.result?.map((user) => {
@@ -145,6 +158,7 @@ export const Managers = () => {
                   items={getActions(actions)}
                   context={filteredManager}
                   visibleByDefault={hasVisibleActions}
+                  data-testid="dashboard-managers-table-actions"
                 />
               );
             },
@@ -197,19 +211,16 @@ export const Managers = () => {
         <>
           {removeAccessPopupVisible && (
             <ManagersRemoveAccessPopup
-              removeAccessPopupVisible={removeAccessPopupVisible}
-              onClose={() => setRemoveAccessPopupVisible(false)}
+              popupVisible={removeAccessPopupVisible}
+              onClose={removeManagerAccessOnClose}
               user={selectedManager}
-              refetchManagers={handleReload}
             />
           )}
           {editAccessPopupVisible && (
             <EditAccessPopup
-              editAccessPopupVisible={editAccessPopupVisible}
-              setEditAccessSuccessPopupVisible={setEditAccessSuccessPopupVisible}
-              onClose={() => setEditAccessPopupVisible(false)}
+              popupVisible={editAccessPopupVisible}
+              onClose={editManagerAccessOnClose}
               user={selectedManager}
-              reFetchManagers={handleReload}
             />
           )}
           {editAccessSuccessPopupVisible && (

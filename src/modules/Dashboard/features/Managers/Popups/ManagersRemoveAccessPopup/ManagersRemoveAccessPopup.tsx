@@ -24,17 +24,17 @@ import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.cons
 import { RemoveAccessPopupProps, FormValues } from './ManagersRemoveAccessPopupProps.types';
 
 export const ManagersRemoveAccessPopup = ({
-  removeAccessPopupVisible,
+  popupVisible,
   onClose,
   user,
-  refetchManagers,
 }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { appletId } = useParams() || {};
 
   const { firstName, lastName, email, applets } = user;
 
   const [step, setStep] = useState<number>(appletId ? 1 : 0);
+
   const incrementStep = () => setStep((prevStep) => prevStep + 1);
   const decrementStep = () => setStep((prevStep) => prevStep - 1);
 
@@ -93,14 +93,9 @@ export const ManagersRemoveAccessPopup = ({
     },
   }));
 
-  const onCLoseHandler = () => {
-    step === 2 && refetchManagers();
-    onClose();
-  };
+  const onCLoseHandler = () => onClose(step);
 
-  const { execute, error, setError } = useAsync(removeManagerAccessApi, () => {
-    incrementStep();
-  });
+  const { execute, error, setError } = useAsync(removeManagerAccessApi, incrementStep);
 
   const onSubmit = () => {
     switch (step) {
@@ -217,7 +212,7 @@ export const ManagersRemoveAccessPopup = ({
               <>
                 {{ firstName }} {{ lastName }} ({{ email }})
               </>
-            </strong>{' '}
+            </strong>
             no longer has access to any Applets.
           </Trans>
         </StyledBodyLarge>
@@ -235,7 +230,7 @@ export const ManagersRemoveAccessPopup = ({
 
   return (
     <Modal
-      open={removeAccessPopupVisible}
+      open={popupVisible}
       onClose={onCLoseHandler}
       onSubmit={onSubmit}
       title={t('removeAccess')}

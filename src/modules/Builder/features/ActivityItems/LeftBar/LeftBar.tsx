@@ -55,7 +55,7 @@ export const LeftBar = ({
   const activeItemId = getEntityKey(items?.[activeItemIndex]);
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
-  const groupedConditions = getObjectFromList<ConditionalLogic>(activity.conditionalLogic ?? []);
+  const groupedConditions = getObjectFromList<ConditionalLogic>(activity?.conditionalLogic ?? []);
 
   const { data: itemsData, isPending } = useDataPreloader<ItemFormValues>({
     data: items,
@@ -76,10 +76,14 @@ export const LeftBar = ({
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
     if (!destination || source.index === destination?.index) return;
-    const conditionsToRemove = getConditionsToRemove(items, activity?.conditionalLogic, {
-      sourceIndex: source.index,
-      destinationIndex: destination.index,
-      item: items[source.index],
+    const conditionsToRemove = getConditionsToRemove({
+      items,
+      conditionalLogic: activity?.conditionalLogic,
+      config: {
+        sourceIndex: source.index,
+        destinationIndex: destination.index,
+        item: items[source.index],
+      },
     });
 
     if (!conditionsToRemove?.length) return onMoveItem(source.index, destination.index);
@@ -97,7 +101,7 @@ export const LeftBar = ({
   const handleConfirmRemoveConditionals = () => {
     setValue(
       `${fieldName}.conditionalLogic`,
-      activity.conditionalLogic?.filter(
+      activity?.conditionalLogic?.filter(
         (condition: ConditionalLogic) =>
           !conditionalLogicKeysToRemove?.includes(getEntityKey(condition)),
       ),

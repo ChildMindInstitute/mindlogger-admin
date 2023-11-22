@@ -7,7 +7,7 @@ export const StyledButton = styled(Button)`
 
   :disabled {
     svg {
-      fill: ${variables.palette.contained_btn_disabled_text};
+      fill: ${variables.palette.disabled};
     }
   }
 

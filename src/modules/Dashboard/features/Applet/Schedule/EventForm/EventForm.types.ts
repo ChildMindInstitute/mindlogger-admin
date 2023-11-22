@@ -14,6 +14,7 @@ export type EventFormProps = {
   setRemoveAlwaysAvailablePopupVisible: Dispatch<SetStateAction<boolean>>;
   setActivityName: Dispatch<SetStateAction<string>>;
   defaultStartDate: Date;
+  onFormIsLoading: (isLoading: boolean) => void;
   editedEvent?: CalendarEvent;
   onFormChange?: (isChanged: boolean) => void;
   'data-testid'?: string;
@@ -23,6 +24,8 @@ export type Warning = {
   showRemoveAlwaysAvailable?: boolean;
   showRemoveAllScheduled?: boolean;
 };
+
+export type FormReminder = (EventReminder & { activityIncompleteDate?: Date }) | null;
 
 export type EventFormValues = {
   activityOrFlowId: string;
@@ -39,7 +42,7 @@ export type EventFormValues = {
   timerDuration: string;
   idleTime: string;
   notifications: EventNotifications;
-  reminder: EventReminder;
+  reminder: FormReminder;
   removeWarning: Warning;
 };
 
@@ -67,4 +70,16 @@ export type GetEventFromTabs = {
   hasNotificationsErrors?: boolean;
   hasAlwaysAvailableOption?: boolean;
   'data-testid'?: string;
+};
+
+export type GetDaysInPeriod = {
+  isCrossDayEvent: boolean;
+  startDate: Date;
+  endDate: Date;
+};
+
+export type GetWeeklyDays = {
+  daysInPeriod: Date[];
+  startDate: Date;
+  isCrossDayEvent: boolean;
 };

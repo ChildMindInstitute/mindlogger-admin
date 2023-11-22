@@ -18,3 +18,4 @@ export * from './alertsWebsocket';
 export * from './useIntersectionObserver';
 export * from './useNetwork';
 export * from './useCheckIfAppletHasNotFoundError';
+export * from './useRespondentLabel';

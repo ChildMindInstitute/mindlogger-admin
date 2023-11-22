@@ -14,6 +14,7 @@ export const addToBuilderPopupSchema = (): AddToBuilderPopupSchemaType => {
   const appletRequired = t('appletRequired');
 
   return {
+    [AddToBuilderSteps.LoadingWorkspaces]: object(),
     [AddToBuilderSteps.SelectWorkspace]: object({
       selectedWorkspace: string().required(workspaceRequired),
     }),
@@ -33,5 +34,6 @@ export const addToBuilderPopupSchema = (): AddToBuilderPopupSchemaType => {
       ),
     }),
     [AddToBuilderSteps.Error]: object(),
+    [AddToBuilderSteps.AccessError]: object(),
   };
 };

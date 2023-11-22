@@ -36,7 +36,7 @@ export const palette = {
   outline_alfa8: 'rgba(114, 119, 127, 0.08)',
   outline_alfa12: 'rgba(114, 119, 127, 0.12)',
   contained_btn_focus: '#1f79ab',
-  contained_btn_disabled_text: '#979799',
+  disabled: '#979799',
   light_alfa8: 'rgba(255, 255, 255, 0.08)',
   surface_variant_alfa8: 'rgba(222, 227, 235, 0.08)',
   white_alfa50: 'rgb(255 255 255 / 50%)',

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,11 +12,14 @@ import {
   StyledAppletList,
 } from 'shared/styles';
 import { page } from 'resources';
-import { PublishedApplet, auth, library, workspaces, SingleApplet } from 'redux/modules';
+import { PublishedApplet, auth, library, SingleApplet } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
-import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
+import {
+  useAppletsFromCart,
+  useReturnToLibraryPath,
+  useWorkspaceList,
+} from 'modules/Library/hooks';
 import { getDictionaryText, Mixpanel, Path } from 'shared/utils';
-import { useAppDispatch } from 'redux/store';
 
 import { Applet, AppletUiType } from '../Applet';
 import { AddToBuilderPopup, AuthPopup } from '../Popups';
@@ -37,9 +40,7 @@ export const Cart = () => {
   const [addToBuilderPopupVisible, setAddToBuilderPopupVisible] = useState(false);
   const [authPopupVisible, setAuthPopupVisible] = useState(false);
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE);
-  const dispatch = useAppDispatch();
-  const { result: workspacesData = [] } = workspaces.useWorkspacesData() || {};
-  const workspacesWithRoles = workspaces.useWorkspacesRolesData();
+  const { workspaces } = useWorkspaceList(isAuthorized);
   const handleClearCart = useClearCart();
   const dataTestid = 'library-cart';
 
@@ -51,8 +52,8 @@ export const Cart = () => {
 
     if (
       // if only one workspace without applets
-      workspacesWithRoles?.length === 1 &&
-      Object.keys(workspacesWithRoles[0].workspaceRoles).length === 0
+      workspaces?.length === 1 &&
+      Object.keys(workspaces[0].workspaceRoles).length === 0
     ) {
       const { appletToBuilder } = await getAddToBuilderData(cartItems);
 
@@ -117,12 +118,6 @@ export const Cart = () => {
         </>
       </EmptyState>
     );
-
-  useEffect(() => {
-    if (!isAuthorized || !workspacesData.length) return;
-    const { getWorkspacesRoles } = workspaces.thunk;
-    dispatch(getWorkspacesRoles(workspacesData));
-  }, [workspacesData, isAuthorized]);
 
   return (
     <>

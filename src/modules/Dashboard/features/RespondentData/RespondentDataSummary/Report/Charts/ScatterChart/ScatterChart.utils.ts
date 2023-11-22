@@ -45,7 +45,11 @@ export const getOptions = (
         beginAtZero: true,
         ticks: {
           precision: 0,
+          stepSize: 1,
+          autoSkip: false,
         },
+        min: 0,
+        max: 1,
       },
       x: {
         adapters: {

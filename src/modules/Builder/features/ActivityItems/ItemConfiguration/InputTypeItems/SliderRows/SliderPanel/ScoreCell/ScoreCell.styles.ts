@@ -9,7 +9,7 @@ export const StyledInputController = styled(InputController)`
   }
 
   .MuiInputBase-input {
-    padding: ${theme.spacing(1.2, 0, 1.2, 1.2)};
+    padding: ${theme.spacing(1.2, 0, 1.2, 1)};
   }
 
   && .MuiBox-root {

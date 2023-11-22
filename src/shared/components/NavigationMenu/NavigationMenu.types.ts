@@ -9,6 +9,8 @@ export type NavigationItem = {
   tooltip?: string;
   disabled?: boolean;
   isVisible?: boolean;
+  hasError?: boolean;
+  onClick?: () => void;
   'data-testid'?: string;
 };
 
@@ -23,4 +25,5 @@ export type NavigationMenuProps = {
   items: Item[];
   onClose: () => void;
   onSetActiveItem: (item: NavigationItem) => void;
+  'data-testid'?: string;
 };

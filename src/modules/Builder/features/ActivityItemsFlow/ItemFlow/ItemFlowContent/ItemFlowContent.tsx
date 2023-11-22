@@ -13,18 +13,17 @@ import { StyledItemFlowContent } from './ItemFlowContent.styles';
 import { SummaryRow } from '../SummaryRow';
 
 export const ItemFlowContent = ({
-  isStatic,
   name,
+  isStatic,
   onRemove,
-  conditions,
   'data-testid': dataTestid,
 }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
   const { getFieldState } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const [itemKey] = useWatch({
-    name: [`${name}.itemKey`],
+  const [conditions, itemKey] = useWatch({
+    name: [`${name}.conditions`, `${name}.itemKey`],
   });
 
   if (isStatic) {
@@ -60,7 +59,7 @@ export const ItemFlowContent = ({
         />
       ))}
       <SummaryRow
-        key={`item-flow-condition-${name}`}
+        key={`item-flow-condition-${itemKey}`}
         name={name}
         activityName={fieldName}
         data-testid={`${dataTestid}-summary`}

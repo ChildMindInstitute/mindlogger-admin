@@ -1,16 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { ChosenAppletData } from '../../Respondents.types';
 
 export type EditRespondentForm = {
   secretUserId: string;
-  nickname: string;
+  nickname?: string;
 };
 
 export type EditRespondentPopupProps = {
   popupVisible: boolean;
-  setPopupVisible: Dispatch<SetStateAction<boolean>>;
+  onClose: (isSuccessVisible: boolean) => void;
   chosenAppletData: ChosenAppletData | null;
-  setChosenAppletData: Dispatch<SetStateAction<ChosenAppletData | null>>;
-  reFetchRespondents: () => void;
 };

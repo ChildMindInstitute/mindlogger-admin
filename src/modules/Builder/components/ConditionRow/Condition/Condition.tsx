@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useWatch } from 'react-hook-form';
+import { useWatch, useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
@@ -17,7 +17,6 @@ import {
 } from './Condition.utils';
 
 export const Condition = ({
-  control,
   itemName,
   stateName,
   optionValueName,
@@ -36,6 +35,7 @@ export const Condition = ({
   'data-testid': dataTestid,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
+  const { control } = useFormContext();
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 

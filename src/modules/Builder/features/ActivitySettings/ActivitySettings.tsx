@@ -1,16 +1,23 @@
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
 
 import { page } from 'resources';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { NavigationItem, NavigationMenu } from 'shared/components';
 
-import { getSettings } from './ActivitySettings.utils';
+import { getActivitySettings } from './ActivitySettings.utils';
 
 export const ActivitySettings = () => {
   const { fieldName, activity } = useCurrentActivity();
   const { appletId, activityId } = useParams();
+  const { getFieldState } = useFormContext();
 
   const navigate = useNavigate();
+
+  const settingsErrors = {
+    hasActivitySubscalesErrors: !!getFieldState(`${fieldName}.subscaleSetting`).error,
+    hasActivityReportsErrors: !!getFieldState(`${fieldName}.scoresAndReports`).error,
+  };
 
   useRedirectIfNoMatchedActivity();
 
@@ -31,7 +38,7 @@ export const ActivitySettings = () => {
   return (
     <NavigationMenu
       title="activitySettings"
-      items={getSettings(fieldName, activity)}
+      items={getActivitySettings({ activityFieldName: fieldName, activity, settingsErrors })}
       onClose={handleClose}
       onSetActiveItem={handleSetActiveSetting}
     />

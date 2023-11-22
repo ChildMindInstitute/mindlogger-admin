@@ -230,7 +230,7 @@ export const theme = createTheme({
           boxShadow: 'unset',
           '&.Mui-disabled': {
             '& svg': {
-              fill: variables.palette.contained_btn_disabled_text,
+              fill: variables.palette.disabled,
             },
           },
           '&.MuiButton-contained': {
@@ -255,10 +255,10 @@ export const theme = createTheme({
               })),
             ),
             '&.Mui-disabled': {
-              color: variables.palette.contained_btn_disabled_text,
+              color: variables.palette.disabled,
               backgroundColor: variables.palette.on_surface_alfa12,
               '& svg': {
-                fill: variables.palette.contained_btn_disabled_text,
+                fill: variables.palette.disabled,
               },
             },
           },
@@ -281,7 +281,7 @@ export const theme = createTheme({
               backgroundColor: 'transparent',
               borderColor: variables.palette.on_surface_alfa12,
               '& svg': {
-                fill: variables.palette.contained_btn_disabled_text,
+                fill: variables.palette.disabled,
               },
             },
           },
@@ -408,6 +408,9 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: variables.borderRadius.sm,
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: variables.palette.outline_variant,
+          },
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,

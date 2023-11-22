@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
 
@@ -8,9 +8,9 @@ import { useAppDispatch } from 'redux/store';
 import {
   useCallbackPrompt,
   useCheckIfNewApplet,
+  useLogout,
   usePromptSetup,
   useRemoveAppletData,
-  useLogout,
 } from 'shared/hooks';
 import {
   Encryption,
@@ -21,7 +21,7 @@ import {
   Mixpanel,
   SettingParam,
 } from 'shared/utils';
-import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
+import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
 import { auth, workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
@@ -30,20 +30,25 @@ import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { AppletFormValues } from 'modules/Builder/types';
 import { reportConfig } from 'modules/Builder/state';
+import {
+  FlowReportFieldsPrepareType,
+  getEntityReportFields,
+} from 'modules/Builder/utils/getEntityReportFields';
 
 import {
-  removeAppletExtraFields,
+  getActivityItems,
+  getCurrentEntitiesIds,
+  getScoresAndReports,
+  remapSubscaleSettings,
   removeActivityExtraFields,
   removeActivityFlowExtraFields,
   removeActivityFlowItemExtraFields,
-  remapSubscaleSettings,
-  getActivityItems,
-  getScoresAndReports,
-  getCurrentEntitiesIds,
+  removeAppletExtraFields,
 } from './SaveAndPublish.utils';
 
 export const useAppletDataFromForm = () => {
   const { getValues } = useFormContext();
+  const isNewApplet = useCheckIfNewApplet();
 
   return (encryption?: Encryption): SingleApplet => {
     const appletInfo = getValues() as AppletFormValues;
@@ -63,8 +68,13 @@ export const useAppletDataFromForm = () => {
             items: getActivityItems(activity),
             subscaleSetting: remapSubscaleSettings(activity),
             scoresAndReports: getScoresAndReports(activity),
+            ...getEntityReportFields({
+              reportItem: activity.reportIncludedItemName,
+              activityItems: activity.items,
+              type: FlowReportFieldsPrepareType.KeyToName,
+            }),
             ...removeActivityExtraFields(),
-          } as Activity),
+          }) as Activity,
       ),
       encryption,
       description: appletDescription,
@@ -79,10 +89,16 @@ export const useAppletDataFromForm = () => {
               ...item,
               ...removeActivityFlowItemExtraFields(),
             })),
+            ...getEntityReportFields({
+              reportActivity: flow.reportIncludedActivityName ?? '',
+              reportItem: flow.reportIncludedItemName ?? '',
+              activities: appletInfo.activities,
+              type: FlowReportFieldsPrepareType.KeyToName,
+            }),
             ...removeActivityFlowExtraFields(),
-          } as ActivityFlow),
+          }) as ActivityFlow,
       ),
-      ...removeAppletExtraFields(),
+      ...removeAppletExtraFields(isNewApplet),
     };
   };
 };
@@ -238,10 +254,11 @@ export const useUpdatedAppletNavigate = () => {
 export const useSaveAndPublishSetup = (
   hasPrompt: boolean,
   setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
+  setAppletWithoutChangesPopupVisible?: (val: boolean) => void,
 ) => {
   const {
     trigger,
-    formState: { dirtyFields },
+    formState: { dirtyFields, isDirty },
   } = useFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletDataFromForm();
@@ -358,6 +375,8 @@ export const useSaveAndPublishSetup = (
 
     setPublishProcessPopupOpened(false);
 
+    Mixpanel.track('Applet Save click');
+
     await sendRequestWithPasswordCheck();
   };
 
@@ -372,6 +391,13 @@ export const useSaveAndPublishSetup = (
 
       return;
     }
+
+    if (!isDirty) {
+      setAppletWithoutChangesPopupVisible?.(true);
+
+      return;
+    }
+
     await sendRequest();
   };
 
@@ -409,6 +435,8 @@ export const useSaveAndPublishSetup = (
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
+      Mixpanel.track('Applet edit successful');
+
       setIsFromLibrary?.(false);
       if (shouldNavigateRef.current) {
         confirmNavigation();

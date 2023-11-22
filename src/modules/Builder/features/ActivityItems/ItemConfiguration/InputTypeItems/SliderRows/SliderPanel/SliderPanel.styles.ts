@@ -1,6 +1,7 @@
 import { Collapse, Slider, styled } from '@mui/material';
 
 import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
+import { Table } from 'shared/components';
 
 export const StyledSliderPanelContainer = styled(Collapse)`
   background: ${variables.palette.surface1};
@@ -19,6 +20,12 @@ export const StyledInputContainer = styled(StyledFlexTopCenter)`
     position: absolute;
     bottom: -2.4rem;
     font-size: ${variables.font.size.md};
+  }
+`;
+
+export const StyledTable = styled(Table)`
+  .MuiTableCell-root {
+    padding: ${theme.spacing(0, 0.5)};
   }
 `;
 

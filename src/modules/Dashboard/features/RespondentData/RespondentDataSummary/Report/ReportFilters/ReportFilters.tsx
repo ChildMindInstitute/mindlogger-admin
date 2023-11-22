@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
 
 import { DatePicker, TimePicker } from 'shared/components';
@@ -46,6 +46,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             inputSx={{ width: '19rem' }}
             onCloseCallback={onCloseCallback}
             label={t('startDate')}
+            disabled={false}
             data-testid={`${dataTestid}-start-date`}
           />
           <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
@@ -55,6 +56,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             control={control}
             inputSx={{ width: '19rem' }}
             label={t('endDate')}
+            disabled={false}
             data-testid={`${dataTestid}-end-date`}
           />
         </StyledFlexTopCenter>
@@ -67,7 +69,13 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             wrapperSx={{ width: '13rem' }}
             data-testid={`${dataTestid}-start-time`}
           />
-          <StyledTimeText>{t('timeIsShownInUTC')}</StyledTimeText>
+          <StyledTimeText>
+            <Trans i18nKey="timeIsShownInUTC">
+              Time is
+              <br />
+              shown in UTC
+            </Trans>
+          </StyledTimeText>
 
           <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
           <TimePicker

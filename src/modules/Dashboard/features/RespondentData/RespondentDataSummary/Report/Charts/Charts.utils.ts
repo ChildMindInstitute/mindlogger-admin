@@ -1,12 +1,19 @@
 import { Chart as ChartJS } from 'chart.js/dist/types';
 
-import { CustomLegend } from './Chart.types';
 import {
+  CustomLegend,
+  ScatterChartTooltipHandler,
+  ChartType,
+  SetTooltipStyles,
+} from './Chart.types';
+import {
+  MAX_LABEL_CHARS_Y,
   MAX_TICKS_LENGTH,
   MIN_TICKS_LENGTH,
-  MAX_LABEL_CHARS_Y,
   MS_PER_DAY,
   MS_PER_HOUR,
+  POINT_RADIUS_DEFAULT,
+  POINT_RADIUS_SECONDARY,
 } from './Charts.const';
 
 export const truncateString = (label: string) =>
@@ -71,4 +78,51 @@ export const legendMargin = {
       this.height += 42;
     };
   },
+};
+
+export const setTooltipStyles = ({
+  chartType,
+  tooltipEl,
+  positionX,
+  positionY,
+}: SetTooltipStyles) => {
+  const POINT_RADIUS =
+    chartType === ChartType.SubscaleLineChart ? POINT_RADIUS_SECONDARY : POINT_RADIUS_DEFAULT;
+  const VERTICAL_OFFSET = POINT_RADIUS - 0.6;
+  tooltipEl.style.display = 'block';
+  tooltipEl.style.top = `${positionY + VERTICAL_OFFSET}px`;
+  tooltipEl.style.left = `${positionX}px`;
+};
+
+export const scatterChartTooltipHandler = ({
+  context,
+  tooltipRef,
+  isHovered,
+  chartRef,
+  setTooltipData,
+  chartType,
+}: ScatterChartTooltipHandler) => {
+  if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
+  const tooltipEl = tooltipRef.current;
+
+  if (!tooltipEl) return;
+
+  const { tooltip } = context;
+  const { dataPoints } = tooltip;
+
+  if (!tooltip.opacity && !isHovered.current) {
+    tooltipEl.style.display = 'none';
+
+    return;
+  }
+
+  const chart = chartRef.current;
+
+  if (chart) {
+    setTooltipData(chartType === ChartType.ScatterChart ? dataPoints[0] : dataPoints);
+    const {
+      element: { x: positionX, y: positionY },
+    } = dataPoints[0];
+    setTooltipStyles({ chartType, tooltipEl, positionX, positionY });
+  }
 };

@@ -5,10 +5,6 @@ import { theme, variables } from 'shared/styles';
 export const StyledTooltip = styled(Box)`
   max-width: 20rem;
   min-width: 18rem;
-  position: absolute;
-  display: none;
-  transform: translate(-50%, 0);
-  z-index: ${theme.zIndex.fab};
   background-color: ${variables.palette.surface2};
   border-radius: ${variables.borderRadius.lg};
   box-shadow: ${variables.boxShadow.light2};

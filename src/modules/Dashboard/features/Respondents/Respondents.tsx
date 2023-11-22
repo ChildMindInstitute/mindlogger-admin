@@ -151,6 +151,18 @@ export const Respondents = () => {
     updateRespondentsPin({ ownerId, userId });
   };
 
+  const editRespondentOnClose = (shouldRefetch: boolean) => {
+    setEditRespondentPopupVisible(false);
+    setChosenAppletData(null);
+    shouldRefetch && handleReload();
+  };
+
+  const removeRespondentAccessOnClose = (shouldRefetch?: boolean) => {
+    setRemoveAccessPopupVisible(false);
+    setChosenAppletData(null);
+    shouldRefetch && handleReload();
+  };
+
   const formatRow = (user: Respondent): Row => {
     const { secretIds, nicknames, lastSeen, id, details, isPinned, isAnonymousRespondent } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
@@ -158,8 +170,8 @@ export const Respondents = () => {
       appletId && details?.[0]?.hasIndividualSchedule
         ? t('individualSchedule')
         : t('defaultSchedule');
-    const stringNicknames = joinWihComma(nicknames);
-    const stringSecretIds = joinWihComma(secretIds);
+    const stringNicknames = joinWihComma(nicknames, true);
+    const stringSecretIds = joinWihComma(secretIds, true);
 
     return {
       pin: {
@@ -196,6 +208,7 @@ export const Respondents = () => {
             items={getActions(actions, filteredRespondents?.[id], isAnonymousRespondent, appletId)}
             context={id}
             visibleByDefault={hasVisibleActions}
+            data-testid="dashboard-respondents-table-actions"
           />
         ),
         value: '',
@@ -336,11 +349,9 @@ export const Respondents = () => {
       {removeAccessPopupVisible && (
         <RespondentsRemoveAccessPopup
           popupVisible={removeAccessPopupVisible}
-          setPopupVisible={setRemoveAccessPopupVisible}
-          tableRows={editableAppletsSmallTableRows}
+          onClose={removeRespondentAccessOnClose}
           chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-          reFetchRespondents={handleReload}
+          tableRows={editableAppletsSmallTableRows}
         />
       )}
       {dataExportPopupVisible && (
@@ -356,10 +367,8 @@ export const Respondents = () => {
       {editRespondentPopupVisible && (
         <EditRespondentPopup
           popupVisible={editRespondentPopupVisible}
-          setPopupVisible={setEditRespondentPopupVisible}
+          onClose={editRespondentOnClose}
           chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-          reFetchRespondents={handleReload}
         />
       )}
     </StyledBody>

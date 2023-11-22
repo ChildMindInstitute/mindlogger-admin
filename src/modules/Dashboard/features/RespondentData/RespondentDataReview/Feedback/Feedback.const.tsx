@@ -19,6 +19,7 @@ export const getTabs = (
   return [
     {
       labelKey: 'notes',
+      id: 'feedback-notes',
       content: <FeedbackNotes activity={selectedActivity} />,
       'data-testid': `${dataTestid}-notes`,
     },
@@ -26,6 +27,7 @@ export const getTabs = (
       ? [
           {
             labelKey: 'assessment',
+            id: 'feedback-assessment',
             content: (
               <FeedbackAssessment
                 setActiveTab={setActiveTab}
@@ -37,6 +39,7 @@ export const getTabs = (
           },
           {
             labelKey: 'reviewed',
+            id: 'feedback-reviewed',
             content: <FeedbackReviewed />,
             'data-testid': `${dataTestid}-reviewed`,
           },

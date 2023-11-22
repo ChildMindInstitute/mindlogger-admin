@@ -6,14 +6,15 @@ import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { Box } from '@mui/material';
 
 import { getOptionTextApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 
-import { legendMargin } from '../../Charts.utils';
-import { LINK_PATTERN, locales, TOOLTIP_OFFSET_LEFT, TOOLTIP_OFFSET_TOP } from '../../Charts.const';
+import { legendMargin, setTooltipStyles } from '../../Charts.utils';
+import { LINK_PATTERN, locales } from '../../Charts.const';
 import { StyledChartContainer } from '../../Chart.styles';
 import { ChartTooltip } from './ChartTooltip';
 import { getOptions, getData } from './SubscaleLineChart.utils';
@@ -22,6 +23,7 @@ import {
   SubscaleLineChartProps,
   TooltipData,
 } from './SubscaleLineChart.types';
+import { ChartType } from '../../Chart.types';
 
 ChartJS.register(Tooltip, TimeScale, Legend);
 
@@ -87,13 +89,10 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
       );
 
       setTooltipData(tooltipDataPoints);
-      const position = chart.canvas.getBoundingClientRect();
-      const left = position.left + tooltip.caretX;
-      const top = position.top + tooltip.caretY;
-
-      tooltipEl.style.display = 'block';
-      tooltipEl.style.top = `${top - TOOLTIP_OFFSET_TOP}px`;
-      tooltipEl.style.left = `${left - TOOLTIP_OFFSET_LEFT}px`;
+      const {
+        element: { x: positionX, y: positionY },
+      } = tooltipsPoint[0];
+      setTooltipStyles({ chartType: ChartType.SubscaleLineChart, tooltipEl, positionX, positionY });
     }
   };
 
@@ -110,7 +109,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
   );
 
   return (
-    <>
+    <Box sx={{ position: 'relative' }}>
       <StyledChartContainer>{renderChart}</StyledChartContainer>
       <ChartTooltip
         ref={tooltipRef}
@@ -120,6 +119,6 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
         }}
         onMouseLeave={hideTooltip}
       />
-    </>
+    </Box>
   );
 };

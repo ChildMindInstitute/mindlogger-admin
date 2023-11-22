@@ -23,14 +23,23 @@ import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import { page } from 'resources';
 import { ScoreReportType } from 'shared/consts';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { ItemFormValues } from 'modules/Builder/types';
+import { removeMarkdown } from 'modules/Builder/utils';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';
 import { SectionContent } from './SectionContent';
-import { getReportIndex, getScoreDefaults, getSectionDefaults } from './ScoresAndReports.utils';
+import {
+  getReportIndex,
+  getScoreDefaults,
+  getSectionDefaults,
+  getTableScoreItems,
+} from './ScoresAndReports.utils';
 import { ScoreContent } from './ScoreContent';
 import { Title } from './Title';
 import { StyledConfigureBtn } from './ScoresAndReports.styles';
+import { ItemTypesToPrint } from './ScoresAndReports.const';
+import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const ScoresAndReports = () => {
   const { t } = useTranslation('app');
@@ -38,6 +47,7 @@ export const ScoresAndReports = () => {
   const navigate = useNavigate();
   const { fieldName } = useCurrentActivity();
   const { control, setValue, getFieldState } = useFormContext();
+  const { activity } = useCurrentActivity();
 
   useRedirectIfNoMatchedActivity();
 
@@ -58,7 +68,19 @@ export const ScoresAndReports = () => {
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  const isCheckboxesDisabled = !reports?.length;
+  const items = activity?.items.reduce(
+    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item) => {
+      if (!ItemTypesToPrint.includes(item.responseType)) return items;
+      const { name, question } = item;
+
+      return [...items, { id: getEntityKey(item), name, question: removeMarkdown(question) }];
+    },
+    [],
+  );
+
+  const scoreItems = activity?.items.filter(checkOnItemTypeAndScore);
+  const tableItems = getTableScoreItems(scoreItems);
+
   const dataTestid = 'builder-activity-settings-scores-and-reports';
 
   const handleAddScore = () => {
@@ -86,7 +108,6 @@ export const ScoresAndReports = () => {
     if (reports?.length) return;
 
     setValue(generateReportName, false);
-    setValue(showScoreSummaryName, false);
   }, [reports]);
 
   return (
@@ -112,7 +133,7 @@ export const ScoresAndReports = () => {
         )}
       </StyledBodyLarge>
       <CheckboxController
-        disabled={isCheckboxesDisabled}
+        disabled={!reports?.length}
         control={control}
         key={generateReportName}
         name={generateReportName}
@@ -120,7 +141,6 @@ export const ScoresAndReports = () => {
         data-testid={`${dataTestid}-generate-report`}
       />
       <CheckboxController
-        disabled={isCheckboxesDisabled}
         control={control}
         key={showScoreSummaryName}
         name={showScoreSummaryName}
@@ -147,7 +167,7 @@ export const ScoresAndReports = () => {
                   const title = t(isSection ? 'sectionHeader' : 'scoreHeader', {
                     index: getReportIndex(reports, report) + 1,
                   });
-                  const key = `data-section-${getEntityKey(report) || index}`;
+                  const key = `data-section-${getEntityKey(report, false) || index}`;
                   const sectionDataTestid = `${dataTestid}-section-${index}`;
                   const headerTitle = (
                     <Title
@@ -178,8 +198,9 @@ export const ScoresAndReports = () => {
                               name: reportName,
                               title,
                               ...(isSection && { sectionId: report.id }),
-                              ...(!isSection && { index }),
+                              ...(!isSection && { index, tableItems, scoreItems }),
                               'data-testid': sectionDataTestid,
+                              items,
                             }}
                             data-testid={sectionDataTestid}
                           />

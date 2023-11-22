@@ -5,13 +5,13 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { itemsTypeIcons } from 'shared/consts';
-import { falseReturnFunc, getEntityKey, removeMarkdown } from 'shared/utils';
+import { falseReturnFunc, getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { removeMarkdown } from 'modules/Builder/utils';
 
 import { StyledCol, StyledDescription, StyledItem, StyledTitle } from './Item.styles';
 import { ItemProps } from './Item.types';
-import { getSummaryRowDependencies } from '../../ActivityItems.utils';
 import { getActions } from './Item.utils';
 
 export const Item = ({

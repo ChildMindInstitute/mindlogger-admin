@@ -1,10 +1,9 @@
 import { Manager } from 'modules/Dashboard/types';
 
 export type RemoveAccessPopupProps = {
-  removeAccessPopupVisible: boolean;
-  onClose: () => void;
+  popupVisible: boolean;
+  onClose: (step?: number) => void;
   user: Manager;
-  refetchManagers: () => void;
 };
 
 export type FormValues = {

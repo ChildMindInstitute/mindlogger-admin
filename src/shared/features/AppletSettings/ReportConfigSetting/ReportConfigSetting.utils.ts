@@ -1,5 +1,9 @@
-import { SingleApplet } from 'shared/state';
-import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+import {
+  ActivityFlowFormValues,
+  ActivityFormValues,
+  AppletFormValues,
+} from 'modules/Builder/types';
+import { getEntityKey } from 'shared/utils';
 
 import {
   VerifyReportServer,
@@ -11,23 +15,33 @@ const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
 
 export const getActivitiesOptions = (
   activityFlow?: ActivityFlowFormValues,
-  appletData?: Partial<SingleApplet>,
-) =>
-  activityFlow?.items?.map(({ activityKey }) => {
-    const activityName = appletData?.activities?.find(
-      (activity) => activityKey === activity.id,
-    )?.name;
+  appletData?: AppletFormValues,
+) => {
+  const uniqueValuesSet = new Set<string>();
+  const activities = appletData?.activities;
+  const activityFlowItems = activityFlow?.items;
+  if (!activities || !activityFlowItems) return [];
 
-    return {
-      value: activityName ?? '',
-      labelKey: activityName ?? '',
-    };
-  }) ?? [];
+  return activityFlowItems.reduce((acc: { value: string; labelKey: string }[], { activityKey }) => {
+    const activity = activities.find((activity) => activityKey === getEntityKey(activity));
+    const activityName = activity?.name;
 
-export const getActivityItemsOptions = (activity?: ActivityFormValues) =>
-  activity?.items?.map(({ name }) => ({
-    value: name,
-    labelKey: name,
+    if (activityName && !uniqueValuesSet.has(activityKey)) {
+      uniqueValuesSet.add(activityKey);
+      acc.push({
+        value: activityKey,
+        labelKey: activityName,
+      });
+    }
+
+    return acc;
+  }, []);
+};
+
+export const getActivityItemsOptions = (activity?: ActivityFormValues | null) =>
+  activity?.items?.map((item) => ({
+    value: getEntityKey(item),
+    labelKey: item.name,
   })) || [];
 
 export const verifyReportServer = async ({ url, publicKey, token }: VerifyReportServer) => {

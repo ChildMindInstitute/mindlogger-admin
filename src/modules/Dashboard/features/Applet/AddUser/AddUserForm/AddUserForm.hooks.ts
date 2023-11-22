@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 
-import { ErrorResponse } from 'shared/state';
-
+import { ApiError } from 'shared/state';
 import { getErrorData, getErrorMessage } from 'shared/utils';
 
 import { Fields } from './AddUserForm.const';
@@ -14,7 +13,7 @@ export const useFormError = <T extends FieldValues>({ error, setError }: UseForm
   useEffect(() => {
     if (!error) return setHasCommonError(false);
 
-    const errorData: ErrorResponse = getErrorData(error);
+    const errorData: ApiError = getErrorData(error);
     const fieldName = errorData?.path?.at?.(-1) as Path<T>;
 
     if (!fieldName || (fieldName && !Fields[fieldName as keyof typeof Fields]))

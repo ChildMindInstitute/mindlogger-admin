@@ -24,6 +24,8 @@ type DatePicker = {
   onMonthChange?: (date: Date) => void;
   disabled?: boolean;
   onCloseCallback?: () => void;
+  isLoading?: boolean;
+  tooltip?: string;
   'data-testid'?: string;
 } & TextFieldProps;
 

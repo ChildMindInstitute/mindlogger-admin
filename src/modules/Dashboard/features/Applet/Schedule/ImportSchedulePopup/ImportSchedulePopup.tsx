@@ -2,17 +2,26 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Error, FileUploader, Modal, SubmitBtnColor } from 'shared/components';
+import {
+  Error,
+  FileUploader,
+  Modal,
+  Spinner,
+  SpinnerUiType,
+  SubmitBtnColor,
+} from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
-import { useAsync } from 'shared/hooks/useAsync';
 import { useAppDispatch } from 'redux/store';
+import { useAsync } from 'shared/hooks';
+import { applet } from 'shared/state';
+import { Mixpanel } from 'shared/utils/mixpanel';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 import {
   deleteIndividualEventsApi,
   deleteScheduledEventsApi,
   importScheduleApi,
   Periodicity,
 } from 'modules/Dashboard/api';
-import { applet } from 'shared/state';
 import { applets } from 'modules/Dashboard/state';
 
 import { getScreens, invalidFileFormatError, uploadLabel } from './ImportSchedule.const';
@@ -35,16 +44,28 @@ export const ImportSchedulePopup = ({
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
   const getEvents = () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId }));
-  const { execute: deleteScheduledEvents, error: deleteScheduledError } =
-    useAsync(deleteScheduledEventsApi);
-  const { execute: deleteIndividualScheduledEvents, error: deleteIndividualScheduledError } =
-    useAsync(deleteIndividualEventsApi);
-  const { execute: importSchedule, error: importScheduleError } = useAsync(
-    importScheduleApi,
-    getEvents,
-  );
+  const {
+    execute: deleteScheduledEvents,
+    error: deleteScheduledError,
+    isLoading: deleteScheduledLoading,
+  } = useAsync(deleteScheduledEventsApi);
+  const {
+    execute: deleteIndividualScheduledEvents,
+    error: deleteIndividualScheduledError,
+    isLoading: deleteIndividualScheduledLoading,
+  } = useAsync(deleteIndividualEventsApi);
+  const {
+    execute: importSchedule,
+    error: importScheduleError,
+    isLoading: importIsLoading,
+  } = useAsync(importScheduleApi, getEvents);
   const apiError = importScheduleError || deleteScheduledError || deleteIndividualScheduledError;
+  const isLoading = deleteScheduledLoading || deleteIndividualScheduledLoading || importIsLoading;
   const [step, setStep] = useState<Steps>(0);
+
+  const analyticsPrefix = isIndividual
+    ? AnalyticsCalendarPrefix.IndividualCalendar
+    : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } =
     useImportSchedule({ appletName, scheduleExportData });
@@ -137,6 +158,8 @@ export const ImportSchedulePopup = ({
       }
       await importSchedule({ appletId, body });
       onClose();
+
+      Mixpanel.track(`${analyticsPrefix} Schedule import successful`);
     }
 
     setStep((prevStep) => ++prevStep as Steps);
@@ -159,14 +182,17 @@ export const ImportSchedulePopup = ({
       secondBtnText={t(screens[step].secondBtnText || '')}
       submitBtnColor={screens[step].submitBtnColor as SubmitBtnColor | undefined}
       onSecondBtnSubmit={onClose}
-      disabledSubmit={isSubmitDisabled}
+      disabledSubmit={isSubmitDisabled || isLoading}
       width="66"
       data-testid={dataTestid}
     >
-      <StyledModalWrapper>
-        {screens[step].component}
-        {apiError && <Error error={apiError} sxProps={{ m: theme.spacing(1, 0) }} />}
-      </StyledModalWrapper>
+      <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        <StyledModalWrapper>
+          {screens[step].component}
+          {apiError && <Error error={apiError} sxProps={{ m: theme.spacing(1, 0) }} />}
+        </StyledModalWrapper>
+      </>
     </Modal>
   );
 };

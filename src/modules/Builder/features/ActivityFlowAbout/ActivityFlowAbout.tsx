@@ -46,6 +46,7 @@ export const ActivityFlowAbout = () => {
             name={`activityFlows.${activityFlowIndex}.name`}
             label={t('activityFlowName')}
             maxLength={MAX_NAME_LENGTH}
+            restrictExceededValueLength
             data-testid={`${dataTestid}-name`}
           />
         </Box>
@@ -56,6 +57,7 @@ export const ActivityFlowAbout = () => {
             name={`activityFlows.${activityFlowIndex}.description`}
             label={t('activityFlowDescription')}
             maxLength={MAX_DESCRIPTION_LENGTH}
+            restrictExceededValueLength
             multiline
             rows={TEXTAREA_ROWS_COUNT_SM}
             data-testid={`${dataTestid}-description`}

@@ -5,3 +5,4 @@ export * from './useRedirectIfNoMatchedActivityFlow';
 export * from './useCurrentActivityFlow';
 export * from './useFilterConditionalLogicByItem';
 export * from './useRedirectIfNoMatchedActivityItem';
+export * from './useFieldLengthError';

@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar, AvatarUiType, Svg } from 'shared/components';
-import { StyledFlexTopCenter, StyledLabelBoldMedium, variables } from 'shared/styles';
+import { Avatar, AvatarUiType, Svg, Banner } from 'shared/components';
+import { StyledBadge, StyledFlexTopCenter } from 'shared/styles';
 import { page } from 'resources';
 import { auth } from 'modules/Auth/state';
 import { alerts } from 'shared/state';
 
 import { AccountPanel } from './AccountPanel';
 import { Breadcrumbs } from './Breadcrumbs';
-import { StyledAvatarBtn, StyledLoginButton, StyledQuantity, StyledTopBar } from './TopBar.styles';
+import { StyledAvatarBtn, StyledLoginButton, StyledTopBar } from './TopBar.styles';
 
 export const TopBar = () => {
   const navigate = useNavigate();
@@ -29,19 +29,14 @@ export const TopBar = () => {
           <Breadcrumbs />
         </StyledFlexTopCenter>
         {isAuthorized ? (
-          <StyledAvatarBtn
-            onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
-            variant="text"
-          >
-            <Avatar caption={userInitials} uiType={AvatarUiType.Secondary} />
-            {notWatched > 0 && (
-              <StyledQuantity>
-                <StyledLabelBoldMedium color={variables.palette.white}>
-                  {notWatched}
-                </StyledLabelBoldMedium>
-              </StyledQuantity>
-            )}
-          </StyledAvatarBtn>
+          <StyledBadge badgeContent={notWatched}>
+            <StyledAvatarBtn
+              onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
+              variant="text"
+            >
+              <Avatar caption={userInitials} uiType={AvatarUiType.Secondary} />
+            </StyledAvatarBtn>
+          </StyledBadge>
         ) : (
           <StyledLoginButton
             startIcon={<Svg width="18" height="18" id="profile" />}
@@ -51,6 +46,7 @@ export const TopBar = () => {
           </StyledLoginButton>
         )}
       </StyledTopBar>
+      <Banner />
       {visibleAccountDrawer && (
         <AccountPanel
           setVisibleDrawer={setVisibleAccountDrawer}

@@ -8,7 +8,7 @@ import { applet, workspaces, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
-import { getEntityKey } from 'shared/utils/builderHelpers';
+import { getEntityKey } from 'shared/utils/getEntityKey';
 import {
   checkCurrentActivityPage,
   checkCurrentActivityFlowPage,
@@ -22,7 +22,7 @@ import {
   checkCurrentAppletPage,
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
-import { useRespondentLabel } from 'modules/Dashboard/hooks/useRespondentLabel';
+import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {

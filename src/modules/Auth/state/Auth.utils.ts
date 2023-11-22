@@ -1,7 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
-import { AxiosError, AxiosResponse } from 'axios';
 
-import { BaseSchema } from 'redux/modules';
+import { ApiErrorReturn, BaseSchema } from 'shared/state/Base';
 
 import { AuthData, AuthSchema } from './Auth.schema';
 import { state as initialState } from './Auth.state';
@@ -31,14 +30,13 @@ export const createAuthFulfilledData = (
 export const createAuthRejectedData = (
   state: Draft<AuthSchema>,
   requestId: string,
-  error: AxiosError,
+  error: ApiErrorReturn,
 ) => {
   const { authentication } = state;
   if (authentication.status === 'loading' && authentication.requestId === requestId) {
-    const axiosResponse = error.response as AxiosResponse;
     authentication.requestId = initialState.authentication.requestId;
     authentication.status = 'error';
-    authentication.error = axiosResponse?.data?.result;
+    authentication.error = error;
     authentication.data ? (authentication.data = null) : null;
     state.isAuthorized = false;
   }

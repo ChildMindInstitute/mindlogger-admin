@@ -14,6 +14,7 @@ import {
   StyledAppletContainer,
   StyledAppletList,
 } from 'shared/styles';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 
@@ -58,6 +59,11 @@ export const AppletsCatalog = () => {
 
   const renderEmptyState = () => !!searchValue && <EmptyState>{t('notFound')}</EmptyState>;
 
+  const handleNavigateToLibraryCart = () => {
+    navigate(page.libraryCart);
+    Mixpanel.track('Go to Basket click');
+  };
+
   useEffect(() => {
     dispatch(
       library.thunk.getPublishedApplets({
@@ -76,7 +82,7 @@ export const AppletsCatalog = () => {
         searchValue={searchValue}
         setSearchValue={setSearchValue}
         rightButtonType={RightButtonType.Cart}
-        rightButtonCallback={() => navigate(page.libraryCart)}
+        rightButtonCallback={handleNavigateToLibraryCart}
       />
       <ContentContainer>
         <>

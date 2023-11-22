@@ -4,8 +4,8 @@ import { StyledTitleLarge, variables } from 'shared/styles';
 import { EmptySearchProps } from './EmptySearch.types';
 import { StyledEmptyItem, StyledIcon } from './EmptySearch.styles';
 
-export const EmptySearch = ({ description }: EmptySearchProps) => (
-  <StyledEmptyItem>
+export const EmptySearch = ({ description, 'data-testid': dataTestid }: EmptySearchProps) => (
+  <StyledEmptyItem data-testid={dataTestid}>
     <StyledIcon>
       <Svg width="64" height="64" id="not-found" />
     </StyledIcon>

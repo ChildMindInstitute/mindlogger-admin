@@ -1,9 +1,9 @@
-import { TFunction } from 'i18next';
-
+import i18n from 'i18n';
 import { Applet, Folder } from 'api';
 import { groupBy } from 'shared/utils';
 
-export const generateNewFolderName = (folders: Folder[], t: TFunction) => {
+export const generateNewFolderName = (folders: Folder[]) => {
+  const { t } = i18n;
   const newFolder = t('newFolder');
   const names = folders.filter(({ displayName }) => displayName);
 

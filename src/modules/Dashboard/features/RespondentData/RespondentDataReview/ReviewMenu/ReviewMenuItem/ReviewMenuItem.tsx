@@ -23,7 +23,7 @@ export const ReviewMenuItem = ({
   setSelectedActivity,
   isSelected,
   selectedAnswer,
-  setSelectedAnswer,
+  onSelectAnswer,
   'data-testid': dataTestid,
 }: ReviewMenuItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +38,7 @@ export const ReviewMenuItem = ({
     if (selectedAnswer || !answerId) return;
     const answerByRoute = activity.answerDates.find((answer) => answer.answerId === answerId);
     if (answerByRoute) {
-      setSelectedAnswer(answerByRoute);
+      onSelectAnswer(answerByRoute);
       setSelectedActivity(activity);
       setIsOpen(true);
     }
@@ -52,7 +52,7 @@ export const ReviewMenuItem = ({
 
   const handleActivityClick = () => {
     setSelectedActivity(activity);
-    setSelectedAnswer(null);
+    onSelectAnswer(null);
     setIsOpen((state) => !state);
     navigate(generatePath(page.appletRespondentDataReview, { appletId, respondentId }));
   };
@@ -62,7 +62,7 @@ export const ReviewMenuItem = ({
       setSelectedActivity(activity);
     }
 
-    setSelectedAnswer(answer);
+    onSelectAnswer(answer);
     const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
     navigate({
       pathname,

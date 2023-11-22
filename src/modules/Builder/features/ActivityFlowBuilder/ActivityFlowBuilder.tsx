@@ -28,14 +28,17 @@ export const ActivityFlowBuilder = () => {
   const [flowActivityToDeleteData, setFlowActivityToDeleteData] = useState<{
     index: number;
     name: string;
+    activityKey: string;
   } | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [indexToUpdate, setIndexToUpdate] = useState<null | number>(null);
+  const [flowActivityToUpdateIndex, setFlowActivityToUpdateIndex] = useState<number | null>(null);
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
   const { activityFlowId } = useParams();
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
+  const currentActivityFlow = activityFlows[activityFlowIndex];
+  const activityFlowName = `activityFlows.${activityFlowIndex}`;
   const {
     fields: activityFlowItems,
     remove,
@@ -45,7 +48,7 @@ export const ActivityFlowBuilder = () => {
     move,
   } = useFieldArray<Record<string, ActivityFlowItem[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
-    name: `activityFlows.${activityFlowIndex}.items`,
+    name: `${activityFlowName}.items`,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
   const activities: AppletFormValues['activities'] = watch('activities');
@@ -56,20 +59,38 @@ export const ActivityFlowBuilder = () => {
     insert(index + 1, { activityKey: activityFlowItems[index].activityKey, key: uuidv4() });
   };
 
-  const handleFlowActivityToDeleteSet = (index: number, name: string) => () =>
-    setFlowActivityToDeleteData({ index, name });
+  const handleFlowActivityToDeleteSet = (index: number, name: string, activityKey: string) => () =>
+    setFlowActivityToDeleteData({ index, name, activityKey });
+
+  const removeReportConfigItemValue = () => {
+    setValue(`${activityFlowName}.reportIncludedActivityName`, '');
+    setValue(`${activityFlowName}.reportIncludedItemName`, '');
+  };
 
   const handleFlowActivityDelete = () => {
     if (!flowActivityToDeleteData) return;
-
+    if (
+      currentActivityFlow.reportIncludedActivityName &&
+      flowActivityToDeleteData.activityKey === currentActivityFlow.reportIncludedActivityName &&
+      activityFlowItems.filter(
+        (item) => item.activityKey === currentActivityFlow.reportIncludedActivityName,
+      ).length === 1
+    ) {
+      removeReportConfigItemValue();
+    }
     remove(flowActivityToDeleteData.index);
     setFlowActivityToDeleteData(null);
+  };
+
+  const handleClearFlow = () => {
+    remove();
+    removeReportConfigItemValue();
   };
 
   const handleFlowActivityAdd = (activityKey: string) => append({ key: uuidv4(), activityKey });
 
   const handleFlowActivityToUpdateSet = (event: MouseEvent<HTMLElement>, index: number) => {
-    setIndexToUpdate(index);
+    setFlowActivityToUpdateIndex(index);
     let parentElement = event.currentTarget.parentNode as HTMLElement;
     while (parentElement && !parentElement.classList.contains(builderItemClassName)) {
       parentElement = parentElement.parentNode as HTMLElement;
@@ -78,8 +99,17 @@ export const ActivityFlowBuilder = () => {
   };
 
   const handleFlowActivityUpdate = (index: number, obj: ActivityFlowItem) => {
+    if (
+      flowActivityToUpdateIndex !== null &&
+      currentActivityFlow.reportIncludedActivityName &&
+      activityFlowItems.filter(
+        (item) => item.activityKey === currentActivityFlow.reportIncludedActivityName,
+      ).length === 1
+    ) {
+      removeReportConfigItemValue();
+    }
     update(index, obj);
-    setIndexToUpdate(null);
+    setFlowActivityToUpdateIndex(null);
   };
 
   const handleMenuClose = () => setAnchorEl(null);
@@ -100,7 +130,7 @@ export const ActivityFlowBuilder = () => {
       headerProps={{
         clearFlowBtnDisabled: activityFlowItems?.length === 0,
         onAddFlowActivity: handleFlowActivityAdd,
-        onClearFlow: remove,
+        onClearFlow: handleClearFlow,
       }}
       hasMaxWidth
     >
@@ -133,15 +163,20 @@ export const ActivityFlowBuilder = () => {
                               index,
                               replaceItem: handleFlowActivityToUpdateSet,
                               duplicateItem: handleFlowActivityDuplicate,
-                              removeItem: handleFlowActivityToDeleteSet(index, activityName || ''),
-                              replaceItemActionActive: !!anchorEl && indexToUpdate === index,
+                              removeItem: handleFlowActivityToDeleteSet(
+                                index,
+                                activityName || '',
+                                item.activityKey,
+                              ),
+                              replaceItemActionActive:
+                                !!anchorEl && flowActivityToUpdateIndex === index,
                               'data-testid': itemDataTestid,
                             })
                           }
                           uiType={ItemUiType.FlowBuilder}
                           name={activityName || ''}
                           description={activityDescription || ''}
-                          visibleByDefault={!!anchorEl && indexToUpdate === index}
+                          visibleByDefault={!!anchorEl && flowActivityToUpdateIndex === index}
                           {...item}
                           data-testid={itemDataTestid}
                         />
@@ -169,7 +204,7 @@ export const ActivityFlowBuilder = () => {
           onClose={handleMenuClose}
           menuItems={getMenuItems({
             type: GetMenuItemsType.ChangeActivity,
-            index: indexToUpdate ?? undefined,
+            index: flowActivityToUpdateIndex ?? undefined,
             onMenuClose: () => setAnchorEl(null),
             activities,
             onUpdateFlowActivity: handleFlowActivityUpdate,

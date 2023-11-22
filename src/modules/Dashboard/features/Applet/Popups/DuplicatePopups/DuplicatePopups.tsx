@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Encryption, getEncryptionToServer } from 'shared/utils';
+import { Encryption, Mixpanel, getEncryptionToServer } from 'shared/utils';
 import { Modal, Spinner } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledModalWrapper, variables } from 'shared/styles';
@@ -119,6 +119,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     onCloseCallback?.();
     setSuccessModalVisible(false);
     duplicatePopupsClose();
+    Mixpanel.track('Applet Created Successfully');
   };
 
   const errorModalClose = () => {

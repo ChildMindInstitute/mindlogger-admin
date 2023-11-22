@@ -16,15 +16,15 @@ import { StyledController } from './EditRespondentsPopup.styles';
 
 export const EditRespondentPopup = ({
   popupVisible,
-  setPopupVisible,
+  onClose,
   chosenAppletData,
-  setChosenAppletData,
-  reFetchRespondents,
 }: EditRespondentPopupProps) => {
   const { t } = useTranslation('app');
 
   const [isSuccessVisible, setIsSuccessVisible] = useState(false);
   const [isServerErrorVisible, setIsServerErrorVisible] = useState(true);
+
+  const onCloseHandler = () => onClose(isSuccessVisible);
 
   const { handleSubmit, control, setValue, getValues, trigger } = useForm<EditRespondentForm>({
     resolver: yupResolver(editRespondentFormSchema()),
@@ -42,27 +42,24 @@ export const EditRespondentPopup = ({
     },
   );
 
-  const handlePopupClose = () => {
-    setChosenAppletData(null);
-    setPopupVisible(false);
-    reFetchRespondents();
-  };
-
   const submitForm = () => {
     if (!chosenAppletData) return;
 
-    const values = getValues();
+    const { secretUserId, nickname } = getValues();
     const { appletId, ownerId, respondentId } = chosenAppletData;
 
     editRespondent({
-      values,
+      values: {
+        secretUserId: secretUserId.trim(),
+        nickname: nickname?.trim(),
+      },
       appletId,
       ownerId,
       respondentId,
     });
   };
 
-  const handleChangeSecredId = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSecretId = (event: ChangeEvent<HTMLInputElement>) => {
     setValue('secretUserId', event.target.value);
     setIsServerErrorVisible(false);
     trigger('secretUserId');
@@ -80,12 +77,12 @@ export const EditRespondentPopup = ({
   return (
     <Modal
       open={popupVisible}
-      onClose={handlePopupClose}
-      onSubmit={isSuccessVisible ? handlePopupClose : handleSubmit(submitForm)}
+      onClose={onCloseHandler}
+      onSubmit={isSuccessVisible ? onCloseHandler : handleSubmit(submitForm)}
       title={t('editRespondent')}
       buttonText={t(isSuccessVisible ? 'ok' : 'save')}
       hasSecondBtn={!isSuccessVisible}
-      onSecondBtnSubmit={handlePopupClose}
+      onSecondBtnSubmit={onCloseHandler}
       secondBtnText={t('cancel')}
       data-testid={dataTestid}
     >
@@ -110,7 +107,7 @@ export const EditRespondentPopup = ({
                   name="secretUserId"
                   control={control}
                   label={t('secretUserId')}
-                  onChange={handleChangeSecredId}
+                  onChange={handleChangeSecretId}
                   data-testid={`${dataTestid}-secret-user-id`}
                 />
               </StyledController>

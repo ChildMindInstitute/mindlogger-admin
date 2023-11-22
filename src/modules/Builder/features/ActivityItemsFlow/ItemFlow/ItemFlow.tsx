@@ -31,11 +31,9 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
   const dataTestid = `builder-activity-item-flow-${index}`;
 
   const { control, getFieldState } = useFormContext();
-  const {
-    fields: conditions,
-    append: appendCondition,
-    remove: removeCondition,
-  } = useFieldArray<Record<string, Condition[]>>({
+  const { append: appendCondition, remove: removeCondition } = useFieldArray<
+    Record<string, Condition[]>
+  >({
     control,
     name: conditionsName,
   });
@@ -90,7 +88,6 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
             onRemove={handleRemoveCondition}
             data-testid={dataTestid}
             isStatic={isStatic}
-            conditions={conditions}
           />
         )}
       </StyledCollapse>

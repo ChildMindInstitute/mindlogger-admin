@@ -18,7 +18,7 @@ export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditIt
   const currentItem = watch(itemFieldName);
   const conditionalLogicForItem = getItemConditionDependencies(
     currentItem,
-    activity.conditionalLogic,
+    activity?.conditionalLogic,
   );
 
   const handleModalSubmit = () => {

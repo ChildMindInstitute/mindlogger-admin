@@ -10,6 +10,10 @@ export const StyledTimePickerWrapper = styled(Box)`
     width: 100%;
   }
 
+  .react-datepicker-wrapper {
+    display: block;
+  }
+
   .react-datepicker-popper[data-placement^='bottom'] {
     padding-top: ${theme.spacing(0.2)};
   }

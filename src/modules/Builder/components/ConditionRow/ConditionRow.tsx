@@ -35,7 +35,6 @@ export const ConditionRow = ({
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
   const {
-    control,
     setValue,
     trigger,
     formState: { errors },
@@ -82,16 +81,24 @@ export const ConditionRow = ({
 
   const handleChangeConditionItemName = useCallback(
     (event: SelectEvent) => {
-      const itemResponseType = items?.find(
-        (item: ItemFormValues) => getEntityKey(item) === event.target.value,
-      )?.responseType;
+      const selectedItemKey = event.target.value;
+      const selectedItem = items?.find(
+        (item: ItemFormValues) => getEntityKey(item) === selectedItemKey,
+      );
+      const selectedItemIndex = items?.indexOf(selectedItem);
 
-      if (conditionItemResponseType !== itemResponseType) {
+      if (conditionItemResponseType !== selectedItem?.responseType) {
         setValue(conditionTypeName, '');
         setValue(conditionPayloadName, {});
       }
 
-      if (autoTrigger) trigger(`${name}.itemKey`);
+      if (selectedItemIndex !== undefined && selectedItemIndex !== -1) {
+        setValue(`${activityName}.items.${selectedItemIndex}.isHidden`, false);
+      }
+
+      if (autoTrigger) {
+        trigger(`${name}.itemKey`);
+      }
     },
     [items, conditionItemResponseType, name, autoTrigger],
   );
@@ -123,7 +130,6 @@ export const ConditionRow = ({
   return (
     <>
       <Condition
-        control={control}
         itemName={conditionItemName}
         stateName={conditionTypeName}
         optionValueName={conditionPayloadSelectionName}

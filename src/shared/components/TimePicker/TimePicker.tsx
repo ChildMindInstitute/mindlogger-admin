@@ -18,24 +18,26 @@ export const TimePicker = <T extends FieldValues>({
   wrapperSx = {},
   minTime,
   maxTime,
-  // TODO: check how to avoid using providedValue and use value from control (the issue is in the NotificationsTab of
-  //  EventForm)
-  providedValue,
+  onCustomChange,
   'data-testid': dataTestid,
 }: TimePickerProps<T>) => (
   <Controller
     control={control}
     name={name}
     render={({ field: { onChange, value }, fieldState: { error } }) => {
-      const valueToPass = providedValue || value;
-      const selected = valueToPass ? parse(valueToPass, DateFormats.Time, new Date()) : valueToPass;
+      const selected = value ? parse(value, DateFormats.Time, new Date()) : value;
+      const handleChange = (date: Date) => {
+        const newTime = dateFnsFormat(date, DateFormats.Time);
+        onCustomChange?.(newTime);
+        onChange(newTime);
+      };
 
       return (
         <StyledTimePickerWrapper sx={{ ...wrapperSx }} data-testid={dataTestid}>
           <ReactDatePicker
             className="date-picker"
             selected={selected as Date | null | undefined}
-            onChange={(date: Date) => onChange(dateFnsFormat(date, DateFormats.Time))}
+            onChange={handleChange}
             showTimeSelect
             showTimeSelectOnly
             timeIntervals={timeIntervals}

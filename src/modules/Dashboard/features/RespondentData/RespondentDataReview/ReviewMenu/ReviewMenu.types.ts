@@ -8,5 +8,5 @@ export type ReviewMenuProps = {
   selectedActivity: ReviewActivity | null;
   selectedAnswer: Answer | null;
   setSelectedActivity: Dispatch<SetStateAction<ReviewActivity | null>>;
-  setSelectedAnswer: Dispatch<SetStateAction<Answer | null>>;
+  onSelectAnswer: (answer: Answer | null) => void;
 };
