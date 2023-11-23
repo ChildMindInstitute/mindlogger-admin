@@ -13,7 +13,7 @@ import {
 import { FileSizeExceededPopup } from 'shared/components/MarkDownEditor/FileSizeExceededPopup';
 import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
-import { MediaType, UploadFileError } from 'shared/consts';
+import { MediaType, UploadFileError, CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
 import { concatIf } from 'shared/utils/concatIf';
 import { getSanitizedContent } from 'shared/utils/forms';
@@ -21,7 +21,6 @@ import { getSanitizedContent } from 'shared/utils/forms';
 import { StyledMdEditor } from './EditorController.styles';
 import { EditorControllerProps, EditorUiType } from './EditorController.types';
 import { getCustomIcons, getDefToolbars, getToolbars } from './EditorController.utils';
-import { EDITOR_CONTROLLER_DEBOUNCE_VALUE } from './EditorController.const';
 
 export const EditorController = <T extends FieldValues>({
   name,
@@ -48,9 +47,7 @@ export const EditorController = <T extends FieldValues>({
         name={name}
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
-          const handleChange = withDebounce
-            ? debounce(onChange, EDITOR_CONTROLLER_DEBOUNCE_VALUE)
-            : onChange;
+          const handleChange = withDebounce ? debounce(onChange, CHANGE_DEBOUNCE_VALUE) : onChange;
 
           return (
             <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>

@@ -8,6 +8,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { ArrowPressType } from '../InputController.types';
 import { InputProps } from './Input.types';
@@ -19,7 +20,6 @@ import {
   StyledUpDown,
 } from './Input.styles';
 import { getTextAdornment } from './Input.utils';
-import { INPUT_DEBOUNCE_VALUE } from './Input.const';
 
 export const Input = <T extends FieldValues>({
   onChange,
@@ -90,7 +90,7 @@ export const Input = <T extends FieldValues>({
   };
   const handleDebouncedChange = debounce(
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(event),
-    INPUT_DEBOUNCE_VALUE,
+    CHANGE_DEBOUNCE_VALUE,
   );
 
   useEffect(() => {

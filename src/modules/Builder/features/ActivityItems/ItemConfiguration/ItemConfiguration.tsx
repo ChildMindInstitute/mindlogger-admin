@@ -16,10 +16,13 @@ import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
-import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { ItemConfigurationProps, ItemsOptionGroup } from './ItemConfiguration.types';
+import {
+  ItemConfigurationProps,
+  ItemsOptionGroup,
+  UseWatchItemConfiguration,
+} from './ItemConfiguration.types';
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
@@ -38,11 +41,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
 
-  const [isReviewable, responseType, currentItem]: [
-    boolean,
-    ItemResponseTypeNoPerfTasks,
-    ItemFormValues,
-  ] = useWatch({
+  const [isReviewable, responseType, currentItem]: UseWatchItemConfiguration = useWatch({
     name: [`${fieldName}.isReviewable`, `${name}.responseType`, name],
   });
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
