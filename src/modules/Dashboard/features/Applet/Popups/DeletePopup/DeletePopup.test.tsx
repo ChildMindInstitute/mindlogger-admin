@@ -25,7 +25,7 @@ const preloadedState = {
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
 const onCloseMock = jest.fn();
 
-describe('DeletePopup component tests', () => {
+describe('DeletePopup', () => {
   afterEach(() => {
     mockAxios.reset();
     jest.restoreAllMocks();
