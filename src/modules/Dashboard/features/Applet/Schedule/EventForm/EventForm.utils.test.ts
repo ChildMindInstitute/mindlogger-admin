@@ -1,8 +1,9 @@
+import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+
 import { notificationValidPeriodTest } from './EventForm.utils';
 import {
   getBetweenStartEndNextDayComparison,
   getBetweenStartEndNextDaySingleComparison,
-  getNextDayComparison,
 } from './EventForm.utils';
 
 describe('EventForm.utils', () => {
