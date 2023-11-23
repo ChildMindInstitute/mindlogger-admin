@@ -23,12 +23,16 @@ import {
 import { RoundTypeEnum } from 'modules/Builder/types';
 import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
+import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
 
 import {
   checkRawScoreRegexp,
   checkScoreRegexp,
+  getCommonSliderValidationProps,
   getRegexForIndexedField,
+  getSliderAlertValueValidation,
   getTestFunctionForSubscaleScore,
+  isNumberAtLeastOne,
   testFunctionForNotExistedItems,
   testFunctionForNotSupportedItems,
   testFunctionForSkippedItems,
@@ -46,10 +50,13 @@ import {
 
 const { t } = i18n;
 
+export const ResponseValuesSliderSchema = () => getCommonSliderValidationProps('slider');
+
 export const ResponseValuesSliderRowsSchema = () =>
   yup.array().of(
     yup.object({
       label: yup.string().required(getIsRequiredValidateMessage('sliderLabel')),
+      ...getCommonSliderValidationProps('sliderRows'),
     }),
   );
 
@@ -85,7 +92,7 @@ export const ResponseValuesOptionsSchema = () =>
   );
 
 export const ResponseValuesAudio = () => ({
-  maxDuration: yup.number(),
+  maxDuration: yup.mixed().test('is-number', t('positiveIntegerRequired'), isNumberAtLeastOne),
 });
 
 export const ResponseValuesAudioPlayer = () => ({
@@ -93,13 +100,34 @@ export const ResponseValuesAudioPlayer = () => ({
 });
 
 export const ResponseValuesNumberSelectionSchema = () => ({
+  maxValue: yup
+    .mixed()
+    .test('is-number', t('positiveIntegerRequired'), isNumberAtLeastOne)
+    .test('min-max-interval', '', function (value) {
+      if (!value && value !== 0) return;
+      const { minValue } = this.parent;
+
+      return value > minValue;
+    }),
   minValue: yup
-    .number()
-    .when('maxValue', ([maxValue], schema) =>
-      schema.lessThan(
-        maxValue,
-        t('validationMessages.lessThan', { less: t('minValue'), than: t('maxValue') }),
-      ),
+    .mixed()
+    .test(
+      'is-number-at-least-zero',
+      t('positiveIntegerOrZeroRequired'),
+      (value) => typeof value === 'number' && value >= DEFAULT_NUMBER_SELECT_MIN_VALUE,
+    )
+    .test(
+      'min-max-interval',
+      t('validationMessages.lessThan', {
+        less: t('minValue'),
+        than: t('maxValue'),
+      }),
+      function (value) {
+        if (!value && value !== 0) return;
+        const { maxValue } = this.parent;
+
+        return value < maxValue;
+      },
     ),
 });
 
@@ -258,6 +286,9 @@ export const ItemSchema = () =>
 
         if (responseType === ItemResponseType.Audio) return schema.shape(ResponseValuesAudio());
 
+        if (responseType === ItemResponseType.Slider)
+          return schema.shape(ResponseValuesSliderSchema());
+
         if (responseType === ItemResponseType.SliderRows)
           return schema.shape({ rows: ResponseValuesSliderRowsSchema() });
 
@@ -280,7 +311,7 @@ export const ItemSchema = () =>
           if (responseType === ItemResponseType.Slider) {
             return schema.of(
               yup.object({
-                value: yup.number().required(''),
+                value: getSliderAlertValueValidation(false),
                 alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
               }),
             );
@@ -302,8 +333,8 @@ export const ItemSchema = () =>
           if (responseType === ItemResponseType.SliderRows) {
             return schema.of(
               yup.object({
-                value: yup.string().required(''),
-                sliderId: yup.string().required(''),
+                value: yup.string().required(t('fillInAllRequired')),
+                sliderId: yup.string().required(t('fillInAllRequired')),
                 alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
               }),
             );
@@ -318,24 +349,35 @@ export const ItemSchema = () =>
           then: (schema) =>
             schema.of(
               yup.object({
-                minValue: yup.number().required(''),
-                maxValue: yup.number().required(''),
+                minValue: getSliderAlertValueValidation(true),
+                maxValue: getSliderAlertValueValidation(true),
                 alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
               }),
             ),
           otherwise: (schema) => schema,
         }),
-      config: yup.object({
-        correctAnswerRequired: yup.boolean().nullable(),
-        correctAnswer: yup
-          .string()
-          .nullable()
-          .when('correctAnswerRequired', ([correctAnswerRequired], schema) =>
-            correctAnswerRequired
-              ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-              : schema,
-          ),
-      }),
+      config: yup
+        .object({
+          correctAnswerRequired: yup.boolean().nullable(),
+          correctAnswer: yup
+            .string()
+            .nullable()
+            .when('correctAnswerRequired', ([correctAnswerRequired], schema) =>
+              correctAnswerRequired
+                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
+                : schema,
+            ),
+        })
+        .when('responseType', {
+          is: (responseType: ItemResponseType) => responseType === ItemResponseType.Text,
+          then: (schema) =>
+            schema.shape({
+              maxResponseLength: yup
+                .mixed()
+                .test('is-positive-integer', t('positiveIntegerRequired'), isNumberAtLeastOne),
+            }),
+          otherwise: (schema) => schema,
+        }),
     })
     .required();
 

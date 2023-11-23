@@ -31,9 +31,9 @@ export const signIn = createAsyncThunk(
 
       return data;
     } catch (exception) {
-      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+      const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
 
-      return rejectWithValue(errorResult);
+      return rejectWithValue(errorMessage);
     }
   },
 );

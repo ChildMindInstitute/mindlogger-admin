@@ -1,6 +1,6 @@
+import { User } from 'redux/modules';
 import { Roles } from 'shared/consts';
 import { BaseSchema, Workspace } from 'shared/state';
-import { User } from 'modules/Auth';
 
 export const getIsAddAppletBtnVisible = (
   currentWorkspace: Workspace | null,

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import { useAppDispatch } from 'redux/store';
-import { auth } from 'modules/Auth';
+import { auth } from 'modules/Auth/state';
 import { alerts } from 'shared/state';
 
 import { getAlertFormValue, getWebsocketProtocol } from './alertsWebsocket.utils';

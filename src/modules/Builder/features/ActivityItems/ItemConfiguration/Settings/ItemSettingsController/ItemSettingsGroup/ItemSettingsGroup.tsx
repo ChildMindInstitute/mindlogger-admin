@@ -15,6 +15,7 @@ import {
   SingleAndMultipleSelectRow,
   SliderRowsItemResponseValues,
 } from 'shared/state';
+import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 
 import {
   StyledFormControl,
@@ -36,11 +37,7 @@ import {
   DEFAULT_SCORE_VALUE,
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
-import {
-  checkIfItemHasRequiredOptions,
-  getDefaultSliderScores,
-  getEmptyAlert,
-} from '../../../ItemConfiguration.utils';
+import { checkIfItemHasRequiredOptions, getEmptyAlert } from '../../../ItemConfiguration.utils';
 
 export const ItemSettingsGroup = ({
   name,
@@ -66,6 +63,7 @@ export const ItemSettingsGroup = ({
       timeout={0}
       collapsedSize="4.8rem"
       sx={{ flexShrink: 0 }}
+      data-testid={`builder-activity-items-item-settings-group-container-${groupName}`}
     >
       <StyledFormControl>
         <StyledItemSettingsGroupHeader sx={{ justifyContent: 'space-between' }}>
@@ -234,7 +232,7 @@ export const ItemSettingsGroup = ({
                     hasAlerts
                       ? [
                           getEmptyAlert({
-                            responseType: inputType as ItemResponseType,
+                            responseType: inputType,
                             responseValues: getValues(`${itemName}.responseValues`),
                             config,
                           }),
