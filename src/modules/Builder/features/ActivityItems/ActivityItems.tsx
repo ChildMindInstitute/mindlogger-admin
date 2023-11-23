@@ -62,7 +62,7 @@ export const ActivityItems = () => {
   };
 
   const handleAddItem = () => {
-    const item = getNewActivityItem() as ItemFormValues;
+    const item = getNewActivityItem();
     const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
 
     const indexListToTrigger = getIndexListToTrigger(items, item.name);
@@ -76,7 +76,7 @@ export const ActivityItems = () => {
   };
 
   const handleInsertItem = (index: number, item?: ItemFormValues) => {
-    const itemToInsert = (item ?? getNewActivityItem()) as ItemFormValues;
+    const itemToInsert = item ?? getNewActivityItem();
     const shouldBecomeActive = !item || (item && getEntityKey(activeItem ?? {}));
 
     const indexListToTrigger = getIndexListToTrigger(items, itemToInsert.name);
