@@ -15,4 +15,5 @@ export type BuilderContainerProps = {
   sxProps?: SxProps;
   contentSxProps?: SxProps;
   hasMaxWidth?: boolean;
+  contentClassName?: string;
 };

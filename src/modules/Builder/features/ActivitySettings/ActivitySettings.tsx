@@ -2,7 +2,7 @@ import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
 import { page } from 'resources';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { NavigationItem, NavigationMenu } from 'shared/components';
 
 import { getActivitySettings } from './ActivitySettings.utils';
@@ -19,7 +19,7 @@ export const ActivitySettings = () => {
     hasActivityReportsErrors: !!getFieldState(`${fieldName}.scoresAndReports`).error,
   };
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const handleSetActiveSetting = (setting: NavigationItem) => {
     navigate(

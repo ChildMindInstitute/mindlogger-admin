@@ -26,7 +26,7 @@ export function getObserverOf(element: Element): IntersectionObserver {
 const Observed = ({ callback = () => {} }: { callback?: () => void }) => {
   useIntersectionObserver({
     targetSelector: '.observed',
-    loadNextPage: callback,
+    onAppear: callback,
   });
 
   return (
