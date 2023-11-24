@@ -7,6 +7,7 @@ import { getEntityKey } from 'shared/utils';
 import { ConditionRow } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
@@ -24,6 +25,7 @@ export const ConditionContent = ({
   const conditionsName = `${name}.conditions`;
 
   const { control, getFieldState } = useFormContext();
+  const { fieldName } = useCurrentActivity();
   const {
     fields: conditions,
     append: appendCondition,
@@ -48,6 +50,7 @@ export const ConditionContent = ({
         <ConditionRow
           key={`score-condition-${getEntityKey(condition) || index}-${index}`}
           name={name}
+          activityName={fieldName}
           index={index}
           type={type}
           scoreKey={type === ConditionRowType.Score ? score?.key : ''}

@@ -95,7 +95,7 @@ export const SelectionOption = ({
     const settings = getValues(`${name}.config`);
 
     if (get(settings, ItemConfigurationSettings.HasColorPalette)) {
-      setValue(`${name}.responseValues.paletteName`, undefined);
+      setValue(`${name}.responseValues.paletteName`, '');
     }
   };
 
@@ -239,6 +239,7 @@ export const SelectionOption = ({
               </StyledFlexTopCenter>
               <StyledTextInputWrapper hasScores={!!scoreString}>
                 <InputController
+                  withDebounce
                   {...commonInputProps}
                   name={optionTextName}
                   label={t('optionText')}
@@ -270,6 +271,7 @@ export const SelectionOption = ({
             {hasTooltipsChecked && (
               <StyledTooltipWrapper>
                 <InputController
+                  withDebounce
                   {...commonInputProps}
                   label={t('tooltip')}
                   name={`${optionName}.tooltip`}

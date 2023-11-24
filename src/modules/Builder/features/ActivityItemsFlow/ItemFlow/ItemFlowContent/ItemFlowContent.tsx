@@ -1,35 +1,56 @@
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Condition } from 'shared/state';
-import { StyledFlexColumn, StyledBodyLarge, theme, variables } from 'shared/styles';
+import { StyledBodyLarge, theme, variables } from 'shared/styles';
 import { ConditionRow } from 'modules/Builder/components';
+import { useCurrentActivity } from 'modules/Builder/hooks';
+import { createArray } from 'shared/utils';
 
+import { StaticConditionRow } from './StaticConditionRow';
 import { ItemFlowContentProps } from './ItemFlowContent.types';
+import { StyledItemFlowContent } from './ItemFlowContent.styles';
 import { SummaryRow } from '../SummaryRow';
 
 export const ItemFlowContent = ({
   name,
+  isStatic,
   onRemove,
   'data-testid': dataTestid,
 }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
-  const { watch, getFieldState } = useFormContext();
+  const { getFieldState } = useFormContext();
+  const { fieldName } = useCurrentActivity();
 
-  const conditionsName = `${name}.conditions`;
-  const conditions = watch(conditionsName);
-  const itemKey = watch(`${name}.itemKey`);
+  const [conditions, itemKey] = useWatch({
+    name: [`${name}.conditions`, `${name}.itemKey`],
+  });
+
+  if (isStatic) {
+    const staticConditions = createArray(conditions?.length, (index) => index);
+
+    return (
+      <StyledItemFlowContent>
+        {staticConditions.map((_, index) => (
+          <StaticConditionRow key={`static-condition-row-${index}`} />
+        ))}
+        <StaticConditionRow isSummary />
+      </StyledItemFlowContent>
+    );
+  }
+
   const { error } = getFieldState(name);
   const { error: conditionalError } = getFieldState(`${name}.itemKey`);
 
   const errorMessage = conditionalError?.message ?? t('fillInAllRequired');
 
   return (
-    <StyledFlexColumn sx={{ gap: '1.2rem' }}>
+    <StyledItemFlowContent>
       {conditions?.map((condition: Condition, index: number) => (
         <ConditionRow
           key={`item-flow-condition-${condition.key}`}
           name={name}
+          activityName={fieldName}
           index={index}
           onRemove={() => onRemove(index)}
           autoTrigger={!!itemKey}
@@ -37,12 +58,17 @@ export const ItemFlowContent = ({
           showError={false}
         />
       ))}
-      <SummaryRow key={itemKey} name={name} data-testid={`${dataTestid}-summary`} />
+      <SummaryRow
+        key={`item-flow-condition-${itemKey}`}
+        name={name}
+        activityName={fieldName}
+        data-testid={`${dataTestid}-summary`}
+      />
       {error && (
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}>
           {errorMessage}
         </StyledBodyLarge>
       )}
-    </StyledFlexColumn>
+    </StyledItemFlowContent>
   );
 };

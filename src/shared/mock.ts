@@ -411,13 +411,13 @@ export const mockedSingleSelectFormValues = {
       {
         id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
         text: 's1',
-        score: 0,
+        score: 1,
         value: 0,
       },
       {
         id: 'e3ca9405-71e9-4627-8311-d405f383246e',
         text: 's23333333',
-        score: 0,
+        score: 2,
         value: 1,
       },
     ],
@@ -478,10 +478,12 @@ export const mockedSliderFormValues = {
     maxLabel: 'max',
     minValue: 1,
     maxValue: 4,
+    scores: [1, 2, 3, 4],
   },
   order: 3,
   question: '',
-  condig: {
+  config: {
+    addScores: true,
     showTickMarks: false,
     showTickLabels: false,
     continuousSlider: false,
@@ -622,7 +624,7 @@ export const mockedScoreReport = {
   key: '5bad6e4a-7035-4ddd-9c54-375604025a',
   calculationType: CalculationType.Sum,
   itemsScore: ['Item1', 'Item3'],
-  showMessage: false,
+  showMessage: true,
   message: 'message [[sumScore_firstscore]]',
   printItems: true,
   itemsPrint: ['Item1', 'Item3'],
@@ -656,6 +658,41 @@ export const mockedScoreReport = {
   ],
 };
 
+export const mockedSectionReport = {
+  type: ScoreReportType.Section,
+  name: 'firstSection',
+  showMessage: true,
+  message: 'section message',
+  printItems: true,
+  itemsPrint: ['Item1', 'Item3'],
+  conditionalLogic: {
+    match: 'any',
+    conditions: [
+      {
+        itemName: 'Item1',
+        type: 'GREATER_THAN',
+        payload: {
+          value: 1,
+        },
+      },
+      {
+        itemName: 'sumScore_firstscore_cnsdsd',
+        type: 'EQUAL_TO_SCORE',
+        payload: {
+          value: false,
+        },
+      },
+      {
+        itemName: 'averageScore_secondscore',
+        type: 'EQUAL',
+        payload: {
+          value: 1,
+        },
+      },
+    ],
+  },
+};
+
 export const mockedAppletFormData = {
   displayName: 'dataviz',
   description: '',
@@ -682,7 +719,7 @@ export const mockedAppletFormData = {
       scoresAndReports: {
         generateReport: false,
         showScoreSummary: false,
-        reports: [mockedScoreReport],
+        reports: [mockedScoreReport, mockedSectionReport],
       },
       conditionalLogic: [
         {

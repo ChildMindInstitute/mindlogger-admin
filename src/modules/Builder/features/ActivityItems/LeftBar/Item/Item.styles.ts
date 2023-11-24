@@ -18,10 +18,10 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
     isDragging,
     isSystem,
   }: {
-    isActive: boolean;
-    hasError: boolean;
-    isDragging: boolean;
-    isSystem: boolean;
+    isActive?: boolean;
+    hasError?: boolean;
+    isDragging?: boolean;
+    isSystem?: boolean;
   }) => `
       cursor: pointer;
       padding: ${theme.spacing(1.2, 1.2, 1.2, 2.2)};

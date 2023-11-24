@@ -81,6 +81,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 control={control}
                 placeholder={t('option')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
+                isErrorVisible={false}
                 data-testid={`${dataTestid}-selection-option`}
               />,
             ]}
@@ -97,6 +98,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 control={control}
                 placeholder={t('option')}
                 options={getOptionsList(getValues(name) as ItemFormValues, alert)}
+                isErrorVisible={false}
                 data-testid={`${dataTestid}-selection-per-row-option`}
               />,
               <StyledSelectController
@@ -104,6 +106,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
                 control={control}
                 placeholder={t('row')}
                 options={getItemsList(getValues(name) as ItemFormValues, alert)}
+                isErrorVisible={false}
                 data-testid={`${dataTestid}-selection-per-row-row`}
               />,
             ]}
@@ -188,6 +191,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
       <StyledDescription>{renderAlertContent()}</StyledDescription>
       <InputController
         fullWidth
+        withDebounce
         name={alertTextName}
         control={control}
         label={t('alertMessage')}
