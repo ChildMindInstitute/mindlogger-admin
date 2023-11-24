@@ -123,3 +123,10 @@ export type GetNotificationsValidationProps = {
   showValidPeriodMessage: boolean;
   isSingleTime: boolean;
 };
+
+export type GetReminderTimeComparison = {
+  time: string;
+  startTime: string;
+  endTime: string;
+  isCrossDay: boolean;
+};
