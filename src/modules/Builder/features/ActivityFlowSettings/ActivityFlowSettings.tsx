@@ -2,7 +2,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { NavigationItem, NavigationMenu } from 'shared/components';
 import { page } from 'resources';
-import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
 
 import { getSettings } from './ActivityFlowSettings.utils';
 import { useActivityFlow } from './ActivityFlowSettings.hooks';
@@ -12,7 +12,7 @@ export const ActivityFlowSettings = () => {
   const { appletId, activityFlowId } = useParams();
   const activityFlow = useActivityFlow();
 
-  useActivityFlowsRedirection();
+  useRedirectIfNoMatchedActivityFlow();
 
   const handleItemClose = () => {
     navigate(

@@ -12,6 +12,7 @@ export type EditorProps = {
   uiType?: EditorUiType;
   editorId?: string;
   disabled?: boolean;
+  withDebounce?: boolean;
   'data-testid'?: string;
 };
 

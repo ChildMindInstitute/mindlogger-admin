@@ -191,6 +191,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
       <StyledDescription>{renderAlertContent()}</StyledDescription>
       <InputController
         fullWidth
+        withDebounce
         name={alertTextName}
         control={control}
         label={t('alertMessage')}

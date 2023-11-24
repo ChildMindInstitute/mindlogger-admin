@@ -51,6 +51,7 @@ export const Options = ({ name }: { name: string }) => {
                 data-testid={`${dataTestId}-image`}
               />
               <InputController
+                withDebounce
                 control={control}
                 name={`${optionName}.text`}
                 label={t('selectionRowsOptionLabel', { index: index + 1 })}
@@ -64,6 +65,7 @@ export const Options = ({ name }: { name: string }) => {
             {hasTooltips && (
               <StyledFlexTopCenter>
                 <InputController
+                  withDebounce
                   control={control}
                   name={`${optionName}.tooltip`}
                   label={t('tooltip')}

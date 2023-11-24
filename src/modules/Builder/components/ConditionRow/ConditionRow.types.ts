@@ -4,6 +4,7 @@ import { ConditionItemType } from './Condition';
 
 export type ConditionRowProps = {
   name: string;
+  activityName?: string;
   index: number;
   onRemove: () => void;
   type?: ConditionRowType;

@@ -1,10 +1,10 @@
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
-import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues } from 'modules/Builder/types';
 import {
   StyledSummaryRow,
@@ -12,26 +12,25 @@ import {
 } from 'shared/styles/styledComponents/ConditionalSummary';
 
 import { SummaryRowProps } from './SummaryRow.types';
-import { getMatchOptions, getItemsOptions } from './SummaryRow.utils';
+import { getItemsOptions, getMatchOptions } from './SummaryRow.utils';
 
-export const SummaryRow = ({ name, 'data-testid': dataTestid }: SummaryRowProps) => {
+export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
-  const { control, watch, setValue, trigger } = useFormContext();
+  const { control, setValue } = useFormContext();
 
-  const { fieldName } = useCurrentActivity();
-  const items = watch(`${fieldName}.items`);
+  const items = useWatch({ name: `${activityName}.items` });
 
-  const handleChangeItemKey = (event: SelectEvent) => {
-    trigger(`${name}.itemKey`);
+  const handleChangeItemKey = useCallback(
+    (event: SelectEvent) => {
+      const itemIndex = items?.findIndex(
+        (item: ItemFormValues) => getEntityKey(item) === event.target.value,
+      );
 
-    const itemIndex = items?.findIndex(
-      (item: ItemFormValues) => getEntityKey(item) === event.target.value,
-    );
-
-    if (itemIndex !== undefined && itemIndex !== -1) {
-      setValue(`${fieldName}.items.${itemIndex}.isHidden`, false);
-    }
-  };
+      if (itemIndex !== undefined && itemIndex !== -1 && items[itemIndex]?.isHidden)
+        setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
+    },
+    [items],
+  );
 
   return (
     <>
