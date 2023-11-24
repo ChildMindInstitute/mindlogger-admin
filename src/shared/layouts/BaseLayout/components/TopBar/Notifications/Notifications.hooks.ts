@@ -29,6 +29,6 @@ export const useInfinityData = () => {
   useIntersectionObserver({
     rootSelector: `.${ALERT_LIST_CLASS}`,
     targetSelector: `.${ALERT_END_ITEM_CLASS}`,
-    loadNextPage,
+    onAppear: loadNextPage,
   });
 };

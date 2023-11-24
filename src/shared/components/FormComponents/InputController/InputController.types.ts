@@ -25,6 +25,7 @@ export type FormInputProps = {
   onArrowPress?: (value: number, type: ArrowPressType) => void;
   Counter?: FC<PropsWithChildren<CounterProps>>;
   counterProps?: Record<string, unknown>;
+  withDebounce?: boolean;
   hintText?: string;
   'data-testid'?: string;
 } & TextFieldProps;

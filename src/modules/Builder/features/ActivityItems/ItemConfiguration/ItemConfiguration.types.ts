@@ -65,3 +65,5 @@ export type ItemConfigurationProps = {
 };
 
 export type GetEmptyAlert = Partial<ItemFormValues>;
+
+export type UseWatchItemConfiguration = [boolean, ItemResponseTypeNoPerfTasks, ItemFormValues];

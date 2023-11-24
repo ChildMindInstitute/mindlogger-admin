@@ -80,7 +80,7 @@ export const ClearScheduledEventsPopup = ({
     >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
-        <StyledModalWrapper>
+        <StyledModalWrapper data-testid={`${dataTestid}-text`}>
           {screens[step].component}
           {(deleteScheduledError || deleteIndividualScheduledError) && (
             <StyledBodyLarge

@@ -94,6 +94,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
               data-testid={`${dataTestid}-image`}
             />
             <InputController
+              withDebounce
               control={control}
               name={`${rowName}.rowName`}
               label={t('selectionRowsItemLabel', { index: index + 1 })}
@@ -107,6 +108,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
           {hasTooltips && (
             <StyledFlexTopCenter>
               <InputController
+                withDebounce
                 control={control}
                 name={`${rowName}.tooltip`}
                 label={t('tooltip')}

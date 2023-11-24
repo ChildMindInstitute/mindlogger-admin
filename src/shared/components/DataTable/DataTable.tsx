@@ -93,6 +93,7 @@ export const DataTable = ({
                     <StyledCheckbox
                       checked={isSelected}
                       onChange={() => handleSelect(item, isSelected)}
+                      data-testid={`${dataTestid}-checkbox-${index}`}
                     />
                   </TableCell>
                 )}

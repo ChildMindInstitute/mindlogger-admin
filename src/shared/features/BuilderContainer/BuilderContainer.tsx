@@ -17,6 +17,7 @@ export const BuilderContainer = ({
   sxProps,
   contentSxProps,
   hasMaxWidth,
+  contentClassName,
 }: BuilderContainerProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
@@ -28,7 +29,10 @@ export const BuilderContainer = ({
       <HeaderComponent isSticky={isHeaderSticky} headerProps={headerProps}>
         <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
       </HeaderComponent>
-      <StyledFlexColumn sx={{ padding: theme.spacing(1.6, 6.4, 2.4), ...contentSxProps }}>
+      <StyledFlexColumn
+        sx={{ padding: theme.spacing(1.6, 6.4, 2.4), ...contentSxProps }}
+        className={contentClassName}
+      >
         {children}
       </StyledFlexColumn>
     </StyledBuilderWrapper>

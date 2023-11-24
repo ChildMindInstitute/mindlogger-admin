@@ -4,7 +4,7 @@ import { createRef } from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
-import { ItemResponseType } from 'shared/consts';
+import { ItemResponseType, CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 import { createArray } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
@@ -720,6 +720,8 @@ describe('ItemConfiguration', () => {
       const error = name.querySelector('.Mui-error');
 
       fireEvent.change(input, { target: { value: text } });
+
+      await new Promise((resolve) => setTimeout(resolve, CHANGE_DEBOUNCE_VALUE));
 
       await ref.current.trigger(`${mockedItemName}.name`);
 

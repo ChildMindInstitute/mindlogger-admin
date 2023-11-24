@@ -111,23 +111,23 @@ export const getScreens = ({
   isRemoved,
   submitPassword,
   removeAccess,
-  handlePopupClose,
-  reFetchRespondents,
+  onClose,
 }: ScreensParams): Screen[] => {
-  const handleClose = () => {
-    reFetchRespondents();
-    handlePopupClose();
-  };
+  const onCloseHandler = () => onClose(true);
 
-  const getResultScreen = (getSuccessScreen: GetScreen, getErrorScreen: GetScreen, title: string) =>
+  const getResultScreen = (
+    getSuccessScreen: GetScreen,
+    getErrorScreen: GetScreen,
+    title: string,
+  ) =>
     isRemoved
       ? {
           component: getSuccessScreen(respondentName, appletName),
           buttonText: 'ok',
           hasSecondBtn: false,
           title,
-          submitForm: handleClose,
-          onClose: handleClose,
+          submitForm: onCloseHandler,
+          onClose: onCloseHandler,
         }
       : {
           component: getErrorScreen(respondentName, appletName),
