@@ -1,4 +1,4 @@
-import { useEffect, useRef, ChangeEvent } from 'react';
+import { useEffect, useRef } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -90,7 +90,7 @@ export const Input = <T extends FieldValues>({
     onChange?.(getNumberValue() ?? newValue);
   };
   const handleDebouncedChange = debounce(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(event),
+    (event: SelectEvent) => handleChange(event),
     CHANGE_DEBOUNCE_VALUE,
   );
 

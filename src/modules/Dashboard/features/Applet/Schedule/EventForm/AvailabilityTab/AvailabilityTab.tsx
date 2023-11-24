@@ -110,6 +110,7 @@ export const AvailabilityTab = ({
       setValue('periodicity', Periodicity.Always);
       setValue('startTime', DEFAULT_START_TIME);
       setValue('endTime', DEFAULT_END_TIME);
+      reminder && setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE);
 
       return;
     }
