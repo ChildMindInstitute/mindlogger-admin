@@ -114,6 +114,7 @@
   "allDay": "Toute la journée",
   "allowAccessBeforeTime": "Autoriser l'accès avant l'heure “À partir de“",
   "allowToSkipAllItems": "Autoriser à ignorer tous les éléments",
+  "nextDay": "Le prochain jour",
   "alwaysAvailable": "Toujours disponible",
   "alwaysAvailableWarning": "Si vous définissez cet événement comme toujours disponible, tous les événements programmés pour cette activité seront supprimés.",
   "any": "N'importe lequel",
@@ -550,7 +551,7 @@
     "invalidActivityNames": "Les Activités <1>{{activityNames}}</1> n'existent pas dans l'Applet <1>{{appletName}}</1>. Veuillez entrer un nom d'Activité valide et réuploader le fichier.",
     "invalidDataFormat": "Format de données invalide pour les champs suivants :",
     "notificationTime": "<2>Heure de Notification</2>. Format de date valide : <2>HH:mm ou -</2>.",
-    "startEndTime": "<2>L'heure de Fin de l'Activité</2> doit être ultérieure à <2>l'heure de Début de l'Activité</2>.",
+    "startEndTime": "<2>L'heure de Fin de l'Activité</2> ne devrait pas être égal à <2>l'heure de Début de l'Activité</2>.",
     "startTime": "<2>Heure de Début de l'Activité</2>. Format de date valide : <2>HH:mm pour une activité programmée et - pour une activité toujours disponible</2>.",
     "updateReupload": "Veuillez mettre à jour et réuploader le fichier."
   },
