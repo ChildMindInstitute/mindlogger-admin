@@ -66,8 +66,26 @@ export const getTimelineStepSize = (minMs: number, maxMs: number) => {
   return 15; // step is 15m
 };
 
-export const getTicksStepSize = (maxScore: number) =>
-  maxScore > 2 ? Math.ceil(maxScore / MAX_TICKS_LENGTH) : maxScore / MIN_TICKS_LENGTH;
+const getTicksCount = (maxScore: number, minScore: number) => {
+  if (maxScore > 0 && minScore > 0) {
+    return maxScore;
+  }
+
+  if (maxScore < 0 && minScore < 0) {
+    const absMaxScore = Math.abs(maxScore);
+    const absMinScore = Math.abs(minScore);
+
+    return absMaxScore > absMinScore ? absMaxScore : absMinScore;
+  }
+
+  return maxScore - minScore;
+};
+
+export const getTicksStepSize = (maxScore: number, minScore = 0) => {
+  const ticksCount = getTicksCount(maxScore, minScore);
+
+  return ticksCount > 2 ? Math.ceil(ticksCount / MAX_TICKS_LENGTH) : ticksCount / MIN_TICKS_LENGTH;
+};
 
 export const legendMargin = {
   id: 'legendMargin',

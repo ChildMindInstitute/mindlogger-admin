@@ -30,14 +30,16 @@ export const getOptions = (
   tooltipHandler: (context: ScriptableTooltipContext<'line'>) => void,
 ) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const maxScore = Math.max(...pluck(responses.flat(), 'score'));
+  const scores = pluck(responses.flat(), 'score');
+  const maxScore = Math.max(...scores);
+  const minScore = Math.min(...scores);
+  const ticksStepSize = getTicksStepSize(maxScore, minScore);
 
   const min = minDate.getTime();
   const max = maxDate.getTime();
 
   const timeConfig = getTimeConfig(min, max);
   const timelineStepSize = getTimelineStepSize(min, max);
-  const ticksStepSize = getTicksStepSize(maxScore);
 
   return {
     maintainAspectRatio: false,
@@ -99,7 +101,8 @@ export const getOptions = (
             size: 14,
           },
         },
-        suggestedMax: maxScore + ticksStepSize,
+        suggestedMax: maxScore + 2 * ticksStepSize, // added additional offset to display versions
+        suggestedMin: minScore - ticksStepSize,
       },
       x: {
         adapters: {
@@ -168,8 +171,10 @@ export const getOptions = (
 
 export const getData = (data: SubscaleChartData, versions: Version[]) => {
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const maxScore = Math.max(...pluck(responses.flat(), 'score'));
-  const ticksStepSize = getTicksStepSize(maxScore);
+  const scores = pluck(responses.flat(), 'score');
+  const maxScore = Math.max(...scores);
+  const minScore = Math.min(...scores);
+  const ticksStepSize = getTicksStepSize(maxScore, minScore);
 
   return {
     datasets: [
@@ -201,7 +206,7 @@ export const getData = (data: SubscaleChartData, versions: Version[]) => {
         labels: versions.map(({ version }) => version),
         data: versions.map(({ createdAt }) => ({
           x: new Date(createdAt),
-          y: maxScore + ticksStepSize,
+          y: maxScore + 2 * ticksStepSize,
         })),
         datalabels: {
           anchor: 'center' as const,

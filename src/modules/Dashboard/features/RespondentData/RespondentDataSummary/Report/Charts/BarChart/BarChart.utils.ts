@@ -22,8 +22,10 @@ export const getOptions = (
   chartData: ChartData[],
   tooltipHandler: (context: ScriptableTooltipContext<'bar'>) => void,
 ) => {
-  const maxScore = Math.max(...pluck(chartData, 'score'));
-  const ticksStepSize = getTicksStepSize(maxScore);
+  const scores = pluck(chartData, 'score');
+  const maxScore = Math.max(...scores);
+  const minScore = Math.min(...scores);
+  const ticksStepSize = getTicksStepSize(maxScore, minScore);
 
   return {
     maintainAspectRatio: false,
@@ -61,6 +63,7 @@ export const getOptions = (
           },
         },
         suggestedMax: maxScore + ticksStepSize,
+        suggestedMin: minScore - ticksStepSize,
       },
       x: {
         grid: {
