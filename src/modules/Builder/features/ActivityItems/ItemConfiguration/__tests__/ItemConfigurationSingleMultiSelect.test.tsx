@@ -5,8 +5,8 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import get from 'lodash.get';
 
 import { mockedMultiSelectFormValues, mockedSingleSelectFormValues } from 'shared/mock';
-import { ItemResponseType } from 'shared/consts';
-import { createArray, renderWithAppletFormData } from 'shared/utils';
+import { CHANGE_DEBOUNCE_VALUE, ItemResponseType } from 'shared/consts';
+import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
 
 import {
   mockedItemName,
@@ -390,6 +390,8 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         .querySelector('input');
       fireEvent.change(tooltipInput, { target: { value: 'tooltip' } });
 
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+
       expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.tooltip`)).toEqual(
         'tooltip',
       );
@@ -527,6 +529,8 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
       const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
       fireEvent.change(alertInput, { target: { value: 'text' } });
+
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
       const optionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
       const optionsSelectButton = optionsSelect.querySelector('[role="button"]');

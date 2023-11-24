@@ -4,7 +4,8 @@ import { createRef } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { mockedSingleSelectFormValues, mockedAppletFormData } from 'shared/mock';
-import { renderWithAppletFormData } from 'shared/utils';
+import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import {
   renderItemConfiguration,
@@ -60,6 +61,8 @@ describe('ItemConfiguration: Item Name', () => {
     const error = name.querySelector('.Mui-error');
 
     fireEvent.change(input, { target: { value: text } });
+
+    await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
     await ref.current.trigger(`${mockedItemName}.name`);
 
