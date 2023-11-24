@@ -53,6 +53,7 @@ import {
   GetWeeklyDays,
   NotificationTimeTestContext,
   SecondsManipulation,
+  GetReminderTimeComparison,
 } from './EventForm.types';
 
 const { t } = i18n;
@@ -579,7 +580,7 @@ export const getEventPayload = (
 export const getDaysInPeriod = ({ isCrossDayEvent, startDate, endDate }: GetDaysInPeriod) => {
   const end = isCrossDayEvent ? addDays(endDate, 1) : endDate;
 
-  return startDate && endDate && endDate > startDate
+  return startDate && endDate && endDate >= startDate
     ? eachDayOfInterval({
         start: startDate,
         end,
@@ -587,21 +588,35 @@ export const getDaysInPeriod = ({ isCrossDayEvent, startDate, endDate }: GetDays
     : [];
 };
 
-export const getWeeklyDays = ({ daysInPeriod, startDate, isCrossDayEvent }: GetWeeklyDays) => {
-  const dayOfWeek = getDay(startDate);
-  let weeklyDaysCount = 0;
+export const getWeeklyDays = ({ daysInPeriod, startDate, isCrossDayEvent }: GetWeeklyDays) =>
+  daysInPeriod.reduce(
+    (
+      acc: {
+        daysArr: number[];
+        daysInfoArr: { dayNumber: number; isCrossDay: boolean }[];
+        weeklyDaysCount: number;
+      },
+      currentDate,
+    ) => {
+      const dayOfWeek = getDay(currentDate);
 
-  return daysInPeriod.reduce((acc: number[], date) => {
-    if (getDay(date) === dayOfWeek) {
-      const weeklyDayNumber = weeklyDaysCount * 7;
-      acc.push(weeklyDayNumber);
-      isCrossDayEvent && acc.push(weeklyDayNumber + 1);
-      weeklyDaysCount++;
-    }
+      if (dayOfWeek === getDay(startDate)) {
+        const weeklyDayNumber = acc.weeklyDaysCount * 7;
+        acc.daysArr.push(weeklyDayNumber, ...(isCrossDayEvent ? [weeklyDayNumber + 1] : []));
+        acc.daysInfoArr.push(
+          {
+            dayNumber: weeklyDayNumber,
+            isCrossDay: false,
+          },
+          ...(isCrossDayEvent ? [{ dayNumber: weeklyDayNumber + 1, isCrossDay: true }] : []),
+        );
+        acc.weeklyDaysCount++;
+      }
 
-    return acc;
-  }, []);
-};
+      return acc;
+    },
+    { daysArr: [], daysInfoArr: [], weeklyDaysCount: 0 },
+  );
 
 const getActivityIncompleteCommonFields = (formContext: yup.TestContext<yup.AnyObject>) => {
   const startDate = formContext.from?.[1]?.value?.startDate;
@@ -611,7 +626,7 @@ const getActivityIncompleteCommonFields = (formContext: yup.TestContext<yup.AnyO
   const periodicity = formContext.from?.[1]?.value?.periodicity;
   const isCrossDayEvent = getNextDayComparison(startTime, endTime);
 
-  return { startDate, endDate, periodicity, isCrossDayEvent };
+  return { startDate, endDate, periodicity, isCrossDayEvent, startTime, endTime };
 };
 
 export const getActivityIncompleteValidation = () =>
@@ -634,7 +649,7 @@ export const getActivityIncompleteValidation = () =>
         if (periodicity === Periodicity.Weekly) {
           const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
 
-          return weeklyDays.includes(value);
+          return weeklyDays.daysArr.includes(value);
         }
 
         return true;
@@ -671,6 +686,108 @@ export const getActivityIncompleteDateValidation = () =>
             : null;
 
           return (includedMonthlyDatesCrossDay || includedMonthlyDates).includes(testedDate);
+        }
+
+        return true;
+      },
+    );
+
+export const getReminderTimeComparison = ({
+  time,
+  startTime,
+  endTime,
+  isCrossDay,
+}: GetReminderTimeComparison) => {
+  const rangeStartTime = isCrossDay ? DEFAULT_START_TIME : startTime;
+  const rangeEndTime = isCrossDay ? endTime : DEFAULT_END_TIME;
+
+  return getBetweenStartEndNextDaySingleComparison({
+    time,
+    rangeStartTime,
+    rangeEndTime,
+  });
+};
+
+export const getReminderTimeValidation = () =>
+  yup
+    .string()
+    .test(
+      'reminder-time-validation',
+      t('activityUnavailableAtTime'),
+      function reminderTimeTest(value) {
+        if (!value) return true;
+        const time = value;
+        const { activityIncomplete, activityIncompleteDate } = this.parent;
+        const { startTime, endTime, startDate, endDate, periodicity, isCrossDayEvent } =
+          getActivityIncompleteCommonFields(this);
+        const isAlwaysPeriodicity = periodicity === Periodicity.Always;
+        const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
+
+        if (isAlwaysPeriodicity) return true;
+        if (!isCrossDayEvent || isWeekdaysPeriodicity) {
+          return getBetweenStartEndNextDaySingleComparison({
+            time,
+            rangeStartTime: startTime,
+            rangeEndTime: endTime,
+          });
+        }
+
+        const isOncePeriodicity = periodicity === Periodicity.Once;
+        const isDailyPeriodicity = periodicity === Periodicity.Daily;
+        const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
+        const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
+        const daysInPeriod = getDaysInPeriod({
+          isCrossDayEvent,
+          startDate,
+          endDate: isOncePeriodicity ? startDate : endDate,
+        });
+
+        if (isOncePeriodicity || isDailyPeriodicity) {
+          const isCrossDay = daysInPeriod.length - 1 === activityIncomplete;
+
+          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
+        }
+
+        if (isWeeklyPeriodicity) {
+          const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
+          const isCrossDay =
+            weeklyDays.daysInfoArr.find((day) => day.dayNumber === activityIncomplete)
+              ?.isCrossDay ?? false;
+
+          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
+        }
+
+        if (isMonthlyPeriodicity) {
+          const includedMonthlyDates = getDaysInMonthlyPeriodicity({
+            chosenDate: getDate(startDate),
+            eventStart: startDate,
+            eventEnd: endDate,
+            returnStringDate: true,
+          }) as string[];
+          const includedMonthlyDatesWithCrossDay = includedMonthlyDates.reduce(
+            (acc: { monthlyDate: string; isCrossDay: boolean }[], date) => {
+              acc.push(
+                {
+                  monthlyDate: date,
+                  isCrossDay: false,
+                },
+                {
+                  monthlyDate: format(addDays(new Date(date), 1), DateFormats.YearMonthDay),
+                  isCrossDay: true,
+                },
+              );
+
+              return acc;
+            },
+            [],
+          );
+
+          const isCrossDay =
+            includedMonthlyDatesWithCrossDay.find(
+              (day) => day.monthlyDate === format(activityIncompleteDate, DateFormats.YearMonthDay),
+            )?.isCrossDay ?? false;
+
+          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
         }
 
         return true;

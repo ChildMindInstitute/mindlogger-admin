@@ -1,4 +1,3 @@
-import { ChangeEvent } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +6,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
+import { SelectEvent } from 'shared/types/event';
 
 import { ArrowPressType } from '../InputController.types';
 import { InputProps } from './Input.types';
@@ -71,7 +71,7 @@ export const Input = <T extends FieldValues>({
       onChange?.(numberValue - 1);
     }
   };
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (event: SelectEvent) => {
     if (onCustomChange) return onCustomChange(event);
     const newValue = event.target.value;
     if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength) return;

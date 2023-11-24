@@ -5,11 +5,11 @@ import { NotificationType } from 'modules/Dashboard/api';
 
 import {
   getTimeComparison,
-  getNotificationTimeComparison,
   getNotificationsValidation,
   getTimerDurationCheck,
   getActivityIncompleteValidation,
   getActivityIncompleteDateValidation,
+  getReminderTimeValidation,
 } from './EventForm.utils';
 
 export const EventFormSchema = () => {
@@ -46,19 +46,11 @@ export const EventFormSchema = () => {
       startTime: getTimeComparison(selectValidPeriod),
       endTime: getTimeComparison(''),
       notifications: yup.array().of(notificationSchema),
-      reminder: yup
-        .object()
-        .nullable()
-        .shape({
-          activityIncomplete: getActivityIncompleteValidation(),
-          activityIncompleteDate: getActivityIncompleteDateValidation(),
-          reminderTime: getNotificationTimeComparison({
-            schema: yup.string().nullable(),
-            field: 'reminderTime',
-            showValidPeriodMessage: false,
-            isSingleTime: true,
-          }),
-        }),
+      reminder: yup.object().nullable().shape({
+        activityIncomplete: getActivityIncompleteValidation(),
+        activityIncompleteDate: getActivityIncompleteDateValidation(),
+        reminderTime: getReminderTimeValidation(),
+      }),
     })
     .required();
 };

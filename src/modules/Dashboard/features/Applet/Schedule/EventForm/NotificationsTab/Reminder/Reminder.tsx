@@ -10,6 +10,7 @@ import {
   getDaysInMonthlyPeriodicity,
   getNextDayComparison,
 } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import { SelectEvent } from 'shared/types';
 
 import { EventFormValues } from '../../EventForm.types';
 import { getDaysInPeriod, getWeeklyDays } from '../../EventForm.utils';
@@ -23,11 +24,15 @@ import { ReminderProps } from './Reminder.types';
 export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
   const { t } = useTranslation('app');
   const { setValue, control, trigger } = useFormContext<EventFormValues>();
+  const activityIncompleteField = 'reminder.activityIncomplete';
+  const activityIncompleteDateField = 'reminder.activityIncompleteDate';
+  const reminderTimeField = 'reminder.reminderTime';
 
   const [periodicity, startDate, endDate, startTime, endTime] = useWatch({
     control,
     name: ['periodicity', 'startDate', 'endDate', 'startTime', 'endTime'],
   });
+
   const isOncePeriodicity = periodicity === Periodicity.Once;
   const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
   const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
@@ -38,6 +43,11 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
     setValue('reminder', null, { shouldDirty: true });
   };
 
+  const triggerFields = () => {
+    trigger(activityIncompleteField);
+    trigger(reminderTimeField);
+  };
+
   const includedMonthlyDates = isMonthlyPeriodicity
     ? (getDaysInMonthlyPeriodicity({
         chosenDate: getDate(startDate as Date),
@@ -45,6 +55,7 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
         eventEnd: endDate as Date,
       }) as Date[])
     : undefined;
+
   const includedMonthlyDatesCrossDay =
     includedMonthlyDates && isCrossDayEvent
       ? includedMonthlyDates.reduce((acc: Date[], date) => [...acc, date, addDays(date, 1)], [])
@@ -61,32 +72,45 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
     });
 
   const weeklyDays =
-    daysInPeriod && getWeeklyDays({ daysInPeriod, startDate: startDate as Date, isCrossDayEvent });
+    daysInPeriod &&
+    getWeeklyDays({ daysInPeriod, startDate: startDate as Date, isCrossDayEvent }).daysArr;
+
   const handleArrowPress = (value: number, type: ArrowPressType) => {
-    if (!weeklyDays) return;
-    const isAddType = type === ArrowPressType.Add;
-    const prevValue = isAddType ? value - 1 : value + 1;
-    let currentIndex = weeklyDays.indexOf(prevValue);
+    if (isWeeklyPeriodicity && weeklyDays) {
+      const isAddType = type === ArrowPressType.Add;
+      const prevValue = isAddType ? value - 1 : value + 1;
+      let currentIndex = weeklyDays.indexOf(prevValue);
 
-    if (currentIndex === -1) {
-      const { closestBefore, closestAfter } = findClosestValues(weeklyDays, prevValue);
-      const prevIndex = weeklyDays.indexOf(isAddType ? closestAfter : closestBefore);
-      currentIndex = isAddType ? prevIndex - 1 : prevIndex + 1;
+      if (currentIndex === -1) {
+        const { closestBefore, closestAfter } = findClosestValues(weeklyDays, prevValue);
+        const prevIndex = weeklyDays.indexOf(isAddType ? closestAfter : closestBefore);
+        currentIndex = isAddType ? prevIndex - 1 : prevIndex + 1;
+      }
+
+      if (type === ArrowPressType.Add) {
+        const addResult =
+          currentIndex === weeklyDays.length - 1 ? weeklyDays[0] : weeklyDays[currentIndex + 1];
+        setValue(activityIncompleteField, addResult);
+      } else {
+        const subtractResult =
+          currentIndex === 0 ? weeklyDays[weeklyDays.length - 1] : weeklyDays[currentIndex - 1];
+        setValue(activityIncompleteField, subtractResult);
+      }
+    } else if (value >= DEFAULT_ACTIVITY_INCOMPLETE_VALUE) {
+      setValue(activityIncompleteField, value);
     }
 
-    if (type === ArrowPressType.Add) {
-      const addResult =
-        currentIndex === weeklyDays.length - 1 ? weeklyDays[0] : weeklyDays[currentIndex + 1];
-      setValue('reminder.activityIncomplete', addResult);
-    } else {
-      const subtractResult =
-        currentIndex === 0 ? weeklyDays[weeklyDays.length - 1] : weeklyDays[currentIndex - 1];
-      setValue('reminder.activityIncomplete', subtractResult);
-    }
-
-    trigger('reminder.activityIncomplete');
+    triggerFields();
   };
-  const onArrowPress = isWeeklyPeriodicity ? handleArrowPress : undefined;
+
+  const handleActivityIncompleteChange = (event: SelectEvent) => {
+    const newValue =
+      +event.target.value < DEFAULT_ACTIVITY_INCOMPLETE_VALUE
+        ? DEFAULT_ACTIVITY_INCOMPLETE_VALUE
+        : +event.target.value;
+    setValue(activityIncompleteField, newValue);
+    triggerFields();
+  };
 
   return (
     <StyledNotificationWrapper>
@@ -99,32 +123,34 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
           <StyledInputWrapper>
             {isMonthlyPeriodicity ? (
               <DatePicker
-                name="reminder.activityIncompleteDate"
+                name={activityIncompleteDateField}
                 key="activityIncompleteDate"
                 control={control}
                 label={t('activityIncomplete')}
                 includeDates={includedMonthlyDatesCrossDay || includedMonthlyDates}
                 tooltip={t('deadlineForActivityCompletion')}
+                onCloseCallback={() => trigger(reminderTimeField)}
                 data-testid={`${dataTestid}-activity-incomplete-monthly-date`}
               />
             ) : (
               <InputController
                 label={t('activityIncomplete')}
                 type="number"
-                name="reminder.activityIncomplete"
+                name={activityIncompleteField}
                 control={control}
                 textAdornment="day"
                 tooltip={t('numberOfConsecutiveDays')}
                 minNumberValue={DEFAULT_ACTIVITY_INCOMPLETE_VALUE}
                 disabled={isOncePeriodicity && !isCrossDayEvent}
-                onArrowPress={onArrowPress}
+                onChange={handleActivityIncompleteChange}
+                onArrowPress={handleArrowPress}
                 data-testid={`${dataTestid}-activity-incomplete`}
               />
             )}
           </StyledInputWrapper>
           <StyledColInner>
             <TimePicker
-              name="reminder.reminderTime"
+              name={reminderTimeField}
               label={t('reminderTime')}
               data-testid={`${dataTestid}-reminder-time`}
             />
