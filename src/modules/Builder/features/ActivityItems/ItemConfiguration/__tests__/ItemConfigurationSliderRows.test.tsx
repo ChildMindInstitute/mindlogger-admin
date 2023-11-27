@@ -71,11 +71,11 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       const minLabels = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-min-label`));
       const maxLabels = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-max-label`));
-      minLabels.forEach((label, index) => {
+      minLabels.forEach((label) => {
         expect(label).toBeVisible();
         expect(label.querySelector('label')).toHaveTextContent('Min Label');
       });
-      maxLabels.forEach((label, index) => {
+      maxLabels.forEach((label) => {
         expect(label).toBeVisible();
         expect(label.querySelector('label')).toHaveTextContent('Max Label');
       });
@@ -140,12 +140,41 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
     });
   });
 
-  test('Slider Rows: Alerts', async () => {});
+  describe('Slider/Slider Rows: sets correct data when changed');
 
-  test('Slider: Alerts', async () => {});
+  describe('Slider Rows: Alerts', () => {
+    test('Is rendered correctly', async () => {});
+    test('Add/remove works correctly', async () => {});
+    test('Sets correct data when changed', async () => {});
+    test('Options in list are filtered if already used', async () => {});
+    test('Removes alerts if the last Alert was removed', async () => {});
+    test('validations', () => {});
+  });
 
-  test('Slider: Scores', async () => {});
-  test('Slider: Use Continuous Slider + Scores', async () => {});
+  describe('Slider: Alerts', () => {
+    test('Is rendered correctly', async () => {});
+    test('Add/remove works correctly', async () => {});
+    test('Sets correct data when changed', async () => {});
+    test('Options in list are filtered if already used', async () => {});
+    test('Removes alerts if the last Alert was removed', async () => {});
+    test('validations', () => {});
+  });
+
+  describe('Slider: Is Continuous + Alerts', () => {
+    test('Sets correct data when changed', async () => {});
+  });
+  describe('Slider: Scores', () => {
+    test('Sets correct data when changed', async () => {});
+    test('Is removed from document when checkbox is unchecked', async () => {});
+    test('validation');
+  });
+  describe('Slider: Additional Response Options', () => {
+    test('Is rendered correctly when Add Text Input Option is selected', async () => {});
+    test('Is rendered correctly when Required is selected additionally', async () => {});
+    test('Is removed when click on Trash icon', async () => {});
+  });
+
+  test('Slider/Slider Rows: Validation', () => {});
 
   test.each`
     setting                                         | description
