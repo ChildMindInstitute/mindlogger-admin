@@ -449,7 +449,6 @@ export const mockedMultiSelectFormValues = {
       {
         id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
         text: 'm1',
-        score: 1,
         value: 0,
       },
       {
@@ -461,12 +460,14 @@ export const mockedMultiSelectFormValues = {
       {
         id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
         text: 'm3',
-        score: 1,
         value: 2,
       },
     ],
   },
   order: 2,
+  config: {
+    addScores: false,
+  },
 };
 
 export const mockedSliderFormValues = {

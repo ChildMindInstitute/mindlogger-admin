@@ -11,7 +11,12 @@ export const ColorPalette = ({ name, setShowColorPalette }: ColorPaletteProps) =
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
   return (
-    <StyledColorPaletteContainer in={isExpanded} collapsedSize="8.8rem" timeout={0}>
+    <StyledColorPaletteContainer
+      in={isExpanded}
+      collapsedSize="8.8rem"
+      timeout={0}
+      data-testid="builder-activity-items-item-configuration-color-palette"
+    >
       <ColorPaletteHeader
         isExpanded={isExpanded}
         onArrowClick={handleCollapse}

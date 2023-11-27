@@ -179,7 +179,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   };
 
   return (
-    <StyledAlert>
+    <StyledAlert data-testid={`${dataTestid}-panel`}>
       <StyledRow>
         <StyledTitleBoldSmall>
           {t('alert')} {index + 1}

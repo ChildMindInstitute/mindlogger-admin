@@ -23,6 +23,7 @@ export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDraw
         container: () => document.querySelector('#simple-tabpanel-items'),
       }}
       transitionDuration={0}
+      data-testid="builder-activity-items-item-configuration-settings-drawer"
     >
       <StyledDrawerContent>
         <StyledFlexTopCenter
