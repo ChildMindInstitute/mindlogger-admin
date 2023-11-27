@@ -1225,5 +1225,6 @@
     "details": "Détails",
     "refreshPage": "Rafraîchir la page"
   },
-  "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet."
+  "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet.",
+  "goToDashboard": "Aller au tableau de bord"
 }

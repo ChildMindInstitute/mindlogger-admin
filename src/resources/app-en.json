@@ -1225,5 +1225,6 @@
     "details": "Details",
     "refreshPage": "Refresh page"
   },
-  "pleaseMakeChangesToApplet": "Please make changes to update applet."
+  "pleaseMakeChangesToApplet": "Please make changes to update applet.",
+  "goToDashboard": "Go to Dashboard"
 }

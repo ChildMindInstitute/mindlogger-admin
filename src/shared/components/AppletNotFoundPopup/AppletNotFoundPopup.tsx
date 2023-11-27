@@ -1,26 +1,34 @@
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledBodyLarge, StyledModalWrapper } from 'shared/styles';
+import { checkIfAppletUrlPassed, falseReturnFunc } from 'shared/utils';
 
 import { useNotFoundPopup } from './AppletNotFoundPopup.hooks';
 
 export const AppletNotFoundPopup = () => {
   const { t } = useTranslation('app');
   const { appletNotFoundPopupVisible, handleClose, handleSubmit } = useNotFoundPopup();
+  const { pathname } = useLocation();
 
-  return (
+  const isBuilder = checkIfAppletUrlPassed(pathname);
+
+  return appletNotFoundPopupVisible ? (
     <Modal
       open={appletNotFoundPopupVisible}
-      onClose={handleClose}
+      onClose={isBuilder ? falseReturnFunc : handleClose}
       onSubmit={handleSubmit}
       title={t('appletNotFoundPopupTitle')}
-      buttonText={t('refresh')}
+      buttonText={isBuilder ? t('goToDashboard') : t('refresh')}
+      hasCross={!isBuilder}
       data-testid="applet-not-found-popup"
     >
-      <StyledModalWrapper>
-        <StyledBodyLarge>{t('appletNotFoundPopupText')}</StyledBodyLarge>
-      </StyledModalWrapper>
+      {isBuilder ? null : (
+        <StyledModalWrapper>
+          <StyledBodyLarge>{t('appletNotFoundPopupText')}</StyledBodyLarge>
+        </StyledModalWrapper>
+      )}
     </Modal>
-  );
+  ) : null;
 };
