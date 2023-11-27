@@ -66,6 +66,13 @@ export type NotificationTimeTestContext = {
   }[];
 };
 
+export type StartEndTimeTestContext = {
+  parent: {
+    startTime: string;
+    endTime: string;
+  };
+};
+
 export const enum SecondsManipulation {
   AddSeconds,
   RemoveSeconds,

@@ -54,6 +54,7 @@ import {
   NotificationTimeTestContext,
   SecondsManipulation,
   GetReminderTimeComparison,
+  StartEndTimeTestContext,
 } from './EventForm.types';
 
 const { t } = i18n;
@@ -157,32 +158,35 @@ export const getBetweenStartEndNextDayComparison = ({
   return startTimeDate <= timeDate && fromTimeDate <= timeDate && timeDate <= endTimeDate;
 };
 
+export const startEndTimeTest = (_: string | undefined, testContext: StartEndTimeTestContext) => {
+  const { startTime, endTime } = testContext.parent;
+  if (!startTime || !endTime) {
+    return false;
+  }
+
+  return startTime !== endTime;
+};
+
 export const getTimeComparison = (message: string) =>
   yup.string().when('alwaysAvailable', {
     is: false,
-    then: (schema) =>
-      schema.test('is-valid-period', message, function scheduledStartEnd() {
-        const { startTime, endTime } = this.parent;
-        if (!startTime || !endTime) {
-          return true;
-        }
-
-        return startTime !== endTime;
-      }),
+    then: (schema) => schema.test('is-valid-period', message, startEndTimeTest),
     otherwise: (schema) => schema,
   });
+
+export const timerDurationTest = (value: string | undefined) => {
+  if (!value) {
+    return false;
+  }
+  const [hours, minutes] = value.split(':');
+
+  return Number(hours) > 0 || Number(minutes) > 0;
+};
 
 export const getTimerDurationCheck = () => {
   const timerDurationCheck = t('timerDurationCheck');
 
-  return yup.string().test('is-valid-duration', timerDurationCheck, (value) => {
-    if (!value) {
-      return false;
-    }
-    const [hours, minutes] = value.split(':');
-
-    return Number(hours) > 0 || Number(minutes) > 0;
-  });
+  return yup.string().test('is-valid-duration', timerDurationCheck, timerDurationTest);
 };
 
 export const notificationValidPeriodTest =
@@ -269,7 +273,7 @@ export const getNotificationsValidation = ({
       return schema;
     });
 
-const createTimeEntity = (timeQuantity: number) => timeQuantity.toString().padStart(2, '0');
+export const createTimeEntity = (timeQuantity: number) => timeQuantity.toString().padStart(2, '0');
 
 export const convertSecondsToHHmmString = (timeInSeconds: number) => {
   const date = new Date(timeInSeconds * SECONDS_TO_MILLISECONDS_MULTIPLIER);
@@ -279,7 +283,7 @@ export const convertSecondsToHHmmString = (timeInSeconds: number) => {
   return `${createTimeEntity(hours)}:${createTimeEntity(minutes)}`;
 };
 
-const getActivityOrFlowId = (
+export const getActivityOrFlowId = (
   editedEvent?: CalendarEvent,
   startFlowIcon?: boolean,
   eventActivityOrFlowId?: string,
@@ -290,7 +294,7 @@ const getActivityOrFlowId = (
   return eventActivityOrFlowId;
 };
 
-const getStartEndDates = (
+export const getStartEndDates = (
   isPeriodicityOnce: boolean,
   isPeriodicityAlways: boolean,
   defaultStartDate: Date,
@@ -301,13 +305,11 @@ const getStartEndDates = (
   if (isPeriodicityOnce || isPeriodicityAlways) {
     return { startDate: defaultStartDate, endDate: endOfYear(defaultStartDate) };
   }
+  const startDate = eventStart || defaultStartDate;
 
   return {
-    startDate: eventStart || defaultStartDate,
-    endDate:
-      editedEvent && eventEnd === null
-        ? null
-        : eventEnd || endOfYear(eventStart || defaultStartDate),
+    startDate,
+    endDate: editedEvent && eventEnd === null ? null : eventEnd || endOfYear(startDate),
   };
 };
 
