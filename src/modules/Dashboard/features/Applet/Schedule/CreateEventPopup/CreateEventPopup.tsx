@@ -85,7 +85,9 @@ export const CreateEventPopup = ({
           data-testid={dataTestid}
         >
           <>
-            {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+            {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (
+              <Spinner uiType={SpinnerUiType.Secondary} noBackground />
+            )}
             <EventForm
               ref={eventFormRef}
               submitCallback={handleCreateEventClose}

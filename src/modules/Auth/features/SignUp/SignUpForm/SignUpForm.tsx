@@ -107,7 +107,7 @@ export const SignUpForm = () => {
           data-testid="signup-form-password"
         />
       </StyledController>
-      {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
+      {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
       {/* <AdvancedSettings /> */}
       <StyledController>
         <CheckboxController

@@ -114,6 +114,7 @@
   "allDay": "All Day",
   "allowAccessBeforeTime": "Allow access before “From” time",
   "allowToSkipAllItems": "Allow to skip all items",
+  "nextDay": "Next day",
   "alwaysAvailable": "Always available",
   "alwaysAvailableWarning": "Once you set this event to always available, all scheduled events for this activity will be removed.",
   "any": "Any",
@@ -550,7 +551,7 @@
     "invalidActivityNames": "Activities <1>{{activityNames}}</1> do not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
     "invalidDataFormat": "Invalid data format for the following fields:",
     "notificationTime": "<2>Notification Time</2>. Valid data format: <2>HH:mm or -</2>.",
-    "startEndTime": "<2>Activity End Time</2> should be greater than <2>Activity Start Time</2>.",
+    "startEndTime": "<2>Activity End Time</2> should not be equal to <2>Activity Start Time</2>.",
     "startTime": "<2>Activity Start Time</2>. Valid data format: <2>HH:mm for Scheduled activity and - for Always available activity</2>.",
     "updateReupload": "Please update and reupload the file."
   },
