@@ -102,21 +102,19 @@ export const FeedbackAssessment = ({
     setAssessmentStep(0);
   };
 
-  useEffect(() => {
-    if (!isBannerVisible && lastAssessment?.length) {
-      const updatedAssessment = lastAssessment.map((activityItem) => ({
-        activityItem,
-        answer: undefined,
-      })) as AssessmentActivityItem[];
-      setAssessment(updatedAssessment);
-      setAssessmentStep(0);
-      methods.reset(getDefaultFormValues(updatedAssessment));
-    }
-  }, [isBannerVisible]);
-
   const handleSelectLastVersion = () => {
+    if (!lastAssessment?.length) return;
+
     setIsLastVersion(true);
     setIsBannerVisible(false);
+
+    const updatedAssessment = lastAssessment.map((activityItem) => ({
+      activityItem,
+      answer: undefined,
+    })) as AssessmentActivityItem[];
+    setAssessment(updatedAssessment);
+    setAssessmentStep(0);
+    methods.reset(getDefaultFormValues(updatedAssessment));
   };
 
   const activityItems = useMemo(() => {
@@ -134,7 +132,6 @@ export const FeedbackAssessment = ({
         isBannerVisible={isBannerVisible}
         onSelectLastVersion={handleSelectLastVersion}
       />
-
       <ActivityCardItemList
         step={assessmentStep}
         activityItems={activityItems}
