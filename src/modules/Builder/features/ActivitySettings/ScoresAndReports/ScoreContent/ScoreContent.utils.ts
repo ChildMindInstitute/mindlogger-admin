@@ -1,17 +1,11 @@
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
 import i18n from 'i18n';
-import {
-  ScoreReport,
-  SingleAndMultiSelectOption,
-  SingleAndMultipleSelectItemResponseValues,
-  SliderItemResponseValues,
-} from 'shared/state';
+import { ScoreReport, SingleAndMultiSelectOption } from 'shared/state';
 import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
-import { ItemFormValues } from 'modules/Builder/types';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
-import { GetScoreRangeLabel } from './ScoreContent.types';
+import { GetScoreRangeLabel, ItemsWithScore } from './ScoreContent.types';
 
 const { t } = i18n;
 
@@ -37,13 +31,13 @@ export const getScoreId = (name: string, calculationType: CalculationType) =>
 export const getScoreRangeLabel = ({ minScore, maxScore }: GetScoreRangeLabel) =>
   `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}`;
 
-const getItemScoreRange = (item: ItemFormValues) => {
+const getItemScoreRange = (item: ItemsWithScore) => {
   let scores: number[];
   if (
     item.responseType === ItemResponseType.SingleSelection ||
     item.responseType === ItemResponseType.MultipleSelection
   ) {
-    scores = (item.responseValues as SingleAndMultipleSelectItemResponseValues).options?.reduce(
+    scores = item.responseValues.options?.reduce(
       (result: number[], option: SingleAndMultiSelectOption) => {
         if (!option.isHidden && typeof option.score === 'number') {
           return [...result, option.score];
@@ -54,7 +48,7 @@ const getItemScoreRange = (item: ItemFormValues) => {
       [],
     ) as number[];
   } else {
-    scores = (item.responseValues as SliderItemResponseValues).scores as number[];
+    scores = item.responseValues.scores as number[];
   }
 
   let maxScore = 0;
@@ -71,7 +65,7 @@ const getItemScoreRange = (item: ItemFormValues) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = (itemsScore: ItemFormValues[], calculationType: CalculationType) => {
+export const getScoreRange = (itemsScore: ItemsWithScore[], calculationType: CalculationType) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
   const count = itemsScore.length;
@@ -114,9 +108,12 @@ const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: str
 
 export const getIsScoreIdVariable = (score: ScoreReport) => {
   const { id } = score;
-  let isVariable = false;
 
-  isVariable = isMessageIncludeScoreId(score.showMessage, id, score.message);
+  if (isMessageIncludeScoreId(score.showMessage, id, score.message)) {
+    return true;
+  }
+
+  let isVariable = false;
   score.conditionalLogic?.forEach((condition) => {
     isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message);
   });

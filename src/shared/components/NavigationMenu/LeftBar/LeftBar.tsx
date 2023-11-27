@@ -49,6 +49,7 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                       tooltip,
                       isVisible: isItemVisible = true,
                       hasError = false,
+                      onClick,
                       'data-testid': dataTestid,
                     }) =>
                       isItemVisible && (
@@ -59,7 +60,15 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                           <span>
                             <StyledSetting
                               onClick={() =>
-                                onItemClick({ label, component, param, icon, disabled, tooltip })
+                                onItemClick({
+                                  label,
+                                  component,
+                                  param,
+                                  icon,
+                                  disabled,
+                                  tooltip,
+                                  onClick,
+                                })
                               }
                               isCompact={hasActiveItem}
                               isSelected={!disabled && setting === param}

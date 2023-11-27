@@ -5,9 +5,11 @@ import { NotificationType } from 'modules/Dashboard/api';
 
 import {
   getTimeComparison,
-  getNotificationTimeComparison,
   getNotificationsValidation,
   getTimerDurationCheck,
+  getActivityIncompleteValidation,
+  getActivityIncompleteDateValidation,
+  getReminderTimeValidation,
 } from './EventForm.utils';
 
 export const EventFormSchema = () => {
@@ -16,9 +18,24 @@ export const EventFormSchema = () => {
   const selectValidPeriod = t('selectValidPeriod');
 
   const notificationSchema = yup.object().shape({
-    atTime: getNotificationsValidation('atTime', NotificationType.Fixed, false),
-    fromTime: getNotificationsValidation('fromTime', NotificationType.Random, true),
-    toTime: getNotificationsValidation('toTime', NotificationType.Random, false),
+    atTime: getNotificationsValidation({
+      field: 'atTime',
+      notificationType: NotificationType.Fixed,
+      showValidPeriodMessage: false,
+      isSingleTime: true,
+    }),
+    fromTime: getNotificationsValidation({
+      field: 'fromTime',
+      notificationType: NotificationType.Random,
+      showValidPeriodMessage: true,
+      isSingleTime: false,
+    }),
+    toTime: getNotificationsValidation({
+      field: 'toTime',
+      notificationType: NotificationType.Random,
+      showValidPeriodMessage: false,
+      isSingleTime: false,
+    }),
   });
 
   return yup
@@ -29,16 +46,11 @@ export const EventFormSchema = () => {
       startTime: getTimeComparison(selectValidPeriod),
       endTime: getTimeComparison(''),
       notifications: yup.array().of(notificationSchema),
-      reminder: yup
-        .object()
-        .nullable()
-        .shape({
-          reminderTime: getNotificationTimeComparison(
-            yup.string().nullable(),
-            'reminderTime',
-            false,
-          ),
-        }),
+      reminder: yup.object().nullable().shape({
+        activityIncomplete: getActivityIncompleteValidation(),
+        activityIncompleteDate: getActivityIncompleteDateValidation(),
+        reminderTime: getReminderTimeValidation(),
+      }),
     })
     .required();
 };

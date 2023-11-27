@@ -1,12 +1,12 @@
-import get from 'lodash.get';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
+import get from 'lodash.get';
 
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
 import { ConditionType, ScoreReportType } from 'shared/consts';
 import { ScoreOrSection, ScoreReport } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 
 import { StyledErrorText, theme } from 'shared/styles';
@@ -24,6 +24,7 @@ import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 
 export const ConditionRow = ({
   name,
+  activityName,
   index,
   onRemove,
   type = ConditionRowType.Item,
@@ -34,14 +35,13 @@ export const ConditionRow = ({
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
   const {
-    control,
     setValue,
-    watch,
     trigger,
     formState: { errors },
   } = useFormContext();
-  const { fieldName } = useCurrentActivity();
 
+  const itemsName = `${activityName}.items`;
+  const reportsName = `${activityName}.scoresAndReports.reports`;
   const conditionsName = `${name}.conditions`;
   const conditionName = `${conditionsName}.${index}`;
   const conditionItemName = `${conditionName}.itemName`;
@@ -52,18 +52,21 @@ export const ConditionRow = ({
   const conditionPayloadMinValueName = `${conditionPayloadName}.minValue`;
   const conditionPayloadMaxValueName = `${conditionPayloadName}.maxValue`;
 
-  const conditions = watch(conditionsName);
-  const items = watch(`${fieldName}.items`);
-  const reports = watch(`${fieldName}.scoresAndReports.reports`);
+  const [conditions, items, reports, conditionItem, conditionType, conditionPayload] = useWatch({
+    name: [
+      conditionsName,
+      itemsName,
+      reportsName,
+      conditionItemName,
+      conditionTypeName,
+      conditionPayloadName,
+    ],
+  });
   const scores = reports?.filter((report: ScoreOrSection) => report.type === ScoreReportType.Score);
-  const conditionItem = watch(conditionItemName);
-  const conditionType = watch(conditionTypeName);
-  const conditionPayload = watch(conditionPayloadName);
-  const conditionItemResponseType = items?.find(
-    (item: ItemFormValues) => getEntityKey(item) === conditionItem,
-  )?.responseType;
+  const groupedItems = getObjectFromList<ItemFormValues>(items);
+  const conditionItemResponseType = groupedItems[conditionItem]?.responseType;
 
-  const selectedItem = items?.find((item: ItemFormValues) => getEntityKey(item) === conditionItem);
+  const selectedItem = groupedItems[conditionItem];
   const selectedScore =
     scores?.find((score: ScoreReport) => getEntityKey(score, false) === scoreKey) ?? {};
   const options = {
@@ -76,30 +79,43 @@ export const ConditionRow = ({
     [ConditionRowType.Score]: [getScoreIdOption(selectedScore)],
   } as Record<ConditionRowType, ConditionItem[]>;
 
-  const handleChangeConditionItemName = (event: SelectEvent) => {
-    const selectedItemKey = event.target.value;
-    const selectedItem = items?.find(
-      (item: ItemFormValues) => getEntityKey(item) === selectedItemKey,
-    );
-    const selectedItemIndex = items?.indexOf(selectedItem);
+  const handleChangeConditionItemName = useCallback(
+    (event: SelectEvent) => {
+      const selectedItemKey = event.target.value;
+      const selectedItem = items?.find(
+        (item: ItemFormValues) => getEntityKey(item) === selectedItemKey,
+      );
+      const selectedItemIndex = items?.indexOf(selectedItem);
 
-    if (conditionItemResponseType !== selectedItem?.responseType) {
-      setValue(conditionTypeName, '');
-      setValue(conditionPayloadName, {});
-    }
-    if (selectedItemIndex !== undefined && selectedItemIndex !== -1) {
-      setValue(`${fieldName}.items.${selectedItemIndex}.isHidden`, false);
-    }
-    if (autoTrigger) {
-      trigger(`${name}.itemKey`);
-    }
-  };
+      if (conditionItemResponseType !== selectedItem?.responseType) {
+        setValue(conditionTypeName, '');
+        setValue(conditionPayloadName, {});
+      }
 
-  const handleChangeConditionType = (e: SelectEvent) => {
-    const payload = getPayload(e.target.value as ConditionType, conditionPayload, selectedItem);
+      if (selectedItemIndex !== undefined && selectedItemIndex !== -1) {
+        setValue(`${activityName}.items.${selectedItemIndex}.isHidden`, false);
+      }
 
-    setValue(conditionPayloadName, payload);
-  };
+      if (autoTrigger) {
+        trigger(`${name}.itemKey`);
+      }
+    },
+    [items, conditionItemResponseType, name, autoTrigger],
+  );
+
+  const handleChangeConditionType = useCallback(
+    (e: SelectEvent) => {
+      const payload = getPayload(e.target.value as ConditionType, conditionPayload, selectedItem);
+
+      setValue(conditionPayloadName, payload);
+    },
+    [name, conditionPayload, selectedItem],
+  );
+
+  const handleRemove = useCallback(onRemove, [index]);
+
+  const itemOptions = useMemo(() => options[type], [type, scores, items, selectedScore]);
+  const valueOptions = useMemo(() => getValueOptionsList(selectedItem), [selectedItem]);
 
   const error = get(errors, `${conditionsName}[${index}]`);
   const errorMessage =
@@ -114,21 +130,20 @@ export const ConditionRow = ({
   return (
     <>
       <Condition
-        control={control}
         itemName={conditionItemName}
         stateName={conditionTypeName}
         optionValueName={conditionPayloadSelectionName}
         numberValueName={conditionPayloadValueName}
         minValueName={conditionPayloadMinValueName}
         maxValueName={conditionPayloadMaxValueName}
-        itemOptions={options[type]}
-        valueOptions={getValueOptionsList(selectedItem)}
+        itemOptions={itemOptions}
+        valueOptions={valueOptions}
         item={conditionItem}
         state={conditionType}
         isRemoveVisible={conditions?.length > 1}
         onItemChange={handleChangeConditionItemName}
         onStateChange={handleChangeConditionType}
-        onRemove={onRemove}
+        onRemove={handleRemove}
         type={type}
         data-testid={dataTestid}
       />

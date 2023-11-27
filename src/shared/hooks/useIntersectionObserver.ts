@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 
-interface UseIntersectionObserverProps {
+type UseIntersectionObserverProps = {
   rootSelector?: string;
   targetSelector: string;
   onAppear?(): void;
   onHide?(): void;
-}
+};
+
 export const useIntersectionObserver = ({
   rootSelector,
   targetSelector,

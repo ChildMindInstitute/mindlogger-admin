@@ -10,6 +10,7 @@ type TimePicker = {
   wrapperSx?: SxProps;
   minTime?: Date;
   maxTime?: Date;
+  onCustomChange?: (time: string) => void;
   'data-testid'?: string;
 } & TextFieldProps;
 

@@ -7,12 +7,11 @@ import {
   TransferOwnershipSetting,
   DuplicateAppletSettings,
   DeleteAppletSetting,
-  ReportConfigSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
   // ShareAppletSetting,
 } from 'shared/features/AppletSettings';
-import { SettingParam, isManagerOrOwner } from 'shared/utils';
+import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
@@ -29,6 +28,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           label: 'exportData',
           component: <ExportDataSetting />,
           param: SettingParam.ExportData,
+          onClick: () => Mixpanel.track('Export Data click'),
           'data-testid': `${dataTestid}-export-data`,
         },
         {
@@ -50,7 +50,7 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           param: SettingParam.EditApplet,
           'data-testid': `${dataTestid}-edit-applet`,
         },
-        // Description: hid "Download Schema" logic until it will be used in future features
+        // Description: "Download Schema" logic is hidden until it will be used in future features
         // {
         //   icon: <Svg id="schema" />,
         //   label: 'downloadSchema',
@@ -86,20 +86,6 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
           component: <DeleteAppletSetting />,
           param: SettingParam.DeleteApplet,
           'data-testid': `${dataTestid}-remove-applet`,
-        },
-      ],
-    },
-    {
-      label: 'reports',
-      items: [
-        {
-          icon: <Svg id="configure" />,
-          label: 'reportConfiguration',
-          component: (
-            <ReportConfigSetting isDashboard data-testid={`${dataTestid}-report-config-form`} />
-          ),
-          param: SettingParam.ReportConfiguration,
-          'data-testid': `${dataTestid}-report-config`,
         },
       ],
     },

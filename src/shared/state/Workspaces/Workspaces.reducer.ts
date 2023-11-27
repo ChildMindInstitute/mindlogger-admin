@@ -3,7 +3,7 @@ import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { Workspace, WorkspacesSchema } from './Workspaces.schema';
-import { getWorkspaceRoles, getWorkspaces, getWorkspacesRoles } from './Workspaces.thunk';
+import { getWorkspaceRoles, getWorkspaces } from './Workspaces.thunk';
 import { state as initialState } from './Workspaces.state';
 
 export const reducers = {
@@ -27,8 +27,4 @@ export const extraReducers = (builder: ActionReducerMapBuilder<WorkspacesSchema>
   getPendingData({ builder, thunk: getWorkspaces, key: 'workspaces' });
   getFulfilledData({ builder, thunk: getWorkspaces, key: 'workspaces', initialState });
   getRejectedData({ builder, thunk: getWorkspaces, key: 'workspaces', initialState });
-
-  getPendingData({ builder, thunk: getWorkspacesRoles, key: 'workspacesRoles' });
-  getFulfilledData({ builder, thunk: getWorkspacesRoles, key: 'workspacesRoles', initialState });
-  getRejectedData({ builder, thunk: getWorkspacesRoles, key: 'workspacesRoles', initialState });
 };

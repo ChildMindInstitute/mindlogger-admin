@@ -3,7 +3,7 @@ import { Chart as ChartJS } from 'chart.js/dist/types';
 import {
   CustomLegend,
   ScatterChartTooltipHandler,
-  ScatterChartType,
+  ChartType,
   SetTooltipStyles,
 } from './Chart.types';
 import {
@@ -12,6 +12,8 @@ import {
   MIN_TICKS_LENGTH,
   MS_PER_DAY,
   MS_PER_HOUR,
+  POINT_RADIUS_DEFAULT,
+  POINT_RADIUS_SECONDARY,
 } from './Charts.const';
 
 export const truncateString = (label: string) =>
@@ -78,8 +80,15 @@ export const legendMargin = {
   },
 };
 
-export const setTooltipStyles = ({ tooltipEl, positionX, positionY }: SetTooltipStyles) => {
-  const VERTICAL_OFFSET = 2;
+export const setTooltipStyles = ({
+  chartType,
+  tooltipEl,
+  positionX,
+  positionY,
+}: SetTooltipStyles) => {
+  const POINT_RADIUS =
+    chartType === ChartType.SubscaleLineChart ? POINT_RADIUS_SECONDARY : POINT_RADIUS_DEFAULT;
+  const VERTICAL_OFFSET = POINT_RADIUS - 0.6;
   tooltipEl.style.display = 'block';
   tooltipEl.style.top = `${positionY + VERTICAL_OFFSET}px`;
   tooltipEl.style.left = `${positionX}px`;
@@ -91,7 +100,7 @@ export const scatterChartTooltipHandler = ({
   isHovered,
   chartRef,
   setTooltipData,
-  type,
+  chartType,
 }: ScatterChartTooltipHandler) => {
   if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
   const tooltipEl = tooltipRef.current;
@@ -110,10 +119,10 @@ export const scatterChartTooltipHandler = ({
   const chart = chartRef.current;
 
   if (chart) {
-    setTooltipData(type === ScatterChartType.ScatterChart ? dataPoints[0] : dataPoints);
+    setTooltipData(chartType === ChartType.ScatterChart ? dataPoints[0] : dataPoints);
     const {
       element: { x: positionX, y: positionY },
     } = dataPoints[0];
-    setTooltipStyles({ tooltipEl, positionX, positionY });
+    setTooltipStyles({ chartType, tooltipEl, positionX, positionY });
   }
 };

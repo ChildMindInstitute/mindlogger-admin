@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
-import { ExportDataResult } from 'shared/types';
+import { EncryptedAnswerSharedProps, ExportDataResult } from 'shared/types';
 import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 
 import {
@@ -52,6 +52,7 @@ import {
   AppletName,
   LatestReport,
   Identifiers,
+  GetRespondentDetailsParams,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -408,10 +409,13 @@ export const getActivityAnswerApi = (
   { appletId, answerId, activityId }: ActivityAnswer,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`, {
-    params: { limit: MAX_LIMIT },
-    signal,
-  });
+  authApiClient.get<ResponseWithObject<EncryptedAnswerSharedProps>>(
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`,
+    {
+      params: { limit: MAX_LIMIT },
+      signal,
+    },
+  );
 
 export const getAnswersNotesApi = (
   { appletId, answerId, activityId, params }: ActivityAnswer & GetAnswersNotesParams,
@@ -638,4 +642,12 @@ export const getOptionTextApi = (url: string) =>
   axios({
     method: 'get',
     url,
+  });
+
+export const getRespondentDetailsApi = (
+  { ownerId, appletId, respondentId }: GetRespondentDetailsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/workspaces/${ownerId}/applets/${appletId}/respondents/${respondentId}`, {
+    signal,
   });

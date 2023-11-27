@@ -29,6 +29,7 @@ export enum UploadFileError {
 }
 
 export const SEARCH_DEBOUNCE_VALUE = 700;
+export const CHANGE_DEBOUNCE_VALUE = 500;
 
 export const DEFAULT_MILLISECONDS_DURATION = 3000;
 export const MIN_MILLISECONDS_DURATION = 1;
@@ -63,6 +64,8 @@ export enum DateFormats {
   YearMonthDay = 'yyyy-MM-dd',
   MonthDayTime = 'MMM dd, HH:mm',
 }
+
+export const EMAIL_REGEXP = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
 export const ACCOUNT_PASSWORD_MIN_LENGTH = 6;
 export const APPLET_PASSWORD_MIN_LENGTH = 8;

@@ -95,7 +95,7 @@ export const SelectionOption = ({
     const settings = getValues(`${name}.config`);
 
     if (get(settings, ItemConfigurationSettings.HasColorPalette)) {
-      setValue(`${name}.responseValues.paletteName`, undefined);
+      setValue(`${name}.responseValues.paletteName`, '');
     }
   };
 
@@ -186,9 +186,10 @@ export const SelectionOption = ({
             >
               <Svg id={optionOpen ? 'navigate-up' : 'navigate-down'} />
             </StyledIconButton>
-            <StyledLabelBoldLarge sx={{ ml: theme.spacing(2) }}>{`${t('option')} ${
-              index + 1
-            }`}</StyledLabelBoldLarge>
+            <StyledLabelBoldLarge
+              sx={{ ml: theme.spacing(2) }}
+              data-testid={`${dataTestid}-title`}
+            >{`${t('option')} ${index + 1}`}</StyledLabelBoldLarge>
             {!optionOpen && (
               <StyledCollapsedWrapper>
                 <StyledSvgWrapper sx={{ m: theme.spacing(0, 2, 0, 6) }}>
@@ -239,6 +240,7 @@ export const SelectionOption = ({
               </StyledFlexTopCenter>
               <StyledTextInputWrapper hasScores={!!scoreString}>
                 <InputController
+                  withDebounce
                   {...commonInputProps}
                   name={optionTextName}
                   label={t('optionText')}
@@ -270,6 +272,7 @@ export const SelectionOption = ({
             {hasTooltipsChecked && (
               <StyledTooltipWrapper>
                 <InputController
+                  withDebounce
                   {...commonInputProps}
                   label={t('tooltip')}
                   name={`${optionName}.tooltip`}

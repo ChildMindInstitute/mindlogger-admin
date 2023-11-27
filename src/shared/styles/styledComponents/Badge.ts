@@ -2,8 +2,9 @@ import { Badge, styled } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
+import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
-export const StyledBadge = styled(Badge)`
+export const StyledBadge = styled(Badge, shouldForwardProp)`
   && .MuiBadge-badge {
     height: ${theme.spacing(1.8)};
     min-width: ${theme.spacing(1.8)};

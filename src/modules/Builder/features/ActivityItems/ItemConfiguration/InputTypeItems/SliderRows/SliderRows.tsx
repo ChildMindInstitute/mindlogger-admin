@@ -5,7 +5,7 @@ import get from 'lodash.get';
 
 import { Svg } from 'shared/components/Svg';
 import { theme, StyledFlexColumn } from 'shared/styles';
-import { SliderItemResponseValues } from 'shared/state';
+import { ItemAlert, SliderItemResponseValues } from 'shared/state';
 
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';
@@ -17,9 +17,11 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
   const { watch, setValue } = useFormContext();
 
   const sliderName = isMultiple ? `${name}.responseValues.rows` : `${name}.responseValues`;
+  const alertsName = `${name}.alerts`;
   const value = watch(sliderName);
   const settings = watch(`${name}.config`);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
+  const alerts = watch(alertsName) as ItemAlert[];
 
   const handleAddSlider = () => {
     setValue(sliderName, [...(value ?? []), getEmptySliderOption({ isMultiple, hasScores })]);
@@ -29,6 +31,12 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
       sliderName,
       value?.filter(({ id: sliderId }: SliderItemResponseValues) => sliderId !== id),
     );
+    if (id && isMultiple && alerts?.length) {
+      setValue(
+        alertsName,
+        alerts.filter((alert) => alert.sliderId !== id),
+      );
+    }
   };
 
   return (

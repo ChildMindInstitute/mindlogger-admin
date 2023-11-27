@@ -1,5 +1,13 @@
 import { UseFormGetValues } from 'react-hook-form';
-import { endOfYear, format } from 'date-fns';
+import {
+  addDays,
+  differenceInDays,
+  eachDayOfInterval,
+  endOfYear,
+  format,
+  getDate,
+  getDay,
+} from 'date-fns';
 import * as yup from 'yup';
 
 import i18n from 'i18n';
@@ -9,15 +17,19 @@ import { Activity, ActivityFlow } from 'shared/state';
 import {
   CreateEventType,
   EventNotifications,
-  EventReminder,
   NotificationType,
   Periodicity,
   TimerType,
 } from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 import { getIsRequiredValidateMessage } from 'shared/utils';
+import {
+  getDaysInMonthlyPeriodicity,
+  getNextDayComparison,
+  removeSecondsFromTime,
+} from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
-import { convertDateToYearMonthDay, removeSecondsFromTime } from '../Schedule.utils';
+import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
 import { NotificationsTab } from './NotificationsTab';
 import { TimersTab } from './TimersTab';
@@ -26,13 +38,22 @@ import {
   DEFAULT_IDLE_TIME,
   DEFAULT_START_TIME,
   DEFAULT_TIMER_DURATION,
+  ONCE_ACTIVITY_INCOMPLETE_LIMITATION,
   SECONDS_TO_MILLISECONDS_MULTIPLIER,
 } from './EventForm.const';
 import {
   EventFormValues,
+  FormReminder,
+  GetBetweenStartEndNextDayComparisonProps,
+  GetBetweenStartEndNextDaySingleComparisonProps,
+  GetDaysInPeriod,
+  GetEventFromTabs,
+  GetNotificationTimeComparisonProps,
+  GetNotificationsValidationProps,
+  GetWeeklyDays,
   NotificationTimeTestContext,
   SecondsManipulation,
-  GetEventFromTabs,
+  GetReminderTimeComparison,
 } from './EventForm.types';
 
 const { t } = i18n;
@@ -72,36 +93,81 @@ export const getEventFormTabs = ({
   },
 ];
 
-export const getStartEndComparison = (startTime: string, endTime: string) => {
-  const startDate = new Date(`2000-01-01T${startTime}:00`);
-  const endDate = new Date(`2000-01-01T${endTime}:00`);
+export const getBetweenStartEndNextDaySingleComparison = ({
+  time,
+  rangeStartTime,
+  rangeEndTime,
+}: GetBetweenStartEndNextDaySingleComparisonProps) => {
+  const timeDate = new Date(`1970-01-01T${time}:00.000Z`);
+  const startTimeDate = new Date(`1970-01-01T${rangeStartTime}:00.000Z`);
+  const endTimeDate = new Date(`1970-01-01T${rangeEndTime}:00.000Z`);
+  const endOfCurrentDay = new Date('1970-01-01T23:59:00.000Z');
+  const startOfCurrentDay = new Date('1970-01-01T00:00:00.000Z');
 
-  return startDate < endDate;
+  if (startTimeDate > endTimeDate)
+    return (
+      (startTimeDate <= timeDate && timeDate <= endOfCurrentDay) ||
+      (startOfCurrentDay <= timeDate && timeDate <= endTimeDate)
+    );
+
+  return startTimeDate <= timeDate && timeDate <= endTimeDate;
 };
 
-export const getBetweenStartEndComparison = (
-  notificationTime: string,
-  startTime: string,
-  endTime: string,
-) => {
-  const timeDate = new Date(`1970-01-01T${notificationTime}:00.000Z`);
-  const startTimeDate = new Date(`1970-01-01T${startTime}:00.000Z`);
-  const endTimeDate = new Date(`1970-01-01T${endTime}:00.000Z`);
+export const getBetweenStartEndNextDayComparison = ({
+  time,
+  fromTime,
+  toTime,
+  rangeStartTime,
+  rangeEndTime,
+}: GetBetweenStartEndNextDayComparisonProps) => {
+  const isFromTime = time === fromTime;
+  const isCrossDay = getNextDayComparison(fromTime, toTime);
+  const timeDate = new Date(`1970-01-01T${time}:00.000Z`);
+  const startTimeDate = new Date(`1970-01-01T${rangeStartTime}:00.000Z`);
+  const endTimeDate = new Date(`1970-01-01T${rangeEndTime}:00.000Z`);
+  const fromTimeDate = new Date(`1970-01-01T${fromTime}:00.000Z`);
+  const toTimeDate = new Date(`1970-01-01T${toTime}:00.000Z`);
+  const endOfCurrentDay = new Date('1970-01-01T23:59:00.000Z');
+  const startOfCurrentDay = new Date('1970-01-01T00:00:00.000Z');
 
-  return timeDate >= startTimeDate && timeDate <= endTimeDate;
+  if (startTimeDate > endTimeDate) {
+    if (isFromTime) {
+      if (isCrossDay) {
+        return startTimeDate <= timeDate && timeDate <= endOfCurrentDay;
+      }
+
+      return startTimeDate <= timeDate || timeDate <= endTimeDate;
+    }
+
+    if (isCrossDay) {
+      return startOfCurrentDay <= timeDate && timeDate <= endTimeDate;
+    }
+
+    return startTimeDate <= timeDate || timeDate <= endTimeDate;
+  }
+
+  if (isCrossDay) {
+    return false;
+  }
+
+  if (isFromTime) {
+    return startTimeDate <= timeDate && timeDate <= toTimeDate && timeDate <= endTimeDate;
+  }
+
+  return startTimeDate <= timeDate && fromTimeDate <= timeDate && timeDate <= endTimeDate;
 };
 
 export const getTimeComparison = (message: string) =>
   yup.string().when('alwaysAvailable', {
     is: false,
     then: (schema) =>
-      schema.test('is-valid-period', message, function () {
+      schema.test('is-valid-period', message, function scheduledStartEnd() {
         const { startTime, endTime } = this.parent;
         if (!startTime || !endTime) {
           return true;
         }
 
-        return getStartEndComparison(startTime, endTime);
+        return startTime !== endTime;
       }),
     otherwise: (schema) => schema,
   });
@@ -119,13 +185,23 @@ export const getTimerDurationCheck = () => {
   });
 };
 
-export const getNotificationTimeComparison = (
-  schema:
-    | yup.Schema<EventReminder>
-    | yup.StringSchema<string | null | undefined, yup.AnyObject, string | null | undefined>,
-  field: string,
-  showValidPeriodMessage: boolean,
-) => {
+export const notificationValidPeriodTest =
+  (field: string) => (_: string, testContext: NotificationTimeTestContext) => {
+    const { fromTime, toTime } = testContext.parent;
+
+    if ((field !== 'fromTime' && field !== 'toTime') || !fromTime || !toTime) {
+      return true;
+    }
+
+    return fromTime !== toTime;
+  };
+
+export const getNotificationTimeComparison = ({
+  schema,
+  field,
+  showValidPeriodMessage,
+  isSingleTime = false,
+}: GetNotificationTimeComparisonProps) => {
   const selectValidPeriod = t('selectValidPeriod');
   const activityUnavailableAtTime = t('activityUnavailableAtTime');
 
@@ -134,15 +210,7 @@ export const getNotificationTimeComparison = (
     .test(
       'is-valid-period',
       showValidPeriodMessage ? selectValidPeriod : '',
-      function notificationValidPeriodTest(_: string, testContext: NotificationTimeTestContext) {
-        const { fromTime, toTime } = testContext.parent;
-
-        if ((field !== 'fromTime' && field !== 'toTime') || !fromTime || !toTime) {
-          return true;
-        }
-
-        return getStartEndComparison(fromTime, toTime);
-      },
+      notificationValidPeriodTest(field),
     )
     .test(
       'after-start-time-before-end-time',
@@ -150,27 +218,52 @@ export const getNotificationTimeComparison = (
       function notificationStartEndTest(value: string, testContext: NotificationTimeTestContext) {
         const startTimeValue = testContext.from[1].value.startTime;
         const endTimeValue = testContext.from[1].value.endTime;
+        const { fromTime, toTime } = testContext.parent;
 
-        if (!startTimeValue || !endTimeValue || !value) {
+        if (
+          !startTimeValue ||
+          !endTimeValue ||
+          !value ||
+          (fromTime === toTime && typeof toTime === 'string')
+        ) {
           return true;
         }
 
-        return getBetweenStartEndComparison(value, startTimeValue, endTimeValue);
+        if (isSingleTime)
+          return getBetweenStartEndNextDaySingleComparison({
+            time: value,
+            rangeStartTime: startTimeValue,
+            rangeEndTime: endTimeValue,
+          });
+
+        return getBetweenStartEndNextDayComparison({
+          time: value,
+          fromTime,
+          toTime,
+          rangeStartTime: startTimeValue,
+          rangeEndTime: endTimeValue,
+        });
       },
     );
 };
 
-export const getNotificationsValidation = (
-  field: string,
-  notificationType: NotificationType,
-  showValidPeriodMessage: boolean,
-) =>
+export const getNotificationsValidation = ({
+  field,
+  notificationType,
+  showValidPeriodMessage,
+  isSingleTime = false,
+}: GetNotificationsValidationProps) =>
   yup
     .string()
     .nullable()
     .when('triggerType', ([triggerType]: NotificationType[], schema) => {
       if (triggerType === notificationType) {
-        return getNotificationTimeComparison(schema, field, showValidPeriodMessage);
+        return getNotificationTimeComparison({
+          schema,
+          field,
+          showValidPeriodMessage,
+          isSingleTime,
+        });
       }
 
       return schema;
@@ -244,23 +337,40 @@ const getNotifications = (type: SecondsManipulation, notifications?: EventNotifi
     };
   }) || null;
 
-const getReminder = (type: SecondsManipulation, reminder?: EventReminder) => {
+const getReminder = ({
+  type,
+  reminder,
+  isMonthlyPeriodicity,
+  startDate,
+}: {
+  type: SecondsManipulation;
+  reminder?: FormReminder;
+  isMonthlyPeriodicity: boolean;
+  startDate: Date;
+}) => {
   if (!reminder) return null;
+  const isFromForm = type === SecondsManipulation.AddSeconds;
+  const activityIncompleteDate =
+    isMonthlyPeriodicity && !isFromForm && startDate
+      ? addDays(startDate, reminder.activityIncomplete)
+      : undefined;
+  const activityIncomplete =
+    isMonthlyPeriodicity && isFromForm && startDate && reminder.activityIncompleteDate
+      ? differenceInDays(reminder.activityIncompleteDate, startDate)
+      : reminder.activityIncomplete;
 
   return {
-    ...reminder,
-    reminderTime:
-      type === SecondsManipulation.AddSeconds
-        ? addSecondsToHourMinutes(reminder.reminderTime)
-        : removeSecondsFromTime(reminder.reminderTime),
+    activityIncomplete,
+    activityIncompleteDate,
+    reminderTime: isFromForm
+      ? addSecondsToHourMinutes(reminder.reminderTime)
+      : removeSecondsFromTime(reminder.reminderTime),
   };
 };
 
 export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarEvent) => {
   const {
     alwaysAvailable: eventAlwaysAvailable,
-    start,
-    end,
     eventStart,
     eventEnd,
     periodicity: eventPeriodicity,
@@ -271,6 +381,8 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     timerType: eventTimerType,
     timer,
     notification,
+    startTime: eventStartTime,
+    endTime: eventEndTime,
   } = editedEvent || {};
   const activityOrFlowId = getActivityOrFlowId(editedEvent, startFlowIcon, eventActivityOrFlowId);
   const isPeriodicityAlways = eventPeriodicity === Periodicity.Always;
@@ -285,10 +397,9 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     eventEnd,
     editedEvent,
   );
-  const startTime = start ? format(start, DateFormats.Time) : DEFAULT_START_TIME;
-  const endTime = end ? format(end, DateFormats.Time) : DEFAULT_END_TIME;
-  const periodicity =
-    editedEvent && !isPeriodicityAlways ? editedEvent.periodicity : Periodicity.Once;
+  const startTime = eventStartTime ?? DEFAULT_START_TIME;
+  const endTime = eventEndTime ?? DEFAULT_END_TIME;
+  const periodicity = editedEvent?.periodicity || Periodicity.Once;
   const oneTimeCompletion = eventOneTimeCompletion || false;
   const accessBeforeSchedule = eventAccessBeforeSchedule ?? false;
   const timerType = eventTimerType || TimerType.NotSet;
@@ -298,7 +409,13 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
   const idleTime = (timerType === TimerType.Idle && timerHHmmString) || DEFAULT_IDLE_TIME;
   const notifications =
     getNotifications(SecondsManipulation.RemoveSeconds, notification?.notifications) || [];
-  const reminder = getReminder(SecondsManipulation.RemoveSeconds, notification?.reminder) || null;
+  const reminder =
+    getReminder({
+      type: SecondsManipulation.RemoveSeconds,
+      reminder: notification?.reminder,
+      isMonthlyPeriodicity: periodicity === Periodicity.Monthly,
+      startDate,
+    }) || null;
 
   return {
     activityOrFlowId,
@@ -399,7 +516,12 @@ export const getEventPayload = (
     'reminder',
   ]);
   const notifications = getNotifications(SecondsManipulation.AddSeconds, notificationsFromForm);
-  const reminder = getReminder(SecondsManipulation.AddSeconds, reminderFromForm);
+  const reminder = getReminder({
+    type: SecondsManipulation.AddSeconds,
+    reminder: reminderFromForm,
+    isMonthlyPeriodicity: periodicity === Periodicity.Monthly,
+    startDate: startDate as Date,
+  });
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 
   const body: CreateEventType['body'] = {
@@ -454,3 +576,220 @@ export const getEventPayload = (
 
   return body;
 };
+
+export const getDaysInPeriod = ({ isCrossDayEvent, startDate, endDate }: GetDaysInPeriod) => {
+  const end = isCrossDayEvent ? addDays(endDate, 1) : endDate;
+
+  return startDate && endDate && endDate >= startDate
+    ? eachDayOfInterval({
+        start: startDate,
+        end,
+      })
+    : [];
+};
+
+export const getWeeklyDays = ({ daysInPeriod, startDate, isCrossDayEvent }: GetWeeklyDays) =>
+  daysInPeriod.reduce(
+    (
+      acc: {
+        daysArr: number[];
+        daysInfoArr: { dayNumber: number; isCrossDay: boolean }[];
+        weeklyDaysCount: number;
+      },
+      currentDate,
+    ) => {
+      const dayOfWeek = getDay(currentDate);
+
+      if (dayOfWeek === getDay(startDate)) {
+        const weeklyDayNumber = acc.weeklyDaysCount * 7;
+        acc.daysArr.push(weeklyDayNumber, ...(isCrossDayEvent ? [weeklyDayNumber + 1] : []));
+        acc.daysInfoArr.push(
+          {
+            dayNumber: weeklyDayNumber,
+            isCrossDay: false,
+          },
+          ...(isCrossDayEvent ? [{ dayNumber: weeklyDayNumber + 1, isCrossDay: true }] : []),
+        );
+        acc.weeklyDaysCount++;
+      }
+
+      return acc;
+    },
+    { daysArr: [], daysInfoArr: [], weeklyDaysCount: 0 },
+  );
+
+const getActivityIncompleteCommonFields = (formContext: yup.TestContext<yup.AnyObject>) => {
+  const startDate = formContext.from?.[1]?.value?.startDate;
+  const endDate = formContext.from?.[1]?.value?.endDate;
+  const startTime = formContext.from?.[1]?.value?.startTime;
+  const endTime = formContext.from?.[1]?.value?.endTime;
+  const periodicity = formContext.from?.[1]?.value?.periodicity;
+  const isCrossDayEvent = getNextDayComparison(startTime, endTime);
+
+  return { startDate, endDate, periodicity, isCrossDayEvent, startTime, endTime };
+};
+
+export const getActivityIncompleteValidation = () =>
+  yup
+    .number()
+    .test(
+      'activity-availability-at-day',
+      t('activityIsUnavailable'),
+      function activityAvailabilityAtDayTest(value) {
+        if (!value || value === 0) return true;
+        const { startDate, endDate, periodicity, isCrossDayEvent } =
+          getActivityIncompleteCommonFields(this);
+        const daysInPeriod = getDaysInPeriod({ isCrossDayEvent, startDate, endDate });
+        if (periodicity === Periodicity.Once) {
+          return value < ONCE_ACTIVITY_INCOMPLETE_LIMITATION;
+        }
+        if (periodicity === Periodicity.Daily || periodicity === Periodicity.Weekdays) {
+          return value < daysInPeriod.length;
+        }
+        if (periodicity === Periodicity.Weekly) {
+          const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
+
+          return weeklyDays.daysArr.includes(value);
+        }
+
+        return true;
+      },
+    );
+
+export const getActivityIncompleteDateValidation = () =>
+  yup
+    .date()
+    .test(
+      'activity-incomplete-date',
+      t('activityIsUnavailable'),
+      function activityIncompleteDateTest(value) {
+        if (!value) return true;
+        const { startDate, endDate, periodicity, isCrossDayEvent } =
+          getActivityIncompleteCommonFields(this);
+        if (periodicity === Periodicity.Monthly) {
+          const testedDate = format(value, DateFormats.YearMonthDay);
+          const includedMonthlyDates = getDaysInMonthlyPeriodicity({
+            chosenDate: getDate(startDate),
+            eventStart: startDate,
+            eventEnd: endDate,
+            returnStringDate: true,
+          }) as string[];
+          const includedMonthlyDatesCrossDay = isCrossDayEvent
+            ? includedMonthlyDates.reduce(
+                (acc: string[], date) => [
+                  ...acc,
+                  date,
+                  format(addDays(new Date(date), 1), DateFormats.YearMonthDay),
+                ],
+                [],
+              )
+            : null;
+
+          return (includedMonthlyDatesCrossDay || includedMonthlyDates).includes(testedDate);
+        }
+
+        return true;
+      },
+    );
+
+export const getReminderTimeComparison = ({
+  time,
+  startTime,
+  endTime,
+  isCrossDay,
+}: GetReminderTimeComparison) => {
+  const rangeStartTime = isCrossDay ? DEFAULT_START_TIME : startTime;
+  const rangeEndTime = isCrossDay ? endTime : DEFAULT_END_TIME;
+
+  return getBetweenStartEndNextDaySingleComparison({
+    time,
+    rangeStartTime,
+    rangeEndTime,
+  });
+};
+
+export const getReminderTimeValidation = () =>
+  yup
+    .string()
+    .test(
+      'reminder-time-validation',
+      t('activityUnavailableAtTime'),
+      function reminderTimeTest(value) {
+        if (!value) return true;
+        const time = value;
+        const { activityIncomplete, activityIncompleteDate } = this.parent;
+        const { startTime, endTime, startDate, endDate, periodicity, isCrossDayEvent } =
+          getActivityIncompleteCommonFields(this);
+        const isAlwaysPeriodicity = periodicity === Periodicity.Always;
+        const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
+
+        if (isAlwaysPeriodicity) return true;
+        if (!isCrossDayEvent || isWeekdaysPeriodicity) {
+          return getBetweenStartEndNextDaySingleComparison({
+            time,
+            rangeStartTime: startTime,
+            rangeEndTime: endTime,
+          });
+        }
+
+        const isOncePeriodicity = periodicity === Periodicity.Once;
+        const isDailyPeriodicity = periodicity === Periodicity.Daily;
+        const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
+        const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
+        const daysInPeriod = getDaysInPeriod({
+          isCrossDayEvent,
+          startDate,
+          endDate: isOncePeriodicity ? startDate : endDate,
+        });
+
+        if (isOncePeriodicity || isDailyPeriodicity) {
+          const isCrossDay = daysInPeriod.length - 1 === activityIncomplete;
+
+          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
+        }
+
+        if (isWeeklyPeriodicity) {
+          const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
+          const isCrossDay =
+            weeklyDays.daysInfoArr.find((day) => day.dayNumber === activityIncomplete)
+              ?.isCrossDay ?? false;
+
+          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
+        }
+
+        if (isMonthlyPeriodicity) {
+          const includedMonthlyDates = getDaysInMonthlyPeriodicity({
+            chosenDate: getDate(startDate),
+            eventStart: startDate,
+            eventEnd: endDate,
+            returnStringDate: true,
+          }) as string[];
+          const includedMonthlyDatesWithCrossDay = includedMonthlyDates.reduce(
+            (acc: { monthlyDate: string; isCrossDay: boolean }[], date) => {
+              acc.push(
+                {
+                  monthlyDate: date,
+                  isCrossDay: false,
+                },
+                {
+                  monthlyDate: format(addDays(new Date(date), 1), DateFormats.YearMonthDay),
+                  isCrossDay: true,
+                },
+              );
+
+              return acc;
+            },
+            [],
+          );
+
+          const isCrossDay =
+            includedMonthlyDatesWithCrossDay.find(
+              (day) => day.monthlyDate === format(activityIncompleteDate, DateFormats.YearMonthDay),
+            )?.isCrossDay ?? false;
+
+          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
+        }
+
+        return true;
+      },
+    );

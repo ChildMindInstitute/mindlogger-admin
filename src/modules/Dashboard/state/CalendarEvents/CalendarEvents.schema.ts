@@ -25,6 +25,8 @@ export type CalendarEvent = {
   eventStart: Date;
   eventEnd: Date | null;
   eventCurrentDate?: string;
+  startTime: string | null;
+  endTime: string | null;
 } & Pick<
   Event,
   'oneTimeCompletion' | 'accessBeforeSchedule' | 'timerType' | 'timer' | 'notification'
@@ -60,6 +62,13 @@ export type AllDayEventsSortedByDaysItem = {
   eventsIds: { id: string; isHiddenInTimeView: boolean }[];
 };
 
+export type GetDaysInMonthlyPeriodicity = {
+  chosenDate: number;
+  eventEnd: Date;
+  eventStart: Date;
+  returnStringDate?: boolean;
+};
+
 export type CalendarEventsSchema = {
   events: BaseSchema<CalendarEvent[] | null>;
   alwaysAvailableVisible: BaseSchema<boolean>;
@@ -71,4 +80,32 @@ export type CalendarEventsSchema = {
     allDayEventsSortedByDays: AllDayEventsSortedByDaysItem[] | null;
     hiddenEventsIds: string[] | null;
   } | null>;
+};
+
+export type GetDateFromDateStringTimeString = { date: string | null; time: string };
+
+export type GetEventStartDateTime = {
+  periodicity: Periodicity;
+  selectedDate: string | null;
+  startDate: string | null;
+  startTime: string;
+  nextYearDateString: string | null;
+};
+
+export type GetEventEndDateTime = {
+  periodicity: Periodicity;
+  selectedDate: string | null;
+  endDate: string | null;
+  endTime: string;
+  currentYear: number;
+  eventStart: Date;
+  isCrossDayEvent: boolean;
+};
+
+export type GetEventsArrayFromDates = {
+  dates: Date[];
+  commonProps: Omit<CalendarEvent, 'id' | 'start' | 'end'>;
+  startTime?: string;
+  endTime?: string;
+  isCrossDayEvent: boolean;
 };

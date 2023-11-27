@@ -1,14 +1,10 @@
 import i18n from 'i18n';
-import { ItemFormValues } from 'modules/Builder/types';
+import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
 import { ItemResponseType } from 'shared/consts';
-import {
-  SingleAndMultipleSelectItemResponseValues,
-  SingleAndMultipleSelectRowsResponseValues,
-  SliderRowsResponseValues,
-  ItemAlert,
-} from 'shared/state';
+import { ItemAlert, SliderRowsItem } from 'shared/state';
 import { createArray, groupBy } from 'shared/utils';
 import { Option } from 'shared/components/FormComponents';
+import { DEFAULT_SLIDER_MAX_NUMBER, DEFAULT_SLIDER_ROWS_MIN_NUMBER } from 'modules/Builder/consts';
 
 import { OptionTypes } from './Alert.types';
 
@@ -31,7 +27,7 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
     responseType === ItemResponseType.SingleSelection ||
     responseType === ItemResponseType.MultipleSelection
   ) {
-    const { options } = (responseValues as SingleAndMultipleSelectItemResponseValues) ?? {};
+    const { options } = responseValues ?? {};
 
     return (
       options?.reduce((result: Option[], option, index) => {
@@ -50,7 +46,7 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
     responseType === ItemResponseType.SingleSelectionPerRow ||
     responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const { options, rows } = (responseValues as SingleAndMultipleSelectRowsResponseValues) ?? {};
+    const { options, rows } = responseValues ?? {};
 
     return options?.reduce((result: Option[], option, index) => {
       const alertsWithOption = alerts?.filter(({ optionId }) => optionId === option.id);
@@ -72,7 +68,7 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
 
   if (responseType === ItemResponseType.SliderRows) {
     return (
-      (responseValues as SliderRowsResponseValues)?.rows?.map(({ id, label }, index) => ({
+      responseValues?.rows?.map(({ id, label }, index) => ({
         labelKey: getOptionName(OptionTypes.Slider, index, label),
         value: id!,
       })) || []
@@ -88,7 +84,7 @@ export const getItemsList = (formValues: ItemFormValues, alert: ItemAlert) => {
     responseType === ItemResponseType.SingleSelectionPerRow ||
     responseType === ItemResponseType.MultipleSelectionPerRow
   ) {
-    const { rows, options } = (responseValues as SingleAndMultipleSelectRowsResponseValues) ?? {};
+    const { rows, options } = responseValues ?? {};
 
     const alertsByRow = groupBy(alerts ?? [], 'rowId');
 
@@ -114,12 +110,14 @@ export const getItemsList = (formValues: ItemFormValues, alert: ItemAlert) => {
   return [];
 };
 
-export const getSliderRowsItemList = (formValues: ItemFormValues, { sliderId }: ItemAlert) => {
+export const getSliderRowsItemList = (
+  formValues: SliderRowsItem<ItemFormValuesCommonType>,
+  { sliderId }: ItemAlert,
+) => {
   const { responseValues, alerts } = formValues;
   if (!sliderId) return [];
 
-  const { minValue, maxValue } =
-    (responseValues as SliderRowsResponseValues)?.rows?.find(({ id }) => id === sliderId) ?? {};
+  const { minValue, maxValue } = responseValues?.rows?.find(({ id }) => id === sliderId) ?? {};
   const alertsNumbersToExclude = alerts?.reduce((acc: string[], alert) => {
     if (alert.sliderId === sliderId && alert.value) {
       acc.push(String(alert.value));
@@ -129,10 +127,14 @@ export const getSliderRowsItemList = (formValues: ItemFormValues, { sliderId }: 
   }, []);
 
   if ([minValue, maxValue].includes(undefined)) return [];
-  const maxValueNumber = Number(maxValue);
-  const minValueNumber = Number(minValue);
+  const maxValueNumber =
+    Number(maxValue) > DEFAULT_SLIDER_MAX_NUMBER ? DEFAULT_SLIDER_MAX_NUMBER : Number(maxValue);
+  const minValueNumber =
+    Number(minValue) < DEFAULT_SLIDER_ROWS_MIN_NUMBER
+      ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
+      : Number(minValue);
 
-  return createArray(Number(maxValueNumber) - Number(minValueNumber) + 1, (index) => {
+  return createArray(maxValueNumber - minValueNumber + 1, (index) => {
     const value = `${minValueNumber + index}`;
 
     return {

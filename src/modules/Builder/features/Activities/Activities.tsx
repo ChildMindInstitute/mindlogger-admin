@@ -1,13 +1,13 @@
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
 
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { page } from 'resources';
-import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
+import { ActivityFormValues, AppletFormValues, GetNewPerformanceTask } from 'modules/Builder/types';
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
@@ -16,7 +16,8 @@ import {
 } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
-import { pluck, getUniqueName, Mixpanel } from 'shared/utils';
+import { pluck, Mixpanel } from 'shared/utils';
+import { getUniqueName } from 'modules/Builder/utils';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
@@ -26,7 +27,7 @@ import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch, getFieldState, setValue } = useFormContext();
+  const { control, getFieldState, setValue } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
@@ -46,7 +47,7 @@ export const Activities = () => {
   });
 
   const activityNames = pluck(activities, 'name');
-  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
+  const activityFlows: AppletFormValues['activityFlows'] = useWatch({ name: 'activityFlows' });
   const errors = activities?.map((_, index) => !!getFieldState(`activities.${index}`).error);
 
   const navigateToActivity = (activityId?: string) =>
@@ -72,6 +73,7 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
+    Mixpanel.track('Add Activity click');
     const {
       index,
       performanceTaskName,
@@ -135,7 +137,7 @@ export const Activities = () => {
       ? getNewPerformanceTask({
           name,
           description: activityToDuplicate.description,
-          performanceTask: activityToDuplicate,
+          performanceTask: activityToDuplicate as GetNewPerformanceTask['performanceTask'],
         })
       : getNewActivity({ activity: activityToDuplicate });
 

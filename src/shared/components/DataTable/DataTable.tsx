@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';
-import { getEntityKey } from 'shared/utils/builderHelpers';
 import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
+import { getEntityKey } from 'shared/utils';
 
 import { DataTableItem, DataTableProps } from './DataTable.types';
 import {
@@ -23,14 +23,13 @@ export const DataTable = ({
   onSelect,
   onSelectAll,
   hasError,
-  isValueName = false,
   tableHeadBackground,
   'data-testid': dataTestid,
   tooltipByDefault,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
 
-  const getItemKey = (item: DataTableItem) => (isValueName ? item.name || '' : item.id);
+  const getItemKey = (item: DataTableItem) => item.id;
 
   useEffect(() => {
     if (selectedItems) setSelected(selectedItems);
@@ -94,6 +93,7 @@ export const DataTable = ({
                     <StyledCheckbox
                       checked={isSelected}
                       onChange={() => handleSelect(item, isSelected)}
+                      data-testid={`${dataTestid}-checkbox-${index}`}
                     />
                   </TableCell>
                 )}

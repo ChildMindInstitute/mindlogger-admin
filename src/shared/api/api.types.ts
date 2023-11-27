@@ -32,7 +32,7 @@ export type Response<T> = {
 };
 
 export type ResponseWithObject<T> = {
-  count: number;
+  count?: number;
   result: T;
 };
 

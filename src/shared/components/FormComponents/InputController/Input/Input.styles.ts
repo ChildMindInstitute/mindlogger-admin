@@ -7,8 +7,22 @@ import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import { commonEllipsisStyles } from 'shared/styles/stylesConsts';
 
+const commonHintProps = `
+  position: absolute;
+  bottom: -2.1rem;
+  right: 1.5rem;
+  `;
+
 export const StyledTextField = styled(TextField)`
   width: 100%;
+
+  && {
+    &:hover {
+      .Mui-disabled .MuiOutlinedInput-notchedOutline {
+        border-color: ${variables.palette.on_surface_alfa12};
+      }
+    }
+  }
 
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
@@ -17,7 +31,7 @@ export const StyledTextField = styled(TextField)`
   }
 `;
 
-export const StyledTextFieldContainer = styled(Box)`
+export const StyledTextFieldContainer = styled(Box, shouldForwardProp)`
   position: relative;
   width: 100%;
 
@@ -25,15 +39,15 @@ export const StyledTextFieldContainer = styled(Box)`
     position: absolute;
     left: 0;
     bottom: -2.1rem;
-    width: calc(100% - 16.5rem);
+    max-width: calc(100% - 1.4rem);
+    width: ${({ hasCounter }: { hasCounter: boolean }) =>
+      hasCounter ? 'calc(100% - 16.5rem)' : '100%'};
     ${commonEllipsisStyles};
   }
 `;
 
 export const StyledCounter = styled(StyledBodyMedium, shouldForwardProp)`
-  position: absolute;
-  bottom: -2.1rem;
-  right: 1.5rem;
+  ${commonHintProps};
   color: ${({ hasError }: { hasError?: boolean }) =>
     hasError ? variables.palette.semantic.error : variables.palette.on_surface_variant};
 `;
@@ -44,4 +58,9 @@ export const StyledUpDown = styled(StyledFlexColumn)`
   svg {
     fill: ${variables.palette.on_surface_variant};
   }
+`;
+
+export const StyledHint = styled(StyledBodyMedium)`
+  ${commonHintProps};
+  color: ${variables.palette.on_surface_variant};
 `;

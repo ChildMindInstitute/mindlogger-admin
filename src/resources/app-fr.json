@@ -73,6 +73,9 @@
   "addSubscales": "Ajouter une sous-échelle",
   "addToBuilder": "Ajouter au créateur",
   "addToBuilderError": "Le contenu du panier n'a pas été ajouté au créateur. Veuillez réessayer.",
+  "addToBuilderAccessError": "Pas d'accès",
+  "addToBuilderAppletAccessError": "Votre accès à l'applet a été supprimé.",
+  "addToBuilderWorkspaceAccessError": "Votre accès à l'espace de travail a été supprimé.",
   "addToCart": "Ajouter au panier",
   "addToExistingApplet": "Ajouter à une applet existante",
   "addTotalScoreLookupTable": {
@@ -111,6 +114,7 @@
   "allDay": "Toute la journée",
   "allowAccessBeforeTime": "Autoriser l'accès avant l'heure “À partir de“",
   "allowToSkipAllItems": "Autoriser à ignorer tous les éléments",
+  "nextDay": "Le prochain jour",
   "alwaysAvailable": "Toujours disponible",
   "alwaysAvailableWarning": "Si vous définissez cet événement comme toujours disponible, tous les événements programmés pour cette activité seront supprimés.",
   "any": "N'importe lequel",
@@ -547,7 +551,7 @@
     "invalidActivityNames": "Les Activités <1>{{activityNames}}</1> n'existent pas dans l'Applet <1>{{appletName}}</1>. Veuillez entrer un nom d'Activité valide et réuploader le fichier.",
     "invalidDataFormat": "Format de données invalide pour les champs suivants :",
     "notificationTime": "<2>Heure de Notification</2>. Format de date valide : <2>HH:mm ou -</2>.",
-    "startEndTime": "<2>L'heure de Fin de l'Activité</2> doit être ultérieure à <2>l'heure de Début de l'Activité</2>.",
+    "startEndTime": "<2>L'heure de Fin de l'Activité</2> ne devrait pas être égal à <2>l'heure de Début de l'Activité</2>.",
     "startTime": "<2>Heure de Début de l'Activité</2>. Format de date valide : <2>HH:mm pour une activité programmée et - pour une activité toujours disponible</2>.",
     "updateReupload": "Veuillez mettre à jour et réuploader le fichier."
   },
@@ -750,6 +754,7 @@
   "nov": "Novembre",
   "noVersions": "Pas encore de versions.",
   "numberOfConsecutiveDays": "Nombre de jours consécutifs où l'utilisateur ne termine pas l'activité",
+  "deadlineForActivityCompletion": "Date limite de réalisation de l'activité, sinon le rappel sera envoyé",
   "numberOfTrials": "Nombre d'Essais:",
   "numberOfTrialsTooltip": "Nombre de manches d'entraînement avant la manche de test",
   "numberSelect": "Sélection de Numéro",
@@ -1095,6 +1100,9 @@
   "timeHint": "Sélection de l'heure au format HH:MM",
   "timeIsShownInUTC": "L'heure est<br />affichée en UTC",
   "timeNotificationsError": "L'heure sélectionnée dans l'onglet Notifications est en dehors de la plage horaire de disponibilité de l'activité. Veuillez mettre à jour.",
+  "activityIncompleteError": "Le rappel sélectionné dans l'onglet Notifications est en dehors du temps de disponibilité de l'Activité. Veuillez mettre à jour",
+  "weekdaysReminderMessage": "Remarque: Le système n'enverra pas de rappels le week-end, car l'activité est limitée aux jours de semaine.",
+  "activityIsUnavailable": "L'activité n'est pas disponible ce jour",
   "timer": "Minuteur",
   "timeRange": "Plage horaire",
   "timeRangeDescription": "Le participant sera invité à indiquer une plage horaire.",
@@ -1198,6 +1206,7 @@
   "workspaceNameRequired": "Le nom de l'espace de travail est requis",
   "workspaceRequired": "Veuillez sélectionner l'espace de travail pour continuer.",
   "workspaceSelection": "Sélectionnez l'espace de travail",
+  "workspacesLoading": "Vérification de vos espaces de travail",
   "workspaceTooltip": "Le nom de l'espace de travail s'affiche pour les gestionnaires que vous avez invités à votre applet dans leur interface.",
   "year": "Année",
   "years": "Années",
@@ -1205,6 +1214,17 @@
   "yesAuthorize": "Oui, autoriser",
   "yesRemove": "Oui, supprimer",
   "youNeedToAuthorize": "Vous devez autoriser",
+  "positiveIntegerRequired": "Un entier positif est requis",
+  "positiveIntegerOrZeroRequired": "Un entier positif ou 0 est requis",
+  "fromToHint": "De {{min}} à {{max}}",
+  "selectValidInterval": "Sélectionnez un intervalle valide",
+  "selectValueWithinInterval": "Sélectionnez une valeur dans un intervalle",
   "bannerText": "<0>Vous utilisez la nouvelle version de MindLogger!</0><1>Les utilisateurs finaux doivent mettre à jour vers la nouvelle application.</1><2>Prenez ces mesures dès maintenant pour vous assurer que les données de réponse des participants ne sont pas perdues.</2>",
-  "youNeedToAuthorizeHint": "Pour créer une nouvelle applet ou la fusionner avec d'autres, vous devez autoriser."
+  "youNeedToAuthorizeHint": "Pour créer une nouvelle applet ou la fusionner avec d'autres, vous devez autoriser.",
+  "errorFallback": {
+    "somethingWentWrong": "Quelque chose s'est mal passé.",
+    "details": "Détails",
+    "refreshPage": "Rafraîchir la page"
+  },
+  "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet."
 }

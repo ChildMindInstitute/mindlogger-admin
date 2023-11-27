@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -8,21 +8,23 @@ import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
+import { SelectEvent } from 'shared/types/event';
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
+import { ArrowPressType } from '../InputController.types';
 import { InputProps } from './Input.types';
 import {
   StyledCounter,
+  StyledHint,
   StyledTextField,
   StyledTextFieldContainer,
   StyledUpDown,
 } from './Input.styles';
 import { getTextAdornment } from './Input.utils';
-import { INPUT_DEBOUNCE_VALUE } from './Input.const';
 
 export const Input = <T extends FieldValues>({
   onChange,
   value,
-  isEmptyStringAllowed,
   minNumberValue,
   maxNumberValue,
   onArrowPress,
@@ -36,20 +38,20 @@ export const Input = <T extends FieldValues>({
   Counter = StyledCounter,
   counterProps,
   textAdornment,
-  withDebounce,
+  withDebounce = false,
+  hintText,
+  disabled,
   'data-testid': dataTestid,
   ...textFieldProps
 }: InputProps<T>) => {
   const { t } = useTranslation('app');
   const inputRef = useRef<HTMLInputElement | null>();
   const isNumberType = textFieldProps.type === 'number';
+  const isControlledNumberValue = minNumberValue !== undefined || maxNumberValue !== undefined;
   const getTextFieldValue = () => {
-    if (!isNumberType) return value ?? '';
+    if (!isNumberType || !isControlledNumberValue) return value ?? '';
 
-    if (
-      (typeof value !== 'number' && !isEmptyStringAllowed) ||
-      (minNumberValue !== undefined && value < minNumberValue)
-    ) {
+    if (minNumberValue !== undefined && value < minNumberValue) {
       return String(minNumberValue);
     }
 
@@ -63,27 +65,33 @@ export const Input = <T extends FieldValues>({
   const numberValue = isNaN(+value) ? 0 : +value;
 
   const handleAddNumber = () => {
-    if (onArrowPress) return onArrowPress(numberValue + 1);
-    if (typeof maxNumberValue !== 'number') return onChange?.(numberValue + 1);
-
-    if (numberValue < maxNumberValue) onChange?.(numberValue + 1);
+    if (onArrowPress) return onArrowPress(numberValue + 1, ArrowPressType.Add);
+    if (maxNumberValue === undefined || numberValue < maxNumberValue) {
+      onChange?.(numberValue + 1);
+    }
   };
-  const handleDistractNumber = () => {
-    if (onArrowPress) return onArrowPress(numberValue - 1);
-    if (minNumberValue === undefined || numberValue > minNumberValue) onChange?.(numberValue - 1);
+  const handleSubtractNumber = () => {
+    if (onArrowPress) return onArrowPress(numberValue - 1, ArrowPressType.Subtract);
+    if (minNumberValue === undefined || numberValue > minNumberValue) {
+      onChange?.(numberValue - 1);
+    }
   };
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (event: SelectEvent) => {
     if (onCustomChange) return onCustomChange(event);
-
     const newValue = event.target.value;
+    if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength) return;
+    const getNumberValue = () => {
+      if (!isNumberType) return undefined;
+      if (isControlledNumberValue) return +newValue;
 
-    if (newValue && maxLength && restrictExceededValueLength && newValue.length > maxLength) return;
+      return newValue === '' ? '' : +newValue;
+    };
 
-    onChange?.(isNumberType ? +newValue : newValue);
+    onChange?.(getNumberValue() ?? newValue);
   };
   const handleDebouncedChange = debounce(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(event),
-    INPUT_DEBOUNCE_VALUE,
+    (event: SelectEvent) => handleChange(event),
+    CHANGE_DEBOUNCE_VALUE,
   );
 
   useEffect(() => {
@@ -93,7 +101,7 @@ export const Input = <T extends FieldValues>({
 
   return (
     <Tooltip tooltipTitle={tooltip}>
-      <StyledTextFieldContainer>
+      <StyledTextFieldContainer hasCounter={!!maxLength}>
         <StyledTextField
           {...textFieldProps}
           {...(withDebounce ? { inputRef } : { value: getTextFieldValue() })}
@@ -101,17 +109,18 @@ export const Input = <T extends FieldValues>({
           error={error}
           helperText={helperText}
           data-testid={dataTestid}
+          disabled={disabled}
           InputProps={
             isNumberType
               ? {
                   endAdornment: (
                     <StyledFlexTopCenter>
-                      {getTextAdornment(value, textAdornment)}
+                      {getTextAdornment({ value, textAdornment, disabled })}
                       <StyledUpDown>
-                        <StyledClearedButton onClick={handleAddNumber}>
+                        <StyledClearedButton disabled={disabled} onClick={handleAddNumber}>
                           <Svg width={18} height={18} id="navigate-up" />
                         </StyledClearedButton>
-                        <StyledClearedButton onClick={handleDistractNumber}>
+                        <StyledClearedButton disabled={disabled} onClick={handleSubtractNumber}>
                           <Svg width={18} height={18} id="navigate-down" />
                         </StyledClearedButton>
                       </StyledUpDown>
@@ -131,6 +140,7 @@ export const Input = <T extends FieldValues>({
             {value?.length || 0}/{maxLength} {t('characters')}
           </Counter>
         )}
+        {!maxLength && !error && hintText && <StyledHint>{hintText}</StyledHint>}
       </StyledTextFieldContainer>
     </Tooltip>
   );

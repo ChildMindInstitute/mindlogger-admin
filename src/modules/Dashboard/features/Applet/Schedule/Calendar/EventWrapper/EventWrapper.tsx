@@ -5,25 +5,19 @@ import { format } from 'date-fns';
 import { Tooltip } from 'shared/components/Tooltip';
 import { DateFormats } from 'shared/consts';
 
+import { EVENT_CLASSNAME } from '../Calendar.const';
 import { EventWrapperProps, UiType } from './EventWrapper.types';
 
 export const EventWrapper = ({
-  event: { title, id, start, end, isHiddenInTimeView },
+  event: { title, id, start, end, isHiddenInTimeView, startTime, endTime },
   children,
   components,
   uiType = UiType.TimeView,
 }: EventWrapperProps) => {
   const emptyRef = useRef<HTMLElement>(null);
   const childrenRef = useRef<HTMLElement>(null);
-  const isVisible = components?.isAllDayEventsVisible?.visible;
   const timeView = uiType === UiType.TimeView;
-
-  const tooltipTitle = (
-    <>
-      <Box>{`${format(start, DateFormats.Time)} - ${format(end, DateFormats.Time)}`}</Box>
-      <Box>{title}</Box>
-    </>
-  );
+  const isVisible = components?.isAllDayEventsVisible?.visible;
 
   useEffect(() => {
     if (timeView) {
@@ -34,7 +28,7 @@ export const EventWrapper = ({
       if (parentElement) {
         for (const child of Array.from(parentElement.children)) {
           if (child.classList.contains('rbc-row-segment')) {
-            isVisible || child.querySelector('.rbc-event')
+            isVisible || child.querySelector(EVENT_CLASSNAME)
               ? child.classList.remove('hidden')
               : child.classList.add('hidden');
           }
@@ -43,9 +37,20 @@ export const EventWrapper = ({
     }
   }, [isVisible]);
 
-  return timeView && isHiddenInTimeView ? (
-    <Box ref={emptyRef} />
-  ) : (
+  if (timeView && isHiddenInTimeView) {
+    return <Box ref={emptyRef} />;
+  }
+
+  const tooltipTitle = (
+    <>
+      <Box>{`${startTime ?? format(start, DateFormats.Time)} - ${
+        endTime ?? format(end, DateFormats.Time)
+      }`}</Box>
+      <Box>{title}</Box>
+    </>
+  );
+
+  return (
     <Box
       className="event-wrapper"
       ref={childrenRef}

@@ -33,3 +33,8 @@ export const repeatsButtons = [
     label: 'monthly',
   },
 ];
+
+export enum TimeType {
+  FromTime,
+  ToTime,
+}

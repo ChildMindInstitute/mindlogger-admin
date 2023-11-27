@@ -38,6 +38,7 @@ export const SelectController = <T extends FieldValues>({
   disabled,
   sx,
   dropdownStyles,
+  isErrorVisible = true,
   'data-testid': dataTestid,
   rootSelector,
   targetSelector,
@@ -130,11 +131,14 @@ export const SelectController = <T extends FieldValues>({
         onChange={onChange}
         value={selectValue}
         error={!!error || providedError}
-        helperText={error?.message || null}
+        helperText={isErrorVisible ? error?.message || null : ''}
         disabled={disabled}
         SelectProps={{
           MenuProps: {
-            PaperProps: { sx: { ...selectDropdownStyles, ...dropdownStyles } },
+            PaperProps: {
+              sx: { ...selectDropdownStyles, ...dropdownStyles },
+              'data-testid': `${dataTestid}-dropdown`,
+            },
           },
           IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
         }}

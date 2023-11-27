@@ -9,19 +9,24 @@ type CounterProps = {
   hasError?: boolean;
 };
 
+export enum ArrowPressType {
+  Add,
+  Subtract,
+}
+
 export type FormInputProps = {
   textAdornment?: string;
   tooltip?: string;
   maxLength?: number;
   minNumberValue?: number;
   maxNumberValue?: number;
-  isEmptyStringAllowed?: boolean;
   isErrorVisible?: boolean;
   restrictExceededValueLength?: boolean;
-  onArrowPress?: (value: number) => void;
+  onArrowPress?: (value: number, type: ArrowPressType) => void;
   Counter?: FC<PropsWithChildren<CounterProps>>;
   counterProps?: Record<string, unknown>;
   withDebounce?: boolean;
+  hintText?: string;
   'data-testid'?: string;
 } & TextFieldProps;
 

@@ -17,6 +17,8 @@ export const StyledMaxCharacters = styled(StyledFlexTopCenter)`
 `;
 
 export const StyledInputWrapper = styled(Box)`
+  margin-top: ${theme.spacing(0.5)};
+
   .MuiFormHelperText-root.Mui-error {
     position: static;
   }
