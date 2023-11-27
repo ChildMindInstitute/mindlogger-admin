@@ -28,7 +28,7 @@ export const useDataPreloader = <T>({
     listSize,
     totalSize,
     limit: ROWS_PER_PAGE,
-    isFetching: isPending,
+    isLoading: isPending,
   });
 
   useIntersectionObserver({
