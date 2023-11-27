@@ -11,7 +11,7 @@ import { DescriptionProps } from './Description.types';
 export const Description = ({ step }: DescriptionProps) => {
   const { t } = useTranslation('app');
   const getAppletData = useAppletDataFromForm();
-  const name = getAppletData().displayName;
+  const name = getAppletData()?.displayName;
   const typePrefix = applet.useResponseTypePrefix();
 
   const hasNotBeenSaved = (

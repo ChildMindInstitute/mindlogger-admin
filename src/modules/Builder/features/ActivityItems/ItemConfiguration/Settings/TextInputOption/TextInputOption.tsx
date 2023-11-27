@@ -32,9 +32,11 @@ export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
   const requiredContext = isTextInputOptionRequired ? { context: 'required' } : undefined;
 
   return (
-    <StyledContainerWithBg>
+    <StyledContainerWithBg data-testid="builder-activity-items-item-configuration-text-input-option">
       <StyledTextInputOptionHeader>
-        <StyledLabelBoldLarge>{t('textInputOptionLabel', requiredContext)}</StyledLabelBoldLarge>
+        <StyledLabelBoldLarge data-testid="builder-activity-items-item-configuration-text-input-option-title">
+          {t('textInputOptionLabel', requiredContext)}
+        </StyledLabelBoldLarge>
         <StyledClearedButton
           sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
           onClick={onRemove}
@@ -46,12 +48,13 @@ export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
       <StyledTextInputOptionDescription>
         <StyledBodyLarge
           sx={{ opacity: variables.opacity.disabled, color: variables.palette.outline }}
+          data-testid="builder-activity-items-item-configuration-text-input-option-description"
         >
           {t('textInputOptionDescription', requiredContext)}
         </StyledBodyLarge>
       </StyledTextInputOptionDescription>
       {isTextInputOptionRequired && (
-        <StyledTextInputOptionHelpText>
+        <StyledTextInputOptionHelpText data-testid="builder-activity-items-item-configuration-text-input-option-description-required">
           {t('textInputOptionHelpText')}
         </StyledTextInputOptionHelpText>
       )}

@@ -7,10 +7,10 @@ import {
   DeleteAppletSetting,
   ExportDataSetting,
   PublishConcealAppletSetting,
-  ReportConfigSetting,
   VersionHistorySetting,
   LiveResponseStreamingSetting,
 } from 'shared/features/AppletSettings';
+import { ReportConfigSetting } from 'modules/Builder/features/ReportConfigSetting';
 import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './BuilderAppletSettings.types';
