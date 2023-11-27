@@ -21,7 +21,7 @@ export const AppletNotFoundPopup = () => {
       onSubmit={handleSubmit}
       title={t('appletNotFoundPopupTitle')}
       buttonText={isBuilder ? t('goToDashboard') : t('refresh')}
-      hasCross={!isBuilder}
+      hasCloseIcon={!isBuilder}
       data-testid="applet-not-found-popup"
     >
       {isBuilder ? null : (

@@ -39,7 +39,7 @@ export const Modal = ({
   hasActions = true,
   submitBtnTooltip,
   onTransitionEntered,
-  hasCross = true,
+  hasCloseIcon = true,
   'data-testid': dataTestId,
 }: ModalProps) => {
   const getActionsAlign = () => {
@@ -90,7 +90,7 @@ export const Modal = ({
       <StyledModalContent>
         <StyledDialogTitle align={titleAlign}>
           {title}
-          {hasCross && (
+          {hasCloseIcon && (
             <StyledCloseButton onClick={onClose} data-testid={`${dataTestId}-close-button`}>
               <Svg id="cross" />
             </StyledCloseButton>
