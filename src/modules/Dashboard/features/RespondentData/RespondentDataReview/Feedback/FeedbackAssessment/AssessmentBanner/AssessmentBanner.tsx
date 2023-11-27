@@ -19,7 +19,7 @@ export const AssessmentBanner = ({
   const { t } = useTranslation('app');
 
   return (
-    <StyledCollapse in={isBannerVisible}>
+    <StyledCollapse in={isBannerVisible} data-testid="assessment-banner">
       <StyledContainer>
         <StyledContent>
           <Svg id="exclamation-circle" width="22" height="22" />
@@ -29,11 +29,8 @@ export const AssessmentBanner = ({
           <StyledLabelMedium sx={{ gridArea: 'text' }}>
             {t('assessmentBanner.text')}
           </StyledLabelMedium>
-          <StyledButton>
-            <StyledLabelBoldMedium
-              sx={{ color: variables.palette.primary }}
-              onClick={onSelectLastVersion}
-            >
+          <StyledButton onClick={onSelectLastVersion} data-testid="assessment-banner-button">
+            <StyledLabelBoldMedium sx={{ color: variables.palette.primary }}>
               {t('assessmentBanner.button')}
             </StyledLabelBoldMedium>
           </StyledButton>
