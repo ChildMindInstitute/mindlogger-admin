@@ -3,11 +3,12 @@
 import { createRef } from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { ItemResponseType } from 'shared/consts';
-import { renderWithAppletFormData } from 'shared/utils';
+import { CHANGE_DEBOUNCE_VALUE, ItemResponseType } from 'shared/consts';
+import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
 
 import {
   getAppletFormDataWithItem,
+  mockedAlertsTestid,
   mockedItemName,
   mockedUseParams,
   renderItemConfiguration,
@@ -23,6 +24,19 @@ jest.mock('react-router-dom', () => ({
 
 const getDataTestidRegex = (isSliderRows) =>
   `builder-activity-items-item-configuration-slider${isSliderRows ? '-rows-\\d+' : ''}`;
+const renderSlider = (responseType) => {
+  const ref = createRef();
+
+  renderWithAppletFormData({
+    children: renderItemConfiguration(),
+    appletFormData: getAppletFormDataWithItem(),
+    formRef: ref,
+  });
+
+  setItemResponseType(responseType);
+
+  return ref;
+};
 
 describe('ItemConfiguration: Slider & Slider Rows', () => {
   beforeEach(() => {
@@ -34,12 +48,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
     ${ItemResponseType.Slider}     | ${'Slider: renders by default with 1 panel'}
     ${ItemResponseType.SliderRows} | ${'Slider rows: renders by default with 2 panels'}
   `('$description', async ({ responseType }) => {
-    renderWithAppletFormData({
-      children: renderItemConfiguration(),
-      appletFormData: getAppletFormDataWithItem(),
-    });
-
-    setItemResponseType(responseType);
+    renderSlider(responseType);
 
     const isSliderRows = responseType === ItemResponseType.SliderRows;
     const dataTestidRegex = getDataTestidRegex(isSliderRows);
@@ -106,15 +115,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
   });
 
   test('Slider Rows: slider is added and removed successfully', async () => {
-    const ref = createRef();
-
-    renderWithAppletFormData({
-      children: renderItemConfiguration(),
-      appletFormData: getAppletFormDataWithItem(),
-      formRef: ref,
-    });
-
-    setItemResponseType(ItemResponseType.SliderRows);
+    const ref = renderSlider(ItemResponseType.SliderRows);
 
     const button = screen.getByTestId(
       'builder-activity-items-item-configuration-slider-add-slider',
@@ -140,23 +141,190 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
     });
   });
 
-  describe('Slider/Slider Rows: sets correct data when changed');
+  describe('Slider/Slider Rows: sets correct data when changed', () => {
+    test.each`
+      testId                                                          | attribute     | value          | description
+      ${'builder-activity-items-item-configuration-slider-min-label'} | ${'minLabel'} | ${'min label'} | ${'Slider: min label'}
+      ${'builder-activity-items-item-configuration-slider-max-label'} | ${'maxLabel'} | ${'max label'} | ${'Slider: max label'}
+      ${'builder-activity-items-item-configuration-slider-min-value'} | ${'minValue'} | ${2}           | ${'Slider: min value'}
+      ${'builder-activity-items-item-configuration-slider-max-value'} | ${'maxValue'} | ${12}          | ${'Slider: max value'}
+    `('$description', ({ testId, attribute, value }) => {
+      const ref = renderSlider(ItemResponseType.Slider);
 
-  describe('Slider Rows: Alerts', () => {
-    test('Is rendered correctly', async () => {});
-    test('Add/remove works correctly', async () => {});
-    test('Sets correct data when changed', async () => {});
-    test('Options in list are filtered if already used', async () => {});
-    test('Removes alerts if the last Alert was removed', async () => {});
-    test('validations', () => {});
+      const input = screen.getByTestId(testId).querySelector('input');
+      fireEvent.change(input, { target: { value } });
+
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.${attribute}`)).toEqual(value);
+    });
+
+    test.each`
+      testId         | attribute     | value          | description
+      ${'label'}     | ${'label'}    | ${'label'}     | ${'Slider: min label'}
+      ${'min-label'} | ${'minLabel'} | ${'min label'} | ${'Slider: min label'}
+      ${'max-label'} | ${'maxLabel'} | ${'max label'} | ${'Slider: max label'}
+      ${'min-value'} | ${'minValue'} | ${2}           | ${'Slider: min value'}
+      ${'max-value'} | ${'maxValue'} | ${12}          | ${'Slider: max value'}
+    `('$description', async ({ testId, attribute, value }) => {
+      const ref = renderSlider(ItemResponseType.SliderRows);
+
+      const items = screen.getAllByTestId(new RegExp(`${getDataTestidRegex(true)}-${testId}`));
+      items.forEach((item, index) => {
+        const input = item.querySelector('input');
+        fireEvent.change(input, { target: { value } });
+
+        expect(
+          ref.current.getValues(`${mockedItemName}.responseValues.rows.${index}.${attribute}`),
+        ).toEqual(value);
+      });
+    });
   });
 
   describe('Slider: Alerts', () => {
-    test('Is rendered correctly', async () => {});
-    test('Add/remove works correctly', async () => {});
-    test('Sets correct data when changed', async () => {});
+    test('Is rendered correctly', async () => {
+      renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      expect(screen.getByText('Alert 1')).toBeVisible();
+      expect(
+        screen.getByText('If Respondent selected when answering this question then send:'),
+      ).toBeVisible();
+      expect(screen.getByTestId(`${mockedAlertsTestid}-0-remove`)).toBeVisible();
+      expect(screen.getByTestId(`${mockedAlertsTestid}-0-text`));
+      expect(
+        screen.getByTestId(`${mockedAlertsTestid}-0-slider-value`).querySelector('input'),
+      ).toHaveValue(0);
+    });
+
+    test('Add/remove works correctly', async () => {
+      const ref = renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+      fireEvent.click(addAlert);
+
+      expect(screen.getByTestId(`${mockedAlertsTestid}-1-panel`)).toBeVisible();
+      expect(ref.current.getValues(`${mockedItemName}.alerts.1.alert`)).toEqual('');
+
+      const removeAlert = screen.getByTestId(`${mockedAlertsTestid}-0-remove`);
+      fireEvent.click(removeAlert);
+
+      expect(screen.queryByTestId(`${mockedAlertsTestid}-1-panel`)).not.toBeInTheDocument();
+      expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toBeUndefined();
+    });
+
+    test('Sets correct data when changed', async () => {
+      const ref = renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+      fireEvent.click(addAlert);
+
+      const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
+      fireEvent.change(alertInput, { target: { value: 'text' } });
+
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+
+      const valueInput = screen
+        .getByTestId(`${mockedAlertsTestid}-1-slider-value`)
+        .querySelector('input');
+      fireEvent.change(valueInput, { target: { value: 4 } });
+
+      expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
+        alert: 'text',
+        value: 4,
+        key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
+      });
+    });
+
+    test('Removes alerts if the last Alert was removed', async () => {
+      const ref = renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const removeAlert = screen.getByTestId(`${mockedAlertsTestid}-0-remove`);
+      fireEvent.click(removeAlert);
+
+      expect(screen.queryByTestId(`${mockedAlertsTestid}-0-panel`)).not.toBeInTheDocument();
+      expect(
+        ref.current.getValues(`${mockedItemName}.config.${ItemConfigurationSettings.HasAlerts}`),
+      ).toBeFalsy();
+      expect(ref.current.getValues(`${mockedItemName}.alerts`)).toEqual([]);
+    });
+
+    test.each`
+      message                                | value | attribute         | description
+      ${'Alert Message is required'}         | ${''} | ${'text'}         | ${'Validation error: empty message'}
+      ${'Select a value within an interval'} | ${-2} | ${'slider-value'} | ${'Validation error: value is not in range'}
+    `('$description', async ({ message, value, attribute }) => {
+      const ref = renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const input = screen
+        .getByTestId(`${mockedAlertsTestid}-0-${attribute}`)
+        .querySelector('input');
+      fireEvent.change(input, { target: { value } });
+
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+      await ref.current.trigger(`${mockedItemName}.alerts`);
+
+      await waitFor(() => {
+        expect(screen.getByText(message)).toBeVisible();
+      });
+    });
+  });
+
+  describe('Slider Rows: Alerts', () => {
+    test('Is rendered correctly', async () => {
+      renderSlider(ItemResponseType.SliderRows);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      expect(screen.getByText('Alert 1')).toBeVisible();
+      expect(
+        screen.getByText('If respondent in selected when answering this question then send:'),
+      ).toBeVisible();
+      expect(screen.getByTestId(`${mockedAlertsTestid}-0-remove`)).toBeVisible();
+      expect(screen.getByTestId(`${mockedAlertsTestid}-0-text`));
+      expect(screen.getByTestId(`${mockedAlertsTestid}-0-slider-rows-row`)).toBeVisible();
+      expect(screen.getByTestId(`${mockedAlertsTestid}-0-slider-rows-value`)).toBeVisible();
+    });
+
+    test('Sets correct data when changed', async () => {
+      const ref = renderSlider(ItemResponseType.SliderRows);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+      fireEvent.click(addAlert);
+
+      const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
+      fireEvent.change(alertInput, { target: { value: 'text' } });
+
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+
+      const sliderSelect = screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-row`);
+      const sliderSelectButton = sliderSelect.querySelector('[role="button"]');
+      fireEvent.mouseDown(sliderSelectButton);
+      fireEvent.click(
+        screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-row-dropdown`).querySelector('li'),
+      );
+
+      const optionSelect = screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-value`);
+      const optionSelectButton = optionSelect.querySelector('[role="button"]');
+      fireEvent.mouseDown(optionSelectButton);
+      fireEvent.click(
+        screen
+          .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
+          .querySelector('li:last-child'),
+      );
+
+      expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
+        alert: 'text',
+        value: '5',
+        sliderId: ref.current.getValues(`${mockedItemName}.responseValues.rows.0.id`),
+        key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
+      });
+    });
+
     test('Options in list are filtered if already used', async () => {});
-    test('Removes alerts if the last Alert was removed', async () => {});
+
     test('validations', () => {});
   });
 
@@ -166,7 +334,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
   describe('Slider: Scores', () => {
     test('Sets correct data when changed', async () => {});
     test('Is removed from document when checkbox is unchecked', async () => {});
-    test('validation');
+    test('validation', () => {});
   });
   describe('Slider: Additional Response Options', () => {
     test('Is rendered correctly when Add Text Input Option is selected', async () => {});
@@ -181,15 +349,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
     ${ItemConfigurationSettings.HasTickMarks}       | ${'Slider: Show Tick Marks'}
     ${ItemConfigurationSettings.HasTickMarksLabels} | ${'Slider: Show Tick Marks Labels'}
   `('$description', async ({ setting }) => {
-    const ref = createRef();
-
-    renderWithAppletFormData({
-      children: renderItemConfiguration(),
-      appletFormData: getAppletFormDataWithItem(),
-      formRef: ref,
-    });
-
-    setItemResponseType(ItemResponseType.Slider);
+    renderSlider(ItemResponseType.Slider);
 
     const isMarks = setting === ItemConfigurationSettings.HasTickMarks;
 
