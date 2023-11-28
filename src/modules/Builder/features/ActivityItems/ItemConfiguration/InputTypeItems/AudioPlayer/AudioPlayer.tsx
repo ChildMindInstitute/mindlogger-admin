@@ -14,6 +14,7 @@ import {
 
 import { AddAudio } from './AddAudio';
 import { UploadAudio } from './UploadAudio';
+import { RecordAudio } from './RecordAudio';
 import { RemoveAudioPopup } from './RemoveAudioPopup';
 import { StyledName, StyledNameWrapper } from './AudioPlayer.styles';
 import { AudioPlayerProps } from './AudioPlayer.types';
@@ -22,6 +23,7 @@ import { getNameByUrl } from './AudioPlayer.utils';
 export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const { t } = useTranslation('app');
   const [isUploadPopupOpened, setUploadPopupOpened] = useState(false);
+  const [isRecordPopupOpened, setRecordPopupOpened] = useState(false);
   const [isRemoveAudioPopupOpened, setRemoveAudioPopupOpened] = useState(false);
   const { setValue, watch, trigger, getFieldState } = useFormContext();
 
@@ -40,15 +42,20 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
 
   const onClearMedia = () => {
     setMedia(null);
-    setValue(urlName, undefined);
+    setValue(urlName, undefined, { shouldDirty: true });
   };
   const onCloseUploadPopup = () => setUploadPopupOpened(false);
+  const onCloseRecordPopup = () => setRecordPopupOpened(false);
 
   const onCloseRemoveAudioPopup = () => setRemoveAudioPopupOpened(false);
 
   const handleUploadAudio = (url?: string) => {
-    setValue(urlName, url ?? media?.url);
+    setValue(urlName, url ?? media?.url, { shouldDirty: true });
     onCloseUploadPopup();
+  };
+  const handleUploadRecord = (url?: string) => {
+    setValue(urlName, url, { shouldDirty: true });
+    onCloseRecordPopup();
   };
 
   const handleRemoveAudio = () => {
@@ -72,7 +79,10 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
       {url ? (
         <MLPlayer media={media} onRemove={() => setRemoveAudioPopupOpened(true)} />
       ) : (
-        <AddAudio onUploadAudio={() => setUploadPopupOpened(true)} />
+        <AddAudio
+          onUploadAudio={() => setUploadPopupOpened(true)}
+          onRecordAudio={() => setRecordPopupOpened(true)}
+        />
       )}
       {error && (
         <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error?.message}</StyledBodyErrorText>
@@ -83,6 +93,12 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
         onChange={setMedia}
         onUpload={handleUploadAudio}
         onClose={onCloseUploadPopup}
+      />
+      <RecordAudio
+        open={isRecordPopupOpened}
+        onChange={setMedia}
+        onUpload={handleUploadRecord}
+        onClose={onCloseRecordPopup}
       />
       <RemoveAudioPopup
         open={isRemoveAudioPopupOpened}
