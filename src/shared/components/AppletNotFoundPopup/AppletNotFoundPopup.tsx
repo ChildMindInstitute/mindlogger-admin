@@ -14,7 +14,9 @@ export const AppletNotFoundPopup = () => {
 
   const isBuilder = checkIfAppletUrlPassed(pathname);
 
-  return appletNotFoundPopupVisible ? (
+  if (!appletNotFoundPopupVisible) return null;
+
+  return (
     <Modal
       open={appletNotFoundPopupVisible}
       onClose={isBuilder ? falseReturnFunc : handleClose}
@@ -30,5 +32,5 @@ export const AppletNotFoundPopup = () => {
         </StyledModalWrapper>
       )}
     </Modal>
-  ) : null;
+  );
 };
