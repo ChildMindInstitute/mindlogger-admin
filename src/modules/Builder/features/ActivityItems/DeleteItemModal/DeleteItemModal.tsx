@@ -133,7 +133,7 @@ export const DeleteItemModal = ({
         }
         if (type === ScoreReportType.Section && conditionalLogic) {
           const { conditions } = conditionalLogic;
-          if (conditions.some((condition) => condition.itemName === itemIdToDelete)) {
+          if (conditions?.some((condition) => condition.itemName === itemIdToDelete)) {
             shouldTriggerReports = true;
             const newConditions = conditions.filter(
               (condition) => condition.itemName !== itemIdToDelete,
