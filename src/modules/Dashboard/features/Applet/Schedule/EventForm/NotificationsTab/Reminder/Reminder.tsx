@@ -94,10 +94,10 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
       } else {
         const subtractResult =
           currentIndex === 0 ? weeklyDays[weeklyDays.length - 1] : weeklyDays[currentIndex - 1];
-        setValue(activityIncompleteField, subtractResult);
+        setValue(activityIncompleteField, subtractResult, { shouldDirty: true });
       }
     } else if (value >= DEFAULT_ACTIVITY_INCOMPLETE_VALUE) {
-      setValue(activityIncompleteField, value);
+      setValue(activityIncompleteField, value, { shouldDirty: true });
     }
 
     triggerFields();
@@ -108,7 +108,7 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
       +event.target.value < DEFAULT_ACTIVITY_INCOMPLETE_VALUE
         ? DEFAULT_ACTIVITY_INCOMPLETE_VALUE
         : +event.target.value;
-    setValue(activityIncompleteField, newValue);
+    setValue(activityIncompleteField, newValue, { shouldDirty: true });
     triggerFields();
   };
 
