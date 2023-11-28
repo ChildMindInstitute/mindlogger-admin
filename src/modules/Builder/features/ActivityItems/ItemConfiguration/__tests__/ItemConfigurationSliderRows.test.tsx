@@ -10,6 +10,7 @@ import {
   getAppletFormDataWithItem,
   mockedAlertsTestid,
   mockedItemName,
+  mockedTextInputOptionTestid,
   mockedUseParams,
   renderItemConfiguration,
   setItemConfigSetting,
@@ -36,6 +37,26 @@ const renderSlider = (responseType) => {
   setItemResponseType(responseType);
 
   return ref;
+};
+const selectSliderId = (panelIndex, sliderIndex) => {
+  const sliderSelect = screen.getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-row`);
+  const sliderSelectButton = sliderSelect.querySelector('[role="button"]');
+  fireEvent.mouseDown(sliderSelectButton);
+  fireEvent.click(
+    screen
+      .getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-row-dropdown`)
+      .querySelectorAll('li')[sliderIndex],
+  );
+};
+const selectOption = (panelIndex, optionIndex) => {
+  const optionSelect = screen.getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-value`);
+  const optionSelectButton = optionSelect.querySelector('[role="button"]');
+  fireEvent.mouseDown(optionSelectButton);
+  fireEvent.click(
+    screen
+      .getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-value-dropdown`)
+      .querySelectorAll('li')[optionIndex],
+  );
 };
 
 describe('ItemConfiguration: Slider & Slider Rows', () => {
@@ -299,21 +320,8 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
-      const sliderSelect = screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-row`);
-      const sliderSelectButton = sliderSelect.querySelector('[role="button"]');
-      fireEvent.mouseDown(sliderSelectButton);
-      fireEvent.click(
-        screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-row-dropdown`).querySelector('li'),
-      );
-
-      const optionSelect = screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-value`);
-      const optionSelectButton = optionSelect.querySelector('[role="button"]');
-      fireEvent.mouseDown(optionSelectButton);
-      fireEvent.click(
-        screen
-          .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
-          .querySelector('li:last-child'),
-      );
+      selectSliderId(1, 0);
+      selectOption(1, 4);
 
       expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
         alert: 'text',
@@ -323,26 +331,247 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       });
     });
 
-    test('Options in list are filtered if already used', async () => {});
+    test('Options in list are filtered if already used', async () => {
+      renderSlider(ItemResponseType.SliderRows);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
-    test('validations', () => {});
+      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+      fireEvent.click(addAlert);
+
+      const optionSelect = screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-value`);
+      const optionSelectButton = optionSelect.querySelector('[role="button"]');
+
+      selectSliderId(0, 0);
+      selectSliderId(1, 0);
+
+      fireEvent.mouseDown(optionSelectButton);
+      expect(
+        screen
+          .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
+          .querySelectorAll('li'),
+      ).toHaveLength(5);
+
+      selectOption(0, 0);
+
+      fireEvent.mouseDown(optionSelectButton);
+      expect(
+        [
+          ...screen
+            .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
+            .querySelectorAll('li'),
+        ].filter((li) => !li.classList.contains('hidden-menu-item')),
+      ).toHaveLength(4);
+    });
+
+    test.each`
+      testId                                         | message                        | description
+      ${`${mockedAlertsTestid}-0-slider-rows-row`}   | ${''}                          | ${'Validation error: empty Slider'}
+      ${`${mockedAlertsTestid}-0-slider-rows-value`} | ${''}                          | ${'Validation error: empty Option'}
+      ${`${mockedAlertsTestid}-0-text`}              | ${'Alert Message is required'} | ${'Validation error: empty Alert'}
+    `('$description', async ({ testId, message }) => {
+      const ref = renderSlider(ItemResponseType.SliderRows);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      await ref.current.trigger(`${mockedItemName}.alerts`);
+
+      await waitFor(() => {
+        expect(screen.getByText('Please fill in all required fields')).toBeVisible();
+        expect(screen.getByTestId(testId).querySelector('div')).toHaveClass('Mui-error');
+
+        message && expect(screen.getByTestId(testId)).toBeVisible();
+      });
+    });
   });
 
   describe('Slider: Is Continuous + Alerts', () => {
-    test('Sets correct data when changed', async () => {});
-  });
-  describe('Slider: Scores', () => {
-    test('Sets correct data when changed', async () => {});
-    test('Is removed from document when checkbox is unchecked', async () => {});
-    test('validation', () => {});
-  });
-  describe('Slider: Additional Response Options', () => {
-    test('Is rendered correctly when Add Text Input Option is selected', async () => {});
-    test('Is rendered correctly when Required is selected additionally', async () => {});
-    test('Is removed when click on Trash icon', async () => {});
+    test('Sets correct data when changed', async () => {
+      const ref = renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.IsContinuous);
+      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+
+      expect(ref.current.getValues(`${mockedItemName}.alerts.0`)).toStrictEqual({
+        minValue: 0,
+        maxValue: 5,
+        alert: '',
+        key: ref.current.getValues(`${mockedItemName}.alerts.0.key`),
+      });
+
+      const minValue = screen
+        .getByTestId(`${mockedAlertsTestid}-0-cont-slider-min-value`)
+        .querySelector('input');
+      const maxValue = screen
+        .getByTestId(`${mockedAlertsTestid}-0-cont-slider-max-value`)
+        .querySelector('input');
+
+      fireEvent.change(minValue, { target: { value: -7 } });
+      fireEvent.change(maxValue, { target: { value: 50 } });
+
+      expect(ref.current.getValues(`${mockedItemName}.alerts.0`)).toStrictEqual({
+        minValue: -7,
+        maxValue: 50,
+        alert: '',
+        key: ref.current.getValues(`${mockedItemName}.alerts.0.key`),
+      });
+    });
   });
 
-  test('Slider/Slider Rows: Validation', () => {});
+  describe('Slider: Scores', () => {
+    test('Sets correct data when changed', async () => {
+      const ref = renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.HasScores);
+
+      const cell = screen.getByTestId(
+        'builder-activity-items-item-configuration-slider-scores-table-0-score-inactive',
+      );
+      fireEvent.click(cell);
+
+      fireEvent.change(
+        screen
+          .getByTestId('builder-activity-items-item-configuration-slider-scores-table-0-score')
+          .querySelector('input'),
+        { target: { value: 15 } },
+      );
+
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.scores`)).toEqual([
+        15, 2, 3, 4, 5, 6,
+      ]);
+    });
+
+    test('Is removed from document when checkbox is unchecked', async () => {
+      const ref = renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.HasScores);
+
+      expect(
+        screen.getByTestId(
+          'builder-activity-items-item-configuration-slider-scores-table-0-score-inactive',
+        ),
+      ).toBeVisible();
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasScores);
+
+      expect(
+        screen.queryByTestId(
+          'builder-activity-items-item-configuration-slider-scores-table-0-score-inactive',
+        ),
+      ).not.toBeInTheDocument();
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.scores`)).toBeUndefined();
+    });
+
+    test('Validation errors:', async () => {
+      const ref = renderSlider(ItemResponseType.Slider);
+      await setItemConfigSetting(ItemConfigurationSettings.HasScores);
+
+      const cell = screen.getByTestId(
+        'builder-activity-items-item-configuration-slider-scores-table-0-score-inactive',
+      );
+      fireEvent.click(cell);
+
+      fireEvent.change(
+        screen
+          .getByTestId('builder-activity-items-item-configuration-slider-scores-table-0-score')
+          .querySelector('input'),
+        { target: { value: '2e' } },
+      );
+
+      await ref.current.trigger(`${mockedItemName}.responseValues.scores`);
+
+      await waitFor(() => {
+        expect(screen.getByText('Numerical value is required')).toBeVisible();
+      });
+
+      fireEvent.change(
+        screen
+          .getByTestId('builder-activity-items-item-configuration-slider-scores-table-0-score')
+          .querySelector('input'),
+        { target: { value: 5 } },
+      );
+
+      await ref.current.trigger(`${mockedItemName}.responseValues.scores`);
+
+      await waitFor(() => {
+        expect(screen.queryByText('Numerical value is required')).not.toBeInTheDocument();
+      });
+
+      fireEvent.change(
+        screen
+          .getByTestId('builder-activity-items-item-configuration-slider-max-value')
+          .querySelector('input'),
+        { target: { value: 6 } },
+      );
+
+      await ref.current.trigger(`${mockedItemName}.responseValues.scores`);
+
+      await waitFor(() => {
+        expect(screen.getByText('Numerical value is required')).toBeVisible();
+      });
+    });
+  });
+
+  describe('Slider: Additional Response Options', () => {
+    test('Is rendered correctly when Add Text Input Option is selected', async () => {
+      renderSlider(ItemResponseType.Slider);
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTextInput);
+
+      expect(screen.getByTestId(mockedTextInputOptionTestid)).toBeVisible();
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-title`)).toHaveTextContent(
+        'Additional Text Input Option',
+      );
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-remove`)).toBeVisible();
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-description`)).toHaveTextContent(
+        'The respondent will be able to enter an additional text response',
+      );
+    });
+
+    test('Is rendered correctly when Required is selected additionally', async () => {
+      renderSlider(ItemResponseType.Slider);
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTextInput);
+      await setItemConfigSetting(ItemConfigurationSettings.IsTextInputRequired);
+
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-title`)).toHaveTextContent(
+        'Additional Text Input Option (Required)',
+      );
+      expect(screen.getByTestId(`${mockedTextInputOptionTestid}-description`)).toHaveTextContent(
+        'The respondent will be required to enter an additional text response',
+      );
+      expect(
+        screen.getByTestId(
+          'builder-activity-items-item-configuration-text-input-option-description-required',
+        ),
+      ).toHaveTextContent('*Required');
+    });
+
+    test('Is removed when click on Trash icon', async () => {
+      const ref = renderSlider(ItemResponseType.Slider);
+
+      await setItemConfigSetting(ItemConfigurationSettings.HasTextInput);
+
+      const removeButton = screen.getByTestId(`${mockedTextInputOptionTestid}-remove`);
+      fireEvent.click(removeButton);
+
+      expect(screen.queryByTestId(mockedTextInputOptionTestid)).not.toBeInTheDocument();
+      expect(
+        ref.current.getValues(`${mockedItemName}.config.additionalResponseOption.textInputOption`),
+      ).toBeFalsy();
+    });
+  });
+
+  test.each`
+    responseType                   | testId                                                             | value | message                       | description
+    ${ItemResponseType.Slider}     | ${'builder-activity-items-item-configuration-slider-min-value'}    | ${-1} | ${'Select valid interval'}    | ${'Slider: Validation error: Min value less than 0'}
+    ${ItemResponseType.Slider}     | ${'builder-activity-items-item-configuration-slider-max-value'}    | ${13} | ${'Select valid interval'}    | ${'Slider: Validation error: Max value more than 12'}
+    ${ItemResponseType.SliderRows} | ${'builder-activity-items-item-configuration-slider-rows-0-label'} | ${''} | ${'Slider Label is required'} | ${'Slider Rows: Validation error: Empty Label'}
+  `('$description', async ({ responseType, testId, value, message }) => {
+    const ref = renderSlider(responseType);
+
+    fireEvent.change(screen.getByTestId(testId).querySelector('input'), { target: { value } });
+
+    await ref.current.trigger(`${mockedItemName}.responseValues`);
+    await waitFor(() => {
+      expect(screen.getAllByText(message)[0]).toBeVisible();
+    });
+  });
 
   test.each`
     setting                                         | description
