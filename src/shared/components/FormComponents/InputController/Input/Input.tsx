@@ -1,4 +1,4 @@
-import { useEffect, useRef, ChangeEvent } from 'react';
+import { useEffect, useRef } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -8,6 +8,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
+import { SelectEvent } from 'shared/types/event';
 import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { ArrowPressType } from '../InputController.types';
@@ -75,7 +76,7 @@ export const Input = <T extends FieldValues>({
       onChange?.(numberValue - 1);
     }
   };
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (event: SelectEvent) => {
     if (onCustomChange) return onCustomChange(event);
     const newValue = event.target.value;
     if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength) return;
@@ -89,13 +90,13 @@ export const Input = <T extends FieldValues>({
     onChange?.(getNumberValue() ?? newValue);
   };
   const handleDebouncedChange = debounce(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(event),
+    (event: SelectEvent) => handleChange(event),
     CHANGE_DEBOUNCE_VALUE,
   );
 
   useEffect(() => {
     if (!withDebounce || !inputRef.current || inputRef.current?.value === String(value)) return;
-    inputRef.current.value = value;
+    inputRef.current.value = value ?? '';
   });
 
   return (

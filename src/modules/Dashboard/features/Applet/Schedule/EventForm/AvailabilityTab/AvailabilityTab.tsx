@@ -5,9 +5,16 @@ import { addDays } from 'date-fns';
 
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { DatePicker, TimePicker, ToggleButtonGroup } from 'shared/components';
-import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledBodyMedium,
+  StyledTitleSmall,
+  theme,
+  variables,
+} from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 import { SelectEvent } from 'shared/types';
+import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { EventFormValues } from '../EventForm.types';
 import {
@@ -25,7 +32,7 @@ import {
 } from './AvailabilityTab.styles';
 import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
-import { getNextDayComparison } from '../EventForm.utils';
+import { useNextDayLabel } from '../EventForm.hooks';
 
 export const AvailabilityTab = ({
   hasAlwaysAvailableOption,
@@ -55,6 +62,7 @@ export const AvailabilityTab = ({
       'removeWarning',
     ],
   });
+  const hasNextDayLabel = useNextDayLabel({ startTime, endTime });
   const isOncePeriodicity = periodicity === Periodicity.Once;
   const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
@@ -102,6 +110,7 @@ export const AvailabilityTab = ({
       setValue('periodicity', Periodicity.Always);
       setValue('startTime', DEFAULT_START_TIME);
       setValue('endTime', DEFAULT_END_TIME);
+      reminder && setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE);
 
       return;
     }
@@ -198,6 +207,15 @@ export const AvailabilityTab = ({
                 onCustomChange={(time) => handleTimeCustomChange(time, TimeType.ToTime)}
                 data-testid={`${dataTestid}-end-time`}
               />
+              {hasNextDayLabel && (
+                <StyledTitleSmall
+                  sx={{
+                    mx: theme.spacing(1.6),
+                  }}
+                >
+                  {t('nextDay')}
+                </StyledTitleSmall>
+              )}
             </StyledTimeWrapper>
           </StyledTimeRow>
           <StyledWrapper isCheckboxDisabled={startTime === '00:00'}>

@@ -104,11 +104,25 @@ export const Calendar = () => {
   useEffect(() => {
     if (eventsToShow) {
       if (activeView === CalendarViews.Month) {
-        const eventsWithOffRange = eventsToShow.map((event) => ({
-          ...event,
-          isOffRange: event.start.getMonth() !== date.getMonth(),
-        }));
-        setEvents(eventsWithOffRange);
+        const eventsWithOffRangeWithoutCrossDay = eventsToShow.reduce(
+          (acc: CalendarEvent[], event) => {
+            if (!event.eventSpanBefore) {
+              acc.push({
+                ...event,
+                isOffRange: event.start.getMonth() !== date.getMonth(),
+              });
+            }
+
+            return acc;
+          },
+          [],
+        );
+
+        setEvents(eventsWithOffRangeWithoutCrossDay);
+      } else if (activeView === CalendarViews.Year) {
+        const eventsWithoutCrossDay = eventsToShow.filter((event) => !event.eventSpanBefore);
+
+        setEvents(eventsWithoutCrossDay);
       } else {
         setEvents(eventsToShow);
       }

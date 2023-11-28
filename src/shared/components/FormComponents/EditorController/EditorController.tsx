@@ -79,7 +79,11 @@ export const EditorController = <T extends FieldValues>({
                   error={error}
                 />
                 {!error?.message && (
-                  <CharacterCounter inputSize={(value ?? '').length} key="character-counter" />
+                  <CharacterCounter
+                    inputSize={(value ?? '').length}
+                    disabled={disabled}
+                    key="character-counter"
+                  />
                 )}
               </StyledFlexSpaceBetween>
               {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}

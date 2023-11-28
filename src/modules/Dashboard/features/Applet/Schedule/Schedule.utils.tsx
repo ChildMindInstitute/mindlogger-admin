@@ -55,12 +55,5 @@ export const getNextColor = (index: number) => {
 export const getFrequencyString = (periodicity: Periodicity) =>
   String(periodicity).charAt(0) + String(periodicity).slice(1).toLowerCase();
 
-export const removeSecondsFromTime = (time?: string | null) => {
-  if (!time) return null;
-  const [hours, minutes] = time.split(':');
-
-  return `${hours}:${minutes}`;
-};
-
 export const checkIfHasAccessToSchedule = (roles?: Roles[]) =>
   without(roles, [Roles.Editor, Roles.Reviewer, Roles.Respondent]).length > 0;

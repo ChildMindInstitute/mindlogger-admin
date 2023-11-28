@@ -13,6 +13,7 @@ export const StyledMdEditor = styled(MarkDownEditor)`
   height: 32rem;
 
   &.disabled {
+    pointer-events: none;
     opacity: ${variables.opacity.disabled};
   }
 
