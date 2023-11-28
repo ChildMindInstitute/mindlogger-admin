@@ -96,7 +96,7 @@ export const Input = <T extends FieldValues>({
 
   useEffect(() => {
     if (!withDebounce || !inputRef.current || inputRef.current?.value === String(value)) return;
-    inputRef.current.value = value;
+    inputRef.current.value = value ?? '';
   }, [withDebounce, inputRef.current, value]);
 
   return (
