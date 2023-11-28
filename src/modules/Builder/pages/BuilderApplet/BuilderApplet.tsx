@@ -73,12 +73,7 @@ export const BuilderApplet = () => {
     setValue,
     getValues,
     formState: { isDirty },
-    watch,
   } = methods;
-
-  useEffect(() => {
-    console.log('form values: ', watch());
-  }, [watch()]);
 
   useEffect(() => {
     location.state?.isFromLibrary && setIsFromLibrary(true);
