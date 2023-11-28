@@ -14,6 +14,7 @@ import { ActivityFlowFormValues, ItemFormValues, SubscaleFormValue } from 'modul
 import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
+import { ScoreReportType } from '../../../../../shared/consts';
 
 export const DeleteItemModal = ({
   itemIdToDelete,
@@ -101,7 +102,7 @@ export const DeleteItemModal = ({
       let shouldTriggerReports = false;
 
       reports.forEach((report, index) => {
-        const { itemsPrint, itemsScore, conditionalLogic } = report;
+        const { itemsPrint, itemsScore, conditionalLogic, type } = report;
         const reportField = `${reportsField}.${index}`;
 
         if (itemsPrint?.includes(itemIdToDelete)) {
@@ -112,19 +113,34 @@ export const DeleteItemModal = ({
           shouldTriggerReports = true;
           setValue(`${reportField}.itemsScore`, itemsScore?.filter((id) => id !== itemIdToDelete));
         }
+        if (type === ScoreReportType.Score) {
+          conditionalLogic?.forEach((conditional, conditionalIndex) => {
+            const { itemsPrint: conditionalItemsPrint } = conditional;
+            const conditionalLogicField = `${reportField}.conditionalLogic.${conditionalIndex}`;
 
-        conditionalLogic?.forEach((conditional, conditionalIndex) => {
-          const { itemsPrint: conditionalItemsPrint } = conditional;
-          const conditionalLogicField = `${reportField}.conditionalLogic.${conditionalIndex}`;
-
-          if (conditionalItemsPrint?.includes(itemIdToDelete)) {
-            shouldTriggerReports = true;
-            setValue(
-              `${conditionalLogicField}.itemsPrint`,
-              conditionalItemsPrint?.filter((id) => id !== itemIdToDelete),
-            );
-          }
-        });
+            if (conditionalItemsPrint?.includes(itemIdToDelete)) {
+              shouldTriggerReports = true;
+              setValue(
+                `${conditionalLogicField}.itemsPrint`,
+                conditionalItemsPrint?.filter((id) => id !== itemIdToDelete),
+              );
+            }
+          });
+        }
+        // if (type === ScoreReportType.Section) {
+        // conditionalLogic?.forEach((conditional, conditionalIndex) => {
+        //   const { itemsPrint: conditionalItemsPrint } = conditional;
+        //   const conditionalLogicField = `${reportField}.conditionalLogic.${conditionalIndex}`;
+        //
+        //   if (conditionalItemsPrint?.includes(itemIdToDelete)) {
+        //     shouldTriggerReports = true;
+        //     setValue(
+        //       `${conditionalLogicField}.itemsPrint`,
+        //       conditionalItemsPrint?.filter((id) => id !== itemIdToDelete),
+        //     );
+        //   }
+        // });
+        // }
       });
       shouldTriggerReports && trigger(reportsField);
     }
