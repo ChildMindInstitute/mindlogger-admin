@@ -38,13 +38,8 @@ import {
   renderItemConfiguration,
   getAppletFormDataWithItem,
   removeUuidValues,
-  mockedUseParams,
+  mockedOptions,
 } from '../__mocks__';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
 
 describe('ItemConfiguration: Item Type', () => {
   beforeEach(() => {
@@ -84,6 +79,7 @@ describe('ItemConfiguration: Item Type', () => {
     renderWithAppletFormData({
       children: renderItemConfiguration(),
       appletFormData: getAppletFormDataWithItem(mockedEmptyItem, { isReviewable }),
+      options: mockedOptions,
     });
 
     const type = screen.getByTestId(mockedTypeTestid);

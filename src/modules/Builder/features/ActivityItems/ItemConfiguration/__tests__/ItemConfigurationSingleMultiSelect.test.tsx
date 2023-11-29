@@ -19,7 +19,6 @@ import {
   getAppletFormDataWithItemWithPalette,
   mockedTextInputOptionTestid,
   mockedAlertsTestid,
-  mockedUseParams,
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 
@@ -31,11 +30,6 @@ jest.mock('react-color', () => ({
       onClick={() => onChangeComplete(mockedChangeColorEvent)}
     ></div>
   ),
-}));
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
 }));
 
 describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
