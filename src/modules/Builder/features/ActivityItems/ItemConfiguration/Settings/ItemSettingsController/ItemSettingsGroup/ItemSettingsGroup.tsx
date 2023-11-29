@@ -1,9 +1,9 @@
 import { useState, ChangeEvent } from 'react';
 import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
@@ -51,7 +51,7 @@ export const ItemSettingsGroup = ({
   const [isExpanded, setIsExpanded] = useState(!collapsedByDefault);
 
   const { t } = useTranslation('app');
-  const { control, setValue, getValues } = useFormContext();
+  const { control, setValue, getValues } = useCustomFormContext();
 
   const config = getValues(`${itemName}.config`) ?? {};
 

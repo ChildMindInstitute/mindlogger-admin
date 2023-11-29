@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { SubscaleTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
@@ -22,7 +22,7 @@ export const SubscaleHeaderContent = ({
   onUpdate,
   'data-testid': dataTestid,
 }: SubscaleHeaderContentProps) => {
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
   const subscaleName = watch(`${name}.name`);
   const subscaleTableData = watch(`${name}.subscaleTableData`) ?? [];
   const [isSubscaleLookupTableOpened, setIsSubscaleLookupTableOpened] = useState(false);

@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
-import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
+import {
+  useRedirectIfNoMatchedActivity,
+  useCurrentActivity,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
@@ -41,7 +45,7 @@ import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
-  const { control, watch, setValue } = useFormContext();
+  const { control, watch, setValue } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
 
   useRedirectIfNoMatchedActivity();

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components/Svg';
@@ -23,7 +23,7 @@ export const PublishConcealAppletSetting = ({
   const dispatch = useAppDispatch();
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getApplet } = applet.thunk;
-  const { setValue, getValues } = useFormContext() ?? {};
+  const { setValue, getValues } = useCustomFormContext() ?? {};
 
   const { publishConcealPopupVisible } = popups.useData();
 

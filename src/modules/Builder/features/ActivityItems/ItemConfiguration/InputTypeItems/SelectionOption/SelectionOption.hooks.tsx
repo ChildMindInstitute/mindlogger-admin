@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { ColorResult } from 'react-color';
+
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { SetSelectionOptionValue } from './SelectionOption.types';
 
@@ -11,7 +12,7 @@ export const useSetSelectionOptionValue = ({
   hasColorPicker,
   hasColor,
 }: SetSelectionOptionValue) => {
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
   const option = watch(name);
 
   const setOptionFieldValue = (

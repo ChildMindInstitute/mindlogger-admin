@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
 import { SelectEvent } from 'shared/types/event';
 import {
@@ -31,7 +31,7 @@ const commonButtonProps = {
 export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps) => {
   const { t } = useTranslation('app');
 
-  const { watch, getValues, setValue } = useFormContext();
+  const { watch, getValues, setValue } = useCustomFormContext();
 
   const optionsName = `${name}.responseValues.options`;
   const options = watch(optionsName);

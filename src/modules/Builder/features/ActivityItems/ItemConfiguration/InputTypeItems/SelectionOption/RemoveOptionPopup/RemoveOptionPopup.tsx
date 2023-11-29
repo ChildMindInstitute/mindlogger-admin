@@ -1,6 +1,6 @@
 import { useTranslation, Trans } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Modal } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
@@ -15,7 +15,7 @@ export const RemoveOptionPopup = ({
   'data-testid': dataTestid,
 }: RemoveOptionPopupProps) => {
   const { t } = useTranslation('app');
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
 
   const option = watch(name);
 

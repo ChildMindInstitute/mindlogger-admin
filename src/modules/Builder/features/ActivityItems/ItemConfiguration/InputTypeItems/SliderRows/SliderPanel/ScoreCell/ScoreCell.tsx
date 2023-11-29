@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+
 import { Box, ClickAwayListener } from '@mui/material';
 import get from 'lodash.get';
 
 import { StyledFlexTopCenter } from 'shared/styles';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledInputController } from './ScoreCell.styles';
 import { ScoreCellProps } from './ScoreCell.types';
@@ -15,7 +16,7 @@ export const ScoreCell = ({ name, 'data-testid': dataTestid }: ScoreCellProps) =
     control,
     getValues,
     formState: { errors },
-  } = useFormContext();
+  } = useCustomFormContext();
 
   const error = get(errors, name);
 

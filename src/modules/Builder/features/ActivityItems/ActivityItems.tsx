@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
@@ -11,6 +11,7 @@ import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderA
 import { ItemFormValues } from 'modules/Builder/types';
 import { getUniqueName } from 'modules/Builder/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemConfiguration } from './ItemConfiguration/ItemConfiguration';
 import { LeftBar } from './LeftBar';
@@ -19,7 +20,7 @@ import { DeleteItemModal } from './DeleteItemModal';
 
 export const ActivityItems = () => {
   const { fieldName, activity } = useCurrentActivity();
-  const { control, trigger, getValues } = useFormContext();
+  const { control, trigger, getValues } = useCustomFormContext();
   const itemsName = `${fieldName}.items`;
   const navigate = useNavigate();
 

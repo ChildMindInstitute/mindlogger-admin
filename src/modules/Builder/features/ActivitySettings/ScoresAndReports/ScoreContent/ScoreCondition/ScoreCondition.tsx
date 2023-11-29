@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+
 import { Box } from '@mui/material';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexTopCenter,
@@ -28,7 +29,7 @@ export const ScoreCondition = ({
   items,
 }: ScoreConditionProps) => {
   const { t } = useTranslation();
-  const { control, setValue, watch } = useFormContext();
+  const { control, setValue, watch } = useCustomFormContext();
   const conditionName = watch(`${name}.name`);
   const conditionId = watch(`${name}.id`);
 

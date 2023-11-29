@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { Svg, Table, UiType } from 'shared/components';
@@ -11,7 +10,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerStimulusSettings } from 'shared/state';
 import { exportTemplate } from 'shared/utils';
 import { FlankerItemPositions } from 'modules/Builder/types';
@@ -34,7 +33,7 @@ export const BlockSequencesContent = ({
   'data-testid': dataTestid,
 }: BlockSequencesContentProps) => {
   const { t } = useTranslation();
-  const { watch, setValue, clearErrors } = useFormContext();
+  const { watch, setValue, clearErrors } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
 
   const [importTableVisible, setImportTableVisible] = useState(false);

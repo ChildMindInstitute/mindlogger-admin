@@ -1,6 +1,5 @@
 import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import {
@@ -11,7 +10,7 @@ import {
   StyledTitleMedium,
   theme,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
   MAX_THRESHOLD_DURATION,
@@ -25,7 +24,7 @@ import { RoundOptionsProps } from './RoundOptions.types';
 
 export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: RoundOptionsProps) => {
   const { t } = useTranslation();
-  const { control, setValue, watch } = useFormContext();
+  const { control, setValue, watch } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   const roundField = `${fieldName}.items.${
     isPracticeRound ? FlankerItemPositions.PracticeFirst : FlankerItemPositions.TestFirst

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledBodyErrorText, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
@@ -11,6 +10,7 @@ import {
   SharedToggleItemProps,
   ToggleItemContainer,
 } from 'modules/Builder/components/ToggleItemContainer';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { AddAudio } from './AddAudio';
 import { UploadAudio } from './UploadAudio';
@@ -25,7 +25,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const [isUploadPopupOpened, setUploadPopupOpened] = useState(false);
   const [isRecordPopupOpened, setRecordPopupOpened] = useState(false);
   const [isRemoveAudioPopupOpened, setRemoveAudioPopupOpened] = useState(false);
-  const { setValue, watch, trigger, getFieldState } = useFormContext();
+  const { setValue, watch, trigger, getFieldState } = useCustomFormContext();
 
   const urlName = `${name}.responseValues.file`;
   const url = watch(urlName);

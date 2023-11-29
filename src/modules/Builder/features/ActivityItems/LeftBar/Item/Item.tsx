@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { itemsTypeIcons } from 'shared/consts';
@@ -26,7 +27,7 @@ export const Item = ({
   isDragging = false,
 }: ItemProps) => {
   const { itemId } = useParams();
-  const { getFieldState } = useFormContext();
+  const { getFieldState } = useCustomFormContext();
   const [visibleActions, setVisibleActions] = useState(false);
   const { activity } = useCurrentActivity();
   const item: ItemFormValues = useWatch({ name: name! });

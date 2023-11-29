@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
-import { useFieldArray, useWatch, useFormContext } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
@@ -46,7 +47,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
     const [optionsOpen, setOptionsOpen] = useState<boolean[]>([]);
 
-    const { control, setValue } = useFormContext();
+    const { control, setValue } = useCustomFormContext();
     const [settings, responseType, responseValues, palette] = useWatch({
       control,
       name: [

@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 import { getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 import { ItemFormValues } from 'modules/Builder/types';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { checkIfItemHasRequiredOptions } from 'modules/Builder/features/ActivityItems/ItemConfiguration';
 
 const checkIfItemsHaveVariables = (items: ItemFormValues[]) => {
@@ -16,7 +15,7 @@ const checkIfItemsHaveVariables = (items: ItemFormValues[]) => {
   });
 };
 export const useCheckIfItemsHaveVariables = () => {
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   const activityItems = watch(`${fieldName}.items`) ?? [];
   const hasVariableAmongItems = checkIfItemsHaveVariables(activityItems);
@@ -33,7 +32,7 @@ const checkIfItemsHaveRequiredOptions = (items: ItemFormValues[]) =>
   items.some((item) => checkIfItemHasRequiredOptions(item.config));
 
 export const useCheckIfItemsHaveRequiredItems = () => {
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   const activityItems = watch(`${fieldName}.items`) ?? [];
   const hasRequiredItems = checkIfItemsHaveRequiredOptions(activityItems);

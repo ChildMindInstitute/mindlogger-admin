@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { Box, Button } from '@mui/material';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -46,7 +47,7 @@ export const ScoresAndReports = () => {
   const { appletId } = useParams();
   const navigate = useNavigate();
   const { fieldName } = useCurrentActivity();
-  const { control, setValue, getFieldState } = useFormContext();
+  const { control, setValue, getFieldState } = useCustomFormContext();
   const { activity } = useCurrentActivity();
 
   useRedirectIfNoMatchedActivity();

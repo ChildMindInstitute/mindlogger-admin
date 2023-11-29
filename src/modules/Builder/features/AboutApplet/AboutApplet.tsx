@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -19,6 +18,7 @@ import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { themes } from 'modules/Builder/state';
 import { BuilderContainer } from 'shared/features';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { getColorThemeOptions } from './AboutApplet.utils';
@@ -28,7 +28,7 @@ export const AboutApplet = () => {
   const { t } = useTranslation();
   const { result: themesList = [] } = themes.useThemesData() || {};
   const themesOptions = getColorThemeOptions(themesList);
-  const { control, setValue, watch } = useFormContext();
+  const { control, setValue, watch } = useCustomFormContext();
 
   const commonInputProps = {
     control,
