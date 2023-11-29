@@ -19,15 +19,15 @@ const mockedEvent = {
   activityOrFlowId: '123',
   eventId: '123456',
   title: 'test title',
-  start: new Date(),
-  end: new Date(),
+  start: new Date('2023-11-12'),
+  end: new Date('2023-11-29'),
   backgroundColor: '#fff',
   alwaysAvailable: false,
   isHidden: false,
   periodicity: Periodicity.Once,
-  eventStart: new Date(),
-  eventEnd: null,
-  startTime: '00:00',
+  eventStart: new Date('2023-11-12'),
+  eventEnd: new Date('2023-11-29'),
+  startTime: '01:00',
   endTime: '23:59',
 };
 
@@ -109,56 +109,46 @@ describe('EventForm.utils', () => {
     });
   });
 
-  // describe('getStartEndDates', () => {
-  //   const defaultStartDate = new Date('2023-01-01');
-  //   it('should return default start and end dates for periodicity once', () => {
-  //     const result = getStartEndDates(true, false, defaultStartDate);
-  //     expect(result).toEqual({
-  //       startDate: defaultStartDate,
-  //       endDate: endOfYear(defaultStartDate),
-  //     });
-  //   });
-  //
-  //   it('should return default start and end dates for periodicity always', () => {
-  //     const result = getStartEndDates(false, true, defaultStartDate);
-  //     expect(result).toEqual({
-  //       startDate: defaultStartDate,
-  //       endDate: endOfYear(defaultStartDate),
-  //     });
-  //   });
-  //
-  //   it('should return event start and end dates if not periodicity once or always', () => {
-  //     const result = getStartEndDates(false, false, defaultStartDate, sampleEvent.start, sampleEvent.end);
-  //     expect(result).toEqual({
-  //       startDate: mockedEvent.start,
-  //       endDate: mockedEvent.end,
-  //     });
-  //   });
-  //
-  //   it('should return default start and computed end date if event end is null', () => {
-  //     const result = getStartEndDates(false, false, defaultStartDate, mockedEvent.start, null, mockedEvent);
-  //     expect(result).toEqual({
-  //       startDate: mockedEvent.start,
-  //       endDate: endOfYear(mockedEvent.start),
-  //     });
-  //   });
-  //
-  //   it('should return default start and event end date if event end is provided', () => {
-  //     const result = getStartEndDates(false, false, defaultStartDate, mockedEvent.start, mockedEvent.end, mockedEvent);
-  //     expect(result).toEqual({
-  //       startDate: mockedEvent.start,
-  //       endDate: mockedEvent.end,
-  //     });
-  //   });
-  //
-  //   it('should return default start date if event start is not provided', () => {
-  //     const result = getStartEndDates(false, false, defaultStartDate, undefined, mockedEvent.end, mockedEvent);
-  //     expect(result).toEqual({
-  //       startDate: defaultStartDate,
-  //       endDate: mockedEvent.end,
-  //     });
-  //   });
-  // });
+  describe('getStartEndDates: should return', () => {
+    const defaultStartDate = new Date('2023-01-01');
+    const expected1 = {
+      startDate: defaultStartDate,
+      endDate: endOfYear(defaultStartDate),
+    };
+    const expected2 = {
+      startDate: mockedEvent.start,
+      endDate: mockedEvent.end,
+    };
+    const expected3 = {
+      startDate: mockedEvent.start,
+      endDate: null,
+    };
+    const expected4 = {
+      startDate: mockedEvent.start,
+      endDate: endOfYear(mockedEvent.start),
+    };
+    const expected5 = {
+      startDate: defaultStartDate,
+      endDate: mockedEvent.end,
+    };
+
+    test.each`
+      isOnce   | isAlways | defaultStartDate    | eventStart           | eventEnd           | editedEvent    | expected     | description
+      ${true}  | ${false} | ${defaultStartDate} | ${undefined}         | ${undefined}       | ${undefined}   | ${expected1} | ${'default start and end dates for periodicity once'}
+      ${false} | ${true}  | ${defaultStartDate} | ${undefined}         | ${undefined}       | ${undefined}   | ${expected1} | ${'default start and end dates for periodicity always'}
+      ${false} | ${false} | ${defaultStartDate} | ${mockedEvent.start} | ${mockedEvent.end} | ${undefined}   | ${expected2} | ${'event start and end dates if not periodicity once or always'}
+      ${false} | ${false} | ${defaultStartDate} | ${mockedEvent.start} | ${null}            | ${mockedEvent} | ${expected3} | ${'event start and end date equal to null if edited event is defined and event end is null'}
+      ${false} | ${false} | ${defaultStartDate} | ${mockedEvent.start} | ${null}            | ${undefined}   | ${expected4} | ${'event start and computed end date if edited event is undefined and event end is null'}
+      ${false} | ${false} | ${defaultStartDate} | ${undefined}         | ${mockedEvent.end} | ${mockedEvent} | ${expected5} | ${'default start date if event start is not provided'}
+    `(
+      '$description',
+      ({ isOnce, isAlways, defaultStartDate, eventStart, eventEnd, editedEvent, expected }) => {
+        expect(
+          getStartEndDates(isOnce, isAlways, defaultStartDate, eventStart, eventEnd, editedEvent),
+        ).toEqual(expected);
+      },
+    );
+  });
 
   describe('getBetweenStartEndNextDaySingleComparison', () => {
     test.each`
