@@ -1,21 +1,36 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
 
-import { Svg } from 'shared/components/Svg';
+import { ButtonWithMenu } from 'shared/components';
 
 import { AddAudioProps } from './AddAudio.types';
+import { getMenuItems } from './AddAudio.utils';
 
-export const AddAudio = ({ onUploadAudio }: AddAudioProps) => {
+export const AddAudio = ({ onUploadAudio, onRecordAudio }: AddAudioProps) => {
   const { t } = useTranslation('app');
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const onMenuClose = () => setAnchorEl(null);
+  const handleUploadAudio = () => {
+    onUploadAudio();
+    onMenuClose();
+  };
+  const handleRecordAudio = () => {
+    onRecordAudio();
+    onMenuClose();
+  };
 
   return (
-    <Button
+    <ButtonWithMenu
+      data-testid="builder-activity-items-item-configuration-audio-player-add"
       variant="outlined"
-      startIcon={<Svg id="upload" />}
-      data-testid="builder-activity-items-item-configuration-audio-player-upload"
-      onClick={onUploadAudio}
-    >
-      {t('audioPlayerUploadAudio')}
-    </Button>
+      label={t('addAudio')}
+      anchorEl={anchorEl}
+      setAnchorEl={setAnchorEl}
+      menuItems={getMenuItems({
+        onUploadAudio: handleUploadAudio,
+        onRecordAudio: handleRecordAudio,
+      })}
+    />
   );
 };

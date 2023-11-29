@@ -423,7 +423,6 @@ export type ConditionalLogic = {
   match: ConditionalLogicMatch;
   //for frontend purposes only
   key?: string;
-  //TODO: for frontend purposes only - should be reviewed after refactoring phase
   itemKey?: string;
   conditions: Array<Condition>;
 };
@@ -644,7 +643,6 @@ export type Activity = {
   performanceTaskType?: PerfTaskType;
   createdAt?: string;
   reportIncludedItemName?: string;
-  //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
 };
 

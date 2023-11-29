@@ -10,7 +10,6 @@ import { SEVEN_ROWS_PER_PAGE } from './Table.const';
 import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { Row, TableProps, UiType } from './Table.types';
 
-// TODO: make rows rendering more strict
 export const Table = ({
   columns,
   rows,

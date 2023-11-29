@@ -16,7 +16,8 @@ import { formatSecondsToMinutes } from './RecordAudio.utils';
 
 export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioProps) => {
   const { t } = useTranslation('app');
-  const [url, setUrl] = useState('');
+  const [file, setFile] = useState<null | File>(null);
+  const audioUrl = file && URL.createObjectURL(file);
 
   const {
     startRecording,
@@ -30,19 +31,14 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     recordingTime,
   } = useAudioRecorder();
 
-  const { execute: executeAudioUpload, isLoading } = useAsync(
-    postFileUploadApi,
-    (response) => response?.data?.result && setUrl(response.data.result.url ?? ''),
-  );
+  const { execute: executeAudioUpload, isLoading } = useAsync(postFileUploadApi);
 
   useEffect(() => {
-    if (isStopped && recordingBlob.length && !url) {
+    if (isStopped && recordingBlob.length && !file) {
       const file = new File(recordingBlob, 'record.webm', { type: 'audio/webm' });
-      const body = getUploadFormData(file);
-
-      executeAudioUpload(body);
+      setFile(file);
     }
-  }, [isStopped, recordingBlob, url]);
+  }, [isStopped, recordingBlob, file]);
 
   const commonSvgProps = {
     width: 16,
@@ -50,29 +46,38 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
   };
 
   const handleRemove = () => {
-    setUrl('');
+    setFile(null);
     clearBlob();
   };
 
   const handleStop = () => {
     stopRecording();
-    setUrl('');
+    setFile(null);
   };
 
-  const handleUpload = () => {
-    onUpload(url);
-    onChange({ url });
+  const handleUpload = async () => {
+    if (!file) return;
+    const body = getUploadFormData(file);
+    try {
+      const response = await executeAudioUpload(body);
+      const url = response?.data?.result?.url || '';
+      if (!url) return;
+      onUpload(url);
+      onChange({ url, uploaded: true });
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   const dataTestid = 'builder-activity-items-item-configuration-record-audio-popup';
   const modalProps = {
     open,
     title: t('audioPlayerRecordAudio'),
-    buttonText: url ? t('upload') : t('cancel'),
-    hasSecondBtn: !!url,
+    buttonText: audioUrl ? t('upload') : t('cancel'),
+    hasSecondBtn: !!audioUrl,
     secondBtnText: t('cancel'),
     onClose,
-    onSubmit: url ? handleUpload : onClose,
+    onSubmit: audioUrl ? handleUpload : onClose,
     onSecondBtnSubmit: onClose,
     footerStyles: {
       paddingTop: theme.spacing(2.1),
@@ -110,11 +115,11 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
             {t('audioPlayerRecordStop')}
           </Button>
         </StyledButtons>
-        {isLoading && <StyledLinearProgress />}
-        {url && (
+        {isLoading && <StyledLinearProgress sx={{ mt: theme.spacing(1.5) }} />}
+        {audioUrl && !isLoading && (
           <MLPlayer
-            key={`audio-player-${url}`}
-            media={{ url }}
+            key={`audio-player-${audioUrl}`}
+            media={{ url: audioUrl }}
             hasRemoveButton={false}
             onRemove={handleRemove}
             data-testid={`${dataTestid}-player`}

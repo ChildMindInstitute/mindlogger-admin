@@ -53,6 +53,7 @@ export const Item = ({
       onMouseEnter={() => setVisibleActions(true)}
       onClick={onItemClick}
       isDragging={isDragging}
+      data-testid="builder-item"
     >
       {isActivityUiType && image}
       <StyledCol hasImage={isActivityUiType} sx={commonSx}>
