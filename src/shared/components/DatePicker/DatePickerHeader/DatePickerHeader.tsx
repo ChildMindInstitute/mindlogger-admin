@@ -48,7 +48,6 @@ export const DatePickerHeader = ({
             getYear(date)
           ) : (
             <Select value={String(getYear(date))} changeValue={changeYearHandler} options={years} />
-            // TODO change design of select
           )}
         </>
       </StyledSelect>
