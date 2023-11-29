@@ -9,6 +9,7 @@ import { ConditionalLogic } from 'shared/state';
 import { Spinner } from 'shared/components';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
+import { ITEMS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 
 import { ItemFlow } from './ItemFlow';
 import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
@@ -82,6 +83,7 @@ export const ActivityItemsFlow = () => {
             key={`item-flow-${flowItem.key}`}
             name={conditionalLogicName}
             index={index}
+            isStaticActive={flowItemsData.length > ITEMS_COUNT_TO_ACTIVATE_STATIC}
             onRemove={() => handleRemoveItemFlow(index)}
           />
         ))}

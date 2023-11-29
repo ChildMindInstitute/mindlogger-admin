@@ -7,7 +7,7 @@ import { mockedApplet, mockedPassword } from 'shared/mock';
 
 import { DeletePopup } from '.';
 
-const testId = 'dashboard-applets-delete-popup';
+const testId = 'dashboard-applets-delete';
 const preloadedState = {
   popups: {
     data: {
@@ -36,7 +36,7 @@ describe('DeletePopup', () => {
       preloadedState,
     });
 
-    expect(screen.getByTestId(`${testId}-enter-password-password`)).toBeInTheDocument();
+    expect(screen.getByTestId(`${testId}-enter-password-popup-password`)).toBeInTheDocument();
   });
 
   test('DeletePopup should open success modal', async () => {
