@@ -11,17 +11,11 @@ import {
   mockedAlertsTestid,
   mockedItemName,
   mockedTextInputOptionTestid,
-  mockedUseParams,
   renderItemConfiguration,
   setItemConfigSetting,
   setItemResponseType,
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockedUseParams(),
-}));
 
 const getDataTestidRegex = (isSliderRows) =>
   `builder-activity-items-item-configuration-slider${isSliderRows ? '-rows-\\d+' : ''}`;
