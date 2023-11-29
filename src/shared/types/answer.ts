@@ -141,7 +141,15 @@ export type DecryptedNumberSelectionAnswer = AdditionalTextType & {
 };
 
 export type DecryptedMediaAnswer = AdditionalTextType & {
-  value: string;
+  value:
+    | string
+    | {
+        uri: string;
+        fileName: string;
+        size: number;
+        type: string;
+        fromLibrary: boolean;
+      };
 };
 
 export type DecryptedDateRangeAnswer = AdditionalTextType & {
