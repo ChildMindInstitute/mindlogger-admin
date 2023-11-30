@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
@@ -27,7 +27,7 @@ import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, watch, getFieldState, setValue } = useFormContext();
+  const { control, getFieldState, setValue } = useFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
@@ -47,7 +47,7 @@ export const Activities = () => {
   });
 
   const activityNames = pluck(activities, 'name');
-  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
+  const activityFlows: AppletFormValues['activityFlows'] = useWatch({ name: 'activityFlows' });
   const errors = activities?.map((_, index) => !!getFieldState(`activities.${index}`).error);
 
   const navigateToActivity = (activityId?: string) =>
@@ -73,6 +73,7 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
+    Mixpanel.track('Add Activity click');
     const {
       index,
       performanceTaskName,

@@ -8,6 +8,8 @@ import {
   getNotificationTimeComparison,
   getNotificationsValidation,
   getTimerDurationCheck,
+  getActivityIncompleteValidation,
+  getActivityIncompleteDateValidation,
 } from './EventForm.utils';
 
 export const EventFormSchema = () => {
@@ -33,6 +35,8 @@ export const EventFormSchema = () => {
         .object()
         .nullable()
         .shape({
+          activityIncomplete: getActivityIncompleteValidation(),
+          activityIncompleteDate: getActivityIncompleteDateValidation(),
           reminderTime: getNotificationTimeComparison(
             yup.string().nullable(),
             'reminderTime',

@@ -31,6 +31,7 @@ export const LinkedTabs = ({
           isMinHeightAuto,
           path,
           hasError,
+          onClick,
           'data-testid': dataTestId,
         },
         index,
@@ -41,6 +42,7 @@ export const LinkedTabs = ({
             component={Link}
             label={t(labelKey)}
             to={path || ''}
+            onClick={onClick}
             icon={
               <>
                 {tabIndex === index ? activeIcon : icon}

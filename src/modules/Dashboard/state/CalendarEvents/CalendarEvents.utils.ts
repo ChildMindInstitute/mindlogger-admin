@@ -3,6 +3,7 @@ import {
   eachDayOfInterval,
   eachMonthOfInterval,
   endOfYear,
+  format,
   getDate,
   getDay,
   isWeekend,
@@ -15,11 +16,13 @@ import {
 import { Periodicity } from 'modules/Dashboard/api';
 import { formatToWeekYear, formatToYearMonthDate } from 'shared/utils/dateFormat';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
+import { DateFormats } from 'shared/consts';
 
 import {
   CalendarEvent,
   CreateEventsData,
   AllDayEventsSortedByDaysItem,
+  GetDaysInMonthlyPeriodicity,
 } from './CalendarEvents.schema';
 
 const LENGTH_TO_SET_ID_IS_HIDDEN = 2;
@@ -298,26 +301,40 @@ export const createEvents = ({
 
   if (periodicityType === Periodicity.Monthly && selectedDate) {
     const chosenDate = getDate(getNormalizedTimezoneDate(selectedDate));
-    const endDate = getDate(eventEnd);
-    const end =
-      chosenDate <= endDate ? eventEnd : new Date(eventEnd.getFullYear(), eventEnd.getMonth(), 0);
-    const monthsBetween =
-      end && eventStart && end > eventStart
-        ? eachMonthOfInterval({
-            start: eventStart,
-            end,
-          })
-        : [];
-
-    const daysOfMonth = monthsBetween.map((month) => {
-      const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
-      const dayOfMonth = Math.min(chosenDate, lastDayOfMonth.getDate());
-
-      return new Date(month.getFullYear(), month.getMonth(), dayOfMonth);
-    });
+    const daysOfMonth = getDaysInMonthlyPeriodicity({
+      chosenDate,
+      eventStart,
+      eventEnd,
+    }) as Date[];
 
     return getEventsArrayFromDates(daysOfMonth, commonProps, startTime, endTime);
   }
 
   return [];
+};
+
+export const getDaysInMonthlyPeriodicity = ({
+  chosenDate,
+  eventEnd,
+  eventStart,
+  returnStringDate,
+}: GetDaysInMonthlyPeriodicity) => {
+  const endDate = getDate(eventEnd);
+  const end =
+    chosenDate <= endDate ? eventEnd : new Date(eventEnd.getFullYear(), eventEnd.getMonth(), 0);
+  const monthsBetween =
+    end && eventStart && end > eventStart
+      ? eachMonthOfInterval({
+          start: eventStart,
+          end,
+        })
+      : [];
+
+  return monthsBetween.map((month) => {
+    const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+    const dayOfMonth = Math.min(chosenDate, lastDayOfMonth.getDate());
+    const returnDate = new Date(month.getFullYear(), month.getMonth(), dayOfMonth);
+
+    return returnStringDate ? format(returnDate, DateFormats.YearMonthDay) : returnDate;
+  });
 };

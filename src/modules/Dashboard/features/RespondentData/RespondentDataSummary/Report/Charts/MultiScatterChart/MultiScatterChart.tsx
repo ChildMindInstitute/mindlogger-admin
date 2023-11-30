@@ -18,7 +18,7 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { locales } from 'shared/consts';
 
 import { scatterChartTooltipHandler } from '../Charts.utils';
-import { ScatterChartType, SetTooltipData } from '../Chart.types';
+import { ChartType, SetTooltipData } from '../Chart.types';
 import { getData, getOptions } from './MultiScatterChart.utils';
 import { MultiScatterChartProps } from './MultiScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
@@ -64,7 +64,7 @@ export const MultiScatterChart = ({
       isHovered,
       chartRef,
       setTooltipData: setTooltipData as SetTooltipData,
-      type: ScatterChartType.MultiScatterChart,
+      chartType: ChartType.MultiScatterChart,
     });
 
   const renderChart = useMemo(

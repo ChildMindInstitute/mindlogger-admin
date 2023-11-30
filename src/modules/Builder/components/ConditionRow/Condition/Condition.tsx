@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useWatch, useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 
 import { ConditionRowType } from 'modules/Builder/types';
-import { StyledCondition, StyledSelectController, StyledInputController } from './Condition.styles';
+import { StyledCondition, StyledInputController, StyledSelectController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
 import { ConditionItemType } from './Condition.const';
 import {
@@ -35,7 +35,7 @@ export const Condition = ({
   'data-testid': dataTestid,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
-  const { control, watch } = useFormContext();
+  const { control } = useFormContext();
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 
@@ -55,8 +55,8 @@ export const Condition = ({
     item: selectedItem,
     state,
   });
-  const minValue = watch(minValueName);
-  const maxValue = watch(maxValueName);
+  const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
+
   const { leftRange, rightRange } = getConditionMinMaxRangeValues({
     item: selectedItem,
     minValue,

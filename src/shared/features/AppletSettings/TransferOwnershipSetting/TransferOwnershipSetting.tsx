@@ -6,6 +6,7 @@ import { applet } from 'shared/state';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { SuccessTransferOwnershipPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { TransferOwnershipRef } from 'modules/Dashboard/features/Applet/TransferOwnership/TransferOwnership.types';
+import { Mixpanel } from 'shared/utils';
 
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
@@ -31,6 +32,7 @@ export const TransferOwnershipSetting = () => {
     if (!emailTransfered) return;
 
     setTransferOwnershipPopupVisible(true);
+    Mixpanel.track('Invitation sent successfully');
   }, [emailTransfered]);
 
   return (

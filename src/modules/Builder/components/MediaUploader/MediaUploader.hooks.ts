@@ -68,7 +68,7 @@ export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
     handleSetResource(files);
   };
 
-  const onRemove = (/*e: MouseEvent*/) => {
+  const onRemove = () => {
     onUpload(null);
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';

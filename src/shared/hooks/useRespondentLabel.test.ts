@@ -31,13 +31,12 @@ describe('useRespondentLabel', () => {
 
   test('should construct and return the respondent label correctly (User: secret123)', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
-    const details = [
-      {
-        respondentSecretId: 'secret123',
-        respondentNickname: '',
-      },
-    ];
-    users.useRespondent = jest.fn().mockReturnValue({ details });
+    const res = {
+      secretUserId: 'secret123',
+      nickname: '',
+    };
+
+    users.useRespondent = jest.fn().mockReturnValue({ result: res });
 
     const { result } = renderHook(useRespondentLabel);
 
@@ -46,13 +45,11 @@ describe('useRespondentLabel', () => {
 
   test('should construct and return the respondent label correctly (User: secret123 (John Doe))', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
-    const details = [
-      {
-        respondentSecretId: 'secret123',
-        respondentNickname: 'John Doe',
-      },
-    ];
-    users.useRespondent = jest.fn().mockReturnValue({ details });
+    const res = {
+      secretUserId: 'secret123',
+      nickname: 'John Doe',
+    };
+    users.useRespondent = jest.fn().mockReturnValue({ result: res });
 
     const { result } = renderHook(useRespondentLabel);
 

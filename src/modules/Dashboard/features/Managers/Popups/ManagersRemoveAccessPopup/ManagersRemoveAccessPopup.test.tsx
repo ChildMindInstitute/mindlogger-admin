@@ -1,10 +1,11 @@
-import { waitFor, screen } from '@testing-library/react';
+import { waitFor, screen, fireEvent } from '@testing-library/react';
+import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
 
-import { ManagersRemoveAccessPopup } from './ManagersRemoveAccessPopup';
+import { ManagersRemoveAccessPopup } from '.';
 
 const refetchManagersMock = jest.fn();
 const onCloseMock = jest.fn();
@@ -18,32 +19,35 @@ const user = {
   email: 'email@gmail.com',
   lastSeen: '',
   roles: [],
-  applets: [],
+  applets: [{ displayName: 'displayName', id: mockedAppletId, roles: [] }],
+};
+const commonProps = {
+  onClose: onCloseMock,
+  popupVisible: true,
+  refetchManagers: refetchManagersMock,
+  user,
 };
 
 describe('ManagersRemoveAccessPopup component tests', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    mockAxios.reset();
   });
 
-  test('ManagersRemoveAccessPopup should appear second screen', async () => {
-    renderWithProviders(
-      <ManagersRemoveAccessPopup
-        onClose={onCloseMock}
-        removeAccessPopupVisible={true}
-        refetchManagers={refetchManagersMock}
-        user={user}
-      />,
-      {
-        route,
-        routePath,
-      },
-    );
+  test('ManagersRemoveAccessPopup should open with applets list', async () => {
+    renderWithProviders(<ManagersRemoveAccessPopup {...commonProps} />);
 
-    await waitFor(() =>
-      expect(
-        screen.getByText(`${user.firstName} ${user.lastName} (${user.email})`),
-      ).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByText(user.applets[0].displayName)).toBeInTheDocument());
+  });
+
+  test('ManagersRemoveAccessPopup should remove access with appletId', async () => {
+    mockAxios.delete.mockResolvedValueOnce(null);
+
+    renderWithProviders(<ManagersRemoveAccessPopup {...commonProps} />, {
+      route,
+      routePath,
+    });
+
+    fireEvent.click(screen.getByText('Remove'));
+    await waitFor(() => expect(screen.getByText('Ok')).toBeInTheDocument());
   });
 });
