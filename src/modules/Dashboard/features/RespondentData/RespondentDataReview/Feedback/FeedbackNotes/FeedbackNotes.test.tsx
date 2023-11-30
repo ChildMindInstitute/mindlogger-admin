@@ -101,21 +101,28 @@ const FormComponent = ({ children }: { children: ReactNode }) => {
   return <FormProvider {...methods}>{children}</FormProvider>;
 };
 
+const renderFeedbackNotes = () =>
+  renderWithProviders(
+    <RespondentDataReviewContext.Provider
+      value={{ isFeedbackOpen: true } as RespondentDataReviewContextType}
+    >
+      <FormComponent>{<FeedbackNotes activity={mockedActivity} />}</FormComponent>
+    </RespondentDataReviewContext.Provider>,
+    {
+      preloadedState,
+      route,
+      routePath,
+    },
+  );
+
+const mockGetWithNotes = () => {
+  mockAxios.get.mockResolvedValueOnce(mockedGetWithNotes);
+};
+
 describe('FeedbackNotes', () => {
   test('should render array of notes', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithNotes);
-    renderWithProviders(
-      <RespondentDataReviewContext.Provider
-        value={{ isFeedbackOpen: true } as RespondentDataReviewContextType}
-      >
-        <FormComponent>{<FeedbackNotes activity={mockedActivity} />}</FormComponent>
-      </RespondentDataReviewContext.Provider>,
-      {
-        preloadedState,
-        route,
-        routePath,
-      },
-    );
+    mockGetWithNotes();
+    renderFeedbackNotes();
 
     await waitFor(() => {
       const elementsWithTestIdSubstring = screen.queryAllByTestId(
@@ -131,18 +138,7 @@ describe('FeedbackNotes', () => {
 
   test('should save new note', async () => {
     mockAxios.get.mockResolvedValueOnce(mockedGetWitEmptyhNotes);
-    renderWithProviders(
-      <RespondentDataReviewContext.Provider
-        value={{ isFeedbackOpen: true } as RespondentDataReviewContextType}
-      >
-        <FormComponent>{<FeedbackNotes activity={mockedActivity} />}</FormComponent>
-      </RespondentDataReviewContext.Provider>,
-      {
-        preloadedState,
-        route,
-        routePath,
-      },
-    );
+    renderFeedbackNotes();
 
     fireEvent.change(screen.getByLabelText(/Add a New Note/i), { target: { value: newNoteValue } });
     fireEvent.click(screen.getByTestId('respondents-summary-feedback-notes-save'));
@@ -162,19 +158,8 @@ describe('FeedbackNotes', () => {
   });
 
   test('should edit an existing note', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithNotes);
-    renderWithProviders(
-      <RespondentDataReviewContext.Provider
-        value={{ isFeedbackOpen: true } as RespondentDataReviewContextType}
-      >
-        <FormComponent>{<FeedbackNotes activity={mockedActivity} />}</FormComponent>
-      </RespondentDataReviewContext.Provider>,
-      {
-        preloadedState,
-        route,
-        routePath,
-      },
-    );
+    mockGetWithNotes();
+    renderFeedbackNotes();
 
     await waitFor(() => {
       const hiddenEditAction = screen.queryByTestId(`${noteTestId}-0-edit`);
@@ -213,19 +198,8 @@ describe('FeedbackNotes', () => {
   });
 
   test('should remove an existing note', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWithNotes);
-    renderWithProviders(
-      <RespondentDataReviewContext.Provider
-        value={{ isFeedbackOpen: true } as RespondentDataReviewContextType}
-      >
-        <FormComponent>{<FeedbackNotes activity={mockedActivity} />}</FormComponent>
-      </RespondentDataReviewContext.Provider>,
-      {
-        preloadedState,
-        route,
-        routePath,
-      },
-    );
+    mockGetWithNotes();
+    renderFeedbackNotes();
 
     await waitFor(() => {
       const noteHeader = screen.queryByTestId(`${noteTestId}-0-header`) as HTMLElement;
