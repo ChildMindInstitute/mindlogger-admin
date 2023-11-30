@@ -4,6 +4,7 @@ import {
   EventDTO,
   ExportMediaData,
   isDrawingAnswerData,
+  SuccessedEventDTO,
   UserActionType,
 } from 'shared/types';
 import {
@@ -46,7 +47,7 @@ export const getReportData = (
 ) => {
   const answers = decryptedAnswers.reduce(
     (filteredAcc, item, index) => {
-      if (item.answer === null) return filteredAcc;
+      if (item.answer === null || item.answer === undefined) return filteredAcc;
 
       return filteredAcc.concat(
         getReportCSVObject({
@@ -97,7 +98,7 @@ export const searchItemNameInUrlScreen = (screen: string) => screen.split('/').p
 export const checkIfScreenHasUrl = (screen: string) => /^https?:\/\//.test(screen);
 // For ex.:
 // screen: "https://raw.githubusercontent.com/ChildMindInstitute/NIMH_EMA_applet/master/activities/<activity_name>/items/<item_name>"
-export const checkIfHasJsonLdEventScreen = (decryptedEvents: EventDTO[]) => {
+export const checkIfHasJsonLdEventScreen = (decryptedEvents: SuccessedEventDTO[]) => {
   if (!decryptedEvents.length) return false;
 
   return checkIfScreenHasUrl(decryptedEvents[0]?.screen);
@@ -110,14 +111,18 @@ export const getEventScreenWrapper =
     return searchItemNameInUrlScreen(screen);
   };
 
+export const isSuccessEvent = (event: EventDTO): event is SuccessedEventDTO =>
+  event.type !== '' && event.screen !== '' && event.time !== '';
+
 export const getActivityJourneyData = (
   activityJourneyData: AppletExportData['activityJourneyData'],
   rawAnswersObject: Record<string, DecryptedAnswerData>,
   decryptedAnswers: DecryptedAnswerData[],
   decryptedEvents: EventDTO[],
 ) => {
+  const decryptedFilteredEvents = decryptedEvents.filter(isSuccessEvent);
   const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);
-  const hasUrlEventScreen = checkIfHasJsonLdEventScreen(decryptedEvents);
+  const hasUrlEventScreen = checkIfHasJsonLdEventScreen(decryptedFilteredEvents);
   const getEventScreen = getEventScreenWrapper({ hasUrlEventScreen });
   const decryptedAnswersObject = getDecryptedAnswersObject({
     decryptedAnswers,
@@ -125,7 +130,7 @@ export const getActivityJourneyData = (
     hasUrlEventScreen,
   });
   let indexForABTrailsFiles = 0;
-  const events = decryptedEvents.map((event, index, events) => {
+  const events = decryptedFilteredEvents.map((event, index, events) => {
     if (index === 0 && !decryptedAnswersObject[getEventScreen(event.screen)] && events[index + 1])
       return getSplashScreen(event, {
         ...events[index + 1],
