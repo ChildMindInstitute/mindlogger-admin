@@ -158,6 +158,14 @@ const mockedGetWithReviews = {
   },
 };
 
+const mockedGetWithEmptyReviews = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: {
+    result: [],
+    count: 0,
+  },
+};
+
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   CollapsedMdText: jest.fn(() => (
@@ -302,6 +310,28 @@ describe('FeedbackReviewed', () => {
       expect(screen.getByText(/Jane Doe/)).toBeInTheDocument();
       expect(screen.queryByTestId(`${reviewerTestId}-0-review-0-edited`)).not.toBeInTheDocument();
       expect(screen.getByTestId(`${reviewerTestId}-0-review-1-edited`)).toBeInTheDocument();
+    });
+  });
+
+  test('should render empty state', async () => {
+    mockAxios.get.mockResolvedValueOnce(mockedGetWithEmptyReviews);
+
+    const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
+      decryptedAnswers: [],
+    });
+
+    dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
+
+    renderWithProviders(<FeedbackReviewed />, {
+      preloadedState,
+      route,
+      routePath,
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('No reviewer has completed the Assessment for this.'),
+      ).toBeInTheDocument();
     });
   });
 });
