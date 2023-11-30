@@ -42,7 +42,7 @@ export const ItemCardButtons = ({
       <Button
         sx={{ minWidth: '10rem', ml: theme.spacing(1.6) }}
         variant="contained"
-        disabled={!config.isSkippable && hasAnswer}
+        disabled={!config.isSkippable && !hasAnswer}
         onClick={isSubmitVisible ? onSubmit : onNextButtonClick}
         data-testid={`${dataTestid}-${isSubmitVisible ? 'submit' : 'next'}`}
       >
