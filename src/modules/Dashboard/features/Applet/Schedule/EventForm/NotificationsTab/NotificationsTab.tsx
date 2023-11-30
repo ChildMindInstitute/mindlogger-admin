@@ -24,13 +24,12 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     name: 'notifications',
   });
 
-  const [periodicity, startDate, startTime, reminder] = useWatch({
+  const [periodicity, startTime, reminder] = useWatch({
     control,
-    name: ['periodicity', 'startDate', 'startTime', 'reminder'],
+    name: ['periodicity', 'startTime', 'reminder'],
   });
 
   const isAlwaysAvailable = periodicity === Periodicity.Always;
-  const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
   const handleAddNotification = () => {
     append({
@@ -43,7 +42,6 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     setValue(
       'reminder',
       {
-        ...(isMonthlyPeriodicity && { activityIncompleteDate: startDate as Date }),
         activityIncomplete: DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
         reminderTime: isAlwaysAvailable ? DEFAULT_REMINDER_TIME : startTime,
       },

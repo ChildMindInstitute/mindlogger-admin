@@ -78,7 +78,7 @@ export const StyledPopover = styled(Popover)`
       color: ${variables.palette.primary};
     }
 
-    &__day--today.react-datepicker__day--disabled {
+    &__day--today.react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
       border: ${variables.borderWidth.md} solid ${variables.palette.on_surface_alfa12};
       font-weight: ${variables.font.weight.regular};
     }
