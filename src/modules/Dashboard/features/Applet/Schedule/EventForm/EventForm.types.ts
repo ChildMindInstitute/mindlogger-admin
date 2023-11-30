@@ -32,7 +32,7 @@ export type Warning = {
   showRemoveAllScheduled?: boolean;
 };
 
-export type FormReminder = (EventReminder & { activityIncompleteDate?: Date }) | null;
+export type FormReminder = EventReminder | null;
 
 export type EventFormValues = {
   activityOrFlowId: string;
@@ -136,4 +136,9 @@ export type GetReminderTimeComparison = {
   startTime: string;
   endTime: string;
   isCrossDay: boolean;
+};
+
+export type GetReminder = {
+  type: SecondsManipulation;
+  reminder?: FormReminder;
 };

@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
-import { ConditionalLogic, ScoreReport } from 'shared/state';
+import { ConditionalLogic, ScoreOrSection } from 'shared/state';
 import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 import { Modal } from 'shared/components';
 import {
@@ -12,6 +12,7 @@ import {
 import { getEntityKey } from 'shared/utils';
 import { ActivityFlowFormValues, ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
+import { ScoreReportType } from 'shared/consts';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
 
@@ -28,7 +29,7 @@ export const DeleteItemModal = ({
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const reportsField = `${fieldName}.scoresAndReports.reports`;
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
-  const reports: ScoreReport[] = watch(reportsField) ?? [];
+  const reports: ScoreOrSection[] = watch(reportsField) ?? [];
   const items: ItemFormValues[] = watch(`${fieldName}.items`);
   const activityFlows: ActivityFlowFormValues[] = watch('activityFlows');
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
@@ -101,30 +102,45 @@ export const DeleteItemModal = ({
       let shouldTriggerReports = false;
 
       reports.forEach((report, index) => {
-        const { itemsPrint, itemsScore, conditionalLogic } = report;
+        const { itemsPrint, conditionalLogic, type } = report;
         const reportField = `${reportsField}.${index}`;
 
         if (itemsPrint?.includes(itemIdToDelete)) {
           shouldTriggerReports = true;
           setValue(`${reportField}.itemsPrint`, itemsPrint?.filter((id) => id !== itemIdToDelete));
         }
-        if (itemsScore?.includes(itemIdToDelete)) {
-          shouldTriggerReports = true;
-          setValue(`${reportField}.itemsScore`, itemsScore?.filter((id) => id !== itemIdToDelete));
-        }
-
-        conditionalLogic?.forEach((conditional, conditionalIndex) => {
-          const { itemsPrint: conditionalItemsPrint } = conditional;
-          const conditionalLogicField = `${reportField}.conditionalLogic.${conditionalIndex}`;
-
-          if (conditionalItemsPrint?.includes(itemIdToDelete)) {
+        if (type === ScoreReportType.Score) {
+          const { itemsScore } = report;
+          if (itemsScore?.includes(itemIdToDelete)) {
             shouldTriggerReports = true;
             setValue(
-              `${conditionalLogicField}.itemsPrint`,
-              conditionalItemsPrint?.filter((id) => id !== itemIdToDelete),
+              `${reportField}.itemsScore`,
+              itemsScore?.filter((id) => id !== itemIdToDelete),
             );
           }
-        });
+          conditionalLogic?.forEach((conditional, conditionalIndex) => {
+            const { itemsPrint: conditionalItemsPrint } = conditional;
+            const conditionalLogicField = `${reportField}.conditionalLogic.${conditionalIndex}`;
+
+            if (conditionalItemsPrint?.includes(itemIdToDelete)) {
+              shouldTriggerReports = true;
+              setValue(
+                `${conditionalLogicField}.itemsPrint`,
+                conditionalItemsPrint?.filter((id) => id !== itemIdToDelete),
+              );
+            }
+          });
+        }
+        if (type === ScoreReportType.Section && conditionalLogic) {
+          const { conditions } = conditionalLogic;
+          if (conditions?.some((condition) => condition.itemName === itemIdToDelete)) {
+            shouldTriggerReports = true;
+            const newConditions = conditions.filter(
+              (condition) => condition.itemName !== itemIdToDelete,
+            );
+            setValue(`${reportField}.conditionalLogic.conditions`, newConditions);
+          }
+        }
       });
       shouldTriggerReports && trigger(reportsField);
     }
@@ -132,6 +148,10 @@ export const DeleteItemModal = ({
     handleRemoveItem(itemIndexToDelete);
     onClose();
   };
+
+  const deleteItemWithConditionalsDesc = conditionalLogicForItemToDelete?.length
+    ? t('deleteItemWithConditionalsDescription')
+    : null;
 
   if (!itemIdToDelete) return null;
 
@@ -175,9 +195,7 @@ export const DeleteItemModal = ({
                 </strong>
                 ?
               </Trans>{' '}
-              {conditionalLogicForItemToDelete?.length
-                ? t('deleteItemWithConditionalsDescription')
-                : null}
+              {deleteItemWithConditionalsDesc}
             </StyledBodyLarge>
             {conditionalLogicForItemToDelete?.map((conditionalLogic: ConditionalLogic) => (
               <ConditionalPanel

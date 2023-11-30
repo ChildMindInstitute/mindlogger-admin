@@ -64,16 +64,13 @@ export const AvailabilityTab = ({
   });
   const hasNextDayLabel = useNextDayLabel({ startTime, endTime });
   const isOncePeriodicity = periodicity === Periodicity.Once;
-  const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
   const handleSetPeriodicity = (periodicity: string | number) => {
     setValue('periodicity', periodicity as Periodicity, { shouldDirty: true });
     if (!reminder) return;
-    if (periodicity === Periodicity.Monthly) {
-      setValue('reminder.activityIncompleteDate', startDate as Date);
-    } else {
-      setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE);
-    }
+    setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE, {
+      shouldDirty: true,
+    });
     trigger(['reminder']);
   };
 
@@ -81,10 +78,6 @@ export const AvailabilityTab = ({
     if (typeof startDate === 'string' || !startDate || !endDate) return;
     if (endDate < startDate) {
       setValue('endDate', addDays(startDate, 1));
-    }
-    if (reminder) {
-      isMonthlyPeriodicity && setValue('reminder.activityIncompleteDate', startDate);
-      trigger(['reminder']);
     }
   };
 
@@ -100,7 +93,9 @@ export const AvailabilityTab = ({
     const toTime = isFromTime ? endTime : time;
     const isCrossDayEvent = getNextDayComparison(fromTime, toTime);
     if (!isCrossDayEvent) {
-      setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE);
+      setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE, {
+        shouldDirty: true,
+      });
     }
   };
 
@@ -110,7 +105,10 @@ export const AvailabilityTab = ({
       setValue('periodicity', Periodicity.Always);
       setValue('startTime', DEFAULT_START_TIME);
       setValue('endTime', DEFAULT_END_TIME);
-      reminder && setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE);
+      reminder &&
+        setValue('reminder.activityIncomplete', DEFAULT_ACTIVITY_INCOMPLETE_VALUE, {
+          shouldDirty: true,
+        });
 
       return;
     }

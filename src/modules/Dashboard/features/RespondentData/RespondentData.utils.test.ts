@@ -1,9 +1,5 @@
 import { createArrayForSlider } from './RespondentData.utils';
 
-jest.mock('shared/utils', () => ({
-  ...jest.requireActual('shared/utils'),
-}));
-
 describe('createArrayForSlider', () => {
   test('should create an array with the correct length', () => {
     const result = createArrayForSlider({ maxValue: 5, minValue: 1 });
