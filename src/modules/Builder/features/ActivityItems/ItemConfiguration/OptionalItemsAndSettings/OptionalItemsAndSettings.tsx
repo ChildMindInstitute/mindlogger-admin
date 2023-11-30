@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
-import { useFieldArray, useWatch } from 'react-hook-form';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,6 @@ import { ItemResponseType } from 'shared/consts';
 import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 import { DEFAULT_SCORE_VALUE } from '../ItemConfiguration.const';
@@ -47,7 +46,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
     const [optionsOpen, setOptionsOpen] = useState<boolean[]>([]);
 
-    const { control, setValue } = useCustomFormContext();
+    const { control, setValue } = useFormContext();
     const [settings, responseType, responseValues, palette] = useWatch({
       control,
       name: [
@@ -64,6 +63,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       setShowColorPalette(visibility);
       setValue(`${name}.responseValues.paletteName`, undefined);
     };
+
     const {
       fields: alerts,
       append: appendAlert,
@@ -154,17 +154,25 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       removeAlert(index);
 
       if (alerts?.length === 1) {
-        setValue(`${name}.config.${ItemConfigurationSettings.HasAlerts}`, false);
+        setValue(`${name}.config.${ItemConfigurationSettings.HasAlerts}`, false, {
+          shouldDirty: true,
+        });
       }
     };
 
     const handleRemoveTextInputOption = () => {
-      setValue(`${name}.config.${ItemConfigurationSettings.HasTextInput}`, false);
-      setValue(`${name}.config.${ItemConfigurationSettings.IsTextInputRequired}`, false);
+      setValue(`${name}.config.${ItemConfigurationSettings.HasTextInput}`, false, {
+        shouldDirty: true,
+      });
+      setValue(`${name}.config.${ItemConfigurationSettings.IsTextInputRequired}`, false, {
+        shouldDirty: true,
+      });
     };
 
     const handleRemoveResponseDataIdentifier = () => {
-      setValue(`${name}.config.${ItemConfigurationSettings.HasResponseDataIdentifier}`, false);
+      setValue(`${name}.config.${ItemConfigurationSettings.HasResponseDataIdentifier}`, false, {
+        shouldDirty: true,
+      });
     };
 
     const activeItem = useActiveItem({
