@@ -254,11 +254,10 @@ export const useUpdatedAppletNavigate = () => {
 export const useSaveAndPublishSetup = (
   hasPrompt: boolean,
   setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
-  setAppletWithoutChangesPopupVisible?: (val: boolean) => void,
 ) => {
   const {
     trigger,
-    formState: { dirtyFields, isDirty },
+    formState: { dirtyFields },
   } = useFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletDataFromForm();
@@ -388,12 +387,6 @@ export const useSaveAndPublishSetup = (
   const sendRequestWithPasswordCheck = async () => {
     if (isNewApplet) {
       setIsPasswordPopupOpened(true);
-
-      return;
-    }
-
-    if (!isDirty) {
-      setAppletWithoutChangesPopupVisible?.(true);
 
       return;
     }

@@ -36,7 +36,7 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
     handleSaveChangesDoNotSaveSubmit,
     handleSaveChangesSaveSubmit,
     cancelNavigation,
-  } = useSaveAndPublishSetup(hasPrompt, setIsFromLibrary, setAppletWithoutChangesPopupVisible);
+  } = useSaveAndPublishSetup(hasPrompt, setIsFromLibrary);
   const { appletId } = useParams();
 
   const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
