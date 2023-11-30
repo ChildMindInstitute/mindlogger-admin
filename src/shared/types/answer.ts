@@ -140,8 +140,16 @@ export type DecryptedNumberSelectionAnswer = AdditionalTextType & {
   value: number;
 };
 
+type CachedMediaValue = {
+  uri: string;
+  fileName: string;
+  size: number;
+  type: string;
+  fromLibrary: boolean;
+};
+
 export type DecryptedMediaAnswer = AdditionalTextType & {
-  value: string;
+  value: string | CachedMediaValue;
 };
 
 export type DecryptedDateRangeAnswer = AdditionalTextType & {
