@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useWatch } from 'react-hook-form';
+import { useWatch, useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
 import { EditorUiType, Switch, TransferListController } from 'shared/components/FormComponents';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
@@ -20,8 +19,7 @@ export const SectionScoreCommonFields = ({
 }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, getFieldState, register, unregister, setValue, getValues } =
-    useCustomFormContext();
+  const { control, getFieldState, register, unregister, setValue, getValues } = useFormContext();
 
   const showMessageName = `${name}.showMessage`;
   const printItemsName = `${name}.printItems`;

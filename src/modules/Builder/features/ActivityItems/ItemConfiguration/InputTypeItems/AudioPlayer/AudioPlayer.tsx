@@ -42,7 +42,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
 
   const onClearMedia = () => {
     setMedia(null);
-    setValue(urlName, undefined, { shouldDirty: true });
+    setValue(urlName, undefined);
   };
   const onCloseUploadPopup = () => setUploadPopupOpened(false);
   const onCloseRecordPopup = () => setRecordPopupOpened(false);
@@ -50,11 +50,11 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const onCloseRemoveAudioPopup = () => setRemoveAudioPopupOpened(false);
 
   const handleUploadAudio = (url?: string) => {
-    setValue(urlName, url ?? media?.url, { shouldDirty: true });
+    setValue(urlName, url ?? media?.url);
     onCloseUploadPopup();
   };
   const handleUploadRecord = (url?: string) => {
-    setValue(urlName, url, { shouldDirty: true });
+    setValue(urlName, url);
     onCloseRecordPopup();
   };
 

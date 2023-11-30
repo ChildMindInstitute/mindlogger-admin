@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
-import {
-  useRedirectIfNoMatchedActivity,
-  useCurrentActivity,
-  useCustomFormContext,
-} from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
@@ -45,7 +41,7 @@ import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');
-  const { control, watch, setValue } = useCustomFormContext();
+  const { control, watch, setValue } = useFormContext();
   const { fieldName, activity } = useCurrentActivity();
 
   useRedirectIfNoMatchedActivity();
@@ -66,7 +62,7 @@ export const SubscalesConfiguration = () => {
   const [isLookupTableOpened, setIsLookupTableOpened] = useState(false);
   const tableData = watch(totalScoresTableDataField) ?? [];
   const onTableDataUpdate = (data?: DataTableItem[]) => {
-    setValue(totalScoresTableDataField, data);
+    setValue(totalScoresTableDataField, data, { shouldDirty: true });
   };
   const iconId = `lookup-table${tableData?.length ? '-filled' : ''}`;
 
