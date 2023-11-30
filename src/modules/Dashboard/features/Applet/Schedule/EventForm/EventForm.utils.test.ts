@@ -62,8 +62,9 @@ describe('EventForm.utils', () => {
       ${'07:00'} | ${'03:00'} | ${'07:00'} | ${'14:00'}     | ${'05:00'}   | ${false}
       ${'07:00'} | ${'06:00'} | ${'07:00'} | ${'14:00'}     | ${'05:00'}   | ${false}
       ${'05:00'} | ${'14:00'} | ${'05:00'} | ${'14:00'}     | ${'05:00'}   | ${true}
+      ${'23:55'} | ${'00:00'} | ${'23:55'} | ${'23:55'}     | ${'00:00'}   | ${false}
     `(
-      'time=$time, fromTime=$fromTime, toTime=$toTime, rangeStart=$rangeStartTime, rangeStart=$rangeEndTime:',
+      'time=$time, fromTime=$fromTime, toTime=$toTime, rangeStart=$rangeStartTime, rangeEnd=$rangeEndTime:',
       ({ time, fromTime, toTime, rangeStartTime, rangeEndTime, expected }) => {
         expect(
           getBetweenStartEndNextDayComparison({
