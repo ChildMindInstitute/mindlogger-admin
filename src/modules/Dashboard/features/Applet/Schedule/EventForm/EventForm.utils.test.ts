@@ -1,6 +1,6 @@
 import { endOfYear } from 'date-fns';
 
-import { Periodicity } from 'modules/Dashboard/api';
+import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
 
 import {
   getBetweenStartEndNextDayComparison,
@@ -12,7 +12,17 @@ import {
   convertSecondsToHHmmString,
   getActivityOrFlowId,
   getStartEndDates,
+  getDefaultValues,
+  getNotifications,
+  getReminder,
 } from './EventForm.utils';
+import {
+  DEFAULT_END_TIME,
+  DEFAULT_IDLE_TIME,
+  DEFAULT_START_TIME,
+  DEFAULT_TIMER_DURATION,
+} from './EventForm.const';
+import { SecondsManipulation } from './EventForm.types';
 
 const mockedEvent = {
   id: '12',
@@ -28,7 +38,7 @@ const mockedEvent = {
   eventStart: new Date('2023-11-12'),
   eventEnd: new Date('2023-11-29'),
   startTime: '01:00',
-  endTime: '23:59',
+  endTime: '23:00',
 };
 
 describe('EventForm.utils', () => {
@@ -148,6 +158,83 @@ describe('EventForm.utils', () => {
         ).toEqual(expected);
       },
     );
+  });
+
+  describe('getDefaultValues', () => {
+    const defaultStartDate = new Date('2023-11-12');
+    test('returns default values when editedEvent is undefined', () => {
+      expect(getDefaultValues(defaultStartDate)).toEqual({
+        activityOrFlowId: '',
+        alwaysAvailable: true,
+        oneTimeCompletion: false,
+        startTime: DEFAULT_START_TIME,
+        endTime: DEFAULT_END_TIME,
+        date: defaultStartDate,
+        startDate: defaultStartDate,
+        endDate: endOfYear(defaultStartDate),
+        accessBeforeSchedule: false,
+        timerType: TimerType.NotSet,
+        timerDuration: DEFAULT_TIMER_DURATION,
+        idleTime: DEFAULT_IDLE_TIME,
+        periodicity: Periodicity.Once,
+        notifications: [],
+        reminder: null,
+        removeWarning: {},
+      });
+    });
+
+    test('returns correct values when editedEvent is provided', () => {
+      const editedEvent = {
+        ...mockedEvent,
+        startFlowIcon: true,
+        oneTimeCompletion: false,
+        accessBeforeSchedule: true,
+        timerType: TimerType.Timer,
+        timer: 120,
+        notification: {
+          notifications: [
+            {
+              fromTime: '05:00',
+              toTime: '20:00',
+              triggerType: NotificationType.Random,
+            },
+            {
+              atTime: '15:00',
+              triggerType: NotificationType.Fixed,
+            },
+          ],
+          reminder: {
+            activityIncomplete: 0,
+            reminderTime: '16:00',
+          },
+        },
+      };
+
+      expect(getDefaultValues(defaultStartDate, editedEvent)).toEqual({
+        activityOrFlowId: `flow-${editedEvent.activityOrFlowId}`,
+        alwaysAvailable: editedEvent.alwaysAvailable,
+        oneTimeCompletion: editedEvent.oneTimeCompletion,
+        startTime: editedEvent.startTime,
+        endTime: editedEvent.endTime,
+        date: editedEvent.eventStart,
+        startDate: defaultStartDate,
+        endDate: endOfYear(defaultStartDate),
+        accessBeforeSchedule: editedEvent.accessBeforeSchedule,
+        timerType: editedEvent.timerType,
+        timerDuration: convertSecondsToHHmmString(editedEvent.timer),
+        idleTime: DEFAULT_IDLE_TIME,
+        periodicity: editedEvent.periodicity,
+        notifications: getNotifications(
+          SecondsManipulation.RemoveSeconds,
+          editedEvent.notification.notifications,
+        ),
+        reminder: getReminder({
+          type: SecondsManipulation.RemoveSeconds,
+          reminder: editedEvent.notification.reminder,
+        }),
+        removeWarning: {},
+      });
+    });
   });
 
   describe('getBetweenStartEndNextDaySingleComparison', () => {

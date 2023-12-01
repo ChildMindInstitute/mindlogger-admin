@@ -310,7 +310,7 @@ export const getStartEndDates = (
   };
 };
 
-const getNotifications = (type: SecondsManipulation, notifications?: EventNotifications) =>
+export const getNotifications = (type: SecondsManipulation, notifications?: EventNotifications) =>
   notifications?.map((notification) => {
     const { atTime, fromTime, toTime } = notification || {};
     if (notification.triggerType === NotificationType.Fixed) {
@@ -336,7 +336,7 @@ const getNotifications = (type: SecondsManipulation, notifications?: EventNotifi
     };
   }) || null;
 
-const getReminder = ({ type, reminder }: GetReminder) => {
+export const getReminder = ({ type, reminder }: GetReminder) => {
   if (!reminder) return null;
   const isFromForm = type === SecondsManipulation.AddSeconds;
 
