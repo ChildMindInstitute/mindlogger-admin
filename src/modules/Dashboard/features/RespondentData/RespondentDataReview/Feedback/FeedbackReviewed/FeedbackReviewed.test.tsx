@@ -19,7 +19,7 @@ import * as dashboardHooks from 'modules/Dashboard/hooks';
 import { FeedbackReviewed } from './FeedbackReviewed';
 
 const reviewerTestId = 'respondents-data-summary-feedback-reviewed-reviewer';
-const mockedAnserId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
+const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondent}/dataviz/review?selectedDate=2023-11-27&answerId=${mockedAnserId}`;
 const routePath = page.appletRespondentDataReview;
 const preloadedState = {
