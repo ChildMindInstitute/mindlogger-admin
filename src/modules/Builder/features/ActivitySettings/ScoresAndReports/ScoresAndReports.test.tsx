@@ -168,8 +168,8 @@ describe('ScoreAndReports', () => {
       options: { route, routePath },
     });
 
-    const addSectionBtn = screen.getByText('Add Score');
-    fireEvent.click(addSectionBtn);
+    const addScoreBtn = screen.getByText('Add Score');
+    fireEvent.click(addScoreBtn);
 
     expect(screen.getByTestId(`${dataTestid}-score-2`)).toBeInTheDocument();
   });
