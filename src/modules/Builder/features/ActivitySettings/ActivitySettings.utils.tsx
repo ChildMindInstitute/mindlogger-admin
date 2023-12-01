@@ -60,7 +60,7 @@ export const getActivitySettings = ({
 };
 
 export const checkOnItemTypeAndScore = (item: ItemFormValues | Item): item is ItemsWithScore =>
-  (item.config as SingleAndMultipleSelectionConfig | SliderConfig).addScores &&
+  (item.config as SingleAndMultipleSelectionConfig | SliderConfig)?.addScores &&
   [
     ItemResponseType.SingleSelection,
     ItemResponseType.MultipleSelection,
