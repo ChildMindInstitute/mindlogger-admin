@@ -29,7 +29,7 @@ export const getDrawingItemsData = (
 ) => {
   const drawingAnswers = decryptedAnswers.reduce((acc, item) => {
     const responseType = item.activityItem?.responseType;
-    if (responseType !== ItemResponseType.Drawing || item.answer === null) return acc;
+    if (responseType !== ItemResponseType.Drawing || !item.answer) return acc;
     const drawingValue = (item.answer as DecryptedDrawingAnswer).value;
 
     return acc.concat({
@@ -47,7 +47,7 @@ export const getStabilityTrackerItemsData = (
 ) => {
   const stabilityTrackerAnswers = decryptedAnswers.reduce((acc, item) => {
     const responseType = item.activityItem?.responseType;
-    if (responseType !== ItemResponseType.StabilityTracker) return acc;
+    if (responseType !== ItemResponseType.StabilityTracker || !item.answer) return acc;
 
     const answer = <DecryptedStabilityTrackerAnswer>item.answer;
     const stabilityTrackerValue = (answer as DecryptedStabilityTrackerAnswerObject).phaseType
@@ -69,7 +69,7 @@ export const getABTrailsItemsData = (
 ) => {
   const abTrackerAnswers = decryptedAnswers.reduce((acc, item, index) => {
     const responseType = item.activityItem?.responseType;
-    if (responseType !== ItemResponseType.ABTrails) return acc;
+    if (responseType !== ItemResponseType.ABTrails || !item.answer) return acc;
 
     const abTrackerValue = (item.answer as DecryptedABTrailsAnswer).value;
 

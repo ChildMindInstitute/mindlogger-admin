@@ -354,14 +354,22 @@ export const enum UserActionType {
   Skip = 'SKIP',
 }
 
-export type EventDTO = {
+export type FailedDecryption = {
+  screen: '';
+  time: '';
+  type: unknown;
+};
+
+export type SuccessedEventDTO = {
   response?: AnswerDTO; // optional field. Required if the type is "SET_ANSWER". AnswerDTO depends on activity item type.
   screen: string; // {activityId}/{activityItemId}
   time: number; // timestamp in milliseconds
   type: UserActionType;
 };
 
-export type ExtendedEvent = EventDTO & DecryptedAnswerData;
+export type EventDTO = SuccessedEventDTO | FailedDecryption;
+
+export type ExtendedEvent = SuccessedEventDTO & DecryptedAnswerData;
 
 export type ActivityItemAnswer =
   | TextItemAnswer

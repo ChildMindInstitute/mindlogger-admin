@@ -136,6 +136,11 @@ export const getBetweenStartEndNextDayComparison = ({
       return startOfCurrentDay <= timeDate && timeDate <= endTimeDate;
     }
 
+    // if fromTime is in the next day
+    if (fromTimeDate >= startOfCurrentDay && fromTimeDate <= endTimeDate) {
+      return timeDate >= fromTimeDate && timeDate <= endTimeDate;
+    }
+
     return startTimeDate <= timeDate || timeDate <= endTimeDate;
   }
 

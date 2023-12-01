@@ -2,7 +2,11 @@ import { AppletExportData, ExportDataResult } from 'shared/types/answer';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { getObjectFromList } from '../getObjectFromList';
-import { getAnswersWithPublicUrls, getParsedAnswers } from '../getParsedAnswers';
+import {
+  getAnswersWithPublicUrls,
+  getParsedAnswers,
+  remapFailedAnswers,
+} from '../getParsedAnswers';
 import {
   getABTrailsItemsData,
   getDrawingItemsData,
@@ -26,7 +30,8 @@ export const prepareData = async (
   getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
 ) => {
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
-  const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(parsedAnswers);
+  const remappedParsedAnswers = remapFailedAnswers(parsedAnswers);
+  const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(remappedParsedAnswers);
 
   return parsedAnswersWithPublicUrls.reduce<AppletExportData>((acc, data) => {
     const rawAnswersObject = getObjectFromList(
