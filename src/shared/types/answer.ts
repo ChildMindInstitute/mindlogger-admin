@@ -29,6 +29,7 @@ import {
 import { getJourneyCSVObject } from 'shared/utils/exportData/getJourneyCSVObject';
 import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
 import { CorrectPress } from 'modules/Builder/types';
+import { PerfTaskType } from 'shared/consts';
 
 export type ExportActivity = {
   createdAt: string;
@@ -36,7 +37,7 @@ export type ExportActivity = {
   id: string;
   idVersion: string;
   image: string;
-  isAssessment: false;
+  isAssessment?: boolean;
   isHidden?: boolean;
   isReviewable: boolean;
   isSkippable: boolean;
@@ -48,6 +49,9 @@ export type ExportActivity = {
   splashScreen: string;
   subscaleSetting: SubscaleSetting | null;
   version: string;
+  reportIncludedItemName?: string | null;
+  isPerformanceTask?: boolean;
+  performanceTaskType?: PerfTaskType;
 };
 
 export type MigratedAnswer = {

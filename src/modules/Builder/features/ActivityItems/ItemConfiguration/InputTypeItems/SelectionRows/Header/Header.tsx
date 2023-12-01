@@ -101,7 +101,7 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
       >
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
-      <StyledLabelBoldLarge>
+      <StyledLabelBoldLarge data-testid={`${dataTestid}-title`}>
         {t('selectionRowsHeader', { context: isSingle ? 'single' : 'multiple' })}
       </StyledLabelBoldLarge>
       {isExpanded && (
