@@ -22,8 +22,8 @@ import { RespondentDataReviewContextType } from '../../RespondentDataReview.type
 
 const noteTestId = 'respondents-summary-feedback-notes-note';
 const newNoteValue = 'New note has been added';
-const mockedAnserId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondent}/dataviz/review?selectedDate=2023-11-27&answerId=${mockedAnserId}`;
+const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
+const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondent}/dataviz/review?selectedDate=2023-11-27&answerId=${mockedAnswerId}`;
 const routePath = page.appletRespondentDataReview;
 const preloadedState = {
   workspaces: {
@@ -148,7 +148,7 @@ describe('FeedbackNotes', () => {
     await waitFor(() => {
       expect(mockAxios.post).nthCalledWith(
         1,
-        `/answers/applet/${mockedAppletId}/answers/${mockedAnserId}/activities/${mockedActivity.id}/notes`,
+        `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/activities/${mockedActivity.id}/notes`,
         {
           note: newNoteValue,
         },
@@ -188,7 +188,7 @@ describe('FeedbackNotes', () => {
     await waitFor(() => {
       expect(mockAxios.put).nthCalledWith(
         1,
-        `/answers/applet/${mockedAppletId}/answers/${mockedAnserId}/activities/${mockedActivity.id}/notes/950fe4cc-dddb-4b5f-bdb5-4f3966dbed7e`,
+        `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/activities/${mockedActivity.id}/notes/950fe4cc-dddb-4b5f-bdb5-4f3966dbed7e`,
         {
           note: newNoteValue,
         },
@@ -213,7 +213,7 @@ describe('FeedbackNotes', () => {
     await waitFor(() => {
       expect(mockAxios.delete).nthCalledWith(
         1,
-        `/answers/applet/${mockedAppletId}/answers/${mockedAnserId}/activities/${mockedActivity.id}/notes/950fe4cc-dddb-4b5f-bdb5-4f3966dbed7e`,
+        `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/activities/${mockedActivity.id}/notes/950fe4cc-dddb-4b5f-bdb5-4f3966dbed7e`,
 
         { signal: undefined },
       );
