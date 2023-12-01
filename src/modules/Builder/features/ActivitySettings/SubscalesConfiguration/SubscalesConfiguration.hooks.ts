@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
 import { isSystemItem } from 'shared/utils';
 
@@ -8,7 +9,7 @@ import { ageItem, genderItem } from './SubscalesConfiguration.const';
 
 export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => {
   const { fieldName: activityFieldName } = useCurrentActivity();
-  const { watch, setValue } = useCustomFormContext();
+  const { watch, setValue } = useFormContext();
   const itemsFieldName = `${activityFieldName}.items`;
   const items: ItemFormValues[] = watch(itemsFieldName) ?? [];
 

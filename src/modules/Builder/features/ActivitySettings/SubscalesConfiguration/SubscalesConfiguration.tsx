@@ -7,7 +7,11 @@ import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
-import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
+import {
+  useRedirectIfNoMatchedActivity,
+  useCurrentActivity,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
@@ -62,7 +66,7 @@ export const SubscalesConfiguration = () => {
   const [isLookupTableOpened, setIsLookupTableOpened] = useState(false);
   const tableData = watch(totalScoresTableDataField) ?? [];
   const onTableDataUpdate = (data?: DataTableItem[]) => {
-    setValue(totalScoresTableDataField, data, { shouldDirty: true });
+    setValue(totalScoresTableDataField, data);
   };
   const iconId = `lookup-table${tableData?.length ? '-filled' : ''}`;
 
@@ -91,21 +95,25 @@ export const SubscalesConfiguration = () => {
     appendSubscale(getSubscalesDefaults());
   };
 
-  useEffect(() => {
-    if (calculateTotalScoreSwitch) {
-      setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum);
+  // useEffect(() => {
+  //   if (calculateTotalScoreSwitch) {
+  //     setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum, {
+  //       shouldDirty: false,
+  //     });
 
-      return;
-    }
+  //     return;
+  //   }
 
-    setValue(calculateTotalScoreField, null);
-    setValue(totalScoresTableDataField, null);
-  }, [calculateTotalScoreSwitch]);
+  //   setValue(calculateTotalScoreField, null, { shouldDirty: false });
+  //   setValue(totalScoresTableDataField, null, { shouldDirty: false });
+  // }, [calculateTotalScoreSwitch]);
 
   useEffect(() => {
     if (subscalesLength) return;
 
     setCalculateTotalScoreSwitch(false);
+    setValue(calculateTotalScoreField, null, { shouldDirty: true });
+    setValue(totalScoresTableDataField, null, { shouldDirty: true });
   }, [!!subscalesLength]);
 
   useEffect(() => {
@@ -176,7 +184,17 @@ export const SubscalesConfiguration = () => {
           />
           <SwitchWithState
             checked={calculateTotalScoreSwitch}
-            handleChange={() => {
+            handleChange={(e) => {
+              if (e.target.checked) {
+                setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum, {
+                  shouldDirty: true,
+                });
+
+                return;
+              }
+
+              setValue(calculateTotalScoreField, null, { shouldDirty: true });
+              setValue(totalScoresTableDataField, null, { shouldDirty: true });
               setCalculateTotalScoreSwitch((prevState) => !prevState);
             }}
             label={t('calculateTotalScore')}
