@@ -20,7 +20,7 @@ import { FeedbackReviewed } from './FeedbackReviewed';
 
 const reviewerTestId = 'respondents-data-summary-feedback-reviewed-reviewer';
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondent}/dataviz/review?selectedDate=2023-11-27&answerId=${mockedAnserId}`;
+const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondent}/dataviz/review?selectedDate=2023-11-27&answerId=${mockedAnswerId}`;
 const routePath = page.appletRespondentDataReview;
 const preloadedState = {
   workspaces: {
@@ -289,7 +289,7 @@ describe('FeedbackReviewed', () => {
     await waitFor(() => {
       expect(mockAxios.get).nthCalledWith(
         1,
-        `/answers/applet/${mockedAppletId}/answers/${mockedAnserId}/reviews`,
+        `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
         { signal: undefined },
       );
     });
