@@ -12,6 +12,7 @@ import { applet } from 'shared/state';
 import { SelectController } from 'shared/components/FormComponents';
 import { DatePicker } from 'shared/components';
 import { theme, StyledBodyLarge, StyledFlexTopCenter } from 'shared/styles';
+import { SelectEvent } from 'shared/types';
 
 import {
   StyledAppletSettingsButton,
@@ -54,8 +55,8 @@ export const ExportDataSetting = () => {
       setValue('toDate', addDays(fromDate, 1));
     }
   };
-
-  useEffect(() => {
+  const onDateTypeChange = (e: SelectEvent) => {
+    const dateType = e.target.value as ExportDateType;
     switch (dateType) {
       case ExportDateType.AllTime:
         setValue('fromDate', minDate);
@@ -78,7 +79,7 @@ export const ExportDataSetting = () => {
         setValue('toDate', maxDate);
         break;
     }
-  }, [dateType]);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -96,6 +97,7 @@ export const ExportDataSetting = () => {
           SelectProps={{
             autoWidth: true,
           }}
+          customChange={onDateTypeChange}
         />
         {hasCustomDate && (
           <StyledFlexTopCenter
