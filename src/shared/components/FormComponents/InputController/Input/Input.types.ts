@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FocusEventHandler } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 import { FieldPathValue } from 'react-hook-form/dist/types';
 
@@ -6,6 +6,7 @@ import { FormInputProps } from '../InputController.types';
 
 export type InputProps<T extends FieldValues> = FormInputProps & {
   onChange: (value: string | number) => void;
+  onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   value: FieldPathValue<T, Path<T>>;
   onCustomChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
