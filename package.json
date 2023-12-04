@@ -82,7 +82,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build --project tsconfig.build.json",
     "test": "react-app-rewired test",
-    "test:coverage": "npm run test --coverage --colors",
+    "test:coverage": "npm run test -- --coverage --watchAll=false --colors",
     "test:related": "sh test-related.sh",
     "test:nowatch": "cross-env CI=true npm run test -- --colors --watchAll=false --passWithNoTests",
     "eject": "react-app-rewired eject",
