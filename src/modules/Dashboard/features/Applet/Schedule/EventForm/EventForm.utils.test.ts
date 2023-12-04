@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import { endOfYear } from 'date-fns';
 
 import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
@@ -15,6 +17,8 @@ import {
   getDefaultValues,
   getNotifications,
   getReminder,
+  activityAvailabilityAtDayTest,
+  reminderTimeTest,
 } from './EventForm.utils';
 import {
   DEFAULT_END_TIME,
@@ -338,5 +342,215 @@ describe('EventForm.utils', () => {
       const value = '00:00';
       expect(notificationValidPeriodTest(field)(value, testContext)).toBe(expected);
     });
+  });
+
+  const getReminderMockedTestContext = ({
+    startDate = new Date('2023-11-12'),
+    endDate = new Date('2023-12-31'),
+    startTime = '05:00',
+    endTime = '20:00',
+    periodicity = Periodicity.Once,
+    activityIncomplete = undefined,
+  }) => ({
+    parent: {
+      activityIncomplete,
+    },
+    from: [
+      {},
+      {
+        value: {
+          startDate,
+          endDate,
+          startTime,
+          endTime,
+          periodicity,
+        },
+      },
+    ],
+  });
+
+  describe('activityAvailabilityAtDayTest', () => {
+    const testContext = getReminderMockedTestContext({
+      periodicity: Periodicity.Always,
+    });
+    const testContext1 = getReminderMockedTestContext({});
+    const testContext2 = getReminderMockedTestContext({
+      endDate: new Date('2023-11-15'),
+      periodicity: Periodicity.Daily,
+    });
+    const testContext3 = getReminderMockedTestContext({
+      endDate: new Date('2023-11-15'),
+      periodicity: Periodicity.Daily,
+      endTime: '04:00',
+    });
+    const testContext4 = getReminderMockedTestContext({
+      endDate: new Date('2023-11-15'),
+      periodicity: Periodicity.Weekdays,
+    });
+    const testContext5 = getReminderMockedTestContext({
+      endDate: new Date('2023-11-15'),
+      periodicity: Periodicity.Weekdays,
+      endTime: '03:00',
+    });
+    const testContext6 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekly,
+    });
+    const testContext7 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekly,
+      endTime: '03:00',
+    });
+    const testContext8 = getReminderMockedTestContext({
+      startDate: new Date('2023-12-04'),
+      endDate: new Date('2024-03-31'),
+      periodicity: Periodicity.Monthly,
+      endTime: '03:00',
+    });
+    test.each`
+      value        | testContext     | expected | description
+      ${99}        | ${testContext}  | ${true}  | ${'returns true if Always periodicity'}
+      ${undefined} | ${testContext1} | ${true}  | ${'returns true when value is falsy or 0'}
+      ${0}         | ${testContext1} | ${true}  | ${'returns true when value is falsy or 0'}
+      ${1}         | ${testContext1} | ${true}  | ${'handles Once periodicity'}
+      ${2}         | ${testContext1} | ${false} | ${'handles Once periodicity'}
+      ${100}       | ${testContext1} | ${false} | ${'handles Once periodicity'}
+      ${1}         | ${testContext2} | ${true}  | ${'handles Daily periodicity'}
+      ${3}         | ${testContext2} | ${true}  | ${'handles Daily periodicity'}
+      ${4}         | ${testContext2} | ${false} | ${'handles Daily periodicity'}
+      ${16}        | ${testContext2} | ${false} | ${'handles Daily periodicity'}
+      ${3}         | ${testContext3} | ${true}  | ${'handles Daily periodicity: cross-day'}
+      ${4}         | ${testContext3} | ${true}  | ${'handles Daily periodicity: cross-day'}
+      ${5}         | ${testContext3} | ${false} | ${'handles Daily periodicity: cross-day'}
+      ${3}         | ${testContext4} | ${true}  | ${'handles Weekdays periodicity'}
+      ${4}         | ${testContext4} | ${false} | ${'handles Weekdays periodicity'}
+      ${4}         | ${testContext5} | ${true}  | ${'handles Weekdays periodicity: cross-day'}
+      ${5}         | ${testContext5} | ${false} | ${'handles Weekdays periodicity: cross-day'}
+      ${7}         | ${testContext6} | ${true}  | ${'handles Weekly periodicity'}
+      ${49}        | ${testContext6} | ${true}  | ${'handles Weekly periodicity'}
+      ${56}        | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
+      ${2}         | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
+      ${8}         | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
+      ${1}         | ${testContext7} | ${true}  | ${'handles Weekly periodicity: cross-day'}
+      ${50}        | ${testContext7} | ${true}  | ${'handles Weekly periodicity: cross-day'}
+      ${2}         | ${testContext7} | ${false} | ${'handles Weekly periodicity: cross-day'}
+      ${5}         | ${testContext7} | ${false} | ${'handles Weekly periodicity: cross-day'}
+      ${1}         | ${testContext8} | ${true}  | ${'handles Monthly periodicity'}
+      ${3}         | ${testContext8} | ${true}  | ${'handles Monthly periodicity'}
+      ${4}         | ${testContext8} | ${false} | ${'handles Monthly periodicity'}
+    `('$description, value=$value, expected=$expected', ({ value, testContext, expected }) => {
+      expect(activityAvailabilityAtDayTest(value, testContext)).toBe(expected);
+    });
+  });
+
+  describe('reminderTimeTest: returns', () => {
+    const testContext = getReminderMockedTestContext({
+      periodicity: Periodicity.Always,
+    });
+    const testContext1 = getReminderMockedTestContext({
+      activityIncomplete: 1,
+    });
+    const testContext2 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekdays,
+      startTime: '20:00',
+      endTime: '11:00',
+      activityIncomplete: 1,
+    });
+    const testContext3 = getReminderMockedTestContext({
+      periodicity: Periodicity.Monthly,
+      startTime: '20:00',
+      endTime: '11:00',
+      activityIncomplete: 1,
+    });
+    const testContext4 = getReminderMockedTestContext({
+      periodicity: Periodicity.Once,
+      startTime: '11:00',
+      endTime: '15:00',
+      activityIncomplete: 1,
+    });
+    const testContext5 = getReminderMockedTestContext({
+      periodicity: Periodicity.Once,
+      startTime: '22:00',
+      endTime: '15:00',
+      activityIncomplete: 0,
+    });
+    const testContext6 = getReminderMockedTestContext({
+      periodicity: Periodicity.Once,
+      startTime: '22:00',
+      endTime: '15:00',
+      activityIncomplete: 1,
+    });
+    const testContext7 = getReminderMockedTestContext({
+      periodicity: Periodicity.Daily,
+      startDate: new Date('2023-12-12'),
+      endDate: new Date('2023-12-15'),
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 0,
+    });
+    const testContext8 = getReminderMockedTestContext({
+      periodicity: Periodicity.Daily,
+      startDate: new Date('2023-12-12'),
+      endDate: new Date('2023-12-15'),
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 4,
+    });
+    const testContext9 = getReminderMockedTestContext({
+      periodicity: Periodicity.Daily,
+      startDate: new Date('2023-12-12'),
+      endDate: new Date('2023-12-15'),
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 2,
+    });
+    const testContext10 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekly,
+      startDate: new Date('2023-12-12'),
+      endDate: new Date('2023-12-31'),
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 7,
+    });
+    const testContext11 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekly,
+      startDate: new Date('2023-12-12'),
+      endDate: new Date('2023-12-31'),
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 8,
+    });
+
+    test.each`
+      reminderTime | testContext      | expected | description
+      ${'12:00'}   | ${testContext}   | ${true}  | ${'Always periodicity'}
+      ${undefined} | ${testContext1}  | ${true}  | ${'reminderTime is falsy or 0'}
+      ${0}         | ${testContext1}  | ${true}  | ${'reminderTime is falsy or 0'}
+      ${'11:00'}   | ${testContext1}  | ${true}  | ${'not cross-day and time is between startTime and endTime'}
+      ${'09:00'}   | ${testContext1}  | ${true}  | ${'not cross-day and time is outside startTime and endTime'}
+      ${'10:00'}   | ${testContext2}  | ${true}  | ${'Weekdays periodicity cross-day and time is between startTime and endTime'}
+      ${'14:00'}   | ${testContext2}  | ${false} | ${'Weekdays periodicity cross-day and time is outside startTime and endTime'}
+      ${'20:00'}   | ${testContext3}  | ${true}  | ${'Monthly periodicity cross-day and time is between startTime and endTime'}
+      ${'19:00'}   | ${testContext3}  | ${false} | ${'Monthly periodicity cross-day and time is outside startTime and endTime'}
+      ${'15:00'}   | ${testContext4}  | ${true}  | ${'Once periodicity not cross-day, time is between startTime and endTime'}
+      ${'23:00'}   | ${testContext4}  | ${false} | ${'Once periodicity not cross-day, time is outside startTime and endTime'}
+      ${'22:30'}   | ${testContext5}  | ${true}  | ${'Once periodicity cross-day: first day and time is between startTime and 23:59'}
+      ${'20:50'}   | ${testContext5}  | ${false} | ${'Once periodicity cross-day: first day and time is outside startTime and 23:59'}
+      ${'02:50'}   | ${testContext6}  | ${true}  | ${'Once periodicity cross-day: second day and time is between 00:00 and endTime'}
+      ${'23:50'}   | ${testContext6}  | ${false} | ${'Once periodicity cross-day: second day and time is outside 00:00 and endTime'}
+      ${'23:30'}   | ${testContext7}  | ${true}  | ${'Daily periodicity cross-day: first day and time is between startTime and 23:59'}
+      ${'15:50'}   | ${testContext7}  | ${false} | ${'Daily periodicity cross-day: first day and time is outside startTime and 23:59'}
+      ${'09:30'}   | ${testContext8}  | ${true}  | ${'Daily periodicity cross-day: last day and and time is between 00:00 and endTime'}
+      ${'10:01'}   | ${testContext8}  | ${false} | ${'Daily periodicity cross-day: last day and time is outside 00:00 and endTime'}
+      ${'09:30'}   | ${testContext9}  | ${true}  | ${'Daily periodicity cross-day: not first or last day and time is between startTime and endTime'}
+      ${'15:25'}   | ${testContext9}  | ${false} | ${'Daily periodicity cross-day: not first or last day and time is outside startTime and endTime'}
+      ${'23:00'}   | ${testContext10} | ${true}  | ${'Weekly periodicity cross-day: first day and time is between startTime and 23:59'}
+      ${'09:30'}   | ${testContext10} | ${false} | ${'Weekly periodicity cross-day: first day and time is outside startTime and 23:59'}
+      ${'10:00'}   | ${testContext11} | ${true}  | ${'Weekly periodicity cross-day: next day and and time is between 00:00 and endTime'}
+      ${'10:50'}   | ${testContext11} | ${false} | ${'Weekly periodicity cross-day: next day and time is outside 00:00 and endTime'}
+    `(
+      '$description, reminderTime=$reminderTime, expected=$expected',
+      ({ reminderTime, testContext, expected }) => {
+        expect(reminderTimeTest(reminderTime, testContext)).toBe(expected);
+      },
+    );
   });
 });
