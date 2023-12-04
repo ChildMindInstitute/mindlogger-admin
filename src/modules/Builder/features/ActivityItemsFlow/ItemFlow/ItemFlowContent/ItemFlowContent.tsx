@@ -1,4 +1,4 @@
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Condition } from 'shared/state';
@@ -22,10 +22,8 @@ export const ItemFlowContent = ({
   const { getFieldState, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const [itemKey] = useWatch({
-    name: [`${name}.itemKey`],
-  });
   const conditions = watch(`${name}.conditions`);
+  const itemKey = watch(`${name}.itemKey`);
 
   if (isStatic) {
     const staticConditions = createArray(conditions?.length, (index) => index);
