@@ -19,12 +19,13 @@ export const ItemFlowContent = ({
   'data-testid': dataTestid,
 }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
-  const { getFieldState } = useFormContext();
+  const { getFieldState, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const [conditions, itemKey] = useWatch({
-    name: [`${name}.conditions`, `${name}.itemKey`],
+  const [itemKey] = useWatch({
+    name: [`${name}.itemKey`],
   });
+  const conditions = watch(`${name}.conditions`);
 
   if (isStatic) {
     const staticConditions = createArray(conditions?.length, (index) => index);
