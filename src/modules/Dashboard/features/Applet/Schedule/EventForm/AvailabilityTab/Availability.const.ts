@@ -1,16 +1,5 @@
 import { Periodicity } from 'modules/Dashboard/api';
 
-export const availabilityOptions = [
-  {
-    value: true,
-    labelKey: 'alwaysAvailable',
-  },
-  {
-    value: false,
-    labelKey: 'scheduledAccess',
-  },
-];
-
 export const repeatsButtons = [
   {
     value: Periodicity.Once,
