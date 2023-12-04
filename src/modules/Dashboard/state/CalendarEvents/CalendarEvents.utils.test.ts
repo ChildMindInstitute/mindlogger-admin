@@ -8,7 +8,7 @@ describe('CalendarEvents.utils', () => {
       ${'00:00'} | ${'23:59'} | ${false}
       ${'12:00'} | ${'12:00'} | ${false}
     `(
-      'time=$time, rangeStart=$rangeStartTime, rangeStart=$rangeEndTime:',
+      'startTime=$startTime, endTime=$endTime, expected=$expected:',
       ({ startTime, endTime, expected }) => {
         expect(getNextDayComparison(startTime, endTime)).toBe(expected);
       },
