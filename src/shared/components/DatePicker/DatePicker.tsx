@@ -31,6 +31,7 @@ export const DatePicker = <T extends FieldValues>({
   label,
   includeDates,
   minDate,
+  maxDate,
   onMonthChange,
   disabled,
   onCloseCallback,
@@ -171,6 +172,7 @@ export const DatePicker = <T extends FieldValues>({
                 monthsShown={isStartEndingDate ? 2 : 1}
                 formatWeekDay={(nameOfDay) => nameOfDay[0]}
                 minDate={minDate === undefined ? new Date() : minDate}
+                maxDate={maxDate === undefined ? null : maxDate}
                 focusSelectedMonth
                 onMonthChange={onMonthChange}
                 includeDates={includeDates}
