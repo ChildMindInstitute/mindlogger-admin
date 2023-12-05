@@ -14,6 +14,7 @@ import { ReportConfigSetting } from 'modules/Builder/features/ReportConfigSettin
 import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './BuilderAppletSettings.types';
+import { LorisIntegrationSetting } from './LorisIntegrationSetting';
 
 export const getSettings = ({
   isNewApplet,
@@ -55,6 +56,13 @@ export const getSettings = ({
           component: <LiveResponseStreamingSetting />,
           param: SettingParam.LiveResponseStreaming,
           'data-testid': `${dataTestid}-live-response-streaming`,
+        },
+        {
+          icon: <Svg id="data-collection" />,
+          label: 'lorisIntegration',
+          component: <LorisIntegrationSetting />,
+          param: SettingParam.LorisIntegration,
+          'data-testid': `${dataTestid}-loris-integration`,
         },
       ],
     },
