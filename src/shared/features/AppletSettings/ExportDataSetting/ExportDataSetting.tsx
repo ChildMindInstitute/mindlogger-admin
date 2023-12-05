@@ -44,7 +44,6 @@ export const ExportDataSetting = () => {
   const toDate = watch('toDate');
   const hasCustomDate = dateType === ExportDateType.ChooseDates;
   const commonProps = {
-    minDate,
     maxDate,
     control,
     inputSx: { width: '19rem' },
@@ -110,6 +109,7 @@ export const ExportDataSetting = () => {
               name="fromDate"
               onCloseCallback={onCloseCallback}
               label={t('fromDate')}
+              minDate={minDate}
               data-testid={`${dataTestid}-from-date`}
             />
             <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>

@@ -413,7 +413,7 @@
   "exportDescription": "Exporter les données pour la plage de dates sélectionnée",
   "exportDateRange": {
     "allTime": "Tout le temps",
-    "last24h": "Lasr 24 heures",
+    "last24h": "Dernières 24 heures",
     "lastWeek": "La semaine dernière",
     "lastMonth": "Le mois dernier",
     "chooseDates": "Choisir les dates"
