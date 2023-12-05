@@ -5,7 +5,7 @@ import { getEntityKey } from 'shared/utils';
 import { StyledObserverTarget } from 'shared/styles';
 import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { observerStyles } from 'modules/Builder/consts';
+import { ITEMS_COUNT_TO_ACTIVATE_STATIC, observerStyles } from 'modules/Builder/consts';
 
 import { DraggableItemsProps } from './DraggableItems.types';
 import { DRAGGABLE_ITEMS_LIST_CLASS, DRAGGABLE_ITEMS_END_ITEM_CLASS } from './DraggableItems.const';
@@ -48,6 +48,8 @@ export const DraggableItems = ({
               itemName={itemName}
               index={index}
               itemId={itemId}
+              isDragging={isDragging}
+              isStaticActive={draggableItems.length > ITEMS_COUNT_TO_ACTIVATE_STATIC}
               isInsertVisible={index >= 0 && index < draggableItems.length - 1 && !isDragging}
               onSetActiveItem={() => onSetActiveItem(item)}
               onDuplicateItem={() => onDuplicateItem(index)}

@@ -70,7 +70,10 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
     try {
       if (!item.answer?.value) return '';
 
-      return getMediaFileName(item, getFileExtension(item.answer.value));
+      return getMediaFileName(
+        item,
+        getFileExtension(typeof item.answer.value === 'string' ? item.answer.value : ''),
+      );
     } catch (error) {
       console.warn(error);
     }

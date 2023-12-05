@@ -6,7 +6,7 @@ describe('getSettings', () => {
   const roles = [Roles.Owner, Roles.Manager];
 
   test('should return right section', () => {
-    const sections = ['usersAndData', 'appletContent', 'reports', 'sharing'];
+    const sections = ['usersAndData', 'appletContent', 'sharing'];
     expect(getSettings({ isPublished: true, roles }).map((section) => section.label)).toStrictEqual(
       sections,
     );
@@ -21,7 +21,6 @@ describe('getSettings', () => {
       'duplicateApplet',
       'deleteApplet',
     ];
-    const reportsItems = ['reportConfiguration'];
     const sharingItemsForPublished = ['concealApplet'];
     const sharingItems = ['publishApplet'];
 
@@ -29,7 +28,6 @@ describe('getSettings', () => {
       isPublished | sectionLabel       | items                       | description
       ${true}     | ${'usersAndData'}  | ${usersAndDataItems}        | ${'usersAndData'}
       ${true}     | ${'appletContent'} | ${appletContentItems}       | ${'appletContent'}
-      ${true}     | ${'reports'}       | ${reportsItems}             | ${'reports'}
       ${true}     | ${'sharing'}       | ${sharingItemsForPublished} | ${'sharing with isPublished true'}
       ${false}    | ${'sharing'}       | ${sharingItems}             | ${'sharing with isPublished false'}
     `('$description', ({ isPublished, sectionLabel, items }) => {

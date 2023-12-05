@@ -1,18 +1,19 @@
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
-import { AnswerDTO, EventDTO, ExtendedEvent, UserActionType } from 'shared/types';
+import { AnswerDTO, ExtendedEvent, UserActionType } from 'shared/types';
 import { getDictionaryText } from 'shared/utils/forms';
 
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { convertDateStampToMs } from './convertDateStampToMs';
+import { SuccessedEventDTO } from '../../types/answer';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
 
 const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
 
-export const getSplashScreen = (event: EventDTO, nextExtendedEvent: ExtendedEvent) => {
+export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: ExtendedEvent) => {
   const {
     id,
     scheduledDatetime,

@@ -309,6 +309,8 @@
   "day": "Day",
   "day_one": "day",
   "day_other": "days",
+  "month_one": "month",
+  "month_other": "months",
   "days": "Days",
   "deactivated": "Deactivated",
   "dec": "December",
@@ -754,6 +756,7 @@
   "nov": "November",
   "noVersions": "No versions yet.",
   "numberOfConsecutiveDays": "Number of consecutive days the user does not complete the activity",
+  "numberOfConsecutiveMonths": "Number of consecutive months the user does not complete the Activity",
   "deadlineForActivityCompletion": "Deadline for Activity completion, otherwise the Reminder will be sent",
   "numberOfTrials": "Number Of Trials:",
   "numberOfTrialsTooltip": "Number of practice rounds before the test round",
@@ -1226,5 +1229,6 @@
     "details": "Details",
     "refreshPage": "Refresh page"
   },
-  "pleaseMakeChangesToApplet": "Please make changes to update applet."
+  "pleaseMakeChangesToApplet": "Please make changes to update applet.",
+  "goToDashboard": "Go to Dashboard"
 }

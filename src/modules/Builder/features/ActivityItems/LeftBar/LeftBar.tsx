@@ -62,14 +62,8 @@ export const LeftBar = ({
     rootSelector: `.${ACTIVITY_ITEMS_LIST_CLASS}`,
     targetSelector: `.${ACTIVITY_ITEMS_END_ITEM_CLASS}`,
   });
-  const draggableItems = useMemo(
-    () => itemsData.filter((item) => item.allowEdit),
-    [itemsData.length],
-  );
-  const systemItems = useMemo(
-    () => itemsData.filter((item) => !item.allowEdit),
-    [itemsData.length],
-  );
+  const draggableItems = useMemo(() => itemsData.filter((item) => item.allowEdit), [itemsData]);
+  const systemItems = useMemo(() => itemsData.filter((item) => !item.allowEdit), [itemsData]);
 
   useRedirectIfNoMatchedActivityItem();
 

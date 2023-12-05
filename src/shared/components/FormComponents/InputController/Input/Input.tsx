@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, FocusEventHandler } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -24,6 +24,7 @@ import { getTextAdornment } from './Input.utils';
 
 export const Input = <T extends FieldValues>({
   onChange,
+  onBlur,
   value,
   minNumberValue,
   maxNumberValue,
@@ -93,11 +94,18 @@ export const Input = <T extends FieldValues>({
     (event: SelectEvent) => handleChange(event),
     CHANGE_DEBOUNCE_VALUE,
   );
+  const handleBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
+    onBlur?.(event);
+
+    if (withDebounce) {
+      handleDebouncedChange.flush();
+    }
+  };
 
   useEffect(() => {
     if (!withDebounce || !inputRef.current || inputRef.current?.value === String(value)) return;
-    inputRef.current.value = value;
-  });
+    inputRef.current.value = value ?? '';
+  }, [withDebounce, inputRef.current, value]);
 
   return (
     <Tooltip tooltipTitle={tooltip}>
@@ -106,6 +114,7 @@ export const Input = <T extends FieldValues>({
           {...textFieldProps}
           {...(withDebounce ? { inputRef } : { value: getTextFieldValue() })}
           onChange={withDebounce ? handleDebouncedChange : handleChange}
+          onBlur={handleBlur}
           error={error}
           helperText={helperText}
           data-testid={dataTestid}

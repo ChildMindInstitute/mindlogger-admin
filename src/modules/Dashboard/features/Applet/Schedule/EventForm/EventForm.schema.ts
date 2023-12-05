@@ -8,7 +8,6 @@ import {
   getNotificationsValidation,
   getTimerDurationCheck,
   getActivityIncompleteValidation,
-  getActivityIncompleteDateValidation,
   getReminderTimeValidation,
 } from './EventForm.utils';
 
@@ -48,7 +47,6 @@ export const EventFormSchema = () => {
       notifications: yup.array().of(notificationSchema),
       reminder: yup.object().nullable().shape({
         activityIncomplete: getActivityIncompleteValidation(),
-        activityIncompleteDate: getActivityIncompleteDateValidation(),
         reminderTime: getReminderTimeValidation(),
       }),
     })
