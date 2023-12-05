@@ -1,9 +1,9 @@
 import { ChangeEvent } from 'react';
 import { Radio, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { UploaderUiType, Uploader, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
@@ -34,7 +34,7 @@ const commonUploaderProps = {
 export const Items = ({ name, isSingle }: ItemsProps) => {
   const { t } = useTranslation('app');
 
-  const { watch, control, setValue, getValues } = useFormContext();
+  const { watch, control, setValue, getValues } = useCustomFormContext();
 
   const optionsName = `${name}.responseValues.options`;
   const dataMatrixName = `${name}.responseValues.dataMatrix`;

@@ -1,11 +1,10 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
 import { FlankerStimulusSettings } from 'shared/state';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerItemPositions } from 'modules/Builder/types';
 
 import { BlockSequencesContent } from './BlockSequencesContent';
@@ -17,7 +16,7 @@ export const BlockSequences = memo(
     const {
       watch,
       formState: { errors },
-    } = useFormContext();
+    } = useCustomFormContext();
     const { fieldName, activityObjField } = useCurrentActivity();
 
     const stimulusTrials = watch(

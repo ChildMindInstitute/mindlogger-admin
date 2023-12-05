@@ -20,6 +20,7 @@ export const ItemFlowContent = ({
 }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
   const { getFieldState, watch } = useFormContext();
+
   const { fieldName } = useCurrentActivity();
 
   const conditions = watch(`${name}.conditions`);

@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+
 import get from 'lodash.get';
 
 import { StyledTitleLarge, theme } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerInstructionPositions } from 'modules/Builder/types';
 
 import { Instruction } from '../../Instruction';
@@ -16,7 +16,7 @@ export const GeneralSettings = () => {
   const { fieldName, activityObjField } = useCurrentActivity();
   const {
     formState: { errors },
-  } = useFormContext();
+  } = useCustomFormContext();
 
   const hasError = !!get(
     errors,

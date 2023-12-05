@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledLabelBoldLarge } from 'shared/styles';
 import {
   StyledSummaryRow,
@@ -12,7 +12,7 @@ import { getMatchOptions } from './ScoreSummaryRow.utils';
 
 export const ScoreSummaryRow = ({ name, 'data-testid': dataTestid }: ScoreSummaryRowProps) => {
   const { t } = useTranslation('app');
-  const { control } = useFormContext();
+  const { control } = useCustomFormContext();
 
   return (
     <StyledSummaryRow>

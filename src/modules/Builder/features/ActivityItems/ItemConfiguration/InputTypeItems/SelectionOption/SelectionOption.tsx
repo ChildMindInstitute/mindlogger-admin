@@ -1,9 +1,10 @@
 import { useState, useRef, ChangeEvent } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ColorResult } from 'react-color';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Actions, Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import {
@@ -54,7 +55,7 @@ export const SelectionOption = ({
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [visibleActions, setVisibleActions] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const { setValue, watch, control, getValues } = useFormContext();
+  const { setValue, watch, control, getValues } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const [settings, responseType, option] = useWatch({
     control,
