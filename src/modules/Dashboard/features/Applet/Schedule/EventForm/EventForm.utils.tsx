@@ -1,17 +1,8 @@
 import { UseFormGetValues } from 'react-hook-form';
-import {
-  addDays,
-  differenceInDays,
-  eachDayOfInterval,
-  endOfYear,
-  format,
-  getDate,
-  getDay,
-} from 'date-fns';
+import { addDays, eachDayOfInterval, endOfYear, getDate, getDay } from 'date-fns';
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { DateFormats } from 'shared/consts';
 import { Svg } from 'shared/components/Svg';
 import { Activity, ActivityFlow } from 'shared/state';
 import {
@@ -34,6 +25,7 @@ import { AvailabilityTab } from './AvailabilityTab';
 import { NotificationsTab } from './NotificationsTab';
 import { TimersTab } from './TimersTab';
 import {
+  DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
   DEFAULT_END_TIME,
   DEFAULT_IDLE_TIME,
   DEFAULT_START_TIME,
@@ -43,7 +35,6 @@ import {
 } from './EventForm.const';
 import {
   EventFormValues,
-  FormReminder,
   GetBetweenStartEndNextDayComparisonProps,
   GetBetweenStartEndNextDaySingleComparisonProps,
   GetDaysInPeriod,
@@ -54,6 +45,7 @@ import {
   NotificationTimeTestContext,
   SecondsManipulation,
   GetReminderTimeComparison,
+  GetReminder,
 } from './EventForm.types';
 
 const { t } = i18n;
@@ -141,6 +133,11 @@ export const getBetweenStartEndNextDayComparison = ({
 
     if (isCrossDay) {
       return startOfCurrentDay <= timeDate && timeDate <= endTimeDate;
+    }
+
+    // if fromTime is in the next day
+    if (fromTimeDate >= startOfCurrentDay && fromTimeDate <= endTimeDate) {
+      return timeDate >= fromTimeDate && timeDate <= endTimeDate;
     }
 
     return startTimeDate <= timeDate || timeDate <= endTimeDate;
@@ -337,31 +334,12 @@ const getNotifications = (type: SecondsManipulation, notifications?: EventNotifi
     };
   }) || null;
 
-const getReminder = ({
-  type,
-  reminder,
-  isMonthlyPeriodicity,
-  startDate,
-}: {
-  type: SecondsManipulation;
-  reminder?: FormReminder;
-  isMonthlyPeriodicity: boolean;
-  startDate: Date;
-}) => {
+const getReminder = ({ type, reminder }: GetReminder) => {
   if (!reminder) return null;
   const isFromForm = type === SecondsManipulation.AddSeconds;
-  const activityIncompleteDate =
-    isMonthlyPeriodicity && !isFromForm && startDate
-      ? addDays(startDate, reminder.activityIncomplete)
-      : undefined;
-  const activityIncomplete =
-    isMonthlyPeriodicity && isFromForm && startDate && reminder.activityIncompleteDate
-      ? differenceInDays(reminder.activityIncompleteDate, startDate)
-      : reminder.activityIncomplete;
 
   return {
-    activityIncomplete,
-    activityIncompleteDate,
+    ...reminder,
     reminderTime: isFromForm
       ? addSecondsToHourMinutes(reminder.reminderTime)
       : removeSecondsFromTime(reminder.reminderTime),
@@ -413,8 +391,6 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
     getReminder({
       type: SecondsManipulation.RemoveSeconds,
       reminder: notification?.reminder,
-      isMonthlyPeriodicity: periodicity === Periodicity.Monthly,
-      startDate,
     }) || null;
 
   return {
@@ -519,8 +495,6 @@ export const getEventPayload = (
   const reminder = getReminder({
     type: SecondsManipulation.AddSeconds,
     reminder: reminderFromForm,
-    isMonthlyPeriodicity: periodicity === Periodicity.Monthly,
-    startDate: startDate as Date,
   });
   const { isFlowId, id: flowId } = getIdWithoutRegex(activityOrFlowId);
 
@@ -651,41 +625,14 @@ export const getActivityIncompleteValidation = () =>
 
           return weeklyDays.daysArr.includes(value);
         }
-
-        return true;
-      },
-    );
-
-export const getActivityIncompleteDateValidation = () =>
-  yup
-    .date()
-    .test(
-      'activity-incomplete-date',
-      t('activityIsUnavailable'),
-      function activityIncompleteDateTest(value) {
-        if (!value) return true;
-        const { startDate, endDate, periodicity, isCrossDayEvent } =
-          getActivityIncompleteCommonFields(this);
         if (periodicity === Periodicity.Monthly) {
-          const testedDate = format(value, DateFormats.YearMonthDay);
           const includedMonthlyDates = getDaysInMonthlyPeriodicity({
             chosenDate: getDate(startDate),
             eventStart: startDate,
             eventEnd: endDate,
-            returnStringDate: true,
-          }) as string[];
-          const includedMonthlyDatesCrossDay = isCrossDayEvent
-            ? includedMonthlyDates.reduce(
-                (acc: string[], date) => [
-                  ...acc,
-                  date,
-                  format(addDays(new Date(date), 1), DateFormats.YearMonthDay),
-                ],
-                [],
-              )
-            : null;
+          }) as Date[];
 
-          return (includedMonthlyDatesCrossDay || includedMonthlyDates).includes(testedDate);
+          return value < includedMonthlyDates.length;
         }
 
         return true;
@@ -717,14 +664,15 @@ export const getReminderTimeValidation = () =>
       function reminderTimeTest(value) {
         if (!value) return true;
         const time = value;
-        const { activityIncomplete, activityIncompleteDate } = this.parent;
+        const { activityIncomplete } = this.parent;
         const { startTime, endTime, startDate, endDate, periodicity, isCrossDayEvent } =
           getActivityIncompleteCommonFields(this);
         const isAlwaysPeriodicity = periodicity === Periodicity.Always;
         const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
+        const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
         if (isAlwaysPeriodicity) return true;
-        if (!isCrossDayEvent || isWeekdaysPeriodicity) {
+        if (!isCrossDayEvent || isWeekdaysPeriodicity || isMonthlyPeriodicity) {
           return getBetweenStartEndNextDaySingleComparison({
             time,
             rangeStartTime: startTime,
@@ -735,17 +683,37 @@ export const getReminderTimeValidation = () =>
         const isOncePeriodicity = periodicity === Periodicity.Once;
         const isDailyPeriodicity = periodicity === Periodicity.Daily;
         const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
-        const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
         const daysInPeriod = getDaysInPeriod({
           isCrossDayEvent,
           startDate,
           endDate: isOncePeriodicity ? startDate : endDate,
         });
+        const isOnceDailyCrossDay = daysInPeriod.length - 1 === activityIncomplete;
 
-        if (isOncePeriodicity || isDailyPeriodicity) {
-          const isCrossDay = daysInPeriod.length - 1 === activityIncomplete;
+        if (isOncePeriodicity) {
+          return getReminderTimeComparison({
+            time,
+            startTime,
+            endTime,
+            isCrossDay: isOnceDailyCrossDay,
+          });
+        }
 
-          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
+        if (isDailyPeriodicity) {
+          if (activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE || isOnceDailyCrossDay) {
+            return getReminderTimeComparison({
+              time,
+              startTime,
+              endTime,
+              isCrossDay: isOnceDailyCrossDay,
+            });
+          }
+
+          return getBetweenStartEndNextDaySingleComparison({
+            time,
+            rangeStartTime: startTime,
+            rangeEndTime: endTime,
+          });
         }
 
         if (isWeeklyPeriodicity) {
@@ -753,39 +721,6 @@ export const getReminderTimeValidation = () =>
           const isCrossDay =
             weeklyDays.daysInfoArr.find((day) => day.dayNumber === activityIncomplete)
               ?.isCrossDay ?? false;
-
-          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
-        }
-
-        if (isMonthlyPeriodicity) {
-          const includedMonthlyDates = getDaysInMonthlyPeriodicity({
-            chosenDate: getDate(startDate),
-            eventStart: startDate,
-            eventEnd: endDate,
-            returnStringDate: true,
-          }) as string[];
-          const includedMonthlyDatesWithCrossDay = includedMonthlyDates.reduce(
-            (acc: { monthlyDate: string; isCrossDay: boolean }[], date) => {
-              acc.push(
-                {
-                  monthlyDate: date,
-                  isCrossDay: false,
-                },
-                {
-                  monthlyDate: format(addDays(new Date(date), 1), DateFormats.YearMonthDay),
-                  isCrossDay: true,
-                },
-              );
-
-              return acc;
-            },
-            [],
-          );
-
-          const isCrossDay =
-            includedMonthlyDatesWithCrossDay.find(
-              (day) => day.monthlyDate === format(activityIncompleteDate, DateFormats.YearMonthDay),
-            )?.isCrossDay ?? false;
 
           return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
         }

@@ -1,16 +1,23 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { generatePath } from 'react-router-dom';
 
+import { page } from 'resources';
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ItemConfiguration } from '../ItemConfiguration';
 
-export const mockedUseParams = () => ({
+export const mockedParams = {
   appletId: mockedAppletFormData.id,
   activityId: mockedAppletFormData.activities[0].id,
-});
+};
+export const mockedActivityRoute = generatePath(page.builderAppletActivity, mockedParams);
+export const mockedOptions = {
+  route: mockedActivityRoute,
+  routePath: page.builderAppletActivity,
+};
 
 export const mockedItemName = 'activities.0.items.0';
 export const mockedTypeTestid = 'builder-activity-items-item-configuration-response-type';

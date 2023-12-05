@@ -18,6 +18,7 @@ export const Table = ({
   uiType = UiType.Primary,
   emptyComponent,
   className = '',
+  'data-testid': dataTestid,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
@@ -81,7 +82,7 @@ export const Table = ({
     <>
       <StyledTableContainer className={className} maxHeight={maxHeight} uiType={uiType}>
         {rows?.length ? (
-          <MuiTable stickyHeader>
+          <MuiTable stickyHeader data-testid={dataTestid}>
             <TableHead
               headCells={columns}
               order={order}

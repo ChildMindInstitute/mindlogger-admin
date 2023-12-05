@@ -1,7 +1,6 @@
-import { useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Condition } from 'shared/state';
 import { StyledBodyLarge, theme, variables } from 'shared/styles';
 import { ConditionRow } from 'modules/Builder/components';
@@ -20,12 +19,12 @@ export const ItemFlowContent = ({
   'data-testid': dataTestid,
 }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
-  const { getFieldState } = useCustomFormContext();
+  const { getFieldState, watch } = useFormContext();
+
   const { fieldName } = useCurrentActivity();
 
-  const [conditions, itemKey] = useWatch({
-    name: [`${name}.conditions`, `${name}.itemKey`],
-  });
+  const conditions = watch(`${name}.conditions`);
+  const itemKey = watch(`${name}.itemKey`);
 
   if (isStatic) {
     const staticConditions = createArray(conditions?.length, (index) => index);

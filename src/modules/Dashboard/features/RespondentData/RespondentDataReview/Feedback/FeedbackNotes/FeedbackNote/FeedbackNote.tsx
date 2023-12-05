@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';
@@ -74,7 +74,7 @@ export const FeedbackNote = ({
   }, [isFeedbackOpen]);
 
   return (
-    <>
+    <Box data-testid={`${dataTestid}`}>
       <StyledNoteHeader
         onMouseEnter={() => !isEditMode && setIsVisibleActions(true)}
         onMouseLeave={() => setIsVisibleActions(false)}
@@ -127,6 +127,6 @@ export const FeedbackNote = ({
           <StyledBodyLarge>{note.note}</StyledBodyLarge>
         </StyledNote>
       )}
-    </>
+    </Box>
   );
 };

@@ -239,6 +239,7 @@ export const SliderPanel = ({
       key={`slider-container-${id}`}
       collapsedSize="12.8rem"
       timeout={0}
+      data-testid={`${dataTestid}-panel`}
     >
       <Header
         name={name}

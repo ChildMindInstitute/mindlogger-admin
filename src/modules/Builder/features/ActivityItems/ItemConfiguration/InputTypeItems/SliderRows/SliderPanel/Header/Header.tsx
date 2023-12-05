@@ -61,7 +61,7 @@ export const Header = ({
         >
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>
-        <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>
+        <StyledLabelBoldLarge data-testid={`${dataTestid}-title`}>{label}</StyledLabelBoldLarge>
         {isActionsVisible && <Actions {...commonActionsProps} />}
       </StyledSliderPanelHeader>
     );

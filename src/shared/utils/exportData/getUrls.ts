@@ -16,5 +16,9 @@ export const getDrawingUrl = (
 
   return url;
 };
-export const getMediaUrl = (item: DecryptedAnswerData) =>
-  (item.answer as DecryptedMediaAnswer)?.value || '';
+export const getMediaUrl = (item: DecryptedAnswerData) => {
+  const answer = item.answer as DecryptedMediaAnswer;
+  if (!answer) return '';
+
+  return typeof answer.value === 'string' ? answer.value : '';
+};
