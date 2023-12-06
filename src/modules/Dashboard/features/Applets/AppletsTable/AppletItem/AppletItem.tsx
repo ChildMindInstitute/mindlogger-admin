@@ -176,7 +176,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     },
     editAction: () =>
       checkAppletEncryption(() => {
-        if (item.isFolder) return; // TODO: add Edit Folder Page navigation
+        if (item.isFolder) return;
 
         navigate(getBuilderAppletUrl(appletId));
         Mixpanel.track('Applet edit click');
