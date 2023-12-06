@@ -1,4 +1,4 @@
-import { getRawScores } from './getRowScores';
+import { getRawScores } from './getRawScores';
 
 const singleResponseValues = {
   paletteName: null,
