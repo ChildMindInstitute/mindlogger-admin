@@ -118,9 +118,9 @@ export const SelectController = <T extends FieldValues>({
     });
 
   const renderGroupedOptions = () => {
+    setOpened?.(true);
     if (!withGroups) return renderOptions(options);
 
-    setOpened?.(true);
     const groupedOptions = groupBy(options, 'groupKey');
 
     return Object.keys(groupedOptions).reduce(
