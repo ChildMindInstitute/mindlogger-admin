@@ -20,7 +20,7 @@ import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
 
 import { getObjectFromList } from '../getObjectFromList';
 
-const getDecryptedAnswersObject = ({
+export const getDecryptedAnswersObject = ({
   decryptedAnswers,
   hasMigratedAnswers,
   hasUrlEventScreen,
