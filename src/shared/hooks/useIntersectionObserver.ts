@@ -6,6 +6,7 @@ type UseIntersectionObserverProps = {
   isActive?: boolean;
   onAppear?(): void;
   onHide?(): void;
+  hasTrigger?: boolean;
 };
 
 export const useIntersectionObserver = ({
@@ -14,6 +15,7 @@ export const useIntersectionObserver = ({
   isActive = true,
   onAppear,
   onHide,
+  hasTrigger = false,
 }: UseIntersectionObserverProps) => {
   useEffect(() => {
     if (!isActive) return;
@@ -22,7 +24,9 @@ export const useIntersectionObserver = ({
       if (entries.length === 0) return;
 
       entries.forEach((entry) => {
-        if (entry.isIntersecting) return onAppear?.();
+        if (entry.isIntersecting) {
+          return onAppear?.();
+        }
 
         return onHide?.();
       });
@@ -37,7 +41,6 @@ export const useIntersectionObserver = ({
 
     const observer = new IntersectionObserver(callback, options);
     const target = document.querySelector(targetSelector);
-
     if (!target) return;
 
     observer.observe(target);
@@ -45,5 +48,5 @@ export const useIntersectionObserver = ({
     return () => {
       observer.unobserve(target);
     };
-  }, [targetSelector, onAppear, onHide, rootSelector, isActive]);
+  }, [targetSelector, onAppear, onHide, rootSelector, isActive, hasTrigger]);
 };

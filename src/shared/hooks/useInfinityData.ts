@@ -14,6 +14,8 @@ export type UseInfinityDataType = {
   isLoading: boolean;
   limitPerPage?: number;
   getListThunk: AsyncThunk<AxiosResponse['data'], Record<string, unknown>, Record<string, never>>;
+  params?: Record<string, unknown>;
+  hasTrigger?: boolean;
 };
 export const useInfinityData = ({
   rootSelector,
@@ -23,12 +25,15 @@ export const useInfinityData = ({
   isLoading,
   limitPerPage = DEFAULT_ROWS_PER_PAGE,
   getListThunk,
+  params = {},
+  hasTrigger = false,
 }: UseInfinityDataType) => {
   const dispatch = useAppDispatch();
   const { loadNextPage } = getInfinityScrollData({
     action: async (page) => {
       dispatch(
         getListThunk({
+          ...params,
           limit: limitPerPage,
           page,
         }),
@@ -44,5 +49,6 @@ export const useInfinityData = ({
     rootSelector,
     targetSelector,
     onAppear: loadNextPage,
+    hasTrigger,
   });
 };

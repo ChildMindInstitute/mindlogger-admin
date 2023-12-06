@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
 import { Box } from '@mui/material';
+import { useEffect } from 'react';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
@@ -14,7 +15,6 @@ import {
 } from 'shared/styles';
 import { groupBy } from 'shared/utils/array';
 
-import { SelectControllerProps, SelectUiType, GetMenuItem, Option } from './SelectController.types';
 import {
   StyledPlaceholder,
   StyledItem,
@@ -22,6 +22,23 @@ import {
   selectDropdownStyles,
   StyledTextField,
 } from './SelectController.styles';
+import {
+  SelectControllerProps,
+  SelectUiType,
+  GetMenuItem,
+  Option,
+  ObserverTargetProps,
+} from './SelectController.types';
+
+export const ObserverTarget = ({ targetSelector, setOpened }: ObserverTargetProps) => {
+  useEffect(() => {
+    setOpened?.(true);
+
+    return () => setOpened?.(false);
+  }, [setOpened]);
+
+  return <StyledObserverTarget className={targetSelector} />;
+};
 
 export const SelectController = <T extends FieldValues>({
   name,
@@ -42,6 +59,7 @@ export const SelectController = <T extends FieldValues>({
   'data-testid': dataTestid,
   rootSelector,
   targetSelector,
+  setOpened,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -102,6 +120,7 @@ export const SelectController = <T extends FieldValues>({
   const renderGroupedOptions = () => {
     if (!withGroups) return renderOptions(options);
 
+    setOpened?.(true);
     const groupedOptions = groupBy(options, 'groupKey');
 
     return Object.keys(groupedOptions).reduce(
@@ -135,6 +154,11 @@ export const SelectController = <T extends FieldValues>({
         disabled={disabled}
         SelectProps={{
           MenuProps: {
+            ...(rootSelector && {
+              classes: {
+                list: rootSelector,
+              },
+            }),
             PaperProps: {
               sx: { ...selectDropdownStyles, ...dropdownStyles },
               'data-testid': `${dataTestid}-dropdown`,
@@ -144,14 +168,8 @@ export const SelectController = <T extends FieldValues>({
         }}
         data-testid={dataTestid}
       >
-        {rootSelector && targetSelector ? (
-          <Box className={rootSelector} sx={{ overflowY: 'auto' }}>
-            {renderGroupedOptions()}
-            <StyledObserverTarget className={targetSelector} />
-          </Box>
-        ) : (
-          renderGroupedOptions()
-        )}
+        {renderGroupedOptions()}
+        {targetSelector && <ObserverTarget setOpened={setOpened} targetSelector={targetSelector} />}
       </StyledTextField>
     </Box>
   );
@@ -167,6 +185,7 @@ export const SelectController = <T extends FieldValues>({
               (event) => {
                 customChange && customChange(event);
                 onChange(event);
+                setOpened?.(false);
               },
               value,
               error,
@@ -174,7 +193,10 @@ export const SelectController = <T extends FieldValues>({
           }
         />
       ) : (
-        renderSelect(customChange, selectValue)
+        renderSelect((event) => {
+          customChange?.(event);
+          setOpened?.(false);
+        }, selectValue)
       )}
     </>
   );
