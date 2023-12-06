@@ -1,11 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import {
-  EditorController,
-  InputController,
-  SelectController,
-} from 'shared/components/FormComponents';
+import { EditorController, InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { Tooltip, Uploader } from 'shared/components';
 import {
@@ -23,6 +19,7 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { getColorThemeOptions } from './AboutApplet.utils';
 import { commonUploaderProps } from './AboutApplet.const';
+import { ThemeSelectController } from './ThemeSelectController';
 
 export const AboutApplet = () => {
   const { t } = useTranslation();
@@ -92,7 +89,7 @@ export const AboutApplet = () => {
           </Box>
           {!!themesOptions.length && (
             <StyledFlexTopCenter sx={{ position: 'relative' }}>
-              <SelectController
+              <ThemeSelectController
                 {...commonInputProps}
                 name="themeId"
                 label={t('appletColorTheme')}
