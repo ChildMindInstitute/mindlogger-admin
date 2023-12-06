@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FieldValues } from 'react-hook-form';
-import { themes } from 'redux/modules';
 
+import { themes } from 'modules/Builder/state';
 import { SelectController, SelectControllerProps } from 'shared/components/FormComponents';
 import { useInfinityData } from 'shared/hooks/useInfinityData';
 

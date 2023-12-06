@@ -19,7 +19,7 @@ import { BuilderContainer } from 'shared/features';
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { getColorThemeOptions } from './AboutApplet.utils';
 import { commonUploaderProps } from './AboutApplet.const';
-import ThemeSelectController from './ThemeSelectController/index';
+import { ThemeSelectController } from './ThemeSelectController';
 
 export const AboutApplet = () => {
   const { t } = useTranslation();

@@ -27,10 +27,10 @@ import {
   SelectUiType,
   GetMenuItem,
   Option,
-  ObserverTargetProps,
+  SelectObserverTargetProps,
 } from './SelectController.types';
 
-export const ObserverTarget = ({ targetSelector, setOpened }: ObserverTargetProps) => {
+export const SelectObserverTarget = ({ targetSelector, setOpened }: SelectObserverTargetProps) => {
   useEffect(() => {
     setOpened?.(true);
 
@@ -169,7 +169,9 @@ export const SelectController = <T extends FieldValues>({
         data-testid={dataTestid}
       >
         {renderGroupedOptions()}
-        {targetSelector && <ObserverTarget setOpened={setOpened} targetSelector={targetSelector} />}
+        {targetSelector && (
+          <SelectObserverTarget setOpened={setOpened} targetSelector={targetSelector} />
+        )}
       </StyledTextField>
     </Box>
   );

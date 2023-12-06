@@ -1,3 +1,1 @@
-import { ThemeSelectController } from './ThemeSelectController';
-
-export default ThemeSelectController;
+export * from './ThemeSelectController';

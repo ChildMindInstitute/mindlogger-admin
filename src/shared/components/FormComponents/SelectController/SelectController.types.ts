@@ -47,7 +47,7 @@ type FormSelectProps = {
 
 export type SelectControllerProps<T extends FieldValues> = FormSelectProps & UseControllerProps<T>;
 
-export type ObserverTargetProps = Pick<
+export type SelectObserverTargetProps = Pick<
   SelectControllerProps<FieldValues>,
   'setOpened' | 'targetSelector'
 >;
