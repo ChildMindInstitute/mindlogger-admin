@@ -24,9 +24,7 @@ export const useIntersectionObserver = ({
       if (entries.length === 0) return;
 
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          return onAppear?.();
-        }
+        if (entry.isIntersecting) return onAppear?.();
 
         return onHide?.();
       });
@@ -41,6 +39,7 @@ export const useIntersectionObserver = ({
 
     const observer = new IntersectionObserver(callback, options);
     const target = document.querySelector(targetSelector);
+
     if (!target) return;
 
     observer.observe(target);
