@@ -30,12 +30,12 @@ import {
   SelectObserverTargetProps,
 } from './SelectController.types';
 
-export const SelectObserverTarget = ({ targetSelector, setOpened }: SelectObserverTargetProps) => {
+export const SelectObserverTarget = ({ targetSelector, setTrigger }: SelectObserverTargetProps) => {
   useEffect(() => {
-    setOpened?.(true);
+    setTrigger?.(true);
 
-    return () => setOpened?.(false);
-  }, [setOpened]);
+    return () => setTrigger?.(false);
+  }, [setTrigger]);
 
   return <StyledObserverTarget className={targetSelector} />;
 };
@@ -59,7 +59,7 @@ export const SelectController = <T extends FieldValues>({
   'data-testid': dataTestid,
   rootSelector,
   targetSelector,
-  setOpened,
+  setTrigger,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -118,7 +118,6 @@ export const SelectController = <T extends FieldValues>({
     });
 
   const renderGroupedOptions = () => {
-    setOpened?.(true);
     if (!withGroups) return renderOptions(options);
 
     const groupedOptions = groupBy(options, 'groupKey');
@@ -170,7 +169,7 @@ export const SelectController = <T extends FieldValues>({
       >
         {renderGroupedOptions()}
         {targetSelector && (
-          <SelectObserverTarget setOpened={setOpened} targetSelector={targetSelector} />
+          <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />
         )}
       </StyledTextField>
     </Box>
@@ -187,7 +186,7 @@ export const SelectController = <T extends FieldValues>({
               (event) => {
                 customChange && customChange(event);
                 onChange(event);
-                setOpened?.(false);
+                setTrigger?.(false);
               },
               value,
               error,
@@ -197,7 +196,7 @@ export const SelectController = <T extends FieldValues>({
       ) : (
         renderSelect((event) => {
           customChange?.(event);
-          setOpened?.(false);
+          setTrigger?.(false);
         }, selectValue)
       )}
     </>

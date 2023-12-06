@@ -4,11 +4,12 @@ import { FieldValues } from 'react-hook-form';
 import { themes } from 'modules/Builder/state';
 import { SelectController, SelectControllerProps } from 'shared/components/FormComponents';
 import { useInfinityData } from 'shared/hooks/useInfinityData';
+import { themeParams } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import { THEME_LIST_CLASS, THEME_END_ITEM_CLASS } from '../AboutApplet.const';
 
 export const ThemeSelectController = <T extends FieldValues>(props: SelectControllerProps<T>) => {
-  const [opened, setOpened] = useState(false);
+  const [trigger, setTrigger] = useState(false);
   const { result: themesList = [], count = 0 } = themes.useThemesData() || {};
   const themesLoadingStatus = themes.useThemesStatus();
 
@@ -19,17 +20,15 @@ export const ThemeSelectController = <T extends FieldValues>(props: SelectContro
     listSize: themesList.length,
     isLoading: themesLoadingStatus === 'loading',
     getListThunk: themes.thunk.getThemes,
-    params: {
-      ordering: 'name',
-    },
-    hasTrigger: opened,
+    params: themeParams,
+    hasTrigger: trigger,
   });
 
   return (
     <SelectController
       rootSelector={THEME_LIST_CLASS}
       targetSelector={THEME_END_ITEM_CLASS}
-      setOpened={setOpened}
+      setTrigger={setTrigger}
       {...props}
     />
   );

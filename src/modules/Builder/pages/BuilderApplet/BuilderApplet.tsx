@@ -22,6 +22,7 @@ import {
   prepareActivityFlowsFromLibrary,
   getDefaultThemeId,
 } from './BuilderApplet.utils';
+import { themeParams } from './BuilderApplet.const';
 
 export const BuilderApplet = () => {
   const params = useParams();
@@ -126,7 +127,7 @@ export const BuilderApplet = () => {
 
   useEffect(() => {
     dispatch(themes.actions.resetThemes());
-    dispatch(themes.thunk.getThemes({ ordering: 'name', page: 1 }));
+    dispatch(themes.thunk.getThemes({ ...themeParams, page: 1 }));
 
     return removeAppletData;
   }, []);

@@ -41,7 +41,7 @@ type FormSelectProps = {
   isErrorVisible?: boolean;
   rootSelector?: string;
   targetSelector?: string;
-  setOpened?: Dispatch<SetStateAction<boolean>>;
+  setTrigger?: Dispatch<SetStateAction<boolean>>;
   'data-testid'?: string;
 } & TextFieldProps;
 
@@ -49,5 +49,5 @@ export type SelectControllerProps<T extends FieldValues> = FormSelectProps & Use
 
 export type SelectObserverTargetProps = Pick<
   SelectControllerProps<FieldValues>,
-  'setOpened' | 'targetSelector'
+  'setTrigger' | 'targetSelector'
 >;
