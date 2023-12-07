@@ -1,6 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { renderWithAppletFormData } from 'shared/utils';
 import { mockedSingleSelectFormValues, mockedSliderFormValues } from 'shared/mock';
 
 import { SectionScoreCommonFields } from './SectionScoreCommonFields';

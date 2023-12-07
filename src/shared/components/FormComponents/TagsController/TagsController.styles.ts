@@ -6,6 +6,14 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 export const StyledTextField = styled(TextField, shouldForwardProp)`
   width: 100%;
 
+  && {
+    &:hover {
+      .Mui-disabled .MuiOutlinedInput-notchedOutline {
+        border-color: ${variables.palette.on_surface_alfa12};
+      }
+    }
+  }
+
   ${({
     isSecondaryUiType,
     showInputLabel,

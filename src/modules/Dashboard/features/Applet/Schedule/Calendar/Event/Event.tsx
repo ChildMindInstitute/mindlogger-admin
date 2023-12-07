@@ -25,6 +25,8 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
     endAlertIcon,
     alwaysAvailable,
     isOffRange,
+    startTime,
+    endTime,
   } = event;
   const isAllDayEvent = allDay || alwaysAvailable;
   const isDefaultView = uiType === UiType.DefaultView;
@@ -43,16 +45,14 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
           {!isAllDayEvent && isDefaultView && scheduledColor && (
             <StyledIndicator bgColor={scheduledColor} />
           )}
-          {isDefaultView && !isAllDayEvent && (
-            <StyledLabelMedium>{format(start, DateFormats.Time)}</StyledLabelMedium>
-          )}
+          {isDefaultView && !isAllDayEvent && <StyledLabelMedium>{startTime}</StyledLabelMedium>}
           {isTimeView && !isAllDayEvent && (
             <>
               <StyledBodySmall className="event-start-time" sx={{ flexShrink: 0 }}>
-                {format(start, DateFormats.Time)}
+                {startTime ?? format(start, DateFormats.Time)}
               </StyledBodySmall>
               <StyledBodySmall className="event-end-time" sx={{ flexShrink: 0 }}>
-                - {format(end, DateFormats.Time)}
+                - {endTime ?? format(end, DateFormats.Time)}
               </StyledBodySmall>
             </>
           )}

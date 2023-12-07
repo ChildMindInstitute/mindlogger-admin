@@ -411,13 +411,13 @@ export const mockedSingleSelectFormValues = {
       {
         id: '0d764084-f3bb-4a91-b74d-3fae4a0beb1f',
         text: 's1',
-        score: 0,
+        score: 1,
         value: 0,
       },
       {
         id: 'e3ca9405-71e9-4627-8311-d405f383246e',
         text: 's23333333',
-        score: 0,
+        score: 2,
         value: 1,
       },
     ],
@@ -449,7 +449,6 @@ export const mockedMultiSelectFormValues = {
       {
         id: '7a71bf32-8d25-4040-88a0-8ae3f1c4f8bc',
         text: 'm1',
-        score: 1,
         value: 0,
       },
       {
@@ -461,12 +460,14 @@ export const mockedMultiSelectFormValues = {
       {
         id: 'cea898cc-d4be-4320-be11-b6bc6e72a9d1',
         text: 'm3',
-        score: 1,
         value: 2,
       },
     ],
   },
   order: 2,
+  config: {
+    addScores: false,
+  },
 };
 
 export const mockedSliderFormValues = {
@@ -478,10 +479,12 @@ export const mockedSliderFormValues = {
     maxLabel: 'max',
     minValue: 1,
     maxValue: 4,
+    scores: [1, 2, 3, 4],
   },
   order: 3,
   question: '',
-  condig: {
+  config: {
+    addScores: true,
     showTickMarks: false,
     showTickLabels: false,
     continuousSlider: false,

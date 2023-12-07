@@ -47,11 +47,13 @@ import {
 } from './SaveAndPublish.utils';
 
 export const useAppletDataFromForm = () => {
-  const { getValues } = useFormContext();
+  const { getValues } = useFormContext() || {};
   const isNewApplet = useCheckIfNewApplet();
 
-  return (encryption?: Encryption): SingleApplet => {
-    const appletInfo = getValues() as AppletFormValues;
+  return (encryption?: Encryption): SingleApplet | undefined => {
+    const appletInfo = getValues?.() as AppletFormValues;
+
+    if (!appletInfo) return;
 
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
@@ -109,7 +111,7 @@ export const useCheckIfHasAtLeastOneActivity = () => {
   return () => {
     const body = getAppletData();
 
-    return Boolean(body.activities?.length);
+    return Boolean(body?.activities?.length);
   };
 };
 
@@ -119,7 +121,7 @@ export const useCheckIfHasAtLeastOneItem = () => {
   return () => {
     const body = getAppletData();
 
-    return (body.activities ?? []).every((activity) => Boolean(activity.items?.length));
+    return (body?.activities ?? []).every((activity) => Boolean(activity.items?.length));
   };
 };
 
@@ -254,11 +256,10 @@ export const useUpdatedAppletNavigate = () => {
 export const useSaveAndPublishSetup = (
   hasPrompt: boolean,
   setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
-  setAppletWithoutChangesPopupVisible?: (val: boolean) => void,
 ) => {
   const {
     trigger,
-    formState: { dirtyFields, isDirty },
+    formState: { dirtyFields },
   } = useFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletDataFromForm();
@@ -392,12 +393,6 @@ export const useSaveAndPublishSetup = (
       return;
     }
 
-    if (!isDirty) {
-      setAppletWithoutChangesPopupVisible?.(true);
-
-      return;
-    }
-
     await sendRequest();
   };
 
@@ -409,6 +404,9 @@ export const useSaveAndPublishSetup = (
     const encryptionData = password ? getEncryptionToServer(password, ownerId!) : appletEncryption;
     setPublishProcessPopupOpened(true);
     const appletData = getAppletData(encryptionData);
+
+    if (!appletData) return;
+
     let result;
     try {
       const uniqueNameResult =

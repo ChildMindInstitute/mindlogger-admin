@@ -98,7 +98,7 @@ export const LoginForm = () => {
             data-testid="login-form-password"
           />
         </StyledController>
-        {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
+        {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
         <StyledForgotPasswordLink
           onClick={() => navigate(page.passwordReset)}
           data-testid="login-form-forgot-password"

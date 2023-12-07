@@ -114,6 +114,7 @@
   "allDay": "Toute la journée",
   "allowAccessBeforeTime": "Autoriser l'accès avant l'heure “À partir de“",
   "allowToSkipAllItems": "Autoriser à ignorer tous les éléments",
+  "nextDay": "Le prochain jour",
   "alwaysAvailable": "Toujours disponible",
   "alwaysAvailableWarning": "Si vous définissez cet événement comme toujours disponible, tous les événements programmés pour cette activité seront supprimés.",
   "any": "N'importe lequel",
@@ -308,6 +309,8 @@
   "day": "Jour",
   "day_one": "jour",
   "day_other": "jours",
+  "month_one": "mois",
+  "month_other": "mois",
   "days": "Jours",
   "deactivated": "Désactivé",
   "dec": "Décembre",
@@ -342,6 +345,7 @@
   "displayedContentRequired": "Le contenu affiché est requis",
   "dontSave": "Ne pas enregistrer",
   "download": "Télécharger",
+  "downloadCSV": "Télécharger CSV",
   "downloadDescription": "<0>Téléchargez le contenu de l'Applet au format JSON.</0><1>Veuillez mettre à jour l'URL des contextes dans le schéma de l'Applet, le schéma de l'activité et changer les chemins de l'activité/élément dans les fichiers de contexte après avoir uploadé le contenu sur GitHub.</1>",
   "downloadLatestReport": "Télécharger le dernier rapport",
   "downloadSchema": "Télécharger le schéma",
@@ -406,7 +410,15 @@
   "export": "Exporter",
   "exportData": "Exporter les données",
   "exportDefaultSchedule": "Exporter le programme par défaut",
-  "exportDescription": "Exporter les données de toutes les participants.",
+  "exportDescription": "Exporter les données pour la plage de dates sélectionnée",
+  "exportDateRange": {
+    "allTime": "Tout le temps",
+    "last24h": "Dernières 24 heures",
+    "lastWeek": "La semaine dernière",
+    "lastMonth": "Le mois dernier",
+    "chooseDates": "Choisir les dates"
+  },
+  "dateRange": "Plage de dates",
   "exportFailed": "Échec de l'exportation. Veuillez réessayer.",
   "exportIndividualSchedule": "Exporter le programme individuel",
   "false": "Faux",
@@ -550,7 +562,7 @@
     "invalidActivityNames": "Les Activités <1>{{activityNames}}</1> n'existent pas dans l'Applet <1>{{appletName}}</1>. Veuillez entrer un nom d'Activité valide et réuploader le fichier.",
     "invalidDataFormat": "Format de données invalide pour les champs suivants :",
     "notificationTime": "<2>Heure de Notification</2>. Format de date valide : <2>HH:mm ou -</2>.",
-    "startEndTime": "<2>L'heure de Fin de l'Activité</2> doit être ultérieure à <2>l'heure de Début de l'Activité</2>.",
+    "startEndTime": "<2>L'heure de Fin de l'Activité</2> ne devrait pas être égal à <2>l'heure de Début de l'Activité</2>.",
     "startTime": "<2>Heure de Début de l'Activité</2>. Format de date valide : <2>HH:mm pour une activité programmée et - pour une activité toujours disponible</2>.",
     "updateReupload": "Veuillez mettre à jour et réuploader le fichier."
   },
@@ -753,6 +765,7 @@
   "nov": "Novembre",
   "noVersions": "Pas encore de versions.",
   "numberOfConsecutiveDays": "Nombre de jours consécutifs où l'utilisateur ne termine pas l'activité",
+  "numberOfConsecutiveMonths": "Nombre de mois consécutifs pendant lesquels l'utilisateur ne termine pas l'activité",
   "deadlineForActivityCompletion": "Date limite de réalisation de l'activité, sinon le rappel sera envoyé",
   "numberOfTrials": "Nombre d'Essais:",
   "numberOfTrialsTooltip": "Nombre de manches d'entraînement avant la manche de test",
@@ -1225,5 +1238,6 @@
     "details": "Détails",
     "refreshPage": "Rafraîchir la page"
   },
-  "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet."
+  "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet.",
+  "goToDashboard": "Aller au tableau de bord"
 }

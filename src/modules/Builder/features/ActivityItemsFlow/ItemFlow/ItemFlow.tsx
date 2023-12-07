@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Badge, Box } from '@mui/material';
@@ -21,10 +21,10 @@ import { getEmptyCondition, getObserverSelector } from './ItemFlow.utils';
 import { StyledTitle, StyledCollapse } from './ItemFlow.styles';
 import { ItemFlowContent } from './ItemFlowContent';
 
-export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
+export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProps) => {
   const { t } = useTranslation('app');
   const [isExpanded, setExpanded] = useState(true);
-  const [isStatic, setStatic] = useState(true);
+  const [isStatic, setStatic] = useState(isStaticActive);
 
   const itemName = `${name}.${index}`;
   const conditionsName = `${itemName}.conditions`;
@@ -58,7 +58,12 @@ export const ItemFlow = ({ name, index, onRemove }: ItemFlowProps) => {
     targetSelector: `.${getObserverSelector(index)}`,
     onAppear: () => setStatic(false),
     onHide: () => setStatic(true),
+    isActive: isStaticActive,
   });
+
+  useEffect(() => {
+    if (!isStaticActive) setStatic(false);
+  }, [isStaticActive]);
 
   return (
     <Box sx={{ position: 'relative' }}>

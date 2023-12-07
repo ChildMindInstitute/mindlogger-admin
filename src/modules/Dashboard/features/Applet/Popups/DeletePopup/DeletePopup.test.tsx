@@ -7,7 +7,7 @@ import { mockedApplet, mockedPassword } from 'shared/mock';
 
 import { DeletePopup } from '.';
 
-const testId = 'dashboard-applets-delete-popup';
+const testId = 'dashboard-applets-delete';
 const preloadedState = {
   popups: {
     data: {
@@ -25,7 +25,7 @@ const preloadedState = {
 const getPublicKeyMock = () => Buffer.from(JSON.parse(mockedApplet?.encryption?.publicKey || ''));
 const onCloseMock = jest.fn();
 
-describe('DeletePopup component tests', () => {
+describe('DeletePopup', () => {
   afterEach(() => {
     mockAxios.reset();
     jest.restoreAllMocks();
@@ -36,7 +36,7 @@ describe('DeletePopup component tests', () => {
       preloadedState,
     });
 
-    expect(screen.getByTestId(`${testId}-enter-password-password`)).toBeInTheDocument();
+    expect(screen.getByTestId(`${testId}-enter-password-popup-password`)).toBeInTheDocument();
   });
 
   test('DeletePopup should open success modal', async () => {

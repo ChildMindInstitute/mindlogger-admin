@@ -82,7 +82,7 @@ describe('InvitationsTable', () => {
       'Doe',
       'Editor',
       mockedEmail,
-      '/invitation/e6fdab42-412d-312c-a1e6-a6ee3a72a777',
+      `${process.env.REACT_APP_WEB_URI}/invitation/e6fdab42-412d-312c-a1e6-a6ee3a72a777`,
       `${format(
         new Date('2023-11-02T08:37:13.652256Z'),
         DateFormats.YearMonthDayHoursMinutesSeconds,

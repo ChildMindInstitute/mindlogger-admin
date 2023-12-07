@@ -626,14 +626,14 @@ export const getAppletVersionChangesApi = (
 ) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
 
 export const getExportDataApi = (
-  { appletId, respondentIds, page = 1, limit = DEFAULT_ROWS_PER_PAGE }: ExportData,
+  { appletId, page = 1, limit = DEFAULT_ROWS_PER_PAGE, ...rest }: ExportData,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<ResponseWithObject<ExportDataResult>>(`/answers/applet/${appletId}/data`, {
     params: {
-      respondentIds,
       page,
       limit,
+      ...rest,
     },
     signal,
   });

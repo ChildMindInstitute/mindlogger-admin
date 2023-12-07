@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components/Svg';
-import { ReportConfigSetting } from 'shared/features/AppletSettings';
+import { ReportConfigSetting } from 'modules/Builder/features/ReportConfigSetting';
 import { SettingParam } from 'shared/utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType } from 'shared/consts';
