@@ -29,9 +29,6 @@ describe('ConditionalPanel', () => {
     mockedUseParams.mockReturnValue({ activityId: mockedAppletData.activities[0].id });
     mockedWatch.mockReturnValue(mockedAppletData.activities[0].items);
   });
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
 
   test('toggles expansion on button click', async () => {
     renderComponent();
