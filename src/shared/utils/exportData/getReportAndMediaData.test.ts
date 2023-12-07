@@ -14,7 +14,7 @@ import {
   getReportData,
   getMediaData,
   getActivityJourneyData,
-  checkIfHasJsonLdEventScreen,
+  checkIfHasGithubImportedEventScreen,
 } from './getReportAndMediaData';
 import { ItemResponseType } from '../../consts';
 import { getObjectFromList } from '../getObjectFromList';
@@ -551,7 +551,7 @@ describe('getReportAndMediaData', () => {
       ]);
     });
   });
-  describe('checkIfHasJsonLdEventScreen', () => {
+  describe('checkIfHasGithubImportedEventScreen', () => {
     const decryptedEventsWithItemImportedFromGithub = [
       {
         type: UserActionType.Next,
@@ -565,7 +565,7 @@ describe('getReportAndMediaData', () => {
       ${mockedDecryptedEventsForDrawing}           | ${false} | ${'should return false for regular items'}
       ${decryptedEventsWithItemImportedFromGithub} | ${true}  | ${'should return true for applet with items imported from github'}
     `('$description', ({ decryptedEvents, expected }) => {
-      const result = checkIfHasJsonLdEventScreen(decryptedEvents);
+      const result = checkIfHasGithubImportedEventScreen(decryptedEvents);
       expect(result).toBe(expected);
     });
   });
