@@ -4,7 +4,13 @@ import { Applet } from 'api';
 
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
 
-import { CalculationType, ItemResponseType, Roles, ScoreReportType } from './consts';
+import {
+  CalculationType,
+  ConditionalLogicMatch,
+  ItemResponseType,
+  Roles,
+  ScoreReportType,
+} from './consts';
 import { MultiSelectItem, SingleSelectItem } from './state';
 
 export const mockedEmail = 'test@gmail.com';
@@ -235,7 +241,7 @@ export const mockedAppletData = {
           config: {},
           name: 'Item2',
           conditionalLogic: {
-            match: 'any',
+            match: ConditionalLogicMatch.Any,
             conditions: [
               {
                 itemName: 'Item1',
@@ -667,7 +673,7 @@ export const mockedSectionReport = {
   printItems: true,
   itemsPrint: ['Item1', 'Item3'],
   conditionalLogic: {
-    match: 'any',
+    match: ConditionalLogicMatch.Any,
     conditions: [
       {
         itemName: 'Item1',
@@ -726,7 +732,7 @@ export const mockedAppletFormData = {
         {
           key: '597ffffb-9bce-4c73-9627-cc1bab064b7e',
           itemKey: 'dad4e249-6a19-4c71-9806-e87b1c9e751b',
-          match: 'any',
+          match: ConditionalLogicMatch.Any,
           conditions: [
             {
               key: '25616abd-799b-4aff-90d5-74c3cd956d54',
@@ -741,7 +747,7 @@ export const mockedAppletFormData = {
         {
           key: 'a420fd93-5576-4d99-9394-403cd4a00390',
           itemKey: '97c34ed6-4d18-4cb6-a0c8-b1cb2efaa24c',
-          match: 'any',
+          match: ConditionalLogicMatch.Any,
           conditions: [
             {
               key: '296f9140-f283-4040-b9e7-5c43221d5a5e',
