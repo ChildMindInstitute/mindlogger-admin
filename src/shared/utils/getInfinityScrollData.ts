@@ -6,16 +6,16 @@ export const getInfinityScrollData = ({
   totalSize,
   listSize,
   limit,
-  isFetching,
+  isLoading,
 }: {
   action: (nextPage: number) => Promise<void>;
   totalSize: number;
   listSize: number;
   limit: number;
-  isFetching: boolean;
+  isLoading: boolean;
 }) => {
   const loadNextPage = async () => {
-    if (totalSize === 0 || isFetching || totalSize === listSize) return;
+    if (totalSize === 0 || isLoading || totalSize === listSize) return;
 
     const nextPage = getNextPage({
       listSize,

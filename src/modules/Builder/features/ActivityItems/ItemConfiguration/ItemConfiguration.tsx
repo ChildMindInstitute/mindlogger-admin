@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import { Grid } from '@mui/material';
 
 import { Modal } from 'shared/components';
@@ -16,6 +16,7 @@ import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import {
@@ -37,7 +38,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
 
-  const { control } = useFormContext();
+  const { control } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
 

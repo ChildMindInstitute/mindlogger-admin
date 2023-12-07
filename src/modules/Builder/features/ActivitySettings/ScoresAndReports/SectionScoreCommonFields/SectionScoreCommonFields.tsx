@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch, useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { EditorUiType, Switch, TransferListController } from 'shared/components/FormComponents';

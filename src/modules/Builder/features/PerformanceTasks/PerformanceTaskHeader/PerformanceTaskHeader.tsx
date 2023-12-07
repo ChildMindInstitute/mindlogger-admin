@@ -1,9 +1,9 @@
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { variables, StyledTitleSmall } from 'shared/styles';
 import { page } from 'resources';
 
@@ -13,7 +13,7 @@ export const PerformanceTaskHeader = () => {
   const { t } = useTranslation();
   const { appletId } = useParams();
   const navigate = useNavigate();
-  const { trigger } = useFormContext();
+  const { trigger } = useCustomFormContext();
 
   const handleActivitiesClick = () => {
     trigger(['activities']);

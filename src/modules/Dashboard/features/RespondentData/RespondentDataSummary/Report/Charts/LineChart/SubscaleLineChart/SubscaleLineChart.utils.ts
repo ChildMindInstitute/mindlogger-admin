@@ -19,25 +19,23 @@ import {
   COLORS,
   commonLabelsProps,
 } from '../../Charts.const';
-import { getTimelineStepSize, getTimeConfig, getTicksStepSize } from '../../Charts.utils';
+import { getTimelineStepSize, getTimeConfig } from '../../Charts.utils';
 import { SubscaleChartData, Tick } from './SubscaleLineChart.types';
 
 export const getOptions = (
   lang: keyof typeof locales,
   minDate: Date,
   maxDate: Date,
-  data: SubscaleChartData,
   tooltipHandler: (context: ScriptableTooltipContext<'line'>) => void,
+  minY: number,
+  maxY: number,
+  stepSize: number,
 ) => {
-  const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const maxScore = Math.max(...pluck(responses.flat(), 'score'));
-
   const min = minDate.getTime();
   const max = maxDate.getTime();
 
   const timeConfig = getTimeConfig(min, max);
   const timelineStepSize = getTimelineStepSize(min, max);
-  const ticksStepSize = getTicksStepSize(maxScore);
 
   return {
     maintainAspectRatio: false,
@@ -85,7 +83,7 @@ export const getOptions = (
           scaleInstance.width = SUBSCALES_CHART_LABEL_WIDTH_Y;
         },
         ticks: {
-          stepSize: ticksStepSize,
+          stepSize,
           color: (value: Tick) => {
             const lastTickIndex = value.chart.scales.y.ticks.length - 1;
             if (lastTickIndex === value.index) {
@@ -99,7 +97,8 @@ export const getOptions = (
             size: 14,
           },
         },
-        suggestedMax: maxScore + ticksStepSize,
+        suggestedMin: minY,
+        suggestedMax: maxY,
       },
       x: {
         adapters: {
@@ -166,61 +165,55 @@ export const getOptions = (
   };
 };
 
-export const getData = (data: SubscaleChartData, versions: Version[]) => {
-  const responses = data.subscales.map((subscale) => subscale.activityCompletions);
-  const maxScore = Math.max(...pluck(responses.flat(), 'score'));
-  const ticksStepSize = getTicksStepSize(maxScore);
-
-  return {
-    datasets: [
-      ...data.subscales.map((subscale, index) => ({
-        xAxisID: 'x',
-        label: subscale.name,
-        data: subscale.activityCompletions.map(({ date, score, optionText }) => ({
-          x: date,
-          y: score,
-          optionText,
-        })),
-        borderColor: COLORS[index % COLORS.length],
-        backgroundColor: COLORS[index % COLORS.length],
-        datalabels: {
-          display: false,
-        },
-        borderWidth: 1,
-        pointRadius: subscale.activityCompletions.map(({ optionText }) =>
-          optionText ? POINT_RADIUS_DEFAULT : POINT_RADIUS_SECONDARY,
-        ),
-        pointBorderColor: variables.palette.white,
+export const getData = (data: SubscaleChartData, versions: Version[], max: number) => ({
+  datasets: [
+    ...data.subscales.map((subscale, index) => ({
+      xAxisID: 'x',
+      label: subscale.name,
+      data: subscale.activityCompletions.map(({ date, score, optionText }) => ({
+        x: date,
+        y: score,
+        optionText,
       })),
-      {
-        xAxisID: 'x1',
-        data: [],
+      borderColor: COLORS[index % COLORS.length],
+      backgroundColor: COLORS[index % COLORS.length],
+      datalabels: {
+        display: false,
       },
-      {
-        xAxisID: 'x2',
-        labels: versions.map(({ version }) => version),
-        data: versions.map(({ createdAt }) => ({
-          x: new Date(createdAt),
-          y: maxScore + ticksStepSize,
-        })),
-        datalabels: {
-          anchor: 'center' as const,
-          align: 'right' as const,
-          font: {
-            size: 11,
-          },
-          formatter: (_: unknown, context: Context) => {
-            const dataset = context.dataset as ChartDataset & {
-              labels: string[];
-            };
-
-            return dataset.labels[context.dataIndex];
-          },
+      borderWidth: 1,
+      pointRadius: subscale.activityCompletions.map(({ optionText }) =>
+        optionText ? POINT_RADIUS_DEFAULT : POINT_RADIUS_SECONDARY,
+      ),
+      pointBorderColor: variables.palette.white,
+    })),
+    {
+      xAxisID: 'x1',
+      data: [],
+    },
+    {
+      xAxisID: 'x2',
+      labels: versions.map(({ version }) => version),
+      data: versions.map(({ createdAt }) => ({
+        x: new Date(createdAt),
+        y: max,
+      })),
+      datalabels: {
+        anchor: 'center' as const,
+        align: 'right' as const,
+        font: {
+          size: 11,
         },
-        borderColor: 'transparent',
-        backgroundColor: 'transparent',
-        pointStyle: false as const,
+        formatter: (_: unknown, context: Context) => {
+          const dataset = context.dataset as ChartDataset & {
+            labels: string[];
+          };
+
+          return dataset.labels[context.dataIndex];
+        },
       },
-    ],
-  };
-};
+      borderColor: 'transparent',
+      backgroundColor: 'transparent',
+      pointStyle: false as const,
+    },
+  ],
+});

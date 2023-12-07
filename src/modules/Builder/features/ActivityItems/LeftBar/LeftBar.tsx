@@ -2,8 +2,9 @@ import { useState, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Button, Box } from '@mui/material';
 import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Modal, Spinner, Svg } from 'shared/components';
 import {
   StyledBodyLarge,
@@ -42,7 +43,7 @@ export const LeftBar = ({
   onMoveItem,
 }: LeftBarProps) => {
   const { t } = useTranslation('app');
-  const { setValue, getValues } = useFormContext();
+  const { setValue, getValues } = useCustomFormContext();
   const [isDragging, setIsDragging] = useState(false);
   const [conditionalLogicKeysToRemove, setConditionalLogicKeysToRemove] = useState<string[] | null>(
     null,

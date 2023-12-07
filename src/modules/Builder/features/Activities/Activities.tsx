@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
@@ -18,6 +18,7 @@ import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
 import { pluck, Mixpanel } from 'shared/utils';
 import { getUniqueName } from 'modules/Builder/utils';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { DeleteActivityModal } from './DeleteActivityModal';
 import { ActivitiesHeader } from './ActivitiesHeader';
@@ -27,7 +28,7 @@ import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, getFieldState, setValue } = useFormContext();
+  const { control, getFieldState, setValue } = useCustomFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');

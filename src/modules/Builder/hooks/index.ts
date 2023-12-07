@@ -6,3 +6,4 @@ export * from './useCurrentActivityFlow';
 export * from './useFilterConditionalLogicByItem';
 export * from './useRedirectIfNoMatchedActivityItem';
 export * from './useFieldLengthError';
+export * from './useCustomFormContext';

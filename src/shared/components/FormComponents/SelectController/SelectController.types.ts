@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
 
@@ -38,7 +39,15 @@ type FormSelectProps = {
   uiType?: SelectUiType;
   dropdownStyles?: SxProps;
   isErrorVisible?: boolean;
+  rootSelector?: string;
+  targetSelector?: string;
+  setTrigger?: Dispatch<SetStateAction<boolean>>;
   'data-testid'?: string;
 } & TextFieldProps;
 
 export type SelectControllerProps<T extends FieldValues> = FormSelectProps & UseControllerProps<T>;
+
+export type SelectObserverTargetProps = Pick<
+  SelectControllerProps<FieldValues>,
+  'setTrigger' | 'targetSelector'
+>;

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import get from 'lodash.get';
 
 import { getEntityKey, getObjectFromList } from 'shared/utils';
@@ -8,8 +8,9 @@ import { SelectEvent } from 'shared/types';
 import { ConditionType, ScoreReportType } from 'shared/consts';
 import { ScoreOrSection, ScoreReport } from 'shared/state';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
-
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledErrorText, theme } from 'shared/styles';
+
 import { ConditionRowProps } from './ConditionRow.types';
 import {
   getItemOptions,
@@ -38,7 +39,7 @@ export const ConditionRow = ({
     setValue,
     trigger,
     formState: { errors },
-  } = useFormContext();
+  } = useCustomFormContext();
 
   const itemsName = `${activityName}.items`;
   const reportsName = `${activityName}.scoresAndReports.reports`;
