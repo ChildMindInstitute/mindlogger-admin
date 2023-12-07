@@ -4,7 +4,6 @@ import {
   eachDayOfInterval,
   eachMonthOfInterval,
   endOfYear,
-  format,
   getDate,
   getDay,
   isWeekend,
@@ -18,7 +17,6 @@ import {
 import { Periodicity } from 'modules/Dashboard/api';
 import { formatToWeekYear, formatToYearMonthDate } from 'shared/utils/dateFormat';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
-import { DateFormats } from 'shared/consts';
 
 import {
   CalendarEvent,
@@ -104,18 +102,24 @@ export const getStartOfYearDateTime = (year: number) => startOfYear(new Date(yea
 export const getEndOfYearDateTime = (year: number) => endOfYear(new Date(year, 0, 1));
 
 export const getDateFromDateTimeString = (date: Date, time: string) => {
+  const regex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+  if (!regex.test(time)) return date;
+
   const [hours, minutes, seconds] = time.split(':');
 
   return setSeconds(setMinutes(setHours(date, Number(hours)), Number(minutes)), Number(seconds));
 };
 
-const getDateFromDateStringTimeString = ({ date, time }: GetDateFromDateStringTimeString) => {
+export const getDateFromDateStringTimeString = ({
+  date,
+  time,
+}: GetDateFromDateStringTimeString) => {
   if (!date) return null;
 
   return new Date(`${date}T${time}`);
 };
 
-const getEventStartDateTime = ({
+export const getEventStartDateTime = ({
   periodicity,
   selectedDate,
   startDate,
@@ -177,7 +181,7 @@ const getEventStartDateTime = ({
   }
 };
 
-const getEventEndDateTime = ({
+export const getEventEndDateTime = ({
   periodicity,
   selectedDate,
   endDate,
@@ -187,8 +191,7 @@ const getEventEndDateTime = ({
   isCrossDayEvent,
 }: GetEventEndDateTime) => {
   const endOfYearDateTime = getEndOfYearDateTime(currentYear);
-  const calculatedEndDate =
-    eventStart > endOfYearDateTime ? eventStart : getEndOfYearDateTime(currentYear);
+  const calculatedEndDate = eventStart > endOfYearDateTime ? eventStart : endOfYearDateTime;
   const time = isCrossDayEvent ? DEFAULT_END_TIME : endTime;
 
   switch (periodicity) {
@@ -212,7 +215,7 @@ const getEventEndDateTime = ({
   }
 };
 
-const getEventsArrayFromDates = ({
+export const getEventsArrayFromDates = ({
   dates,
   commonProps,
   startTime,
@@ -438,7 +441,6 @@ export const getDaysInMonthlyPeriodicity = ({
   chosenDate,
   eventEnd,
   eventStart,
-  returnStringDate,
 }: GetDaysInMonthlyPeriodicity) => {
   const endDate = getDate(eventEnd);
   const end =
@@ -454,9 +456,8 @@ export const getDaysInMonthlyPeriodicity = ({
   return monthsBetween.map((month) => {
     const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
     const dayOfMonth = Math.min(chosenDate, lastDayOfMonth.getDate());
-    const returnDate = new Date(month.getFullYear(), month.getMonth(), dayOfMonth);
 
-    return returnStringDate ? format(returnDate, DateFormats.YearMonthDay) : returnDate;
+    return new Date(month.getFullYear(), month.getMonth(), dayOfMonth);
   });
 };
 
