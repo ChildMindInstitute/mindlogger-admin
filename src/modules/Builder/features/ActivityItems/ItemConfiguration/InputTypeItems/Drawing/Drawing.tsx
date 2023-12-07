@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Uploads } from 'modules/Builder/components/Uploads';
@@ -6,7 +5,7 @@ import {
   SharedToggleItemProps,
   ToggleItemContainer,
 } from 'modules/Builder/components/ToggleItemContainer';
-
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Uploader } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_25MB } from 'shared/consts';
@@ -17,7 +16,7 @@ import { StyledImage } from './Drawing.styles';
 
 export const Drawing = ({ name }: DrawingProps) => {
   const { t } = useTranslation();
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue } = useCustomFormContext();
 
   const drawingExampleName = `${name}.responseValues.drawingExample`;
   const drawingBackgroundName = `${name}.responseValues.drawingBackground`;

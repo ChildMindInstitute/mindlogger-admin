@@ -1,8 +1,8 @@
 import { ChangeEvent, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Table, UiType, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledBodySmall, StyledFlexTopCenter, theme, variables } from 'shared/styles';
@@ -68,7 +68,7 @@ export const SliderPanel = ({
     setValue,
     clearErrors,
     formState: { errors },
-  } = useFormContext();
+  } = useCustomFormContext();
 
   const { id, minValue, maxValue, scores } = watch(sliderName) || {};
   const settings = watch(`${name}.config`);

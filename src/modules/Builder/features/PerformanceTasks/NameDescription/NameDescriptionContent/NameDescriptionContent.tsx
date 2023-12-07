@@ -1,15 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { MAX_NAME_LENGTH, MAX_DESCRIPTION_LENGTH, TEXTAREA_ROWS_COUNT } from 'shared/consts';
 
 export const NameDescriptionContent = () => {
   const { t } = useTranslation();
-  const { control } = useFormContext();
+  const { control } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
 
   const dataTestid = 'builder-activity-flanker';

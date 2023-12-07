@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Grid } from '@mui/material';
 
 import { StyledItemOptionContainer } from 'modules/Builder/components';
@@ -12,7 +11,7 @@ import {
   StyledTitleMedium,
   theme,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { Tooltip } from 'shared/components/Tooltip';
 import {
@@ -28,7 +27,7 @@ import { StyledLambdaScopeInput } from './GeneralSettings.styles';
 
 export const GeneralSettings = () => {
   const { t } = useTranslation();
-  const { control, watch, setValue } = useFormContext();
+  const { control, watch, setValue } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
 
   const practiceName = `${fieldName}.items.2.config`;

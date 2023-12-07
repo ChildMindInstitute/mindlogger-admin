@@ -42,3 +42,7 @@ export const conditionsMatch = yup.string().when('conditions', {
   then: (schema) => schema.required(),
   otherwise: (schema) => schema,
 });
+
+export const themeParams = {
+  ordering: 'name',
+};

@@ -43,7 +43,7 @@ export const FeedbackReviewer = ({
               data-testid={`${dataTestid}-review-${index}`}
             >
               {activityItemAnswer.answer?.edited && (
-                <StyledEdited>
+                <StyledEdited data-testid={`${dataTestid}-review-${index}-edited`}>
                   <StyledBodyMedium color={variables.palette.on_secondary_container}>
                     {t('edited')}
                   </StyledBodyMedium>

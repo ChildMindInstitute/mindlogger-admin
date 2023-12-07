@@ -1,13 +1,13 @@
-import { useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { ActivityFlowFormValues } from 'modules/Builder/types';
 import { getEntityKey } from 'shared/utils';
+import { useCustomFormContext } from './useCustomFormContext';
 
 export const useCurrentActivityFlow = () => {
   const { activityFlowId } = useParams();
 
-  const { watch } = useFormContext() ?? {};
+  const { watch } = useCustomFormContext() ?? {};
 
   if (!activityFlowId) return {};
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledBodyErrorText, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
@@ -11,6 +10,7 @@ import {
   SharedToggleItemProps,
   ToggleItemContainer,
 } from 'modules/Builder/components/ToggleItemContainer';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { AddAudio } from './AddAudio';
 import { UploadAudio } from './UploadAudio';
@@ -25,7 +25,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const [isUploadPopupOpened, setUploadPopupOpened] = useState(false);
   const [isRecordPopupOpened, setRecordPopupOpened] = useState(false);
   const [isRemoveAudioPopupOpened, setRemoveAudioPopupOpened] = useState(false);
-  const { setValue, watch, trigger, getFieldState } = useFormContext();
+  const { setValue, watch, trigger, getFieldState } = useCustomFormContext();
 
   const urlName = `${name}.responseValues.file`;
   const url = watch(urlName);
@@ -42,7 +42,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
 
   const onClearMedia = () => {
     setMedia(null);
-    setValue(urlName, undefined, { shouldDirty: true });
+    setValue(urlName, undefined);
   };
   const onCloseUploadPopup = () => setUploadPopupOpened(false);
   const onCloseRecordPopup = () => setRecordPopupOpened(false);
@@ -50,11 +50,11 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const onCloseRemoveAudioPopup = () => setRemoveAudioPopupOpened(false);
 
   const handleUploadAudio = (url?: string) => {
-    setValue(urlName, url ?? media?.url, { shouldDirty: true });
+    setValue(urlName, url ?? media?.url);
     onCloseUploadPopup();
   };
   const handleUploadRecord = (url?: string) => {
-    setValue(urlName, url, { shouldDirty: true });
+    setValue(urlName, url);
     onCloseRecordPopup();
   };
 

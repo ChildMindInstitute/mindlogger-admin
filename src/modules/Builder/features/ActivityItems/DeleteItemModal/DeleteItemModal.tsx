@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
@@ -11,7 +10,11 @@ import {
 } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { getEntityKey } from 'shared/utils';
 import { ActivityFlowFormValues, ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
-import { useCurrentActivity, useFilterConditionalLogicByItem } from 'modules/Builder/hooks';
+import {
+  useCurrentActivity,
+  useFilterConditionalLogicByItem,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 import { ScoreReportType } from 'shared/consts';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
@@ -25,7 +28,7 @@ export const DeleteItemModal = ({
 }: DeleteItemModalProps) => {
   const { t } = useTranslation('app');
   const { fieldName, activity } = useCurrentActivity();
-  const { watch, setValue, trigger } = useFormContext();
+  const { watch, setValue, trigger } = useCustomFormContext();
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const reportsField = `${fieldName}.scoresAndReports.reports`;
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];

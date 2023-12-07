@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { Badge, Box } from '@mui/material';
 
 import { Svg } from 'shared/components';
@@ -14,6 +14,7 @@ import {
 import { useIntersectionObserver } from 'shared/hooks';
 import { Condition } from 'shared/state';
 import { observerStyles } from 'modules/Builder/consts';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemFlowActions } from './ItemFlowActions';
 import { ItemFlowProps } from './ItemFlow.types';
@@ -30,7 +31,7 @@ export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProp
   const conditionsName = `${itemName}.conditions`;
   const dataTestid = `builder-activity-item-flow-${index}`;
 
-  const { control, getFieldState } = useFormContext();
+  const { control, getFieldState } = useCustomFormContext();
   const { append: appendCondition, remove: removeCondition } = useFieldArray<
     Record<string, Condition[]>
   >({
