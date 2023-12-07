@@ -9,6 +9,8 @@ import {
   getEventsWithHiddenInTimeView,
   getNotHiddenEvents,
   getNextDayComparison,
+  getStartEndComparison,
+  removeSecondsFromTime,
   getPreparedEvents,
   getStartOfYearDateTime,
   getEndOfYearDateTime,
@@ -31,6 +33,20 @@ describe('getNextDayComparison', () => {
     'startTime=$startTime, endTime=$endTime, expected=$expected:',
     ({ startTime, endTime, expected }) => {
       expect(getNextDayComparison(startTime, endTime)).toBe(expected);
+    },
+  );
+});
+
+describe('getStartEndComparison', () => {
+  test.each`
+    startTime  | endTime    | expected
+    ${'14:00'} | ${'05:00'} | ${false}
+    ${'00:00'} | ${'23:59'} | ${true}
+    ${'12:00'} | ${'12:00'} | ${false}
+  `(
+    'startTime=$startTime, endTime=$endTime, expected=$expected:',
+    ({ startTime, endTime, expected }) => {
+      expect(getStartEndComparison(startTime, endTime)).toBe(expected);
     },
   );
 });
@@ -1074,23 +1090,35 @@ describe('createEvents', () => {
 });
 
 describe('getDaysInMonthlyPeriodicity', () => {
-  test('returns an array of dates in monthly periodicity', () => {
-    const chosenDate = 15;
-    const eventStart = new Date('2023-01-15T00:00:00.000Z');
-    const eventEnd = new Date('2023-03-31T23:59:59.999Z');
+  const eventStart1 = new Date('2023-01-15T00:00:00.000Z');
+  const eventEnd1 = new Date('2023-03-31T23:59:59.999Z');
+  const eventStart2 = new Date('2023-01-25T00:00:00.000Z');
+  const eventEnd2 = new Date('2023-03-20T23:59:59.999Z');
+  const eventStart3 = new Date('2023-04-15T00:00:00.000Z');
+  const eventEnd3 = new Date('2023-03-31T23:59:59.999Z');
+  test.each`
+    chosenDate | eventStart     | eventEnd     | expected
+    ${15}      | ${eventStart1} | ${eventEnd1} | ${3}
+    ${25}      | ${eventStart2} | ${eventEnd2} | ${2}
+    ${15}      | ${eventStart3} | ${eventEnd3} | ${0}
+  `(
+    'chosenDate=$chosenDate, eventStart=$eventStart, eventEnd=$eventEnd, expected=$expected',
+    ({ chosenDate, eventStart, eventEnd, expected }) => {
+      expect(getDaysInMonthlyPeriodicity({ chosenDate, eventStart, eventEnd })).toHaveLength(
+        expected,
+      );
+    },
+  );
+});
 
-    const result = getDaysInMonthlyPeriodicity({ chosenDate, eventStart, eventEnd });
-
-    expect(result).toHaveLength(2);
-  });
-
-  test('returns empty array if chosen date is after event end', () => {
-    const chosenDate = 15;
-    const eventStart = new Date('2023-04-15T00:00:00.000Z');
-    const eventEnd = new Date('2023-03-31T23:59:59.999Z');
-
-    const result = getDaysInMonthlyPeriodicity({ chosenDate, eventStart, eventEnd });
-
-    expect(result).toHaveLength(0);
+describe('removeSecondsFromTime', () => {
+  test.each`
+    time                   | expected
+    ${'12:34:56'}          | ${'12:34'}
+    ${null}                | ${null}
+    ${undefined}           | ${null}
+    ${'invalidTimeFormat'} | ${null}
+  `('time=$time, expected=$expected:', ({ time, expected }) => {
+    expect(removeSecondsFromTime(time)).toBe(expected);
   });
 });

@@ -33,6 +33,7 @@ const LENGTH_TO_SET_ID_IS_HIDDEN = 2;
 const LENGTH_TO_FILTER_DAYS_EVENTS = 3;
 const DEFAULT_START_TIME = '00:00:00';
 const DEFAULT_END_TIME = '23:59:00';
+const timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
 
 export const getPreparedEvents = (
   events: CalendarEvent[],
@@ -102,8 +103,7 @@ export const getStartOfYearDateTime = (year: number) => startOfYear(new Date(yea
 export const getEndOfYearDateTime = (year: number) => endOfYear(new Date(year, 0, 1));
 
 export const getDateFromDateTimeString = (date: Date, time: string) => {
-  const regex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
-  if (!regex.test(time)) return date;
+  if (!timeRegex.test(time)) return date;
 
   const [hours, minutes, seconds] = time.split(':');
 
@@ -472,7 +472,7 @@ export const getNextDayComparison = (startTime: string, endTime: string) =>
   !getStartEndComparison(startTime, endTime) && startTime !== endTime;
 
 export const removeSecondsFromTime = (time?: string | null) => {
-  if (!time) return null;
+  if (!time || !timeRegex.test(time)) return null;
   const [hours, minutes] = time.split(':');
 
   return `${hours}:${minutes}`;
