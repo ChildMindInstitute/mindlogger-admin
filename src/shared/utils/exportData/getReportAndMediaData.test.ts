@@ -1,6 +1,7 @@
-import { DecryptedAnswerData } from 'shared/types';
+import { DecryptedAnswerData, UserActionType } from 'shared/types';
 import {
   mockedDecryptedAnswersWithSubscales,
+  mockedDecryptedEventsForDrawing,
   mockedDecryptedObjectForAudio,
   mockedDecryptedObjectForDrawing,
   mockedDecryptedObjectForPhoto,
@@ -8,7 +9,13 @@ import {
   mockedParsedAnswers,
 } from 'shared/mock';
 
-import { getDecryptedAnswersObject, getReportData, getMediaData } from './getReportAndMediaData';
+import {
+  getDecryptedAnswersObject,
+  getReportData,
+  getMediaData,
+  getActivityJourneyData,
+  checkIfHasJsonLdEventScreen,
+} from './getReportAndMediaData';
 import { ItemResponseType } from '../../consts';
 import { getObjectFromList } from '../getObjectFromList';
 
@@ -172,11 +179,10 @@ describe('getReportAndMediaData', () => {
     });
     test('should return an array with items', () => {
       const { decryptedAnswers } = mockedParsedAnswers[0];
-      const rawAnswersObject = {
-        single: decryptedAnswers[0],
-        multi: decryptedAnswers[1],
-        slider: decryptedAnswers[2],
-      };
+      const rawAnswersObject = getObjectFromList(
+        decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const result = getReportData([], rawAnswersObject, decryptedAnswers);
@@ -266,7 +272,7 @@ describe('getReportAndMediaData', () => {
           rawScore: 9,
           response: 'value: 2',
           reviewing_id: null,
-          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          secret_user_id: 'respondentSecretId',
           'ss-1': 5,
           'ss-2': 6,
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
@@ -287,7 +293,7 @@ describe('getReportAndMediaData', () => {
           rawScore: 4,
           response: 'value: 0',
           reviewing_id: null,
-          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
         },
@@ -307,7 +313,7 @@ describe('getReportAndMediaData', () => {
           rawScore: 21,
           response: 'value: 2',
           reviewing_id: null,
-          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
         },
@@ -326,7 +332,7 @@ describe('getReportAndMediaData', () => {
           rawScore: '',
           response: 'value: 0',
           reviewing_id: null,
-          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
         },
@@ -345,7 +351,7 @@ describe('getReportAndMediaData', () => {
           rawScore: '',
           response: '25',
           reviewing_id: null,
-          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
         },
@@ -387,6 +393,180 @@ describe('getReportAndMediaData', () => {
       //@ts-ignore
       const result = getMediaData([], decryptedAnswers);
       expect(result).toEqual(expected);
+    });
+  });
+  describe('getActivityJourneyData', () => {
+    test('should return an array for journey data', () => {
+      const decryptedAnswers = [mockedDecryptedObjectForDrawing];
+      const rawAnswersObject = getObjectFromList(
+        decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
+      const result = getActivityJourneyData(
+        [],
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        rawAnswersObject,
+        decryptedAnswers,
+        mockedDecryptedEventsForDrawing,
+      );
+      expect(result).toEqual([
+        {
+          activity_end_time: '1689770404000',
+          activity_flow: null,
+          activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
+          activity_name: 'New Activity#Drawing-item2',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1689770351000',
+          id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          item: 'drawing',
+          options: '',
+          press_back_time: '',
+          press_done_time: '',
+          press_next_time: '',
+          press_skip_time: '',
+          press_undo_time: '',
+          prompt: 'drawing\n',
+          response:
+            'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+          response_option_selection_time: '1689770402756',
+          secret_user_id: 'respondentSecretId',
+          user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.1.1',
+        },
+        {
+          activity_end_time: '1689770404000',
+          activity_flow: null,
+          activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
+          activity_name: 'New Activity#Drawing-item2',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1689770351000',
+          id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          item: 'drawing',
+          options: '',
+          press_back_time: '',
+          press_done_time: '1689770404752',
+          press_next_time: '',
+          press_skip_time: '',
+          press_undo_time: '',
+          prompt: 'drawing\n',
+          response: '',
+          response_option_selection_time: '',
+          secret_user_id: 'respondentSecretId',
+          user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.1.1',
+        },
+      ]);
+    });
+    test('should return an array for journey data with splash screen', () => {
+      const decryptedAnswers = [mockedDecryptedObjectForDrawing];
+      const rawAnswersObject = getObjectFromList(
+        decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
+      const events = [
+        {
+          type: 'NEXT',
+          screen: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
+          time: 1689770402755,
+        },
+        ...mockedDecryptedEventsForDrawing,
+      ];
+      const result = getActivityJourneyData(
+        [],
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        rawAnswersObject,
+        decryptedAnswers,
+        events,
+      );
+      expect(result).toEqual([
+        {
+          activity_end_time: '1689770404000',
+          activity_flow: null,
+          activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
+          activity_name: 'New Activity#Drawing-item2',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1689770351000',
+          id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          item: 'Splash Screen',
+          options: '',
+          press_back_time: '',
+          press_done_time: '',
+          press_next_time: '1689770402755',
+          press_skip_time: '',
+          press_undo_time: '',
+          prompt: '',
+          response: '',
+          response_option_selection_time: '',
+          secret_user_id: 'respondentSecretId',
+          user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.1.1',
+        },
+        {
+          activity_end_time: '1689770404000',
+          activity_flow: null,
+          activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
+          activity_name: 'New Activity#Drawing-item2',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1689770351000',
+          id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          item: 'drawing',
+          options: '',
+          press_back_time: '',
+          press_done_time: '',
+          press_next_time: '',
+          press_skip_time: '',
+          press_undo_time: '',
+          prompt: 'drawing\n',
+          response:
+            'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+          response_option_selection_time: '1689770402756',
+          secret_user_id: 'respondentSecretId',
+          user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.1.1',
+        },
+        {
+          activity_end_time: '1689770404000',
+          activity_flow: null,
+          activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
+          activity_name: 'New Activity#Drawing-item2',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1689770351000',
+          id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
+          item: 'drawing',
+          options: '',
+          press_back_time: '',
+          press_done_time: '1689770404752',
+          press_next_time: '',
+          press_skip_time: '',
+          press_undo_time: '',
+          prompt: 'drawing\n',
+          response: '',
+          response_option_selection_time: '',
+          secret_user_id: 'respondentSecretId',
+          user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.1.1',
+        },
+      ]);
+    });
+  });
+  describe('checkIfHasJsonLdEventScreen', () => {
+    const decryptedEventsWithItemImportedFromGithub = [
+      {
+        type: UserActionType.Next,
+        screen:
+          'https://raw.githubusercontent.com/ChildMindInstitute/NIMH_EMA_applet/master/activities/<activity_name>/items/<item_name>',
+        time: 1689770402755,
+      },
+    ];
+    test.each`
+      decryptedEvents                              | expected | description
+      ${mockedDecryptedEventsForDrawing}           | ${false} | ${'should return false for regular items'}
+      ${decryptedEventsWithItemImportedFromGithub} | ${true}  | ${'should return true for applet with items imported from github'}
+    `('$description', ({ decryptedEvents, expected }) => {
+      const result = checkIfHasJsonLdEventScreen(decryptedEvents);
+      expect(result).toBe(expected);
     });
   });
 });
