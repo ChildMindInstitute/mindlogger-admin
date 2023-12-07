@@ -61,6 +61,16 @@ const preloadedState = {
 };
 
 describe('AboutApplet', () => {
+  beforeEach(() => {
+    const mockIntersectionObserver = jest.fn();
+    mockIntersectionObserver.mockReturnValue({
+      observe: () => null,
+      unobserve: () => null,
+      disconnect: () => null,
+    });
+    window.IntersectionObserver = mockIntersectionObserver;
+  });
+
   test('should validate applet name', async () => {
     const route = `/builder/${mockedAppletId}/about`;
     renderWithAppletFormData({
