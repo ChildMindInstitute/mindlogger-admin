@@ -46,7 +46,12 @@ export const ExportDataSetting = () => {
   const commonProps = {
     maxDate,
     control,
-    inputSx: { width: '19rem' },
+    inputSx: {
+      width: '19rem',
+      '& .MuiInputLabel-outlined': {
+        textTransform: 'capitalize',
+      },
+    },
   };
 
   const onCloseCallback = () => {
@@ -108,7 +113,7 @@ export const ExportDataSetting = () => {
               {...commonProps}
               name="fromDate"
               onCloseCallback={onCloseCallback}
-              label={t('fromDate')}
+              label={t('startDate')}
               minDate={minDate}
               data-testid={`${dataTestid}-from-date`}
             />
@@ -117,7 +122,7 @@ export const ExportDataSetting = () => {
               {...commonProps}
               name="toDate"
               minDate={fromDate}
-              label={t('toDate')}
+              label={t('endDate')}
               data-testid={`${dataTestid}-to-date`}
             />
           </StyledFlexTopCenter>
