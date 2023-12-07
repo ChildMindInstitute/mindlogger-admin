@@ -1,7 +1,9 @@
+import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
 
+import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
 
 import { CalculationType, ItemResponseType, Roles, ScoreReportType } from './consts';
@@ -1734,3 +1736,13 @@ export const mockedParsedAnswers = [
     decryptedEvents: [],
   },
 ];
+
+export const mockedParams = {
+  appletId: mockedAppletFormData.id,
+  activityId: mockedAppletFormData.activities[0].id,
+};
+export const mockedActivityRoute = generatePath(page.builderAppletActivity, mockedParams);
+export const mockedRenderAppletFormDataActivityOptions = {
+  route: mockedActivityRoute,
+  routePath: page.builderAppletActivity,
+};

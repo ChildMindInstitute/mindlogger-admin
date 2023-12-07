@@ -4,7 +4,10 @@ import { createRef } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { ItemResponseType } from 'shared/consts';
-import { mockedSingleSelectFormValues } from 'shared/mock';
+import {
+  mockedRenderAppletFormDataActivityOptions,
+  mockedSingleSelectFormValues,
+} from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils';
 
 import {
@@ -38,7 +41,6 @@ import {
   renderItemConfiguration,
   getAppletFormDataWithItem,
   removeUuidValues,
-  mockedOptions,
 } from '../__mocks__';
 
 describe('ItemConfiguration: Item Type', () => {
@@ -79,7 +81,7 @@ describe('ItemConfiguration: Item Type', () => {
     renderWithAppletFormData({
       children: renderItemConfiguration(),
       appletFormData: getAppletFormDataWithItem(mockedEmptyItem, { isReviewable }),
-      options: mockedOptions,
+      options: mockedRenderAppletFormDataActivityOptions,
     });
 
     const type = screen.getByTestId(mockedTypeTestid);
