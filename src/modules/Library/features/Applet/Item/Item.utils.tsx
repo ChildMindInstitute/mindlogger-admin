@@ -1,7 +1,7 @@
 import uniqueId from 'lodash.uniqueid';
 
 import { ItemResponseType } from 'shared/consts';
-import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+import { Item } from 'shared/state';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import { getHighlightedText } from 'shared/utils';
 

@@ -46,6 +46,7 @@ import {
   SecondsManipulation,
   GetReminderTimeComparison,
   GetReminder,
+  StartEndTimeTestContext,
 } from './EventForm.types';
 
 const { t } = i18n;
@@ -154,32 +155,35 @@ export const getBetweenStartEndNextDayComparison = ({
   return startTimeDate <= timeDate && fromTimeDate <= timeDate && timeDate <= endTimeDate;
 };
 
+export const startEndTimeTest = (_: string | undefined, testContext: StartEndTimeTestContext) => {
+  const { startTime, endTime } = testContext.parent;
+  if (!startTime || !endTime) {
+    return false;
+  }
+
+  return startTime !== endTime;
+};
+
 export const getTimeComparison = (message: string) =>
   yup.string().when('alwaysAvailable', {
     is: false,
-    then: (schema) =>
-      schema.test('is-valid-period', message, function scheduledStartEnd() {
-        const { startTime, endTime } = this.parent;
-        if (!startTime || !endTime) {
-          return true;
-        }
-
-        return startTime !== endTime;
-      }),
+    then: (schema) => schema.test('is-valid-period', message, startEndTimeTest),
     otherwise: (schema) => schema,
   });
+
+export const timerDurationTest = (value: string | undefined) => {
+  if (!value) {
+    return false;
+  }
+  const [hours, minutes] = value.split(':');
+
+  return Number(hours) > 0 || Number(minutes) > 0;
+};
 
 export const getTimerDurationCheck = () => {
   const timerDurationCheck = t('timerDurationCheck');
 
-  return yup.string().test('is-valid-duration', timerDurationCheck, (value) => {
-    if (!value) {
-      return false;
-    }
-    const [hours, minutes] = value.split(':');
-
-    return Number(hours) > 0 || Number(minutes) > 0;
-  });
+  return yup.string().test('is-valid-duration', timerDurationCheck, timerDurationTest);
 };
 
 export const notificationValidPeriodTest =
@@ -266,7 +270,7 @@ export const getNotificationsValidation = ({
       return schema;
     });
 
-const createTimeEntity = (timeQuantity: number) => timeQuantity.toString().padStart(2, '0');
+export const createTimeEntity = (timeQuantity: number) => timeQuantity.toString().padStart(2, '0');
 
 export const convertSecondsToHHmmString = (timeInSeconds: number) => {
   const date = new Date(timeInSeconds * SECONDS_TO_MILLISECONDS_MULTIPLIER);
@@ -276,7 +280,7 @@ export const convertSecondsToHHmmString = (timeInSeconds: number) => {
   return `${createTimeEntity(hours)}:${createTimeEntity(minutes)}`;
 };
 
-const getActivityOrFlowId = (
+export const getActivityOrFlowId = (
   editedEvent?: CalendarEvent,
   startFlowIcon?: boolean,
   eventActivityOrFlowId?: string,
@@ -287,7 +291,7 @@ const getActivityOrFlowId = (
   return eventActivityOrFlowId;
 };
 
-const getStartEndDates = (
+export const getStartEndDates = (
   isPeriodicityOnce: boolean,
   isPeriodicityAlways: boolean,
   defaultStartDate: Date,
@@ -298,17 +302,15 @@ const getStartEndDates = (
   if (isPeriodicityOnce || isPeriodicityAlways) {
     return { startDate: defaultStartDate, endDate: endOfYear(defaultStartDate) };
   }
+  const startDate = eventStart || defaultStartDate;
 
   return {
-    startDate: eventStart || defaultStartDate,
-    endDate:
-      editedEvent && eventEnd === null
-        ? null
-        : eventEnd || endOfYear(eventStart || defaultStartDate),
+    startDate,
+    endDate: editedEvent && eventEnd === null ? null : eventEnd || endOfYear(startDate),
   };
 };
 
-const getNotifications = (type: SecondsManipulation, notifications?: EventNotifications) =>
+export const getNotifications = (type: SecondsManipulation, notifications?: EventNotifications) =>
   notifications?.map((notification) => {
     const { atTime, fromTime, toTime } = notification || {};
     if (notification.triggerType === NotificationType.Fixed) {
@@ -334,7 +336,7 @@ const getNotifications = (type: SecondsManipulation, notifications?: EventNotifi
     };
   }) || null;
 
-const getReminder = ({ type, reminder }: GetReminder) => {
+export const getReminder = ({ type, reminder }: GetReminder) => {
   if (!reminder) return null;
   const isFromForm = type === SecondsManipulation.AddSeconds;
 
@@ -592,7 +594,7 @@ export const getWeeklyDays = ({ daysInPeriod, startDate, isCrossDayEvent }: GetW
     { daysArr: [], daysInfoArr: [], weeklyDaysCount: 0 },
   );
 
-const getActivityIncompleteCommonFields = (formContext: yup.TestContext<yup.AnyObject>) => {
+export const getActivityIncompleteCommonFields = (formContext: yup.TestContext<yup.AnyObject>) => {
   const startDate = formContext.from?.[1]?.value?.startDate;
   const endDate = formContext.from?.[1]?.value?.endDate;
   const startTime = formContext.from?.[1]?.value?.startTime;
@@ -603,40 +605,45 @@ const getActivityIncompleteCommonFields = (formContext: yup.TestContext<yup.AnyO
   return { startDate, endDate, periodicity, isCrossDayEvent, startTime, endTime };
 };
 
+export const activityAvailabilityAtDayTest = (
+  value: number | undefined,
+  testContext: yup.TestContext<yup.AnyObject>,
+) => {
+  if (!value || value === 0) return true;
+  const { startDate, endDate, periodicity, isCrossDayEvent } =
+    getActivityIncompleteCommonFields(testContext);
+  const daysInPeriod = getDaysInPeriod({ isCrossDayEvent, startDate, endDate });
+  if (periodicity === Periodicity.Once) {
+    return value < ONCE_ACTIVITY_INCOMPLETE_LIMITATION;
+  }
+  if (periodicity === Periodicity.Daily || periodicity === Periodicity.Weekdays) {
+    return value < daysInPeriod.length;
+  }
+  if (periodicity === Periodicity.Weekly) {
+    const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
+
+    return weeklyDays.daysArr.includes(value);
+  }
+  if (periodicity === Periodicity.Monthly) {
+    const includedMonthlyDates = getDaysInMonthlyPeriodicity({
+      chosenDate: getDate(startDate),
+      eventStart: startDate,
+      eventEnd: endDate,
+    }) as Date[];
+
+    return value < includedMonthlyDates.length;
+  }
+
+  return true;
+};
+
 export const getActivityIncompleteValidation = () =>
   yup
     .number()
     .test(
       'activity-availability-at-day',
       t('activityIsUnavailable'),
-      function activityAvailabilityAtDayTest(value) {
-        if (!value || value === 0) return true;
-        const { startDate, endDate, periodicity, isCrossDayEvent } =
-          getActivityIncompleteCommonFields(this);
-        const daysInPeriod = getDaysInPeriod({ isCrossDayEvent, startDate, endDate });
-        if (periodicity === Periodicity.Once) {
-          return value < ONCE_ACTIVITY_INCOMPLETE_LIMITATION;
-        }
-        if (periodicity === Periodicity.Daily || periodicity === Periodicity.Weekdays) {
-          return value < daysInPeriod.length;
-        }
-        if (periodicity === Periodicity.Weekly) {
-          const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
-
-          return weeklyDays.daysArr.includes(value);
-        }
-        if (periodicity === Periodicity.Monthly) {
-          const includedMonthlyDates = getDaysInMonthlyPeriodicity({
-            chosenDate: getDate(startDate),
-            eventStart: startDate,
-            eventEnd: endDate,
-          }) as Date[];
-
-          return value < includedMonthlyDates.length;
-        }
-
-        return true;
-      },
+      activityAvailabilityAtDayTest,
     );
 
 export const getReminderTimeComparison = ({
@@ -655,76 +662,75 @@ export const getReminderTimeComparison = ({
   });
 };
 
+export const reminderTimeTest = (
+  value: string | undefined,
+  testContext: yup.TestContext<yup.AnyObject>,
+) => {
+  if (!value) return true;
+  const time = value;
+  const { activityIncomplete } = testContext.parent;
+  const { startTime, endTime, startDate, endDate, periodicity, isCrossDayEvent } =
+    getActivityIncompleteCommonFields(testContext);
+  const isAlwaysPeriodicity = periodicity === Periodicity.Always;
+  const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
+  const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
+
+  if (isAlwaysPeriodicity) return true;
+  if (!isCrossDayEvent || isWeekdaysPeriodicity || isMonthlyPeriodicity) {
+    return getBetweenStartEndNextDaySingleComparison({
+      time,
+      rangeStartTime: startTime,
+      rangeEndTime: endTime,
+    });
+  }
+
+  const isOncePeriodicity = periodicity === Periodicity.Once;
+  const isDailyPeriodicity = periodicity === Periodicity.Daily;
+  const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
+  const daysInPeriod = getDaysInPeriod({
+    isCrossDayEvent,
+    startDate,
+    endDate: isOncePeriodicity ? startDate : endDate,
+  });
+  const isOnceDailyCrossDay = daysInPeriod.length - 1 === activityIncomplete;
+
+  if (isOncePeriodicity) {
+    return getReminderTimeComparison({
+      time,
+      startTime,
+      endTime,
+      isCrossDay: isOnceDailyCrossDay,
+    });
+  }
+
+  if (isDailyPeriodicity) {
+    if (activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE || isOnceDailyCrossDay) {
+      return getReminderTimeComparison({
+        time,
+        startTime,
+        endTime,
+        isCrossDay: isOnceDailyCrossDay,
+      });
+    }
+
+    return getBetweenStartEndNextDaySingleComparison({
+      time,
+      rangeStartTime: startTime,
+      rangeEndTime: endTime,
+    });
+  }
+
+  if (isWeeklyPeriodicity) {
+    const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
+    const isCrossDay =
+      weeklyDays.daysInfoArr.find((day) => day.dayNumber === activityIncomplete)?.isCrossDay ??
+      false;
+
+    return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
+  }
+
+  return true;
+};
+
 export const getReminderTimeValidation = () =>
-  yup
-    .string()
-    .test(
-      'reminder-time-validation',
-      t('activityUnavailableAtTime'),
-      function reminderTimeTest(value) {
-        if (!value) return true;
-        const time = value;
-        const { activityIncomplete } = this.parent;
-        const { startTime, endTime, startDate, endDate, periodicity, isCrossDayEvent } =
-          getActivityIncompleteCommonFields(this);
-        const isAlwaysPeriodicity = periodicity === Periodicity.Always;
-        const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
-        const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
-
-        if (isAlwaysPeriodicity) return true;
-        if (!isCrossDayEvent || isWeekdaysPeriodicity || isMonthlyPeriodicity) {
-          return getBetweenStartEndNextDaySingleComparison({
-            time,
-            rangeStartTime: startTime,
-            rangeEndTime: endTime,
-          });
-        }
-
-        const isOncePeriodicity = periodicity === Periodicity.Once;
-        const isDailyPeriodicity = periodicity === Periodicity.Daily;
-        const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
-        const daysInPeriod = getDaysInPeriod({
-          isCrossDayEvent,
-          startDate,
-          endDate: isOncePeriodicity ? startDate : endDate,
-        });
-        const isOnceDailyCrossDay = daysInPeriod.length - 1 === activityIncomplete;
-
-        if (isOncePeriodicity) {
-          return getReminderTimeComparison({
-            time,
-            startTime,
-            endTime,
-            isCrossDay: isOnceDailyCrossDay,
-          });
-        }
-
-        if (isDailyPeriodicity) {
-          if (activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE || isOnceDailyCrossDay) {
-            return getReminderTimeComparison({
-              time,
-              startTime,
-              endTime,
-              isCrossDay: isOnceDailyCrossDay,
-            });
-          }
-
-          return getBetweenStartEndNextDaySingleComparison({
-            time,
-            rangeStartTime: startTime,
-            rangeEndTime: endTime,
-          });
-        }
-
-        if (isWeeklyPeriodicity) {
-          const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
-          const isCrossDay =
-            weeklyDays.daysInfoArr.find((day) => day.dayNumber === activityIncomplete)
-              ?.isCrossDay ?? false;
-
-          return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
-        }
-
-        return true;
-      },
-    );
+  yup.string().test('reminder-time-validation', t('activityUnavailableAtTime'), reminderTimeTest);

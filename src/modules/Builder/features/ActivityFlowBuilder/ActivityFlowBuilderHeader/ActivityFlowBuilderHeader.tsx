@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
@@ -7,6 +6,7 @@ import { Svg, ButtonWithMenu } from 'shared/components';
 import { StyledBuilderContainerHeader } from 'shared/features';
 import { falseReturnFunc } from 'shared/utils';
 import { AppletFormValues } from 'modules/Builder/types';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ClearFlowModal } from '../ClearFlowModal';
 import { getMenuItems } from '../ActivityFlowBuilder.utils';
@@ -20,7 +20,7 @@ export const ActivityFlowBuilderHeader = ({
   headerProps,
 }: ActivityFlowBuilderHeaderProps) => {
   const { t } = useTranslation('app');
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
   const activities: AppletFormValues['activities'] = watch('activities');
   const [clearFlowModalVisible, setClearFlowModalVisible] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

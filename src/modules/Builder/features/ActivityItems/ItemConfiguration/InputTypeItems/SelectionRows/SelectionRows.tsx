@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn } from 'shared/styles';
 import { SingleAndMultiSelectRowOption } from 'shared/state';
@@ -21,7 +21,7 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
 
   const { t } = useTranslation('app');
 
-  const { watch, setValue, getValues } = useFormContext();
+  const { watch, setValue, getValues } = useCustomFormContext();
 
   const rowsName = `${name}.responseValues.rows`;
   const rows = watch(rowsName);

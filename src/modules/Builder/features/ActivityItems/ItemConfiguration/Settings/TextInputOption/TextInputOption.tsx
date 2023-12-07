@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
 import {
   theme,
@@ -23,7 +23,7 @@ import { TextInputOptionProps } from './TextInputOption.types';
 export const TextInputOption = ({ name, onRemove }: TextInputOptionProps) => {
   const { t } = useTranslation('app');
 
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
 
   const settings = watch(`${name}.config`);
 

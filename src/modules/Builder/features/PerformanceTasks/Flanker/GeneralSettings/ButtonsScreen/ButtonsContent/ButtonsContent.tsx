@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 import get from 'lodash.get';
 
@@ -10,7 +9,7 @@ import {
   StyledTitleMedium,
   theme,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
 import { ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
@@ -31,7 +30,7 @@ export const ButtonsContent = () => {
     setValue,
     trigger,
     formState: { errors },
-  } = useFormContext();
+  } = useCustomFormContext();
   const { fieldName, activityObjField } = useCurrentActivity();
   const buttonsField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.buttons`;
   const itemButtons: FlankerButtonSetting[] = watch(buttonsField);

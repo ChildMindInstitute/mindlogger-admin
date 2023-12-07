@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { useWatch, useFormContext } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
-
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { ConditionRowType } from 'modules/Builder/types';
+
 import { StyledCondition, StyledInputController, StyledSelectController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
 import { ConditionItemType } from './Condition.const';
@@ -35,7 +36,7 @@ export const Condition = ({
   'data-testid': dataTestid,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
-  const { control } = useFormContext();
+  const { control } = useCustomFormContext();
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 

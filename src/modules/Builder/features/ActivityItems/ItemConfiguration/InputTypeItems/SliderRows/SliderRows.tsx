@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
 import get from 'lodash.get';
 
 import { Svg } from 'shared/components/Svg';
 import { theme, StyledFlexColumn } from 'shared/styles';
 import { ItemAlert, SliderItemResponseValues } from 'shared/state';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';
@@ -14,7 +14,7 @@ import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
   const { t } = useTranslation('app');
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue } = useCustomFormContext();
 
   const sliderName = isMultiple ? `${name}.responseValues.rows` : `${name}.responseValues`;
   const alertsName = `${name}.alerts`;

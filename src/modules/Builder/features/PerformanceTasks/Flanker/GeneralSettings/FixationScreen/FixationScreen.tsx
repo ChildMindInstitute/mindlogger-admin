@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { FlankerItemPositions } from 'modules/Builder/types';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
 import { FixationContent } from './FixationContent';
 
@@ -13,7 +12,7 @@ export const FixationScreen = () => {
   const { activityObjField } = useCurrentActivity();
   const {
     formState: { errors },
-  } = useFormContext();
+  } = useCustomFormContext();
 
   const error = get(
     errors,

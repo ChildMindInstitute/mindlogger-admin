@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
 import { ValidationError } from 'yup';
 
 import { Update } from 'history';
@@ -24,7 +23,7 @@ import {
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
 import { auth, workspaces } from 'redux/modules';
-import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
+import { useAppletPrivateKeySetter, useCustomFormContext } from 'modules/Builder/hooks';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
@@ -47,7 +46,7 @@ import {
 } from './SaveAndPublish.utils';
 
 export const useAppletDataFromForm = () => {
-  const { getValues } = useFormContext() || {};
+  const { getValues } = useCustomFormContext() || {};
   const isNewApplet = useCheckIfNewApplet();
 
   return (encryption?: Encryption): SingleApplet | undefined => {
@@ -126,7 +125,7 @@ export const useCheckIfHasAtLeastOneItem = () => {
 };
 
 export const useCheckIfHasEmptyRequiredFields = () => {
-  const { getValues } = useFormContext();
+  const { getValues } = useCustomFormContext();
   const appletSchema = AppletSchema();
 
   return async () => {
@@ -143,7 +142,7 @@ export const useCheckIfHasEmptyRequiredFields = () => {
 };
 
 export const useCheckIfHasErrorsInFields = () => {
-  const { getValues } = useFormContext();
+  const { getValues } = useCustomFormContext();
   const appletSchema = AppletSchema();
 
   return async () => {
@@ -231,7 +230,7 @@ export const useUpdatedAppletNavigate = () => {
   const { activityId, activityFlowId, itemId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { getValues, reset } = useFormContext();
+  const { getValues, reset } = useCustomFormContext();
 
   const { getAppletWithItems } = applet.thunk;
 
@@ -261,7 +260,7 @@ export const useSaveAndPublishSetup = (
   const {
     trigger,
     formState: { dirtyFields, isDirty },
-  } = useFormContext();
+  } = useCustomFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletDataFromForm();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();

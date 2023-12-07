@@ -6,6 +6,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { initialStateData } from 'shared/state';
 import {
+  mockedActivityId,
   mockedApplet,
   mockedAppletFormData,
   mockedAppletId,
@@ -16,7 +17,7 @@ import { Roles } from 'shared/consts';
 
 import { ScoresAndReports } from './ScoresAndReports';
 
-const route = `/builder/${mockedAppletId}/activities/56a4ebe4-3d7f-485c-8293-093cabf29fa3/settings/scores-and-reports`;
+const route = `/builder/${mockedAppletId}/activities/${mockedActivityId}/settings/scores-and-reports`;
 const routePath = page.builderAppletActivitySettingsItem;
 const dataTestid = 'builder-activity-settings-scores-and-reports';
 const mockedUseNavigate = jest.fn();

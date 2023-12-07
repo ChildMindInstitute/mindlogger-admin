@@ -6,6 +6,7 @@ type UseIntersectionObserverProps = {
   isActive?: boolean;
   onAppear?(): void;
   onHide?(): void;
+  hasTrigger?: boolean;
 };
 
 export const useIntersectionObserver = ({
@@ -14,6 +15,7 @@ export const useIntersectionObserver = ({
   isActive = true,
   onAppear,
   onHide,
+  hasTrigger = false,
 }: UseIntersectionObserverProps) => {
   useEffect(() => {
     if (!isActive) return;
@@ -45,5 +47,5 @@ export const useIntersectionObserver = ({
     return () => {
       observer.unobserve(target);
     };
-  }, [targetSelector, onAppear, onHide, rootSelector, isActive]);
+  }, [targetSelector, onAppear, onHide, rootSelector, isActive, hasTrigger]);
 };

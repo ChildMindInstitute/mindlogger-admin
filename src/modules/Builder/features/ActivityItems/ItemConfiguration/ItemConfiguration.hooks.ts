@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { doubleBrackets } from 'shared/utils';
 
 import { checkIfQuestionIncludesVariables } from './ItemConfiguration.utils';
 
 export const useCheckIfItemHasVariables = (itemField: string) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const { watch, setValue, trigger } = useFormContext();
+  const { watch, setValue, trigger } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   const activityItems = watch(`${fieldName}.items`) ?? [];
   const questionField = `${itemField}.question`;

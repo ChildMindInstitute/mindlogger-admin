@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import { StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
@@ -10,13 +10,14 @@ import {
   StyledSummaryRow,
   StyledSummarySelectController,
 } from 'shared/styles/styledComponents/ConditionalSummary';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { SummaryRowProps } from './SummaryRow.types';
 import { getItemsOptions, getMatchOptions } from './SummaryRow.utils';
 
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue } = useFormContext();
+  const { control, setValue } = useCustomFormContext();
 
   const items = useWatch({ name: `${activityName}.items` });
 
