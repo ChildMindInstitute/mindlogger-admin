@@ -1,7 +1,14 @@
 import { DecryptedAnswerData } from 'shared/types';
-import { mockedDecryptedAnswersWithSubscales, mockedParsedAnswers } from 'shared/mock';
+import {
+  mockedDecryptedAnswersWithSubscales,
+  mockedDecryptedObjectForAudio,
+  mockedDecryptedObjectForDrawing,
+  mockedDecryptedObjectForPhoto,
+  mockedDecryptedObjectForVideo,
+  mockedParsedAnswers,
+} from 'shared/mock';
 
-import { getDecryptedAnswersObject, getReportData } from './getReportAndMediaData';
+import { getDecryptedAnswersObject, getReportData, getMediaData } from './getReportAndMediaData';
 import { ItemResponseType } from '../../consts';
 import { getObjectFromList } from '../getObjectFromList';
 
@@ -343,6 +350,43 @@ describe('getReportAndMediaData', () => {
           version: '1.2.0',
         },
       ]);
+    });
+  });
+  describe('getMediaData', () => {
+    const answersForRegularItems = mockedParsedAnswers[0].decryptedAnswers;
+    const resultForDrawing = {
+      fileName:
+        'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+      url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/023cf7e7-6083-443a-b74a-f32b75a711cd/e2e611df-02d5-4316-8406-c5d685b94090.svg',
+    };
+    const resultForPhoto = {
+      fileName:
+        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-photo_text.jpg',
+      url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/d595acfc-8322-4d45-8ba5-c2f793b5476e/rn_image_picker_lib_temp_46ecc18c-2c7d-4d72-8d27-636c37e2e6f3.jpg',
+    };
+    const resultForVideo = {
+      fileName:
+        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-video_text.mp4',
+      url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/4fc51edd-2dab-4048-836b-f1b9bf0270f6/rn_image_picker_lib_temp_9309b1eb-90b0-4908-a24d-be6fa06def10.mp4',
+    };
+    const resultForAudio = {
+      fileName:
+        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-audio_text.m4a',
+      url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/73ef3a61-8053-4558-814e-05baafbbdc90/f01c225c-62df-4867-b282-66f585a65109.m4a',
+    };
+
+    test.each`
+      decryptedAnswers                     | expected              | description
+      ${answersForRegularItems}            | ${[]}                 | ${'should return an empty array for regular items'}
+      ${[mockedDecryptedObjectForDrawing]} | ${[resultForDrawing]} | ${'should return an media data for drawing'}
+      ${[mockedDecryptedObjectForPhoto]}   | ${[resultForPhoto]}   | ${'should return an media data for photo'}
+      ${[mockedDecryptedObjectForVideo]}   | ${[resultForVideo]}   | ${'should return an media data for video'}
+      ${[mockedDecryptedObjectForAudio]}   | ${[resultForAudio]}   | ${'should return an media data for audio'}
+    `('$description', ({ decryptedAnswers, expected }) => {
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getMediaData([], decryptedAnswers);
+      expect(result).toEqual(expected);
     });
   });
 });
