@@ -32,6 +32,9 @@ export const prepareData = async (
   const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
   const remappedParsedAnswers = remapFailedAnswers(parsedAnswers);
   const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(remappedParsedAnswers);
+  console.log({
+    parsedAnswersWithPublicUrls,
+  });
 
   return parsedAnswersWithPublicUrls.reduce<AppletExportData>((acc, data) => {
     const rawAnswersObject = getObjectFromList(

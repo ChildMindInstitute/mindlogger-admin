@@ -1,8 +1,9 @@
 import { DecryptedAnswerData } from 'shared/types';
-import { mockedParsedAnswers } from 'shared/mock';
+import { mockedDecryptedAnswersWithSubscales, mockedParsedAnswers } from 'shared/mock';
 
 import { getDecryptedAnswersObject, getReportData } from './getReportAndMediaData';
 import { ItemResponseType } from '../../consts';
+import { getObjectFromList } from '../getObjectFromList';
 
 describe('getReportAndMediaData', () => {
   describe('getDecryptedAnswersObject', () => {
@@ -134,11 +135,7 @@ describe('getReportAndMediaData', () => {
       textNullAnswerItem,
       textUndefinedAnswerItem,
     ] as DecryptedAnswerData[];
-    const rawAnswersObject = {
-      'itemName-1': textItem,
-      'itemName-2': textNullAnswerItem,
-      'itemName-3': textUndefinedAnswerItem,
-    };
+    const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
 
     test('should return filtered out array with items without empty answers', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -233,6 +230,117 @@ describe('getReportAndMediaData', () => {
           secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
           userId: '0e6d026f-b382-4022-9208-74a54768ea81',
           version: '2.1.0',
+        },
+      ]);
+    });
+    test('should return an array with items and subscale calculation in first item', () => {
+      const rawAnswersObject = getObjectFromList(
+        mockedDecryptedAnswersWithSubscales,
+        (item) => item.activityItem.name,
+      );
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales);
+      expect(result).toEqual([
+        {
+          'Final SubScale Score': 5,
+          'Optional text for Final SubScale Score': 'Description #2 for range 4~20',
+          activity_end_time: '1698673935278',
+          activity_flow: null,
+          activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
+          activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1698673918439',
+          flag: 'completed',
+          id: '8daa8ec9-7c54-4a51-a87f-f5a14b1294d3',
+          item: 'single',
+          options: 'Opt1: 0 (score: 3), Opt2: 1 (score: 5), Opt3: 2 (score: 1)',
+          prompt: 'single',
+          rawScore: 9,
+          response: 'value: 2',
+          reviewing_id: null,
+          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          'ss-1': 5,
+          'ss-2': 6,
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.2.0',
+        },
+        {
+          activity_end_time: '1698673935278',
+          activity_flow: null,
+          activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
+          activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1698673918439',
+          flag: 'completed',
+          id: '8daa8ec9-7c54-4a51-a87f-f5a14b1294d3',
+          item: 'multi',
+          options: 'Opt1: 0 (score: 1), Opt2: 1 (score: 3), Opt3: 2 (score: 0)',
+          prompt: 'multi',
+          rawScore: 4,
+          response: 'value: 0',
+          reviewing_id: null,
+          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.2.0',
+        },
+        {
+          activity_end_time: '1698673935278',
+          activity_flow: null,
+          activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
+          activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1698673918439',
+          flag: 'completed',
+          id: '8daa8ec9-7c54-4a51-a87f-f5a14b1294d3',
+          item: 'slider',
+          options:
+            '0: 0 (score: 1), 1: 1 (score: 2), 2: 2 (score: 3), 3: 3 (score: 4), 4: 4 (score: 5), 5: 5 (score: 6)',
+          prompt: 'slider',
+          rawScore: 21,
+          response: 'value: 2',
+          reviewing_id: null,
+          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.2.0',
+        },
+        {
+          activity_end_time: '1698673935278',
+          activity_flow: null,
+          activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
+          activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1698673918439',
+          flag: 'completed',
+          id: '8daa8ec9-7c54-4a51-a87f-f5a14b1294d3',
+          item: 'gender_screen',
+          options: 'Male: 0, Female: 1',
+          prompt: 'How do you describe yourself?',
+          rawScore: '',
+          response: 'value: 0',
+          reviewing_id: null,
+          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.2.0',
+        },
+        {
+          activity_end_time: '1698673935278',
+          activity_flow: null,
+          activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
+          activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1698673918439',
+          flag: 'completed',
+          id: '8daa8ec9-7c54-4a51-a87f-f5a14b1294d3',
+          item: 'age_screen',
+          options: '',
+          prompt: 'How old are you?',
+          rawScore: '',
+          response: '25',
+          reviewing_id: null,
+          secret_user_id: 'aleksandr.i.eremin@yandex.ru',
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.2.0',
         },
       ]);
     });
