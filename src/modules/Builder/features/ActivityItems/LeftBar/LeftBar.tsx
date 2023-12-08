@@ -168,10 +168,11 @@ export const LeftBar = ({
         systemItems.map((item, index) => {
           const itemIndex = (draggableItems?.length ?? 0) + index;
           const name = `${fieldName}.items.${itemIndex}`;
+          const key = `item-${getEntityKey(item)}-${index + draggableItems?.length}`;
 
           return (
             <Item
-              key={`item-${getEntityKey(item)}`}
+              key={key}
               name={name}
               index={index}
               onSetActiveItem={handleSetActiveItem}
