@@ -136,7 +136,7 @@ export const ExportDataSetting = () => {
             startIcon={<Svg width="18" height="18" id="export" />}
             data-testid={dataTestid}
           >
-            {t('downloadCSV')}
+            {t('download')}
           </StyledAppletSettingsButton>
         </Box>
         {dataIsExporting && (
