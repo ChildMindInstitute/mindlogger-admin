@@ -44,6 +44,7 @@ import {
   DEFAULT_NUMBER_OF_TRIALS,
   DEFAULT_THRESHOLD_DURATION,
   GyroscopeOrTouch,
+  Integrations,
   ItemResponseType,
   PerfTaskType,
   ScoreConditionType,
@@ -953,6 +954,9 @@ const getActivitySubscaleSetting = (
 export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: string) => {
   if (!appletData) return getNewApplet();
 
+  const hasLorisIntegration =
+    appletData.integrations?.some((integration) => integration === Integrations.Loris) || false;
+
   const processedApplet: AppletFormValues = {
     ...appletData,
     description: getDictionaryText(appletData.description),
@@ -981,6 +985,8 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
       : [],
     activityFlows: getActivityFlows(appletData.activityFlows, appletData.activities),
     streamEnabled: !!appletData.streamEnabled,
+    lorisIntegration: hasLorisIntegration,
+    integrations: appletData.integrations,
   };
 
   return processedApplet;

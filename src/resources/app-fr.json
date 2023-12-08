@@ -669,6 +669,16 @@
   "liveResponseStreaming": "Diffusion en direct des réponses",
   "liveResponseStreamingDescription": "Envoyez les réponses à un serveur de votre choix au fur et à mesure de leur saisie.<br/>Vous pouvez configurer le serveur dans l'application MindLogger.",
   "liveResponseStreamingLabel": "Activer la diffusion en continu des données de réponse",
+  "loris": {
+    "integration": "Intégration LORIS",
+    "description": "Activer la collecte de données permettra ultérieurement d'initier le téléchargement des données des activités complétées par des répondants consentants dans LORIS, en vue de les utiliser et de les contextualiser.",
+    "activateDataCollection": "Activer la collecte de données",
+    "uploadPublicData": "Télécharger des données publiques dans LORIS",
+    "reportServerTooltip": "Configurez d'abord le serveur dans l'onglet Configuration du rapport",
+    "publishTooltip": "Enregistrez et publiez l'applet d'abord",
+    "agreementText": "J'accepte de décrypter les données des répondants et de les télécharger dans LORIS sous forme non cryptée.",
+    "successMessage": "Si de nouvelles données ont été collectées, elles ont été téléchargées avec succès."
+  },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
   "login": "Se Connecter",
   "loginLink": "Connexion",

@@ -64,7 +64,7 @@ export const getSettingBreadcrumbs = (param: SettingParam, isPublished = false) 
     },
     [SettingParam.LorisIntegration]: {
       icon: 'data-collection',
-      label: t('lorisIntegration'),
+      label: t('loris.integration'),
     },
   };
 

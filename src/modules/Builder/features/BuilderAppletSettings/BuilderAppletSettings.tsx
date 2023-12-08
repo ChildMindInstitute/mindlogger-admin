@@ -11,6 +11,7 @@ export const BuilderAppletSettings = () => {
 
   const isPublished = watch('isPublished');
   const workspaceRoles = workspaces.useRolesData();
+  const integrations = workspaces.useData()?.integrations;
   const { result: appletData } = applet.useAppletData() ?? {};
 
   const handleReportConfigSubmit = (values: Record<string, unknown>) => {
@@ -35,6 +36,7 @@ export const BuilderAppletSettings = () => {
             isPublished,
             roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
             onReportConfigSubmit: handleReportConfigSubmit,
+            integrations,
           })}
         />
       )}

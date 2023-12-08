@@ -20,6 +20,7 @@ import {
   Mixpanel,
   SettingParam,
 } from 'shared/utils';
+import { Integrations } from 'shared/consts';
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
 import { auth, workspaces } from 'redux/modules';
@@ -99,6 +100,9 @@ export const useAppletDataFromForm = () => {
             ...removeActivityFlowExtraFields(),
           }) as ActivityFlow,
       ),
+      ...(appletInfo.lorisIntegration
+        ? { integrations: [Integrations.Loris] }
+        : { integrations: undefined }),
       ...removeAppletExtraFields(isNewApplet),
     };
   };

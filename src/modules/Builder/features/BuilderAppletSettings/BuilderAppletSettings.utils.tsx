@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components/Svg';
-import { Roles } from 'shared/consts';
+import { Integrations, Roles } from 'shared/consts';
 import {
   DataRetention,
   TransferOwnershipSetting,
@@ -21,6 +21,7 @@ export const getSettings = ({
   isPublished,
   roles,
   onReportConfigSubmit,
+  integrations,
 }: GetSettings) => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
@@ -59,9 +60,11 @@ export const getSettings = ({
         },
         {
           icon: <Svg id="data-collection" />,
-          label: 'lorisIntegration',
+          label: 'loris.integration',
           component: <LorisIntegrationSetting />,
           param: SettingParam.LorisIntegration,
+          isVisible:
+            integrations?.some((integration) => integration === Integrations.Loris) || false,
           'data-testid': `${dataTestid}-loris-integration`,
         },
       ],

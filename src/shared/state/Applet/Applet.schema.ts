@@ -12,6 +12,7 @@ import {
   PerfTaskType,
   GyroscopeOrTouch,
   ScoreReportType,
+  Integrations,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils/encryption';
 import {
@@ -746,6 +747,7 @@ export type SingleApplet = {
   isPublished?: boolean;
   activityCount?: number | null;
   streamEnabled?: boolean | null;
+  integrations?: Integrations[];
 };
 
 export type AppletSchema = {
