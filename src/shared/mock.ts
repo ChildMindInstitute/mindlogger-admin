@@ -684,13 +684,6 @@ export const mockedSectionReport = {
           value: false,
         },
       },
-      {
-        itemName: 'averageScore_secondscore',
-        type: 'EQUAL',
-        payload: {
-          value: 1,
-        },
-      },
     ],
   },
 };
