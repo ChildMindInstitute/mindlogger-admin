@@ -12,6 +12,7 @@ import {
 import { Roles } from 'shared/consts';
 import { page } from 'resources';
 import { initialStateData } from 'shared/state';
+
 import { BuilderAppletSettings } from './BuilderAppletSettings';
 
 const route = `/builder/${mockedAppletId}/settings`;
