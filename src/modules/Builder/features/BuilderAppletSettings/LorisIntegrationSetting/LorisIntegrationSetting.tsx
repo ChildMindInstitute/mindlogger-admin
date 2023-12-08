@@ -59,7 +59,13 @@ export const LorisIntegrationSetting = () => {
           </span>
         </Tooltip>
       </StyledFlexTopCenter>
-      {popupOpen && <UploadDataPopup open={popupOpen} onClose={() => setPopupOpen(false)} />}
+      {popupOpen && (
+        <UploadDataPopup
+          open={popupOpen}
+          onClose={() => setPopupOpen(false)}
+          data-testid={`${dataTestid}-popup`}
+        />
+      )}
     </>
   );
 };

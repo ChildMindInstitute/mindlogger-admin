@@ -679,7 +679,6 @@
     "agreementText": "I agree to decrypt the Respondents' data and upload it to LORIS in an unencrypted format.",
     "successMessage": "If any new data has been collected, it has been uploaded successfully."
   },
-  "sharePasswordConsent": "I agree to sharing my Applet password to the server to enable the decryption of Respondent's data and its transfer to the LORIS in an unencrypted format.",
   "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "login": "Log In",
   "loginLink": "Login",
