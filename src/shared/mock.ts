@@ -10,6 +10,7 @@ import { MultiSelectItem, SingleSelectItem } from './state';
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
 export const mockedAppletId = '2e46fa32-ea7c-4a76-b49b-1c97d795bb9a';
+export const mockedActivityId = '56a4ebe4-3d7f-485c-8293-093cabf29fa3';
 
 export const mockedUserData = {
   email: mockedEmail,
@@ -702,7 +703,7 @@ export const mockedAppletFormData = {
   activities: [
     {
       name: 'New Activity',
-      id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
+      id: mockedActivityId,
       items: [
         mockedSingleSelectFormValues,
         mockedMultiSelectFormValues,
