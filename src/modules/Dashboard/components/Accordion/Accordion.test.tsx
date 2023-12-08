@@ -2,9 +2,11 @@ import { render, fireEvent } from '@testing-library/react';
 
 import { Accordion } from './Accordion';
 
+const title = 'Accordion Title';
+const accordionContent = 'Accordion Content';
+
 describe('Accordion Component', () => {
-  it('renders with the provided title', () => {
-    const title = 'Accordion Title';
+  test('renders with the provided title', () => {
     const { getByText } = render(
       <Accordion title={title}>
         <></>
@@ -13,9 +15,7 @@ describe('Accordion Component', () => {
     expect(getByText(title)).toBeInTheDocument();
   });
 
-  it('expands and collapses on click', () => {
-    const title = 'Accordion Title';
-    const accordionContent = 'Accordion Content';
+  test('expands and collapses on click', () => {
     const { getByText, queryByText } = render(
       <Accordion title={title}>
         <>{accordionContent}</>
