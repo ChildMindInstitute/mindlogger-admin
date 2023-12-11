@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { addDays } from 'date-fns';
+import { addDays, endOfDay, startOfDay } from 'date-fns';
 import { ObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -13,6 +13,8 @@ import { SelectController } from 'shared/components/FormComponents';
 import { DatePicker } from 'shared/components';
 import { theme, StyledBodyLarge, StyledFlexTopCenter } from 'shared/styles';
 import { SelectEvent } from 'shared/types';
+import { DateType } from 'shared/components/DatePicker/DatePicker.types';
+import { getNormalizedTimezoneDate } from 'shared/utils';
 
 import {
   StyledAppletSettingsButton,
@@ -28,13 +30,13 @@ export const ExportDataSetting = () => {
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const dataTestid = 'applet-settings-export-data-export';
   const minDate = new Date(appletData?.createdAt ?? '');
-  const maxDate = new Date();
+  const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
   const methods = useForm<ExportDataFormValues>({
     resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
     defaultValues: {
       dateType: ExportDateType.AllTime,
       fromDate: minDate,
-      toDate: maxDate,
+      toDate: getMaxDate(),
     },
     mode: 'onSubmit',
   });
@@ -44,7 +46,7 @@ export const ExportDataSetting = () => {
   const toDate = watch('toDate');
   const hasCustomDate = dateType === ExportDateType.ChooseDates;
   const commonProps = {
-    maxDate,
+    maxDate: getMaxDate(),
     control,
     inputSx: {
       width: '19rem',
@@ -54,6 +56,14 @@ export const ExportDataSetting = () => {
     },
   };
 
+  const onFromDateSubmit = (date: DateType) => {
+    if (!date) return;
+    setValue('fromDate', startOfDay(date));
+  };
+  const onToDateSubmit = (date: DateType) => {
+    if (!date) return;
+    setValue('toDate', endOfDay(date));
+  };
   const onCloseCallback = () => {
     if (toDate < fromDate) {
       setValue('toDate', addDays(fromDate, 1));
@@ -61,6 +71,7 @@ export const ExportDataSetting = () => {
   };
   const onDateTypeChange = (e: SelectEvent) => {
     const dateType = e.target.value as ExportDateType;
+    const maxDate = getMaxDate();
     switch (dateType) {
       case ExportDateType.AllTime:
         setValue('fromDate', minDate);
@@ -113,6 +124,7 @@ export const ExportDataSetting = () => {
               {...commonProps}
               name="fromDate"
               onCloseCallback={onCloseCallback}
+              onSubmitCallback={onFromDateSubmit}
               label={t('startDate')}
               minDate={minDate}
               data-testid={`${dataTestid}-from-date`}
@@ -121,6 +133,7 @@ export const ExportDataSetting = () => {
             <DatePicker
               {...commonProps}
               name="toDate"
+              onSubmitCallback={onToDateSubmit}
               minDate={fromDate}
               label={t('endDate')}
               data-testid={`${dataTestid}-to-date`}
