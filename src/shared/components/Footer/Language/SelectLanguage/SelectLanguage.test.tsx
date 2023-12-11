@@ -48,8 +48,8 @@ describe('SelectLanguage', () => {
   test('test close popup and "ok" button click', () => {
     renderWithProviders(<SelectLanguage {...props} />);
 
-    const ok = screen.getByText('Ok');
-    fireEvent.click(ok);
+    const okButton = screen.getByText('Ok');
+    fireEvent.click(okButton);
 
     expect(onClose).toBeCalledWith({
       value: Languages.EN,

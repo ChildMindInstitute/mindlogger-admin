@@ -49,8 +49,8 @@ describe('Language', () => {
     const french = screen.getByText('Français');
     fireEvent.click(french);
 
-    const ok = screen.getByText('ok');
-    fireEvent.click(ok);
+    const okButton = screen.getByText('ok');
+    fireEvent.click(okButton);
 
     expect(screen.queryByTestId(dataTestid)).not.toBeInTheDocument();
     expect(screen.getByText('Français')).toBeInTheDocument();
