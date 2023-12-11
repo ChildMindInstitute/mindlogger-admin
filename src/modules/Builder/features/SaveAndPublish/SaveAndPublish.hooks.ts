@@ -100,9 +100,7 @@ export const useAppletDataFromForm = () => {
             ...removeActivityFlowExtraFields(),
           }) as ActivityFlow,
       ),
-      ...(appletInfo.lorisIntegration
-        ? { integrations: [Integrations.Loris] }
-        : { integrations: undefined }),
+      integrations: appletInfo.lorisIntegration ? [Integrations.Loris] : undefined,
       ...removeAppletExtraFields(isNewApplet),
     };
   };
