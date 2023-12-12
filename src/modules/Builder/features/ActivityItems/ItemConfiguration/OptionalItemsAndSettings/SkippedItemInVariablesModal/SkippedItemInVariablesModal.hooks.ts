@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { getItemsWithVariable } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemNameWithIndex } from 'modules/Builder/features/ActivityItems/ActivityItems.types';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 export const useCheckIfItemHasVariables = (itemField: string) => {
   const { t } = useTranslation('app');
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const { watch, setError, trigger } = useFormContext();
+  const { watch, setError, trigger } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   const activityItems = watch(`${fieldName}.items`) ?? [];
   const name = watch(`${itemField}.name`) ?? '';

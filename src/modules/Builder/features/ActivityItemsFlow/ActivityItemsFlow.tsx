@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 import { Box } from '@mui/material';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledObserverTarget, StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { ConditionalLogic } from 'shared/state';
 import { Spinner } from 'shared/components';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
+import { ITEMS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 
 import { ItemFlow } from './ItemFlow';
 import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
@@ -24,7 +26,7 @@ export const ActivityItemsFlow = () => {
   const { t } = useTranslation('app');
   const [itemIndexToDelete, setItemIndexToDelete] = useState(-1);
 
-  const { control } = useFormContext();
+  const { control } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   useRedirectIfNoMatchedActivity();
 
@@ -82,6 +84,7 @@ export const ActivityItemsFlow = () => {
             key={`item-flow-${flowItem.key}`}
             name={conditionalLogicName}
             index={index}
+            isStaticActive={flowItemsData.length > ITEMS_COUNT_TO_ACTIVATE_STATIC}
             onRemove={() => handleRemoveItemFlow(index)}
           />
         ))}

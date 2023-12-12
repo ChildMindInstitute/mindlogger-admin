@@ -31,10 +31,11 @@ export const StyledNameWrapper = styled(StyledFlexTopCenter)`
   display: flex;
   position: absolute;
   top: 0;
+  max-width: 45%;
 
   svg.svg-check {
     fill: ${variables.palette.primary};
-    margin-right: ${theme.spacing(1)};
+    margin-right: ${theme.spacing(0.7)};
   }
 `;
 

@@ -20,10 +20,12 @@ type DatePicker = {
   inputSx?: SxProps;
   label?: string;
   minDate?: Date | null;
+  maxDate?: Date | null;
   includeDates?: Date[];
   onMonthChange?: (date: Date) => void;
   disabled?: boolean;
   onCloseCallback?: () => void;
+  onSubmitCallback?: (date: DateType) => void;
   isLoading?: boolean;
   tooltip?: string;
   'data-testid'?: string;

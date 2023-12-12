@@ -31,9 +31,11 @@ export const DatePicker = <T extends FieldValues>({
   label,
   includeDates,
   minDate,
+  maxDate,
   onMonthChange,
   disabled,
   onCloseCallback,
+  onSubmitCallback,
   isLoading,
   tooltip,
   'data-testid': dataTestid,
@@ -54,6 +56,10 @@ export const DatePicker = <T extends FieldValues>({
   const handlePickerClose = () => {
     onCloseCallback?.();
     setAnchorEl(null);
+  };
+  const handlePickerSubmit = (date: DateType) => () => {
+    onSubmitCallback?.(date);
+    handlePickerClose();
   };
 
   return (
@@ -171,6 +177,7 @@ export const DatePicker = <T extends FieldValues>({
                 monthsShown={isStartEndingDate ? 2 : 1}
                 formatWeekDay={(nameOfDay) => nameOfDay[0]}
                 minDate={minDate === undefined ? new Date() : minDate}
+                maxDate={maxDate === undefined ? null : maxDate}
                 focusSelectedMonth
                 onMonthChange={onMonthChange}
                 includeDates={includeDates}
@@ -179,7 +186,7 @@ export const DatePicker = <T extends FieldValues>({
                 <StyledCancelButton variant="text" onClick={handlePickerClose}>
                   {t('cancel')}
                 </StyledCancelButton>
-                <StyledButton variant="text" onClick={handlePickerClose}>
+                <StyledButton variant="text" onClick={handlePickerSubmit(getSelectedDate())}>
                   {t('ok')}
                 </StyledButton>
               </StyledButtons>

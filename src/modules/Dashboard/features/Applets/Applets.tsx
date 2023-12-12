@@ -175,10 +175,7 @@ export const Applets = () => {
         />
         {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
         {deletePopupVisible && (
-          <DeletePopup
-            onCloseCallback={onCloseCallback}
-            data-testid="dashboard-applets-delete-popup"
-          />
+          <DeletePopup onCloseCallback={onCloseCallback} data-testid="dashboard-applets-delete" />
         )}
         {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
         {publishConcealPopupVisible && <PublishConcealAppletPopup />}

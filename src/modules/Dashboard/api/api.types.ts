@@ -349,7 +349,13 @@ export type ReportConfig = {
 
 export type AppletVersionChanges = AppletId & { version: string };
 
-export type ExportData = AppletId & { respondentIds?: string; page?: number; limit?: number };
+export type ExportData = AppletId & {
+  respondentIds?: string;
+  page?: number;
+  limit?: number;
+  fromDate?: string;
+  toDate?: string;
+};
 
 export type Folder = {
   id: string;

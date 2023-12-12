@@ -7,12 +7,14 @@ import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
 import { getTableCell } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
-import { createEvents } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import {
+  createEvents,
+  removeSecondsFromTime,
+} from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { AddEventsToCategories, EventsData, LegendEvent, PreparedEvents } from './Schedule.types';
 import {
   getNextColor,
-  removeSecondsFromTime,
   getFrequencyString,
   getCount,
   convertDateToYearMonthDay,

@@ -13,3 +13,5 @@ export const observerStyles = {
   height: 'calc(100% + 20rem)',
   bottom: 0,
 };
+
+export const ITEMS_COUNT_TO_ACTIVATE_STATIC = 20;

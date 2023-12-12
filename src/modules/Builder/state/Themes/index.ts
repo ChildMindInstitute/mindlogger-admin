@@ -4,7 +4,7 @@ import { useAppSelector } from 'redux/store/hooks';
 
 import * as thunk from './Themes.thunk';
 import { state as initialState } from './Themes.state';
-import { extraReducers } from './Themes.reducer';
+import { extraReducers, reducers } from './Themes.reducer';
 import { ThemesSchema } from './Themes.schema';
 
 export * from './Themes.schema';
@@ -13,7 +13,7 @@ const slice = createSlice({
   name: 'themes',
   initialState,
   extraReducers,
-  reducers: {},
+  reducers,
 });
 
 export const themes = {

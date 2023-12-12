@@ -1,6 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
+import * as yup from 'yup';
 
-import { TimerType, Periodicity, EventNotifications, EventReminder } from 'modules/Dashboard/api';
+import {
+  TimerType,
+  Periodicity,
+  EventNotifications,
+  EventReminder,
+  NotificationType,
+} from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 
 export type EventFormRef = {
@@ -25,7 +32,7 @@ export type Warning = {
   showRemoveAllScheduled?: boolean;
 };
 
-export type FormReminder = (EventReminder & { activityIncompleteDate?: Date }) | null;
+export type FormReminder = EventReminder | null;
 
 export type EventFormValues = {
   activityOrFlowId: string;
@@ -59,6 +66,13 @@ export type NotificationTimeTestContext = {
   }[];
 };
 
+export type StartEndTimeTestContext = {
+  parent: {
+    startTime: string;
+    endTime: string;
+  };
+};
+
 export const enum SecondsManipulation {
   AddSeconds,
   RemoveSeconds,
@@ -82,4 +96,49 @@ export type GetWeeklyDays = {
   daysInPeriod: Date[];
   startDate: Date;
   isCrossDayEvent: boolean;
+};
+
+/** For ex., startTime: '00:00', endTime: '23:59' */
+export type UseNextDayLabelProps = { startTime: string; endTime: string };
+
+export type GetBetweenStartEndNextDaySingleComparisonProps = {
+  time: string;
+  rangeStartTime: string;
+  rangeEndTime: string;
+};
+
+export type GetBetweenStartEndNextDayComparisonProps = {
+  time: string;
+  fromTime: string;
+  toTime: string;
+  rangeStartTime: string;
+  rangeEndTime: string;
+};
+
+export type GetNotificationTimeComparisonProps = {
+  schema:
+    | yup.Schema<EventReminder>
+    | yup.StringSchema<string | null | undefined, yup.AnyObject, string | null | undefined>;
+  field: string;
+  showValidPeriodMessage: boolean;
+  isSingleTime: boolean;
+};
+
+export type GetNotificationsValidationProps = {
+  field: string;
+  notificationType: NotificationType;
+  showValidPeriodMessage: boolean;
+  isSingleTime: boolean;
+};
+
+export type GetReminderTimeComparison = {
+  time: string;
+  startTime: string;
+  endTime: string;
+  isCrossDay: boolean;
+};
+
+export type GetReminder = {
+  type: SecondsManipulation;
+  reminder?: FormReminder;
 };

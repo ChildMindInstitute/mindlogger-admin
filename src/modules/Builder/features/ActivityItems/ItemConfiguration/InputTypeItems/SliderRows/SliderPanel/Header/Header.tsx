@@ -1,6 +1,6 @@
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg, Actions } from 'shared/components';
 import {
   theme,
@@ -35,7 +35,7 @@ export const Header = ({
   onArrowClick,
   onTrashClick,
 }: HeaderProps) => {
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
 
   const settings = watch(`${name}.config`);
   const { minValue, maxValue, minLabel, maxLabel, minImage, maxImage } =
@@ -61,7 +61,7 @@ export const Header = ({
         >
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>
-        <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>
+        <StyledLabelBoldLarge data-testid={`${dataTestid}-title`}>{label}</StyledLabelBoldLarge>
         {isActionsVisible && <Actions {...commonActionsProps} />}
       </StyledSliderPanelHeader>
     );

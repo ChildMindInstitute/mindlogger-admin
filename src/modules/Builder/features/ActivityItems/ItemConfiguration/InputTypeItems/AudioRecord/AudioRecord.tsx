@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { UseControllerProps, useFormContext } from 'react-hook-form';
+import { UseControllerProps } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { InputController } from 'shared/components/FormComponents';
 import { theme } from 'shared/styles';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemInfo } from '../ItemInfo';
 import { ItemOptionContainer } from '../ItemOptionContainer';
@@ -11,7 +12,7 @@ import { ItemOptionContainer } from '../ItemOptionContainer';
 export const AudioRecord = ({ name }: UseControllerProps) => {
   const { t } = useTranslation('app');
 
-  const { control } = useFormContext();
+  const { control } = useCustomFormContext();
 
   return (
     <ItemOptionContainer title={t('audio')} description={t('audioRecordDescription')}>

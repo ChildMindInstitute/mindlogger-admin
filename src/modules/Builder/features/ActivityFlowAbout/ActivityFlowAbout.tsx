@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
@@ -22,7 +22,7 @@ import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 
 export const ActivityFlowAbout = () => {
   const { t } = useTranslation();
-  const { control, watch } = useFormContext();
+  const { control, watch } = useCustomFormContext();
   const { activityFlowId } = useParams();
 
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');

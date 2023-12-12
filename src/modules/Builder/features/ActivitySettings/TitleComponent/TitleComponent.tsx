@@ -1,4 +1,4 @@
-import { FieldError, useFormContext } from 'react-hook-form';
+import { FieldError } from 'react-hook-form';
 
 import {
   StyledFlexColumn,
@@ -7,12 +7,13 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { TitleComponentProps } from './TitleComponent.types';
 import { StyledMark } from './TitleComponent.styles';
 
 export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
-  const { getFieldState } = useFormContext();
+  const { getFieldState } = useCustomFormContext();
   const errorObject = getFieldState(name).error as unknown as Record<string, FieldError>;
   const hasErrors = !!errorObject;
   const errorMessages = hasErrors
