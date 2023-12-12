@@ -37,7 +37,9 @@ export const ActivityItems = () => {
   });
 
   const { appletId, activityId, itemId } = useParams();
-  const activeItemIndex = itemId ? items?.findIndex((item) => getEntityKey(item) === itemId) : -1;
+  const activeItemIndex = itemId
+    ? (getValues(itemsName) as ItemFormValues[])?.findIndex((item) => getEntityKey(item) === itemId)
+    : -1;
   const activeItem =
     activeItemIndex === undefined || activeItemIndex === -1 ? undefined : items[activeItemIndex];
   const [itemIdToDelete, setItemIdToDelete] = useState('');
