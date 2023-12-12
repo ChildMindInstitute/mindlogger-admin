@@ -35,6 +35,7 @@ export const DatePicker = <T extends FieldValues>({
   onMonthChange,
   disabled,
   onCloseCallback,
+  onSubmitCallback,
   isLoading,
   tooltip,
   'data-testid': dataTestid,
@@ -55,6 +56,10 @@ export const DatePicker = <T extends FieldValues>({
   const handlePickerClose = () => {
     onCloseCallback?.();
     setAnchorEl(null);
+  };
+  const handlePickerSubmit = (date: DateType) => () => {
+    onSubmitCallback?.(date);
+    handlePickerClose();
   };
 
   return (
@@ -181,7 +186,7 @@ export const DatePicker = <T extends FieldValues>({
                 <StyledCancelButton variant="text" onClick={handlePickerClose}>
                   {t('cancel')}
                 </StyledCancelButton>
-                <StyledButton variant="text" onClick={handlePickerClose}>
+                <StyledButton variant="text" onClick={handlePickerSubmit(getSelectedDate())}>
                   {t('ok')}
                 </StyledButton>
               </StyledButtons>
