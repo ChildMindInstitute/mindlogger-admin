@@ -2,7 +2,7 @@ import { Box, Link, styled } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { blendColorsNormal } from 'shared/utils';
+import { blendColorsNormal } from 'shared/utils/colors';
 
 export const StyledAlert = styled(Box)`
   background-color: ${blendColorsNormal(
