@@ -1238,5 +1238,10 @@
     "refreshPage": "Rafraîchir la page"
   },
   "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet.",
+  "assessmentBanner": {
+    "header": "Une nouvelle version de l'évaluation est désormais disponible.",
+    "text": "Choisir de procéder avec la nouvelle version entraînera la perte des données de la complétion précédente.",
+    "button": "Procéder avec la nouvelle version"
+  },
   "goToDashboard": "Aller au tableau de bord"
 }

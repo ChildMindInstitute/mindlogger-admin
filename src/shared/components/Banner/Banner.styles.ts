@@ -2,16 +2,19 @@ import { Box, Link, styled } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { blendColorsNormal } from 'shared/utils';
 
 export const StyledAlert = styled(Box)`
-  background-color: ${variables.palette.surface};
+  background-color: ${blendColorsNormal(
+    variables.palette.surface,
+    variables.palette.yellow_alfa30,
+  )};
 `;
 
 export const StyledWrapper = styled(Box)`
   min-height: 7.2rem;
   position: relative;
   color: ${variables.palette.on_surface};
-  background-color: ${variables.palette.yellow_alfa30};
   padding: ${theme.spacing(1.2, 5, 1.2, 1.6)};
   display: flex;
   align-items: center;
