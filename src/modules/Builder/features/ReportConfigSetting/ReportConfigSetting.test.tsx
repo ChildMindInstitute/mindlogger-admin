@@ -3,10 +3,13 @@
 import { generatePath } from 'react-router-dom';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
+import * as reportApi from 'modules/Dashboard/api/api';
 import { page } from 'resources';
 import { applet } from 'redux/modules';
-import { mockedAppletData } from 'shared/mock';
+import { mockedAppletData, mockedPassword } from 'shared/mock';
 import { SettingParam, renderWithProviders } from 'shared/utils';
+import * as encryptionUtils from 'shared/utils/encryption';
+import * as customFormContext from 'modules/Builder/hooks/useCustomFormContext';
 
 import { ReportConfigSetting } from './ReportConfigSetting';
 import * as reportUtils from './ReportConfigSetting.utils';
@@ -84,7 +87,7 @@ describe('ReportConfigSetting', () => {
   });
 
   describe('Server Ip/Public Key/Password', () => {
-    test('Configure server', async () => {
+    test('Configure server: no server ip or publicKey', async () => {
       renderReportConfigSetting();
 
       const save = screen.getByTestId(`${mockedReportConfigDataTestid}-save`);
@@ -97,6 +100,12 @@ describe('ReportConfigSetting', () => {
         ).toBeVisible();
         fireEvent.click(screen.getByText('Cancel'));
       });
+    });
+
+    test('Configure server: rejected verify server or publicKey', async () => {
+      renderReportConfigSetting();
+
+      const save = screen.getByTestId(`${mockedReportConfigDataTestid}-save`);
 
       fireEvent.change(
         screen.getByTestId(`${mockedReportConfigDataTestid}-server-url`).querySelector('input'),
@@ -128,9 +137,123 @@ describe('ReportConfigSetting', () => {
       expect(spySetPasswordReportServer).not.toBeCalled();
     });
 
-    test('edit', async () => {});
+    test('Configure server: rejected set password', async () => {
+      jest.spyOn(applet, 'useAppletData').mockReturnValue({
+        result: mockedAppletData,
+      });
+      jest.spyOn(encryptionUtils, 'getAppletEncryptionInfo').mockReturnValue({
+        getPublicKey: () => ({ equals: () => true }),
+      });
 
-    test('validations', async () => {});
+      renderReportConfigSetting();
+
+      const save = screen.getByTestId(`${mockedReportConfigDataTestid}-save`);
+
+      fireEvent.change(
+        screen.getByTestId(`${mockedReportConfigDataTestid}-server-url`).querySelector('input'),
+        {
+          target: { value: 'https://url.com/' },
+        },
+      );
+      fireEvent.change(
+        screen.getByTestId(`${mockedReportConfigDataTestid}-encrypt-key`).querySelector('textarea'),
+        {
+          target: { value: 'publicKey' },
+        },
+      );
+
+      spyVerifyReportServer.mockResolvedValueOnce(new Response(JSON.stringify({ message: 'ok' })));
+      spySetPasswordReportServer.mockRejectedValueOnce({});
+
+      fireEvent.click(save);
+
+      await waitFor(() => {
+        screen.getByTestId('report-config-password-popup');
+      });
+
+      fireEvent.change(
+        screen
+          .getByTestId('report-config-password-popup-enter-password-password')
+          .querySelector('input'),
+        { target: { value: mockedPassword } },
+      );
+      fireEvent.click(screen.getByTestId('report-config-password-popup-submit-button'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('applet-settings-report-config-verify-server-error-popup'),
+        ).toBeVisible();
+      });
+    });
+
+    test('Configure Server: all endpoints works', async () => {
+      jest.spyOn(applet, 'useAppletData').mockReturnValue({
+        result: mockedAppletData,
+      });
+      jest.spyOn(encryptionUtils, 'getAppletEncryptionInfo').mockReturnValue({
+        getPublicKey: () => ({ equals: () => true }),
+      });
+      jest.spyOn(encryptionUtils, 'publicEncrypt').mockReturnValue({});
+      jest.spyOn(customFormContext, 'useCustomFormContext').mockReturnValue({
+        setValue: jest.fn(),
+        getValues: jest.fn(),
+      });
+      jest.spyOn(reportApi, 'postReportConfigApi').mockResolvedValue({});
+
+      renderReportConfigSetting();
+
+      const save = screen.getByTestId(`${mockedReportConfigDataTestid}-save`);
+
+      fireEvent.change(
+        screen.getByTestId(`${mockedReportConfigDataTestid}-server-url`).querySelector('input'),
+        {
+          target: { value: 'https://url.com/' },
+        },
+      );
+      fireEvent.change(
+        screen.getByTestId(`${mockedReportConfigDataTestid}-encrypt-key`).querySelector('textarea'),
+        {
+          target: { value: 'publicKey' },
+        },
+      );
+
+      spyVerifyReportServer.mockResolvedValueOnce(new Response(JSON.stringify({ message: 'ok' })));
+      spySetPasswordReportServer.mockResolvedValueOnce(
+        new Response(JSON.stringify({ message: 'success' })),
+      );
+
+      fireEvent.click(save);
+
+      await waitFor(() => {
+        screen.getByTestId('report-config-password-popup');
+      });
+
+      fireEvent.change(
+        screen
+          .getByTestId('report-config-password-popup-enter-password-password')
+          .querySelector('input'),
+        { target: { value: mockedPassword } },
+      );
+      fireEvent.click(screen.getByTestId('report-config-password-popup-submit-button'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('builder-applet-settings-report-config-setting-success-popup'),
+        ).toBeVisible();
+      });
+    });
+
+    test('Validations', async () => {
+      renderReportConfigSetting();
+
+      const email = screen.getByTestId(`${mockedReportConfigDataTestid}-recipients`);
+      fireEvent.change(email.querySelector('input'), { target: { value: 'effeafawe ' } });
+      fireEvent.click(screen.getByTestId(`${mockedReportConfigDataTestid}-save`));
+
+      await waitFor(() => {
+        expect(screen.getByText('Email must be valid')).toBeVisible();
+      });
+    });
   });
 
   describe('Activity/Activity Flow', () => {});
