@@ -29,6 +29,7 @@ import {
 import { getJourneyCSVObject } from 'shared/utils/exportData/getJourneyCSVObject';
 import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
 import { CorrectPress } from 'modules/Builder/types';
+import { PerfTaskType } from 'shared/consts';
 
 export type ExportActivity = {
   createdAt: string;
@@ -36,7 +37,7 @@ export type ExportActivity = {
   id: string;
   idVersion: string;
   image: string;
-  isAssessment: false;
+  isAssessment?: boolean;
   isHidden?: boolean;
   isReviewable: boolean;
   isSkippable: boolean;
@@ -48,6 +49,9 @@ export type ExportActivity = {
   splashScreen: string;
   subscaleSetting: SubscaleSetting | null;
   version: string;
+  reportIncludedItemName?: string | null;
+  isPerformanceTask?: boolean;
+  performanceTaskType?: PerfTaskType;
 };
 
 export type MigratedAnswer = {
@@ -140,8 +144,16 @@ export type DecryptedNumberSelectionAnswer = AdditionalTextType & {
   value: number;
 };
 
+type CachedMediaValue = {
+  uri: string;
+  fileName: string;
+  size: number;
+  type: string;
+  fromLibrary: boolean;
+};
+
 export type DecryptedMediaAnswer = AdditionalTextType & {
-  value: string;
+  value: string | CachedMediaValue;
 };
 
 export type DecryptedDateRangeAnswer = AdditionalTextType & {
@@ -346,14 +358,22 @@ export const enum UserActionType {
   Skip = 'SKIP',
 }
 
-export type EventDTO = {
+export type FailedDecryption = {
+  screen: '';
+  time: '';
+  type: unknown;
+};
+
+export type SuccessedEventDTO = {
   response?: AnswerDTO; // optional field. Required if the type is "SET_ANSWER". AnswerDTO depends on activity item type.
   screen: string; // {activityId}/{activityItemId}
   time: number; // timestamp in milliseconds
   type: UserActionType;
 };
 
-export type ExtendedEvent = EventDTO & DecryptedAnswerData;
+export type EventDTO = SuccessedEventDTO | FailedDecryption;
+
+export type ExtendedEvent = SuccessedEventDTO & DecryptedAnswerData;
 
 export type ActivityItemAnswer =
   | TextItemAnswer

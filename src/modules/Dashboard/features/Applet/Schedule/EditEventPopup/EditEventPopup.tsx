@@ -128,7 +128,9 @@ export const EditEventPopup = ({
           data-testid={`${dataTestid}-popup`}
         >
           <>
-            {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+            {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (
+              <Spinner uiType={SpinnerUiType.Secondary} noBackground />
+            )}
             <StyledContainer>
               <StyledButton
                 variant="outlined"

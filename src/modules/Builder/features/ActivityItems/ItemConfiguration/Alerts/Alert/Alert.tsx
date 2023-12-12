@@ -1,5 +1,4 @@
 import { useTranslation, Trans } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
 import { Svg } from 'shared/components/Svg';
@@ -13,6 +12,7 @@ import {
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { ItemFormValues } from 'modules/Builder/types';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { StyledAlert, StyledRow, StyledDescription, StyledSelectController } from './Alert.styles';
@@ -26,7 +26,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
     getValues,
     watch,
     formState: { errors },
-  } = useFormContext();
+  } = useCustomFormContext();
 
   const alertName = `${name}.alerts.${index}`;
   const alertValueName = `${alertName}.value`;
@@ -179,7 +179,7 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   };
 
   return (
-    <StyledAlert>
+    <StyledAlert data-testid={`${dataTestid}-panel`}>
       <StyledRow>
         <StyledTitleBoldSmall>
           {t('alert')} {index + 1}

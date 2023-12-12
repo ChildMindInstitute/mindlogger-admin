@@ -12,8 +12,9 @@ import { getOptionTextApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
+import { pluck } from 'shared/utils';
 
-import { legendMargin, setTooltipStyles } from '../../Charts.utils';
+import { getTicksData, legendMargin, setTooltipStyles } from '../../Charts.utils';
 import { LINK_PATTERN, locales } from '../../Charts.const';
 import { StyledChartContainer } from '../../Chart.styles';
 import { ChartTooltip } from './ChartTooltip';
@@ -39,6 +40,12 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
   const { execute: getOptionText } = useAsync(getOptionTextApi);
   const { watch } = useFormContext<SummaryFiltersForm>();
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
+
+  const responses = data.subscales.map((subscale) => subscale.activityCompletions);
+  const scores = pluck(responses.flat(), 'score');
+  const minScore = Math.min(...scores);
+  const maxScore = Math.max(...scores);
+  const { min, max, stepSize, height } = getTicksData(minScore, maxScore);
 
   const lang = i18n.language as keyof typeof locales;
 
@@ -100,8 +107,8 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
     () => (
       <Line
         ref={chartRef}
-        options={getOptions(lang, minDate, maxDate, data, tooltipHandler)}
-        data={getData(data, filteredVersions)}
+        options={getOptions(lang, minDate, maxDate, tooltipHandler, min, max, stepSize)}
+        data={getData(data, filteredVersions, max)}
         plugins={[ChartDataLabels, legendMargin]}
       />
     ),
@@ -110,7 +117,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
   return (
     <Box sx={{ position: 'relative' }}>
-      <StyledChartContainer>{renderChart}</StyledChartContainer>
+      <StyledChartContainer sx={{ height: `${height}px` }}>{renderChart}</StyledChartContainer>
       <ChartTooltip
         ref={tooltipRef}
         dataPoints={tooltipData}

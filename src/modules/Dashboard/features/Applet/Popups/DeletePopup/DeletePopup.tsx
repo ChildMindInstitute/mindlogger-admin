@@ -69,7 +69,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={deletePopupClose}
-          data-testid={`${dataTestid}-password`}
+          data-testid={`${dataTestid}-password-popup`}
         >
           <StyledModalWrapper>
             <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
@@ -80,7 +80,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
               appletId={currentApplet?.id ?? ''}
               encryption={currentApplet?.encryption}
               submitCallback={handleDeleteApplet}
-              data-testid={`${dataTestid}-enter-password`}
+              data-testid={`${dataTestid}-enter-password-popup`}
             />
           </StyledModalWrapper>
         </Modal>
@@ -93,7 +93,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           onSubmit={handleConfirmation}
           title={t('deleteApplet')}
           buttonText={t('ok')}
-          data-testid={`${dataTestid}-confirm`}
+          data-testid={`${dataTestid}-success-popup`}
         >
           <StyledModalWrapper>{t('appletDeletedSuccessfully')}</StyledModalWrapper>
         </Modal>
@@ -110,7 +110,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={deletePopupClose}
-          data-testid={`${dataTestid}-error`}
+          data-testid={`${dataTestid}-error-popup`}
         >
           <StyledModalWrapper>
             <Trans i18nKey="appletDeletedError">

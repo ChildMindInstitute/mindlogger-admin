@@ -1,5 +1,4 @@
-import { useFormContext } from 'react-hook-form';
-
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import {
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
@@ -11,7 +10,7 @@ import {
 import { TitleProps } from './Title.types';
 
 export const Title = ({ title, reportFieldName }: TitleProps) => {
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
   const reportName = reportFieldName ? watch(`${reportFieldName}.name`) : '';
 
   return (

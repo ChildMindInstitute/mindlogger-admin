@@ -3,17 +3,23 @@ import { useEffect } from 'react';
 type UseIntersectionObserverProps = {
   rootSelector?: string;
   targetSelector: string;
+  isActive?: boolean;
   onAppear?(): void;
   onHide?(): void;
+  hasTrigger?: boolean;
 };
 
 export const useIntersectionObserver = ({
   rootSelector,
   targetSelector,
+  isActive = true,
   onAppear,
   onHide,
+  hasTrigger = false,
 }: UseIntersectionObserverProps) => {
   useEffect(() => {
+    if (!isActive) return;
+
     const callback: IntersectionObserverCallback = (entries: IntersectionObserverEntry[]) => {
       if (entries.length === 0) return;
 
@@ -41,5 +47,5 @@ export const useIntersectionObserver = ({
     return () => {
       observer.unobserve(target);
     };
-  }, [targetSelector, onAppear, onHide, rootSelector]);
+  }, [targetSelector, onAppear, onHide, rootSelector, isActive, hasTrigger]);
 };

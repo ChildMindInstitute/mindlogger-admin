@@ -4,6 +4,7 @@ import {
   ExportActivity,
   ExportDataResult,
   ExtendedExportAnswerWithoutEncryption,
+  FailedDecryption,
   isDrawingAnswerData,
   isNotMediaAnswerData,
 } from 'shared/types';
@@ -12,6 +13,7 @@ import { postFilePresignApi } from 'shared/api';
 
 import { getDrawingUrl, getMediaUrl } from './exportData/getUrls';
 import { getObjectFromList } from './getObjectFromList';
+import { isSuccessEvent } from './exportData/getReportAndMediaData';
 
 export const getParsedAnswers = (
   result: ExportDataResult,
@@ -29,6 +31,41 @@ export const getParsedAnswers = (
       activityName: activitiesObject[answer.activityHistoryId].name,
       subscaleSetting: activitiesObject[answer.activityHistoryId].subscaleSetting,
     }),
+  );
+};
+
+export const remapFailedAnswers = (
+  parsedAnswers: ReturnType<typeof getParsedAnswers>,
+): ReturnType<typeof getParsedAnswers> => {
+  if (!parsedAnswers.length) return [];
+
+  return parsedAnswers.reduce(
+    (acc, data) =>
+      acc.concat({
+        ...data,
+        /* eslint-disable @typescript-eslint/ban-ts-comment */
+        // @ts-ignore
+        decryptedEvents: data.decryptedEvents.filter(isSuccessEvent),
+        /* eslint-disable @typescript-eslint/ban-ts-comment */
+        // @ts-ignore
+        decryptedAnswers: data.decryptedAnswers.map((item) => {
+          if (
+            typeof item.answer === 'object' &&
+            item.answer !== null &&
+            'type' in (item.answer as FailedDecryption) &&
+            'screen' in (item.answer as FailedDecryption) &&
+            'time' in (item.answer as FailedDecryption)
+          ) {
+            return {
+              ...item,
+              answer: null,
+            };
+          }
+
+          return item;
+        }),
+      }),
+    [],
   );
 };
 

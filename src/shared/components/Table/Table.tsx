@@ -10,7 +10,6 @@ import { SEVEN_ROWS_PER_PAGE } from './Table.const';
 import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { Row, TableProps, UiType } from './Table.types';
 
-// TODO: make rows rendering more strict
 export const Table = ({
   columns,
   rows,
@@ -19,6 +18,7 @@ export const Table = ({
   uiType = UiType.Primary,
   emptyComponent,
   className = '',
+  'data-testid': dataTestid,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<string>(orderByProp);
@@ -82,7 +82,7 @@ export const Table = ({
     <>
       <StyledTableContainer className={className} maxHeight={maxHeight} uiType={uiType}>
         {rows?.length ? (
-          <MuiTable stickyHeader>
+          <MuiTable stickyHeader data-testid={dataTestid}>
             <TableHead
               headCells={columns}
               order={order}

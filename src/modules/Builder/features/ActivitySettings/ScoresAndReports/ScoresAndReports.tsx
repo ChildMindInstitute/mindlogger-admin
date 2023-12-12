@@ -168,12 +168,14 @@ export const ScoresAndReports = () => {
                     index: getReportIndex(reports, report) + 1,
                   });
                   const key = `data-section-${getEntityKey(report, false) || index}`;
-                  const sectionDataTestid = `${dataTestid}-section-${index}`;
+                  const reportDataTestid = `${dataTestid}-${
+                    isSection ? 'section' : 'score'
+                  }-${index}`;
                   const headerTitle = (
                     <Title
                       title={title}
                       reportFieldName={reportName}
-                      data-testid={sectionDataTestid}
+                      data-testid={reportDataTestid}
                     />
                   );
 
@@ -193,16 +195,17 @@ export const ScoresAndReports = () => {
                               name: reportName,
                               title: headerTitle,
                               dragHandleProps,
+                              'data-testid': reportDataTestid,
                             }}
                             contentProps={{
                               name: reportName,
                               title,
                               ...(isSection && { sectionId: report.id }),
                               ...(!isSection && { index, tableItems, scoreItems }),
-                              'data-testid': sectionDataTestid,
+                              'data-testid': reportDataTestid,
                               items,
                             }}
-                            data-testid={sectionDataTestid}
+                            data-testid={`${reportDataTestid}-container`}
                           />
                         </Box>
                       )}

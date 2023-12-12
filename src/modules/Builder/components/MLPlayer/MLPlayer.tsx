@@ -1,6 +1,6 @@
 import ReactPlayer from 'react-player/lazy';
 
-import { StyledClearedButton, StyledTitleSmall, theme } from 'shared/styles';
+import { StyledClearedButton, StyledFlexTopCenter, StyledTitleSmall, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 
 import {
@@ -63,7 +63,11 @@ export const MLPlayer = ({
         </StyledClearedButton>
       </StyledHeader>
       <StyledNameWrapper>
-        {uploaded && <Svg id="check" width={18} height={18} />}
+        {uploaded && (
+          <StyledFlexTopCenter sx={{ flexShrink: 0 }}>
+            <Svg id="check" width={18} height={18} />
+          </StyledFlexTopCenter>
+        )}
         <StyledName sx={{ marginRight: theme.spacing(0.4) }} title={fileName}>
           {fileName}
         </StyledName>

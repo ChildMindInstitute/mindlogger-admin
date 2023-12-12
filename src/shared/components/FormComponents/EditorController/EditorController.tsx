@@ -47,7 +47,13 @@ export const EditorController = <T extends FieldValues>({
         name={name}
         control={control}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
-          const handleChange = withDebounce ? debounce(onChange, CHANGE_DEBOUNCE_VALUE) : onChange;
+          const handleDebouncedChange = debounce(onChange, CHANGE_DEBOUNCE_VALUE);
+          const handleBlur = () => {
+            if (withDebounce) {
+              handleDebouncedChange.flush();
+            }
+          };
+          const handleChange = withDebounce ? handleDebouncedChange : onChange;
 
           return (
             <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>
@@ -58,6 +64,7 @@ export const EditorController = <T extends FieldValues>({
                 ref={editorRef}
                 modelValue={value ?? ''}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 language={LANGUAGE_BY_DEFAULT}
                 disabled={disabled}
                 placeholder={t('textPlaceholder')}
@@ -79,7 +86,11 @@ export const EditorController = <T extends FieldValues>({
                   error={error}
                 />
                 {!error?.message && (
-                  <CharacterCounter inputSize={(value ?? '').length} key="character-counter" />
+                  <CharacterCounter
+                    inputSize={(value ?? '').length}
+                    disabled={disabled}
+                    key="character-counter"
+                  />
                 )}
               </StyledFlexSpaceBetween>
               {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}

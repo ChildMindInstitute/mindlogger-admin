@@ -1,4 +1,4 @@
-import { useEffect, useRef, ChangeEvent } from 'react';
+import { useEffect, useRef, FocusEventHandler } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -8,6 +8,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
+import { SelectEvent } from 'shared/types/event';
 import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { ArrowPressType } from '../InputController.types';
@@ -23,6 +24,7 @@ import { getTextAdornment } from './Input.utils';
 
 export const Input = <T extends FieldValues>({
   onChange,
+  onBlur,
   value,
   minNumberValue,
   maxNumberValue,
@@ -75,7 +77,7 @@ export const Input = <T extends FieldValues>({
       onChange?.(numberValue - 1);
     }
   };
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (event: SelectEvent) => {
     if (onCustomChange) return onCustomChange(event);
     const newValue = event.target.value;
     if (restrictExceededValueLength && newValue && maxLength && newValue.length > maxLength) return;
@@ -89,14 +91,21 @@ export const Input = <T extends FieldValues>({
     onChange?.(getNumberValue() ?? newValue);
   };
   const handleDebouncedChange = debounce(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(event),
+    (event: SelectEvent) => handleChange(event),
     CHANGE_DEBOUNCE_VALUE,
   );
+  const handleBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
+    onBlur?.(event);
+
+    if (withDebounce) {
+      handleDebouncedChange.flush();
+    }
+  };
 
   useEffect(() => {
     if (!withDebounce || !inputRef.current || inputRef.current?.value === String(value)) return;
-    inputRef.current.value = value;
-  });
+    inputRef.current.value = value ?? '';
+  }, [withDebounce, inputRef.current, value]);
 
   return (
     <Tooltip tooltipTitle={tooltip}>
@@ -105,6 +114,7 @@ export const Input = <T extends FieldValues>({
           {...textFieldProps}
           {...(withDebounce ? { inputRef } : { value: getTextFieldValue() })}
           onChange={withDebounce ? handleDebouncedChange : handleChange}
+          onBlur={handleBlur}
           error={error}
           helperText={helperText}
           data-testid={dataTestid}

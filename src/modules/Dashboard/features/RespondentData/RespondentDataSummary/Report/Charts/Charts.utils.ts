@@ -7,13 +7,15 @@ import {
   SetTooltipStyles,
 } from './Chart.types';
 import {
+  LEGEND_HEIGHT,
   MAX_LABEL_CHARS_Y,
-  MAX_TICKS_LENGTH,
-  MIN_TICKS_LENGTH,
+  MAX_TICKS_COUNT,
+  MIN_TICKS_COUNT,
   MS_PER_DAY,
   MS_PER_HOUR,
   POINT_RADIUS_DEFAULT,
   POINT_RADIUS_SECONDARY,
+  TICK_HEIGHT,
 } from './Charts.const';
 
 export const truncateString = (label: string) =>
@@ -65,9 +67,6 @@ export const getTimelineStepSize = (minMs: number, maxMs: number) => {
 
   return 15; // step is 15m
 };
-
-export const getTicksStepSize = (maxScore: number) =>
-  maxScore > 2 ? Math.ceil(maxScore / MAX_TICKS_LENGTH) : maxScore / MIN_TICKS_LENGTH;
 
 export const legendMargin = {
   id: 'legendMargin',
@@ -125,4 +124,35 @@ export const scatterChartTooltipHandler = ({
     } = dataPoints[0];
     setTooltipStyles({ chartType, tooltipEl, positionX, positionY });
   }
+};
+
+const getLength = (minScore: number, maxScore: number) => {
+  if (minScore > 0 && maxScore > 0) {
+    return Math.ceil(maxScore);
+  }
+  if (minScore < 0 && maxScore < 0) {
+    return Math.abs(Math.floor(minScore));
+  }
+
+  return Math.ceil(maxScore) + Math.abs(Math.floor(minScore));
+};
+
+export const getTicksData = (minScore: number, maxScore: number) => {
+  const length = getLength(minScore, maxScore);
+
+  const ticks = (length < MAX_TICKS_COUNT ? MIN_TICKS_COUNT : MAX_TICKS_COUNT) - 1;
+
+  const stepSize = Math.ceil(length / ticks);
+
+  const min = minScore < 0 ? Math.floor(minScore) : 0;
+  const max =
+    stepSize * (length < MAX_TICKS_COUNT ? MIN_TICKS_COUNT : MAX_TICKS_COUNT) +
+    (minScore < 0 ? Math.floor(minScore) : 0);
+
+  return {
+    min,
+    max,
+    stepSize,
+    height: (ticks + 1) * TICK_HEIGHT + LEGEND_HEIGHT, // +1 to include version tick
+  };
 };

@@ -1,14 +1,14 @@
-import { useFormContext } from 'react-hook-form';
-
 import { ConditionalLogic } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 
+import { useCustomFormContext } from './useCustomFormContext';
+
 export const useFilterConditionalLogicByItem = (item: ItemFormValues) => {
   const { fieldName, activity } = useCurrentActivity();
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue } = useCustomFormContext();
   const conditionalLogicForItemToDelete = getItemConditionDependencies(
     item,
     activity?.conditionalLogic,

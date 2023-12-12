@@ -114,6 +114,7 @@
   "allDay": "All Day",
   "allowAccessBeforeTime": "Allow access before “From” time",
   "allowToSkipAllItems": "Allow to skip all items",
+  "nextDay": "Next day",
   "alwaysAvailable": "Always available",
   "alwaysAvailableWarning": "Once you set this event to always available, all scheduled events for this activity will be removed.",
   "any": "Any",
@@ -308,6 +309,8 @@
   "day": "Day",
   "day_one": "day",
   "day_other": "days",
+  "month_one": "month",
+  "month_other": "months",
   "days": "Days",
   "deactivated": "Deactivated",
   "dec": "December",
@@ -406,7 +409,15 @@
   "export": "Export",
   "exportData": "Export Data",
   "exportDefaultSchedule": "Export Default Schedule",
-  "exportDescription": "Export all Respondents' data.",
+  "exportDescription": "Export data for the selected date range",
+  "exportDateRange": {
+    "allTime": "All time",
+    "last24h": "Last 24 hours",
+    "lastWeek": "Last week",
+    "lastMonth": "Last month",
+    "chooseDates": "Choose dates"
+  },
+  "dateRange": "Date Range",
   "exportFailed": "Export failed. Please try again.",
   "exportIndividualSchedule": "Export Individual Schedule",
   "false": "False",
@@ -550,7 +561,7 @@
     "invalidActivityNames": "Activities <1>{{activityNames}}</1> do not exist in Applet <1>{{appletName}}</1>. Please enter a valid Activity name and reupload the file.",
     "invalidDataFormat": "Invalid data format for the following fields:",
     "notificationTime": "<2>Notification Time</2>. Valid data format: <2>HH:mm or -</2>.",
-    "startEndTime": "<2>Activity End Time</2> should be greater than <2>Activity Start Time</2>.",
+    "startEndTime": "<2>Activity End Time</2> should not be equal to <2>Activity Start Time</2>.",
     "startTime": "<2>Activity Start Time</2>. Valid data format: <2>HH:mm for Scheduled activity and - for Always available activity</2>.",
     "updateReupload": "Please update and reupload the file."
   },
@@ -753,6 +764,7 @@
   "nov": "November",
   "noVersions": "No versions yet.",
   "numberOfConsecutiveDays": "Number of consecutive days the user does not complete the activity",
+  "numberOfConsecutiveMonths": "Number of consecutive months the user does not complete the Activity",
   "deadlineForActivityCompletion": "Deadline for Activity completion, otherwise the Reminder will be sent",
   "numberOfTrials": "Number Of Trials:",
   "numberOfTrialsTooltip": "Number of practice rounds before the test round",
@@ -1230,5 +1242,6 @@
     "header": "A new version of the assessment is now available.",
     "text": "Choosing to proceed with new version will result in the loss of data from the previous completion.",
     "button": "Proceed with new version"
-  }
+  },
+  "goToDashboard": "Go to Dashboard"
 }
