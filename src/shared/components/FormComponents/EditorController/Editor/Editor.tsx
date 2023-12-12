@@ -1,0 +1,91 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import debounce from 'lodash.debounce';
+import 'md-editor-rt/lib/style.css';
+
+import {
+  CharacterCounter,
+  FooterMessage,
+  LANGUAGE_BY_DEFAULT,
+} from 'shared/components/MarkDownEditor';
+import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
+import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
+import { getSanitizedContent } from 'shared/utils/forms';
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
+
+import { StyledMdEditor } from './Editor.styles';
+import { getCustomIcons, getDefToolbars, getToolbars } from './Editor.utils';
+import { EditorProps } from './Editor.types';
+
+export const Editor = ({
+  editorId,
+  editorRef,
+  value,
+  onChange,
+  onInsert,
+  onLoading,
+  onFileExceeded,
+  onIncorrectFileFormat,
+  uiType,
+  error,
+  disabled,
+  isLoading,
+  withDebounce,
+  'data-testid': dataTestid,
+}: EditorProps) => {
+  const { t } = useTranslation('app');
+  const [inputValue, setInputValue] = useState(value ?? '');
+
+  const handleDebouncedChange = useCallback(
+    debounce((v) => onChange(v), CHANGE_DEBOUNCE_VALUE),
+    [],
+  );
+  useEffect(() => {
+    handleDebouncedChange(inputValue);
+  }, [inputValue]);
+
+  const handleChange = withDebounce ? setInputValue : onChange;
+  const handleBlur = () => {
+    if (withDebounce) {
+      onChange(inputValue);
+    }
+  };
+
+  return (
+    <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>
+      <StyledMdEditor
+        sanitize={(content: string) => getSanitizedContent(content)}
+        editorId={editorId}
+        className={`${uiType} ${disabled ? 'disabled' : ''} ${error ? 'has-error' : ''}`}
+        ref={editorRef}
+        modelValue={withDebounce ? inputValue : value ?? ''}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        language={LANGUAGE_BY_DEFAULT}
+        disabled={disabled}
+        placeholder={t('textPlaceholder')}
+        defToolbars={getDefToolbars({
+          onInsert,
+          onChange,
+          setFileSizeExceeded: onFileExceeded,
+          setIncorrectFormat: onIncorrectFileFormat,
+          setIsLoading: onLoading,
+        })}
+        customIcon={getCustomIcons()}
+        toolbars={getToolbars()}
+        footers={[]}
+      />
+      <StyledFlexSpaceBetween sx={{ m: theme.spacing(0.4, 0, 2) }}>
+        <FooterMessage inputSize={(value ?? '').length} key="footer-message" error={error} />
+        {!error?.message && (
+          <CharacterCounter
+            inputSize={(value ?? '').length}
+            disabled={disabled}
+            key="character-counter"
+          />
+        )}
+      </StyledFlexSpaceBetween>
+      {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
+    </StyledFlexColumn>
+  );
+};
