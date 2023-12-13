@@ -12,13 +12,11 @@ export type EditorProps = {
   value?: string;
   onChange: ChangeEvent;
   onInsert: (generator: InsertContentGenerator) => void;
-  onLoading: Dispatch<SetStateAction<boolean>>;
   onFileExceeded: Dispatch<SetStateAction<number | null>>;
   onIncorrectFileFormat: Dispatch<SetStateAction<MediaType | null>>;
   uiType: EditorUiType;
   error?: FieldError;
   disabled?: boolean;
-  isLoading: boolean;
   withDebounce?: boolean;
   'data-testid'?: string;
 };

@@ -23,21 +23,20 @@ export const Editor = ({
   value,
   onChange,
   onInsert,
-  onLoading,
   onFileExceeded,
   onIncorrectFileFormat,
   uiType,
   error,
   disabled,
-  isLoading,
   withDebounce,
   'data-testid': dataTestid,
 }: EditorProps) => {
   const { t } = useTranslation('app');
   const [inputValue, setInputValue] = useState(value ?? '');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDebouncedChange = useCallback(
-    debounce((v) => onChange(v), CHANGE_DEBOUNCE_VALUE),
+    debounce((value: string) => onChange(value), CHANGE_DEBOUNCE_VALUE),
     [],
   );
   useEffect(() => {
@@ -69,7 +68,7 @@ export const Editor = ({
           onChange,
           setFileSizeExceeded: onFileExceeded,
           setIncorrectFormat: onIncorrectFileFormat,
-          setIsLoading: onLoading,
+          setIsLoading,
         })}
         customIcon={getCustomIcons()}
         toolbars={getToolbars()}

@@ -22,7 +22,6 @@ export const EditorController = <T extends FieldValues>({
   const editorRef = useRef<ExposeParam>();
   const [fileSizeExceeded, setFileSizeExceeded] = useState<number | null>(null);
   const [incorrectFileFormat, setIncorrectFileFormat] = useState<MediaType | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const onInsert = useCallback((generator: InsertContentGenerator) => {
     editorRef.current?.insert(generator);
@@ -42,10 +41,8 @@ export const EditorController = <T extends FieldValues>({
             onInsert={onInsert}
             onFileExceeded={setFileSizeExceeded}
             onIncorrectFileFormat={setIncorrectFileFormat}
-            onLoading={setIsLoading}
             uiType={uiType}
             error={error}
-            isLoading={isLoading}
             disabled={disabled}
             withDebounce={withDebounce}
             data-testid={dataTestid}
