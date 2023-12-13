@@ -7,7 +7,7 @@ import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
 import { parseOptions } from './parseOptions';
-import { getRawScores } from './getRowScores';
+import { getRawScores } from './getRawScores';
 import { convertDateStampToMs } from './convertDateStampToMs';
 
 export const getReportCSVObject = <T>({
