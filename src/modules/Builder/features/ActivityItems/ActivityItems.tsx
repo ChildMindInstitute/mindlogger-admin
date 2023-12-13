@@ -20,12 +20,11 @@ import { DeleteItemModal } from './DeleteItemModal';
 
 export const ActivityItems = () => {
   const { fieldName, activity } = useCurrentActivity();
-  const { control, trigger, getValues } = useCustomFormContext();
-  const itemsName = `${fieldName}.items`;
+  const { control, trigger, watch } = useCustomFormContext();
   const navigate = useNavigate();
+  const itemsName = `${fieldName}.items`;
 
   const {
-    fields: items,
     append: appendItem,
     insert: insertItem,
     remove: removeItem,
@@ -36,12 +35,15 @@ export const ActivityItems = () => {
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
+  const itemsValue: ItemFormValues[] = watch(itemsName);
   const { appletId, activityId, itemId } = useParams();
   const activeItemIndex = itemId
-    ? (getValues(itemsName) as ItemFormValues[])?.findIndex((item) => getEntityKey(item) === itemId)
+    ? itemsValue?.findIndex((item) => getEntityKey(item) === itemId)
     : -1;
   const activeItem =
-    activeItemIndex === undefined || activeItemIndex === -1 ? undefined : items[activeItemIndex];
+    activeItemIndex === undefined || activeItemIndex === -1
+      ? undefined
+      : itemsValue[activeItemIndex];
   const [itemIdToDelete, setItemIdToDelete] = useState('');
 
   useRedirectIfNoMatchedActivity();
@@ -66,9 +68,9 @@ export const ActivityItems = () => {
 
   const handleAddItem = () => {
     const item = getNewActivityItem();
-    const firstSystemIndex = items.findIndex((item) => !item.allowEdit);
+    const firstSystemIndex = itemsValue.findIndex((item) => !item.allowEdit);
 
-    const indexListToTrigger = getIndexListToTrigger(items, item.name);
+    const indexListToTrigger = getIndexListToTrigger(itemsValue, item.name);
     for (const itemIndex of indexListToTrigger) {
       trigger(`${itemsName}.${itemIndex}`);
     }
@@ -82,7 +84,7 @@ export const ActivityItems = () => {
     const itemToInsert = item ?? getNewActivityItem();
     const shouldBecomeActive = !item || (item && getEntityKey(activeItem ?? {}));
 
-    const indexListToTrigger = getIndexListToTrigger(items, itemToInsert.name);
+    const indexListToTrigger = getIndexListToTrigger(itemsValue, itemToInsert.name);
     for (const itemIndex of indexListToTrigger) {
       trigger(`${itemsName}.${itemIndex}`);
     }
@@ -91,8 +93,7 @@ export const ActivityItems = () => {
   };
 
   const handleDuplicateItem = (index: number) => {
-    const itemsValues = getValues(itemsName);
-    const itemToDuplicate = itemsValues[index];
+    const itemToDuplicate = itemsValue[index];
 
     handleInsertItem(index, {
       ...itemToDuplicate,
@@ -100,7 +101,7 @@ export const ActivityItems = () => {
       key: uuidv4(),
       name: getUniqueName({
         name: itemToDuplicate.name,
-        existingNames: pluck(itemsValues, 'name'),
+        existingNames: pluck(itemsValue, 'name'),
         withUnderscore: true,
       }),
     });
