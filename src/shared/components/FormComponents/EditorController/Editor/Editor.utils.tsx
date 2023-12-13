@@ -20,11 +20,7 @@ import {
 import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType } from 'shared/consts';
 import { InsertContentExtensionProps } from 'shared/components/MarkDownEditor/extensions/Extensions.types';
 
-import {
-  StyledIcon,
-  StyledPageFullscreenIcon,
-  StyledStrikeThroughIcon,
-} from './EditorController.styles';
+import { StyledIcon, StyledPageFullscreenIcon, StyledStrikeThroughIcon } from './Editor.styles';
 
 const { t } = i18n;
 

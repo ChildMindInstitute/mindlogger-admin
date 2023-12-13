@@ -1,16 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import { TextItem, SliderItem, SingleSelectItem, MultiSelectItem, Item } from 'shared/state';
 import {
-  DecryptedAnswerData,
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
-  MultiSelectionItemAnswer,
-  SingleSelectionItemAnswer,
 } from 'shared/types';
-
-import { Review } from './Feedback/FeedbackReviewed/FeedbackReviewed.types';
 
 export type Answer = {
   createdAt: string;
@@ -55,6 +50,13 @@ export type MultiSelectItemAnswer = {
 
 export type RespondentDataReviewContextType = {
   assessment?: AssessmentActivityItem[];
+  setAssessment: Dispatch<SetStateAction<AssessmentActivityItem[]>>;
+  lastAssessment: Item[] | null;
+  assessmentVersions: string[];
+  isLastVersion: boolean;
+  setIsLastVersion: Dispatch<SetStateAction<boolean>>;
+  isBannerVisible: boolean;
+  setIsBannerVisible: Dispatch<SetStateAction<boolean>>;
   itemIds: string[];
   setItemIds: Dispatch<SetStateAction<string[]>>;
   isFeedbackOpen: boolean;
@@ -68,14 +70,19 @@ export type AssessmentAnswer = (
   edited?: number | null;
 };
 
-export type AssessmentActivityItem<T = Review> = DecryptedAnswerData<
-  T,
-  MultiSelectionItemAnswer | SingleSelectionItemAnswer | SliderItemAnswer
-> & {
-  items: Item[];
-  answer: {
-    edited: number | null;
+type AssessmentItems = MultiSelectItem | SingleSelectItem | SliderItem;
+
+type AssessmentAnswers =
+  | DecryptedMultiSelectionAnswer
+  | DecryptedSingleSelectionAnswer
+  | DecryptedSliderAnswer;
+
+export type AssessmentActivityItem = {
+  activityItem: AssessmentItems;
+  answer?: AssessmentAnswers & {
+    edited?: number | null;
   };
+  items: AssessmentItems[];
 };
 
 export type FormattedAssessmentAnswer = {

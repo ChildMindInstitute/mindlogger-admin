@@ -345,7 +345,6 @@
   "displayedContentRequired": "Le contenu affiché est requis",
   "dontSave": "Ne pas enregistrer",
   "download": "Télécharger",
-  "downloadCSV": "Télécharger CSV",
   "downloadDescription": "<0>Téléchargez le contenu de l'Applet au format JSON.</0><1>Veuillez mettre à jour l'URL des contextes dans le schéma de l'Applet, le schéma de l'activité et changer les chemins de l'activité/élément dans les fichiers de contexte après avoir uploadé le contenu sur GitHub.</1>",
   "downloadLatestReport": "Télécharger le dernier rapport",
   "downloadSchema": "Télécharger le schéma",
@@ -1249,5 +1248,10 @@
     "refreshPage": "Rafraîchir la page"
   },
   "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet.",
+  "assessmentBanner": {
+    "header": "Une nouvelle version de l'évaluation est désormais disponible.",
+    "text": "Choisir de procéder avec la nouvelle version entraînera la perte des données de la complétion précédente.",
+    "button": "Procéder avec la nouvelle version"
+  },
   "goToDashboard": "Aller au tableau de bord"
 }
