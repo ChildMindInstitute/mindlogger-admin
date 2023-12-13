@@ -134,7 +134,7 @@ export const AvailabilityTab = ({
           <DatePicker
             name="endDate"
             key="endDate"
-            minDate={typeof startDate === 'string' ? null : startDate}
+            minDate={startDate as Date}
             control={control}
             label={t('endDate')}
             onCloseCallback={() => reminder && trigger(['reminder'])}

@@ -66,7 +66,6 @@ export type GetDaysInMonthlyPeriodicity = {
   chosenDate: number;
   eventEnd: Date;
   eventStart: Date;
-  returnStringDate?: boolean;
 };
 
 export type CalendarEventsSchema = {

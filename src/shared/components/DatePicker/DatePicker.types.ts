@@ -20,6 +20,7 @@ type DatePicker = {
   inputSx?: SxProps;
   label?: string;
   minDate?: Date | null;
+  maxDate?: Date | null;
   includeDates?: Date[];
   onMonthChange?: (date: Date) => void;
   disabled?: boolean;
