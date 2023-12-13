@@ -33,10 +33,10 @@ export const DeleteItemModal = ({
   const reportsField = `${fieldName}.scoresAndReports.reports`;
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const reports: ScoreOrSection[] = watch(reportsField) ?? [];
-  const items: ItemFormValues[] = watch(`${fieldName}.items`);
-  const activityFlows: ActivityFlowFormValues[] = watch('activityFlows');
+  const items: ItemFormValues[] = watch(`${fieldName}.items`) ?? [];
+  const activityFlows: ActivityFlowFormValues[] = watch('activityFlows') ?? [];
   const itemIndexToDelete = items?.findIndex((item) => itemIdToDelete === getEntityKey(item));
-  const itemToDelete = items[itemIndexToDelete];
+  const itemToDelete = items?.[itemIndexToDelete];
   const itemName = itemToDelete?.name;
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(itemToDelete);
   const conditionalLogicForItemToDelete = getItemConditionDependencies(

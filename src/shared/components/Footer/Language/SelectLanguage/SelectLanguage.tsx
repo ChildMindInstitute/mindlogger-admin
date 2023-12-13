@@ -15,13 +15,11 @@ import {
   StyledBox,
   StyledSelect,
 } from './SelectLanguage.styles';
+import { languages } from '../Language.const';
 
-export const SelectLanguage = ({
-  onClose,
-  open,
-  currentLanguage,
-  languages,
-}: SelectLanguageProps) => {
+const dataTestid = 'select-language-popup';
+
+export const SelectLanguage = ({ onClose, open, currentLanguage }: SelectLanguageProps) => {
   const { t } = useTranslation('app');
 
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage);
@@ -35,7 +33,7 @@ export const SelectLanguage = ({
       titleAlign="center"
       buttonText={t('ok')}
       width="42"
-      data-testid="select-language-popup"
+      data-testid={dataTestid}
     >
       <StyledList>
         {languages.map((lang) => (
@@ -43,6 +41,7 @@ export const SelectLanguage = ({
             key={lang.value}
             selected={selectedLanguage.value === lang.value}
             onClick={() => setSelectedLanguage(lang)}
+            data-testid={`${dataTestid}-${lang.value}`}
           >
             <StyledItemContent>
               <Box>{lang.component}</Box>
@@ -54,7 +53,7 @@ export const SelectLanguage = ({
               </StyledBox>
             </StyledItemContent>
             {selectedLanguage.value === lang.value && (
-              <StyledSelect>
+              <StyledSelect data-testid={`${dataTestid}-selected`}>
                 <Svg id="selected" />
               </StyledSelect>
             )}
