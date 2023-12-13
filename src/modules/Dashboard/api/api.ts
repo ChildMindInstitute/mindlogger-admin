@@ -53,6 +53,7 @@ import {
   LatestReport,
   Identifiers,
   GetRespondentDetailsParams,
+  AssessmentResult,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -477,9 +478,12 @@ export const getAppletSubmitDateListApi = (
   });
 
 export const getAssessmentApi = ({ appletId, answerId }: AssessmentReview, signal?: AbortSignal) =>
-  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/assessment`, {
-    signal,
-  });
+  authApiClient.get<ResponseWithObject<AssessmentResult>>(
+    `/answers/applet/${appletId}/answers/${answerId}/assessment`,
+    {
+      signal,
+    },
+  );
 
 export const createAssessmentApi = (
   { appletId, answerId, ...assessment }: SaveAssessment,
