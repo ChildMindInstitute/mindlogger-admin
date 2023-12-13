@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { createRef } from 'react';
 import { generatePath } from 'react-router-dom';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
@@ -7,16 +8,15 @@ import * as reportApi from 'modules/Dashboard/api/api';
 import { page } from 'resources';
 import { applet } from 'redux/modules';
 import { mockedAppletData, mockedPassword } from 'shared/mock';
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { SettingParam, renderWithAppletFormData, renderWithProviders } from 'shared/utils';
 import * as encryptionUtils from 'shared/utils/encryption';
-import * as customFormContext from 'modules/Builder/hooks/useCustomFormContext';
 
 import { ReportConfigSetting } from './ReportConfigSetting';
 import * as reportUtils from './ReportConfigSetting.utils';
 
 const mockedReportConfigDataTestid = 'report-config';
 const renderReportConfigSetting = () => {
-  const ref = renderWithProviders(
+  renderWithProviders(
     <ReportConfigSetting onSubmitSuccess={() => {}} data-testid={mockedReportConfigDataTestid} />,
     {
       routePath: page.builderAppletSettingsItem,
@@ -26,6 +26,50 @@ const renderReportConfigSetting = () => {
       }),
     },
   );
+};
+const renderReportConfigSettingWithForm = ({
+  isActivity,
+  isActivityFlow,
+  isServerConfigured,
+} = {}) => {
+  const ref = createRef();
+  const options = {
+    routePath: page.builderAppletSettingsItem,
+    route: generatePath(page.builderAppletSettingsItem, {
+      appletId: mockedAppletData.id,
+      setting: SettingParam.ReportConfiguration,
+    }),
+  };
+
+  if (isActivity) {
+    options.routePath = page.builderAppletActivitySettingsItem;
+    options.route = generatePath(page.builderAppletActivitySettingsItem, {
+      appletId: mockedAppletData.id,
+      activityId: mockedAppletData.activities[0].id,
+      setting: SettingParam.ReportConfiguration,
+    });
+  }
+
+  if (isActivityFlow) {
+    options.routePath = page.builderAppletActivityFlowItemSettingsItem;
+    options.route = generatePath(page.builderAppletActivityFlowItemSettingsItem, {
+      appletId: mockedAppletData.id,
+      activityFlowId: mockedAppletData.activityFlows[0].id,
+      setting: SettingParam.ReportConfiguration,
+    });
+  }
+
+  renderWithAppletFormData({
+    children: (
+      <ReportConfigSetting onSubmitSuccess={() => {}} data-testid={mockedReportConfigDataTestid} />
+    ),
+    options,
+    formRef: ref,
+    ...(isServerConfigured && {
+      reportServerIp: 'ip',
+      reportPublicKey: 'key',
+    }),
+  });
 
   return ref;
 };
@@ -194,13 +238,9 @@ describe('ReportConfigSetting', () => {
         getPublicKey: () => ({ equals: () => true }),
       });
       jest.spyOn(encryptionUtils, 'publicEncrypt').mockReturnValue({});
-      jest.spyOn(customFormContext, 'useCustomFormContext').mockReturnValue({
-        setValue: jest.fn(),
-        getValues: jest.fn(),
-      });
       jest.spyOn(reportApi, 'postReportConfigApi').mockResolvedValue({});
 
-      renderReportConfigSetting();
+      renderReportConfigSettingWithForm();
 
       const save = screen.getByTestId(`${mockedReportConfigDataTestid}-save`);
 
@@ -256,5 +296,112 @@ describe('ReportConfigSetting', () => {
     });
   });
 
-  describe('Activity/Activity Flow', () => {});
+  describe('Activity/Activity Flow', () => {
+    test.each`
+      isActivity | description
+      ${true}    | ${'Activity: Server is not configured'}
+      ${false}   | ${'Activity Flow: Server is not configured'}
+    `('$description', ({ isActivity }) => {
+      renderReportConfigSettingWithForm({ isActivity, isActivityFlow: !isActivity });
+
+      expect(
+        screen.getByText('Server Status: Not Configured. Report can not be generated.'),
+      ).toBeVisible();
+      expect(screen.getByTestId(`${mockedReportConfigDataTestid}-configure-report`)).toBeVisible();
+    });
+  });
+
+  test('Activity: fields', () => {
+    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+      result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
+    });
+
+    renderReportConfigSettingWithForm({ isActivity: true, isServerConfigured: true });
+
+    expect(
+      screen.getByTestId(`${mockedReportConfigDataTestid}-subject`).querySelector('input'),
+    ).toHaveValue('REPORT: dataviz / New Activity');
+    expect(screen.getByTestId(`${mockedReportConfigDataTestid}-item-value`)).toBeVisible();
+  });
+
+  test('Activity Flow: fields', () => {
+    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+      result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
+    });
+
+    renderReportConfigSettingWithForm({ isActivityFlow: true, isServerConfigured: true });
+
+    expect(
+      screen.getByTestId(`${mockedReportConfigDataTestid}-subject`).querySelector('input'),
+    ).toHaveValue('REPORT: dataviz / af1');
+    expect(screen.getByTestId(`${mockedReportConfigDataTestid}-item-value`)).toBeVisible();
+  });
+
+  test('Activity: Item Value', async () => {
+    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+      result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
+    });
+
+    renderReportConfigSettingWithForm({ isActivity: true, isServerConfigured: true });
+
+    fireEvent.click(screen.getByTestId(`${mockedReportConfigDataTestid}-item-value`));
+
+    const itemName = screen.getByTestId(
+      `${mockedReportConfigDataTestid}-report-includes-item-name`,
+    );
+    expect(itemName).toBeVisible();
+
+    fireEvent.mouseDown(itemName.querySelector('[role=\'button\']'));
+
+    const itemNameOptions = screen.getByTestId(
+      `${mockedReportConfigDataTestid}-report-includes-item-name-dropdown`,
+    );
+
+    expect(itemNameOptions).toBeVisible();
+    expect(itemNameOptions.querySelectorAll('li')).toHaveLength(9);
+  });
+
+  test('Activity Flow: Item Value', async () => {
+    jest.spyOn(applet, 'useAppletData').mockReturnValue({
+      result: { ...mockedAppletData, reportServerIp: 'ip', reportPublicKey: 'key' },
+    });
+
+    renderReportConfigSettingWithForm({ isActivityFlow: true, isServerConfigured: true });
+
+    fireEvent.click(screen.getByTestId(`${mockedReportConfigDataTestid}-item-value`));
+
+    const itemName = screen.getByTestId(
+      `${mockedReportConfigDataTestid}-report-includes-item-name`,
+    );
+    const activityName = screen.getByTestId(
+      `${mockedReportConfigDataTestid}-report-includes-activity-name`,
+    );
+    expect(activityName).toBeVisible();
+    expect(itemName).toBeVisible();
+
+    expect(itemName.querySelector('label')).toHaveClass('Mui-disabled');
+
+    fireEvent.mouseDown(activityName.querySelector('[role="button"]'));
+
+    const activityNameOptions = screen.getByTestId(
+      `${mockedReportConfigDataTestid}-report-includes-activity-name-dropdown`,
+    );
+
+    expect(activityNameOptions).toBeVisible();
+    expect(activityNameOptions.querySelectorAll('li')).toHaveLength(1);
+
+    fireEvent.click(activityNameOptions.querySelectorAll('li')[0]);
+
+    await waitFor(() => {
+      expect(itemName.querySelector('label')).not.toHaveClass('Mui-disabled');
+    });
+
+    fireEvent.mouseDown(itemName.querySelector('[role="button"]'));
+
+    const itemNameOptions = screen.getByTestId(
+      `${mockedReportConfigDataTestid}-report-includes-item-name-dropdown`,
+    );
+
+    expect(itemNameOptions.querySelectorAll('li')).toHaveLength(9);
+  });
 });
