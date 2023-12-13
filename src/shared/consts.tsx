@@ -319,6 +319,6 @@ export const enum AnalyticsCalendarPrefix {
   GeneralCalendar = 'GC',
 }
 
-export enum Integrations {
+export const enum Integrations {
   Loris = 'loris',
 }
