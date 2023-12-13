@@ -1,10 +1,11 @@
 import { ChangeEvent } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 import { getMaxLengthValidationError } from 'shared/utils';
 
+import { useCustomFormContext } from './useCustomFormContext';
+
 export const useFieldLengthError = () => {
-  const { setValue, setError, clearErrors } = useFormContext();
+  const { setValue, setError, clearErrors } = useCustomFormContext();
 
   return ({
     event,

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
 import { EditorController, EditorUiType } from 'shared/components/FormComponents';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { InstructionContentProps } from './InstructionContent.types';
 
@@ -14,7 +14,7 @@ export const InstructionContent = ({
   'data-testid': dataTestid,
 }: InstructionContentProps) => {
   const { t } = useTranslation('app');
-  const { control } = useFormContext();
+  const { control } = useCustomFormContext();
 
   return (
     <>

@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerItemPositions } from 'modules/Builder/types';
 
 import { StimulusContent } from './StimulusContent';
@@ -13,7 +12,7 @@ export const StimulusScreen = () => {
   const { activityObjField } = useCurrentActivity();
   const {
     formState: { errors },
-  } = useFormContext();
+  } = useCustomFormContext();
 
   const error = get(
     errors,

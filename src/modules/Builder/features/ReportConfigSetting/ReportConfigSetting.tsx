@@ -1,6 +1,6 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useForm, useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
 import { ObjectSchema } from 'yup';
@@ -41,7 +41,11 @@ import {
 } from 'shared/utils/encryption';
 import { getSanitizedContent } from 'shared/utils/forms';
 import { reportConfig } from 'modules/Builder/state';
-import { useCurrentActivity, useCurrentActivityFlow } from 'modules/Builder/hooks';
+import {
+  useCurrentActivity,
+  useCurrentActivityFlow,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 import { TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { AppletFormValues } from 'modules/Builder/types';
@@ -81,7 +85,8 @@ export const ReportConfigSetting = ({
   const isActivity = !!activity;
   const isActivityFlow = !!activityFlow;
   const isActivityOrFlow = isActivity || isActivityFlow;
-  const { setValue: setAppletFormValue, getValues: getAppletFormValues } = useFormContext() || {};
+  const { setValue: setAppletFormValue, getValues: getAppletFormValues } =
+    useCustomFormContext() || {};
   const appletFormValues = getAppletFormValues?.() as AppletFormValues;
   const defaultValues = useDefaultValues(appletFormValues ?? appletData);
 

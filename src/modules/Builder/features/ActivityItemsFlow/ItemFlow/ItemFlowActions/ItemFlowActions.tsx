@@ -1,6 +1,6 @@
-import { useFormContext } from 'react-hook-form';
 import { useTranslation, Trans } from 'react-i18next';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
@@ -20,7 +20,7 @@ export const ItemFlowActions = ({
 }: ItemFlowActionsProps) => {
   const { t } = useTranslation('app');
   const { fieldName } = useCurrentActivity();
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
 
   const items = watch(`${fieldName}.items`);
   const selectedItem = watch(`${name}.itemKey`);

@@ -1,6 +1,6 @@
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { page } from 'resources';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { NavigationItem, NavigationMenu } from 'shared/components';
@@ -10,7 +10,7 @@ import { getActivitySettings } from './ActivitySettings.utils';
 export const ActivitySettings = () => {
   const { fieldName, activity } = useCurrentActivity();
   const { appletId, activityId } = useParams();
-  const { getFieldState } = useFormContext();
+  const { getFieldState } = useCustomFormContext();
 
   const navigate = useNavigate();
 

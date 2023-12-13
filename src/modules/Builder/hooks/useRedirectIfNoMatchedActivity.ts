@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
 
 import { page } from 'resources';
 import { useCheckIfNewApplet } from 'shared/hooks';
 
 import { useCurrentActivity } from './useCurrentActivity';
+import { useCustomFormContext } from './useCustomFormContext';
 
 export const useRedirectIfNoMatchedActivity = () => {
   const { appletId, activityId } = useParams();
   const navigate = useNavigate();
   const { activity } = useCurrentActivity();
   const isNewApplet = useCheckIfNewApplet();
-  const { getValues } = useFormContext();
+  const { getValues } = useCustomFormContext();
 
   useEffect(() => {
     const activities = getValues('activities');

@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
 import { Badge } from '@mui/material';
 
 import { StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { LinkedTabs, Svg } from 'shared/components';
 import { page } from 'resources';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
 import { getActivityTabs } from './BuilderActivity.utils';
 import { StyledBuilderActivityBody } from './BuilderActivity.styles';
@@ -18,7 +17,7 @@ export const BuilderActivity = () => {
 
   const { fieldName = '' } = useCurrentActivity();
 
-  const { trigger, getFieldState } = useFormContext();
+  const { trigger, getFieldState } = useCustomFormContext();
 
   const navigateToActivities = () =>
     navigate(generatePath(page.builderAppletActivities, { appletId }));

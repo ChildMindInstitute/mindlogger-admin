@@ -15,6 +15,7 @@ import {
 } from 'shared/styles';
 import { EncryptedAnswerSharedProps } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { Item } from 'shared/state';
 
 import { StyledTextBtn } from '../RespondentData.styles';
 import {
@@ -39,6 +40,10 @@ export const RespondentDataReview = () => {
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [assessment, setAssessment] = useState<AssessmentActivityItem[]>([]);
+  const [lastAssessment, setLastAssessment] = useState<Item[] | null>(null);
+  const [assessmentVersions, setAssessmentVersions] = useState<string[]>([]);
+  const [isLastVersion, setIsLastVersion] = useState<boolean>(false);
+  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
   const [itemIds, setItemIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const dataTestid = 'respondents-review';
@@ -79,14 +84,17 @@ export const RespondentDataReview = () => {
       try {
         setIsLoading(true);
         const result = await getAssessment({ appletId, answerId });
-        const { reviewerPublicKey, ...assessmentData } = result.data.result;
+        const { reviewerPublicKey, itemsLast, versions, ...assessmentData } = result.data.result;
         const encryptedData = {
           ...assessmentData,
           userPublicKey: reviewerPublicKey,
         } as EncryptedAnswerSharedProps;
         const decryptedAssessment = getDecryptedActivityData(encryptedData);
-        setItemIds(result.data.result.itemIds || []);
+        setItemIds(assessmentData.itemIds || []);
         setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
+        setLastAssessment(itemsLast);
+        setAssessmentVersions(versions);
+        setIsBannerVisible(!!(itemsLast?.length && versions));
       } finally {
         setIsLoading(false);
       }
@@ -102,7 +110,19 @@ export const RespondentDataReview = () => {
         onSelectAnswer={handleSelectAnswer}
       />
       <RespondentDataReviewContext.Provider
-        value={{ isFeedbackOpen, assessment, itemIds, setItemIds }}
+        value={{
+          isFeedbackOpen,
+          assessment,
+          setAssessment,
+          lastAssessment,
+          assessmentVersions,
+          isLastVersion,
+          setIsLastVersion,
+          isBannerVisible,
+          setIsBannerVisible,
+          itemIds,
+          setItemIds,
+        }}
       >
         <StyledReviewContainer ref={containerRef} data-testid={`${dataTestid}-activity-items`}>
           <StyledStickyHeader
