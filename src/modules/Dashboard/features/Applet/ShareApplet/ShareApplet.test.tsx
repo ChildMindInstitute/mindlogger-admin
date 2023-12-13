@@ -7,10 +7,13 @@ import { ApiResponseCodes } from 'api';
 import { ShareApplet } from './ShareApplet';
 
 const dataTestid = 'share-applet';
+const appletName = 'displayName';
+
+const onAppletSharedMock = jest.fn();
 
 const defaultProps = {
   applet: mockedApplet,
-  onAppletShared: jest.fn(),
+  onAppletShared: onAppletSharedMock,
   onDisableSubmit: jest.fn(),
   isSubmitted: false,
   setIsSubmitted: jest.fn(),
@@ -22,9 +25,15 @@ const checkAppletNameInLibraryMock = () =>
   expect(mockAxios.post).toHaveBeenNthCalledWith(
     1,
     '/library/check_name',
-    { name: 'displayName' },
+    { name: appletName },
     { signal: undefined },
   );
+
+Object.assign(navigator, {
+  clipboard: {
+    writeText: jest.fn(),
+  },
+});
 
 describe('ShareApplet Component', () => {
   test('renders the ShareApplet component with default values', () => {
@@ -86,6 +95,19 @@ describe('ShareApplet Component', () => {
         screen.getByText(/Note: This will change the name of the Applet for your users./),
       ).toBeInTheDocument();
     });
+  });
+
+  test('handle share applet and copy applet link', async () => {
+    const libraryUrl = 'library-url';
+    mockAxios.get.mockResolvedValueOnce({
+      data: {
+        result: {
+          url: libraryUrl,
+        },
+      },
+    });
+
+    const { rerender } = render(<ShareApplet {...defaultProps} />);
 
     const keywordsContainer = screen.getByTestId(`${dataTestid}-keywords`);
     const keywordsInput = keywordsContainer.querySelector('input') as HTMLElement;
@@ -97,5 +119,35 @@ describe('ShareApplet Component', () => {
     fireEvent.keyDown(keywordsInput, { key: 'Enter' });
 
     expect(screen.getByText(mockedKeyword)).toBeInTheDocument();
+
+    rerender(<ShareApplet {...defaultProps} isSubmitted />);
+
+    await waitFor(() => {
+      expect(mockAxios.post).toHaveBeenNthCalledWith(
+        3,
+        '/library',
+        { appletId: mockedApplet.id, name: appletName, keywords: [mockedKeyword] },
+        { signal: undefined },
+      );
+
+      expect(mockAxios.get).toHaveBeenNthCalledWith(1, `/applets/${mockedApplet.id}/library_link`, {
+        signal: undefined,
+      });
+    });
+
+    expect(onAppletSharedMock).toHaveBeenCalledWith({
+      keywords: [mockedKeyword],
+      libraryUrl,
+      appletName,
+    });
+
+    const copyLink = screen.getByTestId(`${dataTestid}-shared-copy-link`);
+    fireEvent.click(copyLink);
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(libraryUrl);
+
+    await waitFor(() => {
+      expect(screen.getByText('Link successfully copied')).toBeInTheDocument();
+    });
   });
 });
