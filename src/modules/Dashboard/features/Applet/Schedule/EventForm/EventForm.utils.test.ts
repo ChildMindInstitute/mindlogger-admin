@@ -518,6 +518,20 @@ describe('EventForm.utils', () => {
       endTime: '10:00',
       activityIncomplete: 8,
     });
+    const testContext12 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekdays,
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 0,
+    });
+    const testContext13 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekdays,
+      startDate: new Date('2023-12-12'),
+      endDate: new Date('2023-12-15'),
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 4,
+    });
 
     test.each`
       reminderTime | testContext      | expected | description
@@ -526,8 +540,6 @@ describe('EventForm.utils', () => {
       ${0}         | ${testContext1}  | ${true}  | ${'reminderTime is falsy or 0'}
       ${'11:00'}   | ${testContext1}  | ${true}  | ${'not cross-day and time is between startTime and endTime'}
       ${'09:00'}   | ${testContext1}  | ${true}  | ${'not cross-day and time is outside startTime and endTime'}
-      ${'10:00'}   | ${testContext2}  | ${true}  | ${'Weekdays periodicity cross-day and time is between startTime and endTime'}
-      ${'14:00'}   | ${testContext2}  | ${false} | ${'Weekdays periodicity cross-day and time is outside startTime and endTime'}
       ${'20:00'}   | ${testContext3}  | ${true}  | ${'Monthly periodicity cross-day and time is between startTime and endTime'}
       ${'19:00'}   | ${testContext3}  | ${false} | ${'Monthly periodicity cross-day and time is outside startTime and endTime'}
       ${'15:00'}   | ${testContext4}  | ${true}  | ${'Once periodicity not cross-day, time is between startTime and endTime'}
@@ -546,6 +558,12 @@ describe('EventForm.utils', () => {
       ${'09:30'}   | ${testContext10} | ${false} | ${'Weekly periodicity cross-day: first day and time is outside startTime and 23:59'}
       ${'10:00'}   | ${testContext11} | ${true}  | ${'Weekly periodicity cross-day: next day and and time is between 00:00 and endTime'}
       ${'10:50'}   | ${testContext11} | ${false} | ${'Weekly periodicity cross-day: next day and time is outside 00:00 and endTime'}
+      ${'10:00'}   | ${testContext2}  | ${true}  | ${'Weekdays periodicity cross-day and time is between startTime and endTime'}
+      ${'14:00'}   | ${testContext2}  | ${false} | ${'Weekdays periodicity cross-day and time is outside startTime and endTime'}
+      ${'23:30'}   | ${testContext12} | ${true}  | ${'Weekdays periodicity cross-day: first day and time is between startTime and 23:59'}
+      ${'15:50'}   | ${testContext12} | ${false} | ${'Weekdays periodicity cross-day: first day and time is outside startTime and 23:59'}
+      ${'09:30'}   | ${testContext13} | ${true}  | ${'Weekdays periodicity cross-day: last day and and time is between 00:00 and endTime'}
+      ${'10:01'}   | ${testContext13} | ${false} | ${'Weekdays periodicity cross-day: last day and time is outside 00:00 and endTime'}
     `(
       '$description, reminderTime=$reminderTime, expected=$expected',
       ({ reminderTime, testContext, expected }) => {
