@@ -703,7 +703,7 @@ export const reminderTimeTest = (
     });
   }
 
-  if (isDailyPeriodicity) {
+  if (isDailyPeriodicity || isWeekdaysPeriodicity) {
     if (activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE || isOnceDailyWeeklyCrossDay) {
       return getReminderTimeComparison({
         time,
@@ -727,23 +727,6 @@ export const reminderTimeTest = (
       false;
 
     return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
-  }
-
-  if (isWeekdaysPeriodicity) {
-    if (isOnceDailyWeeklyCrossDay) {
-      return getReminderTimeComparison({
-        time,
-        startTime,
-        endTime,
-        isCrossDay: true,
-      });
-    }
-
-    return getBetweenStartEndNextDaySingleComparison({
-      time,
-      rangeStartTime: startTime,
-      rangeEndTime: endTime,
-    });
   }
 
   return true;
