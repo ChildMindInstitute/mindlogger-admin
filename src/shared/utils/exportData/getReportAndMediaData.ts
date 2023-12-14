@@ -20,7 +20,7 @@ import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
 
 import { getObjectFromList } from '../getObjectFromList';
 
-const getDecryptedAnswersObject = ({
+export const getDecryptedAnswersObject = ({
   decryptedAnswers,
   hasMigratedAnswers,
   hasUrlEventScreen,
@@ -98,7 +98,7 @@ export const searchItemNameInUrlScreen = (screen: string) => screen.split('/').p
 export const checkIfScreenHasUrl = (screen: string) => /^https?:\/\//.test(screen);
 // For ex.:
 // screen: "https://raw.githubusercontent.com/ChildMindInstitute/NIMH_EMA_applet/master/activities/<activity_name>/items/<item_name>"
-export const checkIfHasJsonLdEventScreen = (decryptedEvents: SuccessedEventDTO[]) => {
+export const checkIfHasGithubImportedEventScreen = (decryptedEvents: SuccessedEventDTO[]) => {
   if (!decryptedEvents.length) return false;
 
   return checkIfScreenHasUrl(decryptedEvents[0]?.screen);
@@ -122,7 +122,7 @@ export const getActivityJourneyData = (
 ) => {
   const decryptedFilteredEvents = decryptedEvents.filter(isSuccessEvent);
   const hasMigratedAnswers = checkIfHasMigratedAnswers(decryptedAnswers);
-  const hasUrlEventScreen = checkIfHasJsonLdEventScreen(decryptedFilteredEvents);
+  const hasUrlEventScreen = checkIfHasGithubImportedEventScreen(decryptedFilteredEvents);
   const getEventScreen = getEventScreenWrapper({ hasUrlEventScreen });
   const decryptedAnswersObject = getDecryptedAnswersObject({
     decryptedAnswers,

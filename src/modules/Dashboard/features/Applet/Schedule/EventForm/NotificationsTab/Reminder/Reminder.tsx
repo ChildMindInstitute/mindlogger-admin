@@ -19,7 +19,7 @@ import { ReminderProps } from './Reminder.types';
 
 export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
   const { t } = useTranslation('app');
-  const { setValue, control, trigger } = useFormContext<EventFormValues>();
+  const { setValue, control, trigger, clearErrors } = useFormContext<EventFormValues>();
   const activityIncompleteField = 'reminder.activityIncomplete';
   const reminderTimeField = 'reminder.reminderTime';
 
@@ -36,6 +36,7 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
 
   const handleRemoveReminder = () => {
     setValue('reminder', null, { shouldDirty: true });
+    clearErrors('reminder');
   };
 
   const triggerFields = () => {
