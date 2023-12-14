@@ -230,7 +230,7 @@ describe('ReportConfigSetting', () => {
       });
     });
 
-    test('Configure Server: all endpoints works', async () => {
+    test('Configure Server: all endpoints work', async () => {
       jest.spyOn(applet, 'useAppletData').mockReturnValue({
         result: mockedAppletData,
       });
