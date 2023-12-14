@@ -8,7 +8,7 @@ const onCloseMock = jest.fn();
 const onSubmitMock = jest.fn();
 
 describe('ConfirmScheduledAccessPopup', () => {
-  test('should render', () => {
+  test('should render and submit', () => {
     renderWithProviders(
       <ConfirmScheduledAccessPopup
         open={true}

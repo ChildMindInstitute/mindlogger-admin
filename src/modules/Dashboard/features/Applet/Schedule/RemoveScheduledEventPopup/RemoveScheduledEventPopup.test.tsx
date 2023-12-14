@@ -8,7 +8,7 @@ const onCloseMock = jest.fn();
 const onSubmitMock = jest.fn();
 
 describe('RemoveScheduledEventPopup', () => {
-  test('should render', () => {
+  test('should render and submit', () => {
     renderWithProviders(
       <RemoveScheduledEventPopup
         open={true}
