@@ -672,11 +672,10 @@ export const reminderTimeTest = (
   const { startTime, endTime, startDate, endDate, periodicity, isCrossDayEvent } =
     getActivityIncompleteCommonFields(testContext);
   const isAlwaysPeriodicity = periodicity === Periodicity.Always;
-  const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
   const isMonthlyPeriodicity = periodicity === Periodicity.Monthly;
 
   if (isAlwaysPeriodicity) return true;
-  if (!isCrossDayEvent || isWeekdaysPeriodicity || isMonthlyPeriodicity) {
+  if (!isCrossDayEvent || isMonthlyPeriodicity) {
     return getBetweenStartEndNextDaySingleComparison({
       time,
       rangeStartTime: startTime,
@@ -687,29 +686,30 @@ export const reminderTimeTest = (
   const isOncePeriodicity = periodicity === Periodicity.Once;
   const isDailyPeriodicity = periodicity === Periodicity.Daily;
   const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
+  const isWeekdaysPeriodicity = periodicity === Periodicity.Weekdays;
   const daysInPeriod = getDaysInPeriod({
     isCrossDayEvent,
     startDate,
     endDate: isOncePeriodicity ? startDate : endDate,
   });
-  const isOnceDailyCrossDay = daysInPeriod.length - 1 === activityIncomplete;
+  const isOnceDailyWeeklyCrossDay = daysInPeriod.length - 1 === activityIncomplete;
 
   if (isOncePeriodicity) {
     return getReminderTimeComparison({
       time,
       startTime,
       endTime,
-      isCrossDay: isOnceDailyCrossDay,
+      isCrossDay: isOnceDailyWeeklyCrossDay,
     });
   }
 
   if (isDailyPeriodicity) {
-    if (activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE || isOnceDailyCrossDay) {
+    if (activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE || isOnceDailyWeeklyCrossDay) {
       return getReminderTimeComparison({
         time,
         startTime,
         endTime,
-        isCrossDay: isOnceDailyCrossDay,
+        isCrossDay: isOnceDailyWeeklyCrossDay,
       });
     }
 
@@ -727,6 +727,23 @@ export const reminderTimeTest = (
       false;
 
     return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
+  }
+
+  if (isWeekdaysPeriodicity) {
+    if (isOnceDailyWeeklyCrossDay) {
+      return getReminderTimeComparison({
+        time,
+        startTime,
+        endTime,
+        isCrossDay: true,
+      });
+    }
+
+    return getBetweenStartEndNextDaySingleComparison({
+      time,
+      rangeStartTime: startTime,
+      rangeEndTime: endTime,
+    });
   }
 
   return true;
