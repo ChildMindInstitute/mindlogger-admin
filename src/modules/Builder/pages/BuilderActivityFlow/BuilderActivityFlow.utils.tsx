@@ -2,20 +2,26 @@ import { generatePath } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
+import { Tab } from 'shared/components/Tabs/Tabs.types';
 
-export const getActivityFlowTabs = ({
-  appletId,
-  activityFlowId,
-}: {
-  appletId?: string;
-  activityFlowId?: string;
-}) => [
+type GetActivityFlowTabs = {
+  (
+    params: { appletId?: string; activityFlowId?: string },
+    tabErrors: { hasAboutActivityFlowErrors: boolean; hasActivityFlowBuilderErrors: boolean },
+  ): Tab[];
+};
+
+export const getActivityFlowTabs: GetActivityFlowTabs = (
+  { appletId, activityFlowId },
+  { hasAboutActivityFlowErrors, hasActivityFlowBuilderErrors },
+) => [
   {
     labelKey: 'aboutActivityFlow',
     id: 'about-activity-flow',
     icon: <Svg id="more-info-outlined" />,
     activeIcon: <Svg id="more-info-filled" />,
     path: generatePath(page.builderAppletActivityFlowItemAbout, { appletId, activityFlowId }),
+    hasError: hasAboutActivityFlowErrors,
     'data-testid': 'builder-tab-about-activity-flow',
   },
   {
@@ -24,6 +30,7 @@ export const getActivityFlowTabs = ({
     icon: <Svg id="checklist-outlined" />,
     activeIcon: <Svg id="checklist-filled" />,
     path: generatePath(page.builderAppletActivityFlowItemBuilder, { appletId, activityFlowId }),
+    hasError: hasActivityFlowBuilderErrors,
     'data-testid': 'builder-tab-activity-flow-builder',
   },
   {
