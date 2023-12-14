@@ -35,7 +35,9 @@ export const ActivityCardItem = ({
   };
 
   return (
-    <StyledCardItemContainer>
+    <StyledCardItemContainer
+      data-testid={`${dataTestid}-question-${activityItem.activityItem.responseType}`}
+    >
       <CollapsedMdText
         text={getDictionaryText(activityItem.activityItem.question)}
         maxHeight={120}

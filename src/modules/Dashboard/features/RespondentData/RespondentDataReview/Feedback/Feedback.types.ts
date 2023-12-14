@@ -1,4 +1,9 @@
 import { DatavizActivity } from 'api';
+import {
+  DecryptedMultiSelectionAnswer,
+  DecryptedSingleSelectionAnswer,
+  DecryptedSliderAnswer,
+} from 'shared/types';
 
 export type FeedbackProps = {
   onClose: () => void;
@@ -7,7 +12,11 @@ export type FeedbackProps = {
 
 export type AssessmentFormItem = {
   itemId: string;
-  answers: string | number | (string | number)[];
+  answers:
+    | DecryptedMultiSelectionAnswer['value']
+    | DecryptedSingleSelectionAnswer['value']
+    | DecryptedSliderAnswer['value']
+    | null;
   edited: number | null;
 };
 

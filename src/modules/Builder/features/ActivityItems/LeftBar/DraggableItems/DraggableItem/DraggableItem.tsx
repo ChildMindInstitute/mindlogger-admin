@@ -64,7 +64,11 @@ export const DraggableItem = ({
                 onChangeItemVisibility={onChangeItemVisibility}
               />
             )}
-            <InsertItem isVisible={isInsertVisible} onInsert={() => onInsertItem(index)} />
+            <InsertItem
+              isVisible={isInsertVisible}
+              onInsert={() => onInsertItem(index)}
+              data-testid={`${dataTestid}-insert-${index}`}
+            />
           </Box>
         )}
       </Draggable>

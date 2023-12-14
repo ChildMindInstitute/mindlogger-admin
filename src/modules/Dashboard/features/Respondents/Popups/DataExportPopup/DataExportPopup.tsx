@@ -90,8 +90,8 @@ export const DataExportPopup = ({
       try {
         const formFromDate = getValues?.().fromDate as Date;
         const formToDate = getValues?.().toDate as Date;
-        const fromDate = formFromDate && format(formFromDate, DateFormats.YearMonthDay);
-        const toDate = formToDate && format(formToDate, DateFormats.YearMonthDay);
+        const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
+        const toDate = formToDate && format(formToDate, DateFormats.shortISO);
         const body = {
           appletId,
           respondentIds: respondentId,
