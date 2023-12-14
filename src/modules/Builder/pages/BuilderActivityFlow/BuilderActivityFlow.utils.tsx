@@ -2,14 +2,8 @@ import { generatePath } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
-import { Tab } from 'shared/components/Tabs/Tabs.types';
 
-type GetActivityFlowTabs = {
-  (
-    params: { appletId?: string; activityFlowId?: string },
-    tabErrors: { hasAboutActivityFlowErrors: boolean; hasActivityFlowBuilderErrors: boolean },
-  ): Tab[];
-};
+import { GetActivityFlowTabs } from './BuilderActivityFlow.types';
 
 export const getActivityFlowTabs: GetActivityFlowTabs = (
   { appletId, activityFlowId },
