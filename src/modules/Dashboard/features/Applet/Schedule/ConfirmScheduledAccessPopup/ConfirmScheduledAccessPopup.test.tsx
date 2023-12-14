@@ -41,7 +41,7 @@ describe('ConfirmScheduledAccessPopup', () => {
       />,
     );
 
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeVisible();
     expect(screen.getByText('Confirm')).toBeDisabled();
 
     fireEvent.click(screen.getByText('Cancel'));

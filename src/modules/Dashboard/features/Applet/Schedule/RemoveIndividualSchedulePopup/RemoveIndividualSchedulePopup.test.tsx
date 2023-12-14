@@ -56,7 +56,7 @@ describe('RemoveIndividualSchedulePopup', () => {
     );
 
     const popupText = screen.getByTestId('remove-individual-schedule-popup-text');
-    expect(screen.getByTestId('remove-individual-schedule-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('remove-individual-schedule-popup')).toBeVisible();
     expect(popupText).toHaveTextContent(
       'You are about to remove Respondent Respondent Name’s individual schedule and move the Respondent to a group of Respondents that use the default schedule. All individually scheduled activities and their notifications will be lost. Are you sure you want to continue?',
     );

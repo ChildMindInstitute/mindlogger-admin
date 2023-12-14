@@ -43,7 +43,7 @@ describe('RemoveAllScheduledEventsPopup', () => {
       />,
     );
 
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeVisible();
     expect(screen.getByText('Remove')).toBeDisabled();
 
     fireEvent.click(screen.getByText('Cancel'));
