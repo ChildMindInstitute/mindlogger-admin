@@ -1,4 +1,4 @@
-import { useState, useMemo, useContext } from 'react';
+import { useState, useMemo, useContext, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
@@ -12,16 +12,30 @@ import { AssessmentFormItem, FeedbackForm } from '../Feedback.types';
 import { FeedbackTabs } from './FeedbackAssessment.const';
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
-import { formatAssessmentAnswers } from './FeedbackAssessment.utils';
+import { formatAssessmentAnswers, getAssessmentVersion } from './FeedbackAssessment.utils';
 import { ActivityCardItemList } from './ActivityCardItemList';
 import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
+import { AssessmentBanner } from './AssessmentBanner';
+import { getDefaultFormValues } from '../Feedback.utils';
+import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
 export const FeedbackAssessment = ({
   setActiveTab,
   assessmentStep,
   setAssessmentStep,
 }: FeedbackAssessmentProps) => {
-  const { assessment, itemIds, setItemIds } = useContext(RespondentDataReviewContext);
+  const {
+    assessment,
+    setAssessment,
+    lastAssessment,
+    assessmentVersions,
+    isLastVersion,
+    setIsLastVersion,
+    isBannerVisible,
+    setIsBannerVisible,
+    itemIds,
+    setItemIds,
+  } = useContext(RespondentDataReviewContext);
   const { appletId = '' } = useParams();
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId');
@@ -73,6 +87,7 @@ export const FeedbackAssessment = ({
       answer,
       itemIds: updatedItemIds || [],
       reviewerPublicKey: accountId,
+      assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
     });
 
     methods.reset({
@@ -87,6 +102,21 @@ export const FeedbackAssessment = ({
     setAssessmentStep(0);
   };
 
+  const handleSelectLastVersion = () => {
+    if (!lastAssessment?.length) return;
+
+    setIsLastVersion(true);
+    setIsBannerVisible(false);
+
+    const updatedAssessment = lastAssessment.map((activityItem) => ({
+      activityItem,
+      answer: undefined,
+    })) as AssessmentActivityItem[];
+    setAssessment(updatedAssessment);
+    setAssessmentStep(0);
+    methods.reset(getDefaultFormValues(updatedAssessment));
+  };
+
   const activityItems = useMemo(() => {
     if (!assessment?.length) return [];
 
@@ -98,6 +128,10 @@ export const FeedbackAssessment = ({
 
   return (
     <StyledContainer>
+      <AssessmentBanner
+        isBannerVisible={isBannerVisible}
+        onSelectLastVersion={handleSelectLastVersion}
+      />
       <ActivityCardItemList
         step={assessmentStep}
         activityItems={activityItems}

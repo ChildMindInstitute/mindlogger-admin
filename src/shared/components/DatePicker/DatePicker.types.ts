@@ -25,6 +25,7 @@ type DatePicker = {
   onMonthChange?: (date: Date) => void;
   disabled?: boolean;
   onCloseCallback?: () => void;
+  onSubmitCallback?: (date: DateType) => void;
   isLoading?: boolean;
   tooltip?: string;
   'data-testid'?: string;
