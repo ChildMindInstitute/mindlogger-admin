@@ -3,42 +3,39 @@ import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { SelectRespondents } from './SelectRespondents';
 import { SearchAcross } from './SelectRespondents.const';
+import { SelectRespondentsProps } from './SelectRespondents.types';
 
 const mockRespondents = [
   { id: '1', secretId: '123', nickname: 'John Doe' },
   { id: '2', secretId: '456', nickname: 'Jane Doe' },
 ];
 
-const mockProps = {
+const mockProps: SelectRespondentsProps = {
   reviewer: { name: 'Reviewer Name', email: 'reviewer@example.com' },
   appletName: 'Test Applet',
   respondents: mockRespondents,
 };
 
-const FormComponent = ({ children }: { children: React.ReactNode }) => {
+const SelectRespondentsComponent = (props: SelectRespondentsProps) => {
   const methods = useForm();
 
-  return <FormProvider {...methods}>{children}</FormProvider>;
+  return (
+    <FormProvider {...methods}>
+      <SelectRespondents {...props} />
+    </FormProvider>
+  );
 };
 
 describe('SelectRespondents', () => {
   test('renders the component with empty respondents', () => {
-    render(
-      <FormComponent>
-        <SelectRespondents {...mockProps} respondents={[]} />
-      </FormComponent>,
-    );
+    render(<SelectRespondentsComponent {...mockProps} respondents={[]} />);
 
     expect(screen.getByText('Reviewer Name (reviewer@example.com)')).toBeInTheDocument();
     expect(screen.getByText(/No Respondents yet./)).toBeInTheDocument();
   });
 
   test('renders the component and handles search input', async () => {
-    render(
-      <FormComponent>
-        <SelectRespondents {...mockProps} />
-      </FormComponent>,
-    );
+    render(<SelectRespondentsComponent {...mockProps} />);
 
     const searchContainer = screen.getByTestId('dashboard-select-respondents-search');
     expect(searchContainer).toBeInTheDocument();
@@ -55,11 +52,7 @@ describe('SelectRespondents', () => {
   });
 
   test('renders the component and handles search across filter change', async () => {
-    render(
-      <FormComponent>
-        <SelectRespondents {...mockProps} />
-      </FormComponent>,
-    );
+    render(<SelectRespondentsComponent {...mockProps} />);
 
     const selectContainer = screen.getByTestId('select-respondents-popup-search-across');
     expect(selectContainer).toBeInTheDocument();
@@ -75,11 +68,7 @@ describe('SelectRespondents', () => {
   });
 
   test('renders the component with the correct description and handles respondent selection', async () => {
-    render(
-      <FormComponent>
-        <SelectRespondents {...mockProps} />
-      </FormComponent>,
-    );
+    render(<SelectRespondentsComponent {...mockProps} />);
 
     const respondent = screen.getByTestId('dashboard-managers-select-respondents-respondent-1');
     expect(respondent).toBeInTheDocument();
