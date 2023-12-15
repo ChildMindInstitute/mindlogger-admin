@@ -57,7 +57,6 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const disabledLatestReport =
     !currentActivity?.scoresAndReports?.generateReport || !appletData?.reportPublicKey;
 
-  const [latestReportError, setLatestReportError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityCompletion[]>([]);
   const [responseOptions, setResponseOptions] = useState<Record<string, FormattedResponse[]>>();
@@ -79,34 +78,29 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     ],
   });
 
-  const { execute: getLatestReport, isLoading: latestReportLoading } = useAsync(
-    getLatestReportApi,
-    (response) => {
-      try {
-        const data = response?.data;
-        const headers = response?.headers;
+  const {
+    execute: getLatestReport,
+    isLoading: latestReportLoading,
+    error: latestReportError,
+  } = useAsync(getLatestReportApi, (response) => {
+    const data = response?.data;
+    const headers = response?.headers;
 
-        if (data) {
-          const contentDisposition = headers?.['content-disposition'];
-          const fileName =
-            (contentDisposition &&
-              LATEST_REPORT_REGEX.exec(contentDisposition)?.groups?.filename) ??
-            LATEST_REPORT_DEFAULT_NAME;
-          const base64Str = Buffer.from(data).toString('base64');
-          const linkSource = getLatestReportUrl(base64Str);
+    if (data) {
+      const contentDisposition = headers?.['content-disposition'];
+      const fileName =
+        (contentDisposition && LATEST_REPORT_REGEX.exec(contentDisposition)?.groups?.filename) ??
+        LATEST_REPORT_DEFAULT_NAME;
+      const base64Str = Buffer.from(data).toString('base64');
+      const linkSource = getLatestReportUrl(base64Str);
 
-          download(linkSource, fileName, LATEST_REPORT_TYPE);
-        }
-      } catch (error) {
-        setLatestReportError(getErrorMessage(error));
-      }
-    },
-  );
+      download(linkSource, fileName, LATEST_REPORT_TYPE);
+    }
+  });
 
   const downloadLatestReportHandler = async () => {
     if (!appletId || !respondentId) return;
 
-    setLatestReportError(null);
     getLatestReport({
       appletId,
       activityId: activity.id,
@@ -206,7 +200,9 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
               </span>
             </Tooltip>
             {latestReportError && (
-              <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>{latestReportError}</StyledErrorText>
+              <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>
+                {getErrorMessage(latestReportError)}
+              </StyledErrorText>
             )}
           </Box>
         </StyledHeader>

@@ -28,7 +28,7 @@ export const RespondentData = () => {
   const respondentDataTabs = useRespondentDataTabs();
 
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, (result) => {
-    setSummaryActivities(result?.data?.result);
+    setSummaryActivities(result?.data?.result || []);
   });
 
   const [summaryActivities, setSummaryActivities] = useState<DatavizActivity[]>();

@@ -22,7 +22,7 @@ export const FeedbackReviewed = () => {
   const { execute: getReviews } = useAsync(
     getReviewsApi,
     (result) => {
-      const decryptedData = result?.data.result.map((review) => {
+      const decryptedData = result?.data?.result.map((review) => {
         const { reviewerPublicKey, reviewer, ...assessmentData } = review;
         const encryptedData = {
           ...assessmentData,
@@ -35,7 +35,7 @@ export const FeedbackReviewed = () => {
         };
       });
 
-      setReviewers(decryptedData as ReviewData[]);
+      setReviewers((decryptedData as ReviewData[]) ?? []);
     },
     undefined,
     () => setIsLoading(false),

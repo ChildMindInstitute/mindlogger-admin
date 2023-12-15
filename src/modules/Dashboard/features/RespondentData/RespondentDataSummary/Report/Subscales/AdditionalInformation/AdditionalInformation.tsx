@@ -13,7 +13,7 @@ import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInform
 export const AdditionalInformation = ({ optionText }: AdditionalInformationProps) => {
   const { t } = useTranslation();
   const { execute: getOptionText } = useAsync(getOptionTextApi, (response) =>
-    setAdditionalInformation(response?.data),
+    setAdditionalInformation(response?.data || ''),
   );
 
   const [additionalInformation, setAdditionalInformation] = useState('');
