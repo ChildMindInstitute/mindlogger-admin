@@ -9,7 +9,6 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { Box } from '@mui/material';
 
 import { getOptionTextApi } from 'api';
-import { useAsync } from 'shared/hooks/useAsync';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 import { pluck } from 'shared/utils';
@@ -37,7 +36,6 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
   const [tooltipData, setTooltipData] = useState<TooltipData[] | null>(null);
 
-  const { execute: getOptionText } = useAsync(getOptionTextApi);
   const { watch } = useFormContext<SummaryFiltersForm>();
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
@@ -82,7 +80,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
           let optionText = (dataPoint.raw as SubscaleLineDataPointRaw).optionText;
 
           if (optionText && optionText.match(LINK_PATTERN)) {
-            optionText = (await getOptionText(optionText)).data;
+            optionText = (await getOptionTextApi(optionText)).data;
           }
 
           return {

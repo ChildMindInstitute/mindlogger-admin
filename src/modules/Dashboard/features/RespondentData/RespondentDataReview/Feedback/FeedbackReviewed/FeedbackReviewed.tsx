@@ -19,7 +19,27 @@ export const FeedbackReviewed = () => {
   const answerId = searchParams.get('answerId');
 
   const getDecryptedActivityData = useDecryptedActivityData();
-  const { execute: getReviews } = useAsync(getReviewsApi);
+  const { execute: getReviews } = useAsync(
+    getReviewsApi,
+    (result) => {
+      const decryptedData = result?.data.result.map((review) => {
+        const { reviewerPublicKey, reviewer, ...assessmentData } = review;
+        const encryptedData = {
+          ...assessmentData,
+          userPublicKey: reviewerPublicKey,
+        } as Review;
+
+        return {
+          reviewer,
+          review: getDecryptedActivityData(encryptedData).decryptedAnswers,
+        };
+      });
+
+      setReviewers(decryptedData as ReviewData[]);
+    },
+    undefined,
+    () => setIsLoading(false),
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [reviewers, setReviewers] = useState<ReviewData[]>([]);
   const dataTestid = 'respondents-data-summary-feedback-reviewed';
@@ -27,27 +47,7 @@ export const FeedbackReviewed = () => {
   useEffect(() => {
     if (!appletId || !answerId) return;
 
-    (async () => {
-      try {
-        const result = await getReviews({ appletId, answerId });
-        const decryptedData = result.data.result.map((review) => {
-          const { reviewerPublicKey, reviewer, ...assessmentData } = review;
-          const encryptedData = {
-            ...assessmentData,
-            userPublicKey: reviewerPublicKey,
-          } as Review;
-
-          return {
-            reviewer,
-            review: getDecryptedActivityData(encryptedData).decryptedAnswers,
-          };
-        });
-
-        setReviewers(decryptedData as ReviewData[]);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+    getReviews({ appletId, answerId });
   }, []);
 
   return (

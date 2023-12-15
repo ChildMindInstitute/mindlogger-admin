@@ -79,32 +79,39 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     ],
   });
 
-  const { execute: getAnswers } = useAsync(getAnswersApi);
-  const { execute: getLatestReport, isLoading: latestReportLoading } = useAsync(getLatestReportApi);
+  const { execute: getLatestReport, isLoading: latestReportLoading } = useAsync(
+    getLatestReportApi,
+    (response) => {
+      try {
+        const data = response?.data;
+        const headers = response?.headers;
+
+        if (data) {
+          const contentDisposition = headers?.['content-disposition'];
+          const fileName =
+            (contentDisposition &&
+              LATEST_REPORT_REGEX.exec(contentDisposition)?.groups?.filename) ??
+            LATEST_REPORT_DEFAULT_NAME;
+          const base64Str = Buffer.from(data).toString('base64');
+          const linkSource = getLatestReportUrl(base64Str);
+
+          download(linkSource, fileName, LATEST_REPORT_TYPE);
+        }
+      } catch (error) {
+        setLatestReportError(getErrorMessage(error));
+      }
+    },
+  );
 
   const downloadLatestReportHandler = async () => {
     if (!appletId || !respondentId) return;
 
     setLatestReportError(null);
-    try {
-      const { data, headers } = await getLatestReport({
-        appletId,
-        activityId: activity.id,
-        respondentId,
-      });
-      if (data) {
-        const contentDisposition = headers?.['content-disposition'];
-        const fileName =
-          (contentDisposition && LATEST_REPORT_REGEX.exec(contentDisposition)?.groups?.filename) ??
-          LATEST_REPORT_DEFAULT_NAME;
-        const base64Str = Buffer.from(data).toString('base64');
-        const linkSource = getLatestReportUrl(base64Str);
-
-        download(linkSource, fileName, LATEST_REPORT_TYPE);
-      }
-    } catch (error) {
-      setLatestReportError(getErrorMessage(error));
-    }
+    getLatestReport({
+      appletId,
+      activityId: activity.id,
+      respondentId,
+    });
   };
 
   useEffect(() => {
@@ -116,7 +123,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           getValues();
         const selectedIdentifiers = getIdentifiers(filterByIdentifier, identifier, identifiers);
 
-        const result = await getAnswers({
+        const result = await getAnswersApi({
           appletId,
           activityId: activity.id,
           params: {
@@ -155,6 +162,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
         setSubscalesFrequency(subscalesFrequency);
         setResponseOptions(formattedResponses);
+      } catch (error) {
+        console.warn(error);
       } finally {
         setIsLoading(false);
       }
