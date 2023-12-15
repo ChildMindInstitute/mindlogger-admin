@@ -39,8 +39,11 @@ export const StyledPopover = styled(Popover)`
       }
     }
 
-    &__day--keyboard-selected {
+    &__day--keyboard-selected:not(.react-datepicker__day--disabled) {
       color: ${variables.palette.on_surface};
+    }
+
+    &__day--keyboard-selected {
       background-color: transparent;
     }
 
@@ -67,10 +70,17 @@ export const StyledPopover = styled(Popover)`
       }
     }
 
-    &__day--today:not(.react-datepicker__day--selected):not(.react-datepicker__day--outside-month) {
+    &__day--today:not(.react-datepicker__day--selected):not(
+        .react-datepicker__day--outside-month
+      ):not(.react-datepicker__day--disabled) {
       border: ${variables.borderWidth.md} solid ${variables.palette.primary};
       font-weight: ${variables.font.weight.regular};
       color: ${variables.palette.primary};
+    }
+
+    &__day--today.react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
+      border: ${variables.borderWidth.md} solid ${variables.palette.on_surface_alfa12};
+      font-weight: ${variables.font.weight.regular};
     }
 
     &__day--outside-month {
@@ -134,6 +144,10 @@ export const StyledTextField = styled(TextField)`
 
   .MuiInputBase-root {
     padding-right: ${theme.spacing(0.5)};
+  }
+
+  .MuiInputBase-input {
+    caret-color: transparent;
   }
 
   .Mui-disabled {

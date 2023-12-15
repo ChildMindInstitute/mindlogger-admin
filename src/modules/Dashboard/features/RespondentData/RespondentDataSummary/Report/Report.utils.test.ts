@@ -1,6 +1,15 @@
 import { ItemResponseType } from 'shared/consts';
+import { SingleAndMultipleSelectItemResponseValues, SingleSelectItem } from 'shared/state';
+import { ActivityItemAnswer } from 'shared/types';
 
-import { getDateISO, getSliderOptions, isAnswerTypeCorrect, isValueDefined } from './Report.utils';
+import {
+  compareActivityItem,
+  getDateISO,
+  getSliderOptions,
+  isAnswerTypeCorrect,
+  isValueDefined,
+  formatActivityItemAnswers,
+} from './Report.utils';
 
 describe('isValueDefined', () => {
   test.each`
@@ -62,5 +71,266 @@ describe('getSliderOptions', () => {
   `('$description', ({ minValue, maxValue, itemId, expectedOptions }) => {
     const result = getSliderOptions({ minValue, maxValue }, itemId);
     expect(result).toEqual(expectedOptions);
+  });
+});
+
+const answerDate = '2023-11-06T13:12:09.736000';
+
+const commonSingleSelectionConfig = {
+  removeBackButton: false,
+  skippableItem: false,
+  randomizeOptions: false,
+  timer: 0,
+  addScores: false,
+  setAlerts: false,
+  addTooltip: false,
+  setPalette: false,
+  addTokens: null,
+  additionalResponseOption: {
+    textInputOption: false,
+    textInputRequired: false,
+  },
+};
+
+const prevActivityItem = {
+  activityItem: {
+    id: 'e77acf6b-0938-45c8-a254-da620941daf3',
+    name: 'Item1',
+    question: {
+      en: 'Question before update',
+    },
+    responseType: ItemResponseType.SingleSelection,
+    responseValues: {
+      options: [
+        {
+          id: '88f88333-c5fb-4e1e-8a20-8c4bbca192e1',
+          text: 'SS 2',
+          value: 0,
+        },
+        {
+          id: '4669350b-2435-4c3a-b180-cbb8245df264',
+          text: 'SS 1',
+          value: 1,
+        },
+      ],
+    },
+  },
+  answers: [
+    {
+      answer: {
+        value: 1,
+        text: null,
+      },
+      date: '2023-11-06T11:06:46.710000',
+    },
+  ],
+};
+
+const currActivityItem = {
+  activityItem: {
+    question: {
+      en: 'Question after update',
+    },
+    responseType: ItemResponseType.SingleSelection,
+    responseValues: {
+      options: [
+        {
+          id: '0be0aeba-058a-4df4-aa7c-296a1d8211b3',
+          text: 'SS 3 (new)',
+          value: 2,
+        },
+        {
+          id: '88f88333-c5fb-4e1e-8a20-8c4bbca192e1',
+          text: 'SS 2 (updated)',
+          value: 1,
+        },
+        {
+          id: '4669350b-2435-4c3a-b180-cbb8245df264',
+          text: 'SS 1',
+          value: 0,
+        },
+      ],
+    } as SingleAndMultipleSelectItemResponseValues,
+    config: commonSingleSelectionConfig,
+    name: 'Item1',
+    isHidden: false,
+    allowEdit: true,
+    id: 'e77acf6b-0938-45c8-a254-da620941daf3',
+    order: 1,
+  } as SingleSelectItem,
+  answer: {
+    value: 2,
+    text: null,
+  },
+  items: [
+    {
+      question: {
+        en: 'Question after update',
+      },
+      responseType: ItemResponseType.SingleSelection,
+      responseValues: {
+        paletteName: null,
+        options: [
+          {
+            id: '0be0aeba-058a-4df4-aa7c-296a1d8211b3',
+            text: 'SS 3 (new)',
+            value: 2,
+          },
+          {
+            id: '88f88333-c5fb-4e1e-8a20-8c4bbca192e1',
+            text: 'SS 2 (updated)',
+            value: 1,
+          },
+          {
+            id: '4669350b-2435-4c3a-b180-cbb8245df264',
+            text: 'SS 1',
+            value: 0,
+          },
+        ],
+      },
+      config: commonSingleSelectionConfig,
+      name: 'Item1',
+      isHidden: false,
+      allowEdit: true,
+      id: 'e77acf6b-0938-45c8-a254-da620941daf3',
+      order: 1,
+    },
+  ],
+};
+
+const expectedResult = {
+  activityItem: {
+    id: 'e77acf6b-0938-45c8-a254-da620941daf3',
+    name: 'Item1',
+    question: {
+      en: 'Question after update',
+    },
+    responseType: ItemResponseType.SingleSelection,
+    responseValues: {
+      options: [
+        {
+          id: '88f88333-c5fb-4e1e-8a20-8c4bbca192e1',
+          text: 'SS 2 (updated)',
+          value: 1,
+        },
+        {
+          id: '4669350b-2435-4c3a-b180-cbb8245df264',
+          text: 'SS 1',
+          value: 2,
+        },
+        {
+          id: '0be0aeba-058a-4df4-aa7c-296a1d8211b3',
+          text: 'SS 3 (new)',
+          value: 0,
+        },
+      ],
+    },
+  },
+  answers: [
+    {
+      answer: {
+        value: 2,
+        text: null,
+      },
+      date: '2023-11-06T11:06:46.710000',
+    },
+    {
+      answer: {
+        value: 0,
+        text: null,
+      },
+      date: answerDate,
+    },
+  ],
+};
+
+describe('compareActivityItem', () => {
+  test('should be updated question and options for activity and added new answer', () => {
+    const result = compareActivityItem(prevActivityItem, currActivityItem, answerDate);
+    expect(result).toEqual(expectedResult);
+  });
+});
+
+const currentAnswer: ActivityItemAnswer = {
+  activityItem: {
+    question: {
+      en: 'SS',
+    },
+    responseType: ItemResponseType.SingleSelection,
+    responseValues: {
+      options: [
+        {
+          id: '0be0aeba-058a-4df4-aa7c-296a1d8211b3',
+          text: 'SS 3',
+          value: 2,
+        },
+        {
+          id: '88f88333-c5fb-4e1e-8a20-8c4bbca192e1',
+          text: 'SS 2',
+          value: 1,
+        },
+        {
+          id: '4669350b-2435-4c3a-b180-cbb8245df264',
+          text: 'SS 1',
+          value: 0,
+        },
+      ],
+    },
+    config: commonSingleSelectionConfig,
+    name: 'Item1',
+    isHidden: false,
+    allowEdit: true,
+    id: 'e77acf6b-0938-45c8-a254-da620941daf3',
+    order: 1,
+  },
+  answer: {
+    value: 1,
+    text: null,
+  },
+};
+
+const formatActivityItemAnswersResult = {
+  activityItem: {
+    id: 'e77acf6b-0938-45c8-a254-da620941daf3',
+    name: 'Item1',
+    question: {
+      en: 'SS',
+    },
+    responseType: ItemResponseType.SingleSelection,
+    responseValues: {
+      options: [
+        {
+          id: '0be0aeba-058a-4df4-aa7c-296a1d8211b3',
+          text: 'SS 3',
+          value: 0,
+        },
+        {
+          id: '88f88333-c5fb-4e1e-8a20-8c4bbca192e1',
+          text: 'SS 2',
+          value: 1,
+        },
+        {
+          id: '4669350b-2435-4c3a-b180-cbb8245df264',
+          text: 'SS 1',
+          value: 2,
+        },
+      ],
+    },
+  },
+  answers: [
+    {
+      answer: {
+        value: 1,
+        text: null,
+      },
+      date: answerDate,
+    },
+  ],
+};
+
+describe('formatActivityItemAnswers', () => {
+  test('activity and answers should be formatted to FormattedResponse type', () => {
+    const result = formatActivityItemAnswers(currentAnswer, answerDate);
+    expect(result).toEqual(formatActivityItemAnswersResult);
   });
 });

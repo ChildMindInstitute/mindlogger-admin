@@ -8,6 +8,7 @@ export type CustomLegend = LegendElement<keyof ChartTypeRegistry> & {
 };
 
 export type SetTooltipStyles = {
+  chartType: ChartType;
   tooltipEl: HTMLDivElement;
   positionX: number;
   positionY: number;
@@ -21,9 +22,12 @@ type TooltipDataAction = ScatterTooltipData | MultiScatterTooltipData | null;
 
 export type SetTooltipData = Dispatch<SetStateAction<TooltipDataAction>>;
 
-export enum ScatterChartType {
+export enum ChartType {
   ScatterChart,
   MultiScatterChart,
+  BarChart,
+  SubscaleLineChart,
+  TimePickerLineChart,
 }
 
 export type ScatterChartTooltipHandler = {
@@ -36,5 +40,5 @@ export type ScatterChartTooltipHandler = {
     unknown
   > | null>;
   setTooltipData: SetTooltipData;
-  type: ScatterChartType;
+  chartType: ChartType;
 };

@@ -1,26 +1,38 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
+import { Box } from '@mui/material';
 
-import { StyledTitleMedium, theme } from 'shared/styles';
+import { useCustomFormContext } from 'modules/Builder/hooks';
+import { StyledObserverTarget, StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { ConditionalLogic } from 'shared/state';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { Spinner } from 'shared/components';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
+import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
+import { ITEMS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 
 import { ItemFlow } from './ItemFlow';
 import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
 import { RemoveItemFlowPopup } from './RemoveItemFlowPopup';
 import { getEmptyFlowItem } from './ActivityItemsFlow.utils';
+import {
+  ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS,
+  ACTIVITY_ITEMS_FLOW_LIST_CLASS,
+  contentStyles,
+} from './ActivityItemsFlow.const';
 
 export const ActivityItemsFlow = () => {
   const { t } = useTranslation('app');
   const [itemIndexToDelete, setItemIndexToDelete] = useState(-1);
 
-  const { control, watch } = useFormContext();
+  const { control } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const conditionalLogicName = `${fieldName}.conditionalLogic`;
+  const items = useWatch({ name: `${fieldName}.items` });
+
   const {
     fields: flowItems,
     append: appendFlowItem,
@@ -29,8 +41,6 @@ export const ActivityItemsFlow = () => {
     control,
     name: conditionalLogicName,
   });
-
-  const items = watch(`${fieldName}.items`);
 
   const handleAddItemFlow = () => {
     appendFlowItem(getEmptyFlowItem() as ConditionalLogic);
@@ -46,8 +56,14 @@ export const ActivityItemsFlow = () => {
     handleCloseRemovePopup();
   };
 
+  const { data: flowItemsData, isPending } = useDataPreloader<ConditionalLogic>({
+    data: flowItems,
+    rootSelector: `.${ACTIVITY_ITEMS_FLOW_LIST_CLASS}`,
+    targetSelector: `.${ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS}`,
+  });
+
   const headerProps = {
-    isAddItemFlowDisabled: items?.length < 2,
+    isAddItemFlowDisabled: items?.length < 2 || isPending,
     onAddItemFlow: handleAddItemFlow,
   };
 
@@ -59,20 +75,32 @@ export const ActivityItemsFlow = () => {
       Header={ActivityItemsFlowHeader}
       headerProps={headerProps}
       hasMaxWidth
+      contentClassName={ACTIVITY_ITEMS_FLOW_LIST_CLASS}
+      contentSxProps={contentStyles}
     >
-      {flowItems?.length ? (
-        flowItems.map((flowItem: ConditionalLogic, index: number) => (
+      {!!flowItemsData?.length &&
+        flowItemsData.map((flowItem: ConditionalLogic, index: number) => (
           <ItemFlow
             key={`item-flow-${flowItem.key}`}
             name={conditionalLogicName}
             index={index}
+            isStaticActive={flowItemsData.length > ITEMS_COUNT_TO_ACTIVATE_STATIC}
             onRemove={() => handleRemoveItemFlow(index)}
           />
-        ))
-      ) : (
+        ))}
+      {!flowItemsData?.length && !isPending && (
         <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
           {t('activityItemsFlowDescription')}
         </StyledTitleMedium>
+      )}
+      <StyledObserverTarget
+        className={ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS}
+        sx={{ position: 'absolute', bottom: '5rem' }}
+      />
+      {isPending && (
+        <Box sx={{ position: 'relative' }}>
+          <Spinner />
+        </Box>
       )}
       {isRemovePopupOpened && (
         <RemoveItemFlowPopup

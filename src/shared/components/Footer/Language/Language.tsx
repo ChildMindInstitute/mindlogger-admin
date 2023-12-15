@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Svg } from 'shared/components/Svg';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
 import { Languages } from 'shared/api';
@@ -10,21 +9,7 @@ import { Languages } from 'shared/api';
 import { SelectLanguage } from './SelectLanguage';
 import { LanguageItem } from './Language.types';
 import { StyledLanguage, StyledFlag } from './Language.styles';
-
-export const languages: LanguageItem[] = [
-  {
-    value: Languages.EN,
-    label: 'English',
-    type: 'United States',
-    component: <Svg id="us" width={32} height={24} />,
-  },
-  {
-    value: Languages.FR,
-    label: 'Français',
-    type: 'France',
-    component: <Svg id="france" width={32} height={24} />,
-  },
-];
+import { languages } from './Language.const';
 
 export const Language = () => {
   const { i18n } = useTranslation('app');
@@ -61,12 +46,7 @@ export const Language = () => {
         </StyledLanguage>
       </Box>
       {open && (
-        <SelectLanguage
-          open={open}
-          onClose={handleClose}
-          languages={languages}
-          currentLanguage={currentLanguage}
-        />
+        <SelectLanguage open={open} onClose={handleClose} currentLanguage={currentLanguage} />
       )}
     </>
   );

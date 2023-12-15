@@ -21,7 +21,7 @@ export const StyledDialog = styled(Dialog)`
 
 export const StyledDialogTitle = styled(DialogTitle)`
   && {
-    padding: ${theme.spacing(2.8, 2.4, 3.4)};
+    padding: ${theme.spacing(2.8, 3.2, 3.4)};
   }
 `;
 

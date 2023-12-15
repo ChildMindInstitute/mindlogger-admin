@@ -3,15 +3,19 @@ import { Chart as ChartJS } from 'chart.js/dist/types';
 import {
   CustomLegend,
   ScatterChartTooltipHandler,
-  ScatterChartType,
+  ChartType,
   SetTooltipStyles,
 } from './Chart.types';
 import {
+  LEGEND_HEIGHT,
   MAX_LABEL_CHARS_Y,
-  MAX_TICKS_LENGTH,
-  MIN_TICKS_LENGTH,
+  MAX_TICKS_COUNT,
+  MIN_TICKS_COUNT,
   MS_PER_DAY,
   MS_PER_HOUR,
+  POINT_RADIUS_DEFAULT,
+  POINT_RADIUS_SECONDARY,
+  TICK_HEIGHT,
 } from './Charts.const';
 
 export const truncateString = (label: string) =>
@@ -64,9 +68,6 @@ export const getTimelineStepSize = (minMs: number, maxMs: number) => {
   return 15; // step is 15m
 };
 
-export const getTicksStepSize = (maxScore: number) =>
-  maxScore > 2 ? Math.ceil(maxScore / MAX_TICKS_LENGTH) : maxScore / MIN_TICKS_LENGTH;
-
 export const legendMargin = {
   id: 'legendMargin',
   beforeInit: (chart: ChartJS) => {
@@ -78,9 +79,17 @@ export const legendMargin = {
   },
 };
 
-export const setTooltipStyles = ({ tooltipEl, positionX, positionY }: SetTooltipStyles) => {
+export const setTooltipStyles = ({
+  chartType,
+  tooltipEl,
+  positionX,
+  positionY,
+}: SetTooltipStyles) => {
+  const POINT_RADIUS =
+    chartType === ChartType.SubscaleLineChart ? POINT_RADIUS_SECONDARY : POINT_RADIUS_DEFAULT;
+  const VERTICAL_OFFSET = POINT_RADIUS - 0.6;
   tooltipEl.style.display = 'block';
-  tooltipEl.style.top = `${positionY}px`;
+  tooltipEl.style.top = `${positionY + VERTICAL_OFFSET}px`;
   tooltipEl.style.left = `${positionX}px`;
 };
 
@@ -90,7 +99,7 @@ export const scatterChartTooltipHandler = ({
   isHovered,
   chartRef,
   setTooltipData,
-  type,
+  chartType,
 }: ScatterChartTooltipHandler) => {
   if (context.tooltip.dataPoints?.find((dataPoint) => dataPoint.dataset.xAxisID === 'x2')) return; // hide the tooltip for version axis
   const tooltipEl = tooltipRef.current;
@@ -109,10 +118,41 @@ export const scatterChartTooltipHandler = ({
   const chart = chartRef.current;
 
   if (chart) {
-    setTooltipData(type === ScatterChartType.ScatterChart ? dataPoints[0] : dataPoints);
+    setTooltipData(chartType === ChartType.ScatterChart ? dataPoints[0] : dataPoints);
     const {
       element: { x: positionX, y: positionY },
     } = dataPoints[0];
-    setTooltipStyles({ tooltipEl, positionX, positionY });
+    setTooltipStyles({ chartType, tooltipEl, positionX, positionY });
   }
+};
+
+const getLength = (minScore: number, maxScore: number) => {
+  if (minScore > 0 && maxScore > 0) {
+    return Math.ceil(maxScore);
+  }
+  if (minScore < 0 && maxScore < 0) {
+    return Math.abs(Math.floor(minScore));
+  }
+
+  return Math.ceil(maxScore) + Math.abs(Math.floor(minScore));
+};
+
+export const getTicksData = (minScore: number, maxScore: number) => {
+  const length = getLength(minScore, maxScore);
+
+  const ticks = (length < MAX_TICKS_COUNT ? MIN_TICKS_COUNT : MAX_TICKS_COUNT) - 1;
+
+  const stepSize = Math.ceil(length / ticks);
+
+  const min = minScore < 0 ? Math.floor(minScore) : 0;
+  const max =
+    stepSize * (length < MAX_TICKS_COUNT ? MIN_TICKS_COUNT : MAX_TICKS_COUNT) +
+    (minScore < 0 ? Math.floor(minScore) : 0);
+
+  return {
+    min,
+    max,
+    stepSize,
+    height: (ticks + 1) * TICK_HEIGHT + LEGEND_HEIGHT, // +1 to include version tick
+  };
 };

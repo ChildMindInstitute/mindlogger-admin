@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store/hooks';
-import { Respondent } from 'modules/Dashboard/types';
 
 import * as thunk from './Users.thunk';
 import { state as initialState } from './Users.state';
@@ -37,12 +36,12 @@ export const users = {
         },
       }) => status,
     ),
-  useRespondent: (id: string): Respondent | undefined =>
+  useRespondent: (): UsersSchema['respondentDetails']['data'] | undefined =>
     useAppSelector(
       ({
         users: {
-          allRespondents: { data },
+          respondentDetails: { data },
         },
-      }) => data?.result.find((respondent: Respondent) => respondent.id === id),
+      }) => data,
     ),
 };

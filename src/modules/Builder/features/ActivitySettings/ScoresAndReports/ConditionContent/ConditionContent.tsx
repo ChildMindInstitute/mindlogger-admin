@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';
 import { Condition } from 'shared/state';
@@ -7,6 +7,8 @@ import { getEntityKey } from 'shared/utils';
 import { ConditionRow } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
+import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
@@ -23,7 +25,8 @@ export const ConditionContent = ({
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
-  const { control, getFieldState } = useFormContext();
+  const { control, getFieldState } = useCustomFormContext();
+  const { fieldName } = useCurrentActivity();
   const {
     fields: conditions,
     append: appendCondition,
@@ -48,6 +51,7 @@ export const ConditionContent = ({
         <ConditionRow
           key={`score-condition-${getEntityKey(condition) || index}-${index}`}
           name={name}
+          activityName={fieldName}
           index={index}
           type={type}
           scoreKey={type === ConditionRowType.Score ? score?.key : ''}

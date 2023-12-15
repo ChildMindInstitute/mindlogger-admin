@@ -1,4 +1,4 @@
-import { Modal } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
@@ -10,6 +10,7 @@ export const RemoveScheduledEventPopup = ({
   onClose,
   onSubmit,
   activityName,
+  isLoading,
   'data-testid': dataTestid,
 }: RemoveScheduledEventPopupProps) => {
   const { t } = useTranslation();
@@ -25,17 +26,21 @@ export const RemoveScheduledEventPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
+      disabledSubmit={isLoading}
       data-testid={dataTestid}
     >
-      <StyledModalWrapper>
-        <Trans i18nKey="confirmRemoveScheduledEvent">
-          Are you sure you want to remove this scheduled event for
-          <strong>
-            <> {{ activityName }}</>
-          </strong>
-          ?
-        </Trans>
-      </StyledModalWrapper>
+      <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        <StyledModalWrapper>
+          <Trans i18nKey="confirmRemoveScheduledEvent">
+            Are you sure you want to remove this scheduled event for
+            <strong>
+              <> {{ activityName }}</>
+            </strong>
+            ?
+          </Trans>
+        </StyledModalWrapper>
+      </>
     </Modal>
   );
 };

@@ -9,9 +9,10 @@ import { SignIn } from 'api';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
+import { navigateToLibrary } from 'modules/Auth/utils';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
-import { getErrorMessage, Mixpanel, navigateToLibrary } from 'shared/utils';
+import { Mixpanel } from 'shared/utils';
 import { variables } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
 
@@ -50,7 +51,7 @@ export const LoginForm = () => {
     }
 
     if (signIn.rejected.match(result)) {
-      setErrorMessage(getErrorMessage(result.payload));
+      setErrorMessage(result.payload as string);
     }
   };
 
@@ -97,7 +98,7 @@ export const LoginForm = () => {
             data-testid="login-form-password"
           />
         </StyledController>
-        {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
+        {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
         <StyledForgotPasswordLink
           onClick={() => navigate(page.passwordReset)}
           data-testid="login-form-forgot-password"

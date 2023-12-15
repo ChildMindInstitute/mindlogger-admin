@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -22,7 +21,11 @@ import {
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
 import { ItemFormValues } from 'modules/Builder/types';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import {
+  useRedirectIfNoMatchedActivity,
+  useCurrentActivity,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
@@ -35,9 +38,9 @@ import {
 export const ActivityAbout = () => {
   const { t } = useTranslation();
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
-  const { control, setValue, watch } = useFormContext();
+  const { control, setValue, watch } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
   const hasVariableAmongItems = useCheckIfItemsHaveVariables();
   const hasRequiredItems = useCheckIfItemsHaveRequiredItems();

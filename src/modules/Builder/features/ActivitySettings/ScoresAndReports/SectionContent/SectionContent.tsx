@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledFlexColumn, theme } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
@@ -25,7 +26,7 @@ export const SectionContent = ({
   items,
 }: SectionContentProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue } = useFormContext();
+  const { control, setValue } = useCustomFormContext();
   const conditionalLogicName = `${name}.conditionalLogic`;
   const conditionalLogic = useWatch({ name: conditionalLogicName });
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
@@ -44,7 +45,7 @@ export const SectionContent = ({
   };
 
   return (
-    <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }}>
+    <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }} data-testId={dataTestid}>
       <InputController
         control={control}
         key={`${name}.name`}

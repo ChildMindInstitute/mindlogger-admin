@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import { useIntersectionObserver } from './useIntersectionObserver';
 
@@ -23,10 +23,17 @@ export function getObserverOf(element: Element): IntersectionObserver {
   return instanceMap.get(element);
 }
 
-const Observed = ({ callback = () => {} }: { callback?: () => void }) => {
+const Observed = ({
+  callback = () => {},
+  isActive,
+}: {
+  callback?: () => void;
+  isActive?: boolean;
+}) => {
   useIntersectionObserver({
     targetSelector: '.observed',
-    loadNextPage: callback,
+    onAppear: callback,
+    isActive,
   });
 
   return (
@@ -70,8 +77,8 @@ describe('useIntersectionObserver', () => {
   });
 
   test('hook subscribes to the element on the page', () => {
-    const { getByTestId } = render(<Observed />);
-    const target = getByTestId('observed');
+    render(<Observed />);
+    const target = screen.getByTestId('observed');
     const instance = getObserverOf(target);
 
     expect(instance.observe).toHaveBeenCalledWith(target);
@@ -79,8 +86,8 @@ describe('useIntersectionObserver', () => {
 
   test('loadNextPage should be called if component is on the screen', () => {
     const callback = jest.fn();
-    const { getByTestId } = render(<Observed callback={callback} />);
-    const target = getByTestId('observed');
+    render(<Observed callback={callback} />);
+    const target = screen.getByTestId('observed');
     intersect(target, true);
 
     expect(callback).toBeCalled();
@@ -88,16 +95,29 @@ describe('useIntersectionObserver', () => {
 
   test('loadNextPage shouldnt be called if component isnt on the screen', () => {
     const callback = jest.fn();
-    const { getByTestId } = render(<Observed callback={callback} />);
-    const target = getByTestId('observed');
+    render(<Observed callback={callback} />);
+    const target = screen.getByTestId('observed');
     intersect(target, false);
 
     expect(callback).toBeCalledTimes(0);
   });
 
+  test('loadNextPage should be called if isActive=false', () => {
+    const callback = jest.fn();
+    const { rerender } = render(<Observed callback={callback} isActive={false} />);
+    intersect(screen.getByTestId('observed'), true);
+
+    expect(callback).toBeCalledTimes(0);
+
+    rerender(<Observed callback={callback} />);
+    intersect(screen.getByTestId('observed'), true);
+
+    expect(callback).toBeCalled();
+  });
+
   test('hook unsubscribes correctly', () => {
-    const { getByTestId, unmount } = render(<Observed />);
-    const target = getByTestId('observed');
+    const { unmount } = render(<Observed />);
+    const target = screen.getByTestId('observed');
     const instance = getObserverOf(target);
 
     expect(instance.observe).toHaveBeenCalledWith(target);

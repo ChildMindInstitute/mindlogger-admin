@@ -7,8 +7,9 @@ import {
   DecryptedSliderAnswer,
 } from 'shared/types';
 import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
-import { getObjectFromList } from 'shared/utils/builderHelpers';
 import { ItemResponseType } from 'shared/consts';
+
+import { getObjectFromList } from '../getObjectFromList';
 
 const getTimeString = (obj?: DecryptedDateRangeAnswer['value']['from' | 'to']) => {
   if (!obj) return '';
@@ -70,9 +71,7 @@ export const replaceItemVariableWithName = <T>({
       } else if (rawAnswer && typeof rawAnswer === 'object') {
         switch (itemValue.responseType) {
           case ItemResponseType.SingleSelection: {
-            const item = (
-              itemValue.responseValues as SingleAndMultipleSelectItemResponseValues
-            ).options.find(
+            const item = itemValue.responseValues.options.find(
               (option) =>
                 String(option.value) ===
                 String((rawAnswer as DecryptedSingleSelectionAnswer).value),

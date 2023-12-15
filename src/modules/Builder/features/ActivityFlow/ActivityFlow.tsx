@@ -1,20 +1,22 @@
 import { useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 import { Box } from '@mui/material';
 
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
-import { getEntityKey, getUniqueName, pluck } from 'shared/utils';
+import { getEntityKey, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { useActivitiesRedirection } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity } from 'modules/Builder/hooks';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+import { getUniqueName } from 'modules/Builder/utils';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { DeleteFlowModal } from './DeleteFlowModal';
 import { getDuplicatedActivityFlow, getFlowsItemActions } from './ActivityFlow.utils';
@@ -27,7 +29,7 @@ export const ActivityFlow = () => {
   } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const { t } = useTranslation('app');
-  const { watch, control, getFieldState } = useFormContext();
+  const { watch, control, getFieldState } = useCustomFormContext();
   const { appletId } = useParams();
   const navigate = useNavigate();
 
@@ -110,7 +112,7 @@ export const ActivityFlow = () => {
     moveActivityFlow(source.index, destination.index);
   };
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   return (
     <BuilderContainer

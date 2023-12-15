@@ -1,14 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
 import { Box } from '@mui/material';
+import { useEffect } from 'react';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 import { SelectEvent } from 'shared/types';
-import { StyledFlexTopCenter, StyledLabelBoldMedium, theme, variables } from 'shared/styles';
+import {
+  StyledFlexTopCenter,
+  StyledLabelBoldMedium,
+  StyledObserverTarget,
+  theme,
+  variables,
+} from 'shared/styles';
 import { groupBy } from 'shared/utils/array';
 
-import { SelectControllerProps, SelectUiType, GetMenuItem, Option } from './SelectController.types';
 import {
   StyledPlaceholder,
   StyledItem,
@@ -16,6 +22,23 @@ import {
   selectDropdownStyles,
   StyledTextField,
 } from './SelectController.styles';
+import {
+  SelectControllerProps,
+  SelectUiType,
+  GetMenuItem,
+  Option,
+  SelectObserverTargetProps,
+} from './SelectController.types';
+
+export const SelectObserverTarget = ({ targetSelector, setTrigger }: SelectObserverTargetProps) => {
+  useEffect(() => {
+    setTrigger?.(true);
+
+    return () => setTrigger?.(false);
+  }, [setTrigger]);
+
+  return <StyledObserverTarget className={targetSelector} />;
+};
 
 export const SelectController = <T extends FieldValues>({
   name,
@@ -32,7 +55,11 @@ export const SelectController = <T extends FieldValues>({
   disabled,
   sx,
   dropdownStyles,
+  isErrorVisible = true,
   'data-testid': dataTestid,
+  rootSelector,
+  targetSelector,
+  setTrigger,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -122,17 +149,28 @@ export const SelectController = <T extends FieldValues>({
         onChange={onChange}
         value={selectValue}
         error={!!error || providedError}
-        helperText={error?.message || null}
+        helperText={isErrorVisible ? error?.message || null : ''}
         disabled={disabled}
         SelectProps={{
           MenuProps: {
-            PaperProps: { sx: { ...selectDropdownStyles, ...dropdownStyles } },
+            ...(rootSelector && {
+              classes: {
+                list: rootSelector,
+              },
+            }),
+            PaperProps: {
+              sx: { ...selectDropdownStyles, ...dropdownStyles },
+              'data-testid': `${dataTestid}-dropdown`,
+            },
           },
           IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
         }}
         data-testid={dataTestid}
       >
         {renderGroupedOptions()}
+        {targetSelector && (
+          <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />
+        )}
       </StyledTextField>
     </Box>
   );
@@ -148,6 +186,7 @@ export const SelectController = <T extends FieldValues>({
               (event) => {
                 customChange && customChange(event);
                 onChange(event);
+                setTrigger?.(false);
               },
               value,
               error,
@@ -155,7 +194,10 @@ export const SelectController = <T extends FieldValues>({
           }
         />
       ) : (
-        renderSelect(customChange, selectValue)
+        renderSelect((event) => {
+          customChange?.(event);
+          setTrigger?.(false);
+        }, selectValue)
       )}
     </>
   );

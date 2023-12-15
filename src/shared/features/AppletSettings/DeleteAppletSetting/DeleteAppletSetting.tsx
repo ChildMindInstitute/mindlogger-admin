@@ -49,7 +49,7 @@ export const DeleteAppletSetting = () => {
         </StyledAppletSettingsButton>
       </Box>
       {deletePopupVisible && (
-        <DeletePopup onCloseCallback={onCloseCallback} data-testid={`${dataTestid}-delete-popup`} />
+        <DeletePopup onCloseCallback={onCloseCallback} data-testid={`${dataTestid}-delete`} />
       )}
     </>
   );

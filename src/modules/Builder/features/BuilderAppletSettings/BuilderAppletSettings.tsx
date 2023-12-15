@@ -1,5 +1,4 @@
-import { useFormContext } from 'react-hook-form';
-
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { AppletSettings } from 'shared/features/AppletSettings';
 import { workspaces, applet } from 'redux/modules';
@@ -8,7 +7,7 @@ import { getSettings } from './BuilderAppletSettings.utils';
 
 export const BuilderAppletSettings = () => {
   const isNewApplet = useCheckIfNewApplet();
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue } = useCustomFormContext();
 
   const isPublished = watch('isPublished');
   const workspaceRoles = workspaces.useRolesData();

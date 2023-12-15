@@ -15,15 +15,16 @@ import {
 } from 'shared/styles';
 import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController } from 'shared/components/FormComponents';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
-import { SettingParam, getEntityKey, removeMarkdown } from 'shared/utils';
+import { SettingParam, getEntityKey } from 'shared/utils';
 import { useIsServerConfigured } from 'shared/hooks';
 import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import { page } from 'resources';
 import { ScoreReportType } from 'shared/consts';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ItemFormValues } from 'modules/Builder/types';
+import { removeMarkdown } from 'modules/Builder/utils';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';
@@ -48,7 +49,7 @@ export const ScoresAndReports = () => {
   const { control, setValue, getFieldState } = useFormContext();
   const { activity } = useCurrentActivity();
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const scoresAndReportsName = `${fieldName}.scoresAndReports`;
   const generateReportName = `${scoresAndReportsName}.generateReport`;
@@ -68,11 +69,11 @@ export const ScoresAndReports = () => {
   });
 
   const items = activity?.items.reduce(
-    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item: ItemFormValues) => {
-      if (item.responseType === '' || !ItemTypesToPrint.includes(item.responseType)) return items;
-      const { id, name, question } = item;
+    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item) => {
+      if (!ItemTypesToPrint.includes(item.responseType)) return items;
+      const { name, question } = item;
 
-      return [...items, { id, name, question: removeMarkdown(question) }];
+      return [...items, { id: getEntityKey(item), name, question: removeMarkdown(question) }];
     },
     [],
   );
@@ -167,12 +168,14 @@ export const ScoresAndReports = () => {
                     index: getReportIndex(reports, report) + 1,
                   });
                   const key = `data-section-${getEntityKey(report, false) || index}`;
-                  const sectionDataTestid = `${dataTestid}-section-${index}`;
+                  const reportDataTestid = `${dataTestid}-${
+                    isSection ? 'section' : 'score'
+                  }-${index}`;
                   const headerTitle = (
                     <Title
                       title={title}
                       reportFieldName={reportName}
-                      data-testid={sectionDataTestid}
+                      data-testid={reportDataTestid}
                     />
                   );
 
@@ -192,16 +195,17 @@ export const ScoresAndReports = () => {
                               name: reportName,
                               title: headerTitle,
                               dragHandleProps,
+                              'data-testid': reportDataTestid,
                             }}
                             contentProps={{
                               name: reportName,
                               title,
                               ...(isSection && { sectionId: report.id }),
                               ...(!isSection && { index, tableItems, scoreItems }),
-                              'data-testid': sectionDataTestid,
+                              'data-testid': reportDataTestid,
                               items,
                             }}
-                            data-testid={sectionDataTestid}
+                            data-testid={`${reportDataTestid}-container`}
                           />
                         </Box>
                       )}

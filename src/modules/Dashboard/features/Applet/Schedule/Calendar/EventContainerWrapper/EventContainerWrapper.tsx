@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 
 import { CalendarViews } from '../Calendar.types';
+import { EVENT_CLASSNAME } from '../Calendar.const';
 import { EventContainerWrapperProps, EventsStartEndDates } from './EventContainerWrapper.types';
 import { getEventClassNames, getOverlappingEvents } from './EventContainerWrapper.utils';
 import {
@@ -26,7 +27,6 @@ export const EventContainerWrapper = ({
   const isWeekView = activeView === CalendarViews.Week;
 
   useEffect(() => {
-    //TODO: Try to find a better solution for the hide/show many events, and responsive breakpoints logic in the day/week view
     const updateEventsLayout = async () => {
       const eventsWrapper = await wrapperRef.current;
       const containerEvents: NodeListOf<HTMLElement> | undefined =
@@ -34,6 +34,7 @@ export const EventContainerWrapper = ({
       const timeContent = (await eventsWrapper?.closest('.rbc-day-slot')) as HTMLElement;
 
       if (!eventsWrapper || !containerEvents?.length) {
+        if (!timeContent) return;
         timeContent.style.minWidth = '';
 
         return;
@@ -43,15 +44,9 @@ export const EventContainerWrapper = ({
 
       await containerEvents.forEach((eventWrapper) => {
         const { id, start, end } = eventWrapper.dataset;
-        const event = eventWrapper.querySelector('.rbc-event') as HTMLElement;
 
         if (id && start && end) {
           arrayOfEventsDates.push({ id, start, end });
-        }
-
-        if (event) {
-          const { offsetWidth: width, offsetHeight: height } = event;
-          eventWrapper.classList.add(...getEventClassNames(width, height));
         }
       });
 
@@ -60,6 +55,7 @@ export const EventContainerWrapper = ({
         maxEventsQuantity: isWeekView ? MAX_VISIBLE_EVENTS_WEEK_VIEW : MAX_EVENTS_DAY_VIEW,
       });
 
+      // hiding overlapping events in week/day views and adding hidden events quantity info
       if (overlappingEvents.length) {
         if (isWeekView) {
           overlappingEvents.forEach(({ eventIds }) => {
@@ -71,7 +67,7 @@ export const EventContainerWrapper = ({
                 const currEventWrapper = eventsWrapper.querySelector(
                   `[data-id='${id}']`,
                 ) as HTMLElement;
-                const currEventEl = currEventWrapper?.querySelector('.rbc-event') as HTMLElement;
+                const currEventEl = currEventWrapper?.querySelector(EVENT_CLASSNAME) as HTMLElement;
                 const showMoreEl = currEventWrapper.querySelector('.more');
 
                 if (currEventEl) {
@@ -104,16 +100,25 @@ export const EventContainerWrapper = ({
           );
           const largestArrayOfEventsIdsLength = largestArrayOfEventsIds.eventIds.length;
 
-          if (largestArrayOfEventsIdsLength) {
+          if (largestArrayOfEventsIdsLength && timeContent) {
             timeContent.style.minWidth = `${
               largestArrayOfEventsIdsLength * MIN_EVENT_WIDTH_DAY_VIEW +
               largestArrayOfEventsIdsLength * OFFSET_BETWEEN_EVENTS
             }px`;
           }
         }
-      } else {
+      } else if (timeContent) {
         timeContent.style.minWidth = '';
       }
+
+      // adding class names for event wrapper to show/hide event info by its width and height
+      containerEvents.forEach((eventWrapper) => {
+        const event = eventWrapper.querySelector(EVENT_CLASSNAME) as HTMLElement;
+        if (!event) return;
+
+        const { offsetWidth: width, offsetHeight: height } = event;
+        eventWrapper.classList.add(...getEventClassNames(width, height));
+      });
     };
 
     updateEventsLayout();

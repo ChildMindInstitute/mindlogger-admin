@@ -1,27 +1,19 @@
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
-import {
-  AnswerDTO,
-  EventDTO,
-  ExtendedEvent,
-  ExtendedExportAnswerWithoutEncryption,
-  UserActionType,
-} from 'shared/types';
+import { AnswerDTO, ExtendedEvent, UserActionType } from 'shared/types';
 import { getDictionaryText } from 'shared/utils/forms';
 
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { convertDateStampToMs } from './convertDateStampToMs';
+import { SuccessedEventDTO } from '../../types/answer';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
 
 const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
 
-export const getSplashScreen = (
-  event: EventDTO,
-  nextExtendedEvent: ExtendedEvent<ExtendedExportAnswerWithoutEncryption>,
-) => {
+export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: ExtendedEvent) => {
   const {
     id,
     scheduledDatetime,
@@ -69,7 +61,7 @@ export const getJourneyCSVObject = <T>({
   rawAnswersObject,
   index,
 }: {
-  event: ExtendedEvent<ExtendedExportAnswerWithoutEncryption>;
+  event: ExtendedEvent;
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
   index: number;
 }) => {

@@ -18,13 +18,12 @@ export const ItemSettingsDrawer = ({ open, onClose, children }: ItemSettingsDraw
     <StyledDrawer
       open={open}
       anchor="right"
-      hideBackdrop
       onClose={onClose}
       ModalProps={{
         container: () => document.querySelector('#simple-tabpanel-items'),
-        disableEnforceFocus: true,
       }}
       transitionDuration={0}
+      data-testid="builder-activity-items-item-configuration-settings-drawer"
     >
       <StyledDrawerContent>
         <StyledFlexTopCenter

@@ -13,7 +13,6 @@ import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { DashboardTableProps } from './DashboardTable.types';
 import { StyledTableCell } from './DashboardTable.styles';
 
-// TODO: make rows rendering more strict
 export const DashboardTable = ({
   columns,
   rows,

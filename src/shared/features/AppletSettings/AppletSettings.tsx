@@ -21,6 +21,8 @@ export const AppletSettings = ({
 
   const handleSettingClick = (setting: NavigationItem) => {
     navigateTo(setting.param);
+
+    setting.onClick?.();
   };
 
   const navigateTo = (param = '') => {

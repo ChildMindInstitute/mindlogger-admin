@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopStart, theme } from 'shared/styles';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledInputWrapper } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';
@@ -12,12 +12,11 @@ import { ItemOptionContainer } from '../ItemOptionContainer';
 export const NumberSelection = ({ name }: NumberSelectionProps) => {
   const { t } = useTranslation('app');
 
-  const { control, watch, trigger } = useFormContext();
+  const { control, watch, trigger } = useCustomFormContext();
 
   const commonProps = {
     control,
     type: 'number',
-    minNumberValue: 0,
   };
 
   const minValueName = `${name}.responseValues.minValue`;

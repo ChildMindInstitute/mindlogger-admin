@@ -3,7 +3,8 @@ import { AxiosError } from 'axios';
 
 import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
-import { ApiError } from 'redux/modules';
+import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
+import { ApiErrorResponse } from 'shared/state/Base';
 import {
   signInApi,
   SignIn,
@@ -15,7 +16,7 @@ import {
 } from 'api';
 
 export const signIn = createAsyncThunk(
-  'mindlogger_login',
+  'auth/login',
   async ({ email, password }: SignIn, { rejectWithValue, signal }) => {
     try {
       const { data } = await signInApi({ email, password }, signal);
@@ -30,24 +31,30 @@ export const signIn = createAsyncThunk(
 
       return data;
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorMessage);
     }
   },
 );
 
 export const getUserDetails = createAsyncThunk(
-  'mindlogger_get_user_data',
+  'auth/getUserData',
   async (_: void, { rejectWithValue, signal }) => {
     try {
-      return await getUserDetailsApi(signal);
+      const { data } = await getUserDetailsApi(signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorResult);
     }
   },
 );
 
 export const signUp = createAsyncThunk(
-  'mindlogger_signup',
+  'auth/signup',
   async ({ body }: SignUpArgs, { rejectWithValue, signal, dispatch }) => {
     try {
       await signUpApi({ body }, signal);
@@ -55,18 +62,24 @@ export const signUp = createAsyncThunk(
 
       return await dispatch(signIn({ email, password }));
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorMessage);
     }
   },
 );
 
 export const resetPassword = createAsyncThunk(
-  'mindlogger_reset_password',
+  'auth/resetPassword',
   async ({ email }: ResetPassword, { rejectWithValue, signal }) => {
     try {
-      return await resetPasswordApi({ email }, signal);
+      const { data } = await resetPasswordApi({ email }, signal);
+
+      return { data };
     } catch (exception) {
-      return rejectWithValue(exception as AxiosError<ApiError>);
+      const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
+
+      return rejectWithValue(errorMessage);
     }
   },
 );

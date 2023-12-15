@@ -188,7 +188,6 @@ export const useSettingsSetup = ({
   }, [hasPalette]);
 
   useEffect(() => {
-    //TODO add to isSkippable: 'Reset to True IF Allow respondent to skip all Items = True AND Required = False;'
     if (hasRequiredItems && isSkippable) {
       setValue(`${name}.config`, {
         ...settings,

@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
@@ -7,40 +6,32 @@ import { ConditionalLogic } from 'shared/state';
 import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { EditItemModalProps } from './EditItemModal.types';
 
-export const EditItemModal = ({
-  itemFieldName,
-  isPopupVisible,
-  setIsPopupVisible,
-  onModalSubmit,
-}: EditItemModalProps) => {
+export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditItemModalProps) => {
   const { t } = useTranslation('app');
   const { activity } = useCurrentActivity();
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
   const itemName = watch(`${itemFieldName}.name`);
   const currentItem = watch(itemFieldName);
   const conditionalLogicForItem = getItemConditionDependencies(
     currentItem,
-    activity.conditionalLogic,
+    activity?.conditionalLogic,
   );
 
-  const handleModalClose = () => {
-    setIsPopupVisible(false);
-  };
-
   const handleModalSubmit = () => {
-    setIsPopupVisible(false);
-    onModalSubmit();
+    onClose();
+    onSubmit();
   };
 
   return (
     <Modal
-      open={isPopupVisible}
-      onClose={handleModalClose}
+      open={open}
+      onClose={onClose}
       onSubmit={handleModalSubmit}
-      onSecondBtnSubmit={handleModalClose}
+      onSecondBtnSubmit={onClose}
       title={t('editItem')}
       buttonText={t('continue')}
       secondBtnText={t('cancel')}

@@ -11,17 +11,12 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
-import { base } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
+import { initialStateData } from 'shared/state';
 import { ApiResponseCodes } from 'api';
 
 import { SelectRespondentsPopup } from './SelectRespondentsPopup';
 import { SearchAcross } from './SelectRespondents/SelectRespondents.const';
-
-const initialStateData = {
-  ...base.state,
-  data: null,
-};
 
 const preloadedState = {
   workspaces: {
@@ -46,6 +41,9 @@ const preloadedState = {
         result: [mockedRespondent, mockedRespondent2],
         count: 2,
       },
+    },
+    respondentDetails: {
+      ...initialStateData,
     },
   },
 };

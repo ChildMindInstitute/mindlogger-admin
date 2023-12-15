@@ -3,7 +3,6 @@ import { Dispatch, SetStateAction } from 'react';
 import { Item } from 'redux/modules';
 import { PublishedActivity, PublishedApplet } from 'modules/Library/state';
 import { ItemResponseType, performanceTaskResponseTypes } from 'shared/consts';
-import { SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 
 import { ExpandedActivity } from './Applet.types';
 
@@ -55,15 +54,13 @@ export const getActivities = (
         item.responseType === ItemResponseType.SingleSelection ||
         item.responseType === ItemResponseType.MultipleSelection
       ) {
-        (item?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.forEach(
-          (option) => {
-            if (includesSearchValue(option.text, search)) {
-              isActivitiesExpanded = true;
-              isItemExpanded = true;
-              isActivityExpanded = true;
-            }
-          },
-        );
+        item?.responseValues?.options?.forEach((option) => {
+          if (includesSearchValue(option.text, search)) {
+            isActivitiesExpanded = true;
+            isItemExpanded = true;
+            isActivityExpanded = true;
+          }
+        });
       }
 
       if (includesSearchValue(item.question.en, search)) {

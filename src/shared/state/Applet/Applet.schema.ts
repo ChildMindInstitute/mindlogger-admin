@@ -67,9 +67,10 @@ export type SingleAndMultipleSelectionConfig = {
   setPalette: boolean;
   timer: number;
   additionalResponseOption: {
-    textInputOption: boolean;
+    textInputOption?: boolean;
     textInputRequired: boolean;
   };
+  addTokens?: null | boolean;
 };
 
 export type SliderConfig = {
@@ -422,49 +423,183 @@ export type ConditionalLogic = {
   match: ConditionalLogicMatch;
   //for frontend purposes only
   key?: string;
-  //TODO: for frontend purposes only - should be reviewed after refactoring phase
   itemKey?: string;
   conditions: Array<Condition>;
 };
 
-export type Item<T = Config> = {
+export type Item<T = ItemCommonType> =
+  | TextItem<T>
+  | SingleSelectItem<T>
+  | MultiSelectItem<T>
+  | SliderItem<T>
+  | DateItem<T>
+  | TimeRangeItem<T>
+  | TimeItem<T>
+  | GeolocationItem<T>
+  | AudioItem<T>
+  | AudioPlayerItem<T>
+  | ABTrailsItem<T>
+  | DrawingItem<T>
+  | FlankerItem<T>
+  | MessageItem<T>
+  | SingleSelectionPerRowItem<T>
+  | MultipleSelectionPerRowItem<T>
+  | NumberSelectionItem<T>
+  | PhotoItem<T>
+  | VideoItem<T>
+  | SliderRowsItem<T>
+  | StabilityTrackerItem<T>
+  | TouchPracticeItem<T>
+  | TouchTestItem<T>;
+
+export type ItemCommonType = {
   id?: string;
   key?: string;
   name: string;
   question: Record<string, string>;
-  config: T;
-  responseType: ItemResponseType;
-  responseValues: ResponseValues;
   alerts?: ItemAlert[];
   conditionalLogic?: ConditionalLogic;
-  allowEdit: boolean;
+  allowEdit?: boolean;
   isHidden?: boolean;
   order?: number;
 };
 
-export interface TextItem extends Item {
+export type TextItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.Text;
   config: TextInputConfig;
   responseValues: TextItemResponseValues;
-}
+};
 
-export interface SingleSelectItem extends Item {
+export type SingleSelectItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.SingleSelection;
   config: SingleAndMultipleSelectionConfig;
   responseValues: SingleAndMultipleSelectItemResponseValues;
-}
+};
 
-export interface MultiSelectItem extends Item {
+export type MultiSelectItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.MultipleSelection;
   config: SingleAndMultipleSelectionConfig;
   responseValues: SingleAndMultipleSelectItemResponseValues;
-}
+};
 
-export interface SliderItem extends Item {
+export type SliderItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.Slider;
   config: SliderConfig;
   responseValues: SliderItemResponseValues;
-}
+};
+export type DateItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Date;
+  config: DateAndTimeRangeConfig;
+  responseValues: DateAndTimeRangeResponseValues;
+};
+
+export type TimeRangeItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.TimeRange;
+  config: DateAndTimeRangeConfig;
+  responseValues: DateAndTimeRangeResponseValues;
+};
+
+export type TimeItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Time;
+  config: DateAndTimeRangeConfig;
+  responseValues: null;
+};
+
+export type GeolocationItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Geolocation;
+  config: GeolocationConfig;
+  responseValues: GeolocationResponseValues;
+};
+
+export type AudioItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Audio;
+  config: AudioAndVideoConfig;
+  responseValues: AudioResponseValues;
+};
+
+export type AudioPlayerItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.AudioPlayer;
+  config: AudioPlayerConfig;
+  responseValues: AudioPlayerResponseValues;
+};
+
+export type ABTrailsItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.ABTrails;
+  config: ABTrailsConfig;
+  responseValues: null;
+};
+
+export type DrawingItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Drawing;
+  config: DrawingConfig;
+  responseValues: DrawingResponseValues;
+};
+
+export type FlankerItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Flanker;
+  config: FlankerConfig;
+  responseValues: null;
+};
+
+export type MessageItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Message;
+  config: MessageConfig;
+  responseValues: MessageResponseValues;
+};
+
+export type SingleSelectionPerRowItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.SingleSelectionPerRow;
+  config: SingleAndMultiplePerRowConfig;
+  responseValues: SingleAndMultipleSelectRowsResponseValues;
+};
+
+export type MultipleSelectionPerRowItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.MultipleSelectionPerRow;
+  config: SingleAndMultiplePerRowConfig;
+  responseValues: SingleAndMultipleSelectRowsResponseValues;
+};
+
+export type NumberSelectionItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.NumberSelection;
+  config: NumberConfig;
+  responseValues: NumberItemResponseValues;
+};
+
+export type PhotoItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Photo;
+  config: PhotoConfig;
+  responseValues: PhotoResponseValues;
+};
+
+export type VideoItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.Video;
+  config: AudioAndVideoConfig;
+  responseValues: VideoResponseValues;
+};
+
+export type SliderRowsItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.SliderRows;
+  config: SliderRowsConfig;
+  responseValues: SliderRowsResponseValues;
+};
+
+export type StabilityTrackerItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.StabilityTracker;
+  config: GyroscopeConfig;
+  responseValues: null;
+};
+
+export type TouchPracticeItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.TouchPractice;
+  config: TouchConfig;
+  responseValues: null;
+};
+
+export type TouchTestItem<T = ItemCommonType> = T & {
+  responseType: ItemResponseType.TouchTest;
+  config: TouchConfig;
+  responseValues: null;
+};
 
 export type ScoreOrSection = ScoreReport | SectionReport;
 
@@ -508,7 +643,6 @@ export type Activity = {
   performanceTaskType?: PerfTaskType;
   createdAt?: string;
   reportIncludedItemName?: string;
-  //TODO: for frontend purposes only - should be reviewed after refactoring phase
   conditionalLogic?: ConditionalLogic[];
 };
 
@@ -616,15 +750,4 @@ export type SingleApplet = {
 
 export type AppletSchema = {
   applet: BaseSchema<{ result: SingleApplet } | null>;
-};
-
-export type UpdateActivityData = {
-  activityId?: string;
-  reportIncludedItemName?: string;
-};
-
-export type UpdateActivityFlowData = {
-  flowId?: string;
-  reportIncludedItemName?: string;
-  reportIncludedActivityName?: string;
 };

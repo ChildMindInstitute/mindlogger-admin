@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import {
@@ -15,14 +15,14 @@ import {
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
 import { AppletFormValues } from 'modules/Builder/types';
-import { useActivityFlowsRedirection } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
 
 import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
 import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';
 
 export const ActivityFlowAbout = () => {
   const { t } = useTranslation();
-  const { control, watch } = useFormContext();
+  const { control, watch } = useCustomFormContext();
   const { activityFlowId } = useParams();
 
   const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
@@ -34,7 +34,7 @@ export const ActivityFlowAbout = () => {
     control,
   };
 
-  useActivityFlowsRedirection();
+  useRedirectIfNoMatchedActivityFlow();
 
   return (
     <BuilderContainer title={t('aboutActivityFlow')}>

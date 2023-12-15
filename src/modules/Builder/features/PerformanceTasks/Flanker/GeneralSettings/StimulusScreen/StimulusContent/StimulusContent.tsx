@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { Box } from '@mui/material';
 import get from 'lodash.get';
@@ -13,12 +13,13 @@ import {
   variables,
   StyledSvgPrimaryColorBtn,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { FlankerButtonSetting, FlankerStimulusSettings } from 'shared/state';
 import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
-import { getUploadedMediaName, getIsRequiredValidateMessage } from 'shared/utils';
+import { getIsRequiredValidateMessage } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { getUploadedMediaName } from 'modules/Builder/utils';
 
 import { DeleteStimulusPopup } from './DeleteStimulusPopup';
 import { pressOptions } from './StimulusContent.const';
@@ -40,7 +41,7 @@ export const StimulusContent = () => {
     trigger,
     formState: { errors },
     clearErrors,
-  } = useFormContext();
+  } = useCustomFormContext();
   const { fieldName, activityObjField } = useCurrentActivity();
   const [screenToDelete, setScreenToDelete] = useState<null | { index: number; imageName: string }>(
     null,

@@ -14,13 +14,18 @@ export const getItemConditionDependencies = (
       conditions?.some(({ itemName }) => itemName === getEntityKey(item)),
   );
 
-export const getConditionsToRemove = (
-  items: ItemFormValues[],
-  conditionalLogic: ConditionalLogic[],
-  config: GetConditionsToRemoveConfig,
-) => {
-  const { sourceIndex, destinationIndex, item } = config;
+export const getConditionsToRemove = ({
+  items,
+  config,
+  conditionalLogic,
+}: {
+  items: ItemFormValues[];
+  config: GetConditionsToRemoveConfig;
+  conditionalLogic?: ConditionalLogic[];
+}) => {
+  if (!conditionalLogic) return;
 
+  const { sourceIndex, destinationIndex, item } = config;
   const dependentConditions = getItemConditionDependencies(item, conditionalLogic);
 
   if (!dependentConditions?.length) return;

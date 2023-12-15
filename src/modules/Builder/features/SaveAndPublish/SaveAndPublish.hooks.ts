@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ValidationError } from 'yup';
 
 import { Update } from 'history';
@@ -8,9 +7,9 @@ import { useAppDispatch } from 'redux/store';
 import {
   useCallbackPrompt,
   useCheckIfNewApplet,
+  useLogout,
   usePromptSetup,
   useRemoveAppletData,
-  useLogout,
 } from 'shared/hooks';
 import {
   Encryption,
@@ -21,33 +20,39 @@ import {
   Mixpanel,
   SettingParam,
 } from 'shared/utils';
-import { applet, Activity, SingleApplet, ActivityFlow } from 'shared/state';
+import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
 import { auth, workspaces } from 'redux/modules';
-import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
+import { useAppletPrivateKeySetter, useCustomFormContext } from 'modules/Builder/hooks';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 import { isAppletRoute } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { AppletFormValues } from 'modules/Builder/types';
 import { reportConfig } from 'modules/Builder/state';
+import {
+  FlowReportFieldsPrepareType,
+  getEntityReportFields,
+} from 'modules/Builder/utils/getEntityReportFields';
 
 import {
-  removeAppletExtraFields,
+  getActivityItems,
+  getCurrentEntitiesIds,
+  getScoresAndReports,
+  remapSubscaleSettings,
   removeActivityExtraFields,
   removeActivityFlowExtraFields,
   removeActivityFlowItemExtraFields,
-  remapSubscaleSettings,
-  getActivityItems,
-  getScoresAndReports,
-  getCurrentEntitiesIds,
+  removeAppletExtraFields,
 } from './SaveAndPublish.utils';
 
 export const useAppletDataFromForm = () => {
-  const { getValues } = useFormContext();
+  const { getValues } = useCustomFormContext() || {};
   const isNewApplet = useCheckIfNewApplet();
 
-  return (encryption?: Encryption): SingleApplet => {
-    const appletInfo = getValues() as AppletFormValues;
+  return (encryption?: Encryption): SingleApplet | undefined => {
+    const appletInfo = getValues?.() as AppletFormValues;
+
+    if (!appletInfo) return;
 
     const appletDescription = getDictionaryObject(appletInfo.description);
     const appletAbout = getDictionaryObject(appletInfo.about);
@@ -64,6 +69,11 @@ export const useAppletDataFromForm = () => {
             items: getActivityItems(activity),
             subscaleSetting: remapSubscaleSettings(activity),
             scoresAndReports: getScoresAndReports(activity),
+            ...getEntityReportFields({
+              reportItem: activity.reportIncludedItemName,
+              activityItems: activity.items,
+              type: FlowReportFieldsPrepareType.KeyToName,
+            }),
             ...removeActivityExtraFields(),
           }) as Activity,
       ),
@@ -80,6 +90,12 @@ export const useAppletDataFromForm = () => {
               ...item,
               ...removeActivityFlowItemExtraFields(),
             })),
+            ...getEntityReportFields({
+              reportActivity: flow.reportIncludedActivityName ?? '',
+              reportItem: flow.reportIncludedItemName ?? '',
+              activities: appletInfo.activities,
+              type: FlowReportFieldsPrepareType.KeyToName,
+            }),
             ...removeActivityFlowExtraFields(),
           }) as ActivityFlow,
       ),
@@ -94,7 +110,7 @@ export const useCheckIfHasAtLeastOneActivity = () => {
   return () => {
     const body = getAppletData();
 
-    return Boolean(body.activities?.length);
+    return Boolean(body?.activities?.length);
   };
 };
 
@@ -104,12 +120,12 @@ export const useCheckIfHasAtLeastOneItem = () => {
   return () => {
     const body = getAppletData();
 
-    return (body.activities ?? []).every((activity) => Boolean(activity.items?.length));
+    return (body?.activities ?? []).every((activity) => Boolean(activity.items?.length));
   };
 };
 
 export const useCheckIfHasEmptyRequiredFields = () => {
-  const { getValues } = useFormContext();
+  const { getValues } = useCustomFormContext();
   const appletSchema = AppletSchema();
 
   return async () => {
@@ -126,7 +142,7 @@ export const useCheckIfHasEmptyRequiredFields = () => {
 };
 
 export const useCheckIfHasErrorsInFields = () => {
-  const { getValues } = useFormContext();
+  const { getValues } = useCustomFormContext();
   const appletSchema = AppletSchema();
 
   return async () => {
@@ -214,7 +230,7 @@ export const useUpdatedAppletNavigate = () => {
   const { activityId, activityFlowId, itemId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { getValues, reset } = useFormContext();
+  const { getValues, reset } = useCustomFormContext();
 
   const { getAppletWithItems } = applet.thunk;
 
@@ -239,11 +255,12 @@ export const useUpdatedAppletNavigate = () => {
 export const useSaveAndPublishSetup = (
   hasPrompt: boolean,
   setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
+  setAppletWithoutChangesPopupVisible?: (val: boolean) => void,
 ) => {
   const {
     trigger,
-    formState: { dirtyFields },
-  } = useFormContext();
+    formState: { dirtyFields, isDirty },
+  } = useCustomFormContext();
   const { pathname } = useLocation();
   const getAppletData = useAppletDataFromForm();
   const checkIfHasAtLeastOneActivity = useCheckIfHasAtLeastOneActivity();
@@ -375,6 +392,13 @@ export const useSaveAndPublishSetup = (
 
       return;
     }
+
+    if (!isDirty) {
+      setAppletWithoutChangesPopupVisible?.(true);
+
+      return;
+    }
+
     await sendRequest();
   };
 
@@ -386,6 +410,9 @@ export const useSaveAndPublishSetup = (
     const encryptionData = password ? getEncryptionToServer(password, ownerId!) : appletEncryption;
     setPublishProcessPopupOpened(true);
     const appletData = getAppletData(encryptionData);
+
+    if (!appletData) return;
+
     let result;
     try {
       const uniqueNameResult =

@@ -36,7 +36,12 @@ export const getEmptyComponent = (searchTerm: string) => {
       ? `${searchTerm.substring(0, MAX_SEARCH_VALUE_LENGTH)}...`
       : searchTerm;
 
-  return <EmptySearch description={t('noMatchWasFound', { searchValue })} />;
+  return (
+    <EmptySearch
+      data-testid="builder-activity-items-item-configuration-response-type-empty-search"
+      description={t('noMatchWasFound', { searchValue })}
+    />
+  );
 };
 
 export const getGroupName = (
@@ -45,7 +50,14 @@ export const getGroupName = (
   searchTermLowercase: string,
 ) => {
   if (options.some(({ value }) => t(value).toLowerCase().includes(searchTermLowercase))) {
-    return <StyledGroupName key={groupName}>{t(groupName)}</StyledGroupName>;
+    return (
+      <StyledGroupName
+        key={groupName}
+        data-testid={`builder-activity-items-item-configuration-response-type-group-${groupName}`}
+      >
+        {t(groupName)}
+      </StyledGroupName>
+    );
   }
 
   return [];

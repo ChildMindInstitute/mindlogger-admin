@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 import get from 'lodash.get';
 
@@ -14,12 +13,13 @@ import {
   StyledBodySmall,
   StyledBodyLarge,
 } from 'shared/styles';
-import { useCurrentActivity } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { DEFAULT_MILLISECONDS_DURATION, MIN_MILLISECONDS_DURATION } from 'shared/consts';
-import { getIsRequiredValidateMessage, getUploadedMediaName } from 'shared/utils';
+import { getIsRequiredValidateMessage } from 'shared/utils';
 import { FlankerItemPositions } from 'modules/Builder/types';
+import { getUploadedMediaName } from 'modules/Builder/utils';
 
 import { StyledRemoveButton } from './FixationContent.styles';
 
@@ -32,7 +32,7 @@ export const FixationContent = () => {
     trigger,
     formState: { errors },
     clearErrors,
-  } = useFormContext();
+  } = useCustomFormContext();
   const { fieldName, activityObjField } = useCurrentActivity();
   const fixationImageField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.fixationScreen`;
   const fixationDurationField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.fixationDuration`;

@@ -6,6 +6,7 @@ import fr from 'date-fns/locale/fr';
 
 import { Svg } from 'shared/components/Svg';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
+import { Tooltip } from 'shared/components/Tooltip';
 import { StyledBodyLarge, theme } from 'shared/styles';
 
 import {
@@ -24,17 +25,19 @@ import { PopoverHeader } from './PopoverHeader';
 
 export const DatePicker = <T extends FieldValues>({
   control,
-  value: providedValue,
   name,
   uiType = UiType.OneDate,
   inputSx = {},
   label,
   includeDates,
   minDate,
+  maxDate,
   onMonthChange,
   disabled,
   onCloseCallback,
+  onSubmitCallback,
   isLoading,
+  tooltip,
   'data-testid': dataTestid,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
@@ -54,13 +57,16 @@ export const DatePicker = <T extends FieldValues>({
     onCloseCallback?.();
     setAnchorEl(null);
   };
+  const handlePickerSubmit = (date: DateType) => () => {
+    onSubmitCallback?.(date);
+    handlePickerClose();
+  };
 
   return (
     <Controller
       control={control}
       name={name}
-      render={({ field: { onChange, value: fieldValue }, fieldState: { error } }) => {
-        const value = providedValue || fieldValue;
+      render={({ field: { onChange, value }, fieldState: { error } }) => {
         const singleDate = value as DateType;
         const startEndingValue = value as DateArrayType;
 
@@ -89,7 +95,7 @@ export const DatePicker = <T extends FieldValues>({
 
         const textFieldProps = {
           fullWidth: true,
-          disabled: disabled ?? true,
+          disabled,
           onClick: handlePickerShow,
           className: isOpen ? 'active' : '',
           sx: { ...inputSx },
@@ -107,34 +113,36 @@ export const DatePicker = <T extends FieldValues>({
 
         return (
           <>
-            {uiType === UiType.OneDate ? (
-              <StyledTextField
-                variant="outlined"
-                {...textFieldProps}
-                label={label || t('date')}
-                value={getValue()}
-              />
-            ) : (
-              <>
+            <Tooltip tooltipTitle={tooltip}>
+              {uiType === UiType.OneDate ? (
                 <StyledTextField
                   variant="outlined"
                   {...textFieldProps}
-                  label={t('startDate')}
-                  value={getValue()[0] || ''}
-                  data-testid={`${dataTestid}-start`}
+                  label={label || t('date')}
+                  value={getValue()}
                 />
-                <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
-                  {t('smallTo')}
-                </StyledBodyLarge>
-                <StyledTextField
-                  variant="outlined"
-                  {...textFieldProps}
-                  label={t('endDate')}
-                  value={getValue()[1] || ''}
-                  data-testid={`${dataTestid}-end`}
-                />
-              </>
-            )}
+              ) : (
+                <>
+                  <StyledTextField
+                    variant="outlined"
+                    {...textFieldProps}
+                    label={t('startDate')}
+                    value={getValue()[0] || ''}
+                    data-testid={`${dataTestid}-start`}
+                  />
+                  <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
+                    {t('smallTo')}
+                  </StyledBodyLarge>
+                  <StyledTextField
+                    variant="outlined"
+                    {...textFieldProps}
+                    label={t('endDate')}
+                    value={getValue()[1] || ''}
+                    data-testid={`${dataTestid}-end`}
+                  />
+                </>
+              )}
+            </Tooltip>
             <StyledPopover
               id={id}
               open={isOpen}
@@ -151,7 +159,9 @@ export const DatePicker = <T extends FieldValues>({
               data-testid={`${dataTestid}-popover`}
             >
               {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
-              {value && <PopoverHeader uiType={uiType} date={value as Date | Date[]} />}
+              {value && (
+                <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />
+              )}
               <ReactDatePicker
                 locale={i18n.language === 'fr' ? fr : undefined}
                 renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
@@ -167,6 +177,7 @@ export const DatePicker = <T extends FieldValues>({
                 monthsShown={isStartEndingDate ? 2 : 1}
                 formatWeekDay={(nameOfDay) => nameOfDay[0]}
                 minDate={minDate === undefined ? new Date() : minDate}
+                maxDate={maxDate === undefined ? null : maxDate}
                 focusSelectedMonth
                 onMonthChange={onMonthChange}
                 includeDates={includeDates}
@@ -175,7 +186,7 @@ export const DatePicker = <T extends FieldValues>({
                 <StyledCancelButton variant="text" onClick={handlePickerClose}>
                   {t('cancel')}
                 </StyledCancelButton>
-                <StyledButton variant="text" onClick={handlePickerClose}>
+                <StyledButton variant="text" onClick={handlePickerSubmit(getSelectedDate())}>
                   {t('ok')}
                 </StyledButton>
               </StyledButtons>

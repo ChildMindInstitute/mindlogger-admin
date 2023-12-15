@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,6 +22,7 @@ import {
   prepareActivityFlowsFromLibrary,
   getDefaultThemeId,
 } from './BuilderApplet.utils';
+import { themeParams } from './BuilderApplet.const';
 
 export const BuilderApplet = () => {
   const params = useParams();
@@ -57,9 +58,13 @@ export const BuilderApplet = () => {
       ? dispatch(getAppletWithItems({ ownerId, appletId }))
       : undefined,
   );
+  const defaultValues = useMemo(
+    () => getDefaultValues(appletData, defaultThemeId),
+    [appletData, defaultThemeId],
+  );
 
   const methods = useForm<AppletFormValues>({
-    defaultValues: getDefaultValues(appletData, defaultThemeId),
+    defaultValues,
     resolver: yupResolver(AppletSchema() as ObjectSchema<AppletFormValues>),
     mode: 'onChange',
   });
@@ -121,7 +126,8 @@ export const BuilderApplet = () => {
   }, [defaultThemeId, isNewApplet]);
 
   useEffect(() => {
-    dispatch(themes.thunk.getThemes({ ordering: 'name' }));
+    dispatch(themes.actions.resetThemes());
+    dispatch(themes.thunk.getThemes({ ...themeParams, page: 1 }));
 
     return removeAppletData;
   }, []);

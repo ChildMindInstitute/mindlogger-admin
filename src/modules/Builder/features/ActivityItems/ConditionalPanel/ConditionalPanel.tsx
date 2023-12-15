@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation, Trans } from 'react-i18next';
 import { Collapse } from '@mui/material';
 
@@ -28,16 +27,17 @@ import {
 } from 'shared/consts';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemFormValues } from 'modules/Builder/types';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }) => {
   const { t } = useTranslation('app');
   const [isExpanded, setExpanded] = useState(true);
-  const { watch } = useFormContext();
+  const { watch } = useCustomFormContext();
   const { fieldName } = useCurrentActivity();
 
-  const items = watch(`${fieldName}.items`);
-  const groupedItems = getObjectFromList<ItemFormValues>(items ?? []);
-  const currentItem = groupedItems[condition?.itemKey ?? ''];
+  const items = watch(`${fieldName}.items`) ?? [];
+  const groupedItems = getObjectFromList<ItemFormValues>(items);
+  const currentItem = groupedItems?.[condition?.itemKey ?? ''];
 
   return (
     <Collapse in={isExpanded} timeout={0} collapsedSize="4.8rem">
@@ -45,6 +45,7 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
         <StyledClearedButton
           sx={{ p: theme.spacing(1) }}
           onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
+          data-testid="builder-conditional-panel-btn"
         >
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>
@@ -64,7 +65,10 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
         </StyledBodyLarge>
       </StyledFlexTopCenter>
       {isExpanded && (
-        <StyledFlexColumn sx={{ mt: theme.spacing(1.2) }}>
+        <StyledFlexColumn
+          sx={{ mt: theme.spacing(1.2) }}
+          data-testid="builder-conditional-panel-expanded"
+        >
           {condition?.conditions?.map(({ key, type, itemName, payload }) => {
             const relatedItem = groupedItems[itemName];
             const valuePlaceholder = t('conditionPanelValue');

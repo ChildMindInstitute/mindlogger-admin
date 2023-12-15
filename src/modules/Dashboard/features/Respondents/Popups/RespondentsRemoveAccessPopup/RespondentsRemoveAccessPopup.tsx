@@ -17,14 +17,12 @@ import { getScreens } from './RespondentAccessPopup.utils';
 
 export const RespondentsRemoveAccessPopup = ({
   popupVisible,
-  setPopupVisible,
   tableRows,
   chosenAppletData,
-  setChosenAppletData,
-  reFetchRespondents,
+  onClose,
 }: RespondentAccessPopupProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { appletId } = useParams() || {};
   const rolesData = workspaces.useRolesData();
   const appletRoles = chosenAppletData && rolesData?.data?.[chosenAppletData.appletId];
   const { appletPasswordRef, submitForm: submitPassword } = useSetupEnterAppletPassword();
@@ -41,6 +39,8 @@ export const RespondentsRemoveAccessPopup = ({
   const isFirstStepWithAppletId = !!appletId && step === 1;
   const dataTestid = 'dashboard-respondents-remove-access-popup';
 
+  const onCloseHandler = () => onClose();
+
   useEffect(() => {
     if (chosenAppletData) {
       setAppletName(chosenAppletData?.appletDisplayName || '');
@@ -49,17 +49,12 @@ export const RespondentsRemoveAccessPopup = ({
     }
   }, [chosenAppletData]);
 
-  const handlePopupClose = () => {
-    setChosenAppletData(null);
-    setPopupVisible(false);
-  };
-
   const firstScreen = (
     <>
       <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
         {t('removeAccessDescription')}
       </StyledBodyLarge>
-      <AppletsSmallTable tableRows={tableRows} />
+      <AppletsSmallTable tableRows={tableRows} data-testid={`${dataTestid}-respondents-table`} />
     </>
   );
 
@@ -97,6 +92,7 @@ export const RespondentsRemoveAccessPopup = ({
           control={
             <Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />
           }
+          data-testid={`${dataTestid}-remove-data`}
         />
       )}
     </>
@@ -140,13 +136,12 @@ export const RespondentsRemoveAccessPopup = ({
     isRemoved,
     submitPassword,
     removeAccess,
-    handlePopupClose,
-    reFetchRespondents,
+    onClose,
   });
 
   const onSecondBtnSubmit = () => {
     if (isFirstStepWithAppletId) {
-      handlePopupClose();
+      onCloseHandler();
 
       return;
     }
@@ -169,7 +164,7 @@ export const RespondentsRemoveAccessPopup = ({
   return (
     <Modal
       open={popupVisible}
-      onClose={screens[step]?.onClose || handlePopupClose}
+      onClose={screens[step]?.onClose || onCloseHandler}
       onSubmit={submitForm}
       title={t(screens[step].title)}
       buttonText={t(screens[step].buttonText)}

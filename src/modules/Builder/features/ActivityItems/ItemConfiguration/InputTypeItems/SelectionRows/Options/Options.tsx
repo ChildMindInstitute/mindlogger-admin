@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { UploaderUiType, Uploader } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
@@ -21,7 +21,7 @@ const commonUploaderProps = {
 export const Options = ({ name }: { name: string }) => {
   const { t } = useTranslation('app');
 
-  const { watch, control, setValue } = useFormContext();
+  const { watch, control, setValue } = useCustomFormContext();
 
   const optionsName = `${name}.responseValues.options`;
   const options = watch(optionsName);
@@ -51,6 +51,7 @@ export const Options = ({ name }: { name: string }) => {
                 data-testid={`${dataTestId}-image`}
               />
               <InputController
+                withDebounce
                 control={control}
                 name={`${optionName}.text`}
                 label={t('selectionRowsOptionLabel', { index: index + 1 })}
@@ -64,6 +65,7 @@ export const Options = ({ name }: { name: string }) => {
             {hasTooltips && (
               <StyledFlexTopCenter>
                 <InputController
+                  withDebounce
                   control={control}
                   name={`${optionName}.tooltip`}
                   label={t('tooltip')}

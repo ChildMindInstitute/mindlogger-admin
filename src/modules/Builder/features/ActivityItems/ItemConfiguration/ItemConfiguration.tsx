@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import { Grid } from '@mui/material';
 
 import { Modal } from 'shared/components';
@@ -15,11 +15,15 @@ import {
 import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
-import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { ItemConfigurationProps, ItemsOptionGroup } from './ItemConfiguration.types';
+import {
+  ItemConfigurationProps,
+  ItemsOptionGroup,
+  UseWatchItemConfiguration,
+} from './ItemConfiguration.types';
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
@@ -34,18 +38,17 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
 
-  const methods = useFormContext();
+  const { control } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
 
-  const { control, watch } = methods;
-  const isReviewable = watch(`${fieldName}.isReviewable`);
-  const responseType = watch(`${name}.responseType`) as ItemResponseTypeNoPerfTasks;
-  const currentItem = watch(name);
+  const [isReviewable, responseType, currentItem]: UseWatchItemConfiguration = useWatch({
+    name: [`${fieldName}.isReviewable`, `${name}.responseType`, name],
+  });
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
   const conditionalLogicForItem = getItemConditionDependencies(
     currentItem,
-    activity.conditionalLogic,
+    activity?.conditionalLogic,
   );
 
   const availableItemsTypeOptions = isReviewable
@@ -113,6 +116,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           <Grid item xs={1}>
             <InputController
               fullWidth
+              withDebounce
               name={`${name}.name`}
               control={control}
               label={t('itemName')}
@@ -124,29 +128,34 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         </Grid>
         <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('displayedContent')}</StyledTitleLarge>
         <EditorController
+          withDebounce
           name={`${name}.question`}
           control={control}
           data-testid="builder-activity-items-item-configuration-description"
         />
         <OptionalItemsAndSettings name={name} ref={optionalItemsRef} />
       </BuilderContainer>
-      <Modal
-        open={isPopupVisible}
-        onClose={onPopupConfirm}
-        onSubmit={onPopupConfirm}
-        width={'62'}
-        title={t('variablesWarning.title')}
-        buttonText={t('ok')}
-        data-testid="builder-activity-items-item-configuration-variables-warning-popup"
-      >
-        <StyledModalWrapper>{t(message)}</StyledModalWrapper>
-      </Modal>
-      <EditItemModal
-        itemFieldName={name}
-        isPopupVisible={isEditItemPopupVisible}
-        setIsPopupVisible={setIsEditItemPopupVisible}
-        onModalSubmit={handleModalSubmit}
-      />
+      {isPopupVisible && (
+        <Modal
+          open
+          onClose={onPopupConfirm}
+          onSubmit={onPopupConfirm}
+          width={'62'}
+          title={t('variablesWarning.title')}
+          buttonText={t('ok')}
+          data-testid="builder-activity-items-item-configuration-variables-warning-popup"
+        >
+          <StyledModalWrapper>{t(message)}</StyledModalWrapper>
+        </Modal>
+      )}
+      {isEditItemPopupVisible && (
+        <EditItemModal
+          open
+          itemFieldName={name}
+          onClose={() => setIsEditItemPopupVisible(false)}
+          onSubmit={handleModalSubmit}
+        />
+      )}
     </>
   );
 };

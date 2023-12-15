@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import isEqual from 'lodash.isequal';
 import { useParams } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
 
@@ -38,6 +37,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       setActivityName,
       defaultStartDate,
       editedEvent,
+      onFormIsLoading,
       onFormChange,
       'data-testid': dataTestid,
     },
@@ -64,7 +64,15 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       mode: 'onChange',
     });
 
-    const { handleSubmit, control, watch, getValues, setValue, trigger } = methods;
+    const {
+      handleSubmit,
+      control,
+      watch,
+      getValues,
+      setValue,
+      trigger,
+      formState: { isDirty },
+    } = methods;
 
     const { errors } = useFormState({
       control,
@@ -79,7 +87,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       !!activityOrFlowId &&
       eventsData?.some(
         ({ activityOrFlowId: id, periodicityType }) =>
-          activityOrFlowId === id && periodicityType === Periodicity.Always,
+          getIdWithoutRegex(activityOrFlowId)?.id === id && periodicityType === Periodicity.Always,
       );
     const hasAlwaysAvailableOption = !!editedEvent || !isAlwaysAvailableSelected;
 
@@ -106,8 +114,18 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       }
     };
 
-    const { execute: createEvent, error: createEventError } = useAsync(createEventApi, getEvents);
-    const { execute: updateEvent, error: updateEventError } = useAsync(updateEventApi, getEvents);
+    const {
+      execute: createEvent,
+      error: createEventError,
+      isLoading: createEventIsLoading,
+    } = useAsync(createEventApi, getEvents);
+    const {
+      execute: updateEvent,
+      error: updateEventError,
+      isLoading: updateEventIsLoading,
+    } = useAsync(updateEventApi, getEvents);
+
+    const isLoading = createEventIsLoading || updateEventIsLoading;
 
     const removeWarning: Warning = eventsData.reduce((acc, event) => {
       const idWithoutFlowRegex = getIdWithoutRegex(activityOrFlowId)?.id;
@@ -157,6 +175,23 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       submitCallback();
     };
 
+    const apiError = createEventError || updateEventError;
+    const getError = () => {
+      if (errors.reminder?.activityIncomplete) {
+        return t('activityIncompleteError');
+      }
+      if (eventFormConfig.hasNotificationsErrors) {
+        return t('timeNotificationsError');
+      }
+      if (apiError) {
+        return getErrorMessage(apiError);
+      }
+
+      return null;
+    };
+
+    const errorMessage = getError();
+
     useImperativeHandle(ref, () => ({
       submitForm() {
         handleSubmit(submitForm)();
@@ -184,9 +219,13 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
 
     useEffect(() => {
       if (onFormChange) {
-        onFormChange(!isEqual(getValues(), defaultValues));
+        onFormChange(isDirty);
       }
-    }, [watch()]);
+    }, [isDirty]);
+
+    useEffect(() => {
+      onFormIsLoading(isLoading);
+    }, [isLoading]);
 
     useEffect(() => {
       setValue('removeWarning', removeWarning);
@@ -221,14 +260,12 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
             )}
           </StyledModalWrapper>
           <Tabs tabs={getEventFormTabs(eventFormConfig)} uiType={UiType.Secondary} />
-          {(createEventError || updateEventError || eventFormConfig.hasNotificationsErrors) && (
+          {errorMessage && (
             <StyledBodyLarge
               color={variables.palette.semantic.error}
               sx={{ m: theme.spacing(1, 2.6) }}
             >
-              {eventFormConfig.hasNotificationsErrors
-                ? t('timeNotificationsError')
-                : getErrorMessage(createEventError || updateEventError)}
+              {errorMessage}
             </StyledBodyLarge>
           )}
         </form>

@@ -1,8 +1,9 @@
-import { useState, ChangeEvent } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useState } from 'react';
 import { Box, ClickAwayListener } from '@mui/material';
+import get from 'lodash.get';
 
 import { StyledFlexTopCenter } from 'shared/styles';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledInputController } from './ScoreCell.styles';
 import { ScoreCellProps } from './ScoreCell.types';
@@ -10,12 +11,18 @@ import { ScoreCellProps } from './ScoreCell.types';
 export const ScoreCell = ({ name, 'data-testid': dataTestid }: ScoreCellProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { control, getValues, setValue } = useFormContext();
+  const {
+    control,
+    getValues,
+    formState: { errors },
+  } = useCustomFormContext();
+
+  const error = get(errors, name);
 
   const handleClick = () => setIsEditing(true);
   const handleClickAway = () => setIsEditing(false);
 
-  if (!isEditing)
+  if (!error && !isEditing)
     return (
       <ClickAwayListener onClickAway={handleClickAway}>
         <StyledFlexTopCenter
@@ -28,12 +35,6 @@ export const ScoreCell = ({ name, 'data-testid': dataTestid }: ScoreCellProps) =
       </ClickAwayListener>
     );
 
-  const handleScoreChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === '') return setValue(name, 0);
-
-    setValue(name, +event.target.value);
-  };
-
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box>
@@ -41,11 +42,8 @@ export const ScoreCell = ({ name, 'data-testid': dataTestid }: ScoreCellProps) =
           control={control}
           name={name}
           type="number"
-          minNumberValue={Number.MIN_SAFE_INTEGER}
           autoFocus
-          isEmptyStringAllowed
           isErrorVisible={false}
-          onChange={handleScoreChange}
           data-testid={`${dataTestid}-score`}
         />
       </Box>

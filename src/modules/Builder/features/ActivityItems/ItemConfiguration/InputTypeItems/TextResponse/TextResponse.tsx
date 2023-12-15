@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
 import { InputController } from 'shared/components/FormComponents';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 import {
@@ -17,7 +17,7 @@ import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 export const TextResponse = ({ name }: TextResponseProps) => {
   const { t } = useTranslation('app');
 
-  const { control, watch } = useFormContext();
+  const { control, watch } = useCustomFormContext();
   const settings = watch(`${name}.config`);
 
   const isCorrectAnswerRequired = get(settings, ItemConfigurationSettings.IsCorrectAnswerRequired);
@@ -32,7 +32,6 @@ export const TextResponse = ({ name }: TextResponseProps) => {
             control={control}
             type="number"
             label={t('maxCharacters')}
-            minNumberValue={1}
             data-testid="builder-activity-items-item-configuration-text-response-max-length"
           />
         </StyledMaxCharacters>

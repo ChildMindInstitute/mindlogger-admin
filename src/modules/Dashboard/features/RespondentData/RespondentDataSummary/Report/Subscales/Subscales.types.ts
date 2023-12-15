@@ -1,5 +1,5 @@
-import { AnswerDTO } from 'shared/types';
-import { ActivitySettingsSubscale, Item } from 'shared/state';
+import { ActivityItemAnswer } from 'shared/types';
+import { ActivitySettingsSubscale } from 'shared/state';
 import { Version } from 'api';
 
 import { ActivityCompletion, FormattedResponse } from '../Report.types';
@@ -28,7 +28,7 @@ export type ParsedSubscale = {
   optionText: string;
   date: Date;
   activityCompletionID?: string;
-  activityItems: Record<string, { answer: AnswerDTO; activityItem: Item }>;
+  activityItems: Record<string, ActivityItemAnswer>;
   subscalesObject: Record<string, ActivitySettingsSubscale>;
   restScores?: { [key: string]: { score: number; optionText: string } };
 };

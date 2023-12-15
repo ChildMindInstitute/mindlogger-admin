@@ -1,9 +1,9 @@
 import { useState, ChangeEvent } from 'react';
 import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import get from 'lodash.get';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
@@ -15,6 +15,7 @@ import {
   SingleAndMultipleSelectRow,
   SliderRowsItemResponseValues,
 } from 'shared/state';
+import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 
 import {
   StyledFormControl,
@@ -36,11 +37,7 @@ import {
   DEFAULT_SCORE_VALUE,
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
-import {
-  checkIfItemHasRequiredOptions,
-  getDefaultSliderScores,
-  getEmptyAlert,
-} from '../../../ItemConfiguration.utils';
+import { checkIfItemHasRequiredOptions, getEmptyAlert } from '../../../ItemConfiguration.utils';
 
 export const ItemSettingsGroup = ({
   name,
@@ -54,7 +51,7 @@ export const ItemSettingsGroup = ({
   const [isExpanded, setIsExpanded] = useState(!collapsedByDefault);
 
   const { t } = useTranslation('app');
-  const { control, setValue, getValues } = useFormContext();
+  const { control, setValue, getValues } = useCustomFormContext();
 
   const config = getValues(`${itemName}.config`) ?? {};
 
@@ -66,6 +63,7 @@ export const ItemSettingsGroup = ({
       timeout={0}
       collapsedSize="4.8rem"
       sx={{ flexShrink: 0 }}
+      data-testid={`builder-activity-items-item-settings-group-container-${groupName}`}
     >
       <StyledFormControl>
         <StyledItemSettingsGroupHeader sx={{ justifyContent: 'space-between' }}>
@@ -234,7 +232,7 @@ export const ItemSettingsGroup = ({
                     hasAlerts
                       ? [
                           getEmptyAlert({
-                            responseType: inputType as ItemResponseType,
+                            responseType: inputType,
                             responseValues: getValues(`${itemName}.responseValues`),
                             config,
                           }),

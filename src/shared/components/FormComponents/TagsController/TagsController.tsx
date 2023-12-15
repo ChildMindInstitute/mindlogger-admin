@@ -18,6 +18,7 @@ export const TagsController = <T extends FieldValues>({
   onRemoveTagClick,
   uiType = UiType.Primary,
   inputLabel,
+  disabled,
   ...props
 }: TagsInputControllerProps<T>) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -31,8 +32,12 @@ export const TagsController = <T extends FieldValues>({
           color={isPrimaryUiType ? 'secondary' : 'primary'}
           key={index}
           title={tag}
-          onRemove={() => onRemoveTagClick(index)}
-          sxProps={isSecondaryUiType ? { m: theme.spacing(0.2) } : null}
+          onRemove={disabled ? undefined : () => onRemoveTagClick(index)}
+          sxProps={
+            isSecondaryUiType
+              ? { m: theme.spacing(0.2), ...(disabled && { pointerEvents: 'none' }) }
+              : null
+          }
         />
       ))}
     </>
@@ -49,6 +54,7 @@ export const TagsController = <T extends FieldValues>({
           <>
             <StyledTextField
               {...props}
+              disabled={disabled}
               isSecondaryUiType={isSecondaryUiType}
               onBlur={() => {
                 onAddTagClick(value);

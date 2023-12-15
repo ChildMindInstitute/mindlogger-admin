@@ -115,7 +115,7 @@ export type EventNotifications =
     }[]
   | null;
 
-export type EventReminder = { activityIncomplete: number; reminderTime: string | null } | null;
+export type EventReminder = { activityIncomplete: number; reminderTime: string | null };
 
 type CreateEvent = {
   startTime?: string;
@@ -135,7 +135,7 @@ type CreateEvent = {
   flowId?: string;
   notification: {
     notifications: EventNotifications;
-    reminder: EventReminder;
+    reminder: EventReminder | null;
   } | null;
 };
 
@@ -252,12 +252,22 @@ export type ActivityAnswer = AppletId & { answerId: string; activityId: string }
 
 export type AssessmentReview = AppletId & { answerId: string };
 
+export type AssessmentResult = {
+  answer: string | null;
+  itemIds: string[];
+  items: Item[];
+  itemsLast: Item[] | null;
+  reviewerPublicKey: string | null;
+  versions: string[];
+};
+
 export type SaveAssessment = AppletId & {
   answerId: string;
 } & {
   answer: string;
   itemIds: string[];
   reviewerPublicKey: string;
+  assessmentVersionId: string;
 };
 
 export type Review = {
@@ -339,7 +349,13 @@ export type ReportConfig = {
 
 export type AppletVersionChanges = AppletId & { version: string };
 
-export type ExportData = AppletId & { respondentIds?: string; page?: number; limit?: number };
+export type ExportData = AppletId & {
+  respondentIds?: string;
+  page?: number;
+  limit?: number;
+  fromDate?: string;
+  toDate?: string;
+};
 
 export type Folder = {
   id: string;
@@ -373,3 +389,5 @@ export type LatestReport = {
 };
 
 export type Identifiers = LatestReport;
+
+export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;

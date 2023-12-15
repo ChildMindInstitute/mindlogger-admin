@@ -1,8 +1,4 @@
-import {
-  AnswerDTO,
-  DecryptedAnswerData,
-  ExtendedExportAnswerWithoutEncryption,
-} from 'shared/types';
+import { AnswerDTO, DecryptedAnswerData } from 'shared/types';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
 import { getDictionaryText } from 'shared/utils/forms';
@@ -11,7 +7,7 @@ import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { parseResponseValue } from './parseResponseValue';
 import { getFlag } from './getFlag';
 import { parseOptions } from './parseOptions';
-import { getRawScores } from './getRowScores';
+import { getRawScores } from './getRawScores';
 import { convertDateStampToMs } from './convertDateStampToMs';
 
 export const getReportCSVObject = <T>({
@@ -19,7 +15,7 @@ export const getReportCSVObject = <T>({
   rawAnswersObject,
   index,
 }: {
-  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption>;
+  item: DecryptedAnswerData;
   rawAnswersObject: Record<string, T & { answer: AnswerDTO }>;
   index: number;
 }) => {

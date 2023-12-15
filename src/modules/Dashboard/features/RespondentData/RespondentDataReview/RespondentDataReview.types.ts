@@ -50,6 +50,13 @@ export type MultiSelectItemAnswer = {
 
 export type RespondentDataReviewContextType = {
   assessment?: AssessmentActivityItem[];
+  setAssessment: Dispatch<SetStateAction<AssessmentActivityItem[]>>;
+  lastAssessment: Item[] | null;
+  assessmentVersions: string[];
+  isLastVersion: boolean;
+  setIsLastVersion: Dispatch<SetStateAction<boolean>>;
+  isBannerVisible: boolean;
+  setIsBannerVisible: Dispatch<SetStateAction<boolean>>;
   itemIds: string[];
   setItemIds: Dispatch<SetStateAction<string[]>>;
   isFeedbackOpen: boolean;
@@ -63,10 +70,19 @@ export type AssessmentAnswer = (
   edited?: number | null;
 };
 
+type AssessmentItems = MultiSelectItem | SingleSelectItem | SliderItem;
+
+type AssessmentAnswers =
+  | DecryptedMultiSelectionAnswer
+  | DecryptedSingleSelectionAnswer
+  | DecryptedSliderAnswer;
+
 export type AssessmentActivityItem = {
-  activityItem: Item;
-  answer: AssessmentAnswer;
-  items: Item[];
+  activityItem: AssessmentItems;
+  answer?: AssessmentAnswers & {
+    edited?: number | null;
+  };
+  items: AssessmentItems[];
 };
 
 export type FormattedAssessmentAnswer = {

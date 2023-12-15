@@ -1,7 +1,7 @@
-import { AxiosError } from 'axios';
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
+import { ApiErrorReturn } from 'shared/state/Base';
 
 import { AuthSchema } from './Auth.schema';
 import { signIn, getUserDetails } from './Auth.thunk';
@@ -38,7 +38,7 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(signIn.rejected, (state, action) => {
-    createAuthRejectedData(state, action.meta.requestId, action.payload as AxiosError);
+    createAuthRejectedData(state, action.meta.requestId, action.payload as ApiErrorReturn);
   });
 
   builder.addCase(getUserDetails.pending, ({ authentication }, action) => {
@@ -50,6 +50,6 @@ export const extraReducers = (builder: ActionReducerMapBuilder<AuthSchema>): voi
   });
 
   builder.addCase(getUserDetails.rejected, (state, action) => {
-    createAuthRejectedData(state, action.meta.requestId, action.payload as AxiosError);
+    createAuthRejectedData(state, action.meta.requestId, action.payload as ApiErrorReturn);
   });
 };

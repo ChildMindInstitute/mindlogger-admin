@@ -2,7 +2,7 @@ import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Modal } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 
@@ -23,7 +23,7 @@ export const CreateEventPopup = ({
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleCreateEventClose = () => setCreateEventPopupVisible(false);
 
   const isIndividualCalendar = !!respondentId;
@@ -63,6 +63,10 @@ export const CreateEventPopup = ({
     }
   };
 
+  const handleFormIsLoading = (isLoading: boolean) => {
+    setIsLoading(isLoading);
+  };
+
   return (
     <>
       {open && (
@@ -70,6 +74,7 @@ export const CreateEventPopup = ({
           open={open}
           onClose={handleCreateEventClose}
           onSubmit={onCreateActivitySubmit}
+          disabledSubmit={isLoading}
           title={t('createActivitySchedule')}
           buttonText={t('save')}
           width="67.1"
@@ -79,15 +84,21 @@ export const CreateEventPopup = ({
           }}
           data-testid={dataTestid}
         >
-          <EventForm
-            ref={eventFormRef}
-            submitCallback={handleCreateEventClose}
-            setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
-            setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
-            setActivityName={setCurrentActivityName}
-            defaultStartDate={defaultStartDate}
-            data-testid={`${dataTestid}-form`}
-          />
+          <>
+            {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (
+              <Spinner uiType={SpinnerUiType.Secondary} noBackground />
+            )}
+            <EventForm
+              ref={eventFormRef}
+              submitCallback={handleCreateEventClose}
+              setRemoveAllScheduledPopupVisible={setRemoveAllScheduledPopupVisible}
+              setRemoveAlwaysAvailablePopupVisible={setRemoveAlwaysAvailablePopupVisible}
+              setActivityName={setCurrentActivityName}
+              defaultStartDate={defaultStartDate}
+              onFormIsLoading={handleFormIsLoading}
+              data-testid={`${dataTestid}-form`}
+            />
+          </>
         </Modal>
       )}
       {removeAllScheduledPopupVisible && (
@@ -96,6 +107,7 @@ export const CreateEventPopup = ({
           onClose={handleRemoveAllScheduledClose}
           onSubmit={handleRemoveAllScheduledSubmit}
           activityName={currentActivityName}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-remove-all-scheduled-events-popup`}
         />
       )}
@@ -105,6 +117,7 @@ export const CreateEventPopup = ({
           onClose={handleRemoveAlwaysAvailableClose}
           onSubmit={handleRemoveAlwaysAvailableSubmit}
           activityName={currentActivityName}
+          isLoading={isLoading}
           data-testid={`${dataTestid}-confirm-scheduled-access-popup`}
         />
       )}

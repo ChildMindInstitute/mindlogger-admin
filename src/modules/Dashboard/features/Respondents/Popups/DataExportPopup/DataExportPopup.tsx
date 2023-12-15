@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
+import { useFormContext } from 'react-hook-form';
+import { format } from 'date-fns';
 
 import { EnterAppletPassword, Modal } from 'shared/components';
 import {
@@ -10,11 +12,13 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { getExportDataApi } from 'api';
-import { exportDataSucceed, Mixpanel, createArrayFromMinToMax } from 'shared/utils';
+import { exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { getExportDataApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getPageAmount } from 'modules/Dashboard/api/api.utils';
+import { DateFormats } from 'shared/consts';
+import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSettings.types';
 
 import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -31,6 +35,7 @@ export const DataExportPopup = ({
   setChosenAppletData,
   'data-testid': dataTestid,
 }: DataExportPopupProps) => {
+  const { getValues } = useFormContext<ExportDataFormValues>() ?? {};
   const { t } = useTranslation('app');
   const [dataIsExporting, setDataIsExporting] = useState(false);
   const [activeModal, setActiveModal] = useState(Modals.DataExport);
@@ -83,12 +88,20 @@ export const DataExportPopup = ({
       respondentIds?: string;
     }) => {
       try {
-        const firstPageResponse = await getExportDataApi({
+        const formFromDate = getValues?.().fromDate as Date;
+        const formToDate = getValues?.().toDate as Date;
+        const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
+        const toDate = formToDate && format(formToDate, DateFormats.shortISO);
+        const body = {
           appletId,
           respondentIds: respondentId,
-        });
+          fromDate,
+          toDate,
+        };
+        const firstPageResponse = await getExportDataApi(body);
         const { result: firstPageData, count = 0 } = firstPageResponse.data;
         const pageLimit = getPageAmount(count);
+
         await exportDataSucceed({
           getDecryptedAnswers,
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
@@ -101,8 +114,7 @@ export const DataExportPopup = ({
               limit: pageLimit,
             });
             const nextPageResponse = await getExportDataApi({
-              appletId,
-              respondentIds: respondentId,
+              ...body,
               page,
             });
             const { result: nextPageData } = nextPageResponse.data;
@@ -115,10 +127,12 @@ export const DataExportPopup = ({
 
         setDataIsExporting(false);
         handlePopupClose();
-      } catch (error) {
-        console.warn(error);
+      } catch (e) {
+        const error = e as TypeError;
+        console.warn('Error while export data', error);
         setDataIsExporting(false);
         setActiveModal(Modals.ExportError);
+        await sendLogFile({ error });
       }
     },
     [getDecryptedAnswers],

@@ -56,7 +56,7 @@ export const Applets = () => {
   const folders = rows.filter((row) => row.isFolder) as Folder[];
 
   const addFolder = () => {
-    const newFolderName = generateNewFolderName(folders, t);
+    const newFolderName = generateNewFolderName(folders);
     const folderRow = {
       foldersAppletCount: 0,
       id: uuidv4(),
@@ -69,7 +69,7 @@ export const Applets = () => {
   };
 
   const headerContent = (
-    <Box onClick={addFolder}>
+    <Box onClick={addFolder} data-testid="dashboard-applets-add-folder">
       <Svg id="add-folder" />
     </Box>
   );
@@ -175,10 +175,7 @@ export const Applets = () => {
         />
         {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
         {deletePopupVisible && (
-          <DeletePopup
-            onCloseCallback={onCloseCallback}
-            data-testid="dashboard-applets-delete-popup"
-          />
+          <DeletePopup onCloseCallback={onCloseCallback} data-testid="dashboard-applets-delete" />
         )}
         {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
         {publishConcealPopupVisible && <PublishConcealAppletPopup />}

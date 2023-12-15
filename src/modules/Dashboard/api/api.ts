@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
-import { ExportDataResult } from 'shared/types';
+import { EncryptedAnswerSharedProps, ExportDataResult } from 'shared/types';
 import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 
 import {
@@ -52,6 +52,8 @@ import {
   AppletName,
   LatestReport,
   Identifiers,
+  GetRespondentDetailsParams,
+  AssessmentResult,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -408,10 +410,13 @@ export const getActivityAnswerApi = (
   { appletId, answerId, activityId }: ActivityAnswer,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`, {
-    params: { limit: MAX_LIMIT },
-    signal,
-  });
+  authApiClient.get<ResponseWithObject<EncryptedAnswerSharedProps>>(
+    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`,
+    {
+      params: { limit: MAX_LIMIT },
+      signal,
+    },
+  );
 
 export const getAnswersNotesApi = (
   { appletId, answerId, activityId, params }: ActivityAnswer & GetAnswersNotesParams,
@@ -473,9 +478,12 @@ export const getAppletSubmitDateListApi = (
   });
 
 export const getAssessmentApi = ({ appletId, answerId }: AssessmentReview, signal?: AbortSignal) =>
-  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/assessment`, {
-    signal,
-  });
+  authApiClient.get<ResponseWithObject<AssessmentResult>>(
+    `/answers/applet/${appletId}/answers/${answerId}/assessment`,
+    {
+      signal,
+    },
+  );
 
 export const createAssessmentApi = (
   { appletId, answerId, ...assessment }: SaveAssessment,
@@ -622,14 +630,14 @@ export const getAppletVersionChangesApi = (
 ) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
 
 export const getExportDataApi = (
-  { appletId, respondentIds, page = 1, limit = DEFAULT_ROWS_PER_PAGE }: ExportData,
+  { appletId, page = 1, limit = DEFAULT_ROWS_PER_PAGE, ...rest }: ExportData,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<ResponseWithObject<ExportDataResult>>(`/answers/applet/${appletId}/data`, {
     params: {
-      respondentIds,
       page,
       limit,
+      ...rest,
     },
     signal,
   });
@@ -638,4 +646,12 @@ export const getOptionTextApi = (url: string) =>
   axios({
     method: 'get',
     url,
+  });
+
+export const getRespondentDetailsApi = (
+  { ownerId, appletId, respondentId }: GetRespondentDetailsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/workspaces/${ownerId}/applets/${appletId}/respondents/${respondentId}`, {
+    signal,
   });

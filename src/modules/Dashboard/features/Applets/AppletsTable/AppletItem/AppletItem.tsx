@@ -110,6 +110,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     });
     await fetchData();
     setPasswordPopupVisible(false);
+    Mixpanel.track('Applet Created Successfully');
   };
 
   const checkAppletEncryption = (callback: () => void) =>
@@ -123,7 +124,11 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       await fetchData();
     },
     viewUsers: () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS)),
-    viewCalendar: () => checkAppletEncryption(() => navigate(APPLET_SCHEDULE)),
+    viewCalendar: () =>
+      checkAppletEncryption(() => {
+        navigate(APPLET_SCHEDULE);
+        Mixpanel.track('View General calendar click');
+      }),
     deleteAction: () =>
       checkAppletEncryption(() =>
         dispatch(
@@ -171,7 +176,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     },
     editAction: () =>
       checkAppletEncryption(() => {
-        if (item.isFolder) return; // TODO: add Edit Folder Page navigation
+        if (item.isFolder) return;
 
         navigate(getBuilderAppletUrl(appletId));
         Mixpanel.track('Applet edit click');
@@ -198,6 +203,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
               <StyledPinContainer>
                 <Pin
                   isPinned={item?.isPinned}
+                  data-testid="dashboard-applets-pin"
                   onClick={(event) => {
                     event.stopPropagation();
                     handleTogglePin();
@@ -219,6 +225,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
             items={getActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
             context={item}
             visibleByDefault={hasVisibleActions}
+            data-testid="dashboard-applets-table-applet-actions"
           />
         </StyledTableCell>
       </TableRow>

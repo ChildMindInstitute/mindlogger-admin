@@ -1,15 +1,17 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
+import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
+import { AppletWithoutChangesPopup } from 'modules/Builder/components/Popups/AppletWithoutChangesPopup';
+import { SaveChangesPopup } from 'modules/Builder/components';
+import { Mixpanel } from 'shared/utils/mixpanel';
 import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
   AppletPasswordRefType,
-} from 'modules/Dashboard';
-import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
-import { SaveChangesPopup } from 'modules/Builder/components';
-import { Mixpanel } from 'shared/utils/mixpanel';
+} from 'modules/Dashboard/features';
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
@@ -17,6 +19,9 @@ import { SaveAndPublishProps } from './SaveAndPublish.types';
 
 export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishProps) => {
   const { t } = useTranslation('app');
+
+  const [appletWithoutChangesPopupVisible, setAppletWithoutChangesPopupVisible] = useState(false);
+
   const {
     isPasswordPopupOpened,
     isPublishProcessPopupOpened,
@@ -31,7 +36,7 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
     handleSaveChangesDoNotSaveSubmit,
     handleSaveChangesSaveSubmit,
     cancelNavigation,
-  } = useSaveAndPublishSetup(hasPrompt, setIsFromLibrary);
+  } = useSaveAndPublishSetup(hasPrompt, setIsFromLibrary, setAppletWithoutChangesPopupVisible);
   const { appletId } = useParams();
 
   const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
@@ -51,6 +56,10 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
       >
         {t('saveAndPublish')}
       </StyledButton>
+      <AppletWithoutChangesPopup
+        isPopupVisible={appletWithoutChangesPopupVisible}
+        onClose={() => setAppletWithoutChangesPopupVisible(false)}
+      />
       <AppletPasswordPopup
         appletId={appletId ?? ''}
         onClose={() => setIsPasswordPopupOpened(false)}

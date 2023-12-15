@@ -1,26 +1,40 @@
 import { useEffect } from 'react';
 
-interface Props {
+type UseIntersectionObserverProps = {
   rootSelector?: string;
   targetSelector: string;
-  loadNextPage(): void;
-}
-export const useIntersectionObserver = ({ rootSelector, targetSelector, loadNextPage }: Props) => {
+  isActive?: boolean;
+  onAppear?(): void;
+  onHide?(): void;
+  hasTrigger?: boolean;
+};
+
+export const useIntersectionObserver = ({
+  rootSelector,
+  targetSelector,
+  isActive = true,
+  onAppear,
+  onHide,
+  hasTrigger = false,
+}: UseIntersectionObserverProps) => {
   useEffect(() => {
+    if (!isActive) return;
+
     const callback: IntersectionObserverCallback = (entries: IntersectionObserverEntry[]) => {
       if (entries.length === 0) return;
 
-      const intersection = entries[0];
-      if (intersection.intersectionRatio !== 1) return;
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) return onAppear?.();
 
-      loadNextPage();
+        return onHide?.();
+      });
     };
 
     const root = rootSelector === undefined ? null : document.querySelector(rootSelector);
     const options = {
       root,
       rootMargin: '0px',
-      threshold: 1,
+      threshold: 0,
     };
 
     const observer = new IntersectionObserver(callback, options);
@@ -33,5 +47,5 @@ export const useIntersectionObserver = ({ rootSelector, targetSelector, loadNext
     return () => {
       observer.unobserve(target);
     };
-  }, [targetSelector, loadNextPage, rootSelector]);
+  }, [targetSelector, onAppear, onHide, rootSelector, isActive, hasTrigger]);
 };

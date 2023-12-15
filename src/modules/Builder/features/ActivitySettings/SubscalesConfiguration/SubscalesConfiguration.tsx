@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
@@ -7,7 +7,7 @@ import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
-import { useActivitiesRedirection, useCurrentActivity } from 'modules/Builder/hooks';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
@@ -44,7 +44,7 @@ export const SubscalesConfiguration = () => {
   const { control, watch, setValue } = useFormContext();
   const { fieldName, activity } = useCurrentActivity();
 
-  useActivitiesRedirection();
+  useRedirectIfNoMatchedActivity();
 
   const subscalesField = `${fieldName}.subscaleSetting.subscales`;
   const calculateTotalScoreField = `${fieldName}.subscaleSetting.calculateTotalScore`;
@@ -62,7 +62,7 @@ export const SubscalesConfiguration = () => {
   const [isLookupTableOpened, setIsLookupTableOpened] = useState(false);
   const tableData = watch(totalScoresTableDataField) ?? [];
   const onTableDataUpdate = (data?: DataTableItem[]) => {
-    setValue(totalScoresTableDataField, data);
+    setValue(totalScoresTableDataField, data, { shouldDirty: true });
   };
   const iconId = `lookup-table${tableData?.length ? '-filled' : ''}`;
 
@@ -91,21 +91,28 @@ export const SubscalesConfiguration = () => {
     appendSubscale(getSubscalesDefaults());
   };
 
-  useEffect(() => {
-    if (calculateTotalScoreSwitch) {
-      setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum);
+  const resetCalculateTotalScoreField = (shouldDirty: boolean) => {
+    setValue(calculateTotalScoreField, null, { shouldDirty });
+    setValue(totalScoresTableDataField, null, { shouldDirty });
+  };
+
+  const calculateTotalScoreSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCalculateTotalScoreSwitch((prevState) => !prevState);
+    if (e.target.checked) {
+      setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum, {
+        shouldDirty: true,
+      });
 
       return;
     }
-
-    setValue(calculateTotalScoreField, null);
-    setValue(totalScoresTableDataField, null);
-  }, [calculateTotalScoreSwitch]);
+    resetCalculateTotalScoreField(true);
+  };
 
   useEffect(() => {
     if (subscalesLength) return;
 
     setCalculateTotalScoreSwitch(false);
+    resetCalculateTotalScoreField(false);
   }, [!!subscalesLength]);
 
   useEffect(() => {
@@ -163,7 +170,6 @@ export const SubscalesConfiguration = () => {
       >
         {t('addSubscales')}
       </Button>
-
       {!!subscalesLength && (
         <>
           <StyledTitleMedium>{t('elementsAssociatedWithSubscales')}</StyledTitleMedium>
@@ -176,9 +182,7 @@ export const SubscalesConfiguration = () => {
           />
           <SwitchWithState
             checked={calculateTotalScoreSwitch}
-            handleChange={() => {
-              setCalculateTotalScoreSwitch((prevState) => !prevState);
-            }}
+            handleChange={calculateTotalScoreSwitchChange}
             label={t('calculateTotalScore')}
             tooltipText={t('calculateTotalScoreTooltip')}
             data-testid="builder-activity-settings-subscales-calculate-total-score"

@@ -42,7 +42,7 @@ describe('useFieldLengthError', () => {
       maxLength: mockedMaxLength,
     });
 
-    expect(mockedSetValue).toBeCalledWith(mockedFieldName, value);
+    expect(mockedSetValue).toBeCalledWith(mockedFieldName, value, { shouldDirty: true });
 
     expected
       ? expect(mockedSetError).toBeCalledWith(...expected)

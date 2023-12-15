@@ -26,7 +26,7 @@ export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => 
     const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !hasSystemItems;
 
     if (shouldAddSubscaleSystemItems) {
-      appendSystemItems([genderItem, ageItem] as ItemFormValues[]);
+      appendSystemItems([genderItem, ageItem]);
 
       return;
     }

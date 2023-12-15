@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
-import { useFieldArray, useWatch, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -63,6 +63,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       setShowColorPalette(visibility);
       setValue(`${name}.responseValues.paletteName`, undefined);
     };
+
     const {
       fields: alerts,
       append: appendAlert,
@@ -153,17 +154,25 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       removeAlert(index);
 
       if (alerts?.length === 1) {
-        setValue(`${name}.config.${ItemConfigurationSettings.HasAlerts}`, false);
+        setValue(`${name}.config.${ItemConfigurationSettings.HasAlerts}`, false, {
+          shouldDirty: true,
+        });
       }
     };
 
     const handleRemoveTextInputOption = () => {
-      setValue(`${name}.config.${ItemConfigurationSettings.HasTextInput}`, false);
-      setValue(`${name}.config.${ItemConfigurationSettings.IsTextInputRequired}`, false);
+      setValue(`${name}.config.${ItemConfigurationSettings.HasTextInput}`, false, {
+        shouldDirty: true,
+      });
+      setValue(`${name}.config.${ItemConfigurationSettings.IsTextInputRequired}`, false, {
+        shouldDirty: true,
+      });
     };
 
     const handleRemoveResponseDataIdentifier = () => {
-      setValue(`${name}.config.${ItemConfigurationSettings.HasResponseDataIdentifier}`, false);
+      setValue(`${name}.config.${ItemConfigurationSettings.HasResponseDataIdentifier}`, false, {
+        shouldDirty: true,
+      });
     };
 
     const activeItem = useActiveItem({

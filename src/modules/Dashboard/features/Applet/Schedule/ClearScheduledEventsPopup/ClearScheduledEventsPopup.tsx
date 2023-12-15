@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Modal, SubmitBtnColor } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks/useAsync';
 import { deleteScheduledEventsApi, deleteIndividualEventsApi } from 'api';
@@ -26,14 +26,20 @@ export const ClearScheduledEventsPopup = ({
   const { respondentId } = useParams();
   const dispatch = useAppDispatch();
   const [step, setStep] = useState<Steps>(0);
-  const { execute: deleteScheduledEvents, error: deleteScheduledError } = useAsync(
-    deleteScheduledEventsApi,
-    () => dispatch(applets.thunk.getEvents({ appletId })),
+  const {
+    execute: deleteScheduledEvents,
+    error: deleteScheduledError,
+    isLoading: deleteScheduledLoading,
+  } = useAsync(deleteScheduledEventsApi, () => dispatch(applets.thunk.getEvents({ appletId })));
+  const {
+    execute: deleteIndividualScheduledEvents,
+    error: deleteIndividualScheduledError,
+    isLoading: deleteIndividualScheduledLoading,
+  } = useAsync(deleteIndividualEventsApi, () =>
+    dispatch(applets.thunk.getEvents({ appletId, respondentId })),
   );
-  const { execute: deleteIndividualScheduledEvents, error: deleteIndividualScheduledError } =
-    useAsync(deleteIndividualEventsApi, () =>
-      dispatch(applets.thunk.getEvents({ appletId, respondentId })),
-    );
+
+  const isLoading = deleteScheduledLoading || deleteIndividualScheduledLoading;
 
   const getNextStep = () =>
     setStep((prevStep) => {
@@ -69,16 +75,23 @@ export const ClearScheduledEventsPopup = ({
       hasSecondBtn={screens[step].hasSecondBtn}
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
+      disabledSubmit={isLoading}
       data-testid={dataTestid}
     >
-      <StyledModalWrapper>
-        {screens[step].component}
-        {(deleteScheduledError || deleteIndividualScheduledError) && (
-          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
-            {getErrorMessage(deleteScheduledError || deleteIndividualScheduledError)}
-          </StyledBodyLarge>
-        )}
-      </StyledModalWrapper>
+      <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        <StyledModalWrapper data-testid={`${dataTestid}-text`}>
+          {screens[step].component}
+          {(deleteScheduledError || deleteIndividualScheduledError) && (
+            <StyledBodyLarge
+              color={variables.palette.semantic.error}
+              sx={{ m: theme.spacing(1, 0) }}
+            >
+              {getErrorMessage(deleteScheduledError || deleteIndividualScheduledError)}
+            </StyledBodyLarge>
+          )}
+        </StyledModalWrapper>
+      </>
     </Modal>
   );
 };

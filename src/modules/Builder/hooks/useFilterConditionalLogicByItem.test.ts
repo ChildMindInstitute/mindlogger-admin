@@ -105,7 +105,7 @@ describe('useFilterConditionalLogicByItem', () => {
     result.current();
 
     expected
-      ? expect(mockedSetValue).toBeCalledWith(...expected)
+      ? expect(mockedSetValue).toBeCalledWith(...expected, { shouldDirty: true })
       : expect(mockedSetValue).not.toBeCalled();
   });
 });

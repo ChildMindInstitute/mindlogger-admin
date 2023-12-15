@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Button, Box } from '@mui/material';
-import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
-import { useFormContext } from 'react-hook-form';
+import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
+import { useWatch } from 'react-hook-form';
 
-import { Modal, Svg } from 'shared/components';
+import { useCustomFormContext } from 'modules/Builder/hooks';
+import { Modal, Spinner, Svg } from 'shared/components';
 import {
   StyledBodyLarge,
   StyledFlexAllCenter,
   StyledModalWrapper,
+  StyledObserverTarget,
   StyledTitleMedium,
   theme,
   variables,
@@ -16,20 +18,24 @@ import {
 import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state';
 import { BuilderContainer } from 'shared/features';
+import { DndDroppable } from 'modules/Builder/components';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
-import { InsertItem } from 'modules/Builder/components/InsertItem';
-import { DndDroppable } from 'modules/Builder/components/DndDroppable';
 import { ItemFormValues } from 'modules/Builder/types';
+import { observerStyles } from 'modules/Builder/consts';
+import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
+import { useRedirectIfNoMatchedActivityItem } from 'modules/Builder/hooks/useRedirectIfNoMatchedActivityItem';
 
 import { LeftBarProps } from './LeftBar.types';
 import { Item } from './Item';
 import { LeftBarHeader } from './LeftBarHeader';
+import { ACTIVITY_ITEMS_LIST_CLASS, ACTIVITY_ITEMS_END_ITEM_CLASS } from './LeftBar.const';
 import { ConditionalPanel } from '../ConditionalPanel';
 import { getConditionsToRemove } from '../ActivityItems.utils';
+import { DraggableItems } from './DraggableItems';
 
 export const LeftBar = ({
   activeItemIndex,
-  onSetActiveItemIndex,
+  onSetActiveItem,
   onAddItem,
   onInsertItem,
   onDuplicateItem,
@@ -37,7 +43,7 @@ export const LeftBar = ({
   onMoveItem,
 }: LeftBarProps) => {
   const { t } = useTranslation('app');
-  const { watch, setValue } = useFormContext();
+  const { setValue, getValues } = useCustomFormContext();
   const [isDragging, setIsDragging] = useState(false);
   const [conditionalLogicKeysToRemove, setConditionalLogicKeysToRemove] = useState<string[] | null>(
     null,
@@ -46,21 +52,33 @@ export const LeftBar = ({
   const [destinationIndex, setDestinationIndex] = useState(-1);
 
   const { fieldName, activity } = useCurrentActivity();
-  const items: ItemFormValues[] = watch(`${fieldName}.items`);
+  const items: ItemFormValues[] = useWatch({ name: `${fieldName}.items` });
   const activeItemId = getEntityKey(items?.[activeItemIndex]);
   const hasActiveItem = !!activeItemId;
   const movingItemSourceName = items?.[sourceIndex]?.name;
-  const groupedConditions = getObjectFromList<ConditionalLogic>(activity.conditionalLogic ?? []);
-  const draggableItems = items.filter((item) => item.allowEdit);
-  const systemItems = items.filter((item) => !item.allowEdit);
+  const groupedConditions = getObjectFromList<ConditionalLogic>(activity?.conditionalLogic ?? []);
+
+  const { data: itemsData, isPending } = useDataPreloader<ItemFormValues>({
+    data: items,
+    rootSelector: `.${ACTIVITY_ITEMS_LIST_CLASS}`,
+    targetSelector: `.${ACTIVITY_ITEMS_END_ITEM_CLASS}`,
+  });
+  const draggableItems = useMemo(() => itemsData.filter((item) => item.allowEdit), [itemsData]);
+  const systemItems = useMemo(() => itemsData.filter((item) => !item.allowEdit), [itemsData]);
+
+  useRedirectIfNoMatchedActivityItem();
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
     if (!destination || source.index === destination?.index) return;
-    const conditionsToRemove = getConditionsToRemove(items, activity?.conditionalLogic, {
-      sourceIndex: source.index,
-      destinationIndex: destination.index,
-      item: items[source.index],
+    const conditionsToRemove = getConditionsToRemove({
+      items,
+      conditionalLogic: activity?.conditionalLogic,
+      config: {
+        sourceIndex: source.index,
+        destinationIndex: destination.index,
+        item: items[source.index],
+      },
     });
 
     if (!conditionsToRemove?.length) return onMoveItem(source.index, destination.index);
@@ -78,7 +96,7 @@ export const LeftBar = ({
   const handleConfirmRemoveConditionals = () => {
     setValue(
       `${fieldName}.conditionalLogic`,
-      activity.conditionalLogic?.filter(
+      activity?.conditionalLogic?.filter(
         (condition: ConditionalLogic) =>
           !conditionalLogicKeysToRemove?.includes(getEntityKey(condition)),
       ),
@@ -87,10 +105,13 @@ export const LeftBar = ({
     handleCancelRemoveConditionals();
   };
 
-  const handleSetActiveItem = (id: string) => {
-    const activeItemIndex = items?.findIndex((item) => getEntityKey(item) === id);
+  const handleSetActiveItem = (item: ItemFormValues) => {
+    onSetActiveItem(item);
+  };
 
-    onSetActiveItemIndex(activeItemIndex);
+  const handleChangeItemVisibility = (itemName: string) => {
+    const prevValue = getValues(itemName)?.isHidden;
+    setValue(`${itemName}.isHidden`, !prevValue);
   };
 
   const addItemBtn = (
@@ -120,72 +141,57 @@ export const LeftBar = ({
       headerProps={{ hasActiveItem, onAddItem }}
       sxProps={containerSxProps}
       contentSxProps={{
+        position: 'relative',
         padding: theme.spacing(0, 1.6, 2.8),
       }}
+      contentClassName={ACTIVITY_ITEMS_LIST_CLASS}
       hasMaxWidth={!hasActiveItem}
     >
       {!!draggableItems?.length && (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-items-dnd" direction="vertical">
             {(listProvided) => (
-              <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-                {draggableItems?.map((item, index) => {
-                  const dataTestid = `builder-activity-items-item-${index}`;
-
-                  return (
-                    <Draggable
-                      key={`item-${getEntityKey(item)}`}
-                      draggableId={getEntityKey(item)}
-                      index={index}
-                    >
-                      {(itemProvided, snapshot) => (
-                        <Box
-                          {...itemProvided.draggableProps}
-                          ref={itemProvided.innerRef}
-                          data-testid={dataTestid}
-                        >
-                          <Item
-                            dragHandleProps={itemProvided.dragHandleProps}
-                            isDragging={snapshot.isDragging}
-                            item={item}
-                            name={`${fieldName}.items[${index}]`}
-                            index={index}
-                            activeItemId={activeItemId}
-                            onSetActiveItem={handleSetActiveItem}
-                            onDuplicateItem={onDuplicateItem}
-                            onRemoveItem={onRemoveItem}
-                          />
-                          <InsertItem
-                            isVisible={index >= 0 && index < items.length - 1 && !isDragging}
-                            onInsert={() => onInsertItem(index)}
-                            data-testid={`${dataTestid}-insert`}
-                          />
-                        </Box>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {listProvided.placeholder}
-              </Box>
+              <DraggableItems
+                items={draggableItems}
+                listProvided={listProvided}
+                isDragging={isDragging}
+                onRemoveItem={onRemoveItem}
+                onInsertItem={onInsertItem}
+                onSetActiveItem={handleSetActiveItem}
+                onDuplicateItem={onDuplicateItem}
+                onChangeItemVisibility={handleChangeItemVisibility}
+              />
             )}
           </DndDroppable>
         </DragDropContext>
       )}
       {!!systemItems?.length &&
-        systemItems.map((item) => (
-          <Item
-            key={`item-${getEntityKey(item)}`}
-            item={item}
-            activeItemId={activeItemId}
-            onSetActiveItem={handleSetActiveItem}
-            onDuplicateItem={onDuplicateItem}
-            onRemoveItem={onRemoveItem}
-          />
-        ))}
-      {!items?.length && (
+        systemItems.map((item, index) => {
+          const itemIndex = (draggableItems?.length ?? 0) + index;
+          const name = `${fieldName}.items.${itemIndex}`;
+          const key = `item-${getEntityKey(item)}-${index + draggableItems?.length}`;
+
+          return (
+            <Item
+              key={key}
+              name={name}
+              index={index}
+              onSetActiveItem={handleSetActiveItem}
+              onDuplicateItem={() => onDuplicateItem(itemIndex)}
+              onRemoveItem={onRemoveItem}
+            />
+          );
+        })}
+      {!itemsData?.length && (
         <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
           {t('itemIsRequired')}
         </StyledTitleMedium>
+      )}
+      <StyledObserverTarget className={ACTIVITY_ITEMS_END_ITEM_CLASS} sx={observerStyles} />
+      {isPending && (
+        <Box sx={{ position: 'relative' }}>
+          <Spinner />
+        </Box>
       )}
       {hasActiveItem && <StyledFlexAllCenter>{addItemBtn}</StyledFlexAllCenter>}
       {conditionalLogicKeysToRemove && (
@@ -215,7 +221,10 @@ export const LeftBar = ({
             </StyledBodyLarge>
             <Box sx={{ mt: theme.spacing(2.4) }}>
               {conditionalLogicKeysToRemove.map((conditionalLogicKey) => (
-                <ConditionalPanel condition={groupedConditions[conditionalLogicKey]} />
+                <ConditionalPanel
+                  key={`conditional-panel-${conditionalLogicKey}`}
+                  condition={groupedConditions[conditionalLogicKey]}
+                />
               ))}
             </Box>
           </StyledModalWrapper>

@@ -1,7 +1,7 @@
 import uniqueId from 'lodash.uniqueid';
 
 import { ItemResponseType } from 'shared/consts';
-import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
+import { Item } from 'shared/state';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import { getHighlightedText } from 'shared/utils';
 
@@ -18,17 +18,15 @@ export const renderItemContent = (item: Item, search: string) => {
     case ItemResponseType.MultipleSelection:
       return (
         <>
-          {(item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.map(
-            ({ text, image }) => (
-              <StyledItemContentRow key={uniqueId()}>
-                <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
-                {image && <StyledItemImage src={image} alt="Option image" />}
-                <StyledBodyLarge sx={{ color: variables.palette.on_surface }}>
-                  {getHighlightedText(text, search)}
-                </StyledBodyLarge>
-              </StyledItemContentRow>
-            ),
-          )}
+          {item.responseValues?.options?.map(({ text, image }) => (
+            <StyledItemContentRow key={uniqueId()}>
+              <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
+              {image && <StyledItemImage src={image} alt="Option image" />}
+              <StyledBodyLarge sx={{ color: variables.palette.on_surface }}>
+                {getHighlightedText(text, search)}
+              </StyledBodyLarge>
+            </StyledItemContentRow>
+          ))}
         </>
       );
     default:

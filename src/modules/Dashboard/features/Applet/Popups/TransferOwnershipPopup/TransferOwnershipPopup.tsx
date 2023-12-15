@@ -6,6 +6,7 @@ import { popups, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
+import { Mixpanel } from 'shared/utils';
 
 import { SuccessTransferOwnershipPopup } from '../SuccessTransferOwnershipPopup';
 
@@ -39,6 +40,7 @@ export const TransferOwnershipPopup = () => {
     if (!emailTransfered) return;
 
     setTransferOwnershipSuccessVisible(true);
+    Mixpanel.track('Invitation sent successfully');
   }, [emailTransfered]);
 
   return (

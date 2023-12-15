@@ -1,5 +1,5 @@
-import { ActivitySettingsSubscale, Item } from 'shared/state';
-import { AnswerDTO, ElementType } from 'shared/types';
+import { ActivitySettingsSubscale } from 'shared/state';
+import { ActivityItemAnswer, ElementType } from 'shared/types';
 
 import { compareActivityItem, formatActivityItemAnswers } from '../Report.utils';
 import { ActivityCompletion, FormattedResponse } from '../Report.types';
@@ -7,7 +7,7 @@ import { ActivityCompletionToRender, GroupedSubscales, SubscaleToRender } from '
 
 export const getSubscalesToRender = (
   data: ActivitySettingsSubscale,
-  activityItems: Record<string, { answer: AnswerDTO; activityItem: Item }>,
+  activityItems: Record<string, ActivityItemAnswer>,
   subscalesObject: Record<string, ActivitySettingsSubscale>,
   endDatetime: string,
   result: SubscaleToRender,
@@ -46,7 +46,7 @@ export const getAllSubscalesToRender = (
   allSubscalesToRender: SubscaleToRender,
   item: ActivityCompletion,
   subscale: ActivitySettingsSubscale,
-  activityItems: Record<string, { answer: AnswerDTO; activityItem: Item }>,
+  activityItems: Record<string, ActivityItemAnswer>,
 ) => {
   if (!allSubscalesToRender[subscale.name]) {
     allSubscalesToRender[subscale.name] = {

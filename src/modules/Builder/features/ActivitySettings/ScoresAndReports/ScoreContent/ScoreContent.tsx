@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -55,7 +56,7 @@ export const ScoreContent = ({
   scoreItems,
 }: ScoreContentProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue } = useFormContext();
+  const { control, setValue } = useCustomFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
@@ -65,7 +66,9 @@ export const ScoreContent = ({
   const score = useWatch({ name });
   const { name: scoreName, id: scoreId, calculationType, itemsScore } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
-  const selectedItems = scoreItems?.filter((item) => itemsScore?.includes(item.name));
+  const selectedItems = scoreItems?.filter(
+    (item) => itemsScore?.includes(getEntityKey(item, true)),
+  );
   const scoreRangeLabel = selectedItems?.length
     ? getScoreRangeLabel(getScoreRange(selectedItems, calculationType))
     : EMPTY_SCORE_RANGE_LABEL;
@@ -125,7 +128,7 @@ export const ScoreContent = ({
   };
 
   return (
-    <StyledFlexColumn>
+    <StyledFlexColumn data-testid={dataTestid}>
       <StyledFlexTopStart sx={{ mt: theme.spacing(1.6) }}>
         <Box sx={{ mr: theme.spacing(2.4), width: '50%' }}>
           <InputController
@@ -149,16 +152,16 @@ export const ScoreContent = ({
           />
         </Box>
         <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
-          <CopyId
-            title={t('scoreId')}
-            value={scoreId}
-            showCopy
-            data-testid={`${dataTestid}-copy`}
-          />
+          <CopyId title={t('scoreId')} value={scoreId} showCopy data-testid={dataTestid} />
           <StyledTitleSmall sx={{ m: theme.spacing(2.4, 0, 1.2, 0) }}>
             {t('rangeOfScores')}
           </StyledTitleSmall>
-          <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>{scoreRangeLabel}</StyledBodyLarge>
+          <StyledBodyLarge
+            sx={{ mb: theme.spacing(2.4) }}
+            data-testid={`${dataTestid}-score-range`}
+          >
+            {scoreRangeLabel}
+          </StyledBodyLarge>
         </Box>
       </StyledFlexTopStart>
       <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>{t('scoreItems')}</StyledTitleMedium>
@@ -171,7 +174,6 @@ export const ScoreContent = ({
         searchKey="label"
         hasSearch
         sxProps={{ mb: theme.spacing(2.5) }}
-        isValueName
         data-testid={`${dataTestid}-items-score`}
         tooltipByDefault
       />

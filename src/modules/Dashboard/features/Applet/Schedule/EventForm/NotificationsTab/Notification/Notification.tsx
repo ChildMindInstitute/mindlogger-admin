@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ToggleButtonGroup, TimePicker } from 'shared/components';
-import { StyledFlexTopStart, StyledLabelLarge, theme } from 'shared/styles';
+import { StyledFlexTopStart, StyledLabelLarge, StyledTitleSmall, theme } from 'shared/styles';
 import { NotificationType } from 'modules/Dashboard/api';
+import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
+import { DEFAULT_START_TIME } from '../../EventForm.const';
 import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { notificationTimeToggles } from './Notification.const';
@@ -14,31 +16,53 @@ import { NotificationProps } from './Notification.types';
 
 export const Notification = ({ index, remove, 'data-testid': dataTestid }: NotificationProps) => {
   const { t } = useTranslation('app');
-  const { setValue, watch, trigger } = useFormContext();
+  const { setValue, control, trigger } = useFormContext();
 
   const notificationFieldName = `notifications.${index}`;
   const atTimeFieldName = `${notificationFieldName}.atTime`;
   const fromTimeFieldName = `${notificationFieldName}.fromTime`;
   const toTimeFieldName = `${notificationFieldName}.toTime`;
 
-  const notification = watch(notificationFieldName);
-  const startTime = watch('startTime');
-  const endTime = watch('endTime');
-  const atTime = watch(atTimeFieldName);
-  const fromTime = watch(fromTimeFieldName);
-  const toTime = watch(toTimeFieldName);
+  const [notification, startTime, endTime, atTime, fromTime, toTime] = useWatch({
+    control,
+    name: [
+      notificationFieldName,
+      'startTime',
+      'endTime',
+      atTimeFieldName,
+      fromTimeFieldName,
+      toTimeFieldName,
+    ],
+  });
+  const isCrossDayEvent = getNextDayComparison(startTime, endTime);
+  const getNextDayLabel = (time: string) =>
+    isCrossDayEvent &&
+    new Date(`2000-01-01T${time}:00`) >= new Date(`2000-01-01T${DEFAULT_START_TIME}:00`) &&
+    new Date(`2000-01-01T${time}:00`) <= new Date(`2000-01-01T${endTime}:00`) && (
+      <StyledTitleSmall
+        sx={{
+          mx: theme.spacing(1.6),
+        }}
+      >
+        {t('nextDay')}
+      </StyledTitleSmall>
+    );
 
   const handleRemoveNotification = () => {
     remove(index);
   };
 
   const updateTime = (selected: string | number) => {
-    setValue(`${notificationFieldName}`, {
-      atTime: selected === NotificationType.Fixed ? startTime : null,
-      fromTime: selected === NotificationType.Random ? startTime : null,
-      toTime: selected === NotificationType.Random ? endTime : null,
-      triggerType: selected as NotificationType,
-    });
+    setValue(
+      `${notificationFieldName}`,
+      {
+        atTime: selected === NotificationType.Fixed ? startTime : null,
+        fromTime: selected === NotificationType.Random ? startTime : null,
+        toTime: selected === NotificationType.Random ? endTime : null,
+        triggerType: selected as NotificationType,
+      },
+      { shouldDirty: true },
+    );
   };
 
   useEffect(() => {
@@ -65,29 +89,32 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
             {notification.triggerType === NotificationType.Fixed ? (
               <StyledColInner>
                 <TimePicker
-                  providedValue={atTime}
                   name={atTimeFieldName}
+                  key={atTimeFieldName}
                   label={t('at')}
                   data-testid={`${dataTestid}-time`}
                 />
+                {getNextDayLabel(atTime)}
               </StyledColInner>
             ) : (
               <>
                 <StyledColInner>
                   <TimePicker
-                    providedValue={fromTime}
                     name={fromTimeFieldName}
+                    key={fromTimeFieldName}
                     label={t('from')}
                     data-testid={`${dataTestid}-from`}
                   />
+                  {getNextDayLabel(fromTime)}
                 </StyledColInner>
                 <StyledColInner sx={{ marginLeft: theme.spacing(2.4) }}>
                   <TimePicker
-                    providedValue={toTime}
                     name={toTimeFieldName}
+                    key={toTimeFieldName}
                     label={t('to')}
                     data-testid={`${dataTestid}-to`}
                   />
+                  {getNextDayLabel(toTime)}
                 </StyledColInner>
               </>
             )}
