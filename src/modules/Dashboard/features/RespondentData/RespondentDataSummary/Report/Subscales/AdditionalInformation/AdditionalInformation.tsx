@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import 'md-editor-rt/lib/style.css';
 
 import { getOptionTextApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -9,6 +8,8 @@ import { AdditionalInformation as AdditionalInformationProps } from 'modules/Das
 
 import { LINK_PATTERN } from '../../Charts/Charts.const';
 import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInformation.styles';
+
+await import('md-editor-rt/lib/style.css');
 
 export const AdditionalInformation = ({ optionText }: AdditionalInformationProps) => {
   const { t } = useTranslation();

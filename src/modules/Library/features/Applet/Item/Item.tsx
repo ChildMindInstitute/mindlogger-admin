@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { renderToString } from 'react-dom/server';
-
 import { Controller, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@mui/material';
-import 'md-editor-rt/lib/style.css';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledSvgArrowContainer } from 'shared/styles';
@@ -21,6 +19,8 @@ import {
 import { ItemProps } from './Item.types';
 import { getSelector, renderItemContent } from './Item.utils';
 import { AppletUiType, LibraryForm } from '../Applet.types';
+
+await import('md-editor-rt/lib/style.css');
 
 export const Item = ({
   item,

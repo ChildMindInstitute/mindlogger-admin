@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
-import 'md-editor-rt/lib/style.css';
 
 import {
   CharacterCounter,
@@ -16,6 +15,8 @@ import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 import { StyledMdEditor } from './Editor.styles';
 import { getCustomIcons, getDefToolbars, getToolbars } from './Editor.utils';
 import { EditorProps } from './Editor.types';
+
+await import('md-editor-rt/lib/style.css');
 
 export const Editor = ({
   editorId,
