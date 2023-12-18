@@ -1,4 +1,4 @@
-import * as crypto from 'crypto-browserify';
+// import * as crypto from 'crypto-browserify';
 
 import config from './encryption.config';
 import {
@@ -9,6 +9,7 @@ import {
 } from './encryption.types';
 import { algorithm, encoding } from './encryption.const';
 
+const crypto = await import('crypto-browserify');
 const defaultBase = [2];
 
 export const getPrivateKey = ({ appletPassword, accountId }: GetPrivateKey) => {
