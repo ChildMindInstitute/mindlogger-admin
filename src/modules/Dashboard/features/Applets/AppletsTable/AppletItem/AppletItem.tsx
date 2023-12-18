@@ -12,7 +12,7 @@ import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
   AppletPasswordRefType,
-} from 'modules/Dashboard/features/Applet';
+} from 'modules/Dashboard/features/Applet/Popups';
 import { page } from 'resources';
 import {
   Encryption,

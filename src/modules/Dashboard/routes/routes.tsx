@@ -7,11 +7,14 @@ import { PrivateRoute } from 'routes/PrivateRoute';
 import { ErrorFallback } from 'shared/components';
 
 import { appletRoutes, mainRoutes } from './routes.const';
-import { RespondentDataReview, RespondentDataSummary } from '../features';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
 const RespondentData = lazy(() => import('../pages/RespondentData'));
+const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
+const RespondentDataSummary = lazy(
+  () => import('../features/RespondentData/RespondentDataSummary'),
+);
 
 export const dashboardRoutes = () => (
   <Route path={page.dashboard}>

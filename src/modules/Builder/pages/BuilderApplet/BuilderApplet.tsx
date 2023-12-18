@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ObjectSchema } from 'yup';
 
 import { useAppDispatch } from 'redux/store';
-import { SaveAndPublish } from 'modules/Builder/features';
+import { SaveAndPublish } from 'modules/Builder/features/SaveAndPublish';
 import { LinkedTabs, Spinner } from 'shared/components';
 import { useCheckIfNewApplet, useRemoveAppletData, usePermissions } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
