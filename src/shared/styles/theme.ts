@@ -1,10 +1,11 @@
 import { SelectClasses, createTheme, Theme } from '@mui/material';
 import { OverridesStyleRules } from '@mui/material/styles/overrides';
-import 'react-datepicker/dist/react-datepicker.min.css';
 
 import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
+
+await import('react-datepicker/dist/react-datepicker.min.css');
 
 declare module '@mui/system/createTheme/createBreakpoints' {
   interface BreakpointOverrides {
