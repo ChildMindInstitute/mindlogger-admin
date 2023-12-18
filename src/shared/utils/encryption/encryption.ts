@@ -1,5 +1,3 @@
-// import * as crypto from 'crypto-browserify';
-
 import config from './encryption.config';
 import {
   Encryption,
