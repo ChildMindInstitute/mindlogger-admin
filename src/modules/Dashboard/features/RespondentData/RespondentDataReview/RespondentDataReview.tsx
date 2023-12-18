@@ -11,18 +11,12 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Item } from 'shared/state';
 
 import { StyledTextBtn } from '../RespondentData.styles';
-import {
-  StyledEmptyReview,
-  StyledContentContainer,
-  StyledReviewContainer,
-  StyledWrapper,
-} from './RespondentDataReview.styles';
+import { StyledContentContainer, StyledReviewContainer } from './RespondentDataReview.styles';
 import { Answer, AssessmentActivityItem } from './RespondentDataReview.types';
 import { Feedback } from './Feedback';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
-import { renderEmptyState } from './RespondentDataReview.utils';
 
 export const RespondentDataReview = () => {
   const { t } = useTranslation();
@@ -135,16 +129,12 @@ export const RespondentDataReview = () => {
                 {t('feedback')}
               </StyledTextBtn>
             </StyledStickyHeader>
-            {activityItemAnswers ? (
-              <Review
-                activityItemAnswers={activityItemAnswers}
-                data-testid={`${dataTestid}-activity-items`}
-              />
-            ) : (
-              <StyledWrapper>
-                <StyledEmptyReview>{renderEmptyState(selectedAnswer)}</StyledEmptyReview>
-              </StyledWrapper>
-            )}
+            <Review
+              isLoading={isLoading}
+              selectedAnswer={selectedAnswer}
+              activityItemAnswers={activityItemAnswers}
+              data-testid={`${dataTestid}-activity-items`}
+            />
           </StyledReviewContainer>
         </StyledContentContainer>
         {selectedActivity && selectedAnswer && !isLoading && (
