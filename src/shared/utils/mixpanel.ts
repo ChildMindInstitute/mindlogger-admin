@@ -1,10 +1,12 @@
-import mixpanel, { Dict } from 'mixpanel-browser';
+import { Dict } from 'mixpanel-browser';
 
 const PROJECT_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
 
 const isProduction = process.env.REACT_APP_ENV === 'prod';
 const isStaging = process.env.REACT_APP_ENV === 'stage';
 const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging);
+
+const { default: mixpanel } = await import('mixpanel-browser');
 
 export const Mixpanel = {
   init() {
