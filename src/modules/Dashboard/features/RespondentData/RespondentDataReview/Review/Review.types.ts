@@ -1,5 +1,6 @@
+import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
+
 export type ReviewProps = {
-  answerId: string;
-  activityId: string;
+  activityItemAnswers: DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'];
   'data-testid'?: string;
 };
