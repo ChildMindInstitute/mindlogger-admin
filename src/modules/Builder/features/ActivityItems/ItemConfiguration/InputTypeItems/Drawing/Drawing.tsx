@@ -6,7 +6,7 @@ import {
   ToggleItemContainer,
 } from 'modules/Builder/components/ToggleItemContainer';
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { CropRatio, Uploader } from 'shared/components';
+import { Uploader } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_25MB } from 'shared/consts';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
