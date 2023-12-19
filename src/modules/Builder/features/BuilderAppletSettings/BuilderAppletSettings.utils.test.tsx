@@ -46,26 +46,26 @@ describe('getSettings', () => {
   });
 
   describe('should return isDisabled true for new applet for', () => {
+    const items = getSettings({
+      isNewApplet: true,
+      isPublished: true,
+      roles,
+      onReportConfigSubmit: onReportConfigSubmitMock,
+    })
+      .map((setting) => setting.items)
+      .flat();
+
     test.each`
-      sectionLabel       | label                    | description
-      ${'usersAndData'}  | ${'exportData'}          | ${'export data'}
-      ${'usersAndData'}  | ${'dataRetention'}       | ${'data retention'}
-      ${'appletContent'} | ${'versionHistory'}      | ${'version history'}
-      ${'appletContent'} | ${'transferOwnership'}   | ${'transfer ownership'}
-      ${'appletContent'} | ${'deleteApplet'}        | ${'delete applet'}
-      ${'reports'}       | ${'reportConfiguration'} | ${'report configuration'}
-      ${'sharing'}       | ${'concealApplet'}       | ${'conceal applet'}
-    `('$description', ({ sectionLabel, label }) => {
-      expect(
-        getSettings({
-          isNewApplet: true,
-          isPublished: true,
-          roles,
-          onReportConfigSubmit: onReportConfigSubmitMock,
-        })
-          .find((section) => section.label === sectionLabel)
-          ?.items.find((item) => item.label === label)?.disabled,
-      ).toBe(true);
+      label                    | description
+      ${'exportData'}          | ${'export data'}
+      ${'dataRetention'}       | ${'data retention'}
+      ${'versionHistory'}      | ${'version history'}
+      ${'transferOwnership'}   | ${'transfer ownership'}
+      ${'deleteApplet'}        | ${'delete applet'}
+      ${'reportConfiguration'} | ${'report configuration'}
+      ${'concealApplet'}       | ${'conceal applet'}
+    `('$description', ({ label }) => {
+      expect(items.find((item) => item.label === label)?.disabled).toBe(true);
     });
   });
 
