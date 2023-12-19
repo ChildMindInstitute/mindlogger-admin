@@ -16,7 +16,7 @@ import markdownItImSize from 'markdown-it-imsize';
 
 import i18n from 'i18n';
 
-import { LANGUAGE_BY_DEFAULT } from './MarkDownEditor.const';
+import { LANGUAGE_BY_DEFAULT, VIDEO_LINK_REGEX } from './MarkDownEditor.const';
 
 const { t } = i18n;
 
@@ -98,6 +98,24 @@ config({
           useImageSyntax: true,
         },
       })
-      .use(markdownItImSize);
+      .use(markdownItImSize)
+      .use((md) => {
+        const defaultRender = md.renderer.rules.image;
+        if (!defaultRender) return;
+
+        md.renderer.rules.image = function (tokens, idx, options, env, self) {
+          const token = tokens[idx];
+          const src = token.attrGet('src');
+          const description = token.children?.[0]?.content;
+
+          if (src && VIDEO_LINK_REGEX.test(src)) {
+            return `<a target="_blank" href="${src}">
+                      ${description || src}
+                    </a>`;
+          }
+
+          return defaultRender(tokens, idx, options, env, self);
+        };
+      });
   },
 });
