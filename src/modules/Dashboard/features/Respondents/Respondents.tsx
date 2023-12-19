@@ -183,23 +183,23 @@ export const Respondents = () => {
       secretId: {
         content: () => stringSecretIds,
         value: stringSecretIds,
-        width: RespondentsColumnsWidth.SecretId,
+        width: RespondentsColumnsWidth.Default,
       },
       nickname: {
         content: () => stringNicknames,
         value: stringNicknames,
-        width: RespondentsColumnsWidth.Nickname,
+        width: RespondentsColumnsWidth.Default,
       },
       latestActive: {
         content: () => latestActive,
         value: latestActive,
-        width: RespondentsColumnsWidth.LatestActive,
+        width: RespondentsColumnsWidth.Default,
       },
       ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
-          width: RespondentsColumnsWidth.Schedule,
+          width: RespondentsColumnsWidth.Default,
         },
       }),
       actions: {

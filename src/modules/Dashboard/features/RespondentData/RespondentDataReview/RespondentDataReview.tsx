@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ReviewActivity, getAssessmentApi } from 'api';
 import { Svg } from 'shared/components/Svg';
-import { useAsync, useHeaderSticky } from 'shared/hooks';
+import { useHeaderSticky } from 'shared/hooks';
 import {
   StyledContainer,
   StyledStickyHeader,
@@ -49,7 +49,6 @@ export const RespondentDataReview = () => {
   const dataTestid = 'respondents-review';
 
   const getDecryptedActivityData = useDecryptedActivityData();
-  const { execute: getAssessment } = useAsync(getAssessmentApi);
 
   const handleSelectAnswer = (answer: Answer | null) => {
     setIsFeedbackOpen(false);
@@ -83,7 +82,7 @@ export const RespondentDataReview = () => {
     (async () => {
       try {
         setIsLoading(true);
-        const result = await getAssessment({ appletId, answerId });
+        const result = await getAssessmentApi({ appletId, answerId });
         const { reviewerPublicKey, itemsLast, versions, ...assessmentData } = result.data.result;
         const encryptedData = {
           ...assessmentData,

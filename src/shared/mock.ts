@@ -160,7 +160,7 @@ export const mockedAppletData = {
   reportRecipients: [],
   reportIncludeUserId: false,
   reportIncludeCaseId: false,
-  reportEmailBody: '',
+  reportEmailBody: 'Please see the report attached to this email.',
   encryption: mockedEncryption,
   id: mockedAppletId,
   version: '1.1.3',

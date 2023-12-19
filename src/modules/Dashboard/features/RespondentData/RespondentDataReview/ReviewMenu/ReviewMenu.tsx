@@ -47,7 +47,16 @@ export const ReviewMenu = ({
   const [submitDates, setSubmitDates] = useState<Date[] | undefined>(undefined);
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
 
-  const { execute: getAppletSubmitDateList, isLoading } = useAsync(getAppletSubmitDateListApi);
+  const { execute: getAppletSubmitDateList, isLoading } = useAsync(
+    getAppletSubmitDateListApi,
+    (datesApiResult) => {
+      const datesResult = datesApiResult?.data?.result;
+      if (!datesResult) return;
+
+      const submitDates = datesResult.dates.map((date: string) => new Date(date));
+      setSubmitDates(submitDates);
+    },
+  );
 
   const { execute: getReviewActivities } = useAsync(getReviewActivitiesApi, (res) => {
     res?.data?.result && setActivities(res.data.result);
@@ -60,20 +69,15 @@ export const ReviewMenu = ({
     onSelectAnswer(null);
   });
 
-  const setSubmitDatesFromApi = async (fromDate: string, toDate: string) => {
+  const setSubmitDatesFromApi = (fromDate: string, toDate: string) => {
     if (!appletId || !respondentId) return;
 
-    const datesApiResult = await getAppletSubmitDateList({
+    getAppletSubmitDateList({
       appletId,
       respondentId,
       fromDate,
       toDate,
     });
-    const datesResult = datesApiResult?.data?.result;
-    if (!datesResult) return;
-
-    const submitDates = datesResult.dates.map((date: string) => new Date(date));
-    setSubmitDates(submitDates);
   };
 
   const onMonthChange = (date: Date) => {
