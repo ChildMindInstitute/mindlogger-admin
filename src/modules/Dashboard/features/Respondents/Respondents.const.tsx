@@ -3,10 +3,7 @@ import { HeadCell } from 'shared/types';
 
 export enum RespondentsColumnsWidth {
   Pin = '4.8rem',
-  SecretId = '20rem',
-  Nickname = '20rem',
-  LatestActive = '20rem',
-  Schedule = '20rem',
+  Default = '20rem',
 }
 
 export const getHeadCells = (id?: string): HeadCell[] => {
@@ -23,19 +20,19 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       id: 'secretId',
       label: t('secretUserId'),
       enableSort: true,
-      width: RespondentsColumnsWidth.SecretId,
+      width: RespondentsColumnsWidth.Default,
     },
     {
       id: 'nickname',
       label: t('nickname'),
       enableSort: true,
-      width: RespondentsColumnsWidth.Nickname,
+      width: RespondentsColumnsWidth.Default,
     },
     {
       id: 'latestActive',
       label: t('latestActive'),
       enableSort: true,
-      width: RespondentsColumnsWidth.LatestActive,
+      width: RespondentsColumnsWidth.Default,
     },
     ...(id
       ? [
@@ -43,7 +40,7 @@ export const getHeadCells = (id?: string): HeadCell[] => {
             id: 'schedule',
             label: t('schedule'),
             enableSort: true,
-            width: RespondentsColumnsWidth.Schedule,
+            width: RespondentsColumnsWidth.Default,
           },
         ]
       : []),

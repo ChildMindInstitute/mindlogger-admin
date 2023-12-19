@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-type Tab = {
+export type Tab = {
   id: string;
   labelKey: string;
   icon?: JSX.Element;

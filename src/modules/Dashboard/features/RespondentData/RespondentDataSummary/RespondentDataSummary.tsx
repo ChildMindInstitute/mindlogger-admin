@@ -3,7 +3,6 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useAsync } from 'shared/hooks';
 import { Spinner } from 'shared/components';
 import { useDecryptedIdentifiers } from 'modules/Dashboard/hooks';
 import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
@@ -28,9 +27,6 @@ export const RespondentDataSummary = () => {
   const [identifiers, setIdentifiers] = useState<Identifier[]>([]);
 
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
-
-  const { execute: getIdentifiers } = useAsync(getIdentifiersApi);
-  const { execute: getVersions } = useAsync(getVersionsApi);
 
   const reportContent = useMemo(() => {
     if (selectedActivity && isLoading) return <Spinner />;
@@ -58,7 +54,7 @@ export const RespondentDataSummary = () => {
           return;
 
         setIsLoading(true);
-        const identifiers = await getIdentifiers({
+        const identifiers = await getIdentifiersApi({
           appletId,
           activityId: selectedActivity.id,
           respondentId,
@@ -69,13 +65,15 @@ export const RespondentDataSummary = () => {
         setValue('identifier', identifiersFilter);
         setIdentifiers(decryptedIdentifiers);
 
-        const versions = await getVersions({ appletId, activityId: selectedActivity.id });
+        const versions = await getVersionsApi({ appletId, activityId: selectedActivity.id });
         const versionsFilter = versions.data.result?.map(({ version }) => ({
           id: version,
           label: version,
         }));
         setValue('versions', versionsFilter);
         setVersions(versions.data.result);
+      } catch (error) {
+        console.warn(error);
       } finally {
         setIsLoading(false);
       }

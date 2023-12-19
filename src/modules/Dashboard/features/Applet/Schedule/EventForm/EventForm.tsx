@@ -87,7 +87,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       !!activityOrFlowId &&
       eventsData?.some(
         ({ activityOrFlowId: id, periodicityType }) =>
-          activityOrFlowId === id && periodicityType === Periodicity.Always,
+          getIdWithoutRegex(activityOrFlowId)?.id === id && periodicityType === Periodicity.Always,
       );
     const hasAlwaysAvailableOption = !!editedEvent || !isAlwaysAvailableSelected;
 

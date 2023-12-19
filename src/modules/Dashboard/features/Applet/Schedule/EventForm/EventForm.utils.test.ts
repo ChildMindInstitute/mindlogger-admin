@@ -405,37 +405,53 @@ describe('EventForm.utils', () => {
       periodicity: Periodicity.Monthly,
       endTime: '03:00',
     });
+    const testContext9 = getReminderMockedTestContext({
+      endDate: null,
+      periodicity: Periodicity.Daily,
+    });
+    const testContext10 = getReminderMockedTestContext({
+      endDate: null,
+      periodicity: Periodicity.Weekdays,
+    });
+    const testContext11 = getReminderMockedTestContext({
+      endDate: null,
+      periodicity: Periodicity.Monthly,
+    });
+    const largeActivityIncomplete = 1000;
     test.each`
-      value        | testContext     | expected | description
-      ${99}        | ${testContext}  | ${true}  | ${'returns true if Always periodicity'}
-      ${undefined} | ${testContext1} | ${true}  | ${'returns true when value is falsy or 0'}
-      ${0}         | ${testContext1} | ${true}  | ${'returns true when value is falsy or 0'}
-      ${1}         | ${testContext1} | ${true}  | ${'handles Once periodicity'}
-      ${2}         | ${testContext1} | ${false} | ${'handles Once periodicity'}
-      ${100}       | ${testContext1} | ${false} | ${'handles Once periodicity'}
-      ${1}         | ${testContext2} | ${true}  | ${'handles Daily periodicity'}
-      ${3}         | ${testContext2} | ${true}  | ${'handles Daily periodicity'}
-      ${4}         | ${testContext2} | ${false} | ${'handles Daily periodicity'}
-      ${16}        | ${testContext2} | ${false} | ${'handles Daily periodicity'}
-      ${3}         | ${testContext3} | ${true}  | ${'handles Daily periodicity: cross-day'}
-      ${4}         | ${testContext3} | ${true}  | ${'handles Daily periodicity: cross-day'}
-      ${5}         | ${testContext3} | ${false} | ${'handles Daily periodicity: cross-day'}
-      ${3}         | ${testContext4} | ${true}  | ${'handles Weekdays periodicity'}
-      ${4}         | ${testContext4} | ${false} | ${'handles Weekdays periodicity'}
-      ${4}         | ${testContext5} | ${true}  | ${'handles Weekdays periodicity: cross-day'}
-      ${5}         | ${testContext5} | ${false} | ${'handles Weekdays periodicity: cross-day'}
-      ${7}         | ${testContext6} | ${true}  | ${'handles Weekly periodicity'}
-      ${49}        | ${testContext6} | ${true}  | ${'handles Weekly periodicity'}
-      ${56}        | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
-      ${2}         | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
-      ${8}         | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
-      ${1}         | ${testContext7} | ${true}  | ${'handles Weekly periodicity: cross-day'}
-      ${50}        | ${testContext7} | ${true}  | ${'handles Weekly periodicity: cross-day'}
-      ${2}         | ${testContext7} | ${false} | ${'handles Weekly periodicity: cross-day'}
-      ${5}         | ${testContext7} | ${false} | ${'handles Weekly periodicity: cross-day'}
-      ${1}         | ${testContext8} | ${true}  | ${'handles Monthly periodicity'}
-      ${3}         | ${testContext8} | ${true}  | ${'handles Monthly periodicity'}
-      ${4}         | ${testContext8} | ${false} | ${'handles Monthly periodicity'}
+      value                      | testContext      | expected | description
+      ${largeActivityIncomplete} | ${testContext}   | ${true}  | ${'returns true if Always periodicity'}
+      ${undefined}               | ${testContext1}  | ${true}  | ${'returns true when value is falsy or 0'}
+      ${0}                       | ${testContext1}  | ${true}  | ${'returns true when value is falsy or 0'}
+      ${1}                       | ${testContext1}  | ${true}  | ${'handles Once periodicity'}
+      ${2}                       | ${testContext1}  | ${false} | ${'handles Once periodicity'}
+      ${largeActivityIncomplete} | ${testContext1}  | ${false} | ${'handles Once periodicity'}
+      ${1}                       | ${testContext2}  | ${true}  | ${'handles Daily periodicity'}
+      ${3}                       | ${testContext2}  | ${true}  | ${'handles Daily periodicity'}
+      ${4}                       | ${testContext2}  | ${false} | ${'handles Daily periodicity'}
+      ${16}                      | ${testContext2}  | ${false} | ${'handles Daily periodicity'}
+      ${3}                       | ${testContext3}  | ${true}  | ${'handles Daily periodicity: cross-day'}
+      ${4}                       | ${testContext3}  | ${true}  | ${'handles Daily periodicity: cross-day'}
+      ${5}                       | ${testContext3}  | ${false} | ${'handles Daily periodicity: cross-day'}
+      ${largeActivityIncomplete} | ${testContext9}  | ${true}  | ${'handles Daily periodicity: no end date'}
+      ${3}                       | ${testContext4}  | ${true}  | ${'handles Weekdays periodicity'}
+      ${4}                       | ${testContext4}  | ${false} | ${'handles Weekdays periodicity'}
+      ${4}                       | ${testContext5}  | ${true}  | ${'handles Weekdays periodicity: cross-day'}
+      ${5}                       | ${testContext5}  | ${false} | ${'handles Weekdays periodicity: cross-day'}
+      ${largeActivityIncomplete} | ${testContext10} | ${true}  | ${'handles Weekly periodicity: no end date'}
+      ${7}                       | ${testContext6}  | ${true}  | ${'handles Weekly periodicity'}
+      ${49}                      | ${testContext6}  | ${true}  | ${'handles Weekly periodicity'}
+      ${56}                      | ${testContext6}  | ${false} | ${'handles Weekly periodicity'}
+      ${2}                       | ${testContext6}  | ${false} | ${'handles Weekly periodicity'}
+      ${8}                       | ${testContext6}  | ${false} | ${'handles Weekly periodicity'}
+      ${1}                       | ${testContext7}  | ${true}  | ${'handles Weekly periodicity: cross-day'}
+      ${50}                      | ${testContext7}  | ${true}  | ${'handles Weekly periodicity: cross-day'}
+      ${2}                       | ${testContext7}  | ${false} | ${'handles Weekly periodicity: cross-day'}
+      ${5}                       | ${testContext7}  | ${false} | ${'handles Weekly periodicity: cross-day'}
+      ${1}                       | ${testContext8}  | ${true}  | ${'handles Monthly periodicity'}
+      ${3}                       | ${testContext8}  | ${true}  | ${'handles Monthly periodicity'}
+      ${4}                       | ${testContext8}  | ${false} | ${'handles Monthly periodicity'}
+      ${largeActivityIncomplete} | ${testContext11} | ${true}  | ${'handles Monthly periodicity: no end date'}
     `('$description, value=$value, expected=$expected', ({ value, testContext, expected }) => {
       expect(activityAvailabilityAtDayTest(value, testContext)).toBe(expected);
     });
@@ -518,6 +534,20 @@ describe('EventForm.utils', () => {
       endTime: '10:00',
       activityIncomplete: 8,
     });
+    const testContext12 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekdays,
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 0,
+    });
+    const testContext13 = getReminderMockedTestContext({
+      periodicity: Periodicity.Weekdays,
+      startDate: new Date('2023-12-12'),
+      endDate: new Date('2023-12-15'),
+      startTime: '23:00',
+      endTime: '10:00',
+      activityIncomplete: 4,
+    });
 
     test.each`
       reminderTime | testContext      | expected | description
@@ -526,8 +556,6 @@ describe('EventForm.utils', () => {
       ${0}         | ${testContext1}  | ${true}  | ${'reminderTime is falsy or 0'}
       ${'11:00'}   | ${testContext1}  | ${true}  | ${'not cross-day and time is between startTime and endTime'}
       ${'09:00'}   | ${testContext1}  | ${true}  | ${'not cross-day and time is outside startTime and endTime'}
-      ${'10:00'}   | ${testContext2}  | ${true}  | ${'Weekdays periodicity cross-day and time is between startTime and endTime'}
-      ${'14:00'}   | ${testContext2}  | ${false} | ${'Weekdays periodicity cross-day and time is outside startTime and endTime'}
       ${'20:00'}   | ${testContext3}  | ${true}  | ${'Monthly periodicity cross-day and time is between startTime and endTime'}
       ${'19:00'}   | ${testContext3}  | ${false} | ${'Monthly periodicity cross-day and time is outside startTime and endTime'}
       ${'15:00'}   | ${testContext4}  | ${true}  | ${'Once periodicity not cross-day, time is between startTime and endTime'}
@@ -546,6 +574,12 @@ describe('EventForm.utils', () => {
       ${'09:30'}   | ${testContext10} | ${false} | ${'Weekly periodicity cross-day: first day and time is outside startTime and 23:59'}
       ${'10:00'}   | ${testContext11} | ${true}  | ${'Weekly periodicity cross-day: next day and and time is between 00:00 and endTime'}
       ${'10:50'}   | ${testContext11} | ${false} | ${'Weekly periodicity cross-day: next day and time is outside 00:00 and endTime'}
+      ${'10:00'}   | ${testContext2}  | ${true}  | ${'Weekdays periodicity cross-day and time is between startTime and endTime'}
+      ${'14:00'}   | ${testContext2}  | ${false} | ${'Weekdays periodicity cross-day and time is outside startTime and endTime'}
+      ${'23:30'}   | ${testContext12} | ${true}  | ${'Weekdays periodicity cross-day: first day and time is between startTime and 23:59'}
+      ${'15:50'}   | ${testContext12} | ${false} | ${'Weekdays periodicity cross-day: first day and time is outside startTime and 23:59'}
+      ${'09:30'}   | ${testContext13} | ${true}  | ${'Weekdays periodicity cross-day: last day and and time is between 00:00 and endTime'}
+      ${'10:01'}   | ${testContext13} | ${false} | ${'Weekdays periodicity cross-day: last day and time is outside 00:00 and endTime'}
     `(
       '$description, reminderTime=$reminderTime, expected=$expected',
       ({ reminderTime, testContext, expected }) => {
