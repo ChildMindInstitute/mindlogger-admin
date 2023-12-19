@@ -26,6 +26,7 @@ export const Drawing = ({ name }: DrawingProps) => {
   const commonUploaderProps = {
     width: 20,
     height: 20,
+    flexibleCropRatio: true,
   };
 
   const uploads = [
