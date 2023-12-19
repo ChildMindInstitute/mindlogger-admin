@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-import { ControllerRenderProps } from 'react-hook-form';
 import { ToolbarNames } from 'md-editor-rt';
 import i18n from 'i18n';
 
@@ -17,10 +15,10 @@ import {
   UnorderedListExtension,
   VideoUploadExtension,
 } from 'shared/components/MarkDownEditor';
-import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB, MediaType } from 'shared/consts';
-import { InsertContentExtensionProps } from 'shared/components/MarkDownEditor/extensions/Extensions.types';
+import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB } from 'shared/consts';
 
 import { StyledIcon, StyledPageFullscreenIcon, StyledStrikeThroughIcon } from './Editor.styles';
+import { GetDefToolbars } from './Editor.types';
 
 const { t } = i18n;
 
@@ -30,13 +28,7 @@ export const getDefToolbars = ({
   setFileSizeExceeded,
   setIncorrectFormat,
   setIsLoading,
-}: {
-  onInsert: InsertContentExtensionProps['onInsert'];
-  onChange: ControllerRenderProps['onChange'];
-  setFileSizeExceeded: Dispatch<SetStateAction<number | null>>;
-  setIncorrectFormat: Dispatch<SetStateAction<MediaType | null>>;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
-}) => {
+}: GetDefToolbars) => {
   const commonMediaProps = {
     onInsert,
     setFileSizeExceeded,
