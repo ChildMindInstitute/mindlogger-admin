@@ -45,7 +45,7 @@ export const Editor = ({
 
   const handleChange = withDebounce ? setInputValue : onChange;
   const handleBlur = () => {
-    if (withDebounce) {
+    if (withDebounce && value !== inputValue) {
       onChange(inputValue);
     }
   };
