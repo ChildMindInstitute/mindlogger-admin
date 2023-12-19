@@ -12,7 +12,7 @@ describe('SuccessSharePopup', () => {
     renderWithProviders(
       <SuccessSharePopup
         applet={mockedApplet}
-        keywords={[]}
+        keywords={['keyword1']}
         libraryUrl="libraryUrl"
         sharePopupVisible={true}
         setSharePopupVisible={setSharePopupVisibleMock}
@@ -20,6 +20,8 @@ describe('SuccessSharePopup', () => {
     );
 
     expect(screen.getByTestId('dashboard-applets-share-popup-success-popup')).toBeVisible();
+    expect(screen.getByText('displayName')).toBeVisible();
+    expect(screen.getByText('keyword1')).toBeVisible();
 
     fireEvent.click(screen.getByText('Ok'));
 
