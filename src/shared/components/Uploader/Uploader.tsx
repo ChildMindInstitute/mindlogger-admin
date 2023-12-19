@@ -87,7 +87,7 @@ export const Uploader = ({
           );
         };
         img.onerror = reject;
-        img.src = e.target?.result as string;
+        img.src = (e.target?.result as string) || '';
       };
 
       reader.onerror = reject;
