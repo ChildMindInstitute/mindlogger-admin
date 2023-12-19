@@ -45,11 +45,40 @@ describe('getSettings', () => {
     });
   });
 
+  describe('should return isDisabled true for new applet for', () => {
+    test.each`
+      sectionLabel       | label                    | description
+      ${'usersAndData'}  | ${'exportData'}          | ${'export data'}
+      ${'usersAndData'}  | ${'dataRetention'}       | ${'data retention'}
+      ${'appletContent'} | ${'versionHistory'}      | ${'version history'}
+      ${'appletContent'} | ${'transferOwnership'}   | ${'transfer ownership'}
+      ${'appletContent'} | ${'deleteApplet'}        | ${'delete applet'}
+      ${'reports'}       | ${'reportConfiguration'} | ${'report configuration'}
+      ${'sharing'}       | ${'concealApplet'}       | ${'conceal applet'}
+    `('$description', ({ sectionLabel, label }) => {
+      expect(
+        getSettings({
+          isNewApplet: true,
+          isPublished: true,
+          roles,
+          onReportConfigSubmit: onReportConfigSubmitMock,
+        })
+          .find((section) => section.label === sectionLabel)
+          ?.items.find((item) => item.label === label)?.disabled,
+      ).toBe(true);
+    });
+  });
+
   describe('should return right isVisible for sharing section ', () => {
     test.each`
-      isVisible | roles               | description
-      ${false}  | ${[Roles.Manager]}  | ${'sharing for Manager'}
-      ${true}   | ${Roles.SuperAdmin} | ${'sharing for SuperAdmin'}
+      isVisible | roles                | description
+      ${false}  | ${[Roles.Manager]}   | ${'sharing for Manager'}
+      ${true}   | ${Roles.SuperAdmin}  | ${'sharing for SuperAdmin'}
+      ${false}  | ${Roles.Owner}       | ${'sharing for Owner'}
+      ${false}  | ${Roles.Coordinator} | ${'sharing for Coordinator'}
+      ${false}  | ${Roles.Editor}      | ${'sharing for Editor'}
+      ${false}  | ${Roles.Respondent}  | ${'sharing for Respondent'}
+      ${false}  | ${Roles.Reviewer}    | ${'sharing for Reviewer'}
     `('$description', ({ isVisible, roles }) => {
       expect(
         getSettings({
