@@ -19,9 +19,9 @@ export const CropPopup = ({
   onSave,
   onClose,
   'data-testid': dataTestid,
+  flexibleCropRatio,
 }: CropPopupProps) => {
   const { t } = useTranslation('app');
-
   const [crop, setCrop] = useState<Crop>();
   const [isSmallImg, setIsSmallImg] = useState(false);
   const imgSrc = useMemo(() => URL.createObjectURL(image), [image]);
@@ -30,10 +30,11 @@ export const CropPopup = ({
 
   const handleImageLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     const { naturalWidth: width, naturalHeight: height } = event.currentTarget;
+
     setIsSmallImg(width < SIZE_TO_SET_IMG_SMALL || height < SIZE_TO_SET_IMG_SMALL);
 
-    const crop = initPercentCrop({ width, height, ratio });
-
+    const calculatedRatio = flexibleCropRatio ? width / height : ratio;
+    const crop = initPercentCrop({ width, height, ratio: calculatedRatio });
     setCrop(crop);
   };
 
@@ -65,7 +66,7 @@ export const CropPopup = ({
             <ReactCrop
               crop={crop}
               onChange={(_, percentCrop) => setCrop(percentCrop)}
-              aspect={ratio}
+              aspect={flexibleCropRatio ? undefined : ratio}
               keepSelection={true}
               style={{ maxHeight: '60vh' }}
             >

@@ -6,7 +6,7 @@ import {
   ToggleItemContainer,
 } from 'modules/Builder/components/ToggleItemContainer';
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { Uploader } from 'shared/components';
+import { CropRatio, Uploader } from 'shared/components';
 import { byteFormatter } from 'shared/utils';
 import { MAX_FILE_SIZE_25MB } from 'shared/consts';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
@@ -26,6 +26,7 @@ export const Drawing = ({ name }: DrawingProps) => {
   const commonUploaderProps = {
     width: 20,
     height: 20,
+    flexibleCropRatio: true,
   };
 
   const uploads = [
