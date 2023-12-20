@@ -96,7 +96,7 @@ export const AboutApplet = () => {
                 options={themesOptions}
                 sx={{ margin: theme.spacing(0, 0, 3.6, 0) }}
                 dropdownStyles={{
-                  maxHeight: '25rem',
+                  maxHeight: '25.5rem',
                   width: '55rem',
                 }}
                 data-testid="about-applet-theme"
