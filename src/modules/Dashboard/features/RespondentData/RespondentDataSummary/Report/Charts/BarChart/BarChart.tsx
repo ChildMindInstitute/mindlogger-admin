@@ -20,6 +20,8 @@ import { ChartTooltip } from './ChartTooltip';
 
 ChartJS.register(BarElement, CategoryScale, Legend);
 
+const dataTestid = 'bar-chart';
+
 export const BarChart = ({ chartData }: BarChartProps) => {
   const chartRef = useRef<ChartJS<'bar'>>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -89,7 +91,7 @@ export const BarChart = ({ chartData }: BarChartProps) => {
   );
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative' }} data-testid={dataTestid}>
       <StyledChartContainer sx={{ height: `${height}px` }}>{renderChart}</StyledChartContainer>
       <ChartTooltip
         ref={tooltipRef}
@@ -98,6 +100,7 @@ export const BarChart = ({ chartData }: BarChartProps) => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
+        data-testid={dataTestid}
       />
     </Box>
   );

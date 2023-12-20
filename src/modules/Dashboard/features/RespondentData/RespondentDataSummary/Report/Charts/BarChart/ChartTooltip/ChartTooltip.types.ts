@@ -6,4 +6,5 @@ export type ChartTooltipProps = {
   data: TooltipData | null;
   onMouseEnter: MouseEventHandler;
   onMouseLeave: MouseEventHandler;
+  'data-testid'?: string;
 };

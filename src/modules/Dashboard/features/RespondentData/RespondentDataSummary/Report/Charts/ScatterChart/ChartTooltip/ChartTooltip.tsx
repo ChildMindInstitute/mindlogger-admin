@@ -13,7 +13,7 @@ import { StyledListItemButton, StyledTooltip } from './ChartTooltip.styles';
 import { ChartTooltipProps, ScatterTooltipRowData } from './ChartTooltip.types';
 
 export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
-  ({ data, onMouseEnter, onMouseLeave }, tooltipRef) => {
+  ({ data, onMouseEnter, onMouseLeave, 'data-testid': dataTestid }, tooltipRef) => {
     const { t } = useTranslation('app');
     const navigate = useNavigate();
     const { appletId, respondentId } = useParams();
@@ -45,6 +45,7 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
         ref={tooltipRef}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        data-testid={`${dataTestid}-tooltip`}
       >
         <StyledIndent />
         <StyledTooltip>
@@ -52,16 +53,23 @@ export const ChartTooltip = forwardRef<HTMLDivElement, ChartTooltipProps>(
             <StyledBodySmall
               sx={{ padding: theme.spacing(1.6, 2, 0.8) }}
               color={variables.palette.outline}
+              data-testid={`${dataTestid}-tooltip-date`}
             >
               {format(data?.parsed.x, DateFormats.MonthDayTime)}
             </StyledBodySmall>
           )}
           <StyledFlexColumn>
-            <StyledListItemButton onClick={navigateToReviewAnswer}>
+            <StyledListItemButton
+              onClick={navigateToReviewAnswer}
+              data-testid={`${dataTestid}-tooltip-review-button`}
+            >
               {t('review')}
             </StyledListItemButton>
             {areSubscalesVisible && (
-              <StyledListItemButton onClick={showSubscaleResultHandler}>
+              <StyledListItemButton
+                onClick={showSubscaleResultHandler}
+                data-testid={`${dataTestid}-tooltip-show-subscale-result-button`}
+              >
                 {t('showSubscaleResult')}
               </StyledListItemButton>
             )}

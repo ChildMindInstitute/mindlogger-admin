@@ -26,6 +26,8 @@ import { StyledWrapper } from './ScatterChart.styles';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
+const dataTestid = 'scatter-chart';
+
 export const ScatterChart = ({
   height = '6rem',
   answers,
@@ -76,7 +78,7 @@ export const ScatterChart = ({
   );
 
   return (
-    <StyledWrapper sx={{ height }}>
+    <StyledWrapper sx={{ height }} data-testid={dataTestid}>
       {renderChart}
       <ChartTooltip
         ref={tooltipRef}
@@ -85,6 +87,7 @@ export const ScatterChart = ({
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
+        data-testid={dataTestid}
       />
     </StyledWrapper>
   );
