@@ -65,11 +65,13 @@ export const genderItem = getNewActivityItem({
         id: uuidv4(),
         text: t('male'),
         isHidden: false,
+        value: 0,
       },
       {
         id: uuidv4(),
         text: t('female'),
         isHidden: false,
+        value: 1,
       },
     ],
   },
