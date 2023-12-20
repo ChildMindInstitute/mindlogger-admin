@@ -64,7 +64,23 @@ describe('LinkForm', () => {
 
     fireEvent.click(deleteButton);
 
-    expect(screen.getByTestId(`${dataTestid}-delete-popup`)).toBeInTheDocument();
+    const deleteConfirmationPopup = screen.getByTestId(`${dataTestid}-delete-popup`);
+    expect(deleteConfirmationPopup).toBeInTheDocument();
+
+    expect(screen.getByText('Delete Public Link')).toBeInTheDocument();
+
+    expect(
+      screen.getByText(
+        'If deleted, the public link will become invalid, and the respondents will not be able to use it anymore. Are you sure you want to delete it?',
+      ),
+    ).toBeInTheDocument();
+
+    const closeButton = screen.getByTestId(`${dataTestid}-delete-popup-close-button`);
+    fireEvent.click(closeButton);
+
+    expect(deleteConfirmationPopup).not.toBeInTheDocument();
+
+    fireEvent.click(deleteButton);
 
     const popupDeleteButton = screen.getByTestId(`${dataTestid}-delete-popup-submit-button`);
     expect(popupDeleteButton).toBeInTheDocument();
