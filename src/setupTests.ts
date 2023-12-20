@@ -18,6 +18,7 @@ jest.spyOn(global.console, 'warn').mockImplementation((message) => {
 
   return message;
 });
+
 jest.spyOn(global.console, 'error').mockImplementation((message) => {
   if (
     message?.includes('A component is changing an uncontrolled input to be controlled') ||
@@ -28,6 +29,6 @@ jest.spyOn(global.console, 'error').mockImplementation((message) => {
   return message;
 });
 
-jest.mock('shared/components/FormComponents/EditorController/EditorController.styles', () => ({
+jest.mock('shared/components/FormComponents/EditorController/Editor/Editor.styles', () => ({
   ...jest.requireActual('__mocks__/EditorController'),
 }));

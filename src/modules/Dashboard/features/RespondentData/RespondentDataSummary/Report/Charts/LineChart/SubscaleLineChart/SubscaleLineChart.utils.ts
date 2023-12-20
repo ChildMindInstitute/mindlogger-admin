@@ -9,7 +9,6 @@ import {
 
 import { variables } from 'shared/styles';
 import { Version } from 'api';
-import { pluck } from 'shared/utils';
 
 import {
   SUBSCALES_CHART_LABEL_WIDTH_Y,
