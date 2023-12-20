@@ -1,26 +1,18 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledTitleMedium, StyledBodyErrorText, theme, variables } from 'shared/styles';
 import { MLPlayer } from 'modules/Builder/components/MLPlayer';
-import { MediaType } from 'modules/Builder/components';
 
 import { AddAudio } from '../AddAudio';
 import { UploadAudio } from '../UploadAudio';
 import { RecordAudio } from '../RecordAudio';
 import { RemoveAudioPopup } from '../RemoveAudioPopup';
+import { AudioPlayerContentProps } from './AudioPlayerContent.types';
 
-export const AudioPlayerContent = ({
-  media,
-  setMedia,
-  name,
-}: {
-  media: MediaType | null;
-  setMedia: Dispatch<SetStateAction<MediaType | null>>;
-  name: string;
-}) => {
+export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContentProps) => {
   const { t } = useTranslation('app');
 
   const [isUploadPopupOpened, setUploadPopupOpened] = useState(false);
@@ -67,8 +59,8 @@ export const AudioPlayerContent = ({
           onRecordAudio={() => setRecordPopupOpened(true)}
         />
       )}
-      {error && (
-        <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error?.message}</StyledBodyErrorText>
+      {error?.message && (
+        <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error.message}</StyledBodyErrorText>
       )}
       <UploadAudio
         open={isUploadPopupOpened}
