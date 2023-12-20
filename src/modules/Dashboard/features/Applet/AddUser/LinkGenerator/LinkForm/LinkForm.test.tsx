@@ -2,9 +2,8 @@ import { generatePath } from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils';
-
 import { page } from 'resources';
+import { renderWithProviders } from 'shared/utils';
 import { mockedAppletData } from 'shared/mock';
 
 import { LinkForm } from './LinkForm';
