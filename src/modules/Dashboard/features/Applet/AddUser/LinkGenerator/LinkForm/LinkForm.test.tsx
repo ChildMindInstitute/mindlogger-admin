@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { generatePath } from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
@@ -33,6 +35,10 @@ const checkDeleteButtonAndHelperText = () => {
 };
 
 describe('LinkForm', () => {
+  beforeAll(() => {
+    navigator.clipboard.writeText.mockResolvedValue(undefined);
+  });
+
   test('renders LinkForm component when login is not required, opens popup, calls deleteAppletPublicLink callback', async () => {
     mockAxios.delete.mockResolvedValueOnce(null);
     renderWithProviders(<LinkForm {...getProps()} />, {
