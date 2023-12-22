@@ -11,6 +11,7 @@ import { Box } from '@mui/material';
 
 import { pluck } from 'shared/utils';
 
+import { ChartTooltipContainer } from '../ChartTooltipContainer';
 import { getTicksData, legendMargin, setTooltipStyles } from '../Charts.utils';
 import { ChartType } from '../Chart.types';
 import { StyledChartContainer } from '../Chart.styles';
@@ -93,15 +94,16 @@ export const BarChart = ({ chartData }: BarChartProps) => {
   return (
     <Box sx={{ position: 'relative' }} data-testid={dataTestid}>
       <StyledChartContainer sx={{ height: `${height}px` }}>{renderChart}</StyledChartContainer>
-      <ChartTooltip
+      <ChartTooltipContainer
         ref={tooltipRef}
-        data={tooltipData}
         onMouseEnter={() => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
         data-testid={dataTestid}
-      />
+      >
+        <ChartTooltip data={tooltipData} data-testid={dataTestid} />
+      </ChartTooltipContainer>
     </Box>
   );
 };

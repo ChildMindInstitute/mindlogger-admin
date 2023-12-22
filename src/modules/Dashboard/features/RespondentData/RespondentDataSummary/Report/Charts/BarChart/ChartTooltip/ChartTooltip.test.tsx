@@ -1,4 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { render, screen } from '@testing-library/react';
+
 import { ChartTooltip } from './ChartTooltip';
 
 const dataTestid = 'bar-chart';
@@ -9,12 +12,17 @@ const props = {
     label: 'Example Label',
     value: 42,
   },
-  onMouseEnter: jest.fn(),
-  onMouseLeave: jest.fn(),
   'data-testid': dataTestid,
 };
 
 describe('ChartTooltip', () => {
+  test('renders component correctly when props data is null', () => {
+    render(<ChartTooltip data={null} />);
+
+    const tooltip = screen.queryByTestId(`${dataTestid}-tooltip`);
+    expect(tooltip).not.toBeInTheDocument();
+  });
+
   test('renders component correctly', () => {
     render(<ChartTooltip {...props} />);
 

@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { locales } from 'shared/consts';
 
+import { ChartTooltipContainer } from '../ChartTooltipContainer';
 import { scatterChartTooltipHandler } from '../Charts.utils';
 import { ChartType, SetTooltipData } from '../Chart.types';
 import { getData, getOptions } from './ScatterChart.utils';
@@ -80,15 +81,16 @@ export const ScatterChart = ({
   return (
     <StyledWrapper sx={{ height }} data-testid={dataTestid}>
       {renderChart}
-      <ChartTooltip
+      <ChartTooltipContainer
         ref={tooltipRef}
-        data={tooltipData}
         onMouseEnter={() => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
         data-testid={dataTestid}
-      />
+      >
+        <ChartTooltip data={tooltipData} data-testid={dataTestid} />
+      </ChartTooltipContainer>
     </StyledWrapper>
   );
 };

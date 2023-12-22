@@ -42,6 +42,21 @@ jest.mock('react-router-dom', () => ({
 const setCurrentActivityCompletionData = jest.fn();
 
 describe('ChartTooltip', () => {
+  test('renders component correctly when props data is null', () => {
+    renderWithProviders(
+      <ReportContext.Provider value={{ setCurrentActivityCompletionData }}>
+        <ChartTooltip data={null} />
+      </ReportContext.Provider>,
+      {
+        route,
+        routePath,
+      },
+    );
+
+    const tooltip = screen.queryByTestId(`${dataTestid}-tooltip`);
+    expect(tooltip).not.toBeInTheDocument();
+  });
+
   test('renders component correctly when areSubscalesVisible is true', () => {
     renderWithProviders(
       <ReportContext.Provider value={{ setCurrentActivityCompletionData }}>
