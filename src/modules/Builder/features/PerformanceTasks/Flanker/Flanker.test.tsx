@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { createRef } from 'react';
 import { generatePath } from 'react-router-dom';
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import { mockedAppletFormData } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils';
@@ -556,9 +556,169 @@ describe('Flanker', () => {
     });
   });
 
-  test('Validations', () => {});
-  test('Buttons: disability', () => {});
-  test('Fixation screen', () => {});
-  test('Stimulus screen', () => {});
-  test('Block Sequences', () => {});
+  describe('Buttons', () => {
+    test('Switch to 1 button', () => {
+      renderFlanker();
+
+      fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-buttons-available-buttons-0`));
+
+      expect(screen.queryByTestId(`${mockedFlankerTestid}-buttons-1-text`)).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId(`${mockedFlankerTestid}-buttons-1-image`),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Image should be disabled if text is added and vice versa', async () => {
+      const ref = renderFlanker();
+
+      ref.current.setValue('activities.0.items.2.config.buttons.0.text', 'test');
+
+      await waitFor(() => {
+        expect(screen.getByTestId(`${mockedFlankerTestid}-buttons-0-image`)).toHaveAttribute(
+          'disabled',
+        );
+      });
+
+      ref.current.setValue('activities.0.items.2.config.buttons.1.image', 'image');
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(`${mockedFlankerTestid}-buttons-1-text`).querySelector('input'),
+        ).toBeDisabled();
+      });
+    });
+  });
+
+  test('Fixation screen', () => {
+    renderFlanker();
+
+    fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-fixation-screen-add`));
+
+    expect(screen.getByTestId(`${mockedFlankerTestid}-fixation-screen-image`)).toBeVisible();
+    expect(screen.getByTestId(`${mockedFlankerTestid}-fixation-screen-remove`)).toBeVisible();
+
+    const duration = screen.getByTestId(`${mockedFlankerTestid}-fixation-screen-duration`);
+    expect(duration).toBeVisible();
+    expect(duration.querySelector('input')).toHaveValue(3000);
+  });
+
+  test('Stimulus screen', () => {
+    renderFlanker();
+
+    fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
+    fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
+
+    const stimulusScreens = screen.getAllByTestId(
+      new RegExp(`${mockedFlankerTestid}-stimulus-screen-\\d+-(image|remove)`),
+    );
+
+    expect(stimulusScreens).toHaveLength(4);
+
+    stimulusScreens.forEach((stimulusScreen) => {
+      expect(stimulusScreen).toBeVisible();
+    });
+  });
+
+  test.each`
+    testId                                                     | attribute                 | description
+    ${`${mockedFlankerTestid}-practice-round-block-sequences`} | ${'activities.0.items.1'} | ${'Practice Round: Block Sequences'}
+    ${`${mockedFlankerTestid}-test-round-block-sequences`}     | ${'activities.0.items.7'} | ${'Test Round: Block Sequences'}
+  `('$description', async ({ testId, attribute }) => {
+    const ref = renderFlanker();
+
+    fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
+    fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
+
+    await waitFor(() => {
+      expandAllPanels();
+      expect(screen.queryByTestId(`${testId}-table`)).not.toBeInTheDocument();
+    });
+
+    ref.current.setValue('activities.0.items.2.config.stimulusTrials', [
+      {
+        image: 'image1',
+        text: 'text1',
+      },
+    ]);
+
+    await waitFor(() => {
+      expandAllPanels();
+      const table = screen.getByTestId(`${testId}-table`);
+      expect(table).toBeInTheDocument();
+      expect(table.querySelectorAll('tbody > tr')).toHaveLength(1);
+    });
+
+    ref.current.setValue('activities.0.items.2.config.stimulusTrials.1', {
+      image: 'image2',
+      text: 'text2',
+    });
+
+    await waitFor(() => {
+      expandAllPanels();
+      const table = screen.getByTestId(`${testId}-table`);
+      expect(table).toBeInTheDocument();
+      expect(table.querySelectorAll('tbody > tr')).toHaveLength(2);
+    });
+
+    const headCells = screen.getByTestId(`${testId}-table`).querySelectorAll('tr:last-child th');
+    expect(headCells).toHaveLength(4);
+    headCells.forEach((headCell, index) => {
+      expect(headCell).toHaveTextContent(`Block ${index + 1}`);
+    });
+
+    const bodyRows = screen.getByTestId(`${testId}-table`).querySelectorAll('tbody tr');
+    expect(bodyRows).toHaveLength(2);
+    const [firstRow, secondRow] = bodyRows;
+
+    expect(firstRow.querySelectorAll('td')).toHaveLength(4);
+    expect(secondRow.querySelectorAll('td')).toHaveLength(4);
+
+    firstRow.querySelectorAll('td').forEach((cell) => {
+      expect(cell).toHaveTextContent('text');
+    });
+    secondRow.querySelectorAll('td').forEach((cell) => {
+      expect(cell).toHaveTextContent('text');
+    });
+  });
+
+  describe('Validations', () => {
+    test.each`
+      testId                                                     | error                                   | description
+      ${`${mockedFlankerTestid}-buttons-0-text`}                 | ${'Button Name or Image is required'}   | ${'Left Button Name'}
+      ${`${mockedFlankerTestid}-buttons-1-text`}                 | ${'Button Name or Image is required'}   | ${'Right Button Name'}
+      ${`${mockedFlankerTestid}-stimulus-screen`}                | ${'Please fill in all required fields'} | ${'Stimulus Screen'}
+      ${`${mockedFlankerTestid}-practice-round-block-sequences`} | ${'Add stimulus screens first'}         | ${'Practice Round: Stimulus Screen'}
+      ${`${mockedFlankerTestid}-test-round-block-sequences`}     | ${'Add stimulus screens first'}         | ${'Test Round: Stimulus Screen'}
+    `('$description', async ({ testId, error }) => {
+      const ref = renderFlanker();
+
+      await ref.current.trigger('activities');
+
+      await waitFor(() => {
+        const section = screen.getByTestId(testId);
+
+        expect([...section.querySelectorAll('p')].at(-1)).toHaveTextContent(error);
+      });
+    });
+
+    test.each`
+      testId                                                             | attribute                          | error                                       | description
+      ${`${mockedFlankerTestid}-general-instruction-instruction`}        | ${'activities.0.items.0.question'} | ${'Overview Instruction is required'}       | ${'Empty Overview Instruction'}
+      ${`${mockedFlankerTestid}-practice-round-instruction-instruction`} | ${'activities.0.items.1.question'} | ${'Practice Round Instruction is required'} | ${'Empty Practice Round Instruction'}
+      ${`${mockedFlankerTestid}-test-round-instruction-instruction`}     | ${'activities.0.items.7.question'} | ${'Test Round Instruction is required'}     | ${'Empty Test Round Instruction'}
+    `('$description', async ({ testId, attribute, error }) => {
+      const ref = renderFlanker();
+
+      expandAllPanels();
+
+      ref.current.setValue(attribute, '');
+      await ref.current.trigger('activities');
+
+      await waitFor(() => {
+        const instruction = screen.getByTestId(testId);
+
+        expect(instruction).toHaveTextContent(error);
+      });
+    });
+  });
 });
