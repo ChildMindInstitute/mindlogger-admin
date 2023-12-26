@@ -1,0 +1,57 @@
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+
+import { SettingParam, renderWithProviders } from 'shared/utils';
+
+import { initialStateData } from 'shared/state';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
+import { page } from 'resources';
+import { Roles } from 'shared/consts';
+import { ShareAppletSetting } from './ShareAppletSetting';
+
+const preloadedState = {
+  workspaces: {
+    workspaces: initialStateData,
+    currentWorkspace: {
+      ...initialStateData,
+      ...mockedCurrentWorkspace,
+    },
+    roles: {
+      ...initialStateData,
+      data: {
+        [mockedAppletId]: [Roles.Manager],
+      },
+    },
+    applet: mockedApplet,
+    workspacesRoles: initialStateData,
+  },
+  applet: {
+    applet: {
+      ...initialStateData,
+      data: { result: mockedApplet },
+    },
+  },
+};
+
+describe('ShareAppletSetting', () => {
+  describe('should render and submit', () => {
+    test.each`
+      route                                                                  | routePath                         | description
+      ${`/dashboard/${mockedAppletId}/settings/${SettingParam.ShareApplet}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
+      ${`/builder/${mockedAppletId}/settings/${SettingParam.ShareApplet}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
+    `('$description', async ({ route, routePath }) => {
+      const dataTestid = 'applet-settings-share-to-library';
+      renderWithProviders(<ShareAppletSetting />, { route, routePath, preloadedState });
+
+      expect(screen.getByTestId(`${dataTestid}-form`)).toBeVisible();
+      expect(screen.getByTestId(`${dataTestid}-applet-name`)).toBeVisible();
+      expect(screen.getByTestId(`${dataTestid}-keywords`)).toBeVisible();
+      expect(screen.getByTestId(`${dataTestid}-agreement`)).toBeVisible();
+
+      fireEvent.click(screen.getByText('Share'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId(`${dataTestid}-popup`)).toBeVisible();
+      });
+    });
+  });
+});
