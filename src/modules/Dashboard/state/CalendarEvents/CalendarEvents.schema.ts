@@ -81,13 +81,13 @@ export type CalendarEventsSchema = {
   } | null>;
 };
 
-export type GetDateFromDateStringTimeString = { date: string | null; time: string };
+export type GetDateFromDateStringTimeString = { date: string | null; time: string | null };
 
 export type GetEventStartDateTime = {
   periodicity: Periodicity;
   selectedDate: string | null;
   startDate: string | null;
-  startTime: string;
+  startTime: string | null;
   nextYearDateString: string | null;
 };
 
@@ -95,7 +95,7 @@ export type GetEventEndDateTime = {
   periodicity: Periodicity;
   selectedDate: string | null;
   endDate: string | null;
-  endTime: string;
+  endTime: string | null;
   currentYear: number;
   eventStart: Date;
   isCrossDayEvent: boolean;
@@ -104,7 +104,7 @@ export type GetEventEndDateTime = {
 export type GetEventsArrayFromDates = {
   dates: Date[];
   commonProps: Omit<CalendarEvent, 'id' | 'start' | 'end'>;
-  startTime?: string;
-  endTime?: string;
+  startTime?: string | null;
+  endTime?: string | null;
   isCrossDayEvent: boolean;
 };

@@ -116,7 +116,7 @@ export const getDateFromDateStringTimeString = ({
 }: GetDateFromDateStringTimeString) => {
   if (!date) return null;
 
-  return new Date(`${date}T${time}`);
+  return new Date(`${date}T${time ?? DEFAULT_START_TIME}`);
 };
 
 export const getEventStartDateTime = ({

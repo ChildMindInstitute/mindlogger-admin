@@ -1,5 +1,4 @@
-import { Periodicity } from 'modules/Dashboard/api';
-import { DateFormats, Roles } from 'shared/consts';
+import { Roles } from 'shared/consts';
 
 import {
   getCount,
@@ -7,6 +6,7 @@ import {
   getNextColor,
   getFrequencyString,
   checkIfHasAccessToSchedule,
+  colorsArray,
 } from './Schedule.utils';
 import { ActivitiesFlowsWithColors } from './Schedule.types';
 
@@ -30,43 +30,56 @@ describe('Schedule.utils.tsx', () => {
     });
   });
 
-  // describe('convertDateToYearMonthDay', () => {
-  //   test('formats date to YearMonthDay when input is Date object', () => {
-  //     const date = new Date(2023, 0, 1); // 1st Jan 2023
-  //     expect(convertDateToYearMonthDay(date)).toEqual('2023-01-01');
-  //   });
-  //
-  //   test('returns input when it is string', () => {
-  //     expect(convertDateToYearMonthDay('2023-01-01')).toEqual('2023-01-01');
-  //   });
-  // });
-  //
-  // describe('getNextColor', () => {
-  //   test('returns the nth color of the colors array', () => {
-  //     const color = getNextColor(1);
-  //     // Adjust this according to your colors
-  //     expect(color).toEqual(['COLOR_VALUE', 'COLOR_VALUE_ALFA30']);
-  //   });
-  // });
-  //
-  // describe('getFrequencyString', () => {
-  //   test('returns the first character capitalized and the rest lowercase', () => {
-  //     const frequencyString = getFrequencyString(Periodicity.YOUR_PERIODICITY);
-  //     // Adjust this according to your Periodicity enum
-  //     expect(frequencyString).toEqual('YourPeriodicity');
-  //   });
-  // });
-  //
-  // describe('checkIfHasAccessToSchedule', () => {
-  //   test('returns true when roles does not contain [Editor, Reviewer, Respondent]', () => {
-  //     const hasAccess = checkIfHasAccessToSchedule([Roles.YOUR_ROLE]);
-  //     // Adjust this according to your Roles enum
-  //     expect(hasAccess).toBe(true);
-  //   });
-  //
-  //   test('returns false when roles contains at least one of [Editor, Reviewer, Respondent]', () => {
-  //     const hasAccess = checkIfHasAccessToSchedule([Roles.Editor]);
-  //     expect(hasAccess).toBe(false);
-  //   });
-  // });
+  describe('convertDateToYearMonthDay', () => {
+    test.each`
+      date                      | expected
+      ${new Date(2023, 0, 1)}   | ${'2023-01-01'}
+      ${new Date(2025, 11, 15)} | ${'2025-12-15'}
+      ${'2023-01-01'}           | ${'2023-01-01'}
+    `('date=$date, expected=$expected', ({ date, expected }) => {
+      expect(convertDateToYearMonthDay(date)).toEqual(expected);
+    });
+  });
+
+  describe('getNextColor', () => {
+    test.each`
+      index | expected
+      ${0}  | ${colorsArray[0]}
+      ${4}  | ${colorsArray[4]}
+      ${9}  | ${colorsArray[0]}
+      ${10} | ${colorsArray[1]}
+      ${69} | ${colorsArray[6]}
+    `('index=$index, expected=$expected', ({ index, expected }) => {
+      expect(getNextColor(index)).toEqual(expected);
+    });
+  });
+
+  describe('getFrequencyString', () => {
+    test.each`
+      string        | expected
+      ${'text'}     | ${'text'}
+      ${'SOMEtext'} | ${'Sometext'}
+      ${'tExT'}     | ${'text'}
+      ${'TExT'}     | ${'Text'}
+    `('string=$string, expected=$expected', ({ string, expected }) => {
+      expect(getFrequencyString(string)).toEqual(expected);
+    });
+  });
+
+  describe('checkIfHasAccessToSchedule', () => {
+    test.each`
+      roles                                               | expected
+      ${[Roles.Editor, Roles.Reviewer, Roles.Respondent]} | ${false}
+      ${[Roles.Owner, Roles.Reviewer, Roles.Respondent]}  | ${true}
+      ${[Roles.Editor]}                                   | ${false}
+      ${[Roles.Reviewer]}                                 | ${false}
+      ${[Roles.Respondent]}                               | ${false}
+      ${[Roles.Owner]}                                    | ${true}
+      ${[Roles.Manager]}                                  | ${true}
+      ${[Roles.SuperAdmin]}                               | ${true}
+      ${[Roles.Coordinator]}                              | ${true}
+    `('roles=$roles, expected=$expected', ({ roles, expected }) => {
+      expect(checkIfHasAccessToSchedule(roles)).toBe(expected);
+    });
+  });
 });
