@@ -571,6 +571,7 @@
   "incorrectAudioFormat": "Incorrect audio format.",
   "incorrectEmail": "Email must be valid",
   "incorrectImageFormat": "Image format must be JPEG or PNG.",
+  "incorrectImageDimensions": "The Image dimensions should range between 100 px and 1920 px for both width and height.",
   "incorrectImageSize": "Image is more than {{size}}.",
   "incorrectVideoFormat": "Incorrect video format.",
   "indefinitely": "Indefinitely",

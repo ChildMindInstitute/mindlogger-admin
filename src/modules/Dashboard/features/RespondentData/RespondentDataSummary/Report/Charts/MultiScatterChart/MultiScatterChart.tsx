@@ -22,6 +22,9 @@ import { ChartType, SetTooltipData } from '../Chart.types';
 import { getData, getOptions } from './MultiScatterChart.utils';
 import { MultiScatterChartProps } from './MultiScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
+import { ChartTooltipContainer } from '../ChartTooltipContainer';
+
+const dataTestid = 'multi-scatter-chart';
 
 export const MultiScatterChart = ({
   color,
@@ -89,16 +92,18 @@ export const MultiScatterChart = ({
   );
 
   return (
-    <Box sx={{ height, position: 'relative' }}>
+    <Box sx={{ height, position: 'relative' }} data-testid={dataTestid}>
       {renderChart}
-      <ChartTooltip
+      <ChartTooltipContainer
         ref={tooltipRef}
-        data={tooltipData}
         onMouseEnter={() => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-      />
+        data-testid={dataTestid}
+      >
+        <ChartTooltip data={tooltipData} data-testid={dataTestid} />
+      </ChartTooltipContainer>
     </Box>
   );
 };

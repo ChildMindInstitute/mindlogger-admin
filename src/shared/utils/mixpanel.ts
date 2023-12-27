@@ -19,7 +19,10 @@ export const Mixpanel = {
     if (shouldEnableMixpanel) mixpanel.track(`[Admin] ${action}`, payload);
   },
   login(userId: string) {
-    if (shouldEnableMixpanel) mixpanel.identify(userId);
+    if (shouldEnableMixpanel) {
+      mixpanel.identify(userId);
+      mixpanel.people.set({ 'User ID': userId });
+    }
   },
   logout() {
     if (shouldEnableMixpanel) mixpanel.reset();

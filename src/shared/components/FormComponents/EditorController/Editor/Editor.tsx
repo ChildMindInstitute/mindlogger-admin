@@ -41,12 +41,14 @@ export const Editor = ({
     [],
   );
   useEffect(() => {
+    if (!withDebounce || inputValue === value) return;
+
     handleDebouncedChange(inputValue);
-  }, [inputValue]);
+  }, [inputValue, value, withDebounce]);
 
   const handleChange = withDebounce ? setInputValue : onChange;
   const handleBlur = () => {
-    if (withDebounce) {
+    if (withDebounce && value !== inputValue) {
       onChange(inputValue);
     }
   };

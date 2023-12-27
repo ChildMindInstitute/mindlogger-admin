@@ -2,7 +2,7 @@ import { SxProps } from '@mui/material';
 
 import { CropRatio } from 'shared/components/CropPopup';
 
-export enum UploaderUiType {
+export const enum UploaderUiType {
   Primary = 'primary',
   Secondary = 'secondary',
   Tertiary = 'tertiary',
@@ -20,4 +20,5 @@ export type UploaderProps = {
   hasError?: boolean;
   disabled?: boolean;
   'data-testid'?: string;
+  flexibleCropRatio?: boolean;
 };

@@ -29,6 +29,7 @@ export const ActivityFlowBuilderHeader = ({
     onAddFlowActivity = falseReturnFunc,
     onClearFlow = falseReturnFunc,
   } = headerProps || {};
+  const dataTestid = 'builder-activity-flows-builder';
 
   const handleFlowClear = () => {
     onClearFlow();
@@ -37,9 +38,9 @@ export const ActivityFlowBuilderHeader = ({
 
   return (
     <>
-      <StyledBuilderContainerHeader isSticky={isSticky}>
+      <StyledBuilderContainerHeader isSticky={isSticky} data-testid={`${dataTestid}-header`}>
         {children}
-        <StyledButtons>
+        <StyledButtons data-testid={`${dataTestid}-buttons`}>
           <ButtonWithMenu
             variant="outlined"
             label={t('addActivity')}
@@ -53,13 +54,14 @@ export const ActivityFlowBuilderHeader = ({
             })}
             startIcon={<Svg id="add" width={18} height={18} />}
             menuListWidth="44rem"
+            data-testid={`${dataTestid}-add`}
           />
           <Button
             disabled={clearFlowBtnDisabled}
             variant="outlined"
             startIcon={<Svg id="cross" width={18} height={18} />}
             onClick={() => setClearFlowModalVisible(true)}
-            data-testid="builder-activity-flows-builder-clear"
+            data-testid={`${dataTestid}-clear`}
           >
             {t('clearFlow')}
           </Button>

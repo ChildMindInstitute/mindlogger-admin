@@ -57,7 +57,6 @@ export const SelectController = <T extends FieldValues>({
   dropdownStyles,
   isErrorVisible = true,
   'data-testid': dataTestid,
-  rootSelector,
   targetSelector,
   setTrigger,
   ...props
@@ -153,11 +152,6 @@ export const SelectController = <T extends FieldValues>({
         disabled={disabled}
         SelectProps={{
           MenuProps: {
-            ...(rootSelector && {
-              classes: {
-                list: rootSelector,
-              },
-            }),
             PaperProps: {
               sx: { ...selectDropdownStyles, ...dropdownStyles },
               'data-testid': `${dataTestid}-dropdown`,

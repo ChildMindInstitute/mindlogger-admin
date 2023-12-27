@@ -19,7 +19,7 @@ export const Chip = ({
     color={color}
     deleteIcon={
       canRemove ? (
-        <StyledClearedButton data-testid={`${dataTestid}-close-button`}>
+        <StyledClearedButton data-testid={`${dataTestid || 'chip'}-close-button`}>
           <Svg id="close" width={18} height={18} />
         </StyledClearedButton>
       ) : undefined
