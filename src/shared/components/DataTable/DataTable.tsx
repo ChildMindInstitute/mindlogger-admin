@@ -66,6 +66,7 @@ export const DataTable = ({
                   checked={isAllSelected}
                   onChange={handleSelectAll}
                   disabled={!data?.length}
+                  data-testid={`${dataTestid}-select-all`}
                 />
               </StyledHeadCell>
             ) : null}
