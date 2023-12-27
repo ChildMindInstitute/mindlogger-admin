@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Modal } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks/useAsync';
 import { editRespondentApi } from 'api';
 import { falseReturnFunc, getErrorMessage } from 'shared/utils';
-import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
 import { editRespondentFormSchema } from './EditRespondentPopup.schema';
