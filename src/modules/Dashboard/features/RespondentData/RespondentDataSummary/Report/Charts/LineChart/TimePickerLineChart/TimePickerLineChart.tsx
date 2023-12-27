@@ -13,8 +13,11 @@ import { setTooltipStyles } from '../../Charts.utils';
 import { getOptions, getData } from './TimePickerLineChart.utils';
 import { TimePickerDataPointRaw, TimePickerLineChartProps } from './TimePickerLineChart.types';
 import { ChartTooltip } from './ChartTooltip';
+import { ChartTooltipContainer } from '../../ChartTooltipContainer';
 
 ChartJS.register(Tooltip, TimeScale);
+
+const dataTestid = 'time-picker-chart';
 
 export const TimePickerLineChart = ({
   color,
@@ -86,16 +89,18 @@ export const TimePickerLineChart = ({
   );
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative' }} data-testid={dataTestid}>
       {renderChart}
-      <ChartTooltip
+      <ChartTooltipContainer
         ref={tooltipRef}
-        data={tooltipData}
         onMouseEnter={() => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-      />
+        data-testid={dataTestid}
+      >
+        <ChartTooltip data={tooltipData} data-testid={dataTestid} />
+      </ChartTooltipContainer>
     </Box>
   );
 };
