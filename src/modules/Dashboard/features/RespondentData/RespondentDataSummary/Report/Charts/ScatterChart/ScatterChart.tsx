@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { locales } from 'shared/consts';
 
+import { ChartTooltipContainer } from '../ChartTooltipContainer';
 import { scatterChartTooltipHandler } from '../Charts.utils';
 import { ChartType, SetTooltipData } from '../Chart.types';
 import { getData, getOptions } from './ScatterChart.utils';
@@ -25,6 +26,8 @@ import { ChartTooltip } from './ChartTooltip';
 import { StyledWrapper } from './ScatterChart.styles';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
+
+const dataTestid = 'scatter-chart';
 
 export const ScatterChart = ({
   height = '6rem',
@@ -76,16 +79,18 @@ export const ScatterChart = ({
   );
 
   return (
-    <StyledWrapper sx={{ height }}>
+    <StyledWrapper sx={{ height }} data-testid={dataTestid}>
       {renderChart}
-      <ChartTooltip
+      <ChartTooltipContainer
         ref={tooltipRef}
-        data={tooltipData}
         onMouseEnter={() => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-      />
+        data-testid={dataTestid}
+      >
+        <ChartTooltip data={tooltipData} data-testid={dataTestid} />
+      </ChartTooltipContainer>
     </StyledWrapper>
   );
 };
