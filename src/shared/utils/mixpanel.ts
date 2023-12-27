@@ -6,25 +6,36 @@ const isProduction = process.env.REACT_APP_ENV === 'prod';
 const isStaging = process.env.REACT_APP_ENV === 'stage';
 const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging);
 
-const { default: mixpanel } = await import('mixpanel-browser');
-
 export const Mixpanel = {
-  init() {
-    if (shouldEnableMixpanel) mixpanel.init(PROJECT_TOKEN);
-  },
-  trackPageView(pageName: string) {
-    if (shouldEnableMixpanel) mixpanel.track_pageview({ page: `[Admin] ${pageName}` });
-  },
-  track(action: string, payload?: Dict) {
-    if (shouldEnableMixpanel) mixpanel.track(`[Admin] ${action}`, payload);
-  },
-  login(userId: string) {
+  async init() {
     if (shouldEnableMixpanel) {
+      const { default: mixpanel } = await import('mixpanel-browser');
+      mixpanel.init(PROJECT_TOKEN);
+    }
+  },
+  async trackPageView(pageName: string) {
+    if (shouldEnableMixpanel) {
+      const { default: mixpanel } = await import('mixpanel-browser');
+      mixpanel.track_pageview({ page: `[Admin] ${pageName}` });
+    }
+  },
+  async track(action: string, payload?: Dict) {
+    if (shouldEnableMixpanel) {
+      const { default: mixpanel } = await import('mixpanel-browser');
+      mixpanel.track(`[Admin] ${action}`, payload);
+    }
+  },
+  async login(userId: string) {
+    if (shouldEnableMixpanel) {
+      const { default: mixpanel } = await import('mixpanel-browser');
       mixpanel.identify(userId);
       mixpanel.people.set({ 'User ID': userId });
     }
   },
-  logout() {
-    if (shouldEnableMixpanel) mixpanel.reset();
+  async logout() {
+    if (shouldEnableMixpanel) {
+      const { default: mixpanel } = await import('mixpanel-browser');
+      mixpanel.reset();
+    }
   },
 };
