@@ -9,6 +9,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks/useAsync';
 import { editRespondentApi } from 'api';
 import { falseReturnFunc, getErrorMessage } from 'shared/utils';
+import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
 import { editRespondentFormSchema } from './EditRespondentPopup.schema';
@@ -31,7 +32,11 @@ export const EditRespondentPopup = ({
     defaultValues: { secretUserId: '', nickname: '' },
   });
 
-  const { execute: editRespondent, error } = useAsync(
+  const {
+    execute: editRespondent,
+    isLoading,
+    error,
+  } = useAsync(
     editRespondentApi,
     () => {
       setIsSuccessVisible(true);
@@ -79,6 +84,7 @@ export const EditRespondentPopup = ({
       open={popupVisible}
       onClose={onCloseHandler}
       onSubmit={isSuccessVisible ? onCloseHandler : handleSubmit(submitForm)}
+      disabledSubmit={isLoading}
       title={t('editRespondent')}
       buttonText={t(isSuccessVisible ? 'ok' : 'save')}
       hasSecondBtn={!isSuccessVisible}
@@ -86,36 +92,40 @@ export const EditRespondentPopup = ({
       secondBtnText={t('cancel')}
       data-testid={dataTestid}
     >
-      <StyledModalWrapper>
-        {isSuccessVisible ? (
-          <>{t('editRespondentSuccess')}</>
-        ) : (
-          <>
-            <form onSubmit={handleSubmit(submitForm)} noValidate>
-              <StyledController>
-                <InputController
-                  fullWidth
-                  name="nickname"
-                  control={control}
-                  label={t('nickname')}
-                  data-testid={`${dataTestid}-nickname`}
-                />
-              </StyledController>
-              <StyledController>
-                <InputController
-                  fullWidth
-                  name="secretUserId"
-                  control={control}
-                  label={t('secretUserId')}
-                  onChange={handleChangeSecretId}
-                  data-testid={`${dataTestid}-secret-user-id`}
-                />
-              </StyledController>
-            </form>
-            {hasServerError && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
-          </>
-        )}
-      </StyledModalWrapper>
+      <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        <StyledModalWrapper>
+          {isSuccessVisible ? (
+            <>{t('editRespondentSuccess')}</>
+          ) : (
+            <>
+              <form onSubmit={handleSubmit(submitForm)} noValidate>
+                <StyledController>
+                  <InputController
+                    fullWidth
+                    name="nickname"
+                    control={control}
+                    label={t('nickname')}
+                    data-testid={`${dataTestid}-nickname`}
+                  />
+                </StyledController>
+                <StyledController>
+                  <InputController
+                    fullWidth
+                    name="secretUserId"
+                    control={control}
+                    label={t('secretUserId')}
+                    onChange={handleChangeSecretId}
+                    error={!!hasServerError}
+                    data-testid={`${dataTestid}-secret-user-id`}
+                  />
+                </StyledController>
+              </form>
+              {hasServerError && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
+            </>
+          )}
+        </StyledModalWrapper>
+      </>
     </Modal>
   );
 };
