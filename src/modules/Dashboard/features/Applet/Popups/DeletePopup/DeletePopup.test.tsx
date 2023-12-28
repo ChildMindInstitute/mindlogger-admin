@@ -41,9 +41,11 @@ describe('DeletePopup', () => {
 
   test('DeletePopup should open success modal', async () => {
     mockAxios.delete.mockResolvedValueOnce(null);
-    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() => ({
-      getPublicKey: getPublicKeyMock,
-    }));
+    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+      Promise.resolve({
+        getPublicKey: getPublicKeyMock,
+      }),
+    );
 
     renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />, {
       preloadedState,

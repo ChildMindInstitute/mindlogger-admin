@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { Svg } from 'shared/components/Svg';
 import { Roles } from 'shared/consts';
 import {
@@ -10,10 +11,11 @@ import {
   VersionHistorySetting,
   LiveResponseStreamingSetting,
 } from 'shared/features/AppletSettings';
-import { ReportConfigSetting } from 'modules/Builder/features/ReportConfigSetting';
 import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './BuilderAppletSettings.types';
+
+const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
 export const getSettings = ({
   isNewApplet,

@@ -1,5 +1,5 @@
+import { lazy } from 'react';
 import { TextField } from '@mui/material';
-import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
 import { parse, format as dateFnsFormat } from 'date-fns';
 
@@ -8,6 +8,8 @@ import { DateFormats } from 'shared/consts';
 
 import { StyledIcon, StyledTimePickerWrapper } from './TimePicker.styles';
 import { TimePickerProps } from './TimePicker.types';
+
+const ReactDatePicker = lazy(() => import('react-datepicker'));
 
 export const TimePicker = <T extends FieldValues>({
   control,

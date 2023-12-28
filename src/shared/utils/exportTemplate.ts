@@ -1,6 +1,4 @@
-import { utils, writeFile } from 'xlsx';
-
-export const exportTemplate = <T extends unknown[]>({
+export const exportTemplate = async <T extends unknown[]>({
   data,
   fileName,
   isXlsx,
@@ -11,6 +9,7 @@ export const exportTemplate = <T extends unknown[]>({
   isXlsx?: boolean;
   defaultData?: string[] | null;
 }) => {
+  const { writeFile, utils } = await import('xlsx');
   const workSheet = defaultData ? utils.aoa_to_sheet([defaultData]) : utils.json_to_sheet(data);
   const workBook = utils.book_new();
 
@@ -28,4 +27,8 @@ export const exportTemplate = <T extends unknown[]>({
   });
 };
 
-export const convertJsonToCsv = (data: unknown[]) => utils.sheet_to_csv(utils.json_to_sheet(data));
+export const convertJsonToCsv = async (data: unknown[]) => {
+  const { utils } = await import('xlsx');
+
+  return utils.sheet_to_csv(utils.json_to_sheet(data));
+};

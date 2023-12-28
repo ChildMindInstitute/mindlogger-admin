@@ -1,4 +1,4 @@
-import { LibraryForm } from 'modules/Library/features';
+import { LibraryForm } from 'modules/Library/features/Applet';
 
 export const getFilteredSelectedItems = (storageItems: LibraryForm, id: string) =>
   Object.keys(storageItems).reduce((acc: LibraryForm, key) => {
