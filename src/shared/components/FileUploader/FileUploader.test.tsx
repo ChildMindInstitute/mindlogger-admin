@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
+import i18n from 'i18n';
 
 import { FileUploader } from './FileUploader';
 import { FileUploaderProps } from './FileUploader.types';

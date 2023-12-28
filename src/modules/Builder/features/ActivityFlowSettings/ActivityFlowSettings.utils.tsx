@@ -1,5 +1,6 @@
 import { lazy } from 'react';
-import i18n from 'i18next';
+
+import i18n from 'i18n';
 import { ActivityFlowFormValues } from 'modules/Builder/types';
 import { Svg } from 'shared/components/Svg';
 import { SettingParam } from 'shared/utils';
