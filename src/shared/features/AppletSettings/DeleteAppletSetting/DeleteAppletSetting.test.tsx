@@ -1,7 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
+import userEvent from '@testing-library/user-event';
 
 import { SettingParam, renderWithProviders } from 'shared/utils';
 
@@ -69,12 +70,10 @@ describe('DeleteAppletSetting', () => {
     expect(screen.getByTestId('applet-settings-delete-applet-delete-button')).toBeVisible();
     expect(screen.getByTestId('applet-settings-delete-applet-delete-password-popup')).toBeVisible();
 
-    fireEvent.change(screen.getByLabelText(/Password/), {
-      target: { value: mockedPassword },
-    });
+    await userEvent.type(screen.getByLabelText(/Password/), mockedPassword);
 
     fireEvent.click(screen.getByText('Delete'));
-    await waitFor(() => fireEvent.click(screen.getByText('Ok')));
+    fireEvent.click(await screen.findByText('Ok'));
 
     expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
   });

@@ -106,7 +106,7 @@ describe('VersionHistorySetting', () => {
       const input = screen.getByTestId(`${dataTestid}-version`).querySelector('input');
       input && fireEvent.change(input, { target: { value: '1.1.0' } });
 
-      await waitFor(() => expect(screen.getByText('version (1.1.0)')).toBeVisible());
+      expect(await screen.findByText('version (1.1.0)')).toBeVisible();
       expect(screen.getByText('No changes.')).toBeVisible();
     });
   });
