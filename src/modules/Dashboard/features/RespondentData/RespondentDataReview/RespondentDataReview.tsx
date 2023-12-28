@@ -43,10 +43,10 @@ export const RespondentDataReview = () => {
 
   const getDecryptedActivityData = useDecryptedActivityData();
 
-  const { execute: getActivityAnswer } = useAsync(getActivityAnswerApi, (res) => {
+  const { execute: getActivityAnswer } = useAsync(getActivityAnswerApi, async (res) => {
     if (!res?.data?.result) return;
 
-    const decryptedActivityData = getDecryptedActivityData(res.data.result);
+    const decryptedActivityData = await getDecryptedActivityData(res.data.result);
     setActivityItemAnswers(decryptedActivityData.decryptedAnswers);
   });
 
@@ -67,7 +67,7 @@ export const RespondentDataReview = () => {
           ...assessmentData,
           userPublicKey: reviewerPublicKey,
         } as EncryptedAnswerSharedProps;
-        const decryptedAssessment = getDecryptedActivityData(encryptedData);
+        const decryptedAssessment = await getDecryptedActivityData(encryptedData);
         setItemIds(assessmentData.itemIds || []);
         setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
         setLastAssessment(itemsLast);

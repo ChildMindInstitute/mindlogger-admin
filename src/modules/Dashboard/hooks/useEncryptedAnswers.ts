@@ -19,11 +19,11 @@ export const useEncryptedAnswers = () => {
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);
 
-  return (answers: AnswerDTO[]): string => {
-    const key = getAESKey(privateKey, accountId, prime, base);
+  return async (answers: AnswerDTO[]): Promise<string> => {
+    const key = await getAESKey(privateKey, accountId, prime, base);
     let answersEncrypted = '';
     try {
-      answersEncrypted = encryptData({
+      answersEncrypted = await encryptData({
         text: JSON.stringify(answers),
         key,
       });

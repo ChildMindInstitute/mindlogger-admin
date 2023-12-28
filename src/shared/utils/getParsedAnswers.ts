@@ -15,7 +15,7 @@ import { getDrawingUrl, getMediaUrl } from './exportData/getUrls';
 import { getObjectFromList } from './getObjectFromList';
 import { isSuccessEvent } from './exportData/getReportAndMediaData';
 
-export const getParsedAnswers = (
+export const getParsedAnswers = async (
   result: ExportDataResult,
   getDecryptedActivityData: ReturnType<typeof useDecryptedActivityData>,
 ) => {
@@ -24,19 +24,25 @@ export const getParsedAnswers = (
     (activity: ExportActivity) => activity.idVersion,
   );
 
-  return result.answers.map((answer) =>
-    getDecryptedActivityData({
-      ...answer,
-      items: activitiesObject[answer.activityHistoryId].items,
-      activityName: activitiesObject[answer.activityHistoryId].name,
-      subscaleSetting: activitiesObject[answer.activityHistoryId].subscaleSetting,
-    }),
-  );
+  const { answers } = result;
+  const parsedAnswers = [];
+  for await (const answer of answers) {
+    parsedAnswers.push(
+      await getDecryptedActivityData({
+        ...answer,
+        items: activitiesObject[answer.activityHistoryId].items,
+        activityName: activitiesObject[answer.activityHistoryId].name,
+        subscaleSetting: activitiesObject[answer.activityHistoryId].subscaleSetting,
+      }),
+    );
+  }
+
+  return parsedAnswers;
 };
 
 export const remapFailedAnswers = (
-  parsedAnswers: ReturnType<typeof getParsedAnswers>,
-): ReturnType<typeof getParsedAnswers> => {
+  parsedAnswers: Awaited<ReturnType<typeof getParsedAnswers>>,
+): Awaited<ReturnType<typeof getParsedAnswers>> => {
   if (!parsedAnswers.length) return [];
 
   return parsedAnswers.reduce(
@@ -75,7 +81,7 @@ const shouldConvertPrivateDrawingUrl = (
   isDrawingAnswerData(item) && Boolean(item.answer.value.uri);
 
 export const getAnswersWithPublicUrls = async (
-  parsedAnswers: ReturnType<typeof getParsedAnswers>,
+  parsedAnswers: Awaited<ReturnType<typeof getParsedAnswers>>,
 ) => {
   if (!parsedAnswers.length) return [];
 
@@ -103,7 +109,7 @@ export const getAnswersWithPublicUrls = async (
   }
   let publicUrlIndex = 0;
 
-  return parsedAnswers.reduce<ReturnType<typeof getParsedAnswers>>((acc, data) => {
+  return parsedAnswers.reduce<Awaited<ReturnType<typeof getParsedAnswers>>>((acc, data) => {
     const decryptedAnswers = data.decryptedAnswers.reduce(
       (decryptedAnswersAcc: DecryptedAnswerData[], item) => {
         if (shouldConvertPrivateDrawingUrl(item)) {

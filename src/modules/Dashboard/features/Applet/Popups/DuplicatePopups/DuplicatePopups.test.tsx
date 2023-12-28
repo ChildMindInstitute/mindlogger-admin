@@ -36,7 +36,14 @@ describe('DuplicatePopups', () => {
   test('should duplicate and open success modal', async () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce(null);
-    jest.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(mockedEncryption);
+    jest
+      .spyOn(encryptionFunctions, 'getEncryptionToServer')
+      .mockReturnValue(Promise.resolve(mockedEncryption));
+    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+      Promise.resolve({
+        getPrivateKey: () => [],
+      }),
+    );
 
     const { getByTestId, getByLabelText, getByText } = renderWithProviders(<DuplicatePopups />, {
       preloadedState,
