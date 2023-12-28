@@ -1,5 +1,3 @@
-import JSZip from 'jszip';
-
 import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
 import { BLOB_ZIP_OPTIONS } from './exportData/exportZip';
@@ -60,7 +58,8 @@ export const sendLogFile = async ({
     lastModified: time,
   });
   const fileId = `${pathname.replace(/\//g, '_')}_${time}`;
-  const zip = new JSZip();
+  const JSZip = await import('jszip');
+  const zip = new JSZip.default();
   zip.file(`${fileId}.txt`, file);
   const content = await zip.generateAsync(BLOB_ZIP_OPTIONS);
   const fileFormData = getUploadFormData(content);

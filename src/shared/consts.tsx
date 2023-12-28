@@ -14,18 +14,23 @@ export const SMALL_INPUT_LENGTH = 5;
 export const TEXTAREA_ROWS_COUNT_SM = 4;
 export const TEXTAREA_ROWS_COUNT = 5;
 export const MAX_DESCRIPTION_LENGTH_LONG = 150;
+
 export const MAX_FILE_SIZE_5MB = 5_242_880;
 export const MAX_FILE_SIZE_2MB = 2_097_152;
-
 export const MAX_FILE_SIZE_25MB = 26_214_400;
-
 export const MAX_FILE_SIZE_150MB = 157_286_400;
 
 export const VALID_IMAGE_TYPES = ['.png', '.jpg', '.jpeg'];
 
+export const MAX_IMAGE_WIDTH = 1920;
+export const MIN_IMAGE_WIDTH = 100;
+export const MAX_IMAGE_HEIGHT = 1920;
+export const MIN_IMAGE_HEIGHT = 100;
+
 export enum UploadFileError {
   Size,
   Format,
+  Dimensions,
 }
 
 export const SEARCH_DEBOUNCE_VALUE = 700;

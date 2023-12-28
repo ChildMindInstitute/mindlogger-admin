@@ -9,6 +9,7 @@ export type CropPopupProps = {
   onSave: (data: FormData) => void;
   onClose: () => void;
   'data-testid'?: string;
+  flexibleCropRatio?: boolean;
 };
 
 export type CropImage = {

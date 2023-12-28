@@ -36,9 +36,9 @@ export const useDecryptedActivityData = (
   if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;
   const { prime, base } = encryptionInfoFromServer;
 
-  return <T extends EncryptedAnswerSharedProps>(
+  return async <T extends EncryptedAnswerSharedProps>(
     answersApiResponse: T,
-  ): DecryptedActivityData<T> => {
+  ): Promise<DecryptedActivityData<T>> => {
     const { userPublicKey, answer, itemIds, events, migratedData, ...rest } = answersApiResponse;
 
     const migratedUrls =
@@ -56,11 +56,11 @@ export const useDecryptedActivityData = (
         userPublicKeyParsed = userPublicKey;
       }
       const privateKey = getAppletPrivateKey(dynamicAppletId ?? appletId);
-      const key = getAESKey(privateKey, userPublicKeyParsed, prime, base);
+      const key = await getAESKey(privateKey, userPublicKeyParsed, prime, base);
 
       try {
         answersDecrypted = JSON.parse(
-          decryptData({
+          await decryptData({
             text: answer,
             key,
           }),
@@ -72,7 +72,7 @@ export const useDecryptedActivityData = (
       if (events) {
         try {
           eventsDecrypted = JSON.parse(
-            decryptData({
+            await decryptData({
               text: events,
               key,
             }),
