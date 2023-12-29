@@ -1,12 +1,8 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "target": "es2015",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "es2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,9 +17,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src",
-    "jest.config.js",
-  ],
+  "include": ["src", "jest.config.js"],
   "exclude": ["node_modules"]
 }

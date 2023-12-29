@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18n from 'i18n';
 import { Row } from 'shared/components';
 import { HeadCell } from 'shared/types';
 import { createArray, getTableCell } from 'shared/utils';

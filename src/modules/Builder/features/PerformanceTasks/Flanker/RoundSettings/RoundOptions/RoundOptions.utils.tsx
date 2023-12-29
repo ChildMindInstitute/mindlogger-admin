@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18n from 'i18n';
 import { StyledBodyMedium, StyledCheckboxTooltipSvg } from 'shared/styles';
 import { Tooltip } from 'shared/components/Tooltip';
 

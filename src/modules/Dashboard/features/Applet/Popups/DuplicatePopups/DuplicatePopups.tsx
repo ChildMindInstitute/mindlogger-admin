@@ -83,8 +83,8 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
   const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
-    () => {
-      setAppletPrivateKey({
+    async () => {
+      await setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
         encryption: encryptionDataRef.current.encryption!,
         appletId: currentAppletId,
@@ -132,9 +132,9 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
   };
 
-  const submitCallback = (ref?: AppletPasswordRefType) => {
+  const submitCallback = async (ref?: AppletPasswordRefType) => {
     const password = ref?.current?.password ?? '';
-    const encryption = getEncryptionToServer(password, accountId ?? '');
+    const encryption = await getEncryptionToServer(password, accountId ?? '');
     encryptionDataRef.current = {
       encryption,
       password,

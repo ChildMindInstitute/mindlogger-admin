@@ -11,6 +11,7 @@ import { getReviewsApi } from 'api';
 import { StyledContainer } from './FeedbackReviewed.styles';
 import { FeedbackReviewer } from './FeedbackReviewer';
 import { Review, ReviewData } from './FeedbackReviewed.types';
+import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
 export const FeedbackReviewed = () => {
   const { t } = useTranslation('app');
@@ -21,21 +22,25 @@ export const FeedbackReviewed = () => {
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getReviews } = useAsync(
     getReviewsApi,
-    (result) => {
-      const decryptedData = result?.data?.result.map((review) => {
+    async (result) => {
+      const reviews = result?.data?.result ?? [];
+      const decryptedData: ReviewData[] = [];
+
+      for await (const review of reviews) {
         const { reviewerPublicKey, reviewer, ...assessmentData } = review;
         const encryptedData = {
           ...assessmentData,
           userPublicKey: reviewerPublicKey,
         } as Review;
 
-        return {
+        decryptedData.push({
           reviewer,
-          review: getDecryptedActivityData(encryptedData).decryptedAnswers,
-        };
-      });
+          review: (await getDecryptedActivityData(encryptedData))
+            .decryptedAnswers as AssessmentActivityItem[],
+        });
+      }
 
-      setReviewers((decryptedData as ReviewData[]) ?? []);
+      setReviewers(decryptedData);
     },
     undefined,
     () => setIsLoading(false),
