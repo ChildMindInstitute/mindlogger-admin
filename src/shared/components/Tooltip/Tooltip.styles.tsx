@@ -11,7 +11,6 @@ export const StyledTooltip = styled(({ className, children, ...props }: TooltipP
     color: variables.palette.inverse_on_surface,
     textAlign: 'left',
     fontSize: variables.font.size.md,
-    maxWidth: '24rem',
     lineHeight: variables.font.lineHeight.md,
     padding: theme.spacing(0.4, 0.8),
     fontWeight: variables.font.weight.regular,

@@ -5,4 +5,5 @@ export type TooltipProps = Partial<MuiTooltipProps> & {
   tooltipTitle?: string | ReactNode | null;
   className?: string;
   children: JSX.Element;
+  maxWidth?: string;
 };

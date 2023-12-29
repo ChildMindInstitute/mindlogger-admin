@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useAsync } from 'shared/hooks';
 import { getInvitationsApi } from 'api';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
-import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyState } from 'shared/components';
+import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyState, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { Roles } from 'shared/consts';
 import { isManagerOrOwner } from 'shared/utils';
@@ -24,7 +24,10 @@ export const AddUser = () => {
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
-  const { execute } = useAsync(getInvitationsApi, (res) => res?.data && setInvitations(res.data));
+  const { execute, isLoading } = useAsync(
+    getInvitationsApi,
+    (res) => res?.data && setInvitations(res.data),
+  );
 
   const getInvitationsHandler = () => {
     execute({
@@ -42,6 +45,7 @@ export const AddUser = () => {
 
   return (
     <>
+      {isLoading && <Spinner />}
       <StyledHeadlineLarge sx={{ mb: theme.spacing(4.8) }}>{t('addUsers')}</StyledHeadlineLarge>
       <AddUserForm getInvitationsHandler={getInvitationsHandler} roles={appletRoles} />
       <InvitationsTable invitations={invitations} setInvitations={setInvitations} />

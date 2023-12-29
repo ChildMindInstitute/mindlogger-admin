@@ -28,6 +28,7 @@ export const DashboardTable = ({
   count,
   hasColFixedWidth,
   rowsPerPage = DEFAULT_ROWS_PER_PAGE,
+  onScroll,
   'data-testid': dataTestid,
 }: DashboardTableProps) => {
   const tableHeader = (
@@ -52,6 +53,7 @@ export const DashboardTable = ({
       maxHeight={maxHeight}
       uiType={uiType}
       hasColFixedWidth={hasColFixedWidth}
+      onScroll={onScroll}
     >
       {!!rows?.length && (
         <MuiTable stickyHeader data-testid={dataTestid}>
@@ -79,8 +81,11 @@ export const DashboardTable = ({
                     align={row[key].align}
                     width={row[key].width}
                     hasColFixedWidth={hasColFixedWidth}
+                    sx={{ cursor: row[key].onClick ? 'pointer' : 'default' }}
                   >
-                    {row[key].content(row, hoveredRowIndex === index)}
+                    {row[key].contentWithTooltip
+                      ? row[key].contentWithTooltip
+                      : row[key].content(row, hoveredRowIndex === index)}
                   </StyledTableCell>
                 ))}
               </TableRow>

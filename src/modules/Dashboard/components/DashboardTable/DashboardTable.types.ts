@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, UIEvent } from 'react';
 
 import { Row, UiType } from 'shared/components';
 import { HeadCell, Order } from 'shared/types';
@@ -19,5 +19,6 @@ export type DashboardTableProps = {
   handleChangePage: (event: unknown, newPage: number) => void;
   rowsPerPage?: number;
   hasColFixedWidth?: boolean;
+  onScroll?: (event: UIEvent<HTMLDivElement>) => void;
   'data-testid'?: string;
 };
