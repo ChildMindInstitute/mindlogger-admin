@@ -11,7 +11,7 @@ import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
   AppletPasswordRefType,
-} from 'modules/Dashboard/features';
+} from 'modules/Dashboard/features/Applet/Popups';
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';

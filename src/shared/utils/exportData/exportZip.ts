@@ -1,7 +1,7 @@
-import JSZip from 'jszip';
+import { JSZipGeneratorOptions } from 'jszip';
 import FileSaver from 'file-saver';
 
-export const BLOB_ZIP_OPTIONS: JSZip.JSZipGeneratorOptions<'blob'> = {
+export const BLOB_ZIP_OPTIONS: JSZipGeneratorOptions<'blob'> = {
   type: 'blob',
   compression: 'DEFLATE',
   compressionOptions: { level: 3 },
@@ -10,7 +10,8 @@ export const BLOB_ZIP_OPTIONS: JSZip.JSZipGeneratorOptions<'blob'> = {
 export const exportZip = async (data: { fileName: string; file: Blob }[], fileName: string) => {
   const dataArray = Array.isArray(data) ? data : [data];
 
-  const zip = new JSZip();
+  const JSZip = await import('jszip');
+  const zip = new JSZip.default();
   dataArray.forEach((data) => {
     zip.file(data.fileName, data.file);
   });

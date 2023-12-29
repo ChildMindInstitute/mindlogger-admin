@@ -1244,5 +1244,6 @@
     "text": "Choisir de procéder avec la nouvelle version entraînera la perte des données de la complétion précédente.",
     "button": "Procéder avec la nouvelle version"
   },
+  "appletNameExists": "Ce nom d'Applet existe déjà",
   "goToDashboard": "Aller au tableau de bord"
 }
