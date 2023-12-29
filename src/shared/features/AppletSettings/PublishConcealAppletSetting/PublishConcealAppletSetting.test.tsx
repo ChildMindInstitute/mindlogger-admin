@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { fireEvent, screen } from '@testing-library/react';
 
 import { page } from 'resources';
