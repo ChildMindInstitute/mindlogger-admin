@@ -4,7 +4,6 @@ import mockAxios from 'jest-mock-axios';
 import { renderWithProviders } from 'shared/utils';
 import { mockedApplet, mockedAppletData, mockedPassword } from 'shared/mock';
 import * as encryptionFunctions from 'shared/utils/encryption';
-import * as builderHooks from 'modules/Builder/hooks';
 
 import { DuplicatePopups } from './DuplicatePopups';
 
@@ -27,11 +26,6 @@ const mockedEncryption = {
   base: '[2]',
   accountId: '12345',
 };
-
-jest.mock('modules/Builder/hooks', () => ({
-  ...jest.requireActual('modules/Builder/hooks'),
-  useAppletPrivateKeySetter: jest.fn(),
-}));
 
 describe('DuplicatePopups', () => {
   afterEach(() => {
@@ -67,7 +61,6 @@ describe('DuplicatePopups', () => {
         getPrivateKey: () => [],
       }),
     );
-    jest.spyOn(builderHooks, 'useAppletPrivateKeySetter').mockReturnValue(() => jest.fn());
 
     const { getByTestId, getByLabelText, getByText } = renderWithProviders(<DuplicatePopups />, {
       preloadedState,
