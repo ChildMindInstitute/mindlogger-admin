@@ -227,8 +227,12 @@ export type OwnerId = {
 export type DatavizActivity = {
   id: string;
   name: string;
-  isPerformanceTask: boolean;
-  hasAnswer: boolean;
+  isPerformanceTask?: boolean;
+  hasAnswer?: boolean;
+};
+
+export type SubmitDates = {
+  dates: string[];
 };
 
 export type ReviewActivity = DatavizActivity & {

@@ -54,6 +54,7 @@ import {
   Identifiers,
   GetRespondentDetailsParams,
   AssessmentResult,
+  SubmitDates,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -472,7 +473,7 @@ export const getAppletSubmitDateListApi = (
   { appletId, ...params }: AppletSubmitDateList,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get(`/answers/applet/${appletId}/dates`, {
+  authApiClient.get<ResponseWithObject<SubmitDates>>(`/answers/applet/${appletId}/dates`, {
     params,
     signal,
   });
