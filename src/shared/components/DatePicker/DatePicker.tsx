@@ -1,8 +1,7 @@
-import { MouseEventHandler, useState } from 'react';
+import { MouseEventHandler, lazy, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ReactDatePicker from 'react-datepicker';
 import { Controller, FieldValues } from 'react-hook-form';
-import fr from 'date-fns/locale/fr';
+import { fr } from 'date-fns/locale';
 
 import { Svg } from 'shared/components/Svg';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
@@ -22,6 +21,8 @@ import { DatePickerHeader } from './DatePickerHeader';
 import { getStringFromDate } from './DatePicker.utils';
 import { DATE_PLACEHOLDER } from './DatePicker.const';
 import { PopoverHeader } from './PopoverHeader';
+
+const ReactDatePicker = lazy(() => import('react-datepicker'));
 
 export const DatePicker = <T extends FieldValues>({
   control,

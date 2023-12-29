@@ -4,7 +4,7 @@ import { useEncryptionStorage } from 'shared/hooks';
 export const useAppletPrivateKeySetter = () => {
   const { setAppletPrivateKey } = useEncryptionStorage();
 
-  return ({
+  return async ({
     appletPassword,
     encryption,
     appletId,
@@ -17,7 +17,7 @@ export const useAppletPrivateKeySetter = () => {
     if (!encryptionParsed || !appletId || !appletPassword) return;
 
     const { publicKey, ...rest } = encryptionParsed;
-    const encryptionInfoGenerated = getAppletEncryptionInfo({
+    const encryptionInfoGenerated = await getAppletEncryptionInfo({
       appletPassword,
       ...rest,
     });

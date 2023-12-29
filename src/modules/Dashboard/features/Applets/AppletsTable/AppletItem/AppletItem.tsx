@@ -12,7 +12,7 @@ import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
   AppletPasswordRefType,
-} from 'modules/Dashboard/features/Applet';
+} from 'modules/Dashboard/features/Applet/Popups';
 import { page } from 'resources';
 import {
   Encryption,
@@ -54,8 +54,8 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const { execute: togglePin } = useAsync(togglePinApi);
   const { execute: setAppletEncryption } = useAsync(
     setAppletEncryptionApi,
-    () => {
-      setAppletPrivateKey({
+    async () => {
+      await setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
         encryption: encryptionDataRef.current.encryption!,
         appletId,
@@ -99,7 +99,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
 
   const submitCallback = async (ref?: AppletPasswordRefType) => {
     const password = ref?.current?.password ?? '';
-    const encryption = getEncryptionToServer(password, accountId ?? '');
+    const encryption = await getEncryptionToServer(password, accountId ?? '');
     encryptionDataRef.current = {
       encryption,
       password,
