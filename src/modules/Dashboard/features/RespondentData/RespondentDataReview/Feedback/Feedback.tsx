@@ -23,7 +23,8 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   const { assessment, isFeedbackOpen } = useContext(RespondentDataReviewContext);
   const [assessmentStep, setAssessmentStep] = useState(0);
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
-  const dataTestid = 'respondents-review-feedback';
+
+  const dataTestid = 'respondents-review-feedback-menu';
 
   const methods = useForm<FeedbackForm>({
     defaultValues: getDefaultFormValues(assessment),
@@ -35,7 +36,7 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   );
 
   return (
-    <StyledContainer sx={{ display: isFeedbackOpen ? 'flex' : 'none' }}>
+    <StyledContainer sx={{ display: isFeedbackOpen ? 'flex' : 'none' }} data-testid={dataTestid}>
       <StyledFlexAllCenter
         sx={{ justifyContent: 'space-between', margin: theme.spacing(3.2, 3.2, 0) }}
       >

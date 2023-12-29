@@ -1,12 +1,24 @@
 import { format } from 'date-fns';
+import { Box } from '@mui/material';
 
-import { DateFormats } from 'shared/consts';
-import { DecryptedTimeAnswer } from 'shared/types';
+import { DateFormats, ItemResponseType } from 'shared/consts';
+import { ActivityItemAnswer, DecryptedTimeAnswer } from 'shared/types';
 import { Svg } from 'shared/components/Svg';
 import { StyledTitleLarge, theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
-import { Answer } from '../RespondentDataReview.types';
+import {
+  Answer,
+  MultiSelectItemAnswer,
+  SingleSelectItemAnswer,
+  SliderItemAnswer,
+  TextItemAnswer,
+} from '../RespondentDataReview.types';
+
+import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
+import { SliderResponseItem } from '../SliderResponseItem';
+import { TextResponseItem } from '../TextResponseItem';
+import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
 
 const { t } = i18n;
 
@@ -44,4 +56,24 @@ export const renderEmptyState = (selectedAnswer: Answer | null) => {
       </StyledTitleLarge>
     </>
   );
+};
+
+export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
+  switch (activityItemAnswer.activityItem.responseType) {
+    case ItemResponseType.SingleSelection:
+      return <SingleSelectResponseItem {...(activityItemAnswer as SingleSelectItemAnswer)} />;
+    case ItemResponseType.MultipleSelection:
+      return <MultiSelectResponseItem {...(activityItemAnswer as MultiSelectItemAnswer)} />;
+    case ItemResponseType.Slider:
+      return <SliderResponseItem {...(activityItemAnswer as SliderItemAnswer)} />;
+    case ItemResponseType.Text:
+      return <TextResponseItem {...(activityItemAnswer as TextItemAnswer)} />;
+    case ItemResponseType.Time: {
+      const answer = activityItemAnswer.answer as DecryptedTimeAnswer;
+
+      return (
+        <Box data-testid={activityItemAnswer['data-testid']}>{getTimeResponseItem(answer)}</Box>
+      );
+    }
+  }
 };

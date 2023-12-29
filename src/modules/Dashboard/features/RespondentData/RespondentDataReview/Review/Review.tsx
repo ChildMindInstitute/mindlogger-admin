@@ -7,8 +7,7 @@ import { CollapsedMdText } from '../../CollapsedMdText';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';
 import { StyledEmptyReview, StyledReview, StyledWrapper } from './Review.styles';
 import { ReviewProps } from './Review.types';
-import { getResponseItem } from './Review.const';
-import { renderEmptyState } from './Review.utils';
+import { renderEmptyState, getResponseItem } from './Review.utils';
 
 export const Review = ({
   activityItemAnswers,
@@ -17,7 +16,7 @@ export const Review = ({
   'data-testid': dataTestid,
 }: ReviewProps) =>
   activityItemAnswers ? (
-    <StyledReview>
+    <StyledReview data-testid={dataTestid}>
       {activityItemAnswers?.map((activityItemAnswer, index) => {
         const testId = `${dataTestid}-${index}`;
         const {

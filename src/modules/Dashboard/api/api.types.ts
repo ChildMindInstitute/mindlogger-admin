@@ -227,8 +227,8 @@ export type OwnerId = {
 export type DatavizActivity = {
   id: string;
   name: string;
-  isPerformanceTask: boolean;
-  hasAnswer: boolean;
+  isPerformanceTask?: boolean;
+  hasAnswer?: boolean;
 };
 
 export type ReviewActivity = DatavizActivity & {
