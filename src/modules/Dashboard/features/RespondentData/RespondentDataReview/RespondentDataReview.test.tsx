@@ -22,7 +22,6 @@ import * as dashboardHooks from 'modules/Dashboard/hooks';
 import { RespondentDataReview } from './RespondentDataReview';
 
 const date = new Date('2023-12-27');
-
 const dataTestid = 'respondents-review';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review?selectedDate=2023-12-27`;
@@ -269,9 +268,9 @@ describe('RespondentDataReview', () => {
     });
 
     // check render child components
-    expect(screen.getByTestId('respondents-review-menu')).toBeInTheDocument();
-    expect(screen.getByTestId('respondents-review-container')).toBeInTheDocument();
-    expect(screen.getByTestId('respondents-review-feedback-button')).toBeInTheDocument();
+    expect(screen.getByTestId(`${dataTestid}-menu`)).toBeInTheDocument();
+    expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
+    expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
 
     expect(
       screen.getByText('Select the date, Activity, and response time to review the response data.'),
@@ -291,7 +290,7 @@ describe('RespondentDataReview', () => {
     expect(timestampLength).toHaveLength(0);
 
     // check that the selected date is displayed correctly in the datepicker
-    const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
+    const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
     expect(inputContainer).toBeInTheDocument();
 
     const input = inputContainer.querySelector('input') as HTMLInputElement;
@@ -300,9 +299,7 @@ describe('RespondentDataReview', () => {
 
     await userEvent.click(inputContainer);
 
-    const datepicker = screen.getByTestId(
-      'respondents-review-menu-review-date-popover',
-    ) as HTMLElement;
+    const datepicker = screen.getByTestId(`${dataTestid}-menu-review-date-popover`) as HTMLElement;
 
     expect(datepicker).toBeInTheDocument();
 
@@ -366,10 +363,10 @@ describe('RespondentDataReview', () => {
     expect(screen.getByText('Single Selected - Mocked Item')).toBeInTheDocument();
 
     // test open/close feedback panel
-    const feedbackButton = screen.getByTestId('respondents-review-feedback-button');
+    const feedbackButton = screen.getByTestId(`${dataTestid}-feedback-button`);
     expect(feedbackButton).toBeInTheDocument();
 
-    const feedbackMenu = screen.getByTestId('respondents-review-feedback-menu');
+    const feedbackMenu = screen.getByTestId(`${dataTestid}-feedback-menu`);
     expect(feedbackMenu).toBeInTheDocument();
     expect(feedbackMenu).toHaveStyle({ display: 'none' });
 
@@ -379,7 +376,7 @@ describe('RespondentDataReview', () => {
       display: 'flex',
     });
 
-    const feedbackMenuClose = screen.getByTestId('respondents-review-feedback-menu-close');
+    const feedbackMenuClose = screen.getByTestId(`${dataTestid}-feedback-menu-close`);
     expect(feedbackMenuClose).toBeInTheDocument();
 
     await userEvent.click(feedbackMenuClose);
