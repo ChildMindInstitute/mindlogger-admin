@@ -231,6 +231,10 @@ export type DatavizActivity = {
   hasAnswer?: boolean;
 };
 
+export type SubmitDates = {
+  dates: string[];
+};
+
 export type ReviewActivity = DatavizActivity & {
   answerDates: {
     answerId: string;

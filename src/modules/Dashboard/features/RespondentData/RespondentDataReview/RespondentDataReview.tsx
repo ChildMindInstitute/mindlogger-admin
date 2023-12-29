@@ -10,6 +10,11 @@ import {
   getAssessmentApi,
   getReviewActivitiesApi,
   getAppletSubmitDateListApi,
+  Answers,
+  Response,
+  AppletSubmitDateList,
+  ResponseWithObject,
+  SubmitDates,
 } from 'api';
 import { DateFormats } from 'shared/consts';
 import { Svg, Spinner } from 'shared/components';
@@ -67,29 +72,34 @@ export const RespondentDataReview = () => {
 
   const dataTestid = 'respondents-review';
 
-  const { execute: getAppletSubmitDateList } = useAsync(
-    getAppletSubmitDateListApi,
-    (datesApiResult) => {
-      const datesResult = datesApiResult?.data?.result;
-      if (!datesResult) return;
+  const { execute: getAppletSubmitDateList } = useAsync<
+    AppletSubmitDateList,
+    ResponseWithObject<SubmitDates>
+  >(getAppletSubmitDateListApi, ({ data }) => {
+    const datesResult = data?.result;
+    if (!datesResult) return;
 
-      const submitDates = datesResult.dates.map((date: string) => new Date(date));
-      setResponseDates(submitDates);
+    const submitDates = datesResult.dates.map((date: string) => new Date(date));
+    setResponseDates(submitDates);
+  });
+
+  const { execute: getReviewActivities } = useAsync<Answers, Response<ReviewActivity>>(
+    getReviewActivitiesApi,
+    ({ data }) => {
+      const activities = data?.result;
+      if (!activities) return;
+
+      setActivities(activities);
+
+      const activity = activities.find(
+        ({ id, answerDates }) => id === selectedActivity?.id && answerDates.length,
+      );
+      if (!activity) {
+        setSelectedActivity(null);
+      }
+      handleSelectAnswer(null);
     },
   );
-
-  // TODO: refactor
-  const { execute: getReviewActivities } = useAsync(getReviewActivitiesApi, (res) => {
-    res?.data?.result && setActivities(res.data.result);
-
-    const activity = res?.data?.result?.find(
-      ({ id, answerDates }) => id === selectedActivity?.id && answerDates.length,
-    );
-    if (!activity) {
-      setSelectedActivity(null);
-    }
-    handleSelectAnswer(null);
-  });
 
   const getDecryptedActivityData = useDecryptedActivityData();
 
