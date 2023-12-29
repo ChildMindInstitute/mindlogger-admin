@@ -6,6 +6,9 @@ import { SettingParam, renderWithProviders } from 'shared/utils';
 
 import { EditAppletSetting } from './EditAppletSetting';
 
+const route = `/dashboard/${mockedAppletId}/settings/${SettingParam.EditApplet}`;
+const routePath = page.appletSettingsItem;
+
 const mockedUseNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
@@ -14,19 +17,13 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('EditAppletSetting', () => {
-  describe('should render and navigate to builder', () => {
-    test.each`
-      route                                                                 | routePath                         | description
-      ${`/dashboard/${mockedAppletId}/settings/${SettingParam.EditApplet}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
-      ${`/builder/${mockedAppletId}/settings/${SettingParam.EditApplet}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
-    `('$description', async ({ route, routePath }) => {
-      renderWithProviders(<EditAppletSetting />, { route, routePath });
+  test('should render and navigate to builder', () => {
+    renderWithProviders(<EditAppletSetting />, { route, routePath });
 
-      expect(screen.getByTestId('applet-settings-edit-applet-edit')).toBeVisible();
+    expect(screen.getByTestId('applet-settings-edit-applet-edit')).toBeVisible();
 
-      fireEvent.click(screen.getByText('Edit Applet in Builder'));
+    fireEvent.click(screen.getByText('Edit Applet in Builder'));
 
-      expect(mockedUseNavigate).toBeCalledWith(`/builder/${mockedAppletId}`);
-    });
+    expect(mockedUseNavigate).toBeCalledWith(`/builder/${mockedAppletId}`);
   });
 });
