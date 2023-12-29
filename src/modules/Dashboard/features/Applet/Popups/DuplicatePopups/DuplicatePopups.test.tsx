@@ -46,7 +46,7 @@ describe('DuplicatePopups', () => {
       fireEvent.click(getByText('Submit'));
     });
 
-    await waitFor(() => expect(getByText(/That applet name already exists/)).toBeInTheDocument());
+    await waitFor(() => expect(getByText(/That Applet name already exists/)).toBeInTheDocument());
   });
 
   test('should duplicate and open success modal', async () => {
