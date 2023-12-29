@@ -1244,6 +1244,6 @@
     "text": "Choosing to proceed with new version will result in the loss of data from the previous completion.",
     "button": "Proceed with new version"
   },
-  "appletNameExists": "That applet name already exists",
+  "appletNameExists": "That Applet name already exists",
   "goToDashboard": "Go to Dashboard"
 }

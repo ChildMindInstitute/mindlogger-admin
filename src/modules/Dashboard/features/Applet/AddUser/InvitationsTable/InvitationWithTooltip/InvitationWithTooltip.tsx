@@ -3,6 +3,7 @@ import { Box, ClickAwayListener } from '@mui/material';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { Svg, Tooltip } from 'shared/components';
 
+import { dataTestId } from '../InvitationsTable.const';
 import { InvitationWithTooltipProps } from './InvitationWithTooltip.types';
 import { StyledCopyButton } from './InvitationWithTooltip.styles';
 
@@ -14,11 +15,15 @@ export const InvitationWithTooltip = ({
   <Tooltip
     tooltipTitle={
       <ClickAwayListener onClickAway={onClose}>
-        <StyledFlexTopCenter sx={{ cursor: 'default' }}>
+        <StyledFlexTopCenter
+          data-testid={`${dataTestId}-invitation-tooltip`}
+          sx={{ cursor: 'default' }}
+        >
           <Box sx={{ mr: theme.spacing(1) }}>{invitationLink}</Box>
           <StyledCopyButton
             sx={{ cursor: 'pointer' }}
             onClick={() => navigator.clipboard.writeText(invitationLink)}
+            data-testid={`${dataTestId}-tooltip-copy-btn`}
           >
             <Svg id="duplicate" width="18" height="18" />
           </StyledCopyButton>
@@ -31,6 +36,6 @@ export const InvitationWithTooltip = ({
       disablePortal: true,
     }}
   >
-    <span>{invitationLink}</span>
+    <span data-testid={`${dataTestId}-invitation-link`}>{invitationLink}</span>
   </Tooltip>
 );

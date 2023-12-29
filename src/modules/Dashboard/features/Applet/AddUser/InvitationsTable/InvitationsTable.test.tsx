@@ -1,4 +1,5 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { format } from 'date-fns';
 
 import {
@@ -13,6 +14,7 @@ import { renderWithProviders } from 'shared/utils';
 import { page } from 'resources';
 import { initialStateData } from 'shared/state';
 
+import { dataTestId } from './InvitationsTable.const';
 import { InvitationsTable } from './InvitationsTable';
 import { InvitationsTableProps } from './InvitationsTable.types';
 
@@ -56,11 +58,11 @@ describe('InvitationsTable', () => {
       routePath,
     });
 
-    expect(screen.queryByTestId('dashboard-add-users-table')).not.toBeInTheDocument();
+    expect(screen.queryByTestId(dataTestId)).not.toBeInTheDocument();
     expect(screen.getByText(/No pending invitations/)).toBeInTheDocument();
   });
 
-  test('InvitationsTable for Editor', () => {
+  test('InvitationsTable for Editor, render copy link tooltip on invitation link click, close tooltip on click outside', async () => {
     renderWithProviders(<InvitationsTable {...defaultProps} />, {
       preloadedState,
       route,
@@ -89,8 +91,17 @@ describe('InvitationsTable', () => {
       )}`,
     ];
 
-    expect(screen.getByTestId('dashboard-add-users-table')).toBeInTheDocument();
+    expect(screen.getByTestId(dataTestId)).toBeInTheDocument();
     tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
     invitationColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
+
+    const invitationLink = screen.getByTestId(`${dataTestId}-invitation-link`);
+    expect(invitationLink).toBeInTheDocument();
+    await userEvent.click(invitationLink);
+    expect(screen.getByTestId(`${dataTestId}-invitation-tooltip`)).toBeInTheDocument();
+    await userEvent.click(document.body);
+    await waitFor(() => {
+      expect(screen.queryByTestId(`${dataTestId}-invitation-tooltip`)).not.toBeInTheDocument();
+    });
   });
 });

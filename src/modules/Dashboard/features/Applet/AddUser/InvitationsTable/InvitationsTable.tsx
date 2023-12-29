@@ -11,7 +11,7 @@ import { DEFAULT_INVITATIONS_ROWS_PER_PAGE } from 'shared/components';
 import { StyledTitle } from '../AddUser.styles';
 import { getHeadCells, getInvitationsTableRows } from './InvitationsTable.utils';
 import { InvitationsTableProps } from './InvitationsTable.types';
-import { SCROLL_THRESHOLD } from './InvitationsTable.const';
+import { dataTestId, SCROLL_THRESHOLD } from './InvitationsTable.const';
 
 export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTableProps) => {
   const { t } = useTranslation('app');
@@ -63,7 +63,7 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
         rowsPerPage={DEFAULT_INVITATIONS_ROWS_PER_PAGE}
         maxHeight={'34.2rem'}
         onScroll={handleTableScroll}
-        data-testid="dashboard-add-users-table"
+        data-testid={dataTestId}
         {...tableProps}
       />
     </>
