@@ -13,7 +13,7 @@ export const SingleSelectResponseItem = ({
       <FormControlLabel
         key={option.id}
         disabled
-        control={<Radio disabled checked={option.value === answer?.value} />}
+        control={<Radio value={option.value} disabled checked={option.value === answer?.value} />}
         label={option.text}
         data-testid={`${dataTestid}-option-${index}`}
       />
