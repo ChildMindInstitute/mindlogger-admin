@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
@@ -36,6 +38,10 @@ Object.assign(navigator, {
 });
 
 describe('ShareApplet Component', () => {
+  beforeAll(() => {
+    navigator.clipboard.writeText.mockResolvedValue(undefined);
+  });
+
   test('renders the ShareApplet component with default values', () => {
     render(<ShareApplet {...defaultProps} />);
 
