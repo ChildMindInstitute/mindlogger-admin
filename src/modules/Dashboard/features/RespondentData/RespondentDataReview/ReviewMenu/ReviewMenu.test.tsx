@@ -1,5 +1,6 @@
+import { Suspense } from 'react';
 import { useForm } from 'react-hook-form';
-import { fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
 import {
@@ -141,8 +142,13 @@ describe('ReviewMenu', () => {
     });
   });
 
-  test('test change date of the month', () => {
-    renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
+  test('test change date of the month', async () => {
+    renderWithProviders(
+      <Suspense fallback={<></>}>
+        <ReviewMenuComponent />
+      </Suspense>,
+      { preloadedState, route, routePath },
+    );
 
     const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
     expect(inputContainer).toBeInTheDocument();
@@ -153,30 +159,38 @@ describe('ReviewMenu', () => {
 
     fireEvent.click(inputContainer);
 
-    const datepicker = screen.getByTestId(
+    const datepicker = (await screen.findByTestId(
       'respondents-review-menu-review-date-popover',
-    ) as HTMLElement;
+    )) as HTMLElement;
     expect(datepicker).toBeInTheDocument();
 
-    const december11 = datepicker.getElementsByClassName(
-      'react-datepicker__day react-datepicker__day--011',
-    );
-    expect(december11).toHaveLength(1);
+    act(() => {
+      const december11 = datepicker.getElementsByClassName(
+        'react-datepicker__day react-datepicker__day--011',
+      );
+      expect(december11).toHaveLength(1);
 
-    fireEvent.click(december11[0]);
+      fireEvent.click(december11[0]);
+    });
+
     expect(input.value).toEqual('11 Dec 2023');
   });
 
-  test('test change month', () => {
-    renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
+  test('test change month', async () => {
+    renderWithProviders(
+      <Suspense fallback={<></>}>
+        <ReviewMenuComponent />
+      </Suspense>,
+      { preloadedState, route, routePath },
+    );
 
     const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
 
     fireEvent.click(inputContainer);
 
-    const datepicker = screen.getByTestId(
+    const datepicker = (await screen.findByTestId(
       'respondents-review-menu-review-date-popover',
-    ) as HTMLElement;
+    )) as HTMLElement;
     expect(datepicker).toBeInTheDocument();
 
     const datepickerHeader = datepicker.getElementsByClassName(
