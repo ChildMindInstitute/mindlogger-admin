@@ -34,7 +34,7 @@ const {
   red_alfa30,
 } = variables.palette;
 
-const colorsArray = [
+export const colorsArray = [
   [blue, blue_alfa30],
   [green, green_alfa30],
   [orange, orange_alfa30],
