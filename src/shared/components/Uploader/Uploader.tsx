@@ -169,7 +169,6 @@ export const Uploader = ({
 
   const handleEditImg = (event: MouseEvent) => {
     stopDefaults(event);
-    handleRemoveImg();
     uploadInputRef?.current?.click();
   };
 
@@ -207,6 +206,7 @@ export const Uploader = ({
   const hasSizeError = error === UploadFileError.Size;
   const hasFormatError = error === UploadFileError.Format;
   const hasDimensionsError = error === UploadFileError.Dimensions;
+  const hasImageError = hasSizeError || hasFormatError || hasDimensionsError;
   const spinnerUiType = isPrimaryUiType ? SpinnerUiType.Primary : SpinnerUiType.Secondary;
 
   const fileName = imageField?.split('/').at(-1) || image?.name || '';
@@ -226,7 +226,7 @@ export const Uploader = ({
         {...dragEvents}
       >
         {isLoading && <Spinner uiType={spinnerUiType} />}
-        {imageField ? (
+        {imageField && !hasImageError ? (
           <UploadedImgContainer isPrimaryUiType={isPrimaryUiType} width={width} height={height}>
             <StyledUploadImg alt="file upload" src={imageField} isPrimaryUiType={isPrimaryUiType} />
             {isMouseOver && (

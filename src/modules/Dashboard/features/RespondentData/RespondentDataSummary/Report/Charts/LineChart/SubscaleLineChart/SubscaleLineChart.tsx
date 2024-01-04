@@ -13,6 +13,7 @@ import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 import { pluck } from 'shared/utils';
 
+import { ChartTooltipContainer } from '../../ChartTooltipContainer';
 import { getTicksData, legendMargin, setTooltipStyles } from '../../Charts.utils';
 import { LINK_PATTERN, locales } from '../../Charts.const';
 import { StyledChartContainer } from '../../Chart.styles';
@@ -26,6 +27,8 @@ import {
 import { ChartType } from '../../Chart.types';
 
 ChartJS.register(Tooltip, TimeScale, Legend);
+
+const dataTestid = 'subscale-line-chart';
 
 export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) => {
   const { i18n } = useTranslation('app');
@@ -114,16 +117,18 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
   );
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative' }} data-testid={dataTestid}>
       <StyledChartContainer sx={{ height: `${height}px` }}>{renderChart}</StyledChartContainer>
-      <ChartTooltip
+      <ChartTooltipContainer
         ref={tooltipRef}
-        dataPoints={tooltipData}
         onMouseEnter={() => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-      />
+        data-testid={dataTestid}
+      >
+        <ChartTooltip dataPoints={tooltipData} data-testid={dataTestid} />
+      </ChartTooltipContainer>
     </Box>
   );
 };

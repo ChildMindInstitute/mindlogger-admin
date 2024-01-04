@@ -72,7 +72,7 @@ export const FeedbackAssessment = ({
 
       if (!getEncryptedAnswers) return;
 
-      const answer = getEncryptedAnswers(answersToEncrypt);
+      const answer = await getEncryptedAnswers(answersToEncrypt);
 
       if (!appletId || !answerId) return;
 

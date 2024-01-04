@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 import {
   CalendarProps,
   Culture,
@@ -11,7 +10,7 @@ import {
 
 import { DateFormats } from 'shared/consts';
 import { variables } from 'shared/styles/variables';
-import { CalendarEvent, AllDayEventsSortedByDaysItem } from 'modules/Dashboard/state';
+import { CalendarEvent } from 'modules/Dashboard/state';
 import { formatToWeekYear, formatToYearMonthDate, getMoreText } from 'shared/utils/dateFormat';
 
 import { Toolbar } from './Toolbar';
@@ -19,7 +18,12 @@ import { MonthHeader } from './MonthHeader';
 import { Event, UiType } from './Event';
 import { MonthView } from './MonthView';
 import { YearView } from './YearView';
-import { AllDayEventsVisible, CalendarEventWrapperProps, CalendarViews } from './Calendar.types';
+import {
+  CalendarEventWrapperProps,
+  CalendarViews,
+  GetCalendarComponents,
+  GetHasWrapperMoreBtn,
+} from './Calendar.types';
 import { TimeHeader, UiType as TimeHeaderUiType } from './TimeHeader';
 import { TimeGutterHeader } from './TimeGutterHeader';
 import { EventWrapper, UiType as EventWrapperUiType } from './EventWrapper';
@@ -32,13 +36,12 @@ export const getDefaultStartDate = (date: Date) => {
   return date && newDate > date ? newDate : date || undefined;
 };
 
-export const getHasWrapperMoreBtn = (
-  activeView: CalendarViews,
-  events: CalendarEvent[],
-  date: Date,
-  isAllDayEventsVisible: AllDayEventsVisible,
-  allDayEventsSortedByDays: AllDayEventsSortedByDaysItem[],
-) => {
+export const getHasWrapperMoreBtn = ({
+  activeView,
+  date,
+  isAllDayEventsVisible,
+  allDayEventsSortedByDays,
+}: GetHasWrapperMoreBtn) => {
   const currentDate = formatToYearMonthDate(date);
   const currentWeek = formatToWeekYear(date);
   const hasDateHiddenEvents =
@@ -63,16 +66,16 @@ export const getHasWrapperMoreBtn = (
   }
 };
 
-export const getCalendarComponents = (
-  activeView: CalendarViews,
-  setActiveView: Dispatch<SetStateAction<CalendarViews>>,
-  date: Date,
-  setDate: Dispatch<SetStateAction<Date>>,
-  events: CalendarEvent[],
-  setEvents: Dispatch<SetStateAction<CalendarEvent[]>>,
-  isAllDayEventsVisible: AllDayEventsVisible,
-  setIsAllDayEventsVisible: Dispatch<SetStateAction<AllDayEventsVisible>>,
-) => ({
+export const getCalendarComponents = ({
+  activeView,
+  setActiveView,
+  date,
+  setDate,
+  events,
+  setEvents,
+  isAllDayEventsVisible,
+  setIsAllDayEventsVisible,
+}: GetCalendarComponents) => ({
   components: {
     toolbar: (props: ToolbarProps) => (
       <Toolbar {...props} activeView={activeView} setActiveView={setActiveView} />
@@ -189,14 +192,6 @@ export const eventPropGetter = (
   const isWeekEvent = activeView === CalendarViews.Week;
   const isScheduledTimeEvent = (isDayEvent || isWeekEvent) && !isAllDayEvent;
 
-  const getBgColor = () => {
-    if (isScheduledTimeEvent) {
-      return scheduledBackground;
-    }
-
-    return backgroundColor;
-  };
-
   return {
     style: {
       padding: 0,
@@ -204,7 +199,7 @@ export const eventPropGetter = (
       borderRadius: getBorderRadius(isScheduledTimeEvent, eventSpanAfter, eventSpanBefore),
       borderWidth: `0 0 0 ${isScheduledTimeEvent ? variables.borderWidth.xl : 0}`,
       borderColor: isScheduledTimeEvent ? scheduledColor : 'transparent',
-      backgroundColor: getBgColor(),
+      backgroundColor: isScheduledTimeEvent ? scheduledBackground : backgroundColor,
       maxWidth: isScheduledTimeEvent || isDayEvent ? 'unset' : '96%',
       margin: '0 auto',
     },

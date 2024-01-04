@@ -130,20 +130,25 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           },
         });
 
-        const decryptedAnswers = result.data.result.map((encryptedAnswer) => {
-          const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
-          const decryptedAnswer = getDecryptedActivityData({
-            userPublicKey,
-            answer,
-            items,
-            itemIds,
-          }).decryptedAnswers;
+        const encryptedAnswers = result.data.result;
+        const decryptedAnswers = [];
 
-          return {
+        for await (const encryptedAnswer of encryptedAnswers) {
+          const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
+          const decryptedAnswer = (
+            await getDecryptedActivityData({
+              userPublicKey,
+              answer,
+              items,
+              itemIds,
+            })
+          ).decryptedAnswers;
+
+          decryptedAnswers.push({
             decryptedAnswer,
             ...rest,
-          };
-        });
+          });
+        }
 
         // TODO: remove when backend add sorting
         const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) =>

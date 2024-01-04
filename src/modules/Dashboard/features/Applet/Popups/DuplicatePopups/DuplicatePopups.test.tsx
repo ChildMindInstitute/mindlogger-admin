@@ -2,10 +2,10 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
-import { mockedApplet, mockedPassword } from 'shared/mock';
+import { mockedApplet, mockedAppletData, mockedPassword } from 'shared/mock';
 import * as encryptionFunctions from 'shared/utils/encryption';
 
-import { DuplicatePopups } from '.';
+import { DuplicatePopups } from './DuplicatePopups';
 
 const preloadedState = {
   popups: {
@@ -33,10 +33,34 @@ describe('DuplicatePopups', () => {
     jest.restoreAllMocks();
   });
 
+  test('should show an error if the name already exists in database', async () => {
+    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name (1)' } } });
+
+    const { getByTestId, getByText } = renderWithProviders(<DuplicatePopups />, {
+      preloadedState,
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      fireEvent.click(getByText('Submit'));
+    });
+
+    await waitFor(() => expect(getByText(/That Applet name already exists/)).toBeInTheDocument());
+  });
+
   test('should duplicate and open success modal', async () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce(null);
-    jest.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(mockedEncryption);
+    mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
+    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    jest
+      .spyOn(encryptionFunctions, 'getEncryptionToServer')
+      .mockReturnValue(Promise.resolve(mockedEncryption));
+    jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
+      Promise.resolve({
+        getPrivateKey: () => [],
+      }),
+    );
 
     const { getByTestId, getByLabelText, getByText } = renderWithProviders(<DuplicatePopups />, {
       preloadedState,
@@ -46,6 +70,7 @@ describe('DuplicatePopups', () => {
       expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
+
     await waitFor(() => {
       fireEvent.change(getByLabelText('Password'), {
         target: { value: mockedPassword },

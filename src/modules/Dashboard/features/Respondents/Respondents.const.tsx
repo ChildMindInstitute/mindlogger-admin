@@ -17,19 +17,19 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       width: RespondentsColumnsWidth.Pin,
     },
     {
-      id: 'secretId',
+      id: 'secretIds',
       label: t('secretUserId'),
       enableSort: true,
       width: RespondentsColumnsWidth.Default,
     },
     {
-      id: 'nickname',
+      id: 'nicknames',
       label: t('nickname'),
       enableSort: true,
       width: RespondentsColumnsWidth.Default,
     },
     {
-      id: 'latestActive',
+      id: 'lastSeen',
       label: t('latestActive'),
       enableSort: true,
       width: RespondentsColumnsWidth.Default,
@@ -39,7 +39,6 @@ export const getHeadCells = (id?: string): HeadCell[] => {
           {
             id: 'schedule',
             label: t('schedule'),
-            enableSort: true,
             width: RespondentsColumnsWidth.Default,
           },
         ]

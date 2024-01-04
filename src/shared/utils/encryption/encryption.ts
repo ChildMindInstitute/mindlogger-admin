@@ -1,5 +1,3 @@
-import * as crypto from 'crypto-browserify';
-
 import config from './encryption.config';
 import {
   Encryption,
@@ -11,15 +9,16 @@ import { algorithm, encoding } from './encryption.const';
 
 const defaultBase = [2];
 
-export const getPrivateKey = ({ appletPassword, accountId }: GetPrivateKey) => {
-  const key1 = crypto.createHash('sha512').update(appletPassword).digest();
-  const key2 = crypto.createHash('sha512').update(accountId).digest();
+export const getPrivateKey = async ({ appletPassword, accountId }: GetPrivateKey) => {
+  const { createHash } = await import('crypto-browserify');
+  const key1 = createHash('sha512').update(appletPassword).digest();
+  const key2 = createHash('sha512').update(accountId).digest();
 
   return `${key1}${key2}`;
 };
 
-export const getEncryptionToServer = (appletPassword: string, accountId: string) => {
-  const encryptionInfo = getAppletEncryptionInfo({
+export const getEncryptionToServer = async (appletPassword: string, accountId: string) => {
+  const encryptionInfo = await getAppletEncryptionInfo({
     appletPassword,
     accountId,
   });
@@ -49,20 +48,21 @@ export const getParsedEncryptionFromServer = (encryption: Encryption): Encryptio
 
 export const getPrime = () => config.primes[Math.floor(Math.random() * 10)];
 
-export const getAppletEncryptionInfo = ({
+export const getAppletEncryptionInfo = async ({
   appletPassword,
   accountId,
   prime,
   base,
 }: GetAppletEncryptionInfo) => {
-  const key = crypto.createDiffieHellman(
+  const { createDiffieHellman } = await import('crypto-browserify');
+  const key = createDiffieHellman(
     Buffer.from(prime || getPrime()) as unknown as number,
     Buffer.from(base || defaultBase),
   );
 
   key.setPrivateKey(
     Buffer.from(
-      getPrivateKey({
+      await getPrivateKey({
         appletPassword,
         accountId,
       }),
@@ -73,25 +73,27 @@ export const getAppletEncryptionInfo = ({
   return key;
 };
 
-export const getAESKey = (
+export const getAESKey = async (
   appletPrivateKey: number[],
   userPublicKey: number[] | string,
   appletPrime: number[],
   base: number[],
 ) => {
-  const key = crypto.createDiffieHellman(Buffer.from(appletPrime), Buffer.from(base));
+  const { createDiffieHellman, createHash } = await import('crypto-browserify');
+  const key = createDiffieHellman(Buffer.from(appletPrime), Buffer.from(base));
   key.setPrivateKey(Buffer.from(appletPrivateKey));
 
   const secretKey = key.computeSecret(Buffer.from(userPublicKey));
 
-  return crypto.createHash('sha256').update(secretKey).digest();
+  return createHash('sha256').update(secretKey).digest();
 };
 
-export const decryptData = ({ text, key }: { text: string; key: number[] }) => {
+export const decryptData = async ({ text, key }: { text: string; key: number[] }) => {
+  const { createDecipheriv } = await import('crypto-browserify');
   const textParts = text.split(':');
   const initializationVector = Buffer.from(textParts.shift()!, encoding);
   const encryptedText = Buffer.from(textParts.join(':'), encoding);
-  const decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), initializationVector);
+  const decipher = createDecipheriv(algorithm, Buffer.from(key), initializationVector);
   const decrypted = decipher.update(encryptedText);
 
   try {
@@ -103,9 +105,10 @@ export const decryptData = ({ text, key }: { text: string; key: number[] }) => {
   }
 };
 
-export const encryptData = ({ text, key }: { text: string; key: number[] }) => {
-  const initializationVector: Buffer = crypto.randomBytes(config.IV_LENGTH);
-  const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), initializationVector);
+export const encryptData = async ({ text, key }: { text: string; key: number[] }) => {
+  const { createCipheriv, randomBytes } = await import('crypto-browserify');
+  const initializationVector: Buffer = randomBytes(config.IV_LENGTH);
+  const cipher = createCipheriv(algorithm, Buffer.from(key), initializationVector);
   let encrypted: Buffer = cipher.update(text);
 
   encrypted = Buffer.concat([encrypted, cipher.final()]);
@@ -113,5 +116,8 @@ export const encryptData = ({ text, key }: { text: string; key: number[] }) => {
   return `${initializationVector.toString(encoding)}:${encrypted.toString(encoding)}`;
 };
 
-export const publicEncrypt = (text: string, key: string) =>
-  crypto.publicEncrypt(Buffer.from(key), Buffer.from(text)).toString('base64');
+export const publicEncrypt = async (text: string, key: string) => {
+  const { publicEncrypt } = await import('crypto-browserify');
+
+  return publicEncrypt(Buffer.from(key), Buffer.from(text)).toString('base64');
+};

@@ -23,79 +23,86 @@ import { getABTrailsRecords } from 'shared/utils/exportData/getABTrailsRecords';
 import { getFlankerRecords } from 'shared/utils/exportData/getFlankerRecords';
 import { convertDateStampToMs } from 'shared/utils/exportData/convertDateStampToMs';
 
-export const getDrawingItemsData = (
+export const getDrawingItemsData = async (
   drawingItemsData: AppletExportData['drawingItemsData'],
   decryptedAnswers: DecryptedAnswerData[],
 ) => {
-  const drawingAnswers = decryptedAnswers.reduce((acc, item) => {
+  const data: ExportCsvData[] = [];
+  for await (const item of decryptedAnswers) {
     const responseType = item.activityItem?.responseType;
-    if (responseType !== ItemResponseType.Drawing || !item.answer) return acc;
+    if (responseType !== ItemResponseType.Drawing || !item.answer) continue;
+
     const drawingValue = (item.answer as DecryptedDrawingAnswer).value;
-
-    return acc.concat({
+    data.push({
       name: getMediaFileName(item, 'csv'),
-      data: convertJsonToCsv(getDrawingLines(drawingValue.lines, drawingValue.width || 100)),
+      data: await convertJsonToCsv(getDrawingLines(drawingValue.lines, drawingValue.width || 100)),
     });
-  }, [] as ExportCsvData[]);
+  }
 
-  return drawingItemsData.concat(...drawingAnswers);
+  return drawingItemsData.concat(data);
 };
 
-export const getStabilityTrackerItemsData = (
+export const getStabilityTrackerItemsData = async (
   stabilityTrackerItemsData: AppletExportData['stabilityTrackerItemsData'],
   decryptedAnswers: DecryptedAnswerData[],
 ) => {
-  const stabilityTrackerAnswers = decryptedAnswers.reduce((acc, item) => {
+  const data: ExportCsvData[] = [];
+  for await (const item of decryptedAnswers) {
     const responseType = item.activityItem?.responseType;
-    if (responseType !== ItemResponseType.StabilityTracker || !item.answer) return acc;
+    if (responseType !== ItemResponseType.StabilityTracker || !item.answer) continue;
 
     const answer = <DecryptedStabilityTrackerAnswer>item.answer;
     const stabilityTrackerValue = (answer as DecryptedStabilityTrackerAnswerObject).phaseType
       ? <DecryptedStabilityTrackerAnswerObject>answer
       : (answer.value as DecryptedStabilityTrackerAnswerObject);
-
-    return acc.concat({
+    data.push({
       name: getStabilityTrackerCsvName(item.id, stabilityTrackerValue.phaseType),
-      data: convertJsonToCsv(getStabilityRecords(stabilityTrackerValue.value)),
+      data: await convertJsonToCsv(getStabilityRecords(stabilityTrackerValue.value)),
     });
-  }, [] as ExportCsvData[]);
+  }
 
-  return stabilityTrackerItemsData.concat(...stabilityTrackerAnswers);
+  return stabilityTrackerItemsData.concat(data);
 };
 
-export const getABTrailsItemsData = (
+export const getABTrailsItemsData = async (
   abTrackerItemsData: AppletExportData['abTrailsItemsData'],
   decryptedAnswers: DecryptedAnswerData[],
 ) => {
-  const abTrackerAnswers = decryptedAnswers.reduce((acc, item, index) => {
+  const data: ExportCsvData[] = [];
+  let index = -1;
+  for await (const item of decryptedAnswers) {
+    index++;
     const responseType = item.activityItem?.responseType;
-    if (responseType !== ItemResponseType.ABTrails || !item.answer) return acc;
+    if (responseType !== ItemResponseType.ABTrails || !item.answer) continue;
 
     const abTrackerValue = (item.answer as DecryptedABTrailsAnswer).value;
-
-    return acc.concat({
+    data.push({
       name: getABTrailsCsvName(index, item.id),
-      data: convertJsonToCsv(getABTrailsRecords(abTrackerValue.lines, abTrackerValue.width || 100)),
+      data: await convertJsonToCsv(
+        getABTrailsRecords(abTrackerValue.lines, abTrackerValue.width || 100),
+      ),
     });
-  }, [] as ExportCsvData[]);
+  }
 
-  return abTrackerItemsData.concat(...abTrackerAnswers);
+  return abTrackerItemsData.concat(data);
 };
 
-export const getFlankerItemsData = (
+export const getFlankerItemsData = async (
   flankerItemsData: AppletExportData['flankerItemsData'],
   decryptedAnswers: DecryptedAnswerData[],
 ) => {
-  const flankerAnswers = decryptedAnswers.reduce((acc, item, itemIndex) => {
+  const data: ExportCsvData[] = [];
+  let itemIndex = -1;
+  for await (const item of decryptedAnswers) {
+    itemIndex++;
     const responseType = item.activityItem?.responseType;
-    if (responseType !== ItemResponseType.Flanker || !item.answer) return acc;
+    if (responseType !== ItemResponseType.Flanker || !item.answer) continue;
 
     const flankerValue =
       (item.answer as AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>)?.value ?? item.answer;
-
-    return acc.concat({
+    data.push({
       name: getFlankerCsvName(item),
-      data: convertJsonToCsv(
+      data: await convertJsonToCsv(
         getFlankerRecords({
           responses: flankerValue,
           item: item.activityItem,
@@ -104,7 +111,7 @@ export const getFlankerItemsData = (
         }),
       ),
     });
-  }, [] as ExportCsvData[]);
+  }
 
-  return flankerItemsData.concat(...flankerAnswers);
+  return flankerItemsData.concat(data);
 };
