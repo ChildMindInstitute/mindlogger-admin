@@ -338,6 +338,26 @@ const expectIsExpandedOrCollapsed = (testId, isExpanded) => {
   expect(expandIcon).toHaveClass(isExpanded ? 'svg-navigate-up' : 'svg-navigate-down');
 };
 
+const blockSequencesTest = (testId: string, label: string, value: number | boolean) => {
+  renderFlanker();
+
+  const field = screen.getByTestId(testId);
+  expect(field).toBeVisible();
+  label && expect(field).toHaveTextContent(label);
+
+  switch (true) {
+    case typeof value === 'number':
+      expect(field.querySelector('input')).toHaveValue(value);
+      break;
+    case typeof value === 'boolean' && value:
+      expect(field.querySelector('input')).toHaveAttribute('checked');
+      break;
+    case typeof value === 'boolean' && !value:
+      expect(field.querySelector('input')).not.toHaveAttribute('checked');
+      break;
+  }
+};
+
 describe('Flanker', () => {
   describe('Default Sections and Fields', () => {
     test.each`
@@ -476,23 +496,7 @@ describe('Flanker', () => {
       ${`${mockedFlankerTestid}-practice-round-round-options-show-feedback`}    | ${true} | ${'Show Feedback For Each Stimulus Screen'}    | ${'Practice Round Settings: Show Feedback For Each Stimulus Screen'}
       ${`${mockedFlankerTestid}-practice-round-round-options-show-summary`}     | ${true} | ${'Show Summary Screen'}                       | ${'Practice Round Settings: Show Summary Screen'}
     `('$description', ({ testId, value, label }) => {
-      renderFlanker();
-
-      const field = screen.getByTestId(testId);
-      expect(field).toBeVisible();
-      label && expect(field).toHaveTextContent(label);
-
-      switch (true) {
-        case typeof value === 'number':
-          expect(field.querySelector('input')).toHaveValue(value);
-          break;
-        case typeof value === 'boolean' && value:
-          expect(field.querySelector('input')).toHaveAttribute('checked');
-          break;
-        case typeof value === 'boolean' && !value:
-          expect(field.querySelector('input')).not.toHaveAttribute('checked');
-          break;
-      }
+      blockSequencesTest(testId, label, value);
     });
 
     test('Test Round Settings: Instruction', () => {
@@ -536,23 +540,7 @@ describe('Flanker', () => {
       ${`${mockedFlankerTestid}-test-round-round-options-show-feedback`}  | ${false} | ${'Show Feedback For Each Stimulus Screen'}    | ${'Test Round Settings: Show Feedback For Each Stimulus Screen'}
       ${`${mockedFlankerTestid}-test-round-round-options-show-summary`}   | ${true}  | ${'Show Summary Screen'}                       | ${'Test Round Settings: Show Summary Screen'}
     `('$description', ({ testId, value, label }) => {
-      renderFlanker();
-
-      const field = screen.getByTestId(testId);
-      expect(field).toBeVisible();
-      label && expect(field).toHaveTextContent(label);
-
-      switch (true) {
-        case typeof value === 'number':
-          expect(field.querySelector('input')).toHaveValue(value);
-          break;
-        case typeof value === 'boolean' && value:
-          expect(field.querySelector('input')).toHaveAttribute('checked');
-          break;
-        case typeof value === 'boolean' && !value:
-          expect(field.querySelector('input')).not.toHaveAttribute('checked');
-          break;
-      }
+      blockSequencesTest(testId, label, value);
     });
   });
 
@@ -623,7 +611,7 @@ describe('Flanker', () => {
     testId                                                     | attribute                 | description
     ${`${mockedFlankerTestid}-practice-round-block-sequences`} | ${'activities.0.items.1'} | ${'Practice Round: Block Sequences'}
     ${`${mockedFlankerTestid}-test-round-block-sequences`}     | ${'activities.0.items.7'} | ${'Test Round: Block Sequences'}
-  `('$description', async ({ testId, attribute }) => {
+  `('$description', async ({ testId }) => {
     const ref = renderFlanker();
 
     fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
@@ -693,12 +681,9 @@ describe('Flanker', () => {
       const ref = renderFlanker();
 
       await ref.current.trigger('activities');
+      const section = await screen.findByTestId(testId);
 
-      await waitFor(() => {
-        const section = screen.getByTestId(testId);
-
-        expect([...section.querySelectorAll('p')].at(-1)).toHaveTextContent(error);
-      });
+      expect([...section.querySelectorAll('p')].at(-1)).toHaveTextContent(error);
     });
 
     test.each`
@@ -713,12 +698,9 @@ describe('Flanker', () => {
 
       ref.current.setValue(attribute, '');
       await ref.current.trigger('activities');
+      const instruction = await screen.findByTestId(testId);
 
-      await waitFor(() => {
-        const instruction = screen.getByTestId(testId);
-
-        expect(instruction).toHaveTextContent(error);
-      });
+      expect(instruction).toHaveTextContent(error);
     });
   });
 });
