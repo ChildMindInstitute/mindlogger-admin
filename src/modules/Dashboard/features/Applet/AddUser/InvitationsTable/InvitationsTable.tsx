@@ -1,22 +1,34 @@
+import { useState, UIEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
 import { DashboardTable } from 'modules/Dashboard/components';
 import { useTable } from 'shared/hooks';
-import { capitalize } from 'shared/utils';
-import { DateFormats } from 'shared/consts';
 import { getInvitationsApi } from 'api';
 import { theme } from 'shared/styles';
 import { DEFAULT_INVITATIONS_ROWS_PER_PAGE } from 'shared/components';
 
-import { getHeadCells } from './InvitationsTable.const';
 import { StyledTitle } from '../AddUser.styles';
+import { getHeadCells, getInvitationsTableRows } from './InvitationsTable.utils';
 import { InvitationsTableProps } from './InvitationsTable.types';
+import { dataTestId, SCROLL_THRESHOLD } from './InvitationsTable.const';
 
 export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTableProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
+  const [openTooltipIndex, setOpenTooltipIndex] = useState(-1);
+
+  const handleTooltipClose = () => {
+    setOpenTooltipIndex(-1);
+  };
+
+  const handleTableScroll = (event: UIEvent<HTMLDivElement>) => {
+    const scrollPosition = event.currentTarget.scrollTop;
+
+    if (scrollPosition > SCROLL_THRESHOLD) {
+      setOpenTooltipIndex(-1);
+    }
+  };
 
   const tableProps = useTable(async (args) => {
     const params = {
@@ -31,43 +43,12 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
     data && setInvitations(data);
   }, DEFAULT_INVITATIONS_ROWS_PER_PAGE);
 
-  const rows = invitations?.result.map(
-    ({ meta, firstName, lastName, role, email, key, createdAt }) => {
-      const capitalizedRole = capitalize(role);
-
-      return {
-        secretUserId: {
-          content: () => meta?.secret_user_id ?? '',
-          value: meta?.secret_user_id ?? '',
-        },
-        firstName: {
-          content: () => firstName,
-          value: firstName,
-        },
-        lastName: {
-          content: () => lastName,
-          value: lastName,
-        },
-        role: {
-          content: () => capitalizedRole,
-          value: capitalizedRole,
-        },
-        email: {
-          content: () => email,
-          value: email,
-        },
-        invitationLink: {
-          content: () => `${process.env.REACT_APP_WEB_URI || ''}/invitation/${key}`,
-          value: key,
-        },
-        dateTimeInvited: {
-          content: () =>
-            `${format(new Date(`${createdAt}Z`), DateFormats.YearMonthDayHoursMinutesSeconds)}`,
-          value: createdAt,
-        },
-      };
-    },
-  );
+  const rows = getInvitationsTableRows({
+    invitations,
+    setOpenTooltipIndex,
+    openTooltipIndex,
+    handleTooltipClose,
+  });
 
   const emptyComponent = rows?.length ? undefined : t('noPendingInvitations');
 
@@ -80,7 +61,9 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
         count={invitations?.count || 0}
         emptyComponent={emptyComponent}
         rowsPerPage={DEFAULT_INVITATIONS_ROWS_PER_PAGE}
-        data-testid="dashboard-add-users-table"
+        maxHeight={'34.2rem'}
+        onScroll={handleTableScroll}
+        data-testid={dataTestId}
         {...tableProps}
       />
     </>
