@@ -338,7 +338,7 @@ const expectIsExpandedOrCollapsed = (testId, isExpanded) => {
   expect(expandIcon).toHaveClass(isExpanded ? 'svg-navigate-up' : 'svg-navigate-down');
 };
 
-const blockSequencesTest = (testId: string, label: string, value: number | boolean) => {
+const blockSequencesTest = (testId, label, value) => {
   renderFlanker();
 
   const field = screen.getByTestId(testId);
