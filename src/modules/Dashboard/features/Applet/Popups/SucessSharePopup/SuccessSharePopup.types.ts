@@ -8,4 +8,5 @@ export type SuccessSharePopupProps = {
   libraryUrl: string;
   sharePopupVisible: boolean;
   setSharePopupVisible: Dispatch<SetStateAction<boolean>>;
+  'data-testid'?: string;
 };
