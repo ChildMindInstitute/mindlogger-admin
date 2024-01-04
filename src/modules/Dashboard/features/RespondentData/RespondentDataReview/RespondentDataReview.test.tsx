@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { Suspense } from 'react';
 import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
@@ -235,11 +236,16 @@ describe('RespondentDataReview', () => {
 
     dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
-    renderWithProviders(<RespondentDataReview />, {
-      preloadedState,
-      route,
-      routePath,
-    });
+    renderWithProviders(
+      <Suspense fallback={<></>}>
+        <RespondentDataReview />
+      </Suspense>,
+      {
+        preloadedState,
+        route,
+        routePath,
+      },
+    );
 
     window.HTMLElement.prototype.scrollTo = () => {};
 
@@ -297,9 +303,11 @@ describe('RespondentDataReview', () => {
     expect(input).toBeInTheDocument();
     expect(input.value).toEqual('27 Dec 2023');
 
-    await userEvent.click(inputContainer);
+    userEvent.click(inputContainer);
 
-    const datepicker = screen.getByTestId(`${dataTestid}-menu-review-date-popover`) as HTMLElement;
+    const datepicker = (await screen.findByTestId(
+      `${dataTestid}-menu-review-date-popover`,
+    )) as HTMLElement;
 
     expect(datepicker).toBeInTheDocument();
 
