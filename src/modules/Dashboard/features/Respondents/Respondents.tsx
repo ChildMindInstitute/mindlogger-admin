@@ -180,17 +180,17 @@ export const Respondents = () => {
         onClick: () => handlePinClick(id),
         width: RespondentsColumnsWidth.Pin,
       },
-      secretId: {
+      secretIds: {
         content: () => stringSecretIds,
         value: stringSecretIds,
         width: RespondentsColumnsWidth.Default,
       },
-      nickname: {
+      nicknames: {
         content: () => stringNicknames,
         value: stringNicknames,
         width: RespondentsColumnsWidth.Default,
       },
-      latestActive: {
+      lastSeen: {
         content: () => latestActive,
         value: latestActive,
         width: RespondentsColumnsWidth.Default,
