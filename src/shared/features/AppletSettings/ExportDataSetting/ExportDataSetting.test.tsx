@@ -1,9 +1,9 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { addDays } from 'date-fns';
+import { addDays, format } from 'date-fns';
 
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
-import { Roles } from 'shared/consts';
+import { DateFormats, Roles } from 'shared/consts';
 import { mockedAppletId, mockedCurrentWorkspace, mockedApplet } from 'shared/mock';
 import { SettingParam, renderWithProviders } from 'shared/utils';
 
@@ -62,6 +62,7 @@ describe('ExportDataSetting', () => {
     });
   });
 
+  // prettier-ignore
   describe('should appear export data popup for \'choose dates\' date range', () => {
     test.each`
       route                                                                 | routePath                         | description
@@ -83,7 +84,7 @@ describe('ExportDataSetting', () => {
       expect(fromDate).toBeVisible();
       expect(fromDateInput?.value).toBe('14 Nov 2023');
       expect(toDate).toBeVisible();
-      expect(toDateInput?.value).toBe('27 Dec 2023');
+      expect(toDateInput?.value).toBe(format(new Date(), DateFormats.DayMonthYear));
 
       fromDateInput && fireEvent.change(fromDateInput, { target: { value: addDays(date, 1) } });
       toDateInput && fireEvent.change(toDateInput, { target: { value: addDays(date, -1) } });
