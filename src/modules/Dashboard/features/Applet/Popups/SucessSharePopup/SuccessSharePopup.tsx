@@ -12,6 +12,7 @@ export const SuccessSharePopup = ({
   libraryUrl,
   sharePopupVisible,
   setSharePopupVisible,
+  'data-testid': dataTestid,
 }: SuccessSharePopupProps) => {
   const { t } = useTranslation();
 
@@ -23,7 +24,7 @@ export const SuccessSharePopup = ({
       title={t('appletIsSharedWithLibrary')}
       buttonText={t('ok')}
       width="60"
-      data-testid="dashboard-applets-share-popup-success-popup"
+      data-testid={dataTestid}
     >
       <SuccessShared
         title={applet.displayName}

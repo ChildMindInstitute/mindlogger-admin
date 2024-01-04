@@ -50,13 +50,16 @@ describe('TransferOwnershipSetting', () => {
       fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: mockedEmail } });
       fireEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
 
-      await waitFor(() => expect(screen.getByTestId(`${dataTestid}-success-popup`)).toBeVisible());
+      const successPopup = await screen.findByTestId(`${dataTestid}-success-popup`);
+      expect(successPopup).toBeVisible();
 
       fireEvent.click(screen.getByText('Ok'));
 
-      await waitFor(() =>
-        expect(screen.queryByTestId(`${dataTestid}-success-popup`)).not.toBeInTheDocument(),
-      );
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('applet-settings-share-to-library-success-popup'),
+        ).not.toBeInTheDocument();
+      });
     });
   });
 });
