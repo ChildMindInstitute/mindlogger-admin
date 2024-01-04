@@ -6,6 +6,7 @@ import { mockedApplet } from 'shared/mock';
 import { SuccessSharePopup } from './SuccessSharePopup';
 
 const setSharePopupVisibleMock = jest.fn();
+const dataTestId = 'applet-settings-share-to-library-success-popup';
 
 describe('SuccessSharePopup', () => {
   test('should render and submit', () => {
@@ -16,10 +17,11 @@ describe('SuccessSharePopup', () => {
         libraryUrl="libraryUrl"
         sharePopupVisible={true}
         setSharePopupVisible={setSharePopupVisibleMock}
+        data-testid={dataTestId}
       />,
     );
 
-    expect(screen.getByTestId('dashboard-applets-share-popup-success-popup')).toBeVisible();
+    expect(screen.getByTestId(dataTestId)).toBeVisible();
     expect(screen.getByText('displayName')).toBeVisible();
     expect(screen.getByText('keyword1')).toBeVisible();
 

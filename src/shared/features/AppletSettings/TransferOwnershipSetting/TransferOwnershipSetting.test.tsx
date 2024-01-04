@@ -1,4 +1,5 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { SettingParam, renderWithProviders } from 'shared/utils';
@@ -47,18 +48,26 @@ describe('TransferOwnershipSetting', () => {
       expect(screen.getByTestId(`${dataTestid}-form`)).toBeVisible();
       expect(screen.getByTestId(`${dataTestid}-confirm`)).toBeVisible();
 
-      fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: mockedEmail } });
-      fireEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
+      userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
+
+      await waitFor(() => {
+        expect(mockAxios.post).nthCalledWith(
+          1,
+          `/applets/${mockedAppletId}/transferOwnership`,
+          { email: mockedEmail },
+          { signal: undefined },
+        );
+      });
+
+      userEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
 
       const successPopup = await screen.findByTestId(`${dataTestid}-success-popup`);
       expect(successPopup).toBeVisible();
 
-      fireEvent.click(screen.getByText('Ok'));
+      userEvent.click(screen.getByText('Ok'));
 
       await waitFor(() => {
-        expect(
-          screen.queryByTestId('applet-settings-share-to-library-success-popup'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId(`${dataTestid}-success-popup`)).not.toBeInTheDocument();
       });
     });
   });
