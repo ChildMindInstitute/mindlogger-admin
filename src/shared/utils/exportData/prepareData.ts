@@ -15,7 +15,7 @@ import {
 } from './getItemsData';
 import { getActivityJourneyData, getMediaData, getReportData } from './getReportAndMediaData';
 
-const getDefaultExportData = (): AppletExportData => ({
+export const getDefaultExportData = (): AppletExportData => ({
   reportData: [],
   activityJourneyData: [],
   mediaData: [],
