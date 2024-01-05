@@ -82,9 +82,9 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     selectedRespondent?.nickname,
   );
 
-  const scheduleChangeHandler = (event: SelectEvent) => {
+  const scheduleChangeHandler = async (event: SelectEvent) => {
     const { value } = event.target;
-    setSchedule(value);
+    await setSchedule(value);
     if (value === ScheduleOptions.IndividualSchedule) {
       setSearchPopupVisible(true);
       Mixpanel.track('View Individual calendar click');
