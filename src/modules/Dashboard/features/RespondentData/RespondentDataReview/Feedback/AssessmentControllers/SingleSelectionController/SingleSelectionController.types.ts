@@ -5,4 +5,5 @@ import { SingleSelectItemAnswer } from 'modules/Dashboard/features/RespondentDat
 export type SingleSelectionProps<T extends FieldValues> = {
   activityItem: SingleSelectItemAnswer;
   isDisabled: boolean;
+  'data-testid'?: string;
 } & UseControllerProps<T>;

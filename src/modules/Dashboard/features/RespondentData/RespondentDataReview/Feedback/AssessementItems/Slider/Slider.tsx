@@ -10,6 +10,7 @@ export const Slider = ({
   isDisabled = false,
   onChange,
   value,
+  'data-testid': dataTestid,
   ...sliderProps
 }: SliderProps) => {
   const {
@@ -36,12 +37,20 @@ export const Slider = ({
         max={maxValueNumber}
         valueLabelDisplay="auto"
         onChange={(_, value) => onChange && onChange(value)}
+        data-testid={dataTestid}
       />
       <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
         <StyledDescriptionItem sx={{ alignItems: 'start' }}>
-          {minImage && <StyledImage sx={{ opacity: isDisabled ? 0.6 : 1 }} src={minImage} />}
+          {minImage && (
+            <StyledImage
+              data-testid={`${dataTestid}-min-image`}
+              sx={{ opacity: isDisabled ? 0.6 : 1 }}
+              src={minImage}
+            />
+          )}
           {minLabel && (
             <StyledBodySmall
+              data-testid={`${dataTestid}-min-label`}
               sx={{ textAlign: 'start' }}
               color={variables.palette.on_surface_variant}
             >
@@ -50,9 +59,19 @@ export const Slider = ({
           )}
         </StyledDescriptionItem>
         <StyledDescriptionItem sx={{ alignItems: 'end' }}>
-          {maxImage && <StyledImage sx={{ opacity: isDisabled ? 0.6 : 1 }} src={maxImage} />}
+          {maxImage && (
+            <StyledImage
+              data-testid={`${dataTestid}-max-image`}
+              sx={{ opacity: isDisabled ? 0.6 : 1 }}
+              src={maxImage}
+            />
+          )}
           {maxLabel && (
-            <StyledBodySmall sx={{ textAlign: 'end' }} color={variables.palette.on_surface_variant}>
+            <StyledBodySmall
+              data-testid={`${dataTestid}-max-label`}
+              sx={{ textAlign: 'end' }}
+              color={variables.palette.on_surface_variant}
+            >
               {maxLabel}
             </StyledBodySmall>
           )}
