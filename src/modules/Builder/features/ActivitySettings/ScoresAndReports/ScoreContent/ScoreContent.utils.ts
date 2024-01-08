@@ -71,10 +71,9 @@ export const getScoreRange = (itemsScore: ItemsWithScore[], calculationType: Cal
   const count = itemsScore.length;
 
   itemsScore.forEach((item) => {
-    if (item.config.skippableItem) return;
-
     const { minScore, maxScore } = getItemScoreRange(item);
-    totalMinScore += minScore;
+
+    if (!item.config.skippableItem) totalMinScore += minScore;
     totalMaxScore += maxScore;
   });
 
