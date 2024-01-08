@@ -112,9 +112,11 @@ export const LeftBar = ({
 
   const handleChangeItemVisibility = (itemName: string) => {
     const item = getValues(itemName);
-    const prevValue = item?.isHidden;
+    const newValue = !item?.isHidden;
     const itemKey = getEntityKey(item);
-    setValue(`${itemName}.isHidden`, !prevValue);
+    setValue(`${itemName}.isHidden`, newValue);
+
+    if (!newValue) return;
 
     const reports: ScoreOrSection[] = getValues(`${fieldName}.scoresAndReports.reports`) ?? [];
 
