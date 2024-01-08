@@ -3,7 +3,7 @@ import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -56,11 +56,13 @@ export const ScoreContent = ({
   scoreItems,
 }: ScoreContentProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue } = useCustomFormContext();
+  const { control, setValue, getValues } = useCustomFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
+  const { fieldName } = useCurrentActivity();
 
+  const reportsName = `${fieldName}.scoresAndReports.reports`;
   const scoreConditionalsName = `${name}.conditionalLogic`;
 
   const score = useWatch({ name });
@@ -98,7 +100,13 @@ export const ScoreContent = ({
 
   const onChangeScoreId = () => {
     const updatedScoreId = getScoreId(scoreName, calculationType);
-    updateMessagesWithVariable(setValue, name, score, updatedScoreId);
+    updateMessagesWithVariable(
+      setValue,
+      `${fieldName}.scoresAndReports.reports`,
+      getValues(reportsName),
+      score.id,
+      updatedScoreId,
+    );
 
     setValue(`${name}.id`, updatedScoreId);
     setPrevScoreName(scoreName);

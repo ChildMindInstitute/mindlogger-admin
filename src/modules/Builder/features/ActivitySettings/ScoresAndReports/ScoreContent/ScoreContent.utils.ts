@@ -1,8 +1,13 @@
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
 import i18n from 'i18n';
-import { ScoreReport, SingleAndMultiSelectOption } from 'shared/state';
-import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
+import { ScoreOrSection, ScoreReport, SingleAndMultiSelectOption } from 'shared/state';
+import {
+  ItemResponseType,
+  CalculationType,
+  ConditionalLogicMatch,
+  ScoreReportType,
+} from 'shared/consts';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 import { GetScoreRangeLabel, ItemsWithScore } from './ScoreContent.types';
@@ -136,20 +141,27 @@ const updateMessage = (
 
 export const updateMessagesWithVariable = (
   setValue: UseFormSetValue<FieldValues>,
-  name: string,
-  score: ScoreReport,
+  reportsName: string,
+  reports: ScoreOrSection[],
+  oldScoreId: string,
   newScoreId: string,
 ) => {
-  const { id, showMessage, message, conditionalLogic } = score;
-  updateMessage(setValue, name, id, newScoreId, showMessage, message);
-  conditionalLogic?.forEach((condition, index) =>
-    updateMessage(
-      setValue,
-      `${name}.conditionalLogic.[${index}]`,
-      id,
-      newScoreId,
-      condition.showMessage,
-      condition.message,
-    ),
-  );
+  reports.forEach((report, index) => {
+    const { type, showMessage, message, conditionalLogic } = report;
+    const reportName = `${reportsName}.${index}`;
+    updateMessage(setValue, reportName, oldScoreId, newScoreId, showMessage, message);
+
+    if (type === ScoreReportType.Score) {
+      conditionalLogic?.forEach((condition, key) =>
+        updateMessage(
+          setValue,
+          `${reportName}.conditionalLogic.${key}`,
+          oldScoreId,
+          newScoreId,
+          condition.showMessage,
+          condition.message,
+        ),
+      );
+    }
+  });
 };
