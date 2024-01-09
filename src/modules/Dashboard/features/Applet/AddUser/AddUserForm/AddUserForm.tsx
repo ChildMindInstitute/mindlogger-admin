@@ -3,14 +3,14 @@ import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import Grid from '@mui/material/Grid';
+import { Button, Grid } from '@mui/material';
 
 import {
   InputController,
   SelectController,
   TagsInputController,
 } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
+import { StyledErrorText, StyledFlexTopCenter, StyledTitleMedium, theme } from 'shared/styles';
 import { AppletInvitationOptions, getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
 import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
@@ -19,10 +19,18 @@ import { users, workspaces } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
 
-import { StyledButton, StyledRow, StyledResetButton, StyledTooltip } from './AddUserForm.styles';
-import { Fields, fields, defaultValues, langs, getRoles } from './AddUserForm.const';
+import { StyledRow, StyledTooltip } from './AddUserForm.styles';
+import {
+  dataTestId,
+  defaultValues,
+  Fields,
+  getRoles,
+  languages,
+  nameFields,
+  SubmitBtnType,
+} from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
-import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types';
+import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl } from './AddUserForm.utils';
 import { useFormError } from './AddUserForm.hooks';
 
@@ -41,14 +49,15 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     label: `${details?.[0].accessId} (${details?.[0].respondentNickname})`,
     id,
   }));
-  const { handleSubmit, control, watch, reset, register, unregister, setError } =
-    useForm<FormValues>({
+  const { handleSubmit, control, watch, reset, register, unregister, setError, setValue } =
+    useForm<AddUserFormValues>({
       resolver: yupResolver(AddUserSchema(workspaceNameVisible)),
       defaultValues,
-      mode: 'onChange',
+      mode: 'onSubmit',
     });
 
   const role = watch(Fields.role);
+  const isRespondentRole = role === Roles.Respondent;
 
   const commonProps = {
     fullWidth: true,
@@ -70,25 +79,28 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     setWorkspaceInfo(res?.data?.result || null);
   });
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = (values: AddUserFormValues) => {
+    Mixpanel.track('Invitation submitted click');
+    if (!appletId) return;
+    const { submitBtnType, ...restValues } = values;
     const options = {
-      ...values,
-      ...(values.respondents && { respondents: values.respondents.map((item) => item.id) }),
+      ...restValues,
+      ...(restValues.respondents && { respondents: restValues.respondents.map((item) => item.id) }),
     } as AppletInvitationOptions;
 
-    if (appletId) {
+    if (submitBtnType === SubmitBtnType.WithInvitation) {
       executePostAppletInvitationApi({
-        url: getUrl(values.role),
+        url: getUrl(restValues.role),
         appletId,
         options,
       });
+    } else if (submitBtnType === SubmitBtnType.WithoutInvitation) {
+      console.log('without invitation click');
     }
-
-    Mixpanel.track('Invitation submitted click');
   };
 
-  const updateFields = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { value } = e.target;
+  const updateFields = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { value } = event.target;
     const { nickname, secretUserId, workspacePrefix, respondents } = Fields;
 
     if (value !== Roles.Respondent && value !== Roles.Reviewer) {
@@ -110,6 +122,8 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     }
   };
 
+  const hasCommonError = useFormError({ error, setError });
+
   useEffect(() => {
     if (ownerId) {
       const { getAllWorkspaceRespondents } = users.thunk;
@@ -123,8 +137,6 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     }
   }, [ownerId]);
 
-  const hasCommonError = useFormError({ error, setError });
-
   return (
     <>
       <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }}>
@@ -132,18 +144,6 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
       </StyledTitleMedium>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={2.4} alignItems="flex-start">
-          <Grid container item xs={12} spacing={2.4}>
-            {fields.map(({ name, 'data-testid': dataTestId }) => (
-              <Grid item xs={4} key={name}>
-                <InputController
-                  {...commonProps}
-                  name={name}
-                  label={t(name)}
-                  data-testid={dataTestId}
-                />
-              </Grid>
-            ))}
-          </Grid>
           <Grid item xs={4}>
             <SelectController
               {...commonProps}
@@ -151,9 +151,47 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
               options={getRoles(roles)}
               label={t('role')}
               customChange={updateFields}
-              data-testid="dashboard-add-users-role"
+              data-testid={`${dataTestId}-role`}
             />
           </Grid>
+          {isRespondentRole && (
+            <Grid item xs={4}>
+              <InputController
+                {...commonProps}
+                name={Fields.secretUserId}
+                label={t(Fields.secretUserId)}
+                data-testid={`${dataTestId}-secret-id`}
+              />
+            </Grid>
+          )}
+          <Grid item xs={4}>
+            <InputController
+              {...commonProps}
+              name={Fields.email}
+              label={isRespondentRole ? t('respondentEmail') : t(Fields.email)}
+              data-testid={`${dataTestId}-email`}
+            />
+          </Grid>
+          {nameFields.map(({ name, 'data-testid': dataTestId }) => (
+            <Grid item xs={4} key={name}>
+              <InputController
+                {...commonProps}
+                name={name}
+                label={t(name)}
+                data-testid={dataTestId}
+              />
+            </Grid>
+          ))}
+          {isRespondentRole && (
+            <Grid item xs={4}>
+              <InputController
+                {...commonProps}
+                name={Fields.nickname}
+                label={t('nicknameOptional')}
+                data-testid={`${dataTestId}-nickname`}
+              />
+            </Grid>
+          )}
           {role === Roles.Reviewer && (
             <Grid item xs={4}>
               <TagsInputController
@@ -165,29 +203,9 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
                 noOptionsText={
                   respondents?.length ? t('noRespondentsToSelect') : t('noRespondentsYet')
                 }
-                data-testid="dashboard-add-users-respondents"
+                data-testid={`${dataTestId}-respondents`}
               />
             </Grid>
-          )}
-          {role === Roles.Respondent && (
-            <>
-              <Grid item xs={4}>
-                <InputController
-                  {...commonProps}
-                  name={Fields.nickname}
-                  label={t('nickname')}
-                  data-testid="dashboard-add-users-nickname"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <InputController
-                  {...commonProps}
-                  name={Fields.secretUserId}
-                  label={t('secretUserId')}
-                  data-testid="dashboard-add-users-secret-id"
-                />
-              </Grid>
-            </>
           )}
           {workspaceNameVisible && role !== Roles.Respondent && (
             <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -195,7 +213,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
                 {...commonProps}
                 name={Fields.workspacePrefix}
                 label={t('workspaceName')}
-                data-testid="dashboard-add-users-workspace"
+                data-testid={`${dataTestId}-workspace`}
               />
               <Tooltip tooltipTitle={t('workspaceTooltip')}>
                 <StyledTooltip>
@@ -208,9 +226,9 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
             <SelectController
               {...commonProps}
               name={Fields.language}
-              options={langs}
+              options={languages}
               label={t('language')}
-              data-testid="dashboard-add-users-lang"
+              data-testid={`${dataTestId}-lang`}
             />
             <Tooltip tooltipTitle={t('languageTooltip')}>
               <StyledTooltip>
@@ -220,16 +238,41 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           </Grid>
         </Grid>
         <StyledRow>
-          <StyledButton variant="contained" type="submit" data-testid="dashboard-add-users-send">
-            {t('sendInvitation')}
-          </StyledButton>
-          <StyledResetButton
-            variant="outlined"
-            onClick={resetForm}
-            data-testid="dashboard-add-users-reset"
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={() => setValue('submitBtnType', SubmitBtnType.WithInvitation)}
+            data-testid={`${dataTestId}-send`}
           >
-            {t('resetForm')}
-          </StyledResetButton>
+            {t('sendInvitation')}
+          </Button>
+          {isRespondentRole ? (
+            <StyledFlexTopCenter>
+              <Button
+                type="submit"
+                variant="outlined"
+                sx={{ ml: theme.spacing(1.2) }}
+                onClick={() => setValue('submitBtnType', SubmitBtnType.WithoutInvitation)}
+                data-testid={`${dataTestId}-send-without-inviting`}
+              >
+                {t('addWithoutInviting')}
+              </Button>
+              <Tooltip tooltipTitle={t('addWithoutInvitingTooltip')}>
+                <StyledTooltip>
+                  <Svg id="more-info-outlined" />
+                </StyledTooltip>
+              </Tooltip>
+            </StyledFlexTopCenter>
+          ) : (
+            <Button
+              variant="outlined"
+              sx={{ ml: theme.spacing(1.2) }}
+              onClick={resetForm}
+              data-testid={`${dataTestId}-reset`}
+            >
+              {t('resetForm')}
+            </Button>
+          )}
         </StyledRow>
       </form>
       {hasCommonError && (

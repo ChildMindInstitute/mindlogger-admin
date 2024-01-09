@@ -1,8 +1,9 @@
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { Roles } from 'shared/consts';
-import { getEmailValidationSchema } from 'shared/utils';
+import { EMAIL_REGEXP, Roles } from 'shared/consts';
+
+import { SubmitBtnType } from './AddUserForm.const';
 
 export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
   const { t } = i18n;
@@ -13,7 +14,28 @@ export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
 
   return yup
     .object({
-      email: getEmailValidationSchema(),
+      submitBtnType: yup.string().oneOf(Object.values(SubmitBtnType)).required(),
+      email: yup
+        .string()
+        .test('isWithInvitation', t('emailRequired'), function (value) {
+          const submitBtnType = this.parent?.submitBtnType;
+          if (submitBtnType === SubmitBtnType.WithInvitation) {
+            return value !== undefined && value !== '';
+          }
+
+          return true;
+        })
+        .test('isCorrectEmail', t('incorrectEmail'), function (value) {
+          const submitBtnType = this.parent?.submitBtnType;
+          if (
+            value !== undefined &&
+            (submitBtnType === SubmitBtnType.WithInvitation || value !== '')
+          ) {
+            return EMAIL_REGEXP.test(value);
+          }
+
+          return true;
+        }),
       firstName: yup.string().required(firstNameRequired),
       lastName: yup.string().required(lastNameRequired),
       nickName: yup.string(),

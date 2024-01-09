@@ -75,10 +75,10 @@ describe('AddUser component tests', () => {
     fireEvent.change(screen.getByLabelText('Last Name'), {
       target: { value: invitation.lastName },
     });
-    fireEvent.change(screen.getByLabelText('Email'), {
+    fireEvent.change(screen.getByLabelText('Email (only required for invitation)'), {
       target: { value: invitation.email },
     });
-    fireEvent.change(screen.getByLabelText('Secret User ID'), {
+    fireEvent.change(screen.getByLabelText('ID'), {
       target: { value: invitation.meta.secret_user_id },
     });
     fireEvent.click(screen.getByText('Send Invitation'));

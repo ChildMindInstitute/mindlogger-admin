@@ -1,11 +1,7 @@
 import { Roles } from 'shared/consts';
+import { Languages } from 'shared/api';
 
 import { Field } from './AddUserForm.types';
-
-export const Langs = {
-  fr: 'fr',
-  en: 'en',
-} as const;
 
 export const Fields = {
   firstName: 'firstName',
@@ -24,8 +20,9 @@ export const getRoles = (roles?: Roles[]) => [
     labelKey: Roles.Respondent,
     value: Roles.Respondent,
   },
-  ...(!roles?.includes(Roles.Coordinator)
-    ? [
+  ...(roles?.includes(Roles.Coordinator)
+    ? []
+    : [
         {
           labelKey: Roles.Manager,
           value: Roles.Manager,
@@ -38,26 +35,25 @@ export const getRoles = (roles?: Roles[]) => [
           labelKey: Roles.Editor,
           value: Roles.Editor,
         },
-      ]
-    : []),
+      ]),
   {
     labelKey: Roles.Reviewer,
     value: Roles.Reviewer,
   },
 ];
 
-export const langs = [
+export const languages = [
   {
-    labelKey: Langs.fr,
-    value: Langs.fr,
+    labelKey: Languages.FR,
+    value: Languages.FR,
   },
   {
-    labelKey: Langs.en,
-    value: Langs.en,
+    labelKey: Languages.EN,
+    value: Languages.EN,
   },
 ];
 
-export const fields: Field[] = [
+export const nameFields: Field[] = [
   {
     name: Fields.firstName,
     'data-testid': 'dashboard-add-users-fname',
@@ -66,11 +62,12 @@ export const fields: Field[] = [
     name: Fields.lastName,
     'data-testid': 'dashboard-add-users-lname',
   },
-  {
-    name: Fields.email,
-    'data-testid': 'dashboard-add-users-email',
-  },
 ];
+
+export enum SubmitBtnType {
+  WithInvitation = 'withInvitation',
+  WithoutInvitation = 'withoutInvitation',
+}
 
 export const defaultValues = {
   firstName: '',
@@ -79,5 +76,10 @@ export const defaultValues = {
   email: '',
   secretUserId: '',
   role: Roles.Respondent,
-  language: Langs.en,
+  language: Languages.EN,
+  submitBtnType: SubmitBtnType.WithInvitation,
 };
+
+export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
+
+export const dataTestId = 'dashboard-add-users';
