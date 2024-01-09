@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 
 import { Actions, Pin, Row, Search, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
@@ -35,7 +34,6 @@ import {
   ScheduleSetupPopup,
   ViewDataPopup,
 } from './Popups';
-import { StatusFlag, StatusType } from './StatusFlag';
 
 export const Respondents = () => {
   const { appletId } = useParams();
@@ -299,10 +297,6 @@ export const Respondents = () => {
 
   return (
     <StyledBody>
-      <StatusFlag status={StatusType.NotInvited} />
-      <Box sx={{ mb: '20px' }}>----</Box>
-      <StatusFlag status={StatusType.Pending} />
-      <Box sx={{ mb: '20px' }}>----</Box>
       {isLoading && <Spinner />}
       <RespondentsTableHeader hasButton={!!appletId}>
         {appletId && (
