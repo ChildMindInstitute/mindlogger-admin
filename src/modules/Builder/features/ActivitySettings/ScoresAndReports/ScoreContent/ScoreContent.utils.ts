@@ -111,16 +111,29 @@ export const getDefaultConditionalValue = (id: string, key: string) => ({
 const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>
   showMessage && !!message?.includes(`[[${id}]]`);
 
-export const getIsScoreIdVariable = (score: ScoreReport) => {
+export const getIsScoreIdVariable = (score: ScoreReport, reports: ScoreOrSection[]) => {
   const { id } = score;
 
-  if (isMessageIncludeScoreId(score.showMessage, id, score.message)) {
-    return true;
-  }
+  // if (isMessageIncludeScoreId(score.showMessage, id, score.message)) {
+  //   return true;
+  // }
 
   let isVariable = false;
-  score.conditionalLogic?.forEach((condition) => {
-    isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message);
+
+  reports?.forEach((report) => {
+    if (isVariable) return;
+
+    if ((isVariable = isMessageIncludeScoreId(report.showMessage, id, report.message))) {
+      return;
+    }
+
+    if (report.type === ScoreReportType.Score) {
+      report.conditionalLogic?.forEach((condition) => {
+        if (isVariable) return;
+
+        isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message);
+      });
+    }
   });
 
   return isVariable;

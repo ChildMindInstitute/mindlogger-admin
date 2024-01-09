@@ -103,7 +103,7 @@ export const ScoreContent = ({
     const updatedScoreId = getScoreId(scoreName, calculationType);
     updateMessagesWithVariable(
       setValue,
-      `${fieldName}.scoresAndReports.reports`,
+      reportsName,
       getValues(reportsName),
       score.id,
       updatedScoreId,
@@ -124,7 +124,7 @@ export const ScoreContent = ({
     const calculationType = event.target.value as CalculationType;
     setPrevCalculationType(score.calculationType);
 
-    const isVariable = getIsScoreIdVariable(score);
+    const isVariable = getIsScoreIdVariable(score, getValues(reportsName));
 
     if (isVariable) {
       setIsChangeScoreIdPopupVisible(true);
@@ -137,7 +137,7 @@ export const ScoreContent = ({
   };
 
   const handleNameBlur = () => {
-    const isVariable = getIsScoreIdVariable(score);
+    const isVariable = getIsScoreIdVariable(score, getValues(reportsName));
 
     if (isVariable) {
       setIsChangeScoreIdPopupVisible(true);
