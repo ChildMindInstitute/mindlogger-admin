@@ -5,7 +5,7 @@ import {
   mockedSingleActivityItem,
   mockedSliderActivityItem,
 } from 'shared/mock';
-import { ScoreReport } from 'redux/modules';
+import { ScoreOrSection } from 'redux/modules';
 
 import {
   getIsScoreIdVariable,
@@ -59,7 +59,7 @@ describe('getIsScoreIdVariable', () => {
     ${report}                | ${true}        | ${'should be true'}
     ${reportWithoutVariable} | ${false}       | ${'should be false'}
   `('$description', async ({ score, expectedResult }) => {
-    expect(getIsScoreIdVariable(score)).toBe(expectedResult);
+    expect(getIsScoreIdVariable(score, [score])).toBe(expectedResult);
   });
 });
 
@@ -71,8 +71,15 @@ describe('updateMessagesWithVariable', () => {
     ${'scoreFirst'} | ${'scoreSecond'} | ${'should set new message with scoreSecond variable'}
     ${'score_F'}    | ${'score'}       | ${'should set new message with score variable'}
   `('$description', async ({ name, newScoreId }) => {
-    updateMessagesWithVariable(mockedSetValue, name, report as ScoreReport, newScoreId);
+    updateMessagesWithVariable({
+      setValue: mockedSetValue,
+      reportsName: name,
+      reports: [report as ScoreOrSection],
+      oldScoreId: report.id,
+      newScoreId,
+    });
 
-    expect(mockedSetValue).toBeCalledWith(`${name}.message`, `message [[${newScoreId}]]`);
+    expect(mockedSetValue).nthCalledWith(1, `${name}.0.message`, `message [[${newScoreId}]]`);
+    expect(mockedSetValue).nthCalledWith(2, `${name}.0.conditionalLogic.0.message`, 'message');
   });
 });

@@ -3,7 +3,7 @@ import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -56,16 +56,19 @@ export const ScoreContent = ({
   scoreItems,
 }: ScoreContentProps) => {
   const { t } = useTranslation('app');
-  const { control, setValue } = useCustomFormContext();
+  const { control, setValue, getValues } = useCustomFormContext();
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
+  const { fieldName } = useCurrentActivity();
 
+  const reportsName = `${fieldName}.scoresAndReports.reports`;
   const scoreConditionalsName = `${name}.conditionalLogic`;
 
   const score = useWatch({ name });
   const { name: scoreName, id: scoreId, calculationType, itemsScore } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
+  const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
   const selectedItems = scoreItems?.filter(
     (item) => itemsScore?.includes(getEntityKey(item, true)),
   );
@@ -97,25 +100,44 @@ export const ScoreContent = ({
   };
 
   const onChangeScoreId = () => {
-    const updatedScoreId = getScoreId(scoreName, calculationType);
-    updateMessagesWithVariable(setValue, name, score, updatedScoreId);
+    const newScoreId = getScoreId(scoreName, calculationType);
+    updateMessagesWithVariable({
+      setValue,
+      reportsName,
+      reports: getValues(reportsName),
+      oldScoreId: score.id,
+      newScoreId,
+    });
 
-    setValue(`${name}.id`, updatedScoreId);
+    setValue(`${name}.id`, newScoreId);
     setPrevScoreName(scoreName);
+    setPrevCalculationType(calculationType);
   };
 
   const onCancelChangeScoreId = () => {
     setIsChangeScoreIdPopupVisible(false);
     setValue(`${name}.name`, prevScoreName);
+    setValue(`${name}.calculationType`, prevCalculationType);
   };
 
   const handleCalculationChange = (event: SelectEvent) => {
     const calculationType = event.target.value as CalculationType;
+    setPrevCalculationType(score.calculationType);
+
+    const isVariable = getIsScoreIdVariable(score, getValues(reportsName));
+
+    if (isVariable) {
+      setIsChangeScoreIdPopupVisible(true);
+
+      return;
+    }
+
     setValue(`${name}.id`, getScoreId(scoreName, calculationType));
+    setPrevCalculationType(calculationType);
   };
 
   const handleNameBlur = () => {
-    const isVariable = getIsScoreIdVariable(score);
+    const isVariable = getIsScoreIdVariable(score, getValues(reportsName));
 
     if (isVariable) {
       setIsChangeScoreIdPopupVisible(true);

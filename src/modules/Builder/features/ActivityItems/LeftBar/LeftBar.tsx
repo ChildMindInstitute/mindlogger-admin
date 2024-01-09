@@ -16,8 +16,9 @@ import {
   variables,
 } from 'shared/styles';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
-import { ConditionalLogic } from 'shared/state';
+import { ConditionalLogic, ScoreOrSection } from 'shared/state';
 import { BuilderContainer } from 'shared/features';
+import { ScoreReportType } from 'shared/consts';
 import { DndDroppable } from 'modules/Builder/components';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemFormValues } from 'modules/Builder/types';
@@ -110,8 +111,27 @@ export const LeftBar = ({
   };
 
   const handleChangeItemVisibility = (itemName: string) => {
-    const prevValue = getValues(itemName)?.isHidden;
-    setValue(`${itemName}.isHidden`, !prevValue);
+    const item = getValues(itemName);
+    const newValue = !item?.isHidden;
+    const itemKey = getEntityKey(item);
+    setValue(`${itemName}.isHidden`, newValue);
+
+    if (!newValue) return;
+
+    const reports: ScoreOrSection[] = getValues(`${fieldName}.scoresAndReports.reports`) ?? [];
+
+    reports.forEach((report, index) => {
+      if (report.type !== ScoreReportType.Score) return;
+
+      const { itemsScore } = report;
+
+      if (itemsScore?.includes(itemKey)) {
+        setValue(
+          `${fieldName}.scoresAndReports.reports.${index}.itemsScore`,
+          itemsScore?.filter((itemId) => itemId !== itemKey),
+        );
+      }
+    });
   };
 
   const addItemBtn = (
