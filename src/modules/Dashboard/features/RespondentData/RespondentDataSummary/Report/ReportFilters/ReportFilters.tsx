@@ -117,6 +117,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 noOptionsText={t('noRespondentIdentifier')}
                 labelAllSelect={t('selectAll')}
                 disabled={!filterByIdentifier}
+                defaultSelectedAll
                 data-testid={`${dataTestid}-respondent-identifier`}
               />
             </Box>
@@ -129,6 +130,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 control={control}
                 noOptionsText={t('noVersions')}
                 labelAllSelect={t('selectAll')}
+                defaultSelectedAll
                 data-testid={`${dataTestid}-versions`}
               />
             </Box>
