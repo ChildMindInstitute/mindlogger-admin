@@ -30,7 +30,7 @@ export const TextResponse = ({ name }: TextResponseProps) => {
     setValue(responseLengthName, value);
     trigger(responseLengthName);
     if (correctAnswer && value >= MIN_TEXT_RESPONSE_LENGTH && correctAnswer.length > value) {
-      const trimmedCorrectAnswer = correctAnswer.slice(0, -1 * (correctAnswer.length - value));
+      const trimmedCorrectAnswer = correctAnswer.slice(0, value - correctAnswer.length);
 
       setValue(correctAnswerName, trimmedCorrectAnswer);
     }
