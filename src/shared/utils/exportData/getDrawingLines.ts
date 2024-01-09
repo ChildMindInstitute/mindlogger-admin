@@ -18,8 +18,8 @@ export const getDrawingLines = (
 
       result.push({
         line_number: i.toString(),
-        x: ((point.x / width) * 100).toString(),
-        y: (100 - (point.y / width) * 100).toString(),
+        x: point.x.toString(),
+        y: (100 - point.y).toString(),
         UTC_Timestamp: Number(point.time / 1000).toString(),
         seconds: Number((point.time - startTime) / 1000).toString(),
         epoch_time_in_seconds_start: firstPoint ? (startTime / 1000).toString() : '',
