@@ -30,6 +30,8 @@ export const Options = ({ name }: { name: string }) => {
   const hasTooltips = get(settings, ItemConfigurationSettings.HasTooltips);
   const hasShortenedHelper = options?.length === 3;
 
+  const commonInputProps = { maxlength: SELECTION_ROW_OPTION_LABEL_MAX_LENGTH };
+
   return (
     <StyledSelectionRow hasTooltips={hasTooltips}>
       <StyledSelectionBox />
@@ -60,6 +62,7 @@ export const Options = ({ name }: { name: string }) => {
                 Counter={CharactersCounter}
                 counterProps={{ isShortenedVisible: hasShortenedHelper }}
                 data-testid={`${dataTestId}-text`}
+                inputProps={commonInputProps}
               />
             </StyledFlexTopStart>
             {hasTooltips && (
@@ -70,6 +73,7 @@ export const Options = ({ name }: { name: string }) => {
                   name={`${optionName}.tooltip`}
                   label={t('tooltip')}
                   data-testid={`${dataTestId}-tooltip`}
+                  inputProps={commonInputProps}
                 />
               </StyledFlexTopCenter>
             )}
