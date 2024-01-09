@@ -1,5 +1,3 @@
-import { FieldValues, UseFormSetValue } from 'react-hook-form';
-
 import i18n from 'i18n';
 import { ScoreOrSection, ScoreReport, SingleAndMultiSelectOption } from 'shared/state';
 import {
@@ -10,7 +8,12 @@ import {
 } from 'shared/consts';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
-import { GetScoreRangeLabel, ItemsWithScore } from './ScoreContent.types';
+import {
+  GetScoreRangeLabel,
+  ItemsWithScore,
+  UpdateMessage,
+  UpdateMessagesWithVariable,
+} from './ScoreContent.types';
 
 const { t } = i18n;
 
@@ -114,10 +117,6 @@ const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: str
 export const getIsScoreIdVariable = (score: ScoreReport, reports: ScoreOrSection[]) => {
   const { id } = score;
 
-  // if (isMessageIncludeScoreId(score.showMessage, id, score.message)) {
-  //   return true;
-  // }
-
   let isVariable = false;
 
   reports?.forEach((report) => {
@@ -139,41 +138,48 @@ export const getIsScoreIdVariable = (score: ScoreReport, reports: ScoreOrSection
   return isVariable;
 };
 
-const updateMessage = (
-  setValue: UseFormSetValue<FieldValues>,
-  fieldName: string,
-  id: string,
-  newScoreId: string,
-  showMessage: boolean,
-  message?: string,
-) => {
+const updateMessage = ({
+  setValue,
+  fieldName,
+  id,
+  newScoreId,
+  showMessage,
+  message,
+}: UpdateMessage) => {
   if (showMessage && message) {
     setValue(`${fieldName}.message`, message.replaceAll(`[[${id}]]`, `[[${newScoreId}]]`));
   }
 };
 
-export const updateMessagesWithVariable = (
-  setValue: UseFormSetValue<FieldValues>,
-  reportsName: string,
-  reports: ScoreOrSection[],
-  oldScoreId: string,
-  newScoreId: string,
-) => {
+export const updateMessagesWithVariable = ({
+  setValue,
+  reportsName,
+  reports,
+  oldScoreId,
+  newScoreId,
+}: UpdateMessagesWithVariable) => {
   reports.forEach((report, index) => {
     const { type, showMessage, message, conditionalLogic } = report;
     const reportName = `${reportsName}.${index}`;
-    updateMessage(setValue, reportName, oldScoreId, newScoreId, showMessage, message);
+    updateMessage({
+      setValue,
+      fieldName: reportName,
+      id: oldScoreId,
+      newScoreId,
+      showMessage,
+      message,
+    });
 
     if (type === ScoreReportType.Score) {
       conditionalLogic?.forEach((condition, key) =>
-        updateMessage(
+        updateMessage({
           setValue,
-          `${reportName}.conditionalLogic.${key}`,
-          oldScoreId,
+          fieldName: `${reportName}.conditionalLogic.${key}`,
+          id: oldScoreId,
           newScoreId,
-          condition.showMessage,
-          condition.message,
-        ),
+          showMessage: condition.showMessage,
+          message: condition.message,
+        }),
       );
     }
   });

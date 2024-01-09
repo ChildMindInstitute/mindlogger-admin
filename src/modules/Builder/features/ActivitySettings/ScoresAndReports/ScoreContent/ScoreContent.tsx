@@ -100,16 +100,16 @@ export const ScoreContent = ({
   };
 
   const onChangeScoreId = () => {
-    const updatedScoreId = getScoreId(scoreName, calculationType);
-    updateMessagesWithVariable(
+    const newScoreId = getScoreId(scoreName, calculationType);
+    updateMessagesWithVariable({
       setValue,
       reportsName,
-      getValues(reportsName),
-      score.id,
-      updatedScoreId,
-    );
+      reports: getValues(reportsName),
+      oldScoreId: score.id,
+      newScoreId,
+    });
 
-    setValue(`${name}.id`, updatedScoreId);
+    setValue(`${name}.id`, newScoreId);
     setPrevScoreName(scoreName);
     setPrevCalculationType(calculationType);
   };

@@ -71,13 +71,13 @@ describe('updateMessagesWithVariable', () => {
     ${'scoreFirst'} | ${'scoreSecond'} | ${'should set new message with scoreSecond variable'}
     ${'score_F'}    | ${'score'}       | ${'should set new message with score variable'}
   `('$description', async ({ name, newScoreId }) => {
-    updateMessagesWithVariable(
-      mockedSetValue,
-      name,
-      [report as ScoreOrSection],
-      report.id,
+    updateMessagesWithVariable({
+      setValue: mockedSetValue,
+      reportsName: name,
+      reports: [report as ScoreOrSection],
+      oldScoreId: report.id,
       newScoreId,
-    );
+    });
 
     expect(mockedSetValue).nthCalledWith(1, `${name}.0.message`, `message [[${newScoreId}]]`);
     expect(mockedSetValue).nthCalledWith(2, `${name}.0.conditionalLogic.0.message`, 'message');
