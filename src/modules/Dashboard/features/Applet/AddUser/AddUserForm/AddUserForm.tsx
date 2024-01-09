@@ -11,7 +11,12 @@ import {
   TagsInputController,
 } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledFlexTopCenter, StyledTitleMedium, theme } from 'shared/styles';
-import { AppletInvitationOptions, getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
+import {
+  AppletInvitationOptions,
+  getWorkspaceInfoApi,
+  postAppletInvitationApi,
+  postAppletShellAccountApi,
+} from 'api';
 import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -66,13 +71,20 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
 
   const resetForm = () => reset();
 
-  const { error, execute: executePostAppletInvitationApi } = useAsync(
+  const { error: invitationError, execute: executePostAppletInvitationApi } = useAsync(
     postAppletInvitationApi,
     async () => {
       await getInvitationsHandler();
       ownerId && executeGetWorkspaceInfoApi({ ownerId });
       resetForm();
       Mixpanel.track('Invitation sent successfully');
+    },
+  );
+  const { error: shellAccountError, execute: executePostAppletShellAccountApi } = useAsync(
+    postAppletShellAccountApi,
+    async () => {
+      resetForm();
+      Mixpanel.track('Shell account created successfully');
     },
   );
   const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {
@@ -82,20 +94,24 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
   const onSubmit = (values: AddUserFormValues) => {
     Mixpanel.track('Invitation submitted click');
     if (!appletId) return;
-    const { submitBtnType, ...restValues } = values;
+    const { submitBtnType, respondents, ...restValues } = values;
     const options = {
       ...restValues,
-      ...(restValues.respondents && { respondents: restValues.respondents.map((item) => item.id) }),
+      ...(respondents && { respondents: respondents.map((item) => item.id) }),
     } as AppletInvitationOptions;
+
+    const apiParams = {
+      appletId,
+      options,
+    };
 
     if (submitBtnType === SubmitBtnType.WithInvitation) {
       executePostAppletInvitationApi({
         url: getUrl(restValues.role),
-        appletId,
-        options,
+        ...apiParams,
       });
     } else if (submitBtnType === SubmitBtnType.WithoutInvitation) {
-      console.log('without invitation click');
+      executePostAppletShellAccountApi(apiParams);
     }
   };
 
@@ -122,6 +138,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     }
   };
 
+  const error = invitationError || shellAccountError;
   const hasCommonError = useFormError({ error, setError });
 
   useEffect(() => {
