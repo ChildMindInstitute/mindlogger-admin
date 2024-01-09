@@ -68,6 +68,7 @@ export const ScoreContent = ({
   const score = useWatch({ name });
   const { name: scoreName, id: scoreId, calculationType, itemsScore } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
+  const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
   const selectedItems = scoreItems?.filter(
     (item) => itemsScore?.includes(getEntityKey(item, true)),
   );
@@ -110,16 +111,29 @@ export const ScoreContent = ({
 
     setValue(`${name}.id`, updatedScoreId);
     setPrevScoreName(scoreName);
+    setPrevCalculationType(calculationType);
   };
 
   const onCancelChangeScoreId = () => {
     setIsChangeScoreIdPopupVisible(false);
     setValue(`${name}.name`, prevScoreName);
+    setValue(`${name}.calculationType`, prevCalculationType);
   };
 
   const handleCalculationChange = (event: SelectEvent) => {
     const calculationType = event.target.value as CalculationType;
+    setPrevCalculationType(score.calculationType);
+
+    const isVariable = getIsScoreIdVariable(score);
+
+    if (isVariable) {
+      setIsChangeScoreIdPopupVisible(true);
+
+      return;
+    }
+
     setValue(`${name}.id`, getScoreId(scoreName, calculationType));
+    setPrevCalculationType(calculationType);
   };
 
   const handleNameBlur = () => {
