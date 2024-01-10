@@ -128,7 +128,7 @@ describe('ItemPicker', () => {
     expect(sliderController).toBeInTheDocument();
   });
 
-  test('render text', () => {
+  test('render text (unsupported item)', () => {
     renderWithProviders(
       getItemPicker({
         activityItem: text,
@@ -136,6 +136,7 @@ describe('ItemPicker', () => {
       }),
     );
 
+    // nothing should be displayed
     const element = screen.queryByTestId(/.*/);
     expect(element).not.toBeInTheDocument();
   });
