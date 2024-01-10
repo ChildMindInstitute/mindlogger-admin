@@ -23,7 +23,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   const renderResponseOption = (
-    { activityItem, answers, dataTestid }: FormattedResponse & { dataTestid: string },
+    { activityItem, answers, dataTestid }: FormattedResponse,
     index: number,
   ) => {
     if (UNSUPPORTED_ITEMS.includes(activityItem.responseType))

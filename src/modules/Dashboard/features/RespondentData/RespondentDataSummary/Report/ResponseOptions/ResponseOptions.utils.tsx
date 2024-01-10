@@ -14,7 +14,7 @@ export const getResponseItem = ({
   versions,
   answers = [],
   dataTestid,
-}: GetResponseOptionsProps & { dataTestid: string }) => {
+}: GetResponseOptionsProps) => {
   const responseType = activityItem.responseType;
 
   const renderMultipleSelection = () => {
