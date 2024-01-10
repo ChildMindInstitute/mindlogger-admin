@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 
 import { ApiError } from 'shared/state';
@@ -10,9 +10,11 @@ import { UseFormError } from './AddUserForm.types';
 
 const { t } = i18n;
 
-export const useFormError = <T extends FieldValues>({ error, setError }: UseFormError<T>) => {
-  const [hasCommonError, setHasCommonError] = useState(false);
-
+export const useFormError = <T extends FieldValues>({
+  error,
+  setError,
+  setHasCommonError,
+}: UseFormError<T>) => {
   useEffect(() => {
     if (!error) return setHasCommonError(false);
 
@@ -30,6 +32,4 @@ export const useFormError = <T extends FieldValues>({ error, setError }: UseForm
 
     setError(fieldName, { message });
   }, [error]);
-
-  return hasCommonError;
 };

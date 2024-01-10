@@ -190,12 +190,11 @@ export type AppletInvitationData = AppletId & {
 };
 
 export type AppletShellAccountOptions = {
-  role: string;
   secretUserId: string;
   firstName: string;
   lastName: string;
   language: string;
-  email?: string;
+  email: string | null;
   nickname?: string;
 };
 

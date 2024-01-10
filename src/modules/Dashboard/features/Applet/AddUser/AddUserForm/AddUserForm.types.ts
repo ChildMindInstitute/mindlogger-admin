@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { AxiosError } from 'axios';
 import { UseFormSetError, FieldValues } from 'react-hook-form';
 
@@ -35,4 +36,5 @@ export type WorkspaceInfo = {
 export type UseFormError<T extends FieldValues> = {
   error: AxiosError<ApiErrorResponse> | null;
   setError: UseFormSetError<T>;
+  setHasCommonError: Dispatch<SetStateAction<boolean>>;
 };
