@@ -1,15 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 
 import { ApiError } from 'shared/state';
 import { getErrorData, getErrorMessage } from 'shared/utils';
+import i18n from 'i18n';
 
-import { Fields } from './AddUserForm.const';
+import { Fields, NON_UNIQUE_VALUE_MESSAGE } from './AddUserForm.const';
 import { UseFormError } from './AddUserForm.types';
 
-export const useFormError = <T extends FieldValues>({ error, setError }: UseFormError<T>) => {
-  const [hasCommonError, setHasCommonError] = useState(false);
+const { t } = i18n;
 
+export const useFormError = <T extends FieldValues>({
+  error,
+  setError,
+  setHasCommonError,
+}: UseFormError<T>) => {
   useEffect(() => {
     if (!error) return setHasCommonError(false);
 
@@ -19,8 +24,12 @@ export const useFormError = <T extends FieldValues>({ error, setError }: UseForm
     if (!fieldName || (fieldName && !Fields[fieldName as keyof typeof Fields]))
       return setHasCommonError(true);
 
-    setError(fieldName, { message: getErrorMessage(error) });
-  }, [error]);
+    const errorMessage = getErrorMessage(error);
+    const message =
+      fieldName === Fields.secretUserId && errorMessage === NON_UNIQUE_VALUE_MESSAGE
+        ? t('secretUserIdExists')
+        : errorMessage;
 
-  return hasCommonError;
+    setError(fieldName, { message });
+  }, [error]);
 };

@@ -70,7 +70,7 @@ describe('InvitationsTable', () => {
     });
 
     const tableColumnNames = [
-      'Secret User ID',
+      'ID',
       'First Name',
       'Last Name',
       'Role',

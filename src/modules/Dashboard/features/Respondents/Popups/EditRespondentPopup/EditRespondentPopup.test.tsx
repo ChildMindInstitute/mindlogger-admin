@@ -47,7 +47,7 @@ describe('EditRespondentPopup component tests', () => {
     fireEvent.click(screen.getByText('Save'));
     await waitFor(() =>
       expect(
-        screen.getByText('Nickname and Secret User ID have been updated successfully.'),
+        screen.getByText('Nickname and ID have been updated successfully.'),
       ).toBeInTheDocument(),
     );
   });

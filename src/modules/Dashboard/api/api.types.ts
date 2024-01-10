@@ -181,11 +181,25 @@ export type AppletInvitationOptions = {
   secretUserId: string;
   workspacePrefix: string;
   respondents: string[];
+  language: string;
 };
 
 export type AppletInvitationData = AppletId & {
   url: string;
   options: AppletInvitationOptions;
+};
+
+export type AppletShellAccountOptions = {
+  secretUserId: string;
+  firstName: string;
+  lastName: string;
+  language: string;
+  email: string | null;
+  nickname?: string;
+};
+
+export type AppletShellAccountData = AppletId & {
+  options: AppletShellAccountOptions;
 };
 
 export type DuplicateApplet = AppletId & {
