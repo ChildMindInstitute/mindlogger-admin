@@ -34,6 +34,7 @@ import {
   ScheduleSetupPopup,
   ViewDataPopup,
 } from './Popups';
+import { SendInvitationPopup } from './Popups/SendInvitationPopup';
 
 export const Respondents = () => {
   const { appletId } = useParams();
@@ -151,16 +152,16 @@ export const Respondents = () => {
     updateRespondentsPin({ ownerId, userId });
   };
 
-  const editRespondentOnClose = (shouldRefetch: boolean) => {
+  const editRespondentOnClose = (shouldReFetch: boolean) => {
     setEditRespondentPopupVisible(false);
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
+    shouldReFetch && handleReload();
   };
 
-  const removeRespondentAccessOnClose = (shouldRefetch?: boolean) => {
+  const removeRespondentAccessOnClose = (shouldReFetch?: boolean) => {
     setRemoveAccessPopupVisible(false);
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
+    shouldReFetch && handleReload();
   };
 
   const formatRow = (user: Respondent): Row => {
@@ -371,6 +372,12 @@ export const Respondents = () => {
           chosenAppletData={chosenAppletData}
         />
       )}
+      <SendInvitationPopup
+        open
+        onClose={() => console.log('on close')}
+        secretUserId="123456"
+        subjectId="subj-123"
+      />
     </StyledBody>
   );
 };
