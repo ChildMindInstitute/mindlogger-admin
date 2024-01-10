@@ -39,6 +39,7 @@
   "activitySplashScreenDescription": "An image that is displayed to a respondent before the activity.",
   "activityUnavailableAtTime": "Activity is unavailable at this time",
   "addActivity": "Add Activity",
+  "addBlankActivity": "Add Blank Activity",
   "addActivityFlow": "Add Activity Flow",
   "addActivityItemsFlowTooltip": "You need to create at least two Items first",
   "addAlert": "Add Alert",
