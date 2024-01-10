@@ -12,7 +12,6 @@ import { getEntityKey, pluck } from 'shared/utils';
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
 import { page } from 'resources';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { useRedirectIfNoMatchedActivity } from 'modules/Builder/hooks';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
 import { getUniqueName } from 'modules/Builder/utils';
@@ -111,8 +110,6 @@ export const ActivityFlow = () => {
     if (!destination) return;
     moveActivityFlow(source.index, destination.index);
   };
-
-  useRedirectIfNoMatchedActivity();
 
   return (
     <BuilderContainer

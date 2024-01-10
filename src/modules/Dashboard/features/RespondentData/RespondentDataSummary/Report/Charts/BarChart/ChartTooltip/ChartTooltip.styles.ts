@@ -1,13 +1,10 @@
 import { Box, styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { StyledFlexTopCenter, variables } from 'shared/styles';
 
-export const StyledTooltip = styled(Box)`
+export const StyledTooltip = styled(StyledFlexTopCenter)`
   max-width: 20rem;
-  position: absolute;
-  display: none;
-  transform: translate(-50%, -100%);
-  z-index: ${theme.zIndex.fab};
+  transform: translate(0, -100%);
   background-color: ${variables.palette.on_surface};
   border-radius: ${variables.borderRadius.xs};
 `;

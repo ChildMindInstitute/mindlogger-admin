@@ -25,18 +25,18 @@ describe('useEncryptedAnswers', () => {
     jest.spyOn(applet, 'useAppletData').mockReturnValue(null);
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
 
-    const { result } = renderHook(() => useEncryptedAnswers());
+    const { result } = renderHook(useEncryptedAnswers);
 
     expect(result.current).toEqual(null);
   });
 
-  test('should return encrypted string', () => {
+  test('should return encrypted string', async () => {
     jest.spyOn(auth, 'useData').mockReturnValue({ user: mockedUserData });
     jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
 
-    const { result } = renderHook(() => useEncryptedAnswers());
-    const encryptAnswers = result.current as (answers: AnswerDTO[]) => string;
+    const { result } = renderHook(useEncryptedAnswers);
+    const encryptAnswers = result.current as (answers: AnswerDTO[]) => Promise<string>;
 
     const answers = [
       {
@@ -53,7 +53,7 @@ describe('useEncryptedAnswers', () => {
       },
     ];
 
-    const encryptedAnswers = encryptAnswers(answers as AnswerDTO[]);
+    const encryptedAnswers = await encryptAnswers(answers as AnswerDTO[]);
     expect(typeof encryptedAnswers).toBe('string');
   });
 });

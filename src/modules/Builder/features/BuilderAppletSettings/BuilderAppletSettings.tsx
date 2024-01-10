@@ -30,6 +30,7 @@ export const BuilderAppletSettings = () => {
       {(isNewApplet || appletData) && (
         <AppletSettings
           isBuilder
+          data-testid="builder-applet-settings"
           settings={getSettings({
             isNewApplet,
             isPublished,

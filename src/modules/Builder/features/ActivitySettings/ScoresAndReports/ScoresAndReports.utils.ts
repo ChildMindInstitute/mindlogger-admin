@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { DataTableItem } from 'shared/components';
 import { CalculationType, ScoreReportType } from 'shared/consts';
 import { ScoreOrSection } from 'shared/state';
 import { ItemFormValues } from 'modules/Builder/types';
@@ -43,9 +44,16 @@ export const getReportIndex = (reports: ScoreOrSection[], report: ScoreOrSection
   ).index;
 
 export const getTableScoreItems = (items?: ItemFormValues[]) =>
-  items?.map((item) => ({
-    id: getEntityKey(item),
-    name: item.name,
-    tooltip: removeMarkdown(item.question),
-    label: `${item.name}: ${removeMarkdown(item.question)}`,
-  }));
+  items?.reduce((tableScoreItems: DataTableItem[], item) => {
+    if (item.isHidden) return tableScoreItems;
+
+    return [
+      ...tableScoreItems,
+      {
+        id: getEntityKey(item),
+        name: item.name,
+        tooltip: removeMarkdown(item.question),
+        label: `${item.name}: ${removeMarkdown(item.question)}`,
+      },
+    ];
+  }, []);

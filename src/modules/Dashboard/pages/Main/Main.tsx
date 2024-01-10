@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { LinkedTabs } from 'shared/components';
+import { LinkedTabs } from 'shared/components/Tabs/LinkedTabs';
 import { StyledBody } from 'shared/styles/styledComponents';
 import { Mixpanel } from 'shared/utils/mixpanel';
 

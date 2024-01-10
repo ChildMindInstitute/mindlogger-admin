@@ -32,7 +32,7 @@ export const IncorrectFilePopup = ({
       hasSecondBtn
       data-testid={dataTestid}
     >
-      <StyledModalWrapper>
+      <StyledModalWrapper data-testid={`${dataTestid}-text`}>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
           {isFormatError ? (
             t(formatError[fileType])

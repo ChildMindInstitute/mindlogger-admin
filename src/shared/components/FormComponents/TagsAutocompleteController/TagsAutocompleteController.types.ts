@@ -11,6 +11,7 @@ export type FormAutocompleteProps = {
   labelAllSelect?: string;
   noOptionsText?: string;
   limitTags?: number;
+  defaultSelectedAll?: boolean;
   'data-testid'?: string;
 } & TextFieldProps;
 

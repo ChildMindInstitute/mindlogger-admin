@@ -407,7 +407,9 @@ export const useSaveAndPublishSetup = (
   };
 
   const sendRequest = async (password?: string) => {
-    const encryptionData = password ? getEncryptionToServer(password, ownerId!) : appletEncryption;
+    const encryptionData = password
+      ? await getEncryptionToServer(password, ownerId!)
+      : appletEncryption;
     setPublishProcessPopupOpened(true);
     const appletData = getAppletData(encryptionData);
 
@@ -460,7 +462,7 @@ export const useSaveAndPublishSetup = (
       setIsFromLibrary?.(false);
 
       if (encryptionData && password && createdAppletId) {
-        setAppletPrivateKey({
+        await setAppletPrivateKey({
           appletPassword: password,
           encryption: encryptionData,
           appletId: createdAppletId,

@@ -572,6 +572,7 @@
   "incorrectEmail": "L'adresse e-mail doit être valide",
   "incorrectImageFormat": "Format d'image incorrect.",
   "incorrectImageSize": "La taille de l'image fait plus de {{size}}.",
+  "incorrectImageDimensions": "Les dimensions de l'image doivent être comprises entre 100 px et 1920 px en largeur et en hauteur.",
   "incorrectVideoFormat": "Format vidéo incorrect.",
   "indefinitely": "Indéfiniment",
   "individualSchedule": "Programme Individuel",
@@ -1243,5 +1244,6 @@
     "text": "Choisir de procéder avec la nouvelle version entraînera la perte des données de la complétion précédente.",
     "button": "Procéder avec la nouvelle version"
   },
+  "appletNameExists": "Ce nom d'Applet existe déjà",
   "goToDashboard": "Aller au tableau de bord"
 }

@@ -16,14 +16,16 @@ export const SliderResponseItem = ({
     minValue: minValueNumber,
   });
 
+  const isCorrectType = !isNaN(Number(answer?.value)) && answer?.value !== null;
+
   return (
     <StyledSlider
       disabled
       marks={marks}
       min={minValueNumber}
       max={maxValueNumber}
-      value={isNaN(Number(answer?.value)) ? 0 : Number(answer?.value)}
-      data-skipped={answer?.value === undefined || answer?.value === null}
+      value={isCorrectType ? Number(answer?.value) : undefined}
+      data-skipped={!isCorrectType}
       data-testid={dataTestid}
     />
   );

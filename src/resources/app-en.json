@@ -571,6 +571,7 @@
   "incorrectAudioFormat": "Incorrect audio format.",
   "incorrectEmail": "Email must be valid",
   "incorrectImageFormat": "Image format must be JPEG or PNG.",
+  "incorrectImageDimensions": "The Image dimensions should range between 100 px and 1920 px for both width and height.",
   "incorrectImageSize": "Image is more than {{size}}.",
   "incorrectVideoFormat": "Incorrect video format.",
   "indefinitely": "Indefinitely",
@@ -801,7 +802,7 @@
     "abTrailsMobile": "A/B Trails Mobile",
     "flanker": "Simple & Choice Reaction Time Task Builder",
     "gyroscope": "CST Gyroscope",
-    "touch": "CST  Touch"
+    "touch": "CST Touch"
   },
   "performanceTasksDesc": {
     "abTrails": "A/B Trails",
@@ -1243,5 +1244,6 @@
     "text": "Choosing to proceed with new version will result in the loss of data from the previous completion.",
     "button": "Proceed with new version"
   },
+  "appletNameExists": "That Applet name already exists",
   "goToDashboard": "Go to Dashboard"
 }

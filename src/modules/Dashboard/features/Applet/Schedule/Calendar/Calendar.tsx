@@ -17,6 +17,7 @@ import { locales } from 'shared/consts';
 
 import { CreateEventPopup } from '../CreateEventPopup';
 import { EditEventPopup } from '../EditEventPopup';
+import { dataTestId } from './Calendar.const';
 import {
   eventPropGetter,
   getCalendarComponents,
@@ -51,7 +52,7 @@ export const Calendar = () => {
   const { eventsToShow = null, allDayEventsSortedByDays = null } =
     calendarEvents.useVisibleEventsData() || {};
 
-  const { components, messages, views, formats } = getCalendarComponents(
+  const { components, messages, views, formats } = getCalendarComponents({
     activeView,
     setActiveView,
     date,
@@ -60,7 +61,7 @@ export const Calendar = () => {
     setEvents,
     isAllDayEventsVisible,
     setIsAllDayEventsVisible,
-  );
+  });
 
   const onNavigate = (newDate: Date) => setDate(newDate);
 
@@ -91,13 +92,7 @@ export const Calendar = () => {
 
     return (
       (activeView === CalendarViews.Week || activeView === CalendarViews.Day) &&
-      getHasWrapperMoreBtn(
-        activeView,
-        events,
-        date,
-        isAllDayEventsVisible,
-        allDayEventsSortedByDays,
-      )
+      getHasWrapperMoreBtn({ activeView, date, isAllDayEventsVisible, allDayEventsSortedByDays })
     );
   }, [activeView, events, date, isAllDayEventsVisible, allDayEventsSortedByDays]);
 
@@ -152,7 +147,7 @@ export const Calendar = () => {
       <StyledCalendarWrapper
         hasMoreBtn={hasWrapperMoreBtn}
         className={activeView}
-        data-testid="dashboard-calendar"
+        data-testid={dataTestId}
       >
         <ReactCalendar
           date={date}
@@ -175,7 +170,7 @@ export const Calendar = () => {
           formats={formats as Formats}
           dayLayoutAlgorithm="no-overlap"
         />
-        <StyledAddBtn onClick={handleAddClick} data-testid="dashboard-calendar-create-event">
+        <StyledAddBtn onClick={handleAddClick} data-testid={`${dataTestId}-create-event`}>
           <Svg id="add" />
         </StyledAddBtn>
       </StyledCalendarWrapper>
@@ -184,7 +179,7 @@ export const Calendar = () => {
           open={createEventPopupVisible}
           setCreateEventPopupVisible={setCreateEventPopupVisible}
           defaultStartDate={defaultStartDate}
-          data-testid="dashboard-calendar-create-event-popup"
+          data-testid={`${dataTestId}-create-event-popup`}
         />
       )}
       {editedEvent && (
@@ -193,6 +188,7 @@ export const Calendar = () => {
           editedEvent={editedEvent}
           setEditEventPopupVisible={setEditEventPopupVisible}
           defaultStartDate={defaultStartDate}
+          data-testid={`${dataTestId}-edit-event-popup`}
         />
       )}
     </>

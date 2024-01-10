@@ -18,7 +18,7 @@ import { CreateEventPopup } from '../CreateEventPopup';
 import { ExpandedList } from './ExpandedList';
 import { SearchPopup } from './SearchPopup';
 import { Search } from './Search';
-import { ScheduleOptions, scheduleOptions } from './Legend.const';
+import { ScheduleOptions, scheduleOptions, defaultExportHeader } from './Legend.const';
 import {
   StyledBtn,
   StyledLegend,
@@ -82,8 +82,8 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     selectedRespondent?.nickname,
   );
 
-  const scheduleChangeHandler = async (e: SelectEvent) => {
-    const { value } = e.target;
+  const scheduleChangeHandler = async (event: SelectEvent) => {
+    const { value } = event.target;
     await setSchedule(value);
     if (value === ScheduleOptions.IndividualSchedule) {
       setSearchPopupVisible(true);
@@ -130,7 +130,11 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
       return `${isDefault ? 'default' : 'individual'}_schedule_template`;
     };
 
-    await exportTemplate({ data: scheduleExportCsv, fileName: getFileName() });
+    await exportTemplate({
+      data: scheduleExportCsv,
+      fileName: getFileName(),
+      defaultData: scheduleExportCsv.length > 0 ? null : defaultExportHeader,
+    });
 
     isExport && setExportDefaultSchedulePopupVisible(false);
   };

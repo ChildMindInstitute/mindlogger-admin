@@ -1,5 +1,7 @@
+import { FieldValues, UseFormSetValue } from 'react-hook-form';
+
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
-import { MultiSelectItem, SingleSelectItem, SliderItem } from 'shared/state';
+import { MultiSelectItem, ScoreOrSection, SingleSelectItem, SliderItem } from 'shared/state';
 import { DataTableItem } from 'shared/components';
 
 export type ScoreContentProps = {
@@ -21,3 +23,20 @@ export type ItemsWithScore =
   | SingleSelectItem<ItemFormValuesCommonType>
   | MultiSelectItem<ItemFormValuesCommonType>
   | SliderItem<ItemFormValuesCommonType>;
+
+export type UpdateMessagesWithVariable = {
+  setValue: UseFormSetValue<FieldValues>;
+  reportsName: string;
+  reports: ScoreOrSection[];
+  oldScoreId: string;
+  newScoreId: string;
+};
+
+export type UpdateMessage = {
+  setValue: UseFormSetValue<FieldValues>;
+  fieldName: string;
+  id: string;
+  newScoreId: string;
+  showMessage: boolean;
+  message?: string;
+};

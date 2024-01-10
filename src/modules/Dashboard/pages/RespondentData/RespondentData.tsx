@@ -27,7 +27,9 @@ export const RespondentData = () => {
   const { ownerId } = workspaces.useData() || {};
   const respondentDataTabs = useRespondentDataTabs();
 
-  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi);
+  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, (result) => {
+    setSummaryActivities(result?.data?.result || []);
+  });
 
   const [summaryActivities, setSummaryActivities] = useState<DatavizActivity[]>();
   const [selectedActivity, setSelectedActivity] = useState<DatavizActivity>();
@@ -50,14 +52,10 @@ export const RespondentData = () => {
   useEffect(() => {
     if (!appletId || !respondentId || !ownerId) return;
 
-    const fetchActivities = async () => {
-      const result = await getSummaryActivities({
-        appletId,
-        respondentId,
-      });
-      setSummaryActivities(result.data?.result);
-    };
-    fetchActivities();
+    getSummaryActivities({
+      appletId,
+      respondentId,
+    });
 
     const { getRespondentDetails } = users.thunk;
 

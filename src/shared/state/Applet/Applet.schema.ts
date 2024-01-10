@@ -695,7 +695,7 @@ export type SectionConditionalLogic = {
 };
 
 export type SectionReport = {
-  id?: string;
+  id: string;
   name: string;
   type: ScoreReportType.Section;
   showMessage: boolean;

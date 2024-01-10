@@ -39,7 +39,6 @@ type FormSelectProps = {
   uiType?: SelectUiType;
   dropdownStyles?: SxProps;
   isErrorVisible?: boolean;
-  rootSelector?: string;
   targetSelector?: string;
   setTrigger?: Dispatch<SetStateAction<boolean>>;
   'data-testid'?: string;

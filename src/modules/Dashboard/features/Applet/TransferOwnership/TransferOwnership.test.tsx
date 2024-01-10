@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { mockedAppletId, mockedEmail } from 'shared/mock';
@@ -25,17 +26,16 @@ describe('TransferOwnership', () => {
   });
 
   test('not transfers ownership on form submission with invalid email', async () => {
-    const { getByTestId } = render(transferOwnershipComponent);
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'invalid@email' } });
-    fireEvent.submit(getByTestId(dataTestid));
+    render(transferOwnershipComponent);
+    userEvent.type(screen.getByLabelText(/Email/i), 'invalid@email{enter}');
 
-    await waitFor(() => expect(screen.getByText('Email must be valid')).toBeInTheDocument());
+    const error = await screen.findByText('Email must be valid');
+    expect(error).toBeInTheDocument();
   });
 
   test('transfers ownership on form submission with valid email', async () => {
-    const { getByTestId } = render(transferOwnershipComponent);
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: mockedEmail } });
-    fireEvent.submit(getByTestId(dataTestid));
+    render(transferOwnershipComponent);
+    userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
 
     await waitFor(() => {
       expect(mockAxios.post).nthCalledWith(

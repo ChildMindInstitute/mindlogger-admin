@@ -180,26 +180,26 @@ export const Respondents = () => {
         onClick: () => handlePinClick(id),
         width: RespondentsColumnsWidth.Pin,
       },
-      secretId: {
+      secretIds: {
         content: () => stringSecretIds,
         value: stringSecretIds,
-        width: RespondentsColumnsWidth.SecretId,
+        width: RespondentsColumnsWidth.Default,
       },
-      nickname: {
+      nicknames: {
         content: () => stringNicknames,
         value: stringNicknames,
-        width: RespondentsColumnsWidth.Nickname,
+        width: RespondentsColumnsWidth.Default,
       },
-      latestActive: {
+      lastSeen: {
         content: () => latestActive,
         value: latestActive,
-        width: RespondentsColumnsWidth.LatestActive,
+        width: RespondentsColumnsWidth.Default,
       },
       ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
-          width: RespondentsColumnsWidth.Schedule,
+          width: RespondentsColumnsWidth.Default,
         },
       }),
       actions: {

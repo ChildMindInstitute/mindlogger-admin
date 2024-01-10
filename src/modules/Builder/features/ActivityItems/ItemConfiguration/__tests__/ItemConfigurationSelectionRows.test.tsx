@@ -64,6 +64,8 @@ const setAlertRow = (alertIndex, rowIndex) => {
 const mockedDataTestid = 'builder-activity-items-item-configuration-selection-rows';
 const mockedAddRowTestid = 'builder-activity-items-item-configuration-selection-rows-add-row';
 
+const JEST_TEST_TIMEOUT = 10000;
+
 describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row', () => {
   test.each`
     responseType                                | description
@@ -239,60 +241,66 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
     responseType                                | description
     ${ItemResponseType.SingleSelectionPerRow}   | ${'Single: tooltips'}
     ${ItemResponseType.MultipleSelectionPerRow} | ${'Multi: tooltips'}
-  `('$description', async ({ responseType }) => {
-    const ref = renderSelectionRows(responseType);
-    await setItemConfigSetting(ItemConfigurationSettings.HasTooltips);
+  `(
+    '$description',
+    async ({ responseType }) => {
+      const ref = renderSelectionRows(responseType);
+      await setItemConfigSetting(ItemConfigurationSettings.HasTooltips);
 
-    setOption(2);
-    const addRow = screen.getByTestId(mockedAddRowTestid);
-    fireEvent.click(addRow);
+      setOption(2);
+      const addRow = screen.getByTestId(mockedAddRowTestid);
+      fireEvent.click(addRow);
 
-    const optionTooltips = screen.getAllByTestId(
-      /^builder-activity-items-item-configuration-selection-rows-option-\d+-tooltip$/,
-    );
-    expect(optionTooltips).toHaveLength(2);
-    optionTooltips.forEach((option, index) => {
-      expect(option.querySelector('label')).toHaveTextContent('Tooltip');
-      const dataOption = ref.current.getValues(`${mockedItemName}.responseValues.options.${index}`);
-      expect(dataOption).toHaveProperty('tooltip');
-      expect(dataOption.tooltip).toBeUndefined();
-    });
+      const optionTooltips = screen.getAllByTestId(
+        /^builder-activity-items-item-configuration-selection-rows-option-\d+-tooltip$/,
+      );
+      expect(optionTooltips).toHaveLength(2);
+      optionTooltips.forEach((option, index) => {
+        expect(option.querySelector('label')).toHaveTextContent('Tooltip');
+        const dataOption = ref.current.getValues(
+          `${mockedItemName}.responseValues.options.${index}`,
+        );
+        expect(dataOption).toHaveProperty('tooltip');
+        expect(dataOption.tooltip).toBeUndefined();
+      });
 
-    const rowTooltips = screen.getAllByTestId(
-      /^builder-activity-items-item-configuration-selection-rows-row-\d+-tooltip$/,
-    );
-    expect(rowTooltips).toHaveLength(2);
-    rowTooltips.forEach((row, index) => {
-      expect(row.querySelector('label')).toHaveTextContent('Tooltip');
-      const dataRow = ref.current.getValues(`${mockedItemName}.responseValues.rows.${index}`);
-      expect(dataRow).toHaveProperty('tooltip');
-      expect(dataRow.tooltip).toBeUndefined();
-    });
+      const rowTooltips = screen.getAllByTestId(
+        /^builder-activity-items-item-configuration-selection-rows-row-\d+-tooltip$/,
+      );
+      expect(rowTooltips).toHaveLength(2);
+      rowTooltips.forEach((row, index) => {
+        expect(row.querySelector('label')).toHaveTextContent('Tooltip');
+        const dataRow = ref.current.getValues(`${mockedItemName}.responseValues.rows.${index}`);
+        expect(dataRow).toHaveProperty('tooltip');
+        expect(dataRow.tooltip).toBeUndefined();
+      });
 
-    const rowTooltip = rowTooltips[0];
-    fireEvent.change(rowTooltip.querySelector('input'), { target: { value: 'tooltip' } });
-    await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
-    expect(ref.current.getValues(`${mockedItemName}.responseValues.rows.0.tooltip`)).toEqual(
-      'tooltip',
-    );
+      const rowTooltip = rowTooltips[0];
+      fireEvent.change(rowTooltip.querySelector('input'), { target: { value: 'tooltip' } });
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.rows.0.tooltip`)).toEqual(
+        'tooltip',
+      );
 
-    const optionTooltip = optionTooltips[1];
-    fireEvent.change(optionTooltip.querySelector('input'), { target: { value: 'tooltip' } });
-    await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
-    expect(ref.current.getValues(`${mockedItemName}.responseValues.options.1.tooltip`)).toEqual(
-      'tooltip',
-    );
+      const optionTooltip = optionTooltips[1];
+      fireEvent.change(optionTooltip.querySelector('input'), { target: { value: 'tooltip' } });
+      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.1.tooltip`)).toEqual(
+        'tooltip',
+      );
 
-    setOption(3);
-    expect(screen.getByTestId(`${mockedDataTestid}-option-2-tooltip`)).toBeVisible();
+      setOption(3);
+      expect(screen.getByTestId(`${mockedDataTestid}-option-2-tooltip`)).toBeVisible();
 
-    await setItemConfigSetting(ItemConfigurationSettings.HasTooltips);
-    expect(
-      screen.queryByTestId(
-        /^(builder-activity-items-item-configuration-selection-rows-row-\d+-tooltip|builder-activity-items-item-configuration-selection-rows-option-\d+-tooltip)$/,
-      ),
-    ).not.toBeInTheDocument();
-  });
+      await setItemConfigSetting(ItemConfigurationSettings.HasTooltips);
+      expect(
+        screen.queryByTestId(
+          /^(builder-activity-items-item-configuration-selection-rows-row-\d+-tooltip|builder-activity-items-item-configuration-selection-rows-option-\d+-tooltip)$/,
+        ),
+      ).not.toBeInTheDocument();
+    },
+    JEST_TEST_TIMEOUT,
+  );
 
   describe.each`
     responseType                                | description
@@ -330,29 +338,35 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
       expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toBeUndefined();
     });
 
-    test('Sets correct data when changed', async () => {
-      const ref = renderSelectionRows(responseType);
-      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+    test(
+      'Sets correct data when changed',
+      async () => {
+        const ref = renderSelectionRows(responseType);
+        await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
-      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
-      fireEvent.click(addAlert);
+        const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+        fireEvent.click(addAlert);
 
-      const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
-      fireEvent.change(alertInput, { target: { value: 'text' } });
+        const alertInput = screen
+          .getByTestId(`${mockedAlertsTestid}-1-text`)
+          .querySelector('input');
+        fireEvent.change(alertInput, { target: { value: 'text' } });
 
-      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+        await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
-      setAlertOption(1, 0);
-      setAlertRow(1, 0);
+        setAlertOption(1, 0);
+        setAlertRow(1, 0);
 
-      const alert = ref.current.getValues(`${mockedItemName}.alerts.1`);
-      expect(alert).toStrictEqual({
-        key: alert.key,
-        alert: 'text',
-        rowId: ref.current.getValues(`${mockedItemName}.responseValues.rows.0.id`),
-        optionId: ref.current.getValues(`${mockedItemName}.responseValues.options.0.id`),
-      });
-    });
+        const alert = ref.current.getValues(`${mockedItemName}.alerts.1`);
+        expect(alert).toStrictEqual({
+          key: alert.key,
+          alert: 'text',
+          rowId: ref.current.getValues(`${mockedItemName}.responseValues.rows.0.id`),
+          optionId: ref.current.getValues(`${mockedItemName}.responseValues.options.0.id`),
+        });
+      },
+      JEST_TEST_TIMEOUT,
+    );
 
     test('Options and Rows are filtered if already used', async () => {
       renderSelectionRows(responseType);

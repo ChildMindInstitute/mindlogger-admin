@@ -152,6 +152,7 @@ export const ActivityFlowBuilder = () => {
                         className={builderItemClassName}
                         ref={itemProvided.innerRef}
                         {...itemProvided.draggableProps}
+                        data-testid={itemDataTestid}
                       >
                         <Item
                           dragHandleProps={itemProvided.dragHandleProps}

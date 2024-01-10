@@ -26,7 +26,7 @@ import { FeedbackNote as FeedbackNoteType } from './FeedbackNotes.types';
 export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   const { t } = useTranslation();
   const [notes, setNotes] = useState<FeedbackNoteType[]>([]);
-  const { appletId } = useParams();
+  const appletId = useParams()?.appletId || '';
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId');
   const containerRef = useRef<HTMLElement | null>(null);
@@ -42,19 +42,21 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   );
 
   const updateListOfNotes = async () => {
-    if (!appletId || !answerId) return;
+    if (!answerId) return;
     await getAnswersNotes({ appletId, answerId, activityId, params: {} });
   };
 
-  const { execute: createAnswerNote } = useAsync(createAnswerNoteApi, () => updateListOfNotes());
-  const { execute: editAnswerNote } = useAsync(editAnswerNoteApi, () => updateListOfNotes());
-  const { execute: deleteAnswerNote } = useAsync(deleteAnswerNoteApi, () => updateListOfNotes());
+  const { execute: createAnswerNote } = useAsync(createAnswerNoteApi, () => {
+    setValue('newNote', '');
+    updateListOfNotes();
+  });
+  const { execute: editAnswerNote } = useAsync(editAnswerNoteApi, updateListOfNotes);
+  const { execute: deleteAnswerNote } = useAsync(deleteAnswerNoteApi, updateListOfNotes);
 
   const activityId = activity?.id ?? '';
 
   const handleNoteEdit = (updatedNote: Pick<FeedbackNoteType, 'id' | 'note'>) => {
-    appletId &&
-      answerId &&
+    answerId &&
       editAnswerNote({
         appletId,
         answerId,
@@ -65,17 +67,16 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
   };
 
   const handleNoteDelete = (noteId: string) => {
-    appletId && answerId && deleteAnswerNote({ appletId, answerId, activityId, noteId });
+    answerId && deleteAnswerNote({ appletId, answerId, activityId, noteId });
   };
 
   const addNewNote = ({ newNote }: FeedbackForm) => {
     if (!newNote.trim()) return;
-    appletId && answerId && createAnswerNote({ appletId, answerId, activityId, note: newNote });
-    setValue('newNote', '');
+    answerId && createAnswerNote({ appletId, answerId, activityId, note: newNote });
   };
 
   useEffect(() => {
-    if (appletId && answerId && isFeedbackOpen) {
+    if (answerId && isFeedbackOpen) {
       getAnswersNotes({ appletId, answerId, activityId, params: {} });
     }
   }, [appletId, answerId, isFeedbackOpen]);
