@@ -21,6 +21,7 @@ export type MultiScatterChartProps = {
   responseType: ItemResponseType;
   answers: Answer[];
   versions: Version[];
+  'data-testid'?: string;
 };
 
 export type OptionsProps = {
