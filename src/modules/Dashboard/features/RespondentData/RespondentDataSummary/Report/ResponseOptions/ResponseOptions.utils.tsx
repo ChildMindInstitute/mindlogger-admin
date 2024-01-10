@@ -13,7 +13,8 @@ export const getResponseItem = ({
   activityItem,
   versions,
   answers = [],
-}: GetResponseOptionsProps) => {
+  dataTestid,
+}: GetResponseOptionsProps & { dataTestid: string }) => {
   const responseType = activityItem.responseType;
 
   const renderMultipleSelection = () => {
@@ -36,6 +37,7 @@ export const getResponseItem = ({
         responseType={responseType}
         answers={answers}
         versions={versions}
+        data-testid={dataTestid}
       />
     );
   };
@@ -47,6 +49,7 @@ export const getResponseItem = ({
       maxDate={maxDate}
       answers={answers}
       versions={versions}
+      data-testid={dataTestid}
     />
   );
 
@@ -56,7 +59,7 @@ export const getResponseItem = ({
     case ItemResponseType.Slider:
       return renderMultipleSelection();
     case ItemResponseType.Text:
-      return <ReportTable answers={answers} />;
+      return <ReportTable answers={answers} data-testid={dataTestid} />;
     case ItemResponseType.Time:
       return renderTimePicker();
     default:
