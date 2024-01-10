@@ -6,4 +6,5 @@ export type MultipleSelectionProps = {
   value: DecryptedMultiSelectionAnswer['value'];
   isDisabled?: boolean;
   onChange?: (value: DecryptedMultiSelectionAnswer['value']) => void;
+  'data-testid'?: string;
 };

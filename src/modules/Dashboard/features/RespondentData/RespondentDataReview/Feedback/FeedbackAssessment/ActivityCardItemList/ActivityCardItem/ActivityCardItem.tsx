@@ -36,14 +36,18 @@ export const ActivityCardItem = ({
 
   return (
     <StyledCardItemContainer
-      data-testid={`${dataTestid}-question-${activityItem.activityItem.responseType}`}
+      data-testid={`${dataTestid}-${activityItem.activityItem.responseType}`}
     >
       <CollapsedMdText
         text={getDictionaryText(activityItem.activityItem.question)}
         maxHeight={120}
         data-testid={`${dataTestid}-question`}
       />
-      <ItemPicker activityItem={activityItem} isDisabled={!isActive} />
+      <ItemPicker
+        activityItem={activityItem}
+        isDisabled={!isActive}
+        data-testid={`${dataTestid}-item`}
+      />
       {isActive && (
         <ItemCardButtons
           step={step}
@@ -52,7 +56,7 @@ export const ActivityCardItem = ({
           onNextButtonClick={onNextButtonClick}
           onBackButtonClick={onBackButtonClick}
           onSubmit={onSubmit}
-          data-testid={`${dataTestid}-item`}
+          data-testid={`${dataTestid}-item-buttons`}
         />
       )}
     </StyledCardItemContainer>
