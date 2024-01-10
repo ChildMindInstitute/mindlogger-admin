@@ -1250,5 +1250,8 @@
     "button": "Proceed with new version"
   },
   "appletNameExists": "That Applet name already exists",
+  "notInvited": "Not invited",
+  "pending": "Pending",
+  "inviteTooltip": "<0>To enable this person to use MindLogger on their own,</0> <1>invite them now</1>.",
   "goToDashboard": "Go to Dashboard"
 }

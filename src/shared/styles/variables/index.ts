@@ -23,6 +23,7 @@ export const variables = {
     md: '0.1rem', //1px
   },
   opacity: {
+    hover: 0.85,
     disabled: 0.38,
   },
   boxShadow: {

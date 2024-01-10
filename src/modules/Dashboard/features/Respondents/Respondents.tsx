@@ -1,15 +1,15 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
+import { Actions, Pin, Row, Search, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
-import { useTimeAgo, useTable, useAsync, usePermissions, useEncryptionStorage } from 'shared/hooks';
+import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
-import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 import { Respondent } from 'modules/Dashboard/types';
 
@@ -29,10 +29,10 @@ import {
 } from './Respondents.types';
 import {
   DataExportPopup,
+  EditRespondentPopup,
+  RespondentsRemoveAccessPopup,
   ScheduleSetupPopup,
   ViewDataPopup,
-  RespondentsRemoveAccessPopup,
-  EditRespondentPopup,
 } from './Popups';
 
 export const Respondents = () => {
