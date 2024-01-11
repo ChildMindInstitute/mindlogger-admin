@@ -32,9 +32,3 @@ export type WorkspaceInfo = {
   hasManagers: boolean;
   name: string;
 };
-
-export type UseFormError<T extends FieldValues> = {
-  error: AxiosError<ApiErrorResponse> | null;
-  setError: UseFormSetError<T>;
-  setHasCommonError: Dispatch<SetStateAction<boolean>>;
-};

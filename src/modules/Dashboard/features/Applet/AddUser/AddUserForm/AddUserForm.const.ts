@@ -80,6 +80,4 @@ export const defaultValues = {
   submitBtnType: SubmitBtnType.WithInvitation,
 };
 
-export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
-
 export const dataTestId = 'dashboard-add-users';

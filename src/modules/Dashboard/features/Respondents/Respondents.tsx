@@ -377,6 +377,7 @@ export const Respondents = () => {
         onClose={() => console.log('on close')}
         secretUserId="123456"
         subjectId="subj-123"
+        email="test@test.com"
       />
     </StyledBody>
   );

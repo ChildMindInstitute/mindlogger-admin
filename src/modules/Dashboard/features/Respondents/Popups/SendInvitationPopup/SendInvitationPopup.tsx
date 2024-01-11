@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -9,6 +10,7 @@ import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
 import { postSubjectInvitationApi } from 'api';
 import { InputController } from 'shared/components/FormComponents';
+import { useFormError } from 'modules/Dashboard/hooks';
 
 import { SendInvitationForm, SendInvitationPopupProps } from './SendInvitationPopup.types';
 import { dataTestId } from './SendInvitationPopup.const';
@@ -23,7 +25,8 @@ export const SendInvitationPopup = ({
 }: SendInvitationPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
-  const { handleSubmit, control, getValues } = useForm<SendInvitationForm>({
+  const [hasCommonError, setHasCommonError] = useState(false);
+  const { handleSubmit, control, getValues, setError } = useForm<SendInvitationForm>({
     resolver: yupResolver(SendInvitationSchema()),
     defaultValues: { email: email || '' },
   });
@@ -35,8 +38,11 @@ export const SendInvitationPopup = ({
   const submitForm = async () => {
     if (!appletId || !subjectId) return;
     Mixpanel.track('Subject Invitation click');
+    setHasCommonError(false);
     execute({ appletId, subjectId, email: getValues('email') });
   };
+
+  useFormError({ error, setError, setHasCommonError, fields: { email: 'email' } });
 
   return (
     <Modal
@@ -61,7 +67,7 @@ export const SendInvitationPopup = ({
               data-testid={`${dataTestId}-email`}
             />
           </form>
-          {error && (
+          {hasCommonError && (
             <StyledBodyLarge
               color={variables.palette.semantic.error}
               sx={{ m: theme.spacing(1, 0) }}

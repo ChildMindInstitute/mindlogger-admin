@@ -3,7 +3,7 @@ export type SendInvitationPopupProps = {
   onClose: (shouldReFetch: boolean) => void;
   secretUserId: string;
   subjectId: string;
-  email?: string;
+  email: string | null;
 };
 
 export type SendInvitationForm = {
