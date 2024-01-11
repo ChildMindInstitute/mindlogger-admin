@@ -21,8 +21,10 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   );
 
   useEffect(() => {
+    if (!url) return;
+
     trigger(urlName);
-    url && setMedia({ ...media, name: getNameByUrl(url) });
+    setMedia({ ...media, name: getNameByUrl(url) });
   }, [url]);
 
   return (
