@@ -504,6 +504,8 @@ export const getEventPayload = (
   const body: CreateEventType['body'] = {
     respondentId,
     timerType,
+    startTime: addSecondsToHourMinutes(startTime) || undefined,
+    endTime: addSecondsToHourMinutes(endTime) || undefined,
     notification:
       notifications?.length || reminder
         ? {
@@ -525,8 +527,6 @@ export const getEventPayload = (
       }),
     };
   } else {
-    body.startTime = addSecondsToHourMinutes(startTime) || undefined;
-    body.endTime = addSecondsToHourMinutes(endTime) || undefined;
     body.accessBeforeSchedule = accessBeforeSchedule;
 
     body.periodicity = {
