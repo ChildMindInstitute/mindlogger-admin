@@ -1,8 +1,8 @@
 import { ItemResponseType } from 'shared/consts';
 
-import { TimePickerLineChart } from '../Charts/LineChart';
 import { TICK_HEIGHT } from '../Charts/Charts.const';
-import { MultiScatterChart } from '../Charts';
+import { MultiScatterChart } from '../Charts/MultiScatterChart';
+import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
 
@@ -37,7 +37,7 @@ export const getResponseItem = ({
         responseType={responseType}
         answers={answers}
         versions={versions}
-        data-testid={dataTestid}
+        data-testid={`${dataTestid}-multi-scatter-chart`}
       />
     );
   };
@@ -49,7 +49,7 @@ export const getResponseItem = ({
       maxDate={maxDate}
       answers={answers}
       versions={versions}
-      data-testid={dataTestid}
+      data-testid={`${dataTestid}-time-picker-chart`}
     />
   );
 
