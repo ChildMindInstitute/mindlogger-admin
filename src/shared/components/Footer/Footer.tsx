@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import packageJson from '../../../../package.json';
 import { Language } from './Language';
 import {
   StyledFooter,
@@ -19,14 +18,12 @@ import {
   TERMS_LINK,
 } from './Footer.const';
 
-const version = `v ${packageJson.version}`;
 const year = new Date().getFullYear();
 
 export const Footer = () => {
   const { t } = useTranslation('app');
 
   const { REACT_APP_DEVELOP_BUILD_VERSION } = process.env;
-  const buildVersion = REACT_APP_DEVELOP_BUILD_VERSION && `(${REACT_APP_DEVELOP_BUILD_VERSION})`;
 
   return (
     <StyledFooter>
@@ -36,7 +33,7 @@ export const Footer = () => {
           <StyledUnderlineLink target="_blank" href={CMI_LINK}>
             Child Mind Institute
           </StyledUnderlineLink>
-          &#169; {year} {version} {buildVersion}
+          &#169; {year} {REACT_APP_DEVELOP_BUILD_VERSION ?? ''}
         </StyledText>
       </Box>
       <StyledBox>
