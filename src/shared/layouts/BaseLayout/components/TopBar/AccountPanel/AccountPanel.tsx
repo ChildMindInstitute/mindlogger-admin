@@ -29,6 +29,8 @@ import {
 } from './AccountPanel.styles';
 import { AccountPanelProps } from './AccountPanel.types';
 
+const dataTestid = 'account-panel';
+
 export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelProps) => {
   const { t } = useTranslation('app');
   const authData = auth.useData();
@@ -50,7 +52,12 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
-      <StyledAccountDrawer anchor="right" open={visibleDrawer} hideBackdrop>
+      <StyledAccountDrawer
+        data-testid={dataTestid}
+        anchor="right"
+        open={visibleDrawer}
+        hideBackdrop
+      >
         <Box>
           <StyledHeader>
             <StyledFlexTopCenter>
