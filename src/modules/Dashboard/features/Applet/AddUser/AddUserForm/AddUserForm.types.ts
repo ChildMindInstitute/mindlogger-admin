@@ -1,10 +1,5 @@
-import { Dispatch, SetStateAction } from 'react';
-import { AxiosError } from 'axios';
-import { UseFormSetError, FieldValues } from 'react-hook-form';
-
 import { Option } from 'shared/components/FormComponents';
 import { Roles } from 'shared/consts';
-import { ApiErrorResponse } from 'shared/state';
 
 import { SubmitBtnType } from './AddUserForm.const';
 
