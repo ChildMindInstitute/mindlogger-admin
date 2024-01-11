@@ -76,7 +76,10 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
               </StyledHeaderInfo>
             </StyledFlexTopCenter>
             <StyledCloseWrapper>
-              <StyledIconButton onClick={() => setVisibleDrawer(false)}>
+              <StyledIconButton
+                data-testid="account-panel-close"
+                onClick={() => setVisibleDrawer(false)}
+              >
                 <Svg id="close" />
               </StyledIconButton>
             </StyledCloseWrapper>
