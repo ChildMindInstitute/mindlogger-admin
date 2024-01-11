@@ -34,7 +34,6 @@ import {
   ScheduleSetupPopup,
   ViewDataPopup,
 } from './Popups';
-import { SendInvitationPopup } from './Popups/SendInvitationPopup';
 
 export const Respondents = () => {
   const { appletId } = useParams();
@@ -372,13 +371,6 @@ export const Respondents = () => {
           chosenAppletData={chosenAppletData}
         />
       )}
-      <SendInvitationPopup
-        open
-        onClose={() => console.log('on close')}
-        secretUserId="123456"
-        subjectId="subj-123"
-        email="test@test.com"
-      />
     </StyledBody>
   );
 };

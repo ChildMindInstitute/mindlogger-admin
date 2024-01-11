@@ -35,7 +35,7 @@ export const SendInvitationPopup = ({
     onClose(true);
   });
 
-  const submitForm = async () => {
+  const submitForm = () => {
     if (!appletId || !subjectId) return;
     Mixpanel.track('Subject Invitation click');
     setHasCommonError(false);
@@ -53,19 +53,13 @@ export const SendInvitationPopup = ({
       buttonText={t('sendInvitation')}
       disabledSubmit={isLoading}
       submitBtnVariant={SubmitBtnVariant.Contained}
-      data-testid="dashboard-respondents-view-calendar-popup"
+      data-testid={dataTestId}
     >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
           <form onSubmit={handleSubmit(submitForm)} noValidate>
-            <InputController
-              fullWidth
-              name="email"
-              control={control}
-              label={t('emailAddress')}
-              data-testid={`${dataTestId}-email`}
-            />
+            <InputController fullWidth name="email" control={control} label={t('emailAddress')} />
           </form>
           {hasCommonError && (
             <StyledBodyLarge
