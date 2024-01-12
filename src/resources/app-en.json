@@ -1253,5 +1253,8 @@
   "notInvited": "Not invited",
   "pending": "Pending",
   "inviteTooltip": "<0>To enable this person to use MindLogger on their own,</0> <1>invite them now</1>.",
+  "addEmailForId": "Add an email for ID:",
+  "confirmEmailForId": "Confirm email for ID:",
+  "emailAddress": "Email address",
   "goToDashboard": "Go to Dashboard"
 }

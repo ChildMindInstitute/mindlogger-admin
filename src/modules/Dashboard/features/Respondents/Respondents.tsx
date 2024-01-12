@@ -151,16 +151,16 @@ export const Respondents = () => {
     updateRespondentsPin({ ownerId, userId });
   };
 
-  const editRespondentOnClose = (shouldRefetch: boolean) => {
+  const editRespondentOnClose = (shouldReFetch: boolean) => {
     setEditRespondentPopupVisible(false);
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
+    shouldReFetch && handleReload();
   };
 
-  const removeRespondentAccessOnClose = (shouldRefetch?: boolean) => {
+  const removeRespondentAccessOnClose = (shouldReFetch?: boolean) => {
     setRemoveAccessPopupVisible(false);
     setChosenAppletData(null);
-    shouldRefetch && handleReload();
+    shouldReFetch && handleReload();
   };
 
   const formatRow = (user: Respondent): Row => {

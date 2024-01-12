@@ -1,10 +1,5 @@
-import { Dispatch, SetStateAction } from 'react';
-import { AxiosError } from 'axios';
-import { UseFormSetError, FieldValues } from 'react-hook-form';
-
 import { Option } from 'shared/components/FormComponents';
 import { Roles } from 'shared/consts';
-import { ApiErrorResponse } from 'shared/state';
 
 import { SubmitBtnType } from './AddUserForm.const';
 
@@ -31,10 +26,4 @@ export type AddUserFormProps = {
 export type WorkspaceInfo = {
   hasManagers: boolean;
   name: string;
-};
-
-export type UseFormError<T extends FieldValues> = {
-  error: AxiosError<ApiErrorResponse> | null;
-  setError: UseFormSetError<T>;
-  setHasCommonError: Dispatch<SetStateAction<boolean>>;
 };

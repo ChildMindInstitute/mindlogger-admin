@@ -66,6 +66,7 @@ export enum DateFormats {
   Time = 'HH:mm',
   TimeSeconds = 'HH:mm:ss',
   YearMonthDayHoursMinutesSeconds = 'yyyy-MM-dd HH:mm:ss',
+  // prettier-ignore
   shortISO = 'yyyy-MM-dd\'T\'HH:mm:ss',
   YearMonthDay = 'yyyy-MM-dd',
   MonthDayTime = 'MMM dd, HH:mm',
@@ -319,7 +320,10 @@ export const enum ScoreReportType {
 export const URL_REGEX = /(https?:\/\/)?(www\.)?/g;
 
 export const AUTH_BOX_WIDTH = '39.2rem';
+
 export const enum AnalyticsCalendarPrefix {
   IndividualCalendar = 'IC',
   GeneralCalendar = 'GC',
 }
+
+export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';

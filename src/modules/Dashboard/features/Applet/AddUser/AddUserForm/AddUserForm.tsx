@@ -19,11 +19,12 @@ import {
   postAppletShellAccountApi,
 } from 'api';
 import { getErrorMessage, Mixpanel } from 'shared/utils';
-import { Roles } from 'shared/consts';
+import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
 import { users, workspaces } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
+import { useFormError } from 'modules/Dashboard/hooks';
 
 import { StyledRow, StyledTooltip } from './AddUserForm.styles';
 import {
@@ -38,7 +39,6 @@ import {
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl } from './AddUserForm.utils';
-import { useFormError } from './AddUserForm.hooks';
 
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
   const { appletId } = useParams();
@@ -147,7 +147,19 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
   };
 
   const error = invitationError || shellAccountError;
-  useFormError({ error, setError, setHasCommonError });
+  useFormError({
+    error,
+    setError,
+    setHasCommonError,
+    fields: Fields,
+    customFieldErrors: [
+      {
+        fieldName: Fields.secretUserId,
+        apiMessage: NON_UNIQUE_VALUE_MESSAGE,
+        errorMessage: t('secretUserIdExists'),
+      },
+    ],
+  });
 
   useEffect(() => {
     if (ownerId) {

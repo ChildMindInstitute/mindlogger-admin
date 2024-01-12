@@ -189,6 +189,11 @@ export type AppletInvitationData = AppletId & {
   options: AppletInvitationOptions;
 };
 
+export type SubjectInvitationData = AppletId & {
+  subjectId: string;
+  email: string;
+};
+
 export type AppletShellAccountOptions = {
   secretUserId: string;
   firstName: string;

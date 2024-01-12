@@ -56,6 +56,7 @@ import {
   AssessmentResult,
   SubmitDates,
   AppletShellAccountData,
+  SubjectInvitationData,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -264,6 +265,18 @@ export const postAppletShellAccountApi = (
   authApiClient.post(
     `/invitations/${appletId}/shell-account`,
     { ...options },
+    {
+      signal,
+    },
+  );
+
+export const postSubjectInvitationApi = (
+  { appletId, subjectId, email }: SubjectInvitationData,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/invitations/${appletId}/subject`,
+    { subjectId, email },
     {
       signal,
     },

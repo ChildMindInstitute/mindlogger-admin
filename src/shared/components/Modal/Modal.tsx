@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { Svg } from 'shared/components/Svg';
 import { theme, StyledModalContent } from 'shared/styles';
 
-import { ModalProps } from './Modal.types';
+import { ModalProps, SubmitBtnVariant } from './Modal.types';
 import {
   StyledDialog,
   StyledDialogTitle,
@@ -27,6 +27,7 @@ export const Modal = ({
   hasSecondBtn = false,
   submitBtnColor = 'primary',
   secondBtnText,
+  submitBtnVariant = SubmitBtnVariant.Text,
   onSecondBtnSubmit,
   disabledSecondBtn,
   sxProps,
@@ -54,7 +55,7 @@ export const Modal = ({
     if (!buttonText) return;
     const button = (
       <StyledButton
-        variant="text"
+        variant={submitBtnVariant}
         disabled={disabledSubmit}
         onClick={onSubmit}
         color={submitBtnColor}
