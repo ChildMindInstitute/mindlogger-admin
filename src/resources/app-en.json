@@ -1183,7 +1183,8 @@
     "variableInTheSameItem": "* You cannot use item name in the same item. Please remove",
     "variableIsNotSupported": "* This item is not supported, please remove it.",
     "variableReferringToNotExistedItem": "Remove the variable referring to the nonexistent item.",
-    "variableReferringToSkippedItem": "Remove the variable referring to the skipped item."
+    "variableReferringToSkippedItem": "Remove the variable referring to the skipped item.",
+    "nameExistsInSystemItems": "The activity already contains a system item {{- itemName}} which was added automatically after the Subscales Lookup Table was uploaded. Please create a different name for this item."
   },
   "value": "Value",
   "variablesWarning": {

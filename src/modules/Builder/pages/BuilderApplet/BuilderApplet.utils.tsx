@@ -33,6 +33,7 @@ import {
   getObjectFromList,
   getTextBetweenBrackets,
   INTERVAL_SYMBOL,
+  isSystemItem,
   Path,
   pluck,
 } from 'shared/utils';
@@ -45,6 +46,7 @@ import {
   DEFAULT_THRESHOLD_DURATION,
   GyroscopeOrTouch,
   ItemResponseType,
+  LookupTableItems,
   PerfTaskType,
   ScoreConditionType,
   ScoreReportType,
@@ -1044,6 +1046,21 @@ export const testIsReportCommonFieldsRequired = (
 
 export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
   items?.filter((item) => item.name === value).length < 2 ?? true;
+
+export const testFunctionForSystemItems = (
+  currentItem: ItemFormValues,
+  items: ItemFormValues[],
+) => {
+  if (currentItem.allowEdit === false) return true;
+
+  if (
+    currentItem.name !== LookupTableItems.Age_screen &&
+    currentItem.name !== LookupTableItems.Gender_screen
+  )
+    return true;
+
+  return !items?.some((item) => isSystemItem(item));
+};
 
 export const testFunctionForTheSameVariable = (
   field: string,

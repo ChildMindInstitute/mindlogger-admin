@@ -18,11 +18,11 @@ export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => 
   const removeSystemItems = () =>
     setValue(
       itemsFieldName,
-      items.filter((item) => !isSystemItem(item.name)),
+      items.filter((item) => !isSystemItem(item)),
     );
   useEffect(() => {
     const hasSubscaleLookupTable = subscales?.some((subscale) => !!subscale.subscaleTableData);
-    const hasSystemItems = items?.some((item) => isSystemItem(item.name));
+    const hasSystemItems = items?.some((item) => isSystemItem(item));
     const shouldAddSubscaleSystemItems = hasSubscaleLookupTable && !hasSystemItems;
 
     if (shouldAddSubscaleSystemItems) {

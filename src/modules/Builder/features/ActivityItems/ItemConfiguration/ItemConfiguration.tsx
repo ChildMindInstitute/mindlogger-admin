@@ -16,6 +16,7 @@ import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
@@ -38,7 +39,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
 
-  const { control } = useCustomFormContext();
+  const { control, getFieldState } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
 
@@ -84,6 +85,17 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     flexGrow: 1,
     height: '100%',
   };
+  const itemNameHelperTextSxProps = {
+    '&&': {
+      top: '100%',
+      whiteSpace: 'normal',
+      overflow: 'unset',
+      bottom: 'unset',
+    },
+  };
+
+  const hasSameNameInSystemItemsError =
+    getFieldState(`${name}.name`)?.error?.type === ItemTestFunctions.ExistingNameInSystemItem;
 
   return (
     <>
@@ -123,6 +135,9 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
               type="text"
               sx={{ mb: theme.spacing(4) }}
               data-testid="builder-activity-items-item-configuration-name"
+              FormHelperTextProps={{
+                ...(hasSameNameInSystemItemsError && { sx: itemNameHelperTextSxProps }),
+              }}
             />
           </Grid>
         </Grid>

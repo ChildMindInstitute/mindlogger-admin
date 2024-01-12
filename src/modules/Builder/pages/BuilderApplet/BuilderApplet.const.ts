@@ -31,6 +31,7 @@ export const alphanumericAndHyphenRegexp = /^[a-zA-Z0-9_-]+$/g;
 
 export const enum ItemTestFunctions {
   UniqueItemName = 'unique-item-name',
+  ExistingNameInSystemItem = 'name-exists-in-system-items',
   VariableInTheSameItem = 'variable-in-the-same-item-error',
   VariableIsNotSupported = 'variable-is-not-supported-error',
   VariableReferringToSkippedItem = 'variable-referring-to-skipped-item-error',

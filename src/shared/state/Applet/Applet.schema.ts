@@ -708,6 +708,7 @@ export type SectionReport = {
 export type ActivitySettingsSubscaleItem = {
   name: string;
   type: ElementType;
+  allowEdit?: boolean;
 };
 
 export type ActivitySettingsSubscale<T = ActivitySettingsSubscaleItem> = {

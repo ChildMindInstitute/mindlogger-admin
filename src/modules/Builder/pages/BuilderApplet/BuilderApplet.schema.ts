@@ -37,6 +37,7 @@ import {
   testFunctionForNotSupportedItems,
   testFunctionForSkippedItems,
   testFunctionForSubscaleAge,
+  testFunctionForSystemItems,
   testFunctionForTheSameVariable,
   testFunctionForUniqueness,
   testIsReportCommonFieldsRequired,
@@ -230,6 +231,12 @@ export const ItemSchema = () =>
         .matches(alphanumericAndHyphenRegexp, {
           message: t('validationMessages.alphanumericAndHyphen', { field: t('itemName') }),
         })
+        .test(
+          ItemTestFunctions.ExistingNameInSystemItem,
+          ({ value: itemName }) => t('validationMessages.nameExistsInSystemItems', { itemName }),
+          (_, context) =>
+            testFunctionForSystemItems(context.parent, get(context, 'from.1.value.items')),
+        )
         .test(
           ItemTestFunctions.UniqueItemName,
           t('validationMessages.unique', { field: t('itemName') }) as string,

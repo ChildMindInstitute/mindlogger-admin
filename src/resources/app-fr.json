@@ -1183,7 +1183,8 @@
     "variableInTheSameItem": "* Vous ne pouvez pas utiliser le nom de l'élément dans le même élément. Veuillez le supprimer",
     "variableIsNotSupported": "* Cet élément n'est pas pris en charge, veuillez le supprimer.",
     "variableReferringToNotExistedItem": "Supprimez la variable faisant référence à l'élément inexistant.",
-    "variableReferringToSkippedItem": "Supprimez la variable faisant référence à l'élément ignoré."
+    "variableReferringToSkippedItem": "Supprimez la variable faisant référence à l'élément ignoré.",
+    "nameExistsInSystemItems": "L'activité contient déjà un élément système {{- itemName}} qui a été ajouté automatiquement après le téléchargement de la table de recherche des sous-échelles. Veuillez créer un nom différent pour cet élément."
   },
   "value": "Valeur",
   "variablesWarning": {
