@@ -14,4 +14,5 @@ export type GetResponseOptionsProps = {
   activityItem: FormattedActivityItem;
   answers?: Answer[];
   versions: Version[];
+  dataTestid?: string;
 };

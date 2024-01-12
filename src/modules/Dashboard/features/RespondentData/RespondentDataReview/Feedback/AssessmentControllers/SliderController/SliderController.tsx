@@ -8,6 +8,7 @@ export const SliderController = <T extends FieldValues>({
   control,
   activityItem: { activityItem },
   isDisabled = false,
+  'data-testid': dataTestid,
 }: SliderProps<T>) => (
   <Controller
     name={name}
@@ -18,6 +19,7 @@ export const SliderController = <T extends FieldValues>({
         activityItem={activityItem}
         isDisabled={isDisabled}
         onChange={(value) => onChange(value)}
+        data-testid={dataTestid}
       />
     )}
   />

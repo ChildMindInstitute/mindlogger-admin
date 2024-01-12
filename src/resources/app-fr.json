@@ -39,6 +39,7 @@
   "activitySplashScreenDescription": "Une image qui est affichée à un utilisateur avant l'activité.",
   "activityUnavailableAtTime": "L'activité n'est pas disponible pour le moment",
   "addActivity": "Ajouter une activité",
+  "addBlankActivity": "Ajouter une activité vide",
   "addActivityFlow": "Ajouter un flux d'activités",
   "addActivityItemsFlowTooltip": "Vous devez d'abord créer au moins deux éléments",
   "addAlert": "Ajouter une alerte",

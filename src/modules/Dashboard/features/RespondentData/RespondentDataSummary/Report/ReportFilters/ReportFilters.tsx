@@ -90,14 +90,14 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             sx={{
               backgroundColor: moreFiltersVisible ? variables.palette.primary_alfa12 : '',
             }}
-            data-testid={`${dataTestid}-more`}
+            data-testid={`${dataTestid}-more-button`}
           >
             {t('moreFilters')}
           </StyledMoreFilters>
         </StyledFlexTopCenter>
       </StyledFiltersContainer>
       {moreFiltersVisible && (
-        <Box sx={{ mb: theme.spacing(4.8) }}>
+        <Box sx={{ mb: theme.spacing(4.8) }} data-testid={`${dataTestid}-more`}>
           {!!identifiersOptions?.length && (
             <Switch
               name="filterByIdentifier"

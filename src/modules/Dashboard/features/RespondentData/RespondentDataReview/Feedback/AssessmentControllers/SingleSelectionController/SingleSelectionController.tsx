@@ -8,6 +8,7 @@ export const SingleSelectionController = <T extends FieldValues>({
   control,
   activityItem: { activityItem },
   isDisabled,
+  'data-testid': dataTestid,
 }: SingleSelectionProps<T>) => (
   <Controller
     name={name}
@@ -18,6 +19,7 @@ export const SingleSelectionController = <T extends FieldValues>({
         activityItem={activityItem}
         isDisabled={isDisabled}
         onChange={(value) => onChange(value)}
+        data-testid={dataTestid}
       />
     )}
   />

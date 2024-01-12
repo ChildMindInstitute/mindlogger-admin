@@ -22,7 +22,10 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
-  const renderResponseOption = ({ activityItem, answers }: FormattedResponse, index: number) => {
+  const renderResponseOption = (
+    { activityItem, answers, dataTestid }: FormattedResponse,
+    index: number,
+  ) => {
     if (UNSUPPORTED_ITEMS.includes(activityItem.responseType))
       return <UnsupportedItemResponse itemType={activityItem.responseType} />;
 
@@ -35,6 +38,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
       activityItem,
       versions: filteredVersions,
       answers,
+      dataTestid,
     });
   };
 
@@ -49,12 +53,24 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
         </Tooltip>
       </StyledHeadline>
       {Object.values(responseOptions).map((responseOption, responseOptionIndex) =>
-        responseOption.map((item, index) => (
-          <Box key={`${item.activityItem.id}-${index}`} sx={{ mb: theme.spacing(6.4) }}>
-            <CollapsedMdText text={getDictionaryText(item.activityItem.question)} maxHeight={120} />
-            {renderResponseOption(item, responseOptionIndex)}
-          </Box>
-        )),
+        responseOption.map((item, index) => {
+          const dataTestid = `response-option-${responseOptionIndex}-${index}`;
+
+          return (
+            <Box
+              key={`${item.activityItem.id}-${responseOptionIndex}-${index}`}
+              data-testid={dataTestid}
+              sx={{ mb: theme.spacing(6.4) }}
+            >
+              <CollapsedMdText
+                text={getDictionaryText(item.activityItem.question)}
+                maxHeight={120}
+                data-testid={`${dataTestid}-question`}
+              />
+              {renderResponseOption({ ...item, dataTestid }, responseOptionIndex)}
+            </Box>
+          );
+        }),
       )}
     </>
   );
