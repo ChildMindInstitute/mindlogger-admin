@@ -96,7 +96,7 @@ export const calcScores = <T>(
       const scores = typedOptions.scores;
       const options = createArrayFromMinToMax(min, max);
 
-      value = scores[options.findIndex((item) => item === answer.value)] || 0;
+      value = scores[options.findIndex((item) => item === answer?.value)] || 0;
     }
 
     return acc + value;
