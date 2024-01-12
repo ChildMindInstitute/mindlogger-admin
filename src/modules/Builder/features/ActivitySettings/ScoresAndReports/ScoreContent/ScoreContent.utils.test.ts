@@ -41,13 +41,13 @@ describe('getScoreRangeLabel', () => {
 
 describe('getScoreRange', () => {
   test.each`
-    itemsScore                                              | calculationType               | expectedResult                     | description
+    items                                                   | calculationType               | expectedResult                     | description
     ${[mockedSliderActivityItem]}                           | ${CalculationType.Average}    | ${{ maxScore: 6, minScore: 1 }}    | ${'should be from 1 to 6'}
     ${[mockedSingleActivityItem]}                           | ${CalculationType.Sum}        | ${{ maxScore: 4, minScore: 2 }}    | ${'should be from 2 to 4'}
     ${[mockedMultiActivityItem]}                            | ${CalculationType.Average}    | ${{ maxScore: 3, minScore: 1 }}    | ${'should be from 1 to 3'}
     ${[mockedSliderActivityItem, mockedSingleActivityItem]} | ${CalculationType.Percentage} | ${{ maxScore: 100, minScore: 30 }} | ${'should be from 30 to 100'}
-  `('$description', async ({ itemsScore, calculationType, expectedResult }) => {
-    expect(getScoreRange(itemsScore, calculationType)).toStrictEqual(expectedResult);
+  `('$description', async ({ items, calculationType, expectedResult }) => {
+    expect(getScoreRange({ items, calculationType })).toStrictEqual(expectedResult);
   });
 });
 
