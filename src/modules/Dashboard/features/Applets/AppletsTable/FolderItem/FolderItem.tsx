@@ -1,15 +1,15 @@
-import { useEffect, useState, KeyboardEvent, useContext, ChangeEvent } from 'react';
+import { useEffect, useState, KeyboardEvent, useContext, ChangeEvent, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputAdornment, TableRow } from '@mui/material';
+import { ClickAwayListener, InputAdornment, TableRow } from '@mui/material';
 
 import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'redux/modules';
-import { Svg, Actions } from 'shared/components';
+import { Svg, ActionsMenu } from 'shared/components';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
 import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.const';
-import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'api';
+import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'modules/Dashboard/api';
 import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
@@ -22,7 +22,7 @@ import {
   StyledCloseButton,
   StyledOutlinedInput,
 } from './FolderItem.styles';
-import { getActions } from './FolderItem.const';
+import { getFolderActions } from './FolderItem.utils';
 
 export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');
@@ -33,20 +33,18 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   const { execute: saveFolder } = useAsync(saveFolderApi);
   const { execute: updateFolder } = useAsync(updateFolderApi);
   const { execute: deleteFolder } = useAsync(deleteFolderApi);
-
   const { ownerId } = workspaces.useData() || {};
   const { isDragOver, onDragLeave, onDragOver, onDrop } = useAppletsDnd();
-
+  const inputRef = useRef<HTMLInputElement>(null);
   const [folder, setFolder] = useState(item);
-  const [hasVisibleActions, setHasVisibleActions] = useState(false);
 
   const isFolderExpanded = !!expandedFolders.find((id) => id === item.id);
 
   const handleRenameFolder = () => {
-    setFolder((folder) => ({ ...folder, isRenaming: true }));
+    setFolder((prevFolderValue) => ({ ...prevFolderValue, isRenaming: true }));
   };
 
-  const onDeleteFolder = async () => {
+  const handleDeleteFolder = async () => {
     if (folder.foldersAppletCount || !ownerId) return;
     if (folder.isNew) {
       setRows([...rows.filter(({ id }) => id !== item.id)]);
@@ -69,7 +67,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     }
   };
 
-  const handleBlur = () => {
+  const handleClickAway = () => {
     saveFolderHandler();
   };
 
@@ -101,14 +99,18 @@ export const FolderItem = ({ item }: FolderItemProps) => {
 
   useEffect(() => setFolder(item), [item]);
 
+  useEffect(() => {
+    if (folder.isRenaming) {
+      inputRef.current?.focus();
+    }
+  }, [folder.isRenaming]);
+
   return (
     <TableRow
       className={isDragOver ? 'dragged-over' : ''}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
       onDrop={(event) => onDrop(event, item)}
-      onMouseEnter={() => setHasVisibleActions(true)}
-      onMouseLeave={() => setHasVisibleActions(false)}
     >
       <StyledTableCell
         width={AppletsColumnsWidth.Folder}
@@ -116,32 +118,36 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       >
         <StyledFlexTopCenter>
           <StyledFolderIcon>
-            <Svg id={isFolderExpanded ? 'folder-opened' : 'folder'} />
+            <Svg
+              id={isFolderExpanded && !!folder.foldersAppletCount ? 'folder-opened' : 'folder'}
+            />
           </StyledFolderIcon>
           <StyledFolderName>
             {folder?.isRenaming ? (
-              <StyledOutlinedInput
-                autoFocus
-                error={!folder.displayName}
-                placeholder={t('newFolder')}
-                value={folder.displayName}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <StyledCloseButton
-                      data-testid="folder-clear-button"
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                        handleClearClick();
-                      }}
-                    >
-                      <Svg id="cross" />
-                    </StyledCloseButton>
-                  </InputAdornment>
-                }
-              />
+              <ClickAwayListener onClickAway={handleClickAway}>
+                <StyledOutlinedInput
+                  autoFocus
+                  error={!folder.displayName}
+                  placeholder={t('newFolder')}
+                  value={folder.displayName}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  inputRef={inputRef}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <StyledCloseButton
+                        data-testid="folder-clear-button"
+                        onMouseDown={(event) => {
+                          event.preventDefault();
+                          handleClearClick();
+                        }}
+                      >
+                        <Svg id="cross" />
+                      </StyledCloseButton>
+                    </InputAdornment>
+                  }
+                />
+              </ClickAwayListener>
             ) : (
               <>
                 <StyledBodyMedium color={variables.palette.on_surface}>
@@ -154,10 +160,8 @@ export const FolderItem = ({ item }: FolderItemProps) => {
         </StyledFlexTopCenter>
       </StyledTableCell>
       <StyledTableCell>
-        <Actions
-          items={getActions(folder, handleRenameFolder, onDeleteFolder)}
-          context={item}
-          visibleByDefault={hasVisibleActions}
+        <ActionsMenu
+          menuItems={getFolderActions(folder, handleRenameFolder, handleDeleteFolder)}
           data-testid="dashboard-applets-table-folder-actions"
         />
       </StyledTableCell>

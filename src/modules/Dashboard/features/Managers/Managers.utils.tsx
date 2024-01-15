@@ -1,15 +1,14 @@
 import i18n from 'i18n';
 import { Svg } from 'shared/components/Svg';
 import { HeadCell } from 'shared/types/table';
+import { Manager } from 'modules/Dashboard/types';
 
 import { ManagersActions } from './Managers.types';
 
 export enum ManagersColumnsWidth {
   Pin = '4.8rem',
-  FirstName = '20rem',
-  LastName = '20rem',
+  Default = '20rem',
   Email = '30rem',
-  Roles = '20rem',
 }
 
 export const getHeadCells = (id?: string): HeadCell[] => {
@@ -26,13 +25,13 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       id: 'firstName',
       label: t('firstName'),
       enableSort: true,
-      width: ManagersColumnsWidth.FirstName,
+      width: ManagersColumnsWidth.Default,
     },
     {
       id: 'lastName',
       label: t('lastName'),
       enableSort: true,
-      width: ManagersColumnsWidth.LastName,
+      width: ManagersColumnsWidth.Default,
     },
     {
       id: 'email',
@@ -46,7 +45,7 @@ export const getHeadCells = (id?: string): HeadCell[] => {
             id: 'roles',
             label: t('roles'),
             enableSort: true,
-            width: ManagersColumnsWidth.Roles,
+            width: ManagersColumnsWidth.Default,
           },
         ]
       : []),
@@ -57,20 +56,25 @@ export const getHeadCells = (id?: string): HeadCell[] => {
   ];
 };
 
-export const getActions = ({ removeAccessAction, editAccessAction }: ManagersActions) => {
+export const getManagerActions = (
+  { removeAccessAction, editAccessAction }: ManagersActions,
+  manager: Manager,
+) => {
   const { t } = i18n;
 
   return [
     {
       icon: <Svg id="remove-access" />,
       action: removeAccessAction,
-      tooltipTitle: t('removeAccess'),
+      title: t('removeAccess'),
+      context: manager,
       'data-testid': 'dashboard-managers-remove-access',
     },
     {
       icon: <Svg id="edit-user" />,
       action: editAccessAction,
-      tooltipTitle: t('editAccess'),
+      title: t('editAccess'),
+      context: manager,
       'data-testid': 'dashboard-managers-edit-user',
     },
   ];

@@ -11,52 +11,58 @@ import {
 } from 'shared/styles';
 import { RespondentDetail } from 'modules/Dashboard/types';
 
-import { RespondentsActions, ChosenAppletData, FilteredApplets } from './Respondents.types';
+import { ChosenAppletData, GetMenuItems } from './Respondents.types';
 
-export const getActions = (
-  {
+export const getRespondentActions = ({
+  actions: {
     scheduleSetupAction,
     viewDataAction,
     removeAccessAction,
     userDataExportAction,
     editRespondent,
-  }: RespondentsActions,
-  filteredApplets: FilteredApplets,
-  isAnonymousRespondent: boolean,
-  appletId?: string,
-) => [
+  },
+  filteredApplets,
+  isAnonymousRespondent,
+  respondentId,
+  appletId,
+}: GetMenuItems) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
-    tooltipTitle: t('viewCalendar'),
+    title: t('viewCalendar'),
+    context: respondentId,
     isDisplayed: !isAnonymousRespondent && !!filteredApplets?.scheduling.length,
     'data-testid': 'dashboard-respondents-view-calendar',
   },
   {
     icon: <Svg id="data" width={22} height={22} />,
     action: viewDataAction,
-    tooltipTitle: t('viewData'),
+    title: t('viewData'),
+    context: respondentId,
     isDisplayed: !!filteredApplets?.viewable.length,
     'data-testid': 'dashboard-respondents-view-data',
   },
   {
     icon: <Svg id="export" width={18} height={20} />,
     action: userDataExportAction,
-    tooltipTitle: t('exportData'),
+    title: t('exportData'),
+    context: respondentId,
     isDisplayed: !!filteredApplets?.viewable.length,
     'data-testid': 'dashboard-respondents-export-data',
   },
   {
     icon: <Svg id="edit-user" width={21} height={19} />,
     action: editRespondent,
-    tooltipTitle: t('editRespondent'),
+    title: t('editRespondent'),
+    context: respondentId,
     isDisplayed: !!appletId && !!filteredApplets?.editable.length,
     'data-testid': 'dashboard-respondents-edit',
   },
   {
     icon: <Svg id="remove-access" />,
     action: removeAccessAction,
-    tooltipTitle: t('removeAccess'),
+    title: t('removeAccess'),
+    context: respondentId,
     isDisplayed: !!filteredApplets?.editable.length,
     'data-testid': 'dashboard-respondents-remove-access',
   },
