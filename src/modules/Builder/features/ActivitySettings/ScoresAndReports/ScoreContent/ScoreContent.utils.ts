@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { ScoreOrSection, ScoreReport, SingleAndMultiSelectOption } from 'shared/state';
+import { ScoreOrSection, SingleAndMultiSelectOption } from 'shared/state';
 import {
   ItemResponseType,
   CalculationType,
@@ -13,7 +13,9 @@ import {
   ItemsWithScore,
   UpdateMessage,
   UpdateMessagesWithVariable,
+  UpdateScoreConditionIds,
 } from './ScoreContent.types';
+import { getScoreConditionId } from './ScoreCondition';
 
 const { t } = i18n;
 
@@ -116,9 +118,7 @@ export const getDefaultConditionalValue = (id: string, key: string) => ({
 const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>
   showMessage && !!message?.includes(`[[${id}]]`);
 
-export const getIsScoreIdVariable = (score: ScoreReport, reports: ScoreOrSection[]) => {
-  const { id } = score;
-
+export const getIsScoreIdVariable = (id: string, reports: ScoreOrSection[], isScore: boolean) => {
   let isVariable = false;
 
   reports?.forEach((report) => {
@@ -132,7 +132,16 @@ export const getIsScoreIdVariable = (score: ScoreReport, reports: ScoreOrSection
       report.conditionalLogic?.forEach((condition) => {
         if (isVariable) return;
 
-        isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message);
+        if ((isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message)))
+          return;
+
+        if (isScore) {
+          isVariable = getIsScoreIdVariable(
+            getScoreConditionId(id, condition.name),
+            reports,
+            false,
+          );
+        }
       });
     }
   });
@@ -159,6 +168,7 @@ export const updateMessagesWithVariable = ({
   reports,
   oldScoreId,
   newScoreId,
+  isScore,
 }: UpdateMessagesWithVariable) => {
   reports.forEach((report, index) => {
     const { type, showMessage, message, conditionalLogic } = report;
@@ -173,7 +183,7 @@ export const updateMessagesWithVariable = ({
     });
 
     if (type === ScoreReportType.Score) {
-      conditionalLogic?.forEach((condition, key) =>
+      conditionalLogic?.forEach((condition, key) => {
         updateMessage({
           setValue,
           fieldName: `${reportName}.conditionalLogic.${key}`,
@@ -181,8 +191,30 @@ export const updateMessagesWithVariable = ({
           newScoreId,
           showMessage: condition.showMessage,
           message: condition.message,
-        }),
-      );
+        });
+
+        if (isScore) {
+          updateMessagesWithVariable({
+            setValue,
+            reportsName,
+            reports,
+            oldScoreId: getScoreConditionId(oldScoreId, condition.name),
+            newScoreId: getScoreConditionId(newScoreId, condition.name),
+            isScore: false,
+          });
+        }
+      });
     }
+  });
+};
+
+export const updateScoreConditionIds = ({
+  setValue,
+  conditionsName,
+  conditions,
+  scoreId,
+}: UpdateScoreConditionIds) => {
+  conditions?.forEach((condition, index) => {
+    setValue(`${conditionsName}.${index}.id`, getScoreConditionId(scoreId, condition.name));
   });
 };
