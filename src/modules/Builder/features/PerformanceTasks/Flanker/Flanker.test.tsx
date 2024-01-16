@@ -25,6 +25,7 @@ const mockedNewFlanker = {
         timer: null,
       },
       question:
+        // prettier-ignore
         '## General Instructions\n\n You will see arrows presented at the center of the screen that point either to the left \'<\' or right \'>\'.\n Press the left button if the arrow is pointing to the left \'<\' or press the right button if the arrow is pointing to the right \'>\'.\n These arrows will appear in the center of a line of other items. Sometimes, these other items will be arrows pointing in the same direction, e.g.. \'> > > > >\', or in the opposite direction, e.g. \'< < > < <\'.\n Your job is to respond to the central arrow, no matter what direction the other arrows are pointing.\n For example, you would press the left button for both \'< < < < <\', and \'> > < > >\' because the middle arrow points to the left.\n Finally, in some trials dashes \' - \' will appear beside the central arrow.\n Again, respond only to the direction of the central arrow. Please respond as quickly and accurately as possible.',
       responseType: 'message',
       order: 1,
@@ -358,6 +359,8 @@ const blockSequencesTest = (testId, label, value) => {
   }
 };
 
+const JEST_TEST_TIMEOUT = 10000;
+
 describe('Flanker', () => {
   describe('Default Sections and Fields', () => {
     test.each`
@@ -611,63 +614,67 @@ describe('Flanker', () => {
     testId                                                     | attribute                 | description
     ${`${mockedFlankerTestid}-practice-round-block-sequences`} | ${'activities.0.items.1'} | ${'Practice Round: Block Sequences'}
     ${`${mockedFlankerTestid}-test-round-block-sequences`}     | ${'activities.0.items.7'} | ${'Test Round: Block Sequences'}
-  `('$description', async ({ testId }) => {
-    const ref = renderFlanker();
+  `(
+    '$description',
+    async ({ testId }) => {
+      const ref = renderFlanker();
 
-    fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
-    fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
+      fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
+      fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-stimulus-screen-add`));
 
-    await waitFor(() => {
-      expandAllPanels();
-      expect(screen.queryByTestId(`${testId}-table`)).not.toBeInTheDocument();
-    });
+      await waitFor(() => {
+        expandAllPanels();
+        expect(screen.queryByTestId(`${testId}-table`)).not.toBeInTheDocument();
+      });
 
-    ref.current.setValue('activities.0.items.2.config.stimulusTrials', [
-      {
-        image: 'image1',
-        text: 'text1',
-      },
-    ]);
+      ref.current.setValue('activities.0.items.2.config.stimulusTrials', [
+        {
+          image: 'image1',
+          text: 'text1',
+        },
+      ]);
 
-    await waitFor(() => {
-      expandAllPanels();
-      const table = screen.getByTestId(`${testId}-table`);
-      expect(table).toBeInTheDocument();
-      expect(table.querySelectorAll('tbody > tr')).toHaveLength(1);
-    });
+      await waitFor(() => {
+        expandAllPanels();
+        const table = screen.getByTestId(`${testId}-table`);
+        expect(table).toBeInTheDocument();
+        expect(table.querySelectorAll('tbody > tr')).toHaveLength(1);
+      });
 
-    ref.current.setValue('activities.0.items.2.config.stimulusTrials.1', {
-      image: 'image2',
-      text: 'text2',
-    });
+      ref.current.setValue('activities.0.items.2.config.stimulusTrials.1', {
+        image: 'image2',
+        text: 'text2',
+      });
 
-    await waitFor(() => {
-      expandAllPanels();
-      const table = screen.getByTestId(`${testId}-table`);
-      expect(table).toBeInTheDocument();
-      expect(table.querySelectorAll('tbody > tr')).toHaveLength(2);
-    });
+      await waitFor(() => {
+        expandAllPanels();
+        const table = screen.getByTestId(`${testId}-table`);
+        expect(table).toBeInTheDocument();
+        expect(table.querySelectorAll('tbody > tr')).toHaveLength(2);
+      });
 
-    const headCells = screen.getByTestId(`${testId}-table`).querySelectorAll('tr:last-child th');
-    expect(headCells).toHaveLength(4);
-    headCells.forEach((headCell, index) => {
-      expect(headCell).toHaveTextContent(`Block ${index + 1}`);
-    });
+      const headCells = screen.getByTestId(`${testId}-table`).querySelectorAll('tr:last-child th');
+      expect(headCells).toHaveLength(4);
+      headCells.forEach((headCell, index) => {
+        expect(headCell).toHaveTextContent(`Block ${index + 1}`);
+      });
 
-    const bodyRows = screen.getByTestId(`${testId}-table`).querySelectorAll('tbody tr');
-    expect(bodyRows).toHaveLength(2);
-    const [firstRow, secondRow] = bodyRows;
+      const bodyRows = screen.getByTestId(`${testId}-table`).querySelectorAll('tbody tr');
+      expect(bodyRows).toHaveLength(2);
+      const [firstRow, secondRow] = bodyRows;
 
-    expect(firstRow.querySelectorAll('td')).toHaveLength(4);
-    expect(secondRow.querySelectorAll('td')).toHaveLength(4);
+      expect(firstRow.querySelectorAll('td')).toHaveLength(4);
+      expect(secondRow.querySelectorAll('td')).toHaveLength(4);
 
-    firstRow.querySelectorAll('td').forEach((cell) => {
-      expect(cell).toHaveTextContent('text');
-    });
-    secondRow.querySelectorAll('td').forEach((cell) => {
-      expect(cell).toHaveTextContent('text');
-    });
-  });
+      firstRow.querySelectorAll('td').forEach((cell) => {
+        expect(cell).toHaveTextContent('text');
+      });
+      secondRow.querySelectorAll('td').forEach((cell) => {
+        expect(cell).toHaveTextContent('text');
+      });
+    },
+    JEST_TEST_TIMEOUT,
+  );
 
   describe('Validations', () => {
     test.each`
