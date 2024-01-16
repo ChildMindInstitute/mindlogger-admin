@@ -1,6 +1,5 @@
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
-import { ItemFormValuesCommonType } from 'modules/Builder/types';
 import {
   MultiSelectItem,
   ScoreConditionalLogic,
@@ -8,7 +7,9 @@ import {
   SingleSelectItem,
   SliderItem,
 } from 'shared/state';
+import { ActivityFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
 import { DataTableItem } from 'shared/components';
+import { CalculationType } from 'shared/consts';
 
 export type ScoreContentProps = {
   name: string;
@@ -53,4 +54,10 @@ export type UpdateMessage = {
   newScoreId: string;
   showMessage: boolean;
   message?: string;
+};
+
+export type GetScoreRange = {
+  items: ItemsWithScore[];
+  calculationType: CalculationType;
+  activity?: ActivityFormValues;
 };

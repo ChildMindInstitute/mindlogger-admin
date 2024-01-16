@@ -61,7 +61,7 @@ export const ScoreContent = ({
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
-  const { fieldName } = useCurrentActivity();
+  const { fieldName, activity } = useCurrentActivity();
 
   const reportsName = `${fieldName}.scoresAndReports.reports`;
   const scoreConditionalsName = `${name}.conditionalLogic`;
@@ -74,7 +74,7 @@ export const ScoreContent = ({
     (item) => itemsScore?.includes(getEntityKey(item, true)),
   );
   const scoreRangeLabel = selectedItems?.length
-    ? getScoreRangeLabel(getScoreRange(selectedItems, calculationType))
+    ? getScoreRangeLabel(getScoreRange({ items: selectedItems, calculationType, activity }))
     : EMPTY_SCORE_RANGE_LABEL;
 
   const {
