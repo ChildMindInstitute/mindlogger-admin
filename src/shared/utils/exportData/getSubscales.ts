@@ -48,17 +48,16 @@ export const calcScores = <T>(
   subscalesObject: Record<string, ActivitySettingsSubscale>,
   result: { [key: string]: { score: number; optionText: string } },
 ): { [key: string]: { score: number; optionText: string } } => {
-  const subscaleItems = data.items.map((item) => {
-    const isHidden = activityItems[item.name].activityItem.isHidden;
+  let itemCount = 0;
 
-    return {
-      ...item,
-      isHidden,
-    };
-  });
+  const sumScore = data.items.reduce((acc, item) => {
+    const isHidden = activityItems[item.name]?.activityItem?.isHidden;
 
-  const sumScore = subscaleItems.reduce((acc, item) => {
-    if (!item?.type || item.isHidden) {
+    if (!isSystemItem(item) && !isHidden) {
+      itemCount++;
+    }
+
+    if (!item?.type || isHidden) {
       return acc;
     }
 
@@ -111,8 +110,7 @@ export const calcScores = <T>(
     return acc + value;
   }, 0);
 
-  const filteredItems = subscaleItems.filter((item) => !isSystemItem(item) && !item.isHidden);
-  const calculatedScore = getSubScaleScore(sumScore, data.scoring, filteredItems.length);
+  const calculatedScore = getSubScaleScore(sumScore, data.scoring, itemCount);
 
   if (data?.subscaleTableData) {
     const subscaleTableDataItem = data.subscaleTableData?.find(({ sex, age, rawScore }) => {

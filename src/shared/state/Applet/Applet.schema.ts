@@ -709,7 +709,6 @@ export type ActivitySettingsSubscaleItem = {
   name: string;
   type: ElementType;
   allowEdit?: boolean;
-  isHidden?: boolean;
 };
 
 export type ActivitySettingsSubscale<T = ActivitySettingsSubscaleItem> = {
