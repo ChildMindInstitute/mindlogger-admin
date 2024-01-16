@@ -1,7 +1,13 @@
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
+import {
+  MultiSelectItem,
+  ScoreConditionalLogic,
+  ScoreOrSection,
+  SingleSelectItem,
+  SliderItem,
+} from 'shared/state';
 import { ActivityFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
-import { MultiSelectItem, ScoreOrSection, SingleSelectItem, SliderItem } from 'shared/state';
 import { DataTableItem } from 'shared/components';
 import { CalculationType } from 'shared/consts';
 
@@ -31,6 +37,14 @@ export type UpdateMessagesWithVariable = {
   reports: ScoreOrSection[];
   oldScoreId: string;
   newScoreId: string;
+  isScore?: boolean;
+};
+
+export type UpdateScoreConditionIds = {
+  setValue: UseFormSetValue<FieldValues>;
+  conditionsName: string;
+  conditions: ScoreConditionalLogic[];
+  scoreId: string;
 };
 
 export type UpdateMessage = {
@@ -47,3 +61,11 @@ export type GetScoreRange = {
   calculationType: CalculationType;
   activity?: ActivityFormValues;
 };
+
+export type GetIsScoreIdVariable = {
+  id: string;
+  reports: ScoreOrSection[];
+  isScore: boolean;
+};
+
+export type IsMessageIncludeScoreId = { showMessage: boolean; id: string; message?: string };
