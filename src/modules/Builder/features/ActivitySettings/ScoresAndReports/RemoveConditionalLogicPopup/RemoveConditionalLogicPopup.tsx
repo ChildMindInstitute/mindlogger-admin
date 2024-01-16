@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useCustomFormContext } from 'modules/Builder/hooks';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledBodyLarge, StyledModalWrapper } from 'shared/styles';
 import { Modal } from 'shared/components';
 
