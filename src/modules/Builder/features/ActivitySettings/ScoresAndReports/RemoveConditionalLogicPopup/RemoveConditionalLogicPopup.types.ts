@@ -2,6 +2,6 @@ export type RemoveConditionalLogicPopupProps = {
   name: string;
   onClose: () => void;
   onRemove: () => void;
-  reportFieldName?: string;
+  reportFieldName: string;
   'data-testid'?: string;
 };
