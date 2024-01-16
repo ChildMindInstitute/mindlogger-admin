@@ -9,7 +9,7 @@ export const WorkspaceImage = ({
   workspaceName = '',
   coverSxProps = {},
 }: WorkspaceImageProps) => (
-  <StyledCustomCover uiType={uiType} sx={coverSxProps}>
+  <StyledCustomCover data-testid="workspace-image" uiType={uiType} sx={coverSxProps}>
     {image ? (
       <StyledImage src={image} />
     ) : (

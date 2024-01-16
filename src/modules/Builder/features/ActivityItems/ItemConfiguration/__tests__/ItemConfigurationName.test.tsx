@@ -14,6 +14,20 @@ import {
   mockedItemName,
 } from '../__mocks__';
 
+const mockedAppletFormDataWithSystemItems = {
+  ...mockedAppletFormData,
+  activities: [
+    {
+      ...mockedAppletFormData.activities[0],
+      items: [
+        ...mockedAppletFormData.activities[0].items,
+        { name: 'age_screen', allowEdit: false },
+        { name: 'gender_screen', allowEdit: false },
+      ],
+    },
+  ],
+};
+
 describe('ItemConfiguration: Item Name', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -36,17 +50,19 @@ describe('ItemConfiguration: Item Name', () => {
   });
 
   test.each`
-    text         | expected                                                                         | description
-    ${''}        | ${'Item Name is required'}                                                       | ${'empty name is not allowed'}
-    ${'Item1!'}  | ${'Item Name must contain only alphanumeric characters, underscores, or hyphen'} | ${'other symbols than a-zA-Z0-9_- are not allowed'}
-    ${'Item2'}   | ${'That Item Name is already in use. Please use a different name'}               | ${'name should be unique among the others in activity'}
-    ${'Item1_-'} | ${''}                                                                            | ${'name with a-zA-Z0-9_- is allowed'}
+    text               | expected                                                                                                                                                                                  | description
+    ${''}              | ${'Item Name is required'}                                                                                                                                                                | ${'empty name is not allowed'}
+    ${'Item1!'}        | ${'Item Name must contain only alphanumeric characters, underscores, or hyphen'}                                                                                                          | ${'other symbols than a-zA-Z0-9_- are not allowed'}
+    ${'Item2'}         | ${'That Item Name is already in use. Please use a different name'}                                                                                                                        | ${'name should be unique among the others in activity'}
+    ${'age_screen'}    | ${'The activity already contains a system item age_screen which was added automatically after the Subscales Lookup Table was uploaded. Please create a different name for this item.'}    | ${'age_screen is not allowed if there are system items'}
+    ${'gender_screen'} | ${'The activity already contains a system item gender_screen which was added automatically after the Subscales Lookup Table was uploaded. Please create a different name for this item.'} | ${'gender_screen is not allowed if there are system items'}
+    ${'Item1_-'}       | ${''}                                                                                                                                                                                     | ${'name with a-zA-Z0-9_- is allowed'}
   `('$description', async ({ text, expected }) => {
     const ref = createRef();
 
     renderWithAppletFormData({
       children: renderItemConfiguration(),
-      appletFormData: mockedAppletFormData,
+      appletFormData: mockedAppletFormDataWithSystemItems,
       formRef: ref,
     });
 

@@ -1,5 +1,6 @@
 import {
   ActivitySettingsSubscale,
+  ActivitySettingsSubscaleItem,
   Item,
   ParsedSubscale,
   ScoresObject,
@@ -95,13 +96,13 @@ export const calcScores = <T>(
       const scores = typedOptions.scores;
       const options = createArrayFromMinToMax(min, max);
 
-      value = scores[options.findIndex((item) => item === answer.value)] || 0;
+      value = scores[options.findIndex((item) => item === answer?.value)] || 0;
     }
 
     return acc + value;
   }, 0);
 
-  const filteredItems = data.items.filter((item) => !isSystemItem(item.name));
+  const filteredItems = data.items.filter((item) => !isSystemItem(item));
   const calculatedScore = getSubScaleScore(sumScore, data.scoring, filteredItems.length);
 
   if (data?.subscaleTableData) {
@@ -145,25 +146,24 @@ export const calcTotalScore = (
   return calcScores(
     {
       name: FinalSubscale.Key,
-      items: Object.keys(activityItems).reduce(
-        (acc: { name: string; type: ElementType.Item }[], item) => {
-          const itemType = activityItems[item].activityItem.responseType;
+      items: Object.keys(activityItems).reduce((acc: ActivitySettingsSubscaleItem[], item) => {
+        const itemType = activityItems[item].activityItem.responseType;
+        const allowEdit = activityItems[item].activityItem.allowEdit;
 
-          if (
-            itemType === ItemResponseType.SingleSelection ||
-            itemType === ItemResponseType.MultipleSelection ||
-            itemType === ItemResponseType.Slider
-          ) {
-            acc.push({
-              name: item,
-              type: ElementType.Item,
-            });
-          }
+        if (
+          itemType === ItemResponseType.SingleSelection ||
+          itemType === ItemResponseType.MultipleSelection ||
+          itemType === ItemResponseType.Slider
+        ) {
+          acc.push({
+            name: item,
+            type: ElementType.Item,
+            allowEdit,
+          });
+        }
 
-          return acc;
-        },
-        [],
-      ),
+        return acc;
+      }, []),
       scoring: subscaleSetting.calculateTotalScore,
       subscaleTableData: subscaleSetting.totalScoresTableData,
     } as ActivitySettingsSubscale,
