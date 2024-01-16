@@ -44,7 +44,7 @@ export const Editor = ({
     if (!withDebounce || inputValue === value) return;
 
     handleDebouncedChange(inputValue);
-  }, [inputValue, withDebounce]);
+  }, [inputValue, value, withDebounce]);
 
   useEffect(() => {
     if (!withDebounce) return;
