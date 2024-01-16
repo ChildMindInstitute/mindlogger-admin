@@ -1,5 +1,5 @@
 import i18n from 'i18n';
-import { ScoreOrSection, SingleAndMultiSelectOption } from 'shared/state';
+import { SingleAndMultiSelectOption } from 'shared/state';
 import {
   ItemResponseType,
   CalculationType,
@@ -9,8 +9,10 @@ import {
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 import {
+  GetIsScoreIdVariable,
   GetScoreRange,
   GetScoreRangeLabel,
+  IsMessageIncludeScoreId,
   ItemsWithScore,
   UpdateMessage,
   UpdateMessagesWithVariable,
@@ -116,16 +118,22 @@ export const getDefaultConditionalValue = (id: string, key: string) => ({
   conditions: [{ itemName: key, type: '' }],
 });
 
-const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>
+const isMessageIncludeScoreId = ({ showMessage, id, message }: IsMessageIncludeScoreId) =>
   showMessage && !!message?.includes(`[[${id}]]`);
 
-export const getIsScoreIdVariable = (id: string, reports: ScoreOrSection[], isScore: boolean) => {
+export const getIsScoreIdVariable = ({ id, reports, isScore }: GetIsScoreIdVariable) => {
   let isVariable = false;
 
   reports?.forEach((report) => {
     if (isVariable) return;
 
-    if ((isVariable = isMessageIncludeScoreId(report.showMessage, id, report.message))) {
+    if (
+      (isVariable = isMessageIncludeScoreId({
+        showMessage: report.showMessage,
+        id,
+        message: report.message,
+      }))
+    ) {
       return;
     }
 
@@ -133,15 +141,22 @@ export const getIsScoreIdVariable = (id: string, reports: ScoreOrSection[], isSc
       report.conditionalLogic?.forEach((condition) => {
         if (isVariable) return;
 
-        if ((isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message)))
+        if (
+          (isVariable = isMessageIncludeScoreId({
+            showMessage: condition.showMessage,
+            id,
+            message: condition.message,
+          }))
+        ) {
           return;
+        }
 
         if (isScore) {
-          isVariable = getIsScoreIdVariable(
-            getScoreConditionId(id, condition.name),
+          isVariable = getIsScoreIdVariable({
+            id: getScoreConditionId(id, condition.name),
             reports,
-            false,
-          );
+            isScore: false,
+          });
         }
       });
     }

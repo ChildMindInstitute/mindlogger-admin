@@ -61,3 +61,11 @@ export type GetScoreRange = {
   calculationType: CalculationType;
   activity?: ActivityFormValues;
 };
+
+export type GetIsScoreIdVariable = {
+  id: string;
+  reports: ScoreOrSection[];
+  isScore: boolean;
+};
+
+export type IsMessageIncludeScoreId = { showMessage: boolean; id: string; message?: string };

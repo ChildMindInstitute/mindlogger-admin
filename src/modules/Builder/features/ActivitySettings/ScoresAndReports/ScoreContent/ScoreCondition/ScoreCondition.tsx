@@ -43,7 +43,11 @@ export const ScoreCondition = ({
   const handleConditionNameBlur = () => {
     if (conditionName === prevScoreConditionName) return;
 
-    const isVariable = getIsScoreIdVariable(conditionId, getValues(reportsName), false);
+    const isVariable = getIsScoreIdVariable({
+      id: conditionId,
+      reports: getValues(reportsName),
+      isScore: false,
+    });
 
     if (isVariable) {
       setIsChangeScoreIdPopupVisible(true);

@@ -132,7 +132,11 @@ export const ScoreContent = ({
     const calculationType = event.target.value as CalculationType;
     setPrevCalculationType(score.calculationType);
 
-    const isVariable = getIsScoreIdVariable(score.id, getValues(reportsName), true);
+    const isVariable = getIsScoreIdVariable({
+      id: score.id,
+      reports: getValues(reportsName),
+      isScore: true,
+    });
 
     if (isVariable) {
       setIsChangeScoreIdPopupVisible(true);
@@ -155,7 +159,11 @@ export const ScoreContent = ({
   const handleNameBlur = () => {
     if (scoreName === prevScoreName) return;
 
-    const isVariable = getIsScoreIdVariable(score.id, getValues(reportsName), true);
+    const isVariable = getIsScoreIdVariable({
+      id: score.id,
+      reports: getValues(reportsName),
+      isScore: true,
+    });
 
     if (isVariable) {
       setIsChangeScoreIdPopupVisible(true);
