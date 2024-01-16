@@ -9,6 +9,7 @@ import {
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 import {
+  GetScoreRange,
   GetScoreRangeLabel,
   ItemsWithScore,
   UpdateMessage,
@@ -73,15 +74,15 @@ const getItemScoreRange = (item: ItemsWithScore) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = (itemsScore: ItemsWithScore[], calculationType: CalculationType) => {
+export const getScoreRange = ({ items, calculationType, activity }: GetScoreRange) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
-  const count = itemsScore.length;
+  const count = items.length;
 
-  itemsScore.forEach((item) => {
+  items.forEach((item) => {
     const { minScore, maxScore } = getItemScoreRange(item);
 
-    if (!item.config.skippableItem) {
+    if (!item.config.skippableItem && !activity?.isSkippable) {
       totalMinScore += minScore;
     }
 
