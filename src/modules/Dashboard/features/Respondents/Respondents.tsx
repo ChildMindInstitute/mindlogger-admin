@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Actions, Pin, Row, Search, Spinner, Svg } from 'shared/components';
+import { ActionsMenu, Pin, Row, Search, Spinner, Svg, MenuActionProps } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
@@ -19,8 +19,8 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './Respondents.styles';
-import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
-import { getHeadCells, RespondentsColumnsWidth } from './Respondents.const';
+import { getRespondentActions, getAppletsSmallTableRows, getHeadCells } from './Respondents.utils';
+import { RespondentsColumnsWidth } from './Respondents.const';
 import {
   ChosenAppletData,
   FilteredApplets,
@@ -105,18 +105,24 @@ export const Respondents = () => {
   };
 
   const actions = {
-    scheduleSetupAction: (respondentId: string) => {
+    scheduleSetupAction: ({ context: respondentId }: MenuActionProps<string>) => {
+      if (!respondentId) return;
+
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'scheduling');
       setScheduleSetupPopupVisible(true);
     },
-    userDataExportAction: (respondentId: string) => {
+    userDataExportAction: ({ context: respondentId }: MenuActionProps<string>) => {
+      if (!respondentId) return;
+
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'viewable');
       setDataExportPopupVisible(true);
       Mixpanel.track('Export Data click');
     },
-    viewDataAction: (respondentId: string) => {
+    viewDataAction: ({ context: respondentId }: MenuActionProps<string>) => {
+      if (!respondentId) return;
+
       if (hasEncryptionCheck && appletId) {
         respondentId &&
           navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
@@ -127,12 +133,16 @@ export const Respondents = () => {
       setRespondentKey(respondentId);
       setViewDataPopupVisible(true);
     },
-    removeAccessAction: (respondentId: string) => {
+    removeAccessAction: ({ context: respondentId }: MenuActionProps<string>) => {
+      if (!respondentId) return;
+
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'editable');
       setRemoveAccessPopupVisible(true);
     },
-    editRespondent: (respondentId: string) => {
+    editRespondent: ({ context: respondentId }: MenuActionProps<string>) => {
+      if (!respondentId) return;
+
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'editable');
       setEditRespondentPopupVisible(true);
@@ -203,11 +213,15 @@ export const Respondents = () => {
         },
       }),
       actions: {
-        content: (_, hasVisibleActions) => (
-          <Actions
-            items={getActions(actions, filteredRespondents?.[id], isAnonymousRespondent, appletId)}
-            context={id}
-            visibleByDefault={hasVisibleActions}
+        content: () => (
+          <ActionsMenu
+            menuItems={getRespondentActions({
+              actions,
+              filteredApplets: filteredRespondents?.[id],
+              isAnonymousRespondent,
+              respondentId: id,
+              appletId,
+            })}
             data-testid="dashboard-respondents-table-actions"
           />
         ),

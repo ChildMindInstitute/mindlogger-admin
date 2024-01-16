@@ -1,7 +1,7 @@
 import { Svg } from 'shared/components';
-import { mockedAppletId } from 'shared/mock';
+import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 
-import { getActions } from './Respondents.utils';
+import { getRespondentActions, getHeadCells } from './Respondents.utils';
 
 const applets = [
   {
@@ -27,87 +27,114 @@ const filteredApplets = {
   editable: applets,
   viewable: applets,
 };
+const headCellProperties = ['pin', 'secretIds', 'nicknames', 'lastSeen', 'actions'];
 
-describe('getActions function', () => {
-  test('should return the correct actions for a respondent with scheduling and viewable applets', () => {
-    const actions = getActions(
-      {
-        scheduleSetupAction: jest.fn(),
-        viewDataAction: jest.fn(),
-        removeAccessAction: jest.fn(),
-        userDataExportAction: jest.fn(),
-        editRespondent: jest.fn(),
-      },
-      filteredApplets,
-      false,
-      mockedAppletId,
-    );
+describe('Respondents utils tests', () => {
+  describe('getRespondentActions function', () => {
+    test('should return the correct actions for a respondent with scheduling and viewable applets', () => {
+      const actions = getRespondentActions({
+        actions: {
+          scheduleSetupAction: jest.fn(),
+          viewDataAction: jest.fn(),
+          removeAccessAction: jest.fn(),
+          userDataExportAction: jest.fn(),
+          editRespondent: jest.fn(),
+        },
+        filteredApplets,
+        isAnonymousRespondent: false,
+        respondentId: mockedRespondentId,
+        appletId: mockedAppletId,
+      });
 
-    expect(actions).toEqual([
-      {
-        icon: <Svg id="user-calendar" width={20} height={21} />,
-        action: expect.any(Function),
-        tooltipTitle: 'View Individual Calendar',
-        isDisplayed: true,
-        'data-testid': 'dashboard-respondents-view-calendar',
-      },
-      {
-        icon: <Svg id="data" width={22} height={22} />,
-        action: expect.any(Function),
-        tooltipTitle: 'View Data',
-        isDisplayed: true,
-        'data-testid': 'dashboard-respondents-view-data',
-      },
-      {
-        icon: <Svg id="export" width={18} height={20} />,
-        action: expect.any(Function),
-        tooltipTitle: 'Export Data',
-        isDisplayed: true,
-        'data-testid': 'dashboard-respondents-export-data',
-      },
-      {
-        icon: <Svg id="edit-user" width={21} height={19} />,
-        action: expect.any(Function),
-        tooltipTitle: 'Edit Respondent',
-        isDisplayed: true,
-        'data-testid': 'dashboard-respondents-edit',
-      },
-      {
-        icon: <Svg id="remove-access" />,
-        action: expect.any(Function),
-        tooltipTitle: 'Remove Access',
-        isDisplayed: true,
-        'data-testid': 'dashboard-respondents-remove-access',
-      },
-    ]);
+      expect(actions).toEqual([
+        {
+          icon: <Svg id="user-calendar" width={20} height={21} />,
+          action: expect.any(Function),
+          title: 'View Individual Calendar',
+          context: mockedRespondentId,
+          isDisplayed: true,
+          'data-testid': 'dashboard-respondents-view-calendar',
+        },
+        {
+          icon: <Svg id="data" width={22} height={22} />,
+          action: expect.any(Function),
+          title: 'View Data',
+          context: mockedRespondentId,
+          isDisplayed: true,
+          'data-testid': 'dashboard-respondents-view-data',
+        },
+        {
+          icon: <Svg id="export" width={18} height={20} />,
+          action: expect.any(Function),
+          title: 'Export Data',
+          context: mockedRespondentId,
+          isDisplayed: true,
+          'data-testid': 'dashboard-respondents-export-data',
+        },
+        {
+          icon: <Svg id="edit-user" width={21} height={19} />,
+          action: expect.any(Function),
+          title: 'Edit Respondent',
+          context: mockedRespondentId,
+          isDisplayed: true,
+          'data-testid': 'dashboard-respondents-edit',
+        },
+        {
+          icon: <Svg id="remove-access" />,
+          action: expect.any(Function),
+          title: 'Remove Access',
+          context: mockedRespondentId,
+          isDisplayed: true,
+          'data-testid': 'dashboard-respondents-remove-access',
+        },
+      ]);
 
-    // Verify that specific actions are displayed
-    expect(actions[0].isDisplayed).toBe(true);
-    expect(actions[1].isDisplayed).toBe(true);
-    expect(actions[2].isDisplayed).toBe(true);
-    expect(actions[3].isDisplayed).toBe(true);
-    expect(actions[4].isDisplayed).toBe(true);
+      // Verify that specific actions are displayed
+      expect(actions[0].isDisplayed).toBe(true);
+      expect(actions[1].isDisplayed).toBe(true);
+      expect(actions[2].isDisplayed).toBe(true);
+      expect(actions[3].isDisplayed).toBe(true);
+      expect(actions[4].isDisplayed).toBe(true);
+    });
+
+    test('should return the correct actions for an anonymous respondent', () => {
+      const actions = getRespondentActions({
+        actions: {
+          scheduleSetupAction: jest.fn(),
+          viewDataAction: jest.fn(),
+          removeAccessAction: jest.fn(),
+          userDataExportAction: jest.fn(),
+          editRespondent: jest.fn(),
+        },
+        filteredApplets,
+        isAnonymousRespondent: true,
+        respondentId: mockedRespondentId,
+        appletId: mockedAppletId,
+      });
+
+      // Verify that specific actions are not displayed for an anonymous respondent
+      expect(actions[0].isDisplayed).toBe(false);
+      expect(actions[1].isDisplayed).toBe(true);
+      expect(actions[2].isDisplayed).toBe(true);
+      expect(actions[3].isDisplayed).toBe(true);
+      expect(actions[4].isDisplayed).toBe(true);
+    });
   });
 
-  test('should return the correct actions for an anonymous respondent', () => {
-    const actions = getActions(
-      {
-        scheduleSetupAction: jest.fn(),
-        viewDataAction: jest.fn(),
-        removeAccessAction: jest.fn(),
-        userDataExportAction: jest.fn(),
-        editRespondent: jest.fn(),
-      },
-      filteredApplets,
-      true,
-      mockedAppletId,
-    );
+  describe('getHeadCells function', () => {
+    test('returns the correct array of head cells without an id', () => {
+      const headCells = getHeadCells();
+      expect(headCells).toHaveLength(5);
+      headCellProperties.forEach((property, index) => {
+        expect(headCells[index]).toHaveProperty('id', property);
+      });
+    });
 
-    // Verify that specific actions are not displayed for an anonymous respondent
-    expect(actions[0].isDisplayed).toBe(false);
-    expect(actions[1].isDisplayed).toBe(true);
-    expect(actions[2].isDisplayed).toBe(true);
-    expect(actions[3].isDisplayed).toBe(true);
-    expect(actions[4].isDisplayed).toBe(true);
+    test('returns the correct array of head cells with an id', () => {
+      const headCells = getHeadCells(mockedAppletId);
+      expect(headCells).toHaveLength(6);
+      expect(headCells[4]).toHaveProperty('id', 'schedule');
+      expect(headCells[5]).toHaveProperty('id', 'actions');
+    });
   });
 });

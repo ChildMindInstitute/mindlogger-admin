@@ -53,6 +53,13 @@ const getMockedGetWithRespondents = (isAnonymousRespondent = false) => ({
   },
 });
 
+const clickActionDots = async () => {
+  const actionsDots = await waitFor(() =>
+    screen.getByTestId('dashboard-respondents-table-actions-dots'),
+  );
+  fireEvent.click(actionsDots);
+};
+
 describe('Respondents component tests', () => {
   test('should render empty table', async () => {
     const successfulGetMock = {
@@ -114,14 +121,11 @@ describe('Respondents component tests', () => {
     });
   });
 
-  test('should appear respondents actions on respondent hover', async () => {
+  test('should appear respondents actions on respondent actions button click', async () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-respondents-table-actions-dots'),
-    );
-    fireEvent.mouseEnter(actionsDots);
+    await clickActionDots();
     const actionsDataTestIds = [
       'dashboard-respondents-view-calendar',
       'dashboard-respondents-view-data',
@@ -137,14 +141,11 @@ describe('Respondents component tests', () => {
     });
   });
 
-  test('should appear actions on respondent hover for anonymous respondent', async () => {
+  test('should appear actions for anonymous respondent', async () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithRespondents(true));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-respondents-table-actions-dots'),
-    );
-    fireEvent.mouseEnter(actionsDots);
+    await clickActionDots();
 
     const actionsDataTestIds = [
       'dashboard-respondents-view-data',
@@ -167,15 +168,12 @@ describe('Respondents component tests', () => {
       ${'dashboard-respondents-view-calendar'} | ${'dashboard-respondents-view-calendar-popup'}        | ${'view calendar'}
       ${'dashboard-respondents-export-data'}   | ${'dashboard-respondents-export-data-popup-password'} | ${'export data'}
       ${'dashboard-respondents-edit'}          | ${'dashboard-respondents-edit-popup'}                 | ${'edit respondents'}
-      ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access'}              | ${'remove access'}
+      ${'dashboard-respondents-remove-access'} | ${'dashboard-respondents-remove-access-popup'}        | ${'remove access'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
       mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
       renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
-      const actionsDots = await waitFor(() =>
-        screen.getByTestId('dashboard-respondents-table-actions-dots'),
-      );
-      fireEvent.mouseEnter(actionsDots);
+      await clickActionDots();
       const action = await waitFor(() => screen.getByTestId(actionDataTestId));
       fireEvent.click(action);
 

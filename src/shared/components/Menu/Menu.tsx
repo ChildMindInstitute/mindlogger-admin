@@ -3,12 +3,13 @@ import { ListItemIcon, MenuItem } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
+import { Tooltip } from 'shared/components/Tooltip';
 
-import { StyledMenu } from './Menu.styles';
+import { StyledMenu, StyledMenuItemContent } from './Menu.styles';
 import { MenuProps } from './Menu.types';
 import { MenuUiType } from './Menu.const';
 
-export const Menu = ({
+export const Menu = <T = unknown,>({
   anchorEl,
   onClose,
   menuItems,
@@ -16,7 +17,8 @@ export const Menu = ({
   transformOrigin,
   width = 'auto',
   uiType = MenuUiType.Primary,
-}: MenuProps) => {
+  'data-testid': dataTestid,
+}: MenuProps<T>) => {
   const { t } = useTranslation('app');
   const open = Boolean(anchorEl);
 
@@ -41,15 +43,52 @@ export const Menu = ({
         }
       }
       uiType={uiType}
+      data-testid={dataTestid}
     >
-      {menuItems.map(({ icon, title, action, 'data-testid': dataTestId }, i) => (
-        <MenuItem key={i} onClick={() => action(title)} data-testid={dataTestId}>
-          {icon && <ListItemIcon>{icon}</ListItemIcon>}
-          <StyledBodyLarge color={variables.palette.on_surface} letterSpacing="xxl">
-            {t(title)}
-          </StyledBodyLarge>
-        </MenuItem>
-      ))}
+      {menuItems.map(
+        (
+          {
+            icon,
+            title,
+            isDisplayed = true,
+            disabled,
+            tooltip,
+            context,
+            action,
+            'data-testid': dataTestId,
+          },
+          index,
+        ) => {
+          if (!isDisplayed) return null;
+          const handleMenuItemClick = () => {
+            action({ title, context });
+            onClose();
+          };
+          const menuItemContent = (
+            <StyledMenuItemContent>
+              {icon && <ListItemIcon>{icon}</ListItemIcon>}
+              <StyledBodyLarge color={variables.palette.on_surface} letterSpacing="xxl">
+                {t(title)}
+              </StyledBodyLarge>
+            </StyledMenuItemContent>
+          );
+
+          return (
+            <MenuItem
+              key={index}
+              disabled={disabled}
+              onClick={disabled ? undefined : handleMenuItemClick}
+              data-testid={dataTestId}
+            >
+              {tooltip ? (
+                <Tooltip tooltipTitle={tooltip}>{menuItemContent}</Tooltip>
+              ) : (
+                menuItemContent
+              )}
+            </MenuItem>
+          );
+        },
+      )}
     </StyledMenu>
   );
 };

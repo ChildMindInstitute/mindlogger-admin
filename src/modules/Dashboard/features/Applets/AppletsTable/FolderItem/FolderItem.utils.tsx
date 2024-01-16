@@ -1,25 +1,26 @@
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { Folder } from 'api';
+import { Folder } from 'modules/Dashboard/api';
 
-export const getActions = (
+export const getFolderActions = (
   folder: Folder,
-  onRenameFolder: (folder: Folder) => void,
-  onDeleteFolder: (folder: Folder) => void,
+  onRenameFolder: () => void,
+  onDeleteFolder: () => void,
 ) => [
   {
     disabled: !!folder?.isRenaming,
     icon: <Svg id="edit" />,
-    action: (item: Folder) => onRenameFolder(item),
-    tooltipTitle: t('edit'),
+    action: onRenameFolder,
+    title: t('edit'),
     'data-testid': 'dashboard-applets-folder-rename',
   },
   {
     disabled: !!folder.foldersAppletCount,
     icon: <Svg id="trash" />,
-    action: (item: Folder) => onDeleteFolder(item),
-    tooltipTitle: t(folder.foldersAppletCount ? 'deleteFolderWarning' : 'delete'),
+    action: onDeleteFolder,
+    title: t('delete'),
+    tooltip: folder.foldersAppletCount && t('deleteFolderWarning'),
     'data-testid': 'dashboard-applets-folder-delete',
   },
 ];

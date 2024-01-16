@@ -81,18 +81,6 @@ describe('DashboardTable component tests', () => {
     row.forEach((rowItem) => expect(screen.getByText(rowItem)).toBeInTheDocument());
   });
 
-  test('should hover row', () => {
-    renderWithProviders(getTable({ rows: getMockRows(1) }));
-
-    const firstRow = screen.getByText('John0');
-    firstRow && fireEvent.mouseEnter(firstRow);
-
-    expect(actionsContentFn.mock.calls[1][1]).toBe(true);
-
-    firstRow && fireEvent.mouseLeave(firstRow);
-    expect(actionsContentFn.mock.calls[2][1]).toBe(false);
-  });
-
   test('should request table sort', () => {
     renderWithProviders(getTable());
     fireEvent.click(screen.getByText('First Name'));
