@@ -269,7 +269,7 @@
   "confirmMultipleRemoveAccess": "Are you sure that you want to remove the access for the <1>{{firstName}} {{lastName}} ({{email}})</1> to the list of Applets below?",
   "confirmRemoveAccess": "Are you sure that you want to remove the access for the <1>{{firstName}} {{lastName}} ({{email}})</1> to the Applet <3>{{displayName}}</3>?",
   "confirmRemoveAllScheduledEventsForActivity": "All scheduled events for <1>{{activityName}}</1> will be removed, and the activity will become always available to the user. Are you sure you want to continue?",
-  "confirmRemoveConditionalLogic": "Are you sure you want to remove conditional logic for the <1>{{name}}</1>?",
+  "confirmRemoveConditionalLogic": "Are you sure you want to remove conditional logic for the <1>{{name}}</1> <2>{{reportName}}</2>?",
   "confirmRemoveEmptyIndividualSchedule": "Respondent <1>{{name}}’s individual schedule</1> will be removed, and the Respondent will use the <3>default schedule</3> instead. Are you sure you want to continue?",
   "confirmRemoveIndividualSchedule": "<0>You are about to remove Respondent <1>{{name}}</1>’s <3>individual schedule</3> and move the Respondent to a group of Respondents that use the <5>default schedule</5>. All individually scheduled activities and their notifications will be lost.</0> <1>Are you sure you want to continue?</1>",
   "confirmRemoveRespondentAccess": "Are you sure you want to remove access for Respondent <1>{{respondentName}}</1>'s to the <3>{{appletName}}</3> Applet?",

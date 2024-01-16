@@ -262,6 +262,7 @@ export const ScoreContent = ({
           onClose={() => setIsRemoveConditionalPopupVisible(false)}
           onRemove={() => remove(removeConditionalIndex)}
           name={title}
+          reportFieldName={name}
           data-testid={`${dataTestid}-remove-conditional-logic-popup`}
         />
       )}
