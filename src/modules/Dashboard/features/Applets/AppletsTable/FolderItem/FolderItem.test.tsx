@@ -1,4 +1,4 @@
-import { fireEvent, waitFor, screen, act } from '@testing-library/react';
+import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
