@@ -21,6 +21,6 @@ export const scoreIdBase = {
   [CalculationType.Percentage]: 'percentScore',
 };
 
-export const ForbiddenScoreIdSymbols = /[\s$-/:-?{-~!"@#^_“[\]]/g;
+export const ForbiddenScoreIdSymbols = /[\s$-/:-?{-~!"@#^_“[\]]+/g;
 
 export const EMPTY_SCORE_RANGE_LABEL = '-';

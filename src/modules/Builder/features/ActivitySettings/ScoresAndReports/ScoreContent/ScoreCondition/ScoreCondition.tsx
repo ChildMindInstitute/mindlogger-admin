@@ -43,16 +43,21 @@ export const ScoreCondition = ({
   const handleConditionNameBlur = () => {
     if (conditionName === prevScoreConditionName) return;
 
-    const isVariable = getIsScoreIdVariable({
-      id: conditionId,
-      reports: getValues(reportsName),
-      isScore: false,
-    });
+    const oldScoreConditionId = getScoreConditionId(score?.id, prevScoreConditionName);
+    const newScoreConditionId = getScoreConditionId(score?.id, conditionName);
 
-    if (isVariable) {
-      setIsChangeScoreIdPopupVisible(true);
+    if (oldScoreConditionId !== newScoreConditionId && !!prevScoreConditionName) {
+      const isVariable = getIsScoreIdVariable({
+        id: conditionId,
+        reports: getValues(reportsName),
+        isScore: false,
+      });
 
-      return;
+      if (isVariable) {
+        setIsChangeScoreIdPopupVisible(true);
+
+        return;
+      }
     }
 
     setPrevScoreConditionName(conditionName);
