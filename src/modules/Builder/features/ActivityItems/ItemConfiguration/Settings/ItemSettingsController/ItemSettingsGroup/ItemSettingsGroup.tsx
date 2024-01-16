@@ -3,7 +3,7 @@ import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
@@ -38,6 +38,7 @@ import {
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { checkIfItemHasRequiredOptions, getEmptyAlert } from '../../../ItemConfiguration.utils';
+import { removeItemFromSubscales } from './ItemSettingsGroup.utils';
 
 export const ItemSettingsGroup = ({
   name,
@@ -52,7 +53,9 @@ export const ItemSettingsGroup = ({
 
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useCustomFormContext();
+  const { fieldName } = useCurrentActivity();
 
+  const subscalesName = `${fieldName}.subscaleSetting.subscales`;
   const config = getValues(`${itemName}.config`) ?? {};
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
@@ -147,6 +150,15 @@ export const ItemSettingsGroup = ({
 
                 if (isScores) {
                   const hasScores = event.target.checked;
+
+                  if (!hasScores) {
+                    removeItemFromSubscales({
+                      setValue,
+                      subscales: getValues(subscalesName),
+                      item: getValues(itemName),
+                      subscalesName,
+                    });
+                  }
 
                   onChange({
                     ...config,
