@@ -19,8 +19,8 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './Respondents.styles';
-import { getRespondentActions, getAppletsSmallTableRows } from './Respondents.utils';
-import { getHeadCells, RespondentsColumnsWidth } from './Respondents.const';
+import { getRespondentActions, getAppletsSmallTableRows, getHeadCells } from './Respondents.utils';
+import { RespondentsColumnsWidth } from './Respondents.const';
 import {
   ChosenAppletData,
   FilteredApplets,
