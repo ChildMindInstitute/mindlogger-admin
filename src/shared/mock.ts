@@ -15,6 +15,7 @@ import {
   SubscaleTotalScore,
 } from './consts';
 import { MultiSelectItem, SingleSelectItem } from './state';
+import { RespondentStatus } from '../modules/Dashboard/types';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -112,6 +113,8 @@ export const mockedRespondent = {
   accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   role: Roles.Respondent,
   details: [mockedRespondentDetails],
+  status: RespondentStatus.Invited,
+  email: 'resp1@mail.com',
 };
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
 export const mockedRespondent2 = {
@@ -123,6 +126,8 @@ export const mockedRespondent2 = {
   isPinned: false,
   accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   role: Roles.Respondent,
+  status: RespondentStatus.Invited,
+  email: 'resp2@mail.com',
   details: [
     {
       appletId: mockedAppletId,

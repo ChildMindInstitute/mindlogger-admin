@@ -271,12 +271,12 @@ export const postAppletShellAccountApi = (
   );
 
 export const postSubjectInvitationApi = (
-  { appletId, subjectId, email }: SubjectInvitationData,
+  { appletId, respondentId, email }: SubjectInvitationData,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     `/invitations/${appletId}/subject`,
-    { subjectId, email },
+    { subjectId: respondentId, email },
     {
       signal,
     },

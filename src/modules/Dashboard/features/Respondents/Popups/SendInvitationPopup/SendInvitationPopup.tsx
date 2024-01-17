@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -17,14 +16,13 @@ import { dataTestId } from './SendInvitationPopup.const';
 import { SendInvitationSchema } from './SendInvitation.schema';
 
 export const SendInvitationPopup = ({
-  open,
+  popupVisible,
   onClose,
-  secretUserId,
-  subjectId,
+  chosenAppletData,
   email,
 }: SendInvitationPopupProps) => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { respondentSecretId, respondentId, appletId } = chosenAppletData || {};
   const [hasCommonError, setHasCommonError] = useState(false);
   const { handleSubmit, control, getValues, setError } = useForm<SendInvitationForm>({
     resolver: yupResolver(SendInvitationSchema()),
@@ -36,20 +34,20 @@ export const SendInvitationPopup = ({
   });
 
   const submitForm = () => {
-    if (!appletId || !subjectId) return;
+    if (!appletId || !respondentId) return;
     Mixpanel.track('Subject Invitation click');
     setHasCommonError(false);
-    execute({ appletId, subjectId, email: getValues('email') });
+    execute({ appletId, respondentId, email: getValues('email') });
   };
 
   useFormError({ error, setError, setHasCommonError, fields: { email: 'email' } });
 
   return (
     <Modal
-      open={open}
+      open={popupVisible}
       onClose={() => onClose(false)}
       onSubmit={handleSubmit(submitForm)}
-      title={`${t(email ? 'confirmEmailForId' : 'addEmailForId')} ${secretUserId}`}
+      title={`${t(email ? 'confirmEmailForId' : 'addEmailForId')} ${respondentSecretId}`}
       buttonText={t('sendInvitation')}
       disabledSubmit={isLoading}
       submitBtnVariant={SubmitBtnVariant.Contained}

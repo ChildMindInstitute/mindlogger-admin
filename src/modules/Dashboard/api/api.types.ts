@@ -190,7 +190,7 @@ export type AppletInvitationData = AppletId & {
 };
 
 export type SubjectInvitationData = AppletId & {
-  subjectId: string;
+  respondentId: string;
   email: string;
 };
 

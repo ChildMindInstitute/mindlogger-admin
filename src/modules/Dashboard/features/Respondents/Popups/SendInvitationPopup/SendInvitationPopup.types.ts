@@ -1,8 +1,9 @@
+import { ChosenAppletData } from '../../Respondents.types';
+
 export type SendInvitationPopupProps = {
-  open: boolean;
+  popupVisible: boolean;
   onClose: (shouldReFetch: boolean) => void;
-  secretUserId: string;
-  subjectId: string;
+  chosenAppletData: ChosenAppletData | null;
   email: string | null;
 };
 

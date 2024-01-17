@@ -34,14 +34,17 @@ export const StyledMenu = styled(Menu, shouldForwardProp)`
     &:hover {
       background-color: ${variables.palette.surface_variant};
     }
-
-    svg {
-      fill: ${variables.palette.on_surface_variant};
-    }
   }
 `;
 
-export const StyledMenuItemContent = styled(StyledFlexTopCenter)`
+export const StyledMenuItemContent = styled(StyledFlexTopCenter, shouldForwardProp)`
   width: 100%;
   padding: ${theme.spacing(1.6)};
+
+  && {
+    svg {
+      fill: ${({ customItemColor }: { customItemColor?: string }) =>
+        customItemColor || variables.palette.on_surface_variant};
+    }
+  }
 `;

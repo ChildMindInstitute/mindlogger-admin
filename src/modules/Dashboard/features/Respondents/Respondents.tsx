@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { ActionsMenu, Pin, Row, Search, Spinner, Svg, MenuActionProps } from 'shared/components';
+import { ActionsMenu, MenuActionProps, Pin, Row, Search, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
@@ -11,7 +11,7 @@ import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
-import { Respondent } from 'modules/Dashboard/types';
+import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 
 import {
   RespondentsTableHeader,
@@ -19,7 +19,7 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './Respondents.styles';
-import { getRespondentActions, getAppletsSmallTableRows, getHeadCells } from './Respondents.utils';
+import { getAppletsSmallTableRows, getHeadCells, getRespondentActions } from './Respondents.utils';
 import { RespondentsColumnsWidth } from './Respondents.const';
 import {
   ChosenAppletData,
@@ -32,8 +32,10 @@ import {
   EditRespondentPopup,
   RespondentsRemoveAccessPopup,
   ScheduleSetupPopup,
+  SendInvitationPopup,
   ViewDataPopup,
 } from './Popups';
+import { StatusFlag } from './StatusFlag';
 
 export const Respondents = () => {
   const { appletId } = useParams();
@@ -88,6 +90,8 @@ export const Respondents = () => {
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentKey, setRespondentKey] = useState<null | string>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
+  const [invitationPopupVisible, setInvitationPopupVisible] = useState(false);
+  const [respondentEmail, setRespondentEmail] = useState<null | string>(null);
 
   const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
@@ -173,13 +177,33 @@ export const Respondents = () => {
     shouldReFetch && handleReload();
   };
 
+  const handleInviteClick = (respondentId: string, email: string | null) => {
+    setRespondentKey(respondentId);
+    setRespondentEmail(email);
+    handleSetDataForAppletPage(respondentId, 'editable');
+    setInvitationPopupVisible(true);
+  };
+
+  const handleInvitationPopupClose = () => {
+    setInvitationPopupVisible(false);
+    setRespondentEmail(null);
+  };
+
   const formatRow = (user: Respondent): Row => {
-    const { secretIds, nicknames, lastSeen, id, details, isPinned, isAnonymousRespondent } = user;
+    const {
+      secretIds,
+      nicknames,
+      lastSeen,
+      id,
+      details,
+      isPinned,
+      isAnonymousRespondent,
+      status,
+      email,
+    } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
-      appletId && details?.[0]?.hasIndividualSchedule
-        ? t('individualSchedule')
-        : t('defaultSchedule');
+      appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
     const stringNicknames = joinWihComma(nicknames, true);
     const stringSecretIds = joinWihComma(secretIds, true);
 
@@ -209,9 +233,21 @@ export const Respondents = () => {
         schedule: {
           content: () => schedule,
           value: schedule,
-          width: RespondentsColumnsWidth.Default,
+          width: RespondentsColumnsWidth.Schedule,
         },
       }),
+      status: {
+        content: () =>
+          status !== RespondentStatus.Invited && (
+            <StatusFlag
+              status={status}
+              onInviteClick={() => handleInviteClick(id, email)}
+              isInviteDisabled={!filteredRespondents?.[id]?.editable.length}
+            />
+          ),
+        value: '',
+        width: RespondentsColumnsWidth.Status,
+      },
       actions: {
         content: () => (
           <ActionsMenu
@@ -221,6 +257,7 @@ export const Respondents = () => {
               isAnonymousRespondent,
               respondentId: id,
               appletId,
+              isInviteEnabled: status === RespondentStatus.NotInvited,
             })}
             data-testid="dashboard-respondents-table-actions"
           />
@@ -382,6 +419,14 @@ export const Respondents = () => {
         <EditRespondentPopup
           popupVisible={editRespondentPopupVisible}
           onClose={editRespondentOnClose}
+          chosenAppletData={chosenAppletData}
+        />
+      )}
+      {invitationPopupVisible && (
+        <SendInvitationPopup
+          popupVisible={invitationPopupVisible}
+          onClose={handleInvitationPopupClose}
+          email={respondentEmail}
           chosenAppletData={chosenAppletData}
         />
       )}

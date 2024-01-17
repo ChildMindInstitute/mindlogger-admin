@@ -43,4 +43,5 @@ export type GetMenuItems = {
   isAnonymousRespondent: boolean;
   respondentId: string;
   appletId?: string;
+  isInviteEnabled: boolean;
 };

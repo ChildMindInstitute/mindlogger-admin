@@ -1,9 +1,7 @@
-export enum StatusType {
-  NotInvited,
-  Pending,
-}
+import { RespondentStatus } from 'modules/Dashboard/types';
 
 export type StatusFlagProps = {
-  status: StatusType;
+  status: RespondentStatus;
+  isInviteDisabled: boolean;
   onInviteClick?: () => void;
 };

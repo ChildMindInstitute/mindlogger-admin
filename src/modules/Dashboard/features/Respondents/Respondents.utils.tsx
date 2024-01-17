@@ -8,6 +8,7 @@ import {
   StyledBodyMedium,
   StyledLabelLarge,
   StyledFlexTopCenter,
+  variables,
 } from 'shared/styles';
 import { RespondentDetail } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
@@ -28,6 +29,7 @@ export const getRespondentActions = ({
   isAnonymousRespondent,
   respondentId,
   appletId,
+  isInviteEnabled,
 }: GetMenuItems) => [
   {
     icon: <Svg id="user-calendar" width={20} height={21} />,
@@ -62,11 +64,20 @@ export const getRespondentActions = ({
     'data-testid': 'dashboard-respondents-edit',
   },
   {
-    icon: <Svg id="remove-access" />,
+    icon: <Svg id="edit-user" width={21} height={19} />,
+    action: editRespondent,
+    title: t('sendInvitation'),
+    context: respondentId,
+    isDisplayed: isInviteEnabled && !!filteredApplets?.editable.length,
+    'data-testid': 'dashboard-respondents-invite',
+  },
+  {
+    icon: <Svg id="trash" />,
     action: removeAccessAction,
-    title: t('removeAccess'),
+    title: t('removeFromApplet'),
     context: respondentId,
     isDisplayed: !!filteredApplets?.editable.length,
+    customItemColor: variables.palette.dark_error_container,
     'data-testid': 'dashboard-respondents-remove-access',
   },
 ];
@@ -135,7 +146,7 @@ export const getHeadCells = (id?: string): HeadCell[] => {
     },
     {
       id: 'lastSeen',
-      label: t('latestActive'),
+      label: t('lastActive'),
       enableSort: true,
       width: RespondentsColumnsWidth.Default,
     },
@@ -144,10 +155,11 @@ export const getHeadCells = (id?: string): HeadCell[] => {
           {
             id: 'schedule',
             label: t('schedule'),
-            width: RespondentsColumnsWidth.Default,
+            width: RespondentsColumnsWidth.Schedule,
           },
         ]
       : []),
+    { id: 'status', label: '', width: RespondentsColumnsWidth.Status },
     {
       id: 'actions',
       label: t('actions'),
