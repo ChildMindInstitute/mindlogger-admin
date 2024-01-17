@@ -94,6 +94,7 @@ export const SectionContent = ({
           onClose={() => setIsRemoveConditionalPopupVisible(false)}
           onRemove={handleRemoveConditionalLogic}
           name={title}
+          reportFieldName={name}
           data-testid={`${dataTestid}-remove-condition-popup`}
         />
       )}
