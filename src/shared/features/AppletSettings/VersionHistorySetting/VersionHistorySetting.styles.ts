@@ -21,6 +21,8 @@ export const StyledVersionSelect = styled(Select)`
 `;
 
 export const StyledChangesContainer = styled(Box)`
+  min-height: 6rem;
+
   .spinner-container {
     height: calc(100% - 11.6rem);
   }
