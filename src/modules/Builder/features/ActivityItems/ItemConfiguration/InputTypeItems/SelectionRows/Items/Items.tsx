@@ -75,6 +75,8 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
     }
   };
 
+  const commonInputProps = { maxlength: SELECTION_ROW_OPTION_LABEL_MAX_LENGTH };
+
   return rows?.map((row: SingleAndMultipleSelectRow, index: number) => {
     const rowName = `${name}.responseValues.rows.${index}`;
     const dataTestid = `builder-activity-items-item-configuration-selection-rows-row-${index}`;
@@ -103,6 +105,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
               Counter={CharactersCounter}
               counterProps={{ isShortenedVisible: hasShortenedHelper }}
               data-testid={`${dataTestid}-text`}
+              inputProps={commonInputProps}
             />
           </StyledFlexTopStart>
           {hasTooltips && (
@@ -113,6 +116,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
                 name={`${rowName}.tooltip`}
                 label={t('tooltip')}
                 data-testid={`${dataTestid}-tooltip`}
+                inputProps={commonInputProps}
               />
             </StyledFlexTopCenter>
           )}

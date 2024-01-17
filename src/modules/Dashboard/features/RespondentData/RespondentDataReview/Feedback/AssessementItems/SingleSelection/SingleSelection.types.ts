@@ -9,4 +9,5 @@ export type SingleSelectionProps = {
   isDisabled?: boolean;
   radioGroupProps?: RadioGroupProps;
   onChange?: (value: string) => void;
+  'data-testid'?: string;
 };

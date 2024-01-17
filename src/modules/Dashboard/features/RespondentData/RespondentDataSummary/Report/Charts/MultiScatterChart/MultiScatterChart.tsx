@@ -24,8 +24,6 @@ import { MultiScatterChartProps } from './MultiScatterChart.types';
 import { ChartTooltip } from './ChartTooltip';
 import { ChartTooltipContainer } from '../ChartTooltipContainer';
 
-const dataTestid = 'multi-scatter-chart';
-
 export const MultiScatterChart = ({
   color,
   minDate,
@@ -37,6 +35,7 @@ export const MultiScatterChart = ({
   responseType,
   answers,
   versions,
+  'data-testid': dataTestid,
 }: MultiScatterChartProps) => {
   const { i18n } = useTranslation('app');
   const chartRef = useRef<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>(

@@ -39,7 +39,9 @@ export const StyledPopover = styled(Popover)`
       }
     }
 
-    &__day--keyboard-selected:not(.react-datepicker__day--disabled) {
+    &__day--keyboard-selected:not(.react-datepicker__day--disabled):not(
+        .react-datepicker__day--outside-month
+      ) {
       color: ${variables.palette.on_surface};
     }
 

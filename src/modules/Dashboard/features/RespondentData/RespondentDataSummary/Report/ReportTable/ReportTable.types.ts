@@ -13,4 +13,5 @@ export type TextAnswer = {
 
 export type ReportTableProps = {
   answers?: Answer[];
+  'data-testid'?: string;
 };

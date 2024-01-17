@@ -17,14 +17,13 @@ import { ChartTooltipContainer } from '../../ChartTooltipContainer';
 
 ChartJS.register(Tooltip, TimeScale);
 
-const dataTestid = 'time-picker-chart';
-
 export const TimePickerLineChart = ({
   color,
   minDate,
   maxDate,
   answers,
   versions,
+  'data-testid': dataTestid,
 }: TimePickerLineChartProps) => {
   const { i18n } = useTranslation('app');
   const chartRef = useRef<ChartJSOrUndefined<'line', TimePickerDataPointRaw[]> | null>(null);

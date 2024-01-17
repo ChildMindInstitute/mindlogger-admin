@@ -34,9 +34,9 @@ export const getSectionDefaults = () => ({
 
 export const getReportIndex = (reports: ScoreOrSection[], report: ScoreOrSection) =>
   reports?.reduce(
-    ({ index, done }, { type, id }) => {
-      if (done || report.type !== type) return { index, done };
-      if (report.id === id) return { index, done: true };
+    ({ index, done }, item) => {
+      if (done || report.type !== item.type) return { index, done };
+      if (getEntityKey(report, false) === getEntityKey(item, false)) return { index, done: true };
 
       return { index: index + 1, done };
     },

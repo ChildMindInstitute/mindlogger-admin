@@ -5,4 +5,5 @@ export type SliderProps = {
   value?: number;
   isDisabled?: boolean;
   onChange?: (value: number | number[]) => void;
+  'data-testid'?: string;
 };
