@@ -17,5 +17,6 @@ export type SwitchWorkspaceProps = {
   visibleDrawer: boolean;
   setVisibleDrawer: Dispatch<SetStateAction<boolean>>;
   workspaces: Workspace[];
+  onChangeWorkspace: (workspace: Workspace) => void;
   'data-testid'?: string;
 };
