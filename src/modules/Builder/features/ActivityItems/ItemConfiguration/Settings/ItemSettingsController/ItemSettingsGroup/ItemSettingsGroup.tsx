@@ -15,6 +15,7 @@ import {
   SingleAndMultipleSelectRow,
   SliderRowsItemResponseValues,
 } from 'shared/state';
+import { SelectEvent } from 'shared/types';
 import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 
 import {
@@ -28,6 +29,7 @@ import {
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
 import {
+  DEFAULT_ACTIVE_TIMER_VALUE,
   ITEM_SETTINGS_TO_HAVE_TOOLTIP,
   ITEM_TYPES_TO_HAVE_ALERTS,
 } from './ItemSettingsGroup.const';
@@ -59,6 +61,12 @@ export const ItemSettingsGroup = ({
   const config = getValues(`${itemName}.config`) ?? {};
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
+  const handleTimerChange = (e: SelectEvent) => {
+    setValue(
+      `${name}.${ItemConfigurationSettings.HasTimer}`,
+      +e.target.value || DEFAULT_ACTIVE_TIMER_VALUE,
+    );
+  };
 
   return (
     <StyledItemSettingGroupContainer
@@ -296,8 +304,13 @@ export const ItemSettingsGroup = ({
                               name={`${name}.${ItemConfigurationSettings.HasTimer}`}
                               type="number"
                               disabled={isSecondsDisabled}
-                              minNumberValue={isSecondsDisabled ? DEFAULT_DISABLED_TIMER_VALUE : 1}
+                              minNumberValue={
+                                isSecondsDisabled
+                                  ? DEFAULT_DISABLED_TIMER_VALUE
+                                  : DEFAULT_ACTIVE_TIMER_VALUE
+                              }
                               data-testid={`builder-activity-items-item-settings-${settingKey}-input`}
+                              onChange={handleTimerChange}
                             />
                           </StyledInputControllerContainer>
                           <StyledTitleMedium>{t('seconds')}</StyledTitleMedium>
