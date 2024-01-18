@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import uniqueId from 'lodash.uniqueid';
 
 import { applet, workspaces, SingleApplet } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
+import { useAppDispatch } from 'redux/store/hooks';
 import { page } from 'resources';
 import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
 import { getEntityKey } from 'shared/utils/getEntityKey';
