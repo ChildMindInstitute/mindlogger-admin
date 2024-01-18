@@ -1136,7 +1136,7 @@
   "toTime": "À l'heure",
   "touch": "CST Touch",
   "transferOwnership": "Transférer la propriété",
-  "transferOwnershipConfirmation": "<0>Êtes-vous sûr de vouloir transférer la propriété de l'applet <1>{{appletName}}</1> à un autre utilisateur?</0><1>Cela ne transférera que l'applet. Aucune donnée utilisateur ne sera transférée. Une fois que le nouveau propriétaire aura confirmé le transfert, vous n'aurez plus accès à cette applet ni à ses données.</1>",
+  "transferOwnershipConfirmation": "<0>Êtes-vous sûr de vouloir transférer la propriété de l'applet <1>{{appletName}}</1> à un autre utilisateur ?</0><1>Cette action transférera tous les paramètres de l'Applet, les horaires créés, la liste des répondants et des gestionnaires, ainsi que les données collectées pendant l'étude. </1><2>Une fois que le nouveau propriétaire confirme le transfert, vous n'aurez plus accès à cet Applet ni à ses données.</2> <3>Cependant, soyez assuré que le transfert de la propriété de l'Applet n'aura aucun impact sur les répondants. Ils pourront toujours soumettre de nouvelles réponses.</3>",
   "transferOwnershipHelperText": "Entrez l'adresse e-mail du nouveau propriétaire",
   "trash": "Corbeille",
   "true": "Vrai",
