@@ -61,10 +61,10 @@ export const ItemSettingsGroup = ({
   const config = getValues(`${itemName}.config`) ?? {};
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
-  const handleTimerChange = (e: SelectEvent) => {
+  const handleTimerChange = (event: SelectEvent) => {
     setValue(
       `${name}.${ItemConfigurationSettings.HasTimer}`,
-      +e.target.value || DEFAULT_ACTIVE_TIMER_VALUE,
+      +event.target.value || DEFAULT_ACTIVE_TIMER_VALUE,
     );
   };
 
