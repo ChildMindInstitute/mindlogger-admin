@@ -84,8 +84,16 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
             to another user?
           </StyledBodyLarge>
           <StyledBodyLarge marginTop={theme.spacing(2.4)}>
-            This will only transfer the Applet. No user data will be transferred. After the new
-            Owner confirms transfer, you will no longer have access to this Applet or its data.
+            This action will transfer all Applet settings, created Schedules, the list of
+            Respondents and Managers, as well as the data collected during the study.
+          </StyledBodyLarge>
+          <StyledBodyLarge marginTop={theme.spacing(0.4)}>
+            Once the new owner confirms the transfer, you will no longer have access to this Applet
+            or its data.
+          </StyledBodyLarge>
+          <StyledBodyLarge marginTop={theme.spacing(0.4)}>
+            However, be assured that the transfer of Applet ownership will not impact Respondents.
+            They will still be able to submit new responses.
           </StyledBodyLarge>
         </Trans>
         <StyledInputWrapper>
