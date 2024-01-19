@@ -146,6 +146,7 @@ export const mockedEmptySingleSelection = {
       textInputOption: false,
       textInputRequired: false,
     },
+    autoAdvance: false,
   },
   isHidden: false,
   allowEdit: true,

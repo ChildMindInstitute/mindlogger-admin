@@ -90,6 +90,7 @@ const commonSingleSelectionConfig = {
     textInputOption: false,
     textInputRequired: false,
   },
+  autoAdvance: false,
 };
 
 const prevActivityItem = {

@@ -17,6 +17,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     {
       groupName: ItemSettingsGroupNames.ResponseOptions,
       groupOptions: [
+        ItemConfigurationSettings.HasAutoAdvance,
         ItemConfigurationSettings.HasColorPalette,
         ItemConfigurationSettings.HasTooltips,
       ],
