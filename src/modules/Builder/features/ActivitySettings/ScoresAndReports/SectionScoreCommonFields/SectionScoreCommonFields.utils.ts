@@ -9,7 +9,7 @@ export const getColumns = () => [
   },
   {
     key: 'question',
-    label: t('itemBody'),
+    label: t('displayedContent'),
     styles: {
       width: '65%',
     },
