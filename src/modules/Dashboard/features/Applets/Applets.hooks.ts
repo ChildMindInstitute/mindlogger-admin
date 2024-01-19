@@ -15,6 +15,7 @@ import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'shared/state';
 import { getObjectFromList } from 'shared/utils';
+
 import { getAppletsWithLocalFolders } from './Applets.utils';
 
 export const useAppletsWithFolders = (

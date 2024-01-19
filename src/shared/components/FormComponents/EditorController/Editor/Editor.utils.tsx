@@ -1,6 +1,6 @@
 import { ToolbarNames } from 'md-editor-rt';
-import i18n from 'i18n';
 
+import i18n from 'i18n';
 import { Svg } from 'shared/components/Svg';
 import {
   AlignTextExtension,

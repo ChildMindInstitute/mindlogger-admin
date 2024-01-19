@@ -19,10 +19,29 @@
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "quotes": ["error", "single"],
     "import/order": [
-      "error",
-      {
-        "groups": [["builtin", "external"], ["internal"], ["index", "parent", "sibling"]]
-      }
+      "warn",
+        {
+          "groups": [
+            ["external", "builtin"],
+            "internal",
+            ["sibling", "parent"],
+            "index"
+          ],
+          "pathGroups": [
+            {
+              "pattern":
+                  "@(api|assets|modules|redux|routes|shared|resources)/**",
+              "group": "internal"
+            },
+            {
+              "pattern":
+                  "@(redux|routes|resources|api|i18n)",
+              "group": "internal"
+            }
+          ],
+          "pathGroupsExcludedImportTypes": ["internal"],
+          "newlines-between": "always"
+        }
     ],
     "import/no-cycle": "error",
     "react-hooks/rules-of-hooks": "error",

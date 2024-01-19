@@ -11,7 +11,6 @@ import theme from 'shared/styles/theme';
 import { byteFormatter } from 'shared/utils/fileSystem';
 import { concatIf } from 'shared/utils/concatIf';
 import { joinWihComma } from 'shared/utils/joinWihComma';
-
 import {
   MAX_FILE_SIZE_25MB,
   VALID_IMAGE_TYPES,

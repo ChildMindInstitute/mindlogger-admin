@@ -6,7 +6,6 @@ import { ApiResponseCodes } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { alerts, auth, workspaces } from 'redux/modules';
 import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
-
 import { Mixpanel } from 'shared/utils/mixpanel';
 
 export const useLogout = () => {
