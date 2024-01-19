@@ -3,8 +3,8 @@ import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { EmptyState, TableHead } from 'shared/components';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-
 import { Applet, Folder } from 'api';
+
 import {
   StyledCellItem,
   StyledTableCellContent,

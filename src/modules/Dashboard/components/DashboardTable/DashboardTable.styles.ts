@@ -7,6 +7,7 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
   font-size: ${variables.font.size.md};
   line-height: ${variables.font.lineHeight.md};
   letter-spacing: ${variables.font.letterSpacing.sm};
+  word-break: break-all;
 
   ${({ hasColFixedWidth, width }: { hasColFixedWidth?: boolean; width?: string }) => {
     if (hasColFixedWidth) {

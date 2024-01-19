@@ -8,7 +8,6 @@ import { mockedUserData } from 'shared/mock';
 import { auth, alerts } from 'redux/modules';
 import * as reduxHooks from 'redux/store/hooks';
 import * as hooksModule from 'shared/hooks';
-import { page } from 'resources';
 
 import { AccountPanel } from './AccountPanel';
 

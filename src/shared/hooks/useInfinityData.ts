@@ -1,7 +1,7 @@
-import { useAppDispatch } from 'redux/store';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
+import { useAppDispatch } from 'redux/store';
 import { getInfinityScrollData } from 'shared/utils/getInfinityScrollData';
 import { useIntersectionObserver } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';

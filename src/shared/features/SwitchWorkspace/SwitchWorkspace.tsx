@@ -17,6 +17,7 @@ export const SwitchWorkspace = ({
   setVisibleDrawer,
   visibleDrawer,
   workspaces,
+  onChangeWorkspace,
   'data-testid': dataTestid,
 }: SwitchWorkspaceProps) => {
   const userData = auth.useData();
@@ -43,6 +44,7 @@ export const SwitchWorkspace = ({
           {!!index && <StyledDivider />}
           <WorkspaceGroup
             workspacesGroup={workspacesGroup}
+            onChangeWorkspace={onChangeWorkspace}
             data-testid={`${dataTestid}-workspace-group-${index}`}
           />
         </Fragment>

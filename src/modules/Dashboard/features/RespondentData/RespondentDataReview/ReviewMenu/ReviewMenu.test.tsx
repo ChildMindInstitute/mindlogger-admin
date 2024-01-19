@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 import { act, fireEvent, screen } from '@testing-library/react';
+
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
 import {
