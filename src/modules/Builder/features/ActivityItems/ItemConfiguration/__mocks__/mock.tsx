@@ -216,7 +216,7 @@ export const mockedEmptySlider = {
   alerts: [],
   responseValues: {
     minValue: 0,
-    maxValue: 5,
+    maxValue: 12,
     minLabel: '',
     maxLabel: '',
     scores: undefined,
