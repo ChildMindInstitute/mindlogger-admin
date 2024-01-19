@@ -96,6 +96,7 @@ export const Condition = ({
         customChange={onStateChange}
         isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-type`}
+        disabled={!selectedItem?.type}
       />
       {isValueSelectShown && (
         <StyledSelectController
@@ -105,6 +106,7 @@ export const Condition = ({
           placeholder={t('value')}
           isLabelNeedTranslation={false}
           data-testid={`${dataTestid}-selection-value`}
+          disabled={!isItemScoreCondition && !valueOptions.length}
         />
       )}
       {isNumberValueShown && (
