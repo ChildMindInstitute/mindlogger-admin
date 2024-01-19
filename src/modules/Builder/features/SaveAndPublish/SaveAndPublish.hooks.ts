@@ -22,6 +22,7 @@ import {
 } from 'shared/utils';
 import { Activity, ActivityFlow, applet, SingleApplet } from 'shared/state';
 import { getAppletUniqueNameApi } from 'shared/api';
+import { AppletThunkTypePrefix } from 'shared/state/Applet/Applet.thunk';
 import { auth, workspaces } from 'redux/modules';
 import { useAppletPrivateKeySetter, useCustomFormContext } from 'modules/Builder/hooks';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
@@ -276,6 +277,7 @@ export const useSaveAndPublishSetup = (
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
   const [publishProcessStep, setPublishProcessStep] = useState<SaveAndPublishSteps>();
   const responseStatus = applet.useResponseStatus();
+  const responseTypePrefix = applet.useResponseTypePrefix();
   const {
     cancelNavigation: onCancelNavigation,
     confirmNavigation,
@@ -296,12 +298,18 @@ export const useSaveAndPublishSetup = (
   const isDisplayNameDirty = dirtyFields?.displayName;
 
   useEffect(() => {
+    const isUpdateOrCreate =
+      responseTypePrefix === AppletThunkTypePrefix.Create ||
+      responseTypePrefix === AppletThunkTypePrefix.Update;
+
+    if (!isUpdateOrCreate) return;
+
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
       setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
     }
     responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
     responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
-  }, [responseStatus]);
+  }, [responseStatus, responseTypePrefix]);
 
   const handleSaveChangesDoNotSaveSubmit = async () => {
     setPromptVisible(false);
