@@ -110,8 +110,6 @@ export const Respondents = () => {
   };
 
   const handleInviteClick = (respondentId: string, email: string | null) => {
-    console.log('respondent id', respondentId);
-    console.log('email', email);
     setRespondentKey(respondentId);
     setRespondentEmail(email);
     handleSetDataForAppletPage(respondentId, 'editable');
