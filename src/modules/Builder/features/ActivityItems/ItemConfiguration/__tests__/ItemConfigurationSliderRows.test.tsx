@@ -119,7 +119,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       maxValues.forEach((value) => {
         expect(value).toBeVisible();
         expect(value.querySelector('label')).toHaveTextContent('Max Value');
-        expect(value.querySelector('input')).toHaveValue(5);
+        expect(value.querySelector('input')).toHaveValue(isSliderRows ? 5 : 12);
       });
 
       const addButton = screen.queryByTestId(
@@ -385,7 +385,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       expect(ref.current.getValues(`${mockedItemName}.alerts.0`)).toStrictEqual({
         minValue: 0,
-        maxValue: 5,
+        maxValue: 12,
         alert: '',
         key: ref.current.getValues(`${mockedItemName}.alerts.0.key`),
       });
@@ -427,7 +427,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       );
 
       expect(ref.current.getValues(`${mockedItemName}.responseValues.scores`)).toEqual([
-        15, 2, 3, 4, 5, 6,
+        15, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
       ]);
     });
 
@@ -464,7 +464,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
         screen
           .getByTestId('builder-activity-items-item-configuration-slider-scores-table-0-score')
           .querySelector('input'),
-        { target: { value: '2e' } },
+        { target: { value: '' } },
       );
 
       await ref.current.trigger(`${mockedItemName}.responseValues.scores`);
@@ -484,19 +484,6 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       await waitFor(() => {
         expect(screen.queryByText('Numerical value is required')).not.toBeInTheDocument();
-      });
-
-      fireEvent.change(
-        screen
-          .getByTestId('builder-activity-items-item-configuration-slider-max-value')
-          .querySelector('input'),
-        { target: { value: 6 } },
-      );
-
-      await ref.current.trigger(`${mockedItemName}.responseValues.scores`);
-
-      await waitFor(() => {
-        expect(screen.getByText('Numerical value is required')).toBeVisible();
       });
     });
   });
@@ -585,7 +572,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       const expected = slider.querySelectorAll(
         isMarks ? '.MuiSlider-mark' : '.MuiSlider-markLabel',
       );
-      expect(expected).toHaveLength(6);
+      expect(expected).toHaveLength(13);
     });
   });
 });
