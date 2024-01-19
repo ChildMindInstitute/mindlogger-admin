@@ -15,7 +15,7 @@ import { ReportTableProps, TextItemAnswer } from './ReportTable.types';
 import { filterReportTable, getComparator, getRows, stableSort } from './ReportTable.utils';
 import { Answer } from '../Report.types';
 
-export const ReportTable = ({ answers = [] }: ReportTableProps) => {
+export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportTableProps) => {
   const { t } = useTranslation('app');
 
   const [page, setPage] = useState(1);
@@ -77,7 +77,7 @@ export const ReportTable = ({ answers = [] }: ReportTableProps) => {
   }, [answers, searchValue, page, order, orderBy]);
 
   return (
-    <Box sx={{ mt: theme.spacing(2.4) }}>
+    <Box sx={{ mt: theme.spacing(2.4) }} data-testid={`${dataTestid}-table`}>
       <Search withDebounce placeholder={t('search')} onSearch={handleSearch} />
       <StyledTableWrapper>
         <DashboardTable

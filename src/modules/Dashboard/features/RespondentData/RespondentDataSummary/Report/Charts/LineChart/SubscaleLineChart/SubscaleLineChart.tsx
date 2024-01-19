@@ -9,11 +9,11 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { Box } from '@mui/material';
 
 import { getOptionTextApi } from 'api';
-import { useAsync } from 'shared/hooks/useAsync';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 import { pluck } from 'shared/utils';
 
+import { ChartTooltipContainer } from '../../ChartTooltipContainer';
 import { getTicksData, legendMargin, setTooltipStyles } from '../../Charts.utils';
 import { LINK_PATTERN, locales } from '../../Charts.const';
 import { StyledChartContainer } from '../../Chart.styles';
@@ -28,6 +28,8 @@ import { ChartType } from '../../Chart.types';
 
 ChartJS.register(Tooltip, TimeScale, Legend);
 
+const dataTestid = 'subscale-line-chart';
+
 export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) => {
   const { i18n } = useTranslation('app');
   const chartRef = useRef<ChartJSOrUndefined<'line', SubscaleLineDataPointRaw[]> | null>(null);
@@ -37,7 +39,6 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
   const [tooltipData, setTooltipData] = useState<TooltipData[] | null>(null);
 
-  const { execute: getOptionText } = useAsync(getOptionTextApi);
   const { watch } = useFormContext<SummaryFiltersForm>();
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
@@ -82,7 +83,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
           let optionText = (dataPoint.raw as SubscaleLineDataPointRaw).optionText;
 
           if (optionText && optionText.match(LINK_PATTERN)) {
-            optionText = (await getOptionText(optionText)).data;
+            optionText = (await getOptionTextApi(optionText)).data;
           }
 
           return {
@@ -116,16 +117,18 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
   );
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative' }} data-testid={dataTestid}>
       <StyledChartContainer sx={{ height: `${height}px` }}>{renderChart}</StyledChartContainer>
-      <ChartTooltip
+      <ChartTooltipContainer
         ref={tooltipRef}
-        dataPoints={tooltipData}
         onMouseEnter={() => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-      />
+        data-testid={dataTestid}
+      >
+        <ChartTooltip dataPoints={tooltipData} data-testid={dataTestid} />
+      </ChartTooltipContainer>
     </Box>
   );
 };

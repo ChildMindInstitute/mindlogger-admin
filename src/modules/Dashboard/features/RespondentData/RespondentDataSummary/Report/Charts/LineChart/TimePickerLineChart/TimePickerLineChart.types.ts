@@ -7,6 +7,7 @@ export type TimePickerLineChartProps = {
   maxDate: Date;
   answers: Answer[];
   versions: Version[];
+  'data-testid'?: string;
 };
 
 export type TimePickerDataPointRaw = {

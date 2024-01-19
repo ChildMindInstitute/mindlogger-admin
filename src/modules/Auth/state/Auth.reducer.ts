@@ -1,6 +1,5 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import { Mixpanel } from 'shared/utils/mixpanel';
 import { ApiErrorReturn } from 'shared/state/Base';
 
 import { AuthSchema } from './Auth.schema';
@@ -23,8 +22,6 @@ export const reducers = {
     sessionStorage.clear();
     state.authentication = initialState.authentication;
     state.isAuthorized = false;
-
-    Mixpanel.logout();
   },
 };
 

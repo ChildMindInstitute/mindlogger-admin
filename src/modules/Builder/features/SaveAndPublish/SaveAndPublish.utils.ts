@@ -30,7 +30,7 @@ import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/Builder
 import { findRelatedScore } from 'modules/Builder/utils';
 import { ElementType, isScoreReport, isSectionReport } from 'shared/types';
 
-import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration';
+import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import {
   GetConditions,
   GetItemCommonFields,

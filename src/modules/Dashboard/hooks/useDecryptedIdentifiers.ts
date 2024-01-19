@@ -18,7 +18,42 @@ export const useDecryptedIdentifiers = () => {
   const { prime, base } = encryptionInfoFromServer;
   const privateKey = getAppletPrivateKey(appletId);
 
-  return (identifiers: IdentifierResponse[]): Identifier[] =>
+  return async (identifiers: IdentifierResponse[]): Promise<Identifier[]> => {
+    const identifiersResult: Identifier[] = [];
+
+    for await (const identifierResponse of identifiers) {
+      const { identifier, userPublicKey } = identifierResponse;
+
+      // workaround for decrypted identifier data
+      if (!userPublicKey) {
+        identifiersResult.push({
+          decryptedValue: identifier,
+          encryptedValue: identifier,
+        });
+        continue;
+      }
+
+      try {
+        const key = await getAESKey(privateKey, JSON.parse(userPublicKey), prime, base);
+        const decryptedValue = await decryptData({
+          text: identifier,
+          key,
+        });
+
+        identifiersResult.push({
+          decryptedValue,
+          encryptedValue: identifier,
+        });
+      } catch {
+        console.warn('Error while answer parsing');
+        continue;
+      }
+    }
+
+    return identifiersResult;
+  };
+  /*
+  return async (identifiers: IdentifierResponse[]): Promise<Identifier[]> =>
     identifiers.map(({ identifier, userPublicKey }) => {
       // workaround for decrypted identifier data
       if (!userPublicKey) {
@@ -29,8 +64,8 @@ export const useDecryptedIdentifiers = () => {
       }
 
       try {
-        const key = getAESKey(privateKey, JSON.parse(userPublicKey), prime, base);
-        const decryptedValue = decryptData({
+        const key = await getAESKey(privateKey, JSON.parse(userPublicKey), prime, base);
+        const decryptedValue = await decryptData({
           text: identifier,
           key,
         });
@@ -45,4 +80,5 @@ export const useDecryptedIdentifiers = () => {
         return null;
       }
     }) as Identifier[];
+    */
 };

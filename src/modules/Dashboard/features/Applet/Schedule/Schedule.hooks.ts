@@ -60,7 +60,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
             (item) => item.id === activityOrFlowId,
           );
 
-          if (!currentActivityOrFlow?.isHidden) {
+          if (currentActivityOrFlow && !currentActivityOrFlow?.isHidden) {
             const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
             const activityOrFlowName = currentActivityOrFlow?.name || '';
             const activityOrFlowCreatedAt = convertDateToYearMonthDay(

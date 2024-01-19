@@ -36,7 +36,7 @@ export const useCallbackPrompt = ({
 
   useEffect(() => {
     if (confirmedNavigation && lastLocation) {
-      navigate(lastLocation.location?.pathname);
+      navigate(lastLocation.location?.pathname, { state: lastLocation.location?.state });
       setConfirmedNavigation(false);
     }
   }, [confirmedNavigation, lastLocation]);

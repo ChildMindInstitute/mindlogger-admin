@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-admin",
-  "version": "1.5.3",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -83,6 +83,7 @@
     "build": "react-app-rewired build --project tsconfig.build.json",
     "test": "react-app-rewired test",
     "test:coverage": "npm run test -- --coverage --watchAll=false --colors",
+    "test:junit": "npm run test -- --watchAll=false --reporters=default --reporters=jest-junit",
     "test:related": "sh test-related.sh",
     "test:nowatch": "cross-env CI=true npm run test -- --colors --watchAll=false --passWithNoTests",
     "eject": "react-app-rewired eject",
@@ -95,7 +96,11 @@
     ]
   },
   "jest": {
-    "globalSetup": "./global-setup.js"
+    "globalSetup": "./global-setup.js",
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
   },
   "browserslist": {
     "production": [
@@ -136,6 +141,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
+    "jest-junit": "^16.0.0",
     "jest-mock-axios": "^4.7.3",
     "lint-staged": "^14.0.1",
     "mock-local-storage": "^1.1.24",

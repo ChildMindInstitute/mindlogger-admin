@@ -405,37 +405,53 @@ describe('EventForm.utils', () => {
       periodicity: Periodicity.Monthly,
       endTime: '03:00',
     });
+    const testContext9 = getReminderMockedTestContext({
+      endDate: null,
+      periodicity: Periodicity.Daily,
+    });
+    const testContext10 = getReminderMockedTestContext({
+      endDate: null,
+      periodicity: Periodicity.Weekdays,
+    });
+    const testContext11 = getReminderMockedTestContext({
+      endDate: null,
+      periodicity: Periodicity.Monthly,
+    });
+    const largeActivityIncomplete = 1000;
     test.each`
-      value        | testContext     | expected | description
-      ${99}        | ${testContext}  | ${true}  | ${'returns true if Always periodicity'}
-      ${undefined} | ${testContext1} | ${true}  | ${'returns true when value is falsy or 0'}
-      ${0}         | ${testContext1} | ${true}  | ${'returns true when value is falsy or 0'}
-      ${1}         | ${testContext1} | ${true}  | ${'handles Once periodicity'}
-      ${2}         | ${testContext1} | ${false} | ${'handles Once periodicity'}
-      ${100}       | ${testContext1} | ${false} | ${'handles Once periodicity'}
-      ${1}         | ${testContext2} | ${true}  | ${'handles Daily periodicity'}
-      ${3}         | ${testContext2} | ${true}  | ${'handles Daily periodicity'}
-      ${4}         | ${testContext2} | ${false} | ${'handles Daily periodicity'}
-      ${16}        | ${testContext2} | ${false} | ${'handles Daily periodicity'}
-      ${3}         | ${testContext3} | ${true}  | ${'handles Daily periodicity: cross-day'}
-      ${4}         | ${testContext3} | ${true}  | ${'handles Daily periodicity: cross-day'}
-      ${5}         | ${testContext3} | ${false} | ${'handles Daily periodicity: cross-day'}
-      ${3}         | ${testContext4} | ${true}  | ${'handles Weekdays periodicity'}
-      ${4}         | ${testContext4} | ${false} | ${'handles Weekdays periodicity'}
-      ${4}         | ${testContext5} | ${true}  | ${'handles Weekdays periodicity: cross-day'}
-      ${5}         | ${testContext5} | ${false} | ${'handles Weekdays periodicity: cross-day'}
-      ${7}         | ${testContext6} | ${true}  | ${'handles Weekly periodicity'}
-      ${49}        | ${testContext6} | ${true}  | ${'handles Weekly periodicity'}
-      ${56}        | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
-      ${2}         | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
-      ${8}         | ${testContext6} | ${false} | ${'handles Weekly periodicity'}
-      ${1}         | ${testContext7} | ${true}  | ${'handles Weekly periodicity: cross-day'}
-      ${50}        | ${testContext7} | ${true}  | ${'handles Weekly periodicity: cross-day'}
-      ${2}         | ${testContext7} | ${false} | ${'handles Weekly periodicity: cross-day'}
-      ${5}         | ${testContext7} | ${false} | ${'handles Weekly periodicity: cross-day'}
-      ${1}         | ${testContext8} | ${true}  | ${'handles Monthly periodicity'}
-      ${3}         | ${testContext8} | ${true}  | ${'handles Monthly periodicity'}
-      ${4}         | ${testContext8} | ${false} | ${'handles Monthly periodicity'}
+      value                      | testContext      | expected | description
+      ${largeActivityIncomplete} | ${testContext}   | ${true}  | ${'returns true if Always periodicity'}
+      ${undefined}               | ${testContext1}  | ${true}  | ${'returns true when value is falsy or 0'}
+      ${0}                       | ${testContext1}  | ${true}  | ${'returns true when value is falsy or 0'}
+      ${1}                       | ${testContext1}  | ${true}  | ${'handles Once periodicity'}
+      ${2}                       | ${testContext1}  | ${false} | ${'handles Once periodicity'}
+      ${largeActivityIncomplete} | ${testContext1}  | ${false} | ${'handles Once periodicity'}
+      ${1}                       | ${testContext2}  | ${true}  | ${'handles Daily periodicity'}
+      ${3}                       | ${testContext2}  | ${true}  | ${'handles Daily periodicity'}
+      ${4}                       | ${testContext2}  | ${false} | ${'handles Daily periodicity'}
+      ${16}                      | ${testContext2}  | ${false} | ${'handles Daily periodicity'}
+      ${3}                       | ${testContext3}  | ${true}  | ${'handles Daily periodicity: cross-day'}
+      ${4}                       | ${testContext3}  | ${true}  | ${'handles Daily periodicity: cross-day'}
+      ${5}                       | ${testContext3}  | ${false} | ${'handles Daily periodicity: cross-day'}
+      ${largeActivityIncomplete} | ${testContext9}  | ${true}  | ${'handles Daily periodicity: no end date'}
+      ${3}                       | ${testContext4}  | ${true}  | ${'handles Weekdays periodicity'}
+      ${4}                       | ${testContext4}  | ${false} | ${'handles Weekdays periodicity'}
+      ${4}                       | ${testContext5}  | ${true}  | ${'handles Weekdays periodicity: cross-day'}
+      ${5}                       | ${testContext5}  | ${false} | ${'handles Weekdays periodicity: cross-day'}
+      ${largeActivityIncomplete} | ${testContext10} | ${true}  | ${'handles Weekly periodicity: no end date'}
+      ${7}                       | ${testContext6}  | ${true}  | ${'handles Weekly periodicity'}
+      ${49}                      | ${testContext6}  | ${true}  | ${'handles Weekly periodicity'}
+      ${56}                      | ${testContext6}  | ${false} | ${'handles Weekly periodicity'}
+      ${2}                       | ${testContext6}  | ${false} | ${'handles Weekly periodicity'}
+      ${8}                       | ${testContext6}  | ${false} | ${'handles Weekly periodicity'}
+      ${1}                       | ${testContext7}  | ${true}  | ${'handles Weekly periodicity: cross-day'}
+      ${50}                      | ${testContext7}  | ${true}  | ${'handles Weekly periodicity: cross-day'}
+      ${2}                       | ${testContext7}  | ${false} | ${'handles Weekly periodicity: cross-day'}
+      ${5}                       | ${testContext7}  | ${false} | ${'handles Weekly periodicity: cross-day'}
+      ${1}                       | ${testContext8}  | ${true}  | ${'handles Monthly periodicity'}
+      ${3}                       | ${testContext8}  | ${true}  | ${'handles Monthly periodicity'}
+      ${4}                       | ${testContext8}  | ${false} | ${'handles Monthly periodicity'}
+      ${largeActivityIncomplete} | ${testContext11} | ${true}  | ${'handles Monthly periodicity: no end date'}
     `('$description, value=$value, expected=$expected', ({ value, testContext, expected }) => {
       expect(activityAvailabilityAtDayTest(value, testContext)).toBe(expected);
     });

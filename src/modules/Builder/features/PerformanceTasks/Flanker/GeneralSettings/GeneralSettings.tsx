@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-
 import get from 'lodash.get';
 
 import { StyledTitleLarge, theme } from 'shared/styles';

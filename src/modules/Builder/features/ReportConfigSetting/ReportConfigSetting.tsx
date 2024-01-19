@@ -304,10 +304,10 @@ export const ReportConfigSetting = ({
 
     try {
       const isPasswordSet = await onSetPassword(
-        publicEncrypt(
+        await publicEncrypt(
           JSON.stringify({
             password,
-            privateKey: getPrivateKey({ appletPassword: password, accountId }),
+            privateKey: await getPrivateKey({ appletPassword: password, accountId }),
           }),
           reportPublicKey,
         ),
@@ -364,7 +364,6 @@ export const ReportConfigSetting = ({
 
   const handleDontSave = () => {
     reset(defaultValues);
-    setSubjectData(subjectDataProps);
     confirmNavigation();
   };
 

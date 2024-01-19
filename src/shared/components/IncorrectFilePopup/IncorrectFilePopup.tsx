@@ -2,7 +2,6 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
-
 import { MAX_FILE_SIZE_25MB, UploadFileError } from 'shared/consts';
 import { byteFormatter } from 'shared/utils/fileSystem';
 
@@ -32,7 +31,7 @@ export const IncorrectFilePopup = ({
       hasSecondBtn
       data-testid={dataTestid}
     >
-      <StyledModalWrapper>
+      <StyledModalWrapper data-testid={`${dataTestid}-text`}>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
           {isFormatError ? (
             t(formatError[fileType])

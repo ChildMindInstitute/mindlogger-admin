@@ -59,4 +59,5 @@ export type FormattedActivityItem = {
 export type FormattedResponse = {
   activityItem: FormattedActivityItem;
   answers: Answer[];
+  dataTestid?: string;
 };

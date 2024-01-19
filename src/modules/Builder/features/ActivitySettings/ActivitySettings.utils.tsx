@@ -1,5 +1,6 @@
+import { lazy } from 'react';
+
 import { Svg } from 'shared/components/Svg';
-import { ReportConfigSetting } from 'modules/Builder/features/ReportConfigSetting';
 import { SettingParam } from 'shared/utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType } from 'shared/consts';
@@ -9,6 +10,8 @@ import { SubscalesConfiguration } from './SubscalesConfiguration';
 import { ScoresAndReports } from './ScoresAndReports';
 import { GetActivitySettings } from './ActivitySettings.types';
 import { ItemsWithScore } from './ScoresAndReports/ScoreContent/ScoreContent.types';
+
+const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
 export const getActivitySettings = ({
   activity,

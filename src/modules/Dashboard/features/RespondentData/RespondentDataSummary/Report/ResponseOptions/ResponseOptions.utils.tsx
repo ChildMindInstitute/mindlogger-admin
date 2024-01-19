@@ -1,8 +1,8 @@
 import { ItemResponseType } from 'shared/consts';
 
-import { TimePickerLineChart } from '../Charts/LineChart';
 import { TICK_HEIGHT } from '../Charts/Charts.const';
-import { MultiScatterChart } from '../Charts';
+import { MultiScatterChart } from '../Charts/MultiScatterChart';
+import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
 
@@ -13,6 +13,7 @@ export const getResponseItem = ({
   activityItem,
   versions,
   answers = [],
+  dataTestid,
 }: GetResponseOptionsProps) => {
   const responseType = activityItem.responseType;
 
@@ -36,6 +37,7 @@ export const getResponseItem = ({
         responseType={responseType}
         answers={answers}
         versions={versions}
+        data-testid={`${dataTestid}-multi-scatter-chart`}
       />
     );
   };
@@ -47,6 +49,7 @@ export const getResponseItem = ({
       maxDate={maxDate}
       answers={answers}
       versions={versions}
+      data-testid={`${dataTestid}-time-picker-chart`}
     />
   );
 
@@ -56,7 +59,7 @@ export const getResponseItem = ({
     case ItemResponseType.Slider:
       return renderMultipleSelection();
     case ItemResponseType.Text:
-      return <ReportTable answers={answers} />;
+      return <ReportTable answers={answers} data-testid={dataTestid} />;
     case ItemResponseType.Time:
       return renderTimePicker();
     default:

@@ -15,7 +15,7 @@ import {
 } from './getItemsData';
 import { getActivityJourneyData, getMediaData, getReportData } from './getReportAndMediaData';
 
-const getDefaultExportData = (): AppletExportData => ({
+export const getDefaultExportData = (): AppletExportData => ({
   reportData: [],
   activityJourneyData: [],
   mediaData: [],
@@ -29,11 +29,12 @@ export const prepareData = async (
   data: ExportDataResult,
   getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
 ) => {
-  const parsedAnswers = getParsedAnswers(data, getDecryptedAnswers);
+  const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
   const remappedParsedAnswers = remapFailedAnswers(parsedAnswers);
   const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(remappedParsedAnswers);
+  let acc: AppletExportData = getDefaultExportData();
 
-  return parsedAnswersWithPublicUrls.reduce<AppletExportData>((acc, data) => {
+  for await (const data of parsedAnswersWithPublicUrls) {
     const rawAnswersObject = getObjectFromList(
       data.decryptedAnswers,
       (item) => item.activityItem.name,
@@ -47,15 +48,18 @@ export const prepareData = async (
       data.decryptedAnswers,
       data.decryptedEvents,
     );
-    const drawingItemsData = getDrawingItemsData(acc.drawingItemsData, data.decryptedAnswers);
-    const stabilityTrackerItemsData = getStabilityTrackerItemsData(
+    const drawingItemsData = await getDrawingItemsData(acc.drawingItemsData, data.decryptedAnswers);
+    const stabilityTrackerItemsData = await getStabilityTrackerItemsData(
       acc.stabilityTrackerItemsData,
       data.decryptedAnswers,
     );
-    const abTrailsItemsData = getABTrailsItemsData(acc.abTrailsItemsData, data.decryptedAnswers);
-    const flankerItemsData = getFlankerItemsData(acc.flankerItemsData, data.decryptedAnswers);
+    const abTrailsItemsData = await getABTrailsItemsData(
+      acc.abTrailsItemsData,
+      data.decryptedAnswers,
+    );
+    const flankerItemsData = await getFlankerItemsData(acc.flankerItemsData, data.decryptedAnswers);
 
-    return {
+    acc = {
       reportData,
       activityJourneyData,
       mediaData,
@@ -64,5 +68,7 @@ export const prepareData = async (
       abTrailsItemsData,
       flankerItemsData,
     };
-  }, getDefaultExportData());
+  }
+
+  return acc;
 };

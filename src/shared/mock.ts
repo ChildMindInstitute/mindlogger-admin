@@ -2,7 +2,6 @@ import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
-
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
 
@@ -92,6 +91,16 @@ export const mockedCurrentWorkspace = {
   },
 };
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
+export const mockedRespondentDetails = {
+  appletId: mockedAppletId,
+  appletDisplayName: 'Mocked Applet',
+  appletImage: '',
+  accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
+  respondentNickname: 'Mocked Respondent',
+  respondentSecretId: '3921968c-3903-4872-8f30-a6e6a10cef36',
+  hasIndividualSchedule: false,
+  encryption: mockedEncryption,
+};
 export const mockedRespondent = {
   id: mockedRespondentId,
   nicknames: ['Mocked Respondent'],
@@ -101,18 +110,7 @@ export const mockedRespondent = {
   isPinned: false,
   accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   role: Roles.Respondent,
-  details: [
-    {
-      appletId: mockedAppletId,
-      appletDisplayName: 'Mocked Applet',
-      appletImage: '',
-      accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
-      respondentNickname: 'Mocked Respondent',
-      respondentSecretId: '3921968c-3903-4872-8f30-a6e6a10cef36',
-      hasIndividualSchedule: false,
-      encryption: mockedEncryption,
-    },
-  ],
+  details: [mockedRespondentDetails],
 };
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
 export const mockedRespondent2 = {
@@ -160,7 +158,7 @@ export const mockedAppletData = {
   reportRecipients: [],
   reportIncludeUserId: false,
   reportIncludeCaseId: false,
-  reportEmailBody: '',
+  reportEmailBody: 'Please see the report attached to this email.',
   encryption: mockedEncryption,
   id: mockedAppletId,
   version: '1.1.3',

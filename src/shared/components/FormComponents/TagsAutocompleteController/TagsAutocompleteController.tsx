@@ -25,10 +25,11 @@ export const TagsInputController = <T extends FieldValues>({
   noOptionsText,
   disabled,
   limitTags,
+  defaultSelectedAll = false,
   'data-testid': dataTestid,
   ...props
 }: TagsAutocompleteControllerProps<T>) => {
-  const [selectedAll, setSelectedAll] = useState<boolean>(false);
+  const [selectedAll, setSelectedAll] = useState<boolean>(defaultSelectedAll);
 
   return (
     <Controller

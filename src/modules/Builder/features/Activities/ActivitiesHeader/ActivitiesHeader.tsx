@@ -29,7 +29,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           sx={{ mr: theme.spacing(1.6) }}
           data-testid="builder-activities-add-activity"
         >
-          {t('addActivity')}
+          {t('addBlankActivity')}
         </Button>
         <ButtonWithMenu
           variant="outlined"

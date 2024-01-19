@@ -1,4 +1,5 @@
 import { StabilityTrackerPhaseType } from 'shared/types';
+
 import { getAnswerValue } from './getAnswerValue';
 
 describe('getAnswerValue', () => {

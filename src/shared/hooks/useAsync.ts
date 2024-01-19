@@ -5,7 +5,7 @@ import { ApiErrorResponse } from 'shared/state/Base';
 
 export const useAsync = <T, K>(
   asyncFunction: (args: T) => Promise<AxiosResponse<K>>,
-  callback?: (data: AxiosResponse<K> | null) => void,
+  callback?: (data: AxiosResponse<K>) => void,
   errorCallback?: (data: K | null) => void,
   finallyCallback?: () => void,
   dependencies?: unknown[],

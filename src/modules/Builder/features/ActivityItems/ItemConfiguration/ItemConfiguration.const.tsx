@@ -2,6 +2,7 @@ import { itemsTypeIcons } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 import { createArray } from 'shared/utils';
 import {
+  DEFAULT_SLIDER_MAX_NUMBER,
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MIN_NUMBER,
   DEFAULT_SLIDER_ROWS_MIN_NUMBER,
@@ -22,13 +23,14 @@ export const DEFAULT_SLIDER_ROWS_SCORE = createArray(
 
 export const DEFAULT_EMPTY_SLIDER = {
   minValue: DEFAULT_SLIDER_MIN_NUMBER,
-  maxValue: DEFAULT_SLIDER_MAX_VALUE,
+  maxValue: DEFAULT_SLIDER_MAX_NUMBER,
   scores: DEFAULT_SLIDER_SCORE,
   minLabel: '',
   maxLabel: '',
 };
 export const DEFAULT_EMPTY_SLIDER_ROWS = {
   ...DEFAULT_EMPTY_SLIDER,
+  maxValue: DEFAULT_SLIDER_MAX_VALUE,
   minValue: DEFAULT_SLIDER_ROWS_MIN_NUMBER,
   scores: DEFAULT_SLIDER_ROWS_SCORE,
   label: '',

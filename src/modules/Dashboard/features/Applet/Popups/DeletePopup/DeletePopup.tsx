@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Modal, EnterAppletPassword } from 'shared/components';
+import { Modal, EnterAppletPassword, Spinner, SpinnerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
 import { alerts, applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
@@ -31,7 +31,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     );
   };
 
-  const { execute } = useAsync(
+  const { execute, isLoading } = useAsync(
     deleteAppletApi,
     () => {
       setActiveModal(Modals.Confirmation);
@@ -68,21 +68,25 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           hasSecondBtn
           submitBtnColor="error"
           secondBtnText={t('cancel')}
+          disabledSubmit={isLoading}
           onSecondBtnSubmit={deletePopupClose}
           data-testid={`${dataTestid}-password-popup`}
         >
-          <StyledModalWrapper>
-            <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
-              {t('deleteAppletDescriptionWithPassword')}
-            </StyledBodyLarge>
-            <EnterAppletPassword
-              ref={appletPasswordRef}
-              appletId={currentApplet?.id ?? ''}
-              encryption={currentApplet?.encryption}
-              submitCallback={handleDeleteApplet}
-              data-testid={`${dataTestid}-enter-password-popup`}
-            />
-          </StyledModalWrapper>
+          <>
+            {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+            <StyledModalWrapper>
+              <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
+                {t('deleteAppletDescriptionWithPassword')}
+              </StyledBodyLarge>
+              <EnterAppletPassword
+                ref={appletPasswordRef}
+                appletId={currentApplet?.id ?? ''}
+                encryption={currentApplet?.encryption}
+                submitCallback={handleDeleteApplet}
+                data-testid={`${dataTestid}-enter-password-popup`}
+              />
+            </StyledModalWrapper>
+          </>
         </Modal>
       );
     case Modals.Confirmation:

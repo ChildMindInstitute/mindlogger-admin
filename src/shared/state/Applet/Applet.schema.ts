@@ -695,7 +695,7 @@ export type SectionConditionalLogic = {
 };
 
 export type SectionReport = {
-  id?: string;
+  id: string;
   name: string;
   type: ScoreReportType.Section;
   showMessage: boolean;
@@ -708,6 +708,7 @@ export type SectionReport = {
 export type ActivitySettingsSubscaleItem = {
   name: string;
   type: ElementType;
+  allowEdit?: boolean;
 };
 
 export type ActivitySettingsSubscale<T = ActivitySettingsSubscaleItem> = {

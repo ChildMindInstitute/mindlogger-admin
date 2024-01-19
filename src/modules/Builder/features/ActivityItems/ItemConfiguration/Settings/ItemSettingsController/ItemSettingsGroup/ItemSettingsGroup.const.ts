@@ -29,3 +29,5 @@ export const ITEM_TYPES_TO_HAVE_ALERTS = [
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.MultipleSelectionPerRow,
 ];
+
+export const DEFAULT_ACTIVE_TIMER_VALUE = 1;

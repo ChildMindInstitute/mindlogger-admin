@@ -13,7 +13,7 @@ import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/Colla
 
 import { StyledButton, StyledEdited, StyledItem, StyledReviewer } from './FeedbackReviewer.styles';
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';
-import { getResponseItem } from './FeedbackReviewer.const';
+import { getResponseItem } from './FeedbackReviewer.utils';
 
 export const FeedbackReviewer = ({
   reviewer: { review, reviewer },

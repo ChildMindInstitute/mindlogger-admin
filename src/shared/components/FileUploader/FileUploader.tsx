@@ -1,4 +1,4 @@
-import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
+import { ChangeEvent, DragEvent, useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -37,6 +37,7 @@ export const FileUploader = ({
 
   const [file, setFile] = useState<null | ImportedFile>(null);
   const [error, setError] = useState<JSX.Element | string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>();
   const isPrimaryUiType = uiType === FileUploaderUiType.Primary;
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
@@ -63,6 +64,9 @@ export const FileUploader = ({
     }
 
     const file = files[0];
+
+    if (fileInputRef.current) fileInputRef.current.value = '';
+
     if (csvOnly && !file.type.includes(MimeType.Csv)) {
       setError(invalidFileFormatError);
 
@@ -74,7 +78,7 @@ export const FileUploader = ({
         setError(null);
         const importedFile = { name: file.name, data };
         const hasError = onFileReady(importedFile);
-        !hasError && setFile(importedFile);
+        hasError ? setError(validationError!) : setFile(importedFile);
       })
       .catch(() => setError(parsingError || invalidFileFormatError));
   };
@@ -139,6 +143,7 @@ export const FileUploader = ({
             }
             control={
               <StyledTextField
+                inputRef={fileInputRef}
                 onChange={handleChange}
                 inputProps={{
                   accept: getAcceptedFormats({ isPrimaryUiType, csvOnly }),

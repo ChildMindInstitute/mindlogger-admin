@@ -12,6 +12,8 @@ import { AccountPanel } from './AccountPanel';
 import { Breadcrumbs } from './Breadcrumbs';
 import { StyledAvatarBtn, StyledLoginButton, StyledTopBar } from './TopBar.styles';
 
+const dataTestid = 'top-bar';
+
 export const TopBar = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
@@ -24,15 +26,16 @@ export const TopBar = () => {
 
   return (
     <>
-      <StyledTopBar>
+      <StyledTopBar data-testid={dataTestid}>
         <StyledFlexTopCenter>
           <Breadcrumbs />
         </StyledFlexTopCenter>
         {isAuthorized ? (
-          <StyledBadge badgeContent={notWatched}>
+          <StyledBadge badgeContent={notWatched} data-testid={`${dataTestid}-badge`}>
             <StyledAvatarBtn
               onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
               variant="text"
+              data-testid={`${dataTestid}-badge-button`}
             >
               <Avatar caption={userInitials} uiType={AvatarUiType.Secondary} />
             </StyledAvatarBtn>
@@ -41,6 +44,7 @@ export const TopBar = () => {
           <StyledLoginButton
             startIcon={<Svg width="18" height="18" id="profile" />}
             onClick={handleLoginClick}
+            data-testid={`${dataTestid}-login-button`}
           >
             {t('loginLink')}
           </StyledLoginButton>

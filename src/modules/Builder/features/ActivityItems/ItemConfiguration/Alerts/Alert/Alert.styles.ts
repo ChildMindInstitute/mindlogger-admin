@@ -1,6 +1,6 @@
 import { styled, Box } from '@mui/material';
-import { SelectController } from 'shared/components/FormComponents';
 
+import { SelectController } from 'shared/components/FormComponents';
 import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledAlert = styled(Box)`

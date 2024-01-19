@@ -29,7 +29,10 @@ export const ItemCardButtons = ({
   }, [answerValue]);
 
   return (
-    <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', mt: theme.spacing(1.6) }}>
+    <StyledFlexTopCenter
+      sx={{ justifyContent: 'flex-end', mt: theme.spacing(1.6) }}
+      data-testid={dataTestid}
+    >
       {config.isBackVisible && (
         <Button
           sx={{ minWidth: '10rem' }}

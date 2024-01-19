@@ -33,7 +33,9 @@ export const getSanitizedContent = (
           FORBID_TAGS: ['a'],
           FORBID_ATTR: ['href'],
         }
-      : {},
+      : {
+          ADD_ATTR: ['target'],
+        },
   )
     .replace(/&lt;/g, '<') // fix because DOMPurify replaces <,> symbols
     .replace(/&gt;/g, '>');

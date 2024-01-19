@@ -6,7 +6,7 @@ import { SelectController, SelectControllerProps } from 'shared/components/FormC
 import { useInfinityData } from 'shared/hooks/useInfinityData';
 import { themeParams } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
-import { THEME_LIST_CLASS, THEME_END_ITEM_CLASS } from '../AboutApplet.const';
+import { THEME_END_ITEM_CLASS } from '../AboutApplet.const';
 
 export const ThemeSelectController = <T extends FieldValues>(props: SelectControllerProps<T>) => {
   const [trigger, setTrigger] = useState(false);
@@ -14,7 +14,6 @@ export const ThemeSelectController = <T extends FieldValues>(props: SelectContro
   const themesLoadingStatus = themes.useThemesStatus();
 
   useInfinityData({
-    rootSelector: `.${THEME_LIST_CLASS}`,
     targetSelector: `.${THEME_END_ITEM_CLASS}`,
     totalSize: count,
     listSize: themesList.length,
@@ -25,11 +24,6 @@ export const ThemeSelectController = <T extends FieldValues>(props: SelectContro
   });
 
   return (
-    <SelectController
-      rootSelector={THEME_LIST_CLASS}
-      targetSelector={THEME_END_ITEM_CLASS}
-      setTrigger={setTrigger}
-      {...props}
-    />
+    <SelectController targetSelector={THEME_END_ITEM_CLASS} setTrigger={setTrigger} {...props} />
   );
 };

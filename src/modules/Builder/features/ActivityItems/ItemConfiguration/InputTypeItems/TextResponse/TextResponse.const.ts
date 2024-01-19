@@ -1,0 +1,1 @@
+export const MIN_TEXT_RESPONSE_LENGTH = 1;

@@ -38,3 +38,4 @@ export * from './validationSchemas';
 export * from './logger';
 export * from './renderWithAppletFormData';
 export * from './asyncTimeout';
+export * from './renderHookWithProviders';

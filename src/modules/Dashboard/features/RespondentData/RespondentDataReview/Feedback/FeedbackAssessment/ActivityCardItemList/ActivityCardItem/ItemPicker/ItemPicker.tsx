@@ -15,7 +15,11 @@ import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/Responde
 
 import { ItemPickerProps } from './ItemPicker.types';
 
-export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
+export const ItemPicker = ({
+  activityItem,
+  isDisabled,
+  'data-testid': dataTestid,
+}: ItemPickerProps) => {
   const { control, getValues } = useFormContext<FeedbackForm>();
   const { assessmentItems } = getValues();
 
@@ -34,6 +38,7 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
           name={controlName}
           activityItem={activityItem as SingleSelectItemAnswer}
           isDisabled={isDisabled}
+          data-testid={dataTestid}
         />
       );
     case 'multiSelect':
@@ -43,6 +48,7 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
           name={controlName}
           activityItem={activityItem as MultiSelectItemAnswer}
           isDisabled={isDisabled}
+          data-testid={dataTestid}
         />
       );
     case 'slider':
@@ -52,6 +58,7 @@ export const ItemPicker = ({ activityItem, isDisabled }: ItemPickerProps) => {
           name={controlName}
           activityItem={activityItem as SliderItemAnswer}
           isDisabled={isDisabled}
+          data-testid={dataTestid}
         />
       );
     default:

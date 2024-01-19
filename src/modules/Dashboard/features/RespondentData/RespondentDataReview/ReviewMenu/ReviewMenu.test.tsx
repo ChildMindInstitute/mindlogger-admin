@@ -1,6 +1,6 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
-import mockAxios from 'jest-mock-axios';
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { Suspense } from 'react';
+import { useForm } from 'react-hook-form';
+import { act, fireEvent, screen } from '@testing-library/react';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
@@ -16,7 +16,6 @@ import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 
 import { ReviewMenu } from './ReviewMenu';
-import { ReviewMenuProps } from './ReviewMenu.types';
 
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
@@ -57,114 +56,160 @@ const preloadedState = {
   },
 };
 
-const mockedDate = '2023-12-05';
-const dataTestid = 'respondents-review';
-const commonProps = {
-  selectedActivity: null,
-  selectedAnswer: null,
-  setSelectedActivity: jest.fn(),
-  onSelectAnswer: jest.fn(),
+const dataTestid = 'respondents-review-menu';
+
+const selectedDate = new Date('2023-12-15');
+const onMonthChange = jest.fn();
+const setSelectedActivity = jest.fn();
+const onSelectAnswer = jest.fn();
+
+const ReviewMenuComponent = () => {
+  const { control } = useForm({
+    defaultValues: {
+      date: selectedDate,
+    },
+  });
+
+  const props = {
+    control,
+    selectedDate,
+    responseDates: [new Date('2023-12-11T11:21:40.509095'), new Date('2023-12-15T11:22:34.150182')],
+    onMonthChange,
+    activities: [
+      {
+        id: '951145fa-3053-4428-a970-70531e383d89',
+        name: 'Activity 1',
+        answerDates: [
+          {
+            createdAt: '2023-12-15T11:21:40.509095',
+            answerId: 'ff9e1f86-3fa2-4edd-908c-832810555633',
+          },
+          {
+            createdAt: '2023-12-15T14:22:34.150182',
+            answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
+          },
+        ],
+      },
+      {
+        id: 'ad9e1f86-3fa2-4edd-908c-832810555865',
+        name: 'Activity 2',
+        answerDates: [
+          {
+            createdAt: '2023-12-15T16:39:11.509095',
+            answerId: 'fe2e188f-6b47-4507-b1e0-8f7707934b81',
+          },
+        ],
+      },
+    ],
+    selectedActivity: null,
+    selectedAnswer: null,
+    setSelectedActivity,
+    onSelectAnswer,
+  };
+
+  return <ReviewMenu {...props} />;
 };
 
-const getReviewMenuComponent = (props: ReviewMenuProps) =>
-  renderWithProviders(<ReviewMenu {...props} />, {
-    preloadedState,
-    route,
-    routePath,
-  });
-
 describe('ReviewMenu', () => {
-  afterEach(() => {
-    mockAxios.reset();
-  });
-
-  test('component should render correctly', async () => {
-    getReviewMenuComponent(commonProps);
+  test('renders component correctly, select activity, select timestamp', () => {
+    renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
     expect(screen.getByText('Review')).toBeInTheDocument();
     expect(screen.getByTestId(`${dataTestid}-review-date`)).toBeInTheDocument();
     expect(
       screen.getByText('User: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)'),
     ).toBeInTheDocument();
     expect(screen.getByText('Select activity and response')).toBeInTheDocument();
+
+    const activityLength = screen.queryAllByTestId(/respondents-review-menu-activity-\d+-select$/);
+    expect(activityLength).toHaveLength(2);
+
+    const activity0 = screen.getByTestId(`${dataTestid}-activity-0-select`);
+    fireEvent.click(activity0);
+    expect(setSelectedActivity).toBeCalledTimes(1);
+
+    const timestampLength = screen.queryAllByTestId(
+      /respondents-review-menu-activity-0-completion-time-\d+$/,
+    );
+    expect(timestampLength).toHaveLength(2);
+
+    expect(screen.getByText('11:21:40')).toBeInTheDocument();
+    expect(screen.getByText('14:22:34')).toBeInTheDocument();
+
+    const timestamp0 = screen.getByTestId(`${dataTestid}-activity-0-completion-time-1`);
+    fireEvent.click(timestamp0);
+    expect(onSelectAnswer).toHaveBeenCalledWith({
+      answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
+      createdAt: '2023-12-15T14:22:34.150182',
+    });
   });
 
-  test('fetches activities and select activity and specific date', async () => {
-    const fromDate = startOfMonth(new Date(mockedDate)).getTime().toString();
-    const toDate = endOfMonth(new Date(mockedDate)).getTime().toString();
+  test('test change date of the month', async () => {
+    renderWithProviders(
+      <Suspense fallback={<></>}>
+        <ReviewMenuComponent />
+      </Suspense>,
+      { preloadedState, route, routePath },
+    );
 
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        result: {
-          dates: ['2023-12-03', '2023-12-05'],
-        },
-      },
-    });
+    const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
+    expect(inputContainer).toBeInTheDocument();
 
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        result: [
-          {
-            id: '19471c61-bade-4caf-90a7-07307a811d44',
-            name: 'New Activity 1',
-            answerDates: [
-              {
-                createdAt: '2023-12-05T17:10:50.428740',
-                answerId: 'e341e33a-5322-4bde-ab85-e2e04597742e',
-              },
-            ],
-          },
-          {
-            id: 'e128dff4-3448-499c-bcd1-bac208848744',
-            name: 'New Activity 2',
-            answerDates: [],
-          },
-        ],
-      },
-    });
+    const input = inputContainer.querySelector('input') as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input.value).toEqual('15 Dec 2023');
 
-    const onSelectAnswer = jest.fn();
-    getReviewMenuComponent({
-      ...commonProps,
-      onSelectAnswer,
-    });
+    fireEvent.click(inputContainer);
 
-    await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith(`/answers/applet/${mockedAppletId}/dates`, {
-        params: {
-          respondentId: mockedRespondentId,
-          fromDate,
-          toDate,
-        },
-      });
-    });
+    const datepicker = (await screen.findByTestId(
+      'respondents-review-menu-review-date-popover',
+    )) as HTMLElement;
+    expect(datepicker).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith(
-        `/answers/applet/${mockedAppletId}/review/activities`,
-        {
-          params: {
-            respondentId: mockedRespondentId,
-            createdDate: mockedDate,
-            limit: 10000,
-          },
-        },
+    act(() => {
+      const december11 = datepicker.getElementsByClassName(
+        'react-datepicker__day react-datepicker__day--011',
       );
+      expect(december11).toHaveLength(1);
+
+      fireEvent.click(december11[0]);
     });
 
-    await waitFor(() => {
-      const activity = screen.getByTestId(`${dataTestid}-activity-0-select`);
-      expect(activity).toBeInTheDocument();
+    expect(input.value).toEqual('11 Dec 2023');
+  });
 
-      fireEvent.click(activity);
-    });
+  test('test change month', async () => {
+    renderWithProviders(
+      <Suspense fallback={<></>}>
+        <ReviewMenuComponent />
+      </Suspense>,
+      { preloadedState, route, routePath },
+    );
 
-    const timestamp = screen.getByTestId(`${dataTestid}-activity-0-completion-time-0`);
-    expect(timestamp).toBeInTheDocument();
-    fireEvent.click(timestamp);
+    const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
 
-    expect(onSelectAnswer).toBeCalledWith({
-      createdAt: '2023-12-05T17:10:50.428740',
-      answerId: 'e341e33a-5322-4bde-ab85-e2e04597742e',
-    });
+    fireEvent.click(inputContainer);
+
+    const datepicker = (await screen.findByTestId(
+      'respondents-review-menu-review-date-popover',
+    )) as HTMLElement;
+    expect(datepicker).toBeInTheDocument();
+
+    const datepickerHeader = datepicker.getElementsByClassName(
+      'react-datepicker__header react-datepicker__header--custom',
+    );
+    expect(datepickerHeader[0]).toHaveTextContent('December');
+
+    const svgNavigateLeft = datepickerHeader[0].querySelector('.svg-navigate-left');
+    const svgNavigateRight = datepickerHeader[0].querySelector('.svg-navigate-right');
+
+    if (svgNavigateLeft) {
+      fireEvent.click(svgNavigateLeft);
+      expect(datepickerHeader[0]).toHaveTextContent('November');
+    }
+
+    if (svgNavigateRight) {
+      fireEvent.click(svgNavigateRight);
+      expect(datepickerHeader[0]).toHaveTextContent('December');
+    }
   });
 });
