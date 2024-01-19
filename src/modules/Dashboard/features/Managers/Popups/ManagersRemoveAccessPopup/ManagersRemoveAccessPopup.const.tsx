@@ -16,5 +16,6 @@ export const getHeadCells = (): HeadCell[] => [
 export const buttonTextByStep = {
   0: 'removeAccess',
   1: 'remove',
-  2: 'ok',
+  2: 'retry',
+  3: 'ok',
 };
