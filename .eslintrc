@@ -19,7 +19,7 @@
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "quotes": ["error", "single"],
     "import/order": [
-      "warn",
+      "error",
         {
           "groups": [
             ["external", "builtin"],
