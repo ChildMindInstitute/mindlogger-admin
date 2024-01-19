@@ -71,7 +71,7 @@ describe('RespondentsRemoveAccessPopup component tests', () => {
       routePath,
     });
 
-    fireEvent.click(screen.getAllByText('Remove Access')[1]);
+    fireEvent.click(screen.getAllByText('Remove from Applet')[1]);
     fireEvent.click(screen.getByText('Yes, Remove'));
     await waitFor(() => {
       expect(screen.getByText(chosenAppletData.appletDisplayName)).toBeInTheDocument();

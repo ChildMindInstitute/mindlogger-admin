@@ -41,14 +41,6 @@ export const RespondentsRemoveAccessPopup = ({
 
   const onCloseHandler = () => onClose();
 
-  useEffect(() => {
-    if (chosenAppletData) {
-      setAppletName(chosenAppletData?.appletDisplayName || '');
-      setRespondentName(chosenAppletData?.respondentSecretId || '');
-      setStep(1);
-    }
-  }, [chosenAppletData]);
-
   const firstScreen = (
     <>
       <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
@@ -161,6 +153,14 @@ export const RespondentsRemoveAccessPopup = ({
     if (isLastScreen || isAppletPwdScreen) return;
     getStep('next');
   };
+
+  useEffect(() => {
+    if (chosenAppletData) {
+      setAppletName(chosenAppletData?.appletDisplayName || '');
+      setRespondentName(chosenAppletData?.respondentSecretId || '');
+      setStep(1);
+    }
+  }, [chosenAppletData]);
 
   return (
     <Modal

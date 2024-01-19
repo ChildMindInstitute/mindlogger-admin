@@ -901,6 +901,7 @@
   "respondentAccessAndDataRemoveSuccess": "<0>{{respondentName}}</0> et toutes leurs données de réponse ont été supprimés avec succès de l'Applet <2>{{appletName}}</3>.",
   "respondentAccessRemoveError": "<0>{{respondentName}}</0> n'a pas été retiré de l'Applet <2>{{appletName}}</2>. Veuillez réessayer.",
   "respondentAccessRemoveSuccess": "<0>{{respondentName}}</0> a été retiré avec succès de l'Applet <2>{{appletName}}</2>.",
+  "respondentAlreadyInvited": "Le répondant a déjà été invité",
   "respondentCompletedActivities": "Le participant a terminé l'activité à ces heures",
   "respondentId": "Identifiant du participant",
   "respondentIdentifier": "Identifiant du participant",

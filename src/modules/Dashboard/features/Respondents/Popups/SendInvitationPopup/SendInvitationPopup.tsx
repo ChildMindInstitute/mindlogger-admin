@@ -13,7 +13,7 @@ import { useFormError } from 'modules/Dashboard/hooks';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { SendInvitationForm, SendInvitationPopupProps } from './SendInvitationPopup.types';
-import { dataTestId } from './SendInvitationPopup.const';
+import { dataTestId, RESPONDENT_ALREADY_INVITED } from './SendInvitationPopup.const';
 import { SendInvitationSchema } from './SendInvitation.schema';
 
 export const SendInvitationPopup = ({
@@ -58,7 +58,19 @@ export const SendInvitationPopup = ({
     return t('sendInvitation');
   };
 
-  useFormError({ error, setError, setHasCommonError, fields: { email: 'email' } });
+  useFormError({
+    error,
+    setError,
+    setHasCommonError,
+    fields: { email: 'email' },
+    customFieldErrors: [
+      {
+        fieldName: 'email',
+        apiMessage: RESPONDENT_ALREADY_INVITED,
+        errorMessage: t('respondentAlreadyInvited'),
+      },
+    ],
+  });
 
   return (
     <Modal
