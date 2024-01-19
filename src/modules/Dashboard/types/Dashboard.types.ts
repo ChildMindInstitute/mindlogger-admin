@@ -39,7 +39,6 @@ export enum RespondentStatus {
 
 export type Respondent = {
   id: string;
-  // accessId: string;
   nicknames: string[];
   role: Roles;
   secretIds: string[];

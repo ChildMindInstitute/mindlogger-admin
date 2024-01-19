@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
+import { RespondentStatus } from 'modules/Dashboard/types';
 
 import {
   CalculationType,
@@ -14,7 +15,6 @@ import {
   SubscaleTotalScore,
 } from './consts';
 import { MultiSelectItem, SingleSelectItem } from './state';
-import { RespondentStatus } from '../modules/Dashboard/types';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
