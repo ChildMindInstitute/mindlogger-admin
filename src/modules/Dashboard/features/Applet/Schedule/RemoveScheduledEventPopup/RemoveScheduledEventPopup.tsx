@@ -1,6 +1,6 @@
-import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
 
 import { RemoveScheduledEventPopupProps } from './RemoveScheduledEventPopup.types';

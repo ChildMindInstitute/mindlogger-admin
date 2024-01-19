@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { ClickAwayListener, List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
+import { page } from 'resources';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
-import { workspaces, auth } from 'redux/modules';
+import { workspaces, auth, Workspace } from 'redux/modules';
 import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { useAppDispatch } from 'redux/store';
@@ -16,6 +17,8 @@ import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styl
 export const LeftBar = () => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const userData = auth.useData();
   const { id } = userData?.user || {};
@@ -36,10 +39,23 @@ export const LeftBar = () => {
     }
   }, [workspacesData]);
 
+  useEffect(() => {
+    const { workspace } = location.state ?? {};
+
+    if (workspace) {
+      authStorage.setWorkspace(workspace);
+      dispatch(workspaces.actions.setCurrentWorkspace(workspace));
+    }
+  }, [location.state]);
+
   const handleLinkClick = (key: string) => {
     if (key === 'library') {
       Mixpanel.track('Browse applet library click');
     }
+  };
+
+  const handleChangeWorkspace = (workspace: Workspace) => {
+    navigate(page.dashboard, { state: { workspace } });
   };
 
   return (
@@ -76,6 +92,7 @@ export const LeftBar = () => {
             setVisibleDrawer={setVisibleDrawer}
             visibleDrawer={visibleDrawer}
             workspaces={workspacesData || []}
+            onChangeWorkspace={handleChangeWorkspace}
             data-testid={`${dataTestid}-workspaces-drawer`}
           />
         )}

@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 
 import { getMaxLengthValidationError } from 'shared/utils';
+
 import { useFieldLengthError } from './useFieldLengthError';
 
 const mockedFieldName = 'fieldName';

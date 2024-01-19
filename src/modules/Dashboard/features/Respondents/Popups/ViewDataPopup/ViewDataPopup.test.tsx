@@ -4,7 +4,6 @@ import { renderWithProviders } from 'shared/utils';
 import { mockedRespondentDetails, mockedRespondentId, mockedOwnerId } from 'shared/mock';
 
 import * as hooks from '../Popup.hooks';
-
 import { ViewDataPopup } from './ViewDataPopup';
 
 const setChosenAppletDataMock = jest.fn();
