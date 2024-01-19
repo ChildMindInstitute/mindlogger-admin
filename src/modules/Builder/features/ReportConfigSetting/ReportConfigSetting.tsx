@@ -364,7 +364,6 @@ export const ReportConfigSetting = ({
 
   const handleDontSave = () => {
     reset(defaultValues);
-    setSubjectData(subjectDataProps);
     confirmNavigation();
   };
 
