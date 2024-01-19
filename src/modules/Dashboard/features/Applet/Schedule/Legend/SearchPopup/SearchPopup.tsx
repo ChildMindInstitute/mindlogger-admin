@@ -10,7 +10,7 @@ import { getRespondentName, getErrorMessage } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
 import { createIndividualEventsApi } from 'api';
 import { applets, users } from 'modules/Dashboard/state';
-import { useAppDispatch } from 'redux/store';
+import { useAppDispatch } from 'redux/store/hooks';
 import { workspaces } from 'shared/state';
 
 import { AddIndividualSchedulePopup } from '../../AddIndividualSchedulePopup';

@@ -84,6 +84,17 @@ const changesMock = {
   },
 };
 
+const emptyChangesMock = {
+  data: {
+    result: {
+      displayName: 'New applet app1 (1) added',
+      changes: [],
+      activities: [],
+      activityFlows: [],
+    },
+  },
+};
+
 const dataTestid = 'applet-settings-version-history';
 
 describe('VersionHistorySetting', () => {
@@ -93,8 +104,16 @@ describe('VersionHistorySetting', () => {
       ${`/dashboard/${mockedAppletId}/settings/${SettingParam.VersionHistory}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
       ${`/builder/${mockedAppletId}/settings/${SettingParam.VersionHistory}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
     `('$description', async ({ route, routePath }) => {
-      mockAxios.get.mockResolvedValueOnce(versionsMock);
-      mockAxios.get.mockResolvedValueOnce(changesMock);
+      mockAxios.get.mockImplementation((url) => {
+        switch (true) {
+          case url?.endsWith('/versions'):
+            return Promise.resolve(versionsMock);
+          case url?.endsWith('/2.0.0/changes'):
+            return Promise.resolve(changesMock);
+          default:
+            return Promise.resolve(emptyChangesMock);
+        }
+      });
       renderWithProviders(<VersionHistorySetting />, { preloadedState, route, routePath });
 
       expect(screen.getByTestId('spinner')).toBeVisible();

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Modal } from 'shared/components/Modal';
 import { CreateAppletPassword, EnterAppletPassword } from 'shared/components/Password';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
-
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 
 import { AppletPasswordPopupProps, AppletPasswordPopupType } from './AppletPasswordPopup.types';

@@ -14,6 +14,7 @@ import {
   StyledSmallAppletImgPlaceholder,
   theme,
   StyledErrorText,
+  variables,
 } from 'shared/styles';
 import { Table, UiType, Modal } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -95,13 +96,23 @@ export const ManagersRemoveAccessPopup = ({
 
   const onCLoseHandler = () => onClose(step);
 
-  const { execute, error, setError } = useAsync(removeManagerAccessApi, incrementStep);
+  const { execute, error, setError } = useAsync(
+    removeManagerAccessApi,
+    () => setStep(3),
+    () => setStep(2),
+  );
 
   const onSubmit = () => {
     switch (step) {
       case 0:
         return incrementStep();
       case 1:
+        execute({
+          appletIds: selectedApplets.map((item) => item.id),
+          userId: user.id,
+        });
+        break;
+      case 2:
         execute({
           appletIds: selectedApplets.map((item) => item.id),
           userId: user.id,
@@ -169,7 +180,48 @@ export const ManagersRemoveAccessPopup = ({
     </>
   );
 
+  const getThirdMultipleScreen = () => (
+    <>
+      <StyledBodyLarge
+        sx={{ marginBottom: theme.spacing(2.4), color: variables.palette.semantic.error }}
+      >
+        <Trans i18nKey="multipleRemoveAccessError">
+          Access for
+          <strong>
+            <>
+              {{ firstName }} {{ lastName }} ({{ email }})
+            </>
+          </strong>
+          to the list of Applets below has not been removed. Please try again.
+        </Trans>
+      </StyledBodyLarge>
+      {listOfSelectedApplets}
+    </>
+  );
+
   const getThirdScreen = () => {
+    const { displayName } = selectedApplets[0];
+
+    return (
+      <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
+        <Trans i18nKey="removeAccessError">
+          Access for the
+          <strong>
+            <>
+              {{ firstName }} {{ lastName }} ({{ email }})
+            </>
+          </strong>
+          to the
+          <strong>
+            <>{{ displayName }}</>
+          </strong>
+          has not been removed. Please try again.
+        </Trans>
+      </StyledBodyLarge>
+    );
+  };
+
+  const getFourthScreen = () => {
     const { displayName } = selectedApplets[0];
 
     return (
@@ -191,7 +243,7 @@ export const ManagersRemoveAccessPopup = ({
     );
   };
 
-  const getThirdMultipleScreen = () => (
+  const getFourthMultipleScreen = () => (
     <>
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
         <Trans i18nKey="multipleRemoveAccessSuccess">
@@ -226,6 +278,7 @@ export const ManagersRemoveAccessPopup = ({
     getFirstScreen(),
     isOneSelected ? getSecondScreen() : getSecondMultipleScreen(),
     isOneSelected ? getThirdScreen() : getThirdMultipleScreen(),
+    isOneSelected ? getFourthScreen() : getFourthMultipleScreen(),
   ];
 
   return (
@@ -234,7 +287,7 @@ export const ManagersRemoveAccessPopup = ({
       onClose={onCLoseHandler}
       onSubmit={onSubmit}
       title={t('removeAccess')}
-      hasSecondBtn={step === 1}
+      hasSecondBtn={step < 3}
       secondBtnText={t('back')}
       disabledSecondBtn={!!appletId}
       onSecondBtnSubmit={decrementStep}
