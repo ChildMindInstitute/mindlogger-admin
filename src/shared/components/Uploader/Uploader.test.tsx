@@ -7,6 +7,7 @@ import i18n from 'i18n';
 import { postFileUploadApi } from 'api';
 
 import * as CropPopupUtils from '../CropPopup/CropPopup.utils';
+
 import { Uploader, UploaderProps } from '.';
 
 jest.mock('api');

@@ -23,6 +23,7 @@ import {
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
+
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {

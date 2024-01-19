@@ -1,5 +1,4 @@
 import { ScoreOrSection } from 'shared/state';
-
 import { mockedMultiActivityItem, mockedSingleActivityItem } from 'shared/mock';
 
 import {

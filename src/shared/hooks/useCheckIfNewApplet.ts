@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+
 import { isNewApplet } from 'shared/utils/urlGenerator';
 
 export const useCheckIfNewApplet = () => {
