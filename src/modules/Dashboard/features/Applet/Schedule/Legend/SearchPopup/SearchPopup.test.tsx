@@ -118,7 +118,7 @@ describe('SearchPopup component', () => {
     const search = screen.getByTestId(`${dataTestid}-search`);
     expect(search).toBeInTheDocument();
 
-    const searchInput = search.querySelector('input');
+    const searchInput = search.querySelector('input') as HTMLInputElement;
     expect(searchInput).toBeInTheDocument();
 
     await userEvent.type(searchInput, 'john');
