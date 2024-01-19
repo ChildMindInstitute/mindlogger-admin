@@ -177,106 +177,108 @@ describe('FeedbackReviewed', () => {
   test('should render array of reviews with/without edited labels', async () => {
     mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews);
 
-    const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
-      decryptedAnswers: [
-        {
-          activityItem: {
-            question: {
-              en: 'ss-1',
-            },
-            responseType: 'singleSelect',
-            responseValues: {
-              options: [
-                {
-                  id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
-                  text: '1',
-                  isHidden: false,
-                  value: 0,
-                },
-                {
-                  id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
-                  text: '2',
-                  isHidden: false,
-                  value: 1,
-                },
-              ],
-            },
-            config: {
-              removeBackButton: false,
-              skippableItem: true,
-              randomizeOptions: false,
-              timer: 0,
-              addScores: false,
-              setAlerts: false,
-              addTooltip: false,
-              setPalette: false,
-              additionalResponseOption: {
-                textInputOption: false,
-                textInputRequired: false,
+    const getDecryptedActivityDataMock = jest.fn().mockReturnValue(
+      Promise.resolve({
+        decryptedAnswers: [
+          {
+            activityItem: {
+              question: {
+                en: 'ss-1',
               },
-            },
-            name: 'ss-1',
-            isHidden: false,
-            allowEdit: true,
-            id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
-            order: 1,
-          },
-          answer: {
-            value: '0',
-            edited: null,
-          },
-          items,
-        },
-        {
-          activityItem: {
-            question: {
-              en: 'ms-1',
-            },
-            responseType: 'multiSelect',
-            responseValues: {
-              options: [
-                {
-                  id: '0ad7f2a4-f1b1-4f33-b260-10b0c51c81b4',
-                  text: '1',
-                  isHidden: false,
-                  value: 0,
-                },
-                {
-                  id: '2a797f6c-c9c2-4f33-831e-a45041aa7951',
-                  text: '2',
-                  isHidden: false,
-                  value: 1,
-                },
-              ],
-            },
-            config: {
-              removeBackButton: false,
-              skippableItem: true,
-              randomizeOptions: false,
-              timer: 0,
-              addScores: false,
-              setAlerts: false,
-              addTooltip: false,
-              setPalette: false,
-              additionalResponseOption: {
-                textInputOption: false,
-                textInputRequired: false,
+              responseType: 'singleSelect',
+              responseValues: {
+                options: [
+                  {
+                    id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
+                    text: '1',
+                    isHidden: false,
+                    value: 0,
+                  },
+                  {
+                    id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
+                    text: '2',
+                    isHidden: false,
+                    value: 1,
+                  },
+                ],
               },
+              config: {
+                removeBackButton: false,
+                skippableItem: true,
+                randomizeOptions: false,
+                timer: 0,
+                addScores: false,
+                setAlerts: false,
+                addTooltip: false,
+                setPalette: false,
+                additionalResponseOption: {
+                  textInputOption: false,
+                  textInputRequired: false,
+                },
+              },
+              name: 'ss-1',
+              isHidden: false,
+              allowEdit: true,
+              id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
+              order: 1,
             },
-            name: 'ms-1',
-            isHidden: false,
-            allowEdit: true,
-            id: '0bd5d605-2e82-4e70-9eec-352b26b5f45d',
-            order: 2,
+            answer: {
+              value: '0',
+              edited: null,
+            },
+            items,
           },
-          answer: {
-            value: ['0', '1'],
-            edited: 1701342809040,
+          {
+            activityItem: {
+              question: {
+                en: 'ms-1',
+              },
+              responseType: 'multiSelect',
+              responseValues: {
+                options: [
+                  {
+                    id: '0ad7f2a4-f1b1-4f33-b260-10b0c51c81b4',
+                    text: '1',
+                    isHidden: false,
+                    value: 0,
+                  },
+                  {
+                    id: '2a797f6c-c9c2-4f33-831e-a45041aa7951',
+                    text: '2',
+                    isHidden: false,
+                    value: 1,
+                  },
+                ],
+              },
+              config: {
+                removeBackButton: false,
+                skippableItem: true,
+                randomizeOptions: false,
+                timer: 0,
+                addScores: false,
+                setAlerts: false,
+                addTooltip: false,
+                setPalette: false,
+                additionalResponseOption: {
+                  textInputOption: false,
+                  textInputRequired: false,
+                },
+              },
+              name: 'ms-1',
+              isHidden: false,
+              allowEdit: true,
+              id: '0bd5d605-2e82-4e70-9eec-352b26b5f45d',
+              order: 2,
+            },
+            answer: {
+              value: ['0', '1'],
+              edited: 1701342809040,
+            },
+            items,
           },
-          items,
-        },
-      ],
-    });
+        ],
+      }),
+    );
 
     dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 

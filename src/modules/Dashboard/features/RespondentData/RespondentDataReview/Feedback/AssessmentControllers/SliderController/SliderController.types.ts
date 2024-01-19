@@ -5,4 +5,5 @@ import { SliderItemAnswer } from 'modules/Dashboard/features/RespondentData/Resp
 export type SliderProps<T extends FieldValues> = {
   activityItem: SliderItemAnswer;
   isDisabled?: boolean;
+  'data-testid'?: string;
 } & UseControllerProps<T>;

@@ -1,4 +1,3 @@
-import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 
 import { ExportCsvData } from 'shared/types';
@@ -7,7 +6,8 @@ export const exportCsvZip = async (csvDataList: ExportCsvData[], reportName: str
   if (!csvDataList.length) return;
 
   try {
-    const zip = new JSZip();
+    const JSZip = await import('jszip');
+    const zip = new JSZip.default();
 
     for (const csvData of csvDataList) {
       zip.file(csvData.name, csvData.data);

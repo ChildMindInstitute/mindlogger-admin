@@ -1,11 +1,24 @@
-import { FieldValues, UseFormSetValue } from 'react-hook-form';
-
 import i18n from 'i18n';
-import { ScoreReport, SingleAndMultiSelectOption } from 'shared/state';
-import { ItemResponseType, CalculationType, ConditionalLogicMatch } from 'shared/consts';
+import { SingleAndMultiSelectOption } from 'shared/state';
+import {
+  ItemResponseType,
+  CalculationType,
+  ConditionalLogicMatch,
+  ScoreReportType,
+} from 'shared/consts';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
-import { GetScoreRangeLabel, ItemsWithScore } from './ScoreContent.types';
+import {
+  GetIsScoreIdVariable,
+  GetScoreRange,
+  GetScoreRangeLabel,
+  IsMessageIncludeScoreId,
+  ItemsWithScore,
+  UpdateMessage,
+  UpdateMessagesWithVariable,
+  UpdateScoreConditionIds,
+} from './ScoreContent.types';
+import { getScoreConditionId } from './ScoreCondition';
 
 const { t } = i18n;
 
@@ -65,16 +78,18 @@ const getItemScoreRange = (item: ItemsWithScore) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = (itemsScore: ItemsWithScore[], calculationType: CalculationType) => {
+export const getScoreRange = ({ items, calculationType, activity }: GetScoreRange) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
-  const count = itemsScore.length;
+  const count = items.length;
 
-  itemsScore.forEach((item) => {
-    if (item.config.skippableItem) return;
-
+  items.forEach((item) => {
     const { minScore, maxScore } = getItemScoreRange(item);
-    totalMinScore += minScore;
+
+    if (!item.config.skippableItem && !activity?.isSkippable) {
+      totalMinScore += minScore;
+    }
+
     totalMaxScore += maxScore;
   });
 
@@ -103,53 +118,119 @@ export const getDefaultConditionalValue = (id: string, key: string) => ({
   conditions: [{ itemName: key, type: '' }],
 });
 
-const isMessageIncludeScoreId = (showMessage: boolean, id: string, message?: string) =>
+const isMessageIncludeScoreId = ({ showMessage, id, message }: IsMessageIncludeScoreId) =>
   showMessage && !!message?.includes(`[[${id}]]`);
 
-export const getIsScoreIdVariable = (score: ScoreReport) => {
-  const { id } = score;
-
-  if (isMessageIncludeScoreId(score.showMessage, id, score.message)) {
-    return true;
-  }
-
+export const getIsScoreIdVariable = ({ id, reports, isScore }: GetIsScoreIdVariable) => {
   let isVariable = false;
-  score.conditionalLogic?.forEach((condition) => {
-    isVariable = isMessageIncludeScoreId(condition.showMessage, id, condition.message);
+
+  reports?.forEach((report) => {
+    if (isVariable) return;
+
+    if (
+      (isVariable = isMessageIncludeScoreId({
+        showMessage: report.showMessage,
+        id,
+        message: report.message,
+      }))
+    ) {
+      return;
+    }
+
+    if (report.type === ScoreReportType.Score) {
+      report.conditionalLogic?.forEach((condition) => {
+        if (isVariable) return;
+
+        if (
+          (isVariable = isMessageIncludeScoreId({
+            showMessage: condition.showMessage,
+            id,
+            message: condition.message,
+          }))
+        ) {
+          return;
+        }
+
+        if (isScore) {
+          isVariable = getIsScoreIdVariable({
+            id: getScoreConditionId(id, condition.name),
+            reports,
+            isScore: false,
+          });
+        }
+      });
+    }
   });
 
   return isVariable;
 };
 
-const updateMessage = (
-  setValue: UseFormSetValue<FieldValues>,
-  fieldName: string,
-  id: string,
-  newScoreId: string,
-  showMessage: boolean,
-  message?: string,
-) => {
+const updateMessage = ({
+  setValue,
+  fieldName,
+  id,
+  newScoreId,
+  showMessage,
+  message,
+}: UpdateMessage) => {
   if (showMessage && message) {
     setValue(`${fieldName}.message`, message.replaceAll(`[[${id}]]`, `[[${newScoreId}]]`));
   }
 };
 
-export const updateMessagesWithVariable = (
-  setValue: UseFormSetValue<FieldValues>,
-  name: string,
-  score: ScoreReport,
-  newScoreId: string,
-) => {
-  const { id, showMessage, message, conditionalLogic } = score;
-  updateMessage(setValue, name, id, newScoreId, showMessage, message);
-  conditionalLogic?.forEach((condition, index) =>
-    updateMessage(
+export const updateMessagesWithVariable = ({
+  setValue,
+  reportsName,
+  reports,
+  oldScoreId,
+  newScoreId,
+  isScore,
+}: UpdateMessagesWithVariable) => {
+  reports.forEach((report, index) => {
+    const { type, showMessage, message, conditionalLogic } = report;
+    const reportName = `${reportsName}.${index}`;
+    updateMessage({
       setValue,
-      `${name}.conditionalLogic.[${index}]`,
-      id,
+      fieldName: reportName,
+      id: oldScoreId,
       newScoreId,
-      condition.showMessage,
-      condition.message,
-    ),
-  );
+      showMessage,
+      message,
+    });
+
+    if (type === ScoreReportType.Score) {
+      conditionalLogic?.forEach((condition, key) => {
+        updateMessage({
+          setValue,
+          fieldName: `${reportName}.conditionalLogic.${key}`,
+          id: oldScoreId,
+          newScoreId,
+          showMessage: condition.showMessage,
+          message: condition.message,
+        });
+
+        if (isScore) {
+          updateMessagesWithVariable({
+            setValue,
+            reportsName,
+            reports,
+            oldScoreId: getScoreConditionId(oldScoreId, condition.name),
+            newScoreId: getScoreConditionId(newScoreId, condition.name),
+            isScore: false,
+          });
+        }
+      });
+    }
+  });
+};
+
+export const updateScoreConditionIds = ({
+  setValue,
+  conditionsName,
+  conditions,
+  scoreId,
+}: UpdateScoreConditionIds) => {
+  conditions?.forEach((condition, index) => {
+    setValue(`${conditionsName}.${index}.id`, getScoreConditionId(scoreId, condition.name));
+  });
 };

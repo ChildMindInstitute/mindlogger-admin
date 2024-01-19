@@ -19,13 +19,17 @@ export const SectionScoreCommonFields = ({
 }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, getFieldState, register, unregister, setValue, getValues } = useFormContext();
+  const { control, getFieldState, register, unregister, setValue, getValues, trigger } =
+    useFormContext();
 
   const showMessageName = `${name}.showMessage`;
   const printItemsName = `${name}.printItems`;
   const itemsPrintName = `${name}.itemsPrint`;
   const messageName = `${name}.message`;
-  const [showMessage, printItems] = useWatch({ name: [showMessageName, printItemsName] });
+  const scoreConditionalLogicName = `${name}.conditionalLogic`;
+  const [showMessage, printItems, scoreConditionalLogic] = useWatch({
+    name: [showMessageName, printItemsName, scoreConditionalLogicName],
+  });
   const printItemsError = getFieldState(printItemsName).error;
 
   useEffect(() => {
@@ -54,6 +58,10 @@ export const SectionScoreCommonFields = ({
 
     unregister(itemsPrintName, { keepDefaultValue: true });
   }, [printItems]);
+
+  useEffect(() => {
+    trigger(printItemsName);
+  }, [printItems, showMessage, scoreConditionalLogic]);
 
   return (
     <>

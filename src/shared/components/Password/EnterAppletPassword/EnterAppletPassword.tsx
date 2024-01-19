@@ -32,7 +32,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
       if (!encryptionInfoFromServer) return;
 
       const { publicKey: publicKeyFromServer, ...restEncryption } = encryptionInfoFromServer;
-      const encryptionInfoGenerated = getAppletEncryptionInfo({
+      const encryptionInfoGenerated = await getAppletEncryptionInfo({
         appletPassword,
         ...restEncryption,
       });

@@ -57,7 +57,7 @@ export const SignUpForm = () => {
     if (signUp.fulfilled.match(result)) {
       navigateToLibrary(navigate);
 
-      Mixpanel.track('Account Creation complete');
+      Mixpanel.track('Signup Successful');
     }
 
     if (signUp.rejected.match(result)) {

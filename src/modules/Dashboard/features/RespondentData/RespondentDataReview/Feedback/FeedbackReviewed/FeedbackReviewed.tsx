@@ -11,6 +11,7 @@ import { getReviewsApi } from 'api';
 import { StyledContainer } from './FeedbackReviewed.styles';
 import { FeedbackReviewer } from './FeedbackReviewer';
 import { Review, ReviewData } from './FeedbackReviewed.types';
+import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
 export const FeedbackReviewed = () => {
   const { t } = useTranslation('app');
@@ -19,7 +20,31 @@ export const FeedbackReviewed = () => {
   const answerId = searchParams.get('answerId');
 
   const getDecryptedActivityData = useDecryptedActivityData();
-  const { execute: getReviews } = useAsync(getReviewsApi);
+  const { execute: getReviews } = useAsync(
+    getReviewsApi,
+    async (result) => {
+      const reviews = result?.data?.result ?? [];
+      const decryptedData: ReviewData[] = [];
+
+      for await (const review of reviews) {
+        const { reviewerPublicKey, reviewer, ...assessmentData } = review;
+        const encryptedData = {
+          ...assessmentData,
+          userPublicKey: reviewerPublicKey,
+        } as Review;
+
+        decryptedData.push({
+          reviewer,
+          review: (await getDecryptedActivityData(encryptedData))
+            .decryptedAnswers as AssessmentActivityItem[],
+        });
+      }
+
+      setReviewers(decryptedData);
+    },
+    undefined,
+    () => setIsLoading(false),
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [reviewers, setReviewers] = useState<ReviewData[]>([]);
   const dataTestid = 'respondents-data-summary-feedback-reviewed';
@@ -27,27 +52,7 @@ export const FeedbackReviewed = () => {
   useEffect(() => {
     if (!appletId || !answerId) return;
 
-    (async () => {
-      try {
-        const result = await getReviews({ appletId, answerId });
-        const decryptedData = result.data.result.map((review) => {
-          const { reviewerPublicKey, reviewer, ...assessmentData } = review;
-          const encryptedData = {
-            ...assessmentData,
-            userPublicKey: reviewerPublicKey,
-          } as Review;
-
-          return {
-            reviewer,
-            review: getDecryptedActivityData(encryptedData).decryptedAnswers,
-          };
-        });
-
-        setReviewers(decryptedData as ReviewData[]);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+    getReviews({ appletId, answerId });
   }, []);
 
   return (

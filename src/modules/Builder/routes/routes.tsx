@@ -5,8 +5,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
 import { Path } from 'shared/utils';
-import BuilderAppletSettings from 'modules/Builder/features/BuilderAppletSettings';
-import ActivitySettings from 'modules/Builder/features/ActivitySettings';
 import { ErrorFallback } from 'shared/components';
 
 import {
@@ -15,12 +13,14 @@ import {
   appletActivityFlowRoutes,
   performanceTasksRoutes,
 } from './routes.const';
-import ActivityFlowSettings from '../features/ActivityFlowSettings';
-import ActivityItems from '../features/ActivityItems';
 
 const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
 const BuilderActivityFlow = lazy(() => import('../pages/BuilderActivityFlow'));
 const BuilderActivity = lazy(() => import('../pages/BuilderActivity'));
+const BuilderAppletSettings = lazy(() => import('modules/Builder/features/BuilderAppletSettings'));
+const ActivityItems = lazy(() => import('../features/ActivityItems'));
+const ActivitySettings = lazy(() => import('modules/Builder/features/ActivitySettings'));
+const ActivityFlowSettings = lazy(() => import('../features/ActivityFlowSettings'));
 
 export const builderRoutes = () => (
   <Route path={page.builder}>

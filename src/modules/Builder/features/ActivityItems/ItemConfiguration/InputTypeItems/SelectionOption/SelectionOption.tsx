@@ -199,11 +199,9 @@ export const SelectionOption = ({
                   />
                 </StyledSvgWrapper>
                 {imageSrc && <StyledImg src={imageSrc} alt="option-image" />}
-                {text && (
-                  <StyledBodyLarge sx={{ ml: imageSrc ? theme.spacing(1) : 0 }}>
-                    {text}
-                  </StyledBodyLarge>
-                )}
+                <StyledBodyLarge sx={{ ml: imageSrc ? theme.spacing(1) : 0 }}>
+                  {text || t('textForOption', { index: index + 1 })}
+                </StyledBodyLarge>
               </StyledCollapsedWrapper>
             )}
           </StyledFlexTopCenter>
@@ -245,6 +243,7 @@ export const SelectionOption = ({
                   {...commonInputProps}
                   name={optionTextName}
                   label={t('optionText')}
+                  placeholder={t('textForOption', { index: index + 1 })}
                   onChange={(event) =>
                     handleOptionTextChange({
                       event,
@@ -254,6 +253,7 @@ export const SelectionOption = ({
                   }
                   maxLength={SELECT_OPTION_TEXT_MAX_LENGTH}
                   data-testid={`${dataTestid}-text`}
+                  InputLabelProps={{ shrink: true }}
                 />
               </StyledTextInputWrapper>
               {scoreString && (

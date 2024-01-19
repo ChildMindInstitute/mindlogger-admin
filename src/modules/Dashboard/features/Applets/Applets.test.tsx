@@ -11,8 +11,8 @@ import {
 } from 'shared/mock';
 import { initialStateData } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
-
 import { ApiResponseCodes } from 'api';
+
 import { Applets } from './Applets';
 
 const getPreloadedState = (role = Roles.Manager) => ({

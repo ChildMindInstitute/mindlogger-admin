@@ -1,10 +1,9 @@
-import { useState, useMemo, useContext, useEffect } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
 import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
-import { useAsync } from 'shared/hooks/useAsync';
 import { createAssessmentApi } from 'api';
 import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
@@ -41,9 +40,6 @@ export const FeedbackAssessment = ({
   const answerId = searchParams.get('answerId');
   const userData = auth.useData();
   const getEncryptedAnswers = useEncryptedAnswers();
-  const { execute: createAssessment } = useAsync(createAssessmentApi, () =>
-    setSubmitAssessmentPopupVisible(false),
-  );
 
   const methods = useFormContext<FeedbackForm>();
   const {
@@ -64,42 +60,46 @@ export const FeedbackAssessment = ({
   };
 
   const handleSubmitAssessment = async () => {
-    const { assessmentItems } = getValues();
-    const { answers, updatedItemIds } = formatAssessmentAnswers(
-      defaultValues?.assessmentItems as AssessmentFormItem[],
-      assessmentItems,
-      itemIds,
-    );
+    try {
+      const { assessmentItems } = getValues();
+      const { answers, updatedItemIds } = formatAssessmentAnswers(
+        defaultValues?.assessmentItems as AssessmentFormItem[],
+        assessmentItems,
+        itemIds,
+      );
 
-    const answersToEncrypt = answers.map(({ answer }) => answer);
+      const answersToEncrypt = answers.map(({ answer }) => answer);
 
-    if (!getEncryptedAnswers) return;
+      if (!getEncryptedAnswers) return;
 
-    const answer = getEncryptedAnswers(answersToEncrypt);
+      const answer = await getEncryptedAnswers(answersToEncrypt);
 
-    if (!appletId || !answerId) return;
+      if (!appletId || !answerId) return;
 
-    setItemIds(updatedItemIds);
+      setItemIds(updatedItemIds);
 
-    await createAssessment({
-      appletId,
-      answerId,
-      answer,
-      itemIds: updatedItemIds || [],
-      reviewerPublicKey: accountId,
-      assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
-    });
-
-    methods.reset({
-      newNote: '',
-      assessmentItems: answers.map(({ answer, itemId }) => ({
-        itemId,
-        answers: answer.value,
-        edited: answer.edited,
-      })),
-    });
-    setActiveTab(FeedbackTabs.Reviewed);
-    setAssessmentStep(0);
+      await createAssessmentApi({
+        appletId,
+        answerId,
+        answer,
+        itemIds: updatedItemIds || [],
+        reviewerPublicKey: accountId,
+        assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
+      });
+      setSubmitAssessmentPopupVisible(false);
+      methods.reset({
+        newNote: '',
+        assessmentItems: answers.map(({ answer, itemId }) => ({
+          itemId,
+          answers: answer.value,
+          edited: answer.edited,
+        })),
+      });
+      setActiveTab(FeedbackTabs.Reviewed);
+      setAssessmentStep(0);
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   const handleSelectLastVersion = () => {

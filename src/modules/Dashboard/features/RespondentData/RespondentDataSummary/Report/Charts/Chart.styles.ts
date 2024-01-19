@@ -6,13 +6,6 @@ export const StyledChartContainer = styled(Box)`
   margin: ${theme.spacing(2.4, 0)};
 `;
 
-export const StyledTooltipWrapper = styled(Box)`
-  position: absolute;
-  display: none;
-  transform: translate(-50%, 0);
-  z-index: ${theme.zIndex.fab};
-`;
-
 export const StyledIndent = styled(Box)`
   opacity: 0;
   width: 100%;

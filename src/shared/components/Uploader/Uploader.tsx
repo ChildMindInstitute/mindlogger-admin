@@ -11,8 +11,16 @@ import theme from 'shared/styles/theme';
 import { byteFormatter } from 'shared/utils/fileSystem';
 import { concatIf } from 'shared/utils/concatIf';
 import { joinWihComma } from 'shared/utils/joinWihComma';
-
-import { MAX_FILE_SIZE_25MB, VALID_IMAGE_TYPES, UploadFileError, MediaType } from 'shared/consts';
+import {
+  MAX_FILE_SIZE_25MB,
+  VALID_IMAGE_TYPES,
+  UploadFileError,
+  MediaType,
+  MAX_IMAGE_WIDTH,
+  MIN_IMAGE_WIDTH,
+  MIN_IMAGE_HEIGHT,
+  MAX_IMAGE_HEIGHT,
+} from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
 
 import {
@@ -40,6 +48,7 @@ export const Uploader = ({
   hasError,
   disabled,
   'data-testid': dataTestid,
+  flexibleCropRatio,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const uploadInputRef = useRef<HTMLInputElement>(null);
@@ -61,8 +70,32 @@ export const Uploader = ({
     e.preventDefault();
   };
 
+  const checkDimensions = (file: File): Promise<boolean> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const img = new Image();
+        img.onload = () => {
+          const { width, height } = img;
+          resolve(
+            width > MIN_IMAGE_WIDTH &&
+              width < MAX_IMAGE_WIDTH &&
+              height > MIN_IMAGE_HEIGHT &&
+              height < MAX_IMAGE_HEIGHT,
+          );
+        };
+        img.onerror = reject;
+        img.src = (e.target?.result as string) || '';
+      };
+
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
   const handleSetImage = (files: FileList | null) => {
     const imageFile = files?.[0];
+
     if (!imageFile) return;
     setError(null);
 
@@ -75,9 +108,30 @@ export const Uploader = ({
 
     if (notAllowableSize || notAllowableType) return;
 
-    setImage(imageFile);
-    setIsMouseOver(false);
-    setCropPopupVisible(true);
+    const successSetImageCallback = () => {
+      setImage(imageFile);
+      setIsMouseOver(false);
+      setCropPopupVisible(true);
+    };
+
+    if (!flexibleCropRatio) {
+      successSetImageCallback();
+
+      return;
+    }
+
+    checkDimensions(imageFile)
+      .then((allowableDimensions) => {
+        if (allowableDimensions) {
+          successSetImageCallback();
+
+          return;
+        }
+        setError(UploadFileError.Dimensions);
+      })
+      .catch((error) => {
+        console.error('Error loading image:', error);
+      });
   };
 
   const dragEvents = {
@@ -114,7 +168,6 @@ export const Uploader = ({
 
   const handleEditImg = (event: MouseEvent) => {
     stopDefaults(event);
-    handleRemoveImg();
     uploadInputRef?.current?.click();
   };
 
@@ -151,6 +204,8 @@ export const Uploader = ({
   const placeholderImgSize = isPrimaryUiType ? 32 : 24;
   const hasSizeError = error === UploadFileError.Size;
   const hasFormatError = error === UploadFileError.Format;
+  const hasDimensionsError = error === UploadFileError.Dimensions;
+  const hasImageError = hasSizeError || hasFormatError || hasDimensionsError;
   const spinnerUiType = isPrimaryUiType ? SpinnerUiType.Primary : SpinnerUiType.Secondary;
 
   const fileName = imageField?.split('/').at(-1) || image?.name || '';
@@ -170,7 +225,7 @@ export const Uploader = ({
         {...dragEvents}
       >
         {isLoading && <Spinner uiType={spinnerUiType} />}
-        {imageField ? (
+        {imageField && !hasImageError ? (
           <UploadedImgContainer isPrimaryUiType={isPrimaryUiType} width={width} height={height}>
             <StyledUploadImg alt="file upload" src={imageField} isPrimaryUiType={isPrimaryUiType} />
             {isMouseOver && (
@@ -200,6 +255,7 @@ export const Uploader = ({
                   </StyledError>
                 )}
                 {hasFormatError && <StyledError>{t('incorrectImageFormat')}</StyledError>}
+                {hasDimensionsError && <StyledError>{t('incorrectImageDimensions')}</StyledError>}
                 <StyledBodyMedium>
                   <Trans i18nKey="dropImg">
                     Drop Image here <br /> or <span>click to browse</span>.
@@ -239,6 +295,7 @@ export const Uploader = ({
           onSave={handleSaveCroppedImage}
           onClose={handleCloseCropPopup}
           data-testid={concatIf(dataTestid, '-crop-popup')}
+          flexibleCropRatio={flexibleCropRatio}
         />
       )}
       <RemoveImagePopup

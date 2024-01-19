@@ -39,13 +39,23 @@ export const Editor = ({
     debounce((value: string) => onChange(value), CHANGE_DEBOUNCE_VALUE),
     [],
   );
+
   useEffect(() => {
+    if (!withDebounce || inputValue === value) return;
+
     handleDebouncedChange(inputValue);
-  }, [inputValue]);
+  }, [inputValue, value, withDebounce]);
+
+  useEffect(() => {
+    if (!withDebounce) return;
+
+    setInputValue(value ?? '');
+    handleDebouncedChange.cancel();
+  }, [value]);
 
   const handleChange = withDebounce ? setInputValue : onChange;
   const handleBlur = () => {
-    if (withDebounce) {
+    if (withDebounce && value !== inputValue) {
       onChange(inputValue);
     }
   };

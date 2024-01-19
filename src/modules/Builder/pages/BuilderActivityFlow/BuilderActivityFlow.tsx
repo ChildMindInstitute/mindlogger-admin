@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
+import { Badge } from '@mui/material';
 
-import { StyledDirectoryUpButton, StyledBody } from 'shared/styles/styledComponents';
+import { StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { LinkedTabs, Svg } from 'shared/components';
 import { page } from 'resources';
 import { useCurrentActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
 
+import { StyledBuilderActivityFlowBody } from './BuilderActivityFlow.styles';
 import { getActivityFlowTabs } from './BuilderActivityFlow.utils';
 
 export const BuilderActivityFlow = () => {
@@ -29,17 +31,20 @@ export const BuilderActivityFlow = () => {
       !!getFieldState(`${fieldName}.description`).error,
     hasActivityFlowBuilderErrors: !!getFieldState(`${fieldName}.items`).error,
   };
+  const hasAppletErrors =
+    !!getFieldState('activities').error || !!getFieldState('displayName').error;
 
   return (
-    <StyledBody sx={{ position: 'relative' }}>
+    <StyledBuilderActivityFlowBody sx={{ position: 'relative' }}>
       <StyledDirectoryUpButton
         variant="text"
         onClick={handleBackBtnClick}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
       >
         {t('activityFlows')}
+        <Badge variant="dot" invisible={!hasAppletErrors} color="error" />
       </StyledDirectoryUpButton>
       <LinkedTabs tabs={getActivityFlowTabs({ appletId, activityFlowId }, tabErrors)} isBuilder />
-    </StyledBody>
+    </StyledBuilderActivityFlowBody>
   );
 };

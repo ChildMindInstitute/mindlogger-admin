@@ -20,16 +20,16 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
 }));
 
 describe('useDecryptedIdentifiers', () => {
-  test('should return null when useAppletData is null', () => {
+  test('should return null when useAppletData is null', async () => {
     jest.spyOn(applet, 'useAppletData').mockReturnValue(null);
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
 
     const { result } = renderHook(useDecryptedIdentifiers);
 
-    expect(result.current).toEqual(null);
+    expect(await result.current).toEqual(null);
   });
 
-  test('should return an array of identifiers for decrypted data (userPublicKey: null)', () => {
+  test('should return an array of identifiers for decrypted data (userPublicKey: null)', async () => {
     jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
 
@@ -47,9 +47,9 @@ describe('useDecryptedIdentifiers', () => {
     const { result } = renderHook(useDecryptedIdentifiers);
     const getDecryptedIdentifiers = result.current as (
       identifiers: IdentifierResponse[],
-    ) => Identifier[];
+    ) => Promise<Identifier[]>;
 
-    const decryptedIdentifiers = getDecryptedIdentifiers(identifiers);
+    const decryptedIdentifiers = await getDecryptedIdentifiers(identifiers);
 
     expect(decryptedIdentifiers).toEqual([
       {
@@ -63,16 +63,18 @@ describe('useDecryptedIdentifiers', () => {
     ]);
   });
 
-  test('should return an array of identifiers for encrypted data', () => {
+  test('should return an array of identifiers for encrypted data', async () => {
     jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
 
     const { result } = renderHook(useDecryptedIdentifiers);
     const getDecryptedIdentifiers = result.current as (
       identifiers: IdentifierResponse[],
-    ) => Identifier[];
+    ) => Promise<Identifier[]>;
 
-    const decryptedIdentifiers = getDecryptedIdentifiers(mockedIdentifiers as IdentifierResponse[]);
+    const decryptedIdentifiers = await getDecryptedIdentifiers(
+      mockedIdentifiers as IdentifierResponse[],
+    );
 
     expect(decryptedIdentifiers).toEqual([
       {

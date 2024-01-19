@@ -29,10 +29,10 @@ describe('useAppletPrivateKeySetter', () => {
     ${undefined}      | ${mockedPassword} | ${mockedEncryption} | ${undefined}                           | ${'doesn\'t set private key if appletId is empty'}
     ${mockedAppletId} | ${mockedPassword} | ${undefined}        | ${undefined}                           | ${'doesn\'t set private key if encryption is empty'}
     ${mockedAppletId} | ${mockedPassword} | ${mockedEncryption} | ${[mockedAppletId, mockedPrivateKey2]} | ${'sets private key if everything is provided'}
-  `('$description', ({ appletId, appletPassword, encryption, expected }) => {
+  `('$description', async ({ appletId, appletPassword, encryption, expected }) => {
     const { result } = renderHook(useAppletPrivateKeySetter);
 
-    result.current({ appletId, appletPassword, encryption });
+    await result.current({ appletId, appletPassword, encryption });
 
     expected
       ? expect(mockedSetAppletPrivateKey).toBeCalledWith(...expected)

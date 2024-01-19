@@ -57,7 +57,6 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const disabledLatestReport =
     !currentActivity?.scoresAndReports?.generateReport || !appletData?.reportPublicKey;
 
-  const [latestReportError, setLatestReportError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityCompletion[]>([]);
   const [responseOptions, setResponseOptions] = useState<Record<string, FormattedResponse[]>>();
@@ -79,32 +78,34 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     ],
   });
 
-  const { execute: getAnswers } = useAsync(getAnswersApi);
-  const { execute: getLatestReport, isLoading: latestReportLoading } = useAsync(getLatestReportApi);
+  const {
+    execute: getLatestReport,
+    isLoading: latestReportLoading,
+    error: latestReportError,
+  } = useAsync(getLatestReportApi, (response) => {
+    const data = response?.data;
+    const headers = response?.headers;
+
+    if (data) {
+      const contentDisposition = headers?.['content-disposition'];
+      const fileName =
+        (contentDisposition && LATEST_REPORT_REGEX.exec(contentDisposition)?.groups?.filename) ??
+        LATEST_REPORT_DEFAULT_NAME;
+      const base64Str = Buffer.from(data).toString('base64');
+      const linkSource = getLatestReportUrl(base64Str);
+
+      download(linkSource, fileName, LATEST_REPORT_TYPE);
+    }
+  });
 
   const downloadLatestReportHandler = async () => {
     if (!appletId || !respondentId) return;
 
-    setLatestReportError(null);
-    try {
-      const { data, headers } = await getLatestReport({
-        appletId,
-        activityId: activity.id,
-        respondentId,
-      });
-      if (data) {
-        const contentDisposition = headers?.['content-disposition'];
-        const fileName =
-          (contentDisposition && LATEST_REPORT_REGEX.exec(contentDisposition)?.groups?.filename) ??
-          LATEST_REPORT_DEFAULT_NAME;
-        const base64Str = Buffer.from(data).toString('base64');
-        const linkSource = getLatestReportUrl(base64Str);
-
-        download(linkSource, fileName, LATEST_REPORT_TYPE);
-      }
-    } catch (error) {
-      setLatestReportError(getErrorMessage(error));
-    }
+    getLatestReport({
+      appletId,
+      activityId: activity.id,
+      respondentId,
+    });
   };
 
   useEffect(() => {
@@ -116,7 +117,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           getValues();
         const selectedIdentifiers = getIdentifiers(filterByIdentifier, identifier, identifiers);
 
-        const result = await getAnswers({
+        const result = await getAnswersApi({
           appletId,
           activityId: activity.id,
           params: {
@@ -129,20 +130,25 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           },
         });
 
-        const decryptedAnswers = result.data.result.map((encryptedAnswer) => {
-          const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
-          const decryptedAnswer = getDecryptedActivityData({
-            userPublicKey,
-            answer,
-            items,
-            itemIds,
-          }).decryptedAnswers;
+        const encryptedAnswers = result.data.result;
+        const decryptedAnswers = [];
 
-          return {
+        for await (const encryptedAnswer of encryptedAnswers) {
+          const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
+          const decryptedAnswer = (
+            await getDecryptedActivityData({
+              userPublicKey,
+              answer,
+              items,
+              itemIds,
+            })
+          ).decryptedAnswers;
+
+          decryptedAnswers.push({
             decryptedAnswer,
             ...rest,
-          };
-        });
+          });
+        }
 
         // TODO: remove when backend add sorting
         const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) =>
@@ -155,6 +161,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
         setSubscalesFrequency(subscalesFrequency);
         setResponseOptions(formattedResponses);
+      } catch (error) {
+        console.warn(error);
       } finally {
         setIsLoading(false);
       }
@@ -197,7 +205,9 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
               </span>
             </Tooltip>
             {latestReportError && (
-              <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>{latestReportError}</StyledErrorText>
+              <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>
+                {getErrorMessage(latestReportError)}
+              </StyledErrorText>
             )}
           </Box>
         </StyledHeader>

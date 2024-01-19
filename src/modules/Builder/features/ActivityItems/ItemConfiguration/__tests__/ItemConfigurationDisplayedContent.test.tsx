@@ -4,7 +4,8 @@ import { createRef } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
 import { mockedSingleSelectFormValues } from 'shared/mock';
-import { createArray, renderWithAppletFormData } from 'shared/utils';
+import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import {
   mockedItemName,
@@ -57,5 +58,15 @@ describe('ItemConfiguration: Displayed Content', () => {
     await waitFor(() => {
       expect(screen.getByText(expected)).toBeVisible();
     });
+  });
+
+  test('Displayed Content validation is not triggered for newly added item', async () => {
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+    });
+
+    await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+
+    expect(screen.queryByText('Displayed Content is required')).not.toBeInTheDocument();
   });
 });

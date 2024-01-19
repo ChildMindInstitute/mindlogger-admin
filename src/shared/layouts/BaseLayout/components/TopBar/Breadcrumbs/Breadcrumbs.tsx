@@ -25,9 +25,14 @@ export const Breadcrumbs = () => {
 
   const getIconComponent = (icon: string, hasUrl?: boolean) =>
     hasUrl ? (
-      <StyledIconImg src={icon} alt="Icon" />
+      <StyledIconImg src={icon} alt="Icon" data-testid="breadcrumbs-item-src" />
     ) : (
-      <Svg id={icon} width={BREADCRUMB_ICON_SIZE} height={BREADCRUMB_ICON_SIZE} />
+      <Svg
+        id={icon}
+        width={BREADCRUMB_ICON_SIZE}
+        height={BREADCRUMB_ICON_SIZE}
+        data-testid="breadcrumbs-item-icon"
+      />
     );
 
   const getBreadcrumbIcon = ({ icon, useCustomIcon, label, hasUrl }: Breadcrumb) => {
@@ -38,7 +43,7 @@ export const Breadcrumbs = () => {
         {icon ? (
           getIconComponent(icon, hasUrl)
         ) : (
-          <StyledPlaceholder>
+          <StyledPlaceholder data-testid="breadcrumbs-item-placeholder">
             <StyledLabelSmall color={variables.palette.on_surface}>
               {label.substring(0, 1).toUpperCase()}
             </StyledLabelSmall>
@@ -49,11 +54,14 @@ export const Breadcrumbs = () => {
   };
 
   return (
-    <MuiBreadcrumbs separator={<Svg id="separator" width="8" height="12" />}>
+    <MuiBreadcrumbs
+      separator={<Svg id="separator" width="8" height="12" />}
+      data-testid="breadcrumbs"
+    >
       {breadcrumbsData?.map(
         ({ icon, useCustomIcon, label, chip, navPath, disabledLink, hasUrl, key }, index) =>
           index === breadcrumbsData.length - 1 || disabledLink ? (
-            <StyledBox key={key}>
+            <StyledBox key={key} data-testid="breadcrumbs-item">
               {getBreadcrumbIcon({ icon, useCustomIcon, label, hasUrl })}
               {disabledLink ? (
                 <StyledBodySmall color={variables.palette.on_surface_variant}>
@@ -64,7 +72,7 @@ export const Breadcrumbs = () => {
               )}
             </StyledBox>
           ) : (
-            <StyledLink key={key} to={navPath || ''}>
+            <StyledLink key={key} to={navPath || ''} data-testid="breadcrumbs-link">
               {getBreadcrumbIcon({ icon, useCustomIcon, label, hasUrl })}
               <StyledBodySmall color={variables.palette.on_surface_variant}>
                 {label}

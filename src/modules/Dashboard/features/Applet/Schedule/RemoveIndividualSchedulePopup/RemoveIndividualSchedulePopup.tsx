@@ -82,7 +82,7 @@ export const RemoveIndividualSchedulePopup = ({
     >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
-        <StyledModalWrapper>
+        <StyledModalWrapper data-testid={`${dataTestid}-text`}>
           {screens[step].component}
           {error && <Error error={error} />}
         </StyledModalWrapper>

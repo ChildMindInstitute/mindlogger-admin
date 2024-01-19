@@ -27,3 +27,12 @@ export const enum ExpandedListTypes {
   AlwaysAvailable = 'always-available',
   Deactivated = 'deactivated',
 }
+
+export const defaultExportHeader = [
+  'activityName',
+  'date',
+  'startTime',
+  'endTime',
+  'notificationTime',
+  'frequency',
+];

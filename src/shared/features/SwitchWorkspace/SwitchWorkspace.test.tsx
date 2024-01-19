@@ -24,6 +24,7 @@ describe('SwitchWorkspace component tests', () => {
         setVisibleDrawer={jest.fn}
         visibleDrawer={true}
         workspaces={[]}
+        onChangeWorkspace={jest.fn}
         data-testid={mockedDataTestId}
       />,
       { preloadedState },
@@ -40,6 +41,7 @@ describe('SwitchWorkspace component tests', () => {
       <SwitchWorkspace
         setVisibleDrawer={jest.fn}
         visibleDrawer={true}
+        onChangeWorkspace={jest.fn}
         workspaces={mockedWorkspaces}
         data-testid={mockedDataTestId}
       />,
@@ -59,6 +61,7 @@ describe('SwitchWorkspace component tests', () => {
         setVisibleDrawer={setVisibleDrawerMockFn}
         visibleDrawer={true}
         workspaces={mockedWorkspaces}
+        onChangeWorkspace={jest.fn}
         data-testid={mockedDataTestId}
       />,
       { preloadedState },

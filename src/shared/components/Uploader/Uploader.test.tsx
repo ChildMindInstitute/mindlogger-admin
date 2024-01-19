@@ -1,12 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { AxiosResponse } from 'axios';
 
+import i18n from 'i18n';
 import { postFileUploadApi } from 'api';
 
 import * as CropPopupUtils from '../CropPopup/CropPopup.utils';
+
 import { Uploader, UploaderProps } from '.';
 
 jest.mock('api');

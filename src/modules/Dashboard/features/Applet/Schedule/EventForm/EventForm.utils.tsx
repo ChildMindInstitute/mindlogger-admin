@@ -1,5 +1,5 @@
 import { UseFormGetValues } from 'react-hook-form';
-import { addDays, eachDayOfInterval, endOfYear, getDate, getDay } from 'date-fns';
+import { addDays, addYears, eachDayOfInterval, endOfYear, getDate, getDay } from 'date-fns';
 import * as yup from 'yup';
 
 import i18n from 'i18n';
@@ -32,6 +32,7 @@ import {
   DEFAULT_TIMER_DURATION,
   ONCE_ACTIVITY_INCOMPLETE_LIMITATION,
   SECONDS_TO_MILLISECONDS_MULTIPLIER,
+  YEARS_TO_ADD_IF_NO_END_DATE,
 } from './EventForm.const';
 import {
   EventFormValues,
@@ -503,6 +504,8 @@ export const getEventPayload = (
   const body: CreateEventType['body'] = {
     respondentId,
     timerType,
+    startTime: addSecondsToHourMinutes(startTime) || undefined,
+    endTime: addSecondsToHourMinutes(endTime) || undefined,
     notification:
       notifications?.length || reminder
         ? {
@@ -524,8 +527,6 @@ export const getEventPayload = (
       }),
     };
   } else {
-    body.startTime = addSecondsToHourMinutes(startTime) || undefined;
-    body.endTime = addSecondsToHourMinutes(endTime) || undefined;
     body.accessBeforeSchedule = accessBeforeSchedule;
 
     body.periodicity = {
@@ -612,17 +613,22 @@ export const activityAvailabilityAtDayTest = (
   if (!value || value === 0) return true;
   const { startDate, endDate, periodicity, isCrossDayEvent } =
     getActivityIncompleteCommonFields(testContext);
-  const daysInPeriod = getDaysInPeriod({ isCrossDayEvent, startDate, endDate });
   if (periodicity === Periodicity.Once) {
     return value < ONCE_ACTIVITY_INCOMPLETE_LIMITATION;
   }
-  if (periodicity === Periodicity.Daily || periodicity === Periodicity.Weekdays) {
-    return value < daysInPeriod.length;
-  }
+  const daysInPeriod = getDaysInPeriod({
+    isCrossDayEvent,
+    startDate,
+    endDate: endDate ?? addYears(startDate, YEARS_TO_ADD_IF_NO_END_DATE),
+  });
   if (periodicity === Periodicity.Weekly) {
     const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
 
     return weeklyDays.daysArr.includes(value);
+  }
+  if (endDate === null) return true;
+  if (periodicity === Periodicity.Daily || periodicity === Periodicity.Weekdays) {
+    return value < daysInPeriod.length;
   }
   if (periodicity === Periodicity.Monthly) {
     const includedMonthlyDates = getDaysInMonthlyPeriodicity({
@@ -683,6 +689,17 @@ export const reminderTimeTest = (
     });
   }
 
+  const getEndDate = () => {
+    if (isOncePeriodicity) {
+      return startDate;
+    }
+    if (isWeeklyPeriodicity) {
+      return endDate ?? addYears(startDate, YEARS_TO_ADD_IF_NO_END_DATE);
+    }
+
+    return endDate;
+  };
+
   const isOncePeriodicity = periodicity === Periodicity.Once;
   const isDailyPeriodicity = periodicity === Periodicity.Daily;
   const isWeeklyPeriodicity = periodicity === Periodicity.Weekly;
@@ -690,7 +707,7 @@ export const reminderTimeTest = (
   const daysInPeriod = getDaysInPeriod({
     isCrossDayEvent,
     startDate,
-    endDate: isOncePeriodicity ? startDate : endDate,
+    endDate: getEndDate(),
   });
   const isOnceDailyWeeklyCrossDay = daysInPeriod.length - 1 === activityIncomplete;
 

@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { unstable_HistoryRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 
-import { BaseLayout } from 'shared/layouts/BaseLayout';
-import { AuthLayout } from 'modules/Auth/layouts/AuthLayout';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { authStorage } from 'shared/utils';
@@ -14,6 +12,9 @@ import { auth } from 'redux/modules';
 import { AppletNotFoundPopup } from 'shared/components';
 
 import history from './history';
+
+const BaseLayout = lazy(() => import('shared/layouts/BaseLayout'));
+const AuthLayout = lazy(() => import('modules/Auth/layouts/AuthLayout'));
 
 export const AppRoutes = () => {
   const token = authStorage.getAccessToken();

@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { DataTableItem } from 'shared/components';
 import { CalculationType, ScoreReportType } from 'shared/consts';
 import { ScoreOrSection } from 'shared/state';
 import { ItemFormValues } from 'modules/Builder/types';
@@ -33,9 +34,9 @@ export const getSectionDefaults = () => ({
 
 export const getReportIndex = (reports: ScoreOrSection[], report: ScoreOrSection) =>
   reports?.reduce(
-    ({ index, done }, { type, id }) => {
-      if (done || report.type !== type) return { index, done };
-      if (report.id === id) return { index, done: true };
+    ({ index, done }, item) => {
+      if (done || report.type !== item.type) return { index, done };
+      if (getEntityKey(report, false) === getEntityKey(item, false)) return { index, done: true };
 
       return { index: index + 1, done };
     },
@@ -43,9 +44,16 @@ export const getReportIndex = (reports: ScoreOrSection[], report: ScoreOrSection
   ).index;
 
 export const getTableScoreItems = (items?: ItemFormValues[]) =>
-  items?.map((item) => ({
-    id: getEntityKey(item),
-    name: item.name,
-    tooltip: removeMarkdown(item.question),
-    label: `${item.name}: ${removeMarkdown(item.question)}`,
-  }));
+  items?.reduce((tableScoreItems: DataTableItem[], item) => {
+    if (item.isHidden) return tableScoreItems;
+
+    return [
+      ...tableScoreItems,
+      {
+        id: getEntityKey(item),
+        name: item.name,
+        tooltip: removeMarkdown(item.question),
+        label: `${item.name}: ${removeMarkdown(item.question)}`,
+      },
+    ];
+  }, []);
