@@ -8,8 +8,8 @@ import { ManagersActions } from './Managers.types';
 
 export enum ManagersColumnsWidth {
   Pin = '4.8rem',
-  Default = '20rem',
-  Email = '30rem',
+  Default = '22rem',
+  Email = '35rem',
 }
 
 export const getHeadCells = (id?: string): HeadCell[] => {

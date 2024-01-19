@@ -2,12 +2,15 @@ import { Respondent, RespondentDetail } from 'modules/Dashboard/types';
 import { Encryption } from 'shared/utils';
 import { MenuActionProps } from 'shared/components';
 
+export type RespondentActionProps = { respondentId: string; email: string | null };
+
 export type RespondentsActions = {
-  scheduleSetupAction: ({ context }: MenuActionProps<string>) => void;
-  userDataExportAction: ({ context }: MenuActionProps<string>) => void;
-  viewDataAction: ({ context }: MenuActionProps<string>) => void;
-  removeAccessAction: ({ context }: MenuActionProps<string>) => void;
-  editRespondent: ({ context }: MenuActionProps<string>) => void;
+  scheduleSetupAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  userDataExportAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  viewDataAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  removeAccessAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  editRespondent: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  sendInvitation: ({ context }: MenuActionProps<RespondentActionProps>) => void;
 };
 
 export type ChosenAppletData = {
@@ -17,7 +20,7 @@ export type ChosenAppletData = {
   respondentSecretId?: string;
   hasIndividualSchedule?: boolean;
   respondentId: string;
-  respondentNickname?: string;
+  respondentNickname?: string | null;
   encryption?: Encryption;
   ownerId: string;
 };
@@ -42,6 +45,7 @@ export type GetMenuItems = {
   filteredApplets: FilteredApplets;
   isAnonymousRespondent: boolean;
   respondentId: string;
+  email: string | null;
   appletId?: string;
   isInviteEnabled: boolean;
 };

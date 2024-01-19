@@ -25,6 +25,7 @@ import {
   ChosenAppletData,
   FilteredApplets,
   FilteredRespondents,
+  RespondentActionProps,
   RespondentsData,
 } from './Respondents.types';
 import {
@@ -108,15 +109,26 @@ export const Respondents = () => {
     }
   };
 
+  const handleInviteClick = (respondentId: string, email: string | null) => {
+    console.log('respondent id', respondentId);
+    console.log('email', email);
+    setRespondentKey(respondentId);
+    setRespondentEmail(email);
+    handleSetDataForAppletPage(respondentId, 'editable');
+    setInvitationPopupVisible(true);
+  };
+
   const actions = {
-    scheduleSetupAction: ({ context: respondentId }: MenuActionProps<string>) => {
+    scheduleSetupAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
+      const { respondentId } = context || {};
       if (!respondentId) return;
 
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'scheduling');
       setScheduleSetupPopupVisible(true);
     },
-    userDataExportAction: ({ context: respondentId }: MenuActionProps<string>) => {
+    userDataExportAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
+      const { respondentId } = context || {};
       if (!respondentId) return;
 
       setRespondentKey(respondentId);
@@ -124,7 +136,8 @@ export const Respondents = () => {
       setDataExportPopupVisible(true);
       Mixpanel.track('Export Data click');
     },
-    viewDataAction: ({ context: respondentId }: MenuActionProps<string>) => {
+    viewDataAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
+      const { respondentId } = context || {};
       if (!respondentId) return;
 
       if (hasEncryptionCheck && appletId) {
@@ -137,19 +150,27 @@ export const Respondents = () => {
       setRespondentKey(respondentId);
       setViewDataPopupVisible(true);
     },
-    removeAccessAction: ({ context: respondentId }: MenuActionProps<string>) => {
+    removeAccessAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
+      const { respondentId } = context || {};
       if (!respondentId) return;
 
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'editable');
       setRemoveAccessPopupVisible(true);
     },
-    editRespondent: ({ context: respondentId }: MenuActionProps<string>) => {
+    editRespondent: ({ context }: MenuActionProps<RespondentActionProps>) => {
+      const { respondentId } = context || {};
       if (!respondentId) return;
 
       setRespondentKey(respondentId);
       handleSetDataForAppletPage(respondentId, 'editable');
       setEditRespondentPopupVisible(true);
+    },
+    sendInvitation: ({ context }: MenuActionProps<RespondentActionProps>) => {
+      const { respondentId, email = null } = context || {};
+      if (!respondentId) return;
+
+      handleInviteClick(respondentId, email);
     },
   };
 
@@ -177,16 +198,10 @@ export const Respondents = () => {
     shouldReFetch && handleReload();
   };
 
-  const handleInviteClick = (respondentId: string, email: string | null) => {
-    setRespondentKey(respondentId);
-    setRespondentEmail(email);
-    handleSetDataForAppletPage(respondentId, 'editable');
-    setInvitationPopupVisible(true);
-  };
-
-  const handleInvitationPopupClose = () => {
+  const handleInvitationPopupClose = (shouldReFetch?: boolean) => {
     setInvitationPopupVisible(false);
     setRespondentEmail(null);
+    shouldReFetch && handleReload();
   };
 
   const formatRow = (user: Respondent): Row => {
@@ -257,6 +272,7 @@ export const Respondents = () => {
               isAnonymousRespondent,
               respondentId: id,
               appletId,
+              email,
               isInviteEnabled: status === RespondentStatus.NotInvited,
             })}
             data-testid="dashboard-respondents-table-actions"
@@ -428,6 +444,8 @@ export const Respondents = () => {
           onClose={handleInvitationPopupClose}
           email={respondentEmail}
           chosenAppletData={chosenAppletData}
+          setChosenAppletData={setChosenAppletData}
+          tableRows={editableAppletsSmallTableRows}
         />
       )}
     </StyledBody>

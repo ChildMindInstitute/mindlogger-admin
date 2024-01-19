@@ -11,6 +11,7 @@ import { postSubjectInvitationApi } from 'api';
 import { InputController } from 'shared/components/FormComponents';
 import { useFormError } from 'modules/Dashboard/hooks';
 
+import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { SendInvitationForm, SendInvitationPopupProps } from './SendInvitationPopup.types';
 import { dataTestId } from './SendInvitationPopup.const';
 import { SendInvitationSchema } from './SendInvitation.schema';
@@ -19,10 +20,13 @@ export const SendInvitationPopup = ({
   popupVisible,
   onClose,
   chosenAppletData,
+  setChosenAppletData,
+  tableRows,
   email,
 }: SendInvitationPopupProps) => {
   const { t } = useTranslation('app');
-  const { respondentSecretId, respondentId, appletId } = chosenAppletData || {};
+  const { respondentSecretId = '', respondentId, appletId } = chosenAppletData || {};
+  const showSecondScreen = !!chosenAppletData;
   const [hasCommonError, setHasCommonError] = useState(false);
   const { handleSubmit, control, getValues, setError } = useForm<SendInvitationForm>({
     resolver: yupResolver(SendInvitationSchema()),
@@ -30,8 +34,14 @@ export const SendInvitationPopup = ({
   });
 
   const { execute, error, isLoading } = useAsync(postSubjectInvitationApi, () => {
+    setChosenAppletData(null);
     onClose(true);
   });
+
+  const handlePopupClose = () => {
+    setChosenAppletData(null);
+    onClose(false);
+  };
 
   const submitForm = () => {
     if (!appletId || !respondentId) return;
@@ -40,15 +50,23 @@ export const SendInvitationPopup = ({
     execute({ appletId, respondentId, email: getValues('email') });
   };
 
+  const getTitle = () => {
+    if (showSecondScreen) {
+      return `${t(email ? 'confirmEmailForId' : 'addEmailForId')} ${respondentSecretId}`;
+    }
+
+    return t('sendInvitation');
+  };
+
   useFormError({ error, setError, setHasCommonError, fields: { email: 'email' } });
 
   return (
     <Modal
       open={popupVisible}
-      onClose={() => onClose(false)}
+      onClose={handlePopupClose}
       onSubmit={handleSubmit(submitForm)}
-      title={`${t(email ? 'confirmEmailForId' : 'addEmailForId')} ${respondentSecretId}`}
-      buttonText={t('sendInvitation')}
+      title={getTitle()}
+      buttonText={showSecondScreen ? t('sendInvitation') : ''}
       disabledSubmit={isLoading}
       submitBtnVariant={SubmitBtnVariant.Contained}
       data-testid={dataTestId}
@@ -56,16 +74,32 @@ export const SendInvitationPopup = ({
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
-          <form onSubmit={handleSubmit(submitForm)} noValidate>
-            <InputController fullWidth name="email" control={control} label={t('emailAddress')} />
-          </form>
-          {hasCommonError && (
-            <StyledBodyLarge
-              color={variables.palette.semantic.error}
-              sx={{ m: theme.spacing(1, 0) }}
-            >
-              {getErrorMessage(error)}
-            </StyledBodyLarge>
+          {showSecondScreen ? (
+            <>
+              <form onSubmit={handleSubmit(submitForm)} noValidate>
+                <InputController
+                  fullWidth
+                  name="email"
+                  control={control}
+                  label={t('emailAddress')}
+                />
+              </form>
+              {hasCommonError && (
+                <StyledBodyLarge
+                  color={variables.palette.semantic.error}
+                  sx={{ m: theme.spacing(1, 0) }}
+                >
+                  {getErrorMessage(error)}
+                </StyledBodyLarge>
+              )}
+            </>
+          ) : (
+            <>
+              <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+                {t('pleaseSelectAppletToInvite')}
+              </StyledBodyLarge>
+              <AppletsSmallTable tableRows={tableRows} />
+            </>
           )}
         </StyledModalWrapper>
       </>

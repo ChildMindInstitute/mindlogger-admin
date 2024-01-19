@@ -62,15 +62,15 @@ export const RespondentsRemoveAccessPopup = ({
     <>
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
         <Trans i18nKey="removeRespondentAccess">
-          You are about to remove Respondent
+          You are about to remove
           <b>
             <>{{ respondentName }}’s</>
           </b>
-          access to the
+          from Applet
           <b>
             <>{{ appletName }}</>
           </b>
-          Applet.
+          .
         </Trans>
       </StyledBodyLarge>
       {isManagerOrOwner(appletRoles?.[0]) && (
@@ -78,7 +78,7 @@ export const RespondentsRemoveAccessPopup = ({
           label={
             <StyledBodyLarge>
               <Trans i18nKey="removeRespondentData">
-                Also remove Respondent
+                Also remove
                 <b>
                   <>{{ respondentName }}</>
                 </b>
@@ -86,6 +86,7 @@ export const RespondentsRemoveAccessPopup = ({
                 <b>
                   <>{{ appletName }}</>
                 </b>
+                .
               </Trans>
             </StyledBodyLarge>
           }
