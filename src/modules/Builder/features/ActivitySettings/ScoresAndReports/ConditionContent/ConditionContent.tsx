@@ -33,8 +33,8 @@ export const ConditionContent = ({
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
-  const { control, getFieldState, getValues, setValue } = useCustomFormContext();
-  const { fieldName, activity } = useCurrentActivity();
+  const { control, getFieldState, setValue } = useCustomFormContext();
+  const { fieldName } = useCurrentActivity();
   const {
     fields: conditions,
     append: appendCondition,
