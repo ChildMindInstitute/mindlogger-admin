@@ -2,13 +2,14 @@ import i18n from 'i18n';
 import { Svg } from 'shared/components/Svg';
 import { HeadCell } from 'shared/types/table';
 import { Manager } from 'modules/Dashboard/types';
+import { variables } from 'shared/styles';
 
 import { ManagersActions } from './Managers.types';
 
 export enum ManagersColumnsWidth {
   Pin = '4.8rem',
-  Default = '20rem',
-  Email = '30rem',
+  Default = '22rem',
+  Email = '35rem',
 }
 
 export const getHeadCells = (id?: string): HeadCell[] => {
@@ -64,18 +65,19 @@ export const getManagerActions = (
 
   return [
     {
-      icon: <Svg id="remove-access" />,
-      action: removeAccessAction,
-      title: t('removeAccess'),
-      context: manager,
-      'data-testid': 'dashboard-managers-remove-access',
-    },
-    {
       icon: <Svg id="edit-user" />,
       action: editAccessAction,
       title: t('editAccess'),
       context: manager,
       'data-testid': 'dashboard-managers-edit-user',
+    },
+    {
+      icon: <Svg id="remove-access" />,
+      action: removeAccessAction,
+      title: t('removeAccess'),
+      context: manager,
+      customItemColor: variables.palette.dark_error_container,
+      'data-testid': 'dashboard-managers-remove-access',
     },
   ];
 };

@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import { Svg } from 'shared/components/Svg';
 import { Roles } from 'shared/consts';
 import { isManagerOrOwner } from 'shared/utils';
+import { variables } from 'shared/styles';
 
 import { AppletActions } from './AppletItem.types';
 
@@ -66,13 +67,6 @@ export const getAppletActions = ({
       'data-testid': 'dashboard-applets-applet-duplicate',
     },
     {
-      icon: <Svg id="trash" />,
-      action: deleteAction,
-      title: t('deleteApplet'),
-      isDisplayed: commonCondition,
-      'data-testid': 'dashboard-applets-applet-delete',
-    },
-    {
       icon: <Svg id="switch-account" />,
       action: transferOwnership,
       title: t('transferOwnership'),
@@ -93,6 +87,14 @@ export const getAppletActions = ({
       title: t(isPublished ? 'conceal' : 'publish'),
       isDisplayed: !item.isFolder && isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-publish-conceal',
+    },
+    {
+      icon: <Svg id="trash" />,
+      action: deleteAction,
+      title: t('deleteApplet'),
+      isDisplayed: commonCondition,
+      customItemColor: variables.palette.dark_error_container,
+      'data-testid': 'dashboard-applets-applet-delete',
     },
   ];
 };

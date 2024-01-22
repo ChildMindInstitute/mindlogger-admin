@@ -55,6 +55,7 @@ export const Menu = <T = unknown,>({
             tooltip,
             context,
             action,
+            customItemColor,
             'data-testid': dataTestId,
           },
           index,
@@ -65,9 +66,12 @@ export const Menu = <T = unknown,>({
             onClose();
           };
           const menuItemContent = (
-            <StyledMenuItemContent>
+            <StyledMenuItemContent customItemColor={customItemColor}>
               {icon && <ListItemIcon>{icon}</ListItemIcon>}
-              <StyledBodyLarge color={variables.palette.on_surface} letterSpacing="xxl">
+              <StyledBodyLarge
+                color={customItemColor || variables.palette.on_surface}
+                letterSpacing="xxl"
+              >
                 {t(title)}
               </StyledBodyLarge>
             </StyledMenuItemContent>

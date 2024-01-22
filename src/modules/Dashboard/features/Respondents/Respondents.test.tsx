@@ -94,8 +94,8 @@ describe('Respondents component tests', () => {
   test('should render table with respondents', async () => {
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
-    const tableColumnNames = ['ID', 'Nickname', 'Latest active', 'Schedule', 'Actions'];
-    const respondentColumns = ['mockedSecretId', 'Mocked Respondent', 'Default Schedule'];
+    const tableColumnNames = ['ID', 'Nickname', 'Last active', 'Schedule', 'Actions'];
+    const respondentColumns = ['mockedSecretId', 'Mocked Respondent', 'Schedule'];
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-respondents-table')).toBeInTheDocument();

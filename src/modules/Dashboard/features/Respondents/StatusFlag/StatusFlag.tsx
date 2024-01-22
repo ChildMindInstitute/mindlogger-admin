@@ -3,16 +3,17 @@ import { Box } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { variables, StyledBodyLarge } from 'shared/styles';
+import { RespondentStatus } from 'modules/Dashboard/types';
 
 import { StyledButton, StyledPopover, StyledLinkBtn } from './StatusFlag.styles';
-import { StatusFlagProps, StatusType } from './StatusFlag.types';
+import { StatusFlagProps } from './StatusFlag.types';
 import { dataTestId } from './StatusFlag.const';
 
-export const StatusFlag = ({ status, onInviteClick }: StatusFlagProps) => {
+export const StatusFlag = ({ status, onInviteClick, isInviteDisabled }: StatusFlagProps) => {
   const { t } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const isNotInvitedStatus = status === StatusType.NotInvited;
-  const open = isNotInvitedStatus && Boolean(anchorEl);
+  const isNotInvitedStatus = status === RespondentStatus.NotInvited;
+  const open = isNotInvitedStatus && !isInviteDisabled && Boolean(anchorEl);
   const id = open ? 'status-flag-popover' : undefined;
 
   const handleBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -21,11 +22,15 @@ export const StatusFlag = ({ status, onInviteClick }: StatusFlagProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleInviteClick = () => {
+    onInviteClick?.();
+    handleClose();
+  };
 
   return (
     <Box>
       <StyledButton
-        disabled={!isNotInvitedStatus}
+        disabled={isInviteDisabled || !isNotInvitedStatus}
         aria-describedby={id}
         variant="contained"
         onClick={handleBtnClick}
@@ -48,7 +53,7 @@ export const StatusFlag = ({ status, onInviteClick }: StatusFlagProps) => {
           <StyledBodyLarge color={variables.palette.on_surface}>
             To enable this person to use MindLogger on their own,
           </StyledBodyLarge>
-          <StyledLinkBtn onClick={onInviteClick}>invite them now</StyledLinkBtn>.
+          <StyledLinkBtn onClick={handleInviteClick}>invite them now</StyledLinkBtn>.
         </Trans>
       </StyledPopover>
     </Box>

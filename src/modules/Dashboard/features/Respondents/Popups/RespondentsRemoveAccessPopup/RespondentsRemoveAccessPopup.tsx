@@ -41,14 +41,6 @@ export const RespondentsRemoveAccessPopup = ({
 
   const onCloseHandler = () => onClose();
 
-  useEffect(() => {
-    if (chosenAppletData) {
-      setAppletName(chosenAppletData?.appletDisplayName || '');
-      setRespondentName(chosenAppletData?.respondentSecretId || '');
-      setStep(1);
-    }
-  }, [chosenAppletData]);
-
   const firstScreen = (
     <>
       <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
@@ -62,15 +54,15 @@ export const RespondentsRemoveAccessPopup = ({
     <>
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
         <Trans i18nKey="removeRespondentAccess">
-          You are about to remove Respondent
+          You are about to remove
           <b>
             <>{{ respondentName }}’s</>
           </b>
-          access to the
+          from Applet
           <b>
             <>{{ appletName }}</>
           </b>
-          Applet.
+          .
         </Trans>
       </StyledBodyLarge>
       {isManagerOrOwner(appletRoles?.[0]) && (
@@ -78,7 +70,7 @@ export const RespondentsRemoveAccessPopup = ({
           label={
             <StyledBodyLarge>
               <Trans i18nKey="removeRespondentData">
-                Also remove Respondent
+                Also remove
                 <b>
                   <>{{ respondentName }}</>
                 </b>
@@ -86,6 +78,7 @@ export const RespondentsRemoveAccessPopup = ({
                 <b>
                   <>{{ appletName }}</>
                 </b>
+                .
               </Trans>
             </StyledBodyLarge>
           }
@@ -160,6 +153,14 @@ export const RespondentsRemoveAccessPopup = ({
     if (isLastScreen || isAppletPwdScreen) return;
     getStep('next');
   };
+
+  useEffect(() => {
+    if (chosenAppletData) {
+      setAppletName(chosenAppletData?.appletDisplayName || '');
+      setRespondentName(chosenAppletData?.respondentSecretId || '');
+      setStep(1);
+    }
+  }, [chosenAppletData]);
 
   return (
     <Modal

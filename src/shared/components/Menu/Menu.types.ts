@@ -12,6 +12,7 @@ export type MenuItem<T = unknown> = {
   isDisplayed?: boolean;
   disabled?: boolean;
   tooltip?: string;
+  customItemColor?: string;
   'data-testid'?: string;
 };
 

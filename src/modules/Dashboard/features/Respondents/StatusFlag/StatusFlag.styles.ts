@@ -14,6 +14,7 @@ export const StyledButton = styled(Button)`
     letter-spacing: ${variables.font.letterSpacing.xxl};
     height: auto;
     transition: ${variables.transitions.opacity};
+    min-width: 8.5rem;
 
     &.Mui-disabled {
       color: ${variables.palette.on_surface_variant};

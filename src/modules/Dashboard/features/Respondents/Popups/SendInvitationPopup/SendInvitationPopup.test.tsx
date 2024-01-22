@@ -14,20 +14,27 @@ jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
 }));
 const mockedSecretUserId = '123';
-const mockedSubjectId = '456';
+const mockedRespondentId = '456';
 const mockedEmail = 'test@test.com';
+const mockedChosenAppletData = {
+  appletId: mockedAppletId,
+  respondentSecretId: mockedSecretUserId,
+  respondentId: mockedRespondentId,
+  respondentNickname: 'respondentNickname',
+  ownerId: '1',
+};
+const commonPopupProps = {
+  popupVisible: true,
+  onClose: jest.fn(),
+  chosenAppletData: mockedChosenAppletData,
+  setChosenAppletData: jest.fn(),
+};
 
 describe('SendInvitationPopup', () => {
   test('renders the component with no email, submit after correct email enter', async () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: mockedAppletId });
     const { getByTestId, getByText, getByLabelText } = renderWithProviders(
-      <SendInvitationPopup
-        open
-        onClose={() => {}}
-        secretUserId={mockedSecretUserId}
-        subjectId={mockedSubjectId}
-        email={null}
-      />,
+      <SendInvitationPopup {...commonPopupProps} email={null} />,
     );
 
     expect(getByTestId(dataTestId)).toBeInTheDocument();
@@ -46,7 +53,7 @@ describe('SendInvitationPopup', () => {
       expect(mockAxios.post).toHaveBeenNthCalledWith(
         1,
         `/invitations/${mockedAppletId}/subject`,
-        { email: mockedEmail, subjectId: mockedSubjectId },
+        { email: mockedEmail, subjectId: mockedRespondentId },
         { signal: undefined },
       );
     });
@@ -55,13 +62,7 @@ describe('SendInvitationPopup', () => {
   test('renders and submit the component with email', async () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: mockedAppletId });
     const { getByTestId, getByText } = renderWithProviders(
-      <SendInvitationPopup
-        open
-        onClose={() => {}}
-        secretUserId={mockedSecretUserId}
-        subjectId={mockedSubjectId}
-        email={mockedEmail}
-      />,
+      <SendInvitationPopup {...commonPopupProps} email={mockedEmail} />,
     );
 
     expect(getByTestId(dataTestId)).toBeInTheDocument();
@@ -73,7 +74,7 @@ describe('SendInvitationPopup', () => {
       expect(mockAxios.post).toHaveBeenNthCalledWith(
         1,
         `/invitations/${mockedAppletId}/subject`,
-        { email: mockedEmail, subjectId: mockedSubjectId },
+        { email: mockedEmail, subjectId: mockedRespondentId },
         { signal: undefined },
       );
     });

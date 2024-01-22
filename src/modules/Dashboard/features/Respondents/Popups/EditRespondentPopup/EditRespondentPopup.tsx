@@ -70,9 +70,9 @@ export const EditRespondentPopup = ({
   };
 
   useEffect(() => {
-    const { respondentNickname = '', respondentSecretId = '' } = chosenAppletData || {};
+    const { respondentNickname, respondentSecretId = '' } = chosenAppletData || {};
     setValue('secretUserId', respondentSecretId);
-    setValue('nickname', respondentNickname);
+    setValue('nickname', respondentNickname || '');
   }, [chosenAppletData]);
 
   const hasServerError = error && isServerErrorVisible;
