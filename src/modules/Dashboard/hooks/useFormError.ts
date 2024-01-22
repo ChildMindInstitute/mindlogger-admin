@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useEffect } from 'react';
 import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 import { AxiosError } from 'axios';
 
@@ -13,7 +13,7 @@ type UseFormError<T extends FieldValues> = {
   customFieldErrors?: {
     fieldName: string;
     apiMessage: string;
-    errorMessage: string;
+    errorMessage: string | ReactNode;
   }[];
 };
 

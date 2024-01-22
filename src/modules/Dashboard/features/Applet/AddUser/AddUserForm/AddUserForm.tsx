@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
 
 import {
@@ -25,8 +25,9 @@ import { users, workspaces } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
 import { useFormError } from 'modules/Dashboard/hooks';
+import { page } from 'resources';
 
-import { StyledRow, StyledTooltip } from './AddUserForm.styles';
+import { StyledRow, StyledTooltip, StyledLinkBtn, StyledGridContainer } from './AddUserForm.styles';
 import {
   dataTestId,
   defaultValues,
@@ -35,6 +36,8 @@ import {
   languages,
   nameFields,
   SubmitBtnType,
+  RESPONDENT_ALREADY_INVITED,
+  EMAIL_IN_USE,
 } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
@@ -44,6 +47,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
+  const navigate = useNavigate();
 
   const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
   const [hasCommonError, setHasCommonError] = useState(false);
@@ -146,6 +150,16 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     }
   };
 
+  const handleRedirectClick = () => navigate(generatePath(page.appletRespondents, { appletId }));
+
+  const emailInUse = (
+    <Trans i18nKey="emailAlreadyInUse">
+      That email is,
+      <StyledLinkBtn onClick={handleRedirectClick}>already in use</StyledLinkBtn>. Please enter
+      another one.
+    </Trans>
+  );
+
   const error = invitationError || shellAccountError;
   useFormError({
     error,
@@ -157,6 +171,16 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
         fieldName: Fields.secretUserId,
         apiMessage: NON_UNIQUE_VALUE_MESSAGE,
         errorMessage: t('secretUserIdExists'),
+      },
+      {
+        fieldName: Fields.email,
+        apiMessage: RESPONDENT_ALREADY_INVITED,
+        errorMessage: t('respondentAlreadyInvited'),
+      },
+      {
+        fieldName: Fields.email,
+        apiMessage: EMAIL_IN_USE,
+        errorMessage: emailInUse,
       },
     ],
   });
@@ -180,7 +204,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
         {t('personalInvitation')}
       </StyledTitleMedium>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Grid container spacing={2.4} alignItems="flex-start">
+        <StyledGridContainer container spacing={2.4} alignItems="flex-start">
           <Grid item xs={4}>
             <SelectController
               {...commonProps}
@@ -273,7 +297,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
               </StyledTooltip>
             </Tooltip>
           </Grid>
-        </Grid>
+        </StyledGridContainer>
         <StyledRow>
           <Button
             type="submit"
