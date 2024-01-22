@@ -2,13 +2,20 @@ import { useTranslation } from 'react-i18next';
 import { useFieldArray } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';
-import { Condition } from 'shared/state';
+import { Condition, RangeValueCondition } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
+import { ConditionType } from 'shared/consts';
 import { ConditionRow } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { OnChangeConditionType } from 'modules/Builder/components/ConditionRow/ConditionRow.types';
+import { getPayload } from 'modules/Builder/components/ConditionRow/ConditionRow.utils';
+import {
+  DEFAULT_PAYLOAD_MAX_VALUE,
+  DEFAULT_PAYLOAD_MIN_VALUE,
+} from 'modules/Builder/components/ConditionRow/ConditionRow.const';
 
 import { ConditionContentProps } from './ConditionContent.types';
 import { ScoreSummaryRow } from './ScoreSummaryRow';
@@ -20,13 +27,14 @@ export const ConditionContent = ({
   name,
   type,
   score,
+  scoreRange,
   'data-testid': dataTestid,
 }: ConditionContentProps) => {
   const { t } = useTranslation();
   const conditionsName = `${name}.conditions`;
 
-  const { control, getFieldState } = useCustomFormContext();
-  const { fieldName } = useCurrentActivity();
+  const { control, getFieldState, getValues, setValue } = useCustomFormContext();
+  const { fieldName, activity } = useCurrentActivity();
   const {
     fields: conditions,
     append: appendCondition,
@@ -45,6 +53,29 @@ export const ConditionContent = ({
     );
   };
 
+  const handleChangeConditionType: OnChangeConditionType = ({
+    conditionType,
+    conditionPayload,
+    conditionPayloadName,
+    selectedItem,
+  }) => {
+    if (
+      type === ConditionRowType.Score &&
+      (conditionType === ConditionType.Between || conditionType === ConditionType.OutsideOf)
+    ) {
+      const { minValue, maxValue } = (conditionPayload as RangeValueCondition['payload']) ?? {};
+
+      const payload = {
+        minValue: +(minValue ?? scoreRange?.minScore ?? DEFAULT_PAYLOAD_MIN_VALUE).toFixed(2),
+        maxValue: +(maxValue ?? scoreRange?.maxScore ?? DEFAULT_PAYLOAD_MAX_VALUE).toFixed(2),
+      };
+
+      return setValue(conditionPayloadName, payload);
+    }
+
+    setValue(conditionPayloadName, getPayload({ conditionType, conditionPayload, selectedItem }));
+  };
+
   return (
     <>
       {conditions?.map((condition: Condition, index: number) => (
@@ -56,6 +87,7 @@ export const ConditionContent = ({
           type={type}
           scoreKey={type === ConditionRowType.Score ? score?.key : ''}
           onRemove={() => removeCondition(index)}
+          onChangeConditionType={handleChangeConditionType}
           data-testid={`${dataTestid}-condition-${index}`}
         />
       ))}

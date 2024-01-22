@@ -28,6 +28,7 @@ export const ConditionRow = ({
   activityName,
   index,
   onRemove,
+  onChangeConditionType,
   type = ConditionRowType.Item,
   scoreKey,
   autoTrigger,
@@ -106,11 +107,22 @@ export const ConditionRow = ({
 
   const handleChangeConditionType = useCallback(
     (e: SelectEvent) => {
-      const payload = getPayload(e.target.value as ConditionType, conditionPayload, selectedItem);
+      const conditionType = e.target.value as ConditionType;
+
+      if (onChangeConditionType) {
+        return onChangeConditionType({
+          conditionType,
+          conditionPayload,
+          conditionPayloadName,
+          selectedItem,
+        });
+      }
+
+      const payload = getPayload({ conditionType, conditionPayload, selectedItem });
 
       setValue(conditionPayloadName, payload);
     },
-    [name, conditionPayload, selectedItem],
+    [name, conditionPayload, selectedItem, onChangeConditionType],
   );
 
   const handleRemove = useCallback(onRemove, [index]);
