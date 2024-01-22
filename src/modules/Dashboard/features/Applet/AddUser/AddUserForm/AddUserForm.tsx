@@ -154,7 +154,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
 
   const emailInUse = (
     <Trans i18nKey="emailAlreadyInUse">
-      That email is,
+      That email is
       <StyledLinkBtn onClick={handleRedirectClick}>already in use</StyledLinkBtn>. Please enter
       another one.
     </Trans>
