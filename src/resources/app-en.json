@@ -256,6 +256,7 @@
   "conditionTarget": "Item",
   "conditionType": "State",
   "conditionTypePlaceholder": "State",
+  "conditionDisabledPlaceholder": "Select Item First",
   "conditionValue": "Value",
   "configure": "Configure",
   "configureServer": "Please configure the report server to download the report.",

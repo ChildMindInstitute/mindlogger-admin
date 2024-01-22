@@ -256,6 +256,7 @@
   "conditionTarget": "Élément",
   "conditionType": "État",
   "conditionTypePlaceholder": "État",
+  "conditionDisabledPlaceholder": "Sélectionnez d'abord un élément",
   "conditionValue": "Valeur",
   "configure": "Configurer",
   "configureServer": "Veuillez configurer le serveur de rapports pour télécharger le rapport.",
