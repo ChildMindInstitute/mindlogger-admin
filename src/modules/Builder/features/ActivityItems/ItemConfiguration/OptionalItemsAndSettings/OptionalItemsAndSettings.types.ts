@@ -23,6 +23,6 @@ export type SettingsSetupProps = {
   handleAddSingleOrMultipleRow?: () => void;
   removeAlert?: () => void;
   handleAddAlert?: () => void;
-  setShowColorPalette?: (visibility: boolean) => void;
+  handleRemovePalette?: () => void;
   setOptionsOpen?: Dispatch<SetStateAction<boolean[]>>;
 };
