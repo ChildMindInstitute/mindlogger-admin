@@ -1271,5 +1271,6 @@
   "addEmailForId": "Add an email for ID:",
   "confirmEmailForId": "Confirm email for ID:",
   "emailAddress": "Email address",
+  "emailAlreadyInUse": "That email is <1>already in use</1>. Please enter another one.",
   "goToDashboard": "Go to Dashboard"
 }

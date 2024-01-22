@@ -1271,5 +1271,6 @@
   "addEmailForId": "Ajouter un e-mail pour l'ID :",
   "confirmEmailForId": "Confirmer l'e-mail pour l'ID :",
   "emailAddress": "Adresse e-mail",
+  "emailAlreadyInUse": "Cet e-mail est déjà <1>utilisé</1>. Veuillez en saisir un autre.",
   "goToDashboard": "Aller au tableau de bord"
 }

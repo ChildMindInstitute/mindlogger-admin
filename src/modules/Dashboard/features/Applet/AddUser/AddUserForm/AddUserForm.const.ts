@@ -81,3 +81,6 @@ export const defaultValues = {
 };
 
 export const dataTestId = 'dashboard-add-users';
+
+export const RESPONDENT_ALREADY_INVITED = 'Respondent already invited.';
+export const EMAIL_IN_USE = 'That email is already in use for shell account.';
