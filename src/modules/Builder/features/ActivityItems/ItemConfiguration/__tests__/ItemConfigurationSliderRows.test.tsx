@@ -266,9 +266,8 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
     });
 
     test.each`
-      message                                | value | attribute         | description
-      ${'Alert Message is required'}         | ${''} | ${'text'}         | ${'Validation error: empty message'}
-      ${'Select a value within an interval'} | ${-2} | ${'slider-value'} | ${'Validation error: value is not in range'}
+      message                        | value | attribute | description
+      ${'Alert Message is required'} | ${''} | ${'text'} | ${'Validation error: empty message'}
     `('$description', async ({ message, value, attribute }) => {
       const ref = renderSlider(ItemResponseType.Slider);
       await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
@@ -369,7 +368,6 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       await ref.current.trigger(`${mockedItemName}.alerts`);
 
       await waitFor(() => {
-        expect(screen.getByText('Please fill in all required fields')).toBeVisible();
         expect(screen.getByTestId(testId).querySelector('div')).toHaveClass('Mui-error');
 
         message && expect(screen.getByTestId(testId)).toBeVisible();

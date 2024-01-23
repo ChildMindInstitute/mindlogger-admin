@@ -3,13 +3,7 @@ import get from 'lodash.get';
 
 import { Svg } from 'shared/components/Svg';
 import { InputController } from 'shared/components/FormComponents';
-import {
-  StyledTitleBoldSmall,
-  StyledIconButton,
-  variables,
-  theme,
-  StyledBodyMedium,
-} from 'shared/styles';
+import { StyledTitleBoldSmall, StyledIconButton, variables } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { ItemFormValues } from 'modules/Builder/types';
 import { useCustomFormContext } from 'modules/Builder/hooks';
@@ -21,12 +15,7 @@ import { getItemsList, getOptionsList, getSliderRowsItemList } from './Alert.uti
 
 export const Alert = ({ name, index, removeAlert }: AlertProps) => {
   const { t } = useTranslation('app');
-  const {
-    control,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useCustomFormContext();
+  const { control, getValues, watch } = useCustomFormContext();
 
   const alertName = `${name}.alerts.${index}`;
   const alertValueName = `${alertName}.value`;
@@ -41,32 +30,6 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
 
   const { responseType, config: settings } = watch(name);
   const dataTestid = `builder-activity-items-item-configuration-alerts-${index}`;
-
-  const alertValueErrorMessage = get(errors, alertValueName)?.message;
-  const alertMinValueErrorMessage = get(errors, alertMinValueName)?.message;
-  const alertMaxValueErrorMessage = get(errors, alertMaxValueName)?.message;
-  const alertSliderIdErrorMessage = get(errors, alertSliderIdName)?.message;
-  const alertTextError = get(errors, alertTextName);
-  const getSliderErrorText = () => {
-    if (responseType !== ItemResponseType.Slider && responseType !== ItemResponseType.SliderRows) {
-      return null;
-    }
-    if (alertSliderIdErrorMessage && typeof alertSliderIdErrorMessage === 'string') {
-      return alertSliderIdErrorMessage;
-    }
-    if (alertValueErrorMessage && typeof alertValueErrorMessage === 'string') {
-      return alertValueErrorMessage;
-    }
-    if (alertMinValueErrorMessage && typeof alertMinValueErrorMessage === 'string') {
-      return alertMinValueErrorMessage;
-    }
-    if (alertMaxValueErrorMessage && typeof alertMaxValueErrorMessage === 'string') {
-      return alertMaxValueErrorMessage;
-    }
-
-    return null;
-  };
-  const sliderErrorText = getSliderErrorText();
 
   const renderAlertContent = () => {
     switch (responseType) {
@@ -201,14 +164,6 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
         }}
         data-testid={`${dataTestid}-text`}
       />
-      {sliderErrorText && (
-        <StyledBodyMedium
-          sx={{ pt: theme.spacing(alertTextError ? 2.5 : 0.5) }}
-          color={variables.palette.semantic.error}
-        >
-          {sliderErrorText}
-        </StyledBodyMedium>
-      )}
     </StyledAlert>
   );
 };
