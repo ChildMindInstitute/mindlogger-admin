@@ -17,6 +17,7 @@ import {
 } from 'shared/state';
 import { SelectEvent } from 'shared/types';
 import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
+import { DEFAULT_SLIDER_MAX_NUMBER, DEFAULT_SLIDER_MIN_NUMBER } from 'modules/Builder/consts';
 
 import {
   StyledFormControl,
@@ -184,13 +185,25 @@ export const ItemSettingsGroup = ({
                           }),
                         ),
                       );
-                    case ItemResponseType.Slider:
+                    case ItemResponseType.Slider: {
+                      const { minValue, maxValue } = getValues(`${itemName}.responseValues`) ?? {};
+
                       return setValue(
                         `${itemName}.responseValues.scores`,
                         hasScores
-                          ? getDefaultSliderScores(getValues(`${itemName}.responseValues`))
+                          ? getDefaultSliderScores({
+                              minValue:
+                                minValue > DEFAULT_SLIDER_MIN_NUMBER
+                                  ? minValue
+                                  : DEFAULT_SLIDER_MIN_NUMBER,
+                              maxValue:
+                                maxValue < DEFAULT_SLIDER_MAX_NUMBER
+                                  ? maxValue
+                                  : DEFAULT_SLIDER_MAX_NUMBER,
+                            })
                           : undefined,
                       );
+                    }
                     case ItemResponseType.SingleSelection:
                     case ItemResponseType.MultipleSelection:
                       return setValue(

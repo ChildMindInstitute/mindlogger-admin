@@ -24,3 +24,9 @@ export type SetScoresAndAlertsChange = {
   hasAlerts: boolean;
   alertsName: string;
 };
+
+export type GetStrictValue = {
+  value: string | number;
+  minValue: number;
+  maxValue: number;
+};

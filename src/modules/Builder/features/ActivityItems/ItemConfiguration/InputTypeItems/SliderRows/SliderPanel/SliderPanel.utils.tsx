@@ -4,7 +4,7 @@ import { createArray } from 'shared/utils';
 import { ItemAlert } from 'shared/state';
 
 import { ScoreCell } from './ScoreCell';
-import { SetScoresAndAlertsChange, SliderInputType } from './SliderPanel.types';
+import { GetStrictValue, SetScoresAndAlertsChange, SliderInputType } from './SliderPanel.types';
 
 const { t } = i18n;
 
@@ -57,11 +57,10 @@ export const setScoresAndAlertsChange = ({
   const lessThanScoresQuantity = scoresLength && scoresLength < scoresQuantity;
   const moreThanScoresQuantity = scoresLength && scoresLength > scoresQuantity;
   const alertsCondition = alerts && hasAlerts;
-  const emptyNumber = '' as unknown as number;
 
   if (type === SliderInputType.MinValue) {
     if (lessThanScoresQuantity) {
-      const newScores = createArray(scoresQuantity - scoresLength, () => emptyNumber).reverse();
+      const newScores = createArray(scoresQuantity - scoresLength, () => minValue + 1).reverse();
       setValue(scoresName, newScores.concat(scores));
     }
 
@@ -78,7 +77,7 @@ export const setScoresAndAlertsChange = ({
 
   if (type === SliderInputType.MaxValue) {
     if (lessThanScoresQuantity) {
-      const newScores = createArray(scoresQuantity - scoresLength, () => emptyNumber);
+      const newScores = createArray(scoresQuantity - scoresLength, () => maxValue + 1);
       setValue(scoresName, scores.concat(newScores));
     }
 
@@ -92,4 +91,20 @@ export const setScoresAndAlertsChange = ({
       });
     }
   }
+};
+
+export const getStrictMinValue = ({ value, minValue, maxValue }: GetStrictValue) => {
+  if (value === '') return minValue;
+  if (+value < minValue) return minValue;
+  if (+value > maxValue - 1) return maxValue - 1;
+
+  return +value;
+};
+
+export const getStrictMaxValue = ({ value, minValue, maxValue }: GetStrictValue) => {
+  if (value === '') return maxValue;
+  if (+value > maxValue) return maxValue;
+  if (+value < minValue + 1) return minValue + 1;
+
+  return +value;
 };

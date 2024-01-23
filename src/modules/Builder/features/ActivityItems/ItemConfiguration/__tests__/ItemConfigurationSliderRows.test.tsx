@@ -174,11 +174,11 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
     test.each`
       testId         | attribute     | value          | description
-      ${'label'}     | ${'label'}    | ${'label'}     | ${'Slider: min label'}
-      ${'min-label'} | ${'minLabel'} | ${'min label'} | ${'Slider: min label'}
-      ${'max-label'} | ${'maxLabel'} | ${'max label'} | ${'Slider: max label'}
-      ${'min-value'} | ${'minValue'} | ${2}           | ${'Slider: min value'}
-      ${'max-value'} | ${'maxValue'} | ${12}          | ${'Slider: max value'}
+      ${'label'}     | ${'label'}    | ${'label'}     | ${'Slider rows: min label'}
+      ${'min-label'} | ${'minLabel'} | ${'min label'} | ${'Slider rows: min label'}
+      ${'max-label'} | ${'maxLabel'} | ${'max label'} | ${'Slider rows: max label'}
+      ${'min-value'} | ${'minValue'} | ${2}           | ${'Slider rows: min value'}
+      ${'max-value'} | ${'maxValue'} | ${4}           | ${'Slider rows: max value'}
     `('$description', async ({ testId, attribute, value }) => {
       const ref = renderSlider(ItemResponseType.SliderRows);
 
@@ -540,8 +540,6 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
   test.each`
     responseType                   | testId                                                             | value | message                       | description
-    ${ItemResponseType.Slider}     | ${'builder-activity-items-item-configuration-slider-min-value'}    | ${-1} | ${'Select valid interval'}    | ${'Slider: Validation error: Min value less than 0'}
-    ${ItemResponseType.Slider}     | ${'builder-activity-items-item-configuration-slider-max-value'}    | ${13} | ${'Select valid interval'}    | ${'Slider: Validation error: Max value more than 12'}
     ${ItemResponseType.SliderRows} | ${'builder-activity-items-item-configuration-slider-rows-0-label'} | ${''} | ${'Slider Label is required'} | ${'Slider Rows: Validation error: Empty Label'}
   `('$description', async ({ responseType, testId, value, message }) => {
     const ref = renderSlider(responseType);
