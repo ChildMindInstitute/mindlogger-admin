@@ -46,7 +46,7 @@ export const SectionScoreCommonFields = ({
       return;
     }
 
-    unregister(messageName, { keepDefaultValue: true });
+    unregister(messageName, { keepValue: true });
   }, [showMessage]);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export const SectionScoreCommonFields = ({
       return;
     }
 
-    unregister(itemsPrintName, { keepDefaultValue: true });
+    unregister(itemsPrintName, { keepValue: true });
   }, [printItems]);
 
   useEffect(() => {
