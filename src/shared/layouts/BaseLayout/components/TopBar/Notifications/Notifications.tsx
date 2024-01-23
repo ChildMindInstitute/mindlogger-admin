@@ -75,7 +75,10 @@ export const Notifications = () => {
               {`${notWatched} ${t('unread')}`}
             </StyledLabelBoldLarge>
           )}
-          <StyledCollapseBtn onClick={() => setShowList((prevState) => !prevState)}>
+          <StyledCollapseBtn
+            aria-label="collapse-expand"
+            onClick={() => setShowList((prevState) => !prevState)}
+          >
             <Svg id={showList ? 'navigate-up' : 'navigate-down'} />
           </StyledCollapseBtn>
         </StyledFlexTopCenter>
