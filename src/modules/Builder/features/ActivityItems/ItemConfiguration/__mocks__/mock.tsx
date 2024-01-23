@@ -64,11 +64,13 @@ export const getAppletFormDataWithItemWithPalette = (paletteName) => {
 
   return getAppletFormDataWithItem(item);
 };
+/* eslint no-underscore-dangle: 0 */
 export const removeUuidValues = (item) => {
   const newItem = { ...item };
 
   delete newItem.key;
   delete newItem.id;
+  delete newItem._id;
 
   return {
     ...newItem,
@@ -80,6 +82,7 @@ export const removeUuidValues = (item) => {
               const newOption = { ...option };
 
               delete newOption.id;
+              delete newOption._id;
 
               return newOption;
             }),
@@ -89,6 +92,7 @@ export const removeUuidValues = (item) => {
               const newRow = { ...row };
 
               delete newRow.id;
+              delete newRow._id;
 
               return newRow;
             }),
@@ -157,6 +161,7 @@ export const mockedEmptySingleSelection = {
         text: '',
         isHidden: false,
         value: 0,
+        color: undefined,
       },
     ],
   },
@@ -189,6 +194,7 @@ export const mockedEmptyMultiSelection = {
         text: '',
         isHidden: false,
         value: 0,
+        color: undefined,
       },
     ],
   },
