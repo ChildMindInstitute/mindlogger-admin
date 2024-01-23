@@ -4,6 +4,7 @@ import { screen, fireEvent } from '@testing-library/react';
 
 import { AlertsSchema } from 'redux/modules';
 import { renderWithProviders } from 'shared/utils';
+import { mockedAlert } from 'shared/mock';
 
 import { Notifications } from './Notifications';
 
@@ -21,21 +22,6 @@ const getAlertsPreloadedState = (data: AlertsSchema['alerts']['data'] = null) =>
 });
 
 describe('Notifications', () => {
-  const mockedAlert = {
-    id: 1,
-    workspace: 'Test Test',
-    appletId: 1,
-    appletName: 'applet',
-    image: null,
-    secretId: 'secretId',
-    message: 'message',
-    timeAgo: '',
-    isWatched: false,
-    respondentId: '',
-    encryption: {},
-    alert: {},
-    createdAt: '2023-03-27T12:00:00Z',
-  };
   const intersectionObserverOriginal = global.IntersectionObserver;
   beforeEach(() => {
     const mockIntersectionObserver = jest.fn();
@@ -72,10 +58,9 @@ describe('Notifications', () => {
       preloadedState,
     });
 
-    expect(screen.getByText('applet')).toBeInTheDocument();
+    expect(screen.getByText('applet#With_alerts')).toBeInTheDocument();
     expect(screen.getByText('secretId')).toBeInTheDocument();
-    expect(screen.getByText('message')).toBeInTheDocument();
-    expect(screen.getByText('10 months ago')).toBeInTheDocument();
+    expect(screen.getByText(/SingleItem was matched with Opt1 ,/)).toBeInTheDocument();
 
     fireEvent.click(
       screen.getByRole('button', {
@@ -85,10 +70,9 @@ describe('Notifications', () => {
 
     expect(container.querySelector('.svg-navigate-up')).not.toBeInTheDocument;
     expect(container.querySelector('.svg-navigate-down')).toBeInTheDocument;
-    expect(screen.queryByText('applet')).not.toBeInTheDocument();
+    expect(screen.queryByText('applet#With_alerts')).not.toBeInTheDocument();
     expect(screen.queryByText('secretId')).not.toBeInTheDocument();
-    expect(screen.queryByText('message')).not.toBeInTheDocument();
-    expect(screen.queryByText('10 months ago')).not.toBeInTheDocument();
+    expect(screen.queryByText(/SingleItem was matched with Opt1 ,/)).not.toBeInTheDocument();
   });
 
   test('should render component with a unread notification', () => {

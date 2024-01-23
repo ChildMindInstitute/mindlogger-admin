@@ -53,6 +53,7 @@ export const Notification = ({
   const navigate = useNavigate();
   const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
+  const dataTestid = `notification-${id}`;
 
   const handleNotificationClick = async () => {
     const { setAlertWatched } = alerts.thunk;
@@ -96,7 +97,11 @@ export const Notification = ({
 
   return (
     <>
-      <StyledNotification active={isActive} onClick={handleNotificationClick}>
+      <StyledNotification
+        active={isActive}
+        onClick={handleNotificationClick}
+        data-testid={dataTestid}
+      >
         <StyledTopSection>
           <StyledLeftSection>
             <StyledImageWrapper>
@@ -151,6 +156,7 @@ export const Notification = ({
               variant="contained"
               startIcon={<Svg width="16.5" height="16.5" id="data-outlined" />}
               onClick={handleToResponseDataClick}
+              aria-label="takeMeToTheResponseData"
             >
               {t('takeMeToTheResponseData')}
             </StyledBtn>
