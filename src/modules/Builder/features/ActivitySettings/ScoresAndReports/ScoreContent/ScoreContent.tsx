@@ -133,7 +133,7 @@ export const ScoreContent = ({
     const calculationType = event.target.value as CalculationType;
     setPrevCalculationType(score.calculationType);
 
-    const oldScoreId = getScoreId(prevScoreName, calculationType);
+    const oldScoreId = getScoreId(prevScoreName, prevCalculationType);
     const newScoreId = getScoreId(scoreName, calculationType);
 
     if (oldScoreId !== newScoreId) {
