@@ -48,6 +48,7 @@ export type Respondent = {
   isAnonymousRespondent: boolean;
   email: string | null;
   status: RespondentStatus;
+  userId: string | null;
 };
 
 export type RespondentDetails = {

@@ -2,7 +2,11 @@ import { Respondent, RespondentDetail } from 'modules/Dashboard/types';
 import { Encryption } from 'shared/utils';
 import { MenuActionProps } from 'shared/components';
 
-export type RespondentActionProps = { respondentId: string; email: string | null };
+export type RespondentActionProps = {
+  respondentId: string;
+  userId: string | null;
+  email: string | null;
+};
 
 export type RespondentsActions = {
   scheduleSetupAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
@@ -23,6 +27,7 @@ export type ChosenAppletData = {
   respondentNickname?: string | null;
   encryption?: Encryption;
   ownerId: string;
+  userId?: string;
 };
 
 export type FilteredApplets = {
@@ -43,9 +48,10 @@ export type RespondentsData = {
 export type GetMenuItems = {
   actions: RespondentsActions;
   filteredApplets: FilteredApplets;
-  isAnonymousRespondent: boolean;
   respondentId: string;
+  userId: string | null;
   email: string | null;
   appletId?: string;
   isInviteEnabled: boolean;
+  isViewCalendarEnabled: boolean;
 };

@@ -46,7 +46,7 @@ describe('useCheckIfHasEncryption', () => {
     expect(result.current).toBe(false);
   });
 
-  test('should not call callback and return true if appletData is null, and hasEncryptionCheck is true', () => {
+  test('should not call callback and return true if appletData is null and hasEncryptionCheck is true', () => {
     jest.spyOn(useEncryptionStorageHook, 'useEncryptionStorage').mockReturnValue({
       getAppletPrivateKey: () => mockedPrivateKey,
     });

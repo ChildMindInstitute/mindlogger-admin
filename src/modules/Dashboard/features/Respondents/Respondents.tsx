@@ -97,13 +97,18 @@ export const Respondents = () => {
   const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
-  const handleSetDataForAppletPage = (respondentId: string, key: keyof FilteredApplets) => {
+  const handleSetDataForAppletPage = (
+    respondentId: string,
+    key: keyof FilteredApplets,
+    userId?: string,
+  ) => {
     if (respondentId && appletId && ownerId) {
       const respondentAccess = filteredRespondents[respondentId]?.[key]?.[0];
       const chosenAppletData = respondentAccess && {
         ...respondentAccess,
         respondentId,
         ownerId,
+        userId,
       };
       setChosenAppletData(chosenAppletData ?? null);
     }
@@ -118,11 +123,11 @@ export const Respondents = () => {
 
   const actions = {
     scheduleSetupAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
-      const { respondentId } = context || {};
-      if (!respondentId) return;
+      const { respondentId, userId } = context || {};
+      if (!respondentId || !userId) return;
 
       setRespondentKey(respondentId);
-      handleSetDataForAppletPage(respondentId, 'scheduling');
+      handleSetDataForAppletPage(respondentId, 'scheduling', userId);
       setScheduleSetupPopupVisible(true);
     },
     userDataExportAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
@@ -213,6 +218,7 @@ export const Respondents = () => {
       isAnonymousRespondent,
       status,
       email,
+      userId,
     } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
@@ -267,11 +273,12 @@ export const Respondents = () => {
             menuItems={getRespondentActions({
               actions,
               filteredApplets: filteredRespondents?.[id],
-              isAnonymousRespondent,
               respondentId: id,
+              userId,
               appletId,
               email,
               isInviteEnabled: status === RespondentStatus.NotInvited,
+              isViewCalendarEnabled: status === RespondentStatus.Invited && !isAnonymousRespondent,
             })}
             data-testid="dashboard-respondents-table-actions"
           />
