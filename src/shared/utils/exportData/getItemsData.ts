@@ -17,10 +17,7 @@ import {
   getStabilityTrackerCsvName,
 } from 'shared/utils/exportData/getReportName';
 import { convertJsonToCsv } from 'shared/utils/exportTemplate';
-import {
-  checkIf104_107MobileAppVersion,
-  getDrawingLines,
-} from 'shared/utils/exportData/getDrawingLines';
+import { checkIfShouldScaleCoords, getDrawingLines } from 'shared/utils/exportData/getDrawingLines';
 import { getStabilityRecords } from 'shared/utils/exportData/getStabilityRecords';
 import { getABTrailsRecords } from 'shared/utils/exportData/getABTrailsRecords';
 import { getFlankerRecords } from 'shared/utils/exportData/getFlankerRecords';
@@ -36,11 +33,11 @@ export const getDrawingItemsData = async (
     if (responseType !== ItemResponseType.Drawing || !item.answer) continue;
 
     const drawingValue = (item.answer as DecryptedDrawingAnswer).value;
-    const has104_107MobileAppVersion = checkIf104_107MobileAppVersion(item.client);
+    const shouldScaleCoords = checkIfShouldScaleCoords(item.client);
     data.push({
       name: getMediaFileName(item, 'csv'),
       data: await convertJsonToCsv(
-        getDrawingLines(drawingValue.lines, drawingValue.width || 100, has104_107MobileAppVersion),
+        getDrawingLines(drawingValue.lines, drawingValue.width || 100, shouldScaleCoords),
       ),
     });
   }

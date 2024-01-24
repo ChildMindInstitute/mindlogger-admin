@@ -1,25 +1,25 @@
 import { DecryptedDrawingValue, ExportAnswer } from 'shared/types';
 
 // Ex. appVersion = '1.0.4' ... '1.0.7'; appId: "mindlogger-mobile"
-export const checkIf104_107MobileAppVersion = (client: ExportAnswer['client']) => {
+export const checkIfShouldScaleCoords = (client: ExportAnswer['client']) => {
   const appVersion = client?.app_version ?? '';
   const appId = client?.app_id ?? '';
   if (!appVersion || appId !== 'mindlogger-mobile') return false;
 
-  const versionList = appVersion.split('.');
-  if (!versionList[0] || !versionList[1] || !versionList[2]) return false;
+  const [major, minor, patch] = appVersion.split('.');
+  if (!major || !minor || !patch) return false;
 
-  const major = Number(versionList[0]);
-  const minor = Number(versionList[1]);
-  const patch = Number(versionList[2]);
+  const majorNumber = Number(major);
+  const minorNumber = Number(minor);
+  const patchNumber = Number(patch);
 
-  return major === 1 && minor === 0 && patch >= 4 && patch <= 7;
+  return majorNumber === 1 && minorNumber === 0 && patchNumber >= 4 && patchNumber <= 7;
 };
 
 export const getDrawingLines = (
   lines: DecryptedDrawingValue['lines'],
   width: DecryptedDrawingValue['width'],
-  has104_107MobileAppVersion: boolean = false,
+  shouldScaleCoords: boolean = false,
 ) => {
   if (!width) return [];
 
@@ -32,10 +32,8 @@ export const getDrawingLines = (
       if (!startTime) {
         startTime = point.time;
       }
-      const xCoordinate = has104_107MobileAppVersion ? point.x : (point.x / width) * 100;
-      const yCoordinate = has104_107MobileAppVersion
-        ? 100 - point.y
-        : 100 - (point.y / width) * 100;
+      const xCoordinate = shouldScaleCoords ? point.x : (point.x / width) * 100;
+      const yCoordinate = shouldScaleCoords ? 100 - point.y : 100 - (point.y / width) * 100;
 
       result.push({
         line_number: i.toString(),
