@@ -33,7 +33,7 @@ const uploaderProps = {
 
 describe('Uploader component', () => {
   beforeAll(() => {
-    global.URL.createObjectURL = jest.fn((file: Blob) => `mocked-url://${file.name}`);
+    global.URL.createObjectURL = jest.fn(() => 'mocked-url://mocked-url');
   });
 
   afterAll(() => {
