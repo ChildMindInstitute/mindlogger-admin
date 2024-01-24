@@ -132,30 +132,44 @@ const getDuplicatedOptionsAndAlerts = (item?: ItemFormValues) => {
   };
 };
 
-export const getNewActivityItem = (item?: ItemFormValues) =>
+const getNewItemDefaultProps = () => ({
+  responseType: '',
+  name: t('newItem'),
+  question: '',
+  config: {} as Config,
+  isHidden: false,
+  allowEdit: true,
+});
+const getNewPropsForSingleAndMultiSelection = (item?: ItemFormValues) => ({
+  ...((item?.responseType === ItemResponseType.SingleSelection ||
+    item?.responseType === ItemResponseType.MultipleSelection) &&
+    getDuplicatedOptionsAndAlerts(item)),
+});
+const getNewPropsForSlider = (item?: ItemFormValues) => ({
+  ...(item?.responseType === ItemResponseType.Slider && {
+    responseValues: {
+      ...item.responseValues,
+      id: uuidv4(),
+    },
+    alerts: item?.alerts?.map((alert) => ({
+      ...alert,
+      key: uuidv4(),
+    })),
+  }),
+});
+export const getUniqueItem = (item?: ItemFormValues) =>
   ({
-    responseType: '',
-    name: t('newItem'),
-    question: '',
-    config: {} as Config,
-    isHidden: false,
-    allowEdit: true,
     ...item,
     id: undefined,
     key: uuidv4(),
-    ...((item?.responseType === ItemResponseType.SingleSelection ||
-      item?.responseType === ItemResponseType.MultipleSelection) &&
-      getDuplicatedOptionsAndAlerts(item)),
-    ...(item?.responseType === ItemResponseType.Slider && {
-      responseValues: {
-        ...item.responseValues,
-        id: uuidv4(),
-      },
-      alerts: item?.alerts?.map((alert) => ({
-        ...alert,
-        key: uuidv4(),
-      })),
-    }),
+    ...getNewPropsForSingleAndMultiSelection(item),
+    ...getNewPropsForSlider(item),
+  }) as ItemFormValues;
+
+export const getNewActivityItem = (item?: ItemFormValues) =>
+  ({
+    ...getNewItemDefaultProps(),
+    ...getUniqueItem(item),
   }) as ItemFormValues;
 
 export const getDuplicatedConditions = (
