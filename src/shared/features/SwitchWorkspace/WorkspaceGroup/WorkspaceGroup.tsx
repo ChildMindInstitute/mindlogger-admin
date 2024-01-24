@@ -1,13 +1,9 @@
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { List } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
-import { useAppDispatch } from 'redux/store';
-import { workspaces as currentWorkspace, Workspace } from 'redux/modules';
-import { authStorage } from 'shared/utils/authStorage';
-import { page } from 'resources';
+import { workspaces as currentWorkspace } from 'redux/modules';
 
 import { WorkspaceImage } from '../WorkspaceImage';
 import {
@@ -20,19 +16,12 @@ import { WorkspaceGroupProps } from './WorkspaceGroup.types';
 
 export const WorkspaceGroup = ({
   workspacesGroup: { groupName, workspaces, emptyState = '' },
+  onChangeWorkspace,
   'data-testid': dataTestid,
 }: WorkspaceGroupProps) => {
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const currentWorkspaceData = currentWorkspace.useData();
-
-  const changeWorkspaceHandler = (workspace: Workspace) => {
-    authStorage.setWorkspace(workspace);
-    dispatch(currentWorkspace.actions.setCurrentWorkspace(workspace));
-    navigate(page.dashboard);
-  };
 
   return (
     <List sx={{ padding: theme.spacing(0) }}>
@@ -43,7 +32,7 @@ export const WorkspaceGroup = ({
         workspaces.map((workspace, index) => (
           <StyledListItemButton
             key={workspace.ownerId}
-            onClick={() => changeWorkspaceHandler(workspace)}
+            onClick={() => onChangeWorkspace(workspace)}
             selected={currentWorkspaceData?.ownerId === workspace.ownerId}
             data-testid={`${dataTestid}-workspace-${index}`}
           >

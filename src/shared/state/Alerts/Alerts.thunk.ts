@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import { getApiErrorResult } from 'shared/utils/errors';
 
+import { getApiErrorResult } from 'shared/utils/errors';
 import { AlertListParams, getAlertsApi, setAlertWatchedApi } from 'shared/api';
 import { ApiErrorResponse } from 'shared/state/Base';
 

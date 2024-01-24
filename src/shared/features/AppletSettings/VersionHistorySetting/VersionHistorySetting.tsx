@@ -25,11 +25,12 @@ export const VersionHistorySetting = () => {
   const [currentVersion, setCurrentVersion] = useState<string>();
   const [versionChanges, setVersionChanges] = useState<VersionChanges | null>(null);
 
-  const { execute: getAppletVersions, isLoading: areAppletVersionsLoaded } =
+  const { execute: getAppletVersions, isLoading: areAppletVersionsLoading } =
     useAsync(getAppletVersionsApi);
-  const { execute: getAppletVersionChanges, isLoading: areAppletVersionChangesLoaded } = useAsync(
+  const { execute: getAppletVersionChanges, isLoading: areAppletVersionChangesLoading } = useAsync(
     getAppletVersionChangesApi,
   );
+  const isLoading = areAppletVersionsLoading || areAppletVersionChangesLoading;
 
   const hasAppletChanges = !!versionChanges?.changes.length;
   const hasActivitiesChanges = !!versionChanges?.activities.length;
@@ -74,7 +75,7 @@ export const VersionHistorySetting = () => {
 
   return (
     <StyledVersionHistoryContainer>
-      {!areAppletVersionsLoaded || !!versions?.length ? (
+      {!areAppletVersionsLoading || !!versions?.length ? (
         <>
           <StyledVersionSelect
             value={currentVersion}
@@ -98,8 +99,8 @@ export const VersionHistorySetting = () => {
             ))}
           </StyledVersionSelect>
           <StyledChangesContainer>
-            {areAppletVersionChangesLoaded && <Spinner />}
-            {!hasAppletChanges && !hasActivitiesChanges && (
+            {isLoading && <Spinner noBackground />}
+            {!hasAppletChanges && !hasActivitiesChanges && !isLoading && (
               <StyledBodyLarge color={variables.palette.on_surface_variant}>
                 {t('noChanges')}
               </StyledBodyLarge>

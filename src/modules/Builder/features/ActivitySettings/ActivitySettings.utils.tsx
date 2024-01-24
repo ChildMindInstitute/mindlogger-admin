@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+
 import { Svg } from 'shared/components/Svg';
 import { SettingParam } from 'shared/utils';
 import { ItemFormValues } from 'modules/Builder/types';

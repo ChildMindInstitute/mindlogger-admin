@@ -1,4 +1,5 @@
 import { Box, styled } from '@mui/material';
+
 import { theme } from 'shared/styles';
 
 const columnWidth = 'calc(50% - 1rem)';

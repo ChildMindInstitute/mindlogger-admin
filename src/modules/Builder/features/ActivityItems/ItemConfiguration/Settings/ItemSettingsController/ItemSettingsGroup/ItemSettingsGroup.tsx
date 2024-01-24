@@ -3,7 +3,7 @@ import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { theme, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
@@ -15,6 +15,7 @@ import {
   SingleAndMultipleSelectRow,
   SliderRowsItemResponseValues,
 } from 'shared/state';
+import { SelectEvent } from 'shared/types';
 import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 
 import {
@@ -28,6 +29,7 @@ import {
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
 import {
+  DEFAULT_ACTIVE_TIMER_VALUE,
   ITEM_SETTINGS_TO_HAVE_TOOLTIP,
   ITEM_TYPES_TO_HAVE_ALERTS,
 } from './ItemSettingsGroup.const';
@@ -38,6 +40,7 @@ import {
 } from '../../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { checkIfItemHasRequiredOptions, getEmptyAlert } from '../../../ItemConfiguration.utils';
+import { removeItemFromSubscales } from './ItemSettingsGroup.utils';
 
 export const ItemSettingsGroup = ({
   name,
@@ -52,10 +55,18 @@ export const ItemSettingsGroup = ({
 
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useCustomFormContext();
+  const { fieldName } = useCurrentActivity();
 
+  const subscalesName = `${fieldName}.subscaleSetting.subscales`;
   const config = getValues(`${itemName}.config`) ?? {};
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
+  const handleTimerChange = (event: SelectEvent) => {
+    setValue(
+      `${name}.${ItemConfigurationSettings.HasTimer}`,
+      +event.target.value || DEFAULT_ACTIVE_TIMER_VALUE,
+    );
+  };
 
   return (
     <StyledItemSettingGroupContainer
@@ -147,6 +158,15 @@ export const ItemSettingsGroup = ({
 
                 if (isScores) {
                   const hasScores = event.target.checked;
+
+                  if (!hasScores) {
+                    removeItemFromSubscales({
+                      setValue,
+                      subscales: getValues(subscalesName),
+                      item: getValues(itemName),
+                      subscalesName,
+                    });
+                  }
 
                   onChange({
                     ...config,
@@ -284,8 +304,13 @@ export const ItemSettingsGroup = ({
                               name={`${name}.${ItemConfigurationSettings.HasTimer}`}
                               type="number"
                               disabled={isSecondsDisabled}
-                              minNumberValue={isSecondsDisabled ? DEFAULT_DISABLED_TIMER_VALUE : 1}
+                              minNumberValue={
+                                isSecondsDisabled
+                                  ? DEFAULT_DISABLED_TIMER_VALUE
+                                  : DEFAULT_ACTIVE_TIMER_VALUE
+                              }
                               data-testid={`builder-activity-items-item-settings-${settingKey}-input`}
+                              onChange={handleTimerChange}
                             />
                           </StyledInputControllerContainer>
                           <StyledTitleMedium>{t('seconds')}</StyledTitleMedium>

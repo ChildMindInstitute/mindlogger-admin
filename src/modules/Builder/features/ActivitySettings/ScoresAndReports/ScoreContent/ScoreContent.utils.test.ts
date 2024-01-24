@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { CalculationType } from 'shared/consts';
 import {
   mockedMultiActivityItem,
@@ -16,6 +18,13 @@ import {
 } from './ScoreContent.utils';
 
 const report = { ...mockedScoreReport, showMessage: true };
+const mockedSkippableSingleItem = {
+  ...mockedSingleActivityItem,
+  config: {
+    ...mockedSingleActivityItem.config,
+    skippableItem: true,
+  },
+};
 
 describe('getScoreId', () => {
   test.each`
@@ -41,13 +50,21 @@ describe('getScoreRangeLabel', () => {
 
 describe('getScoreRange', () => {
   test.each`
-    itemsScore                                              | calculationType               | expectedResult                     | description
-    ${[mockedSliderActivityItem]}                           | ${CalculationType.Average}    | ${{ maxScore: 6, minScore: 1 }}    | ${'should be from 1 to 6'}
-    ${[mockedSingleActivityItem]}                           | ${CalculationType.Sum}        | ${{ maxScore: 4, minScore: 2 }}    | ${'should be from 2 to 4'}
-    ${[mockedMultiActivityItem]}                            | ${CalculationType.Average}    | ${{ maxScore: 3, minScore: 1 }}    | ${'should be from 1 to 3'}
-    ${[mockedSliderActivityItem, mockedSingleActivityItem]} | ${CalculationType.Percentage} | ${{ maxScore: 100, minScore: 30 }} | ${'should be from 30 to 100'}
-  `('$description', async ({ itemsScore, calculationType, expectedResult }) => {
-    expect(getScoreRange(itemsScore, calculationType)).toStrictEqual(expectedResult);
+    items                                                   | calculationType               | isActivitySkippable | expectedResult                     | description
+    ${[mockedSliderActivityItem]}                           | ${CalculationType.Average}    | ${false}            | ${{ maxScore: 6, minScore: 1 }}    | ${'should be from 1 to 6'}
+    ${[mockedSingleActivityItem]}                           | ${CalculationType.Sum}        | ${false}            | ${{ maxScore: 4, minScore: 2 }}    | ${'should be from 2 to 4'}
+    ${[mockedMultiActivityItem]}                            | ${CalculationType.Average}    | ${false}            | ${{ maxScore: 3, minScore: 1 }}    | ${'should be from 1 to 3'}
+    ${[mockedSliderActivityItem, mockedSingleActivityItem]} | ${CalculationType.Percentage} | ${false}            | ${{ maxScore: 100, minScore: 30 }} | ${'should be from 30 to 100'}
+    ${[mockedSkippableSingleItem]}                          | ${CalculationType.Sum}        | ${false}            | ${{ maxScore: 4, minScore: 0 }}    | ${'should be from 0 to 4 if item is skippable'}
+    ${[mockedSliderActivityItem, mockedSingleActivityItem]} | ${CalculationType.Sum}        | ${true}             | ${{ maxScore: 10, minScore: 0 }}   | ${'should be from 0 to 10 if activity is skippable'}
+  `('$description', async ({ items, calculationType, expectedResult, isActivitySkippable }) => {
+    expect(
+      getScoreRange({
+        items,
+        calculationType,
+        activity: { isSkippable: isActivitySkippable },
+      }),
+    ).toStrictEqual(expectedResult);
   });
 });
 
@@ -59,7 +76,9 @@ describe('getIsScoreIdVariable', () => {
     ${report}                | ${true}        | ${'should be true'}
     ${reportWithoutVariable} | ${false}       | ${'should be false'}
   `('$description', async ({ score, expectedResult }) => {
-    expect(getIsScoreIdVariable(score, [score])).toBe(expectedResult);
+    expect(getIsScoreIdVariable({ id: score.id, reports: [score], isScore: true })).toBe(
+      expectedResult,
+    );
   });
 });
 

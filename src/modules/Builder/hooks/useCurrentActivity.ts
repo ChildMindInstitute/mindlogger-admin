@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { getEntityKey } from 'shared/utils';
 import { ActivityFormValues } from 'modules/Builder/types';
+
 import { useCustomFormContext } from './useCustomFormContext';
 
 export const useCurrentActivity = () => {

@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { render, screen, fireEvent } from '@testing-library/react';
+
 import { ChartTooltipContainer } from './ChartTooltipContainer';
 
 const dataTestid = 'example';

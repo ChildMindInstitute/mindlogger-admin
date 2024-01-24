@@ -5,7 +5,6 @@ import mockAxios from 'jest-mock-axios';
 import userEvent from '@testing-library/user-event';
 
 import { SettingParam, renderWithProviders } from 'shared/utils';
-
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';

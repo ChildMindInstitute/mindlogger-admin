@@ -14,7 +14,6 @@ import {
   SliderItemAnswer,
   TextItemAnswer,
 } from '../RespondentDataReview.types';
-
 import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
 import { TextResponseItem } from '../TextResponseItem';
