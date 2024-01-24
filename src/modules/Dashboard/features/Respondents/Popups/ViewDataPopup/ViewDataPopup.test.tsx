@@ -3,7 +3,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from 'shared/utils';
 import { mockedRespondentDetails, mockedRespondentId, mockedOwnerId } from 'shared/mock';
 
-import * as hooks from '../Popup.hooks';
+import * as hooks from '../Popups.hooks';
 import { ViewDataPopup } from './ViewDataPopup';
 
 const setChosenAppletDataMock = jest.fn();
@@ -68,6 +68,7 @@ describe('ViewDataPopup', () => {
     );
 
     expect(
+      // prettier-ignore
       screen.getByText('Please select the Applet to view Respondent\'s data for:'),
     ).toBeInTheDocument();
 

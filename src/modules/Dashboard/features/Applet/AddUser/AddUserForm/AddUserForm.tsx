@@ -32,7 +32,6 @@ import {
   dataTestId,
   defaultValues,
   Fields,
-  getRoles,
   languages,
   nameFields,
   SubmitBtnType,
@@ -41,7 +40,7 @@ import {
 } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
-import { getUrl } from './AddUserForm.utils';
+import { getUrl, getRoles } from './AddUserForm.utils';
 
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
   const { appletId } = useParams();
