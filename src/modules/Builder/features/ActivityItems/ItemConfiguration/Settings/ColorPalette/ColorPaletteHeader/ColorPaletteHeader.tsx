@@ -18,7 +18,7 @@ const commonButtonStyles = {
 export const ColorPaletteHeader = ({
   isExpanded,
   onArrowClick,
-  setShowColorPalette,
+  onRemovePalette,
 }: ColorPaletteHeaderProps) => {
   const { t } = useTranslation('app');
 
@@ -33,7 +33,7 @@ export const ColorPaletteHeader = ({
       </StyledClearedButton>
       <StyledLabelBoldLarge sx={{ flexGrow: 1 }}>{t('colorPalette')}</StyledLabelBoldLarge>
       <StyledClearedButton
-        onClick={() => setShowColorPalette(false)}
+        onClick={onRemovePalette}
         sx={commonButtonStyles}
         data-testid="builder-activity-items-item-configuration-color-palette-remove"
       >

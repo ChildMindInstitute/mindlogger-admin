@@ -185,7 +185,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   return (
     <>
       {(isLoading || latestReportLoading) && <Spinner />}
-      <StyledReport ref={containerRef}>
+      <StyledReport ref={containerRef} data-testid="respondents-summary-report">
         <StyledHeader isSticky={isHeaderSticky}>
           <StyledStickyHeadline isSticky={isHeaderSticky} color={variables.palette.on_surface}>
             {activity.name}
@@ -232,7 +232,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
               </>
             )}
             {!isLoading && !answers.length && (
-              <StyledEmptyState>
+              <StyledEmptyState data-testid="report-empty-state">
                 <Svg id="chart" width="80" height="80" />
                 <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
                   {t('noDataForActivityFilters')}

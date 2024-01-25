@@ -62,10 +62,15 @@ export const Item = ({
             {index} {t('of')} {total}
           </StyledTitleMedium>
         )}
-        <StyledTitleBoldMedium>{name}</StyledTitleBoldMedium>
-        <StyledActivityDescription>{description}</StyledActivityDescription>
+        <StyledTitleBoldMedium data-testid={`${dataTestid}-name`}>{name}</StyledTitleBoldMedium>
+        <StyledActivityDescription data-testid={`${dataTestid}-description`}>
+          {description}
+        </StyledActivityDescription>
         {count !== undefined && (
-          <StyledTitleBoldSmall sx={{ marginTop: theme.spacing(0.6) }}>
+          <StyledTitleBoldSmall
+            sx={{ marginTop: theme.spacing(0.6) }}
+            data-testid={`${dataTestid}-items-count`}
+          >
             {count} {t('item', { count })}
           </StyledTitleBoldSmall>
         )}
