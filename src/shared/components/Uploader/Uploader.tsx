@@ -47,8 +47,8 @@ export const Uploader = ({
   cropRatio,
   hasError,
   disabled,
-  'data-testid': dataTestid,
   flexibleCropRatio,
+  'data-testid': dataTestid,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const uploadInputRef = useRef<HTMLInputElement>(null);
