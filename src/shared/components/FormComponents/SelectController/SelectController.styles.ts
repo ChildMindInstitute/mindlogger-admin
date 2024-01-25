@@ -29,6 +29,14 @@ export const StyledPlaceholder = styled(StyledBodyLarge)`
   left: 1.65rem;
   top: 1.4rem;
   color: ${variables.palette.outline};
+  white-space: nowrap;
+`;
+
+export const StyledPlaceholderMask = styled(StyledBodyLarge)`
+  white-space: nowrap;
+  margin-right: 5rem;
+  height: 0rem;
+  opacity: 0;
 `;
 
 export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`

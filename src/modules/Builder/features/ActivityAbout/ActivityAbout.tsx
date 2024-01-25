@@ -143,6 +143,7 @@ export const ActivityAbout = () => {
               key={`${fieldName}.name`}
               name={`${fieldName}.name`}
               maxLength={MAX_NAME_LENGTH}
+              restrictExceededValueLength
               label={t('activityName')}
               data-testid="builder-activity-about-name"
             />
@@ -152,6 +153,7 @@ export const ActivityAbout = () => {
             key={`${fieldName}.description`}
             name={`${fieldName}.description`}
             maxLength={MAX_DESCRIPTION_LENGTH}
+            restrictExceededValueLength
             label={t('activityDescription')}
             multiline
             rows={TEXTAREA_ROWS_COUNT_SM}

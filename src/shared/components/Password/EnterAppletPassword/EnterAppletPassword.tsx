@@ -60,7 +60,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     }));
 
     return (
-      <form onSubmit={handleSubmit(submitForm)} noValidate>
+      <form onSubmit={handleSubmit(submitForm)} noValidate aria-label={`${dataTestid}-form`}>
         <StyledController>
           <InputController
             fullWidth
@@ -79,6 +79,9 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
                   <Svg id={showPassword ? 'visibility-off' : 'visibility-on'} />
                 </StyledIconButton>
               ),
+              inputProps: {
+                'data-testid': `${dataTestid}-input`,
+              },
             }}
             data-testid={`${dataTestid}-password`}
           />

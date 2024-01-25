@@ -240,10 +240,9 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       fireEvent.click(removePalette);
 
       options.forEach((_, index) => {
-        const color = mockedPalette1Color[index % mockedPalette1Color.length];
         expect(
           ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
-        ).toEqual({ hex: color });
+        ).toEqual({ hex: '' });
       });
 
       expect(
@@ -288,7 +287,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
     test('Value for paletteName is removed if palette is already selected and color for option is changed', async () => {
       const ref = createRef();
 
-      const container = renderWithAppletFormData({
+      renderWithAppletFormData({
         children: renderItemConfiguration(),
         formRef: ref,
         appletFormData: getAppletFormDataWithItemWithPalette('palette2'),
