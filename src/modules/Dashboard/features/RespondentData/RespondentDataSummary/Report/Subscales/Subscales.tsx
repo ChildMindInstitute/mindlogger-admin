@@ -210,8 +210,9 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
         <AllScores {...allScores} versions={versions} />
       )}
       <Box sx={{ mt: theme.spacing(6.4) }}>
-        {Object.keys(subscales)?.map((name) => (
+        {Object.keys(subscales)?.map((name, index) => (
           <Subscale
+            data-testid={`subscale-${index}`}
             key={name}
             name={name}
             subscale={subscales[name]}

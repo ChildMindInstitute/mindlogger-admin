@@ -8,4 +8,5 @@ export type SubscaleProps = {
   subscale: Subscale;
   versions: Version[];
   isActivityCompletionSelected?: boolean;
+  'data-testid'?: string;
 };
