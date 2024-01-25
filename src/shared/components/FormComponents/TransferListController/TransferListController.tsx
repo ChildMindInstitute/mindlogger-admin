@@ -57,12 +57,21 @@ export const TransferListController = <T extends FieldValues>({
           onChange(isAllSelected ? [] : items?.map((item) => getItemKey(item)));
         };
 
-        const filteredData =
-          hasSearch && search && searchKey
-            ? items?.filter((item) =>
-                `${item[searchKey] || ''}`.toLowerCase().includes(search.toLowerCase()),
-              )
-            : items;
+        const isSearchable = hasSearch && search && searchKey;
+
+        const filteredData = isSearchable
+          ? items?.filter((item) =>
+              `${item[searchKey] || ''}`.toLowerCase().includes(search.toLowerCase()),
+            )
+          : items;
+
+        const getNoDataPlaceholder = () => {
+          if (isSearchable && filteredData?.length === 0) {
+            return t('noMatchWasFoundShort', { searchValue: search });
+          }
+
+          return t('noSelectedItemsYet');
+        };
 
         return (
           <StyledFlexColumn sx={{ gap: '1.2rem', width: '100%', ...sxProps }}>
@@ -85,10 +94,11 @@ export const TransferListController = <T extends FieldValues>({
                 onSelect={handleSelect}
                 onSelectAll={handleSelectAll}
                 hasError={!!error}
-                noDataPlaceholder={t('noSelectedItemsYet')}
-                data-testid={`${dataTestid}-unselected`}
+                noDataPlaceholder={getNoDataPlaceholder()}
                 tableHeadBackground={tableHeadBackground}
                 tooltipByDefault={tooltipByDefault}
+                itemsLength={items?.length}
+                data-testid={`${dataTestid}-unselected`}
               />
               {hasSelectedSection && (
                 <DataTable

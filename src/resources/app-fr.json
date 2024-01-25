@@ -751,6 +751,7 @@
   "noManagers": "Aucun Gestionnaire pour le moment.",
   "noManagersForApplet": "Aucun Gestionnaire pour le moment. Invitez le premier en cliquant sur le bouton 'Ajouter un Gestionnaire' ci-dessus.",
   "noMatchWasFound": "Aucune correspondance trouvée pour '{{searchValue}}'. Essayez avec un autre mot ou expression de recherche.",
+  "noMatchWasFoundShort": "Aucune correspondance trouvée pour '{{searchValue}}'.",
   "noPendingInvitations": "Aucune invitation en attente",
   "noPermissions": "Vous n'avez pas les permissions pour voir cet onglet.",
   "noRespondentIdentifier": "Aucun identifiant de participant pour le moment.",
