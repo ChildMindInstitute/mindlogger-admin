@@ -36,16 +36,16 @@ export const ScheduleSetupPopup = ({
   const handleBackClick = () => setChosenAppletData(null);
 
   const handlePopupSubmit = async () => {
-    const { appletId, respondentId, hasIndividualSchedule } = chosenAppletData || {};
-    if (!appletId || !respondentId) return;
+    const { appletId, userId, hasIndividualSchedule } = chosenAppletData || {};
+    if (!appletId || !userId) return;
     if (!hasIndividualSchedule) {
-      await createIndividualEvents({ appletId, respondentId });
+      await createIndividualEvents({ appletId, respondentId: userId });
     }
     setPopupVisible(false);
     navigate(
       generatePath(page.appletScheduleIndividual, {
         appletId,
-        respondentId,
+        respondentId: userId,
       }),
     );
     Mixpanel.track('View Individual calendar click');

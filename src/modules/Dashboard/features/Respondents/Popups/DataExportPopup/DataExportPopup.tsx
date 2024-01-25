@@ -22,7 +22,7 @@ import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataS
 
 import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../Popup.hooks';
+import { useCheckIfHasEncryption } from '../Popups.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
 import { getExportDataSuffix } from './DataExportPopup.utils';
 

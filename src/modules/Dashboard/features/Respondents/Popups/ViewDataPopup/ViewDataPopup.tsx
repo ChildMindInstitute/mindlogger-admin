@@ -8,7 +8,7 @@ import { page } from 'resources';
 
 import { ViewDataPopupProps } from './ViewDataPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../Popup.hooks';
+import { useCheckIfHasEncryption } from '../Popups.hooks';
 
 export const ViewDataPopup = ({
   popupVisible,

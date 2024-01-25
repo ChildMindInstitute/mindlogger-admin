@@ -92,6 +92,7 @@ export const mockedCurrentWorkspace = {
   },
 };
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
+export const mockedUserId = 'user-id-1';
 export const mockedRespondentDetails = {
   appletId: mockedAppletId,
   appletDisplayName: 'Mocked Applet',
@@ -114,8 +115,10 @@ export const mockedRespondent = {
   details: [mockedRespondentDetails],
   status: RespondentStatus.Invited,
   email: 'resp1@mail.com',
+  userId: mockedUserId,
 };
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
+export const mockedUserId2 = 'user-id-2';
 export const mockedRespondent2 = {
   id: mockedRespondentId2,
   nicknames: ['Test Respondent'],
@@ -127,6 +130,7 @@ export const mockedRespondent2 = {
   role: Roles.Respondent,
   status: RespondentStatus.Invited,
   email: 'resp2@mail.com',
+  userId: mockedUserId2,
   details: [
     {
       appletId: mockedAppletId,

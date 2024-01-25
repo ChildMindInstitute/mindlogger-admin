@@ -13,7 +13,7 @@ import { isManagerOrOwner } from 'shared/utils';
 import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { RespondentAccessPopupProps, Steps } from './RespondentsRemoveAccessPopup.types';
-import { getScreens } from './RespondentAccessPopup.utils';
+import { getScreens } from './RespondentsRemoveAccessPopup.utils';
 
 export const RespondentsRemoveAccessPopup = ({
   popupVisible,

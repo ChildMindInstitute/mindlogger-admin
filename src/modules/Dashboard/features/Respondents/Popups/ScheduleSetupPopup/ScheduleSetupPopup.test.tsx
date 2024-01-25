@@ -7,6 +7,7 @@ import {
   mockedOwnerId,
   mockedRespondentDetails,
   mockedRespondentId,
+  mockedUserId,
 } from 'shared/mock';
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
@@ -17,6 +18,7 @@ const chosenAppletDataMock = {
   ...mockedRespondentDetails,
   respondentId: mockedRespondentId,
   ownerId: mockedOwnerId,
+  userId: mockedUserId,
 };
 
 const tableRowsMock = [
@@ -69,13 +71,13 @@ describe('ScheduleSetupPopup', () => {
 
     expect(mockAxios.post).toHaveBeenNthCalledWith(
       1,
-      `/applets/${mockedAppletId}/events/individual/${mockedRespondentId}`,
+      `/applets/${mockedAppletId}/events/individual/${mockedUserId}`,
       {},
       { signal: undefined },
     );
     await waitFor(() =>
       expect(mockedUseNavigate).toBeCalledWith(
-        '/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7',
+        `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedUserId}`,
       ),
     );
   });
@@ -99,7 +101,7 @@ describe('ScheduleSetupPopup', () => {
 
     expect(setChosenAppletDataMock).toBeCalledWith(chosenAppletDataMock);
     expect(mockedUseNavigate).toBeCalledWith(
-      '/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7',
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedUserId}`,
     );
   });
 });
