@@ -13,7 +13,7 @@ import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
 import { useRedirectIfNoMatchedActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { StyledTitleMedium, theme } from 'shared/styles';
+import { StyledTitleMedium, theme, variables } from 'shared/styles';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 import {
@@ -226,7 +226,9 @@ export const ActivityFlowBuilder = () => {
           )}
         </>
       ) : (
-        <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
+        <StyledTitleMedium
+          sx={{ mt: theme.spacing(0.4), color: variables.palette.on_surface_variant }}
+        >
           {t('activityFlowIsRequired')}
         </StyledTitleMedium>
       )}
