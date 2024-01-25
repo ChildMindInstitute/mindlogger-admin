@@ -57,7 +57,7 @@ export const Condition = ({
     state,
   });
   const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
-  const isValueSelectDisabled = !isItemScoreCondition && !valueOptions.length;
+  const isValueSelectDisabled = !isItemScoreCondition && !valueOptions?.length;
   const isStateSelectDisabled = !selectedItem?.type;
 
   const { leftRange, rightRange } = getConditionMinMaxRangeValues({

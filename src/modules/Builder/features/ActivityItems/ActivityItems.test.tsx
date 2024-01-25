@@ -6,7 +6,7 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
 import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
-import { mockedParams, mockedAppletFormData } from 'shared/mock';
+import { mockedParams, mockedAppletFormData, mockIntersectionObserver } from 'shared/mock';
 import {
   getNewActivity,
   getNewActivityItem,
@@ -75,18 +75,7 @@ const getActivityItemUrl = (itemId) =>
 
 describe('Activity Items', () => {
   beforeEach(() => {
-    global.IntersectionObserver = jest.fn((_, options = {}) => {
-      const instance = {
-        thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
-        root: options.root,
-        rootMargin: options.rootMargin,
-        observe: jest.fn(),
-        unobserve: jest.fn(),
-        disconnect: jest.fn(),
-      };
-
-      return instance;
-    });
+    mockIntersectionObserver();
   });
 
   test('Is rendered correctly', async () => {

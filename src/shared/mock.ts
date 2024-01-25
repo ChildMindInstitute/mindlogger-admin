@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -2759,4 +2761,19 @@ export const mockedDecryptedObjectForAudio = {
   items: [mockedAudioSettings],
   activityName: 'New Activity#1',
   subscaleSetting: null,
+};
+
+export const mockIntersectionObserver = () => {
+  global.IntersectionObserver = jest.fn((_, options = {}) => {
+    const instance = {
+      thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
+      root: options.root,
+      rootMargin: options.rootMargin,
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+    };
+
+    return instance;
+  });
 };
