@@ -24,8 +24,9 @@ export const DataTable = ({
   onSelectAll,
   hasError,
   tableHeadBackground,
-  'data-testid': dataTestid,
   tooltipByDefault,
+  itemsLength,
+  'data-testid': dataTestid,
 }: DataTableProps) => {
   const [selected, setSelected] = useState<(string | number)[]>(selectedItems || []);
 
@@ -35,7 +36,7 @@ export const DataTable = ({
     if (selectedItems) setSelected(selectedItems);
   }, [selectedItems]);
 
-  const isAllSelected = data?.length !== 0 && selected?.length === data?.length;
+  const isAllSelected = !!itemsLength && itemsLength !== 0 && selected?.length === itemsLength;
 
   const handleSelect = (item: DataTableItem, prevSelected: boolean) => {
     const key = getItemKey(item);

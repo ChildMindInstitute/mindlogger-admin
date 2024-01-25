@@ -116,7 +116,7 @@ export const getSliderOptions = (
   }));
 };
 
-const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) => {
+export const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) => {
   const sortedOptions = getSortedOptions(formattedActivityItem.responseValues.options);
 
   return sortedOptions.reduce(

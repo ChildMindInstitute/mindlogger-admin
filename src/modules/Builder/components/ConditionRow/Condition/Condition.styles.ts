@@ -38,6 +38,7 @@ export const StyledCondition = styled(StyledFlexTopCenter)`
 
 export const StyledSelectController = styled(SelectController)`
   min-width: 10rem;
+  width: 100%;
 
   .MuiInputBase-root {
     border-radius: ${variables.borderRadius.md};

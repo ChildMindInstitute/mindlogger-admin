@@ -92,7 +92,7 @@ export const useSettingsSetup = ({
   removeOptions,
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
-  setShowColorPalette,
+  handleRemovePalette,
   setOptionsOpen,
 }: SettingsSetupProps) => {
   const { setValue, getValues, watch, clearErrors } = useFormContext();
@@ -184,7 +184,7 @@ export const useSettingsSetup = ({
   }, []);
 
   useEffect(() => {
-    if (!hasPalette) setShowColorPalette?.(false);
+    if (!hasPalette) handleRemovePalette?.();
   }, [hasPalette]);
 
   useEffect(() => {

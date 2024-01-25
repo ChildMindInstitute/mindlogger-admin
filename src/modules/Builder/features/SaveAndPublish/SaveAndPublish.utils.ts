@@ -11,7 +11,9 @@ import {
   Item,
   ItemAlert,
   OptionCondition,
+  ScoreConditionalLogic,
   ScoreReport,
+  SectionReport,
   SingleAndMultipleSelectItemResponseValues,
   SingleApplet,
 } from 'shared/state';
@@ -150,6 +152,13 @@ const removeReportsFields = () => ({
   ...removeReactHookFormKey(),
 });
 
+const getReportMessage = (report: ScoreReport | SectionReport | ScoreConditionalLogic) => ({
+  message: report.showMessage ? report.message : undefined,
+});
+const getReportItemsPrint = (report: ScoreReport | SectionReport | ScoreConditionalLogic) => ({
+  itemsPrint: report.printItems ? report.itemsPrint : undefined,
+});
+
 const remapItemsByName = (itemsObject: Record<string, ItemFormValues>) => (name: string) =>
   itemsObject[name].name;
 const getScore = (
@@ -167,10 +176,18 @@ const getScore = (
       conditions: conditional.conditions,
       score,
     }),
-    itemsPrint: conditional.itemsPrint?.map(remapItemsByName(itemsObjectById)),
+    ...getReportMessage(conditional),
+    ...getReportItemsPrint({
+      ...conditional,
+      itemsPrint: conditional.itemsPrint?.map(remapItemsByName(itemsObjectById)),
+    }),
   })),
   itemsScore: score.itemsScore.map(remapItemsByName(itemsObjectById)),
-  itemsPrint: score.itemsPrint?.map(remapItemsByName(itemsObjectById)),
+  ...getReportMessage(score),
+  ...getReportItemsPrint({
+    ...score,
+    itemsPrint: score.itemsPrint?.map(remapItemsByName(itemsObjectById)),
+  }),
 });
 
 const getSection = ({ section, items, scores, itemsObjectById }: GetSection) => ({
@@ -188,7 +205,11 @@ const getSection = ({ section, items, scores, itemsObjectById }: GetSection) => 
       ...removeReactHookFormKey(),
     },
   }),
-  itemsPrint: section.itemsPrint?.map(remapItemsByName(itemsObjectById)),
+  ...getReportMessage(section),
+  ...getReportItemsPrint({
+    ...section,
+    itemsPrint: section.itemsPrint?.map(remapItemsByName(itemsObjectById)),
+  }),
 });
 
 export const getScoresAndReports = (activity: ActivityFormValues) => {
