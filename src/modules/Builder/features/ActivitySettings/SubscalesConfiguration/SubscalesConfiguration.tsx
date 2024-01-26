@@ -65,6 +65,7 @@ export const SubscalesConfiguration = () => {
     setValue(totalScoresTableDataField, data, { shouldDirty: true });
   };
   const iconId = `lookup-table${tableData?.length ? '-filled' : ''}`;
+  const dataTestid = 'builder-activity-settings-subscales';
 
   const subscales: SubscaleFormValue[] = watch(subscalesField) ?? [];
   const subscalesLength = subscales.length;
@@ -131,7 +132,7 @@ export const SubscalesConfiguration = () => {
           index: index + 1,
           name: subscale?.name,
         });
-        const dataTestid = `builder-activity-settings-subscales-${index}`;
+        const subscaleDataTestid = `${dataTestid}-${index}`;
 
         return (
           <ToggleItemContainer
@@ -150,15 +151,15 @@ export const SubscalesConfiguration = () => {
                   subscaleTableData,
                 });
               },
-              'data-testid': dataTestid,
+              'data-testid': subscaleDataTestid,
             }}
             contentProps={{
               subscaleId: subscale.id,
               name: subscaleField,
               notUsedElements,
-              'data-testid': dataTestid,
+              'data-testid': subscaleDataTestid,
             }}
-            data-testid={dataTestid}
+            data-testid={subscaleDataTestid}
           />
         );
       })}
@@ -166,7 +167,7 @@ export const SubscalesConfiguration = () => {
         {...commonButtonProps}
         onClick={handleAddSubscale}
         sx={{ mb: theme.spacing(2) }}
-        data-testid="builder-activity-settings-subscales-add"
+        data-testid={`${dataTestid}-add`}
       >
         {t('addSubscales')}
       </Button>
@@ -178,24 +179,24 @@ export const SubscalesConfiguration = () => {
             columns={getAllElementsTableColumns()}
             data={usedWithinSubscalesElements}
             noDataPlaceholder={t('noElementsYet')}
-            data-testid="builder-activity-settings-subscales-elements-associated-with-subscales"
+            data-testid={`${dataTestid}-elements-associated-with-subscales`}
           />
           <SwitchWithState
             checked={calculateTotalScoreSwitch}
             handleChange={calculateTotalScoreSwitchChange}
             label={t('calculateTotalScore')}
             tooltipText={t('calculateTotalScoreTooltip')}
-            data-testid="builder-activity-settings-subscales-calculate-total-score"
+            data-testid={`${dataTestid}-calculate-total-score`}
           />
         </>
       )}
       {calculateTotalScoreSwitch && (
-        <StyledContainerWithBg>
+        <StyledContainerWithBg data-testid="builder-activity-settings">
           <StyledSvgButton
             onClick={() => {
               setIsLookupTableOpened(true);
             }}
-            data-testid="builder-activity-settings-subscales-lookup-table"
+            data-testid={`${dataTestid}-lookup-table`}
           >
             <StyledSvg isFilled={!!tableData?.length} id={iconId} width="20" height="20" />
           </StyledSvgButton>
@@ -205,7 +206,7 @@ export const SubscalesConfiguration = () => {
             control={control}
             options={getOptions()}
             defaultValue={SubscaleTotalScore.Sum}
-            data-testid="builder-activity-settings-subscales-calculate-total-score-value"
+            data-testid={`${dataTestid}-calculate-total-score-value`}
           />
         </StyledContainerWithBg>
       )}
@@ -222,7 +223,7 @@ export const SubscalesConfiguration = () => {
           onClose={() => {
             setIsLookupTableOpened(false);
           }}
-          data-testid="builder-activity-settings-subscales-lookup-table-popup"
+          data-testid={`${dataTestid}-lookup-table-popup`}
         />
       )}
     </StyledButtonsContainer>

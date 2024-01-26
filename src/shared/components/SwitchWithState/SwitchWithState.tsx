@@ -10,8 +10,9 @@ export const SwitchWithState = ({
   handleChange,
   label,
   tooltipText,
+  'data-testid': dataTestid,
 }: SwitchWithStateProps) => (
-  <StyledFlexTopCenter>
+  <StyledFlexTopCenter data-testid={dataTestid}>
     <FormControlLabel
       control={<Switch checked={checked} onChange={handleChange} />}
       label={label}
