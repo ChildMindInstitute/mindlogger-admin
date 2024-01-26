@@ -648,7 +648,9 @@
     "skippableItem": "Élément Pouvant Être Sauté",
     "skippableItem_tooltip": "Le participant pourra laisser l'élément sans réponse",
     "timer": "Configurer la Minuterie",
-    "timer_tooltip": "Temps pour compléter l'élément"
+    "timer_tooltip": "Temps pour compléter l'élément",
+    "autoAdvance": "Avance automatique",
+    "autoAdvance_tooltip": "Le répondant sera automatiquement déplacé vers l'élément suivant après avoir sélectionné une réponse"
   },
   "itemType": "Type d'Élément",
   "itemValue": "Valeur de l'Élément",

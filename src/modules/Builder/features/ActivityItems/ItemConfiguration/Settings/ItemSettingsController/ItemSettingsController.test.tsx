@@ -133,6 +133,7 @@ const mockedSliderWithNoScores = {
 
 const mockedSettingsByType = {
   [ItemResponseType.SingleSelection]: [
+    ItemConfigurationSettings.HasAutoAdvance,
     ItemConfigurationSettings.HasColorPalette,
     ItemConfigurationSettings.HasTooltips,
     ItemConfigurationSettings.HasTextInput,
@@ -460,6 +461,7 @@ describe('ItemSettingsController', () => {
 
   test.each`
     settingKey                                             | item                            | description
+    ${ItemConfigurationSettings.HasAutoAdvance}            | ${mockedSingleSelectFormValues} | ${'Auto-advance set data in config correctly'}
     ${ItemConfigurationSettings.HasScores}                 | ${mockedSingleSelectFormValues} | ${'HasScores set data in config correctly'}
     ${ItemConfigurationSettings.HasTooltips}               | ${mockedSingleSelectFormValues} | ${'HasTooltips set data in config correctly'}
     ${ItemConfigurationSettings.HasAlerts}                 | ${mockedSingleSelectFormValues} | ${'HasAlerts set data in config correctly'}
@@ -581,6 +583,7 @@ describe('ItemSettingsController', () => {
 
   test.each`
     settingKey                                             | item                            | expected | description
+    ${ItemConfigurationSettings.HasAutoAdvance}            | ${mockedSingleSelectFormValues} | ${true}  | ${'HasAutoAdvance has tooltip'}
     ${ItemConfigurationSettings.HasScores}                 | ${mockedSingleSelectFormValues} | ${false} | ${'HasScores has no tooltip'}
     ${ItemConfigurationSettings.HasTooltips}               | ${mockedSingleSelectFormValues} | ${false} | ${'HasTooltips has no tooltip'}
     ${ItemConfigurationSettings.HasAlerts}                 | ${mockedSingleSelectFormValues} | ${true}  | ${'HasAlerts has tooltip'}

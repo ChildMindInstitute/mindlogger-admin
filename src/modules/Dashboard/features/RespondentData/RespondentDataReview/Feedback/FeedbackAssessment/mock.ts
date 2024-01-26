@@ -61,6 +61,7 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
         textInputOption: false,
         textInputRequired: false,
       },
+      autoAdvance: false,
     },
     responseType: ItemResponseType.SingleSelection,
     responseValues: {
