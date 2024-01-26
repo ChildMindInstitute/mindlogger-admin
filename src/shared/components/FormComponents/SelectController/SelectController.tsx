@@ -21,6 +21,7 @@ import {
   StyledMenuItem,
   selectDropdownStyles,
   StyledTextField,
+  StyledPlaceholderMask,
 } from './SelectController.styles';
 import {
   SelectControllerProps,
@@ -59,6 +60,7 @@ export const SelectController = <T extends FieldValues>({
   'data-testid': dataTestid,
   targetSelector,
   setTrigger,
+  SelectProps,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -141,7 +143,13 @@ export const SelectController = <T extends FieldValues>({
     error?: FieldError,
   ) => (
     <Box sx={{ position: 'relative', width: '100%', ...sx }}>
-      {placeholder && !selectValue && <StyledPlaceholder>{placeholder}</StyledPlaceholder>}
+      {placeholder && !selectValue && (
+        <>
+          <StyledPlaceholderMask>{placeholder}</StyledPlaceholderMask>
+          <StyledPlaceholder>{placeholder}</StyledPlaceholder>
+        </>
+      )}
+
       <StyledTextField
         {...props}
         select
@@ -158,6 +166,7 @@ export const SelectController = <T extends FieldValues>({
             },
           },
           IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
+          ...SelectProps,
         }}
         data-testid={dataTestid}
       >

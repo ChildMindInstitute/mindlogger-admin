@@ -18,8 +18,8 @@ export const CropPopup = ({
   ratio = CropRatio.Default,
   onSave,
   onClose,
-  'data-testid': dataTestid,
   flexibleCropRatio,
+  'data-testid': dataTestid,
 }: CropPopupProps) => {
   const { t } = useTranslation('app');
   const [crop, setCrop] = useState<Crop>();
@@ -30,11 +30,8 @@ export const CropPopup = ({
 
   const handleImageLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     const { naturalWidth: width, naturalHeight: height } = event.currentTarget;
-
     setIsSmallImg(width < SIZE_TO_SET_IMG_SMALL || height < SIZE_TO_SET_IMG_SMALL);
-
-    const calculatedRatio = flexibleCropRatio ? width / height : ratio;
-    const crop = initPercentCrop({ width, height, ratio: calculatedRatio });
+    const crop = initPercentCrop({ width, height, ratio });
     setCrop(crop);
   };
 

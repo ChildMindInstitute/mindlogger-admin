@@ -45,7 +45,7 @@ export const SectionContent = ({
   };
 
   return (
-    <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }} data-testId={dataTestid}>
+    <StyledFlexColumn sx={{ mt: theme.spacing(1.6) }} data-testid={dataTestid}>
       <InputController
         control={control}
         key={`${name}.name`}

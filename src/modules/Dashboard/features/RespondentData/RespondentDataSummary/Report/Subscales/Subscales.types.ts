@@ -15,6 +15,7 @@ export type SubscaleScore = {
 
 export type AdditionalInformation = {
   optionText: string;
+  'data-testid'?: string;
 };
 
 export type SubscalesProps = {

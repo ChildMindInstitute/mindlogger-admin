@@ -132,30 +132,44 @@ const getDuplicatedOptionsAndAlerts = (item?: ItemFormValues) => {
   };
 };
 
-export const getNewActivityItem = (item?: ItemFormValues) =>
+const getNewItemDefaultProps = () => ({
+  responseType: '',
+  name: t('newItem'),
+  question: '',
+  config: {} as Config,
+  isHidden: false,
+  allowEdit: true,
+});
+const getNewPropsForSingleAndMultiSelection = (item?: ItemFormValues) => ({
+  ...((item?.responseType === ItemResponseType.SingleSelection ||
+    item?.responseType === ItemResponseType.MultipleSelection) &&
+    getDuplicatedOptionsAndAlerts(item)),
+});
+const getNewPropsForSlider = (item?: ItemFormValues) => ({
+  ...(item?.responseType === ItemResponseType.Slider && {
+    responseValues: {
+      ...item.responseValues,
+      id: uuidv4(),
+    },
+    alerts: item?.alerts?.map((alert) => ({
+      ...alert,
+      key: uuidv4(),
+    })),
+  }),
+});
+export const getUniqueItem = (item?: ItemFormValues) =>
   ({
-    responseType: '',
-    name: t('newItem'),
-    question: '',
-    config: {} as Config,
-    isHidden: false,
-    allowEdit: true,
     ...item,
     id: undefined,
     key: uuidv4(),
-    ...((item?.responseType === ItemResponseType.SingleSelection ||
-      item?.responseType === ItemResponseType.MultipleSelection) &&
-      getDuplicatedOptionsAndAlerts(item)),
-    ...(item?.responseType === ItemResponseType.Slider && {
-      responseValues: {
-        ...item.responseValues,
-        id: uuidv4(),
-      },
-      alerts: item?.alerts?.map((alert) => ({
-        ...alert,
-        key: uuidv4(),
-      })),
-    }),
+    ...getNewPropsForSingleAndMultiSelection(item),
+    ...getNewPropsForSlider(item),
+  }) as ItemFormValues;
+
+export const getNewActivityItem = (item?: ItemFormValues) =>
+  ({
+    ...getNewItemDefaultProps(),
+    ...getUniqueItem(item),
   }) as ItemFormValues;
 
 export const getDuplicatedConditions = (
@@ -1036,7 +1050,7 @@ export const testIsReportCommonFieldsRequired = (
   context: unknown,
 ) => {
   if (isScoreReport) {
-    const conditionalLogicLength = get(context, 'from.0.value.conditionalLogic')?.length;
+    const conditionalLogicLength = (get(context, 'from.0.value.conditionalLogic') ?? [])?.length;
 
     return !!conditionalLogicLength || printItemsValue;
   }
@@ -1074,7 +1088,7 @@ export const testFunctionForTheSameVariable = (
 };
 
 export const testFunctionForNotSupportedItems = (value: string, context: yup.TestContext) => {
-  const items: Item[] = get(context, 'from.1.value.items');
+  const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
   const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
 
@@ -1082,14 +1096,14 @@ export const testFunctionForNotSupportedItems = (value: string, context: yup.Tes
 };
 
 export const testFunctionForSkippedItems = (value: string, context: yup.TestContext) => {
-  const items: Item[] = get(context, 'from.1.value.items');
+  const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
 
   return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
 };
 
 export const testFunctionForNotExistedItems = (value: string, context: yup.TestContext) => {
-  const items: Item[] = get(context, 'from.1.value.items');
+  const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
 
   if (!variableNames.length) return true;
@@ -1158,7 +1172,11 @@ export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') =>
         if (!value && value !== 0) return;
         const { maxValue } = this.parent;
 
-        return value < maxValue && value >= minNumber && value < DEFAULT_SLIDER_MAX_NUMBER;
+        return (
+          value < maxValue &&
+          (value as number) >= minNumber &&
+          (value as number) < DEFAULT_SLIDER_MAX_NUMBER
+        );
       }),
     maxValue: yup
       .mixed()
@@ -1167,7 +1185,11 @@ export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') =>
         if (!value && value !== 0) return;
         const { minValue } = this.parent;
 
-        return value > minValue && value > minNumber && value <= DEFAULT_SLIDER_MAX_NUMBER;
+        return (
+          value > minValue &&
+          (value as number) > minNumber &&
+          (value as number) <= DEFAULT_SLIDER_MAX_NUMBER
+        );
       }),
     ...(isSlider && {
       scores: yup

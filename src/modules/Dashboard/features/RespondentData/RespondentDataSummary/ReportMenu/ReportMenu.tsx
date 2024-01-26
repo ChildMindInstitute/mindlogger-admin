@@ -22,7 +22,7 @@ export const ReportMenu = ({ activities }: ReportMenuProps) => {
   const { selectedActivity, setSelectedActivity } = useContext(RespondentDataContext);
 
   return (
-    <StyledMenu>
+    <StyledMenu data-testid="report-menu">
       <Box sx={{ margin: theme.spacing(0, 2.4, 3.2) }}>
         <StyledHeadlineLarge>{t('activities')}</StyledHeadlineLarge>
         <StyledLabelLarge>{respondentLabel}</StyledLabelLarge>

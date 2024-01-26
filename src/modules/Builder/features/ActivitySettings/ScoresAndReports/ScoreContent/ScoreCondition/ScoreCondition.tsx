@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Box } from '@mui/material';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
@@ -29,8 +28,9 @@ export const ScoreCondition = ({
   reportsName,
   score,
   scoreKey,
-  'data-testid': dataTestid,
   items,
+  scoreRange,
+  'data-testid': dataTestid,
 }: ScoreConditionProps) => {
   const { t } = useTranslation();
   const { control, setValue, watch, getValues } = useCustomFormContext();
@@ -108,6 +108,7 @@ export const ScoreCondition = ({
         name={name}
         type={ConditionRowType.Score}
         score={score}
+        scoreRange={scoreRange}
         data-testid={dataTestid}
       />
       <CheckboxController

@@ -20,21 +20,21 @@ export const AllScores = ({ data, latestFinalScore, frequency, versions }: AllSc
   if (!data.subscales.length) return null;
 
   return (
-    <Box sx={{ mb: theme.spacing(2.4) }}>
+    <Box sx={{ mb: theme.spacing(2.4) }} data-testid="all-scores">
       <StyledHeadline sx={{ mb: theme.spacing(0.8), color: variables.palette.on_surface }}>
         {t('subscaleScores')}
       </StyledHeadline>
       <StyledFlexTopStart>
         {latestFinalScore && (
           <>
-            <StyledBodyMedium>
+            <StyledBodyMedium data-testid="latest-final-subscale-score">
               {t('latestFinalSubscaleScore')}: {latestFinalScore}
             </StyledBodyMedium>
             {StringDivider}
           </>
         )}
         {frequency && (
-          <StyledBodyMedium>
+          <StyledBodyMedium data-testid="frequency">
             {t('frequency')}: {frequency}
           </StyledBodyMedium>
         )}

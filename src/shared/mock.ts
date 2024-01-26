@@ -1,8 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Applet } from 'api';
-
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
 
@@ -2768,4 +2769,39 @@ export const mockedDecryptedObjectForAudio = {
   items: [mockedAudioSettings],
   activityName: 'New Activity#1',
   subscaleSetting: null,
+};
+
+export const mockedAlert = {
+  id: 'dcc07d2a-617c-43af-8e5a-0dcb1564d5e0',
+  isWatched: true,
+  appletId: mockedAppletId,
+  appletName: 'applet#With_alerts',
+  version: '1.3.0',
+  secretId: 'secretId',
+  activityId: '516fc8ba-67e9-4b7a-8365-3664fde92f86',
+  activityItemId: '043227ac-1b27-464f-ad3d-197c395451a0',
+  message:
+    'SingleItem was matched with Opt1 , very long description there and so on... very long description there and so on...  very long description there and so on...',
+  createdAt: '2023-08-03T09:30:30.461952',
+  answerId: '607c315a-8144-4119-92ce-b48b831b1103',
+  encryption: mockedEncryption,
+  image:
+    'https://media-dev.cmiml.net/mindlogger/391962851007982489/4490a3c1-904b-441c-87a9-4683fe2983fa/1.jpg',
+  workspace: 'Test ML',
+  respondentId: mockedRespondentId,
+};
+
+export const mockIntersectionObserver = () => {
+  global.IntersectionObserver = jest.fn((_, options = {}) => {
+    const instance = {
+      thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
+      root: options.root,
+      rootMargin: options.rootMargin,
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+    };
+
+    return instance;
+  });
 };

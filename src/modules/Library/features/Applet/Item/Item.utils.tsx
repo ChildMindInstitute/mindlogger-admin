@@ -4,7 +4,6 @@ import { ItemResponseType } from 'shared/consts';
 import { Item } from 'shared/state';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import { getHighlightedText } from 'shared/utils';
-
 import i18n from 'i18n';
 
 import { StyledItemContentRow, StyledItemImage, StyledItemSvg } from './Item.styles';
