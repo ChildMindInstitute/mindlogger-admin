@@ -78,7 +78,7 @@ export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProp
           >
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
           </StyledClearedButton>
-          <StyledLabelBoldLarge>{title}</StyledLabelBoldLarge>
+          <StyledLabelBoldLarge data-testid={`${dataTestid}-title`}>{title}</StyledLabelBoldLarge>
           <ItemFlowActions
             name={itemName}
             onAdd={handleAddCondition}
