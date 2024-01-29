@@ -14,6 +14,7 @@ export enum ItemConfigurationSettings {
   HasRandomize = 'randomizeOptions',
   HasResponseDataIdentifier = 'responseDataIdentifier',
   HasTimer = 'timer',
+  HasAutoAdvance = 'autoAdvance',
   IsCorrectAnswerRequired = 'correctAnswerRequired',
   IsNumericalRequired = 'numericalResponseRequired',
   IsResponseRequired = 'responseRequired',

@@ -669,11 +669,7 @@ export const getExportDataApi = (
     signal,
   });
 
-export const getOptionTextApi = (url: string) =>
-  axios({
-    method: 'get',
-    url,
-  });
+export const getOptionTextApi = (url: string) => axios.get(url);
 
 export const getRespondentDetailsApi = (
   { ownerId, appletId, respondentId }: GetRespondentDetailsParams,

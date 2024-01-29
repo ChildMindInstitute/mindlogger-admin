@@ -649,7 +649,9 @@
     "skippableItem": "Skippable Item",
     "skippableItem_tooltip": "The respondent will be able to leave the Item unanswered",
     "timer": "Set Timer",
-    "timer_tooltip": "Time to complete the Item "
+    "timer_tooltip": "Time to complete the Item ",
+    "autoAdvance": "Auto-advance",
+    "autoAdvance_tooltip": "The respondent will be automatically moved to the next Item after selecting a response"
   },
   "itemType": "Item Type",
   "itemValue": "Item Value",

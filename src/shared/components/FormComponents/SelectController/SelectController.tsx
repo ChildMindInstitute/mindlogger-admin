@@ -60,6 +60,7 @@ export const SelectController = <T extends FieldValues>({
   'data-testid': dataTestid,
   targetSelector,
   setTrigger,
+  SelectProps,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -165,6 +166,7 @@ export const SelectController = <T extends FieldValues>({
             },
           },
           IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
+          ...SelectProps,
         }}
         data-testid={dataTestid}
       >
