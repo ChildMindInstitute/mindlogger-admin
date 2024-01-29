@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import { SingleApplet } from 'shared/state';
 import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
-import { DateFormats } from 'shared/consts';
+import { DateFormats, DEFAULT_API_START_TIME, DEFAULT_API_END_TIME } from 'shared/consts';
 
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { ScheduleExportCsv } from '../Schedule.types';
@@ -256,11 +256,11 @@ export const prepareImportPayload = (
     return {
       startTime:
         startTime === EMPTY_TIME
-          ? undefined
+          ? DEFAULT_API_START_TIME
           : addSecondsToHourMinutes(getUploadedTime(startTime)) || undefined,
       endTime:
         endTime === EMPTY_TIME
-          ? undefined
+          ? DEFAULT_API_END_TIME
           : addSecondsToHourMinutes(getUploadedTime(endTime)) || undefined,
       accessBeforeSchedule: periodicityType === Periodicity.Always ? undefined : false,
       oneTimeCompletion: periodicityType === Periodicity.Always ? false : undefined,
