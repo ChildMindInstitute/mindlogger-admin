@@ -32,7 +32,6 @@ import {
   GetWorkspaceAppletsParams,
   FolderName,
   ReportConfig,
-  EditRespondent,
   AppletVersionChanges,
   RemoveAccess,
   ActivityAnswer,
@@ -57,6 +56,7 @@ import {
   SubmitDates,
   AppletShellAccountData,
   SubjectInvitationData,
+  EditSubject,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -229,12 +229,9 @@ export const removeRespondentAccessApi = (
     },
   });
 
-export const editRespondentApi = (
-  { ownerId, appletId, respondentId, values }: EditRespondent,
-  signal?: AbortSignal,
-) =>
-  authApiClient.post(
-    `/workspaces/${ownerId}/applets/${appletId}/respondents/${respondentId}`,
+export const editSubjectApi = ({ subjectId, values }: EditSubject, signal?: AbortSignal) =>
+  authApiClient.put(
+    `/subjects/${subjectId}`,
     {
       ...values,
     },

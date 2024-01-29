@@ -162,10 +162,8 @@ export type RemoveRespondentAccess = RemoveAccess & {
   deleteResponses: boolean;
 };
 
-export type EditRespondent = {
-  ownerId: string;
-  respondentId: string;
-  appletId: string;
+export type EditSubject = {
+  subjectId: string;
   values: {
     secretUserId: string;
     nickname?: string;
