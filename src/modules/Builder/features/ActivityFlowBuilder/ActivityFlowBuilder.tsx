@@ -13,6 +13,7 @@ import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
 import { useRedirectIfNoMatchedActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { StyledTitleMedium, theme, variables } from 'shared/styles';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 import {
@@ -134,92 +135,102 @@ export const ActivityFlowBuilder = () => {
       }}
       hasMaxWidth
     >
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <DndDroppable droppableId="activity-flow-builder-dnd" direction="vertical">
-          {(listProvided) => (
-            <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
-              {activityFlowItems?.map((item, index) => {
-                const key = item.id || item.key;
-                const currentActivity = activitiesIdsObjects[item.activityKey];
-                const activityName = currentActivity?.name;
-                const activityDescription = currentActivity?.description;
-                const itemDataTestid = `${dataTestid}-flow-${index}`;
+      {activityFlowItems?.length ? (
+        <>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <DndDroppable droppableId="activity-flow-builder-dnd" direction="vertical">
+              {(listProvided) => (
+                <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
+                  {activityFlowItems.map((item, index) => {
+                    const key = item.id || item.key;
+                    const currentActivity = activitiesIdsObjects[item.activityKey];
+                    const activityName = currentActivity?.name;
+                    const activityDescription = currentActivity?.description;
+                    const itemDataTestid = `${dataTestid}-flow-${index}`;
 
-                return (
-                  <Draggable key={key} draggableId={key || ''} index={index}>
-                    {(itemProvided, snapshot) => (
-                      <Box
-                        className={builderItemClassName}
-                        ref={itemProvided.innerRef}
-                        {...itemProvided.draggableProps}
-                        data-testid={itemDataTestid}
-                      >
-                        <Item
-                          dragHandleProps={itemProvided.dragHandleProps}
-                          isDragging={snapshot.isDragging}
-                          index={index + 1}
-                          total={activityFlowItems.length}
-                          getActions={() =>
-                            getFlowBuilderActions({
-                              index,
-                              replaceItem: handleFlowActivityToUpdateSet,
-                              duplicateItem: handleFlowActivityDuplicate,
-                              removeItem: handleFlowActivityToDeleteSet(
-                                index,
-                                activityName || '',
-                                item.activityKey,
-                              ),
-                              replaceItemActionActive:
-                                !!anchorEl && flowActivityToUpdateIndex === index,
-                              'data-testid': itemDataTestid,
-                            })
-                          }
-                          uiType={ItemUiType.FlowBuilder}
-                          name={activityName || ''}
-                          description={activityDescription || ''}
-                          visibleByDefault={!!anchorEl && flowActivityToUpdateIndex === index}
-                          {...item}
-                          data-testid={itemDataTestid}
-                        />
-                      </Box>
-                    )}
-                  </Draggable>
-                );
-              })}
-              {listProvided.placeholder}
-            </Box>
+                    return (
+                      <Draggable key={key} draggableId={key || ''} index={index}>
+                        {(itemProvided, snapshot) => (
+                          <Box
+                            className={builderItemClassName}
+                            ref={itemProvided.innerRef}
+                            {...itemProvided.draggableProps}
+                            data-testid={itemDataTestid}
+                          >
+                            <Item
+                              dragHandleProps={itemProvided.dragHandleProps}
+                              isDragging={snapshot.isDragging}
+                              index={index + 1}
+                              total={activityFlowItems.length}
+                              getActions={() =>
+                                getFlowBuilderActions({
+                                  index,
+                                  replaceItem: handleFlowActivityToUpdateSet,
+                                  duplicateItem: handleFlowActivityDuplicate,
+                                  removeItem: handleFlowActivityToDeleteSet(
+                                    index,
+                                    activityName || '',
+                                    item.activityKey,
+                                  ),
+                                  replaceItemActionActive:
+                                    !!anchorEl && flowActivityToUpdateIndex === index,
+                                  'data-testid': itemDataTestid,
+                                })
+                              }
+                              uiType={ItemUiType.FlowBuilder}
+                              name={activityName || ''}
+                              description={activityDescription || ''}
+                              visibleByDefault={!!anchorEl && flowActivityToUpdateIndex === index}
+                              {...item}
+                              data-testid={itemDataTestid}
+                            />
+                          </Box>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {listProvided.placeholder}
+                </Box>
+              )}
+            </DndDroppable>
+          </DragDropContext>
+          {flowActivityToDeleteData && (
+            <RemoveFlowActivityModal
+              activityName={flowActivityToDeleteData.name}
+              isOpen={!!flowActivityToDeleteData}
+              onModalClose={() => setFlowActivityToDeleteData(null)}
+              onModalSubmit={handleFlowActivityDelete}
+            />
           )}
-        </DndDroppable>
-      </DragDropContext>
-      {flowActivityToDeleteData && (
-        <RemoveFlowActivityModal
-          activityName={flowActivityToDeleteData.name}
-          isOpen={!!flowActivityToDeleteData}
-          onModalClose={() => setFlowActivityToDeleteData(null)}
-          onModalSubmit={handleFlowActivityDelete}
-        />
-      )}
-      {anchorEl && (
-        <Menu
-          anchorEl={anchorEl}
-          onClose={handleMenuClose}
-          menuItems={getMenuItems({
-            type: GetMenuItemsType.ChangeActivity,
-            index: flowActivityToUpdateIndex ?? undefined,
-            onMenuClose: () => setAnchorEl(null),
-            activities,
-            onUpdateFlowActivity: handleFlowActivityUpdate,
-          })}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 30,
-            horizontal: 'right',
-          }}
-          width="44rem"
-        />
+          {anchorEl && (
+            <Menu
+              anchorEl={anchorEl}
+              onClose={handleMenuClose}
+              menuItems={getMenuItems({
+                type: GetMenuItemsType.ChangeActivity,
+                index: flowActivityToUpdateIndex ?? undefined,
+                onMenuClose: () => setAnchorEl(null),
+                activities,
+                onUpdateFlowActivity: handleFlowActivityUpdate,
+              })}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 30,
+                horizontal: 'right',
+              }}
+              width="44rem"
+            />
+          )}
+        </>
+      ) : (
+        <StyledTitleMedium
+          sx={{ mt: theme.spacing(0.4), color: variables.palette.on_surface_variant }}
+        >
+          {t('activityFlowIsRequired')}
+        </StyledTitleMedium>
       )}
     </BuilderContainer>
   );

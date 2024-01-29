@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 import 'md-editor-rt/lib/style.css';
 
 import { getOptionTextApi } from 'api';
@@ -10,7 +11,10 @@ import { AdditionalInformation as AdditionalInformationProps } from 'modules/Das
 import { LINK_PATTERN } from '../../Charts/Charts.const';
 import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInformation.styles';
 
-export const AdditionalInformation = ({ optionText }: AdditionalInformationProps) => {
+export const AdditionalInformation = ({
+  optionText,
+  'data-testid': dataTestid,
+}: AdditionalInformationProps) => {
   const { t } = useTranslation();
   const { execute: getOptionText } = useAsync(getOptionTextApi, (response) =>
     setAdditionalInformation(response?.data || ''),
@@ -27,7 +31,7 @@ export const AdditionalInformation = ({ optionText }: AdditionalInformationProps
   }, [optionText]);
 
   return (
-    <>
+    <Box data-testid={dataTestid}>
       <StyledHeader>
         <StyledHeadline sx={{ mr: theme.spacing(1.6) }}>
           {t('additionalInformation')}
@@ -36,6 +40,6 @@ export const AdditionalInformation = ({ optionText }: AdditionalInformationProps
       <StyledContent>
         <StyledMdPreview modelValue={additionalInformation} />
       </StyledContent>
-    </>
+    </Box>
   );
 };

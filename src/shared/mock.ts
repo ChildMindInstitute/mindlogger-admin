@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -445,6 +447,7 @@ export const mockedSingleSelectFormValues = {
     skippableItem: false,
     removeBackButton: false,
     randomizeOptions: false,
+    autoAdvance: false,
   },
 };
 
@@ -822,6 +825,7 @@ export const mockedSingleActivityItem: SingleSelectItem<ItemFormValuesCommonType
       textInputOption: true,
       textInputRequired: false,
     },
+    autoAdvance: false,
   },
   name: 'single_text_score',
   isHidden: false,
@@ -1383,6 +1387,7 @@ export const mockedItemsOfParsedAnswers = [
         textInputOption: false,
         textInputRequired: false,
       },
+      autoAdvance: false,
     },
     name: 'single',
     isHidden: false,
@@ -1546,6 +1551,7 @@ export const mockedParsedAnswers = [
               textInputOption: false,
               textInputRequired: false,
             },
+            autoAdvance: false,
           },
           name: 'single',
           isHidden: false,
@@ -1927,6 +1933,7 @@ export const mockedItemsSettingsForSubscale = [
         textInputOption: false,
         textInputRequired: false,
       },
+      autoAdvance: false,
     },
     name: 'single',
     isHidden: false,
@@ -2073,6 +2080,7 @@ export const mockedItemsSettingsForSubscale = [
         textInputOption: false,
         textInputRequired: false,
       },
+      autoAdvance: false,
     },
     name: 'gender_screen',
     isHidden: false,
@@ -2159,6 +2167,7 @@ export const mockedDecryptedAnswersWithSubscales = [
           textInputOption: false,
           textInputRequired: false,
         },
+        autoAdvance: false,
       },
       name: 'single',
       isHidden: false,
@@ -2389,6 +2398,7 @@ export const mockedDecryptedAnswersWithSubscales = [
           textInputOption: false,
           textInputRequired: false,
         },
+        autoAdvance: false,
       },
       name: 'gender_screen',
       isHidden: false,
@@ -2760,6 +2770,7 @@ export const mockedDecryptedObjectForAudio = {
   activityName: 'New Activity#1',
   subscaleSetting: null,
 };
+
 export const mockedAlert = {
   id: 'dcc07d2a-617c-43af-8e5a-0dcb1564d5e0',
   isWatched: true,
@@ -2778,4 +2789,19 @@ export const mockedAlert = {
     'https://media-dev.cmiml.net/mindlogger/391962851007982489/4490a3c1-904b-441c-87a9-4683fe2983fa/1.jpg',
   workspace: 'Test ML',
   respondentId: mockedRespondentId,
+};
+
+export const mockIntersectionObserver = () => {
+  global.IntersectionObserver = jest.fn((_, options = {}) => {
+    const instance = {
+      thresholds: Array.isArray(options.threshold) ? options.threshold : [options.threshold],
+      root: options.root,
+      rootMargin: options.rootMargin,
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+    };
+
+    return instance;
+  });
 };

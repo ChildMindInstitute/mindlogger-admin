@@ -64,7 +64,7 @@ export const ActivityCompletionScores = ({
   );
 
   return (
-    <>
+    <Box data-testid="activity-completion-scores">
       <StyledFlexSpaceBetween sx={{ mt: theme.spacing(6) }}>
         <StyledHeadline color={variables.palette.on_surface}>{t('subscaleScores')}</StyledHeadline>
         {showAllSubscaleResultsVisible && (
@@ -72,6 +72,7 @@ export const ActivityCompletionScores = ({
             onClick={() => setCurrentActivityCompletionData(null)}
             variant="text"
             startIcon={<Svg id="reset" width="18" height="18" />}
+            data-testid="show-all-subscale-results"
           >
             {t('showAllSubscaleResults')}
           </StyledTextBtn>
@@ -84,6 +85,6 @@ export const ActivityCompletionScores = ({
           <AdditionalInformation optionText={optionText} />
         </Box>
       )}
-    </>
+    </Box>
   );
 };

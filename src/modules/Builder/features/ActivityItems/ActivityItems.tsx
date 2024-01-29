@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 import { useFieldArray } from 'react-hook-form';
-import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
 import { StyledContainer } from 'shared/styles';
 import { getEntityKey, pluck } from 'shared/utils';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
-import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import {
+  getNewActivityItem,
+  getUniqueItem,
+} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { getUniqueName } from 'modules/Builder/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
@@ -96,9 +98,7 @@ export const ActivityItems = () => {
     const itemToDuplicate = itemsValue[index];
 
     handleInsertItem(index, {
-      ...itemToDuplicate,
-      id: undefined,
-      key: uuidv4(),
+      ...getUniqueItem(itemToDuplicate),
       name: getUniqueName({
         name: itemToDuplicate.name,
         existingNames: pluck(itemsValue, 'name'),

@@ -32,7 +32,7 @@ export const defaultSingleAndMultiSelectionRowsConfig = {
   addTooltip: false,
 };
 
-export const defaultSingleAndMultiSelectionConfig = {
+export const defaultMultiSelectionConfig = {
   removeBackButton: false,
   skippableItem: false,
   randomizeOptions: false,
@@ -45,6 +45,11 @@ export const defaultSingleAndMultiSelectionConfig = {
     textInputOption: false,
     textInputRequired: false,
   },
+};
+
+export const defaultSingleSelectionConfig = {
+  ...defaultMultiSelectionConfig,
+  autoAdvance: false,
 };
 
 export const defaultTextConfig = {
