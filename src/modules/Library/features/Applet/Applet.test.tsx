@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -87,14 +89,14 @@ const mockApplet = {
   version: '1.1.1',
 };
 
-const preloadedState = {
+const getPreloadedState = ({ isAuthorized }) => ({
   auth: {
-    isAuthorized: true,
+    isAuthorized,
   },
   cartApplets: {
     data: null,
   },
-};
+});
 
 const dataTestid = 'library-applet';
 const mockedUseNavigate = jest.fn();
@@ -111,31 +113,39 @@ jest.mock('redux/store/hooks', () => ({
   useAppDispatch: jest.fn(),
 }));
 
+const renderComponent = ({ uiType, route, routePath, preloadedState }) =>
+  renderWithProviders(
+    <Applet
+      applet={mockApplet}
+      uiType={uiType}
+      data-testid={dataTestid}
+      setSearch={mockSetSearch}
+    />,
+    {
+      route,
+      routePath,
+      preloadedState,
+    },
+  );
+
 describe('Applet', () => {
+  beforeEach(() => {
+    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+  });
   afterEach(() => {
     jest.clearAllMocks();
   });
-
   afterAll(() => {
     sessionStorage.clear();
   });
 
-  test('renders applet information for uiType = List, search by keyword and view details', async () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-
-    renderWithProviders(
-      <Applet
-        applet={mockApplet}
-        uiType={AppletUiType.List}
-        data-testid={dataTestid}
-        setSearch={mockSetSearch}
-      />,
-      {
-        route: '/library',
-        routePath: page.library,
-        preloadedState,
-      },
-    );
+  test('renders applet information for uiType = List, isAuthorized = true; test search by keyword and view details', async () => {
+    const { rerender } = renderComponent({
+      uiType: AppletUiType.List,
+      route: '/library',
+      routePath: page.library,
+      preloadedState: getPreloadedState({ isAuthorized: true }),
+    });
 
     expect(screen.getByText('Applet Share Test')).toBeInTheDocument();
     expect(screen.getByText('1.1.1')).toBeInTheDocument();
@@ -152,6 +162,22 @@ describe('Applet', () => {
 
     expect(mockSetSearch).toHaveBeenCalledWith('keyword1'); // first keyword value
 
+    rerender(
+      <Applet
+        search="keyword1"
+        applet={mockApplet}
+        uiType={AppletUiType.List}
+        data-testid={dataTestid}
+        setSearch={mockSetSearch}
+      />,
+    );
+
+    const highlightedText = screen.getByText(/keyword1/i);
+    const parentElement = highlightedText.closest('.highlighted-text');
+
+    expect(highlightedText).toBeInTheDocument();
+    expect(parentElement).toHaveClass('highlighted-text'); // search matches should be wrapped in highlighted-text class
+
     const viewDetailsButton = screen.getByTestId(`${dataTestid}-view-details`);
     const addToCartButton = screen.getByTestId(`${dataTestid}-add-to-cart`);
 
@@ -164,23 +190,15 @@ describe('Applet', () => {
     expect(mockedUseNavigate).toHaveBeenCalledWith(`/library/${mockApplet.id}`);
   });
 
-  test('renders applet information for uiType = List, select activity and add to cart', async () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+  test('renders applet information for uiType = List, isAuthorized = true; test select activity and add to cart', async () => {
     const addAppletToCartMock = jest.spyOn(library.thunk, 'postAppletsToCart');
 
-    renderWithProviders(
-      <Applet
-        applet={mockApplet}
-        uiType={AppletUiType.List}
-        data-testid={dataTestid}
-        setSearch={mockSetSearch}
-      />,
-      {
-        route: '/library',
-        routePath: page.library,
-        preloadedState,
-      },
-    );
+    renderComponent({
+      uiType: AppletUiType.List,
+      route: '/library',
+      routePath: page.library,
+      preloadedState: getPreloadedState({ isAuthorized: true }),
+    });
 
     const activitiesRegex = new RegExp(`${dataTestid}-activities-\\d+$`);
     expect(screen.queryAllByTestId(activitiesRegex)).toHaveLength(0);
@@ -194,9 +212,8 @@ describe('Applet', () => {
     // check all to be unchecked by default
     const activities = screen.queryAllByTestId(activitiesRegex);
     activities.forEach((activity) => {
-      const checkbox = activity.querySelector('input[type="checkbox"]');
-      expect(checkbox).toBeInTheDocument();
-      expect(checkbox).not.toHaveAttribute('checked');
+      const checkedActivities = activity.querySelector('.Mui-checked');
+      expect(checkedActivities).toBeNull();
     });
 
     // check first one
@@ -214,23 +231,56 @@ describe('Applet', () => {
     sessionStorage.clear(); // clear session storage for the next test
   });
 
-  test('renders applet information for uiType = Details, select activity and add to cart', async () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+  test('renders applet information for uiType = List, isAuthorized = false; test select activity and add to cart', async () => {
+    const addAppletToCartMock = jest.spyOn(library.actions, 'setAppletsFromStorage');
+
+    renderComponent({
+      uiType: AppletUiType.List,
+      route: '/library',
+      routePath: page.library,
+      preloadedState: getPreloadedState({ isAuthorized: false }),
+    });
+
+    const activitiesRegex = new RegExp(`${dataTestid}-activities-\\d+$`);
+    expect(screen.queryAllByTestId(activitiesRegex)).toHaveLength(0);
+
+    const activitiesCollapse = screen.getByTestId(`${dataTestid}-activities-collapse`);
+    expect(activitiesCollapse).toBeInTheDocument();
+    await userEvent.click(activitiesCollapse);
+
+    expect(screen.queryAllByTestId(activitiesRegex)).toHaveLength(3);
+
+    // check all to be unchecked by default
+    const activities = screen.queryAllByTestId(activitiesRegex);
+    activities.forEach((activity) => {
+      const checkedActivities = activity.querySelector('.Mui-checked');
+      expect(checkedActivities).toBeNull();
+    });
+
+    // check first one
+    const activity0Checkbox = activities[0].querySelector('input[type="checkbox"]');
+    await userEvent.click(activity0Checkbox);
+
+    expect(activity0Checkbox).toBeChecked();
+    const addToCartButton = screen.getByTestId(`${dataTestid}-add-to-cart`);
+    expect(addToCartButton).not.toBeDisabled();
+
+    await userEvent.click(addToCartButton);
+
+    expect(addAppletToCartMock).toHaveBeenCalledWith([mockApplet]);
+
+    sessionStorage.clear(); // clear session storage for the next test
+  });
+
+  test('renders applet information for uiType = Details, isAuthorized = true; test select activity and add to cart', async () => {
     const addAppletToCartMock = jest.spyOn(library.thunk, 'postAppletsToCart');
 
-    renderWithProviders(
-      <Applet
-        applet={mockApplet}
-        uiType={AppletUiType.Details}
-        data-testid={dataTestid}
-        setSearch={mockSetSearch}
-      />,
-      {
-        route: '/library',
-        routePath: page.library,
-        preloadedState,
-      },
-    );
+    renderComponent({
+      uiType: AppletUiType.Details,
+      route: '/library/d8c5096c-e9f0-454f-b757-67a1d60fdcdf',
+      routePath: page.libraryAppletDetails,
+      preloadedState: getPreloadedState({ isAuthorized: true }),
+    });
 
     const activitiesRegex = new RegExp(`${dataTestid}-activities-\\d+$`);
     const activitiesCollapse = screen.queryByTestId(`${dataTestid}-activities-collapse`);
@@ -241,9 +291,8 @@ describe('Applet', () => {
     // check all to be unchecked by default
     const activities = screen.queryAllByTestId(activitiesRegex);
     activities.forEach((activity) => {
-      const checkbox = activity.querySelector('input[type="checkbox"]');
-      expect(checkbox).toBeInTheDocument();
-      expect(checkbox).not.toHaveAttribute('checked');
+      const checkedActivities = activity.querySelector('.Mui-checked');
+      expect(checkedActivities).toBeNull();
     });
 
     const addToCartButton = screen.getByTestId(`${dataTestid}-add-to-cart`);
@@ -261,22 +310,18 @@ describe('Applet', () => {
     expect(addAppletToCartMock).toHaveBeenCalledWith([mockApplet]);
   });
 
-  test('renders applet information for uiType = Cart, remove applet from the cart', async () => {
-    jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-
-    renderWithProviders(
-      <Applet
-        applet={mockApplet}
-        uiType={AppletUiType.Cart}
-        data-testid={dataTestid}
-        setSearch={mockSetSearch}
-      />,
-      {
-        route: '/library/cart',
-        routePath: page.libraryCart,
-        preloadedState,
+  test('renders applet information for uiType = Cart, isAuthorized = true; test remove applet from the cart', async () => {
+    renderComponent({
+      uiType: AppletUiType.Cart,
+      route: '/library/cart',
+      routePath: page.libraryCart,
+      preloadedState: {
+        ...getPreloadedState({ isAuthorized: true }),
+        cartApplets: {
+          data: mockApplet,
+        },
       },
-    );
+    });
 
     const activitiesRegex = new RegExp(`${dataTestid}-activities-\\d+$`);
     const activitiesCollapse = screen.getByTestId(`${dataTestid}-activities-collapse`);
