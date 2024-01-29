@@ -57,6 +57,7 @@ describe('getScoreRange', () => {
     ${[mockedSliderActivityItem, mockedSingleActivityItem]} | ${CalculationType.Percentage} | ${false}            | ${{ maxScore: 100, minScore: 30 }} | ${'should be from 30 to 100'}
     ${[mockedSkippableSingleItem]}                          | ${CalculationType.Sum}        | ${false}            | ${{ maxScore: 4, minScore: 0 }}    | ${'should be from 0 to 4 if item is skippable'}
     ${[mockedSliderActivityItem, mockedSingleActivityItem]} | ${CalculationType.Sum}        | ${true}             | ${{ maxScore: 10, minScore: 0 }}   | ${'should be from 0 to 10 if activity is skippable'}
+    ${undefined}                                            | ${CalculationType.Sum}        | ${true}             | ${{ maxScore: 0, minScore: 0 }}    | ${'should be from 0 to 0 if items is undefined'}
   `('$description', async ({ items, calculationType, expectedResult, isActivitySkippable }) => {
     expect(
       getScoreRange({
