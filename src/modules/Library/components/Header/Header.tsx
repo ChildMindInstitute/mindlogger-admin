@@ -43,7 +43,10 @@ export const Header = ({
         <StyledLabelLarge sx={{ textAlign: 'initial', color: variables.palette.on_surface }}>
           {t('cart')}
         </StyledLabelLarge>
-        <StyledBodySmall sx={{ color: variables.palette.on_surface_variant }}>
+        <StyledBodySmall
+          sx={{ color: variables.palette.on_surface_variant }}
+          data-testid="library-cart-applets-count"
+        >
           {appletsCount} {t('applet', { count: appletsCount })}
         </StyledBodySmall>
       </Box>
