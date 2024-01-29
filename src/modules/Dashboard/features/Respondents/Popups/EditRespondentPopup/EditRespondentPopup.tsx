@@ -7,7 +7,7 @@ import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks/useAsync';
-import { editRespondentApi } from 'api';
+import { editSubjectApi } from 'api';
 import { falseReturnFunc, getErrorMessage } from 'shared/utils';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
@@ -36,7 +36,7 @@ export const EditRespondentPopup = ({
     isLoading,
     error,
   } = useAsync(
-    editRespondentApi,
+    editSubjectApi,
     () => {
       setIsSuccessVisible(true);
     },
@@ -50,16 +50,14 @@ export const EditRespondentPopup = ({
     if (!chosenAppletData) return;
 
     const { secretUserId, nickname } = getValues();
-    const { appletId, ownerId, respondentId } = chosenAppletData;
+    const { respondentId } = chosenAppletData;
 
     editRespondent({
       values: {
         secretUserId: secretUserId.trim(),
         nickname: nickname?.trim(),
       },
-      appletId,
-      ownerId,
-      respondentId,
+      subjectId: respondentId,
     });
   };
 

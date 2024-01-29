@@ -1,4 +1,5 @@
-import { waitFor, screen, fireEvent } from '@testing-library/react';
+import { waitFor, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -39,12 +40,19 @@ describe('EditRespondentPopup component tests', () => {
   });
 
   test('EditRespondentPopup should appear success text', async () => {
-    jest.spyOn(mockedAxios, 'post').mockImplementation(successFakeRequest);
+    jest.spyOn(mockedAxios, 'put').mockImplementation(successFakeRequest);
 
     renderWithProviders(<EditRespondentPopup {...commonProps} />);
 
-    fireEvent.change(screen.getByLabelText(/Nickname/i), { target: { value: '00000' } });
-    fireEvent.click(screen.getByText('Save'));
+    const nicknameInput = screen
+      .getByTestId('dashboard-respondents-edit-popup-nickname')
+      .querySelector('input') as HTMLInputElement;
+    await userEvent.clear(nicknameInput);
+    await userEvent.type(nicknameInput, 'john');
+
+    const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
+    await userEvent.click(submitButton);
+
     await waitFor(() =>
       expect(
         screen.getByText('Nickname and ID have been updated successfully.'),
