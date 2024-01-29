@@ -354,7 +354,67 @@ describe('SubscalesConfiguration', () => {
     expect(items.filter((item) => !isSystemItem(item))).toHaveLength(2);
   });
 
-  test('Selected Subscale is filtered from the others', () => {});
+  test('Subscale is removed from the list of elements (cannot make recursive selection)', () => {
+    renderSubscales();
 
-  test('Validation', () => {});
+    addSubscale();
+    addSubscale();
+
+    fireEvent.change(screen.getByTestId(`${mockedTestid}-0-name`).querySelector('input'), {
+      target: { value: 'subscale_1' },
+    });
+    fireEvent.change(screen.getByTestId(`${mockedTestid}-1-name`).querySelector('input'), {
+      target: { value: 'subscale_2' },
+    });
+
+    expect(
+      screen.getAllByTestId(new RegExp(`${mockedTestid}-1-items-unselected-checkbox-\\d+$`)),
+    ).toHaveLength(4);
+
+    fireEvent.click(
+      screen.getByTestId(`${mockedTestid}-0-items-unselected-checkbox-0`).querySelector('input'),
+    );
+
+    expect(
+      screen.getAllByTestId(new RegExp(`${mockedTestid}-1-items-unselected-checkbox-\\d+$`)),
+    ).toHaveLength(3);
+  });
+
+  describe('Validations', () => {
+    test.each`
+      error                          | description
+      ${'Subscale Name is required'} | ${'Subscale name is required'}
+      ${'Select at least 1 element'} | ${'At least one element is required'}
+    `('$description', async ({ error }) => {
+      const ref = renderSubscales();
+
+      addSubscale();
+
+      await ref.current.trigger('activities.0.subscaleSetting');
+
+      await waitFor(() => {
+        expect(screen.getByText(error)).toBeVisible();
+      });
+    });
+
+    test('Subscale Name should be unique', async () => {
+      const ref = renderSubscales();
+
+      addSubscale();
+      addSubscale();
+
+      fireEvent.change(screen.getByTestId(`${mockedTestid}-0-name`).querySelector('input'), {
+        target: { value: 'subscale_1' },
+      });
+      fireEvent.change(screen.getByTestId(`${mockedTestid}-1-name`).querySelector('input'), {
+        target: { value: 'subscale_1' },
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('That Subscale Name is already in use. Please use a different name'),
+        ).toBeVisible();
+      });
+    });
+  });
 });
