@@ -42,14 +42,15 @@ export const parseResponseValue = <T extends DecryptedAnswerData>(
 
   const answerEdited = (answer as AdditionalEdited)?.edited;
   const editedWithLabel = answerEdited ? ` | edited: ${answerEdited}` : '';
+  const responseValue = parseResponseValueRaw(item, index, answer);
 
   if (answer && typeof answer === 'object' && (answer as AdditionalTextType).text?.length) {
-    return `${parseResponseValueRaw(item, index, answer)} | text: ${
+    return `${responseValue !== '' ? `${responseValue} | ` : ''}text: ${
       (answer as AdditionalTextType).text
     }${editedWithLabel}`;
   }
 
-  return `${parseResponseValueRaw(item, index, answer)}${editedWithLabel}`;
+  return `${responseValue}${editedWithLabel}`;
 };
 
 export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
@@ -61,11 +62,10 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
   const inputType = activityItem.responseType;
   const key =
     answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
-
   const value = getAnswerValue(answer);
 
   if (!key) return answer || '';
-
+  if (key === 'text') return '';
   if (isMediaAnswerData(item)) {
     try {
       if (!item.answer?.value) return '';
