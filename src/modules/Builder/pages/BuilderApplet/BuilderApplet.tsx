@@ -84,7 +84,9 @@ export const BuilderApplet = () => {
     if (!isAppletLoaded) return;
 
     (async () => {
-      await reset(getDefaultValues(appletData, defaultThemeId));
+      await reset(getDefaultValues(appletData, defaultThemeId), {
+        keepDirty: false,
+      });
 
       if (!hasLibraryData) return;
 
