@@ -37,7 +37,7 @@ import { EMPTY_SCORE_RANGE_LABEL, calculationTypes } from './ScoreContent.const'
 import {
   getScoreItemsColumns,
   getSelectedItemsColumns,
-  getDefaultConditionalValue,
+  getScoreConditionalDefaults,
   getIsScoreIdVariable,
   getScoreId,
   getScoreRange,
@@ -99,7 +99,7 @@ export const ScoreContent = ({
   };
 
   const handleAddScoreConditional = () => {
-    append(getDefaultConditionalValue(scoreId, score?.key));
+    append(getScoreConditionalDefaults(scoreId, score?.key));
   };
 
   const onChangeScoreId = () => {
