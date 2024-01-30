@@ -5,4 +5,5 @@ export type SwitchWithStateProps = {
   handleChange?: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void;
   label?: string;
   tooltipText?: string;
+  'data-testid'?: string;
 };
