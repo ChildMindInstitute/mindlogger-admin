@@ -1,9 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { generatePath } from 'react-router-dom';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { mockedSingleSelectFormValues } from 'shared/mock';
+import { page } from 'resources';
+import { mockedActivityId, mockedAppletId, mockedSingleSelectFormValues } from 'shared/mock';
 import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
 import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
@@ -15,6 +17,28 @@ import {
   getAppletFormDataWithItem,
 } from '../__mocks__';
 
+const mockedItemId = mockedSingleSelectFormValues.id;
+
+const renderItemConfig = (item) => {
+  const ref = createRef();
+
+  renderWithAppletFormData({
+    children: renderItemConfiguration(),
+    appletFormData: item ? getAppletFormDataWithItem(item) : undefined,
+    formRef: ref,
+    options: {
+      routePath: page.builderAppletActivityItem,
+      route: generatePath(page.builderAppletActivityItem, {
+        appletId: mockedAppletId,
+        activityId: mockedActivityId,
+        itemId: mockedItemId,
+      }),
+    },
+  });
+
+  return ref;
+};
+
 describe('ItemConfiguration: Displayed Content', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -25,10 +49,7 @@ describe('ItemConfiguration: Displayed Content', () => {
     ${mockedEmptyItem}              | ${'is rendered for newly created item'}
     ${mockedSingleSelectFormValues} | ${'is rendered for existing item'}
   `('$description', ({ item }) => {
-    renderWithAppletFormData({
-      children: renderItemConfiguration(),
-      appletFormData: getAppletFormDataWithItem(item),
-    });
+    renderItemConfig(item);
 
     const displayedContent = screen.getByTestId(mockedDisplayedContentTestid);
 
@@ -44,14 +65,14 @@ describe('ItemConfiguration: Displayed Content', () => {
     ${'[[Item5]]'}                          | ${'Remove the variable referring to the skipped item.'}         | ${'cannot have item variable which is skippable'}
     ${'[[ItemItem]]'}                       | ${'Remove the variable referring to the nonexistent item.'}     | ${'cannot refer to non-existent item'}
   `('$description', async ({ text, expected }) => {
-    const ref = createRef();
+    const ref = renderItemConfig();
 
-    renderWithAppletFormData({
-      children: renderItemConfiguration(),
-      formRef: ref,
-    });
-
-    ref.current.setValue(`${mockedItemName}.question`, text);
+    fireEvent.change(
+      screen
+        .getByTestId('builder-activity-items-item-configuration-description')
+        .querySelector('textarea'),
+      { target: { value: text } },
+    );
 
     await ref.current.trigger(`${mockedItemName}.question`);
 
@@ -61,9 +82,7 @@ describe('ItemConfiguration: Displayed Content', () => {
   });
 
   test('Displayed Content validation is not triggered for newly added item', async () => {
-    renderWithAppletFormData({
-      children: renderItemConfiguration(),
-    });
+    renderItemConfig();
 
     await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
