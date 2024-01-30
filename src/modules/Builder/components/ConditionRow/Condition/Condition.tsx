@@ -44,6 +44,7 @@ export const Condition = ({
   const isItemScore = selectedItem?.type === ConditionItemType.Score;
   const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
   const isRowTypeItem = type === ConditionRowType.Item;
+  const isRowTypeScore = type === ConditionRowType.Score;
   const isItemSelect =
     selectedItem?.type === ConditionItemType.SingleSelection ||
     selectedItem?.type === ConditionItemType.MultiSelection ||
@@ -85,7 +86,8 @@ export const Condition = ({
           },
         }}
         customChange={onItemChange}
-        disabled={type === ConditionRowType.Score}
+        disabled={isRowTypeScore}
+        shouldSkipIcon={isRowTypeScore}
         isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-name`}
       />
