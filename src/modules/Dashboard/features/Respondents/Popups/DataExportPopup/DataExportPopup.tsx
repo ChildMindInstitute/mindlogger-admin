@@ -20,7 +20,7 @@ import { getPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSettings.types';
 
-import { DataExportPopupProps, Modals } from './DataExportPopup.types';
+import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popups.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
@@ -46,9 +46,9 @@ export const DataExportPopup = ({
   });
 
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
-  const respondentId = !isAppletSetting
-    ? (chosenAppletData as ChosenAppletData)?.respondentId
-    : undefined;
+  const respondentId = isAppletSetting
+    ? undefined
+    : (chosenAppletData as ChosenAppletData)?.respondentId;
   const { encryption } = chosenAppletData ?? {};
 
   const handleDataExportSubmit = async () => {
@@ -60,7 +60,7 @@ export const DataExportPopup = ({
       setDataIsExporting(true);
 
       try {
-        await executeAllPagesOfExportData({ appletId, respondentIds: respondentId });
+        await executeAllPagesOfExportData({ appletId, targetSubjectIds: respondentId });
 
         Mixpanel.track('Export Data Successful');
       } catch {
@@ -80,13 +80,7 @@ export const DataExportPopup = ({
   const getDecryptedAnswers = useDecryptedActivityData(appletId, encryption);
 
   const executeAllPagesOfExportData = useCallback(
-    async ({
-      appletId,
-      respondentIds: respondentId,
-    }: {
-      appletId: string;
-      respondentIds?: string;
-    }) => {
+    async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
       try {
         const formFromDate = getValues?.().fromDate as Date;
         const formToDate = getValues?.().toDate as Date;
@@ -94,7 +88,7 @@ export const DataExportPopup = ({
         const toDate = formToDate && format(formToDate, DateFormats.shortISO);
         const body = {
           appletId,
-          respondentIds: respondentId,
+          targetSubjectIds,
           fromDate,
           toDate,
         };

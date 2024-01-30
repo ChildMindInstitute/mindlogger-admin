@@ -372,6 +372,7 @@ export type AppletVersionChanges = AppletId & { version: string };
 
 export type ExportData = AppletId & {
   respondentIds?: string;
+  targetSubjectIds?: string;
   page?: number;
   limit?: number;
   fromDate?: string;
