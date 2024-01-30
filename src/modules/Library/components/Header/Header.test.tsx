@@ -1,4 +1,7 @@
-import { fireEvent, screen } from '@testing-library/react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils';
 
@@ -6,13 +9,30 @@ import { Header } from './Header';
 import { RightButtonType } from './Header.types';
 
 const rightButtonCallback = jest.fn();
+const mockedUseNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUseNavigate,
+}));
+
+const preloadedState = {
+  library: {
+    cartApplets: {
+      data: { count: 4 },
+    },
+  },
+};
 
 describe('Header component tests', () => {
-  test(' should show the back button when isBackButtonVisible is true', () => {
+  test(' should show the back button when isBackButtonVisible is true', async () => {
     renderWithProviders(<Header isBackButtonVisible={true} />);
 
     const backButton = screen.getByTestId('library-back-button');
     expect(backButton).toBeVisible();
+
+    await userEvent.click(backButton);
+    expect(mockedUseNavigate).toBeCalledWith('/library');
   });
 
   test('should do not show the back button when isBackButtonVisible is false', () => {
@@ -31,7 +51,12 @@ describe('Header component tests', () => {
   });
 
   test('should render the cart button when rightButtonType is Cart', () => {
-    renderWithProviders(<Header rightButtonType={RightButtonType.Cart} />);
+    renderWithProviders(<Header rightButtonType={RightButtonType.Cart} />, { preloadedState });
+
+    const appletsCountElement = screen.getByTestId('library-cart-applets-count');
+    const expectedText = '4 Applets';
+
+    expect(appletsCountElement).toHaveTextContent(expectedText);
 
     const cartButton = screen.getByTestId('library-cart-button');
     expect(cartButton).toBeVisible();
@@ -44,17 +69,17 @@ describe('Header component tests', () => {
     expect(builderButton).toBeVisible();
   });
 
-  test('should call the rightButtonCallback when the cart button is clicked', () => {
+  test('should call the rightButtonCallback when the cart button is clicked', async () => {
     renderWithProviders(
       <Header rightButtonType={RightButtonType.Cart} rightButtonCallback={rightButtonCallback} />,
     );
 
     const cartButton = screen.getByTestId('library-cart-button');
-    fireEvent.click(cartButton);
+    await userEvent.click(cartButton);
     expect(rightButtonCallback).toHaveBeenCalled();
   });
 
-  test('should call the rightButtonCallback when the builder button is clicked', () => {
+  test('should call the rightButtonCallback when the builder button is clicked', async () => {
     renderWithProviders(
       <Header
         rightButtonType={RightButtonType.Builder}
@@ -63,7 +88,7 @@ describe('Header component tests', () => {
     );
 
     const builderButton = screen.getByTestId('library-add-to-builder');
-    fireEvent.click(builderButton);
+    await userEvent.click(builderButton);
     expect(rightButtonCallback).toHaveBeenCalled();
   });
 });
