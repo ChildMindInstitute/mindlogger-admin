@@ -1,24 +1,25 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { createRef } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
+import { renderWithAppletFormData } from 'shared/utils';
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ItemConfiguration } from '../ItemConfiguration';
 
 export const mockedItemName = 'activities.0.items.0';
-export const mockedTypeTestid = 'builder-activity-items-item-configuration-response-type';
-export const mockedOptionTestid = 'builder-activity-items-item-configuration-response-type-option';
-export const mockedGroupTestid = 'builder-activity-items-item-configuration-response-type-group';
-export const mockedSearchTestid = 'builder-activity-items-item-configuration-response-type-search';
-export const mockedNameTestid = 'builder-activity-items-item-configuration-name';
-export const mockedDisplayedContentTestid = 'builder-activity-items-item-configuration-description';
-export const mockedSingleAndMultiSelectOptionTestid =
-  'builder-activity-items-item-configuration-options-0';
-export const mockedTextInputOptionTestid =
-  'builder-activity-items-item-configuration-text-input-option';
-export const mockedAlertsTestid = 'builder-activity-items-item-configuration-alerts';
+export const mockedTestid = 'builder-activity-items-item-configuration';
+export const mockedTypeTestid = `${mockedTestid}-response-type`;
+export const mockedOptionTestid = `${mockedTestid}-response-type-option`;
+export const mockedGroupTestid = `${mockedTestid}-response-type-group`;
+export const mockedSearchTestid = `${mockedTestid}-response-type-search`;
+export const mockedNameTestid = `${mockedTestid}-name`;
+export const mockedDisplayedContentTestid = `${mockedTestid}-description`;
+export const mockedSingleAndMultiSelectOptionTestid = `${mockedTestid}-options-0`;
+export const mockedTextInputOptionTestid = `${mockedTestid}-text-input-option`;
+export const mockedAlertsTestid = `${mockedTestid}-alerts`;
 
 export const mockedPalette1Color = [
   '#ffadad',
@@ -110,11 +111,11 @@ export const setItemResponseType = (responseType) => {
   fireEvent.click(option);
 };
 export const setItemConfigSetting = async (setting) => {
-  const settingsButton = screen.getByTestId('builder-activity-items-item-configuration-settings');
+  const settingsButton = screen.getByTestId(`${mockedTestid}-settings`);
   fireEvent.click(settingsButton);
 
   await waitFor(() => {
-    const drawer = screen.getByTestId('builder-activity-items-item-configuration-settings-drawer');
+    const drawer = screen.getByTestId(`${mockedTestid}-settings-drawer`);
     const collapsedSections = drawer.querySelectorAll('.svg-navigate-down');
 
     collapsedSections.forEach((section) => {
@@ -132,6 +133,28 @@ export const setItemConfigSetting = async (setting) => {
 export const renderItemConfiguration = (name = mockedItemName) => (
   <ItemConfiguration name={name} onClose={jest.fn()} />
 );
+
+export const renderItemConfigurationByType = (responseType) => {
+  const ref = createRef();
+
+  renderWithAppletFormData({
+    children: renderItemConfiguration(),
+    appletFormData: {
+      ...mockedAppletFormData,
+      activities: [
+        {
+          ...mockedAppletFormData.activities[0],
+          items: [mockedEmptyItem],
+        },
+      ],
+    },
+    formRef: ref,
+  });
+
+  setItemResponseType(responseType);
+
+  return ref;
+};
 
 export const mockedEmptySingleSelection = {
   responseType: 'singleSelect',
