@@ -59,7 +59,7 @@ export const Item = ({
 
     if (uiType === AppletUiType.Cart) {
       const { isNoSelectedItems } = updateSelectedItemsInStorage(getValues(), appletId);
-      dispatch(library.actions.setAddToCartBtnDisabled(isNoSelectedItems));
+      dispatch(library.actions.setAddToBuilderBtnDisabled(isNoSelectedItems));
     }
   };
 

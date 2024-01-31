@@ -13,9 +13,9 @@ export const reducers = {
     state.cartApplets.data.count = action.payload?.length ?? 0;
     state.cartApplets.status = 'success';
   },
-  setAddToCartBtnDisabled: (state: LibrarySchema, action: PayloadAction<boolean>): void => {
-    state.isCartBtnDisabled.data = action.payload;
-    state.isCartBtnDisabled.status = 'success';
+  setAddToBuilderBtnDisabled: (state: LibrarySchema, action: PayloadAction<boolean>): void => {
+    state.isAddToBuilderBtnDisabled.data = action.payload;
+    state.isAddToBuilderBtnDisabled.status = 'success';
   },
 };
 

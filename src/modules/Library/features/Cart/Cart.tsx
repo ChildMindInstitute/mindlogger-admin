@@ -35,7 +35,7 @@ export const Cart = () => {
   const isAuthorized = auth.useAuthorized();
   const { result: cartItems } = library.useCartApplets() || {};
   const loadingStatus = library.useCartAppletsStatus();
-  const isAddBtnDisabled = library.useIsCartBtnDisabled() || !cartItems?.length;
+  const isAddToBuilderBtnDisabled = library.useIsAddToBuilderBtnDisabled() || !cartItems?.length;
   const [searchValue, setSearchValue] = useState('');
   const [addToBuilderPopupVisible, setAddToBuilderPopupVisible] = useState(false);
   const [authPopupVisible, setAuthPopupVisible] = useState(false);
@@ -130,7 +130,7 @@ export const Cart = () => {
           isBackButtonVisible
           rightButtonType={RightButtonType.Builder}
           rightButtonCallback={handleAddToBuilder}
-          isRightButtonDisabled={isAddBtnDisabled}
+          isRightButtonDisabled={isAddToBuilderBtnDisabled}
         />
         <ContentContainer>
           <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
