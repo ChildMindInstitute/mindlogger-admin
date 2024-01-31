@@ -14,6 +14,7 @@ import {
   variables,
 } from 'shared/styles';
 import { groupBy } from 'shared/utils/array';
+import { conditionSxPropsPx } from 'modules/Builder/components/ConditionRow/Condition/Condition.styles';
 
 import {
   StyledPlaceholder,
@@ -170,6 +171,14 @@ export const SelectController = <T extends FieldValues>({
             ? undefined
             : (props) => <Svg className={props.className} id="navigate-down" />,
           ...SelectProps,
+          ...(shouldSkipIcon && {
+            inputProps: {
+              sx: {
+                pr: `${theme.spacing(conditionSxPropsPx)} !important`,
+                minWidth: '94% !important',
+              },
+            },
+          }),
         }}
         data-testid={dataTestid}
       >
