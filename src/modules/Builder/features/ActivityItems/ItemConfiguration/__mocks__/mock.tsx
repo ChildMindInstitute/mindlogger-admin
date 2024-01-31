@@ -1,10 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
+import { generatePath } from 'react-router-dom';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
-import { renderWithAppletFormData } from 'shared/utils';
-import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
+import { page } from 'resources';
+import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
+import {
+  mockedActivityId,
+  mockedAppletFormData,
+  mockedAppletId,
+  mockedSingleSelectFormValues,
+} from 'shared/mock';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ItemConfiguration } from '../ItemConfiguration';
@@ -149,6 +156,14 @@ export const renderItemConfigurationByType = (responseType) => {
       ],
     },
     formRef: ref,
+    options: {
+      routePath: page.builderAppletActivityItem,
+      route: generatePath(page.builderAppletActivityItem, {
+        appletId: mockedAppletId,
+        activityId: mockedActivityId,
+        itemId: getEntityKey(mockedEmptyItem),
+      }),
+    },
   });
 
   setItemResponseType(responseType);

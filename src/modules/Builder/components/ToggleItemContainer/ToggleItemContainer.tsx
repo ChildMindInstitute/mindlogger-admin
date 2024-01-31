@@ -59,7 +59,7 @@ export const ToggleItemContainer = ({
               <Svg id={open ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>
             {title && (
-              <StyledFlexColumn>
+              <StyledFlexColumn data-testid={`${dataTestid}-title`}>
                 <StyledTitleContainer hasError={!!titleErrorVisible}>
                   {titleErrorVisible && <StyledBadge variant="dot" color="error" />}
                   <StyledFlexTopCenter>

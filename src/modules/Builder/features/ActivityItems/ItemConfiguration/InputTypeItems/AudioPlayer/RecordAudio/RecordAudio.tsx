@@ -88,7 +88,10 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
   return (
     <Modal {...modalProps}>
       <Box sx={{ m: theme.spacing(0, 3.2) }}>
-        <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }}>
+        <StyledTitleMedium
+          sx={{ mb: theme.spacing(2.4) }}
+          data-testid={`${dataTestid}-description`}
+        >
           {t('audioPlayerRecordAudioDescription')}
         </StyledTitleMedium>
         <StyledButtons>
