@@ -14,7 +14,6 @@ import {
   variables,
 } from 'shared/styles';
 import { groupBy } from 'shared/utils/array';
-import { conditionSxPropsPx } from 'modules/Builder/components/ConditionRow/Condition/Condition.styles';
 
 import {
   StyledPlaceholder,
@@ -174,7 +173,7 @@ export const SelectController = <T extends FieldValues>({
           ...(shouldSkipIcon && {
             inputProps: {
               sx: {
-                pr: `${theme.spacing(conditionSxPropsPx)} !important`,
+                pr: '1.2rem !important',
                 minWidth: '94% !important',
               },
             },

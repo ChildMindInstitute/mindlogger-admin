@@ -3,11 +3,9 @@ import { styled } from '@mui/material';
 import { StyledFlexTopCenter, variables, theme } from 'shared/styles';
 import { SelectController, InputController } from 'shared/components/FormComponents';
 
-export const conditionSxPropsPx = 1.2;
-
 export const StyledCondition = styled(StyledFlexTopCenter)`
   gap: 0.4rem;
-  padding: ${theme.spacing(0.8, conditionSxPropsPx)};
+  padding: ${theme.spacing(0.8, 1.2)};
   border-radius: ${variables.borderRadius.xs};
   position: relative;
   flex-wrap: wrap;
@@ -55,7 +53,7 @@ export const StyledSelectController = styled(SelectController)`
   }
 
   .MuiSelect-select {
-    padding: ${theme.spacing(0.65, conditionSxPropsPx)};
+    padding: ${theme.spacing(0.65, 1.2)};
   }
 
   .MuiFormHelperText-root {
@@ -84,7 +82,7 @@ export const StyledInputController = styled(InputController)`
   }
 
   .MuiInputBase-input {
-    padding: ${theme.spacing(0.6, conditionSxPropsPx)};
+    padding: ${theme.spacing(0.6, 1.2)};
   }
 
   .MuiBox-root {
