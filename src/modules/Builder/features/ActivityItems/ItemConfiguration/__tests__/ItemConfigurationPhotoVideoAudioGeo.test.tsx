@@ -6,12 +6,13 @@ import { ItemResponseType } from 'shared/consts';
 
 import { mockedTestid, renderItemConfigurationByType } from '../__mocks__';
 
-describe('Item Configuration: Photo/Video/Audio', () => {
+describe('Item Configuration: Photo/Video/Audio/Geo', () => {
   test.each`
-    responseType              | testId                     | header              | content                                                     | description
-    ${ItemResponseType.Photo} | ${`${mockedTestid}-photo`} | ${'Photo Response'} | ${'The respondent will be able to take or upload a photo.'} | ${'Photo is rendered correctly'}
-    ${ItemResponseType.Video} | ${`${mockedTestid}-video`} | ${'Video Response'} | ${'The respondent will be able to take or upload a video.'} | ${'Video is rendered correctly'}
-    ${ItemResponseType.Audio} | ${`${mockedTestid}-audio`} | ${'Audio'}          | ${'The respondent will be able to record audio.'}           | ${'Audio is rendered correctly'}
+    responseType                    | testId                           | header              | content                                                     | description
+    ${ItemResponseType.Photo}       | ${`${mockedTestid}-photo`}       | ${'Photo Response'} | ${'The respondent will be able to take or upload a photo.'} | ${'Photo is rendered correctly'}
+    ${ItemResponseType.Video}       | ${`${mockedTestid}-video`}       | ${'Video Response'} | ${'The respondent will be able to take or upload a video.'} | ${'Video is rendered correctly'}
+    ${ItemResponseType.Audio}       | ${`${mockedTestid}-audio`}       | ${'Audio'}          | ${'The respondent will be able to record audio.'}           | ${'Audio is rendered correctly'}
+    ${ItemResponseType.Geolocation} | ${`${mockedTestid}-geolocation`} | ${'Geolocation'}    | ${'The respondent will be able to share geolocation.'}      | ${'Geolocation is rendered correctly'}
   `('$description', ({ responseType, testId, header, content }) => {
     renderItemConfigurationByType(responseType);
 
