@@ -107,7 +107,7 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
     expect(optionsSelectListOptions).toHaveLength(3);
 
     optionsSelectListOptions.forEach((option, index) => {
-      expect(option).toHaveTextContent(`${index + 1}-option${index !== 0 ? 's' : ''} Matrix`);
+      expect(option).toHaveTextContent(`${index + 1}-option${index === 0 ? '' : 's'} Matrix`);
     });
 
     expect(screen.getByTestId(`${mockedDataTestid}-option-0-image`)).toBeVisible();

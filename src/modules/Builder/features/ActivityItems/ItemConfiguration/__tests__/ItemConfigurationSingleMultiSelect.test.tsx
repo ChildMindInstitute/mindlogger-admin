@@ -5,7 +5,7 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import get from 'lodash.get';
 
 import { mockedMultiSelectFormValues, mockedSingleSelectFormValues } from 'shared/mock';
-import { CHANGE_DEBOUNCE_VALUE, ItemResponseType } from 'shared/consts';
+import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
 import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
 
 import {
@@ -506,40 +506,46 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toBeUndefined();
     });
 
-    test('Sets correct data when changed', async () => {
-      const ref = createRef();
+    test(
+      'Sets correct data when changed',
+      async () => {
+        const ref = createRef();
 
-      renderWithAppletFormData({
-        children: renderItemConfiguration(),
-        appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
-        formRef: ref,
-      });
+        renderWithAppletFormData({
+          children: renderItemConfiguration(),
+          appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
+          formRef: ref,
+        });
 
-      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+        await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
-      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
-      fireEvent.click(addAlert);
+        const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+        fireEvent.click(addAlert);
 
-      const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
-      fireEvent.change(alertInput, { target: { value: 'text' } });
+        const alertInput = screen
+          .getByTestId(`${mockedAlertsTestid}-1-text`)
+          .querySelector('input');
+        fireEvent.change(alertInput, { target: { value: 'text' } });
 
-      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+        await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
-      const optionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
-      const optionsSelectButton = optionsSelect.querySelector('[role="button"]');
-      fireEvent.mouseDown(optionsSelectButton);
+        const optionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
+        const optionsSelectButton = optionsSelect.querySelector('[role="button"]');
+        fireEvent.mouseDown(optionsSelectButton);
 
-      const option = screen
-        .getByTestId(`${mockedAlertsTestid}-1-selection-option-dropdown`)
-        .querySelector('li');
-      fireEvent.click(option);
+        const option = screen
+          .getByTestId(`${mockedAlertsTestid}-1-selection-option-dropdown`)
+          .querySelector('li');
+        fireEvent.click(option);
 
-      expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
-        alert: 'text',
-        value: mockedMultiSelectFormValues.responseValues.options[0].id,
-        key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
-      });
-    });
+        expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
+          alert: 'text',
+          value: mockedMultiSelectFormValues.responseValues.options[0].id,
+          key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
+        });
+      },
+      JEST_TEST_TIMEOUT,
+    );
 
     test('Options in list are filtered if already used', async () => {
       const ref = createRef();

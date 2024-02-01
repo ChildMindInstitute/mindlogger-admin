@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { TextField } from '@mui/material';
 import { Controller, FieldValues } from 'react-hook-form';
 import { parse, format as dateFnsFormat } from 'date-fns';
@@ -36,34 +36,36 @@ export const TimePicker = <T extends FieldValues>({
 
       return (
         <StyledTimePickerWrapper sx={{ ...wrapperSx }} data-testid={dataTestid}>
-          <ReactDatePicker
-            className="date-picker"
-            selected={selected as Date | null | undefined}
-            onChange={handleChange}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={timeIntervals}
-            showPopperArrow={false}
-            dateFormat={format}
-            timeFormat={format}
-            minTime={minTime}
-            maxTime={maxTime}
-            customInput={
-              <TextField
-                variant="outlined"
-                label={label}
-                error={!!error}
-                helperText={error?.message || null}
-                InputProps={{
-                  endAdornment: (
-                    <StyledIcon>
-                      <Svg id="clock" />
-                    </StyledIcon>
-                  ),
-                }}
-              />
-            }
-          />
+          <Suspense>
+            <ReactDatePicker
+              className="date-picker"
+              selected={selected as Date | null | undefined}
+              onChange={handleChange}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={timeIntervals}
+              showPopperArrow={false}
+              dateFormat={format}
+              timeFormat={format}
+              minTime={minTime}
+              maxTime={maxTime}
+              customInput={
+                <TextField
+                  variant="outlined"
+                  label={label}
+                  error={!!error}
+                  helperText={error?.message || null}
+                  InputProps={{
+                    endAdornment: (
+                      <StyledIcon>
+                        <Svg id="clock" />
+                      </StyledIcon>
+                    ),
+                  }}
+                />
+              }
+            />
+          </Suspense>
         </StyledTimePickerWrapper>
       );
     }}
