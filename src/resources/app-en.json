@@ -878,6 +878,7 @@
   "removeFromFolder": "Remove Applet from folder",
   "removeImage": "Remove Image",
   "removeImageDescription": "Are you sure you want to remove Image?",
+  "removeImageSuccess": "Image has been removed successfully.",
   "removeIndividualSchedule": "Remove Individual Schedule",
   "removeIndividualScheduleSuccess": "Respondent <1>{{name}}</1> is now using the <1>default schedule</1>. You may add an individual schedule for this Respondent again any time.",
   "removeRespondentAccess": "You are about to remove Respondent <1>{{respondentName}}</1>’s access to the <3>{{appletName}}</3> Applet.",
