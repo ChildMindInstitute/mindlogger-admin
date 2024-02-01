@@ -156,13 +156,11 @@ export const mockedEmptySingleSelection = {
   allowEdit: true,
   alerts: [],
   responseValues: {
-    paletteName: undefined,
     options: [
       {
         text: '',
         isHidden: false,
         value: 0,
-        color: undefined,
       },
     ],
   },
@@ -189,13 +187,11 @@ export const mockedEmptyMultiSelection = {
   allowEdit: true,
   alerts: [],
   responseValues: {
-    paletteName: undefined,
     options: [
       {
         text: '',
         isHidden: false,
         value: 0,
-        color: undefined,
       },
     ],
   },
