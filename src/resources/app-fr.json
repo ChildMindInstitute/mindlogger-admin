@@ -1177,6 +1177,7 @@
   "userDashboard": "Tableau de bord de {{userName}}",
   "userHasAccess": " a accès à la liste suivante d'Applets :",
   "userHasNoAccessToAnyApplets": "<0>{{firstName}} {{lastName}} ({{email}})</0> n'a plus accès à aucune Applet.",
+  "userHasManagerAccess": "L'utilisateur dispose déjà d'un rôle de gestionnaire avec un accès complet",
   "userList": "Liste des utilisateurs",
   "usersAndData": "Utilisateurs et données",
   "usersCanAccessActivity": "Les utilisateurs peuvent accéder à cette activité :",
