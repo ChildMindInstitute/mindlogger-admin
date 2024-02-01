@@ -206,13 +206,135 @@ const regularResult = [
     y: '74.16192355451622',
   },
 ];
+const regularResultOldVersions = [
+  {
+    UTC_Timestamp: '1689770366.939',
+    epoch_time_in_seconds_start: '1689770366.939',
+    line_number: '0',
+    seconds: '0',
+    x: '8.22055156707117',
+    y: '2.255636854946431',
+  },
+  {
+    UTC_Timestamp: '1689770367.141',
+    epoch_time_in_seconds_start: '',
+    line_number: '0',
+    seconds: '0.202',
+    x: '8.22055156707117',
+    y: '2.4831343147404255',
+  },
+  {
+    UTC_Timestamp: '1689770367.155',
+    epoch_time_in_seconds_start: '',
+    line_number: '0',
+    seconds: '0.216',
+    x: '8.22055156707117',
+    y: '2.961160445696464',
+  },
+  {
+    UTC_Timestamp: '1689770388.034',
+    epoch_time_in_seconds_start: '',
+    line_number: '1',
+    seconds: '21.095',
+    x: '3.609022639201978',
+    y: '97.79448616493212',
+  },
+  {
+    UTC_Timestamp: '1689770388.128',
+    epoch_time_in_seconds_start: '',
+    line_number: '1',
+    seconds: '21.189',
+    x: '4.00325086405094',
+    y: '97.79448616493212',
+  },
+  {
+    UTC_Timestamp: '1689770388.145',
+    epoch_time_in_seconds_start: '',
+    line_number: '1',
+    seconds: '21.206',
+    x: '5.03298357511019',
+    y: '97.79448616493212',
+  },
+  {
+    UTC_Timestamp: '1689770388.162',
+    epoch_time_in_seconds_start: '',
+    line_number: '1',
+    seconds: '21.223',
+
+    x: '6.088444364277798',
+    y: '97.79448616493212',
+  },
+  {
+    UTC_Timestamp: '1689770395.493',
+    epoch_time_in_seconds_start: '',
+    line_number: '2',
+    seconds: '28.554',
+
+    x: '93.43358610378453',
+    y: '99.39849622679967',
+  },
+  {
+    UTC_Timestamp: '1689770395.594',
+    epoch_time_in_seconds_start: '',
+    line_number: '2',
+    seconds: '28.655',
+    x: '93.43358610378453',
+    y: '99.19799496906623',
+  },
+  {
+    UTC_Timestamp: '1689770395.613',
+    epoch_time_in_seconds_start: '',
+    line_number: '2',
+    seconds: '28.674',
+    x: '93.43358610378453',
+    y: '98.2751311477653',
+  },
+  {
+    UTC_Timestamp: '1689770395.628',
+    epoch_time_in_seconds_start: '',
+    line_number: '2',
+    seconds: '28.689',
+    x: '93.43358610378453',
+    y: '97.12485553004954',
+  },
+  {
+    UTC_Timestamp: '1689770401.736',
+    epoch_time_in_seconds_start: '',
+    line_number: '3',
+    seconds: '34.797',
+    x: '96.94235811411978',
+    y: '6.4661632673487475',
+  },
+  {
+    UTC_Timestamp: '1689770401.838',
+    epoch_time_in_seconds_start: '',
+    line_number: '3',
+    seconds: '34.899',
+    x: '96.24149705872111',
+    y: '6.4661632673487475',
+  },
+  {
+    UTC_Timestamp: '1689770401.854',
+    epoch_time_in_seconds_start: '',
+    line_number: '3',
+    seconds: '34.915',
+    x: '94.84529411706667',
+    y: '6.4661632673487475',
+  },
+];
 
 describe('getDrawingLines', () => {
   test.each`
     lines           | width  | expected         | description
-    ${drawingLines} | ${362} | ${regularResult} | ${'should generate records for width = 300'}
+    ${drawingLines} | ${362} | ${regularResult} | ${'should generate records for width = 362'}
     ${drawingLines} | ${0}   | ${[]}            | ${'should return empty array for width = 0'}
   `('$description', ({ lines, width, expected }) => {
-    expect(getDrawingLines(lines, width)).toEqual(expected);
+    expect(getDrawingLines(lines, width, false)).toEqual(expected);
+  });
+  test.each`
+    lines           | width  | expected                    | description
+    ${drawingLines} | ${362} | ${regularResultOldVersions} | ${'should generate records for old mobile versions'}
+  `('$description', ({ lines, width, expected }) => {
+    expect(getDrawingLines(lines, width, true)).toEqual(expected);
   });
 });

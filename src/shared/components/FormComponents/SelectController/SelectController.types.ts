@@ -42,6 +42,7 @@ type FormSelectProps = {
   targetSelector?: string;
   setTrigger?: Dispatch<SetStateAction<boolean>>;
   'data-testid'?: string;
+  shouldSkipIcon?: boolean;
 } & TextFieldProps;
 
 export type SelectControllerProps<T extends FieldValues> = FormSelectProps & UseControllerProps<T>;

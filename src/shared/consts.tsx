@@ -320,7 +320,6 @@ export const enum ScoreReportType {
 export const URL_REGEX = /(https?:\/\/)?(www\.)?/g;
 
 export const AUTH_BOX_WIDTH = '39.2rem';
-
 export const enum AnalyticsCalendarPrefix {
   IndividualCalendar = 'IC',
   GeneralCalendar = 'GC',
@@ -328,5 +327,7 @@ export const enum AnalyticsCalendarPrefix {
 
 export const DEFAULT_API_START_TIME = '00:00:00';
 export const DEFAULT_API_END_TIME = '23:59:00';
+
+export const JEST_TEST_TIMEOUT = 10000;
 
 export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';

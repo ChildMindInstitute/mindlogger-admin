@@ -1,6 +1,6 @@
-import { Suspense } from 'react';
 import { useForm } from 'react-hook-form';
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
@@ -111,7 +111,7 @@ const ReviewMenuComponent = () => {
 };
 
 describe('ReviewMenu', () => {
-  test('renders component correctly, select activity, select timestamp', () => {
+  test('renders component correctly, select activity, select timestamp', async () => {
     renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
     expect(screen.getByText('Review')).toBeInTheDocument();
     expect(screen.getByTestId(`${dataTestid}-review-date`)).toBeInTheDocument();
@@ -124,7 +124,7 @@ describe('ReviewMenu', () => {
     expect(activityLength).toHaveLength(2);
 
     const activity0 = screen.getByTestId(`${dataTestid}-activity-0-select`);
-    fireEvent.click(activity0);
+    await userEvent.click(activity0);
     expect(setSelectedActivity).toBeCalledTimes(1);
 
     const timestampLength = screen.queryAllByTestId(
@@ -136,7 +136,7 @@ describe('ReviewMenu', () => {
     expect(screen.getByText('14:22:34')).toBeInTheDocument();
 
     const timestamp0 = screen.getByTestId(`${dataTestid}-activity-0-completion-time-1`);
-    fireEvent.click(timestamp0);
+    await userEvent.click(timestamp0);
     expect(onSelectAnswer).toHaveBeenCalledWith({
       answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
       createdAt: '2023-12-15T14:22:34.150182',
@@ -144,12 +144,7 @@ describe('ReviewMenu', () => {
   });
 
   test('test change date of the month', async () => {
-    renderWithProviders(
-      <Suspense fallback={<></>}>
-        <ReviewMenuComponent />
-      </Suspense>,
-      { preloadedState, route, routePath },
-    );
+    renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
 
     const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
     expect(inputContainer).toBeInTheDocument();
@@ -158,36 +153,33 @@ describe('ReviewMenu', () => {
     expect(input).toBeInTheDocument();
     expect(input.value).toEqual('15 Dec 2023');
 
-    fireEvent.click(inputContainer);
+    await act(async () => {
+      await userEvent.click(inputContainer);
+    });
 
     const datepicker = (await screen.findByTestId(
       'respondents-review-menu-review-date-popover',
     )) as HTMLElement;
     expect(datepicker).toBeInTheDocument();
 
-    act(() => {
-      const december11 = datepicker.getElementsByClassName(
-        'react-datepicker__day react-datepicker__day--011',
-      );
-      expect(december11).toHaveLength(1);
+    const december11 = datepicker.getElementsByClassName(
+      'react-datepicker__day react-datepicker__day--011',
+    );
+    expect(december11).toHaveLength(1);
 
-      fireEvent.click(december11[0]);
-    });
+    await userEvent.click(december11[0]);
 
     expect(input.value).toEqual('11 Dec 2023');
   });
 
   test('test change month', async () => {
-    renderWithProviders(
-      <Suspense fallback={<></>}>
-        <ReviewMenuComponent />
-      </Suspense>,
-      { preloadedState, route, routePath },
-    );
+    renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
 
     const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
 
-    fireEvent.click(inputContainer);
+    await act(async () => {
+      await userEvent.click(inputContainer);
+    });
 
     const datepicker = (await screen.findByTestId(
       'respondents-review-menu-review-date-popover',
@@ -203,12 +195,12 @@ describe('ReviewMenu', () => {
     const svgNavigateRight = datepickerHeader[0].querySelector('.svg-navigate-right');
 
     if (svgNavigateLeft) {
-      fireEvent.click(svgNavigateLeft);
+      await userEvent.click(svgNavigateLeft);
       expect(datepickerHeader[0]).toHaveTextContent('November');
     }
 
     if (svgNavigateRight) {
-      fireEvent.click(svgNavigateRight);
+      await userEvent.click(svgNavigateRight);
       expect(datepickerHeader[0]).toHaveTextContent('December');
     }
   });

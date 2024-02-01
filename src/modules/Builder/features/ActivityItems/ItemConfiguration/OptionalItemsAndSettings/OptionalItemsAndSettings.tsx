@@ -46,7 +46,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
     const [optionsOpen, setOptionsOpen] = useState<boolean[]>([]);
 
-    const { control, setValue, reset } = useFormContext();
+    const { control, setValue } = useFormContext();
     const [settings, responseType, responseValues, palette] = useWatch({
       control,
       name: [
@@ -72,6 +72,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       control,
       name: `${name}.alerts`,
     });
+
     const {
       fields: options,
       append: appendOption,
@@ -192,13 +193,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     });
 
     useEffect(() => {
-      if (options?.length) {
-        (async () => {
-          await setOptionsOpen(options.map(() => true));
-          //reset is dirty state after page refresh (to avoid is dirty state for useFieldArray keyName - "_id")
-          reset(undefined, { keepDirty: false });
-        })();
-      }
+      if (!options?.length) return;
+
+      setOptionsOpen(options.map(() => true));
     }, []);
 
     useImperativeHandle(
@@ -217,7 +214,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       handleAddSingleOrMultipleRow,
       removeAlert,
       handleAddAlert,
-      handleRemovePalette,
       setOptionsOpen,
     });
 

@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Suspense } from 'react';
-import { waitFor, screen } from '@testing-library/react';
+import { waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
@@ -240,16 +239,11 @@ describe('RespondentDataReview', () => {
 
       dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
-      renderWithProviders(
-        <Suspense fallback={<></>}>
-          <RespondentDataReview />
-        </Suspense>,
-        {
-          preloadedState,
-          route,
-          routePath,
-        },
-      );
+      renderWithProviders(<RespondentDataReview />, {
+        preloadedState,
+        route,
+        routePath,
+      });
 
       window.HTMLElement.prototype.scrollTo = () => {};
 
@@ -299,7 +293,7 @@ describe('RespondentDataReview', () => {
       expect(activityLength).toHaveLength(1);
 
       const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
-      userEvent.click(activity);
+      await userEvent.click(activity);
 
       // check that there are no timestamps in the selected activity
       const timestampLength = screen.queryAllByTestId(
@@ -315,7 +309,9 @@ describe('RespondentDataReview', () => {
       expect(input).toBeInTheDocument();
       expect(input.value).toEqual('27 Dec 2023');
 
-      userEvent.click(inputContainer);
+      await act(async () => {
+        await userEvent.click(inputContainer);
+      });
 
       const datepicker = (await screen.findByTestId(
         `${dataTestid}-menu-review-date-popover`,
@@ -330,7 +326,7 @@ describe('RespondentDataReview', () => {
       );
       expect(datepickerDaySelected).toHaveLength(1);
 
-      userEvent.click(datepickerDaySelected[0]);
+      await userEvent.click(datepickerDaySelected[0]);
 
       await waitFor(() => {
         expect(input.value).toEqual('15 Dec 2023');
@@ -356,7 +352,7 @@ describe('RespondentDataReview', () => {
       const timestamp0 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
       expect(timestamp0).toBeInTheDocument();
 
-      userEvent.click(timestamp0);
+      await userEvent.click(timestamp0);
 
       await waitFor(() => {
         expect(mockAxios.get).toHaveBeenNthCalledWith(
