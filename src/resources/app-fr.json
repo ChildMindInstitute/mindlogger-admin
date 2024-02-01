@@ -878,6 +878,7 @@
   "removeFromFolder": "Retirer l'Applet du dossier",
   "removeImage": "Supprimer l'image",
   "removeImageDescription": "Êtes-vous sûr de vouloir supprimer l'image?",
+  "removeImageSuccess": "L'image a été supprimée avec succès.",
   "removeIndividualSchedule": "Supprimer le programme individuel",
   "removeIndividualScheduleSuccess": "Le participant <1>{{name}}</1> utilise maintenant le <1>programme par défaut</1>. Vous pouvez ajouter un programme individuel pour ce participant à tout moment.",
   "removeRespondentAccess": "Vous êtes sur le point de supprimer l'accès du participant <1>{{respondentName}}</1> à l'Applet <3>{{appletName}}</3>.",

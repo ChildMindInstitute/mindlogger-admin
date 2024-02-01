@@ -1,6 +1,7 @@
 import { centerCrop, makeAspectCrop } from 'react-image-crop';
 
 import { CropImage, InitCrop } from './CropPopup.types';
+import { SIZE_TO_SET_IMG_SMALL } from './CropPopup.const';
 
 export const getAbsoluteFromPercent = (basis: number, percent: number) => (basis / 100) * percent;
 
@@ -47,3 +48,6 @@ export const initPercentCrop = ({ width, height, ratio }: InitCrop) =>
     width,
     height,
   );
+
+export const checkIfImageSmall = (width: number, height: number): boolean =>
+  width < SIZE_TO_SET_IMG_SMALL || height < SIZE_TO_SET_IMG_SMALL;
