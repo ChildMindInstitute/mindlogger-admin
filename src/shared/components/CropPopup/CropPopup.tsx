@@ -1,6 +1,6 @@
 import { useState, useMemo, SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import ReactCrop, { Crop } from 'react-image-crop';
+import ReactCrop, { Crop, PixelCrop, PercentCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { Modal } from 'shared/components/Modal';
@@ -48,6 +48,11 @@ export const CropPopup = ({
     });
   };
 
+  const handleCropChange = ({ width, height }: PixelCrop, percentCrop: PercentCrop) => {
+    setCrop(percentCrop);
+    setIsSmallImg(checkIfImageSmall(width, height));
+  };
+
   return (
     <>
       <Modal
@@ -62,10 +67,7 @@ export const CropPopup = ({
           <StyledCropWrapper isSmallImg={isSmallImg}>
             <ReactCrop
               crop={crop}
-              onChange={({ width, height }, percentCrop) => {
-                setCrop(percentCrop);
-                setIsSmallImg(checkIfImageSmall(width, height));
-              }}
+              onChange={handleCropChange}
               aspect={flexibleCropRatio ? undefined : ratio}
               keepSelection={true}
               style={{ maxHeight: '60vh' }}
