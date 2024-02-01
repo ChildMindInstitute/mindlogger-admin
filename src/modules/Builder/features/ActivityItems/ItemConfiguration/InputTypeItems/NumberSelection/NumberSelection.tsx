@@ -23,20 +23,21 @@ export const NumberSelection = ({ name }: NumberSelectionProps) => {
   const maxValueName = `${name}.responseValues.maxValue`;
   const minValue = watch(minValueName);
   const maxValue = watch(maxValueName);
+  const dataTestid = 'builder-activity-items-item-configuration-number-selection';
 
   useEffect(() => {
     trigger([minValueName, maxValueName]);
   }, [minValue, maxValue]);
 
   return (
-    <ItemOptionContainer title={t('numberSelection')}>
+    <ItemOptionContainer title={t('numberSelection')} data-testid={dataTestid}>
       <StyledFlexTopStart sx={{ justifyContent: 'space-between' }}>
         <StyledInputWrapper sx={{ mr: theme.spacing(1.25) }}>
           <InputController
             {...commonProps}
             name={minValueName}
             label={t('minValue')}
-            data-testid="builder-activity-items-item-configuration-number-selection-min-value"
+            data-testid={`${dataTestid}-min-value`}
           />
         </StyledInputWrapper>
         <StyledInputWrapper sx={{ ml: theme.spacing(1.25) }}>
@@ -44,7 +45,7 @@ export const NumberSelection = ({ name }: NumberSelectionProps) => {
             {...commonProps}
             name={maxValueName}
             label={t('maxValue')}
-            data-testid="builder-activity-items-item-configuration-number-selection-max-value"
+            data-testid={`${dataTestid}-max-value`}
           />
         </StyledInputWrapper>
       </StyledFlexTopStart>

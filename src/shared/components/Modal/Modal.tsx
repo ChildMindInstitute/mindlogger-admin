@@ -40,7 +40,7 @@ export const Modal = ({
   submitBtnTooltip,
   onTransitionEntered,
   hasCloseIcon = true,
-  'data-testid': dataTestId,
+  'data-testid': dataTestid,
 }: ModalProps) => {
   const getActionsAlign = () => {
     if (hasThirdBtn) {
@@ -58,7 +58,7 @@ export const Modal = ({
         disabled={disabledSubmit}
         onClick={onSubmit}
         color={submitBtnColor}
-        data-testid={`${dataTestId}-submit-button`}
+        data-testid={`${dataTestid}-submit-button`}
       >
         {buttonText}
       </StyledButton>
@@ -85,13 +85,13 @@ export const Modal = ({
       TransitionProps={{
         onEntered: onTransitionEntered,
       }}
-      data-testid={dataTestId}
+      data-testid={dataTestid}
     >
       <StyledModalContent>
-        <StyledDialogTitle align={titleAlign}>
+        <StyledDialogTitle align={titleAlign} data-testid={`${dataTestid}-title`}>
           {title}
           {hasCloseIcon && (
-            <StyledCloseButton onClick={onClose} data-testid={`${dataTestId}-close-button`}>
+            <StyledCloseButton onClick={onClose} data-testid={`${dataTestid}-close-button`}>
               <Svg id="cross" />
             </StyledCloseButton>
           )}

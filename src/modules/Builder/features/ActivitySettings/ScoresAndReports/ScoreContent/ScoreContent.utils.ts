@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import i18n from 'i18n';
 import { ScoreConditionalLogic, SingleAndMultiSelectOption } from 'shared/state';
 import {
@@ -84,7 +86,7 @@ const getItemScoreRange = (item: ItemsWithScore) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = ({ items, calculationType, activity }: GetScoreRange) => {
+export const getScoreRange = ({ items = [], calculationType, activity }: GetScoreRange) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
   const count = items.length;
@@ -112,9 +114,10 @@ export const getScoreRange = ({ items, calculationType, activity }: GetScoreRang
   }
 };
 
-export const getDefaultConditionalValue = (id: string, key: string) => ({
+export const getScoreConditionalDefaults = (id: string, key: string) => ({
   name: '',
   id,
+  key: uuidv4(),
   showMessage: true,
   flagScore: false,
   message: undefined,

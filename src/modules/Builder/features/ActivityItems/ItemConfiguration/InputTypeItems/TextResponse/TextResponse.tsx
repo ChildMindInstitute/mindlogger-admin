@@ -25,6 +25,7 @@ export const TextResponse = ({ name }: TextResponseProps) => {
   const settings = watch(`${name}.config`);
   const maxResponseLength = watch(responseLengthName);
   const correctAnswer = watch(correctAnswerName);
+  const dataTestid = 'builder-activity-items-item-configuration-text-response';
 
   const handleResponseLengthChange = (value: number) => {
     setValue(responseLengthName, value);
@@ -44,9 +45,18 @@ export const TextResponse = ({ name }: TextResponseProps) => {
   const isCorrectAnswerRequired = get(settings, ItemConfigurationSettings.IsCorrectAnswerRequired);
 
   return (
-    <ItemOptionContainer title={t('textResponseTitle')} description={t('textResponseDescription')}>
+    <ItemOptionContainer
+      title={t('textResponseTitle')}
+      description={t('textResponseDescription')}
+      data-testid={dataTestid}
+    >
       <StyledRow>
-        <StyledTextField disabled variant="outlined" value={t('text')} />
+        <StyledTextField
+          disabled
+          variant="outlined"
+          value={t('text')}
+          data-testid={`${dataTestid}-input`}
+        />
         <StyledMaxCharacters>
           <InputController
             name={responseLengthName}
@@ -56,7 +66,7 @@ export const TextResponse = ({ name }: TextResponseProps) => {
             withDebounce
             type="number"
             label={t('maxCharacters')}
-            data-testid="builder-activity-items-item-configuration-text-response-max-length"
+            data-testid={`${dataTestid}-max-length`}
           />
         </StyledMaxCharacters>
       </StyledRow>
@@ -68,7 +78,7 @@ export const TextResponse = ({ name }: TextResponseProps) => {
             label={t('correctAnswer')}
             restrictExceededValueLength
             maxLength={maxResponseLength > 0 ? maxResponseLength : MIN_TEXT_RESPONSE_LENGTH}
-            data-testid="builder-activity-items-item-configuration-correct-answer"
+            data-testid={`${dataTestid}-correct-answer`}
           />
         </StyledInputWrapper>
       )}

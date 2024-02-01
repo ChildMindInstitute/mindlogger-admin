@@ -48,12 +48,50 @@ const commonProps = {
   scoreItems,
   'data-testid': dataTestid,
 };
+const formValues = {
+  activities: [
+    {
+      name: 'New Activity#1',
+      scoresAndReports: {
+        generateReport: true,
+        showScoreSummary: true,
+        reports: [
+          {
+            type: 'score',
+            name: 'score1',
+            id: 'sumScore_score1',
+            calculationType: 'sum',
+            itemsScore: [mockedSingleSelectFormValues.id],
+            message: 'score1',
+            itemsPrint: [],
+            key: '342a5c93-4c6c-443f-83e9-8b7d517c24ad',
+            showMessage: true,
+            printItems: false,
+          },
+        ],
+      },
+    },
+  ],
+};
 
 describe('ScoreContent', () => {
   test('should render score', () => {
     renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
     expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
+  });
+
+  test.each`
+    scoreItems                | expectedResult   | description
+    ${commonProps.scoreItems} | ${'1.00 ~ 2.00'} | ${'should render filled in score range if scoreItems is provided'}
+    ${[]}                     | ${'-'}           | ${'should render empty score range if scoreItems is empty list'}
+    ${undefined}              | ${'-'}           | ${'should render empty score range if scoreItems is undefined'}
+  `('$description', async ({ scoreItems, expectedResult }) => {
+    renderWithAppletFormData({
+      children: <ScoreContent {...{ ...commonProps, scoreItems }} />,
+      appletFormData: formValues,
+    });
+    expect(screen.getByTestId(`${dataTestid}-score-range`)).toHaveTextContent(expectedResult);
   });
 
   describe('scoreId should change when calculation type changes', () => {
