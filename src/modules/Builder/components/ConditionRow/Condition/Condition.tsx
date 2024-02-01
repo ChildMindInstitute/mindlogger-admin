@@ -57,6 +57,8 @@ export const Condition = ({
     state,
   });
   const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
+  const isValueSelectDisabled = !isItemScoreCondition && !valueOptions?.length;
+  const isStateSelectDisabled = !selectedItem?.type;
 
   const { leftRange, rightRange } = getConditionMinMaxRangeValues({
     item: selectedItem,
@@ -92,19 +94,23 @@ export const Condition = ({
         control={control}
         name={stateName}
         options={getStateOptions(selectedItem?.type)}
-        placeholder={t('conditionTypePlaceholder')}
+        placeholder={
+          isStateSelectDisabled ? t('conditionDisabledPlaceholder') : t('conditionTypePlaceholder')
+        }
         customChange={onStateChange}
         isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-type`}
+        disabled={isStateSelectDisabled}
       />
       {isValueSelectShown && (
         <StyledSelectController
           control={control}
           name={isItemScoreCondition ? numberValueName : optionValueName}
           options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
-          placeholder={t('value')}
+          placeholder={isValueSelectDisabled ? t('conditionDisabledPlaceholder') : t('value')}
           isLabelNeedTranslation={false}
           data-testid={`${dataTestid}-selection-value`}
+          disabled={isValueSelectDisabled}
         />
       )}
       {isNumberValueShown && (

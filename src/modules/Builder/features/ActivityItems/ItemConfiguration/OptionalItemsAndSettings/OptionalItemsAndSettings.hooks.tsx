@@ -25,7 +25,6 @@ import {
   defaultTextConfig,
   defaultSliderConfig,
   defaultSliderRowsConfig,
-  defaultSingleAndMultiSelectionConfig,
   defaultAudioAndVideoConfig,
   defaultAudioPlayerConfig,
   defaultSingleAndMultiSelectionRowsConfig,
@@ -36,6 +35,8 @@ import {
   defaultPhotoConfig,
   defaultGeolocationConfig,
   defaultMessageConfig,
+  defaultSingleSelectionConfig,
+  defaultMultiSelectionConfig,
 } from './OptionalItemsAndSettings.const';
 import {
   getEmptySliderOption,
@@ -92,7 +93,7 @@ export const useSettingsSetup = ({
   removeOptions,
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
-  setShowColorPalette,
+  handleRemovePalette,
   setOptionsOpen,
 }: SettingsSetupProps) => {
   const { setValue, getValues, watch, clearErrors } = useFormContext();
@@ -113,12 +114,14 @@ export const useSettingsSetup = ({
 
         const responseType = getValues(`${name}.responseType`);
 
+        const isSingleSelect = responseType === ItemResponseType.SingleSelection;
+
         switch (responseType) {
           case ItemResponseType.SingleSelection:
           case ItemResponseType.MultipleSelection:
             removeOptions?.();
             setOptionsOpen?.([]);
-            setConfig(defaultSingleAndMultiSelectionConfig);
+            setConfig(isSingleSelect ? defaultSingleSelectionConfig : defaultMultiSelectionConfig);
             handleAddOption?.(false);
             break;
           case ItemResponseType.Text:
@@ -184,7 +187,7 @@ export const useSettingsSetup = ({
   }, []);
 
   useEffect(() => {
-    if (!hasPalette) setShowColorPalette?.(false);
+    if (!hasPalette) handleRemovePalette?.();
   }, [hasPalette]);
 
   useEffect(() => {

@@ -219,22 +219,14 @@ describe('Condition', () => {
 
   test.each`
     testId               | description
-    ${'type'}            | ${'empty condition has no state options'}
-    ${'selection-value'} | ${'empty condition has no value options'}
+    ${'type'}            | ${'state is disabled if there is not item selected'}
+    ${'selection-value'} | ${'value is disabled if there is not item selected'}
   `('$description', ({ testId }) => {
     renderWithAppletFormData({
       children: <Condition {...mockedPropsForEmptyCondition} />,
     });
 
-    const select = screen.getByTestId(`empty-condition-${testId}`);
-    const selectButton = select.querySelector('[role="button"]');
-
-    fireEvent.mouseDown(selectButton);
-
-    const selectDropdown = screen.getByTestId(`empty-condition-${testId}-dropdown`);
-    const options = selectDropdown.querySelectorAll('li');
-
-    expect(options.length).toBe(0);
+    expect(screen.getByTestId(`empty-condition-${testId}`).querySelector('input')).toBeDisabled();
   });
 
   test.each`

@@ -27,6 +27,7 @@ export type DataTableProps = {
   onSelectAll?: (allSelected: boolean) => unknown[] | void;
   hasError?: boolean;
   tableHeadBackground?: string;
-  'data-testid'?: string;
   tooltipByDefault?: boolean;
+  itemsLength?: number;
+  'data-testid'?: string;
 };

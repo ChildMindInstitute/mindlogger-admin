@@ -64,7 +64,10 @@ export const ItemFlowContent = ({
         data-testid={`${dataTestid}-summary`}
       />
       {error && (
-        <StyledBodyLarge sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}>
+        <StyledBodyLarge
+          sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}
+          data-testid={`${dataTestid}-error`}
+        >
           {errorMessage}
         </StyledBodyLarge>
       )}

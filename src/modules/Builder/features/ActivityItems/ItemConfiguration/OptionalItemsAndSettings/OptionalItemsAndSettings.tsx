@@ -175,6 +175,17 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       });
     };
 
+    const handleRemovePalette = () => {
+      handleChangeColorPaletteVisibility(false);
+
+      options?.forEach((option, index) =>
+        updateOptions(index, {
+          ...option,
+          color: undefined,
+        }),
+      );
+    };
+
     const activeItem = useActiveItem({
       name,
       responseType,
@@ -200,7 +211,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       handleAddSingleOrMultipleRow,
       removeAlert,
       handleAddAlert,
-      setShowColorPalette: handleChangeColorPaletteVisibility,
+      handleRemovePalette,
       setOptionsOpen,
     });
 
@@ -226,7 +237,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
               </StyledFlexTopCenter>
             )}
             {hasColorPalette && showColorPalette && (
-              <ColorPalette name={name} setShowColorPalette={handleChangeColorPaletteVisibility} />
+              <ColorPalette name={name} onRemovePalette={handleRemovePalette} />
             )}
             <StyledOptionsWrapper>
               {options?.length

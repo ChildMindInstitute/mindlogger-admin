@@ -54,7 +54,7 @@ export const GeneralSettings = () => {
   }, [practiceLambdaSlope]);
 
   return (
-    <StyledItemOptionContainer>
+    <StyledItemOptionContainer data-testid={dataTestid}>
       <StyledTitleLarge sx={{ mb: theme.spacing(2.4) }}>{t('generalSettings')}</StyledTitleLarge>
       <Grid container spacing={2}>
         <Grid item xs={4}>

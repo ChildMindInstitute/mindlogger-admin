@@ -43,6 +43,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
           options={getMatchOptions()}
           placeholder={t('select')}
           data-testid={`${dataTestid}-match`}
+          isLabelNeedTranslation={false}
         />
         <StyledTitleMedium>{t('summaryRowDescription')}</StyledTitleMedium>
         <StyledSummarySelectController
@@ -60,6 +61,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
           }}
           customChange={handleChangeItemKey}
           data-testid={`${dataTestid}-item`}
+          isLabelNeedTranslation={false}
         />
       </StyledSummaryRow>
     </>

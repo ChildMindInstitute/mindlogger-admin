@@ -3,7 +3,6 @@ import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType, ConditionType } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import {
-  Condition,
   OptionCondition,
   SingleValueCondition,
   RangeValueCondition,
@@ -12,7 +11,7 @@ import {
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
-import { OptionListItem } from './ConditionRow.types';
+import { GetPayload, OptionListItem } from './ConditionRow.types';
 import { ConditionItemType } from './Condition';
 
 const { t } = i18n;
@@ -84,11 +83,7 @@ const getDefaultPayload = (conditionPayload: SingleValueCondition['payload']) =>
   value: conditionPayload?.value ?? DEFAULT_PAYLOAD_MIN_VALUE,
 });
 
-export const getPayload = (
-  conditionType: ConditionType,
-  conditionPayload?: Condition['payload'],
-  selectedItem?: ItemFormValues,
-) => {
+export const getPayload = ({ conditionType, conditionPayload, selectedItem }: GetPayload) => {
   switch (conditionType) {
     case ConditionType.IncludesOption:
     case ConditionType.NotIncludesOption:

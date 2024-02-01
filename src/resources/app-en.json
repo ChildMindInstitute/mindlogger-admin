@@ -256,6 +256,7 @@
   "conditionTarget": "Item",
   "conditionType": "State",
   "conditionTypePlaceholder": "State",
+  "conditionDisabledPlaceholder": "Select Item First",
   "conditionValue": "Value",
   "configure": "Configure",
   "configureServer": "Please configure the report server to download the report.",
@@ -647,7 +648,9 @@
     "skippableItem": "Skippable Item",
     "skippableItem_tooltip": "The respondent will be able to leave the Item unanswered",
     "timer": "Set Timer",
-    "timer_tooltip": "Time to complete the Item "
+    "timer_tooltip": "Time to complete the Item ",
+    "autoAdvance": "Auto-advance",
+    "autoAdvance_tooltip": "The respondent will be automatically moved to the next Item after selecting a response"
   },
   "itemType": "Item Type",
   "itemValue": "Item Value",
@@ -750,6 +753,7 @@
   "noManagers": "No Managers yet.",
   "noManagersForApplet": "No Managers yet. Invite your first one by clicking the ‘Add Manager’ button above.",
   "noMatchWasFound": "No match was found for '{{searchValue}}'. Try a different search word or phrase.",
+  "noMatchWasFoundShort": "No match was found for '{{searchValue}}'.",
   "noPendingInvitations": "No pending invitations",
   "noPermissions": "You have no permissions to view this tab.",
   "noRespondentIdentifier": "No respondent identifier yet.",

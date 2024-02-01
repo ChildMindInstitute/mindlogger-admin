@@ -73,8 +73,9 @@ export const ScoreContent = ({
   const selectedItems = scoreItems?.filter(
     (item) => itemsScore?.includes(getEntityKey(item, true)),
   );
+  const scoreRange = getScoreRange({ items: selectedItems, calculationType, activity });
   const scoreRangeLabel = selectedItems?.length
-    ? getScoreRangeLabel(getScoreRange({ items: selectedItems, calculationType, activity }))
+    ? getScoreRangeLabel(scoreRange)
     : EMPTY_SCORE_RANGE_LABEL;
 
   const {
@@ -132,7 +133,7 @@ export const ScoreContent = ({
     const calculationType = event.target.value as CalculationType;
     setPrevCalculationType(score.calculationType);
 
-    const oldScoreId = getScoreId(prevScoreName, calculationType);
+    const oldScoreId = getScoreId(prevScoreName, prevCalculationType);
     const newScoreId = getScoreId(scoreName, calculationType);
 
     if (oldScoreId !== newScoreId) {
@@ -269,8 +270,9 @@ export const ScoreContent = ({
                   reportsName,
                   score,
                   scoreKey: `score-condition-${index}-${key}`,
-                  'data-testid': conditionalDataTestid,
                   items,
+                  scoreRange,
+                  'data-testid': conditionalDataTestid,
                 }}
                 headerContentProps={{
                   onRemove: () => removeScoreConditional(key),
