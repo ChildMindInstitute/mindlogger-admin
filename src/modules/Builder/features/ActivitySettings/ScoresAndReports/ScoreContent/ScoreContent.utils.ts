@@ -86,7 +86,7 @@ const getItemScoreRange = (item: ItemsWithScore) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = ({ items, calculationType, activity }: GetScoreRange) => {
+export const getScoreRange = ({ items = [], calculationType, activity }: GetScoreRange) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
   const count = items.length;
