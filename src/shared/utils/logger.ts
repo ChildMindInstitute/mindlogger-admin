@@ -2,6 +2,8 @@ import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
 import { BLOB_ZIP_OPTIONS } from './exportData/exportZip';
 import { postLogFile } from '../api/api';
+import { isProduction } from './env';
+import { SessionStorageKeys } from './storage';
 
 const DEVICE_ID = 'browser';
 
@@ -75,3 +77,8 @@ export const sendLogFile = async ({
     console.warn('Error while file logging:', error);
   }
 };
+
+export const checkIfShouldLogging = () =>
+  !isProduction && sessionStorage.getItem(SessionStorageKeys.DebugMode) === 'true';
+
+export const logDataInDebugMode = (data: unknown) => checkIfShouldLogging() && console.log(data);
