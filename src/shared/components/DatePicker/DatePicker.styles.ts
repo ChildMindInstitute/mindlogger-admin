@@ -221,7 +221,7 @@ export const StyledCancelButton = styled(StyledButton)`
   margin-right: ${theme.spacing(0.7)};
 `;
 
-export const DatePickerWrapper = styled(Box)`
+export const DatePickerFallback = styled(Box)`
   min-height: 30rem;
   min-width: 30rem;
 `;

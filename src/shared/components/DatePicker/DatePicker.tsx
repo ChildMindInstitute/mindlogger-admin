@@ -9,7 +9,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { StyledBodyLarge, theme } from 'shared/styles';
 
 import {
-  DatePickerWrapper,
+  DatePickerFallback,
   StyledButton,
   StyledButtons,
   StyledCancelButton,
@@ -165,34 +165,28 @@ export const DatePicker = <T extends FieldValues>({
                 {value && (
                   <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />
                 )}
-                <DatePickerWrapper>
-                  <Suspense>
-                    <ReactDatePicker
-                      locale={i18n.language === 'fr' ? fr : undefined}
-                      renderCustomHeader={(props) => (
-                        <DatePickerHeader uiType={uiType} {...props} />
-                      )}
-                      startDate={isStartEndingDate ? (getSelectedDate() as DateType) : undefined}
-                      endDate={
-                        isStartEndingDate
-                          ? (getSelectedDate(DateVariant.End) as DateType)
-                          : undefined
-                      }
-                      selectsRange={isStartEndingDate}
-                      inline
-                      selected={getSelectedDate() as DateType}
-                      disabled={disabled}
-                      onChange={(date) => onChange(date)}
-                      monthsShown={isStartEndingDate ? 2 : 1}
-                      formatWeekDay={(nameOfDay) => nameOfDay[0]}
-                      minDate={minDate === undefined ? new Date() : minDate}
-                      maxDate={maxDate === undefined ? null : maxDate}
-                      focusSelectedMonth
-                      onMonthChange={onMonthChange}
-                      includeDates={includeDates}
-                    />
-                  </Suspense>
-                </DatePickerWrapper>
+                <Suspense fallback={<DatePickerFallback />}>
+                  <ReactDatePicker
+                    locale={i18n.language === 'fr' ? fr : undefined}
+                    renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
+                    startDate={isStartEndingDate ? (getSelectedDate() as DateType) : undefined}
+                    endDate={
+                      isStartEndingDate ? (getSelectedDate(DateVariant.End) as DateType) : undefined
+                    }
+                    selectsRange={isStartEndingDate}
+                    inline
+                    selected={getSelectedDate() as DateType}
+                    disabled={disabled}
+                    onChange={(date) => onChange(date)}
+                    monthsShown={isStartEndingDate ? 2 : 1}
+                    formatWeekDay={(nameOfDay) => nameOfDay[0]}
+                    minDate={minDate === undefined ? new Date() : minDate}
+                    maxDate={maxDate === undefined ? null : maxDate}
+                    focusSelectedMonth
+                    onMonthChange={onMonthChange}
+                    includeDates={includeDates}
+                  />
+                </Suspense>
                 <StyledButtons>
                   <StyledCancelButton variant="text" onClick={handlePickerClose}>
                     {t('cancel')}
