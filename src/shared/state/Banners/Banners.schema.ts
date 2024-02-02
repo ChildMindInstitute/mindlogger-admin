@@ -1,12 +1,14 @@
+import { VersionWarningBanner } from 'shared/components';
+
 export const BannerComponents = {
-  // TODO: add available banner components here
+  VersionWarningBanner,
 };
 
 export type BannerPayload = {
   key: keyof typeof BannerComponents;
 };
 
-export type BannerSchema = {
+export type BannersSchema = {
   data: {
     banners: Array<BannerPayload>;
   };

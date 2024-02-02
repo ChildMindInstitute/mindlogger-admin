@@ -1,6 +1,6 @@
-import { BannerSchema } from './Banners.schema';
+import { BannersSchema } from './Banners.schema';
 
-export const state: BannerSchema = {
+export const state: BannersSchema = {
   data: {
     banners: [],
   },

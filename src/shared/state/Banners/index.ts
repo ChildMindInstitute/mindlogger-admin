@@ -4,7 +4,7 @@ import { useAppSelector } from 'redux/store/hooks';
 
 import { state as initialState } from './Banners.state';
 import { reducers } from './Banners.reducer';
-import { BannerSchema } from './Banners.schema';
+import { BannersSchema } from './Banners.schema';
 
 export * from './Banners.schema';
 
@@ -17,5 +17,5 @@ const slice = createSlice({
 export const banners = {
   slice,
   actions: slice.actions,
-  useData: (): BannerSchema['data'] => useAppSelector(({ banners: { data } }) => data),
+  useData: (): BannersSchema['data'] => useAppSelector(({ banners: { data } }) => data),
 };
