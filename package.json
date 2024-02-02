@@ -90,12 +90,6 @@
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "jest": {
     "globalSetup": "./global-setup.js",
     "reporters": [
