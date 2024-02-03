@@ -1,7 +1,8 @@
 import { Outlet } from 'react-router-dom';
 
 import { auth } from 'modules/Auth/state';
-import { Spinner, Svg, Footer, Banners } from 'shared/components';
+import { Spinner, Svg, Footer } from 'shared/components';
+import { Banners } from 'shared/components/Banners';
 
 import {
   StyledAuthLayout,

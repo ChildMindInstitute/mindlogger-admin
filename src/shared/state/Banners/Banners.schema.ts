@@ -1,5 +1,5 @@
-import { AppletWithoutChangesBanner } from 'modules/Builder/components';
-import { VersionWarningBanner } from 'shared/components';
+import { AppletWithoutChangesBanner } from 'modules/Builder/components/Banners';
+import { VersionWarningBanner } from 'shared/components/Banners/VersionWarningBanner';
 
 export const BannerComponents = {
   AppletWithoutChangesBanner,

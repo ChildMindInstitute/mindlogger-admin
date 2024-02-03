@@ -1,8 +1,7 @@
 import { Link } from '@mui/material';
 import { Trans } from 'react-i18next';
 
-import { Banner, BannerProps } from 'shared/components';
-
+import { Banner, BannerProps } from '../Banner';
 import { BANNER_LINK } from './VersionWarningBanner.const';
 
 export const VersionWarningBanner = (props: BannerProps) => (
