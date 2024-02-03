@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import { auth } from 'modules/Auth/state';
-import { Spinner, Svg, Footer, Banner } from 'shared/components';
+import { Spinner, Svg, Footer, Banners } from 'shared/components';
 
 import {
   StyledAuthLayout,
@@ -22,7 +22,7 @@ export const AuthLayout = () => {
         <StyledLogoWrapper>
           <Svg id="header-logo" width={250} height={44} />
         </StyledLogoWrapper>
-        <Banner />
+        <Banners />
       </StyledHeader>
       <StyledOutlet>
         <StyledAuthWrapper>
