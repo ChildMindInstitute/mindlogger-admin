@@ -34,6 +34,7 @@ import {
   FlowReportFieldsPrepareType,
   getEntityReportFields,
 } from 'modules/Builder/utils/getEntityReportFields';
+import { banners } from 'shared/state/Banners';
 
 import {
   getActivityItems,
@@ -256,7 +257,6 @@ export const useUpdatedAppletNavigate = () => {
 export const useSaveAndPublishSetup = (
   hasPrompt: boolean,
   setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
-  setAppletWithoutChangesPopupVisible?: (val: boolean) => void,
 ) => {
   const {
     trigger,
@@ -402,7 +402,7 @@ export const useSaveAndPublishSetup = (
     }
 
     if (!isDirty) {
-      setAppletWithoutChangesPopupVisible?.(true);
+      dispatch(banners.actions.addBanner({ key: 'AppletWithoutChangesBanner' }));
 
       return;
     }

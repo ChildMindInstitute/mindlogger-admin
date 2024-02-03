@@ -1,6 +1,8 @@
+import { AppletWithoutChangesBanner } from 'modules/Builder/components';
 import { VersionWarningBanner } from 'shared/components';
 
 export const BannerComponents = {
+  AppletWithoutChangesBanner,
   VersionWarningBanner,
 };
 
