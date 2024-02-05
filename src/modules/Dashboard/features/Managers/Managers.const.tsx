@@ -4,13 +4,13 @@ import { HeadCell } from 'shared/types/table';
 
 import { ManagersActions } from './Managers.types';
 
-export enum ManagersColumnsWidth {
-  Pin = '4.8rem',
-  FirstName = '20rem',
-  LastName = '20rem',
-  Email = '30rem',
-  Roles = '20rem',
-}
+export const ManagersColumnsWidth = {
+  Pin: '4.8rem',
+  FirstName: '20rem',
+  LastName: '20rem',
+  Email: '30rem',
+  Roles: '20rem',
+} as const
 
 export const getHeadCells = (id?: string): HeadCell[] => {
   const { t } = i18n;
