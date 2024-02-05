@@ -885,7 +885,7 @@
   "removeRespondentData": "Also remove Respondent <1>{{respondentName}}</1>’s response data for Applet <3>{{appletName}}</3>",
   "removeScheduledEvent": "Remove Scheduled Event",
   "repeatPassword": "Repeat the password",
-  "repeatPasswordRequired": "Repeat Password is Required",
+  "repeatPasswordRequired": "Repeat Password is required",
   "replace": "Replace",
   "reportConfigNotSaved": "Report Configuration not saved. Save it?",
   "reportConfiguration": "Report Configuration",
