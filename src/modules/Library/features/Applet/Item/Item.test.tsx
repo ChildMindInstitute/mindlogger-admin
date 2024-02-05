@@ -32,6 +32,38 @@ const FormComponent = ({ children }) => {
   return <FormProvider {...methods}>{children}</FormProvider>;
 };
 
+const singleSelectionItem = {
+  question: {
+    en: 'Single Selection Item',
+  },
+  responseType: 'singleSelect',
+  responseValues: {
+    options: [
+      {
+        text: 'option 1',
+      },
+      {
+        text: 'option 2',
+      },
+    ],
+  },
+  name: 'Item',
+};
+
+const ItemComponent = (
+  <FormComponent>
+    <Item
+      item={singleSelectionItem}
+      appletId={mockedAppletId}
+      activityName={'mockedActivityName'}
+      activityKey={'mockedActivityKey'}
+      search={''}
+      uiType={AppletUiType.Cart}
+      data-testid={dataTestid}
+    />
+  </FormComponent>
+);
+
 describe('Item', () => {
   beforeEach(() => {
     jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
@@ -45,38 +77,6 @@ describe('Item', () => {
     const setAddToBuilderBtnDisabledMock = jest.spyOn(
       library.actions,
       'setAddToBuilderBtnDisabled',
-    );
-
-    const singleSelectionItem = {
-      question: {
-        en: 'Single Selection Item',
-      },
-      responseType: 'singleSelect',
-      responseValues: {
-        options: [
-          {
-            text: 'option 1',
-          },
-          {
-            text: 'option 2',
-          },
-        ],
-      },
-      name: 'Item',
-    };
-
-    const ItemComponent = (
-      <FormComponent>
-        <Item
-          item={singleSelectionItem}
-          appletId={mockedAppletId}
-          activityName={'mockedActivityName'}
-          activityKey={'mockedActivityKey'}
-          search={''}
-          uiType={AppletUiType.Cart}
-          data-testid={dataTestid}
-        />
-      </FormComponent>
     );
 
     renderWithProviders(ItemComponent, {
