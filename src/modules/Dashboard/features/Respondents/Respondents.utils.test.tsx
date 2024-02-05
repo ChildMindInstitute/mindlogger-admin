@@ -1,5 +1,5 @@
 import { Svg } from 'shared/components';
-import { mockedAppletId, mockedRespondentId, mockedUserId } from 'shared/mock';
+import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
 
 import { getRespondentActions, getHeadCells } from './Respondents.utils';
@@ -12,6 +12,7 @@ const applets = [
     respondentNickname: 'Jane Doe',
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
+    subjectId: 'subj-1',
   },
   {
     appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
@@ -20,6 +21,7 @@ const applets = [
     respondentNickname: 'Jane Doe',
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
+    subjectId: 'subj-2',
   },
 ];
 
@@ -41,9 +43,9 @@ const commonGetActionsProps = {
   },
   filteredApplets,
   respondentId: mockedRespondentId,
+  respondentOrSubjectId: mockedRespondentId,
   appletId: mockedAppletId,
   email: mockedEmail,
-  userId: mockedUserId,
 };
 
 describe('Respondents utils tests', () => {
@@ -60,7 +62,11 @@ describe('Respondents utils tests', () => {
           icon: <Svg id="calendar" width={20} height={21} />,
           action: expect.any(Function),
           title: 'View Individual Calendar',
-          context: { respondentId: mockedRespondentId, email: mockedEmail, userId: mockedUserId },
+          context: {
+            respondentId: mockedRespondentId,
+            email: mockedEmail,
+            respondentOrSubjectId: mockedRespondentId,
+          },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-view-calendar',
         },
@@ -68,7 +74,11 @@ describe('Respondents utils tests', () => {
           icon: <Svg id="data" width={22} height={22} />,
           action: expect.any(Function),
           title: 'View Data',
-          context: { respondentId: mockedRespondentId, email: mockedEmail, userId: mockedUserId },
+          context: {
+            respondentId: mockedRespondentId,
+            email: mockedEmail,
+            respondentOrSubjectId: mockedRespondentId,
+          },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-view-data',
         },
@@ -76,7 +86,11 @@ describe('Respondents utils tests', () => {
           icon: <Svg id="export2" width={20} height={21} />,
           action: expect.any(Function),
           title: 'Export Data',
-          context: { respondentId: mockedRespondentId, email: mockedEmail, userId: mockedUserId },
+          context: {
+            respondentId: mockedRespondentId,
+            email: mockedEmail,
+            respondentOrSubjectId: mockedRespondentId,
+          },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-export-data',
         },
@@ -84,7 +98,11 @@ describe('Respondents utils tests', () => {
           icon: <Svg id="edit" width={22} height={21} />,
           action: expect.any(Function),
           title: 'Edit Respondent',
-          context: { respondentId: mockedRespondentId, email: mockedEmail, userId: mockedUserId },
+          context: {
+            respondentId: mockedRespondentId,
+            email: mockedEmail,
+            respondentOrSubjectId: mockedRespondentId,
+          },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-edit',
         },
@@ -92,7 +110,11 @@ describe('Respondents utils tests', () => {
           icon: <Svg id="remove-from-folder" width={21} height={21} />,
           action: expect.any(Function),
           title: 'Send Invitation',
-          context: { respondentId: mockedRespondentId, email: mockedEmail, userId: mockedUserId },
+          context: {
+            respondentId: mockedRespondentId,
+            email: mockedEmail,
+            respondentOrSubjectId: mockedRespondentId,
+          },
           isDisplayed: true,
           'data-testid': 'dashboard-respondents-invite',
         },
@@ -100,7 +122,11 @@ describe('Respondents utils tests', () => {
           icon: <Svg id="trash" width={21} height={21} />,
           action: expect.any(Function),
           title: 'Remove from Applet',
-          context: { respondentId: mockedRespondentId, email: mockedEmail, userId: mockedUserId },
+          context: {
+            respondentId: mockedRespondentId,
+            email: mockedEmail,
+            respondentOrSubjectId: mockedRespondentId,
+          },
           isDisplayed: true,
           customItemColor: variables.palette.dark_error_container,
           'data-testid': 'dashboard-respondents-remove-access',

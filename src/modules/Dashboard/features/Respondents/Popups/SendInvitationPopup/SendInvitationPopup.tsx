@@ -25,7 +25,7 @@ export const SendInvitationPopup = ({
   email,
 }: SendInvitationPopupProps) => {
   const { t } = useTranslation('app');
-  const { respondentSecretId = '', respondentId, appletId } = chosenAppletData || {};
+  const { respondentSecretId = '', subjectId, appletId } = chosenAppletData || {};
   const showSecondScreen = !!chosenAppletData;
   const [hasCommonError, setHasCommonError] = useState(false);
   const { handleSubmit, control, getValues, setError } = useForm<SendInvitationForm>({
@@ -44,10 +44,10 @@ export const SendInvitationPopup = ({
   };
 
   const submitForm = () => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
     Mixpanel.track('Subject Invitation click');
     setHasCommonError(false);
-    execute({ appletId, respondentId, email: getValues('email') });
+    execute({ appletId, subjectId, email: getValues('email') });
   };
 
   const getTitle = () => {

@@ -29,6 +29,7 @@ export type RespondentDetail = {
   respondentNickname: string;
   respondentSecretId: string;
   hasIndividualSchedule: boolean;
+  subjectId: string;
 };
 
 export enum RespondentStatus {
@@ -38,7 +39,7 @@ export enum RespondentStatus {
 }
 
 export type Respondent = {
-  id: string;
+  id: string | null;
   nicknames: string[];
   role: Roles;
   secretIds: string[];
@@ -48,7 +49,6 @@ export type Respondent = {
   isAnonymousRespondent: boolean;
   email: string | null;
   status: RespondentStatus;
-  userId: string | null;
 };
 
 export type RespondentDetails = {

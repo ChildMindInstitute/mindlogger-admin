@@ -94,7 +94,7 @@ export const mockedCurrentWorkspace = {
   },
 };
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
-export const mockedUserId = 'user-id-1';
+export const mockedSubjectId1 = 'subject-id-987';
 export const mockedRespondentDetails = {
   appletId: mockedAppletId,
   appletDisplayName: 'Mocked Applet',
@@ -104,6 +104,7 @@ export const mockedRespondentDetails = {
   respondentSecretId: '3921968c-3903-4872-8f30-a6e6a10cef36',
   hasIndividualSchedule: false,
   encryption: mockedEncryption,
+  subjectId: mockedSubjectId1,
 };
 export const mockedRespondent = {
   id: mockedRespondentId,
@@ -117,10 +118,9 @@ export const mockedRespondent = {
   details: [mockedRespondentDetails],
   status: RespondentStatus.Invited,
   email: 'resp1@mail.com',
-  userId: mockedUserId,
 };
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
-export const mockedUserId2 = 'user-id-2';
+export const mockedSubjectId2 = 'subject-id-123';
 export const mockedRespondent2 = {
   id: mockedRespondentId2,
   nicknames: ['Test Respondent'],
@@ -132,7 +132,6 @@ export const mockedRespondent2 = {
   role: Roles.Respondent,
   status: RespondentStatus.Invited,
   email: 'resp2@mail.com',
-  userId: mockedUserId2,
   details: [
     {
       appletId: mockedAppletId,
@@ -143,6 +142,7 @@ export const mockedRespondent2 = {
       respondentSecretId: '39ff968c-3903-4872-8f30-a6e6a10cef36',
       hasIndividualSchedule: false,
       encryption: mockedEncryption,
+      subjectId: mockedSubjectId2,
     },
   ],
 };

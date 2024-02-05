@@ -18,7 +18,7 @@ import {
   postAppletInvitationApi,
   postAppletShellAccountApi,
 } from 'api';
-import { getErrorMessage, Mixpanel } from 'shared/utils';
+import { getErrorMessage, Mixpanel, getRespondentName } from 'shared/utils';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
 import { users, workspaces } from 'redux/modules';
@@ -55,10 +55,14 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
 
   const { ownerId } = workspaces.useData() || {};
   const respondentsData = users.useAllRespondentsData();
-  const respondents = respondentsData?.result?.map(({ details, id }) => ({
-    label: `${details?.[0].accessId} (${details?.[0].respondentNickname})`,
-    id,
-  }));
+  const respondents = respondentsData?.result?.map(({ details }) => {
+    const { respondentSecretId, respondentNickname, subjectId } = details[0];
+
+    return {
+      label: getRespondentName(respondentSecretId, respondentNickname),
+      id: subjectId,
+    };
+  });
   const { handleSubmit, control, watch, reset, register, unregister, setError, setValue } =
     useForm<AddUserFormValues>({
       resolver: yupResolver(AddUserSchema(workspaceNameVisible)),

@@ -268,12 +268,12 @@ export const postAppletShellAccountApi = (
   );
 
 export const postSubjectInvitationApi = (
-  { appletId, respondentId, email }: SubjectInvitationData,
+  { appletId, subjectId, email }: SubjectInvitationData,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     `/invitations/${appletId}/subject`,
-    { subjectId: respondentId, email },
+    { subjectId, email },
     {
       signal,
     },
@@ -305,6 +305,15 @@ export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSi
 export const updateRespondentsPinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
   authApiClient.post(
     `/workspaces/${ownerId}/respondents/${userId}/pin`,
+    {},
+    {
+      signal,
+    },
+  );
+
+export const updateSubjectsPinApi = ({ ownerId, userId }: UpdatePin, signal?: AbortSignal) =>
+  authApiClient.post(
+    `/workspaces/${ownerId}/subjects/${userId}/pin`,
     {},
     {
       signal,

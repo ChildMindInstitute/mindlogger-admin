@@ -13,6 +13,7 @@ export type GetAppletsParams = {
     ordering?: string;
     roles?: string;
     appletId?: string;
+    shell?: boolean;
   };
 };
 
@@ -188,7 +189,7 @@ export type AppletInvitationData = AppletId & {
 };
 
 export type SubjectInvitationData = AppletId & {
-  respondentId: string;
+  subjectId: string;
   email: string;
 };
 

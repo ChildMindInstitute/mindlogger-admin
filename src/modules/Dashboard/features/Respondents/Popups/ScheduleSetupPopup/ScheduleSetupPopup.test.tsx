@@ -7,7 +7,7 @@ import {
   mockedOwnerId,
   mockedRespondentDetails,
   mockedRespondentId,
-  mockedUserId,
+  mockedSubjectId1,
 } from 'shared/mock';
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
@@ -18,7 +18,7 @@ const chosenAppletDataMock = {
   ...mockedRespondentDetails,
   respondentId: mockedRespondentId,
   ownerId: mockedOwnerId,
-  userId: mockedUserId,
+  subjectId: mockedSubjectId1,
 };
 
 const tableRowsMock = [
@@ -71,17 +71,16 @@ describe('ScheduleSetupPopup', () => {
 
     expect(mockAxios.post).toHaveBeenNthCalledWith(
       1,
-      `/applets/${mockedAppletId}/events/individual/${mockedUserId}`,
+      `/applets/${mockedAppletId}/events/individual/${mockedRespondentId}`,
       {},
       { signal: undefined },
     );
     await waitFor(() =>
       expect(mockedUseNavigate).toBeCalledWith(
-        `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedUserId}`,
+        `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedRespondentId}`,
       ),
     );
   });
-
   test('should render table of applets', () => {
     renderWithProviders(
       <ScheduleSetupPopup
@@ -101,7 +100,7 @@ describe('ScheduleSetupPopup', () => {
 
     expect(setChosenAppletDataMock).toBeCalledWith(chosenAppletDataMock);
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedUserId}`,
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedRespondentId}`,
     );
   });
 });

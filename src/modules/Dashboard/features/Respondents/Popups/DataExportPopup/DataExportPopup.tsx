@@ -46,9 +46,7 @@ export const DataExportPopup = ({
   });
 
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
-  const respondentId = isAppletSetting
-    ? undefined
-    : (chosenAppletData as ChosenAppletData)?.respondentId;
+  const subjectId = isAppletSetting ? undefined : (chosenAppletData as ChosenAppletData)?.subjectId;
   const { encryption } = chosenAppletData ?? {};
 
   const handleDataExportSubmit = async () => {
@@ -60,7 +58,7 @@ export const DataExportPopup = ({
       setDataIsExporting(true);
 
       try {
-        await executeAllPagesOfExportData({ appletId, targetSubjectIds: respondentId });
+        await executeAllPagesOfExportData({ appletId, targetSubjectIds: subjectId });
 
         Mixpanel.track('Export Data Successful');
       } catch {

@@ -2,7 +2,7 @@ import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId } from 'shared/mock';
+import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { page } from 'resources';
 
 import { RespondentsRemoveAccessPopup } from '.';
@@ -16,6 +16,7 @@ const chosenAppletData = {
   respondentNickname: 'respondentNickname',
   ownerId: '1',
   appletDisplayName: 'ApplletName',
+  subjectId: mockedSubjectId1,
 };
 
 const onCloseMock = jest.fn();
