@@ -16,7 +16,7 @@ export const getAllWorkspaceRespondents = createAsyncThunk(
   async ({ params }: GetAppletsParams, { rejectWithValue, signal }) => {
     try {
       const { data } = await getWorkspaceRespondentsApi(
-        { params: { ...params, limit: MAX_LIMIT, shell: false } },
+        { params: { ...params, limit: MAX_LIMIT } },
         signal,
       );
 

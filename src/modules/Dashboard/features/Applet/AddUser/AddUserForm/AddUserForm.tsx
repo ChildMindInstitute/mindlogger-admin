@@ -55,9 +55,9 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
 
   const { ownerId } = workspaces.useData() || {};
   const respondentsData = users.useAllRespondentsData();
-  const respondents = respondentsData?.result?.map(({ details, id }) => ({
-    label: `${details?.[0].accessId} (${details?.[0].respondentNickname})`,
-    id,
+  const respondents = respondentsData?.result?.map(({ details }) => ({
+    label: `${details[0].accessId} (${details[0].respondentNickname})`,
+    id: details[0].subjectId,
   }));
   const { handleSubmit, control, watch, reset, register, unregister, setError, setValue } =
     useForm<AddUserFormValues>({

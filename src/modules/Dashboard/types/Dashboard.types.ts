@@ -51,8 +51,6 @@ export type Respondent = {
   status: RespondentStatus;
 };
 
-export type InvitedRespondent = Omit<Respondent, 'id'> & { id: string };
-
 export type RespondentDetails = {
   nickname: string;
   secretUserId: string;

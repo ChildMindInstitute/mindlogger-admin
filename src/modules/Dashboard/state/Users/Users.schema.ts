@@ -1,7 +1,7 @@
 import { BaseSchema } from 'shared/state/Base';
-import { InvitedRespondent, RespondentDetails } from 'modules/Dashboard/types';
+import { Respondent, RespondentDetails } from 'modules/Dashboard/types';
 
 export type UsersSchema = {
-  allRespondents: BaseSchema<{ result: InvitedRespondent[]; count: number } | null>;
+  allRespondents: BaseSchema<{ result: Respondent[]; count: number } | null>;
   respondentDetails: BaseSchema<{ result: RespondentDetails } | null>;
 };
