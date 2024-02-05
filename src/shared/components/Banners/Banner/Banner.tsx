@@ -1,9 +1,9 @@
 import { Alert } from '@mui/material';
 import { useEffect, useState } from 'react';
-import useWindowFocus from 'use-window-focus';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton } from 'shared/styles';
+import { useWindowFocus } from 'shared/hooks/useWindowFocus';
 
 import { BannerProps } from './Banner.types';
 import { BANNER_ICONS } from './Banner.const';

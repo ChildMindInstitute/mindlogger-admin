@@ -27,7 +27,7 @@ describe('Banners', () => {
     const button = screen.getByRole('button');
     fireEvent.click(button);
 
-    // Wait for Collpse transition to complete
+    // Wait for Collapse transition to complete
     await waitFor(() => {
       expect(screen.queryByText('You are using the new version of MindLogger!')).toBeNull();
     });
