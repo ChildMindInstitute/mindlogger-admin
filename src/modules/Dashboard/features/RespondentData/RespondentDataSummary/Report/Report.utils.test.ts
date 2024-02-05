@@ -528,6 +528,66 @@ const activityResponses = [
       totalScoresTableData: null,
     },
   },
+  {
+    decryptedAnswer: [
+      {
+        activityItem: {
+          question: {
+            en: 'Text',
+          },
+          responseType: 'text',
+          config: {
+            responseDataIdentifier: false,
+            isIdentifier: null,
+          },
+          name: 'Item3',
+          isHidden: true,
+          allowEdit: true,
+          id: '69a98366-8627-4c9b-9973-5c16416695b8',
+        },
+        answer: undefined,
+      },
+    ],
+    answerId: 'da2b4d38-0dbd-4344-9d12-42986f1dce4a',
+    version: '1.1.2',
+    startDatetime: '2024-01-22T21:09:12.424000',
+    endDatetime: '2024-01-22T21:09:20.950000',
+    subscaleSetting: {
+      calculateTotalScore: null,
+      subscales: [],
+      totalScoresTableData: null,
+    },
+  },
+  {
+    decryptedAnswer: [
+      {
+        activityItem: {
+          question: {
+            en: 'Text',
+          },
+          responseType: 'text',
+          config: {
+            responseDataIdentifier: false,
+            isIdentifier: null,
+          },
+          name: 'Item3',
+          isHidden: false,
+          allowEdit: true,
+          id: '69a98366-8627-4c9b-9973-5c16416695b8',
+        },
+        answer: null,
+      },
+    ],
+    answerId: 'ea2b4d38-0dbd-4344-9d12-42986f1dce4a',
+    version: '1.1.2',
+    startDatetime: '2024-01-22T22:09:12.424000',
+    endDatetime: '2024-01-22T22:09:20.950000',
+    subscaleSetting: {
+      calculateTotalScore: null,
+      subscales: [],
+      totalScoresTableData: null,
+    },
+  },
 ];
 
 const formattedResponses = {
@@ -538,40 +598,18 @@ const formattedResponses = {
         activityItem: {
           id: 'b3825743-f796-4551-9057-662797ccd8c3',
           name: 'Item1',
-          question: {
-            en: 'SS (updated)',
-          },
+          question: { en: 'SS (updated)' },
           responseType: 'singleSelect',
           responseValues: {
             options: [
-              {
-                id: 'ba194132-91a7-49ee-a8ce-be97c7261ff0',
-                text: 'SS 2 (updated)',
-                value: 0,
-              },
-              {
-                id: 'ac6bcb6b-d645-49f2-ba24-a8a60c82f303',
-                text: 'SS 1',
-                value: 1,
-              },
+              { id: 'ba194132-91a7-49ee-a8ce-be97c7261ff0', text: 'SS 2 (updated)', value: 0 },
+              { id: 'ac6bcb6b-d645-49f2-ba24-a8a60c82f303', text: 'SS 1', value: 1 },
             ],
           },
         },
         answers: [
-          {
-            answer: {
-              value: 1,
-              text: null,
-            },
-            date: '2024-01-22T20:07:22.782000',
-          },
-          {
-            answer: {
-              value: 0,
-              text: null,
-            },
-            date: '2024-01-22T20:08:18.645000',
-          },
+          { answer: { value: 1, text: null }, date: '2024-01-22T20:07:22.782000' },
+          { answer: { value: 0, text: null }, date: '2024-01-22T20:08:18.645000' },
         ],
       },
     ],
@@ -580,67 +618,31 @@ const formattedResponses = {
         activityItem: {
           id: 'dfeb5edb-d797-4b5f-be40-05fea8de4c22',
           name: 'Item2',
-          question: {
-            en: 'MS',
-          },
+          question: { en: 'MS' },
           responseType: 'multiSelect',
           responseValues: {
             options: [
-              {
-                id: '727f9f6d-ff0d-47f0-94e3-bc16d72024ff',
-                text: 'MS 2',
-                value: 0,
-              },
-              {
-                id: '76286f9c-1ffe-43f2-8155-362bcf66dd13',
-                text: 'MS 1',
-                value: 1,
-              },
+              { id: '727f9f6d-ff0d-47f0-94e3-bc16d72024ff', text: 'MS 2', value: 0 },
+              { id: '76286f9c-1ffe-43f2-8155-362bcf66dd13', text: 'MS 1', value: 1 },
             ],
           },
         },
-        answers: [
-          {
-            answer: {
-              value: 1,
-              text: null,
-            },
-            date: '2024-01-22T20:07:22.782000',
-          },
-        ],
+        answers: [{ answer: { value: 1, text: null }, date: '2024-01-22T20:07:22.782000' }],
       },
       {
         activityItem: {
           id: 'dfeb5edb-d797-4b5f-be40-05fea8de4c22',
           name: 'Item2',
-          question: {
-            en: 'MS --> SS',
-          },
+          question: { en: 'MS --> SS' },
           responseType: 'singleSelect',
           responseValues: {
             options: [
-              {
-                id: 'a14634c9-d39c-4f05-9197-43b9330bfd06',
-                text: '2',
-                value: 0,
-              },
-              {
-                id: '196e2bfa-5216-4cbd-b4b0-97917db4243d',
-                text: '1',
-                value: 1,
-              },
+              { id: 'a14634c9-d39c-4f05-9197-43b9330bfd06', text: '2', value: 0 },
+              { id: '196e2bfa-5216-4cbd-b4b0-97917db4243d', text: '1', value: 1 },
             ],
           },
         },
-        answers: [
-          {
-            answer: {
-              value: 0,
-              text: null,
-            },
-            date: '2024-01-22T20:08:18.645000',
-          },
-        ],
+        answers: [{ answer: { value: 0, text: null }, date: '2024-01-22T20:08:18.645000' }],
       },
     ],
     '69a98366-8627-4c9b-9973-5c16416695b8': [
@@ -648,34 +650,17 @@ const formattedResponses = {
         activityItem: {
           id: '69a98366-8627-4c9b-9973-5c16416695b8',
           name: 'Item3',
-          question: {
-            en: 'Text',
-          },
+          question: { en: 'Text' },
           responseType: 'text',
           responseDataIdentifier: false,
+          responseValues: undefined,
         },
         answers: [
-          {
-            answer: {
-              value: 'Text 1',
-              text: null,
-            },
-            date: '2024-01-22T20:07:22.782000',
-          },
-          {
-            answer: {
-              value: 'Text 2',
-              text: null,
-            },
-            date: '2024-01-22T20:08:18.645000',
-          },
-          {
-            answer: {
-              value: 'Text 3',
-              text: null,
-            },
-            date: '2024-01-22T20:09:20.950000',
-          },
+          { answer: { value: 'Text 1', text: null }, date: '2024-01-22T20:07:22.782000' },
+          { answer: { value: 'Text 2', text: null }, date: '2024-01-22T20:08:18.645000' },
+          { answer: { value: 'Text 3', text: null }, date: '2024-01-22T20:09:20.950000' },
+          { answer: { value: undefined, text: null }, date: '2024-01-22T21:09:20.950000' },
+          { answer: { value: null, text: null }, date: '2024-01-22T22:09:20.950000' },
         ],
       },
     ],
@@ -684,34 +669,14 @@ const formattedResponses = {
         activityItem: {
           id: '85a332c4-7e47-4d9b-aaf7-b7a01acb98c2',
           name: 'Item4',
-          question: {
-            en: 'Time',
-          },
+          question: { en: 'Time' },
           responseType: 'time',
           responseValues: null,
         },
         answers: [
-          {
-            answer: {
-              text: null,
-              value: 126900000,
-            },
-            date: '2024-01-22T20:07:22.782000',
-          },
-          {
-            answer: {
-              text: null,
-              value: 115500000,
-            },
-            date: '2024-01-22T20:08:18.645000',
-          },
-          {
-            answer: {
-              text: null,
-              value: null,
-            },
-            date: '2024-01-22T20:09:20.950000',
-          },
+          { answer: { text: null, value: 126900000 }, date: '2024-01-22T20:07:22.782000' },
+          { answer: { text: null, value: 115500000 }, date: '2024-01-22T20:08:18.645000' },
+          { answer: { text: null, value: null }, date: '2024-01-22T20:09:20.950000' },
         ],
       },
     ],
@@ -720,92 +685,28 @@ const formattedResponses = {
         activityItem: {
           id: '2613ae84-7282-46e3-98e1-344c6fcbfe53',
           name: 'Item5',
-          question: {
-            en: 'Slider',
-          },
+          question: { en: 'Slider' },
           responseType: 'slider',
           responseValues: {
             options: [
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-0',
-                text: 0,
-                value: 0,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-1',
-                text: 1,
-                value: 1,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-2',
-                text: 2,
-                value: 2,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-3',
-                text: 3,
-                value: 3,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-4',
-                text: 4,
-                value: 4,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-5',
-                text: 5,
-                value: 5,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-6',
-                text: 6,
-                value: 6,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-7',
-                text: 7,
-                value: 7,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-8',
-                text: 8,
-                value: 8,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-9',
-                text: 9,
-                value: 9,
-              },
-              {
-                id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-10',
-                text: 10,
-                value: 10,
-              },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-0', text: 0, value: 0 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-1', text: 1, value: 1 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-2', text: 2, value: 2 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-3', text: 3, value: 3 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-4', text: 4, value: 4 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-5', text: 5, value: 5 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-6', text: 6, value: 6 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-7', text: 7, value: 7 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-8', text: 8, value: 8 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-9', text: 9, value: 9 },
+              { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-10', text: 10, value: 10 },
             ],
           },
         },
         answers: [
-          {
-            answer: {
-              text: null,
-              value: 2,
-            },
-            date: '2024-01-22T20:07:22.782000',
-          },
-          {
-            answer: {
-              text: null,
-              value: null,
-            },
-            date: '2024-01-22T20:08:18.645000',
-          },
-          {
-            answer: {
-              text: null,
-              value: 4,
-            },
-            date: '2024-01-22T20:09:20.950000',
-          },
+          { answer: { text: null, value: 2 }, date: '2024-01-22T20:07:22.782000' },
+          { answer: { text: null, value: null }, date: '2024-01-22T20:08:18.645000' },
+          { answer: { text: null, value: 4 }, date: '2024-01-22T20:09:20.950000' },
         ],
       },
     ],
