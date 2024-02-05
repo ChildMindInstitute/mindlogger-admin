@@ -352,7 +352,7 @@ describe('ReportConfigSetting', () => {
     );
     expect(itemName).toBeVisible();
 
-    fireEvent.mouseDown(itemName.querySelector('[role=\'button\']'));
+    fireEvent.mouseDown(itemName.querySelector("[role='button']"));
 
     const itemNameOptions = screen.getByTestId(
       `${mockedReportConfigDataTestid}-report-includes-item-name-dropdown`,

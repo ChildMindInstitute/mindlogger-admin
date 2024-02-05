@@ -68,7 +68,7 @@ describe('ViewDataPopup', () => {
     );
 
     expect(
-      screen.getByText('Please select the Applet to view Respondent\'s data for:'),
+      screen.getByText("Please select the Applet to view Respondent's data for:"),
     ).toBeInTheDocument();
 
     const tableRow = screen.getByText('Mocked Applet');

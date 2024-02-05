@@ -32,7 +32,7 @@ describe('useCurrentActivityFlow', () => {
   test.each`
     activityFlowId                           | activityFlows                     | expected                          | description
     ${undefined}                             | ${[]}                             | ${{}}                             | ${'returns empty object if there is no activityId in url'}
-    ${uuidv4()}                              | ${mockedAppletData.activityFlows} | ${{}}                             | ${'returns empty object if activity from url doesn\'t exist'}
+    ${uuidv4()}                              | ${mockedAppletData.activityFlows} | ${{}}                             | ${"returns empty object if activity from url doesn't exist"}
     ${mockedAppletData.activityFlows[0].id}  | ${undefined}                      | ${{}}                             | ${'returns empty object if there are no activities in form'}
     ${mockedAppletData.activityFlows[0].id}  | ${mockedAppletData.activityFlows} | ${mockedExistingActivityFlow}     | ${'returns correct activity by id'}
     ${mockedAppletData.activityFlows[1].key} | ${mockedAppletData.activityFlows} | ${mockedExistingKeydActivityFlow} | ${'returns correct activity by key'}

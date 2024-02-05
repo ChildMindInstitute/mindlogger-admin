@@ -10,7 +10,7 @@ export const ManagersColumnsWidth = {
   LastName: '20rem',
   Email: '30rem',
   Roles: '20rem',
-} as const
+} as const;
 
 export const getHeadCells = (id?: string): HeadCell[] => {
   const { t } = i18n;

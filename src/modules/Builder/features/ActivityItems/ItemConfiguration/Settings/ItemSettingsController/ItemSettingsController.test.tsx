@@ -359,7 +359,7 @@ describe('ItemSettingsController', () => {
     jest.clearAllMocks();
   });
 
-  test('doesn\'t render if inputType is not provided', () => {
+  test("doesn't render if inputType is not provided", () => {
     const container = renderWithAppletFormData({
       children: <ItemSettingsController itemName="" inputType="" name="" />,
     });
@@ -367,7 +367,7 @@ describe('ItemSettingsController', () => {
     expect(container.container).toBeEmptyDOMElement();
   });
 
-  test('doesn\'t render if inputType is not in enum', () => {
+  test("doesn't render if inputType is not in enum", () => {
     const container = renderWithAppletFormData({
       children: <ItemSettingsController itemName="" inputType={ItemResponseType.Flanker} name="" />,
     });

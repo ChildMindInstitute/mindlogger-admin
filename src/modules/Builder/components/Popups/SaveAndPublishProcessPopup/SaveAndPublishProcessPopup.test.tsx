@@ -73,7 +73,7 @@ describe('SaveAndPublishProcessPopup', () => {
       payload: { saveChanges: true },
     });
 
-    fireEvent.click(screen.getByText('Don\'t Save'));
+    fireEvent.click(screen.getByText("Don't Save"));
     expect(mockDispatch).toHaveBeenCalledWith({
       type: 'reportConfig/setReportConfigChanges',
       payload: { doNotSaveChanges: true },

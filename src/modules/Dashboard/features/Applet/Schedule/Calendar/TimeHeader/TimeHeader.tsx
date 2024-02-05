@@ -26,9 +26,8 @@ export const TimeHeader = ({
   const currentWeek = formatToWeekYear(date);
   const { hiddenEventsIds = [], allDayEventsSortedByDays = [] } =
     calendarEvents.useVisibleEventsData() || {};
-  const currentAllDaysEventsIds = allDayEventsSortedByDays?.find(
-    (el) => el.date === currentDate,
-  )?.eventsIds;
+  const currentAllDaysEventsIds = allDayEventsSortedByDays?.find((el) => el.date === currentDate)
+    ?.eventsIds;
   const isWeekUiType = uiType === UiType.Week;
   const isDayUiType = uiType === UiType.Day;
 

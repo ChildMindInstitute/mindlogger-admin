@@ -6,42 +6,33 @@
     "node": true
   },
   "extends": [
-    "prettier",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
     "react/react-in-jsx-scope": "off",
-    "no-trailing-spaces": "error",
     "react/no-children-prop": "off",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
-    "quotes": ["error", "single"],
     "import/order": [
       "error",
-        {
-          "groups": [
-            ["external", "builtin"],
-            "internal",
-            ["sibling", "parent"],
-            "index"
-          ],
-          "pathGroups": [
-            {
-              "pattern":
-                  "@(api|assets|modules|redux|routes|shared|resources)/**",
-              "group": "internal"
-            },
-            {
-              "pattern":
-                  "@(redux|routes|resources|api|i18n)",
-              "group": "internal"
-            }
-          ],
-          "pathGroupsExcludedImportTypes": ["internal"],
-          "newlines-between": "always"
-        }
+      {
+        "groups": [["external", "builtin"], "internal", ["sibling", "parent"], "index"],
+        "pathGroups": [
+          {
+            "pattern": "@(api|assets|modules|redux|routes|shared|resources)/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "@(redux|routes|resources|api|i18n)",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["internal"],
+        "newlines-between": "always"
+      }
     ],
     "import/no-cycle": "error",
     "react-hooks/rules-of-hooks": "error",
@@ -72,14 +63,12 @@
     "no-nested-ternary": "error",
     "no-unneeded-ternary": "error",
     "camelcase": "off",
-    "arrow-parens": ["off", "as-needed"],
     "no-debugger": "error",
     "no-empty": "error",
     "no-underscore-dangle": "error",
     "no-unused-labels": "error",
     "prefer-const": "error",
     "no-unused-vars": "off",
-    "jsx-quotes": ["error", "prefer-double"],
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
