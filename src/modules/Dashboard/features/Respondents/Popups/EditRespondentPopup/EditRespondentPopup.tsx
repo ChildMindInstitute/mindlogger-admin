@@ -50,14 +50,14 @@ export const EditRespondentPopup = ({
     if (!chosenAppletData) return;
 
     const { secretUserId, nickname } = getValues();
-    const { respondentId } = chosenAppletData;
+    const { subjectId } = chosenAppletData;
 
     editRespondent({
       values: {
         secretUserId: secretUserId.trim(),
         nickname: nickname?.trim(),
       },
-      subjectId: respondentId,
+      subjectId,
     });
   };
 

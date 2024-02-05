@@ -15,6 +15,7 @@ const chosenAppletData = {
   respondentId: '12312',
   respondentNickname: 'respondentNickname',
   ownerId: '1',
+  subjectId: 'subj-1',
 };
 
 const commonProps = {

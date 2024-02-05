@@ -28,8 +28,10 @@ export const ViewDataPopup = ({
 
   const handleSubmitCallback = () => {
     if (chosenAppletData) {
-      const { appletId, respondentId } = chosenAppletData;
-      navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
+      const { appletId, subjectId } = chosenAppletData;
+      navigate(
+        generatePath(page.appletRespondentDataSummary, { appletId, respondentId: subjectId }),
+      );
     }
 
     handlePopupClose();

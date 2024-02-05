@@ -10,7 +10,6 @@ import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { workspaces } from 'redux/modules';
 import { isManagerOrOwner } from 'shared/utils';
 
-import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { RespondentAccessPopupProps, Steps } from './RespondentsRemoveAccessPopup.types';
 import { getScreens } from './RespondentsRemoveAccessPopup.utils';
@@ -109,14 +108,14 @@ export const RespondentsRemoveAccessPopup = ({
   );
 
   const removeAccess = async () => {
-    const { appletId, respondentId: userId } = chosenAppletData as ChosenAppletData;
-    userId &&
-      appletId &&
-      (await handleAccessRemove({
-        userId,
-        appletIds: [appletId],
-        deleteResponses: removeData,
-      }));
+    const { appletId, subjectId } = chosenAppletData || {};
+    if (!subjectId || !appletId) return;
+
+    await handleAccessRemove({
+      userId: subjectId,
+      appletIds: [appletId],
+      deleteResponses: removeData,
+    });
   };
 
   const screens = getScreens({
