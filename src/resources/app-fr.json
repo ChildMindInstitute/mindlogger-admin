@@ -936,7 +936,7 @@
   "saveAnyway": "Enregistrer quand même",
   "saveChanges": "Enregistrer les modifications?",
   "saveChangesDescription": "Les modifications non enregistrées seront perdues.",
-  "saveReportConfigurationError": "La configuration du rapport n'a pas été mise à jour. Veuillez réessayer.",
+  "saveError": "Désolé, nous n'avons pas pu enregistrer ces modifications.",
   "saveReportConfigurationSuccess": "La configuration du rapport a été mise à jour avec succès.",
   "saveReportConfigurationWarning": "Un rapport ne peut pas être généré tant que <1>'l'adresse IP du serveur de chiffrement'<1> et <3>'la clé publique de chiffrement'<3> ne sont pas saisies.",
   "schedule": "Programme",
