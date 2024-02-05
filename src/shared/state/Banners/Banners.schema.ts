@@ -1,13 +1,13 @@
-import { AppletWithoutChangesBanner } from 'modules/Builder/components/Banners';
-import { VersionWarningBanner } from 'shared/components/Banners/VersionWarningBanner';
+import { BannerProps } from 'shared/components/Banners/Banner/Banner.types';
 
-export const BannerComponents = {
+export enum BannerType {
   AppletWithoutChangesBanner,
   VersionWarningBanner,
-};
+}
 
 export type BannerPayload = {
-  key: keyof typeof BannerComponents;
+  key: keyof typeof BannerType;
+  bannerProps?: BannerProps;
 };
 
 export type BannersSchema = {

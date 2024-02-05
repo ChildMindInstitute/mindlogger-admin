@@ -1,8 +1,10 @@
 import { Collapse } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
 
-import { BannerComponents, banners } from 'shared/state/Banners';
+import { banners } from 'shared/state/Banners';
 import { useAppDispatch } from 'redux/store';
+
+import { BannerComponents } from './Banners.const';
 
 export const Banners = () => {
   const dispatch = useAppDispatch();
@@ -10,12 +12,18 @@ export const Banners = () => {
 
   return (
     <TransitionGroup>
-      {data.banners.map(({ key }) => {
+      {data.banners.map(({ key, bannerProps }) => {
         const BannerComponent = BannerComponents[key];
 
         return (
           <Collapse key={key}>
-            <BannerComponent onClose={() => dispatch(banners.actions.removeBanner({ key }))} />
+            <BannerComponent
+              {...bannerProps}
+              onClose={() => {
+                dispatch(banners.actions.removeBanner({ key }));
+                bannerProps?.onClose?.();
+              }}
+            />
           </Collapse>
         );
       })}
