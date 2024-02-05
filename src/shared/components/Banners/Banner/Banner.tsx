@@ -38,10 +38,10 @@ export const Banner = ({
         warning: getSvg('exclamation-circle'),
         error: getSvg('exclamation-octagon'),
       }}
-      components={{
-        CloseButton: StyledClearedButton,
+      slots={{
+        closeButton: StyledClearedButton,
       }}
-      componentsProps={{
+      slotProps={{
         closeButton: {
           children: <Svg id="close" />,
         },
