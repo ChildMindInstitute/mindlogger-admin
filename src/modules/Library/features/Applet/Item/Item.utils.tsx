@@ -1,5 +1,3 @@
-import uniqueId from 'lodash.uniqueid';
-
 import { ItemResponseType } from 'shared/consts';
 import { Item } from 'shared/state';
 import { variables, StyledBodyLarge } from 'shared/styles';
@@ -17,8 +15,8 @@ export const renderItemContent = (item: Item, search: string) => {
     case ItemResponseType.MultipleSelection:
       return (
         <>
-          {item.responseValues?.options?.map(({ text, image }) => (
-            <StyledItemContentRow key={uniqueId()}>
+          {item.responseValues?.options?.map(({ text, image }, index) => (
+            <StyledItemContentRow key={index} data-testid={`item-option-${index}`}>
               <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
               {image && <StyledItemImage src={image} alt="Option image" />}
               <StyledBodyLarge sx={{ color: variables.palette.on_surface }}>
@@ -32,7 +30,10 @@ export const renderItemContent = (item: Item, search: string) => {
       return (
         <StyledItemContentRow>
           <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
-          <StyledBodyLarge sx={{ color: variables.palette.outline }}>
+          <StyledBodyLarge
+            sx={{ color: variables.palette.outline }}
+            data-testid={'item-option-title'}
+          >
             {t(ItemResponseTypes[item.responseType].title)}
           </StyledBodyLarge>
         </StyledItemContentRow>

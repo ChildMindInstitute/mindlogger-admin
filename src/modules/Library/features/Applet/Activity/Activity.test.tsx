@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { FormProvider, useForm } from 'react-hook-form';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils';
@@ -20,7 +20,7 @@ const mockedNormalActivity = {
   name: 'New Activity 1',
   items: [
     {
-      question: { en: 'Lorem ipsum is placeholder text commonly used in the graphic...' },
+      question: { en: 'Single Select' },
       responseType: 'singleSelect',
       responseValues: {
         options: [
@@ -28,7 +28,18 @@ const mockedNormalActivity = {
           { text: 'No', value: 1 },
         ],
       },
-      name: 'Item',
+      name: 'Item1',
+    },
+    {
+      question: { en: 'Multi Select' },
+      responseType: 'multiSelection',
+      responseValues: {
+        options: [
+          { text: 'option 1', value: 0 },
+          { text: 'option 2', value: 1 },
+        ],
+      },
+      name: 'Item2',
     },
   ],
   key: 'fa5f7c95-91b5-4da0-b4f9-c24deed2ac11',
@@ -105,27 +116,49 @@ describe('Activity Component', () => {
     expect(activityCheckboxContainer).toBeInTheDocument();
     expect(screen.getByText('New Activity 1')).toBeInTheDocument();
 
-    const activityCheckbox = activityCheckboxContainer.querySelector('input[type="checkbox"]');
-    await userEvent.click(activityCheckbox);
-
-    expect(activityCheckboxContainer).toHaveClass('Mui-checked');
-    expect(setAddToBuilderBtnDisabledMock).toHaveBeenCalledWith(false);
-
-    await userEvent.click(activityCheckbox);
-    expect(activityCheckboxContainer).not.toHaveClass('Mui-checked');
+    const activityItemsRegex = new RegExp(`${dataTestid}-item-\\d+$`);
+    expect(screen.queryAllByTestId(activityItemsRegex)).toHaveLength(0);
 
     const activityHeader = screen.getByTestId(`${dataTestid}-header`);
     expect(activityHeader).toBeInTheDocument();
 
-    const activityItemsRegex = new RegExp(`${dataTestid}-item-\\d+$`);
-    expect(screen.queryAllByTestId(activityItemsRegex)).toHaveLength(0);
-
     await userEvent.click(activityHeader);
 
-    expect(screen.queryAllByTestId(activityItemsRegex)).toHaveLength(1);
-    expect(
-      screen.getByText('Lorem ipsum is placeholder text commonly used in the graphic...'),
-    ).toBeInTheDocument();
+    const items = screen.queryAllByTestId(activityItemsRegex);
+    expect(items).toHaveLength(2);
+
+    items.forEach((item, index) => {
+      const textContent = item.textContent;
+      expect(textContent).toEqual(mockedNormalActivity.items[index].question.en);
+
+      const activityItemCheckboxRegex = new RegExp(`${dataTestid}-item-\\d+-checkbox$`);
+      const itemCheckboxContainer = within(item).getByTestId(activityItemCheckboxRegex);
+      expect(itemCheckboxContainer).toBeInTheDocument();
+      expect(itemCheckboxContainer).not.toHaveClass('Mui-checked');
+    });
+
+    const activityCheckbox = activityCheckboxContainer.querySelector('input[type="checkbox"]');
+    await userEvent.click(activityCheckbox); // select activity
+
+    expect(activityCheckboxContainer).toHaveClass('Mui-checked');
+    expect(setAddToBuilderBtnDisabledMock).toHaveBeenCalledWith(false);
+
+    items.forEach((item) => {
+      const activityItemCheckboxRegex = new RegExp(`${dataTestid}-item-\\d+-checkbox$`);
+      const itemCheckboxContainer = within(item).getByTestId(activityItemCheckboxRegex);
+      expect(itemCheckboxContainer).toHaveClass('Mui-checked');
+    });
+
+    await userEvent.click(activityCheckbox); // unselect activity
+    expect(activityCheckboxContainer).not.toHaveClass('Mui-checked');
+
+    // select one item - actvity checkbox should be indeterminate
+    const item0CheckboxContainer = screen.getByTestId(`${dataTestid}-item-0-checkbox`);
+    const item0Checkbox = item0CheckboxContainer.querySelector('input[type="checkbox"]');
+    await userEvent.click(item0Checkbox);
+
+    expect(activityCheckboxContainer).not.toHaveClass('Mui-checked');
+    expect(activityCheckboxContainer).toHaveClass('MuiCheckbox-indeterminate');
   });
 
   test('renders performance task', async () => {
