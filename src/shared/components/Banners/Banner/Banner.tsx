@@ -6,6 +6,7 @@ import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton } from 'shared/styles';
 
 import { BannerProps } from './Banner.types';
+import { BANNER_ICONS } from './Banner.const';
 
 export const Banner = ({
   children,
@@ -32,12 +33,7 @@ export const Banner = ({
 
   return (
     <Alert
-      iconMapping={{
-        info: getSvg('more-info-filled'),
-        success: getSvg('check-circle'),
-        warning: getSvg('exclamation-circle'),
-        error: getSvg('exclamation-octagon'),
-      }}
+      iconMapping={BANNER_ICONS}
       slots={{
         closeButton: StyledClearedButton,
       }}
@@ -55,5 +51,3 @@ export const Banner = ({
     </Alert>
   );
 };
-
-const getSvg = (id: string) => <Svg id={id} width={32} height={32} />;
