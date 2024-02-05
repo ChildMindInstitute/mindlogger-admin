@@ -24,7 +24,7 @@ export const generateNewFolderName = (folders: Folder[]) => {
     return newFolder;
   }
 
-  const [_, index = 0] = result.sort((a, b) => {
+  const [, index = 0] = result.sort((a, b) => {
     if (a[0] > b[0]) {
       return -1;
     }
