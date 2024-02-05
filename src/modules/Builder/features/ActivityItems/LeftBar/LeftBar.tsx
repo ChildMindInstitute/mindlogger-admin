@@ -190,6 +190,7 @@ export const LeftBar = ({
           const itemIndex = (draggableItems?.length ?? 0) + index;
           const name = `${fieldName}.items.${itemIndex}`;
           const key = `item-${getEntityKey(item)}-${index + draggableItems?.length}`;
+          const dataTestid = `builder-activity-items-system-item-${index}-cell`;
 
           return (
             <Item
@@ -199,6 +200,7 @@ export const LeftBar = ({
               onSetActiveItem={handleSetActiveItem}
               onDuplicateItem={() => onDuplicateItem(itemIndex)}
               onRemoveItem={onRemoveItem}
+              data-testid={dataTestid}
             />
           );
         })}
