@@ -1,0 +1,38 @@
+name: CI
+on: [pull_request]
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - run: npm ci
+
+      - uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          eslint_extensions: ts
+          eslint_args: 'src/**/*.ts'
+          prettier: true
+          prettier_extensions: ts
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: npm install
+      - name: Running tests
+        env:
+          REACT_APP_API_DOMAIN: http://localhost:8080
+        run: npm run test:nowatch
