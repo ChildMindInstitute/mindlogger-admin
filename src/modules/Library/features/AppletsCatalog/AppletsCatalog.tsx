@@ -75,7 +75,7 @@ export const AppletsCatalog = () => {
   }, [pageIndex]);
 
   return (
-    <StyledBody sx={{ position: 'relative' }}>
+    <StyledBody sx={{ position: 'relative' }} data-testid="applets-catalog">
       {isLoading && <Spinner />}
       <Header
         handleSearch={handleSearch}
@@ -89,7 +89,7 @@ export const AppletsCatalog = () => {
           <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
             {t('appletsCatalog')}
           </StyledHeadlineLarge>
-          <StyledAppletList>
+          <StyledAppletList data-testid="applets-catalog-applet-list">
             {appletsArray?.length
               ? appletsArray.map((applet, index) => (
                   <StyledAppletContainer key={applet.id}>
