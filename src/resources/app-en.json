@@ -1246,7 +1246,7 @@
   "fromToHint": "From {{min}} to {{max}}",
   "selectValidInterval": "Select valid interval",
   "selectValueWithinInterval": "Select a value within an interval",
-  "bannerText": "<0>You are using the new version of MindLogger!</0><1>End users must update to the new app.</1><2>Take these steps now to ensure participant response data is not lost.</2>",
+  "versionWarningBanner": "<0>You are using the new version of MindLogger!</0> <1>End users must update to the new app.</1> <2>Take these steps now to ensure participant response data is not lost.</2>",
   "youNeedToAuthorizeHint": "To create a new Applet or merge it with others you have to authorize.",
   "errorFallback": {
     "somethingWentWrong": "Something went wrong.",

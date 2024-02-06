@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar, AvatarUiType, Svg, Banner } from 'shared/components';
+import { Avatar, AvatarUiType, Svg } from 'shared/components';
+import { Banners } from 'shared/components/Banners';
 import { StyledBadge, StyledFlexTopCenter } from 'shared/styles';
 import { page } from 'resources';
 import { auth } from 'modules/Auth/state';
@@ -50,7 +51,7 @@ export const TopBar = () => {
           </StyledLoginButton>
         )}
       </StyledTopBar>
-      <Banner />
+      <Banners />
       {visibleAccountDrawer && (
         <AccountPanel
           setVisibleDrawer={setVisibleAccountDrawer}
