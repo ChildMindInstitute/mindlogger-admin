@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["import", "prettier", "react-hooks", "@typescript-eslint"],
+  "plugins": ["import", "prettier", "react-hooks", "@typescript-eslint", "unused-imports"],
   "env": {
     "node": true
   },
@@ -68,13 +68,12 @@
     "no-underscore-dangle": "error",
     "no-unused-labels": "error",
     "prefer-const": "error",
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        "ignoreRestSiblings": true
-      }
-    ],
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+		"unused-imports/no-unused-vars": [
+			"warn",
+			{ "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+		],
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-duplicate-enum-values": "warn",
