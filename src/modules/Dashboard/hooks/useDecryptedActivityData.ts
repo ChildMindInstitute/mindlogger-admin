@@ -83,9 +83,7 @@ export const useDecryptedActivityData = (
       }
     }
 
-    const getAnswer = (activityItem: Item, index: number): AnswerDTO => {
-      const answer = answersDecrypted[index];
-
+    const getAnswer = (activityItem: Item, answer: AnswerDTO): AnswerDTO => {
       if (!migratedUrls) {
         return answer;
       }
@@ -114,11 +112,17 @@ export const useDecryptedActivityData = (
       return answer;
     };
 
-    const answerDataDecrypted = rest.items.map((activityItem, index) => ({
-      activityItem,
-      answer: getAnswer(activityItem, index),
-      ...rest,
-    }));
+    const itemsObject = getObjectFromList(rest.items);
+    const answerDataDecrypted = answersDecrypted.map((answer, index) => {
+      const itemId = itemIds[index];
+      const item = itemsObject[itemId];
+
+      return {
+        activityItem: item,
+        answer: getAnswer(item, answer),
+        ...rest,
+      };
+    });
 
     return {
       decryptedAnswers: answerDataDecrypted as DecryptedActivityData<T>['decryptedAnswers'],
