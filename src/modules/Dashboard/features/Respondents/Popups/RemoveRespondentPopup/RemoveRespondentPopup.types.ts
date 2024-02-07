@@ -1,7 +1,7 @@
 import { Row, SubmitBtnColor } from 'shared/components';
 import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 
-export type RespondentAccessPopupProps = {
+export type RemoveRespondentPopupProps = {
   popupVisible: boolean;
   tableRows: Row[] | undefined;
   chosenAppletData: ChosenAppletData | null;

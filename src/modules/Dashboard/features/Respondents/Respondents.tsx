@@ -35,7 +35,7 @@ import {
 import {
   DataExportPopup,
   EditRespondentPopup,
-  RespondentsRemoveAccessPopup,
+  RemoveRespondentPopup,
   ScheduleSetupPopup,
   SendInvitationPopup,
   ViewDataPopup,
@@ -472,7 +472,7 @@ export const Respondents = () => {
         />
       )}
       {removeAccessPopupVisible && (
-        <RespondentsRemoveAccessPopup
+        <RemoveRespondentPopup
           popupVisible={removeAccessPopupVisible}
           onClose={removeRespondentAccessOnClose}
           chosenAppletData={chosenAppletData}

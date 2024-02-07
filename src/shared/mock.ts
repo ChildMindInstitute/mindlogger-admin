@@ -413,7 +413,7 @@ export const mockedManager = {
         {
           accessId: '17ba7d95-f766-42ae-9ce6-2f8fcc3l24a',
           role: Roles.Reviewer,
-          reviewerRespondents: [mockedRespondentId],
+          reviewerSubjects: [mockedSubjectId1],
         },
       ],
       encryption: mockedEncryption,
@@ -632,6 +632,8 @@ export const mockedInvitation = {
       firstName: 'Jane',
       lastName: 'Doe',
       createdAt: '2023-11-02T08:37:13.652256',
+      secretUserId: null,
+      nickname: null,
       meta: {},
     },
   ],
@@ -2797,7 +2799,7 @@ export const mockedAlert = {
   image:
     'https://media-dev.cmiml.net/mindlogger/391962851007982489/4490a3c1-904b-441c-87a9-4683fe2983fa/1.jpg',
   workspace: 'Test ML',
-  respondentId: mockedRespondentId,
+  subjectId: mockedSubjectId1,
 };
 
 export const mockIntersectionObserver = () => {

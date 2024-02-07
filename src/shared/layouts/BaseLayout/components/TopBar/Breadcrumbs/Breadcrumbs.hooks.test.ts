@@ -222,13 +222,16 @@ describe('useBreadcrumbs', () => {
           },
         },
         users: {
-          respondentDetails: {
+          subjectDetails: {
             data: {
               result: {
                 nickname: 'Jane Doe',
                 secretUserId: 'secretUserId',
               },
             },
+          },
+          respondentDetails: {
+            data: null,
           },
         },
       },

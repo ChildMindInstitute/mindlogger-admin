@@ -44,4 +44,12 @@ export const users = {
         },
       }) => data,
     ),
+  useSubject: (): UsersSchema['subjectDetails']['data'] | undefined =>
+    useAppSelector(
+      ({
+        users: {
+          subjectDetails: { data },
+        },
+      }) => data,
+    ),
 };

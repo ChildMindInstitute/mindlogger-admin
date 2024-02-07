@@ -104,7 +104,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     getLatestReport({
       appletId,
       activityId: activity.id,
-      respondentId,
+      targetSubjectId: respondentId,
     });
   };
 
@@ -121,7 +121,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
           appletId,
           activityId: activity.id,
           params: {
-            respondentId,
+            targetSubjectId: respondentId,
             fromDatetime: getDateISO(startDate, startTime),
             toDatetime: getDateISO(endDate || addDays(startDate, 1), endTime),
             emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,

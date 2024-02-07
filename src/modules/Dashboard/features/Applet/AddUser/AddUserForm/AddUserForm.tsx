@@ -120,7 +120,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
       role,
       email,
       ...restValues,
-      ...(respondents && { respondents: respondents.map((item) => item.id) }),
+      ...(respondents && { subjects: respondents.map((item) => item.id) }),
     } as AppletInvitationOptions;
 
     executePostAppletInvitationApi({

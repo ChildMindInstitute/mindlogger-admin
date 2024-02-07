@@ -5,21 +5,21 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { removeRespondentAccessApi } from 'api';
+import { deleteSubjectApi } from 'api';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { workspaces } from 'redux/modules';
 import { isManagerOrOwner } from 'shared/utils';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { RespondentAccessPopupProps, Steps } from './RespondentsRemoveAccessPopup.types';
-import { getScreens } from './RespondentsRemoveAccessPopup.utils';
+import { RemoveRespondentPopupProps, Steps } from './RemoveRespondentPopup.types';
+import { getScreens } from './RemoveRespondentPopup.utils';
 
-export const RespondentsRemoveAccessPopup = ({
+export const RemoveRespondentPopup = ({
   popupVisible,
   tableRows,
   chosenAppletData,
   onClose,
-}: RespondentAccessPopupProps) => {
+}: RemoveRespondentPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams() || {};
   const rolesData = workspaces.useRolesData();
@@ -32,7 +32,7 @@ export const RespondentsRemoveAccessPopup = ({
   const [step, setStep] = useState<Steps>(0);
   const [removeData, setRemoveData] = useState(false);
 
-  const { execute: handleAccessRemove, error } = useAsync(removeRespondentAccessApi);
+  const { execute: handleSubjectDelete, error } = useAsync(deleteSubjectApi);
 
   const isRemoved = !error;
   const isFirstStepWithAppletId = !!appletId && step === 1;
@@ -108,13 +108,12 @@ export const RespondentsRemoveAccessPopup = ({
   );
 
   const removeAccess = async () => {
-    const { appletId, subjectId } = chosenAppletData || {};
-    if (!subjectId || !appletId) return;
+    const { subjectId } = chosenAppletData || {};
+    if (!subjectId) return;
 
-    await handleAccessRemove({
-      userId: subjectId,
-      appletIds: [appletId],
-      deleteResponses: removeData,
+    await handleSubjectDelete({
+      subjectId,
+      deleteAnswers: removeData,
     });
   };
 

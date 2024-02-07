@@ -21,7 +21,7 @@ export const ReviewMenu = ({
   onSelectAnswer,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
-  const respondentLabel = useRespondentLabel();
+  const respondentLabel = useRespondentLabel(true);
 
   const dataTestid = 'respondents-review-menu';
 

@@ -45,6 +45,9 @@ const preloadedState = {
     respondentDetails: {
       ...initialStateData,
     },
+    subjectDetails: {
+      ...initialStateData,
+    },
   },
 };
 

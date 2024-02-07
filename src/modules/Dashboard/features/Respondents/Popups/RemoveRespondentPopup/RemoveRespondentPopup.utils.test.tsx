@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { getScreens } from './RespondentsRemoveAccessPopup.utils';
+import { getScreens } from './RemoveRespondentPopup.utils';
 
 const mockScreensParams = {
   firstScreen: <div>First Screen</div>,
