@@ -47,9 +47,8 @@ export const SelectionOption = ({
   onUpdateOption,
   index,
   optionsLength,
-  optionsOpen,
-  setOptionsOpen,
 }: SelectionOptionProps) => {
+  const [optionOpen, setOptionOpen] = useState(true);
   const optionName = `${name}.responseValues.options.${index}`;
   const optionTextName = `${optionName}.text`;
   const scoreName = `${optionName}.score`;
@@ -89,17 +88,7 @@ export const SelectionOption = ({
     : t('textForOption', { index: optionIndex });
   const title = isNoneAbove ? t('titleForNoneOption') : `${t('option')} ${optionIndex}`;
 
-  const handleOptionToggle = () =>
-    setOptionsOpen((prevState) =>
-      prevState.map((optionOpen, optionIndex) => {
-        if (optionIndex === index) return !optionOpen;
-
-        return optionOpen;
-      }),
-    );
-
-  const optionOpen = optionsOpen[index];
-
+  const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
   const handlePopoverClose = () => setAnchorEl(null);
   const handleRemoveModalClose = () => setIndexToRemove(-1);
   const handleColorChange = () => {

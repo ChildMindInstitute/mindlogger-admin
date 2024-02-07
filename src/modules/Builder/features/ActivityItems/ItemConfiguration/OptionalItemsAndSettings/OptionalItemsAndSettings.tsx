@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { ColorResult } from 'react-color';
 import { Button, Collapse } from '@mui/material';
@@ -49,7 +49,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
   ({ name }, ref) => {
     const { t } = useTranslation('app');
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
-    const [optionsOpen, setOptionsOpen] = useState<boolean[]>([]); // remove setOptionsOpen
 
     const { control, setValue } = useFormContext();
     const [settings, responseType, responseValues, palette] = useWatch({
@@ -128,7 +127,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
         value: isAppendedOption ? getOptionValue(options ?? []) : DEFAULT_OPTION_VALUE,
         ...rest,
       });
-      setOptionsOpen((prevState) => [...prevState, true]);
     };
 
     const handleAddNoneOption = async () => {
@@ -160,12 +158,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       const isNoneAbove = optionItem.isNoneAbove;
       isNoneAbove && setHasNoneOption(false);
       removeOptions(index);
-      setOptionsOpen((prevState) => {
-        const newOptionsOpen = [...prevState];
-        newOptionsOpen.splice(index, 1);
-
-        return newOptionsOpen;
-      });
     };
 
     const handleUpdateOption = (index: number, option: SingleAndMultiSelectOption) => {
@@ -213,12 +205,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       responseType,
     });
 
-    useEffect(() => {
-      if (!options?.length) return;
-
-      setOptionsOpen(options.map(() => true));
-    }, []);
-
     useImperativeHandle(
       ref,
       () => ({
@@ -235,7 +221,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       handleAddSingleOrMultipleRow,
       removeAlert,
       handleAddAlert,
-      setOptionsOpen,
     });
 
     return (
@@ -273,8 +258,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
                           onUpdateOption={handleUpdateOption}
                           optionsLength={options.length}
                           index={index}
-                          optionsOpen={optionsOpen}
-                          setOptionsOpen={setOptionsOpen}
                         />
                       </Collapse>
                     ))

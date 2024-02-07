@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { ItemResponseType } from 'shared/consts';
 
 export type OptionalItemsProps = {
@@ -23,7 +21,6 @@ export type SettingsSetupProps = {
   handleAddSingleOrMultipleRow?: () => void;
   removeAlert?: () => void;
   handleAddAlert?: () => void;
-  setOptionsOpen?: Dispatch<SetStateAction<boolean[]>>;
 };
 
 export type HandleAddOptionProps = {

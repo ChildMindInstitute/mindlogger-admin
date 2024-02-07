@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { mockedAppletFormData, mockedMultiSelectFormValues } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils';
@@ -35,42 +36,27 @@ const getFormData = (index = 0, optionProps = { isNoneAbove: false }) => {
     ],
   };
 };
+const getToggleBtn = () =>
+  screen.getByTestId('builder-activity-items-item-configuration-options-0-collapse');
 
 describe('SelectionOption', () => {
   const onRemoveOption = jest.fn();
   const onUpdateOption = jest.fn();
-  const setOptionsOpen = jest.fn();
-  const selectionOptionCollapsedProps = {
+  const selectionOptionProps = {
     name,
     onRemoveOption,
     onUpdateOption,
     index: 0,
     optionsLength,
-    optionsOpen: [false],
-    setOptionsOpen,
-  };
-  const selectionOptionExpandedProps = {
-    ...selectionOptionCollapsedProps,
-    optionsOpen: [true],
   };
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('should render first regular option collapsed', () => {
-    renderWithAppletFormData({
-      children: <SelectionOption {...selectionOptionCollapsedProps} />,
-      appletFormData: mockedAppletFormData,
-    });
-
-    expect(screen.getByText('Option 1')).toBeInTheDocument();
-    expect(screen.getByText('m1')).toBeInTheDocument();
-  });
-
   test('should render first regular option expanded', () => {
     renderWithAppletFormData({
-      children: <SelectionOption {...selectionOptionExpandedProps} />,
+      children: <SelectionOption {...selectionOptionProps} />,
       appletFormData: mockedAppletFormData,
     });
 
@@ -81,22 +67,20 @@ describe('SelectionOption', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('should render None option collapsed', () => {
+  test('should render first regular option collapsed', async () => {
     renderWithAppletFormData({
-      children: <SelectionOption {...selectionOptionCollapsedProps} />,
-      appletFormData: getFormData(0, {
-        isNoneAbove: true,
-        text: 'text for None option',
-      }),
+      children: <SelectionOption {...selectionOptionProps} />,
+      appletFormData: mockedAppletFormData,
     });
+    await userEvent.click(getToggleBtn());
 
-    expect(screen.getByText('“None“ Option')).toBeInTheDocument();
-    expect(screen.getByText('text for None option')).toBeInTheDocument();
+    expect(screen.getByText('Option 1')).toBeInTheDocument();
+    expect(screen.getByText('m1')).toBeInTheDocument();
   });
 
   test('should render None option expanded', async () => {
-    const { debug } = renderWithAppletFormData({
-      children: <SelectionOption {...selectionOptionExpandedProps} />,
+    renderWithAppletFormData({
+      children: <SelectionOption {...selectionOptionProps} />,
       appletFormData: getFormData(0, {
         isNoneAbove: true,
         text: 'text for None option',
@@ -108,6 +92,19 @@ describe('SelectionOption', () => {
         'If selected, this option will disable other options, and other options already selected by the respondent will not be submitted.',
       ),
     ).toBeInTheDocument();
-    debug();
+  });
+
+  test('should render None option collapsed', async () => {
+    renderWithAppletFormData({
+      children: <SelectionOption {...selectionOptionProps} />,
+      appletFormData: getFormData(0, {
+        isNoneAbove: true,
+        text: 'text for None option',
+      }),
+    });
+    await userEvent.click(getToggleBtn());
+
+    expect(screen.getByText('“None“ Option')).toBeInTheDocument();
+    expect(screen.getByText('text for None option')).toBeInTheDocument();
   });
 });
