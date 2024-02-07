@@ -1,14 +1,15 @@
 import { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { ColorResult } from 'react-color';
-import { Button } from '@mui/material';
+import { Button, Collapse } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
+import { TransitionGroup } from 'react-transition-group';
 
 import { SingleAndMultiSelectOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
-import { StyledFlexTopCenter, StyledTitleLarge, theme } from 'shared/styles';
+import { StyledFlexTopCenter, StyledTitleLarge, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 
@@ -30,7 +31,11 @@ import {
 } from '../Settings';
 import { Alerts } from '../Alerts';
 import { SelectionOption } from '../InputTypeItems/SelectionOption';
-import { OptionalItemsProps, OptionalItemsRef } from './OptionalItemsAndSettings.types';
+import {
+  OptionalItemsProps,
+  OptionalItemsRef,
+  HandleAddOptionProps,
+} from './OptionalItemsAndSettings.types';
 import { SkippedItemInVariablesModal } from './SkippedItemInVariablesModal';
 import { StyledOptionsWrapper } from './OptionalItemsAndSettings.styles';
 import { useActiveItem, useSettingsSetup } from './OptionalItemsAndSettings.hooks';
@@ -44,7 +49,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
   ({ name }, ref) => {
     const { t } = useTranslation('app');
     const [settingsDrawerVisible, setSettingsDrawerVisible] = useState(false);
-    const [optionsOpen, setOptionsOpen] = useState<boolean[]>([]);
+    const [optionsOpen, setOptionsOpen] = useState<boolean[]>([]); // remove setOptionsOpen
 
     const { control, setValue } = useFormContext();
     const [settings, responseType, responseValues, palette] = useWatch({
@@ -87,6 +92,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       name: `${name}.responseValues.options`,
       keyName: REACT_HOOK_FORM_KEY_NAME,
     });
+    const [hasNoneOption, setHasNoneOption] = useState(
+      options.some((option) => option.isNoneAbove),
+    );
 
     const { append: appendRow } = useFieldArray({
       control,
@@ -108,7 +116,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       responseType as ItemResponseType,
     );
 
-    const handleAddOption = async (isAppendedOption: boolean) => {
+    const handleAddOption = async ({ isAppendedOption, ...rest }: HandleAddOptionProps) => {
       await appendOption({
         id: uuidv4(),
         text: '',
@@ -118,8 +126,18 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
           hasColorPalette &&
           palette && { color: { hex: getPaletteColor(palette, options.length) } as ColorResult }),
         value: isAppendedOption ? getOptionValue(options ?? []) : DEFAULT_OPTION_VALUE,
+        ...rest,
       });
       setOptionsOpen((prevState) => [...prevState, true]);
+    };
+
+    const handleAddNoneOption = async () => {
+      await handleAddOption({
+        isAppendedOption: true,
+        text: t('placeholderForNoneOption'),
+        isNoneAbove: true,
+      });
+      setHasNoneOption(true);
     };
 
     const handleAddSingleOrMultipleRow = () => {
@@ -138,6 +156,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       appendAlert(getEmptyAlert({ responseType, responseValues, config: settings }));
 
     const handleRemoveOptions = (index: number) => {
+      const optionItem = options[index];
+      const isNoneAbove = optionItem.isNoneAbove;
+      isNoneAbove && setHasNoneOption(false);
       removeOptions(index);
       setOptionsOpen((prevState) => {
         const newOptionsOpen = [...prevState];
@@ -242,27 +263,40 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
               <ColorPalette name={name} onRemovePalette={handleRemovePalette} />
             )}
             <StyledOptionsWrapper>
-              {options?.length
-                ? options.map((option, index) => (
-                    <SelectionOption
-                      key={option.id}
-                      name={name}
-                      onRemoveOption={handleRemoveOptions}
-                      onUpdateOption={handleUpdateOption}
-                      optionsLength={options.length}
-                      index={index}
-                      optionsOpen={optionsOpen}
-                      setOptionsOpen={setOptionsOpen}
-                    />
-                  ))
-                : null}
+              <TransitionGroup>
+                {options?.length
+                  ? options.map((option, index) => (
+                      <Collapse key={option.id}>
+                        <SelectionOption
+                          name={name}
+                          onRemoveOption={handleRemoveOptions}
+                          onUpdateOption={handleUpdateOption}
+                          optionsLength={options.length}
+                          index={index}
+                          optionsOpen={optionsOpen}
+                          setOptionsOpen={setOptionsOpen}
+                        />
+                      </Collapse>
+                    ))
+                  : null}
+              </TransitionGroup>
               <Button
-                onClick={() => handleAddOption(true)}
+                onClick={() => handleAddOption({ isAppendedOption: true })}
                 variant="outlined"
                 startIcon={<Svg id="add" width="20" height="20" />}
                 data-testid="builder-activity-items-item-configuration-add-option"
               >
                 {t('addOption')}
+              </Button>
+              <Button
+                onClick={() => handleAddNoneOption()}
+                variant="text"
+                startIcon={<Svg id="add" width="20" height="20" />}
+                data-testid="builder-activity-items-item-configuration-add-none-option"
+                sx={{ ml: theme.spacing(1), color: variables.palette.on_surface_variant }}
+                disabled={hasNoneOption}
+              >
+                {t('addNoneOption')}
               </Button>
             </StyledOptionsWrapper>
           </>

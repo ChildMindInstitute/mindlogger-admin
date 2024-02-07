@@ -120,7 +120,7 @@ export const useSettingsSetup = ({
             removeOptions?.();
             setOptionsOpen?.([]);
             setConfig(isSingleSelect ? defaultSingleSelectionConfig : defaultMultiSelectionConfig);
-            handleAddOption?.(false);
+            handleAddOption?.({ isAppendedOption: false });
             break;
           case ItemResponseType.Text:
             setConfig(defaultTextConfig);

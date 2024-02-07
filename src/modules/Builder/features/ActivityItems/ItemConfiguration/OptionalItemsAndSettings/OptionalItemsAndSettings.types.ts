@@ -17,11 +17,17 @@ export type ActiveItemHookProps = {
 
 export type SettingsSetupProps = {
   name: string;
-  handleAddOption?: (isAppendedOption: boolean) => void;
+  handleAddOption?: (props: HandleAddOptionProps) => void;
   removeOptions?: () => void;
   handleAddSliderRow?: () => void;
   handleAddSingleOrMultipleRow?: () => void;
   removeAlert?: () => void;
   handleAddAlert?: () => void;
   setOptionsOpen?: Dispatch<SetStateAction<boolean[]>>;
+};
+
+export type HandleAddOptionProps = {
+  isAppendedOption: boolean;
+  text?: string;
+  isNoneAbove?: boolean;
 };
