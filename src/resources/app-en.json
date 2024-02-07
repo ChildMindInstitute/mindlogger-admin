@@ -937,7 +937,7 @@
   "saveChanges": "Save Changes?",
   "saveChangesDescription": "Unsaved changes will be lost.",
   "saveError": "Sorry, we couldn’t save those changes.",
-  "saveReportConfigurationSuccess": "Report configuration has been updated successfully.",
+  "saveSuccess": "Changes saved",
   "saveReportConfigurationWarning": "A report can not be generated until the <1>'Encryption Server IP Address'</1> and the <3>'Public Encryption Key'</3> are entered. ",
   "schedule": "Schedule",
   "scheduleClearedSuccess": "Schedule Cleared Successfully",

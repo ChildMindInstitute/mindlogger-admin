@@ -59,7 +59,7 @@ const renderReportConfigSettingWithForm = ({
     });
   }
 
-  renderWithAppletFormData({
+  return renderWithAppletFormData({
     children: (
       <ReportConfigSetting onSubmitSuccess={() => {}} data-testid={mockedReportConfigDataTestid} />
     ),
@@ -70,8 +70,6 @@ const renderReportConfigSettingWithForm = ({
       reportPublicKey: 'key',
     }),
   });
-
-  return ref;
 };
 
 const spyVerifyReportServer = jest.spyOn(reportUtils, 'verifyReportServer');
@@ -240,7 +238,7 @@ describe('ReportConfigSetting', () => {
       jest.spyOn(encryptionUtils, 'publicEncrypt').mockReturnValue({});
       jest.spyOn(reportApi, 'postReportConfigApi').mockResolvedValue({});
 
-      renderReportConfigSettingWithForm();
+      const { store } = renderReportConfigSettingWithForm();
 
       const save = screen.getByTestId(`${mockedReportConfigDataTestid}-save`);
 
@@ -278,8 +276,8 @@ describe('ReportConfigSetting', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByTestId('builder-applet-settings-report-config-setting-success-popup'),
-        ).toBeVisible();
+          store.getState().banners.data.banners.find(({ key }) => key === 'SaveSuccessBanner'),
+        ).toBeDefined();
       });
     });
 

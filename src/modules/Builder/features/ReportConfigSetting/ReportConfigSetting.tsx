@@ -10,7 +10,7 @@ import {
   postActivityReportConfigApi,
   postActivityFlowReportConfigApi,
 } from 'api';
-import { applet } from 'redux/modules';
+import { applet, banners } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { SaveChangesPopup, Svg } from 'shared/components';
 import {
@@ -60,7 +60,7 @@ import {
   StyledActivities,
 } from './ReportConfigSetting.styles';
 import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
-import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
+import { ErrorPopup, ServerVerifyErrorPopup, WarningPopup } from './Popups';
 import {
   getActivitiesOptions,
   getActivityItemsOptions,
@@ -92,7 +92,7 @@ export const ReportConfigSetting = ({
 
   const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-  const [successPopupVisible, setSuccessPopupVisible] = useState(false);
+  const [successBannerVisible, setSuccessBannerVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
@@ -104,7 +104,7 @@ export const ReportConfigSetting = ({
   const { execute: postReportConfig } = useAsync(
     postReportConfigApi,
     () => {
-      setSuccessPopupVisible(true);
+      setSuccessBannerVisible(true);
     },
     () => {
       setErrorPopupVisible(true);
@@ -113,7 +113,7 @@ export const ReportConfigSetting = ({
   const { execute: postActivityReportConfig } = useAsync(
     postActivityReportConfigApi,
     () => {
-      setSuccessPopupVisible(true);
+      setSuccessBannerVisible(true);
     },
     () => {
       setErrorPopupVisible(true);
@@ -122,7 +122,7 @@ export const ReportConfigSetting = ({
   const { execute: postActivityFlowReportConfig } = useAsync(
     postActivityFlowReportConfigApi,
     () => {
-      setSuccessPopupVisible(true);
+      setSuccessBannerVisible(true);
     },
     () => {
       setErrorPopupVisible(true);
@@ -333,7 +333,7 @@ export const ReportConfigSetting = ({
   };
 
   const handleSuccessPopupClose = () => {
-    setSuccessPopupVisible(false);
+    setSuccessBannerVisible(false);
     confirmNavigation();
   };
 
@@ -382,10 +382,19 @@ export const ReportConfigSetting = ({
   };
 
   useEffect(() => {
-    if (!successPopupVisible || !onSubmitSuccess) return;
+    if (!successBannerVisible || !onSubmitSuccess) return;
 
     onSubmitSuccess(getValues());
-  }, [successPopupVisible]);
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: {
+          onClose: handleSuccessPopupClose,
+          'data-testid': 'builder-applet-settings-report-config-setting-success-banner',
+        },
+      }),
+    );
+  }, [successBannerVisible]);
 
   useEffect(() => {
     reset(defaultValues);
@@ -618,9 +627,6 @@ export const ReportConfigSetting = ({
           setPopupVisible={setErrorPopupVisible}
           retryCallback={handleSaveWithoutServer}
         />
-      )}
-      {successPopupVisible && (
-        <SuccessPopup popupVisible={successPopupVisible} onClose={handleSuccessPopupClose} />
       )}
       {promptVisible && (
         <SaveChangesPopup
