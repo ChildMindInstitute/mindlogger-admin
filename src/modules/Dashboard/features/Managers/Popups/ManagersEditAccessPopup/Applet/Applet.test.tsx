@@ -60,7 +60,7 @@ describe('Applet', () => {
       {
         role: Roles.Manager,
         accessId: 'accessId',
-        reviewerRespondents: [],
+        reviewerSubjects: [],
       },
     ]);
     const addButton = screen.getByText('Add Role');
