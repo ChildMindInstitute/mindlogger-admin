@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Modal } from 'shared/components';
+import { Modal, SpinnerUiType, Spinner } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { Roles } from 'shared/consts';
 import { workspaces } from 'redux/modules';
@@ -24,12 +24,17 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
 
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: handleEditAccess, error: editAccessError } = useAsync(editManagerAccessApi, () =>
-    onClose(true),
-  );
-  const { execute: handleRemoveAccess, error: removeAccessError } =
-    useAsync(removeManagerAccessApi);
-
+  const {
+    execute: handleEditAccess,
+    error: editAccessError,
+    isLoading: isEditAccessLoading,
+  } = useAsync(editManagerAccessApi, () => onClose(true));
+  const {
+    execute: handleRemoveAccess,
+    error: removeAccessError,
+    isLoading: isRemoveAccessLoading,
+  } = useAsync(removeManagerAccessApi);
+  const isLoading = isEditAccessLoading || isRemoveAccessLoading;
   const error = removeAccessError || editAccessError;
 
   const getAppletsWithoutRespondents = () =>
@@ -102,6 +107,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
       data-testid="dashboard-managers-edit-access-popup"
     >
       <>
+        {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
           <StyledBodyLarge sx={{ margin: theme.spacing(-1.8, 0, 1.2) }}>
             <strong>

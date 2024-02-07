@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ButtonWithMenu, Chip } from 'shared/components';
@@ -26,14 +26,18 @@ export const Applet = ({
   const selectedRespondents = roles?.flatMap(({ reviewerSubjects }) => reviewerSubjects ?? []);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
+  const isPristineRef = useRef(true);
+  const hasManagerRole = isPristineRef.current && roles.some((item) => item.role === Roles.Manager);
+  const addRoleTooltip = hasManagerRole ? t('userHasManagerAccess') : null;
 
   const handleAddRole = (label: Roles) => {
     addRole(id, label);
     setAnchorEl(null);
+    isPristineRef.current = false;
   };
 
   const menuItems = getMenuItems(handleAddRole);
-  const isAddRoleDisabled = menuItems?.length === roles.length;
+  const isAddRoleDisabled = menuItems?.length === roles.length || hasManagerRole;
 
   const getFilteredMenuItems = () =>
     menuItems?.filter((menuItem: MenuItem) => !roles.find(({ role }) => role === menuItem.title));
@@ -64,6 +68,7 @@ export const Applet = ({
             setAnchorEl={setAnchorEl}
             menuItems={getFilteredMenuItems()}
             label={t('addRole')}
+            tooltip={addRoleTooltip}
           />
         </StyledRow>
         {roles?.map(({ role, icon }) => (

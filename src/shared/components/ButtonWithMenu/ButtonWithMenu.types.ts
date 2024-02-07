@@ -11,4 +11,5 @@ export type ButtonWithMenuProps = {
   menuListWidth?: string;
   menuProps?: Partial<MenuProps<unknown>>;
   'data-testid'?: string;
+  tooltip?: null | string;
 };

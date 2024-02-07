@@ -1,6 +1,7 @@
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Tooltip } from 'shared/components/Tooltip';
 import { Svg } from 'shared/components/Svg';
 import { Menu } from 'shared/components/Menu';
 import { variables } from 'shared/styles';
@@ -19,6 +20,7 @@ export const ButtonWithMenu = ({
   menuListWidth,
   menuProps,
   'data-testid': dataTestid,
+  tooltip,
 }: ButtonWithMenuProps) => {
   const { t } = useTranslation('app');
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
@@ -29,22 +31,26 @@ export const ButtonWithMenu = ({
 
   return (
     <>
-      <StyledButton
-        sx={{
-          backgroundColor:
-            openMenu && variant === 'outlined' ? variables.palette.primary_alfa12 : 'inherit',
-        }}
-        disabled={disabled}
-        variant={variant}
-        aria-haspopup="true"
-        aria-expanded={openMenu ? 'true' : undefined}
-        startIcon={startIcon || <Svg id="add" width="18" height="18" />}
-        endIcon={<Svg id={openMenu ? 'navigate-up' : 'navigate-down'} width="18" height="18" />}
-        onClick={handleMenuOpen}
-        data-testid={dataTestid}
-      >
-        {t(label)}
-      </StyledButton>
+      <Tooltip tooltipTitle={tooltip || null}>
+        <span>
+          <StyledButton
+            sx={{
+              backgroundColor:
+                openMenu && variant === 'outlined' ? variables.palette.primary_alfa12 : 'inherit',
+            }}
+            disabled={disabled}
+            variant={variant}
+            aria-haspopup="true"
+            aria-expanded={openMenu ? 'true' : undefined}
+            startIcon={startIcon || <Svg id="add" width="18" height="18" />}
+            endIcon={<Svg id={openMenu ? 'navigate-up' : 'navigate-down'} width="18" height="18" />}
+            onClick={handleMenuOpen}
+            data-testid={dataTestid}
+          >
+            {t(label)}
+          </StyledButton>
+        </span>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         onClose={handleMenuClose}

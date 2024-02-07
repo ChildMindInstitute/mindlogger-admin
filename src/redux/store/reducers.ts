@@ -3,6 +3,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import { alerts } from 'shared/state/Alerts';
 import { applet } from 'shared/state/Applet';
 import { applets } from 'modules/Dashboard/state/Applets';
+import { banners } from 'shared/state/Banners';
 import { calendarEvents } from 'modules/Dashboard/state/CalendarEvents';
 import { popups } from 'modules/Dashboard/state/Popups';
 import { users } from 'modules/Dashboard/state/Users';
@@ -17,6 +18,7 @@ export const rootReducer = combineReducers({
   applet: applet.slice.reducer,
   applets: applets.slice.reducer,
   auth: auth?.slice.reducer,
+  banners: banners.slice.reducer,
   calendarEvents: calendarEvents.slice.reducer,
   library: library.slice.reducer,
   popups: popups.slice.reducer,
