@@ -57,6 +57,9 @@ import {
   AppletShellAccountData,
   SubjectInvitationData,
   EditSubject,
+  DeleteSubject,
+  TargetSubjectId,
+  SubjectId,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -237,6 +240,17 @@ export const editSubjectApi = ({ subjectId, values }: EditSubject, signal?: Abor
     },
     { signal },
   );
+
+export const deleteSubjectApi = (
+  { subjectId, deleteAnswers }: DeleteSubject,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(`/subjects/${subjectId}`, {
+    signal,
+    data: {
+      deleteAnswers,
+    },
+  });
 
 export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}`, {
@@ -424,12 +438,12 @@ export const getAppletInviteLinkApi = ({ appletId }: AppletId, signal?: AbortSig
   authApiClient.get(`/applet/${appletId}/inviteLink`, { signal });
 
 export const getReviewActivitiesApi = (
-  { appletId, respondentId, createdDate }: Answers,
+  { appletId, targetSubjectId, createdDate }: Answers,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<ReviewActivity>>(`/answers/applet/${appletId}/review/activities`, {
     params: {
-      respondentId,
+      targetSubjectId,
       createdDate,
       limit: MAX_LIMIT,
     },
@@ -536,26 +550,26 @@ export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?:
   });
 
 export const getSummaryActivitiesApi = (
-  { appletId, respondentId }: AppletId & RespondentId,
+  { appletId, targetSubjectId }: AppletId & TargetSubjectId,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<DatavizActivity>>(`/answers/applet/${appletId}/summary/activities`, {
     params: {
-      respondentId,
+      targetSubjectId,
       limit: MAX_LIMIT,
     },
     signal,
   });
 
 export const getIdentifiersApi = (
-  { appletId, activityId, respondentId }: Identifiers,
+  { appletId, activityId, targetSubjectId }: Identifiers,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Identifier>>(
     `/answers/applet/${appletId}/summary/activities/${activityId}/identifiers`,
     {
       params: {
-        respondentId,
+        targetSubjectId,
       },
       signal,
     },
@@ -573,11 +587,11 @@ export const getVersionsApi = (
   );
 
 export const getLatestReportApi = (
-  { appletId, activityId, respondentId }: LatestReport,
+  { appletId, activityId, targetSubjectId }: LatestReport,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/answers/applet/${appletId}/activities/${activityId}/answers/${respondentId}/latest_report`,
+    `/answers/applet/${appletId}/activities/${activityId}/answers/${targetSubjectId}/latest_report`,
     {},
     {
       responseType: 'arraybuffer',
@@ -682,5 +696,10 @@ export const getRespondentDetailsApi = (
   signal?: AbortSignal,
 ) =>
   authApiClient.get(`/workspaces/${ownerId}/applets/${appletId}/respondents/${respondentId}`, {
+    signal,
+  });
+
+export const getSubjectDetailsApi = ({ subjectId }: SubjectId, signal?: AbortSignal) =>
+  authApiClient.get(`/subjects/${subjectId}`, {
     signal,
   });

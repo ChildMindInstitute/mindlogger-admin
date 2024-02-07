@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next';
 import { StyledBodyLarge, theme, variables } from 'shared/styles';
 import { SubmitBtnColor } from 'shared/components';
 
-import { GetScreen, Screen, ScreensParams } from './RespondentsRemoveAccessPopup.types';
+import { GetScreen, Screen, ScreensParams } from './RemoveRespondentPopup.types';
 
 const getThirdScreen = (respondentName: string, appletName: string) => (
   <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>

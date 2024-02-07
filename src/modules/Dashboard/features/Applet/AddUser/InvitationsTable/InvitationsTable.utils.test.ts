@@ -36,13 +36,15 @@ describe('InvitationsTable.utils', () => {
       const invitations = {
         result: [
           {
-            meta: { secret_user_id: '123' },
+            meta: { subject_id: '123' },
             firstName: 'John',
             lastName: 'Doe',
             role: 'respondent',
             email: 'john.doe@example.com',
             key: 'abc123',
             createdAt: '2022-01-01T12:00:00',
+            secretUserId: 'secret-id',
+            nickname: 'test-nickname',
           },
         ],
         count: 1,
@@ -59,7 +61,7 @@ describe('InvitationsTable.utils', () => {
         {
           secretUserId: {
             content: expect.any(Function),
-            value: '123',
+            value: 'secret-id',
           },
           firstName: {
             content: expect.any(Function),

@@ -19,6 +19,10 @@ export type GetAppletsParams = {
 
 export type RespondentId = { respondentId: string };
 
+export type TargetSubjectId = { targetSubjectId: string };
+
+export type SubjectId = { subjectId: string };
+
 export type FolderId = { folderId: string };
 
 export type Event = {
@@ -156,19 +160,22 @@ export type RemoveAccess = {
 export type EditManagerAccess = {
   userId: string;
   ownerId: string;
-  accesses: { appletId: string; roles: Roles[]; respondents: string[] }[];
+  accesses: { appletId: string; roles: Roles[]; subjects: string[] }[];
 };
 
 export type RemoveRespondentAccess = RemoveAccess & {
   deleteResponses: boolean;
 };
 
-export type EditSubject = {
-  subjectId: string;
+export type EditSubject = SubjectId & {
   values: {
     secretUserId: string;
     nickname?: string;
   };
+};
+
+export type DeleteSubject = SubjectId & {
+  deleteAnswers: boolean;
 };
 
 export type AppletInvitationOptions = {
@@ -179,7 +186,7 @@ export type AppletInvitationOptions = {
   email: string;
   secretUserId: string;
   workspacePrefix: string;
-  respondents: string[];
+  subjects: string[];
   language: string;
 };
 
@@ -188,10 +195,10 @@ export type AppletInvitationData = AppletId & {
   options: AppletInvitationOptions;
 };
 
-export type SubjectInvitationData = AppletId & {
-  subjectId: string;
-  email: string;
-};
+export type SubjectInvitationData = AppletId &
+  SubjectId & {
+    email: string;
+  };
 
 export type AppletShellAccountOptions = {
   secretUserId: string;
@@ -268,7 +275,7 @@ export type DatavizAnswer = EncryptedAnswerSharedProps & {
   version: string;
 };
 
-export type Answers = AppletId & RespondentId & { createdDate?: string };
+export type Answers = AppletId & TargetSubjectId & { createdDate?: string };
 
 export type ActivityAnswer = AppletId & { answerId: string; activityId: string };
 
@@ -305,8 +312,7 @@ export type Review = {
 
 export type SummaryAnswers = AppletId & {
   activityId: string;
-  params: {
-    respondentId: string;
+  params: TargetSubjectId & {
     fromDatetime: string;
     toDatetime: string;
     emptyIdentifiers: boolean;
@@ -334,7 +340,7 @@ export type GetAnswersNotesParams = {
 };
 
 export type AppletSubmitDateList = AppletId &
-  RespondentId & {
+  TargetSubjectId & {
     fromDate: string;
     toDate: string;
   };
@@ -405,10 +411,9 @@ export type Version = {
   createdAt: string;
 };
 
-export type LatestReport = {
+export type LatestReport = TargetSubjectId & {
   appletId: string;
   activityId: string;
-  respondentId: string;
 };
 
 export type Identifiers = LatestReport;

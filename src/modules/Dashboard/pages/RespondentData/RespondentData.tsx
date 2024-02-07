@@ -54,16 +54,14 @@ export const RespondentData = () => {
 
     getSummaryActivities({
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
     });
 
-    const { getRespondentDetails } = users.thunk;
+    const { getSubjectDetails } = users.thunk;
 
     dispatch(
-      getRespondentDetails({
-        ownerId,
-        appletId,
-        respondentId,
+      getSubjectDetails({
+        subjectId: respondentId,
       }),
     );
   }, [appletId, respondentId, ownerId]);

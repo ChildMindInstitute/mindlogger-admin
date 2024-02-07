@@ -123,7 +123,7 @@ export const RespondentDataReview = () => {
 
     getAppletSubmitDateList({
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
       fromDate,
       toDate,
     });
@@ -162,7 +162,7 @@ export const RespondentDataReview = () => {
     if (appletId && respondentId && date) {
       getReviewActivities({
         appletId,
-        respondentId,
+        targetSubjectId: respondentId,
         createdDate: format(date || new Date(), DateFormats.YearMonthDay),
       });
     }

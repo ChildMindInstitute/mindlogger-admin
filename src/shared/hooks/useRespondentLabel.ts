@@ -3,14 +3,15 @@ import { t } from 'i18next';
 import { users } from 'redux/modules';
 import { getRespondentName } from 'shared/utils';
 
-export const useRespondentLabel = () => {
-  const { result } = users.useRespondent() || {};
-  const secretId = result?.secretUserId;
-  const nickname = result?.nickname;
+export const useRespondentLabel = (isSubject?: boolean) => {
+  const { useRespondent, useSubject } = users;
+  const subjectResult = useSubject();
+  const respondentResult = useRespondent();
 
-  if (!secretId) return '';
+  const result = isSubject ? subjectResult?.result : respondentResult?.result;
+  const { secretUserId, nickname } = result || {};
 
-  const respondentName = getRespondentName(secretId || '', nickname);
+  if (!secretUserId) return '';
 
-  return `${t('user')}: ${respondentName}`;
+  return `${t('user')}: ${getRespondentName(secretUserId, nickname)}`;
 };

@@ -5,7 +5,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { page } from 'resources';
 
-import { RespondentsRemoveAccessPopup } from '.';
+import { RemoveRespondentPopup } from '.';
 
 const route = `/dashboard/${mockedAppletId}/respondents`;
 const routePath = page.appletRespondents;
@@ -46,15 +46,13 @@ const commonProps = {
   ],
 };
 
-describe('RespondentsRemoveAccessPopup component tests', () => {
+describe('RemoveRespondentPopup component tests', () => {
   afterEach(() => {
     mockAxios.reset();
   });
 
-  test('RespondentsRemoveAccessPopup should open with applets list', async () => {
-    renderWithProviders(
-      <RespondentsRemoveAccessPopup {...{ ...commonProps, chosenAppletData: null }} />,
-    );
+  test('RemoveRespondentPopup should open with applets list', async () => {
+    renderWithProviders(<RemoveRespondentPopup {...{ ...commonProps, chosenAppletData: null }} />);
 
     await waitFor(() => {
       expect(
@@ -64,10 +62,10 @@ describe('RespondentsRemoveAccessPopup component tests', () => {
     });
   });
 
-  test('RespondentsRemoveAccessPopup should remove access with appletId', async () => {
+  test('RemoveRespondentPopup should remove access with appletId', async () => {
     mockAxios.post.mockResolvedValueOnce(null);
 
-    renderWithProviders(<RespondentsRemoveAccessPopup {...commonProps} />, {
+    renderWithProviders(<RemoveRespondentPopup {...commonProps} />, {
       route,
       routePath,
     });

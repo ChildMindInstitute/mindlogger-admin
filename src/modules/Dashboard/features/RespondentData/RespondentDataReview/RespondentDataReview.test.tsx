@@ -56,7 +56,7 @@ const preloadedState = {
         count: 2,
       },
     },
-    respondentDetails: {
+    subjectDetails: {
       ...initialStateData,
       data: {
         result: {
@@ -64,6 +64,10 @@ const preloadedState = {
           secretUserId: mockedRespondentId,
         },
       },
+    },
+    respondentDetails: {
+      ...initialStateData,
+      data: null,
     },
   },
 };
@@ -255,7 +259,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
               limit: 10000,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -266,7 +270,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
             },
@@ -337,7 +341,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
               limit: 10000,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
