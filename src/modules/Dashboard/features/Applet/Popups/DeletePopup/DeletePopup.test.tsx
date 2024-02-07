@@ -47,16 +47,23 @@ describe('DeletePopup', () => {
       }),
     );
 
-    renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />, {
-      preloadedState,
-    });
+    const { store } = renderWithProviders(
+      <DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />,
+      { preloadedState },
+    );
 
     fireEvent.change(screen.getByLabelText(/Password/), {
       target: { value: mockedPassword },
     });
     fireEvent.click(screen.getByText('Delete'));
-    await waitFor(() =>
-      expect(screen.getByText('Applet has been deleted successfully.')).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expect(
+        store
+          .getState()
+          .banners.data.banners.find(
+            ({ bannerProps }) => bannerProps?.['data-testid'] === `${testId}-success-banner`,
+          ),
+      ).toBeDefined();
+    });
   });
 });

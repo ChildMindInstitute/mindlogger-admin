@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Modal, EnterAppletPassword, Spinner, SpinnerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
-import { alerts, applet, popups } from 'redux/modules';
+import { alerts, applet, banners, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { deleteAppletApi } from 'api';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
@@ -56,6 +56,21 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     deletePopupClose();
   };
 
+  useEffect(() => {
+    if (activeModal === Modals.Confirmation) {
+      handleConfirmation();
+      dispatch(
+        banners.actions.addBanner({
+          key: 'SaveSuccessBanner',
+          bannerProps: {
+            children: t('appletDeletedSuccessfully'),
+            'data-testid': `${dataTestid}-success-banner`,
+          },
+        }),
+      );
+    }
+  });
+
   switch (activeModal) {
     case Modals.PasswordCheck:
       return (
@@ -90,18 +105,8 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
         </Modal>
       );
     case Modals.Confirmation:
-      return (
-        <Modal
-          open={deletePopupVisible}
-          onClose={handleConfirmation}
-          onSubmit={handleConfirmation}
-          title={t('deleteApplet')}
-          buttonText={t('ok')}
-          data-testid={`${dataTestid}-success-popup`}
-        >
-          <StyledModalWrapper>{t('appletDeletedSuccessfully')}</StyledModalWrapper>
-        </Modal>
-      );
+      // This is rendered as a banner via effect above.
+      return null;
     case Modals.DeleteError:
       return (
         <Modal

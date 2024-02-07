@@ -125,7 +125,7 @@
   "appletColorTheme": "Thème de couleur de l'applet",
   "appletContent": "Contenu de l'applet",
   "appletDeletedError": "L'applet <1>{{appletName}}</1> n'a pas été supprimée. Veuillez réessayer.",
-  "appletDeletedSuccessfully": "L'applet a été supprimée avec succès.",
+  "appletDeletedSuccessfully": "L'applet a été supprimée",
   "appletDescription": "Description de l'applet",
   "appletDuplication": "Dupliquer l'applet",
   "appletHasEmptyRequiredFields": "Veuillez remplir tous les champs requis marqués en rouge",

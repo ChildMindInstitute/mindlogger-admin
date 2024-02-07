@@ -125,7 +125,7 @@
   "appletColorTheme": "Applet Color Theme",
   "appletContent": "Applet Content",
   "appletDeletedError": "Applet <1>{{appletName}}</1> has not been deleted. Please try again.",
-  "appletDeletedSuccessfully": "Applet has been deleted successfully.",
+  "appletDeletedSuccessfully": "Applet was deleted",
   "appletDescription": "Applet Description",
   "appletDuplication": "Duplicate Applet",
   "appletHasEmptyRequiredFields": "Please fill in all required fields marked in red",
