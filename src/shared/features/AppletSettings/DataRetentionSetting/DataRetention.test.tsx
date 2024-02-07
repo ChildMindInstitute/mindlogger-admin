@@ -86,7 +86,7 @@ describe('DataRetention component tests', () => {
 
   test('should successfully save changes', async () => {
     mockAxios.post.mockResolvedValueOnce(null);
-    const { container } = renderWithProviders(<DataRetention isDashboard />, {
+    const { container, store } = renderWithProviders(<DataRetention isDashboard />, {
       preloadedState: getPreloadedState(),
       route,
       routePath,
@@ -109,7 +109,13 @@ describe('DataRetention component tests', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId(`${dataTestid}-success-popup`)).toBeInTheDocument();
+      expect(
+        store
+          .getState()
+          .banners.data.banners.find(
+            ({ bannerProps }) => bannerProps?.['data-testid'] === `${dataTestid}-success-popup`,
+          ),
+      ).toBeDefined();
     });
   });
 });

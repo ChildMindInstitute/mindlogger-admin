@@ -276,7 +276,13 @@ describe('ReportConfigSetting', () => {
 
       await waitFor(() => {
         expect(
-          store.getState().banners.data.banners.find(({ key }) => key === 'SaveSuccessBanner'),
+          store
+            .getState()
+            .banners.data.banners.find(
+              ({ bannerProps }) =>
+                bannerProps?.['data-testid'] ===
+                'builder-applet-settings-report-config-setting-success-banner',
+            ),
         ).toBeDefined();
       });
     });

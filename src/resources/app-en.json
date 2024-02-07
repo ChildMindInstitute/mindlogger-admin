@@ -305,7 +305,6 @@
   "dataRetention": "Data retention",
   "dataRetentionUpdate": "Data Retention Setting Update",
   "dataRetentionUpdatedFail": "The 'Data Retention' setting has not been updated. Please try again.",
-  "dataRetentionUpdatedSuccess": "Data Retention setting has been updated successfully.",
   "datavizNotSupportedForPerformanceTasks": "Data visualization for Performance Tasks not supported",
   "date": "Date",
   "dateHint": "Date selection in the format Month DD, YYYY",
