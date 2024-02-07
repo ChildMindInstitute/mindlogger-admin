@@ -1,11 +1,10 @@
-import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
+import { ChangeEvent, DragEvent, MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { postFileUploadApi } from 'api';
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
-import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { byteFormatter } from 'shared/utils/fileSystem';
@@ -22,6 +21,8 @@ import {
   MAX_IMAGE_HEIGHT,
 } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
+import { useAppDispatch } from 'redux/store';
+import { banners } from 'redux/modules';
 
 import {
   StyledContainer,
@@ -51,14 +52,17 @@ export const Uploader = ({
   'data-testid': dataTestid,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   const [error, setError] = useState<UploadFileError | null>(null);
   const [isRemovePopupOpen, setRemovePopupOpen] = useState(false);
-  const isPrimaryUiType = uiType === UploaderUiType.Primary;
-  const isTertiaryUiType = uiType === UploaderUiType.Tertiary;
+  const [isPrimaryUiType, isTertiaryUiType] = useMemo(
+    () => [uiType === UploaderUiType.Primary, uiType === UploaderUiType.Tertiary],
+    [uiType],
+  );
 
   const { execute: executeImgUpload, isLoading } = useAsync(
     postFileUploadApi,
@@ -197,13 +201,50 @@ export const Uploader = ({
 
   const placeholderImgId = isPrimaryUiType ? 'img-filled' : 'img-outlined';
   const placeholderImgSize = isPrimaryUiType ? 32 : 24;
-  const hasSizeError = error === UploadFileError.Size;
-  const hasFormatError = error === UploadFileError.Format;
-  const hasDimensionsError = error === UploadFileError.Dimensions;
+  const [hasSizeError, hasFormatError, hasDimensionsError] = useMemo(
+    () => [
+      error === UploadFileError.Size,
+      error === UploadFileError.Format,
+      error === UploadFileError.Dimensions,
+    ],
+    [error],
+  );
   const hasImageError = hasSizeError || hasFormatError || hasDimensionsError;
   const spinnerUiType = isPrimaryUiType ? SpinnerUiType.Primary : SpinnerUiType.Secondary;
 
   const fileName = imageField?.split('/').at(-1) || image?.name || '';
+
+  useEffect(() => {
+    if (isPrimaryUiType) return;
+
+    if (hasSizeError) {
+      dispatch(
+        banners.actions.addBanner({
+          key: 'IncorrectFileBanner',
+          bannerProps: {
+            errorType: UploadFileError.Size,
+            fileType: MediaType.Image,
+            'data-testid': concatIf(dataTestid, '-incorrect-file-size-banner'),
+            onClose: () => setError(null),
+          },
+        }),
+      );
+    }
+
+    if (hasFormatError) {
+      dispatch(
+        banners.actions.addBanner({
+          key: 'IncorrectFileBanner',
+          bannerProps: {
+            errorType: UploadFileError.Format,
+            fileType: MediaType.Image,
+            'data-testid': concatIf(dataTestid, '-incorrect-file-format-banner'),
+            onClose: () => setError(null),
+          },
+        }),
+      );
+    }
+  }, [hasSizeError, hasFormatError, isPrimaryUiType, dispatch]);
 
   return (
     <>
@@ -300,28 +341,6 @@ export const Uploader = ({
           onRemove={handleRemoveImg}
           data-testid={concatIf(dataTestid, '-remove-popup')}
         />
-      )}
-      {!isPrimaryUiType && (
-        <>
-          {hasSizeError && (
-            <IncorrectFilePopup
-              popupVisible={hasSizeError}
-              onClose={() => setError(null)}
-              uiType={UploadFileError.Size}
-              fileType={MediaType.Image}
-              data-testid={concatIf(dataTestid, '-incorrect-file-size-popup')}
-            />
-          )}
-          {hasFormatError && (
-            <IncorrectFilePopup
-              popupVisible={hasFormatError}
-              onClose={() => setError(null)}
-              uiType={UploadFileError.Format}
-              fileType={MediaType.Image}
-              data-testid={concatIf(dataTestid, '-incorrect-file-format-popup')}
-            />
-          )}
-        </>
       )}
     </>
   );

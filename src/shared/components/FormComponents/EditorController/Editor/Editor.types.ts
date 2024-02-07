@@ -13,8 +13,8 @@ export type EditorProps = {
   value?: string;
   onChange: ChangeEvent;
   onInsert: (generator: InsertContentGenerator) => void;
-  onFileExceeded: Dispatch<SetStateAction<number | null>>;
-  onIncorrectFileFormat: Dispatch<SetStateAction<MediaType | null>>;
+  onFileExceeded: (size: number | null) => void;
+  onIncorrectFileFormat: (fileType: MediaType | null) => void;
   uiType: EditorUiType;
   error?: FieldError;
   disabled?: boolean;
@@ -25,7 +25,7 @@ export type EditorProps = {
 export type GetDefToolbars = {
   onInsert: InsertContentExtensionProps['onInsert'];
   onChange: ControllerRenderProps['onChange'];
-  setFileSizeExceeded: Dispatch<SetStateAction<number | null>>;
-  setIncorrectFormat: Dispatch<SetStateAction<MediaType | null>>;
+  setFileSizeExceeded: (size: number | null) => void;
+  setIncorrectFormat: (fileType: MediaType | null) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 };
