@@ -93,14 +93,12 @@ export const useSettingsSetup = ({
   removeOptions,
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
-  handleRemovePalette,
   setOptionsOpen,
 }: SettingsSetupProps) => {
   const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
 
-  const hasPalette = get(settings, ItemConfigurationSettings.HasColorPalette);
   const isSkippable = get(settings, ItemConfigurationSettings.IsSkippable);
   const hasRequiredItems = checkIfItemHasRequiredOptions(settings);
 
@@ -185,10 +183,6 @@ export const useSettingsSetup = ({
       subscription.unsubscribe();
     };
   }, []);
-
-  useEffect(() => {
-    if (!hasPalette) handleRemovePalette?.();
-  }, [hasPalette]);
 
   useEffect(() => {
     if (hasRequiredItems && isSkippable) {

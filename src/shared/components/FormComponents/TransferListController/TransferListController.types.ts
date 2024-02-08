@@ -18,4 +18,5 @@ export type TransferListControllerProps<T extends FieldValues> = {
   tableHeadBackground?: string;
   'data-testid'?: string;
   tooltipByDefault?: boolean;
+  onChangeSelectedCallback?: (values: string[]) => void;
 } & UseControllerProps<T>;

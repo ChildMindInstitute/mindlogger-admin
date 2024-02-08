@@ -35,6 +35,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
         Content={AudioPlayerContent}
         headerContentProps={{ media }}
         contentProps={{ media, setMedia, name }}
+        data-testid="builder-activity-items-item-configuration-audio-player"
       />
     </>
   );

@@ -17,6 +17,7 @@ import {
 import { Periodicity } from 'modules/Dashboard/api';
 import { formatToWeekYear, formatToYearMonthDate } from 'shared/utils/dateFormat';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
+import { DEFAULT_API_START_TIME, DEFAULT_API_END_TIME } from 'shared/consts';
 
 import {
   CalendarEvent,
@@ -31,8 +32,6 @@ import {
 
 const LENGTH_TO_SET_ID_IS_HIDDEN = 2;
 const LENGTH_TO_FILTER_DAYS_EVENTS = 3;
-const DEFAULT_START_TIME = '00:00:00';
-const DEFAULT_END_TIME = '23:59:00';
 const timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
 
 export const getPreparedEvents = (
@@ -116,7 +115,7 @@ export const getDateFromDateStringTimeString = ({
 }: GetDateFromDateStringTimeString) => {
   if (!date) return null;
 
-  return new Date(`${date}T${time ?? DEFAULT_START_TIME}`);
+  return new Date(`${date}T${time ?? DEFAULT_API_START_TIME}`);
 };
 
 export const getEventStartDateTime = ({
@@ -128,7 +127,7 @@ export const getEventStartDateTime = ({
 }: GetEventStartDateTime) => {
   const nextYearDate =
     nextYearDateString &&
-    getDateFromDateStringTimeString({ date: nextYearDateString, time: DEFAULT_START_TIME });
+    getDateFromDateStringTimeString({ date: nextYearDateString, time: DEFAULT_API_START_TIME });
 
   const nextYearDateWithTime =
     nextYearDateString &&
@@ -136,7 +135,7 @@ export const getEventStartDateTime = ({
 
   const selectedDateToDate = getDateFromDateStringTimeString({
     date: selectedDate,
-    time: DEFAULT_START_TIME,
+    time: DEFAULT_API_START_TIME,
   });
   const selectedDateToDateWithTime = getDateFromDateStringTimeString({
     date: selectedDate,
@@ -192,7 +191,7 @@ export const getEventEndDateTime = ({
 }: GetEventEndDateTime) => {
   const endOfYearDateTime = getEndOfYearDateTime(currentYear);
   const calculatedEndDate = eventStart > endOfYearDateTime ? eventStart : endOfYearDateTime;
-  const time = isCrossDayEvent ? DEFAULT_END_TIME : endTime;
+  const time = isCrossDayEvent ? DEFAULT_API_END_TIME : endTime;
 
   switch (periodicity) {
     case Periodicity.Always:
@@ -230,16 +229,16 @@ export const getEventsArrayFromDates = ({
         {
           ...commonProps,
           id: uniqueId('event-'),
-          start: getDateFromDateTimeString(date, startTime || DEFAULT_START_TIME),
-          end: getDateFromDateTimeString(date, DEFAULT_END_TIME),
+          start: getDateFromDateTimeString(date, startTime || DEFAULT_API_START_TIME),
+          end: getDateFromDateTimeString(date, DEFAULT_API_END_TIME),
           eventCurrentDate: formatToYearMonthDate(date),
           eventSpanAfter: true,
         },
         {
           ...commonProps,
           id: uniqueId('event-'),
-          start: getDateFromDateTimeString(nextDay, DEFAULT_START_TIME),
-          end: getDateFromDateTimeString(nextDay, endTime || DEFAULT_END_TIME),
+          start: getDateFromDateTimeString(nextDay, DEFAULT_API_START_TIME),
+          end: getDateFromDateTimeString(nextDay, endTime || DEFAULT_API_END_TIME),
           eventCurrentDate: formatToYearMonthDate(nextDay),
           eventSpanBefore: true,
         },
@@ -249,8 +248,8 @@ export const getEventsArrayFromDates = ({
         {
           ...commonProps,
           id: uniqueId('event-'),
-          start: getDateFromDateTimeString(date, startTime || DEFAULT_START_TIME),
-          end: getDateFromDateTimeString(date, endTime || DEFAULT_END_TIME),
+          start: getDateFromDateTimeString(date, startTime || DEFAULT_API_START_TIME),
+          end: getDateFromDateTimeString(date, endTime || DEFAULT_API_END_TIME),
           eventCurrentDate: formatToYearMonthDate(date),
         },
       ];
@@ -302,7 +301,7 @@ export const createEvents = ({
       isCrossDayEvent,
     }) || newDate;
   const isAllDayEvent =
-    isAlwaysAvailable || (startTime === DEFAULT_START_TIME && endTime === DEFAULT_END_TIME);
+    isAlwaysAvailable || (startTime === DEFAULT_API_START_TIME && endTime === DEFAULT_API_END_TIME);
 
   const getBgColor = () => {
     if (isAlwaysAvailable) return colors[0];
@@ -323,7 +322,7 @@ export const createEvents = ({
     eventStart:
       getDateFromDateStringTimeString({
         date: startDate || selectedDate,
-        time: startTime || DEFAULT_START_TIME,
+        time: startTime || DEFAULT_API_START_TIME,
       }) || newDate,
     eventEnd: endDate === null ? null : eventEnd,
     oneTimeCompletion,
@@ -352,7 +351,7 @@ export const createEvents = ({
             start: eventStart,
             end: getDateFromDateStringTimeString({
               date: selectedDate,
-              time: DEFAULT_END_TIME,
+              time: DEFAULT_API_END_TIME,
             }) as Date,
             eventCurrentDate: formatToYearMonthDate(eventStart),
             eventSpanAfter: true,

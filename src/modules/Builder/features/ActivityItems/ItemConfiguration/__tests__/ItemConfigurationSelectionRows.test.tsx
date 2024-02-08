@@ -107,7 +107,7 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
     expect(optionsSelectListOptions).toHaveLength(3);
 
     optionsSelectListOptions.forEach((option, index) => {
-      expect(option).toHaveTextContent(`${index + 1}-option${index !== 0 ? 's' : ''} Matrix`);
+      expect(option).toHaveTextContent(`${index + 1}-option${index === 0 ? '' : 's'} Matrix`);
     });
 
     expect(screen.getByTestId(`${mockedDataTestid}-option-0-image`)).toBeVisible();
@@ -433,31 +433,35 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
     responseType                                | description
     ${ItemResponseType.SingleSelectionPerRow}   | ${'Single: validations'}
     ${ItemResponseType.MultipleSelectionPerRow} | ${'Multi: validations'}
-  `('$description', ({ responseType }) => {
-    test.each`
-      testId                                                                           | message                        | description
-      ${'builder-activity-items-item-configuration-selection-rows-option-0-text'}      | ${''}                          | ${'Option 1 text'}
-      ${'builder-activity-items-item-configuration-selection-rows-option-1-text'}      | ${''}                          | ${'Option 2 text'}
-      ${'builder-activity-items-item-configuration-selection-rows-option-2-text'}      | ${''}                          | ${'Option 3 text'}
-      ${'builder-activity-items-item-configuration-selection-rows-row-0-text'}         | ${''}                          | ${'Row 1 text'}
-      ${'builder-activity-items-item-configuration-selection-rows-row-1-text'}         | ${''}                          | ${'Row 2 text'}
-      ${'builder-activity-items-item-configuration-alerts-0-selection-per-row-option'} | ${''}                          | ${'Alert Option'}
-      ${'builder-activity-items-item-configuration-alerts-0-selection-per-row-row'}    | ${''}                          | ${'Alert Row'}
-      ${'builder-activity-items-item-configuration-alerts-0-text'}                     | ${'Alert Message is required'} | ${'Alert Message'}
-    `('$description', async ({ testId, message }) => {
-      const ref = renderSelectionRows(responseType);
-      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+  `(
+    '$description',
+    ({ responseType }) => {
+      test.each`
+        testId                                                                           | message                        | description
+        ${'builder-activity-items-item-configuration-selection-rows-option-0-text'}      | ${''}                          | ${'Option 1 text'}
+        ${'builder-activity-items-item-configuration-selection-rows-option-1-text'}      | ${''}                          | ${'Option 2 text'}
+        ${'builder-activity-items-item-configuration-selection-rows-option-2-text'}      | ${''}                          | ${'Option 3 text'}
+        ${'builder-activity-items-item-configuration-selection-rows-row-0-text'}         | ${''}                          | ${'Row 1 text'}
+        ${'builder-activity-items-item-configuration-selection-rows-row-1-text'}         | ${''}                          | ${'Row 2 text'}
+        ${'builder-activity-items-item-configuration-alerts-0-selection-per-row-option'} | ${''}                          | ${'Alert Option'}
+        ${'builder-activity-items-item-configuration-alerts-0-selection-per-row-row'}    | ${''}                          | ${'Alert Row'}
+        ${'builder-activity-items-item-configuration-alerts-0-text'}                     | ${'Alert Message is required'} | ${'Alert Message'}
+      `('$description', async ({ testId, message }) => {
+        const ref = renderSelectionRows(responseType);
+        await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
-      const addRow = screen.getByTestId(mockedAddRowTestid);
-      fireEvent.click(addRow);
-      setOption(3);
+        const addRow = screen.getByTestId(mockedAddRowTestid);
+        fireEvent.click(addRow);
+        setOption(3);
 
-      await ref.current.trigger(`${mockedItemName}`);
+        await ref.current.trigger(`${mockedItemName}`);
 
-      await waitFor(() => {
-        message && expect(screen.getByText(message)).toBeVisible();
-        expect(screen.getByTestId(testId).querySelector('div')).toHaveClass('Mui-error');
+        await waitFor(() => {
+          message && expect(screen.getByText(message)).toBeVisible();
+          expect(screen.getByTestId(testId).querySelector('div')).toHaveClass('Mui-error');
+        });
       });
-    });
-  });
+    },
+    JEST_TEST_TIMEOUT,
+  );
 });

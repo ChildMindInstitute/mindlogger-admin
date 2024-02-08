@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Suspense } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -80,11 +79,7 @@ describe('ReportFilters', () => {
 
   test('check if the startDate is greater than the endDate, then the endDate should be updated', async () => {
     await act(async () => {
-      renderWithProviders(
-        <Suspense fallback={<></>}>
-          <FormComponent />
-        </Suspense>,
-      );
+      renderWithProviders(<FormComponent />);
     });
 
     const startDatePicker = screen.getByTestId(`${dataTestid}-start-date`);
@@ -98,7 +93,9 @@ describe('ReportFilters', () => {
     expect(endInput).toBeInTheDocument();
     expect(endInput.value).toEqual('10 Jan 2024');
 
-    userEvent.click(startInput);
+    await act(async () => {
+      await userEvent.click(startInput);
+    });
 
     const datepicker = await screen.findByTestId(`${dataTestid}-start-date-popover`);
     expect(datepicker).toBeInTheDocument();
@@ -108,7 +105,7 @@ describe('ReportFilters', () => {
     );
     expect(january11).toHaveLength(1);
 
-    userEvent.click(january11[0]);
+    await userEvent.click(january11[0]);
 
     const okButton = screen.getByText('Ok', { container: datepicker });
     await userEvent.click(okButton);

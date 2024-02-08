@@ -72,6 +72,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       control,
       name: `${name}.alerts`,
     });
+
     const {
       fields: options,
       append: appendOption,
@@ -192,7 +193,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
     });
 
     useEffect(() => {
-      options?.length && setOptionsOpen(options.map(() => true));
+      if (!options?.length) return;
+
+      setOptionsOpen(options.map(() => true));
     }, []);
 
     useImperativeHandle(
@@ -211,7 +214,6 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       handleAddSingleOrMultipleRow,
       removeAlert,
       handleAddAlert,
-      handleRemovePalette,
       setOptionsOpen,
     });
 

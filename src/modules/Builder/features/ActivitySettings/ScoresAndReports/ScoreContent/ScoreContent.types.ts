@@ -1,4 +1,4 @@
-import { FieldValues, UseFormSetValue } from 'react-hook-form';
+import { FieldValues, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 
 import {
   MultiSelectItem,
@@ -69,3 +69,12 @@ export type GetIsScoreIdVariable = {
 };
 
 export type IsMessageIncludeScoreId = { showMessage: boolean; id: string; message?: string };
+
+export type UpdateScoreConditionsPayload = {
+  setValue: UseFormSetValue<FieldValues>;
+  getValues: UseFormGetValues<FieldValues>;
+  scoreConditionalsName: string;
+  selectedItems: ItemsWithScore[];
+  calculationType: CalculationType;
+  activity?: ActivityFormValues;
+};

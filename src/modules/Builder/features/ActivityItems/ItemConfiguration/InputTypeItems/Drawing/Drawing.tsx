@@ -16,6 +16,7 @@ export const Drawing = ({ name }: DrawingProps) => {
       Content={DrawingContent}
       contentProps={{ name }}
       headerContentProps={{ name }}
+      data-testid="builder-activity-items-item-configuration-drawing"
     />
   );
 };

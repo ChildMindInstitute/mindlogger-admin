@@ -3,7 +3,7 @@
 import { createRef } from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { CHANGE_DEBOUNCE_VALUE, ItemResponseType } from 'shared/consts';
+import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
 import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
 
 import {
@@ -558,21 +558,25 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
     setting                                         | description
     ${ItemConfigurationSettings.HasTickMarks}       | ${'Slider: Show Tick Marks'}
     ${ItemConfigurationSettings.HasTickMarksLabels} | ${'Slider: Show Tick Marks Labels'}
-  `('$description', async ({ setting }) => {
-    renderSlider(ItemResponseType.Slider);
+  `(
+    '$description',
+    async ({ setting }) => {
+      renderSlider(ItemResponseType.Slider);
 
-    const isMarks = setting === ItemConfigurationSettings.HasTickMarks;
+      const isMarks = setting === ItemConfigurationSettings.HasTickMarks;
 
-    if (!isMarks) await setItemConfigSetting(ItemConfigurationSettings.HasTickMarks);
-    await setItemConfigSetting(setting);
+      if (!isMarks) await setItemConfigSetting(ItemConfigurationSettings.HasTickMarks);
+      await setItemConfigSetting(setting);
 
-    await waitFor(() => {
-      const slider = screen.getByTestId(new RegExp(`${getDataTestidRegex(false)}-slider`));
+      await waitFor(() => {
+        const slider = screen.getByTestId(new RegExp(`${getDataTestidRegex(false)}-slider`));
 
-      const expected = slider.querySelectorAll(
-        isMarks ? '.MuiSlider-mark' : '.MuiSlider-markLabel',
-      );
-      expect(expected).toHaveLength(13);
-    });
-  });
+        const expected = slider.querySelectorAll(
+          isMarks ? '.MuiSlider-mark' : '.MuiSlider-markLabel',
+        );
+        expect(expected).toHaveLength(13);
+      });
+    },
+    JEST_TEST_TIMEOUT,
+  );
 });

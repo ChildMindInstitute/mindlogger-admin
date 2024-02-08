@@ -61,6 +61,7 @@ export const SelectController = <T extends FieldValues>({
   targetSelector,
   setTrigger,
   SelectProps,
+  shouldSkipIcon = false,
   ...props
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -165,8 +166,18 @@ export const SelectController = <T extends FieldValues>({
               'data-testid': `${dataTestid}-dropdown`,
             },
           },
-          IconComponent: (props) => <Svg className={props.className} id="navigate-down" />,
+          IconComponent: shouldSkipIcon
+            ? undefined
+            : (props) => <Svg className={props.className} id="navigate-down" />,
           ...SelectProps,
+          ...(shouldSkipIcon && {
+            inputProps: {
+              sx: {
+                pr: '1.2rem !important',
+                minWidth: '94% !important',
+              },
+            },
+          }),
         }}
         data-testid={dataTestid}
       >

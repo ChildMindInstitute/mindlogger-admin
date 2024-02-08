@@ -37,13 +37,14 @@ import { EMPTY_SCORE_RANGE_LABEL, calculationTypes } from './ScoreContent.const'
 import {
   getScoreItemsColumns,
   getSelectedItemsColumns,
-  getDefaultConditionalValue,
+  getScoreConditionalDefaults,
   getIsScoreIdVariable,
   getScoreId,
   getScoreRange,
   getScoreRangeLabel,
   updateMessagesWithVariable,
   updateScoreConditionIds,
+  updateScoreConditionsPayload,
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
 
@@ -98,7 +99,7 @@ export const ScoreContent = ({
   };
 
   const handleAddScoreConditional = () => {
-    append(getDefaultConditionalValue(scoreId, score?.key));
+    append(getScoreConditionalDefaults(scoreId, score?.key));
   };
 
   const onChangeScoreId = () => {
@@ -158,6 +159,14 @@ export const ScoreContent = ({
       scoreId: newScoreId,
       conditions: getValues(scoreConditionalsName),
     });
+    updateScoreConditionsPayload({
+      setValue,
+      getValues,
+      scoreConditionalsName,
+      selectedItems,
+      calculationType,
+      activity,
+    });
   };
 
   const handleNameBlur = () => {
@@ -188,6 +197,20 @@ export const ScoreContent = ({
       conditionsName: scoreConditionalsName,
       scoreId: newScoreId,
       conditions: getValues(scoreConditionalsName),
+    });
+  };
+
+  const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
+    const newSelectedItems = scoreItems?.filter(
+      (item) => chosenItems?.includes(getEntityKey(item, true)),
+    );
+    updateScoreConditionsPayload({
+      setValue,
+      getValues,
+      scoreConditionalsName,
+      selectedItems: newSelectedItems,
+      calculationType,
+      activity,
     });
   };
 
@@ -238,8 +261,9 @@ export const ScoreContent = ({
         searchKey="label"
         hasSearch
         sxProps={{ mb: theme.spacing(2.5) }}
-        data-testid={`${dataTestid}-items-score`}
         tooltipByDefault
+        onChangeSelectedCallback={onItemsToCalculateScoreChange}
+        data-testid={`${dataTestid}-items-score`}
       />
       <SectionScoreCommonFields
         name={name}

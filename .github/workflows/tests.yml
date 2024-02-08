@@ -1,0 +1,14 @@
+
+name: Automated tests
+on: [pull_request]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: npm install
+      - name: Running tests
+        env:
+          REACT_APP_API_DOMAIN: http://localhost:8080
+        run: npm run test:nowatch

@@ -102,6 +102,7 @@ export const ItemSettingsGroup = ({
                 settingKey === ItemConfigurationSettings.IsCorrectAnswerRequired;
               const isScores = settingKey === ItemConfigurationSettings.HasScores;
               const isAlerts = settingKey === ItemConfigurationSettings.HasAlerts;
+              const isColorPalette = settingKey === ItemConfigurationSettings.HasColorPalette;
 
               const hasTextInput = get(config, ItemConfigurationSettings.HasTextInput);
               const hasResponseRequired = checkIfItemHasRequiredOptions(config);
@@ -154,6 +155,33 @@ export const ItemSettingsGroup = ({
                     [settingKey]: checked,
                     correctAnswer: checked ? '' : undefined,
                   });
+                }
+
+                if (isColorPalette) {
+                  const hasColorPalette = event.target.checked;
+
+                  onChange({
+                    ...config,
+                    [settingKey]: hasColorPalette,
+                  });
+
+                  if (
+                    inputType === ItemResponseType.SingleSelection ||
+                    inputType === ItemResponseType.MultipleSelection
+                  ) {
+                    if (hasColorPalette) return;
+
+                    setValue(
+                      `${itemName}.responseValues.options`,
+                      getValues(`${itemName}.responseValues.options`)?.map(
+                        (option: SingleAndMultiSelectOption) => ({
+                          ...option,
+                          color: undefined,
+                        }),
+                      ),
+                    );
+                    setValue(`${itemName}.responseValues.paletteName`, undefined);
+                  }
                 }
 
                 if (isScores) {

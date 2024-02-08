@@ -17,7 +17,7 @@ export const state: LibrarySchema = {
       count: 0,
     },
   },
-  isCartBtnDisabled: {
+  isAddToBuilderBtnDisabled: {
     ...initialStateData,
     data: false,
   },
