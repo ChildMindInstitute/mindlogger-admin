@@ -144,6 +144,15 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       );
       expect(secondOption).toHaveTextContent('“None“ Option');
     });
+
+    const removeNoneOptionButton = screen.getByTestId(
+      'builder-activity-items-item-configuration-options-1-remove',
+    );
+    fireEvent.click(removeNoneOptionButton);
+
+    await waitFor(() => {
+      expect(addNoneOption).toBeEnabled();
+    });
   });
 
   test('should keep the ordering for None option and the indexing for next Options for Multi Selection', async () => {
