@@ -1,18 +1,19 @@
 import { useParams } from 'react-router-dom';
+import { UseFormWatch } from 'react-hook-form';
 
 import { getEntityKey } from 'shared/utils';
-import { ActivityFormValues } from 'modules/Builder/types';
+import { ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
 
 import { useCustomFormContext } from './useCustomFormContext';
 
-export const useCurrentActivity = () => {
+export const useCurrentActivity = (watch?: UseFormWatch<AppletFormValues>) => {
   const { activityId } = useParams();
 
   const methods = useCustomFormContext();
 
   if (!activityId) return {};
 
-  const activities = methods?.watch?.('activities');
+  const activities = watch?.('activities') || methods?.watch?.('activities');
   const currentActivityIndex = activities?.findIndex(
     (activity: ActivityFormValues) => getEntityKey(activity) === activityId,
   );

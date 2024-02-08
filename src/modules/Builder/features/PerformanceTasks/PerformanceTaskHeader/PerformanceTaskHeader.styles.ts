@@ -12,7 +12,6 @@ export const StyledWrapper = styled(StyledFlexSpaceBetween)`
   ${commonStickyStyles};
   padding: ${theme.spacing(0, 2.4)};
   border-bottom: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
-  white-space: nowrap;
   z-index: ${theme.zIndex.appBar};
 `;
 

@@ -254,10 +254,7 @@ export const useUpdatedAppletNavigate = () => {
   };
 };
 
-export const useSaveAndPublishSetup = (
-  hasPrompt: boolean,
-  setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
-) => {
+export const useSaveAndPublishSetup = () => {
   const {
     trigger,
     formState: { dirtyFields, isDirty },
@@ -284,7 +281,7 @@ export const useSaveAndPublishSetup = (
     promptVisible,
     setPromptVisible,
     isLogoutInProgress,
-  } = usePrompt(hasPrompt);
+  } = usePrompt(isDirty);
   const shouldNavigateRef = useRef(false);
   const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
@@ -451,7 +448,6 @@ export const useSaveAndPublishSetup = (
     if (updateApplet.fulfilled.match(result)) {
       Mixpanel.track('Applet edit successful');
 
-      setIsFromLibrary?.(false);
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
@@ -467,7 +463,6 @@ export const useSaveAndPublishSetup = (
       Mixpanel.track('Applet Created Successfully');
 
       const createdAppletId = result.payload.data.result?.id;
-      setIsFromLibrary?.(false);
 
       if (encryptionData && password && createdAppletId) {
         await setAppletPrivateKey({

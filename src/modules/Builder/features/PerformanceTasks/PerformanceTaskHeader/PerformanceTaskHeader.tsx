@@ -6,11 +6,11 @@ import { Svg } from 'shared/components/Svg';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { variables, StyledTitleSmall } from 'shared/styles';
 import { page } from 'resources';
+import { SaveAndPublish } from 'modules/Builder/features/SaveAndPublish';
 
 import { StyledWrapper, StyledButton, StyledContentWrapper } from './PerformanceTaskHeader.styles';
-import { PerformanceTaskHeaderProps } from './PerformanceTaskHeader.types';
 
-export const PerformanceTaskHeader = ({ isSticky }: PerformanceTaskHeaderProps) => {
+export const PerformanceTaskHeader = () => {
   const { t } = useTranslation();
   const { appletId } = useParams();
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ export const PerformanceTaskHeader = ({ isSticky }: PerformanceTaskHeaderProps) 
         <Svg id="configure-filled" />
         <StyledTitleSmall color={variables.palette.primary}>{t('configure')}</StyledTitleSmall>
       </StyledContentWrapper>
+      <SaveAndPublish />
       <Box sx={{ width: '20%' }} />
     </StyledWrapper>
   );

@@ -13,6 +13,7 @@ import { applet } from 'shared/state';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
 import { themes } from 'modules/Builder/state';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import {
@@ -43,10 +44,10 @@ export const BuilderApplet = () => {
     !isNewApplet;
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
-  const [isFromLibrary, setIsFromLibrary] = useState(false);
   const [isAppletInitialized, setAppletInitialized] = useState(false);
-  const { data: dataFromLibrary } = location.state ?? {};
+  const { data: dataFromLibrary, isFromLibrary } = location.state ?? {};
   const hasLibraryData = isFromLibrary && !!dataFromLibrary;
+
   const isLoading =
     (!isNewApplet && loadingStatus === 'idle') ||
     loadingStatus === 'loading' ||
@@ -68,17 +69,10 @@ export const BuilderApplet = () => {
     resolver: yupResolver(AppletSchema() as ObjectSchema<AppletFormValues>),
     mode: 'onChange',
   });
-  const {
-    reset,
-    control,
-    setValue,
-    getValues,
-    formState: { isDirty },
-  } = methods;
+  const { reset, control, setValue, getValues, watch } = methods;
 
-  useEffect(() => {
-    location.state?.isFromLibrary && setIsFromLibrary(true);
-  }, [location.state?.isFromLibrary]);
+  const { activity } = useCurrentActivity(watch);
+  const isPerformanceTask = activity?.isPerformanceTask;
 
   useEffect(() => {
     if (!isAppletLoaded) return;
@@ -104,7 +98,7 @@ export const BuilderApplet = () => {
         ]),
       };
 
-      await reset(newFormValues);
+      await reset(newFormValues, { keepDefaultValues: true });
     })();
   }, [isAppletLoaded]);
 
@@ -117,7 +111,7 @@ export const BuilderApplet = () => {
           activities: prepareActivitiesFromLibrary(libraryConvertedValues.activities),
           activityFlows: prepareActivityFlowsFromLibrary(libraryConvertedValues.activityFlows),
         };
-        await reset(newFormValues);
+        await reset(newFormValues, { keepDefaultValues: true });
       })();
     }
   }, [hasLibraryData, isNewApplet]);
@@ -151,6 +145,8 @@ export const BuilderApplet = () => {
     hasAppletActivityFlowErrors: !!errors.activityFlows,
   };
 
+  const saveAndPublish = isPerformanceTask ? null : <SaveAndPublish />;
+
   if (isForbidden) return noPermissionsComponent;
 
   return (
@@ -160,10 +156,7 @@ export const BuilderApplet = () => {
           <>
             {isLoading && <Spinner />}
             <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} isBuilder />
-            <SaveAndPublish
-              hasPrompt={isDirty || isFromLibrary}
-              setIsFromLibrary={setIsFromLibrary}
-            />
+            {saveAndPublish}
           </>
         ) : (
           <Spinner />

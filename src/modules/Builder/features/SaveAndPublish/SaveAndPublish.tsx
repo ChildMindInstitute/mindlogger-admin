@@ -13,9 +13,8 @@ import {
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
-import { SaveAndPublishProps } from './SaveAndPublish.types';
 
-export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishProps) => {
+export const SaveAndPublish = () => {
   const { t } = useTranslation('app');
 
   const {
@@ -32,7 +31,7 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
     handleSaveChangesDoNotSaveSubmit,
     handleSaveChangesSaveSubmit,
     cancelNavigation,
-  } = useSaveAndPublishSetup(hasPrompt, setIsFromLibrary);
+  } = useSaveAndPublishSetup();
   const { appletId } = useParams();
 
   const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
