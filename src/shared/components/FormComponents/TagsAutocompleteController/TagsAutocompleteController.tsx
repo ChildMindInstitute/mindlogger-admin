@@ -1,6 +1,7 @@
 import { useState, MouseEvent, SyntheticEvent } from 'react';
-import { Controller, FieldValues } from 'react-hook-form';
+
 import { TextField, Autocomplete, Checkbox, FormControlLabel, Divider, Paper, ListItem } from '@mui/material';
+import { Controller, FieldValues } from 'react-hook-form';
 
 import { theme } from 'shared/styles';
 

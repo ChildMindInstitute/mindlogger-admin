@@ -1,7 +1,7 @@
 import { styled, Button, Box, Link } from '@mui/material';
 
-import { theme, variables, StyledHeadline, StyledBodyMedium } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
+import { theme, variables, StyledHeadline, StyledBodyMedium } from 'shared/styles';
 
 export const StyledSignUpHeader = styled(StyledHeadline)`
   margin: ${theme.spacing(0, 0, 2.4)};

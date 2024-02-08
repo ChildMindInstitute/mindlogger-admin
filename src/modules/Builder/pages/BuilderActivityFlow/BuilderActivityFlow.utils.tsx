@@ -1,7 +1,7 @@
 import { generatePath } from 'react-router-dom';
 
-import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
+import { Svg } from 'shared/components/Svg';
 
 import { GetActivityFlowTabs } from './BuilderActivityFlow.types';
 

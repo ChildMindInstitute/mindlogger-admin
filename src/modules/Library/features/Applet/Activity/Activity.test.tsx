@@ -1,17 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { FormProvider, useForm } from 'react-hook-form';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { renderWithProviders } from 'shared/utils';
-import { mockedAppletId } from 'shared/mock';
-import { page } from 'resources';
-import * as reduxHooks from 'redux/store/hooks';
 import { library } from 'redux/modules';
+import * as reduxHooks from 'redux/store/hooks';
+import { page } from 'resources';
+import { mockedAppletId } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils';
 
-import { Activity } from './Activity';
 import { AppletUiType, LibraryForm } from '../Applet.types';
+import { Activity } from './Activity';
 
 const dataTestid = 'library-applet-activity';
 const mockDispatch = jest.fn();

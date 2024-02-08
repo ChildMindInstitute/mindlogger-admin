@@ -1,15 +1,15 @@
+import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { PublishConcealAppletPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components/Svg';
-import { PublishConcealAppletPopup } from 'modules/Dashboard/features/Applet/Popups';
 
-import { PublishConcealAppletSettingProps } from './PublishConcealAppletSetting.types';
 import { StyledAppletSettingsButton, StyledAppletSettingsDescription } from '../AppletSettings.styles';
+import { PublishConcealAppletSettingProps } from './PublishConcealAppletSetting.types';
 
 export const PublishConcealAppletSetting = ({ isDashboard, isBuilder }: PublishConcealAppletSettingProps) => {
   const { t } = useTranslation('app');

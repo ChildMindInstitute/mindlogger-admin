@@ -1,9 +1,9 @@
-import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
+import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 
-import { SectionScoreHeaderProps } from './SectionScoreHeader.types';
-import { StyledWrapper } from './SectionScoreHeader.styles';
 import { TitleComponent } from '../../TitleComponent';
+import { StyledWrapper } from './SectionScoreHeader.styles';
+import { SectionScoreHeaderProps } from './SectionScoreHeader.types';
 
 export const SectionScoreHeader = ({
   onRemove,

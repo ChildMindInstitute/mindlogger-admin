@@ -1,6 +1,7 @@
 import { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { ToggleButtonGroup as MuiToggleButtonGroup } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';

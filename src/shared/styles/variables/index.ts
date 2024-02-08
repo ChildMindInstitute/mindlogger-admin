@@ -1,5 +1,5 @@
-import { palette } from './palette';
 import { font } from './font';
+import { palette } from './palette';
 
 export const variables = {
   palette,

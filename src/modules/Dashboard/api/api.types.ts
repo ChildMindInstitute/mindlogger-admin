@@ -1,6 +1,6 @@
 import { AppletId } from 'shared/api';
-import { Item, SingleApplet } from 'shared/state';
 import { Roles } from 'shared/consts';
+import { Item, SingleApplet } from 'shared/state';
 import { RetentionPeriods, EncryptedAnswerSharedProps } from 'shared/types';
 import { Encryption } from 'shared/utils';
 

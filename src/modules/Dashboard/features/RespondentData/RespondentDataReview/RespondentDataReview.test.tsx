@@ -5,7 +5,9 @@ import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils';
+import * as dashboardHooks from 'modules/Dashboard/hooks';
+import { page } from 'resources';
+import { DateFormats, Roles } from 'shared/consts';
 import {
   mockedApplet,
   mockedAppletId,
@@ -14,10 +16,8 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
-import { DateFormats, Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
-import { page } from 'resources';
-import * as dashboardHooks from 'modules/Dashboard/hooks';
+import { renderWithProviders } from 'shared/utils';
 
 import { RespondentDataReview } from './RespondentDataReview';
 

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-import { useAppDispatch } from 'redux/store';
-import { auth, library } from 'redux/modules';
-import { getAppletsFromStorage } from 'modules/Library/utils';
 import { STORAGE_LIBRARY_KEY } from 'modules/Library/consts';
+import { getAppletsFromStorage } from 'modules/Library/utils';
+import { auth, library } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 
 export const useAppletsFromCart = () => {
   const dispatch = useAppDispatch();

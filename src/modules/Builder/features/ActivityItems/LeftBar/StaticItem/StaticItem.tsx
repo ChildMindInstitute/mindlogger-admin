@@ -1,7 +1,7 @@
 import { Skeleton } from '@mui/material';
 
-import { StaticItemProps } from './StaticItem.types';
 import { StyledCol, StyledItem } from '../Item/Item.styles';
+import { StaticItemProps } from './StaticItem.types';
 
 export const StaticItem = ({ dragHandleProps }: StaticItemProps) => (
   <StyledItem {...dragHandleProps}>

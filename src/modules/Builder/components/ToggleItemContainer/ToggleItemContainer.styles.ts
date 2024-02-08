@@ -1,7 +1,7 @@
 import { styled, Badge } from '@mui/material';
 
-import { shouldForwardProp } from 'shared/utils';
 import { StyledFlexColumn, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
 import { ToggleContainerUiType } from './ToggleItemContainer.types';
 

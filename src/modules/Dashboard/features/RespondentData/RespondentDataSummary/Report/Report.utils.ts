@@ -1,7 +1,6 @@
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
 import { ActivitySettingsSubscale, SliderItemResponseValues } from 'shared/state/Applet/Applet.schema';
-import { getObjectFromList } from 'shared/utils';
 import {
   ActivityItemAnswer,
   AnswerDTO,
@@ -12,10 +11,11 @@ import {
   DecryptedTimeAnswer,
   ElementType,
 } from 'shared/types';
+import { getObjectFromList } from 'shared/utils';
 
 import { Identifier } from '../RespondentDataSummary.types';
-import { ActivityCompletion, Answer, FormattedActivityItem, FormattedResponse, ItemOption } from './Report.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
+import { ActivityCompletion, Answer, FormattedActivityItem, FormattedResponse, ItemOption } from './Report.types';
 
 export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
   value !== null && value !== undefined;

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';

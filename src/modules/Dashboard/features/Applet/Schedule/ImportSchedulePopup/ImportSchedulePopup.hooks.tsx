@@ -1,12 +1,13 @@
 import { Fragment, useState } from 'react';
+
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { ImportedFile } from 'shared/components';
 
+import { commonErrorBoxProps } from './ImportSchedule.const';
 import { ImportScheduleHookProps } from './ImportSchedulePopup.types';
 import { getInvalidActivitiesError, getUploadedScheduleErrors } from './ImportSchedulePopup.utils';
-import { commonErrorBoxProps } from './ImportSchedule.const';
 
 export const useImportSchedule = ({ appletName, scheduleExportData }: ImportScheduleHookProps) => {
   const { t } = useTranslation('app');

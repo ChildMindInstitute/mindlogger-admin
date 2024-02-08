@@ -1,8 +1,10 @@
-import * as yup from 'yup';
 import get from 'lodash/get';
+import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { getEntityKey, getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
+import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { RoundTypeEnum } from 'modules/Builder/types';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -16,11 +18,15 @@ import {
   PerfTaskType,
   ScoreReportType,
 } from 'shared/consts';
-import { RoundTypeEnum } from 'modules/Builder/types';
 import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
+import { getEntityKey, getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
 
+import {
+  CONDITION_TYPES_TO_HAVE_OPTION_ID,
+  ItemTestFunctions,
+  alphanumericAndHyphenRegexp,
+  conditionsMatch,
+} from './BuilderApplet.const';
 import {
   checkRawScoreRegexp,
   checkScoreRegexp,
@@ -38,12 +44,6 @@ import {
   testFunctionForUniqueness,
   testIsReportCommonFieldsRequired,
 } from './BuilderApplet.utils';
-import {
-  CONDITION_TYPES_TO_HAVE_OPTION_ID,
-  ItemTestFunctions,
-  alphanumericAndHyphenRegexp,
-  conditionsMatch,
-} from './BuilderApplet.const';
 
 const { t } = i18n;
 

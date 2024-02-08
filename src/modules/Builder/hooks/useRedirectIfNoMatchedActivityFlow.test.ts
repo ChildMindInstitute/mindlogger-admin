@@ -1,9 +1,9 @@
-import { generatePath } from 'react-router-dom';
 import { renderHook } from '@testing-library/react';
+import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { mockedAppletData, mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
+import { mockedAppletData, mockedAppletId } from 'shared/mock';
 import { Path } from 'shared/utils';
 
 import { useRedirectIfNoMatchedActivityFlow } from './useRedirectIfNoMatchedActivityFlow';

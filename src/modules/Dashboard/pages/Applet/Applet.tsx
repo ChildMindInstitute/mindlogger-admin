@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
+
 import { useLocation, useParams } from 'react-router-dom';
 
-import { LinkedTabs, Spinner } from 'shared/components';
-import { StyledBody } from 'shared/styles';
-import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
+import { LinkedTabs, Spinner } from 'shared/components';
 import { usePermissions, useRemoveAppletData } from 'shared/hooks';
+import { applet } from 'shared/state';
+import { StyledBody } from 'shared/styles';
 
 import { useAppletTabs } from './Applet.hooks';
 

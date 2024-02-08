@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 
-import { StyledTitleLarge, theme } from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerInstructionPositions } from 'modules/Builder/types';
+import { StyledTitleLarge, theme } from 'shared/styles';
 
 import { Instruction } from '../../Instruction';
 import { ButtonsScreen } from './ButtonsScreen';

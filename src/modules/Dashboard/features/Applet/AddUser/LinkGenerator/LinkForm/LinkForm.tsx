@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { deleteAppletPublicLinkApi } from 'api';
-import { getErrorMessage } from 'shared/utils/errors';
-import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { Svg } from 'shared/components/Svg';
+import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { getErrorMessage } from 'shared/utils/errors';
 
-import { StyledButton, StyledInput } from './LinkForm.styles';
-import { LinkGeneratorProps } from '../LinkGenerator.types';
 import { DeletePublicLinkPopup } from '../../Popups';
+import { LinkGeneratorProps } from '../LinkGenerator.types';
+import { StyledButton, StyledInput } from './LinkForm.styles';
 
 export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
   const { appletId } = useParams() || {};

@@ -6,8 +6,8 @@ import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
 import { StyledHeadlineLarge } from 'shared/styles/styledComponents/Typography';
 import { theme } from 'shared/styles/theme';
 
-import { BuilderContainerProps } from './BuilderContainer.types';
 import { StyledBuilderContainerHeader } from './BuilderContainer.styles';
+import { BuilderContainerProps } from './BuilderContainer.types';
 
 export const BuilderContainer = ({
   title,

@@ -1,12 +1,13 @@
 import { useState, ChangeEvent } from 'react';
+
 import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 import { Tooltip, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { theme, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import {
   SingleAndMultipleSelectMatrix,
@@ -15,9 +16,21 @@ import {
   SingleAndMultipleSelectRow,
   SliderRowsItemResponseValues,
 } from 'shared/state';
+import { theme, StyledTitleMedium, StyledClearedButton } from 'shared/styles';
 import { SelectEvent } from 'shared/types';
-import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 
+import {
+  DEFAULT_TIMER_VALUE,
+  DEFAULT_DISABLED_TIMER_VALUE,
+  DEFAULT_SCORE_VALUE,
+} from '../../../ItemConfiguration.const';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
+import { checkIfItemHasRequiredOptions, getEmptyAlert } from '../../../ItemConfiguration.utils';
+import {
+  DEFAULT_ACTIVE_TIMER_VALUE,
+  ITEM_SETTINGS_TO_HAVE_TOOLTIP,
+  ITEM_TYPES_TO_HAVE_ALERTS,
+} from './ItemSettingsGroup.const';
 import {
   StyledFormControl,
   StyledSettingInfoIcon,
@@ -28,18 +41,6 @@ import {
   StyledFormLabel,
 } from './ItemSettingsGroup.styles';
 import { ItemSettingsGroupProps } from './ItemSettingsGroup.types';
-import {
-  DEFAULT_ACTIVE_TIMER_VALUE,
-  ITEM_SETTINGS_TO_HAVE_TOOLTIP,
-  ITEM_TYPES_TO_HAVE_ALERTS,
-} from './ItemSettingsGroup.const';
-import {
-  DEFAULT_TIMER_VALUE,
-  DEFAULT_DISABLED_TIMER_VALUE,
-  DEFAULT_SCORE_VALUE,
-} from '../../../ItemConfiguration.const';
-import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
-import { checkIfItemHasRequiredOptions, getEmptyAlert } from '../../../ItemConfiguration.utils';
 import { removeItemFromSubscales } from './ItemSettingsGroup.utils';
 
 export const ItemSettingsGroup = ({

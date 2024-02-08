@@ -1,12 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { FormProvider, useForm } from 'react-hook-form';
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { renderWithProviders } from 'shared/utils';
-import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 import { defaultSummaryFormFiltersValues } from 'modules/Dashboard/pages/RespondentData/RespondentData.const';
+import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
+import { renderWithProviders } from 'shared/utils';
 
 import { ReportFilters } from './ReportFilters';
 

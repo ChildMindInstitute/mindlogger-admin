@@ -1,8 +1,8 @@
-import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
+import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 
-import { joinWihComma } from '../joinWihComma';
 import { createArrayFromMinToMax } from '../array';
+import { joinWihComma } from '../joinWihComma';
 
 export const parseOptions = (
   responseValues: SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues,

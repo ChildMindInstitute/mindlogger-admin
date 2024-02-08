@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import { Modal, EnterAppletPassword } from 'shared/components';
-import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { page } from 'resources';
+import { Modal, EnterAppletPassword } from 'shared/components';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 
-import { ViewDataPopupProps } from './ViewDataPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { useCheckIfHasEncryption } from '../Popup.hooks';
+import { ViewDataPopupProps } from './ViewDataPopup.types';
 
 export const ViewDataPopup = ({
   popupVisible,

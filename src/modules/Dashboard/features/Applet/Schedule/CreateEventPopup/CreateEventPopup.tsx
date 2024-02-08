@@ -1,13 +1,14 @@
 import { RefObject, useRef, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { Mixpanel } from 'shared/utils/mixpanel';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
-import { EventForm, EventFormRef } from '../EventForm';
 import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
+import { EventForm, EventFormRef } from '../EventForm';
 import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';
 import { CreateEventPopupProps } from './CreateEventPopup.types';
 

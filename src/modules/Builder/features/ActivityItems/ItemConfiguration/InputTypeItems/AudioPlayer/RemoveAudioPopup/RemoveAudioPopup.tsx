@@ -1,8 +1,8 @@
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-import { StyledTitleMedium, theme } from 'shared/styles';
 import { Modal } from 'shared/components';
+import { StyledTitleMedium, theme } from 'shared/styles';
 
 import { RemoveAudioPopupProps } from './RemoveAudioPopup.types';
 

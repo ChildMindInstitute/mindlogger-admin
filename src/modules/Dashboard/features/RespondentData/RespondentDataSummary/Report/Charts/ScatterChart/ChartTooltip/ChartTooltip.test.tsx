@@ -2,10 +2,10 @@
 // @ts-nocheck
 import { fireEvent, screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
-import { mockedAppletId, mockedRespondentId } from 'shared/mock';
-import { page } from 'resources';
 import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
+import { page } from 'resources';
+import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils';
 
 import { ChartTooltip } from './ChartTooltip';
 

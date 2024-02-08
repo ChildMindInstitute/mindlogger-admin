@@ -1,7 +1,7 @@
 import { styled, Box } from '@mui/material';
 
-import theme from 'shared/styles/theme';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 
 export const StyledLanguage = styled(StyledFlexTopCenter)`
   margin: ${theme.spacing(0, 2.4)};

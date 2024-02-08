@@ -1,19 +1,26 @@
 import { useState, DragEvent, useContext, useRef } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+
 import { TableRow } from '@mui/material';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { setFolderApi, setAppletEncryptionApi, togglePinApi } from 'api';
-import { useAsync, useTimeAgo } from 'shared/hooks';
-import { useAppDispatch } from 'redux/store';
-import { auth, popups, workspaces } from 'redux/modules';
-import { StyledBodyMedium, theme } from 'shared/styles';
-import { Pin, Actions, AppletImage } from 'shared/components';
+import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
   AppletPasswordRefType,
 } from 'modules/Dashboard/features/Applet/Popups';
+import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.const';
+import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
+import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
+import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
+import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
+import { auth, popups, workspaces } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
+import { Pin, Actions, AppletImage } from 'shared/components';
+import { useAsync, useTimeAgo } from 'shared/hooks';
+import { StyledBodyMedium, theme } from 'shared/styles';
 import {
   Encryption,
   falseReturnFunc,
@@ -22,17 +29,11 @@ import {
   getEncryptionToServer,
   Mixpanel,
 } from 'shared/utils';
-import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
-import { ShareAppletPopup } from 'modules/Dashboard/features/Applets/Popups';
-import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
-import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
-import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.const';
-import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
 import { StyledTableCell } from '../AppletsTable.styles';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
-import { getActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
+import { getActions, hasOwnerRole } from './AppletItem.utils';
 
 export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const dispatch = useAppDispatch();

@@ -1,5 +1,5 @@
-import { MdEditor, MdPreview } from 'md-editor-rt';
 import { styled } from '@mui/material';
+import { MdEditor, MdPreview } from 'md-editor-rt';
 
 import { theme, variables } from 'shared/styles';
 

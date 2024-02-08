@@ -1,11 +1,11 @@
 import { Trans, useTranslation } from 'react-i18next';
 
+import { STORAGE_LIBRARY_KEY, STORAGE_SELECTED_KEY } from 'modules/Library/consts';
+import { library } from 'modules/Library/state';
+import { getFilteredSelectedItems, getSelectedItemsFromStorage } from 'modules/Library/utils';
+import { useAppDispatch } from 'redux/store';
 import { Modal } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
-import { useAppDispatch } from 'redux/store';
-import { library } from 'modules/Library/state';
-import { STORAGE_LIBRARY_KEY, STORAGE_SELECTED_KEY } from 'modules/Library/consts';
-import { getFilteredSelectedItems, getSelectedItemsFromStorage } from 'modules/Library/utils';
 
 import { RemoveAppletPopupProps } from './RemoveAppletPopup.types';
 

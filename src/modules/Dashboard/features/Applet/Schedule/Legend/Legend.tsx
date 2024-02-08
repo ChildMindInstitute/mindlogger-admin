@@ -1,24 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { SelectController } from 'shared/components/FormComponents';
+import { users } from 'modules/Dashboard/state';
+import { page } from 'resources';
 import { Spinner, Svg } from 'shared/components';
+import { SelectController } from 'shared/components/FormComponents';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 import { SelectEvent } from 'shared/types';
 import { exportTemplate, getRespondentName, Mixpanel } from 'shared/utils';
-import { AnalyticsCalendarPrefix } from 'shared/consts';
-import { page } from 'resources';
-import { users } from 'modules/Dashboard/state';
 
+import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
+import { CreateEventPopup } from '../CreateEventPopup';
 import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ImportSchedulePopup } from '../ImportSchedulePopup';
-import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
 import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
-import { CreateEventPopup } from '../CreateEventPopup';
 import { ExpandedList } from './ExpandedList';
-import { SearchPopup } from './SearchPopup';
-import { Search } from './Search';
 import { ScheduleOptions, scheduleOptions, defaultExportHeader } from './Legend.const';
+import { useExpandedLists } from './Legend.hooks';
 import {
   StyledBtn,
   StyledLegend,
@@ -29,7 +29,8 @@ import {
   StyledIconBtn,
 } from './Legend.styles';
 import { LegendProps, SelectedRespondent } from './Legend.types';
-import { useExpandedLists } from './Legend.hooks';
+import { Search } from './Search';
+import { SearchPopup } from './SearchPopup';
 
 export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const { t } = useTranslation('app');

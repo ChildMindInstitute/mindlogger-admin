@@ -1,9 +1,9 @@
-import { Trans, useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { StyledTitleMedium, theme } from 'shared/styles';
-import { Modal } from 'shared/components';
 import { MediaUploader } from 'modules/Builder/components/MediaUploader';
+import { Modal } from 'shared/components';
+import { StyledTitleMedium, theme } from 'shared/styles';
 
 import { UploadAudioProps } from './UploadAudio.types';
 

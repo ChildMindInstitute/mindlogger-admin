@@ -1,14 +1,17 @@
 import { useMemo } from 'react';
-import { useLocation, useParams, generatePath } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+
 import uniqueId from 'lodash.uniqueid';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useParams, generatePath } from 'react-router-dom';
 
 import { applet, workspaces, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store/hooks';
 import { page } from 'resources';
-import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
+import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
+import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
 import { getEntityKey } from 'shared/utils/getEntityKey';
+import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
 import {
   checkCurrentActivityPage,
   checkCurrentActivityFlowPage,
@@ -21,8 +24,6 @@ import {
   checkIfAppletUrlPassed,
   checkCurrentAppletPage,
 } from 'shared/utils/urlGenerator';
-import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
-import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
 
 import { Breadcrumb } from './Breadcrumbs.types';
 

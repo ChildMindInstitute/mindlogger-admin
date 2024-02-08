@@ -1,9 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { generatePath } from 'react-router-dom';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
 
+import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { generatePath } from 'react-router-dom';
+
+import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { page } from 'resources';
 import {
   mockIntersectionObserver,
@@ -28,7 +30,6 @@ import {
   mockedSingleSelectRowsActivityItem,
 } from 'shared/mock';
 import { createArray, getEntityKey, renderWithAppletFormData } from 'shared/utils';
-import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ActivityItemsFlow } from './ActivityItemsFlow';
 

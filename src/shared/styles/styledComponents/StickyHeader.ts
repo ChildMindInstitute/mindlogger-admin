@@ -1,10 +1,10 @@
 import { styled } from '@mui/material';
 
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
+import { commonStickyStyles } from 'shared/styles/stylesConsts';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
-import { commonStickyStyles } from 'shared/styles/stylesConsts';
 
 export const StyledStickyHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
   ${commonStickyStyles};

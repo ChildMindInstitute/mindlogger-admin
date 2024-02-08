@@ -1,11 +1,11 @@
+import { Badge } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
-import { Badge } from '@mui/material';
 
-import { StyledDirectoryUpButton } from 'shared/styles/styledComponents';
-import { LinkedTabs, Svg } from 'shared/components';
-import { page } from 'resources';
 import { useCurrentActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
+import { page } from 'resources';
+import { LinkedTabs, Svg } from 'shared/components';
+import { StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 
 import { StyledBuilderActivityFlowBody } from './BuilderActivityFlow.styles';
 import { getActivityFlowTabs } from './BuilderActivityFlow.utils';

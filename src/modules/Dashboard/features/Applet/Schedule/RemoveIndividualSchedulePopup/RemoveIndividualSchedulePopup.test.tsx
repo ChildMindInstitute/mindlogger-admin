@@ -1,11 +1,11 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils';
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import { mockedAppletId, mockedCurrentWorkspace, mockedRespondentId } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils';
 
 import { RemoveIndividualSchedulePopup } from './RemoveIndividualSchedulePopup';
 

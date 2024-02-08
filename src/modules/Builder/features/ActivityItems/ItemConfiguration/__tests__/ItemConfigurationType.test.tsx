@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
+
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { ItemResponseType } from 'shared/consts';

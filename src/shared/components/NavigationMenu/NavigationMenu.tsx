@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { LeftBar } from './LeftBar';
 import { Container } from './Container';
+import { LeftBar } from './LeftBar';
+import { useSettingsRedirection } from './NavigationMenu.hooks';
 import { StyledWrapper } from './NavigationMenu.styles';
 import { NavigationMenuProps } from './NavigationMenu.types';
 import { getActiveItem } from './NavigationMenu.utils';
-import { useSettingsRedirection } from './NavigationMenu.hooks';
 
 export const NavigationMenu = ({
   title,

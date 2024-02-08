@@ -1,5 +1,5 @@
-import { Svg } from 'shared/components/Svg';
 import i18n from 'i18n';
+import { Svg } from 'shared/components/Svg';
 
 import { CalendarViews } from '../Calendar.types';
 

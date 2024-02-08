@@ -1,9 +1,9 @@
 import { useState, useEffect, MouseEvent } from 'react';
 
-import { Order } from 'shared/types';
+import { GetAppletsParams } from 'api';
 import { workspaces } from 'redux/modules';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { GetAppletsParams } from 'api';
+import { Order } from 'shared/types';
 import { formattedOrder } from 'shared/utils/table';
 
 const defaultParams = {

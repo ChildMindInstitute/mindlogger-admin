@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
-import { alerts, applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { useCheckIfAppletHasNotFoundError } from 'shared/hooks/useCheckIfAppletHasNotFoundError';
+import { alerts, applet } from 'shared/state';
 
 export const useNotFoundPopup = () => {
   const [appletNotFoundPopupVisible, setAppletNotFoundPopupVisible] = useState(false);

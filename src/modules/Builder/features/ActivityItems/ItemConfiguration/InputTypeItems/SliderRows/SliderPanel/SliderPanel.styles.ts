@@ -1,7 +1,7 @@
 import { Collapse, Slider, styled } from '@mui/material';
 
-import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 import { Table } from 'shared/components';
+import { theme, variables, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledSliderPanelContainer = styled(Collapse)`
   background: ${variables.palette.surface1};

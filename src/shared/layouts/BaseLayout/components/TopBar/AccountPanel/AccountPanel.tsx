@@ -1,9 +1,11 @@
+import { Box, ClickAwayListener } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { Box, ClickAwayListener } from '@mui/material';
 
-import { Avatar, Svg } from 'shared/components';
 import { alerts, auth } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { Avatar, Svg } from 'shared/components';
+import { useLogout } from 'shared/hooks';
 import {
   StyledLabelSmall,
   StyledTitleSmall,
@@ -12,8 +14,6 @@ import {
   StyledIconButton,
   StyledBadge,
 } from 'shared/styles';
-import { useLogout } from 'shared/hooks';
-import { useAppDispatch } from 'redux/store';
 import { checkIfAppletUrlPassed } from 'shared/utils/urlGenerator';
 
 import { Notifications } from '../Notifications';

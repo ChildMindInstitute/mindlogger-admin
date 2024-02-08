@@ -22,6 +22,11 @@
         "groups": [["external", "builtin"], "internal", ["sibling", "parent"], "index"],
         "pathGroups": [
           {
+            "pattern": "@(react)",
+            "group": "external",
+            "position": "before"
+          },
+          {
             "pattern": "@(api|assets|modules|redux|routes|shared|resources)/**",
             "group": "internal"
           },
@@ -30,8 +35,12 @@
             "group": "internal"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["internal"],
-        "newlines-between": "always"
+        "pathGroupsExcludedImportTypes": ["internal", "react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
       }
     ],
     "import/no-cycle": "error",
@@ -70,10 +79,10 @@
     "prefer-const": "error",
     "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
-		"unused-imports/no-unused-vars": [
-			"warn",
-			{ "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
-		],
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+    ],
     "@typescript-eslint/no-non-null-assertion": "warn",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-duplicate-enum-values": "warn",

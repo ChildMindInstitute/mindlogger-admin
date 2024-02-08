@@ -1,7 +1,7 @@
 import { Box, styled } from '@mui/material';
 
-import theme from 'shared/styles/theme';
 import { Applet } from 'api';
+import theme from 'shared/styles/theme';
 
 export const StyledAppletName = styled(Box)`
   display: flex;

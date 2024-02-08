@@ -1,12 +1,12 @@
-import { itemsTypeIcons } from 'shared/consts';
-import { ItemResponseType } from 'shared/consts';
-import { createArray } from 'shared/utils';
 import {
   DEFAULT_SLIDER_MAX_NUMBER,
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MIN_NUMBER,
   DEFAULT_SLIDER_ROWS_MIN_NUMBER,
 } from 'modules/Builder/consts';
+import { itemsTypeIcons } from 'shared/consts';
+import { ItemResponseType } from 'shared/consts';
+import { createArray } from 'shared/utils';
 
 import { ItemsOptionGroup } from './ItemConfiguration.types';
 

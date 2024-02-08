@@ -1,5 +1,5 @@
-import { ItemResponseType } from 'shared/consts';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { ItemResponseType } from 'shared/consts';
 
 export const ITEM_SETTINGS_TO_HAVE_TOOLTIP = [
   ItemConfigurationSettings.IsCorrectAnswerRequired,

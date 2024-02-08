@@ -1,13 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { generatePath } from 'react-router-dom';
+
 import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { generatePath } from 'react-router-dom';
 
 import { page } from 'resources';
-import { renderWithAppletFormData } from 'shared/utils';
 import { GyroscopeOrTouch, PerfTaskType } from 'shared/consts';
 import { mockedAppletFormData } from 'shared/mock';
+import { renderWithAppletFormData } from 'shared/utils';
 
 import { GyroscopeAndTouch } from './GyroscopeAndTouch';
 

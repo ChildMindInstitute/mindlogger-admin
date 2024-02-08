@@ -1,9 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
+
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
 import {

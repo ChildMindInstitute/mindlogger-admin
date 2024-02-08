@@ -2,8 +2,8 @@ import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { ItemResponseType } from 'shared/consts';
 
-import { ItemSettingsGroupNames } from './ItemSettingsController.const';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
+import { ItemSettingsGroupNames } from './ItemSettingsController.const';
 
 export type ItemSettingsControllerProps<T extends FieldValues> = {
   inputType: ItemResponseType | '';

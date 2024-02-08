@@ -1,7 +1,19 @@
-import { FieldValues } from 'react-hook-form';
-import { ColorResult } from 'react-color';
 import get from 'lodash.get';
+import { ColorResult } from 'react-color';
+import { FieldValues } from 'react-hook-form';
 
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
+import {
+  ABTrailsItemQuestions,
+  ActivityFormValues,
+  FlankerItemPositions,
+  FlankerNextButton,
+  ItemFormValues,
+  RoundTypeEnum,
+} from 'modules/Builder/types';
+import { findRelatedScore } from 'modules/Builder/utils';
+import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import {
   Activity,
   ActivityFlow,
@@ -17,20 +29,8 @@ import {
   SingleAndMultipleSelectItemResponseValues,
   SingleApplet,
 } from 'shared/state';
-import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
-import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import {
-  ABTrailsItemQuestions,
-  ActivityFormValues,
-  FlankerItemPositions,
-  FlankerNextButton,
-  ItemFormValues,
-  RoundTypeEnum,
-} from 'modules/Builder/types';
-import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
-import { findRelatedScore } from 'modules/Builder/utils';
 import { ElementType, isScoreReport, isSectionReport } from 'shared/types';
+import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import { GetConditions, GetItemCommonFields, GetSection, GetSectionConditions } from './SaveAndPublish.types';

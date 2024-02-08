@@ -1,10 +1,10 @@
 import { Radio, RadioGroup } from '@mui/material';
 
-import { StyledBodyLarge, StyledFlexTopCenter, variables } from 'shared/styles';
 import { Tooltip } from 'shared/components/Tooltip';
+import { StyledBodyLarge, StyledFlexTopCenter, variables } from 'shared/styles';
 
-import { SingleSelectionProps } from './SingleSelection.types';
 import { StyledFormControlLabel, StyledImage, StyledLabel, StyledSvg } from './SingleSelection.styles';
+import { SingleSelectionProps } from './SingleSelection.types';
 
 export const SingleSelection = ({
   value,

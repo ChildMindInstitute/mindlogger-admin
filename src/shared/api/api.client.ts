@@ -1,7 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
-import { getCommonConfig, getRequestTokenData, refreshTokenAndReattemptRequest } from './api.utils';
 import { ApiResponseCodes, DEFAULT_CONFIG } from './api.const';
+import { getCommonConfig, getRequestTokenData, refreshTokenAndReattemptRequest } from './api.utils';
 
 export const apiClient = axios.create(DEFAULT_CONFIG);
 export const authApiClient = axios.create(DEFAULT_CONFIG);

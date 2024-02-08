@@ -1,5 +1,5 @@
-import { Svg } from 'shared/components/Svg';
 import { Languages } from 'shared/api';
+import { Svg } from 'shared/components/Svg';
 
 import { LanguageItem } from './Language.types';
 

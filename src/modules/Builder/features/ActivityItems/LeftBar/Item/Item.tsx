@@ -1,20 +1,21 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+
 import { useWatch } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { Actions } from 'shared/components';
-import { StyledFlexTopCenter, variables } from 'shared/styles';
-import { itemsTypeIcons } from 'shared/consts';
-import { falseReturnFunc, getEntityKey } from 'shared/utils';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { removeMarkdown } from 'modules/Builder/utils';
+import { Actions } from 'shared/components';
+import { itemsTypeIcons } from 'shared/consts';
+import { StyledFlexTopCenter, variables } from 'shared/styles';
+import { falseReturnFunc, getEntityKey } from 'shared/utils';
 
+import { getItemConditionDependencies } from '../../ActivityItems.utils';
 import { StyledCol, StyledDescription, StyledItem, StyledTitle } from './Item.styles';
 import { ItemProps } from './Item.types';
 import { getActions } from './Item.utils';
-import { getItemConditionDependencies } from '../../ActivityItems.utils';
 
 export const Item = ({
   name,

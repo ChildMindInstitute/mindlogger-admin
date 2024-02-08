@@ -1,5 +1,5 @@
-import { JSZipGeneratorOptions } from 'jszip';
 import FileSaver from 'file-saver';
+import { JSZipGeneratorOptions } from 'jszip';
 
 export const BLOB_ZIP_OPTIONS: JSZipGeneratorOptions<'blob'> = {
   type: 'blob',

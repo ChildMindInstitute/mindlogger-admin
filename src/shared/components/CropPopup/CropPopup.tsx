@@ -1,4 +1,5 @@
 import { useState, useMemo, SyntheticEvent } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import ReactCrop, { Crop, PixelCrop, PercentCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -6,10 +7,10 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
 
-import { checkIfImageSmall, cropImage, initPercentCrop } from './CropPopup.utils';
 import { CropRatio, MIN_CROP_SIZE } from './CropPopup.const';
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
+import { checkIfImageSmall, cropImage, initPercentCrop } from './CropPopup.utils';
 
 export const CropPopup = ({
   open,

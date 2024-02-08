@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next';
 import { ListItemIcon, MenuItem } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
+import { MenuUiType } from './Menu.const';
 import { StyledMenu } from './Menu.styles';
 import { MenuProps } from './Menu.types';
-import { MenuUiType } from './Menu.const';
 
 export const Menu = ({
   anchorEl,

@@ -1,16 +1,17 @@
 import { useState } from 'react';
+
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import { page } from 'resources';
-import { useEncryptionStorage } from 'shared/hooks';
-import { Svg } from 'shared/components/Svg';
 import { AppletPasswordPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { useAppDispatch } from 'redux/store';
-import { StyledLabelMedium, StyledLabelSmall, variables } from 'shared/styles';
-import { alerts } from 'shared/state';
+import { page } from 'resources';
+import { Svg } from 'shared/components/Svg';
 import { WorkspaceImage } from 'shared/features/SwitchWorkspace';
+import { useEncryptionStorage } from 'shared/hooks';
+import { alerts } from 'shared/state';
+import { StyledLabelMedium, StyledLabelSmall, variables } from 'shared/styles';
 
 import {
   StyledNotification,

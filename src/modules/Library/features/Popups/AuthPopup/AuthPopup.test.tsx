@@ -1,7 +1,7 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
 import { page } from 'resources';
+import { renderWithProviders } from 'shared/utils';
 
 import { AuthPopup } from './AuthPopup';
 

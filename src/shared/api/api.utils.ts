@@ -3,8 +3,8 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { authStorage } from 'shared/utils/authStorage';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
 
-import { BASE_API_URL, Languages, regionalLangFormats } from './api.const';
 import { signInRefreshTokenApi } from './api';
+import { BASE_API_URL, Languages, regionalLangFormats } from './api.const';
 
 export const getBaseUrl = () => (storage.getItem(LocalStorageKeys.ApiUrl) as string) || BASE_API_URL || '';
 

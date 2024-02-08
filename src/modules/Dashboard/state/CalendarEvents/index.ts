@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store/hooks';
 
-import { state as initialState } from './CalendarEvents.state';
 import { reducers } from './CalendarEvents.reducer';
 import { CalendarEventsSchema } from './CalendarEvents.schema';
+import { state as initialState } from './CalendarEvents.state';
 
 export * from './CalendarEvents.schema';
 

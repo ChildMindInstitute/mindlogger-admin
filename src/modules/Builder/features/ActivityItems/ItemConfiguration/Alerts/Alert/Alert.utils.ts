@@ -1,10 +1,10 @@
 import i18n from 'i18n';
+import { DEFAULT_SLIDER_MAX_NUMBER, DEFAULT_SLIDER_ROWS_MIN_NUMBER } from 'modules/Builder/consts';
 import { ItemFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
+import { Option } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
 import { ItemAlert, SliderRowsItem } from 'shared/state';
 import { createArray, groupBy } from 'shared/utils';
-import { Option } from 'shared/components/FormComponents';
-import { DEFAULT_SLIDER_MAX_NUMBER, DEFAULT_SLIDER_ROWS_MIN_NUMBER } from 'modules/Builder/consts';
 
 import { OptionTypes } from './Alert.types';
 

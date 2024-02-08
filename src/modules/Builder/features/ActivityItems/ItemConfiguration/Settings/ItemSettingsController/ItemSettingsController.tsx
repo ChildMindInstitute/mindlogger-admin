@@ -1,8 +1,8 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { ItemSettingsGroup } from './ItemSettingsGroup';
-import { ItemSettingsControllerProps } from './ItemSettingsController.types';
 import { itemSettingsOptionsByInputType } from './ItemSettingsController.const';
+import { ItemSettingsControllerProps } from './ItemSettingsController.types';
+import { ItemSettingsGroup } from './ItemSettingsGroup';
 
 export const ItemSettingsController = <T extends FieldValues>({
   name,

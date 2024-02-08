@@ -1,17 +1,19 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { ResetPassword } from 'api';
-import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
+import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledErrorText, StyledHeadline, StyledLinkBtn } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles';
+import { StyledErrorText, StyledHeadline, StyledLinkBtn } from 'shared/styles/styledComponents';
 
+import { resetSchema } from './ResetForm.schema';
 import {
   StyledForm,
   StyledResetPasswordSubheader,
@@ -19,7 +21,6 @@ import {
   StyledButton,
   StyledBackWrapper,
 } from './ResetForm.styles';
-import { resetSchema } from './ResetForm.schema';
 import { ResetFormProps } from './ResetForm.types';
 
 export const ResetForm = ({ setEmail }: ResetFormProps) => {

@@ -1,16 +1,16 @@
-import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
-import { theme, StyledFlexColumn } from 'shared/styles';
-import { ItemAlert, SliderItemResponseValues } from 'shared/state';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { Svg } from 'shared/components/Svg';
+import { ItemAlert, SliderItemResponseValues } from 'shared/state';
+import { theme, StyledFlexColumn } from 'shared/styles';
 
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
+import { getEmptySliderOption } from '../../ItemConfiguration.utils';
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';
-import { getEmptySliderOption } from '../../ItemConfiguration.utils';
-import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
   const { t } = useTranslation('app');

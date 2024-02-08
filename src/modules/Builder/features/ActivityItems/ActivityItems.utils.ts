@@ -1,6 +1,6 @@
+import { ItemFormValues } from 'modules/Builder/types';
 import { ConditionalLogic } from 'shared/state';
 import { getEntityKey, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
-import { ItemFormValues } from 'modules/Builder/types';
 
 import { GetConditionsToRemoveConfig, ItemNameWithIndex } from './ActivityItems.types';
 

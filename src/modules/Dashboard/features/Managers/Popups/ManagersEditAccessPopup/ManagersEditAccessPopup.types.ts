@@ -1,5 +1,5 @@
-import { Roles } from 'shared/consts';
 import { Manager, ManagerApplet } from 'modules/Dashboard/types';
+import { Roles } from 'shared/consts';
 
 export type EditAccessPopupProps = {
   onClose: (shouldRefetch?: boolean) => void;

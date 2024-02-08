@@ -1,11 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
+
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 import { mockedSingleSelectFormValues, mockedAppletFormData } from 'shared/mock';
 import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
-import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { renderItemConfiguration, mockedNameTestid, getAppletFormDataWithItem, mockedItemName } from '../__mocks__';
 

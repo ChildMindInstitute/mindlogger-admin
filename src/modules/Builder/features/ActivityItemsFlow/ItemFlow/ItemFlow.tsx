@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useFieldArray } from 'react-hook-form';
-import { Badge, Box } from '@mui/material';
 
+import { Badge, Box } from '@mui/material';
+import { useFieldArray } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import { observerStyles } from 'modules/Builder/consts';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components';
+import { useIntersectionObserver } from 'shared/hooks';
+import { Condition } from 'shared/state';
 import {
   StyledClearedButton,
   StyledFlexTopCenter,
@@ -11,15 +16,11 @@ import {
   StyledObserverTarget,
   theme,
 } from 'shared/styles';
-import { useIntersectionObserver } from 'shared/hooks';
-import { Condition } from 'shared/state';
-import { observerStyles } from 'modules/Builder/consts';
-import { useCustomFormContext } from 'modules/Builder/hooks';
 
-import { ItemFlowActions } from './ItemFlowActions';
+import { StyledTitle, StyledCollapse } from './ItemFlow.styles';
 import { ItemFlowProps } from './ItemFlow.types';
 import { getEmptyCondition, getObserverSelector } from './ItemFlow.utils';
-import { StyledTitle, StyledCollapse } from './ItemFlow.styles';
+import { ItemFlowActions } from './ItemFlowActions';
 import { ItemFlowContent } from './ItemFlowContent';
 
 export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProps) => {

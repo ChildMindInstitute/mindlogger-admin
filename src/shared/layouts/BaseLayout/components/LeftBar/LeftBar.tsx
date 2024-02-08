@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation, NavLink } from 'react-router-dom';
+
 import { ClickAwayListener, List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 
-import { page } from 'resources';
-import { StyledLabelMedium, variables } from 'shared/styles';
-import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { workspaces, auth, Workspace } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { page } from 'resources';
+import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
+import { StyledLabelMedium, variables } from 'shared/styles';
 import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
-import { useAppDispatch } from 'redux/store';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';

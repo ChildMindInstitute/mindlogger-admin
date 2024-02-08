@@ -1,7 +1,7 @@
 import { BuilderContainer } from 'shared/features/BuilderContainer';
 
-import { ContainerHeader } from './ContainerHeader';
 import { ActivitySettingsContainerProps } from './Container.types';
+import { ContainerHeader } from './ContainerHeader';
 
 export const Container = ({ title, onClose, children }: ActivitySettingsContainerProps) => (
   <BuilderContainer

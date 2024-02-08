@@ -4,10 +4,10 @@ import { screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { ApiResponseCodes } from 'api';
-import { page } from 'resources';
-import { renderWithProviders } from 'shared/utils';
 import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
+import { page } from 'resources';
 import { mockedAppletId, mockedIdentifiers, mockedRespondentId } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils';
 
 import { RespondentDataSummary } from './RespondentDataSummary';
 

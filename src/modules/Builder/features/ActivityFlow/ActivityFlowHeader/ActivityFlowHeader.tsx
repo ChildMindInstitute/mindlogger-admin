@@ -1,8 +1,8 @@
-import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-import { StyledBuilderContainerHeader } from 'shared/features';
 import { Svg } from 'shared/components/Svg';
+import { StyledBuilderContainerHeader } from 'shared/features';
 import { falseReturnFunc } from 'shared/utils';
 
 import { ActivityFlowHeaderProps } from './ActivityFlowHeader.types';

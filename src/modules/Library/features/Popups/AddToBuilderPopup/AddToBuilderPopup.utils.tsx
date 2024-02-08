@@ -1,9 +1,13 @@
-import { Controller } from 'react-hook-form';
 import { FormControlLabelProps, Radio, RadioGroup } from '@mui/material';
+import { Controller } from 'react-hook-form';
 
+import { DashboardAppletType, Applet as FullApplet } from 'api';
+import i18n from 'i18n';
 import { AppletImage, Table, UiType } from 'shared/components';
 import { RadioGroupController } from 'shared/components/FormComponents';
+import { Roles } from 'shared/consts';
 import { WorkspaceImage, WorkspaceUiType } from 'shared/features/SwitchWorkspace';
+import { Workspace } from 'shared/state';
 import {
   StyledBodyLarge,
   StyledErrorText,
@@ -14,12 +18,9 @@ import {
   variables,
 } from 'shared/styles';
 import { HeadCell } from 'shared/types/table';
-import i18n from 'i18n';
-import { Workspace } from 'shared/state';
-import { Roles } from 'shared/consts';
-import { DashboardAppletType, Applet as FullApplet } from 'api';
 import { isManagerOrOwnerOrEditor } from 'shared/utils';
 
+import { StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
 import {
   AddToBuilderActions,
   AddToBuilderSteps,
@@ -28,7 +29,6 @@ import {
   Step,
   TableController,
 } from './AddToBuilderPopup.types';
-import { StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
 
 const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] => [
   {

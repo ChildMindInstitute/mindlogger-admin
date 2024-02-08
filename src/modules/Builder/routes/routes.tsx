@@ -1,11 +1,12 @@
 import { lazy } from 'react';
-import { Route, Navigate, generatePath } from 'react-router-dom';
+
 import { ErrorBoundary } from 'react-error-boundary';
+import { Route, Navigate, generatePath } from 'react-router-dom';
 
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
-import { Path } from 'shared/utils';
 import { ErrorFallback } from 'shared/components';
+import { Path } from 'shared/utils';
 
 import { appletRoutes, appletActivityRoutes, appletActivityFlowRoutes, performanceTasksRoutes } from './routes.const';
 

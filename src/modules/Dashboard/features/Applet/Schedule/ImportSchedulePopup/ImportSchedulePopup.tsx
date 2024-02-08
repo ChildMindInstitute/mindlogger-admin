@@ -1,14 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
 
-import { Error, FileUploader, Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
-import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
-import { useAppDispatch } from 'redux/store';
-import { useAsync } from 'shared/hooks';
-import { applet } from 'shared/state';
-import { Mixpanel } from 'shared/utils/mixpanel';
-import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { Trans, useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+
 import {
   deleteIndividualEventsApi,
   deleteScheduledEventsApi,
@@ -16,10 +10,17 @@ import {
   Periodicity,
 } from 'modules/Dashboard/api';
 import { applets } from 'modules/Dashboard/state';
+import { useAppDispatch } from 'redux/store';
+import { Error, FileUploader, Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { useAsync } from 'shared/hooks';
+import { applet } from 'shared/state';
+import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { getScreens, invalidFileFormatError, uploadLabel } from './ImportSchedule.const';
-import { ImportSchedulePopupProps, Steps, UploadedEvent } from './ImportSchedulePopup.types';
 import { useImportSchedule } from './ImportSchedulePopup.hooks';
+import { ImportSchedulePopupProps, Steps, UploadedEvent } from './ImportSchedulePopup.types';
 import { prepareImportPayload } from './ImportSchedulePopup.utils';
 
 export const ImportSchedulePopup = ({

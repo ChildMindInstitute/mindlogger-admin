@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
-import { EncryptedAnswerSharedProps, ExportDataResult } from 'shared/types';
+import { authApiClient } from 'shared/api/api.client';
 import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
+import { EncryptedAnswerSharedProps, ExportDataResult } from 'shared/types';
 
+import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 import {
   TransferOwnershipType,
   AppletInvitationData,
@@ -56,7 +57,6 @@ import {
   AssessmentResult,
   SubmitDates,
 } from './api.types';
-import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
 export const getUserDetailsApi = (signal?: AbortSignal) => authApiClient.get('/users/me', { signal });
 

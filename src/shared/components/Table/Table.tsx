@@ -1,14 +1,15 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
+
 import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } from '@mui/material';
 
-import { Order } from 'shared/types/table';
 import { EmptyState } from 'shared/components/EmptyState';
 import { DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts';
+import { Order } from 'shared/types/table';
 
-import { TableHead } from './TableHead';
 import { SEVEN_ROWS_PER_PAGE } from './Table.const';
 import { StyledTableCellContent, StyledTableContainer } from './Table.styles';
 import { Row, TableProps, UiType } from './Table.types';
+import { TableHead } from './TableHead';
 
 export const Table = ({
   columns,

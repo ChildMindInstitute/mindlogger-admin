@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import { useAppSelector } from 'redux/store/hooks';
 import { MetaSchema } from 'shared/state/Base';
 
-import * as thunk from './Applet.thunk';
-import { state as initialState } from './Applet.state';
 import { extraReducers } from './Applet.reducer';
 import { AppletSchema } from './Applet.schema';
+import { state as initialState } from './Applet.state';
+import * as thunk from './Applet.thunk';
 import { removeApplet, updateAppletData, resetApplet } from './Applet.utils';
 
 export * from './Applet.schema';

@@ -1,20 +1,21 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
-import { StyledFlexColumn } from 'shared/styles';
 import { SingleAndMultiSelectRowOption } from 'shared/state';
+import { StyledFlexColumn } from 'shared/styles';
 
+import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
+import { getEmptySelectionItem } from '../../ItemConfiguration.utils';
 import { Header } from './Header';
-import { Options } from './Options';
 import { Items } from './Items';
+import { Options } from './Options';
 import { StyledSelectionRowsContainer, StyledAddRowButton } from './SelectionRows.styles';
 import { SelectionRowsProps } from './SelectionRows.types';
-import { getEmptySelectionItem } from '../../ItemConfiguration.utils';
-import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
-import { DEFAULT_SCORE_VALUE } from '../../ItemConfiguration.const';
 
 export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
   const [isExpanded, setIsExpanded] = useState(true);

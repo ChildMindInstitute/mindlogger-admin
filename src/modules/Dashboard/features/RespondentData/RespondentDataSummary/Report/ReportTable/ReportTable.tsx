@@ -1,19 +1,20 @@
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { Box } from '@mui/material';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
-import { Search } from 'shared/components';
 import { DashboardTable } from 'modules/Dashboard/components';
+import { Search } from 'shared/components';
+import { DateFormats, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Order } from 'shared/types';
-import { DateFormats, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
+import { Answer } from '../Report.types';
 import { getHeadCells } from './ReportTable.const';
 import { StyledTableWrapper } from './ReportTable.styles';
 import { ReportTableProps, TextItemAnswer } from './ReportTable.types';
 import { filterReportTable, getComparator, getRows, stableSort } from './ReportTable.utils';
-import { Answer } from '../Report.types';
 
 export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportTableProps) => {
   const { t } = useTranslation('app');

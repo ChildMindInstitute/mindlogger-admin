@@ -1,14 +1,14 @@
 import { screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
-import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { Roles } from 'shared/consts';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { initialStateData } from 'shared/state';
+import { renderWithProviders } from 'shared/utils';
 
-import { AppletsTable } from './AppletsTable';
 import { getHeadCells } from '../Applets.const';
-import { AppletsTableProps } from './AppletsTable.types';
 import { AppletsContext } from '../Applets.context';
+import { AppletsTable } from './AppletsTable';
+import { AppletsTableProps } from './AppletsTable.types';
 
 const preloadedState = {
   workspaces: {

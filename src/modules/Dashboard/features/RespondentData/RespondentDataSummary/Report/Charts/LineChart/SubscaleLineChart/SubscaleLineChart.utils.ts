@@ -1,8 +1,8 @@
-import { Context } from 'chartjs-plugin-datalabels';
 import { LegendItem, ChartData, LinearScale, ScriptableTooltipContext, ChartDataset } from 'chart.js';
+import { Context } from 'chartjs-plugin-datalabels';
 
-import { variables } from 'shared/styles';
 import { Version } from 'api';
+import { variables } from 'shared/styles';
 
 import {
   SUBSCALES_CHART_LABEL_WIDTH_Y,

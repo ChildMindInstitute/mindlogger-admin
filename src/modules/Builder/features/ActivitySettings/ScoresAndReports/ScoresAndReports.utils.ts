@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { ItemFormValues } from 'modules/Builder/types';
+import { removeMarkdown } from 'modules/Builder/utils';
 import { DataTableItem } from 'shared/components';
 import { CalculationType, ScoreReportType } from 'shared/consts';
 import { ScoreOrSection } from 'shared/state';
-import { ItemFormValues } from 'modules/Builder/types';
 import { getEntityKey } from 'shared/utils';
-import { removeMarkdown } from 'modules/Builder/utils';
 
 import { getScoreId } from './ScoreContent/ScoreContent.utils';
 

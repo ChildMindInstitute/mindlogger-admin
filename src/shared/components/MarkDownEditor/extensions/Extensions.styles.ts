@@ -1,8 +1,8 @@
 import { styled, MenuItem, MenuList } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
-import theme from 'shared/styles/theme';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 
 export const StyledMenuList = styled(MenuList)`
   margin: 0;

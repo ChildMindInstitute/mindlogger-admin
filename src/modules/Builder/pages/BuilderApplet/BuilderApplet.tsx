@@ -1,19 +1,21 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import { FormProvider, useForm, useFormState } from 'react-hook-form';
+
 import { yupResolver } from '@hookform/resolvers/yup';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
+import { useParams, useLocation } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
 
-import { useAppDispatch } from 'redux/store';
 import { SaveAndPublish } from 'modules/Builder/features/SaveAndPublish';
+import { themes } from 'modules/Builder/state';
+import { AppletFormValues } from 'modules/Builder/types';
+import { workspaces } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { LinkedTabs, Spinner } from 'shared/components';
 import { useCheckIfNewApplet, useRemoveAppletData, usePermissions } from 'shared/hooks';
-import { StyledBody } from 'shared/styles/styledComponents';
 import { applet } from 'shared/state';
-import { workspaces } from 'redux/modules';
-import { AppletFormValues } from 'modules/Builder/types';
-import { themes } from 'modules/Builder/state';
+import { StyledBody } from 'shared/styles/styledComponents';
 
+import { themeParams } from './BuilderApplet.const';
 import { AppletSchema } from './BuilderApplet.schema';
 import {
   getDefaultValues,
@@ -22,7 +24,6 @@ import {
   prepareActivityFlowsFromLibrary,
   getDefaultThemeId,
 } from './BuilderApplet.utils';
-import { themeParams } from './BuilderApplet.const';
 
 export const BuilderApplet = () => {
   const params = useParams();

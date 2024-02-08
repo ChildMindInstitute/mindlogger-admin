@@ -4,6 +4,8 @@ import { screen, fireEvent } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
+import { ConditionRowType } from 'modules/Builder/types';
+import { ConditionType } from 'shared/consts';
 import {
   mockedAppletFormData,
   mockedMultiSelectFormValues,
@@ -11,8 +13,6 @@ import {
   mockedSliderFormValues,
 } from 'shared/mock';
 import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
-import { ConditionRowType } from 'modules/Builder/types';
-import { ConditionType } from 'shared/consts';
 
 import { getItemOptions, getValueOptionsList } from '../ConditionRow.utils';
 import { Condition } from './Condition';

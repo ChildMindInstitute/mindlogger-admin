@@ -1,22 +1,25 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from 'react-router-dom';
 
-import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles';
-import { SingleApplet, workspaces as workspacesState } from 'shared/state';
-import { useAsync, useNetwork } from 'shared/hooks';
-import { authStorage, Path } from 'shared/utils';
-import { MAX_LIMIT } from 'shared/consts';
+import { getWorkspaceAppletsApi } from 'api';
+import { useClearCart } from 'modules/Library/features/Cart/Cart.hooks';
+import { navigateToBuilder, getAddToBuilderData } from 'modules/Library/features/Cart/Cart.utils';
+import { useWorkspaceList } from 'modules/Library/hooks';
 import { library } from 'modules/Library/state';
 import { useAppDispatch } from 'redux/store';
-import { navigateToBuilder, getAddToBuilderData } from 'modules/Library/features/Cart/Cart.utils';
-import { useClearCart } from 'modules/Library/features/Cart/Cart.hooks';
-import { useWorkspaceList } from 'modules/Library/hooks';
-import { getWorkspaceAppletsApi } from 'api';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { MAX_LIMIT } from 'shared/consts';
+import { useAsync, useNetwork } from 'shared/hooks';
+import { SingleApplet, workspaces as workspacesState } from 'shared/state';
+import { StyledModalWrapper } from 'shared/styles';
+import { authStorage, Path } from 'shared/utils';
 
+import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
+import { StyledContainer } from './AddToBuilderPopup.styles';
 import {
   AddToBuilderActions,
   AddToBuilderForm,
@@ -25,8 +28,6 @@ import {
   Applet,
 } from './AddToBuilderPopup.types';
 import { getArrayFromApplets, getSteps } from './AddToBuilderPopup.utils';
-import { addToBuilderPopupSchema } from './AddToBuilderPopup.schema';
-import { StyledContainer } from './AddToBuilderPopup.styles';
 
 const dataTestid = 'library-cart-add-to-builder-popup';
 

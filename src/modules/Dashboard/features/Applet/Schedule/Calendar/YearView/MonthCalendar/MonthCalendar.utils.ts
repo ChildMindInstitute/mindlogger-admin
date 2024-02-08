@@ -1,7 +1,7 @@
-import { DateLocalizer } from 'react-big-calendar';
-import { firstVisibleDay, lastVisibleDay } from 'react-big-calendar/lib/utils/dates';
 import { add } from 'date-fns';
 import uniqueId from 'lodash.uniqueid';
+import { DateLocalizer } from 'react-big-calendar';
+import { firstVisibleDay, lastVisibleDay } from 'react-big-calendar/lib/utils/dates';
 
 import { EN_WEEK_DAYS, FR_WEEK_DAYS, MILLISECONDS_PER_WEEK } from './MonthCalendar.const';
 import { MonthObject, Week } from './MonthCalendar.types';

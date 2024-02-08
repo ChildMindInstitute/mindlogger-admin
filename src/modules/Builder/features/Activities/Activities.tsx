@@ -1,27 +1,28 @@
 import { Fragment, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useFieldArray, useWatch } from 'react-hook-form';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
-import { Box } from '@mui/material';
 
-import { StyledTitleMedium, theme } from 'shared/styles';
-import { page } from 'resources';
-import { ActivityFormValues, AppletFormValues, GetNewPerformanceTask } from 'modules/Builder/types';
+import { Box } from '@mui/material';
+import { DragDropContext, DragDropContextProps, Draggable } from 'react-beautiful-dnd';
+import { useFieldArray, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
+
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { getNewActivity, getNewPerformanceTask } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { BuilderContainer } from 'shared/features';
-import { PerfTaskType } from 'shared/consts';
-import { pluck, Mixpanel } from 'shared/utils';
-import { getUniqueName } from 'modules/Builder/utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { getNewActivity, getNewPerformanceTask } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { ActivityFormValues, AppletFormValues, GetNewPerformanceTask } from 'modules/Builder/types';
+import { getUniqueName } from 'modules/Builder/utils';
+import { page } from 'resources';
+import { PerfTaskType } from 'shared/consts';
+import { BuilderContainer } from 'shared/features';
+import { StyledTitleMedium, theme } from 'shared/styles';
+import { pluck, Mixpanel } from 'shared/utils';
 
-import { DeleteActivityModal } from './DeleteActivityModal';
-import { ActivitiesHeader } from './ActivitiesHeader';
-import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
-import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
 import { EditablePerformanceTasks } from './Activities.const';
+import { ActivityAddProps, EditablePerformanceTasksType } from './Activities.types';
+import { getActions, getActivityKey, getPerformanceTaskPath } from './Activities.utils';
+import { ActivitiesHeader } from './ActivitiesHeader';
+import { DeleteActivityModal } from './DeleteActivityModal';
 
 export const Activities = () => {
   const { t } = useTranslation('app');

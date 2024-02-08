@@ -1,6 +1,7 @@
 import { lazy } from 'react';
-import { Navigate, Route } from 'react-router-dom';
+
 import { ErrorBoundary } from 'react-error-boundary';
+import { Navigate, Route } from 'react-router-dom';
 
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';

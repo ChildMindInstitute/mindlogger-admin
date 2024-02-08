@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Folder, Applet } from 'api';
@@ -12,18 +13,18 @@ import {
   TransferOwnershipPopup,
 } from 'modules/Dashboard/features/Applet/Popups';
 import { auth, popups, workspaces } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { ButtonWithMenu, Search, Spinner, Svg } from 'shared/components';
 import { useTable, useCheckIfAppletHasNotFoundError } from 'shared/hooks';
-import { useAppDispatch } from 'redux/store';
-import { getIsAddAppletBtnVisible } from 'shared/utils';
 import { StyledBody } from 'shared/styles';
+import { getIsAddAppletBtnVisible } from 'shared/utils';
 
-import { AppletsTable } from './AppletsTable';
 import { getHeadCells, getMenuItems } from './Applets.const';
+import { AppletsContext } from './Applets.context';
+import { useAppletsWithFolders } from './Applets.hooks';
 import { AppletsTableHeader, StyledButtons } from './Applets.styles';
 import { generateNewFolderName } from './Applets.utils';
-import { useAppletsWithFolders } from './Applets.hooks';
-import { AppletsContext } from './Applets.context';
+import { AppletsTable } from './AppletsTable';
 
 export const Applets = () => {
   const { t } = useTranslation('app');

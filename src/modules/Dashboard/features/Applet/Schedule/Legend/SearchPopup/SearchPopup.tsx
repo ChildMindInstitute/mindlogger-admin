@@ -1,21 +1,22 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Search, Svg } from 'shared/components';
-import { theme, variables, StyledModalContent, StyledIconButton } from 'shared/styles';
-import { page } from 'resources';
-import { getRespondentName, getErrorMessage } from 'shared/utils';
-import { useAsync } from 'shared/hooks/useAsync';
 import { createIndividualEventsApi } from 'api';
 import { applets, users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store/hooks';
+import { page } from 'resources';
+import { Search, Svg } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'shared/state';
+import { theme, variables, StyledModalContent, StyledIconButton } from 'shared/styles';
+import { getRespondentName, getErrorMessage } from 'shared/utils';
 
 import { AddIndividualSchedulePopup } from '../../AddIndividualSchedulePopup';
-import { SelectedRespondent } from '../Legend.types';
 import { ScheduleOptions } from '../Legend.const';
+import { SelectedRespondent } from '../Legend.types';
 import { StyledModal, StyledModalInner, StyledItemsContainer, StyledItem, StyledChecked } from './SearchPopup.styles';
 import { SearchPopupProps } from './SearchPopup.types';
 import { filterRows } from './SearchPopup.utils';

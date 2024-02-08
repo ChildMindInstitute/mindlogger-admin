@@ -1,19 +1,20 @@
 import { Fragment, SyntheticEvent, useEffect, useState, useReducer } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { Box, Checkbox } from '@mui/material';
 
+import { Box, Checkbox } from '@mui/material';
+import { useFormContext } from 'react-hook-form';
+
+import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
+import { library } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexTopCenter, StyledSvgArrowContainer } from 'shared/styles';
-import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
-import { useAppDispatch } from 'redux/store';
-import { library } from 'redux/modules';
 import { getHighlightedText } from 'shared/utils';
 
-import { ActivityProps } from './Activity.types';
-import { StyledActivityContainer, StyledActivityHeader, StyledActivityName, StyledItemsList } from './Activity.styles';
-import { Item } from '../Item';
 import { AppletUiType, LibraryForm, SelectedItem } from '../Applet.types';
 import { checkIfPerformanceTask } from '../Applet.utils';
+import { Item } from '../Item';
+import { StyledActivityContainer, StyledActivityHeader, StyledActivityName, StyledItemsList } from './Activity.styles';
+import { ActivityProps } from './Activity.types';
 
 export const Activity = ({
   appletId,

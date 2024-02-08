@@ -3,11 +3,11 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
-import { mockedUserData } from 'shared/mock';
 import { auth, alerts } from 'redux/modules';
 import * as reduxHooks from 'redux/store/hooks';
 import * as hooksModule from 'shared/hooks';
+import { mockedUserData } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils';
 
 import { AccountPanel } from './AccountPanel';
 

@@ -1,6 +1,6 @@
 import config from './encryption.config';
-import { Encryption, EncryptionParsed, GetAppletEncryptionInfo, GetPrivateKey } from './encryption.types';
 import { algorithm, encoding } from './encryption.const';
+import { Encryption, EncryptionParsed, GetAppletEncryptionInfo, GetPrivateKey } from './encryption.types';
 
 const defaultBase = [2];
 

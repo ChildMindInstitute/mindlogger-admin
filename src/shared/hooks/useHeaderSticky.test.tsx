@@ -1,6 +1,7 @@
 import { MutableRefObject, createRef, forwardRef } from 'react';
-import { act, fireEvent, render, renderHook } from '@testing-library/react';
+
 import { Box } from '@mui/material';
+import { act, fireEvent, render, renderHook } from '@testing-library/react';
 
 import { OFFSET_TO_SET_STICKY, OFFSET_TO_UNSET_STICKY, useHeaderSticky } from './useHeaderSticky';
 

@@ -1,5 +1,5 @@
-import { variables } from './variables';
 import theme from './theme';
+import { variables } from './variables';
 
 export const commonStickyStyles = `
   position: sticky;

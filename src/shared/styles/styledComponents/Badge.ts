@@ -1,7 +1,7 @@
 import { Badge, styled } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledBadge = styled(Badge, shouldForwardProp)`

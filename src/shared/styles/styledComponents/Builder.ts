@@ -1,8 +1,8 @@
 import { Box, styled } from '@mui/material';
 
+import { Svg } from 'shared/components/Svg';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { Svg } from 'shared/components/Svg';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 const maxWidthBuilderPadding = 'calc((100% - 123.2rem) / 2)';

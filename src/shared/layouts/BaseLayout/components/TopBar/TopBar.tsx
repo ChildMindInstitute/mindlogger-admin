@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { auth } from 'modules/Auth/state';
+import { page } from 'resources';
 import { Avatar, AvatarUiType, Svg } from 'shared/components';
 import { Banners } from 'shared/components/Banners';
-import { StyledBadge, StyledFlexTopCenter } from 'shared/styles';
-import { page } from 'resources';
-import { auth } from 'modules/Auth/state';
 import { alerts } from 'shared/state';
+import { StyledBadge, StyledFlexTopCenter } from 'shared/styles';
 
 import { AccountPanel } from './AccountPanel';
 import { Breadcrumbs } from './Breadcrumbs';

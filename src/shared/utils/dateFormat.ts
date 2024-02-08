@@ -1,8 +1,8 @@
 import { format, getISOWeek } from 'date-fns';
 
-import { DateFormats } from 'shared/consts';
 import i18n from 'i18n';
 import { NameLength } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.types';
+import { DateFormats } from 'shared/consts';
 
 const { t } = i18n;
 

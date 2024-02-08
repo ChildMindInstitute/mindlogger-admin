@@ -1,5 +1,5 @@
-import { Roles } from 'shared/consts';
 import { Manager } from 'modules/Dashboard/types';
+import { Roles } from 'shared/consts';
 
 import { Applet } from '../ManagersEditAccessPopup.types';
 

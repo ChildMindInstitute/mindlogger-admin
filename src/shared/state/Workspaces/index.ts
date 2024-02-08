@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store/hooks';
 
-import * as thunk from './Workspaces.thunk';
-import { state as initialState } from './Workspaces.state';
+import { MetaStatus } from '../Base';
 import { reducers, extraReducers } from './Workspaces.reducer';
 import { WorkspacesSchema } from './Workspaces.schema';
-import { MetaStatus } from '../Base';
+import { state as initialState } from './Workspaces.state';
+import * as thunk from './Workspaces.thunk';
 
 export * from './Workspaces.schema';
 

@@ -1,12 +1,13 @@
 import { useState } from 'react';
+
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg } from 'shared/components/Svg';
 import { Chip, ChipShape } from 'shared/components/Chip';
+import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton, StyledFlexTopCenter, StyledFlexWrap, theme } from 'shared/styles';
 
-import { TagsInputControllerProps, UiType } from './TagsController.types';
 import { StyledInputLabel, StyledTextField } from './TagsController.styles';
+import { TagsInputControllerProps, UiType } from './TagsController.types';
 
 export const TagsController = <T extends FieldValues>({
   name,

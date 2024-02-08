@@ -1,11 +1,12 @@
 import { useState } from 'react';
+
 import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
 
 import { EmptyState, TableHead, UiType, StyledTableCellContent, StyledTableContainer } from 'shared/components';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
-import { DashboardTableProps } from './DashboardTable.types';
 import { StyledTableCell } from './DashboardTable.styles';
+import { DashboardTableProps } from './DashboardTable.types';
 
 export const DashboardTable = ({
   columns,

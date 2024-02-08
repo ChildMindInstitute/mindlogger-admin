@@ -1,7 +1,7 @@
 import theme from 'shared/styles/theme';
 
-import { ItemTypeTooltipProps } from './ItemTypeTooltip.types';
 import { StyledPopover } from './ItemTypeTooltip.styles';
+import { ItemTypeTooltipProps } from './ItemTypeTooltip.types';
 import { getInputTypeContent } from './ItemTypeTooltip.utils';
 
 export const ItemTypeTooltip = ({ uiType, anchorEl }: ItemTypeTooltipProps) => {

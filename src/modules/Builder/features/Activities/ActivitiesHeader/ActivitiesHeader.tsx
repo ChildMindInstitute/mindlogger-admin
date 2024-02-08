@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
 
-import { StyledBuilderContainerHeader } from 'shared/features';
+import { Box, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+
 import { ButtonWithMenu, Svg, MenuUiType } from 'shared/components';
+import { StyledBuilderContainerHeader } from 'shared/features';
 import { theme } from 'shared/styles';
 import { falseReturnFunc } from 'shared/utils';
 

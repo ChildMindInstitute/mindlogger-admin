@@ -1,5 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 
+import { Svg } from 'shared/components/Svg';
+import { MAX_FILE_SIZE_150MB, ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 import {
   StyledBodyMedium,
   StyledFlexColumn,
@@ -9,14 +11,12 @@ import {
   variables,
   StyledTitleSmall,
 } from 'shared/styles';
-import { Svg } from 'shared/components/Svg';
 import { byteFormatter } from 'shared/utils';
-import { MAX_FILE_SIZE_150MB, ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 
-import { StyledContainer, StyledSourceContainer, StyledPreview } from './MediaUploader.styles';
-import { useMediaUploader } from './MediaUploader.hooks';
-import { MediaUploaderProps } from './MediaUploader.types';
 import { MLPlayer } from '../MLPlayer';
+import { useMediaUploader } from './MediaUploader.hooks';
+import { StyledContainer, StyledSourceContainer, StyledPreview } from './MediaUploader.styles';
+import { MediaUploaderProps } from './MediaUploader.types';
 
 export const MediaUploader = ({
   width,

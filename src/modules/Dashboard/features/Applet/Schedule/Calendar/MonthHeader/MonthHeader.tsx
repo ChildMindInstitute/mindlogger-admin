@@ -1,7 +1,7 @@
 import { firstVisibleDay, lastVisibleDay } from 'react-big-calendar/lib/utils/dates';
 
-import { variables } from 'shared/styles/variables';
 import { StyledLabelBoldMedium } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 import { MonthHeaderProps } from './MonthHeader.types';
 

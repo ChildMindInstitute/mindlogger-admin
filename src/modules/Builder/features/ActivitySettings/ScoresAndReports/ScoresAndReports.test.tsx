@@ -3,8 +3,8 @@
 
 import { fireEvent, screen } from '@testing-library/react';
 
-import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
-import { initialStateData } from 'shared/state';
+import { page } from 'resources';
+import { Roles } from 'shared/consts';
 import {
   mockedActivityId,
   mockedApplet,
@@ -12,8 +12,8 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
 } from 'shared/mock';
-import { page } from 'resources';
-import { Roles } from 'shared/consts';
+import { initialStateData } from 'shared/state';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import { ScoresAndReports } from './ScoresAndReports';
 

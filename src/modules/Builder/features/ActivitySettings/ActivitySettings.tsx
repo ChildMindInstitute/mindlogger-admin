@@ -1,8 +1,8 @@
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { page } from 'resources';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
+import { page } from 'resources';
 import { NavigationItem, NavigationMenu } from 'shared/components';
 
 import { getActivitySettings } from './ActivitySettings.utils';

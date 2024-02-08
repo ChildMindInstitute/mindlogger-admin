@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
+import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+
+import { MLPlayer } from 'modules/Builder/components/MLPlayer';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledTitleMedium, StyledBodyErrorText, theme, variables } from 'shared/styles';
-import { MLPlayer } from 'modules/Builder/components/MLPlayer';
 
 import { AddAudio } from '../AddAudio';
-import { UploadAudio } from '../UploadAudio';
 import { RecordAudio } from '../RecordAudio';
 import { RemoveAudioPopup } from '../RemoveAudioPopup';
+import { UploadAudio } from '../UploadAudio';
 import { AudioPlayerContentProps } from './AudioPlayerContent.types';
 
 export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContentProps) => {

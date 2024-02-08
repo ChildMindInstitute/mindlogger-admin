@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 
+import { CorrectPress } from 'modules/Builder/types';
 import { ConditionType, ItemResponseType } from 'shared/consts';
 import { Condition } from 'shared/state';
-import { CorrectPress } from 'modules/Builder/types';
 
 export const CONDITION_TYPES_TO_HAVE_OPTION_ID = [
   ConditionType.IncludesOption,

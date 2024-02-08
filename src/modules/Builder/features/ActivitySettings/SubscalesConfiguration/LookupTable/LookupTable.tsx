@@ -1,9 +1,9 @@
-import { StyledModalWrapper } from 'shared/styles';
 import { Modal } from 'shared/components';
+import { StyledModalWrapper } from 'shared/styles';
 
+import { useSubscaleLookupTableSetup } from './LookupTable.hooks';
 import { LookupTableProps } from './LookupTable.types';
 import { getModalComponents } from './LookupTable.utils';
-import { useSubscaleLookupTableSetup } from './LookupTable.hooks';
 
 export const LookupTable = ({
   open,

@@ -1,10 +1,10 @@
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
 
+import { page } from 'resources';
 import { Svg } from 'shared/components/Svg';
 import { theme, variables, StyledBodyLarge } from 'shared/styles';
-import { page } from 'resources';
 import { SettingParam } from 'shared/utils/urlGenerator';
 
 import { StyledSvg } from '../ReportConfigSetting.styles';

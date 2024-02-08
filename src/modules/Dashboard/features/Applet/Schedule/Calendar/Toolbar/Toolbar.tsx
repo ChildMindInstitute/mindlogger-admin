@@ -1,14 +1,14 @@
-import { View } from 'react-big-calendar';
 import { getISOWeek } from 'date-fns';
+import { View } from 'react-big-calendar';
 
-import { ToggleButtonGroup, Svg } from 'shared/components';
 import i18n from 'i18n';
+import { ToggleButtonGroup, Svg } from 'shared/components';
 import { theme, variables, StyledTitleBoldMedium, StyledFlexTopCenter } from 'shared/styles';
 import { formatToYearMonthDate } from 'shared/utils/dateFormat';
 
 import { CalendarViews } from '../Calendar.types';
-import { StyledToolbar, StyledIconBtn, StyledViewsWrapper, StyledTodayBtn } from './Toolbar.styles';
 import { getCalendarViewButtons } from './Toolbar.const';
+import { StyledToolbar, StyledIconBtn, StyledViewsWrapper, StyledTodayBtn } from './Toolbar.styles';
 import { ToolbarProps, SetActiveBtnFunc } from './Toolbar.types';
 import { onlyMonthDate } from './Toolbar.utils';
 

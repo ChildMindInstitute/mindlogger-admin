@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch } from 'redux/store';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { Header, RightButtonType } from 'modules/Library/components';
+import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 import { library } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { EmptyState, Spinner } from 'shared/components';
 import {
@@ -15,12 +18,10 @@ import {
   StyledAppletList,
 } from 'shared/styles';
 import { Mixpanel } from 'shared/utils/mixpanel';
-import { Header, RightButtonType } from 'modules/Library/components';
-import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 
 import { Applet } from '../Applet';
-import { StyledTablePagination } from './AppletsCatalog.styles';
 import { DEFAULT_PAGE, DEFAULT_APPLETS_PER_PAGE } from './AppletsCatalog.conts';
+import { StyledTablePagination } from './AppletsCatalog.styles';
 
 export const AppletsCatalog = () => {
   const { t } = useTranslation('app');

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import { prepareData } from './prepareData';
-import * as getParsedAnswersFunctions from '../getParsedAnswers';
 import { mockedParsedAnswers } from '../../mock';
+import * as getParsedAnswersFunctions from '../getParsedAnswers';
+import { prepareData } from './prepareData';
 
 describe('prepareData', () => {
   afterEach(() => {

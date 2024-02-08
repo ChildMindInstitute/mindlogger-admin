@@ -1,9 +1,16 @@
 import { useState } from 'react';
+
+import { Box } from '@mui/material';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
+import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { InputController, SelectController, TransferListController } from 'shared/components/FormComponents';
+import { Svg } from 'shared/components/Svg';
+import { CalculationType } from 'shared/consts';
+import { ScoreConditionalLogic } from 'shared/state';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -12,24 +19,19 @@ import {
   StyledTitleSmall,
   theme,
 } from 'shared/styles';
-import { InputController, SelectController, TransferListController } from 'shared/components/FormComponents';
-import { Svg } from 'shared/components/Svg';
-import { ScoreConditionalLogic } from 'shared/state';
-import { CalculationType } from 'shared/consts';
-import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { getEntityKey } from 'shared/utils';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { SelectEvent } from 'shared/types';
+import { getEntityKey } from 'shared/utils';
 
-import { StyledButton } from '../ScoresAndReports.styles';
-import { SectionScoreHeader } from '../SectionScoreHeader';
-import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
-import { CopyId } from './CopyId';
 import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
+import { StyledButton } from '../ScoresAndReports.styles';
+import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
+import { SectionScoreHeader } from '../SectionScoreHeader';
 import { Title } from '../Title';
 import { ChangeScoreIdPopup } from './ChangeScoreIdPopup';
+import { CopyId } from './CopyId';
 import { ScoreCondition } from './ScoreCondition';
 import { EMPTY_SCORE_RANGE_LABEL, calculationTypes } from './ScoreContent.const';
+import { ScoreContentProps } from './ScoreContent.types';
 import {
   getScoreItemsColumns,
   getSelectedItemsColumns,
@@ -42,7 +44,6 @@ import {
   updateScoreConditionIds,
   updateScoreConditionsPayload,
 } from './ScoreContent.utils';
-import { ScoreContentProps } from './ScoreContent.types';
 
 export const ScoreContent = ({
   name,

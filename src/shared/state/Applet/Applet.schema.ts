@@ -1,7 +1,6 @@
 import { ColorResult } from 'react-color';
 
-import { BaseSchema } from 'shared/state/Base';
-import { ElementType, RetentionPeriods } from 'shared/types';
+import { CorrectPress, RoundTypeEnum, FlankerSamplingMethod, DeviceType, OrderName } from 'modules/Builder/types';
 import {
   ItemResponseType,
   SubscaleTotalScore,
@@ -13,8 +12,9 @@ import {
   GyroscopeOrTouch,
   ScoreReportType,
 } from 'shared/consts';
+import { BaseSchema } from 'shared/state/Base';
+import { ElementType, RetentionPeriods } from 'shared/types';
 import { Encryption } from 'shared/utils/encryption';
-import { CorrectPress, RoundTypeEnum, FlankerSamplingMethod, DeviceType, OrderName } from 'modules/Builder/types';
 
 type ActivityFlowItem = {
   activityId: string;

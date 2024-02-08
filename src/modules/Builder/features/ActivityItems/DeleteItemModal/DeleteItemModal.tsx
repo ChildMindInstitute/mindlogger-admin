@@ -1,17 +1,17 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
-import { ConditionalLogic, ScoreOrSection } from 'shared/state';
-import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
-import { Modal } from 'shared/components';
 import {
   getItemConditionDependencies,
   getItemsWithVariable,
 } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
-import { getEntityKey } from 'shared/utils';
-import { ActivityFlowFormValues, ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
+import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 import { useCurrentActivity, useFilterConditionalLogicByItem, useCustomFormContext } from 'modules/Builder/hooks';
+import { ActivityFlowFormValues, ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
+import { Modal } from 'shared/components';
 import { ScoreReportType } from 'shared/consts';
+import { ConditionalLogic, ScoreOrSection } from 'shared/state';
+import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
+import { getEntityKey } from 'shared/utils';
 
 import { DeleteItemModalProps } from './DeleteItemModal.types';
 

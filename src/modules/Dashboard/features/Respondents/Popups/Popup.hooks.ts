@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import get from 'lodash.get';
 
 import { useEncryptionStorage } from 'shared/hooks';

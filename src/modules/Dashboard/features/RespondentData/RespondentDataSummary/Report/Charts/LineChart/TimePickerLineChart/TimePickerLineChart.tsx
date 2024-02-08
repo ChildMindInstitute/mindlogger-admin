@@ -1,19 +1,20 @@
 import { useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
+import { Box } from '@mui/material';
 import { Chart as ChartJS, Tooltip, TimeScale, ScriptableTooltipContext } from 'chart.js';
-import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import 'chartjs-adapter-date-fns';
 
-import { locales } from '../../Charts.const';
 import { ChartType } from '../../Chart.types';
+import { locales } from '../../Charts.const';
 import { setTooltipStyles } from '../../Charts.utils';
-import { getOptions, getData } from './TimePickerLineChart.utils';
-import { TimePickerDataPointRaw, TimePickerLineChartProps } from './TimePickerLineChart.types';
-import { ChartTooltip } from './ChartTooltip';
 import { ChartTooltipContainer } from '../../ChartTooltipContainer';
+import { ChartTooltip } from './ChartTooltip';
+import { TimePickerDataPointRaw, TimePickerLineChartProps } from './TimePickerLineChart.types';
+import { getOptions, getData } from './TimePickerLineChart.utils';
 
 ChartJS.register(Tooltip, TimeScale);
 

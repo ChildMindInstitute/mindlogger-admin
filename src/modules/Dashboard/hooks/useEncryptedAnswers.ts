@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 
 import { auth } from 'redux/modules';
-import { applet } from 'shared/state';
-import { encryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionStorage } from 'shared/hooks';
+import { applet } from 'shared/state';
 import { AnswerDTO } from 'shared/types';
+import { encryptData, getAESKey, getParsedEncryptionFromServer } from 'shared/utils';
 
 export const useEncryptedAnswers = () => {
   const userData = auth.useData();

@@ -1,9 +1,15 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { Box, Button } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
+import { STORAGE_LIBRARY_KEY } from 'modules/Library/consts';
+import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
+import { auth, library } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
+import { page } from 'resources';
 import { AppletImage, Svg } from 'shared/components';
 import {
   StyledBodyLarge,
@@ -17,12 +23,9 @@ import {
   variables,
 } from 'shared/styles';
 import { falseReturnFunc, getDictionaryText, getHighlightedText, Mixpanel } from 'shared/utils';
-import { page } from 'resources';
-import { useAppDispatch } from 'redux/store';
-import { auth, library } from 'redux/modules';
-import { STORAGE_LIBRARY_KEY } from 'modules/Library/consts';
-import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
 
+import { Activity } from './Activity';
+import { appletImageProps } from './Applet.const';
 import {
   StyledActivities,
   StyledActivitiesContainer,
@@ -35,10 +38,8 @@ import {
   StyledSvgContainer,
 } from './Applet.styles';
 import { AppletProps, AppletUiType, LibraryForm } from './Applet.types';
-import { RemoveAppletPopup } from './Popups';
-import { Activity } from './Activity';
 import { getActivities, getUpdatedStorageData } from './Applet.utils';
-import { appletImageProps } from './Applet.const';
+import { RemoveAppletPopup } from './Popups';
 
 export const Applet = ({
   applet,

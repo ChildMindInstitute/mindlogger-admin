@@ -1,9 +1,9 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
+import { mockedAppletId } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { RespondentsRemoveAccessPopup } from '.';
 

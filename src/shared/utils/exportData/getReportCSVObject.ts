@@ -1,14 +1,14 @@
-import { AnswerDTO, DecryptedAnswerData } from 'shared/types';
-import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
+import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
+import { AnswerDTO, DecryptedAnswerData } from 'shared/types';
 import { getDictionaryText } from 'shared/utils/forms';
 
-import { replaceItemVariableWithName } from './replaceItemVariableWithName';
-import { parseResponseValue } from './parseResponseValue';
-import { getFlag } from './getFlag';
-import { parseOptions } from './parseOptions';
-import { getRawScores } from './getRawScores';
 import { convertDateStampToMs } from './convertDateStampToMs';
+import { getFlag } from './getFlag';
+import { getRawScores } from './getRawScores';
+import { parseOptions } from './parseOptions';
+import { parseResponseValue } from './parseResponseValue';
+import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 
 export const getReportCSVObject = <T>({
   item,

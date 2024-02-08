@@ -2,6 +2,7 @@
 // @ts-nocheck
 import { variables } from 'shared/styles';
 
+import { CalendarViews } from './Calendar.types';
 import {
   getCalendarComponents,
   getDefaultStartDate,
@@ -9,7 +10,6 @@ import {
   getBorderRadius,
   eventPropGetter,
 } from './Calendar.utils';
-import { CalendarViews } from './Calendar.types';
 
 describe('Schedule.utils.tsx', () => {
   describe('getDefaultStartDate', () => {

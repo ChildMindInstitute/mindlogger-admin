@@ -1,23 +1,23 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Controller, FieldValues } from 'react-hook-form';
-import { FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
 
+import { FormControl, FormHelperText, InputLabel, TextField } from '@mui/material';
+import { Controller, FieldValues } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 import { Svg } from 'shared/components/Svg';
+import { itemsTypeIcons } from 'shared/consts';
 import { StyledBodyMedium, StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 import { falseReturnFunc } from 'shared/utils';
-import { itemsTypeIcons } from 'shared/consts';
-import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
-import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
+import { selectDropdownStyles } from './GroupedSelectSearchController.const';
 import {
   StyledListSubheader,
   StyledMenuItem,
   StyledMobileOnly,
   StyledSelect,
 } from './GroupedSelectSearchController.styles';
-import { ItemTypeTooltip } from './ItemTypeTooltip';
-import { selectDropdownStyles } from './GroupedSelectSearchController.const';
+import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
 import {
   getEmptyComponent,
   getGroupName,
@@ -26,6 +26,7 @@ import {
   getIsOnlyMobileValue,
   handleSearchKeyDown,
 } from './GroupedSelectSearchController.utils';
+import { ItemTypeTooltip } from './ItemTypeTooltip';
 
 export const GroupedSelectSearchController = <T extends FieldValues>({
   name,

@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import { useAppSelector } from 'redux/store/hooks';
 import { MetaStatus } from 'shared/state';
 
-import * as thunk from './Library.thunk';
-import { state as initialState } from './Library.state';
 import { extraReducers, reducers } from './Library.reducer';
 import { LibrarySchema } from './Library.schema';
+import { state as initialState } from './Library.state';
+import * as thunk from './Library.thunk';
 
 export * from './Library.schema';
 

@@ -1,30 +1,31 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useFormContext, useWatch } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+
 import { Box } from '@mui/material';
 import { addDays } from 'date-fns';
 import download from 'downloadjs';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
-import { Spinner, Svg, Tooltip } from 'shared/components';
-import { useAsync, useHeaderSticky } from 'shared/hooks';
-import { StyledErrorText, StyledStickyHeadline, StyledTitleLarge, theme, variables } from 'shared/styles';
 import { getAnswersApi, getLatestReportApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { getErrorMessage } from 'shared/utils';
-import { applet } from 'shared/state';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
+import { Spinner, Svg, Tooltip } from 'shared/components';
+import { useAsync, useHeaderSticky } from 'shared/hooks';
+import { applet } from 'shared/state';
+import { StyledErrorText, StyledStickyHeadline, StyledTitleLarge, theme, variables } from 'shared/styles';
+import { getErrorMessage } from 'shared/utils';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
-import { ReportFilters } from './ReportFilters';
-import { StyledEmptyState, StyledHeader, StyledReport } from './Report.styles';
-import { Subscales } from './Subscales';
-import { ActivityCompletion, FormattedResponse, ReportProps, CurrentActivityCompletionData } from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
-import { ResponseOptions } from './ResponseOptions';
-import { getDateISO, getFormattedResponses, getIdentifiers, getLatestReportUrl } from './Report.utils';
-import { ReportContext } from './Report.context';
 import { LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_REGEX, LATEST_REPORT_TYPE } from './Report.const';
+import { ReportContext } from './Report.context';
+import { StyledEmptyState, StyledHeader, StyledReport } from './Report.styles';
+import { ActivityCompletion, FormattedResponse, ReportProps, CurrentActivityCompletionData } from './Report.types';
+import { getDateISO, getFormattedResponses, getIdentifiers, getLatestReportUrl } from './Report.utils';
+import { ReportFilters } from './ReportFilters';
+import { ResponseOptions } from './ResponseOptions';
+import { Subscales } from './Subscales';
 
 export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {
   const { t } = useTranslation('app');

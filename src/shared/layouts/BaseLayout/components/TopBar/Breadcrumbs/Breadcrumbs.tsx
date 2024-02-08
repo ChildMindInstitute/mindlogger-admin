@@ -4,6 +4,8 @@ import { Svg } from 'shared/components/Svg';
 import { StyledLabelSmall, StyledLabelMedium, StyledBodySmall } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 
+import { BREADCRUMB_ICON_SIZE } from './Breadcrumbs.const';
+import { useBreadcrumbs } from './Breadcrumbs.hooks';
 import {
   StyledLink,
   StyledBox,
@@ -12,8 +14,6 @@ import {
   StyledIconImg,
   StyledChip,
 } from './Breadcrumbs.styles';
-import { BREADCRUMB_ICON_SIZE } from './Breadcrumbs.const';
-import { useBreadcrumbs } from './Breadcrumbs.hooks';
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const Breadcrumbs = () => {

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import { exportDataSucceed } from './exportDataSucceed';
-import * as prepareDataUtils from './prepareData';
 import * as exportTemplateUtils from '../exportTemplate';
 import * as exportCsvZipUtils from './exportCsvZip';
+import { exportDataSucceed } from './exportDataSucceed';
 import * as exportMediaZipUtils from './exportMediaZip';
+import * as prepareDataUtils from './prepareData';
 
 describe('exportDataSucceed', () => {
   beforeAll(() => {

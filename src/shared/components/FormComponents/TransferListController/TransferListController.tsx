@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Controller, FieldValues } from 'react-hook-form';
 
-import { Svg } from 'shared/components/Svg';
+import { Controller, FieldValues } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
 import { DataTable, DataTableProps, DataTableItem } from 'shared/components/DataTable';
+import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 
 import { StyledTextField, StyledErrorContainer, StyledTransferListController } from './TransferListController.styles';

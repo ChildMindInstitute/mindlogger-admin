@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
-import { page } from 'resources';
 import { auth } from 'redux/modules';
+import { page } from 'resources';
 
 type PrivateRouteProps = {
   children: JSX.Element;

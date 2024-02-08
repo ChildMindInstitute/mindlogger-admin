@@ -1,5 +1,5 @@
-import { Encryption, getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionStorage } from 'shared/hooks';
+import { Encryption, getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils';
 
 export const useAppletPrivateKeySetter = () => {
   const { setAppletPrivateKey } = useEncryptionStorage();

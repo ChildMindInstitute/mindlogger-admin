@@ -1,5 +1,5 @@
-import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { ColorChangeHandler } from 'react-color';
+import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 type ColorPicker = {
   anchorEl: HTMLElement;

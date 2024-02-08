@@ -1,4 +1,3 @@
-import uniqueId from 'lodash.uniqueid';
 import {
   addDays,
   eachDayOfInterval,
@@ -13,11 +12,12 @@ import {
   startOfDay,
   startOfYear,
 } from 'date-fns';
+import uniqueId from 'lodash.uniqueid';
 
 import { Periodicity } from 'modules/Dashboard/api';
+import { DEFAULT_API_START_TIME, DEFAULT_API_END_TIME } from 'shared/consts';
 import { formatToWeekYear, formatToYearMonthDate } from 'shared/utils/dateFormat';
 import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
-import { DEFAULT_API_START_TIME, DEFAULT_API_END_TIME } from 'shared/consts';
 
 import {
   CalendarEvent,

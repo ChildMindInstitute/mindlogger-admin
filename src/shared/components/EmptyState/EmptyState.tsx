@@ -4,8 +4,8 @@ import { Svg } from 'shared/components/Svg';
 import { StyledTitleLarge } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 
-import { EmptyStateProps } from './EmptyState.types';
 import { StyledEmptyState, StyledIcon } from './EmptyState.styles';
+import { EmptyStateProps } from './EmptyState.types';
 
 export const EmptyState = ({ children, icon = 'not-found', width = '38.1rem' }: EmptyStateProps) => {
   const { t } = useTranslation('app');

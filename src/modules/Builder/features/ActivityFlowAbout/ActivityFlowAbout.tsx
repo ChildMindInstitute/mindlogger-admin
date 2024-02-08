@@ -1,15 +1,15 @@
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { Tooltip } from 'shared/components/Tooltip';
+import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
+import { AppletFormValues } from 'modules/Builder/types';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
-import { theme, variables, StyledBodyLarge, StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
+import { Tooltip } from 'shared/components/Tooltip';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
-import { AppletFormValues } from 'modules/Builder/types';
-import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
+import { theme, variables, StyledBodyLarge, StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 
 import { getActivityFlowIndex } from '../ActivityFlowBuilder/ActivityFlowBuilder.utils';
 import { StyledWrapper, StyledSvg } from './ActivityFlowAbout.styles';

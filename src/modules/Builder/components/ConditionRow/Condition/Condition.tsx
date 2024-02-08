@@ -1,15 +1,15 @@
-import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
-import { Svg } from 'shared/components/Svg';
-import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { ConditionRowType } from 'modules/Builder/types';
+import { Svg } from 'shared/components/Svg';
+import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
+import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 
+import { ConditionItemType } from './Condition.const';
 import { StyledCondition, StyledInputController, StyledSelectController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
-import { ConditionItemType } from './Condition.const';
 import {
   getConditionMinMaxRangeValues,
   getConditionMinMaxValues,

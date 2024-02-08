@@ -1,6 +1,6 @@
-import { ConditionType } from 'shared/consts';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { Condition } from 'redux/modules';
+import { ConditionType } from 'shared/consts';
 
 import { ConditionItemType } from './Condition';
 

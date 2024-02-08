@@ -1,8 +1,8 @@
 import { styled, Box } from '@mui/material';
 
+import { StyledItemOptionContainer } from 'modules/Builder/components/ToggleItemContainer/ToggleItemContainer.styles';
 import { theme, variables, StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
-import { StyledItemOptionContainer } from 'modules/Builder/components/ToggleItemContainer/ToggleItemContainer.styles';
 
 export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
   padding: ${theme.spacing(2, 2.4, 2, 3.4)};

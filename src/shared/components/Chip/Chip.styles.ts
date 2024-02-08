@@ -1,9 +1,9 @@
 import { styled } from '@mui/material';
 import Chip from '@mui/material/Chip';
 
+import { StyledClearedButton as ClearedButton } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledClearedButton as ClearedButton } from 'shared/styles/styledComponents';
 
 import { ChipShape } from './Chip.types';
 

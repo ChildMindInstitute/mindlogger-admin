@@ -1,3 +1,5 @@
+import { ItemResponseType } from 'shared/consts';
+import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
 import {
   AnswerDTO,
   DecryptedDateAnswer,
@@ -6,8 +8,6 @@ import {
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
 } from 'shared/types';
-import { Item, SingleAndMultipleSelectItemResponseValues } from 'shared/state';
-import { ItemResponseType } from 'shared/consts';
 
 import { getObjectFromList } from '../getObjectFromList';
 

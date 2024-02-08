@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react';
+
 import { Box } from '@mui/material';
 
-import { CalendarViews } from '../Calendar.types';
 import { EVENT_CLASSNAME } from '../Calendar.const';
-import { EventContainerWrapperProps, EventsStartEndDates } from './EventContainerWrapper.types';
-import { getEventClassNames, getOverlappingEvents } from './EventContainerWrapper.utils';
+import { CalendarViews } from '../Calendar.types';
 import {
   ALL_COL_QUANTITY_WEEK_VIEW,
   INDEX_SHOW_MORE_BTN_WEEK_VIEW,
@@ -16,6 +15,8 @@ import {
   OFFSET_BETWEEN_EVENTS,
   VALUE_DECREASING_CONTAINER_WIDTH_WEEK_VIEW,
 } from './EventContainerWrapper.const';
+import { EventContainerWrapperProps, EventsStartEndDates } from './EventContainerWrapper.types';
+import { getEventClassNames, getOverlappingEvents } from './EventContainerWrapper.utils';
 
 export const EventContainerWrapper = ({ children, events, components }: EventContainerWrapperProps) => {
   const wrapperRef = useRef<HTMLElement>();

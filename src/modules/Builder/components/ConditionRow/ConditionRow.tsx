@@ -1,16 +1,19 @@
 import { useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useWatch } from 'react-hook-form';
-import get from 'lodash.get';
 
-import { getEntityKey, getObjectFromList } from 'shared/utils';
-import { SelectEvent } from 'shared/types';
+import get from 'lodash.get';
+import { useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import { useCustomFormContext } from 'modules/Builder/hooks';
+import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { ConditionType, ScoreReportType } from 'shared/consts';
 import { ScoreOrSection, ScoreReport } from 'shared/state';
-import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
-import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledErrorText, theme } from 'shared/styles';
+import { SelectEvent } from 'shared/types';
+import { getEntityKey, getObjectFromList } from 'shared/utils';
 
+import { Condition, ConditionItem } from './Condition';
+import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 import { ConditionRowProps } from './ConditionRow.types';
 import {
   getItemOptions,
@@ -20,8 +23,6 @@ import {
   getScoreOptions,
   getValueOptionsList,
 } from './ConditionRow.utils';
-import { Condition, ConditionItem } from './Condition';
-import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 
 export const ConditionRow = ({
   name,

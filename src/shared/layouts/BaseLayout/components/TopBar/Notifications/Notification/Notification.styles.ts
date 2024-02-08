@@ -1,7 +1,5 @@
 import { styled, Box, Button } from '@mui/material';
 
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
 import {
   StyledFlexColumn,
   StyledFlexTopCenter,
@@ -11,6 +9,8 @@ import {
   StyledFlexWrap,
   StyledFlexAllCenter,
 } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 const commonImgStyles = `

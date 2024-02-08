@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useAsync } from 'shared/hooks';
 import { getInvitationsApi } from 'api';
-import { StyledHeadlineLarge, theme } from 'shared/styles';
-import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyState, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
+import { DEFAULT_INVITATIONS_ROWS_PER_PAGE, EmptyState, Spinner } from 'shared/components';
 import { Roles } from 'shared/consts';
+import { useAsync } from 'shared/hooks';
+import { StyledHeadlineLarge, theme } from 'shared/styles';
 import { isManagerOrOwner } from 'shared/utils';
 
+import { Invitations } from './AddUser.types';
 import { AddUserForm } from './AddUserForm';
 import { InvitationsTable } from './InvitationsTable';
 import { LinkGenerator } from './LinkGenerator';
-import { Invitations } from './AddUser.types';
 
 export const AddUser = () => {
   const { appletId } = useParams();

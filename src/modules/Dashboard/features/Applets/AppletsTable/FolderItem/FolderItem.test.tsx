@@ -1,13 +1,13 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils';
-import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedOwnerId } from 'shared/mock';
 import { Roles } from 'shared/consts';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedOwnerId } from 'shared/mock';
 import { initialStateData } from 'shared/state';
+import { renderWithProviders } from 'shared/utils';
 
-import { FolderItem } from './FolderItem';
 import { AppletsContext } from '../../Applets.context';
+import { FolderItem } from './FolderItem';
 
 const preloadedState = {
   workspaces: {

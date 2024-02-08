@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
+
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 
 import { page } from 'resources';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { getEntityKey } from 'shared/utils';
 
-import { useCurrentActivity } from './useCurrentActivity';
 import { ItemFormValues } from '../types';
+import { useCurrentActivity } from './useCurrentActivity';
 import { useCustomFormContext } from './useCustomFormContext';
 
 export const useRedirectIfNoMatchedActivityItem = () => {

@@ -1,16 +1,17 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+
+import { Box, Button } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Box, Button } from '@mui/material';
 
-import { InputController } from 'shared/components/FormComponents';
-import { StyledFlexTopCenter, theme } from 'shared/styles';
-import { useAsync, useHeaderSticky } from 'shared/hooks';
-import { Spinner } from 'shared/components';
 import { DatavizActivity, createAnswerNoteApi, deleteAnswerNoteApi, editAnswerNoteApi, getAnswersNotesApi } from 'api';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
 import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
+import { Spinner } from 'shared/components';
+import { InputController } from 'shared/components/FormComponents';
+import { useAsync, useHeaderSticky } from 'shared/hooks';
+import { StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { FeedbackNote } from './FeedbackNote';
 import { NOTE_ROWS_COUNT } from './FeedbackNotes.const';

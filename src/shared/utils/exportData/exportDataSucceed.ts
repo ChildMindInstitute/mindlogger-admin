@@ -1,5 +1,5 @@
-import { activityJourneyHeader, GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME, reportHeader } from 'shared/consts';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { activityJourneyHeader, GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME, reportHeader } from 'shared/consts';
 import { ExportDataResult } from 'shared/types';
 
 import { exportTemplate } from '../exportTemplate';

@@ -1,12 +1,12 @@
-import { useTranslation, Trans } from 'react-i18next';
 import get from 'lodash.get';
+import { useTranslation, Trans } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
-import { InputController } from 'shared/components/FormComponents';
-import { StyledTitleBoldSmall, StyledIconButton, variables, theme, StyledBodyMedium } from 'shared/styles';
-import { ItemResponseType } from 'shared/consts';
-import { ItemFormValues } from 'modules/Builder/types';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { ItemFormValues } from 'modules/Builder/types';
+import { InputController } from 'shared/components/FormComponents';
+import { Svg } from 'shared/components/Svg';
+import { ItemResponseType } from 'shared/consts';
+import { StyledTitleBoldSmall, StyledIconButton, variables, theme, StyledBodyMedium } from 'shared/styles';
 
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { StyledAlert, StyledRow, StyledDescription, StyledSelectController } from './Alert.styles';

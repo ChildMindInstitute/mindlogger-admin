@@ -1,5 +1,5 @@
-import { getErrorMessage } from 'shared/utils/errors';
 import { StyledBodyLarge, theme, variables } from 'shared/styles';
+import { getErrorMessage } from 'shared/utils/errors';
 
 import { ErrorProps } from './Error.types';
 

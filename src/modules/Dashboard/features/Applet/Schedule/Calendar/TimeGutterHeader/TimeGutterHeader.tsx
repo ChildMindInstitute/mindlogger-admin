@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
+import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import { Svg } from 'shared/components/Svg';
 import { theme, variables, StyledLabelBoldMedium, StyledClearedButton } from 'shared/styles';
-import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import { formatToWeekYear, formatToYearMonthDate } from 'shared/utils/dateFormat';
 
 import { CalendarViews } from '../Calendar.types';

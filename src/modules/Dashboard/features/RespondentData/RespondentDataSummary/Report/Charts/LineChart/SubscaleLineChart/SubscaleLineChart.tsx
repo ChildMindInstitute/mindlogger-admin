@@ -1,26 +1,27 @@
 import { useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+
+import { Box } from '@mui/material';
 import { Chart as ChartJS, Tooltip, TimeScale, Legend, ScriptableTooltipContext } from 'chart.js';
-import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import { Box } from '@mui/material';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import 'chartjs-adapter-date-fns';
 
 import { getOptionTextApi } from 'api';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 import { pluck } from 'shared/utils';
 
-import { ChartTooltipContainer } from '../../ChartTooltipContainer';
-import { getTicksData, legendMargin, setTooltipStyles } from '../../Charts.utils';
-import { LINK_PATTERN, locales } from '../../Charts.const';
 import { StyledChartContainer } from '../../Chart.styles';
-import { ChartTooltip } from './ChartTooltip';
-import { getOptions, getData } from './SubscaleLineChart.utils';
-import { SubscaleLineDataPointRaw, SubscaleLineChartProps, TooltipData } from './SubscaleLineChart.types';
 import { ChartType } from '../../Chart.types';
+import { LINK_PATTERN, locales } from '../../Charts.const';
+import { getTicksData, legendMargin, setTooltipStyles } from '../../Charts.utils';
+import { ChartTooltipContainer } from '../../ChartTooltipContainer';
+import { ChartTooltip } from './ChartTooltip';
+import { SubscaleLineDataPointRaw, SubscaleLineChartProps, TooltipData } from './SubscaleLineChart.types';
+import { getOptions, getData } from './SubscaleLineChart.utils';
 
 ChartJS.register(Tooltip, TimeScale, Legend);
 

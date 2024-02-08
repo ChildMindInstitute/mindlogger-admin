@@ -1,25 +1,26 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { FormProvider, useForm, useFormState } from 'react-hook-form';
+
 import { yupResolver } from '@hookform/resolvers/yup';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
 
-import { Option, SelectController } from 'shared/components/FormComponents';
+import { Periodicity, createEventApi, updateEventApi } from 'api';
+import { applets } from 'modules/Dashboard/state';
+import { calendarEvents, users } from 'modules/Dashboard/state';
+import { useAppDispatch } from 'redux/store';
 import { DefaultTabs as Tabs } from 'shared/components';
+import { Option, SelectController } from 'shared/components/FormComponents';
+import { UiType } from 'shared/components/Tabs/Tabs.types';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
+import { useAsync } from 'shared/hooks/useAsync';
+import { applet, workspaces } from 'shared/state';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { getErrorMessage, Mixpanel } from 'shared/utils';
-import { UiType } from 'shared/components/Tabs/Tabs.types';
-import { applets } from 'modules/Dashboard/state';
-import { applet, workspaces } from 'shared/state';
-import { Periodicity, createEventApi, updateEventApi } from 'api';
-import { useAsync } from 'shared/hooks/useAsync';
-import { useAppDispatch } from 'redux/store';
-import { calendarEvents, users } from 'modules/Dashboard/state';
-import { AnalyticsCalendarPrefix } from 'shared/consts';
 
-import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
 import { EventFormSchema } from './EventForm.schema';
+import { EventFormProps, EventFormRef, EventFormValues, Warning } from './EventForm.types';
 import {
   getActivitiesFlows,
   getDefaultValues,

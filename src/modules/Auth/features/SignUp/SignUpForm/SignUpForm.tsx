@@ -1,17 +1,19 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { auth } from 'modules/Auth/state';
+import { navigateToLibrary } from 'modules/Auth/utils';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { InputController, CheckboxController } from 'shared/components/FormComponents';
 import { variables, StyledErrorText, StyledLinkBtn } from 'shared/styles';
 import { Mixpanel } from 'shared/utils';
-import { auth } from 'modules/Auth/state';
-import { navigateToLibrary } from 'modules/Auth/utils';
 
+import { SignUpFormSchema } from './SignUpForm.schema';
 import {
   StyledSignUpHeader,
   StyledForm,
@@ -21,7 +23,6 @@ import {
   StyledButton,
   StyledBackWrapper,
 } from './SignUpForm.styles';
-import { SignUpFormSchema } from './SignUpForm.schema';
 import { SignUpData } from './SignUpForm.types';
 
 export const SignUpForm = () => {

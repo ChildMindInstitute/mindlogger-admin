@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
-import { useFormContext } from 'react-hook-form';
+
 import get from 'lodash.get';
+import { useFormContext } from 'react-hook-form';
 
 import { ItemResponseType } from 'shared/consts';
 import { Config } from 'shared/state';
@@ -19,8 +20,14 @@ import {
   SelectionRows,
   Time,
 } from '../InputTypeItems';
-import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
+import {
+  getEmptySliderOption,
+  getEmptyAudioPlayerResponse,
+  getEmptyAudioResponse,
+  getEmptyNumberSelection,
+  checkIfItemHasRequiredOptions,
+} from '../ItemConfiguration.utils';
 import {
   defaultTextConfig,
   defaultSliderConfig,
@@ -38,13 +45,7 @@ import {
   defaultSingleSelectionConfig,
   defaultMultiSelectionConfig,
 } from './OptionalItemsAndSettings.const';
-import {
-  getEmptySliderOption,
-  getEmptyAudioPlayerResponse,
-  getEmptyAudioResponse,
-  getEmptyNumberSelection,
-  checkIfItemHasRequiredOptions,
-} from '../ItemConfiguration.utils';
+import { ActiveItemHookProps, SettingsSetupProps } from './OptionalItemsAndSettings.types';
 
 export const useActiveItem = ({ name, responseType }: ActiveItemHookProps) => {
   const activeItem = useMemo(() => {

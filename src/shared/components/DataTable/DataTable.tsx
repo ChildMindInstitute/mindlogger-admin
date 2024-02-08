@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
+
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
-import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';
 import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
+import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 
-import { DataTableItem, DataTableProps } from './DataTable.types';
 import { StyledCheckbox, StyledTableCell, StyledTableContainer, StyledHeadCell } from './DataTable.styles';
+import { DataTableItem, DataTableProps } from './DataTable.types';
 
 export const DataTable = ({
   data,

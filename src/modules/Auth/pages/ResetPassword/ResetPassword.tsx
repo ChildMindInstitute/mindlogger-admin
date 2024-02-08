@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { ResetForm } from '../../features/ResetPassword/ResetForm';
 import { Confirmation } from '../../features/ResetPassword/Confirmation';
+import { ResetForm } from '../../features/ResetPassword/ResetForm';
 
 export const ResetPassword = () => {
   const [email, setEmail] = useState('');

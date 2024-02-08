@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 
-import { authStorage } from 'shared/utils/authStorage';
-import { SingleApplet } from 'shared/state';
 import { AppletFormValues } from 'modules/Builder/types';
+import { SingleApplet } from 'shared/state';
+import { authStorage } from 'shared/utils/authStorage';
 
-import { verifyReportServer, setPasswordReportServer } from './ReportConfigSetting.utils';
-import { UseCheckReportServer } from './ReportConfigSetting.types';
 import { OK_MESSAGE, SUCCESS_MESSAGE, defaultValues as initialValues } from './ReportConfigSetting.const';
+import { UseCheckReportServer } from './ReportConfigSetting.types';
+import { verifyReportServer, setPasswordReportServer } from './ReportConfigSetting.utils';
 
 export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) => {
   const { appletId = '', ownerId = '' } = useParams();

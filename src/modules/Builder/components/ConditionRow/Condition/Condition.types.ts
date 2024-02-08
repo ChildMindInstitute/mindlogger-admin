@@ -1,7 +1,7 @@
-import { ConditionType } from 'shared/consts';
-import { SelectEvent } from 'shared/types';
 import { ConditionRowType } from 'modules/Builder/types';
+import { ConditionType } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
+import { SelectEvent } from 'shared/types';
 
 import { ConditionItemType } from './Condition.const';
 

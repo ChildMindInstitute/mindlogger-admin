@@ -1,5 +1,5 @@
-import { FormProvider, useForm } from 'react-hook-form';
 import { screen, fireEvent, render } from '@testing-library/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { TextInputOption } from './TextInputOption';
 

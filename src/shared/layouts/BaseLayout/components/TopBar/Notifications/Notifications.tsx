@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Spinner, Svg } from 'shared/components';
 import { useTimeAgo } from 'shared/hooks';
-import { getDateInUserTimezone } from 'shared/utils/dateTimezone';
+import { useInfinityData } from 'shared/hooks/useInfinityData';
+import { alerts } from 'shared/state';
 import {
   variables,
   StyledLabelBoldLarge,
@@ -12,10 +14,10 @@ import {
   StyledFlexTopCenter,
   StyledObserverTarget,
 } from 'shared/styles';
-import { alerts } from 'shared/state';
-import { useInfinityData } from 'shared/hooks/useInfinityData';
+import { getDateInUserTimezone } from 'shared/utils/dateTimezone';
 
 import { Notification, NotificationProps } from './Notification';
+import { ALERT_LIST_CLASS, ALERT_END_ITEM_CLASS } from './Notifications.const';
 import {
   StyledHeader,
   StyledHeaderLeft,
@@ -25,7 +27,6 @@ import {
   StyledCentered,
   StyledBox,
 } from './Notifications.styles';
-import { ALERT_LIST_CLASS, ALERT_END_ITEM_CLASS } from './Notifications.const';
 
 export const Notifications = () => {
   const { t } = useTranslation('app');

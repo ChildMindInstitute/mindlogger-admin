@@ -1,15 +1,15 @@
 import {
+  MultipleSelection,
+  SingleSelection,
+  Slider,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessementItems';
+import {
   AssessmentActivityItem,
   MultiSelectActivityItem,
   SingleSelectActivityItem,
   SliderActivityItem,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
 import { ItemResponseType } from 'shared/consts';
-import {
-  MultipleSelection,
-  SingleSelection,
-  Slider,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessementItems';
 import { DecryptedMultiSelectionAnswer, DecryptedSingleSelectionAnswer, DecryptedSliderAnswer } from 'shared/types';
 
 export const getResponseItem = ({ activityItem, answer }: AssessmentActivityItem) => {

@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Trans } from 'react-i18next';
 
-import { Modal } from 'shared/components';
-import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
-import { page } from 'resources';
-import { Mixpanel, getErrorMessage } from 'shared/utils';
-import { useAsync } from 'shared/hooks/useAsync';
+import { useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
+
 import { createIndividualEventsApi } from 'api';
+import { page } from 'resources';
+import { Modal } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
+import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
+import { Mixpanel, getErrorMessage } from 'shared/utils';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { ScheduleSetupPopupProps } from './ScheduleSetupPopup.types';

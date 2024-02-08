@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
-import { createSearchParams, generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { format, compareAsc } from 'date-fns';
 
+import { format, compareAsc } from 'date-fns';
+import { createSearchParams, generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+
+import { page } from 'resources';
 import { Chip } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexWrap, theme } from 'shared/styles';
-import { page } from 'resources';
 
+import { Answer } from '../../RespondentDataReview.types';
 import { StyledHeader, StyledItem, StyledSvg } from './ReviewMenuItem.styles';
 import { ReviewMenuItemProps } from './ReviewMenuItem.types';
-import { Answer } from '../../RespondentDataReview.types';
 
 export const ReviewMenuItem = ({
   selectedDate,

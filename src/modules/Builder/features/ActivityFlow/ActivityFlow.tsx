@@ -1,25 +1,26 @@
 import { useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useFieldArray } from 'react-hook-form';
-import { v4 as uuidv4 } from 'uuid';
-import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
-import { Box } from '@mui/material';
 
-import { StyledTitleMedium, theme } from 'shared/styles';
-import { BuilderContainer } from 'shared/features';
-import { getEntityKey, pluck } from 'shared/utils';
+import { Box } from '@mui/material';
+import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
+import { useFieldArray } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+
 import { DndDroppable, Item, ItemUiType, InsertItem } from 'modules/Builder/components';
-import { page } from 'resources';
-import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { useCustomFormContext } from 'modules/Builder/hooks';
+import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
 import { getUniqueName } from 'modules/Builder/utils';
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { page } from 'resources';
+import { BuilderContainer } from 'shared/features';
+import { StyledTitleMedium, theme } from 'shared/styles';
+import { getEntityKey, pluck } from 'shared/utils';
 
-import { DeleteFlowModal } from './DeleteFlowModal';
 import { getDuplicatedActivityFlow, getFlowsItemActions } from './ActivityFlow.utils';
 import { ActivityFlowHeader } from './ActivityFlowHeader';
+import { DeleteFlowModal } from './DeleteFlowModal';
 
 export const ActivityFlow = () => {
   const [flowToDeleteData, setFlowToDeleteData] = useState<{

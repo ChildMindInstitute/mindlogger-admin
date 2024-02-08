@@ -3,9 +3,9 @@
 import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import * as useEncryptionStorageFunc from 'shared/hooks/useEncryptionStorage';
 import { mockedAlert } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import * as useEncryptionStorageFunc from 'shared/hooks/useEncryptionStorage';
 
 import { Notification } from './Notification';
 

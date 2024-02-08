@@ -1,12 +1,17 @@
 import { useState, useRef, ChangeEvent } from 'react';
+
+import get from 'lodash.get';
+import { ColorResult } from 'react-color';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ColorResult } from 'react-color';
-import get from 'lodash.get';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
 import { Actions, Svg, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
+import { ItemResponseType } from 'shared/consts';
+import { SingleAndMultiSelectOption, ConditionalLogic, ItemAlert } from 'shared/state';
 import {
   theme,
   StyledBodyLarge,
@@ -17,16 +22,14 @@ import {
   StyledBodyMedium,
   variables,
 } from 'shared/styles';
-import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
-import { SingleAndMultiSelectOption, ConditionalLogic, ItemAlert } from 'shared/state';
-import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
-import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
 
 import { SELECT_OPTION_TEXT_MAX_LENGTH } from '../../ItemConfiguration.const';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { getPaletteColor } from '../../ItemConfiguration.utils';
 import { ColorPicker } from './ColorPicker';
+import { RemoveOptionPopup } from './RemoveOptionPopup';
+import { useSetSelectionOptionValue } from './SelectionOption.hooks';
 import {
   StyledCollapsedWrapper,
   StyledImg,
@@ -38,8 +41,6 @@ import {
 } from './SelectionOption.styles';
 import { SelectionOptionProps } from './SelectionOption.types';
 import { getActions, getDependentConditions } from './SelectionOption.utils';
-import { useSetSelectionOptionValue } from './SelectionOption.hooks';
-import { RemoveOptionPopup } from './RemoveOptionPopup';
 
 export const SelectionOption = ({
   name,

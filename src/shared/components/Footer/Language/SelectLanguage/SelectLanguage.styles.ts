@@ -1,8 +1,8 @@
 import { styled, Box, List, ListItemButton } from '@mui/material';
 
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 export const StyledList = styled(List)`
   padding: ${theme.spacing(0.4, 2.4)};

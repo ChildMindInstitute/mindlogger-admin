@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
+import { Uploads } from 'modules/Builder/components';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Uploader } from 'shared/components';
 import { MAX_FILE_SIZE_25MB } from 'shared/consts';
 import { theme } from 'shared/styles';
 import { byteFormatter } from 'shared/utils';
-import { Uploads } from 'modules/Builder/components';
-import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { DrawingContentProps } from './DrawingContent.types';
 

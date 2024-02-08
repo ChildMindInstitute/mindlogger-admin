@@ -1,5 +1,5 @@
-import { Trans, useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyLarge, theme } from 'shared/styles';

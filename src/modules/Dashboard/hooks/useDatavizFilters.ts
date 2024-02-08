@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
-import { UseFormWatch } from 'react-hook-form';
-import { isAfter, isBefore } from 'date-fns';
 
+import { isAfter, isBefore } from 'date-fns';
+import { UseFormWatch } from 'react-hook-form';
+
+import { Version } from 'api';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 import { getDateTime } from 'shared/utils';
-import { Version } from 'api';
 
 export const useDatavizFilters = (watch: UseFormWatch<SummaryFiltersForm>, versions: Version[]) => {
   const { startDate, endDate, startTime, endTime } = watch();

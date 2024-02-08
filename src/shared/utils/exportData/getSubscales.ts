@@ -1,3 +1,4 @@
+import { FinalSubscale, ItemResponseType, LookupTableItems, Sex, SubscaleTotalScore } from 'shared/consts';
 import {
   ActivitySettingsSubscale,
   ActivitySettingsSubscaleItem,
@@ -8,7 +9,6 @@ import {
   SliderItemResponseValues,
   SubscaleSetting,
 } from 'shared/state';
-import { FinalSubscale, ItemResponseType, LookupTableItems, Sex, SubscaleTotalScore } from 'shared/consts';
 import {
   AnswerDTO,
   DecryptedMultiSelectionAnswer,
@@ -19,8 +19,8 @@ import {
 } from 'shared/types';
 
 import { createArrayFromMinToMax } from '../array';
-import { isSystemItem } from '../isSystemItem';
 import { getObjectFromList } from '../getObjectFromList';
+import { isSystemItem } from '../isSystemItem';
 
 export const getSubScaleScore = (subscalesSum: number, type: SubscaleTotalScore, length: number) => {
   if (type === SubscaleTotalScore.Average && length === 0) return 0;

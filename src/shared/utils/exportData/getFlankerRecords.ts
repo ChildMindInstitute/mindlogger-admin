@@ -1,3 +1,4 @@
+import { CorrectPress } from 'modules/Builder/types';
 import { FlankerConfig, FlankerItem } from 'shared/state';
 import {
   DecryptedFlankerAnswerItemValue,
@@ -8,7 +9,6 @@ import {
   FlankerTag,
   NumberWithDotType,
 } from 'shared/types';
-import { CorrectPress } from 'modules/Builder/types';
 
 const getImage = (image: string, alt: string) => {
   if (image) {

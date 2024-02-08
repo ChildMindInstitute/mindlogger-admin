@@ -1,5 +1,5 @@
-import { Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Route } from 'react-router-dom';
 
 import { page } from 'resources';
 import { ErrorFallback } from 'shared/components';

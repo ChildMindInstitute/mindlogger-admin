@@ -1,17 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import debounce from 'lodash.debounce';
+import { useTranslation } from 'react-i18next';
 import 'md-editor-rt/lib/style.css';
 
 import { CharacterCounter, FooterMessage, LANGUAGE_BY_DEFAULT } from 'shared/components/MarkDownEditor';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
 import { getSanitizedContent } from 'shared/utils/forms';
-import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { StyledMdEditor } from './Editor.styles';
-import { getCustomIcons, getDefToolbars, getToolbars } from './Editor.utils';
 import { EditorProps } from './Editor.types';
+import { getCustomIcons, getDefToolbars, getToolbars } from './Editor.utils';
 
 export const Editor = ({
   editorId,

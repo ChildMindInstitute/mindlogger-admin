@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
+import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+
+import { SuccessSharePopup } from 'modules/Dashboard/features/Applet/Popups';
+import { ShareApplet, OnAppletShared } from 'modules/Dashboard/features/Applet/ShareApplet';
 import { applet } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
-import { ShareApplet, OnAppletShared } from 'modules/Dashboard/features/Applet/ShareApplet';
-import { SuccessSharePopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import { StyledButton, StyledContainer } from './ShareAppletSetting.styles';
 

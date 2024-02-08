@@ -3,8 +3,8 @@ import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { Workspace, WorkspacesSchema } from './Workspaces.schema';
-import { getWorkspaceRoles, getWorkspaces } from './Workspaces.thunk';
 import { state as initialState } from './Workspaces.state';
+import { getWorkspaceRoles, getWorkspaces } from './Workspaces.thunk';
 
 export const reducers = {
   setCurrentWorkspace: (state: WorkspacesSchema, action: PayloadAction<Workspace | null>): void => {

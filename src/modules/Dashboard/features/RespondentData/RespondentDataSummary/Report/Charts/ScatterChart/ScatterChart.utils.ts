@@ -1,13 +1,13 @@
 import { ChartDataset, ScriptableTooltipContext } from 'chart.js';
 import { Context } from 'chartjs-plugin-datalabels';
 
-import { variables } from 'shared/styles';
-import { locales } from 'shared/consts';
 import { Version } from 'api';
 import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import { locales } from 'shared/consts';
+import { variables } from 'shared/styles';
 
-import { getTimelineStepSize, getTimeConfig } from '../Charts.utils';
 import { POINT_RADIUS_DEFAULT } from '../Charts.const';
+import { getTimelineStepSize, getTimeConfig } from '../Charts.utils';
 
 export const getOptions = (
   lang: keyof typeof locales,

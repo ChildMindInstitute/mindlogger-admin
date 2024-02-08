@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { FallbackProps } from 'react-error-boundary';
+
 import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
+import { FallbackProps } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 
-import { StyledLabelMedium, StyledLinkBtn, StyledTitleLarge } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
+import { StyledLabelMedium, StyledLinkBtn, StyledTitleLarge } from 'shared/styles';
 import { sendLogFile } from 'shared/utils';
 
 export const ErrorFallback = ({ error }: FallbackProps) => {

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import 'md-editor-rt/lib/style.css';
 
 import { getOptionTextApi } from 'api';
+import { AdditionalInformation as AdditionalInformationProps } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
 import { useAsync } from 'shared/hooks/useAsync';
 import { StyledHeadline, theme } from 'shared/styles';
-import { AdditionalInformation as AdditionalInformationProps } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Subscales/Subscales.types';
 
 import { LINK_PATTERN } from '../../Charts/Charts.const';
 import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInformation.styles';

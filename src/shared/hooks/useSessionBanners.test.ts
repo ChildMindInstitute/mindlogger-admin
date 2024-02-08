@@ -1,8 +1,8 @@
 import { PreloadedState } from '@reduxjs/toolkit';
 
 import { auth } from 'redux/modules';
-import { authStorage, renderHookWithProviders } from 'shared/utils';
 import { RootState } from 'redux/store';
+import { authStorage, renderHookWithProviders } from 'shared/utils';
 
 import { useSessionBanners } from './useSessionBanners';
 

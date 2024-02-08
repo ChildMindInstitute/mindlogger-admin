@@ -1,3 +1,4 @@
+import { ItemsWithFileResponses } from 'shared/consts';
 import {
   AppletExportData,
   DecryptedAnswerData,
@@ -7,13 +8,12 @@ import {
   SuccessedEventDTO,
   UserActionType,
 } from 'shared/types';
-import { checkIfHasMigratedAnswers, getIdBeforeMigration } from 'shared/utils/exportData/migratedData';
-import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
-import { getSubscales } from 'shared/utils/exportData/getSubscales';
-import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
-import { ItemsWithFileResponses } from 'shared/consts';
 import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
+import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
+import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
+import { getSubscales } from 'shared/utils/exportData/getSubscales';
 import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
+import { checkIfHasMigratedAnswers, getIdBeforeMigration } from 'shared/utils/exportData/migratedData';
 
 import { getObjectFromList } from '../getObjectFromList';
 

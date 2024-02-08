@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FieldValues, UseControllerProps } from 'react-hook-form';
-import { TextFieldProps } from '@mui/material/TextField';
+
 import { SxProps } from '@mui/material';
+import { TextFieldProps } from '@mui/material/TextField';
+import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { SelectEvent } from 'shared/types/event';
 

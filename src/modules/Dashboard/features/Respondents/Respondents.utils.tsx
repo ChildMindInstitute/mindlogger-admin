@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
+
 import { t } from 'i18next';
 
+import { RespondentDetail } from 'modules/Dashboard/types';
 import { Svg } from 'shared/components/Svg';
 import {
   StyledSmallAppletImg,
@@ -9,7 +11,6 @@ import {
   StyledLabelLarge,
   StyledFlexTopCenter,
 } from 'shared/styles';
-import { RespondentDetail } from 'modules/Dashboard/types';
 
 import { RespondentsActions, ChosenAppletData, FilteredApplets } from './Respondents.types';
 

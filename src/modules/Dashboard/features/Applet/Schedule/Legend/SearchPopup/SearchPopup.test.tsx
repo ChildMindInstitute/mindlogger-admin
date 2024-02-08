@@ -3,12 +3,12 @@ import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { page } from 'resources';
+import { mockedCurrentWorkspace } from 'shared/mock';
 import { initialStateData } from 'shared/state';
 import { renderWithProviders } from 'shared/utils';
-import { mockedCurrentWorkspace } from 'shared/mock';
 
-import { SearchPopup } from './SearchPopup';
 import { ScheduleOptions } from '../Legend.const';
+import { SearchPopup } from './SearchPopup';
 
 const mockedUseNavigate = jest.fn();
 

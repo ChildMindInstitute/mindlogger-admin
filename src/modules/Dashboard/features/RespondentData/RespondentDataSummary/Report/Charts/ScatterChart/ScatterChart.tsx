@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+
 import {
   Chart as ChartJS,
   LinearScale,
@@ -11,19 +12,19 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { Scatter } from 'react-chartjs-2';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTranslation } from 'react-i18next';
 
 import { locales } from 'shared/consts';
 
-import { ChartTooltipContainer } from '../ChartTooltipContainer';
-import { scatterChartTooltipHandler } from '../Charts.utils';
 import { ChartType, SetTooltipData } from '../Chart.types';
-import { getData, getOptions } from './ScatterChart.utils';
-import { ScatterChartProps } from './ScatterChart.types';
+import { scatterChartTooltipHandler } from '../Charts.utils';
+import { ChartTooltipContainer } from '../ChartTooltipContainer';
 import { ChartTooltip } from './ChartTooltip';
 import { StyledWrapper } from './ScatterChart.styles';
+import { ScatterChartProps } from './ScatterChart.types';
+import { getData, getOptions } from './ScatterChart.utils';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 

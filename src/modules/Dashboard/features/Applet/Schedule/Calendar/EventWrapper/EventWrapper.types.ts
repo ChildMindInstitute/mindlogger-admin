@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+
 import { CalendarProps } from 'react-big-calendar';
 
 import { AllDayEventsVisible, CalendarEventWrapperProps } from '../Calendar.types';

@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 
-import { InsertContentExtensionProps } from '../Extensions.types';
 import { StyledIconCenter } from '../Extensions.styles';
+import { InsertContentExtensionProps } from '../Extensions.types';
 
 export const SubscriptExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');

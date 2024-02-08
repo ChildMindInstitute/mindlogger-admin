@@ -1,16 +1,17 @@
 import { lazy, useEffect } from 'react';
+
 import { unstable_HistoryRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 
+import { authRoutes } from 'modules/Auth/routes';
+import { builderRoutes } from 'modules/Builder/routes';
+import { dashboardRoutes } from 'modules/Dashboard/routes';
+import { libraryRoutes } from 'modules/Library/routes';
+import { auth } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
-import { authStorage } from 'shared/utils';
-import { dashboardRoutes } from 'modules/Dashboard/routes';
-import { builderRoutes } from 'modules/Builder/routes';
-import { libraryRoutes } from 'modules/Library/routes';
-import { authRoutes } from 'modules/Auth/routes';
-import { auth } from 'redux/modules';
 import { AppletNotFoundPopup } from 'shared/components';
 import { useSessionBanners } from 'shared/hooks/useSessionBanners';
+import { authStorage } from 'shared/utils';
 
 import history from './history';
 

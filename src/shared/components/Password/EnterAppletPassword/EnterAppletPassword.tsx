@@ -1,14 +1,15 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-import { theme } from 'shared/styles/theme';
-import { StyledIconButton } from 'shared/styles/styledComponents/Buttons';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
 import { InputController } from 'shared/components/FormComponents/InputController';
-import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { Svg } from 'shared/components/Svg';
 import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
+import { StyledIconButton } from 'shared/styles/styledComponents/Buttons';
+import { theme } from 'shared/styles/theme';
+import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
 import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { StyledController } from '../Password.styles';

@@ -1,5 +1,5 @@
-import i18n from 'i18n';
 import { Applet, Folder } from 'api';
+import i18n from 'i18n';
 import { groupBy } from 'shared/utils';
 
 export const generateNewFolderName = (folders: Folder[]) => {

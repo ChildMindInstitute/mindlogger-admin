@@ -1,16 +1,17 @@
 import { useEffect, useMemo } from 'react';
+
 import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { StyledModalWrapper } from 'shared/styles';
-import { Modal } from 'shared/components';
 import { users, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
+import { Modal } from 'shared/components';
+import { StyledModalWrapper } from 'shared/styles';
 
 import { SelectRespondents } from './SelectRespondents';
-import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';
-import { getSelectedRespondentsLength } from './SelectRespondentsPopup.utils';
 import { Respondent } from './SelectRespondents/SelectRespondents.types';
+import { getSelectedRespondentsLength } from './SelectRespondentsPopup.utils';
+import { SelectRespondentsPopupProps } from './SuccessSharePopup.types';
 
 export const SelectRespondentsPopup = ({
   appletName,

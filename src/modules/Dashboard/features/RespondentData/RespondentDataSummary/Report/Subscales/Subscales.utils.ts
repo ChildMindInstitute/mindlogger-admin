@@ -1,8 +1,8 @@
 import { ActivitySettingsSubscale } from 'shared/state';
 import { ActivityItemAnswer, ElementType } from 'shared/types';
 
-import { compareActivityItem, formatActivityItemAnswers } from '../Report.utils';
 import { ActivityCompletion, FormattedResponse } from '../Report.types';
+import { compareActivityItem, formatActivityItemAnswers } from '../Report.utils';
 import { ActivityCompletionToRender, GroupedSubscales, SubscaleToRender } from './Subscales.types';
 
 export const getSubscalesToRender = (

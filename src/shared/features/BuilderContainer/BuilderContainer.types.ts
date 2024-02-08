@@ -1,4 +1,5 @@
 import { ReactNode, FC } from 'react';
+
 import { SxProps } from '@mui/material';
 
 export type HeaderProps = {

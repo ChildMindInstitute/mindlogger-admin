@@ -2,9 +2,9 @@ import { renderHook } from '@testing-library/react';
 import * as routerDom from 'react-router-dom';
 
 import { auth } from 'redux/modules';
-import { AnswerDTO } from 'shared/types';
-import { applet } from 'shared/state';
 import { mockedApplet, mockedPrivateKey, mockedUserData } from 'shared/mock';
+import { applet } from 'shared/state';
+import { AnswerDTO } from 'shared/types';
 
 import { useEncryptedAnswers } from './useEncryptedAnswers';
 

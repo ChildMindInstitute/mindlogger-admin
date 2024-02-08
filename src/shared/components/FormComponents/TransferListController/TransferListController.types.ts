@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { FieldValues, UseControllerProps } from 'react-hook-form';
+
 import { SxProps } from '@mui/material';
+import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { DataTableItem, DataTableColumn } from 'shared/components/DataTable';
 

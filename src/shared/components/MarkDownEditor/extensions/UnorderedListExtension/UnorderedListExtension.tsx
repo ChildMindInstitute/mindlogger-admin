@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
 import { NormalToolbar, InsertContentGenerator } from 'md-editor-rt';
+import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 

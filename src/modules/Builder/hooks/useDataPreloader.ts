@@ -1,7 +1,7 @@
 import { useState, useTransition } from 'react';
 
-import { getInfinityScrollData } from 'shared/utils/getInfinityScrollData';
 import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
+import { getInfinityScrollData } from 'shared/utils/getInfinityScrollData';
 
 const ROWS_PER_PAGE = 10000;
 

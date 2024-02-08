@@ -1,7 +1,7 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { InputControllerProps } from './InputController.types';
 import { Input } from './Input';
+import { InputControllerProps } from './InputController.types';
 
 export const InputController = <T extends FieldValues>({
   name,

@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useWatch, useFormContext } from 'react-hook-form';
+
 import { Box } from '@mui/material';
+import { useWatch, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { EditorUiType, Switch, TransferListController } from 'shared/components/FormComponents';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
-import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { StyledEditor } from './SectionScoreCommonFields.styles';
+import { CommonFieldsProps } from './SectionScoreCommonFields.types';
 import { getColumns } from './SectionScoreCommonFields.utils';
 
 export const SectionScoreCommonFields = ({

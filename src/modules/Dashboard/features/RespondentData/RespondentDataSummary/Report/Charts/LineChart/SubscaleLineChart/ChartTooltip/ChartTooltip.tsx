@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import uniqueId from 'lodash.uniqueid';
 
+import { DateFormats } from 'shared/consts';
 import {
   StyledBodySmall,
   StyledFlexColumn,
@@ -9,7 +10,6 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { DateFormats } from 'shared/consts';
 
 import { StyledIndent } from '../../../Chart.styles';
 import { StyledBackground, StyledMdPreview, StyledTooltip } from './ChartTooltip.styles';

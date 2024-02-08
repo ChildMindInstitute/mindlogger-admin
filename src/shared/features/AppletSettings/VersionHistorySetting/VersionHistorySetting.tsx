@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
+
+import { Box, MenuItem, SelectChangeEvent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Box, MenuItem, SelectChangeEvent } from '@mui/material';
 
-import { useAsync } from 'shared/hooks/useAsync';
 import { getAppletVersionChangesApi, getAppletVersionsApi } from 'api';
-import { StyledBodyLarge, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
 import { Accordion, AccordionUiType } from 'modules/Dashboard/components';
 import { Spinner, Svg } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
+import { StyledBodyLarge, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
 
 import {
   StyledChangesContainer,

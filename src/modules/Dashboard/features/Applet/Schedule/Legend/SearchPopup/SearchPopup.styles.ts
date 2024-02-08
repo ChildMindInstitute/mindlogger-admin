@@ -1,8 +1,8 @@
 import { styled, Box, Modal } from '@mui/material';
 
+import { StyledFlexTopCenter, StyledClearedButton } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexTopCenter, StyledClearedButton } from 'shared/styles/styledComponents';
 
 export const StyledModal = styled(Modal)`
   position: absolute;

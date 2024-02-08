@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
 import { renderHook, act } from '@testing-library/react';
+import { AxiosResponse } from 'axios';
 
 import { useAsync } from './useAsync';
 

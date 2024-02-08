@@ -1,9 +1,9 @@
-import { useForm } from 'react-hook-form';
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { useForm } from 'react-hook-form';
 
 import { page } from 'resources';
-import { renderWithProviders } from 'shared/utils';
+import { Roles } from 'shared/consts';
 import {
   mockedApplet,
   mockedAppletId,
@@ -12,8 +12,8 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
-import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
+import { renderWithProviders } from 'shared/utils';
 
 import { ReviewMenu } from './ReviewMenu';
 

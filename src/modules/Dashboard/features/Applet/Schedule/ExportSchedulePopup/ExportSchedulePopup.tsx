@@ -1,11 +1,11 @@
-import { useTranslation, Trans } from 'react-i18next';
 import { Box } from '@mui/material';
+import { useTranslation, Trans } from 'react-i18next';
 
 import { Modal, Table, UiType } from 'shared/components';
 import { theme, StyledModalWrapper } from 'shared/styles';
 
-import { ExportSchedulePopupProps } from './ExportSchedulePopup.types';
 import { getHeadCells } from './ExportSchedulePopup.const';
+import { ExportSchedulePopupProps } from './ExportSchedulePopup.types';
 
 export const ExportSchedulePopup = ({
   open,

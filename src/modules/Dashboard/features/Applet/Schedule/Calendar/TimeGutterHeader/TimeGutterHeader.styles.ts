@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
-import { variables } from 'shared/styles/variables';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { variables } from 'shared/styles/variables';
 
 export const StyledTimeGutterHeader = styled(StyledFlexTopCenter)`
   svg {

@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { DatavizActivity, getSummaryActivitiesApi } from 'api';
-import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
-import { EmptyState, LinkedTabs, Svg } from 'shared/components';
-import { useAsync } from 'shared/hooks';
-import { Roles } from 'shared/consts';
-import { Mixpanel } from 'shared/utils/mixpanel';
-import { page } from 'resources';
 import { users, workspaces } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
+import { page } from 'resources';
+import { EmptyState, LinkedTabs, Svg } from 'shared/components';
+import { Roles } from 'shared/consts';
+import { useAsync } from 'shared/hooks';
+import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
-import { useRespondentDataTabs } from './RespondentData.hooks';
-import { RespondentDataContext } from './RespondentData.context';
-import { SummaryFiltersForm } from './RespondentData.types';
 import { defaultSummaryFormFiltersValues } from './RespondentData.const';
+import { RespondentDataContext } from './RespondentData.context';
+import { useRespondentDataTabs } from './RespondentData.hooks';
+import { SummaryFiltersForm } from './RespondentData.types';
 
 export const RespondentData = () => {
   const { t } = useTranslation();

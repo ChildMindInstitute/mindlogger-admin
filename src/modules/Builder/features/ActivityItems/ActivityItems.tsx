@@ -1,21 +1,22 @@
 import { useState } from 'react';
-import { useNavigate, useParams, generatePath } from 'react-router-dom';
-import { useFieldArray } from 'react-hook-form';
 
-import { page } from 'resources';
-import { StyledContainer } from 'shared/styles';
-import { getEntityKey, pluck } from 'shared/utils';
+import { useFieldArray } from 'react-hook-form';
+import { useNavigate, useParams, generatePath } from 'react-router-dom';
+
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { getNewActivityItem, getUniqueItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { getUniqueName } from 'modules/Builder/utils';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { page } from 'resources';
+import { StyledContainer } from 'shared/styles';
+import { getEntityKey, pluck } from 'shared/utils';
 
-import { ItemConfiguration } from './ItemConfiguration/ItemConfiguration';
-import { LeftBar } from './LeftBar';
 import { getIndexListToTrigger } from './ActivityItems.utils';
 import { DeleteItemModal } from './DeleteItemModal';
+import { ItemConfiguration } from './ItemConfiguration/ItemConfiguration';
+import { LeftBar } from './LeftBar';
 
 export const ActivityItems = () => {
   const { fieldName, activity } = useCurrentActivity();

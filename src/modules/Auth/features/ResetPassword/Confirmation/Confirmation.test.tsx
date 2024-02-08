@@ -1,8 +1,8 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
 import { mockedEmail } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils';
 
 import { Confirmation } from '.';
 

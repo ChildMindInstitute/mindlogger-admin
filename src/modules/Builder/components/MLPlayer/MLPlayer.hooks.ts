@@ -1,10 +1,11 @@
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+
 import { OnProgressProps } from 'react-player/base';
 import ReactPlayer from 'react-player/lazy';
 
 import { MediaType } from '../MediaUploader';
-import { MLPlayerStateProps } from './MLPlayer.types';
 import { VERY_LARGE_NUMBER, PLAYER_DEFAULTS } from './MLPlayer.const';
+import { MLPlayerStateProps } from './MLPlayer.types';
 
 const calculateTime = (secs: number) => {
   const minutes = Math.floor(secs / 60);

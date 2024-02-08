@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
-import { AppletSettings } from 'shared/features/AppletSettings/AppletSettings';
 import { workspaces, applet } from 'redux/modules';
 import { EmptyState, Spinner } from 'shared/components';
-import { isManagerOrOwner } from 'shared/utils';
 import { Roles } from 'shared/consts';
+import { AppletSettings } from 'shared/features/AppletSettings/AppletSettings';
+import { isManagerOrOwner } from 'shared/utils';
 
 import { getSettings } from './DashboardAppletSettings.utils';
 

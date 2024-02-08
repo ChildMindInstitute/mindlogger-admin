@@ -1,16 +1,17 @@
 import { useContext, useMemo } from 'react';
+
 import { Box } from '@mui/material';
 
-import { theme } from 'shared/styles';
-import { getObjectFromList, calcScores, calcTotalScore } from 'shared/utils';
 import { FinalSubscale } from 'shared/consts';
 import { ActivitySettingsSubscale } from 'shared/state';
+import { theme } from 'shared/styles';
+import { getObjectFromList, calcScores, calcTotalScore } from 'shared/utils';
 
-import { ActivityCompletionScores } from './ActivityCompletionScores';
-import { Subscale } from './Subscale';
 import { ReportContext } from '../Report.context';
-import { ActivityCompletionToRender, ParsedSubscales, SubscaleScore, SubscalesProps } from './Subscales.types';
+import { ActivityCompletionScores } from './ActivityCompletionScores';
 import { AllScores } from './AllScores';
+import { Subscale } from './Subscale';
+import { ActivityCompletionToRender, ParsedSubscales, SubscaleScore, SubscalesProps } from './Subscales.types';
 import {
   getSubscalesToRender,
   groupSubscales,

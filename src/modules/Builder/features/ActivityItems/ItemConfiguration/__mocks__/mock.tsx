@@ -1,13 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { generatePath } from 'react-router-dom';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
 
-import { page } from 'resources';
-import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
-import { mockedActivityId, mockedAppletFormData, mockedAppletId, mockedSingleSelectFormValues } from 'shared/mock';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { generatePath } from 'react-router-dom';
+
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { page } from 'resources';
+import { mockedActivityId, mockedAppletFormData, mockedAppletId, mockedSingleSelectFormValues } from 'shared/mock';
+import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
 
 import { ItemConfiguration } from '../ItemConfiguration';
 

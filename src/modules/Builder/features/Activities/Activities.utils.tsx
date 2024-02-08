@@ -1,6 +1,6 @@
-import { Svg } from 'shared/components/Svg';
 import { ActivityFormValues } from 'modules/Builder/types';
 import { page } from 'resources';
+import { Svg } from 'shared/components/Svg';
 import { PerfTaskType } from 'shared/consts';
 
 import { EditablePerformanceTasksType, GetActivitiesActions } from './Activities.types';

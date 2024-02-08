@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Item } from 'redux/modules';
 import { PublishedActivity, PublishedApplet } from 'modules/Library/state';
+import { Item } from 'redux/modules';
 import { ItemResponseType, performanceTaskResponseTypes } from 'shared/consts';
 
 import { ExpandedActivity } from './Applet.types';

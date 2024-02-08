@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { TooltipProps as MuiTooltipProps } from '@mui/material';
 
 export type TooltipProps = Partial<MuiTooltipProps> & {

@@ -2,7 +2,6 @@
 // @ts-nocheck
 import { fireEvent, screen, within } from '@testing-library/react';
 
-import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import {
   mockedAppletFormData,
   mockedScoreReport,
@@ -10,6 +9,7 @@ import {
   mockedSingleSelectFormValues,
   mockedSliderFormValues,
 } from 'shared/mock';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import { SectionContent } from './SectionContent';
 

@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 
-import { getEntityKey } from 'shared/utils';
 import { ActivityFormValues } from 'modules/Builder/types';
+import { getEntityKey } from 'shared/utils';
 
 import { useCustomFormContext } from './useCustomFormContext';
 

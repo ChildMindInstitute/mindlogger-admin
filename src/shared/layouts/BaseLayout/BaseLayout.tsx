@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
+
 import { Outlet, useParams } from 'react-router-dom';
 
-import { useAppDispatch } from 'redux/store';
 import { workspaces, auth, alerts } from 'redux/modules';
+import { useAppDispatch } from 'redux/store';
 import { Footer } from 'shared/components';
-import { useAlertsWebsocket } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { useAlertsWebsocket } from 'shared/hooks';
 
-import { LeftBar, TopBar } from './components';
 import { StyledBaseLayout, StyledCol } from './BaseLayout.styles';
+import { LeftBar, TopBar } from './components';
 
 export const BaseLayout = () => {
   const { appletId } = useParams();

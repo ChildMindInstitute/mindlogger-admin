@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
-import theme from 'shared/styles/theme';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import theme from 'shared/styles/theme';
 
 export const StyledHeader = styled(StyledFlexTopCenter)`
   justify-content: space-between;

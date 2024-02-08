@@ -1,7 +1,7 @@
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { useCheckIfNewApplet } from 'shared/hooks';
-import { AppletSettings } from 'shared/features/AppletSettings';
 import { workspaces, applet } from 'redux/modules';
+import { AppletSettings } from 'shared/features/AppletSettings';
+import { useCheckIfNewApplet } from 'shared/hooks';
 
 import { getSettings } from './BuilderAppletSettings.utils';
 

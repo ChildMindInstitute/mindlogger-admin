@@ -1,23 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
+import { format } from 'date-fns';
 import get from 'lodash.get';
 import { useFormContext } from 'react-hook-form';
-import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
-import { EnterAppletPassword, Modal } from 'shared/components';
-import { StyledBodyLarge, StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
-import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { getExportDataApi } from 'api';
-import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getPageAmount } from 'modules/Dashboard/api/api.utils';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { EnterAppletPassword, Modal } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSettings.types';
+import { useSetupEnterAppletPassword } from 'shared/hooks';
+import { StyledBodyLarge, StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
 
-import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../Popup.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
+import { useCheckIfHasEncryption } from '../Popup.hooks';
+import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { getExportDataSuffix } from './DataExportPopup.utils';
 
 export const DataExportPopup = ({

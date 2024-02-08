@@ -2,8 +2,8 @@ import i18n from 'i18n';
 import { ConditionType, ScoreConditionType } from 'shared/consts';
 import { SliderItemResponseValues } from 'shared/state';
 
-import { ConditionItem } from './Condition.types';
 import { ConditionItemType, DEFAULT_NUMBER_MIN_VALUE } from './Condition.const';
+import { ConditionItem } from './Condition.types';
 
 const { t } = i18n;
 

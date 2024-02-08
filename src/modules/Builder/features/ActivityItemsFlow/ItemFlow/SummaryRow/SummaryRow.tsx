@@ -1,13 +1,14 @@
 import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useWatch } from 'react-hook-form';
 
-import { StyledTitleMedium } from 'shared/styles';
-import { getEntityKey } from 'shared/utils';
-import { SelectEvent } from 'shared/types';
-import { ItemFormValues } from 'modules/Builder/types';
-import { StyledSummaryRow, StyledSummarySelectController } from 'shared/styles/styledComponents/ConditionalSummary';
+import { useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { ItemFormValues } from 'modules/Builder/types';
+import { StyledTitleMedium } from 'shared/styles';
+import { StyledSummaryRow, StyledSummarySelectController } from 'shared/styles/styledComponents/ConditionalSummary';
+import { SelectEvent } from 'shared/types';
+import { getEntityKey } from 'shared/utils';
 
 import { SummaryRowProps } from './SummaryRow.types';
 import { getItemsOptions, getMatchOptions } from './SummaryRow.utils';

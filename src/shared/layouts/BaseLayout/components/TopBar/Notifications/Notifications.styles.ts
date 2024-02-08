@@ -1,8 +1,8 @@
 import { styled, Box } from '@mui/material';
 
+import { StyledFlexTopCenter, StyledFlexAllCenter, StyledIconButton } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexTopCenter, StyledFlexAllCenter, StyledIconButton } from 'shared/styles/styledComponents';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/AccountPanel.const';
 import { NOTIFICATIONS_HEADER_HEIGHT } from './Notifications.const';

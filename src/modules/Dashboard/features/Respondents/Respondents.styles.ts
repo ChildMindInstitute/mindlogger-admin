@@ -1,8 +1,8 @@
 import { styled, Box, Button } from '@mui/material';
 
+import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const RespondentsTableHeader = styled(Box, shouldForwardProp)`

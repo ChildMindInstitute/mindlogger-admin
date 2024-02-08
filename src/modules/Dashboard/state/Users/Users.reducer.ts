@@ -2,8 +2,8 @@ import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import { getPendingData, getFulfilledData, getRejectedData } from 'shared/utils/state';
 
-import { state as initialState } from './Users.state';
 import { UsersSchema } from './Users.schema';
+import { state as initialState } from './Users.state';
 import { getAllWorkspaceRespondents, getRespondentDetails } from './Users.thunk';
 
 export const extraReducers = (builder: ActionReducerMapBuilder<UsersSchema>): void => {

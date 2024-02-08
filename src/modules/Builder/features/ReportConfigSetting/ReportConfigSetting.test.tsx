@@ -1,12 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { generatePath } from 'react-router-dom';
+
 import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { generatePath } from 'react-router-dom';
 
 import * as reportApi from 'modules/Dashboard/api/api';
-import { page } from 'resources';
 import { applet } from 'redux/modules';
+import { page } from 'resources';
 import { mockedAppletData, mockedPassword } from 'shared/mock';
 import {
   SettingParam,

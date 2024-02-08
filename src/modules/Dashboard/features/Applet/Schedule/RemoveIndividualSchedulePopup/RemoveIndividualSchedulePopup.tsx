@@ -1,20 +1,21 @@
 import { useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Modal, SubmitBtnColor, Error, Spinner, SpinnerUiType } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles';
 import { removeIndividualEventsApi } from 'api';
-import { useAppDispatch } from 'redux/store';
-import { useAsync } from 'shared/hooks/useAsync';
 import { applets, users } from 'modules/Dashboard/state';
+import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
+import { Modal, SubmitBtnColor, Error, Spinner, SpinnerUiType } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'shared/state';
+import { StyledModalWrapper } from 'shared/styles';
 
-import { RemoveIndividualScheduleProps } from './RemoveIndividualSchedulePopup.types';
+import { ScheduleOptions } from '../Legend/Legend.const';
 import { Steps } from './RemoveIndividualSchedule.types';
 import { getScreens } from './RemoveIndividualSchedulePopup.const';
-import { ScheduleOptions } from '../Legend/Legend.const';
+import { RemoveIndividualScheduleProps } from './RemoveIndividualSchedulePopup.types';
 
 export const RemoveIndividualSchedulePopup = ({
   open,

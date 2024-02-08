@@ -1,5 +1,5 @@
-import AtkinsonRegular from 'assets/fonts/AtkinsonHyperlegible-Regular.ttf';
 import AtkinsonBold from 'assets/fonts/AtkinsonHyperlegible-Bold.ttf';
+import AtkinsonRegular from 'assets/fonts/AtkinsonHyperlegible-Regular.ttf';
 
 export const typography = `
 @font-face {

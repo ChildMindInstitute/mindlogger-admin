@@ -2,20 +2,20 @@ import { Trans } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
-import { StyledTitleSmall, variables } from 'shared/styles';
 import { ItemFormValues, SubscaleFormValue } from 'modules/Builder/types';
-import { SubscaleTotalScore } from 'shared/consts';
-import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
-import { DataTableColumn } from 'shared/components';
 import { removeMarkdown } from 'modules/Builder/utils';
+import { DataTableColumn } from 'shared/components';
+import { SubscaleTotalScore } from 'shared/consts';
+import { StyledTitleSmall, variables } from 'shared/styles';
+import { capitalize, getEntityKey, getObjectFromList } from 'shared/utils';
 
+import { LabelsObject, ModalType } from './LookupTable';
 import {
   ItemElement,
   SharedElementColumns,
   SubscaleColumns,
   SubscaleContentProps,
 } from './SubscalesConfiguration.types';
-import { LabelsObject, ModalType } from './LookupTable';
 
 const { t } = i18n;
 

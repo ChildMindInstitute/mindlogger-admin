@@ -1,17 +1,18 @@
 import { useState, UIEvent } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { DashboardTable } from 'modules/Dashboard/components';
-import { useTable } from 'shared/hooks';
 import { getInvitationsApi } from 'api';
-import { theme } from 'shared/styles';
+import { DashboardTable } from 'modules/Dashboard/components';
 import { DEFAULT_INVITATIONS_ROWS_PER_PAGE } from 'shared/components';
+import { useTable } from 'shared/hooks';
+import { theme } from 'shared/styles';
 
 import { StyledTitle } from '../AddUser.styles';
-import { getHeadCells, getInvitationsTableRows } from './InvitationsTable.utils';
-import { InvitationsTableProps } from './InvitationsTable.types';
 import { dataTestId, SCROLL_THRESHOLD } from './InvitationsTable.const';
+import { InvitationsTableProps } from './InvitationsTable.types';
+import { getHeadCells, getInvitationsTableRows } from './InvitationsTable.utils';
 
 export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTableProps) => {
   const { t } = useTranslation('app');

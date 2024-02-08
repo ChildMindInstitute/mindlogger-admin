@@ -1,9 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { StyledBodyLarge, variables } from 'shared/styles';
 import { useAppletDataFromForm } from 'modules/Builder/features/SaveAndPublish/SaveAndPublish.hooks';
 import { applet } from 'shared/state';
 import { AppletThunkTypePrefix } from 'shared/state/Applet/Applet.thunk';
+import { StyledBodyLarge, variables } from 'shared/styles';
 
 import { SaveAndPublishSteps } from '../SaveAndPublishProcessPopup.types';
 import { DescriptionProps } from './Description.types';

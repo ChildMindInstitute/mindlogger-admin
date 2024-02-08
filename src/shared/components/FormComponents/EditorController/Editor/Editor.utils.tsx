@@ -1,7 +1,6 @@
 import { ToolbarNames } from 'md-editor-rt';
 
 import i18n from 'i18n';
-import { Svg } from 'shared/components/Svg';
 import {
   AlignTextExtension,
   AudioUploadExtension,
@@ -15,6 +14,7 @@ import {
   UnorderedListExtension,
   VideoUploadExtension,
 } from 'shared/components/MarkDownEditor';
+import { Svg } from 'shared/components/Svg';
 import { MAX_FILE_SIZE_150MB, MAX_FILE_SIZE_25MB } from 'shared/consts';
 
 import { StyledIcon, StyledPageFullscreenIcon, StyledStrikeThroughIcon } from './Editor.styles';

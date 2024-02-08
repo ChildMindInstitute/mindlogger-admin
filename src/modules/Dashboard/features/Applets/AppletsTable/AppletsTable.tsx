@@ -1,14 +1,15 @@
 import { Fragment } from 'react';
+
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
+import { Applet, Folder } from 'api';
 import { EmptyState, TableHead } from 'shared/components';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { Applet, Folder } from 'api';
 
+import { AppletItem } from './AppletItem';
 import { StyledCellItem, StyledTableCellContent, StyledTableContainer } from './AppletsTable.styles';
 import { AppletsTableProps } from './AppletsTable.types';
 import { FolderItem } from './FolderItem';
-import { AppletItem } from './AppletItem';
 
 export const AppletsTable = ({
   columns,

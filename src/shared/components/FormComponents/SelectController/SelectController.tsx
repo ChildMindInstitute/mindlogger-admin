@@ -1,12 +1,13 @@
-import { useTranslation } from 'react-i18next';
-import { Controller, FieldError, FieldValues } from 'react-hook-form';
-import { Box } from '@mui/material';
 import { useEffect } from 'react';
+
+import { Box } from '@mui/material';
+import { Controller, FieldError, FieldValues } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
-import { SelectEvent } from 'shared/types';
 import { StyledFlexTopCenter, StyledLabelBoldMedium, StyledObserverTarget, theme, variables } from 'shared/styles';
+import { SelectEvent } from 'shared/types';
 import { groupBy } from 'shared/utils/array';
 
 import {

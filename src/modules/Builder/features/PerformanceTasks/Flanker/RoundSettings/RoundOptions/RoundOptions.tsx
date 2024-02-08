@@ -1,7 +1,12 @@
 import { ChangeEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Checkbox, FormControlLabel } from '@mui/material';
 
+import { Checkbox, FormControlLabel } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { FlankerItemPositions, FlankerSamplingMethod } from 'modules/Builder/types';
+import { CheckboxController, InputController } from 'shared/components/FormComponents';
+import { MAX_THRESHOLD_DURATION, MIN_MILLISECONDS_DURATION, MIN_THRESHOLD_DURATION } from 'shared/consts';
 import {
   StyledBodyMedium,
   StyledFlexColumn,
@@ -10,13 +15,9 @@ import {
   StyledTitleMedium,
   theme,
 } from 'shared/styles';
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { CheckboxController, InputController } from 'shared/components/FormComponents';
-import { MAX_THRESHOLD_DURATION, MIN_MILLISECONDS_DURATION, MIN_THRESHOLD_DURATION } from 'shared/consts';
-import { FlankerItemPositions, FlankerSamplingMethod } from 'modules/Builder/types';
 
-import { getCheckboxes } from './RoundOptions.utils';
 import { RoundOptionsProps } from './RoundOptions.types';
+import { getCheckboxes } from './RoundOptions.utils';
 
 export const RoundOptions = ({ isPracticeRound, 'data-testid': dataTestid }: RoundOptionsProps) => {
   const { t } = useTranslation();

@@ -1,5 +1,5 @@
-import { BaseSchema } from 'shared/state/Base';
 import { Periodicity, TimerType, EventNotifications, EventReminder } from 'api';
+import { BaseSchema } from 'shared/state/Base';
 
 export type Event = {
   startTime: string | null;

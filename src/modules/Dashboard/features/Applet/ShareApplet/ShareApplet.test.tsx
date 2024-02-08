@@ -3,8 +3,8 @@
 import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { mockedApplet } from 'shared/mock';
 import { ApiResponseCodes } from 'api';
+import { mockedApplet } from 'shared/mock';
 
 import { ShareApplet } from './ShareApplet';
 

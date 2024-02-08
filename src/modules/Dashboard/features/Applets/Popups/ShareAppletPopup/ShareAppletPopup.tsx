@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
 import { ShareApplet } from 'modules/Dashboard/features/Applet/ShareApplet';
+import { Modal } from 'shared/components';
 
 import { ShareAppletPopupProps } from './ShareAppletPopup.types';
 

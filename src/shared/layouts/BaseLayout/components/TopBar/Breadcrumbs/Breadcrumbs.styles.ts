@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
 import { styled, Box } from '@mui/material';
+import { Link } from 'react-router-dom';
 
+import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 
 const commonCenterStyles = `
   display: flex;

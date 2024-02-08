@@ -20,6 +20,8 @@ import {
 } from 'shared/types';
 import { NULL_ANSWER } from 'shared/consts';
 
+import { getAnswerValue } from '../getAnswerValue';
+import { joinWihComma } from '../joinWihComma';
 import {
   getABTrailsCsvName,
   getFileExtension,
@@ -27,8 +29,6 @@ import {
   getMediaFileName,
   getStabilityTrackerCsvName,
 } from './getReportName';
-import { joinWihComma } from '../joinWihComma';
-import { getAnswerValue } from '../getAnswerValue';
 
 export const isNullAnswer = (obj: ResponseValueType) =>
   obj === null || (typeof obj === 'object' && Object.keys(obj).length === 0);

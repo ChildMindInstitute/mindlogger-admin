@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
 import { StyledIconBtn, StyledTextField } from 'shared/components/DatePicker/DatePicker.styles';
-import { theme } from 'shared/styles/theme';
+import { Svg } from 'shared/components/Svg';
 import { StyledFlexTopStart } from 'shared/styles/styledComponents';
+import { theme } from 'shared/styles/theme';
 import { concatIf } from 'shared/utils';
 
-import { TimeProps } from './Time.types';
 import { ItemOptionContainer } from '../ItemOptionContainer';
+import { TimeProps } from './Time.types';
 
 export const Time = ({ isRange = false }: TimeProps) => {
   const { t } = useTranslation('app');

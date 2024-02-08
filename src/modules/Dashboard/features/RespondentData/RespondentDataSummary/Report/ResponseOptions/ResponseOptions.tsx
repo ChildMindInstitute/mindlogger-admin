@@ -1,15 +1,15 @@
+import { Box } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
-import { Tooltip } from 'shared/components/Tooltip';
-import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
-import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
-import { getDictionaryText } from 'shared/utils';
+import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
+import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { useDatavizFilters } from 'modules/Dashboard/hooks';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
-import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
+import { Tooltip } from 'shared/components/Tooltip';
+import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
+import { getDictionaryText } from 'shared/utils';
 
 import { COLORS } from '../Charts/Charts.const';
 import { FormattedResponse } from '../Report.types';

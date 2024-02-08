@@ -1,9 +1,9 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
 import { mockedAppletId } from 'shared/mock';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { LinkGenerator } from './LinkGenerator';
 

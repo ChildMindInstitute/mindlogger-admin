@@ -1,18 +1,19 @@
 import { useEffect, useRef, FocusEventHandler } from 'react';
+
+import debounce from 'lodash.debounce';
 import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import debounce from 'lodash.debounce';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
+import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
 import { SelectEvent } from 'shared/types/event';
-import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { ArrowPressType } from '../InputController.types';
-import { InputProps } from './Input.types';
 import { StyledCounter, StyledHint, StyledTextField, StyledTextFieldContainer, StyledUpDown } from './Input.styles';
+import { InputProps } from './Input.types';
 import { getTextAdornment } from './Input.utils';
 
 export const Input = <T extends FieldValues>({

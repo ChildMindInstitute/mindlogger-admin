@@ -1,8 +1,8 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import { renderWithAppletFormData } from 'shared/utils';
-import { mockedScoreReport, mockedSectionReport } from 'shared/mock';
 import { ConditionRowType } from 'modules/Builder/types';
+import { mockedScoreReport, mockedSectionReport } from 'shared/mock';
+import { renderWithAppletFormData } from 'shared/utils';
 
 import { ConditionContent } from './ConditionContent';
 

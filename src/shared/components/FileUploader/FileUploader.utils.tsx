@@ -1,11 +1,11 @@
 import { Trans } from 'react-i18next';
 
-import { DateFormats } from 'shared/consts';
 import {
   FileAcceptFormat,
   PrimaryAcceptFormats,
   SecondaryAcceptFormats,
 } from 'shared/components/FileUploader/FileUploader.const';
+import { DateFormats } from 'shared/consts';
 import { variables } from 'shared/styles';
 
 export const importTable = async (file: File, isPrimaryUiType: boolean) => {

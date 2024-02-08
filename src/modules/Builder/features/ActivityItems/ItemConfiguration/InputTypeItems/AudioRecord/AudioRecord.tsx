@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next';
-import { UseControllerProps } from 'react-hook-form';
 import { Box } from '@mui/material';
+import { UseControllerProps } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
+import { useCustomFormContext } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { theme } from 'shared/styles';
-import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemInfo } from '../ItemInfo';
 import { ItemOptionContainer } from '../ItemOptionContainer';

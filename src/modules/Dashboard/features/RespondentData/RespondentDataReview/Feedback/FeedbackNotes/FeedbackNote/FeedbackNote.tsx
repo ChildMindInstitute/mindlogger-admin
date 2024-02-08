@@ -1,11 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { Box, Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
+import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
 import { useTimeAgo } from 'shared/hooks';
-import { getDateInUserTimezone } from 'shared/utils';
 import {
   StyledBodyLarge,
   StyledBodyMedium,
@@ -14,9 +16,9 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { InputController } from 'shared/components/FormComponents';
-import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
+import { getDateInUserTimezone } from 'shared/utils';
 
+import { NOTE_ROWS_COUNT } from '../FeedbackNotes.const';
 import {
   StyledActions,
   StyledAuthorLabel,
@@ -26,7 +28,6 @@ import {
   StyledNoteHeader,
 } from './FeedbackNote.styles';
 import { FeedbackNoteProps } from './FeedbackNote.types';
-import { NOTE_ROWS_COUNT } from '../FeedbackNotes.const';
 
 export const FeedbackNote = ({ note, onEdit, onDelete, 'data-testid': dataTestid }: FeedbackNoteProps) => {
   const { t } = useTranslation();

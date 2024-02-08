@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components/Modal';
 import { Svg } from 'shared/components/Svg';
 import { StyledTitleMedium, StyledTitleSmall } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
 
-import { SelectLanguageProps } from './SelectLanguage.types';
-import { StyledList, StyledListItemButton, StyledItemContent, StyledBox, StyledSelect } from './SelectLanguage.styles';
 import { languages } from '../Language.const';
+import { StyledList, StyledListItemButton, StyledItemContent, StyledBox, StyledSelect } from './SelectLanguage.styles';
+import { SelectLanguageProps } from './SelectLanguage.types';
 
 const dataTestid = 'select-language-popup';
 

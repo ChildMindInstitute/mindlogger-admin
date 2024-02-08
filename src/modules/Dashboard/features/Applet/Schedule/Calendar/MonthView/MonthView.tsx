@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import CalendarMonthView from 'react-big-calendar/lib/Month';
 
 import { COEFFICIENT_SHOW_ONE_MORE_EVENT } from './MonthView.const';

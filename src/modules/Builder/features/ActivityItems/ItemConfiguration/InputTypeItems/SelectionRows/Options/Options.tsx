@@ -1,16 +1,16 @@
-import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { UploaderUiType, Uploader } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
 import { SingleAndMultiSelectOption } from 'shared/state';
+import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
 
-import { StyledSelectionRow, StyledSelectionBox } from '../SelectionRows.styles';
-import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.const';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { CharactersCounter } from '../CharactersCounter';
+import { StyledSelectionRow, StyledSelectionBox } from '../SelectionRows.styles';
 
 const commonUploaderProps = {
   width: 5.6,

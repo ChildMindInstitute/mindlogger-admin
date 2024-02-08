@@ -1,24 +1,25 @@
 import { ChangeEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import get from 'lodash.get';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
-import { Table, UiType, Uploader, UploaderUiType } from 'shared/components';
-import { InputController } from 'shared/components/FormComponents';
-import { StyledBodySmall, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { concatIf } from 'shared/utils';
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
-import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
+import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
+
 import {
   DEFAULT_SLIDER_MIN_NUMBER,
   DEFAULT_SLIDER_ROWS_MIN_NUMBER,
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MAX_NUMBER,
 } from 'modules/Builder/consts';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
+import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
+import { Table, UiType, Uploader, UploaderUiType } from 'shared/components';
+import { InputController } from 'shared/components/FormComponents';
+import { StyledBodySmall, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { concatIf } from 'shared/utils';
 
 import { Header } from './Header';
-import { SliderInputType, SliderPanelProps } from './SliderPanel.types';
+import { SLIDER_LABEL_MAX_LENGTH, SLIDER_VALUE_LABEL_MAX_LENGTH } from './SliderPanel.const';
 import {
   StyledInputContainer,
   StyledScoresContainer,
@@ -26,6 +27,7 @@ import {
   StyledSliderPanelContainer,
   StyledTable,
 } from './SliderPanel.styles';
+import { SliderInputType, SliderPanelProps } from './SliderPanel.types';
 import {
   getHeadCells,
   getMarks,
@@ -34,7 +36,6 @@ import {
   getTableRows,
   setScoresAndAlertsChange,
 } from './SliderPanel.utils';
-import { SLIDER_LABEL_MAX_LENGTH, SLIDER_VALUE_LABEL_MAX_LENGTH } from './SliderPanel.const';
 
 const commonUploaderProps = {
   width: 5.6,

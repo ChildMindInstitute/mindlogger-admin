@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { Box, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { postFileUploadApi } from 'api';
-import { StyledLinearProgress, StyledTitleMedium, theme } from 'shared/styles';
+import { MLPlayer } from 'modules/Builder/components';
 import { Modal, Svg } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
+import { StyledLinearProgress, StyledTitleMedium, theme } from 'shared/styles';
 import { getUploadFormData } from 'shared/utils';
-import { MLPlayer } from 'modules/Builder/components';
 
 import { useAudioRecorder } from './RecordAudio.hooks';
-import { RecordAudioProps } from './RecordAudio.types';
 import { StyledButtons, StyledRecordButton } from './RecordAudio.styles';
+import { RecordAudioProps } from './RecordAudio.types';
 import { formatSecondsToMinutes } from './RecordAudio.utils';
 
 export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioProps) => {

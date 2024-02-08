@@ -1,19 +1,19 @@
-import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
-import { SelectEvent } from 'shared/types/event';
-import { StyledClearedButton, StyledFlexTopCenter, StyledLabelBoldLarge, theme } from 'shared/styles';
 import { ItemAlert, SingleAndMultipleSelectMatrix, SingleAndMultiSelectRowOption } from 'shared/state';
+import { StyledClearedButton, StyledFlexTopCenter, StyledLabelBoldLarge, theme } from 'shared/styles';
+import { SelectEvent } from 'shared/types/event';
 import { getObjectFromList } from 'shared/utils';
 
+import { DEFAULT_SCORE_VALUE } from '../../../ItemConfiguration.const';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
+import { getEmptySelectionItemOptions } from '../../../ItemConfiguration.utils';
 import { StyledSelectController } from './Header.styles';
 import { HeaderProps } from './Header.types';
 import { getMultipleSelectionRowsOptions } from './Header.utils';
-import { getEmptySelectionItemOptions } from '../../../ItemConfiguration.utils';
-import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
-import { DEFAULT_SCORE_VALUE } from '../../../ItemConfiguration.const';
 
 const commonButtonProps = {
   sx: { p: theme.spacing(1) },

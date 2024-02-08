@@ -1,11 +1,11 @@
 import { styled, Box, TextField } from '@mui/material';
 
-import { StyledBodyMedium } from 'shared/styles/styledComponents/Typography';
 import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
+import { StyledBodyMedium } from 'shared/styles/styledComponents/Typography';
+import { commonEllipsisStyles } from 'shared/styles/stylesConsts';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
-import { commonEllipsisStyles } from 'shared/styles/stylesConsts';
 
 const commonHintProps = `
   position: absolute;

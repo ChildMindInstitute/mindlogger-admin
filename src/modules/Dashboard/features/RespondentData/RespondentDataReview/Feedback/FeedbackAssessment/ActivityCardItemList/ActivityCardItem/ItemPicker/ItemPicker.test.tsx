@@ -1,10 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { FormProvider, useForm } from 'react-hook-form';
 import { screen } from '@testing-library/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { renderWithProviders } from 'shared/utils';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.types';
+import { renderWithProviders } from 'shared/utils';
 
 import { ItemPicker } from './ItemPicker';
 import { ItemPickerProps } from './ItemPicker.types';

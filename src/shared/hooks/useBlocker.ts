@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import type { Blocker, Transition } from 'history';
 
 import history from 'routes/history';

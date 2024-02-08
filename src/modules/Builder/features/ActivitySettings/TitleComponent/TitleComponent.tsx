@@ -1,10 +1,10 @@
 import { FieldError } from 'react-hook-form';
 
-import { StyledFlexColumn, StyledFlexTopCenter, StyledLabelBoldLarge, theme, variables } from 'shared/styles';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { StyledFlexColumn, StyledFlexTopCenter, StyledLabelBoldLarge, theme, variables } from 'shared/styles';
 
-import { TitleComponentProps } from './TitleComponent.types';
 import { StyledMark } from './TitleComponent.styles';
+import { TitleComponentProps } from './TitleComponent.types';
 
 export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
   const { getFieldState } = useCustomFormContext();

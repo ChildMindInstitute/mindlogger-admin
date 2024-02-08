@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-import { Language } from './Language';
-import { StyledFooter, StyledText, StyledLink, StyledUnderlineLink, StyledBox } from './Footer.styles';
 import { ABOUT_LINK, CMI_LINK, CREDITS_LINK, PRIVACY_LINK, SUPPORT_LINK, TERMS_LINK } from './Footer.const';
+import { StyledFooter, StyledText, StyledLink, StyledUnderlineLink, StyledBox } from './Footer.styles';
+import { Language } from './Language';
 
 const year = new Date().getFullYear();
 

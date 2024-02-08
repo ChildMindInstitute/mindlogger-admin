@@ -1,11 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
+
 import { screen, fireEvent } from '@testing-library/react';
 import get from 'lodash.get';
 import { v4 as uuidv4 } from 'uuid';
 
-import { renderWithAppletFormData } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 import {
   mockedAppletFormData,
@@ -17,10 +17,11 @@ import {
   mockedSliderRowsFormValues,
   mockedTextFormValues,
 } from 'shared/mock';
+import { renderWithAppletFormData } from 'shared/utils';
 
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { ItemSettingsController } from './ItemSettingsController';
 import { ItemSettingsGroupNames } from './ItemSettingsController.const';
-import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 const getMockedAppletFormData = item => ({
   ...mockedAppletFormData,

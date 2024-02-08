@@ -18,8 +18,8 @@ import {
   mockedVideoActivityItem,
 } from 'shared/mock';
 
-import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { mockedExportContextItemData } from '../../mock';
+import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 
 const items = [
   mockedSingleActivityItem,

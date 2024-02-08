@@ -1,13 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { generatePath } from 'react-router-dom';
+
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { generatePath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
-import { renderWithAppletFormData } from 'shared/utils';
 import { mockedAppletFormData } from 'shared/mock';
+import { renderWithAppletFormData } from 'shared/utils';
 
 import { ActivityFlowBuilder } from './ActivityFlowBuilder';
 

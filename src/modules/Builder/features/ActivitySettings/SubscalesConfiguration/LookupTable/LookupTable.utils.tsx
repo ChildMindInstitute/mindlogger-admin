@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 
+import i18n from 'i18n';
 import { DataTable, FileUploader } from 'shared/components';
 import { theme, variables } from 'shared/styles';
-import i18n from 'i18n';
 
 import { GetComponentsProps, ModalType, ScreenObjectProps, LookupTableDataItem } from './LookupTable.types';
 

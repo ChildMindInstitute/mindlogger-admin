@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { SxProps } from '@mui/material';
 
 import { TooltipProps } from 'shared/components/Tooltip';

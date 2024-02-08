@@ -1,18 +1,19 @@
 import { useState } from 'react';
+
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Modal, SpinnerUiType, Spinner } from 'shared/components';
-import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { Roles } from 'shared/consts';
-import { workspaces } from 'redux/modules';
-import { useAsync } from 'shared/hooks/useAsync';
 import { editManagerAccessApi, removeManagerAccessApi } from 'api';
+import { workspaces } from 'redux/modules';
+import { Modal, SpinnerUiType, Spinner } from 'shared/components';
+import { Roles } from 'shared/consts';
+import { useAsync } from 'shared/hooks/useAsync';
+import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { getErrorMessage, pluck } from 'shared/utils';
 
 import { Applet } from './Applet';
-import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
 import { StyledApplets, StyledError } from './ManagersEditAccessPopup.styles';
+import { Applet as AppletType, EditAccessPopupProps, Role } from './ManagersEditAccessPopup.types';
 import { getRoleIcon } from './ManagersEditAccessPopup.utils';
 
 export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopupProps) => {

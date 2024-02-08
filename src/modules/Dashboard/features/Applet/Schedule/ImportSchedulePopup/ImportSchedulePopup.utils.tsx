@@ -1,14 +1,14 @@
-import { Trans } from 'react-i18next';
-import { endOfYear, format } from 'date-fns';
 import { Box } from '@mui/material';
+import { endOfYear, format } from 'date-fns';
+import { Trans } from 'react-i18next';
 
-import { SingleApplet } from 'shared/state';
 import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
 import { DateFormats, DEFAULT_API_START_TIME, DEFAULT_API_END_TIME } from 'shared/consts';
+import { SingleApplet } from 'shared/state';
 
-import { convertDateToYearMonthDay } from '../Schedule.utils';
-import { ScheduleExportCsv } from '../Schedule.types';
 import { addSecondsToHourMinutes, getBetweenStartEndNextDaySingleComparison } from '../EventForm/EventForm.utils';
+import { ScheduleExportCsv } from '../Schedule.types';
+import { convertDateToYearMonthDay } from '../Schedule.utils';
 import {
   dateValidationRegex,
   frequencyArray,

@@ -1,25 +1,26 @@
 import { ChangeEvent } from 'react';
+
 import { Radio, Checkbox } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';
+import { useTranslation } from 'react-i18next';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { UploaderUiType, Uploader, Svg } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
 import {
   SingleAndMultipleSelectRow,
   SingleAndMultiSelectRowOption,
   SingleAndMultipleSelectMatrix,
   ItemAlert,
 } from 'shared/state';
+import { StyledFlexTopCenter, StyledFlexTopStart } from 'shared/styles';
 
-import { StyledSelectionRowItem, StyledItemContainer, StyledRemoveItemButton } from './Items.styles';
-import { ItemsProps } from './Items.types';
+import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.const';
+import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
 import { CharactersCounter } from '../CharactersCounter';
 import { StyledSelectionBox } from '../SelectionRows.styles';
-import { ItemConfigurationSettings } from '../../../ItemConfiguration.types';
-import { SELECTION_ROW_OPTION_LABEL_MAX_LENGTH } from '../../../ItemConfiguration.const';
+import { StyledSelectionRowItem, StyledItemContainer, StyledRemoveItemButton } from './Items.styles';
+import { ItemsProps } from './Items.types';
 
 const commonUploaderProps = {
   width: 5.6,

@@ -1,7 +1,6 @@
 import i18n from 'i18n';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { ItemResponseType, ConditionType } from 'shared/consts';
-import { getEntityKey } from 'shared/utils';
 import {
   OptionCondition,
   SingleValueCondition,
@@ -9,10 +8,11 @@ import {
   ScoreReport,
   SliderItemResponseValues,
 } from 'shared/state';
+import { getEntityKey } from 'shared/utils';
 
+import { ConditionItemType } from './Condition';
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
 import { GetPayload, OptionListItem } from './ConditionRow.types';
-import { ConditionItemType } from './Condition';
 
 const { t } = i18n;
 
