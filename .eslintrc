@@ -74,7 +74,6 @@
     "camelcase": "off",
     "no-debugger": "error",
     "no-empty": "error",
-    "no-underscore-dangle": "error",
     "no-unused-labels": "error",
     "prefer-const": "error",
     "@typescript-eslint/no-unused-vars": "off",
