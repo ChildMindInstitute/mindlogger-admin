@@ -1,7 +1,10 @@
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { StyledHeadlineLarge, theme } from 'shared/styles';
 import { RoundTypeEnum } from 'modules/Builder/types';
+import { useHeaderSticky } from 'shared/hooks';
 
 import { PerformanceTaskHeader } from '../PerformanceTaskHeader';
 import { NameDescription } from '../NameDescription';
@@ -11,9 +14,11 @@ import { RoundSettings } from './RoundSettings';
 
 export const Flanker = () => {
   const { t } = useTranslation();
+  const containerRef = useRef<HTMLElement | null>(null);
+  const isHeaderSticky = useHeaderSticky(containerRef);
 
   return (
-    <>
+    <Box>
       <PerformanceTaskHeader />
       <StyledPerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>{t('flanker')}</StyledHeadlineLarge>
@@ -22,6 +27,6 @@ export const Flanker = () => {
         <RoundSettings uiType={RoundTypeEnum.Practice} />
         <RoundSettings uiType={RoundTypeEnum.Test} />
       </StyledPerformanceTaskBody>
-    </>
+    </Box>
   );
 };

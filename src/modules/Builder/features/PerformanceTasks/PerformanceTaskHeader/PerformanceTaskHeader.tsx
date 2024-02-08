@@ -8,8 +8,9 @@ import { variables, StyledTitleSmall } from 'shared/styles';
 import { page } from 'resources';
 
 import { StyledWrapper, StyledButton, StyledContentWrapper } from './PerformanceTaskHeader.styles';
+import { PerformanceTaskHeaderProps } from './PerformanceTaskHeader.types';
 
-export const PerformanceTaskHeader = () => {
+export const PerformanceTaskHeader = ({ isSticky }: PerformanceTaskHeaderProps) => {
   const { t } = useTranslation();
   const { appletId } = useParams();
   const navigate = useNavigate();

@@ -1,10 +1,19 @@
 import { Button, styled } from '@mui/material';
 
-import { StyledFlexAllCenter, StyledFlexSpaceBetween, theme, variables } from 'shared/styles';
+import {
+  StyledFlexAllCenter,
+  StyledFlexSpaceBetween,
+  theme,
+  variables,
+  commonStickyStyles,
+} from 'shared/styles';
 
 export const StyledWrapper = styled(StyledFlexSpaceBetween)`
+  ${commonStickyStyles};
   padding: ${theme.spacing(0, 2.4)};
   border-bottom: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};
+  white-space: nowrap;
+  z-index: ${theme.zIndex.appBar};
 `;
 
 export const StyledButton = styled(Button)`
