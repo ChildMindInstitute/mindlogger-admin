@@ -91,8 +91,9 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       name: `${name}.responseValues.options`,
       keyName: REACT_HOOK_FORM_KEY_NAME,
     });
+    const isMultipleSelection = responseType === ItemResponseType.MultipleSelection;
     const [hasNoneOption, setHasNoneOption] = useState(
-      options.some((option) => option.isNoneAbove),
+      isMultipleSelection && options.some((option) => option.isNoneAbove),
     );
 
     const { append: appendRow } = useFieldArray({
@@ -154,9 +155,11 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
       appendAlert(getEmptyAlert({ responseType, responseValues, config: settings }));
 
     const handleRemoveOptions = (index: number) => {
-      const optionItem = options[index];
-      const isNoneAbove = optionItem.isNoneAbove;
-      isNoneAbove && setHasNoneOption(false);
+      if (isMultipleSelection) {
+        const optionItem = options[index];
+        const isNoneAbove = optionItem.isNoneAbove;
+        isNoneAbove && setHasNoneOption(false);
+      }
       removeOptions(index);
     };
 
@@ -248,21 +251,18 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
               <ColorPalette name={name} onRemovePalette={handleRemovePalette} />
             )}
             <StyledOptionsWrapper>
-              <TransitionGroup>
-                {options?.length
-                  ? options.map((option, index) => (
-                      <Collapse key={option.id}>
-                        <SelectionOption
-                          name={name}
-                          onRemoveOption={handleRemoveOptions}
-                          onUpdateOption={handleUpdateOption}
-                          optionsLength={options.length}
-                          index={index}
-                        />
-                      </Collapse>
-                    ))
-                  : null}
-              </TransitionGroup>
+              {options?.length
+                ? options.map((option, index) => (
+                    <SelectionOption
+                      key={option.id}
+                      name={name}
+                      onRemoveOption={handleRemoveOptions}
+                      onUpdateOption={handleUpdateOption}
+                      optionsLength={options.length}
+                      index={index}
+                    />
+                  ))
+                : null}
               <Button
                 onClick={() => handleAddOption({ isAppendedOption: true })}
                 variant="outlined"
@@ -271,16 +271,18 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
               >
                 {t('addOption')}
               </Button>
-              <Button
-                onClick={() => handleAddNoneOption()}
-                variant="text"
-                startIcon={<Svg id="add" width="20" height="20" />}
-                data-testid="builder-activity-items-item-configuration-add-none-option"
-                sx={{ ml: theme.spacing(1), color: variables.palette.on_surface_variant }}
-                disabled={hasNoneOption}
-              >
-                {t('addNoneOption')}
-              </Button>
+              {isMultipleSelection && (
+                <Button
+                  onClick={() => handleAddNoneOption()}
+                  variant="text"
+                  startIcon={<Svg id="add" width="20" height="20" />}
+                  data-testid="builder-activity-items-item-configuration-add-none-option"
+                  sx={{ ml: theme.spacing(1), color: variables.palette.on_surface_variant }}
+                  disabled={hasNoneOption}
+                >
+                  {t('addNoneOption')}
+                </Button>
+              )}
             </StyledOptionsWrapper>
           </>
         )}
