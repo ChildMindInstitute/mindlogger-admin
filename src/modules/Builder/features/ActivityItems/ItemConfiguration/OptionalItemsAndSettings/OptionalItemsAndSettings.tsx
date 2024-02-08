@@ -1,11 +1,10 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { ColorResult } from 'react-color';
-import { Button, Collapse } from '@mui/material';
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import get from 'lodash.get';
-import { TransitionGroup } from 'react-transition-group';
 
 import { SingleAndMultiSelectOption } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
