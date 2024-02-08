@@ -23,6 +23,7 @@ export const Instruction = ({
       Content={InstructionContent}
       contentProps={{ description, name, hasError, instructionId, 'data-testid': dataTestid }}
       errorMessage={hasError ? 'blockIsNecessary' : null}
+      headerToggling
       data-testid={dataTestid}
     />
   );

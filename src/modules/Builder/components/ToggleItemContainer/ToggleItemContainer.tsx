@@ -34,6 +34,7 @@ export const ToggleItemContainer = ({
   tooltip,
   errorMessage,
   hasError,
+  headerToggling,
   'data-testid': dataTestid,
 }: ToggleItemProps) => {
   const { t } = useTranslation();
@@ -42,10 +43,17 @@ export const ToggleItemContainer = ({
 
   const hasErrorMessage = !open && !!errorMessage;
   const titleErrorVisible = !open && (!!errorMessage || hasError);
+  const isHeaderClickable = headerToggling && !isOpenDisabled;
 
   return (
     <StyledItemOption uiType={uiType} data-testid={dataTestid}>
-      <StylesTitleWrapper open={open} uiType={uiType} isError={titleErrorVisible}>
+      <StylesTitleWrapper
+        open={open}
+        uiType={uiType}
+        isError={titleErrorVisible}
+        headerClickable={isHeaderClickable}
+        onClick={isHeaderClickable ? handleToggle : undefined}
+      >
         <StyledFlexTopCenter
           sx={{ flexGrow: 1, overflow: titleErrorVisible ? 'visible' : 'hidden' }}
         >
