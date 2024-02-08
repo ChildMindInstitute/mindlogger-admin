@@ -62,9 +62,7 @@ const dataTestid = 'respondents-review-activity-items-response';
 
 describe('SliderResponseItem', () => {
   test('renders slider item with options correctly', async () => {
-    renderWithProviders(
-      <SliderResponseItem activityItem={activityItem} answer={answer1} data-testid={dataTestid} />,
-    );
+    renderWithProviders(<SliderResponseItem activityItem={activityItem} answer={answer1} data-testid={dataTestid} />);
 
     const item = screen.getByTestId(dataTestid);
     expect(item).toBeInTheDocument();
@@ -99,9 +97,7 @@ describe('SliderResponseItem', () => {
     ${answer3} | ${'3'}        | ${'slider value shound be 3, when answer is 3 (string)'}
     ${answer4} | ${'0'}        | ${'slider value shound be 0, when answer is the array'}
   `('$description', ({ answer, expectedValue }) => {
-    renderWithProviders(
-      <SliderResponseItem activityItem={activityItem} answer={answer} data-testid={dataTestid} />,
-    );
+    renderWithProviders(<SliderResponseItem activityItem={activityItem} answer={answer} data-testid={dataTestid} />);
 
     const item = screen.getByTestId(dataTestid);
 

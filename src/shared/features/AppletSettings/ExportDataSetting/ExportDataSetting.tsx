@@ -16,10 +16,7 @@ import { SelectEvent } from 'shared/types';
 import { DateType } from 'shared/components/DatePicker/DatePicker.types';
 import { getNormalizedTimezoneDate } from 'shared/utils';
 
-import {
-  StyledAppletSettingsButton,
-  StyledAppletSettingsDescription,
-} from '../AppletSettings.styles';
+import { StyledAppletSettingsButton, StyledAppletSettingsDescription } from '../AppletSettings.styles';
 import { ExportDataFormValues, ExportDateType } from './ExportDataSettings.types';
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import { getDateTypeOptions } from './ExportDataSetting.utils';
@@ -118,8 +115,7 @@ export const ExportDataSetting = () => {
           <StyledFlexTopCenter
             sx={{
               mt: theme.spacing(2.4),
-            }}
-          >
+            }}>
             <DatePicker
               {...commonProps}
               name="fromDate"
@@ -147,8 +143,7 @@ export const ExportDataSetting = () => {
             }}
             variant="outlined"
             startIcon={<Svg width="18" height="18" id="export" />}
-            data-testid={dataTestid}
-          >
+            data-testid={dataTestid}>
             {t('download')}
           </StyledAppletSettingsButton>
         </Box>

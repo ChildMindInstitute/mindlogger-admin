@@ -7,24 +7,16 @@ import { dataTestId } from '../InvitationsTable.const';
 import { InvitationWithTooltipProps } from './InvitationWithTooltip.types';
 import { StyledCopyButton } from './InvitationWithTooltip.styles';
 
-export const InvitationWithTooltip = ({
-  open,
-  onClose,
-  invitationLink,
-}: InvitationWithTooltipProps) => (
+export const InvitationWithTooltip = ({ open, onClose, invitationLink }: InvitationWithTooltipProps) => (
   <Tooltip
     tooltipTitle={
       <ClickAwayListener onClickAway={onClose}>
-        <StyledFlexTopCenter
-          data-testid={`${dataTestId}-invitation-tooltip`}
-          sx={{ cursor: 'default' }}
-        >
+        <StyledFlexTopCenter data-testid={`${dataTestId}-invitation-tooltip`} sx={{ cursor: 'default' }}>
           <Box sx={{ mr: theme.spacing(1) }}>{invitationLink}</Box>
           <StyledCopyButton
             sx={{ cursor: 'pointer' }}
             onClick={() => navigator.clipboard.writeText(invitationLink)}
-            data-testid={`${dataTestId}-tooltip-copy-btn`}
-          >
+            data-testid={`${dataTestId}-tooltip-copy-btn`}>
             <Svg id="duplicate" width="18" height="18" />
           </StyledCopyButton>
         </StyledFlexTopCenter>
@@ -34,8 +26,7 @@ export const InvitationWithTooltip = ({
     maxWidth="none"
     PopperProps={{
       disablePortal: true,
-    }}
-  >
+    }}>
     <span data-testid={`${dataTestId}-invitation-link`}>{invitationLink}</span>
   </Tooltip>
 );

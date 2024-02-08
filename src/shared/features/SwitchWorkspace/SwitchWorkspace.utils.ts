@@ -18,7 +18,7 @@ export const getWorkspacesGroups = (workspaces: Workspace[], id?: string): Works
     return groups;
   }, groups);
 
-  return workspacesGroups.map((workspace) => ({
+  return workspacesGroups.map(workspace => ({
     ...workspace,
     workspaces: filteredGroups[workspace.groupName],
   }));

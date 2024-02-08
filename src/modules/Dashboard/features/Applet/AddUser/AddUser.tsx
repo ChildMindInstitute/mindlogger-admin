@@ -24,10 +24,7 @@ export const AddUser = () => {
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
-  const { execute, isLoading } = useAsync(
-    getInvitationsApi,
-    (res) => res?.data && setInvitations(res.data),
-  );
+  const { execute, isLoading } = useAsync(getInvitationsApi, res => res?.data && setInvitations(res.data));
 
   const getInvitationsHandler = () => {
     execute({

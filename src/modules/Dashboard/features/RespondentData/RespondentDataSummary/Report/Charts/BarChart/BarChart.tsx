@@ -1,11 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import {
-  Chart as ChartJS,
-  ScriptableTooltipContext,
-  BarElement,
-  Legend,
-  CategoryScale,
-} from 'chart.js';
+import { Chart as ChartJS, ScriptableTooltipContext, BarElement, Legend, CategoryScale } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { Box } from '@mui/material';
 
@@ -100,8 +94,7 @@ export const BarChart = ({ chartData }: BarChartProps) => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-        data-testid={dataTestid}
-      >
+        data-testid={dataTestid}>
         <ChartTooltip data={tooltipData} data-testid={dataTestid} />
       </ChartTooltipContainer>
     </Box>

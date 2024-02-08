@@ -13,20 +13,10 @@ import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 import { Respondent } from 'modules/Dashboard/types';
 
-import {
-  RespondentsTableHeader,
-  StyledButton,
-  StyledLeftBox,
-  StyledRightBox,
-} from './Respondents.styles';
+import { RespondentsTableHeader, StyledButton, StyledLeftBox, StyledRightBox } from './Respondents.styles';
 import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
 import { getHeadCells, RespondentsColumnsWidth } from './Respondents.const';
-import {
-  ChosenAppletData,
-  FilteredApplets,
-  FilteredRespondents,
-  RespondentsData,
-} from './Respondents.types';
+import { ChosenAppletData, FilteredApplets, FilteredRespondents, RespondentsData } from './Respondents.types';
 import {
   DataExportPopup,
   ScheduleSetupPopup,
@@ -49,7 +39,7 @@ export const Respondents = () => {
 
   const { execute: getWorkspaceRespondents } = useAsync(
     getWorkspaceRespondentsApi,
-    (response) => {
+    response => {
       setRespondentsData(response?.data || null);
     },
     undefined,
@@ -68,7 +58,7 @@ export const Respondents = () => {
     });
   });
 
-  const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
+  const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable(args => {
     setIsLoading(true);
     const params = {
       ...args,
@@ -118,8 +108,7 @@ export const Respondents = () => {
     },
     viewDataAction: (respondentId: string) => {
       if (hasEncryptionCheck && appletId) {
-        respondentId &&
-          navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
+        respondentId && navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
 
         return;
       }
@@ -139,11 +128,8 @@ export const Respondents = () => {
     },
   };
 
-  const { execute: updateRespondentsPin } = useAsync(
-    updateRespondentsPinApi,
-    handleReload,
-    undefined,
-    () => setIsLoading(false),
+  const { execute: updateRespondentsPin } = useAsync(updateRespondentsPinApi, handleReload, undefined, () =>
+    setIsLoading(false),
   );
 
   const handlePinClick = (userId: string) => {
@@ -166,10 +152,7 @@ export const Respondents = () => {
   const formatRow = (user: Respondent): Row => {
     const { secretIds, nicknames, lastSeen, id, details, isPinned, isAnonymousRespondent } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
-    const schedule =
-      appletId && details?.[0]?.hasIndividualSchedule
-        ? t('individualSchedule')
-        : t('defaultSchedule');
+    const schedule = appletId && details?.[0]?.hasIndividualSchedule ? t('individualSchedule') : t('defaultSchedule');
     const stringNicknames = joinWihComma(nicknames, true);
     const stringSecretIds = joinWihComma(secretIds, true);
 
@@ -245,20 +228,19 @@ export const Respondents = () => {
     return filteredApplets;
   };
 
-  const { rows, filteredRespondents }: { filteredRespondents: FilteredRespondents; rows?: Row[] } =
-    useMemo(
-      () =>
-        respondentsData?.result?.reduce(
-          (acc: { filteredRespondents: FilteredRespondents; rows: Row[] }, user) => {
-            acc.filteredRespondents[user.id] = filterRespondentApplets(user);
-            acc.rows.push(formatRow(user));
+  const { rows, filteredRespondents }: { filteredRespondents: FilteredRespondents; rows?: Row[] } = useMemo(
+    () =>
+      respondentsData?.result?.reduce(
+        (acc: { filteredRespondents: FilteredRespondents; rows: Row[] }, user) => {
+          acc.filteredRespondents[user.id] = filterRespondentApplets(user);
+          acc.rows.push(formatRow(user));
 
-            return acc;
-          },
-          { rows: [], filteredRespondents: {} },
-        ) || { rows: undefined, filteredRespondents: {} },
-      [respondentsData, t],
-    );
+          return acc;
+        },
+        { rows: [], filteredRespondents: {} },
+      ) || { rows: undefined, filteredRespondents: {} },
+    [respondentsData, t],
+  );
 
   useEffect(
     () => () => {
@@ -271,12 +253,7 @@ export const Respondents = () => {
 
   const getAppletsSmallTable = (key: keyof FilteredApplets) =>
     chosenRespondentsItems?.[key] && ownerId && respondentKey
-      ? getAppletsSmallTableRows(
-          chosenRespondentsItems[key],
-          setChosenAppletData,
-          respondentKey,
-          ownerId,
-        )
+      ? getAppletsSmallTableRows(chosenRespondentsItems[key], setChosenAppletData, respondentKey, ownerId)
       : undefined;
 
   const viewableAppletsSmallTableRows = getAppletsSmallTable('viewable');
@@ -305,8 +282,7 @@ export const Respondents = () => {
               variant="outlined"
               startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
               onClick={() => navigate(generatePath(page.appletAddUser, { appletId }))}
-              data-testid="dashboard-respondents-add"
-            >
+              data-testid="dashboard-respondents-add">
               {t('addRespondent')}
             </StyledButton>
           </StyledLeftBox>

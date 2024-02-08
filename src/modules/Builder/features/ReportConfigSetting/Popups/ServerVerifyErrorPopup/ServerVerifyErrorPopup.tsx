@@ -5,10 +5,7 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { ServerVerifyErrorPopupProps } from './ServerVerifyErrorPopup.types';
 
-export const ServerVerifyErrorPopup = ({
-  popupVisible,
-  setPopupVisible,
-}: ServerVerifyErrorPopupProps) => {
+export const ServerVerifyErrorPopup = ({ popupVisible, setPopupVisible }: ServerVerifyErrorPopupProps) => {
   const { t } = useTranslation('app');
 
   const onClose = () => setPopupVisible(false);
@@ -20,8 +17,7 @@ export const ServerVerifyErrorPopup = ({
       onSubmit={onClose}
       title={t('reportConfiguration')}
       buttonText={t('ok')}
-      data-testid="applet-settings-report-config-verify-server-error-popup"
-    >
+      data-testid="applet-settings-report-config-verify-server-error-popup">
       <StyledModalWrapper>
         <Trans i18nKey="serverVerifyError">
           Sorry, we were unable to verify the Server. Please check the

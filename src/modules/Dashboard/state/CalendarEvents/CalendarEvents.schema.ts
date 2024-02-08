@@ -27,10 +27,7 @@ export type CalendarEvent = {
   eventCurrentDate?: string;
   startTime: string | null;
   endTime: string | null;
-} & Pick<
-  Event,
-  'oneTimeCompletion' | 'accessBeforeSchedule' | 'timerType' | 'timer' | 'notification'
->;
+} & Pick<Event, 'oneTimeCompletion' | 'accessBeforeSchedule' | 'timerType' | 'timer' | 'notification'>;
 
 export type CreateEventsData = {
   activityOrFlowId: string;

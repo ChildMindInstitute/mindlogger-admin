@@ -100,9 +100,7 @@ describe('ReportFilters', () => {
     const datepicker = await screen.findByTestId(`${dataTestid}-start-date-popover`);
     expect(datepicker).toBeInTheDocument();
 
-    const january11 = datepicker.getElementsByClassName(
-      'react-datepicker__day react-datepicker__day--011',
-    );
+    const january11 = datepicker.getElementsByClassName('react-datepicker__day react-datepicker__day--011');
     expect(january11).toHaveLength(1);
 
     await userEvent.click(january11[0]);

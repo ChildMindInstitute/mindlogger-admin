@@ -30,13 +30,7 @@ export const importTable = async (file: File, isPrimaryUiType: boolean) => {
   return data as Record<string, string | number>[];
 };
 
-export const getDropText = ({
-  isPrimaryUiType,
-  csvOnly,
-}: {
-  isPrimaryUiType: boolean;
-  csvOnly?: boolean;
-}) => {
+export const getDropText = ({ isPrimaryUiType, csvOnly }: { isPrimaryUiType: boolean; csvOnly?: boolean }) => {
   if (csvOnly)
     return (
       <Trans i18nKey="dropCsvFile">
@@ -58,13 +52,7 @@ export const getDropText = ({
   );
 };
 
-export const getAcceptedFormats = ({
-  isPrimaryUiType,
-  csvOnly,
-}: {
-  isPrimaryUiType: boolean;
-  csvOnly?: boolean;
-}) => {
+export const getAcceptedFormats = ({ isPrimaryUiType, csvOnly }: { isPrimaryUiType: boolean; csvOnly?: boolean }) => {
   if (csvOnly) return FileAcceptFormat.Csv;
 
   return isPrimaryUiType ? PrimaryAcceptFormats.join(', ') : SecondaryAcceptFormats.join(', ');

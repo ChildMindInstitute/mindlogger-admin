@@ -23,9 +23,7 @@ describe('LinkPopup', () => {
     });
 
     expect(screen.getByTestId('dashboard-add-users-generate-link-generate-popup')).toBeVisible();
-    expect(
-      screen.getByText('Do you want to require the respondent to create an account?'),
-    ).toBeVisible();
+    expect(screen.getByText('Do you want to require the respondent to create an account?')).toBeVisible();
 
     fireEvent.click(screen.getByText('Yes, account is required'));
 
@@ -47,9 +45,7 @@ describe('LinkPopup', () => {
     });
 
     expect(screen.getByTestId('dashboard-add-users-generate-link-generate-popup')).toBeVisible();
-    expect(
-      screen.getByText('Do you want to require the respondent to create an account?'),
-    ).toBeVisible();
+    expect(screen.getByText('Do you want to require the respondent to create an account?')).toBeVisible();
 
     fireEvent.click(screen.getByText('No, account is not required'));
 

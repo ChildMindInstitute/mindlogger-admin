@@ -14,11 +14,7 @@ import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/
 import { SubscaleFormValue } from 'modules/Builder/types';
 
 import { commonButtonProps } from '../ActivitySettings.const';
-import {
-  getOptions,
-  getTotalScoreTableColumnData,
-  totalScoreTableTemplate,
-} from './SubscalesConfiguration.const';
+import { getOptions, getTotalScoreTableColumnData, totalScoreTableTemplate } from './SubscalesConfiguration.const';
 import {
   getSubscalesDefaults,
   getAllElementsTableColumns,
@@ -29,11 +25,7 @@ import {
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
-import {
-  StyledButtonsContainer,
-  StyledSvg,
-  StyledSvgButton,
-} from './SubscalesConfiguration.styles';
+import { StyledButtonsContainer, StyledSvg, StyledSvgButton } from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { LookupTable } from './LookupTable';
 import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
@@ -98,7 +90,7 @@ export const SubscalesConfiguration = () => {
   };
 
   const calculateTotalScoreSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCalculateTotalScoreSwitch((prevState) => !prevState);
+    setCalculateTotalScoreSwitch(prevState => !prevState);
     if (e.target.checked) {
       setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum, {
         shouldDirty: true,
@@ -167,8 +159,7 @@ export const SubscalesConfiguration = () => {
         {...commonButtonProps}
         onClick={handleAddSubscale}
         sx={{ mb: theme.spacing(2) }}
-        data-testid={`${dataTestid}-add`}
-      >
+        data-testid={`${dataTestid}-add`}>
         {t('addSubscales')}
       </Button>
       {!!subscalesLength && (
@@ -196,8 +187,7 @@ export const SubscalesConfiguration = () => {
             onClick={() => {
               setIsLookupTableOpened(true);
             }}
-            data-testid={`${dataTestid}-lookup-table`}
-          >
+            data-testid={`${dataTestid}-lookup-table`}>
             <StyledSvg isFilled={!!tableData?.length} id={iconId} width="20" height="20" />
           </StyledSvgButton>
           <RadioGroupController

@@ -58,13 +58,9 @@ import {
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
-export const getUserDetailsApi = (signal?: AbortSignal) =>
-  authApiClient.get('/users/me', { signal });
+export const getUserDetailsApi = (signal?: AbortSignal) => authApiClient.get('/users/me', { signal });
 
-export const getWorkspaceAppletsApi = (
-  { params }: GetWorkspaceAppletsParams,
-  signal?: AbortSignal,
-) => {
+export const getWorkspaceAppletsApi = ({ params }: GetWorkspaceAppletsParams, signal?: AbortSignal) => {
   const { ownerId, ...restParams } = params;
 
   return authApiClient.get<Response<Applet>>(`/workspaces/${ownerId}/applets`, {
@@ -73,10 +69,7 @@ export const getWorkspaceAppletsApi = (
   });
 };
 
-export const getWorkspaceFolderAppletsApi = (
-  { params }: GetWorkspaceAppletsParams,
-  signal?: AbortSignal,
-) => {
+export const getWorkspaceFolderAppletsApi = ({ params }: GetWorkspaceAppletsParams, signal?: AbortSignal) => {
   const { ownerId, folderId } = params;
 
   return authApiClient.get<Response<Applet>>(`/workspaces/${ownerId}/folders/${folderId}/applets`, {
@@ -84,10 +77,7 @@ export const getWorkspaceFolderAppletsApi = (
   });
 };
 
-export const getFilteredWorkspaceAppletsApi = (
-  { params }: GetWorkspaceAppletsParams,
-  signal?: AbortSignal,
-) => {
+export const getFilteredWorkspaceAppletsApi = ({ params }: GetWorkspaceAppletsParams, signal?: AbortSignal) => {
   const { ownerId, search, ...restParams } = params;
 
   return authApiClient.get<Response<Applet>>(`/workspaces/${ownerId}/applets/search/${search}`, {
@@ -99,25 +89,19 @@ export const getFilteredWorkspaceAppletsApi = (
 export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, appletId, ...restParams } = params;
 
-  return authApiClient.get(
-    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}managers`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
+  return authApiClient.get(`/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}managers`, {
+    params: restParams,
+    signal,
+  });
 };
 
 export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, appletId, ...restParams } = params;
 
-  return authApiClient.get(
-    `/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}respondents`,
-    {
-      params: restParams,
-      signal,
-    },
-  );
+  return authApiClient.get(`/workspaces/${ownerId}/${appletId ? `applets/${appletId}/` : ''}respondents`, {
+    params: restParams,
+    signal,
+  });
 };
 
 export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) =>
@@ -125,10 +109,7 @@ export const getWorkspaceInfoApi = ({ ownerId }: OwnerId, signal?: AbortSignal) 
     signal,
   });
 
-export const transferOwnershipApi = (
-  { appletId, email }: TransferOwnershipType,
-  signal?: AbortSignal,
-) =>
+export const transferOwnershipApi = ({ appletId, email }: TransferOwnershipType, signal?: AbortSignal) =>
   authApiClient.post(
     `/applets/${appletId}/transferOwnership`,
     { email },
@@ -142,10 +123,7 @@ export const createEventApi = ({ appletId, body }: CreateEventType, signal?: Abo
     signal,
   });
 
-export const createIndividualEventsApi = (
-  { appletId, respondentId }: AppletId & RespondentId,
-  signal?: AbortSignal,
-) =>
+export const createIndividualEventsApi = ({ appletId, respondentId }: AppletId & RespondentId, signal?: AbortSignal) =>
   authApiClient.post(
     `/applets/${appletId}/events/individual/${respondentId}`,
     {},
@@ -154,20 +132,15 @@ export const createIndividualEventsApi = (
     },
   );
 
-export const updateEventApi = (
-  { appletId, body, eventId }: CreateEventType & EventId,
-  signal?: AbortSignal,
-) => authApiClient.put(`/applets/${appletId}/events/${eventId}`, body, { signal });
+export const updateEventApi = ({ appletId, body, eventId }: CreateEventType & EventId, signal?: AbortSignal) =>
+  authApiClient.put(`/applets/${appletId}/events/${eventId}`, body, { signal });
 
 export const importScheduleApi = ({ appletId, body }: ImportSchedule, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/events/import`, body, {
     signal,
   });
 
-export const getEventsApi = (
-  { appletId, respondentId }: AppletId & Partial<RespondentId>,
-  signal?: AbortSignal,
-) =>
+export const getEventsApi = ({ appletId, respondentId }: AppletId & Partial<RespondentId>, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}/events`, {
     params: {
       respondentId,
@@ -181,16 +154,10 @@ export const deleteScheduledEventsApi = ({ appletId }: AppletId, signal?: AbortS
 export const deleteEventApi = ({ appletId, eventId }: AppletId & EventId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}/events/${eventId}`, { signal });
 
-export const deleteIndividualEventsApi = (
-  { appletId, respondentId }: AppletId & RespondentId,
-  signal?: AbortSignal,
-) =>
+export const deleteIndividualEventsApi = ({ appletId, respondentId }: AppletId & RespondentId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}/events/delete_individual/${respondentId}`, { signal });
 
-export const removeIndividualEventsApi = (
-  { appletId, respondentId }: AppletId & RespondentId,
-  signal?: AbortSignal,
-) =>
+export const removeIndividualEventsApi = ({ appletId, respondentId }: AppletId & RespondentId, signal?: AbortSignal) =>
   authApiClient.delete(`/applets/${appletId}/events/remove_individual/${respondentId}`, { signal });
 
 export const removeManagerAccessApi = ({ userId, appletIds }: RemoveAccess, signal?: AbortSignal) =>
@@ -202,10 +169,7 @@ export const removeManagerAccessApi = ({ userId, appletIds }: RemoveAccess, sign
     },
   });
 
-export const editManagerAccessApi = (
-  { ownerId, userId, accesses }: EditManagerAccess,
-  signal?: AbortSignal,
-) =>
+export const editManagerAccessApi = ({ ownerId, userId, accesses }: EditManagerAccess, signal?: AbortSignal) =>
   authApiClient.post(
     `/workspaces/${ownerId}/managers/${userId}/accesses`,
     {
@@ -227,10 +191,7 @@ export const removeRespondentAccessApi = (
     },
   });
 
-export const editRespondentApi = (
-  { ownerId, appletId, respondentId, values }: EditRespondent,
-  signal?: AbortSignal,
-) =>
+export const editRespondentApi = ({ ownerId, appletId, respondentId, values }: EditRespondent, signal?: AbortSignal) =>
   authApiClient.post(
     `/workspaces/${ownerId}/applets/${appletId}/respondents/${respondentId}`,
     {
@@ -244,10 +205,7 @@ export const deleteAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
     signal,
   });
 
-export const postAppletInvitationApi = (
-  { url, appletId, options }: AppletInvitationData,
-  signal?: AbortSignal,
-) =>
+export const postAppletInvitationApi = ({ url, appletId, options }: AppletInvitationData, signal?: AbortSignal) =>
   authApiClient.post(
     `/invitations/${appletId}/${url}`,
     { ...options },
@@ -265,10 +223,8 @@ export const duplicateAppletApi = ({ appletId, options }: DuplicateApplet, signa
     },
   );
 
-export const setAppletEncryptionApi = (
-  { appletId, encryption }: AppletEncryption,
-  signal?: AbortSignal,
-) => authApiClient.post(`/applets/${appletId}/encryption`, { ...encryption }, { signal });
+export const setAppletEncryptionApi = ({ appletId, encryption }: AppletEncryption, signal?: AbortSignal) =>
+  authApiClient.post(`/applets/${appletId}/encryption`, { ...encryption }, { signal });
 
 export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
   const { ownerId, ...restParams } = params;
@@ -307,10 +263,7 @@ export const deleteFolderApi = ({ ownerId, folderId }: OwnerId & FolderId, signa
     signal,
   });
 
-export const setFolderApi = (
-  { folderId, appletId }: Partial<FolderId> & AppletId,
-  signal?: AbortSignal,
-) =>
+export const setFolderApi = ({ folderId, appletId }: Partial<FolderId> & AppletId, signal?: AbortSignal) =>
   authApiClient.post(
     '/applets/set_folder',
     {
@@ -337,26 +290,16 @@ export const saveFolderApi = ({ ownerId, name }: OwnerId & FolderName, signal?: 
 export const updateFolderApi = ({ ownerId, name, folderId }: UpdateFolder, signal?: AbortSignal) =>
   authApiClient.put(`/workspaces/${ownerId}/folders/${folderId}`, { name }, { signal });
 
-export const togglePinApi = (
-  { ownerId, appletId, folderId, isPinned }: TogglePin,
-  signal?: AbortSignal,
-) => {
+export const togglePinApi = ({ ownerId, appletId, folderId, isPinned }: TogglePin, signal?: AbortSignal) => {
   const method = isPinned ? 'post' : 'delete';
 
-  return authApiClient[method](
-    `/workspaces/${ownerId}/folders/${folderId}/pin/${appletId}`,
-    {},
-    { signal },
-  );
+  return authApiClient[method](`/workspaces/${ownerId}/folders/${folderId}/pin/${appletId}`, {}, { signal });
 };
 
 export const checkAppletNameInLibraryApi = ({ appletName }: AppletName, signal?: AbortSignal) =>
   authApiClient.post('/library/check_name', { name: appletName }, { signal });
 
-export const publishAppletToLibraryApi = (
-  { appletId, keywords, appletName }: PublishApplet,
-  signal?: AbortSignal,
-) =>
+export const publishAppletToLibraryApi = ({ appletId, keywords, appletName }: PublishApplet, signal?: AbortSignal) =>
   authApiClient.post(
     '/library',
     {
@@ -377,10 +320,8 @@ export const getAppletLibraryUrlApi = ({ appletId }: AppletId, signal?: AbortSig
     signal,
   });
 
-export const postAppletPublicLinkApi = (
-  { appletId, requireLogin }: PostAppletPublicLink,
-  signal?: AbortSignal,
-) => authApiClient.post(`/applets/${appletId}/access_link`, { requireLogin }, { signal });
+export const postAppletPublicLinkApi = ({ appletId, requireLogin }: PostAppletPublicLink, signal?: AbortSignal) =>
+  authApiClient.post(`/applets/${appletId}/access_link`, { requireLogin }, { signal });
 
 export const getAppletPublicLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}/access_link`, { signal });
@@ -391,10 +332,7 @@ export const deleteAppletPublicLinkApi = ({ appletId }: AppletId, signal?: Abort
 export const getAppletInviteLinkApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applet/${appletId}/inviteLink`, { signal });
 
-export const getReviewActivitiesApi = (
-  { appletId, respondentId, createdDate }: Answers,
-  signal?: AbortSignal,
-) =>
+export const getReviewActivitiesApi = ({ appletId, respondentId, createdDate }: Answers, signal?: AbortSignal) =>
   authApiClient.get<Response<ReviewActivity>>(`/answers/applet/${appletId}/review/activities`, {
     params: {
       respondentId,
@@ -407,10 +345,7 @@ export const getReviewActivitiesApi = (
 export const getAnswerApi = ({ appletId, answerId }: ActivityAnswer, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
 
-export const getActivityAnswerApi = (
-  { appletId, answerId, activityId }: ActivityAnswer,
-  signal?: AbortSignal,
-) =>
+export const getActivityAnswerApi = ({ appletId, answerId, activityId }: ActivityAnswer, signal?: AbortSignal) =>
   authApiClient.get<ResponseWithObject<EncryptedAnswerSharedProps>>(
     `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`,
     {
@@ -423,16 +358,13 @@ export const getAnswersNotesApi = (
   { appletId, answerId, activityId, params }: ActivityAnswer & GetAnswersNotesParams,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
-    {
-      params: {
-        ...params,
-        limit: MAX_LIMIT,
-      },
-      signal,
+  authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`, {
+    params: {
+      ...params,
+      limit: MAX_LIMIT,
     },
-  );
+    signal,
+  });
 
 export const createAnswerNoteApi = (
   { appletId, answerId, activityId, note }: ActivityAnswer & Note,
@@ -462,17 +394,11 @@ export const deleteAnswerNoteApi = (
   { appletId, answerId, activityId, noteId }: ActivityAnswer & NoteId,
   signal?: AbortSignal,
 ) =>
-  authApiClient.delete(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`,
-    {
-      signal,
-    },
-  );
+  authApiClient.delete(`/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`, {
+    signal,
+  });
 
-export const getAppletSubmitDateListApi = (
-  { appletId, ...params }: AppletSubmitDateList,
-  signal?: AbortSignal,
-) =>
+export const getAppletSubmitDateListApi = ({ appletId, ...params }: AppletSubmitDateList, signal?: AbortSignal) =>
   authApiClient.get<ResponseWithObject<SubmitDates>>(`/answers/applet/${appletId}/dates`, {
     params,
     signal,
@@ -486,10 +412,7 @@ export const getAssessmentApi = ({ appletId, answerId }: AssessmentReview, signa
     },
   );
 
-export const createAssessmentApi = (
-  { appletId, answerId, ...assessment }: SaveAssessment,
-  signal?: AbortSignal,
-) =>
+export const createAssessmentApi = ({ appletId, answerId, ...assessment }: SaveAssessment, signal?: AbortSignal) =>
   authApiClient.post(
     `/answers/applet/${appletId}/answers/${answerId}/assessment`,
     { ...assessment },
@@ -503,10 +426,7 @@ export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?:
     signal,
   });
 
-export const getSummaryActivitiesApi = (
-  { appletId, respondentId }: AppletId & RespondentId,
-  signal?: AbortSignal,
-) =>
+export const getSummaryActivitiesApi = ({ appletId, respondentId }: AppletId & RespondentId, signal?: AbortSignal) =>
   authApiClient.get<Response<DatavizActivity>>(`/answers/applet/${appletId}/summary/activities`, {
     params: {
       respondentId,
@@ -515,35 +435,20 @@ export const getSummaryActivitiesApi = (
     signal,
   });
 
-export const getIdentifiersApi = (
-  { appletId, activityId, respondentId }: Identifiers,
-  signal?: AbortSignal,
-) =>
-  authApiClient.get<Response<Identifier>>(
-    `/answers/applet/${appletId}/summary/activities/${activityId}/identifiers`,
-    {
-      params: {
-        respondentId,
-      },
-      signal,
+export const getIdentifiersApi = ({ appletId, activityId, respondentId }: Identifiers, signal?: AbortSignal) =>
+  authApiClient.get<Response<Identifier>>(`/answers/applet/${appletId}/summary/activities/${activityId}/identifiers`, {
+    params: {
+      respondentId,
     },
-  );
+    signal,
+  });
 
-export const getVersionsApi = (
-  { appletId, activityId }: AppletId & { activityId: string },
-  signal?: AbortSignal,
-) =>
-  authApiClient.get<Response<Version>>(
-    `/answers/applet/${appletId}/summary/activities/${activityId}/versions`,
-    {
-      signal,
-    },
-  );
+export const getVersionsApi = ({ appletId, activityId }: AppletId & { activityId: string }, signal?: AbortSignal) =>
+  authApiClient.get<Response<Version>>(`/answers/applet/${appletId}/summary/activities/${activityId}/versions`, {
+    signal,
+  });
 
-export const getLatestReportApi = (
-  { appletId, activityId, respondentId }: LatestReport,
-  signal?: AbortSignal,
-) =>
+export const getLatestReportApi = ({ appletId, activityId, respondentId }: LatestReport, signal?: AbortSignal) =>
   authApiClient.post(
     `/answers/applet/${appletId}/activities/${activityId}/answers/${respondentId}/latest_report`,
     {},
@@ -557,17 +462,14 @@ export const getAnswersApi = (
   { appletId, activityId, params: { identifiers, versions, ...params } }: SummaryAnswers,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<DatavizAnswer>>(
-    `/answers/applet/${appletId}/activities/${activityId}/answers`,
-    {
-      params: {
-        ...params,
-        identifiers: identifiers?.join(','),
-        versions: versions?.join(','),
-      },
-      signal,
+  authApiClient.get<Response<DatavizAnswer>>(`/answers/applet/${appletId}/activities/${activityId}/answers`, {
+    params: {
+      ...params,
+      identifiers: identifiers?.join(','),
+      versions: versions?.join(','),
     },
-  );
+    signal,
+  });
 
 export const postAppletDataRetentionApi = (
   { appletId, ...dataRetentionParams }: AppletDataRetention,
@@ -587,48 +489,28 @@ export const publishAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =
 export const concealAppletApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.post(`/applets/${appletId}/conceal`, { signal });
 
-export const postReportConfigApi = (
-  { appletId, ...params }: AppletId & ReportConfig,
-  signal?: AbortSignal,
-) => authApiClient.post(`/applets/${appletId}/report_configuration`, { ...params }, { signal });
+export const postReportConfigApi = ({ appletId, ...params }: AppletId & ReportConfig, signal?: AbortSignal) =>
+  authApiClient.post(`/applets/${appletId}/report_configuration`, { ...params }, { signal });
 
 export const postActivityReportConfigApi = (
-  {
-    appletId,
-    activityId,
-    ...params
-  }: AppletId & ActivityId & Pick<ReportConfig, 'reportIncludedItemName'>,
+  { appletId, activityId, ...params }: AppletId & ActivityId & Pick<ReportConfig, 'reportIncludedItemName'>,
   signal?: AbortSignal,
-) =>
-  authApiClient.put(
-    `/applets/${appletId}/activities/${activityId}/report_configuration`,
-    { ...params },
-    { signal },
-  );
+) => authApiClient.put(`/applets/${appletId}/activities/${activityId}/report_configuration`, { ...params }, { signal });
 
 export const postActivityFlowReportConfigApi = (
   {
     appletId,
     activityFlowId,
     ...params
-  }: AppletId &
-    ActivityFlowId &
-    Pick<ReportConfig, 'reportIncludedItemName' | 'reportIncludedActivityName'>,
+  }: AppletId & ActivityFlowId & Pick<ReportConfig, 'reportIncludedItemName' | 'reportIncludedActivityName'>,
   signal?: AbortSignal,
-) =>
-  authApiClient.put(
-    `/applets/${appletId}/flows/${activityFlowId}/report_configuration`,
-    { ...params },
-    { signal },
-  );
+) => authApiClient.put(`/applets/${appletId}/flows/${activityFlowId}/report_configuration`, { ...params }, { signal });
 
 export const getAppletVersionsApi = ({ appletId }: AppletId, signal?: AbortSignal) =>
   authApiClient.get(`/applets/${appletId}/versions`, { signal });
 
-export const getAppletVersionChangesApi = (
-  { appletId, version }: AppletVersionChanges,
-  signal?: AbortSignal,
-) => authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
+export const getAppletVersionChangesApi = ({ appletId, version }: AppletVersionChanges, signal?: AbortSignal) =>
+  authApiClient.get(`/applets/${appletId}/versions/${version}/changes`, { signal });
 
 export const getExportDataApi = (
   { appletId, page = 1, limit = DEFAULT_ROWS_PER_PAGE, ...rest }: ExportData,

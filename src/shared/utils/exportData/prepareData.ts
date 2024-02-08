@@ -2,11 +2,7 @@ import { AppletExportData, ExportDataResult } from 'shared/types/answer';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { getObjectFromList } from '../getObjectFromList';
-import {
-  getAnswersWithPublicUrls,
-  getParsedAnswers,
-  remapFailedAnswers,
-} from '../getParsedAnswers';
+import { getAnswersWithPublicUrls, getParsedAnswers, remapFailedAnswers } from '../getParsedAnswers';
 import {
   getABTrailsItemsData,
   getDrawingItemsData,
@@ -37,10 +33,7 @@ export const prepareData = async (
   let acc: AppletExportData = getDefaultExportData();
 
   for await (const data of parsedAnswersWithPublicUrls) {
-    const rawAnswersObject = getObjectFromList(
-      data.decryptedAnswers,
-      (item) => item.activityItem.name,
-    );
+    const rawAnswersObject = getObjectFromList(data.decryptedAnswers, item => item.activityItem.name);
 
     const reportData = getReportData(acc.reportData, rawAnswersObject, data.decryptedAnswers);
     const mediaData = getMediaData(acc.mediaData, data.decryptedAnswers);
@@ -55,10 +48,7 @@ export const prepareData = async (
       acc.stabilityTrackerItemsData,
       data.decryptedAnswers,
     );
-    const abTrailsItemsData = await getABTrailsItemsData(
-      acc.abTrailsItemsData,
-      data.decryptedAnswers,
-    );
+    const abTrailsItemsData = await getABTrailsItemsData(acc.abTrailsItemsData, data.decryptedAnswers);
     const flankerItemsData = await getFlankerItemsData(acc.flankerItemsData, data.decryptedAnswers);
 
     acc = {

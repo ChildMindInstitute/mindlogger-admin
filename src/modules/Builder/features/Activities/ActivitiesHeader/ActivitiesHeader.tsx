@@ -27,8 +27,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           startIcon={<Svg id="add" width={18} height={18} />}
           onClick={handleActivityAdd}
           sx={{ mr: theme.spacing(1.6) }}
-          data-testid="builder-activities-add-activity"
-        >
+          data-testid="builder-activities-add-activity">
           {t('addBlankActivity')}
         </Button>
         <ButtonWithMenu
@@ -36,10 +35,7 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           label={t('addPerformanceTask')}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
-          menuItems={getPerformanceTasksMenu(
-            headerProps?.onAddActivity || falseReturnFunc,
-            setAnchorEl,
-          )}
+          menuItems={getPerformanceTasksMenu(headerProps?.onAddActivity || falseReturnFunc, setAnchorEl)}
           startIcon={<Svg id="add" width={18} height={18} />}
           menuListWidth="44rem"
           data-testid="builder-activities-add-perf-task"

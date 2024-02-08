@@ -16,9 +16,7 @@ export const getUniqueName = ({
   let newName;
 
   if (match) {
-    newName = name.replace(regexp, (_, number) =>
-      withUnderscore ? `_${+number + 1}` : `(${+number + 1})`,
-    );
+    newName = name.replace(regexp, (_, number) => (withUnderscore ? `_${+number + 1}` : `(${+number + 1})`));
   } else {
     newName = withUnderscore ? `${name}_1` : `${name} (1)`;
   }

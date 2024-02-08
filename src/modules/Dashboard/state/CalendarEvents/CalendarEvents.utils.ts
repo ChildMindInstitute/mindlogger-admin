@@ -39,13 +39,12 @@ export const getPreparedEvents = (
   isAlwaysAvailableHidden: boolean,
   isScheduledHidden: boolean,
 ) =>
-  events.map((item) => ({
+  events.map(item => ({
     ...item,
     isHidden: item.alwaysAvailable ? isAlwaysAvailableHidden : isScheduledHidden,
   }));
 
-export const getNotHiddenEvents = (events: CalendarEvent[]) =>
-  events.filter((event) => !event.isHidden);
+export const getNotHiddenEvents = (events: CalendarEvent[]) => events.filter(event => !event.isHidden);
 
 export const getEventsWithHiddenInTimeView = (notHiddenEvents: CalendarEvent[]) => {
   const allDayEventsSortedByDaysMap = notHiddenEvents.reduce(
@@ -77,18 +76,18 @@ export const getEventsWithHiddenInTimeView = (notHiddenEvents: CalendarEvent[]) 
   );
 
   const allDayEventsSortedByDays = Array.from(allDayEventsSortedByDaysMap.values()).filter(
-    (item) => item.eventsIds.length > LENGTH_TO_FILTER_DAYS_EVENTS,
+    item => item.eventsIds.length > LENGTH_TO_FILTER_DAYS_EVENTS,
   );
 
   const hiddenEventsIds = allDayEventsSortedByDays.reduce((acc: string[], item) => {
-    item.eventsIds.forEach((item) => item.isHiddenInTimeView && acc.push(item.id));
+    item.eventsIds.forEach(item => item.isHiddenInTimeView && acc.push(item.id));
 
     return acc;
   }, []);
 
-  const eventsToShow = notHiddenEvents.map((event) => ({
+  const eventsToShow = notHiddenEvents.map(event => ({
     ...event,
-    isHiddenInTimeView: hiddenEventsIds.some((id) => id === event.id),
+    isHiddenInTimeView: hiddenEventsIds.some(id => id === event.id),
   }));
 
   return {
@@ -109,10 +108,7 @@ export const getDateFromDateTimeString = (date: Date, time: string) => {
   return setSeconds(setMinutes(setHours(date, Number(hours)), Number(minutes)), Number(seconds));
 };
 
-export const getDateFromDateStringTimeString = ({
-  date,
-  time,
-}: GetDateFromDateStringTimeString) => {
+export const getDateFromDateStringTimeString = ({ date, time }: GetDateFromDateStringTimeString) => {
   if (!date) return null;
 
   return new Date(`${date}T${time ?? DEFAULT_API_START_TIME}`);
@@ -126,12 +122,10 @@ export const getEventStartDateTime = ({
   nextYearDateString,
 }: GetEventStartDateTime) => {
   const nextYearDate =
-    nextYearDateString &&
-    getDateFromDateStringTimeString({ date: nextYearDateString, time: DEFAULT_API_START_TIME });
+    nextYearDateString && getDateFromDateStringTimeString({ date: nextYearDateString, time: DEFAULT_API_START_TIME });
 
   const nextYearDateWithTime =
-    nextYearDateString &&
-    getDateFromDateStringTimeString({ date: nextYearDateString, time: startTime });
+    nextYearDateString && getDateFromDateStringTimeString({ date: nextYearDateString, time: startTime });
 
   const selectedDateToDate = getDateFromDateStringTimeString({
     date: selectedDate,
@@ -147,9 +141,7 @@ export const getEventStartDateTime = ({
   });
 
   const dateAlways =
-    nextYearDate &&
-    selectedDateToDate &&
-    nextYearDate.getFullYear() > selectedDateToDate.getFullYear()
+    nextYearDate && selectedDateToDate && nextYearDate.getFullYear() > selectedDateToDate.getFullYear()
       ? nextYearDate
       : selectedDateToDate;
 
@@ -221,7 +213,7 @@ export const getEventsArrayFromDates = ({
   endTime,
   isCrossDayEvent,
 }: GetEventsArrayFromDates) =>
-  dates.flatMap((date) => {
+  dates.flatMap(date => {
     const nextDay = addDays(date, 1);
 
     if (isCrossDayEvent) {
@@ -300,8 +292,7 @@ export const createEvents = ({
       eventStart,
       isCrossDayEvent,
     }) || newDate;
-  const isAllDayEvent =
-    isAlwaysAvailable || (startTime === DEFAULT_API_START_TIME && endTime === DEFAULT_API_END_TIME);
+  const isAllDayEvent = isAlwaysAvailable || (startTime === DEFAULT_API_START_TIME && endTime === DEFAULT_API_END_TIME);
 
   const getBgColor = () => {
     if (isAlwaysAvailable) return colors[0];
@@ -377,9 +368,7 @@ export const createEvents = ({
   }
 
   const daysInPeriod =
-    eventEnd && eventStart && eventEnd >= eventStart
-      ? eachDayOfInterval({ start: eventStart, end: eventEnd })
-      : [];
+    eventEnd && eventStart && eventEnd >= eventStart ? eachDayOfInterval({ start: eventStart, end: eventEnd }) : [];
 
   if (periodicityType === Periodicity.Always || periodicityType === Periodicity.Daily) {
     return getEventsArrayFromDates({
@@ -393,7 +382,7 @@ export const createEvents = ({
 
   if (periodicityType === Periodicity.Weekly && selectedDate) {
     const dayOfWeek = getDay(getNormalizedTimezoneDate(selectedDate));
-    const weeklyDays = daysInPeriod.filter((date) => getDay(date) === dayOfWeek);
+    const weeklyDays = daysInPeriod.filter(date => getDay(date) === dayOfWeek);
 
     return getEventsArrayFromDates({
       dates: weeklyDays,
@@ -405,7 +394,7 @@ export const createEvents = ({
   }
 
   if (periodicityType === Periodicity.Weekdays) {
-    const weekDays = daysInPeriod.filter((date) => !isWeekend(date));
+    const weekDays = daysInPeriod.filter(date => !isWeekend(date));
 
     return getEventsArrayFromDates({
       dates: weekDays,
@@ -436,14 +425,9 @@ export const createEvents = ({
   return [];
 };
 
-export const getDaysInMonthlyPeriodicity = ({
-  chosenDate,
-  eventEnd,
-  eventStart,
-}: GetDaysInMonthlyPeriodicity) => {
+export const getDaysInMonthlyPeriodicity = ({ chosenDate, eventEnd, eventStart }: GetDaysInMonthlyPeriodicity) => {
   const endDate = getDate(eventEnd);
-  const end =
-    chosenDate <= endDate ? eventEnd : new Date(eventEnd.getFullYear(), eventEnd.getMonth(), 0);
+  const end = chosenDate <= endDate ? eventEnd : new Date(eventEnd.getFullYear(), eventEnd.getMonth(), 0);
   const monthsBetween =
     end && eventStart && end > eventStart
       ? eachMonthOfInterval({
@@ -452,7 +436,7 @@ export const getDaysInMonthlyPeriodicity = ({
         })
       : [];
 
-  return monthsBetween.map((month) => {
+  return monthsBetween.map(month => {
     const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
     const dayOfMonth = Math.min(chosenDate, lastDayOfMonth.getDate());
 

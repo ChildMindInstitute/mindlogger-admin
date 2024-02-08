@@ -29,16 +29,9 @@ export const ItemCardButtons = ({
   }, [answerValue]);
 
   return (
-    <StyledFlexTopCenter
-      sx={{ justifyContent: 'flex-end', mt: theme.spacing(1.6) }}
-      data-testid={dataTestid}
-    >
+    <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', mt: theme.spacing(1.6) }} data-testid={dataTestid}>
       {config.isBackVisible && (
-        <Button
-          sx={{ minWidth: '10rem' }}
-          onClick={onBackButtonClick}
-          data-testid={`${dataTestid}-back`}
-        >
+        <Button sx={{ minWidth: '10rem' }} onClick={onBackButtonClick} data-testid={`${dataTestid}-back`}>
           {t('back')}
         </Button>
       )}
@@ -47,8 +40,7 @@ export const ItemCardButtons = ({
         variant="contained"
         disabled={!config.isSkippable && !hasAnswer}
         onClick={isSubmitVisible ? onSubmit : onNextButtonClick}
-        data-testid={`${dataTestid}-${isSubmitVisible ? 'submit' : 'next'}`}
-      >
+        data-testid={`${dataTestid}-${isSubmitVisible ? 'submit' : 'next'}`}>
         {isSubmitVisible ? t('submit') : t('next')}
       </Button>
     </StyledFlexTopCenter>

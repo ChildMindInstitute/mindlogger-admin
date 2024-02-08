@@ -16,11 +16,7 @@ import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
 
 import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
-import {
-  getActivityFlowIndex,
-  getFlowBuilderActions,
-  getMenuItems,
-} from './ActivityFlowBuilder.utils';
+import { getActivityFlowIndex, getFlowBuilderActions, getMenuItems } from './ActivityFlowBuilder.utils';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
 import { GetMenuItemsType } from './ActivityFlowBuilder.types';
 import { builderItemClassName } from './ActivityFlowBuilder.const';
@@ -73,9 +69,7 @@ export const ActivityFlowBuilder = () => {
     if (
       currentActivityFlow.reportIncludedActivityName &&
       flowActivityToDeleteData.activityKey === currentActivityFlow.reportIncludedActivityName &&
-      activityFlowItems.filter(
-        (item) => item.activityKey === currentActivityFlow.reportIncludedActivityName,
-      ).length === 1
+      activityFlowItems.filter(item => item.activityKey === currentActivityFlow.reportIncludedActivityName).length === 1
     ) {
       removeReportConfigItemValue();
     }
@@ -103,9 +97,7 @@ export const ActivityFlowBuilder = () => {
     if (
       flowActivityToUpdateIndex !== null &&
       currentActivityFlow.reportIncludedActivityName &&
-      activityFlowItems.filter(
-        (item) => item.activityKey === currentActivityFlow.reportIncludedActivityName,
-      ).length === 1
+      activityFlowItems.filter(item => item.activityKey === currentActivityFlow.reportIncludedActivityName).length === 1
     ) {
       removeReportConfigItemValue();
     }
@@ -133,13 +125,12 @@ export const ActivityFlowBuilder = () => {
         onAddFlowActivity: handleFlowActivityAdd,
         onClearFlow: handleClearFlow,
       }}
-      hasMaxWidth
-    >
+      hasMaxWidth>
       {activityFlowItems?.length ? (
         <>
           <DragDropContext onDragEnd={handleDragEnd}>
             <DndDroppable droppableId="activity-flow-builder-dnd" direction="vertical">
-              {(listProvided) => (
+              {listProvided => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                   {activityFlowItems.map((item, index) => {
                     const key = item.id || item.key;
@@ -155,8 +146,7 @@ export const ActivityFlowBuilder = () => {
                             className={builderItemClassName}
                             ref={itemProvided.innerRef}
                             {...itemProvided.draggableProps}
-                            data-testid={itemDataTestid}
-                          >
+                            data-testid={itemDataTestid}>
                             <Item
                               dragHandleProps={itemProvided.dragHandleProps}
                               isDragging={snapshot.isDragging}
@@ -172,8 +162,7 @@ export const ActivityFlowBuilder = () => {
                                     activityName || '',
                                     item.activityKey,
                                   ),
-                                  replaceItemActionActive:
-                                    !!anchorEl && flowActivityToUpdateIndex === index,
+                                  replaceItemActionActive: !!anchorEl && flowActivityToUpdateIndex === index,
                                   'data-testid': itemDataTestid,
                                 })
                               }
@@ -226,9 +215,7 @@ export const ActivityFlowBuilder = () => {
           )}
         </>
       ) : (
-        <StyledTitleMedium
-          sx={{ mt: theme.spacing(0.4), color: variables.palette.on_surface_variant }}
-        >
+        <StyledTitleMedium sx={{ mt: theme.spacing(0.4), color: variables.palette.on_surface_variant }}>
           {t('activityFlowIsRequired')}
         </StyledTitleMedium>
       )}

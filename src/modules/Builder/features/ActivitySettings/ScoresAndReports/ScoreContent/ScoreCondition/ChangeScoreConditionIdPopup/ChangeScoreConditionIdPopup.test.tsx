@@ -11,11 +11,7 @@ describe('ChangeScoreConditionIdPopup', () => {
   test('should change scoreConditionId', () => {
     const dataTestid = 'change-score-condition-id-popup';
     renderWithProviders(
-      <ChangeScoreConditionIdPopup
-        onClose={onCloseMock}
-        onChange={onChangeMock}
-        data-testid={dataTestid}
-      />,
+      <ChangeScoreConditionIdPopup onClose={onCloseMock} onChange={onChangeMock} data-testid={dataTestid} />,
     );
 
     expect(
@@ -27,9 +23,7 @@ describe('ChangeScoreConditionIdPopup', () => {
     fireEvent.click(screen.getByText('Change'));
 
     expect(onChangeMock).toBeCalled();
-    expect(
-      screen.getByText('Score Condition ID has been changed successfully.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Score Condition ID has been changed successfully.')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('Ok'));
 

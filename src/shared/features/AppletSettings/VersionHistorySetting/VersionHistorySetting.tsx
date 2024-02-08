@@ -25,11 +25,9 @@ export const VersionHistorySetting = () => {
   const [currentVersion, setCurrentVersion] = useState<string>();
   const [versionChanges, setVersionChanges] = useState<VersionChanges | null>(null);
 
-  const { execute: getAppletVersions, isLoading: areAppletVersionsLoading } =
-    useAsync(getAppletVersionsApi);
-  const { execute: getAppletVersionChanges, isLoading: areAppletVersionChangesLoading } = useAsync(
-    getAppletVersionChangesApi,
-  );
+  const { execute: getAppletVersions, isLoading: areAppletVersionsLoading } = useAsync(getAppletVersionsApi);
+  const { execute: getAppletVersionChanges, isLoading: areAppletVersionChangesLoading } =
+    useAsync(getAppletVersionChangesApi);
   const isLoading = areAppletVersionsLoading || areAppletVersionChangesLoading;
 
   const hasAppletChanges = !!versionChanges?.changes.length;
@@ -46,8 +44,7 @@ export const VersionHistorySetting = () => {
         mb: theme.spacing(1),
       }}
       color={variables.palette.on_surface_variant}
-      key={change}
-    >
+      key={change}>
       {change}
     </StyledBodyLarge>
   );
@@ -83,17 +80,10 @@ export const VersionHistorySetting = () => {
             open={selectOpen}
             onOpen={() => setSelectOpen(true)}
             onClose={() => setSelectOpen(false)}
-            IconComponent={() => (
-              <Svg className="navigate-arrow" id={selectOpen ? 'navigate-up' : 'navigate-down'} />
-            )}
-            data-testid={`${dataTestid}-version`}
-          >
+            IconComponent={() => <Svg className="navigate-arrow" id={selectOpen ? 'navigate-up' : 'navigate-down'} />}
+            data-testid={`${dataTestid}-version`}>
             {versions.map((version, index) => (
-              <MenuItem
-                key={version}
-                value={version}
-                data-testid={`${dataTestid}-version-${index}`}
-              >
+              <MenuItem key={version} value={version} data-testid={`${dataTestid}-version-${index}`}>
                 {t(index === 0 ? 'current' : 'version', { version })}
               </MenuItem>
             ))}
@@ -101,23 +91,18 @@ export const VersionHistorySetting = () => {
           <StyledChangesContainer>
             {isLoading && <Spinner noBackground />}
             {!hasAppletChanges && !hasActivitiesChanges && !isLoading && (
-              <StyledBodyLarge color={variables.palette.on_surface_variant}>
-                {t('noChanges')}
-              </StyledBodyLarge>
+              <StyledBodyLarge color={variables.palette.on_surface_variant}>{t('noChanges')}</StyledBodyLarge>
             )}
             {(hasAppletChanges || hasActivitiesChanges) && (
-              <StyledTitleBoldMedium sx={{ mb: theme.spacing(1) }}>
-                {t('changes')}
-              </StyledTitleBoldMedium>
+              <StyledTitleBoldMedium sx={{ mb: theme.spacing(1) }}>{t('changes')}</StyledTitleBoldMedium>
             )}
             {hasAppletChanges && (
               <Accordion
                 uiType={AccordionUiType.Secondary}
                 title={t('appletMetadata')}
-                data-testid={`${dataTestid}-applet-changes`}
-              >
+                data-testid={`${dataTestid}-applet-changes`}>
                 <Box sx={{ ml: theme.spacing(2.5) }}>
-                  {versionChanges?.changes.map((change) => renderChangeItem(change))}
+                  {versionChanges?.changes.map(change => renderChangeItem(change))}
                 </Box>
               </Accordion>
             )}
@@ -125,43 +110,31 @@ export const VersionHistorySetting = () => {
               <Accordion
                 uiType={AccordionUiType.Secondary}
                 title={t('activities')}
-                data-testid={`${dataTestid}-activities-changes`}
-              >
+                data-testid={`${dataTestid}-activities-changes`}>
                 <Box sx={{ ml: theme.spacing(2.5) }}>
-                  {versionChanges?.activities.map((activity) => (
-                    <Accordion
-                      uiType={AccordionUiType.Secondary}
-                      key={activity.name}
-                      title={activity.name}
-                    >
+                  {versionChanges?.activities.map(activity => (
+                    <Accordion uiType={AccordionUiType.Secondary} key={activity.name} title={activity.name}>
                       <Box sx={{ ml: theme.spacing(2.5) }}>
                         {!!activity?.changes.length && (
-                          <Accordion
-                            uiType={AccordionUiType.Secondary}
-                            title={t('activityMetadata')}
-                          >
+                          <Accordion uiType={AccordionUiType.Secondary} title={t('activityMetadata')}>
                             <Box sx={{ ml: theme.spacing(2.5) }}>
-                              {activity.changes.map((change) => renderChangeItem(change))}
+                              {activity.changes.map(change => renderChangeItem(change))}
                             </Box>
                           </Accordion>
                         )}
                         {!!activity?.items.length && (
                           <Accordion uiType={AccordionUiType.Secondary} title={t('items')}>
                             <Box sx={{ ml: theme.spacing(2.5) }}>
-                              {activity?.items.map((item) => {
+                              {activity?.items.map(item => {
                                 if (!item.changes && item.name) {
                                   return renderChangeItem(item.name);
                                 }
 
                                 return (
                                   item.changes && (
-                                    <Accordion
-                                      key={item.name}
-                                      uiType={AccordionUiType.Secondary}
-                                      title={item.name}
-                                    >
+                                    <Accordion key={item.name} uiType={AccordionUiType.Secondary} title={item.name}>
                                       <Box sx={{ ml: theme.spacing(2.5) }}>
-                                        {item.changes?.map((change) => renderChangeItem(change))}
+                                        {item.changes?.map(change => renderChangeItem(change))}
                                       </Box>
                                     </Accordion>
                                   )

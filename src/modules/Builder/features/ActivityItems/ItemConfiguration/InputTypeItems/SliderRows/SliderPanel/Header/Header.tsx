@@ -2,20 +2,10 @@ import get from 'lodash.get';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg, Actions } from 'shared/components';
-import {
-  theme,
-  StyledClearedButton,
-  StyledFlexColumn,
-  StyledLabelBoldLarge,
-  StyledLabelLarge,
-} from 'shared/styles';
+import { theme, StyledClearedButton, StyledFlexColumn, StyledLabelBoldLarge, StyledLabelLarge } from 'shared/styles';
 
 import { HeaderProps } from './Header.types';
-import {
-  StyledImg,
-  StyledSliderPanelHeader,
-  StyledSliderPanelPreviewContainer,
-} from './Header.styles';
+import { StyledImg, StyledSliderPanelHeader, StyledSliderPanelPreviewContainer } from './Header.styles';
 import { getActions } from './Header.utils';
 import { StyledSlider } from '../SliderPanel.styles';
 import { getMarks } from '../SliderPanel.utils';
@@ -26,15 +16,7 @@ const commonButtonStyles = {
   mr: theme.spacing(0.2),
 };
 
-export const Header = ({
-  name,
-  index,
-  label,
-  isExpanded,
-  isMultiple,
-  onArrowClick,
-  onTrashClick,
-}: HeaderProps) => {
+export const Header = ({ name, index, label, isExpanded, isMultiple, onArrowClick, onTrashClick }: HeaderProps) => {
   const { watch } = useCustomFormContext();
 
   const settings = watch(`${name}.config`);
@@ -54,11 +36,7 @@ export const Header = ({
   if (isExpanded) {
     return (
       <StyledSliderPanelHeader isExpanded>
-        <StyledClearedButton
-          onClick={onArrowClick}
-          sx={commonButtonStyles}
-          data-testid={`${dataTestid}-collapse`}
-        >
+        <StyledClearedButton onClick={onArrowClick} sx={commonButtonStyles} data-testid={`${dataTestid}-collapse`}>
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>
         <StyledLabelBoldLarge data-testid={`${dataTestid}-title`}>{label}</StyledLabelBoldLarge>
@@ -74,11 +52,7 @@ export const Header = ({
 
   return (
     <StyledSliderPanelHeader>
-      <StyledClearedButton
-        onClick={onArrowClick}
-        sx={commonButtonStyles}
-        data-testid={`${dataTestid}-collapse`}
-      >
+      <StyledClearedButton onClick={onArrowClick} sx={commonButtonStyles} data-testid={`${dataTestid}-collapse`}>
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
       <StyledLabelBoldLarge>{label}</StyledLabelBoldLarge>

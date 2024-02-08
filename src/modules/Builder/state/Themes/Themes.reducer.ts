@@ -1,10 +1,6 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import {
-  getFulfilledDataWithConcatenatedResult,
-  getPendingData,
-  getRejectedData,
-} from 'shared/utils/state';
+import { getFulfilledDataWithConcatenatedResult, getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { state as initialState } from './Themes.state';
 import { ThemesSchema } from './Themes.schema';

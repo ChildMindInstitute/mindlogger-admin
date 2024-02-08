@@ -53,34 +53,24 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
     <>
       <StyledRowHeader>
         <Svg id="alert" width="16" height="20" />
-        <StyledTitleMedium
-          sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}
-        >
+        <StyledTitleMedium sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}>
           {t('sendNotifications')}
         </StyledTitleMedium>
       </StyledRowHeader>
       {notifications?.map((item, index) => (
-        <Notification
-          key={item.id}
-          index={index}
-          remove={remove}
-          data-testid={`${dataTestid}-notification-${index}`}
-        />
+        <Notification key={item.id} index={index} remove={remove} data-testid={`${dataTestid}-notification-${index}`} />
       ))}
       <StyledAddBtn
         variant="text"
         startIcon={<Svg width="18" height="18" id="add" />}
         onClick={handleAddNotification}
-        data-testid={`${dataTestid}-add-notification`}
-      >
+        data-testid={`${dataTestid}-add-notification`}>
         {t('addNotification')}
       </StyledAddBtn>
       <StyledRow>
         <StyledRowHeader>
           <Svg id="clock" width="20" height="20" />
-          <StyledTitleMedium
-            sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}
-          >
+          <StyledTitleMedium sx={{ color: variables.palette.on_surface, marginLeft: theme.spacing(1.5) }}>
             {t('sendReminder')}
           </StyledTitleMedium>
         </StyledRowHeader>
@@ -91,8 +81,7 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
             variant="text"
             startIcon={<Svg width="18" height="18" id="add" />}
             onClick={handleAddReminder}
-            data-testid={`${dataTestid}-add-reminder`}
-          >
+            data-testid={`${dataTestid}-add-reminder`}>
             {t('addReminder')}
           </StyledAddBtn>
         )}

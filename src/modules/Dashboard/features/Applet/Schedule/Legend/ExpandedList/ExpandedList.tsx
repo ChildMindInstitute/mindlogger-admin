@@ -4,21 +4,9 @@ import uniqueId from 'lodash.uniqueid';
 import { useTranslation } from 'react-i18next';
 
 import { Svg, Tooltip } from 'shared/components';
-import {
-  theme,
-  StyledBodyMedium,
-  StyledFlexTopCenter,
-  StyledLabelBoldLarge,
-  variables,
-} from 'shared/styles';
+import { theme, StyledBodyMedium, StyledFlexTopCenter, StyledLabelBoldLarge, variables } from 'shared/styles';
 
-import {
-  StyledChildren,
-  StyledCollapseBtn,
-  StyledCollapse,
-  StyledItem,
-  StyledIconBtn,
-} from './ExpandedList.styles';
+import { StyledChildren, StyledCollapseBtn, StyledCollapse, StyledItem, StyledIconBtn } from './ExpandedList.styles';
 import { ExpandedListProps } from './ExpandedList.types';
 
 export const ExpandedList = ({
@@ -36,10 +24,7 @@ export const ExpandedList = ({
 
   return isHiddenInLegend ? null : (
     <StyledCollapse data-testid={dataTestid}>
-      <StyledCollapseBtn
-        onClick={() => setListVisible((prevState) => !prevState)}
-        data-testid={`${dataTestid}-collapse`}
-      >
+      <StyledCollapseBtn onClick={() => setListVisible(prevState => !prevState)} data-testid={`${dataTestid}-collapse`}>
         <StyledFlexTopCenter sx={{ cursor: 'pointer' }}>
           <Svg id={collapseBtnId} />
           <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(1) }}>{title}</StyledLabelBoldLarge>
@@ -51,12 +36,11 @@ export const ExpandedList = ({
                 <StyledIconBtn
                   disabled={button.disabled}
                   sx={{ ml: getIconBtnMargin(index) }}
-                  onClick={(event) => {
+                  onClick={event => {
                     event.stopPropagation();
                     button.action();
                   }}
-                  data-testid={`${dataTestid}-${index}`}
-                >
+                  data-testid={`${dataTestid}-${index}`}>
                   {button.icon}
                 </StyledIconBtn>
               </Box>
@@ -67,10 +51,7 @@ export const ExpandedList = ({
       {listVisible && (
         <>
           {allAvailableScheduled && (
-            <StyledBodyMedium
-              color={variables.palette.outline}
-              sx={{ p: theme.spacing(2.4, 0.9, 0, 0.9) }}
-            >
+            <StyledBodyMedium color={variables.palette.outline} sx={{ p: theme.spacing(2.4, 0.9, 0, 0.9) }}>
               {t('activateActivitiesScheduled')}
             </StyledBodyMedium>
           )}

@@ -13,9 +13,7 @@ export const useSubscaleLookupTableSetup = ({
   tableData,
   schema,
 }: LookupTableSetupHookProps) => {
-  const [modalType, setModalType] = useState<ModalType>(
-    tableData?.length ? ModalType.Edit : ModalType.Upload,
-  );
+  const [modalType, setModalType] = useState<ModalType>(tableData?.length ? ModalType.Edit : ModalType.Upload);
   const [step, setStep] = useState<Steps>(0);
   const [data, setData] = useState<DataTableItem[]>();
   const [error, setError] = useState<JSX.Element | null>(null);
@@ -32,7 +30,7 @@ export const useSubscaleLookupTableSetup = ({
     const mappedData = file.data.map(processImportedData);
     setError(null);
     setData(mappedData);
-    setStep((prevState) => ++prevState as Steps);
+    setStep(prevState => ++prevState as Steps);
   };
 
   const onDownloadTemplate = async () => {

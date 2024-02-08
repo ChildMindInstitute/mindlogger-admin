@@ -9,15 +9,9 @@ import { Svg } from 'shared/components/Svg';
 import { PublishConcealAppletPopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import { PublishConcealAppletSettingProps } from './PublishConcealAppletSetting.types';
-import {
-  StyledAppletSettingsButton,
-  StyledAppletSettingsDescription,
-} from '../AppletSettings.styles';
+import { StyledAppletSettingsButton, StyledAppletSettingsDescription } from '../AppletSettings.styles';
 
-export const PublishConcealAppletSetting = ({
-  isDashboard,
-  isBuilder,
-}: PublishConcealAppletSettingProps) => {
+export const PublishConcealAppletSetting = ({ isDashboard, isBuilder }: PublishConcealAppletSettingProps) => {
   const { t } = useTranslation('app');
   const { appletId = '' } = useParams();
   const dispatch = useAppDispatch();
@@ -53,8 +47,7 @@ export const PublishConcealAppletSetting = ({
           }
           variant="outlined"
           startIcon={<Svg width="18" height="18" id={isPublished ? 'conceal' : 'publish'} />}
-          data-testid="applet-settings-publish-conceal-publish"
-        >
+          data-testid="applet-settings-publish-conceal-publish">
           {t(isPublished ? 'concealApplet' : 'publishApplet')}
         </StyledAppletSettingsButton>
       </Box>

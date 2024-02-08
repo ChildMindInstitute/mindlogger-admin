@@ -14,7 +14,7 @@ import { languages } from './Language.const';
 export const Language = () => {
   const { i18n } = useTranslation('app');
   const langFromStorage = storage.getItem(LocalStorageKeys.Language) || Languages.EN;
-  const language = languages.find((lang) => lang.value === langFromStorage) as LanguageItem;
+  const language = languages.find(lang => lang.value === langFromStorage) as LanguageItem;
 
   const [currentLanguage, setCurrentLanguage] = useState(language);
   const [open, setOpen] = useState(false);
@@ -40,14 +40,10 @@ export const Language = () => {
       <Box onClick={() => setOpen(true)}>
         <StyledLanguage>
           <StyledFlag>{currentLanguage.component}</StyledFlag>
-          <StyledLabelMedium color={variables.palette.on_surface_variant}>
-            {currentLanguage.label}
-          </StyledLabelMedium>
+          <StyledLabelMedium color={variables.palette.on_surface_variant}>{currentLanguage.label}</StyledLabelMedium>
         </StyledLanguage>
       </Box>
-      {open && (
-        <SelectLanguage open={open} onClose={handleClose} currentLanguage={currentLanguage} />
-      )}
+      {open && <SelectLanguage open={open} onClose={handleClose} currentLanguage={currentLanguage} />}
     </>
   );
 };

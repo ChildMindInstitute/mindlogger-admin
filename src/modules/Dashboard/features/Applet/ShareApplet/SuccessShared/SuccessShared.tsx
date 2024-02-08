@@ -13,12 +13,7 @@ import {
 } from 'shared/styles/styledComponents';
 
 import { SuccessSharedProps } from './SuccessShared.types';
-import {
-  StyledSuccessShared,
-  StyledApplet,
-  StyledLinkBtn,
-  StyledText,
-} from './SuccessShared.styles';
+import { StyledSuccessShared, StyledApplet, StyledLinkBtn, StyledText } from './SuccessShared.styles';
 import { appletImageProps } from './SuccessShared.const';
 
 export const SuccessShared = ({
@@ -43,17 +38,11 @@ export const SuccessShared = ({
       <StyledApplet>
         <AppletImage image={img} appletName={title} {...appletImageProps} />
         <Box>
-          <StyledTitleLarge
-            sx={{ wordBreak: 'break-word' }}
-            color={variables.palette.on_surface_variant}
-          >
+          <StyledTitleLarge sx={{ wordBreak: 'break-word' }} color={variables.palette.on_surface_variant}>
             {title}
           </StyledTitleLarge>
           {text && (
-            <StyledText
-              sx={{ wordBreak: 'break-word' }}
-              color={variables.palette.on_surface_variant}
-            >
+            <StyledText sx={{ wordBreak: 'break-word' }} color={variables.palette.on_surface_variant}>
               {text}
             </StyledText>
           )}
@@ -65,9 +54,9 @@ export const SuccessShared = ({
             </StyledFlexWrap>
           )}
           {activitiesQuantity ? (
-            <StyledTitleBoldSmall
-              sx={{ marginTop: theme.spacing(1.6) }}
-            >{`${activitiesQuantity} ${t('activities')}`}</StyledTitleBoldSmall>
+            <StyledTitleBoldSmall sx={{ marginTop: theme.spacing(1.6) }}>{`${activitiesQuantity} ${t(
+              'activities',
+            )}`}</StyledTitleBoldSmall>
           ) : null}
         </Box>
       </StyledApplet>
@@ -75,8 +64,7 @@ export const SuccessShared = ({
         startIcon={<Svg width="18" height="18" id="duplicate" />}
         variant="text"
         onClick={handleCopyAppletLink}
-        data-testid={`${dataTestid}-copy-link`}
-      >
+        data-testid={`${dataTestid}-copy-link`}>
         {t('copyAppletLink')}
       </StyledLinkBtn>
       {linkCopied && (

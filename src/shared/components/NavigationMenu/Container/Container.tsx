@@ -12,8 +12,7 @@ export const Container = ({ title, onClose, children }: ActivitySettingsContaine
       margin: 0,
       flexGrow: 1,
       height: '100%',
-    }}
-  >
+    }}>
     {children}
   </BuilderContainer>
 );

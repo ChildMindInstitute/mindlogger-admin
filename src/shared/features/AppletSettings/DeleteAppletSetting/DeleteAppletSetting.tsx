@@ -8,10 +8,7 @@ import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components/Svg';
 import { DeletePopup } from 'modules/Dashboard/features/Applet/Popups';
 
-import {
-  StyledAppletSettingsButton,
-  StyledAppletSettingsDescription,
-} from '../AppletSettings.styles';
+import { StyledAppletSettingsButton, StyledAppletSettingsDescription } from '../AppletSettings.styles';
 
 export const DeleteAppletSetting = () => {
   const { t } = useTranslation('app');
@@ -43,14 +40,11 @@ export const DeleteAppletSetting = () => {
           }
           variant="outlined"
           startIcon={<Svg width="18" height="18" id="trash" />}
-          data-testid={`${dataTestid}-delete-button`}
-        >
+          data-testid={`${dataTestid}-delete-button`}>
           {t('deleteApplet')}
         </StyledAppletSettingsButton>
       </Box>
-      {deletePopupVisible && (
-        <DeletePopup onCloseCallback={onCloseCallback} data-testid={`${dataTestid}-delete`} />
-      )}
+      {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} data-testid={`${dataTestid}-delete`} />}
     </>
   );
 };

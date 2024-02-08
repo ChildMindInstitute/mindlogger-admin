@@ -10,10 +10,7 @@ import { page } from 'resources';
 import { ActivityFormValues, AppletFormValues, GetNewPerformanceTask } from 'modules/Builder/types';
 import { DndDroppable, InsertItem, Item, ItemUiType } from 'modules/Builder/components';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import {
-  getNewActivity,
-  getNewPerformanceTask,
-} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { getNewActivity, getNewPerformanceTask } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { BuilderContainer } from 'shared/features';
 import { PerfTaskType } from 'shared/consts';
 import { pluck, Mixpanel } from 'shared/utils';
@@ -64,29 +61,18 @@ export const Activities = () => {
     appletId &&
     performanceTasksType &&
     navigate(
-      generatePath(
-        getPerformanceTaskPath(performanceTasksType as unknown as EditablePerformanceTasksType),
-        {
-          appletId,
-          activityId,
-        },
-      ),
+      generatePath(getPerformanceTaskPath(performanceTasksType as unknown as EditablePerformanceTasksType), {
+        appletId,
+        activityId,
+      }),
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
     Mixpanel.track('Add Activity click');
-    const {
-      index,
-      performanceTaskName,
-      performanceTaskDesc,
-      isNavigationBlocked,
-      performanceTaskType,
-    } = props || {};
+    const { index, performanceTaskName, performanceTaskDesc, isNavigationBlocked, performanceTaskType } = props || {};
 
     const newActivityName =
-      performanceTaskName && performanceTaskDesc && performanceTaskType
-        ? performanceTaskName
-        : t('newActivity');
+      performanceTaskName && performanceTaskDesc && performanceTaskType ? performanceTaskName : t('newActivity');
 
     const name = getUniqueName({ name: newActivityName, existingNames: activityNames });
 
@@ -113,21 +99,18 @@ export const Activities = () => {
   };
 
   const handleActivityRemove = (index: number, activityKey: string) => {
-    const newActivityFlows = activityFlows.reduce(
-      (acc: AppletFormValues['activityFlows'], flow) => {
-        if (flow.reportIncludedActivityName === activityKey) {
-          flow.reportIncludedActivityName = '';
-          flow.reportIncludedItemName = '';
-        }
-        const items = flow.items?.filter((item) => item.activityKey !== activityKey);
-        if (items && items.length > 0) {
-          acc.push({ ...flow, items });
-        }
+    const newActivityFlows = activityFlows.reduce((acc: AppletFormValues['activityFlows'], flow) => {
+      if (flow.reportIncludedActivityName === activityKey) {
+        flow.reportIncludedActivityName = '';
+        flow.reportIncludedItemName = '';
+      }
+      const items = flow.items?.filter(item => item.activityKey !== activityKey);
+      if (items && items.length > 0) {
+        acc.push({ ...flow, items });
+      }
 
-        return acc;
-      },
-      [],
-    );
+      return acc;
+    }, []);
 
     removeActivity(index);
     setValue('activityFlows', newActivityFlows);
@@ -181,20 +164,18 @@ export const Activities = () => {
       title={t('activities')}
       Header={ActivitiesHeader}
       headerProps={{ onAddActivity: handleActivityAdd }}
-      hasMaxWidth
-    >
+      hasMaxWidth>
       {activities?.length ? (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activities-dnd" direction="vertical">
-            {(listProvided) => (
+            {listProvided => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activities.map((activity: ActivityFormValues, index: number) => {
                   const activityKey = getActivityKey(activity);
                   const isPerformanceTask = activity?.isPerformanceTask || false;
                   const activityName = activity.name;
                   const isEditVisible =
-                    !isPerformanceTask ||
-                    EditablePerformanceTasks.includes(activity.performanceTaskType || '');
+                    !isPerformanceTask || EditablePerformanceTasks.includes(activity.performanceTaskType || '');
                   const hasError = errors[index];
                   const dataTestid = `builder-activities-activity-${index}`;
 
@@ -202,16 +183,10 @@ export const Activities = () => {
                     <Fragment key={`activity-${activityKey}`}>
                       <Draggable draggableId={activityKey} index={index}>
                         {(itemProvided, snapshot) => (
-                          <Box
-                            {...itemProvided.draggableProps}
-                            ref={itemProvided.innerRef}
-                            data-testid={dataTestid}
-                          >
+                          <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef} data-testid={dataTestid}>
                             <Item
                               {...activity}
-                              onItemClick={
-                                isEditVisible ? () => handleEditActivity(index) : undefined
-                              }
+                              onItemClick={isEditVisible ? () => handleEditActivity(index) : undefined}
                               dragHandleProps={itemProvided.dragHandleProps}
                               isDragging={snapshot.isDragging}
                               img={activity.image}
@@ -223,8 +198,7 @@ export const Activities = () => {
                                   key: activityKey,
                                   isActivityHidden: activity.isHidden,
                                   onEdit: () => handleEditActivity(index),
-                                  onDuplicate: () =>
-                                    handleDuplicateActivity(index, isPerformanceTask),
+                                  onDuplicate: () => handleDuplicateActivity(index, isPerformanceTask),
                                   onRemove: () => setActivityToDelete(activityKey),
                                   onVisibilityChange: () => handleActivityVisibilityChange(index),
                                   isEditVisible,
@@ -259,9 +233,7 @@ export const Activities = () => {
           </DndDroppable>
         </DragDropContext>
       ) : (
-        <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
-          {t('activityIsRequired')}
-        </StyledTitleMedium>
+        <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>{t('activityIsRequired')}</StyledTitleMedium>
       )}
     </BuilderContainer>
   );

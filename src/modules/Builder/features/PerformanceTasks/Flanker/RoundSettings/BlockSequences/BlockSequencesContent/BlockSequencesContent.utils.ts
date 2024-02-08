@@ -36,17 +36,17 @@ export const getSequencesData = (stimulusTrials: FlankerStimulusSettings[] = [])
 
 export const getSequencesHeadCells = (uploadedData?: UploadedDataOrNull): HeadCell[] =>
   uploadedData
-    ? Object.keys(uploadedData[0]).map((label) => ({
+    ? Object.keys(uploadedData[0]).map(label => ({
         id: label.toLowerCase().replace(/\s+/g, '-'),
         label,
       }))
-    : createArray(DEFAULT_SEQUENCES_TABLE_COLUMNS, (index) => ({
+    : createArray(DEFAULT_SEQUENCES_TABLE_COLUMNS, index => ({
         id: `block-${index + 1}`,
         label: `${t('flankerRound.block')} ${index + 1}`,
       }));
 
 export const getUploadedTableRows = (uploadedData?: UploadedDataOrNull) =>
-  uploadedData?.map((obj) => {
+  uploadedData?.map(obj => {
     const updatedObj: Row = {};
     // eslint-disable-next-line no-restricted-syntax
     for (const key in obj) {
@@ -59,10 +59,7 @@ export const getUploadedTableRows = (uploadedData?: UploadedDataOrNull) =>
     return updatedObj;
   });
 
-export const getStimulusObject = (
-  stimulusTrials: FlankerStimulusSettings[],
-  type: 'imageKey' | 'idKey',
-) =>
+export const getStimulusObject = (stimulusTrials: FlankerStimulusSettings[], type: 'imageKey' | 'idKey') =>
   stimulusTrials?.reduce((result: Record<string, string>, item) => {
     const trialName = item.text || getUploadedMediaName(item.image);
     const key = type === 'imageKey' ? trialName : item.id;
@@ -71,15 +68,12 @@ export const getStimulusObject = (
     return { ...result, [key]: value };
   }, {});
 
-export const getRoundBlocks = (
-  stimulusTrials: FlankerStimulusSettings[],
-  uploadedData?: UploadedDataOrNull,
-) => {
+export const getRoundBlocks = (stimulusTrials: FlankerStimulusSettings[], uploadedData?: UploadedDataOrNull) => {
   if (!uploadedData?.length) return;
 
   return Object.keys(uploadedData[0]).reduce((result: { order: string[]; name: string }[], key) => {
     result.push({
-      order: uploadedData.map((obj) => obj?.[key]?.id),
+      order: uploadedData.map(obj => obj?.[key]?.id),
       name: key,
     });
 
@@ -107,9 +101,9 @@ export const getTableFromSequences = (
 };
 
 export const getExportData = (uploadedData?: UploadedDataOrNull) =>
-  uploadedData?.map((obj) => {
+  uploadedData?.map(obj => {
     const transformedObj: Record<string, string> = {};
-    Object.keys(obj).forEach((key) => {
+    Object.keys(obj).forEach(key => {
       transformedObj[key] = obj[key].text;
     });
 

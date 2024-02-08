@@ -48,12 +48,7 @@ const onChange = jest.fn();
 describe('MultipleSelection', () => {
   test('renders the multiple selection component with images and labels', async () => {
     renderWithProviders(
-      <MultipleSelection
-        onChange={onChange}
-        data-testid={dataTestid}
-        activityItem={activityItem}
-        value={[]}
-      />,
+      <MultipleSelection onChange={onChange} data-testid={dataTestid} activityItem={activityItem} value={[]} />,
     );
 
     const multiSelect = screen.getByTestId(dataTestid);

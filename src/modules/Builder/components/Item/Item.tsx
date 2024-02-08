@@ -2,13 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Actions } from 'shared/components';
-import {
-  StyledTitleBoldMedium,
-  StyledTitleBoldSmall,
-  StyledTitleMedium,
-  theme,
-  variables,
-} from 'shared/styles';
+import { StyledTitleBoldMedium, StyledTitleBoldSmall, StyledTitleMedium, theme, variables } from 'shared/styles';
 
 import {
   StyledActions,
@@ -39,11 +33,7 @@ export const Item = ({
 
   const commonSx = isInactive ? { opacity: variables.opacity.disabled } : undefined;
 
-  const image = img ? (
-    <StyledImg src={img} alt={name} sx={commonSx} />
-  ) : (
-    <StyledImgPlaceholder sx={commonSx} />
-  );
+  const image = img ? <StyledImg src={img} alt={name} sx={commonSx} /> : <StyledImgPlaceholder sx={commonSx} />;
 
   return (
     <StyledItem
@@ -53,8 +43,7 @@ export const Item = ({
       onMouseEnter={() => setVisibleActions(true)}
       onClick={onItemClick}
       isDragging={isDragging}
-      data-testid="builder-item"
-    >
+      data-testid="builder-item">
       {isActivityUiType && image}
       <StyledCol hasImage={isActivityUiType} sx={commonSx}>
         {index && total && (
@@ -63,14 +52,9 @@ export const Item = ({
           </StyledTitleMedium>
         )}
         <StyledTitleBoldMedium data-testid={`${dataTestid}-name`}>{name}</StyledTitleBoldMedium>
-        <StyledActivityDescription data-testid={`${dataTestid}-description`}>
-          {description}
-        </StyledActivityDescription>
+        <StyledActivityDescription data-testid={`${dataTestid}-description`}>{description}</StyledActivityDescription>
         {count !== undefined && (
-          <StyledTitleBoldSmall
-            sx={{ marginTop: theme.spacing(0.6) }}
-            data-testid={`${dataTestid}-items-count`}
-          >
+          <StyledTitleBoldSmall sx={{ marginTop: theme.spacing(0.6) }} data-testid={`${dataTestid}-items-count`}>
             {count} {t('item', { count })}
           </StyledTitleBoldSmall>
         )}

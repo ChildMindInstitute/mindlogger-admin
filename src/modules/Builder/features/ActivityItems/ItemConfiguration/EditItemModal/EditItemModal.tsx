@@ -16,10 +16,7 @@ export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditIt
   const { watch } = useCustomFormContext();
   const itemName = watch(`${itemFieldName}.name`);
   const currentItem = watch(itemFieldName);
-  const conditionalLogicForItem = getItemConditionDependencies(
-    currentItem,
-    activity?.conditionalLogic,
-  );
+  const conditionalLogicForItem = getItemConditionDependencies(currentItem, activity?.conditionalLogic);
 
   const handleModalSubmit = () => {
     onClose();
@@ -37,8 +34,7 @@ export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditIt
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
-      data-testid="builder-activity-items-edit-item-popup"
-    >
+      data-testid="builder-activity-items-edit-item-popup">
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
           <Trans i18nKey="editItemDescription">
@@ -51,10 +47,7 @@ export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditIt
           {conditionalLogicForItem?.length ? t('deleteItemWithConditionalsDescription') : null}
         </StyledBodyLarge>
         {conditionalLogicForItem?.map((conditionalLogic: ConditionalLogic) => (
-          <ConditionalPanel
-            key={`condition-panel-${conditionalLogic.key}`}
-            condition={conditionalLogic}
-          />
+          <ConditionalPanel key={`condition-panel-${conditionalLogic.key}`} condition={conditionalLogic} />
         ))}
       </StyledModalWrapper>
     </Modal>

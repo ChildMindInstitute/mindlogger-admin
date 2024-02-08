@@ -43,7 +43,7 @@ describe('ConditionalPanel', () => {
   test('displays correct data based on condition prop', () => {
     renderComponent();
 
-    mockCondition?.conditions.forEach((condition) => {
+    mockCondition?.conditions.forEach(condition => {
       expect(screen.getByText(new RegExp(condition.itemName, 'i'))).toBeInTheDocument();
     });
   });

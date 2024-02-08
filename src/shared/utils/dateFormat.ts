@@ -12,8 +12,7 @@ export const formatToWeekYear = (date: Date) => `${getISOWeek(date)} ${date.getF
 
 export const getMoreText = () => `${t('more').toLowerCase()}...`;
 
-export const getDayName = (date: Date) =>
-  date.toLocaleDateString(i18n.language, { weekday: NameLength.Long });
+export const getDayName = (date: Date) => date.toLocaleDateString(i18n.language, { weekday: NameLength.Long });
 
 export const getMonthName = (date: Date, length?: NameLength) =>
   date.toLocaleString(i18n.language, { month: length || NameLength.Long });

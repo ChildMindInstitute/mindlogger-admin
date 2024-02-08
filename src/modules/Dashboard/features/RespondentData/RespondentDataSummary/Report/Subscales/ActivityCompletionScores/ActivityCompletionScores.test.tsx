@@ -31,8 +31,7 @@ describe('ActivityCompletionScores component', () => {
       <ReportContext.Provider
         value={{
           setCurrentActivityCompletionData,
-        }}
-      >
+        }}>
         <ActivityCompletionScores
           reviewDate={new Date('2024-01-23T20:10:15')}
           finalSubscaleScore={25}
@@ -52,9 +51,7 @@ describe('ActivityCompletionScores component', () => {
     expect(screen.getByText('Final Subscale Score: 25')).toBeInTheDocument();
     expect(screen.getByText('Frequency: 3')).toBeInTheDocument();
     expect(screen.getByTestId('mocked-bar-chart')).toBeInTheDocument();
-    expect(screen.getByTestId('mocked-additional-information')).toHaveTextContent(
-      'Mocked option text',
-    );
+    expect(screen.getByTestId('mocked-additional-information')).toHaveTextContent('Mocked option text');
 
     await userEvent.click(showAllSubscaleResultsButton);
     expect(setCurrentActivityCompletionData).toHaveBeenCalledTimes(1);

@@ -26,8 +26,7 @@ export const AuthPopup = ({ authPopupVisible, setAuthPopupVisible }: AuthPopupPr
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={() => setAuthPopupVisible(false)}
-      data-testid="library-auth-popup"
-    >
+      data-testid="library-auth-popup">
       <StyledModalWrapper>{t('youNeedToAuthorizeHint')}</StyledModalWrapper>
     </Modal>
   );

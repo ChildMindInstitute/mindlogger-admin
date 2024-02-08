@@ -4,12 +4,7 @@ import { Box } from '@mui/material';
 import { EditorController, InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { Tooltip, Uploader } from 'shared/components';
-import {
-  MAX_DESCRIPTION_LENGTH_LONG,
-  MAX_FILE_SIZE_25MB,
-  MAX_NAME_LENGTH,
-  TEXTAREA_ROWS_COUNT,
-} from 'shared/consts';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_25MB, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { themes } from 'modules/Builder/state';

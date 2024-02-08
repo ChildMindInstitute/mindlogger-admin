@@ -7,21 +7,14 @@ import { URL_REGEX } from 'shared/consts';
 const { t } = i18n;
 
 // function to remove Cross-site scripting (XSS), HTML injection, and URL
-export const getSanitizedContent = (
-  content: string,
-  sanitizeFromLink?: boolean,
-  sanitizeFromUrl?: boolean,
-) => {
+export const getSanitizedContent = (content: string, sanitizeFromLink?: boolean, sanitizeFromUrl?: boolean) => {
   const getContentToSanitize = () => {
     const urls = linkify.find(content, 'url');
     if (!urls?.length) return content;
 
     return urls.reduce(
       (sanitizedContent, url) =>
-        sanitizedContent.replace(
-          new RegExp(url.value, 'g'),
-          url.value.replace(URL_REGEX, '').replace(/\./g, ''),
-        ),
+        sanitizedContent.replace(new RegExp(url.value, 'g'), url.value.replace(URL_REGEX, '').replace(/\./g, '')),
       content,
     );
   };

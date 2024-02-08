@@ -28,8 +28,7 @@ export const AddIndividualSchedulePopup = ({
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
       disabledSubmit={isLoading}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
@@ -40,15 +39,11 @@ export const AddIndividualSchedulePopup = ({
                 <>{{ respondentName }}</>
               </strong>
               is currently using the <strong>default schedule</strong>
-              Do you want to create an <strong>individual schedule</strong> for this respondent
-              instead?
+              Do you want to create an <strong>individual schedule</strong> for this respondent instead?
             </Trans>
           </StyledBodyLarge>
           {error && (
-            <StyledBodyLarge
-              color={variables.palette.semantic.error}
-              sx={{ m: theme.spacing(1, 0) }}
-            >
+            <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
               {error}
             </StyledBodyLarge>
           )}

@@ -24,11 +24,7 @@ import { getErrorMessage } from 'shared/utils';
 import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.const';
 import { RemoveAccessPopupProps, FormValues } from './ManagersRemoveAccessPopupProps.types';
 
-export const ManagersRemoveAccessPopup = ({
-  popupVisible,
-  onClose,
-  user,
-}: RemoveAccessPopupProps) => {
+export const ManagersRemoveAccessPopup = ({ popupVisible, onClose, user }: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams() || {};
 
@@ -36,8 +32,8 @@ export const ManagersRemoveAccessPopup = ({
 
   const [step, setStep] = useState<number>(appletId ? 1 : 0);
 
-  const incrementStep = () => setStep((prevStep) => prevStep + 1);
-  const decrementStep = () => setStep((prevStep) => prevStep - 1);
+  const incrementStep = () => setStep(prevStep => prevStep + 1);
+  const decrementStep = () => setStep(prevStep => prevStep - 1);
 
   const defaultValues = applets?.map(({ displayName, id, image }) => ({
     displayName,
@@ -54,12 +50,12 @@ export const ManagersRemoveAccessPopup = ({
 
   const getSelectedApplets = () => {
     if (appletId) {
-      const selectedApplet = watchedUserApplets.find((applet) => applet.id === appletId);
+      const selectedApplet = watchedUserApplets.find(applet => applet.id === appletId);
 
       return selectedApplet ? [selectedApplet] : [];
     }
 
-    return watchedUserApplets.filter((applet) => applet.value);
+    return watchedUserApplets.filter(applet => applet.value);
   };
 
   const selectedApplets = getSelectedApplets();
@@ -68,11 +64,7 @@ export const ManagersRemoveAccessPopup = ({
     name: {
       content: () => (
         <StyledFlexTopCenter>
-          {image ? (
-            <StyledSmallAppletImg src={image} alt="Applet image" />
-          ) : (
-            <StyledSmallAppletImgPlaceholder />
-          )}
+          {image ? <StyledSmallAppletImg src={image} alt="Applet image" /> : <StyledSmallAppletImgPlaceholder />}
           <StyledLabelLarge>{displayName}</StyledLabelLarge>
         </StyledFlexTopCenter>
       ),
@@ -108,13 +100,13 @@ export const ManagersRemoveAccessPopup = ({
         return incrementStep();
       case 1:
         execute({
-          appletIds: selectedApplets.map((item) => item.id),
+          appletIds: selectedApplets.map(item => item.id),
           userId: user.id,
         });
         break;
       case 2:
         execute({
-          appletIds: selectedApplets.map((item) => item.id),
+          appletIds: selectedApplets.map(item => item.id),
           userId: user.id,
         });
         break;
@@ -125,7 +117,7 @@ export const ManagersRemoveAccessPopup = ({
     }
   };
 
-  const listOfSelectedApplets = selectedApplets?.map((applet) => (
+  const listOfSelectedApplets = selectedApplets?.map(applet => (
     <StyledTitleBoldMedium key={applet?.id}>- {applet.displayName} </StyledTitleBoldMedium>
   ));
 
@@ -182,9 +174,7 @@ export const ManagersRemoveAccessPopup = ({
 
   const getThirdMultipleScreen = () => (
     <>
-      <StyledBodyLarge
-        sx={{ marginBottom: theme.spacing(2.4), color: variables.palette.semantic.error }}
-      >
+      <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4), color: variables.palette.semantic.error }}>
         <Trans i18nKey="multipleRemoveAccessError">
           Access for
           <strong>
@@ -293,8 +283,7 @@ export const ManagersRemoveAccessPopup = ({
       onSecondBtnSubmit={decrementStep}
       buttonText={t(buttonTextByStep[step as keyof typeof buttonTextByStep])}
       disabledSubmit={!selectedApplets.length}
-      data-testid="dashboard-managers-remove-access-popup"
-    >
+      data-testid="dashboard-managers-remove-access-popup">
       <StyledModalWrapper>
         {screenByStep[step]}
         {error && step === 1 && (

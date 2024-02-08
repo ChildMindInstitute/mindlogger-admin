@@ -35,8 +35,7 @@ export const ButtonWithMenu = ({
         <span>
           <StyledButton
             sx={{
-              backgroundColor:
-                openMenu && variant === 'outlined' ? variables.palette.primary_alfa12 : 'inherit',
+              backgroundColor: openMenu && variant === 'outlined' ? variables.palette.primary_alfa12 : 'inherit',
             }}
             disabled={disabled}
             variant={variant}
@@ -45,8 +44,7 @@ export const ButtonWithMenu = ({
             startIcon={startIcon || <Svg id="add" width="18" height="18" />}
             endIcon={<Svg id={openMenu ? 'navigate-up' : 'navigate-down'} width="18" height="18" />}
             onClick={handleMenuOpen}
-            data-testid={dataTestid}
-          >
+            data-testid={dataTestid}>
             {t(label)}
           </StyledButton>
         </span>

@@ -15,18 +15,11 @@ import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/Responde
 
 import { ItemPickerProps } from './ItemPicker.types';
 
-export const ItemPicker = ({
-  activityItem,
-  isDisabled,
-  'data-testid': dataTestid,
-}: ItemPickerProps) => {
+export const ItemPicker = ({ activityItem, isDisabled, 'data-testid': dataTestid }: ItemPickerProps) => {
   const { control, getValues } = useFormContext<FeedbackForm>();
   const { assessmentItems } = getValues();
 
-  const activityItemIndex = getActivityItemIndex(
-    assessmentItems,
-    activityItem.activityItem.id || '',
-  );
+  const activityItemIndex = getActivityItemIndex(assessmentItems, activityItem.activityItem.id || '');
 
   const controlName = `assessmentItems.${activityItemIndex}.answers` as const;
 

@@ -40,7 +40,7 @@ export const getFlowsItemActions = ({
 
 export const getDuplicatedActivityFlow = (flow: ActivityFlowFormValues, name: string) => {
   const duplicatedItems =
-    flow.items?.map((item) => ({
+    flow.items?.map(item => ({
       ...item,
       id: undefined,
       key: uuidv4(),

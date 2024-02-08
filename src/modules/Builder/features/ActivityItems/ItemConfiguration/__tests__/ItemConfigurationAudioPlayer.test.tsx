@@ -8,10 +8,9 @@ import { mockedItemName, mockedTestid, renderItemConfigurationByType } from '../
 
 const mockedAudioTestid = `${mockedTestid}-audio-player`;
 
-const renderAudioPlayer = (itemProps) =>
-  renderItemConfigurationByType(ItemResponseType.AudioPlayer);
+const renderAudioPlayer = itemProps => renderItemConfigurationByType(ItemResponseType.AudioPlayer);
 
-const selectAudioType = (isUpload) => {
+const selectAudioType = isUpload => {
   fireEvent.click(screen.getByTestId(`${mockedAudioTestid}-add`));
 
   fireEvent.click(screen.getByTestId(`${mockedAudioTestid}-${isUpload ? 'upload' : 'record'}`));
@@ -91,9 +90,7 @@ describe('ItemConfiguration: AudioPlayer', () => {
     fireEvent.click(remove);
 
     expect(screen.getByTestId(`${mockedAudioTestid}-remove-popup`)).toBeVisible();
-    expect(screen.getByTestId(`${mockedAudioTestid}-remove-popup-title`)).toHaveTextContent(
-      'Delete Audio',
-    );
+    expect(screen.getByTestId(`${mockedAudioTestid}-remove-popup-title`)).toHaveTextContent('Delete Audio');
     expect(screen.getByTestId(`${mockedAudioTestid}-remove-popup-description`)).toHaveTextContent(
       'Are you sure you want to delete the current audio?',
     );

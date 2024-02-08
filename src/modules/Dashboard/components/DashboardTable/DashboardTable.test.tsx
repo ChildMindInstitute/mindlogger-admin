@@ -21,7 +21,7 @@ const mockColumns = [
 const actionsContentFn = jest.fn();
 
 const getMockRows = (arrayLength = 15) =>
-  createArray(arrayLength, (index) => ({
+  createArray(arrayLength, index => ({
     firstName: {
       content: () => `John${index}`,
       value: `john-${index}`,
@@ -63,9 +63,7 @@ describe('DashboardTable component tests', () => {
 
   test('should render empty component for empty table', () => {
     const EmptyComponent = <>empty component</>;
-    renderWithProviders(
-      getTable({ rows: [], columns: [], count: 0, emptyComponent: EmptyComponent }),
-    );
+    renderWithProviders(getTable({ rows: [], columns: [], count: 0, emptyComponent: EmptyComponent }));
 
     expect(screen.getByText('empty component')).toBeInTheDocument();
   });
@@ -77,8 +75,8 @@ describe('DashboardTable component tests', () => {
     const row = ['John1', 'Doe1'];
     expect(screen.getByTestId(`${mockDataTestId}-table-pagination`)).toBeInTheDocument();
     expect(screen.getByTestId(mockDataTestId)).toBeInTheDocument();
-    columns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
-    row.forEach((rowItem) => expect(screen.getByText(rowItem)).toBeInTheDocument());
+    columns.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
+    row.forEach(rowItem => expect(screen.getByText(rowItem)).toBeInTheDocument());
   });
 
   test('should hover row', () => {

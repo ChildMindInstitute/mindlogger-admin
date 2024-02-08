@@ -1,7 +1,4 @@
-import {
-  getEntityReportFields,
-  FlowReportFieldsPrepareType as Type,
-} from './getEntityReportFields';
+import { getEntityReportFields, FlowReportFieldsPrepareType as Type } from './getEntityReportFields';
 
 const activities = [
   {

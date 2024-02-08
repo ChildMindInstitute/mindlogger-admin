@@ -82,9 +82,7 @@ describe('SelectRespondentsPopup component tests', () => {
       expect(screen.getByTestId('dashboard-managers-select-respondents-popup')).toBeInTheDocument();
       expect(screen.getByText('Mocked Respondent')).toBeInTheDocument();
       expect(screen.getByText('Test Respondent')).toBeInTheDocument();
-      expect(
-        screen.getByText('To proceed, at least 1 Respondent should be selected.'),
-      ).toBeInTheDocument();
+      expect(screen.getByText('To proceed, at least 1 Respondent should be selected.')).toBeInTheDocument();
     });
   });
 

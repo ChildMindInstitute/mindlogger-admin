@@ -34,10 +34,9 @@ export const TopBar = () => {
         {isAuthorized ? (
           <StyledBadge badgeContent={notWatched} data-testid={`${dataTestid}-badge`}>
             <StyledAvatarBtn
-              onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
+              onClick={() => setVisibleAccountDrawer(prevState => !prevState)}
               variant="text"
-              data-testid={`${dataTestid}-badge-button`}
-            >
+              data-testid={`${dataTestid}-badge-button`}>
               <Avatar caption={userInitials} uiType={AvatarUiType.Secondary} />
             </StyledAvatarBtn>
           </StyledBadge>
@@ -45,18 +44,14 @@ export const TopBar = () => {
           <StyledLoginButton
             startIcon={<Svg width="18" height="18" id="profile" />}
             onClick={handleLoginClick}
-            data-testid={`${dataTestid}-login-button`}
-          >
+            data-testid={`${dataTestid}-login-button`}>
             {t('loginLink')}
           </StyledLoginButton>
         )}
       </StyledTopBar>
       <Banners />
       {visibleAccountDrawer && (
-        <AccountPanel
-          setVisibleDrawer={setVisibleAccountDrawer}
-          visibleDrawer={visibleAccountDrawer}
-        />
+        <AccountPanel setVisibleDrawer={setVisibleAccountDrawer} visibleDrawer={visibleAccountDrawer} />
       )}
     </>
   );

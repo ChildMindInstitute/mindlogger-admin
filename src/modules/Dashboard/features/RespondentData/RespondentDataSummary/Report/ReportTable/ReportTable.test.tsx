@@ -31,9 +31,7 @@ describe('ReportFilters', () => {
   test('renders empty state for report table when no answers', async () => {
     renderWithProviders(<ReportTable />);
 
-    expect(
-      screen.getByText("No match was found for ''. Try a different search word or phrase."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("No match was found for ''. Try a different search word or phrase.")).toBeInTheDocument();
   });
 
   test('search in the table', async () => {

@@ -29,12 +29,7 @@ import { removeMarkdown } from 'modules/Builder/utils';
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';
 import { SectionContent } from './SectionContent';
-import {
-  getReportIndex,
-  getScoreDefaults,
-  getSectionDefaults,
-  getTableScoreItems,
-} from './ScoresAndReports.utils';
+import { getReportIndex, getScoreDefaults, getSectionDefaults, getTableScoreItems } from './ScoresAndReports.utils';
 import { ScoreContent } from './ScoreContent';
 import { Title } from './Title';
 import { StyledConfigureBtn } from './ScoresAndReports.styles';
@@ -68,15 +63,12 @@ export const ScoresAndReports = () => {
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  const items = activity?.items.reduce(
-    (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item) => {
-      if (!ItemTypesToPrint.includes(item.responseType)) return items;
-      const { name, question } = item;
+  const items = activity?.items.reduce((items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item) => {
+    if (!ItemTypesToPrint.includes(item.responseType)) return items;
+    const { name, question } = item;
 
-      return [...items, { id: getEntityKey(item), name, question: removeMarkdown(question) }];
-    },
-    [],
-  );
+    return [...items, { id: getEntityKey(item), name, question: removeMarkdown(question) }];
+  }, []);
 
   const scoreItems = activity?.items.filter(checkOnItemTypeAndScore);
   const tableItems = getTableScoreItems(scoreItems);
@@ -114,19 +106,13 @@ export const ScoresAndReports = () => {
     <>
       <StyledBodyLarge
         sx={{ mb: theme.spacing(2.4) }}
-        color={
-          isServerConfigured ? variables.palette.semantic.green : variables.palette.semantic.error
-        }
-      >
+        color={isServerConfigured ? variables.palette.semantic.green : variables.palette.semantic.error}>
         {isServerConfigured ? (
           t('serverStatusConnected')
         ) : (
           <>
             {t('configureServerForReport')}
-            <StyledConfigureBtn
-              onClick={navigateToSettings}
-              data-testid={`${dataTestid}-configure-server`}
-            >
+            <StyledConfigureBtn onClick={navigateToSettings} data-testid={`${dataTestid}-configure-server`}>
               {t('configure')}
             </StyledConfigureBtn>
           </>
@@ -168,15 +154,9 @@ export const ScoresAndReports = () => {
                     index: getReportIndex(reports, report) + 1,
                   });
                   const key = `data-section-${getEntityKey(report, false) || index}`;
-                  const reportDataTestid = `${dataTestid}-${
-                    isSection ? 'section' : 'score'
-                  }-${index}`;
+                  const reportDataTestid = `${dataTestid}-${isSection ? 'section' : 'score'}-${index}`;
                   const headerTitle = (
-                    <Title
-                      title={title}
-                      reportFieldName={reportName}
-                      data-testid={reportDataTestid}
-                    />
+                    <Title title={title} reportFieldName={reportName} data-testid={reportDataTestid} />
                   );
 
                   return (

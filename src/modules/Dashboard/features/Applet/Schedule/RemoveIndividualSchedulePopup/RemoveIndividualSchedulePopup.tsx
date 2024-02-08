@@ -38,7 +38,7 @@ export const RemoveIndividualSchedulePopup = ({
   });
 
   const getNextStep = () =>
-    setStep((prevStep) => {
+    setStep(prevStep => {
       const newStep = prevStep + 1;
 
       return newStep as Steps;
@@ -78,8 +78,7 @@ export const RemoveIndividualSchedulePopup = ({
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
       disabledSubmit={isLoading}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper data-testid={`${dataTestid}-text`}>

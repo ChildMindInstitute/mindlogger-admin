@@ -27,20 +27,17 @@ export const BuilderActivityFlow = () => {
 
   const tabErrors = {
     hasAboutActivityFlowErrors:
-      !!getFieldState(`${fieldName}.name`).error ||
-      !!getFieldState(`${fieldName}.description`).error,
+      !!getFieldState(`${fieldName}.name`).error || !!getFieldState(`${fieldName}.description`).error,
     hasActivityFlowBuilderErrors: !!getFieldState(`${fieldName}.items`).error,
   };
-  const hasAppletErrors =
-    !!getFieldState('activities').error || !!getFieldState('displayName').error;
+  const hasAppletErrors = !!getFieldState('activities').error || !!getFieldState('displayName').error;
 
   return (
     <StyledBuilderActivityFlowBody sx={{ position: 'relative' }}>
       <StyledDirectoryUpButton
         variant="text"
         onClick={handleBackBtnClick}
-        startIcon={<Svg id="directory-up" width="18" height="18" />}
-      >
+        startIcon={<Svg id="directory-up" width="18" height="18" />}>
         {t('activityFlows')}
         <Badge variant="dot" invisible={!hasAppletErrors} color="error" />
       </StyledDirectoryUpButton>

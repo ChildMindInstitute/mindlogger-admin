@@ -5,13 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { format } from 'date-fns';
 
 import { EnterAppletPassword, Modal } from 'shared/components';
-import {
-  StyledBodyLarge,
-  StyledLinearProgress,
-  StyledModalWrapper,
-  theme,
-  variables,
-} from 'shared/styles';
+import { StyledBodyLarge, StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { getExportDataApi } from 'api';
@@ -46,9 +40,7 @@ export const DataExportPopup = ({
   });
 
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
-  const respondentId = !isAppletSetting
-    ? (chosenAppletData as ChosenAppletData)?.respondentId
-    : undefined;
+  const respondentId = !isAppletSetting ? (chosenAppletData as ChosenAppletData)?.respondentId : undefined;
   const { encryption } = chosenAppletData ?? {};
 
   const handleDataExportSubmit = async () => {
@@ -69,13 +61,7 @@ export const DataExportPopup = ({
   const getDecryptedAnswers = useDecryptedActivityData(appletId, encryption);
 
   const executeAllPagesOfExportData = useCallback(
-    async ({
-      appletId,
-      respondentIds: respondentId,
-    }: {
-      appletId: string;
-      respondentIds?: string;
-    }) => {
+    async ({ appletId, respondentIds: respondentId }: { appletId: string; respondentIds?: string }) => {
       try {
         setDataIsExporting(true);
         const formFromDate = getValues?.().fromDate as Date;
@@ -182,8 +168,7 @@ export const DataExportPopup = ({
           onSubmit={submitForm}
           title={t('dataExport')}
           buttonText=""
-          data-testid={dataTestid}
-        >
+          data-testid={dataTestid}>
           <StyledModalWrapper>{renderDataExportContent()}</StyledModalWrapper>
         </Modal>
       );
@@ -195,8 +180,7 @@ export const DataExportPopup = ({
           onSubmit={submitForm}
           title={t('enterAppletPassword')}
           buttonText={t('submit')}
-          data-testid={`${dataTestid}-password`}
-        >
+          data-testid={`${dataTestid}-password`}>
           <StyledModalWrapper>
             <EnterAppletPassword
               ref={appletPasswordRef}
@@ -220,12 +204,9 @@ export const DataExportPopup = ({
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={handlePopupClose}
-          data-testid={`${dataTestid}-error`}
-        >
+          data-testid={`${dataTestid}-error`}>
           <StyledModalWrapper>
-            <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
-              {t('exportFailed')}
-            </StyledBodyLarge>
+            <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>{t('exportFailed')}</StyledBodyLarge>
           </StyledModalWrapper>
         </Modal>
       );

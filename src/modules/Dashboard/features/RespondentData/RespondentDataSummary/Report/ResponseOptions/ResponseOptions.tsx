@@ -22,10 +22,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
-  const renderResponseOption = (
-    { activityItem, answers, dataTestid }: FormattedResponse,
-    index: number,
-  ) => {
+  const renderResponseOption = ({ activityItem, answers, dataTestid }: FormattedResponse, index: number) => {
     if (UNSUPPORTED_ITEMS.includes(activityItem.responseType))
       return <UnsupportedItemResponse itemType={activityItem.responseType} />;
 
@@ -60,8 +57,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
             <Box
               key={`${item.activityItem.id}-${responseOptionIndex}-${index}`}
               data-testid={dataTestid}
-              sx={{ mb: theme.spacing(6.4) }}
-            >
+              sx={{ mb: theme.spacing(6.4) }}>
               <CollapsedMdText
                 text={getDictionaryText(item.activityItem.question)}
                 maxHeight={120}

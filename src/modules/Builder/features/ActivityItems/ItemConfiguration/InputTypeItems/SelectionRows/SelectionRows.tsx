@@ -29,7 +29,7 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
 
-  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
+  const handleCollapse = () => setIsExpanded(prevExpanded => !prevExpanded);
 
   const handleAddRow = () => {
     const newRow = getEmptySelectionItem();
@@ -54,12 +54,7 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
   return (
     <StyledSelectionRowsContainer in={isExpanded} collapsedSize="9.2rem" timeout={0}>
       <StyledFlexColumn sx={{ gap: '2.4rem' }}>
-        <Header
-          name={name}
-          isSingle={isSingle}
-          isExpanded={isExpanded}
-          onArrowClick={handleCollapse}
-        />
+        <Header name={name} isSingle={isSingle} isExpanded={isExpanded} onArrowClick={handleCollapse} />
         <StyledFlexColumn>
           <Options name={name} />
           <Items name={name} isSingle={isSingle} />
@@ -68,8 +63,7 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
           onClick={handleAddRow}
           variant="outlined"
           startIcon={<Svg id="add" width="20" height="20" />}
-          data-testid="builder-activity-items-item-configuration-selection-rows-add-row"
-        >
+          data-testid="builder-activity-items-item-configuration-selection-rows-add-row">
           {t('addSelectionRow')}
         </StyledAddRowButton>
       </StyledFlexColumn>

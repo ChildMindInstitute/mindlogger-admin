@@ -8,7 +8,7 @@ import { StyledFormControl } from './Select.styles';
 export const Select = ({ value, changeValue, options }: SelectProps) => (
   <StyledFormControl variant="standard" fullWidth>
     <MuiSelect value={value} onChange={changeValue}>
-      {options.map((value) => (
+      {options.map(value => (
         <MenuItem key={value} value={value}>
           <StyledLabelBoldLarge>{value}</StyledLabelBoldLarge>
         </MenuItem>

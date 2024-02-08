@@ -36,9 +36,7 @@ describe('DataTable Component', () => {
   test('calls onSelectAll when the select all checkbox is clicked', () => {
     const onSelectAllMock = jest.fn();
 
-    const { getByTestId } = render(
-      <DataTable selectAll onSelectAll={onSelectAllMock} {...commonProps} />,
-    );
+    const { getByTestId } = render(<DataTable selectAll onSelectAll={onSelectAllMock} {...commonProps} />);
 
     const selectAllCheckbox = getByTestId(`${dataTestid}-select-all`).childNodes[0];
     fireEvent.click(selectAllCheckbox);

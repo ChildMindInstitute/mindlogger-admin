@@ -1,12 +1,7 @@
 import { ScoreOrSection } from 'shared/state';
 import { mockedMultiActivityItem, mockedSingleActivityItem } from 'shared/mock';
 
-import {
-  getReportIndex,
-  getScoreDefaults,
-  getSectionDefaults,
-  getTableScoreItems,
-} from './ScoresAndReports.utils';
+import { getReportIndex, getScoreDefaults, getSectionDefaults, getTableScoreItems } from './ScoresAndReports.utils';
 
 jest.mock('uuid', () => ({
   ...jest.requireActual('uuid'),

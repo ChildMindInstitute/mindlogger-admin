@@ -7,7 +7,5 @@ export const getButtonLabel = (buttonsQuantity: number, buttonIndex: number) => 
     return t('flankerButtons.buttonName');
   }
 
-  return buttonIndex === 0
-    ? t('flankerButtons.leftButtonName')
-    : t('flankerButtons.rightButtonName');
+  return buttonIndex === 0 ? t('flankerButtons.leftButtonName') : t('flankerButtons.rightButtonName');
 };

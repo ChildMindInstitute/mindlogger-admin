@@ -14,11 +14,7 @@ import { GetMenuItemsType } from '../ActivityFlowBuilder.types';
 import { StyledButtons } from './ActivityFlowBuilderHeader.styles';
 import { ActivityFlowBuilderHeaderProps } from './ActivityFlowBuilderHeader.types';
 
-export const ActivityFlowBuilderHeader = ({
-  isSticky,
-  children,
-  headerProps,
-}: ActivityFlowBuilderHeaderProps) => {
+export const ActivityFlowBuilderHeader = ({ isSticky, children, headerProps }: ActivityFlowBuilderHeaderProps) => {
   const { t } = useTranslation('app');
   const { watch } = useCustomFormContext();
   const activities: AppletFormValues['activities'] = watch('activities');
@@ -61,8 +57,7 @@ export const ActivityFlowBuilderHeader = ({
             variant="outlined"
             startIcon={<Svg id="cross" width={18} height={18} />}
             onClick={() => setClearFlowModalVisible(true)}
-            data-testid={`${dataTestid}-clear`}
-          >
+            data-testid={`${dataTestid}-clear`}>
             {t('clearFlow')}
           </Button>
         </StyledButtons>

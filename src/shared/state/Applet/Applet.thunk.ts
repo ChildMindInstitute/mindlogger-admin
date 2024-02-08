@@ -2,15 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { ApiErrorResponse, SingleApplet } from 'redux/modules';
-import {
-  getAppletApi,
-  AppletId,
-  postAppletApi,
-  putAppletApi,
-  AppletBody,
-  getAppletWithItemsApi,
-  OwnerId,
-} from 'api';
+import { getAppletApi, AppletId, postAppletApi, putAppletApi, AppletBody, getAppletWithItemsApi, OwnerId } from 'api';
 import { getApiErrorResult } from 'shared/utils/errors';
 
 export const enum AppletThunkTypePrefix {

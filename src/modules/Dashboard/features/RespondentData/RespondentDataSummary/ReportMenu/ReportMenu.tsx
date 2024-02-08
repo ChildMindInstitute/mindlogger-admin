@@ -2,13 +2,7 @@ import { useContext } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import {
-  theme,
-  StyledHeadlineLarge,
-  StyledLabelLarge,
-  StyledBodyLarge,
-  variables,
-} from 'shared/styles';
+import { theme, StyledHeadlineLarge, StyledLabelLarge, StyledBodyLarge, variables } from 'shared/styles';
 import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
 import { useRespondentLabel } from 'shared/hooks';
 
@@ -32,8 +26,7 @@ export const ReportMenu = ({ activities }: ReportMenuProps) => {
           key={String(activity.id)}
           isSelected={selectedActivity?.id === activity.id}
           onClick={() => setSelectedActivity(activity)}
-          data-testid={`respondents-summary-activity-${index}`}
-        >
+          data-testid={`respondents-summary-activity-${index}`}>
           <StyledBodyLarge color={variables.palette.on_surface}>{activity.name}</StyledBodyLarge>
         </StyledActivity>
       ))}

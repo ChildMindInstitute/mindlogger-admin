@@ -44,9 +44,7 @@ const monthValidation =
   '(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)';
 const yearValidation = '(?:\\d{2}|\\d{4})';
 
-export const dateValidationRegex = new RegExp(
-  `^${dayValidation}([- ])?${monthValidation}\\1${yearValidation}$`,
-);
+export const dateValidationRegex = new RegExp(`^${dayValidation}([- ])?${monthValidation}\\1${yearValidation}$`);
 
 export const frequencyArray = ['Always', 'Once', 'Daily', 'Weekly', 'Monthly', 'Weekdays'];
 export const EMPTY_TIME = '-';

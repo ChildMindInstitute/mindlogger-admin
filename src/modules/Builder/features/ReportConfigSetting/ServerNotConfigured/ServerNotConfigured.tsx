@@ -10,19 +10,13 @@ import { SettingParam } from 'shared/utils/urlGenerator';
 import { StyledSvg } from '../ReportConfigSetting.styles';
 import { ServerNotConfiguredProps } from './ServerNotConfigured.types';
 
-export const ServerNotConfigured = ({
-  appletId,
-  'data-testid': dataTestid,
-}: ServerNotConfiguredProps) => {
+export const ServerNotConfigured = ({ appletId, 'data-testid': dataTestid }: ServerNotConfiguredProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
     <>
-      <StyledBodyLarge
-        sx={{ margin: theme.spacing(2.4, 0, 4.8, 0) }}
-        color={variables.palette.semantic.error}
-      >
+      <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0, 4.8, 0) }} color={variables.palette.semantic.error}>
         {t('configureServerForReport')}
       </StyledBodyLarge>
       <Button
@@ -41,8 +35,7 @@ export const ServerNotConfigured = ({
             }),
           )
         }
-        data-testid={`${dataTestid}-configure-report`}
-      >
+        data-testid={`${dataTestid}-configure-report`}>
         {t('configureServerForApplet')}
       </Button>
     </>

@@ -7,11 +7,7 @@ import { falseReturnFunc } from 'shared/utils';
 
 import { ActivityFlowHeaderProps } from './ActivityFlowHeader.types';
 
-export const ActivityFlowHeader = ({
-  isSticky,
-  children,
-  headerProps,
-}: ActivityFlowHeaderProps) => {
+export const ActivityFlowHeader = ({ isSticky, children, headerProps }: ActivityFlowHeaderProps) => {
   const { t } = useTranslation('app');
   const { onAddActivityFlow = falseReturnFunc } = headerProps || {};
 
@@ -22,8 +18,7 @@ export const ActivityFlowHeader = ({
         variant="outlined"
         startIcon={<Svg id="flow" />}
         onClick={() => onAddActivityFlow()}
-        data-testid="builder-activity-flows-add"
-      >
+        data-testid="builder-activity-flows-add">
         {t('addActivityFlow')}
       </Button>
     </StyledBuilderContainerHeader>

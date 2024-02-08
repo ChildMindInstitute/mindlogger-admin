@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import 'md-editor-rt/lib/style.css';
 
-import {
-  CharacterCounter,
-  FooterMessage,
-  LANGUAGE_BY_DEFAULT,
-} from 'shared/components/MarkDownEditor';
+import { CharacterCounter, FooterMessage, LANGUAGE_BY_DEFAULT } from 'shared/components/MarkDownEditor';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
 import { getSanitizedContent } from 'shared/utils/forms';
@@ -87,11 +83,7 @@ export const Editor = ({
       <StyledFlexSpaceBetween sx={{ m: theme.spacing(0.4, 0, 2) }}>
         <FooterMessage inputSize={(value ?? '').length} key="footer-message" error={error} />
         {!error?.message && (
-          <CharacterCounter
-            inputSize={(value ?? '').length}
-            disabled={disabled}
-            key="character-counter"
-          />
+          <CharacterCounter inputSize={(value ?? '').length} disabled={disabled} key="character-counter" />
         )}
       </StyledFlexSpaceBetween>
       {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}

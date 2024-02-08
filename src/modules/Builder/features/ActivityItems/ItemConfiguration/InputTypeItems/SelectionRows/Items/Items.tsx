@@ -14,11 +14,7 @@ import {
   ItemAlert,
 } from 'shared/state';
 
-import {
-  StyledSelectionRowItem,
-  StyledItemContainer,
-  StyledRemoveItemButton,
-} from './Items.styles';
+import { StyledSelectionRowItem, StyledItemContainer, StyledRemoveItemButton } from './Items.styles';
 import { ItemsProps } from './Items.types';
 import { CharactersCounter } from '../CharactersCounter';
 import { StyledSelectionBox } from '../SelectionRows.styles';
@@ -68,9 +64,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
 
       setValue(
         dataMatrixName,
-        dataMatrix?.filter(
-          (dataMatrixRow: SingleAndMultipleSelectMatrix, key: number) => key !== index,
-        ),
+        dataMatrix?.filter((dataMatrixRow: SingleAndMultipleSelectMatrix, key: number) => key !== index),
       );
     }
   };
@@ -82,11 +76,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
     const dataTestid = `builder-activity-items-item-configuration-selection-rows-row-${index}`;
 
     return (
-      <StyledSelectionRowItem
-        key={`row-${row.id}`}
-        hasTooltips={hasTooltips}
-        data-testid={dataTestid}
-      >
+      <StyledSelectionRowItem key={`row-${row.id}`} hasTooltips={hasTooltips} data-testid={dataTestid}>
         <StyledSelectionBox isErrorShortened={hasShortenedHelper}>
           <StyledFlexTopStart sx={{ gap: '1.2rem' }}>
             <Uploader
@@ -123,8 +113,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
         </StyledSelectionBox>
         {options?.map((option: SingleAndMultiSelectRowOption, key: number) => {
           const scoreName = `${dataMatrixName}.${index}.options.${key}.score`;
-          const isRemoveButtonVisible =
-            hasRemoveButton && key === options?.length - 1 && index !== 0;
+          const isRemoveButtonVisible = hasRemoveButton && key === options?.length - 1 && index !== 0;
 
           const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
             if (event.target.value === '') return setValue(scoreName, 0);
@@ -152,10 +141,7 @@ export const Items = ({ name, isSingle }: ItemsProps) => {
                   />
                 )}
                 {isRemoveButtonVisible && (
-                  <StyledRemoveItemButton
-                    onClick={() => handleRemoveItem(index)}
-                    data-testid={`${dataTestid}-remove`}
-                  >
+                  <StyledRemoveItemButton onClick={() => handleRemoveItem(index)} data-testid={`${dataTestid}-remove`}>
                     <Svg id="cross" />
                   </StyledRemoveItemButton>
                 )}

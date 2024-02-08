@@ -101,13 +101,9 @@ describe('ShareAppletSetting', () => {
           { signal: undefined },
         );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(
-          1,
-          `/applets/${mockedApplet.id}/library_link`,
-          {
-            signal: undefined,
-          },
-        );
+        expect(mockAxios.get).toHaveBeenNthCalledWith(1, `/applets/${mockedApplet.id}/library_link`, {
+          signal: undefined,
+        });
       });
 
       const successPopup = await screen.findByTestId(`${dataTestid}-share-success-popup`);

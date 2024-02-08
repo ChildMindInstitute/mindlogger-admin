@@ -8,13 +8,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
 import { Spinner } from 'shared/components';
-import {
-  DatavizActivity,
-  createAnswerNoteApi,
-  deleteAnswerNoteApi,
-  editAnswerNoteApi,
-  getAnswersNotesApi,
-} from 'api';
+import { DatavizActivity, createAnswerNoteApi, deleteAnswerNoteApi, editAnswerNoteApi, getAnswersNotesApi } from 'api';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
 import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
@@ -38,7 +32,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
 
   const { execute: getAnswersNotes, isLoading } = useAsync(
     getAnswersNotesApi,
-    (res) => res?.data?.result && setNotes(res.data.result),
+    res => res?.data?.result && setNotes(res.data.result),
   );
 
   const updateListOfNotes = async () => {

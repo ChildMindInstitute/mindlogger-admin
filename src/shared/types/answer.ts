@@ -98,20 +98,15 @@ export type ExportAnswer = {
   };
 };
 
-export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &
-  EncryptedAnswerSharedProps<A, E>;
+export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer & EncryptedAnswerSharedProps<A, E>;
 
-export type EncryptionAnswerDataTypes =
-  | 'userPublicKey'
-  | 'itemIds'
-  | 'answer'
-  | 'events'
-  | 'migratedData';
+export type EncryptionAnswerDataTypes = 'userPublicKey' | 'itemIds' | 'answer' | 'events' | 'migratedData';
 
-export type DecryptedAnswerData<
-  T = ExtendedExportAnswerWithoutEncryption,
-  P = ActivityItemAnswer,
-> = Omit<T, EncryptionAnswerDataTypes> & P;
+export type DecryptedAnswerData<T = ExtendedExportAnswerWithoutEncryption, P = ActivityItemAnswer> = Omit<
+  T,
+  EncryptionAnswerDataTypes
+> &
+  P;
 
 export type ExtendedExportAnswerWithoutEncryption = Omit<
   ExtendedExportAnswer<AnswerDTO, EventDTO>,

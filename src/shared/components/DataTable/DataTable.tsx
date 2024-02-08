@@ -6,12 +6,7 @@ import { ContentWithTooltip } from 'shared/components/ContentWithTooltip';
 import { getEntityKey } from 'shared/utils';
 
 import { DataTableItem, DataTableProps } from './DataTable.types';
-import {
-  StyledCheckbox,
-  StyledTableCell,
-  StyledTableContainer,
-  StyledHeadCell,
-} from './DataTable.styles';
+import { StyledCheckbox, StyledTableCell, StyledTableContainer, StyledHeadCell } from './DataTable.styles';
 
 export const DataTable = ({
   data,
@@ -43,7 +38,7 @@ export const DataTable = ({
 
     if (onSelect) return onSelect(key, prevSelected);
 
-    if (prevSelected) return setSelected(selected.filter((selectedKey) => selectedKey !== key));
+    if (prevSelected) return setSelected(selected.filter(selectedKey => selectedKey !== key));
 
     setSelected([...selected, key]);
   };
@@ -53,7 +48,7 @@ export const DataTable = ({
 
     if (isAllSelected) return setSelected([]);
 
-    setSelected(data?.map((item) => getItemKey(item)) ?? []);
+    setSelected(data?.map(item => getItemKey(item)) ?? []);
   };
 
   return (
@@ -72,14 +67,8 @@ export const DataTable = ({
               </StyledHeadCell>
             ) : null}
             {dataTableColumns?.map(({ key, label, styles = {} }) => (
-              <StyledHeadCell
-                tableHeadBackground={tableHeadBackground}
-                sx={styles}
-                key={`data-table-head-${key}`}
-              >
-                <StyledBodyMedium sx={{ color: variables.palette.outline }}>
-                  {label}
-                </StyledBodyMedium>
+              <StyledHeadCell tableHeadBackground={tableHeadBackground} sx={styles} key={`data-table-head-${key}`}>
+                <StyledBodyMedium sx={{ color: variables.palette.outline }}>{label}</StyledBodyMedium>
               </StyledHeadCell>
             ))}
           </TableRow>
@@ -100,10 +89,7 @@ export const DataTable = ({
                   </TableCell>
                 )}
                 {dataTableColumns?.map(({ key }) => (
-                  <StyledTableCell
-                    sx={{ backgroundColor: 'inherit' }}
-                    key={`data-table-cell-${key}`}
-                  >
+                  <StyledTableCell sx={{ backgroundColor: 'inherit' }} key={`data-table-cell-${key}`}>
                     <ContentWithTooltip
                       value={item.tooltip ?? item[key]}
                       item={item}

@@ -16,8 +16,7 @@ export const LeftBarHeader = ({ isSticky, children, headerProps }: LeftBarHeader
       variant="outlined"
       startIcon={<Svg id="add" width={18} height={18} />}
       onClick={onAddItem}
-      data-testid="builder-activity-items-add-item"
-    >
+      data-testid="builder-activity-items-add-item">
       {t('addItem')}
     </Button>
   );

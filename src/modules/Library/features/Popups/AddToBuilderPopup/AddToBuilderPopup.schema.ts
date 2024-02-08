@@ -2,11 +2,7 @@ import { object, string } from 'yup';
 
 import i18n from 'i18n';
 
-import {
-  AddToBuilderActions,
-  AddToBuilderPopupSchemaType,
-  AddToBuilderSteps,
-} from './AddToBuilderPopup.types';
+import { AddToBuilderActions, AddToBuilderPopupSchemaType, AddToBuilderSteps } from './AddToBuilderPopup.types';
 
 export const addToBuilderPopupSchema = (): AddToBuilderPopupSchemaType => {
   const { t } = i18n;
@@ -22,16 +18,12 @@ export const addToBuilderPopupSchema = (): AddToBuilderPopupSchemaType => {
       addToBuilderAction: string().required(),
     }),
     [AddToBuilderSteps.SelectApplet]: object({
-      selectedApplet: string().test(
-        'check_addToBuilderAction',
-        appletRequired,
-        (value, testContext) => {
-          const isAddToExistingAppletSelected =
-            testContext.parent?.addToBuilderAction === AddToBuilderActions.AddToExistingApplet;
+      selectedApplet: string().test('check_addToBuilderAction', appletRequired, (value, testContext) => {
+        const isAddToExistingAppletSelected =
+          testContext.parent?.addToBuilderAction === AddToBuilderActions.AddToExistingApplet;
 
-          return !!value || isAddToExistingAppletSelected;
-        },
-      ),
+        return !!value || isAddToExistingAppletSelected;
+      }),
     }),
     [AddToBuilderSteps.Error]: object(),
     [AddToBuilderSteps.AccessError]: object(),

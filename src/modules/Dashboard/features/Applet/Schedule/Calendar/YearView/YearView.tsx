@@ -16,7 +16,7 @@ export const YearView = ({ date, localizer, events, onNavigate, components }: Ye
 
   return (
     <StyledYear>
-      {createArray(12, (index) => (
+      {createArray(12, index => (
         <MonthCalendar
           key={index}
           events={events as CalendarEvent[]}
@@ -46,5 +46,4 @@ YearView.navigate = (date: Date, action: NavigateAction) => {
   }
 };
 
-YearView.title = (date: Date, { localizer }: { localizer: DateLocalizer }) =>
-  localizer.format(date, DateFormats.Year);
+YearView.title = (date: Date, { localizer }: { localizer: DateLocalizer }) => localizer.format(date, DateFormats.Year);

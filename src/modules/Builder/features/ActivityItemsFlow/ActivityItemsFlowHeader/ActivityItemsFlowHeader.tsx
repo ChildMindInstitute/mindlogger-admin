@@ -6,11 +6,7 @@ import { StyledBuilderContainerHeader } from 'shared/features/BuilderContainer';
 
 import { ActivityItemsFlowHeaderProps } from './ActivityItemsFlowHeader.types';
 
-export const ActivityItemsFlowHeader = ({
-  isSticky,
-  children,
-  headerProps,
-}: ActivityItemsFlowHeaderProps) => {
+export const ActivityItemsFlowHeader = ({ isSticky, children, headerProps }: ActivityItemsFlowHeaderProps) => {
   const { t } = useTranslation('app');
 
   const isAddButtonDisabled = headerProps?.isAddItemFlowDisabled;
@@ -25,8 +21,7 @@ export const ActivityItemsFlowHeader = ({
             startIcon={<Svg id="add" />}
             onClick={headerProps?.onAddItemFlow}
             disabled={isAddButtonDisabled}
-            data-testid="builder-activity-item-flow-add"
-          >
+            data-testid="builder-activity-item-flow-add">
             {t('addItemFlow')}
           </Button>
         </span>

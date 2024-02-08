@@ -16,10 +16,7 @@ export const CheckboxController = <T extends FieldValues>({
   'data-testid': dataTestid,
   ...checkboxProps
 }: InputControllerProps<T>) => {
-  const handleCheckboxChange = (
-    event: ChangeEvent<HTMLInputElement>,
-    onChange: (event: boolean) => void,
-  ) => {
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>, onChange: (event: boolean) => void) => {
     const checked = event.target.checked;
     onCustomChange && onCustomChange(event);
     onChange(isInversed ? !checked : checked);
@@ -39,7 +36,7 @@ export const CheckboxController = <T extends FieldValues>({
               {...checkboxProps}
               disabled={disabled}
               checked={(isInversed ? !value : value) ?? false}
-              onChange={(event) => {
+              onChange={event => {
                 handleCheckboxChange(event, onChange);
               }}
             />

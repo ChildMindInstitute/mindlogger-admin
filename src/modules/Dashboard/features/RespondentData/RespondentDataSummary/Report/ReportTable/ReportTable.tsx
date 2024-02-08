@@ -46,10 +46,7 @@ export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportT
         const date = format(new Date(answerDate), DateFormats.DayMonthYear);
         const time = format(new Date(answerDate), DateFormats.Time);
 
-        if (
-          !filterReportTable(`${date} ${time} ${answer.value}`, searchValue) ||
-          answer.value === undefined
-        ) {
+        if (!filterReportTable(`${date} ${time} ${answer.value}`, searchValue) || answer.value === undefined) {
           return textItemAnswers;
         }
 
@@ -71,9 +68,7 @@ export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportT
     );
 
     const skippedResponse = (
-      <StyledBodyMedium color={variables.palette.outline}>
-        {t('respondentSkippedResponse')}
-      </StyledBodyMedium>
+      <StyledBodyMedium color={variables.palette.outline}>{t('respondentSkippedResponse')}</StyledBodyMedium>
     );
 
     return getRows(visibleAnswers, skippedResponse);

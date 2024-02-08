@@ -66,8 +66,6 @@ describe('useDatavizFilters', () => {
 
     expect(result.current.minDate).toEqual(new Date('2023-01-10T00:00:00'));
     expect(result.current.maxDate).toEqual(new Date('2023-01-15T23:59:00'));
-    expect(result.current.filteredVersions).toEqual([
-      { version: '1.0.1', createdAt: '2023-01-11T16:40:00' },
-    ]);
+    expect(result.current.filteredVersions).toEqual([{ version: '1.0.1', createdAt: '2023-01-11T16:40:00' }]);
   });
 });

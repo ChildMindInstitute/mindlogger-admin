@@ -52,8 +52,7 @@ export const Slider = ({
             <StyledBodySmall
               data-testid={`${dataTestid}-min-label`}
               sx={{ textAlign: 'start' }}
-              color={variables.palette.on_surface_variant}
-            >
+              color={variables.palette.on_surface_variant}>
               {minLabel}
             </StyledBodySmall>
           )}
@@ -70,8 +69,7 @@ export const Slider = ({
             <StyledBodySmall
               data-testid={`${dataTestid}-max-label`}
               sx={{ textAlign: 'end' }}
-              color={variables.palette.on_surface_variant}
-            >
+              color={variables.palette.on_surface_variant}>
               {maxLabel}
             </StyledBodySmall>
           )}

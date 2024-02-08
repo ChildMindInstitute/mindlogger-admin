@@ -24,7 +24,7 @@ export const useDataPreloader = <T>({
   const listSize = currentListSize < totalSize ? currentListSize : totalSize;
 
   const { loadNextPage } = getInfinityScrollData({
-    action: async () => await startTransition(() => setPage((prevPage) => prevPage + 1)),
+    action: async () => await startTransition(() => setPage(prevPage => prevPage + 1)),
     listSize,
     totalSize,
     limit: ROWS_PER_PAGE,

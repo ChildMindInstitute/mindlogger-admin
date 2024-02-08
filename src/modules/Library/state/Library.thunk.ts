@@ -2,12 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
 import { ApiErrorResponse } from 'shared/state/Base';
-import {
-  PublishedAppletsType,
-  getPublishedAppletsApi,
-  postAppletsToCartApi,
-  getAppletsFromCartApi,
-} from 'api';
+import { PublishedAppletsType, getPublishedAppletsApi, postAppletsToCartApi, getAppletsFromCartApi } from 'api';
 import { getApiErrorResult } from 'shared/utils/errors';
 
 import { PublishedApplet } from './Library.schema';

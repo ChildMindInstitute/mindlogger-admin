@@ -9,8 +9,7 @@ export const ChartTooltipContainer = forwardRef<HTMLDivElement, ChartTooltipCont
       ref={tooltipRef}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      data-testid={`${dataTestid}-tooltip-wrapper`}
-    >
+      data-testid={`${dataTestid}-tooltip-wrapper`}>
       {children}
     </StyledTooltip>
   ),

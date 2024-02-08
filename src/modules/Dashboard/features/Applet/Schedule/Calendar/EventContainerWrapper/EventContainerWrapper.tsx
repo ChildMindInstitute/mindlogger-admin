@@ -17,11 +17,7 @@ import {
   VALUE_DECREASING_CONTAINER_WIDTH_WEEK_VIEW,
 } from './EventContainerWrapper.const';
 
-export const EventContainerWrapper = ({
-  children,
-  events,
-  components,
-}: EventContainerWrapperProps) => {
+export const EventContainerWrapper = ({ children, events, components }: EventContainerWrapperProps) => {
   const wrapperRef = useRef<HTMLElement>();
   const activeView = components?.activeView;
   const isWeekView = activeView === CalendarViews.Week;
@@ -42,7 +38,7 @@ export const EventContainerWrapper = ({
 
       const arrayOfEventsDates: EventsStartEndDates = [];
 
-      await containerEvents.forEach((eventWrapper) => {
+      await containerEvents.forEach(eventWrapper => {
         const { id, start, end } = eventWrapper.dataset;
 
         if (id && start && end) {
@@ -64,33 +60,24 @@ export const EventContainerWrapper = ({
 
             lengthToShow > 0 &&
               eventIds.slice(0, MAX_VISIBLE_EVENTS_WEEK_VIEW).forEach((id, index) => {
-                const currEventWrapper = eventsWrapper.querySelector(
-                  `[data-id='${id}']`,
-                ) as HTMLElement;
+                const currEventWrapper = eventsWrapper.querySelector(`[data-id='${id}']`) as HTMLElement;
                 const currEventEl = currEventWrapper?.querySelector(EVENT_CLASSNAME) as HTMLElement;
                 const showMoreEl = currEventWrapper.querySelector('.more');
 
                 if (currEventEl) {
                   currEventWrapper.classList.add('not-hidden-event');
                   currEventEl.style.width = `calc((100% - ${VALUE_DECREASING_CONTAINER_WIDTH_WEEK_VIEW}) /${ALL_COL_QUANTITY_WEEK_VIEW})`;
-                  currEventEl.style.left = `${
-                    LEFT_START_VAL_WEEK_VIEW + index * LEFT_OFFSET_COEFFICIENT_WEEK_VIEW
-                  }%`;
+                  currEventEl.style.left = `${LEFT_START_VAL_WEEK_VIEW + index * LEFT_OFFSET_COEFFICIENT_WEEK_VIEW}%`;
 
                   if (index === INDEX_SHOW_MORE_BTN_WEEK_VIEW && !showMoreEl) {
-                    currEventEl.insertAdjacentHTML(
-                      'afterbegin',
-                      `<span class="more">${lengthToShow}+</span>`,
-                    );
+                    currEventEl.insertAdjacentHTML('afterbegin', `<span class="more">${lengthToShow}+</span>`);
                   }
                 }
               });
 
             lengthToShow > 0 &&
-              eventsToHide.forEach((id) => {
-                const currEventWrapper = eventsWrapper.querySelector(
-                  `[data-id='${id}']`,
-                ) as HTMLElement;
+              eventsToHide.forEach(id => {
+                const currEventWrapper = eventsWrapper.querySelector(`[data-id='${id}']`) as HTMLElement;
                 currEventWrapper?.classList.add('hidden-event');
               });
           });
@@ -112,7 +99,7 @@ export const EventContainerWrapper = ({
       }
 
       // adding class names for event wrapper to show/hide event info by its width and height
-      containerEvents.forEach((eventWrapper) => {
+      containerEvents.forEach(eventWrapper => {
         const event = eventWrapper.querySelector(EVENT_CLASSNAME) as HTMLElement;
         if (!event) return;
 

@@ -28,20 +28,17 @@ export const SelectRespondentsPopup = ({
   const respondentsData = users.useAllRespondentsData();
   const respondents = useMemo(
     () =>
-      respondentsData?.result?.reduce(
-        (acc: Respondent[], { nicknames, secretIds, id, isAnonymousRespondent }) => {
-          if (!isAnonymousRespondent) {
-            acc.push({
-              nickname: nicknames[0],
-              secretId: secretIds[0],
-              id,
-            });
-          }
+      respondentsData?.result?.reduce((acc: Respondent[], { nicknames, secretIds, id, isAnonymousRespondent }) => {
+        if (!isAnonymousRespondent) {
+          acc.push({
+            nickname: nicknames[0],
+            secretId: secretIds[0],
+            id,
+          });
+        }
 
-          return acc;
-        },
-        [],
-      ),
+        return acc;
+      }, []),
     [respondentsData?.result],
   );
 
@@ -55,7 +52,7 @@ export const SelectRespondentsPopup = ({
 
   const handleConfirm = () => {
     const values = getValues();
-    const selectedRespondents = Object.keys(values).filter((key) => values[key]);
+    const selectedRespondents = Object.keys(values).filter(key => values[key]);
 
     onClose(selectedRespondents);
   };
@@ -91,15 +88,10 @@ export const SelectRespondentsPopup = ({
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleClose}
       height="60"
-      data-testid="dashboard-managers-select-respondents-popup"
-    >
+      data-testid="dashboard-managers-select-respondents-popup">
       <StyledModalWrapper>
         <FormProvider {...methods}>
-          <SelectRespondents
-            appletName={appletName}
-            reviewer={{ name, email }}
-            respondents={respondents || []}
-          />
+          <SelectRespondents appletName={appletName} reviewer={{ name, email }} respondents={respondents || []} />
         </FormProvider>
       </StyledModalWrapper>
     </Modal>

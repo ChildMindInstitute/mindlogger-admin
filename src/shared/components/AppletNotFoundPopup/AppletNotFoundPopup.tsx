@@ -24,8 +24,7 @@ export const AppletNotFoundPopup = () => {
       title={t('appletNotFoundPopupTitle')}
       buttonText={isBuilder ? t('goToDashboard') : t('refresh')}
       hasCloseIcon={!isBuilder}
-      data-testid="applet-not-found-popup"
-    >
+      data-testid="applet-not-found-popup">
       {isBuilder ? null : (
         <StyledModalWrapper>
           <StyledBodyLarge>{t('appletNotFoundPopupText')}</StyledBodyLarge>

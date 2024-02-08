@@ -30,9 +30,7 @@ export const ChangeScoreConditionIdPopup = ({
 
   const getSecondScreen = () =>
     isError ? (
-      <StyledBodyLarge color={variables.palette.semantic.error}>
-        {t('changeScoreConditionIdError')}
-      </StyledBodyLarge>
+      <StyledBodyLarge color={variables.palette.semantic.error}>{t('changeScoreConditionIdError')}</StyledBodyLarge>
     ) : (
       <StyledBodyLarge>{t('changeScoreConditionIdSuccess')}</StyledBodyLarge>
     );
@@ -48,14 +46,9 @@ export const ChangeScoreConditionIdPopup = ({
       submitBtnColor={isFirstScreen ? 'error' : 'primary'}
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
-        {isFirstScreen ? (
-          <StyledBodyLarge>{t('changeScoreConditionIdText')}</StyledBodyLarge>
-        ) : (
-          getSecondScreen()
-        )}
+        {isFirstScreen ? <StyledBodyLarge>{t('changeScoreConditionIdText')}</StyledBodyLarge> : getSecondScreen()}
       </StyledModalWrapper>
     </Modal>
   );

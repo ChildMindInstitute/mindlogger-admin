@@ -2,11 +2,7 @@ import * as yup from 'yup';
 import get from 'lodash/get';
 
 import i18n from 'i18n';
-import {
-  getEntityKey,
-  getIsRequiredValidateMessage,
-  getMaxLengthValidationError,
-} from 'shared/utils';
+import { getEntityKey, getIsRequiredValidateMessage, getMaxLengthValidationError } from 'shared/utils';
 import {
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
@@ -115,7 +111,7 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     .test(
       'is-number-at-least-zero',
       t('positiveIntegerOrZeroRequired'),
-      (value) => typeof value === 'number' && value >= DEFAULT_NUMBER_SELECT_MIN_VALUE,
+      value => typeof value === 'number' && value >= DEFAULT_NUMBER_SELECT_MIN_VALUE,
     )
     .test(
       'min-max-interval',
@@ -152,10 +148,7 @@ const flankerImageOrValueValidation = () =>
     })
     .nullable();
 
-export const getFlankerGeneralSchema = (
-  schema: yup.ObjectSchema<yup.AnyObject>,
-  type: RoundTypeEnum,
-) => {
+export const getFlankerGeneralSchema = (schema: yup.ObjectSchema<yup.AnyObject>, type: RoundTypeEnum) => {
   const isPractice = type === RoundTypeEnum.Practice;
 
   return schema.shape({
@@ -173,9 +166,7 @@ export const getFlankerGeneralSchema = (
         .min(1),
       buttons: yup.array().of(
         yup.object({
-          text: flankerImageOrNameValidation(
-            getIsRequiredValidateMessage('flankerButtons.nameOrImage'),
-          ),
+          text: flankerImageOrNameValidation(getIsRequiredValidateMessage('flankerButtons.nameOrImage')),
           image: flankerImageOrNameValidation(),
         }),
       ),
@@ -198,9 +189,7 @@ export const getFlankerGeneralSchema = (
           return schema.required(getIsRequiredValidateMessage('positiveInteger'));
         })
         .nullable(),
-      minimumAccuracy: yup
-        .number()
-        .required(getIsRequiredValidateMessage('integerBetweenOneAndHundred')),
+      minimumAccuracy: yup.number().required(getIsRequiredValidateMessage('integerBetweenOneAndHundred')),
     }),
   });
 };
@@ -234,14 +223,12 @@ export const ItemSchema = () =>
         .test(
           ItemTestFunctions.ExistingNameInSystemItem,
           ({ value: itemName }) => t('validationMessages.nameExistsInSystemItems', { itemName }),
-          (_, context) =>
-            testFunctionForSystemItems(context.parent, get(context, 'from.1.value.items') ?? []),
+          (_, context) => testFunctionForSystemItems(context.parent, get(context, 'from.1.value.items') ?? []),
         )
         .test(
           ItemTestFunctions.UniqueItemName,
           t('validationMessages.unique', { field: t('itemName') }) as string,
-          (itemName, context) =>
-            testFunctionForUniqueness(itemName ?? '', get(context, 'from.1.value.items') ?? []),
+          (itemName, context) => testFunctionForUniqueness(itemName ?? '', get(context, 'from.1.value.items') ?? []),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup
@@ -250,8 +237,7 @@ export const ItemSchema = () =>
         .test(
           ItemTestFunctions.VariableInTheSameItem,
           t('validationMessages.variableInTheSameItem') as string,
-          (itemName, context) =>
-            testFunctionForTheSameVariable('question', itemName ?? '', context),
+          (itemName, context) => testFunctionForTheSameVariable('question', itemName ?? '', context),
         )
         .test(
           ItemTestFunctions.VariableIsNotSupported,
@@ -269,10 +255,7 @@ export const ItemSchema = () =>
           (itemName, context) => testFunctionForNotExistedItems(itemName ?? '', context),
         ),
       responseValues: yup.object({}).when('responseType', ([responseType], schema) => {
-        if (
-          responseType === ItemResponseType.SingleSelection ||
-          responseType === ItemResponseType.MultipleSelection
-        )
+        if (responseType === ItemResponseType.SingleSelection || responseType === ItemResponseType.MultipleSelection)
           return schema.shape({ options: ResponseValuesOptionsSchema() });
 
         if (responseType === ItemResponseType.NumberSelection)
@@ -288,13 +271,11 @@ export const ItemSchema = () =>
           });
         }
 
-        if (responseType === ItemResponseType.AudioPlayer)
-          return schema.shape(ResponseValuesAudioPlayer());
+        if (responseType === ItemResponseType.AudioPlayer) return schema.shape(ResponseValuesAudioPlayer());
 
         if (responseType === ItemResponseType.Audio) return schema.shape(ResponseValuesAudio());
 
-        if (responseType === ItemResponseType.Slider)
-          return schema.shape(ResponseValuesSliderSchema());
+        if (responseType === ItemResponseType.Slider) return schema.shape(ResponseValuesSliderSchema());
 
         if (responseType === ItemResponseType.SliderRows)
           return schema.shape({ rows: ResponseValuesSliderRowsSchema() });
@@ -304,10 +285,7 @@ export const ItemSchema = () =>
       alerts: yup
         .array()
         .when('responseType', ([responseType], schema) => {
-          if (
-            responseType === ItemResponseType.SingleSelection ||
-            responseType === ItemResponseType.MultipleSelection
-          )
+          if (responseType === ItemResponseType.SingleSelection || responseType === ItemResponseType.MultipleSelection)
             return schema.of(
               yup.object({
                 value: yup.string().required(''),
@@ -351,9 +329,8 @@ export const ItemSchema = () =>
         })
         .when(['responseType', 'config'], {
           is: (responseType: ItemResponseType, config: Config) =>
-            responseType === ItemResponseType.Slider &&
-            get(config, ItemConfigurationSettings.IsContinuous),
-          then: (schema) =>
+            responseType === ItemResponseType.Slider && get(config, ItemConfigurationSettings.IsContinuous),
+          then: schema =>
             schema.of(
               yup.object({
                 minValue: getSliderAlertValueValidation(true),
@@ -361,7 +338,7 @@ export const ItemSchema = () =>
                 alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
               }),
             ),
-          otherwise: (schema) => schema,
+          otherwise: schema => schema,
         }),
       config: yup
         .object({
@@ -370,20 +347,18 @@ export const ItemSchema = () =>
             .string()
             .nullable()
             .when('correctAnswerRequired', ([correctAnswerRequired], schema) =>
-              correctAnswerRequired
-                ? schema.required(getIsRequiredValidateMessage('correctAnswer'))
-                : schema,
+              correctAnswerRequired ? schema.required(getIsRequiredValidateMessage('correctAnswer')) : schema,
             ),
         })
         .when('responseType', {
           is: (responseType: ItemResponseType) => responseType === ItemResponseType.Text,
-          then: (schema) =>
+          then: schema =>
             schema.shape({
               maxResponseLength: yup
                 .mixed()
                 .test('is-positive-integer', t('positiveIntegerRequired'), isNumberAtLeastOne),
             }),
-          otherwise: (schema) => schema,
+          otherwise: schema => schema,
         }),
     })
     .required();
@@ -457,7 +432,7 @@ const SubscaleTableDataItemSchema = () =>
       age: yup
         .string()
         .nullable()
-        .test('subscale-age-validator', (age) => testFunctionForSubscaleAge('age', age)),
+        .test('subscale-age-validator', age => testFunctionForSubscaleAge('age', age)),
       sex: yup
         .string()
         .nullable()
@@ -487,10 +462,7 @@ export const SubscaleSchema = () =>
           'unique-subscale-name',
           t('validationMessages.unique', { field: t('subscaleName') }) as string,
           (subscaleName, context) =>
-            testFunctionForUniqueness(
-              subscaleName ?? '',
-              get(context, 'from.1.value.subscales') ?? [],
-            ),
+            testFunctionForUniqueness(subscaleName ?? '', get(context, 'from.1.value.subscales') ?? []),
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
       scoring: yup.string(),
@@ -518,21 +490,15 @@ export const ConditionalLogicSchema = () =>
     itemKey: yup
       .string()
       .required(t('fillInAllRequired') as string)
-      .test(
-        'item-flow-contradiction',
-        t('appletHasItemFlowContradictions') as string,
-        (itemKey, context) => {
-          const items = get(context, 'from.1.value.items') ?? [];
-          const conditions = get(context, 'parent.conditions');
-          const itemIds = items?.map((item: Item) => getEntityKey(item));
-          const itemIndex = itemIds?.findIndex((id: string) => id === itemKey);
-          const itemsBefore = itemIds?.slice(0, itemIndex + 1);
+      .test('item-flow-contradiction', t('appletHasItemFlowContradictions') as string, (itemKey, context) => {
+        const items = get(context, 'from.1.value.items') ?? [];
+        const conditions = get(context, 'parent.conditions');
+        const itemIds = items?.map((item: Item) => getEntityKey(item));
+        const itemIndex = itemIds?.findIndex((id: string) => id === itemKey);
+        const itemsBefore = itemIds?.slice(0, itemIndex + 1);
 
-          return !conditions?.some(
-            ({ itemName }: Condition) => itemName && !itemsBefore.includes(itemName),
-          );
-        },
-      ),
+        return !conditions?.some(({ itemName }: Condition) => itemName && !itemsBefore.includes(itemName));
+      }),
     conditions: yup.array().of(ConditionSchema()),
   });
 
@@ -540,24 +506,23 @@ const getReportCommonFields = (isScoreReport = false) => ({
   showMessage: yup.boolean(),
   printItems: yup.boolean().when('showMessage', {
     is: false,
-    then: (schema) =>
+    then: schema =>
       schema.test(
         'required-report-common-fields',
         <string>t('validationMessages.mustShowMessageOrItems'),
-        (printItemsName, context) =>
-          testIsReportCommonFieldsRequired(isScoreReport, !!printItemsName, context),
+        (printItemsName, context) => testIsReportCommonFieldsRequired(isScoreReport, !!printItemsName, context),
       ),
   }),
   message: yup
     .string()
     .when('showMessage', {
       is: true,
-      then: (schema) => schema.required(getIsRequiredValidateMessage('message')),
+      then: schema => schema.required(getIsRequiredValidateMessage('message')),
     })
     .nullable(),
   itemsPrint: yup.array().when('printItems', {
     is: true,
-    then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
+    then: schema => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
   }),
 });
 
@@ -571,10 +536,7 @@ export const ScoreConditionalLogic = () =>
         'unique-score-conditional-name',
         t('validationMessages.unique', { field: t('scoreConditionName') }) as string,
         (scoreConditionName, context) =>
-          testFunctionForUniqueness(
-            scoreConditionName ?? '',
-            get(context, 'from.1.value.conditionalLogic') ?? [],
-          ),
+          testFunctionForUniqueness(scoreConditionName ?? '', get(context, 'from.1.value.conditionalLogic') ?? []),
       ),
     conditions: yup
       .array()
@@ -594,9 +556,7 @@ export const ScoreSchema = () => ({
       t('validationMessages.unique', { field: t('scoreName') }) as string,
       (scoreName, context) => {
         const reports = get(context, 'from.1.value.reports') ?? [];
-        const scores = reports?.filter(
-          ({ type }: ScoreOrSection) => type === ScoreReportType.Score,
-        );
+        const scores = reports?.filter(({ type }: ScoreOrSection) => type === ScoreReportType.Score);
 
         return testFunctionForUniqueness(scoreName ?? '', scores);
       },
@@ -615,10 +575,7 @@ export const SectionConditionalLogic = () =>
     match: conditionsMatch,
   });
 
-export const TotalScoresTableDataSchema = yup
-  .array()
-  .of(TotalScoreTableDataItemSchema())
-  .nullable();
+export const TotalScoresTableDataSchema = yup.array().of(TotalScoreTableDataItemSchema()).nullable();
 
 export const SectionSchema = () => ({
   name: yup
@@ -632,9 +589,7 @@ export const SectionSchema = () => ({
       t('validationMessages.unique', { field: t('sectionName') }) as string,
       (sectionName, context) => {
         const reports = get(context, 'from.1.value.reports') ?? [];
-        const sections = reports?.filter(
-          ({ type }: ScoreOrSection) => type === ScoreReportType.Section,
-        );
+        const sections = reports?.filter(({ type }: ScoreOrSection) => type === ScoreReportType.Section);
 
         return testFunctionForUniqueness(sectionName ?? '', sections);
       },
@@ -657,18 +612,18 @@ export const ScoreOrSectionSchema = () =>
     }),
     calculationType: yup.string().when('type', {
       is: ScoreReportType.Score,
-      then: (schema) => schema.required(),
-      otherwise: (schema) => schema.nullable(),
+      then: schema => schema.required(),
+      otherwise: schema => schema.nullable(),
     }),
     id: yup.string().when('type', {
       is: ScoreReportType.Score,
-      then: (schema) => schema.required(),
-      otherwise: (schema) => schema.nullable(),
+      then: schema => schema.required(),
+      otherwise: schema => schema.nullable(),
     }),
     itemsScore: yup.array().when('type', {
       is: ScoreReportType.Score,
-      then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')),
-      otherwise: (schema) => schema.nullable(),
+      then: schema => schema.min(1, <string>t('validationMessages.atLeastOneItem')),
+      otherwise: schema => schema.nullable(),
     }),
     showMessage: yup.boolean(),
     printItems: yup.boolean().when('showMessage', ([showMessage], schema) => {
@@ -678,11 +633,7 @@ export const ScoreOrSectionSchema = () =>
             'required-report-common-fields',
             <string>t('validationMessages.mustShowMessageOrItems'),
             (printItemsName: boolean | undefined, context: yup.TestContext) =>
-              testIsReportCommonFieldsRequired(
-                type === ScoreReportType.Score,
-                !!printItemsName,
-                context,
-              ),
+              testIsReportCommonFieldsRequired(type === ScoreReportType.Score, !!printItemsName, context),
           ),
         );
 
@@ -692,12 +643,12 @@ export const ScoreOrSectionSchema = () =>
       .string()
       .when('showMessage', {
         is: true,
-        then: (schema) => schema.required(getIsRequiredValidateMessage('message')),
+        then: schema => schema.required(getIsRequiredValidateMessage('message')),
       })
       .nullable(),
     itemsPrint: yup.array().when('printItems', {
       is: true,
-      then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
+      then: schema => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
     }),
   });
 
@@ -710,10 +661,7 @@ export const ActivitySchema = () =>
         'unique-activity-name',
         t('validationMessages.unique', { field: t('activityName') }) as string,
         (activityName, context) =>
-          testFunctionForUniqueness(
-            activityName ?? '',
-            get(context, 'from.1.value.activities') ?? [],
-          ),
+          testFunctionForUniqueness(activityName ?? '', get(context, 'from.1.value.activities') ?? []),
       ),
     description: yup.string(),
     image: yup.string(),
@@ -776,10 +724,7 @@ export const ActivityFlowSchema = () =>
           'unique-activity-flow-name',
           t('validationMessages.unique', { field: t('activityFlowName') }) as string,
           (activityFlowName, context) =>
-            testFunctionForUniqueness(
-              activityFlowName ?? '',
-              get(context, 'from.1.value.activityFlows') ?? [],
-            ),
+            testFunctionForUniqueness(activityFlowName ?? '', get(context, 'from.1.value.activityFlows') ?? []),
         ),
       description: yup
         .string()

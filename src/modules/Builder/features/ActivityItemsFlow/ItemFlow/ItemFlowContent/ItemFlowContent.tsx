@@ -12,12 +12,7 @@ import { ItemFlowContentProps } from './ItemFlowContent.types';
 import { StyledItemFlowContent } from './ItemFlowContent.styles';
 import { SummaryRow } from '../SummaryRow';
 
-export const ItemFlowContent = ({
-  name,
-  isStatic,
-  onRemove,
-  'data-testid': dataTestid,
-}: ItemFlowContentProps) => {
+export const ItemFlowContent = ({ name, isStatic, onRemove, 'data-testid': dataTestid }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
   const { getFieldState, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
@@ -26,7 +21,7 @@ export const ItemFlowContent = ({
   const itemKey = watch(`${name}.itemKey`);
 
   if (isStatic) {
-    const staticConditions = createArray(conditions?.length, (index) => index);
+    const staticConditions = createArray(conditions?.length, index => index);
 
     return (
       <StyledItemFlowContent>
@@ -66,8 +61,7 @@ export const ItemFlowContent = ({
       {error && (
         <StyledBodyLarge
           sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}
-          data-testid={`${dataTestid}-error`}
-        >
+          data-testid={`${dataTestid}-error`}>
           {errorMessage}
         </StyledBodyLarge>
       )}

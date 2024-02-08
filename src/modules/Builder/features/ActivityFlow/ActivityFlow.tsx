@@ -41,11 +41,7 @@ export const ActivityFlow = () => {
     insert: insertActivityFlow,
     update: updateActivityFlow,
     move: moveActivityFlow,
-  } = useFieldArray<
-    Record<string, ActivityFlowFormValues[]>,
-    string,
-    typeof REACT_HOOK_FORM_KEY_NAME
-  >({
+  } = useFieldArray<Record<string, ActivityFlowFormValues[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
     control,
     name: 'activityFlows',
     keyName: REACT_HOOK_FORM_KEY_NAME,
@@ -69,7 +65,7 @@ export const ActivityFlow = () => {
     );
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
-    const flowItems = activities.map((activity) => ({
+    const flowItems = activities.map(activity => ({
       key: uuidv4(),
       activityKey: getEntityKey(activity),
     }));
@@ -99,11 +95,9 @@ export const ActivityFlow = () => {
       isHidden: !activityFlows[index].isHidden,
     });
 
-  const getActivityFlowVisible = (isHidden: boolean | undefined) =>
-    isHidden === undefined ? false : isHidden;
+  const getActivityFlowVisible = (isHidden: boolean | undefined) => (isHidden === undefined ? false : isHidden);
 
-  const handleSetFlowToDeleteData = (index: number, name: string) => () =>
-    setFlowToDeleteData({ index, name });
+  const handleSetFlowToDeleteData = (index: number, name: string) => () => setFlowToDeleteData({ index, name });
 
   const handleDragEnd: DragDropContextProps['onDragEnd'] = ({ source, destination }) => {
     setIsDragging(false);
@@ -116,12 +110,11 @@ export const ActivityFlow = () => {
       title={t('activityFlows')}
       Header={ActivityFlowHeader}
       headerProps={{ onAddActivityFlow: handleAddActivityFlow }}
-      hasMaxWidth
-    >
+      hasMaxWidth>
       {activityFlows?.length ? (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-flows-dnd" direction="vertical">
-            {(listProvided) => (
+            {listProvided => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activityFlows.map((flow, index) => {
                   const activityFlowKey = getEntityKey(flow);
@@ -132,11 +125,7 @@ export const ActivityFlow = () => {
                         const dataTestid = `builder-activity-flows-flow-${index}`;
 
                         return (
-                          <Box
-                            {...itemProvided.draggableProps}
-                            ref={itemProvided.innerRef}
-                            data-testid={dataTestid}
-                          >
+                          <Box {...itemProvided.draggableProps} ref={itemProvided.innerRef} data-testid={dataTestid}>
                             <Item
                               dragHandleProps={itemProvided.dragHandleProps}
                               isDragging={snapshot.isDragging}
@@ -161,9 +150,7 @@ export const ActivityFlow = () => {
                               data-testid={dataTestid}
                             />
                             <InsertItem
-                              isVisible={
-                                index >= 0 && index < activityFlows.length - 1 && !isDragging
-                              }
+                              isVisible={index >= 0 && index < activityFlows.length - 1 && !isDragging}
                               onInsert={() => handleAddActivityFlow(index + 1)}
                               data-testid={`${dataTestid}-insert`}
                             />
@@ -187,9 +174,7 @@ export const ActivityFlow = () => {
           )}
         </DragDropContext>
       ) : (
-        <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>
-          {t('activityFlowIsRequired')}
-        </StyledTitleMedium>
+        <StyledTitleMedium sx={{ marginTop: theme.spacing(0.4) }}>{t('activityFlowIsRequired')}</StyledTitleMedium>
       )}
     </BuilderContainer>
   );

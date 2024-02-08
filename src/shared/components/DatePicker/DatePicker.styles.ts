@@ -39,9 +39,7 @@ export const StyledPopover = styled(Popover)`
       }
     }
 
-    &__day--keyboard-selected:not(.react-datepicker__day--disabled):not(
-        .react-datepicker__day--outside-month
-      ) {
+    &__day--keyboard-selected:not(.react-datepicker__day--disabled):not(.react-datepicker__day--outside-month) {
       color: ${variables.palette.on_surface};
     }
 
@@ -72,9 +70,9 @@ export const StyledPopover = styled(Popover)`
       }
     }
 
-    &__day--today:not(.react-datepicker__day--selected):not(
-        .react-datepicker__day--outside-month
-      ):not(.react-datepicker__day--disabled) {
+    &__day--today:not(.react-datepicker__day--selected):not(.react-datepicker__day--outside-month):not(
+        .react-datepicker__day--disabled
+      ) {
       border: ${variables.borderWidth.md} solid ${variables.palette.primary};
       font-weight: ${variables.font.weight.regular};
       color: ${variables.palette.primary};
@@ -120,8 +118,7 @@ export const StyledPopover = styled(Popover)`
   }
 
   .react-datepicker__day--range-start + .react-datepicker__day--in-range:not(:empty):before,
-  .react-datepicker__day--in-range:not(:empty)
-    + .react-datepicker__day--range-end:not(:empty):before {
+  .react-datepicker__day--in-range:not(:empty) + .react-datepicker__day--range-end:not(:empty):before {
     position: absolute;
     content: '';
     top: 0;
@@ -134,8 +131,7 @@ export const StyledPopover = styled(Popover)`
     left: -50%;
   }
 
-  .react-datepicker__day--in-range:not(:empty)
-    + .react-datepicker__day--range-end:not(:empty):before {
+  .react-datepicker__day--in-range:not(:empty) + .react-datepicker__day--range-end:not(:empty):before {
     left: 0;
     transform: translateZ(-0.1rem);
   }

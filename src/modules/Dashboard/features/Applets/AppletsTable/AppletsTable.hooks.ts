@@ -30,10 +30,7 @@ export const useAppletsDnd = () => {
     }
   };
 
-  const onDrop = async (
-    event: React.DragEvent<HTMLTableRowElement>,
-    droppedItem: Folder | Applet,
-  ) => {
+  const onDrop = async (event: React.DragEvent<HTMLTableRowElement>, droppedItem: Folder | Applet) => {
     onDragLeave(event);
 
     const draggedId = event.dataTransfer.getData('text');
@@ -43,12 +40,11 @@ export const useAppletsDnd = () => {
 
     const wasInFolder = draggedItem?.parentId;
     const isMovingToFolder =
-      (droppedItem.isFolder || (droppedItem as Applet)?.parentId) &&
-      draggedItem.parentId !== droppedItem.id;
+      (droppedItem.isFolder || (droppedItem as Applet)?.parentId) && draggedItem.parentId !== droppedItem.id;
 
     const folder = droppedItem.isFolder
       ? droppedItem
-      : rows?.filter((row) => row.id === (droppedItem as Applet).parentId)[0];
+      : rows?.filter(row => row.id === (droppedItem as Applet).parentId)[0];
 
     if (!wasInFolder && isMovingToFolder) {
       await setFolder({ folderId: folder.id, appletId: draggedItem.id });
@@ -57,7 +53,7 @@ export const useAppletsDnd = () => {
     }
 
     if (isMovingToFolder && wasInFolder) {
-      const previousFolder = rows?.filter((row) => row.id === draggedItem.parentId)[0];
+      const previousFolder = rows?.filter(row => row.id === draggedItem.parentId)[0];
 
       if (previousFolder.id === folder.id) return;
       await setFolder({ folderId: folder.id, appletId: draggedItem.id });

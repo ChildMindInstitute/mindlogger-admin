@@ -53,26 +53,16 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
       <StyledTitleMedium
         color={variables.palette.on_surface}
         sx={{ mb: theme.spacing(2.4) }}
-        data-testid={`${dataTestid}-description`}
-      >
+        data-testid={`${dataTestid}-description`}>
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
       {url && (
-        <MLPlayer
-          media={media}
-          onRemove={() => setRemoveAudioPopupOpened(true)}
-          data-testid={`${dataTestid}-player`}
-        />
+        <MLPlayer media={media} onRemove={() => setRemoveAudioPopupOpened(true)} data-testid={`${dataTestid}-player`} />
       )}
       {!url && (
-        <AddAudio
-          onUploadAudio={() => setUploadPopupOpened(true)}
-          onRecordAudio={() => setRecordPopupOpened(true)}
-        />
+        <AddAudio onUploadAudio={() => setUploadPopupOpened(true)} onRecordAudio={() => setRecordPopupOpened(true)} />
       )}
-      {error?.message && (
-        <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error.message}</StyledBodyErrorText>
-      )}
+      {error?.message && <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error.message}</StyledBodyErrorText>}
       <UploadAudio
         open={isUploadPopupOpened}
         media={media}

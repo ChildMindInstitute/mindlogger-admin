@@ -51,13 +51,7 @@ export const ResetForm = ({ setEmail }: ResetFormProps) => {
         {t('enterEmailAssociatedWithAccount')}
       </StyledResetPasswordSubheader>
       <StyledController>
-        <InputController
-          fullWidth
-          name="email"
-          control={control}
-          label={t('email')}
-          data-testid="reset-form-email"
-        />
+        <InputController fullWidth name="email" control={control} label={t('email')} data-testid="reset-form-email" />
       </StyledController>
       {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
       <StyledButton variant="contained" type="submit" data-testid="reset-form-reset">

@@ -46,9 +46,7 @@ const preloadedState = {
 const getMockedGetWithRespondents = (isAnonymousRespondent = false) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
-    result: isAnonymousRespondent
-      ? [{ ...mockedRespondent, isAnonymousRespondent: true }]
-      : [mockedRespondent],
+    result: isAnonymousRespondent ? [{ ...mockedRespondent, isAnonymousRespondent: true }] : [mockedRespondent],
     count: 1,
   },
 });
@@ -92,8 +90,8 @@ describe('Respondents component tests', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-respondents-table')).toBeInTheDocument();
-      tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
-      respondentColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
+      tableColumnNames.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
+      respondentColumns.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
     });
   });
 
@@ -118,9 +116,7 @@ describe('Respondents component tests', () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-respondents-table-actions-dots'),
-    );
+    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-respondents-table-actions-dots'));
     fireEvent.mouseEnter(actionsDots);
     const actionsDataTestIds = [
       'dashboard-respondents-view-calendar',
@@ -131,9 +127,7 @@ describe('Respondents component tests', () => {
     ];
 
     await waitFor(() => {
-      actionsDataTestIds.forEach((dataTestId) =>
-        expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
-      );
+      actionsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
     });
   });
 
@@ -141,9 +135,7 @@ describe('Respondents component tests', () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithRespondents(true));
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-respondents-table-actions-dots'),
-    );
+    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-respondents-table-actions-dots'));
     fireEvent.mouseEnter(actionsDots);
 
     const actionsDataTestIds = [
@@ -154,9 +146,7 @@ describe('Respondents component tests', () => {
     ];
 
     await waitFor(() => {
-      actionsDataTestIds.forEach((dataTestId) =>
-        expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
-      );
+      actionsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
     });
   });
 
@@ -172,9 +162,7 @@ describe('Respondents component tests', () => {
       mockAxios.get.mockResolvedValue(getMockedGetWithRespondents());
       renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
-      const actionsDots = await waitFor(() =>
-        screen.getByTestId('dashboard-respondents-table-actions-dots'),
-      );
+      const actionsDots = await waitFor(() => screen.getByTestId('dashboard-respondents-table-actions-dots'));
       fireEvent.mouseEnter(actionsDots);
       const action = await waitFor(() => screen.getByTestId(actionDataTestId));
       fireEvent.click(action);
@@ -195,17 +183,14 @@ describe('Respondents component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toBeCalledWith(
-        `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`,
-        {
-          params: {
-            limit: 20,
-            page: 1,
-            search: mockedSearchValue,
-          },
-          signal: undefined,
+      expect(mockAxios.get).toBeCalledWith(`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`, {
+        params: {
+          limit: 20,
+          page: 1,
+          search: mockedSearchValue,
         },
-      );
+        signal: undefined,
+      });
     });
   });
 });

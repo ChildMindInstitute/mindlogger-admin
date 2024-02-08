@@ -26,8 +26,7 @@ export const ExportSchedulePopup = ({
       title={isIndividualSchedule ? t('exportIndividualSchedule') : t('exportDefaultSchedule')}
       buttonText={t('export')}
       width="93.6"
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
         <Box sx={{ margin: theme.spacing(-1.8, 0, 2.4) }}>
           {isIndividualSchedule ? (
@@ -44,12 +43,7 @@ export const ExportSchedulePopup = ({
             </Trans>
           )}
         </Box>
-        <Table
-          columns={getHeadCells()}
-          rows={scheduleTableRows}
-          orderBy="activityName"
-          uiType={UiType.Tertiary}
-        />
+        <Table columns={getHeadCells()} rows={scheduleTableRows} orderBy="activityName" uiType={UiType.Tertiary} />
       </StyledModalWrapper>
     </Modal>
   );

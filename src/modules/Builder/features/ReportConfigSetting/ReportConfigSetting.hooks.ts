@@ -6,11 +6,7 @@ import { AppletFormValues } from 'modules/Builder/types';
 
 import { verifyReportServer, setPasswordReportServer } from './ReportConfigSetting.utils';
 import { UseCheckReportServer } from './ReportConfigSetting.types';
-import {
-  OK_MESSAGE,
-  SUCCESS_MESSAGE,
-  defaultValues as initialValues,
-} from './ReportConfigSetting.const';
+import { OK_MESSAGE, SUCCESS_MESSAGE, defaultValues as initialValues } from './ReportConfigSetting.const';
 
 export const useCheckReportServer = ({ url, publicKey }: UseCheckReportServer) => {
   const { appletId = '', ownerId = '' } = useParams();
@@ -57,13 +53,7 @@ export const useDefaultValues = (appletData?: SingleApplet | AppletFormValues) =
   const { activityId, activityFlowId } = useParams();
   if (!appletData) return initialValues;
 
-  const {
-    reportServerIp,
-    reportPublicKey,
-    reportRecipients,
-    reportIncludeUserId,
-    reportEmailBody,
-  } = appletData;
+  const { reportServerIp, reportPublicKey, reportRecipients, reportIncludeUserId, reportEmailBody } = appletData;
 
   let reportIncludedItemName = '';
   let reportIncludedActivityName = '';
@@ -83,10 +73,8 @@ export const useDefaultValues = (appletData?: SingleApplet | AppletFormValues) =
     const activityFlow = (appletData as SingleApplet).activityFlows?.find(
       ({ id, key }) => activityFlowId === id || activityFlowId === key,
     );
-    const {
-      reportIncludedActivityName: flowIncludedActivityNameKey,
-      reportIncludedItemName: flowIncludedItemNameKey,
-    } = activityFlow || {};
+    const { reportIncludedActivityName: flowIncludedActivityNameKey, reportIncludedItemName: flowIncludedItemNameKey } =
+      activityFlow || {};
 
     if (flowIncludedActivityNameKey) {
       reportIncludedActivityName = flowIncludedActivityNameKey;

@@ -35,25 +35,18 @@ export const Description = ({ step }: DescriptionProps) => {
       return (
         <>
           {hasNotBeenSaved}
-          <StyledBodyLarge sx={{ color: variables.palette.red }}>
-            {t('appletHasEmptyRequiredFields')}
-          </StyledBodyLarge>
+          <StyledBodyLarge sx={{ color: variables.palette.red }}>{t('appletHasEmptyRequiredFields')}</StyledBodyLarge>
         </>
       );
     case SaveAndPublishSteps.ErrorsInFields:
       return (
         <>
           {hasNotBeenSaved}
-          <StyledBodyLarge sx={{ color: variables.palette.red }}>
-            {t('appletHasErrorsInFields')}
-          </StyledBodyLarge>
+          <StyledBodyLarge sx={{ color: variables.palette.red }}>{t('appletHasErrorsInFields')}</StyledBodyLarge>
         </>
       );
     case SaveAndPublishSteps.BeingCreated: {
-      const text =
-        typePrefix === AppletThunkTypePrefix.Update
-          ? t('appletIsBeingUpdated')
-          : t('appletIsBeingCreated');
+      const text = typePrefix === AppletThunkTypePrefix.Update ? t('appletIsBeingUpdated') : t('appletIsBeingCreated');
 
       return <StyledBodyLarge>{text}</StyledBodyLarge>;
     }

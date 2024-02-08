@@ -5,19 +5,10 @@ import { Modal } from 'shared/components/Modal';
 import { InputController } from 'shared/components/FormComponents/InputController';
 import { StyledErrorText, theme } from 'shared/styles';
 
-import {
-  SourceLinkModalForm,
-  SourceLinkModalFormValues,
-  SourceLinkModalProps,
-} from './SourceLinkModal.types';
+import { SourceLinkModalForm, SourceLinkModalFormValues, SourceLinkModalProps } from './SourceLinkModal.types';
 import { StyledController, StyledModalWrapper } from './SourceLinkModal.styles';
 
-export const SourceLinkModal = ({
-  title,
-  error,
-  handleClose,
-  handleSubmit,
-}: SourceLinkModalProps) => {
+export const SourceLinkModal = ({ title, error, handleClose, handleSubmit }: SourceLinkModalProps) => {
   const { t } = useTranslation('app');
   const { control, getValues } = useForm<SourceLinkModalForm>({
     defaultValues: { label: '', address: '' },
@@ -35,8 +26,7 @@ export const SourceLinkModal = ({
       title={title}
       buttonText={t('ok')}
       width="32"
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
         <form onSubmit={onSubmit} noValidate>
           <StyledController>
@@ -60,9 +50,7 @@ export const SourceLinkModal = ({
             />
           </StyledController>
         </form>
-        {error && (
-          <StyledErrorText sx={{ marginTop: theme.spacing(1) }}>{t(error)}</StyledErrorText>
-        )}
+        {error && <StyledErrorText sx={{ marginTop: theme.spacing(1) }}>{t(error)}</StyledErrorText>}
       </StyledModalWrapper>
     </Modal>
   );

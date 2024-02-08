@@ -39,10 +39,7 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
       return [
         ...optionList,
         {
-          labelKey:
-            conditionRowType === ConditionRowType.Item
-              ? item.name
-              : `${t('conditionItem')}: ${item.name}`,
+          labelKey: conditionRowType === ConditionRowType.Item ? item.name : `${t('conditionItem')}: ${item.name}`,
           value: getEntityKey(item),
           type: getConditionItemType(item),
           responseValues: item.responseValues,
@@ -54,7 +51,7 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
   }, []) || [];
 
 export const getScoreOptions = (scores: ScoreReport[]) =>
-  scores?.map((score) => ({
+  scores?.map(score => ({
     labelKey: `${t('score')}: ${score.name}`,
     value: score.key,
     type: ConditionItemType.Score,
@@ -70,7 +67,7 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
   scores?.reduce(
     (scoreConditionals: OptionListItem[], score: ScoreReport) => [
       ...scoreConditionals,
-      ...(score.conditionalLogic?.map((conditional) => ({
+      ...(score.conditionalLogic?.map(conditional => ({
         labelKey: `${t('scoreConditionals')}: ${conditional.name}`,
         value: getEntityKey(conditional, false),
         type: ConditionItemType.ScoreCondition,
@@ -121,12 +118,8 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
       }
 
       return {
-        minValue:
-          (conditionPayload as RangeValueCondition['payload'])?.minValue ??
-          DEFAULT_PAYLOAD_MIN_VALUE,
-        maxValue:
-          (conditionPayload as RangeValueCondition['payload'])?.maxValue ??
-          DEFAULT_PAYLOAD_MAX_VALUE,
+        minValue: (conditionPayload as RangeValueCondition['payload'])?.minValue ?? DEFAULT_PAYLOAD_MIN_VALUE,
+        maxValue: (conditionPayload as RangeValueCondition['payload'])?.maxValue ?? DEFAULT_PAYLOAD_MAX_VALUE,
       };
     default:
       return {};

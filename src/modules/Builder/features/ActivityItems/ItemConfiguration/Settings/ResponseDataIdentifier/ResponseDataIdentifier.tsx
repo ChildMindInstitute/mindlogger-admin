@@ -1,13 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import {
-  theme,
-  variables,
-  StyledLabelBoldLarge,
-  StyledClearedButton,
-  StyledTitleMedium,
-} from 'shared/styles';
+import { theme, variables, StyledLabelBoldLarge, StyledClearedButton, StyledTitleMedium } from 'shared/styles';
 
 import {
   StyledResponseDataIdentifierContainer,
@@ -25,8 +19,7 @@ export const ResponseDataIdentifier = ({ onRemove }: ResponseDataIdentifierProps
         <StyledClearedButton
           sx={{ p: theme.spacing(1) }}
           onClick={onRemove}
-          data-testid="builder-activity-items-item-configuration-data-indentifier-remove"
-        >
+          data-testid="builder-activity-items-item-configuration-data-indentifier-remove">
           <Svg id="trash" width="20" height="20" />
         </StyledClearedButton>
       </StyledResponseDataIdentifierHeader>

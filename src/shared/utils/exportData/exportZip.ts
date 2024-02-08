@@ -12,7 +12,7 @@ export const exportZip = async (data: { fileName: string; file: Blob }[], fileNa
 
   const JSZip = await import('jszip');
   const zip = new JSZip.default();
-  dataArray.forEach((data) => {
+  dataArray.forEach(data => {
     zip.file(data.fileName, data.file);
   });
 

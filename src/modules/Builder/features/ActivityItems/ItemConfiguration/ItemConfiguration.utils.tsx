@@ -151,16 +151,13 @@ export const checkIfQuestionIncludesVariables = (question: string, items: ItemFo
   const itemsObject = getObjectFromList(items, ({ name }) => name);
   const variableNames = getTextBetweenBrackets(question);
 
-  return variableNames.some((variable) => !!itemsObject[variable]);
+  return variableNames.some(variable => !!itemsObject[variable]);
 };
 
 export const checkIfItemHasRequiredOptions = (config: Config) => {
   const isCorrectAnswerRequired = get(config, ItemConfigurationSettings.IsCorrectAnswerRequired);
   const isNumericalRequired = get(config, ItemConfigurationSettings.IsNumericalRequired);
-  const hasResponseDataIdentifier = get(
-    config,
-    ItemConfigurationSettings.HasResponseDataIdentifier,
-  );
+  const hasResponseDataIdentifier = get(config, ItemConfigurationSettings.HasResponseDataIdentifier);
   const isResponseRequired = get(config, ItemConfigurationSettings.IsResponseRequired);
   const isTextInputRequired = get(config, ItemConfigurationSettings.IsTextInputRequired);
 

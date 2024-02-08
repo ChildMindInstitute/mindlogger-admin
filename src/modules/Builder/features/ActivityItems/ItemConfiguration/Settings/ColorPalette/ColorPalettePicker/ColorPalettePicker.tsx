@@ -7,10 +7,7 @@ import { RadioGroupController } from 'shared/components/FormComponents';
 import { SELECTION_OPTIONS_COLOR_PALETTE } from '../../../ItemConfiguration.const';
 import { getPaletteColor } from '../../../ItemConfiguration.utils';
 import { SelectionOption } from '../../../ItemConfiguration.types';
-import {
-  StyledColorPalettePickerContainer,
-  StyledPaletteColorBox,
-} from './ColorPalettePicker.styles';
+import { StyledColorPalettePickerContainer, StyledPaletteColorBox } from './ColorPalettePicker.styles';
 import { RADIO_GROUP_OPTIONS } from './ColorPalettePicker.const';
 import { ColorPalettePickerProps } from './ColorPalettePicker.types';
 
@@ -48,7 +45,7 @@ export const ColorPalettePicker = ({ name }: ColorPalettePickerProps) => {
       <StyledFlexTopCenter sx={{ gap: '1.2rem' }}>
         {SELECTION_OPTIONS_COLOR_PALETTE.map(({ name, colors }) => (
           <StyledFlexColumn key={`palette-${name}`} sx={{ flexGrow: 1, gap: '0.1rem' }}>
-            {colors.map((hex) => (
+            {colors.map(hex => (
               <StyledPaletteColorBox key={`palette-${name}-${hex}`} sx={{ background: hex }} />
             ))}
           </StyledFlexColumn>

@@ -64,19 +64,13 @@ const dataTestid = 'respondents-review-activity-items-response';
 describe('SingleSelectResponseItem', () => {
   test('renders single select item with options correctly', () => {
     renderWithProviders(
-      <SingleSelectResponseItem
-        activityItem={activityItem}
-        answer={answer}
-        data-testid={dataTestid}
-      />,
+      <SingleSelectResponseItem activityItem={activityItem} answer={answer} data-testid={dataTestid} />,
     );
 
     const item = screen.getByTestId(dataTestid);
     expect(item).toBeInTheDocument();
 
-    const optionLength = screen.queryAllByTestId(
-      /respondents-review-activity-items-response-option-\d+$/,
-    );
+    const optionLength = screen.queryAllByTestId(/respondents-review-activity-items-response-option-\d+$/);
     expect(optionLength).toHaveLength(3);
 
     const option1Container = screen.getByTestId(`${dataTestid}-option-0`);

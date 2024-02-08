@@ -35,14 +35,12 @@ export const ClearScheduledEventsPopup = ({
     execute: deleteIndividualScheduledEvents,
     error: deleteIndividualScheduledError,
     isLoading: deleteIndividualScheduledLoading,
-  } = useAsync(deleteIndividualEventsApi, () =>
-    dispatch(applets.thunk.getEvents({ appletId, respondentId })),
-  );
+  } = useAsync(deleteIndividualEventsApi, () => dispatch(applets.thunk.getEvents({ appletId, respondentId })));
 
   const isLoading = deleteScheduledLoading || deleteIndividualScheduledLoading;
 
   const getNextStep = () =>
-    setStep((prevStep) => {
+    setStep(prevStep => {
       const newStep = prevStep + 1;
 
       return newStep as Steps;
@@ -76,17 +74,13 @@ export const ClearScheduledEventsPopup = ({
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
       disabledSubmit={isLoading}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper data-testid={`${dataTestid}-text`}>
           {screens[step].component}
           {(deleteScheduledError || deleteIndividualScheduledError) && (
-            <StyledBodyLarge
-              color={variables.palette.semantic.error}
-              sx={{ m: theme.spacing(1, 0) }}
-            >
+            <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
               {getErrorMessage(deleteScheduledError || deleteIndividualScheduledError)}
             </StyledBodyLarge>
           )}

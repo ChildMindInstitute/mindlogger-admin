@@ -38,9 +38,7 @@ export const MultiScatterChart = ({
   'data-testid': dataTestid,
 }: MultiScatterChartProps) => {
   const { i18n } = useTranslation('app');
-  const chartRef = useRef<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>(
-    null,
-  );
+  const chartRef = useRef<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const isHovered = useRef(false);
 
@@ -99,8 +97,7 @@ export const MultiScatterChart = ({
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-        data-testid={dataTestid}
-      >
+        data-testid={dataTestid}>
         <ChartTooltip data={tooltipData} data-testid={dataTestid} />
       </ChartTooltipContainer>
     </Box>

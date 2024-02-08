@@ -18,11 +18,7 @@ import { AssessmentBanner } from './AssessmentBanner';
 import { getDefaultFormValues } from '../Feedback.utils';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
-export const FeedbackAssessment = ({
-  setActiveTab,
-  assessmentStep,
-  setAssessmentStep,
-}: FeedbackAssessmentProps) => {
+export const FeedbackAssessment = ({ setActiveTab, assessmentStep, setAssessmentStep }: FeedbackAssessmentProps) => {
   const {
     assessment,
     setAssessment,
@@ -108,7 +104,7 @@ export const FeedbackAssessment = ({
     setIsLastVersion(true);
     setIsBannerVisible(false);
 
-    const updatedAssessment = lastAssessment.map((activityItem) => ({
+    const updatedAssessment = lastAssessment.map(activityItem => ({
       activityItem,
       answer: undefined,
     })) as AssessmentActivityItem[];
@@ -128,10 +124,7 @@ export const FeedbackAssessment = ({
 
   return (
     <StyledContainer>
-      <AssessmentBanner
-        isBannerVisible={isBannerVisible}
-        onSelectLastVersion={handleSelectLastVersion}
-      />
+      <AssessmentBanner isBannerVisible={isBannerVisible} onSelectLastVersion={handleSelectLastVersion} />
       <ActivityCardItemList
         step={assessmentStep}
         activityItems={activityItems}

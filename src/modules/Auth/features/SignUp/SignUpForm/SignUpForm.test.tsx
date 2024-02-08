@@ -35,9 +35,7 @@ describe('SignUp component tests', () => {
     await waitFor(() => expect(screen.getByText('Email must be valid')).toBeInTheDocument());
 
     submitForm(mockedEmail, ` ${mockedPassword}`, 'fname', 'lname');
-    await waitFor(() =>
-      expect(screen.getByText('Password must not contain spaces.')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByText('Password must not contain spaces.')).toBeInTheDocument());
 
     submitForm('', '', '', '');
     await waitFor(() => expect(screen.getByText('Email is required')).toBeInTheDocument());

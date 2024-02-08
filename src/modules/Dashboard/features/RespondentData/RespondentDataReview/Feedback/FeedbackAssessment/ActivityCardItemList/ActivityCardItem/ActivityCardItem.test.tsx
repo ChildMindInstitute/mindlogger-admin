@@ -54,9 +54,7 @@ const dataTestid = 'activity-card-item';
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ 'data-testid': dataTestid, text }) => (
-    <div data-testid={dataTestid}>{text}</div>
-  ),
+  CollapsedMdText: ({ 'data-testid': dataTestid, text }) => <div data-testid={dataTestid}>{text}</div>,
 }));
 
 const FormComponent = ({
@@ -91,12 +89,7 @@ describe('ActivityCardItem', () => {
   test('does not render ItemCardButtons when isActive is false', () => {
     render(
       <FormComponent assessment={[mockActivityItem]}>
-        <ActivityCardItem
-          data-testid={dataTestid}
-          activityItem={mockActivityItem}
-          isActive={false}
-          step={0}
-        />
+        <ActivityCardItem data-testid={dataTestid} activityItem={mockActivityItem} isActive={false} step={0} />
       </FormComponent>,
     );
 

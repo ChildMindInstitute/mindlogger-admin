@@ -1,9 +1,6 @@
 import { DecryptedABTrailsValue } from 'shared/types';
 
-export const getABTrailsRecords = (
-  lines: DecryptedABTrailsValue['lines'],
-  width: DecryptedABTrailsValue['width'],
-) => {
+export const getABTrailsRecords = (lines: DecryptedABTrailsValue['lines'], width: DecryptedABTrailsValue['width']) => {
   if (!width) return [];
 
   const result = [];
@@ -30,9 +27,7 @@ export const getABTrailsRecords = (
         // eslint-disable-next-line no-nested-ternary
         error: point.valid ? 'E0' : point.actual !== 'none' ? 'E1' : 'E2',
         correct_path: `${point.start} ~ ${point.end}`,
-        actual_path: `${point.start} ~ ${
-          point.actual === 'none' ? '?' : point.actual || point.end
-        }`,
+        actual_path: `${point.start} ~ ${point.actual === 'none' ? '?' : point.actual || point.end}`,
         UTC_Timestamp: Number(point.time / 1000).toString(),
         seconds: Number((point.time - startTime) / 1000).toString(),
         epoch_time_in_seconds_start: firstPoint ? (startTime / 1000).toString() : '',

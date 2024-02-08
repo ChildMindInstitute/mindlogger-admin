@@ -19,7 +19,7 @@ import {
 
 const mockedItemId = mockedSingleSelectFormValues.id;
 
-const renderItemConfig = (item) => {
+const renderItemConfig = item => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -68,9 +68,7 @@ describe('ItemConfiguration: Displayed Content', () => {
     const ref = renderItemConfig();
 
     fireEvent.change(
-      screen
-        .getByTestId('builder-activity-items-item-configuration-description')
-        .querySelector('textarea'),
+      screen.getByTestId('builder-activity-items-item-configuration-description').querySelector('textarea'),
       { target: { value: text } },
     );
 

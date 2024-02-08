@@ -23,13 +23,11 @@ export const Applet = ({
 }: AppletProps) => {
   const { t } = useTranslation('app');
 
-  const selectedRespondents = roles?.flatMap(
-    ({ reviewerRespondents }) => reviewerRespondents ?? [],
-  );
+  const selectedRespondents = roles?.flatMap(({ reviewerRespondents }) => reviewerRespondents ?? []);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
   const isPristineRef = useRef(true);
-  const hasManagerRole = isPristineRef.current && roles.some((item) => item.role === Roles.Manager);
+  const hasManagerRole = isPristineRef.current && roles.some(item => item.role === Roles.Manager);
   const addRoleTooltip = hasManagerRole ? t('userHasManagerAccess') : null;
 
   const handleAddRole = (label: Roles) => {
@@ -60,9 +58,7 @@ export const Applet = ({
         <StyledRow>
           <StyledFlexTopCenter>
             {image && <StyledImg src={image} alt={displayName} />}
-            <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>
-              {displayName}
-            </StyledBodyMedium>
+            <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>{displayName}</StyledBodyMedium>
           </StyledFlexTopCenter>
           <ButtonWithMenu
             disabled={isAddRoleDisabled}
@@ -76,11 +72,7 @@ export const Applet = ({
         {roles?.map(({ role, icon }) => (
           <Chip
             shape={ChipShape.Rounded}
-            color={
-              appletsWithoutRespondents?.includes(displayName) && role === Roles.Reviewer
-                ? 'error'
-                : 'secondary'
-            }
+            color={appletsWithoutRespondents?.includes(displayName) && role === Roles.Reviewer ? 'error' : 'secondary'}
             icon={icon}
             key={role}
             title={
@@ -91,8 +83,7 @@ export const Applet = ({
                     <StyledBtn
                       onClick={() => setSelectRespondentsPopupVisible(true)}
                       variant="body2"
-                      data-testid="dashboard-managers-edit-access-edit-role"
-                    >
+                      data-testid="dashboard-managers-edit-access-edit-role">
                       {selectedRespondents?.join(', ') || t('editRespondents')}
                     </StyledBtn>
                   </>

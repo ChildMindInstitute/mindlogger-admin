@@ -27,14 +27,11 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
     setValue(sliderName, [...(value ?? []), getEmptySliderOption({ isMultiple, hasScores })]);
   };
   const handleRemoveSlider = (id?: string) => {
-    setValue(
-      sliderName,
-      value?.filter(({ id: sliderId }: SliderItemResponseValues) => sliderId !== id),
-    );
+    setValue(sliderName, value?.filter(({ id: sliderId }: SliderItemResponseValues) => sliderId !== id));
     if (id && isMultiple && alerts?.length) {
       setValue(
         alertsName,
-        alerts.filter((alert) => alert.sliderId !== id),
+        alerts.filter(alert => alert.sliderId !== id),
       );
     }
   };
@@ -63,8 +60,7 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
           variant="outlined"
           startIcon={<Svg id="add" width="20" height="20" />}
           sx={{ width: '13.2rem' }}
-          data-testid="builder-activity-items-item-configuration-slider-add-slider"
-        >
+          data-testid="builder-activity-items-item-configuration-slider-add-slider">
           {t('addSlider')}
         </Button>
       )}

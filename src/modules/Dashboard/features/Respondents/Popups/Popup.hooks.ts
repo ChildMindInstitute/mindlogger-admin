@@ -5,11 +5,7 @@ import { useEncryptionStorage } from 'shared/hooks';
 
 import { useCheckIfHasEncryptionProps } from './Popups.types';
 
-export const useCheckIfHasEncryption = ({
-  isAppletSetting,
-  appletData,
-  callback,
-}: useCheckIfHasEncryptionProps) => {
+export const useCheckIfHasEncryption = ({ isAppletSetting, appletData, callback }: useCheckIfHasEncryptionProps) => {
   const { getAppletPrivateKey } = useEncryptionStorage();
   const appletId = get(appletData, isAppletSetting ? 'id' : 'appletId');
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');

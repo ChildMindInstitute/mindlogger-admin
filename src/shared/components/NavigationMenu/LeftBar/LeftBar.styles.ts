@@ -19,8 +19,7 @@ export const StyledBar = styled(Box, shouldForwardProp)`
 export const StyledHeader = styled(StyledHeadlineLarge, shouldForwardProp)`
   ${commonStickyStyles};
   padding: ${theme.spacing(4.8, 1.6, 2.4, 0)};
-  box-shadow: ${({ isSticky }: { isSticky: boolean }) =>
-    isSticky ? variables.boxShadow.light0 : 'none'};
+  box-shadow: ${({ isSticky }: { isSticky: boolean }) => (isSticky ? variables.boxShadow.light0 : 'none')};
 `;
 
 export const StyledContent = styled(Box, shouldForwardProp)`

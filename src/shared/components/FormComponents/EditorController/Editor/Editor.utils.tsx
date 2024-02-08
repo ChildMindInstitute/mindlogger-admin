@@ -44,39 +44,12 @@ export const getDefToolbars = ({
         onChange('');
       }}
     />,
-    <AlignTextExtension
-      key="align-left-extension"
-      type="left"
-      title={t('alignLeft')}
-      onInsert={onInsert}
-    />,
-    <AlignTextExtension
-      key="align-center-extension"
-      type="center"
-      title={t('alignCenter')}
-      onInsert={onInsert}
-    />,
-    <AlignTextExtension
-      key="align-right-extension"
-      type="right"
-      title={t('alignRight')}
-      onInsert={onInsert}
-    />,
-    <ImageUploadExtension
-      {...commonMediaProps}
-      key="image-upload-extension"
-      fileSizeExceeded={MAX_FILE_SIZE_25MB}
-    />,
-    <AudioUploadExtension
-      {...commonMediaProps}
-      key="audio-upload-extension"
-      fileSizeExceeded={MAX_FILE_SIZE_150MB}
-    />,
-    <VideoUploadExtension
-      {...commonMediaProps}
-      key="video-upload-extension"
-      fileSizeExceeded={MAX_FILE_SIZE_150MB}
-    />,
+    <AlignTextExtension key="align-left-extension" type="left" title={t('alignLeft')} onInsert={onInsert} />,
+    <AlignTextExtension key="align-center-extension" type="center" title={t('alignCenter')} onInsert={onInsert} />,
+    <AlignTextExtension key="align-right-extension" type="right" title={t('alignRight')} onInsert={onInsert} />,
+    <ImageUploadExtension {...commonMediaProps} key="image-upload-extension" fileSizeExceeded={MAX_FILE_SIZE_25MB} />,
+    <AudioUploadExtension {...commonMediaProps} key="audio-upload-extension" fileSizeExceeded={MAX_FILE_SIZE_150MB} />,
+    <VideoUploadExtension {...commonMediaProps} key="video-upload-extension" fileSizeExceeded={MAX_FILE_SIZE_150MB} />,
     <UnderlineExtension key="underline-extension" onInsert={onInsert} />,
     <SubscriptExtension key="subscript-extension" onInsert={onInsert} />,
     <SuperscriptExtension key="superscript-extension" onInsert={onInsert} />,

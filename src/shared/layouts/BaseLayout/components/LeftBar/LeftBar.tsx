@@ -33,7 +33,7 @@ export const LeftBar = () => {
 
   useEffect(() => {
     if (workspacesData?.length) {
-      const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
+      const ownerWorkspace = workspacesData.find(item => item.ownerId === id);
       const storageWorkspace = authStorage.getWorkspace();
       dispatch(workspaces.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null));
     }
@@ -62,9 +62,8 @@ export const LeftBar = () => {
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
       <StyledDrawer>
         <StyledDrawerLogo
-          onClick={() => setVisibleDrawer((prevState) => !prevState)}
-          data-testid={`${dataTestid}-collapse`}
-        >
+          onClick={() => setVisibleDrawer(prevState => !prevState)}
+          data-testid={`${dataTestid}-collapse`}>
           <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
         </StyledDrawerLogo>
         <List>
@@ -73,14 +72,11 @@ export const LeftBar = () => {
               <NavLink
                 onClick={() => handleLinkClick(labelKey)}
                 to={link}
-                className={({ isActive }) => `${isActive ? 'active-link' : ''}`}
-              >
+                className={({ isActive }) => `${isActive ? 'active-link' : ''}`}>
                 {({ isActive }) => (
                   <>
                     {isActive ? activeIcon : icon}
-                    <StyledLabelMedium color={variables.palette.on_surface_variant}>
-                      {t(labelKey)}
-                    </StyledLabelMedium>
+                    <StyledLabelMedium color={variables.palette.on_surface_variant}>{t(labelKey)}</StyledLabelMedium>
                   </>
                 )}
               </NavLink>

@@ -31,12 +31,9 @@ export const SaveChangesPopup = ({
         color: variables.palette.semantic.error,
         fontWeight: variables.font.weight.bold,
       }}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
-        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>
-          {t('saveChangesDescription')}
-        </StyledBodyLarge>
+        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>{t('saveChangesDescription')}</StyledBodyLarge>
       </StyledModalWrapper>
     </Modal>
   );

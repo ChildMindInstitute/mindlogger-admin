@@ -19,16 +19,14 @@ export const SectionScoreHeader = ({
       <StyledClearedButton
         sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
         onClick={onRemove}
-        data-testid={`${dataTestid}-remove`}
-      >
+        data-testid={`${dataTestid}-remove`}>
         <Svg id="trash" width="20" height="20" />
       </StyledClearedButton>
       {dragHandleProps && (
         <StyledClearedButton
           sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
           {...dragHandleProps}
-          data-testid={`${dataTestid}-dnd`}
-        >
+          data-testid={`${dataTestid}-dnd`}>
           <Svg id="drag" />
         </StyledClearedButton>
       )}

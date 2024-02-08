@@ -30,21 +30,13 @@ export const TimersTab = ({ 'data-testid': dataTestid }: TimersTabProps) => {
       />
       {activeTimer === TimerType.Timer && (
         <>
-          <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
-            {t('timeToCompleteActivity')}
-          </StyledBodyLarge>
-          <TimePicker
-            name="timerDuration"
-            label={t('duration')}
-            data-testid={`${dataTestid}-duration`}
-          />
+          <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>{t('timeToCompleteActivity')}</StyledBodyLarge>
+          <TimePicker name="timerDuration" label={t('duration')} data-testid={`${dataTestid}-duration`} />
         </>
       )}
       {activeTimer === TimerType.Idle && (
         <>
-          <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>
-            {t('maximumTimeAwayFromActivity')}
-          </StyledBodyLarge>
+          <StyledBodyLarge sx={{ margin: theme.spacing(2.4, 0) }}>{t('maximumTimeAwayFromActivity')}</StyledBodyLarge>
           <StyledTimePickerWrapper>
             <TimePicker
               name="idleTime"

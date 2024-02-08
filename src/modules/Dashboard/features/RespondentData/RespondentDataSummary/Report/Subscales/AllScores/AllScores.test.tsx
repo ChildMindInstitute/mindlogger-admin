@@ -25,9 +25,7 @@ jest.mock('../../Charts/LineChart', () => ({
 
 describe('AllScores component', () => {
   test('renders component with correct data and frequency, without latestFinalScore', () => {
-    renderWithProviders(
-      <AllScores data={data} latestFinalScore={null} frequency={frequency} versions={[]} />,
-    );
+    renderWithProviders(<AllScores data={data} latestFinalScore={null} frequency={frequency} versions={[]} />);
 
     expect(screen.getByText('Subscale Scores')).toBeInTheDocument();
     expect(screen.queryByTestId('latest-final-subscale-score')).not.toBeInTheDocument();
@@ -38,28 +36,19 @@ describe('AllScores component', () => {
 
   test('renders component with correct data and frequency, with latestFinalScore', () => {
     renderWithProviders(
-      <AllScores
-        data={data}
-        latestFinalScore={latestFinalScore}
-        frequency={frequency}
-        versions={[]}
-      />,
+      <AllScores data={data} latestFinalScore={latestFinalScore} frequency={frequency} versions={[]} />,
     );
 
     expect(screen.getByText('Subscale Scores')).toBeInTheDocument();
     expect(screen.getByTestId('subscale-line-chart')).toBeInTheDocument();
     expect(screen.getByTestId('latest-final-subscale-score')).toBeInTheDocument();
-    expect(
-      screen.getByText(`Latest Final Subscale Score: ${latestFinalScore}`),
-    ).toBeInTheDocument();
+    expect(screen.getByText(`Latest Final Subscale Score: ${latestFinalScore}`)).toBeInTheDocument();
     expect(screen.getByTestId('frequency')).toBeInTheDocument();
     expect(screen.getByText(`Frequency: ${frequency}`)).toBeInTheDocument();
   });
 
   test('renders nothing when data.subscales is empty', () => {
-    renderWithProviders(
-      <AllScores data={{ subscales: [] }} latestFinalScore={null} frequency={0} versions={[]} />,
-    );
+    renderWithProviders(<AllScores data={{ subscales: [] }} latestFinalScore={null} frequency={0} versions={[]} />);
 
     expect(screen.queryByText('Subscale Scores')).not.toBeInTheDocument();
     expect(screen.queryByTestId('subscale-line-chart')).not.toBeInTheDocument();

@@ -33,9 +33,7 @@ describe('RemoveConditionalLogicPopup', () => {
     fireEvent.click(screen.getByText('Remove'));
 
     expect(onRemoveMock).toBeCalled();
-    expect(
-      screen.getByText('Conditional logic has been removed successfully.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Conditional logic has been removed successfully.')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('Ok'));
 

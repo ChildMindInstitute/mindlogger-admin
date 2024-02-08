@@ -25,11 +25,7 @@ export const ScoreCell = ({ name, 'data-testid': dataTestid }: ScoreCellProps) =
   if (!error && !isEditing)
     return (
       <ClickAwayListener onClickAway={handleClickAway}>
-        <StyledFlexTopCenter
-          sx={{ height: '100%' }}
-          onClick={handleClick}
-          data-testid={`${dataTestid}-score-inactive`}
-        >
+        <StyledFlexTopCenter sx={{ height: '100%' }} onClick={handleClick} data-testid={`${dataTestid}-score-inactive`}>
           {getValues(name)}
         </StyledFlexTopCenter>
       </ClickAwayListener>

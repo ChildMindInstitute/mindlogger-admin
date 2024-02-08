@@ -4,12 +4,7 @@ import { Svg } from 'shared/components/Svg';
 import { CopyIdProps } from './CopyId.types';
 import { StyledDuplicateButton, StyledValue } from './CopyId.styles';
 
-export const CopyId = ({
-  title,
-  value,
-  showCopy = false,
-  'data-testid': dataTestid,
-}: CopyIdProps) => {
+export const CopyId = ({ title, value, showCopy = false, 'data-testid': dataTestid }: CopyIdProps) => {
   const copyScoreId = () => {
     navigator.clipboard.writeText(value);
   };
@@ -23,8 +18,7 @@ export const CopyId = ({
           <StyledDuplicateButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
             onClick={copyScoreId}
-            data-testid={`${dataTestid}-copy`}
-          >
+            data-testid={`${dataTestid}-copy`}>
             <Svg id="duplicate" width="20" height="20" />
           </StyledDuplicateButton>
         )}

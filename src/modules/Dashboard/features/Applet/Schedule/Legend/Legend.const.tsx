@@ -28,11 +28,4 @@ export const enum ExpandedListTypes {
   Deactivated = 'deactivated',
 }
 
-export const defaultExportHeader = [
-  'activityName',
-  'date',
-  'startTime',
-  'endTime',
-  'notificationTime',
-  'frequency',
-];
+export const defaultExportHeader = ['activityName', 'date', 'startTime', 'endTime', 'notificationTime', 'frequency'];

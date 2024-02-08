@@ -27,9 +27,7 @@ const props = {
 
 jest.mock('./ChartTooltip.styles', () => ({
   ...jest.requireActual('./ChartTooltip.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{modelValue}</div>
-  ),
+  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => <div data-testid={dataTestid}>{modelValue}</div>,
 }));
 
 describe('ChartTooltip', () => {
@@ -57,9 +55,7 @@ describe('ChartTooltip', () => {
 
     const itemContainer1 = screen.getByTestId(`${dataTestid}-tooltip-item-1`);
     expect(itemContainer1).toHaveTextContent('Example 2: 7');
-    const mdEditor1 = within(itemContainer1).queryByTestId(
-      `${dataTestid}-tooltip-item-1-md-preview`,
-    );
+    const mdEditor1 = within(itemContainer1).queryByTestId(`${dataTestid}-tooltip-item-1-md-preview`);
     expect(mdEditor1).not.toBeInTheDocument();
     expect(itemContainer1).toHaveTextContent('Dec 20, 17:20');
   });

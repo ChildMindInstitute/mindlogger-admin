@@ -25,8 +25,7 @@ export const ConfirmScheduledAccessPopup = ({
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
       disabledSubmit={isLoading}
-      data-testid="dashboard-calendar-confirm-scheduled-access-popup"
-    >
+      data-testid="dashboard-calendar-confirm-scheduled-access-popup">
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
@@ -35,8 +34,8 @@ export const ConfirmScheduledAccessPopup = ({
             <strong>
               <> {{ activityName }} </>
             </strong>
-            will no longer be always available, and the Activity will be a scheduled event. Are you
-            sure you want to continue?
+            will no longer be always available, and the Activity will be a scheduled event. Are you sure you want to
+            continue?
           </Trans>
         </StyledModalWrapper>
       </>

@@ -48,7 +48,7 @@ describe('LeftBar component', () => {
     expect(listItems).toHaveLength(2);
 
     const linkTexts = ['Dashboard', 'Library'];
-    linkTexts.forEach((text) => {
+    linkTexts.forEach(text => {
       const link = screen.getByText(text);
       expect(link).toBeInTheDocument();
     });

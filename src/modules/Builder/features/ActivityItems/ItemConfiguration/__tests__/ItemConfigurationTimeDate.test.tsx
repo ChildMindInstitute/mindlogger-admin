@@ -32,7 +32,7 @@ describe('Item Configuration: Date/Time/Time Range', () => {
       const startTime = screen.getByTestId(`${testId}-input-start`).querySelector('input');
       const endTime = screen.getByTestId(`${testId}-input-end`).querySelector('input');
 
-      [startTime, endTime].forEach((input) => {
+      [startTime, endTime].forEach(input => {
         expect(input).toBeVisible();
         expect(input).toBeDisabled();
       });

@@ -481,8 +481,7 @@ describe('useBreadcrumbs', () => {
     });
 
     expect(result.current).toHaveLength(5);
-    const [dashboard, applet, activityFlows, newActivityFlow, activityFlowSettings] =
-      result.current;
+    const [dashboard, applet, activityFlows, newActivityFlow, activityFlowSettings] = result.current;
 
     expect(dashboard).toEqual(expectedDashboard);
     expect(applet).toEqual(expectedApplet);

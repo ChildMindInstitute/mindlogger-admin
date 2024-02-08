@@ -1,10 +1,6 @@
 import { Svg } from 'shared/components/Svg';
 import theme from 'shared/styles/theme';
-import {
-  StyledLabelLarge,
-  StyledFlexTopCenter,
-  StyledIconButton,
-} from 'shared/styles/styledComponents';
+import { StyledLabelLarge, StyledFlexTopCenter, StyledIconButton } from 'shared/styles/styledComponents';
 
 import { StyledHeader } from './Header.styles';
 import { HeaderProps } from './Header.types';

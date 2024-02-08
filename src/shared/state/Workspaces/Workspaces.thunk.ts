@@ -20,17 +20,14 @@ export const getWorkspaceRoles = createAsyncThunk(
   },
 );
 
-export const getWorkspaces = createAsyncThunk(
-  'workspaces/getWorkspaces',
-  async (_, { rejectWithValue, signal }) => {
-    try {
-      const { data } = await getWorkspacesApi(signal);
+export const getWorkspaces = createAsyncThunk('workspaces/getWorkspaces', async (_, { rejectWithValue, signal }) => {
+  try {
+    const { data } = await getWorkspacesApi(signal);
 
-      return { data };
-    } catch (exception) {
-      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+    return { data };
+  } catch (exception) {
+    const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
 
-      return rejectWithValue(errorResult);
-    }
-  },
-);
+    return rejectWithValue(errorResult);
+  }
+});

@@ -2,12 +2,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { fireEvent, screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils';
-import {
-  mockedApplet,
-  mockedAppletId,
-  mockedCurrentWorkspace,
-  mockedRespondentId,
-} from 'shared/mock';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedRespondentId } from 'shared/mock';
 import { ItemResponseType, Roles } from 'shared/consts';
 import { Item, initialStateData } from 'shared/state';
 import { page } from 'resources';
@@ -186,10 +181,7 @@ const lastAssessment = [
     order: 1,
   },
 ] as Item[];
-const assessmentVersions = [
-  '316b25bf-5136-404f-b9f0-c97f60cf8d74_1.1.0',
-  '316b25bf-5136-404f-b9f0-c97f60cf8d74_1.2.0',
-];
+const assessmentVersions = ['316b25bf-5136-404f-b9f0-c97f60cf8d74_1.1.0', '316b25bf-5136-404f-b9f0-c97f60cf8d74_1.2.0'];
 const itemIds = ['1b3ad6ee-9c35-46bf-8948-0ffbcc9ca7ce'];
 
 const setIsLastVersion = jest.fn();
@@ -220,9 +212,7 @@ jest.mock('modules/Dashboard/hooks/useEncryptedAnswers', () => ({
 
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
-  CollapsedMdText: jest.fn(() => (
-    <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>
-  )),
+  CollapsedMdText: jest.fn(() => <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>),
 }));
 
 const FormComponent = ({
@@ -246,14 +236,9 @@ const getFeedbackAssessmentComponent = (
   isBannerVisible: boolean,
 ) => (
   <RespondentDataReviewContext.Provider
-    value={getMockedContext(assessment, lastAssessment, isLastVersion, isBannerVisible)}
-  >
+    value={getMockedContext(assessment, lastAssessment, isLastVersion, isBannerVisible)}>
     <FormComponent assessment={assessment}>
-      <FeedbackAssessment
-        setActiveTab={jest.fn()}
-        assessmentStep={0}
-        setAssessmentStep={jest.fn()}
-      />
+      <FeedbackAssessment setActiveTab={jest.fn()} assessmentStep={0} setAssessmentStep={jest.fn()} />
     </FormComponent>
   </RespondentDataReviewContext.Provider>
 );

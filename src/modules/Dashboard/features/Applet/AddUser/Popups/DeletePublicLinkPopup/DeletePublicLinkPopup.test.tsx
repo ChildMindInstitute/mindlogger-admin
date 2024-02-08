@@ -9,12 +9,8 @@ const onSubmitMock = jest.fn();
 
 describe('DeletePublicLinkPopup', () => {
   test('should render popup correctly', () => {
-    renderWithProviders(
-      <DeletePublicLinkPopup open={true} onClose={onCloseMock} onSubmit={onSubmitMock} />,
-    );
-    expect(
-      screen.getByTestId('dashboard-add-users-generate-link-delete-popup'),
-    ).toBeInTheDocument();
+    renderWithProviders(<DeletePublicLinkPopup open={true} onClose={onCloseMock} onSubmit={onSubmitMock} />);
+    expect(screen.getByTestId('dashboard-add-users-generate-link-delete-popup')).toBeInTheDocument();
     expect(screen.getByText('Delete Public Link')).toBeInTheDocument();
     expect(
       screen.getByText(

@@ -90,8 +90,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             sx={{
               backgroundColor: moreFiltersVisible ? variables.palette.primary_alfa12 : '',
             }}
-            data-testid={`${dataTestid}-more-button`}
-          >
+            data-testid={`${dataTestid}-more-button`}>
             {t('moreFilters')}
           </StyledMoreFilters>
         </StyledFlexTopCenter>

@@ -25,8 +25,7 @@ export const DeleteActivityModal = ({
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
         <Trans i18nKey="deleteActivityDescription">
           Are you sure you want to delete the Activity

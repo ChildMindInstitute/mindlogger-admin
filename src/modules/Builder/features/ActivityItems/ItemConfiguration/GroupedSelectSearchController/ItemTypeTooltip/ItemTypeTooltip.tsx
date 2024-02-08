@@ -24,8 +24,7 @@ export const ItemTypeTooltip = ({ uiType, anchorEl }: ItemTypeTooltipProps) => {
         style: {
           marginLeft: theme.spacing(1.5),
         },
-      }}
-    >
+      }}>
       {getInputTypeContent()[uiType]}
     </StyledPopover>
   );

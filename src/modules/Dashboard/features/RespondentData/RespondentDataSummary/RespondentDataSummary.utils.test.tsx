@@ -31,9 +31,7 @@ describe('getEmptyState', () => {
 
     render(<>{result}</>);
 
-    expect(
-      screen.getByText(/Select the Activity to review the response data./),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Select the Activity to review the response data./)).toBeInTheDocument();
   });
 
   test('returns JSX for performance task', () => {
@@ -45,9 +43,7 @@ describe('getEmptyState', () => {
 
     render(<>{result}</>);
 
-    expect(
-      screen.getByText(/Data visualization for Performance Tasks not supported/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Data visualization for Performance Tasks not supported/)).toBeInTheDocument();
   });
 
   test('returns JSX for activity with no data', () => {

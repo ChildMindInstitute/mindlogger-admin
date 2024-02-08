@@ -12,13 +12,7 @@ import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { ArrowPressType } from '../InputController.types';
 import { InputProps } from './Input.types';
-import {
-  StyledCounter,
-  StyledHint,
-  StyledTextField,
-  StyledTextFieldContainer,
-  StyledUpDown,
-} from './Input.styles';
+import { StyledCounter, StyledHint, StyledTextField, StyledTextFieldContainer, StyledUpDown } from './Input.styles';
 import { getTextAdornment } from './Input.utils';
 
 export const Input = <T extends FieldValues>({
@@ -89,11 +83,8 @@ export const Input = <T extends FieldValues>({
 
     onChange?.(getNumberValue() ?? newValue);
   };
-  const handleDebouncedChange = debounce(
-    (event: SelectEvent) => handleChange(event),
-    CHANGE_DEBOUNCE_VALUE,
-  );
-  const handleBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
+  const handleDebouncedChange = debounce((event: SelectEvent) => handleChange(event), CHANGE_DEBOUNCE_VALUE);
+  const handleBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = event => {
     onBlur?.(event);
 
     if (withDebounce) {
@@ -139,12 +130,7 @@ export const Input = <T extends FieldValues>({
           }
         />
         {maxLength && (
-          <Counter
-            hasError={!!error}
-            value={value?.length || 0}
-            maxLength={maxLength}
-            counterProps={counterProps}
-          >
+          <Counter hasError={!!error} value={value?.length || 0} maxLength={maxLength} counterProps={counterProps}>
             {value?.length || 0}/{maxLength} {t('characters')}
           </Counter>
         )}

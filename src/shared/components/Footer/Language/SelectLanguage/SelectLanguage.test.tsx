@@ -30,7 +30,7 @@ describe('SelectLanguage', () => {
     const paragraphElements = languagePopup.querySelectorAll('p');
 
     languages.forEach(({ label }) => {
-      expect([...paragraphElements].some((element) => element.textContent === label)).toBe(true);
+      expect([...paragraphElements].some(element => element.textContent === label)).toBe(true);
     });
 
     const en = screen.getByTestId(`${dataTestid}-en`);

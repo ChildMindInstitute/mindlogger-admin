@@ -46,9 +46,7 @@ const onChange = jest.fn();
 
 describe('Slider', () => {
   test('renders the slider component with images and labels', async () => {
-    renderWithProviders(
-      <Slider onChange={onChange} data-testid={dataTestid} activityItem={activityItem} />,
-    );
+    renderWithProviders(<Slider onChange={onChange} data-testid={dataTestid} activityItem={activityItem} />);
 
     const slider = screen.getByTestId(dataTestid);
     expect(slider).toBeInTheDocument();

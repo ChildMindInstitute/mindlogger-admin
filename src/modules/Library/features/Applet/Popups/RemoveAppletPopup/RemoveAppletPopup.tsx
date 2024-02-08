@@ -24,7 +24,7 @@ export const RemoveAppletPopup = ({
   const handleModalClose = () => setRemoveAppletPopupVisible(false);
 
   const handleSubmit = () => {
-    const updatedAppletsData = cartItems?.filter((applet) => applet.id !== appletId) || [];
+    const updatedAppletsData = cartItems?.filter(applet => applet.id !== appletId) || [];
     const selectedItemsFromStorage = getSelectedItemsFromStorage();
     const filteredSelectedItems = getFilteredSelectedItems(selectedItemsFromStorage, appletId);
     Object.keys(filteredSelectedItems)?.length > 0
@@ -51,8 +51,7 @@ export const RemoveAppletPopup = ({
       hasSecondBtn
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleModalClose}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
         <Trans i18nKey="removeAppletConfirmation">
           Are you sure you want to to remove Applet

@@ -11,7 +11,7 @@ import { LinkPopupProps } from './LinkPopup.types';
 export const LinkPopup = ({ open, onClose, onSubmit }: LinkPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams() || {};
-  const { execute } = useAsync(postAppletPublicLinkApi, (res) => {
+  const { execute } = useAsync(postAppletPublicLinkApi, res => {
     onSubmit(res?.data.result);
     onClose();
   });
@@ -37,12 +37,9 @@ export const LinkPopup = ({ open, onClose, onSubmit }: LinkPopupProps) => {
         fontWeight: variables.font.weight.bold,
       }}
       data-testid="dashboard-add-users-generate-link-generate-popup"
-      width="70"
-    >
+      width="70">
       <StyledModalWrapper>
-        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>
-          {t('requireToCreateAccount')}
-        </StyledBodyLarge>
+        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>{t('requireToCreateAccount')}</StyledBodyLarge>
       </StyledModalWrapper>
     </Modal>
   );

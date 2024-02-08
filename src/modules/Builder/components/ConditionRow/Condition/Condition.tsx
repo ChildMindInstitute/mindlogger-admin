@@ -50,8 +50,7 @@ export const Condition = ({
     selectedItem?.type === ConditionItemType.MultiSelection ||
     isItemScoreCondition;
   const isValueSelectShown = !selectedItem || isItemSelect;
-  const isNumberValueShown =
-    (isItemSlider || isItemScore) && !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
+  const isNumberValueShown = (isItemSlider || isItemScore) && !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = (isItemSlider || isItemScore) && !isNumberValueShown;
   const { minNumber, maxNumber } = getConditionMinMaxValues({
     item: selectedItem,
@@ -77,10 +76,8 @@ export const Condition = ({
         placeholder={t(isRowTypeItem ? 'conditionItemNamePlaceholder' : 'select')}
         SelectProps={{
           renderValue: (value: unknown) => {
-            const item = itemOptions?.find((item) => item.value === value);
-            const placeholder = isRowTypeItem
-              ? t('conditionItemSelected', { value: item?.labelKey })
-              : item?.labelKey;
+            const item = itemOptions?.find(item => item.value === value);
+            const placeholder = isRowTypeItem ? t('conditionItemSelected', { value: item?.labelKey }) : item?.labelKey;
 
             return <span>{placeholder}</span>;
           },
@@ -96,9 +93,7 @@ export const Condition = ({
         control={control}
         name={stateName}
         options={getStateOptions(selectedItem?.type)}
-        placeholder={
-          isStateSelectDisabled ? t('conditionDisabledPlaceholder') : t('conditionTypePlaceholder')
-        }
+        placeholder={isStateSelectDisabled ? t('conditionDisabledPlaceholder') : t('conditionTypePlaceholder')}
         customChange={onStateChange}
         isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-type`}
@@ -148,11 +143,7 @@ export const Condition = ({
         </>
       )}
       {isRemoveVisible && (
-        <StyledClearedButton
-          sx={{ p: theme.spacing(1) }}
-          onClick={onRemove}
-          data-testid={`${dataTestid}-remove`}
-        >
+        <StyledClearedButton sx={{ p: theme.spacing(1) }} onClick={onRemove} data-testid={`${dataTestid}-remove`}>
           <Svg id="cross" />
         </StyledClearedButton>
       )}

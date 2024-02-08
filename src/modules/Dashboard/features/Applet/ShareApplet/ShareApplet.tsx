@@ -3,17 +3,9 @@ import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import {
-  checkAppletNameInLibraryApi,
-  publishAppletToLibraryApi,
-  getAppletLibraryUrlApi,
-} from 'api';
+import { checkAppletNameInLibraryApi, publishAppletToLibraryApi, getAppletLibraryUrlApi } from 'api';
 import { Spinner, SpinnerUiType } from 'shared/components';
-import {
-  InputController,
-  CheckboxController,
-  TagsController,
-} from 'shared/components/FormComponents';
+import { InputController, CheckboxController, TagsController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyMedium } from 'shared/styles/styledComponents';
 import { getErrorMessage } from 'shared/utils/errors';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -43,11 +35,8 @@ export const ShareApplet = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isAppletNameDisabled, setIsAppletNameDisabled] = useState(false);
 
-  const { execute: checkAppletNameInLibrary, error: nameError } = useAsync(
-    checkAppletNameInLibraryApi,
-  );
-  const { execute: publishAppletToLibrary, error: publishError } =
-    useAsync(publishAppletToLibraryApi);
+  const { execute: checkAppletNameInLibrary, error: nameError } = useAsync(checkAppletNameInLibraryApi);
+  const { execute: publishAppletToLibrary, error: publishError } = useAsync(publishAppletToLibraryApi);
   const { execute: getAppletLibraryUrl, error: libraryUrlError } = useAsync(getAppletLibraryUrlApi);
 
   const error = publishError || libraryUrlError;
@@ -89,8 +78,8 @@ export const ShareApplet = ({
   const handleAddKeyword = (keyword: string) => {
     if (keyword.length) {
       setValue('keyword', '');
-      setKeywords((prevState) => {
-        if (prevState.some((item) => item === keyword)) {
+      setKeywords(prevState => {
+        if (prevState.some(item => item === keyword)) {
           return prevState;
         }
         const newKeywords = prevState.concat(keyword.trim());
@@ -102,7 +91,7 @@ export const ShareApplet = ({
   };
 
   const handleRemoveKeyword = (index: number) => {
-    setKeywords((prevState) => {
+    setKeywords(prevState => {
       const newKeywords = prevState?.filter((_, i) => i !== index);
       setValue('keywords', newKeywords);
 
@@ -178,8 +167,8 @@ export const ShareApplet = ({
           {showNameTakenError && (
             <StyledErrorText marginTop={ERROR_MARGIN_TOP}>
               <Trans i18nKey="appletNameAlreadyTaken">
-                This Applet name is already taken in the Library. Please rename the Applet to share
-                it. <br /> Note: This will change the name of the Applet for your users.
+                This Applet name is already taken in the Library. Please rename the Applet to share it. <br /> Note:
+                This will change the name of the Applet for your users.
               </Trans>
             </StyledErrorText>
           )}

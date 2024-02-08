@@ -30,8 +30,7 @@ export const RemoveOptionPopup = ({
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
           <Trans i18nKey="deleteOptionDescription">
@@ -42,11 +41,8 @@ export const RemoveOptionPopup = ({
             ? It will also remove the Conditional(s) below
           </Trans>
         </StyledBodyLarge>
-        {conditions?.map((conditionalLogic) => (
-          <ConditionalPanel
-            key={`condition-panel-${conditionalLogic.key}`}
-            condition={conditionalLogic}
-          />
+        {conditions?.map(conditionalLogic => (
+          <ConditionalPanel key={`condition-panel-${conditionalLogic.key}`} condition={conditionalLogic} />
         ))}
       </StyledModalWrapper>
     </Modal>

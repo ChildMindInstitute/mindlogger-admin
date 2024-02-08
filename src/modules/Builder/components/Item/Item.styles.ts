@@ -26,10 +26,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
   }) => {
     let bgColor = 'inherit';
     if (isDragging) {
-      bgColor = blendColorsNormal(
-        variables.palette.surface,
-        variables.palette.on_surface_alfa16,
-      ) as string;
+      bgColor = blendColorsNormal(variables.palette.surface, variables.palette.on_surface_alfa16) as string;
     }
     if (hasError) {
       bgColor = variables.palette.error_container;
@@ -41,9 +38,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       padding: ${theme.spacing(1.3, 2.4)};
       width: 100%;
       border-radius: ${variables.borderRadius.lg2};
-      height: ${
-        uiType === ItemUiType.Activity || uiType === ItemUiType.FlowBuilder ? '9.8rem' : '7.2rem'
-      };
+      height: ${uiType === ItemUiType.Activity || uiType === ItemUiType.FlowBuilder ? '9.8rem' : '7.2rem'};
       transition: ${variables.transitions.all};
       cursor: ${onClick ? 'pointer' : 'default'};
       background-color: ${bgColor};
@@ -51,10 +46,7 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       box-shadow: ${isDragging ? variables.boxShadow.light3 : 'inherit'};
     
       &:hover {
-        background-color:  ${blendColorsNormal(
-          variables.palette.surface,
-          variables.palette.on_surface_alfa8,
-        )};
+        background-color:  ${blendColorsNormal(variables.palette.surface, variables.palette.on_surface_alfa8)};
         
         .item-name {
           font-weight: ${uiType === ItemUiType.Flow ? variables.font.weight.bold : 'inherit'};
@@ -62,18 +54,14 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       }
 
       &:active {
-        background-color: ${blendColorsNormal(
-          variables.palette.surface,
-          variables.palette.on_surface_alfa12,
-        )};
+        background-color: ${blendColorsNormal(variables.palette.surface, variables.palette.on_surface_alfa12)};
       }
   `;
   }}
 `;
 
 export const StyledCol = styled(Box, shouldForwardProp)`
-  width: ${({ hasImage }: { hasImage: boolean }) =>
-    `calc(100% - ${hasImage ? '32.4rem' : '24rem'})`};
+  width: ${({ hasImage }: { hasImage: boolean }) => `calc(100% - ${hasImage ? '32.4rem' : '24rem'})`};
   padding-right: ${theme.spacing(1)};
 `;
 

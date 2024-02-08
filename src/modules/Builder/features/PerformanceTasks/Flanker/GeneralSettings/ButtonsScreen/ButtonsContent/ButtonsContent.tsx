@@ -3,12 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import get from 'lodash.get';
 
-import {
-  StyledFlexSpaceBetween,
-  StyledFlexTopCenter,
-  StyledTitleMedium,
-  theme,
-} from 'shared/styles';
+import { StyledFlexSpaceBetween, StyledFlexTopCenter, StyledTitleMedium, theme } from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
 import { ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
@@ -76,9 +71,7 @@ export const ButtonsContent = () => {
 
   return (
     <>
-      <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>
-        {t('flankerButtons.number')}
-      </StyledTitleMedium>
+      <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>{t('flankerButtons.number')}</StyledTitleMedium>
       <Box sx={{ width: '23.1rem', mb: theme.spacing(2.4) }}>
         <ToggleButtonGroup
           toggleButtons={buttonsQuantity}

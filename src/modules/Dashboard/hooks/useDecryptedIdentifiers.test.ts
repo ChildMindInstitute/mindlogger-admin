@@ -45,9 +45,7 @@ describe('useDecryptedIdentifiers', () => {
     ];
 
     const { result } = renderHook(useDecryptedIdentifiers);
-    const getDecryptedIdentifiers = result.current as (
-      identifiers: IdentifierResponse[],
-    ) => Promise<Identifier[]>;
+    const getDecryptedIdentifiers = result.current as (identifiers: IdentifierResponse[]) => Promise<Identifier[]>;
 
     const decryptedIdentifiers = await getDecryptedIdentifiers(identifiers);
 
@@ -68,13 +66,9 @@ describe('useDecryptedIdentifiers', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
 
     const { result } = renderHook(useDecryptedIdentifiers);
-    const getDecryptedIdentifiers = result.current as (
-      identifiers: IdentifierResponse[],
-    ) => Promise<Identifier[]>;
+    const getDecryptedIdentifiers = result.current as (identifiers: IdentifierResponse[]) => Promise<Identifier[]>;
 
-    const decryptedIdentifiers = await getDecryptedIdentifiers(
-      mockedIdentifiers as IdentifierResponse[],
-    );
+    const decryptedIdentifiers = await getDecryptedIdentifiers(mockedIdentifiers as IdentifierResponse[]);
 
     expect(decryptedIdentifiers).toEqual([
       {

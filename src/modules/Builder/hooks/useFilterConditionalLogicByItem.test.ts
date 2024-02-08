@@ -7,7 +7,7 @@ import { useFilterConditionalLogicByItem } from './useFilterConditionalLogicByIt
 
 const CONDITIONAL_LOGIC_FIELD_NAME = 'activities.0.conditionalLogic';
 
-const findItemByName = (name: string) => mockedActivity.items.find((item) => item.name === name);
+const findItemByName = (name: string) => mockedActivity.items.find(item => item.name === name);
 
 const mockedActivity = mockedAppletFormData.activities[0];
 const mockedConditional = mockedActivity.conditionalLogic[0];

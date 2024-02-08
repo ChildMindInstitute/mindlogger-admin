@@ -5,13 +5,7 @@ import { Grid } from '@mui/material';
 
 import { Modal } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
-import {
-  StyledBodyMedium,
-  StyledModalWrapper,
-  StyledTitleLarge,
-  theme,
-  variables,
-} from 'shared/styles';
+import { StyledBodyMedium, StyledModalWrapper, StyledTitleLarge, theme, variables } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
@@ -20,11 +14,7 @@ import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderAp
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import {
-  ItemConfigurationProps,
-  ItemsOptionGroup,
-  UseWatchItemConfiguration,
-} from './ItemConfiguration.types';
+import { ItemConfigurationProps, ItemsOptionGroup, UseWatchItemConfiguration } from './ItemConfiguration.types';
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
@@ -47,10 +37,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     name: [`${fieldName}.isReviewable`, `${name}.responseType`, name],
   });
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
-  const conditionalLogicForItem = getItemConditionDependencies(
-    currentItem,
-    activity?.conditionalLogic,
-  );
+  const conditionalLogicForItem = getItemConditionDependencies(currentItem, activity?.conditionalLogic);
 
   const availableItemsTypeOptions = isReviewable
     ? itemsTypeOptions.reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
@@ -59,9 +46,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         return [
           {
             groupName,
-            groupOptions: groupOptions.filter(({ value }) =>
-              itemsForReviewableActivity.includes(value),
-            ),
+            groupOptions: groupOptions.filter(({ value }) => itemsForReviewableActivity.includes(value)),
           },
         ];
       }, [])
@@ -76,9 +61,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     setIsEditItemPopupVisible(true);
     selectChangeRef.current = handleOnChange;
   };
-  const checkIfSelectChangePopupIsVisible = conditionalLogicForItem?.length
-    ? prepareSelectChangePopup
-    : undefined;
+  const checkIfSelectChangePopupIsVisible = conditionalLogicForItem?.length ? prepareSelectChangePopup : undefined;
 
   const containerSxProps = {
     margin: 0,
@@ -107,8 +90,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           optionalItemsRef,
           onClose,
         }}
-        sxProps={containerSxProps}
-      >
+        sxProps={containerSxProps}>
         <Grid container direction="row" columns={2} spacing={2.4}>
           <Grid item xs={1}>
             <GroupedSelectSearchController
@@ -120,8 +102,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
             />
             <StyledBodyMedium
               sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
-              color={variables.palette.on_surface_variant}
-            >
+              color={variables.palette.on_surface_variant}>
               {responseType && getInputTypeTooltip()[responseType]}
             </StyledBodyMedium>
           </Grid>
@@ -158,8 +139,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           width={'62'}
           title={t('variablesWarning.title')}
           buttonText={t('ok')}
-          data-testid="builder-activity-items-item-configuration-variables-warning-popup"
-        >
+          data-testid="builder-activity-items-item-configuration-variables-warning-popup">
           <StyledModalWrapper>{t(message)}</StyledModalWrapper>
         </Modal>
       )}

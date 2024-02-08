@@ -69,9 +69,7 @@ describe('SectionContent', () => {
 
     fireEvent.click(within(removePopup).getByText('Remove'));
 
-    expect(
-      within(removePopup).getByText('Conditional logic has been removed successfully.'),
-    ).toBeInTheDocument();
+    expect(within(removePopup).getByText('Conditional logic has been removed successfully.')).toBeInTheDocument();
 
     fireEvent.click(within(removePopup).getByText('Ok'));
 
@@ -90,12 +88,8 @@ describe('SectionContent', () => {
     const conditionalWrapper = screen.getByTestId(`${dataTestId}-conditional`);
     expect(conditionalWrapper).toBeInTheDocument();
 
-    fireEvent.click(
-      within(conditionalWrapper).getByTestId(`${dataTestId}-conditional-add-condition`),
-    );
+    fireEvent.click(within(conditionalWrapper).getByTestId(`${dataTestId}-conditional-add-condition`));
 
-    expect(
-      within(conditionalWrapper).getByTestId(`${dataTestId}-conditional-condition-0`),
-    ).toBeInTheDocument();
+    expect(within(conditionalWrapper).getByTestId(`${dataTestId}-conditional-condition-0`)).toBeInTheDocument();
   });
 });

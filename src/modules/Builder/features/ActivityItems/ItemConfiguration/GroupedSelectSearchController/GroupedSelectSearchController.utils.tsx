@@ -23,18 +23,14 @@ export const getIsNotHaveSearchValue = (value: string, searchTermLowercase: stri
   t(value).toLowerCase().indexOf(searchTermLowercase) === -1;
 
 export const getItemTypesNames = (): string[] =>
-  Object.keys(ItemResponseType).map((key) =>
-    t(ItemResponseType[key as keyof typeof ItemResponseType]).toLowerCase(),
-  );
+  Object.keys(ItemResponseType).map(key => t(ItemResponseType[key as keyof typeof ItemResponseType]).toLowerCase());
 
 export const getEmptyComponent = (searchTerm: string) => {
-  if (getItemTypesNames().some((name) => name.includes(searchTerm.toLowerCase()))) return null;
+  if (getItemTypesNames().some(name => name.includes(searchTerm.toLowerCase()))) return null;
   const MAX_SEARCH_VALUE_LENGTH = 80;
 
   const searchValue =
-    searchTerm.length > MAX_SEARCH_VALUE_LENGTH
-      ? `${searchTerm.substring(0, MAX_SEARCH_VALUE_LENGTH)}...`
-      : searchTerm;
+    searchTerm.length > MAX_SEARCH_VALUE_LENGTH ? `${searchTerm.substring(0, MAX_SEARCH_VALUE_LENGTH)}...` : searchTerm;
 
   return (
     <EmptySearch
@@ -44,17 +40,12 @@ export const getEmptyComponent = (searchTerm: string) => {
   );
 };
 
-export const getGroupName = (
-  groupName: string,
-  options: ItemsOption[],
-  searchTermLowercase: string,
-) => {
+export const getGroupName = (groupName: string, options: ItemsOption[], searchTermLowercase: string) => {
   if (options.some(({ value }) => t(value).toLowerCase().includes(searchTermLowercase))) {
     return (
       <StyledGroupName
         key={groupName}
-        data-testid={`builder-activity-items-item-configuration-response-type-group-${groupName}`}
-      >
+        data-testid={`builder-activity-items-item-configuration-response-type-group-${groupName}`}>
         {t(groupName)}
       </StyledGroupName>
     );

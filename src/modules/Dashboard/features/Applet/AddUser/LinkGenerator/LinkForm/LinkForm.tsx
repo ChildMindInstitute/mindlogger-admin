@@ -36,9 +36,7 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
 
   return (
     <>
-      <StyledBodyMedium>
-        {inviteLink?.requireLogin ? t('shareWithLogin') : t('shareWithNoLogin')}
-      </StyledBodyMedium>
+      <StyledBodyMedium>{inviteLink?.requireLogin ? t('shareWithLogin') : t('shareWithNoLogin')}</StyledBodyMedium>
       <StyledFlexTopCenter>
         <StyledInput
           label=""
@@ -51,8 +49,7 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
         <StyledButton
           variant="outlined"
           onClick={copyPublicLink}
-          data-testid="dashboard-add-users-generate-link-url-copy"
-        >
+          data-testid="dashboard-add-users-generate-link-url-copy">
           <Svg id="duplicate" />
         </StyledButton>
       </StyledFlexTopCenter>
@@ -60,8 +57,7 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
         <StyledButton
           variant="outlined"
           onClick={() => setDeletePopupVisible(true)}
-          data-testid="dashboard-add-users-generate-link-url-delete"
-        >
+          data-testid="dashboard-add-users-generate-link-url-delete">
           {t('deleteInviteLink')}
         </StyledButton>
         <StyledBodyMedium>{t('deleteLinkToNoAllow')}</StyledBodyMedium>

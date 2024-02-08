@@ -212,14 +212,11 @@ describe('Report component', () => {
 
     dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
-    const { rerender } = renderWithProviders(
-      <Report activity={mockedActivity} identifiers={[]} versions={[]} />,
-      {
-        route,
-        routePath,
-        preloadedState,
-      },
-    );
+    const { rerender } = renderWithProviders(<Report activity={mockedActivity} identifiers={[]} versions={[]} />, {
+      route,
+      routePath,
+      preloadedState,
+    });
 
     expect(screen.getByTestId('respondents-summary-report')).toBeInTheDocument();
     expect(screen.getByText('Activity 1')).toBeInTheDocument();
@@ -264,11 +261,7 @@ describe('Report component', () => {
     });
 
     // base64 for 'data' is ZGF0YQ==
-    expect(download).toHaveBeenCalledWith(
-      'data:application/pdf;base64,ZGF0YQ==',
-      'Report.pdf',
-      'text/pdf',
-    );
+    expect(download).toHaveBeenCalledWith('data:application/pdf;base64,ZGF0YQ==', 'Report.pdf', 'text/pdf');
   });
 
   test('renders Report correctly with no data', async () => {
@@ -278,14 +271,11 @@ describe('Report component', () => {
       },
     });
 
-    const { rerender } = renderWithProviders(
-      <Report activity={mockedActivity} identifiers={[]} versions={[]} />,
-      {
-        route,
-        routePath,
-        preloadedState,
-      },
-    );
+    const { rerender } = renderWithProviders(<Report activity={mockedActivity} identifiers={[]} versions={[]} />, {
+      route,
+      routePath,
+      preloadedState,
+    });
 
     await waitFor(() => {
       expect(mockAxios.get).toHaveBeenNthCalledWith(

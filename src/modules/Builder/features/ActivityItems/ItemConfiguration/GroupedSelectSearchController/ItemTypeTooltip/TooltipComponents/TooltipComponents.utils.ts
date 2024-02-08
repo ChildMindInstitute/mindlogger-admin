@@ -6,11 +6,7 @@ export const getSelectionSvgId = (index: number, isSingleSelection: boolean) => 
   return index === 2 ? 'checkbox-empty-outline' : 'checkbox-filled';
 };
 
-export const getSelectionPerRowSvgId = (
-  rowIndex: number,
-  colIndex: number,
-  isSingleSelection: boolean,
-) => {
+export const getSelectionPerRowSvgId = (rowIndex: number, colIndex: number, isSingleSelection: boolean) => {
   if (isSingleSelection) {
     return (rowIndex === 1 && colIndex === 1) ||
       (rowIndex === 2 && colIndex === 2) ||
@@ -19,9 +15,7 @@ export const getSelectionPerRowSvgId = (
       : 'radio-button-empty-outline';
   }
 
-  return rowIndex === 1 ||
-    (rowIndex === 2 && (colIndex === 1 || colIndex === 2)) ||
-    (rowIndex === 3 && colIndex === 1)
+  return rowIndex === 1 || (rowIndex === 2 && (colIndex === 1 || colIndex === 2)) || (rowIndex === 3 && colIndex === 1)
     ? 'checkbox-filled'
     : 'checkbox-empty-outline';
 };

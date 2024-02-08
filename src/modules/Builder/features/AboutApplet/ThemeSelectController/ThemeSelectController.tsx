@@ -23,7 +23,5 @@ export const ThemeSelectController = <T extends FieldValues>(props: SelectContro
     hasTrigger: trigger,
   });
 
-  return (
-    <SelectController targetSelector={THEME_END_ITEM_CLASS} setTrigger={setTrigger} {...props} />
-  );
+  return <SelectController targetSelector={THEME_END_ITEM_CLASS} setTrigger={setTrigger} {...props} />;
 };

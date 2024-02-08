@@ -46,9 +46,7 @@ export const LeftBar = ({
   const { t } = useTranslation('app');
   const { setValue, getValues } = useCustomFormContext();
   const [isDragging, setIsDragging] = useState(false);
-  const [conditionalLogicKeysToRemove, setConditionalLogicKeysToRemove] = useState<string[] | null>(
-    null,
-  );
+  const [conditionalLogicKeysToRemove, setConditionalLogicKeysToRemove] = useState<string[] | null>(null);
   const [sourceIndex, setSourceIndex] = useState(-1);
   const [destinationIndex, setDestinationIndex] = useState(-1);
 
@@ -64,8 +62,8 @@ export const LeftBar = ({
     rootSelector: `.${ACTIVITY_ITEMS_LIST_CLASS}`,
     targetSelector: `.${ACTIVITY_ITEMS_END_ITEM_CLASS}`,
   });
-  const draggableItems = useMemo(() => itemsData.filter((item) => item.allowEdit), [itemsData]);
-  const systemItems = useMemo(() => itemsData.filter((item) => !item.allowEdit), [itemsData]);
+  const draggableItems = useMemo(() => itemsData.filter(item => item.allowEdit), [itemsData]);
+  const systemItems = useMemo(() => itemsData.filter(item => !item.allowEdit), [itemsData]);
 
   useRedirectIfNoMatchedActivityItem();
 
@@ -84,7 +82,7 @@ export const LeftBar = ({
 
     if (!conditionsToRemove?.length) return onMoveItem(source.index, destination.index);
 
-    setConditionalLogicKeysToRemove(conditionsToRemove.map((condition) => getEntityKey(condition)));
+    setConditionalLogicKeysToRemove(conditionsToRemove.map(condition => getEntityKey(condition)));
     setSourceIndex(source.index);
     setDestinationIndex(destination.index);
   };
@@ -98,8 +96,7 @@ export const LeftBar = ({
     setValue(
       `${fieldName}.conditionalLogic`,
       activity?.conditionalLogic?.filter(
-        (condition: ConditionalLogic) =>
-          !conditionalLogicKeysToRemove?.includes(getEntityKey(condition)),
+        (condition: ConditionalLogic) => !conditionalLogicKeysToRemove?.includes(getEntityKey(condition)),
       ),
     );
     onMoveItem(sourceIndex, destinationIndex);
@@ -128,7 +125,7 @@ export const LeftBar = ({
       if (itemsScore?.includes(itemKey)) {
         setValue(
           `${fieldName}.scoresAndReports.reports.${index}.itemsScore`,
-          itemsScore?.filter((itemId) => itemId !== itemKey),
+          itemsScore?.filter(itemId => itemId !== itemKey),
         );
       }
     });
@@ -139,8 +136,7 @@ export const LeftBar = ({
       variant="outlined"
       startIcon={<Svg id="add" width={18} height={18} />}
       onClick={onAddItem}
-      data-testid="builder-activity-items-add-item"
-    >
+      data-testid="builder-activity-items-add-item">
       {t('addItem')}
     </Button>
   );
@@ -165,12 +161,11 @@ export const LeftBar = ({
         padding: theme.spacing(0, 1.6, 2.8),
       }}
       contentClassName={ACTIVITY_ITEMS_LIST_CLASS}
-      hasMaxWidth={!hasActiveItem}
-    >
+      hasMaxWidth={!hasActiveItem}>
       {!!draggableItems?.length && (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-items-dnd" direction="vertical">
-            {(listProvided) => (
+            {listProvided => (
               <DraggableItems
                 items={draggableItems}
                 listProvided={listProvided}
@@ -205,9 +200,7 @@ export const LeftBar = ({
           );
         })}
       {!itemsData?.length && (
-        <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
-          {t('itemIsRequired')}
-        </StyledTitleMedium>
+        <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>{t('itemIsRequired')}</StyledTitleMedium>
       )}
       <StyledObserverTarget className={ACTIVITY_ITEMS_END_ITEM_CLASS} sx={observerStyles} />
       {isPending && (
@@ -227,8 +220,7 @@ export const LeftBar = ({
           secondBtnText={t('cancel')}
           hasSecondBtn
           submitBtnColor="error"
-          data-testid="builder-activity-items-item-remove-item-with-conditional-popup"
-        >
+          data-testid="builder-activity-items-item-remove-item-with-conditional-popup">
           <StyledModalWrapper>
             <StyledBodyLarge>
               <Trans i18nKey="removeConditionalsMoveItemPopupDescription">
@@ -237,12 +229,12 @@ export const LeftBar = ({
                   {' '}
                   <>{{ name: movingItemSourceName }}</>{' '}
                 </strong>
-                in the list contradicts the existing Item Flow. If you continue, the following
-                Conditional(s) will be removed:
+                in the list contradicts the existing Item Flow. If you continue, the following Conditional(s) will be
+                removed:
               </Trans>
             </StyledBodyLarge>
             <Box sx={{ mt: theme.spacing(2.4) }}>
-              {conditionalLogicKeysToRemove.map((conditionalLogicKey) => (
+              {conditionalLogicKeysToRemove.map(conditionalLogicKey => (
                 <ConditionalPanel
                   key={`conditional-panel-${conditionalLogicKey}`}
                   condition={groupedConditions[conditionalLogicKey]}

@@ -33,9 +33,7 @@ export const RespondentDataSummary = () => {
     if (!selectedActivity || !selectedActivity.hasAnswer || selectedActivity.isPerformanceTask) {
       return (
         <StyledFlexAllCenter sx={{ height: '100%' }}>
-          <StyledEmptyReview data-testid="summary-empty-state">
-            {getEmptyState(selectedActivity)}
-          </StyledEmptyReview>
+          <StyledEmptyReview data-testid="summary-empty-state">{getEmptyState(selectedActivity)}</StyledEmptyReview>
         </StyledFlexAllCenter>
       );
     }

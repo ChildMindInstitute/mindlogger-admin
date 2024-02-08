@@ -39,21 +39,14 @@ export const Applets = () => {
 
   const { ownerId } = workspaces.useData() || {};
 
-  const {
-    duplicatePopupsVisible,
-    deletePopupVisible,
-    transferOwnershipPopupVisible,
-    publishConcealPopupVisible,
-  } = popups.useData();
+  const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible, publishConcealPopupVisible } =
+    popups.useData();
 
-  const { fetchData, isLoading, count, expandedFolders, expandFolder, collapseFolder } =
-    useAppletsWithFolders(setRows);
+  const { fetchData, isLoading, count, expandedFolders, expandFolder, collapseFolder } = useAppletsWithFolders(setRows);
 
-  const { handleSearch, searchValue, ...tableProps } = useTable(
-    async (params) => await fetchData(params),
-  );
+  const { handleSearch, searchValue, ...tableProps } = useTable(async params => await fetchData(params));
 
-  const folders = rows.filter((row) => row.isFolder) as Folder[];
+  const folders = rows.filter(row => row.isFolder) as Folder[];
 
   const addFolder = () => {
     const newFolderName = generateNewFolderName(folders);
@@ -104,7 +97,7 @@ export const Applets = () => {
     const isFolderExpanded = expandedFolders.includes(folder.id);
 
     if (isFolderExpanded) {
-      setRows(rows.filter((row) => (row as Applet)?.parentId !== folder.id));
+      setRows(rows.filter(row => (row as Applet)?.parentId !== folder.id));
       collapseFolder(folder.id);
 
       return;
@@ -138,8 +131,7 @@ export const Applets = () => {
           fetchData,
           reloadData: tableProps.handleReload,
           handleFolderClick,
-        }}
-      >
+        }}>
         <AppletsTableHeader>
           <Box>
             {getIsAddAppletBtnVisible(currentWorkspace, rolesData, user) && (
@@ -174,9 +166,7 @@ export const Applets = () => {
           {...tableProps}
         />
         {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
-        {deletePopupVisible && (
-          <DeletePopup onCloseCallback={onCloseCallback} data-testid="dashboard-applets-delete" />
-        )}
+        {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} data-testid="dashboard-applets-delete" />}
         {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
         {publishConcealPopupVisible && <PublishConcealAppletPopup />}
       </AppletsContext.Provider>

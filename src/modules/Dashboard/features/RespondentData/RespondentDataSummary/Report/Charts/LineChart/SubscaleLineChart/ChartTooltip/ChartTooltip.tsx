@@ -24,17 +24,13 @@ export const ChartTooltip = ({ dataPoints, 'data-testid': dataTestid }: ChartToo
           <StyledFlexColumn
             key={uniqueId()}
             sx={{ mt: index > 0 ? theme.spacing(2.4) : '' }}
-            data-testid={`${dataTestid}-tooltip-item-${index}`}
-          >
+            data-testid={`${dataTestid}-tooltip-item-${index}`}>
             <StyledBodySmall sx={{ mb: theme.spacing(1) }} color={variables.palette.outline}>
               {format(date, DateFormats.MonthDayTime)}
             </StyledBodySmall>
             <StyledFlexTopCenter>
               <StyledBackground sx={{ backgroundColor }} />
-              <StyledLabelMedium
-                sx={{ ml: theme.spacing(0.8) }}
-                color={variables.palette.on_surface}
-              >
+              <StyledLabelMedium sx={{ ml: theme.spacing(0.8) }} color={variables.palette.on_surface}>
                 {label}: {value}
               </StyledLabelMedium>
             </StyledFlexTopCenter>

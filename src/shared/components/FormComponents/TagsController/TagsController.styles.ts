@@ -56,7 +56,6 @@ export const StyledTextField = styled(TextField, shouldForwardProp)`
 `;
 
 export const StyledInputLabel = styled(StyledBodyLarge, shouldForwardProp)`
-  flex-shrink: ${({ showInputLabel }: { showInputLabel: boolean }) =>
-    showInputLabel ? 0 : 'unset'};
+  flex-shrink: ${({ showInputLabel }: { showInputLabel: boolean }) => (showInputLabel ? 0 : 'unset')};
   color: ${variables.palette.outline};
 `;

@@ -59,12 +59,10 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const [searchPopupVisible, setSearchPopupVisible] = useState(false);
   const [selectedRespondent, setSelectedRespondent] = useState<SelectedRespondent>(null);
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
-  const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
-    useState(false);
+  const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] = useState(false);
   const [importSchedulePopupVisible, setImportSchedulePopupVisible] = useState(false);
   const [clearScheduledEventsPopupVisible, setClearScheduledEventsPopupVisible] = useState(false);
-  const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
-    useState(false);
+  const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] = useState(false);
   const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
 
   const searchContainerRef = useRef<HTMLElement>(null);
@@ -77,10 +75,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
-  const respondentName = getRespondentName(
-    selectedRespondent?.secretId || '',
-    selectedRespondent?.nickname,
-  );
+  const respondentName = getRespondentName(selectedRespondent?.secretId || '', selectedRespondent?.nickname);
 
   const scheduleChangeHandler = async (event: SelectEvent) => {
     const { value } = event.target;
@@ -107,11 +102,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     setCreateEventPopupVisible(true);
   };
 
-  const expandedLists = useExpandedLists(
-    legendEvents,
-    clearAllScheduledEventsAction,
-    onCreateActivitySchedule,
-  );
+  const expandedLists = useExpandedLists(legendEvents, clearAllScheduledEventsAction, onCreateActivitySchedule);
 
   const exportScheduleHandler = () => {
     if (isIndividual) {
@@ -146,16 +137,13 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   };
 
   useEffect(() => {
-    setSchedule(
-      respondentId ? ScheduleOptions.IndividualSchedule : ScheduleOptions.DefaultSchedule,
-    );
+    setSchedule(respondentId ? ScheduleOptions.IndividualSchedule : ScheduleOptions.DefaultSchedule);
   }, [respondentId]);
 
   useEffect(() => {
     if (!respondentId || selectedRespondent) return;
 
-    const currentRespondent =
-      respondentsItems?.find((respondent) => respondent?.id === respondentId) || null;
+    const currentRespondent = respondentsItems?.find(respondent => respondent?.id === respondentId) || null;
     setSelectedRespondent(currentRespondent);
   }, [respondentId, respondentsItems, selectedRespondent]);
 
@@ -180,8 +168,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
         {isIndividual && (
           <StyledIconBtn
             onClick={() => setRemoveIndividualSchedulePopupVisible(true)}
-            data-testid={`${dataTestid}-individual-remove`}
-          >
+            data-testid={`${dataTestid}-individual-remove`}>
             <Svg id="trash" />
           </StyledIconBtn>
         )}
@@ -191,8 +178,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           <StyledSearchContainer
             ref={searchContainerRef}
             onClick={() => setSearchPopupVisible(true)}
-            data-testid={`${dataTestid}-individual-search`}
-          >
+            data-testid={`${dataTestid}-individual-search`}>
             <Search selectedRespondent={selectedRespondent} placeholder={t('selectRespondent')} />
           </StyledSearchContainer>
           <SearchPopup
@@ -218,19 +204,17 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           {t('export')}
         </StyledBtn>
       </StyledBtnsRow>
-      {expandedLists?.map(
-        ({ buttons, items, title, allAvailableScheduled, isHiddenInLegend, type }) => (
-          <ExpandedList
-            key={title}
-            buttons={buttons}
-            items={items}
-            title={title}
-            isHiddenInLegend={isHiddenInLegend}
-            allAvailableScheduled={allAvailableScheduled}
-            data-testid={`${dataTestid}-${type}`}
-          />
-        ),
-      )}
+      {expandedLists?.map(({ buttons, items, title, allAvailableScheduled, isHiddenInLegend, type }) => (
+        <ExpandedList
+          key={title}
+          buttons={buttons}
+          items={items}
+          title={title}
+          isHiddenInLegend={isHiddenInLegend}
+          allAvailableScheduled={allAvailableScheduled}
+          data-testid={`${dataTestid}-${type}`}
+        />
+      ))}
       {exportDefaultSchedulePopupVisible && (
         <ExportSchedulePopup
           open={exportDefaultSchedulePopupVisible}

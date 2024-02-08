@@ -16,10 +16,7 @@ export const getScreens = (isUpload: boolean, components: JSX.Element[]) => [
   },
 ];
 
-export const getUploadedDataWithIds = (
-  array: Record<string, string | number>[],
-  uploadedImages: UploadedImages,
-) => {
+export const getUploadedDataWithIds = (array: Record<string, string | number>[], uploadedImages: UploadedImages) => {
   const invalidDataReturn = { invalidData: true, uploadedDataWithIds: [] };
 
   if (array.length === 0) return invalidDataReturn;

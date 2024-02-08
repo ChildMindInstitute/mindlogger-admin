@@ -6,10 +6,8 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 export const StyledHeader = styled(Box, shouldForwardProp)`
   align-items: center;
   padding: ${theme.spacing(0.8, 1.2)};
-  display: ${({ isStartEndingDate }: { isStartEndingDate: boolean }) =>
-    isStartEndingDate ? 'grid' : 'flex'};
-  grid-template-columns: ${({ isStartEndingDate }) =>
-    isStartEndingDate ? '1fr auto 1fr' : ' auto'};
+  display: ${({ isStartEndingDate }: { isStartEndingDate: boolean }) => (isStartEndingDate ? 'grid' : 'flex')};
+  grid-template-columns: ${({ isStartEndingDate }) => (isStartEndingDate ? '1fr auto 1fr' : ' auto')};
 `;
 
 export const StyledCol = styled(Box)`

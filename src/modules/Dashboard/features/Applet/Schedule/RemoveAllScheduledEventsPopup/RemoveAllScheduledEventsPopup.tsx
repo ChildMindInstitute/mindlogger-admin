@@ -27,8 +27,7 @@ export const RemoveAllScheduledEventsPopup = ({
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
       disabledSubmit={isLoading}
-      data-testid={`${dataTestid}-remove-all-scheduled-events-popup`}
-    >
+      data-testid={`${dataTestid}-remove-all-scheduled-events-popup`}>
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
@@ -37,8 +36,8 @@ export const RemoveAllScheduledEventsPopup = ({
             <strong>
               <> {{ activityName }} </>
             </strong>
-            will be removed, and the activity will become always available to the user. Are you sure
-            you want to continue?
+            will be removed, and the activity will become always available to the user. Are you sure you want to
+            continue?
           </Trans>
         </StyledModalWrapper>
       </>

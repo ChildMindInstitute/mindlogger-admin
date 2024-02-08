@@ -1,12 +1,6 @@
 import styled from '@emotion/styled/macro';
 
-import {
-  StyledFlexAllCenter,
-  StyledClearedButton,
-  StyledFlexTopCenter,
-  variables,
-  theme,
-} from 'shared/styles';
+import { StyledFlexAllCenter, StyledClearedButton, StyledFlexTopCenter, variables, theme } from 'shared/styles';
 
 export const StyledSvg = styled(StyledFlexAllCenter)`
   width: 4rem;

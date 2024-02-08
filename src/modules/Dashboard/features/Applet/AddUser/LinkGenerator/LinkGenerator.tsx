@@ -21,7 +21,7 @@ export const LinkGenerator = () => {
   const [inviteLink, setInviteLink] = useState<InviteLink | null>(null);
   const [linkPopupVisible, setLinkPopupVisible] = useState(false);
 
-  const { execute } = useAsync(getAppletPublicLinkApi, (res) => {
+  const { execute } = useAsync(getAppletPublicLinkApi, res => {
     res?.data?.result && setInviteLink(res.data.result);
   });
 
@@ -56,15 +56,10 @@ export const LinkGenerator = () => {
           <Button
             variant="contained"
             onClick={handleGeneratePublicLinkClick}
-            data-testid="dashboard-add-users-generate-link-generate"
-          >
+            data-testid="dashboard-add-users-generate-link-generate">
             {t('generateLink')}
           </Button>
-          <LinkPopup
-            open={linkPopupVisible}
-            onClose={() => setLinkPopupVisible(false)}
-            onSubmit={onLinkCreated}
-          />
+          <LinkPopup open={linkPopupVisible} onClose={() => setLinkPopupVisible(false)} onSubmit={onLinkCreated} />
         </>
       )}
     </StyledWrapper>

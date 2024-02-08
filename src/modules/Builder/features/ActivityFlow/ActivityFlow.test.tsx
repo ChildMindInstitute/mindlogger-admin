@@ -24,7 +24,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUseNavigate,
 }));
 
-const renderActivityFlow = (formData) => {
+const renderActivityFlow = formData => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -44,9 +44,7 @@ describe('ActivityFlow', () => {
   test('Empty page', () => {
     renderActivityFlow(mockedAppletFormDataWithNoFlows);
 
-    expect(
-      screen.getByText('Create an Activity Flow to order the sequence of Activities.'),
-    ).toBeVisible();
+    expect(screen.getByText('Create an Activity Flow to order the sequence of Activities.')).toBeVisible();
     expect(screen.getByTestId('builder-activity-flows-add')).toBeVisible();
   });
 
@@ -56,9 +54,7 @@ describe('ActivityFlow', () => {
     fireEvent.click(screen.getByTestId('builder-activity-flows-add'));
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/builder/${mockedAppletFormData.id}/activity-flows/${ref.current.getValues(
-        'activityFlows.0.key',
-      )}`,
+      `/builder/${mockedAppletFormData.id}/activity-flows/${ref.current.getValues('activityFlows.0.key')}`,
     );
 
     const activityFlowData = ref.current.getValues('activityFlows.0');
@@ -86,7 +82,7 @@ describe('ActivityFlow', () => {
       `${mockedFlowTestid}-0-hide`,
       `${mockedFlowTestid}-0-remove`,
       `${mockedFlowTestid}-0-dnd`,
-    ].forEach((testId) => {
+    ].forEach(testId => {
       expect(screen.getByTestId(testId)).toBeVisible();
     });
   });

@@ -49,7 +49,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
   const onCloseHandler = () => onClose();
 
   const updateAppletHandler = (id: string, callback: (roles: Role[]) => Role[]) => {
-    const updatedApplets = applets.map((applet) =>
+    const updatedApplets = applets.map(applet =>
       applet.id === id
         ? {
             ...applet,
@@ -61,7 +61,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
   };
 
   const handleRemoveRole = (id: string, label: Roles) =>
-    updateAppletHandler(id, (roles) => roles.filter(({ role }) => role !== label));
+    updateAppletHandler(id, roles => roles.filter(({ role }) => role !== label));
 
   const handleAddRole = (id: string, role: Roles) => {
     const callback = (roles: Role[]) => [...roles, { role, icon: getRoleIcon(role) }];
@@ -70,8 +70,8 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
   };
 
   const handleAddSelectedRespondents = (id: string, respondents: string[]) =>
-    updateAppletHandler(id, (roles) =>
-      roles.map((role) => ({
+    updateAppletHandler(id, roles =>
+      roles.map(role => ({
         ...role,
         ...(role.role === Roles.Reviewer && { reviewerRespondents: respondents }),
       })),
@@ -104,8 +104,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
       title={t('editAccess')}
       buttonText={t('save')}
       disabledSubmit={!applets.length}
-      data-testid="dashboard-managers-edit-access-popup"
-    >
+      data-testid="dashboard-managers-edit-access-popup">
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
@@ -113,13 +112,11 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
             <strong>
               {firstName} {lastName} ({email})
             </strong>
-            {appletId
-              ? ` ${t('hasTheFollowingRole')} ${applets?.[0]?.displayName}`
-              : t('userHasAccess')}
+            {appletId ? ` ${t('hasTheFollowingRole')} ${applets?.[0]?.displayName}` : t('userHasAccess')}
           </StyledBodyLarge>
         </StyledModalWrapper>
         <StyledApplets>
-          {applets.map((applet) => (
+          {applets.map(applet => (
             <Applet
               key={applet.id}
               addRole={handleAddRole}
@@ -135,7 +132,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
           <StyledError>
             <Trans
               i18nKey="editAccessNoRespondent"
-              values={{ titles: appletsWithoutRespondents.map((el) => el).join(', ') }}
+              values={{ titles: appletsWithoutRespondents.map(el => el).join(', ') }}
             />
           </StyledError>
         )}

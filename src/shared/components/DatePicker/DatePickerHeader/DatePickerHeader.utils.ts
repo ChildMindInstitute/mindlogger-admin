@@ -17,5 +17,4 @@ export const getMonthsArr = (t: TFunction) => [
   t('dec'),
 ];
 
-export const getRange = (start: number, end: number) =>
-  createArray(end - start, (index) => String(index + start));
+export const getRange = (start: number, end: number) => createArray(end - start, index => String(index + start));

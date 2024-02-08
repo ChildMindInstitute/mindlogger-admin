@@ -77,9 +77,7 @@ describe('getIsScoreIdVariable', () => {
     ${report}                | ${true}        | ${'should be true'}
     ${reportWithoutVariable} | ${false}       | ${'should be false'}
   `('$description', async ({ score, expectedResult }) => {
-    expect(getIsScoreIdVariable({ id: score.id, reports: [score], isScore: true })).toBe(
-      expectedResult,
-    );
+    expect(getIsScoreIdVariable({ id: score.id, reports: [score], isScore: true })).toBe(expectedResult);
   });
 });
 

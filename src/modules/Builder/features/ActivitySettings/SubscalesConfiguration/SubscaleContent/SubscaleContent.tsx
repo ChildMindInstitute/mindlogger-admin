@@ -3,21 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledFlexColumn, StyledFlexTopStart, StyledTitleMedium, theme } from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import {
-  InputController,
-  SelectController,
-  TransferListController,
-} from 'shared/components/FormComponents';
+import { InputController, SelectController, TransferListController } from 'shared/components/FormComponents';
 import { DataTable } from 'shared/components';
 import { SubscaleFormValue } from 'modules/Builder/types';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
-import {
-  getItemElements,
-  getColumns,
-  getNotUsedElementsTableColumns,
-} from '../SubscalesConfiguration.utils';
+import { getItemElements, getColumns, getNotUsedElementsTableColumns } from '../SubscalesConfiguration.utils';
 import { StyledWrapper } from './SubscaleContent.styles';
 import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 
@@ -30,13 +22,8 @@ export const SubscaleContent = ({
   const { t } = useTranslation('app');
   const { control } = useCustomFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
-  const subscales: SubscaleFormValue[] =
-    useWatch({ name: `${fieldName}.subscaleSetting.subscales` }) ?? [];
-  const items = getItemElements(
-    subscaleId,
-    activity?.items.filter(checkOnItemTypeAndScore),
-    subscales,
-  );
+  const subscales: SubscaleFormValue[] = useWatch({ name: `${fieldName}.subscaleSetting.subscales` }) ?? [];
+  const items = getItemElements(subscaleId, activity?.items.filter(checkOnItemTypeAndScore), subscales);
 
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
@@ -56,9 +43,7 @@ export const SubscaleContent = ({
           data-testid={`${dataTestid}-scoring`}
         />
       </StyledFlexTopStart>
-      <StyledTitleMedium sx={{ mb: theme.spacing(1) }}>
-        {t('elementsWithinSubscale')}
-      </StyledTitleMedium>
+      <StyledTitleMedium sx={{ mb: theme.spacing(1) }}>{t('elementsWithinSubscale')}</StyledTitleMedium>
       <StyledWrapper>
         <TransferListController
           name={`${name}.items`}

@@ -32,9 +32,7 @@ export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProp
   const dataTestid = `builder-activity-item-flow-${index}`;
 
   const { control, getFieldState } = useCustomFormContext();
-  const { append: appendCondition, remove: removeCondition } = useFieldArray<
-    Record<string, Condition[]>
-  >({
+  const { append: appendCondition, remove: removeCondition } = useFieldArray<Record<string, Condition[]>>({
     control,
     name: conditionsName,
   });
@@ -73,9 +71,8 @@ export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProp
         <StyledFlexTopCenter sx={{ minHeight: '4.8rem' }}>
           <StyledClearedButton
             sx={{ p: theme.spacing(1) }}
-            onClick={() => setExpanded((prev) => !prev)}
-            data-testid={`${dataTestid}-collapse`}
-          >
+            onClick={() => setExpanded(prev => !prev)}
+            data-testid={`${dataTestid}-collapse`}>
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
           </StyledClearedButton>
           <StyledLabelBoldLarge data-testid={`${dataTestid}-title`}>{title}</StyledLabelBoldLarge>
@@ -85,7 +82,7 @@ export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProp
             onRemove={onRemove}
             data-testid={dataTestid}
             open={isExpanded}
-            onToggle={() => setExpanded((prev) => !prev)}
+            onToggle={() => setExpanded(prev => !prev)}
           />
         </StyledFlexTopCenter>
         {isExpanded && (

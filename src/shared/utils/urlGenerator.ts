@@ -37,8 +37,7 @@ export const enum SettingParam {
   LiveResponseStreaming = 'live-response-streaming',
 }
 
-export const uuidRegexp =
-  '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})';
+export const uuidRegexp = '([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})';
 export const APPLET_DASHBOARD_PAGE_REGEXP_STRING = `\\/${Path.Dashboard}\\/(${uuidRegexp})`;
 export const APPLET_PAGE_REGEXP_STRING = `\\/${Path.Builder}\\/(${uuidRegexp}|${Path.NewApplet})`;
 export const APPLET_SETTINGS_PAGE_REGEXP_STRING = `(${APPLET_DASHBOARD_PAGE_REGEXP_STRING}|${APPLET_PAGE_REGEXP_STRING})\\/${Path.Settings}`;
@@ -59,12 +58,7 @@ export const getAppletPerformanceActivityPageRegexp = (path: string) =>
 
 export const getBuilderAppletUrl = (id: string) => `/${Path.Builder}/${id}`;
 
-export const getUpdatedAppletUrl = (
-  appletId: string,
-  activityOrFlowId: string,
-  itemId: string,
-  url: string,
-) => {
+export const getUpdatedAppletUrl = (appletId: string, activityOrFlowId: string, itemId: string, url: string) => {
   const matchedPath =
     [
       page.builderAppletFlanker,
@@ -74,7 +68,7 @@ export const getUpdatedAppletUrl = (
       page.builderAppletActivity,
       page.builderAppletActivityFlowItem,
       page.builderApplet,
-    ].find((pattern) => matchPath(`${pattern}/*`, url)) ?? '';
+    ].find(pattern => matchPath(`${pattern}/*`, url)) ?? '';
 
   const match = matchPath(`${matchedPath}/*`, url);
 
@@ -89,14 +83,12 @@ export const getUpdatedAppletUrl = (
   });
 };
 
-export const checkIfAppletUrlPassed = (url: string) =>
-  new RegExp(`^${APPLET_PAGE_REGEXP_STRING}`).test(url);
+export const checkIfAppletUrlPassed = (url: string) => new RegExp(`^${APPLET_PAGE_REGEXP_STRING}`).test(url);
 
 export const checkIfAppletSettingsUrlPassed = (url: string) =>
   new RegExp(`^${APPLET_SETTINGS_PAGE_REGEXP_STRING}`).test(url);
 
-export const checkIfAppletActivityUrlPassed = (url: string) =>
-  new RegExp(`^${ACTIVITY_PAGE_REGEXP_STRING}`).test(url);
+export const checkIfAppletActivityUrlPassed = (url: string) => new RegExp(`^${ACTIVITY_PAGE_REGEXP_STRING}`).test(url);
 
 export const checkIfPerformanceTaskUrlPassed = (url: string) =>
   new RegExp(`^${PERFORMANCE_TASK_PAGE_REGEXP_STRING}`).test(url);
@@ -105,15 +97,9 @@ export const checkIfAppletActivityFlowUrlPassed = (url: string) =>
   new RegExp(`^${ACTIVITY_FLOW_PAGE_REGEXP_STRING}`).test(url);
 
 export const checkCurrentPerformanceTaskPage = (url: string) => ({
-  [PerformanceTasks.Flanker]: new RegExp(
-    `${getAppletPerformanceActivityPageRegexp(Path.Flanker)}`,
-  ).test(url),
-  [PerformanceTasks.Gyroscope]: new RegExp(
-    `${getAppletPerformanceActivityPageRegexp(Path.Gyroscope)}`,
-  ).test(url),
-  [PerformanceTasks.Touch]: new RegExp(
-    `${getAppletPerformanceActivityPageRegexp(Path.Touch)}`,
-  ).test(url),
+  [PerformanceTasks.Flanker]: new RegExp(`${getAppletPerformanceActivityPageRegexp(Path.Flanker)}`).test(url),
+  [PerformanceTasks.Gyroscope]: new RegExp(`${getAppletPerformanceActivityPageRegexp(Path.Gyroscope)}`).test(url),
+  [PerformanceTasks.Touch]: new RegExp(`${getAppletPerformanceActivityPageRegexp(Path.Touch)}`).test(url),
 });
 
 export const checkCurrentAppletPage = (url: string) => ({

@@ -32,16 +32,10 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
 
     return (
       <form onSubmit={handleSubmit(submitCallback)} noValidate>
-        <StyledBodyLarge
-          color={variables.palette.semantic.error}
-          sx={{ marginBottom: theme.spacing(3.2) }}
-        >
+        <StyledBodyLarge color={variables.palette.semantic.error} sx={{ marginBottom: theme.spacing(3.2) }}>
           {t('createAppletPasswordWarning')}
         </StyledBodyLarge>
-        <StyledBodyLarge
-          color={variables.palette.on_surface_variant}
-          sx={{ marginBottom: theme.spacing(3.2) }}
-        >
+        <StyledBodyLarge color={variables.palette.on_surface_variant} sx={{ marginBottom: theme.spacing(3.2) }}>
           {t('createAppletPasswordRequirements')}
         </StyledBodyLarge>
         <StyledController>
@@ -56,8 +50,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
               endAdornment: (
                 <StyledClearedButton
                   aria-label="toggle password visibility"
-                  onClick={() => setShowPassword((prevState) => !prevState)}
-                >
+                  onClick={() => setShowPassword(prevState => !prevState)}>
                   <Svg id={showPassword ? 'visibility-off' : 'visibility-on'} />
                 </StyledClearedButton>
               ),
@@ -77,8 +70,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
               endAdornment: (
                 <StyledClearedButton
                   aria-label="toggle password visibility"
-                  onClick={() => setShowAppletPasswordConfirmation((prevState) => !prevState)}
-                >
+                  onClick={() => setShowAppletPasswordConfirmation(prevState => !prevState)}>
                   <Svg id={showAppletPasswordConfirmation ? 'visibility-off' : 'visibility-on'} />
                 </StyledClearedButton>
               ),

@@ -67,17 +67,9 @@ export const SignUpForm = () => {
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
-      <StyledSignUpHeader color={variables.palette.on_surface}>
-        {t('createAccount')}
-      </StyledSignUpHeader>
+      <StyledSignUpHeader color={variables.palette.on_surface}>{t('createAccount')}</StyledSignUpHeader>
       <StyledController>
-        <InputController
-          fullWidth
-          name="email"
-          control={control}
-          label={t('email')}
-          data-testid="signup-form-email"
-        />
+        <InputController fullWidth name="email" control={control} label={t('email')} data-testid="signup-form-email" />
       </StyledController>
       <StyledController>
         <InputController
@@ -124,12 +116,7 @@ export const SignUpForm = () => {
           data-testid="signup-form-terms"
         />
       </StyledController>
-      <StyledButton
-        variant="contained"
-        type="submit"
-        disabled={!termsOfService}
-        data-testid="signup-form-signup"
-      >
+      <StyledButton variant="contained" type="submit" disabled={!termsOfService} data-testid="signup-form-signup">
         {t('createAccount')}
       </StyledButton>
       <StyledBackWrapper>

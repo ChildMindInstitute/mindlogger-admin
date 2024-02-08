@@ -12,14 +12,7 @@ import { getCalendarViewButtons } from './Toolbar.const';
 import { ToolbarProps, SetActiveBtnFunc } from './Toolbar.types';
 import { onlyMonthDate } from './Toolbar.utils';
 
-export const Toolbar = ({
-  onView,
-  onNavigate,
-  label,
-  activeView,
-  setActiveView,
-  date,
-}: ToolbarProps) => {
+export const Toolbar = ({ onView, onNavigate, label, activeView, setActiveView, date }: ToolbarProps) => {
   const { t } = i18n;
   const currentDate = new Date();
   const selectedDay = formatToYearMonthDate(date);
@@ -43,9 +36,7 @@ export const Toolbar = ({
       case CalendarViews.Year:
         return dateYear > currentDateYear;
       case CalendarViews.Week:
-        return (
-          dateYear > currentDateYear || (dateYear === currentDateYear && dateWeek > currentDateWeek)
-        );
+        return dateYear > currentDateYear || (dateYear === currentDateYear && dateWeek > currentDateWeek);
       case CalendarViews.Month:
         return dateMonth > currentDateMonth;
       default:
@@ -57,9 +48,7 @@ export const Toolbar = ({
       case CalendarViews.Year:
         return dateYear < currentDateYear;
       case CalendarViews.Week:
-        return (
-          dateYear < currentDateYear || (dateYear === currentDateYear && dateWeek < currentDateWeek)
-        );
+        return dateYear < currentDateYear || (dateYear === currentDateYear && dateWeek < currentDateWeek);
       case CalendarViews.Month:
         return dateMonth < currentDateMonth;
       default:
@@ -77,8 +66,7 @@ export const Toolbar = ({
       variant="text"
       startIcon={isSelectedFutureDate() && <Svg id="triangle-left" />}
       endIcon={isSelectedPastDate() && <Svg id="triangle-right" />}
-      data-testid={`${dataTestid}-today`}
-    >
+      data-testid={`${dataTestid}-today`}>
       {t('today')}
     </StyledTodayBtn>
   );
@@ -91,9 +79,7 @@ export const Toolbar = ({
           <StyledIconBtn onClick={() => onNavigate('PREV')} data-testid={`${dataTestid}-prev`}>
             <Svg id="navigate-left" />
           </StyledIconBtn>
-          <StyledTitleBoldMedium
-            color={isTodayInDayView ? variables.palette.primary : variables.palette.on_surface}
-          >
+          <StyledTitleBoldMedium color={isTodayInDayView ? variables.palette.primary : variables.palette.on_surface}>
             {label}
           </StyledTitleBoldMedium>
           <StyledIconBtn onClick={() => onNavigate('NEXT')} data-testid={`${dataTestid}-next`}>

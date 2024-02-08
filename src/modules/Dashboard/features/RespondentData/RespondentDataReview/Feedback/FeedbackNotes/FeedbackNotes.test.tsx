@@ -4,12 +4,7 @@ import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
-import {
-  mockedApplet,
-  mockedAppletId,
-  mockedCurrentWorkspace,
-  mockedRespondent,
-} from 'shared/mock';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedRespondent } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
@@ -103,9 +98,7 @@ const FormComponent = ({ children }: { children: ReactNode }) => {
 
 const renderFeedbackNotes = () =>
   renderWithProviders(
-    <RespondentDataReviewContext.Provider
-      value={{ isFeedbackOpen: true } as RespondentDataReviewContextType}
-    >
+    <RespondentDataReviewContext.Provider value={{ isFeedbackOpen: true } as RespondentDataReviewContextType}>
       <FormComponent>{<FeedbackNotes activity={mockedActivity} />}</FormComponent>
     </RespondentDataReviewContext.Provider>,
     {
@@ -125,9 +118,7 @@ describe('FeedbackNotes', () => {
     renderFeedbackNotes();
 
     await waitFor(() => {
-      const elementsWithTestIdSubstring = screen.queryAllByTestId(
-        /respondents-summary-feedback-notes-note-\d+$/,
-      );
+      const elementsWithTestIdSubstring = screen.queryAllByTestId(/respondents-summary-feedback-notes-note-\d+$/);
       expect(elementsWithTestIdSubstring).toHaveLength(2);
       expect(screen.getByText(/John Doe/)).toBeInTheDocument();
       expect(screen.getByText(/New note/)).toBeInTheDocument();

@@ -24,8 +24,7 @@ export const SuccessSharePopup = ({
       title={t('appletIsSharedWithLibrary')}
       buttonText={t('ok')}
       width="60"
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <SuccessShared
         title={applet.displayName}
         text={getDictionaryText(applet.description || '')}

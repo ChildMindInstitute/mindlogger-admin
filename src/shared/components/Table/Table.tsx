@@ -97,15 +97,14 @@ export const Table = ({
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
                   <TableRow key={`row-${index}`} data-testid="table-row">
-                    {Object.keys(row)?.map((key) => (
+                    {Object.keys(row)?.map(key => (
                       <TableCell
                         sx={{ height: '4.8rem' }}
                         onClick={row[key].onClick}
                         scope="row"
                         key={key}
                         align={row[key].align}
-                        width={row[key].width}
-                      >
+                        width={row[key].width}>
                         {row[key].content(row)}
                       </TableCell>
                     ))}

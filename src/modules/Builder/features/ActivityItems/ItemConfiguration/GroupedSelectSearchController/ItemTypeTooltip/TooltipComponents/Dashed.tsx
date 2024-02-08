@@ -2,11 +2,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import theme from 'shared/styles/theme';
-import {
-  StyledBodyMedium,
-  StyledFlexAllCenter,
-  StyledFlexColumn,
-} from 'shared/styles/styledComponents';
+import { StyledBodyMedium, StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
 
 import {
   StyledDashedWrapper,

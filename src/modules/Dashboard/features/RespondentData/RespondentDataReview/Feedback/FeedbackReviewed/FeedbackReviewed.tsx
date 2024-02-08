@@ -22,7 +22,7 @@ export const FeedbackReviewed = () => {
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getReviews } = useAsync(
     getReviewsApi,
-    async (result) => {
+    async result => {
       const reviews = result?.data?.result ?? [];
       const decryptedData: ReviewData[] = [];
 
@@ -35,8 +35,7 @@ export const FeedbackReviewed = () => {
 
         decryptedData.push({
           reviewer,
-          review: (await getDecryptedActivityData(encryptedData))
-            .decryptedAnswers as AssessmentActivityItem[],
+          review: (await getDecryptedActivityData(encryptedData)).decryptedAnswers as AssessmentActivityItem[],
         });
       }
 
@@ -63,10 +62,7 @@ export const FeedbackReviewed = () => {
           {reviewers.length ? (
             reviewers.map((reviewer, index) => (
               <Fragment key={uniqueId()}>
-                <FeedbackReviewer
-                  reviewer={reviewer}
-                  data-testid={`${dataTestid}-reviewer-${index}`}
-                />
+                <FeedbackReviewer reviewer={reviewer} data-testid={`${dataTestid}-reviewer-${index}`} />
               </Fragment>
             ))
           ) : (

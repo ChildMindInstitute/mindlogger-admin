@@ -4,12 +4,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { Svg } from 'shared/components/Svg';
 import { concatIf } from 'shared/utils/concatIf';
 
-import {
-  StyledActions,
-  StyledActionButton,
-  StyledActionsWrapper,
-  StyledDotsSvg,
-} from './Actions.styles';
+import { StyledActions, StyledActionButton, StyledActionsWrapper, StyledDotsSvg } from './Actions.styles';
 import { Action, ActionsProps } from './Actions.types';
 
 export const Actions = <T = unknown,>({
@@ -35,8 +30,7 @@ export const Actions = <T = unknown,>({
     <StyledActionsWrapper
       sx={sxProps}
       onMouseEnter={() => setVisibleActions(true)}
-      onMouseLeave={() => setVisibleActions(false)}
-    >
+      onMouseLeave={() => setVisibleActions(false)}>
       <StyledActions isVisible={isVisible}>
         {items.map(
           ({
@@ -58,10 +52,9 @@ export const Actions = <T = unknown,>({
                     isActive={active}
                     disabled={disabled}
                     onClick={onClick(action)}
-                    onMouseDown={(e) => e.preventDefault()} // prevent onBlur actions for folders
+                    onMouseDown={e => e.preventDefault()} // prevent onBlur actions for folders
                     isVisible={isVisible || (hasStaticActions && !isVisible && isStatic)}
-                    data-testid={dataTestid}
-                  >
+                    data-testid={dataTestid}>
                     {icon}
                   </StyledActionButton>
                 </span>
@@ -75,8 +68,7 @@ export const Actions = <T = unknown,>({
             isActive={false}
             disabled={false}
             data-testid={concatIf(dataTestid, '-dnd')}
-            {...dragHandleProps}
-          >
+            {...dragHandleProps}>
             <Svg id="drag" />
           </StyledActionButton>
         )}

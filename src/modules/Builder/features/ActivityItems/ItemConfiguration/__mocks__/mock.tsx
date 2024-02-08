@@ -6,12 +6,7 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
 import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
-import {
-  mockedActivityId,
-  mockedAppletFormData,
-  mockedAppletId,
-  mockedSingleSelectFormValues,
-} from 'shared/mock';
+import { mockedActivityId, mockedAppletFormData, mockedAppletId, mockedSingleSelectFormValues } from 'shared/mock';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ItemConfiguration } from '../ItemConfiguration';
@@ -51,18 +46,16 @@ export const getAppletFormDataWithItem = (item = mockedEmptyItem, activity) => (
     },
   ],
 });
-export const getAppletFormDataWithItemWithPalette = (paletteName) => {
+export const getAppletFormDataWithItemWithPalette = paletteName => {
   const item = {
     ...mockedSingleSelectFormValues,
     responseValues: {
       ...mockedSingleSelectFormValues.responseValues,
       paletteName,
-      options: mockedSingleSelectFormValues.responseValues.options
-        .slice(0, 2)
-        .map((option, index) => ({
-          ...option,
-          color: { hex: index === 0 ? '#005f73' : '#0a9396' },
-        })),
+      options: mockedSingleSelectFormValues.responseValues.options.slice(0, 2).map((option, index) => ({
+        ...option,
+        color: { hex: index === 0 ? '#005f73' : '#0a9396' },
+      })),
     },
     config: {
       ...mockedSingleSelectFormValues.config,
@@ -73,7 +66,7 @@ export const getAppletFormDataWithItemWithPalette = (paletteName) => {
   return getAppletFormDataWithItem(item);
 };
 /* eslint no-underscore-dangle: 0 */
-export const removeUuidValues = (item) => {
+export const removeUuidValues = item => {
   const newItem = { ...item };
 
   delete newItem.key;
@@ -86,7 +79,7 @@ export const removeUuidValues = (item) => {
       ? {
           ...item.responseValues,
           ...(item.responseValues.options && {
-            options: item.responseValues.options.map((option) => {
+            options: item.responseValues.options.map(option => {
               const newOption = { ...option };
 
               delete newOption.id;
@@ -96,7 +89,7 @@ export const removeUuidValues = (item) => {
             }),
           }),
           ...(item.responseValues.rows && {
-            rows: item.responseValues.rows.map((row) => {
+            rows: item.responseValues.rows.map(row => {
               const newRow = { ...row };
 
               delete newRow.id;
@@ -109,7 +102,7 @@ export const removeUuidValues = (item) => {
       : undefined,
   };
 };
-export const setItemResponseType = (responseType) => {
+export const setItemResponseType = responseType => {
   const itemType = screen.getByTestId(mockedTypeTestid);
   const typeButton = itemType.querySelector('[role="button"]');
   fireEvent.mouseDown(typeButton);
@@ -117,7 +110,7 @@ export const setItemResponseType = (responseType) => {
   const option = screen.getByTestId(`${mockedOptionTestid}-${responseType}`);
   fireEvent.click(option);
 };
-export const setItemConfigSetting = async (setting) => {
+export const setItemConfigSetting = async setting => {
   const settingsButton = screen.getByTestId(`${mockedTestid}-settings`);
   fireEvent.click(settingsButton);
 
@@ -125,7 +118,7 @@ export const setItemConfigSetting = async (setting) => {
     const drawer = screen.getByTestId(`${mockedTestid}-settings-drawer`);
     const collapsedSections = drawer.querySelectorAll('.svg-navigate-down');
 
-    collapsedSections.forEach((section) => {
+    collapsedSections.forEach(section => {
       fireEvent.click(section);
     });
   });
@@ -137,11 +130,9 @@ export const setItemConfigSetting = async (setting) => {
   fireEvent.click(closeButton);
 };
 
-export const renderItemConfiguration = (name = mockedItemName) => (
-  <ItemConfiguration name={name} onClose={jest.fn()} />
-);
+export const renderItemConfiguration = (name = mockedItemName) => <ItemConfiguration name={name} onClose={jest.fn()} />;
 
-export const renderItemConfigurationByType = (responseType) => {
+export const renderItemConfigurationByType = responseType => {
   const ref = createRef();
 
   renderWithAppletFormData({

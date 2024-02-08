@@ -17,8 +17,7 @@ export const StyledDayBtn = styled(StyledClearedButton, shouldForwardProp)`
   line-height: 1.8rem;
   text-align: center;
   transition: ${variables.transitions.all};
-  opacity: ${({ isOffRange }: { isOffRange: boolean; isToday: boolean }) =>
-    isOffRange && variables.opacity.disabled};
+  opacity: ${({ isOffRange }: { isOffRange: boolean; isToday: boolean }) => isOffRange && variables.opacity.disabled};
   margin-bottom: ${theme.spacing(0.7)};
 
   & .MuiTypography-root {
@@ -94,8 +93,7 @@ export const StyledTooltip = styled(Popover)`
 
 export const StyledTooltipEventWrapper = styled(Box, shouldForwardProp)`
   width: 100%;
-  background-color: ${({ bgColor }: { bgColor: string }) =>
-    bgColor !== variables.palette.white && bgColor};
+  background-color: ${({ bgColor }: { bgColor: string }) => bgColor !== variables.palette.white && bgColor};
   margin-bottom: ${theme.spacing(0.2)};
   padding: ${theme.spacing(0.4)};
   border-radius: ${variables.borderRadius.xs};

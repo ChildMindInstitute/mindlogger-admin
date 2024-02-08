@@ -11,8 +11,8 @@ export const OrderedListExtension = ({ onInsert }: InsertContentExtensionProps) 
 
   const markHandler = () => {
     let index = 1;
-    const generator: InsertContentGenerator = (selectedText) => ({
-      targetValue: selectedText.replace(/^.*$/gm, (match) => `${index++}. ${match}`),
+    const generator: InsertContentGenerator = selectedText => ({
+      targetValue: selectedText.replace(/^.*$/gm, match => `${index++}. ${match}`),
       select: true,
       deviationStart: 0,
       deviationEnd: 0,

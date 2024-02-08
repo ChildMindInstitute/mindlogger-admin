@@ -6,13 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { SignIn } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { InputController } from 'shared/components/FormComponents';
-import {
-  variables,
-  StyledBodyMedium,
-  StyledHeadline,
-  StyledTitleMedium,
-  StyledErrorText,
-} from 'shared/styles';
+import { variables, StyledBodyMedium, StyledHeadline, StyledTitleMedium, StyledErrorText } from 'shared/styles';
 import { auth, User } from 'redux/modules';
 import { useLogout } from 'shared/hooks/useLogout';
 import { Avatar } from 'shared/components';
@@ -68,12 +62,8 @@ export const LockForm = () => {
             <Avatar caption={userInitials} />
           </StyledImageContainer>
           <StyledUserInfo>
-            <StyledTitleMedium sx={{ color: variables.palette.on_surface }}>
-              {fullName}
-            </StyledTitleMedium>
-            <StyledBodyMedium sx={{ color: variables.palette.on_surface_variant }}>
-              {email}
-            </StyledBodyMedium>
+            <StyledTitleMedium sx={{ color: variables.palette.on_surface }}>{fullName}</StyledTitleMedium>
+            <StyledBodyMedium sx={{ color: variables.palette.on_surface_variant }}>{email}</StyledBodyMedium>
           </StyledUserInfo>
         </StyledUserInfoController>
         <StyledController>

@@ -18,9 +18,7 @@ const mockDispatch = jest.fn();
 
 jest.mock('./Item.styles', () => ({
   ...jest.requireActual('./Item.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
-    <div data-testid={dataTestid}>{modelValue}</div>
-  ),
+  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => <div data-testid={dataTestid}>{modelValue}</div>,
 }));
 
 const FormComponent = ({ children }) => {
@@ -74,10 +72,7 @@ describe('Item', () => {
   });
 
   test('renders checkbox and header', async () => {
-    const setAddToBuilderBtnDisabledMock = jest.spyOn(
-      library.actions,
-      'setAddToBuilderBtnDisabled',
-    );
+    const setAddToBuilderBtnDisabledMock = jest.spyOn(library.actions, 'setAddToBuilderBtnDisabled');
 
     renderWithProviders(ItemComponent, {
       route: '/library/cart',

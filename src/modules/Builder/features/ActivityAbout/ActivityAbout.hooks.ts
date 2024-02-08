@@ -12,7 +12,7 @@ const checkIfItemsHaveVariables = (items: ItemFormValues[]) => {
   return items.some(({ question }) => {
     const variableNames = getTextBetweenBrackets(question!);
 
-    return variableNames.some((variable) => !!itemsObject[variable]);
+    return variableNames.some(variable => !!itemsObject[variable]);
   });
 };
 export const useCheckIfItemsHaveVariables = () => {
@@ -30,7 +30,7 @@ export const useCheckIfItemsHaveVariables = () => {
 };
 
 const checkIfItemsHaveRequiredOptions = (items: ItemFormValues[]) =>
-  items.some((item) => checkIfItemHasRequiredOptions(item.config));
+  items.some(item => checkIfItemHasRequiredOptions(item.config));
 
 export const useCheckIfItemsHaveRequiredItems = () => {
   const { setValue, watch } = useFormContext();

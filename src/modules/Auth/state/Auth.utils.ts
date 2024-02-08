@@ -12,11 +12,7 @@ export const createAuthPendingData = (authentication: Draft<BaseSchema>, request
   }
 };
 
-export const createAuthFulfilledData = (
-  state: Draft<AuthSchema>,
-  requestId: string,
-  data: AuthData,
-) => {
+export const createAuthFulfilledData = (state: Draft<AuthSchema>, requestId: string, data: AuthData) => {
   const { authentication } = state;
   if (authentication.status === 'loading' && authentication.requestId === requestId) {
     authentication.requestId = initialState.authentication.requestId;
@@ -27,11 +23,7 @@ export const createAuthFulfilledData = (
   }
 };
 
-export const createAuthRejectedData = (
-  state: Draft<AuthSchema>,
-  requestId: string,
-  error: ApiErrorReturn,
-) => {
+export const createAuthRejectedData = (state: Draft<AuthSchema>, requestId: string, error: ApiErrorReturn) => {
   const { authentication } = state;
   if (authentication.status === 'loading' && authentication.requestId === requestId) {
     authentication.requestId = initialState.authentication.requestId;

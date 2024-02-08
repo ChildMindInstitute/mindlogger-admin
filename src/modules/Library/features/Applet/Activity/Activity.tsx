@@ -10,12 +10,7 @@ import { library } from 'redux/modules';
 import { getHighlightedText } from 'shared/utils';
 
 import { ActivityProps } from './Activity.types';
-import {
-  StyledActivityContainer,
-  StyledActivityHeader,
-  StyledActivityName,
-  StyledItemsList,
-} from './Activity.styles';
+import { StyledActivityContainer, StyledActivityHeader, StyledActivityName, StyledItemsList } from './Activity.styles';
 import { Item } from '../Item';
 import { AppletUiType, LibraryForm, SelectedItem } from '../Applet.types';
 import { checkIfPerformanceTask } from '../Applet.utils';
@@ -33,7 +28,7 @@ export const Activity = ({
   const [activityVisible, setActivityVisible] = useState(false);
   const [activityIndeterminate, setActivityIndeterminate] = useState(false);
   const [activityChecked, setActivityChecked] = useState(false);
-  const forceUpdate = useReducer((x) => x + 1, 0)[1];
+  const forceUpdate = useReducer(x => x + 1, 0)[1];
 
   const updateSelectedItems = () => {
     if (uiType === AppletUiType.Cart) {
@@ -50,9 +45,7 @@ export const Activity = ({
     if (!checked) {
       await setValue(
         appletId,
-        selectedItems.filter(
-          (selectedItem) => selectedItem.activityNamePlusId !== activityNamePlusId,
-        ),
+        selectedItems.filter(selectedItem => selectedItem.activityNamePlusId !== activityNamePlusId),
       );
       updateSelectedItems();
 
@@ -62,14 +55,9 @@ export const Activity = ({
     const unselectedItems = items.reduce((unselected: SelectedItem[], item) => {
       const itemNamePlusActivityName = `${item.name}-${name}`;
 
-      return selectedItems.find(
-        (selectedItem) => selectedItem.itemNamePlusActivityName === itemNamePlusActivityName,
-      )
+      return selectedItems.find(selectedItem => selectedItem.itemNamePlusActivityName === itemNamePlusActivityName)
         ? unselected
-        : [
-            ...unselected,
-            { itemNamePlusActivityName, activityName: name, activityNamePlusId, activityKey: key },
-          ];
+        : [...unselected, { itemNamePlusActivityName, activityName: name, activityNamePlusId, activityKey: key }];
     }, []);
 
     await setValue(appletId, [...selectedItems, ...unselectedItems]);
@@ -81,9 +69,8 @@ export const Activity = ({
   const arrowSgvId = activityVisible ? 'navigate-up' : 'navigate-down';
 
   const getCheckedActivity = (currentItems: SelectedItem[]) => {
-    const currentActivityItems = currentItems?.filter((item) => item.activityName === name);
-    const isAllItemsSelected =
-      !!currentActivityItems?.length && currentActivityItems?.length === items.length;
+    const currentActivityItems = currentItems?.filter(item => item.activityName === name);
+    const isAllItemsSelected = !!currentActivityItems?.length && currentActivityItems?.length === items.length;
     const isIndeterminate = !!currentActivityItems?.length && !isAllItemsSelected;
     setActivityIndeterminate(isIndeterminate);
     setActivityChecked(isAllItemsSelected);
@@ -120,9 +107,8 @@ export const Activity = ({
         </StyledFlexTopCenter>
       ) : (
         <StyledActivityHeader
-          onClick={() => setActivityVisible((prevState) => !prevState)}
-          data-testid={`${dataTestid}-header`}
-        >
+          onClick={() => setActivityVisible(prevState => !prevState)}
+          data-testid={`${dataTestid}-header`}>
           <StyledSvgArrowContainer>
             <Svg id={arrowSgvId} />
           </StyledSvgArrowContainer>

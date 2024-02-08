@@ -7,7 +7,7 @@ import { StyledIconCenter } from '../Extensions.styles';
 
 export const AlignTextExtension = ({ onInsert, type, title }: AlignTextExtensionProps) => {
   const markHandler = () => {
-    const generator: InsertContentGenerator = (selectedText) => ({
+    const generator: InsertContentGenerator = selectedText => ({
       targetValue: `::: hljs-${type}
 ${selectedText} 
 :::`,

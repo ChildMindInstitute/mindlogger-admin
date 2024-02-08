@@ -16,8 +16,7 @@ export const StyledMenu = styled(Menu, shouldForwardProp)`
   }
 
   .MuiMenuItem-root {
-    ${({ uiType }: { uiType?: MenuUiType }) =>
-      uiType === MenuUiType.Primary && 'text-transform: capitalize;'}
+    ${({ uiType }: { uiType?: MenuUiType }) => uiType === MenuUiType.Primary && 'text-transform: capitalize;'}
     border-radius: ${variables.borderRadius.xxs};
 
     &:hover {

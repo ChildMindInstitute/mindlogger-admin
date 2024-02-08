@@ -2,10 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledLabelBoldLarge } from 'shared/styles';
-import {
-  StyledSummaryRow,
-  StyledSummarySelectController,
-} from 'shared/styles/styledComponents/ConditionalSummary';
+import { StyledSummaryRow, StyledSummarySelectController } from 'shared/styles/styledComponents/ConditionalSummary';
 
 import { ScoreSummaryRowProps } from './ScoreSummaryRow.types';
 import { getMatchOptions } from './ScoreSummaryRow.utils';

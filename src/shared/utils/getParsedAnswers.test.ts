@@ -93,7 +93,7 @@ describe('getParsedAnswers', () => {
     test('should return answers with public urls', async () => {
       jest.spyOn(mockedAxios, 'post').mockImplementation(
         () =>
-          new Promise((res) =>
+          new Promise(res =>
             res({
               data: {
                 result: ['publicDrawingUrl', 'publicAudioUrl', 'publicVideoUrl', 'publicPhotoUrl'],

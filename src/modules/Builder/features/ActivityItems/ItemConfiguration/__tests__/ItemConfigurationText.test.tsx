@@ -23,7 +23,7 @@ describe('ItemConfiguration: Text', () => {
     const textInput = text.querySelector('input');
     const maxLength = screen.getByTestId(`${mockedTextTestid}-max-length`);
 
-    [title, description, text, maxLength].forEach((element) => {
+    [title, description, text, maxLength].forEach(element => {
       expect(element).toBeVisible();
     });
 
@@ -51,18 +51,15 @@ describe('ItemConfiguration: Text', () => {
 
     await setItemConfigSetting(ItemConfigurationSettings.IsCorrectAnswerRequired);
 
-    fireEvent.change(
-      screen.getByTestId(`${mockedTextTestid}-correct-answer`).querySelector('input'),
-      { target: { value: 'correct' } },
-    );
+    fireEvent.change(screen.getByTestId(`${mockedTextTestid}-correct-answer`).querySelector('input'), {
+      target: { value: 'correct' },
+    });
     fireEvent.change(screen.getByTestId(`${mockedTextTestid}-max-length`).querySelector('input'), {
       target: { value: 3 },
     });
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId(`${mockedTextTestid}-correct-answer`).querySelector('input'),
-      ).toHaveValue('cor');
+      expect(screen.getByTestId(`${mockedTextTestid}-correct-answer`).querySelector('input')).toHaveValue('cor');
     });
   });
 

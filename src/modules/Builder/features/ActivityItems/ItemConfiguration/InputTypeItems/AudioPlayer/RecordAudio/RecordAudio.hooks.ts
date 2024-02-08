@@ -13,7 +13,7 @@ export const useAudioRecorder: () => RecorderControls = () => {
 
   const startTimer = () => {
     const interval = setInterval(() => {
-      setRecordingTime((time) => time + 1);
+      setRecordingTime(time => time + 1);
     }, 1000);
     setTimerInterval(interval);
   };
@@ -28,7 +28,7 @@ export const useAudioRecorder: () => RecorderControls = () => {
 
     navigator.mediaDevices
       .getUserMedia({ audio: true })
-      .then((stream) => {
+      .then(stream => {
         setIsStopped(false);
         setIsRecording(true);
         const recorder: MediaRecorder = new MediaRecorder(stream);
@@ -36,11 +36,11 @@ export const useAudioRecorder: () => RecorderControls = () => {
         recorder.start();
         startTimer();
 
-        recorder.addEventListener('dataavailable', (event) => {
+        recorder.addEventListener('dataavailable', event => {
           setRecordingBlob([...recordingBlob, event.data]);
         });
       })
-      .catch((err) => console.warn(err));
+      .catch(err => console.warn(err));
   }, [timerInterval]);
 
   const togglePauseResume = () => {

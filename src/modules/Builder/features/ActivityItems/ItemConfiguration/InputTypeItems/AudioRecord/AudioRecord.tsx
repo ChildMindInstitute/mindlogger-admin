@@ -17,11 +17,7 @@ export const AudioRecord = ({ name }: UseControllerProps) => {
   const dataTestid = 'builder-activity-items-item-configuration-audio';
 
   return (
-    <ItemOptionContainer
-      title={t('audio')}
-      description={t('audioRecordDescription')}
-      data-testid={dataTestid}
-    >
+    <ItemOptionContainer title={t('audio')} description={t('audioRecordDescription')} data-testid={dataTestid}>
       <Box sx={{ mb: theme.spacing(2.6) }}>
         <ItemInfo svgId="audio" textKey="audio" />
       </Box>

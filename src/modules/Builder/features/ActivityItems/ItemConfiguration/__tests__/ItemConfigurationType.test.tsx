@@ -4,10 +4,7 @@ import { createRef } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { ItemResponseType } from 'shared/consts';
-import {
-  mockedRenderAppletFormDataActivityOptions,
-  mockedSingleSelectFormValues,
-} from 'shared/mock';
+import { mockedRenderAppletFormDataActivityOptions, mockedSingleSelectFormValues } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils';
 
 import {
@@ -58,15 +55,14 @@ describe('ItemConfiguration: Item Type', () => {
     const typeButton = type.querySelector('[role="button"]');
     fireEvent.mouseDown(typeButton);
 
-    mockedItemTypes.forEach((itemType) => {
+    mockedItemTypes.forEach(itemType => {
       const option = screen.getByTestId(`${mockedOptionTestid}-${itemType}`);
 
       expect(option).toHaveAttribute('data-value', itemType);
 
-      if (mockedItemTypesMobileOnly.includes(itemType))
-        expect(option).toHaveTextContent(/mobile only$/i);
+      if (mockedItemTypesMobileOnly.includes(itemType)) expect(option).toHaveTextContent(/mobile only$/i);
     });
-    mockedItemTypeGroups.forEach((groupName) => {
+    mockedItemTypeGroups.forEach(groupName => {
       const group = screen.getByTestId(`${mockedGroupTestid}-${groupName}`);
 
       expect(group).toBeInTheDocument();
@@ -88,7 +84,7 @@ describe('ItemConfiguration: Item Type', () => {
     const typeButton = type.querySelector('[role="button"]');
     fireEvent.mouseDown(typeButton);
 
-    const options = screen.getAllByTestId((testId) => testId.startsWith(mockedOptionTestid));
+    const options = screen.getAllByTestId(testId => testId.startsWith(mockedOptionTestid));
 
     expect(options).toHaveLength(expected);
   });
@@ -103,9 +99,7 @@ describe('ItemConfiguration: Item Type', () => {
       appletFormData: getAppletFormDataWithItem(item),
     });
 
-    expect(
-      screen.getByTestId('builder-activity-items-item-configuration-response-type'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('builder-activity-items-item-configuration-response-type')).toBeInTheDocument();
 
     const input = document.querySelector(
       '[data-testid="builder-activity-items-item-configuration-response-type"] input',
@@ -131,17 +125,13 @@ describe('ItemConfiguration: Item Type', () => {
     const searchInput = search.querySelector('input');
     fireEvent.change(searchInput, { target: { value: searchText } });
 
-    const itemTypes = screen.getAllByTestId((testId) => testId.startsWith(mockedOptionTestid));
-    const visibleItemTypes = itemTypes.filter(
-      (itemType) => window.getComputedStyle(itemType).display !== 'none',
-    );
+    const itemTypes = screen.getAllByTestId(testId => testId.startsWith(mockedOptionTestid));
+    const visibleItemTypes = itemTypes.filter(itemType => window.getComputedStyle(itemType).display !== 'none');
 
     expect(visibleItemTypes).toHaveLength(expected);
 
-    visibleItemTypes.forEach((itemType) => {
-      expect(itemType.querySelector('.highlighted-text')).toHaveTextContent(
-        new RegExp(`^${searchText}$`, 'i'),
-      );
+    visibleItemTypes.forEach(itemType => {
+      expect(itemType.querySelector('.highlighted-text')).toHaveTextContent(new RegExp(`^${searchText}$`, 'i'));
     });
 
     if (expected === 0) {

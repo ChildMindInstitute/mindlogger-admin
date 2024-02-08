@@ -6,11 +6,7 @@ import { ShareApplet } from 'modules/Dashboard/features/Applet/ShareApplet';
 
 import { ShareAppletPopupProps } from './ShareAppletPopup.types';
 
-export const ShareAppletPopup = ({
-  sharePopupVisible,
-  setSharePopupVisible,
-  applet,
-}: ShareAppletPopupProps) => {
+export const ShareAppletPopup = ({ sharePopupVisible, setSharePopupVisible, applet }: ShareAppletPopupProps) => {
   const { t } = useTranslation('app');
 
   const [title, setTitle] = useState(t('shareTheAppletWithTheLibrary'));
@@ -47,8 +43,7 @@ export const ShareAppletPopup = ({
       buttonText={btnText || ''}
       disabledSubmit={isDisabled}
       width="60"
-      data-testid={`${dataTestid}-popup`}
-    >
+      data-testid={`${dataTestid}-popup`}>
       <ShareApplet
         applet={applet}
         onAppletShared={() => setAppletShared(true)}

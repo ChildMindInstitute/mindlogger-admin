@@ -57,11 +57,7 @@ export const Schedule = () => {
   ) : (
     <StyledSchedule>
       <StyledLeftPanel>
-        <Legend
-          legendEvents={preparedEvents}
-          appletName={appletData?.displayName || ''}
-          appletId={appletId || ''}
-        />
+        <Legend legendEvents={preparedEvents} appletName={appletData?.displayName || ''} appletId={appletId || ''} />
       </StyledLeftPanel>
       <Calendar />
     </StyledSchedule>

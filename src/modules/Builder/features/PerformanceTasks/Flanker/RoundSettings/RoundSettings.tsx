@@ -26,9 +26,7 @@ export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
     errors,
     `${activityObjField}.items[${FlankerInstructionPositions.Test}].question`,
   );
-  const key = isPracticeRound
-    ? FlankerInstructionPositions.Practice
-    : FlankerInstructionPositions.Test;
+  const key = isPracticeRound ? FlankerInstructionPositions.Practice : FlankerInstructionPositions.Test;
   const dataTestid = `builder-activity-flanker-${isPracticeRound ? 'practice' : 'test'}-round`;
 
   return (
@@ -44,10 +42,7 @@ export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
         instructionId={`instruction-${key}`}
         data-testid={`${dataTestid}-instruction`}
       />
-      <BlockSequences
-        isPracticeRound={isPracticeRound}
-        data-testid={`${dataTestid}-block-sequences`}
-      />
+      <BlockSequences isPracticeRound={isPracticeRound} data-testid={`${dataTestid}-block-sequences`} />
       <RoundOptions isPracticeRound={isPracticeRound} data-testid={`${dataTestid}-round-options`} />
     </>
   );

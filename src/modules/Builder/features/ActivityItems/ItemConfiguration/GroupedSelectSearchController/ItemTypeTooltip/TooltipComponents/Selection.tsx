@@ -22,16 +22,14 @@ export const Selection = ({ uiType }: SelectionProps) => {
   return (
     <>
       <StyledPresentation>
-        {createArray(3, (index) => (
+        {createArray(3, index => (
           <StyledPresentationLine key={uniqueId()}>
             <Svg id={getSelectionSvgId(index, isSingleSelection)} {...commonProps} />
             <SelectionOption optionNumber={index + 1} />
           </StyledPresentationLine>
         ))}
       </StyledPresentation>
-      <StyledBodyMedium>
-        {isSingleSelection ? t('singleSelectionHint') : t('multipleSelectionHint')}.
-      </StyledBodyMedium>
+      <StyledBodyMedium>{isSingleSelection ? t('singleSelectionHint') : t('multipleSelectionHint')}.</StyledBodyMedium>
     </>
   );
 };

@@ -16,11 +16,7 @@ import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPo
 import { editRespondentFormSchema } from './EditRespondentPopup.schema';
 import { StyledController } from './EditRespondentsPopup.styles';
 
-export const EditRespondentPopup = ({
-  popupVisible,
-  onClose,
-  chosenAppletData,
-}: EditRespondentPopupProps) => {
+export const EditRespondentPopup = ({ popupVisible, onClose, chosenAppletData }: EditRespondentPopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
 
@@ -100,8 +96,7 @@ export const EditRespondentPopup = ({
       hasSecondBtn
       onSecondBtnSubmit={onCloseHandler}
       secondBtnText={t('cancel')}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>

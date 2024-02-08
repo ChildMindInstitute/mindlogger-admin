@@ -38,7 +38,7 @@ const mockedSingleActivityItemWithoutScores = {
   name: `${mockedSingleActivityItem.name}_no_scores`,
   responseValues: {
     ...mockedSingleActivityItem.responseValues,
-    options: mockedSingleActivityItem.responseValues.options.map((option) => ({
+    options: mockedSingleActivityItem.responseValues.options.map(option => ({
       ...option,
       score: undefined,
     })),
@@ -54,7 +54,7 @@ const mockedMultiActivityItemWithoutScores = {
   name: `${mockedMultiActivityItem.name}_no_scores`,
   responseValues: {
     ...mockedMultiActivityItem.responseValues,
-    options: mockedMultiActivityItem.responseValues.options.map((option) => ({
+    options: mockedMultiActivityItem.responseValues.options.map(option => ({
       ...option,
       score: undefined,
     })),
@@ -77,11 +77,7 @@ const mockedSliderActivityItemWithoutScores = {
     addScores: false,
   },
 };
-const mockedAvailableItems = [
-  mockedSingleActivityItem,
-  mockedMultiActivityItem,
-  mockedSliderActivityItem,
-];
+const mockedAvailableItems = [mockedSingleActivityItem, mockedMultiActivityItem, mockedSliderActivityItem];
 
 const mockedAppletWithAllItemTypes = {
   ...mockedAppletFormData,
@@ -167,9 +163,7 @@ describe('SubscalesConfiguration', () => {
 
     expect(screen.getByTestId(`${mockedTestid}-add`)).toBeVisible();
     expect(screen.queryAllByTestId(new RegExp(`^${mockedTestid}-\\d+$`))).toHaveLength(0);
-    expect(
-      screen.queryByTestId(`${mockedTestid}-elements-associated-with-subscales`),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId(`${mockedTestid}-elements-associated-with-subscales`)).not.toBeInTheDocument();
     expect(screen.queryByTestId(`${mockedTestid}-calculate-total-score`)).not.toBeInTheDocument();
   });
 
@@ -201,7 +195,7 @@ describe('SubscalesConfiguration', () => {
       `${mockedTestid}-0-unused-items`,
       `${mockedTestid}-elements-associated-with-subscales`,
       `${mockedTestid}-calculate-total-score`,
-    ].forEach((testId) => {
+    ].forEach(testId => {
       expect(screen.getByTestId(testId)).toBeVisible();
     });
   });
@@ -211,9 +205,7 @@ describe('SubscalesConfiguration', () => {
 
     addSubscale();
 
-    const itemsToSelect = screen
-      .getByTestId(`${mockedTestid}-0-items-unselected`)
-      .querySelectorAll('tbody tr');
+    const itemsToSelect = screen.getByTestId(`${mockedTestid}-0-items-unselected`).querySelectorAll('tbody tr');
     expect(itemsToSelect).toHaveLength(3);
 
     itemsToSelect.forEach((item, index) => {
@@ -222,9 +214,7 @@ describe('SubscalesConfiguration', () => {
     });
 
     addSubscale();
-    const newItemsToSelect = screen
-      .getByTestId(`${mockedTestid}-0-items-unselected`)
-      .querySelectorAll('tbody tr');
+    const newItemsToSelect = screen.getByTestId(`${mockedTestid}-0-items-unselected`).querySelectorAll('tbody tr');
     expect(newItemsToSelect).toHaveLength(4);
     expect(newItemsToSelect[0]).toHaveTextContent('Subscale: ()');
 
@@ -246,12 +236,8 @@ describe('SubscalesConfiguration', () => {
     fireEvent.change(screen.getByTestId(`${mockedTestid}-1-name`).querySelector('input'), {
       target: { value: 'subscale_2' },
     });
-    fireEvent.click(
-      screen.getByTestId(`${mockedTestid}-0-items-unselected-checkbox-0`).querySelector('input'),
-    );
-    fireEvent.click(
-      screen.getByTestId(`${mockedTestid}-1-items-unselected-checkbox-0`).querySelector('input'),
-    );
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-0-items-unselected-checkbox-0`).querySelector('input'));
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-1-items-unselected-checkbox-0`).querySelector('input'));
 
     const elementsAssociated = screen
       .getByTestId(`${mockedTestid}-elements-associated-with-subscales`)
@@ -260,13 +246,10 @@ describe('SubscalesConfiguration', () => {
     expect(elementsAssociated).toHaveLength(2);
 
     const [associatedSubscale, associatedItem] = elementsAssociated;
-    const [associatedSubscaleElement, associatedSubscaleSubscale] =
-      associatedSubscale.querySelectorAll('td');
+    const [associatedSubscaleElement, associatedSubscaleSubscale] = associatedSubscale.querySelectorAll('td');
     const [associatedItemElement, associatedItemSubscale] = associatedItem.querySelectorAll('td');
 
-    expect(associatedSubscaleElement).toHaveTextContent(
-      'Subscale: subscale_2 (Item: single_text_score)',
-    );
+    expect(associatedSubscaleElement).toHaveTextContent('Subscale: subscale_2 (Item: single_text_score)');
     expect(associatedSubscaleSubscale).toHaveTextContent('subscale_1');
 
     expect(associatedItemElement).toHaveTextContent('Item: single_text_score');
@@ -279,13 +262,9 @@ describe('SubscalesConfiguration', () => {
     addSubscale();
 
     const calculateTotalScoreSwitch = screen.getByTestId(`${mockedTestid}-calculate-total-score`);
-    expect(calculateTotalScoreSwitch.querySelector('.MuiSwitch-switchBase')).not.toHaveClass(
-      'Mui-checked',
-    );
+    expect(calculateTotalScoreSwitch.querySelector('.MuiSwitch-switchBase')).not.toHaveClass('Mui-checked');
     fireEvent.click(calculateTotalScoreSwitch.querySelector('input'));
-    expect(calculateTotalScoreSwitch.querySelector('.MuiSwitch-switchBase')).toHaveClass(
-      'Mui-checked',
-    );
+    expect(calculateTotalScoreSwitch.querySelector('.MuiSwitch-switchBase')).toHaveClass('Mui-checked');
 
     const sumOfScores = screen.getByTestId(`${mockedTestid}-calculate-total-score-value-0`);
     const averageOfScores = screen.getByTestId(`${mockedTestid}-calculate-total-score-value-1`);
@@ -316,18 +295,14 @@ describe('SubscalesConfiguration', () => {
     fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table-popup-submit-button`));
 
     await waitFor(() => {
-      const addedSystemItems = ref.current
-        .getValues('activities.0.items')
-        .filter((item) => isSystemItem(item));
+      const addedSystemItems = ref.current.getValues('activities.0.items').filter(item => isSystemItem(item));
       expect(addedSystemItems).toHaveLength(2);
     });
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-0-remove`));
 
     await waitFor(() => {
-      const addedSystemItems = ref.current
-        .getValues('activities.0.items')
-        .filter((item) => isSystemItem(item));
+      const addedSystemItems = ref.current.getValues('activities.0.items').filter(item => isSystemItem(item));
       expect(addedSystemItems).toHaveLength(0);
     });
   });
@@ -350,8 +325,8 @@ describe('SubscalesConfiguration', () => {
     const items = ref.current.getValues('activities.0.items');
 
     expect(items).toHaveLength(4);
-    expect(items.filter((item) => isSystemItem(item))).toHaveLength(2);
-    expect(items.filter((item) => !isSystemItem(item))).toHaveLength(2);
+    expect(items.filter(item => isSystemItem(item))).toHaveLength(2);
+    expect(items.filter(item => !isSystemItem(item))).toHaveLength(2);
   });
 
   test('Subscale is removed from the list of elements (cannot make recursive selection)', () => {
@@ -367,17 +342,11 @@ describe('SubscalesConfiguration', () => {
       target: { value: 'subscale_2' },
     });
 
-    expect(
-      screen.getAllByTestId(new RegExp(`${mockedTestid}-1-items-unselected-checkbox-\\d+$`)),
-    ).toHaveLength(4);
+    expect(screen.getAllByTestId(new RegExp(`${mockedTestid}-1-items-unselected-checkbox-\\d+$`))).toHaveLength(4);
 
-    fireEvent.click(
-      screen.getByTestId(`${mockedTestid}-0-items-unselected-checkbox-0`).querySelector('input'),
-    );
+    fireEvent.click(screen.getByTestId(`${mockedTestid}-0-items-unselected-checkbox-0`).querySelector('input'));
 
-    expect(
-      screen.getAllByTestId(new RegExp(`${mockedTestid}-1-items-unselected-checkbox-\\d+$`)),
-    ).toHaveLength(3);
+    expect(screen.getAllByTestId(new RegExp(`${mockedTestid}-1-items-unselected-checkbox-\\d+$`))).toHaveLength(3);
   });
 
   describe('Validations', () => {
@@ -411,9 +380,7 @@ describe('SubscalesConfiguration', () => {
       });
 
       await waitFor(() => {
-        expect(
-          screen.getByText('That Subscale Name is already in use. Please use a different name'),
-        ).toBeVisible();
+        expect(screen.getByText('That Subscale Name is already in use. Please use a different name')).toBeVisible();
       });
     });
   });

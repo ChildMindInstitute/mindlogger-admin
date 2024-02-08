@@ -4,12 +4,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { page } from 'resources';
-import {
-  mockedApplet,
-  mockedAppletFormData,
-  mockedAppletId,
-  mockedCurrentWorkspace,
-} from 'shared/mock';
+import { mockedApplet, mockedAppletFormData, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { initialStateData } from 'shared/state';
 import { Roles } from 'shared/consts';
 
@@ -125,9 +120,7 @@ describe('AboutApplet', () => {
       'about-applet-watermark',
     ];
 
-    fieldsDataTestIds.forEach((dataTestId) =>
-      expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
-    );
+    fieldsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
 
     const theme = screen.getByLabelText('Applet Color Theme').querySelector('input');
     theme && expect(theme.value).toBe('9b023afd-e5f9-403c-b154-fc8f35fcf3ab');

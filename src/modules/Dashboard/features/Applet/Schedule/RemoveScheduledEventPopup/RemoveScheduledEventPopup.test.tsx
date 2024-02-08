@@ -22,9 +22,7 @@ describe('RemoveScheduledEventPopup', () => {
 
     const popup = screen.getByTestId('remove-scheduled-events-popup');
     expect(popup).toBeVisible();
-    expect(popup).toHaveTextContent(
-      'Are you sure you want to remove this scheduled event for New Activity?',
-    );
+    expect(popup).toHaveTextContent('Are you sure you want to remove this scheduled event for New Activity?');
 
     fireEvent.click(screen.getByText('Remove'));
 

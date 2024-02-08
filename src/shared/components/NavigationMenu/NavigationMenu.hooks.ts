@@ -15,8 +15,7 @@ export const useSettingsRedirection = (items: Item[]) => {
   const rolesLoadingStatus = workspaces.useRolesResponseStatus();
 
   const activeItem = getActiveItem(items, setting);
-  const isLoading =
-    rolesLoadingStatus !== 'success' || (!isNewApplet && appletLoadingStatus !== 'success');
+  const isLoading = rolesLoadingStatus !== 'success' || (!isNewApplet && appletLoadingStatus !== 'success');
 
   useEffect(() => {
     if (!!setting && !isLoading && (!activeItem || activeItem?.disabled)) {

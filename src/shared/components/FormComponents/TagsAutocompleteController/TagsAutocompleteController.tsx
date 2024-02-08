@@ -1,21 +1,10 @@
 import { useState, MouseEvent, SyntheticEvent } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
-import {
-  TextField,
-  Autocomplete,
-  Checkbox,
-  FormControlLabel,
-  Divider,
-  Paper,
-  ListItem,
-} from '@mui/material';
+import { TextField, Autocomplete, Checkbox, FormControlLabel, Divider, Paper, ListItem } from '@mui/material';
 
 import { theme } from 'shared/styles';
 
-import {
-  AutocompleteOption,
-  TagsAutocompleteControllerProps,
-} from './TagsAutocompleteController.types';
+import { AutocompleteOption, TagsAutocompleteControllerProps } from './TagsAutocompleteController.types';
 
 export const TagsInputController = <T extends FieldValues>({
   name,
@@ -39,7 +28,7 @@ export const TagsInputController = <T extends FieldValues>({
         const handleToggleSelectAll = (e: MouseEvent<HTMLLabelElement>) => {
           e.preventDefault(); // prevent blur
           onChange(options || []);
-          setSelectedAll((prev) => {
+          setSelectedAll(prev => {
             if (!prev) onChange(options || []);
             else onChange([]);
 
@@ -47,11 +36,7 @@ export const TagsInputController = <T extends FieldValues>({
           });
         };
 
-        const handleChange = (
-          _e: SyntheticEvent<Element, Event>,
-          value: AutocompleteOption[],
-          reason: string,
-        ) => {
+        const handleChange = (_e: SyntheticEvent<Element, Event>, value: AutocompleteOption[], reason: string) => {
           if (reason === 'clear' || reason === 'removeOption') setSelectedAll(false);
           if (reason === 'selectOption' && value?.length === options?.length) setSelectedAll(true);
           onChange(value);
@@ -79,7 +64,7 @@ export const TagsInputController = <T extends FieldValues>({
                 {option.label}
               </ListItem>
             )}
-            PaperComponent={(paperProps) => {
+            PaperComponent={paperProps => {
               const { children, ...restPaperProps } = paperProps;
 
               return (
@@ -87,9 +72,8 @@ export const TagsInputController = <T extends FieldValues>({
                   <>
                     {options?.length ? (
                       <ListItem
-                        onMouseDown={(event) => event.preventDefault()} // prevent blur
-                        sx={{ pl: theme.spacing(2.8) }}
-                      >
+                        onMouseDown={event => event.preventDefault()} // prevent blur
+                        sx={{ pl: theme.spacing(2.8) }}>
                         <FormControlLabel
                           onClick={handleToggleSelectAll}
                           label={labelAllSelect}

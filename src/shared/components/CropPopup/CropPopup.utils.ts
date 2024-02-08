@@ -26,7 +26,7 @@ export const cropImage = ({ image, type, crop, onReady }: CropImage) => {
     canvas.height = height;
 
     ctx?.drawImage(originalImage, x, y, width, height, 0, 0, width, height);
-    canvas.toBlob((blob) => {
+    canvas.toBlob(blob => {
       if (!blob) return;
 
       onReady(blob);

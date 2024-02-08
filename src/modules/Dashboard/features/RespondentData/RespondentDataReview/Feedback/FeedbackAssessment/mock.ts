@@ -30,8 +30,7 @@ export const sliderMocked: SliderItemAnswer = {
       minImage: 'https://cdn.pixabay.com/photo/2023/01/10/07/12/cat-7709087__480.jpg',
       minLabel: 'This is a good result',
       minValue: 1,
-      maxImage:
-        'https://t4.ftcdn.net/jpg/00/84/66/63/360_F_84666330_LoeYCZ5LCobNwWePKbykqEfdQOZ6fipq.jpg',
+      maxImage: 'https://t4.ftcdn.net/jpg/00/84/66/63/360_F_84666330_LoeYCZ5LCobNwWePKbykqEfdQOZ6fipq.jpg',
       maxLabel: 'This is not such a good result as I think',
       maxValue: 9,
     },
@@ -69,22 +68,19 @@ export const singleSelectionMocked: SingleSelectItemAnswer = {
         {
           id: 'single-select-option-1',
           text: 'Never',
-          image:
-            'https://wdfiles.ru/plugins/imageviewer/site/thumb.php?s=de02fcf&/Frame_26086022.png',
+          image: 'https://wdfiles.ru/plugins/imageviewer/site/thumb.php?s=de02fcf&/Frame_26086022.png',
           tooltip: 'Never',
         },
         {
           id: 'single-select-option-2',
           text: 'Sometimes',
-          image:
-            'https://wdfiles.ru/plugins/imageviewer/site/thumb.php?s=0aa4332&/Frame_26086023.png',
+          image: 'https://wdfiles.ru/plugins/imageviewer/site/thumb.php?s=0aa4332&/Frame_26086023.png',
           tooltip: 'Sometimes',
         },
         {
           id: 'single-select-option-3',
           text: 'Often',
-          image:
-            'https://wdfiles.ru/plugins/imageviewer/site/thumb.php?s=8680fe9&/Frame_26086024.png',
+          image: 'https://wdfiles.ru/plugins/imageviewer/site/thumb.php?s=8680fe9&/Frame_26086024.png',
         },
       ],
     },
@@ -144,8 +140,4 @@ export const multipleSelectionMocked: MultiSelectItemAnswer = {
   },
 };
 
-export const assessmentActivityItems = [
-  sliderMocked,
-  singleSelectionMocked,
-  multipleSelectionMocked,
-];
+export const assessmentActivityItems = [sliderMocked, singleSelectionMocked, multipleSelectionMocked];

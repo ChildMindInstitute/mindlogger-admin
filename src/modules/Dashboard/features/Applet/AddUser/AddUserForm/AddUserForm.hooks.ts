@@ -16,8 +16,7 @@ export const useFormError = <T extends FieldValues>({ error, setError }: UseForm
     const errorData: ApiError = getErrorData(error);
     const fieldName = errorData?.path?.at?.(-1) as Path<T>;
 
-    if (!fieldName || (fieldName && !Fields[fieldName as keyof typeof Fields]))
-      return setHasCommonError(true);
+    if (!fieldName || (fieldName && !Fields[fieldName as keyof typeof Fields])) return setHasCommonError(true);
 
     setError(fieldName, { message: getErrorMessage(error) });
   }, [error]);

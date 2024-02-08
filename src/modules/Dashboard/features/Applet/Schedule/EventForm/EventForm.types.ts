@@ -1,13 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import * as yup from 'yup';
 
-import {
-  TimerType,
-  Periodicity,
-  EventNotifications,
-  EventReminder,
-  NotificationType,
-} from 'modules/Dashboard/api';
+import { TimerType, Periodicity, EventNotifications, EventReminder, NotificationType } from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 
 export type EventFormRef = {

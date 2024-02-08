@@ -42,13 +42,7 @@ const commonUploaderProps = {
   uiType: UploaderUiType.Secondary,
 };
 
-export const SliderPanel = ({
-  name,
-  label,
-  index,
-  isMultiple = false,
-  onRemove,
-}: SliderPanelProps) => {
+export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }: SliderPanelProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const sliderName = `${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`;
@@ -78,11 +72,9 @@ export const SliderPanel = ({
   const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-  const defaultMinNumberValue = isMultiple
-    ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
-    : DEFAULT_SLIDER_MIN_NUMBER;
+  const defaultMinNumberValue = isMultiple ? DEFAULT_SLIDER_ROWS_MIN_NUMBER : DEFAULT_SLIDER_MIN_NUMBER;
 
-  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
+  const handleCollapse = () => setIsExpanded(prevExpanded => !prevExpanded);
   const validationCheck =
     minValue !== '' &&
     maxValue !== '' &&
@@ -131,12 +123,7 @@ export const SliderPanel = ({
     const value = event.target.value === '' ? '' : +event.target.value;
     await setValue(minValueName, value);
     clearErrors([minValueName, maxValueName]);
-    if (
-      value !== '' &&
-      value < maxValue &&
-      value >= defaultMinNumberValue &&
-      maxValue <= DEFAULT_SLIDER_MAX_NUMBER
-    ) {
+    if (value !== '' && value < maxValue && value >= defaultMinNumberValue && maxValue <= DEFAULT_SLIDER_MAX_NUMBER) {
       setScoresAndAlertsChange({
         minValue: value,
         ...commonSetScoresMinProps,
@@ -152,11 +139,7 @@ export const SliderPanel = ({
   const handleMinValueArrowPress = (value: number) => {
     setValue(minValueName, value);
     clearErrors([minValueName, maxValueName]);
-    if (
-      value < maxValue &&
-      value >= defaultMinNumberValue &&
-      maxValue <= DEFAULT_SLIDER_MAX_NUMBER
-    ) {
+    if (value < maxValue && value >= defaultMinNumberValue && maxValue <= DEFAULT_SLIDER_MAX_NUMBER) {
       setScoresAndAlertsChange({
         minValue: value,
         ...commonSetScoresMinProps,
@@ -173,12 +156,7 @@ export const SliderPanel = ({
     const value = event.target.value === '' ? '' : +event.target.value;
     clearErrors([minValueName, maxValueName]);
     setValue(maxValueName, value);
-    if (
-      value !== '' &&
-      value > minValue &&
-      value <= DEFAULT_SLIDER_MAX_NUMBER &&
-      minValue >= defaultMinNumberValue
-    ) {
+    if (value !== '' && value > minValue && value <= DEFAULT_SLIDER_MAX_NUMBER && minValue >= defaultMinNumberValue) {
       setScoresAndAlertsChange({
         maxValue: value,
         ...commonSetScoresMaxProps,
@@ -194,11 +172,7 @@ export const SliderPanel = ({
   const handleMaxValueArrowPress = (value: number) => {
     setValue(maxValueName, value);
     clearErrors([minValueName, maxValueName]);
-    if (
-      value > minValue &&
-      value <= DEFAULT_SLIDER_MAX_NUMBER &&
-      minValue >= defaultMinNumberValue
-    ) {
+    if (value > minValue && value <= DEFAULT_SLIDER_MAX_NUMBER && minValue >= defaultMinNumberValue) {
       setScoresAndAlertsChange({
         maxValue: value,
         ...commonSetScoresMaxProps,
@@ -218,11 +192,7 @@ export const SliderPanel = ({
       validationCheck ? maxValue : DEFAULT_SLIDER_MAX_VALUE,
       hasTickMarksLabels,
     );
-  const dataTestid = concatIf(
-    'builder-activity-items-item-configuration-slider',
-    `-rows-${index}`,
-    isMultiple,
-  );
+  const dataTestid = concatIf('builder-activity-items-item-configuration-slider', `-rows-${index}`, isMultiple);
 
   const handleLabelChange = useFieldLengthError();
 
@@ -239,8 +209,7 @@ export const SliderPanel = ({
       key={`slider-container-${id}`}
       collapsedSize="12.8rem"
       timeout={0}
-      data-testid={`${dataTestid}-panel`}
-    >
+      data-testid={`${dataTestid}-panel`}>
       <Header
         name={name}
         label={label}
@@ -258,7 +227,7 @@ export const SliderPanel = ({
                 control={control}
                 name={sliderLabelName}
                 label={t('sliderLabel')}
-                onChange={(event) =>
+                onChange={event =>
                   handleLabelChange({
                     event,
                     fieldName: sliderLabelName,
@@ -275,7 +244,7 @@ export const SliderPanel = ({
               control={control}
               name={sliderMinLabelName}
               label={t('minLabel')}
-              onChange={(event) =>
+              onChange={event =>
                 handleLabelChange({
                   event,
                   fieldName: sliderMinLabelName,
@@ -289,7 +258,7 @@ export const SliderPanel = ({
               control={control}
               name={sliderMaxLabelName}
               label={t('maxLabel')}
-              onChange={(event) =>
+              onChange={event =>
                 handleLabelChange({
                   event,
                   fieldName: sliderMaxLabelName,
@@ -349,12 +318,7 @@ export const SliderPanel = ({
           {hasScores && (
             <>
               <StyledScoresContainer>
-                <Table
-                  columns={getStaticHeadRow()}
-                  rows={getStaticBodyRow()}
-                  orderBy="0"
-                  uiType={UiType.Secondary}
-                />
+                <Table columns={getStaticHeadRow()} rows={getStaticBodyRow()} orderBy="0" uiType={UiType.Secondary} />
                 <StyledTable
                   columns={tableColumns}
                   rows={getTableRows(scores, sliderName, `${dataTestid}-scores-table`)}
@@ -364,10 +328,7 @@ export const SliderPanel = ({
                 />
               </StyledScoresContainer>
               {scoresError && (
-                <StyledBodySmall
-                  sx={{ p: theme.spacing(0.5, 0, 0, 0) }}
-                  color={variables.palette.semantic.error}
-                >
+                <StyledBodySmall sx={{ p: theme.spacing(0.5, 0, 0, 0) }} color={variables.palette.semantic.error}>
                   {t('numberValueIsRequired')}
                 </StyledBodySmall>
               )}

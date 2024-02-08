@@ -91,8 +91,8 @@ describe('Managers component tests', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-managers-table')).toBeInTheDocument();
-      tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
-      managersColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
+      tableColumnNames.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
+      managersColumns.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
     });
   });
 
@@ -118,16 +118,12 @@ describe('Managers component tests', () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-managers-table-actions-dots'),
-    );
+    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-managers-table-actions-dots'));
     fireEvent.mouseEnter(actionsDots);
     const actionsDataTestIds = ['dashboard-managers-edit-user', 'dashboard-managers-remove-access'];
 
     await waitFor(() => {
-      actionsDataTestIds.forEach((dataTestId) =>
-        expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
-      );
+      actionsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
     });
   });
 
@@ -135,9 +131,7 @@ describe('Managers component tests', () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithManagers(true));
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
-    await waitFor(() =>
-      expect(screen.queryByTestId('dashboard-managers-table-actions-dots')).not.toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.queryByTestId('dashboard-managers-table-actions-dots')).not.toBeInTheDocument());
   });
 
   describe('should appear popup when click on manager action for ', () => {
@@ -149,9 +143,7 @@ describe('Managers component tests', () => {
       mockAxios.get.mockResolvedValue(getMockedGetWithManagers());
       renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
-      const actionsDots = await waitFor(() =>
-        screen.getByTestId('dashboard-managers-table-actions-dots'),
-      );
+      const actionsDots = await waitFor(() => screen.getByTestId('dashboard-managers-table-actions-dots'));
       fireEvent.mouseEnter(actionsDots);
       const action = await waitFor(() => screen.getByTestId(actionDataTestId));
       fireEvent.click(action);
@@ -181,17 +173,14 @@ describe('Managers component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toBeCalledWith(
-        `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`,
-        {
-          params: {
-            limit: 20,
-            page: 1,
-            search: mockedSearchValue,
-          },
-          signal: undefined,
+      expect(mockAxios.get).toBeCalledWith(`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`, {
+        params: {
+          limit: 20,
+          page: 1,
+          search: mockedSearchValue,
         },
-      );
+        signal: undefined,
+      });
     });
 
     await waitFor(() => {

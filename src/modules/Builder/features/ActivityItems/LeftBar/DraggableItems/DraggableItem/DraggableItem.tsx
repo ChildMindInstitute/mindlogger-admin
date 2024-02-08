@@ -48,8 +48,7 @@ export const DraggableItem = ({
             sx={{ position: 'relative' }}
             ref={itemProvided.innerRef}
             {...itemProvided.draggableProps}
-            data-testid={dataTestid}
-          >
+            data-testid={dataTestid}>
             {isStaticVisible ? (
               <StaticItem data-testid={dataTestid} dragHandleProps={itemProvided.dragHandleProps} />
             ) : (

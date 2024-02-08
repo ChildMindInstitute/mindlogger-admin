@@ -2,10 +2,7 @@ import { OverridableStringUnion } from '@mui/types';
 import { ButtonPropsColorOverrides, SxProps } from '@mui/material';
 import { BaseSyntheticEvent } from 'react';
 
-type BtnSubmit =
-  | ((e?: BaseSyntheticEvent | undefined) => Promise<void>)
-  | ((value?: unknown) => void)
-  | (() => void);
+type BtnSubmit = ((e?: BaseSyntheticEvent | undefined) => Promise<void>) | ((value?: unknown) => void) | (() => void);
 
 export type ActionsAlign = 'center' | 'space-around' | 'end' | 'space-between';
 

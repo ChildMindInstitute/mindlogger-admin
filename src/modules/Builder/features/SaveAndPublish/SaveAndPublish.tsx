@@ -35,9 +35,7 @@ export const SaveAndPublish = () => {
   const { appletId } = useParams();
 
   const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
-    handleAppletPasswordSubmit(ref?.current?.password).then(() =>
-      Mixpanel.track('Password added successfully'),
-    );
+    handleAppletPasswordSubmit(ref?.current?.password).then(() => Mixpanel.track('Password added successfully'));
     setIsPasswordPopupOpened(false);
   };
 
@@ -47,8 +45,7 @@ export const SaveAndPublish = () => {
         variant="contained"
         startIcon={<Svg id="save" width={18} height={18} />}
         onClick={handleSaveAndPublishFirstClick}
-        data-testid="builder-save-and-publish"
-      >
+        data-testid="builder-save-and-publish">
         {t('saveAndPublish')}
       </StyledButton>
       <AppletPasswordPopup

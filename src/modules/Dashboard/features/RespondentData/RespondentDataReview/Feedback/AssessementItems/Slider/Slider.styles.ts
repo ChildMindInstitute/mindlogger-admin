@@ -46,8 +46,7 @@ export const StyledSlider = styled(Slider)`
     line-height: ${variables.font.lineHeight.sm};
     width: 3.2rem;
     height: 3.2rem;
-    border-radius: ${variables.borderRadius.half} ${variables.borderRadius.half}
-      ${variables.borderRadius.half} 0;
+    border-radius: ${variables.borderRadius.half} ${variables.borderRadius.half} ${variables.borderRadius.half} 0;
     background-color: ${variables.palette.primary};
     transform-origin: bottom left;
     transform: translate(50%, -100%) rotate(-45deg) scale(0);

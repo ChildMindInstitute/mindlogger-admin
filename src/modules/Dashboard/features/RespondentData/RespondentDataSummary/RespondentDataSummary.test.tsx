@@ -60,18 +60,14 @@ jest.mock('./Report', () => ({
   Report: () => <div data-testid="respondents-summary-report"></div>,
 }));
 
-const getRespondentDataSummaryComponent = ({
-  summaryActivities = mockedSummaryActivities,
-  selectedActivity,
-}) => (
+const getRespondentDataSummaryComponent = ({ summaryActivities = mockedSummaryActivities, selectedActivity }) => (
   <RespondentDataContext.Provider
     value={{
       summaryActivities,
       setSummaryActivities: jest.fn,
       selectedActivity,
       setSelectedActivity: jest.fn,
-    }}
-  >
+    }}>
     <RespondentDataSummary />
   </RespondentDataContext.Provider>
 );
@@ -94,9 +90,7 @@ describe('RespondentDataSummary component', () => {
 
     expect(screen.getByTestId('report-menu')).toBeInTheDocument();
     expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
-    expect(
-      screen.getByText(/Select the Activity to review the response data./),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Select the Activity to review the response data./)).toBeInTheDocument();
   });
 
   test('renders RespondentDataSummary correctly for selected activity with successful data fetching', async () => {

@@ -38,8 +38,7 @@ export const ColorPicker = <T extends FieldValues>({
               vertical: 'top',
               horizontal: 'center',
             }}
-            data-testid={dataTestid}
-          >
+            data-testid={dataTestid}>
             <ChromePicker disableAlpha={true} color={value} onChangeComplete={handleChange} />
           </Popover>
         );

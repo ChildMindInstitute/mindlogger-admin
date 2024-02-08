@@ -14,10 +14,7 @@ export const StimulusScreen = () => {
     formState: { errors },
   } = useCustomFormContext();
 
-  const error = get(
-    errors,
-    `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.stimulusTrials`,
-  );
+  const error = get(errors, `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.stimulusTrials`);
 
   return (
     <ToggleItemContainer

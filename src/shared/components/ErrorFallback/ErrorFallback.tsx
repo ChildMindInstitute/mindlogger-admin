@@ -22,11 +22,7 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
     <Box>
       <StyledTitleLarge>{t('errorFallback.somethingWentWrong')}</StyledTitleLarge>
       <Accordion>
-        <AccordionSummary
-          expandIcon={<Svg id="navigate-down" />}
-          aria-controls="panel-content"
-          id="panel-header"
-        >
+        <AccordionSummary expandIcon={<Svg id="navigate-down" />} aria-controls="panel-content" id="panel-header">
           <StyledTitleLarge>{t('errorFallback.details')}</StyledTitleLarge>
         </AccordionSummary>
         <AccordionDetails sx={{ whiteSpace: 'pre-wrap' }}>

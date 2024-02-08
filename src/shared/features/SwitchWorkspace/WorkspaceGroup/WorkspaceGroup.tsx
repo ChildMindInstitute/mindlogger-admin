@@ -6,12 +6,7 @@ import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styl
 import { workspaces as currentWorkspace } from 'redux/modules';
 
 import { WorkspaceImage } from '../WorkspaceImage';
-import {
-  StyledListItemButton,
-  StyledItemContent,
-  StyledSelect,
-  StyledItemName,
-} from './WorkspaceGroup.styles';
+import { StyledListItemButton, StyledItemContent, StyledSelect, StyledItemName } from './WorkspaceGroup.styles';
 import { WorkspaceGroupProps } from './WorkspaceGroup.types';
 
 export const WorkspaceGroup = ({
@@ -34,8 +29,7 @@ export const WorkspaceGroup = ({
             key={workspace.ownerId}
             onClick={() => onChangeWorkspace(workspace)}
             selected={currentWorkspaceData?.ownerId === workspace.ownerId}
-            data-testid={`${dataTestid}-workspace-${index}`}
-          >
+            data-testid={`${dataTestid}-workspace-${index}`}>
             <StyledItemContent>
               <WorkspaceImage image={workspace?.image} workspaceName={workspace.workspaceName} />
               <StyledItemName>{workspace.workspaceName}</StyledItemName>
@@ -48,9 +42,7 @@ export const WorkspaceGroup = ({
           </StyledListItemButton>
         ))
       ) : (
-        <StyledBodyLarge
-          sx={{ margin: theme.spacing(0, 2.4), color: variables.palette.on_surface_variant }}
-        >
+        <StyledBodyLarge sx={{ margin: theme.spacing(0, 2.4), color: variables.palette.on_surface_variant }}>
           {t(emptyState)}
         </StyledBodyLarge>
       )}

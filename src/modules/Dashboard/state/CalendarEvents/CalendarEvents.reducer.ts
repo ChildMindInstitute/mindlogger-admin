@@ -56,10 +56,7 @@ export const reducers = {
     state.scheduledVisible.status = 'success';
   },
 
-  setCreateEventsData: (
-    state: CalendarEventsSchema,
-    action: PayloadAction<CreateEventsData[]>,
-  ): void => {
+  setCreateEventsData: (state: CalendarEventsSchema, action: PayloadAction<CreateEventsData[]>): void => {
     state.createEventsData.data = action.payload;
     state.createEventsData.status = 'success';
   },
@@ -87,7 +84,7 @@ export const reducers = {
     const date = new Date(`${yearToCreateEvents}-01-01`);
     const nextYearDateString = format(date, DateFormats.YearMonthDay);
     state.events.data = [];
-    state.createEventsData.data?.forEach((item) => {
+    state.createEventsData.data?.forEach(item => {
       const data = {
         ...item,
         nextYearDateString,

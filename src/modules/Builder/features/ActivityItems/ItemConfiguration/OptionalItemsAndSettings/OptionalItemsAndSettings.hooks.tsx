@@ -125,10 +125,7 @@ export const useSettingsSetup = ({
             break;
           case ItemResponseType.Slider:
             setConfig(defaultSliderConfig);
-            setValue(
-              `${name}.responseValues`,
-              getEmptySliderOption({ isMultiple: false, hasScores: false }),
-            );
+            setValue(`${name}.responseValues`, getEmptySliderOption({ isMultiple: false, hasScores: false }));
             break;
           case ItemResponseType.NumberSelection:
             setConfig(defaultNumberSelectionConfig);

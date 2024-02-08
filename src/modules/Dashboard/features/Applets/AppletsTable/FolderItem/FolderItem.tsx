@@ -40,10 +40,10 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   const [folder, setFolder] = useState(item);
   const [hasVisibleActions, setHasVisibleActions] = useState(false);
 
-  const isFolderExpanded = !!expandedFolders.find((id) => id === item.id);
+  const isFolderExpanded = !!expandedFolders.find(id => id === item.id);
 
   const handleRenameFolder = () => {
-    setFolder((folder) => ({ ...folder, isRenaming: true }));
+    setFolder(folder => ({ ...folder, isRenaming: true }));
   };
 
   const onDeleteFolder = async () => {
@@ -56,11 +56,11 @@ export const FolderItem = ({ item }: FolderItemProps) => {
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFolder((folder) => ({ ...folder, displayName: event.target.value }));
+    setFolder(folder => ({ ...folder, displayName: event.target.value }));
   };
 
   const handleClearClick = () => {
-    setFolder((folder) => ({ ...folder, displayName: '' }));
+    setFolder(folder => ({ ...folder, displayName: '' }));
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -75,7 +75,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
 
   const saveFolderHandler = async () => {
     if (!folder.isNew && folder.displayName === item.displayName) {
-      return setFolder((folder) => ({ ...folder, isRenaming: false }));
+      return setFolder(folder => ({ ...folder, isRenaming: false }));
     }
 
     if (!ownerId) return;
@@ -95,9 +95,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     handleFolderClick(item);
   };
 
-  const folderAppletCount = item?.foldersAppletCount
-    ? `${item?.foldersAppletCount} ${t('applets')}`
-    : `${t('empty')}`;
+  const folderAppletCount = item?.foldersAppletCount ? `${item?.foldersAppletCount} ${t('applets')}` : `${t('empty')}`;
 
   useEffect(() => setFolder(item), [item]);
 
@@ -106,14 +104,10 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       className={isDragOver ? 'dragged-over' : ''}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
-      onDrop={(event) => onDrop(event, item)}
+      onDrop={event => onDrop(event, item)}
       onMouseEnter={() => setHasVisibleActions(true)}
-      onMouseLeave={() => setHasVisibleActions(false)}
-    >
-      <StyledTableCell
-        width={AppletsColumnsWidth.Folder}
-        onClick={() => (folder?.isRenaming ? null : onFolderClick())}
-      >
+      onMouseLeave={() => setHasVisibleActions(false)}>
+      <StyledTableCell width={AppletsColumnsWidth.Folder} onClick={() => (folder?.isRenaming ? null : onFolderClick())}>
         <StyledFlexTopCenter>
           <StyledFolderIcon>
             <Svg id={isFolderExpanded ? 'folder-opened' : 'folder'} />
@@ -132,11 +126,10 @@ export const FolderItem = ({ item }: FolderItemProps) => {
                   <InputAdornment position="end">
                     <StyledCloseButton
                       data-testid="folder-clear-button"
-                      onMouseDown={(event) => {
+                      onMouseDown={event => {
                         event.preventDefault();
                         handleClearClick();
-                      }}
-                    >
+                      }}>
                       <Svg id="cross" />
                     </StyledCloseButton>
                   </InputAdornment>

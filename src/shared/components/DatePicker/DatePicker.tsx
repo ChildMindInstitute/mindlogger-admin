@@ -50,7 +50,7 @@ export const DatePicker = <T extends FieldValues>({
   const id = isOpen ? 'date-picker-popover' : undefined;
   const isStartEndingDate = uiType === UiType.StartEndingDate;
 
-  const handlePickerShow: MouseEventHandler<HTMLDivElement> = (event) => {
+  const handlePickerShow: MouseEventHandler<HTMLDivElement> = event => {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
@@ -135,9 +135,7 @@ export const DatePicker = <T extends FieldValues>({
                       value={getValue()[0] || ''}
                       data-testid={`${dataTestid}-start`}
                     />
-                    <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
-                      {t('smallTo')}
-                    </StyledBodyLarge>
+                    <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
                     <StyledTextField
                       variant="outlined"
                       {...textFieldProps}
@@ -161,27 +159,22 @@ export const DatePicker = <T extends FieldValues>({
                   vertical: 'bottom',
                   horizontal: 'center',
                 }}
-                data-testid={`${dataTestid}-popover`}
-              >
+                data-testid={`${dataTestid}-popover`}>
                 {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
-                {value && (
-                  <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />
-                )}
+                {value && <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />}
                 <Suspense fallback={<DatePickerFallback />}>
                   <ReactDatePicker
                     locale={i18n.language === 'fr' ? fr : undefined}
-                    renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
+                    renderCustomHeader={props => <DatePickerHeader uiType={uiType} {...props} />}
                     startDate={isStartEndingDate ? (getSelectedDate() as DateType) : undefined}
-                    endDate={
-                      isStartEndingDate ? (getSelectedDate(DateVariant.End) as DateType) : undefined
-                    }
+                    endDate={isStartEndingDate ? (getSelectedDate(DateVariant.End) as DateType) : undefined}
                     selectsRange={isStartEndingDate}
                     inline
                     selected={getSelectedDate() as DateType}
                     disabled={disabled}
-                    onChange={(date) => onChange(date)}
+                    onChange={date => onChange(date)}
                     monthsShown={isStartEndingDate ? 2 : 1}
-                    formatWeekDay={(nameOfDay) => nameOfDay[0]}
+                    formatWeekDay={nameOfDay => nameOfDay[0]}
                     minDate={minDate === undefined ? new Date() : minDate}
                     maxDate={maxDate === undefined ? null : maxDate}
                     focusSelectedMonth

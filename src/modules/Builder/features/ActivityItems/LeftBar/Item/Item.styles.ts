@@ -41,18 +41,12 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
       ${hasError && `background-color: ${variables.palette.error_container}`};
       ${
         isDragging &&
-        `background-color: ${blendColorsNormal(
-          variables.palette.surface,
-          variables.palette.on_surface_alfa16,
-        )}`
+        `background-color: ${blendColorsNormal(variables.palette.surface, variables.palette.on_surface_alfa16)}`
       };
       ${
         isSystem &&
         `
-        background-color: ${blendColorsNormal(
-          variables.palette.surface,
-          variables.palette.on_surface_variant_alfa8,
-        )};
+        background-color: ${blendColorsNormal(variables.palette.surface, variables.palette.on_surface_variant_alfa8)};
         cursor: default;
       `
       };
@@ -63,19 +57,13 @@ export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
           !hasError &&
           !isSystem &&
           `
-            background-color: ${blendColorsNormal(
-              variables.palette.surface,
-              variables.palette.on_surface_alfa8,
-            )};
+            background-color: ${blendColorsNormal(variables.palette.surface, variables.palette.on_surface_alfa8)};
         `
         };
       }
 
       &:active {
-        background-color: ${blendColorsNormal(
-          variables.palette.surface,
-          variables.palette.on_surface_alfa12,
-        )};
+        background-color: ${blendColorsNormal(variables.palette.surface, variables.palette.on_surface_alfa12)};
       }
   `}
 `;

@@ -76,19 +76,12 @@ describe('FolderItem component tests', () => {
   test('should appear actions on row hover', async () => {
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
-    );
+    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-folder-actions-dots'));
     fireEvent.mouseEnter(actionsDots);
-    const actionsDataTestIds = [
-      'dashboard-applets-folder-rename',
-      'dashboard-applets-folder-delete',
-    ];
+    const actionsDataTestIds = ['dashboard-applets-folder-rename', 'dashboard-applets-folder-delete'];
 
     await waitFor(() => {
-      actionsDataTestIds.forEach((dataTestId) =>
-        expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
-      );
+      actionsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
     });
     fireEvent.mouseLeave(actionsDots);
   });
@@ -97,9 +90,7 @@ describe('FolderItem component tests', () => {
     mockAxios.delete.mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
-    );
+    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-folder-actions-dots'));
     fireEvent.mouseEnter(actionsDots);
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-delete'));
 
@@ -115,9 +106,7 @@ describe('FolderItem component tests', () => {
     mockAxios.delete.mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(true, true), { preloadedState });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
-    );
+    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-folder-actions-dots'));
     fireEvent.mouseEnter(actionsDots);
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-delete'));
 
@@ -132,9 +121,7 @@ describe('FolderItem component tests', () => {
   test('shouldnt have possibility to delete folder with applets', async () => {
     renderWithProviders(getFolderItemComponent(false), { preloadedState });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
-    );
+    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-folder-actions-dots'));
     fireEvent.mouseEnter(actionsDots);
 
     const deleteButton = screen.getByTestId('dashboard-applets-folder-delete');
@@ -144,9 +131,7 @@ describe('FolderItem component tests', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(
-          'Cannot delete a folder that contains Applets. Remove Applets from folder before deleting.',
-        ),
+        screen.getByText('Cannot delete a folder that contains Applets. Remove Applets from folder before deleting.'),
       ).toBeInTheDocument();
     });
   });
@@ -155,9 +140,7 @@ describe('FolderItem component tests', () => {
     mockAxios.put.mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
-    const actionsDots = await waitFor(() =>
-      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
-    );
+    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-folder-actions-dots'));
     fireEvent.mouseEnter(actionsDots);
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-rename'));
 

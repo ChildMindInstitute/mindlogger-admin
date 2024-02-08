@@ -220,8 +220,7 @@ describe('Subscales component', () => {
       <ReportContext.Provider
         value={{
           currentActivityCompletionData: false,
-        }}
-      >
+        }}>
         <Subscales answers={answers} versions={[]} subscalesFrequency={subscalesFrequency} />,
       </ReportContext.Provider>,
     );
@@ -238,8 +237,7 @@ describe('Subscales component', () => {
             answerId: '03f80472-7829-44b0-a900-f93a70459932',
             date: 1706120981932,
           },
-        }}
-      >
+        }}>
         <Subscales answers={answers} versions={[]} subscalesFrequency={subscalesFrequency} />,
       </ReportContext.Provider>,
     );

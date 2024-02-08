@@ -48,8 +48,7 @@ export const ViewDataPopup = ({
       onSubmit={submitForm}
       title={showSecondScreen ? t('enterAppletPassword') : t('viewData')}
       buttonText={showSecondScreen ? t('submit') : ''}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
         {showSecondScreen ? (
           <EnterAppletPassword
@@ -61,9 +60,7 @@ export const ViewDataPopup = ({
           />
         ) : (
           <>
-            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-              {t('viewDataDescription')}
-            </StyledBodyLarge>
+            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>{t('viewDataDescription')}</StyledBodyLarge>
             <AppletsSmallTable tableRows={tableRows} />
           </>
         )}

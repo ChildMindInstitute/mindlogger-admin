@@ -71,10 +71,7 @@ const changesMock = {
           items: [
             {
               name: 'Item itemName was added',
-              changes: [
-                'Item Name was set to testItemName',
-                'Displayed Content was set to testDisplayedContent',
-              ],
+              changes: ['Item Name was set to testItemName', 'Displayed Content was set to testDisplayedContent'],
             },
           ],
         },
@@ -104,7 +101,7 @@ describe('VersionHistorySetting', () => {
       ${`/dashboard/${mockedAppletId}/settings/${SettingParam.VersionHistory}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
       ${`/builder/${mockedAppletId}/settings/${SettingParam.VersionHistory}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
     `('$description', async ({ route, routePath }) => {
-      mockAxios.get.mockImplementation((url) => {
+      mockAxios.get.mockImplementation(url => {
         switch (true) {
           case url?.endsWith('/versions'):
             return Promise.resolve(versionsMock);

@@ -5,12 +5,7 @@ import { DataTable, FileUploader } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
-import {
-  GetComponentsProps,
-  ModalType,
-  ScreenObjectProps,
-  LookupTableDataItem,
-} from './LookupTable.types';
+import { GetComponentsProps, ModalType, ScreenObjectProps, LookupTableDataItem } from './LookupTable.types';
 
 const { t } = i18n;
 
@@ -136,9 +131,7 @@ export const getModalComponents = ({
 };
 
 export const processImportedData = (item: Record<string, string | number>) => {
-  Object.keys(item).forEach(
-    (k) => (item[k] = typeof item[k] === 'string' ? (item[k] as string).trim() : item[k]),
-  );
+  Object.keys(item).forEach(k => (item[k] = typeof item[k] === 'string' ? (item[k] as string).trim() : item[k]));
 
   return {
     ...item,

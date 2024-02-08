@@ -33,14 +33,10 @@ describe('LinkGenerator component tests', () => {
 
     fireEvent.click(screen.getByTestId('dashboard-add-users-generate-link-generate'));
     await waitFor(() =>
-      expect(
-        screen.getByTestId('dashboard-add-users-generate-link-generate-popup'),
-      ).toBeInTheDocument(),
+      expect(screen.getByTestId('dashboard-add-users-generate-link-generate-popup')).toBeInTheDocument(),
     );
     await waitFor(() => fireEvent.click(screen.getByText('Yes, account is required')));
-    await waitFor(() =>
-      expect(screen.getByTestId('dashboard-add-users-generate-link-url')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByTestId('dashboard-add-users-generate-link-url')).toBeInTheDocument());
   });
 
   test('LinkGenerator should get link', async () => {
@@ -51,8 +47,6 @@ describe('LinkGenerator component tests', () => {
       routePath,
     });
 
-    await waitFor(() =>
-      expect(screen.getByTestId('dashboard-add-users-generate-link-url')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByTestId('dashboard-add-users-generate-link-url')).toBeInTheDocument());
   });
 });

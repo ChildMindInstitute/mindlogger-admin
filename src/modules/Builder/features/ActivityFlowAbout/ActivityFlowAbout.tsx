@@ -5,13 +5,7 @@ import { Box } from '@mui/material';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Tooltip } from 'shared/components/Tooltip';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
-import {
-  theme,
-  variables,
-  StyledBodyLarge,
-  StyledFlexColumn,
-  StyledTitleMedium,
-} from 'shared/styles';
+import { theme, variables, StyledBodyLarge, StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
 import { BuilderContainer } from 'shared/features';
 import { AppletFormValues } from 'modules/Builder/types';
@@ -63,10 +57,7 @@ export const ActivityFlowAbout = () => {
             data-testid={`${dataTestid}-description`}
           />
         </Box>
-        <StyledTitleMedium
-          color={variables.palette.on_surface_variant}
-          sx={{ marginBottom: theme.spacing(1.4) }}
-        >
+        <StyledTitleMedium color={variables.palette.on_surface_variant} sx={{ marginBottom: theme.spacing(1.4) }}>
           {t('additionalSettings')}
         </StyledTitleMedium>
         <StyledFlexColumn>

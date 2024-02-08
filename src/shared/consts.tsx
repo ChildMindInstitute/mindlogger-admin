@@ -140,11 +140,7 @@ export enum GyroscopeOrTouch {
   Touch = 'touch',
 }
 
-export const ItemsWithFileResponses = [
-  ItemResponseType.Photo,
-  ItemResponseType.Video,
-  ItemResponseType.Audio,
-];
+export const ItemsWithFileResponses = [ItemResponseType.Photo, ItemResponseType.Video, ItemResponseType.Audio];
 
 export enum CalculationType {
   Sum = 'sum',

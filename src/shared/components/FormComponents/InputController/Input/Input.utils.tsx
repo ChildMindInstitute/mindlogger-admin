@@ -10,9 +10,7 @@ export const getTextAdornment = ({ value, textAdornment, disabled }: GetTextAdor
   if (!textAdornment || (!value && value !== 0)) return null;
 
   return (
-    <StyledBodyLarge
-      sx={{ color: disabled ? variables.palette.disabled : variables.palette.on_surface }}
-    >
+    <StyledBodyLarge sx={{ color: disabled ? variables.palette.disabled : variables.palette.on_surface }}>
       {t(textAdornment, { count: value })}
     </StyledBodyLarge>
   );

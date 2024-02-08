@@ -3,12 +3,7 @@
 import { screen } from '@testing-library/react';
 
 import { renderWithAppletFormData } from 'shared/utils';
-import {
-  mockedApplet,
-  mockedAppletFormData,
-  mockedAppletId,
-  mockedCurrentWorkspace,
-} from 'shared/mock';
+import { mockedApplet, mockedAppletFormData, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { page } from 'resources';
 import { initialStateData } from 'shared/state';

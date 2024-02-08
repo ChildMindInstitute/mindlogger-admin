@@ -31,9 +31,7 @@ export const ReviewMenu = ({
     <StyledMenu data-testid={dataTestid}>
       <StyledHeader>
         <StyledHeadlineLarge>{t('review')}</StyledHeadlineLarge>
-        <StyledLabelLarge sx={{ marginBottom: theme.spacing(4) }}>
-          {respondentLabel}
-        </StyledLabelLarge>
+        <StyledLabelLarge sx={{ marginBottom: theme.spacing(4) }}>{respondentLabel}</StyledLabelLarge>
         <DatePicker
           name="date"
           control={control}
@@ -49,9 +47,7 @@ export const ReviewMenu = ({
           data-testid={`${dataTestid}-review-date`}
         />
       </StyledHeader>
-      <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
-        {t('selectActivityAndResponse')}
-      </StyledLabelLarge>
+      <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>{t('selectActivityAndResponse')}</StyledLabelLarge>
       {activities.map((activity, index) => (
         <ReviewMenuItem
           key={activity.id}

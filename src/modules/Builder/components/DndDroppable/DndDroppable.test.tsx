@@ -21,7 +21,7 @@ describe('DndDroppable', () => {
     await act(async () => {
       render(renderComponent());
 
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await new Promise(resolve => requestAnimationFrame(resolve));
     });
     await waitFor(() => expect(Droppable).toHaveBeenCalled());
   });

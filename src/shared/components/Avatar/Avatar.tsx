@@ -1,9 +1,4 @@
-import {
-  StyledLabelBoldLarge,
-  variables,
-  StyledLabelBoldMedium,
-  StyledFlexAllCenter,
-} from 'shared/styles';
+import { StyledLabelBoldLarge, variables, StyledLabelBoldMedium, StyledFlexAllCenter } from 'shared/styles';
 
 import { AvatarProps, AvatarUiType } from './Avatar.types';
 

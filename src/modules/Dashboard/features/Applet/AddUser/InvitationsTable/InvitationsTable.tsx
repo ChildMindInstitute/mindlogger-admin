@@ -30,7 +30,7 @@ export const InvitationsTable = ({ invitations, setInvitations }: InvitationsTab
     }
   };
 
-  const tableProps = useTable(async (args) => {
+  const tableProps = useTable(async args => {
     const params = {
       ...args,
       params: {

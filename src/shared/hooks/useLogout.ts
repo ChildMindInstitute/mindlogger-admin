@@ -17,8 +17,7 @@ export const useLogout = () => {
     try {
       await deleteAccessTokenApi();
     } catch (e) {
-      if ((e as AxiosError).response?.status === ApiResponseCodes.Unauthorized)
-        await deleteRefreshTokenApi();
+      if ((e as AxiosError).response?.status === ApiResponseCodes.Unauthorized) await deleteRefreshTokenApi();
     } finally {
       dispatch(workspaces.actions.setCurrentWorkspace(null));
       dispatch(alerts.actions.resetAlerts());

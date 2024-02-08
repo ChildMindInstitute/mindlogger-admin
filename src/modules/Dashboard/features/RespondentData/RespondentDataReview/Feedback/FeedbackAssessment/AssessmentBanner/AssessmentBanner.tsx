@@ -4,18 +4,10 @@ import { Svg } from 'shared/components';
 import { variables } from 'shared/styles';
 import { StyledLabelBoldMedium, StyledLabelMedium } from 'shared/styles/styledComponents';
 
-import {
-  StyledCollapse,
-  StyledContainer,
-  StyledContent,
-  StyledButton,
-} from './AssessmentBanner.styles';
+import { StyledCollapse, StyledContainer, StyledContent, StyledButton } from './AssessmentBanner.styles';
 import { AssessmentBannerProps } from './AssessmentBanner.types';
 
-export const AssessmentBanner = ({
-  isBannerVisible,
-  onSelectLastVersion,
-}: AssessmentBannerProps) => {
+export const AssessmentBanner = ({ isBannerVisible, onSelectLastVersion }: AssessmentBannerProps) => {
   const { t } = useTranslation('app');
 
   return (
@@ -23,12 +15,8 @@ export const AssessmentBanner = ({
       <StyledContainer>
         <StyledContent>
           <Svg id="exclamation-circle" width="22" height="22" />
-          <StyledLabelBoldMedium sx={{ gridArea: 'header' }}>
-            {t('assessmentBanner.header')}
-          </StyledLabelBoldMedium>
-          <StyledLabelMedium sx={{ gridArea: 'text' }}>
-            {t('assessmentBanner.text')}
-          </StyledLabelMedium>
+          <StyledLabelBoldMedium sx={{ gridArea: 'header' }}>{t('assessmentBanner.header')}</StyledLabelBoldMedium>
+          <StyledLabelMedium sx={{ gridArea: 'text' }}>{t('assessmentBanner.text')}</StyledLabelMedium>
           <StyledButton onClick={onSelectLastVersion} data-testid="assessment-banner-button">
             <StyledLabelBoldMedium sx={{ color: variables.palette.primary }}>
               {t('assessmentBanner.button')}

@@ -14,8 +14,7 @@ export const TableHead = ({
   uiType = UiType.Primary,
   hasColFixedWidth,
 }: TableHeadProps) => {
-  const createSortHandler = (property: string) => (event: MouseEvent<unknown>) =>
-    onRequestSort(event, property);
+  const createSortHandler = (property: string) => (event: MouseEvent<unknown>) => onRequestSort(event, property);
 
   return (
     <StyledTableHead uiType={uiType} hasColFixedWidth={hasColFixedWidth}>
@@ -34,14 +33,12 @@ export const TableHead = ({
             width={width}
             align={align}
             sortDirection={orderBy === id ? order : false}
-            hasColFixedWidth={hasColFixedWidth}
-          >
+            hasColFixedWidth={hasColFixedWidth}>
             {enableSort ? (
               <TableSortLabel
                 active={orderBy === id}
                 direction={orderBy === id ? order : 'asc'}
-                onClick={createSortHandler(id)}
-              >
+                onClick={createSortHandler(id)}>
                 {label}
               </TableSortLabel>
             ) : (

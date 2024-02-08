@@ -12,9 +12,7 @@ const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
 const RespondentData = lazy(() => import('../pages/RespondentData'));
 const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
-const RespondentDataSummary = lazy(
-  () => import('../features/RespondentData/RespondentDataSummary'),
-);
+const RespondentDataSummary = lazy(() => import('../features/RespondentData/RespondentDataSummary'));
 
 export const dashboardRoutes = () => (
   <Route path={page.dashboard}>
@@ -41,8 +39,7 @@ export const dashboardRoutes = () => (
             <Applet />
           </ErrorBoundary>
         </PrivateRoute>
-      }
-    >
+      }>
       {appletRoutes.map(({ path, Component }) => (
         <Route
           key={path}
@@ -57,10 +54,7 @@ export const dashboardRoutes = () => (
         />
       ))}
       <Route element={<RespondentData />}>
-        <Route
-          path={page.appletRespondentData}
-          element={<Navigate to={page.appletRespondentDataSummary} />}
-        />
+        <Route path={page.appletRespondentData} element={<Navigate to={page.appletRespondentDataSummary} />} />
         <Route path={page.appletRespondentDataSummary} element={<RespondentDataSummary />}>
           <Route
             path={page.appletRespondentDataSummary}

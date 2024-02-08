@@ -4,12 +4,7 @@ import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
-import {
-  mockedApplet,
-  mockedAppletId,
-  mockedCurrentWorkspace,
-  mockedRespondent,
-} from 'shared/mock';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedRespondent } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
@@ -168,9 +163,7 @@ const mockedGetWithEmptyReviews = {
 
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
-  CollapsedMdText: jest.fn(() => (
-    <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>
-  )),
+  CollapsedMdText: jest.fn(() => <div data-testid="mock-collapsed-md-text">Mocked CollapsedMdText</div>),
 }));
 
 describe('FeedbackReviewed', () => {
@@ -289,11 +282,9 @@ describe('FeedbackReviewed', () => {
     });
 
     await waitFor(() => {
-      expect(mockAxios.get).nthCalledWith(
-        1,
-        `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
-        { signal: undefined },
-      );
+      expect(mockAxios.get).nthCalledWith(1, `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`, {
+        signal: undefined,
+      });
     });
 
     const elementsWithTestIdSubstring = screen.queryAllByTestId(
@@ -331,9 +322,7 @@ describe('FeedbackReviewed', () => {
     });
 
     await waitFor(() => {
-      expect(
-        screen.getByText('No reviewer has completed the Assessment for this.'),
-      ).toBeInTheDocument();
+      expect(screen.getByText('No reviewer has completed the Assessment for this.')).toBeInTheDocument();
     });
   });
 });

@@ -14,11 +14,7 @@ import {
 import { page } from 'resources';
 import { PublishedApplet, auth, library, SingleApplet } from 'redux/modules';
 import { Header, RightButtonType } from 'modules/Library/components';
-import {
-  useAppletsFromCart,
-  useReturnToLibraryPath,
-  useWorkspaceList,
-} from 'modules/Library/hooks';
+import { useAppletsFromCart, useReturnToLibraryPath, useWorkspaceList } from 'modules/Library/hooks';
 import { getDictionaryText, Mixpanel, Path } from 'shared/utils';
 
 import { Applet, AppletUiType } from '../Applet';
@@ -82,17 +78,15 @@ export const Cart = () => {
     cartItems?.reduce((renderedApplets: PublishedApplet[], applet) => {
       const { displayName, description, activities, keywords } = applet;
       const appletNameSearch = getSearchIncludes(displayName, searchValue);
-      const appletDescriptionSearch =
-        description && getSearchIncludes(getDictionaryText(description), searchValue);
-      const activitySearch = activities.some((activity) => {
+      const appletDescriptionSearch = description && getSearchIncludes(getDictionaryText(description), searchValue);
+      const activitySearch = activities.some(activity => {
         const itemsSearch = activity.items.some(
-          (item) =>
-            item?.question && getSearchIncludes(getDictionaryText(item.question), searchValue),
+          item => item?.question && getSearchIncludes(getDictionaryText(item.question), searchValue),
         );
 
         return getSearchIncludes(activity.name, searchValue) || itemsSearch;
       });
-      const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, searchValue));
+      const keywordsSearch = keywords.some(keyword => getSearchIncludes(keyword, searchValue));
 
       if (appletNameSearch || appletDescriptionSearch || keywordsSearch || activitySearch) {
         renderedApplets.push(applet);
@@ -135,9 +129,7 @@ export const Cart = () => {
           isRightButtonDisabled={isAddToBuilderBtnDisabled}
         />
         <ContentContainer>
-          <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
-            {t('cart')}
-          </StyledHeadlineLarge>
+          <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>{t('cart')}</StyledHeadlineLarge>
           <StyledAppletList>
             {pagedApplets?.length
               ? pagedApplets.map((applet, index) => (

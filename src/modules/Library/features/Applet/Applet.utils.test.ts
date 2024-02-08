@@ -2,12 +2,7 @@
 // @ts-nocheck
 import { ItemResponseType } from 'shared/consts';
 
-import {
-  checkIfPerformanceTask,
-  getActivities,
-  getUpdatedStorageData,
-  includesSearchValue,
-} from './Applet.utils';
+import { checkIfPerformanceTask, getActivities, getUpdatedStorageData, includesSearchValue } from './Applet.utils';
 
 describe('checkIfPerformanceTask', () => {
   test.each`
@@ -80,13 +75,10 @@ describe('includesSearchValue', () => {
     ${'Hello World'} | ${'foo'}    | ${false}
     ${''}            | ${'search'} | ${false}
     ${''}            | ${''}       | ${true}
-  `(
-    'should return $expectedResult if text is "$text" and search is "$search"',
-    ({ text, search, expectedResult }) => {
-      const result = includesSearchValue(text, search);
-      expect(result).toBe(expectedResult);
-    },
-  );
+  `('should return $expectedResult if text is "$text" and search is "$search"', ({ text, search, expectedResult }) => {
+    const result = includesSearchValue(text, search);
+    expect(result).toBe(expectedResult);
+  });
 });
 
 const activities = [

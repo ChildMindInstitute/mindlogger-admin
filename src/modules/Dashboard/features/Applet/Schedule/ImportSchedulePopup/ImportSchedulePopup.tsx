@@ -2,14 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import {
-  Error,
-  FileUploader,
-  Modal,
-  Spinner,
-  SpinnerUiType,
-  SubmitBtnColor,
-} from 'shared/components';
+import { Error, FileUploader, Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
@@ -67,8 +60,10 @@ export const ImportSchedulePopup = ({
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
-  const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } =
-    useImportSchedule({ appletName, scheduleExportData });
+  const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } = useImportSchedule({
+    appletName,
+    scheduleExportData,
+  });
 
   const fileUploader = (
     <FileUploader
@@ -105,8 +100,7 @@ export const ImportSchedulePopup = ({
           <strong>
             <>{{ respondentName }})</>
           </strong>
-          will replace the respondent’s current individual schedule. Are you sure you want to
-          continue?
+          will replace the respondent’s current individual schedule. Are you sure you want to continue?
         </Trans>
       </StyledBodyLarge>,
       fileUploader,
@@ -138,16 +132,9 @@ export const ImportSchedulePopup = ({
 
       const uploadedEvents = uploadedFile?.data as unknown as UploadedEvent[];
 
-      const hasScheduledEvents = scheduleExportData.some(
-        (event) => event.frequency.toUpperCase() !== Periodicity.Always,
-      );
+      const hasScheduledEvents = scheduleExportData.some(event => event.frequency.toUpperCase() !== Periodicity.Always);
 
-      const body = prepareImportPayload(
-        uploadedEvents,
-        scheduleExportData,
-        appletData,
-        respondentId,
-      );
+      const body = prepareImportPayload(uploadedEvents, scheduleExportData, appletData, respondentId);
       if (hasScheduledEvents) {
         respondentId
           ? await deleteIndividualScheduledEvents({
@@ -162,7 +149,7 @@ export const ImportSchedulePopup = ({
       Mixpanel.track(`${analyticsPrefix} Schedule import successful`);
     }
 
-    setStep((prevStep) => ++prevStep as Steps);
+    setStep(prevStep => ++prevStep as Steps);
   };
 
   useEffect(() => {
@@ -184,8 +171,7 @@ export const ImportSchedulePopup = ({
       onSecondBtnSubmit={onClose}
       disabledSubmit={isSubmitDisabled || isLoading}
       width="66"
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>

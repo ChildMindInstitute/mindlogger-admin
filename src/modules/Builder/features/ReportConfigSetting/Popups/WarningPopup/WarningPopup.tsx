@@ -5,11 +5,7 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { WarningPopupProps } from './WarningPopup.types';
 
-export const WarningPopup = ({
-  popupVisible,
-  setPopupVisible,
-  submitCallback,
-}: WarningPopupProps) => {
+export const WarningPopup = ({ popupVisible, setPopupVisible, submitCallback }: WarningPopupProps) => {
   const { t } = useTranslation('app');
 
   const onClose = () => setPopupVisible(false);
@@ -30,8 +26,7 @@ export const WarningPopup = ({
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
       buttonText={t('saveAnyway')}
-      data-testid="builder-applet-settings-report-config-setting-save-anyway-popup"
-    >
+      data-testid="builder-applet-settings-report-config-setting-save-anyway-popup">
       <StyledModalWrapper>
         <Trans i18nKey="saveReportConfigurationWarning">
           A report can not be generated until the <strong>'Encryption Server IP Address'</strong>

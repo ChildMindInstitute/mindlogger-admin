@@ -24,10 +24,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     },
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
       collapsedByDefault: true,
     },
     {
@@ -49,17 +46,11 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemResponseType.MultipleSelection]: [
     {
       groupName: ItemSettingsGroupNames.ResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasColorPalette,
-        ItemConfigurationSettings.HasTooltips,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasColorPalette, ItemConfigurationSettings.HasTooltips],
     },
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
       collapsedByDefault: true,
     },
     {
@@ -89,10 +80,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     },
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
       collapsedByDefault: true,
     },
     {
@@ -113,10 +101,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemResponseType.Date]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -131,27 +116,18 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemResponseType.NumberSelection]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
-      groupOptions: [
-        ItemConfigurationSettings.IsSkippable,
-        ItemConfigurationSettings.IsGoBackRemoved,
-      ],
+      groupOptions: [ItemConfigurationSettings.IsSkippable, ItemConfigurationSettings.IsGoBackRemoved],
       collapsedByDefault: true,
     },
   ],
   [ItemResponseType.TimeRange]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -166,10 +142,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemResponseType.Geolocation]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -184,10 +157,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemResponseType.Audio]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -264,20 +234,14 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurations,
-      groupOptions: [
-        ItemConfigurationSettings.IsSkippable,
-        ItemConfigurationSettings.IsGoBackRemoved,
-      ],
+      groupOptions: [ItemConfigurationSettings.IsSkippable, ItemConfigurationSettings.IsGoBackRemoved],
       collapsedByDefault: true,
     },
   ],
   [ItemResponseType.Drawing]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -294,10 +258,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemResponseType.Photo]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -312,10 +273,7 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
   [ItemResponseType.Video]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -340,28 +298,19 @@ export const itemSettingsOptionsByInputType: ItemSettingsOptionsByInputType = {
     },
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
       collapsedByDefault: true,
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurations,
-      groupOptions: [
-        ItemConfigurationSettings.IsSkippable,
-        ItemConfigurationSettings.IsGoBackRemoved,
-      ],
+      groupOptions: [ItemConfigurationSettings.IsSkippable, ItemConfigurationSettings.IsGoBackRemoved],
       collapsedByDefault: true,
     },
   ],
   [ItemResponseType.Time]: [
     {
       groupName: ItemSettingsGroupNames.AdditionalResponseOptions,
-      groupOptions: [
-        ItemConfigurationSettings.HasTextInput,
-        ItemConfigurationSettings.IsTextInputRequired,
-      ],
+      groupOptions: [ItemConfigurationSettings.HasTextInput, ItemConfigurationSettings.IsTextInputRequired],
     },
     {
       groupName: ItemSettingsGroupNames.ScreenConfigurationsAndTimer,

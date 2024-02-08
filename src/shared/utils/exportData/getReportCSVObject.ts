@@ -38,9 +38,7 @@ export const getReportCSVObject = <T>({
 
   return {
     id: item.id,
-    activity_scheduled_time: scheduledDatetime
-      ? convertDateStampToMs(scheduledDatetime)
-      : ActivityStatus.NotScheduled,
+    activity_scheduled_time: scheduledDatetime ? convertDateStampToMs(scheduledDatetime) : ActivityStatus.NotScheduled,
     activity_start_time: convertDateStampToMs(startDatetime),
     activity_end_time: convertDateStampToMs(endDatetime),
     flag: getFlag(item),

@@ -1,11 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Calendar as ReactCalendar,
-  dateFnsLocalizer,
-  Formats,
-  SlotInfo,
-  View,
-} from 'react-big-calendar';
+import { Calendar as ReactCalendar, dateFnsLocalizer, Formats, SlotInfo, View } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, getDay, getYear, parse, startOfWeek } from 'date-fns';
 
@@ -18,12 +12,7 @@ import { locales } from 'shared/consts';
 import { CreateEventPopup } from '../CreateEventPopup';
 import { EditEventPopup } from '../EditEventPopup';
 import { dataTestId } from './Calendar.const';
-import {
-  eventPropGetter,
-  getCalendarComponents,
-  getDefaultStartDate,
-  getHasWrapperMoreBtn,
-} from './Calendar.utils';
+import { eventPropGetter, getCalendarComponents, getDefaultStartDate, getHasWrapperMoreBtn } from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
 import { AllDayEventsVisible, CalendarViews, OnViewFunc } from './Calendar.types';
 
@@ -49,8 +38,7 @@ export const Calendar = () => {
   const [editedEvent, setEditedEvent] = useState<CalendarEvent | null>(null);
 
   const { setCalendarCurrentYear } = calendarEvents.actions;
-  const { eventsToShow = null, allDayEventsSortedByDays = null } =
-    calendarEvents.useVisibleEventsData() || {};
+  const { eventsToShow = null, allDayEventsSortedByDays = null } = calendarEvents.useVisibleEventsData() || {};
 
   const { components, messages, views, formats } = getCalendarComponents({
     activeView,
@@ -78,9 +66,7 @@ export const Calendar = () => {
   const onSelectEvent = (calendarEvent: CalendarEvent) => {
     setEditEventPopupVisible(true);
     setDefaultStartDate(
-      getDefaultStartDate(
-        calendarEvent.alwaysAvailable ? calendarEvent.eventStart : calendarEvent.start,
-      ),
+      getDefaultStartDate(calendarEvent.alwaysAvailable ? calendarEvent.eventStart : calendarEvent.start),
     );
     setEditedEvent(calendarEvent);
   };
@@ -99,23 +85,20 @@ export const Calendar = () => {
   useEffect(() => {
     if (eventsToShow) {
       if (activeView === CalendarViews.Month) {
-        const eventsWithOffRangeWithoutCrossDay = eventsToShow.reduce(
-          (acc: CalendarEvent[], event) => {
-            if (!event.eventSpanBefore) {
-              acc.push({
-                ...event,
-                isOffRange: event.start.getMonth() !== date.getMonth(),
-              });
-            }
+        const eventsWithOffRangeWithoutCrossDay = eventsToShow.reduce((acc: CalendarEvent[], event) => {
+          if (!event.eventSpanBefore) {
+            acc.push({
+              ...event,
+              isOffRange: event.start.getMonth() !== date.getMonth(),
+            });
+          }
 
-            return acc;
-          },
-          [],
-        );
+          return acc;
+        }, []);
 
         setEvents(eventsWithOffRangeWithoutCrossDay);
       } else if (activeView === CalendarViews.Year) {
-        const eventsWithoutCrossDay = eventsToShow.filter((event) => !event.eventSpanBefore);
+        const eventsWithoutCrossDay = eventsToShow.filter(event => !event.eventSpanBefore);
 
         setEvents(eventsWithoutCrossDay);
       } else {
@@ -144,11 +127,7 @@ export const Calendar = () => {
 
   return (
     <>
-      <StyledCalendarWrapper
-        hasMoreBtn={hasWrapperMoreBtn}
-        className={activeView}
-        data-testid={dataTestId}
-      >
+      <StyledCalendarWrapper hasMoreBtn={hasWrapperMoreBtn} className={activeView} data-testid={dataTestId}>
         <ReactCalendar
           date={date}
           onNavigate={onNavigate}
@@ -162,7 +141,7 @@ export const Calendar = () => {
           selectable
           onSelectSlot={onSelectSlot}
           onSelectEvent={onSelectEvent}
-          eventPropGetter={(event) => eventPropGetter(event, activeView)}
+          eventPropGetter={event => eventPropGetter(event, activeView)}
           view={activeView as View}
           onView={setActiveView as OnViewFunc}
           messages={messages}

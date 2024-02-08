@@ -1,11 +1,5 @@
 import { Context } from 'chartjs-plugin-datalabels';
-import {
-  LegendItem,
-  ChartData,
-  LinearScale,
-  ScriptableTooltipContext,
-  ChartDataset,
-} from 'chart.js';
+import { LegendItem, ChartData, LinearScale, ScriptableTooltipContext, ChartDataset } from 'chart.js';
 
 import { variables } from 'shared/styles';
 import { Version } from 'api';
@@ -45,12 +39,10 @@ export const getOptions = (
         align: 'start' as const,
         labels: {
           filter: (legendItem: LegendItem, chart: ChartData<'line'>) => {
-            const versionIndex = chart.datasets.findIndex((dataset) => dataset.xAxisID === 'x2');
-            const dateIndex = chart.datasets.findIndex((dataset) => dataset.xAxisID === 'x1');
+            const versionIndex = chart.datasets.findIndex(dataset => dataset.xAxisID === 'x2');
+            const dateIndex = chart.datasets.findIndex(dataset => dataset.xAxisID === 'x1');
 
-            return (
-              legendItem.datasetIndex !== versionIndex && legendItem.datasetIndex !== dateIndex
-            );
+            return legendItem.datasetIndex !== versionIndex && legendItem.datasetIndex !== dateIndex;
           },
           ...commonLabelsProps,
         },

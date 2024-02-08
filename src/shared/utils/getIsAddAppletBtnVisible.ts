@@ -8,6 +8,4 @@ export const getIsAddAppletBtnVisible = (
   user?: User,
 ) =>
   currentWorkspace?.ownerId === user?.id ||
-  Object.values(rolesData?.data || {}).some(
-    (roles) => roles.includes(Roles.Manager) || roles.includes(Roles.Editor),
-  );
+  Object.values(rolesData?.data || {}).some(roles => roles.includes(Roles.Manager) || roles.includes(Roles.Editor));

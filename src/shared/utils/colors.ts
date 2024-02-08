@@ -13,7 +13,7 @@ export const convertColorToRGBA = (color: string) => {
   const matchedRgba = rgba.match(/[.\d]+/g) as RegExpMatchArray;
 
   if (matchedRgba) {
-    const [r, g, b, a] = matchedRgba.map((color) => +color);
+    const [r, g, b, a] = matchedRgba.map(color => +color);
 
     return {
       r,

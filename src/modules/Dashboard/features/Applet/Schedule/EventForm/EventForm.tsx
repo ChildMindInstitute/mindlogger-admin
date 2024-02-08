@@ -211,8 +211,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     useEffect(() => {
       if (!activityOrFlowId) return;
 
-      const activityName = activitiesOrFlows?.find((item) => item.value === activityOrFlowId)
-        ?.labelKey;
+      const activityName = activitiesOrFlows?.find(item => item.value === activityOrFlowId)?.labelKey;
 
       activityName && setActivityName(activityName);
     }, [activityOrFlowId, activitiesOrFlows]);
@@ -261,10 +260,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
           </StyledModalWrapper>
           <Tabs tabs={getEventFormTabs(eventFormConfig)} uiType={UiType.Secondary} />
           {errorMessage && (
-            <StyledBodyLarge
-              color={variables.palette.semantic.error}
-              sx={{ m: theme.spacing(1, 2.6) }}
-            >
+            <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 2.6) }}>
               {errorMessage}
             </StyledBodyLarge>
           )}

@@ -22,14 +22,14 @@ import { ItemSettingsController } from './ItemSettingsController';
 import { ItemSettingsGroupNames } from './ItemSettingsController.const';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
-const getMockedAppletFormData = (item) => ({
+const getMockedAppletFormData = item => ({
   ...mockedAppletFormData,
   activities: [{ ...mockedAppletFormData.activities[0], items: [item] }],
 });
 const expandAllPanels = () => {
   const collapseButtons = document.querySelectorAll('.svg-navigate-down');
 
-  collapseButtons.forEach((button) => {
+  collapseButtons.forEach(button => {
     fireEvent.click(button);
   });
 };
@@ -58,7 +58,7 @@ const mockedSliderWithScores = {
 const mockedSingleSelectWithoutScores = {
   ...mockedSingleSelectFormValues,
   responseValues: {
-    options: mockedSingleSelectFormValues.responseValues.options.map((option) => ({
+    options: mockedSingleSelectFormValues.responseValues.options.map(option => ({
       ...option,
       score: undefined,
     })),
@@ -114,7 +114,7 @@ const mockedSingleSelectWithNullableScores = {
   ...mockedSingleSelectFormValues,
   responseValues: {
     ...mockedSingleSelectFormValues.responseValues,
-    options: mockedSingleSelectFormValues.responseValues.options.map((option) => ({
+    options: mockedSingleSelectFormValues.responseValues.options.map(option => ({
       ...option,
       score: 0,
     })),
@@ -254,10 +254,7 @@ const mockedSettingsByType = {
     ItemConfigurationSettings.IsSkippable,
     ItemConfigurationSettings.IsGoBackRemoved,
   ],
-  [ItemResponseType.Message]: [
-    ItemConfigurationSettings.HasTimer,
-    ItemConfigurationSettings.IsGoBackRemoved,
-  ],
+  [ItemResponseType.Message]: [ItemConfigurationSettings.HasTimer, ItemConfigurationSettings.IsGoBackRemoved],
   [ItemResponseType.AudioPlayer]: [
     ItemConfigurationSettings.IsPlayAudioOnce,
     ItemConfigurationSettings.HasTextInput,
@@ -326,10 +323,7 @@ const mockedSettingGroupsByType = {
     ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
     ItemSettingsGroupNames.ScoresAndAlerts,
   ],
-  [ItemResponseType.Text]: [
-    ItemSettingsGroupNames.ResponseOptions,
-    ItemSettingsGroupNames.ScreenConfigurations,
-  ],
+  [ItemResponseType.Text]: [ItemSettingsGroupNames.ResponseOptions, ItemSettingsGroupNames.ScreenConfigurations],
   [ItemResponseType.Drawing]: [
     ItemSettingsGroupNames.AdditionalResponseOptions,
     ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -403,18 +397,14 @@ describe('ItemSettingsController', () => {
     expandAllPanels();
 
     const mockedSettings = mockedSettingsByType[inputType];
-    const settings = document.querySelectorAll(
-      'label[data-testid^="builder-activity-items-item-settings"]',
-    );
+    const settings = document.querySelectorAll('label[data-testid^="builder-activity-items-item-settings"]');
 
     expect(settings.length).toEqual(mockedSettings.length);
 
     settings.forEach((setting, index) => {
       const mockedSetting = mockedSettings[index];
 
-      expect(screen.getByTestId(`builder-activity-items-item-settings-${mockedSetting}`)).toEqual(
-        setting,
-      );
+      expect(screen.getByTestId(`builder-activity-items-item-settings-${mockedSetting}`)).toEqual(setting);
     });
   });
 
@@ -444,7 +434,7 @@ describe('ItemSettingsController', () => {
     });
 
     const mockedGroups = mockedSettingGroupsByType[inputType];
-    const groups = screen.queryAllByTestId((content) =>
+    const groups = screen.queryAllByTestId(content =>
       content.startsWith('builder-activity-items-item-settings-group-container'),
     );
 
@@ -453,9 +443,7 @@ describe('ItemSettingsController', () => {
     groups.forEach((group, index) => {
       const mockedGroup = mockedGroups[index];
 
-      expect(
-        screen.getByTestId(`builder-activity-items-item-settings-group-container-${mockedGroup}`),
-      ).toEqual(group);
+      expect(screen.getByTestId(`builder-activity-items-item-settings-group-container-${mockedGroup}`)).toEqual(group);
     });
   });
 
@@ -685,8 +673,8 @@ describe('ItemSettingsController', () => {
 
     mockedEventByAction[action]();
 
-    expect(
-      ref.current.getValues(`activities.0.items.0.config.${ItemConfigurationSettings.HasTimer}`),
-    ).toEqual(expected);
+    expect(ref.current.getValues(`activities.0.items.0.config.${ItemConfigurationSettings.HasTimer}`)).toEqual(
+      expected,
+    );
   });
 });

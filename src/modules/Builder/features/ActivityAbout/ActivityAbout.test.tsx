@@ -99,9 +99,7 @@ describe('ActivityAbout', () => {
       'builder-activity-about-reviewable',
     ];
 
-    fieldsDataTestIds.forEach((dataTestId) =>
-      expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
-    );
+    fieldsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
   });
 
   test('should render all fields for exisiting applet with default values', () => {
@@ -119,9 +117,7 @@ describe('ActivityAbout', () => {
     expect(showAllAtOnce).toBeChecked();
     const isSkippable = screen.getByLabelText('Allow to skip all items');
     expect(isSkippable).toBeChecked();
-    const isEditable = screen.getByLabelText(
-      "Disable the respondent's ability to change the response",
-    );
+    const isEditable = screen.getByLabelText("Disable the respondent's ability to change the response");
     expect(isEditable).toBeChecked();
     const isReviewable = screen.getByLabelText(
       "This Activity is only displayed in the Admin panel for the reviewer to provide responses about respondent's data. Only single selection, multiple selection, and slider items are supported.",
@@ -136,9 +132,7 @@ describe('ActivityAbout', () => {
       options: { route, routePath },
     });
 
-    expect(
-      screen.getByLabelText('Turn the Activity to the Reviewer dashboard assessment'),
-    ).toBeDisabled();
+    expect(screen.getByLabelText('Turn the Activity to the Reviewer dashboard assessment')).toBeDisabled();
   });
 
   test('should validate activity name', async () => {

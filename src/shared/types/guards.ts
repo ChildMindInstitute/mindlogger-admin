@@ -10,8 +10,7 @@ import {
   VideoItemAnswer,
 } from 'shared/types/answer';
 
-export const isScoreReport = (report: ScoreOrSection): report is ScoreReport =>
-  report.type === ScoreReportType.Score;
+export const isScoreReport = (report: ScoreOrSection): report is ScoreReport => report.type === ScoreReportType.Score;
 export const isSectionReport = (report: ScoreOrSection): report is SectionReport =>
   report.type === ScoreReportType.Section;
 

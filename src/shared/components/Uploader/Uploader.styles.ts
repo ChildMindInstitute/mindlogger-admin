@@ -1,10 +1,6 @@
 import { styled, Box } from '@mui/material';
 
-import {
-  StyledFlexAllCenter,
-  StyledFlexColumn,
-  StyledBodyMedium,
-} from 'shared/styles/styledComponents';
+import { StyledFlexAllCenter, StyledFlexColumn, StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -19,9 +15,7 @@ export const absolutePosition = `
 const getContainerSecondaryStyles = (isImgUploaded: boolean, hasError?: boolean) => `
   border-radius: ${variables.borderRadius.xs};
   background-color: ${isImgUploaded ? 'transparent' : variables.palette.primary_container};
-  border: ${
-    hasError ? `${variables.borderWidth.md} solid ${variables.palette.semantic.error}` : 'unset'
-  };
+  border: ${hasError ? `${variables.borderWidth.md} solid ${variables.palette.semantic.error}` : 'unset'};
   
   .image-container {
     transition: ${variables.transitions.bgColor};
@@ -112,15 +106,7 @@ export const StyledImgContainer = styled(StyledFlexColumn, shouldForwardProp)`
 
 export const UploadedImgContainer = styled(Box, shouldForwardProp)`
   position: relative;
-  ${({
-    isPrimaryUiType,
-    height,
-    width,
-  }: {
-    isPrimaryUiType: boolean;
-    height: number;
-    width: number;
-  }) => `
+  ${({ isPrimaryUiType, height, width }: { isPrimaryUiType: boolean; height: number; width: number }) => `
      width: ${width - 0.2}rem;
      height: ${height - 0.2}rem;
      ${
@@ -138,11 +124,7 @@ export const StyledUploadImg = styled('img', shouldForwardProp)`
     width: 100%;
     height: 100%;
     border-radius: ${isPrimaryUiType ? variables.borderRadius.lg2 : variables.borderRadius.xs};
-    border: ${
-      isPrimaryUiType
-        ? 'none'
-        : `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`
-    };
+    border: ${isPrimaryUiType ? 'none' : `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`};
   `}
 
   object-fit: contain;

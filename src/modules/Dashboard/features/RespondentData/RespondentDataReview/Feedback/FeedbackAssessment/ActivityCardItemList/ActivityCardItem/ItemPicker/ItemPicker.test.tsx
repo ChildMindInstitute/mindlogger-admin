@@ -45,18 +45,15 @@ const text = {
   },
 };
 
-jest.mock(
-  'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers',
-  () => ({
-    __esModule: true,
-    ...jest.requireActual(
-      'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers',
-    ),
-    SingleSelectionController: () => <div data-testid="mock-single-selection-controller"></div>,
-    MultipleSelectionController: () => <div data-testid="mock-multi-selection-controller"></div>,
-    SliderController: () => <div data-testid="mock-slider-controller"></div>,
-  }),
-);
+jest.mock('modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers', () => ({
+  __esModule: true,
+  ...jest.requireActual(
+    'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/AssessmentControllers',
+  ),
+  SingleSelectionController: () => <div data-testid="mock-single-selection-controller"></div>,
+  MultipleSelectionController: () => <div data-testid="mock-multi-selection-controller"></div>,
+  SliderController: () => <div data-testid="mock-slider-controller"></div>,
+}));
 
 const FormComponent = ({ children }: { children: React.ReactNode }) => {
   const methods = useForm<FeedbackForm>({

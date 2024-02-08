@@ -40,8 +40,7 @@ export const Menu = ({
           horizontal: 'left',
         }
       }
-      uiType={uiType}
-    >
+      uiType={uiType}>
       {menuItems.map(({ icon, title, action, 'data-testid': dataTestId }, i) => (
         <MenuItem key={i} onClick={() => action(title)} data-testid={dataTestId}>
           {icon && <ListItemIcon>{icon}</ListItemIcon>}

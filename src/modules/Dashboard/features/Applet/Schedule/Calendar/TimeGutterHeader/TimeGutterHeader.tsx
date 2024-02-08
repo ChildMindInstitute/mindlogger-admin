@@ -21,30 +21,24 @@ export const TimeGutterHeader = ({
   const currentWeek = formatToWeekYear(date);
   const isDayView = activeView === CalendarViews.Day;
   const isWeekView = activeView === CalendarViews.Week;
-  const { hiddenEventsIds = [], allDayEventsSortedByDays = [] } =
-    calendarEvents.useVisibleEventsData() || {};
+  const { hiddenEventsIds = [], allDayEventsSortedByDays = [] } = calendarEvents.useVisibleEventsData() || {};
 
-  const getDayCondition = (event: CalendarEvent) =>
-    isDayView && formatToYearMonthDate(event.start) === currentDate;
+  const getDayCondition = (event: CalendarEvent) => isDayView && formatToYearMonthDate(event.start) === currentDate;
 
-  const getWeekCondition = (event: CalendarEvent) =>
-    isWeekView && formatToWeekYear(event.start) === currentWeek;
+  const getWeekCondition = (event: CalendarEvent) => isWeekView && formatToWeekYear(event.start) === currentWeek;
 
   const getShowEventsCondition = (event: CalendarEvent, isVisible: boolean | undefined) =>
     // eslint-disable-next-line no-prototype-builtins
-    event.hasOwnProperty('isHiddenInTimeView') &&
-    !isVisible &&
-    (getWeekCondition(event) || getDayCondition(event));
+    event.hasOwnProperty('isHiddenInTimeView') && !isVisible && (getWeekCondition(event) || getDayCondition(event));
 
   const navigateIconCondition =
-    (isAllDayEventsVisible?.period === currentDate ||
-      isAllDayEventsVisible?.period === currentWeek) &&
+    (isAllDayEventsVisible?.period === currentDate || isAllDayEventsVisible?.period === currentWeek) &&
     isAllDayEventsVisible?.visible;
 
   const handleBtnClick = () => {
-    setIsAllDayEventsVisible((prevState) => {
-      setEvents((prevEvents) =>
-        prevEvents.map((event) => {
+    setIsAllDayEventsVisible(prevState => {
+      setEvents(prevEvents =>
+        prevEvents.map(event => {
           if (getShowEventsCondition(event, prevState?.visible)) {
             return {
               ...event,
@@ -54,7 +48,7 @@ export const TimeGutterHeader = ({
 
           return {
             ...event,
-            isHiddenInTimeView: hiddenEventsIds?.some((id) => id === event.id),
+            isHiddenInTimeView: hiddenEventsIds?.some(id => id === event.id),
           };
         }),
       );
@@ -62,8 +56,7 @@ export const TimeGutterHeader = ({
       return {
         period: isDayView ? currentDate : currentWeek,
         visible:
-          (isDayView && currentDate === prevState?.period) ||
-          (isWeekView && currentWeek === prevState?.period)
+          (isDayView && currentDate === prevState?.period) || (isWeekView && currentWeek === prevState?.period)
             ? !prevState?.visible
             : true,
       };
@@ -71,21 +64,13 @@ export const TimeGutterHeader = ({
   };
 
   const isBtnDisabled = !allDayEventsSortedByDays?.some(
-    (el) => (isDayView && el.date === currentDate) || (isWeekView && el.week === currentWeek),
+    el => (isDayView && el.date === currentDate) || (isWeekView && el.week === currentWeek),
   );
 
   return (
     <StyledTimeGutterHeader>
-      <StyledClearedButton
-        sx={{ p: theme.spacing(0.2) }}
-        onClick={handleBtnClick}
-        disabled={isBtnDisabled}
-      >
-        <Svg
-          id={navigateIconCondition ? 'navigate-down' : 'navigate-right'}
-          width="19"
-          height="19"
-        />
+      <StyledClearedButton sx={{ p: theme.spacing(0.2) }} onClick={handleBtnClick} disabled={isBtnDisabled}>
+        <Svg id={navigateIconCondition ? 'navigate-down' : 'navigate-right'} width="19" height="19" />
       </StyledClearedButton>
       <StyledLabelBoldMedium sx={{ ml: theme.spacing(0.4) }} color={variables.palette.outline}>
         {t('allDay')}

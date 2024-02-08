@@ -51,9 +51,7 @@ export const RespondentsRemoveAccessPopup = ({
 
   const firstScreen = (
     <>
-      <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-        {t('removeAccessDescription')}
-      </StyledBodyLarge>
+      <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>{t('removeAccessDescription')}</StyledBodyLarge>
       <AppletsSmallTable tableRows={tableRows} data-testid={`${dataTestid}-respondents-table`} />
     </>
   );
@@ -89,9 +87,7 @@ export const RespondentsRemoveAccessPopup = ({
               </Trans>
             </StyledBodyLarge>
           }
-          control={
-            <Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />
-          }
+          control={<Checkbox checked={removeData} onChange={() => setRemoveData(prevVal => !prevVal)} />}
           data-testid={`${dataTestid}-remove-data`}
         />
       )}
@@ -99,7 +95,7 @@ export const RespondentsRemoveAccessPopup = ({
   );
 
   const getStep = (type: 'next' | 'prev') =>
-    setStep((prevStep) => {
+    setStep(prevStep => {
       const newStep = type === 'next' ? prevStep + 1 : prevStep - 1;
 
       return newStep as Steps;
@@ -173,8 +169,7 @@ export const RespondentsRemoveAccessPopup = ({
       secondBtnText={t(isFirstStepWithAppletId ? 'cancel' : 'back')}
       disabledSubmit={disabledSubmit}
       submitBtnColor={screens[step]?.submitBtnColor}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>
   );

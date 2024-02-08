@@ -191,12 +191,11 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         onDragStart={onDragStart}
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
-        onDragEnd={(event) => onDragEnd(event, item)}
-        onDrop={(event) => onDrop(event, item)}
+        onDragEnd={event => onDragEnd(event, item)}
+        onDrop={event => onDrop(event, item)}
         hover
         onMouseEnter={() => setHasVisibleActions(true)}
-        onMouseLeave={() => setHasVisibleActions(false)}
-      >
+        onMouseLeave={() => setHasVisibleActions(false)}>
         <StyledTableCell width={AppletsColumnsWidth.AppletName} onClick={handleAppletClick}>
           <StyledAppletName applet={item}>
             {item.parentId && (
@@ -204,7 +203,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
                 <Pin
                   isPinned={item?.isPinned}
                   data-testid="dashboard-applets-pin"
-                  onClick={(event) => {
+                  onClick={event => {
                     event.stopPropagation();
                     handleTogglePin();
                   }}

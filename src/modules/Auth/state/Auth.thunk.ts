@@ -5,15 +5,7 @@ import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { ApiErrorResponse } from 'shared/state/Base';
-import {
-  signInApi,
-  SignIn,
-  getUserDetailsApi,
-  signUpApi,
-  SignUpArgs,
-  resetPasswordApi,
-  ResetPassword,
-} from 'api';
+import { signInApi, SignIn, getUserDetailsApi, signUpApi, SignUpArgs, resetPasswordApi, ResetPassword } from 'api';
 
 export const signIn = createAsyncThunk(
   'auth/login',
@@ -38,20 +30,17 @@ export const signIn = createAsyncThunk(
   },
 );
 
-export const getUserDetails = createAsyncThunk(
-  'auth/getUserData',
-  async (_: void, { rejectWithValue, signal }) => {
-    try {
-      const { data } = await getUserDetailsApi(signal);
+export const getUserDetails = createAsyncThunk('auth/getUserData', async (_: void, { rejectWithValue, signal }) => {
+  try {
+    const { data } = await getUserDetailsApi(signal);
 
-      return { data };
-    } catch (exception) {
-      const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
+    return { data };
+  } catch (exception) {
+    const errorResult = getApiErrorResult(exception as AxiosError<ApiErrorResponse>);
 
-      return rejectWithValue(errorResult);
-    }
-  },
-);
+    return rejectWithValue(errorResult);
+  }
+});
 
 export const signUp = createAsyncThunk(
   'auth/signup',

@@ -6,11 +6,7 @@ import { Svg } from 'shared/components/Svg';
 import { DataTable, DataTableProps, DataTableItem } from 'shared/components/DataTable';
 import { StyledFlexColumn, StyledTitleMedium } from 'shared/styles';
 
-import {
-  StyledTextField,
-  StyledErrorContainer,
-  StyledTransferListController,
-} from './TransferListController.styles';
+import { StyledTextField, StyledErrorContainer, StyledTransferListController } from './TransferListController.styles';
 import { TransferListControllerProps } from './TransferListController.types';
 
 export const TransferListController = <T extends FieldValues>({
@@ -44,8 +40,7 @@ export const TransferListController = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        const selectionSectionItems =
-          selectedItems ?? items?.filter((item) => value?.includes(getItemKey(item)));
+        const selectionSectionItems = selectedItems ?? items?.filter(item => value?.includes(getItemKey(item)));
 
         const handleSelect: DataTableProps['onSelect'] = (selectedKey, isSelected) => {
           const newValues = isSelected
@@ -56,7 +51,7 @@ export const TransferListController = <T extends FieldValues>({
         };
 
         const handleSelectAll = (isAllSelected: boolean) => {
-          const newValues = isAllSelected ? [] : items?.map((item) => getItemKey(item)) || [];
+          const newValues = isAllSelected ? [] : items?.map(item => getItemKey(item)) || [];
           onChange(newValues);
           onChangeSelectedCallback?.(newValues);
         };
@@ -64,9 +59,7 @@ export const TransferListController = <T extends FieldValues>({
         const isSearchable = hasSearch && search && searchKey;
 
         const filteredData = isSearchable
-          ? items?.filter((item) =>
-              `${item[searchKey] || ''}`.toLowerCase().includes(search.toLowerCase()),
-            )
+          ? items?.filter(item => `${item[searchKey] || ''}`.toLowerCase().includes(search.toLowerCase()))
           : items;
 
         const getNoDataPlaceholder = () => {

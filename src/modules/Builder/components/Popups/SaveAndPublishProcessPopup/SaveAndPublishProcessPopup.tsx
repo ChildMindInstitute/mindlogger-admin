@@ -7,10 +7,7 @@ import { concatIf } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { reportConfig } from 'modules/Builder/state';
 
-import {
-  SaveAndPublishProcessPopupProps,
-  SaveAndPublishSteps,
-} from './SaveAndPublishProcessPopup.types';
+import { SaveAndPublishProcessPopupProps, SaveAndPublishSteps } from './SaveAndPublishProcessPopup.types';
 import { Description } from './Description';
 import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
 
@@ -77,19 +74,15 @@ export const SaveAndPublishProcessPopup = ({
       buttonText={t('ok')}
       onSubmit={onClose}
       data-testid={concatIf('builder-save-and-publish-popup', saveAndPublishProcessTestIds[step])}
-      {...modalProps}
-    >
+      {...modalProps}>
       <StyledModalWrapper>
         <Box
           sx={{
             mt: theme.spacing(-1),
             pb: step === SaveAndPublishSteps.BeingCreated ? theme.spacing(3.2) : 0,
-          }}
-        >
+          }}>
           <Description step={step} />
-          {step === SaveAndPublishSteps.BeingCreated && (
-            <StyledLinearProgress sx={{ mt: theme.spacing(3) }} />
-          )}
+          {step === SaveAndPublishSteps.BeingCreated && <StyledLinearProgress sx={{ mt: theme.spacing(3) }} />}
         </Box>
       </StyledModalWrapper>
     </Modal>

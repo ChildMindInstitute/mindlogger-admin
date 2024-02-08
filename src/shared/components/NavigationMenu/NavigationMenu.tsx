@@ -25,12 +25,7 @@ export const NavigationMenu = ({
 
   return (
     <StyledWrapper data-testid={dataTestid}>
-      <LeftBar
-        title={title}
-        items={items}
-        hasActiveItem={hasActiveItem}
-        onItemClick={onSetActiveItem}
-      />
+      <LeftBar title={title} items={items} hasActiveItem={hasActiveItem} onItemClick={onSetActiveItem} />
       {hasActiveItem && (
         <Container title={t(activeItem?.label || '')} onClose={onClose}>
           {activeItem?.component}

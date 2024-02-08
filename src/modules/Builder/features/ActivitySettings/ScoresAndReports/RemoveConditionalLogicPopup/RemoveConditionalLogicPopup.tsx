@@ -38,8 +38,7 @@ export const RemoveConditionalLogicPopup = ({
       submitBtnColor={isFirstScreen ? 'error' : 'primary'}
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <StyledModalWrapper>
         <StyledBodyLarge>
           {isFirstScreen ? (

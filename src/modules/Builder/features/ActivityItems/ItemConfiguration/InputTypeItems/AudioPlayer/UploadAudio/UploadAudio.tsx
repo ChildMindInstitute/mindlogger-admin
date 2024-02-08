@@ -31,10 +31,7 @@ export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: Upload
   return (
     <Modal open={open} title={t('uploadAudio')} onClose={onClose} {...modalProps}>
       <Box sx={{ ml: theme.spacing(3.2) }}>
-        <StyledTitleMedium
-          sx={{ mb: theme.spacing(2.4) }}
-          data-testid={`${dataTestid}-description`}
-        >
+        <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }} data-testid={`${dataTestid}-description`}>
           <Trans i18nKey="dropAudio">
             Please upload file in one of the following formats: <strong>.mp3, .wav</strong>.
           </Trans>

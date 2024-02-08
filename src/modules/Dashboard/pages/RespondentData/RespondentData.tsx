@@ -27,7 +27,7 @@ export const RespondentData = () => {
   const { ownerId } = workspaces.useData() || {};
   const respondentDataTabs = useRespondentDataTabs();
 
-  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, (result) => {
+  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, result => {
     setSummaryActivities(result?.data?.result || []);
   });
 
@@ -75,8 +75,7 @@ export const RespondentData = () => {
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
-  if (appletRoles?.[0] === Roles.Coordinator)
-    return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
+  if (appletRoles?.[0] === Roles.Coordinator) return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
 
   return (
     <StyledBody sx={{ position: 'relative' }}>
@@ -84,13 +83,11 @@ export const RespondentData = () => {
         variant="text"
         onClick={navigateUp}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
-        data-testid="respondents-summary-back-to-applet"
-      >
+        data-testid="respondents-summary-back-to-applet">
         {t('appletPage')}
       </StyledDirectoryUpButton>
       <RespondentDataContext.Provider
-        value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}
-      >
+        value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}>
         <FormProvider {...methods}>
           <LinkedTabs tabs={respondentDataTabs} />
         </FormProvider>

@@ -39,23 +39,17 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const appletData = (getValues?.() ?? result) as SingleApplet;
   const isNewApplet = useCheckIfNewApplet();
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
-  const currentActivityName = appletData?.activities?.find(
-    (activity) => getEntityKey(activity) === activityId,
-  )?.name;
+  const currentActivityName = appletData?.activities?.find(activity => getEntityKey(activity) === activityId)?.name;
   const activityLabel = currentActivityName ?? t('newActivity');
   const performanceTaskLabel =
-    currentActivityName ??
-    Object.entries(checkCurrentPerformanceTaskPage(pathname)).find(([, value]) => value)?.[0];
+    currentActivityName ?? Object.entries(checkCurrentPerformanceTaskPage(pathname)).find(([, value]) => value)?.[0];
   const activityFlowLabel =
-    appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
-      ?.name ?? t('newActivityFlow');
+    appletData?.activityFlows?.find(activityFlow => getEntityKey(activityFlow) === activityFlowId)?.name ??
+    t('newActivityFlow');
   const activitiesBreadcrumb = {
     icon: 'checklist-outlined',
     label: t('activities'),
-    navPath:
-      appletId && activityId
-        ? generatePath(page.builderAppletActivities, { appletId, activityId })
-        : '',
+    navPath: appletId && activityId ? generatePath(page.builderAppletActivities, { appletId, activityId }) : '',
   };
 
   return useMemo(() => {
@@ -116,18 +110,14 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       newBreadcrumbs.push({
         icon: 'manager-outlined',
         label: t('managers'),
-        navPath: appletId
-          ? generatePath(page.appletManagers, { appletId })
-          : page.dashboardManagers,
+        navPath: appletId ? generatePath(page.appletManagers, { appletId }) : page.dashboardManagers,
       });
     }
     if (pathname.includes('respondents')) {
       newBreadcrumbs.push({
         icon: 'respondent-outlined',
         label: t('respondents'),
-        navPath: appletId
-          ? generatePath(page.appletRespondents, { appletId })
-          : page.dashboardRespondents,
+        navPath: appletId ? generatePath(page.appletRespondents, { appletId }) : page.dashboardRespondents,
       });
     }
     if (respondentId) {
@@ -207,8 +197,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
 
     if (checkIfAppletActivityUrlPassed(pathname)) {
-      const { isAbout, isItems, isItemsFlow, isActivitySettings } =
-        checkCurrentActivityPage(pathname);
+      const { isAbout, isItems, isItemsFlow, isActivitySettings } = checkCurrentActivityPage(pathname);
 
       newBreadcrumbs.push(activitiesBreadcrumb, {
         icon: 'checklist-outlined',
@@ -279,10 +268,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         });
     }
 
-    if (setting)
-      newBreadcrumbs.push(getSettingBreadcrumbs(setting as SettingParam, appletData?.isPublished));
+    if (setting) newBreadcrumbs.push(getSettingBreadcrumbs(setting as SettingParam, appletData?.isPublished));
 
-    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map((crumb) => ({
+    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map(crumb => ({
       ...crumb,
       key: uniqueId(),
     }));

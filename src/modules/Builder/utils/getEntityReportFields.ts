@@ -34,36 +34,25 @@ export const getEntityReportFields = <
   const selectedReportActivity =
     !activityItems &&
     reportActivity &&
-    activities?.find(
-      (activity) => (isKeyToName ? getEntityKey(activity) : activity.name) === reportActivity,
-    );
+    activities?.find(activity => (isKeyToName ? getEntityKey(activity) : activity.name) === reportActivity);
   if (selectedReportActivity) {
-    reportIncludedActivityName = isKeyToName
-      ? selectedReportActivity.name
-      : getEntityKey(selectedReportActivity);
+    reportIncludedActivityName = isKeyToName ? selectedReportActivity.name : getEntityKey(selectedReportActivity);
   }
 
   let selectedReportItem;
   if (activityItems) {
     selectedReportItem =
-      reportItem &&
-      activityItems.find((item) => (isKeyToName ? getEntityKey(item) : item.name) === reportItem);
+      reportItem && activityItems.find(item => (isKeyToName ? getEntityKey(item) : item.name) === reportItem);
   } else {
     selectedReportItem =
       selectedReportActivity &&
       reportItem &&
-      selectedReportActivity.items?.find(
-        (item) => (isKeyToName ? getEntityKey(item) : item.name) === reportItem,
-      );
+      selectedReportActivity.items?.find(item => (isKeyToName ? getEntityKey(item) : item.name) === reportItem);
   }
   let reportIncludedItemName = '';
   if (selectedReportItem) {
-    reportIncludedItemName = isKeyToName
-      ? selectedReportItem.name
-      : getEntityKey(selectedReportItem);
+    reportIncludedItemName = isKeyToName ? selectedReportItem.name : getEntityKey(selectedReportItem);
   }
 
-  return activityItems
-    ? { reportIncludedItemName }
-    : { reportIncludedActivityName, reportIncludedItemName };
+  return activityItems ? { reportIncludedItemName } : { reportIncludedActivityName, reportIncludedItemName };
 };

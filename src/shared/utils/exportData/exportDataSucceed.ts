@@ -1,9 +1,4 @@
-import {
-  activityJourneyHeader,
-  GENERAL_REPORT_NAME,
-  JOURNEY_REPORT_NAME,
-  reportHeader,
-} from 'shared/consts';
+import { activityJourneyHeader, GENERAL_REPORT_NAME, JOURNEY_REPORT_NAME, reportHeader } from 'shared/consts';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { ExportDataResult } from 'shared/types';
 

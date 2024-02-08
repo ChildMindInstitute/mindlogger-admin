@@ -1,9 +1,5 @@
 import { DatavizActivity } from 'api';
-import {
-  DecryptedMultiSelectionAnswer,
-  DecryptedSingleSelectionAnswer,
-  DecryptedSliderAnswer,
-} from 'shared/types';
+import { DecryptedMultiSelectionAnswer, DecryptedSingleSelectionAnswer, DecryptedSliderAnswer } from 'shared/types';
 
 export type FeedbackProps = {
   onClose: () => void;

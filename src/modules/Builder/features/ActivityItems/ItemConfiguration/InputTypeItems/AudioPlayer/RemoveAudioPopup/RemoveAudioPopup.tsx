@@ -22,12 +22,9 @@ export const RemoveAudioPopup = ({ open, onClose, onRemove }: RemoveAudioPopupPr
       onClose={onClose}
       onSubmit={onRemove}
       onSecondBtnSubmit={onClose}
-      data-testid={dataTestid}
-    >
+      data-testid={dataTestid}>
       <Box sx={{ ml: theme.spacing(3.2) }}>
-        <StyledTitleMedium data-testid={`${dataTestid}-description`}>
-          {t('removeAudioDescription')}
-        </StyledTitleMedium>
+        <StyledTitleMedium data-testid={`${dataTestid}-description`}>{t('removeAudioDescription')}</StyledTitleMedium>
       </Box>
     </Modal>
   );

@@ -85,9 +85,7 @@ describe('Storage functions', () => {
   describe('updateSelectedItemsInStorage', () => {
     test('should update the selected items in sessionStorage', () => {
       updateSelectedItemsInStorage(mockedSelectedItems, 'applet1');
-      expect(JSON.parse(window.sessionStorage.getItem(STORAGE_SELECTED_KEY) || '{}')).toEqual(
-        mockedSelectedItems,
-      );
+      expect(JSON.parse(window.sessionStorage.getItem(STORAGE_SELECTED_KEY) || '{}')).toEqual(mockedSelectedItems);
     });
 
     test('should remove the selected items from sessionStorage if updated items are null', () => {

@@ -25,10 +25,7 @@ import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 const mockedChangeColorEvent = { hex: '#fff' };
 jest.mock('react-color', () => ({
   ChromePicker: ({ onChangeComplete }) => (
-    <div
-      data-testid={'color-picker'}
-      onClick={() => onChangeComplete(mockedChangeColorEvent)}
-    ></div>
+    <div data-testid={'color-picker'} onClick={() => onChangeComplete(mockedChangeColorEvent)}></div>
   ),
 }));
 
@@ -53,18 +50,14 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
     setItemResponseType(responseType);
 
     await waitFor(() => {
-      const options = screen.getAllByTestId(
-        /^builder-activity-items-item-configuration-options-\d+-option$/,
-      );
+      const options = screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/);
       expect(options).toHaveLength(1);
 
       const hideButton = screen.getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-hide`);
       expect(hideButton).toBeVisible();
       expect(hideButton.querySelector('svg')).toHaveClass('svg-visibility-on');
 
-      expect(
-        screen.getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-title`),
-      ).toHaveTextContent('Option 1');
+      expect(screen.getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-title`)).toHaveTextContent('Option 1');
       expect(screen.getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-image`)).toBeVisible();
 
       const text = screen.getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-text`);
@@ -225,33 +218,23 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      const options = screen.getAllByTestId(
-        /^builder-activity-items-item-configuration-options-\d+-option$/,
-      );
+      const options = screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/);
       expect(options).toHaveLength(2);
 
       options.forEach((_, index) => {
-        expect(
-          screen.getByTestId(`builder-activity-items-item-configuration-options-${index}-remove`),
-        ).toBeVisible();
+        expect(screen.getByTestId(`builder-activity-items-item-configuration-options-${index}-remove`)).toBeVisible();
       });
 
-      const secondOption = screen.getByTestId(
-        'builder-activity-items-item-configuration-options-1-title',
-      );
+      const secondOption = screen.getByTestId('builder-activity-items-item-configuration-options-1-title');
       expect(secondOption).toHaveTextContent('Option 2');
       expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(2);
     });
 
-    const removeButton = screen.getByTestId(
-      'builder-activity-items-item-configuration-options-1-remove',
-    );
+    const removeButton = screen.getByTestId('builder-activity-items-item-configuration-options-1-remove');
     fireEvent.click(removeButton);
 
     await waitFor(() => {
-      expect(
-        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
-      ).toHaveLength(1);
+      expect(screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/)).toHaveLength(1);
       expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(1);
     });
   });
@@ -325,61 +308,43 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
       createArray(9, () => fireEvent.click(addOption));
 
-      const options = screen.getAllByTestId(
-        /^builder-activity-items-item-configuration-options-\d+-option$/,
-      );
+      const options = screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/);
 
       await setItemConfigSetting(ItemConfigurationSettings.HasColorPalette);
 
-      const paletteButton = screen.getByTestId(
-        'builder-activity-items-item-configuration-set-color-palette',
-      );
+      const paletteButton = screen.getByTestId('builder-activity-items-item-configuration-set-color-palette');
       fireEvent.click(paletteButton);
 
-      const paletteContainer = screen.getByTestId(
-        'builder-activity-items-item-configuration-color-palette',
-      );
+      const paletteContainer = screen.getByTestId('builder-activity-items-item-configuration-color-palette');
       expect(paletteContainer).toBeVisible();
 
       options.forEach((_, index) => {
-        expect(
-          ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
-        ).toStrictEqual({ hex: '' });
+        expect(ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`)).toStrictEqual({
+          hex: '',
+        });
       });
 
-      const palette1 = screen.getByTestId(
-        'builder-activity-items-item-configuration-color-palette-picker-0',
-      );
+      const palette1 = screen.getByTestId('builder-activity-items-item-configuration-color-palette-picker-0');
       fireEvent.click(palette1);
 
       options.forEach((option, index) => {
         const color = mockedPalette1Color[index % mockedPalette1Color.length];
-        expect(
-          ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
-        ).toEqual({ hex: color });
+        expect(ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`)).toEqual({
+          hex: color,
+        });
       });
 
-      expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toEqual(
-        'palette1',
-      );
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toEqual('palette1');
 
-      const removePalette = screen.getByTestId(
-        'builder-activity-items-item-configuration-color-palette-remove',
-      );
+      const removePalette = screen.getByTestId('builder-activity-items-item-configuration-color-palette-remove');
       fireEvent.click(removePalette);
 
       options.forEach((_, index) => {
-        expect(
-          ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
-        ).toEqual({ hex: '' });
+        expect(ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`)).toEqual({ hex: '' });
       });
 
-      expect(
-        screen.queryByTestId('builder-activity-items-item-configuration-color-palette'),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.getByTestId('builder-activity-items-item-configuration-set-color-palette'),
-      ).toBeVisible();
+      expect(screen.queryByTestId('builder-activity-items-item-configuration-color-palette')).not.toBeInTheDocument();
+      expect(screen.getByTestId('builder-activity-items-item-configuration-set-color-palette')).toBeVisible();
       expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toBeUndefined();
     });
 
@@ -389,13 +354,9 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         appletFormData: getAppletFormDataWithItemWithPalette('palette2'),
       });
 
-      expect(
-        screen.getByTestId('builder-activity-items-item-configuration-color-palette'),
-      ).toBeVisible();
+      expect(screen.getByTestId('builder-activity-items-item-configuration-color-palette')).toBeVisible();
 
-      const palette2 = screen.getByTestId(
-        'builder-activity-items-item-configuration-color-palette-picker-1',
-      );
+      const palette2 = screen.getByTestId('builder-activity-items-item-configuration-color-palette-picker-1');
       expect(palette2.querySelector('input')).toBeChecked();
     });
 
@@ -405,12 +366,8 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         appletFormData: getAppletFormDataWithItemWithPalette(),
       });
 
-      expect(
-        screen.queryByTestId('builder-activity-items-item-configuration-color-palette'),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.getByTestId('builder-activity-items-item-configuration-set-color-palette'),
-      ).toBeVisible();
+      expect(screen.queryByTestId('builder-activity-items-item-configuration-color-palette')).not.toBeInTheDocument();
+      expect(screen.getByTestId('builder-activity-items-item-configuration-set-color-palette')).toBeVisible();
     });
 
     test('Value for paletteName is removed if palette is already selected and color for option is changed', async () => {
@@ -422,17 +379,15 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         appletFormData: getAppletFormDataWithItemWithPalette('palette2'),
       });
 
-      const colorPickerButton = screen.getByTestId(
-        'builder-activity-items-item-configuration-options-0-palette',
-      );
+      const colorPickerButton = screen.getByTestId('builder-activity-items-item-configuration-options-0-palette');
       fireEvent.click(colorPickerButton);
 
       const colorPicker = screen.getByTestId('color-picker');
       fireEvent.click(colorPicker);
 
-      expect(
-        ref.current.getValues(`${mockedItemName}.responseValues.options.0.color`),
-      ).toStrictEqual(mockedChangeColorEvent);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.color`)).toStrictEqual(
+        mockedChangeColorEvent,
+      );
       expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toEqual('');
     });
   });
@@ -470,9 +425,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         'The respondent will be required to enter an additional text response',
       );
       expect(
-        screen.getByTestId(
-          'builder-activity-items-item-configuration-text-input-option-description-required',
-        ),
+        screen.getByTestId('builder-activity-items-item-configuration-text-input-option-description-required'),
       ).toHaveTextContent('*Required');
     });
 
@@ -490,9 +443,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       fireEvent.click(removeButton);
 
       expect(screen.queryByTestId(mockedTextInputOptionTestid)).not.toBeInTheDocument();
-      expect(
-        ref.current.getValues(`${mockedItemName}.config.additionalResponseOption.textInputOption`),
-      ).toBeFalsy();
+      expect(ref.current.getValues(`${mockedItemName}.config.additionalResponseOption.textInputOption`)).toBeFalsy();
     });
   });
 
@@ -514,9 +465,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
       await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
-      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.tooltip`)).toEqual(
-        'tooltip',
-      );
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.tooltip`)).toEqual('tooltip');
     });
 
     test('Is removed from document if checkbox is unchecked', async () => {
@@ -533,9 +482,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
       await setItemConfigSetting(ItemConfigurationSettings.HasTooltips);
 
-      expect(
-        screen.queryByTestId(`${mockedSingleAndMultiSelectOptionTestid}-tooltip`),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId(`${mockedSingleAndMultiSelectOptionTestid}-tooltip`)).not.toBeInTheDocument();
     });
   });
 
@@ -551,9 +498,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
       await setItemConfigSetting(ItemConfigurationSettings.HasScores);
 
-      const scoreInput = screen
-        .getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`)
-        .querySelector('input');
+      const scoreInput = screen.getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`).querySelector('input');
       expect(scoreInput).toHaveValue(0);
 
       fireEvent.change(scoreInput, { target: { value: 13 } });
@@ -563,9 +508,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(-5);
 
       fireEvent.change(scoreInput, { target: { value: 0.4 } });
-      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(
-        0.4,
-      );
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toEqual(0.4);
     });
 
     test('Is removed from document when checkbox is unchecked', async () => {
@@ -579,19 +522,13 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
 
       await setItemConfigSetting(ItemConfigurationSettings.HasScores);
 
-      const scoreInput = screen
-        .getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`)
-        .querySelector('input');
+      const scoreInput = screen.getByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`).querySelector('input');
       fireEvent.change(scoreInput, { target: { value: 13 } });
 
       await setItemConfigSetting(ItemConfigurationSettings.HasScores);
 
-      expect(
-        ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`),
-      ).toBeUndefined();
-      expect(
-        screen.queryByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`),
-      ).not.toBeInTheDocument();
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.0.score`)).toBeUndefined();
+      expect(screen.queryByTestId(`${mockedSingleAndMultiSelectOptionTestid}-score`)).not.toBeInTheDocument();
     });
   });
 
@@ -605,9 +542,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
       expect(screen.getByText('Alert 1')).toBeVisible();
-      expect(
-        screen.getByText('If Respondent selected when answering this question then send:'),
-      ).toBeVisible();
+      expect(screen.getByText('If Respondent selected when answering this question then send:')).toBeVisible();
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-text`)).toHaveTextContent('Alert Message');
     });
 
@@ -651,9 +586,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
         fireEvent.click(addAlert);
 
-        const alertInput = screen
-          .getByTestId(`${mockedAlertsTestid}-1-text`)
-          .querySelector('input');
+        const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
         fireEvent.change(alertInput, { target: { value: 'text' } });
 
         await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
@@ -662,9 +595,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         const optionsSelectButton = optionsSelect.querySelector('[role="button"]');
         fireEvent.mouseDown(optionsSelectButton);
 
-        const option = screen
-          .getByTestId(`${mockedAlertsTestid}-1-selection-option-dropdown`)
-          .querySelector('li');
+        const option = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option-dropdown`).querySelector('li');
         fireEvent.click(option);
 
         expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
@@ -736,9 +667,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       fireEvent.click(removeAlert);
 
       expect(screen.queryByTestId(`${mockedAlertsTestid}-0-panel`)).not.toBeInTheDocument();
-      expect(
-        ref.current.getValues(`${mockedItemName}.config.${ItemConfigurationSettings.HasAlerts}`),
-      ).toBeFalsy();
+      expect(ref.current.getValues(`${mockedItemName}.config.${ItemConfigurationSettings.HasAlerts}`)).toBeFalsy();
       expect(ref.current.getValues(`${mockedItemName}.alerts`)).toEqual([]);
     });
 

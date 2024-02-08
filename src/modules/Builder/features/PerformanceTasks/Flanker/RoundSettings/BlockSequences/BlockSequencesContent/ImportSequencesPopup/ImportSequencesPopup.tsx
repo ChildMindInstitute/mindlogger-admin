@@ -20,8 +20,7 @@ export const ImportSequencesPopup = ({
 }: ImportSequencesPopupProps) => {
   const { t } = useTranslation('app');
   const [step, setStep] = useState<number>(0);
-  const { isSubmitDisabled, validationError, handleFileReady, uploadedData } =
-    useImportSequence(uploadedImages);
+  const { isSubmitDisabled, validationError, handleFileReady, uploadedData } = useImportSequence(uploadedImages);
 
   const isUpload = uiType === ImportSequencesType.Upload;
   const downloadText = t(isUpload ? 'downloadTemplate' : 'flankerRound.downloadExistingSequence');
@@ -46,7 +45,7 @@ export const ImportSequencesPopup = ({
 
   const screens = getScreens(isUpload, components);
 
-  const incrementStep = () => setStep((prevStep) => prevStep + 1);
+  const incrementStep = () => setStep(prevStep => prevStep + 1);
 
   const onSubmit = () => {
     switch (step) {
@@ -74,17 +73,14 @@ export const ImportSequencesPopup = ({
       open={open}
       onClose={handleModalClose}
       onSubmit={onSubmit}
-      title={t(
-        `${isUpload ? 'flankerRound.uploadBlockSequences' : 'flankerRound.updateBlockSequences'}`,
-      )}
+      title={t(`${isUpload ? 'flankerRound.uploadBlockSequences' : 'flankerRound.updateBlockSequences'}`)}
       buttonText={t(screens[step].btnText)}
       hasSecondBtn={screens[step].hasSecondBtn}
       secondBtnText={t(screens[step].secondBtnText || '')}
       onSecondBtnSubmit={onClose}
       disabledSubmit={isSubmitDisabled}
       width="66"
-      data-testid="builder-activity-flanker-block-sequences-upload-popup"
-    >
+      data-testid="builder-activity-flanker-block-sequences-upload-popup">
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>
     </Modal>
   );

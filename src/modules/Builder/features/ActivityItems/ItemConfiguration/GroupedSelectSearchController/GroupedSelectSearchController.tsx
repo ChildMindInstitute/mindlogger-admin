@@ -40,10 +40,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   const [currentItemType, setCurrentItemType] = useState<ItemResponseTypeNoPerfTasks | null>(null);
   const searchTermLowercase = searchTerm.toLowerCase();
 
-  const handleTooltipOpen = (
-    event: MouseEvent<HTMLLIElement>,
-    itemType: ItemResponseTypeNoPerfTasks,
-  ) => {
+  const handleTooltipOpen = (event: MouseEvent<HTMLLIElement>, itemType: ItemResponseTypeNoPerfTasks) => {
     setCurrentItemType(itemType);
     setAnchorEl(event.currentTarget);
   };
@@ -104,9 +101,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 renderValue={() => (
                   <StyledFlexTopCenter sx={{ maxHeight: '2.3rem' }}>
                     <StyledFlexTopCenter sx={{ overflow: 'hidden' }}>
-                      <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
-                        {itemsTypeIcons[value]}
-                      </StyledFlexTopCenter>
+                      <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>{itemsTypeIcons[value]}</StyledFlexTopCenter>
                       {t(value)}
                       {getIsOnlyMobileValue(value) && mobileOnly}
                     </StyledFlexTopCenter>
@@ -116,14 +111,10 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 onClose={handleSelectClose}
                 onOpen={handleSelectOpen}
                 IconComponent={() => (
-                  <Svg
-                    className="navigate-arrow"
-                    id={selectOpen ? 'navigate-up' : 'navigate-down'}
-                  />
+                  <Svg className="navigate-arrow" id={selectOpen ? 'navigate-up' : 'navigate-down'} />
                 )}
                 defaultValue=""
-                data-testid="builder-activity-items-item-configuration-response-type"
-              >
+                data-testid="builder-activity-items-item-configuration-response-type">
                 <StyledListSubheader>
                   <form autoComplete="off">
                     <TextField
@@ -133,7 +124,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                       value={searchTerm}
                       onChange={handleSearchChange}
                       onKeyDown={handleSearchKeyDown}
-                      onClick={(event) => {
+                      onClick={event => {
                         event.stopPropagation();
                       }}
                       InputProps={{
@@ -155,21 +146,14 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
                     return (
                       <StyledMenuItem
-                        onMouseEnter={
-                          selectOpen
-                            ? (event) => handleTooltipOpen(event, groupValue)
-                            : falseReturnFunc
-                        }
+                        onMouseEnter={selectOpen ? event => handleTooltipOpen(event, groupValue) : falseReturnFunc}
                         onMouseLeave={handleTooltipClose}
                         isHidden={isHidden}
                         key={groupValue}
                         value={groupValue}
-                        data-testid={`builder-activity-items-item-configuration-response-type-option-${groupValue}`}
-                      >
+                        data-testid={`builder-activity-items-item-configuration-response-type-option-${groupValue}`}>
                         <StyledFlexTopCenter>
-                          <StyledFlexTopCenter sx={{ mr: theme.spacing(1.8) }}>
-                            {icon}
-                          </StyledFlexTopCenter>
+                          <StyledFlexTopCenter sx={{ mr: theme.spacing(1.8) }}>{icon}</StyledFlexTopCenter>
                           <StyledFlexTopCenter>
                             {getGroupValueText(searchTerm, groupValue)}
                             {isMobileOnly && mobileOnly}

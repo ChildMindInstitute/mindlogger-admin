@@ -12,10 +12,7 @@ export const getUniqueIdentifierOptions = (identifiers: Identifier[]) =>
 
     const { decryptedValue } = identifierItem;
 
-    if (
-      uniqueIdentifiers &&
-      !uniqueIdentifiers.find((identifier) => identifier.id === decryptedValue)
-    ) {
+    if (uniqueIdentifiers && !uniqueIdentifiers.find(identifier => identifier.id === decryptedValue)) {
       return [
         ...uniqueIdentifiers,
         {
