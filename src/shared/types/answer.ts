@@ -91,8 +91,8 @@ export type ExportAnswer = {
   startDatetime: string;
   endDatetime: string;
   client?: {
-    app_id: string;
-    app_version: string;
+    appId: string;
+    appVersion: string;
     width: number;
     height: number;
   };
