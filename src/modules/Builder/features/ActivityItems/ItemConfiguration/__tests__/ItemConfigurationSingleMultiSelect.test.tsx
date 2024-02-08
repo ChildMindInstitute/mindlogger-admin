@@ -77,6 +77,126 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
     });
   });
 
+  test('should not render Add None Option for Single Selection', () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.SingleSelection);
+
+    const addNoneOption = screen.queryByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    expect(addNoneOption).toBeNull();
+  });
+
+  test('should render Add None Option for Multi Selection', () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.MultipleSelection);
+
+    const addNoneOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    expect(addNoneOption).toBeVisible();
+    expect(addNoneOption).toHaveTextContent('Add “None“ Option');
+  });
+
+  test('should render only one None option for Multi Selection', async () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.MultipleSelection);
+
+    expect(
+      screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+    ).toHaveLength(1);
+    expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(1);
+
+    const addNoneOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    fireEvent.click(addNoneOption);
+
+    await waitFor(() => {
+      expect(addNoneOption).toBeDisabled();
+      expect(
+        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+      ).toHaveLength(2);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(2);
+      const secondOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-1-title',
+      );
+      expect(secondOption).toHaveTextContent('“None“ Option');
+    });
+  });
+
+  test('should keep the ordering for None option and the indexing for next Options for Multi Selection', async () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.MultipleSelection);
+
+    expect(
+      screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+    ).toHaveLength(1);
+    expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(1);
+    const secondOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-options-0-title',
+    );
+    expect(secondOption).toHaveTextContent('Option 1');
+
+    const addNoneOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    fireEvent.click(addNoneOption);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+      ).toHaveLength(2);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(2);
+      const secondOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-1-title',
+      );
+      expect(secondOption).toHaveTextContent('“None“ Option');
+    });
+
+    const addOption = screen.getByTestId('builder-activity-items-item-configuration-add-option');
+    fireEvent.click(addOption);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+      ).toHaveLength(3);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(3);
+      const thirdOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-2-title',
+      );
+      expect(thirdOption).toHaveTextContent('Option 2');
+    });
+  });
+
   test.each`
     responseType                          | description
     ${ItemResponseType.SingleSelection}   | ${'Single: option is added and removed successfully'}
