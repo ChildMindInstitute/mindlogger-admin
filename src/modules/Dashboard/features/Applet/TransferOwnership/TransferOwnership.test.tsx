@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
@@ -7,14 +7,14 @@ import { mockedAppletId, mockedEmail } from 'shared/mock';
 import { TransferOwnership } from './TransferOwnership';
 
 const mockedSetIsSubmitted = jest.fn();
-const mockedSetEmailTransfered = jest.fn();
+const mockedSetEmailTransferred = jest.fn();
 const dataTestid = 'transfer-ownership';
 
 const transferOwnershipComponent = (
   <TransferOwnership
     appletId={mockedAppletId}
     setIsSubmitted={mockedSetIsSubmitted}
-    setEmailTransfered={mockedSetEmailTransfered}
+    setEmailTransferred={mockedSetEmailTransferred}
     isSubmitted={false}
     data-testid={dataTestid}
   />

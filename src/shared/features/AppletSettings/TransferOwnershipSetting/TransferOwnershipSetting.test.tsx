@@ -43,7 +43,11 @@ describe('TransferOwnershipSetting', () => {
     `('$description', async ({ route, routePath }) => {
       mockAxios.post.mockResolvedValue(null);
       const dataTestid = 'applet-settings-transfer-ownership';
-      renderWithProviders(<TransferOwnershipSetting />, { preloadedState, route, routePath });
+      const { store } = renderWithProviders(<TransferOwnershipSetting />, {
+        preloadedState,
+        route,
+        routePath,
+      });
 
       expect(screen.getByTestId(`${dataTestid}-form`)).toBeVisible();
       expect(screen.getByTestId(`${dataTestid}-confirm`)).toBeVisible();
@@ -61,14 +65,13 @@ describe('TransferOwnershipSetting', () => {
 
       userEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
 
-      const successPopup = await screen.findByTestId(`${dataTestid}-success-popup`);
-      expect(successPopup).toBeVisible();
-
-      userEvent.click(screen.getByText('Ok'));
-
-      await waitFor(() => {
-        expect(screen.queryByTestId(`${dataTestid}-success-popup`)).not.toBeInTheDocument();
-      });
+      expect(
+        store
+          .getState()
+          .banners.data.banners.find(
+            ({ bannerProps }) => bannerProps?.['data-testid'] === `${dataTestid}-success-popup`,
+          ),
+      ).toBeDefined();
     });
   });
 });

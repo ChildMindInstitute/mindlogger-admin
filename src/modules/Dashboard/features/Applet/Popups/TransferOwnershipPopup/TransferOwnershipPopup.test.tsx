@@ -28,7 +28,7 @@ describe('TransferOwnershipPopup component tests', () => {
   test('TransferOwnershipPopup should appear success text', async () => {
     mockAxios.post.mockResolvedValueOnce(null);
 
-    renderWithProviders(<TransferOwnershipPopup />, {
+    const { store } = renderWithProviders(<TransferOwnershipPopup />, {
       preloadedState,
     });
 
@@ -36,11 +36,16 @@ describe('TransferOwnershipPopup component tests', () => {
       target: { value: mockedEmail },
     });
     fireEvent.click(screen.getByText('Confirm'));
+
     await waitFor(() => {
-      const el = screen.getByText('Your request has been successfully sent to', { exact: false });
-      expect(el.textContent).toEqual(
-        `Your request has been successfully sent to ${mockedEmail}. Please wait for receiver to accept your request.`,
-      );
+      expect(
+        store
+          .getState()
+          .banners.data.banners.find(
+            ({ bannerProps }) =>
+              bannerProps?.['data-testid'] === 'dashboard-applets-transfer-success-banner',
+          ),
+      ).toBeDefined();
     });
   });
 });
