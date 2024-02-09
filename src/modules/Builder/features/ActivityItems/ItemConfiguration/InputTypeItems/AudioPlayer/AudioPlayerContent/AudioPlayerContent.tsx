@@ -23,6 +23,7 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
   const urlName = `${name}.responseValues.file`;
   const { error } = getFieldState(urlName);
   const url = watch(urlName);
+  const dataTestid = 'builder-activity-items-item-configuration-audio-player';
 
   const onCloseUploadPopup = () => setUploadPopupOpened(false);
   const onCloseRecordPopup = () => setRecordPopupOpened(false);
@@ -49,10 +50,20 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
 
   return (
     <Box sx={{ mt: theme.spacing(1) }}>
-      <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(2.4) }}>
+      <StyledTitleMedium
+        color={variables.palette.on_surface}
+        sx={{ mb: theme.spacing(2.4) }}
+        data-testid={`${dataTestid}-description`}
+      >
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
-      {url && <MLPlayer media={media} onRemove={() => setRemoveAudioPopupOpened(true)} />}
+      {url && (
+        <MLPlayer
+          media={media}
+          onRemove={() => setRemoveAudioPopupOpened(true)}
+          data-testid={`${dataTestid}-player`}
+        />
+      )}
       {!url && (
         <AddAudio
           onUploadAudio={() => setUploadPopupOpened(true)}

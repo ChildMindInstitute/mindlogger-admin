@@ -4,7 +4,7 @@ import i18n from 'i18n';
 import { SubscaleTotalScore, ItemResponseType, LookupTableItems } from 'shared/consts';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import {
-  defaultSingleAndMultiSelectionConfig,
+  defaultSingleSelectionConfig,
   defaultTextConfig,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
 
@@ -57,7 +57,7 @@ export const genderItem = getNewActivityItem({
   allowEdit: false,
   name: LookupTableItems.Gender_screen,
   question: t('genderQuestion'),
-  config: defaultSingleAndMultiSelectionConfig,
+  config: defaultSingleSelectionConfig,
   responseType: ItemResponseType.SingleSelection,
   responseValues: {
     options: [

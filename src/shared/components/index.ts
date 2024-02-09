@@ -1,7 +1,6 @@
 export * from './Actions';
 export * from './AppletImage';
 export * from './Avatar';
-export * from './Banner';
 export * from './ButtonWithMenu';
 export * from './Chip';
 export * from './CropPopup';

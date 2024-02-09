@@ -591,6 +591,55 @@ export const theme = createTheme({
         },
       },
     },
+    MuiAlert: {
+      styleOverrides: {
+        root: ({ ownerState: { variant, severity } }) => ({
+          fontSize: variables.font.size.lg,
+          lineHeight: variables.font.lineHeight.lg,
+          letterSpacing: variables.font.letterSpacing.md,
+          color: variables.palette.on_surface,
+          padding: theme.spacing(1.2, 1.6),
+          borderRadius: 0,
+          alignItems: 'center',
+          ...(variant === 'standard' && {
+            ...(severity === 'info' && {
+              backgroundColor: variables.palette.blue_alfa30,
+            }),
+            ...(severity === 'success' && {
+              backgroundColor: variables.palette.green_alfa30,
+            }),
+            ...(severity === 'warning' && {
+              backgroundColor: variables.palette.yellow_alfa30,
+            }),
+            ...(severity === 'error' && {
+              backgroundColor: variables.palette.error_container,
+            }),
+          }),
+          '.MuiAlert-action': {
+            marginRight: 0,
+            paddingTop: 0,
+            alignItems: 'center',
+          },
+          '.MuiAlert-icon': {
+            marginLeft: 'auto',
+          },
+          '.MuiAlert-message': {
+            padding: 0,
+            maxWidth: theme.spacing(80),
+          },
+          '.MuiLink-root:hover': {
+            textDecorationColor: 'transparent',
+          },
+          '.MuiButton-root': {
+            padding: theme.spacing(1),
+            margin: theme.spacing(0.4),
+          },
+          '.MuiButton-text:hover': {
+            backgroundColor: variables.palette.on_surface_alfa8,
+          },
+        }),
+      },
+    },
   },
   palette: {
     background: {
@@ -598,6 +647,15 @@ export const theme = createTheme({
     },
     primary: {
       main: variables.palette.primary,
+    },
+    info: {
+      main: variables.palette.blue,
+    },
+    success: {
+      main: variables.palette.green,
+    },
+    warning: {
+      main: variables.palette.yellow,
     },
     error: {
       main: variables.palette.semantic.error,

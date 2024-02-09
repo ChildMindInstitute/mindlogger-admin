@@ -47,8 +47,8 @@ export const Uploader = ({
   cropRatio,
   hasError,
   disabled,
-  'data-testid': dataTestid,
   flexibleCropRatio,
+  'data-testid': dataTestid,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
   const uploadInputRef = useRef<HTMLInputElement>(null);
@@ -180,11 +180,6 @@ export const Uploader = ({
     setRemovePopupOpen(true);
   };
 
-  const handleConfirmRemoval = () => {
-    handleRemoveImg();
-    handleCloseRemovePopup();
-  };
-
   const handleCloseCropPopup = () => {
     setCropPopupVisible(false);
     setImage(null);
@@ -298,12 +293,14 @@ export const Uploader = ({
           flexibleCropRatio={flexibleCropRatio}
         />
       )}
-      <RemoveImagePopup
-        open={isRemovePopupOpen}
-        onClose={handleCloseRemovePopup}
-        onSubmit={handleConfirmRemoval}
-        data-testid={concatIf(dataTestid, '-remove-popup')}
-      />
+      {isRemovePopupOpen && (
+        <RemoveImagePopup
+          open={isRemovePopupOpen}
+          onClose={handleCloseRemovePopup}
+          onRemove={handleRemoveImg}
+          data-testid={concatIf(dataTestid, '-remove-popup')}
+        />
+      )}
       {!isPrimaryUiType && (
         <>
           {hasSizeError && (

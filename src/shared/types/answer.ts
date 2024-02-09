@@ -90,6 +90,12 @@ export type ExportAnswer = {
   scheduledDatetime?: string;
   startDatetime: string;
   endDatetime: string;
+  client?: {
+    appId: string;
+    appVersion: string;
+    width: number;
+    height: number;
+  };
 };
 
 export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &

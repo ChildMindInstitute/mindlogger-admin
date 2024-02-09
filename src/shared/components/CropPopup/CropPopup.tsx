@@ -1,14 +1,14 @@
 import { useState, useMemo, SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import ReactCrop, { Crop } from 'react-image-crop';
+import ReactCrop, { Crop, PixelCrop, PercentCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
 import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
-import { cropImage, initPercentCrop } from './CropPopup.utils';
-import { SIZE_TO_SET_IMG_SMALL, CropRatio } from './CropPopup.const';
+import { checkIfImageSmall, cropImage, initPercentCrop } from './CropPopup.utils';
+import { CropRatio, MIN_CROP_SIZE } from './CropPopup.const';
 import { StyledCropWrapper } from './CropPopup.styles';
 import { CropPopupProps } from './CropPopup.types';
 
@@ -18,8 +18,8 @@ export const CropPopup = ({
   ratio = CropRatio.Default,
   onSave,
   onClose,
-  'data-testid': dataTestid,
   flexibleCropRatio,
+  'data-testid': dataTestid,
 }: CropPopupProps) => {
   const { t } = useTranslation('app');
   const [crop, setCrop] = useState<Crop>();
@@ -30,11 +30,8 @@ export const CropPopup = ({
 
   const handleImageLoad = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     const { naturalWidth: width, naturalHeight: height } = event.currentTarget;
-
-    setIsSmallImg(width < SIZE_TO_SET_IMG_SMALL || height < SIZE_TO_SET_IMG_SMALL);
-
-    const calculatedRatio = flexibleCropRatio ? width / height : ratio;
-    const crop = initPercentCrop({ width, height, ratio: calculatedRatio });
+    setIsSmallImg(checkIfImageSmall(width, height));
+    const crop = initPercentCrop({ width, height, ratio });
     setCrop(crop);
   };
 
@@ -51,6 +48,11 @@ export const CropPopup = ({
     });
   };
 
+  const handleCropChange = ({ width, height }: PixelCrop, percentCrop: PercentCrop) => {
+    setCrop(percentCrop);
+    setIsSmallImg(checkIfImageSmall(width, height));
+  };
+
   return (
     <>
       <Modal
@@ -65,10 +67,12 @@ export const CropPopup = ({
           <StyledCropWrapper isSmallImg={isSmallImg}>
             <ReactCrop
               crop={crop}
-              onChange={(_, percentCrop) => setCrop(percentCrop)}
+              onChange={handleCropChange}
               aspect={flexibleCropRatio ? undefined : ratio}
               keepSelection={true}
               style={{ maxHeight: '60vh' }}
+              minWidth={MIN_CROP_SIZE}
+              minHeight={MIN_CROP_SIZE}
             >
               <img src={imgSrc} onLoad={handleImageLoad} alt={name} />
             </ReactCrop>

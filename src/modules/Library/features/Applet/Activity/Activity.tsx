@@ -38,7 +38,7 @@ export const Activity = ({
   const updateSelectedItems = () => {
     if (uiType === AppletUiType.Cart) {
       const { isNoSelectedItems } = updateSelectedItemsInStorage(getValues(), appletId);
-      dispatch(library.actions.setAddToCartBtnDisabled(isNoSelectedItems));
+      dispatch(library.actions.setAddToBuilderBtnDisabled(isNoSelectedItems));
     }
   };
 
@@ -82,8 +82,9 @@ export const Activity = ({
 
   const getCheckedActivity = (currentItems: SelectedItem[]) => {
     const currentActivityItems = currentItems?.filter((item) => item.activityName === name);
-    const isAllItemsSelected = currentActivityItems?.length === items.length;
-    const isIndeterminate = currentActivityItems?.length > 0 && !isAllItemsSelected;
+    const isAllItemsSelected =
+      !!currentActivityItems?.length && currentActivityItems?.length === items.length;
+    const isIndeterminate = !!currentActivityItems?.length && !isAllItemsSelected;
     setActivityIndeterminate(isIndeterminate);
     setActivityChecked(isAllItemsSelected);
   };

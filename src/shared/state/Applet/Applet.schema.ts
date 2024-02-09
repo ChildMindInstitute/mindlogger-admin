@@ -57,7 +57,7 @@ export type TextInputConfig = {
   responseRequired: boolean;
 };
 
-export type SingleAndMultipleSelectionConfig = {
+export type MultipleSelectionConfig = {
   removeBackButton: boolean;
   skippableItem: boolean;
   randomizeOptions: boolean;
@@ -71,6 +71,10 @@ export type SingleAndMultipleSelectionConfig = {
     textInputRequired: boolean;
   };
   addTokens?: null | boolean;
+};
+
+export type SingleSelectionConfig = MultipleSelectionConfig & {
+  autoAdvance: boolean;
 };
 
 export type SliderConfig = {
@@ -350,7 +354,8 @@ export type ResponseValues =
 
 export type Config =
   | TextInputConfig
-  | SingleAndMultipleSelectionConfig
+  | SingleSelectionConfig
+  | MultipleSelectionConfig
   | SliderConfig
   | AudioAndVideoConfig
   | AudioPlayerConfig
@@ -472,13 +477,13 @@ export type TextItem<T = ItemCommonType> = T & {
 
 export type SingleSelectItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.SingleSelection;
-  config: SingleAndMultipleSelectionConfig;
+  config: SingleSelectionConfig;
   responseValues: SingleAndMultipleSelectItemResponseValues;
 };
 
 export type MultiSelectItem<T = ItemCommonType> = T & {
   responseType: ItemResponseType.MultipleSelection;
-  config: SingleAndMultipleSelectionConfig;
+  config: MultipleSelectionConfig;
   responseValues: SingleAndMultipleSelectItemResponseValues;
 };
 

@@ -19,3 +19,4 @@ export * from './useIntersectionObserver';
 export * from './useNetwork';
 export * from './useCheckIfAppletHasNotFoundError';
 export * from './useRespondentLabel';
+export * from './useWindowFocus';

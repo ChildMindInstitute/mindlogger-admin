@@ -41,6 +41,7 @@ export const StimulusContent = () => {
     trigger,
     formState: { errors },
     clearErrors,
+    reset,
   } = useCustomFormContext();
   const { fieldName, activityObjField } = useCurrentActivity();
   const [screenToDelete, setScreenToDelete] = useState<null | { index: number; imageName: string }>(
@@ -101,6 +102,13 @@ export const StimulusContent = () => {
     }));
     replace(newTrials);
   }, [hasTwoButtons]);
+
+  useEffect(() => {
+    if (fieldName === undefined) {
+      //reset is dirty state if fieldName is not defined (after the first publish of the Flanker)
+      reset(undefined, { keepDirty: false });
+    }
+  }, [fieldName]);
 
   return (
     <>

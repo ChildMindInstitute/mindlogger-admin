@@ -235,13 +235,13 @@ export const ItemSchema = () =>
           ItemTestFunctions.ExistingNameInSystemItem,
           ({ value: itemName }) => t('validationMessages.nameExistsInSystemItems', { itemName }),
           (_, context) =>
-            testFunctionForSystemItems(context.parent, get(context, 'from.1.value.items')),
+            testFunctionForSystemItems(context.parent, get(context, 'from.1.value.items') ?? []),
         )
         .test(
           ItemTestFunctions.UniqueItemName,
           t('validationMessages.unique', { field: t('itemName') }) as string,
           (itemName, context) =>
-            testFunctionForUniqueness(itemName ?? '', get(context, 'from.1.value.items')),
+            testFunctionForUniqueness(itemName ?? '', get(context, 'from.1.value.items') ?? []),
         ),
       responseType: yup.string().required(getIsRequiredValidateMessage('itemType')),
       question: yup
@@ -487,7 +487,10 @@ export const SubscaleSchema = () =>
           'unique-subscale-name',
           t('validationMessages.unique', { field: t('subscaleName') }) as string,
           (subscaleName, context) =>
-            testFunctionForUniqueness(subscaleName ?? '', get(context, 'from.1.value.subscales')),
+            testFunctionForUniqueness(
+              subscaleName ?? '',
+              get(context, 'from.1.value.subscales') ?? [],
+            ),
         ),
       items: yup.array().min(1, t('validationMessages.atLeastOne') as string),
       scoring: yup.string(),
@@ -519,7 +522,7 @@ export const ConditionalLogicSchema = () =>
         'item-flow-contradiction',
         t('appletHasItemFlowContradictions') as string,
         (itemKey, context) => {
-          const items = get(context, 'from.1.value.items');
+          const items = get(context, 'from.1.value.items') ?? [];
           const conditions = get(context, 'parent.conditions');
           const itemIds = items?.map((item: Item) => getEntityKey(item));
           const itemIndex = itemIds?.findIndex((id: string) => id === itemKey);
@@ -570,7 +573,7 @@ export const ScoreConditionalLogic = () =>
         (scoreConditionName, context) =>
           testFunctionForUniqueness(
             scoreConditionName ?? '',
-            get(context, 'from.1.value.conditionalLogic'),
+            get(context, 'from.1.value.conditionalLogic') ?? [],
           ),
       ),
     conditions: yup
@@ -590,7 +593,7 @@ export const ScoreSchema = () => ({
       'unique-score-name',
       t('validationMessages.unique', { field: t('scoreName') }) as string,
       (scoreName, context) => {
-        const reports = get(context, 'from.1.value.reports');
+        const reports = get(context, 'from.1.value.reports') ?? [];
         const scores = reports?.filter(
           ({ type }: ScoreOrSection) => type === ScoreReportType.Score,
         );
@@ -628,7 +631,7 @@ export const SectionSchema = () => ({
       'unique-section-name',
       t('validationMessages.unique', { field: t('sectionName') }) as string,
       (sectionName, context) => {
-        const reports = get(context, 'from.1.value.reports');
+        const reports = get(context, 'from.1.value.reports') ?? [];
         const sections = reports?.filter(
           ({ type }: ScoreOrSection) => type === ScoreReportType.Section,
         );
@@ -707,7 +710,10 @@ export const ActivitySchema = () =>
         'unique-activity-name',
         t('validationMessages.unique', { field: t('activityName') }) as string,
         (activityName, context) =>
-          testFunctionForUniqueness(activityName ?? '', get(context, 'from.1.value.activities')),
+          testFunctionForUniqueness(
+            activityName ?? '',
+            get(context, 'from.1.value.activities') ?? [],
+          ),
       ),
     description: yup.string(),
     image: yup.string(),
@@ -771,7 +777,7 @@ export const ActivityFlowSchema = () =>
           (activityFlowName, context) =>
             testFunctionForUniqueness(
               activityFlowName ?? '',
-              get(context, 'from.1.value.activityFlows'),
+              get(context, 'from.1.value.activityFlows') ?? [],
             ),
         ),
       description: yup

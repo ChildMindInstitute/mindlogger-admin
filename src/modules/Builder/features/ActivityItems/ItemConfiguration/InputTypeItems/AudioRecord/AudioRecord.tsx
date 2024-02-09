@@ -14,8 +14,14 @@ export const AudioRecord = ({ name }: UseControllerProps) => {
 
   const { control } = useCustomFormContext();
 
+  const dataTestid = 'builder-activity-items-item-configuration-audio';
+
   return (
-    <ItemOptionContainer title={t('audio')} description={t('audioRecordDescription')}>
+    <ItemOptionContainer
+      title={t('audio')}
+      description={t('audioRecordDescription')}
+      data-testid={dataTestid}
+    >
       <Box sx={{ mb: theme.spacing(2.6) }}>
         <ItemInfo svgId="audio" textKey="audio" />
       </Box>
@@ -24,7 +30,7 @@ export const AudioRecord = ({ name }: UseControllerProps) => {
         control={control}
         type="number"
         label={t('audioRecordDuration')}
-        data-testid="builder-activity-items-item-configuration-audio-record-max-duration"
+        data-testid={`${dataTestid}-record-max-duration`}
       />
     </ItemOptionContainer>
   );
