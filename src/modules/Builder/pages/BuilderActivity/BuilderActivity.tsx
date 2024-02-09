@@ -1,15 +1,15 @@
+import { Badge } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, generatePath, Outlet } from 'react-router-dom';
-import { Badge } from '@mui/material';
 
-import { StyledDirectoryUpButton, StyledTitleSmall } from 'shared/styles/styledComponents';
-import { LinkedTabs, Svg } from 'shared/components';
-import { page } from 'resources';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { page } from 'resources';
+import { LinkedTabs, Svg } from 'shared/components';
 import { variables } from 'shared/styles';
+import { StyledDirectoryUpButton, StyledTitleSmall } from 'shared/styles/styledComponents';
 
-import { getActivityTabs } from './BuilderActivity.utils';
 import { StyledBuilderActivityBody, StyledConfig, StyledWrapper } from './BuilderActivity.styles';
+import { getActivityTabs } from './BuilderActivity.utils';
 
 export const BuilderActivity = () => {
   const { t } = useTranslation();
@@ -20,16 +20,14 @@ export const BuilderActivity = () => {
   const { trigger, getFieldState } = useCustomFormContext();
   const isPerformanceTask = activity?.isPerformanceTask;
 
-  const navigateToActivities = () =>
-    navigate(generatePath(page.builderAppletActivities, { appletId }));
+  const navigateToActivities = () => navigate(generatePath(page.builderAppletActivities, { appletId }));
 
   const handleBackBtnClick = async () => {
     await trigger();
     navigateToActivities();
   };
 
-  const hasAppletErrors =
-    !!getFieldState('activityFlows').error || !!getFieldState('displayName').error;
+  const hasAppletErrors = !!getFieldState('activityFlows').error || !!getFieldState('displayName').error;
   const tabErrors = {
     hasAboutActivityErrors: !!getFieldState(`${fieldName}.name`).error,
     hasActivityItemsErrors: !!getFieldState(`${fieldName}.items`).error,
@@ -43,8 +41,7 @@ export const BuilderActivity = () => {
       <StyledDirectoryUpButton
         variant="text"
         onClick={handleBackBtnClick}
-        startIcon={<Svg id="directory-up" width="18" height="18" />}
-      >
+        startIcon={<Svg id="directory-up" width="18" height="18" />}>
         {t('activities')}
         <Badge variant="dot" invisible={!hasAppletErrors} color="error" />
       </StyledDirectoryUpButton>
@@ -54,9 +51,7 @@ export const BuilderActivity = () => {
             <StyledWrapper>
               <StyledConfig>
                 <Svg id="configure-filled" />
-                <StyledTitleSmall color={variables.palette.primary}>
-                  {t('configure')}
-                </StyledTitleSmall>
+                <StyledTitleSmall color={variables.palette.primary}>{t('configure')}</StyledTitleSmall>
               </StyledConfig>
             </StyledWrapper>
             <Outlet />

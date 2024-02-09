@@ -1,18 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Svg } from 'shared/components/Svg';
-import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
 import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
   AppletPasswordRefType,
 } from 'modules/Dashboard/features/Applet/Popups';
+import { Svg } from 'shared/components/Svg';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
-import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
+import { StyledButton } from './SaveAndPublish.styles';
 
 export const SaveAndPublish = () => {
   const { t } = useTranslation('app');

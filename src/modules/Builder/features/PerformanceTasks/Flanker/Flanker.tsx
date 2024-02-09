@@ -1,11 +1,10 @@
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { RoundTypeEnum } from 'modules/Builder/types';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
 
 import { NameDescription } from '../NameDescription';
-import { PerformanceTaskHeader } from '../PerformanceTaskHeader';
 import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import { GeneralSettings } from './GeneralSettings';
 import { RoundSettings } from './RoundSettings';

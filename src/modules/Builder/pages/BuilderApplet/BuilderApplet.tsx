@@ -39,9 +39,7 @@ export const BuilderApplet = () => {
   const themesLoadingStatus = themes.useThemesStatus();
   const appletResponseType = applet.useResponseTypePrefix();
   const isAppletLoaded =
-    loadingStatus === 'success' &&
-    appletResponseType === 'applet/getAppletWithItems' &&
-    !isNewApplet;
+    loadingStatus === 'success' && appletResponseType === 'applet/getAppletWithItems' && !isNewApplet;
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
   const [isAppletInitialized, setAppletInitialized] = useState(false);
@@ -49,20 +47,13 @@ export const BuilderApplet = () => {
   const hasLibraryData = isFromLibrary && !!dataFromLibrary;
 
   const isLoading =
-    (!isNewApplet && loadingStatus === 'idle') ||
-    loadingStatus === 'loading' ||
-    themesLoadingStatus === 'loading';
+    (!isNewApplet && loadingStatus === 'idle') || loadingStatus === 'loading' || themesLoadingStatus === 'loading';
   const defaultThemeId = getDefaultThemeId(themesList);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    appletId && ownerId && !isNewApplet
-      ? dispatch(getAppletWithItems({ ownerId, appletId }))
-      : undefined,
+    appletId && ownerId && !isNewApplet ? dispatch(getAppletWithItems({ ownerId, appletId })) : undefined,
   );
-  const defaultValues = useMemo(
-    () => getDefaultValues(appletData, defaultThemeId),
-    [appletData, defaultThemeId],
-  );
+  const defaultValues = useMemo(() => getDefaultValues(appletData, defaultThemeId), [appletData, defaultThemeId]);
 
   const methods = useForm<AppletFormValues>({
     defaultValues,
@@ -85,10 +76,7 @@ export const BuilderApplet = () => {
       const libraryConvertedValues = await getDefaultValues(dataFromLibrary);
       const newFormValues = {
         ...formValues,
-        activities: prepareActivitiesFromLibrary([
-          ...formValues.activities,
-          ...libraryConvertedValues.activities,
-        ]),
+        activities: prepareActivitiesFromLibrary([...formValues.activities, ...libraryConvertedValues.activities]),
         activityFlows: prepareActivityFlowsFromLibrary([
           ...formValues.activityFlows,
           ...libraryConvertedValues.activityFlows,
