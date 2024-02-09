@@ -9,6 +9,8 @@ import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks/useAsync';
 import { editRespondentApi } from 'api';
 import { falseReturnFunc, getErrorMessage } from 'shared/utils';
+import { useAppDispatch } from 'redux/store';
+import { banners } from 'redux/modules';
 
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
 import { editRespondentFormSchema } from './EditRespondentPopup.schema';
@@ -20,16 +22,18 @@ export const EditRespondentPopup = ({
   chosenAppletData,
 }: EditRespondentPopupProps) => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
 
-  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
   const [isServerErrorVisible, setIsServerErrorVisible] = useState(true);
 
-  const onCloseHandler = () => onClose(isSuccessVisible);
+  const onCloseHandler = (shouldRefetch = false) => onClose(shouldRefetch);
 
   const { handleSubmit, control, setValue, getValues, trigger } = useForm<EditRespondentForm>({
     resolver: yupResolver(editRespondentFormSchema()),
     defaultValues: { secretUserId: '', nickname: '' },
   });
+
+  const dataTestid = 'dashboard-respondents-edit-popup';
 
   const {
     execute: editRespondent,
@@ -38,7 +42,15 @@ export const EditRespondentPopup = ({
   } = useAsync(
     editRespondentApi,
     () => {
-      setIsSuccessVisible(true);
+      onCloseHandler(true);
+      dispatch(
+        banners.actions.addBanner({
+          key: 'SaveSuccessBanner',
+          bannerProps: {
+            'data-testid': `${dataTestid}-success-banner`,
+          },
+        }),
+      );
     },
     falseReturnFunc,
     () => {
@@ -76,17 +88,16 @@ export const EditRespondentPopup = ({
   }, [chosenAppletData]);
 
   const hasServerError = error && isServerErrorVisible;
-  const dataTestid = 'dashboard-respondents-edit-popup';
 
   return (
     <Modal
       open={popupVisible}
       onClose={onCloseHandler}
-      onSubmit={isSuccessVisible ? onCloseHandler : handleSubmit(submitForm)}
+      onSubmit={handleSubmit(submitForm)}
       disabledSubmit={isLoading}
       title={t('editRespondent')}
-      buttonText={t(isSuccessVisible ? 'ok' : 'save')}
-      hasSecondBtn={!isSuccessVisible}
+      buttonText={t('save')}
+      hasSecondBtn={true}
       onSecondBtnSubmit={onCloseHandler}
       secondBtnText={t('cancel')}
       data-testid={dataTestid}
@@ -94,35 +105,29 @@ export const EditRespondentPopup = ({
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>
-          {isSuccessVisible ? (
-            <>{t('editRespondentSuccess')}</>
-          ) : (
-            <>
-              <form onSubmit={handleSubmit(submitForm)} noValidate>
-                <StyledController>
-                  <InputController
-                    fullWidth
-                    name="nickname"
-                    control={control}
-                    label={t('nickname')}
-                    data-testid={`${dataTestid}-nickname`}
-                  />
-                </StyledController>
-                <StyledController>
-                  <InputController
-                    fullWidth
-                    name="secretUserId"
-                    control={control}
-                    label={t('secretUserId')}
-                    onChange={handleChangeSecretId}
-                    error={!!hasServerError}
-                    data-testid={`${dataTestid}-secret-user-id`}
-                  />
-                </StyledController>
-              </form>
-              {hasServerError && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
-            </>
-          )}
+          <form onSubmit={handleSubmit(submitForm)} noValidate>
+            <StyledController>
+              <InputController
+                fullWidth
+                name="nickname"
+                control={control}
+                label={t('nickname')}
+                data-testid={`${dataTestid}-nickname`}
+              />
+            </StyledController>
+            <StyledController>
+              <InputController
+                fullWidth
+                name="secretUserId"
+                control={control}
+                label={t('secretUserId')}
+                onChange={handleChangeSecretId}
+                error={!!hasServerError}
+                data-testid={`${dataTestid}-secret-user-id`}
+              />
+            </StyledController>
+          </form>
+          {hasServerError && <StyledErrorText>{getErrorMessage(error)}</StyledErrorText>}
         </StyledModalWrapper>
       </>
     </Modal>
