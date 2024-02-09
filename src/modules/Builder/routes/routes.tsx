@@ -102,7 +102,7 @@ export const builderRoutes = () => (
             />
           </Route>
         </Route>
-        <Route path={Path.PerformanceTask}>
+        <Route element={<BuilderActivity />} path={Path.PerformanceTask}>
           {performanceTasksRoutes.map(({ path, Component, props = {} }) => (
             <Route key={path} path={path}>
               <Route
