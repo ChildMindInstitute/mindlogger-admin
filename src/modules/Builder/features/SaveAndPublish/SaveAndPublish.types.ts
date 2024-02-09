@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import {
   Condition,
   ConditionalLogic,
@@ -8,11 +6,6 @@ import {
   SectionReport,
 } from 'shared/state';
 import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
-
-export type SaveAndPublishProps = {
-  hasPrompt: boolean;
-  setIsFromLibrary: Dispatch<SetStateAction<boolean>>;
-};
 
 export type GetItemCommonFields = {
   id?: string;
