@@ -13,7 +13,6 @@ import { applet } from 'shared/state';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
 import { themes } from 'modules/Builder/state';
-import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 
 import { AppletSchema } from './BuilderApplet.schema';
 import {
@@ -70,9 +69,6 @@ export const BuilderApplet = () => {
     mode: 'onChange',
   });
   const { reset, control, setValue, getValues, watch } = methods;
-
-  const { activity } = useCurrentActivity(watch);
-  const isPerformanceTask = activity?.isPerformanceTask;
 
   useEffect(() => {
     if (!isAppletLoaded) return;
@@ -145,8 +141,6 @@ export const BuilderApplet = () => {
     hasAppletActivityFlowErrors: !!errors.activityFlows,
   };
 
-  const saveAndPublish = isPerformanceTask ? null : <SaveAndPublish />;
-
   if (isForbidden) return noPermissionsComponent;
 
   return (
@@ -156,7 +150,7 @@ export const BuilderApplet = () => {
           <>
             {isLoading && <Spinner />}
             <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} isBuilder />
-            {saveAndPublish}
+            <SaveAndPublish />
           </>
         ) : (
           <Spinner />
