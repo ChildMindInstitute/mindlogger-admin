@@ -40,7 +40,7 @@ export const Respondents = () => {
 
   const { execute: getWorkspaceRespondents } = useAsync(
     getWorkspaceRespondentsApi,
-    response => {
+    (response) => {
       setRespondentsData(response?.data || null);
     },
     undefined,
@@ -59,7 +59,7 @@ export const Respondents = () => {
     });
   });
 
-  const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable(args => {
+  const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
     setIsLoading(true);
     const params = {
       ...args,

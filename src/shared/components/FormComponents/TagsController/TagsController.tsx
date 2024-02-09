@@ -59,7 +59,7 @@ export const TagsController = <T extends FieldValues>({
               }}
               onFocus={() => setIsFocused(true)}
               onChange={onChange}
-              onKeyDown={event => {
+              onKeyDown={(event) => {
                 if (event.key === 'Enter') {
                   event.preventDefault();
                   onAddTagClick(value);

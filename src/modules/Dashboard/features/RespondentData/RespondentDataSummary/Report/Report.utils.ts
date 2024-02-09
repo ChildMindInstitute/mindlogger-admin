@@ -32,7 +32,7 @@ export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemRespons
     case ItemResponseType.MultipleSelection: {
       return (
         Array.isArray((answer as DecryptedMultiSelectionAnswer)?.value) &&
-        (answer as DecryptedMultiSelectionAnswer)?.value.every(item => typeof item === 'number')
+        (answer as DecryptedMultiSelectionAnswer)?.value.every((item) => typeof item === 'number')
       );
     }
     case ItemResponseType.Text: {
@@ -44,7 +44,7 @@ export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemRespons
 const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
 
 const shiftAnswerValues = (answers: Answer[]) =>
-  answers.map(item => ({
+  answers.map((item) => ({
     ...item,
     answer: {
       ...item.answer,
@@ -81,7 +81,7 @@ export const getIdentifiers = (
   if (!filterByIdentifier) return;
 
   return identifiers.reduce((decryptedIdentifiers: string[], { encryptedValue, decryptedValue }: Identifier) => {
-    const identifier = filterIdentifiers.find(filterIdentifier => filterIdentifier.id === decryptedValue);
+    const identifier = filterIdentifiers.find((filterIdentifier) => filterIdentifier.id === decryptedValue);
 
     return identifier ? [...decryptedIdentifiers, encryptedValue] : decryptedIdentifiers;
   }, []);
@@ -327,7 +327,7 @@ export const formatActivityItemAnswers = (currentAnswer: ActivityItemAnswer, dat
         isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.MultipleSelection);
 
       const answers = isValueCorrect
-        ? (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value.map(value => ({
+        ? (currentAnswer.answer as DecryptedMultiSelectionAnswer)?.value.map((value) => ({
             answer: {
               value: optionsValuesMapper[+value],
               text: null,
@@ -441,7 +441,7 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
       }
       const subscalesItems = subscaleSetting?.subscales?.reduce(
         (items: string[], subscale: ActivitySettingsSubscale) => {
-          subscale?.items?.forEach(item => {
+          subscale?.items?.forEach((item) => {
             item.type === ElementType.Item && !items.includes(item.name) && items.push(item.name);
           });
 
@@ -451,7 +451,7 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
       );
 
       let newItems = { ...items };
-      decryptedAnswer.forEach(currentAnswer => {
+      decryptedAnswer.forEach((currentAnswer) => {
         if (subscalesItems?.includes(currentAnswer.activityItem.name)) return items;
 
         const item = items[currentAnswer.activityItem.id!];

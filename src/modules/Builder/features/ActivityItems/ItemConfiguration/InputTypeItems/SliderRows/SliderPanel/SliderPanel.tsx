@@ -75,7 +75,7 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
   const defaultMinNumberValue = isMultiple ? DEFAULT_SLIDER_ROWS_MIN_NUMBER : DEFAULT_SLIDER_MIN_NUMBER;
 
-  const handleCollapse = () => setIsExpanded(prevExpanded => !prevExpanded);
+  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const validationCheck =
     minValue !== '' &&
     maxValue !== '' &&
@@ -228,7 +228,7 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
                 control={control}
                 name={sliderLabelName}
                 label={t('sliderLabel')}
-                onChange={event =>
+                onChange={(event) =>
                   handleLabelChange({
                     event,
                     fieldName: sliderLabelName,
@@ -245,7 +245,7 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
               control={control}
               name={sliderMinLabelName}
               label={t('minLabel')}
-              onChange={event =>
+              onChange={(event) =>
                 handleLabelChange({
                   event,
                   fieldName: sliderMinLabelName,
@@ -259,7 +259,7 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
               control={control}
               name={sliderMaxLabelName}
               label={t('maxLabel')}
-              onChange={event =>
+              onChange={(event) =>
                 handleLabelChange({
                   event,
                   fieldName: sliderMaxLabelName,

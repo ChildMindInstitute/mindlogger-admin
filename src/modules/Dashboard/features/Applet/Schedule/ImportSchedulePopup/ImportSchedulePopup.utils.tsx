@@ -131,7 +131,7 @@ const getUploadedTime = (time: string | Date) => {
   }
 
   //if the time format is H:mm getStartEndComparison makes invalid date
-  return time.replace(/^[0-9]:/, match => `0${match}`);
+  return time.replace(/^[0-9]:/, (match) => `0${match}`);
 };
 
 const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) =>
@@ -220,7 +220,7 @@ export const getUploadedScheduleErrors = (
 
   const importedActivities = new Set(importedActivityNames);
   const availableActivities = new Set(getFieldsToCheck(currentSchedule, false).activityNames);
-  const notExistentActivities = [...importedActivities].filter(item => !availableActivities.has(item));
+  const notExistentActivities = [...importedActivities].filter((item) => !availableActivities.has(item));
 
   return {
     ...props,
@@ -238,8 +238,8 @@ export const prepareImportPayload = (
 ) =>
   uploadedEvents?.map(({ date, endTime, startTime, notificationTime, frequency, activityName }) => {
     const periodicityType = frequency.toUpperCase() as Periodicity;
-    const activity = appletData?.activities?.find(activity => activity.name === activityName);
-    const flow = appletData?.activityFlows?.find(flow => flow.name === activityName);
+    const activity = appletData?.activities?.find((activity) => activity.name === activityName);
+    const flow = appletData?.activityFlows?.find((flow) => flow.name === activityName);
     const activityId = activity?.id;
     const flowId = flow?.id;
     const uploadedDate = getUploadedDate(date);

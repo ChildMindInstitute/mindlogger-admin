@@ -147,7 +147,7 @@ export const SelectController = <T extends FieldValues>({
               'data-testid': `${dataTestid}-dropdown`,
             },
           },
-          IconComponent: shouldSkipIcon ? undefined : props => <Svg className={props.className} id="navigate-down" />,
+          IconComponent: shouldSkipIcon ? undefined : (props) => <Svg className={props.className} id="navigate-down" />,
           ...SelectProps,
           ...(shouldSkipIcon && {
             inputProps: {
@@ -173,7 +173,7 @@ export const SelectController = <T extends FieldValues>({
           control={control}
           render={({ field: { onChange, value }, fieldState: { error } }) =>
             renderSelect(
-              event => {
+              (event) => {
                 customChange && customChange(event);
                 onChange(event);
                 setTrigger?.(false);
@@ -184,7 +184,7 @@ export const SelectController = <T extends FieldValues>({
           }
         />
       ) : (
-        renderSelect(event => {
+        renderSelect((event) => {
           customChange?.(event);
           setTrigger?.(false);
         }, selectValue)

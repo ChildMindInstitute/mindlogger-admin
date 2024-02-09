@@ -37,7 +37,7 @@ export const ActivityItems = () => {
 
   const itemsValue: ItemFormValues[] = watch(itemsName);
   const { appletId, activityId, itemId } = useParams();
-  const activeItemIndex = itemId ? itemsValue?.findIndex(item => getEntityKey(item) === itemId) : -1;
+  const activeItemIndex = itemId ? itemsValue?.findIndex((item) => getEntityKey(item) === itemId) : -1;
   const activeItem = activeItemIndex === undefined || activeItemIndex === -1 ? undefined : itemsValue[activeItemIndex];
   const [itemIdToDelete, setItemIdToDelete] = useState('');
 
@@ -63,7 +63,7 @@ export const ActivityItems = () => {
 
   const handleAddItem = () => {
     const item = getNewActivityItem();
-    const firstSystemIndex = itemsValue.findIndex(item => !item.allowEdit);
+    const firstSystemIndex = itemsValue.findIndex((item) => !item.allowEdit);
 
     const indexListToTrigger = getIndexListToTrigger(itemsValue, item.name);
     for (const itemIndex of indexListToTrigger) {

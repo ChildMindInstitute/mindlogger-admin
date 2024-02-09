@@ -23,14 +23,14 @@ import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { ItemSettingsController } from './ItemSettingsController';
 import { ItemSettingsGroupNames } from './ItemSettingsController.const';
 
-const getMockedAppletFormData = item => ({
+const getMockedAppletFormData = (item) => ({
   ...mockedAppletFormData,
   activities: [{ ...mockedAppletFormData.activities[0], items: [item] }],
 });
 const expandAllPanels = () => {
   const collapseButtons = document.querySelectorAll('.svg-navigate-down');
 
-  collapseButtons.forEach(button => {
+  collapseButtons.forEach((button) => {
     fireEvent.click(button);
   });
 };
@@ -59,7 +59,7 @@ const mockedSliderWithScores = {
 const mockedSingleSelectWithoutScores = {
   ...mockedSingleSelectFormValues,
   responseValues: {
-    options: mockedSingleSelectFormValues.responseValues.options.map(option => ({
+    options: mockedSingleSelectFormValues.responseValues.options.map((option) => ({
       ...option,
       score: undefined,
     })),
@@ -115,7 +115,7 @@ const mockedSingleSelectWithNullableScores = {
   ...mockedSingleSelectFormValues,
   responseValues: {
     ...mockedSingleSelectFormValues.responseValues,
-    options: mockedSingleSelectFormValues.responseValues.options.map(option => ({
+    options: mockedSingleSelectFormValues.responseValues.options.map((option) => ({
       ...option,
       score: 0,
     })),
@@ -435,7 +435,7 @@ describe('ItemSettingsController', () => {
     });
 
     const mockedGroups = mockedSettingGroupsByType[inputType];
-    const groups = screen.queryAllByTestId(content =>
+    const groups = screen.queryAllByTestId((content) =>
       content.startsWith('builder-activity-items-item-settings-group-container'),
     );
 

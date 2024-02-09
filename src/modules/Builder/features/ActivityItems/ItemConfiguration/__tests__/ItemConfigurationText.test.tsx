@@ -23,7 +23,7 @@ describe('ItemConfiguration: Text', () => {
     const textInput = text.querySelector('input');
     const maxLength = screen.getByTestId(`${mockedTextTestid}-max-length`);
 
-    [title, description, text, maxLength].forEach(element => {
+    [title, description, text, maxLength].forEach((element) => {
       expect(element).toBeVisible();
     });
 

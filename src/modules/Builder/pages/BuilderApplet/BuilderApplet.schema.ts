@@ -111,7 +111,7 @@ export const ResponseValuesNumberSelectionSchema = () => ({
     .test(
       'is-number-at-least-zero',
       t('positiveIntegerOrZeroRequired'),
-      value => typeof value === 'number' && value >= DEFAULT_NUMBER_SELECT_MIN_VALUE,
+      (value) => typeof value === 'number' && value >= DEFAULT_NUMBER_SELECT_MIN_VALUE,
     )
     .test(
       'min-max-interval',
@@ -330,7 +330,7 @@ export const ItemSchema = () =>
         .when(['responseType', 'config'], {
           is: (responseType: ItemResponseType, config: Config) =>
             responseType === ItemResponseType.Slider && get(config, ItemConfigurationSettings.IsContinuous),
-          then: schema =>
+          then: (schema) =>
             schema.of(
               yup.object({
                 minValue: getSliderAlertValueValidation(true),
@@ -338,7 +338,7 @@ export const ItemSchema = () =>
                 alert: yup.string().required(getIsRequiredValidateMessage('alertMessage')),
               }),
             ),
-          otherwise: schema => schema,
+          otherwise: (schema) => schema,
         }),
       config: yup
         .object({
@@ -352,13 +352,13 @@ export const ItemSchema = () =>
         })
         .when('responseType', {
           is: (responseType: ItemResponseType) => responseType === ItemResponseType.Text,
-          then: schema =>
+          then: (schema) =>
             schema.shape({
               maxResponseLength: yup
                 .mixed()
                 .test('is-positive-integer', t('positiveIntegerRequired'), isNumberAtLeastOne),
             }),
-          otherwise: schema => schema,
+          otherwise: (schema) => schema,
         }),
     })
     .required();
@@ -432,7 +432,7 @@ const SubscaleTableDataItemSchema = () =>
       age: yup
         .string()
         .nullable()
-        .test('subscale-age-validator', age => testFunctionForSubscaleAge('age', age)),
+        .test('subscale-age-validator', (age) => testFunctionForSubscaleAge('age', age)),
       sex: yup
         .string()
         .nullable()
@@ -506,7 +506,7 @@ const getReportCommonFields = (isScoreReport = false) => ({
   showMessage: yup.boolean(),
   printItems: yup.boolean().when('showMessage', {
     is: false,
-    then: schema =>
+    then: (schema) =>
       schema.test(
         'required-report-common-fields',
         <string>t('validationMessages.mustShowMessageOrItems'),
@@ -517,12 +517,12 @@ const getReportCommonFields = (isScoreReport = false) => ({
     .string()
     .when('showMessage', {
       is: true,
-      then: schema => schema.required(getIsRequiredValidateMessage('message')),
+      then: (schema) => schema.required(getIsRequiredValidateMessage('message')),
     })
     .nullable(),
   itemsPrint: yup.array().when('printItems', {
     is: true,
-    then: schema => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
+    then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
   }),
 });
 
@@ -612,18 +612,18 @@ export const ScoreOrSectionSchema = () =>
     }),
     calculationType: yup.string().when('type', {
       is: ScoreReportType.Score,
-      then: schema => schema.required(),
-      otherwise: schema => schema.nullable(),
+      then: (schema) => schema.required(),
+      otherwise: (schema) => schema.nullable(),
     }),
     id: yup.string().when('type', {
       is: ScoreReportType.Score,
-      then: schema => schema.required(),
-      otherwise: schema => schema.nullable(),
+      then: (schema) => schema.required(),
+      otherwise: (schema) => schema.nullable(),
     }),
     itemsScore: yup.array().when('type', {
       is: ScoreReportType.Score,
-      then: schema => schema.min(1, <string>t('validationMessages.atLeastOneItem')),
-      otherwise: schema => schema.nullable(),
+      then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')),
+      otherwise: (schema) => schema.nullable(),
     }),
     showMessage: yup.boolean(),
     printItems: yup.boolean().when('showMessage', ([showMessage], schema) => {
@@ -643,12 +643,12 @@ export const ScoreOrSectionSchema = () =>
       .string()
       .when('showMessage', {
         is: true,
-        then: schema => schema.required(getIsRequiredValidateMessage('message')),
+        then: (schema) => schema.required(getIsRequiredValidateMessage('message')),
       })
       .nullable(),
     itemsPrint: yup.array().when('printItems', {
       is: true,
-      then: schema => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
+      then: (schema) => schema.min(1, <string>t('validationMessages.atLeastOneItem')).nullable(),
     }),
   });
 

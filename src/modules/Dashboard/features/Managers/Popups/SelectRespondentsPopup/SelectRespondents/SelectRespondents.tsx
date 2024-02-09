@@ -38,7 +38,7 @@ export const SelectRespondents = ({ reviewer: { name, email }, appletName, respo
           name={id}
           value={id}
           label={<></>}
-          onCustomChange={event => {
+          onCustomChange={(event) => {
             filterTableRows(
               searchAcrossValue.current,
               { ...getValues(), [id]: event.target.checked },

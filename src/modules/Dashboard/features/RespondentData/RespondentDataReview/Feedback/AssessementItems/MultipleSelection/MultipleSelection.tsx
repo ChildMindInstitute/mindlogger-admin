@@ -51,7 +51,7 @@ export const MultipleSelection = ({
                   if (!value?.includes(optionValue)) {
                     return onChange && onChange([...value, optionValue]);
                   }
-                  const updatedOptions = value.filter(value => String(value) !== optionValue);
+                  const updatedOptions = value.filter((value) => String(value) !== optionValue);
                   onChange && onChange(updatedOptions);
                 }}
               />

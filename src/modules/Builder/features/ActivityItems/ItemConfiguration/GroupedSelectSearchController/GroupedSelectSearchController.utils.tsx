@@ -23,10 +23,10 @@ export const getIsNotHaveSearchValue = (value: string, searchTermLowercase: stri
   t(value).toLowerCase().indexOf(searchTermLowercase) === -1;
 
 export const getItemTypesNames = (): string[] =>
-  Object.keys(ItemResponseType).map(key => t(ItemResponseType[key as keyof typeof ItemResponseType]).toLowerCase());
+  Object.keys(ItemResponseType).map((key) => t(ItemResponseType[key as keyof typeof ItemResponseType]).toLowerCase());
 
 export const getEmptyComponent = (searchTerm: string) => {
-  if (getItemTypesNames().some(name => name.includes(searchTerm.toLowerCase()))) return null;
+  if (getItemTypesNames().some((name) => name.includes(searchTerm.toLowerCase()))) return null;
   const MAX_SEARCH_VALUE_LENGTH = 80;
 
   const searchValue =

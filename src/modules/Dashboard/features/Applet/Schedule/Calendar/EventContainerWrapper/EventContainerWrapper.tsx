@@ -39,7 +39,7 @@ export const EventContainerWrapper = ({ children, events, components }: EventCon
 
       const arrayOfEventsDates: EventsStartEndDates = [];
 
-      await containerEvents.forEach(eventWrapper => {
+      await containerEvents.forEach((eventWrapper) => {
         const { id, start, end } = eventWrapper.dataset;
 
         if (id && start && end) {
@@ -77,7 +77,7 @@ export const EventContainerWrapper = ({ children, events, components }: EventCon
               });
 
             lengthToShow > 0 &&
-              eventsToHide.forEach(id => {
+              eventsToHide.forEach((id) => {
                 const currEventWrapper = eventsWrapper.querySelector(`[data-id='${id}']`) as HTMLElement;
                 currEventWrapper?.classList.add('hidden-event');
               });
@@ -100,7 +100,7 @@ export const EventContainerWrapper = ({ children, events, components }: EventCon
       }
 
       // adding class names for event wrapper to show/hide event info by its width and height
-      containerEvents.forEach(eventWrapper => {
+      containerEvents.forEach((eventWrapper) => {
         const event = eventWrapper.querySelector(EVENT_CLASSNAME) as HTMLElement;
         if (!event) return;
 

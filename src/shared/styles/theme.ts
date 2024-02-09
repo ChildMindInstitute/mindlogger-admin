@@ -238,7 +238,7 @@ export const theme = createTheme({
             },
             ...Object.assign(
               {},
-              ...['&:focus', '&:active', '&:visited'].map(item => ({
+              ...['&:focus', '&:active', '&:visited'].map((item) => ({
                 [item]: {
                   backgroundColor: variables.palette.contained_btn_focus,
                   boxShadow: 'unset',

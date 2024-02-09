@@ -44,7 +44,7 @@ export const Notifications = () => {
   useEffect(() => {
     if (!alertList.length) return;
 
-    const alerts = alertList.map(alert => ({
+    const alerts = alertList.map((alert) => ({
       ...alert,
       timeAgo: timeAgo.format(getDateInUserTimezone(alert.createdAt), 'round'),
       alert,
@@ -76,7 +76,7 @@ export const Notifications = () => {
               {`${notWatched} ${t('unread')}`}
             </StyledLabelBoldLarge>
           )}
-          <StyledCollapseBtn aria-label="collapse-expand" onClick={() => setShowList(prevState => !prevState)}>
+          <StyledCollapseBtn aria-label="collapse-expand" onClick={() => setShowList((prevState) => !prevState)}>
             <Svg id={showList ? 'navigate-up' : 'navigate-down'} />
           </StyledCollapseBtn>
         </StyledFlexTopCenter>
@@ -88,7 +88,7 @@ export const Notifications = () => {
               <StyledTitleSmall>{t('noAlerts')}</StyledTitleSmall>
             </StyledCentered>
           )}
-          {notifications?.map(item => (
+          {notifications?.map((item) => (
             <Notification key={item.id} currentId={currentId} setCurrentId={setCurrentId} {...item} />
           ))}
           {isLoading && (

@@ -30,7 +30,7 @@ export const useSubscaleLookupTableSetup = ({
     const mappedData = file.data.map(processImportedData);
     setError(null);
     setData(mappedData);
-    setStep(prevState => ++prevState as Steps);
+    setStep((prevState) => ++prevState as Steps);
   };
 
   const onDownloadTemplate = async () => {

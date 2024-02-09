@@ -17,7 +17,7 @@ import {
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 
-const renderSelectionRows = responseType => {
+const renderSelectionRows = (responseType) => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -30,7 +30,7 @@ const renderSelectionRows = responseType => {
 
   return ref;
 };
-const setOption = optionNumber => {
+const setOption = (optionNumber) => {
   const select = screen.getByTestId(`${mockedDataTestid}-options-select`);
   fireEvent.mouseDown(select.querySelector('[role="button"]'));
 

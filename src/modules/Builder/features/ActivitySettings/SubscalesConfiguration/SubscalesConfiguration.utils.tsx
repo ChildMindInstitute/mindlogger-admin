@@ -67,7 +67,7 @@ export const getItemElements = (
       },
     ];
   }, [] as ItemElement[]);
-  const itemElements = items.map(item => ({
+  const itemElements = items.map((item) => ({
     id: getEntityKey(item),
     [SubscaleColumns.Name]: getItemElementName(item),
   }));
@@ -78,8 +78,8 @@ export const getItemElements = (
 export const getPropertiesToFilterByIds = (items: ItemFormValues[] = [], subscales: SubscaleFormValue[] = []) => {
   const itemsMap = getObjectFromList(items);
   const subscalesMap = getObjectFromList(subscales);
-  const allSubscaleIds = subscales.map(subscale => getEntityKey(subscale));
-  const allItemIds = items.map(item => getEntityKey(item));
+  const allSubscaleIds = subscales.map((subscale) => getEntityKey(subscale));
+  const allItemIds = items.map((item) => getEntityKey(item));
   const mergedIds = allSubscaleIds.concat(allItemIds);
   const markedUniqueElementsIds = [
     ...new Set(subscales.reduce((acc, subscale) => acc.concat(subscale.items), [] as string[])),
@@ -141,7 +141,7 @@ export const getUsedWithinSubscalesElements = (
   mergedIds: string[],
   markedUniqueElementsIds: ReturnType<typeof getPropertiesToFilterByIds>['markedUniqueElementsIds'],
 ) => {
-  const subscalesWithItemsSet = subscales.map(subscale => ({
+  const subscalesWithItemsSet = subscales.map((subscale) => ({
     name: subscale.name,
     itemsSet: subscale.items.reduce((acc, itemId) => acc.add(itemId), new Set<string>()),
   }));

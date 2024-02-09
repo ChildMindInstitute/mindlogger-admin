@@ -11,7 +11,7 @@ export const updateAlertWatchedState = (
   if (!alerts.data?.result) return;
 
   alerts.data.notWatched += payload.isWatched ? -1 : 1;
-  alerts.data.result = alerts.data.result.map(alert =>
+  alerts.data.result = alerts.data.result.map((alert) =>
     alert.id === payload.id
       ? {
           ...alert,
@@ -33,5 +33,5 @@ export const addAlerts = (
 
   alerts.data.result = [...payload, ...alerts.data.result];
   alerts.data.count = alerts.data.count + payload.length;
-  alerts.data.notWatched += payload.filter(alert => !alert.isWatched).length;
+  alerts.data.notWatched += payload.filter((alert) => !alert.isWatched).length;
 };

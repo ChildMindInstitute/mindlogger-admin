@@ -70,7 +70,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUseNavigate,
 }));
 
-const renderActivities = formData => {
+const renderActivities = (formData) => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -86,7 +86,7 @@ const renderActivities = formData => {
   return ref;
 };
 
-const addPerfTask = perfTaskType => {
+const addPerfTask = (perfTaskType) => {
   fireEvent.click(screen.getByTestId('builder-activities-add-perf-task'));
 
   switch (perfTaskType) {
@@ -131,7 +131,7 @@ describe('Activities', () => {
         `${mockedTestid}-0-hide`,
         `${mockedTestid}-0-remove`,
         `${mockedTestid}-0-dnd`,
-      ].forEach(testId => {
+      ].forEach((testId) => {
         expect(screen.getByTestId(testId)).toBeVisible();
       });
     });
@@ -268,7 +268,7 @@ describe('Activities', () => {
       fireEvent.click(screen.getByTestId('builder-activities-add-perf-task'));
 
       [mockedIPadTestid, mockedMobileTestid, mockedFlankerTestid, mockedGyroscopeTestid, mockedTouchTestid].forEach(
-        testId => {
+        (testId) => {
           expect(screen.getByTestId(testId)).toBeVisible();
         },
       );

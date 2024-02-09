@@ -31,7 +31,7 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
     if (id && isMultiple && alerts?.length) {
       setValue(
         alertsName,
-        alerts.filter(alert => alert.sliderId !== id),
+        alerts.filter((alert) => alert.sliderId !== id),
       );
     }
   };

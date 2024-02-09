@@ -33,7 +33,7 @@ describe('ActivitiesHeader - Interaction Tests', () => {
       'CST Touch',
     ];
     const menuItem = screen.getByText(menu[0]);
-    menu.forEach(item => {
+    menu.forEach((item) => {
       expect(screen.getByText(item)).toBeInTheDocument();
     });
     fireEvent.click(menuItem);

@@ -35,7 +35,7 @@ export const TopBar = () => {
         {isAuthorized ? (
           <StyledBadge badgeContent={notWatched} data-testid={`${dataTestid}-badge`}>
             <StyledAvatarBtn
-              onClick={() => setVisibleAccountDrawer(prevState => !prevState)}
+              onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
               variant="text"
               data-testid={`${dataTestid}-badge-button`}>
               <Avatar caption={userInitials} uiType={AvatarUiType.Secondary} />

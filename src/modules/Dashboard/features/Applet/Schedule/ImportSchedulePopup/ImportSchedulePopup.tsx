@@ -133,7 +133,9 @@ export const ImportSchedulePopup = ({
 
       const uploadedEvents = uploadedFile?.data as unknown as UploadedEvent[];
 
-      const hasScheduledEvents = scheduleExportData.some(event => event.frequency.toUpperCase() !== Periodicity.Always);
+      const hasScheduledEvents = scheduleExportData.some(
+        (event) => event.frequency.toUpperCase() !== Periodicity.Always,
+      );
 
       const body = prepareImportPayload(uploadedEvents, scheduleExportData, appletData, respondentId);
       if (hasScheduledEvents) {
@@ -150,7 +152,7 @@ export const ImportSchedulePopup = ({
       Mixpanel.track(`${analyticsPrefix} Schedule import successful`);
     }
 
-    setStep(prevStep => ++prevStep as Steps);
+    setStep((prevStep) => ++prevStep as Steps);
   };
 
   useEffect(() => {

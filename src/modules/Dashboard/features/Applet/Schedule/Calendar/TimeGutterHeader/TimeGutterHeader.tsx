@@ -36,9 +36,9 @@ export const TimeGutterHeader = ({
     isAllDayEventsVisible?.visible;
 
   const handleBtnClick = () => {
-    setIsAllDayEventsVisible(prevState => {
-      setEvents(prevEvents =>
-        prevEvents.map(event => {
+    setIsAllDayEventsVisible((prevState) => {
+      setEvents((prevEvents) =>
+        prevEvents.map((event) => {
           if (getShowEventsCondition(event, prevState?.visible)) {
             return {
               ...event,
@@ -48,7 +48,7 @@ export const TimeGutterHeader = ({
 
           return {
             ...event,
-            isHiddenInTimeView: hiddenEventsIds?.some(id => id === event.id),
+            isHiddenInTimeView: hiddenEventsIds?.some((id) => id === event.id),
           };
         }),
       );
@@ -64,7 +64,7 @@ export const TimeGutterHeader = ({
   };
 
   const isBtnDisabled = !allDayEventsSortedByDays?.some(
-    el => (isDayView && el.date === currentDate) || (isWeekView && el.week === currentWeek),
+    (el) => (isDayView && el.date === currentDate) || (isWeekView && el.week === currentWeek),
   );
 
   return (

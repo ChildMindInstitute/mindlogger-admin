@@ -7,7 +7,7 @@ describe('getSettings', () => {
 
   test('should return right section', () => {
     const sections = ['usersAndData', 'appletContent', 'sharing'];
-    expect(getSettings({ isPublished: true, roles }).map(section => section.label)).toStrictEqual(sections);
+    expect(getSettings({ isPublished: true, roles }).map((section) => section.label)).toStrictEqual(sections);
   });
 
   describe('should return right items for section ', () => {
@@ -25,8 +25,8 @@ describe('getSettings', () => {
     `('$description', ({ isPublished, sectionLabel, items }) => {
       expect(
         getSettings({ isPublished, roles })
-          .find(section => section.label === sectionLabel)
-          ?.items.map(item => item.label),
+          .find((section) => section.label === sectionLabel)
+          ?.items.map((item) => item.label),
       ).toStrictEqual(items);
     });
   });
@@ -41,9 +41,9 @@ describe('getSettings', () => {
       ${false}  | ${'sharing'}      | ${[Roles.Manager]}     | ${'sharing for Manager'}
       ${true}   | ${'sharing'}      | ${Roles.SuperAdmin}    | ${'sharing for SuperAdmin'}
     `('$description', ({ isVisible, sectionLabel, roles }) => {
-      expect(getSettings({ isPublished: true, roles }).find(section => section.label === sectionLabel)?.isVisible).toBe(
-        isVisible,
-      );
+      expect(
+        getSettings({ isPublished: true, roles }).find((section) => section.label === sectionLabel)?.isVisible,
+      ).toBe(isVisible);
     });
   });
 });

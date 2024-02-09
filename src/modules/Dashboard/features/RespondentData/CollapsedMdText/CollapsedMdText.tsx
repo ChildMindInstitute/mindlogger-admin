@@ -21,7 +21,7 @@ export const CollapsedMdText = ({ text, maxHeight, 'data-testid': dataTestid }: 
   }, [height, maxHeight]);
 
   const toggleOpen = () => {
-    setIsOpen(state => !state);
+    setIsOpen((state) => !state);
   };
 
   return (

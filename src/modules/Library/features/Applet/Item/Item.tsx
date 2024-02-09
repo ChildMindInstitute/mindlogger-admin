@@ -37,9 +37,9 @@ export const Item = ({
   const handleSelect = async () => {
     const selectedItems = getValues()[appletId];
     const activityNamePlusId = getSelector(activityName, appletId);
-    const checked = !!selectedItems?.find(item => item.itemNamePlusActivityName === itemNamePlusActivityName);
+    const checked = !!selectedItems?.find((item) => item.itemNamePlusActivityName === itemNamePlusActivityName);
     const updatedSelectedItems = checked
-      ? selectedItems?.filter(item => item.itemNamePlusActivityName !== itemNamePlusActivityName)
+      ? selectedItems?.filter((item) => item.itemNamePlusActivityName !== itemNamePlusActivityName)
       : [
           ...selectedItems,
           {
@@ -57,7 +57,7 @@ export const Item = ({
     }
   };
 
-  const isChecked = !!selectedItems?.find(item => item.itemNamePlusActivityName === itemNamePlusActivityName);
+  const isChecked = !!selectedItems?.find((item) => item.itemNamePlusActivityName === itemNamePlusActivityName);
 
   const highlightedTextHtml = search
     ? renderToString(getHighlightedText(dictionaryText, search) as JSX.Element)
@@ -81,7 +81,7 @@ export const Item = ({
           />
         )}
       />
-      <StyledItemHeader onClick={() => setItemVisible(prevState => !prevState)} data-testid={`${dataTestid}-header`}>
+      <StyledItemHeader onClick={() => setItemVisible((prevState) => !prevState)} data-testid={`${dataTestid}-header`}>
         <StyledSvgArrowContainer>
           <Svg id={itemVisible ? 'navigate-up' : 'navigate-right'} />
         </StyledSvgArrowContainer>

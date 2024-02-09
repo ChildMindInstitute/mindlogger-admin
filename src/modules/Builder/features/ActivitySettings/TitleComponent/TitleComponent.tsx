@@ -11,7 +11,7 @@ export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
   const errorObject = getFieldState(name).error as unknown as Record<string, FieldError>;
   const hasErrors = !!errorObject;
   const errorMessages = hasErrors
-    ? Object.keys(errorObject).map(key => ({
+    ? Object.keys(errorObject).map((key) => ({
         message: errorObject[key].message,
         key,
       }))

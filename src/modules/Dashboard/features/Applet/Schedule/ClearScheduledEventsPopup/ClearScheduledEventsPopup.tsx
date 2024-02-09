@@ -41,7 +41,7 @@ export const ClearScheduledEventsPopup = ({
   const isLoading = deleteScheduledLoading || deleteIndividualScheduledLoading;
 
   const getNextStep = () =>
-    setStep(prevStep => {
+    setStep((prevStep) => {
       const newStep = prevStep + 1;
 
       return newStep as Steps;

@@ -96,7 +96,8 @@ import { GetSectionConditions, GetMessageItem, PerformanceTaskItems } from './Bu
 
 const { t } = i18n;
 
-export const getDefaultThemeId = (themesList: Theme[]) => themesList.find(theme => theme.name === 'Default')?.id || '';
+export const getDefaultThemeId = (themesList: Theme[]) =>
+  themesList.find((theme) => theme.name === 'Default')?.id || '';
 
 export const isAppletRoute = (path: string) => matchPath(`${page.builderApplet}/*`, path);
 
@@ -114,7 +115,7 @@ const getDuplicatedOptionsAndAlerts = (item?: ItemFormValues) => {
 
   const mappedAlerts = alerts
     ? {
-        alerts: alerts.map(alert => ({
+        alerts: alerts.map((alert) => ({
           ...alert,
           value: newIdsObject[alert.value ?? ''],
           key: uuidv4(),
@@ -150,7 +151,7 @@ const getNewPropsForSlider = (item?: ItemFormValues) => ({
       ...item.responseValues,
       id: uuidv4(),
     },
-    alerts: item?.alerts?.map(alert => ({
+    alerts: item?.alerts?.map((alert) => ({
       ...alert,
       key: uuidv4(),
     })),
@@ -178,12 +179,12 @@ export const getDuplicatedConditions = (
   scores?: ScoreReport[],
   scoreConditionalLogic?: ScoreConditionalLogic[],
 ) =>
-  conditions?.map(condition => {
+  conditions?.map((condition) => {
     const optionValue = (condition as OptionCondition)?.payload.optionValue;
-    const itemIndex = oldItems.findIndex(item => condition.itemName === getEntityKey(item));
-    const score = scores?.find(score => condition.itemName === getEntityKey(score, false));
+    const itemIndex = oldItems.findIndex((item) => condition.itemName === getEntityKey(item));
+    const score = scores?.find((score) => condition.itemName === getEntityKey(score, false));
     const scoreCondition = scoreConditionalLogic?.find(
-      scoreCondition => condition.itemName === getEntityKey(scoreCondition, false),
+      (scoreCondition) => condition.itemName === getEntityKey(scoreCondition, false),
     );
     const itemName =
       (getEntityKey(newItems[itemIndex]) ||
@@ -200,7 +201,7 @@ export const getDuplicatedConditions = (
 
     const optionIndex = (
       oldItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues
-    ).options?.findIndex(option => option.id === optionValue);
+    ).options?.findIndex((option) => option.id === optionValue);
 
     return {
       ...result,
@@ -217,11 +218,11 @@ export const getDuplicatedConditional = (
   newItems: Record<string, unknown>[],
   conditionalLogic?: ConditionalLogic[],
 ) =>
-  conditionalLogic?.map(conditional => {
+  conditionalLogic?.map((conditional) => {
     const itemKey = conditional.itemKey;
 
     if (itemKey) {
-      const itemIndex = oldItems?.findIndex(item => itemKey === getEntityKey(item));
+      const itemIndex = oldItems?.findIndex((item) => itemKey === getEntityKey(item));
 
       return {
         ...conditional,
@@ -251,7 +252,7 @@ const getDuplicatedScoresAndReports = ({
   scoresAndReports?: ScoresAndReports;
   newItemsObjectByOldId: Record<string, string>;
 }) => {
-  const reports = scoresAndReports?.reports?.map(report => {
+  const reports = scoresAndReports?.reports?.map((report) => {
     let conditionalLogic;
     if (report.type === ScoreReportType.Section) {
       const { scoreReports, scoreConditionals } = (scoresAndReports?.reports || []).reduce(
@@ -287,7 +288,7 @@ const getDuplicatedScoresAndReports = ({
       ...report,
       itemsPrint: report.itemsPrint?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
       itemsScore: report.itemsScore?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
-      conditionalLogic: report.conditionalLogic?.map(conditional => ({
+      conditionalLogic: report.conditionalLogic?.map((conditional) => ({
         ...conditional,
         itemsPrint: conditional.itemsPrint?.map(oldToNewIdRemapper(newItemsObjectByOldId)),
       })),
@@ -301,7 +302,7 @@ const getDuplicatedScoresAndReports = ({
 };
 
 export const getNewActivity = ({ name, activity }: GetNewActivity) => {
-  const items = activity?.items?.map(item => getNewActivityItem(item)) || [];
+  const items = activity?.items?.map((item) => getNewActivityItem(item)) || [];
   const conditionalLogic = getDuplicatedConditional(activity?.items ?? [], items, activity?.conditionalLogic);
   const newItemsObjectByOldId =
     activity?.items?.reduce(
@@ -538,7 +539,7 @@ export const flankerItems = [
 ];
 
 export const getABTrailsItems = (deviceType: DeviceType) =>
-  createArray(4, index => ({
+  createArray(4, (index) => ({
     id: undefined,
     key: uuidv4(),
     responseType: ItemResponseType.ABTrails,
@@ -568,7 +569,7 @@ export const getNewPerformanceTask = ({
 
   const getItems = (): ItemFormValues[] | PerformanceTaskItems => {
     if (items?.length) {
-      return items.map(item => ({
+      return items.map((item) => ({
         ...item,
         id: undefined,
       }));
@@ -616,7 +617,7 @@ const getActivityItemResponseValues = (item: Item) => {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
       return {
-        options: item.responseValues?.options?.map(option => ({
+        options: item.responseValues?.options?.map((option) => ({
           ...option,
           color: option.color ? ({ hex: option.color } as ColorResult) : undefined,
         })),
@@ -705,7 +706,7 @@ const getAlerts = (item: Item): ItemAlert[] | undefined => {
 const getActivityItems = (items: Item[]) =>
   items
     ? items.map(
-        item =>
+        (item) =>
           ({
             id: item.id,
             key: item.key,
@@ -762,8 +763,8 @@ const getActivityConditionalLogic = (items: Item[]) =>
           key: uuidv4(),
           itemKey: getEntityKey(item),
           match: item.conditionalLogic.match,
-          conditions: item.conditionalLogic.conditions?.map(condition => {
-            const relatedItem = items.find(item => item.name === condition.itemName);
+          conditions: item.conditionalLogic.conditions?.map((condition) => {
+            const relatedItem = items.find((item) => item.name === condition.itemName);
 
             return {
               key: uuidv4(),
@@ -779,9 +780,9 @@ const getActivityConditionalLogic = (items: Item[]) =>
   }, []);
 
 const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?: string) =>
-  conditions?.map(condition => {
+  conditions?.map((condition) => {
     const { itemName, type } = condition;
-    const relatedItem = items?.find(item => item.name === itemName);
+    const relatedItem = items?.find((item) => item.name === itemName);
     const payload =
       type === ScoreConditionType
         ? { value: String((condition as ScoreCondition).payload?.value) }
@@ -795,9 +796,9 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?
   });
 
 const getSectionConditions = ({ items, conditions, scores }: GetSectionConditions) =>
-  conditions?.map(condition => {
+  conditions?.map((condition) => {
     const { itemName, type } = condition;
-    const relatedItem = items?.find(item => item.name === itemName);
+    const relatedItem = items?.find((item) => item.name === itemName);
     const relatedScore = findRelatedScore({ entityKey: itemName, scores });
     const payload =
       type === ScoreConditionType
@@ -825,7 +826,7 @@ const getScore = (score: ScoreReport, items: Activity['items'], itemsObject: Rec
     ...score,
     key: scoreKey,
     ...getShowMessageAndPrintItems(score.message, score.itemsPrint),
-    conditionalLogic: score.conditionalLogic?.map(conditional => ({
+    conditionalLogic: score.conditionalLogic?.map((conditional) => ({
       ...conditional,
       key: uuidv4(),
       ...getShowMessageAndPrintItems(conditional.message, conditional.itemsPrint),
@@ -863,15 +864,15 @@ const getScoresAndReports = (activity: Activity) => {
   const { items, scoresAndReports } = activity;
   if (!scoresAndReports || !items) return;
 
-  const itemsObject = getObjectFromList(items, item => item.name);
+  const itemsObject = getObjectFromList(items, (item) => item.name);
   const { reports: initialReports } = scoresAndReports;
-  const reportsWithMappedScores = initialReports?.map(report => {
+  const reportsWithMappedScores = initialReports?.map((report) => {
     if (report.type === ScoreReportType.Section) return report;
 
     return getScore(report as ScoreReport, items, itemsObject);
   });
-  const scores = reportsWithMappedScores?.filter(report => report.type === ScoreReportType.Score);
-  const reports = reportsWithMappedScores?.map(report => {
+  const scores = reportsWithMappedScores?.filter((report) => report.type === ScoreReportType.Score);
+  const reports = reportsWithMappedScores?.map((report) => {
     if (report.type === ScoreReportType.Score) return report;
 
     return getSection(report as SectionReport, items, scores as ScoreReport[], itemsObject);
@@ -885,7 +886,7 @@ const getScoresAndReports = (activity: Activity) => {
 
 const getActivitySubscaleItems = ({ activityItemsObject, subscalesObject, subscaleItems }: GetActivitySubscaleItems) =>
   subscaleItems.map(
-    item =>
+    (item) =>
       getEntityKey(activityItemsObject[item.name] ? activityItemsObject[item.name] : subscalesObject[item.name]) ?? '',
   );
 
@@ -897,7 +898,7 @@ const getActivitySubscaleSettingDuplicated = ({
 
   return {
     ...oldSubscaleSetting,
-    subscales: oldSubscaleSetting?.subscales?.map(subscale => ({
+    subscales: oldSubscaleSetting?.subscales?.map((subscale) => ({
       ...subscale,
       items: subscale.items.map(oldToNewIdRemapper(newItemsObjectByOldId)),
     })),
@@ -909,17 +910,17 @@ const getActivitySubscaleSetting = (subscaleSetting: Activity['subscaleSetting']
 
   const processedSubscaleSetting = {
     ...subscaleSetting,
-    subscales: subscaleSetting?.subscales?.map(subscale => ({
+    subscales: subscaleSetting?.subscales?.map((subscale) => ({
       ...subscale,
       id: uuidv4(),
     })),
   };
-  const activityItemsObject = getObjectFromList(activityItems, item => item.name);
-  const subscalesObject = getObjectFromList(processedSubscaleSetting.subscales, subscale => subscale.name);
+  const activityItemsObject = getObjectFromList(activityItems, (item) => item.name);
+  const subscalesObject = getObjectFromList(processedSubscaleSetting.subscales, (subscale) => subscale.name);
 
   return {
     ...processedSubscaleSetting,
-    subscales: processedSubscaleSetting?.subscales?.map(subscale => ({
+    subscales: processedSubscaleSetting?.subscales?.map((subscale) => ({
       ...subscale,
       items: getActivitySubscaleItems({
         activityItemsObject,
@@ -939,7 +940,7 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
     about: getDictionaryText(appletData.about),
     themeId: appletData.themeId ?? defaultThemeId ?? '',
     activities: appletData.activities
-      ? appletData.activities.map(activity => {
+      ? appletData.activities.map((activity) => {
           const items = getActivityItems(activity.items);
 
           return {
@@ -1023,7 +1024,7 @@ export const testIsReportCommonFieldsRequired = (
 };
 
 export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
-  items?.filter(item => item.name === value).length < 2 ?? true;
+  items?.filter((item) => item.name === value).length < 2 ?? true;
 
 export const testFunctionForSystemItems = (currentItem: ItemFormValues, items: ItemFormValues[]) => {
   if (currentItem.allowEdit === false) return true;
@@ -1031,7 +1032,7 @@ export const testFunctionForSystemItems = (currentItem: ItemFormValues, items: I
   if (currentItem.name !== LookupTableItems.Age_screen && currentItem.name !== LookupTableItems.Gender_screen)
     return true;
 
-  return !items?.some(item => isSystemItem(item));
+  return !items?.some((item) => isSystemItem(item));
 };
 
 export const testFunctionForTheSameVariable = (field: string, value: string, context: yup.TestContext) => {
@@ -1044,16 +1045,16 @@ export const testFunctionForTheSameVariable = (field: string, value: string, con
 export const testFunctionForNotSupportedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
-  const itemsFromVariables = items.filter(item => variableNames.includes(item.name));
+  const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
 
-  return itemsFromVariables.every(item => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
+  return itemsFromVariables.every((item) => ALLOWED_TYPES_IN_VARIABLES.includes(item.responseType));
 };
 
 export const testFunctionForSkippedItems = (value: string, context: yup.TestContext) => {
   const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
 
-  return !items.some(item => variableNames.includes(item.name) && item.config.skippableItem);
+  return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
 };
 
 export const testFunctionForNotExistedItems = (value: string, context: yup.TestContext) => {
@@ -1062,7 +1063,7 @@ export const testFunctionForNotExistedItems = (value: string, context: yup.TestC
 
   if (!variableNames.length) return true;
 
-  return variableNames.every(variable => items.some(item => item.name === variable));
+  return variableNames.every((variable) => items.some((item) => item.name === variable));
 };
 
 export const testFunctionForSubscaleAge = (field: string, value?: number | string | null) =>
@@ -1075,7 +1076,7 @@ export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: stri
   if (!value) return false;
 
   if (value.includes(INTERVAL_SYMBOL)) {
-    const [leftValue, rightValue] = value.split(INTERVAL_SYMBOL).map(item => item.trim());
+    const [leftValue, rightValue] = value.split(INTERVAL_SYMBOL).map((item) => item.trim());
 
     return regexp.test(leftValue) && regexp.test(rightValue);
   }

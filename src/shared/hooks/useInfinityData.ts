@@ -30,7 +30,7 @@ export const useInfinityData = ({
 }: UseInfinityDataType) => {
   const dispatch = useAppDispatch();
   const { loadNextPage } = getInfinityScrollData({
-    action: async page => {
+    action: async (page) => {
       dispatch(
         getListThunk({
           ...params,

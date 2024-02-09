@@ -30,7 +30,7 @@ export const SelectLanguage = ({ onClose, open, currentLanguage }: SelectLanguag
       width="42"
       data-testid={dataTestid}>
       <StyledList>
-        {languages.map(lang => (
+        {languages.map((lang) => (
           <StyledListItemButton
             key={lang.value}
             selected={selectedLanguage.value === lang.value}

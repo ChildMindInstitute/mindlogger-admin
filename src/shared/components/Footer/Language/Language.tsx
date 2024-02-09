@@ -15,7 +15,7 @@ import { SelectLanguage } from './SelectLanguage';
 export const Language = () => {
   const { i18n } = useTranslation('app');
   const langFromStorage = storage.getItem(LocalStorageKeys.Language) || Languages.EN;
-  const language = languages.find(lang => lang.value === langFromStorage) as LanguageItem;
+  const language = languages.find((lang) => lang.value === langFromStorage) as LanguageItem;
 
   const [currentLanguage, setCurrentLanguage] = useState(language);
   const [open, setOpen] = useState(false);

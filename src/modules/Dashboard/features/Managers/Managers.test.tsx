@@ -91,8 +91,8 @@ describe('Managers component tests', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-managers-table')).toBeInTheDocument();
-      tableColumnNames.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
-      managersColumns.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
+      tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
+      managersColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
     });
   });
 
@@ -123,7 +123,7 @@ describe('Managers component tests', () => {
     const actionsDataTestIds = ['dashboard-managers-edit-user', 'dashboard-managers-remove-access'];
 
     await waitFor(() => {
-      actionsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
+      actionsDataTestIds.forEach((dataTestId) => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
     });
   });
 

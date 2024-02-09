@@ -206,7 +206,7 @@ describe('Applet', () => {
 
     // check all to be unchecked by default
     const activities = screen.queryAllByTestId(activitiesRegex);
-    activities.forEach(activity => {
+    activities.forEach((activity) => {
       const checkedActivities = activity.querySelector('.Mui-checked');
       expect(checkedActivities).toBeNull();
     });
@@ -247,7 +247,7 @@ describe('Applet', () => {
 
     // check all to be unchecked by default
     const activities = screen.queryAllByTestId(activitiesRegex);
-    activities.forEach(activity => {
+    activities.forEach((activity) => {
       const checkedActivities = activity.querySelector('.Mui-checked');
       expect(checkedActivities).toBeNull();
     });
@@ -285,7 +285,7 @@ describe('Applet', () => {
 
     // check all to be unchecked by default
     const activities = screen.queryAllByTestId(activitiesRegex);
-    activities.forEach(activity => {
+    activities.forEach((activity) => {
       const checkedActivities = activity.querySelector('.Mui-checked');
       expect(checkedActivities).toBeNull();
     });

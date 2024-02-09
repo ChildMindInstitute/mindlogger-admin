@@ -12,7 +12,7 @@ export const getActivitiesOptions = (activityFlow?: ActivityFlowFormValues, appl
   if (!activities || !activityFlowItems) return [];
 
   return activityFlowItems.reduce((acc: { value: string; labelKey: string }[], { activityKey }) => {
-    const activity = activities.find(activity => activityKey === getEntityKey(activity));
+    const activity = activities.find((activity) => activityKey === getEntityKey(activity));
     const activityName = activity?.name;
 
     if (activityName && !uniqueValuesSet.has(activityKey)) {
@@ -28,7 +28,7 @@ export const getActivitiesOptions = (activityFlow?: ActivityFlowFormValues, appl
 };
 
 export const getActivityItemsOptions = (activity?: ActivityFormValues | null) =>
-  activity?.items?.map(item => ({
+  activity?.items?.map((item) => ({
     value: getEntityKey(item),
     labelKey: item.name,
   })) || [];

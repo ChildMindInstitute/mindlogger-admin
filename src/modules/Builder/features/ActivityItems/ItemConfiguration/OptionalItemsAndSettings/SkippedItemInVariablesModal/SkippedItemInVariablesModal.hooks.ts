@@ -47,7 +47,7 @@ export const useCheckIfItemHasVariables = (itemField: string) => {
   return {
     isPopupVisible,
     skippedItemName: name,
-    itemNamesWithSkippedItem: itemNamesWithSkippedItemRef.current?.map(item => item.name).join(', '),
+    itemNamesWithSkippedItem: itemNamesWithSkippedItemRef.current?.map((item) => item.name).join(', '),
     onPopupConfirm,
   };
 };

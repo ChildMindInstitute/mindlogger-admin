@@ -39,7 +39,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
   const { watch } = useFormContext<SummaryFiltersForm>();
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
-  const responses = data.subscales.map(subscale => subscale.activityCompletions);
+  const responses = data.subscales.map((subscale) => subscale.activityCompletions);
   const scores = pluck(responses.flat(), 'score');
   const minScore = Math.min(...scores);
   const maxScore = Math.max(...scores);
@@ -72,11 +72,11 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
     const chart = chartRef.current;
 
-    const tooltipsPoint = dataPoints.filter(point => point.dataset.xAxisID === 'x');
+    const tooltipsPoint = dataPoints.filter((point) => point.dataset.xAxisID === 'x');
 
     if (chart && tooltipsPoint.length) {
       const tooltipDataPoints = await Promise.all(
-        tooltipsPoint.map(async dataPoint => {
+        tooltipsPoint.map(async (dataPoint) => {
           let optionText = (dataPoint.raw as SubscaleLineDataPointRaw).optionText;
 
           if (optionText && optionText.match(LINK_PATTERN)) {

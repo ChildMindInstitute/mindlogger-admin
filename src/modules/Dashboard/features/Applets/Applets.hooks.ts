@@ -57,7 +57,7 @@ export const useAppletsWithFolders = (onChangeApplets: Dispatch<SetStateAction<(
         isFolder: applet.type === DashboardAppletType.Folder,
       })) ?? [];
     const groupedAppletList = getObjectFromList(appletList);
-    const shownExpandedFolders = expandedFolders.filter(folderId => !!groupedAppletList[folderId]);
+    const shownExpandedFolders = expandedFolders.filter((folderId) => !!groupedAppletList[folderId]);
 
     if (search) {
       const appletsWithFolders = getAppletsWithLocalFolders(appletList ?? [], folders ?? [], expandedFolders);
@@ -85,13 +85,13 @@ export const useAppletsWithFolders = (onChangeApplets: Dispatch<SetStateAction<(
         },
       });
 
-      const nestedApplets = result.map(applet => ({
+      const nestedApplets = result.map((applet) => ({
         ...applet,
         isFolder: false,
         parentId: id,
       }));
 
-      const folderIndex = formattedApplets.findIndex(row => row.id === id);
+      const folderIndex = formattedApplets.findIndex((row) => row.id === id);
 
       formattedApplets = [
         ...formattedApplets.slice(0, folderIndex + 1),
@@ -105,9 +105,10 @@ export const useAppletsWithFolders = (onChangeApplets: Dispatch<SetStateAction<(
   };
 
   const expandFolder = (id: string) => {
-    setExpandedFolders(prevState => [...prevState, id]);
+    setExpandedFolders((prevState) => [...prevState, id]);
   };
-  const collapseFolder = (id: string) => setExpandedFolders(prevState => prevState.filter(folderId => folderId !== id));
+  const collapseFolder = (id: string) =>
+    setExpandedFolders((prevState) => prevState.filter((folderId) => folderId !== id));
 
   return {
     count,

@@ -16,7 +16,7 @@ const getOptionName = (type: OptionTypes, index: number, optionText = '') => {
 };
 
 export const getSliderOptions = (min: number, max: number) =>
-  Array.from({ length: max - min + 1 }, (_, i) => i + min).map(item => ({
+  Array.from({ length: max - min + 1 }, (_, i) => i + min).map((item) => ({
     labelKey: item.toString(),
     value: item.toString(),
   }));
@@ -117,7 +117,7 @@ export const getSliderRowsItemList = (
   const minValueNumber =
     Number(minValue) < DEFAULT_SLIDER_ROWS_MIN_NUMBER ? DEFAULT_SLIDER_ROWS_MIN_NUMBER : Number(minValue);
 
-  return createArray(maxValueNumber - minValueNumber + 1, index => {
+  return createArray(maxValueNumber - minValueNumber + 1, (index) => {
     const value = `${minValueNumber + index}`;
 
     return {

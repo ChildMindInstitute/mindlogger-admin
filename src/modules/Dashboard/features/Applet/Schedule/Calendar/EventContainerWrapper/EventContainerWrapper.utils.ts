@@ -55,5 +55,5 @@ export const getOverlappingEvents = ({ eventsArr, maxEventsQuantity }: Overlappi
     }
   }
 
-  return intervals.filter(interval => interval.eventIds.length > maxEventsQuantity);
+  return intervals.filter((interval) => interval.eventIds.length > maxEventsQuantity);
 };

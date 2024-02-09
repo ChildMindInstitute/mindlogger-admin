@@ -24,7 +24,7 @@ export const RemoveAppletPopup = ({
   const handleModalClose = () => setRemoveAppletPopupVisible(false);
 
   const handleSubmit = () => {
-    const updatedAppletsData = cartItems?.filter(applet => applet.id !== appletId) || [];
+    const updatedAppletsData = cartItems?.filter((applet) => applet.id !== appletId) || [];
     const selectedItemsFromStorage = getSelectedItemsFromStorage();
     const filteredSelectedItems = getFilteredSelectedItems(selectedItemsFromStorage, appletId);
     Object.keys(filteredSelectedItems)?.length > 0

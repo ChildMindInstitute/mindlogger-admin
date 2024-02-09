@@ -25,7 +25,9 @@ export const ExpandedList = ({
 
   return isHiddenInLegend ? null : (
     <StyledCollapse data-testid={dataTestid}>
-      <StyledCollapseBtn onClick={() => setListVisible(prevState => !prevState)} data-testid={`${dataTestid}-collapse`}>
+      <StyledCollapseBtn
+        onClick={() => setListVisible((prevState) => !prevState)}
+        data-testid={`${dataTestid}-collapse`}>
         <StyledFlexTopCenter sx={{ cursor: 'pointer' }}>
           <Svg id={collapseBtnId} />
           <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(1) }}>{title}</StyledLabelBoldLarge>
@@ -37,7 +39,7 @@ export const ExpandedList = ({
                 <StyledIconBtn
                   disabled={button.disabled}
                   sx={{ ml: getIconBtnMargin(index) }}
-                  onClick={event => {
+                  onClick={(event) => {
                     event.stopPropagation();
                     button.action();
                   }}

@@ -39,7 +39,7 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
       <StyledFlexTopCenter sx={{ gap: '1rem' }}>
         <StyledClearedButton
           sx={{ p: theme.spacing(1) }}
-          onClick={() => setExpanded(prevExpanded => !prevExpanded)}
+          onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
           data-testid="builder-conditional-panel-btn">
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>

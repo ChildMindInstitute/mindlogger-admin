@@ -81,7 +81,7 @@ describe('FolderItem component tests', () => {
     const actionsDataTestIds = ['dashboard-applets-folder-rename', 'dashboard-applets-folder-delete'];
 
     await waitFor(() => {
-      actionsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
+      actionsDataTestIds.forEach((dataTestId) => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
     });
     fireEvent.mouseLeave(actionsDots);
   });

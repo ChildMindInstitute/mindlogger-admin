@@ -85,7 +85,7 @@ export const Input = <T extends FieldValues>({
     onChange?.(getNumberValue() ?? newValue);
   };
   const handleDebouncedChange = debounce((event: SelectEvent) => handleChange(event), CHANGE_DEBOUNCE_VALUE);
-  const handleBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = event => {
+  const handleBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
     onBlur?.(event);
 
     if (withDebounce) {

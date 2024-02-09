@@ -8,7 +8,7 @@ import { ColorPalettePicker } from './ColorPalettePicker';
 export const ColorPalette = ({ name, onRemovePalette }: ColorPaletteProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const handleCollapse = () => setIsExpanded(prevExpanded => !prevExpanded);
+  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
   return (
     <StyledColorPaletteContainer

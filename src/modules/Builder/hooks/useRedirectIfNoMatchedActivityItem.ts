@@ -19,7 +19,7 @@ export const useRedirectIfNoMatchedActivityItem = () => {
 
   useEffect(() => {
     const items: ItemFormValues[] = getValues(`${fieldName}.items`);
-    const item = items?.find(item => getEntityKey(item) === itemId);
+    const item = items?.find((item) => getEntityKey(item) === itemId);
     const shouldRedirect = (isNewApplet || items?.length > 0) && itemId && !item;
 
     if (!shouldRedirect) return;

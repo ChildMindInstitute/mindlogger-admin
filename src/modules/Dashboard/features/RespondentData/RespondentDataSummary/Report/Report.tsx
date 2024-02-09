@@ -54,7 +54,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     execute: getLatestReport,
     isLoading: latestReportLoading,
     error: latestReportError,
-  } = useAsync(getLatestReportApi, response => {
+  } = useAsync(getLatestReportApi, (response) => {
     const data = response?.data;
     const headers = response?.headers;
 

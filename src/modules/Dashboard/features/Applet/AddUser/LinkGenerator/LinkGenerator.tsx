@@ -22,7 +22,7 @@ export const LinkGenerator = () => {
   const [inviteLink, setInviteLink] = useState<InviteLink | null>(null);
   const [linkPopupVisible, setLinkPopupVisible] = useState(false);
 
-  const { execute } = useAsync(getAppletPublicLinkApi, res => {
+  const { execute } = useAsync(getAppletPublicLinkApi, (res) => {
     res?.data?.result && setInviteLink(res.data.result);
   });
 

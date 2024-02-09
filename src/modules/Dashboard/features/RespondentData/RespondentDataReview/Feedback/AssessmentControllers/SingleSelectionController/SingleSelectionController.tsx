@@ -18,7 +18,7 @@ export const SingleSelectionController = <T extends FieldValues>({
         {...radioGroupProps}
         activityItem={activityItem}
         isDisabled={isDisabled}
-        onChange={value => onChange(value)}
+        onChange={(value) => onChange(value)}
         data-testid={dataTestid}
       />
     )}

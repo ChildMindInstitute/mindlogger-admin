@@ -18,7 +18,7 @@ export const SliderController = <T extends FieldValues>({
         {...sliderProps}
         activityItem={activityItem}
         isDisabled={isDisabled}
-        onChange={value => onChange(value)}
+        onChange={(value) => onChange(value)}
         data-testid={dataTestid}
       />
     )}

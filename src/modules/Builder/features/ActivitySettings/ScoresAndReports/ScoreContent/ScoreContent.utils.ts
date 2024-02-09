@@ -83,7 +83,7 @@ export const getScoreRange = ({ items = [], calculationType, activity }: GetScor
     totalMaxScore = 0;
   const count = items.length;
 
-  items.forEach(item => {
+  items.forEach((item) => {
     const { minScore, maxScore } = getItemScoreRange(item);
 
     if (!item.config.skippableItem && !activity?.isSkippable) {
@@ -125,7 +125,7 @@ const isMessageIncludeScoreId = ({ showMessage, id, message }: IsMessageIncludeS
 export const getIsScoreIdVariable = ({ id, reports, isScore }: GetIsScoreIdVariable) => {
   let isVariable = false;
 
-  reports?.forEach(report => {
+  reports?.forEach((report) => {
     if (isVariable) return;
 
     if (
@@ -139,7 +139,7 @@ export const getIsScoreIdVariable = ({ id, reports, isScore }: GetIsScoreIdVaria
     }
 
     if (report.type === ScoreReportType.Score) {
-      report.conditionalLogic?.forEach(condition => {
+      report.conditionalLogic?.forEach((condition) => {
         if (isVariable) return;
 
         if (

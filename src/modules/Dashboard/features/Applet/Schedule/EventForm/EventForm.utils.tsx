@@ -159,8 +159,8 @@ export const startEndTimeTest = (_: string | undefined, testContext: StartEndTim
 export const getTimeComparison = (message: string) =>
   yup.string().when('alwaysAvailable', {
     is: false,
-    then: schema => schema.test('is-valid-period', message, startEndTimeTest),
-    otherwise: schema => schema,
+    then: (schema) => schema.test('is-valid-period', message, startEndTimeTest),
+    otherwise: (schema) => schema,
   });
 
 export const timerDurationTest = (value: string | undefined) => {
@@ -293,7 +293,7 @@ export const getStartEndDates = (
 };
 
 export const getNotifications = (type: SecondsManipulation, notifications?: EventNotifications) =>
-  notifications?.map(notification => {
+  notifications?.map((notification) => {
     const { atTime, fromTime, toTime } = notification || {};
     if (notification.triggerType === NotificationType.Fixed) {
       return {
@@ -695,7 +695,7 @@ export const reminderTimeTest = (value: string | undefined, testContext: yup.Tes
 
   if (isWeeklyPeriodicity) {
     const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
-    const isCrossDay = weeklyDays.daysInfoArr.find(day => day.dayNumber === activityIncomplete)?.isCrossDay ?? false;
+    const isCrossDay = weeklyDays.daysInfoArr.find((day) => day.dayNumber === activityIncomplete)?.isCrossDay ?? false;
 
     return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
   }

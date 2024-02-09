@@ -76,7 +76,7 @@ export const Condition = ({
         placeholder={t(isRowTypeItem ? 'conditionItemNamePlaceholder' : 'select')}
         SelectProps={{
           renderValue: (value: unknown) => {
-            const item = itemOptions?.find(item => item.value === value);
+            const item = itemOptions?.find((item) => item.value === value);
             const placeholder = isRowTypeItem ? t('conditionItemSelected', { value: item?.labelKey }) : item?.labelKey;
 
             return <span>{placeholder}</span>;

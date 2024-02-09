@@ -25,7 +25,7 @@ export const TimeHeader = ({
   const currentDate = formatToYearMonthDate(date);
   const currentWeek = formatToWeekYear(date);
   const { hiddenEventsIds = [], allDayEventsSortedByDays = [] } = calendarEvents.useVisibleEventsData() || {};
-  const currentAllDaysEventsIds = allDayEventsSortedByDays?.find(el => el.date === currentDate)?.eventsIds;
+  const currentAllDaysEventsIds = allDayEventsSortedByDays?.find((el) => el.date === currentDate)?.eventsIds;
   const isWeekUiType = uiType === UiType.Week;
   const isDayUiType = uiType === UiType.Day;
 
@@ -43,8 +43,8 @@ export const TimeHeader = ({
 
   const handleMoreClick = (event: MouseEvent<HTMLSpanElement>) => {
     event.stopPropagation();
-    setEvents(prevState =>
-      prevState.map(event => {
+    setEvents((prevState) =>
+      prevState.map((event) => {
         if (
           (isWeekUiType && formatToWeekYear(event.start) === currentWeek) ||
           (isDayUiType && formatToYearMonthDate(event.start) === currentDate)
@@ -57,7 +57,7 @@ export const TimeHeader = ({
 
         return {
           ...event,
-          isHiddenInTimeView: hiddenEventsIds?.some(id => id === event.id),
+          isHiddenInTimeView: hiddenEventsIds?.some((id) => id === event.id),
         };
       }),
     );

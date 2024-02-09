@@ -53,7 +53,7 @@ export const SelectRespondentsPopup = ({
 
   const handleConfirm = () => {
     const values = getValues();
-    const selectedRespondents = Object.keys(values).filter(key => values[key]);
+    const selectedRespondents = Object.keys(values).filter((key) => values[key]);
 
     onClose(selectedRespondents);
   };

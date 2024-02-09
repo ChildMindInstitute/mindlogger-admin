@@ -80,14 +80,14 @@ export const Cart = () => {
       const { displayName, description, activities, keywords } = applet;
       const appletNameSearch = getSearchIncludes(displayName, searchValue);
       const appletDescriptionSearch = description && getSearchIncludes(getDictionaryText(description), searchValue);
-      const activitySearch = activities.some(activity => {
+      const activitySearch = activities.some((activity) => {
         const itemsSearch = activity.items.some(
-          item => item?.question && getSearchIncludes(getDictionaryText(item.question), searchValue),
+          (item) => item?.question && getSearchIncludes(getDictionaryText(item.question), searchValue),
         );
 
         return getSearchIncludes(activity.name, searchValue) || itemsSearch;
       });
-      const keywordsSearch = keywords.some(keyword => getSearchIncludes(keyword, searchValue));
+      const keywordsSearch = keywords.some((keyword) => getSearchIncludes(keyword, searchValue));
 
       if (appletNameSearch || appletDescriptionSearch || keywordsSearch || activitySearch) {
         renderedApplets.push(applet);

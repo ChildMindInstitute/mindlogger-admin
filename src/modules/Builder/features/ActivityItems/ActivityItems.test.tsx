@@ -64,7 +64,7 @@ const renderActivityItemsWithItem = (formData = mockedAppletFormDataWithNewItem)
     }),
     routePath: page.builderAppletActivityItem,
   });
-const getActivityItemUrl = itemId =>
+const getActivityItemUrl = (itemId) =>
   generatePath(itemId ? page.builderAppletActivityItem : page.builderAppletActivityItems, {
     ...mockedParams,
     activityId: mockedNewActivity.key,

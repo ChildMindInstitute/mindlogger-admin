@@ -329,7 +329,7 @@ const renderFlanker = (formData = mockedAppletFormDataWithFlanker) => {
 const expandAllPanels = () => {
   const collapseButtons = document.querySelectorAll('.svg-navigate-down');
 
-  collapseButtons.forEach(button => {
+  collapseButtons.forEach((button) => {
     fireEvent.click(button);
   });
 };
@@ -586,7 +586,7 @@ describe('Flanker', () => {
 
     expect(stimulusScreens).toHaveLength(4);
 
-    stimulusScreens.forEach(stimulusScreen => {
+    stimulusScreens.forEach((stimulusScreen) => {
       expect(stimulusScreen).toBeVisible();
     });
   });
@@ -647,10 +647,10 @@ describe('Flanker', () => {
       expect(firstRow.querySelectorAll('td')).toHaveLength(4);
       expect(secondRow.querySelectorAll('td')).toHaveLength(4);
 
-      firstRow.querySelectorAll('td').forEach(cell => {
+      firstRow.querySelectorAll('td').forEach((cell) => {
         expect(cell).toHaveTextContent('text');
       });
-      secondRow.querySelectorAll('td').forEach(cell => {
+      secondRow.querySelectorAll('td').forEach((cell) => {
         expect(cell).toHaveTextContent('text');
       });
     },

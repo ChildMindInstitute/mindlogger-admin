@@ -33,8 +33,8 @@ export const ManagersRemoveAccessPopup = ({ popupVisible, onClose, user }: Remov
 
   const [step, setStep] = useState<number>(appletId ? 1 : 0);
 
-  const incrementStep = () => setStep(prevStep => prevStep + 1);
-  const decrementStep = () => setStep(prevStep => prevStep - 1);
+  const incrementStep = () => setStep((prevStep) => prevStep + 1);
+  const decrementStep = () => setStep((prevStep) => prevStep - 1);
 
   const defaultValues = applets?.map(({ displayName, id, image }) => ({
     displayName,
@@ -51,12 +51,12 @@ export const ManagersRemoveAccessPopup = ({ popupVisible, onClose, user }: Remov
 
   const getSelectedApplets = () => {
     if (appletId) {
-      const selectedApplet = watchedUserApplets.find(applet => applet.id === appletId);
+      const selectedApplet = watchedUserApplets.find((applet) => applet.id === appletId);
 
       return selectedApplet ? [selectedApplet] : [];
     }
 
-    return watchedUserApplets.filter(applet => applet.value);
+    return watchedUserApplets.filter((applet) => applet.value);
   };
 
   const selectedApplets = getSelectedApplets();
@@ -101,13 +101,13 @@ export const ManagersRemoveAccessPopup = ({ popupVisible, onClose, user }: Remov
         return incrementStep();
       case 1:
         execute({
-          appletIds: selectedApplets.map(item => item.id),
+          appletIds: selectedApplets.map((item) => item.id),
           userId: user.id,
         });
         break;
       case 2:
         execute({
-          appletIds: selectedApplets.map(item => item.id),
+          appletIds: selectedApplets.map((item) => item.id),
           userId: user.id,
         });
         break;
@@ -118,7 +118,7 @@ export const ManagersRemoveAccessPopup = ({ popupVisible, onClose, user }: Remov
     }
   };
 
-  const listOfSelectedApplets = selectedApplets?.map(applet => (
+  const listOfSelectedApplets = selectedApplets?.map((applet) => (
     <StyledTitleBoldMedium key={applet?.id}>- {applet.displayName} </StyledTitleBoldMedium>
   ));
 

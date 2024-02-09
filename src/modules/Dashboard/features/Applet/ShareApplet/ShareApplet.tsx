@@ -79,8 +79,8 @@ export const ShareApplet = ({
   const handleAddKeyword = (keyword: string) => {
     if (keyword.length) {
       setValue('keyword', '');
-      setKeywords(prevState => {
-        if (prevState.some(item => item === keyword)) {
+      setKeywords((prevState) => {
+        if (prevState.some((item) => item === keyword)) {
           return prevState;
         }
         const newKeywords = prevState.concat(keyword.trim());
@@ -92,7 +92,7 @@ export const ShareApplet = ({
   };
 
   const handleRemoveKeyword = (index: number) => {
-    setKeywords(prevState => {
+    setKeywords((prevState) => {
       const newKeywords = prevState?.filter((_, i) => i !== index);
       setValue('keywords', newKeywords);
 

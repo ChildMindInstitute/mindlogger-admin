@@ -45,11 +45,11 @@ export const getHasWrapperMoreBtn = ({
   const currentDate = formatToYearMonthDate(date);
   const currentWeek = formatToWeekYear(date);
   const hasDateHiddenEvents =
-    !isAllDayEventsVisible && allDayEventsSortedByDays.some(item => item.date === currentDate);
+    !isAllDayEventsVisible && allDayEventsSortedByDays.some((item) => item.date === currentDate);
   const hasDateHiddenEventsWithState = isAllDayEventsVisible?.period === currentDate && !isAllDayEventsVisible?.visible;
   const hasWeekHiddenEvents =
     !isAllDayEventsVisible &&
-    allDayEventsSortedByDays.some(item => item.date && formatToWeekYear(new Date(item.date)) === currentWeek);
+    allDayEventsSortedByDays.some((item) => item.date && formatToWeekYear(new Date(item.date)) === currentWeek);
   const hasWeekHiddenEventsWithState = isAllDayEventsVisible?.period === currentWeek && !isAllDayEventsVisible?.visible;
 
   switch (activeView) {

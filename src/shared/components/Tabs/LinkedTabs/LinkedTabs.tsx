@@ -13,7 +13,7 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false
   const { pathname } = useLocation();
 
   const { tabIndex, content, header } = useMemo(() => {
-    const index = tabs?.findIndex(tab => tab.path && pathname.includes(tab.path));
+    const index = tabs?.findIndex((tab) => tab.path && pathname.includes(tab.path));
     const tabIndex = index > -1 ? index : 0;
 
     const { header, content } = tabs.reduce(

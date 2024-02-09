@@ -70,7 +70,8 @@ export const ActivityFlowBuilder = () => {
     if (
       currentActivityFlow.reportIncludedActivityName &&
       flowActivityToDeleteData.activityKey === currentActivityFlow.reportIncludedActivityName &&
-      activityFlowItems.filter(item => item.activityKey === currentActivityFlow.reportIncludedActivityName).length === 1
+      activityFlowItems.filter((item) => item.activityKey === currentActivityFlow.reportIncludedActivityName).length ===
+        1
     ) {
       removeReportConfigItemValue();
     }
@@ -98,7 +99,8 @@ export const ActivityFlowBuilder = () => {
     if (
       flowActivityToUpdateIndex !== null &&
       currentActivityFlow.reportIncludedActivityName &&
-      activityFlowItems.filter(item => item.activityKey === currentActivityFlow.reportIncludedActivityName).length === 1
+      activityFlowItems.filter((item) => item.activityKey === currentActivityFlow.reportIncludedActivityName).length ===
+        1
     ) {
       removeReportConfigItemValue();
     }
@@ -131,7 +133,7 @@ export const ActivityFlowBuilder = () => {
         <>
           <DragDropContext onDragEnd={handleDragEnd}>
             <DndDroppable droppableId="activity-flow-builder-dnd" direction="vertical">
-              {listProvided => (
+              {(listProvided) => (
                 <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                   {activityFlowItems.map((item, index) => {
                     const key = item.id || item.key;

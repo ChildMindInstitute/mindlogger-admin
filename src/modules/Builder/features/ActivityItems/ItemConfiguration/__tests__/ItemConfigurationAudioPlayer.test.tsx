@@ -8,9 +8,9 @@ import { mockedItemName, mockedTestid, renderItemConfigurationByType } from '../
 
 const mockedAudioTestid = `${mockedTestid}-audio-player`;
 
-const renderAudioPlayer = itemProps => renderItemConfigurationByType(ItemResponseType.AudioPlayer);
+const renderAudioPlayer = (itemProps) => renderItemConfigurationByType(ItemResponseType.AudioPlayer);
 
-const selectAudioType = isUpload => {
+const selectAudioType = (isUpload) => {
   fireEvent.click(screen.getByTestId(`${mockedAudioTestid}-add`));
 
   fireEvent.click(screen.getByTestId(`${mockedAudioTestid}-${isUpload ? 'upload' : 'record'}`));

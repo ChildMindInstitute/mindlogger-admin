@@ -22,7 +22,7 @@ describe('InvitationWithTooltip', () => {
     const { getAllByText, getByTestId } = renderComponent(defaultProps);
 
     const exampleLinkTexts = getAllByText('example-link');
-    exampleLinkTexts.forEach(linkText => expect(linkText).toBeInTheDocument());
+    exampleLinkTexts.forEach((linkText) => expect(linkText).toBeInTheDocument());
     expect(getByTestId(`${dataTestId}-invitation-tooltip`)).toBeInTheDocument();
     expect(getByTestId(`${dataTestId}-invitation-link`)).toBeInTheDocument();
   });
@@ -34,7 +34,7 @@ describe('InvitationWithTooltip', () => {
     });
 
     const exampleLinkTexts = getAllByText('example-link');
-    exampleLinkTexts.forEach(linkText => expect(linkText).toBeInTheDocument());
+    exampleLinkTexts.forEach((linkText) => expect(linkText).toBeInTheDocument());
     expect(getByTestId(`${dataTestId}-invitation-link`)).toBeInTheDocument();
     expect(queryByTestId(`${dataTestId}-invitation-tooltip`)).not.toBeInTheDocument();
   });

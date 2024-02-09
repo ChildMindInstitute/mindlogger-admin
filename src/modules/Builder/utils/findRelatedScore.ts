@@ -10,13 +10,13 @@ type FindRelatedScore = {
 export const findRelatedScore = ({ entityKey, scores, isSaving = false }: FindRelatedScore) => {
   if (!scores) return;
 
-  const relatedScore = scores.find(score => getEntityKey(score, !isSaving) === entityKey);
+  const relatedScore = scores.find((score) => getEntityKey(score, !isSaving) === entityKey);
 
   if (relatedScore) return relatedScore;
 
-  const relatedScoreConditional = scores?.flatMap(score => score.conditionalLogic);
+  const relatedScoreConditional = scores?.flatMap((score) => score.conditionalLogic);
 
   return relatedScoreConditional?.find(
-    conditional => conditional && getEntityKey(conditional, !isSaving) === entityKey,
+    (conditional) => conditional && getEntityKey(conditional, !isSaving) === entityKey,
   );
 };

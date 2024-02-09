@@ -138,7 +138,7 @@ describe('Activity Component', () => {
     expect(activityCheckboxContainer).toHaveClass('Mui-checked');
     expect(setAddToBuilderBtnDisabledMock).toHaveBeenCalledWith(false);
 
-    items.forEach(item => {
+    items.forEach((item) => {
       const activityItemCheckboxRegex = new RegExp(`${dataTestid}-item-\\d+-checkbox$`);
       const itemCheckboxContainer = within(item).getByTestId(activityItemCheckboxRegex);
       expect(itemCheckboxContainer).toHaveClass('Mui-checked');

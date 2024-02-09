@@ -165,7 +165,7 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption, 'data-testid': dataT
                 name="startTime"
                 control={control}
                 label={t('from')}
-                onCustomChange={time => handleTimeCustomChange(time, TimeType.FromTime)}
+                onCustomChange={(time) => handleTimeCustomChange(time, TimeType.FromTime)}
                 data-testid={`${dataTestid}-start-time`}
               />
             </StyledTimeWrapper>
@@ -174,7 +174,7 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption, 'data-testid': dataT
                 name="endTime"
                 control={control}
                 label={t('to')}
-                onCustomChange={time => handleTimeCustomChange(time, TimeType.ToTime)}
+                onCustomChange={(time) => handleTimeCustomChange(time, TimeType.ToTime)}
                 data-testid={`${dataTestid}-end-time`}
               />
               {hasNextDayLabel && (

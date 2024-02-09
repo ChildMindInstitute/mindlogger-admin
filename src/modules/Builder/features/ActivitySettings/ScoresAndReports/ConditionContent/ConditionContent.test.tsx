@@ -26,7 +26,7 @@ describe('ConditionContent', () => {
 
       const componentsTestIds = ['condition-0', 'condition-1', 'add-condition', 'summary-row-match'];
 
-      componentsTestIds.forEach(testId => expect(screen.getByTestId(`${dataTestId}-${testId}`)).toBeInTheDocument());
+      componentsTestIds.forEach((testId) => expect(screen.getByTestId(`${dataTestId}-${testId}`)).toBeInTheDocument());
     });
   });
 
@@ -74,7 +74,7 @@ describe('ConditionContent', () => {
         ),
       });
 
-      [0, 1].forEach(conditionNumber => {
+      [0, 1].forEach((conditionNumber) => {
         const itemName = screen.getByTestId(`${dataTestId}-condition-${conditionNumber}-name`).querySelector('input');
         itemName && expect(itemName.value).toBe(conditions[conditionNumber].itemName);
 

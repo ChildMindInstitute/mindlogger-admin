@@ -23,7 +23,7 @@ export const FeedbackReviewed = () => {
   const getDecryptedActivityData = useDecryptedActivityData();
   const { execute: getReviews } = useAsync(
     getReviewsApi,
-    async result => {
+    async (result) => {
       const reviews = result?.data?.result ?? [];
       const decryptedData: ReviewData[] = [];
 

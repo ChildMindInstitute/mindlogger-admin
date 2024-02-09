@@ -66,7 +66,7 @@ export const ActivityFlow = () => {
     );
 
   const handleAddActivityFlow = (positionToAdd?: number) => {
-    const flowItems = activities.map(activity => ({
+    const flowItems = activities.map((activity) => ({
       key: uuidv4(),
       activityKey: getEntityKey(activity),
     }));
@@ -115,7 +115,7 @@ export const ActivityFlow = () => {
       {activityFlows?.length ? (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-flows-dnd" direction="vertical">
-            {listProvided => (
+            {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activityFlows.map((flow, index) => {
                   const activityFlowKey = getEntityKey(flow);

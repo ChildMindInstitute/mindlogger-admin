@@ -11,7 +11,7 @@ import { LinkPopupProps } from './LinkPopup.types';
 export const LinkPopup = ({ open, onClose, onSubmit }: LinkPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams() || {};
-  const { execute } = useAsync(postAppletPublicLinkApi, res => {
+  const { execute } = useAsync(postAppletPublicLinkApi, (res) => {
     onSubmit(res?.data.result);
     onClose();
   });

@@ -15,7 +15,7 @@ describe('getSettings', () => {
         isPublished: true,
         roles,
         onReportConfigSubmit: onReportConfigSubmitMock,
-      }).map(section => section.label),
+      }).map((section) => section.label),
     ).toStrictEqual(sections);
   });
 
@@ -39,8 +39,8 @@ describe('getSettings', () => {
           roles,
           onReportConfigSubmit: onReportConfigSubmitMock,
         })
-          .find(section => section.label === sectionLabel)
-          ?.items.map(item => item.label),
+          .find((section) => section.label === sectionLabel)
+          ?.items.map((item) => item.label),
       ).toStrictEqual(items);
     });
   });
@@ -52,7 +52,7 @@ describe('getSettings', () => {
       roles,
       onReportConfigSubmit: onReportConfigSubmitMock,
     })
-      .map(setting => setting.items)
+      .map((setting) => setting.items)
       .flat();
 
     test.each`
@@ -65,7 +65,7 @@ describe('getSettings', () => {
       ${'reportConfiguration'} | ${'report configuration'}
       ${'concealApplet'}       | ${'conceal applet'}
     `('$description', ({ label }) => {
-      expect(items.find(item => item.label === label)?.disabled).toBe(true);
+      expect(items.find((item) => item.label === label)?.disabled).toBe(true);
     });
   });
 
@@ -86,7 +86,7 @@ describe('getSettings', () => {
           isPublished: true,
           roles,
           onReportConfigSubmit: onReportConfigSubmitMock,
-        }).find(section => section.label === 'sharing')?.isVisible,
+        }).find((section) => section.label === 'sharing')?.isVisible,
       ).toBe(isVisible);
     });
   });

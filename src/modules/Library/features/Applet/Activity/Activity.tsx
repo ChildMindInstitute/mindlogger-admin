@@ -29,7 +29,7 @@ export const Activity = ({
   const [activityVisible, setActivityVisible] = useState(false);
   const [activityIndeterminate, setActivityIndeterminate] = useState(false);
   const [activityChecked, setActivityChecked] = useState(false);
-  const forceUpdate = useReducer(x => x + 1, 0)[1];
+  const forceUpdate = useReducer((x) => x + 1, 0)[1];
 
   const updateSelectedItems = () => {
     if (uiType === AppletUiType.Cart) {
@@ -46,7 +46,7 @@ export const Activity = ({
     if (!checked) {
       await setValue(
         appletId,
-        selectedItems.filter(selectedItem => selectedItem.activityNamePlusId !== activityNamePlusId),
+        selectedItems.filter((selectedItem) => selectedItem.activityNamePlusId !== activityNamePlusId),
       );
       updateSelectedItems();
 
@@ -56,7 +56,7 @@ export const Activity = ({
     const unselectedItems = items.reduce((unselected: SelectedItem[], item) => {
       const itemNamePlusActivityName = `${item.name}-${name}`;
 
-      return selectedItems.find(selectedItem => selectedItem.itemNamePlusActivityName === itemNamePlusActivityName)
+      return selectedItems.find((selectedItem) => selectedItem.itemNamePlusActivityName === itemNamePlusActivityName)
         ? unselected
         : [...unselected, { itemNamePlusActivityName, activityName: name, activityNamePlusId, activityKey: key }];
     }, []);
@@ -70,7 +70,7 @@ export const Activity = ({
   const arrowSgvId = activityVisible ? 'navigate-up' : 'navigate-down';
 
   const getCheckedActivity = (currentItems: SelectedItem[]) => {
-    const currentActivityItems = currentItems?.filter(item => item.activityName === name);
+    const currentActivityItems = currentItems?.filter((item) => item.activityName === name);
     const isAllItemsSelected = !!currentActivityItems?.length && currentActivityItems?.length === items.length;
     const isIndeterminate = !!currentActivityItems?.length && !isAllItemsSelected;
     setActivityIndeterminate(isIndeterminate);
@@ -108,7 +108,7 @@ export const Activity = ({
         </StyledFlexTopCenter>
       ) : (
         <StyledActivityHeader
-          onClick={() => setActivityVisible(prevState => !prevState)}
+          onClick={() => setActivityVisible((prevState) => !prevState)}
           data-testid={`${dataTestid}-header`}>
           <StyledSvgArrowContainer>
             <Svg id={arrowSgvId} />

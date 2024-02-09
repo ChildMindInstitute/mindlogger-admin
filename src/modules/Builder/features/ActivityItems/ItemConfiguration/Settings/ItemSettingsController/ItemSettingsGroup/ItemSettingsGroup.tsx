@@ -61,7 +61,7 @@ export const ItemSettingsGroup = ({
   const subscalesName = `${fieldName}.subscaleSetting.subscales`;
   const config = getValues(`${itemName}.config`) ?? {};
 
-  const handleCollapse = () => setIsExpanded(prevExpanded => !prevExpanded);
+  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const handleTimerChange = (event: SelectEvent) => {
     setValue(`${name}.${ItemConfigurationSettings.HasTimer}`, +event.target.value || DEFAULT_ACTIVE_TIMER_VALUE);
   };
@@ -85,7 +85,7 @@ export const ItemSettingsGroup = ({
         </StyledItemSettingsGroupHeader>
         {isExpanded && (
           <FormGroup sx={{ p: theme.spacing(0, 1.4) }}>
-            {groupOptions.map(settingKey => {
+            {groupOptions.map((settingKey) => {
               const isMultiOrSingleRows =
                 inputType === ItemResponseType.SingleSelectionPerRow ||
                 inputType === ItemResponseType.MultipleSelectionPerRow;

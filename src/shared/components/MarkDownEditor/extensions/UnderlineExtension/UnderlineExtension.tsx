@@ -9,7 +9,7 @@ import { StyledIconCenter } from './UnderlineExtension.styles';
 export const UnderlineExtension = ({ onInsert }: InsertContentExtensionProps) => {
   const { t } = useTranslation('app');
   const handler = () => {
-    const generator: InsertContentGenerator = selectedText => ({
+    const generator: InsertContentGenerator = (selectedText) => ({
       targetValue: `++${selectedText}++`,
       select: true,
       deviationStart: 0,

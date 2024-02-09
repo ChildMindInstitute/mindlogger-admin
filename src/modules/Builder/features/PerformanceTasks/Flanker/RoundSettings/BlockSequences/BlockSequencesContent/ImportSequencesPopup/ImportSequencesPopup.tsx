@@ -46,7 +46,7 @@ export const ImportSequencesPopup = ({
 
   const screens = getScreens(isUpload, components);
 
-  const incrementStep = () => setStep(prevStep => prevStep + 1);
+  const incrementStep = () => setStep((prevStep) => prevStep + 1);
 
   const onSubmit = () => {
     switch (step) {

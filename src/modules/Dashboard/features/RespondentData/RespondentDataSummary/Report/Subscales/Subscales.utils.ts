@@ -82,7 +82,7 @@ export const getAllSubscalesToRender = (
   for (const subscaleItem of subscale.items) {
     if (subscaleItem.type === ElementType.Item) {
       const itemIndex =
-        allSubscalesToRender[subscale.name]?.items?.findIndex(item => item.activityItem.name === subscaleItem.name) ??
+        allSubscalesToRender[subscale.name]?.items?.findIndex((item) => item.activityItem.name === subscaleItem.name) ??
         -1;
 
       if (itemIndex < 0) {

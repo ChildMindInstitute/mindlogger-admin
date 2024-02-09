@@ -12,7 +12,7 @@ export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean)
   const reportIncludedItemName = {
     reportIncludedItemName: yup.string().when('itemValue', {
       is: true,
-      then: schema => schema.required(<string>t('pleaseSelectItem')),
+      then: (schema) => schema.required(<string>t('pleaseSelectItem')),
     }),
   };
 
@@ -25,7 +25,7 @@ export const reportConfigSchema = (isActivity: boolean, isActivityFlow: boolean)
             ...reportIncludedItemName,
             reportIncludedActivityName: yup.string().when('itemValue', {
               is: true,
-              then: schema => schema.required(<string>t('pleaseSelectActivity')),
+              then: (schema) => schema.required(<string>t('pleaseSelectActivity')),
             }),
           }
         : {}),

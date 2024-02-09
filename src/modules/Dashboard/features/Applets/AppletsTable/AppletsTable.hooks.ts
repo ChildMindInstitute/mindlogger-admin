@@ -44,7 +44,7 @@ export const useAppletsDnd = () => {
 
     const folder = droppedItem.isFolder
       ? droppedItem
-      : rows?.filter(row => row.id === (droppedItem as Applet).parentId)[0];
+      : rows?.filter((row) => row.id === (droppedItem as Applet).parentId)[0];
 
     if (!wasInFolder && isMovingToFolder) {
       await setFolder({ folderId: folder.id, appletId: draggedItem.id });
@@ -53,7 +53,7 @@ export const useAppletsDnd = () => {
     }
 
     if (isMovingToFolder && wasInFolder) {
-      const previousFolder = rows?.filter(row => row.id === draggedItem.parentId)[0];
+      const previousFolder = rows?.filter((row) => row.id === draggedItem.parentId)[0];
 
       if (previousFolder.id === folder.id) return;
       await setFolder({ folderId: folder.id, appletId: draggedItem.id });

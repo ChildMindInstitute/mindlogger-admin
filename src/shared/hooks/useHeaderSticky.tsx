@@ -11,7 +11,7 @@ export const useHeaderSticky = (containerRef: MutableRefObject<HTMLElement | nul
     const handleContainerScroll = () => {
       if (containerEl) {
         setIsHeaderSticky(
-          prevSticky => containerEl.scrollTop >= (prevSticky ? OFFSET_TO_UNSET_STICKY : OFFSET_TO_SET_STICKY),
+          (prevSticky) => containerEl.scrollTop >= (prevSticky ? OFFSET_TO_UNSET_STICKY : OFFSET_TO_SET_STICKY),
         );
       }
     };

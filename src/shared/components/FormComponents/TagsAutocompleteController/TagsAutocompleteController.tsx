@@ -29,7 +29,7 @@ export const TagsInputController = <T extends FieldValues>({
         const handleToggleSelectAll = (e: MouseEvent<HTMLLabelElement>) => {
           e.preventDefault(); // prevent blur
           onChange(options || []);
-          setSelectedAll(prev => {
+          setSelectedAll((prev) => {
             if (!prev) onChange(options || []);
             else onChange([]);
 
@@ -65,7 +65,7 @@ export const TagsInputController = <T extends FieldValues>({
                 {option.label}
               </ListItem>
             )}
-            PaperComponent={paperProps => {
+            PaperComponent={(paperProps) => {
               const { children, ...restPaperProps } = paperProps;
 
               return (
@@ -73,7 +73,7 @@ export const TagsInputController = <T extends FieldValues>({
                   <>
                     {options?.length ? (
                       <ListItem
-                        onMouseDown={event => event.preventDefault()} // prevent blur
+                        onMouseDown={(event) => event.preventDefault()} // prevent blur
                         sx={{ pl: theme.spacing(2.8) }}>
                         <FormControlLabel
                           onClick={handleToggleSelectAll}

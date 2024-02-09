@@ -18,9 +18,9 @@ import {
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
 
-const getDataTestidRegex = isSliderRows =>
+const getDataTestidRegex = (isSliderRows) =>
   `builder-activity-items-item-configuration-slider${isSliderRows ? '-rows-\\d+' : ''}`;
-const renderSlider = responseType => {
+const renderSlider = (responseType) => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -92,28 +92,28 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       const minLabels = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-min-label`));
       const maxLabels = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-max-label`));
-      minLabels.forEach(label => {
+      minLabels.forEach((label) => {
         expect(label).toBeVisible();
         expect(label.querySelector('label')).toHaveTextContent('Min Label');
       });
-      maxLabels.forEach(label => {
+      maxLabels.forEach((label) => {
         expect(label).toBeVisible();
         expect(label.querySelector('label')).toHaveTextContent('Max Label');
       });
 
       const sliders = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-slider`));
-      sliders.forEach(slider => {
+      sliders.forEach((slider) => {
         expect(slider).toBeVisible();
       });
 
       const minValues = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-min-value`));
       const maxValues = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-max-value`));
-      minValues.forEach(value => {
+      minValues.forEach((value) => {
         expect(value).toBeVisible();
         expect(value.querySelector('label')).toHaveTextContent('Min Value');
         expect(value.querySelector('input')).toHaveValue(isSliderRows ? 1 : 0);
       });
-      maxValues.forEach(value => {
+      maxValues.forEach((value) => {
         expect(value).toBeVisible();
         expect(value.querySelector('label')).toHaveTextContent('Max Value');
         expect(value.querySelector('input')).toHaveValue(isSliderRows ? 5 : 12);
@@ -325,7 +325,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       fireEvent.mouseDown(optionSelectButton);
       expect(
         [...screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`).querySelectorAll('li')].filter(
-          li => !li.classList.contains('hidden-menu-item'),
+          (li) => !li.classList.contains('hidden-menu-item'),
         ),
       ).toHaveLength(4);
     });

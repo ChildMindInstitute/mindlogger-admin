@@ -75,7 +75,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
                 <StyledIconButton
                   aria-label="toggle password visibility"
                   sx={{ p: theme.spacing(0.9) }}
-                  onClick={() => setShowPassword(prevState => !prevState)}>
+                  onClick={() => setShowPassword((prevState) => !prevState)}>
                   <Svg id={showPassword ? 'visibility-off' : 'visibility-on'} />
                 </StyledIconButton>
               ),

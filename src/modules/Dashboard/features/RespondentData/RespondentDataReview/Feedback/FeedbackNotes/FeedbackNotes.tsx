@@ -33,7 +33,7 @@ export const FeedbackNotes = ({ activity }: { activity: DatavizActivity }) => {
 
   const { execute: getAnswersNotes, isLoading } = useAsync(
     getAnswersNotesApi,
-    res => res?.data?.result && setNotes(res.data.result),
+    (res) => res?.data?.result && setNotes(res.data.result),
   );
 
   const updateListOfNotes = async () => {

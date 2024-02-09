@@ -26,7 +26,7 @@ export const getDecryptedAnswersObject = ({
   hasMigratedAnswers?: boolean;
   hasUrlEventScreen?: boolean;
 }) =>
-  getObjectFromList(decryptedAnswers, item => {
+  getObjectFromList(decryptedAnswers, (item) => {
     if (hasUrlEventScreen) return item.activityItem.name;
     if (hasMigratedAnswers) {
       return `${getIdBeforeMigration(item.activityId)}/${getIdBeforeMigration(item.activityItem.id)}`;

@@ -29,7 +29,7 @@ export const getFulfilledData = <T extends Record<string, BaseSchema>, K>({
   thunk,
   key,
   initialState,
-  mapper = payloadData => payloadData,
+  mapper = (payloadData) => payloadData,
 }: {
   builder: ActionReducerMapBuilder<T>;
   thunk: AsyncThunk<AxiosResponse['data'], K, Record<string, never>>;
@@ -53,7 +53,7 @@ export const getFulfilledDataWithConcatenatedResult = <T extends Record<string, 
   thunk,
   key,
   initialState,
-  mapper = payloadData => payloadData,
+  mapper = (payloadData) => payloadData,
 }: {
   builder: ActionReducerMapBuilder<T>;
   thunk: AsyncThunk<AxiosResponse['data'], K, Record<string, never>>;

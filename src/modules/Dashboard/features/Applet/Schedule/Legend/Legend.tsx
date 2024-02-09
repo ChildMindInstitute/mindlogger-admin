@@ -144,7 +144,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   useEffect(() => {
     if (!respondentId || selectedRespondent) return;
 
-    const currentRespondent = respondentsItems?.find(respondent => respondent?.id === respondentId) || null;
+    const currentRespondent = respondentsItems?.find((respondent) => respondent?.id === respondentId) || null;
     setSelectedRespondent(currentRespondent);
   }, [respondentId, respondentsItems, selectedRespondent]);
 

@@ -83,8 +83,8 @@ describe('InvitationsTable', () => {
     ];
 
     expect(screen.getByTestId(dataTestId)).toBeInTheDocument();
-    tableColumnNames.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
-    invitationColumns.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
+    tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
+    invitationColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
 
     const invitationLink = screen.getByTestId(`${dataTestId}-invitation-link`);
     expect(invitationLink).toBeInTheDocument();

@@ -90,8 +90,8 @@ describe('Respondents component tests', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-respondents-table')).toBeInTheDocument();
-      tableColumnNames.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
-      respondentColumns.forEach(column => expect(screen.getByText(column)).toBeInTheDocument());
+      tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
+      respondentColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
     });
   });
 
@@ -127,7 +127,7 @@ describe('Respondents component tests', () => {
     ];
 
     await waitFor(() => {
-      actionsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
+      actionsDataTestIds.forEach((dataTestId) => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
     });
   });
 
@@ -146,7 +146,7 @@ describe('Respondents component tests', () => {
     ];
 
     await waitFor(() => {
-      actionsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
+      actionsDataTestIds.forEach((dataTestId) => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
     });
   });
 

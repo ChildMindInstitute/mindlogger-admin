@@ -99,7 +99,7 @@ export const Calendar = () => {
 
         setEvents(eventsWithOffRangeWithoutCrossDay);
       } else if (activeView === CalendarViews.Year) {
-        const eventsWithoutCrossDay = eventsToShow.filter(event => !event.eventSpanBefore);
+        const eventsWithoutCrossDay = eventsToShow.filter((event) => !event.eventSpanBefore);
 
         setEvents(eventsWithoutCrossDay);
       } else {
@@ -142,7 +142,7 @@ export const Calendar = () => {
           selectable
           onSelectSlot={onSelectSlot}
           onSelectEvent={onSelectEvent}
-          eventPropGetter={event => eventPropGetter(event, activeView)}
+          eventPropGetter={(event) => eventPropGetter(event, activeView)}
           view={activeView as View}
           onView={setActiveView as OnViewFunc}
           messages={messages}

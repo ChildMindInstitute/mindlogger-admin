@@ -49,7 +49,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
           },
         ) => {
           const activityOrFlowId = activityId || flowId || '';
-          const currentActivityOrFlow = activitiesAndFlows.find(item => item.id === activityOrFlowId);
+          const currentActivityOrFlow = activitiesAndFlows.find((item) => item.id === activityOrFlowId);
 
           if (currentActivityOrFlow && !currentActivityOrFlow?.isHidden) {
             const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
@@ -154,7 +154,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
       const event = { id, name, isFlow };
       if (isHidden) return deactivatedEvents.push(event);
 
-      const scheduledActivityFlow = scheduledActivitiesFlows.find(item => item.id === id);
+      const scheduledActivityFlow = scheduledActivitiesFlows.find((item) => item.id === id);
       if (scheduledActivityFlow) {
         const colors = scheduledActivityFlow.color;
 
@@ -165,7 +165,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
         });
       }
 
-      const alwaysActivityFlow = alwaysActivitiesFlows.find(flow => flow.id === id);
+      const alwaysActivityFlow = alwaysActivitiesFlows.find((flow) => flow.id === id);
       const colors = alwaysActivityFlow?.color || [];
 
       alwaysAvailableEvents.push({

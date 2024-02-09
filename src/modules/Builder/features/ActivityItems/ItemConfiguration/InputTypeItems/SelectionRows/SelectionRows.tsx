@@ -30,7 +30,7 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
 
-  const handleCollapse = () => setIsExpanded(prevExpanded => !prevExpanded);
+  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
   const handleAddRow = () => {
     const newRow = getEmptySelectionItem();

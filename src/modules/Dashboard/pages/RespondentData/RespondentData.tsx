@@ -28,7 +28,7 @@ export const RespondentData = () => {
   const { ownerId } = workspaces.useData() || {};
   const respondentDataTabs = useRespondentDataTabs();
 
-  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, result => {
+  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, (result) => {
     setSummaryActivities(result?.data?.result || []);
   });
 

@@ -68,7 +68,7 @@ export const getUpdatedAppletUrl = (appletId: string, activityOrFlowId: string, 
       page.builderAppletActivity,
       page.builderAppletActivityFlowItem,
       page.builderApplet,
-    ].find(pattern => matchPath(`${pattern}/*`, url)) ?? '';
+    ].find((pattern) => matchPath(`${pattern}/*`, url)) ?? '';
 
   const match = matchPath(`${matchedPath}/*`, url);
 

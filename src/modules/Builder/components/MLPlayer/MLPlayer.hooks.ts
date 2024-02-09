@@ -25,35 +25,35 @@ export const useMLPlayerSetup = (media: MediaType | null) => {
   const playerRef = useRef<ReactPlayer>(null);
 
   useEffect(() => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       url,
     }));
   }, [url]);
 
   const handlePlayPause = () => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       playing: !prevState.playing,
     }));
   };
 
   const handlePlay = () => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       playing: true,
     }));
   };
 
   const handlePause = () => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       playing: false,
     }));
   };
 
   const handleSeekChange = (e: Event, value: number | Array<number>) => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       played: value as number,
       seeking: true,
@@ -61,7 +61,7 @@ export const useMLPlayerSetup = (media: MediaType | null) => {
   };
 
   const handleSeekMouseUp = (e: SyntheticEvent | Event, value: number | Array<number>) => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       seeking: false,
     }));
@@ -71,7 +71,7 @@ export const useMLPlayerSetup = (media: MediaType | null) => {
 
   const handleProgress = (newState: OnProgressProps) => {
     if (!state.seeking) {
-      setState(prevState => ({
+      setState((prevState) => ({
         ...prevState,
         ...newState,
       }));
@@ -79,7 +79,7 @@ export const useMLPlayerSetup = (media: MediaType | null) => {
   };
 
   const handleDuration = (duration: number) => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       duration,
     }));

@@ -145,7 +145,7 @@ describe('getReportAndMediaData', () => {
       },
     };
     const decryptedAnswers = [textItem, textNullAnswerItem, textUndefinedAnswerItem] as DecryptedAnswerData[];
-    const rawAnswersObject = getObjectFromList(decryptedAnswers, item => item.activityItem.name);
+    const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
 
     test('should return filtered out array with items without empty answers', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -175,7 +175,7 @@ describe('getReportAndMediaData', () => {
     });
     test('should return an array with items', () => {
       const { decryptedAnswers } = mockedParsedAnswers[0];
-      const rawAnswersObject = getObjectFromList(decryptedAnswers, item => item.activityItem.name);
+      const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const result = getReportData([], rawAnswersObject, decryptedAnswers);
@@ -240,7 +240,7 @@ describe('getReportAndMediaData', () => {
       ]);
     });
     test('should return an array with items and subscale calculation in first item', () => {
-      const rawAnswersObject = getObjectFromList(mockedDecryptedAnswersWithSubscales, item => item.activityItem.name);
+      const rawAnswersObject = getObjectFromList(mockedDecryptedAnswersWithSubscales, (item) => item.activityItem.name);
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales);
@@ -384,7 +384,7 @@ describe('getReportAndMediaData', () => {
   describe('getActivityJourneyData', () => {
     test('should return an array for journey data', () => {
       const decryptedAnswers = [mockedDecryptedObjectForDrawing];
-      const rawAnswersObject = getObjectFromList(decryptedAnswers, item => item.activityItem.name);
+      const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
       const result = getActivityJourneyData(
         [],
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -442,7 +442,7 @@ describe('getReportAndMediaData', () => {
     });
     test('should return an array for journey data with splash screen', () => {
       const decryptedAnswers = [mockedDecryptedObjectForDrawing];
-      const rawAnswersObject = getObjectFromList(decryptedAnswers, item => item.activityItem.name);
+      const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
       const events = [
         {
           type: 'NEXT',

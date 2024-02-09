@@ -45,9 +45,9 @@ export const Applets = () => {
 
   const { fetchData, isLoading, count, expandedFolders, expandFolder, collapseFolder } = useAppletsWithFolders(setRows);
 
-  const { handleSearch, searchValue, ...tableProps } = useTable(async params => await fetchData(params));
+  const { handleSearch, searchValue, ...tableProps } = useTable(async (params) => await fetchData(params));
 
-  const folders = rows.filter(row => row.isFolder) as Folder[];
+  const folders = rows.filter((row) => row.isFolder) as Folder[];
 
   const addFolder = () => {
     const newFolderName = generateNewFolderName(folders);
@@ -98,7 +98,7 @@ export const Applets = () => {
     const isFolderExpanded = expandedFolders.includes(folder.id);
 
     if (isFolderExpanded) {
-      setRows(rows.filter(row => (row as Applet)?.parentId !== folder.id));
+      setRows(rows.filter((row) => (row as Applet)?.parentId !== folder.id));
       collapseFolder(folder.id);
 
       return;

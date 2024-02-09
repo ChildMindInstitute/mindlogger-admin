@@ -51,7 +51,7 @@ export const remapFailedAnswers = (
         decryptedEvents: data.decryptedEvents.filter(isSuccessEvent),
         /* eslint-disable @typescript-eslint/ban-ts-comment */
         // @ts-ignore
-        decryptedAnswers: data.decryptedAnswers.map(item => {
+        decryptedAnswers: data.decryptedAnswers.map((item) => {
           if (
             typeof item.answer === 'object' &&
             item.answer !== null &&

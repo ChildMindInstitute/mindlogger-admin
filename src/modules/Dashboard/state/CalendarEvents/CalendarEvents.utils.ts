@@ -39,12 +39,12 @@ export const getPreparedEvents = (
   isAlwaysAvailableHidden: boolean,
   isScheduledHidden: boolean,
 ) =>
-  events.map(item => ({
+  events.map((item) => ({
     ...item,
     isHidden: item.alwaysAvailable ? isAlwaysAvailableHidden : isScheduledHidden,
   }));
 
-export const getNotHiddenEvents = (events: CalendarEvent[]) => events.filter(event => !event.isHidden);
+export const getNotHiddenEvents = (events: CalendarEvent[]) => events.filter((event) => !event.isHidden);
 
 export const getEventsWithHiddenInTimeView = (notHiddenEvents: CalendarEvent[]) => {
   const allDayEventsSortedByDaysMap = notHiddenEvents.reduce(
@@ -76,18 +76,18 @@ export const getEventsWithHiddenInTimeView = (notHiddenEvents: CalendarEvent[]) 
   );
 
   const allDayEventsSortedByDays = Array.from(allDayEventsSortedByDaysMap.values()).filter(
-    item => item.eventsIds.length > LENGTH_TO_FILTER_DAYS_EVENTS,
+    (item) => item.eventsIds.length > LENGTH_TO_FILTER_DAYS_EVENTS,
   );
 
   const hiddenEventsIds = allDayEventsSortedByDays.reduce((acc: string[], item) => {
-    item.eventsIds.forEach(item => item.isHiddenInTimeView && acc.push(item.id));
+    item.eventsIds.forEach((item) => item.isHiddenInTimeView && acc.push(item.id));
 
     return acc;
   }, []);
 
-  const eventsToShow = notHiddenEvents.map(event => ({
+  const eventsToShow = notHiddenEvents.map((event) => ({
     ...event,
-    isHiddenInTimeView: hiddenEventsIds.some(id => id === event.id),
+    isHiddenInTimeView: hiddenEventsIds.some((id) => id === event.id),
   }));
 
   return {
@@ -213,7 +213,7 @@ export const getEventsArrayFromDates = ({
   endTime,
   isCrossDayEvent,
 }: GetEventsArrayFromDates) =>
-  dates.flatMap(date => {
+  dates.flatMap((date) => {
     const nextDay = addDays(date, 1);
 
     if (isCrossDayEvent) {
@@ -382,7 +382,7 @@ export const createEvents = ({
 
   if (periodicityType === Periodicity.Weekly && selectedDate) {
     const dayOfWeek = getDay(getNormalizedTimezoneDate(selectedDate));
-    const weeklyDays = daysInPeriod.filter(date => getDay(date) === dayOfWeek);
+    const weeklyDays = daysInPeriod.filter((date) => getDay(date) === dayOfWeek);
 
     return getEventsArrayFromDates({
       dates: weeklyDays,
@@ -394,7 +394,7 @@ export const createEvents = ({
   }
 
   if (periodicityType === Periodicity.Weekdays) {
-    const weekDays = daysInPeriod.filter(date => !isWeekend(date));
+    const weekDays = daysInPeriod.filter((date) => !isWeekend(date));
 
     return getEventsArrayFromDates({
       dates: weekDays,
@@ -436,7 +436,7 @@ export const getDaysInMonthlyPeriodicity = ({ chosenDate, eventEnd, eventStart }
         })
       : [];
 
-  return monthsBetween.map(month => {
+  return monthsBetween.map((month) => {
     const lastDayOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
     const dayOfMonth = Math.min(chosenDate, lastDayOfMonth.getDate());
 

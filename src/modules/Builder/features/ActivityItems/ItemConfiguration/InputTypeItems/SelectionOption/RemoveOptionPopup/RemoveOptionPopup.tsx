@@ -41,7 +41,7 @@ export const RemoveOptionPopup = ({
             ? It will also remove the Conditional(s) below
           </Trans>
         </StyledBodyLarge>
-        {conditions?.map(conditionalLogic => (
+        {conditions?.map((conditionalLogic) => (
           <ConditionalPanel key={`condition-panel-${conditionalLogic.key}`} condition={conditionalLogic} />
         ))}
       </StyledModalWrapper>

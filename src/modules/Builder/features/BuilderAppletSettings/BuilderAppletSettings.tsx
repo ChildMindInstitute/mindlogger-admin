@@ -16,7 +16,7 @@ export const BuilderAppletSettings = () => {
   const handleReportConfigSubmit = (values: Record<string, unknown>) => {
     const keys = ['reportRecipients', 'reportIncludeUserId', 'reportEmailBody', 'reportServerIp', 'reportPublicKey'];
 
-    keys.forEach(key => setValue(key, values[key]));
+    keys.forEach((key) => setValue(key, values[key]));
   };
 
   return (

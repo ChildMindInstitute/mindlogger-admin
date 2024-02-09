@@ -99,7 +99,7 @@ config({
         },
       })
       .use(markdownItImSize)
-      .use(md => {
+      .use((md) => {
         const defaultRender = md.renderer.rules.image;
         if (!defaultRender) return;
 

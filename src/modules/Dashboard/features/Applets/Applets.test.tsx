@@ -159,7 +159,7 @@ describe('Applets component tests', () => {
         params: { limit: 20 },
         signal: undefined,
       });
-      rows.forEach(row => expect(screen.getByText(row)).toBeInTheDocument());
+      rows.forEach((row) => expect(screen.getByText(row)).toBeInTheDocument());
     });
   });
 
@@ -196,7 +196,7 @@ describe('Applets component tests', () => {
 
       await waitFor(() => {
         const menuItems = ['dashboard-applets-add-applet-new', 'dashboard-applets-add-applet-from-library'];
-        menuItems.forEach(menuItem => expect(screen.getByTestId(menuItem)).toBeInTheDocument());
+        menuItems.forEach((menuItem) => expect(screen.getByTestId(menuItem)).toBeInTheDocument());
       });
 
       fireEvent.click(screen.getByTestId('dashboard-applets-add-applet-new'));

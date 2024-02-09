@@ -14,7 +14,7 @@ export const useDatavizFilters = (watch: UseFormWatch<SummaryFiltersForm>, versi
     const minDate = getDateTime(startDate, startTime);
     const maxDate = getDateTime(endDate, endTime);
     const filteredVersions = versions.filter(
-      version => isBefore(new Date(version.createdAt), maxDate) && isAfter(new Date(version.createdAt), minDate),
+      (version) => isBefore(new Date(version.createdAt), maxDate) && isAfter(new Date(version.createdAt), minDate),
     );
 
     return { minDate, maxDate, filteredVersions };

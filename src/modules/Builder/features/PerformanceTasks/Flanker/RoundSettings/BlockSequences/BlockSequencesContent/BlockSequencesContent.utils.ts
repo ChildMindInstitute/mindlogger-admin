@@ -36,17 +36,17 @@ export const getSequencesData = (stimulusTrials: FlankerStimulusSettings[] = [])
 
 export const getSequencesHeadCells = (uploadedData?: UploadedDataOrNull): HeadCell[] =>
   uploadedData
-    ? Object.keys(uploadedData[0]).map(label => ({
+    ? Object.keys(uploadedData[0]).map((label) => ({
         id: label.toLowerCase().replace(/\s+/g, '-'),
         label,
       }))
-    : createArray(DEFAULT_SEQUENCES_TABLE_COLUMNS, index => ({
+    : createArray(DEFAULT_SEQUENCES_TABLE_COLUMNS, (index) => ({
         id: `block-${index + 1}`,
         label: `${t('flankerRound.block')} ${index + 1}`,
       }));
 
 export const getUploadedTableRows = (uploadedData?: UploadedDataOrNull) =>
-  uploadedData?.map(obj => {
+  uploadedData?.map((obj) => {
     const updatedObj: Row = {};
     // eslint-disable-next-line no-restricted-syntax
     for (const key in obj) {
@@ -73,7 +73,7 @@ export const getRoundBlocks = (stimulusTrials: FlankerStimulusSettings[], upload
 
   return Object.keys(uploadedData[0]).reduce((result: { order: string[]; name: string }[], key) => {
     result.push({
-      order: uploadedData.map(obj => obj?.[key]?.id),
+      order: uploadedData.map((obj) => obj?.[key]?.id),
       name: key,
     });
 
@@ -101,9 +101,9 @@ export const getTableFromSequences = (
 };
 
 export const getExportData = (uploadedData?: UploadedDataOrNull) =>
-  uploadedData?.map(obj => {
+  uploadedData?.map((obj) => {
     const transformedObj: Record<string, string> = {};
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       transformedObj[key] = obj[key].text;
     });
 

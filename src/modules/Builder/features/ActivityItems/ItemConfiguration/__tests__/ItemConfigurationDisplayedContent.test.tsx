@@ -20,7 +20,7 @@ import {
 
 const mockedItemId = mockedSingleSelectFormValues.id;
 
-const renderItemConfig = item => {
+const renderItemConfig = (item) => {
   const ref = createRef();
 
   renderWithAppletFormData({

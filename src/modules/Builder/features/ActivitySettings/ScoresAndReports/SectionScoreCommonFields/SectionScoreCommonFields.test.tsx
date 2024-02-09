@@ -36,7 +36,7 @@ describe('SectionScoreCommonFields component tests', () => {
     });
 
     const testIds = ['show-message', 'show-message-text', 'print-items', 'print-items-list-unselected'];
-    testIds.forEach(id => expect(screen.getByTestId(`${dataTestId}-${id}`)).toBeInTheDocument());
+    testIds.forEach((id) => expect(screen.getByTestId(`${dataTestId}-${id}`)).toBeInTheDocument());
   });
 
   test('should hide and unhide print items field', () => {

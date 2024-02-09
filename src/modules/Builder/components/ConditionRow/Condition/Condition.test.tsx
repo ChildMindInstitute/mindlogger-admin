@@ -77,7 +77,7 @@ const mockedScoreConditionOptions = [
   },
 ];
 const mockedValueOptions = getValueOptionsList(
-  mockedAppletFormData.activities[0].items.find(item => getEntityKey(item) === mockedConditional.itemKey),
+  mockedAppletFormData.activities[0].items.find((item) => getEntityKey(item) === mockedConditional.itemKey),
 );
 
 const mockedNames = {
@@ -111,7 +111,7 @@ const mockedPropsForEmptyCondition = {
   'data-testid': 'empty-condition',
 };
 
-const getAppletFormData = condition => ({
+const getAppletFormData = (condition) => ({
   ...mockedAppletFormData,
   activities: [
     {
@@ -244,7 +244,7 @@ describe('Condition', () => {
       const selectItemDropdown = screen.getByTestId('empty-condition-name-dropdown');
       const itemSelectOptions = selectItemDropdown.querySelectorAll('li');
 
-      fireEvent.click([...itemSelectOptions].find(option => option.dataset.value === item));
+      fireEvent.click([...itemSelectOptions].find((option) => option.dataset.value === item));
     }
 
     const selectState = screen.getByTestId('empty-condition-type');

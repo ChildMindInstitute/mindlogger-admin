@@ -33,7 +33,7 @@ export const stableSort = <T>(array: readonly T[], comparator: (a: T, b: T) => n
     return a[1] - b[1];
   });
 
-  return stabilized.map(el => el[0]);
+  return stabilized.map((el) => el[0]);
 };
 
 export const getRows = (answers: TextItemAnswer[], skippedResponse: JSX.Element) =>

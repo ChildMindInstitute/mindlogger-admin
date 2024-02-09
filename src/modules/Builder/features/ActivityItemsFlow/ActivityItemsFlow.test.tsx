@@ -77,7 +77,7 @@ const mockedOrderedSummaryItemItems = [
   mockedTimeRangeActivityItem,
 ];
 
-const renderActivityItemsFlow = formData => {
+const renderActivityItemsFlow = (formData) => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -149,14 +149,14 @@ describe('Activity Items Flow', () => {
     const oneFlow = screen.getAllByTestId(new RegExp(`^${mockedTestid}-\\d+$`));
 
     expect(oneFlow).toHaveLength(1);
-    oneFlow.forEach(flow => expect(flow).toBeVisible());
+    oneFlow.forEach((flow) => expect(flow).toBeVisible());
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 
     const twoFlows = screen.getAllByTestId(new RegExp(`^${mockedTestid}-\\d+$`));
 
     expect(twoFlows).toHaveLength(2);
-    twoFlows.forEach(flow => expect(flow).toBeVisible());
+    twoFlows.forEach((flow) => expect(flow).toBeVisible());
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-1-remove`));
 
@@ -262,7 +262,7 @@ describe('Activity Items Flow', () => {
           `${mockedTestid}-0-condition-0-selection-value`,
           `${mockedTestid}-0-summary-match`,
           `${mockedTestid}-0-summary-item`,
-        ].forEach(testId => {
+        ].forEach((testId) => {
           expect(screen.getByTestId(testId).querySelector('div')).toHaveClass('Mui-error');
         });
       });

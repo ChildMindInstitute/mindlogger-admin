@@ -7,11 +7,11 @@ export const apiClient = axios.create(DEFAULT_CONFIG);
 export const authApiClient = axios.create(DEFAULT_CONFIG);
 export const authApiClientWithoutRefresh = axios.create(DEFAULT_CONFIG);
 
-[apiClient, authApiClient, authApiClientWithoutRefresh].forEach(client =>
+[apiClient, authApiClient, authApiClientWithoutRefresh].forEach((client) =>
   client.interceptors.request.use((config: InternalAxiosRequestConfig) => getCommonConfig(config)),
 );
 
-[authApiClient, authApiClientWithoutRefresh].forEach(client =>
+[authApiClient, authApiClientWithoutRefresh].forEach((client) =>
   client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     getRequestTokenData(config);
 
@@ -20,8 +20,8 @@ export const authApiClientWithoutRefresh = axios.create(DEFAULT_CONFIG);
 );
 
 authApiClient.interceptors.response.use(
-  response => response,
-  async error => {
+  (response) => response,
+  async (error) => {
     if (error.response?.status === ApiResponseCodes.Unauthorized) {
       return refreshTokenAndReattemptRequest(error);
     } else {

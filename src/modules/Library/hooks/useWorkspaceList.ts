@@ -37,7 +37,7 @@ export const useWorkspaceList = (isAuthorized?: boolean) => {
         workspacesRoles?.filter(
           (workspace: WorkspaceWithRoles) =>
             Object.keys(workspace?.workspaceRoles).length === 0 || //in case there are no applets yet in the main Workspace
-            Object.values(workspace?.workspaceRoles).some(roles => isManagerOrOwnerOrEditor(roles[0])),
+            Object.values(workspace?.workspaceRoles).some((roles) => isManagerOrOwnerOrEditor(roles[0])),
         ) || [];
 
       return workspaces;

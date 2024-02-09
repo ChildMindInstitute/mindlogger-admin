@@ -69,7 +69,7 @@ describe('Activity Flow Builder', () => {
           `${mockedFlowTestid}-duplicate`,
           `${mockedFlowTestid}-remove`,
           `${mockedFlowTestid}-dnd`,
-        ].forEach(testId => {
+        ].forEach((testId) => {
           expect(screen.getByTestId(testId)).toBeVisible();
         });
       });

@@ -188,7 +188,7 @@ describe('checkCurrent*Page', () => {
   `('$description', ({ url, util, flag, expected }) => {
     expected
       ? expect(util(url)[flag]).toBe(expected)
-      : expect(Object.values(util(url)).every(flag => flag === false)).toBe(true);
+      : expect(Object.values(util(url)).every((flag) => flag === false)).toBe(true);
   });
 });
 

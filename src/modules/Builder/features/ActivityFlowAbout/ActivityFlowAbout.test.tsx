@@ -20,7 +20,7 @@ const mockedAppletFormDataWithEmptyFlow = {
   activityFlows: [
     {
       ...getNewActivityFlow(),
-      items: mockedAppletFormData.activities.map(activity => ({
+      items: mockedAppletFormData.activities.map((activity) => ({
         key: uuidv4(),
         activityKey: getEntityKey(activity),
       })),

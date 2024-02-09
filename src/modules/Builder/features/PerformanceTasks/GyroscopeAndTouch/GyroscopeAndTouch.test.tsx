@@ -161,12 +161,12 @@ const mockedAppletFormDataWithTouch = {
 const expandAllPanels = () => {
   const collapseButtons = document.querySelectorAll('.svg-navigate-down');
 
-  collapseButtons.forEach(button => {
+  collapseButtons.forEach((button) => {
     fireEvent.click(button);
   });
 };
 
-const renderGyroscopeOrTouch = isGyroscope => {
+const renderGyroscopeOrTouch = (isGyroscope) => {
   const ref = createRef();
   const formData = isGyroscope ? mockedAppletFormDataWithGyroscope : mockedAppletFormDataWithTouch;
   const routePath = isGyroscope ? page.builderAppletGyroscope : page.builderAppletTouch;

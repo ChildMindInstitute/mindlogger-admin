@@ -28,7 +28,7 @@ export const Applet = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
   const isPristineRef = useRef(true);
-  const hasManagerRole = isPristineRef.current && roles.some(item => item.role === Roles.Manager);
+  const hasManagerRole = isPristineRef.current && roles.some((item) => item.role === Roles.Manager);
   const addRoleTooltip = hasManagerRole ? t('userHasManagerAccess') : null;
 
   const handleAddRole = (label: Roles) => {

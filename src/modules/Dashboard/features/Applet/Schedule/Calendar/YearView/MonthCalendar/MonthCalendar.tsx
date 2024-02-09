@@ -23,7 +23,7 @@ export const MonthCalendar = ({ date, events, localizer, setDate, setActiveView 
   const monthDates = useMemo(
     () =>
       calendar &&
-      calendar.weeks.map(week => (
+      calendar.weeks.map((week) => (
         <StyledFlexSpaceBetween key={week.id}>
           {week.days.map((date, index) => {
             const currentDateEvents = events?.filter(

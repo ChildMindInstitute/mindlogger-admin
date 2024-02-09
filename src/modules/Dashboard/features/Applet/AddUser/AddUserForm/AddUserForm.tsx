@@ -59,14 +59,14 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     resetForm();
     Mixpanel.track('Invitation sent successfully');
   });
-  const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, res => {
+  const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {
     setWorkspaceInfo(res?.data?.result || null);
   });
 
   const onSubmit = (values: FormValues) => {
     const options = {
       ...values,
-      ...(values.respondents && { respondents: values.respondents.map(item => item.id) }),
+      ...(values.respondents && { respondents: values.respondents.map((item) => item.id) }),
     } as AppletInvitationOptions;
 
     if (appletId) {

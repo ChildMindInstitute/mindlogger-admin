@@ -13,13 +13,13 @@ jest.mock('shared/utils/encryption', () => ({
   ...jest.requireActual('shared/utils/encryption'),
 }));
 
-jest.spyOn(global.console, 'warn').mockImplementation(message => {
+jest.spyOn(global.console, 'warn').mockImplementation((message) => {
   if (message?.includes('You have provided an out-of-range value')) return;
 
   return message;
 });
 
-jest.spyOn(global.console, 'error').mockImplementation(message => {
+jest.spyOn(global.console, 'error').mockImplementation((message) => {
   if (
     message?.includes('A component is changing an uncontrolled input to be controlled') ||
     message?.includes('`children` must be passed')

@@ -21,7 +21,7 @@ export const ItemFlowContent = ({ name, isStatic, onRemove, 'data-testid': dataT
   const itemKey = watch(`${name}.itemKey`);
 
   if (isStatic) {
-    const staticConditions = createArray(conditions?.length, index => index);
+    const staticConditions = createArray(conditions?.length, (index) => index);
 
     return (
       <StyledItemFlowContent>

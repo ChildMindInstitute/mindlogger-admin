@@ -39,7 +39,7 @@ const mockedSingleActivityItemWithoutScores = {
   name: `${mockedSingleActivityItem.name}_no_scores`,
   responseValues: {
     ...mockedSingleActivityItem.responseValues,
-    options: mockedSingleActivityItem.responseValues.options.map(option => ({
+    options: mockedSingleActivityItem.responseValues.options.map((option) => ({
       ...option,
       score: undefined,
     })),
@@ -55,7 +55,7 @@ const mockedMultiActivityItemWithoutScores = {
   name: `${mockedMultiActivityItem.name}_no_scores`,
   responseValues: {
     ...mockedMultiActivityItem.responseValues,
-    options: mockedMultiActivityItem.responseValues.options.map(option => ({
+    options: mockedMultiActivityItem.responseValues.options.map((option) => ({
       ...option,
       score: undefined,
     })),
@@ -196,7 +196,7 @@ describe('SubscalesConfiguration', () => {
       `${mockedTestid}-0-unused-items`,
       `${mockedTestid}-elements-associated-with-subscales`,
       `${mockedTestid}-calculate-total-score`,
-    ].forEach(testId => {
+    ].forEach((testId) => {
       expect(screen.getByTestId(testId)).toBeVisible();
     });
   });
@@ -296,14 +296,14 @@ describe('SubscalesConfiguration', () => {
     fireEvent.click(screen.getByTestId(`${mockedTestid}-0-lookup-table-popup-submit-button`));
 
     await waitFor(() => {
-      const addedSystemItems = ref.current.getValues('activities.0.items').filter(item => isSystemItem(item));
+      const addedSystemItems = ref.current.getValues('activities.0.items').filter((item) => isSystemItem(item));
       expect(addedSystemItems).toHaveLength(2);
     });
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-0-remove`));
 
     await waitFor(() => {
-      const addedSystemItems = ref.current.getValues('activities.0.items').filter(item => isSystemItem(item));
+      const addedSystemItems = ref.current.getValues('activities.0.items').filter((item) => isSystemItem(item));
       expect(addedSystemItems).toHaveLength(0);
     });
   });
@@ -326,8 +326,8 @@ describe('SubscalesConfiguration', () => {
     const items = ref.current.getValues('activities.0.items');
 
     expect(items).toHaveLength(4);
-    expect(items.filter(item => isSystemItem(item))).toHaveLength(2);
-    expect(items.filter(item => !isSystemItem(item))).toHaveLength(2);
+    expect(items.filter((item) => isSystemItem(item))).toHaveLength(2);
+    expect(items.filter((item) => !isSystemItem(item))).toHaveLength(2);
   });
 
   test('Subscale is removed from the list of elements (cannot make recursive selection)', () => {

@@ -99,7 +99,7 @@ describe('ActivityAbout', () => {
       'builder-activity-about-reviewable',
     ];
 
-    fieldsDataTestIds.forEach(dataTestId => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
+    fieldsDataTestIds.forEach((dataTestId) => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
   });
 
   test('should render all fields for exisiting applet with default values', () => {

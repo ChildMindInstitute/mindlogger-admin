@@ -18,7 +18,7 @@ export const exportTemplate = async <T extends unknown[]>({
   // Fix for Safari (Allow Multiple File Downloads).
   // https://stackoverflow.com/questions/61961488/allow-multiple-file-downloads-in-safari
   // One of the possible options to download multiple files is to add these files to the archive.
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     writeFile(workBook, `${fileName}${isXlsx ? '.xlsx' : '.csv'}`);
 
     setTimeout(() => {

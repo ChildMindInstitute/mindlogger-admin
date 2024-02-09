@@ -25,7 +25,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUseNavigate,
 }));
 
-const renderActivityFlow = formData => {
+const renderActivityFlow = (formData) => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -83,7 +83,7 @@ describe('ActivityFlow', () => {
       `${mockedFlowTestid}-0-hide`,
       `${mockedFlowTestid}-0-remove`,
       `${mockedFlowTestid}-0-dnd`,
-    ].forEach(testId => {
+    ].forEach((testId) => {
       expect(screen.getByTestId(testId)).toBeVisible();
     });
   });

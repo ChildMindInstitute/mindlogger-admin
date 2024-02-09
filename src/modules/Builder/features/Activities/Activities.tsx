@@ -105,7 +105,7 @@ export const Activities = () => {
         flow.reportIncludedActivityName = '';
         flow.reportIncludedItemName = '';
       }
-      const items = flow.items?.filter(item => item.activityKey !== activityKey);
+      const items = flow.items?.filter((item) => item.activityKey !== activityKey);
       if (items && items.length > 0) {
         acc.push({ ...flow, items });
       }
@@ -169,7 +169,7 @@ export const Activities = () => {
       {activities?.length ? (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activities-dnd" direction="vertical">
-            {listProvided => (
+            {(listProvided) => (
               <Box {...listProvided.droppableProps} ref={listProvided.innerRef}>
                 {activities.map((activity: ActivityFormValues, index: number) => {
                   const activityKey = getActivityKey(activity);

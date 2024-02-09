@@ -63,8 +63,8 @@ export const LeftBar = ({
     rootSelector: `.${ACTIVITY_ITEMS_LIST_CLASS}`,
     targetSelector: `.${ACTIVITY_ITEMS_END_ITEM_CLASS}`,
   });
-  const draggableItems = useMemo(() => itemsData.filter(item => item.allowEdit), [itemsData]);
-  const systemItems = useMemo(() => itemsData.filter(item => !item.allowEdit), [itemsData]);
+  const draggableItems = useMemo(() => itemsData.filter((item) => item.allowEdit), [itemsData]);
+  const systemItems = useMemo(() => itemsData.filter((item) => !item.allowEdit), [itemsData]);
 
   useRedirectIfNoMatchedActivityItem();
 
@@ -83,7 +83,7 @@ export const LeftBar = ({
 
     if (!conditionsToRemove?.length) return onMoveItem(source.index, destination.index);
 
-    setConditionalLogicKeysToRemove(conditionsToRemove.map(condition => getEntityKey(condition)));
+    setConditionalLogicKeysToRemove(conditionsToRemove.map((condition) => getEntityKey(condition)));
     setSourceIndex(source.index);
     setDestinationIndex(destination.index);
   };
@@ -126,7 +126,7 @@ export const LeftBar = ({
       if (itemsScore?.includes(itemKey)) {
         setValue(
           `${fieldName}.scoresAndReports.reports.${index}.itemsScore`,
-          itemsScore?.filter(itemId => itemId !== itemKey),
+          itemsScore?.filter((itemId) => itemId !== itemKey),
         );
       }
     });
@@ -166,7 +166,7 @@ export const LeftBar = ({
       {!!draggableItems?.length && (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-items-dnd" direction="vertical">
-            {listProvided => (
+            {(listProvided) => (
               <DraggableItems
                 items={draggableItems}
                 listProvided={listProvided}
@@ -235,7 +235,7 @@ export const LeftBar = ({
               </Trans>
             </StyledBodyLarge>
             <Box sx={{ mt: theme.spacing(2.4) }}>
-              {conditionalLogicKeysToRemove.map(conditionalLogicKey => (
+              {conditionalLogicKeysToRemove.map((conditionalLogicKey) => (
                 <ConditionalPanel
                   key={`conditional-panel-${conditionalLogicKey}`}
                   condition={groupedConditions[conditionalLogicKey]}

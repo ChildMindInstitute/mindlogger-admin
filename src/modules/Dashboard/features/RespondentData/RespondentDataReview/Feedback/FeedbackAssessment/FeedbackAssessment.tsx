@@ -105,7 +105,7 @@ export const FeedbackAssessment = ({ setActiveTab, assessmentStep, setAssessment
     setIsLastVersion(true);
     setIsBannerVisible(false);
 
-    const updatedAssessment = lastAssessment.map(activityItem => ({
+    const updatedAssessment = lastAssessment.map((activityItem) => ({
       activityItem,
       answer: undefined,
     })) as AssessmentActivityItem[];

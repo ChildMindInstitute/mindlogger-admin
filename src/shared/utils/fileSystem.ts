@@ -2,7 +2,7 @@ import { BYTE_QUANTITY } from 'shared/types/fileSystem';
 
 type FORMATTER = (value?: string | number) => string;
 
-export const byteFormatter: FORMATTER = cellValue => {
+export const byteFormatter: FORMATTER = (cellValue) => {
   if (!cellValue && cellValue !== 0) return '';
 
   let output = cellValue;

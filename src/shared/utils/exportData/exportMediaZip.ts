@@ -8,7 +8,7 @@ export const exportMediaZip = async (mediaData: ExportMediaData[], reportName: s
   try {
     const settledFetchDataList = await Promise.allSettled(mediaData.map(({ url }) => fetch(url)));
     const settledBlobDataList = await Promise.allSettled(
-      settledFetchDataList.map(settledFetchData => {
+      settledFetchDataList.map((settledFetchData) => {
         if (settledFetchData.status === 'rejected') return Promise.reject(null);
 
         return settledFetchData.value.blob();

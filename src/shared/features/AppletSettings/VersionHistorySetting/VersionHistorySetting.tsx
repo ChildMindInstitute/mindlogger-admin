@@ -103,7 +103,7 @@ export const VersionHistorySetting = () => {
                 title={t('appletMetadata')}
                 data-testid={`${dataTestid}-applet-changes`}>
                 <Box sx={{ ml: theme.spacing(2.5) }}>
-                  {versionChanges?.changes.map(change => renderChangeItem(change))}
+                  {versionChanges?.changes.map((change) => renderChangeItem(change))}
                 </Box>
               </Accordion>
             )}
@@ -113,20 +113,20 @@ export const VersionHistorySetting = () => {
                 title={t('activities')}
                 data-testid={`${dataTestid}-activities-changes`}>
                 <Box sx={{ ml: theme.spacing(2.5) }}>
-                  {versionChanges?.activities.map(activity => (
+                  {versionChanges?.activities.map((activity) => (
                     <Accordion uiType={AccordionUiType.Secondary} key={activity.name} title={activity.name}>
                       <Box sx={{ ml: theme.spacing(2.5) }}>
                         {!!activity?.changes.length && (
                           <Accordion uiType={AccordionUiType.Secondary} title={t('activityMetadata')}>
                             <Box sx={{ ml: theme.spacing(2.5) }}>
-                              {activity.changes.map(change => renderChangeItem(change))}
+                              {activity.changes.map((change) => renderChangeItem(change))}
                             </Box>
                           </Accordion>
                         )}
                         {!!activity?.items.length && (
                           <Accordion uiType={AccordionUiType.Secondary} title={t('items')}>
                             <Box sx={{ ml: theme.spacing(2.5) }}>
-                              {activity?.items.map(item => {
+                              {activity?.items.map((item) => {
                                 if (!item.changes && item.name) {
                                   return renderChangeItem(item.name);
                                 }
@@ -135,7 +135,7 @@ export const VersionHistorySetting = () => {
                                   item.changes && (
                                     <Accordion key={item.name} uiType={AccordionUiType.Secondary} title={item.name}>
                                       <Box sx={{ ml: theme.spacing(2.5) }}>
-                                        {item.changes?.map(change => renderChangeItem(change))}
+                                        {item.changes?.map((change) => renderChangeItem(change))}
                                       </Box>
                                     </Accordion>
                                   )

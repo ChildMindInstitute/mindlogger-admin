@@ -34,7 +34,7 @@ export const LeftBar = () => {
 
   useEffect(() => {
     if (workspacesData?.length) {
-      const ownerWorkspace = workspacesData.find(item => item.ownerId === id);
+      const ownerWorkspace = workspacesData.find((item) => item.ownerId === id);
       const storageWorkspace = authStorage.getWorkspace();
       dispatch(workspaces.actions.setCurrentWorkspace(storageWorkspace || ownerWorkspace || null));
     }
@@ -63,7 +63,7 @@ export const LeftBar = () => {
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
       <StyledDrawer>
         <StyledDrawerLogo
-          onClick={() => setVisibleDrawer(prevState => !prevState)}
+          onClick={() => setVisibleDrawer((prevState) => !prevState)}
           data-testid={`${dataTestid}-collapse`}>
           <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
         </StyledDrawerLogo>

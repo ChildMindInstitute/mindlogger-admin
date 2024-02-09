@@ -91,7 +91,7 @@ export const SubscalesConfiguration = () => {
   };
 
   const calculateTotalScoreSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCalculateTotalScoreSwitch(prevState => !prevState);
+    setCalculateTotalScoreSwitch((prevState) => !prevState);
     if (e.target.checked) {
       setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum, {
         shouldDirty: true,

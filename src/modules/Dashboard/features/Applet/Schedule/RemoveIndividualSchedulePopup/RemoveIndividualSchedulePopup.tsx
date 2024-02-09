@@ -39,7 +39,7 @@ export const RemoveIndividualSchedulePopup = ({
   });
 
   const getNextStep = () =>
-    setStep(prevStep => {
+    setStep((prevStep) => {
       const newStep = prevStep + 1;
 
       return newStep as Steps;

@@ -88,7 +88,7 @@ export const RespondentsRemoveAccessPopup = ({
               </Trans>
             </StyledBodyLarge>
           }
-          control={<Checkbox checked={removeData} onChange={() => setRemoveData(prevVal => !prevVal)} />}
+          control={<Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />}
           data-testid={`${dataTestid}-remove-data`}
         />
       )}
@@ -96,7 +96,7 @@ export const RespondentsRemoveAccessPopup = ({
   );
 
   const getStep = (type: 'next' | 'prev') =>
-    setStep(prevStep => {
+    setStep((prevStep) => {
       const newStep = type === 'next' ? prevStep + 1 : prevStep - 1;
 
       return newStep as Steps;

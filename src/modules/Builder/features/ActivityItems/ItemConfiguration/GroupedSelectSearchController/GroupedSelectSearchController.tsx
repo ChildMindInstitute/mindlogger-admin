@@ -125,7 +125,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                       value={searchTerm}
                       onChange={handleSearchChange}
                       onKeyDown={handleSearchKeyDown}
-                      onClick={event => {
+                      onClick={(event) => {
                         event.stopPropagation();
                       }}
                       InputProps={{
@@ -147,7 +147,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
 
                     return (
                       <StyledMenuItem
-                        onMouseEnter={selectOpen ? event => handleTooltipOpen(event, groupValue) : falseReturnFunc}
+                        onMouseEnter={selectOpen ? (event) => handleTooltipOpen(event, groupValue) : falseReturnFunc}
                         onMouseLeave={handleTooltipClose}
                         isHidden={isHidden}
                         key={groupValue}

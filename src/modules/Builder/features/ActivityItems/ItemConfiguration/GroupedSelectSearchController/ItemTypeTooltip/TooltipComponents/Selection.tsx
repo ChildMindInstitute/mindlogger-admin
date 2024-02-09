@@ -22,7 +22,7 @@ export const Selection = ({ uiType }: SelectionProps) => {
   return (
     <>
       <StyledPresentation>
-        {createArray(3, index => (
+        {createArray(3, (index) => (
           <StyledPresentationLine key={uniqueId()}>
             <Svg id={getSelectionSvgId(index, isSingleSelection)} {...commonProps} />
             <SelectionOption optionNumber={index + 1} />

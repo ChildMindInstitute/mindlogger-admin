@@ -30,7 +30,7 @@ export const Managers = () => {
 
   const { execute: getWorkspaceManagers } = useAsync(
     getWorkspaceManagersApi,
-    response => {
+    (response) => {
       setManagersData(response?.data || null);
     },
     undefined,
@@ -49,7 +49,7 @@ export const Managers = () => {
     });
   });
 
-  const { searchValue, handleSearch, handleReload, ...tableProps } = useTable(args => {
+  const { searchValue, handleSearch, handleReload, ...tableProps } = useTable((args) => {
     setIsLoading(true);
     const params = {
       ...args,
@@ -64,7 +64,7 @@ export const Managers = () => {
 
   const filterAppletsByRoles = (user: Manager) => ({
     ...user,
-    applets: user.applets.filter(applet => {
+    applets: user.applets.filter((applet) => {
       const workspaceUserRole = rolesData?.data?.[applet.id]?.[0];
       const withoutManagerOrOwner = !applet.roles?.some(({ role }) => isManagerOrOwner(role));
 
@@ -118,7 +118,7 @@ export const Managers = () => {
 
   const rows: DashboardTableProps['rows'] = useMemo(
     () =>
-      managersData?.result?.map(user => {
+      managersData?.result?.map((user) => {
         const filteredManager = filterAppletsByRoles(user);
         const { email, firstName, lastName, roles, isPinned, id } = user;
         const stringRoles = joinWihComma(roles);

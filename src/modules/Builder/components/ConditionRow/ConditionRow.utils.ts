@@ -51,7 +51,7 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
   }, []) || [];
 
 export const getScoreOptions = (scores: ScoreReport[]) =>
-  scores?.map(score => ({
+  scores?.map((score) => ({
     labelKey: `${t('score')}: ${score.name}`,
     value: score.key,
     type: ConditionItemType.Score,
@@ -67,7 +67,7 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
   scores?.reduce(
     (scoreConditionals: OptionListItem[], score: ScoreReport) => [
       ...scoreConditionals,
-      ...(score.conditionalLogic?.map(conditional => ({
+      ...(score.conditionalLogic?.map((conditional) => ({
         labelKey: `${t('scoreConditionals')}: ${conditional.name}`,
         value: getEntityKey(conditional, false),
         type: ConditionItemType.ScoreCondition,

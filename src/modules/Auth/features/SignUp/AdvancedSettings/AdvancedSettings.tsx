@@ -28,8 +28,8 @@ export const AdvancedSettings = () => {
 
   const handleFilterOptions = (options: ServerUrlOption[], params: FilterOptionsState<ServerUrlOption>) => {
     const { inputValue } = params;
-    const filtered = options.filter(option => option.name.includes(inputValue));
-    const isExisting = options.some(option => inputValue === option.value);
+    const filtered = options.filter((option) => option.name.includes(inputValue));
+    const isExisting = options.some((option) => inputValue === option.value);
     if (inputValue !== '' && !isExisting) {
       filtered.push({
         value: inputValue,
@@ -43,7 +43,7 @@ export const AdvancedSettings = () => {
   return (
     <StyledAdvancedSettings>
       <StyledSettingsButton
-        onClick={() => setShowSettings(prevState => !prevState)}
+        onClick={() => setShowSettings((prevState) => !prevState)}
         endIcon={showSettings ? <Svg id="dropdown-up" /> : <Svg id="dropdown" />}>
         {t('advancedSettings')}
       </StyledSettingsButton>
@@ -61,7 +61,7 @@ export const AdvancedSettings = () => {
               disableClearable
               clearOnBlur
               options={BACKEND_SERVERS}
-              getOptionLabel={option => (typeof option === 'string' ? option : option.name)}
+              getOptionLabel={(option) => (typeof option === 'string' ? option : option.name)}
               renderOption={(props, option) => <StyledMenuItem {...props}>{option.name}</StyledMenuItem>}
               renderInput={({ InputLabelProps, ...params }) => <TextField {...params} label={t('serverUrl')} />}
               freeSolo

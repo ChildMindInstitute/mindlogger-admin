@@ -98,7 +98,7 @@ export const Table = ({
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
                   <TableRow key={`row-${index}`} data-testid="table-row">
-                    {Object.keys(row)?.map(key => (
+                    {Object.keys(row)?.map((key) => (
                       <TableCell
                         sx={{ height: '4.8rem' }}
                         onClick={row[key].onClick}

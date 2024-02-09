@@ -73,7 +73,7 @@ export const FileUploader = ({
     }
 
     importTable(file, isPrimaryUiType)
-      .then(data => {
+      .then((data) => {
         setError(null);
         const importedFile = { name: file.name, data };
         const hasError = onFileReady(importedFile);

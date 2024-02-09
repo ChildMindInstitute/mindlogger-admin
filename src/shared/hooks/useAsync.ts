@@ -24,13 +24,13 @@ export const useAsync = <T, K>(
       setError(null);
 
       return asyncFunction(body)
-        ?.then(response => {
+        ?.then((response) => {
           setValue(response);
           callback && callback(response);
 
           return response;
         })
-        .catch(error => {
+        .catch((error) => {
           setError(error);
           errorCallback && errorCallback(error);
 

@@ -53,7 +53,7 @@ export const getAppletsWithLocalFolders = (applets: Applet[], folders: Folder[],
       return [
         ...result,
         folder,
-        ...applets.map(applet => ({
+        ...applets.map((applet) => ({
           ...applet,
           isFolder: false,
           parentId: folderRow.id,

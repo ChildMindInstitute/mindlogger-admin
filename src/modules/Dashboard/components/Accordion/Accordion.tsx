@@ -16,7 +16,7 @@ export const Accordion = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleItemExpand = () => {
-    setIsOpen(prevState => !prevState);
+    setIsOpen((prevState) => !prevState);
   };
 
   const isPrimaryUiType = uiType === AccordionUiType.Primary;

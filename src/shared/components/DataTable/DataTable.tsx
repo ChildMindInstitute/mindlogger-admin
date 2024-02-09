@@ -39,7 +39,7 @@ export const DataTable = ({
 
     if (onSelect) return onSelect(key, prevSelected);
 
-    if (prevSelected) return setSelected(selected.filter(selectedKey => selectedKey !== key));
+    if (prevSelected) return setSelected(selected.filter((selectedKey) => selectedKey !== key));
 
     setSelected([...selected, key]);
   };
@@ -49,7 +49,7 @@ export const DataTable = ({
 
     if (isAllSelected) return setSelected([]);
 
-    setSelected(data?.map(item => getItemKey(item)) ?? []);
+    setSelected(data?.map((item) => getItemKey(item)) ?? []);
   };
 
   return (

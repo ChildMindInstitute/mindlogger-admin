@@ -14,7 +14,7 @@ import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInform
 
 export const AdditionalInformation = ({ optionText, 'data-testid': dataTestid }: AdditionalInformationProps) => {
   const { t } = useTranslation();
-  const { execute: getOptionText } = useAsync(getOptionTextApi, response =>
+  const { execute: getOptionText } = useAsync(getOptionTextApi, (response) =>
     setAdditionalInformation(response?.data || ''),
   );
 

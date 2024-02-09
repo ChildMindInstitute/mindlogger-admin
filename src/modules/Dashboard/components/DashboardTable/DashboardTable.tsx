@@ -66,7 +66,7 @@ export const DashboardTable = ({
                 key={`row-${index}`}
                 onMouseEnter={() => setHoveredRowIndex(index)}
                 onMouseLeave={() => setHoveredRowIndex(-1)}>
-                {Object.keys(row)?.map(key => (
+                {Object.keys(row)?.map((key) => (
                   <StyledTableCell
                     onClick={row[key].onClick}
                     scope="row"

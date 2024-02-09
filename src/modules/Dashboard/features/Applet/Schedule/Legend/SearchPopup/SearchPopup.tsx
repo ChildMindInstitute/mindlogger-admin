@@ -79,7 +79,7 @@ export const SearchPopup = ({
   };
 
   const filteredRespondents = respondentsItems
-    ?.filter(item => filterRows(item?.secretId, searchValue) || filterRows(item?.nickname, searchValue))
+    ?.filter((item) => filterRows(item?.secretId, searchValue) || filterRows(item?.nickname, searchValue))
     .sort((a, b) => (a?.secretId ?? '').localeCompare(b?.secretId ?? ''));
 
   const handleSearch = (value: string) => {

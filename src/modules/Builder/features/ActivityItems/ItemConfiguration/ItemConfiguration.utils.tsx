@@ -151,7 +151,7 @@ export const checkIfQuestionIncludesVariables = (question: string, items: ItemFo
   const itemsObject = getObjectFromList(items, ({ name }) => name);
   const variableNames = getTextBetweenBrackets(question);
 
-  return variableNames.some(variable => !!itemsObject[variable]);
+  return variableNames.some((variable) => !!itemsObject[variable]);
 };
 
 export const checkIfItemHasRequiredOptions = (config: Config) => {

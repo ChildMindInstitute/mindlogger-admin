@@ -13,7 +13,7 @@ export const getUpdatedStorageData = (
   applets: PublishedApplet[] | null,
   selectedApplet: PublishedApplet,
   id: string,
-) => (applets?.length ? [...applets.filter(applet => applet.id !== id), selectedApplet] : [selectedApplet]);
+) => (applets?.length ? [...applets.filter((applet) => applet.id !== id), selectedApplet] : [selectedApplet]);
 
 export const includesSearchValue = (text: string, search: string) => {
   const pattern = new RegExp(search, 'gi');
@@ -44,14 +44,14 @@ export const getActivities = (
       return acc;
     }
 
-    const items = activity.items.map(item => {
+    const items = activity.items.map((item) => {
       let isItemExpanded = false;
 
       if (
         item.responseType === ItemResponseType.SingleSelection ||
         item.responseType === ItemResponseType.MultipleSelection
       ) {
-        item?.responseValues?.options?.forEach(option => {
+        item?.responseValues?.options?.forEach((option) => {
           if (includesSearchValue(option.text, search)) {
             isActivitiesExpanded = true;
             isItemExpanded = true;

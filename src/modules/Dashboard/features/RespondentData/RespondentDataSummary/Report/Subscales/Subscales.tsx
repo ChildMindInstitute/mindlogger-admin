@@ -28,10 +28,10 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
         (acc: ParsedSubscales, item) => {
           if (!item?.subscaleSetting?.subscales?.length) return acc;
 
-          const activityItems = getObjectFromList(item.decryptedAnswer, item => item.activityItem.name);
+          const activityItems = getObjectFromList(item.decryptedAnswer, (item) => item.activityItem.name);
           const subscalesObject = getObjectFromList<ActivitySettingsSubscale>(
             item.subscaleSetting.subscales,
-            item => item.name,
+            (item) => item.name,
           );
 
           const calculatedTotalScore =
@@ -92,11 +92,12 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
   const currentActivityCompletion =
     answers.length === 1
       ? answers[0]
-      : currentActivityCompletionData && answers.find(item => item.answerId === currentActivityCompletionData.answerId);
+      : currentActivityCompletionData &&
+        answers.find((item) => item.answerId === currentActivityCompletionData.answerId);
 
   const calculatedTotalScore =
     currentActivityCompletion?.subscaleSetting?.calculateTotalScore &&
-    finalScores?.find(item => item.activityCompletionID === currentActivityCompletion.answerId);
+    finalScores?.find((item) => item.activityCompletionID === currentActivityCompletion.answerId);
 
   const { activityCompletionToRender, activityCompletionScores } =
     currentActivityCompletion?.subscaleSetting?.subscales?.reduce(
@@ -108,7 +109,7 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
         item,
       ) => {
         const subscale = allSubscalesScores[item.name].activityCompletions.find(
-          el => el.activityCompletionID === currentActivityCompletion.answerId,
+          (el) => el.activityCompletionID === currentActivityCompletion.answerId,
         );
 
         if (!subscale) return acc;
@@ -158,7 +159,7 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
     };
 
   const lineChartSubscales = allSubscalesScores && [
-    ...Object.keys(allSubscalesScores).map(key => ({
+    ...Object.keys(allSubscalesScores).map((key) => ({
       name: key,
       activityCompletions: allSubscalesScores[key].activityCompletions,
     })),

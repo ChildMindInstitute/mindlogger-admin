@@ -222,7 +222,7 @@ export const Applet = ({
               ) : (
                 <StyledExpandedButton
                   disableRipple
-                  onClick={() => setActivitiesVisible(prevState => !prevState)}
+                  onClick={() => setActivitiesVisible((prevState) => !prevState)}
                   startIcon={
                     <StyledSvgContainer>
                       <Svg id={arrowSvgId} />

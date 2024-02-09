@@ -123,7 +123,7 @@ describe('ScoreContent', () => {
       async ({ checkboxIndexes, expectedResult }: { checkboxIndexes: number[]; expectedResult: string }) => {
         renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
-        checkboxIndexes.forEach(index => {
+        checkboxIndexes.forEach((index) => {
           const checkboxWrapper = screen.getByTestId(`${dataTestid}-items-score-unselected-checkbox-${index}`);
           fireEvent.click(within(checkboxWrapper).getByRole('checkbox'));
         });

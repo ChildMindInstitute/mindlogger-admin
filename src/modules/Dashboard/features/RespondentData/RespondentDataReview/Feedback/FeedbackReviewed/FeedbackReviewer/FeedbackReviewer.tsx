@@ -20,7 +20,7 @@ export const FeedbackReviewer = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleIsOpen = () => {
-    setIsOpen(state => !state);
+    setIsOpen((state) => !state);
   };
 
   return (

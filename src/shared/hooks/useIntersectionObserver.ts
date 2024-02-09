@@ -23,7 +23,7 @@ export const useIntersectionObserver = ({
     const callback: IntersectionObserverCallback = (entries: IntersectionObserverEntry[]) => {
       if (entries.length === 0) return;
 
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) return onAppear?.();
 
         return onHide?.();
