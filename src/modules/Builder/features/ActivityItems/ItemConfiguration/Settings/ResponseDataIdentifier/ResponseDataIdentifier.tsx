@@ -19,7 +19,8 @@ export const ResponseDataIdentifier = ({ onRemove }: ResponseDataIdentifierProps
         <StyledClearedButton
           sx={{ p: theme.spacing(1) }}
           onClick={onRemove}
-          data-testid="builder-activity-items-item-configuration-data-indentifier-remove">
+          data-testid="builder-activity-items-item-configuration-data-indentifier-remove"
+        >
           <Svg id="trash" width="20" height="20" />
         </StyledClearedButton>
       </StyledResponseDataIdentifierHeader>

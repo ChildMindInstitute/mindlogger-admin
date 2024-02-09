@@ -74,7 +74,8 @@ export const TagsInputController = <T extends FieldValues>({
                     {options?.length ? (
                       <ListItem
                         onMouseDown={(event) => event.preventDefault()} // prevent blur
-                        sx={{ pl: theme.spacing(2.8) }}>
+                        sx={{ pl: theme.spacing(2.8) }}
+                      >
                         <FormControlLabel
                           onClick={handleToggleSelectAll}
                           label={labelAllSelect}

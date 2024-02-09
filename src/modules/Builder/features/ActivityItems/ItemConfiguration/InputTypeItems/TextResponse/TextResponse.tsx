@@ -44,7 +44,8 @@ export const TextResponse = ({ name }: TextResponseProps) => {
     <ItemOptionContainer
       title={t('textResponseTitle')}
       description={t('textResponseDescription')}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledRow>
         <StyledTextField disabled variant="outlined" value={t('text')} data-testid={`${dataTestid}-input`} />
         <StyledMaxCharacters>

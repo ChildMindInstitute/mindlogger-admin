@@ -67,7 +67,8 @@ export const ActivityCompletionScores = ({
             onClick={() => setCurrentActivityCompletionData(null)}
             variant="text"
             startIcon={<Svg id="reset" width="18" height="18" />}
-            data-testid="show-all-subscale-results">
+            data-testid="show-all-subscale-results"
+          >
             {t('showAllSubscaleResults')}
           </StyledTextBtn>
         )}

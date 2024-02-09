@@ -64,7 +64,8 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
         variant="text"
         startIcon={<Svg width="18" height="18" id="add" />}
         onClick={handleAddNotification}
-        data-testid={`${dataTestid}-add-notification`}>
+        data-testid={`${dataTestid}-add-notification`}
+      >
         {t('addNotification')}
       </StyledAddBtn>
       <StyledRow>
@@ -81,7 +82,8 @@ export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTab
             variant="text"
             startIcon={<Svg width="18" height="18" id="add" />}
             onClick={handleAddReminder}
-            data-testid={`${dataTestid}-add-reminder`}>
+            data-testid={`${dataTestid}-add-reminder`}
+          >
             {t('addReminder')}
           </StyledAddBtn>
         )}

@@ -16,7 +16,8 @@ export const InvitationWithTooltip = ({ open, onClose, invitationLink }: Invitat
           <StyledCopyButton
             sx={{ cursor: 'pointer' }}
             onClick={() => navigator.clipboard.writeText(invitationLink)}
-            data-testid={`${dataTestId}-tooltip-copy-btn`}>
+            data-testid={`${dataTestId}-tooltip-copy-btn`}
+          >
             <Svg id="duplicate" width="18" height="18" />
           </StyledCopyButton>
         </StyledFlexTopCenter>
@@ -26,7 +27,8 @@ export const InvitationWithTooltip = ({ open, onClose, invitationLink }: Invitat
     maxWidth="none"
     PopperProps={{
       disablePortal: true,
-    }}>
+    }}
+  >
     <span data-testid={`${dataTestId}-invitation-link`}>{invitationLink}</span>
   </Tooltip>
 );

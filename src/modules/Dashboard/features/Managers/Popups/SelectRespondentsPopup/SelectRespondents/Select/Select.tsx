@@ -23,7 +23,8 @@ export const Select = ({ label, onChange, value, options, 'data-testid': dataTes
               <Svg id="navigate-down" width="18" height="18" />
             </StyledSvgContainer>
           ),
-        }}>
+        }}
+      >
         {options?.map(({ label, value }) => (
           <MenuItem key={label} value={value}>
             {t(label)}

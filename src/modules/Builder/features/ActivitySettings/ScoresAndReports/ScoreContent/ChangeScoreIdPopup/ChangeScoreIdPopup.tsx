@@ -43,7 +43,8 @@ export const ChangeScoreIdPopup = ({ onClose, onChange, 'data-testid': dataTesti
       submitBtnColor={isFirstScreen ? 'error' : 'primary'}
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledModalWrapper>
         {isFirstScreen ? <StyledBodyLarge>{t('changeScoreIdText')}</StyledBodyLarge> : getSecondScreen()}
       </StyledModalWrapper>

@@ -198,7 +198,8 @@ export const Alert = ({ name, index, removeAlert }: AlertProps) => {
       {sliderErrorText && (
         <StyledBodyMedium
           sx={{ pt: theme.spacing(alertTextError ? 2.5 : 0.5) }}
-          color={variables.palette.semantic.error}>
+          color={variables.palette.semantic.error}
+        >
           {sliderErrorText}
         </StyledBodyMedium>
       )}

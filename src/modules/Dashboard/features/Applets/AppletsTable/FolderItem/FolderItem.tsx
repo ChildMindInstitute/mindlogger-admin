@@ -107,7 +107,8 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       onDragOver={onDragOver}
       onDrop={(event) => onDrop(event, item)}
       onMouseEnter={() => setHasVisibleActions(true)}
-      onMouseLeave={() => setHasVisibleActions(false)}>
+      onMouseLeave={() => setHasVisibleActions(false)}
+    >
       <StyledTableCell width={AppletsColumnsWidth.Folder} onClick={() => (folder?.isRenaming ? null : onFolderClick())}>
         <StyledFlexTopCenter>
           <StyledFolderIcon>
@@ -130,7 +131,8 @@ export const FolderItem = ({ item }: FolderItemProps) => {
                       onMouseDown={(event) => {
                         event.preventDefault();
                         handleClearClick();
-                      }}>
+                      }}
+                    >
                       <Svg id="cross" />
                     </StyledCloseButton>
                   </InputAdornment>

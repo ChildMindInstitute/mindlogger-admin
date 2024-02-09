@@ -51,7 +51,8 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
               endAdornment: (
                 <StyledClearedButton
                   aria-label="toggle password visibility"
-                  onClick={() => setShowPassword((prevState) => !prevState)}>
+                  onClick={() => setShowPassword((prevState) => !prevState)}
+                >
                   <Svg id={showPassword ? 'visibility-off' : 'visibility-on'} />
                 </StyledClearedButton>
               ),
@@ -71,7 +72,8 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
               endAdornment: (
                 <StyledClearedButton
                   aria-label="toggle password visibility"
-                  onClick={() => setShowAppletPasswordConfirmation((prevState) => !prevState)}>
+                  onClick={() => setShowAppletPasswordConfirmation((prevState) => !prevState)}
+                >
                   <Svg id={showAppletPasswordConfirmation ? 'visibility-off' : 'visibility-on'} />
                 </StyledClearedButton>
               ),

@@ -59,7 +59,8 @@ export const DefaultTabs = ({ tabs, activeTab = 0, setActiveTab, uiType = UiType
         value={tabIndex}
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
-        centered>
+        centered
+      >
         {header}
       </StyledTabs>
       {content}

@@ -28,7 +28,8 @@ export const ActivitiesHeader = ({ isSticky, children, headerProps }: Activities
           startIcon={<Svg id="add" width={18} height={18} />}
           onClick={handleActivityAdd}
           sx={{ mr: theme.spacing(1.6) }}
-          data-testid="builder-activities-add-activity">
+          data-testid="builder-activities-add-activity"
+        >
           {t('addBlankActivity')}
         </Button>
         <ButtonWithMenu

@@ -64,7 +64,8 @@ export const LeftBar = () => {
       <StyledDrawer>
         <StyledDrawerLogo
           onClick={() => setVisibleDrawer((prevState) => !prevState)}
-          data-testid={`${dataTestid}-collapse`}>
+          data-testid={`${dataTestid}-collapse`}
+        >
           <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />
         </StyledDrawerLogo>
         <List>
@@ -73,7 +74,8 @@ export const LeftBar = () => {
               <NavLink
                 onClick={() => handleLinkClick(labelKey)}
                 to={link}
-                className={({ isActive }) => `${isActive ? 'active-link' : ''}`}>
+                className={({ isActive }) => `${isActive ? 'active-link' : ''}`}
+              >
                 {({ isActive }) => (
                   <>
                     {isActive ? activeIcon : icon}

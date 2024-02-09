@@ -91,7 +91,8 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           optionalItemsRef,
           onClose,
         }}
-        sxProps={containerSxProps}>
+        sxProps={containerSxProps}
+      >
         <Grid container direction="row" columns={2} spacing={2.4}>
           <Grid item xs={1}>
             <GroupedSelectSearchController
@@ -103,7 +104,8 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
             />
             <StyledBodyMedium
               sx={{ m: theme.spacing(0.2, 1.6, 4.8, 1.6) }}
-              color={variables.palette.on_surface_variant}>
+              color={variables.palette.on_surface_variant}
+            >
               {responseType && getInputTypeTooltip()[responseType]}
             </StyledBodyMedium>
           </Grid>
@@ -140,7 +142,8 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
           width={'62'}
           title={t('variablesWarning.title')}
           buttonText={t('ok')}
-          data-testid="builder-activity-items-item-configuration-variables-warning-popup">
+          data-testid="builder-activity-items-item-configuration-variables-warning-popup"
+        >
           <StyledModalWrapper>{t(message)}</StyledModalWrapper>
         </Modal>
       )}

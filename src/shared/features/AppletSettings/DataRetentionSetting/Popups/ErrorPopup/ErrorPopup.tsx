@@ -30,7 +30,8 @@ export const ErrorPopup = ({
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
           {t('saveError')}

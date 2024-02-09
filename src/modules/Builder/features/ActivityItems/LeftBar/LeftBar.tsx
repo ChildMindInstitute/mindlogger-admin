@@ -137,7 +137,8 @@ export const LeftBar = ({
       variant="outlined"
       startIcon={<Svg id="add" width={18} height={18} />}
       onClick={onAddItem}
-      data-testid="builder-activity-items-add-item">
+      data-testid="builder-activity-items-add-item"
+    >
       {t('addItem')}
     </Button>
   );
@@ -162,7 +163,8 @@ export const LeftBar = ({
         padding: theme.spacing(0, 1.6, 2.8),
       }}
       contentClassName={ACTIVITY_ITEMS_LIST_CLASS}
-      hasMaxWidth={!hasActiveItem}>
+      hasMaxWidth={!hasActiveItem}
+    >
       {!!draggableItems?.length && (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-items-dnd" direction="vertical">
@@ -221,7 +223,8 @@ export const LeftBar = ({
           secondBtnText={t('cancel')}
           hasSecondBtn
           submitBtnColor="error"
-          data-testid="builder-activity-items-item-remove-item-with-conditional-popup">
+          data-testid="builder-activity-items-item-remove-item-with-conditional-popup"
+        >
           <StyledModalWrapper>
             <StyledBodyLarge>
               <Trans i18nKey="removeConditionalsMoveItemPopupDescription">

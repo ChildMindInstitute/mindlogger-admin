@@ -26,7 +26,8 @@ export const SourceLinkModal = ({ title, error, handleClose, handleSubmit }: Sou
       title={title}
       buttonText={t('ok')}
       width="32"
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledModalWrapper>
         <form onSubmit={onSubmit} noValidate>
           <StyledController>

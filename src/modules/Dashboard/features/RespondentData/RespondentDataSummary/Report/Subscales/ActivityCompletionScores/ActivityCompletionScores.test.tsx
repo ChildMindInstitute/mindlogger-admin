@@ -31,7 +31,8 @@ describe('ActivityCompletionScores component', () => {
       <ReportContext.Provider
         value={{
           setCurrentActivityCompletionData,
-        }}>
+        }}
+      >
         <ActivityCompletionScores
           reviewDate={new Date('2024-01-23T20:10:15')}
           finalSubscaleScore={25}

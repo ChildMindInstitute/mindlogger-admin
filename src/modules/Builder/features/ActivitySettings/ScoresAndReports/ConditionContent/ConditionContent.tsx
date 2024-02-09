@@ -96,7 +96,8 @@ export const ConditionContent = ({
         startIcon={<Svg id="add" width="20" height="20" />}
         onClick={handleAddCondition}
         sx={{ m: theme.spacing(1.2, 0, 1.2, -2.4) }}
-        data-testid={`${dataTestid}-add-condition`}>
+        data-testid={`${dataTestid}-add-condition`}
+      >
         {t('addCondition')}
       </StyledButton>
       <ScoreSummaryRow name={name} data-testid={`${dataTestid}-summary-row`} />

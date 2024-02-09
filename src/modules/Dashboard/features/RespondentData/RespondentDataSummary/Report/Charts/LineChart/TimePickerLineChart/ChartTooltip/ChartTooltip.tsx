@@ -18,7 +18,8 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
             <Box
               key={`${x}_${y}`}
               sx={{ p: theme.spacing(index ? 0.6 : 0.4, 1.2) }}
-              data-testid={`${dataTestid}-tooltip-item-${index}`}>
+              data-testid={`${dataTestid}-tooltip-item-${index}`}
+            >
               <StyledBodyMedium sx={{ padding: theme.spacing(0.4, 0) }} color={variables.palette.white}>
                 {format(y, DateFormats.Time)}
               </StyledBodyMedium>

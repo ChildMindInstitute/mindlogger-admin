@@ -45,7 +45,8 @@ export const SaveAndPublish = () => {
         variant="contained"
         startIcon={<Svg id="save" width={18} height={18} />}
         onClick={handleSaveAndPublishFirstClick}
-        data-testid="builder-save-and-publish">
+        data-testid="builder-save-and-publish"
+      >
         {t('saveAndPublish')}
       </StyledButton>
       <AppletPasswordPopup

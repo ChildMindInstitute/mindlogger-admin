@@ -181,7 +181,8 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption, 'data-testid': dataT
                 <StyledTitleSmall
                   sx={{
                     mx: theme.spacing(1.6),
-                  }}>
+                  }}
+                >
                   {t('nextDay')}
                 </StyledTitleSmall>
               )}

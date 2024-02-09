@@ -17,7 +17,8 @@ export const ServerVerifyErrorPopup = ({ popupVisible, setPopupVisible }: Server
       onSubmit={onClose}
       title={t('reportConfiguration')}
       buttonText={t('ok')}
-      data-testid="applet-settings-report-config-verify-server-error-popup">
+      data-testid="applet-settings-report-config-verify-server-error-popup"
+    >
       <StyledModalWrapper>
         <Trans i18nKey="serverVerifyError">
           Sorry, we were unable to verify the Server. Please check the

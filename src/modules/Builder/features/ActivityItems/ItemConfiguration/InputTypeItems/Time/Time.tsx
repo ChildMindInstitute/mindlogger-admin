@@ -18,7 +18,8 @@ export const Time = ({ isRange = false }: TimeProps) => {
     <ItemOptionContainer
       title={t(isRange ? 'timeRangeTitle' : 'timeTitle')}
       description={t(isRange ? 'timeRangeDescription' : 'timeDescription')}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledFlexTopStart>
         <StyledTextField
           disabled

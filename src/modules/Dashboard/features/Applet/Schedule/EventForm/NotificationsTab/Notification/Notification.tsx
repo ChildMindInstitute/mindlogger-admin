@@ -36,7 +36,8 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
       <StyledTitleSmall
         sx={{
           mx: theme.spacing(1.6),
-        }}>
+        }}
+      >
         {t('nextDay')}
       </StyledTitleSmall>
     );

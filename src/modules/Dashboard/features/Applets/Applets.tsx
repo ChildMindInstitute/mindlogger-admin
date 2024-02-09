@@ -132,7 +132,8 @@ export const Applets = () => {
           fetchData,
           reloadData: tableProps.handleReload,
           handleFolderClick,
-        }}>
+        }}
+      >
         <AppletsTableHeader>
           <Box>
             {getIsAddAppletBtnVisible(currentWorkspace, rolesData, user) && (

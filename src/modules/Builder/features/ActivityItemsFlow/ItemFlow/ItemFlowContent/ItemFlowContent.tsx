@@ -61,7 +61,8 @@ export const ItemFlowContent = ({ name, isStatic, onRemove, 'data-testid': dataT
       {error && (
         <StyledBodyLarge
           sx={{ color: variables.palette.semantic.error, pl: theme.spacing(0.8) }}
-          data-testid={`${dataTestid}-error`}>
+          data-testid={`${dataTestid}-error`}
+        >
           {errorMessage}
         </StyledBodyLarge>
       )}

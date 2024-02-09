@@ -73,7 +73,8 @@ export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProp
           <StyledClearedButton
             sx={{ p: theme.spacing(1) }}
             onClick={() => setExpanded((prev) => !prev)}
-            data-testid={`${dataTestid}-collapse`}>
+            data-testid={`${dataTestid}-collapse`}
+          >
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
           </StyledClearedButton>
           <StyledLabelBoldLarge data-testid={`${dataTestid}-title`}>{title}</StyledLabelBoldLarge>

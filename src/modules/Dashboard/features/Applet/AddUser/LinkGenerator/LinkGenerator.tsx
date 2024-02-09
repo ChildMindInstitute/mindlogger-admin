@@ -57,7 +57,8 @@ export const LinkGenerator = () => {
           <Button
             variant="contained"
             onClick={handleGeneratePublicLinkClick}
-            data-testid="dashboard-add-users-generate-link-generate">
+            data-testid="dashboard-add-users-generate-link-generate"
+          >
             {t('generateLink')}
           </Button>
           <LinkPopup open={linkPopupVisible} onClose={() => setLinkPopupVisible(false)} onSubmit={onLinkCreated} />

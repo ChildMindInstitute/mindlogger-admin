@@ -66,7 +66,8 @@ export const Toolbar = ({ onView, onNavigate, label, activeView, setActiveView, 
       variant="text"
       startIcon={isSelectedFutureDate() && <Svg id="triangle-left" />}
       endIcon={isSelectedPastDate() && <Svg id="triangle-right" />}
-      data-testid={`${dataTestid}-today`}>
+      data-testid={`${dataTestid}-today`}
+    >
       {t('today')}
     </StyledTodayBtn>
   );

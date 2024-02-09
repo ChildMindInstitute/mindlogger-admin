@@ -83,7 +83,8 @@ export const CreateEventPopup = ({
           sxProps={{
             opacity: removeAllScheduledPopupVisible || removeAlwaysAvailablePopupVisible ? 0 : 1,
           }}
-          data-testid={dataTestid}>
+          data-testid={dataTestid}
+        >
           <>
             {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (
               <Spinner uiType={SpinnerUiType.Secondary} noBackground />

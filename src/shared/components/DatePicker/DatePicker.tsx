@@ -160,7 +160,8 @@ export const DatePicker = <T extends FieldValues>({
                   vertical: 'bottom',
                   horizontal: 'center',
                 }}
-                data-testid={`${dataTestid}-popover`}>
+                data-testid={`${dataTestid}-popover`}
+              >
                 {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
                 {value && <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />}
                 <Suspense fallback={<DatePickerFallback />}>

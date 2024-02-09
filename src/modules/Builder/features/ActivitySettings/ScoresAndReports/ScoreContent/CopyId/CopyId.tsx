@@ -18,7 +18,8 @@ export const CopyId = ({ title, value, showCopy = false, 'data-testid': dataTest
           <StyledDuplicateButton
             sx={{ p: theme.spacing(1), mr: theme.spacing(0.2) }}
             onClick={copyScoreId}
-            data-testid={`${dataTestid}-copy`}>
+            data-testid={`${dataTestid}-copy`}
+          >
             <Svg id="duplicate" width="20" height="20" />
           </StyledDuplicateButton>
         )}

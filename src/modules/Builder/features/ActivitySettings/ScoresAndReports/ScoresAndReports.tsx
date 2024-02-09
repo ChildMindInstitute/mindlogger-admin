@@ -107,7 +107,8 @@ export const ScoresAndReports = () => {
     <>
       <StyledBodyLarge
         sx={{ mb: theme.spacing(2.4) }}
-        color={isServerConfigured ? variables.palette.semantic.green : variables.palette.semantic.error}>
+        color={isServerConfigured ? variables.palette.semantic.green : variables.palette.semantic.error}
+      >
         {isServerConfigured ? (
           t('serverStatusConnected')
         ) : (

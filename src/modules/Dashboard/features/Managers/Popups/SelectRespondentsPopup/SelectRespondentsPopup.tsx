@@ -89,7 +89,8 @@ export const SelectRespondentsPopup = ({
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleClose}
       height="60"
-      data-testid="dashboard-managers-select-respondents-popup">
+      data-testid="dashboard-managers-select-respondents-popup"
+    >
       <StyledModalWrapper>
         <FormProvider {...methods}>
           <SelectRespondents appletName={appletName} reviewer={{ name, email }} respondents={respondents || []} />

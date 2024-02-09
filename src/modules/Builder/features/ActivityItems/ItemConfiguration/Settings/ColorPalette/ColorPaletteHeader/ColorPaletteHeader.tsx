@@ -18,14 +18,16 @@ export const ColorPaletteHeader = ({ isExpanded, onArrowClick, onRemovePalette }
       <StyledClearedButton
         onClick={onArrowClick}
         sx={commonButtonStyles}
-        data-testid="builder-activity-items-item-configuration-color-palette-collapse">
+        data-testid="builder-activity-items-item-configuration-color-palette-collapse"
+      >
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
       <StyledLabelBoldLarge sx={{ flexGrow: 1 }}>{t('colorPalette')}</StyledLabelBoldLarge>
       <StyledClearedButton
         onClick={onRemovePalette}
         sx={commonButtonStyles}
-        data-testid="builder-activity-items-item-configuration-color-palette-remove">
+        data-testid="builder-activity-items-item-configuration-color-palette-remove"
+      >
         <Svg id="trash" />
       </StyledClearedButton>
     </StyledFlexTopCenter>

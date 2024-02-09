@@ -45,7 +45,8 @@ export const VersionHistorySetting = () => {
         mb: theme.spacing(1),
       }}
       color={variables.palette.on_surface_variant}
-      key={change}>
+      key={change}
+    >
       {change}
     </StyledBodyLarge>
   );
@@ -82,7 +83,8 @@ export const VersionHistorySetting = () => {
             onOpen={() => setSelectOpen(true)}
             onClose={() => setSelectOpen(false)}
             IconComponent={() => <Svg className="navigate-arrow" id={selectOpen ? 'navigate-up' : 'navigate-down'} />}
-            data-testid={`${dataTestid}-version`}>
+            data-testid={`${dataTestid}-version`}
+          >
             {versions.map((version, index) => (
               <MenuItem key={version} value={version} data-testid={`${dataTestid}-version-${index}`}>
                 {t(index === 0 ? 'current' : 'version', { version })}
@@ -101,7 +103,8 @@ export const VersionHistorySetting = () => {
               <Accordion
                 uiType={AccordionUiType.Secondary}
                 title={t('appletMetadata')}
-                data-testid={`${dataTestid}-applet-changes`}>
+                data-testid={`${dataTestid}-applet-changes`}
+              >
                 <Box sx={{ ml: theme.spacing(2.5) }}>
                   {versionChanges?.changes.map((change) => renderChangeItem(change))}
                 </Box>
@@ -111,7 +114,8 @@ export const VersionHistorySetting = () => {
               <Accordion
                 uiType={AccordionUiType.Secondary}
                 title={t('activities')}
-                data-testid={`${dataTestid}-activities-changes`}>
+                data-testid={`${dataTestid}-activities-changes`}
+              >
                 <Box sx={{ ml: theme.spacing(2.5) }}>
                   {versionChanges?.activities.map((activity) => (
                     <Accordion uiType={AccordionUiType.Secondary} key={activity.name} title={activity.name}>

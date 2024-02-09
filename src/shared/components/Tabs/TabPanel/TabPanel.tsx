@@ -8,7 +8,8 @@ export const TabPanel = ({ children, value, index, hiddenHeader = false, id, ...
     id={id ?? `simple-tabpanel-${index}`}
     aria-labelledby={`simple-tab-${index}`}
     hiddenHeader={hiddenHeader}
-    {...other}>
+    {...other}
+  >
     {value === index && children}
   </StyledPanel>
 );

@@ -98,7 +98,8 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
               variant="contained"
               startIcon={<Svg id={isPaused || isStopped ? 'audio-filled' : 'pause'} {...commonSvgProps} />}
               onClick={isRecording || isPaused ? togglePauseResume : startRecording}
-              data-testid={`${dataTestid}-record`}>
+              data-testid={`${dataTestid}-record`}
+            >
               {t('audioPlayerRecordStart')}
             </Button>
             <StyledTitleMedium>{formatSecondsToMinutes(recordingTime)}</StyledTitleMedium>
@@ -108,7 +109,8 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
             startIcon={<Svg id="audio-stop" {...commonSvgProps} />}
             onClick={handleStop}
             disabled={isStopped}
-            data-testid={`${dataTestid}-stop`}>
+            data-testid={`${dataTestid}-stop`}
+          >
             {t('audioPlayerRecordStop')}
           </Button>
         </StyledButtons>

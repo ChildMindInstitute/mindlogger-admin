@@ -35,7 +35,8 @@ export const ServerNotConfigured = ({ appletId, 'data-testid': dataTestid }: Ser
             }),
           )
         }
-        data-testid={`${dataTestid}-configure-report`}>
+        data-testid={`${dataTestid}-configure-report`}
+      >
         {t('configureServerForApplet')}
       </Button>
     </>

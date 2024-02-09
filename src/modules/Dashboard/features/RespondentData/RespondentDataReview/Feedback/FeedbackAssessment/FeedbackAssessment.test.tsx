@@ -236,7 +236,8 @@ const getFeedbackAssessmentComponent = (
   isBannerVisible: boolean,
 ) => (
   <RespondentDataReviewContext.Provider
-    value={getMockedContext(assessment, lastAssessment, isLastVersion, isBannerVisible)}>
+    value={getMockedContext(assessment, lastAssessment, isLastVersion, isBannerVisible)}
+  >
     <FormComponent assessment={assessment}>
       <FeedbackAssessment setActiveTab={jest.fn()} assessmentStep={0} setAssessmentStep={jest.fn()} />
     </FormComponent>

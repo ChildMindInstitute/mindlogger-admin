@@ -95,7 +95,8 @@ export const BarChart = ({ chartData }: BarChartProps) => {
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-        data-testid={dataTestid}>
+        data-testid={dataTestid}
+      >
         <ChartTooltip data={tooltipData} data-testid={dataTestid} />
       </ChartTooltipContainer>
     </Box>

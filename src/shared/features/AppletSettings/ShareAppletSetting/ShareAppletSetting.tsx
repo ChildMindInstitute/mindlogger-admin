@@ -64,7 +64,8 @@ export const ShareAppletSetting = ({ isDisabled: isDisabledSetting = false }) =>
               startIcon={<Svg width={18} height={18} id="share" />}
               disabled={isDisabled || isDisabledSetting}
               onClick={() => setIsSubmitted(true)}
-              data-testid={`${dataTestid}-share`}>
+              data-testid={`${dataTestid}-share`}
+            >
               {t('share')}
             </StyledButton>
           </Box>

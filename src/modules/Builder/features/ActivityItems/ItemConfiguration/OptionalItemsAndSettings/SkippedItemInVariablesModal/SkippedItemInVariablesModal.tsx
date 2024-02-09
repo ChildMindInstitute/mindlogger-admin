@@ -21,7 +21,8 @@ export const SkippedItemInVariablesModal = ({ itemName }: SkippedItemInVariables
       width={'62'}
       title={t('variablesWarning.title')}
       buttonText={t('ok')}
-      data-testid="builder-activity-items-item-configuration-skipped-item-in-vars-popup">
+      data-testid="builder-activity-items-item-configuration-skipped-item-in-vars-popup"
+    >
       <StyledModalWrapper>
         <Trans i18nKey="variablesWarning.skippedItemInVariables">
           By skipping{' '}

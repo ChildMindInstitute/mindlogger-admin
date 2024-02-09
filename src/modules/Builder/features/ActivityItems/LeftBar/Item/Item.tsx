@@ -67,7 +67,8 @@ export const Item = ({
       onMouseEnter={() => setVisibleActions(true)}
       isDragging={isDragging}
       isSystem={!item.allowEdit}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledFlexTopCenter {...hiddenProps}>
         {item.responseType ? itemsTypeIcons[item.responseType as ItemResponseTypeNoPerfTasks] : ''}
       </StyledFlexTopCenter>

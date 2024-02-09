@@ -24,7 +24,8 @@ export const DownloadSchemaSetting = () => {
         <StyledAppletSettingsButton
           variant="outlined"
           startIcon={<Svg width="18" height="18" id="export" />}
-          data-testid="applet-settings-download-schema-download">
+          data-testid="applet-settings-download-schema-download"
+        >
           {t('download')}
         </StyledAppletSettingsButton>
       </Box>

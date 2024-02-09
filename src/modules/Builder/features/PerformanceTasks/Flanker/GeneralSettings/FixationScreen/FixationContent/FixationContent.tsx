@@ -79,7 +79,8 @@ export const FixationContent = () => {
                 sx={{
                   ml: theme.spacing(1),
                   color: variables.palette.on_surface_variant,
-                }}>
+                }}
+              >
                 {fixationImage.value}
               </StyledBodyLarge>
             )}
@@ -115,7 +116,8 @@ export const FixationContent = () => {
         onClick={handleFixationAdd}
         startIcon={<Svg id="add" width="1.8rem" height="1.8rem" />}
         variant="text"
-        data-testid={`${dataTestid}-add`}>
+        data-testid={`${dataTestid}-add`}
+      >
         {t('flankerFixation.addBtn')}
       </StyledSvgPrimaryColorBtn>
     </Box>

@@ -109,7 +109,8 @@ export const Activity = ({
       ) : (
         <StyledActivityHeader
           onClick={() => setActivityVisible((prevState) => !prevState)}
-          data-testid={`${dataTestid}-header`}>
+          data-testid={`${dataTestid}-header`}
+        >
           <StyledSvgArrowContainer>
             <Svg id={arrowSgvId} />
           </StyledSvgArrowContainer>

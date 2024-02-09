@@ -48,7 +48,8 @@ export const DashboardTable = ({
       maxHeight={maxHeight}
       uiType={uiType}
       hasColFixedWidth={hasColFixedWidth}
-      onScroll={onScroll}>
+      onScroll={onScroll}
+    >
       {!!rows?.length && (
         <MuiTable stickyHeader data-testid={dataTestid}>
           <TableHead
@@ -65,7 +66,8 @@ export const DashboardTable = ({
               <TableRow
                 key={`row-${index}`}
                 onMouseEnter={() => setHoveredRowIndex(index)}
-                onMouseLeave={() => setHoveredRowIndex(-1)}>
+                onMouseLeave={() => setHoveredRowIndex(-1)}
+              >
                 {Object.keys(row)?.map((key) => (
                   <StyledTableCell
                     onClick={row[key].onClick}
@@ -74,7 +76,8 @@ export const DashboardTable = ({
                     align={row[key].align}
                     width={row[key].width}
                     hasColFixedWidth={hasColFixedWidth}
-                    sx={{ cursor: row[key].onClick ? 'pointer' : 'default' }}>
+                    sx={{ cursor: row[key].onClick ? 'pointer' : 'default' }}
+                  >
                     {row[key].contentWithTooltip
                       ? row[key].contentWithTooltip
                       : row[key].content(row, hoveredRowIndex === index)}

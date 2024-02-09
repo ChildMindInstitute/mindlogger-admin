@@ -165,7 +165,8 @@ export const Activities = () => {
       title={t('activities')}
       Header={ActivitiesHeader}
       headerProps={{ onAddActivity: handleActivityAdd }}
-      hasMaxWidth>
+      hasMaxWidth
+    >
       {activities?.length ? (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activities-dnd" direction="vertical">

@@ -84,11 +84,13 @@ export const RespondentData = () => {
         variant="text"
         onClick={navigateUp}
         startIcon={<Svg id="directory-up" width="18" height="18" />}
-        data-testid="respondents-summary-back-to-applet">
+        data-testid="respondents-summary-back-to-applet"
+      >
         {t('appletPage')}
       </StyledDirectoryUpButton>
       <RespondentDataContext.Provider
-        value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}>
+        value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}
+      >
         <FormProvider {...methods}>
           <LinkedTabs tabs={respondentDataTabs} />
         </FormProvider>

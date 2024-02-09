@@ -128,7 +128,8 @@ export const ActivityFlowBuilder = () => {
         onAddFlowActivity: handleFlowActivityAdd,
         onClearFlow: handleClearFlow,
       }}
-      hasMaxWidth>
+      hasMaxWidth
+    >
       {activityFlowItems?.length ? (
         <>
           <DragDropContext onDragEnd={handleDragEnd}>
@@ -149,7 +150,8 @@ export const ActivityFlowBuilder = () => {
                             className={builderItemClassName}
                             ref={itemProvided.innerRef}
                             {...itemProvided.draggableProps}
-                            data-testid={itemDataTestid}>
+                            data-testid={itemDataTestid}
+                          >
                             <Item
                               dragHandleProps={itemProvided.dragHandleProps}
                               isDragging={snapshot.isDragging}

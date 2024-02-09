@@ -40,7 +40,8 @@ export const dashboardRoutes = () => (
             <Applet />
           </ErrorBoundary>
         </PrivateRoute>
-      }>
+      }
+    >
       {appletRoutes.map(({ path, Component }) => (
         <Route
           key={path}

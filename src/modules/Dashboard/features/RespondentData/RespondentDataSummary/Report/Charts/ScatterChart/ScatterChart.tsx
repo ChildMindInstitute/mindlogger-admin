@@ -80,7 +80,8 @@ export const ScatterChart = ({ height = '6rem', answers, versions, minDate, maxD
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-        data-testid={dataTestid}>
+        data-testid={dataTestid}
+      >
         <ChartTooltip data={tooltipData} data-testid={dataTestid} />
       </ChartTooltipContainer>
     </StyledWrapper>

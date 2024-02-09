@@ -25,7 +25,8 @@ export const ErrorPopup = ({ popupVisible, setPopupVisible, retryCallback }: Err
       hasSecondBtn
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
-      data-testid="builder-activity-flows-settings-report-config-form-error-popup">
+      data-testid="builder-activity-flows-settings-report-config-form-error-popup"
+    >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
           {t('saveError')}

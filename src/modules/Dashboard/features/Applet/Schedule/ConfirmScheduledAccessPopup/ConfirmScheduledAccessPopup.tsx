@@ -25,7 +25,8 @@ export const ConfirmScheduledAccessPopup = ({
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
       disabledSubmit={isLoading}
-      data-testid="dashboard-calendar-confirm-scheduled-access-popup">
+      data-testid="dashboard-calendar-confirm-scheduled-access-popup"
+    >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>

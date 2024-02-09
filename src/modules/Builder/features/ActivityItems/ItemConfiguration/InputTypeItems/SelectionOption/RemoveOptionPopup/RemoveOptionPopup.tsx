@@ -30,7 +30,8 @@ export const RemoveOptionPopup = ({
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
           <Trans i18nKey="deleteOptionDescription">

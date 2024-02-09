@@ -17,7 +17,8 @@ export const ActionButtons = ({
       isPrimaryUiType={isPrimaryUiType}
       variant="outlined"
       aria-label="button group"
-      data-testid="action-buttons">
+      data-testid="action-buttons"
+    >
       {showFirstButton && (
         <StyledActionBtn isPrimaryUiType={isPrimaryUiType} onClick={onEditImg} data-testid="action-buttons-edit">
           <Svg width={svgSize} height={svgSize} id="edit" />

@@ -37,7 +37,8 @@ export const DuplicateAppletSettings = () => {
             }),
           )
         }
-        data-testid={`${dataTestid}-duplicate`}>
+        data-testid={`${dataTestid}-duplicate`}
+      >
         {t('duplicate')}
       </StyledAppletSettingsButton>
       {duplicatePopupsVisible && (

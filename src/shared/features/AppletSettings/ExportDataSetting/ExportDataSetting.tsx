@@ -116,7 +116,8 @@ export const ExportDataSetting = () => {
           <StyledFlexTopCenter
             sx={{
               mt: theme.spacing(2.4),
-            }}>
+            }}
+          >
             <DatePicker
               {...commonProps}
               name="fromDate"
@@ -144,7 +145,8 @@ export const ExportDataSetting = () => {
             }}
             variant="outlined"
             startIcon={<Svg width="18" height="18" id="export" />}
-            data-testid={dataTestid}>
+            data-testid={dataTestid}
+          >
             {t('download')}
           </StyledAppletSettingsButton>
         </Box>

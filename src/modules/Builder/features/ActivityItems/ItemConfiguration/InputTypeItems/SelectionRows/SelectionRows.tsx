@@ -64,7 +64,8 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
           onClick={handleAddRow}
           variant="outlined"
           startIcon={<Svg id="add" width="20" height="20" />}
-          data-testid="builder-activity-items-item-configuration-selection-rows-add-row">
+          data-testid="builder-activity-items-item-configuration-selection-rows-add-row"
+        >
           {t('addSelectionRow')}
         </StyledAddRowButton>
       </StyledFlexColumn>

@@ -26,7 +26,8 @@ export const WarningPopup = ({ popupVisible, setPopupVisible, submitCallback }: 
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
       buttonText={t('saveAnyway')}
-      data-testid="builder-applet-settings-report-config-setting-save-anyway-popup">
+      data-testid="builder-applet-settings-report-config-setting-save-anyway-popup"
+    >
       <StyledModalWrapper>
         <Trans i18nKey="saveReportConfigurationWarning">
           A report can not be generated until the <strong>'Encryption Server IP Address'</strong>

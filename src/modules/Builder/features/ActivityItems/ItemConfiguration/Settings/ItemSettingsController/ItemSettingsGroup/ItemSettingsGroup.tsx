@@ -72,14 +72,16 @@ export const ItemSettingsGroup = ({
       timeout={0}
       collapsedSize="4.8rem"
       sx={{ flexShrink: 0 }}
-      data-testid={`builder-activity-items-item-settings-group-container-${groupName}`}>
+      data-testid={`builder-activity-items-item-settings-group-container-${groupName}`}
+    >
       <StyledFormControl>
         <StyledItemSettingsGroupHeader sx={{ justifyContent: 'space-between' }}>
           <StyledFormLabel>{t(groupName, { context: inputType })}</StyledFormLabel>
           <StyledClearedButton
             sx={{ p: theme.spacing(1) }}
             onClick={handleCollapse}
-            data-testid="builder-activity-items-item-settings-group-collapse">
+            data-testid="builder-activity-items-item-settings-group-collapse"
+          >
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
           </StyledClearedButton>
         </StyledItemSettingsGroupHeader>
@@ -290,7 +292,8 @@ export const ItemSettingsGroup = ({
                         {hasTooltip && (
                           <Tooltip
                             tooltipTitle={t(`itemSettings.${settingKey}`, { context: 'tooltip' })}
-                            placement="top">
+                            placement="top"
+                          >
                             <span>
                               <StyledSettingInfoIcon id="more-info-outlined" />
                             </span>

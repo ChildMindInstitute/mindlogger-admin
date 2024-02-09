@@ -45,7 +45,8 @@ export const getGroupName = (groupName: string, options: ItemsOption[], searchTe
     return (
       <StyledGroupName
         key={groupName}
-        data-testid={`builder-activity-items-item-configuration-response-type-group-${groupName}`}>
+        data-testid={`builder-activity-items-item-configuration-response-type-group-${groupName}`}
+      >
         {t(groupName)}
       </StyledGroupName>
     );

@@ -16,7 +16,8 @@ export const ItemOptionContainer = ({
         <StyledTitleMedium
           color={variables.palette.on_surface}
           sx={{ mb: theme.spacing(1) }}
-          data-testid={`${dataTestid}-description`}>
+          data-testid={`${dataTestid}-description`}
+        >
           {description}
         </StyledTitleMedium>
       )}

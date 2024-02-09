@@ -105,7 +105,8 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
       title={t('editAccess')}
       buttonText={t('save')}
       disabledSubmit={!applets.length}
-      data-testid="dashboard-managers-edit-access-popup">
+      data-testid="dashboard-managers-edit-access-popup"
+    >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>

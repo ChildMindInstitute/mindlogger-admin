@@ -112,7 +112,8 @@ export const Applet = ({
       {description && (
         <StyledBodyMedium
           color={variables.palette.on_surface}
-          sx={{ marginTop: theme.spacing(0.4), wordBreak: 'break-word' }}>
+          sx={{ marginTop: theme.spacing(0.4), wordBreak: 'break-word' }}
+        >
           {getHighlightedText(getDictionaryText(description), search)}
         </StyledBodyMedium>
       )}
@@ -155,7 +156,8 @@ export const Applet = ({
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleAddToCart}
-              data-testid={`${dataTestid}-add-to-cart`}>
+              data-testid={`${dataTestid}-add-to-cart`}
+            >
               {t('addToCart')}
             </Button>
           </>
@@ -169,7 +171,8 @@ export const Applet = ({
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleAddToCart}
-              data-testid={`${dataTestid}-add-to-cart`}>
+              data-testid={`${dataTestid}-add-to-cart`}
+            >
               {t('addToCart')}
             </Button>
           </>
@@ -182,7 +185,8 @@ export const Applet = ({
               startIcon={<Svg width="18" height="18" id="trash" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleRemove}
-              data-testid={`${dataTestid}-cart-remove`}>
+              data-testid={`${dataTestid}-cart-remove`}
+            >
               {t('remove')}
             </Button>
           </>
@@ -206,7 +210,8 @@ export const Applet = ({
                   variant="contained"
                   key={keyword}
                   hasSearch={!!setSearch}
-                  data-testid={`${dataTestid}-keywords-${index}`}>
+                  data-testid={`${dataTestid}-keywords-${index}`}
+                >
                   {getHighlightedText(keyword, search)}
                 </StyledAppletKeyword>
               ))}
@@ -228,7 +233,8 @@ export const Applet = ({
                       <Svg id={arrowSvgId} />
                     </StyledSvgContainer>
                   }
-                  data-testid={`${dataTestid}-activities-collapse`}>
+                  data-testid={`${dataTestid}-activities-collapse`}
+                >
                   <StyledLabelBoldLarge>{t('activities')}</StyledLabelBoldLarge>
                 </StyledExpandedButton>
               )}

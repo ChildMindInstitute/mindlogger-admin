@@ -28,7 +28,8 @@ export const Accordion = ({
           mb: theme.spacing(isPrimaryUiType ? 0 : 1),
           cursor: 'pointer',
         }}
-        onClick={handleItemExpand}>
+        onClick={handleItemExpand}
+      >
         <StyledSvg
           isPrimaryUiType={isPrimaryUiType}
           id={isOpen ? 'navigate-up' : 'navigate-down'}
@@ -39,7 +40,8 @@ export const Accordion = ({
           sx={{
             fontWeight: isPrimaryUiType ? variables.font.weight.bold : variables.font.weight.regular,
           }}
-          color={variables.palette.on_surface_variant}>
+          color={variables.palette.on_surface_variant}
+        >
           {title}
         </Box>
       </StyledFlexTopCenter>

@@ -58,7 +58,8 @@ export const ActivityFlowBuilderHeader = ({ isSticky, children, headerProps }: A
             variant="outlined"
             startIcon={<Svg id="cross" width={18} height={18} />}
             onClick={() => setClearFlowModalVisible(true)}
-            data-testid={`${dataTestid}-clear`}>
+            data-testid={`${dataTestid}-clear`}
+          >
             {t('clearFlow')}
           </Button>
         </StyledButtons>

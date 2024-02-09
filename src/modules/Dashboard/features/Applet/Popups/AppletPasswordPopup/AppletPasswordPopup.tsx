@@ -33,7 +33,8 @@ export const AppletPasswordPopup = ({
       title={popupType === AppletPasswordPopupType.Enter ? t('enterAppletPassword') : t('createAppletPassword')}
       buttonText={t('submit')}
       data-testid={dataTestid}
-      disabledSubmit={!!appletPasswordRef?.current?.password}>
+      disabledSubmit={!!appletPasswordRef?.current?.password}
+    >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledAppletPasswordContainer>

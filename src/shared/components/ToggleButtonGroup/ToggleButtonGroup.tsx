@@ -33,7 +33,8 @@ export const ToggleButtonGroup = ({
           withIcon={!!icon}
           key={value}
           value={value}
-          data-testid={`${dataTestid}-${index}`}>
+          data-testid={`${dataTestid}-${index}`}
+        >
           {activeButton === value && !icon && (
             <StyledIcon>
               <Svg id="check" />

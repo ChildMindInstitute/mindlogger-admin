@@ -77,7 +77,8 @@ export const ActivityItemsFlow = () => {
       headerProps={headerProps}
       hasMaxWidth
       contentClassName={ACTIVITY_ITEMS_FLOW_LIST_CLASS}
-      contentSxProps={contentStyles}>
+      contentSxProps={contentStyles}
+    >
       {!!flowItemsData?.length &&
         flowItemsData.map((flowItem: ConditionalLogic, index: number) => (
           <ItemFlow

@@ -40,7 +40,8 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
         <StyledClearedButton
           sx={{ p: theme.spacing(1) }}
           onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
-          data-testid="builder-conditional-panel-btn">
+          data-testid="builder-conditional-panel-btn"
+        >
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
         </StyledClearedButton>
         <StyledBodyLarge>

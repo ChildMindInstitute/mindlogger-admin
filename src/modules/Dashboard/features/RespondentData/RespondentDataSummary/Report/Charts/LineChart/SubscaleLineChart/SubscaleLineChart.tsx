@@ -122,7 +122,8 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
           isHovered.current = true;
         }}
         onMouseLeave={hideTooltip}
-        data-testid={dataTestid}>
+        data-testid={dataTestid}
+      >
         <ChartTooltip dataPoints={tooltipData} data-testid={dataTestid} />
       </ChartTooltipContainer>
     </Box>

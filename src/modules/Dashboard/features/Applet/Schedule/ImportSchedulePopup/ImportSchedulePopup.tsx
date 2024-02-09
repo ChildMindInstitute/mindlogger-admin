@@ -174,7 +174,8 @@ export const ImportSchedulePopup = ({
       onSecondBtnSubmit={onClose}
       disabledSubmit={isSubmitDisabled || isLoading}
       width="66"
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>

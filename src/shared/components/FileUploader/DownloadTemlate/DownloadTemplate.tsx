@@ -10,7 +10,8 @@ export const DownloadTemplate = ({ children, onClick, sxProps }: DownloadTemplat
       variant="text"
       startIcon={<StyledSvg width="18" height="18" id="export" />}
       onClick={onClick}
-      data-testid="download-template">
+      data-testid="download-template"
+    >
       {children}
     </Button>
   </Box>

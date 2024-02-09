@@ -160,7 +160,8 @@ export const SubscalesConfiguration = () => {
         {...commonButtonProps}
         onClick={handleAddSubscale}
         sx={{ mb: theme.spacing(2) }}
-        data-testid={`${dataTestid}-add`}>
+        data-testid={`${dataTestid}-add`}
+      >
         {t('addSubscales')}
       </Button>
       {!!subscalesLength && (
@@ -188,7 +189,8 @@ export const SubscalesConfiguration = () => {
             onClick={() => {
               setIsLookupTableOpened(true);
             }}
-            data-testid={`${dataTestid}-lookup-table`}>
+            data-testid={`${dataTestid}-lookup-table`}
+          >
             <StyledSvg isFilled={!!tableData?.length} id={iconId} width="20" height="20" />
           </StyledSvgButton>
           <RadioGroupController

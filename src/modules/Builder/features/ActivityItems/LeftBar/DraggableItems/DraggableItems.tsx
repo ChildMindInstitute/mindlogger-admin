@@ -34,7 +34,8 @@ export const DraggableItems = ({
       {...listProvided.droppableProps}
       ref={listProvided.innerRef}
       className={DRAGGABLE_ITEMS_LIST_CLASS}
-      sx={{ position: 'relative' }}>
+      sx={{ position: 'relative' }}
+    >
       {!isPending &&
         draggableItems.map((item, index) => {
           const dataTestid = `builder-activity-items-item-${index}`;

@@ -27,7 +27,8 @@ export const RemoveScheduledEventPopup = ({
       secondBtnText={t('cancel')}
       onSecondBtnSubmit={onClose}
       disabledSubmit={isLoading}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>

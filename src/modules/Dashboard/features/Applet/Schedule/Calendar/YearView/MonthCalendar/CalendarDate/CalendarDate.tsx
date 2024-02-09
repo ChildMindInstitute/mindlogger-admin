@@ -63,7 +63,8 @@ export const CalendarDate = ({ dateToRender, dateOfMonth, onDayClick, events }: 
         onMouseLeave={events.length ? handleTooltipClose : falseReturnFunc}
         isToday={isToday}
         isOffRange={isOffRange}
-        onClick={() => onDayClick(dateToRender)}>
+        onClick={() => onDayClick(dateToRender)}
+      >
         <StyledBodySmall>{dateToRender.getDate()}</StyledBodySmall>
         {events.length > 0 && (
           <StyledDotsWrapper>
@@ -96,7 +97,8 @@ export const CalendarDate = ({ dateToRender, dateOfMonth, onDayClick, events }: 
             style: {
               marginTop: isTooltipBtm ? theme.spacing(0.4) : theme.spacing(-0.4),
             },
-          }}>
+          }}
+        >
           <StyledMonthName>{getDayName(dateToRender)}</StyledMonthName>
           <StyledTooltipDate>
             <StyledHeadline>{dateToRender.getDate()}</StyledHeadline>

@@ -126,7 +126,8 @@ export const EditEventPopup = ({
           width="67.1"
           disabledSubmit={(!!editedEvent && !isFormChanged) || isLoading}
           onTransitionEntered={handleTransitionEntered}
-          data-testid={`${dataTestid}-popup`}>
+          data-testid={`${dataTestid}-popup`}
+        >
           <>
             {isLoading && !removeAllScheduledPopupVisible && !removeAlwaysAvailablePopupVisible && (
               <Spinner uiType={SpinnerUiType.Secondary} noBackground />
@@ -138,7 +139,8 @@ export const EditEventPopup = ({
                 onClick={onRemoveEventClick}
                 startIcon={<Svg width="18" height="18" id="clear-calendar" />}
                 disabled={editedEvent.alwaysAvailable}
-                data-testid={`${dataTestid}-popup-remove`}>
+                data-testid={`${dataTestid}-popup-remove`}
+              >
                 {t('removeEvent')}
               </StyledButton>
             </StyledContainer>

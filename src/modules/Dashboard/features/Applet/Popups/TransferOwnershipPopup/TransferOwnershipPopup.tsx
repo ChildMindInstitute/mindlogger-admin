@@ -40,7 +40,8 @@ export const TransferOwnershipPopup = () => {
         title={t('transferOwnership')}
         buttonText={t('confirm')}
         width="60"
-        data-testid="dashboard-applets-transfer-popup">
+        data-testid="dashboard-applets-transfer-popup"
+      >
         <StyledModalWrapper>
           <TransferOwnership
             appletId={currentApplet?.id ?? ''}

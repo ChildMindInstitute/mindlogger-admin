@@ -79,7 +79,8 @@ export const RemoveIndividualSchedulePopup = ({
       onSecondBtnSubmit={onClose}
       secondBtnText={t('cancel')}
       disabledSubmit={isLoading}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper data-testid={`${dataTestid}-text`}>

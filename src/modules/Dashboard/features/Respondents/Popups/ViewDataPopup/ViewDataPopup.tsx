@@ -48,7 +48,8 @@ export const ViewDataPopup = ({
       onSubmit={submitForm}
       title={showSecondScreen ? t('enterAppletPassword') : t('viewData')}
       buttonText={showSecondScreen ? t('submit') : ''}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledModalWrapper>
         {showSecondScreen ? (
           <EnterAppletPassword

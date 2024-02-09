@@ -196,7 +196,8 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         onDrop={(event) => onDrop(event, item)}
         hover
         onMouseEnter={() => setHasVisibleActions(true)}
-        onMouseLeave={() => setHasVisibleActions(false)}>
+        onMouseLeave={() => setHasVisibleActions(false)}
+      >
         <StyledTableCell width={AppletsColumnsWidth.AppletName} onClick={handleAppletClick}>
           <StyledAppletName applet={item}>
             {item.parentId && (

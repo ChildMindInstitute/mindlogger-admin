@@ -37,7 +37,8 @@ export const BuilderActivityFlow = () => {
       <StyledDirectoryUpButton
         variant="text"
         onClick={handleBackBtnClick}
-        startIcon={<Svg id="directory-up" width="18" height="18" />}>
+        startIcon={<Svg id="directory-up" width="18" height="18" />}
+      >
         {t('activityFlows')}
         <Badge variant="dot" invisible={!hasAppletErrors} color="error" />
       </StyledDirectoryUpButton>

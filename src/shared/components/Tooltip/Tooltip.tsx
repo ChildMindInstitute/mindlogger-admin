@@ -9,7 +9,8 @@ export const Tooltip = ({ tooltipTitle = '', children, maxWidth, ...props }: Too
       '.MuiTooltip-tooltip': {
         maxWidth: maxWidth ?? '24rem',
       },
-    }}>
+    }}
+  >
     {children}
   </StyledTooltip>
 );

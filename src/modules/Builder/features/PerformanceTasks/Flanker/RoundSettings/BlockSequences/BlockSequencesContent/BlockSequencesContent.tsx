@@ -104,7 +104,8 @@ export const BlockSequencesContent = ({
           onClick={() => setImportTableVisible(true)}
           startIcon={<Svg id={btnIconId} width="1.8rem" height="1.8rem" />}
           variant="text"
-          data-testid={`${dataTestid}-upload`}>
+          data-testid={`${dataTestid}-upload`}
+        >
           {btnText}
         </StyledSvgPrimaryColorBtn>
         {!uploadedTable && hasBlockSequencesErrors && (

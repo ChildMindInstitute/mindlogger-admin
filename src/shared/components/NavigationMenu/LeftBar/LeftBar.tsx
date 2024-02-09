@@ -64,7 +64,8 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                               isCompact={hasActiveItem}
                               isSelected={!disabled && setting === param}
                               disabled={disabled}
-                              data-testid={dataTestid}>
+                              data-testid={dataTestid}
+                            >
                               <StyledFlexAllCenter>{icon}</StyledFlexAllCenter>
                               <StyledTitle>{t(label)}</StyledTitle>
                               {hasError && <Badge variant="dot" invisible={!hasError} color="error" />}

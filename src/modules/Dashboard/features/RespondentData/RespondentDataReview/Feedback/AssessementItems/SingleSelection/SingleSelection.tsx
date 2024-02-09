@@ -21,7 +21,8 @@ export const SingleSelection = ({
       {...radioGroupProps}
       value={value}
       onChange={(_, value) => onChange && onChange(value)}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       {options.map((option, index) => (
         <StyledFormControlLabel
           disabled={isDisabled}

@@ -19,7 +19,8 @@ export const DeletePublicLinkPopup = ({ open, onClose, onSubmit }: DeletePublicL
       secondBtnText={t('cancel')}
       submitBtnColor="error"
       hasSecondBtn
-      data-testid="dashboard-add-users-generate-link-delete-popup">
+      data-testid="dashboard-add-users-generate-link-delete-popup"
+    >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>{t('deletePublicLinkDescription')}</StyledBodyLarge>
       </StyledModalWrapper>

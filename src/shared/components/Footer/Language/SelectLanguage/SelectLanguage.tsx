@@ -28,14 +28,16 @@ export const SelectLanguage = ({ onClose, open, currentLanguage }: SelectLanguag
       titleAlign="center"
       buttonText={t('ok')}
       width="42"
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledList>
         {languages.map((lang) => (
           <StyledListItemButton
             key={lang.value}
             selected={selectedLanguage.value === lang.value}
             onClick={() => setSelectedLanguage(lang)}
-            data-testid={`${dataTestid}-${lang.value}`}>
+            data-testid={`${dataTestid}-${lang.value}`}
+          >
             <StyledItemContent>
               <Box>{lang.component}</Box>
               <StyledBox>

@@ -19,7 +19,8 @@ export const RemoveItemFlowPopup = ({ open, index, onClose, onSubmit }: RemoveIt
       secondBtnText={t('cancel')}
       submitBtnColor="error"
       onSecondBtnSubmit={onClose}
-      data-testid="builder-activity-item-flow-remove-popup">
+      data-testid="builder-activity-item-flow-remove-popup"
+    >
       <StyledModalWrapper>
         <Trans key="removeConditionalPopupDescription">
           Are you sure you want to remove

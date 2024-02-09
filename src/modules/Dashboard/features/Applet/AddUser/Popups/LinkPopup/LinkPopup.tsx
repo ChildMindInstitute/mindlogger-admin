@@ -37,7 +37,8 @@ export const LinkPopup = ({ open, onClose, onSubmit }: LinkPopupProps) => {
         fontWeight: variables.font.weight.bold,
       }}
       data-testid="dashboard-add-users-generate-link-generate-popup"
-      width="70">
+      width="70"
+    >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>{t('requireToCreateAccount')}</StyledBodyLarge>
       </StyledModalWrapper>

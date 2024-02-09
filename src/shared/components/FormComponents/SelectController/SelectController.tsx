@@ -67,7 +67,8 @@ export const SelectController = <T extends FieldValues>({
       uiType={uiType}
       value={value as string}
       disabled={itemDisabled}
-      className={hidden ? 'hidden-menu-item' : ''}>
+      className={hidden ? 'hidden-menu-item' : ''}
+    >
       <StyledItem itemDisabled={itemDisabled} selectDisabled={disabled}>
         {icon && (
           <StyledFlexTopCenter className="icon-wrapper" sx={{ marginRight: theme.spacing(1.8) }}>
@@ -158,7 +159,8 @@ export const SelectController = <T extends FieldValues>({
             },
           }),
         }}
-        data-testid={dataTestid}>
+        data-testid={dataTestid}
+      >
         {renderGroupedOptions()}
         {targetSelector && <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />}
       </StyledTextField>

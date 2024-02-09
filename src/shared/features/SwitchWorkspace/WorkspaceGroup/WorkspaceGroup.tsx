@@ -29,7 +29,8 @@ export const WorkspaceGroup = ({
             key={workspace.ownerId}
             onClick={() => onChangeWorkspace(workspace)}
             selected={currentWorkspaceData?.ownerId === workspace.ownerId}
-            data-testid={`${dataTestid}-workspace-${index}`}>
+            data-testid={`${dataTestid}-workspace-${index}`}
+          >
             <StyledItemContent>
               <WorkspaceImage image={workspace?.image} workspaceName={workspace.workspaceName} />
               <StyledItemName>{workspace.workspaceName}</StyledItemName>

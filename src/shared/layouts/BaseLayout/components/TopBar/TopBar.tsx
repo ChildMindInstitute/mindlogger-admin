@@ -37,7 +37,8 @@ export const TopBar = () => {
             <StyledAvatarBtn
               onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
               variant="text"
-              data-testid={`${dataTestid}-badge-button`}>
+              data-testid={`${dataTestid}-badge-button`}
+            >
               <Avatar caption={userInitials} uiType={AvatarUiType.Secondary} />
             </StyledAvatarBtn>
           </StyledBadge>
@@ -45,7 +46,8 @@ export const TopBar = () => {
           <StyledLoginButton
             startIcon={<Svg width="18" height="18" id="profile" />}
             onClick={handleLoginClick}
-            data-testid={`${dataTestid}-login-button`}>
+            data-testid={`${dataTestid}-login-button`}
+          >
             {t('loginLink')}
           </StyledLoginButton>
         )}

@@ -27,7 +27,8 @@ export const ExpandedList = ({
     <StyledCollapse data-testid={dataTestid}>
       <StyledCollapseBtn
         onClick={() => setListVisible((prevState) => !prevState)}
-        data-testid={`${dataTestid}-collapse`}>
+        data-testid={`${dataTestid}-collapse`}
+      >
         <StyledFlexTopCenter sx={{ cursor: 'pointer' }}>
           <Svg id={collapseBtnId} />
           <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(1) }}>{title}</StyledLabelBoldLarge>
@@ -43,7 +44,8 @@ export const ExpandedList = ({
                     event.stopPropagation();
                     button.action();
                   }}
-                  data-testid={`${dataTestid}-${index}`}>
+                  data-testid={`${dataTestid}-${index}`}
+                >
                   {button.icon}
                 </StyledIconBtn>
               </Box>

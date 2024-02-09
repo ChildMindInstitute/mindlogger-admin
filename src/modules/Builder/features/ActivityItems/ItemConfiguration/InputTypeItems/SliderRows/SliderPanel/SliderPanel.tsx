@@ -210,7 +210,8 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
       key={`slider-container-${id}`}
       collapsedSize="12.8rem"
       timeout={0}
-      data-testid={`${dataTestid}-panel`}>
+      data-testid={`${dataTestid}-panel`}
+    >
       <Header
         name={name}
         label={label}

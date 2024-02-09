@@ -67,7 +67,8 @@ const getRespondentDataSummaryComponent = ({ summaryActivities = mockedSummaryAc
       setSummaryActivities: jest.fn,
       selectedActivity,
       setSelectedActivity: jest.fn,
-    }}>
+    }}
+  >
     <RespondentDataSummary />
   </RespondentDataContext.Provider>
 );

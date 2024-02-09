@@ -283,7 +283,8 @@ export const Respondents = () => {
               variant="outlined"
               startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
               onClick={() => navigate(generatePath(page.appletAddUser, { appletId }))}
-              data-testid="dashboard-respondents-add">
+              data-testid="dashboard-respondents-add"
+            >
               {t('addRespondent')}
             </StyledButton>
           </StyledLeftBox>

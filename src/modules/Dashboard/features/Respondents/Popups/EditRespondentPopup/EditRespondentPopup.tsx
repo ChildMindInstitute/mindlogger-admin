@@ -97,7 +97,8 @@ export const EditRespondentPopup = ({ popupVisible, onClose, chosenAppletData }:
       hasSecondBtn
       onSecondBtnSubmit={onCloseHandler}
       secondBtnText={t('cancel')}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
         <StyledModalWrapper>

@@ -55,7 +55,8 @@ export const EventWrapper = ({
       data-id={id}
       data-start={start}
       data-end={end}
-      data-testid={`dashboard-calendar-${id}`}>
+      data-testid={`dashboard-calendar-${id}`}
+    >
       <Tooltip followCursor tooltipTitle={tooltipTitle} placement="top">
         {cloneElement(children, {
           ...children.props,

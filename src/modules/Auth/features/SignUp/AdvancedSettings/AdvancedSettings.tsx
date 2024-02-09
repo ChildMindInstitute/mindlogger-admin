@@ -44,7 +44,8 @@ export const AdvancedSettings = () => {
     <StyledAdvancedSettings>
       <StyledSettingsButton
         onClick={() => setShowSettings((prevState) => !prevState)}
-        endIcon={showSettings ? <Svg id="dropdown-up" /> : <Svg id="dropdown" />}>
+        endIcon={showSettings ? <Svg id="dropdown-up" /> : <Svg id="dropdown" />}
+      >
         {t('advancedSettings')}
       </StyledSettingsButton>
       {showSettings && (

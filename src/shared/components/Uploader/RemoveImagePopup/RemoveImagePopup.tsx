@@ -24,7 +24,8 @@ export const RemoveImagePopup = ({ open, onClose, onRemove, 'data-testid': dataT
       onSecondBtnSubmit={onClose}
       onSubmit={screens[step].onSubmit}
       hasSecondBtn={screens[step].hasSecondBtn}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledModalWrapper>{t(screens[step].content)}</StyledModalWrapper>
     </Modal>
   );

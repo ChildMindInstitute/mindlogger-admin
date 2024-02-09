@@ -84,7 +84,8 @@ export const Applet = ({
                     <StyledBtn
                       onClick={() => setSelectRespondentsPopupVisible(true)}
                       variant="body2"
-                      data-testid="dashboard-managers-edit-access-edit-role">
+                      data-testid="dashboard-managers-edit-access-edit-role"
+                    >
                       {selectedRespondents?.join(', ') || t('editRespondents')}
                     </StyledBtn>
                   </>

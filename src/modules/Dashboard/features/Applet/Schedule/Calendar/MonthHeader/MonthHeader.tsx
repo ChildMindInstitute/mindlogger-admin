@@ -17,7 +17,8 @@ export const MonthHeader = ({ date, label, calendarDate, localizer }: MonthHeade
     <StyledLabelBoldMedium
       sx={{
         color: isSelectedDay && isSamePeriod ? variables.palette.primary : variables.palette.on_surface_variant,
-      }}>
+      }}
+    >
       {label}
     </StyledLabelBoldMedium>
   );

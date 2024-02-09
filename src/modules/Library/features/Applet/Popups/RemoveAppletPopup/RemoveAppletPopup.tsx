@@ -51,7 +51,8 @@ export const RemoveAppletPopup = ({
       hasSecondBtn
       secondBtnText={t('back')}
       onSecondBtnSubmit={handleModalClose}
-      data-testid={dataTestid}>
+      data-testid={dataTestid}
+    >
       <StyledModalWrapper>
         <Trans i18nKey="removeAppletConfirmation">
           Are you sure you want to to remove Applet

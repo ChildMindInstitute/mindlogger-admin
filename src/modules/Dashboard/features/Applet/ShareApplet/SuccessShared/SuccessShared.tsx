@@ -65,7 +65,8 @@ export const SuccessShared = ({
         startIcon={<Svg width="18" height="18" id="duplicate" />}
         variant="text"
         onClick={handleCopyAppletLink}
-        data-testid={`${dataTestid}-copy-link`}>
+        data-testid={`${dataTestid}-copy-link`}
+      >
         {t('copyAppletLink')}
       </StyledLinkBtn>
       {linkCopied && (

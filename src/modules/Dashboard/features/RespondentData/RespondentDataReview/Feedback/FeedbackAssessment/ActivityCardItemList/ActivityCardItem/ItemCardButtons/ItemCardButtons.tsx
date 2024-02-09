@@ -41,7 +41,8 @@ export const ItemCardButtons = ({
         variant="contained"
         disabled={!config.isSkippable && !hasAnswer}
         onClick={isSubmitVisible ? onSubmit : onNextButtonClick}
-        data-testid={`${dataTestid}-${isSubmitVisible ? 'submit' : 'next'}`}>
+        data-testid={`${dataTestid}-${isSubmitVisible ? 'submit' : 'next'}`}
+      >
         {isSubmitVisible ? t('submit') : t('next')}
       </Button>
     </StyledFlexTopCenter>

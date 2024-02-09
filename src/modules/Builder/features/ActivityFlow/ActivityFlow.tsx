@@ -111,7 +111,8 @@ export const ActivityFlow = () => {
       title={t('activityFlows')}
       Header={ActivityFlowHeader}
       headerProps={{ onAddActivityFlow: handleAddActivityFlow }}
-      hasMaxWidth>
+      hasMaxWidth
+    >
       {activityFlows?.length ? (
         <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={handleDragEnd}>
           <DndDroppable droppableId="activity-flows-dnd" direction="vertical">

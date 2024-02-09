@@ -43,7 +43,8 @@ export const Options = ({ name }: { name: string }) => {
           <StyledSelectionBox
             key={`option-${option.id}`}
             isErrorShortened={hasShortenedHelper}
-            data-testid={dataTestId}>
+            data-testid={dataTestId}
+          >
             <StyledFlexTopStart sx={{ gap: '1.2rem' }}>
               <Uploader
                 {...commonUploaderProps}

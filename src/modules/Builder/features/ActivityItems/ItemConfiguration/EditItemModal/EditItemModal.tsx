@@ -34,7 +34,8 @@ export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditIt
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
-      data-testid="builder-activity-items-edit-item-popup">
+      data-testid="builder-activity-items-edit-item-popup"
+    >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
           <Trans i18nKey="editItemDescription">

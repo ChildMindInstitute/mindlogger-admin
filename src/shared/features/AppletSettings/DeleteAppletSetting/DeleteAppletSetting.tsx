@@ -40,7 +40,8 @@ export const DeleteAppletSetting = () => {
           }
           variant="outlined"
           startIcon={<Svg width="18" height="18" id="trash" />}
-          data-testid={`${dataTestid}-delete-button`}>
+          data-testid={`${dataTestid}-delete-button`}
+        >
           {t('deleteApplet')}
         </StyledAppletSettingsButton>
       </Box>

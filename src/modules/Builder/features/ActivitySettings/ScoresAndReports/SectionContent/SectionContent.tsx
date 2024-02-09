@@ -72,7 +72,8 @@ export const SectionContent = ({ name, title, sectionId, 'data-testid': dataTest
             sx={{ mt: 0 }}
             startIcon={<Svg id="add" width="20" height="20" />}
             onClick={handleAddConditionalLogic}
-            data-testid={`${dataTestid}-add-condition`}>
+            data-testid={`${dataTestid}-add-condition`}
+          >
             {t('addConditionalLogic')}
           </StyledButton>
         )}

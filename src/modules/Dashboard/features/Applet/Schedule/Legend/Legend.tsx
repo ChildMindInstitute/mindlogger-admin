@@ -169,7 +169,8 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
         {isIndividual && (
           <StyledIconBtn
             onClick={() => setRemoveIndividualSchedulePopupVisible(true)}
-            data-testid={`${dataTestid}-individual-remove`}>
+            data-testid={`${dataTestid}-individual-remove`}
+          >
             <Svg id="trash" />
           </StyledIconBtn>
         )}
@@ -179,7 +180,8 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           <StyledSearchContainer
             ref={searchContainerRef}
             onClick={() => setSearchPopupVisible(true)}
-            data-testid={`${dataTestid}-individual-search`}>
+            data-testid={`${dataTestid}-individual-search`}
+          >
             <Search selectedRespondent={selectedRespondent} placeholder={t('selectRespondent')} />
           </StyledSearchContainer>
           <SearchPopup

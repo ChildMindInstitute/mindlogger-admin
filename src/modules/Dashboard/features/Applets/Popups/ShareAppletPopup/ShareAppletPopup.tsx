@@ -44,7 +44,8 @@ export const ShareAppletPopup = ({ sharePopupVisible, setSharePopupVisible, appl
       buttonText={btnText || ''}
       disabledSubmit={isDisabled}
       width="60"
-      data-testid={`${dataTestid}-popup`}>
+      data-testid={`${dataTestid}-popup`}
+    >
       <ShareApplet
         applet={applet}
         onAppletShared={() => setAppletShared(true)}

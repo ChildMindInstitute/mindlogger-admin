@@ -49,7 +49,8 @@ export const MediaUploader = ({
           height={height}
           onClick={() => uploadInputRef?.current?.click()}
           {...dragEvents}
-          data-testid={dataTestid}>
+          data-testid={dataTestid}
+        >
           <StyledSourceContainer>
             <Svg id="audio-player-filled" width={32} height={42} />
             {error && (

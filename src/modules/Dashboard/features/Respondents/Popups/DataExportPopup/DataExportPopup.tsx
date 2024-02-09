@@ -169,7 +169,8 @@ export const DataExportPopup = ({
           onSubmit={submitForm}
           title={t('dataExport')}
           buttonText=""
-          data-testid={dataTestid}>
+          data-testid={dataTestid}
+        >
           <StyledModalWrapper>{renderDataExportContent()}</StyledModalWrapper>
         </Modal>
       );
@@ -181,7 +182,8 @@ export const DataExportPopup = ({
           onSubmit={submitForm}
           title={t('enterAppletPassword')}
           buttonText={t('submit')}
-          data-testid={`${dataTestid}-password`}>
+          data-testid={`${dataTestid}-password`}
+        >
           <StyledModalWrapper>
             <EnterAppletPassword
               ref={appletPasswordRef}
@@ -205,7 +207,8 @@ export const DataExportPopup = ({
           submitBtnColor="error"
           secondBtnText={t('cancel')}
           onSecondBtnSubmit={handlePopupClose}
-          data-testid={`${dataTestid}-error`}>
+          data-testid={`${dataTestid}-error`}
+        >
           <StyledModalWrapper>
             <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>{t('exportFailed')}</StyledBodyLarge>
           </StyledModalWrapper>

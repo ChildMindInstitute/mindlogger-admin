@@ -60,7 +60,8 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
           variant="outlined"
           startIcon={<Svg id="add" width="20" height="20" />}
           sx={{ width: '13.2rem' }}
-          data-testid="builder-activity-items-item-configuration-slider-add-slider">
+          data-testid="builder-activity-items-item-configuration-slider-add-slider"
+        >
           {t('addSlider')}
         </Button>
       )}

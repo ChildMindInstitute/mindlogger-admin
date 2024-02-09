@@ -137,7 +137,8 @@ export const SearchPopup = ({
                     key={id}
                     background={isSelected ? variables.palette.surface_variant : undefined}
                     onClick={() => selectedRespondentHandler(item)}
-                    data-testid={`${dataTestid}-respondent-${index}`}>
+                    data-testid={`${dataTestid}-respondent-${index}`}
+                  >
                     {icon || <Box sx={{ width: '2.4rem' }} />}
                     <Box sx={{ ml: theme.spacing(1.8) }}>
                       <strong>{secretId}</strong>

@@ -34,12 +34,14 @@ export const TableHead = ({
             width={width}
             align={align}
             sortDirection={orderBy === id ? order : false}
-            hasColFixedWidth={hasColFixedWidth}>
+            hasColFixedWidth={hasColFixedWidth}
+          >
             {enableSort ? (
               <TableSortLabel
                 active={orderBy === id}
                 direction={orderBy === id ? order : 'asc'}
-                onClick={createSortHandler(id)}>
+                onClick={createSortHandler(id)}
+              >
                 {label}
               </TableSortLabel>
             ) : (

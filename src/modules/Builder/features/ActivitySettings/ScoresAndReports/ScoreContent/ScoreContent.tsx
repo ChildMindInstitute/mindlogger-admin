@@ -289,7 +289,8 @@ export const ScoreContent = ({
       <StyledButton
         startIcon={<Svg id="add" width="20" height="20" />}
         onClick={handleAddScoreConditional}
-        data-testid={`${dataTestid}-add-score-conditional`}>
+        data-testid={`${dataTestid}-add-score-conditional`}
+      >
         {t('addScoreCondition')}
       </StyledButton>
       {isChangeScoreIdPopupVisible && (

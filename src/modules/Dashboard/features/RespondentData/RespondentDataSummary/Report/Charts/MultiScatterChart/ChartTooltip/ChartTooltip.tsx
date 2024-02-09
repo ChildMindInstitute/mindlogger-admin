@@ -27,7 +27,8 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
                   key={response.parsed.x}
                   sx={{ padding: theme.spacing(0.2, 0.8) }}
                   color={variables.palette.white}
-                  data-testid={`${dataTestid}-tooltip-date-${index}`}>
+                  data-testid={`${dataTestid}-tooltip-date-${index}`}
+                >
                   {format(response?.parsed.x, DateFormats.MonthDayTime)}
                 </StyledLabelMedium>
               ))}

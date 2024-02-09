@@ -19,7 +19,8 @@ export const DeleteFlowModal = ({ activityFlowName, isOpen, onModalClose, onModa
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
-      data-testid="builder-activity-flows-remove-popup">
+      data-testid="builder-activity-flows-remove-popup"
+    >
       <StyledModalWrapper>
         <Trans i18nKey="deleteActivityFlowDescription">
           Are you sure you want to delete the Activity Flow

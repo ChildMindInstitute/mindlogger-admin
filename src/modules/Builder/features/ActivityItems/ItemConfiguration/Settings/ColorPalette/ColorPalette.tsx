@@ -15,7 +15,8 @@ export const ColorPalette = ({ name, onRemovePalette }: ColorPaletteProps) => {
       in={isExpanded}
       collapsedSize="8.8rem"
       timeout={0}
-      data-testid="builder-activity-items-item-configuration-color-palette">
+      data-testid="builder-activity-items-item-configuration-color-palette"
+    >
       <ColorPaletteHeader isExpanded={isExpanded} onArrowClick={handleCollapse} onRemovePalette={onRemovePalette} />
       {isExpanded && <ColorPalettePicker name={name} />}
     </StyledColorPaletteContainer>

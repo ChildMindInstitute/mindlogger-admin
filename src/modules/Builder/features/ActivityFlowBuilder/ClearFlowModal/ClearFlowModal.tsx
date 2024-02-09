@@ -19,7 +19,8 @@ export const ClearFlowModal = ({ isOpen, onModalClose, onModalSubmit }: ClearFlo
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
-      data-testid="builder-activity-flows-builder-clear-popup">
+      data-testid="builder-activity-flows-builder-clear-popup"
+    >
       <StyledModalWrapper>{t('clearActivityFlowDescription')}</StyledModalWrapper>
     </Modal>
   );

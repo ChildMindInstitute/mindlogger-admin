@@ -54,7 +54,8 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
       <StyledTitleMedium
         color={variables.palette.on_surface}
         sx={{ mb: theme.spacing(2.4) }}
-        data-testid={`${dataTestid}-description`}>
+        data-testid={`${dataTestid}-description`}
+      >
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
       {url && (

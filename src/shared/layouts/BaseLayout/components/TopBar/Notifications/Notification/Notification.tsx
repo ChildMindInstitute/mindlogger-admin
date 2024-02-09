@@ -127,12 +127,14 @@ export const Notification = ({
             </StyledLabelMedium>
             <StyledTitle
               fontWeight={isWatched ? 'regular' : 'bold'}
-              color={isActive ? variables.palette.on_secondary_container : variables.palette.on_surface}>
+              color={isActive ? variables.palette.on_secondary_container : variables.palette.on_surface}
+            >
               {secretId}
             </StyledTitle>
             <StyledMessage
               color={isActive ? variables.palette.on_secondary_container : variables.palette.on_surface}
-              isActive={isActive}>
+              isActive={isActive}
+            >
               {message}
             </StyledMessage>
           </StyledInfo>
@@ -144,13 +146,15 @@ export const Notification = ({
               variant="contained"
               startIcon={<Svg width="16.5" height="16.5" id="data-outlined" />}
               onClick={handleToResponseDataClick}
-              aria-label="takeMeToTheResponseData">
+              aria-label="takeMeToTheResponseData"
+            >
               {t('takeMeToTheResponseData')}
             </StyledBtn>
           )}
           <StyledTimeAgo
             fontWeight={isWatched ? 'regular' : 'bold'}
-            color={isWatched ? variables.palette.on_surface_variant : variables.palette.semantic.error}>
+            color={isWatched ? variables.palette.on_surface_variant : variables.palette.semantic.error}
+          >
             {timeAgo}
           </StyledTimeAgo>
         </StyledBottomSection>

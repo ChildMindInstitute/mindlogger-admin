@@ -46,7 +46,8 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false
             value={tabIndex}
             index={index}
             isMinHeightAuto={isMinHeightAuto}
-            hiddenHeader={hiddenHeader}>
+            hiddenHeader={hiddenHeader}
+          >
             <Outlet />
           </TabPanel>,
         );
@@ -67,7 +68,8 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false
         TabIndicatorProps={{ children: <span /> }}
         centered
         hiddenHeader={hiddenHeader}
-        isBuilder={isBuilder}>
+        isBuilder={isBuilder}
+      >
         {!hiddenHeader && header}
       </StyledTabs>
       {content}

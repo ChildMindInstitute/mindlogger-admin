@@ -10,7 +10,8 @@ export const VideoResponse = () => {
     <ItemOptionContainer
       title={t('videoResponseTitle')}
       description={t('videoResponseDescription')}
-      data-testid="builder-activity-items-item-configuration-video">
+      data-testid="builder-activity-items-item-configuration-video"
+    >
       <ItemInfo svgId="video" textKey="video" />
     </ItemOptionContainer>
   );

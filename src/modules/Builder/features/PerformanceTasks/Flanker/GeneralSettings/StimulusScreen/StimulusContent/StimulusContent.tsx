@@ -169,7 +169,8 @@ export const StimulusContent = () => {
               <StyledFlexTopCenter sx={{ justifyContent: 'flex-end', flex: '0 0 10%' }}>
                 <StyledRemoveButton
                   onClick={handleSetScreenToDelete(index, text)}
-                  data-testid={`${currentDataTestid}-remove`}>
+                  data-testid={`${currentDataTestid}-remove`}
+                >
                   <Svg id="cross" width="1.8rem" height="1.8rem" />
                 </StyledRemoveButton>
               </StyledFlexTopCenter>
@@ -181,7 +182,8 @@ export const StimulusContent = () => {
             onClick={handleStimulusAdd}
             startIcon={<Svg id="add" width="1.8rem" height="1.8rem" />}
             variant="text"
-            data-testid={`${dataTestid}-add`}>
+            data-testid={`${dataTestid}-add`}
+          >
             {t('flankerStimulus.addBtn')}
           </StyledSvgPrimaryColorBtn>
         </StyledBtmSection>

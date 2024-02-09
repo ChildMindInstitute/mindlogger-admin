@@ -49,20 +49,23 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
             <StyledBodySmall
               sx={{ padding: theme.spacing(1.6, 2, 0.8) }}
               color={variables.palette.outline}
-              data-testid={`${dataTestid}-tooltip-date`}>
+              data-testid={`${dataTestid}-tooltip-date`}
+            >
               {format(data?.parsed.x, DateFormats.MonthDayTime)}
             </StyledBodySmall>
 
             <StyledFlexColumn>
               <StyledListItemButton
                 onClick={navigateToReviewAnswer}
-                data-testid={`${dataTestid}-tooltip-review-button`}>
+                data-testid={`${dataTestid}-tooltip-review-button`}
+              >
                 {t('review')}
               </StyledListItemButton>
               {areSubscalesVisible && (
                 <StyledListItemButton
                   onClick={showSubscaleResultHandler}
-                  data-testid={`${dataTestid}-tooltip-show-subscale-result-button`}>
+                  data-testid={`${dataTestid}-tooltip-show-subscale-result-button`}
+                >
                   {t('showSubscaleResult')}
                 </StyledListItemButton>
               )}
