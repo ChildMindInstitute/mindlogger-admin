@@ -268,7 +268,6 @@
   "confirmClearEvents": "Vous êtes sur le point de supprimer tous les événements programmés et les notifications du <1>programme par défaut</1> pour l'applet <3>{{appletName}}</3>. Êtes-vous sûr de vouloir continuer?",
   "confirmClearIndividualSchedule": "Vous êtes sur le point de supprimer tous les événements programmés et les notifications du <1>programme individuel</1> pour le participant <3>{{name}}</3>. Êtes-vous sûr de vouloir continuer?",
   "confirmDeleteApplet": "Êtes-vous sûr de vouloir supprimer cette applet? Vous ne pourrez pas la restaurer.",
-  "confirmEditAccessSuccess": "L'accès pour <1>{{firstName}} {{lastName}} ({{email}})</1> a été mis à jour avec succès.",
   "confirmImportIndividualSchedule": "L'importation d'un nouveau programme individuel pour le participant <1>{{respondentName}}</1> remplacera son programme individuel actuel. Êtes-vous sûr de vouloir continuer?",
   "confirmImportSchedule": "L'importation d'un nouveau programme par défaut remplacera le programme par défaut actuel. Êtes-vous sûr de vouloir continuer?",
   "confirmMultipleRemoveAccess": "Êtes-vous sûr de vouloir supprimer l'accès pour <1>{{firstName}} {{lastName}} ({{email}})</1> de la liste des applets ci-dessous?",

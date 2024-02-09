@@ -268,7 +268,6 @@
   "confirmClearEvents": "You are about to remove all scheduled events and notifications from the <1>default schedule</1> for Applet <3>{{appletName}}</3>. Are you sure you want to continue?",
   "confirmClearIndividualSchedule": "You are about to remove all scheduled events and notifications from the <1>individual schedule</1> for Respondent <3>{{name}}</3>. Are you sure you want to continue?",
   "confirmDeleteApplet": "Are you sure that you want to delete this Applet? You won’t be able to restore it.",
-  "confirmEditAccessSuccess": "Access for the <1>{{firstName}} {{lastName}} ({{email}})</1> has been updated successfully.",
   "confirmImportIndividualSchedule": "Importing a new individual schedule for respondent <1>{{respondentName}}</1> will replace the respondent’s current individual schedule. Are you sure you want to continue?",
   "confirmImportSchedule": "Importing a new default schedule will replace the current default schedule. Are you sure you want to continue?",
   "confirmMultipleRemoveAccess": "Are you sure that you want to remove the access for the <1>{{firstName}} {{lastName}} ({{email}})</1> to the list of Applets below?",
