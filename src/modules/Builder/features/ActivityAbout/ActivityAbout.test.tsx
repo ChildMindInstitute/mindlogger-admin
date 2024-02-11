@@ -93,7 +93,6 @@ describe('ActivityAbout', () => {
       'builder-activity-about-description',
       'builder-activity-about-image',
       'builder-activity-about-splash-screen',
-      'builder-activity-about-show-all',
       'builder-activity-about-skippable',
       'builder-activity-about-response-editable',
       'builder-activity-about-reviewable',
@@ -115,8 +114,6 @@ describe('ActivityAbout', () => {
     expect(activityName.value).toBe('New Activity');
     const activityDescription = screen.getByLabelText('Activity Description') as HTMLInputElement;
     expect(activityDescription.value).toBe('');
-    const showAllAtOnce = screen.getByLabelText('Show all questions at once (For web app only)');
-    expect(showAllAtOnce).toBeChecked();
     const isSkippable = screen.getByLabelText('Allow to skip all items');
     expect(isSkippable).toBeChecked();
     const isEditable = screen.getByLabelText(
