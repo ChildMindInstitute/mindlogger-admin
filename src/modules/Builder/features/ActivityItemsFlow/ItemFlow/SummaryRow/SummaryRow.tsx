@@ -53,8 +53,9 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
             renderValue: (value: unknown) => {
-              const itemName = items?.find((item: ItemFormValues) => getEntityKey(item) === value)
-                ?.name;
+              const itemName = items?.find(
+                (item: ItemFormValues) => getEntityKey(item) === value,
+              )?.name;
 
               return <span>{t('conditionItemSelected', { value: itemName })}</span>;
             },

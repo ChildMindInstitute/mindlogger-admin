@@ -32,14 +32,8 @@ export const StyledMdPreview = styled(MarkDownPreview)`
 export const StyledCollapsedContainer = styled(Box, shouldForwardProp)`
   overflow-y: hidden;
 
-  max-height: ${({
-    maxHeight,
-    isOpen,
-  }: {
-    maxHeight: number;
-    isOpen: boolean;
-    isLarge: boolean;
-  }) => (!isOpen ? `${maxHeight}px` : 'unset')};
+  max-height: ${({ maxHeight, isOpen }: { maxHeight: number; isOpen: boolean; isLarge: boolean }) =>
+    !isOpen ? `${maxHeight}px` : 'unset'};
   border-bottom: ${({ isOpen, isLarge }) =>
     isLarge && !isOpen
       ? `${variables.borderWidth.md} solid ${variables.palette.outline_variant}`

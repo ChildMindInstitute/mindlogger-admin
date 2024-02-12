@@ -45,20 +45,17 @@ export const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData>,
   decryptedAnswers: DecryptedAnswerData[],
 ) => {
-  const answers = decryptedAnswers.reduce(
-    (filteredAcc, item, index) => {
-      if (item.answer === null || item.answer === undefined) return filteredAcc;
+  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
+    if (item.answer === null || item.answer === undefined) return filteredAcc;
 
-      return filteredAcc.concat(
-        getReportCSVObject({
-          item,
-          rawAnswersObject,
-          index,
-        }),
-      );
-    },
-    [] as ReturnType<typeof getReportCSVObject>[],
-  );
+    return filteredAcc.concat(
+      getReportCSVObject({
+        item,
+        rawAnswersObject,
+        index,
+      }),
+    );
+  }, [] as ReturnType<typeof getReportCSVObject>[]);
 
   const subscaleSetting = decryptedAnswers?.[0]?.subscaleSetting;
   if (subscaleSetting?.subscales?.length) {
