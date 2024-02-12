@@ -306,7 +306,6 @@ export const useSaveAndPublishSetup = () => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
       setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
     }
-    // TODO: change for forbidden
     if (responseStatus === 'error') {
       // console.log('appletData', appletData);
       // console.log('response error', responseError);
