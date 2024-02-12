@@ -104,7 +104,7 @@ jest.mock('modules/Library/hooks', () => ({
 }));
 
 describe('AppletDetails', () => {
-  beforeEach(() => {
+  afterAll(() => {
     jest.clearAllMocks();
   });
 
