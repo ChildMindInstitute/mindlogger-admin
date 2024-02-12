@@ -10,7 +10,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledModalWrapper, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
-import { applet, auth, popups } from 'redux/modules';
+import { applet, auth, banners, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
 
@@ -38,7 +38,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   }>({});
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
@@ -90,7 +89,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         appletId: currentAppletId,
       });
       setPasswordModalVisible(false);
-      setSuccessModalVisible(true);
     },
     () => {
       setPasswordModalVisible(false);
@@ -115,13 +113,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
   };
 
-  const successModalClose = () => {
-    onCloseCallback?.();
-    setSuccessModalVisible(false);
-    duplicatePopupsClose();
-    Mixpanel.track('Applet Created Successfully');
-  };
-
   const errorModalClose = () => {
     setErrorModalVisible(false);
     duplicatePopupsClose();
@@ -131,6 +122,22 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     setPasswordModalVisible(false);
     duplicatePopupsClose();
   };
+
+  const handleDuplicateSuccess = () => {
+    onCloseCallback?.();
+    duplicatePopupsClose();
+    Mixpanel.track('Applet Created Successfully');
+
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: {
+          children: `Your applet ${currentAppletName} was successfully created!`,
+          'data-testid': 'dashboard-applets-duplicate-popup-success-popup',
+        },
+      }),
+    );
+  }
 
   const submitCallback = async (ref?: AppletPasswordRefType) => {
     const password = ref?.current?.password ?? '';
@@ -145,7 +152,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         encryption,
         displayName: getValues('name'),
       },
-    });
+    }).then(handleDuplicateSuccess);
   };
 
   const retryHandler = () => {
@@ -215,26 +222,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           isLoading={isDuplicateLoading}
           data-testid="dashboard-applets-duplicate-popup-password-popup"
         />
-      )}
-      {successModalVisible && (
-        <Modal
-          open={successModalVisible}
-          onClose={successModalClose}
-          title={t('appletDuplication')}
-          onSubmit={successModalClose}
-          buttonText={t('ok')}
-          data-testid="dashboard-applets-duplicate-popup-success-popup"
-        >
-          <StyledModalWrapper>
-            <Trans i18nKey="successDuplication">
-              Applet
-              <strong>
-                <>{{ appletName: currentAppletName }}</>
-              </strong>
-              has been duplicated successfully.
-            </Trans>
-          </StyledModalWrapper>
-        </Modal>
       )}
       {errorModalVisible && (
         <Modal
