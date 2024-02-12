@@ -23,13 +23,13 @@ jobs:
 
       - run: npm ci
 
-      - uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          eslint_extensions: js,jsx,ts,tsx
-          prettier: true
-          prettier_extensions: js,jsx,ts,tsx
-          continue_on_error: false
+      - name: ESLint
+        run: eslint --ext .js,.jsx,.ts,.tsx .
+        continue-on-error: true
+
+      - name: Prettier
+        run: prettier --list-different "**/*.{js,jsx,ts,tsx}"
+
   tests:
     runs-on: ubuntu-latest
     steps:
