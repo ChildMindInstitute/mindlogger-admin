@@ -309,9 +309,7 @@ describe('Applets component tests', () => {
     await waitFor(() => {
       expect(mockAxios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/folders/${mockedFolderId}/applets`,
-        {
-          signal: undefined,
-        },
+        { signal: undefined },
       );
       expect(screen.getByText('Expanded Applet')).toBeInTheDocument();
     });

@@ -1,5 +1,4 @@
 import { MouseEvent, useState, useRef } from 'react';
-
 import uniqueId from 'lodash.uniqueid';
 
 import { theme, StyledBodySmall, StyledHeadline } from 'shared/styles';

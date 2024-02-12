@@ -79,7 +79,7 @@ export const useAppletDataFromForm = () => {
               type: FlowReportFieldsPrepareType.KeyToName,
             }),
             ...removeActivityExtraFields(),
-          } as Activity),
+          }) as Activity,
       ),
       encryption,
       description: appletDescription,
@@ -101,7 +101,7 @@ export const useAppletDataFromForm = () => {
               type: FlowReportFieldsPrepareType.KeyToName,
             }),
             ...removeActivityFlowExtraFields(),
-          } as ActivityFlow),
+          }) as ActivityFlow,
       ),
       ...removeAppletExtraFields(isNewApplet),
     };

@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-
 import { Trans, useTranslation } from 'react-i18next';
 import { Button, Box } from '@mui/material';
 import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';

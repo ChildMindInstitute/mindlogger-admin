@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react';
-
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';

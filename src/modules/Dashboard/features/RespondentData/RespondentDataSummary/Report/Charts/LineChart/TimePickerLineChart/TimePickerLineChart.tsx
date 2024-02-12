@@ -1,5 +1,4 @@
 import { useMemo, useRef, useState } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { Chart as ChartJS, Tooltip, TimeScale, ScriptableTooltipContext } from 'chart.js';
 import 'chartjs-adapter-date-fns';

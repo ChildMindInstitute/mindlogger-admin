@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import { page } from 'resources';

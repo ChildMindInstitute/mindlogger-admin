@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -69,10 +68,7 @@ export const ImportSchedulePopup = ({
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } =
-    useImportSchedule({
-      appletName,
-      scheduleExportData,
-    });
+    useImportSchedule({ appletName, scheduleExportData });
 
   const fileUploader = (
     <FileUploader

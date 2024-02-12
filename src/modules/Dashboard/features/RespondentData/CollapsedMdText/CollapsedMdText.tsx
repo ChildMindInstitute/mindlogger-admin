@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 

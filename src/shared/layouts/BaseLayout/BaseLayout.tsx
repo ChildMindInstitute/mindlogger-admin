@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { Outlet, useParams } from 'react-router-dom';
 
 import { useAppDispatch } from 'redux/store';

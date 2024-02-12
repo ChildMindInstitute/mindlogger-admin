@@ -1,5 +1,4 @@
 import { ChangeEvent } from 'react';
-
 import { FieldValues, UseControllerProps } from 'react-hook-form';
 
 export enum EditorUiType {

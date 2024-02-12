@@ -1,5 +1,4 @@
 import { MouseEvent } from 'react';
-
 import { TableRow, TableCell, TableSortLabel } from '@mui/material';
 
 import { UiType } from '../Table.types';

@@ -1,5 +1,4 @@
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
-
 import { ControllerRenderProps, FieldError } from 'react-hook-form';
 import { ChangeEvent, ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 

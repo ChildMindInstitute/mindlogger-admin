@@ -1,5 +1,4 @@
 import { useContext, useMemo } from 'react';
-
 import { Box } from '@mui/material';
 
 import { theme } from 'shared/styles';

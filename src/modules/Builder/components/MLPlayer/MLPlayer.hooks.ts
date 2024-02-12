@@ -1,5 +1,4 @@
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
-
 import { OnProgressProps } from 'react-player/base';
 import ReactPlayer from 'react-player/lazy';
 

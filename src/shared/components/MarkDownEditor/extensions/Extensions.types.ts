@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react';
-
 import { InsertContentGenerator } from 'md-editor-rt';
 
 import { MediaType } from 'shared/consts';

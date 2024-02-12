@@ -1,5 +1,4 @@
 import { useState, useRef, ChangeEvent } from 'react';
-
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ColorResult } from 'react-color';

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { format, getYear } from 'date-fns';
 
 import { Activity, ActivityFlow, SingleApplet } from 'shared/state';

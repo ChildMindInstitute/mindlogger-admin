@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-
 import { Table as MuiTable, TableBody, TablePagination } from '@mui/material';
 
 import { EmptyState, TableHead } from 'shared/components';

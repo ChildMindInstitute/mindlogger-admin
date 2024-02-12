@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useRef } from 'react';
-
 import debounce from 'lodash.debounce';
 
 import { Svg } from 'shared/components/Svg';

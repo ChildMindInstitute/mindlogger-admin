@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { useTranslation, Trans } from 'react-i18next';
 import { Collapse } from '@mui/material';
 

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { useLocation, useParams } from 'react-router-dom';
 
 import { LinkedTabs, Spinner } from 'shared/components';

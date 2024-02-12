@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 

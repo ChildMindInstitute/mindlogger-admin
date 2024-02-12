@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-
 import { screen, fireEvent } from '@testing-library/react';
 import get from 'lodash.get';
 import { v4 as uuidv4 } from 'uuid';

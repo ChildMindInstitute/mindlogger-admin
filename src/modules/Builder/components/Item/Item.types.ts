@@ -1,5 +1,4 @@
 import { MouseEvent } from 'react';
-
 import { DraggableProvided } from 'react-beautiful-dnd';
 
 export type ItemType = {

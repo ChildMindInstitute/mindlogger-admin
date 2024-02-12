@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import { Droppable, DroppableProps } from 'react-beautiful-dnd';
 
 // Component to make react-beautiful-dnd work in React Strict Mode.

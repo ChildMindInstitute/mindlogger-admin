@@ -292,9 +292,7 @@ describe('FeedbackReviewed', () => {
       expect(mockAxios.get).nthCalledWith(
         1,
         `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
-        {
-          signal: undefined,
-        },
+        { signal: undefined },
       );
     });
 

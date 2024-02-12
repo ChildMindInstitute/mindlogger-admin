@@ -1,5 +1,4 @@
 import { MouseEventHandler, lazy, useState, Suspense } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { fr } from 'date-fns/locale';

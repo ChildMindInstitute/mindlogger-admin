@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { FallbackProps } from 'react-error-boundary';
 import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';

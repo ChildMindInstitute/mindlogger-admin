@@ -1,5 +1,4 @@
 import { MouseEvent } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { ToggleButtonGroup as MuiToggleButtonGroup } from '@mui/material';
 

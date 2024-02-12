@@ -1,5 +1,4 @@
 import { MutableRefObject, createRef, forwardRef } from 'react';
-
 import { act, fireEvent, render, renderHook } from '@testing-library/react';
 import { Box } from '@mui/material';
 

@@ -1,5 +1,4 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -212,9 +211,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
     useEffect(() => {
       if (!activityOrFlowId) return;
 
-      const activityName = activitiesOrFlows?.find(
-        (item) => item.value === activityOrFlowId,
-      )?.labelKey;
+      const activityName = activitiesOrFlows?.find((item) => item.value === activityOrFlowId)
+        ?.labelKey;
 
       activityName && setActivityName(activityName);
     }, [activityOrFlowId, activitiesOrFlows]);

@@ -156,9 +156,7 @@ describe('AppletItem component tests', () => {
         1,
         `/applets/${mockedAppletId}/encryption`,
         expect.anything(),
-        {
-          singal: undefined,
-        },
+        { singal: undefined },
       );
     });
   });

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-
 import { Box } from '@mui/material';
 
 import { CalendarViews } from '../Calendar.types';

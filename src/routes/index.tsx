@@ -1,5 +1,4 @@
 import { lazy, useEffect } from 'react';
-
 import { unstable_HistoryRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAppDispatch } from 'redux/store';

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -72,8 +71,8 @@ export const ScoreContent = ({
   const { name: scoreName, id: scoreId, calculationType, itemsScore } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
   const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
-  const selectedItems = scoreItems?.filter((item) =>
-    itemsScore?.includes(getEntityKey(item, true)),
+  const selectedItems = scoreItems?.filter(
+    (item) => itemsScore?.includes(getEntityKey(item, true)),
   );
   const scoreRange = getScoreRange({ items: selectedItems, calculationType, activity });
   const scoreRangeLabel = selectedItems?.length
@@ -202,8 +201,8 @@ export const ScoreContent = ({
   };
 
   const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
-    const newSelectedItems = scoreItems?.filter((item) =>
-      chosenItems?.includes(getEntityKey(item, true)),
+    const newSelectedItems = scoreItems?.filter(
+      (item) => chosenItems?.includes(getEntityKey(item, true)),
     );
     updateScoreConditionsPayload({
       setValue,

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { useTranslation } from 'react-i18next';
 
 import { InputController } from 'shared/components/FormComponents';

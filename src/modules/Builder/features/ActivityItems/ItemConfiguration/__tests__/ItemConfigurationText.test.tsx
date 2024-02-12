@@ -53,9 +53,7 @@ describe('ItemConfiguration: Text', () => {
 
     fireEvent.change(
       screen.getByTestId(`${mockedTextTestid}-correct-answer`).querySelector('input'),
-      {
-        target: { value: 'correct' },
-      },
+      { target: { value: 'correct' } },
     );
     fireEvent.change(screen.getByTestId(`${mockedTextTestid}-max-length`).querySelector('input'), {
       target: { value: 3 },

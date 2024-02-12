@@ -1,5 +1,4 @@
 import { ChangeEvent } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 

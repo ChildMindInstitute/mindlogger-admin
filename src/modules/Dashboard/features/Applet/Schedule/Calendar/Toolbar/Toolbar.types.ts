@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react';
-
 import { ToolbarProps as CalendarToolbarProps } from 'react-big-calendar';
 
 import { CalendarViews } from '../Calendar.types';

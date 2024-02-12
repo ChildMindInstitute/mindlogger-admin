@@ -1,5 +1,4 @@
 import { lazy } from 'react';
-
 import { Route, Navigate, generatePath } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 

@@ -1,5 +1,4 @@
 import { Fragment, SyntheticEvent, useEffect, useState, useReducer } from 'react';
-
 import { useFormContext } from 'react-hook-form';
 import { Box, Checkbox } from '@mui/material';
 

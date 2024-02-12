@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-
 import { Alert } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton } from 'shared/styles';

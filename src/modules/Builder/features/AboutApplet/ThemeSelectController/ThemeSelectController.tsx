@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { FieldValues } from 'react-hook-form';
 
 import { themes } from 'modules/Builder/state';

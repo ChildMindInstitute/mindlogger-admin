@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';

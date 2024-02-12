@@ -1,5 +1,4 @@
 import { ChangeEvent, MouseEvent, useState } from 'react';
-
 import { Table as MuiTable, TableBody, TableCell, TablePagination, TableRow } from '@mui/material';
 
 import { Order } from 'shared/types/table';

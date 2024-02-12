@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import 'md-editor-rt/lib/style.css';

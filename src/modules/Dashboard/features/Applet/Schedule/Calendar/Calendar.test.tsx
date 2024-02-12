@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import { Suspense } from 'react';
-
 import { fireEvent, act } from '@testing-library/react';
 import { endOfDay, startOfDay } from 'date-fns';
 

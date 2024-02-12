@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';

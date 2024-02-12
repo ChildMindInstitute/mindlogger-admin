@@ -1,5 +1,4 @@
 import { useMemo, useRef, useState } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Chart as ChartJS, Tooltip, TimeScale, Legend, ScriptableTooltipContext } from 'chart.js';

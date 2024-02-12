@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-
 import { useTranslation } from 'react-i18next';
+import { useEffect, useRef, useState } from 'react';
 
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';

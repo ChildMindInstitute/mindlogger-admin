@@ -19,23 +19,25 @@
     "import/order": [
       "error",
       {
-        "groups": [["external", "builtin"], "internal", ["sibling", "parent"], "index"],
+        "groups": [
+          ["external", "builtin"],
+          "internal",
+          ["sibling", "parent"],
+          "index"
+        ],
         "pathGroups": [
           {
-            "pattern": "@(react)",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@(api|assets|modules|redux|routes|shared|resources)/**",
+            "pattern":
+            "@(api|assets|modules|redux|routes|shared|resources)/**",
             "group": "internal"
           },
           {
-            "pattern": "@(redux|routes|resources|api|i18n)",
+            "pattern":
+            "@(redux|routes|resources|api|i18n)",
             "group": "internal"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["internal", "react"],
+        "pathGroupsExcludedImportTypes": ["internal"],
         "newlines-between": "always"
       }
     ],

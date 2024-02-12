@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { Svg } from 'shared/components/Svg';

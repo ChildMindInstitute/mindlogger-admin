@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import { FieldValues, Path } from 'react-hook-form';
 
 import { ApiError } from 'shared/state';

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-
 import CalendarMonthView from 'react-big-calendar/lib/Month';
 
 import { COEFFICIENT_SHOW_ONE_MORE_EVENT } from './MonthView.const';
@@ -16,9 +15,8 @@ export const MonthView = (props: MonthViewType) => {
       const containerElement = monthRef.current?.containerRef.current;
       const dayCellCollection = await containerElement.getElementsByClassName('rbc-day-bg');
       const dateCellCollection = await containerElement.getElementsByClassName('rbc-date-cell');
-      const eventsElementsCollection = await containerElement.getElementsByClassName(
-        'rbc-row-segment',
-      );
+      const eventsElementsCollection =
+        await containerElement.getElementsByClassName('rbc-row-segment');
       const dayCellHeight = dayCellCollection[0]?.offsetHeight;
       const dateCellHeight = dateCellCollection[0]?.offsetHeight;
       const eventElement = await eventsElementsCollection[0];

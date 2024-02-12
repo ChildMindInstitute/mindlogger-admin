@@ -1,5 +1,4 @@
 import { useState, useMemo, SyntheticEvent } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import ReactCrop, { Crop, PixelCrop, PercentCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';

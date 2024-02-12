@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-
 import { useTranslation } from 'react-i18next';
 
 import { ButtonWithMenu, Chip } from 'shared/components';

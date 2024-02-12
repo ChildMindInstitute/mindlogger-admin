@@ -9,7 +9,7 @@ import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { convertDateStampToMs } from './convertDateStampToMs';
 import { SuccessedEventDTO } from '../../types/answer';
 
-const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';
+const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
 
 const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
 

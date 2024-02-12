@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { StyledBodyMedium, StyledLabelLarge, variables } from 'shared/styles';

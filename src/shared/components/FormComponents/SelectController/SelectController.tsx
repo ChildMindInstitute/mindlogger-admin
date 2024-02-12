@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldError, FieldValues } from 'react-hook-form';
 import { Box } from '@mui/material';
+import { useEffect } from 'react';
 
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';

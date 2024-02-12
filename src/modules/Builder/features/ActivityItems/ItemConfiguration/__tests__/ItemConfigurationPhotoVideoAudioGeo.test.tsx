@@ -45,9 +45,7 @@ describe('Item Configuration: Photo/Video/Audio/Geo', () => {
 
     fireEvent.change(
       screen.getByTestId(`${mockedTestid}-audio-record-max-duration`).querySelector('input'),
-      {
-        target: { value: -1 },
-      },
+      { target: { value: -1 } },
     );
 
     expect(await screen.findByText('A positive integer is required')).toBeVisible();

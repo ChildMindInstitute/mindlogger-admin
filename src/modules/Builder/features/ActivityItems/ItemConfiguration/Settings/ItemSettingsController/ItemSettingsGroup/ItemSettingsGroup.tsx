@@ -1,5 +1,4 @@
 import { useState, ChangeEvent } from 'react';
-
 import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import get from 'lodash.get';

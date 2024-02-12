@@ -1,5 +1,4 @@
 import { PropsWithChildren } from 'react';
-
 import { useTranslation } from 'react-i18next';
 
 import { StyledCounter } from './CharactersCounter.styles';

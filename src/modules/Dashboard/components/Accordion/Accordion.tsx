@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { Box } from '@mui/material';
 
 import { StyledFlexTopCenter, theme, variables } from 'shared/styles';

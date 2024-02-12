@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import get from 'lodash.get';
 
@@ -345,9 +344,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       options.forEach((_, index) => {
         expect(
           ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
-        ).toStrictEqual({
-          hex: '',
-        });
+        ).toStrictEqual({ hex: '' });
       });
 
       const palette1 = screen.getByTestId(
@@ -359,9 +356,7 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
         const color = mockedPalette1Color[index % mockedPalette1Color.length];
         expect(
           ref.current.getValues(`${mockedItemName}.responseValues.options.${index}.color`),
-        ).toEqual({
-          hex: color,
-        });
+        ).toEqual({ hex: color });
       });
 
       expect(ref.current.getValues(`${mockedItemName}.responseValues.paletteName`)).toEqual(

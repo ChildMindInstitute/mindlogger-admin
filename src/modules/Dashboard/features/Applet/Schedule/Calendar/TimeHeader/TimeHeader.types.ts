@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react';
-
 import { HeaderProps } from 'react-big-calendar';
 
 import { CalendarEvent } from 'modules/Dashboard/state';
