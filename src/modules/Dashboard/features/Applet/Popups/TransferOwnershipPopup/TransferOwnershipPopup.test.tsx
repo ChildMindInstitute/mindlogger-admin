@@ -1,8 +1,8 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedEmail } from 'shared/mock';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { TransferOwnershipPopup } from '.';
 
@@ -38,14 +38,7 @@ describe('TransferOwnershipPopup component tests', () => {
     fireEvent.click(screen.getByText('Confirm'));
 
     await waitFor(() => {
-      expect(
-        store
-          .getState()
-          .banners.data.banners.find(
-            ({ bannerProps }) =>
-              bannerProps?.['data-testid'] === 'dashboard-applets-transfer-success-banner',
-          ),
-      ).toBeDefined();
+      expectBanner(store, 'dashboard-applets-transfer-success-banner');
     });
   });
 });

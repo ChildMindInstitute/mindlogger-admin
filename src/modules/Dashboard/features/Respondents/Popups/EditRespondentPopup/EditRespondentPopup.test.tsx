@@ -1,7 +1,7 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import axios from 'axios';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { EditRespondentPopup } from '.';
 
@@ -45,13 +45,8 @@ describe('EditRespondentPopup component tests', () => {
 
     fireEvent.change(screen.getByLabelText(/Nickname/i), { target: { value: '00000' } });
     fireEvent.click(screen.getByText('Save'));
-    await waitFor(() =>
-      store
-        .getState()
-        .banners.data.banners.find(
-          ({ bannerProps }) =>
-            bannerProps?.['data-testid'] === 'dashboard-respondents-edit-popup-success-banner',
-        ),
-    );
+    await waitFor(() => {
+      expectBanner(store, 'dashboard-respondents-edit-popup-success-banner');
+    });
   });
 });

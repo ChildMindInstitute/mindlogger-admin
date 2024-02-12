@@ -4,7 +4,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import userEvent from '@testing-library/user-event';
 
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { expectBanner, SettingParam, renderWithProviders } from 'shared/utils';
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
@@ -78,15 +78,7 @@ describe('DeleteAppletSetting', () => {
     fireEvent.click(screen.getByText('Delete'));
 
     await waitFor(() => {
-      expect(
-        store
-          .getState()
-          .banners.data.banners.find(
-            ({ bannerProps }) =>
-              bannerProps?.['data-testid'] ===
-              'applet-settings-delete-applet-delete-success-banner',
-          ),
-      ).toBeDefined();
+      expectBanner(store, 'applet-settings-delete-applet-delete-success-banner');
     });
 
     expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');

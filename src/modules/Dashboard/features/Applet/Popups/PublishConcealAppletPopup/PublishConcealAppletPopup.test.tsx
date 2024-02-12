@@ -2,8 +2,8 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { initialStateData } from 'shared/state';
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet } from 'shared/mock';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { PublishConcealAppletPopup } from '.';
 
@@ -45,14 +45,7 @@ describe('PublishConcealAppletPopup', () => {
 
     fireEvent.click(screen.getByText('Yes'));
     await waitFor(() => {
-      expect(
-        store
-          .getState()
-          .banners.data.banners.find(
-            ({ bannerProps }) =>
-              bannerProps?.['data-testid'] === 'dashboard-applets-publish-success-banner',
-          ),
-      ).toBeDefined();
+      expectBanner(store, 'dashboard-applets-publish-success-banner');
     });
   });
 
@@ -65,14 +58,7 @@ describe('PublishConcealAppletPopup', () => {
 
     fireEvent.click(screen.getByText('Yes'));
     await waitFor(() => {
-      expect(
-        store
-          .getState()
-          .banners.data.banners.find(
-            ({ bannerProps }) =>
-              bannerProps?.['data-testid'] === 'dashboard-applets-conceal-success-banner',
-          ),
-      ).toBeDefined();
+      expectBanner(store, 'dashboard-applets-conceal-success-banner');
     });
   });
 });

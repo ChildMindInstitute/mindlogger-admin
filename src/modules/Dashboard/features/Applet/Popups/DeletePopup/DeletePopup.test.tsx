@@ -1,9 +1,9 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
 import { mockedApplet, mockedPassword } from 'shared/mock';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { DeletePopup } from '.';
 
@@ -57,13 +57,7 @@ describe('DeletePopup', () => {
     });
     fireEvent.click(screen.getByText('Delete'));
     await waitFor(() => {
-      expect(
-        store
-          .getState()
-          .banners.data.banners.find(
-            ({ bannerProps }) => bannerProps?.['data-testid'] === `${testId}-success-banner`,
-          ),
-      ).toBeDefined();
+      expectBanner(store, `${testId}-success-banner`);
     });
   });
 });

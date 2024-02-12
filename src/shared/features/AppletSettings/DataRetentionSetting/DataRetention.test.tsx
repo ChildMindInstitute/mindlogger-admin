@@ -1,7 +1,7 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { expectBanner, SettingParam, renderWithProviders } from 'shared/utils';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { initialStateData } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
@@ -109,13 +109,7 @@ describe('DataRetention component tests', () => {
     });
 
     await waitFor(() => {
-      expect(
-        store
-          .getState()
-          .banners.data.banners.find(
-            ({ bannerProps }) => bannerProps?.['data-testid'] === `${dataTestid}-success-popup`,
-          ),
-      ).toBeDefined();
+      expectBanner(store, `${dataTestid}-success-popup`);
     });
   });
 });

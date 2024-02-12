@@ -8,7 +8,12 @@ import * as reportApi from 'modules/Dashboard/api/api';
 import { page } from 'resources';
 import { applet } from 'redux/modules';
 import { mockedAppletData, mockedPassword } from 'shared/mock';
-import { SettingParam, renderWithAppletFormData, renderWithProviders } from 'shared/utils';
+import {
+  SettingParam,
+  expectBanner,
+  renderWithAppletFormData,
+  renderWithProviders,
+} from 'shared/utils';
 import * as encryptionUtils from 'shared/utils/encryption';
 
 import { ReportConfigSetting } from './ReportConfigSetting';
@@ -275,15 +280,7 @@ describe('ReportConfigSetting', () => {
       fireEvent.click(screen.getByTestId('report-config-password-popup-submit-button'));
 
       await waitFor(() => {
-        expect(
-          store
-            .getState()
-            .banners.data.banners.find(
-              ({ bannerProps }) =>
-                bannerProps?.['data-testid'] ===
-                'builder-applet-settings-report-config-setting-success-banner',
-            ),
-        ).toBeDefined();
+        expectBanner(store, 'builder-applet-settings-report-config-setting-success-banner');
       });
     });
 

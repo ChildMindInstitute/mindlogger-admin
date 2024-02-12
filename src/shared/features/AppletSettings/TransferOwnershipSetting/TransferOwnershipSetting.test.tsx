@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { expectBanner, SettingParam, renderWithProviders } from 'shared/utils';
 import { page } from 'resources';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedEmail } from 'shared/mock';
 import { initialStateData } from 'shared/state';
@@ -65,13 +65,7 @@ describe('TransferOwnershipSetting', () => {
 
       userEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
 
-      expect(
-        store
-          .getState()
-          .banners.data.banners.find(
-            ({ bannerProps }) => bannerProps?.['data-testid'] === `${dataTestid}-success-popup`,
-          ),
-      ).toBeDefined();
+      expectBanner(store, `${dataTestid}-success-popup`);
     });
   });
 });
