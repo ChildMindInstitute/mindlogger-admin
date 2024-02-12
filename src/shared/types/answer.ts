@@ -1,5 +1,3 @@
-import { CorrectPress } from 'modules/Builder/types';
-import { PerfTaskType } from 'shared/consts';
 import {
   ABTrailsItem,
   AudioItem,
@@ -30,6 +28,8 @@ import {
 } from 'shared/state';
 import { getJourneyCSVObject } from 'shared/utils/exportData/getJourneyCSVObject';
 import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
+import { CorrectPress } from 'modules/Builder/types';
+import { PerfTaskType } from 'shared/consts';
 
 export type ExportActivity = {
   createdAt: string;

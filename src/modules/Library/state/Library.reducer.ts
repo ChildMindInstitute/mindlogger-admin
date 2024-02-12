@@ -3,8 +3,8 @@ import { ActionReducerMapBuilder, PayloadAction } from '@reduxjs/toolkit';
 import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { LibrarySchema, PublishedApplet } from './Library.schema';
-import { state as initialState } from './Library.state';
 import { getAppletsFromCart, getPublishedApplets, postAppletsToCart } from './Library.thunk';
+import { state as initialState } from './Library.state';
 import { mapPostCartItems } from './Library.utils';
 
 export const reducers = {

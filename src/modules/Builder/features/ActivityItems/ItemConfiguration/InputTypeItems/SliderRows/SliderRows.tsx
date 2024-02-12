@@ -1,16 +1,16 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import get from 'lodash.get';
-import { useTranslation } from 'react-i18next';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
-import { ItemAlert, SliderItemResponseValues } from 'shared/state';
 import { theme, StyledFlexColumn } from 'shared/styles';
+import { ItemAlert, SliderItemResponseValues } from 'shared/state';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
-import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
-import { getEmptySliderOption } from '../../ItemConfiguration.utils';
 import { SliderPanel } from './SliderPanel';
 import { SliderProps } from './SliderRows.types';
+import { getEmptySliderOption } from '../../ItemConfiguration.utils';
+import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 
 export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
   const { t } = useTranslation('app');
@@ -27,7 +27,10 @@ export const SliderRows = ({ name, isMultiple = false }: SliderProps) => {
     setValue(sliderName, [...(value ?? []), getEmptySliderOption({ isMultiple, hasScores })]);
   };
   const handleRemoveSlider = (id?: string) => {
-    setValue(sliderName, value?.filter(({ id: sliderId }: SliderItemResponseValues) => sliderId !== id));
+    setValue(
+      sliderName,
+      value?.filter(({ id: sliderId }: SliderItemResponseValues) => sliderId !== id),
+    );
     if (id && isMultiple && alerts?.length) {
       setValue(
         alertsName,

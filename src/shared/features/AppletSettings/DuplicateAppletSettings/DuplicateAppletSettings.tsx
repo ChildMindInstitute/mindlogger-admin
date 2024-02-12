@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-import { DuplicatePopups } from 'modules/Dashboard/features/Applet/Popups';
+import { page } from 'resources';
 import { applet, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { page } from 'resources';
 import { Svg } from 'shared/components/Svg';
+import { DuplicatePopups } from 'modules/Dashboard/features/Applet/Popups';
 
 import { StyledAppletSettingsButton, StyledAppletSettingsDescription } from '../AppletSettings.styles';
 

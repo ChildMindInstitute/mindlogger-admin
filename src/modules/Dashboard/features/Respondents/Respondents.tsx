@@ -3,17 +3,21 @@ import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
-import { DashboardTable } from 'modules/Dashboard/components';
-import { Respondent } from 'modules/Dashboard/types';
-import { workspaces } from 'redux/modules';
-import { page } from 'resources';
 import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
-import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { workspaces } from 'redux/modules';
 import { useTimeAgo, useTable, useAsync, usePermissions, useEncryptionStorage } from 'shared/hooks';
-import { StyledBody } from 'shared/styles';
+import { DashboardTable } from 'modules/Dashboard/components';
+import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
+import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
+import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { StyledBody } from 'shared/styles';
+import { Respondent } from 'modules/Dashboard/types';
 
+import { RespondentsTableHeader, StyledButton, StyledLeftBox, StyledRightBox } from './Respondents.styles';
+import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
+import { getHeadCells, RespondentsColumnsWidth } from './Respondents.const';
+import { ChosenAppletData, FilteredApplets, FilteredRespondents, RespondentsData } from './Respondents.types';
 import {
   DataExportPopup,
   ScheduleSetupPopup,
@@ -21,10 +25,6 @@ import {
   RespondentsRemoveAccessPopup,
   EditRespondentPopup,
 } from './Popups';
-import { getHeadCells, RespondentsColumnsWidth } from './Respondents.const';
-import { RespondentsTableHeader, StyledButton, StyledLeftBox, StyledRightBox } from './Respondents.styles';
-import { ChosenAppletData, FilteredApplets, FilteredRespondents, RespondentsData } from './Respondents.types';
-import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
 
 export const Respondents = () => {
   const { appletId } = useParams();

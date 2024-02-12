@@ -8,27 +8,27 @@ import {
   ToolbarProps,
 } from 'react-big-calendar';
 
-import { CalendarEvent } from 'modules/Dashboard/state';
 import { DateFormats } from 'shared/consts';
 import { variables } from 'shared/styles/variables';
+import { CalendarEvent } from 'modules/Dashboard/state';
 import { formatToWeekYear, formatToYearMonthDate, getMoreText } from 'shared/utils/dateFormat';
 
+import { Toolbar } from './Toolbar';
+import { MonthHeader } from './MonthHeader';
+import { Event, UiType } from './Event';
+import { MonthView } from './MonthView';
+import { YearView } from './YearView';
 import {
   CalendarEventWrapperProps,
   CalendarViews,
   GetCalendarComponents,
   GetHasWrapperMoreBtn,
 } from './Calendar.types';
-import { DateHeader } from './DateHeader';
-import { Event, UiType } from './Event';
-import { EventContainerWrapper } from './EventContainerWrapper';
-import { EventWrapper, UiType as EventWrapperUiType } from './EventWrapper';
-import { MonthHeader } from './MonthHeader';
-import { MonthView } from './MonthView';
-import { TimeGutterHeader } from './TimeGutterHeader';
 import { TimeHeader, UiType as TimeHeaderUiType } from './TimeHeader';
-import { Toolbar } from './Toolbar';
-import { YearView } from './YearView';
+import { TimeGutterHeader } from './TimeGutterHeader';
+import { EventWrapper, UiType as EventWrapperUiType } from './EventWrapper';
+import { DateHeader } from './DateHeader';
+import { EventContainerWrapper } from './EventContainerWrapper';
 
 export const getDefaultStartDate = (date: Date) => {
   const newDate = new Date();

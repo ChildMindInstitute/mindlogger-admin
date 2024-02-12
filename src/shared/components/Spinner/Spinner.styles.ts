@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents/Flex';
 import { theme } from 'shared/styles/theme';
+import { StyledFlexAllCenter } from 'shared/styles/styledComponents/Flex';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 

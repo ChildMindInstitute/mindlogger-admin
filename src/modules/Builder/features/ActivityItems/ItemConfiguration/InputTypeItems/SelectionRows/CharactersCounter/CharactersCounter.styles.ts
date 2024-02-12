@@ -1,8 +1,8 @@
 import { styled } from '@mui/material';
 
-import { StyledCounter as Counter } from 'shared/components/FormComponents/InputController/Input';
 import { theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
+import { StyledCounter as Counter } from 'shared/components/FormComponents/InputController/Input';
 
 export const StyledCounter = styled(Counter, shouldForwardProp)`
   white-space: nowrap;

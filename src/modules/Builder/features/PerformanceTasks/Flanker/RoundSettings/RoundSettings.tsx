@@ -1,14 +1,14 @@
-import get from 'lodash.get';
 import { useTranslation } from 'react-i18next';
+import get from 'lodash.get';
 
+import { StyledTitleLarge, theme } from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerInstructionPositions, RoundTypeEnum } from 'modules/Builder/types';
-import { StyledTitleLarge, theme } from 'shared/styles';
 
 import { Instruction } from '../../Instruction';
-import { BlockSequences } from './BlockSequences';
 import { RoundOptions } from './RoundOptions';
 import { RoundSettingsProps } from './RoundSettings.types';
+import { BlockSequences } from './BlockSequences';
 
 export const RoundSettings = ({ uiType }: RoundSettingsProps) => {
   const { t } = useTranslation();

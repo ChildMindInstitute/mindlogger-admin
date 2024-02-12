@@ -5,8 +5,8 @@ import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils';
 
-import { Breadcrumbs } from './Breadcrumbs';
 import * as useBreadcrumbsHooks from './Breadcrumbs.hooks';
+import { Breadcrumbs } from './Breadcrumbs';
 
 jest.mock('./Breadcrumbs.hooks', () => ({
   ...jest.requireActual('./Breadcrumbs.hooks'),

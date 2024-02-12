@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { Alert } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import { useWindowFocus } from 'shared/hooks/useWindowFocus';
 import { StyledClearedButton } from 'shared/styles';
+import { useWindowFocus } from 'shared/hooks/useWindowFocus';
 
-import { BANNER_ICONS } from './Banner.const';
 import { BannerProps } from './Banner.types';
+import { BANNER_ICONS } from './Banner.const';
 
 export const Banner = ({
   children,

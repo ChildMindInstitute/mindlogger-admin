@@ -1,3 +1,4 @@
+import { DecryptedAnswerData, UserActionType } from 'shared/types';
 import {
   mockedDecryptedAnswersWithSubscales,
   mockedDecryptedEventsForDrawing,
@@ -7,10 +8,7 @@ import {
   mockedDecryptedObjectForVideo,
   mockedParsedAnswers,
 } from 'shared/mock';
-import { DecryptedAnswerData, UserActionType } from 'shared/types';
 
-import { ItemResponseType } from '../../consts';
-import { getObjectFromList } from '../getObjectFromList';
 import {
   getDecryptedAnswersObject,
   getReportData,
@@ -18,6 +16,8 @@ import {
   getActivityJourneyData,
   checkIfHasGithubImportedEventScreen,
 } from './getReportAndMediaData';
+import { ItemResponseType } from '../../consts';
+import { getObjectFromList } from '../getObjectFromList';
 
 describe('getReportAndMediaData', () => {
   describe('getDecryptedAnswersObject', () => {

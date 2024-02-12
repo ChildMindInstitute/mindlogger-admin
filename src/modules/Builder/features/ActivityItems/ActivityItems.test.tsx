@@ -2,13 +2,13 @@
 // @ts-nocheck
 import { createRef } from 'react';
 
-import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { generatePath } from 'react-router-dom';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 
-import { getNewActivity, getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { page } from 'resources';
-import { mockedParams, mockedAppletFormData, mockIntersectionObserver } from 'shared/mock';
 import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
+import { mockedParams, mockedAppletFormData, mockIntersectionObserver } from 'shared/mock';
+import { getNewActivity, getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ActivityItems } from './ActivityItems';
 

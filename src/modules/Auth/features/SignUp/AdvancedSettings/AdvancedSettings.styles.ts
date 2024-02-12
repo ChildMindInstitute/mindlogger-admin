@@ -1,8 +1,8 @@
 import { styled, Box, FormControl, MenuItem } from '@mui/material';
 
-import { StyledClearedButton } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { StyledClearedButton } from 'shared/styles/styledComponents';
 
 export const StyledAdvancedSettings = styled(Box)`
   width: 100%;

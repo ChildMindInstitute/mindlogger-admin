@@ -1,10 +1,10 @@
-import { renderHook } from '@testing-library/react';
-import { Provider } from 'react-redux';
 import { Route, Routes, MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { renderHook } from '@testing-library/react';
 
-import Login from 'modules/Auth/pages/Login';
 import { ExtendedRenderOptions, setupStore } from 'redux/store';
 import { page } from 'resources';
+import Login from 'modules/Auth/pages/Login';
 
 export const renderHookWithProviders = (
   hook: () => unknown,

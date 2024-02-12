@@ -1,20 +1,20 @@
 import { ReactNode } from 'react';
 
+import { FormProvider, useForm } from 'react-hook-form';
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
-import { FormProvider, useForm } from 'react-hook-form';
 
-import { ApiResponseCodes } from 'api';
-import { page } from 'resources';
-import { Roles } from 'shared/consts';
-import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedRespondent } from 'shared/mock';
-import { initialStateData } from 'shared/state';
 import { renderWithProviders } from 'shared/utils';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedRespondent } from 'shared/mock';
+import { Roles } from 'shared/consts';
+import { initialStateData } from 'shared/state';
+import { page } from 'resources';
+import { ApiResponseCodes } from 'api';
 
+import { FeedbackNotes } from './FeedbackNotes';
+import { FeedbackForm } from '../Feedback.types';
 import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { RespondentDataReviewContextType } from '../../RespondentDataReview.types';
-import { FeedbackForm } from '../Feedback.types';
-import { FeedbackNotes } from './FeedbackNotes';
 
 const noteTestId = 'respondents-summary-feedback-notes-note';
 const newNoteValue = 'New note has been added';

@@ -1,12 +1,12 @@
 import { format } from 'date-fns';
 
-import i18n from 'i18n';
-import { DateFormats } from 'shared/consts';
 import { HeadCell } from 'shared/types/table';
 import { capitalize } from 'shared/utils';
+import { DateFormats } from 'shared/consts';
+import i18n from 'i18n';
 
-import { GetInvitationsTableRows } from './InvitationsTable.types';
 import { InvitationWithTooltip } from './InvitationWithTooltip';
+import { GetInvitationsTableRows } from './InvitationsTable.types';
 
 const { t } = i18n;
 

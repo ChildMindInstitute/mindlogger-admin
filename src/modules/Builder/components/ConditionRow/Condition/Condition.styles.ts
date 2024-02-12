@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
-import { SelectController, InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopCenter, variables, theme } from 'shared/styles';
+import { SelectController, InputController } from 'shared/components/FormComponents';
 
 export const StyledCondition = styled(StyledFlexTopCenter)`
   gap: 0.4rem;

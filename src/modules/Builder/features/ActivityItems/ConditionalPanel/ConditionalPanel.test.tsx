@@ -1,7 +1,7 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 
-import { ConditionalLogic } from 'redux/modules';
 import { mockedAppletData } from 'shared/mock';
+import { ConditionalLogic } from 'redux/modules';
 
 import { ConditionalPanel } from '.';
 

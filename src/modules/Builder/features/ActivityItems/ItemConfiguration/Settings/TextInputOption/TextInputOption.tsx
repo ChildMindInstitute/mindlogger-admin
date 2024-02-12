@@ -1,7 +1,6 @@
-import get from 'lodash.get';
 import { useTranslation } from 'react-i18next';
+import get from 'lodash.get';
 
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
 import {
@@ -12,6 +11,7 @@ import {
   StyledBodyLarge,
   StyledContainerWithBg,
 } from 'shared/styles';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 
 import {
   StyledTextInputOptionHeader,

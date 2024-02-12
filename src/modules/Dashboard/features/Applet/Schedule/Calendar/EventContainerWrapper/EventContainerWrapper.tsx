@@ -2,8 +2,10 @@ import { useEffect, useRef } from 'react';
 
 import { Box } from '@mui/material';
 
-import { EVENT_CLASSNAME } from '../Calendar.const';
 import { CalendarViews } from '../Calendar.types';
+import { EVENT_CLASSNAME } from '../Calendar.const';
+import { EventContainerWrapperProps, EventsStartEndDates } from './EventContainerWrapper.types';
+import { getEventClassNames, getOverlappingEvents } from './EventContainerWrapper.utils';
 import {
   ALL_COL_QUANTITY_WEEK_VIEW,
   INDEX_SHOW_MORE_BTN_WEEK_VIEW,
@@ -15,8 +17,6 @@ import {
   OFFSET_BETWEEN_EVENTS,
   VALUE_DECREASING_CONTAINER_WIDTH_WEEK_VIEW,
 } from './EventContainerWrapper.const';
-import { EventContainerWrapperProps, EventsStartEndDates } from './EventContainerWrapper.types';
-import { getEventClassNames, getOverlappingEvents } from './EventContainerWrapper.utils';
 
 export const EventContainerWrapper = ({ children, events, components }: EventContainerWrapperProps) => {
   const wrapperRef = useRef<HTMLElement>();
@@ -26,8 +26,9 @@ export const EventContainerWrapper = ({ children, events, components }: EventCon
   useEffect(() => {
     const updateEventsLayout = async () => {
       const eventsWrapper = await wrapperRef.current;
-      const containerEvents: NodeListOf<HTMLElement> | undefined =
-        await eventsWrapper?.querySelectorAll('.event-wrapper');
+      const containerEvents: NodeListOf<HTMLElement> | undefined = await eventsWrapper?.querySelectorAll(
+        '.event-wrapper',
+      );
       const timeContent = (await eventsWrapper?.closest('.rbc-day-slot')) as HTMLElement;
 
       if (!eventsWrapper || !containerEvents?.length) {

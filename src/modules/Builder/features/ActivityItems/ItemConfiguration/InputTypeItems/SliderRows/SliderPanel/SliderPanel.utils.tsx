@@ -1,7 +1,7 @@
 import i18n from 'i18n';
-import { ItemAlert } from 'shared/state';
 import { HeadCell } from 'shared/types/table';
 import { createArray } from 'shared/utils';
+import { ItemAlert } from 'shared/state';
 
 import { ScoreCell } from './ScoreCell';
 import { SetScoresAndAlertsChange, SliderInputType } from './SliderPanel.types';

@@ -1,7 +1,7 @@
 import { styled, Button, Box } from '@mui/material';
 
-import { AUTH_BOX_WIDTH } from 'shared/consts';
 import { theme, variables, StyledBodyMedium } from 'shared/styles';
+import { AUTH_BOX_WIDTH } from 'shared/consts';
 
 export const StyledForm = styled('form')`
   width: ${AUTH_BOX_WIDTH};

@@ -1,13 +1,13 @@
 import { LinearScale } from 'chart.js';
 import { Context } from 'chartjs-plugin-datalabels';
 
-import { ItemResponseType, locales } from 'shared/consts';
 import { variables } from 'shared/styles';
+import { ItemResponseType, locales } from 'shared/consts';
 
-import { ItemOption } from '../../Report.types';
-import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
-import { getTimelineStepSize, getTimeConfig, truncateString } from '../Charts.utils';
 import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
+import { getTimelineStepSize, getTimeConfig, truncateString } from '../Charts.utils';
+import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
+import { ItemOption } from '../../Report.types';
 
 export const getOptions = ({
   lang,

@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { getEventsApi, AppletId, RespondentId } from 'api';
 import { ApiErrorResponse } from 'shared/state/Base';
+import { getEventsApi, AppletId, RespondentId } from 'api';
 import { getApiErrorResult } from 'shared/utils/errors';
 
 export const getEvents = createAsyncThunk(

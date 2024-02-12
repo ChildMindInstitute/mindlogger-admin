@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import { FilterOptionsState, TextField, Autocomplete } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { FilterOptionsState, TextField, Autocomplete } from '@mui/material';
 
 import { BACKEND_SERVERS, getBaseUrl, ServerUrlOption } from 'api';
-import { Svg } from 'shared/components/Svg';
 import { StyledLabelSmall } from 'shared/styles/styledComponents';
+import { Svg } from 'shared/components/Svg';
 import { variables } from 'shared/styles/variables';
 import { LocalStorageKeys, storage } from 'shared/utils';
 

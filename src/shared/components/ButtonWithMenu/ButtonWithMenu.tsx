@@ -2,9 +2,9 @@ import { MouseEvent } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Menu } from 'shared/components/Menu';
-import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
+import { Svg } from 'shared/components/Svg';
+import { Menu } from 'shared/components/Menu';
 import { variables } from 'shared/styles';
 
 import { StyledButton } from './ButtonWithMenu.styles';

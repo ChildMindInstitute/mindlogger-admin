@@ -1,7 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import { initialStateData } from 'shared/state';
 import { renderWithProviders } from 'shared/utils';
+import { initialStateData } from 'shared/state';
 
 import { SwitchWorkspace } from './SwitchWorkspace';
 

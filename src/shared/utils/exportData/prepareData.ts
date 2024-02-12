@@ -1,9 +1,8 @@
-import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { AppletExportData, ExportDataResult } from 'shared/types/answer';
+import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { getObjectFromList } from '../getObjectFromList';
 import { getAnswersWithPublicUrls, getParsedAnswers, remapFailedAnswers } from '../getParsedAnswers';
-import { logDataInDebugMode } from '../logger';
 import {
   getABTrailsItemsData,
   getDrawingItemsData,
@@ -11,6 +10,7 @@ import {
   getStabilityTrackerItemsData,
 } from './getItemsData';
 import { getActivityJourneyData, getMediaData, getReportData } from './getReportAndMediaData';
+import { logDataInDebugMode } from '../logger';
 
 export const getDefaultExportData = (): AppletExportData => ({
   reportData: [],

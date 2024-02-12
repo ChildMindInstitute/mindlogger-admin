@@ -1,10 +1,10 @@
 import { styled, ListItem, Box } from '@mui/material';
 
-import { LEFT_BAR_WIDTH } from 'shared/consts';
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
+import { StyledFlexAllCenter } from 'shared/styles/styledComponents';
+import { LEFT_BAR_WIDTH } from 'shared/consts';
 
 const ItemBefore = `
   content: '';

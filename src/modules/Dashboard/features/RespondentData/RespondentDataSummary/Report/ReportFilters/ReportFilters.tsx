@@ -1,16 +1,16 @@
 import { Box } from '@mui/material';
-import { addDays } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
+import { addDays } from 'date-fns';
 
-import { getUniqueIdentifierOptions } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.utils';
 import { DatePicker, TimePicker } from 'shared/components';
-import { Switch, TagsInputController } from 'shared/components/FormComponents';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { Switch, TagsInputController } from 'shared/components/FormComponents';
+import { getUniqueIdentifierOptions } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.utils';
 
-import { MIN_DATE } from './ReportFilters.const';
 import { StyledFiltersContainer, StyledMoreFilters, StyledTimeText } from './ReportFilters.styles';
 import { ReportFiltersProps } from './ReportFilters.types';
+import { MIN_DATE } from './ReportFilters.const';
 
 export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFiltersProps) => {
   const { t } = useTranslation('app');

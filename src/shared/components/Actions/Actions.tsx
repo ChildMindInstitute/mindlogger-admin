@@ -1,7 +1,7 @@
 import { MouseEvent, useState } from 'react';
 
-import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
+import { Svg } from 'shared/components/Svg';
 import { concatIf } from 'shared/utils/concatIf';
 
 import { StyledActions, StyledActionButton, StyledActionsWrapper, StyledDotsSvg } from './Actions.styles';

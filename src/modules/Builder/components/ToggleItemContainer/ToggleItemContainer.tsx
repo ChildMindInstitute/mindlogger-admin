@@ -3,7 +3,6 @@ import { useState, MouseEvent } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Svg, Tooltip } from 'shared/components';
 import {
   StyledBodyMedium,
   StyledClearedButton,
@@ -14,6 +13,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { Svg, Tooltip } from 'shared/components';
 
 import { StyledItemOption, StylesTitleWrapper, StyledBadge, StyledTitleContainer } from './ToggleItemContainer.styles';
 import { ToggleItemProps } from './ToggleItemContainer.types';

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
+import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 import { StyledPresentation, StyledTooltipText } from './TooltipComponents.styles';
 

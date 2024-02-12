@@ -2,8 +2,8 @@ import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import { getFulfilledDataWithConcatenatedResult, getPendingData, getRejectedData } from 'shared/utils/state';
 
-import { ThemesSchema } from './Themes.schema';
 import { state as initialState } from './Themes.state';
+import { ThemesSchema } from './Themes.schema';
 import { getThemes } from './Themes.thunk';
 
 export const reducers = {

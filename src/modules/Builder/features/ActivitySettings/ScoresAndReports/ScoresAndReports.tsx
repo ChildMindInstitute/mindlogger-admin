@@ -1,22 +1,11 @@
 import { useEffect } from 'react';
 
-import { Box, Button } from '@mui/material';
-import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
-import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { Box, Button } from '@mui/material';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 
-import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder/types';
-import { removeMarkdown } from 'modules/Builder/utils';
-import { page } from 'resources';
-import { CheckboxController } from 'shared/components/FormComponents';
-import { Tooltip } from 'shared/components/Tooltip';
-import { ScoreReportType } from 'shared/consts';
-import { useIsServerConfigured } from 'shared/hooks';
-import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -25,17 +14,28 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { Tooltip } from 'shared/components/Tooltip';
+import { CheckboxController } from 'shared/components/FormComponents';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
+import { ToggleItemContainer, DndDroppable } from 'modules/Builder/components';
 import { SettingParam, getEntityKey } from 'shared/utils';
+import { useIsServerConfigured } from 'shared/hooks';
+import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
+import { page } from 'resources';
+import { ScoreReportType } from 'shared/consts';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { ItemFormValues } from 'modules/Builder/types';
+import { removeMarkdown } from 'modules/Builder/utils';
 
 import { commonButtonProps } from '../ActivitySettings.const';
-import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
-import { ScoreContent } from './ScoreContent';
-import { ItemTypesToPrint } from './ScoresAndReports.const';
-import { StyledConfigureBtn } from './ScoresAndReports.styles';
-import { getReportIndex, getScoreDefaults, getSectionDefaults, getTableScoreItems } from './ScoresAndReports.utils';
-import { SectionContent } from './SectionContent';
 import { SectionScoreHeader } from './SectionScoreHeader';
+import { SectionContent } from './SectionContent';
+import { getReportIndex, getScoreDefaults, getSectionDefaults, getTableScoreItems } from './ScoresAndReports.utils';
+import { ScoreContent } from './ScoreContent';
 import { Title } from './Title';
+import { StyledConfigureBtn } from './ScoresAndReports.styles';
+import { ItemTypesToPrint } from './ScoresAndReports.const';
+import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const ScoresAndReports = () => {
   const { t } = useTranslation('app');

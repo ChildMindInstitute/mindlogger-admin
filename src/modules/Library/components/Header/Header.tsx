@@ -1,11 +1,11 @@
-import { Box } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { library } from 'redux/modules';
-import { page } from 'resources';
 import { Search, Svg } from 'shared/components';
 import { theme, variables, StyledBodySmall, StyledLabelLarge } from 'shared/styles';
+import { page } from 'resources';
+import { library } from 'redux/modules';
 
 import { StyledHeaderContainer, StyledBackButton, StyledBuilderButton, StyledCartButton } from './Header.styles';
 import { HeaderProps, RightButtonType } from './Header.types';

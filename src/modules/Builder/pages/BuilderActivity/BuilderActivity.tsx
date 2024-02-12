@@ -1,15 +1,15 @@
-import { Badge } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, generatePath, Outlet } from 'react-router-dom';
+import { Badge } from '@mui/material';
 
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { page } from 'resources';
-import { LinkedTabs, Svg } from 'shared/components';
-import { variables } from 'shared/styles';
 import { StyledDirectoryUpButton, StyledTitleSmall } from 'shared/styles/styledComponents';
+import { LinkedTabs, Svg } from 'shared/components';
+import { page } from 'resources';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { variables } from 'shared/styles';
 
-import { StyledBuilderActivityBody, StyledConfig, StyledWrapper } from './BuilderActivity.styles';
 import { getActivityTabs } from './BuilderActivity.utils';
+import { StyledBuilderActivityBody, StyledConfig, StyledWrapper } from './BuilderActivity.styles';
 
 export const BuilderActivity = () => {
   const { t } = useTranslation();

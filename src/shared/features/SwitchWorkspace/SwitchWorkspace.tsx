@@ -1,13 +1,13 @@
 import { Fragment } from 'react';
 
-import { auth } from 'redux/modules';
 import { Svg } from 'shared/components/Svg';
 import { StyledIconButton } from 'shared/styles';
+import { auth } from 'redux/modules';
 
 import { StyledCloseWrapper, StyledDivider, StyledSwitchWorkspaceDrawer } from './SwitchWorkspace.styles';
 import { SwitchWorkspaceProps } from './SwitchWorkspace.types';
-import { getWorkspacesGroups } from './SwitchWorkspace.utils';
 import { WorkspaceGroup } from './WorkspaceGroup';
+import { getWorkspacesGroups } from './SwitchWorkspace.utils';
 
 export const SwitchWorkspace = ({
   setVisibleDrawer,

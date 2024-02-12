@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next';
 
-import { SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, theme, variables } from 'shared/styles';
+import { SubmitBtnColor } from 'shared/components';
 
 import { GetScreen, Screen, ScreensParams } from './RespondentsRemoveAccessPopup.types';
 

@@ -2,17 +2,17 @@ import { useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 
+import { usePermissions } from 'shared/hooks';
+import { applet, workspaces } from 'shared/state';
 import { applets, users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { Spinner } from 'shared/components';
-import { usePermissions } from 'shared/hooks';
-import { applet, workspaces } from 'shared/state';
 import { StyledBody } from 'shared/styles';
 
 import { Calendar } from './Calendar';
 import { Legend } from './Legend';
-import { usePreparedEvents } from './Schedule.hooks';
 import { StyledLeftPanel, StyledSchedule } from './Schedule.styles';
+import { usePreparedEvents } from './Schedule.hooks';
 import { checkIfHasAccessToSchedule } from './Schedule.utils';
 
 export const Schedule = () => {

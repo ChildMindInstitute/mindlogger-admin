@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 
-import { ItemResponseType } from 'shared/consts';
 import { renderWithProviders } from 'shared/utils';
+import { ItemResponseType } from 'shared/consts';
 
 import { UnsupportedItemResponse } from './UnsupportedItemResponse';
 

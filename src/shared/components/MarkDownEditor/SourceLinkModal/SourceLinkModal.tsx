@@ -1,12 +1,12 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { InputController } from 'shared/components/FormComponents/InputController';
 import { Modal } from 'shared/components/Modal';
+import { InputController } from 'shared/components/FormComponents/InputController';
 import { StyledErrorText, theme } from 'shared/styles';
 
-import { StyledController, StyledModalWrapper } from './SourceLinkModal.styles';
 import { SourceLinkModalForm, SourceLinkModalFormValues, SourceLinkModalProps } from './SourceLinkModal.types';
+import { StyledController, StyledModalWrapper } from './SourceLinkModal.styles';
 
 export const SourceLinkModal = ({ title, error, handleClose, handleSubmit }: SourceLinkModalProps) => {
   const { t } = useTranslation('app');

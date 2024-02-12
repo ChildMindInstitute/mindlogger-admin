@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { StyledColorPaletteContainer } from './ColorPalette.styles';
-import { ColorPaletteProps } from './ColorPalette.types';
 import { ColorPaletteHeader } from './ColorPaletteHeader';
 import { ColorPalettePicker } from './ColorPalettePicker';
+import { StyledColorPaletteContainer } from './ColorPalette.styles';
+import { ColorPaletteProps } from './ColorPalette.types';
 
 export const ColorPalette = ({ name, onRemovePalette }: ColorPaletteProps) => {
   const [isExpanded, setIsExpanded] = useState(true);

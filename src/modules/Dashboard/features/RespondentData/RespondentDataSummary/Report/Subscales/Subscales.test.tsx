@@ -4,8 +4,8 @@ import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils';
 
-import { ReportContext } from '../Report.context';
 import { Subscales } from './Subscales';
+import { ReportContext } from '../Report.context';
 
 const answers = [
   {

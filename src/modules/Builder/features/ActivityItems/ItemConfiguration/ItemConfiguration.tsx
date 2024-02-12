@@ -1,28 +1,28 @@
 import { useRef, useState } from 'react';
 
-import { Grid } from '@mui/material';
-import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useWatch } from 'react-hook-form';
+import { Grid } from '@mui/material';
 
-import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
-import { useCustomFormContext } from 'modules/Builder/hooks';
-import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
-import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
-import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { Modal } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
-import { BuilderContainer } from 'shared/features';
 import { StyledBodyMedium, StyledModalWrapper, StyledTitleLarge, theme, variables } from 'shared/styles';
+import { BuilderContainer } from 'shared/features';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
+import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
-import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
-import { ConfigurationHeader } from './ConfigurationHeader';
-import { EditItemModal } from './EditItemModal';
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { itemsTypeOptions } from './ItemConfiguration.const';
-import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
 import { ItemConfigurationProps, ItemsOptionGroup, UseWatchItemConfiguration } from './ItemConfiguration.types';
+import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
+import { itemsForReviewableActivity } from '../../ActivityAbout/ActivityAbout.const';
+import { useCheckIfItemHasVariables } from './ItemConfiguration.hooks';
+import { ConfigurationHeader } from './ConfigurationHeader';
+import { EditItemModal } from './EditItemModal';
 
 export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => {
   const { t } = useTranslation('app');

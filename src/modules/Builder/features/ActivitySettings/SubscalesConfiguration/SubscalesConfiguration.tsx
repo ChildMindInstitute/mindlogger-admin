@@ -1,28 +1,21 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { Button } from '@mui/material';
-import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
+import { RadioGroupController } from 'shared/components/FormComponents';
+import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
 import { ToggleItemContainer } from 'modules/Builder/components';
+import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
+import { SubscaleTotalScore } from 'shared/consts';
+import { getEntityKey } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { SubscaleFormValue } from 'modules/Builder/types';
-import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
-import { RadioGroupController } from 'shared/components/FormComponents';
-import { SubscaleTotalScore } from 'shared/consts';
-import { StyledContainerWithBg, StyledTitleMedium, theme, variables } from 'shared/styles';
-import { getEntityKey } from 'shared/utils';
 
 import { commonButtonProps } from '../ActivitySettings.const';
-import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
-import { LookupTable } from './LookupTable';
-import { SubscaleContent } from './SubscaleContent';
-import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { getOptions, getTotalScoreTableColumnData, totalScoreTableTemplate } from './SubscalesConfiguration.const';
-import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
-import { StyledButtonsContainer, StyledSvg, StyledSvgButton } from './SubscalesConfiguration.styles';
-import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import {
   getSubscalesDefaults,
   getAllElementsTableColumns,
@@ -31,6 +24,13 @@ import {
   getPropertiesToFilterByIds,
   getAddTotalScoreModalLabels,
 } from './SubscalesConfiguration.utils';
+import { SubscaleHeaderContent } from './SubscaleHeaderContent';
+import { SubscaleContent } from './SubscaleContent';
+import { StyledButtonsContainer, StyledSvg, StyledSvgButton } from './SubscalesConfiguration.styles';
+import { SubscaleContentProps } from './SubscalesConfiguration.types';
+import { LookupTable } from './LookupTable';
+import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
+import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');

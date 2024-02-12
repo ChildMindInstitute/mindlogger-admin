@@ -1,10 +1,10 @@
-import { setHours, setMinutes } from 'date-fns';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
+import { setHours, setMinutes } from 'date-fns';
 
-import { TimerType } from 'modules/Dashboard/api';
 import { TimePicker, ToggleButtonGroup } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, theme } from 'shared/styles';
+import { TimerType } from 'modules/Dashboard/api';
 
 import { EventFormValues } from '../EventForm.types';
 import { timersButtons } from './TimersTab.const.';

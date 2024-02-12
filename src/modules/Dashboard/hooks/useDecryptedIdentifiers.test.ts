@@ -2,9 +2,9 @@ import { renderHook } from '@testing-library/react';
 import * as routerDom from 'react-router-dom';
 
 import { Identifier as IdentifierResponse } from 'api';
-import { Identifier } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.types';
-import { mockedApplet, mockedIdentifiers, mockedPrivateKey } from 'shared/mock';
 import { applet } from 'shared/state';
+import { mockedApplet, mockedIdentifiers, mockedPrivateKey } from 'shared/mock';
+import { Identifier } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.types';
 
 import { useDecryptedIdentifiers } from './useDecryptedIdentifiers';
 

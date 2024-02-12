@@ -3,13 +3,13 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
+import { renderWithProviders } from 'shared/utils';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedRespondent } from 'shared/mock';
+import { Roles } from 'shared/consts';
+import { initialStateData } from 'shared/state';
+import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
-import { page } from 'resources';
-import { Roles } from 'shared/consts';
-import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedRespondent } from 'shared/mock';
-import { initialStateData } from 'shared/state';
-import { renderWithProviders } from 'shared/utils';
 
 import { FeedbackReviewed } from './FeedbackReviewed';
 

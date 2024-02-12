@@ -1,15 +1,15 @@
 import { Box } from '@mui/material';
 
-import { ITEMS_COUNT_TO_ACTIVATE_STATIC, observerStyles } from 'modules/Builder/consts';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
 import { Spinner } from 'shared/components';
-import { StyledObserverTarget } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
+import { StyledObserverTarget } from 'shared/styles';
+import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
+import { useCurrentActivity } from 'modules/Builder/hooks';
+import { ITEMS_COUNT_TO_ACTIVATE_STATIC, observerStyles } from 'modules/Builder/consts';
 
-import { DraggableItem } from './DraggableItem';
-import { DRAGGABLE_ITEMS_LIST_CLASS, DRAGGABLE_ITEMS_END_ITEM_CLASS } from './DraggableItems.const';
 import { DraggableItemsProps } from './DraggableItems.types';
+import { DRAGGABLE_ITEMS_LIST_CLASS, DRAGGABLE_ITEMS_END_ITEM_CLASS } from './DraggableItems.const';
+import { DraggableItem } from './DraggableItem';
 
 export const DraggableItems = ({
   items,

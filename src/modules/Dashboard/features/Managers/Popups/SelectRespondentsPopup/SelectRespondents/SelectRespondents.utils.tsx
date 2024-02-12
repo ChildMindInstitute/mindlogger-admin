@@ -3,9 +3,9 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import i18n from 'i18n';
-import { filterRows } from 'modules/Dashboard/utils';
-import { Row } from 'shared/components';
 import { HeadCell } from 'shared/types/table';
+import { Row } from 'shared/components';
+import { filterRows } from 'modules/Dashboard/utils';
 
 import { SearchAcross } from './SelectRespondents.const';
 

@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 
+import { variables } from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats, Roles } from 'shared/consts';
-import { variables } from 'shared/styles';
 import { without } from 'shared/utils';
 
 import { ActivitiesFlowsWithColors } from './Schedule.types';

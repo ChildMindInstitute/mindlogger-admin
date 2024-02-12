@@ -1,5 +1,5 @@
-import { mockedExportContextItemData, mockedSingleActivityItem } from 'shared/mock';
 import { StabilityTrackerPhaseType } from 'shared/types';
+import { mockedExportContextItemData, mockedSingleActivityItem } from 'shared/mock';
 
 import { getFlankerCsvName } from './getReportName';
 import {

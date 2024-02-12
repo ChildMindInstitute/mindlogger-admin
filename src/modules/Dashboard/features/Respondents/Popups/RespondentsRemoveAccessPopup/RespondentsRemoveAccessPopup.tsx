@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 
-import { Checkbox, FormControlLabel } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
-import { removeRespondentAccessApi } from 'api';
-import { workspaces } from 'redux/modules';
 import { Modal, EnterAppletPassword } from 'shared/components';
-import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
+import { removeRespondentAccessApi } from 'api';
+import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
+import { workspaces } from 'redux/modules';
 import { isManagerOrOwner } from 'shared/utils';
 
-import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { ChosenAppletData } from '../../Respondents.types';
-import { getScreens } from './RespondentAccessPopup.utils';
+import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { RespondentAccessPopupProps, Steps } from './RespondentsRemoveAccessPopup.types';
+import { getScreens } from './RespondentAccessPopup.utils';
 
 export const RespondentsRemoveAccessPopup = ({
   popupVisible,

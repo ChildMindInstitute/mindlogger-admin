@@ -1,12 +1,12 @@
-import { Badge } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Badge } from '@mui/material';
 
-import { Tooltip } from 'shared/components/Tooltip';
-import { BuilderContainer } from 'shared/features/BuilderContainer';
-import { StyledFlexAllCenter } from 'shared/styles/styledComponents/Flex';
-import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
 import { variables } from 'shared/styles/variables';
+import { BuilderContainer } from 'shared/features/BuilderContainer';
+import { Tooltip } from 'shared/components/Tooltip';
+import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
+import { StyledFlexAllCenter } from 'shared/styles/styledComponents/Flex';
 
 import { StyledContent, StyledSettingsGroup, StyledSettings, StyledSetting, StyledTitle } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';

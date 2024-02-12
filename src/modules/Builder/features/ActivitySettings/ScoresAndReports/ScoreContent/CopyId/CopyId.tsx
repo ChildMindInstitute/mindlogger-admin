@@ -1,8 +1,8 @@
-import { Svg } from 'shared/components/Svg';
 import { StyledFlexTopCenter, StyledTitleSmall, theme } from 'shared/styles';
+import { Svg } from 'shared/components/Svg';
 
-import { StyledDuplicateButton, StyledValue } from './CopyId.styles';
 import { CopyIdProps } from './CopyId.types';
+import { StyledDuplicateButton, StyledValue } from './CopyId.styles';
 
 export const CopyId = ({ title, value, showCopy = false, 'data-testid': dataTestid }: CopyIdProps) => {
   const copyScoreId = () => {

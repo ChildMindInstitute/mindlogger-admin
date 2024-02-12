@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import { Checkbox } from '@mui/material';
 import { renderToString } from 'react-dom/server';
 import { Controller, useFormContext } from 'react-hook-form';
+import { Checkbox } from '@mui/material';
 import 'md-editor-rt/lib/style.css';
 
-import { updateSelectedItemsInStorage } from 'modules/Library/utils';
-import { library } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components/Svg';
 import { StyledSvgArrowContainer } from 'shared/styles';
+import { updateSelectedItemsInStorage } from 'modules/Library/utils';
+import { useAppDispatch } from 'redux/store';
+import { library } from 'redux/modules';
 import { getHighlightedText, getDictionaryText } from 'shared/utils';
 
-import { AppletUiType, LibraryForm } from '../Applet.types';
 import { StyledItemContainer, StyledItemHeader, StyledItemContent, StyledMdPreview } from './Item.styles';
 import { ItemProps } from './Item.types';
 import { getSelector, renderItemContent } from './Item.utils';
+import { AppletUiType, LibraryForm } from '../Applet.types';
 
 export const Item = ({
   item,

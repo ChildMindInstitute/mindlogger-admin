@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledFlexTopStart, theme } from 'shared/styles';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
-import { ItemOptionContainer } from '../ItemOptionContainer';
 import { StyledInputWrapper } from './NumberSelection.styles';
 import { NumberSelectionProps } from './NumberSelection.types';
+import { ItemOptionContainer } from '../ItemOptionContainer';
 
 export const NumberSelection = ({ name }: NumberSelectionProps) => {
   const { t } = useTranslation('app');

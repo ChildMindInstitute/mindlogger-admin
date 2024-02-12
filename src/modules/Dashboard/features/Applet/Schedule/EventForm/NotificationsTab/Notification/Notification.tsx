@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 
-import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { NotificationType } from 'modules/Dashboard/api';
-import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 import { ToggleButtonGroup, TimePicker } from 'shared/components';
 import { StyledFlexTopStart, StyledLabelLarge, StyledTitleSmall, theme } from 'shared/styles';
+import { NotificationType } from 'modules/Dashboard/api';
+import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { DEFAULT_START_TIME } from '../../EventForm.const';
-import { Header } from '../Header';
+import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { notificationTimeToggles } from './Notification.const';
-import { StyledNotification, StyledCol, StyledLeftCol } from './Notification.styles';
+import { Header } from '../Header';
 import { NotificationProps } from './Notification.types';
 
 export const Notification = ({ index, remove, 'data-testid': dataTestid }: NotificationProps) => {

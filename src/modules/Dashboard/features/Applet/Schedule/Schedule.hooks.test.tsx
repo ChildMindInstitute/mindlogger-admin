@@ -1,15 +1,15 @@
 import { ReactNode } from 'react';
 
 import { renderHook, act } from '@testing-library/react';
-import * as dateFns from 'date-fns';
 import { Provider } from 'react-redux';
+import * as dateFns from 'date-fns';
 
-import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
-import { Event, calendarEvents } from 'modules/Dashboard/state';
-import { setupStore } from 'redux/store';
-import * as reduxHooks from 'redux/store/hooks';
-import { mockedAppletData as mockedApplet } from 'shared/mock';
 import { initialStateData, SingleApplet } from 'shared/state';
+import { setupStore } from 'redux/store';
+import { Event, calendarEvents } from 'modules/Dashboard/state';
+import { mockedAppletData as mockedApplet } from 'shared/mock';
+import { NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
+import * as reduxHooks from 'redux/store/hooks';
 
 import { usePreparedEvents } from './Schedule.hooks';
 

@@ -1,22 +1,22 @@
-import { addYears } from 'date-fns';
-import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { addYears } from 'date-fns';
 
-import { Periodicity } from 'modules/Dashboard/api';
-import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 import { TimePicker } from 'shared/components';
 import { ArrowPressType, InputController } from 'shared/components/FormComponents';
 import { StyledBodyMedium, StyledFlexTopStart, StyledLabelLarge, theme } from 'shared/styles';
+import { Periodicity } from 'modules/Dashboard/api';
+import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 import { SelectEvent } from 'shared/types';
 
-import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, YEARS_TO_ADD_IF_NO_END_DATE } from '../../EventForm.const';
 import { EventFormValues } from '../../EventForm.types';
 import { getDaysInPeriod, getWeeklyDays } from '../../EventForm.utils';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, YEARS_TO_ADD_IF_NO_END_DATE } from '../../EventForm.const';
 import { Header } from '../Header';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { StyledInputWrapper, StyledReminder } from './Reminder.styles';
-import { ReminderProps } from './Reminder.types';
 import { findClosestValues } from './Reminder.utils';
+import { ReminderProps } from './Reminder.types';
 
 export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
   const { t } = useTranslation('app');

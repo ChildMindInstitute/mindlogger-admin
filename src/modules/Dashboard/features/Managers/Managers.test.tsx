@@ -1,9 +1,7 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { ApiResponseCodes } from 'api';
-import { page } from 'resources';
-import { Roles } from 'shared/consts';
+import { renderWithProviders } from 'shared/utils';
 import {
   mockedApplet,
   mockedAppletId,
@@ -13,8 +11,10 @@ import {
   mockedEmail,
   mockedManagerId,
 } from 'shared/mock';
+import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
-import { renderWithProviders } from 'shared/utils';
+import { page } from 'resources';
+import { ApiResponseCodes } from 'api';
 
 import { Managers } from './Managers';
 

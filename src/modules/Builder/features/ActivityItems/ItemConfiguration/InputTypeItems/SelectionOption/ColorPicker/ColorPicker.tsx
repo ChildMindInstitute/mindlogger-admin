@@ -1,6 +1,6 @@
 import { Popover } from '@mui/material';
-import { ChromePicker, ColorChangeHandler } from 'react-color';
 import { Controller, FieldValues } from 'react-hook-form';
+import { ChromePicker, ColorChangeHandler } from 'react-color';
 
 import { ColorPickerProps } from './ColorPicker.types';
 

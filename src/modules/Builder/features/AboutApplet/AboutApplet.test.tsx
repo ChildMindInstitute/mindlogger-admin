@@ -2,11 +2,11 @@
 // @ts-nocheck
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { page } from 'resources';
-import { Roles } from 'shared/consts';
 import { mockedApplet, mockedAppletFormData, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { initialStateData } from 'shared/state';
-import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { Roles } from 'shared/consts';
 
 import { AboutApplet } from './AboutApplet';
 

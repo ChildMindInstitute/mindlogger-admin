@@ -1,5 +1,5 @@
-import { CalendarEvent, CreateEventsData } from 'modules/Dashboard/state';
 import { Row } from 'shared/components';
+import { CalendarEvent, CreateEventsData } from 'modules/Dashboard/state';
 
 export type LegendEvent = {
   name: string;

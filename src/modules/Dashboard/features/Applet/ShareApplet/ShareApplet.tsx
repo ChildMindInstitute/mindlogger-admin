@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { checkAppletNameInLibraryApi, publishAppletToLibraryApi, getAppletLibraryUrlApi } from 'api';
 import { Spinner, SpinnerUiType } from 'shared/components';
 import { InputController, CheckboxController, TagsController } from 'shared/components/FormComponents';
-import { useAsync } from 'shared/hooks/useAsync';
 import { StyledErrorText, StyledBodyMedium } from 'shared/styles/styledComponents';
-import { getDictionaryText } from 'shared/utils';
 import { getErrorMessage } from 'shared/utils/errors';
+import { useAsync } from 'shared/hooks/useAsync';
+import { getDictionaryText } from 'shared/utils';
 
 import { ERROR_MARGIN_TOP, shareAppletDefaultValues } from './ShareApplet.const';
 import { ShareAppletSchema } from './ShareApplet.schema';
-import { StyledInputWrapper } from './ShareApplet.styles';
 import { ShareAppletData, ShareAppletProps } from './ShareApplet.types';
+import { StyledInputWrapper } from './ShareApplet.styles';
 import { SuccessShared } from './SuccessShared';
 
 export const ShareApplet = ({

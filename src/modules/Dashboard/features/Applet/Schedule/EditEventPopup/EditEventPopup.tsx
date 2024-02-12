@@ -3,20 +3,20 @@ import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import { Modal, Spinner, SpinnerUiType, Svg } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
 import { deleteEventApi } from 'api';
 import { applets } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-import { Modal, Spinner, SpinnerUiType, Svg } from 'shared/components';
-import { AnalyticsCalendarPrefix } from 'shared/consts';
-import { useAsync } from 'shared/hooks/useAsync';
 import { Mixpanel } from 'shared/utils/mixpanel';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
-import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
-import { EventForm, EventFormRef } from '../EventForm';
-import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';
-import { RemoveScheduledEventPopup } from '../RemoveScheduledEventPopup';
-import { StyledButton, StyledContainer } from './EditEventPopup.styles';
 import { EditEventPopupProps } from './EditEventPopup.types';
+import { EventForm, EventFormRef } from '../EventForm';
+import { StyledButton, StyledContainer } from './EditEventPopup.styles';
+import { RemoveScheduledEventPopup } from '../RemoveScheduledEventPopup';
+import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';
+import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
 
 export const EditEventPopup = ({
   open,

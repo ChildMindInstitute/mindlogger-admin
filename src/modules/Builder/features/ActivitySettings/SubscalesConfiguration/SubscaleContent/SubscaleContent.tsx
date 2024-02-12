@@ -1,17 +1,17 @@
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { SubscaleFormValue } from 'modules/Builder/types';
-import { DataTable } from 'shared/components';
-import { InputController, SelectController, TransferListController } from 'shared/components/FormComponents';
 import { StyledFlexColumn, StyledFlexTopStart, StyledTitleMedium, theme } from 'shared/styles';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { InputController, SelectController, TransferListController } from 'shared/components/FormComponents';
+import { DataTable } from 'shared/components';
+import { SubscaleFormValue } from 'modules/Builder/types';
 
-import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
+import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
 import { getItemElements, getColumns, getNotUsedElementsTableColumns } from '../SubscalesConfiguration.utils';
-import { scoreValues } from './SubscaleContent.const';
 import { StyledWrapper } from './SubscaleContent.styles';
+import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 
 export const SubscaleContent = ({
   subscaleId,

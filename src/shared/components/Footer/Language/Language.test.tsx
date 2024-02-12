@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { render, screen, fireEvent } from '@testing-library/react';
 import { TFunction } from 'i18next';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import { Language } from './Language';
 

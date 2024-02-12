@@ -1,7 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import { mockedApplet } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils';
+import { mockedApplet } from 'shared/mock';
 
 import { SuccessSharePopup } from './SuccessSharePopup';
 

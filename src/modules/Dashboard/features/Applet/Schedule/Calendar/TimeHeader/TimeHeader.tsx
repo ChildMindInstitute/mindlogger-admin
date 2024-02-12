@@ -1,6 +1,5 @@
 import { MouseEvent } from 'react';
 
-import { calendarEvents } from 'modules/Dashboard/state';
 import { variables, StyledLabelBoldMedium, StyledTitleLarge } from 'shared/styles';
 import {
   formatToWeekYear,
@@ -9,10 +8,11 @@ import {
   getMonthName,
   getMoreText,
 } from 'shared/utils/dateFormat';
+import { calendarEvents } from 'modules/Dashboard/state';
 
 import { NameLength } from '../Calendar.types';
-import { StyledMore, StyledWeekDayWrapper } from './TimeHeader.styles';
 import { TimeHeaderProps, UiType } from './TimeHeader.types';
+import { StyledMore, StyledWeekDayWrapper } from './TimeHeader.styles';
 
 export const TimeHeader = ({
   date,

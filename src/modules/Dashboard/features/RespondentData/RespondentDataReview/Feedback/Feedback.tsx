@@ -1,15 +1,15 @@
 import { useContext, useMemo, useState } from 'react';
 
-import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 import { DefaultTabs as Tabs, Svg } from 'shared/components';
-import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { StyledFlexAllCenter, StyledFlexTopStart, StyledLabelBoldLarge, theme } from 'shared/styles';
+import { UiType } from 'shared/components/Tabs/Tabs.types';
+import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
-import { getTabs } from './Feedback.const';
 import { StyledButton, StyledContainer } from './Feedback.styles';
+import { getTabs } from './Feedback.const';
 import { FeedbackForm, FeedbackProps } from './Feedback.types';
 import { getDefaultFormValues } from './Feedback.utils';
 import { FeedbackTabs } from './FeedbackAssessment/FeedbackAssessment.const';

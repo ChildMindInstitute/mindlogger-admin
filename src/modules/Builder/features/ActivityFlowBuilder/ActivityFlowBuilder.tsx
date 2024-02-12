@@ -1,26 +1,26 @@
 import { useState, MouseEvent } from 'react';
 
 import { Box } from '@mui/material';
-import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
-import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useFieldArray } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 
-import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { useRedirectIfNoMatchedActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
-import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
 import { Menu } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
-import { StyledTitleMedium, theme, variables } from 'shared/styles';
 import { getObjectFromList } from 'shared/utils';
+import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
+import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
+import { useRedirectIfNoMatchedActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { StyledTitleMedium, theme, variables } from 'shared/styles';
 
-import { builderItemClassName } from './ActivityFlowBuilder.const';
-import { GetMenuItemsType } from './ActivityFlowBuilder.types';
+import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
 import { getActivityFlowIndex, getFlowBuilderActions, getMenuItems } from './ActivityFlowBuilder.utils';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
-import { RemoveFlowActivityModal } from './RemoveFlowActivityModal';
+import { GetMenuItemsType } from './ActivityFlowBuilder.types';
+import { builderItemClassName } from './ActivityFlowBuilder.const';
 
 export const ActivityFlowBuilder = () => {
   const [flowActivityToDeleteData, setFlowActivityToDeleteData] = useState<{

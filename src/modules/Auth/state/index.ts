@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store/hooks';
 
+import * as thunk from './Auth.thunk';
+import { state as initialState } from './Auth.state';
 import { reducers, extraReducers } from './Auth.reducer';
 import { AuthSchema } from './Auth.schema';
-import { state as initialState } from './Auth.state';
-import * as thunk from './Auth.thunk';
 
 export * from './Auth.schema';
 

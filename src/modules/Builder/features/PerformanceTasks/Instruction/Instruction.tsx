@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 
-import { InstructionProps } from './Instruction.types';
 import { InstructionContent } from './InstructionContent';
+import { InstructionProps } from './Instruction.types';
 
 export const Instruction = ({
   description,

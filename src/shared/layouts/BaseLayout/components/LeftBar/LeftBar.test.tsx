@@ -3,10 +3,10 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { auth, workspaces } from 'redux/modules';
-import * as reduxHooks from 'redux/store/hooks';
-import { mockedUserData } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils';
+import { mockedUserData } from 'shared/mock';
+import * as reduxHooks from 'redux/store/hooks';
+import { auth, workspaces } from 'redux/modules';
 
 import { LeftBar } from './LeftBar';
 

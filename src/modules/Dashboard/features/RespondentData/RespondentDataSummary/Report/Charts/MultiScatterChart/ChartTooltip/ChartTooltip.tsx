@@ -1,9 +1,9 @@
-import { Box } from '@mui/material';
-import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
+import { Box } from '@mui/material';
 
-import { DateFormats } from 'shared/consts';
 import { StyledBodyMedium, StyledLabelMedium, theme, variables } from 'shared/styles';
+import { DateFormats } from 'shared/consts';
 
 import { StyledIndent } from '../../Chart.styles';
 import { StyledTooltip } from './ChartTooltip.styles';

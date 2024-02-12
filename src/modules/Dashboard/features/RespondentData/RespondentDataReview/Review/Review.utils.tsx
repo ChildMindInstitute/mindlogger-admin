@@ -1,13 +1,12 @@
-import { Box } from '@mui/material';
 import { format } from 'date-fns';
+import { Box } from '@mui/material';
 
-import i18n from 'i18n';
-import { Svg } from 'shared/components/Svg';
 import { DateFormats, ItemResponseType } from 'shared/consts';
-import { StyledTitleLarge, theme, variables } from 'shared/styles';
 import { ActivityItemAnswer, DecryptedTimeAnswer } from 'shared/types';
+import { Svg } from 'shared/components/Svg';
+import { StyledTitleLarge, theme, variables } from 'shared/styles';
+import i18n from 'i18n';
 
-import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
 import {
   Answer,
   MultiSelectItemAnswer,
@@ -18,6 +17,7 @@ import {
 import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
 import { TextResponseItem } from '../TextResponseItem';
+import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
 
 const { t } = i18n;
 

@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 
 import i18n from 'i18n';
 import { CalendarEvent } from 'modules/Dashboard/state';
-import { StyledFlexSpaceBetween } from 'shared/styles';
 import { formatToYearMonthDate, getMonthName } from 'shared/utils/dateFormat';
+import { StyledFlexSpaceBetween } from 'shared/styles';
 
 import { CalendarViews } from '../../Calendar.types';
 import { CalendarDate } from './CalendarDate';
-import { StyledMonth, StyledMonthName, StyledDay, StyledMonthInside, StyledSkeleton } from './MonthCalendar.styles';
-import { MonthCalendarProps, MonthObject } from './MonthCalendar.types';
 import { createCalendar, shortWeekDaysArray } from './MonthCalendar.utils';
+import { MonthCalendarProps, MonthObject } from './MonthCalendar.types';
+import { StyledMonth, StyledMonthName, StyledDay, StyledMonthInside, StyledSkeleton } from './MonthCalendar.styles';
 
 export const MonthCalendar = ({ date, events, localizer, setDate, setActiveView }: MonthCalendarProps) => {
   const langLocale = i18n.language;

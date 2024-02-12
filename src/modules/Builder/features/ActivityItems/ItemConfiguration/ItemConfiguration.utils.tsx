@@ -1,25 +1,25 @@
-import get from 'lodash.get';
 import { v4 as uuidv4 } from 'uuid';
+import get from 'lodash.get';
 
 import i18n from 'i18n';
+import { ItemResponseType } from 'shared/consts';
+import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
+import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
+import { Config, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
 import {
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MIN_NUMBER,
   DEFAULT_NUMBER_SELECT_MIN_VALUE,
   DEFAULT_NUMBER_SELECT_MAX_VALUE,
 } from 'modules/Builder/consts';
-import { ItemFormValues, ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
-import { ItemResponseType } from 'shared/consts';
-import { Config, SliderItemResponseValues, SliderRowsItemResponseValues } from 'shared/state';
-import { createArray, getObjectFromList, getTextBetweenBrackets } from 'shared/utils';
 
-import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
 import {
   DEFAULT_EMPTY_SLIDER,
   DEFAULT_EMPTY_SLIDER_ROWS,
   DEFAULT_AUDIO_DURATION_SEC,
   SELECTION_OPTIONS_COLOR_PALETTE,
 } from './ItemConfiguration.const';
+import { getEmptyCondition } from '../../ActivityItemsFlow/ItemFlow/ItemFlow.utils';
 import { ItemConfigurationSettings, GetEmptyAlert } from './ItemConfiguration.types';
 
 const { t } = i18n;

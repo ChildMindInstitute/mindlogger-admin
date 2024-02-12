@@ -1,18 +1,18 @@
-import abbr from 'markdown-it-abbr';
-import container from 'markdown-it-container';
-import deflist from 'markdown-it-deflist';
+import { config } from 'md-editor-rt';
 import emoji from 'markdown-it-emoji';
-import footnote from 'markdown-it-footnote';
-import html5Embed from 'markdown-it-html5-embed';
-import miip from 'markdown-it-images-preview';
-import markdownItImSize from 'markdown-it-imsize';
-import insert from 'markdown-it-ins';
-import katex from 'markdown-it-katex-external';
-import mark from 'markdown-it-mark';
 import sub from 'markdown-it-sub';
 import sup from 'markdown-it-sup';
+import deflist from 'markdown-it-deflist';
+import abbr from 'markdown-it-abbr';
+import footnote from 'markdown-it-footnote';
+import insert from 'markdown-it-ins';
+import mark from 'markdown-it-mark';
 import taskLists from 'markdown-it-task-lists';
-import { config } from 'md-editor-rt';
+import container from 'markdown-it-container';
+import katex from 'markdown-it-katex-external';
+import miip from 'markdown-it-images-preview';
+import html5Embed from 'markdown-it-html5-embed';
+import markdownItImSize from 'markdown-it-imsize';
 
 import i18n from 'i18n';
 

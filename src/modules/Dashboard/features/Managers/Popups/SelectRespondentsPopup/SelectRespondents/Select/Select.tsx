@@ -1,11 +1,11 @@
 import { MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
 import { StyledFlexTopCenter } from 'shared/styles/styledComponents';
+import { Svg } from 'shared/components/Svg';
 
-import { StyledTextField, StyledLabel, StyledSvgContainer } from './Select.styles';
 import { SelectProps } from './Select.types';
+import { StyledTextField, StyledLabel, StyledSvgContainer } from './Select.styles';
 
 export const Select = ({ label, onChange, value, options, 'data-testid': dataTestId }: SelectProps) => {
   const { t } = useTranslation('app');

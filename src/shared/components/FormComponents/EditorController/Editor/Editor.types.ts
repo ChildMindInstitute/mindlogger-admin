@@ -1,10 +1,10 @@
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
-import { ChangeEvent, ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 import { ControllerRenderProps, FieldError } from 'react-hook-form';
+import { ChangeEvent, ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 
-import { InsertContentExtensionProps } from 'shared/components/MarkDownEditor/extensions/Extensions.types';
 import { MediaType } from 'shared/consts';
+import { InsertContentExtensionProps } from 'shared/components/MarkDownEditor/extensions/Extensions.types';
 
 import { EditorUiType } from '../EditorController.types';
 

@@ -6,8 +6,8 @@ import { page } from 'resources';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { getEntityKey } from 'shared/utils';
 
-import { ItemFormValues } from '../types';
 import { useCurrentActivity } from './useCurrentActivity';
+import { ItemFormValues } from '../types';
 import { useCustomFormContext } from './useCustomFormContext';
 
 export const useRedirectIfNoMatchedActivityItem = () => {

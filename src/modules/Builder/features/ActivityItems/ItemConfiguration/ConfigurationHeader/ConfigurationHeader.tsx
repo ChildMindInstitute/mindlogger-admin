@@ -1,6 +1,6 @@
 import { Svg } from 'shared/components/Svg';
-import { StyledBuilderContainerHeader } from 'shared/features';
 import { StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
+import { StyledBuilderContainerHeader } from 'shared/features';
 
 import { ConfigurationHeaderProps } from './ConfigurationHeader.types';
 

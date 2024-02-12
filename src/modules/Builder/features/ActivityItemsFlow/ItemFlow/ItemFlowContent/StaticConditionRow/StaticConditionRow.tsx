@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { StyledTitleMedium } from 'shared/styles';
 
-import { StyledStaticConditionRow } from './StaticConditionRow.styles';
 import { StaticConditionRowProps } from './StaticConditionRow.types';
+import { StyledStaticConditionRow } from './StaticConditionRow.styles';
 
 const commonSkeletonProps = {
   variant: 'rounded' as SkeletonProps['variant'],

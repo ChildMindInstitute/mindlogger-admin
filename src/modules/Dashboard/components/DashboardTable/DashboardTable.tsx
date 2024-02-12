@@ -5,8 +5,8 @@ import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/ma
 import { EmptyState, TableHead, UiType, StyledTableCellContent, StyledTableContainer } from 'shared/components';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
-import { StyledTableCell } from './DashboardTable.styles';
 import { DashboardTableProps } from './DashboardTable.types';
+import { StyledTableCell } from './DashboardTable.styles';
 
 export const DashboardTable = ({
   columns,

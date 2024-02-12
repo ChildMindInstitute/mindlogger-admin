@@ -1,8 +1,8 @@
 import { lazy, Suspense } from 'react';
 
 import { TextField } from '@mui/material';
-import { parse, format as dateFnsFormat } from 'date-fns';
 import { Controller, FieldValues } from 'react-hook-form';
+import { parse, format as dateFnsFormat } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
 import { DateFormats } from 'shared/consts';

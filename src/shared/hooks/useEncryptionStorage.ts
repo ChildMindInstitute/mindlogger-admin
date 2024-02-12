@@ -1,5 +1,5 @@
-import { auth } from 'modules/Auth/state';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
+import { auth } from 'modules/Auth/state';
 
 export const getEncryptionStorageKey = (ownerId: string, appletId: string) => `pwd/${ownerId}/${appletId}`;
 

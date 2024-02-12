@@ -1,15 +1,15 @@
 import { SelectChangeEvent, Box } from '@mui/material';
-import { getYear } from 'date-fns';
 import { ReactDatePickerCustomHeaderProps } from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
+import { getYear } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
 import { theme } from 'shared/styles';
 
 import { UiType } from '../DatePicker.types';
-import { startYear, endYear } from './DatePickerHeader.const';
-import { StyledCol, StyledHeader, StyledIconBtn, StyledSelect } from './DatePickerHeader.styles';
 import { getMonthsArr, getRange } from './DatePickerHeader.utils';
+import { StyledCol, StyledHeader, StyledIconBtn, StyledSelect } from './DatePickerHeader.styles';
+import { startYear, endYear } from './DatePickerHeader.const';
 import { Select } from './Select';
 
 export const DatePickerHeader = ({

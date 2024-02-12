@@ -1,17 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
+import { useFieldArray } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 import { Box } from '@mui/material';
 import get from 'lodash.get';
-import { useFieldArray } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { v4 as uuidv4 } from 'uuid';
 
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
-import { getUploadedMediaName } from 'modules/Builder/utils';
-import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
-import { FlankerButtonSetting, FlankerStimulusSettings } from 'shared/state';
 import {
   theme,
   StyledBodyLarge,
@@ -20,7 +14,13 @@ import {
   variables,
   StyledSvgPrimaryColorBtn,
 } from 'shared/styles';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { Svg, ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
+import { FlankerButtonSetting, FlankerStimulusSettings } from 'shared/state';
+import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
 import { getIsRequiredValidateMessage } from 'shared/utils';
+import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { getUploadedMediaName } from 'modules/Builder/utils';
 
 import { DeleteStimulusPopup } from './DeleteStimulusPopup';
 import { pressOptions } from './StimulusContent.const';

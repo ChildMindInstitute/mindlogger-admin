@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { ImportedFile } from 'shared/components';
 
-import { UploadedData, UploadedDataOrNull } from '../BlockSequencesContent.types';
-import { invalidFieldError } from './ImportSequencesPopup.const';
-import { UploadedImages } from './ImportSequencesPopup.types';
 import { getUploadedDataWithIds } from './ImportSequencesPopup.utils';
+import { invalidFieldError } from './ImportSequencesPopup.const';
+import { UploadedData, UploadedDataOrNull } from '../BlockSequencesContent.types';
+import { UploadedImages } from './ImportSequencesPopup.types';
 
 export const useImportSequence = (uploadedImages: UploadedImages) => {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);

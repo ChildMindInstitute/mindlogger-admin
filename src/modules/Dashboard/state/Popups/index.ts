@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store/hooks';
 
+import { state as initialState } from './Popups.state';
 import { reducers } from './Popups.reducer';
 import { PopupsSchema } from './Popups.schema';
-import { state as initialState } from './Popups.state';
 
 export * from './Popups.schema';
 

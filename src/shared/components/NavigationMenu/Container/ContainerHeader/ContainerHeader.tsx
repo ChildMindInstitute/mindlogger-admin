@@ -1,6 +1,6 @@
 import { Svg } from 'shared/components/Svg';
-import { StyledBuilderContainerHeader } from 'shared/features/BuilderContainer';
 import { StyledClearedButton, theme } from 'shared/styles';
+import { StyledBuilderContainerHeader } from 'shared/features/BuilderContainer';
 
 import { ContainerHeaderProps } from './ContainerHeader.types';
 

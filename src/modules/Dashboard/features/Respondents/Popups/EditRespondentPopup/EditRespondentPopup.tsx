@@ -1,20 +1,20 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import { editRespondentApi } from 'api';
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks/useAsync';
-import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
+import { editRespondentApi } from 'api';
 import { falseReturnFunc, getErrorMessage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
 
-import { editRespondentFormSchema } from './EditRespondentPopup.schema';
 import { EditRespondentForm, EditRespondentPopupProps } from './EditRespondentPopup.types';
+import { editRespondentFormSchema } from './EditRespondentPopup.schema';
 import { StyledController } from './EditRespondentsPopup.styles';
 
 export const EditRespondentPopup = ({ popupVisible, onClose, chosenAppletData }: EditRespondentPopupProps) => {

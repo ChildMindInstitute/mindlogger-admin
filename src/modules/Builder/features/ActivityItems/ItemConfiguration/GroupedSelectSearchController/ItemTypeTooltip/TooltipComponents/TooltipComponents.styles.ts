@@ -1,13 +1,13 @@
 import { Box, styled } from '@mui/material';
 
+import theme from 'shared/styles/theme';
+import { variables } from 'shared/styles/variables';
 import {
   StyledBodySmall,
   StyledFlexAllCenter,
   StyledFlexColumn,
   StyledFlexTopCenter,
 } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
 
 const {
   palette: {

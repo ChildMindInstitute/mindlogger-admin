@@ -1,9 +1,17 @@
 import { useEffect } from 'react';
 
-import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Grid } from '@mui/material';
 
 import { StyledItemOptionContainer } from 'modules/Builder/components';
+import {
+  StyledCheckboxTooltipSvg,
+  StyledFlexTopCenter,
+  StyledSmallNumberInput,
+  StyledTitleLarge,
+  StyledTitleMedium,
+  theme,
+} from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { InputController } from 'shared/components/FormComponents';
 import { Tooltip } from 'shared/components/Tooltip';
@@ -15,14 +23,6 @@ import {
   MIN_SLOPE,
   MAX_SLOPE,
 } from 'shared/consts';
-import {
-  StyledCheckboxTooltipSvg,
-  StyledFlexTopCenter,
-  StyledSmallNumberInput,
-  StyledTitleLarge,
-  StyledTitleMedium,
-  theme,
-} from 'shared/styles';
 
 import { StyledLambdaScopeInput } from './GeneralSettings.styles';
 

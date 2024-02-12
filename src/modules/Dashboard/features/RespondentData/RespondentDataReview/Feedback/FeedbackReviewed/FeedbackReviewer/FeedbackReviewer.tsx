@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
+import { getDictionaryText } from 'shared/utils';
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyMedium, StyledFlexTopStart, StyledTitleBoldMedium, variables } from 'shared/styles';
-import { getDictionaryText } from 'shared/utils';
+import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 
 import { StyledButton, StyledEdited, StyledItem, StyledReviewer } from './FeedbackReviewer.styles';
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';

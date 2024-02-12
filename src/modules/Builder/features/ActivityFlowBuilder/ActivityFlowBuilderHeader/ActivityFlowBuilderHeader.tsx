@@ -1,17 +1,17 @@
 import { useState } from 'react';
 
-import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
-import { AppletFormValues } from 'modules/Builder/types';
 import { Svg, ButtonWithMenu } from 'shared/components';
 import { StyledBuilderContainerHeader } from 'shared/features';
 import { falseReturnFunc } from 'shared/utils';
+import { AppletFormValues } from 'modules/Builder/types';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
-import { GetMenuItemsType } from '../ActivityFlowBuilder.types';
-import { getMenuItems } from '../ActivityFlowBuilder.utils';
 import { ClearFlowModal } from '../ClearFlowModal';
+import { getMenuItems } from '../ActivityFlowBuilder.utils';
+import { GetMenuItemsType } from '../ActivityFlowBuilder.types';
 import { StyledButtons } from './ActivityFlowBuilderHeader.styles';
 import { ActivityFlowBuilderHeaderProps } from './ActivityFlowBuilderHeader.types';
 

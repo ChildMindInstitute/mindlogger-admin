@@ -70,9 +70,7 @@ export const StyledPopover = styled(Popover)`
       }
     }
 
-    &__day--today:not(.react-datepicker__day--selected):not(.react-datepicker__day--outside-month):not(
-        .react-datepicker__day--disabled
-      ) {
+    &__day--today:not(.react-datepicker__day--selected):not(.react-datepicker__day--outside-month):not(.react-datepicker__day--disabled) {
       border: ${variables.borderWidth.md} solid ${variables.palette.primary};
       font-weight: ${variables.font.weight.regular};
       color: ${variables.palette.primary};

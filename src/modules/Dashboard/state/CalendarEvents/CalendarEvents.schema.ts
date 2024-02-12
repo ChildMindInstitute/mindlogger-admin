@@ -1,6 +1,6 @@
 import { Periodicity } from 'modules/Dashboard/api';
-import { Event } from 'modules/Dashboard/state';
 import { BaseSchema } from 'shared/state';
+import { Event } from 'modules/Dashboard/state';
 
 export type CalendarEvent = {
   id: string;

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import { Update } from 'history';
 import { useLocation, useNavigate } from 'react-router';
+import { Update } from 'history';
 
 import { useBlocker } from './useBlocker';
 

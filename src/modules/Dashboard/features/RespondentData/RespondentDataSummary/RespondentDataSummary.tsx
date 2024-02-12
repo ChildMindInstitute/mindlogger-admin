@@ -4,15 +4,15 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Version, getIdentifiersApi, getVersionsApi } from 'api';
+import { Spinner } from 'shared/components';
 import { useDecryptedIdentifiers } from 'modules/Dashboard/hooks';
+import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
+import { Version, getIdentifiersApi, getVersionsApi } from 'api';
 import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
 import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
-import { Spinner } from 'shared/components';
-import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
 
-import { Report } from './Report';
 import { ReportMenu } from './ReportMenu';
+import { Report } from './Report';
 import { StyledReportContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
 import { Identifier } from './RespondentDataSummary.types';
 import { getEmptyState, getUniqueIdentifierOptions } from './RespondentDataSummary.utils';

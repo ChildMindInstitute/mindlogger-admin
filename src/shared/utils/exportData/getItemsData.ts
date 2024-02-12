@@ -1,4 +1,3 @@
-import { ItemResponseType } from 'shared/consts';
 import {
   AnswerWithWrapper,
   AppletExportData,
@@ -10,18 +9,19 @@ import {
   DecryptedStabilityTrackerAnswerObject,
   ExportCsvData,
 } from 'shared/types';
-import { convertDateStampToMs } from 'shared/utils/exportData/convertDateStampToMs';
-import { getABTrailsRecords } from 'shared/utils/exportData/getABTrailsRecords';
-import { checkIfShouldScaleCoords, getDrawingLines } from 'shared/utils/exportData/getDrawingLines';
-import { getFlankerRecords } from 'shared/utils/exportData/getFlankerRecords';
+import { ItemResponseType } from 'shared/consts';
 import {
   getABTrailsCsvName,
   getFlankerCsvName,
   getMediaFileName,
   getStabilityTrackerCsvName,
 } from 'shared/utils/exportData/getReportName';
-import { getStabilityRecords } from 'shared/utils/exportData/getStabilityRecords';
 import { convertJsonToCsv } from 'shared/utils/exportTemplate';
+import { checkIfShouldScaleCoords, getDrawingLines } from 'shared/utils/exportData/getDrawingLines';
+import { getStabilityRecords } from 'shared/utils/exportData/getStabilityRecords';
+import { getABTrailsRecords } from 'shared/utils/exportData/getABTrailsRecords';
+import { getFlankerRecords } from 'shared/utils/exportData/getFlankerRecords';
+import { convertDateStampToMs } from 'shared/utils/exportData/convertDateStampToMs';
 
 export const getDrawingItemsData = async (
   drawingItemsData: AppletExportData['drawingItemsData'],

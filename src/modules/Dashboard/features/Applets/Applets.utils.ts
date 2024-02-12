@@ -1,5 +1,5 @@
-import { Applet, Folder } from 'api';
 import i18n from 'i18n';
+import { Applet, Folder } from 'api';
 import { groupBy } from 'shared/utils';
 
 export const generateNewFolderName = (folders: Folder[]) => {
@@ -24,7 +24,7 @@ export const generateNewFolderName = (folders: Folder[]) => {
     return newFolder;
   }
 
-  const [, index = 0] = result.sort((a, b) => {
+  const [_, index = 0] = result.sort((a, b) => {
     if (a[0] > b[0]) {
       return -1;
     }

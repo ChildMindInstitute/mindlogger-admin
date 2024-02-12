@@ -4,8 +4,8 @@ import * as reduxHooks from 'redux/store/hooks';
 import { renderWithProviders } from 'shared/utils';
 
 import { SaveAndPublishProcessPopup } from './SaveAndPublishProcessPopup';
-import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
 import { SaveAndPublishSteps } from './SaveAndPublishProcessPopup.types';
+import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
 
 jest.mock('redux/store/hooks', () => ({
   useAppDispatch: jest.fn(),

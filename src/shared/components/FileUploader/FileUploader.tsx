@@ -1,9 +1,8 @@
 import { ChangeEvent, DragEvent, useEffect, useState, useRef } from 'react';
 
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyLarge,
   StyledBodyMedium,
@@ -14,12 +13,13 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { Svg } from 'shared/components/Svg';
 
 import { DownloadTemplate } from './DownloadTemlate';
-import { MimeType } from './FileUploader.const';
 import { StyledButton, StyledLabel, StyledSvg, StyledTextField } from './FileUploader.styles';
 import { FileUploaderProps, ImportedFile, FileUploaderUiType } from './FileUploader.types';
 import { importTable, getDropText, getAcceptedFormats } from './FileUploader.utils';
+import { MimeType } from './FileUploader.const';
 
 export const FileUploader = ({
   uploadLabel,

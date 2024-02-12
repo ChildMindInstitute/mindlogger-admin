@@ -1,27 +1,27 @@
 import { useState } from 'react';
 
-import { Box } from '@mui/material';
-import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useFieldArray, useWatch } from 'react-hook-form';
+import { Box } from '@mui/material';
 
-import { ITEMS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
-import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
-import { Spinner } from 'shared/components';
+import { StyledObserverTarget, StyledTitleMedium, theme } from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { ConditionalLogic } from 'shared/state';
-import { StyledObserverTarget, StyledTitleMedium, theme } from 'shared/styles';
+import { Spinner } from 'shared/components';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
+import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
+import { ITEMS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 
+import { ItemFlow } from './ItemFlow';
+import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
+import { RemoveItemFlowPopup } from './RemoveItemFlowPopup';
+import { getEmptyFlowItem } from './ActivityItemsFlow.utils';
 import {
   ACTIVITY_ITEMS_FLOW_END_ITEM_CLASS,
   ACTIVITY_ITEMS_FLOW_LIST_CLASS,
   contentStyles,
 } from './ActivityItemsFlow.const';
-import { getEmptyFlowItem } from './ActivityItemsFlow.utils';
-import { ActivityItemsFlowHeader } from './ActivityItemsFlowHeader';
-import { ItemFlow } from './ItemFlow';
-import { RemoveItemFlowPopup } from './RemoveItemFlowPopup';
 
 export const ActivityItemsFlow = () => {
   const { t } = useTranslation('app');

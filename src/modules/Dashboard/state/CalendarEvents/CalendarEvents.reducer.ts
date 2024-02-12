@@ -3,8 +3,8 @@ import { format } from 'date-fns';
 
 import { DateFormats } from 'shared/consts';
 
-import { CalendarEvent, CalendarEventsSchema, CreateEventsData } from './CalendarEvents.schema';
 import { state as initialState } from './CalendarEvents.state';
+import { CalendarEvent, CalendarEventsSchema, CreateEventsData } from './CalendarEvents.schema';
 import {
   getNotHiddenEvents,
   getPreparedEvents,

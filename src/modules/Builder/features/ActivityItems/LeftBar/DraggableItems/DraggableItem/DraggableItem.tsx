@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 
-import { Box } from '@mui/material';
 import { Draggable } from 'react-beautiful-dnd';
+import { Box } from '@mui/material';
 
-import { InsertItem } from 'modules/Builder/components';
 import { useIntersectionObserver } from 'shared/hooks';
 import { StyledObserverTarget } from 'shared/styles';
+import { InsertItem } from 'modules/Builder/components';
 
-import { Item } from '../../Item';
-import { StaticItem } from '../../StaticItem';
 import { DraggableItemProps } from './DraggableItem.types';
 import { getObserverSelector } from './DraggableItem.utils';
+import { StaticItem } from '../../StaticItem';
+import { Item } from '../../Item';
 
 export const DraggableItem = ({
   itemName,

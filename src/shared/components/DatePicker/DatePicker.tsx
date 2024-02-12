@@ -1,15 +1,14 @@
 import { MouseEventHandler, lazy, useState, Suspense } from 'react';
 
-import { fr } from 'date-fns/locale';
-import { Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Controller, FieldValues } from 'react-hook-form';
+import { fr } from 'date-fns/locale';
 
-import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { Svg } from 'shared/components/Svg';
+import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { Tooltip } from 'shared/components/Tooltip';
 import { StyledBodyLarge, theme } from 'shared/styles';
 
-import { DATE_PLACEHOLDER } from './DatePicker.const';
 import {
   DatePickerFallback,
   StyledButton,
@@ -20,8 +19,9 @@ import {
   StyledTextField,
 } from './DatePicker.styles';
 import { DateType, DateArrayType, DatePickerProps, DateVariant, UiType } from './DatePicker.types';
-import { getStringFromDate } from './DatePicker.utils';
 import { DatePickerHeader } from './DatePickerHeader';
+import { getStringFromDate } from './DatePicker.utils';
+import { DATE_PLACEHOLDER } from './DatePicker.const';
 import { PopoverHeader } from './PopoverHeader';
 
 const ReactDatePicker = lazy(() => import('react-datepicker'));

@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store/hooks';
 
+import { state as initialState } from './Banners.state';
 import { reducers } from './Banners.reducer';
 import { BannersSchema } from './Banners.schema';
-import { state as initialState } from './Banners.state';
 
 export * from './Banners.schema';
 

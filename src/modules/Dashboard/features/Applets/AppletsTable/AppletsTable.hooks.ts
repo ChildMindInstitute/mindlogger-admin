@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
 
-import { Applet, Folder, setFolderApi } from 'api';
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
+import { Applet, Folder, setFolderApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 
 export const useAppletsDnd = () => {

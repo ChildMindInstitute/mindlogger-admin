@@ -1,21 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { format, getDay, getYear, parse, startOfWeek } from 'date-fns';
 import { Calendar as ReactCalendar, dateFnsLocalizer, Formats, SlotInfo, View } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { format, getDay, getYear, parse, startOfWeek } from 'date-fns';
 
 import i18n from 'i18n';
+import { Svg } from 'shared/components/Svg';
 import { CalendarEvent, calendarEvents } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-import { Svg } from 'shared/components/Svg';
 import { locales } from 'shared/consts';
 
 import { CreateEventPopup } from '../CreateEventPopup';
 import { EditEventPopup } from '../EditEventPopup';
 import { dataTestId } from './Calendar.const';
+import { eventPropGetter, getCalendarComponents, getDefaultStartDate, getHasWrapperMoreBtn } from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
 import { AllDayEventsVisible, CalendarViews, OnViewFunc } from './Calendar.types';
-import { eventPropGetter, getCalendarComponents, getDefaultStartDate, getHasWrapperMoreBtn } from './Calendar.utils';
 
 const dateFnsLocalize = dateFnsLocalizer({
   format,

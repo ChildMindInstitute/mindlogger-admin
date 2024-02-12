@@ -1,16 +1,16 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ConditionRow } from 'modules/Builder/components';
-import { useCurrentActivity } from 'modules/Builder/hooks';
 import { Condition } from 'shared/state';
 import { StyledBodyLarge, theme, variables } from 'shared/styles';
+import { ConditionRow } from 'modules/Builder/components';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 import { createArray } from 'shared/utils';
 
-import { SummaryRow } from '../SummaryRow';
-import { StyledItemFlowContent } from './ItemFlowContent.styles';
-import { ItemFlowContentProps } from './ItemFlowContent.types';
 import { StaticConditionRow } from './StaticConditionRow';
+import { ItemFlowContentProps } from './ItemFlowContent.types';
+import { StyledItemFlowContent } from './ItemFlowContent.styles';
+import { SummaryRow } from '../SummaryRow';
 
 export const ItemFlowContent = ({ name, isStatic, onRemove, 'data-testid': dataTestid }: ItemFlowContentProps) => {
   const { t } = useTranslation('app');

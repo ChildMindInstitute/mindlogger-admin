@@ -4,6 +4,7 @@ import { Svg } from 'shared/components/Svg';
 import { DateFormats } from 'shared/consts';
 import { theme, StyledBodySmall, StyledLabelMedium, variables } from 'shared/styles';
 
+import { EventProps, UiType } from './Event.types';
 import {
   StyledEndIcon,
   StyledEvent,
@@ -13,7 +14,6 @@ import {
   StyledTitle,
   StyledWrapper,
 } from './Event.styles';
-import { EventProps, UiType } from './Event.types';
 
 export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps) => {
   const {

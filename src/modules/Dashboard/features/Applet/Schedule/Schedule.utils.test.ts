@@ -1,6 +1,5 @@
 import { Roles } from 'shared/consts';
 
-import { ActivitiesFlowsWithColors } from './Schedule.types';
 import {
   getCount,
   convertDateToYearMonthDay,
@@ -9,6 +8,7 @@ import {
   checkIfHasAccessToSchedule,
   colorsArray,
 } from './Schedule.utils';
+import { ActivitiesFlowsWithColors } from './Schedule.types';
 
 describe('Schedule.utils.tsx', () => {
   describe('getCount', () => {

@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { postAppletPublicLinkApi } from 'api';
-import { Modal } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
+import { Modal } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 
 import { LinkPopupProps } from './LinkPopup.types';

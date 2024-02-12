@@ -1,9 +1,9 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { page } from 'resources';
-import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils';
+import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { page } from 'resources';
 
 import { ClearScheduledEventsPopup } from './ClearScheduledEventsPopup';
 

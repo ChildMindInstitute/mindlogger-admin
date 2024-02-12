@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 
 import { format, getYear } from 'date-fns';
 
-import { Periodicity } from 'modules/Dashboard/api';
-import { applets, calendarEvents } from 'modules/Dashboard/state';
-import { createEvents, removeSecondsFromTime } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
-import { useAppDispatch } from 'redux/store';
-import { DateFormats } from 'shared/consts';
 import { Activity, ActivityFlow, SingleApplet } from 'shared/state';
+import { applets, calendarEvents } from 'modules/Dashboard/state';
+import { Periodicity } from 'modules/Dashboard/api';
+import { DateFormats } from 'shared/consts';
 import { getTableCell } from 'shared/utils';
+import { useAppDispatch } from 'redux/store';
+import { createEvents, removeSecondsFromTime } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { AddEventsToCategories, EventsData, LegendEvent, PreparedEvents } from './Schedule.types';
 import { getNextColor, getFrequencyString, getCount, convertDateToYearMonthDay } from './Schedule.utils';

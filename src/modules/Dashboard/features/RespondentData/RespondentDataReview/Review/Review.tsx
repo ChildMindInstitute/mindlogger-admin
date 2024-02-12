@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 
-import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
 import { getDictionaryText } from 'shared/utils';
+import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';

@@ -5,8 +5,8 @@ import { createRef } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import get from 'lodash.get';
 
-import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
 import { mockedMultiSelectFormValues, mockedSingleSelectFormValues } from 'shared/mock';
+import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
 import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
 
 import {

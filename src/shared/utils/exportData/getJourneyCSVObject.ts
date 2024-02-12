@@ -1,15 +1,15 @@
-import { ActivityStatus } from 'shared/consts';
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
+import { ActivityStatus } from 'shared/consts';
 import { AnswerDTO, ExtendedEvent, UserActionType } from 'shared/types';
 import { getDictionaryText } from 'shared/utils/forms';
 
-import { SuccessedEventDTO } from '../../types/answer';
-import { convertDateStampToMs } from './convertDateStampToMs';
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
+import { convertDateStampToMs } from './convertDateStampToMs';
+import { SuccessedEventDTO } from '../../types/answer';
 
-const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
+const getTimeByCondition = (time: string) => (condition: boolean) => condition ? time : '';
 
 const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
 

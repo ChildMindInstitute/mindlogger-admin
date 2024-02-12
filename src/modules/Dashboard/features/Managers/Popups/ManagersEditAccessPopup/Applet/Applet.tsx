@@ -3,16 +3,16 @@ import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ButtonWithMenu, Chip } from 'shared/components';
-import { ChipShape } from 'shared/components/Chip/Chip.types';
-import { MenuItem } from 'shared/components/Menu/Menu.types';
-import { Roles } from 'shared/consts';
 import { StyledFlexTopCenter, StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
+import { Roles } from 'shared/consts';
+import { ChipShape } from 'shared/components/Chip/Chip.types';
+import { MenuItem } from 'shared/components/Menu/Menu.types';
 
-import { SelectRespondentsPopup } from '../../SelectRespondentsPopup';
-import { getMenuItems } from './Applet.const';
 import { StyledApplet, StyledRow, StyledBtn, StyledLabel, StyledImg } from './Applet.styles';
+import { getMenuItems } from './Applet.const';
 import { AppletProps } from './Applet.types';
+import { SelectRespondentsPopup } from '../../SelectRespondentsPopup';
 
 export const Applet = ({
   applet: { id, displayName, image, roles },

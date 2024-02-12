@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { useAppSelector } from 'redux/store/hooks';
 
 import { reducers, extraReducers } from './Alerts.reducer';
-import { AlertsSchema } from './Alerts.schema';
 import { state as initialState } from './Alerts.state';
 import * as thunk from './Alerts.thunk';
+import { AlertsSchema } from './Alerts.schema';
 export * from './Alerts.schema';
 
 const slice = createSlice({

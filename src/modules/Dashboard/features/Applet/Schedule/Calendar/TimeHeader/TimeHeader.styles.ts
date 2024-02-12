@@ -1,8 +1,8 @@
 import { Box, styled } from '@mui/material';
 
-import { StyledLabelBoldMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { StyledLabelBoldMedium } from 'shared/styles/styledComponents';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledMore = styled(StyledLabelBoldMedium, shouldForwardProp)`

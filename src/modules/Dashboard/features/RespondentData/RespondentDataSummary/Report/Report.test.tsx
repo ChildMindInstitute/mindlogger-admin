@@ -2,14 +2,14 @@
 // @ts-nocheck
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import download from 'downloadjs';
 import mockAxios from 'jest-mock-axios';
+import download from 'downloadjs';
 
-import * as dashboardHooks from 'modules/Dashboard/hooks';
-import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
-import { mockedApplet, mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils';
+import { mockedApplet, mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { initialStateData } from 'redux/modules';
+import * as dashboardHooks from 'modules/Dashboard/hooks';
 
 import { Report } from './Report';
 

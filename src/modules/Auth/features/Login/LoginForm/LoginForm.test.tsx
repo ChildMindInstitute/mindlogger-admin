@@ -1,8 +1,8 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 
-import { mockedEmail, mockedPassword } from 'shared/mock';
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
+import { mockedEmail, mockedPassword } from 'shared/mock';
 
 import { LoginForm } from '.';
 

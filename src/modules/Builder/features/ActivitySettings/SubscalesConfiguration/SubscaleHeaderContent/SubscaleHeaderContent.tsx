@@ -3,17 +3,17 @@ import { useState } from 'react';
 import { Box } from '@mui/material';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { SubscaleTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
-import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton, theme } from 'shared/styles';
+import { Svg } from 'shared/components/Svg';
+import { SubscaleTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
 import { TitleComponent } from '../../TitleComponent';
+import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
+import { StyledWrapper } from './SubscaleHeaderContent.styles';
 import { LookupTable } from '../LookupTable';
-import { StyledSvg } from '../SubscalesConfiguration.styles';
 import { getSubscaleModalLabels } from '../SubscalesConfiguration.utils';
 import { subscaleColumnData, subscaleTableTemplate } from './SubscaleHeaderContent.const';
-import { StyledWrapper } from './SubscaleHeaderContent.styles';
-import { SubscaleHeaderContentProps } from './SubscaleHeaderContent.types';
+import { StyledSvg } from '../SubscalesConfiguration.styles';
 
 export const SubscaleHeaderContent = ({
   onRemove,

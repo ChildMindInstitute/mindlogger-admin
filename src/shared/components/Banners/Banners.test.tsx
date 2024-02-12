@@ -1,8 +1,8 @@
 import { PreloadedState } from '@reduxjs/toolkit';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { RootState } from 'redux/store';
 import { renderWithProviders } from 'shared/utils';
+import { RootState } from 'redux/store';
 
 import { Banners } from './Banners';
 

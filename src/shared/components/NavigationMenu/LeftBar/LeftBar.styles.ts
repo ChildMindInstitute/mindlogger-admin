@@ -1,10 +1,10 @@
 import { Box, styled } from '@mui/material';
 
-import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
-import { StyledHeadlineLarge, StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
-import { commonStickyStyles } from 'shared/styles/stylesConsts';
 import { theme } from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { commonStickyStyles } from 'shared/styles/stylesConsts';
+import { StyledHeadlineLarge, StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
+import { StyledFlexColumn } from 'shared/styles/styledComponents/Flex';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledBar = styled(Box, shouldForwardProp)`

@@ -1,10 +1,10 @@
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import { getDictionaryText } from 'shared/utils';
 
-import { StyledCardItemContainer } from './ActivityCardItem.styles';
-import { ActivityCardItemProps, ItemCardButtonsConfig } from './ActivityCardItem.types';
-import { ItemCardButtons } from './ItemCardButtons';
 import { ItemPicker } from './ItemPicker';
+import { ActivityCardItemProps, ItemCardButtonsConfig } from './ActivityCardItem.types';
+import { StyledCardItemContainer } from './ActivityCardItem.styles';
+import { ItemCardButtons } from './ItemCardButtons';
 
 export const ActivityCardItem = ({
   activityItem,

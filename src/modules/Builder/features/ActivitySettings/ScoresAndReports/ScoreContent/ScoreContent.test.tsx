@@ -2,9 +2,9 @@
 // @ts-nocheck
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 
-import { CalculationType } from 'shared/consts';
-import { mockedSingleSelectFormValues, mockedSliderFormValues } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { mockedSingleSelectFormValues, mockedSliderFormValues } from 'shared/mock';
+import { CalculationType } from 'shared/consts';
 
 import { ScoreContent } from './ScoreContent';
 

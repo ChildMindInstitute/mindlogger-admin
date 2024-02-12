@@ -2,13 +2,13 @@
 // @ts-nocheck
 import { ReactNode, useImperativeHandle, forwardRef } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
-import { AppletFormValues } from 'modules/Builder/types';
-import { ExtendedRenderOptions } from 'redux/store';
 import { mockedAppletFormData } from 'shared/mock';
+import { ExtendedRenderOptions } from 'redux/store';
+import { AppletFormValues } from 'modules/Builder/types';
+import { AppletSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 
 import { renderWithProviders } from './renderWithProviders';
 

@@ -2,14 +2,14 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { format } from 'date-fns';
 
-import { page } from 'resources';
-import { DateFormats, Roles } from 'shared/consts';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedEmail, mockedInvitation } from 'shared/mock';
-import { initialStateData } from 'shared/state';
+import { DateFormats, Roles } from 'shared/consts';
 import { renderWithProviders } from 'shared/utils';
+import { page } from 'resources';
+import { initialStateData } from 'shared/state';
 
-import { InvitationsTable } from './InvitationsTable';
 import { dataTestId } from './InvitationsTable.const';
+import { InvitationsTable } from './InvitationsTable';
 import { InvitationsTableProps } from './InvitationsTable.types';
 
 const preloadedState = {

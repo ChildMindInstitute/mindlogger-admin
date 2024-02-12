@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components/Svg';
 import { StyledBodyLarge, StyledModalWrapper } from 'shared/styles';
+import { Svg } from 'shared/components/Svg';
 
+import { SaveChangesPopupProps } from './SaveChangesPopup.types';
 import {
   StyledDialog,
   StyledDialogTitle,
@@ -11,7 +12,6 @@ import {
   StyledButton,
   StyledButtonsContainer,
 } from './SaveChangesPopup.styles';
-import { SaveChangesPopupProps } from './SaveChangesPopup.types';
 
 export const SaveChangesPopup = ({
   popupVisible,

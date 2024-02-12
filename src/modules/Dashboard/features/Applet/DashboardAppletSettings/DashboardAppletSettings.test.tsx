@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react';
 
-import { page } from 'resources';
-import { Roles } from 'shared/consts';
-import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
-import { initialStateData } from 'shared/state';
 import { renderWithProviders } from 'shared/utils';
+import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
+import { Roles } from 'shared/consts';
+import { page } from 'resources';
+import { initialStateData } from 'shared/state';
 
 import { DashboardAppletSettings } from './DashboardAppletSettings';
 

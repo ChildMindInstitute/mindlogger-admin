@@ -3,8 +3,8 @@ import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 import { getFulfilledData, getPendingData, getRejectedData } from 'shared/utils/state';
 
 import { AppletSchema } from './Applet.schema';
-import { state as initialState } from './Applet.state';
 import { createApplet, getApplet, getAppletWithItems, updateApplet } from './Applet.thunk';
+import { state as initialState } from './Applet.state';
 
 export const extraReducers = (builder: ActionReducerMapBuilder<AppletSchema>): void => {
   getPendingData({ builder, thunk: getApplet, key: 'applet' });

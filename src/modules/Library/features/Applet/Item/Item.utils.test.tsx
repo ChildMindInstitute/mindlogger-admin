@@ -2,9 +2,9 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 
+import { renderWithProviders } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 import { Item } from 'shared/state';
-import { renderWithProviders } from 'shared/utils';
 
 import { getSelector, renderItemContent } from './Item.utils';
 

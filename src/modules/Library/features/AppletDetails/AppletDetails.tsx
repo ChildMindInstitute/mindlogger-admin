@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
+import { page } from 'resources';
+import { StyledBody, ContentContainer } from 'shared/styles';
+import { useAsync } from 'shared/hooks/useAsync';
+import { Spinner } from 'shared/components';
 import { getPublishedAppletApi } from 'modules/Library/api';
 import { Header, RightButtonType } from 'modules/Library/components';
 import { useAppletsFromCart, useReturnToLibraryPath } from 'modules/Library/hooks';
 import { library } from 'modules/Library/state';
-import { page } from 'resources';
-import { Spinner } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
-import { StyledBody, ContentContainer } from 'shared/styles';
 import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { Applet, AppletUiType } from '../Applet';

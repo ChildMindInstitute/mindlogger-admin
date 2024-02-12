@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 
-import { format } from 'date-fns';
-import { useTranslation } from 'react-i18next';
 import { createSearchParams, generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
-import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
-import { page } from 'resources';
-import { DateFormats } from 'shared/consts';
 import { StyledBodySmall, StyledFlexColumn, theme, variables } from 'shared/styles';
+import { DateFormats } from 'shared/consts';
+import { page } from 'resources';
+import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
 
 import { StyledIndent } from '../../Chart.styles';
 import { StyledListItemButton, StyledTooltip } from './ChartTooltip.styles';

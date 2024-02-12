@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
+import { SubscaleTotalScore, ItemResponseType, LookupTableItems } from 'shared/consts';
+import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import {
   defaultSingleSelectionConfig,
   defaultTextConfig,
 } from 'modules/Builder/features/ActivityItems/ItemConfiguration/OptionalItemsAndSettings/OptionalItemsAndSettings.const';
-import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
-import { SubscaleTotalScore, ItemResponseType, LookupTableItems } from 'shared/consts';
 
 const { t } = i18n;
 

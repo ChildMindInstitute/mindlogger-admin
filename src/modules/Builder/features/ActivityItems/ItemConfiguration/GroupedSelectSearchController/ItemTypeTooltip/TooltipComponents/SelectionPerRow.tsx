@@ -1,9 +1,10 @@
-import uniqueId from 'lodash.uniqueid';
 import { useTranslation } from 'react-i18next';
+import uniqueId from 'lodash.uniqueid';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 
+import { getSelectionPerRowSvgId } from './TooltipComponents.utils';
 import {
   StyledPresentation,
   StyledTooltipText,
@@ -11,7 +12,6 @@ import {
   StyledMatrixLineElement,
 } from './TooltipComponents.styles';
 import { SelectionProps, SelectionUiType } from './TooltipComponents.types';
-import { getSelectionPerRowSvgId } from './TooltipComponents.utils';
 
 const commonProps = {
   width: '17',

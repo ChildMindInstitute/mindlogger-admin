@@ -1,60 +1,13 @@
-import get from 'lodash.get';
-import { ColorResult } from 'react-color';
 import { matchPath } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { ColorResult } from 'react-color';
+import get from 'lodash.get';
 import * as yup from 'yup';
 
 import i18n from 'i18n';
-import { Theme } from 'modules/Builder/api';
-import {
-  DEFAULT_MIN_NUMBER,
-  DEFAULT_SLIDER_MAX_NUMBER,
-  DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
-} from 'modules/Builder/consts';
-import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import {
-  ABTrailsItemQuestions,
-  ActivityFlowFormValues,
-  ActivityFormValues,
-  AppletFormValues,
-  CorrectPress,
-  DeviceType,
-  FlankerItemNames,
-  FlankerNextButton,
-  FlankerSamplingMethod,
-  GetActivitySubscaleItems,
-  GetActivitySubscaleSettingDuplicated,
-  GetNewActivity,
-  GetNewPerformanceTask,
-  GyroscopeItemNames,
-  ItemFormValues,
-  OrderName,
-  RoundTypeEnum,
-  TouchItemNames,
-} from 'modules/Builder/types';
-import {
-  findRelatedScore,
-  FlowReportFieldsPrepareType,
-  getEntityReportFields,
-  getUniqueName,
-} from 'modules/Builder/utils';
 import { page } from 'resources';
 import { Svg } from 'shared/components/Svg';
-import {
-  ConditionType,
-  DEFAULT_LAMBDA_SLOPE,
-  DEFAULT_LENGTH_OF_TEST,
-  DEFAULT_MILLISECONDS_DURATION,
-  DEFAULT_NUMBER_OF_TRIALS,
-  DEFAULT_THRESHOLD_DURATION,
-  GyroscopeOrTouch,
-  ItemResponseType,
-  LookupTableItems,
-  PerfTaskType,
-  ScoreConditionType,
-  ScoreReportType,
-} from 'shared/consts';
+import { Theme } from 'modules/Builder/api';
 import {
   Activity,
   ActivityFlow,
@@ -84,6 +37,53 @@ import {
   Path,
   pluck,
 } from 'shared/utils';
+import {
+  ConditionType,
+  DEFAULT_LAMBDA_SLOPE,
+  DEFAULT_LENGTH_OF_TEST,
+  DEFAULT_MILLISECONDS_DURATION,
+  DEFAULT_NUMBER_OF_TRIALS,
+  DEFAULT_THRESHOLD_DURATION,
+  GyroscopeOrTouch,
+  ItemResponseType,
+  LookupTableItems,
+  PerfTaskType,
+  ScoreConditionType,
+  ScoreReportType,
+} from 'shared/consts';
+import {
+  ABTrailsItemQuestions,
+  ActivityFlowFormValues,
+  ActivityFormValues,
+  AppletFormValues,
+  CorrectPress,
+  DeviceType,
+  FlankerItemNames,
+  FlankerNextButton,
+  FlankerSamplingMethod,
+  GetActivitySubscaleItems,
+  GetActivitySubscaleSettingDuplicated,
+  GetNewActivity,
+  GetNewPerformanceTask,
+  GyroscopeItemNames,
+  ItemFormValues,
+  OrderName,
+  RoundTypeEnum,
+  TouchItemNames,
+} from 'modules/Builder/types';
+import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
+import {
+  findRelatedScore,
+  FlowReportFieldsPrepareType,
+  getEntityReportFields,
+  getUniqueName,
+} from 'modules/Builder/utils';
+import {
+  DEFAULT_MIN_NUMBER,
+  DEFAULT_SLIDER_MAX_NUMBER,
+  DEFAULT_SLIDER_MIN_NUMBER,
+  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
+} from 'modules/Builder/consts';
 
 import {
   ALLOWED_TYPES_IN_VARIABLES,
@@ -164,13 +164,13 @@ export const getUniqueItem = (item?: ItemFormValues) =>
     key: uuidv4(),
     ...getNewPropsForSingleAndMultiSelection(item),
     ...getNewPropsForSlider(item),
-  }) as ItemFormValues;
+  } as ItemFormValues);
 
 export const getNewActivityItem = (item?: ItemFormValues) =>
   ({
     ...getNewItemDefaultProps(),
     ...getUniqueItem(item),
-  }) as ItemFormValues;
+  } as ItemFormValues);
 
 export const getDuplicatedConditions = (
   oldItems: ItemFormValues[],
@@ -720,7 +720,7 @@ const getActivityItems = (items: Item[]) =>
             allowEdit: item.allowEdit,
             isHidden: item.isHidden,
             order: item.order,
-          }) as ItemFormValues,
+          } as ItemFormValues),
       )
     : [];
 

@@ -1,17 +1,17 @@
 import { useMemo, useRef, useState } from 'react';
 
-import { Box } from '@mui/material';
 import { Chart as ChartJS, ScriptableTooltipContext, BarElement, Legend, CategoryScale } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { Box } from '@mui/material';
 
 import { pluck } from 'shared/utils';
 
-import { StyledChartContainer } from '../Chart.styles';
-import { ChartType } from '../Chart.types';
-import { getTicksData, legendMargin, setTooltipStyles } from '../Charts.utils';
 import { ChartTooltipContainer } from '../ChartTooltipContainer';
-import { BarChartProps, TooltipData } from './BarChart.types';
+import { getTicksData, legendMargin, setTooltipStyles } from '../Charts.utils';
+import { ChartType } from '../Chart.types';
+import { StyledChartContainer } from '../Chart.styles';
 import { getDatasets, getOptions } from './BarChart.utils';
+import { BarChartProps, TooltipData } from './BarChart.types';
 import { ChartTooltip } from './ChartTooltip';
 
 ChartJS.register(BarElement, CategoryScale, Legend);

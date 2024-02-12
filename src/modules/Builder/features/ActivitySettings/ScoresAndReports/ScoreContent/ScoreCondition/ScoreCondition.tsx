@@ -1,22 +1,22 @@
 import { useState } from 'react';
 
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { ConditionRowType } from 'modules/Builder/types';
+import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg, theme, variables } from 'shared/styles';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import { Tooltip } from 'shared/components/Tooltip';
-import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg, theme, variables } from 'shared/styles';
+import { ConditionRowType } from 'modules/Builder/types';
 
+import { ScoreConditionProps } from './ScoreCondition.types';
 import { ConditionContent } from '../../ConditionContent';
 import { SectionScoreCommonFields } from '../../SectionScoreCommonFields';
+import { getScoreConditionId } from './ScoreCondition.utils';
 import { CopyId } from '../CopyId';
+import { StyledLabel } from './ScoreCondition.styles';
 import { getIsScoreIdVariable, updateMessagesWithVariable } from '../ScoreContent.utils';
 import { ChangeScoreConditionIdPopup } from './ChangeScoreConditionIdPopup';
-import { StyledLabel } from './ScoreCondition.styles';
-import { ScoreConditionProps } from './ScoreCondition.types';
-import { getScoreConditionId } from './ScoreCondition.utils';
 
 export const ScoreCondition = ({
   name,

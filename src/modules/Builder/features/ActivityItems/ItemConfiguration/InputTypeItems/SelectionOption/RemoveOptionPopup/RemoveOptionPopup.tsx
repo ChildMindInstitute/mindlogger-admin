@@ -1,9 +1,9 @@
 import { useTranslation, Trans } from 'react-i18next';
 
-import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Modal } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
+import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 
 import { RemoveOptionPopupProps } from './RemoveOptionPopup.types';
 

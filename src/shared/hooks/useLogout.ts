@@ -1,11 +1,11 @@
-import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
-import { ApiResponseCodes } from 'api';
-import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
-import { alerts, auth, workspaces } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
+import { ApiResponseCodes } from 'api';
+import { useAppDispatch } from 'redux/store';
+import { alerts, auth, workspaces } from 'redux/modules';
+import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 import { Mixpanel } from 'shared/utils/mixpanel';
 
 export const useLogout = () => {

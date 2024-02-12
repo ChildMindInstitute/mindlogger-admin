@@ -5,15 +5,15 @@ import { Suspense } from 'react';
 import { fireEvent, act } from '@testing-library/react';
 import { endOfDay, startOfDay } from 'date-fns';
 
-import { Periodicity } from 'modules/Dashboard/api';
-import * as reduxHooks from 'redux/store/hooks';
-import { page } from 'resources';
-import { mockedAppletId } from 'shared/mock';
-import { initialStateData } from 'shared/state';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { mockedAppletId } from 'shared/mock';
+import { page } from 'resources';
+import * as reduxHooks from 'redux/store/hooks';
+import { initialStateData } from 'shared/state';
+import { Periodicity } from 'modules/Dashboard/api';
 
-import { Calendar } from './Calendar';
 import { dataTestId } from './Calendar.const';
+import { Calendar } from './Calendar';
 
 const route = `/dashboard/${mockedAppletId}/schedule`;
 const routePath = page.appletSchedule;

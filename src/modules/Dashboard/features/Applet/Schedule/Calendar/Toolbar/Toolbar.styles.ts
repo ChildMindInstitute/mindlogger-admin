@@ -1,8 +1,8 @@
 import { styled, Box, Button } from '@mui/material';
 
-import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { StyledClearedButton, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 export const StyledToolbar = styled(StyledFlexTopCenter)`
   padding: ${theme.spacing(1.2, 1.6)};

@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
+import { ApiErrorResponse } from 'shared/state/Base';
 import { getWorkspaceRespondentsApi, GetAppletsParams, getRespondentDetailsApi, GetRespondentDetailsParams } from 'api';
 import { MAX_LIMIT } from 'shared/consts';
-import { ApiErrorResponse } from 'shared/state/Base';
 import { getApiErrorResult } from 'shared/utils/errors';
 
 export const getAllWorkspaceRespondents = createAsyncThunk(

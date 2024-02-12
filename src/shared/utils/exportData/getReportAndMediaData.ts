@@ -1,4 +1,3 @@
-import { ItemsWithFileResponses } from 'shared/consts';
 import {
   AppletExportData,
   DecryptedAnswerData,
@@ -8,12 +7,13 @@ import {
   SuccessedEventDTO,
   UserActionType,
 } from 'shared/types';
-import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
-import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
-import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
-import { getSubscales } from 'shared/utils/exportData/getSubscales';
-import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
 import { checkIfHasMigratedAnswers, getIdBeforeMigration } from 'shared/utils/exportData/migratedData';
+import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
+import { getSubscales } from 'shared/utils/exportData/getSubscales';
+import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
+import { ItemsWithFileResponses } from 'shared/consts';
+import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
+import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
 
 import { getObjectFromList } from '../getObjectFromList';
 
@@ -40,20 +40,17 @@ export const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData>,
   decryptedAnswers: DecryptedAnswerData[],
 ) => {
-  const answers = decryptedAnswers.reduce(
-    (filteredAcc, item, index) => {
-      if (item.answer === null || item.answer === undefined) return filteredAcc;
+  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
+    if (item.answer === null || item.answer === undefined) return filteredAcc;
 
-      return filteredAcc.concat(
-        getReportCSVObject({
-          item,
-          rawAnswersObject,
-          index,
-        }),
-      );
-    },
-    [] as ReturnType<typeof getReportCSVObject>[],
-  );
+    return filteredAcc.concat(
+      getReportCSVObject({
+        item,
+        rawAnswersObject,
+        index,
+      }),
+    );
+  }, [] as ReturnType<typeof getReportCSVObject>[]);
 
   const subscaleSetting = decryptedAnswers?.[0]?.subscaleSetting;
   if (subscaleSetting?.subscales?.length) {

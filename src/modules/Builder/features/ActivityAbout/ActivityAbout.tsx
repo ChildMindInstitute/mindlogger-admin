@@ -1,18 +1,7 @@
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { useRedirectIfNoMatchedActivity, useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder/types';
-import { Tooltip, Uploader, CropRatio } from 'shared/components';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
-import {
-  ItemResponseType,
-  MAX_DESCRIPTION_LENGTH,
-  MAX_FILE_SIZE_25MB,
-  MAX_NAME_LENGTH,
-  TEXTAREA_ROWS_COUNT_SM,
-} from 'shared/consts';
-import { BuilderContainer } from 'shared/features';
 import {
   StyledBodyLarge,
   StyledTitleMedium,
@@ -21,12 +10,23 @@ import {
   StyledFlexColumn,
   StyledCheckboxTooltipSvg,
 } from 'shared/styles';
+import { Tooltip, Uploader, CropRatio } from 'shared/components';
+import {
+  ItemResponseType,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_FILE_SIZE_25MB,
+  MAX_NAME_LENGTH,
+  TEXTAREA_ROWS_COUNT_SM,
+} from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
+import { BuilderContainer } from 'shared/features';
+import { ItemFormValues } from 'modules/Builder/types';
+import { useRedirectIfNoMatchedActivity, useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
+import { StyledContainer } from './ActivityAbout.styles';
 import { itemsForReviewableActivity, commonUploaderProps } from './ActivityAbout.const';
 import { useCheckIfItemsHaveRequiredItems, useCheckIfItemsHaveVariables } from './ActivityAbout.hooks';
-import { StyledContainer } from './ActivityAbout.styles';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();

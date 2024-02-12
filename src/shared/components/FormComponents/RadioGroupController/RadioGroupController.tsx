@@ -1,9 +1,9 @@
 import { RadioGroup, Radio } from '@mui/material';
-import uniqueId from 'lodash.uniqueid';
 import { Controller, FieldValues } from 'react-hook-form';
+import uniqueId from 'lodash.uniqueid';
 
-import { StyledFormControlLabel } from './RadioGroupController.styles';
 import { RadioGroupControllerProps } from './RadioGroupController.types';
+import { StyledFormControlLabel } from './RadioGroupController.styles';
 
 export const RadioGroupController = <T extends FieldValues>({
   name,

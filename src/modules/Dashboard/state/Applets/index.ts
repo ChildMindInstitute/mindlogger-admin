@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppSelector } from 'redux/store/hooks';
 
+import * as thunk from './Applets.thunk';
+import { state as initialState } from './Applets.state';
 import { extraReducers, reducers } from './Applets.reducer';
 import { AppletsSchema } from './Applets.schema';
-import { state as initialState } from './Applets.state';
-import * as thunk from './Applets.thunk';
 
 export * from './Applets.schema';
 

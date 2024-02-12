@@ -2,13 +2,13 @@
 // @ts-nocheck
 import { createRef } from 'react';
 
-import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { generatePath } from 'react-router-dom';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
-import { mockedAppletFormData } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils';
+import { mockedAppletFormData } from 'shared/mock';
 
 import { ActivityFlowBuilder } from './ActivityFlowBuilder';
 

@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import {
   Chart as ChartJS,
@@ -11,19 +12,18 @@ import {
   Tooltip,
   TooltipItem,
 } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Scatter } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import { useTranslation } from 'react-i18next';
 
 import { locales } from 'shared/consts';
 
-import { ChartType, SetTooltipData } from '../Chart.types';
 import { scatterChartTooltipHandler } from '../Charts.utils';
-import { ChartTooltipContainer } from '../ChartTooltipContainer';
-import { ChartTooltip } from './ChartTooltip';
-import { MultiScatterChartProps } from './MultiScatterChart.types';
+import { ChartType, SetTooltipData } from '../Chart.types';
 import { getData, getOptions } from './MultiScatterChart.utils';
+import { MultiScatterChartProps } from './MultiScatterChart.types';
+import { ChartTooltip } from './ChartTooltip';
+import { ChartTooltipContainer } from '../ChartTooltipContainer';
 
 export const MultiScatterChart = ({
   color,

@@ -1,6 +1,6 @@
-import Button from '@mui/material/Button';
-import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
+import Button from '@mui/material/Button';
 
 import { page } from 'resources';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';

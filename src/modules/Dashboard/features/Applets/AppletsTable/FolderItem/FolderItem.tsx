@@ -1,21 +1,21 @@
 import { useEffect, useState, KeyboardEvent, useContext, ChangeEvent } from 'react';
 
-import { InputAdornment, TableRow } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { InputAdornment, TableRow } from '@mui/material';
 
-import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'api';
-import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.const';
-import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
-import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
-import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import { workspaces } from 'redux/modules';
 import { Svg, Actions } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
 import { StyledBodyMedium, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import { variables } from 'shared/styles/variables';
+import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
+import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.const';
+import { deleteFolderApi, saveFolderApi, updateFolderApi } from 'api';
+import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/AppletsTable.hooks';
+import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
 import { StyledTableCell } from '../AppletsTable.styles';
-import { getActions } from './FolderItem.const';
+import { FolderItemProps } from './FolderItem.types';
 import {
   StyledFolderIcon,
   StyledCountApplets,
@@ -23,7 +23,7 @@ import {
   StyledCloseButton,
   StyledOutlinedInput,
 } from './FolderItem.styles';
-import { FolderItemProps } from './FolderItem.types';
+import { getActions } from './FolderItem.const';
 
 export const FolderItem = ({ item }: FolderItemProps) => {
   const { t } = useTranslation('app');

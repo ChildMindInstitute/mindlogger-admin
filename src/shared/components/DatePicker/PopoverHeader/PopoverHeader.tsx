@@ -1,12 +1,12 @@
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { Tooltip } from 'shared/components/Tooltip';
 import { StyledHeadline, StyledTitleSmall } from 'shared/styles/styledComponents';
+import { Tooltip } from 'shared/components/Tooltip';
 
+import { StyledHeader, StyledSmalltext } from './PopoverHeader.styles';
 import { UiType } from '../DatePicker.types';
 import { getStringFromDateWithWeekDay } from '../DatePicker.utils';
-import { StyledHeader, StyledSmalltext } from './PopoverHeader.styles';
 import { PopoverHeaderProps } from './PopoverHeader.types';
 
 export const PopoverHeader = ({ uiType, date, tooltip }: PopoverHeaderProps) => {

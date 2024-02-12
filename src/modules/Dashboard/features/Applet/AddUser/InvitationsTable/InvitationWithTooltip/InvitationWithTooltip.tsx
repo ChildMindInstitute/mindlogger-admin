@@ -1,11 +1,11 @@
 import { Box, ClickAwayListener } from '@mui/material';
 
-import { Svg, Tooltip } from 'shared/components';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { Svg, Tooltip } from 'shared/components';
 
 import { dataTestId } from '../InvitationsTable.const';
-import { StyledCopyButton } from './InvitationWithTooltip.styles';
 import { InvitationWithTooltipProps } from './InvitationWithTooltip.types';
+import { StyledCopyButton } from './InvitationWithTooltip.styles';
 
 export const InvitationWithTooltip = ({ open, onClose, invitationLink }: InvitationWithTooltipProps) => (
   <Tooltip

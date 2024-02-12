@@ -1,8 +1,8 @@
 import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
+import { BLOB_ZIP_OPTIONS } from './exportData/exportZip';
 import { postLogFile } from '../api/api';
 import { isProduction } from './env';
-import { BLOB_ZIP_OPTIONS } from './exportData/exportZip';
 import { SessionStorageKeys } from './storage';
 
 const DEVICE_ID = 'browser';

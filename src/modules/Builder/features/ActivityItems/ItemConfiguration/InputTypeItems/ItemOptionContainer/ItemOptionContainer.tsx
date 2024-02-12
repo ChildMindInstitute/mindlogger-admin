@@ -1,5 +1,5 @@
-import { StyledItemOptionContainer } from 'modules/Builder/components/ToggleItemContainer';
 import { theme, variables, StyledFlexColumn, StyledLabelBoldLarge, StyledTitleMedium } from 'shared/styles';
+import { StyledItemOptionContainer } from 'modules/Builder/components/ToggleItemContainer';
 
 import { ItemOptionContainerProps } from './ItemOptionContainer.types';
 

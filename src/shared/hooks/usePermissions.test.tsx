@@ -1,9 +1,9 @@
 import { renderHook, waitFor } from '@testing-library/react';
 
-import { ApiResponseCodes } from 'api';
-import { mockedOwnerId } from 'shared/mock';
-import { Workspace, workspaces } from 'shared/state';
 import { mockI18Next } from 'shared/tests';
+import { ApiResponseCodes } from 'api';
+import { Workspace, workspaces } from 'shared/state';
+import { mockedOwnerId } from 'shared/mock';
 import * as utils from 'shared/utils';
 
 import { usePermissions } from './usePermissions';

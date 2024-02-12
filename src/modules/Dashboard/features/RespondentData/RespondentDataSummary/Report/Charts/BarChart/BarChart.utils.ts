@@ -3,8 +3,8 @@ import { LinearScale, ScriptableTooltipContext } from 'chart.js';
 import { variables } from 'shared/styles';
 
 import { COLORS, commonLabelsProps, SUBSCALES_CHART_LABEL_WIDTH_Y } from '../Charts.const';
-import { BORDER_RADIUS } from './BarChart.const';
 import { ChartData } from './BarChart.types';
+import { BORDER_RADIUS } from './BarChart.const';
 
 export const getDatasets = (chartData: ChartData[]) =>
   chartData.map((item, index) => ({

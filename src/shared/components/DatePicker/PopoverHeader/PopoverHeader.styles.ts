@@ -1,8 +1,8 @@
 import { styled } from '@mui/material';
 
-import { StyledTitleSmall, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { StyledTitleSmall, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 
 export const StyledHeader = styled(StyledFlexTopCenter)`
   border-bottom: ${variables.borderWidth.md} solid ${variables.palette.outline_variant};

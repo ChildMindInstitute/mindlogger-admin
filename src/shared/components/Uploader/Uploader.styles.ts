@@ -61,8 +61,8 @@ export const StyledContainer = styled(StyledFlexAllCenter, shouldForwardProp)`
       return `
         ${commonStyles};
         border: ${isImgUploaded ? variables.borderWidth.md : variables.borderWidth.lg} ${
-          isImgUploaded ? 'solid' : 'dashed'
-        } ${variables.palette.outline_variant};
+        isImgUploaded ? 'solid' : 'dashed'
+      } ${variables.palette.outline_variant};
         border-radius: ${variables.borderRadius.lg2};
       `;
     }

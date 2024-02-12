@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 
-import { Badge, Tab } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Badge, Tab } from '@mui/material';
 
-import { TabPanel } from '../TabPanel';
 import { StyledTabs } from '../Tabs.styles';
+import { TabPanel } from '../TabPanel';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
 export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false, isBuilder = false }: TabsProps) => {

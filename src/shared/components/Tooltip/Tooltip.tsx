@@ -1,5 +1,5 @@
-import { StyledTooltip } from './Tooltip.styles';
 import { TooltipProps } from './Tooltip.types';
+import { StyledTooltip } from './Tooltip.styles';
 
 export const Tooltip = ({ tooltipTitle = '', children, maxWidth, ...props }: TooltipProps) => (
   <StyledTooltip

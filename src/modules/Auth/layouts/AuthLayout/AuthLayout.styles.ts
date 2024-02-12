@@ -1,8 +1,8 @@
 import { styled, Box } from '@mui/material';
 
-import { StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles/styledComponents';
 
 export const StyledAuthLayout = styled(StyledFlexColumn)`
   height: 100vh;

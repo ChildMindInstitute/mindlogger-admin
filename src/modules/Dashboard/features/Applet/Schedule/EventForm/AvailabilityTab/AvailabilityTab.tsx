@@ -1,19 +1,18 @@
 import { useEffect } from 'react';
 
-import { addDays } from 'date-fns';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { addDays } from 'date-fns';
 
-import { Periodicity } from 'modules/Dashboard/api';
-import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
-import { DatePicker, TimePicker, ToggleButtonGroup } from 'shared/components';
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
+import { DatePicker, TimePicker, ToggleButtonGroup } from 'shared/components';
 import { StyledBodyLarge, StyledBodyMedium, StyledTitleSmall, theme, variables } from 'shared/styles';
+import { Periodicity } from 'modules/Dashboard/api';
 import { SelectEvent } from 'shared/types';
+import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
-import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_END_TIME, DEFAULT_START_TIME } from '../EventForm.const';
-import { useNextDayLabel } from '../EventForm.hooks';
 import { EventFormValues } from '../EventForm.types';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_END_TIME, DEFAULT_START_TIME } from '../EventForm.const';
 import { repeatsButtons, TimeType } from './Availability.const';
 import {
   StyledButtonsTitle,
@@ -24,6 +23,7 @@ import {
 } from './AvailabilityTab.styles';
 import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
+import { useNextDayLabel } from '../EventForm.hooks';
 
 export const AvailabilityTab = ({ hasAlwaysAvailableOption, 'data-testid': dataTestid }: AvailabilityTabProps) => {
   const { t } = useTranslation('app');

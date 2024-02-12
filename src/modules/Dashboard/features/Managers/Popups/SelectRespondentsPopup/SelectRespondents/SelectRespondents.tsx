@@ -1,18 +1,18 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
-import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
+import { useFormContext } from 'react-hook-form';
 
-import { Row, Search, Table, UiType } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
+import { Row, Search, Table, UiType } from 'shared/components';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 
-import { getSelectedRespondentsLength } from '../SelectRespondentsPopup.utils';
-import { Select } from './Select';
-import { options, SearchAcross } from './SelectRespondents.const';
-import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';
 import { SelectRespondentsProps } from './SelectRespondents.types';
+import { StyledFilterContainer, StyledSelectContainer } from './SelectRespondents.styles';
+import { options, SearchAcross } from './SelectRespondents.const';
 import { filterTableRows, getHeadCells } from './SelectRespondents.utils';
+import { Select } from './Select';
+import { getSelectedRespondentsLength } from '../SelectRespondentsPopup.utils';
 
 export const SelectRespondents = ({ reviewer: { name, email }, appletName, respondents }: SelectRespondentsProps) => {
   const { t } = useTranslation('app');

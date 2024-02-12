@@ -1,19 +1,19 @@
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { Uploads } from 'modules/Builder/components';
-import { useCustomFormContext } from 'modules/Builder/hooks';
-import { themes } from 'modules/Builder/state';
-import { Tooltip, Uploader } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
-import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_25MB, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT } from 'shared/consts';
-import { BuilderContainer } from 'shared/features';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { Tooltip, Uploader } from 'shared/components';
+import { MAX_DESCRIPTION_LENGTH_LONG, MAX_FILE_SIZE_25MB, MAX_NAME_LENGTH, TEXTAREA_ROWS_COUNT } from 'shared/consts';
 import { byteFormatter } from 'shared/utils';
+import { Uploads } from 'modules/Builder/components';
+import { themes } from 'modules/Builder/state';
+import { BuilderContainer } from 'shared/features';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
-import { commonUploaderProps } from './AboutApplet.const';
 import { StyledContainer, StyledSvg, StyledTitle } from './AboutApplet.styles';
 import { getColorThemeOptions } from './AboutApplet.utils';
+import { commonUploaderProps } from './AboutApplet.const';
 import { ThemeSelectController } from './ThemeSelectController';
 
 export const AboutApplet = () => {

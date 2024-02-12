@@ -1,15 +1,15 @@
 import { memo } from 'react';
 
-import get from 'lodash.get';
 import { useTranslation } from 'react-i18next';
+import get from 'lodash.get';
 
+import { FlankerStimulusSettings } from 'shared/state';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerItemPositions } from 'modules/Builder/types';
-import { FlankerStimulusSettings } from 'shared/state';
 
-import { BlockSequencesProps } from './BlockSequences.types';
 import { BlockSequencesContent } from './BlockSequencesContent';
+import { BlockSequencesProps } from './BlockSequences.types';
 
 export const BlockSequences = memo(({ isPracticeRound, 'data-testid': dataTestid }: BlockSequencesProps) => {
   const { t } = useTranslation();

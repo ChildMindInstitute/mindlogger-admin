@@ -1,16 +1,16 @@
 import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { NotificationType, Periodicity } from 'modules/Dashboard/api';
 import { Svg } from 'shared/components/Svg';
 import { theme, StyledTitleMedium, variables } from 'shared/styles';
+import { NotificationType, Periodicity } from 'modules/Dashboard/api';
 
-import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_REMINDER_TIME } from '../EventForm.const';
 import { EventFormValues } from '../EventForm.types';
 import { Notification } from './Notification';
+import { Reminder } from './Reminder';
 import { StyledRow, StyledAddBtn, StyledRowHeader } from './NotificationsTab.styles';
 import { NotificationsTabProps } from './NotificationsTab.types';
-import { Reminder } from './Reminder';
+import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_REMINDER_TIME } from '../EventForm.const';
 
 export const NotificationsTab = ({ 'data-testid': dataTestid }: NotificationsTabProps) => {
   const { t } = useTranslation('app');

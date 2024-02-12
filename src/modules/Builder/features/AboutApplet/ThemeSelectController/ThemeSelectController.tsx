@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { FieldValues } from 'react-hook-form';
 
-import { themeParams } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { themes } from 'modules/Builder/state';
 import { SelectController, SelectControllerProps } from 'shared/components/FormComponents';
 import { useInfinityData } from 'shared/hooks/useInfinityData';
+import { themeParams } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import { THEME_END_ITEM_CLASS } from '../AboutApplet.const';
 

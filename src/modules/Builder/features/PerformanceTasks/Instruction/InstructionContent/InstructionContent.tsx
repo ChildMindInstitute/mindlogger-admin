@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
-import { EditorController, EditorUiType } from 'shared/components/FormComponents';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
+import { EditorController, EditorUiType } from 'shared/components/FormComponents';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { InstructionContentProps } from './InstructionContent.types';
 

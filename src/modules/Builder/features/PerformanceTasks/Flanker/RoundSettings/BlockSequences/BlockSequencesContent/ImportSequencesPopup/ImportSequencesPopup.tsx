@@ -6,8 +6,8 @@ import { FileUploader, FileUploaderUiType, Modal } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 
 import { invalidFileFormatError, uploadLabel } from './ImportSequencesPopup.const';
-import { useImportSequence } from './ImportSequencesPopup.hooks';
 import { ImportSequencesPopupProps, ImportSequencesType } from './ImportSequencesPopup.types';
+import { useImportSequence } from './ImportSequencesPopup.hooks';
 import { getScreens } from './ImportSequencesPopup.utils';
 
 export const ImportSequencesPopup = ({

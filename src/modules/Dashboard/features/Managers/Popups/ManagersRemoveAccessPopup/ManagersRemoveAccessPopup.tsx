@@ -4,10 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { removeManagerAccessApi } from 'api';
-import { Table, UiType, Modal } from 'shared/components';
 import { CheckboxController } from 'shared/components/FormComponents';
-import { useAsync } from 'shared/hooks/useAsync';
 import {
   StyledModalWrapper,
   StyledBodyLarge,
@@ -20,6 +17,9 @@ import {
   StyledErrorText,
   variables,
 } from 'shared/styles';
+import { Table, UiType, Modal } from 'shared/components';
+import { useAsync } from 'shared/hooks/useAsync';
+import { removeManagerAccessApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
 
 import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.const';

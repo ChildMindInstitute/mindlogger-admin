@@ -1,8 +1,7 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { ApiResponseCodes } from 'api';
-import { Roles } from 'shared/consts';
+import { renderWithProviders } from 'shared/utils';
 import {
   mockedApplet,
   mockedAppletId,
@@ -12,11 +11,12 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
+import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
-import { renderWithProviders } from 'shared/utils';
+import { ApiResponseCodes } from 'api';
 
-import { SearchAcross } from './SelectRespondents/SelectRespondents.const';
 import { SelectRespondentsPopup } from './SelectRespondentsPopup';
+import { SearchAcross } from './SelectRespondents/SelectRespondents.const';
 
 const preloadedState = {
   workspaces: {

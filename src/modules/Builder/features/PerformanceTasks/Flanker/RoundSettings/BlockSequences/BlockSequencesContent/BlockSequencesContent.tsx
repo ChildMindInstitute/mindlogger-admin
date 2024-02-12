@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { FlankerItemPositions } from 'modules/Builder/types';
 import { Svg, Table, UiType } from 'shared/components';
-import { FlankerStimulusSettings } from 'shared/state';
 import { StyledBodyMedium, StyledSvgPrimaryColorBtn, StyledTitleMedium, theme, variables } from 'shared/styles';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import { FlankerStimulusSettings } from 'shared/state';
 import { exportTemplate } from 'shared/utils';
+import { FlankerItemPositions } from 'modules/Builder/types';
 
-import { BlockSequencesContentProps, UploadedTable } from './BlockSequencesContent.types';
+import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
 import {
   getExportData,
   getRoundBlocks,
@@ -20,7 +20,7 @@ import {
   getTableFromSequences,
   getUploadedTableRows,
 } from './BlockSequencesContent.utils';
-import { ImportSequencesPopup, ImportSequencesType } from './ImportSequencesPopup';
+import { BlockSequencesContentProps, UploadedTable } from './BlockSequencesContent.types';
 
 export const BlockSequencesContent = ({
   isPracticeRound,

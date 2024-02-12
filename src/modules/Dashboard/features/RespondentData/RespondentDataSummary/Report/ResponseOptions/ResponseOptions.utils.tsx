@@ -1,8 +1,8 @@
 import { ItemResponseType } from 'shared/consts';
 
 import { TICK_HEIGHT } from '../Charts/Charts.const';
-import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { MultiScatterChart } from '../Charts/MultiScatterChart';
+import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
 

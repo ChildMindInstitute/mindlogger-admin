@@ -1,11 +1,11 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { ApiResponseCodes } from 'api';
-import { Roles } from 'shared/consts';
+import { renderWithProviders } from 'shared/utils';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedEncryption, mockedOwnerId } from 'shared/mock';
 import { initialStateData } from 'shared/state/Base';
-import { renderWithProviders } from 'shared/utils';
+import { Roles } from 'shared/consts';
+import { ApiResponseCodes } from 'api';
 
 import { Applets } from './Applets';
 

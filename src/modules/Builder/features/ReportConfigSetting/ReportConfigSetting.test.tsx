@@ -2,12 +2,12 @@
 // @ts-nocheck
 import { createRef } from 'react';
 
-import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { generatePath } from 'react-router-dom';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import * as reportApi from 'modules/Dashboard/api/api';
-import { applet } from 'redux/modules';
 import { page } from 'resources';
+import { applet } from 'redux/modules';
 import { mockedAppletData, mockedPassword } from 'shared/mock';
 import {
   SettingParam,

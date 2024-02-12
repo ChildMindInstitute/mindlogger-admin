@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 
-import { StyledIconCenter } from '../Extensions.styles';
 import { TrashExtensionProps } from './TrashExtension.types';
+import { StyledIconCenter } from '../Extensions.styles';
 
 export const TrashExtension = ({ onClick }: TrashExtensionProps) => {
   const { t } = useTranslation('app');

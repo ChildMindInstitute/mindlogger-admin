@@ -1,21 +1,21 @@
 import { useState } from 'react';
 
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { Svg, Chip, AppletImage } from 'shared/components';
+import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
 import {
   StyledBodyMedium,
   StyledTitleBoldSmall,
   StyledFlexWrap,
   StyledTitleLarge,
 } from 'shared/styles/styledComponents';
-import theme from 'shared/styles/theme';
-import { variables } from 'shared/styles/variables';
 
-import { appletImageProps } from './SuccessShared.const';
-import { StyledSuccessShared, StyledApplet, StyledLinkBtn, StyledText } from './SuccessShared.styles';
 import { SuccessSharedProps } from './SuccessShared.types';
+import { StyledSuccessShared, StyledApplet, StyledLinkBtn, StyledText } from './SuccessShared.styles';
+import { appletImageProps } from './SuccessShared.const';
 
 export const SuccessShared = ({
   title,

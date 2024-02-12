@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { AnalyticsCalendarPrefix } from 'shared/consts';
 import { Mixpanel } from 'shared/utils/mixpanel';
+import { AnalyticsCalendarPrefix } from 'shared/consts';
 
-import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
 import { EventForm, EventFormRef } from '../EventForm';
+import { ConfirmScheduledAccessPopup } from '../ConfirmScheduledAccessPopup';
 import { RemoveAllScheduledEventsPopup } from '../RemoveAllScheduledEventsPopup';
 import { CreateEventPopupProps } from './CreateEventPopup.types';
 

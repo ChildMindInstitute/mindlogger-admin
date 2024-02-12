@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 
-import { auth } from 'modules/Auth/state';
 import { mockedAppletId, mockedEncryption, mockedPassword, mockedPrivateKey2, mockedUserData } from 'shared/mock';
+import { auth } from 'modules/Auth/state';
 
 import { useAppletPrivateKeySetter } from './useAppletPrivateKeySetter';
 

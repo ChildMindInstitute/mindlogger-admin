@@ -1,9 +1,9 @@
-import { List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { List } from '@mui/material';
 
-import { workspaces as currentWorkspace } from 'redux/modules';
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styles';
+import { workspaces as currentWorkspace } from 'redux/modules';
 
 import { WorkspaceImage } from '../WorkspaceImage';
 import { StyledListItemButton, StyledItemContent, StyledSelect, StyledItemName } from './WorkspaceGroup.styles';

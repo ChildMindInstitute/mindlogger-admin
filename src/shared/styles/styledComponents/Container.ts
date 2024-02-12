@@ -2,8 +2,8 @@ import { Box, styled } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 
-import theme from '../theme';
 import { StyledFlexColumn, StyledFlexTopCenter } from './Flex';
+import theme from '../theme';
 
 export const StyledContainer = styled(StyledFlexTopCenter)`
   position: relative;

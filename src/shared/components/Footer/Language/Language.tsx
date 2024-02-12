@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { Languages } from 'shared/api';
 import { StyledLabelMedium, variables } from 'shared/styles';
 import { LocalStorageKeys, storage } from 'shared/utils/storage';
+import { Languages } from 'shared/api';
 
-import { languages } from './Language.const';
-import { StyledLanguage, StyledFlag } from './Language.styles';
-import { LanguageItem } from './Language.types';
 import { SelectLanguage } from './SelectLanguage';
+import { LanguageItem } from './Language.types';
+import { StyledLanguage, StyledFlag } from './Language.styles';
+import { languages } from './Language.const';
 
 export const Language = () => {
   const { i18n } = useTranslation('app');

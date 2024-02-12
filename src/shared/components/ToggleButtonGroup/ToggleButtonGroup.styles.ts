@@ -1,7 +1,7 @@
 import { Box, styled, ToggleButton } from '@mui/material';
 
-import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import theme from 'shared/styles/theme';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledIcon = styled(Box)`

@@ -2,8 +2,8 @@ import { MenuItem, Select as MuiSelect } from '@mui/material';
 
 import { StyledLabelBoldLarge } from 'shared/styles/styledComponents';
 
-import { StyledFormControl } from './Select.styles';
 import { SelectProps } from './Select.types';
+import { StyledFormControl } from './Select.styles';
 
 export const Select = ({ value, changeValue, options }: SelectProps) => (
   <StyledFormControl variant="standard" fullWidth>

@@ -1,12 +1,12 @@
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { RoundTypeEnum } from 'modules/Builder/types';
 import { StyledHeadlineLarge, theme } from 'shared/styles';
+import { RoundTypeEnum } from 'modules/Builder/types';
 
 import { NameDescription } from '../NameDescription';
-import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import { GeneralSettings } from './GeneralSettings';
+import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import { RoundSettings } from './RoundSettings';
 
 export const Flanker = () => {

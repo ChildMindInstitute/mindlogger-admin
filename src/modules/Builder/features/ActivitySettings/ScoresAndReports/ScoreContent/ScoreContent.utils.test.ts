@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { ScoreOrSection } from 'redux/modules';
 import { CalculationType } from 'shared/consts';
 import {
   mockedMultiActivityItem,
@@ -8,6 +7,7 @@ import {
   mockedSingleActivityItem,
   mockedSliderActivityItem,
 } from 'shared/mock';
+import { ScoreOrSection } from 'redux/modules';
 
 import {
   getIsScoreIdVariable,

@@ -1,18 +1,8 @@
 import { useState } from 'react';
 
-import { Collapse } from '@mui/material';
 import { useTranslation, Trans } from 'react-i18next';
+import { Collapse } from '@mui/material';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
-import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
-import { ItemFormValues } from 'modules/Builder/types';
-import { Svg } from 'shared/components/Svg';
-import {
-  ItemResponseType,
-  CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
-  CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
-  ConditionType,
-} from 'shared/consts';
 import {
   ConditionalLogic,
   OptionCondition,
@@ -21,8 +11,18 @@ import {
   SingleAndMultiSelectOption,
   SingleValueCondition,
 } from 'shared/state';
-import { StyledBodyLarge, StyledClearedButton, StyledFlexColumn, StyledFlexTopCenter, theme } from 'shared/styles';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
+import { Svg } from 'shared/components/Svg';
+import { StyledBodyLarge, StyledClearedButton, StyledFlexColumn, StyledFlexTopCenter, theme } from 'shared/styles';
+import {
+  ItemResponseType,
+  CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
+  CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
+  ConditionType,
+} from 'shared/consts';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { ItemFormValues } from 'modules/Builder/types';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }) => {
   const { t } = useTranslation('app');

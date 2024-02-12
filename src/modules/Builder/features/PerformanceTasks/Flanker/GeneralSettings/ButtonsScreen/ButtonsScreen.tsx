@@ -1,9 +1,9 @@
-import get from 'lodash.get';
 import { useTranslation } from 'react-i18next';
+import get from 'lodash.get';
 
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerItemPositions } from 'modules/Builder/types';
+import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ButtonsContent } from './ButtonsContent';
 

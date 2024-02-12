@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { StyledBodyMedium, StyledFlexTopStart, StyledHeadline, theme, variables } from 'shared/styles';
 

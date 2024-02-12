@@ -1,5 +1,5 @@
-import { renderHook } from '@testing-library/react';
 import { add } from 'date-fns';
+import { renderHook } from '@testing-library/react';
 
 import { mockI18Next } from 'shared/tests';
 

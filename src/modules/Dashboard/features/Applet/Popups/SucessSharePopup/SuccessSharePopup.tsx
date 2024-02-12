@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { SuccessShared } from 'modules/Dashboard/features/Applet/ShareApplet/SuccessShared';
 import { Modal } from 'shared/components';
 import { getDictionaryText } from 'shared/utils';
+import { SuccessShared } from 'modules/Dashboard/features/Applet/ShareApplet/SuccessShared';
 
 import { SuccessSharePopupProps } from './SuccessSharePopup.types';
 

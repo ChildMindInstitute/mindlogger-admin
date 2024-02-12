@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { deleteScheduledEventsApi, deleteIndividualEventsApi } from 'api';
-import { applets } from 'modules/Dashboard/state';
-import { useAppDispatch } from 'redux/store';
 import { Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
+import { useAsync } from 'shared/hooks/useAsync';
+import { deleteScheduledEventsApi, deleteIndividualEventsApi } from 'api';
+import { useAppDispatch } from 'redux/store';
+import { applets } from 'modules/Dashboard/state';
 import { getErrorMessage } from 'shared/utils';
 
 import { ClearScheduledEventsPopupProps, Steps } from './ClearScheduledEventsPopup.types';

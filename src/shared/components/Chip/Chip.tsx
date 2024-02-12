@@ -1,7 +1,7 @@
 import { Svg } from 'shared/components/Svg';
 
-import { StyledChip, StyledClearedButton } from './Chip.styles';
 import { ChipProps, ChipShape } from './Chip.types';
+import { StyledChip, StyledClearedButton } from './Chip.styles';
 
 export const Chip = ({
   title,

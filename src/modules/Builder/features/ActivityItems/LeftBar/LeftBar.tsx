@@ -1,21 +1,12 @@
 import { useState, useMemo } from 'react';
 
+import { Trans, useTranslation } from 'react-i18next';
 import { Button, Box } from '@mui/material';
 import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
 import { useWatch } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
 
-import { DndDroppable } from 'modules/Builder/components';
-import { observerStyles } from 'modules/Builder/consts';
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
-import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
-import { useRedirectIfNoMatchedActivityItem } from 'modules/Builder/hooks/useRedirectIfNoMatchedActivityItem';
-import { ItemFormValues } from 'modules/Builder/types';
 import { Modal, Spinner, Svg } from 'shared/components';
-import { ScoreReportType } from 'shared/consts';
-import { BuilderContainer } from 'shared/features';
-import { ConditionalLogic, ScoreOrSection } from 'shared/state';
 import {
   StyledBodyLarge,
   StyledFlexAllCenter,
@@ -26,14 +17,23 @@ import {
   variables,
 } from 'shared/styles';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
+import { ConditionalLogic, ScoreOrSection } from 'shared/state';
+import { BuilderContainer } from 'shared/features';
+import { ScoreReportType } from 'shared/consts';
+import { DndDroppable } from 'modules/Builder/components';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { ItemFormValues } from 'modules/Builder/types';
+import { observerStyles } from 'modules/Builder/consts';
+import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
+import { useRedirectIfNoMatchedActivityItem } from 'modules/Builder/hooks/useRedirectIfNoMatchedActivityItem';
 
-import { getConditionsToRemove } from '../ActivityItems.utils';
-import { ConditionalPanel } from '../ConditionalPanel';
-import { DraggableItems } from './DraggableItems';
-import { Item } from './Item';
-import { ACTIVITY_ITEMS_LIST_CLASS, ACTIVITY_ITEMS_END_ITEM_CLASS } from './LeftBar.const';
 import { LeftBarProps } from './LeftBar.types';
+import { Item } from './Item';
 import { LeftBarHeader } from './LeftBarHeader';
+import { ACTIVITY_ITEMS_LIST_CLASS, ACTIVITY_ITEMS_END_ITEM_CLASS } from './LeftBar.const';
+import { ConditionalPanel } from '../ConditionalPanel';
+import { getConditionsToRemove } from '../ActivityItems.utils';
+import { DraggableItems } from './DraggableItems';
 
 export const LeftBar = ({
   activeItemIndex,

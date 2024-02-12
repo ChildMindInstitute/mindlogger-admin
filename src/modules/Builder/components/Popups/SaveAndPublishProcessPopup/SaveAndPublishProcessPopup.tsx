@@ -1,15 +1,15 @@
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { reportConfig } from 'modules/Builder/state';
-import { useAppDispatch } from 'redux/store';
 import { Modal } from 'shared/components';
 import { StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { concatIf } from 'shared/utils';
+import { useAppDispatch } from 'redux/store';
+import { reportConfig } from 'modules/Builder/state';
 
+import { SaveAndPublishProcessPopupProps, SaveAndPublishSteps } from './SaveAndPublishProcessPopup.types';
 import { Description } from './Description';
 import { saveAndPublishProcessTestIds } from './SaveAndPublishProcessPopup.const';
-import { SaveAndPublishProcessPopupProps, SaveAndPublishSteps } from './SaveAndPublishProcessPopup.types';
 
 export const SaveAndPublishProcessPopup = ({
   isPopupVisible,

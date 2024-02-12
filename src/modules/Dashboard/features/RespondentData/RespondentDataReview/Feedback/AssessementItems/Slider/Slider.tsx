@@ -1,9 +1,9 @@
-import { createArrayForSlider } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 import { StyledBodySmall, StyledFlexTopCenter, variables } from 'shared/styles';
+import { createArrayForSlider } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
-import { continuousSliderStep, sliderStep } from './Slider.const';
-import { StyledSlider, StyledDescriptionItem, StyledImage } from './Slider.styles';
 import { SliderProps } from './Slider.types';
+import { StyledSlider, StyledDescriptionItem, StyledImage } from './Slider.styles';
+import { continuousSliderStep, sliderStep } from './Slider.const';
 
 export const Slider = ({
   activityItem,

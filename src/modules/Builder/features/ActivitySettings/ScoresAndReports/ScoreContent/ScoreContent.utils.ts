@@ -1,10 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import i18n from 'i18n';
-import {
-  DEFAULT_PAYLOAD_MAX_VALUE,
-  DEFAULT_PAYLOAD_MIN_VALUE,
-} from 'modules/Builder/components/ConditionRow/ConditionRow.const';
+import { ScoreConditionalLogic, SingleAndMultiSelectOption } from 'shared/state';
 import {
   ItemResponseType,
   CalculationType,
@@ -12,9 +9,11 @@ import {
   ScoreReportType,
   ConditionType,
 } from 'shared/consts';
-import { ScoreConditionalLogic, SingleAndMultiSelectOption } from 'shared/state';
+import {
+  DEFAULT_PAYLOAD_MAX_VALUE,
+  DEFAULT_PAYLOAD_MIN_VALUE,
+} from 'modules/Builder/components/ConditionRow/ConditionRow.const';
 
-import { getScoreConditionId } from './ScoreCondition';
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 import {
   GetIsScoreIdVariable,
@@ -27,6 +26,7 @@ import {
   UpdateScoreConditionIds,
   UpdateScoreConditionsPayload,
 } from './ScoreContent.types';
+import { getScoreConditionId } from './ScoreCondition';
 
 const { t } = i18n;
 

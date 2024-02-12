@@ -1,9 +1,9 @@
+import { ItemResponseType } from 'shared/consts';
 import {
   MultiSelectItemAnswer,
   SingleSelectItemAnswer,
   SliderItemAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.types';
-import { ItemResponseType } from 'shared/consts';
 
 export const sliderMocked: SliderItemAnswer = {
   activityItem: {

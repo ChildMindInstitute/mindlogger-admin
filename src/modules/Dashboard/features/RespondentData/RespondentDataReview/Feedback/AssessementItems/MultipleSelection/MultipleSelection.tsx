@@ -1,10 +1,10 @@
 import { Checkbox } from '@mui/material';
 
-import { Tooltip } from 'shared/components/Tooltip';
 import { StyledBodyLarge, StyledFlexColumn, StyledFlexTopCenter, variables } from 'shared/styles';
+import { Tooltip } from 'shared/components/Tooltip';
 
-import { StyledFormControlLabel, StyledImage, StyledLabel, StyledSvg } from './MultipleSelection.styles';
 import { MultipleSelectionProps } from './MultipleSelection.types';
+import { StyledFormControlLabel, StyledImage, StyledLabel, StyledSvg } from './MultipleSelection.styles';
 
 export const MultipleSelection = ({
   activityItem,

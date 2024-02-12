@@ -1,11 +1,11 @@
 import { useTranslation, Trans } from 'react-i18next';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ItemFormValues } from 'modules/Builder/types';
 import { Actions } from 'shared/components';
 import { StyledFlexTopCenter, StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
+import { useCurrentActivity } from 'modules/Builder/hooks';
+import { ItemFormValues } from 'modules/Builder/types';
 
 import { ItemFlowActionsProps } from './ItemFlowActions.types';
 import { getItemFlowActions } from './ItemFlowActions.utils';

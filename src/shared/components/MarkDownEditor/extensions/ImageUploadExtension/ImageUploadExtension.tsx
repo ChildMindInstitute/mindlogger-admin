@@ -1,15 +1,15 @@
-import { Paper } from '@mui/material';
 import { DropdownToolbar, InsertContentGenerator } from 'md-editor-rt';
+import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { MediaType, VALID_IMAGE_TYPES } from 'shared/consts';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles/styledComponents';
+import { MediaType, VALID_IMAGE_TYPES } from 'shared/consts';
 import { joinWihComma } from 'shared/utils/joinWihComma';
 
+import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal, SourceLinkModalForm } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { MediaContentExtensionProps } from '../Extensions.types';
 
 export const ImageUploadExtension = ({

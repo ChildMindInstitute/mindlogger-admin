@@ -1,5 +1,5 @@
-import { ReportConfigFormValues } from 'modules/Builder/features/ReportConfigSetting';
 import { Roles } from 'shared/consts';
+import { ReportConfigFormValues } from 'modules/Builder/features/ReportConfigSetting';
 
 export type GetSettings = {
   isNewApplet?: boolean;

@@ -1,23 +1,22 @@
 import { useState } from 'react';
 
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@mui/material';
-import { useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router-dom';
 
 import { SignIn } from 'api';
+import { page } from 'resources';
+import { useAppDispatch } from 'redux/store';
 import { auth } from 'modules/Auth/state';
 import { navigateToLibrary } from 'modules/Auth/utils';
-import { useAppDispatch } from 'redux/store';
-import { page } from 'resources';
 import { InputController } from 'shared/components/FormComponents';
-import { AUTH_BOX_WIDTH } from 'shared/consts';
-import { variables } from 'shared/styles';
 import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents';
 import { Mixpanel } from 'shared/utils';
+import { variables } from 'shared/styles';
+import { AUTH_BOX_WIDTH } from 'shared/consts';
 
-import { loginFormSchema } from '../Login.schema';
 import {
   StyledWelcome,
   StyledLoginSubheader,
@@ -26,6 +25,7 @@ import {
   StyledButton,
   StyledForgotPasswordLink,
 } from '../Login.styles';
+import { loginFormSchema } from '../Login.schema';
 
 export const LoginForm = () => {
   const dispatch = useAppDispatch();

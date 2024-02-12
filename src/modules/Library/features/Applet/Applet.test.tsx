@@ -3,10 +3,10 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { library } from 'redux/modules';
-import * as reduxHooks from 'redux/store/hooks';
-import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
+import { page } from 'resources';
+import * as reduxHooks from 'redux/store/hooks';
+import { library } from 'redux/modules';
 
 import { Applet } from './Applet';
 import { AppletUiType } from './Applet.types';

@@ -3,10 +3,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Header, RightButtonType } from 'modules/Library/components';
-import { useAppletsFromCart, useReturnToLibraryPath, useWorkspaceList } from 'modules/Library/hooks';
-import { PublishedApplet, auth, library, SingleApplet } from 'redux/modules';
-import { page } from 'resources';
 import { EmptyState, Spinner } from 'shared/components';
 import {
   theme,
@@ -16,15 +12,19 @@ import {
   StyledAppletContainer,
   StyledAppletList,
 } from 'shared/styles';
+import { page } from 'resources';
+import { PublishedApplet, auth, library, SingleApplet } from 'redux/modules';
+import { Header, RightButtonType } from 'modules/Library/components';
+import { useAppletsFromCart, useReturnToLibraryPath, useWorkspaceList } from 'modules/Library/hooks';
 import { getDictionaryText, Mixpanel, Path } from 'shared/utils';
 
 import { Applet, AppletUiType } from '../Applet';
-import { DEFAULT_APPLETS_PER_PAGE, DEFAULT_PAGE } from '../AppletsCatalog/AppletsCatalog.conts';
-import { StyledTablePagination } from '../AppletsCatalog/AppletsCatalog.styles';
 import { AddToBuilderPopup, AuthPopup } from '../Popups';
-import { useClearCart } from './Cart.hooks';
 import { StyledLink } from './Cart.styles';
+import { StyledTablePagination } from '../AppletsCatalog/AppletsCatalog.styles';
+import { DEFAULT_APPLETS_PER_PAGE, DEFAULT_PAGE } from '../AppletsCatalog/AppletsCatalog.conts';
 import { getSearchIncludes, getAddToBuilderData, navigateToBuilder } from './Cart.utils';
+import { useClearCart } from './Cart.hooks';
 
 export const Cart = () => {
   const { t } = useTranslation('app');

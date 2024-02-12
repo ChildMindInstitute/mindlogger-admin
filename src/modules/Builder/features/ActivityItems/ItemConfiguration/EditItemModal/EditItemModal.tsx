@@ -1,12 +1,12 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
+import { Modal } from 'shared/components';
+import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
+import { ConditionalLogic } from 'shared/state';
 import { ConditionalPanel } from 'modules/Builder/features/ActivityItems/ConditionalPanel';
 import { useCurrentActivity } from 'modules/Builder/hooks';
+import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { Modal } from 'shared/components';
-import { ConditionalLogic } from 'shared/state';
-import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 
 import { EditItemModalProps } from './EditItemModal.types';
 

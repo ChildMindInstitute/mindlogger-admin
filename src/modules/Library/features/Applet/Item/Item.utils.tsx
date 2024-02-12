@@ -1,11 +1,11 @@
-import i18n from 'i18n';
 import { ItemResponseType } from 'shared/consts';
 import { Item } from 'shared/state';
 import { variables, StyledBodyLarge } from 'shared/styles';
 import { getHighlightedText } from 'shared/utils';
+import i18n from 'i18n';
 
-import { ItemResponseTypes } from '../../AppletsCatalog/AppletsCatalog.conts';
 import { StyledItemContentRow, StyledItemImage, StyledItemSvg } from './Item.styles';
+import { ItemResponseTypes } from '../../AppletsCatalog/AppletsCatalog.conts';
 
 export const renderItemContent = (item: Item, search: string) => {
   const { t } = i18n;

@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 
-import { auth } from 'modules/Auth/state';
 import { useAppDispatch } from 'redux/store';
+import { auth } from 'modules/Auth/state';
 import { alerts } from 'shared/state';
 
-import { WEBSOCKET_ALERTS_API } from './alertsWebsocket.const';
 import { getAlertFormValue, getWebsocketProtocol } from './alertsWebsocket.utils';
+import { WEBSOCKET_ALERTS_API } from './alertsWebsocket.const';
 
 export const useAlertsWebsocket = () => {
   const isAuthorized = auth.useAuthorized();

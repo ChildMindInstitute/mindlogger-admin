@@ -1,15 +1,15 @@
-import { Paper } from '@mui/material';
 import { DropdownToolbar, InsertContentGenerator } from 'md-editor-rt';
+import { Paper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { SourceLinkModalForm } from 'shared/components/MarkDownEditor/SourceLinkModal';
 import { Svg } from 'shared/components/Svg';
-import { ALLOWED_AUDIO_FILE_TYPES, MediaType } from 'shared/consts';
 import { StyledFlexColumn, StyledTitleSmall } from 'shared/styles';
+import { ALLOWED_AUDIO_FILE_TYPES, MediaType } from 'shared/consts';
 
+import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { SourceLinkModal } from '../../SourceLinkModal';
 import { useUploadMethods } from '../Extensions.hooks';
-import { StyledIconCenter, StyledMenuItem, StyledMenuList } from '../Extensions.styles';
 import { MediaContentExtensionProps } from '../Extensions.types';
 
 export const AudioUploadExtension = ({

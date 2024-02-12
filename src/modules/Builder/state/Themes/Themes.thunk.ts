@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { getThemesApi, GetThemesParams } from 'modules/Builder/api';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { ApiErrorResponse } from 'shared/state/Base';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { getThemesApi, GetThemesParams } from 'modules/Builder/api';
 import { getApiErrorResult } from 'shared/utils/errors';
 
 export const getThemes = createAsyncThunk(

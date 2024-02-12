@@ -1,19 +1,19 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
+import { Encryption, getEncryptionToServer, Mixpanel } from 'shared/utils';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { InputController } from 'shared/components/FormComponents';
+import { StyledErrorText, StyledModalWrapper, variables } from 'shared/styles';
+import { useAsync } from 'shared/hooks/useAsync';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { applet, auth, banners, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { Modal, Spinner, SpinnerUiType } from 'shared/components';
-import { InputController } from 'shared/components/FormComponents';
-import { useAsync } from 'shared/hooks/useAsync';
-import { StyledErrorText, StyledModalWrapper, variables } from 'shared/styles';
-import { Encryption, getEncryptionToServer, Mixpanel } from 'shared/utils';
+import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
 
 import {
   AppletPasswordPopup,

@@ -1,16 +1,16 @@
 import { useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { SignIn } from 'api';
-import { auth, User } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { Avatar } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
-import { useLogout } from 'shared/hooks/useLogout';
 import { variables, StyledBodyMedium, StyledHeadline, StyledTitleMedium, StyledErrorText } from 'shared/styles';
+import { auth, User } from 'redux/modules';
+import { useLogout } from 'shared/hooks/useLogout';
+import { Avatar } from 'shared/components';
 
 import { loginFormSchema } from '../Login.schema';
 import {

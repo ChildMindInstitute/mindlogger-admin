@@ -1,8 +1,8 @@
 import { styled, Box } from '@mui/material';
 
-import { StyledHeadline } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
+import { StyledHeadline } from 'shared/styles/styledComponents';
 
 export const StyledConfirmation = styled(Box)`
   width: 47.3rem;

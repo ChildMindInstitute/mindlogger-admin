@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { PublishedActivity, PublishedApplet } from 'modules/Library/state';
 import { Item } from 'redux/modules';
+import { PublishedActivity, PublishedApplet } from 'modules/Library/state';
 import { ItemResponseType, performanceTaskResponseTypes } from 'shared/consts';
 
 import { ExpandedActivity } from './Applet.types';
@@ -9,11 +9,8 @@ import { ExpandedActivity } from './Applet.types';
 export const checkIfPerformanceTask = (items: Item[]) =>
   items?.some(({ responseType }) => performanceTaskResponseTypes.includes(responseType));
 
-export const getUpdatedStorageData = (
-  applets: PublishedApplet[] | null,
-  selectedApplet: PublishedApplet,
-  id: string,
-) => (applets?.length ? [...applets.filter((applet) => applet.id !== id), selectedApplet] : [selectedApplet]);
+export const getUpdatedStorageData = (applets: PublishedApplet[] | null, selectedApplet: PublishedApplet, id: string) =>
+  applets?.length ? [...applets.filter((applet) => applet.id !== id), selectedApplet] : [selectedApplet];
 
 export const includesSearchValue = (text: string, search: string) => {
   const pattern = new RegExp(search, 'gi');

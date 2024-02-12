@@ -1,21 +1,23 @@
-import { addDays, addYears, eachDayOfInterval, endOfYear, getDate, getDay } from 'date-fns';
 import { UseFormGetValues } from 'react-hook-form';
+import { addDays, addYears, eachDayOfInterval, endOfYear, getDate, getDay } from 'date-fns';
 import * as yup from 'yup';
 
 import i18n from 'i18n';
+import { Svg } from 'shared/components/Svg';
+import { Activity, ActivityFlow } from 'shared/state';
 import { CreateEventType, EventNotifications, NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
+import { getIsRequiredValidateMessage } from 'shared/utils';
 import {
   getDaysInMonthlyPeriodicity,
   getNextDayComparison,
   removeSecondsFromTime,
 } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
-import { Svg } from 'shared/components/Svg';
-import { Activity, ActivityFlow } from 'shared/state';
-import { getIsRequiredValidateMessage } from 'shared/utils';
 
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
+import { NotificationsTab } from './NotificationsTab';
+import { TimersTab } from './TimersTab';
 import {
   DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
   DEFAULT_END_TIME,
@@ -41,8 +43,6 @@ import {
   GetReminder,
   StartEndTimeTestContext,
 } from './EventForm.types';
-import { NotificationsTab } from './NotificationsTab';
-import { TimersTab } from './TimersTab';
 
 const { t } = i18n;
 

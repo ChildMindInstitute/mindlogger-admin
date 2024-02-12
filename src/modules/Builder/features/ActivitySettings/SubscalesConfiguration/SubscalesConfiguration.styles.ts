@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 
-import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton, StyledFlexTopStart, theme, variables } from 'shared/styles';
+import { Svg } from 'shared/components/Svg';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledSvgButton = styled(StyledClearedButton)`

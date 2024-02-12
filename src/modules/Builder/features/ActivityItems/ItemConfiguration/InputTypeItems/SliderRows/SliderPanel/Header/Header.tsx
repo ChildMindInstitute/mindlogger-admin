@@ -4,12 +4,12 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg, Actions } from 'shared/components';
 import { theme, StyledClearedButton, StyledFlexColumn, StyledLabelBoldLarge, StyledLabelLarge } from 'shared/styles';
 
-import { ItemConfigurationSettings } from '../../../../ItemConfiguration.types';
+import { HeaderProps } from './Header.types';
+import { StyledImg, StyledSliderPanelHeader, StyledSliderPanelPreviewContainer } from './Header.styles';
+import { getActions } from './Header.utils';
 import { StyledSlider } from '../SliderPanel.styles';
 import { getMarks } from '../SliderPanel.utils';
-import { StyledImg, StyledSliderPanelHeader, StyledSliderPanelPreviewContainer } from './Header.styles';
-import { HeaderProps } from './Header.types';
-import { getActions } from './Header.utils';
+import { ItemConfigurationSettings } from '../../../../ItemConfiguration.types';
 
 const commonButtonStyles = {
   p: theme.spacing(1),

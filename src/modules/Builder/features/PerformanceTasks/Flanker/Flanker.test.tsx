@@ -2,12 +2,12 @@
 // @ts-nocheck
 import { createRef } from 'react';
 
-import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { generatePath } from 'react-router-dom';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 
-import { page } from 'resources';
 import { mockedAppletFormData } from 'shared/mock';
 import { renderWithAppletFormData } from 'shared/utils';
+import { page } from 'resources';
 
 import { Flanker } from './Flanker';
 

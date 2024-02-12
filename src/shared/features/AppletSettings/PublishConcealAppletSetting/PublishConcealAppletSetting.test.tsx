@@ -2,11 +2,11 @@
 // @ts-nocheck
 import { fireEvent, screen } from '@testing-library/react';
 
-import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
-import { Roles } from 'shared/consts';
 import { mockedApplet, mockedAppletFormData, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { SettingParam, renderWithAppletFormData, renderWithProviders } from 'shared/utils';
+import { initialStateData } from 'redux/modules';
+import { Roles } from 'shared/consts';
 
 import { PublishConcealAppletSetting } from './PublishConcealAppletSetting';
 

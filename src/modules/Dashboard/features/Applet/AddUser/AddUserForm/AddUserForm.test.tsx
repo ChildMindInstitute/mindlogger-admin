@@ -2,10 +2,10 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
-import { page } from 'resources';
-import { mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
-import { initialStateData } from 'shared/state';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
+import { page } from 'resources';
+import { initialStateData } from 'shared/state';
 
 import { AddUserForm } from '.';
 

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { StyledIconBtn, StyledTextField } from 'shared/components/DatePicker/DatePicker.styles';
 import { Svg } from 'shared/components/Svg';
+import { StyledIconBtn, StyledTextField } from 'shared/components/DatePicker/DatePicker.styles';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
 

@@ -1,23 +1,23 @@
 import { useState } from 'react';
 
-import { Box } from '@mui/material';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { ConditionRowType } from 'modules/Builder/types';
+import { StyledFlexColumn, theme } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
-import { StyledFlexColumn, theme } from 'shared/styles';
+import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
+import { ConditionRowType } from 'modules/Builder/types';
 
-import { ConditionContent } from '../ConditionContent';
-import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
-import { StyledButton } from '../ScoresAndReports.styles';
-import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
-import { SectionScoreHeader } from '../SectionScoreHeader';
-import { defaultConditionalValue } from './SectionContent.const';
 import { SectionContentProps } from './SectionContent.types';
+import { ConditionContent } from '../ConditionContent';
+import { StyledButton } from '../ScoresAndReports.styles';
+import { SectionScoreHeader } from '../SectionScoreHeader';
+import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
+import { defaultConditionalValue } from './SectionContent.const';
+import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 
 export const SectionContent = ({ name, title, sectionId, 'data-testid': dataTestid, items }: SectionContentProps) => {
   const { t } = useTranslation('app');

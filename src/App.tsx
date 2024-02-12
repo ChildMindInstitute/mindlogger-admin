@@ -1,15 +1,15 @@
 import { Suspense, useEffect } from 'react';
 
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
-import { ErrorBoundary } from 'react-error-boundary';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { setupStore } from 'redux/store';
-import { AppRoutes } from 'routes';
-import { Spinner } from 'shared/components';
-import { ErrorFallback } from 'shared/components/ErrorFallback';
 import { theme } from 'shared/styles';
+import { Spinner } from 'shared/components';
+import { AppRoutes } from 'routes';
+import { ErrorFallback } from 'shared/components/ErrorFallback';
 import svgBuilder from 'shared/utils/svgBuilder';
 
 const App = () => {

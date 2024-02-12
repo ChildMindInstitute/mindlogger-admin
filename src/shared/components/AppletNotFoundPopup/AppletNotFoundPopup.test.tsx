@@ -2,12 +2,12 @@
 // @ts-nocheck
 import { fireEvent, screen } from '@testing-library/react';
 
+import { renderWithProviders } from 'shared/utils';
 import { page } from 'resources';
-import { Roles } from 'shared/consts';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { initialStateData } from 'shared/state';
+import { Roles } from 'shared/consts';
 import { ErrorResponseType } from 'shared/types';
-import { renderWithProviders } from 'shared/utils';
 
 import { AppletNotFoundPopup } from './AppletNotFoundPopup';
 

@@ -4,10 +4,10 @@ import { screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { ApiResponseCodes } from 'api';
-import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
 import { page } from 'resources';
-import { mockedAppletId, mockedIdentifiers, mockedRespondentId } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils';
+import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
+import { mockedAppletId, mockedIdentifiers, mockedRespondentId } from 'shared/mock';
 
 import { RespondentDataSummary } from './RespondentDataSummary';
 
@@ -40,16 +40,17 @@ jest.mock('react-hook-form', () => ({
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedIdentifiers: () => () => [
-    {
-      encryptedValue: 'jane doe',
-      decryptedValue: 'decryptedValue1',
-    },
-    {
-      encryptedValue: 'sam carter',
-      decryptedValue: 'decryptedValue2',
-    },
-  ],
+  useDecryptedIdentifiers: () => () =>
+    [
+      {
+        encryptedValue: 'jane doe',
+        decryptedValue: 'decryptedValue1',
+      },
+      {
+        encryptedValue: 'sam carter',
+        decryptedValue: 'decryptedValue2',
+      },
+    ],
 }));
 
 jest.mock('./ReportMenu', () => ({

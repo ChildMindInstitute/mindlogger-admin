@@ -3,17 +3,17 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { Svg } from 'shared/components/Svg';
+import { page } from 'resources';
+import { BUILDER_PAGES } from 'shared/consts';
 import { calendarEvents } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
-import { page } from 'resources';
-import { Svg } from 'shared/components/Svg';
-import { BUILDER_PAGES } from 'shared/consts';
 
 import { PreparedEvents } from '../Schedule.types';
 import { Counter } from './Counter';
-import { ExpandedListTypes } from './Legend.const';
 import { StyledCreateBtn, StyledDeactivated, StyledIndicator } from './Legend.styles';
 import { getTitle } from './Legend.utils';
+import { ExpandedListTypes } from './Legend.const';
 
 export const useExpandedLists = (
   legendEvents: PreparedEvents | null,

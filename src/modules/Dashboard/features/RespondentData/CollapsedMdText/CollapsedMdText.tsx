@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { useComponentSize } from 'shared/hooks';
 import { StyledTitleLargish, variables } from 'shared/styles';
+import { useComponentSize } from 'shared/hooks';
 
 import { StyledBtn, StyledCollapsedContainer, StyledMdPreview } from './CollapsedMdText.styles';
 import { CollapsedMdTextProps } from './CollapsedMdText.types';

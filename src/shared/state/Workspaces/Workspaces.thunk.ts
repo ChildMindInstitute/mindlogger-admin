@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { OwnerId, getWorkspaceRolesApi, getWorkspacesApi } from 'api';
 import { ApiErrorResponse } from 'shared/state/Base';
+import { OwnerId, getWorkspaceRolesApi, getWorkspacesApi } from 'api';
 import { getApiErrorResult } from 'shared/utils/errors';
 
 export const getWorkspaceRoles = createAsyncThunk(

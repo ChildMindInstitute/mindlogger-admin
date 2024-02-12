@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 
-import { Button } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
 
 import { getAppletPublicLinkApi } from 'api';
-import { Tooltip } from 'shared/components/Tooltip';
 import { useAsync } from 'shared/hooks/useAsync';
 import { StyledFlexTopCenter, StyledTitleBoldMedium, theme } from 'shared/styles';
+import { Tooltip } from 'shared/components/Tooltip';
 import { Mixpanel } from 'shared/utils/mixpanel';
 
 import { StyledTitle } from '../AddUser.styles';
-import { LinkPopup } from '../Popups/LinkPopup';
 import { LinkForm } from './LinkForm';
-import { StyledSvg, StyledWrapper } from './LinkGenerator.styles';
 import { InviteLink } from './LinkGenerator.types';
+import { StyledSvg, StyledWrapper } from './LinkGenerator.styles';
+import { LinkPopup } from '../Popups/LinkPopup';
 
 export const LinkGenerator = () => {
   const { t } = useTranslation('app');

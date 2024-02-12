@@ -1,9 +1,8 @@
 import ReactPlayer from 'react-player/lazy';
 
-import { Svg } from 'shared/components/Svg';
 import { StyledClearedButton, StyledFlexTopCenter, StyledTitleSmall, theme } from 'shared/styles';
+import { Svg } from 'shared/components/Svg';
 
-import { useMLPlayerSetup } from './MLPlayer.hooks';
 import {
   StyledFooter,
   StyledHeader,
@@ -13,6 +12,7 @@ import {
   StyledSlider,
 } from './MLPlayer.styles';
 import { MLPlayerProps } from './MLPlayer.types';
+import { useMLPlayerSetup } from './MLPlayer.hooks';
 
 export const MLPlayer = ({ media, hasRemoveButton = true, onRemove, 'data-testid': dataTestid }: MLPlayerProps) => {
   const {

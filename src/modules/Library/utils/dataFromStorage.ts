@@ -1,6 +1,6 @@
 import { STORAGE_LIBRARY_KEY, STORAGE_SELECTED_KEY } from 'modules/Library/consts';
-import { LibraryForm } from 'modules/Library/features/Applet';
 import { PublishedApplet } from 'modules/Library/state';
+import { LibraryForm } from 'modules/Library/features/Applet';
 
 import { getUpdatedSelectedItems } from './getCheckedItems';
 

@@ -1,5 +1,5 @@
-import { Svg } from 'shared/components';
 import { Roles } from 'shared/consts';
+import { Svg } from 'shared/components';
 
 import { getRoleIcon } from './ManagersEditAccessPopup.utils';
 

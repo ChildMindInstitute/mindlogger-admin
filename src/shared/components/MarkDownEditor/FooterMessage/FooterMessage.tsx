@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { THRESHOLD_SIZE } from '../MarkDownEditor.const';
-import { StyledText } from './FooterMessage.styles';
 import { FooterMessageProps } from './FooterMessage.types';
+import { StyledText } from './FooterMessage.styles';
+import { THRESHOLD_SIZE } from '../MarkDownEditor.const';
 
 export const FooterMessage = ({ inputSize, error }: FooterMessageProps) => {
   const { t } = useTranslation('app');

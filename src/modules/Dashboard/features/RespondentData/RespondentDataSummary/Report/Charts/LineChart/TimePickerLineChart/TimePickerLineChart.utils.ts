@@ -1,13 +1,13 @@
-import { ChartDataset, LinearScale, ScriptableTooltipContext } from 'chart.js';
 import { Context } from 'chartjs-plugin-datalabels';
+import { ChartDataset, LinearScale, ScriptableTooltipContext } from 'chart.js';
 import { format, isEqual } from 'date-fns';
 
+import { DateFormats } from 'shared/consts';
+import { variables } from 'shared/styles';
 import {
   DEFAULT_DATE_MAX,
   DEFAULT_DATE_MIN,
 } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.const';
-import { DateFormats } from 'shared/consts';
-import { variables } from 'shared/styles';
 
 import { locales, POINT_RADIUS_DEFAULT, LABEL_WIDTH_Y } from '../../Charts.const';
 import { getTimelineStepSize, getTimeConfig } from '../../Charts.utils';

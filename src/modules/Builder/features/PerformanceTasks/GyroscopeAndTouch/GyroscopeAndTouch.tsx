@@ -1,13 +1,13 @@
-import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { useCurrentActivity } from 'modules/Builder/hooks';
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
+import { useCurrentActivity } from 'modules/Builder/hooks';
 
-import { Instruction } from '../Instruction';
 import { NameDescription } from '../NameDescription';
-import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
+import { Instruction } from '../Instruction';
 import { GeneralSettings } from './GeneralSettings';
+import { StyledPerformanceTaskBody } from '../PerformanceTasks.styles';
 import { GyroscopeAndTouchProps } from './GyroscopeAndTouch.types';
 
 export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {

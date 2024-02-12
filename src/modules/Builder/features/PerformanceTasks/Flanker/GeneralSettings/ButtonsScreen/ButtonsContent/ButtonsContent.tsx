@@ -1,21 +1,21 @@
 import { useEffect, useState, useRef } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import get from 'lodash.get';
-import { useTranslation } from 'react-i18next';
 
+import { StyledFlexSpaceBetween, StyledFlexTopCenter, StyledTitleMedium, theme } from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
-import { defaultFlankerBtnObj } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { CorrectPress, FlankerItemPositions } from 'modules/Builder/types';
 import { ToggleButtonGroup, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { SMALL_INPUT_LENGTH } from 'shared/consts';
 import { FlankerButtonSetting } from 'shared/state';
-import { StyledFlexSpaceBetween, StyledFlexTopCenter, StyledTitleMedium, theme } from 'shared/styles';
+import { defaultFlankerBtnObj } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import { ButtonsQuantity, buttonsQuantity } from './ButtonsContent.const';
-import { StyledRowWrapper } from './ButtonsContent.styles';
 import { getButtonLabel } from './ButtonsContent.utils';
+import { StyledRowWrapper } from './ButtonsContent.styles';
 
 export const ButtonsContent = () => {
   const { t } = useTranslation();

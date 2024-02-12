@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 
-import { auth } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
 import { banners } from 'shared/state/Banners';
+import { useAppDispatch } from 'redux/store';
+import { auth } from 'redux/modules';
 import { authStorage } from 'shared/utils';
 
 export const useSessionBanners = () => {

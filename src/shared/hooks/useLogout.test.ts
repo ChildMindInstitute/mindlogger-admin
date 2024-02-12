@@ -1,8 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
+import { ApiResponseCodes } from 'api';
 
 import { useLogout } from './useLogout';
 

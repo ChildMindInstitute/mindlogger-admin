@@ -1,6 +1,6 @@
-import { Version } from 'api';
-import { ActivitySettingsSubscale } from 'shared/state';
 import { ActivityItemAnswer } from 'shared/types';
+import { ActivitySettingsSubscale } from 'shared/state';
+import { Version } from 'api';
 
 import { ActivityCompletion, FormattedResponse } from '../Report.types';
 

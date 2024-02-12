@@ -4,8 +4,8 @@ import { OnProgressProps } from 'react-player/base';
 import ReactPlayer from 'react-player/lazy';
 
 import { MediaType } from '../MediaUploader';
-import { VERY_LARGE_NUMBER, PLAYER_DEFAULTS } from './MLPlayer.const';
 import { MLPlayerStateProps } from './MLPlayer.types';
+import { VERY_LARGE_NUMBER, PLAYER_DEFAULTS } from './MLPlayer.const';
 
 const calculateTime = (secs: number) => {
   const minutes = Math.floor(secs / 60);

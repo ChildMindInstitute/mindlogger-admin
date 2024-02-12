@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 
 import { useFormContext } from 'react-hook-form';
 
-import { RadioGroupController } from 'shared/components/FormComponents';
 import { StyledFlexColumn, StyledFlexTopCenter } from 'shared/styles';
+import { RadioGroupController } from 'shared/components/FormComponents';
 
 import { SELECTION_OPTIONS_COLOR_PALETTE } from '../../../ItemConfiguration.const';
-import { SelectionOption } from '../../../ItemConfiguration.types';
 import { getPaletteColor } from '../../../ItemConfiguration.utils';
-import { RADIO_GROUP_OPTIONS } from './ColorPalettePicker.const';
+import { SelectionOption } from '../../../ItemConfiguration.types';
 import { StyledColorPalettePickerContainer, StyledPaletteColorBox } from './ColorPalettePicker.styles';
+import { RADIO_GROUP_OPTIONS } from './ColorPalettePicker.const';
 import { ColorPalettePickerProps } from './ColorPalettePicker.types';
 
 export const ColorPalettePicker = ({ name }: ColorPalettePickerProps) => {

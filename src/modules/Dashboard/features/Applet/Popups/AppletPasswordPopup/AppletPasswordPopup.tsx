@@ -5,8 +5,8 @@ import { CreateAppletPassword, EnterAppletPassword } from 'shared/components/Pas
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 
-import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 import { AppletPasswordPopupProps, AppletPasswordPopupType } from './AppletPasswordPopup.types';
+import { StyledAppletPasswordContainer } from './AppletPasswordPopup.styles';
 
 export const AppletPasswordPopup = ({
   onClose,

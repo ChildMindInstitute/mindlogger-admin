@@ -1,27 +1,27 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import Grid from '@mui/material/Grid';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslation } from 'react-i18next';
+import Grid from '@mui/material/Grid';
 
-import { AppletInvitationOptions, getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
-import { users, workspaces } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
-import { Svg, Tooltip } from 'shared/components';
 import { InputController, SelectController, TagsInputController } from 'shared/components/FormComponents';
+import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
+import { AppletInvitationOptions, getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
+import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
-import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
-import { getErrorMessage, Mixpanel } from 'shared/utils';
+import { users, workspaces } from 'redux/modules';
+import { Svg, Tooltip } from 'shared/components';
+import { useAppDispatch } from 'redux/store';
 
-import { Fields, fields, defaultValues, langs, getRoles } from './AddUserForm.const';
-import { useFormError } from './AddUserForm.hooks';
-import { AddUserSchema } from './AddUserForm.schema';
 import { StyledButton, StyledRow, StyledResetButton, StyledTooltip } from './AddUserForm.styles';
+import { Fields, fields, defaultValues, langs, getRoles } from './AddUserForm.const';
+import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl } from './AddUserForm.utils';
+import { useFormError } from './AddUserForm.hooks';
 
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
   const { appletId } = useParams();

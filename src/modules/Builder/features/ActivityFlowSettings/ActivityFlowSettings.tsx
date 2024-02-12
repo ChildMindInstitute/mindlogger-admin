@@ -1,11 +1,11 @@
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
-import { page } from 'resources';
 import { NavigationItem, NavigationMenu } from 'shared/components';
+import { page } from 'resources';
+import { useRedirectIfNoMatchedActivityFlow } from 'modules/Builder/hooks';
 
-import { useActivityFlow } from './ActivityFlowSettings.hooks';
 import { getSettings } from './ActivityFlowSettings.utils';
+import { useActivityFlow } from './ActivityFlowSettings.hooks';
 
 export const ActivityFlowSettings = () => {
   const navigate = useNavigate();

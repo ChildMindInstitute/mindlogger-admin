@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { signInApi, SignIn, getUserDetailsApi, signUpApi, SignUpArgs, resetPasswordApi, ResetPassword } from 'api';
-import { ApiErrorResponse } from 'shared/state/Base';
 import { authStorage } from 'shared/utils/authStorage';
-import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { Mixpanel } from 'shared/utils/mixpanel';
+import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
+import { ApiErrorResponse } from 'shared/state/Base';
+import { signInApi, SignIn, getUserDetailsApi, signUpApi, SignUpArgs, resetPasswordApi, ResetPassword } from 'api';
 
 export const signIn = createAsyncThunk(
   'auth/login',

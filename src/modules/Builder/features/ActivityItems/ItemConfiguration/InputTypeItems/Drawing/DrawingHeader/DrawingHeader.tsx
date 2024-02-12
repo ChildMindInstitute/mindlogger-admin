@@ -1,5 +1,5 @@
-import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
+import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledImage } from './DrawingHeader.styles';
 import { DrawingHeaderProps } from './DrawingHeader.types';

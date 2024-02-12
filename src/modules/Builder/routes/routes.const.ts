@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
-import { GyroscopeOrTouch } from 'shared/consts';
 import { Path } from 'shared/utils';
+import { GyroscopeOrTouch } from 'shared/consts';
 
 const Activities = lazy(() => import('modules/Builder/features/Activities'));
 const AboutApplet = lazy(() => import('modules/Builder/features/AboutApplet'));

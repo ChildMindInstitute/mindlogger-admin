@@ -2,11 +2,11 @@
 // @ts-nocheck
 import { screen, fireEvent } from '@testing-library/react';
 
-import { Languages } from 'shared/api';
 import { renderWithProviders } from 'shared/utils';
+import { Languages } from 'shared/api';
 
-import { languages } from '../Language.const';
 import { SelectLanguage } from './SelectLanguage';
+import { languages } from '../Language.const';
 
 const onClose = jest.fn();
 const props = {
