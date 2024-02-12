@@ -35,6 +35,7 @@ import {
   getEntityReportFields,
 } from 'modules/Builder/utils/getEntityReportFields';
 import { banners } from 'shared/state/Banners';
+import { ErrorResponseType } from 'shared/types';
 
 import {
   getActivityItems,
@@ -274,6 +275,7 @@ export const useSaveAndPublishSetup = () => {
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
   const [publishProcessStep, setPublishProcessStep] = useState<SaveAndPublishSteps>();
   const responseStatus = applet.useResponseStatus();
+  const responseError = applet.useResponseError() ?? [];
   const responseTypePrefix = applet.useResponseTypePrefix();
   const {
     cancelNavigation: onCancelNavigation,
@@ -304,9 +306,30 @@ export const useSaveAndPublishSetup = () => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
       setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
     }
-    responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
+    // TODO: change for forbidden
+    if (responseStatus === 'error') {
+      // console.log('appletData', appletData);
+      // console.log('response error', responseError);
+      // setPublishProcessStep(SaveAndPublishSteps.Failed);
+      // const errorType = (responseError as ApiError[])?.[0]?.type;
+
+      if (
+        Array.isArray(responseError) &&
+        responseError.some((error) => error.type === ErrorResponseType.AccessDenied)
+      ) {
+        // setPublishProcessStep(SaveAndPublishSteps.NoPermission);
+      }
+
+      // if (errorType === ErrorResponseType.AccessDenied && appletId) {
+      //   navigateToApplet(appletId);
+      //
+      //   return;
+      // }
+
+      setPublishProcessStep(SaveAndPublishSteps.Failed);
+    }
     responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
-  }, [responseStatus, responseTypePrefix]);
+  }, [responseStatus, responseTypePrefix, responseError]);
 
   const handleSaveChangesDoNotSaveSubmit = async () => {
     setPromptVisible(false);

@@ -5,6 +5,7 @@ import { workspaces } from 'redux/modules';
 import { EmptyState } from 'shared/components';
 import { getErrorMessage } from 'shared/utils';
 import { ApiResponseCodes } from 'shared/api';
+import { ErrorResponseType } from 'shared/types';
 
 export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
   const { t } = useTranslation('app');
@@ -22,7 +23,8 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
 
         if (
           payload?.response?.status === ApiResponseCodes.Forbidden ||
-          payload?.status === ApiResponseCodes.Forbidden
+          payload?.status === ApiResponseCodes.Forbidden ||
+          payload?.[0]?.type === ErrorResponseType.AccessDenied
         ) {
           return setIsForbidden(true);
         }
