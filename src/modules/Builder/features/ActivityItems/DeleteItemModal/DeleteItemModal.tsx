@@ -69,7 +69,10 @@ export const DeleteItemModal = ({
     if (activity?.reportIncludedItemName === itemIdToDelete) {
       setValue(`${fieldName}.reportIncludedItemName`, '');
     }
-    setValue(`${fieldName}.items`, items?.filter((_, key) => key !== index));
+    setValue(
+      `${fieldName}.items`,
+      items?.filter((_, key) => key !== index),
+    );
 
     if (itemsWithVariablesToRemove.length) {
       for (const item of itemsWithVariablesToRemove) {
@@ -110,7 +113,10 @@ export const DeleteItemModal = ({
 
         if (itemsPrint?.includes(itemIdToDelete)) {
           shouldTriggerReports = true;
-          setValue(`${reportField}.itemsPrint`, itemsPrint?.filter((id) => id !== itemIdToDelete));
+          setValue(
+            `${reportField}.itemsPrint`,
+            itemsPrint?.filter((id) => id !== itemIdToDelete),
+          );
         }
         if (type === ScoreReportType.Score) {
           const { itemsScore } = report;

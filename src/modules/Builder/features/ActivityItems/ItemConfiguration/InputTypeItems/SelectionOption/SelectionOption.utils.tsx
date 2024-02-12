@@ -35,9 +35,8 @@ export const getDependentConditions = (
   optionValue: string,
   conditionalLogic?: ConditionalLogic[],
 ) =>
-  conditionalLogic?.filter(
-    ({ conditions }) =>
-      conditions?.some(
-        ({ payload }) => (payload as OptionCondition['payload'])?.optionValue === optionValue,
-      ),
+  conditionalLogic?.filter(({ conditions }) =>
+    conditions?.some(
+      ({ payload }) => (payload as OptionCondition['payload'])?.optionValue === optionValue,
+    ),
   );

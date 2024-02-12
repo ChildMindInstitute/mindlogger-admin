@@ -92,8 +92,9 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
 
   switch (inputType) {
     case ItemResponseType.TimeRange:
-      return `time_range: from (hr ${(value as DecryptedDateRangeAnswer['value'])?.from
-        ?.hour}, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
+      return `time_range: from (hr ${
+        (value as DecryptedDateRangeAnswer['value'])?.from?.hour
+      }, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
         (value as DecryptedDateRangeAnswer['value'])?.to?.hour ?? 0
       }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute ?? 0})`;
     case ItemResponseType.Date: {
@@ -110,9 +111,9 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
       return `time: hr ${hours}, min ${minutes}`;
     }
     case ItemResponseType.Geolocation:
-      return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${(
-        value as DecryptedGeolocationAnswer['value']
-      )?.longitude})`;
+      return `geo: lat (${(value as DecryptedGeolocationAnswer['value'])?.latitude}) / long (${
+        (value as DecryptedGeolocationAnswer['value'])?.longitude
+      })`;
     case ItemResponseType.Drawing:
       return getMediaFileName(item, 'svg');
     case ItemResponseType.ABTrails:
