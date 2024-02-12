@@ -24,11 +24,11 @@ jobs:
       - run: npm ci
 
       - name: ESLint
-        run: eslint --ext .js,.jsx,.ts,.tsx .
+        run: npx eslint --ext .js,.jsx,.ts,.tsx .
         continue-on-error: true
 
       - name: Prettier
-        run: prettier --list-different "**/*.{js,jsx,ts,tsx}"
+        run: npx prettier --list-different "**/*.{js,jsx,ts,tsx}"
 
   tests:
     runs-on: ubuntu-latest
