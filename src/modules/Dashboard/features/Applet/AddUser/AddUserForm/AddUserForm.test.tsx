@@ -48,12 +48,14 @@ describe('AddUserForm component tests', () => {
 
     const selectWrapper = screen.getByTestId('dashboard-add-users-role').childNodes[1]
       .childNodes[0];
-    userEvent.click(selectWrapper as Element);
-    const optionsWrapper = await waitFor(() => screen.findByRole('listbox'));
-    userEvent.click(within(optionsWrapper).getByText(/reviewer/i));
-    await waitFor(() => {
-      expect(screen.getByLabelText('Respondents')).toBeInTheDocument();
-      expect(screen.getByTestId('dashboard-add-users-workspace')).toBeInTheDocument();
-    });
+    await userEvent.click(selectWrapper as Element);
+    const optionsWrapper = await screen.findByRole('listbox');
+
+    await userEvent.click(within(optionsWrapper).getByText(/reviewer/i));
+
+    const respondents = await screen.findByLabelText('Respondents');
+    expect(respondents).toBeInTheDocument();
+    const addUserWorkspace = await screen.findByTestId('dashboard-add-users-workspace');
+    expect(addUserWorkspace).toBeInTheDocument();
   });
 });
