@@ -11,9 +11,11 @@ export const shouldForwardProp = {
       prop === 'anchorOrigin' ||
       prop === 'transformOrigin' ||
       prop === 'MenuListProps' ||
-      prop === 'badgeContent'
-    )
+      prop === 'badgeContent' ||
+      prop === 'variant'
+    ) {
       return true;
+    }
 
     return typeof prop === 'string' && isPropValid(prop);
   },
