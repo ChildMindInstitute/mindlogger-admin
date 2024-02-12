@@ -246,7 +246,9 @@ jest.mock('../Charts/MultiScatterChart', () => ({
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ text, 'data-testid': dataTestid }) => <div data-testid={dataTestid}>{text}</div>,
+  CollapsedMdText: ({ text, 'data-testid': dataTestid }) => (
+    <div data-testid={dataTestid}>{text}</div>
+  ),
 }));
 
 describe('ResponseOptions', () => {
@@ -301,7 +303,9 @@ describe('ResponseOptions', () => {
     const timeRangeQuestion = within(timeRange).getByTestId(questionRegExp);
     expect(timeRangeQuestion).toHaveTextContent('Time Range Item');
 
-    const timeRangeUnsupportedText = within(timeRange).getByText('This data type can’t be displayed on this page');
+    const timeRangeUnsupportedText = within(timeRange).getByText(
+      'This data type can’t be displayed on this page',
+    );
     expect(timeRangeUnsupportedText).toBeInTheDocument();
   });
 });

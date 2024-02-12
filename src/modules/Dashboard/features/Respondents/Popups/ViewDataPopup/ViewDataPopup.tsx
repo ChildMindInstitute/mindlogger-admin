@@ -61,7 +61,9 @@ export const ViewDataPopup = ({
           />
         ) : (
           <>
-            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>{t('viewDataDescription')}</StyledBodyLarge>
+            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+              {t('viewDataDescription')}
+            </StyledBodyLarge>
             <AppletsSmallTable tableRows={tableRows} />
           </>
         )}

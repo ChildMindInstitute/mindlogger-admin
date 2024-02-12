@@ -54,7 +54,10 @@ export const TopBar = () => {
       </StyledTopBar>
       <Banners />
       {visibleAccountDrawer && (
-        <AccountPanel setVisibleDrawer={setVisibleAccountDrawer} visibleDrawer={visibleAccountDrawer} />
+        <AccountPanel
+          setVisibleDrawer={setVisibleAccountDrawer}
+          visibleDrawer={visibleAccountDrawer}
+        />
       )}
     </>
   );

@@ -6,7 +6,13 @@ import { Grid } from '@mui/material';
 
 import { Modal } from 'shared/components';
 import { EditorController, InputController } from 'shared/components/FormComponents';
-import { StyledBodyMedium, StyledModalWrapper, StyledTitleLarge, theme, variables } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledModalWrapper,
+  StyledTitleLarge,
+  theme,
+  variables,
+} from 'shared/styles';
 import { BuilderContainer } from 'shared/features';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
@@ -15,7 +21,11 @@ import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderAp
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
-import { ItemConfigurationProps, ItemsOptionGroup, UseWatchItemConfiguration } from './ItemConfiguration.types';
+import {
+  ItemConfigurationProps,
+  ItemsOptionGroup,
+  UseWatchItemConfiguration,
+} from './ItemConfiguration.types';
 import { itemsTypeOptions } from './ItemConfiguration.const';
 import { getInputTypeTooltip } from './ItemConfiguration.utils';
 import { OptionalItemsAndSettings, OptionalItemsRef } from './OptionalItemsAndSettings';
@@ -38,7 +48,10 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     name: [`${fieldName}.isReviewable`, `${name}.responseType`, name],
   });
   const filterConditionalLogicByItem = useFilterConditionalLogicByItem(currentItem);
-  const conditionalLogicForItem = getItemConditionDependencies(currentItem, activity?.conditionalLogic);
+  const conditionalLogicForItem = getItemConditionDependencies(
+    currentItem,
+    activity?.conditionalLogic,
+  );
 
   const availableItemsTypeOptions = isReviewable
     ? itemsTypeOptions.reduce((options: ItemsOptionGroup[], { groupName, groupOptions }) => {
@@ -47,7 +60,9 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         return [
           {
             groupName,
-            groupOptions: groupOptions.filter(({ value }) => itemsForReviewableActivity.includes(value)),
+            groupOptions: groupOptions.filter(({ value }) =>
+              itemsForReviewableActivity.includes(value),
+            ),
           },
         ];
       }, [])
@@ -62,7 +77,9 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
     setIsEditItemPopupVisible(true);
     selectChangeRef.current = handleOnChange;
   };
-  const checkIfSelectChangePopupIsVisible = conditionalLogicForItem?.length ? prepareSelectChangePopup : undefined;
+  const checkIfSelectChangePopupIsVisible = conditionalLogicForItem?.length
+    ? prepareSelectChangePopup
+    : undefined;
 
   const containerSxProps = {
     margin: 0,

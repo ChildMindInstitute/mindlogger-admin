@@ -14,7 +14,10 @@ export const ButtonsScreen = () => {
     formState: { errors },
   } = useCustomFormContext();
 
-  const error = get(errors, `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.buttons`);
+  const error = get(
+    errors,
+    `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.buttons`,
+  );
 
   return (
     <ToggleItemContainer

@@ -16,7 +16,10 @@ export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditIt
   const { watch } = useCustomFormContext();
   const itemName = watch(`${itemFieldName}.name`);
   const currentItem = watch(itemFieldName);
-  const conditionalLogicForItem = getItemConditionDependencies(currentItem, activity?.conditionalLogic);
+  const conditionalLogicForItem = getItemConditionDependencies(
+    currentItem,
+    activity?.conditionalLogic,
+  );
 
   const handleModalSubmit = () => {
     onClose();
@@ -48,7 +51,10 @@ export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditIt
           {conditionalLogicForItem?.length ? t('deleteItemWithConditionalsDescription') : null}
         </StyledBodyLarge>
         {conditionalLogicForItem?.map((conditionalLogic: ConditionalLogic) => (
-          <ConditionalPanel key={`condition-panel-${conditionalLogic.key}`} condition={conditionalLogic} />
+          <ConditionalPanel
+            key={`condition-panel-${conditionalLogic.key}`}
+            condition={conditionalLogic}
+          />
         ))}
       </StyledModalWrapper>
     </Modal>

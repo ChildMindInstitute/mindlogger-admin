@@ -9,7 +9,13 @@ import { StyledTitleMedium, StyledTitleSmall } from 'shared/styles/styledCompone
 import { variables } from 'shared/styles/variables';
 
 import { SelectLanguageProps } from './SelectLanguage.types';
-import { StyledList, StyledListItemButton, StyledItemContent, StyledBox, StyledSelect } from './SelectLanguage.styles';
+import {
+  StyledList,
+  StyledListItemButton,
+  StyledItemContent,
+  StyledBox,
+  StyledSelect,
+} from './SelectLanguage.styles';
 import { languages } from '../Language.const';
 
 const dataTestid = 'select-language-popup';
@@ -41,7 +47,9 @@ export const SelectLanguage = ({ onClose, open, currentLanguage }: SelectLanguag
             <StyledItemContent>
               <Box>{lang.component}</Box>
               <StyledBox>
-                <StyledTitleMedium color={variables.palette.on_secondary_container}>{lang.label}</StyledTitleMedium>
+                <StyledTitleMedium color={variables.palette.on_secondary_container}>
+                  {lang.label}
+                </StyledTitleMedium>
                 <StyledTitleSmall>{lang.type}</StyledTitleSmall>
               </StyledBox>
             </StyledItemContent>

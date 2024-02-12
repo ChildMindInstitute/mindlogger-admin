@@ -338,9 +338,12 @@ describe('replaceItemVariableWithName', () => {
     ${'audio_text [[video_text]]'}            | ${'audio_text  '}                      | ${'"video" variable in "audio" question'}
     ${'audio_player_text [[audio_text]]'}     | ${'audio_player_text  '}               | ${'"audio" variable in "audioPlayer" question'}
     ${'text_last [[audio_player_text]]'}      | ${'text_last  '}                       | ${'"audio_player" variable in "text" question'}
-  `('returns parsed content for "$markdown" for $description item: "$expected"', ({ markdown, expected }) => {
-    /* eslint-disable @typescript-eslint/ban-ts-comment */
-    // @ts-ignore
-    expect(replaceItemVariableWithName({ markdown, items, rawAnswersObject })).toBe(expected);
-  });
+  `(
+    'returns parsed content for "$markdown" for $description item: "$expected"',
+    ({ markdown, expected }) => {
+      /* eslint-disable @typescript-eslint/ban-ts-comment */
+      // @ts-ignore
+      expect(replaceItemVariableWithName({ markdown, items, rawAnswersObject })).toBe(expected);
+    },
+  );
 });

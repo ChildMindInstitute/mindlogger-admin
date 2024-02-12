@@ -29,7 +29,9 @@ Object.assign(navigator, {
 
 const checkDeleteButtonAndHelperText = () => {
   expect(screen.getByText('Delete invite link')).toBeInTheDocument();
-  expect(screen.getByText('Delete this link no longer allow anyone to access url')).toBeInTheDocument();
+  expect(
+    screen.getByText('Delete this link no longer allow anyone to access url'),
+  ).toBeInTheDocument();
 };
 
 describe('LinkForm', () => {
@@ -47,7 +49,9 @@ describe('LinkForm', () => {
     });
 
     expect(
-      screen.getByText('Share the following link for respondents to take assessment without account.'),
+      screen.getByText(
+        'Share the following link for respondents to take assessment without account.',
+      ),
     ).toBeInTheDocument();
 
     const inputContainer = screen.getByTestId(`${dataTestid}-url`);
@@ -88,9 +92,13 @@ describe('LinkForm', () => {
     expect(popupDeleteButton).toBeInTheDocument();
     fireEvent.click(popupDeleteButton);
 
-    expect(mockAxios.delete).toHaveBeenNthCalledWith(1, `/applets/${mockedAppletData.id}/access_link`, {
-      signal: undefined,
-    });
+    expect(mockAxios.delete).toHaveBeenNthCalledWith(
+      1,
+      `/applets/${mockedAppletData.id}/access_link`,
+      {
+        signal: undefined,
+      },
+    );
 
     await waitFor(() => expect(setInviteLink).toHaveBeenCalled());
   });
@@ -98,7 +106,9 @@ describe('LinkForm', () => {
   test('renders LinkForm component when login is required, calls copyPublicLink', () => {
     renderWithProviders(<LinkForm {...getProps(true)} />);
 
-    expect(screen.getByText('Share the following link to invite anyone to this study.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Share the following link to invite anyone to this study.'),
+    ).toBeInTheDocument();
 
     const inputContainer = screen.getByTestId(`${dataTestid}-url`);
     expect(inputContainer).toBeInTheDocument();
@@ -122,7 +132,9 @@ describe('LinkForm', () => {
     renderWithProviders(<LinkForm setInviteLink={setInviteLink} inviteLink={null} />);
 
     expect(
-      screen.getByText('Share the following link for respondents to take assessment without account.'),
+      screen.getByText(
+        'Share the following link for respondents to take assessment without account.',
+      ),
     ).toBeInTheDocument();
 
     const inputContainer = screen.getByTestId(`${dataTestid}-url`);

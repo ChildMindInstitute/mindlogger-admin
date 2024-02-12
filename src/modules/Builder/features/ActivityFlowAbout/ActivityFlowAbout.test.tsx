@@ -57,7 +57,8 @@ const renderActivityFlowAbout = (formData = mockedAppletFormData) => {
   return ref;
 };
 const renderNewActivityFlowAbout = () => renderActivityFlowAbout(mockedAppletFormDataWithEmptyFlow);
-const renderActivityFlowAboutWithTwoFlows = () => renderActivityFlowAbout(mockedAppletFormDataWithTwoFlows);
+const renderActivityFlowAboutWithTwoFlows = () =>
+  renderActivityFlowAbout(mockedAppletFormDataWithTwoFlows);
 
 describe('ActivityFlowAbout', () => {
   beforeEach(() => {
@@ -112,7 +113,9 @@ describe('ActivityFlowAbout', () => {
 
     const field = screen.getByTestId(testId);
 
-    inputType ? fireEvent.change(field.querySelector(inputType), { target: { value } }) : fireEvent.click(field);
+    inputType
+      ? fireEvent.change(field.querySelector(inputType), { target: { value } })
+      : fireEvent.click(field);
 
     expect(ref.current.getValues(`activityFlows.0.${attribute}`)).toEqual(value);
   });
@@ -144,7 +147,9 @@ describe('ActivityFlowAbout', () => {
     await ref.current.trigger('activityFlows');
 
     await waitFor(() => {
-      expect(screen.getByText('That Activity Flow Name is already in use. Please use a different name')).toBeVisible();
+      expect(
+        screen.getByText('That Activity Flow Name is already in use. Please use a different name'),
+      ).toBeVisible();
     });
   });
 });

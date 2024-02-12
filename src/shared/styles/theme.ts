@@ -146,11 +146,17 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiTableRow-root:hover': {
-            backgroundColor: blendColorsNormal(variables.palette.surface, variables.palette.on_surface_alfa8),
+            backgroundColor: blendColorsNormal(
+              variables.palette.surface,
+              variables.palette.on_surface_alfa8,
+            ),
             cursor: 'pointer',
           },
           '.MuiTableRow-root:active': {
-            backgroundColor: blendColorsNormal(variables.palette.surface, variables.palette.on_surface_alfa12),
+            backgroundColor: blendColorsNormal(
+              variables.palette.surface,
+              variables.palette.on_surface_alfa12,
+            ),
           },
           '.MuiTableRow-root:last-child': {
             '.MuiTableCell-body': {
@@ -233,7 +239,10 @@ export const theme = createTheme({
               fill: variables.palette.white,
             },
             '&:hover': {
-              backgroundColor: blendColorsNormal(variables.palette.primary, variables.palette.light_alfa8),
+              backgroundColor: blendColorsNormal(
+                variables.palette.primary,
+                variables.palette.light_alfa8,
+              ),
               boxShadow: 'unset',
             },
             ...Object.assign(
@@ -478,7 +487,9 @@ export const theme = createTheme({
             paddingRight: '3rem',
           },
         },
-      } as Partial<OverridesStyleRules<keyof SelectClasses, 'MuiSelect', Omit<Theme, 'shared/components'>>>,
+      } as Partial<
+        OverridesStyleRules<keyof SelectClasses, 'MuiSelect', Omit<Theme, 'shared/components'>>
+      >,
     },
     MuiMenu: {
       styleOverrides: {
@@ -503,7 +514,10 @@ export const theme = createTheme({
               backgroundColor: variables.palette.surface_variant,
             },
             '&:hover': {
-              backgroundColor: blendColorsNormal(variables.palette.surface_variant, variables.palette.on_surface_alfa8),
+              backgroundColor: blendColorsNormal(
+                variables.palette.surface_variant,
+                variables.palette.on_surface_alfa8,
+              ),
             },
           },
         },

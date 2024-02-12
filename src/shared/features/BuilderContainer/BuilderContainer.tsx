@@ -29,7 +29,10 @@ export const BuilderContainer = ({
       <HeaderComponent isSticky={isHeaderSticky} headerProps={headerProps}>
         <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
       </HeaderComponent>
-      <StyledFlexColumn sx={{ padding: theme.spacing(1.6, 6.4, 2.4), ...contentSxProps }} className={contentClassName}>
+      <StyledFlexColumn
+        sx={{ padding: theme.spacing(1.6, 6.4, 2.4), ...contentSxProps }}
+        className={contentClassName}
+      >
         {children}
       </StyledFlexColumn>
     </StyledBuilderWrapper>

@@ -2,7 +2,13 @@ import { fireEvent, waitFor, screen, act } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
-import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedOwnerId, mockedPassword } from 'shared/mock';
+import {
+  mockedApplet,
+  mockedAppletId,
+  mockedCurrentWorkspace,
+  mockedOwnerId,
+  mockedPassword,
+} from 'shared/mock';
 import { initialStateData } from 'shared/state';
 import { Roles } from 'shared/consts';
 
@@ -86,7 +92,10 @@ describe('AppletItem component tests', () => {
       'dashboard-applets-applet-delete',
     ];
     const ownerActionsTestIds = [...commonActionsTestIds, 'dashboard-applets-applet-transfer'];
-    const superAdminActionsTestIds = [...ownerActionsTestIds, 'dashboard-applets-applet-publish-conceal'];
+    const superAdminActionsTestIds = [
+      ...ownerActionsTestIds,
+      'dashboard-applets-applet-publish-conceal',
+    ];
 
     test.each`
       role                | actionsDataTestIds          | description
@@ -96,11 +105,15 @@ describe('AppletItem component tests', () => {
     `('$description', async ({ role, actionsDataTestIds }) => {
       renderWithProviders(getAppletItemComponent(), { preloadedState: getPreloadedState(role) });
 
-      const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-applet-actions-dots'));
+      const actionsDots = await waitFor(() =>
+        screen.getByTestId('dashboard-applets-table-applet-actions-dots'),
+      );
       fireEvent.mouseEnter(actionsDots);
 
       await waitFor(() => {
-        actionsDataTestIds.forEach((dataTestId: string) => expect(screen.getByTestId(dataTestId)).toBeInTheDocument());
+        actionsDataTestIds.forEach((dataTestId: string) =>
+          expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
+        );
       });
       fireEvent.mouseLeave(actionsDots);
     });
@@ -111,7 +124,9 @@ describe('AppletItem component tests', () => {
       preloadedState: getPreloadedState(Roles.SuperAdmin),
     });
 
-    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-applet-actions-dots'));
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-applets-table-applet-actions-dots'),
+    );
     fireEvent.mouseEnter(actionsDots);
     const publishAction = screen.getByTestId('dashboard-applets-applet-publish-conceal');
 
@@ -123,7 +138,9 @@ describe('AppletItem component tests', () => {
       preloadedState: getPreloadedState(Roles.Owner),
     });
 
-    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-applet-actions-dots'));
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-applets-table-applet-actions-dots'),
+    );
     fireEvent.mouseEnter(actionsDots);
     fireEvent.click(screen.getByTestId('dashboard-applets-applet-duplicate'));
 
@@ -135,9 +152,14 @@ describe('AppletItem component tests', () => {
     act(() => fireEvent.click(screen.getByText('Submit')));
 
     await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(1, `/applets/${mockedAppletId}/encryption`, expect.anything(), {
-        singal: undefined,
-      });
+      expect(mockAxios.post).nthCalledWith(
+        1,
+        `/applets/${mockedAppletId}/encryption`,
+        expect.anything(),
+        {
+          singal: undefined,
+        },
+      );
     });
   });
 
@@ -150,7 +172,9 @@ describe('AppletItem component tests', () => {
     `('$description', async ({ actionTestId, route }) => {
       renderWithProviders(getAppletItemComponent(), { preloadedState: getPreloadedState() });
 
-      const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-applet-actions-dots'));
+      const actionsDots = await waitFor(() =>
+        screen.getByTestId('dashboard-applets-table-applet-actions-dots'),
+      );
       fireEvent.mouseEnter(actionsDots);
       fireEvent.click(screen.getByTestId(`dashboard-applets-applet-${actionTestId}`));
 
@@ -185,7 +209,9 @@ describe('AppletItem component tests', () => {
 
   test('should remove applet from folder', async () => {
     renderWithProviders(getAppletItemComponent(true), { preloadedState: getPreloadedState() });
-    const actionsDots = await waitFor(() => screen.getByTestId('dashboard-applets-table-applet-actions-dots'));
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-applets-table-applet-actions-dots'),
+    );
     fireEvent.mouseEnter(actionsDots);
     fireEvent.click(screen.getByTestId('dashboard-applets-applet-remove-from-folder'));
 

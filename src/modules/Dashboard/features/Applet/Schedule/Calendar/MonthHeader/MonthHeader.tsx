@@ -9,14 +9,18 @@ export const MonthHeader = ({ date, label, calendarDate, localizer }: MonthHeade
   const nowDate = new Date();
 
   const isSamePeriod =
-    nowDate >= firstVisibleDay(calendarDate, localizer) && nowDate <= lastVisibleDay(calendarDate, localizer);
+    nowDate >= firstVisibleDay(calendarDate, localizer) &&
+    nowDate <= lastVisibleDay(calendarDate, localizer);
 
   const isSelectedDay = date.getDay() === nowDate.getDay();
 
   return (
     <StyledLabelBoldMedium
       sx={{
-        color: isSelectedDay && isSamePeriod ? variables.palette.primary : variables.palette.on_surface_variant,
+        color:
+          isSelectedDay && isSamePeriod
+            ? variables.palette.primary
+            : variables.palette.on_surface_variant,
       }}
     >
       {label}

@@ -8,10 +8,18 @@ import { Periodicity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
 import { getTableCell } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
-import { createEvents, removeSecondsFromTime } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import {
+  createEvents,
+  removeSecondsFromTime,
+} from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { AddEventsToCategories, EventsData, LegendEvent, PreparedEvents } from './Schedule.types';
-import { getNextColor, getFrequencyString, getCount, convertDateToYearMonthDay } from './Schedule.utils';
+import {
+  getNextColor,
+  getFrequencyString,
+  getCount,
+  convertDateToYearMonthDay,
+} from './Schedule.utils';
 
 export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | null => {
   const dispatch = useAppDispatch();
@@ -49,16 +57,22 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
           },
         ) => {
           const activityOrFlowId = activityId || flowId || '';
-          const currentActivityOrFlow = activitiesAndFlows.find((item) => item.id === activityOrFlowId);
+          const currentActivityOrFlow = activitiesAndFlows.find(
+            (item) => item.id === activityOrFlowId,
+          );
 
           if (currentActivityOrFlow && !currentActivityOrFlow?.isHidden) {
             const { type: periodicityType, selectedDate, startDate, endDate } = periodicity;
             const activityOrFlowName = currentActivityOrFlow?.name || '';
             const activityOrFlowCreatedAt = convertDateToYearMonthDay(
-              currentActivityOrFlow?.createdAt ? new Date(currentActivityOrFlow.createdAt) : new Date(),
+              currentActivityOrFlow?.createdAt
+                ? new Date(currentActivityOrFlow.createdAt)
+                : new Date(),
             );
             const isAlwaysAvailable = periodicityType === Periodicity.Always;
-            const selectedOrStartDate = isAlwaysAvailable ? activityOrFlowCreatedAt : selectedDate || startDate;
+            const selectedOrStartDate = isAlwaysAvailable
+              ? activityOrFlowCreatedAt
+              : selectedDate || startDate;
             const date = format(
               selectedOrStartDate ? new Date(selectedOrStartDate) : new Date(),
               DateFormats.DayMonthYear,
@@ -175,7 +189,12 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
     };
 
     activitiesAndFlows.forEach(
-      ({ id, name, isHidden, activityIds }: ActivityFlow | (Activity & { activityIds?: string[] })) =>
+      ({
+        id,
+        name,
+        isHidden,
+        activityIds,
+      }: ActivityFlow | (Activity & { activityIds?: string[] })) =>
         id && addEventsToCategories({ id, name, isFlow: !!activityIds, isHidden }),
     );
   }

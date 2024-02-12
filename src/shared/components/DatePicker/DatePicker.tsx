@@ -136,7 +136,9 @@ export const DatePicker = <T extends FieldValues>({
                       value={getValue()[0] || ''}
                       data-testid={`${dataTestid}-start`}
                     />
-                    <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
+                    <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
+                      {t('smallTo')}
+                    </StyledBodyLarge>
                     <StyledTextField
                       variant="outlined"
                       {...textFieldProps}
@@ -163,13 +165,17 @@ export const DatePicker = <T extends FieldValues>({
                 data-testid={`${dataTestid}-popover`}
               >
                 {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
-                {value && <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />}
+                {value && (
+                  <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />
+                )}
                 <Suspense fallback={<DatePickerFallback />}>
                   <ReactDatePicker
                     locale={i18n.language === 'fr' ? fr : undefined}
                     renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
                     startDate={isStartEndingDate ? (getSelectedDate() as DateType) : undefined}
-                    endDate={isStartEndingDate ? (getSelectedDate(DateVariant.End) as DateType) : undefined}
+                    endDate={
+                      isStartEndingDate ? (getSelectedDate(DateVariant.End) as DateType) : undefined
+                    }
                     selectsRange={isStartEndingDate}
                     inline
                     selected={getSelectedDate() as DateType}

@@ -1,6 +1,12 @@
 import { FieldValues, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 
-import { MultiSelectItem, ScoreConditionalLogic, ScoreOrSection, SingleSelectItem, SliderItem } from 'shared/state';
+import {
+  MultiSelectItem,
+  ScoreConditionalLogic,
+  ScoreOrSection,
+  SingleSelectItem,
+  SliderItem,
+} from 'shared/state';
 import { ActivityFormValues, ItemFormValuesCommonType } from 'modules/Builder/types';
 import { DataTableItem } from 'shared/components';
 import { CalculationType } from 'shared/consts';

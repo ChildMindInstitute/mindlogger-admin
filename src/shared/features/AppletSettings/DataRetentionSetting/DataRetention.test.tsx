@@ -12,7 +12,10 @@ import { DataRetention } from './DataRetention';
 
 const route = `/dashboard/${mockedAppletId}/settings/${SettingParam.DataRetention}`;
 const routePath = page.appletSettingsItem;
-const getPreloadedState = (retentionPeriod?: number | null, retentionType?: RetentionPeriods | null) => ({
+const getPreloadedState = (
+  retentionPeriod?: number | null,
+  retentionType?: RetentionPeriods | null,
+) => ({
   workspaces: {
     workspaces: initialStateData,
     currentWorkspace: {
@@ -72,7 +75,8 @@ describe('DataRetention component tests', () => {
     });
 
     const retentionTypeInput = container.querySelector('input');
-    retentionTypeInput && fireEvent.change(retentionTypeInput, { target: { value: RetentionPeriods.Months } });
+    retentionTypeInput &&
+      fireEvent.change(retentionTypeInput, { target: { value: RetentionPeriods.Months } });
 
     await waitFor(() => {
       expect(screen.getByTestId(`${dataTestid}-retention-period`)).toBeInTheDocument();
@@ -91,7 +95,8 @@ describe('DataRetention component tests', () => {
     const retentionPeriod = 1;
     const retentionType = RetentionPeriods.Weeks;
     const retentionTypeInput = container.querySelector('input');
-    retentionTypeInput && fireEvent.change(retentionTypeInput, { target: { value: retentionType } });
+    retentionTypeInput &&
+      fireEvent.change(retentionTypeInput, { target: { value: retentionType } });
     fireEvent.click(screen.getByTestId(`${dataTestid}-save`));
 
     await waitFor(() => {

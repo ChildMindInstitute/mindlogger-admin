@@ -34,7 +34,9 @@ jest.mock('modules/Dashboard/hooks', () => ({
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
-  CollapsedMdText: ({ text, 'data-testid': dataTestid }) => <div data-testid={dataTestid}>{text}</div>,
+  CollapsedMdText: ({ text, 'data-testid': dataTestid }) => (
+    <div data-testid={dataTestid}>{text}</div>
+  ),
 }));
 
 const isNested = false;
@@ -243,11 +245,15 @@ describe('Subscale component', () => {
 
     await userEvent.click(nestedSubscaleTitle0);
 
-    const additionalInformation0 = withinNestedSubscale0.getByTestId('subscale-nested-0-additional-information');
+    const additionalInformation0 = withinNestedSubscale0.getByTestId(
+      'subscale-nested-0-additional-information',
+    );
     expect(additionalInformation0).toBeInTheDocument();
     const withinAdditionalInformation0 = within(additionalInformation0);
     expect(withinAdditionalInformation0.getByText('Markdown Text Here')).toBeInTheDocument();
-    expect(withinNestedSubscale0.queryAllByTestId(/subscale-nested-0-question-\d+$/)).toHaveLength(2);
+    expect(withinNestedSubscale0.queryAllByTestId(/subscale-nested-0-question-\d+$/)).toHaveLength(
+      2,
+    );
     expect(withinNestedSubscale0.getByText('Single Select Item 1')).toBeInTheDocument();
     expect(withinNestedSubscale0.getByText('Single Select Item 2')).toBeInTheDocument();
 
@@ -260,11 +266,15 @@ describe('Subscale component', () => {
 
     await userEvent.click(nestedSubscaleTitle1);
 
-    const additionalInformation1 = withinNestedSubscale1.getByTestId('subscale-nested-1-additional-information');
+    const additionalInformation1 = withinNestedSubscale1.getByTestId(
+      'subscale-nested-1-additional-information',
+    );
     expect(additionalInformation1).toBeInTheDocument();
     const withinAdditionalInformation1 = within(additionalInformation1);
     expect(withinAdditionalInformation1.getByText('Good')).toBeInTheDocument();
-    expect(withinNestedSubscale1.queryAllByTestId(/subscale-nested-1-question-\d+$/)).toHaveLength(2);
+    expect(withinNestedSubscale1.queryAllByTestId(/subscale-nested-1-question-\d+$/)).toHaveLength(
+      2,
+    );
     expect(withinNestedSubscale1.getByText('Multi Select Item')).toBeInTheDocument();
     expect(withinNestedSubscale1.getByText('Slider Item')).toBeInTheDocument();
 

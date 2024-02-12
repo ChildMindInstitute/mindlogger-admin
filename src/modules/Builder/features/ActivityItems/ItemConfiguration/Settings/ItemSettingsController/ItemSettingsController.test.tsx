@@ -255,7 +255,10 @@ const mockedSettingsByType = {
     ItemConfigurationSettings.IsSkippable,
     ItemConfigurationSettings.IsGoBackRemoved,
   ],
-  [ItemResponseType.Message]: [ItemConfigurationSettings.HasTimer, ItemConfigurationSettings.IsGoBackRemoved],
+  [ItemResponseType.Message]: [
+    ItemConfigurationSettings.HasTimer,
+    ItemConfigurationSettings.IsGoBackRemoved,
+  ],
   [ItemResponseType.AudioPlayer]: [
     ItemConfigurationSettings.IsPlayAudioOnce,
     ItemConfigurationSettings.HasTextInput,
@@ -324,7 +327,10 @@ const mockedSettingGroupsByType = {
     ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
     ItemSettingsGroupNames.ScoresAndAlerts,
   ],
-  [ItemResponseType.Text]: [ItemSettingsGroupNames.ResponseOptions, ItemSettingsGroupNames.ScreenConfigurations],
+  [ItemResponseType.Text]: [
+    ItemSettingsGroupNames.ResponseOptions,
+    ItemSettingsGroupNames.ScreenConfigurations,
+  ],
   [ItemResponseType.Drawing]: [
     ItemSettingsGroupNames.AdditionalResponseOptions,
     ItemSettingsGroupNames.ScreenConfigurationsAndTimer,
@@ -398,14 +404,18 @@ describe('ItemSettingsController', () => {
     expandAllPanels();
 
     const mockedSettings = mockedSettingsByType[inputType];
-    const settings = document.querySelectorAll('label[data-testid^="builder-activity-items-item-settings"]');
+    const settings = document.querySelectorAll(
+      'label[data-testid^="builder-activity-items-item-settings"]',
+    );
 
     expect(settings.length).toEqual(mockedSettings.length);
 
     settings.forEach((setting, index) => {
       const mockedSetting = mockedSettings[index];
 
-      expect(screen.getByTestId(`builder-activity-items-item-settings-${mockedSetting}`)).toEqual(setting);
+      expect(screen.getByTestId(`builder-activity-items-item-settings-${mockedSetting}`)).toEqual(
+        setting,
+      );
     });
   });
 
@@ -444,7 +454,9 @@ describe('ItemSettingsController', () => {
     groups.forEach((group, index) => {
       const mockedGroup = mockedGroups[index];
 
-      expect(screen.getByTestId(`builder-activity-items-item-settings-group-container-${mockedGroup}`)).toEqual(group);
+      expect(
+        screen.getByTestId(`builder-activity-items-item-settings-group-container-${mockedGroup}`),
+      ).toEqual(group);
     });
   });
 
@@ -674,8 +686,8 @@ describe('ItemSettingsController', () => {
 
     mockedEventByAction[action]();
 
-    expect(ref.current.getValues(`activities.0.items.0.config.${ItemConfigurationSettings.HasTimer}`)).toEqual(
-      expected,
-    );
+    expect(
+      ref.current.getValues(`activities.0.items.0.config.${ItemConfigurationSettings.HasTimer}`),
+    ).toEqual(expected);
   });
 });

@@ -45,7 +45,9 @@ export const StimulusContent = () => {
     reset,
   } = useCustomFormContext();
   const { fieldName, activityObjField } = useCurrentActivity();
-  const [screenToDelete, setScreenToDelete] = useState<null | { index: number; imageName: string }>(null);
+  const [screenToDelete, setScreenToDelete] = useState<null | { index: number; imageName: string }>(
+    null,
+  );
   const stimulusObjField = `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.stimulusTrials`;
   const stimulusField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`;
   const buttonsField = `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.buttons`;
@@ -61,13 +63,18 @@ export const StimulusContent = () => {
     remove,
     update,
     replace,
-  } = useFieldArray<Record<string, FlankerStimulusSettings[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
+  } = useFieldArray<
+    Record<string, FlankerStimulusSettings[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
     control,
     name: stimulusField,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  const handleStimulusAdd = () => append({ id: uuidv4(), image: '', text: '', value: CorrectPress.Left });
+  const handleStimulusAdd = () =>
+    append({ id: uuidv4(), image: '', text: '', value: CorrectPress.Left });
 
   const handleStimulusDelete = () => {
     if (!screenToDelete) return;
@@ -118,7 +125,9 @@ export const StimulusContent = () => {
           </StyledHeader>
         ) : (
           <StyledInfoSection>
-            <StyledBodyLarge color={variables.palette.outline}>{t('flankerStimulus.addText')}</StyledBodyLarge>
+            <StyledBodyLarge color={variables.palette.outline}>
+              {t('flankerStimulus.addText')}
+            </StyledBodyLarge>
           </StyledInfoSection>
         )}
         {stimulusTrials?.map((trial, index) => {
@@ -149,7 +158,10 @@ export const StimulusContent = () => {
                   {text && <StyledFileName>{text}</StyledFileName>}
                 </StyledFlexTopCenter>
                 {hasImgError && (
-                  <StyledBodyMedium sx={{ pt: theme.spacing(0.5) }} color={variables.palette.semantic.error}>
+                  <StyledBodyMedium
+                    sx={{ pt: theme.spacing(0.5) }}
+                    color={variables.palette.semantic.error}
+                  >
                     {getIsRequiredValidateMessage('flankerStimulus.fileName')}
                   </StyledBodyMedium>
                 )}
@@ -160,7 +172,9 @@ export const StimulusContent = () => {
                     <ToggleButtonGroup
                       toggleButtons={pressOptions}
                       activeButton={value}
-                      setActiveButton={(activeValue: string | number) => handleActiveBtnChange(activeValue, index)}
+                      setActiveButton={(activeValue: string | number) =>
+                        handleActiveBtnChange(activeValue, index)
+                      }
                       data-testid={`${currentDataTestid}-correct-buttons`}
                     />
                   </Box>

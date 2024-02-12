@@ -46,7 +46,8 @@ describe('AddUserForm component tests', () => {
       routePath,
     });
 
-    const selectWrapper = screen.getByTestId('dashboard-add-users-role').childNodes[1].childNodes[0];
+    const selectWrapper = screen.getByTestId('dashboard-add-users-role').childNodes[1]
+      .childNodes[0];
     await userEvent.click(selectWrapper as Element);
     const optionsWrapper = await screen.findByRole('listbox');
 

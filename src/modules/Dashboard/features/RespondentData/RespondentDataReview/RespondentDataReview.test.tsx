@@ -250,23 +250,31 @@ describe('RespondentDataReview', () => {
       window.HTMLElement.prototype.scrollTo = () => {};
 
       await waitFor(() => {
-        expect(mockAxios.get).toHaveBeenNthCalledWith(1, `/answers/applet/${mockedAppletId}/review/activities`, {
-          params: {
-            createdDate: format(date, DateFormats.YearMonthDay),
-            limit: 10000,
-            respondentId: mockedRespondentId,
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          1,
+          `/answers/applet/${mockedAppletId}/review/activities`,
+          {
+            params: {
+              createdDate: format(date, DateFormats.YearMonthDay),
+              limit: 10000,
+              respondentId: mockedRespondentId,
+            },
+            signal: undefined,
           },
-          signal: undefined,
-        });
+        );
 
-        expect(mockAxios.get).toHaveBeenNthCalledWith(2, `/answers/applet/${mockedAppletId}/dates`, {
-          params: {
-            respondentId: mockedRespondentId,
-            fromDate: startOfMonth(date).getTime().toString(),
-            toDate: endOfMonth(date).getTime().toString(),
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          2,
+          `/answers/applet/${mockedAppletId}/dates`,
+          {
+            params: {
+              respondentId: mockedRespondentId,
+              fromDate: startOfMonth(date).getTime().toString(),
+              toDate: endOfMonth(date).getTime().toString(),
+            },
+            signal: undefined,
           },
-          signal: undefined,
-        });
+        );
       });
 
       // check render child components
@@ -275,18 +283,24 @@ describe('RespondentDataReview', () => {
       expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
 
       expect(
-        screen.getByText('Select the date, Activity, and response time to review the response data.'),
+        screen.getByText(
+          'Select the date, Activity, and response time to review the response data.',
+        ),
       ).toBeInTheDocument();
 
       // the activity list in the review menu child component is rendered correctly
-      const activityLength = screen.queryAllByTestId(/respondents-review-menu-activity-\d+-select$/);
+      const activityLength = screen.queryAllByTestId(
+        /respondents-review-menu-activity-\d+-select$/,
+      );
       expect(activityLength).toHaveLength(1);
 
       const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
       await userEvent.click(activity);
 
       // check that there are no timestamps in the selected activity
-      const timestampLength = screen.queryAllByTestId(/respondents-review-menu-activity-0-completion-time-\d+$/);
+      const timestampLength = screen.queryAllByTestId(
+        /respondents-review-menu-activity-0-completion-time-\d+$/,
+      );
       expect(timestampLength).toHaveLength(0);
 
       // check that the selected date is displayed correctly in the datepicker
@@ -301,7 +315,9 @@ describe('RespondentDataReview', () => {
         await userEvent.click(inputContainer);
       });
 
-      const datepicker = (await screen.findByTestId(`${dataTestid}-menu-review-date-popover`)) as HTMLElement;
+      const datepicker = (await screen.findByTestId(
+        `${dataTestid}-menu-review-date-popover`,
+      )) as HTMLElement;
 
       expect(datepicker).toBeInTheDocument();
 
@@ -320,17 +336,23 @@ describe('RespondentDataReview', () => {
 
       await waitFor(() => {
         expect(input.value).toEqual('15 Dec 2023');
-        expect(mockAxios.get).toHaveBeenNthCalledWith(3, `/answers/applet/${mockedAppletId}/review/activities`, {
-          params: {
-            createdDate: format(selectedDate, DateFormats.YearMonthDay),
-            limit: 10000,
-            respondentId: mockedRespondentId,
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          3,
+          `/answers/applet/${mockedAppletId}/review/activities`,
+          {
+            params: {
+              createdDate: format(selectedDate, DateFormats.YearMonthDay),
+              limit: 10000,
+              respondentId: mockedRespondentId,
+            },
+            signal: undefined,
           },
-          signal: undefined,
-        });
+        );
       });
 
-      const timestampLength2 = screen.queryAllByTestId(/respondents-review-menu-activity-0-completion-time-\d+$/);
+      const timestampLength2 = screen.queryAllByTestId(
+        /respondents-review-menu-activity-0-completion-time-\d+$/,
+      );
       expect(timestampLength2).toHaveLength(2);
 
       const timestamp0 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);

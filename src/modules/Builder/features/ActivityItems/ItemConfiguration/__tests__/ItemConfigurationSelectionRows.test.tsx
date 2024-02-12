@@ -34,7 +34,9 @@ const setOption = (optionNumber) => {
   const select = screen.getByTestId(`${mockedDataTestid}-options-select`);
   fireEvent.mouseDown(select.querySelector('[role="button"]'));
 
-  const options = screen.getByTestId(`${mockedDataTestid}-options-select-dropdown`).querySelectorAll('li');
+  const options = screen
+    .getByTestId(`${mockedDataTestid}-options-select-dropdown`)
+    .querySelectorAll('li');
   fireEvent.click(options[optionNumber - 1]);
 };
 const setAlertOption = (alertIndex, optionIndex) => {
@@ -43,9 +45,9 @@ const setAlertOption = (alertIndex, optionIndex) => {
     .querySelector('[role="button"]');
   fireEvent.mouseDown(optionsSelect);
   fireEvent.click(
-    screen.getByTestId(`${mockedAlertsTestid}-${alertIndex}-selection-per-row-option-dropdown`).querySelectorAll('li')[
-      optionIndex
-    ],
+    screen
+      .getByTestId(`${mockedAlertsTestid}-${alertIndex}-selection-per-row-option-dropdown`)
+      .querySelectorAll('li')[optionIndex],
   );
 };
 const setAlertRow = (alertIndex, rowIndex) => {
@@ -54,9 +56,9 @@ const setAlertRow = (alertIndex, rowIndex) => {
     .querySelector('[role="button"]');
   fireEvent.mouseDown(rowsSelect);
   fireEvent.click(
-    screen.getByTestId(`${mockedAlertsTestid}-${alertIndex}-selection-per-row-row-dropdown`).querySelectorAll('li')[
-      rowIndex
-    ],
+    screen
+      .getByTestId(`${mockedAlertsTestid}-${alertIndex}-selection-per-row-row-dropdown`)
+      .querySelectorAll('li')[rowIndex],
   );
 };
 
@@ -74,8 +76,12 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
     renderSelectionRows(responseType);
 
     await waitFor(() => {
-      const options = screen.getAllByTestId(/^builder-activity-items-item-configuration-selection-rows-option-\d+$/);
-      const rows = screen.getAllByTestId(/^builder-activity-items-item-configuration-selection-rows-row-\d+$/);
+      const options = screen.getAllByTestId(
+        /^builder-activity-items-item-configuration-selection-rows-option-\d+$/,
+      );
+      const rows = screen.getAllByTestId(
+        /^builder-activity-items-item-configuration-selection-rows-row-\d+$/,
+      );
 
       expect(options).toHaveLength(1);
       expect(rows).toHaveLength(1);
@@ -118,7 +124,9 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
       screen
         .getByTestId(`${mockedDataTestid}-row-0`)
         .querySelector(
-          `input[type="${responseType === ItemResponseType.SingleSelectionPerRow ? 'radio' : 'checkbox'}"]`,
+          `input[type="${
+            responseType === ItemResponseType.SingleSelectionPerRow ? 'radio' : 'checkbox'
+          }"]`,
         ),
     ).toBeDisabled();
 
@@ -201,7 +209,9 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
     const addRow = screen.getByTestId(mockedAddRowTestid);
     fireEvent.click(addRow);
 
-    const twoRows = screen.getAllByTestId(/^builder-activity-items-item-configuration-selection-rows-row-\d+$/);
+    const twoRows = screen.getAllByTestId(
+      /^builder-activity-items-item-configuration-selection-rows-row-\d+$/,
+    );
     expect(twoRows).toHaveLength(2);
     twoRows.forEach((_, index) => {
       const text = screen.getByTestId(`${mockedDataTestid}-row-${index}-text`);
@@ -216,9 +226,13 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
     fireEvent.click(removeRow);
 
     expect(
-      screen.queryByTestId(/^builder-activity-items-item-configuration-selection-rows-row-\d+-remove$/),
+      screen.queryByTestId(
+        /^builder-activity-items-item-configuration-selection-rows-row-\d+-remove$/,
+      ),
     ).not.toBeInTheDocument();
-    expect(screen.getAllByTestId(/^builder-activity-items-item-configuration-selection-rows-row-\d+$/)).toHaveLength(1);
+    expect(
+      screen.getAllByTestId(/^builder-activity-items-item-configuration-selection-rows-row-\d+$/),
+    ).toHaveLength(1);
     expect(ref.current.getValues(`${mockedItemName}.responseValues.rows`)).toStrictEqual([
       { id: ref.current.getValues(`${mockedItemName}.responseValues.rows.0.id`), rowName: '' },
     ]);
@@ -244,7 +258,9 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
       expect(optionTooltips).toHaveLength(2);
       optionTooltips.forEach((option, index) => {
         expect(option.querySelector('label')).toHaveTextContent('Tooltip');
-        const dataOption = ref.current.getValues(`${mockedItemName}.responseValues.options.${index}`);
+        const dataOption = ref.current.getValues(
+          `${mockedItemName}.responseValues.options.${index}`,
+        );
         expect(dataOption).toHaveProperty('tooltip');
         expect(dataOption.tooltip).toBeUndefined();
       });
@@ -263,12 +279,16 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
       const rowTooltip = rowTooltips[0];
       fireEvent.change(rowTooltip.querySelector('input'), { target: { value: 'tooltip' } });
       await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
-      expect(ref.current.getValues(`${mockedItemName}.responseValues.rows.0.tooltip`)).toEqual('tooltip');
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.rows.0.tooltip`)).toEqual(
+        'tooltip',
+      );
 
       const optionTooltip = optionTooltips[1];
       fireEvent.change(optionTooltip.querySelector('input'), { target: { value: 'tooltip' } });
       await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
-      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.1.tooltip`)).toEqual('tooltip');
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options.1.tooltip`)).toEqual(
+        'tooltip',
+      );
 
       setOption(3);
       expect(screen.getByTestId(`${mockedDataTestid}-option-2-tooltip`)).toBeVisible();
@@ -293,7 +313,9 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
       await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
       expect(screen.getByText('Alert 1')).toBeVisible();
-      expect(screen.getByText('If is selected for when answering this question then send:')).toBeVisible();
+      expect(
+        screen.getByText('If is selected for when answering this question then send:'),
+      ).toBeVisible();
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-remove`)).toBeVisible();
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-text`));
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-selection-per-row-row`)).toBeVisible();
@@ -326,7 +348,9 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
         const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
         fireEvent.click(addAlert);
 
-        const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
+        const alertInput = screen
+          .getByTestId(`${mockedAlertsTestid}-1-text`)
+          .querySelector('input');
         fireEvent.change(alertInput, { target: { value: 'text' } });
 
         await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
@@ -399,7 +423,9 @@ describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row',
       fireEvent.click(removeAlert);
 
       expect(screen.queryByTestId(`${mockedAlertsTestid}-0-panel`)).not.toBeInTheDocument();
-      expect(ref.current.getValues(`${mockedItemName}.config.${ItemConfigurationSettings.HasAlerts}`)).toBeFalsy();
+      expect(
+        ref.current.getValues(`${mockedItemName}.config.${ItemConfigurationSettings.HasAlerts}`),
+      ).toBeFalsy();
       expect(ref.current.getValues(`${mockedItemName}.alerts`)).toEqual([]);
     });
   });

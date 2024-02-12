@@ -13,7 +13,11 @@ import {
   StyledTitleSmall,
   theme,
 } from 'shared/styles';
-import { InputController, SelectController, TransferListController } from 'shared/components/FormComponents';
+import {
+  InputController,
+  SelectController,
+  TransferListController,
+} from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
 import { ScoreConditionalLogic } from 'shared/state';
 import { CalculationType } from 'shared/consts';
@@ -68,15 +72,23 @@ export const ScoreContent = ({
   const { name: scoreName, id: scoreId, calculationType, itemsScore } = score || {};
   const [prevScoreName, setPrevScoreName] = useState(scoreName);
   const [prevCalculationType, setPrevCalculationType] = useState(calculationType);
-  const selectedItems = scoreItems?.filter((item) => itemsScore?.includes(getEntityKey(item, true)));
+  const selectedItems = scoreItems?.filter(
+    (item) => itemsScore?.includes(getEntityKey(item, true)),
+  );
   const scoreRange = getScoreRange({ items: selectedItems, calculationType, activity });
-  const scoreRangeLabel = selectedItems?.length ? getScoreRangeLabel(scoreRange) : EMPTY_SCORE_RANGE_LABEL;
+  const scoreRangeLabel = selectedItems?.length
+    ? getScoreRangeLabel(scoreRange)
+    : EMPTY_SCORE_RANGE_LABEL;
 
   const {
     fields: scoreConditionals,
     append,
     remove,
-  } = useFieldArray<Record<string, ScoreConditionalLogic[]>, string, typeof REACT_HOOK_FORM_KEY_NAME>({
+  } = useFieldArray<
+    Record<string, ScoreConditionalLogic[]>,
+    string,
+    typeof REACT_HOOK_FORM_KEY_NAME
+  >({
     control,
     name: scoreConditionalsName,
     keyName: REACT_HOOK_FORM_KEY_NAME,
@@ -190,7 +202,9 @@ export const ScoreContent = ({
   };
 
   const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
-    const newSelectedItems = scoreItems?.filter((item) => chosenItems?.includes(getEntityKey(item, true)));
+    const newSelectedItems = scoreItems?.filter(
+      (item) => chosenItems?.includes(getEntityKey(item, true)),
+    );
     updateScoreConditionsPayload({
       setValue,
       getValues,
@@ -227,8 +241,13 @@ export const ScoreContent = ({
         </Box>
         <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
           <CopyId title={t('scoreId')} value={scoreId} showCopy data-testid={dataTestid} />
-          <StyledTitleSmall sx={{ m: theme.spacing(2.4, 0, 1.2, 0) }}>{t('rangeOfScores')}</StyledTitleSmall>
-          <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }} data-testid={`${dataTestid}-score-range`}>
+          <StyledTitleSmall sx={{ m: theme.spacing(2.4, 0, 1.2, 0) }}>
+            {t('rangeOfScores')}
+          </StyledTitleSmall>
+          <StyledBodyLarge
+            sx={{ mb: theme.spacing(2.4) }}
+            data-testid={`${dataTestid}-score-range`}
+          >
             {scoreRangeLabel}
           </StyledBodyLarge>
         </Box>
@@ -247,10 +266,17 @@ export const ScoreContent = ({
         onChangeSelectedCallback={onItemsToCalculateScoreChange}
         data-testid={`${dataTestid}-items-score`}
       />
-      <SectionScoreCommonFields name={name} sectionId={`score-${index}`} data-testid={dataTestid} items={items} />
+      <SectionScoreCommonFields
+        name={name}
+        sectionId={`score-${index}`}
+        data-testid={dataTestid}
+        items={items}
+      />
       {!!scoreConditionals?.length && (
         <>
-          <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>{t('scoreConditions')}</StyledTitleMedium>
+          <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
+            {t('scoreConditions')}
+          </StyledTitleMedium>
           {scoreConditionals?.map((conditional: ScoreConditionalLogic, key: number) => {
             const conditionalName = `${scoreConditionalsName}.${key}`;
             const title = t('scoreConditional', {

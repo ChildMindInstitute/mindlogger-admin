@@ -1,5 +1,11 @@
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { StyledFlexTopCenter, StyledLabelBoldLarge, StyledBodyLarge, theme, variables } from 'shared/styles';
+import {
+  StyledFlexTopCenter,
+  StyledLabelBoldLarge,
+  StyledBodyLarge,
+  theme,
+  variables,
+} from 'shared/styles';
 
 import { TitleProps } from './Title.types';
 

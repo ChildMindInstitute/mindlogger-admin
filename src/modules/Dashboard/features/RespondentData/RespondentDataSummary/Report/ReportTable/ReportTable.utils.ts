@@ -20,7 +20,9 @@ export const getComparator = <Key extends string>(
   order: Order,
   orderBy: Key,
 ): ((a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number) =>
-  order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+  order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
 
 export const stableSort = <T>(array: readonly T[], comparator: (a: T, b: T) => number) => {
   const stabilized = array.map((el, index) => [el, index] as [T, number]);

@@ -1,11 +1,22 @@
 import { useState, MouseEvent, SyntheticEvent } from 'react';
 
 import { Controller, FieldValues } from 'react-hook-form';
-import { TextField, Autocomplete, Checkbox, FormControlLabel, Divider, Paper, ListItem } from '@mui/material';
+import {
+  TextField,
+  Autocomplete,
+  Checkbox,
+  FormControlLabel,
+  Divider,
+  Paper,
+  ListItem,
+} from '@mui/material';
 
 import { theme } from 'shared/styles';
 
-import { AutocompleteOption, TagsAutocompleteControllerProps } from './TagsAutocompleteController.types';
+import {
+  AutocompleteOption,
+  TagsAutocompleteControllerProps,
+} from './TagsAutocompleteController.types';
 
 export const TagsInputController = <T extends FieldValues>({
   name,
@@ -37,7 +48,11 @@ export const TagsInputController = <T extends FieldValues>({
           });
         };
 
-        const handleChange = (_e: SyntheticEvent<Element, Event>, value: AutocompleteOption[], reason: string) => {
+        const handleChange = (
+          _e: SyntheticEvent<Element, Event>,
+          value: AutocompleteOption[],
+          reason: string,
+        ) => {
           if (reason === 'clear' || reason === 'removeOption') setSelectedAll(false);
           if (reason === 'selectOption' && value?.length === options?.length) setSelectedAll(true);
           onChange(value);

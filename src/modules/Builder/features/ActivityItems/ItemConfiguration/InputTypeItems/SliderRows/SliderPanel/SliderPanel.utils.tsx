@@ -19,7 +19,9 @@ export const getTableRows = (scores: number[] = [], name: string, dataTestid: st
     (result, score, index) => ({
       ...result,
       [`${name}.scores[${index}]`]: {
-        content: () => <ScoreCell name={`${name}.scores[${index}]`} data-testid={`${dataTestid}-${index}`} />,
+        content: () => (
+          <ScoreCell name={`${name}.scores[${index}]`} data-testid={`${dataTestid}-${index}`} />
+        ),
         value: `${score}`,
       },
     }),
@@ -29,7 +31,9 @@ export const getTableRows = (scores: number[] = [], name: string, dataTestid: st
 
 export const getStaticHeadRow = () => [{ id: 'placeholder', label: t('value') }];
 
-export const getStaticBodyRow = () => [{ placeholder: { content: () => t('score'), value: t('score') } }];
+export const getStaticBodyRow = () => [
+  { placeholder: { content: () => t('score'), value: t('score') } },
+];
 
 export const getMarks = (min: number, max: number, hasLabels: boolean) =>
   createArray(max - min + 1, (index: number) => ({

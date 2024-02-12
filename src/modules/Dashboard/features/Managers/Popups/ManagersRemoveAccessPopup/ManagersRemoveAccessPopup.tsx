@@ -25,7 +25,11 @@ import { getErrorMessage } from 'shared/utils';
 import { buttonTextByStep, getHeadCells } from './ManagersRemoveAccessPopup.const';
 import { RemoveAccessPopupProps, FormValues } from './ManagersRemoveAccessPopupProps.types';
 
-export const ManagersRemoveAccessPopup = ({ popupVisible, onClose, user }: RemoveAccessPopupProps) => {
+export const ManagersRemoveAccessPopup = ({
+  popupVisible,
+  onClose,
+  user,
+}: RemoveAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams() || {};
 
@@ -65,7 +69,11 @@ export const ManagersRemoveAccessPopup = ({ popupVisible, onClose, user }: Remov
     name: {
       content: () => (
         <StyledFlexTopCenter>
-          {image ? <StyledSmallAppletImg src={image} alt="Applet image" /> : <StyledSmallAppletImgPlaceholder />}
+          {image ? (
+            <StyledSmallAppletImg src={image} alt="Applet image" />
+          ) : (
+            <StyledSmallAppletImgPlaceholder />
+          )}
           <StyledLabelLarge>{displayName}</StyledLabelLarge>
         </StyledFlexTopCenter>
       ),
@@ -175,7 +183,9 @@ export const ManagersRemoveAccessPopup = ({ popupVisible, onClose, user }: Remov
 
   const getThirdMultipleScreen = () => (
     <>
-      <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4), color: variables.palette.semantic.error }}>
+      <StyledBodyLarge
+        sx={{ marginBottom: theme.spacing(2.4), color: variables.palette.semantic.error }}
+      >
         <Trans i18nKey="multipleRemoveAccessError">
           Access for
           <strong>

@@ -35,7 +35,9 @@ describe('TextInputOption', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('*Required')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('builder-activity-items-item-configuration-text-input-option-remove'));
+    fireEvent.click(
+      screen.getByTestId('builder-activity-items-item-configuration-text-input-option-remove'),
+    );
 
     expect(onRemove).toHaveBeenCalledTimes(1);
   });
@@ -44,7 +46,9 @@ describe('TextInputOption', () => {
     render(<TextInputOptionComponent />);
 
     expect(screen.getByText('Additional Text Input Option')).toBeInTheDocument();
-    expect(screen.getByText('The respondent will be able to enter an additional text response')).toBeInTheDocument();
+    expect(
+      screen.getByText('The respondent will be able to enter an additional text response'),
+    ).toBeInTheDocument();
     expect(screen.queryByText('*Required')).toBeNull();
   });
 });

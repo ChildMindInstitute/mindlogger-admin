@@ -3,7 +3,12 @@ import { renderHook } from '@testing-library/react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
-import { mockedActivityId, mockedAppletData, mockedAppletId, mockedSingleSelectFormValues } from 'shared/mock';
+import {
+  mockedActivityId,
+  mockedAppletData,
+  mockedAppletId,
+  mockedSingleSelectFormValues,
+} from 'shared/mock';
 import { Path } from 'shared/utils';
 
 import { useRedirectIfNoMatchedActivityItem } from './useRedirectIfNoMatchedActivityItem';

@@ -33,14 +33,21 @@ describe('exportDataSucceed', () => {
   };
 
   test('check actions with empty data', async () => {
-    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '' })(undefined);
+    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '' })(
+      undefined,
+    );
 
     expect(prepareDataUtils.prepareData).not.toHaveBeenCalled();
   });
   test('check actions with default data', async () => {
-    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '-test' })(mockedExportData);
+    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '-test' })(
+      mockedExportData,
+    );
 
-    expect(prepareDataUtils.prepareData).toHaveBeenCalledWith(mockedExportData, mockedGetDecryptedAnswers);
+    expect(prepareDataUtils.prepareData).toHaveBeenCalledWith(
+      mockedExportData,
+      mockedGetDecryptedAnswers,
+    );
     expect(exportTemplateUtils.exportTemplate).toHaveBeenCalledTimes(2);
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(1, {
       data: [],
@@ -92,14 +99,26 @@ describe('exportDataSucceed', () => {
       fileName: 'activity_user_journey-test',
     });
     expect(exportCsvZipUtils.exportCsvZip).toHaveBeenCalledTimes(4);
-    expect(exportCsvZipUtils.exportCsvZip).toHaveBeenNthCalledWith(1, [], 'drawing-responses-Sat Jan 01 2000-test.zip');
+    expect(exportCsvZipUtils.exportCsvZip).toHaveBeenNthCalledWith(
+      1,
+      [],
+      'drawing-responses-Sat Jan 01 2000-test.zip',
+    );
     expect(exportCsvZipUtils.exportCsvZip).toHaveBeenNthCalledWith(
       2,
       [],
       'stability-tracker-responses-Sat Jan 01 2000-test.zip',
     );
-    expect(exportCsvZipUtils.exportCsvZip).toHaveBeenNthCalledWith(3, [], 'trails-responses-Sat Jan 01 2000-test.zip');
-    expect(exportCsvZipUtils.exportCsvZip).toHaveBeenNthCalledWith(4, [], 'flanker-responses-Sat Jan 01 2000-test.zip');
+    expect(exportCsvZipUtils.exportCsvZip).toHaveBeenNthCalledWith(
+      3,
+      [],
+      'trails-responses-Sat Jan 01 2000-test.zip',
+    );
+    expect(exportCsvZipUtils.exportCsvZip).toHaveBeenNthCalledWith(
+      4,
+      [],
+      'flanker-responses-Sat Jan 01 2000-test.zip',
+    );
     expect(exportMediaZipUtils.exportMediaZip).toHaveBeenCalledTimes(1);
     expect(exportMediaZipUtils.exportMediaZip).toHaveBeenNthCalledWith(
       1,
@@ -117,7 +136,9 @@ describe('exportDataSucceed', () => {
         activityJourneyData,
       }),
     );
-    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '' })(mockedExportData);
+    await exportDataSucceed({ getDecryptedAnswers: mockedGetDecryptedAnswers, suffix: '' })(
+      mockedExportData,
+    );
 
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(1, {
       data: reportData,

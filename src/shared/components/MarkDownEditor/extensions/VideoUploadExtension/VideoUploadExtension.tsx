@@ -84,7 +84,11 @@ export const VideoUploadExtension = ({
         }
       />
       {isPopupVisible && (
-        <SourceLinkModal title={t('videoLink')} handleClose={handlePopupClose} handleSubmit={handlePopupSubmit} />
+        <SourceLinkModal
+          title={t('videoLink')}
+          handleClose={handlePopupClose}
+          handleSubmit={handlePopupSubmit}
+        />
       )}
     </>
   );

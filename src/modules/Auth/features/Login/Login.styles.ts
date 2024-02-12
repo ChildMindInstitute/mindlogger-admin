@@ -1,6 +1,13 @@
 import { styled, Button, Box } from '@mui/material';
 
-import { theme, variables, StyledHeadline, StyledLinkBtn, StyledBodyMedium, StyledFlexAllCenter } from 'shared/styles';
+import {
+  theme,
+  variables,
+  StyledHeadline,
+  StyledLinkBtn,
+  StyledBodyMedium,
+  StyledFlexAllCenter,
+} from 'shared/styles';
 
 export const StyledWelcome = styled(StyledHeadline)`
   color: ${variables.palette.primary};

@@ -67,7 +67,9 @@ describe('Applet', () => {
     expect(addButton).toBeDisabled();
     fireEvent.mouseOver(addButton);
     await waitFor(() => {
-      expect(screen.queryByText('The user already has a Manager role with full access')).toBeInTheDocument();
+      expect(
+        screen.queryByText('The user already has a Manager role with full access'),
+      ).toBeInTheDocument();
     });
   });
 });

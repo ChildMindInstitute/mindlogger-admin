@@ -5,7 +5,11 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { WarningPopupProps } from './WarningPopup.types';
 
-export const WarningPopup = ({ popupVisible, setPopupVisible, submitCallback }: WarningPopupProps) => {
+export const WarningPopup = ({
+  popupVisible,
+  setPopupVisible,
+  submitCallback,
+}: WarningPopupProps) => {
   const { t } = useTranslation('app');
 
   const onClose = () => setPopupVisible(false);

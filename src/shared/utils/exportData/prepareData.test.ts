@@ -246,7 +246,9 @@ describe('prepareData', () => {
       ],
     };
     const getDecryptedAnswers = jest.fn();
-    jest.spyOn(getParsedAnswersFunctions, 'getParsedAnswers').mockImplementationOnce(() => mockedParsedAnswers);
+    jest
+      .spyOn(getParsedAnswersFunctions, 'getParsedAnswers')
+      .mockImplementationOnce(() => mockedParsedAnswers);
 
     const result = await prepareData(data, getDecryptedAnswers);
     expect(result).toEqual({

@@ -6,7 +6,8 @@ import { variables } from 'shared/styles/variables';
 import { SearchProps } from './Search.types';
 
 export const StyledTextField = styled(OutlinedInput)`
-  height: ${({ height }: Pick<SearchProps, 'height' | 'width' | 'background'>) => height || '4.8rem'};
+  height: ${({ height }: Pick<SearchProps, 'height' | 'width' | 'background'>) =>
+    height || '4.8rem'};
   width: ${({ width }) => width || '49.8rem'};
   background-color: ${({ background }) => background || variables.palette.outline_alfa8};
   border-radius: 2.2rem;

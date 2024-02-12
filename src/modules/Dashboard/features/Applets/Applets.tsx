@@ -40,12 +40,19 @@ export const Applets = () => {
 
   const { ownerId } = workspaces.useData() || {};
 
-  const { duplicatePopupsVisible, deletePopupVisible, transferOwnershipPopupVisible, publishConcealPopupVisible } =
-    popups.useData();
+  const {
+    duplicatePopupsVisible,
+    deletePopupVisible,
+    transferOwnershipPopupVisible,
+    publishConcealPopupVisible,
+  } = popups.useData();
 
-  const { fetchData, isLoading, count, expandedFolders, expandFolder, collapseFolder } = useAppletsWithFolders(setRows);
+  const { fetchData, isLoading, count, expandedFolders, expandFolder, collapseFolder } =
+    useAppletsWithFolders(setRows);
 
-  const { handleSearch, searchValue, ...tableProps } = useTable(async (params) => await fetchData(params));
+  const { handleSearch, searchValue, ...tableProps } = useTable(
+    async (params) => await fetchData(params),
+  );
 
   const folders = rows.filter((row) => row.isFolder) as Folder[];
 
@@ -168,7 +175,9 @@ export const Applets = () => {
           {...tableProps}
         />
         {duplicatePopupsVisible && <DuplicatePopups onCloseCallback={onCloseCallback} />}
-        {deletePopupVisible && <DeletePopup onCloseCallback={onCloseCallback} data-testid="dashboard-applets-delete" />}
+        {deletePopupVisible && (
+          <DeletePopup onCloseCallback={onCloseCallback} data-testid="dashboard-applets-delete" />
+        )}
         {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
         {publishConcealPopupVisible && <PublishConcealAppletPopup />}
       </AppletsContext.Provider>

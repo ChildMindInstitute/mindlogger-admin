@@ -27,7 +27,9 @@ describe('ReportMenu Component', () => {
   test('renders the component with activities', () => {
     const { getByText, getAllByTestId } = render(<ReportMenu activities={mockActivities} />, {
       wrapper: ({ children }) => (
-        <RespondentDataContext.Provider value={mockContextValue}>{children}</RespondentDataContext.Provider>
+        <RespondentDataContext.Provider value={mockContextValue}>
+          {children}
+        </RespondentDataContext.Provider>
       ),
     });
 
@@ -42,7 +44,9 @@ describe('ReportMenu Component', () => {
   test('invokes setSelectedActivity when an activity is clicked', () => {
     const { getByTestId } = render(<ReportMenu activities={mockActivities} />, {
       wrapper: ({ children }) => (
-        <RespondentDataContext.Provider value={mockContextValue}>{children}</RespondentDataContext.Provider>
+        <RespondentDataContext.Provider value={mockContextValue}>
+          {children}
+        </RespondentDataContext.Provider>
       ),
     });
 

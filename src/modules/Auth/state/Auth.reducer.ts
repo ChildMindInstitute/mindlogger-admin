@@ -4,7 +4,11 @@ import { ApiErrorReturn } from 'shared/state/Base';
 
 import { AuthSchema } from './Auth.schema';
 import { signIn, getUserDetails } from './Auth.thunk';
-import { createAuthFulfilledData, createAuthPendingData, createAuthRejectedData } from './Auth.utils';
+import {
+  createAuthFulfilledData,
+  createAuthPendingData,
+  createAuthRejectedData,
+} from './Auth.utils';
 import { state as initialState } from './Auth.state';
 
 export const reducers = {

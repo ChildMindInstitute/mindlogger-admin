@@ -1,4 +1,9 @@
-import { MediaType, VALID_AUDIO_FILE_TYPES, VALID_IMAGE_TYPES, VALID_VIDEO_FILE_TYPES } from 'shared/consts';
+import {
+  MediaType,
+  VALID_AUDIO_FILE_TYPES,
+  VALID_IMAGE_TYPES,
+  VALID_VIDEO_FILE_TYPES,
+} from 'shared/consts';
 
 export const validFileExtensionsByType = {
   [MediaType.Image]: VALID_IMAGE_TYPES,

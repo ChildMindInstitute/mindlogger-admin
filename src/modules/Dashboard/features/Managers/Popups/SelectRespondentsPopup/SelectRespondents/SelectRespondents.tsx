@@ -14,7 +14,11 @@ import { filterTableRows, getHeadCells } from './SelectRespondents.utils';
 import { Select } from './Select';
 import { getSelectedRespondentsLength } from '../SelectRespondentsPopup.utils';
 
-export const SelectRespondents = ({ reviewer: { name, email }, appletName, respondents }: SelectRespondentsProps) => {
+export const SelectRespondents = ({
+  reviewer: { name, email },
+  appletName,
+  respondents,
+}: SelectRespondentsProps) => {
   const { t } = useTranslation('app');
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [tableRows, setTableRows] = useState<Row[] | null>(null);
@@ -80,7 +84,13 @@ export const SelectRespondents = ({ reviewer: { name, email }, appletName, respo
     await respondents.forEach(({ id }) => {
       setValue(id, checked);
     });
-    filterTableRows(searchAcrossValue.current, getValues(), searchValue.current, setTableRows, rows);
+    filterTableRows(
+      searchAcrossValue.current,
+      getValues(),
+      searchValue.current,
+      setTableRows,
+      rows,
+    );
   };
 
   const selectedRespondentsLength = getSelectedRespondentsLength(formValues);
@@ -156,7 +166,9 @@ export const SelectRespondents = ({ reviewer: { name, email }, appletName, respo
           emptyComponent={renderEmptyComponent()}
         />
       </form>
-      <StyledBodyMedium sx={{ marginTop: theme.spacing(1.2), color: variables.palette.on_surface_variant }}>
+      <StyledBodyMedium
+        sx={{ marginTop: theme.spacing(1.2), color: variables.palette.on_surface_variant }}
+      >
         {renderSelectedRespondents()}
       </StyledBodyMedium>
     </>

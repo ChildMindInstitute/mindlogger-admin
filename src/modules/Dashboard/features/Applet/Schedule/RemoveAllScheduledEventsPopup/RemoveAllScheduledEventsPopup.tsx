@@ -37,8 +37,8 @@ export const RemoveAllScheduledEventsPopup = ({
             <strong>
               <> {{ activityName }} </>
             </strong>
-            will be removed, and the activity will become always available to the user. Are you sure you want to
-            continue?
+            will be removed, and the activity will become always available to the user. Are you sure
+            you want to continue?
           </Trans>
         </StyledModalWrapper>
       </>

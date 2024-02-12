@@ -53,7 +53,11 @@ describe('pluck', () => {
     { name: 'Jane', age: 30 },
     { name: 'Bob', age: 22 },
   ];
-  const array2 = [{ person: { name: 'John' } }, { person: { name: 'Jane' } }, { person: { name: 'Bob' } }];
+  const array2 = [
+    { person: { name: 'John' } },
+    { person: { name: 'Jane' } },
+    { person: { name: 'Bob' } },
+  ];
   const expected = ['John', 'Jane', 'Bob'];
 
   test.each`

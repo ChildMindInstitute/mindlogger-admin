@@ -56,14 +56,22 @@ export const ConditionRow = ({
   const conditionPayloadMaxValueName = `${conditionPayloadName}.maxValue`;
 
   const [conditions, items, reports, conditionItem, conditionType, conditionPayload] = useWatch({
-    name: [conditionsName, itemsName, reportsName, conditionItemName, conditionTypeName, conditionPayloadName],
+    name: [
+      conditionsName,
+      itemsName,
+      reportsName,
+      conditionItemName,
+      conditionTypeName,
+      conditionPayloadName,
+    ],
   });
   const scores = reports?.filter((report: ScoreOrSection) => report.type === ScoreReportType.Score);
   const groupedItems = getObjectFromList<ItemFormValues>(items);
   const conditionItemResponseType = groupedItems[conditionItem]?.responseType;
 
   const selectedItem = groupedItems[conditionItem];
-  const selectedScore = scores?.find((score: ScoreReport) => getEntityKey(score, false) === scoreKey) ?? {};
+  const selectedScore =
+    scores?.find((score: ScoreReport) => getEntityKey(score, false) === scoreKey) ?? {};
   const options = {
     [ConditionRowType.Item]: getItemOptions(items, type),
     [ConditionRowType.Section]: [
@@ -77,7 +85,9 @@ export const ConditionRow = ({
   const handleChangeConditionItemName = useCallback(
     (event: SelectEvent) => {
       const selectedItemKey = event.target.value;
-      const selectedItem = items?.find((item: ItemFormValues) => getEntityKey(item) === selectedItemKey);
+      const selectedItem = items?.find(
+        (item: ItemFormValues) => getEntityKey(item) === selectedItemKey,
+      );
       const selectedItemIndex = items?.indexOf(selectedItem);
 
       if (conditionItemResponseType !== selectedItem?.responseType) {
@@ -125,7 +135,11 @@ export const ConditionRow = ({
   const errorMessage =
     showError &&
     error &&
-    t(Object.keys(error).length === VALIDATED_ITEMS_COUNT ? 'setUpAtLeastOneCondition' : 'setUpCorrectCondition');
+    t(
+      Object.keys(error).length === VALIDATED_ITEMS_COUNT
+        ? 'setUpAtLeastOneCondition'
+        : 'setUpCorrectCondition',
+    );
 
   return (
     <>
@@ -147,7 +161,9 @@ export const ConditionRow = ({
         type={type}
         data-testid={dataTestid}
       />
-      {errorMessage && <StyledErrorText sx={{ mt: theme.spacing(0.6) }}>{errorMessage}</StyledErrorText>}
+      {errorMessage && (
+        <StyledErrorText sx={{ mt: theme.spacing(0.6) }}>{errorMessage}</StyledErrorText>
+      )}
     </>
   );
 };

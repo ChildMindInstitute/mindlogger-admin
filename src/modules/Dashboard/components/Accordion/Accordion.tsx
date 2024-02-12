@@ -22,7 +22,11 @@ export const Accordion = ({
   const isPrimaryUiType = uiType === AccordionUiType.Primary;
 
   return (
-    <StyledItem className="accordion-container" isPrimaryUiType={isPrimaryUiType} data-testid={dataTestid}>
+    <StyledItem
+      className="accordion-container"
+      isPrimaryUiType={isPrimaryUiType}
+      data-testid={dataTestid}
+    >
       <StyledFlexTopCenter
         sx={{
           mb: theme.spacing(isPrimaryUiType ? 0 : 1),
@@ -38,7 +42,9 @@ export const Accordion = ({
         />
         <Box
           sx={{
-            fontWeight: isPrimaryUiType ? variables.font.weight.bold : variables.font.weight.regular,
+            fontWeight: isPrimaryUiType
+              ? variables.font.weight.bold
+              : variables.font.weight.regular,
           }}
           color={variables.palette.on_surface_variant}
         >

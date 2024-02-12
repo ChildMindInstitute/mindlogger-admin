@@ -45,7 +45,9 @@ export const getSelectedItemsColumns = () => [
 ];
 
 export const getScoreId = (name: string, calculationType: CalculationType) =>
-  `${scoreIdBase[calculationType]}_${(name || '').toLowerCase().replaceAll(ForbiddenScoreIdSymbols, '_')}`;
+  `${scoreIdBase[calculationType]}_${(name || '')
+    .toLowerCase()
+    .replaceAll(ForbiddenScoreIdSymbols, '_')}`;
 
 export const getScoreRangeLabel = ({ minScore, maxScore }: GetScoreRangeLabel) =>
   `${minScore.toFixed(2)} ~ ${maxScore.toFixed(2)}`;
@@ -56,20 +58,26 @@ const getItemScoreRange = (item: ItemsWithScore) => {
     item.responseType === ItemResponseType.SingleSelection ||
     item.responseType === ItemResponseType.MultipleSelection
   ) {
-    scores = item.responseValues.options?.reduce((result: number[], option: SingleAndMultiSelectOption) => {
-      if (!option.isHidden && typeof option.score === 'number') {
-        return [...result, option.score];
-      }
+    scores = item.responseValues.options?.reduce(
+      (result: number[], option: SingleAndMultiSelectOption) => {
+        if (!option.isHidden && typeof option.score === 'number') {
+          return [...result, option.score];
+        }
 
-      return result;
-    }, []) as number[];
+        return result;
+      },
+      [],
+    ) as number[];
   } else {
     scores = item.responseValues.scores as number[];
   }
 
   let maxScore = 0;
   const minScore = Math.min(...scores);
-  if (item.responseType === ItemResponseType.SingleSelection || item.responseType === ItemResponseType.Slider) {
+  if (
+    item.responseType === ItemResponseType.SingleSelection ||
+    item.responseType === ItemResponseType.Slider
+  ) {
     maxScore = Math.max(...scores);
   } else if (item.responseType === ItemResponseType.MultipleSelection) {
     maxScore = scores.reduce((acc, score) => (score > 0 ? acc + score : acc), 0);
@@ -166,7 +174,14 @@ export const getIsScoreIdVariable = ({ id, reports, isScore }: GetIsScoreIdVaria
   return isVariable;
 };
 
-const updateMessage = ({ setValue, fieldName, id, newScoreId, showMessage, message }: UpdateMessage) => {
+const updateMessage = ({
+  setValue,
+  fieldName,
+  id,
+  newScoreId,
+  showMessage,
+  message,
+}: UpdateMessage) => {
   if (showMessage && message) {
     setValue(`${fieldName}.message`, message.replaceAll(`[[${id}]]`, `[[${newScoreId}]]`));
   }
@@ -218,7 +233,12 @@ export const updateMessagesWithVariable = ({
   });
 };
 
-export const updateScoreConditionIds = ({ setValue, conditionsName, conditions, scoreId }: UpdateScoreConditionIds) => {
+export const updateScoreConditionIds = ({
+  setValue,
+  conditionsName,
+  conditions,
+  scoreId,
+}: UpdateScoreConditionIds) => {
   conditions?.forEach((condition, index) => {
     setValue(`${conditionsName}.${index}.id`, getScoreConditionId(scoreId, condition.name));
   });

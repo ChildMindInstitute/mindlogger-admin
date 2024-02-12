@@ -26,7 +26,8 @@ export const useExpandedLists = (
   const dispatch = useAppDispatch();
   const scheduledVisibility = calendarEvents.useScheduledVisibilityData();
   const availableVisibility = calendarEvents.useAvailableVisibilityData();
-  const { setAvailableVisibility, setScheduledVisibility, createCalendarEvents } = calendarEvents.actions;
+  const { setAvailableVisibility, setScheduledVisibility, createCalendarEvents } =
+    calendarEvents.actions;
 
   if (!legendEvents) return;
 
@@ -82,7 +83,9 @@ export const useExpandedLists = (
           disabled: noScheduledEvents,
         },
         {
-          icon: <Svg id={scheduledVisibility ? 'visibility-on' : 'visibility-off'} {...commonProps} />,
+          icon: (
+            <Svg id={scheduledVisibility ? 'visibility-on' : 'visibility-off'} {...commonProps} />
+          ),
           action: handleScheduledVisibilityChange,
           tooltipTitle: t(scheduledVisibility ? 'hideFromCalendar' : 'showOnCalendar'),
           disabled: noScheduledEvents,
@@ -95,7 +98,9 @@ export const useExpandedLists = (
     {
       buttons: [
         {
-          icon: <Svg id={availableVisibility ? 'visibility-on' : 'visibility-off'} {...commonProps} />,
+          icon: (
+            <Svg id={availableVisibility ? 'visibility-on' : 'visibility-off'} {...commonProps} />
+          ),
           action: handleAvailableVisibilityChange,
           tooltipTitle: t(availableVisibility ? 'hideFromCalendar' : 'showOnCalendar'),
           disabled: noAvailableEvents,

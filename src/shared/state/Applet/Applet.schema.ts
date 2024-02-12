@@ -14,7 +14,13 @@ import {
   ScoreReportType,
 } from 'shared/consts';
 import { Encryption } from 'shared/utils/encryption';
-import { CorrectPress, RoundTypeEnum, FlankerSamplingMethod, DeviceType, OrderName } from 'modules/Builder/types';
+import {
+  CorrectPress,
+  RoundTypeEnum,
+  FlankerSamplingMethod,
+  DeviceType,
+  OrderName,
+} from 'modules/Builder/types';
 
 type ActivityFlowItem = {
   activityId: string;
@@ -413,7 +419,11 @@ export type RangeValueCondition = BaseCondition & {
   };
 };
 
-export type Condition = OptionCondition | SingleValueCondition | RangeValueCondition | ScoreCondition;
+export type Condition =
+  | OptionCondition
+  | SingleValueCondition
+  | RangeValueCondition
+  | ScoreCondition;
 
 export type ConditionalLogic = {
   match: ConditionalLogicMatch;

@@ -19,7 +19,13 @@ import { SectionScoreCommonFields } from '../SectionScoreCommonFields';
 import { defaultConditionalValue } from './SectionContent.const';
 import { RemoveConditionalLogicPopup } from '../RemoveConditionalLogicPopup';
 
-export const SectionContent = ({ name, title, sectionId, 'data-testid': dataTestid, items }: SectionContentProps) => {
+export const SectionContent = ({
+  name,
+  title,
+  sectionId,
+  'data-testid': dataTestid,
+  items,
+}: SectionContentProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const conditionalLogicName = `${name}.conditionalLogic`;
@@ -78,7 +84,12 @@ export const SectionContent = ({ name, title, sectionId, 'data-testid': dataTest
           </StyledButton>
         )}
       </Box>
-      <SectionScoreCommonFields name={name} sectionId={sectionId} data-testid={dataTestid} items={items} />
+      <SectionScoreCommonFields
+        name={name}
+        sectionId={sectionId}
+        data-testid={dataTestid}
+        items={items}
+      />
       {isRemoveConditionalPopupVisible && (
         <RemoveConditionalLogicPopup
           onClose={() => setIsRemoveConditionalPopupVisible(false)}

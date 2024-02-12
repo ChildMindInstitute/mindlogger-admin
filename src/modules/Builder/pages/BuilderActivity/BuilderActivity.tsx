@@ -20,14 +20,16 @@ export const BuilderActivity = () => {
   const { trigger, getFieldState } = useCustomFormContext();
   const isPerformanceTask = activity?.isPerformanceTask;
 
-  const navigateToActivities = () => navigate(generatePath(page.builderAppletActivities, { appletId }));
+  const navigateToActivities = () =>
+    navigate(generatePath(page.builderAppletActivities, { appletId }));
 
   const handleBackBtnClick = async () => {
     await trigger();
     navigateToActivities();
   };
 
-  const hasAppletErrors = !!getFieldState('activityFlows').error || !!getFieldState('displayName').error;
+  const hasAppletErrors =
+    !!getFieldState('activityFlows').error || !!getFieldState('displayName').error;
   const tabErrors = {
     hasAboutActivityErrors: !!getFieldState(`${fieldName}.name`).error,
     hasActivityItemsErrors: !!getFieldState(`${fieldName}.items`).error,
@@ -52,7 +54,9 @@ export const BuilderActivity = () => {
             <StyledWrapper>
               <StyledConfig>
                 <Svg id="configure-filled" />
-                <StyledTitleSmall color={variables.palette.primary}>{t('configure')}</StyledTitleSmall>
+                <StyledTitleSmall color={variables.palette.primary}>
+                  {t('configure')}
+                </StyledTitleSmall>
               </StyledConfig>
             </StyledWrapper>
             <Outlet />

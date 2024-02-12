@@ -13,7 +13,9 @@ export const useSubscaleLookupTableSetup = ({
   tableData,
   schema,
 }: LookupTableSetupHookProps) => {
-  const [modalType, setModalType] = useState<ModalType>(tableData?.length ? ModalType.Edit : ModalType.Upload);
+  const [modalType, setModalType] = useState<ModalType>(
+    tableData?.length ? ModalType.Edit : ModalType.Upload,
+  );
   const [step, setStep] = useState<Steps>(0);
   const [data, setData] = useState<DataTableItem[]>();
   const [error, setError] = useState<JSX.Element | null>(null);

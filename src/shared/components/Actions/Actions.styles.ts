@@ -25,8 +25,13 @@ export const StyledActions = styled(Box, shouldForwardProp)`
 export const StyledActionButton = styled(StyledClearedButton, shouldForwardProp)`
   height: 4rem;
   border-radius: ${variables.borderRadius.half};
-  background-color: ${({ isActive }: { isActive: boolean; disabled: boolean; isVisible: boolean | undefined }) =>
-    isActive ? variables.palette.secondary_container : 'transparent'};
+  background-color: ${({
+    isActive,
+  }: {
+    isActive: boolean;
+    disabled: boolean;
+    isVisible: boolean | undefined;
+  }) => (isActive ? variables.palette.secondary_container : 'transparent')};
 
   ${({ isVisible }) => `
     opacity: ${isVisible ? 1 : 0};
@@ -39,7 +44,8 @@ export const StyledActionButton = styled(StyledClearedButton, shouldForwardProp)
   }
 
   svg {
-    fill: ${({ disabled }) => (disabled ? variables.palette.surface_variant : variables.palette.on_surface_variant)};
+    fill: ${({ disabled }) =>
+      disabled ? variables.palette.surface_variant : variables.palette.on_surface_variant};
   }
 `;
 

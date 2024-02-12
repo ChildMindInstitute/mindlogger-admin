@@ -47,7 +47,9 @@ const onChange = jest.fn();
 
 describe('MultipleSelection', () => {
   test('renders the single selection component with images and labels', async () => {
-    renderWithProviders(<SingleSelection onChange={onChange} data-testid={dataTestid} activityItem={activityItem} />);
+    renderWithProviders(
+      <SingleSelection onChange={onChange} data-testid={dataTestid} activityItem={activityItem} />,
+    );
 
     const singleSelect = screen.getByTestId(dataTestid);
     expect(singleSelect).toBeInTheDocument();

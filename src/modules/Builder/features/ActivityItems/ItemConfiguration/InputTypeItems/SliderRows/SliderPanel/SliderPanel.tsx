@@ -43,7 +43,13 @@ const commonUploaderProps = {
   uiType: UploaderUiType.Secondary,
 };
 
-export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }: SliderPanelProps) => {
+export const SliderPanel = ({
+  name,
+  label,
+  index,
+  isMultiple = false,
+  onRemove,
+}: SliderPanelProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const sliderName = `${name}.responseValues${isMultiple ? `.rows.${index}` : ''}`;
@@ -73,7 +79,9 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
   const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-  const defaultMinNumberValue = isMultiple ? DEFAULT_SLIDER_ROWS_MIN_NUMBER : DEFAULT_SLIDER_MIN_NUMBER;
+  const defaultMinNumberValue = isMultiple
+    ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
+    : DEFAULT_SLIDER_MIN_NUMBER;
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const validationCheck =
@@ -124,7 +132,12 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
     const value = event.target.value === '' ? '' : +event.target.value;
     await setValue(minValueName, value);
     clearErrors([minValueName, maxValueName]);
-    if (value !== '' && value < maxValue && value >= defaultMinNumberValue && maxValue <= DEFAULT_SLIDER_MAX_NUMBER) {
+    if (
+      value !== '' &&
+      value < maxValue &&
+      value >= defaultMinNumberValue &&
+      maxValue <= DEFAULT_SLIDER_MAX_NUMBER
+    ) {
       setScoresAndAlertsChange({
         minValue: value,
         ...commonSetScoresMinProps,
@@ -140,7 +153,11 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
   const handleMinValueArrowPress = (value: number) => {
     setValue(minValueName, value);
     clearErrors([minValueName, maxValueName]);
-    if (value < maxValue && value >= defaultMinNumberValue && maxValue <= DEFAULT_SLIDER_MAX_NUMBER) {
+    if (
+      value < maxValue &&
+      value >= defaultMinNumberValue &&
+      maxValue <= DEFAULT_SLIDER_MAX_NUMBER
+    ) {
       setScoresAndAlertsChange({
         minValue: value,
         ...commonSetScoresMinProps,
@@ -157,7 +174,12 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
     const value = event.target.value === '' ? '' : +event.target.value;
     clearErrors([minValueName, maxValueName]);
     setValue(maxValueName, value);
-    if (value !== '' && value > minValue && value <= DEFAULT_SLIDER_MAX_NUMBER && minValue >= defaultMinNumberValue) {
+    if (
+      value !== '' &&
+      value > minValue &&
+      value <= DEFAULT_SLIDER_MAX_NUMBER &&
+      minValue >= defaultMinNumberValue
+    ) {
       setScoresAndAlertsChange({
         maxValue: value,
         ...commonSetScoresMaxProps,
@@ -173,7 +195,11 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
   const handleMaxValueArrowPress = (value: number) => {
     setValue(maxValueName, value);
     clearErrors([minValueName, maxValueName]);
-    if (value > minValue && value <= DEFAULT_SLIDER_MAX_NUMBER && minValue >= defaultMinNumberValue) {
+    if (
+      value > minValue &&
+      value <= DEFAULT_SLIDER_MAX_NUMBER &&
+      minValue >= defaultMinNumberValue
+    ) {
       setScoresAndAlertsChange({
         maxValue: value,
         ...commonSetScoresMaxProps,
@@ -193,7 +219,11 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
       validationCheck ? maxValue : DEFAULT_SLIDER_MAX_VALUE,
       hasTickMarksLabels,
     );
-  const dataTestid = concatIf('builder-activity-items-item-configuration-slider', `-rows-${index}`, isMultiple);
+  const dataTestid = concatIf(
+    'builder-activity-items-item-configuration-slider',
+    `-rows-${index}`,
+    isMultiple,
+  );
 
   const handleLabelChange = useFieldLengthError();
 
@@ -320,7 +350,12 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
           {hasScores && (
             <>
               <StyledScoresContainer>
-                <Table columns={getStaticHeadRow()} rows={getStaticBodyRow()} orderBy="0" uiType={UiType.Secondary} />
+                <Table
+                  columns={getStaticHeadRow()}
+                  rows={getStaticBodyRow()}
+                  orderBy="0"
+                  uiType={UiType.Secondary}
+                />
                 <StyledTable
                   columns={tableColumns}
                   rows={getTableRows(scores, sliderName, `${dataTestid}-scores-table`)}
@@ -330,7 +365,10 @@ export const SliderPanel = ({ name, label, index, isMultiple = false, onRemove }
                 />
               </StyledScoresContainer>
               {scoresError && (
-                <StyledBodySmall sx={{ p: theme.spacing(0.5, 0, 0, 0) }} color={variables.palette.semantic.error}>
+                <StyledBodySmall
+                  sx={{ p: theme.spacing(0.5, 0, 0, 0) }}
+                  color={variables.palette.semantic.error}
+                >
                   {t('numberValueIsRequired')}
                 </StyledBodySmall>
               )}

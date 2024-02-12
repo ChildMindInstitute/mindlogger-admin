@@ -24,9 +24,16 @@ describe('ConditionContent', () => {
         ),
       });
 
-      const componentsTestIds = ['condition-0', 'condition-1', 'add-condition', 'summary-row-match'];
+      const componentsTestIds = [
+        'condition-0',
+        'condition-1',
+        'add-condition',
+        'summary-row-match',
+      ];
 
-      componentsTestIds.forEach((testId) => expect(screen.getByTestId(`${dataTestId}-${testId}`)).toBeInTheDocument());
+      componentsTestIds.forEach((testId) =>
+        expect(screen.getByTestId(`${dataTestId}-${testId}`)).toBeInTheDocument(),
+      );
     });
   });
 
@@ -51,7 +58,9 @@ describe('ConditionContent', () => {
 
       expect(screen.getByTestId(`${dataTestId}-condition-2`)).toBeInTheDocument();
       if (type === ConditionRowType.Score) {
-        const itemName = screen.getByTestId(`${dataTestId}-condition-2-name`).querySelector('input');
+        const itemName = screen
+          .getByTestId(`${dataTestId}-condition-2-name`)
+          .querySelector('input');
         itemName && expect(itemName.value).toBe(mockedScoreReport.key);
       }
     });
@@ -75,10 +84,14 @@ describe('ConditionContent', () => {
       });
 
       [0, 1].forEach((conditionNumber) => {
-        const itemName = screen.getByTestId(`${dataTestId}-condition-${conditionNumber}-name`).querySelector('input');
+        const itemName = screen
+          .getByTestId(`${dataTestId}-condition-${conditionNumber}-name`)
+          .querySelector('input');
         itemName && expect(itemName.value).toBe(conditions[conditionNumber].itemName);
 
-        const type = screen.getByTestId(`${dataTestId}-condition-${conditionNumber}-type`).querySelector('input');
+        const type = screen
+          .getByTestId(`${dataTestId}-condition-${conditionNumber}-type`)
+          .querySelector('input');
         type && expect(type.value).toBe(conditions[conditionNumber].type);
       });
     });

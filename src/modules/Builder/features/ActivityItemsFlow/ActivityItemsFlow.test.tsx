@@ -67,7 +67,11 @@ const mockedAppletWithAllItemTypes = {
     },
   ],
 };
-const mockedOrderedConditionNameItems = [mockedSingleActivityItem, mockedMultiActivityItem, mockedSliderActivityItem];
+const mockedOrderedConditionNameItems = [
+  mockedSingleActivityItem,
+  mockedMultiActivityItem,
+  mockedSliderActivityItem,
+];
 const mockedOrderedSummaryItemItems = [
   mockedSingleActivityItem,
   mockedMultiActivityItem,
@@ -118,7 +122,9 @@ describe('Activity Items Flow', () => {
     });
 
     expect(
-      screen.getByText('To determine the order of transition from one Item to another, an Item Flow can be created.'),
+      screen.getByText(
+        'To determine the order of transition from one Item to another, an Item Flow can be created.',
+      ),
     ).toBeVisible();
 
     const addItemFlow = screen.getByTestId(`${mockedTestid}-add`);
@@ -216,7 +222,9 @@ describe('Activity Items Flow', () => {
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 
-    fireEvent.mouseDown(screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'));
+    fireEvent.mouseDown(
+      screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
+    );
     const nameDropdown = screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`);
     expect(nameDropdown).toBeVisible();
 
@@ -234,7 +242,9 @@ describe('Activity Items Flow', () => {
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
 
-    fireEvent.mouseDown(screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'));
+    fireEvent.mouseDown(
+      screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
+    );
     const itemDropdown = screen.getByTestId(`${mockedTestid}-0-summary-item-dropdown`);
     expect(itemDropdown).toBeVisible();
 
@@ -272,22 +282,38 @@ describe('Activity Items Flow', () => {
       renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
       fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
-      fireEvent.mouseDown(screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'));
-      fireEvent.click(
-        screen.getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`).querySelector('li:nth-child(2)'),
+      fireEvent.mouseDown(
+        screen.getByTestId(`${mockedTestid}-0-condition-0-name`).querySelector('[role="button"]'),
       );
-      fireEvent.mouseDown(screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'));
-      fireEvent.click(screen.getByTestId(`${mockedTestid}-0-summary-item-dropdown`).querySelector('li'));
+      fireEvent.click(
+        screen
+          .getByTestId(`${mockedTestid}-0-condition-0-name-dropdown`)
+          .querySelector('li:nth-child(2)'),
+      );
+      fireEvent.mouseDown(
+        screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
+      );
+      fireEvent.click(
+        screen.getByTestId(`${mockedTestid}-0-summary-item-dropdown`).querySelector('li'),
+      );
 
       await waitFor(() => {
         const error = screen.getByTestId(`${mockedTestid}-0-error`);
 
         expect(error).toBeVisible();
-        expect(error).toHaveTextContent('Selected position of the Item in the list contradicts the Item Flow');
+        expect(error).toHaveTextContent(
+          'Selected position of the Item in the list contradicts the Item Flow',
+        );
       });
 
-      fireEvent.mouseDown(screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'));
-      fireEvent.click(screen.getByTestId(`${mockedTestid}-0-summary-item-dropdown`).querySelector('li:last-child'));
+      fireEvent.mouseDown(
+        screen.getByTestId(`${mockedTestid}-0-summary-item`).querySelector('[role="button"]'),
+      );
+      fireEvent.click(
+        screen
+          .getByTestId(`${mockedTestid}-0-summary-item-dropdown`)
+          .querySelector('li:last-child'),
+      );
 
       await waitFor(() => {
         expect(screen.queryByTestId(`${mockedTestid}-0-error`)).not.toBeInTheDocument();

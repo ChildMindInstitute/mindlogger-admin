@@ -7,7 +7,12 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
 import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
-import { mockedActivityId, mockedAppletFormData, mockedAppletId, mockedSingleSelectFormValues } from 'shared/mock';
+import {
+  mockedActivityId,
+  mockedAppletFormData,
+  mockedAppletId,
+  mockedSingleSelectFormValues,
+} from 'shared/mock';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ItemConfiguration } from '../ItemConfiguration';
@@ -53,10 +58,12 @@ export const getAppletFormDataWithItemWithPalette = (paletteName) => {
     responseValues: {
       ...mockedSingleSelectFormValues.responseValues,
       paletteName,
-      options: mockedSingleSelectFormValues.responseValues.options.slice(0, 2).map((option, index) => ({
-        ...option,
-        color: { hex: index === 0 ? '#005f73' : '#0a9396' },
-      })),
+      options: mockedSingleSelectFormValues.responseValues.options
+        .slice(0, 2)
+        .map((option, index) => ({
+          ...option,
+          color: { hex: index === 0 ? '#005f73' : '#0a9396' },
+        })),
     },
     config: {
       ...mockedSingleSelectFormValues.config,
@@ -131,7 +138,9 @@ export const setItemConfigSetting = async (setting) => {
   fireEvent.click(closeButton);
 };
 
-export const renderItemConfiguration = (name = mockedItemName) => <ItemConfiguration name={name} onClose={jest.fn()} />;
+export const renderItemConfiguration = (name = mockedItemName) => (
+  <ItemConfiguration name={name} onClose={jest.fn()} />
+);
 
 export const renderItemConfigurationByType = (responseType) => {
   const ref = createRef();

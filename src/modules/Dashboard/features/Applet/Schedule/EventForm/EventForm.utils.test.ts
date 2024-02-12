@@ -20,7 +20,12 @@ import {
   activityAvailabilityAtDayTest,
   reminderTimeTest,
 } from './EventForm.utils';
-import { DEFAULT_END_TIME, DEFAULT_IDLE_TIME, DEFAULT_START_TIME, DEFAULT_TIMER_DURATION } from './EventForm.const';
+import {
+  DEFAULT_END_TIME,
+  DEFAULT_IDLE_TIME,
+  DEFAULT_START_TIME,
+  DEFAULT_TIMER_DURATION,
+} from './EventForm.const';
 import { SecondsManipulation } from './EventForm.types';
 
 const mockedEvent = {
@@ -149,9 +154,14 @@ describe('EventForm.utils', () => {
       ${false} | ${false} | ${defaultStartDate} | ${mockedEvent.start} | ${null}            | ${mockedEvent} | ${expected3} | ${'event start and end date equal to null if edited event is defined and event end is null'}
       ${false} | ${false} | ${defaultStartDate} | ${mockedEvent.start} | ${null}            | ${undefined}   | ${expected4} | ${'event start and computed end date if edited event is undefined and event end is null'}
       ${false} | ${false} | ${defaultStartDate} | ${undefined}         | ${mockedEvent.end} | ${mockedEvent} | ${expected5} | ${'default start date if event start is not provided'}
-    `('$description', ({ isOnce, isAlways, defaultStartDate, eventStart, eventEnd, editedEvent, expected }) => {
-      expect(getStartEndDates(isOnce, isAlways, defaultStartDate, eventStart, eventEnd, editedEvent)).toEqual(expected);
-    });
+    `(
+      '$description',
+      ({ isOnce, isAlways, defaultStartDate, eventStart, eventEnd, editedEvent, expected }) => {
+        expect(
+          getStartEndDates(isOnce, isAlways, defaultStartDate, eventStart, eventEnd, editedEvent),
+        ).toEqual(expected);
+      },
+    );
   });
 
   describe('getDefaultValues', () => {
@@ -218,7 +228,10 @@ describe('EventForm.utils', () => {
         timerDuration: convertSecondsToHHmmString(editedEvent.timer),
         idleTime: DEFAULT_IDLE_TIME,
         periodicity: editedEvent.periodicity,
-        notifications: getNotifications(SecondsManipulation.RemoveSeconds, editedEvent.notification.notifications),
+        notifications: getNotifications(
+          SecondsManipulation.RemoveSeconds,
+          editedEvent.notification.notifications,
+        ),
         reminder: getReminder({
           type: SecondsManipulation.RemoveSeconds,
           reminder: editedEvent.notification.reminder,
@@ -241,7 +254,9 @@ describe('EventForm.utils', () => {
     `(
       'time=$time, rangeStart=$rangeStartTime, rangeStart=$rangeEndTime:',
       ({ time, rangeStartTime, rangeEndTime, expected }) => {
-        expect(getBetweenStartEndNextDaySingleComparison({ time, rangeStartTime, rangeEndTime })).toBe(expected);
+        expect(
+          getBetweenStartEndNextDaySingleComparison({ time, rangeStartTime, rangeEndTime }),
+        ).toBe(expected);
       },
     );
   });
@@ -565,8 +580,11 @@ describe('EventForm.utils', () => {
       ${'15:50'}   | ${testContext12} | ${false} | ${'Weekdays periodicity cross-day: first day and time is outside startTime and 23:59'}
       ${'09:30'}   | ${testContext13} | ${true}  | ${'Weekdays periodicity cross-day: last day and and time is between 00:00 and endTime'}
       ${'10:01'}   | ${testContext13} | ${false} | ${'Weekdays periodicity cross-day: last day and time is outside 00:00 and endTime'}
-    `('$description, reminderTime=$reminderTime, expected=$expected', ({ reminderTime, testContext, expected }) => {
-      expect(reminderTimeTest(reminderTime, testContext)).toBe(expected);
-    });
+    `(
+      '$description, reminderTime=$reminderTime, expected=$expected',
+      ({ reminderTime, testContext, expected }) => {
+        expect(reminderTimeTest(reminderTime, testContext)).toBe(expected);
+      },
+    );
   });
 });

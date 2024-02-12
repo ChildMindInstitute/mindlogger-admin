@@ -2,7 +2,13 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
-import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedEncryption, mockedOwnerId } from 'shared/mock';
+import {
+  mockedApplet,
+  mockedAppletId,
+  mockedCurrentWorkspace,
+  mockedEncryption,
+  mockedOwnerId,
+} from 'shared/mock';
 import { initialStateData } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
 import { ApiResponseCodes } from 'api';
@@ -138,7 +144,9 @@ describe('Applets component tests', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('No Applets yet. Create your first one by clicking the ‘Add Applet’ button above.'),
+        screen.getByText(
+          'No Applets yet. Create your first one by clicking the ‘Add Applet’ button above.',
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -191,11 +199,16 @@ describe('Applets component tests', () => {
       mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
       renderWithProviders(<Applets />, { preloadedState: getPreloadedState() });
 
-      const addAppletButton = await waitFor(() => screen.queryByTestId('dashboard-applets-add-applet'));
+      const addAppletButton = await waitFor(() =>
+        screen.queryByTestId('dashboard-applets-add-applet'),
+      );
       addAppletButton && fireEvent.click(addAppletButton);
 
       await waitFor(() => {
-        const menuItems = ['dashboard-applets-add-applet-new', 'dashboard-applets-add-applet-from-library'];
+        const menuItems = [
+          'dashboard-applets-add-applet-new',
+          'dashboard-applets-add-applet-from-library',
+        ];
         menuItems.forEach((menuItem) => expect(screen.getByTestId(menuItem)).toBeInTheDocument());
       });
 
@@ -227,19 +240,26 @@ describe('Applets component tests', () => {
       expect(mockAxios.get).toHaveBeenNthCalledWith(3, `/workspaces/${mockedOwnerId}/folders`, {
         signal: undefined,
       });
-      expect(mockAxios.get).toHaveBeenNthCalledWith(4, `/workspaces/${mockedOwnerId}/applets/search/${searchQuery}`, {
-        params: {
-          limit: 20,
-          page: 1,
+      expect(mockAxios.get).toHaveBeenNthCalledWith(
+        4,
+        `/workspaces/${mockedOwnerId}/applets/search/${searchQuery}`,
+        {
+          params: {
+            limit: 20,
+            page: 1,
+          },
+          signal: undefined,
         },
-        signal: undefined,
-      });
+      );
     });
 
     searchInput && fireEvent.change(searchInput, { target: { value: 'NotExistedApplet' } });
     await waitFor(() => {
-      expect(screen.getByText("No match was found for 'NotExistedApplet'. Try a different search word or phrase."))
-        .toBeInTheDocument;
+      expect(
+        screen.getByText(
+          "No match was found for 'NotExistedApplet'. Try a different search word or phrase.",
+        ),
+      ).toBeInTheDocument;
     });
   });
 
@@ -287,9 +307,12 @@ describe('Applets component tests', () => {
     fireEvent.click(folder);
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenLastCalledWith(`/workspaces/${mockedOwnerId}/folders/${mockedFolderId}/applets`, {
-        signal: undefined,
-      });
+      expect(mockAxios.get).toHaveBeenLastCalledWith(
+        `/workspaces/${mockedOwnerId}/folders/${mockedFolderId}/applets`,
+        {
+          signal: undefined,
+        },
+      );
       expect(screen.getByText('Expanded Applet')).toBeInTheDocument();
     });
 

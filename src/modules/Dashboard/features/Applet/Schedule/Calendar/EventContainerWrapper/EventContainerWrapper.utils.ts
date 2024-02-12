@@ -28,7 +28,10 @@ export const getEventClassNames = (width: number, height: number) => {
   return [widthClassName, heightClassName];
 };
 
-export const getOverlappingEvents = ({ eventsArr, maxEventsQuantity }: OverlappingEventsArgs): EventInterval[] => {
+export const getOverlappingEvents = ({
+  eventsArr,
+  maxEventsQuantity,
+}: OverlappingEventsArgs): EventInterval[] => {
   const intervals: EventInterval[] = [];
   for (const currEvent of eventsArr) {
     const currEventStart = new Date(currEvent.start).getTime();
@@ -43,7 +46,10 @@ export const getOverlappingEvents = ({ eventsArr, maxEventsQuantity }: Overlappi
     }
 
     if (overlappingInterval) {
-      overlappingInterval.intervalStart = Math.min(currEventStart, overlappingInterval.intervalStart);
+      overlappingInterval.intervalStart = Math.min(
+        currEventStart,
+        overlappingInterval.intervalStart,
+      );
       overlappingInterval.intervalEnd = Math.max(currEventEnd, overlappingInterval.intervalEnd);
       overlappingInterval.eventIds.push(currEvent.id);
     } else {

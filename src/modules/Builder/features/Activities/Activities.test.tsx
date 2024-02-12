@@ -147,7 +147,9 @@ describe('Activities', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId(`${mockedTestid}-0-name`)).toHaveTextContent(name);
-        expect(screen.getByTestId(`${mockedTestid}-0-description`)).toHaveTextContent(activityDescription);
+        expect(screen.getByTestId(`${mockedTestid}-0-description`)).toHaveTextContent(
+          activityDescription,
+        );
         expect(screen.getByTestId(`${mockedTestid}-0-items-count`)).toHaveTextContent(items);
       });
     });
@@ -161,7 +163,9 @@ describe('Activities', () => {
       fireEvent.click(addActivity);
 
       expect(mockedUseNavigate).toBeCalledWith(
-        `/builder/${mockedAppletFormData.id}/activities/${ref.current.getValues('activities.0.key')}/about`,
+        `/builder/${mockedAppletFormData.id}/activities/${ref.current.getValues(
+          'activities.0.key',
+        )}/about`,
       );
 
       await waitFor(() => {
@@ -188,7 +192,9 @@ describe('Activities', () => {
       const confirmRemoveModal = screen.getByTestId('builder-activities-delete-activity-popup-0');
       expect(confirmRemoveModal).toBeVisible();
 
-      fireEvent.click(screen.getByTestId('builder-activities-delete-activity-popup-0-submit-button'));
+      fireEvent.click(
+        screen.getByTestId('builder-activities-delete-activity-popup-0-submit-button'),
+      );
 
       expect(ref.current.getValues('activities')).toEqual([]);
       expect(screen.queryAllByTestId(/^builder-activities-activity-\d+$/)).toEqual([]);
@@ -224,7 +230,9 @@ describe('Activities', () => {
         expect(screen.getByTestId(`${mockedTestid}-1`)).toBeVisible();
       });
 
-      expect(screen.getByTestId(`${mockedTestid}-1-name`)).toHaveTextContent(`${mockedEmptyActivity.name} (1)`);
+      expect(screen.getByTestId(`${mockedTestid}-1-name`)).toHaveTextContent(
+        `${mockedEmptyActivity.name} (1)`,
+      );
       expect(screen.getByTestId(`${mockedTestid}-1-description`)).toHaveTextContent(
         mockedActivityWithDescription.description,
       );
@@ -267,11 +275,15 @@ describe('Activities', () => {
 
       fireEvent.click(screen.getByTestId('builder-activities-add-perf-task'));
 
-      [mockedIPadTestid, mockedMobileTestid, mockedFlankerTestid, mockedGyroscopeTestid, mockedTouchTestid].forEach(
-        (testId) => {
-          expect(screen.getByTestId(testId)).toBeVisible();
-        },
-      );
+      [
+        mockedIPadTestid,
+        mockedMobileTestid,
+        mockedFlankerTestid,
+        mockedGyroscopeTestid,
+        mockedTouchTestid,
+      ].forEach((testId) => {
+        expect(screen.getByTestId(testId)).toBeVisible();
+      });
     });
 
     test.each`
@@ -281,30 +293,37 @@ describe('Activities', () => {
       ${PerformanceTasks.Flanker}        | ${true}        | ${'Simple & Choice Reaction Time Task Builder'} | ${'This Activity contains Flanker Item. The timestamps collected for an android are not as accurate as iOS devices.'} | ${'13 items'} | ${'Flanker'}
       ${PerformanceTasks.Gyroscope}      | ${true}        | ${'CST Gyroscope'}                              | ${'This Activity contains Stability Tracker (Gyroscope) Item.'}                                                       | ${'5 items'}  | ${'CST Gyroscope'}
       ${PerformanceTasks.Touch}          | ${true}        | ${'CST Touch'}                                  | ${'This Activity contains Stability Tracker (Touch) Item.'}                                                           | ${'5 items'}  | ${'CST Touch'}
-    `('$description', async ({ perfTaskType, shouldNavigate, name, perfTaskDescription, items }) => {
-      const ref = renderActivities(mockedAppletWithNoActivities);
+    `(
+      '$description',
+      async ({ perfTaskType, shouldNavigate, name, perfTaskDescription, items }) => {
+        const ref = renderActivities(mockedAppletWithNoActivities);
 
-      addPerfTask(perfTaskType);
+        addPerfTask(perfTaskType);
 
-      await waitFor(() => {
-        expect(screen.getByTestId(`${mockedTestid}-0`)).toBeVisible();
-      });
+        await waitFor(() => {
+          expect(screen.getByTestId(`${mockedTestid}-0`)).toBeVisible();
+        });
 
-      expect(screen.getByTestId(`${mockedTestid}-0-name`)).toHaveTextContent(name);
-      expect(screen.getByTestId(`${mockedTestid}-0-description`)).toHaveTextContent(perfTaskDescription);
-      expect(screen.getByTestId(`${mockedTestid}-0-items-count`)).toHaveTextContent(items);
-
-      if (shouldNavigate) {
-        expect(mockedUseNavigate).toBeCalledWith(
-          `/builder/${mockedAppletFormData.id}/activities/performance-task/${perfTaskType}/${ref.current.getValues(
-            'activities.0.key',
-          )}`,
+        expect(screen.getByTestId(`${mockedTestid}-0-name`)).toHaveTextContent(name);
+        expect(screen.getByTestId(`${mockedTestid}-0-description`)).toHaveTextContent(
+          perfTaskDescription,
         );
-      }
+        expect(screen.getByTestId(`${mockedTestid}-0-items-count`)).toHaveTextContent(items);
 
-      if (!shouldNavigate) {
-        expect(screen.queryByTestId(`${mockedTestid}-0-edit`)).not.toBeInTheDocument();
-      }
-    });
+        if (shouldNavigate) {
+          expect(mockedUseNavigate).toBeCalledWith(
+            `/builder/${
+              mockedAppletFormData.id
+            }/activities/performance-task/${perfTaskType}/${ref.current.getValues(
+              'activities.0.key',
+            )}`,
+          );
+        }
+
+        if (!shouldNavigate) {
+          expect(screen.queryByTestId(`${mockedTestid}-0-edit`)).not.toBeInTheDocument();
+        }
+      },
+    );
   });
 });

@@ -2,7 +2,11 @@ import { styled, Box } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { StyledFlexTopCenter, StyledFlexAllCenter, StyledIconButton } from 'shared/styles/styledComponents';
+import {
+  StyledFlexTopCenter,
+  StyledFlexAllCenter,
+  StyledIconButton,
+} from 'shared/styles/styledComponents';
 
 import { ACCOUNT_HEADER_HEIGHT, ACCOUNT_FOOTER_HEIGHT } from '../AccountPanel/AccountPanel.const';
 import { NOTIFICATIONS_HEADER_HEIGHT } from './Notifications.const';
@@ -36,7 +40,10 @@ export const StyledCollapseBtn = styled(StyledIconButton)`
 `;
 
 export const StyledList = styled(Box)`
-  height: calc(100vh - ${ACCOUNT_HEADER_HEIGHT} - ${ACCOUNT_FOOTER_HEIGHT} - ${NOTIFICATIONS_HEADER_HEIGHT} - 3.2rem);
+  height: calc(
+    100vh - ${ACCOUNT_HEADER_HEIGHT} - ${ACCOUNT_FOOTER_HEIGHT} - ${NOTIFICATIONS_HEADER_HEIGHT} -
+      3.2rem
+  );
   overflow-y: auto;
 `;
 

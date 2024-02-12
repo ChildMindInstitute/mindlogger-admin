@@ -96,7 +96,9 @@ export const FolderItem = ({ item }: FolderItemProps) => {
     handleFolderClick(item);
   };
 
-  const folderAppletCount = item?.foldersAppletCount ? `${item?.foldersAppletCount} ${t('applets')}` : `${t('empty')}`;
+  const folderAppletCount = item?.foldersAppletCount
+    ? `${item?.foldersAppletCount} ${t('applets')}`
+    : `${t('empty')}`;
 
   useEffect(() => setFolder(item), [item]);
 
@@ -109,7 +111,10 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       onMouseEnter={() => setHasVisibleActions(true)}
       onMouseLeave={() => setHasVisibleActions(false)}
     >
-      <StyledTableCell width={AppletsColumnsWidth.Folder} onClick={() => (folder?.isRenaming ? null : onFolderClick())}>
+      <StyledTableCell
+        width={AppletsColumnsWidth.Folder}
+        onClick={() => (folder?.isRenaming ? null : onFolderClick())}
+      >
         <StyledFlexTopCenter>
           <StyledFolderIcon>
             <Svg id={isFolderExpanded ? 'folder-opened' : 'folder'} />

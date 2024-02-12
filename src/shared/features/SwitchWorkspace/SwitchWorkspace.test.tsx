@@ -48,7 +48,9 @@ describe('SwitchWorkspace component tests', () => {
       { preloadedState },
     );
 
-    expect(screen.getByTestId(`${mockedDataTestId}-workspace-group-1-workspace-0`)).toBeInTheDocument();
+    expect(
+      screen.getByTestId(`${mockedDataTestId}-workspace-group-1-workspace-0`),
+    ).toBeInTheDocument();
     expect(screen.getByText('Mocked Workspace')).toBeInTheDocument();
   });
 

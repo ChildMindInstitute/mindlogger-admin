@@ -6,7 +6,8 @@ import { StyledItemOptionContainer } from 'modules/Builder/components/ToggleItem
 
 export const StyledItemOption = styled(StyledItemOptionContainer, shouldForwardProp)`
   padding: ${theme.spacing(2, 2.4, 2, 3.4)};
-  height: ${({ optionOpen }: { optionOpen: boolean; leftBorderColor?: string }) => (optionOpen ? 'auto' : '8.8rem')};
+  height: ${({ optionOpen }: { optionOpen: boolean; leftBorderColor?: string }) =>
+    optionOpen ? 'auto' : '8.8rem'};
   justify-content: center;
   position: relative;
 

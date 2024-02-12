@@ -8,7 +8,9 @@ const setPopupVisibleMock = jest.fn();
 
 describe('ServerVerifyErrorPopup', () => {
   test('should render', () => {
-    renderWithProviders(<ServerVerifyErrorPopup popupVisible={true} setPopupVisible={setPopupVisibleMock} />);
+    renderWithProviders(
+      <ServerVerifyErrorPopup popupVisible={true} setPopupVisible={setPopupVisibleMock} />,
+    );
 
     const popup = screen.getByTestId('applet-settings-report-config-verify-server-error-popup');
     expect(popup).toBeInTheDocument();

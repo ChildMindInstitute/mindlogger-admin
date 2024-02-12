@@ -20,7 +20,8 @@ const UiTypesStyles = {
 };
 
 export const StyledCustomCover = styled(StyledFlexAllCenter, shouldForwardProp)`
-  ${({ uiType = WorkspaceUiType.List }: Omit<WorkspaceImageProps, 'image | workspaceName'>) => UiTypesStyles[uiType]};
+  ${({ uiType = WorkspaceUiType.List }: Omit<WorkspaceImageProps, 'image | workspaceName'>) =>
+    UiTypesStyles[uiType]};
   background-color: ${variables.palette.secondary};
   text-transform: uppercase;
   flex-shrink: 0;

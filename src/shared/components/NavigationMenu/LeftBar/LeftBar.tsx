@@ -8,7 +8,13 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { StyledTitleSmall } from 'shared/styles/styledComponents/Typography';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents/Flex';
 
-import { StyledContent, StyledSettingsGroup, StyledSettings, StyledSetting, StyledTitle } from './LeftBar.styles';
+import {
+  StyledContent,
+  StyledSettingsGroup,
+  StyledSettings,
+  StyledSetting,
+  StyledTitle,
+} from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
 
 export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarProps) => {
@@ -47,7 +53,10 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                       'data-testid': dataTestid,
                     }) =>
                       isItemVisible && (
-                        <Tooltip tooltipTitle={tooltip ? t(tooltip) : null} key={`item-setting-${label}`}>
+                        <Tooltip
+                          tooltipTitle={tooltip ? t(tooltip) : null}
+                          key={`item-setting-${label}`}
+                        >
                           <span>
                             <StyledSetting
                               onClick={() =>
@@ -68,7 +77,9 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                             >
                               <StyledFlexAllCenter>{icon}</StyledFlexAllCenter>
                               <StyledTitle>{t(label)}</StyledTitle>
-                              {hasError && <Badge variant="dot" invisible={!hasError} color="error" />}
+                              {hasError && (
+                                <Badge variant="dot" invisible={!hasError} color="error" />
+                              )}
                             </StyledSetting>
                           </span>
                         </Tooltip>

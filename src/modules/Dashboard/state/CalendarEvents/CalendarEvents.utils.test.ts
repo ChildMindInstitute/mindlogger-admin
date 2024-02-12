@@ -29,9 +29,12 @@ describe('getNextDayComparison', () => {
     ${'14:00'} | ${'05:00'} | ${true}
     ${'00:00'} | ${'23:59'} | ${false}
     ${'12:00'} | ${'12:00'} | ${false}
-  `('startTime=$startTime, endTime=$endTime, expected=$expected:', ({ startTime, endTime, expected }) => {
-    expect(getNextDayComparison(startTime, endTime)).toBe(expected);
-  });
+  `(
+    'startTime=$startTime, endTime=$endTime, expected=$expected:',
+    ({ startTime, endTime, expected }) => {
+      expect(getNextDayComparison(startTime, endTime)).toBe(expected);
+    },
+  );
 });
 
 describe('getStartEndComparison', () => {
@@ -40,9 +43,12 @@ describe('getStartEndComparison', () => {
     ${'14:00'} | ${'05:00'} | ${false}
     ${'00:00'} | ${'23:59'} | ${true}
     ${'12:00'} | ${'12:00'} | ${false}
-  `('startTime=$startTime, endTime=$endTime, expected=$expected:', ({ startTime, endTime, expected }) => {
-    expect(getStartEndComparison(startTime, endTime)).toBe(expected);
-  });
+  `(
+    'startTime=$startTime, endTime=$endTime, expected=$expected:',
+    ({ startTime, endTime, expected }) => {
+      expect(getStartEndComparison(startTime, endTime)).toBe(expected);
+    },
+  );
 });
 
 describe('getPreparedEvents: should', () => {
@@ -71,7 +77,9 @@ describe('getPreparedEvents: should', () => {
   `(
     '$description; isAlwaysAvailableHidden=$isAlwaysAvailableHidden, isScheduledHidden=$isScheduledHidden',
     ({ isAlwaysAvailableHidden, isScheduledHidden, expected }) => {
-      expect(getPreparedEvents(events, isAlwaysAvailableHidden, isScheduledHidden)).toEqual(expected);
+      expect(getPreparedEvents(events, isAlwaysAvailableHidden, isScheduledHidden)).toEqual(
+        expected,
+      );
     },
   );
 });
@@ -346,7 +354,16 @@ describe('getEventEndDateTime', () => {
     ${Periodicity.Monthly}  | ${null}       | ${dateString} | ${endTime} | ${currentYear} | ${eventStartWithTime} | ${true}         | ${new Date(`${dateString}T23:59:00`)}
   `(
     'periodicity=$periodicity, selectedDate=$selectedDate, endDate=$endDate, endTime=$endTime, currentYear=$currentYear, eventStart=$eventStart, isCrossDayEvent=$isCrossDayEvent, expected=$expected',
-    ({ periodicity, selectedDate, endDate, endTime, currentYear, eventStart, isCrossDayEvent, expected }) => {
+    ({
+      periodicity,
+      selectedDate,
+      endDate,
+      endTime,
+      currentYear,
+      eventStart,
+      isCrossDayEvent,
+      expected,
+    }) => {
       expect(
         getEventEndDateTime({
           periodicity,
@@ -824,7 +841,9 @@ describe('getDaysInMonthlyPeriodicity', () => {
   `(
     'chosenDate=$chosenDate, eventStart=$eventStart, eventEnd=$eventEnd, expected=$expected',
     ({ chosenDate, eventStart, eventEnd, expected }) => {
-      expect(getDaysInMonthlyPeriodicity({ chosenDate, eventStart, eventEnd })).toHaveLength(expected);
+      expect(getDaysInMonthlyPeriodicity({ chosenDate, eventStart, eventEnd })).toHaveLength(
+        expected,
+      );
     },
   );
 });

@@ -18,7 +18,9 @@ describe('ResponseDataIdentifier Component', () => {
       ),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('builder-activity-items-item-configuration-data-indentifier-remove'));
+    fireEvent.click(
+      screen.getByTestId('builder-activity-items-item-configuration-data-indentifier-remove'),
+    );
 
     expect(onRemoveMock).toHaveBeenCalledTimes(1);
   });

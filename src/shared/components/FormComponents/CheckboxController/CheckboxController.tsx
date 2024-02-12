@@ -17,7 +17,10 @@ export const CheckboxController = <T extends FieldValues>({
   'data-testid': dataTestid,
   ...checkboxProps
 }: InputControllerProps<T>) => {
-  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>, onChange: (event: boolean) => void) => {
+  const handleCheckboxChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    onChange: (event: boolean) => void,
+  ) => {
     const checked = event.target.checked;
     onCustomChange && onCustomChange(event);
     onChange(isInversed ? !checked : checked);

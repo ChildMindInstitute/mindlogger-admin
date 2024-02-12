@@ -7,7 +7,10 @@ import { page } from 'resources';
 import { StyledContainer } from 'shared/styles';
 import { getEntityKey, pluck } from 'shared/utils';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
-import { getNewActivityItem, getUniqueItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import {
+  getNewActivityItem,
+  getUniqueItem,
+} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 import { ItemFormValues } from 'modules/Builder/types';
 import { getUniqueName } from 'modules/Builder/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
@@ -37,8 +40,13 @@ export const ActivityItems = () => {
 
   const itemsValue: ItemFormValues[] = watch(itemsName);
   const { appletId, activityId, itemId } = useParams();
-  const activeItemIndex = itemId ? itemsValue?.findIndex((item) => getEntityKey(item) === itemId) : -1;
-  const activeItem = activeItemIndex === undefined || activeItemIndex === -1 ? undefined : itemsValue[activeItemIndex];
+  const activeItemIndex = itemId
+    ? itemsValue?.findIndex((item) => getEntityKey(item) === itemId)
+    : -1;
+  const activeItem =
+    activeItemIndex === undefined || activeItemIndex === -1
+      ? undefined
+      : itemsValue[activeItemIndex];
   const [itemIdToDelete, setItemIdToDelete] = useState('');
 
   useRedirectIfNoMatchedActivity();

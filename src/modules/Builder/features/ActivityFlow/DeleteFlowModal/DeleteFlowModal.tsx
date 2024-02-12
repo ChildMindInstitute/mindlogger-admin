@@ -5,7 +5,12 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { DeleteFlowModalProps } from './DeleteFlowModal.types';
 
-export const DeleteFlowModal = ({ activityFlowName, isOpen, onModalClose, onModalSubmit }: DeleteFlowModalProps) => {
+export const DeleteFlowModal = ({
+  activityFlowName,
+  isOpen,
+  onModalClose,
+  onModalSubmit,
+}: DeleteFlowModalProps) => {
   const { t } = useTranslation('app');
 
   return (

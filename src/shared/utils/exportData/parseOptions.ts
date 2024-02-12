@@ -24,7 +24,9 @@ export const parseOptions = (
     const options = createArrayFromMinToMax(min, max);
 
     return joinWihComma(
-      options?.map((item, i) => `${item}: ${item}${scores?.length ? ` (score: ${scores[i]})` : ''}`) || [],
+      options?.map(
+        (item, i) => `${item}: ${item}${scores?.length ? ` (score: ${scores[i]})` : ''}`,
+      ) || [],
     );
   }
 

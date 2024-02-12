@@ -2,7 +2,12 @@ import { getEntityKey, without } from 'shared/utils';
 
 import { RemoveItemFromSubscales } from './ItemSettingsGroup.types';
 
-export const removeItemFromSubscales = ({ setValue, subscales, subscalesName, item }: RemoveItemFromSubscales) => {
+export const removeItemFromSubscales = ({
+  setValue,
+  subscales,
+  subscalesName,
+  item,
+}: RemoveItemFromSubscales) => {
   const itemKey = getEntityKey(item);
 
   subscales?.forEach((subscale, index) => {

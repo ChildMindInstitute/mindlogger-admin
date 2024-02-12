@@ -73,7 +73,10 @@ export type AssessmentAnswer = (
 
 type AssessmentItems = MultiSelectItem | SingleSelectItem | SliderItem;
 
-type AssessmentAnswers = DecryptedMultiSelectionAnswer | DecryptedSingleSelectionAnswer | DecryptedSliderAnswer;
+type AssessmentAnswers =
+  | DecryptedMultiSelectionAnswer
+  | DecryptedSingleSelectionAnswer
+  | DecryptedSliderAnswer;
 
 export type AssessmentActivityItem = {
   activityItem: AssessmentItems;

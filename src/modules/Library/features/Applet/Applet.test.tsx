@@ -115,7 +115,12 @@ jest.mock('redux/store/hooks', () => ({
 
 const renderComponent = ({ uiType, route, routePath, preloadedState }) =>
   renderWithProviders(
-    <Applet applet={mockApplet} uiType={uiType} data-testid={dataTestid} setSearch={mockSetSearch} />,
+    <Applet
+      applet={mockApplet}
+      uiType={uiType}
+      data-testid={dataTestid}
+      setSearch={mockSetSearch}
+    />,
     {
       route,
       routePath,

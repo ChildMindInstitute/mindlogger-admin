@@ -8,7 +8,8 @@ import { ActivityFlowFormValues } from 'modules/Builder/types';
 
 import { GetFlowBuilderActions, GetMenuItems, GetMenuItemsType } from './ActivityFlowBuilder.types';
 
-const checkOnIdOrKey = (checkId: string) => (entity: ActivityFlowFormValues) => (entity.id || entity.key) === checkId;
+const checkOnIdOrKey = (checkId: string) => (entity: ActivityFlowFormValues) =>
+  (entity.id || entity.key) === checkId;
 
 export const getActivityFlowIndex = (activityFlows: ActivityFlowFormValues[], checkId: string) =>
   activityFlows.findIndex(checkOnIdOrKey(checkId));
@@ -27,7 +28,9 @@ export const getMenuItems = ({
       const activityKey = activity.id || activity.key || '';
       type === GetMenuItemsType.AddActivity
         ? onAddFlowActivity && onAddFlowActivity(activityKey)
-        : onUpdateFlowActivity && index !== undefined && onUpdateFlowActivity(index, { key: uuidv4(), activityKey });
+        : onUpdateFlowActivity &&
+          index !== undefined &&
+          onUpdateFlowActivity(index, { key: uuidv4(), activityKey });
       onMenuClose();
     },
     'data-testid': `builder-activity-flows-builder-add-activity-${key}`,
@@ -43,7 +46,8 @@ export const getFlowBuilderActions = ({
 }: GetFlowBuilderActions) => [
   {
     icon: <Svg id="replace" />,
-    action: (item?: ItemType, event?: MouseEvent<HTMLElement>) => event && replaceItem(event, index),
+    action: (item?: ItemType, event?: MouseEvent<HTMLElement>) =>
+      event && replaceItem(event, index),
     active: replaceItemActionActive,
     'data-testid': `${dataTestid}-replace`,
   },

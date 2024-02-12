@@ -35,7 +35,9 @@ export const SaveAndPublish = () => {
   const { appletId } = useParams();
 
   const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
-    handleAppletPasswordSubmit(ref?.current?.password).then(() => Mixpanel.track('Password added successfully'));
+    handleAppletPasswordSubmit(ref?.current?.password).then(() =>
+      Mixpanel.track('Password added successfully'),
+    );
     setIsPasswordPopupOpened(false);
   };
 

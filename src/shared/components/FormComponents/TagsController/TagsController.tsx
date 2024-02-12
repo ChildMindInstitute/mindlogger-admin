@@ -34,7 +34,11 @@ export const TagsController = <T extends FieldValues>({
           key={index}
           title={tag}
           onRemove={disabled ? undefined : () => onRemoveTagClick(index)}
-          sxProps={isSecondaryUiType ? { m: theme.spacing(0.2), ...(disabled && { pointerEvents: 'none' }) } : null}
+          sxProps={
+            isSecondaryUiType
+              ? { m: theme.spacing(0.2), ...(disabled && { pointerEvents: 'none' }) }
+              : null
+          }
         />
       ))}
     </>
@@ -77,7 +81,9 @@ export const TagsController = <T extends FieldValues>({
                       <Svg id="email-outlined" />
                     </StyledFlexTopCenter>
                     {showInputLabel && (
-                      <StyledInputLabel showInputLabel={showInputLabel}>{inputLabel}</StyledInputLabel>
+                      <StyledInputLabel showInputLabel={showInputLabel}>
+                        {inputLabel}
+                      </StyledInputLabel>
                     )}
                     {chips}
                   </>

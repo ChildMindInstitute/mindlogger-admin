@@ -6,7 +6,12 @@ import { StyledBodyLarge, StyledBodyMedium, theme, variables } from 'shared/styl
 import { workspaces as currentWorkspace } from 'redux/modules';
 
 import { WorkspaceImage } from '../WorkspaceImage';
-import { StyledListItemButton, StyledItemContent, StyledSelect, StyledItemName } from './WorkspaceGroup.styles';
+import {
+  StyledListItemButton,
+  StyledItemContent,
+  StyledSelect,
+  StyledItemName,
+} from './WorkspaceGroup.styles';
 import { WorkspaceGroupProps } from './WorkspaceGroup.types';
 
 export const WorkspaceGroup = ({
@@ -43,7 +48,9 @@ export const WorkspaceGroup = ({
           </StyledListItemButton>
         ))
       ) : (
-        <StyledBodyLarge sx={{ margin: theme.spacing(0, 2.4), color: variables.palette.on_surface_variant }}>
+        <StyledBodyLarge
+          sx={{ margin: theme.spacing(0, 2.4), color: variables.palette.on_surface_variant }}
+        >
           {t(emptyState)}
         </StyledBodyLarge>
       )}

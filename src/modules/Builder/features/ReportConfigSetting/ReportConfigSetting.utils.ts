@@ -1,11 +1,22 @@
-import { ActivityFlowFormValues, ActivityFormValues, AppletFormValues } from 'modules/Builder/types';
+import {
+  ActivityFlowFormValues,
+  ActivityFormValues,
+  AppletFormValues,
+} from 'modules/Builder/types';
 import { getEntityKey } from 'shared/utils';
 
-import { VerifyReportServer, SetPasswordReportServer, SetSubjectData } from './ReportConfigSetting.types';
+import {
+  VerifyReportServer,
+  SetPasswordReportServer,
+  SetSubjectData,
+} from './ReportConfigSetting.types';
 
 const getUrl = (url: string) => (url?.endsWith('/') ? url : `${url}/`);
 
-export const getActivitiesOptions = (activityFlow?: ActivityFlowFormValues, appletData?: AppletFormValues) => {
+export const getActivitiesOptions = (
+  activityFlow?: ActivityFlowFormValues,
+  appletData?: AppletFormValues,
+) => {
   const uniqueValuesSet = new Set<string>();
   const activities = appletData?.activities;
   const activityFlowItems = activityFlow?.items;
@@ -47,7 +58,13 @@ export const verifyReportServer = async ({ url, publicKey, token }: VerifyReport
   });
 };
 
-export const setPasswordReportServer = async ({ url, appletId, ownerId, password, token }: SetPasswordReportServer) => {
+export const setPasswordReportServer = async ({
+  url,
+  appletId,
+  ownerId,
+  password,
+  token,
+}: SetPasswordReportServer) => {
   const headers = new Headers();
   headers.append('Token', token);
   headers.append('Content-Type', 'application/json');
@@ -76,7 +93,9 @@ export const setSubjectData = ({
   if (respondentId) {
     subject += ' by [Respondent ID]';
   }
-  subject += `: ${appletName || '[Applet Name]'} / ${activityName || flowName || '[Activity Name]'}`;
+  subject += `: ${appletName || '[Applet Name]'} / ${
+    activityName || flowName || '[Activity Name]'
+  }`;
   if (hasActivityItemValue) {
     subject += ` / [${itemName || 'Item name'}]`;
   }

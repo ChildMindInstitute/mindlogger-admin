@@ -52,7 +52,12 @@ describe('getUpdatedValues', () => {
     const prevItemIds: string[] = ['item1'];
     const updatedItemIds: string[] = [];
 
-    const result = getUpdatedValues(defaultValues, multiSelectWithoutAnswersNonEdited, prevItemIds, updatedItemIds);
+    const result = getUpdatedValues(
+      defaultValues,
+      multiSelectWithoutAnswersNonEdited,
+      prevItemIds,
+      updatedItemIds,
+    );
 
     expect(result).toEqual({ edited: 1697703435095, itemIds: ['item1'] });
   });
@@ -62,7 +67,12 @@ describe('getUpdatedValues', () => {
     const prevItemIds: string[] = [];
     const updatedItemIds: string[] = [];
 
-    const result = getUpdatedValues([multiSelectWithoutAnswersNonEdited], currentItem, prevItemIds, updatedItemIds);
+    const result = getUpdatedValues(
+      [multiSelectWithoutAnswersNonEdited],
+      currentItem,
+      prevItemIds,
+      updatedItemIds,
+    );
 
     expect(result).toEqual({ edited: null, itemIds: ['item1'] });
   });
@@ -73,7 +83,12 @@ describe('getUpdatedValues', () => {
     const prevItemIds: string[] = ['item1'];
     const updatedItemIds: string[] = [];
 
-    const { edited, itemIds } = getUpdatedValues(defaultValues, currentItem, prevItemIds, updatedItemIds);
+    const { edited, itemIds } = getUpdatedValues(
+      defaultValues,
+      currentItem,
+      prevItemIds,
+      updatedItemIds,
+    );
 
     const editedDate = format(new Date(edited as number), DateFormats.MonthDayTime);
     const expectedDate = format(new Date(), DateFormats.MonthDayTime);
@@ -101,7 +116,12 @@ describe('getUpdatedValues', () => {
     const prevItemIds: string[] = ['item1'];
     const updatedItemIds: string[] = [];
 
-    const result = getUpdatedValues(defaultValues, singleSelectWithAnswersNonEdited, prevItemIds, updatedItemIds);
+    const result = getUpdatedValues(
+      defaultValues,
+      singleSelectWithAnswersNonEdited,
+      prevItemIds,
+      updatedItemIds,
+    );
 
     expect(result).toEqual({ edited: 1697703435095, itemIds: ['item1'] });
   });
@@ -111,7 +131,12 @@ describe('getUpdatedValues', () => {
     const prevItemIds: string[] = [];
     const updatedItemIds: string[] = [];
 
-    const result = getUpdatedValues(defaultValues, singleSelectWithAnswersNonEdited, prevItemIds, updatedItemIds);
+    const result = getUpdatedValues(
+      defaultValues,
+      singleSelectWithAnswersNonEdited,
+      prevItemIds,
+      updatedItemIds,
+    );
 
     expect(result).toEqual({ edited: null, itemIds: ['item1'] });
   });

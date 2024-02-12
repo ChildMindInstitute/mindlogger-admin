@@ -44,7 +44,8 @@ export const getPreparedEvents = (
     isHidden: item.alwaysAvailable ? isAlwaysAvailableHidden : isScheduledHidden,
   }));
 
-export const getNotHiddenEvents = (events: CalendarEvent[]) => events.filter((event) => !event.isHidden);
+export const getNotHiddenEvents = (events: CalendarEvent[]) =>
+  events.filter((event) => !event.isHidden);
 
 export const getEventsWithHiddenInTimeView = (notHiddenEvents: CalendarEvent[]) => {
   const allDayEventsSortedByDaysMap = notHiddenEvents.reduce(
@@ -108,7 +109,10 @@ export const getDateFromDateTimeString = (date: Date, time: string) => {
   return setSeconds(setMinutes(setHours(date, Number(hours)), Number(minutes)), Number(seconds));
 };
 
-export const getDateFromDateStringTimeString = ({ date, time }: GetDateFromDateStringTimeString) => {
+export const getDateFromDateStringTimeString = ({
+  date,
+  time,
+}: GetDateFromDateStringTimeString) => {
   if (!date) return null;
 
   return new Date(`${date}T${time ?? DEFAULT_API_START_TIME}`);
@@ -122,10 +126,12 @@ export const getEventStartDateTime = ({
   nextYearDateString,
 }: GetEventStartDateTime) => {
   const nextYearDate =
-    nextYearDateString && getDateFromDateStringTimeString({ date: nextYearDateString, time: DEFAULT_API_START_TIME });
+    nextYearDateString &&
+    getDateFromDateStringTimeString({ date: nextYearDateString, time: DEFAULT_API_START_TIME });
 
   const nextYearDateWithTime =
-    nextYearDateString && getDateFromDateStringTimeString({ date: nextYearDateString, time: startTime });
+    nextYearDateString &&
+    getDateFromDateStringTimeString({ date: nextYearDateString, time: startTime });
 
   const selectedDateToDate = getDateFromDateStringTimeString({
     date: selectedDate,
@@ -141,7 +147,9 @@ export const getEventStartDateTime = ({
   });
 
   const dateAlways =
-    nextYearDate && selectedDateToDate && nextYearDate.getFullYear() > selectedDateToDate.getFullYear()
+    nextYearDate &&
+    selectedDateToDate &&
+    nextYearDate.getFullYear() > selectedDateToDate.getFullYear()
       ? nextYearDate
       : selectedDateToDate;
 
@@ -292,7 +300,8 @@ export const createEvents = ({
       eventStart,
       isCrossDayEvent,
     }) || newDate;
-  const isAllDayEvent = isAlwaysAvailable || (startTime === DEFAULT_API_START_TIME && endTime === DEFAULT_API_END_TIME);
+  const isAllDayEvent =
+    isAlwaysAvailable || (startTime === DEFAULT_API_START_TIME && endTime === DEFAULT_API_END_TIME);
 
   const getBgColor = () => {
     if (isAlwaysAvailable) return colors[0];
@@ -368,7 +377,9 @@ export const createEvents = ({
   }
 
   const daysInPeriod =
-    eventEnd && eventStart && eventEnd >= eventStart ? eachDayOfInterval({ start: eventStart, end: eventEnd }) : [];
+    eventEnd && eventStart && eventEnd >= eventStart
+      ? eachDayOfInterval({ start: eventStart, end: eventEnd })
+      : [];
 
   if (periodicityType === Periodicity.Always || periodicityType === Periodicity.Daily) {
     return getEventsArrayFromDates({
@@ -425,9 +436,14 @@ export const createEvents = ({
   return [];
 };
 
-export const getDaysInMonthlyPeriodicity = ({ chosenDate, eventEnd, eventStart }: GetDaysInMonthlyPeriodicity) => {
+export const getDaysInMonthlyPeriodicity = ({
+  chosenDate,
+  eventEnd,
+  eventStart,
+}: GetDaysInMonthlyPeriodicity) => {
   const endDate = getDate(eventEnd);
-  const end = chosenDate <= endDate ? eventEnd : new Date(eventEnd.getFullYear(), eventEnd.getMonth(), 0);
+  const end =
+    chosenDate <= endDate ? eventEnd : new Date(eventEnd.getFullYear(), eventEnd.getMonth(), 0);
   const monthsBetween =
     end && eventStart && end > eventStart
       ? eachMonthOfInterval({

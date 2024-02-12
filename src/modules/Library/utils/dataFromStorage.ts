@@ -25,7 +25,11 @@ export const getSelectedAppletFromStorage = (id: string) => {
 
 export const updateSelectedItemsInStorage = (newSelectedItems: LibraryForm, appletId: string) => {
   const selectedItemsFromStorage = getSelectedItemsFromStorage();
-  const updatedSelectedItems = getUpdatedSelectedItems(selectedItemsFromStorage, newSelectedItems, appletId);
+  const updatedSelectedItems = getUpdatedSelectedItems(
+    selectedItemsFromStorage,
+    newSelectedItems,
+    appletId,
+  );
 
   updatedSelectedItems
     ? sessionStorage.setItem(STORAGE_SELECTED_KEY, JSON.stringify(updatedSelectedItems))

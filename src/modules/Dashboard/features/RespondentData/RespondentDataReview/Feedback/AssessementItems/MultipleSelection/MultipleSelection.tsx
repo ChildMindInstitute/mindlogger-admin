@@ -4,7 +4,12 @@ import { StyledBodyLarge, StyledFlexColumn, StyledFlexTopCenter, variables } fro
 import { Tooltip } from 'shared/components/Tooltip';
 
 import { MultipleSelectionProps } from './MultipleSelection.types';
-import { StyledFormControlLabel, StyledImage, StyledLabel, StyledSvg } from './MultipleSelection.styles';
+import {
+  StyledFormControlLabel,
+  StyledImage,
+  StyledLabel,
+  StyledSvg,
+} from './MultipleSelection.styles';
 
 export const MultipleSelection = ({
   activityItem,
@@ -31,11 +36,20 @@ export const MultipleSelection = ({
             label={
               <StyledLabel>
                 {option.image && (
-                  <StyledImage src={option.image} alt="Option image" data-testid={`${dataTestid}-image-${index}`} />
+                  <StyledImage
+                    src={option.image}
+                    alt="Option image"
+                    data-testid={`${dataTestid}-image-${index}`}
+                  />
                 )}
-                <StyledBodyLarge color={variables.palette.on_surface}>{option.text}</StyledBodyLarge>
+                <StyledBodyLarge color={variables.palette.on_surface}>
+                  {option.text}
+                </StyledBodyLarge>
                 {option.tooltip && (
-                  <Tooltip tooltipTitle={option.tooltip} data-testid={`${dataTestid}-tooltip-${index}`}>
+                  <Tooltip
+                    tooltipTitle={option.tooltip}
+                    data-testid={`${dataTestid}-tooltip-${index}`}
+                  >
                     <StyledFlexTopCenter data-testid={`${dataTestid}-more-info-${index}`}>
                       <StyledSvg id="more-info-outlined" />
                     </StyledFlexTopCenter>

@@ -12,4 +12,5 @@ export const defaultValues = {
 export const OK_MESSAGE = 'ok';
 export const SUCCESS_MESSAGE = 'success';
 
-export const REPORT_SERVER_INSTRUCTIONS_LINK = 'https://github.com/ChildMindInstitute/mindlogger-report-server';
+export const REPORT_SERVER_INSTRUCTIONS_LINK =
+  'https://github.com/ChildMindInstitute/mindlogger-report-server';

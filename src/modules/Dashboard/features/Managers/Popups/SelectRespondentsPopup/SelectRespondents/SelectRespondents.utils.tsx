@@ -19,7 +19,10 @@ export const getHeadCells = (
     {
       id: 'select',
       label: (
-        <FormControlLabel control={<Checkbox checked={selectAllChecked} onChange={onSelectAllClick} />} label="" />
+        <FormControlLabel
+          control={<Checkbox checked={selectAllChecked} onChange={onSelectAllClick} />}
+          label=""
+        />
       ),
       enableSort: false,
       width: '48',

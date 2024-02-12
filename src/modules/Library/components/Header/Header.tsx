@@ -7,7 +7,12 @@ import { theme, variables, StyledBodySmall, StyledLabelLarge } from 'shared/styl
 import { page } from 'resources';
 import { library } from 'redux/modules';
 
-import { StyledHeaderContainer, StyledBackButton, StyledBuilderButton, StyledCartButton } from './Header.styles';
+import {
+  StyledHeaderContainer,
+  StyledBackButton,
+  StyledBuilderButton,
+  StyledCartButton,
+} from './Header.styles';
 import { HeaderProps, RightButtonType } from './Header.types';
 
 export const Header = ({
@@ -38,7 +43,10 @@ export const Header = ({
         <StyledLabelLarge sx={{ textAlign: 'initial', color: variables.palette.on_surface }}>
           {t('cart')}
         </StyledLabelLarge>
-        <StyledBodySmall sx={{ color: variables.palette.on_surface_variant }} data-testid="library-cart-applets-count">
+        <StyledBodySmall
+          sx={{ color: variables.palette.on_surface_variant }}
+          data-testid="library-cart-applets-count"
+        >
           {appletsCount} {t('applet', { count: appletsCount })}
         </StyledBodySmall>
       </Box>

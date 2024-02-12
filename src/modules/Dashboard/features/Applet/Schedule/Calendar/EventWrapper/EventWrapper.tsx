@@ -23,7 +23,8 @@ export const EventWrapper = ({
   useEffect(() => {
     if (timeView) {
       const parentElement =
-        emptyRef.current?.parentElement?.parentElement || childrenRef.current?.parentElement?.parentElement;
+        emptyRef.current?.parentElement?.parentElement ||
+        childrenRef.current?.parentElement?.parentElement;
 
       if (parentElement) {
         for (const child of Array.from(parentElement.children)) {
@@ -43,7 +44,9 @@ export const EventWrapper = ({
 
   const tooltipTitle = (
     <>
-      <Box>{`${startTime ?? format(start, DateFormats.Time)} - ${endTime ?? format(end, DateFormats.Time)}`}</Box>
+      <Box>{`${startTime ?? format(start, DateFormats.Time)} - ${
+        endTime ?? format(end, DateFormats.Time)
+      }`}</Box>
       <Box>{title}</Box>
     </>
   );

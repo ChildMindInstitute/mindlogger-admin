@@ -53,7 +53,9 @@ describe('DuplicatePopups', () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
-    jest.spyOn(encryptionFunctions, 'getEncryptionToServer').mockReturnValue(Promise.resolve(mockedEncryption));
+    jest
+      .spyOn(encryptionFunctions, 'getEncryptionToServer')
+      .mockReturnValue(Promise.resolve(mockedEncryption));
     jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
         getPrivateKey: () => [],

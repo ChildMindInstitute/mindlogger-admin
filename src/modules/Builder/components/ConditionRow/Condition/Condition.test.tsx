@@ -28,7 +28,8 @@ const mockedScoreConditionId = uuidv4();
 const mockedConditionName = 'activities.0.conditionalLogic.0.conditions.0';
 const mockedConditional = mockedAppletFormData.activities[0].conditionalLogic[0];
 const mockedSingleSelectionCondition = mockedConditional.conditions[0];
-const mockedMultiSelectionCondition = mockedAppletFormData.activities[0].conditionalLogic[1].conditions[0];
+const mockedMultiSelectionCondition =
+  mockedAppletFormData.activities[0].conditionalLogic[1].conditions[0];
 const mockedSliderCondition = {
   key: uuidv4(),
   type: ConditionType.Equal,
@@ -61,7 +62,10 @@ const mockedScoreConditionCondition = {
   payload: mockedSingleSelectionCondition.payload,
 };
 
-const mockedItemOptions = getItemOptions(mockedAppletFormData.activities[0].items, ConditionRowType.Item);
+const mockedItemOptions = getItemOptions(
+  mockedAppletFormData.activities[0].items,
+  ConditionRowType.Item,
+);
 const mockedScoreOptions = [
   {
     labelKey: 'Score option',
@@ -77,7 +81,9 @@ const mockedScoreConditionOptions = [
   },
 ];
 const mockedValueOptions = getValueOptionsList(
-  mockedAppletFormData.activities[0].items.find((item) => getEntityKey(item) === mockedConditional.itemKey),
+  mockedAppletFormData.activities[0].items.find(
+    (item) => getEntityKey(item) === mockedConditional.itemKey,
+  ),
 );
 
 const mockedNames = {
@@ -232,7 +238,14 @@ describe('Condition', () => {
     ${mockedScoreId}                   | ${ConditionItemType.Score}           | ${mockedScoreOptions}                       | ${'condition state options for score should be greaterThan/lessThan/equal/notEqual/between/outsideOf'}
   `('$description', ({ item, type, itemOptions }) => {
     renderWithAppletFormData({
-      children: <Condition {...mockedPropsForEmptyCondition} item={item} type={type} itemOptions={itemOptions} />,
+      children: (
+        <Condition
+          {...mockedPropsForEmptyCondition}
+          item={item}
+          type={type}
+          itemOptions={itemOptions}
+        />
+      ),
     });
 
     if (type !== ConditionItemType.Score) {
@@ -302,7 +315,14 @@ describe('Condition', () => {
     ${['min-value', 'max-value']} | ${mockedScoreId}                   | ${ConditionType.OutsideOf}   | ${mockedScoreOptions}          | ${'range value is shown if item is score and state is "between"'}
   `('$description', ({ testIds, item, state, options }) => {
     renderWithAppletFormData({
-      children: <Condition {...mockedPropsForEditingCondition} item={item} state={state} itemOptions={options} />,
+      children: (
+        <Condition
+          {...mockedPropsForEditingCondition}
+          item={item}
+          state={state}
+          itemOptions={options}
+        />
+      ),
     });
 
     expect(screen.getByTestId(`editing-condition-${testIds[0]}`)).toBeInTheDocument();
@@ -331,14 +351,18 @@ describe('Condition', () => {
       appletFormData: getAppletFormData(condition),
     });
 
-    expect(screen.getByTestId('editing-condition-name').querySelector('input').value).toBe(condition.itemName);
-    expect(screen.getByTestId('editing-condition-type').querySelector('input').value).toBe(condition.type);
-    expect(screen.getByTestId(`editing-condition-${valueTestIds[0]}`).querySelector('input').value).toBe(
-      expectedValues[0],
+    expect(screen.getByTestId('editing-condition-name').querySelector('input').value).toBe(
+      condition.itemName,
     );
+    expect(screen.getByTestId('editing-condition-type').querySelector('input').value).toBe(
+      condition.type,
+    );
+    expect(
+      screen.getByTestId(`editing-condition-${valueTestIds[0]}`).querySelector('input').value,
+    ).toBe(expectedValues[0]);
     valueTestIds[1] &&
-      expect(screen.getByTestId(`editing-condition-${valueTestIds[1]}`).querySelector('input').value).toBe(
-        expectedValues[1],
-      );
+      expect(
+        screen.getByTestId(`editing-condition-${valueTestIds[1]}`).querySelector('input').value,
+      ).toBe(expectedValues[1]);
   });
 });

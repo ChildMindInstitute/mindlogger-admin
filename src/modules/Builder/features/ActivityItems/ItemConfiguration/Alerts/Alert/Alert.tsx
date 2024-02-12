@@ -3,7 +3,13 @@ import get from 'lodash.get';
 
 import { Svg } from 'shared/components/Svg';
 import { InputController } from 'shared/components/FormComponents';
-import { StyledTitleBoldSmall, StyledIconButton, variables, theme, StyledBodyMedium } from 'shared/styles';
+import {
+  StyledTitleBoldSmall,
+  StyledIconButton,
+  variables,
+  theme,
+  StyledBodyMedium,
+} from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { ItemFormValues } from 'modules/Builder/types';
 import { useCustomFormContext } from 'modules/Builder/hooks';

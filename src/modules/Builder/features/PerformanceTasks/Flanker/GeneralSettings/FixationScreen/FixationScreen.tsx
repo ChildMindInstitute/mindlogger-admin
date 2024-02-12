@@ -14,7 +14,10 @@ export const FixationScreen = () => {
     formState: { errors },
   } = useCustomFormContext();
 
-  const error = get(errors, `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.fixationScreen`);
+  const error = get(
+    errors,
+    `${activityObjField}.items[${FlankerItemPositions.PracticeFirst}].config.fixationScreen`,
+  );
 
   return (
     <ToggleItemContainer

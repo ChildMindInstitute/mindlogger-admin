@@ -36,7 +36,8 @@ export const FeedbackReviewed = () => {
 
         decryptedData.push({
           reviewer,
-          review: (await getDecryptedActivityData(encryptedData)).decryptedAnswers as AssessmentActivityItem[],
+          review: (await getDecryptedActivityData(encryptedData))
+            .decryptedAnswers as AssessmentActivityItem[],
         });
       }
 
@@ -63,7 +64,10 @@ export const FeedbackReviewed = () => {
           {reviewers.length ? (
             reviewers.map((reviewer, index) => (
               <Fragment key={uniqueId()}>
-                <FeedbackReviewer reviewer={reviewer} data-testid={`${dataTestid}-reviewer-${index}`} />
+                <FeedbackReviewer
+                  reviewer={reviewer}
+                  data-testid={`${dataTestid}-reviewer-${index}`}
+                />
               </Fragment>
             ))
           ) : (

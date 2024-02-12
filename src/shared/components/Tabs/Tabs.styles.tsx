@@ -8,8 +8,14 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import { UiType } from './Tabs.types';
 
 export const StyledTabs = styled(Tabs, shouldForwardProp)`
-  height: ${({ uiType }: { uiType: UiType; hiddenHeader?: boolean; defaultTabs?: boolean; isBuilder?: boolean }) =>
-    uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem'};
+  height: ${({
+    uiType,
+  }: {
+    uiType: UiType;
+    hiddenHeader?: boolean;
+    defaultTabs?: boolean;
+    isBuilder?: boolean;
+  }) => (uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem')};
   flex-shrink: 0;
 
   ${({ uiType }) =>
@@ -41,7 +47,8 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     opacity: 1;
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
-    padding: ${({ uiType }) => (uiType === UiType.Primary ? theme.spacing(0.8, 0, 0.7) : theme.spacing(1.4, 2.2))};
+    padding: ${({ uiType }) =>
+      uiType === UiType.Primary ? theme.spacing(0.8, 0, 0.7) : theme.spacing(1.4, 2.2)};
     justify-content: space-between;
     min-height: ${({ uiType }) => (uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem')};
 
@@ -87,7 +94,8 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
   }
 
   .MuiButtonBase-root.Mui-selected {
-    color: ${({ uiType }) => (uiType === UiType.Primary ? variables.palette.on_surface : variables.palette.primary)};
+    color: ${({ uiType }) =>
+      uiType === UiType.Primary ? variables.palette.on_surface : variables.palette.primary};
     font-weight: ${variables.font.weight.regular};
     color: ${variables.palette.primary};
 

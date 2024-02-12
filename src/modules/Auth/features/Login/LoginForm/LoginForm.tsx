@@ -75,7 +75,9 @@ export const LoginForm = () => {
       </StyledWelcome>
       <StyledForm onSubmit={handleSubmit(onSubmit)} noValidate>
         <StyledHeadline color={variables.palette.on_surface}>{t('login')}</StyledHeadline>
-        <StyledLoginSubheader color={variables.palette.on_surface_variant}>{t('logIntoAccount')}</StyledLoginSubheader>
+        <StyledLoginSubheader color={variables.palette.on_surface_variant}>
+          {t('logIntoAccount')}
+        </StyledLoginSubheader>
         <StyledController>
           <InputController
             fullWidth
@@ -98,13 +100,25 @@ export const LoginForm = () => {
           />
         </StyledController>
         {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
-        <StyledForgotPasswordLink onClick={() => navigate(page.passwordReset)} data-testid="login-form-forgot-password">
+        <StyledForgotPasswordLink
+          onClick={() => navigate(page.passwordReset)}
+          data-testid="login-form-forgot-password"
+        >
           {t('forgotPassword')}
         </StyledForgotPasswordLink>
-        <StyledButton onClick={handleLoginClick} variant="contained" type="submit" data-testid="login-form-signin">
+        <StyledButton
+          onClick={handleLoginClick}
+          variant="contained"
+          type="submit"
+          data-testid="login-form-signin"
+        >
           {t('login')}
         </StyledButton>
-        <StyledButton variant="outlined" onClick={handleCreateAccountClick} data-testid="login-form-signup">
+        <StyledButton
+          variant="outlined"
+          onClick={handleCreateAccountClick}
+          data-testid="login-form-signup"
+        >
           {t('createAccount')}
         </StyledButton>
       </StyledForm>

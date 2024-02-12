@@ -11,7 +11,8 @@ const defaultProps = {
   invitationLink: 'example-link',
 };
 
-const renderComponent = (props: InvitationWithTooltipProps) => render(<InvitationWithTooltip {...props} />);
+const renderComponent = (props: InvitationWithTooltipProps) =>
+  render(<InvitationWithTooltip {...props} />);
 
 describe('InvitationWithTooltip', () => {
   afterEach(() => {

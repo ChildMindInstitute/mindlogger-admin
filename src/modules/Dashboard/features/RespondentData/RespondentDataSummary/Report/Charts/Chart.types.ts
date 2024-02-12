@@ -35,7 +35,11 @@ export type ScatterChartTooltipHandler = {
   context: ScriptableTooltipContext<'scatter'>;
   tooltipRef: MutableRefObject<HTMLDivElement | null>;
   isHovered: MutableRefObject<boolean>;
-  chartRef: MutableRefObject<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>;
+  chartRef: MutableRefObject<ChartJSOrUndefined<
+    'scatter',
+    { x: Date; y: number }[],
+    unknown
+  > | null>;
   setTooltipData: SetTooltipData;
   chartType: ChartType;
 };

@@ -26,7 +26,12 @@ export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompl
           </span>
         </Tooltip>
       </StyledHeadline>
-      <ScatterChart minDate={minDate} maxDate={maxDate} answers={answers} versions={filteredVersions} />
+      <ScatterChart
+        minDate={minDate}
+        maxDate={maxDate}
+        answers={answers}
+        versions={filteredVersions}
+      />
     </Box>
   );
 };

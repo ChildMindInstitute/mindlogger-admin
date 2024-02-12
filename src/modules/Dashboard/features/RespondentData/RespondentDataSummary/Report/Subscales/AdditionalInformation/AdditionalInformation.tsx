@@ -12,7 +12,10 @@ import { AdditionalInformation as AdditionalInformationProps } from 'modules/Das
 import { LINK_PATTERN } from '../../Charts/Charts.const';
 import { StyledHeader, StyledContent, StyledMdPreview } from './AdditionalInformation.styles';
 
-export const AdditionalInformation = ({ optionText, 'data-testid': dataTestid }: AdditionalInformationProps) => {
+export const AdditionalInformation = ({
+  optionText,
+  'data-testid': dataTestid,
+}: AdditionalInformationProps) => {
   const { t } = useTranslation();
   const { execute: getOptionText } = useAsync(getOptionTextApi, (response) =>
     setAdditionalInformation(response?.data || ''),
@@ -31,7 +34,9 @@ export const AdditionalInformation = ({ optionText, 'data-testid': dataTestid }:
   return (
     <Box data-testid={dataTestid}>
       <StyledHeader>
-        <StyledHeadline sx={{ mr: theme.spacing(1.6) }}>{t('additionalInformation')}</StyledHeadline>
+        <StyledHeadline sx={{ mr: theme.spacing(1.6) }}>
+          {t('additionalInformation')}
+        </StyledHeadline>
       </StyledHeader>
       <StyledContent>
         <StyledMdPreview modelValue={additionalInformation} />

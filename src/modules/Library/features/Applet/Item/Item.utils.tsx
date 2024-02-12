@@ -30,7 +30,10 @@ export const renderItemContent = (item: Item, search: string) => {
       return (
         <StyledItemContentRow>
           <StyledItemSvg>{ItemResponseTypes[item.responseType].icon}</StyledItemSvg>
-          <StyledBodyLarge sx={{ color: variables.palette.outline }} data-testid={'item-option-title'}>
+          <StyledBodyLarge
+            sx={{ color: variables.palette.outline }}
+            data-testid={'item-option-title'}
+          >
             {t(ItemResponseTypes[item.responseType].title)}
           </StyledBodyLarge>
         </StyledItemContentRow>

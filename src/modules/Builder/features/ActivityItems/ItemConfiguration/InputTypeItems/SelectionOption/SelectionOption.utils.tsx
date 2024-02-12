@@ -31,7 +31,13 @@ export const getActions = ({
   },
 ];
 
-export const getDependentConditions = (optionValue: string, conditionalLogic?: ConditionalLogic[]) =>
-  conditionalLogic?.filter(({ conditions }) =>
-    conditions?.some(({ payload }) => (payload as OptionCondition['payload'])?.optionValue === optionValue),
+export const getDependentConditions = (
+  optionValue: string,
+  conditionalLogic?: ConditionalLogic[],
+) =>
+  conditionalLogic?.filter(
+    ({ conditions }) =>
+      conditions?.some(
+        ({ payload }) => (payload as OptionCondition['payload'])?.optionValue === optionValue,
+      ),
   );

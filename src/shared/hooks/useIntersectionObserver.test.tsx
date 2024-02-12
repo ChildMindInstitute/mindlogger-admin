@@ -23,7 +23,13 @@ export function getObserverOf(element: Element): IntersectionObserver {
   return instanceMap.get(element);
 }
 
-const Observed = ({ callback = () => {}, isActive }: { callback?: () => void; isActive?: boolean }) => {
+const Observed = ({
+  callback = () => {},
+  isActive,
+}: {
+  callback?: () => void;
+  isActive?: boolean;
+}) => {
   useIntersectionObserver({
     targetSelector: '.observed',
     onAppear: callback,

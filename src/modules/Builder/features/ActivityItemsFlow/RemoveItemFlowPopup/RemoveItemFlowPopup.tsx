@@ -5,7 +5,12 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { RemoveItemFlowPopupProps } from './RemoveItemFlowPopup.types';
 
-export const RemoveItemFlowPopup = ({ open, index, onClose, onSubmit }: RemoveItemFlowPopupProps) => {
+export const RemoveItemFlowPopup = ({
+  open,
+  index,
+  onClose,
+  onSubmit,
+}: RemoveItemFlowPopupProps) => {
   const { t } = useTranslation('app');
 
   return (

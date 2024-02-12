@@ -47,7 +47,9 @@ export const LeftBar = ({
   const { t } = useTranslation('app');
   const { setValue, getValues } = useCustomFormContext();
   const [isDragging, setIsDragging] = useState(false);
-  const [conditionalLogicKeysToRemove, setConditionalLogicKeysToRemove] = useState<string[] | null>(null);
+  const [conditionalLogicKeysToRemove, setConditionalLogicKeysToRemove] = useState<string[] | null>(
+    null,
+  );
   const [sourceIndex, setSourceIndex] = useState(-1);
   const [destinationIndex, setDestinationIndex] = useState(-1);
 
@@ -97,7 +99,8 @@ export const LeftBar = ({
     setValue(
       `${fieldName}.conditionalLogic`,
       activity?.conditionalLogic?.filter(
-        (condition: ConditionalLogic) => !conditionalLogicKeysToRemove?.includes(getEntityKey(condition)),
+        (condition: ConditionalLogic) =>
+          !conditionalLogicKeysToRemove?.includes(getEntityKey(condition)),
       ),
     );
     onMoveItem(sourceIndex, destinationIndex);
@@ -203,7 +206,9 @@ export const LeftBar = ({
           );
         })}
       {!itemsData?.length && (
-        <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>{t('itemIsRequired')}</StyledTitleMedium>
+        <StyledTitleMedium sx={{ margin: theme.spacing(1.6, 4, 2.4) }}>
+          {t('itemIsRequired')}
+        </StyledTitleMedium>
       )}
       <StyledObserverTarget className={ACTIVITY_ITEMS_END_ITEM_CLASS} sx={observerStyles} />
       {isPending && (
@@ -233,8 +238,8 @@ export const LeftBar = ({
                   {' '}
                   <>{{ name: movingItemSourceName }}</>{' '}
                 </strong>
-                in the list contradicts the existing Item Flow. If you continue, the following Conditional(s) will be
-                removed:
+                in the list contradicts the existing Item Flow. If you continue, the following
+                Conditional(s) will be removed:
               </Trans>
             </StyledBodyLarge>
             <Box sx={{ mt: theme.spacing(2.4) }}>

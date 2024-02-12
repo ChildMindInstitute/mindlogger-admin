@@ -19,7 +19,9 @@ export const NumberSelection = () => {
       <StyledPresentation>
         <StyledNumberSelection>
           <StyledNumberSelectionLine>
-            <StyledLabelLarge sx={{ mr: theme.spacing(0.5), textAlign: 'center' }}>{t('dropdown')}</StyledLabelLarge>
+            <StyledLabelLarge sx={{ mr: theme.spacing(0.5), textAlign: 'center' }}>
+              {t('dropdown')}
+            </StyledLabelLarge>
             <Svg id="navigate-down" width="22" height="22" />
           </StyledNumberSelectionLine>
           <StyledNumberSelectionLine>

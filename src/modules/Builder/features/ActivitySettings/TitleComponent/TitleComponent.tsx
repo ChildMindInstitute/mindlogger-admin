@@ -1,6 +1,12 @@
 import { FieldError } from 'react-hook-form';
 
-import { StyledFlexColumn, StyledFlexTopCenter, StyledLabelBoldLarge, theme, variables } from 'shared/styles';
+import {
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  StyledLabelBoldLarge,
+  theme,
+  variables,
+} from 'shared/styles';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { TitleComponentProps } from './TitleComponent.types';

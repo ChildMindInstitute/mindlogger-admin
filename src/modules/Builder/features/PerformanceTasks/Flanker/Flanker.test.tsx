@@ -426,7 +426,9 @@ describe('Flanker', () => {
 
       expect(overviewInstruction).toHaveTextContent('Number of buttons available to respondent:');
 
-      const buttons = screen.getAllByTestId(new RegExp(`^${mockedFlankerTestid}-buttons-available-buttons-\\d+$`));
+      const buttons = screen.getAllByTestId(
+        new RegExp(`^${mockedFlankerTestid}-buttons-available-buttons-\\d+$`),
+      );
       expect(buttons).toHaveLength(2);
       const [firstButton, secondButton] = buttons;
 
@@ -460,7 +462,9 @@ describe('Flanker', () => {
     test('Practice Round Settings: Instruction', () => {
       renderFlanker();
 
-      const practiceRoundInstruction = screen.getByTestId(`${mockedFlankerTestid}-practice-round-instruction`);
+      const practiceRoundInstruction = screen.getByTestId(
+        `${mockedFlankerTestid}-practice-round-instruction`,
+      );
       expect(practiceRoundInstruction).toBeVisible();
 
       expandAllPanels();
@@ -469,7 +473,9 @@ describe('Flanker', () => {
         'This instruction will be displayed for the respondent before passing the practice round of the Activity.',
       );
 
-      const editor = screen.getByTestId(`${mockedFlankerTestid}-practice-round-instruction-instruction`);
+      const editor = screen.getByTestId(
+        `${mockedFlankerTestid}-practice-round-instruction-instruction`,
+      );
       expect(editor).toBeVisible();
       expect(editor.querySelector('textarea')).toHaveTextContent(
         mockedNewFlanker.items[1].question.replaceAll('\n', ''),
@@ -479,7 +485,9 @@ describe('Flanker', () => {
     test('Practice Round Settings: Block Sequences', () => {
       renderFlanker();
 
-      const blockSequences = screen.getByTestId(`${mockedFlankerTestid}-practice-round-block-sequences`);
+      const blockSequences = screen.getByTestId(
+        `${mockedFlankerTestid}-practice-round-block-sequences`,
+      );
       expect(blockSequences).toBeVisible();
       expect(blockSequences).toHaveTextContent('Add stimulus screens first');
     });
@@ -498,7 +506,9 @@ describe('Flanker', () => {
     test('Test Round Settings: Instruction', () => {
       renderFlanker();
 
-      const testRoundInstruction = screen.getByTestId(`${mockedFlankerTestid}-test-round-instruction`);
+      const testRoundInstruction = screen.getByTestId(
+        `${mockedFlankerTestid}-test-round-instruction`,
+      );
       expect(testRoundInstruction).toBeVisible();
 
       expandAllPanels();
@@ -507,7 +517,9 @@ describe('Flanker', () => {
         'This instruction will be displayed for the respondent before passing the test round of the Activity.',
       );
 
-      const editor = screen.getByTestId(`${mockedFlankerTestid}-test-round-instruction-instruction`);
+      const editor = screen.getByTestId(
+        `${mockedFlankerTestid}-test-round-instruction-instruction`,
+      );
       expect(editor).toBeVisible();
       expect(editor.querySelector('textarea')).toHaveTextContent(
         mockedNewFlanker.items[7].question.replaceAll('\n', ''),
@@ -518,7 +530,9 @@ describe('Flanker', () => {
     test('Test Round Settings: Block Sequences', () => {
       renderFlanker();
 
-      const blockSequences = screen.getByTestId(`${mockedFlankerTestid}-test-round-block-sequences`);
+      const blockSequences = screen.getByTestId(
+        `${mockedFlankerTestid}-test-round-block-sequences`,
+      );
       expect(blockSequences).toBeVisible();
       expect(blockSequences).toHaveTextContent('Add stimulus screens first');
     });
@@ -541,7 +555,9 @@ describe('Flanker', () => {
       fireEvent.click(screen.getByTestId(`${mockedFlankerTestid}-buttons-available-buttons-0`));
 
       expect(screen.queryByTestId(`${mockedFlankerTestid}-buttons-1-text`)).not.toBeInTheDocument();
-      expect(screen.queryByTestId(`${mockedFlankerTestid}-buttons-1-image`)).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId(`${mockedFlankerTestid}-buttons-1-image`),
+      ).not.toBeInTheDocument();
     });
 
     test('Image should be disabled if text is added and vice versa', async () => {
@@ -550,13 +566,17 @@ describe('Flanker', () => {
       ref.current.setValue('activities.0.items.2.config.buttons.0.text', 'test');
 
       await waitFor(() => {
-        expect(screen.getByTestId(`${mockedFlankerTestid}-buttons-0-image`)).toHaveAttribute('disabled');
+        expect(screen.getByTestId(`${mockedFlankerTestid}-buttons-0-image`)).toHaveAttribute(
+          'disabled',
+        );
       });
 
       ref.current.setValue('activities.0.items.2.config.buttons.1.image', 'image');
 
       await waitFor(() => {
-        expect(screen.getByTestId(`${mockedFlankerTestid}-buttons-1-text`).querySelector('input')).toBeDisabled();
+        expect(
+          screen.getByTestId(`${mockedFlankerTestid}-buttons-1-text`).querySelector('input'),
+        ).toBeDisabled();
       });
     });
   });

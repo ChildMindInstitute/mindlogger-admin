@@ -8,7 +8,10 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { page } from 'resources';
 import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
 import { mockedParams, mockedAppletFormData, mockIntersectionObserver } from 'shared/mock';
-import { getNewActivity, getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import {
+  getNewActivity,
+  getNewActivityItem,
+} from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ActivityItems } from './ActivityItems';
 
@@ -112,9 +115,13 @@ describe('Activity Items', () => {
       const addItem = screen.getByTestId(mockedAddItemTestId);
       fireEvent.click(addItem);
 
-      await waitFor(() => expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible());
+      await waitFor(() =>
+        expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible(),
+      );
 
-      const hoverableItem = screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div');
+      const hoverableItem = screen
+        .getByTestId(`${mockedActivityItemTestid}-0`)
+        .querySelector('div');
 
       fireEvent.mouseEnter(hoverableItem);
 
@@ -129,7 +136,9 @@ describe('Activity Items', () => {
         expect(duplicatedItem).toHaveTextContent('Item_1');
       });
 
-      const duplicatedHoverableItem = screen.getByTestId(`${mockedActivityItemTestid}-1`).querySelector('div');
+      const duplicatedHoverableItem = screen
+        .getByTestId(`${mockedActivityItemTestid}-1`)
+        .querySelector('div');
       fireEvent.mouseEnter(duplicatedHoverableItem);
       fireEvent.click(screen.getByTestId(`${mockedActivityItemTestid}-1-duplicate`));
 
@@ -146,9 +155,13 @@ describe('Activity Items', () => {
       const addItem = screen.getByTestId(mockedAddItemTestId);
       fireEvent.click(addItem);
 
-      await waitFor(() => expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible());
+      await waitFor(() =>
+        expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible(),
+      );
 
-      const hoverableItem = screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div');
+      const hoverableItem = screen
+        .getByTestId(`${mockedActivityItemTestid}-0`)
+        .querySelector('div');
 
       fireEvent.mouseEnter(hoverableItem);
 
@@ -171,9 +184,13 @@ describe('Activity Items', () => {
       const addItem = screen.getByTestId(mockedAddItemTestId);
       fireEvent.click(addItem);
 
-      await waitFor(() => expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible());
+      await waitFor(() =>
+        expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible(),
+      );
 
-      const hoverableItem = screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div');
+      const hoverableItem = screen
+        .getByTestId(`${mockedActivityItemTestid}-0`)
+        .querySelector('div');
 
       fireEvent.mouseEnter(hoverableItem);
 
@@ -187,7 +204,9 @@ describe('Activity Items', () => {
         expect(modal).toBeVisible();
       });
 
-      const confirmRemove = screen.getByTestId('builder-activity-items-delete-item-popup-submit-button');
+      const confirmRemove = screen.getByTestId(
+        'builder-activity-items-delete-item-popup-submit-button',
+      );
       fireEvent.click(confirmRemove);
 
       expect(ref.current.getValues('activities.0.items')).toEqual([]);
@@ -200,13 +219,19 @@ describe('Activity Items', () => {
       const addItem = screen.getByTestId(mockedAddItemTestId);
       fireEvent.click(addItem);
 
-      await waitFor(() => expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible());
+      await waitFor(() =>
+        expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible(),
+      );
 
-      expect(screen.queryByTestId(`${mockedActivityItemTestid}-0-insert-0`)).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId(`${mockedActivityItemTestid}-0-insert-0`),
+      ).not.toBeInTheDocument();
 
       fireEvent.click(addItem);
 
-      await waitFor(() => expect(screen.getByTestId(`${mockedActivityItemTestid}-1`)).toBeVisible());
+      await waitFor(() =>
+        expect(screen.getByTestId(`${mockedActivityItemTestid}-1`)).toBeVisible(),
+      );
 
       const insert = screen.queryByTestId(`${mockedActivityItemTestid}-0-insert-0`);
       fireEvent.mouseEnter(insert);
@@ -225,7 +250,9 @@ describe('Activity Items', () => {
       const addItem = screen.getByTestId(mockedAddItemTestId);
       fireEvent.click(addItem);
 
-      expect(mockedUseNavigate).toBeCalledWith(getActivityItemUrl(ref.current.getValues('activities.0.items.0.key')));
+      expect(mockedUseNavigate).toBeCalledWith(
+        getActivityItemUrl(ref.current.getValues('activities.0.items.0.key')),
+      );
     });
 
     test('Active on add if another item is active', () => {
@@ -234,7 +261,9 @@ describe('Activity Items', () => {
       const addItem = screen.getByTestId(mockedAddItemTestId);
       fireEvent.click(addItem);
 
-      expect(mockedUseNavigate).toBeCalledWith(getActivityItemUrl(ref.current.getValues('activities.0.items.1.key')));
+      expect(mockedUseNavigate).toBeCalledWith(
+        getActivityItemUrl(ref.current.getValues('activities.0.items.1.key')),
+      );
     });
 
     test('Active on insert by default', async () => {
@@ -244,9 +273,13 @@ describe('Activity Items', () => {
       fireEvent.click(addItem);
       fireEvent.click(addItem);
 
-      await waitFor(() => expect(screen.getByTestId(`${mockedActivityItemTestid}-1`)).toBeVisible());
+      await waitFor(() =>
+        expect(screen.getByTestId(`${mockedActivityItemTestid}-1`)).toBeVisible(),
+      );
 
-      fireEvent.click(screen.getByTestId(`${mockedActivityItemTestid}-0-insert-0`).querySelector('button'));
+      fireEvent.click(
+        screen.getByTestId(`${mockedActivityItemTestid}-0-insert-0`).querySelector('button'),
+      );
 
       expect(mockedUseNavigate).toHaveBeenNthCalledWith(
         3,
@@ -260,9 +293,13 @@ describe('Activity Items', () => {
       const addItem = screen.getByTestId(mockedAddItemTestId);
       fireEvent.click(addItem);
 
-      await waitFor(() => expect(screen.getByTestId(`${mockedActivityItemTestid}-1`)).toBeVisible());
+      await waitFor(() =>
+        expect(screen.getByTestId(`${mockedActivityItemTestid}-1`)).toBeVisible(),
+      );
 
-      fireEvent.click(screen.getByTestId(`${mockedActivityItemTestid}-0-insert-0`).querySelector('button'));
+      fireEvent.click(
+        screen.getByTestId(`${mockedActivityItemTestid}-0-insert-0`).querySelector('button'),
+      );
 
       expect(mockedUseNavigate).toHaveBeenNthCalledWith(
         2,
@@ -277,9 +314,13 @@ describe('Activity Items', () => {
       fireEvent.click(addItem);
       fireEvent.click(addItem);
 
-      await waitFor(() => expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible());
+      await waitFor(() =>
+        expect(screen.getByTestId(`${mockedActivityItemTestid}-0`)).toBeVisible(),
+      );
 
-      const hoverableItem = screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div');
+      const hoverableItem = screen
+        .getByTestId(`${mockedActivityItemTestid}-0`)
+        .querySelector('div');
 
       fireEvent.mouseEnter(hoverableItem);
 
@@ -293,7 +334,9 @@ describe('Activity Items', () => {
         expect(modal).toBeVisible();
       });
 
-      const confirmRemove = screen.getByTestId('builder-activity-items-delete-item-popup-submit-button');
+      const confirmRemove = screen.getByTestId(
+        'builder-activity-items-delete-item-popup-submit-button',
+      );
       fireEvent.click(confirmRemove);
 
       expect(mockedUseNavigate).nthCalledWith(3, getActivityItemUrl());
@@ -311,7 +354,10 @@ describe('Activity Items', () => {
 
       fireEvent.click(screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div'));
 
-      expect(mockedUseNavigate).nthCalledWith(2, getActivityItemUrl(ref.current.getValues('activities.0.items.0.key')));
+      expect(mockedUseNavigate).nthCalledWith(
+        2,
+        getActivityItemUrl(ref.current.getValues('activities.0.items.0.key')),
+      );
     });
   });
 
@@ -329,7 +375,9 @@ describe('Activity Items', () => {
         { itemKey: ref.current.getValues('activities.0.items.0.key') },
       ]);
 
-      fireEvent.mouseEnter(screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div'));
+      fireEvent.mouseEnter(
+        screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div'),
+      );
 
       const removes = screen.getAllByTestId(`${mockedActivityItemTestid}-0-remove`);
       fireEvent.click(removes[0]);
@@ -356,7 +404,9 @@ describe('Activity Items', () => {
         { conditions: [{ itemName: ref.current.getValues('activities.0.items.0.key') }] },
       ]);
 
-      fireEvent.mouseEnter(screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div'));
+      fireEvent.mouseEnter(
+        screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div'),
+      );
 
       const removes = screen.getAllByTestId(`${mockedActivityItemTestid}-0-remove`);
       fireEvent.click(removes[0]);
@@ -384,7 +434,9 @@ describe('Activity Items', () => {
       ref.current.setValue('activities.0.items.1.name', 'Item2');
       ref.current.setValue('activities.0.items.1.question', '[[Item]]');
 
-      fireEvent.mouseEnter(screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div'));
+      fireEvent.mouseEnter(
+        screen.getByTestId(`${mockedActivityItemTestid}-0`).querySelector('div'),
+      );
 
       const removes = screen.getAllByTestId(`${mockedActivityItemTestid}-0-remove`);
       fireEvent.click(removes[0]);

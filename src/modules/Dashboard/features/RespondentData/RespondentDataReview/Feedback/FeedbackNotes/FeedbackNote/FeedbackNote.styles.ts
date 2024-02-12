@@ -1,6 +1,12 @@
 import { Box, Button, styled } from '@mui/material';
 
-import { StyledBodyMedium, StyledFlexAllCenter, StyledFlexTopStart, theme, variables } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledFlexAllCenter,
+  StyledFlexTopStart,
+  theme,
+  variables,
+} from 'shared/styles';
 
 export const StyledNote = styled(Box)`
   width: 100%;

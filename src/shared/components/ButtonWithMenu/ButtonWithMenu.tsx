@@ -36,7 +36,8 @@ export const ButtonWithMenu = ({
         <span>
           <StyledButton
             sx={{
-              backgroundColor: openMenu && variant === 'outlined' ? variables.palette.primary_alfa12 : 'inherit',
+              backgroundColor:
+                openMenu && variant === 'outlined' ? variables.palette.primary_alfa12 : 'inherit',
             }}
             disabled={disabled}
             variant={variant}

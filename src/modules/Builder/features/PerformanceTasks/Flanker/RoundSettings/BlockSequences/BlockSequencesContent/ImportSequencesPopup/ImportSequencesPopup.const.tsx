@@ -6,7 +6,8 @@ const { t } = i18n;
 
 export const invalidFileFormatError = (
   <Trans i18nKey="flankerRound.invalidFileFormat">
-    Invalid file format or empty file. Please upload a sequence table in one of the following formats:
+    Invalid file format or empty file. Please upload a sequence table in one of the following
+    formats:
     <strong> .csv</strong> or <strong>.xlsx.</strong>
   </Trans>
 );

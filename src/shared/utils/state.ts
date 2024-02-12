@@ -40,7 +40,10 @@ export const getFulfilledData = <T extends Record<string, BaseSchema>, K>({
   builder.addCase(thunk.fulfilled, (state, action) => {
     const selectedProperty = get(state, key);
 
-    if (selectedProperty.status === 'loading' && selectedProperty.requestId === action.meta.requestId) {
+    if (
+      selectedProperty.status === 'loading' &&
+      selectedProperty.requestId === action.meta.requestId
+    ) {
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'success';
       selectedProperty.data = mapper(action.payload?.data);
@@ -64,13 +67,19 @@ export const getFulfilledDataWithConcatenatedResult = <T extends Record<string, 
   builder.addCase(thunk.fulfilled, (state, action) => {
     const selectedProperty = get(state, key);
 
-    if (selectedProperty.status === 'loading' && selectedProperty.requestId === action.meta.requestId) {
+    if (
+      selectedProperty.status === 'loading' &&
+      selectedProperty.requestId === action.meta.requestId
+    ) {
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'success';
       selectedProperty.error = undefined;
       selectedProperty.data = mapper({
         ...(action.payload?.data ?? {}),
-        result: uniqBy((selectedProperty.data?.result ?? []).concat(action.payload?.data.result ?? []), 'id'),
+        result: uniqBy(
+          (selectedProperty.data?.result ?? []).concat(action.payload?.data.result ?? []),
+          'id',
+        ),
       });
     }
   });
@@ -89,7 +98,10 @@ export const getRejectedData = <T extends Record<string, BaseSchema>, K>({
   builder.addCase(thunk.rejected, (state, action) => {
     const selectedProperty = get(state, key);
 
-    if (selectedProperty.status === 'loading' && selectedProperty.requestId === action.meta.requestId) {
+    if (
+      selectedProperty.status === 'loading' &&
+      selectedProperty.requestId === action.meta.requestId
+    ) {
       selectedProperty.requestId = initialState[key].requestId;
       selectedProperty.status = 'error';
       selectedProperty.error = action.payload;

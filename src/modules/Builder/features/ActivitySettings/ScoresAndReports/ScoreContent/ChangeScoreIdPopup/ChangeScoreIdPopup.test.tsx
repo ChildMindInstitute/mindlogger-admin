@@ -10,7 +10,9 @@ const onChangeMock = jest.fn();
 describe('ChangeScoreIdPopup', () => {
   test('should change scoreId', () => {
     const dataTestid = 'change-score-id-popup';
-    renderWithProviders(<ChangeScoreIdPopup onClose={onCloseMock} onChange={onChangeMock} data-testid={dataTestid} />);
+    renderWithProviders(
+      <ChangeScoreIdPopup onClose={onCloseMock} onChange={onChangeMock} data-testid={dataTestid} />,
+    );
 
     expect(
       screen.getByText(

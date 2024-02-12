@@ -7,7 +7,12 @@ import { useWindowSize } from 'shared/hooks/useWindowSize';
 import { StyledCellText } from './ContentWithTooltip.styles';
 import { ContentWithTooltipProps } from './ContentWithTooltip.types';
 
-export const ContentWithTooltip = ({ value, item, styles = {}, tooltipByDefault }: ContentWithTooltipProps) => {
+export const ContentWithTooltip = ({
+  value,
+  item,
+  styles = {},
+  tooltipByDefault,
+}: ContentWithTooltipProps) => {
   const { width } = useWindowSize();
   const elementRef = useRef<HTMLDivElement>(null);
   const hasTooltip = useIsTextNodeEllipsed(elementRef, [elementRef.current, width, value]);

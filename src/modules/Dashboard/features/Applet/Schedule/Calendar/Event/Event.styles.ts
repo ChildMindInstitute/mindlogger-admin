@@ -1,7 +1,13 @@
 import { styled, Box } from '@mui/material';
 
 import { shouldForwardProp } from 'shared/utils';
-import { theme, variables, StyledFlexTopCenter, StyledFlexTopStart, StyledLabelBoldMedium } from 'shared/styles';
+import {
+  theme,
+  variables,
+  StyledFlexTopCenter,
+  StyledFlexTopStart,
+  StyledLabelBoldMedium,
+} from 'shared/styles';
 
 export const StyledEvent = styled(Box, shouldForwardProp)`
   width: 100%;
@@ -28,14 +34,16 @@ export const StyledLeftSection = styled(StyledFlexTopStart)`
 
 export const StyledStartIcon = styled(StyledFlexTopCenter, shouldForwardProp)`
   svg {
-    fill: ${({ isWhite }: { isWhite: boolean }) => (isWhite ? variables.palette.white : variables.palette.on_surface)};
+    fill: ${({ isWhite }: { isWhite: boolean }) =>
+      isWhite ? variables.palette.white : variables.palette.on_surface};
   }
 `;
 
 export const StyledEndIcon = styled(StyledFlexTopCenter, shouldForwardProp)`
   svg {
     opacity: 0.62;
-    fill: ${({ isWhite }: { isWhite: boolean }) => (isWhite ? variables.palette.white : variables.palette.on_surface)};
+    fill: ${({ isWhite }: { isWhite: boolean }) =>
+      isWhite ? variables.palette.white : variables.palette.on_surface};
   }
 `;
 
@@ -52,5 +60,6 @@ export const StyledTitle = styled(StyledLabelBoldMedium, shouldForwardProp)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: ${({ isWhite }: { isWhite?: boolean }) => (isWhite ? variables.palette.white : variables.palette.on_surface)};
+  color: ${({ isWhite }: { isWhite?: boolean }) =>
+    isWhite ? variables.palette.white : variables.palette.on_surface};
 `;

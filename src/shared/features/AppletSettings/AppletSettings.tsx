@@ -5,7 +5,11 @@ import { NavigationItem, NavigationMenu } from 'shared/components';
 
 import { AppletSettingsProps } from './AppletSettings.types';
 
-export const AppletSettings = ({ settings, isBuilder = false, 'data-testid': dataTestid }: AppletSettingsProps) => {
+export const AppletSettings = ({
+  settings,
+  isBuilder = false,
+  'data-testid': dataTestid,
+}: AppletSettingsProps) => {
   const { appletId } = useParams();
   const navigate = useNavigate();
   const BUILDER_SETTINGS = generatePath(page.builderAppletSettings, {

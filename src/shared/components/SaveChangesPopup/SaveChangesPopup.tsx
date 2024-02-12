@@ -43,7 +43,12 @@ export const SaveChangesPopup = ({
           <StyledButton fontWeight="bold" variant="text" onClick={onDontSave} color="error">
             {t('dontSave')}
           </StyledButton>
-          <StyledButton fontWeight="bold" variant="text" onClick={onSave} data-testid={`${dataTestid}-save-button`}>
+          <StyledButton
+            fontWeight="bold"
+            variant="text"
+            onClick={onSave}
+            data-testid={`${dataTestid}-save-button`}
+          >
             {t('save')}
           </StyledButton>
         </StyledButtonsContainer>

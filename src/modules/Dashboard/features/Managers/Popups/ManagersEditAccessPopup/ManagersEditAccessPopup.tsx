@@ -114,7 +114,9 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
             <strong>
               {firstName} {lastName} ({email})
             </strong>
-            {appletId ? ` ${t('hasTheFollowingRole')} ${applets?.[0]?.displayName}` : t('userHasAccess')}
+            {appletId
+              ? ` ${t('hasTheFollowingRole')} ${applets?.[0]?.displayName}`
+              : t('userHasAccess')}
           </StyledBodyLarge>
         </StyledModalWrapper>
         <StyledApplets>

@@ -85,7 +85,11 @@ export const AudioUploadExtension = ({
         }
       />
       {isPopupVisible && (
-        <SourceLinkModal title={t('audioLink')} handleClose={handlePopupClose} handleSubmit={handlePopupSubmit} />
+        <SourceLinkModal
+          title={t('audioLink')}
+          handleClose={handlePopupClose}
+          handleSubmit={handlePopupSubmit}
+        />
       )}
     </>
   );

@@ -220,11 +220,14 @@ describe('Schedule.utils.tsx', () => {
       ${'Monthly event, all day'}          | ${allDayEvent}          | ${CalendarViews.Month} | ${defaultExpected}
       ${'Monthly event, always available'} | ${alwaysAvailableEvent} | ${CalendarViews.Month} | ${expected2}
       ${'Yearly event, not all day'}       | ${defaultEvent}         | ${CalendarViews.Year}  | ${defaultExpected}
-    `('returns correct styles for $testName, active view: $activeView', ({ eventData, activeView, expectedStyles }) => {
-      const result = eventPropGetter(eventData, activeView);
-      const { style } = result;
+    `(
+      'returns correct styles for $testName, active view: $activeView',
+      ({ eventData, activeView, expectedStyles }) => {
+        const result = eventPropGetter(eventData, activeView);
+        const { style } = result;
 
-      expect(style).toEqual(expectedStyles);
-    });
+        expect(style).toEqual(expectedStyles);
+      },
+    );
   });
 });

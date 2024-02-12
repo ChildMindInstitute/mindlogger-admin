@@ -6,7 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 
-import { InputController, SelectController, TagsInputController } from 'shared/components/FormComponents';
+import {
+  InputController,
+  SelectController,
+  TagsInputController,
+} from 'shared/components/FormComponents';
 import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
 import { AppletInvitationOptions, getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
 import { getErrorMessage, Mixpanel } from 'shared/utils';
@@ -38,11 +42,12 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
     label: `${details?.[0].accessId} (${details?.[0].respondentNickname})`,
     id,
   }));
-  const { handleSubmit, control, watch, reset, register, unregister, setError } = useForm<FormValues>({
-    resolver: yupResolver(AddUserSchema(workspaceNameVisible)),
-    defaultValues,
-    mode: 'onChange',
-  });
+  const { handleSubmit, control, watch, reset, register, unregister, setError } =
+    useForm<FormValues>({
+      resolver: yupResolver(AddUserSchema(workspaceNameVisible)),
+      defaultValues,
+      mode: 'onChange',
+    });
 
   const role = watch(Fields.role);
 
@@ -53,12 +58,15 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
 
   const resetForm = () => reset();
 
-  const { error, execute: executePostAppletInvitationApi } = useAsync(postAppletInvitationApi, async () => {
-    await getInvitationsHandler();
-    ownerId && executeGetWorkspaceInfoApi({ ownerId });
-    resetForm();
-    Mixpanel.track('Invitation sent successfully');
-  });
+  const { error, execute: executePostAppletInvitationApi } = useAsync(
+    postAppletInvitationApi,
+    async () => {
+      await getInvitationsHandler();
+      ownerId && executeGetWorkspaceInfoApi({ ownerId });
+      resetForm();
+      Mixpanel.track('Invitation sent successfully');
+    },
+  );
   const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {
     setWorkspaceInfo(res?.data?.result || null);
   });
@@ -120,13 +128,20 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
 
   return (
     <>
-      <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }}>{t('personalInvitation')}</StyledTitleMedium>
+      <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }}>
+        {t('personalInvitation')}
+      </StyledTitleMedium>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={2.4} alignItems="flex-start">
           <Grid container item xs={12} spacing={2.4}>
             {fields.map(({ name, 'data-testid': dataTestId }) => (
               <Grid item xs={4} key={name}>
-                <InputController {...commonProps} name={name} label={t(name)} data-testid={dataTestId} />
+                <InputController
+                  {...commonProps}
+                  name={name}
+                  label={t(name)}
+                  data-testid={dataTestId}
+                />
               </Grid>
             ))}
           </Grid>
@@ -148,7 +163,9 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
                 options={respondents}
                 label={t('respondents')}
                 labelAllSelect={t('all')}
-                noOptionsText={respondents?.length ? t('noRespondentsToSelect') : t('noRespondentsYet')}
+                noOptionsText={
+                  respondents?.length ? t('noRespondentsToSelect') : t('noRespondentsYet')
+                }
                 data-testid="dashboard-add-users-respondents"
               />
             </Grid>
@@ -207,12 +224,18 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           <StyledButton variant="contained" type="submit" data-testid="dashboard-add-users-send">
             {t('sendInvitation')}
           </StyledButton>
-          <StyledResetButton variant="outlined" onClick={resetForm} data-testid="dashboard-add-users-reset">
+          <StyledResetButton
+            variant="outlined"
+            onClick={resetForm}
+            data-testid="dashboard-add-users-reset"
+          >
             {t('resetForm')}
           </StyledResetButton>
         </StyledRow>
       </form>
-      {hasCommonError && <StyledErrorText sx={{ mt: theme.spacing(2) }}>{getErrorMessage(error)}</StyledErrorText>}
+      {hasCommonError && (
+        <StyledErrorText sx={{ mt: theme.spacing(2) }}>{getErrorMessage(error)}</StyledErrorText>
+      )}
     </>
   );
 };

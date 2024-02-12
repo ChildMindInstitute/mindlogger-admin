@@ -23,14 +23,21 @@ export const getSliderOptions = (min: number, max: number) =>
 
 export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => {
   const { responseType, responseValues, alerts } = formValues;
-  if (responseType === ItemResponseType.SingleSelection || responseType === ItemResponseType.MultipleSelection) {
+  if (
+    responseType === ItemResponseType.SingleSelection ||
+    responseType === ItemResponseType.MultipleSelection
+  ) {
     const { options } = responseValues ?? {};
 
     return (
       options?.reduce((result: Option[], option, index) => {
-        if (alerts?.some(({ value }) => value === option.id && option.id !== alert?.value)) return result;
+        if (alerts?.some(({ value }) => value === option.id && option.id !== alert?.value))
+          return result;
 
-        return [...result, { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id! }];
+        return [
+          ...result,
+          { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id! },
+        ];
       }, []) || []
     );
   }
@@ -52,7 +59,10 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
 
       if (hasSameAlert) return result;
 
-      return [...result, { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id! }];
+      return [
+        ...result,
+        { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id! },
+      ];
     }, []);
   }
 
@@ -84,12 +94,16 @@ export const getItemsList = (formValues: ItemFormValues, alert: ItemAlert) => {
       if (alertsWithRow?.length === options?.length && alert?.rowId !== row.id) return result;
 
       const hasSameAlert = alertsWithRow?.some(
-        ({ optionId, key }) => alert?.optionId && optionId === alert?.optionId && key !== alert?.key,
+        ({ optionId, key }) =>
+          alert?.optionId && optionId === alert?.optionId && key !== alert?.key,
       );
 
       if (hasSameAlert) return result;
 
-      return [...result, { labelKey: getOptionName(OptionTypes.Row, index, row.rowName), value: row.id }];
+      return [
+        ...result,
+        { labelKey: getOptionName(OptionTypes.Row, index, row.rowName), value: row.id },
+      ];
     }, []);
   }
 
@@ -113,9 +127,12 @@ export const getSliderRowsItemList = (
   }, []);
 
   if ([minValue, maxValue].includes(undefined)) return [];
-  const maxValueNumber = Number(maxValue) > DEFAULT_SLIDER_MAX_NUMBER ? DEFAULT_SLIDER_MAX_NUMBER : Number(maxValue);
+  const maxValueNumber =
+    Number(maxValue) > DEFAULT_SLIDER_MAX_NUMBER ? DEFAULT_SLIDER_MAX_NUMBER : Number(maxValue);
   const minValueNumber =
-    Number(minValue) < DEFAULT_SLIDER_ROWS_MIN_NUMBER ? DEFAULT_SLIDER_ROWS_MIN_NUMBER : Number(minValue);
+    Number(minValue) < DEFAULT_SLIDER_ROWS_MIN_NUMBER
+      ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
+      : Number(minValue);
 
   return createArray(maxValueNumber - minValueNumber + 1, (index) => {
     const value = `${minValueNumber + index}`;

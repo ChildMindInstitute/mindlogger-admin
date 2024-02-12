@@ -107,7 +107,9 @@ describe('ScoreContent', () => {
       const input = selectWrapper.querySelector('input');
       input && fireEvent.change(input, { target: { value: calculationType } });
 
-      await waitFor(() => expect(screen.getByTestId(`${dataTestid}-scoreid`)).toHaveTextContent(expectedResult));
+      await waitFor(() =>
+        expect(screen.getByTestId(`${dataTestid}-scoreid`)).toHaveTextContent(expectedResult),
+      );
     });
   });
 
@@ -120,15 +122,25 @@ describe('ScoreContent', () => {
       ${[]}           | ${'-'}           | ${'should be -'}
     `(
       '$description',
-      async ({ checkboxIndexes, expectedResult }: { checkboxIndexes: number[]; expectedResult: string }) => {
+      async ({
+        checkboxIndexes,
+        expectedResult,
+      }: {
+        checkboxIndexes: number[];
+        expectedResult: string;
+      }) => {
         renderWithAppletFormData({ children: <ScoreContent {...commonProps} /> });
 
         checkboxIndexes.forEach((index) => {
-          const checkboxWrapper = screen.getByTestId(`${dataTestid}-items-score-unselected-checkbox-${index}`);
+          const checkboxWrapper = screen.getByTestId(
+            `${dataTestid}-items-score-unselected-checkbox-${index}`,
+          );
           fireEvent.click(within(checkboxWrapper).getByRole('checkbox'));
         });
 
-        await waitFor(() => expect(screen.getByTestId(`${dataTestid}-score-range`)).toHaveTextContent(expectedResult));
+        await waitFor(() =>
+          expect(screen.getByTestId(`${dataTestid}-score-range`)).toHaveTextContent(expectedResult),
+        );
       },
     );
   });
@@ -153,11 +165,15 @@ describe('ScoreContent', () => {
 
     fireEvent.click(within(removePopup).getByText('Remove'));
 
-    expect(within(removePopup).getByText('Conditional logic has been removed successfully.')).toBeInTheDocument();
+    expect(
+      within(removePopup).getByText('Conditional logic has been removed successfully.'),
+    ).toBeInTheDocument();
 
     fireEvent.click(within(removePopup).getByText('Ok'));
 
-    expect(screen.queryByTestId(`${dataTestid}-remove-conditional-logic-popup`)).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId(`${dataTestid}-remove-conditional-logic-popup`),
+    ).not.toBeInTheDocument();
   });
 
   test('should add conditional logic', () => {

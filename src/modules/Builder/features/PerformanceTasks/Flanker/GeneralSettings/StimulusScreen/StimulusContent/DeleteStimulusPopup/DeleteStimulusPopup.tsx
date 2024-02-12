@@ -5,7 +5,12 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { DeleteStimulusPopupProps } from './DeleteStimulusPopup.types';
 
-export const DeleteStimulusPopup = ({ isOpen, onModalClose, onModalSubmit, imageName }: DeleteStimulusPopupProps) => {
+export const DeleteStimulusPopup = ({
+  isOpen,
+  onModalClose,
+  onModalSubmit,
+  imageName,
+}: DeleteStimulusPopupProps) => {
   const { t } = useTranslation('app');
 
   return (

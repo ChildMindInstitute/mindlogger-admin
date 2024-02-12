@@ -52,7 +52,12 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
-      <StyledAccountDrawer data-testid={dataTestid} anchor="right" open={visibleDrawer} hideBackdrop>
+      <StyledAccountDrawer
+        data-testid={dataTestid}
+        anchor="right"
+        open={visibleDrawer}
+        hideBackdrop
+      >
         <Box>
           <StyledHeader>
             <StyledFlexTopCenter>
@@ -71,7 +76,10 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
               </StyledHeaderInfo>
             </StyledFlexTopCenter>
             <StyledCloseWrapper>
-              <StyledIconButton data-testid="account-panel-close" onClick={() => setVisibleDrawer(false)}>
+              <StyledIconButton
+                data-testid="account-panel-close"
+                onClick={() => setVisibleDrawer(false)}
+              >
                 <Svg id="close" />
               </StyledIconButton>
             </StyledCloseWrapper>
@@ -80,7 +88,10 @@ export const AccountPanel = ({ setVisibleDrawer, visibleDrawer }: AccountPanelPr
         </Box>
         <StyledDivider />
         <StyledFooter>
-          <StyledLogOutBtn startIcon={<Svg id="logout" width="16" height="20" />} onClick={onLogout}>
+          <StyledLogOutBtn
+            startIcon={<Svg id="logout" width="16" height="20" />}
+            onClick={onLogout}
+          >
             {t('logOut')}
           </StyledLogOutBtn>
         </StyledFooter>

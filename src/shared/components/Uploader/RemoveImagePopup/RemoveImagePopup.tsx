@@ -8,7 +8,12 @@ import { StyledModalWrapper } from 'shared/styles';
 import { RemoveImagePopupProps, Steps } from './RemoveImagePopup.types';
 import { getScreens } from './RemoveImagePopup.utils';
 
-export const RemoveImagePopup = ({ open, onClose, onRemove, 'data-testid': dataTestid }: RemoveImagePopupProps) => {
+export const RemoveImagePopup = ({
+  open,
+  onClose,
+  onRemove,
+  'data-testid': dataTestid,
+}: RemoveImagePopupProps) => {
   const { t } = useTranslation('app');
   const [step, setStep] = useState<Steps>(0);
 

@@ -81,7 +81,9 @@ describe('ChartTooltip', () => {
       search: `selectedDate=2023-12-20&answerId=${answerId}`,
     });
 
-    const showSubscaleResultButton = screen.getByTestId(`${dataTestid}-tooltip-show-subscale-result-button`);
+    const showSubscaleResultButton = screen.getByTestId(
+      `${dataTestid}-tooltip-show-subscale-result-button`,
+    );
     expect(showSubscaleResultButton).toBeInTheDocument();
 
     fireEvent.click(showSubscaleResultButton);
@@ -102,7 +104,9 @@ describe('ChartTooltip', () => {
       },
     );
 
-    const showSubscaleResultButton = screen.queryByTestId(`${dataTestid}-tooltip-show-subscale-result-button`);
+    const showSubscaleResultButton = screen.queryByTestId(
+      `${dataTestid}-tooltip-show-subscale-result-button`,
+    );
     expect(showSubscaleResultButton).not.toBeInTheDocument();
   });
 });

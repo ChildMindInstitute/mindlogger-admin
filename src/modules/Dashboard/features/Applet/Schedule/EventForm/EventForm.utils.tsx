@@ -5,7 +5,13 @@ import * as yup from 'yup';
 import i18n from 'i18n';
 import { Svg } from 'shared/components/Svg';
 import { Activity, ActivityFlow } from 'shared/state';
-import { CreateEventType, EventNotifications, NotificationType, Periodicity, TimerType } from 'modules/Dashboard/api';
+import {
+  CreateEventType,
+  EventNotifications,
+  NotificationType,
+  Periodicity,
+  TimerType,
+} from 'modules/Dashboard/api';
 import { CalendarEvent } from 'modules/Dashboard/state';
 import { getIsRequiredValidateMessage } from 'shared/utils';
 import {
@@ -57,7 +63,10 @@ export const getEventFormTabs = ({
     labelKey: 'availability',
     id: 'event-form-availability',
     content: (
-      <AvailabilityTab hasAlwaysAvailableOption={hasAlwaysAvailableOption} data-testid={`${dataTestid}-availability`} />
+      <AvailabilityTab
+        hasAlwaysAvailableOption={hasAlwaysAvailableOption}
+        data-testid={`${dataTestid}-availability`}
+      />
     ),
     hasError: hasAvailabilityErrors,
     'data-testid': `${dataTestid}-availability-tab`,
@@ -178,15 +187,16 @@ export const getTimerDurationCheck = () => {
   return yup.string().test('is-valid-duration', timerDurationCheck, timerDurationTest);
 };
 
-export const notificationValidPeriodTest = (field: string) => (_: string, testContext: NotificationTimeTestContext) => {
-  const { fromTime, toTime } = testContext.parent;
+export const notificationValidPeriodTest =
+  (field: string) => (_: string, testContext: NotificationTimeTestContext) => {
+    const { fromTime, toTime } = testContext.parent;
 
-  if ((field !== 'fromTime' && field !== 'toTime') || !fromTime || !toTime) {
-    return true;
-  }
+    if ((field !== 'fromTime' && field !== 'toTime') || !fromTime || !toTime) {
+      return true;
+    }
 
-  return fromTime !== toTime;
-};
+    return fromTime !== toTime;
+  };
 
 export const getNotificationTimeComparison = ({
   schema,
@@ -199,7 +209,11 @@ export const getNotificationTimeComparison = ({
 
   return schema
     .required(getIsRequiredValidateMessage(field))
-    .test('is-valid-period', showValidPeriodMessage ? selectValidPeriod : '', notificationValidPeriodTest(field))
+    .test(
+      'is-valid-period',
+      showValidPeriodMessage ? selectValidPeriod : '',
+      notificationValidPeriodTest(field),
+    )
     .test(
       'after-start-time-before-end-time',
       activityUnavailableAtTime,
@@ -208,7 +222,12 @@ export const getNotificationTimeComparison = ({
         const endTimeValue = testContext.from[1].value.endTime;
         const { fromTime, toTime } = testContext.parent;
 
-        if (!startTimeValue || !endTimeValue || !value || (fromTime === toTime && typeof toTime === 'string')) {
+        if (
+          !startTimeValue ||
+          !endTimeValue ||
+          !value ||
+          (fromTime === toTime && typeof toTime === 'string')
+        ) {
           return true;
         }
 
@@ -299,15 +318,22 @@ export const getNotifications = (type: SecondsManipulation, notifications?: Even
       return {
         ...notification,
         atTime:
-          type === SecondsManipulation.AddSeconds ? addSecondsToHourMinutes(atTime) : removeSecondsFromTime(atTime),
+          type === SecondsManipulation.AddSeconds
+            ? addSecondsToHourMinutes(atTime)
+            : removeSecondsFromTime(atTime),
       };
     }
 
     return {
       ...notification,
       fromTime:
-        type === SecondsManipulation.AddSeconds ? addSecondsToHourMinutes(fromTime) : removeSecondsFromTime(fromTime),
-      toTime: type === SecondsManipulation.AddSeconds ? addSecondsToHourMinutes(toTime) : removeSecondsFromTime(toTime),
+        type === SecondsManipulation.AddSeconds
+          ? addSecondsToHourMinutes(fromTime)
+          : removeSecondsFromTime(fromTime),
+      toTime:
+        type === SecondsManipulation.AddSeconds
+          ? addSecondsToHourMinutes(toTime)
+          : removeSecondsFromTime(toTime),
     };
   }) || null;
 
@@ -359,9 +385,11 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
   const accessBeforeSchedule = eventAccessBeforeSchedule ?? false;
   const timerType = eventTimerType || TimerType.NotSet;
   const timerHHmmString = timer && convertSecondsToHHmmString(timer);
-  const timerDuration = (timerType === TimerType.Timer && timerHHmmString) || DEFAULT_TIMER_DURATION;
+  const timerDuration =
+    (timerType === TimerType.Timer && timerHHmmString) || DEFAULT_TIMER_DURATION;
   const idleTime = (timerType === TimerType.Idle && timerHHmmString) || DEFAULT_IDLE_TIME;
-  const notifications = getNotifications(SecondsManipulation.RemoveSeconds, notification?.notifications) || [];
+  const notifications =
+    getNotifications(SecondsManipulation.RemoveSeconds, notification?.notifications) || [];
   const reminder =
     getReminder({
       type: SecondsManipulation.RemoveSeconds,
@@ -408,7 +436,8 @@ export const getActivitiesFlows = (activities: Activity[], activityFlows: Activi
   })),
 ];
 
-export const addSecondsToHourMinutes = (timeStr?: string | null) => (timeStr ? `${timeStr}:00` : null);
+export const addSecondsToHourMinutes = (timeStr?: string | null) =>
+  timeStr ? `${timeStr}:00` : null;
 
 const getTimer = (timerType: TimerType, timerDuration: string, idleTime: string) => {
   switch (timerType) {
@@ -582,7 +611,8 @@ export const activityAvailabilityAtDayTest = (
   testContext: yup.TestContext<yup.AnyObject>,
 ) => {
   if (!value || value === 0) return true;
-  const { startDate, endDate, periodicity, isCrossDayEvent } = getActivityIncompleteCommonFields(testContext);
+  const { startDate, endDate, periodicity, isCrossDayEvent } =
+    getActivityIncompleteCommonFields(testContext);
   if (periodicity === Periodicity.Once) {
     return value < ONCE_ACTIVITY_INCOMPLETE_LIMITATION;
   }
@@ -614,9 +644,20 @@ export const activityAvailabilityAtDayTest = (
 };
 
 export const getActivityIncompleteValidation = () =>
-  yup.number().test('activity-availability-at-day', t('activityIsUnavailable'), activityAvailabilityAtDayTest);
+  yup
+    .number()
+    .test(
+      'activity-availability-at-day',
+      t('activityIsUnavailable'),
+      activityAvailabilityAtDayTest,
+    );
 
-export const getReminderTimeComparison = ({ time, startTime, endTime, isCrossDay }: GetReminderTimeComparison) => {
+export const getReminderTimeComparison = ({
+  time,
+  startTime,
+  endTime,
+  isCrossDay,
+}: GetReminderTimeComparison) => {
   const rangeStartTime = isCrossDay ? DEFAULT_START_TIME : startTime;
   const rangeEndTime = isCrossDay ? endTime : DEFAULT_END_TIME;
 
@@ -627,7 +668,10 @@ export const getReminderTimeComparison = ({ time, startTime, endTime, isCrossDay
   });
 };
 
-export const reminderTimeTest = (value: string | undefined, testContext: yup.TestContext<yup.AnyObject>) => {
+export const reminderTimeTest = (
+  value: string | undefined,
+  testContext: yup.TestContext<yup.AnyObject>,
+) => {
   if (!value) return true;
   const time = value;
   const { activityIncomplete } = testContext.parent;
@@ -695,7 +739,9 @@ export const reminderTimeTest = (value: string | undefined, testContext: yup.Tes
 
   if (isWeeklyPeriodicity) {
     const weeklyDays = getWeeklyDays({ daysInPeriod, startDate, isCrossDayEvent });
-    const isCrossDay = weeklyDays.daysInfoArr.find((day) => day.dayNumber === activityIncomplete)?.isCrossDay ?? false;
+    const isCrossDay =
+      weeklyDays.daysInfoArr.find((day) => day.dayNumber === activityIncomplete)?.isCrossDay ??
+      false;
 
     return getReminderTimeComparison({ time, startTime, endTime, isCrossDay });
   }

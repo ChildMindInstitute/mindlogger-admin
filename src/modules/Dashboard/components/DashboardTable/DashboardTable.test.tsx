@@ -63,7 +63,9 @@ describe('DashboardTable component tests', () => {
 
   test('should render empty component for empty table', () => {
     const EmptyComponent = <>empty component</>;
-    renderWithProviders(getTable({ rows: [], columns: [], count: 0, emptyComponent: EmptyComponent }));
+    renderWithProviders(
+      getTable({ rows: [], columns: [], count: 0, emptyComponent: EmptyComponent }),
+    );
 
     expect(screen.getByText('empty component')).toBeInTheDocument();
   });

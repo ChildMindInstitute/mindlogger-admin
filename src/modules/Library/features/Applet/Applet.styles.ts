@@ -1,7 +1,13 @@
 import styled from '@emotion/styled/macro';
 import { Box, Button } from '@mui/material';
 
-import { theme, variables, StyledFlexWrap, StyledClearedButton, StyledFlexAllCenter } from 'shared/styles';
+import {
+  theme,
+  variables,
+  StyledFlexWrap,
+  StyledClearedButton,
+  StyledFlexAllCenter,
+} from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 import { AppletUiType } from './Applet.types';

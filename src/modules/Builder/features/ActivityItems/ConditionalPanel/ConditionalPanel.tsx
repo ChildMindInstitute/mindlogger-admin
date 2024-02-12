@@ -13,7 +13,13 @@ import {
 } from 'shared/state';
 import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { Svg } from 'shared/components/Svg';
-import { StyledBodyLarge, StyledClearedButton, StyledFlexColumn, StyledFlexTopCenter, theme } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledClearedButton,
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  theme,
+} from 'shared/styles';
 import {
   ItemResponseType,
   CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
@@ -60,31 +66,47 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
         </StyledBodyLarge>
       </StyledFlexTopCenter>
       {isExpanded && (
-        <StyledFlexColumn sx={{ mt: theme.spacing(1.2) }} data-testid="builder-conditional-panel-expanded">
+        <StyledFlexColumn
+          sx={{ mt: theme.spacing(1.2) }}
+          data-testid="builder-conditional-panel-expanded"
+        >
           {condition?.conditions?.map(({ key, type, itemName, payload }) => {
             const relatedItem = groupedItems[itemName];
             const valuePlaceholder = t('conditionPanelValue');
 
             const isSlider = relatedItem?.responseType === ItemResponseType.Slider;
             const isSingleValueShown =
-              isSlider && type && CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type as ConditionType);
+              isSlider &&
+              type &&
+              CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type as ConditionType);
             const isRangeValueShown =
-              isSlider && type && CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type as ConditionType);
+              isSlider &&
+              type &&
+              CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type as ConditionType);
 
             return (
-              <StyledBodyLarge key={`condition-${key}`} sx={{ mb: theme.spacing(2.4), pl: theme.spacing(5.4) }}>
-                {relatedItem?.name ?? t('conditionPanelItem')} {t('conditionPanelType', { context: type })}{' '}
+              <StyledBodyLarge
+                key={`condition-${key}`}
+                sx={{ mb: theme.spacing(2.4), pl: theme.spacing(5.4) }}
+              >
+                {relatedItem?.name ?? t('conditionPanelItem')}{' '}
+                {t('conditionPanelType', { context: type })}{' '}
                 {((!isSlider || (isSlider && !type)) &&
-                  (relatedItem?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.find(
+                  (
+                    relatedItem?.responseValues as SingleAndMultipleSelectItemResponseValues
+                  )?.options?.find(
                     (option: SingleAndMultiSelectOption) =>
                       getEntityKey(option) === (payload as OptionCondition['payload'])?.optionValue,
                   )?.text) ??
                   valuePlaceholder}
-                {(isSingleValueShown && (payload as SingleValueCondition['payload'])?.value) ?? valuePlaceholder}
+                {(isSingleValueShown && (payload as SingleValueCondition['payload'])?.value) ??
+                  valuePlaceholder}
                 {isRangeValueShown &&
                   t('conditionPanelValueRange', {
-                    minValue: (payload as RangeValueCondition['payload'])?.minValue ?? valuePlaceholder,
-                    maxValue: (payload as RangeValueCondition['payload'])?.maxValue ?? valuePlaceholder,
+                    minValue:
+                      (payload as RangeValueCondition['payload'])?.minValue ?? valuePlaceholder,
+                    maxValue:
+                      (payload as RangeValueCondition['payload'])?.maxValue ?? valuePlaceholder,
                   })}
               </StyledBodyLarge>
             );

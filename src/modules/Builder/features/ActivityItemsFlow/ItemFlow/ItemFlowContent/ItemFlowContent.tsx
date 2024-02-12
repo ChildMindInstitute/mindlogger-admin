@@ -12,7 +12,12 @@ import { ItemFlowContentProps } from './ItemFlowContent.types';
 import { StyledItemFlowContent } from './ItemFlowContent.styles';
 import { SummaryRow } from '../SummaryRow';
 
-export const ItemFlowContent = ({ name, isStatic, onRemove, 'data-testid': dataTestid }: ItemFlowContentProps) => {
+export const ItemFlowContent = ({
+  name,
+  isStatic,
+  onRemove,
+  'data-testid': dataTestid,
+}: ItemFlowContentProps) => {
   const { t } = useTranslation('app');
   const { getFieldState, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();

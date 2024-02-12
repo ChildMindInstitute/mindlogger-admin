@@ -79,7 +79,9 @@ export const LeftBar = () => {
                 {({ isActive }) => (
                   <>
                     {isActive ? activeIcon : icon}
-                    <StyledLabelMedium color={variables.palette.on_surface_variant}>{t(labelKey)}</StyledLabelMedium>
+                    <StyledLabelMedium color={variables.palette.on_surface_variant}>
+                      {t(labelKey)}
+                    </StyledLabelMedium>
                   </>
                 )}
               </NavLink>

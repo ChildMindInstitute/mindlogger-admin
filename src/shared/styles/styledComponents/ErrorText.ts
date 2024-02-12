@@ -8,7 +8,8 @@ import { StyledBodyMedium, StyledLabelMedium } from './Typography';
 export const StyledErrorText = styled(StyledLabelMedium)`
   margin-top: ${({ marginTop }: { marginTop?: number; marginBottom?: number }) =>
     marginTop?.toString() ? theme.spacing(marginTop) : theme.spacing(-1.5)};
-  margin-bottom: ${({ marginBottom }) => (marginBottom?.toString() ? theme.spacing(marginBottom) : theme.spacing(1.2))};
+  margin-bottom: ${({ marginBottom }) =>
+    marginBottom?.toString() ? theme.spacing(marginBottom) : theme.spacing(1.2)};
 
   && {
     color: ${variables.palette.semantic.error};

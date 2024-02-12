@@ -7,7 +7,10 @@ import { StyledTitleMedium } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 import { SelectEvent } from 'shared/types';
 import { ItemFormValues } from 'modules/Builder/types';
-import { StyledSummaryRow, StyledSummarySelectController } from 'shared/styles/styledComponents/ConditionalSummary';
+import {
+  StyledSummaryRow,
+  StyledSummarySelectController,
+} from 'shared/styles/styledComponents/ConditionalSummary';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { SummaryRowProps } from './SummaryRow.types';
@@ -21,7 +24,9 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
 
   const handleChangeItemKey = useCallback(
     (event: SelectEvent) => {
-      const itemIndex = items?.findIndex((item: ItemFormValues) => getEntityKey(item) === event.target.value);
+      const itemIndex = items?.findIndex(
+        (item: ItemFormValues) => getEntityKey(item) === event.target.value,
+      );
 
       if (itemIndex !== undefined && itemIndex !== -1 && items[itemIndex]?.isHidden)
         setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
@@ -49,7 +54,8 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
             renderValue: (value: unknown) => {
-              const itemName = items?.find((item: ItemFormValues) => getEntityKey(item) === value)?.name;
+              const itemName = items?.find((item: ItemFormValues) => getEntityKey(item) === value)
+                ?.name;
 
               return <span>{t('conditionItemSelected', { value: itemName })}</span>;
             },

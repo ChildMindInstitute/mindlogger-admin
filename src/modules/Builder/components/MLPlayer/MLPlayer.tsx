@@ -14,7 +14,12 @@ import {
 import { MLPlayerProps } from './MLPlayer.types';
 import { useMLPlayerSetup } from './MLPlayer.hooks';
 
-export const MLPlayer = ({ media, hasRemoveButton = true, onRemove, 'data-testid': dataTestid }: MLPlayerProps) => {
+export const MLPlayer = ({
+  media,
+  hasRemoveButton = true,
+  onRemove,
+  'data-testid': dataTestid,
+}: MLPlayerProps) => {
   const {
     playerRef,
     state,

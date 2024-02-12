@@ -14,7 +14,13 @@ export const BuilderAppletSettings = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
 
   const handleReportConfigSubmit = (values: Record<string, unknown>) => {
-    const keys = ['reportRecipients', 'reportIncludeUserId', 'reportEmailBody', 'reportServerIp', 'reportPublicKey'];
+    const keys = [
+      'reportRecipients',
+      'reportIncludeUserId',
+      'reportEmailBody',
+      'reportServerIp',
+      'reportPublicKey',
+    ];
 
     keys.forEach((key) => setValue(key, values[key]));
   };

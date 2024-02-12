@@ -24,7 +24,13 @@ export const getOS = () => {
   return `${osName}/${osFormerName}`;
 };
 
-export const sendLogFile = async ({ error, formData }: { error: TypeError; formData?: Record<string, unknown> }) => {
+export const sendLogFile = async ({
+  error,
+  formData,
+}: {
+  error: TypeError;
+  formData?: Record<string, unknown>;
+}) => {
   if (process.env.NODE_ENV !== 'production') return;
 
   const { platform, appVersion, appName, userAgent, hardwareConcurrency, language } = navigator;

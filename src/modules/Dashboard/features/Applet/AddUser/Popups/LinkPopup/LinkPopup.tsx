@@ -40,7 +40,9 @@ export const LinkPopup = ({ open, onClose, onSubmit }: LinkPopupProps) => {
       width="70"
     >
       <StyledModalWrapper>
-        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>{t('requireToCreateAccount')}</StyledBodyLarge>
+        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>
+          {t('requireToCreateAccount')}
+        </StyledBodyLarge>
       </StyledModalWrapper>
     </Modal>
   );

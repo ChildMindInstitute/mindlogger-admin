@@ -7,7 +7,11 @@ import { variables } from 'shared/styles/variables';
 import { EmptyStateProps } from './EmptyState.types';
 import { StyledEmptyState, StyledIcon } from './EmptyState.styles';
 
-export const EmptyState = ({ children, icon = 'not-found', width = '38.1rem' }: EmptyStateProps) => {
+export const EmptyState = ({
+  children,
+  icon = 'not-found',
+  width = '38.1rem',
+}: EmptyStateProps) => {
   const { t } = useTranslation('app');
 
   return (
@@ -15,7 +19,9 @@ export const EmptyState = ({ children, icon = 'not-found', width = '38.1rem' }: 
       <StyledIcon>
         <Svg width="80" height="80" id={icon} />
       </StyledIcon>
-      <StyledTitleLarge color={variables.palette.secondary60}>{children || t('noData')}</StyledTitleLarge>
+      <StyledTitleLarge color={variables.palette.secondary60}>
+        {children || t('noData')}
+      </StyledTitleLarge>
     </StyledEmptyState>
   );
 };

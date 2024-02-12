@@ -1,7 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { theme, variables, StyledLabelBoldLarge, StyledClearedButton, StyledTitleMedium } from 'shared/styles';
+import {
+  theme,
+  variables,
+  StyledLabelBoldLarge,
+  StyledClearedButton,
+  StyledTitleMedium,
+} from 'shared/styles';
 
 import {
   StyledResponseDataIdentifierContainer,

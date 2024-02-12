@@ -22,7 +22,9 @@ export const DeletePublicLinkPopup = ({ open, onClose, onSubmit }: DeletePublicL
       data-testid="dashboard-add-users-generate-link-delete-popup"
     >
       <StyledModalWrapper>
-        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>{t('deletePublicLinkDescription')}</StyledBodyLarge>
+        <StyledBodyLarge sx={{ mt: theme.spacing(-1) }}>
+          {t('deletePublicLinkDescription')}
+        </StyledBodyLarge>
       </StyledModalWrapper>
     </Modal>
   );

@@ -36,7 +36,9 @@ export const getDrawingItemsData = async (
     const shouldScaleCoords = checkIfShouldScaleCoords(item.client);
     data.push({
       name: getMediaFileName(item, 'csv'),
-      data: await convertJsonToCsv(getDrawingLines(drawingValue.lines, drawingValue.width || 100, shouldScaleCoords)),
+      data: await convertJsonToCsv(
+        getDrawingLines(drawingValue.lines, drawingValue.width || 100, shouldScaleCoords),
+      ),
     });
   }
 
@@ -79,7 +81,9 @@ export const getABTrailsItemsData = async (
     const abTrackerValue = (item.answer as DecryptedABTrailsAnswer).value;
     data.push({
       name: getABTrailsCsvName(index, item.id),
-      data: await convertJsonToCsv(getABTrailsRecords(abTrackerValue.lines, abTrackerValue.width || 100)),
+      data: await convertJsonToCsv(
+        getABTrailsRecords(abTrackerValue.lines, abTrackerValue.width || 100),
+      ),
     });
   }
 
@@ -97,7 +101,8 @@ export const getFlankerItemsData = async (
     const responseType = item.activityItem?.responseType;
     if (responseType !== ItemResponseType.Flanker || !item.answer) continue;
 
-    const flankerValue = (item.answer as AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>)?.value ?? item.answer;
+    const flankerValue =
+      (item.answer as AnswerWithWrapper<DecryptedFlankerAnswerItemValue[]>)?.value ?? item.answer;
     data.push({
       name: getFlankerCsvName(item),
       data: await convertJsonToCsv(

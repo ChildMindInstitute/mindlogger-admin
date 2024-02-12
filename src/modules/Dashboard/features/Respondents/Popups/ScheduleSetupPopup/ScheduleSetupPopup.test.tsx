@@ -2,7 +2,12 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
-import { mockedAppletId, mockedOwnerId, mockedRespondentDetails, mockedRespondentId } from 'shared/mock';
+import {
+  mockedAppletId,
+  mockedOwnerId,
+  mockedRespondentDetails,
+  mockedRespondentId,
+} from 'shared/mock';
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
 
@@ -86,7 +91,9 @@ describe('ScheduleSetupPopup', () => {
       />,
     );
 
-    expect(screen.getByText('Please select Applet to schedule for the Respondent:')).toBeInTheDocument();
+    expect(
+      screen.getByText('Please select Applet to schedule for the Respondent:'),
+    ).toBeInTheDocument();
     const tableRow = screen.getByText('Mocked Applet');
     fireEvent.click(tableRow);
 

@@ -29,7 +29,12 @@ import {
 import { FeedbackNoteProps } from './FeedbackNote.types';
 import { NOTE_ROWS_COUNT } from '../FeedbackNotes.const';
 
-export const FeedbackNote = ({ note, onEdit, onDelete, 'data-testid': dataTestid }: FeedbackNoteProps) => {
+export const FeedbackNote = ({
+  note,
+  onEdit,
+  onDelete,
+  'data-testid': dataTestid,
+}: FeedbackNoteProps) => {
   const { t } = useTranslation();
   const timeAgo = useTimeAgo();
   const [isVisibleActions, setIsVisibleActions] = useState(false);

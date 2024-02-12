@@ -68,7 +68,10 @@ export const Managers = () => {
       const workspaceUserRole = rolesData?.data?.[applet.id]?.[0];
       const withoutManagerOrOwner = !applet.roles?.some(({ role }) => isManagerOrOwner(role));
 
-      return workspaceUserRole === Roles.Owner || (workspaceUserRole === Roles.Manager && withoutManagerOrOwner);
+      return (
+        workspaceUserRole === Roles.Owner ||
+        (workspaceUserRole === Roles.Manager && withoutManagerOrOwner)
+      );
     }),
   });
 
@@ -197,7 +200,11 @@ export const Managers = () => {
     <StyledBody>
       {isLoading && <Spinner />}
       <ManagersTableHeader>
-        <Search placeholder={t('searchManagers')} onSearch={handleSearch} data-testid="dashboard-managers-search" />
+        <Search
+          placeholder={t('searchManagers')}
+          onSearch={handleSearch}
+          data-testid="dashboard-managers-search"
+        />
       </ManagersTableHeader>
       <DashboardTable
         columns={getHeadCells(appletId)}

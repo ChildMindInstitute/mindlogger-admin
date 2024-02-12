@@ -20,7 +20,9 @@ const getTimeString = (obj?: DecryptedDateRangeAnswer['value']['from' | 'to']) =
 const getDateString = (obj?: DecryptedDateAnswer['value']) => {
   if (!obj) return '';
 
-  return `${obj.year}-${Number(obj.month).toString().padStart(2, '0')}-${Number(obj.day).toString().padStart(2, '0')}`;
+  return `${obj.year}-${Number(obj.month).toString().padStart(2, '0')}-${Number(obj.day)
+    .toString()
+    .padStart(2, '0')}`;
 };
 
 export const doubleBrackets = /\[\[(.*?)]]/g;
@@ -70,7 +72,9 @@ export const replaceItemVariableWithName = <T>({
         switch (itemValue.responseType) {
           case ItemResponseType.SingleSelection: {
             const item = itemValue.responseValues.options.find(
-              (option) => String(option.value) === String((rawAnswer as DecryptedSingleSelectionAnswer).value),
+              (option) =>
+                String(option.value) ===
+                String((rawAnswer as DecryptedSingleSelectionAnswer).value),
             );
             if (item) {
               markdown = markdown.replace(reg, `${item.text} `);
@@ -84,13 +88,16 @@ export const replaceItemVariableWithName = <T>({
           case ItemResponseType.TimeRange:
             markdown = markdown.replace(
               reg,
-              `${getTimeString((rawAnswer as DecryptedDateRangeAnswer).value.from)} - ${getTimeString(
-                (rawAnswer as DecryptedDateRangeAnswer).value.to,
-              )} `,
+              `${getTimeString(
+                (rawAnswer as DecryptedDateRangeAnswer).value.from,
+              )} - ${getTimeString((rawAnswer as DecryptedDateRangeAnswer).value.to)} `,
             );
             break;
           case ItemResponseType.Date:
-            markdown = markdown.replace(reg, `${getDateString((rawAnswer as DecryptedDateAnswer).value)} `);
+            markdown = markdown.replace(
+              reg,
+              `${getDateString((rawAnswer as DecryptedDateAnswer).value)} `,
+            );
             break;
         }
       } else if (rawAnswer) {

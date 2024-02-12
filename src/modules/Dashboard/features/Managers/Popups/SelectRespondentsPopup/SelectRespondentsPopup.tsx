@@ -29,17 +29,20 @@ export const SelectRespondentsPopup = ({
   const respondentsData = users.useAllRespondentsData();
   const respondents = useMemo(
     () =>
-      respondentsData?.result?.reduce((acc: Respondent[], { nicknames, secretIds, id, isAnonymousRespondent }) => {
-        if (!isAnonymousRespondent) {
-          acc.push({
-            nickname: nicknames[0],
-            secretId: secretIds[0],
-            id,
-          });
-        }
+      respondentsData?.result?.reduce(
+        (acc: Respondent[], { nicknames, secretIds, id, isAnonymousRespondent }) => {
+          if (!isAnonymousRespondent) {
+            acc.push({
+              nickname: nicknames[0],
+              secretId: secretIds[0],
+              id,
+            });
+          }
 
-        return acc;
-      }, []),
+          return acc;
+        },
+        [],
+      ),
     [respondentsData?.result],
   );
 
@@ -93,7 +96,11 @@ export const SelectRespondentsPopup = ({
     >
       <StyledModalWrapper>
         <FormProvider {...methods}>
-          <SelectRespondents appletName={appletName} reviewer={{ name, email }} respondents={respondents || []} />
+          <SelectRespondents
+            appletName={appletName}
+            reviewer={{ name, email }}
+            respondents={respondents || []}
+          />
         </FormProvider>
       </StyledModalWrapper>
     </Modal>

@@ -7,7 +7,12 @@ import { InputController } from 'shared/components/FormComponents';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { ItemOptionContainer } from '../ItemOptionContainer';
-import { StyledMaxCharacters, StyledRow, StyledTextField, StyledInputWrapper } from './TextResponse.styles';
+import {
+  StyledMaxCharacters,
+  StyledRow,
+  StyledTextField,
+  StyledInputWrapper,
+} from './TextResponse.styles';
 import { TextResponseProps } from './TextResponse.types';
 import { ItemConfigurationSettings } from '../../ItemConfiguration.types';
 import { MIN_TEXT_RESPONSE_LENGTH } from './TextResponse.const';
@@ -47,7 +52,12 @@ export const TextResponse = ({ name }: TextResponseProps) => {
       data-testid={dataTestid}
     >
       <StyledRow>
-        <StyledTextField disabled variant="outlined" value={t('text')} data-testid={`${dataTestid}-input`} />
+        <StyledTextField
+          disabled
+          variant="outlined"
+          value={t('text')}
+          data-testid={`${dataTestid}-input`}
+        />
         <StyledMaxCharacters>
           <InputController
             name={responseLengthName}

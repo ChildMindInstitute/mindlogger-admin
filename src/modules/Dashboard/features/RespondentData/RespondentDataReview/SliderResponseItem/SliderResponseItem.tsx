@@ -3,7 +3,11 @@ import { createArrayForSlider } from 'modules/Dashboard/features/RespondentData/
 import { SliderItemAnswer } from '../RespondentDataReview.types';
 import { StyledSlider } from './SliderResponseItem.styles';
 
-export const SliderResponseItem = ({ activityItem, answer, 'data-testid': dataTestid }: SliderItemAnswer) => {
+export const SliderResponseItem = ({
+  activityItem,
+  answer,
+  'data-testid': dataTestid,
+}: SliderItemAnswer) => {
   const { minValue, maxValue } = activityItem.responseValues;
   const maxValueNumber = Number(maxValue);
   const minValueNumber = Number(minValue);

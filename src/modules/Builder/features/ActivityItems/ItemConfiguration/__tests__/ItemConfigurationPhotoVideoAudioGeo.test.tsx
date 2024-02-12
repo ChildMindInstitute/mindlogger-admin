@@ -33,7 +33,9 @@ describe('Item Configuration: Photo/Video/Audio/Geo', () => {
       const maxDuration = screen.getByTestId(`${mockedTestid}-audio-record-max-duration`);
 
       expect(maxDuration).toBeVisible();
-      expect(maxDuration.querySelector('label')).toHaveTextContent('Max Recording Duration (seconds)');
+      expect(maxDuration.querySelector('label')).toHaveTextContent(
+        'Max Recording Duration (seconds)',
+      );
       expect(maxDuration.querySelector('input')).toHaveValue(300);
     }
   });
@@ -41,9 +43,12 @@ describe('Item Configuration: Photo/Video/Audio/Geo', () => {
   test('Audio: Validation', async () => {
     renderItemConfigurationByType(ItemResponseType.Audio);
 
-    fireEvent.change(screen.getByTestId(`${mockedTestid}-audio-record-max-duration`).querySelector('input'), {
-      target: { value: -1 },
-    });
+    fireEvent.change(
+      screen.getByTestId(`${mockedTestid}-audio-record-max-duration`).querySelector('input'),
+      {
+        target: { value: -1 },
+      },
+    );
 
     expect(await screen.findByText('A positive integer is required')).toBeVisible();
   });

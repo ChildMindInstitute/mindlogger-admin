@@ -34,7 +34,8 @@ const practiceItem = {
     stimulusTrials: [
       {
         id: '1c60f5cb-3668-49ef-b2be-c68643aa4ca1',
-        image: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/62e876f7-3144-4774-aaf1-aaf1ed3001eb/6.jpg',
+        image:
+          'https://media-dev.cmiml.net/mindlogger/391962851007982489/62e876f7-3144-4774-aaf1-aaf1ed3001eb/6.jpg',
         text: '6.jpg',
         value: 0,
         weight: null,
@@ -74,7 +75,8 @@ const practiceItem = {
     fixationDuration: 3000,
     fixationScreen: {
       value: '5.jpg',
-      image: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
+      image:
+        'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
     },
     minimumAccuracy: 75,
     sampleSize: 1,
@@ -306,7 +308,8 @@ const test1Item = {
     stimulusTrials: [
       {
         id: '1c60f5cb-3668-49ef-b2be-c68643aa4ca1',
-        image: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/62e876f7-3144-4774-aaf1-aaf1ed3001eb/6.jpg',
+        image:
+          'https://media-dev.cmiml.net/mindlogger/391962851007982489/62e876f7-3144-4774-aaf1-aaf1ed3001eb/6.jpg',
         text: '6.jpg',
         value: 0,
         weight: null,
@@ -346,7 +349,8 @@ const test1Item = {
     fixationDuration: 3000,
     fixationScreen: {
       value: '5.jpg',
-      image: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
+      image:
+        'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
     },
     minimumAccuracy: null,
     sampleSize: 1,

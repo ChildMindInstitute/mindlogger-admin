@@ -70,7 +70,9 @@ describe('Header component tests', () => {
   });
 
   test('should call the rightButtonCallback when the cart button is clicked', async () => {
-    renderWithProviders(<Header rightButtonType={RightButtonType.Cart} rightButtonCallback={rightButtonCallback} />);
+    renderWithProviders(
+      <Header rightButtonType={RightButtonType.Cart} rightButtonCallback={rightButtonCallback} />,
+    );
 
     const cartButton = screen.getByTestId('library-cart-button');
     await userEvent.click(cartButton);
@@ -78,7 +80,12 @@ describe('Header component tests', () => {
   });
 
   test('should call the rightButtonCallback when the builder button is clicked', async () => {
-    renderWithProviders(<Header rightButtonType={RightButtonType.Builder} rightButtonCallback={rightButtonCallback} />);
+    renderWithProviders(
+      <Header
+        rightButtonType={RightButtonType.Builder}
+        rightButtonCallback={rightButtonCallback}
+      />,
+    );
 
     const builderButton = screen.getByTestId('library-add-to-builder');
     await userEvent.click(builderButton);

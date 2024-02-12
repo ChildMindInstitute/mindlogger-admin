@@ -9,19 +9,23 @@ import { useCustomFormContext } from './useCustomFormContext';
 export const useFilterConditionalLogicByItem = (item: ItemFormValues) => {
   const { fieldName, activity } = useCurrentActivity();
   const { watch, setValue } = useCustomFormContext();
-  const conditionalLogicForItemToDelete = getItemConditionDependencies(item, activity?.conditionalLogic);
+  const conditionalLogicForItemToDelete = getItemConditionDependencies(
+    item,
+    activity?.conditionalLogic,
+  );
   const conditionalLogic = watch(`${fieldName}.conditionalLogic`);
 
   return () => {
     if (!conditionalLogicForItemToDelete?.length) return;
 
-    const conditionalLogicKeysToRemove = conditionalLogicForItemToDelete.map((condition: ConditionalLogic) =>
-      getEntityKey(condition),
+    const conditionalLogicKeysToRemove = conditionalLogicForItemToDelete.map(
+      (condition: ConditionalLogic) => getEntityKey(condition),
     );
     setValue(
       `${fieldName}.conditionalLogic`,
       conditionalLogic?.filter(
-        (conditionalLogic: ConditionalLogic) => !conditionalLogicKeysToRemove.includes(getEntityKey(conditionalLogic)),
+        (conditionalLogic: ConditionalLogic) =>
+          !conditionalLogicKeysToRemove.includes(getEntityKey(conditionalLogic)),
       ),
     );
   };

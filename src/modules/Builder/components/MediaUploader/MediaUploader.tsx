@@ -54,7 +54,10 @@ export const MediaUploader = ({
           <StyledSourceContainer>
             <Svg id="audio-player-filled" width={32} height={42} />
             {error && (
-              <StyledBodyMedium sx={{ marginBottom: theme.spacing(1) }} color={variables.palette.semantic.error}>
+              <StyledBodyMedium
+                sx={{ marginBottom: theme.spacing(1) }}
+                color={variables.palette.semantic.error}
+              >
                 {t(error, { size: byteFormatter(MAX_FILE_SIZE_150MB) })}
               </StyledBodyMedium>
             )}
@@ -73,7 +76,9 @@ export const MediaUploader = ({
         <StyledFlexColumn sx={{ mr: theme.spacing(3.2) }}>
           <StyledPreview>
             {media.uploaded && <Svg id="check" width={16} height={16} />}
-            <StyledLabelBoldLarge sx={{ color: variables.palette.primary }}>{media?.name}</StyledLabelBoldLarge>
+            <StyledLabelBoldLarge sx={{ color: variables.palette.primary }}>
+              {media?.name}
+            </StyledLabelBoldLarge>
           </StyledPreview>
           {!media.uploaded && <StyledLinearProgress sx={{ mt: theme.spacing(0.5) }} />}
         </StyledFlexColumn>

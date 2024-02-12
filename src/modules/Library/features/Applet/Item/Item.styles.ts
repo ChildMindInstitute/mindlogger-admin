@@ -2,7 +2,13 @@ import styled from '@emotion/styled/macro';
 import { Box } from '@mui/material';
 
 import { MarkDownPreview } from 'shared/components';
-import { theme, variables, StyledFlexColumn, StyledFlexTopStart, StyledSvgArrowContainer } from 'shared/styles';
+import {
+  theme,
+  variables,
+  StyledFlexColumn,
+  StyledFlexTopStart,
+  StyledSvgArrowContainer,
+} from 'shared/styles';
 
 import { ActivityItemGrid } from '../Activity/Activity.styles';
 

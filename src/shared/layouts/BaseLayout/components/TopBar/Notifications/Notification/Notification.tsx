@@ -98,7 +98,11 @@ export const Notification = ({
 
   return (
     <>
-      <StyledNotification active={isActive} onClick={handleNotificationClick} data-testid={dataTestid}>
+      <StyledNotification
+        active={isActive}
+        onClick={handleNotificationClick}
+        data-testid={dataTestid}
+      >
         <StyledTopSection>
           <StyledLeftSection>
             <StyledImageWrapper>
@@ -122,17 +126,24 @@ export const Notification = ({
             </StyledImageWrapper>
           </StyledLeftSection>
           <StyledInfo>
-            <StyledLabelMedium fontWeight={isWatched ? 'regular' : 'bold'} color={variables.palette.on_surface_variant}>
+            <StyledLabelMedium
+              fontWeight={isWatched ? 'regular' : 'bold'}
+              color={variables.palette.on_surface_variant}
+            >
               {appletName}
             </StyledLabelMedium>
             <StyledTitle
               fontWeight={isWatched ? 'regular' : 'bold'}
-              color={isActive ? variables.palette.on_secondary_container : variables.palette.on_surface}
+              color={
+                isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
+              }
             >
               {secretId}
             </StyledTitle>
             <StyledMessage
-              color={isActive ? variables.palette.on_secondary_container : variables.palette.on_surface}
+              color={
+                isActive ? variables.palette.on_secondary_container : variables.palette.on_surface
+              }
               isActive={isActive}
             >
               {message}
@@ -153,7 +164,9 @@ export const Notification = ({
           )}
           <StyledTimeAgo
             fontWeight={isWatched ? 'regular' : 'bold'}
-            color={isWatched ? variables.palette.on_surface_variant : variables.palette.semantic.error}
+            color={
+              isWatched ? variables.palette.on_surface_variant : variables.palette.semantic.error
+            }
           >
             {timeAgo}
           </StyledTimeAgo>

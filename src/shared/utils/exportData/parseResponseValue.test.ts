@@ -1340,7 +1340,8 @@ describe('parseResponseValue', () => {
         fixationDuration: 3000,
         fixationScreen: {
           value: '5.jpg',
-          image: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
+          image:
+            'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
         },
         minimumAccuracy: 75,
         sampleSize: 1,
@@ -1412,7 +1413,8 @@ describe('parseResponseValue', () => {
         fixationDuration: 3000,
         fixationScreen: {
           value: '5.jpg',
-          image: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
+          image:
+            'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
         },
         minimumAccuracy: null,
         sampleSize: 1,
@@ -1484,7 +1486,8 @@ describe('parseResponseValue', () => {
         fixationDuration: 3000,
         fixationScreen: {
           value: '5.jpg',
-          image: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
+          image:
+            'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
         },
         minimumAccuracy: null,
         sampleSize: 1,
@@ -1556,7 +1559,8 @@ describe('parseResponseValue', () => {
         fixationDuration: 3000,
         fixationScreen: {
           value: '5.jpg',
-          image: 'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
+          image:
+            'https://media-dev.cmiml.net/mindlogger/391962851007982489/50635b4f-7457-4677-9d2d-99132189eba2/5.jpg',
         },
         minimumAccuracy: null,
         sampleSize: 1,

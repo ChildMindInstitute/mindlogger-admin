@@ -40,7 +40,8 @@ export const StyledTextFieldContainer = styled(Box, shouldForwardProp)`
     left: 0;
     bottom: -2.1rem;
     max-width: calc(100% - 1.4rem);
-    width: ${({ hasCounter }: { hasCounter: boolean }) => (hasCounter ? 'calc(100% - 16.5rem)' : '100%')};
+    width: ${({ hasCounter }: { hasCounter: boolean }) =>
+      hasCounter ? 'calc(100% - 16.5rem)' : '100%'};
     ${commonEllipsisStyles};
   }
 `;

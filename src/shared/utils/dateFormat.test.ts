@@ -1,6 +1,12 @@
 import { NameLength } from 'modules/Dashboard/features/Applet/Schedule/Calendar/Calendar.types';
 
-import { formatToWeekYear, formatToYearMonthDate, getDayName, getMonthName, getMoreText } from './dateFormat';
+import {
+  formatToWeekYear,
+  formatToYearMonthDate,
+  getDayName,
+  getMonthName,
+  getMoreText,
+} from './dateFormat';
 
 const firstDate = new Date('2023-10-22T12:00:00Z');
 const secondDate = new Date('2023-10-23T23:00:00Z');

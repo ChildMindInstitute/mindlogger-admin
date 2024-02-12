@@ -7,7 +7,10 @@ import {
   SuccessedEventDTO,
   UserActionType,
 } from 'shared/types';
-import { checkIfHasMigratedAnswers, getIdBeforeMigration } from 'shared/utils/exportData/migratedData';
+import {
+  checkIfHasMigratedAnswers,
+  getIdBeforeMigration,
+} from 'shared/utils/exportData/migratedData';
 import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
 import { getSubscales } from 'shared/utils/exportData/getSubscales';
 import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
@@ -29,7 +32,9 @@ export const getDecryptedAnswersObject = ({
   getObjectFromList(decryptedAnswers, (item) => {
     if (hasUrlEventScreen) return item.activityItem.name;
     if (hasMigratedAnswers) {
-      return `${getIdBeforeMigration(item.activityId)}/${getIdBeforeMigration(item.activityItem.id)}`;
+      return `${getIdBeforeMigration(item.activityId)}/${getIdBeforeMigration(
+        item.activityItem.id,
+      )}`;
     }
 
     return `${item.activityId}/${item.activityItem.id}`;
@@ -40,17 +45,20 @@ export const getReportData = (
   rawAnswersObject: Record<string, DecryptedAnswerData>,
   decryptedAnswers: DecryptedAnswerData[],
 ) => {
-  const answers = decryptedAnswers.reduce((filteredAcc, item, index) => {
-    if (item.answer === null || item.answer === undefined) return filteredAcc;
+  const answers = decryptedAnswers.reduce(
+    (filteredAcc, item, index) => {
+      if (item.answer === null || item.answer === undefined) return filteredAcc;
 
-    return filteredAcc.concat(
-      getReportCSVObject({
-        item,
-        rawAnswersObject,
-        index,
-      }),
-    );
-  }, [] as ReturnType<typeof getReportCSVObject>[]);
+      return filteredAcc.concat(
+        getReportCSVObject({
+          item,
+          rawAnswersObject,
+          index,
+        }),
+      );
+    },
+    [] as ReturnType<typeof getReportCSVObject>[],
+  );
 
   const subscaleSetting = decryptedAnswers?.[0]?.subscaleSetting;
   if (subscaleSetting?.subscales?.length) {
@@ -63,7 +71,10 @@ export const getReportData = (
   return reportData.concat(answers);
 };
 
-export const getMediaData = (mediaData: AppletExportData['mediaData'], decryptedAnswers: DecryptedAnswerData[]) => {
+export const getMediaData = (
+  mediaData: AppletExportData['mediaData'],
+  decryptedAnswers: DecryptedAnswerData[],
+) => {
   const mediaAnswers = decryptedAnswers.reduce((filteredAcc, item) => {
     if (isDrawingAnswerData(item))
       return filteredAcc.concat({
@@ -132,7 +143,8 @@ export const getActivityJourneyData = (
         ...decryptedAnswersObject[getEventScreen(event.screen)],
       },
       rawAnswersObject,
-      index: event.type === UserActionType.SetAnswer ? indexForABTrailsFiles++ : indexForABTrailsFiles,
+      index:
+        event.type === UserActionType.SetAnswer ? indexForABTrailsFiles++ : indexForABTrailsFiles,
     });
   });
 

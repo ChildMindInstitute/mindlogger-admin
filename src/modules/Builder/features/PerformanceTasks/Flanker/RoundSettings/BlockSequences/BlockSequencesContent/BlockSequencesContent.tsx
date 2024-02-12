@@ -4,7 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Svg, Table, UiType } from 'shared/components';
-import { StyledBodyMedium, StyledSvgPrimaryColorBtn, StyledTitleMedium, theme, variables } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledSvgPrimaryColorBtn,
+  StyledTitleMedium,
+  theme,
+  variables,
+} from 'shared/styles';
 import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
 import { FlankerStimulusSettings } from 'shared/state';
 import { exportTemplate } from 'shared/utils';
@@ -46,10 +52,14 @@ export const BlockSequencesContent = ({
   const prevStimulusTrialsLength = useRef(stimulusTrials?.length);
 
   const { defaultExportTable, defaultTableRows } = getSequencesData(stimulusTrials);
-  const tableRows = uploadedTable ? getUploadedTableRows(uploadedTable?.data) : defaultTableRows || [];
+  const tableRows = uploadedTable
+    ? getUploadedTableRows(uploadedTable?.data)
+    : defaultTableRows || [];
 
   const tableWrapperStyles = { opacity: uploadedTable ? '1' : '0.5' };
-  const importSequencesUiType = uploadedTable ? ImportSequencesType.Update : ImportSequencesType.Upload;
+  const importSequencesUiType = uploadedTable
+    ? ImportSequencesType.Update
+    : ImportSequencesType.Upload;
   const btnIconId = uploadedTable ? 'edit' : 'add';
   const btnText = t(`${uploadedTable ? 'update' : 'upload'}`);
   const exportData = getExportData(uploadedTable?.data) || defaultExportTable;
@@ -88,7 +98,9 @@ export const BlockSequencesContent = ({
     <>
       <Box>
         {!uploadedTable && (
-          <StyledTitleMedium sx={{ mb: theme.spacing(1.5) }}>{t('flankerRound.exampleOfSequence')}</StyledTitleMedium>
+          <StyledTitleMedium sx={{ mb: theme.spacing(1.5) }}>
+            {t('flankerRound.exampleOfSequence')}
+          </StyledTitleMedium>
         )}
         <Box sx={tableWrapperStyles}>
           <Table
@@ -109,7 +121,10 @@ export const BlockSequencesContent = ({
           {btnText}
         </StyledSvgPrimaryColorBtn>
         {!uploadedTable && hasBlockSequencesErrors && (
-          <StyledBodyMedium sx={{ pt: theme.spacing(2.4) }} color={variables.palette.semantic.error}>
+          <StyledBodyMedium
+            sx={{ pt: theme.spacing(2.4) }}
+            color={variables.palette.semantic.error}
+          >
             {t('fillInAllRequired')}
           </StyledBodyMedium>
         )}
@@ -138,7 +153,10 @@ export const BlockSequencesContent = ({
       )}
     </>
   ) : (
-    <StyledBodyMedium sx={{ m: theme.spacing(-1.5, 0, 1) }} color={variables.palette.semantic.error}>
+    <StyledBodyMedium
+      sx={{ m: theme.spacing(-1.5, 0, 1) }}
+      color={variables.palette.semantic.error}
+    >
       {t('flankerRound.addStimulus')}
     </StyledBodyMedium>
   );

@@ -5,7 +5,9 @@ import {
   ExtendedExportAnswerWithoutEncryption,
 } from 'shared/types';
 
-export const getDrawingUrl = (item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption, DrawingItemAnswer>) => {
+export const getDrawingUrl = (
+  item: DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption, DrawingItemAnswer>,
+) => {
   const drawingAnswer = item.answer;
   if (drawingAnswer.value.uri) return drawingAnswer.value.uri;
 

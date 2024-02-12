@@ -22,11 +22,17 @@ export const AdvancedSettings = () => {
   const [showSettings, setShowSettings] = useState(false);
 
   const handleServerChange = (e: React.SyntheticEvent, selectedValue: string | ServerUrlOption) => {
-    storage.setItem(LocalStorageKeys.ApiUrl, typeof selectedValue === 'string' ? selectedValue : selectedValue.value);
+    storage.setItem(
+      LocalStorageKeys.ApiUrl,
+      typeof selectedValue === 'string' ? selectedValue : selectedValue.value,
+    );
     setSelectValue(selectedValue);
   };
 
-  const handleFilterOptions = (options: ServerUrlOption[], params: FilterOptionsState<ServerUrlOption>) => {
+  const handleFilterOptions = (
+    options: ServerUrlOption[],
+    params: FilterOptionsState<ServerUrlOption>,
+  ) => {
     const { inputValue } = params;
     const filtered = options.filter((option) => option.name.includes(inputValue));
     const isExisting = options.some((option) => inputValue === option.value);
@@ -63,8 +69,12 @@ export const AdvancedSettings = () => {
               clearOnBlur
               options={BACKEND_SERVERS}
               getOptionLabel={(option) => (typeof option === 'string' ? option : option.name)}
-              renderOption={(props, option) => <StyledMenuItem {...props}>{option.name}</StyledMenuItem>}
-              renderInput={({ InputLabelProps, ...params }) => <TextField {...params} label={t('serverUrl')} />}
+              renderOption={(props, option) => (
+                <StyledMenuItem {...props}>{option.name}</StyledMenuItem>
+              )}
+              renderInput={({ InputLabelProps, ...params }) => (
+                <TextField {...params} label={t('serverUrl')} />
+              )}
               freeSolo
             />
           </StyledFormControl>

@@ -11,7 +11,9 @@ const ActivityFlow = lazy(() => import('modules/Builder/features/ActivityFlow'))
 const ActivityFlowBuilder = lazy(() => import('modules/Builder/features/ActivityFlowBuilder'));
 const ActivityItemsFlow = lazy(() => import('modules/Builder/features/ActivityItemsFlow'));
 const Flanker = lazy(() => import('modules/Builder/features/PerformanceTasks/Flanker'));
-const GyroscopeAndTouch = lazy(() => import('modules/Builder/features/PerformanceTasks/GyroscopeAndTouch'));
+const GyroscopeAndTouch = lazy(
+  () => import('modules/Builder/features/PerformanceTasks/GyroscopeAndTouch'),
+);
 
 export const appletRoutes = [
   { path: Path.About, Component: AboutApplet },

@@ -15,7 +15,11 @@ import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/
 import { SubscaleFormValue } from 'modules/Builder/types';
 
 import { commonButtonProps } from '../ActivitySettings.const';
-import { getOptions, getTotalScoreTableColumnData, totalScoreTableTemplate } from './SubscalesConfiguration.const';
+import {
+  getOptions,
+  getTotalScoreTableColumnData,
+  totalScoreTableTemplate,
+} from './SubscalesConfiguration.const';
 import {
   getSubscalesDefaults,
   getAllElementsTableColumns,
@@ -26,7 +30,11 @@ import {
 } from './SubscalesConfiguration.utils';
 import { SubscaleHeaderContent } from './SubscaleHeaderContent';
 import { SubscaleContent } from './SubscaleContent';
-import { StyledButtonsContainer, StyledSvg, StyledSvgButton } from './SubscalesConfiguration.styles';
+import {
+  StyledButtonsContainer,
+  StyledSvg,
+  StyledSvgButton,
+} from './SubscalesConfiguration.styles';
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { LookupTable } from './LookupTable';
 import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';

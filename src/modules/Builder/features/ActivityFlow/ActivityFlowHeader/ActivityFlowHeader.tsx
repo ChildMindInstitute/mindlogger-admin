@@ -7,7 +7,11 @@ import { falseReturnFunc } from 'shared/utils';
 
 import { ActivityFlowHeaderProps } from './ActivityFlowHeader.types';
 
-export const ActivityFlowHeader = ({ isSticky, children, headerProps }: ActivityFlowHeaderProps) => {
+export const ActivityFlowHeader = ({
+  isSticky,
+  children,
+  headerProps,
+}: ActivityFlowHeaderProps) => {
   const { t } = useTranslation('app');
   const { onAddActivityFlow = falseReturnFunc } = headerProps || {};
 

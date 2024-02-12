@@ -41,10 +41,14 @@ export const Language = () => {
       <Box onClick={() => setOpen(true)}>
         <StyledLanguage>
           <StyledFlag>{currentLanguage.component}</StyledFlag>
-          <StyledLabelMedium color={variables.palette.on_surface_variant}>{currentLanguage.label}</StyledLabelMedium>
+          <StyledLabelMedium color={variables.palette.on_surface_variant}>
+            {currentLanguage.label}
+          </StyledLabelMedium>
         </StyledLanguage>
       </Box>
-      {open && <SelectLanguage open={open} onClose={handleClose} currentLanguage={currentLanguage} />}
+      {open && (
+        <SelectLanguage open={open} onClose={handleClose} currentLanguage={currentLanguage} />
+      )}
     </>
   );
 };

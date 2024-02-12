@@ -38,7 +38,11 @@ export const generateNewFolderName = (folders: Folder[]) => {
   return `${newFolder} (${+index + 1})`;
 };
 
-export const getAppletsWithLocalFolders = (applets: Applet[], folders: Folder[], expandedFolders: string[]) => {
+export const getAppletsWithLocalFolders = (
+  applets: Applet[],
+  folders: Folder[],
+  expandedFolders: string[],
+) => {
   const groupedApplets = groupBy(applets, 'folderId');
 
   return Object.keys(groupedApplets).reduce((result: (Folder | Applet)[], key: string) => {

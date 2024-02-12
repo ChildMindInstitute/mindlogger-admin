@@ -4,7 +4,10 @@ import { Box } from '@mui/material';
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyLarge, theme } from 'shared/styles';
 
-import { StyledAppletSettingsButton, StyledAppletSettingsDescription } from '../AppletSettings.styles';
+import {
+  StyledAppletSettingsButton,
+  StyledAppletSettingsDescription,
+} from '../AppletSettings.styles';
 
 export const DownloadSchemaSetting = () => {
   const { t } = useTranslation('app');
@@ -15,8 +18,8 @@ export const DownloadSchemaSetting = () => {
         <Trans i18nKey="downloadDescription">
           <StyledBodyLarge>Download the Applet content as JSON.</StyledBodyLarge>
           <StyledBodyLarge marginTop={theme.spacing(2.4)}>
-            Please update URL of contexts in Applet schema, Activity schema and change Activity / Item paths in context
-            files after uploading content to GitHub.
+            Please update URL of contexts in Applet schema, Activity schema and change Activity /
+            Item paths in context files after uploading content to GitHub.
           </StyledBodyLarge>
         </Trans>
       </StyledAppletSettingsDescription>

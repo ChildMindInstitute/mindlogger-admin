@@ -24,8 +24,10 @@ export const TimeHeader = ({
   const VISIBLE_EVENTS_LENGTH = 3;
   const currentDate = formatToYearMonthDate(date);
   const currentWeek = formatToWeekYear(date);
-  const { hiddenEventsIds = [], allDayEventsSortedByDays = [] } = calendarEvents.useVisibleEventsData() || {};
-  const currentAllDaysEventsIds = allDayEventsSortedByDays?.find((el) => el.date === currentDate)?.eventsIds;
+  const { hiddenEventsIds = [], allDayEventsSortedByDays = [] } =
+    calendarEvents.useVisibleEventsData() || {};
+  const currentAllDaysEventsIds = allDayEventsSortedByDays?.find((el) => el.date === currentDate)
+    ?.eventsIds;
   const isWeekUiType = uiType === UiType.Week;
   const isDayUiType = uiType === UiType.Day;
 
@@ -81,7 +83,8 @@ export const TimeHeader = ({
       )}
       {isShowMoreVisible && (
         <StyledMore isWeekType={isWeekUiType} onClick={handleMoreClick}>
-          {currentAllDaysEventsIds && `${currentAllDaysEventsIds.length - VISIBLE_EVENTS_LENGTH} ${getMoreText()}`}
+          {currentAllDaysEventsIds &&
+            `${currentAllDaysEventsIds.length - VISIBLE_EVENTS_LENGTH} ${getMoreText()}`}
         </StyledMore>
       )}
     </>

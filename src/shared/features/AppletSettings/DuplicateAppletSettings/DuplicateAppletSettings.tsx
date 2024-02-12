@@ -7,7 +7,10 @@ import { useAppDispatch } from 'redux/store';
 import { Svg } from 'shared/components/Svg';
 import { DuplicatePopups } from 'modules/Dashboard/features/Applet/Popups';
 
-import { StyledAppletSettingsButton, StyledAppletSettingsDescription } from '../AppletSettings.styles';
+import {
+  StyledAppletSettingsButton,
+  StyledAppletSettingsDescription,
+} from '../AppletSettings.styles';
 
 export const DuplicateAppletSettings = () => {
   const { t } = useTranslation('app');
@@ -42,7 +45,10 @@ export const DuplicateAppletSettings = () => {
         {t('duplicate')}
       </StyledAppletSettingsButton>
       {duplicatePopupsVisible && (
-        <DuplicatePopups onCloseCallback={onCloseCallback} data-testid={`${dataTestid}-duplicate-popup`} />
+        <DuplicatePopups
+          onCloseCallback={onCloseCallback}
+          data-testid={`${dataTestid}-duplicate-popup`}
+        />
       )}
     </>
   );

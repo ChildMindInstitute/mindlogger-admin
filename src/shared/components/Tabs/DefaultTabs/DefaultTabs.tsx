@@ -7,7 +7,12 @@ import { TabPanel } from '../TabPanel';
 import { StyledTabs } from '../Tabs.styles';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const DefaultTabs = ({ tabs, activeTab = 0, setActiveTab, uiType = UiType.Primary }: TabsProps) => {
+export const DefaultTabs = ({
+  tabs,
+  activeTab = 0,
+  setActiveTab,
+  uiType = UiType.Primary,
+}: TabsProps) => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(activeTab);
 
@@ -19,7 +24,16 @@ export const DefaultTabs = ({ tabs, activeTab = 0, setActiveTab, uiType = UiType
   const { content, header } = tabs.reduce(
     (
       tabs: RenderTabs,
-      { icon, activeIcon, labelKey, onClick, content, isMinHeightAuto, hasError, 'data-testid': dataTestid },
+      {
+        icon,
+        activeIcon,
+        labelKey,
+        onClick,
+        content,
+        isMinHeightAuto,
+        hasError,
+        'data-testid': dataTestid,
+      },
       index,
     ) => {
       tabs.header.push(
@@ -28,7 +42,14 @@ export const DefaultTabs = ({ tabs, activeTab = 0, setActiveTab, uiType = UiType
           icon={
             <>
               {icon && tabIndex === index ? activeIcon : icon || undefined}
-              {hasError && <Badge sx={{ right: 'auto', left: 0 }} variant="dot" invisible={!hasError} color="error" />}
+              {hasError && (
+                <Badge
+                  sx={{ right: 'auto', left: 0 }}
+                  variant="dot"
+                  invisible={!hasError}
+                  color="error"
+                />
+              )}
             </>
           }
           label={t(labelKey)}

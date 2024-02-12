@@ -11,7 +11,11 @@ export const Date = () => {
   const dataTestid = 'builder-activity-items-item-configuration-date';
 
   return (
-    <ItemOptionContainer title={t('dateItemTitle')} description={t('dateItemDescription')} data-testid={dataTestid}>
+    <ItemOptionContainer
+      title={t('dateItemTitle')}
+      description={t('dateItemDescription')}
+      data-testid={dataTestid}
+    >
       <StyledTextField
         disabled
         variant="outlined"

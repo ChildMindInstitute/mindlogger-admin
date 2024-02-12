@@ -24,7 +24,12 @@ const defaultProps = {
 };
 
 const checkAppletNameInLibraryMock = () =>
-  expect(mockAxios.post).toHaveBeenNthCalledWith(1, '/library/check_name', { name: appletName }, { signal: undefined });
+  expect(mockAxios.post).toHaveBeenNthCalledWith(
+    1,
+    '/library/check_name',
+    { name: appletName },
+    { signal: undefined },
+  );
 
 Object.assign(navigator, {
   clipboard: {
@@ -87,10 +92,14 @@ describe('ShareApplet Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/This Applet name is already taken in the Library. Please rename the Applet to share it./),
+        screen.getByText(
+          /This Applet name is already taken in the Library. Please rename the Applet to share it./,
+        ),
       ).toBeInTheDocument();
 
-      expect(screen.getByText(/Note: This will change the name of the Applet for your users./)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Note: This will change the name of the Applet for your users./),
+      ).toBeInTheDocument();
     });
   });
 

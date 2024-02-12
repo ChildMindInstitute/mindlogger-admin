@@ -164,13 +164,13 @@ export const getUniqueItem = (item?: ItemFormValues) =>
     key: uuidv4(),
     ...getNewPropsForSingleAndMultiSelection(item),
     ...getNewPropsForSlider(item),
-  } as ItemFormValues);
+  }) as ItemFormValues;
 
 export const getNewActivityItem = (item?: ItemFormValues) =>
   ({
     ...getNewItemDefaultProps(),
     ...getUniqueItem(item),
-  } as ItemFormValues);
+  }) as ItemFormValues;
 
 export const getDuplicatedConditions = (
   oldItems: ItemFormValues[],
@@ -207,8 +207,8 @@ export const getDuplicatedConditions = (
       ...result,
       payload: {
         optionValue:
-          (newItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options?.[optionIndex]
-            ?.id ?? '',
+          (newItems[itemIndex]?.responseValues as SingleAndMultipleSelectItemResponseValues)
+            ?.options?.[optionIndex]?.id ?? '',
       },
     };
   });
@@ -256,7 +256,10 @@ const getDuplicatedScoresAndReports = ({
     let conditionalLogic;
     if (report.type === ScoreReportType.Section) {
       const { scoreReports, scoreConditionals } = (scoresAndReports?.reports || []).reduce(
-        (result: { scoreReports: ScoreReport[]; scoreConditionals: ScoreConditionalLogic[] }, report) => {
+        (
+          result: { scoreReports: ScoreReport[]; scoreConditionals: ScoreConditionalLogic[] },
+          report,
+        ) => {
           if (report.type === ScoreReportType.Score) {
             result.scoreReports.push(report);
             result.scoreConditionals.push(...(report.conditionalLogic || []));
@@ -303,7 +306,11 @@ const getDuplicatedScoresAndReports = ({
 
 export const getNewActivity = ({ name, activity }: GetNewActivity) => {
   const items = activity?.items?.map((item) => getNewActivityItem(item)) || [];
-  const conditionalLogic = getDuplicatedConditional(activity?.items ?? [], items, activity?.conditionalLogic);
+  const conditionalLogic = getDuplicatedConditional(
+    activity?.items ?? [],
+    items,
+    activity?.conditionalLogic,
+  );
   const newItemsObjectByOldId =
     activity?.items?.reduce(
       (acc, item, currentIndex) => ({
@@ -372,12 +379,16 @@ export const getGyroscopeOrTouchItems = (type: GyroscopeOrTouch) => {
     getMessageItem({
       name: isGyroscope ? GyroscopeItemNames.GeneralInstruction : TouchItemNames.GeneralInstruction,
       question: t(
-        `gyroscopeAndTouchInstructions.overview.${isGyroscope ? 'instructionGyroscope' : 'instructionTouch'}`,
+        `gyroscopeAndTouchInstructions.overview.${
+          isGyroscope ? 'instructionGyroscope' : 'instructionTouch'
+        }`,
       ),
       order: 1,
     }),
     getMessageItem({
-      name: isGyroscope ? GyroscopeItemNames.PracticeInstruction : TouchItemNames.PracticeInstruction,
+      name: isGyroscope
+        ? GyroscopeItemNames.PracticeInstruction
+        : TouchItemNames.PracticeInstruction,
       question: t('gyroscopeAndTouchInstructions.practice.instruction'),
       order: 2,
     }),
@@ -644,7 +655,10 @@ const getActivityItemResponseValues = (item: Item) => {
 const getAlerts = (item: Item): ItemAlert[] | undefined => {
   const { responseType, responseValues, config } = item;
 
-  if (responseType === ItemResponseType.SingleSelection || responseType === ItemResponseType.MultipleSelection) {
+  if (
+    responseType === ItemResponseType.SingleSelection ||
+    responseType === ItemResponseType.MultipleSelection
+  ) {
     const options = responseValues.options;
     const optionsWithAlert = options?.filter(({ alert }) => typeof alert === 'string');
 
@@ -676,7 +690,8 @@ const getAlerts = (item: Item): ItemAlert[] | undefined => {
 
     return (
       rows?.flatMap(
-        ({ id, alerts }) => alerts?.map(({ value, alert }) => ({ key: uuidv4(), sliderId: id, value, alert })) ?? [],
+        ({ id, alerts }) =>
+          alerts?.map(({ value, alert }) => ({ key: uuidv4(), sliderId: id, value, alert })) ?? [],
       ) ?? []
     );
   }
@@ -720,7 +735,7 @@ const getActivityItems = (items: Item[]) =>
             allowEdit: item.allowEdit,
             isHidden: item.isHidden,
             order: item.order,
-          } as ItemFormValues),
+          }) as ItemFormValues,
       )
     : [];
 
@@ -742,7 +757,8 @@ const getActivityFlows = (activityFlows: ActivityFlow[], activities: Activity[])
   }));
 
 const getConditionPayload = (item: Item, condition: Condition) => {
-  if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType)) return condition.payload;
+  if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType))
+    return condition.payload;
 
   const options = (item?.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;
   const optionValue = options?.find(
@@ -817,8 +833,13 @@ const getShowMessageAndPrintItems = (message?: string, itemsPrint?: string[]) =>
   printItems: !!itemsPrint?.length,
 });
 
-const remapItemsById = (itemsObject: Record<string, Item>) => (name: string) => itemsObject[name].id;
-const getScore = (score: ScoreReport, items: Activity['items'], itemsObject: Record<string, Item>) => {
+const remapItemsById = (itemsObject: Record<string, Item>) => (name: string) =>
+  itemsObject[name].id;
+const getScore = (
+  score: ScoreReport,
+  items: Activity['items'],
+  itemsObject: Record<string, Item>,
+) => {
   const scoreKey = uuidv4();
   const remapperFunction = remapItemsById(itemsObject);
 
@@ -884,10 +905,18 @@ const getScoresAndReports = (activity: Activity) => {
   };
 };
 
-const getActivitySubscaleItems = ({ activityItemsObject, subscalesObject, subscaleItems }: GetActivitySubscaleItems) =>
+const getActivitySubscaleItems = ({
+  activityItemsObject,
+  subscalesObject,
+  subscaleItems,
+}: GetActivitySubscaleItems) =>
   subscaleItems.map(
     (item) =>
-      getEntityKey(activityItemsObject[item.name] ? activityItemsObject[item.name] : subscalesObject[item.name]) ?? '',
+      getEntityKey(
+        activityItemsObject[item.name]
+          ? activityItemsObject[item.name]
+          : subscalesObject[item.name],
+      ) ?? '',
   );
 
 const getActivitySubscaleSettingDuplicated = ({
@@ -905,7 +934,10 @@ const getActivitySubscaleSettingDuplicated = ({
   };
 };
 
-const getActivitySubscaleSetting = (subscaleSetting: Activity['subscaleSetting'], activityItems: ItemFormValues[]) => {
+const getActivitySubscaleSetting = (
+  subscaleSetting: Activity['subscaleSetting'],
+  activityItems: ItemFormValues[],
+) => {
   if (!subscaleSetting) return subscaleSetting;
 
   const processedSubscaleSetting = {
@@ -916,7 +948,10 @@ const getActivitySubscaleSetting = (subscaleSetting: Activity['subscaleSetting']
     })),
   };
   const activityItemsObject = getObjectFromList(activityItems, (item) => item.name);
-  const subscalesObject = getObjectFromList(processedSubscaleSetting.subscales, (subscale) => subscale.name);
+  const subscalesObject = getObjectFromList(
+    processedSubscaleSetting.subscales,
+    (subscale) => subscale.name,
+  );
 
   return {
     ...processedSubscaleSetting,
@@ -1026,16 +1061,26 @@ export const testIsReportCommonFieldsRequired = (
 export const testFunctionForUniqueness = (value: string, items: { name: string }[]) =>
   items?.filter((item) => item.name === value).length < 2 ?? true;
 
-export const testFunctionForSystemItems = (currentItem: ItemFormValues, items: ItemFormValues[]) => {
+export const testFunctionForSystemItems = (
+  currentItem: ItemFormValues,
+  items: ItemFormValues[],
+) => {
   if (currentItem.allowEdit === false) return true;
 
-  if (currentItem.name !== LookupTableItems.Age_screen && currentItem.name !== LookupTableItems.Gender_screen)
+  if (
+    currentItem.name !== LookupTableItems.Age_screen &&
+    currentItem.name !== LookupTableItems.Gender_screen
+  )
     return true;
 
   return !items?.some((item) => isSystemItem(item));
 };
 
-export const testFunctionForTheSameVariable = (field: string, value: string, context: yup.TestContext) => {
+export const testFunctionForTheSameVariable = (
+  field: string,
+  value: string,
+  context: yup.TestContext,
+) => {
   const itemName = get(context, 'parent.name');
   const variableNames = getTextBetweenBrackets(value);
 
@@ -1108,10 +1153,12 @@ export const prepareActivityFlowsFromLibrary = (activityFlows: ActivityFlowFormV
     [],
   );
 
-export const getRegexForIndexedField = (fieldName: string) => new RegExp(`\\[(\\d+)\\].${fieldName}$`);
+export const getRegexForIndexedField = (fieldName: string) =>
+  new RegExp(`\\[(\\d+)\\].${fieldName}$`);
 
 export const isNumberTest = (value?: unknown) => typeof value === 'number' || value === undefined;
-export const isNumberAtLeastOne = (value?: unknown) => typeof value === 'number' && value >= DEFAULT_MIN_NUMBER;
+export const isNumberAtLeastOne = (value?: unknown) =>
+  typeof value === 'number' && value >= DEFAULT_MIN_NUMBER;
 
 export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') => {
   const isSlider = type === 'slider';
@@ -1125,7 +1172,11 @@ export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') =>
         if (!value && value !== 0) return;
         const { maxValue } = this.parent;
 
-        return value < maxValue && (value as number) >= minNumber && (value as number) < DEFAULT_SLIDER_MAX_NUMBER;
+        return (
+          value < maxValue &&
+          (value as number) >= minNumber &&
+          (value as number) < DEFAULT_SLIDER_MAX_NUMBER
+        );
       }),
     maxValue: yup
       .mixed()
@@ -1134,13 +1185,20 @@ export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') =>
         if (!value && value !== 0) return;
         const { minValue } = this.parent;
 
-        return value > minValue && (value as number) > minNumber && (value as number) <= DEFAULT_SLIDER_MAX_NUMBER;
+        return (
+          value > minValue &&
+          (value as number) > minNumber &&
+          (value as number) <= DEFAULT_SLIDER_MAX_NUMBER
+        );
       }),
     ...(isSlider && {
       scores: yup
         .array()
         .of(
-          yup.mixed().test('is-number', t('numberValueIsRequired'), isNumberTest).required(t('numberValueIsRequired')),
+          yup
+            .mixed()
+            .test('is-number', t('numberValueIsRequired'), isNumberTest)
+            .required(t('numberValueIsRequired')),
         )
         .nullable(),
     }),

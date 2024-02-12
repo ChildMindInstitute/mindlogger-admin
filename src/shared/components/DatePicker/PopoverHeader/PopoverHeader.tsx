@@ -13,13 +13,16 @@ export const PopoverHeader = ({ uiType, date, tooltip }: PopoverHeaderProps) => 
   const { t } = useTranslation('app');
   const isStartEndingDate = uiType === UiType.StartEndingDate;
 
-  const renderDate = (i: number) => getStringFromDateWithWeekDay(Array.isArray(date) ? date[i] : date);
+  const renderDate = (i: number) =>
+    getStringFromDateWithWeekDay(Array.isArray(date) ? date[i] : date);
 
   return (
     <Tooltip tooltipTitle={tooltip}>
       <StyledHeader>
         <Box>
-          <StyledTitleSmall>{isStartEndingDate ? t('startDate') : t('selectDate')}</StyledTitleSmall>
+          <StyledTitleSmall>
+            {isStartEndingDate ? t('startDate') : t('selectDate')}
+          </StyledTitleSmall>
           <StyledHeadline>{renderDate(0)}</StyledHeadline>
         </Box>
         {isStartEndingDate && (

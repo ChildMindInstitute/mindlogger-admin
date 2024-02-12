@@ -4,7 +4,12 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { Svg } from 'shared/components/Svg';
 import { concatIf } from 'shared/utils/concatIf';
 
-import { StyledActions, StyledActionButton, StyledActionsWrapper, StyledDotsSvg } from './Actions.styles';
+import {
+  StyledActions,
+  StyledActionButton,
+  StyledActionsWrapper,
+  StyledDotsSvg,
+} from './Actions.styles';
 import { Action, ActionsProps } from './Actions.types';
 
 export const Actions = <T = unknown,>({

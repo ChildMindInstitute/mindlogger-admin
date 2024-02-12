@@ -125,7 +125,9 @@ export const Applet = ({
       <StyledHeadlineLarge>{displayName}</StyledHeadlineLarge>
       {version && <StyledLabelBoldLarge>{version}</StyledLabelBoldLarge>}
       {description && (
-        <StyledBodyLarge sx={{ marginTop: theme.spacing(1.4), color: variables.palette.on_surface_variant }}>
+        <StyledBodyLarge
+          sx={{ marginTop: theme.spacing(1.4), color: variables.palette.on_surface_variant }}
+        >
           {getHighlightedText(getDictionaryText(description), search)}
         </StyledBodyLarge>
       )}
@@ -147,7 +149,11 @@ export const Applet = ({
       case AppletUiType.List:
         return (
           <>
-            <Button variant="text" onClick={() => navigate(APPLET_DETAILS)} data-testid={`${dataTestid}-view-details`}>
+            <Button
+              variant="text"
+              onClick={() => navigate(APPLET_DETAILS)}
+              data-testid={`${dataTestid}-view-details`}
+            >
               {t('viewDetails')}
             </Button>
             <Button

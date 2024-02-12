@@ -6,7 +6,10 @@ import { ChartTooltipProps } from './ChartTooltip.types';
 export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipProps) => (
   <>
     {data && (
-      <StyledTooltip sx={{ padding: theme.spacing(0.4, 0.8) }} data-testid={`${dataTestid}-tooltip`}>
+      <StyledTooltip
+        sx={{ padding: theme.spacing(0.4, 0.8) }}
+        data-testid={`${dataTestid}-tooltip`}
+      >
         <StyledBackground
           data-testid={`${dataTestid}-tooltip-background`}
           sx={{ backgroundColor: data.backgroundColor }}

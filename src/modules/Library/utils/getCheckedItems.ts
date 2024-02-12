@@ -9,7 +9,11 @@ export const getFilteredSelectedItems = (storageItems: LibraryForm, id: string) 
     return acc;
   }, {});
 
-export const getUpdatedSelectedItems = (storageItems: LibraryForm, selectedItems: LibraryForm, id: string) => {
+export const getUpdatedSelectedItems = (
+  storageItems: LibraryForm,
+  selectedItems: LibraryForm,
+  id: string,
+) => {
   const otherAppletSelectedItems = getFilteredSelectedItems(storageItems, id);
 
   if (Object.keys(otherAppletSelectedItems)?.length > 0) {

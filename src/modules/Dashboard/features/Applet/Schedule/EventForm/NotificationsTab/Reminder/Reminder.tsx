@@ -11,7 +11,10 @@ import { SelectEvent } from 'shared/types';
 
 import { EventFormValues } from '../../EventForm.types';
 import { getDaysInPeriod, getWeeklyDays } from '../../EventForm.utils';
-import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, YEARS_TO_ADD_IF_NO_END_DATE } from '../../EventForm.const';
+import {
+  DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
+  YEARS_TO_ADD_IF_NO_END_DATE,
+} from '../../EventForm.const';
 import { Header } from '../Header';
 import { StyledColInner, StyledNotificationWrapper } from '../NotificationsTab.styles';
 import { StyledInputWrapper, StyledReminder } from './Reminder.styles';
@@ -55,7 +58,8 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
     });
 
   const weeklyDays =
-    daysInPeriod && getWeeklyDays({ daysInPeriod, startDate: startDate as Date, isCrossDayEvent }).daysArr;
+    daysInPeriod &&
+    getWeeklyDays({ daysInPeriod, startDate: startDate as Date, isCrossDayEvent }).daysArr;
 
   const handleArrowPress = (value: number, type: ArrowPressType) => {
     if (isWeeklyPeriodicity && weeklyDays) {
@@ -70,10 +74,12 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
       }
 
       if (type === ArrowPressType.Add) {
-        const addResult = currentIndex === weeklyDays.length - 1 ? weeklyDays[0] : weeklyDays[currentIndex + 1];
+        const addResult =
+          currentIndex === weeklyDays.length - 1 ? weeklyDays[0] : weeklyDays[currentIndex + 1];
         setValue(activityIncompleteField, addResult, { shouldDirty: true });
       } else {
-        const subtractResult = currentIndex === 0 ? weeklyDays[weeklyDays.length - 1] : weeklyDays[currentIndex - 1];
+        const subtractResult =
+          currentIndex === 0 ? weeklyDays[weeklyDays.length - 1] : weeklyDays[currentIndex - 1];
         setValue(activityIncompleteField, subtractResult, { shouldDirty: true });
       }
     } else if (value >= DEFAULT_ACTIVITY_INCOMPLETE_VALUE) {
@@ -85,14 +91,18 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
 
   const handleActivityIncompleteChange = (event: SelectEvent) => {
     const newValue =
-      +event.target.value < DEFAULT_ACTIVITY_INCOMPLETE_VALUE ? DEFAULT_ACTIVITY_INCOMPLETE_VALUE : +event.target.value;
+      +event.target.value < DEFAULT_ACTIVITY_INCOMPLETE_VALUE
+        ? DEFAULT_ACTIVITY_INCOMPLETE_VALUE
+        : +event.target.value;
     setValue(activityIncompleteField, newValue, { shouldDirty: true });
     triggerFields();
   };
 
   return (
     <StyledNotificationWrapper>
-      <StyledLabelLarge sx={{ margin: theme.spacing(1.2, 0, 0, 1.1) }}>{t('reminder')}</StyledLabelLarge>
+      <StyledLabelLarge sx={{ margin: theme.spacing(1.2, 0, 0, 1.1) }}>
+        {t('reminder')}
+      </StyledLabelLarge>
       <StyledReminder>
         <Header onClickHandler={handleRemoveReminder} data-testid={dataTestid} />
         <StyledFlexTopStart>
@@ -103,7 +113,9 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
               name={activityIncompleteField}
               control={control}
               textAdornment={isMonthlyPeriodicity ? 'month' : 'day'}
-              tooltip={isMonthlyPeriodicity ? t('numberOfConsecutiveMonths') : t('numberOfConsecutiveDays')}
+              tooltip={
+                isMonthlyPeriodicity ? t('numberOfConsecutiveMonths') : t('numberOfConsecutiveDays')
+              }
               minNumberValue={DEFAULT_ACTIVITY_INCOMPLETE_VALUE}
               disabled={isOncePeriodicity && !isCrossDayEvent}
               onChange={handleActivityIncompleteChange}
@@ -120,7 +132,9 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
           </StyledColInner>
         </StyledFlexTopStart>
         {isWeekdaysPeriodicity && (
-          <StyledBodyMedium sx={{ mt: theme.spacing(2) }}>{t('weekdaysReminderMessage')}</StyledBodyMedium>
+          <StyledBodyMedium sx={{ mt: theme.spacing(2) }}>
+            {t('weekdaysReminderMessage')}
+          </StyledBodyMedium>
         )}
       </StyledReminder>
     </StyledNotificationWrapper>

@@ -7,13 +7,22 @@ import {
   mockedTotalScoresTableData,
 } from 'shared/mock';
 
-import { getSubScaleScore, parseSex, calcScores, calcTotalScore, getSubscales } from './getSubscales';
+import {
+  getSubScaleScore,
+  parseSex,
+  calcScores,
+  calcTotalScore,
+  getSubscales,
+} from './getSubscales';
 import { getObjectFromList } from '../getObjectFromList';
 
 const itemsAndSubscales = [mockedSubscale1, mockedSubscale2];
 const itemsOnly = [mockedSubscale1];
 
-const activityItems = getObjectFromList(mockedDecryptedAnswersWithSubscales, (item) => item.activityItem.name);
+const activityItems = getObjectFromList(
+  mockedDecryptedAnswersWithSubscales,
+  (item) => item.activityItem.name,
+);
 const subscaleItems = [
   {
     name: 'single',

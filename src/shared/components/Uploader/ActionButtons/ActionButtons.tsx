@@ -20,12 +20,20 @@ export const ActionButtons = ({
       data-testid="action-buttons"
     >
       {showFirstButton && (
-        <StyledActionBtn isPrimaryUiType={isPrimaryUiType} onClick={onEditImg} data-testid="action-buttons-edit">
+        <StyledActionBtn
+          isPrimaryUiType={isPrimaryUiType}
+          onClick={onEditImg}
+          data-testid="action-buttons-edit"
+        >
           <Svg width={svgSize} height={svgSize} id="edit" />
         </StyledActionBtn>
       )}
       {showSecondButton && (
-        <StyledActionBtn isPrimaryUiType={isPrimaryUiType} onClick={onDeleteImg} data-testid="action-buttons-delete">
+        <StyledActionBtn
+          isPrimaryUiType={isPrimaryUiType}
+          onClick={onDeleteImg}
+          data-testid="action-buttons-delete"
+        >
           <Svg width={svgSize} height={svgSize} id="trash" />
         </StyledActionBtn>
       )}

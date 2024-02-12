@@ -8,7 +8,13 @@ export const useWorkspaceList = (isAuthorized?: boolean) => {
   const [workspaces, setWorkspaces] = useState<WorkspaceWithRoles[]>([]);
   const [isLoading, setLoading] = useState(true);
 
-  const getWorkspaceWithRole = async ({ ownerId, workspaceName }: { ownerId: string; workspaceName?: string }) => {
+  const getWorkspaceWithRole = async ({
+    ownerId,
+    workspaceName,
+  }: {
+    ownerId: string;
+    workspaceName?: string;
+  }) => {
     const { data } = await getWorkspaceRolesApi({ ownerId });
 
     return {
@@ -37,7 +43,9 @@ export const useWorkspaceList = (isAuthorized?: boolean) => {
         workspacesRoles?.filter(
           (workspace: WorkspaceWithRoles) =>
             Object.keys(workspace?.workspaceRoles).length === 0 || //in case there are no applets yet in the main Workspace
-            Object.values(workspace?.workspaceRoles).some((roles) => isManagerOrOwnerOrEditor(roles[0])),
+            Object.values(workspace?.workspaceRoles).some((roles) =>
+              isManagerOrOwnerOrEditor(roles[0]),
+            ),
         ) || [];
 
       return workspaces;

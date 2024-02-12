@@ -9,7 +9,11 @@ import { useComponentSize } from 'shared/hooks';
 import { StyledBtn, StyledCollapsedContainer, StyledMdPreview } from './CollapsedMdText.styles';
 import { CollapsedMdTextProps } from './CollapsedMdText.types';
 
-export const CollapsedMdText = ({ text, maxHeight, 'data-testid': dataTestid }: CollapsedMdTextProps) => {
+export const CollapsedMdText = ({
+  text,
+  maxHeight,
+  'data-testid': dataTestid,
+}: CollapsedMdTextProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { height } = useComponentSize(containerRef);
   const { t } = useTranslation();
@@ -26,7 +30,12 @@ export const CollapsedMdText = ({ text, maxHeight, 'data-testid': dataTestid }: 
 
   return (
     <>
-      <StyledCollapsedContainer isOpen={isOpen} maxHeight={maxHeight} isLarge={isLarge} data-testid={dataTestid}>
+      <StyledCollapsedContainer
+        isOpen={isOpen}
+        maxHeight={maxHeight}
+        isLarge={isLarge}
+        data-testid={dataTestid}
+      >
         <Box ref={containerRef}>
           <StyledMdPreview modelValue={text} />
         </Box>

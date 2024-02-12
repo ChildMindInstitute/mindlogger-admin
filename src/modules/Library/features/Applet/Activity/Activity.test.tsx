@@ -84,7 +84,9 @@ const renderComponent = ({ activity, search, uiType, route, routePath }) =>
 
 jest.mock('../Item/Item.styles', () => ({
   ...jest.requireActual('../Item/Item.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => <div data-testid={dataTestid}>{modelValue}</div>,
+  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
+    <div data-testid={dataTestid}>{modelValue}</div>
+  ),
 }));
 
 describe('Activity Component', () => {
@@ -97,7 +99,10 @@ describe('Activity Component', () => {
   });
 
   test('renders normal activity', async () => {
-    const setAddToBuilderBtnDisabledMock = jest.spyOn(library.actions, 'setAddToBuilderBtnDisabled');
+    const setAddToBuilderBtnDisabledMock = jest.spyOn(
+      library.actions,
+      'setAddToBuilderBtnDisabled',
+    );
 
     renderComponent({
       activity: mockedNormalActivity,
@@ -157,7 +162,10 @@ describe('Activity Component', () => {
   });
 
   test('renders performance task', async () => {
-    const setAddToBuilderBtnDisabledMock = jest.spyOn(library.actions, 'setAddToBuilderBtnDisabled');
+    const setAddToBuilderBtnDisabledMock = jest.spyOn(
+      library.actions,
+      'setAddToBuilderBtnDisabled',
+    );
 
     renderComponent({
       activity: mockedPerformanceTask,

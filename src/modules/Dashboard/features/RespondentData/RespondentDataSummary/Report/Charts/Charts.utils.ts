@@ -1,6 +1,11 @@
 import { Chart as ChartJS } from 'chart.js/dist/types';
 
-import { CustomLegend, ScatterChartTooltipHandler, ChartType, SetTooltipStyles } from './Chart.types';
+import {
+  CustomLegend,
+  ScatterChartTooltipHandler,
+  ChartType,
+  SetTooltipStyles,
+} from './Chart.types';
 import {
   LEGEND_HEIGHT,
   MAX_LABEL_CHARS_Y,
@@ -74,8 +79,14 @@ export const legendMargin = {
   },
 };
 
-export const setTooltipStyles = ({ chartType, tooltipEl, positionX, positionY }: SetTooltipStyles) => {
-  const POINT_RADIUS = chartType === ChartType.SubscaleLineChart ? POINT_RADIUS_SECONDARY : POINT_RADIUS_DEFAULT;
+export const setTooltipStyles = ({
+  chartType,
+  tooltipEl,
+  positionX,
+  positionY,
+}: SetTooltipStyles) => {
+  const POINT_RADIUS =
+    chartType === ChartType.SubscaleLineChart ? POINT_RADIUS_SECONDARY : POINT_RADIUS_DEFAULT;
   const VERTICAL_OFFSET = POINT_RADIUS - 0.6;
   tooltipEl.style.display = 'block';
   tooltipEl.style.top = `${positionY + VERTICAL_OFFSET}px`;

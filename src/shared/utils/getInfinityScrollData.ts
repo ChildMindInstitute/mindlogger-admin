@@ -1,4 +1,5 @@
-const getNextPage = ({ listSize, limit }: { listSize: number; limit: number }) => Math.floor(listSize / limit) + 1;
+const getNextPage = ({ listSize, limit }: { listSize: number; limit: number }) =>
+  Math.floor(listSize / limit) + 1;
 
 export const getInfinityScrollData = ({
   action,

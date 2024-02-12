@@ -3,7 +3,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Error, FileUploader, Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
+import {
+  Error,
+  FileUploader,
+  Modal,
+  Spinner,
+  SpinnerUiType,
+  SubmitBtnColor,
+} from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
@@ -61,10 +68,11 @@ export const ImportSchedulePopup = ({
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
-  const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } = useImportSchedule({
-    appletName,
-    scheduleExportData,
-  });
+  const { isSubmitDisabled, setIsSubmitDisabled, uploadedFile, validationError, handleFileReady } =
+    useImportSchedule({
+      appletName,
+      scheduleExportData,
+    });
 
   const fileUploader = (
     <FileUploader
@@ -101,7 +109,8 @@ export const ImportSchedulePopup = ({
           <strong>
             <>{{ respondentName }})</>
           </strong>
-          will replace the respondent’s current individual schedule. Are you sure you want to continue?
+          will replace the respondent’s current individual schedule. Are you sure you want to
+          continue?
         </Trans>
       </StyledBodyLarge>,
       fileUploader,
@@ -137,7 +146,12 @@ export const ImportSchedulePopup = ({
         (event) => event.frequency.toUpperCase() !== Periodicity.Always,
       );
 
-      const body = prepareImportPayload(uploadedEvents, scheduleExportData, appletData, respondentId);
+      const body = prepareImportPayload(
+        uploadedEvents,
+        scheduleExportData,
+        appletData,
+        respondentId,
+      );
       if (hasScheduledEvents) {
         respondentId
           ? await deleteIndividualScheduledEvents({

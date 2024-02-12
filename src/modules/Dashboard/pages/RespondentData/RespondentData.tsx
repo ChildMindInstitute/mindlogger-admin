@@ -76,7 +76,8 @@ export const RespondentData = () => {
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
-  if (appletRoles?.[0] === Roles.Coordinator) return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
+  if (appletRoles?.[0] === Roles.Coordinator)
+    return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
 
   return (
     <StyledBody sx={{ position: 'relative' }}>

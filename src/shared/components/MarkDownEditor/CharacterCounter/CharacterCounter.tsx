@@ -12,7 +12,9 @@ export const CharacterCounter = ({ inputSize, disabled }: CharacterCounterProps)
   const { t } = useTranslation('app');
 
   return (
-    <StyledTitleSmall sx={{ m: theme.spacing(0, 1.6), ...(disabled && { color: variables.palette.disabled }) }}>
+    <StyledTitleSmall
+      sx={{ m: theme.spacing(0, 1.6), ...(disabled && { color: variables.palette.disabled }) }}
+    >
       {counter} {t('characters')}
     </StyledTitleSmall>
   );

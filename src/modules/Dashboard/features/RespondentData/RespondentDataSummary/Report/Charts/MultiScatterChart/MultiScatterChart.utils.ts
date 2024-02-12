@@ -33,7 +33,8 @@ export const getOptions = ({
   const timeConfig = getTimeConfig(min, max);
   const timelineStepSize = getTimelineStepSize(min, max);
 
-  const crossAlign = responseType === ItemResponseType.Slider ? ('near' as const) : ('far' as const);
+  const crossAlign =
+    responseType === ItemResponseType.Slider ? ('near' as const) : ('far' as const);
 
   return {
     responsive: true,

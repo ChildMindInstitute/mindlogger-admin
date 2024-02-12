@@ -8,7 +8,10 @@ import { DateFormats, DEFAULT_API_START_TIME, DEFAULT_API_END_TIME } from 'share
 
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { ScheduleExportCsv } from '../Schedule.types';
-import { addSecondsToHourMinutes, getBetweenStartEndNextDaySingleComparison } from '../EventForm/EventForm.utils';
+import {
+  addSecondsToHourMinutes,
+  getBetweenStartEndNextDaySingleComparison,
+} from '../EventForm/EventForm.utils';
 import {
   dateValidationRegex,
   frequencyArray,
@@ -96,7 +99,8 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
       return (
         <Box {...commonErrorBoxProps}>
           <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.StartEndTime}]`}>
-            <strong>Activity End Time</strong> should not be equal to <strong>Activity Start Time</strong>.
+            <strong>Activity End Time</strong> should not be equal to{' '}
+            <strong>Activity Start Time</strong>.
           </Trans>
         </Box>
       );
@@ -104,8 +108,8 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
       return (
         <Box {...commonErrorBoxProps}>
           <Trans i18nKey={`importScheduleErrors[${ImportScheduleErrors.BetweenStartEndTime}]`}>
-            <strong>Notification Time</strong> should be between <strong>Activity Start Time</strong> and{' '}
-            <strong>Activity End Time</strong>.
+            <strong>Notification Time</strong> should be between{' '}
+            <strong>Activity Start Time</strong> and <strong>Activity End Time</strong>.
           </Trans>
         </Box>
       );
@@ -187,7 +191,9 @@ const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) 
             rangeEndTime: getUploadedTime(endTime),
           })
         ) {
-          acc.invalidNotificationTime.data = getInvalidError(ImportScheduleErrors.BetweenStartEndTime);
+          acc.invalidNotificationTime.data = getInvalidError(
+            ImportScheduleErrors.BetweenStartEndTime,
+          );
           acc.hasInvalidData = true;
         }
       }
@@ -220,7 +226,9 @@ export const getUploadedScheduleErrors = (
 
   const importedActivities = new Set(importedActivityNames);
   const availableActivities = new Set(getFieldsToCheck(currentSchedule, false).activityNames);
-  const notExistentActivities = [...importedActivities].filter((item) => !availableActivities.has(item));
+  const notExistentActivities = [...importedActivities].filter(
+    (item) => !availableActivities.has(item),
+  );
 
   return {
     ...props,
@@ -228,7 +236,8 @@ export const getUploadedScheduleErrors = (
   };
 };
 
-const getEndOfYearDate = (uploadedDate: Date) => endOfYear(uploadedDate < new Date() ? new Date() : uploadedDate);
+const getEndOfYearDate = (uploadedDate: Date) =>
+  endOfYear(uploadedDate < new Date() ? new Date() : uploadedDate);
 
 export const prepareImportPayload = (
   uploadedEvents: UploadedEvent[],
@@ -250,7 +259,9 @@ export const prepareImportPayload = (
           ? DEFAULT_API_START_TIME
           : addSecondsToHourMinutes(getUploadedTime(startTime)) || undefined,
       endTime:
-        endTime === EMPTY_TIME ? DEFAULT_API_END_TIME : addSecondsToHourMinutes(getUploadedTime(endTime)) || undefined,
+        endTime === EMPTY_TIME
+          ? DEFAULT_API_END_TIME
+          : addSecondsToHourMinutes(getUploadedTime(endTime)) || undefined,
       accessBeforeSchedule: periodicityType === Periodicity.Always ? undefined : false,
       oneTimeCompletion: periodicityType === Periodicity.Always ? false : undefined,
       timerType: TimerType.NotSet,
@@ -264,7 +275,10 @@ export const prepareImportPayload = (
             periodicityType === Periodicity.Monthly
               ? convertDateToYearMonthDay(uploadedDate)
               : undefined,
-          startDate: periodicityType === Periodicity.Once ? undefined : convertDateToYearMonthDay(uploadedDate),
+          startDate:
+            periodicityType === Periodicity.Once
+              ? undefined
+              : convertDateToYearMonthDay(uploadedDate),
           endDate:
             periodicityType === Periodicity.Once
               ? undefined

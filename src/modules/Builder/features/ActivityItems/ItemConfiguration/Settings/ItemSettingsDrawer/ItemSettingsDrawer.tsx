@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { theme, StyledTitleBoldSmall, StyledClearedButton, StyledFlexTopCenter } from 'shared/styles';
+import {
+  theme,
+  StyledTitleBoldSmall,
+  StyledClearedButton,
+  StyledFlexTopCenter,
+} from 'shared/styles';
 
 import { StyledDrawer, StyledDrawerContent, StyledSettings } from './ItemSettingsDrawer.styles';
 import { ItemSettingsDrawerProps } from './ItemSettingsDrawer.types';

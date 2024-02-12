@@ -267,7 +267,10 @@ describe('parseOptions', () => {
     ${ItemResponseType.Video}                   | ${null}                     | ${undefined}                        | ${'video'}
     ${ItemResponseType.Audio}                   | ${audio}                    | ${undefined}                        | ${'audio'}
     ${ItemResponseType.AudioPlayer}             | ${audioPlayer}              | ${undefined}                        | ${'audioPlayer'}
-  `('returns content for options for "$description": "$expected"', ({ responseType, responseValues, expected }) => {
-    expect(parseOptions(responseValues, responseType)).toBe(expected);
-  });
+  `(
+    'returns content for options for "$description": "$expected"',
+    ({ responseType, responseValues, expected }) => {
+      expect(parseOptions(responseValues, responseType)).toBe(expected);
+    },
+  );
 });

@@ -13,7 +13,9 @@ const mockedLinkResponse = 'This is the response from the link API';
 
 jest.mock('./AdditionalInformation.styles', () => ({
   ...jest.requireActual('./AdditionalInformation.styles'),
-  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => <div data-testid={dataTestid}>{modelValue}</div>,
+  StyledMdPreview: ({ modelValue, 'data-testid': dataTestid }) => (
+    <div data-testid={dataTestid}>{modelValue}</div>
+  ),
 }));
 
 describe('AdditionalInformation component', () => {

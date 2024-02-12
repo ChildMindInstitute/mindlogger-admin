@@ -92,7 +92,8 @@ export const getInvitationsTableRows = ({
         ),
       },
       dateTimeInvited: {
-        content: () => `${format(new Date(`${createdAt}Z`), DateFormats.YearMonthDayHoursMinutesSeconds)}`,
+        content: () =>
+          `${format(new Date(`${createdAt}Z`), DateFormats.YearMonthDayHoursMinutesSeconds)}`,
         value: createdAt,
       },
     };

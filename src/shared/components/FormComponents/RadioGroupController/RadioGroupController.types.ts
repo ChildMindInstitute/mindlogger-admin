@@ -6,4 +6,5 @@ type FormRadioGroupProps = {
   'data-testid'?: string;
 } & RadioGroupProps;
 
-export type RadioGroupControllerProps<T extends FieldValues> = FormRadioGroupProps & UseControllerProps<T>;
+export type RadioGroupControllerProps<T extends FieldValues> = FormRadioGroupProps &
+  UseControllerProps<T>;

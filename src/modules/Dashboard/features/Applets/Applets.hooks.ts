@@ -19,7 +19,9 @@ import { getObjectFromList } from 'shared/utils';
 
 import { getAppletsWithLocalFolders } from './Applets.utils';
 
-export const useAppletsWithFolders = (onChangeApplets: Dispatch<SetStateAction<(Folder | Applet)[]>>) => {
+export const useAppletsWithFolders = (
+  onChangeApplets: Dispatch<SetStateAction<(Folder | Applet)[]>>,
+) => {
   const { ownerId } = workspaces.useData() || {};
 
   const [count, setCount] = useState(0);
@@ -57,10 +59,16 @@ export const useAppletsWithFolders = (onChangeApplets: Dispatch<SetStateAction<(
         isFolder: applet.type === DashboardAppletType.Folder,
       })) ?? [];
     const groupedAppletList = getObjectFromList(appletList);
-    const shownExpandedFolders = expandedFolders.filter((folderId) => !!groupedAppletList[folderId]);
+    const shownExpandedFolders = expandedFolders.filter(
+      (folderId) => !!groupedAppletList[folderId],
+    );
 
     if (search) {
-      const appletsWithFolders = getAppletsWithLocalFolders(appletList ?? [], folders ?? [], expandedFolders);
+      const appletsWithFolders = getAppletsWithLocalFolders(
+        appletList ?? [],
+        folders ?? [],
+        expandedFolders,
+      );
 
       setLoading(false);
 

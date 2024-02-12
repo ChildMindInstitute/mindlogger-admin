@@ -1,6 +1,12 @@
 import { useMemo, useRef, useState } from 'react';
 
-import { Chart as ChartJS, ScriptableTooltipContext, BarElement, Legend, CategoryScale } from 'chart.js';
+import {
+  Chart as ChartJS,
+  ScriptableTooltipContext,
+  BarElement,
+  Legend,
+  CategoryScale,
+} from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { Box } from '@mui/material';
 

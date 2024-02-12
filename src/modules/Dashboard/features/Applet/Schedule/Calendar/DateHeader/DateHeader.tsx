@@ -6,7 +6,9 @@ import { getMonthName } from 'shared/utils/dateFormat';
 import { NameLength } from '../Calendar.types';
 
 export const DateHeader = ({ date, drilldownView, onDrillDown }: DateHeaderProps) => {
-  const dateText = `${date.getDate() === 1 ? `${getMonthName(date, NameLength.Short)} ` : ''}${date.getDate()}`;
+  const dateText = `${
+    date.getDate() === 1 ? `${getMonthName(date, NameLength.Short)} ` : ''
+  }${date.getDate()}`;
 
   if (!drilldownView) {
     return <span>{dateText}</span>;

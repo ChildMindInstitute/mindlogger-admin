@@ -63,7 +63,10 @@ export const ItemSettingsGroup = ({
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const handleTimerChange = (event: SelectEvent) => {
-    setValue(`${name}.${ItemConfigurationSettings.HasTimer}`, +event.target.value || DEFAULT_ACTIVE_TIMER_VALUE);
+    setValue(
+      `${name}.${ItemConfigurationSettings.HasTimer}`,
+      +event.target.value || DEFAULT_ACTIVE_TIMER_VALUE,
+    );
   };
 
   return (
@@ -93,16 +96,19 @@ export const ItemSettingsGroup = ({
                 inputType === ItemResponseType.MultipleSelectionPerRow;
               const isTimer = settingKey === ItemConfigurationSettings.HasTimer;
               const isTextInput = settingKey === ItemConfigurationSettings.HasTextInput;
-              const isTextInputRequired = settingKey === ItemConfigurationSettings.IsTextInputRequired;
+              const isTextInputRequired =
+                settingKey === ItemConfigurationSettings.IsTextInputRequired;
               const isSkippableItem = settingKey === ItemConfigurationSettings.IsSkippable;
-              const isCorrectAnswerRequired = settingKey === ItemConfigurationSettings.IsCorrectAnswerRequired;
+              const isCorrectAnswerRequired =
+                settingKey === ItemConfigurationSettings.IsCorrectAnswerRequired;
               const isScores = settingKey === ItemConfigurationSettings.HasScores;
               const isAlerts = settingKey === ItemConfigurationSettings.HasAlerts;
               const isColorPalette = settingKey === ItemConfigurationSettings.HasColorPalette;
 
               const hasTextInput = get(config, ItemConfigurationSettings.HasTextInput);
               const hasResponseRequired = checkIfItemHasRequiredOptions(config);
-              const isDisabled = (isTextInputRequired && !hasTextInput) || (isSkippableItem && hasResponseRequired);
+              const isDisabled =
+                (isTextInputRequired && !hasTextInput) || (isSkippableItem && hasResponseRequired);
               const isSecondsDisabled = isTimer && !get(config, ItemConfigurationSettings.HasTimer);
 
               const hasTooltip = ITEM_SETTINGS_TO_HAVE_TOOLTIP.includes(settingKey);
@@ -113,7 +119,9 @@ export const ItemSettingsGroup = ({
                 if (isTimer)
                   return onChange({
                     ...config,
-                    [settingKey]: event.target.checked ? DEFAULT_TIMER_VALUE : DEFAULT_DISABLED_TIMER_VALUE,
+                    [settingKey]: event.target.checked
+                      ? DEFAULT_TIMER_VALUE
+                      : DEFAULT_DISABLED_TIMER_VALUE,
                   });
 
                 if (settingKey === ItemConfigurationSettings.IsResponseRequired) {
@@ -126,7 +134,8 @@ export const ItemSettingsGroup = ({
 
                 if (isTextInput || isTextInputRequired) {
                   const [prefix, postfix] = settingKey.split('.');
-                  const [, textInputRequired] = ItemConfigurationSettings.IsTextInputRequired.split('.');
+                  const [, textInputRequired] =
+                    ItemConfigurationSettings.IsTextInputRequired.split('.');
                   const value = event.target.checked;
 
                   return onChange({
@@ -165,10 +174,12 @@ export const ItemSettingsGroup = ({
 
                     setValue(
                       `${itemName}.responseValues.options`,
-                      getValues(`${itemName}.responseValues.options`)?.map((option: SingleAndMultiSelectOption) => ({
-                        ...option,
-                        color: undefined,
-                      })),
+                      getValues(`${itemName}.responseValues.options`)?.map(
+                        (option: SingleAndMultiSelectOption) => ({
+                          ...option,
+                          color: undefined,
+                        }),
+                      ),
                     );
                     setValue(`${itemName}.responseValues.paletteName`, undefined);
                   }
@@ -205,23 +216,31 @@ export const ItemSettingsGroup = ({
                     case ItemResponseType.Slider:
                       return setValue(
                         `${itemName}.responseValues.scores`,
-                        hasScores ? getDefaultSliderScores(getValues(`${itemName}.responseValues`)) : undefined,
+                        hasScores
+                          ? getDefaultSliderScores(getValues(`${itemName}.responseValues`))
+                          : undefined,
                       );
                     case ItemResponseType.SingleSelection:
                     case ItemResponseType.MultipleSelection:
                       return setValue(
                         `${itemName}.responseValues.options`,
-                        getValues(`${itemName}.responseValues.options`)?.map((option: SingleAndMultiSelectOption) => ({
-                          ...option,
-                          score: hasScores ? DEFAULT_SCORE_VALUE : undefined,
-                        })),
+                        getValues(`${itemName}.responseValues.options`)?.map(
+                          (option: SingleAndMultiSelectOption) => ({
+                            ...option,
+                            score: hasScores ? DEFAULT_SCORE_VALUE : undefined,
+                          }),
+                        ),
                       );
                   }
                 }
 
                 if ((isScores || isAlerts) && isMultiOrSingleRows) {
-                  const hasScores = isScores ? event.target.checked : get(config, ItemConfigurationSettings.HasScores);
-                  const hasAlerts = isAlerts ? event.target.checked : get(config, ItemConfigurationSettings.HasAlerts);
+                  const hasScores = isScores
+                    ? event.target.checked
+                    : get(config, ItemConfigurationSettings.HasScores);
+                  const hasAlerts = isAlerts
+                    ? event.target.checked
+                    : get(config, ItemConfigurationSettings.HasAlerts);
 
                   const dataMatrix = getValues(`${itemName}.responseValues.dataMatrix`);
 
@@ -236,17 +255,22 @@ export const ItemSettingsGroup = ({
                     : undefined;
                   const newMatrix =
                     updatedMatrix ??
-                    getValues(`${itemName}.responseValues.rows`)?.map((row: SingleAndMultipleSelectRow) => ({
-                      rowId: row.id,
-                      options: getValues(`${itemName}.responseValues.options`)?.map(
-                        (option: SingleAndMultiSelectRowOption) => ({
-                          optionId: option.id,
-                          ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
-                        }),
-                      ),
-                    }));
+                    getValues(`${itemName}.responseValues.rows`)?.map(
+                      (row: SingleAndMultipleSelectRow) => ({
+                        rowId: row.id,
+                        options: getValues(`${itemName}.responseValues.options`)?.map(
+                          (option: SingleAndMultiSelectRowOption) => ({
+                            optionId: option.id,
+                            ...(hasScores && { score: DEFAULT_SCORE_VALUE }),
+                          }),
+                        ),
+                      }),
+                    );
 
-                  setValue(`${itemName}.responseValues.dataMatrix`, hasScores || hasAlerts ? newMatrix : undefined);
+                  setValue(
+                    `${itemName}.responseValues.dataMatrix`,
+                    hasScores || hasAlerts ? newMatrix : undefined,
+                  );
                 }
 
                 if (isAlerts && ~ITEM_TYPES_TO_HAVE_ALERTS.indexOf(inputType as ItemResponseType)) {
@@ -310,7 +334,9 @@ export const ItemSettingsGroup = ({
                               type="number"
                               disabled={isSecondsDisabled}
                               minNumberValue={
-                                isSecondsDisabled ? DEFAULT_DISABLED_TIMER_VALUE : DEFAULT_ACTIVE_TIMER_VALUE
+                                isSecondsDisabled
+                                  ? DEFAULT_DISABLED_TIMER_VALUE
+                                  : DEFAULT_ACTIVE_TIMER_VALUE
                               }
                               data-testid={`builder-activity-items-item-settings-${settingKey}-input`}
                               onChange={handleTimerChange}

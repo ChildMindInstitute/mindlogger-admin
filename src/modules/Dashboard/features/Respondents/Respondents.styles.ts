@@ -8,7 +8,8 @@ import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 export const RespondentsTableHeader = styled(Box, shouldForwardProp)`
   margin-bottom: ${theme.spacing(2.4)};
   display: flex;
-  justify-content: ${({ hasButton }: { hasButton: boolean }) => (hasButton ? 'space-between' : 'center')};
+  justify-content: ${({ hasButton }: { hasButton: boolean }) =>
+    hasButton ? 'space-between' : 'center'};
 `;
 
 export const StyledButton = styled(Button)`

@@ -44,7 +44,12 @@ export const ExportSchedulePopup = ({
             </Trans>
           )}
         </Box>
-        <Table columns={getHeadCells()} rows={scheduleTableRows} orderBy="activityName" uiType={UiType.Tertiary} />
+        <Table
+          columns={getHeadCells()}
+          rows={scheduleTableRows}
+          orderBy="activityName"
+          uiType={UiType.Tertiary}
+        />
       </StyledModalWrapper>
     </Modal>
   );

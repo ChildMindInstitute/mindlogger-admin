@@ -15,4 +15,5 @@ export type FormAutocompleteProps = {
   'data-testid'?: string;
 } & TextFieldProps;
 
-export type TagsAutocompleteControllerProps<T extends FieldValues> = FormAutocompleteProps & UseControllerProps<T>;
+export type TagsAutocompleteControllerProps<T extends FieldValues> = FormAutocompleteProps &
+  UseControllerProps<T>;

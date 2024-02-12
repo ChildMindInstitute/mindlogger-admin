@@ -20,11 +20,15 @@ export const AddUserSchema = (isWorkspaceName: boolean | undefined) => {
       role: yup.string().required(),
       secretUserId: yup
         .string()
-        .when('role', ([role], schema) => (role === Roles.Respondent ? schema.required(secretUserIdRequired) : schema)),
+        .when('role', ([role], schema) =>
+          role === Roles.Respondent ? schema.required(secretUserIdRequired) : schema,
+        ),
       workspacePrefix: yup
         .string()
         .when('role', ([role], schema) =>
-          role !== Roles.Respondent && isWorkspaceName ? schema.required(workspaceNameRequired) : schema,
+          role !== Roles.Respondent && isWorkspaceName
+            ? schema.required(workspaceNameRequired)
+            : schema,
         ),
       language: yup.string(),
       respondents: yup.array().of(

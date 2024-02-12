@@ -91,7 +91,11 @@ export const ConditionContent = ({
           data-testid={`${dataTestid}-condition-${index}`}
         />
       ))}
-      {!!error && <StyledBodyMedium color={variables.palette.semantic.error}>{error.message}</StyledBodyMedium>}
+      {!!error && (
+        <StyledBodyMedium color={variables.palette.semantic.error}>
+          {error.message}
+        </StyledBodyMedium>
+      )}
       <StyledButton
         startIcon={<Svg id="add" width="20" height="20" />}
         onClick={handleAddCondition}

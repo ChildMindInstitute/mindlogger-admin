@@ -5,7 +5,10 @@ import { StyledModalWrapper } from 'shared/styles';
 
 import { ServerVerifyErrorPopupProps } from './ServerVerifyErrorPopup.types';
 
-export const ServerVerifyErrorPopup = ({ popupVisible, setPopupVisible }: ServerVerifyErrorPopupProps) => {
+export const ServerVerifyErrorPopup = ({
+  popupVisible,
+  setPopupVisible,
+}: ServerVerifyErrorPopupProps) => {
   const { t } = useTranslation('app');
 
   const onClose = () => setPopupVisible(false);

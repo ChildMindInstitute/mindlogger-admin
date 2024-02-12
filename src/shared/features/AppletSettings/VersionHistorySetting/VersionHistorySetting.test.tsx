@@ -71,7 +71,10 @@ const changesMock = {
           items: [
             {
               name: 'Item itemName was added',
-              changes: ['Item Name was set to testItemName', 'Displayed Content was set to testDisplayedContent'],
+              changes: [
+                'Item Name was set to testItemName',
+                'Displayed Content was set to testDisplayedContent',
+              ],
             },
           ],
         },

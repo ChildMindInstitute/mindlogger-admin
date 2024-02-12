@@ -20,7 +20,8 @@ export const SectionScoreCommonFields = ({
 }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, getFieldState, register, unregister, setValue, getValues, trigger } = useFormContext();
+  const { control, getFieldState, register, unregister, setValue, getValues, trigger } =
+    useFormContext();
 
   const showMessageName = `${name}.showMessage`;
   const printItemsName = `${name}.printItems`;

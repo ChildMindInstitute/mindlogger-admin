@@ -10,7 +10,12 @@ import { ActivitySettingsSubscale } from 'shared/state';
 import { ActivityCompletionScores } from './ActivityCompletionScores';
 import { Subscale } from './Subscale';
 import { ReportContext } from '../Report.context';
-import { ActivityCompletionToRender, ParsedSubscales, SubscaleScore, SubscalesProps } from './Subscales.types';
+import {
+  ActivityCompletionToRender,
+  ParsedSubscales,
+  SubscaleScore,
+  SubscalesProps,
+} from './Subscales.types';
 import { AllScores } from './AllScores';
 import {
   getSubscalesToRender,
@@ -28,7 +33,10 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
         (acc: ParsedSubscales, item) => {
           if (!item?.subscaleSetting?.subscales?.length) return acc;
 
-          const activityItems = getObjectFromList(item.decryptedAnswer, (item) => item.activityItem.name);
+          const activityItems = getObjectFromList(
+            item.decryptedAnswer,
+            (item) => item.activityItem.name,
+          );
           const subscalesObject = getObjectFromList<ActivitySettingsSubscale>(
             item.subscaleSetting.subscales,
             (item) => item.name,
@@ -181,9 +189,13 @@ export const Subscales = ({ answers, versions, subscalesFrequency }: SubscalesPr
   };
 
   const subscales = useMemo(() => {
-    const currentSubscales = currentActivityCompletion ? activityCompletionToRender : allSubscalesToRender;
+    const currentSubscales = currentActivityCompletion
+      ? activityCompletionToRender
+      : allSubscalesToRender;
 
-    const formattedSubscales = formatCurrentSubscales(currentSubscales as ActivityCompletionToRender);
+    const formattedSubscales = formatCurrentSubscales(
+      currentSubscales as ActivityCompletionToRender,
+    );
 
     return groupSubscales(formattedSubscales, formattedSubscales);
   }, [allSubscalesToRender, activityCompletionToRender]);

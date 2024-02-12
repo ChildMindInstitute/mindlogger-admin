@@ -35,7 +35,12 @@ const FormComponent = forwardRef(({ defaultValues, children }: FormComponentProp
   return <FormProvider {...methods}>{children}</FormProvider>;
 });
 
-export const renderWithAppletFormData = ({ children, appletFormData, options, formRef }: RenderWithAppletFormData) => {
+export const renderWithAppletFormData = ({
+  children,
+  appletFormData,
+  options,
+  formRef,
+}: RenderWithAppletFormData) => {
   const form = (
     <FormComponent defaultValues={appletFormData} ref={formRef}>
       {children}

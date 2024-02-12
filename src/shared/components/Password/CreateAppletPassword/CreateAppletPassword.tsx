@@ -33,10 +33,16 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
 
     return (
       <form onSubmit={handleSubmit(submitCallback)} noValidate>
-        <StyledBodyLarge color={variables.palette.semantic.error} sx={{ marginBottom: theme.spacing(3.2) }}>
+        <StyledBodyLarge
+          color={variables.palette.semantic.error}
+          sx={{ marginBottom: theme.spacing(3.2) }}
+        >
           {t('createAppletPasswordWarning')}
         </StyledBodyLarge>
-        <StyledBodyLarge color={variables.palette.on_surface_variant} sx={{ marginBottom: theme.spacing(3.2) }}>
+        <StyledBodyLarge
+          color={variables.palette.on_surface_variant}
+          sx={{ marginBottom: theme.spacing(3.2) }}
+        >
           {t('createAppletPasswordRequirements')}
         </StyledBodyLarge>
         <StyledController>

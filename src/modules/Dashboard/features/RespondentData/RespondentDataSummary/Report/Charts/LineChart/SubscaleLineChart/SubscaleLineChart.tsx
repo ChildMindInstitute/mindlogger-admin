@@ -20,7 +20,11 @@ import { LINK_PATTERN, locales } from '../../Charts.const';
 import { StyledChartContainer } from '../../Chart.styles';
 import { ChartTooltip } from './ChartTooltip';
 import { getOptions, getData } from './SubscaleLineChart.utils';
-import { SubscaleLineDataPointRaw, SubscaleLineChartProps, TooltipData } from './SubscaleLineChart.types';
+import {
+  SubscaleLineDataPointRaw,
+  SubscaleLineChartProps,
+  TooltipData,
+} from './SubscaleLineChart.types';
 import { ChartType } from '../../Chart.types';
 
 ChartJS.register(Tooltip, TimeScale, Legend);

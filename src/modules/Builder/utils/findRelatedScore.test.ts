@@ -1,5 +1,10 @@
 import { OptionCondition, ScoreReport } from 'redux/modules';
-import { CalculationType, ConditionType, ConditionalLogicMatch, ScoreReportType } from 'shared/consts';
+import {
+  CalculationType,
+  ConditionType,
+  ConditionalLogicMatch,
+  ScoreReportType,
+} from 'shared/consts';
 
 import { findRelatedScore } from './findRelatedScore';
 

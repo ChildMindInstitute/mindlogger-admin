@@ -7,7 +7,8 @@ import { without } from 'shared/utils';
 
 import { ActivitiesFlowsWithColors } from './Schedule.types';
 
-export const getCount = (ids: ActivitiesFlowsWithColors, id: string) => ids.filter((item) => item.id === id).length;
+export const getCount = (ids: ActivitiesFlowsWithColors, id: string) =>
+  ids.filter((item) => item.id === id).length;
 
 export const convertDateToYearMonthDay = (date: Date | string) =>
   typeof date === 'string' ? date : format(date, DateFormats.YearMonthDay);

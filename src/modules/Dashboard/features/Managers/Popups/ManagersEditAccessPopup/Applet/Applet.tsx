@@ -24,7 +24,9 @@ export const Applet = ({
 }: AppletProps) => {
   const { t } = useTranslation('app');
 
-  const selectedRespondents = roles?.flatMap(({ reviewerRespondents }) => reviewerRespondents ?? []);
+  const selectedRespondents = roles?.flatMap(
+    ({ reviewerRespondents }) => reviewerRespondents ?? [],
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
   const isPristineRef = useRef(true);
@@ -59,7 +61,9 @@ export const Applet = ({
         <StyledRow>
           <StyledFlexTopCenter>
             {image && <StyledImg src={image} alt={displayName} />}
-            <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>{displayName}</StyledBodyMedium>
+            <StyledBodyMedium sx={{ marginLeft: theme.spacing(1.2) }}>
+              {displayName}
+            </StyledBodyMedium>
           </StyledFlexTopCenter>
           <ButtonWithMenu
             disabled={isAddRoleDisabled}
@@ -73,7 +77,11 @@ export const Applet = ({
         {roles?.map(({ role, icon }) => (
           <Chip
             shape={ChipShape.Rounded}
-            color={appletsWithoutRespondents?.includes(displayName) && role === Roles.Reviewer ? 'error' : 'secondary'}
+            color={
+              appletsWithoutRespondents?.includes(displayName) && role === Roles.Reviewer
+                ? 'error'
+                : 'secondary'
+            }
             icon={icon}
             key={role}
             title={

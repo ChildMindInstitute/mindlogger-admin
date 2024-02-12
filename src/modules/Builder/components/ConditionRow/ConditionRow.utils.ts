@@ -39,7 +39,10 @@ export const getItemOptions = (items: ItemFormValues[], conditionRowType: Condit
       return [
         ...optionList,
         {
-          labelKey: conditionRowType === ConditionRowType.Item ? item.name : `${t('conditionItem')}: ${item.name}`,
+          labelKey:
+            conditionRowType === ConditionRowType.Item
+              ? item.name
+              : `${t('conditionItem')}: ${item.name}`,
           value: getEntityKey(item),
           type: getConditionItemType(item),
           responseValues: item.responseValues,
@@ -118,8 +121,12 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
       }
 
       return {
-        minValue: (conditionPayload as RangeValueCondition['payload'])?.minValue ?? DEFAULT_PAYLOAD_MIN_VALUE,
-        maxValue: (conditionPayload as RangeValueCondition['payload'])?.maxValue ?? DEFAULT_PAYLOAD_MAX_VALUE,
+        minValue:
+          (conditionPayload as RangeValueCondition['payload'])?.minValue ??
+          DEFAULT_PAYLOAD_MIN_VALUE,
+        maxValue:
+          (conditionPayload as RangeValueCondition['payload'])?.maxValue ??
+          DEFAULT_PAYLOAD_MAX_VALUE,
       };
     default:
       return {};

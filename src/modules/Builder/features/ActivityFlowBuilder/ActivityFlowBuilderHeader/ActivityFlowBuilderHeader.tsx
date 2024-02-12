@@ -15,7 +15,11 @@ import { GetMenuItemsType } from '../ActivityFlowBuilder.types';
 import { StyledButtons } from './ActivityFlowBuilderHeader.styles';
 import { ActivityFlowBuilderHeaderProps } from './ActivityFlowBuilderHeader.types';
 
-export const ActivityFlowBuilderHeader = ({ isSticky, children, headerProps }: ActivityFlowBuilderHeaderProps) => {
+export const ActivityFlowBuilderHeader = ({
+  isSticky,
+  children,
+  headerProps,
+}: ActivityFlowBuilderHeaderProps) => {
   const { t } = useTranslation('app');
   const { watch } = useCustomFormContext();
   const activities: AppletFormValues['activities'] = watch('activities');

@@ -144,7 +144,11 @@ describe('getReportAndMediaData', () => {
         name: 'itemName-3',
       },
     };
-    const decryptedAnswers = [textItem, textNullAnswerItem, textUndefinedAnswerItem] as DecryptedAnswerData[];
+    const decryptedAnswers = [
+      textItem,
+      textNullAnswerItem,
+      textUndefinedAnswerItem,
+    ] as DecryptedAnswerData[];
     const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
 
     test('should return filtered out array with items without empty answers', () => {
@@ -175,7 +179,10 @@ describe('getReportAndMediaData', () => {
     });
     test('should return an array with items', () => {
       const { decryptedAnswers } = mockedParsedAnswers[0];
-      const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
+      const rawAnswersObject = getObjectFromList(
+        decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const result = getReportData([], rawAnswersObject, decryptedAnswers);
@@ -240,7 +247,10 @@ describe('getReportAndMediaData', () => {
       ]);
     });
     test('should return an array with items and subscale calculation in first item', () => {
-      const rawAnswersObject = getObjectFromList(mockedDecryptedAnswersWithSubscales, (item) => item.activityItem.name);
+      const rawAnswersObject = getObjectFromList(
+        mockedDecryptedAnswersWithSubscales,
+        (item) => item.activityItem.name,
+      );
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const result = getReportData([], rawAnswersObject, mockedDecryptedAnswersWithSubscales);
@@ -351,19 +361,23 @@ describe('getReportAndMediaData', () => {
   describe('getMediaData', () => {
     const answersForRegularItems = mockedParsedAnswers[0].decryptedAnswers;
     const resultForDrawing = {
-      fileName: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+      fileName:
+        'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
       url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/023cf7e7-6083-443a-b74a-f32b75a711cd/e2e611df-02d5-4316-8406-c5d685b94090.svg',
     };
     const resultForPhoto = {
-      fileName: '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-photo_text.jpg',
+      fileName:
+        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-photo_text.jpg',
       url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/d595acfc-8322-4d45-8ba5-c2f793b5476e/rn_image_picker_lib_temp_46ecc18c-2c7d-4d72-8d27-636c37e2e6f3.jpg',
     };
     const resultForVideo = {
-      fileName: '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-video_text.mp4',
+      fileName:
+        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-video_text.mp4',
       url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/4fc51edd-2dab-4048-836b-f1b9bf0270f6/rn_image_picker_lib_temp_9309b1eb-90b0-4908-a24d-be6fa06def10.mp4',
     };
     const resultForAudio = {
-      fileName: '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-audio_text.m4a',
+      fileName:
+        '949f248c-1a4b-4a35-a5a2-898dfef72050-835e5277-5949-4dff-817a-d85c17a3604f-audio_text.m4a',
       url: 'https://media-dev.cmiml.net/mindlogger/2048412251058983019/73ef3a61-8053-4558-814e-05baafbbdc90/f01c225c-62df-4867-b282-66f585a65109.m4a',
     };
 
@@ -384,7 +398,10 @@ describe('getReportAndMediaData', () => {
   describe('getActivityJourneyData', () => {
     test('should return an array for journey data', () => {
       const decryptedAnswers = [mockedDecryptedObjectForDrawing];
-      const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
+      const rawAnswersObject = getObjectFromList(
+        decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
       const result = getActivityJourneyData(
         [],
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -410,7 +427,8 @@ describe('getReportAndMediaData', () => {
           press_skip_time: '',
           press_undo_time: '',
           prompt: 'drawing\n',
-          response: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+          response:
+            'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
           response_option_selection_time: '1689770402756',
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
@@ -442,7 +460,10 @@ describe('getReportAndMediaData', () => {
     });
     test('should return an array for journey data with splash screen', () => {
       const decryptedAnswers = [mockedDecryptedObjectForDrawing];
-      const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
+      const rawAnswersObject = getObjectFromList(
+        decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
       const events = [
         {
           type: 'NEXT',
@@ -498,7 +519,8 @@ describe('getReportAndMediaData', () => {
           press_skip_time: '',
           press_undo_time: '',
           prompt: 'drawing\n',
-          response: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
+          response:
+            'eabe2de0-9ea4-495b-a4d1-2966eece97f8-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg',
           response_option_selection_time: '1689770402756',
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',

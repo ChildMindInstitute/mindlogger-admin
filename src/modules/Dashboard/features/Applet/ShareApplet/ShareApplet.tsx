@@ -4,9 +4,17 @@ import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { checkAppletNameInLibraryApi, publishAppletToLibraryApi, getAppletLibraryUrlApi } from 'api';
+import {
+  checkAppletNameInLibraryApi,
+  publishAppletToLibraryApi,
+  getAppletLibraryUrlApi,
+} from 'api';
 import { Spinner, SpinnerUiType } from 'shared/components';
-import { InputController, CheckboxController, TagsController } from 'shared/components/FormComponents';
+import {
+  InputController,
+  CheckboxController,
+  TagsController,
+} from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyMedium } from 'shared/styles/styledComponents';
 import { getErrorMessage } from 'shared/utils/errors';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -36,8 +44,11 @@ export const ShareApplet = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isAppletNameDisabled, setIsAppletNameDisabled] = useState(false);
 
-  const { execute: checkAppletNameInLibrary, error: nameError } = useAsync(checkAppletNameInLibraryApi);
-  const { execute: publishAppletToLibrary, error: publishError } = useAsync(publishAppletToLibraryApi);
+  const { execute: checkAppletNameInLibrary, error: nameError } = useAsync(
+    checkAppletNameInLibraryApi,
+  );
+  const { execute: publishAppletToLibrary, error: publishError } =
+    useAsync(publishAppletToLibraryApi);
   const { execute: getAppletLibraryUrl, error: libraryUrlError } = useAsync(getAppletLibraryUrlApi);
 
   const error = publishError || libraryUrlError;
@@ -168,8 +179,8 @@ export const ShareApplet = ({
           {showNameTakenError && (
             <StyledErrorText marginTop={ERROR_MARGIN_TOP}>
               <Trans i18nKey="appletNameAlreadyTaken">
-                This Applet name is already taken in the Library. Please rename the Applet to share it. <br /> Note:
-                This will change the name of the Applet for your users.
+                This Applet name is already taken in the Library. Please rename the Applet to share
+                it. <br /> Note: This will change the name of the Applet for your users.
               </Trans>
             </StyledErrorText>
           )}

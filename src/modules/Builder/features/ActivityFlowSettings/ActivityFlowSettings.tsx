@@ -15,7 +15,9 @@ export const ActivityFlowSettings = () => {
   useRedirectIfNoMatchedActivityFlow();
 
   const handleItemClose = () => {
-    navigate(generatePath(page.builderAppletActivityFlowItemSettings, { appletId, activityFlowId }));
+    navigate(
+      generatePath(page.builderAppletActivityFlowItemSettings, { appletId, activityFlowId }),
+    );
   };
   const handleSetActiveItem = (setting: NavigationItem) => {
     navigate(

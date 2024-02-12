@@ -28,7 +28,8 @@ export const auth = {
         },
       }) => status,
     ),
-  useAuthorized: (): AuthSchema['isAuthorized'] => useAppSelector(({ auth: { isAuthorized } }) => isAuthorized),
+  useAuthorized: (): AuthSchema['isAuthorized'] =>
+    useAppSelector(({ auth: { isAuthorized } }) => isAuthorized),
   useData: (): AuthSchema['authentication']['data'] =>
     useAppSelector(
       ({
@@ -43,7 +44,13 @@ export const auth = {
         auth: {
           authentication: { data },
         },
-      }) => (data ? `${data.user.firstName.substring(0, 1)}${data.user.lastName.substring(0, 1)}`.toUpperCase() : ''),
+      }) =>
+        data
+          ? `${data.user.firstName.substring(0, 1)}${data.user.lastName.substring(
+              0,
+              1,
+            )}`.toUpperCase()
+          : '',
     ),
   useLogoutInProgress: (): AuthSchema['isLogoutInProgress'] =>
     useAppSelector(({ auth: { isLogoutInProgress } }) => isLogoutInProgress),

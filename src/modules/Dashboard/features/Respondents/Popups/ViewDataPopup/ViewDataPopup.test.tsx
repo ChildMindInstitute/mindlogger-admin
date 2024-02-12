@@ -50,7 +50,9 @@ describe('ViewDataPopup', () => {
 
     const popup = screen.getByTestId('dashboard-respondents-view-data-popup');
     expect(popup).toBeInTheDocument();
-    expect(screen.getByTestId('dashboard-respondents-view-data-popup-enter-password-password')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('dashboard-respondents-view-data-popup-enter-password-password'),
+    ).toBeInTheDocument();
   });
 
   test('should render table with applets', () => {
@@ -65,7 +67,9 @@ describe('ViewDataPopup', () => {
       />,
     );
 
-    expect(screen.getByText("Please select the Applet to view Respondent's data for:")).toBeInTheDocument();
+    expect(
+      screen.getByText("Please select the Applet to view Respondent's data for:"),
+    ).toBeInTheDocument();
 
     const tableRow = screen.getByText('Mocked Applet');
     fireEvent.click(tableRow);

@@ -37,7 +37,9 @@ export const LinkForm = ({ inviteLink, setInviteLink }: LinkGeneratorProps) => {
 
   return (
     <>
-      <StyledBodyMedium>{inviteLink?.requireLogin ? t('shareWithLogin') : t('shareWithNoLogin')}</StyledBodyMedium>
+      <StyledBodyMedium>
+        {inviteLink?.requireLogin ? t('shareWithLogin') : t('shareWithNoLogin')}
+      </StyledBodyMedium>
       <StyledFlexTopCenter>
         <StyledInput
           label=""

@@ -17,11 +17,16 @@ export const GeneralSettings = () => {
     formState: { errors },
   } = useCustomFormContext();
 
-  const hasError = !!get(errors, `${activityObjField}.items[${FlankerInstructionPositions.General}].question`);
+  const hasError = !!get(
+    errors,
+    `${activityObjField}.items[${FlankerInstructionPositions.General}].question`,
+  );
 
   return (
     <>
-      <StyledTitleLarge sx={{ p: theme.spacing(1, 0, 2.4) }}>{t('generalSettings')}</StyledTitleLarge>
+      <StyledTitleLarge sx={{ p: theme.spacing(1, 0, 2.4) }}>
+        {t('generalSettings')}
+      </StyledTitleLarge>
       <Instruction
         name={`${fieldName}.items.${FlankerInstructionPositions.General}.question`}
         description={t('flankerInstructions.generalDesc')}

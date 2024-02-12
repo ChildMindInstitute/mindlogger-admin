@@ -4,7 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { StyledBodyLarge, StyledFlexTopCenter, StyledTooltipSvg, theme, variables } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledFlexTopCenter,
+  StyledTooltipSvg,
+  theme,
+  variables,
+} from 'shared/styles';
 import { CheckboxController, InputController } from 'shared/components/FormComponents';
 import { Tooltip } from 'shared/components/Tooltip';
 import { ConditionRowType } from 'modules/Builder/types';

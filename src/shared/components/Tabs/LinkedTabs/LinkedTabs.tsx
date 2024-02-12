@@ -8,7 +8,12 @@ import { StyledTabs } from '../Tabs.styles';
 import { TabPanel } from '../TabPanel';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
 
-export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false, isBuilder = false }: TabsProps) => {
+export const LinkedTabs = ({
+  tabs,
+  uiType = UiType.Primary,
+  hiddenHeader = false,
+  isBuilder = false,
+}: TabsProps) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
@@ -19,7 +24,17 @@ export const LinkedTabs = ({ tabs, uiType = UiType.Primary, hiddenHeader = false
     const { header, content } = tabs.reduce(
       (
         tabs: RenderTabs,
-        { id, icon, activeIcon, labelKey, isMinHeightAuto, path, hasError, onClick, 'data-testid': dataTestId },
+        {
+          id,
+          icon,
+          activeIcon,
+          labelKey,
+          isMinHeightAuto,
+          path,
+          hasError,
+          onClick,
+          'data-testid': dataTestId,
+        },
         index,
       ) => {
         tabs.header.push(

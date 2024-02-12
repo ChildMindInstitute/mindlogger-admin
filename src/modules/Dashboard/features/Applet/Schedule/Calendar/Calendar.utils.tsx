@@ -46,11 +46,15 @@ export const getHasWrapperMoreBtn = ({
   const currentWeek = formatToWeekYear(date);
   const hasDateHiddenEvents =
     !isAllDayEventsVisible && allDayEventsSortedByDays.some((item) => item.date === currentDate);
-  const hasDateHiddenEventsWithState = isAllDayEventsVisible?.period === currentDate && !isAllDayEventsVisible?.visible;
+  const hasDateHiddenEventsWithState =
+    isAllDayEventsVisible?.period === currentDate && !isAllDayEventsVisible?.visible;
   const hasWeekHiddenEvents =
     !isAllDayEventsVisible &&
-    allDayEventsSortedByDays.some((item) => item.date && formatToWeekYear(new Date(item.date)) === currentWeek);
-  const hasWeekHiddenEventsWithState = isAllDayEventsVisible?.period === currentWeek && !isAllDayEventsVisible?.visible;
+    allDayEventsSortedByDays.some(
+      (item) => item.date && formatToWeekYear(new Date(item.date)) === currentWeek,
+    );
+  const hasWeekHiddenEventsWithState =
+    isAllDayEventsVisible?.period === currentWeek && !isAllDayEventsVisible?.visible;
 
   switch (activeView) {
     case CalendarViews.Day:
@@ -73,7 +77,9 @@ export const getCalendarComponents = ({
   setIsAllDayEventsVisible,
 }: GetCalendarComponents) => ({
   components: {
-    toolbar: (props: ToolbarProps) => <Toolbar {...props} activeView={activeView} setActiveView={setActiveView} />,
+    toolbar: (props: ToolbarProps) => (
+      <Toolbar {...props} activeView={activeView} setActiveView={setActiveView} />
+    ),
     month: {
       dateHeader: DateHeader,
       header: (props: HeaderProps) => <MonthHeader {...props} calendarDate={date} />,
@@ -94,7 +100,9 @@ export const getCalendarComponents = ({
           uiType={TimeHeaderUiType.Week}
         />
       ),
-      eventContainerWrapper: (props: Partial<CalendarProps>) => <EventContainerWrapper {...props} events={events} />,
+      eventContainerWrapper: (props: Partial<CalendarProps>) => (
+        <EventContainerWrapper {...props} events={events} />
+      ),
       eventWrapper: EventWrapper,
       event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.TimeView} />,
     },
@@ -108,7 +116,9 @@ export const getCalendarComponents = ({
           uiType={TimeHeaderUiType.Day}
         />
       ),
-      eventContainerWrapper: (props: Partial<CalendarProps>) => <EventContainerWrapper {...props} events={events} />,
+      eventContainerWrapper: (props: Partial<CalendarProps>) => (
+        <EventContainerWrapper {...props} events={events} />
+      ),
       eventWrapper: EventWrapper,
       event: (props: EventProps<CalendarEvent>) => <Event {...props} uiType={UiType.TimeView} />,
     },
@@ -150,7 +160,11 @@ export const getCalendarComponents = ({
   },
 });
 
-export const getBorderRadius = (isScheduledEvent: boolean, eventSpanAfter: boolean, eventSpanBefore: boolean) => {
+export const getBorderRadius = (
+  isScheduledEvent: boolean,
+  eventSpanAfter: boolean,
+  eventSpanBefore: boolean,
+) => {
   if (isScheduledEvent && eventSpanAfter) {
     return `${variables.borderRadius.md} ${variables.borderRadius.md} 0 0`;
   }

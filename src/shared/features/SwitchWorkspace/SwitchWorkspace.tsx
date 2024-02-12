@@ -4,7 +4,11 @@ import { Svg } from 'shared/components/Svg';
 import { StyledIconButton } from 'shared/styles';
 import { auth } from 'redux/modules';
 
-import { StyledCloseWrapper, StyledDivider, StyledSwitchWorkspaceDrawer } from './SwitchWorkspace.styles';
+import {
+  StyledCloseWrapper,
+  StyledDivider,
+  StyledSwitchWorkspaceDrawer,
+} from './SwitchWorkspace.styles';
 import { SwitchWorkspaceProps } from './SwitchWorkspace.types';
 import { WorkspaceGroup } from './WorkspaceGroup';
 import { getWorkspacesGroups } from './SwitchWorkspace.utils';
@@ -21,9 +25,17 @@ export const SwitchWorkspace = ({
   const workspacesGroups = getWorkspacesGroups(workspaces, id);
 
   return (
-    <StyledSwitchWorkspaceDrawer anchor="left" open={visibleDrawer} hideBackdrop data-testid={dataTestid}>
+    <StyledSwitchWorkspaceDrawer
+      anchor="left"
+      open={visibleDrawer}
+      hideBackdrop
+      data-testid={dataTestid}
+    >
       <StyledCloseWrapper>
-        <StyledIconButton onClick={() => setVisibleDrawer(false)} data-testid={`${dataTestid}-close`}>
+        <StyledIconButton
+          onClick={() => setVisibleDrawer(false)}
+          data-testid={`${dataTestid}-close`}
+        >
           <Svg id="close" />
         </StyledIconButton>
       </StyledCloseWrapper>

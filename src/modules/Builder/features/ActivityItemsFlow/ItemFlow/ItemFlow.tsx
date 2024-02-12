@@ -33,7 +33,9 @@ export const ItemFlow = ({ name, index, isStaticActive, onRemove }: ItemFlowProp
   const dataTestid = `builder-activity-item-flow-${index}`;
 
   const { control, getFieldState } = useCustomFormContext();
-  const { append: appendCondition, remove: removeCondition } = useFieldArray<Record<string, Condition[]>>({
+  const { append: appendCondition, remove: removeCondition } = useFieldArray<
+    Record<string, Condition[]>
+  >({
     control,
     name: conditionsName,
   });

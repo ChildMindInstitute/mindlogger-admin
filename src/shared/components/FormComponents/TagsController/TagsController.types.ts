@@ -10,7 +10,8 @@ export type TagsControllerProps = {
   disable?: boolean;
 } & TextFieldProps;
 
-export type TagsInputControllerProps<T extends FieldValues> = TagsControllerProps & UseControllerProps<T>;
+export type TagsInputControllerProps<T extends FieldValues> = TagsControllerProps &
+  UseControllerProps<T>;
 
 export enum UiType {
   Primary = 'primary',

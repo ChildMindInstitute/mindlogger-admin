@@ -9,8 +9,14 @@ import { ExpandedActivity } from './Applet.types';
 export const checkIfPerformanceTask = (items: Item[]) =>
   items?.some(({ responseType }) => performanceTaskResponseTypes.includes(responseType));
 
-export const getUpdatedStorageData = (applets: PublishedApplet[] | null, selectedApplet: PublishedApplet, id: string) =>
-  applets?.length ? [...applets.filter((applet) => applet.id !== id), selectedApplet] : [selectedApplet];
+export const getUpdatedStorageData = (
+  applets: PublishedApplet[] | null,
+  selectedApplet: PublishedApplet,
+  id: string,
+) =>
+  applets?.length
+    ? [...applets.filter((applet) => applet.id !== id), selectedApplet]
+    : [selectedApplet];
 
 export const includesSearchValue = (text: string, search: string) => {
   const pattern = new RegExp(search, 'gi');

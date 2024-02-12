@@ -56,7 +56,10 @@ export const reducers = {
     state.scheduledVisible.status = 'success';
   },
 
-  setCreateEventsData: (state: CalendarEventsSchema, action: PayloadAction<CreateEventsData[]>): void => {
+  setCreateEventsData: (
+    state: CalendarEventsSchema,
+    action: PayloadAction<CreateEventsData[]>,
+  ): void => {
     state.createEventsData.data = action.payload;
     state.createEventsData.status = 'success';
   },

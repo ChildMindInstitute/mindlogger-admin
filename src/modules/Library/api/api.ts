@@ -5,7 +5,10 @@ import { MAX_LIMIT } from 'shared/consts';
 import { PublishedApplet } from '../state';
 import { PublishedAppletsType } from './api.types';
 
-export const getPublishedAppletsApi = ({ page, search, limit }: PublishedAppletsType, signal?: AbortSignal) =>
+export const getPublishedAppletsApi = (
+  { page, search, limit }: PublishedAppletsType,
+  signal?: AbortSignal,
+) =>
   apiClient.get('/library', {
     params: {
       search,

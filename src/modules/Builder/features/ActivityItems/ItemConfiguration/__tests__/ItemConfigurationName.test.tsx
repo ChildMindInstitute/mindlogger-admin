@@ -8,7 +8,12 @@ import { mockedSingleSelectFormValues, mockedAppletFormData } from 'shared/mock'
 import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
 import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
-import { renderItemConfiguration, mockedNameTestid, getAppletFormDataWithItem, mockedItemName } from '../__mocks__';
+import {
+  renderItemConfiguration,
+  mockedNameTestid,
+  getAppletFormDataWithItem,
+  mockedItemName,
+} from '../__mocks__';
 
 const mockedAppletFormDataWithSystemItems = {
   ...mockedAppletFormData,
@@ -73,7 +78,9 @@ describe('ItemConfiguration: Item Name', () => {
     await ref.current.trigger(`${mockedItemName}.name`);
 
     await waitFor(() => {
-      expected ? expect(screen.getByText(expected)).toBeVisible() : expect(error).not.toBeInTheDocument();
+      expected
+        ? expect(screen.getByText(expected)).toBeVisible()
+        : expect(error).not.toBeInTheDocument();
     });
   });
 });

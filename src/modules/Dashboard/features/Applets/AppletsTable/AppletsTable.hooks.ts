@@ -30,7 +30,10 @@ export const useAppletsDnd = () => {
     }
   };
 
-  const onDrop = async (event: React.DragEvent<HTMLTableRowElement>, droppedItem: Folder | Applet) => {
+  const onDrop = async (
+    event: React.DragEvent<HTMLTableRowElement>,
+    droppedItem: Folder | Applet,
+  ) => {
     onDragLeave(event);
 
     const draggedId = event.dataTransfer.getData('text');
@@ -40,7 +43,8 @@ export const useAppletsDnd = () => {
 
     const wasInFolder = draggedItem?.parentId;
     const isMovingToFolder =
-      (droppedItem.isFolder || (droppedItem as Applet)?.parentId) && draggedItem.parentId !== droppedItem.id;
+      (droppedItem.isFolder || (droppedItem as Applet)?.parentId) &&
+      draggedItem.parentId !== droppedItem.id;
 
     const folder = droppedItem.isFolder
       ? droppedItem

@@ -10,4 +10,5 @@ export const checkIfHasMigratedAnswers = (decryptedAnswers: DecryptedAnswerData[
 };
 
 // Transform example: 64c23b53-8819-c178-d236-685e00000000 => 64c23b538819c178d236685e
-export const getIdBeforeMigration = (id = '') => id.slice(0, -END_OF_LINE_OF_MIGRATED_ID_SIZE).replace(/-/g, '');
+export const getIdBeforeMigration = (id = '') =>
+  id.slice(0, -END_OF_LINE_OF_MIGRATED_ID_SIZE).replace(/-/g, '');

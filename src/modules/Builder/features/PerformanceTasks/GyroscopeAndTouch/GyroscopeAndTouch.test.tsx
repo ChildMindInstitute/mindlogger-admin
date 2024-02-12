@@ -173,7 +173,9 @@ const renderGyroscopeOrTouch = (isGyroscope) => {
 
   renderWithAppletFormData({
     formRef: ref,
-    children: <GyroscopeAndTouch type={isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch} />,
+    children: (
+      <GyroscopeAndTouch type={isGyroscope ? GyroscopeOrTouch.Gyroscope : GyroscopeOrTouch.Touch} />
+    ),
     appletFormData: formData,
     options: {
       routePath,
@@ -209,33 +211,56 @@ describe('GyroscopeAndTouch', () => {
       renderGyroscopeOrTouch(isGyroscope);
       expandAllPanels();
 
-      expect(screen.getByTestId('builder-activity-flanker-name').querySelector('input')).toHaveValue(
-        isGyroscope ? 'CST Gyroscope' : 'CST Touch',
-      );
-      expect(screen.getByTestId('builder-activity-flanker-description').querySelector('textarea')).toHaveTextContent(
+      expect(
+        screen.getByTestId('builder-activity-flanker-name').querySelector('input'),
+      ).toHaveValue(isGyroscope ? 'CST Gyroscope' : 'CST Touch');
+      expect(
+        screen.getByTestId('builder-activity-flanker-description').querySelector('textarea'),
+      ).toHaveTextContent(
         `This Activity contains Stability Tracker (${isGyroscope ? 'Gyroscope' : 'Touch'}) Item.`,
       );
 
-      expect(screen.getByTestId(`${mockedTestid}-number-of-trials`).querySelector('input')).toHaveValue(2);
-      expect(screen.getByTestId(`${mockedTestid}-length-of-test`).querySelector('input')).toHaveValue(4);
-      expect(screen.getByTestId(`${mockedTestid}-lambda-scope`).querySelector('input')).toHaveValue(19);
-
       expect(
-        screen.getByTestId(`${mockedTestid}-overview-instruction-instruction`).querySelector('textarea'),
-      ).toHaveTextContent(
-        (isGyroscope ? mockedNewlyAddedGyroscope : mockedNewlyAddedTouch).items[0].question?.replaceAll('\n', ' '),
+        screen.getByTestId(`${mockedTestid}-number-of-trials`).querySelector('input'),
+      ).toHaveValue(2);
+      expect(
+        screen.getByTestId(`${mockedTestid}-length-of-test`).querySelector('input'),
+      ).toHaveValue(4);
+      expect(screen.getByTestId(`${mockedTestid}-lambda-scope`).querySelector('input')).toHaveValue(
+        19,
       );
 
       expect(
-        screen.getByTestId(`${mockedTestid}-practice-round-instruction-instruction`).querySelector('textarea'),
+        screen
+          .getByTestId(`${mockedTestid}-overview-instruction-instruction`)
+          .querySelector('textarea'),
       ).toHaveTextContent(
-        (isGyroscope ? mockedNewlyAddedGyroscope : mockedNewlyAddedTouch).items[1].question?.replaceAll('\n', ' '),
+        (isGyroscope
+          ? mockedNewlyAddedGyroscope
+          : mockedNewlyAddedTouch
+        ).items[0].question?.replaceAll('\n', ' '),
       );
 
       expect(
-        screen.getByTestId(`${mockedTestid}-test-round-instruction-instruction`).querySelector('textarea'),
+        screen
+          .getByTestId(`${mockedTestid}-practice-round-instruction-instruction`)
+          .querySelector('textarea'),
       ).toHaveTextContent(
-        (isGyroscope ? mockedNewlyAddedGyroscope : mockedNewlyAddedTouch).items[3].question?.replaceAll('\n', ' '),
+        (isGyroscope
+          ? mockedNewlyAddedGyroscope
+          : mockedNewlyAddedTouch
+        ).items[1].question?.replaceAll('\n', ' '),
+      );
+
+      expect(
+        screen
+          .getByTestId(`${mockedTestid}-test-round-instruction-instruction`)
+          .querySelector('textarea'),
+      ).toHaveTextContent(
+        (isGyroscope
+          ? mockedNewlyAddedGyroscope
+          : mockedNewlyAddedTouch
+        ).items[3].question?.replaceAll('\n', ' '),
       );
     });
 

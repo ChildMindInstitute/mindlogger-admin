@@ -1,5 +1,10 @@
 import config from './encryption.config';
-import { Encryption, EncryptionParsed, GetAppletEncryptionInfo, GetPrivateKey } from './encryption.types';
+import {
+  Encryption,
+  EncryptionParsed,
+  GetAppletEncryptionInfo,
+  GetPrivateKey,
+} from './encryption.types';
 import { algorithm, encoding } from './encryption.const';
 
 const defaultBase = [2];
@@ -43,7 +48,12 @@ export const getParsedEncryptionFromServer = (encryption: Encryption): Encryptio
 
 export const getPrime = () => config.primes[Math.floor(Math.random() * 10)];
 
-export const getAppletEncryptionInfo = async ({ appletPassword, accountId, prime, base }: GetAppletEncryptionInfo) => {
+export const getAppletEncryptionInfo = async ({
+  appletPassword,
+  accountId,
+  prime,
+  base,
+}: GetAppletEncryptionInfo) => {
   const { createDiffieHellman } = await import('crypto-browserify');
   const key = createDiffieHellman(
     Buffer.from(prime || getPrime()) as unknown as number,

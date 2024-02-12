@@ -70,7 +70,9 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
     case ItemResponseType.Time: {
       const answer = activityItemAnswer.answer as DecryptedTimeAnswer;
 
-      return <Box data-testid={activityItemAnswer['data-testid']}>{getTimeResponseItem(answer)}</Box>;
+      return (
+        <Box data-testid={activityItemAnswer['data-testid']}>{getTimeResponseItem(answer)}</Box>
+      );
     }
   }
 };

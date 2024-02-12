@@ -8,7 +8,12 @@ import { PrivateRoute } from 'routes/PrivateRoute';
 import { Path } from 'shared/utils';
 import { ErrorFallback } from 'shared/components';
 
-import { appletRoutes, appletActivityRoutes, appletActivityFlowRoutes, performanceTasksRoutes } from './routes.const';
+import {
+  appletRoutes,
+  appletActivityRoutes,
+  appletActivityFlowRoutes,
+  performanceTasksRoutes,
+} from './routes.const';
 
 const BuilderApplet = lazy(() => import('../pages/BuilderApplet'));
 const BuilderActivityFlow = lazy(() => import('../pages/BuilderActivityFlow'));

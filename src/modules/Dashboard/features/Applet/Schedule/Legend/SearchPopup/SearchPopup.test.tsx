@@ -142,7 +142,9 @@ describe('SearchPopup component', () => {
     expect(setSelectedRespondent).toHaveBeenCalledWith(selectedRespondent1);
     expect(setSearchPopupVisible).toHaveBeenCalledWith(false);
 
-    expect(mockedUseNavigate).toHaveBeenCalledWith(`/dashboard/${appletId}/schedule/${selectedRespondent1.id}`);
+    expect(mockedUseNavigate).toHaveBeenCalledWith(
+      `/dashboard/${appletId}/schedule/${selectedRespondent1.id}`,
+    );
   });
 
   test('selects respondent with hasIndividualSchedule = false', async () => {
@@ -208,6 +210,8 @@ describe('SearchPopup component', () => {
       );
     });
 
-    expect(mockedUseNavigate).toHaveBeenCalledWith(`/dashboard/${appletId}/schedule/${selectedRespondent2.id}`);
+    expect(mockedUseNavigate).toHaveBeenCalledWith(
+      `/dashboard/${appletId}/schedule/${selectedRespondent2.id}`,
+    );
   });
 });

@@ -21,7 +21,8 @@ export const ImportSequencesPopup = ({
 }: ImportSequencesPopupProps) => {
   const { t } = useTranslation('app');
   const [step, setStep] = useState<number>(0);
-  const { isSubmitDisabled, validationError, handleFileReady, uploadedData } = useImportSequence(uploadedImages);
+  const { isSubmitDisabled, validationError, handleFileReady, uploadedData } =
+    useImportSequence(uploadedImages);
 
   const isUpload = uiType === ImportSequencesType.Upload;
   const downloadText = t(isUpload ? 'downloadTemplate' : 'flankerRound.downloadExistingSequence');
@@ -74,7 +75,9 @@ export const ImportSequencesPopup = ({
       open={open}
       onClose={handleModalClose}
       onSubmit={onSubmit}
-      title={t(`${isUpload ? 'flankerRound.uploadBlockSequences' : 'flankerRound.updateBlockSequences'}`)}
+      title={t(
+        `${isUpload ? 'flankerRound.uploadBlockSequences' : 'flankerRound.updateBlockSequences'}`,
+      )}
       buttonText={t(screens[step].btnText)}
       hasSecondBtn={screens[step].hasSecondBtn}
       secondBtnText={t(screens[step].secondBtnText || '')}

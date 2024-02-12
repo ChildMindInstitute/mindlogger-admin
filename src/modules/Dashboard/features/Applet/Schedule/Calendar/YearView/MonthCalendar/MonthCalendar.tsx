@@ -9,9 +9,21 @@ import { CalendarViews } from '../../Calendar.types';
 import { CalendarDate } from './CalendarDate';
 import { createCalendar, shortWeekDaysArray } from './MonthCalendar.utils';
 import { MonthCalendarProps, MonthObject } from './MonthCalendar.types';
-import { StyledMonth, StyledMonthName, StyledDay, StyledMonthInside, StyledSkeleton } from './MonthCalendar.styles';
+import {
+  StyledMonth,
+  StyledMonthName,
+  StyledDay,
+  StyledMonthInside,
+  StyledSkeleton,
+} from './MonthCalendar.styles';
 
-export const MonthCalendar = ({ date, events, localizer, setDate, setActiveView }: MonthCalendarProps) => {
+export const MonthCalendar = ({
+  date,
+  events,
+  localizer,
+  setDate,
+  setActiveView,
+}: MonthCalendarProps) => {
   const langLocale = i18n.language;
   const [calendar, setCalendar] = useState<MonthObject | null>(null);
 

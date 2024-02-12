@@ -5,9 +5,21 @@ import uniqueId from 'lodash.uniqueid';
 import { useTranslation } from 'react-i18next';
 
 import { Svg, Tooltip } from 'shared/components';
-import { theme, StyledBodyMedium, StyledFlexTopCenter, StyledLabelBoldLarge, variables } from 'shared/styles';
+import {
+  theme,
+  StyledBodyMedium,
+  StyledFlexTopCenter,
+  StyledLabelBoldLarge,
+  variables,
+} from 'shared/styles';
 
-import { StyledChildren, StyledCollapseBtn, StyledCollapse, StyledItem, StyledIconBtn } from './ExpandedList.styles';
+import {
+  StyledChildren,
+  StyledCollapseBtn,
+  StyledCollapse,
+  StyledItem,
+  StyledIconBtn,
+} from './ExpandedList.styles';
 import { ExpandedListProps } from './ExpandedList.types';
 
 export const ExpandedList = ({
@@ -56,7 +68,10 @@ export const ExpandedList = ({
       {listVisible && (
         <>
           {allAvailableScheduled && (
-            <StyledBodyMedium color={variables.palette.outline} sx={{ p: theme.spacing(2.4, 0.9, 0, 0.9) }}>
+            <StyledBodyMedium
+              color={variables.palette.outline}
+              sx={{ p: theme.spacing(2.4, 0.9, 0, 0.9) }}
+            >
               {t('activateActivitiesScheduled')}
             </StyledBodyMedium>
           )}

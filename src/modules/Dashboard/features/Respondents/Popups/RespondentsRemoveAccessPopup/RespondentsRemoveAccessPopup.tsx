@@ -52,7 +52,9 @@ export const RespondentsRemoveAccessPopup = ({
 
   const firstScreen = (
     <>
-      <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>{t('removeAccessDescription')}</StyledBodyLarge>
+      <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+        {t('removeAccessDescription')}
+      </StyledBodyLarge>
       <AppletsSmallTable tableRows={tableRows} data-testid={`${dataTestid}-respondents-table`} />
     </>
   );
@@ -88,7 +90,9 @@ export const RespondentsRemoveAccessPopup = ({
               </Trans>
             </StyledBodyLarge>
           }
-          control={<Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />}
+          control={
+            <Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />
+          }
           data-testid={`${dataTestid}-remove-data`}
         />
       )}

@@ -61,7 +61,11 @@ export const LinkGenerator = () => {
           >
             {t('generateLink')}
           </Button>
-          <LinkPopup open={linkPopupVisible} onClose={() => setLinkPopupVisible(false)} onSubmit={onLinkCreated} />
+          <LinkPopup
+            open={linkPopupVisible}
+            onClose={() => setLinkPopupVisible(false)}
+            onSubmit={onLinkCreated}
+          />
         </>
       )}
     </StyledWrapper>

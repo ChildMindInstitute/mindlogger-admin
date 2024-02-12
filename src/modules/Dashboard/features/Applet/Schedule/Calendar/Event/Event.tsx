@@ -42,7 +42,9 @@ export const Event = ({ title, event, uiType = UiType.DefaultView }: EventProps)
     >
       <StyledWrapper className="event-top-section">
         <StyledLeftSection>
-          {!isAllDayEvent && isDefaultView && scheduledColor && <StyledIndicator bgColor={scheduledColor} />}
+          {!isAllDayEvent && isDefaultView && scheduledColor && (
+            <StyledIndicator bgColor={scheduledColor} />
+          )}
           {isDefaultView && !isAllDayEvent && <StyledLabelMedium>{startTime}</StyledLabelMedium>}
           {isTimeView && !isAllDayEvent && (
             <>

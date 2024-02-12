@@ -55,7 +55,10 @@ export const getAllSubscalesToRender = (
 
     for (const subscaleItem of subscale.items) {
       if (subscaleItem.type === ElementType.Item) {
-        const formattedItem = formatActivityItemAnswers(activityItems[subscaleItem.name], item.endDatetime);
+        const formattedItem = formatActivityItemAnswers(
+          activityItems[subscaleItem.name],
+          item.endDatetime,
+        );
 
         if (!allSubscalesToRender?.[subscale.name]?.items) {
           allSubscalesToRender[subscale.name] = {
@@ -82,8 +85,9 @@ export const getAllSubscalesToRender = (
   for (const subscaleItem of subscale.items) {
     if (subscaleItem.type === ElementType.Item) {
       const itemIndex =
-        allSubscalesToRender[subscale.name]?.items?.findIndex((item) => item.activityItem.name === subscaleItem.name) ??
-        -1;
+        allSubscalesToRender[subscale.name]?.items?.findIndex(
+          (item) => item.activityItem.name === subscaleItem.name,
+        ) ?? -1;
 
       if (itemIndex < 0) {
         return allSubscalesToRender;
@@ -106,28 +110,34 @@ export const getAllSubscalesToRender = (
 };
 
 export const formatCurrentSubscales = (currentSubscales: ActivityCompletionToRender) =>
-  Object.keys(currentSubscales).reduce((formattedSubscales: ActivityCompletionToRender, subscaleName) => {
-    const currItems = currentSubscales[subscaleName]?.items || [];
-    const updatedItems = currItems?.reduce((items: Record<string, FormattedResponse>, formattedResponse) => {
-      const prevActivityItem = items[formattedResponse.activityItem.id];
-      if (!prevActivityItem) {
-        return {
-          ...items,
-          [formattedResponse.activityItem.id]: formattedResponse,
-        };
-      }
+  Object.keys(currentSubscales).reduce(
+    (formattedSubscales: ActivityCompletionToRender, subscaleName) => {
+      const currItems = currentSubscales[subscaleName]?.items || [];
+      const updatedItems = currItems?.reduce(
+        (items: Record<string, FormattedResponse>, formattedResponse) => {
+          const prevActivityItem = items[formattedResponse.activityItem.id];
+          if (!prevActivityItem) {
+            return {
+              ...items,
+              [formattedResponse.activityItem.id]: formattedResponse,
+            };
+          }
 
-      return items;
-    }, {});
+          return items;
+        },
+        {},
+      );
 
-    return {
-      ...formattedSubscales,
-      [subscaleName]: {
-        ...currentSubscales[subscaleName],
-        items: Object.values(updatedItems),
-      },
-    };
-  }, {});
+      return {
+        ...formattedSubscales,
+        [subscaleName]: {
+          ...currentSubscales[subscaleName],
+          items: Object.values(updatedItems),
+        },
+      };
+    },
+    {},
+  );
 
 export const groupSubscales = (
   data: ActivityCompletionToRender,

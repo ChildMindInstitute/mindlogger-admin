@@ -14,7 +14,8 @@ export const useSubscalesSystemItemsSetup = (subscales: SubscaleFormValue[]) => 
   const itemsFieldName = `${activityFieldName}.items`;
   const items: ItemFormValues[] = watch(itemsFieldName) ?? [];
 
-  const appendSystemItems = (newItems: ItemFormValues[]) => setValue(itemsFieldName, [...items, ...newItems]);
+  const appendSystemItems = (newItems: ItemFormValues[]) =>
+    setValue(itemsFieldName, [...items, ...newItems]);
   const removeSystemItems = () =>
     setValue(
       itemsFieldName,

@@ -4,7 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { getDictionaryText } from 'shared/utils';
 import { Svg } from 'shared/components/Svg';
-import { StyledBodyMedium, StyledFlexTopStart, StyledTitleBoldMedium, variables } from 'shared/styles';
+import {
+  StyledBodyMedium,
+  StyledFlexTopStart,
+  StyledTitleBoldMedium,
+  variables,
+} from 'shared/styles';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 
 import { StyledButton, StyledEdited, StyledItem, StyledReviewer } from './FeedbackReviewer.styles';
@@ -34,13 +39,21 @@ export const FeedbackReviewer = ({
       {isOpen && (
         <>
           {review.map((activityItemAnswer, index) => (
-            <StyledItem key={activityItemAnswer.activityItem.id} data-testid={`${dataTestid}-review-${index}`}>
+            <StyledItem
+              key={activityItemAnswer.activityItem.id}
+              data-testid={`${dataTestid}-review-${index}`}
+            >
               {activityItemAnswer.answer?.edited && (
                 <StyledEdited data-testid={`${dataTestid}-review-${index}-edited`}>
-                  <StyledBodyMedium color={variables.palette.on_secondary_container}>{t('edited')}</StyledBodyMedium>
+                  <StyledBodyMedium color={variables.palette.on_secondary_container}>
+                    {t('edited')}
+                  </StyledBodyMedium>
                 </StyledEdited>
               )}
-              <CollapsedMdText text={getDictionaryText(activityItemAnswer.activityItem.question)} maxHeight={120} />
+              <CollapsedMdText
+                text={getDictionaryText(activityItemAnswer.activityItem.question)}
+                maxHeight={120}
+              />
               {getResponseItem(activityItemAnswer)}
             </StyledItem>
           ))}

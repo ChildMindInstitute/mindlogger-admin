@@ -7,7 +7,13 @@ import { Box } from '@mui/material';
 import { Svg } from 'shared/components/Svg';
 import { Tooltip } from 'shared/components/Tooltip';
 import { SelectEvent } from 'shared/types';
-import { StyledFlexTopCenter, StyledLabelBoldMedium, StyledObserverTarget, theme, variables } from 'shared/styles';
+import {
+  StyledFlexTopCenter,
+  StyledLabelBoldMedium,
+  StyledObserverTarget,
+  theme,
+  variables,
+} from 'shared/styles';
 import { groupBy } from 'shared/utils/array';
 
 import {
@@ -61,7 +67,14 @@ export const SelectController = <T extends FieldValues>({
 }: SelectControllerProps<T>) => {
   const { t } = useTranslation('app');
 
-  const getMenuItem = ({ labelKey, value, itemDisabled, icon, withoutKey, hidden }: GetMenuItem) => (
+  const getMenuItem = ({
+    labelKey,
+    value,
+    itemDisabled,
+    icon,
+    withoutKey,
+    hidden,
+  }: GetMenuItem) => (
     <StyledMenuItem
       {...(!withoutKey && { key: labelKey })}
       uiType={uiType}
@@ -116,7 +129,9 @@ export const SelectController = <T extends FieldValues>({
       (options: JSX.Element[], groupKey: string) => [
         ...options,
         <StyledMenuItem key={groupKey} uiType={uiType} itemDisabled>
-          <StyledLabelBoldMedium sx={{ color: variables.palette.outline }}>{t(groupKey)}</StyledLabelBoldMedium>
+          <StyledLabelBoldMedium sx={{ color: variables.palette.outline }}>
+            {t(groupKey)}
+          </StyledLabelBoldMedium>
         </StyledMenuItem>,
         ...(renderOptions(groupedOptions[groupKey]) ?? []),
       ],
@@ -124,7 +139,11 @@ export const SelectController = <T extends FieldValues>({
     );
   };
 
-  const renderSelect = (onChange: ((e: SelectEvent) => void) | undefined, selectValue?: string, error?: FieldError) => (
+  const renderSelect = (
+    onChange: ((e: SelectEvent) => void) | undefined,
+    selectValue?: string,
+    error?: FieldError,
+  ) => (
     <Box sx={{ position: 'relative', width: '100%', ...sx }}>
       {placeholder && !selectValue && (
         <>
@@ -148,7 +167,9 @@ export const SelectController = <T extends FieldValues>({
               'data-testid': `${dataTestid}-dropdown`,
             },
           },
-          IconComponent: shouldSkipIcon ? undefined : (props) => <Svg className={props.className} id="navigate-down" />,
+          IconComponent: shouldSkipIcon
+            ? undefined
+            : (props) => <Svg className={props.className} id="navigate-down" />,
           ...SelectProps,
           ...(shouldSkipIcon && {
             inputProps: {
@@ -162,7 +183,9 @@ export const SelectController = <T extends FieldValues>({
         data-testid={dataTestid}
       >
         {renderGroupedOptions()}
-        {targetSelector && <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />}
+        {targetSelector && (
+          <SelectObserverTarget setTrigger={setTrigger} targetSelector={targetSelector} />
+        )}
       </StyledTextField>
     </Box>
   );

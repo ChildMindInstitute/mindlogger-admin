@@ -99,12 +99,16 @@ describe('Breadcrumbs Component', () => {
 
     expect(dashboard.getAttribute('href')).toEqual('/dashboard');
 
-    expect(applet.getAttribute('href')).toEqual('/dashboard/138304f4-79b5-4c99-81f5-abf21f9d8fa2/respondents');
+    expect(applet.getAttribute('href')).toEqual(
+      '/dashboard/138304f4-79b5-4c99-81f5-abf21f9d8fa2/respondents',
+    );
 
     const appletImg = applet.querySelector('img');
     expect(appletImg.getAttribute('src')).toEqual('https://example.com/mocked-image.jpeg');
 
-    const placeholder = breadcrumbsItems[0].querySelector('[data-testid="breadcrumbs-item-placeholder"]');
+    const placeholder = breadcrumbsItems[0].querySelector(
+      '[data-testid="breadcrumbs-item-placeholder"]',
+    );
     expect(placeholder).toBeInTheDocument();
   });
 });

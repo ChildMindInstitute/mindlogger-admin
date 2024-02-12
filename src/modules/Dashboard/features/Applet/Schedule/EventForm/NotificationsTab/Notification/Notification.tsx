@@ -26,7 +26,14 @@ export const Notification = ({ index, remove, 'data-testid': dataTestid }: Notif
 
   const [notification, startTime, endTime, atTime, fromTime, toTime] = useWatch({
     control,
-    name: [notificationFieldName, 'startTime', 'endTime', atTimeFieldName, fromTimeFieldName, toTimeFieldName],
+    name: [
+      notificationFieldName,
+      'startTime',
+      'endTime',
+      atTimeFieldName,
+      fromTimeFieldName,
+      toTimeFieldName,
+    ],
   });
   const isCrossDayEvent = getNextDayComparison(startTime, endTime);
   const getNextDayLabel = (time: string) =>

@@ -19,7 +19,11 @@ import { AssessmentBanner } from './AssessmentBanner';
 import { getDefaultFormValues } from '../Feedback.utils';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
-export const FeedbackAssessment = ({ setActiveTab, assessmentStep, setAssessmentStep }: FeedbackAssessmentProps) => {
+export const FeedbackAssessment = ({
+  setActiveTab,
+  assessmentStep,
+  setAssessmentStep,
+}: FeedbackAssessmentProps) => {
   const {
     assessment,
     setAssessment,
@@ -125,7 +129,10 @@ export const FeedbackAssessment = ({ setActiveTab, assessmentStep, setAssessment
 
   return (
     <StyledContainer>
-      <AssessmentBanner isBannerVisible={isBannerVisible} onSelectLastVersion={handleSelectLastVersion} />
+      <AssessmentBanner
+        isBannerVisible={isBannerVisible}
+        onSelectLastVersion={handleSelectLastVersion}
+      />
       <ActivityCardItemList
         step={assessmentStep}
         activityItems={activityItems}

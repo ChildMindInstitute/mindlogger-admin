@@ -33,7 +33,12 @@ import { findRelatedScore } from 'modules/Builder/utils';
 import { ElementType, isScoreReport, isSectionReport } from 'shared/types';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration/ItemConfiguration.types';
-import { GetConditions, GetItemCommonFields, GetSection, GetSectionConditions } from './SaveAndPublish.types';
+import {
+  GetConditions,
+  GetItemCommonFields,
+  GetSection,
+  GetSectionConditions,
+} from './SaveAndPublish.types';
 
 const removeReactHookFormKey = () => ({
   [REACT_HOOK_FORM_KEY_NAME]: undefined,
@@ -153,7 +158,8 @@ const getReportItemsPrint = (report: ScoreReport | SectionReport | ScoreConditio
   itemsPrint: report.printItems ? report.itemsPrint : undefined,
 });
 
-const remapItemsByName = (itemsObject: Record<string, ItemFormValues>) => (name: string) => itemsObject[name].name;
+const remapItemsByName = (itemsObject: Record<string, ItemFormValues>) => (name: string) =>
+  itemsObject[name].name;
 const getScore = (
   score: ScoreReport,
   items: ActivityFormValues['items'],
@@ -232,7 +238,10 @@ const mapItemResponseValues = (item: ItemFormValues) => {
 
   const hasAlerts = get(config, ItemConfigurationSettings.HasAlerts);
 
-  if (responseType === ItemResponseType.SingleSelection || responseType === ItemResponseType.MultipleSelection)
+  if (
+    responseType === ItemResponseType.SingleSelection ||
+    responseType === ItemResponseType.MultipleSelection
+  )
     return {
       paletteName: responseValues.paletteName || undefined,
       options: responseValues.options?.map((option) => ({
@@ -243,7 +252,10 @@ const mapItemResponseValues = (item: ItemFormValues) => {
       })),
     };
 
-  if (responseType === ItemResponseType.Slider && get(item.config, ItemConfigurationSettings.IsContinuous)) {
+  if (
+    responseType === ItemResponseType.Slider &&
+    get(item.config, ItemConfigurationSettings.IsContinuous)
+  ) {
     return {
       ...responseValues,
       options: undefined,
@@ -336,7 +348,9 @@ export const getItemConditionalLogic = (
   items: ItemFormValues[],
   conditionalLogic?: ConditionalLogic[],
 ) => {
-  const result = conditionalLogic?.find((conditionalLogic) => conditionalLogic.itemKey === getEntityKey(item));
+  const result = conditionalLogic?.find(
+    (conditionalLogic) => conditionalLogic.itemKey === getEntityKey(item),
+  );
 
   if (!result) return;
 
@@ -359,7 +373,8 @@ export const getActivityItems = (activity: ActivityFormValues) => {
 
   const isABTrails =
     isPerformanceTask &&
-    (performanceTaskType === PerfTaskType.ABTrailsMobile || performanceTaskType === PerfTaskType.ABTrailsTablet);
+    (performanceTaskType === PerfTaskType.ABTrailsMobile ||
+      performanceTaskType === PerfTaskType.ABTrailsTablet);
 
   if (isPerformanceTask && performanceTaskType === PerfTaskType.Flanker) {
     const flankerPracticeConfig = items[FlankerItemPositions.PracticeFirst].config as FlankerConfig;
@@ -396,7 +411,10 @@ export const getActivityItems = (activity: ActivityFormValues) => {
         };
       }
 
-      if (index === FlankerItemPositions.PracticeSecond || index === FlankerItemPositions.PracticeThird) {
+      if (
+        index === FlankerItemPositions.PracticeSecond ||
+        index === FlankerItemPositions.PracticeThird
+      ) {
         return {
           ...item,
           config: {
@@ -444,7 +462,11 @@ export const getActivityItems = (activity: ActivityFormValues) => {
 export const getCurrentEntitiesIds = (
   oldApplet: FieldValues,
   newApplet: SingleApplet,
-  { isActivity, activityOrFlowId, itemId }: { isActivity: boolean; activityOrFlowId?: string; itemId?: string },
+  {
+    isActivity,
+    activityOrFlowId,
+    itemId,
+  }: { isActivity: boolean; activityOrFlowId?: string; itemId?: string },
 ) => {
   const activityOrFlowSelector = isActivity ? 'activities' : 'activityFlows';
   const activityOrFlowIndex = oldApplet?.[activityOrFlowSelector]?.findIndex(

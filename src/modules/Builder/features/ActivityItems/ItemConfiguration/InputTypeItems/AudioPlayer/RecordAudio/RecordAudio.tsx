@@ -89,14 +89,19 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
   return (
     <Modal {...modalProps}>
       <Box sx={{ m: theme.spacing(0, 3.2) }}>
-        <StyledTitleMedium sx={{ mb: theme.spacing(2.4) }} data-testid={`${dataTestid}-description`}>
+        <StyledTitleMedium
+          sx={{ mb: theme.spacing(2.4) }}
+          data-testid={`${dataTestid}-description`}
+        >
           {t('audioPlayerRecordAudioDescription')}
         </StyledTitleMedium>
         <StyledButtons>
           <StyledRecordButton>
             <Button
               variant="contained"
-              startIcon={<Svg id={isPaused || isStopped ? 'audio-filled' : 'pause'} {...commonSvgProps} />}
+              startIcon={
+                <Svg id={isPaused || isStopped ? 'audio-filled' : 'pause'} {...commonSvgProps} />
+              }
               onClick={isRecording || isPaused ? togglePauseResume : startRecording}
               data-testid={`${dataTestid}-record`}
             >

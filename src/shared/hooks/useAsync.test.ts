@@ -6,7 +6,8 @@ import { useAsync } from './useAsync';
 const mockedData = { data: 'mock data' };
 const errorResponse = { response: { data: 'error data' } };
 const mockAsyncFunction = () => Promise.resolve(mockedData) as Promise<AxiosResponse<unknown>>;
-const mockAsyncFunctionReject = () => Promise.reject(errorResponse) as Promise<AxiosResponse<unknown>>;
+const mockAsyncFunctionReject = () =>
+  Promise.reject(errorResponse) as Promise<AxiosResponse<unknown>>;
 
 const mockCallback = jest.fn();
 const mockErrorCallback = jest.fn();
@@ -29,7 +30,9 @@ describe('useAsync', () => {
   });
 
   test('should handle errors and update state accordingly', async () => {
-    const { result } = renderHook(() => useAsync(mockAsyncFunctionReject, undefined, mockErrorCallback));
+    const { result } = renderHook(() =>
+      useAsync(mockAsyncFunctionReject, undefined, mockErrorCallback),
+    );
 
     await act(async () => {
       try {
@@ -48,7 +51,9 @@ describe('useAsync', () => {
   });
 
   test('should call finally callback regardless of success or failure', async () => {
-    const { result } = renderHook(() => useAsync(mockAsyncFunction, undefined, undefined, mockFinallyCallback));
+    const { result } = renderHook(() =>
+      useAsync(mockAsyncFunction, undefined, undefined, mockFinallyCallback),
+    );
 
     await act(async () => {
       await result.current.execute({});

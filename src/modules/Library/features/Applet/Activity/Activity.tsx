@@ -11,7 +11,12 @@ import { library } from 'redux/modules';
 import { getHighlightedText } from 'shared/utils';
 
 import { ActivityProps } from './Activity.types';
-import { StyledActivityContainer, StyledActivityHeader, StyledActivityName, StyledItemsList } from './Activity.styles';
+import {
+  StyledActivityContainer,
+  StyledActivityHeader,
+  StyledActivityName,
+  StyledItemsList,
+} from './Activity.styles';
 import { Item } from '../Item';
 import { AppletUiType, LibraryForm, SelectedItem } from '../Applet.types';
 import { checkIfPerformanceTask } from '../Applet.utils';
@@ -46,7 +51,9 @@ export const Activity = ({
     if (!checked) {
       await setValue(
         appletId,
-        selectedItems.filter((selectedItem) => selectedItem.activityNamePlusId !== activityNamePlusId),
+        selectedItems.filter(
+          (selectedItem) => selectedItem.activityNamePlusId !== activityNamePlusId,
+        ),
       );
       updateSelectedItems();
 
@@ -56,9 +63,14 @@ export const Activity = ({
     const unselectedItems = items.reduce((unselected: SelectedItem[], item) => {
       const itemNamePlusActivityName = `${item.name}-${name}`;
 
-      return selectedItems.find((selectedItem) => selectedItem.itemNamePlusActivityName === itemNamePlusActivityName)
+      return selectedItems.find(
+        (selectedItem) => selectedItem.itemNamePlusActivityName === itemNamePlusActivityName,
+      )
         ? unselected
-        : [...unselected, { itemNamePlusActivityName, activityName: name, activityNamePlusId, activityKey: key }];
+        : [
+            ...unselected,
+            { itemNamePlusActivityName, activityName: name, activityNamePlusId, activityKey: key },
+          ];
     }, []);
 
     await setValue(appletId, [...selectedItems, ...unselectedItems]);
@@ -71,7 +83,8 @@ export const Activity = ({
 
   const getCheckedActivity = (currentItems: SelectedItem[]) => {
     const currentActivityItems = currentItems?.filter((item) => item.activityName === name);
-    const isAllItemsSelected = !!currentActivityItems?.length && currentActivityItems?.length === items.length;
+    const isAllItemsSelected =
+      !!currentActivityItems?.length && currentActivityItems?.length === items.length;
     const isIndeterminate = !!currentActivityItems?.length && !isAllItemsSelected;
     setActivityIndeterminate(isIndeterminate);
     setActivityChecked(isAllItemsSelected);

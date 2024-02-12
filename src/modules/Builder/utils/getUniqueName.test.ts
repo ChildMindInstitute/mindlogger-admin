@@ -4,7 +4,13 @@ describe('getUniqueName', () => {
   const name1 = 'Unique Name';
   const name2 = 'Existing Name';
   const name3 = 'Existing Name (5)';
-  const existingNames = ['Other Name', 'Different Name', 'Existing Name', 'Existing Name (5)', 'Existing Name (6)'];
+  const existingNames = [
+    'Other Name',
+    'Different Name',
+    'Existing Name',
+    'Existing Name (5)',
+    'Existing Name (6)',
+  ];
   const expected1 = 'Existing Name (1)';
   const expected2 = 'Existing Name_1';
   const expected3 = 'Existing Name (7)';

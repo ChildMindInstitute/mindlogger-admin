@@ -4,7 +4,11 @@ import { StyledBuilderContainerHeader } from 'shared/features';
 
 import { ConfigurationHeaderProps } from './ConfigurationHeader.types';
 
-export const ConfigurationHeader = ({ isSticky, children, headerProps }: ConfigurationHeaderProps) => {
+export const ConfigurationHeader = ({
+  isSticky,
+  children,
+  headerProps,
+}: ConfigurationHeaderProps) => {
   const { responseType, optionalItemsRef, onClose } = headerProps ?? {};
 
   return (

@@ -34,11 +34,14 @@ export const useImportSchedule = ({ appletName, scheduleExportData }: ImportSche
     if (hasInvalidData || notExistentActivities?.length) {
       const invalidErrors = (
         <>
-          {!!notExistentActivities?.length && getInvalidActivitiesError(notExistentActivities, appletName)}
+          {!!notExistentActivities?.length &&
+            getInvalidActivitiesError(notExistentActivities, appletName)}
           {hasInvalidData && (
             <>
               <Box {...commonErrorBoxProps}>{t('importScheduleErrors.invalidDataFormat')}</Box>
-              {Object.values(otherErrors).map(({ data, id }) => data && <Fragment key={id}>{data}</Fragment>)}
+              {Object.values(otherErrors).map(
+                ({ data, id }) => data && <Fragment key={id}>{data}</Fragment>,
+              )}
               <Box {...commonErrorBoxProps}>{t('importScheduleErrors.updateReupload')}</Box>
             </>
           )}

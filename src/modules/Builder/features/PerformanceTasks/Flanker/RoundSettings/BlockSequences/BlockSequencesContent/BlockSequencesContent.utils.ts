@@ -59,7 +59,10 @@ export const getUploadedTableRows = (uploadedData?: UploadedDataOrNull) =>
     return updatedObj;
   });
 
-export const getStimulusObject = (stimulusTrials: FlankerStimulusSettings[], type: 'imageKey' | 'idKey') =>
+export const getStimulusObject = (
+  stimulusTrials: FlankerStimulusSettings[],
+  type: 'imageKey' | 'idKey',
+) =>
   stimulusTrials?.reduce((result: Record<string, string>, item) => {
     const trialName = item.text || getUploadedMediaName(item.image);
     const key = type === 'imageKey' ? trialName : item.id;
@@ -68,7 +71,10 @@ export const getStimulusObject = (stimulusTrials: FlankerStimulusSettings[], typ
     return { ...result, [key]: value };
   }, {});
 
-export const getRoundBlocks = (stimulusTrials: FlankerStimulusSettings[], uploadedData?: UploadedDataOrNull) => {
+export const getRoundBlocks = (
+  stimulusTrials: FlankerStimulusSettings[],
+  uploadedData?: UploadedDataOrNull,
+) => {
   if (!uploadedData?.length) return;
 
   return Object.keys(uploadedData[0]).reduce((result: { order: string[]; name: string }[], key) => {

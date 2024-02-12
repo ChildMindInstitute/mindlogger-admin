@@ -9,7 +9,13 @@ import download from 'downloadjs';
 
 import { Spinner, Svg, Tooltip } from 'shared/components';
 import { useAsync, useHeaderSticky } from 'shared/hooks';
-import { StyledErrorText, StyledStickyHeadline, StyledTitleLarge, theme, variables } from 'shared/styles';
+import {
+  StyledErrorText,
+  StyledStickyHeadline,
+  StyledTitleLarge,
+  theme,
+  variables,
+} from 'shared/styles';
 import { getAnswersApi, getLatestReportApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getErrorMessage } from 'shared/utils';
@@ -20,12 +26,26 @@ import { StyledTextBtn } from '../../RespondentData.styles';
 import { ReportFilters } from './ReportFilters';
 import { StyledEmptyState, StyledHeader, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
-import { ActivityCompletion, FormattedResponse, ReportProps, CurrentActivityCompletionData } from './Report.types';
+import {
+  ActivityCompletion,
+  FormattedResponse,
+  ReportProps,
+  CurrentActivityCompletionData,
+} from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
-import { getDateISO, getFormattedResponses, getIdentifiers, getLatestReportUrl } from './Report.utils';
+import {
+  getDateISO,
+  getFormattedResponses,
+  getIdentifiers,
+  getLatestReportUrl,
+} from './Report.utils';
 import { ReportContext } from './Report.context';
-import { LATEST_REPORT_DEFAULT_NAME, LATEST_REPORT_REGEX, LATEST_REPORT_TYPE } from './Report.const';
+import {
+  LATEST_REPORT_DEFAULT_NAME,
+  LATEST_REPORT_REGEX,
+  LATEST_REPORT_TYPE,
+} from './Report.const';
 
 export const Report = ({ activity, identifiers = [], versions = [] }: ReportProps) => {
   const { t } = useTranslation('app');
@@ -35,7 +55,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
   const getDecryptedActivityData = useDecryptedActivityData();
   const { result: appletData } = applet.useAppletData() ?? {};
   const currentActivity = appletData?.activities.find(({ id }) => id === activity.id);
-  const disabledLatestReport = !currentActivity?.scoresAndReports?.generateReport || !appletData?.reportPublicKey;
+  const disabledLatestReport =
+    !currentActivity?.scoresAndReports?.generateReport || !appletData?.reportPublicKey;
 
   const [isLoading, setIsLoading] = useState(true);
   const [answers, setAnswers] = useState<ActivityCompletion[]>([]);
@@ -47,7 +68,15 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
 
   const watchFilters = useWatch({
     control,
-    name: ['startDate', 'endDate', 'startTime', 'endTime', 'versions', 'filterByIdentifier', 'identifier'],
+    name: [
+      'startDate',
+      'endDate',
+      'startTime',
+      'endTime',
+      'versions',
+      'filterByIdentifier',
+      'identifier',
+    ],
   });
 
   const {
@@ -85,7 +114,8 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
       if (!appletId || !respondentId) return;
       try {
         setIsLoading(true);
-        const { startDate, endDate, startTime, endTime, identifier, filterByIdentifier, versions } = getValues();
+        const { startDate, endDate, startTime, endTime, identifier, filterByIdentifier, versions } =
+          getValues();
         const selectedIdentifiers = getIdentifiers(filterByIdentifier, identifier, identifiers);
 
         const result = await getAnswersApi({
@@ -122,10 +152,13 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
         }
 
         // TODO: remove when backend add sorting
-        const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) => a.version.localeCompare(b.version));
+        const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) =>
+          a.version.localeCompare(b.version),
+        );
 
         setAnswers(sortedDecryptedAnswers);
-        const { subscalesFrequency, formattedResponses } = getFormattedResponses(sortedDecryptedAnswers);
+        const { subscalesFrequency, formattedResponses } =
+          getFormattedResponses(sortedDecryptedAnswers);
 
         setSubscalesFrequency(subscalesFrequency);
         setResponseOptions(formattedResponses);
@@ -173,18 +206,26 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
               </span>
             </Tooltip>
             {latestReportError && (
-              <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>{getErrorMessage(latestReportError)}</StyledErrorText>
+              <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>
+                {getErrorMessage(latestReportError)}
+              </StyledErrorText>
             )}
           </Box>
         </StyledHeader>
         <Box sx={{ m: theme.spacing(4.8, 6.4) }}>
-          <ReportContext.Provider value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}>
+          <ReportContext.Provider
+            value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
+          >
             <ReportFilters identifiers={identifiers} versions={versions} />
             {!isLoading && answers.length > 0 && (
               <>
                 <ActivityCompleted answers={answers} versions={versions} />
                 {!!subscalesFrequency && (
-                  <Subscales answers={answers} versions={versions} subscalesFrequency={subscalesFrequency} />
+                  <Subscales
+                    answers={answers}
+                    versions={versions}
+                    subscalesFrequency={subscalesFrequency}
+                  />
                 )}
                 {responseOptions && !!Object.values(responseOptions).length && (
                   <ResponseOptions responseOptions={responseOptions} versions={versions} />

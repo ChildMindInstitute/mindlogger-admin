@@ -56,15 +56,17 @@ const getSecondScreenForIndividualSchedule = (name: string) => (
       is still using an <strong>individual schedule</strong>.
     </StyledTitleMedium>
     <StyledTitleMedium sx={{ marginTop: theme.spacing(2.4) }}>
-      You may revert this Respondent back to the <strong>default schedule</strong> by pressing the trash icon on the
-      top-left.
+      You may revert this Respondent back to the <strong>default schedule</strong> by pressing the
+      trash icon on the top-left.
     </StyledTitleMedium>
   </Trans>
 );
 
 export const getScreens = ({ appletName, name, isDefault, onSubmit, onClose }: ScreensParams) => [
   {
-    component: isDefault ? getFirstScreen(appletName) : getFirstScreenForIndividualSchedule(name as string),
+    component: isDefault
+      ? getFirstScreen(appletName)
+      : getFirstScreenForIndividualSchedule(name as string),
     buttonText: 'clearAll',
     title: 'clearScheduledEvents',
     hasSecondBtn: true,
@@ -72,7 +74,9 @@ export const getScreens = ({ appletName, name, isDefault, onSubmit, onClose }: S
     submitBtnColor: 'error',
   },
   {
-    component: isDefault ? getSecondScreen(appletName) : getSecondScreenForIndividualSchedule(name as string),
+    component: isDefault
+      ? getSecondScreen(appletName)
+      : getSecondScreenForIndividualSchedule(name as string),
     buttonText: 'ok',
     title: 'scheduleClearedSuccess',
     onSubmit: onClose,

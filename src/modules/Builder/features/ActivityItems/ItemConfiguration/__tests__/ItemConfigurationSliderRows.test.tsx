@@ -38,9 +38,9 @@ const selectSliderId = (panelIndex, sliderIndex) => {
   const sliderSelectButton = sliderSelect.querySelector('[role="button"]');
   fireEvent.mouseDown(sliderSelectButton);
   fireEvent.click(
-    screen.getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-row-dropdown`).querySelectorAll('li')[
-      sliderIndex
-    ],
+    screen
+      .getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-row-dropdown`)
+      .querySelectorAll('li')[sliderIndex],
   );
 };
 const selectOption = (panelIndex, optionIndex) => {
@@ -48,9 +48,9 @@ const selectOption = (panelIndex, optionIndex) => {
   const optionSelectButton = optionSelect.querySelector('[role="button"]');
   fireEvent.mouseDown(optionSelectButton);
   fireEvent.click(
-    screen.getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-value-dropdown`).querySelectorAll('li')[
-      optionIndex
-    ],
+    screen
+      .getByTestId(`${mockedAlertsTestid}-${panelIndex}-slider-rows-value-dropdown`)
+      .querySelectorAll('li')[optionIndex],
   );
 };
 
@@ -74,10 +74,14 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       expect(panels).toHaveLength(isSliderRows ? 2 : 1);
 
-      const removeButton = screen.queryByTestId('builder-activity-items-item-configuration-slider-remove');
+      const removeButton = screen.queryByTestId(
+        'builder-activity-items-item-configuration-slider-remove',
+      );
       isSliderRows ? expect(removeButton).toBeVisible() : expect(removeButton).toBeNull();
 
-      const titles = screen.getAllByTestId('builder-activity-items-item-configuration-slider-title');
+      const titles = screen.getAllByTestId(
+        'builder-activity-items-item-configuration-slider-title',
+      );
       titles.forEach((title, index) => {
         isSliderRows
           ? expect(title).toHaveTextContent(`Slider ${index + 1}`)
@@ -119,7 +123,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
         expect(value.querySelector('input')).toHaveValue(isSliderRows ? 5 : 12);
       });
 
-      const addButton = screen.queryByTestId('builder-activity-items-item-configuration-slider-add-slider');
+      const addButton = screen.queryByTestId(
+        'builder-activity-items-item-configuration-slider-add-slider',
+      );
       isSliderRows ? expect(addButton).toBeVisible() : expect(addButton).toBeNull();
     });
   });
@@ -127,7 +133,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
   test('Slider Rows: slider is added and removed successfully', async () => {
     const ref = renderSlider(ItemResponseType.SliderRows);
 
-    const button = screen.getByTestId('builder-activity-items-item-configuration-slider-add-slider');
+    const button = screen.getByTestId(
+      'builder-activity-items-item-configuration-slider-add-slider',
+    );
     fireEvent.click(button);
     const dataTestidRegex = getDataTestidRegex(true);
 
@@ -137,7 +145,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       expect(ref.current.getValues(`${mockedItemName}.responseValues.rows`)).toHaveLength(3);
     });
 
-    const removeButtons = screen.getAllByTestId('builder-activity-items-item-configuration-slider-remove');
+    const removeButtons = screen.getAllByTestId(
+      'builder-activity-items-item-configuration-slider-remove',
+    );
     fireEvent.click(removeButtons[0]);
 
     await waitFor(() => {
@@ -178,7 +188,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
         const input = item.querySelector('input');
         fireEvent.change(input, { target: { value } });
 
-        expect(ref.current.getValues(`${mockedItemName}.responseValues.rows.${index}.${attribute}`)).toEqual(value);
+        expect(
+          ref.current.getValues(`${mockedItemName}.responseValues.rows.${index}.${attribute}`),
+        ).toEqual(value);
       });
     });
   });
@@ -189,10 +201,14 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
       expect(screen.getByText('Alert 1')).toBeVisible();
-      expect(screen.getByText('If Respondent selected when answering this question then send:')).toBeVisible();
+      expect(
+        screen.getByText('If Respondent selected when answering this question then send:'),
+      ).toBeVisible();
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-remove`)).toBeVisible();
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-text`));
-      expect(screen.getByTestId(`${mockedAlertsTestid}-0-slider-value`).querySelector('input')).toHaveValue(0);
+      expect(
+        screen.getByTestId(`${mockedAlertsTestid}-0-slider-value`).querySelector('input'),
+      ).toHaveValue(0);
     });
 
     test('Add/remove works correctly', async () => {
@@ -224,7 +240,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
-      const valueInput = screen.getByTestId(`${mockedAlertsTestid}-1-slider-value`).querySelector('input');
+      const valueInput = screen
+        .getByTestId(`${mockedAlertsTestid}-1-slider-value`)
+        .querySelector('input');
       fireEvent.change(valueInput, { target: { value: 4 } });
 
       expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
@@ -242,7 +260,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       fireEvent.click(removeAlert);
 
       expect(screen.queryByTestId(`${mockedAlertsTestid}-0-panel`)).not.toBeInTheDocument();
-      expect(ref.current.getValues(`${mockedItemName}.config.${ItemConfigurationSettings.HasAlerts}`)).toBeFalsy();
+      expect(
+        ref.current.getValues(`${mockedItemName}.config.${ItemConfigurationSettings.HasAlerts}`),
+      ).toBeFalsy();
       expect(ref.current.getValues(`${mockedItemName}.alerts`)).toEqual([]);
     });
 
@@ -254,7 +274,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       const ref = renderSlider(ItemResponseType.Slider);
       await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
-      const input = screen.getByTestId(`${mockedAlertsTestid}-0-${attribute}`).querySelector('input');
+      const input = screen
+        .getByTestId(`${mockedAlertsTestid}-0-${attribute}`)
+        .querySelector('input');
       fireEvent.change(input, { target: { value } });
 
       await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
@@ -272,7 +294,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
       expect(screen.getByText('Alert 1')).toBeVisible();
-      expect(screen.getByText('If respondent in selected when answering this question then send:')).toBeVisible();
+      expect(
+        screen.getByText('If respondent in selected when answering this question then send:'),
+      ).toBeVisible();
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-remove`)).toBeVisible();
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-text`));
       expect(screen.getByTestId(`${mockedAlertsTestid}-0-slider-rows-row`)).toBeVisible();
@@ -317,16 +341,20 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       fireEvent.mouseDown(optionSelectButton);
       expect(
-        screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`).querySelectorAll('li'),
+        screen
+          .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
+          .querySelectorAll('li'),
       ).toHaveLength(5);
 
       selectOption(0, 0);
 
       fireEvent.mouseDown(optionSelectButton);
       expect(
-        [...screen.getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`).querySelectorAll('li')].filter(
-          (li) => !li.classList.contains('hidden-menu-item'),
-        ),
+        [
+          ...screen
+            .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
+            .querySelectorAll('li'),
+        ].filter((li) => !li.classList.contains('hidden-menu-item')),
       ).toHaveLength(4);
     });
 
@@ -363,8 +391,12 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
         key: ref.current.getValues(`${mockedItemName}.alerts.0.key`),
       });
 
-      const minValue = screen.getByTestId(`${mockedAlertsTestid}-0-cont-slider-min-value`).querySelector('input');
-      const maxValue = screen.getByTestId(`${mockedAlertsTestid}-0-cont-slider-max-value`).querySelector('input');
+      const minValue = screen
+        .getByTestId(`${mockedAlertsTestid}-0-cont-slider-min-value`)
+        .querySelector('input');
+      const maxValue = screen
+        .getByTestId(`${mockedAlertsTestid}-0-cont-slider-max-value`)
+        .querySelector('input');
 
       fireEvent.change(minValue, { target: { value: -7 } });
       fireEvent.change(maxValue, { target: { value: 50 } });
@@ -383,7 +415,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       const ref = renderSlider(ItemResponseType.Slider);
       await setItemConfigSetting(ItemConfigurationSettings.HasScores);
 
-      const cell = screen.getByTestId('builder-activity-items-item-configuration-slider-scores-table-0-score-inactive');
+      const cell = screen.getByTestId(
+        'builder-activity-items-item-configuration-slider-scores-table-0-score-inactive',
+      );
       fireEvent.click(cell);
 
       fireEvent.change(
@@ -403,13 +437,17 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       await setItemConfigSetting(ItemConfigurationSettings.HasScores);
 
       expect(
-        screen.getByTestId('builder-activity-items-item-configuration-slider-scores-table-0-score-inactive'),
+        screen.getByTestId(
+          'builder-activity-items-item-configuration-slider-scores-table-0-score-inactive',
+        ),
       ).toBeVisible();
 
       await setItemConfigSetting(ItemConfigurationSettings.HasScores);
 
       expect(
-        screen.queryByTestId('builder-activity-items-item-configuration-slider-scores-table-0-score-inactive'),
+        screen.queryByTestId(
+          'builder-activity-items-item-configuration-slider-scores-table-0-score-inactive',
+        ),
       ).not.toBeInTheDocument();
       expect(ref.current.getValues(`${mockedItemName}.responseValues.scores`)).toBeUndefined();
     });
@@ -418,7 +456,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       const ref = renderSlider(ItemResponseType.Slider);
       await setItemConfigSetting(ItemConfigurationSettings.HasScores);
 
-      const cell = screen.getByTestId('builder-activity-items-item-configuration-slider-scores-table-0-score-inactive');
+      const cell = screen.getByTestId(
+        'builder-activity-items-item-configuration-slider-scores-table-0-score-inactive',
+      );
       fireEvent.click(cell);
 
       fireEvent.change(
@@ -478,7 +518,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
         'The respondent will be required to enter an additional text response',
       );
       expect(
-        screen.getByTestId('builder-activity-items-item-configuration-text-input-option-description-required'),
+        screen.getByTestId(
+          'builder-activity-items-item-configuration-text-input-option-description-required',
+        ),
       ).toHaveTextContent('*Required');
     });
 
@@ -491,7 +533,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       fireEvent.click(removeButton);
 
       expect(screen.queryByTestId(mockedTextInputOptionTestid)).not.toBeInTheDocument();
-      expect(ref.current.getValues(`${mockedItemName}.config.additionalResponseOption.textInputOption`)).toBeFalsy();
+      expect(
+        ref.current.getValues(`${mockedItemName}.config.additionalResponseOption.textInputOption`),
+      ).toBeFalsy();
     });
   });
 
@@ -528,7 +572,9 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       await waitFor(() => {
         const slider = screen.getByTestId(new RegExp(`${getDataTestidRegex(false)}-slider`));
 
-        const expected = slider.querySelectorAll(isMarks ? '.MuiSlider-mark' : '.MuiSlider-markLabel');
+        const expected = slider.querySelectorAll(
+          isMarks ? '.MuiSlider-mark' : '.MuiSlider-markLabel',
+        );
         expect(expected).toHaveLength(13);
       });
     },

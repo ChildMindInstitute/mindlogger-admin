@@ -4,10 +4,14 @@ import { ItemFormValues } from 'modules/Builder/types';
 
 import { GetConditionsToRemoveConfig, ItemNameWithIndex } from './ActivityItems.types';
 
-export const getItemConditionDependencies = (item: ItemFormValues, conditionalLogic?: ConditionalLogic[]) =>
+export const getItemConditionDependencies = (
+  item: ItemFormValues,
+  conditionalLogic?: ConditionalLogic[],
+) =>
   conditionalLogic?.filter(
     ({ itemKey, conditions }) =>
-      itemKey === getEntityKey(item) || conditions?.some(({ itemName }) => itemName === getEntityKey(item)),
+      itemKey === getEntityKey(item) ||
+      conditions?.some(({ itemName }) => itemName === getEntityKey(item)),
   );
 
 export const getConditionsToRemove = ({

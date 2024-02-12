@@ -7,7 +7,11 @@ import { Modal } from 'shared/components';
 
 import { ChangeScoreIdPopupProps } from './ChangeScoreIdPopup.types';
 
-export const ChangeScoreIdPopup = ({ onClose, onChange, 'data-testid': dataTestid }: ChangeScoreIdPopupProps) => {
+export const ChangeScoreIdPopup = ({
+  onClose,
+  onChange,
+  'data-testid': dataTestid,
+}: ChangeScoreIdPopupProps) => {
   const { t } = useTranslation();
   const [isError, setIsError] = useState(false);
   const [isFirstScreen, setIsFirstScreen] = useState(true);
@@ -27,7 +31,9 @@ export const ChangeScoreIdPopup = ({ onClose, onChange, 'data-testid': dataTesti
 
   const getSecondScreen = () =>
     isError ? (
-      <StyledBodyLarge color={variables.palette.semantic.error}>{t('changeScoreIdError')}</StyledBodyLarge>
+      <StyledBodyLarge color={variables.palette.semantic.error}>
+        {t('changeScoreIdError')}
+      </StyledBodyLarge>
     ) : (
       <StyledBodyLarge>{t('changeScoreIdSuccess')}</StyledBodyLarge>
     );
@@ -46,7 +52,11 @@ export const ChangeScoreIdPopup = ({ onClose, onChange, 'data-testid': dataTesti
       data-testid={dataTestid}
     >
       <StyledModalWrapper>
-        {isFirstScreen ? <StyledBodyLarge>{t('changeScoreIdText')}</StyledBodyLarge> : getSecondScreen()}
+        {isFirstScreen ? (
+          <StyledBodyLarge>{t('changeScoreIdText')}</StyledBodyLarge>
+        ) : (
+          getSecondScreen()
+        )}
       </StyledModalWrapper>
     </Modal>
   );

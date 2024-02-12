@@ -15,7 +15,13 @@ import { RespondentDetail } from 'modules/Dashboard/types';
 import { RespondentsActions, ChosenAppletData, FilteredApplets } from './Respondents.types';
 
 export const getActions = (
-  { scheduleSetupAction, viewDataAction, removeAccessAction, userDataExportAction, editRespondent }: RespondentsActions,
+  {
+    scheduleSetupAction,
+    viewDataAction,
+    removeAccessAction,
+    userDataExportAction,
+    editRespondent,
+  }: RespondentsActions,
   filteredApplets: FilteredApplets,
   isAnonymousRespondent: boolean,
   appletId?: string,
@@ -64,8 +70,10 @@ export const getAppletsSmallTableRows = (
   ownerId: string,
 ) =>
   respondentAccesses?.map((respondentAccess) => {
-    const choseAppletHandler = () => setChosenAppletData({ ...respondentAccess, ownerId, respondentId });
-    const { appletDisplayName, appletImage, respondentSecretId, respondentNickname } = respondentAccess;
+    const choseAppletHandler = () =>
+      setChosenAppletData({ ...respondentAccess, ownerId, respondentId });
+    const { appletDisplayName, appletImage, respondentSecretId, respondentNickname } =
+      respondentAccess;
 
     return {
       appletName: {

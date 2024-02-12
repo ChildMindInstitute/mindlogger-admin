@@ -21,12 +21,19 @@ import {
 import { byteFormatter } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
 import { ItemFormValues } from 'modules/Builder/types';
-import { useRedirectIfNoMatchedActivity, useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useRedirectIfNoMatchedActivity,
+  useCurrentActivity,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
 import { itemsForReviewableActivity, commonUploaderProps } from './ActivityAbout.const';
-import { useCheckIfItemsHaveRequiredItems, useCheckIfItemsHaveVariables } from './ActivityAbout.hooks';
+import {
+  useCheckIfItemsHaveRequiredItems,
+  useCheckIfItemsHaveVariables,
+} from './ActivityAbout.hooks';
 
 export const ActivityAbout = () => {
   const { t } = useTranslation();
@@ -40,10 +47,15 @@ export const ActivityAbout = () => {
 
   const activityItems = watch(`${fieldName}.items`);
   const hasUnsupportedReviewableItemTypes = activityItems?.some(
-    (item: ItemFormValues) => ![...itemsForReviewableActivity, ''].includes(item.responseType as ItemResponseType),
+    (item: ItemFormValues) =>
+      ![...itemsForReviewableActivity, ''].includes(item.responseType as ItemResponseType),
   );
-  const isReviewableUnsupportedTooltip = hasUnsupportedReviewableItemTypes ? t('isReviewableUnsupported') : null;
-  let allowToSkipAllItemsTooltip = hasVariableAmongItems ? t('activityHasVariableAmongItems') : null;
+  const isReviewableUnsupportedTooltip = hasUnsupportedReviewableItemTypes
+    ? t('isReviewableUnsupported')
+    : null;
+  let allowToSkipAllItemsTooltip = hasVariableAmongItems
+    ? t('activityHasVariableAmongItems')
+    : null;
   if (hasRequiredItems) {
     allowToSkipAllItemsTooltip = t('activityHasRequiredItems');
   }

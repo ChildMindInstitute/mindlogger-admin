@@ -45,7 +45,9 @@ describe('ActivityFlow', () => {
   test('Empty page', () => {
     renderActivityFlow(mockedAppletFormDataWithNoFlows);
 
-    expect(screen.getByText('Create an Activity Flow to order the sequence of Activities.')).toBeVisible();
+    expect(
+      screen.getByText('Create an Activity Flow to order the sequence of Activities.'),
+    ).toBeVisible();
     expect(screen.getByTestId('builder-activity-flows-add')).toBeVisible();
   });
 
@@ -55,7 +57,9 @@ describe('ActivityFlow', () => {
     fireEvent.click(screen.getByTestId('builder-activity-flows-add'));
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/builder/${mockedAppletFormData.id}/activity-flows/${ref.current.getValues('activityFlows.0.key')}`,
+      `/builder/${mockedAppletFormData.id}/activity-flows/${ref.current.getValues(
+        'activityFlows.0.key',
+      )}`,
     );
 
     const activityFlowData = ref.current.getValues('activityFlows.0');

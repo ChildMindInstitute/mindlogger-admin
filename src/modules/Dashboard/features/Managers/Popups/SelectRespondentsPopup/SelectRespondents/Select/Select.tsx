@@ -7,7 +7,13 @@ import { Svg } from 'shared/components/Svg';
 import { SelectProps } from './Select.types';
 import { StyledTextField, StyledLabel, StyledSvgContainer } from './Select.styles';
 
-export const Select = ({ label, onChange, value, options, 'data-testid': dataTestId }: SelectProps) => {
+export const Select = ({
+  label,
+  onChange,
+  value,
+  options,
+  'data-testid': dataTestId,
+}: SelectProps) => {
   const { t } = useTranslation('app');
 
   return (

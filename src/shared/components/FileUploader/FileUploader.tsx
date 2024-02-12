@@ -57,7 +57,9 @@ export const FileUploader = ({
   };
 
   const handleChange = async (event: DragEvent | ChangeEvent) => {
-    const files = (event as ChangeEvent<HTMLInputElement>)?.target.files || (event as DragEvent)?.dataTransfer.files;
+    const files =
+      (event as ChangeEvent<HTMLInputElement>)?.target.files ||
+      (event as DragEvent)?.dataTransfer.files;
     if (!files.length) {
       return;
     }
@@ -102,12 +104,18 @@ export const FileUploader = ({
       {(onDownloadTemplate || onDownloadSecond) && (
         <StyledFlexTopCenter>
           {onDownloadTemplate && (
-            <DownloadTemplate sxProps={{ m: theme.spacing(1.2, 1.2, 2.4, 0) }} onClick={onDownloadTemplate}>
+            <DownloadTemplate
+              sxProps={{ m: theme.spacing(1.2, 1.2, 2.4, 0) }}
+              onClick={onDownloadTemplate}
+            >
               {downloadFirstText ?? t('downloadTemplate')}
             </DownloadTemplate>
           )}
           {onDownloadSecond && (
-            <DownloadTemplate sxProps={{ m: theme.spacing(1.2, 0, 2.4, 0) }} onClick={onDownloadSecond}>
+            <DownloadTemplate
+              sxProps={{ m: theme.spacing(1.2, 0, 2.4, 0) }}
+              onClick={onDownloadSecond}
+            >
               {downloadSecondText ?? t('downloadTemplate')}
             </DownloadTemplate>
           )}

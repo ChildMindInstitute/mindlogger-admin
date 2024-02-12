@@ -4,8 +4,17 @@ import get from 'lodash.get';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
 import { SelectEvent } from 'shared/types/event';
-import { StyledClearedButton, StyledFlexTopCenter, StyledLabelBoldLarge, theme } from 'shared/styles';
-import { ItemAlert, SingleAndMultipleSelectMatrix, SingleAndMultiSelectRowOption } from 'shared/state';
+import {
+  StyledClearedButton,
+  StyledFlexTopCenter,
+  StyledLabelBoldLarge,
+  theme,
+} from 'shared/styles';
+import {
+  ItemAlert,
+  SingleAndMultipleSelectMatrix,
+  SingleAndMultiSelectRowOption,
+} from 'shared/state';
 import { getObjectFromList } from 'shared/utils';
 
 import { StyledSelectController } from './Header.styles';
@@ -85,7 +94,11 @@ export const Header = ({ name, isSingle, isExpanded, onArrowClick }: HeaderProps
 
   return (
     <StyledFlexTopCenter sx={{ gap: '2.6rem' }}>
-      <StyledClearedButton onClick={onArrowClick} {...commonButtonProps} data-testid={`${dataTestid}-collapse`}>
+      <StyledClearedButton
+        onClick={onArrowClick}
+        {...commonButtonProps}
+        data-testid={`${dataTestid}-collapse`}
+      >
         <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
       </StyledClearedButton>
       <StyledLabelBoldLarge data-testid={`${dataTestid}-title`}>

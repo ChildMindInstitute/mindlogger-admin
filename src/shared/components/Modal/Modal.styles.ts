@@ -38,7 +38,8 @@ export const StyledCloseButton = styled(StyledClearedButton)`
 `;
 
 export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
-  justify-content: ${({ actionsAlign }: { actionsAlign?: ActionsAlign }) => actionsAlign || 'flex-start'};
+  justify-content: ${({ actionsAlign }: { actionsAlign?: ActionsAlign }) =>
+    actionsAlign || 'flex-start'};
   margin-top: auto;
   padding: ${theme.spacing(2.4, 2.4, 0.4)};
 `;

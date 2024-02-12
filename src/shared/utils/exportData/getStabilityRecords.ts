@@ -1,4 +1,7 @@
-import { DecryptedStabilityTrackerAnswerObject, DecryptedStabilityTrackerCalcValue } from 'shared/types';
+import {
+  DecryptedStabilityTrackerAnswerObject,
+  DecryptedStabilityTrackerCalcValue,
+} from 'shared/types';
 
 const getPointStr = (
   pos:

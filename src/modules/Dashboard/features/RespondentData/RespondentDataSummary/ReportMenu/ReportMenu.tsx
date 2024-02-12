@@ -3,7 +3,13 @@ import { useContext } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { theme, StyledHeadlineLarge, StyledLabelLarge, StyledBodyLarge, variables } from 'shared/styles';
+import {
+  theme,
+  StyledHeadlineLarge,
+  StyledLabelLarge,
+  StyledBodyLarge,
+  variables,
+} from 'shared/styles';
 import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
 import { useRespondentLabel } from 'shared/hooks';
 

@@ -17,7 +17,13 @@ import { workspaces } from 'shared/state';
 import { AddIndividualSchedulePopup } from '../../AddIndividualSchedulePopup';
 import { SelectedRespondent } from '../Legend.types';
 import { ScheduleOptions } from '../Legend.const';
-import { StyledModal, StyledModalInner, StyledItemsContainer, StyledItem, StyledChecked } from './SearchPopup.styles';
+import {
+  StyledModal,
+  StyledModalInner,
+  StyledItemsContainer,
+  StyledItem,
+  StyledChecked,
+} from './SearchPopup.styles';
 import { SearchPopupProps } from './SearchPopup.types';
 import { filterRows } from './SearchPopup.utils';
 
@@ -43,7 +49,8 @@ export const SearchPopup = ({
     isLoading,
   } = useAsync(createIndividualEventsApi, () => {
     if (!appletId) return;
-    selectedRespondent && dispatch(applets.thunk.getEvents({ appletId, respondentId: selectedRespondent.id }));
+    selectedRespondent &&
+      dispatch(applets.thunk.getEvents({ appletId, respondentId: selectedRespondent.id }));
     ownerId &&
       dispatch(
         users.thunk.getAllWorkspaceRespondents({
@@ -55,7 +62,10 @@ export const SearchPopup = ({
   const [searchValue, setSearchValue] = useState('');
   const [addIndividualSchedulePopupVisible, setAddIndividualSchedulePopupVisible] = useState(false);
 
-  const respondentName = getRespondentName(selectedRespondent?.secretId || '', selectedRespondent?.nickname);
+  const respondentName = getRespondentName(
+    selectedRespondent?.secretId || '',
+    selectedRespondent?.nickname,
+  );
 
   const handleSearchPopupClose = () => {
     !selectedRespondent && setSchedule(ScheduleOptions.DefaultSchedule);
@@ -79,7 +89,9 @@ export const SearchPopup = ({
   };
 
   const filteredRespondents = respondentsItems
-    ?.filter((item) => filterRows(item?.secretId, searchValue) || filterRows(item?.nickname, searchValue))
+    ?.filter(
+      (item) => filterRows(item?.secretId, searchValue) || filterRows(item?.nickname, searchValue),
+    )
     .sort((a, b) => (a?.secretId ?? '').localeCompare(b?.secretId ?? ''));
 
   const handleSearch = (value: string) => {
@@ -108,7 +120,12 @@ export const SearchPopup = ({
 
   return (
     <>
-      <StyledModal style={{ top, left }} open={open} onClose={handleSearchPopupClose} data-testid={dataTestid}>
+      <StyledModal
+        style={{ top, left }}
+        open={open}
+        onClose={handleSearchPopupClose}
+        data-testid={dataTestid}
+      >
         <StyledModalInner>
           <StyledModalContent>
             <Box>

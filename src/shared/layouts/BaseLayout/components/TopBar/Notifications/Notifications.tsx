@@ -33,9 +33,9 @@ export const Notifications = () => {
   const { result: alertList = [], notWatched = 0, count = 0 } = alerts.useAlertsData() ?? {};
   const alertListStatus = alerts.useAlertsStatus() ?? {};
   const [showList, setShowList] = useState(true);
-  const [notifications, setNotifications] = useState<Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null>(
-    null,
-  );
+  const [notifications, setNotifications] = useState<
+    Omit<NotificationProps, 'currentId' | 'setCurrentId'>[] | null
+  >(null);
   const [currentId, setCurrentId] = useState('');
   const isLoading = alertListStatus === 'loading';
 
@@ -76,7 +76,10 @@ export const Notifications = () => {
               {`${notWatched} ${t('unread')}`}
             </StyledLabelBoldLarge>
           )}
-          <StyledCollapseBtn aria-label="collapse-expand" onClick={() => setShowList((prevState) => !prevState)}>
+          <StyledCollapseBtn
+            aria-label="collapse-expand"
+            onClick={() => setShowList((prevState) => !prevState)}
+          >
             <Svg id={showList ? 'navigate-up' : 'navigate-down'} />
           </StyledCollapseBtn>
         </StyledFlexTopCenter>
@@ -89,7 +92,12 @@ export const Notifications = () => {
             </StyledCentered>
           )}
           {notifications?.map((item) => (
-            <Notification key={item.id} currentId={currentId} setCurrentId={setCurrentId} {...item} />
+            <Notification
+              key={item.id}
+              currentId={currentId}
+              setCurrentId={setCurrentId}
+              {...item}
+            />
           ))}
           {isLoading && (
             <StyledBox>

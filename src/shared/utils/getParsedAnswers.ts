@@ -19,7 +19,10 @@ export const getParsedAnswers = async (
   result: ExportDataResult,
   getDecryptedActivityData: ReturnType<typeof useDecryptedActivityData>,
 ) => {
-  const activitiesObject = getObjectFromList(result.activities, (activity: ExportActivity) => activity.idVersion);
+  const activitiesObject = getObjectFromList(
+    result.activities,
+    (activity: ExportActivity) => activity.idVersion,
+  );
 
   const { answers } = result;
   const parsedAnswers = [];
@@ -77,7 +80,9 @@ const shouldConvertPrivateDrawingUrl = (
 ): item is DecryptedAnswerData<ExtendedExportAnswerWithoutEncryption, DrawingItemAnswer> =>
   isDrawingAnswerData(item) && Boolean(item.answer.value.uri);
 
-export const getAnswersWithPublicUrls = async (parsedAnswers: Awaited<ReturnType<typeof getParsedAnswers>>) => {
+export const getAnswersWithPublicUrls = async (
+  parsedAnswers: Awaited<ReturnType<typeof getParsedAnswers>>,
+) => {
   if (!parsedAnswers.length) return [];
 
   const privateUrls = parsedAnswers.reduce((acc, data) => {
@@ -105,29 +110,32 @@ export const getAnswersWithPublicUrls = async (parsedAnswers: Awaited<ReturnType
   let publicUrlIndex = 0;
 
   return parsedAnswers.reduce<Awaited<ReturnType<typeof getParsedAnswers>>>((acc, data) => {
-    const decryptedAnswers = data.decryptedAnswers.reduce((decryptedAnswersAcc: DecryptedAnswerData[], item) => {
-      if (shouldConvertPrivateDrawingUrl(item)) {
+    const decryptedAnswers = data.decryptedAnswers.reduce(
+      (decryptedAnswersAcc: DecryptedAnswerData[], item) => {
+        if (shouldConvertPrivateDrawingUrl(item)) {
+          return decryptedAnswersAcc.concat({
+            ...item,
+            answer: {
+              ...item.answer,
+              value: {
+                ...item.answer.value,
+                uri: publicUrls[publicUrlIndex++] ?? '',
+              },
+            },
+          });
+        }
+        if (isNotMediaAnswerData(item)) return decryptedAnswersAcc.concat(item);
+
         return decryptedAnswersAcc.concat({
           ...item,
           answer: {
             ...item.answer,
-            value: {
-              ...item.answer.value,
-              uri: publicUrls[publicUrlIndex++] ?? '',
-            },
+            value: publicUrls[publicUrlIndex++] ?? '',
           },
         });
-      }
-      if (isNotMediaAnswerData(item)) return decryptedAnswersAcc.concat(item);
-
-      return decryptedAnswersAcc.concat({
-        ...item,
-        answer: {
-          ...item.answer,
-          value: publicUrls[publicUrlIndex++] ?? '',
-        },
-      });
-    }, []);
+      },
+      [],
+    );
 
     return acc.concat({
       ...data,

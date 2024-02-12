@@ -30,11 +30,19 @@ ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, TimeScale);
 
 const dataTestid = 'scatter-chart';
 
-export const ScatterChart = ({ height = '6rem', answers, versions, minDate, maxDate }: ScatterChartProps) => {
+export const ScatterChart = ({
+  height = '6rem',
+  answers,
+  versions,
+  minDate,
+  maxDate,
+}: ScatterChartProps) => {
   const { i18n } = useTranslation('app');
 
   const [tooltipData, setTooltipData] = useState<TooltipItem<'scatter'> | null>(null);
-  const chartRef = useRef<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>(null);
+  const chartRef = useRef<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>(
+    null,
+  );
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const isHovered = useRef(false);
 

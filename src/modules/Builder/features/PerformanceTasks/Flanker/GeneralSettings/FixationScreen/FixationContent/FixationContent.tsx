@@ -86,7 +86,10 @@ export const FixationContent = () => {
             )}
           </StyledFlexTopCenter>
           {hasImgError && (
-            <StyledBodySmall sx={{ pt: theme.spacing(0.5) }} color={variables.palette.semantic.error}>
+            <StyledBodySmall
+              sx={{ pt: theme.spacing(0.5) }}
+              color={variables.palette.semantic.error}
+            >
               {getIsRequiredValidateMessage('flankerFixation.fixationScreenImg')}
             </StyledBodySmall>
           )}
@@ -96,7 +99,9 @@ export const FixationContent = () => {
         </StyledRemoveButton>
       </StyledFlexTopCenter>
       <StyledFlexTopCenter sx={{ mb: theme.spacing(1) }}>
-        <StyledTitleMedium sx={{ mr: theme.spacing(0.5) }}>{t('flankerFixation.showFixationFor')}</StyledTitleMedium>
+        <StyledTitleMedium sx={{ mr: theme.spacing(0.5) }}>
+          {t('flankerFixation.showFixationFor')}
+        </StyledTitleMedium>
         <StyledSmallNumberInput>
           <InputController
             control={control}

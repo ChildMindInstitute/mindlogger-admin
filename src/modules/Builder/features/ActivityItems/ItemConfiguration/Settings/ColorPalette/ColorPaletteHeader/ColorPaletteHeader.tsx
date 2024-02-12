@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { theme, StyledFlexTopCenter, StyledClearedButton, StyledLabelBoldLarge } from 'shared/styles';
+import {
+  theme,
+  StyledFlexTopCenter,
+  StyledClearedButton,
+  StyledLabelBoldLarge,
+} from 'shared/styles';
 
 import { ColorPaletteHeaderProps } from './ColorPaletteHeader.types';
 
@@ -10,7 +15,11 @@ const commonButtonStyles = {
   mr: theme.spacing(0.2),
 };
 
-export const ColorPaletteHeader = ({ isExpanded, onArrowClick, onRemovePalette }: ColorPaletteHeaderProps) => {
+export const ColorPaletteHeader = ({
+  isExpanded,
+  onArrowClick,
+  onRemovePalette,
+}: ColorPaletteHeaderProps) => {
   const { t } = useTranslation('app');
 
   return (

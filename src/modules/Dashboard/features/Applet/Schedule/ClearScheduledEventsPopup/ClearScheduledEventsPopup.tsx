@@ -36,7 +36,9 @@ export const ClearScheduledEventsPopup = ({
     execute: deleteIndividualScheduledEvents,
     error: deleteIndividualScheduledError,
     isLoading: deleteIndividualScheduledLoading,
-  } = useAsync(deleteIndividualEventsApi, () => dispatch(applets.thunk.getEvents({ appletId, respondentId })));
+  } = useAsync(deleteIndividualEventsApi, () =>
+    dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+  );
 
   const isLoading = deleteScheduledLoading || deleteIndividualScheduledLoading;
 
@@ -82,7 +84,10 @@ export const ClearScheduledEventsPopup = ({
         <StyledModalWrapper data-testid={`${dataTestid}-text`}>
           {screens[step].component}
           {(deleteScheduledError || deleteIndividualScheduledError) && (
-            <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
+            <StyledBodyLarge
+              color={variables.palette.semantic.error}
+              sx={{ m: theme.spacing(1, 0) }}
+            >
               {getErrorMessage(deleteScheduledError || deleteIndividualScheduledError)}
             </StyledBodyLarge>
           )}

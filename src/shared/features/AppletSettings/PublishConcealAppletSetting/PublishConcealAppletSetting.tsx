@@ -9,9 +9,15 @@ import { Svg } from 'shared/components/Svg';
 import { PublishConcealAppletPopup } from 'modules/Dashboard/features/Applet/Popups';
 
 import { PublishConcealAppletSettingProps } from './PublishConcealAppletSetting.types';
-import { StyledAppletSettingsButton, StyledAppletSettingsDescription } from '../AppletSettings.styles';
+import {
+  StyledAppletSettingsButton,
+  StyledAppletSettingsDescription,
+} from '../AppletSettings.styles';
 
-export const PublishConcealAppletSetting = ({ isDashboard, isBuilder }: PublishConcealAppletSettingProps) => {
+export const PublishConcealAppletSetting = ({
+  isDashboard,
+  isBuilder,
+}: PublishConcealAppletSettingProps) => {
   const { t } = useTranslation('app');
   const { appletId = '' } = useParams();
   const dispatch = useAppDispatch();

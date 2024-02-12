@@ -7,4 +7,5 @@ export type FormInputProps = {
   checkIfSelectChangePopupIsVisible?: (handleOnChange: () => void) => void;
 };
 
-export type GroupedSelectControllerProps<T extends FieldValues> = FormInputProps & UseControllerProps<T>;
+export type GroupedSelectControllerProps<T extends FieldValues> = FormInputProps &
+  UseControllerProps<T>;

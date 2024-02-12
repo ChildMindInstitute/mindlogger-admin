@@ -55,7 +55,12 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
   return (
     <StyledSelectionRowsContainer in={isExpanded} collapsedSize="9.2rem" timeout={0}>
       <StyledFlexColumn sx={{ gap: '2.4rem' }}>
-        <Header name={name} isSingle={isSingle} isExpanded={isExpanded} onArrowClick={handleCollapse} />
+        <Header
+          name={name}
+          isSingle={isSingle}
+          isExpanded={isExpanded}
+          onArrowClick={handleCollapse}
+        />
         <StyledFlexColumn>
           <Options name={name} />
           <Items name={name} isSingle={isSingle} />

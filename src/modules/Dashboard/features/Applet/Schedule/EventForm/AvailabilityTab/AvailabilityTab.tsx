@@ -6,13 +6,23 @@ import { addDays } from 'date-fns';
 
 import { CheckboxController, SelectController } from 'shared/components/FormComponents';
 import { DatePicker, TimePicker, ToggleButtonGroup } from 'shared/components';
-import { StyledBodyLarge, StyledBodyMedium, StyledTitleSmall, theme, variables } from 'shared/styles';
+import {
+  StyledBodyLarge,
+  StyledBodyMedium,
+  StyledTitleSmall,
+  theme,
+  variables,
+} from 'shared/styles';
 import { Periodicity } from 'modules/Dashboard/api';
 import { SelectEvent } from 'shared/types';
 import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 
 import { EventFormValues } from '../EventForm.types';
-import { DEFAULT_ACTIVITY_INCOMPLETE_VALUE, DEFAULT_END_TIME, DEFAULT_START_TIME } from '../EventForm.const';
+import {
+  DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
+  DEFAULT_END_TIME,
+  DEFAULT_START_TIME,
+} from '../EventForm.const';
 import { repeatsButtons, TimeType } from './Availability.const';
 import {
   StyledButtonsTitle,
@@ -25,10 +35,22 @@ import { AvailabilityTabProps } from './AvailabilityTab.types';
 import { getAvailabilityOptions } from './AvailabilityTab.utils';
 import { useNextDayLabel } from '../EventForm.hooks';
 
-export const AvailabilityTab = ({ hasAlwaysAvailableOption, 'data-testid': dataTestid }: AvailabilityTabProps) => {
+export const AvailabilityTab = ({
+  hasAlwaysAvailableOption,
+  'data-testid': dataTestid,
+}: AvailabilityTabProps) => {
   const { t } = useTranslation('app');
   const { control, setValue, trigger } = useFormContext<EventFormValues>();
-  const [alwaysAvailable, periodicity, startDate, endDate, startTime, endTime, reminder, removeWarning] = useWatch({
+  const [
+    alwaysAvailable,
+    periodicity,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    reminder,
+    removeWarning,
+  ] = useWatch({
     control,
     name: [
       'alwaysAvailable',
@@ -61,7 +83,12 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption, 'data-testid': dataT
   };
 
   const handleTimeCustomChange = (time: string, type: TimeType) => {
-    if (!reminder || !isOncePeriodicity || reminder.activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE) return;
+    if (
+      !reminder ||
+      !isOncePeriodicity ||
+      reminder.activityIncomplete === DEFAULT_ACTIVITY_INCOMPLETE_VALUE
+    )
+      return;
     const isFromTime = type === TimeType.FromTime;
     const fromTime = isFromTime ? time : startTime;
     const toTime = isFromTime ? endTime : time;
@@ -102,7 +129,9 @@ export const AvailabilityTab = ({ hasAlwaysAvailableOption, 'data-testid': dataT
       />
       {!isOncePeriodicity && (
         <>
-          <StyledBodyLarge sx={{ m: theme.spacing(0, 2.4) }}>{t('to').toLowerCase()}</StyledBodyLarge>
+          <StyledBodyLarge sx={{ m: theme.spacing(0, 2.4) }}>
+            {t('to').toLowerCase()}
+          </StyledBodyLarge>
           <DatePicker
             name="endDate"
             key="endDate"

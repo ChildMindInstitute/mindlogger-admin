@@ -51,10 +51,14 @@ describe('RespondentsRemoveAccessPopup component tests', () => {
   });
 
   test('RespondentsRemoveAccessPopup should open with applets list', async () => {
-    renderWithProviders(<RespondentsRemoveAccessPopup {...{ ...commonProps, chosenAppletData: null }} />);
+    renderWithProviders(
+      <RespondentsRemoveAccessPopup {...{ ...commonProps, chosenAppletData: null }} />,
+    );
 
     await waitFor(() => {
-      expect(screen.getByText('This Respondent has access to the following Applets:')).toBeInTheDocument();
+      expect(
+        screen.getByText('This Respondent has access to the following Applets:'),
+      ).toBeInTheDocument();
       expect(screen.getByText(chosenAppletData.appletDisplayName)).toBeInTheDocument();
     });
   });

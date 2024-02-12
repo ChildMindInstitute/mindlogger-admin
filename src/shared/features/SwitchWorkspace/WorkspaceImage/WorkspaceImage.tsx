@@ -13,7 +13,9 @@ export const WorkspaceImage = ({
     {image ? (
       <StyledImage src={image} />
     ) : (
-      <StyledTitleBoldSmall color={variables.palette.white}>{workspaceName.slice(0, 2)}</StyledTitleBoldSmall>
+      <StyledTitleBoldSmall color={variables.palette.white}>
+        {workspaceName.slice(0, 2)}
+      </StyledTitleBoldSmall>
     )}
   </StyledCustomCover>
 );

@@ -118,10 +118,16 @@ const getResponseObj = ({
   if (tag === FlankerTag.Response) {
     eventOffset = eventStartTimestamp = DEFAULT_VALUE;
     const buttonPressed =
-      Number(response.button_pressed) === CorrectPress.Left ? FlankerResponseValue.Left : FlankerResponseValue.Right;
+      Number(response.button_pressed) === CorrectPress.Left
+        ? FlankerResponseValue.Left
+        : FlankerResponseValue.Right;
     responseValue =
-      response.button_pressed === null || response.button_pressed === undefined ? DEFAULT_VALUE : buttonPressed;
-    responseAccuracy = response.correct ? FlankerResponseAccuracy.Correct : FlankerResponseAccuracy.Incorrect;
+      response.button_pressed === null || response.button_pressed === undefined
+        ? DEFAULT_VALUE
+        : buttonPressed;
+    responseAccuracy = response.correct
+      ? FlankerResponseAccuracy.Correct
+      : FlankerResponseAccuracy.Incorrect;
     responseTouchTimestamp =
       'response_touch_timestamp' in response
         ? response.response_touch_timestamp || DEFAULT_VALUE
@@ -281,6 +287,8 @@ export const getFlankerRecords = ({
     response_time: row.responseTime,
     response: row.responseValue,
     response_accuracy: row.responseAccuracy,
-    ...(item.config.minimumAccuracy && index === 0 ? { failed_practices: failedPractice.toString() } : {}),
+    ...(item.config.minimumAccuracy && index === 0
+      ? { failed_practices: failedPractice.toString() }
+      : {}),
   }));
 };

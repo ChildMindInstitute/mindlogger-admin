@@ -49,12 +49,16 @@ describe('Activity Flow Builder', () => {
   test('Is rendered correctly', async () => {
     renderActivityFlowBuilder();
 
-    expect(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-header`)).toHaveTextContent('Activity Flow Builder');
+    expect(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-header`)).toHaveTextContent(
+      'Activity Flow Builder',
+    );
     expect(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-add`)).toBeVisible();
     expect(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-clear`)).toBeVisible();
 
     await waitFor(() => {
-      const activities = screen.getAllByTestId(new RegExp(`^${mockedActivityFlowBuilderTestid}-flow-\\d+$`));
+      const activities = screen.getAllByTestId(
+        new RegExp(`^${mockedActivityFlowBuilderTestid}-flow-\\d+$`),
+      );
       expect(activities).toHaveLength(1);
       activities.forEach((activity, index) => {
         expect(activity).toBeVisible();
@@ -110,10 +114,14 @@ describe('Activity Flow Builder', () => {
       expect(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-clear-popup`)).toBeVisible();
     });
 
-    fireEvent.click(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-clear-popup-submit-button`));
+    fireEvent.click(
+      screen.getByTestId(`${mockedActivityFlowBuilderTestid}-clear-popup-submit-button`),
+    );
 
     await waitFor(() => {
-      expect(screen.queryAllByTestId(new RegExp(`^${mockedActivityFlowBuilderTestid}-flow-\\d+$`))).toHaveLength(0);
+      expect(
+        screen.queryAllByTestId(new RegExp(`^${mockedActivityFlowBuilderTestid}-flow-\\d+$`)),
+      ).toHaveLength(0);
       expect(ref.current.getValues('activityFlows.0.items')).toEqual([]);
       expect(clearFlow).toBeDisabled();
     });
@@ -126,7 +134,9 @@ describe('Activity Flow Builder', () => {
       const addActivity = screen.getByTestId(`${mockedActivityFlowBuilderTestid}-add`);
       fireEvent.click(addActivity);
 
-      const selectActivity = screen.getByTestId(`${mockedActivityFlowBuilderTestid}-add-activity-0`);
+      const selectActivity = screen.getByTestId(
+        `${mockedActivityFlowBuilderTestid}-add-activity-0`,
+      );
       fireEvent.click(selectActivity);
 
       await waitFor(() => {
@@ -156,7 +166,9 @@ describe('Activity Flow Builder', () => {
         screen.getByTestId(`${mockedActivityFlowBuilderTestid}-flow-1`);
       });
 
-      expect(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-flow-1`)).toHaveTextContent('New Activity');
+      expect(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-flow-1`)).toHaveTextContent(
+        'New Activity',
+      );
       expect(ref.current.getValues('activityFlows.0.items')).toEqual([
         mockedAppletFormDataWithTwoActivites.activityFlows[0].items[0],
         {
@@ -179,10 +191,14 @@ describe('Activity Flow Builder', () => {
         expect(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-remove-popup`)).toBeVisible();
       });
 
-      fireEvent.click(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-remove-popup-submit-button`));
+      fireEvent.click(
+        screen.getByTestId(`${mockedActivityFlowBuilderTestid}-remove-popup-submit-button`),
+      );
 
       await waitFor(() => {
-        expect(screen.queryAllByTestId(new RegExp(`^${mockedActivityFlowBuilderTestid}-flow-\\d+$`))).toHaveLength(0);
+        expect(
+          screen.queryAllByTestId(new RegExp(`^${mockedActivityFlowBuilderTestid}-flow-\\d+$`)),
+        ).toHaveLength(0);
         expect(ref.current.getValues('activityFlows.0.items')).toEqual([]);
       });
     });
