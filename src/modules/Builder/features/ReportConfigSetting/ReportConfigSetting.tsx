@@ -347,9 +347,8 @@ export const ReportConfigSetting = ({
 
     return null;
   };
-  const itemName = getActivityItems()?.find(
-    (item) => getEntityKey(item) === reportIncludedItemName,
-  )?.name;
+  const itemName = getActivityItems()?.find((item) => getEntityKey(item) === reportIncludedItemName)
+    ?.name;
 
   const subjectDataProps = {
     setValue,

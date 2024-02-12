@@ -115,7 +115,11 @@ export const getScreens = ({
 }: ScreensParams): Screen[] => {
   const onCloseHandler = () => onClose(true);
 
-  const getResultScreen = (getSuccessScreen: GetScreen, getErrorScreen: GetScreen, title: string) =>
+  const getResultScreen = (
+    getSuccessScreen: GetScreen,
+    getErrorScreen: GetScreen,
+    title: string,
+  ) =>
     isRemoved
       ? {
           component: getSuccessScreen(respondentName, appletName),

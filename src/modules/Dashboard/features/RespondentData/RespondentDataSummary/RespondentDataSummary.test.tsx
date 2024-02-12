@@ -40,17 +40,16 @@ jest.mock('react-hook-form', () => ({
 
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedIdentifiers: () => () =>
-    [
-      {
-        encryptedValue: 'jane doe',
-        decryptedValue: 'decryptedValue1',
-      },
-      {
-        encryptedValue: 'sam carter',
-        decryptedValue: 'decryptedValue2',
-      },
-    ],
+  useDecryptedIdentifiers: () => () => [
+    {
+      encryptedValue: 'jane doe',
+      decryptedValue: 'decryptedValue1',
+    },
+    {
+      encryptedValue: 'sam carter',
+      decryptedValue: 'decryptedValue2',
+    },
+  ],
 }));
 
 jest.mock('./ReportMenu', () => ({

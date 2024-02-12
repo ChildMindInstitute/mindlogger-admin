@@ -164,13 +164,13 @@ export const getUniqueItem = (item?: ItemFormValues) =>
     key: uuidv4(),
     ...getNewPropsForSingleAndMultiSelection(item),
     ...getNewPropsForSlider(item),
-  } as ItemFormValues);
+  }) as ItemFormValues;
 
 export const getNewActivityItem = (item?: ItemFormValues) =>
   ({
     ...getNewItemDefaultProps(),
     ...getUniqueItem(item),
-  } as ItemFormValues);
+  }) as ItemFormValues;
 
 export const getDuplicatedConditions = (
   oldItems: ItemFormValues[],
@@ -735,7 +735,7 @@ const getActivityItems = (items: Item[]) =>
             allowEdit: item.allowEdit,
             isHidden: item.isHidden,
             order: item.order,
-          } as ItemFormValues),
+          }) as ItemFormValues,
       )
     : [];
 
