@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -40,6 +40,10 @@ export const ToggleItemContainer = ({
   const { t } = useTranslation();
   const [open, setOpen] = useState(isOpenByDefault ?? true);
   const handleToggle = () => setOpen((prevState) => !prevState);
+  const handleToggleBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    handleToggle();
+  };
 
   const hasErrorMessage = !open && !!errorMessage;
   const titleErrorVisible = !open && (!!errorMessage || hasError);
@@ -52,6 +56,7 @@ export const ToggleItemContainer = ({
         uiType={uiType}
         isError={titleErrorVisible}
         headerClickable={isHeaderClickable}
+        data-testid={`${dataTestid}-header`}
         onClick={isHeaderClickable ? handleToggle : undefined}
       >
         <StyledFlexTopCenter
@@ -59,7 +64,7 @@ export const ToggleItemContainer = ({
         >
           <StyledFlexTopCenter>
             <StyledClearedButton
-              onClick={handleToggle}
+              onClick={handleToggleBtnClick}
               sx={{ p: theme.spacing(0.8) }}
               disabled={isOpenDisabled}
               data-testid={`${dataTestid}-collapse`}
