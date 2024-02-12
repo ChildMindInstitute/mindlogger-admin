@@ -28,7 +28,7 @@ jobs:
           eslint: true
           eslint_extensions: js,jsx,ts,tsx
           prettier: true
-          prettier_extensions: ts
+          prettier_extensions: js,jsx,ts,tsx
           continue_on_error: false
   tests:
     runs-on: ubuntu-latest
