@@ -11,47 +11,41 @@ import { FlankerStimulusSettings } from 'shared/state';
 import { BlockSequencesProps } from './BlockSequences.types';
 import { BlockSequencesContent } from './BlockSequencesContent';
 
-export const BlockSequences = memo(
-  ({ isPracticeRound, 'data-testid': dataTestid }: BlockSequencesProps) => {
-    const { t } = useTranslation();
-    const {
-      watch,
-      formState: { errors },
-    } = useCustomFormContext();
-    const { fieldName, activityObjField } = useCurrentActivity();
+export const BlockSequences = memo(({ isPracticeRound, 'data-testid': dataTestid }: BlockSequencesProps) => {
+  const { t } = useTranslation();
+  const {
+    watch,
+    formState: { errors },
+  } = useCustomFormContext();
+  const { fieldName, activityObjField } = useCurrentActivity();
 
-    const stimulusTrials = watch(
-      `${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`,
-    );
-    const hasStimulusErrors = !stimulusTrials?.some(
-      (trial: FlankerStimulusSettings) => !!trial.image || !!trial.text,
-    );
+  const stimulusTrials = watch(`${fieldName}.items.${FlankerItemPositions.PracticeFirst}.config.stimulusTrials`);
+  const hasStimulusErrors = !stimulusTrials?.some((trial: FlankerStimulusSettings) => !!trial.image || !!trial.text);
 
-    const blockSequencesObjField = `${activityObjField}.items[${
-      isPracticeRound ? FlankerItemPositions.PracticeFirst : FlankerItemPositions.TestFirst
-    }].config.blocks`;
-    const hasBlockSequencesErrors = !!get(errors, blockSequencesObjField);
+  const blockSequencesObjField = `${activityObjField}.items[${
+    isPracticeRound ? FlankerItemPositions.PracticeFirst : FlankerItemPositions.TestFirst
+  }].config.blocks`;
+  const hasBlockSequencesErrors = !!get(errors, blockSequencesObjField);
 
-    const getError = () => {
-      if (hasStimulusErrors) return 'flankerRound.addStimulus';
-      if (hasBlockSequencesErrors) return 'fillInAllRequired';
+  const getError = () => {
+    if (hasStimulusErrors) return 'flankerRound.addStimulus';
+    if (hasBlockSequencesErrors) return 'fillInAllRequired';
 
-      return null;
-    };
+    return null;
+  };
 
-    return (
-      <ToggleItemContainer
-        isOpenDisabled={hasStimulusErrors}
-        isOpenByDefault={!hasStimulusErrors}
-        errorMessage={getError()}
-        uiType={ToggleContainerUiType.PerformanceTask}
-        title={t('flankerRound.blockSequences')}
-        Content={BlockSequencesContent}
-        contentProps={{ isPracticeRound, hasBlockSequencesErrors, 'data-testid': dataTestid }}
-        tooltip={t('flankerRound.sequencesTooltip')}
-        headerToggling
-        data-testid={dataTestid}
-      />
-    );
-  },
-);
+  return (
+    <ToggleItemContainer
+      isOpenDisabled={hasStimulusErrors}
+      isOpenByDefault={!hasStimulusErrors}
+      errorMessage={getError()}
+      uiType={ToggleContainerUiType.PerformanceTask}
+      title={t('flankerRound.blockSequences')}
+      Content={BlockSequencesContent}
+      contentProps={{ isPracticeRound, hasBlockSequencesErrors, 'data-testid': dataTestid }}
+      tooltip={t('flankerRound.sequencesTooltip')}
+      headerToggling
+      data-testid={dataTestid}
+    />
+  );
+});

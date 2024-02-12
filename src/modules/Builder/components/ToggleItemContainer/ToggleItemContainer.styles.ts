@@ -7,9 +7,7 @@ import { ToggleContainerUiType } from './ToggleItemContainer.types';
 
 export const StyledItemOptionContainer = styled(StyledFlexColumn, shouldForwardProp)`
   background: ${({ uiType }: { uiType?: ToggleContainerUiType }) =>
-    uiType === ToggleContainerUiType.Score
-      ? variables.palette.surface3
-      : variables.palette.surface1};
+    uiType === ToggleContainerUiType.Score ? variables.palette.surface3 : variables.palette.surface1};
   padding: ${theme.spacing(3, 3, 2.4, 3)};
   border-radius: ${variables.borderRadius.lg2};
   margin-bottom: ${theme.spacing(2.4)};

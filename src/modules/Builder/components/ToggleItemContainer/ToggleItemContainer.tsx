@@ -1,7 +1,9 @@
 import { useState, MouseEvent } from 'react';
+
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
+import { Svg, Tooltip } from 'shared/components';
 import {
   StyledBodyMedium,
   StyledClearedButton,
@@ -12,14 +14,8 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Svg, Tooltip } from 'shared/components';
 
-import {
-  StyledItemOption,
-  StylesTitleWrapper,
-  StyledBadge,
-  StyledTitleContainer,
-} from './ToggleItemContainer.styles';
+import { StyledItemOption, StylesTitleWrapper, StyledBadge, StyledTitleContainer } from './ToggleItemContainer.styles';
 import { ToggleItemProps } from './ToggleItemContainer.types';
 
 export const ToggleItemContainer = ({
@@ -59,9 +55,7 @@ export const ToggleItemContainer = ({
         data-testid={`${dataTestid}-header`}
         onClick={isHeaderClickable ? handleToggle : undefined}
       >
-        <StyledFlexTopCenter
-          sx={{ flexGrow: 1, overflow: titleErrorVisible ? 'visible' : 'hidden' }}
-        >
+        <StyledFlexTopCenter sx={{ flexGrow: 1, overflow: titleErrorVisible ? 'visible' : 'hidden' }}>
           <StyledFlexTopCenter>
             <StyledClearedButton
               onClick={handleToggleBtnClick}
@@ -80,19 +74,14 @@ export const ToggleItemContainer = ({
                   </StyledFlexTopCenter>
                 </StyledTitleContainer>
                 {hasErrorMessage && (
-                  <StyledBodyMedium
-                    sx={{ p: theme.spacing(0.5, 0, 0, 1.5) }}
-                    color={variables.palette.semantic.error}
-                  >
+                  <StyledBodyMedium sx={{ p: theme.spacing(0.5, 0, 0, 1.5) }} color={variables.palette.semantic.error}>
                     {t(errorMessage)}
                   </StyledBodyMedium>
                 )}
               </StyledFlexColumn>
             )}
           </StyledFlexTopCenter>
-          {HeaderContent && (
-            <HeaderContent open={open} onToggle={handleToggle} {...headerContentProps} />
-          )}
+          {HeaderContent && <HeaderContent open={open} onToggle={handleToggle} {...headerContentProps} />}
         </StyledFlexTopCenter>
         {tooltip && (
           <Tooltip tooltipTitle={tooltip}>
