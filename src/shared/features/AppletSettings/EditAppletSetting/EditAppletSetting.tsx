@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { getBuilderAppletUrl } from 'shared/utils/urlGenerator';
+import { Mixpanel } from 'shared/utils/mixpanel';
 
 import {
   StyledAppletSettingsButton,
@@ -14,13 +15,18 @@ export const EditAppletSetting = () => {
   const navigate = useNavigate();
   const { appletId } = useParams();
 
+  const handleClick = () => {
+    navigate(getBuilderAppletUrl(appletId || ''));
+    Mixpanel.track('Applet edit click');
+  };
+
   return (
     <>
       <StyledAppletSettingsDescription>{t('editDescription')}</StyledAppletSettingsDescription>
       <StyledAppletSettingsButton
         variant="outlined"
         startIcon={<Svg width="18" height="18" id="edit-applet" />}
-        onClick={() => navigate(getBuilderAppletUrl(appletId || ''))}
+        onClick={handleClick}
         data-testid="applet-settings-edit-applet-edit"
       >
         {t('editAppletInBuilder')}
