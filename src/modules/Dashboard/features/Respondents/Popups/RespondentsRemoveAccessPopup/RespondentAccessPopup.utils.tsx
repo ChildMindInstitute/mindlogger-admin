@@ -2,9 +2,12 @@ import { Trans } from 'react-i18next';
 
 import { StyledBodyLarge, theme, variables } from 'shared/styles';
 import { SubmitBtnColor } from 'shared/components';
+import i18n from 'i18n';
+import { falseReturnFunc } from 'shared/utils';
 
 import { GetScreen, Screen, ScreensParams } from './RespondentsRemoveAccessPopup.types';
 
+const { t } = i18n;
 const getThirdScreen = (respondentName: string, appletName: string) => (
   <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
     <Trans i18nKey="confirmRemoveRespondentAccess">
@@ -112,6 +115,8 @@ export const getScreens = ({
   submitPassword,
   removeAccess,
   onClose,
+  hasNoPermissionError,
+  handleNoPermissionSubmit,
 }: ScreensParams): Screen[] => {
   const onCloseHandler = () => onClose(true);
 
@@ -119,23 +124,41 @@ export const getScreens = ({
     getSuccessScreen: GetScreen,
     getErrorScreen: GetScreen,
     title: string,
-  ) =>
-    isRemoved
-      ? {
-          component: getSuccessScreen(respondentName, appletName),
-          buttonText: 'ok',
-          hasSecondBtn: false,
-          title,
-          submitForm: onCloseHandler,
-          onClose: onCloseHandler,
-        }
-      : {
-          component: getErrorScreen(respondentName, appletName),
-          buttonText: 'retry',
-          hasSecondBtn: true,
-          title,
-          submitForm: removeAccess,
-        };
+  ) => {
+    if (isRemoved) {
+      return {
+        component: getSuccessScreen(respondentName, appletName),
+        buttonText: 'ok',
+        hasSecondBtn: false,
+        title,
+        submitForm: onCloseHandler,
+        onClose: onCloseHandler,
+      };
+    }
+
+    if (hasNoPermissionError) {
+      return {
+        component: t('noAccessToApplet'),
+        buttonText: 'refresh',
+        onClose: falseReturnFunc,
+        hasSecondBtn: false,
+        hasCloseIcon: false,
+        title,
+        submitForm: () => {
+          handleNoPermissionSubmit();
+          onCloseHandler();
+        },
+      };
+    }
+
+    return {
+      component: getErrorScreen(respondentName, appletName),
+      buttonText: 'retry',
+      hasSecondBtn: true,
+      title,
+      submitForm: removeAccess,
+    };
+  };
 
   return [
     { component: firstScreen, buttonText: '', hasSecondBtn: false, title: 'removeAccess' },

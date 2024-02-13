@@ -2,11 +2,11 @@ import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
+import { Actions, Pin, Svg, Search, Row, Spinner, NoPermissionPopup } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useTimeAgo, useTable, useAsync, usePermissions, useEncryptionStorage } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
-import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
+import { ApiResponseCodes, getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
@@ -43,6 +43,7 @@ export const Respondents = () => {
 
   const [respondentsData, setRespondentsData] = useState<RespondentsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [noPermissionModalVisible, setNoPermissionModalVisible] = useState(false);
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
@@ -52,7 +53,11 @@ export const Respondents = () => {
     (response) => {
       setRespondentsData(response?.data || null);
     },
-    undefined,
+    (error) => {
+      if (error?.response?.status !== ApiResponseCodes.Forbidden) return;
+
+      setNoPermissionModalVisible(true);
+    },
     () => setIsLoading(false),
   );
 
@@ -369,6 +374,14 @@ export const Respondents = () => {
           popupVisible={editRespondentPopupVisible}
           onClose={editRespondentOnClose}
           chosenAppletData={chosenAppletData}
+        />
+      )}
+      {noPermissionModalVisible && (
+        <NoPermissionPopup
+          open={noPermissionModalVisible}
+          title={t('respondents')}
+          onSubmitCallback={() => setNoPermissionModalVisible(false)}
+          data-testid="dashboard-respondents-no-permission-popup"
         />
       )}
     </StyledBody>

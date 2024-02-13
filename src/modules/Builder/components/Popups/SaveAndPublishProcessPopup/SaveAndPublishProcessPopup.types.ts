@@ -6,7 +6,7 @@ export const enum SaveAndPublishSteps {
   BeingCreated = 'beingCreated',
   Success = 'success',
   Failed = 'failed',
-  // NoPermission = 'noPermission',
+  NoPermission = 'noPermission',
   ReportConfigSave = 'reportConfigSave',
 }
 

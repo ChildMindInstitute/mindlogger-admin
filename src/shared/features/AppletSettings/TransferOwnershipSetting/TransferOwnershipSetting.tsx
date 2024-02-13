@@ -7,6 +7,7 @@ import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwn
 import { SuccessTransferOwnershipPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { TransferOwnershipRef } from 'modules/Dashboard/features/Applet/TransferOwnership/TransferOwnership.types';
 import { Mixpanel } from 'shared/utils';
+import { NoPermissionPopup } from 'shared/components';
 
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
@@ -16,24 +17,25 @@ export const TransferOwnershipSetting = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [emailTransfered, setEmailTransfered] = useState('');
+  const [emailTransferred, setEmailTransferred] = useState('');
   const [transferOwnershipPopupVisible, setTransferOwnershipPopupVisible] = useState(false);
   const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
+  const [noPermissionPopupVisible, setNoPermissionPopupVisible] = useState(false);
 
   const dataTestid = 'applet-settings-transfer-ownership';
 
-  const handleSuccessPopupClose = () => {
+  const handlePopupClose = () => {
     setTransferOwnershipPopupVisible(false);
-    setEmailTransfered('');
+    setEmailTransferred('');
     transferOwnershipRef.current?.resetEmail();
   };
 
   useEffect(() => {
-    if (!emailTransfered) return;
+    if (!emailTransferred) return;
 
     setTransferOwnershipPopupVisible(true);
     Mixpanel.track('Invitation sent successfully');
-  }, [emailTransfered]);
+  }, [emailTransferred]);
 
   return (
     <>
@@ -44,7 +46,8 @@ export const TransferOwnershipSetting = () => {
           appletName={appletData?.displayName}
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
-          setEmailTransfered={setEmailTransfered}
+          setEmailTransferred={setEmailTransferred}
+          setNoPermissionPopupVisible={setNoPermissionPopupVisible}
           data-testid={`${dataTestid}-form`}
         />
       </StyledTransferOwnershipForm>
@@ -57,12 +60,22 @@ export const TransferOwnershipSetting = () => {
           {t('confirm')}
         </StyledAppletSettingsButton>
       </Box>
-      <SuccessTransferOwnershipPopup
-        email={emailTransfered}
-        transferOwnershipPopupVisible={transferOwnershipPopupVisible}
-        closeTransferOwnershipPopup={handleSuccessPopupClose}
-        data-testid={`${dataTestid}-success-popup`}
-      />
+      {transferOwnershipPopupVisible && (
+        <SuccessTransferOwnershipPopup
+          email={emailTransferred}
+          transferOwnershipPopupVisible={transferOwnershipPopupVisible}
+          closeTransferOwnershipPopup={handlePopupClose}
+          data-testid={`${dataTestid}-success-popup`}
+        />
+      )}
+      {noPermissionPopupVisible && (
+        <NoPermissionPopup
+          open={noPermissionPopupVisible}
+          title={t('transferOwnership')}
+          onSubmitCallback={handlePopupClose}
+          data-testid={`${dataTestid}-no-permission-popup`}
+        />
+      )}
     </>
   );
 };

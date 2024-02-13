@@ -277,13 +277,17 @@ export const useSaveAndPublishSetup = () => {
   const responseStatus = applet.useResponseStatus();
   const responseError = applet.useResponseError() ?? [];
   const responseTypePrefix = applet.useResponseTypePrefix();
+  const isResponseStatusError = responseStatus === 'error';
+  const hasAccessDeniedError =
+    Array.isArray(responseError) &&
+    responseError.some((error) => error.type === ErrorResponseType.AccessDenied);
   const {
     cancelNavigation: onCancelNavigation,
     confirmNavigation,
     promptVisible,
     setPromptVisible,
     isLogoutInProgress,
-  } = usePrompt(isDirty);
+  } = usePrompt(isDirty && !(isResponseStatusError && hasAccessDeniedError));
   const shouldNavigateRef = useRef(false);
   const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
@@ -306,29 +310,17 @@ export const useSaveAndPublishSetup = () => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
       setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
     }
-    if (responseStatus === 'error') {
-      // console.log('appletData', appletData);
-      // console.log('response error', responseError);
-      // setPublishProcessStep(SaveAndPublishSteps.Failed);
-      // const errorType = (responseError as ApiError[])?.[0]?.type;
+    if (isResponseStatusError) {
+      if (hasAccessDeniedError) {
+        setPublishProcessStep(SaveAndPublishSteps.NoPermission);
 
-      if (
-        Array.isArray(responseError) &&
-        responseError.some((error) => error.type === ErrorResponseType.AccessDenied)
-      ) {
-        // setPublishProcessStep(SaveAndPublishSteps.NoPermission);
+        return;
       }
-
-      // if (errorType === ErrorResponseType.AccessDenied && appletId) {
-      //   navigateToApplet(appletId);
-      //
-      //   return;
-      // }
 
       setPublishProcessStep(SaveAndPublishSteps.Failed);
     }
     responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
-  }, [responseStatus, responseTypePrefix, responseError]);
+  }, [responseStatus, responseTypePrefix, isResponseStatusError, hasAccessDeniedError]);
 
   const handleSaveChangesDoNotSaveSubmit = async () => {
     setPromptVisible(false);

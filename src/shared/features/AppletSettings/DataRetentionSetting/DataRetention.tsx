@@ -5,12 +5,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { SaveChangesPopup } from 'shared/components';
+import { NoPermissionPopup, SaveChangesPopup } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
 import { RetentionPeriods } from 'shared/types';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
-import { postAppletDataRetentionApi } from 'api';
+import { ApiResponseCodes, postAppletDataRetentionApi } from 'api';
 
 import { usePrompt } from '../AppletSettings.hooks';
 import { StyledAppletSettingsDescription } from '../AppletSettings.styles';
@@ -55,11 +55,21 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
 
   const [successPopupVisible, setSuccessPopupVisible] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
+  const [noPermissionPopupVisible, setNoPermissionPopupVisible] = useState(false);
+  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(
+    isDirty && !isSubmitted && !noPermissionPopupVisible,
+  );
   const { execute: saveDataRetention } = useAsync(
     postAppletDataRetentionApi,
     () => setSuccessPopupVisible(true),
-    () => setErrorPopupVisible(true),
+    (error) => {
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermissionPopupVisible(true);
+
+        return;
+      }
+      setErrorPopupVisible(true);
+    },
   );
 
   const watchRetentionType = watch('retentionType');
@@ -161,6 +171,14 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
           onCancel={handleCancel}
           onSave={handleSaveChanges}
           data-testid={`${dataTestid}-save-changes-popup`}
+        />
+      )}
+      {noPermissionPopupVisible && (
+        <NoPermissionPopup
+          open={noPermissionPopupVisible}
+          title={t('dataRetention')}
+          onSubmitCallback={() => setNoPermissionPopupVisible(false)}
+          data-testid={`${dataTestid}-no-permission-popup`}
         />
       )}
     </>

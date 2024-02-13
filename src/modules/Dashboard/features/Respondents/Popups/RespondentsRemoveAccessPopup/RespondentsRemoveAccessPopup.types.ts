@@ -23,6 +23,8 @@ export type ScreensParams = {
   submitPassword: () => void;
   removeAccess: () => void;
   onClose: (shouldRefetch?: boolean) => void;
+  hasNoPermissionError: boolean;
+  handleNoPermissionSubmit: () => void;
 };
 
 export type Screen = {
@@ -33,4 +35,5 @@ export type Screen = {
   submitForm?: () => void;
   onClose?: () => void;
   submitBtnColor?: SubmitBtnColor;
+  hasCloseIcon?: boolean;
 };

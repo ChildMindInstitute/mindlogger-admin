@@ -5,14 +5,14 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Encryption, getEncryptionToServer, Mixpanel } from 'shared/utils';
-import { Modal, Spinner, SpinnerUiType } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType, NoPermissionPopup } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledModalWrapper, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks/useAsync';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { applet, auth, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
+import { ApiResponseCodes, duplicateAppletApi, getAppletUniqueNameApi } from 'api';
 
 import {
   AppletPasswordPopup,
@@ -40,6 +40,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [noPermissionModalVisible, setNoPermissionModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
 
@@ -92,8 +93,14 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       setPasswordModalVisible(false);
       setSuccessModalVisible(true);
     },
-    () => {
+    (error) => {
       setPasswordModalVisible(false);
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermissionModalVisible(true);
+
+        return;
+      }
+
       setErrorModalVisible(true);
     },
     () => {
@@ -120,6 +127,12 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     setSuccessModalVisible(false);
     duplicatePopupsClose();
     Mixpanel.track('Applet Created Successfully');
+  };
+
+  const noPermissionModalClose = () => {
+    duplicatePopupsClose();
+    setNoPermissionModalVisible(false);
+    onCloseCallback?.();
   };
 
   const errorModalClose = () => {
@@ -163,6 +176,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     trigger('name');
   };
   const isLoading = isGetNameLoading || isGetNameSecondLoading;
+  const dataTestid = 'dashboard-applets-duplicate-popup';
 
   useEffect(() => {
     if (!duplicatePopupsVisible) return;
@@ -181,7 +195,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         onSubmit={setNameHandler}
         buttonText={t('submit')}
         disabledSubmit={isLoading}
-        data-testid="dashboard-applets-duplicate-popup"
+        data-testid={dataTestid}
       >
         <>
           {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
@@ -194,7 +208,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
                 label={t('appletName')}
                 onChange={handleNameChange}
                 error={!!nameError}
-                data-testid="dashboard-applets-duplicate-popup-name"
+                data-testid={`${dataTestid}-name`}
               />
             </form>
             {nameError && (
@@ -213,7 +227,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           popupVisible={passwordModalVisible}
           submitCallback={submitCallback}
           isLoading={isDuplicateLoading}
-          data-testid="dashboard-applets-duplicate-popup-password-popup"
+          data-testid={`${dataTestid}-password-popup`}
         />
       )}
       {successModalVisible && (
@@ -223,7 +237,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           title={t('appletDuplication')}
           onSubmit={successModalClose}
           buttonText={t('ok')}
-          data-testid="dashboard-applets-duplicate-popup-success-popup"
+          data-testid={`${dataTestid}-success-popup`}
         >
           <StyledModalWrapper>
             <Trans i18nKey="successDuplication">
@@ -246,12 +260,20 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           onSubmit={retryHandler}
           buttonText={t('tryAgain')}
           hasSecondBtn
-          data-testid="dashboard-applets-duplicate-popup-error-popup"
+          data-testid={`${dataTestid}-error-popup`}
         >
           <StyledModalWrapper sx={{ color: variables.palette.semantic.error }}>
             {t('errorDuplication')}
           </StyledModalWrapper>
         </Modal>
+      )}
+      {noPermissionModalVisible && (
+        <NoPermissionPopup
+          open={noPermissionModalVisible}
+          title={t('appletDuplication')}
+          onSubmitCallback={noPermissionModalClose}
+          data-testid={`${dataTestid}-no-permission-popup`}
+        />
       )}
     </>
   );

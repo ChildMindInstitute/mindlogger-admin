@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { getErrorMessage } from 'shared/utils';
-import { transferOwnershipApi } from 'api';
+import { ApiResponseCodes, transferOwnershipApi } from 'api';
 import { useAsync } from 'shared/hooks/useAsync';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledBodyLarge, theme } from 'shared/styles';
@@ -26,7 +26,8 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
       appletName,
       isSubmitted,
       setIsSubmitted,
-      setEmailTransfered,
+      setEmailTransferred,
+      setNoPermissionPopupVisible,
       'data-testid': dataTestid,
     },
     ref,
@@ -43,13 +44,17 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
       });
     const email = watch('email');
 
-    const { execute, error, setError } = useAsync(transferOwnershipApi);
+    const { execute, error, setError } = useAsync(transferOwnershipApi, undefined, (error) => {
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermissionPopupVisible(true);
+      }
+    });
 
     const handleTransferOwnership = async () => {
       if (!appletId) return;
 
       await execute({ appletId, email: getValues().email });
-      setEmailTransfered(getValues().email);
+      setEmailTransferred(getValues().email);
     };
 
     useEffect(() => {

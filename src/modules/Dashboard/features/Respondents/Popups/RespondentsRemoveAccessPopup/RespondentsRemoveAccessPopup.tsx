@@ -5,8 +5,8 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { removeRespondentAccessApi } from 'api';
-import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
+import { ApiResponseCodes, removeRespondentAccessApi } from 'api';
+import { useSetupEnterAppletPassword, useAsync, useNoPermissionSubmit } from 'shared/hooks';
 import { workspaces } from 'redux/modules';
 import { isManagerOrOwner } from 'shared/utils';
 
@@ -26,6 +26,7 @@ export const RespondentsRemoveAccessPopup = ({
   const rolesData = workspaces.useRolesData();
   const appletRoles = chosenAppletData && rolesData?.data?.[chosenAppletData.appletId];
   const { appletPasswordRef, submitForm: submitPassword } = useSetupEnterAppletPassword();
+  const handleNoPermissionSubmit = useNoPermissionSubmit();
 
   const [appletName, setAppletName] = useState('');
   const [respondentName, setRespondentName] = useState('');
@@ -36,6 +37,7 @@ export const RespondentsRemoveAccessPopup = ({
   const { execute: handleAccessRemove, error } = useAsync(removeRespondentAccessApi);
 
   const isRemoved = !error;
+  const hasNoPermissionError = error?.response?.status === ApiResponseCodes.Forbidden;
   const isFirstStepWithAppletId = !!appletId && step === 1;
   const dataTestid = 'dashboard-respondents-remove-access-popup';
 
@@ -137,6 +139,8 @@ export const RespondentsRemoveAccessPopup = ({
     submitPassword,
     removeAccess,
     onClose,
+    hasNoPermissionError,
+    handleNoPermissionSubmit,
   });
 
   const onSecondBtnSubmit = () => {
@@ -173,6 +177,7 @@ export const RespondentsRemoveAccessPopup = ({
       secondBtnText={t(isFirstStepWithAppletId ? 'cancel' : 'back')}
       disabledSubmit={disabledSubmit}
       submitBtnColor={screens[step]?.submitBtnColor}
+      hasCloseIcon={screens[step]?.hasCloseIcon ?? true}
       data-testid={dataTestid}
     >
       <StyledModalWrapper>{screens[step].component}</StyledModalWrapper>

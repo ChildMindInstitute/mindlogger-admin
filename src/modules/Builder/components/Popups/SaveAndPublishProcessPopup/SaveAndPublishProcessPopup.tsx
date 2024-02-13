@@ -3,9 +3,10 @@ import { Box } from '@mui/material';
 
 import { Modal } from 'shared/components';
 import { StyledLinearProgress, StyledModalWrapper, theme, variables } from 'shared/styles';
-import { concatIf } from 'shared/utils';
+import { concatIf, falseReturnFunc } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { reportConfig } from 'modules/Builder/state';
+import { useNoPermissionSubmit } from 'shared/hooks';
 
 import {
   SaveAndPublishProcessPopupProps,
@@ -23,6 +24,7 @@ export const SaveAndPublishProcessPopup = ({
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { setReportConfigChanges } = reportConfig.actions;
+  const handleNoPermissionSubmit = useNoPermissionSubmit();
 
   const handleReportConfigSave = async () => {
     await dispatch(setReportConfigChanges({ saveChanges: true }));
@@ -65,6 +67,14 @@ export const SaveAndPublishProcessPopup = ({
       hasThirdBtn: true,
       thirdBtnText: t('cancel'),
       onThirdBtnSubmit: onClose,
+    };
+  }
+  if (step === SaveAndPublishSteps.NoPermission) {
+    modalProps = {
+      buttonText: t('goToDashboard'),
+      onSubmit: handleNoPermissionSubmit,
+      hasCloseIcon: false,
+      onClose: falseReturnFunc,
     };
   }
 

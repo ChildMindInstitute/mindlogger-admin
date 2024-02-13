@@ -3,9 +3,9 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { DatavizActivity, getSummaryActivitiesApi } from 'api';
+import { ApiResponseCodes, DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
-import { EmptyState, LinkedTabs, Svg } from 'shared/components';
+import { EmptyState, LinkedTabs, NoPermissionPopup, Svg } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { Roles } from 'shared/consts';
 import { Mixpanel } from 'shared/utils/mixpanel';
@@ -23,13 +23,22 @@ export const RespondentData = () => {
   const navigate = useNavigate();
   const { appletId, respondentId } = useParams();
   const dispatch = useAppDispatch();
+  const [noPermissionModalVisible, setNoPermissionModalVisible] = useState(false);
 
   const { ownerId } = workspaces.useData() || {};
   const respondentDataTabs = useRespondentDataTabs();
 
-  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, (result) => {
-    setSummaryActivities(result?.data?.result || []);
-  });
+  const { execute: getSummaryActivities } = useAsync(
+    getSummaryActivitiesApi,
+    (result) => {
+      setSummaryActivities(result?.data?.result || []);
+    },
+    (error) => {
+      if (error?.response?.status !== ApiResponseCodes.Forbidden) return;
+
+      setNoPermissionModalVisible(true);
+    },
+  );
 
   const [summaryActivities, setSummaryActivities] = useState<DatavizActivity[]>();
   const [selectedActivity, setSelectedActivity] = useState<DatavizActivity>();
@@ -79,22 +88,32 @@ export const RespondentData = () => {
     return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
 
   return (
-    <StyledBody sx={{ position: 'relative' }}>
-      <StyledDirectoryUpButton
-        variant="text"
-        onClick={navigateUp}
-        startIcon={<Svg id="directory-up" width="18" height="18" />}
-        data-testid="respondents-summary-back-to-applet"
-      >
-        {t('appletPage')}
-      </StyledDirectoryUpButton>
-      <RespondentDataContext.Provider
-        value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}
-      >
-        <FormProvider {...methods}>
-          <LinkedTabs tabs={respondentDataTabs} />
-        </FormProvider>
-      </RespondentDataContext.Provider>
-    </StyledBody>
+    <>
+      <StyledBody sx={{ position: 'relative' }}>
+        <StyledDirectoryUpButton
+          variant="text"
+          onClick={navigateUp}
+          startIcon={<Svg id="directory-up" width="18" height="18" />}
+          data-testid="respondents-summary-back-to-applet"
+        >
+          {t('appletPage')}
+        </StyledDirectoryUpButton>
+        <RespondentDataContext.Provider
+          value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}
+        >
+          <FormProvider {...methods}>
+            <LinkedTabs tabs={respondentDataTabs} />
+          </FormProvider>
+        </RespondentDataContext.Provider>
+      </StyledBody>
+      {noPermissionModalVisible && (
+        <NoPermissionPopup
+          open={noPermissionModalVisible}
+          title={t('viewData')}
+          onSubmitCallback={() => setNoPermissionModalVisible(false)}
+          data-testid="respondents-summary-no-permission-popup"
+        />
+      )}
+    </>
   );
 };

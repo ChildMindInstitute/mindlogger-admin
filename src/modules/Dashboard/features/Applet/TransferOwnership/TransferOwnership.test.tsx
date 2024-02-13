@@ -7,14 +7,16 @@ import { mockedAppletId, mockedEmail } from 'shared/mock';
 import { TransferOwnership } from './TransferOwnership';
 
 const mockedSetIsSubmitted = jest.fn();
-const mockedSetEmailTransfered = jest.fn();
+const mockedSetEmailTransferred = jest.fn();
+const mockedSetNoPermissionPopupVisible = jest.fn();
 const dataTestid = 'transfer-ownership';
 
 const transferOwnershipComponent = (
   <TransferOwnership
     appletId={mockedAppletId}
     setIsSubmitted={mockedSetIsSubmitted}
-    setEmailTransfered={mockedSetEmailTransfered}
+    setEmailTransferred={mockedSetEmailTransferred}
+    setNoPermissionPopupVisible={mockedSetNoPermissionPopupVisible}
     isSubmitted={false}
     data-testid={dataTestid}
   />
