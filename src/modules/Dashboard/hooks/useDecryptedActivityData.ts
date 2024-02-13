@@ -10,8 +10,10 @@ import {
 } from 'shared/utils';
 import { useEncryptionStorage } from 'shared/hooks';
 import {
+  ActivityItemAnswer,
   AnswerDTO,
   DecryptedActivityData,
+  DecryptedAnswerData,
   DecryptedDrawingAnswer,
   EncryptedAnswerSharedProps,
   EventDTO,
@@ -113,16 +115,21 @@ export const useDecryptedActivityData = (
     };
 
     const itemsObject = getObjectFromList(rest.items);
-    const answerDataDecrypted = answersDecrypted.map((answer, index) => {
-      const itemId = itemIds[index];
-      const item = itemsObject[itemId];
+    const answerDataDecrypted = answersDecrypted.reduce(
+      (acc: DecryptedActivityData<T>['decryptedAnswers'], answer, index) => {
+        const itemId = itemIds[index];
+        const item = itemsObject[itemId];
 
-      return {
-        activityItem: item,
-        answer: getAnswer(item, answer),
-        ...rest,
-      };
-    });
+        if (item.isHidden) return acc;
+
+        return acc.concat({
+          activityItem: item,
+          answer: getAnswer(item, answer),
+          ...rest,
+        } as DecryptedAnswerData<T, ActivityItemAnswer>);
+      },
+      [],
+    );
 
     return {
       decryptedAnswers: answerDataDecrypted as DecryptedActivityData<T>['decryptedAnswers'],
