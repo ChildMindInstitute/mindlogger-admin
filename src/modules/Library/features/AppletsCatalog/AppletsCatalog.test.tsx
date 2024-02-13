@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { screen } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as reduxHooks from 'redux/store/hooks';
@@ -103,8 +103,11 @@ jest.mock('modules/Library/hooks', () => ({
 }));
 
 describe('AppletsCatalog', () => {
-  beforeEach(() => {
+  afterAll(() => {
     jest.clearAllMocks();
+  });
+
+  beforeEach(() => {
     jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
     jest.spyOn(library.thunk, 'getPublishedApplets').mockReturnValue(() => {});
   });
