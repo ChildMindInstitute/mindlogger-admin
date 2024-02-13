@@ -19,9 +19,9 @@ import { AdditionalInformation } from '../AdditionalInformation';
 import { StyledDescription } from './ActivityCompletionScores.styles';
 import { ScoresProps } from './ActivityCompletionScores.types';
 import { ReportContext } from '../../Report.context';
+import { dataTestid } from './ActivityCompletionScores.const';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
-const dataTestid = 'activity-completion-scores'; //'completion-scores'; // TODO: const.ts
 
 export const ActivityCompletionScores = ({
   reviewDate,
