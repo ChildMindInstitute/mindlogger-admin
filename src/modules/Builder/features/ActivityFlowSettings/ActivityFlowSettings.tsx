@@ -27,6 +27,7 @@ export const ActivityFlowSettings = () => {
         setting: setting.param,
       }),
     );
+    setting.onClick?.();
   };
 
   return (
