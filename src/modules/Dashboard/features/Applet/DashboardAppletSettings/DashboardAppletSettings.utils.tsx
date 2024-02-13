@@ -12,7 +12,7 @@ import {
   // ShareAppletSetting,
 } from 'shared/features/AppletSettings';
 import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
-import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
+import { Item as ItemNavigation } from 'shared/components/NavigationMenu';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
