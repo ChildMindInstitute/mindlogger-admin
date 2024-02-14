@@ -42,8 +42,8 @@ export const CropPopup = ({
       crop,
       onReady: (blob) => {
         const imageFile = new File([blob], name, { type });
-        const body = getUploadFormData(imageFile);
-        onSave(body);
+        const fileData = getUploadFormData(imageFile);
+        onSave({ fileData, fileName: name });
       },
     });
   };

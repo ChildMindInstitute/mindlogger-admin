@@ -1,7 +1,7 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { postFileUploadApi } from 'api';
+import { postFileUploadApi, postFileUploadUrlApi } from 'api';
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
@@ -22,6 +22,7 @@ import {
   MAX_IMAGE_HEIGHT,
 } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
+import { ExecuteMediaUploadProps, useMediaUpload } from 'shared/hooks/useMediaUpload';
 
 import {
   StyledContainer,
@@ -60,10 +61,17 @@ export const Uploader = ({
   const isPrimaryUiType = uiType === UploaderUiType.Primary;
   const isTertiaryUiType = uiType === UploaderUiType.Tertiary;
 
-  const { execute: executeImgUpload, isLoading } = useAsync(
-    postFileUploadApi,
-    (response) => response?.data?.result && setValue(response?.data?.result.url),
-  );
+  // const { execute: executeImgUpload, isLoading } = useAsync(
+  //   postFileUploadApi,
+  //   (response) => response?.data?.result && setValue(response?.data?.result.url),
+  // );
+
+  // const { execute: getImageUploadUrl, isLoading } = useAsync(
+  //   postFileUploadUrlApi,
+  //   (response) => response?.data?.result && setValue(response?.data?.result.url),
+  // );
+
+  const { executeMediaUpload, isLoading } = useMediaUpload();
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -186,11 +194,14 @@ export const Uploader = ({
     clearInput();
   };
 
-  const handleSaveCroppedImage = async (file: FormData) => {
+  const handleSaveCroppedImage = async ({ fileData, fileName }: ExecuteMediaUploadProps) => {
     setCropPopupVisible(false);
-    await executeImgUpload(file);
-    setImage(null);
-    clearInput();
+    await executeMediaUpload({ fileData, fileName });
+    // console.log('file', data);
+    // console.log('name', name);
+    // await executeImgUpload(file);
+    // setImage(null);
+    // clearInput();
   };
 
   const imageField = getValue();
