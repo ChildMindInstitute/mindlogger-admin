@@ -1,7 +1,6 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { postFileUploadApi, postFileUploadUrlApi } from 'api';
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
@@ -21,8 +20,8 @@ import {
   MIN_IMAGE_HEIGHT,
   MAX_IMAGE_HEIGHT,
 } from 'shared/consts';
-import { useAsync } from 'shared/hooks/useAsync';
-import { ExecuteMediaUploadProps, useMediaUpload } from 'shared/hooks/useMediaUpload';
+import { ExecuteMediaUploadProps, useMediaUpload } from 'shared/hooks/useMediaUploads';
+import { getMediaName } from 'shared/utils/getMediaName';
 
 import {
   StyledContainer,
@@ -61,17 +60,9 @@ export const Uploader = ({
   const isPrimaryUiType = uiType === UploaderUiType.Primary;
   const isTertiaryUiType = uiType === UploaderUiType.Tertiary;
 
-  // const { execute: executeImgUpload, isLoading } = useAsync(
-  //   postFileUploadApi,
-  //   (response) => response?.data?.result && setValue(response?.data?.result.url),
-  // );
-
-  // const { execute: getImageUploadUrl, isLoading } = useAsync(
-  //   postFileUploadUrlApi,
-  //   (response) => response?.data?.result && setValue(response?.data?.result.url),
-  // );
-
-  const { executeMediaUpload, isLoading } = useMediaUpload();
+  const { executeMediaUpload, isLoading } = useMediaUpload({
+    callback: (mediaUrl) => setValue(mediaUrl),
+  });
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
     e.stopPropagation();
@@ -194,14 +185,11 @@ export const Uploader = ({
     clearInput();
   };
 
-  const handleSaveCroppedImage = async ({ fileData, fileName }: ExecuteMediaUploadProps) => {
+  const handleSaveCroppedImage = async ({ file, fileName }: ExecuteMediaUploadProps) => {
     setCropPopupVisible(false);
-    await executeMediaUpload({ fileData, fileName });
-    // console.log('file', data);
-    // console.log('name', name);
-    // await executeImgUpload(file);
-    // setImage(null);
-    // clearInput();
+    await executeMediaUpload({ file, fileName });
+    setImage(null);
+    clearInput();
   };
 
   const imageField = getValue();
@@ -213,8 +201,7 @@ export const Uploader = ({
   const hasDimensionsError = error === UploadFileError.Dimensions;
   const hasImageError = hasSizeError || hasFormatError || hasDimensionsError;
   const spinnerUiType = isPrimaryUiType ? SpinnerUiType.Primary : SpinnerUiType.Secondary;
-
-  const fileName = imageField?.split('/').at(-1) || image?.name || '';
+  const fileName = getMediaName(imageField) || image?.name || '';
 
   return (
     <>

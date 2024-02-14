@@ -1,6 +1,6 @@
 import { Crop } from 'react-image-crop';
 
-import { ExecuteMediaUploadProps } from 'shared/hooks/useMediaUpload';
+import { ExecuteMediaUploadProps } from 'shared/hooks/useMediaUploads';
 
 import { CropRatio } from './CropPopup.const';
 
@@ -8,7 +8,7 @@ export type CropPopupProps = {
   open: boolean;
   image: File;
   ratio?: CropRatio;
-  onSave: ({ fileData, fileName }: ExecuteMediaUploadProps) => void;
+  onSave: ({ file, fileName }: ExecuteMediaUploadProps) => void;
   onClose: () => void;
   'data-testid'?: string;
   flexibleCropRatio?: boolean;
