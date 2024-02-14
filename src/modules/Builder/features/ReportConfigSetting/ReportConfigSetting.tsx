@@ -92,7 +92,6 @@ export const ReportConfigSetting = ({
 
   const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-  const [successBannerVisible, setSuccessBannerVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
@@ -104,7 +103,7 @@ export const ReportConfigSetting = ({
   const { execute: postReportConfig } = useAsync(
     postReportConfigApi,
     () => {
-      setSuccessBannerVisible(true);
+      handleSuccess();
     },
     () => {
       setErrorPopupVisible(true);
@@ -113,7 +112,7 @@ export const ReportConfigSetting = ({
   const { execute: postActivityReportConfig } = useAsync(
     postActivityReportConfigApi,
     () => {
-      setSuccessBannerVisible(true);
+      handleSuccess();
     },
     () => {
       setErrorPopupVisible(true);
@@ -122,7 +121,7 @@ export const ReportConfigSetting = ({
   const { execute: postActivityFlowReportConfig } = useAsync(
     postActivityFlowReportConfigApi,
     () => {
-      setSuccessBannerVisible(true);
+      handleSuccess();
     },
     () => {
       setErrorPopupVisible(true);
@@ -332,11 +331,6 @@ export const ReportConfigSetting = ({
     handleSubmit(onSubmit)();
   };
 
-  const handleSuccessPopupClose = () => {
-    setSuccessBannerVisible(false);
-    confirmNavigation();
-  };
-
   const handleCancel = () => {
     cancelNavigation();
   };
@@ -381,20 +375,21 @@ export const ReportConfigSetting = ({
     isActivityFlow && setValue('reportIncludedActivityName', '');
   };
 
-  useEffect(() => {
-    if (!successBannerVisible || !onSubmitSuccess) return;
+  const handleSuccess = () => {
+    if (!onSubmitSuccess) return;
 
     onSubmitSuccess(getValues());
+
     dispatch(
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
         bannerProps: {
-          onClose: handleSuccessPopupClose,
+          onClose: confirmNavigation,
           'data-testid': 'builder-applet-settings-report-config-setting-success-banner',
         },
       }),
     );
-  }, [successBannerVisible]);
+  };
 
   useEffect(() => {
     reset(defaultValues);
