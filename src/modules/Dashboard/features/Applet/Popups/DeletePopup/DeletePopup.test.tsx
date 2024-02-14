@@ -39,7 +39,7 @@ describe('DeletePopup', () => {
     expect(screen.getByTestId(`${testId}-enter-password-popup-password`)).toBeInTheDocument();
   });
 
-  test('DeletePopup should open success modal', async () => {
+  test('DeletePopup should show success banner', async () => {
     mockAxios.delete.mockResolvedValueOnce(null);
     jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({

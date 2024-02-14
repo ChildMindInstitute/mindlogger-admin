@@ -34,7 +34,16 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
   const { execute, isLoading } = useAsync(
     deleteAppletApi,
     () => {
-      setActiveModal(Modals.Confirmation);
+      handleConfirmation();
+      dispatch(
+        banners.actions.addBanner({
+          key: 'SaveSuccessBanner',
+          bannerProps: {
+            children: t('appletDeletedSuccessfully'),
+            'data-testid': `${dataTestid}-success-banner`,
+          },
+        }),
+      );
       dispatch(alerts.actions.resetAlerts());
       dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
     },
@@ -55,21 +64,6 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     onCloseCallback?.();
     deletePopupClose();
   };
-
-  useEffect(() => {
-    if (activeModal === Modals.Confirmation) {
-      handleConfirmation();
-      dispatch(
-        banners.actions.addBanner({
-          key: 'SaveSuccessBanner',
-          bannerProps: {
-            children: t('appletDeletedSuccessfully'),
-            'data-testid': `${dataTestid}-success-banner`,
-          },
-        }),
-      );
-    }
-  });
 
   switch (activeModal) {
     case Modals.PasswordCheck:
@@ -104,9 +98,6 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           </>
         </Modal>
       );
-    case Modals.Confirmation:
-      // This is rendered as a banner via effect above.
-      return null;
     case Modals.DeleteError:
       return (
         <Modal
