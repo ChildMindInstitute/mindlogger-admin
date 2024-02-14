@@ -13,6 +13,7 @@ export type ItemProps = {
   onDuplicateItem: () => void;
   onChangeItemVisibility?: () => void;
   onRemoveItem: (id: string) => void;
+  'data-testid': string;
 };
 
 export type ActionsType = {

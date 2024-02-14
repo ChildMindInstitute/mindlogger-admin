@@ -402,16 +402,10 @@ export const formatActivityItemAnswers = (
       };
     }
     case ItemResponseType.Text: {
-      const value =
-        isValueDefined(currentAnswer.answer as DecryptedTextAnswer) &&
-        isAnswerTypeCorrect(currentAnswer.answer, ItemResponseType.Text)
-          ? currentAnswer.answer
-          : null;
-
       const answers = [
         {
           answer: {
-            value: value as DecryptedTextAnswer,
+            value: currentAnswer.answer as DecryptedTextAnswer,
             text: null,
           },
           date,

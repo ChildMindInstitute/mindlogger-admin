@@ -62,6 +62,7 @@ export const DraggableItem = ({
                 onDuplicateItem={onDuplicateItem}
                 onRemoveItem={onRemoveItem}
                 onChangeItemVisibility={onChangeItemVisibility}
+                data-testid={`${dataTestid}-cell`}
               />
             )}
             <InsertItem

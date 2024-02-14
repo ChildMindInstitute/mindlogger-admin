@@ -176,7 +176,7 @@ export const Applet = ({
               startIcon={<Svg width="18" height="18" id="cart-add" />}
               sx={{ ml: theme.spacing(1.2) }}
               onClick={handleAddToCart}
-              data-testid={`${dataTestid}-details-add-to-cart`}
+              data-testid={`${dataTestid}-add-to-cart`}
             >
               {t('addToCart')}
             </Button>

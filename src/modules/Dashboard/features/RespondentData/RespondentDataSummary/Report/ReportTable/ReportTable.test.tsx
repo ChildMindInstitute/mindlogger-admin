@@ -58,6 +58,36 @@ describe('ReportFilters', () => {
     });
   });
 
+  test("filter out only 'undefined' value from the table", async () => {
+    renderWithProviders(
+      <ReportTable
+        data-testid="response-option"
+        answers={[
+          {
+            answer: {
+              value: undefined,
+              text: null,
+            },
+            date: '2024-01-09T14:13:42.400000',
+          },
+          {
+            answer: {
+              value: null,
+              text: null,
+            },
+            date: '2024-01-09T14:13:42.400000',
+          },
+        ]}
+      />,
+    );
+
+    const container = await screen.findByTestId('response-option-table');
+    const tableBody = container.getElementsByTagName('tbody');
+    expect(tableBody).toHaveLength(1);
+    const tableList = tableBody[0].getElementsByTagName('tr');
+    expect(tableList).toHaveLength(1);
+  });
+
   test('sort in the table', async () => {
     renderWithProviders(<ReportTable data-testid="response-option" answers={answers} />);
 

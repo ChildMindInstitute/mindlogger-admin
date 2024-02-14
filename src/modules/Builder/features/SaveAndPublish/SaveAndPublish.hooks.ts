@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ValidationError } from 'yup';
 import { Update } from 'history';
@@ -34,6 +34,7 @@ import {
   FlowReportFieldsPrepareType,
   getEntityReportFields,
 } from 'modules/Builder/utils/getEntityReportFields';
+import { banners } from 'shared/state/Banners';
 
 import {
   getActivityItems,
@@ -253,11 +254,7 @@ export const useUpdatedAppletNavigate = () => {
   };
 };
 
-export const useSaveAndPublishSetup = (
-  hasPrompt: boolean,
-  setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
-  setAppletWithoutChangesPopupVisible?: (val: boolean) => void,
-) => {
+export const useSaveAndPublishSetup = () => {
   const {
     trigger,
     formState: { dirtyFields, isDirty },
@@ -284,7 +281,7 @@ export const useSaveAndPublishSetup = (
     promptVisible,
     setPromptVisible,
     isLogoutInProgress,
-  } = usePrompt(hasPrompt);
+  } = usePrompt(isDirty);
   const shouldNavigateRef = useRef(false);
   const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
@@ -402,7 +399,7 @@ export const useSaveAndPublishSetup = (
     }
 
     if (!isDirty) {
-      setAppletWithoutChangesPopupVisible?.(true);
+      dispatch(banners.actions.addBanner({ key: 'AppletWithoutChangesBanner' }));
 
       return;
     }
@@ -451,7 +448,6 @@ export const useSaveAndPublishSetup = (
     if (updateApplet.fulfilled.match(result)) {
       Mixpanel.track('Applet edit successful');
 
-      setIsFromLibrary?.(false);
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
@@ -467,7 +463,6 @@ export const useSaveAndPublishSetup = (
       Mixpanel.track('Applet Created Successfully');
 
       const createdAppletId = result.payload.data.result?.id;
-      setIsFromLibrary?.(false);
 
       if (encryptionData && password && createdAppletId) {
         await setAppletPrivateKey({

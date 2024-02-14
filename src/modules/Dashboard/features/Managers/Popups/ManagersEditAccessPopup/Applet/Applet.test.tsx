@@ -1,4 +1,4 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { Roles } from 'shared/consts';
 import { mockedManager, mockedApplet } from 'shared/mock';
@@ -14,11 +14,12 @@ const mockApplet = {
 const addRoleMock = jest.fn();
 const removeRoleMock = jest.fn();
 const handleAddSelectedRespondentsMock = jest.fn();
+const defaultRoles = mockedManager.applets[0].roles;
 
-const renderComponent = () =>
+const renderComponent = (roles = defaultRoles) =>
   renderWithProviders(
     <Applet
-      applet={mockApplet}
+      applet={{ ...mockApplet, roles }}
       addRole={addRoleMock}
       removeRole={removeRoleMock}
       handleAddSelectedRespondents={handleAddSelectedRespondentsMock}
@@ -52,5 +53,23 @@ describe('Applet', () => {
     const removeButton = screen.getByTestId('chip-close-button');
     fireEvent.click(removeButton);
     expect(removeRoleMock).toHaveBeenCalledWith(mockApplet.id, Roles.Reviewer);
+  });
+
+  test('should render disabled Add Role button with tooltip when manager role', async () => {
+    renderComponent([
+      {
+        role: Roles.Manager,
+        accessId: 'accessId',
+        reviewerRespondents: [],
+      },
+    ]);
+    const addButton = screen.getByText('Add Role');
+    expect(addButton).toBeDisabled();
+    fireEvent.mouseOver(addButton);
+    await waitFor(() => {
+      expect(
+        screen.queryByText('The user already has a Manager role with full access'),
+      ).toBeInTheDocument();
+    });
   });
 });
