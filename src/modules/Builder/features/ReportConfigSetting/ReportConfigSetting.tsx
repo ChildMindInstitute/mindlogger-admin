@@ -100,29 +100,35 @@ export const ReportConfigSetting = ({
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
   const { accountId = '' } = encryptionInfoFromServer ?? {};
 
-  const { execute: postReportConfig } = useAsync(
-    postReportConfigApi,
-    () => {
-      handleSuccess();
-    },
-    () => {
-      setErrorPopupVisible(true);
-    },
-  );
+  const handleSuccess = () => {
+    if (!onSubmitSuccess) return;
+
+    onSubmitSuccess(getValues());
+
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: {
+          onClose: confirmNavigation,
+          'data-testid': 'builder-applet-settings-report-config-setting-success-banner',
+        },
+      }),
+    );
+  };
+
+  const { execute: postReportConfig } = useAsync(postReportConfigApi, handleSuccess, () => {
+    setErrorPopupVisible(true);
+  });
   const { execute: postActivityReportConfig } = useAsync(
     postActivityReportConfigApi,
-    () => {
-      handleSuccess();
-    },
+    handleSuccess,
     () => {
       setErrorPopupVisible(true);
     },
   );
   const { execute: postActivityFlowReportConfig } = useAsync(
     postActivityFlowReportConfigApi,
-    () => {
-      handleSuccess();
-    },
+    handleSuccess,
     () => {
       setErrorPopupVisible(true);
     },
@@ -373,22 +379,6 @@ export const ReportConfigSetting = ({
   const handleActivityChange = () => {
     setValue('reportIncludedItemName', '');
     isActivityFlow && setValue('reportIncludedActivityName', '');
-  };
-
-  const handleSuccess = () => {
-    if (!onSubmitSuccess) return;
-
-    onSubmitSuccess(getValues());
-
-    dispatch(
-      banners.actions.addBanner({
-        key: 'SaveSuccessBanner',
-        bannerProps: {
-          onClose: confirmNavigation,
-          'data-testid': 'builder-applet-settings-report-config-setting-success-banner',
-        },
-      }),
-    );
   };
 
   useEffect(() => {
