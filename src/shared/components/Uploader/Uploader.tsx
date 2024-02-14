@@ -1,4 +1,4 @@
-import { ChangeEvent, DragEvent, MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { postFileUploadApi } from 'api';
@@ -59,10 +59,8 @@ export const Uploader = ({
   const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   const [error, setError] = useState<UploadFileError | null>(null);
   const [isRemovePopupOpen, setRemovePopupOpen] = useState(false);
-  const [isPrimaryUiType, isTertiaryUiType] = useMemo(
-    () => [uiType === UploaderUiType.Primary, uiType === UploaderUiType.Tertiary],
-    [uiType],
-  );
+  const isPrimaryUiType = uiType === UploaderUiType.Primary;
+  const isTertiaryUiType = uiType === UploaderUiType.Tertiary;
 
   const { execute: executeImgUpload, isLoading } = useAsync(
     postFileUploadApi,
@@ -107,8 +105,42 @@ export const Uploader = ({
     const notAllowableSize = imageFile.size > MAX_FILE_SIZE_25MB;
     const notAllowableType =
       !imageFile.type.includes('image') || !VALID_IMAGE_TYPES.includes(`.${fileExtension}`);
-    notAllowableSize && setError(UploadFileError.Size);
-    notAllowableType && setError(UploadFileError.Format);
+
+    if (notAllowableSize) {
+      if (isPrimaryUiType) {
+        setError(UploadFileError.Size);
+      } else {
+        dispatch(
+          banners.actions.addBanner({
+            key: 'IncorrectFileBanner',
+            bannerProps: {
+              errorType: UploadFileError.Size,
+              fileType: MediaType.Image,
+              'data-testid': concatIf(dataTestid, '-incorrect-file-size-banner'),
+              onClose: () => setError(null),
+            },
+          }),
+        );
+      }
+    }
+
+    if (notAllowableType) {
+      if (isPrimaryUiType) {
+        setError(UploadFileError.Format);
+      } else {
+        dispatch(
+          banners.actions.addBanner({
+            key: 'IncorrectFileBanner',
+            bannerProps: {
+              errorType: UploadFileError.Format,
+              fileType: MediaType.Image,
+              'data-testid': concatIf(dataTestid, '-incorrect-file-format-banner'),
+              onClose: () => setError(null),
+            },
+          }),
+        );
+      }
+    }
 
     if (notAllowableSize || notAllowableType) return;
 
@@ -201,50 +233,13 @@ export const Uploader = ({
 
   const placeholderImgId = isPrimaryUiType ? 'img-filled' : 'img-outlined';
   const placeholderImgSize = isPrimaryUiType ? 32 : 24;
-  const [hasSizeError, hasFormatError, hasDimensionsError] = useMemo(
-    () => [
-      error === UploadFileError.Size,
-      error === UploadFileError.Format,
-      error === UploadFileError.Dimensions,
-    ],
-    [error],
-  );
+  const hasSizeError = error === UploadFileError.Size;
+  const hasFormatError = error === UploadFileError.Format;
+  const hasDimensionsError = error === UploadFileError.Dimensions;
   const hasImageError = hasSizeError || hasFormatError || hasDimensionsError;
   const spinnerUiType = isPrimaryUiType ? SpinnerUiType.Primary : SpinnerUiType.Secondary;
 
   const fileName = imageField?.split('/').at(-1) || image?.name || '';
-
-  useEffect(() => {
-    if (isPrimaryUiType) return;
-
-    if (hasSizeError) {
-      dispatch(
-        banners.actions.addBanner({
-          key: 'IncorrectFileBanner',
-          bannerProps: {
-            errorType: UploadFileError.Size,
-            fileType: MediaType.Image,
-            'data-testid': concatIf(dataTestid, '-incorrect-file-size-banner'),
-            onClose: () => setError(null),
-          },
-        }),
-      );
-    }
-
-    if (hasFormatError) {
-      dispatch(
-        banners.actions.addBanner({
-          key: 'IncorrectFileBanner',
-          bannerProps: {
-            errorType: UploadFileError.Format,
-            fileType: MediaType.Image,
-            'data-testid': concatIf(dataTestid, '-incorrect-file-format-banner'),
-            onClose: () => setError(null),
-          },
-        }),
-      );
-    }
-  }, [hasSizeError, hasFormatError, isPrimaryUiType, dispatch]);
 
   return (
     <>
