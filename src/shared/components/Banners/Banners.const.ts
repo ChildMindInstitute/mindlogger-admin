@@ -6,6 +6,7 @@ import { FileSizeExceededBanner } from 'shared/components/Banners/FileSizeExceed
 import { IncorrectFileBanner } from 'shared/components/Banners/IncorrectFileBanner';
 import { SaveSuccessBanner } from 'shared/components/Banners/SaveSuccessBanner';
 import { VersionWarningBanner } from 'shared/components/Banners/VersionWarningBanner';
+import { TransferOwnershipSuccessBanner } from 'shared/components/Banners/TransferOwnershipSuccessBanner';
 
 import { BannerProps } from './Banner';
 
@@ -15,4 +16,5 @@ export const BannerComponents: Record<keyof typeof BannerType, ComponentType<Ban
   IncorrectFileBanner,
   SaveSuccessBanner,
   VersionWarningBanner,
+  TransferOwnershipSuccessBanner,
 };

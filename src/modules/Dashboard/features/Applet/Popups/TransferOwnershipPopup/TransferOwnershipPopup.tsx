@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
 import { popups, applet, banners } from 'redux/modules';
@@ -16,7 +16,6 @@ export const TransferOwnershipPopup = () => {
   const currentApplet = appletData || result;
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [emailTransferred, setEmailTransferred] = useState('');
 
   const transferOwnershipPopupClose = () => {
     dispatch(
@@ -32,34 +31,21 @@ export const TransferOwnershipPopup = () => {
     setIsSubmitted(true);
   };
 
-  useEffect(() => {
-    if (!emailTransferred) return;
-
+  const handleEmailTransferred = (email: string) => {
     transferOwnershipPopupClose();
 
     dispatch(
       banners.actions.addBanner({
-        key: 'SaveSuccessBanner',
+        key: 'TransferOwnershipSuccessBanner',
         bannerProps: {
-          children: (
-            <Trans i18nKey="requestTransferOwnershipSuccess">
-              <>
-                Your request has been successfully sent to
-                <strong>
-                  <>{{ email: emailTransferred }}</>
-                </strong>
-                . Please wait for receiver to accept your request.
-              </>
-            </Trans>
-          ),
-          duration: 7000,
+          email,
           'data-testid': 'dashboard-applets-transfer-success-banner',
         },
       }),
     );
 
     Mixpanel.track('Invitation sent successfully');
-  }, [emailTransferred, emailTransferred]);
+  };
 
   return (
     <>
@@ -78,7 +64,7 @@ export const TransferOwnershipPopup = () => {
             appletName={currentApplet?.displayName}
             isSubmitted={isSubmitted}
             setIsSubmitted={setIsSubmitted}
-            setEmailTransferred={setEmailTransferred}
+            setEmailTransferred={handleEmailTransferred}
           />
         </StyledModalWrapper>
       </Modal>

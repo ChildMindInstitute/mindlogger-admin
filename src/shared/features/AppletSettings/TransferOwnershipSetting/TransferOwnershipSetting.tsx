@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { applet, banners } from 'shared/state';
@@ -17,44 +17,25 @@ export const TransferOwnershipSetting = () => {
   const { result: appletData } = applet.useAppletData() ?? {};
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [emailTransferred, setEmailTransferred] = useState('');
   const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
 
   const dataTestid = 'applet-settings-transfer-ownership';
 
-  const handleSuccess = () => {
-    setEmailTransferred('');
-    transferOwnershipRef.current?.resetEmail();
-  };
-
-  useEffect(() => {
-    if (!emailTransferred) return;
-
+  const handleEmailTransferred = (email: string) => {
     dispatch(
       banners.actions.addBanner({
-        key: 'SaveSuccessBanner',
+        key: 'TransferOwnershipSuccessBanner',
         bannerProps: {
-          children: (
-            <Trans i18nKey="requestTransferOwnershipSuccess">
-              <>
-                Your request has been successfully sent to
-                <strong>
-                  <>{{ email: emailTransferred }}</>
-                </strong>
-                . Please wait for receiver to accept your request.
-              </>
-            </Trans>
-          ),
-          duration: 7000,
-          'data-testid': `${dataTestid}-success-popup`,
+          email,
+          'data-testid': `${dataTestid}-success-banner`,
         },
       }),
     );
 
-    handleSuccess();
+    transferOwnershipRef.current?.resetEmail();
 
     Mixpanel.track('Invitation sent successfully');
-  }, [emailTransferred]);
+  };
 
   return (
     <>
@@ -65,7 +46,7 @@ export const TransferOwnershipSetting = () => {
           appletName={appletData?.displayName}
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
-          setEmailTransferred={setEmailTransferred}
+          setEmailTransferred={handleEmailTransferred}
           data-testid={`${dataTestid}-form`}
         />
       </StyledTransferOwnershipForm>

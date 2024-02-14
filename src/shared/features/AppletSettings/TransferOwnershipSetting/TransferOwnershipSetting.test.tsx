@@ -65,7 +65,7 @@ describe('TransferOwnershipSetting', () => {
 
       userEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
 
-      expectBanner(store, `${dataTestid}-success-popup`);
+      expectBanner(store, `${dataTestid}-success-banner`);
     });
   });
 });

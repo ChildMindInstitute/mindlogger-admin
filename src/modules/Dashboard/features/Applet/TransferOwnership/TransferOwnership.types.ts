@@ -5,7 +5,7 @@ export type TransferOwnershipProps = {
   appletName?: string;
   isSubmitted: boolean;
   setIsSubmitted: Dispatch<SetStateAction<boolean>>;
-  setEmailTransferred: Dispatch<SetStateAction<string>>;
+  setEmailTransferred: (email: string) => void;
   'data-testid'?: string;
 };
 

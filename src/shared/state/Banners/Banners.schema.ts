@@ -5,6 +5,7 @@ export enum BannerType {
   FileSizeExceededBanner,
   IncorrectFileBanner,
   SaveSuccessBanner,
+  TransferOwnershipSuccessBanner,
   VersionWarningBanner,
 }
 
