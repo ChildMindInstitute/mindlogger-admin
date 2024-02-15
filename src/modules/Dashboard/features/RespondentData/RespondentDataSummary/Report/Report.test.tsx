@@ -7,7 +7,7 @@ import download from 'downloadjs';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
-import { mockedApplet, mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedApplet, mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { initialStateData } from 'redux/modules';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
 
@@ -37,7 +37,7 @@ const preloadedState = {
   },
 };
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;
+const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
 const routePath = page.appletRespondentDataSummary;
 
 const mockedActivity = {
@@ -237,7 +237,7 @@ describe('Report component', () => {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-17T00:00:00',
             identifiers: undefined,
-            targetSubjectId: mockedRespondentId,
+            targetSubjectId: mockedSubjectId1,
             toDatetime: '2024-01-23T23:59:00',
             versions: '2.0.0,2.0.1',
           },
@@ -257,7 +257,7 @@ describe('Report component', () => {
     await waitFor(() => {
       expect(mockAxios.post).toHaveBeenNthCalledWith(
         1,
-        `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers/${mockedRespondentId}/latest_report`,
+        `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/subjects/${mockedSubjectId1}/latest_report`,
         {},
         { responseType: 'arraybuffer', signal: undefined },
       );
@@ -296,7 +296,7 @@ describe('Report component', () => {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-17T00:00:00',
             identifiers: undefined,
-            targetSubjectId: mockedRespondentId,
+            targetSubjectId: mockedSubjectId1,
             toDatetime: '2024-01-23T23:59:00',
             versions: '2.0.0,2.0.1',
           },

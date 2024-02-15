@@ -7,11 +7,11 @@ import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
 import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
-import { mockedAppletId, mockedIdentifiers, mockedRespondentId } from 'shared/mock';
+import { mockedAppletId, mockedIdentifiers, mockedSubjectId1 } from 'shared/mock';
 
 import { RespondentDataSummary } from './RespondentDataSummary';
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;
+const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
 const routePath = page.appletRespondentDataSummary;
 
 const mockedSelectedActivity = {
@@ -140,7 +140,7 @@ describe('RespondentDataSummary component', () => {
         `/answers/applet/${mockedAppletId}/summary/activities/${mockedSelectedActivity.id}/identifiers`,
         {
           params: {
-            targetSubjectId: mockedRespondentId,
+            targetSubjectId: mockedSubjectId1,
           },
           signal: undefined,
         },
@@ -182,7 +182,7 @@ describe('RespondentDataSummary component', () => {
         `/answers/applet/${mockedAppletId}/summary/activities/${mockedSelectedActivity.id}/identifiers`,
         {
           params: {
-            targetSubjectId: mockedRespondentId,
+            targetSubjectId: mockedSubjectId1,
           },
           signal: undefined,
         },

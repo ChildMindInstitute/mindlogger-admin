@@ -411,11 +411,11 @@ export type Version = {
   createdAt: string;
 };
 
-export type LatestReport = TargetSubjectId & {
+export type LatestReport = SubjectId & {
   appletId: string;
   activityId: string;
 };
 
-export type Identifiers = LatestReport;
+export type Identifiers = Omit<LatestReport, 'subjectId'> & TargetSubjectId;
 
 export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;

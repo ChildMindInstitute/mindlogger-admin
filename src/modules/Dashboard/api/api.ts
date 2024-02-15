@@ -587,11 +587,11 @@ export const getVersionsApi = (
   );
 
 export const getLatestReportApi = (
-  { appletId, activityId, targetSubjectId }: LatestReport,
+  { appletId, activityId, subjectId }: LatestReport,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/answers/applet/${appletId}/activities/${activityId}/answers/${targetSubjectId}/latest_report`,
+    `/answers/applet/${appletId}/activities/${activityId}/subjects/${subjectId}/latest_report`,
     {},
     {
       responseType: 'arraybuffer',
