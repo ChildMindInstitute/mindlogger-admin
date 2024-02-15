@@ -93,7 +93,6 @@ export const useSettingsSetup = ({
   removeOptions,
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
-  setOptionsOpen,
 }: SettingsSetupProps) => {
   const { setValue, getValues, watch, clearErrors } = useFormContext();
 
@@ -118,9 +117,8 @@ export const useSettingsSetup = ({
           case ItemResponseType.SingleSelection:
           case ItemResponseType.MultipleSelection:
             removeOptions?.();
-            setOptionsOpen?.([]);
             setConfig(isSingleSelect ? defaultSingleSelectionConfig : defaultMultiSelectionConfig);
-            handleAddOption?.(false);
+            handleAddOption?.({ isAppendedOption: false });
             break;
           case ItemResponseType.Text:
             setConfig(defaultTextConfig);
