@@ -28,15 +28,18 @@ export const StylesTitleWrapper = styled(StyledFlexTopCenter, shouldForwardProp)
     open,
     uiType,
     isError,
+    headerClickable,
   }: {
     open?: boolean;
     uiType?: ToggleContainerUiType;
     isError?: boolean;
+    headerClickable?: boolean;
   }) => `
     min-height: ${isError ? 'auto' : '4.8rem'};
     overflow: ${isError ? 'visible' : 'hidden'};
-		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0}
+		margin-bottom: ${open && uiType === ToggleContainerUiType.PerformanceTask ? theme.spacing(1.5) : 0};
 		word-break: break-all;
+		cursor: ${headerClickable ? 'pointer' : 'default'};
 	`};
 
   svg {

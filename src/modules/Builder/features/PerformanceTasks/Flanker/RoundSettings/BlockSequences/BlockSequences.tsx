@@ -48,6 +48,7 @@ export const BlockSequences = memo(
         Content={BlockSequencesContent}
         contentProps={{ isPracticeRound, hasBlockSequencesErrors, 'data-testid': dataTestid }}
         tooltip={t('flankerRound.sequencesTooltip')}
+        headerToggling
         data-testid={dataTestid}
       />
     );

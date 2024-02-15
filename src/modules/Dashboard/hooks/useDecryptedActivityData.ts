@@ -114,6 +114,28 @@ export const useDecryptedActivityData = (
       return answer;
     };
 
+    /*
+    Mapping should go through all list of items since the decrypted items MUST have the same length,
+    that means we do identify the decrypted answer with the according item and respective item type and item config.
+
+    So if a hidden item have no an answer on Mobile App or Web App
+    then Mobile/Web app should prepare `null` value for such reponses to support
+    the LEGACY/migrated responses from all respondents.
+
+    For ex.,
+    if activity items = [
+      { ...text item data },
+      { ...single selection item data },
+      { ...multi selection item data }
+    ],
+    and fist item was HIDDEN and third item was SKIPPED on Mobile/Web platform during the activity,
+    then Admin Panel expect to receive decrypted answers in this form:
+    responses = [
+      null, // index = 0, answer for text item = null;
+      { "value": 0 }, // index = 1, answer for single selection item = { "value": 0 };
+      null // index = 2, answer for multi selection item = null;
+    ]
+    */
     const answerDataDecrypted = rest.items.map((activityItem, index) => ({
       activityItem,
       answer: getAnswer(activityItem, index),

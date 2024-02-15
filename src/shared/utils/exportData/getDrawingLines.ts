@@ -2,8 +2,8 @@ import { DecryptedDrawingValue, ExportAnswer } from 'shared/types';
 
 // Ex. appVersion = '1.0.4' ... '1.0.7'; appId: "mindlogger-mobile"
 export const checkIfShouldScaleCoords = (client: ExportAnswer['client']) => {
-  const appVersion = client?.app_version ?? '';
-  const appId = client?.app_id ?? '';
+  const appVersion = client?.appVersion ?? '';
+  const appId = client?.appId ?? '';
   if (!appVersion || appId !== 'mindlogger-mobile') return false;
 
   const [major, minor, patch] = appVersion.split('.');

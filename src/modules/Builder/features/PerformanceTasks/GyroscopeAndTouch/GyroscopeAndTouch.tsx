@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { StyledHeadlineLarge, StyledTitleLarge, theme } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 
-import { PerformanceTaskHeader } from '../PerformanceTaskHeader';
 import { NameDescription } from '../NameDescription';
 import { Instruction } from '../Instruction';
 import { GeneralSettings } from './GeneralSettings';
@@ -17,8 +17,7 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
   const dataTestid = 'builder-activity-gyroscope-and-touch';
 
   return (
-    <>
-      <PerformanceTaskHeader />
+    <Box sx={{ overflowY: 'auto' }}>
       <StyledPerformanceTaskBody sx={{ p: theme.spacing(2.4, 6.4) }}>
         <StyledHeadlineLarge sx={{ mb: theme.spacing(3) }}>{t(type || '')}</StyledHeadlineLarge>
         <NameDescription />
@@ -46,6 +45,6 @@ export const GyroscopeAndTouch = ({ type }: GyroscopeAndTouchProps) => {
           data-testid={`${dataTestid}-test-round-instruction`}
         />
       </StyledPerformanceTaskBody>
-    </>
+    </Box>
   );
 };
