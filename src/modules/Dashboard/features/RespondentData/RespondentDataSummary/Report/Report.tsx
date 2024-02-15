@@ -104,7 +104,7 @@ export const Report = ({ activity, identifiers = [], versions = [] }: ReportProp
     getLatestReport({
       appletId,
       activityId: activity.id,
-      targetSubjectId: respondentId,
+      subjectId: respondentId,
     });
   };
 

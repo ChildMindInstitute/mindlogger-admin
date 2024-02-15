@@ -59,7 +59,7 @@ export const RespondentDataSummary = () => {
         const identifiers = await getIdentifiersApi({
           appletId,
           activityId: selectedActivity.id,
-          targetSubjectId: respondentId,
+          subjectId: respondentId,
         });
         if (!getDecryptedIdentifiers) return;
         const decryptedIdentifiers = await getDecryptedIdentifiers(identifiers.data.result);

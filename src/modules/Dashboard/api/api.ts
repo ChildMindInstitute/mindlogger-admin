@@ -562,14 +562,14 @@ export const getSummaryActivitiesApi = (
   });
 
 export const getIdentifiersApi = (
-  { appletId, activityId, targetSubjectId }: Identifiers,
+  { appletId, activityId, subjectId }: Identifiers,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Identifier>>(
     `/answers/applet/${appletId}/summary/activities/${activityId}/identifiers`,
     {
       params: {
-        targetSubjectId,
+        subjectId,
       },
       signal,
     },
@@ -587,11 +587,11 @@ export const getVersionsApi = (
   );
 
 export const getLatestReportApi = (
-  { appletId, activityId, targetSubjectId }: LatestReport,
+  { appletId, activityId, subjectId }: LatestReport,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/answers/applet/${appletId}/activities/${activityId}/answers/${targetSubjectId}/latest_report`,
+    `/answers/applet/${appletId}/activities/${activityId}/subjects/${subjectId}/latest_report`,
     {},
     {
       responseType: 'arraybuffer',

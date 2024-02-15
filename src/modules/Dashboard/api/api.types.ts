@@ -411,7 +411,7 @@ export type Version = {
   createdAt: string;
 };
 
-export type LatestReport = TargetSubjectId & {
+export type LatestReport = SubjectId & {
   appletId: string;
   activityId: string;
 };
