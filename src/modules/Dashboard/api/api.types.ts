@@ -416,6 +416,6 @@ export type LatestReport = SubjectId & {
   activityId: string;
 };
 
-export type Identifiers = LatestReport;
+export type Identifiers = Omit<LatestReport, 'subjectId'> & TargetSubjectId;
 
 export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;

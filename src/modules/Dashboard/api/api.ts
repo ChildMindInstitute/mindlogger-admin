@@ -562,14 +562,14 @@ export const getSummaryActivitiesApi = (
   });
 
 export const getIdentifiersApi = (
-  { appletId, activityId, subjectId }: Identifiers,
+  { appletId, activityId, targetSubjectId }: Identifiers,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Identifier>>(
     `/answers/applet/${appletId}/summary/activities/${activityId}/identifiers`,
     {
       params: {
-        subjectId,
+        targetSubjectId,
       },
       signal,
     },

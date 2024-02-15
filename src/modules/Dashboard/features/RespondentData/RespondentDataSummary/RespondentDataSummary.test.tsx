@@ -140,7 +140,7 @@ describe('RespondentDataSummary component', () => {
         `/answers/applet/${mockedAppletId}/summary/activities/${mockedSelectedActivity.id}/identifiers`,
         {
           params: {
-            subjectId: mockedSubjectId1,
+            targetSubjectId: mockedSubjectId1,
           },
           signal: undefined,
         },
@@ -182,7 +182,7 @@ describe('RespondentDataSummary component', () => {
         `/answers/applet/${mockedAppletId}/summary/activities/${mockedSelectedActivity.id}/identifiers`,
         {
           params: {
-            subjectId: mockedSubjectId1,
+            targetSubjectId: mockedSubjectId1,
           },
           signal: undefined,
         },
