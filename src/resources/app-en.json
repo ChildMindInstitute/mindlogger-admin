@@ -1097,7 +1097,7 @@
   "subscaleScoringAverage": "Average",
   "subscaleScoringSum": "Sum",
   "subscript": "Subscript",
-  "successDuplication": "Your applet <1>{{appletName}}</1> was successfully created!",
+  "successDuplication": "Your applet {{appletName}} was successfully created!",
   "successRemoveConditionalLogic": "Conditional logic has been removed successfully.",
   "summary": "Summary",
   "summaryRowDescription": "of the “if” rules above are true, show",

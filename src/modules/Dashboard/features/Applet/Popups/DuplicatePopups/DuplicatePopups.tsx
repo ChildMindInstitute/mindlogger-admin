@@ -88,7 +88,8 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         encryption: encryptionDataRef.current.encryption!,
         appletId: currentAppletId,
       });
-      setPasswordModalVisible(false);
+
+      handleDuplicateSuccess();
     },
     () => {
       setPasswordModalVisible(false);
@@ -124,20 +125,25 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   };
 
   const handleDuplicateSuccess = () => {
+    setPasswordModalVisible(false);
+
     onCloseCallback?.();
     duplicatePopupsClose();
+
     Mixpanel.track('Applet Created Successfully');
 
     dispatch(
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
         bannerProps: {
-          children: `Your applet ${currentAppletName} was successfully created!`,
+          children: t('successDuplication', {
+            appletName: currentAppletName,
+          }),
           'data-testid': 'dashboard-applets-duplicate-popup-success-popup',
         },
       }),
     );
-  }
+  };
 
   const submitCallback = async (ref?: AppletPasswordRefType) => {
     const password = ref?.current?.password ?? '';
@@ -152,7 +158,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         encryption,
         displayName: getValues('name'),
       },
-    }).then(handleDuplicateSuccess);
+    });
   };
 
   const retryHandler = () => {
