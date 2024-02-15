@@ -97,7 +97,7 @@ export const EditRespondentPopup = ({
       disabledSubmit={isLoading}
       title={t('editRespondent')}
       buttonText={t('save')}
-      hasSecondBtn={true}
+      hasSecondBtn
       onSecondBtnSubmit={onCloseHandler}
       secondBtnText={t('cancel')}
       data-testid={dataTestid}

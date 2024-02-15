@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { renderWithProviders } from 'shared/utils';
 
 import { VersionWarningBanner } from './VersionWarningBanner';
-import { BANNER_LINK } from './VersionWarningBanner.const';
+import { VERSION_WARNING_BANNER_LINK } from './VersionWarningBanner.const';
 
 const mockOnClose = jest.fn();
 
@@ -27,7 +27,7 @@ describe('VersionWarningBanner', () => {
     render(<VersionWarningBanner />);
 
     const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', BANNER_LINK);
+    expect(link).toHaveAttribute('href', VERSION_WARNING_BANNER_LINK);
     expect(link).toHaveAttribute('target', '_blank');
   });
 });
