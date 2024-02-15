@@ -1,75 +1,86 @@
-import { renderHook, waitFor } from '@testing-library/react';
+/* eslint-disable quotes */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { waitFor, screen } from '@testing-library/react';
+import { PreloadedState } from '@reduxjs/toolkit';
 
 import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { RootState } from 'redux/store';
+import { renderHookWithProviders } from 'shared/utils';
 
 import { useTransferOwnership } from './useTransferOwnership';
 
+const emptyState: PreloadedState<RootState> = {
+  banners: {
+    data: {
+      banners: [],
+    },
+  },
+};
+const email = 'test@email.com';
+const bannerTestId = 'testId';
+const populatedState: PreloadedState<RootState> = {
+  banners: {
+    data: {
+      banners: [
+        {
+          key: 'TransferOwnershipSuccessBanner',
+          bannerProps: {
+            email,
+            'data-testid': bannerTestId,
+          },
+        },
+      ],
+    },
+  },
+};
+
 describe('useTransferOwnership', () => {
   test('should return initial values', () => {
-    const { result } = renderHook(useTransferOwnership);
+    const { result } = renderHookWithProviders(useTransferOwnership);
 
     expect(result.current).toStrictEqual({
-      transferOwnershipSuccessVisible: false,
-      setTransferOwnershipSuccessVisible: expect.any(Function),
       isSubmitted: false,
       setIsSubmitted: expect.any(Function),
-      emailTransfered: '',
-      setEmailTransfered: expect.any(Function),
       handleSubmit: expect.any(Function),
+      handleSendInvitation: expect.any(Function),
     });
   });
 
   test('should change isSubmitted to true if handleSubmit triggered', async () => {
-    const { result } = renderHook(useTransferOwnership);
+    const { result } = renderHookWithProviders(useTransferOwnership);
 
-    result.current.handleSubmit();
+    result.current?.handleSubmit?.();
 
     await waitFor(() =>
       expect(result.current).toStrictEqual({
-        transferOwnershipSuccessVisible: false,
-        setTransferOwnershipSuccessVisible: expect.any(Function),
         isSubmitted: true,
         setIsSubmitted: expect.any(Function),
-        emailTransfered: '',
-        setEmailTransfered: expect.any(Function),
         handleSubmit: expect.any(Function),
+        handleSendInvitation: expect.any(Function),
       }),
     );
   });
 
   test('should change transferOwnershipSuccessVisible accorging to emailTransfered updates', async () => {
     const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
-    const { result } = renderHook(useTransferOwnership);
-
-    result.current.setEmailTransfered('test@email.com');
-
-    await waitFor(() => {
-      expect(result.current).toStrictEqual({
-        transferOwnershipSuccessVisible: true,
-        setTransferOwnershipSuccessVisible: expect.any(Function),
-        isSubmitted: false,
-        setIsSubmitted: expect.any(Function),
-        emailTransfered: 'test@email.com',
-        setEmailTransfered: expect.any(Function),
-        handleSubmit: expect.any(Function),
-      });
-      expect(mixpanelTrack).toHaveBeenNthCalledWith(1, 'Invitation sent successfully');
+    const { result, rerender, store } = renderHookWithProviders(useTransferOwnership, {
+      preloadedState: emptyState,
     });
+    const mockedCallback = jest.fn();
 
-    result.current.setTransferOwnershipSuccessVisible(false);
-    result.current.setEmailTransfered('');
+    expect(store.getState().banners).toEqual(emptyState.banners);
+    expect(screen.queryByTestId('testId')).toBeNull();
 
-    await waitFor(() => {
-      expect(result.current).toStrictEqual({
-        transferOwnershipSuccessVisible: false,
-        setTransferOwnershipSuccessVisible: expect.any(Function),
-        isSubmitted: false,
-        setIsSubmitted: expect.any(Function),
-        emailTransfered: '',
-        setEmailTransfered: expect.any(Function),
-        handleSubmit: expect.any(Function),
-      });
-      expect(mixpanelTrack).toBeCalledTimes(1);
-    });
+    result.current.handleSendInvitation({
+      callback: mockedCallback,
+      bannerTestId,
+    })(email);
+
+    rerender();
+
+    expect(store.getState().banners).toEqual(populatedState.banners);
+    expect(mockedCallback).toBeCalled();
+    expect(mixpanelTrack).toBeCalledWith('Invitation sent successfully');
   });
 });

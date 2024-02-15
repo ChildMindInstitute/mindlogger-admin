@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
-import { popups, applet, banners } from 'redux/modules';
+import { popups, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
 import { useTransferOwnership } from 'shared/hooks/useTransferOwnership';
-import { Mixpanel } from 'shared/utils';
 
 export const TransferOwnershipPopup = () => {
   const { t } = useTranslation('app');
@@ -14,14 +13,8 @@ export const TransferOwnershipPopup = () => {
   const { transferOwnershipPopupVisible, applet: appletData } = popups.useData();
   const { result } = applet.useAppletData() || {};
   const currentApplet = appletData || result;
-  const {
-    // transferOwnershipSuccessVisible,
-    isSubmitted,
-    setIsSubmitted,
-    // emailTransfered,
-    // setEmailTransfered,
-    handleSubmit,
-  } = useTransferOwnership();
+  const { isSubmitted, setIsSubmitted, handleSubmit, handleSendInvitation } =
+    useTransferOwnership();
 
   const transferOwnershipPopupClose = () => {
     dispatch(
@@ -33,21 +26,10 @@ export const TransferOwnershipPopup = () => {
     );
   };
 
-  const handleEmailTransferred = (email: string) => {
-    transferOwnershipPopupClose();
-
-    dispatch(
-      banners.actions.addBanner({
-        key: 'TransferOwnershipSuccessBanner',
-        bannerProps: {
-          email,
-          'data-testid': 'dashboard-applets-transfer-success-banner',
-        },
-      }),
-    );
-
-    Mixpanel.track('Invitation sent successfully');
-  };
+  const handleEmailTransferred = handleSendInvitation({
+    callback: transferOwnershipPopupClose,
+    bannerTestId: 'dashboard-applets-transfer-success-banner',
+  });
 
   return (
     <>
