@@ -5,7 +5,6 @@ import { postFileUploadApi } from 'api';
 import { CropPopup } from 'shared/components/CropPopup';
 import { Svg } from 'shared/components/Svg';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
-import { IncorrectFilePopup } from 'shared/components/IncorrectFilePopup';
 import { StyledBodyMedium } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { byteFormatter } from 'shared/utils/fileSystem';
@@ -22,6 +21,8 @@ import {
   MAX_IMAGE_HEIGHT,
 } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
+import { useAppDispatch } from 'redux/store';
+import { banners } from 'redux/modules';
 
 import {
   StyledContainer,
@@ -51,6 +52,7 @@ export const Uploader = ({
   'data-testid': dataTestid,
 }: UploaderProps) => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [cropPopupVisible, setCropPopupVisible] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -103,8 +105,42 @@ export const Uploader = ({
     const notAllowableSize = imageFile.size > MAX_FILE_SIZE_25MB;
     const notAllowableType =
       !imageFile.type.includes('image') || !VALID_IMAGE_TYPES.includes(`.${fileExtension}`);
-    notAllowableSize && setError(UploadFileError.Size);
-    notAllowableType && setError(UploadFileError.Format);
+
+    if (notAllowableSize) {
+      if (isPrimaryUiType) {
+        setError(UploadFileError.Size);
+      } else {
+        dispatch(
+          banners.actions.addBanner({
+            key: 'IncorrectFileBanner',
+            bannerProps: {
+              errorType: UploadFileError.Size,
+              fileType: MediaType.Image,
+              'data-testid': concatIf(dataTestid, '-incorrect-file-size-banner'),
+              onClose: () => setError(null),
+            },
+          }),
+        );
+      }
+    }
+
+    if (notAllowableType) {
+      if (isPrimaryUiType) {
+        setError(UploadFileError.Format);
+      } else {
+        dispatch(
+          banners.actions.addBanner({
+            key: 'IncorrectFileBanner',
+            bannerProps: {
+              errorType: UploadFileError.Format,
+              fileType: MediaType.Image,
+              'data-testid': concatIf(dataTestid, '-incorrect-file-format-banner'),
+              onClose: () => setError(null),
+            },
+          }),
+        );
+      }
+    }
 
     if (notAllowableSize || notAllowableType) return;
 
@@ -300,28 +336,6 @@ export const Uploader = ({
           onRemove={handleRemoveImg}
           data-testid={concatIf(dataTestid, '-remove-popup')}
         />
-      )}
-      {!isPrimaryUiType && (
-        <>
-          {hasSizeError && (
-            <IncorrectFilePopup
-              popupVisible={hasSizeError}
-              onClose={() => setError(null)}
-              uiType={UploadFileError.Size}
-              fileType={MediaType.Image}
-              data-testid={concatIf(dataTestid, '-incorrect-file-size-popup')}
-            />
-          )}
-          {hasFormatError && (
-            <IncorrectFilePopup
-              popupVisible={hasFormatError}
-              onClose={() => setError(null)}
-              uiType={UploadFileError.Format}
-              fileType={MediaType.Image}
-              data-testid={concatIf(dataTestid, '-incorrect-file-format-popup')}
-            />
-          )}
-        </>
       )}
     </>
   );
