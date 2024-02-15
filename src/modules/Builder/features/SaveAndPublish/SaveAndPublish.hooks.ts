@@ -424,7 +424,7 @@ export const useSaveAndPublishSetup = () => {
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
         bannerProps: {
-          children: t('appletSavedAndPublished', { name: appletData?.displayName }),
+          children: t('appletSavedAndPublished', { name: getAppletData()?.displayName }),
           'data-testid': 'dashboard-applets-save-success-banner',
         },
       }),

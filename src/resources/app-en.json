@@ -153,7 +153,7 @@
   "appletPasswordRequirementsError": "Password does not meet the password requirements.",
   "appletRequired": "Please select the Applet to proceed.",
   "applets": "Applets",
-  "appletSavedAndPublished": "<0>Your applet <1>{{name}}</1> was successfully uploaded!</0>",
+  "appletSavedAndPublished": "Your applet {{name}} was successfully uploaded!",
   "appletsCatalog": "Applets Catalog",
   "appletSettings": "Applet Settings",
   "appletWatermark": "Applet Watermark",
