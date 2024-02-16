@@ -21,5 +21,6 @@ export type ToggleItemProps = {
   tooltip?: string;
   errorMessage?: string | null;
   hasError?: boolean;
+  headerToggling?: boolean;
   'data-testid'?: string;
 };

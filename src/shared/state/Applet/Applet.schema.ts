@@ -260,6 +260,7 @@ export type SingleAndMultiSelectOption = {
   tooltip?: string;
   color?: string | ColorResult;
   isHidden?: boolean;
+  isNoneAbove?: boolean;
   alert?: string;
   value?: number;
 };

@@ -14,6 +14,8 @@ import {
   StyledFlexTopCenter,
   StyledLabelBoldLarge,
   StyledIconButton,
+  StyledBodyMedium,
+  variables,
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
 import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
@@ -45,9 +47,8 @@ export const SelectionOption = ({
   onUpdateOption,
   index,
   optionsLength,
-  optionsOpen,
-  setOptionsOpen,
 }: SelectionOptionProps) => {
+  const [optionOpen, setOptionOpen] = useState(true);
   const optionName = `${name}.responseValues.options.${index}`;
   const optionTextName = `${optionName}.text`;
   const scoreName = `${optionName}.score`;
@@ -66,7 +67,7 @@ export const SelectionOption = ({
   const hasTooltipsChecked = get(settings, ItemConfigurationSettings.HasTooltips);
   const hasColorPicker = get(settings, ItemConfigurationSettings.HasColorPalette);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-  const { text = '', isHidden = false, score, color } = option || {};
+  const { text = '', isHidden = false, score, color, isNoneAbove = false } = option || {};
   const scoreString = score?.toString();
   const hasColor = color !== undefined;
   const hasPalette = !!palette;
@@ -78,18 +79,16 @@ export const SelectionOption = ({
     activity?.conditionalLogic,
   );
   const groupedConditions = getObjectFromList(dependentConditions);
+  const hasNoneOptionBefore = getValues(`${name}.responseValues.options`)
+    .slice(0, index)
+    .some((option: SingleAndMultiSelectOption) => option.isNoneAbove);
+  const optionIndex = hasNoneOptionBefore ? index : index + 1;
+  const placeholder = isNoneAbove
+    ? t('placeholderForNoneOption')
+    : t('textForOption', { index: optionIndex });
+  const title = isNoneAbove ? t('titleForNoneOption') : `${t('option')} ${optionIndex}`;
 
-  const handleOptionToggle = () =>
-    setOptionsOpen((prevState) =>
-      prevState.map((optionOpen, optionIndex) => {
-        if (optionIndex === index) return !optionOpen;
-
-        return optionOpen;
-      }),
-    );
-
-  const optionOpen = optionsOpen[index];
-
+  const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
   const handlePopoverClose = () => setAnchorEl(null);
   const handleRemoveModalClose = () => setIndexToRemove(-1);
   const handleColorChange = () => {
@@ -187,10 +186,9 @@ export const SelectionOption = ({
             >
               <Svg id={optionOpen ? 'navigate-up' : 'navigate-down'} />
             </StyledIconButton>
-            <StyledLabelBoldLarge
-              sx={{ ml: theme.spacing(2) }}
-              data-testid={`${dataTestid}-title`}
-            >{`${t('option')} ${index + 1}`}</StyledLabelBoldLarge>
+            <StyledLabelBoldLarge sx={{ ml: theme.spacing(2) }} data-testid={`${dataTestid}-title`}>
+              {title}
+            </StyledLabelBoldLarge>
             {!optionOpen && (
               <StyledCollapsedWrapper>
                 <StyledSvgWrapper sx={{ m: theme.spacing(0, 2, 0, 6) }}>
@@ -200,7 +198,7 @@ export const SelectionOption = ({
                 </StyledSvgWrapper>
                 {imageSrc && <StyledImg src={imageSrc} alt="option-image" />}
                 <StyledBodyLarge sx={{ ml: imageSrc ? theme.spacing(1) : 0 }}>
-                  {text || t('textForOption', { index: index + 1 })}
+                  {text || placeholder}
                 </StyledBodyLarge>
               </StyledCollapsedWrapper>
             )}
@@ -223,6 +221,14 @@ export const SelectionOption = ({
         </StyledFlexTopCenter>
         {optionOpen && (
           <StyledFlexColumn>
+            {isNoneAbove && (
+              <StyledBodyMedium
+                sx={{ m: theme.spacing(2, 0, 1) }}
+                color={variables.palette.on_surface_variant}
+              >
+                {t('descriptionForNoneOption')}
+              </StyledBodyMedium>
+            )}
             <StyledFlexTopCenter sx={{ m: theme.spacing(1.5, 0, hasTooltipsChecked ? 4 : 2.4) }}>
               <StyledSvgWrapper sx={{ mr: theme.spacing(2) }}>
                 <Svg id={isSingleSelection ? 'radio-button-outline' : 'checkbox-multiple-filled'} />
@@ -243,7 +249,7 @@ export const SelectionOption = ({
                   {...commonInputProps}
                   name={optionTextName}
                   label={t('optionText')}
-                  placeholder={t('textForOption', { index: index + 1 })}
+                  placeholder={placeholder}
                   onChange={(event) =>
                     handleOptionTextChange({
                       event,

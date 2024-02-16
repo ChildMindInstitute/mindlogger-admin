@@ -26,6 +26,7 @@ export const StimulusScreen = () => {
       title={t('flankerStimulus.title')}
       Content={StimulusContent}
       tooltip={t('flankerStimulus.tooltip')}
+      headerToggling
       data-testid="builder-activity-flanker-stimulus-screen"
     />
   );

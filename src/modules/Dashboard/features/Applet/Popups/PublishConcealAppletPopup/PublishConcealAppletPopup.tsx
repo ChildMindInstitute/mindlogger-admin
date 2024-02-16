@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { publishAppletApi, concealAppletApi } from 'api';
-import { applet, popups } from 'redux/modules';
+import { applet, banners, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Modal } from 'shared/components';
 import {
@@ -21,7 +21,6 @@ export const PublishConcealAppletPopup = () => {
   const { publishConcealPopupVisible, popupProps } = popups.useData();
 
   const [isProcessPopupVisible, setProcessPopupVisible] = useState(true);
-  const [isSuccessPopupVisible, setSuccessPopupVisible] = useState(false);
   const [isErrorPopupVisible, setErrorPopupVisible] = useState(false);
 
   const isPublishPopupRef = useRef(false);
@@ -33,11 +32,37 @@ export const PublishConcealAppletPopup = () => {
   const isPublishPopup = isPublishPopupRef.current;
 
   const handleCloseProcessPopup = () => setProcessPopupVisible(false);
+
   const handlePostSuccess = () => {
     handleCloseProcessPopup();
-    setSuccessPopupVisible(true);
+
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: {
+          children: (
+            <Trans i18nKey="publishAppletPopupSuccessDescription">
+              The Applet
+              <strong>
+                {' '}
+                <>{{ name: appletData?.displayName }}</>{' '}
+              </strong>
+              has been
+              <> {{ status: t(appletData?.isPublished ? 'published' : 'concealed') }}</>{' '}
+              successfully.
+            </Trans>
+          ),
+          duration: null,
+          'data-testid': `dashboard-applets-${
+            appletData?.isPublished ? 'publish' : 'conceal'
+          }-success-banner`,
+        },
+      }),
+    );
+
     popupProps?.onSuccess?.();
   };
+
   const handlePostError = () => {
     handleCloseProcessPopup();
     setErrorPopupVisible(true);
@@ -99,30 +124,6 @@ export const PublishConcealAppletPopup = () => {
                 )}
               </StyledBodyLarge>
             )}
-          </StyledModalWrapper>
-        </Modal>
-      )}
-      {isSuccessPopupVisible && (
-        <Modal
-          open={isSuccessPopupVisible}
-          onClose={handleClose}
-          onSubmit={handleClose}
-          title={t(isPublishPopup ? 'concealAppletPopupTitle' : 'publishAppletPopupTitle')}
-          buttonText={t('ok')}
-          data-testid="dashboard-applets-publish-conceal-popup-success-popup"
-        >
-          <StyledModalWrapper>
-            <StyledBodyLarge>
-              <Trans i18nKey="publishAppletPopupSuccessDescription">
-                The Applet
-                <strong>
-                  {' '}
-                  <>{{ name: appletData?.displayName }}</>{' '}
-                </strong>
-                has been
-                <> {{ status: t(isPublishPopup ? 'concealed' : 'published') }}</> successfully.
-              </Trans>
-            </StyledBodyLarge>
           </StyledModalWrapper>
         </Modal>
       )}

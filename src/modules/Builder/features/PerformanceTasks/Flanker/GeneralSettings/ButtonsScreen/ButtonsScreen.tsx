@@ -26,6 +26,7 @@ export const ButtonsScreen = () => {
       title={t('flankerButtons.title')}
       Content={ButtonsContent}
       tooltip={t('flankerButtons.tooltip')}
+      headerToggling
       data-testid="builder-activity-flanker-buttons"
     />
   );
