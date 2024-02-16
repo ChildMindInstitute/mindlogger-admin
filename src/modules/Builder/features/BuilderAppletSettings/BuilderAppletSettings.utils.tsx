@@ -13,6 +13,7 @@ import {
   LiveResponseStreamingSetting,
 } from 'shared/features/AppletSettings';
 import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
+import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
 
@@ -23,7 +24,7 @@ export const getSettings = ({
   isPublished,
   roles,
   onReportConfigSubmit,
-}: GetSettings) => {
+}: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
 
@@ -121,6 +122,7 @@ export const getSettings = ({
           disabled: isNewApplet,
           tooltip,
           'data-testid': `${dataTestid}-report-config`,
+          onClick: () => Mixpanel.track('Applet - Report Configuration Click'),
         },
       ],
     },
