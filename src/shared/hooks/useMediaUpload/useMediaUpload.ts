@@ -5,13 +5,17 @@ import { ApiResponseCodes, postFileUploadUrlApi } from 'shared/api';
 import { useAsync } from 'shared/hooks/useAsync';
 
 import { getFormDataToUpload, uploadFileToS3 } from './useMediaUpload.utils';
-import { ExecuteMediaUploadProps, UseMediaUploadProps } from './useMediaUpload.types';
+import {
+  ExecuteMediaUploadProps,
+  UseMediaUploadProps,
+  UseMediaUploadReturn,
+} from './useMediaUpload.types';
 
 export const useMediaUpload = ({
   callback,
   errorCallback,
   finallyCallback,
-}: UseMediaUploadProps) => {
+}: UseMediaUploadProps): UseMediaUploadReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [mediaUrl, setMediaUrl] = useState<null | string>(null);
   const [error, setError] = useState<AxiosError | null>(null);

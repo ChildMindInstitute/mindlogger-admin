@@ -10,6 +10,13 @@ export type UseMediaUploadProps = {
 
 export type ExecuteMediaUploadProps = { file: File; fileName: string };
 
+export type UseMediaUploadReturn = {
+  error: null | AxiosError;
+  executeMediaUpload: ({ file, fileName }: ExecuteMediaUploadProps) => Promise<void>;
+  isLoading: boolean;
+  mediaUrl: string | null;
+};
+
 export type FileUploadToBucket = {
   body: FormData;
   uploadUrl: string;
