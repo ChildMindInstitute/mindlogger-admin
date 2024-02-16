@@ -1,7 +1,7 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 
 import { AudioFileFormats, MAX_FILE_SIZE_150MB, VALID_AUDIO_FILE_TYPES } from 'shared/consts';
-import { useMediaUpload } from 'shared/hooks/useMediaUploads';
+import { useMediaUpload } from 'shared/hooks/useMediaUpload';
 import { getMediaName } from 'shared/utils/getMediaName';
 
 import { MediaUploaderHookProps } from './MediaUploader.types';

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 
 import { MediaType } from 'shared/consts';
-import { useMediaUpload } from 'shared/hooks/useMediaUploads';
+import { useMediaUpload } from 'shared/hooks/useMediaUpload';
 import { getMediaName } from 'shared/utils/getMediaName';
 
 import { SourceLinkModalForm } from '../SourceLinkModal';

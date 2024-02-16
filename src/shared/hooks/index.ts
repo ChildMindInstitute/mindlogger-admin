@@ -20,4 +20,4 @@ export * from './useNetwork';
 export * from './useCheckIfAppletHasNotFoundError';
 export * from './useRespondentLabel';
 export * from './useWindowFocus';
-export * from './useMediaUploads/useMediaUpload.hooks';
+export * from './useMediaUpload';

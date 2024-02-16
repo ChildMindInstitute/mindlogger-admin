@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { MediaUploadFields } from 'shared/api';
 
-import { FileUploadToBucket, GetFormDataToUpload } from './useMediaUploads.types';
+import { FileUploadToBucket, GetFormDataToUpload } from './useMediaUpload.types';
 
 export const uploadFileToS3 = ({ body, uploadUrl }: FileUploadToBucket) =>
   axios.post(uploadUrl, body, {

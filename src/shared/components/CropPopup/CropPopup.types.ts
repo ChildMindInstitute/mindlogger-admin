@@ -1,6 +1,6 @@
 import { Crop } from 'react-image-crop';
 
-import { ExecuteMediaUploadProps } from 'shared/hooks/useMediaUploads';
+import { ExecuteMediaUploadProps } from 'shared/hooks/useMediaUpload';
 
 import { CropRatio } from './CropPopup.const';
 

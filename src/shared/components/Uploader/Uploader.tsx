@@ -20,7 +20,7 @@ import {
   MIN_IMAGE_HEIGHT,
   MAX_IMAGE_HEIGHT,
 } from 'shared/consts';
-import { ExecuteMediaUploadProps, useMediaUpload } from 'shared/hooks/useMediaUploads';
+import { ExecuteMediaUploadProps, useMediaUpload } from 'shared/hooks/useMediaUpload';
 import { getMediaName } from 'shared/utils/getMediaName';
 
 import {

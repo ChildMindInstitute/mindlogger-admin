@@ -5,7 +5,7 @@ import { ApiResponseCodes, postFileUploadUrlApi } from 'shared/api';
 import { useAsync } from 'shared/hooks/useAsync';
 
 import { getFormDataToUpload, uploadFileToS3 } from './useMediaUpload.utils';
-import { ExecuteMediaUploadProps, UseMediaUploadProps } from './useMediaUploads.types';
+import { ExecuteMediaUploadProps, UseMediaUploadProps } from './useMediaUpload.types';
 
 export const useMediaUpload = ({
   callback,
