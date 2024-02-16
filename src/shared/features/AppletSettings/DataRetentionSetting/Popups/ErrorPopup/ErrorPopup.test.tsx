@@ -20,9 +20,7 @@ describe('ErrorPopup', () => {
     );
 
     expect(screen.getByTestId(dataTestid)).toBeVisible();
-    expect(
-      screen.getByText('The \'Data Retention\' setting has not been updated. Please try again.'),
-    ).toBeVisible();
+    expect(screen.getByText('Sorry, we couldn’t save those changes.')).toBeVisible();
 
     fireEvent.click(screen.getByText('Retry'));
 
