@@ -1,7 +1,7 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import axios from 'axios';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { EditRespondentPopup } from '.';
 
@@ -41,14 +41,12 @@ describe('EditRespondentPopup component tests', () => {
   test('EditRespondentPopup should appear success text', async () => {
     jest.spyOn(mockedAxios, 'post').mockImplementation(successFakeRequest);
 
-    renderWithProviders(<EditRespondentPopup {...commonProps} />);
+    const { store } = renderWithProviders(<EditRespondentPopup {...commonProps} />);
 
     fireEvent.change(screen.getByLabelText(/Nickname/i), { target: { value: '00000' } });
     fireEvent.click(screen.getByText('Save'));
-    await waitFor(() =>
-      expect(
-        screen.getByText('Nickname and Secret User ID have been updated successfully.'),
-      ).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expectBanner(store, 'dashboard-respondents-edit-popup-success-banner');
+    });
   });
 });

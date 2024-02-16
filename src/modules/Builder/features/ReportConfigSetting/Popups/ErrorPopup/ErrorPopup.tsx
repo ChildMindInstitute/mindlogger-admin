@@ -29,7 +29,7 @@ export const ErrorPopup = ({ popupVisible, setPopupVisible, retryCallback }: Err
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
-          {t('saveReportConfigurationError')}
+          {t('saveError')}
         </StyledBodyLarge>
       </StyledModalWrapper>
     </Modal>
