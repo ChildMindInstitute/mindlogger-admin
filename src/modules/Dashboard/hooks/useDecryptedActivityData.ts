@@ -138,14 +138,21 @@ export const useDecryptedActivityData = (
       null // index = 2, answer for multi selection item = null;
     ]
     */
-    const answerDataDecrypted = rest.items.map((activityItem, index) => ({
-      activityItem,
-      answer: getAnswer(activityItem, index),
-      ...rest,
-    }));
+    const answerDataDecrypted = rest.items.reduce(
+      (acc: DecryptedActivityData<T>['decryptedAnswers'], activityItem, index) => {
+        if (activityItem.isHidden) return acc;
+
+        return acc.concat({
+          activityItem,
+          answer: getAnswer(activityItem, index),
+          ...rest,
+        } as DecryptedAnswerData<T, ActivityItemAnswer>);
+      },
+      [],
+    );
 
     return {
-      decryptedAnswers: answerDataDecrypted as DecryptedActivityData<T>['decryptedAnswers'],
+      decryptedAnswers: answerDataDecrypted,
       decryptedEvents: eventsDecrypted,
     };
   };
