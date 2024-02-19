@@ -52,4 +52,5 @@ export enum ApiResponseCodes {
   Unauthorized = 401,
   Forbidden = 403,
   UnprocessableEntity = 422,
+  NoContent = 204,
 }

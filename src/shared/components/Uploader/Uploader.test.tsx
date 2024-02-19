@@ -1,8 +1,6 @@
 import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AxiosResponse } from 'axios';
 
-import { postFileUploadApi } from 'api';
 import { renderWithProviders } from 'shared/utils';
 
 import * as CropPopupUtils from '../CropPopup/CropPopup.utils';
@@ -11,10 +9,20 @@ import { Uploader, UploaderProps } from '.';
 
 jest.mock('api');
 
+const mockImageUrl = 'https://example.com/test-image.png';
+
+jest.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
+  useMediaUpload: ({ callback }: { callback: (url: string) => void }) => ({
+    executeMediaUpload: jest.fn().mockImplementation(() => {
+      callback(mockImageUrl);
+    }),
+    isLoading: false,
+  }),
+}));
+
 const renderComponent = (props: UploaderProps) => renderWithProviders(<Uploader {...props} />);
 const mockSetValue = jest.fn();
 const mockGetValue = jest.fn();
-const postFileUploadApiMock = postFileUploadApi as jest.MockedFunction<typeof postFileUploadApi>;
 const mockImageFile = new File(['(⌐□_□)'], 'test-image.png', { type: 'image/png' });
 const descriptionText = 'Upload an Image';
 const uploaderProps = {
@@ -51,11 +59,7 @@ describe('Uploader component', () => {
     fireEvent.change(input, { target: { files: [mockImageFile] } });
 
     expect(await screen.findByText('test-image.png')).toBeInTheDocument();
-    expect(await screen.getByTestId('image-uploader-crop-popup')).toBeInTheDocument();
-
-    postFileUploadApiMock.mockResolvedValueOnce({
-      data: { result: { url: 'https://example.com/test-image.png' } },
-    } as AxiosResponse);
+    expect(screen.getByTestId('image-uploader-crop-popup')).toBeInTheDocument();
 
     const mockCropImage = jest.spyOn(CropPopupUtils, 'cropImage');
     mockCropImage.mockImplementation(({ onReady }) => {
@@ -65,12 +69,11 @@ describe('Uploader component', () => {
 
     await userEvent.click(screen.getByText(/save/i));
 
-    expect(postFileUploadApi).toHaveBeenCalledWith(expect.any(FormData));
-    expect(mockSetValue).toHaveBeenCalledWith('https://example.com/test-image.png');
+    expect(mockSetValue).toHaveBeenCalledWith(mockImageUrl);
   });
 
   test('handles image delete', async () => {
-    const getImageValueMock = jest.fn().mockReturnValue('https://example.com/uploaded-image.jpg');
+    const getImageValueMock = jest.fn().mockReturnValue(mockImageUrl);
     renderComponent({ ...uploaderProps, getValue: getImageValueMock });
 
     const uploaderContainer = screen.getByTestId('image-uploader');
