@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ValidationError } from 'yup';
 import { Update } from 'history';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from 'redux/store';
 import {
@@ -256,6 +256,7 @@ export const useUpdatedAppletNavigate = () => {
 };
 
 export const useSaveAndPublishSetup = () => {
+  const { t } = useTranslation('app');
   const {
     trigger,
     formState: { dirtyFields, isDirty },
