@@ -44,7 +44,7 @@ const testUploadFlow = async (result: { current: UseMediaUploadReturn }) => {
 
   expect(result.current.isLoading).toBe(true);
 
-  // wait for the next update
+  // wait for the update
   await act(async () => {
     await Promise.resolve();
   });
