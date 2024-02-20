@@ -11,7 +11,7 @@ import {
   mockedCurrentWorkspace,
   mockedPassword,
 } from 'shared/mock';
-import { SettingParam, expectBanner, renderWithProviders, } from 'shared/utils';
+import { SettingParam, expectBanner, renderWithProviders } from 'shared/utils';
 import * as encryptionFunctions from 'shared/utils/encryption';
 
 import { DuplicateAppletSettings } from './DuplicateAppletSettings';
@@ -81,7 +81,11 @@ describe('DuplicateAppletSettings', () => {
       }),
     );
     const dataTestid = 'applet-settings-duplicate-applet';
-    const { store } = renderWithProviders(<DuplicateAppletSettings />, { preloadedState, route, routePath });
+    const { store } = renderWithProviders(<DuplicateAppletSettings />, {
+      preloadedState,
+      route,
+      routePath,
+    });
 
     const duplicateButton = screen.getByTestId(`${dataTestid}-duplicate`);
     expect(duplicateButton).toBeVisible();

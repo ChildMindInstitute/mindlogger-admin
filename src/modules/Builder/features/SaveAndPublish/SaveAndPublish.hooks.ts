@@ -47,6 +47,7 @@ import {
   removeActivityFlowItemExtraFields,
   removeAppletExtraFields,
 } from './SaveAndPublish.utils';
+import { SaveAndPublishSetup } from './SaveAndPublish.types';
 
 export const useAppletDataFromForm = () => {
   const { getValues } = useCustomFormContext() || {};
@@ -255,7 +256,7 @@ export const useUpdatedAppletNavigate = () => {
   };
 };
 
-export const useSaveAndPublishSetup = () => {
+export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const { t } = useTranslation('app');
   const {
     trigger,

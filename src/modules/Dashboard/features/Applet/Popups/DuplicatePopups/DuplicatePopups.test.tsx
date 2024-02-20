@@ -62,9 +62,12 @@ describe('DuplicatePopups', () => {
       }),
     );
 
-    const { getByTestId, getByLabelText, getByText, store } = renderWithProviders(<DuplicatePopups />, {
-      preloadedState,
-    });
+    const { getByTestId, getByLabelText, getByText, store } = renderWithProviders(
+      <DuplicatePopups />,
+      {
+        preloadedState,
+      },
+    );
 
     await waitFor(() => {
       expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
@@ -82,7 +85,7 @@ describe('DuplicatePopups', () => {
     });
 
     await waitFor(() => {
-      expectBanner(store, 'dashboard-applets-duplicate-popup-success-popup')
+      expectBanner(store, 'dashboard-applets-duplicate-popup-success-popup');
     });
   });
 
