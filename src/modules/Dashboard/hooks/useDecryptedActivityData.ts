@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom';
 
 import { applet, Item } from 'shared/state';
 import {
-  checkIfShouldLogging,
   decryptData,
   Encryption,
   getAESKey,
@@ -88,16 +87,21 @@ export const useDecryptedActivityData = (
       }
     }
 
-    checkIfShouldLogging() &&
-      logDataInDebugMode({
-        [`applet_v.${(rest as any as ExportAnswer)?.version ?? ''}/appId_${
-          (rest as any as ExportAnswer).client?.appId ?? ''
-        }/appVersion_${(rest as any as ExportAnswer).client?.appVersion ?? ''}`]: {
-          answersDecrypted,
-          eventsDecrypted,
-          ...rest,
-        },
-      });
+    /*
+    Here we use 'any' because of differences in API responses when Export Data
+    and in Datawiz.
+    Thus, in dataviz summary the responses are retrived without details about:
+    'version', 'client.appId', 'client.appVersion'
+    */
+    logDataInDebugMode({
+      [`applet_v.${(rest as any as ExportAnswer)?.version ?? ''}/appId_${
+        (rest as any as ExportAnswer)?.client?.appId ?? ''
+      }/appVersion_${(rest as any as ExportAnswer)?.client?.appVersion ?? ''}`]: {
+        answersDecrypted,
+        eventsDecrypted,
+        ...rest,
+      },
+    });
 
     const getAnswer = (activityItem: Item, index: number): AnswerDTO => {
       const answer = answersDecrypted[index];
