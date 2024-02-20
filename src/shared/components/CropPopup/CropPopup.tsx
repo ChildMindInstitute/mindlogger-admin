@@ -5,7 +5,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { Modal } from 'shared/components/Modal';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
-import { getUploadFormData } from 'shared/utils/getUploadFormData';
 
 import { checkIfImageSmall, cropImage, initPercentCrop } from './CropPopup.utils';
 import { CropRatio, MIN_CROP_SIZE } from './CropPopup.const';
@@ -41,9 +40,8 @@ export const CropPopup = ({
       type,
       crop,
       onReady: (blob) => {
-        const imageFile = new File([blob], name, { type });
-        const body = getUploadFormData(imageFile);
-        onSave(body);
+        const file = new File([blob], name, { type });
+        onSave({ file, fileName: name });
       },
     });
   };
