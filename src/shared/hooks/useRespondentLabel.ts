@@ -1,9 +1,10 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import { users } from 'redux/modules';
 import { getRespondentName } from 'shared/utils';
 
 export const useRespondentLabel = () => {
+  const { t } = useTranslation('app');
   const { result } = users.useRespondent() || {};
   const secretId = result?.secretUserId;
   const nickname = result?.nickname;
