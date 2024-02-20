@@ -115,7 +115,6 @@ export const Uploader = ({
             bannerProps: {
               errorType: UploadFileError.Size,
               fileType: MediaType.Image,
-              'data-testid': concatIf(dataTestid, '-incorrect-file-size-banner'),
               onClose: () => setError(null),
             },
           }),
@@ -133,7 +132,6 @@ export const Uploader = ({
             bannerProps: {
               errorType: UploadFileError.Format,
               fileType: MediaType.Image,
-              'data-testid': concatIf(dataTestid, '-incorrect-file-format-banner'),
               onClose: () => setError(null),
             },
           }),

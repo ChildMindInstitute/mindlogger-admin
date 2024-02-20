@@ -29,10 +29,7 @@ export const EditorController = <T extends FieldValues>({
       dispatch(
         banners.actions.addBanner({
           key: 'FileSizeExceededBanner',
-          bannerProps: {
-            size,
-            'data-testid': concatIf(dataTestid, '-incorrect-file-size-banner'),
-          },
+          bannerProps: { size },
         }),
       );
     },
@@ -49,7 +46,6 @@ export const EditorController = <T extends FieldValues>({
           bannerProps: {
             errorType: UploadFileError.Format,
             fileType,
-            'data-testid': concatIf(dataTestid, '-incorrect-file-format-banner'),
           },
         }),
       );

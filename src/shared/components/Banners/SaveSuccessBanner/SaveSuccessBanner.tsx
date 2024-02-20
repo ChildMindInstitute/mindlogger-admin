@@ -10,7 +10,6 @@ export const SaveSuccessBanner = ({ children, ...props }: BannerProps) => {
     <Banner
       duration={SAVE_SUCCESS_BANNER_DURATION}
       severity="success"
-      data-testid="save-success-banner"
       {...props}
     >
       {children ?? t('saveSuccess')}

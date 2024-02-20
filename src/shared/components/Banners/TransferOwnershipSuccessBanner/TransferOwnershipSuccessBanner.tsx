@@ -7,7 +7,6 @@ export const TransferOwnershipSuccessBanner = ({ children, email, ...props }: Ba
   <Banner
     duration={TRANSFER_OWNERSHIP_SUCCESS_BANNER_DURATION}
     severity="success"
-    data-testid="transfer-ownership-success-banner"
     {...props}
   >
     <Trans i18nKey="requestTransferOwnershipSuccess">

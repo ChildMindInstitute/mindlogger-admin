@@ -43,14 +43,7 @@ export const EditRespondentPopup = ({
     editRespondentApi,
     () => {
       onCloseHandler(true);
-      dispatch(
-        banners.actions.addBanner({
-          key: 'SaveSuccessBanner',
-          bannerProps: {
-            'data-testid': `${dataTestid}-success-banner`,
-          },
-        }),
-      );
+      dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
     },
     falseReturnFunc,
     () => {
