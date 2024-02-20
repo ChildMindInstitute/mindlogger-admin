@@ -55,8 +55,8 @@ export const DatePicker = <T extends FieldValues>({
     setAnchorEl(event.currentTarget);
   };
 
-  const handlePickerClose = () => {
-    onCloseCallback?.();
+  const handlePickerClose = (date?: DateType) => {
+    onCloseCallback?.(date);
     setAnchorEl(null);
   };
   const handlePickerSubmit = (date: DateType) => () => {
@@ -150,7 +150,9 @@ export const DatePicker = <T extends FieldValues>({
                 id={id}
                 open={isOpen}
                 anchorEl={anchorEl}
-                onClose={handlePickerClose}
+                onClose={() => {
+                  handlePickerClose(getSelectedDate());
+                }}
                 anchorOrigin={{
                   vertical: 'center',
                   horizontal: 'center',
@@ -188,7 +190,10 @@ export const DatePicker = <T extends FieldValues>({
                   />
                 </Suspense>
                 <StyledButtons>
-                  <StyledCancelButton variant="text" onClick={handlePickerClose}>
+                  <StyledCancelButton
+                    variant="text"
+                    onClick={() => handlePickerClose(getSelectedDate())}
+                  >
                     {t('cancel')}
                   </StyledCancelButton>
                   <StyledButton variant="text" onClick={handlePickerSubmit(getSelectedDate())}>

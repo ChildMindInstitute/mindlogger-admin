@@ -14,8 +14,15 @@ export const Review = ({
   isLoading,
   selectedAnswer,
   'data-testid': dataTestid,
-}: ReviewProps) =>
-  activityItemAnswers ? (
+}: ReviewProps) => {
+  if ((!selectedAnswer && !isLoading) || !activityItemAnswers)
+    return (
+      <StyledWrapper>
+        <StyledEmptyReview>{renderEmptyState(selectedAnswer)}</StyledEmptyReview>
+      </StyledWrapper>
+    );
+
+  return (
     <StyledReview data-testid={dataTestid}>
       {activityItemAnswers?.map((activityItemAnswer, index) => {
         const testId = `${dataTestid}-${index}`;
@@ -44,12 +51,5 @@ export const Review = ({
         );
       })}
     </StyledReview>
-  ) : (
-    <>
-      {!isLoading && (
-        <StyledWrapper>
-          <StyledEmptyReview>{renderEmptyState(selectedAnswer)}</StyledEmptyReview>
-        </StyledWrapper>
-      )}
-    </>
   );
+};
