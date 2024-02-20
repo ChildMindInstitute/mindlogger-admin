@@ -31,11 +31,9 @@ describe('useClearCart', () => {
     const spyPostAppletsToCarts = jest.spyOn(library.thunk, 'postAppletsToCart');
     expect(sessionStorage.getItem(STORAGE_SELECTED_KEY)).toEqual(mockSessionStorageSelectedKey);
 
-    const { result } = renderHook(() => useClearCart());
+    const { result } = renderHook(useClearCart);
 
-    act(() => {
-      result.current();
-    });
+    act(result.current);
 
     expect(spyPostAppletsToCarts).toHaveBeenCalledWith([]);
     expect(sessionStorage.getItem(STORAGE_SELECTED_KEY)).toEqual(null);
