@@ -2,11 +2,13 @@ import { useParams } from 'react-router-dom';
 
 import { applet, Item } from 'shared/state';
 import {
+  checkIfShouldLogging,
   decryptData,
   Encryption,
   getAESKey,
   getObjectFromList,
   getParsedEncryptionFromServer,
+  logDataInDebugMode,
 } from 'shared/utils';
 import { useEncryptionStorage } from 'shared/hooks';
 import {
@@ -17,6 +19,7 @@ import {
   DecryptedDrawingAnswer,
   EncryptedAnswerSharedProps,
   EventDTO,
+  ExportAnswer,
 } from 'shared/types';
 import { ItemResponseType } from 'shared/consts';
 
@@ -84,6 +87,17 @@ export const useDecryptedActivityData = (
         }
       }
     }
+
+    checkIfShouldLogging() &&
+      logDataInDebugMode({
+        [`applet_v.${(rest as any as ExportAnswer)?.version ?? ''}/appId_${
+          (rest as any as ExportAnswer).client?.appId ?? ''
+        }/appVersion_${(rest as any as ExportAnswer).client?.appVersion ?? ''}`]: {
+          answersDecrypted,
+          eventsDecrypted,
+          ...rest,
+        },
+      });
 
     const getAnswer = (activityItem: Item, index: number): AnswerDTO => {
       const answer = answersDecrypted[index];

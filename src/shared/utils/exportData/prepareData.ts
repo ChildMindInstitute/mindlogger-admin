@@ -31,7 +31,7 @@ export const prepareData = async (
   getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
 ) => {
   const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
-  logDataInDebugMode({ parsedAnswers });
+  logDataInDebugMode({ parsedAnswersWithoutHiddenItems: parsedAnswers });
   const remappedParsedAnswers = remapFailedAnswers(parsedAnswers);
   const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(remappedParsedAnswers);
   let acc: AppletExportData = getDefaultExportData();
