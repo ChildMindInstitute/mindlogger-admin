@@ -40,3 +40,4 @@ export * from './renderWithAppletFormData';
 export * from './asyncTimeout';
 export * from './renderHookWithProviders';
 export * from './expectBanner';
+export * from './testUtils';

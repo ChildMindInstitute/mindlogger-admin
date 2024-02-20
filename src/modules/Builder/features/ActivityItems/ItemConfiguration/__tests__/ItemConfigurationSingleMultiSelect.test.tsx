@@ -6,7 +6,7 @@ import get from 'lodash.get';
 
 import { mockedMultiSelectFormValues, mockedSingleSelectFormValues } from 'shared/mock';
 import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
-import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
+import { asyncTimeout, createArray, renderWithAppletFormData, testif } from 'shared/utils';
 
 import {
   mockedItemName,
@@ -21,6 +21,7 @@ import {
   mockedAlertsTestid,
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
+import { isNoneAboveFeatureFlag } from '../OptionalItemsAndSettings/OptionalItemsAndSettings';
 
 const mockedChangeColorEvent = { hex: '#fff' };
 jest.mock('react-color', () => ({
