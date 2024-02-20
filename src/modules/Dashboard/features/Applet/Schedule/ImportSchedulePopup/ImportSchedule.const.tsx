@@ -18,7 +18,7 @@ export const getScreens = (
     btnText: 'updateSchedule',
     hasSecondBtn: true,
     secondBtnText: 'cancel',
-    submitBtnColor: type === 'default' ? 'error' : 'primary',
+    submitBtnColor: 'error',
   },
 ];
 

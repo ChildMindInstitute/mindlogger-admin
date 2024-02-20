@@ -31,7 +31,7 @@ export const navigateToBuilder = (
   });
 };
 
-const getPerformanceTaskType = (responseType: ItemResponseType) => {
+export const getPerformanceTaskType = (responseType: ItemResponseType) => {
   let performanceTaskType;
   switch (responseType) {
     case ItemResponseType.Flanker:
@@ -52,7 +52,7 @@ const getPerformanceTaskType = (responseType: ItemResponseType) => {
   return performanceTaskType;
 };
 
-const mapResponseValues = <
+export const mapResponseValues = <
   T extends {
     dataMatrix?: SingleAndMultipleSelectMatrix[] | null;
     options: (SingleAndMultiSelectOption | SingleAndMultiSelectRowOption)[];
@@ -76,7 +76,7 @@ const mapResponseValues = <
       }),
 });
 
-const getSelectedAppletData = (
+export const getSelectedAppletData = (
   applet: PublishedApplet,
   selectedItems: SelectedItem[],
 ): SelectedCartApplet | null => {

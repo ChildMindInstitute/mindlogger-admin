@@ -29,6 +29,7 @@ export const ActivitySettings = () => {
         setting: setting.param,
       }),
     );
+    setting.onClick?.();
   };
 
   const handleClose = () => {
