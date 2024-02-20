@@ -118,6 +118,7 @@ export const AddToBuilderPopup = ({
 
     setStep(AddToBuilderSteps.SelectApplet);
   };
+
   const handleAddToExistingApplet = async () => {
     const { selectedWorkspace: ownerId, selectedApplet } = getValues();
     if (!isOnline || !ownerId || !selectedApplet) {
@@ -219,7 +220,7 @@ export const AddToBuilderPopup = ({
     >
       <>
         {isSpinnerVisible && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
-        <StyledModalWrapper>
+        <StyledModalWrapper data-testid={`library-cart-add-to-builder-popup-step-${step}`}>
           <StyledContainer>{steps[step].render()}</StyledContainer>
         </StyledModalWrapper>
       </>
