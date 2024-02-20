@@ -1,0 +1,55 @@
+import userEvent from '@testing-library/user-event';
+
+import { renderWithProviders } from 'shared/utils';
+
+import { ReviewHeader } from './ReviewHeader';
+import { ReviewHeaderProps } from './ReviewHeader.types';
+
+const dataTestId = 'review-header';
+const mockOnButtonClick = jest.fn();
+const defaultProps = {
+  containerRef: { current: null },
+  isAnswerSelected: false,
+  activityName: 'Activity Name',
+  onButtonClick: mockOnButtonClick,
+  'data-testid': dataTestId,
+};
+const renderReviewHeader = (props: ReviewHeaderProps) =>
+  renderWithProviders(<ReviewHeader {...props} />);
+
+describe('ReviewHeader', () => {
+  test('renders without crashing', () => {
+    const { container } = renderReviewHeader(defaultProps);
+
+    expect(container).toBeTruthy();
+  });
+
+  test('renders correctly when answer is selected', async () => {
+    const { getByText, getByTestId } = renderReviewHeader({
+      ...defaultProps,
+      isAnswerSelected: true,
+    });
+
+    const stickyHeader = getByTestId(`${dataTestId}-sticky-header`);
+    expect(stickyHeader).toBeInTheDocument();
+    expect(getComputedStyle(stickyHeader).justifyContent).toBe('space-between');
+    expect(getByText('Activity Name')).toBeInTheDocument();
+    expect(getByText('Feedback')).toBeInTheDocument();
+
+    const feedbackButton = getByTestId(`${dataTestId}-feedback-button`);
+    expect(feedbackButton).toBeEnabled();
+
+    await userEvent.click(feedbackButton);
+    expect(mockOnButtonClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('renders correctly when answer is not selected', () => {
+    const { getByTestId, queryByText } = renderReviewHeader(defaultProps);
+
+    const stickyHeader = getByTestId(`${dataTestId}-sticky-header`);
+    expect(stickyHeader).toBeInTheDocument();
+    expect(getComputedStyle(stickyHeader).justifyContent).toBe('flex-end');
+    expect(queryByText('Activity Name')).not.toBeInTheDocument();
+    expect(getByTestId(`${dataTestId}-feedback-button`)).toBeDisabled();
+  });
+});
