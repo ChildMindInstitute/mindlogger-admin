@@ -13,8 +13,8 @@ export const Banner = ({
   duration = 5000,
   onClose,
   hasCloseButton = !!onClose,
-  severity,
-  'data-testid': dataTestid,
+  severity = 'success',
+  'data-testid': dataTestid = `${severity}-banner`,
 }: BannerProps) => {
   let timeoutId: NodeJS.Timeout | undefined;
   const [isHovering, setIsHovering] = useState(false);
