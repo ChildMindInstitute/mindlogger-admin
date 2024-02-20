@@ -45,7 +45,7 @@ import {
 } from './OptionalItemsAndSettings.const';
 
 // Feature disabled until release 1.14
-const isNoneAboveFeatureFlag = false;
+export const isNoneAboveFeatureFlag = false;
 
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
