@@ -18,6 +18,7 @@ import {
   ResponseValueType,
   UserActionType,
 } from 'shared/types';
+import { NULL_ANSWER } from 'shared/consts';
 
 import {
   getABTrailsCsvName,
@@ -28,7 +29,6 @@ import {
 } from './getReportName';
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
-import { NULL_ANSWER } from '../../consts';
 
 export const isNullAnswer = (obj: ResponseValueType) =>
   obj === null || (typeof obj === 'object' && Object.keys(obj).length === 0);
