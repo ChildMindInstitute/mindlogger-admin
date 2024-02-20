@@ -1203,7 +1203,6 @@
   "variablesWarning": {
     "deleteItemReferencedByVariable": "By deleting <2> {{itemAsVariable}} </2>, it will cause <2> {{itemsWithVariablesToRemove}} </2> to fail",
     "isSkippable": "Skipping all the items cannot contain variables. The variable will automatically be removed.",
-    "showAllAtOnce": "A one page assessment cannot contain variables. The variable will automatically be removed.",
     "skippedItemInVariables": "By skipping <2> {{skippedItemName}} </2>, it will cause <2> {{itemNamesWithSkippedItem}} </2> to fail",
     "title": "Variables Warning"
   },
