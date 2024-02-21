@@ -44,7 +44,7 @@ export const RecoverPassword = () => {
               <StyledLinkBtn
                 style={{ marginBottom: 3, fontSize: 16 }}
                 variant="text"
-                onClick={() => navigate(page.login)}
+                onClick={() => navigate(page.passwordReset)}
               >
                 here
               </StyledLinkBtn>
