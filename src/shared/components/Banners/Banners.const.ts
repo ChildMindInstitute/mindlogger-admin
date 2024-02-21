@@ -1,7 +1,7 @@
 import { ComponentType } from 'react';
 
 import { BannerType } from 'redux/modules';
-import {PasswordResetSuccessfulBanner} from 'modules/Auth/features/Login/Banners';
+import { PasswordResetSuccessfulBanner } from 'modules/Auth/features/Login/Banners';
 import { AppletWithoutChangesBanner } from 'modules/Builder/components';
 import { FileSizeExceededBanner } from 'shared/components/Banners/FileSizeExceededBanner';
 import { IncorrectFileBanner } from 'shared/components/Banners/IncorrectFileBanner';
