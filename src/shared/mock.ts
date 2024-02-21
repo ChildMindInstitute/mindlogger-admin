@@ -698,6 +698,57 @@ export const mockedSectionReport = {
   },
 };
 
+export const mockedSimpleAppletFormData = {
+  displayName: 'Test',
+  description: 'Test',
+  themeId: '',
+  about: 'Test',
+  image: '',
+  watermark: '',
+  activities: [
+    {
+      name: 'New Activity',
+      description: 'Test',
+      showAllAtOnce: false,
+      isSkippable: false,
+      responseIsEditable: true,
+      isHidden: false,
+      isReviewable: false,
+      items: [
+        {
+          responseType: 'text',
+          name: 'Item',
+          question: 'Test',
+          config: {
+            removeBackButton: false,
+            skippableItem: false,
+            maxResponseLength: 300,
+            correctAnswerRequired: false,
+            correctAnswer: '',
+            numericalResponseRequired: false,
+            responseDataIdentifier: false,
+            responseRequired: false,
+          },
+          isHidden: false,
+          allowEdit: true,
+          key: '03b655eb-6478-45f4-8625-5ef6bf5877db',
+          alerts: [],
+          responseValues: {},
+        },
+      ],
+      scoresAndReports: {
+        generateReport: false,
+        reports: [],
+        showScoreSummary: false,
+      },
+      conditionalLogic: [],
+      key: 'c913d560-b69d-47ec-828c-eec12c47ca24',
+    },
+  ],
+  activityFlows: [],
+  reportEmailBody: 'Please see the report attached to this email.',
+};
+
 export const mockedAppletFormData = {
   displayName: 'dataviz',
   description: '',

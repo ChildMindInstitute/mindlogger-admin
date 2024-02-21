@@ -1,10 +1,8 @@
 import { useRef, useState, useEffect } from 'react';
 
-import { postFileUploadApi } from 'api';
-import { useAsync } from 'shared/hooks/useAsync';
-import { falseReturnFunc } from 'shared/utils/falseReturnFunc';
-import { getUploadFormData } from 'shared/utils/getUploadFormData';
 import { MediaType } from 'shared/consts';
+import { useMediaUpload } from 'shared/hooks/useMediaUpload';
+import { getMediaName } from 'shared/utils/getMediaName';
 
 import { SourceLinkModalForm } from '../SourceLinkModal';
 import { UploadMethodsProps } from './Extensions.types';
@@ -22,22 +20,19 @@ export const useUploadMethods = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { execute: executeMediaUpload, isLoading } = useAsync(
-    postFileUploadApi,
-    (response) => {
-      const file = inputRef.current?.files?.[0];
+  const { executeMediaUpload, isLoading } = useMediaUpload({
+    callback: (address) => {
+      const label = getMediaName(address);
 
-      response?.data?.result &&
-        insertHandler({
-          label: file?.name ?? '',
-          address: response?.data?.result.url ?? '',
-        });
+      insertHandler({
+        label,
+        address,
+      });
     },
-    falseReturnFunc,
-    () => {
+    finallyCallback: () => {
       inputRef.current = null;
     },
-  );
+  });
   const [sourceError, setSourceError] = useState('');
 
   const handlePopupSubmit = async (formData: SourceLinkModalForm) => {
@@ -76,14 +71,14 @@ export const useUploadMethods = ({
       return setFileSizeExceeded(fileSizeExceeded);
     }
 
-    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop()?.toLowerCase();
     const validFileExtensions = type ? validFileExtensionsByType[type] : [];
     if (!validFileExtensions.includes(`.${fileExtension}`)) {
       return setIncorrectFormat(type);
     }
 
-    const body = getUploadFormData(file);
-    executeMediaUpload(body);
+    executeMediaUpload({ file, fileName });
   };
 
   useEffect(() => {

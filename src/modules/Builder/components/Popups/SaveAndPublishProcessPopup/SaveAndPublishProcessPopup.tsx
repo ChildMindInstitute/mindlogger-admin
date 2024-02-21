@@ -23,6 +23,7 @@ export const SaveAndPublishProcessPopup = ({
 }: SaveAndPublishProcessPopupProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
+
   const { setReportConfigChanges } = reportConfig.actions;
   const handleNoPermissionSubmit = useNoPermissionSubmit();
 

@@ -131,6 +131,7 @@ const getTableController = ({
   columns,
   rows,
   orderBy,
+  dataTestid,
 }: TableController) => (
   <Controller
     name={name}
@@ -140,6 +141,7 @@ const getTableController = ({
       <>
         <RadioGroup {...field}>
           <Table
+            data-testid={dataTestid}
             className={error && 'error'}
             maxHeight="32.4rem"
             columns={columns}
@@ -191,6 +193,7 @@ export const getSteps = ({
           }),
           rows: getWorkspacesRows(workspaces),
           orderBy: 'workspaceName',
+          dataTestid: 'select-workspace-table',
         }),
       buttonText: 'confirm',
       hasSecondBtn: true,

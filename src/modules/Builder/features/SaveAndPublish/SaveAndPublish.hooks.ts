@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ValidationError } from 'yup';
 import { Update } from 'history';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from 'redux/store';
 import {
@@ -47,6 +48,7 @@ import {
   removeActivityFlowItemExtraFields,
   removeAppletExtraFields,
 } from './SaveAndPublish.utils';
+import { SaveAndPublishSetup } from './SaveAndPublish.types';
 
 export const useAppletDataFromForm = () => {
   const { getValues } = useCustomFormContext() || {};
@@ -255,7 +257,8 @@ export const useUpdatedAppletNavigate = () => {
   };
 };
 
-export const useSaveAndPublishSetup = () => {
+export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
+  const { t } = useTranslation('app');
   const {
     trigger,
     formState: { dirtyFields, isDirty },
@@ -319,7 +322,6 @@ export const useSaveAndPublishSetup = () => {
 
       setPublishProcessStep(SaveAndPublishSteps.Failed);
     }
-    responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
   }, [responseStatus, responseTypePrefix, isResponseStatusError, hasAccessDeniedError]);
 
   const handleSaveChangesDoNotSaveSubmit = async () => {
@@ -425,6 +427,28 @@ export const useSaveAndPublishSetup = () => {
     await sendRequest(password);
   };
 
+  const showSuccessBanner = () => {
+    // If there is any visible banner warning the user they haven't made changes,
+    // remove it before showing the success banner.
+    dispatch(
+      banners.actions.removeBanner({
+        key: 'AppletWithoutChangesBanner',
+      }),
+    );
+
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: {
+          children: t('appletSavedAndPublished', { name: getAppletData()?.displayName }),
+          'data-testid': 'dashboard-applets-save-success-banner',
+        },
+      }),
+    );
+
+    handlePublishProcessOnClose();
+  };
+
   const sendRequest = async (password?: string) => {
     const encryptionData = password
       ? await getEncryptionToServer(password, ownerId!)
@@ -462,6 +486,8 @@ export const useSaveAndPublishSetup = () => {
     if (updateApplet.fulfilled.match(result)) {
       Mixpanel.track('Applet edit successful');
 
+      showSuccessBanner();
+
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
@@ -475,6 +501,8 @@ export const useSaveAndPublishSetup = () => {
 
     if (createApplet.fulfilled.match(result)) {
       Mixpanel.track('Applet Created Successfully');
+
+      showSuccessBanner();
 
       const createdAppletId = result.payload.data.result?.id;
 
