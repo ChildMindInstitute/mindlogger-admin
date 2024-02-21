@@ -1,5 +1,5 @@
 export type TransferOwnershipPopupProps = {
-  onClosCallback?: () => void;
+  onCloseCallback?: () => void;
 };
 
 export type TransferOwnership = { email: string };
