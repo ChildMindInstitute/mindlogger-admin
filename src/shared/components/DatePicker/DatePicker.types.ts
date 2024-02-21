@@ -24,7 +24,7 @@ type DatePicker = {
   includeDates?: Date[];
   onMonthChange?: (date: Date) => void;
   disabled?: boolean;
-  onCloseCallback?: () => void;
+  onCloseCallback?: (date?: DateType) => void;
   onSubmitCallback?: (date: DateType) => void;
   isLoading?: boolean;
   tooltip?: string;
