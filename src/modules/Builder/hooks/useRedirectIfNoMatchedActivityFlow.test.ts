@@ -58,10 +58,10 @@ describe('useRedirectIfNoMatchedActivityFlow', () => {
 
   test.each`
     params                                      | activityFlows                     | toBeCalledWith                  | description
-    ${mockedParamsWithActivityFlow}             | ${mockedAppletData.activityFlows} | ${undefined}                    | ${'doesn\'t redirect if activity flow exists'}
-    ${mockedParamsNewAppletWithActivityFlow}    | ${mockedAppletData.activityFlows} | ${undefined}                    | ${'doesn\'t redirect if applet is new and activity flow exists'}
-    ${mockedParamsWithoutActivityFlow}          | ${mockedAppletData.activityFlows} | ${pathToActivityFlows}          | ${'should redirect if activity flow doesn\'t exist'}
-    ${mockedParamsNewAppletWithoutActivityFlow} | ${mockedAppletData.activityFlows} | ${pathToActivityFlowsNewApplet} | ${'should redirect if applet is new and activity flow doesn\'t exist'}
+    ${mockedParamsWithActivityFlow}             | ${mockedAppletData.activityFlows} | ${undefined}                    | ${"doesn't redirect if activity flow exists"}
+    ${mockedParamsNewAppletWithActivityFlow}    | ${mockedAppletData.activityFlows} | ${undefined}                    | ${"doesn't redirect if applet is new and activity flow exists"}
+    ${mockedParamsWithoutActivityFlow}          | ${mockedAppletData.activityFlows} | ${pathToActivityFlows}          | ${"should redirect if activity flow doesn't exist"}
+    ${mockedParamsNewAppletWithoutActivityFlow} | ${mockedAppletData.activityFlows} | ${pathToActivityFlowsNewApplet} | ${"should redirect if applet is new and activity flow doesn't exist"}
   `('$description', ({ params, activityFlows, toBeCalledWith }) => {
     mockedUseParams.mockReturnValue(params);
     mockedGetValues.mockReturnValue(activityFlows);

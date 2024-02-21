@@ -74,7 +74,7 @@ describe('AppletNotFoundPopup', () => {
     expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
   });
 
-  test('shouldn\'t appear without not found error', () => {
+  test("shouldn't appear without not found error", () => {
     const route = `/builder/${mockedAppletId}/about`;
     const routePath = page.builderAppletAbout;
     renderWithProviders(<AppletNotFoundPopup />, {
