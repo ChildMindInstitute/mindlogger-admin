@@ -1,10 +1,9 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans } from 'react-i18next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 
 import { RecoverForm } from 'modules/Auth/features/RecoverPassword';
-import { useAsync } from 'shared/hooks';
 import { recoveryLinkHealthCheckApi } from 'api';
 import { StyledBodyLarge, StyledLinkBtn } from 'shared/styles';
 import { Spinner } from 'shared/components';
@@ -18,17 +17,17 @@ export const RecoverPassword = () => {
   const key = searchParams.get('key');
   const email = searchParams.get('email');
 
-  const {
-    execute: validateKey,
-    isLoading,
-    error,
-  } = useAsync(
-    async (data: { email: string | null; key: string | null }) =>
-      await recoveryLinkHealthCheckApi(data),
-  );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error>();
 
   useEffect(() => {
-    validateKey({ email, key });
+    recoveryLinkHealthCheckApi({ email, key })
+      .catch((error) => {
+        if (error instanceof Error) {
+          setError(error);
+        }
+      })
+      .finally(() => setIsLoading(false));
   }, [email, key]);
 
   if (isLoading) {
