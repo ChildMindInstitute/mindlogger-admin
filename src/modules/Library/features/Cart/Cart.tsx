@@ -70,6 +70,7 @@ export const Cart = () => {
     setSearchValue(searchText);
     setPageIndex(DEFAULT_PAGE);
   };
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPageIndex(newPage + 1);
   };
@@ -99,6 +100,7 @@ export const Cart = () => {
 
       return renderedApplets;
     }, []) || [];
+
   const pagedApplets = filteredApplets.slice(
     (pageIndex - 1) * DEFAULT_APPLETS_PER_PAGE,
     pageIndex * DEFAULT_APPLETS_PER_PAGE,
@@ -110,7 +112,7 @@ export const Cart = () => {
     ) : (
       <EmptyState icon="empty-cart">
         <>
-          {t('emptyCart')}{' '}
+          {t('emptyCart')}
           <StyledLink to={page.library} data-testid="library-cart-go-to-library">
             {t('appletsCatalog')}
           </StyledLink>
@@ -166,11 +168,7 @@ export const Cart = () => {
         </ContentContainer>
       </StyledBody>
       {authPopupVisible && (
-        <AuthPopup
-          authPopupVisible={authPopupVisible}
-          setAuthPopupVisible={setAuthPopupVisible}
-          data-testid={`${dataTestid}-auth-popup`}
-        />
+        <AuthPopup authPopupVisible={authPopupVisible} setAuthPopupVisible={setAuthPopupVisible} />
       )}
       {addToBuilderPopupVisible && (
         <AddToBuilderPopup

@@ -39,3 +39,17 @@ export type ResponseWithObject<T> = {
 export type AppletUniqueName = {
   name: string;
 };
+
+export type MediaUploadFields = {
+  AWSAccessKeyId: string;
+  key: string;
+  policy: string;
+  signature: string;
+  'x-amz-security-token': string;
+};
+
+export type FileUploadUrlResult = {
+  fields: MediaUploadFields;
+  uploadUrl: string;
+  url: string;
+};

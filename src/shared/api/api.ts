@@ -1,10 +1,15 @@
 import { SingleApplet } from 'shared/state/Applet';
-import { AlertListParams } from 'shared/api/api.types';
+import { AlertListParams, FileUploadUrlResult } from 'shared/api/api.types';
 import { OwnerId } from 'modules/Dashboard/api/api.types';
 
 import { apiClient, authApiClient } from './api.client';
-import { ResponseWithObject } from './api.types';
-import { SignInRefreshTokenArgs, AppletId, AppletBody, AppletUniqueName } from './api.types';
+import {
+  ResponseWithObject,
+  SignInRefreshTokenArgs,
+  AppletId,
+  AppletBody,
+  AppletUniqueName,
+} from './api.types';
 
 export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,
@@ -58,10 +63,10 @@ export const postFileUploadApi = (body: FormData, signal?: AbortSignal) =>
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
-export const postFileDownloadApi = (key: string, signal?: AbortSignal) =>
-  authApiClient.post(
-    '/file/download',
-    { key },
+export const postFileUploadUrlApi = (fileName: string, signal?: AbortSignal) =>
+  authApiClient.post<ResponseWithObject<FileUploadUrlResult>>(
+    '/file/upload-url',
+    { fileName },
     {
       signal,
     },
