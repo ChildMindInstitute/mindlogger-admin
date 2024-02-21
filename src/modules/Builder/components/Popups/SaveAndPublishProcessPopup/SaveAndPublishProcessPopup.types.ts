@@ -4,7 +4,6 @@ export const enum SaveAndPublishSteps {
   EmptyRequiredFields = 'emptyRequiredFields',
   ErrorsInFields = 'errorsInFields',
   BeingCreated = 'beingCreated',
-  Success = 'success',
   Failed = 'failed',
   ReportConfigSave = 'reportConfigSave',
 }
