@@ -114,6 +114,8 @@ export const DatePicker = <T extends FieldValues>({
             'data-testid': dataTestid,
           };
 
+          const handleCloseWithSelectedDate = () => handlePickerClose(getSelectedDate());
+
           return (
             <>
               <Tooltip tooltipTitle={tooltip}>
@@ -150,9 +152,7 @@ export const DatePicker = <T extends FieldValues>({
                 id={id}
                 open={isOpen}
                 anchorEl={anchorEl}
-                onClose={() => {
-                  handlePickerClose(getSelectedDate());
-                }}
+                onClose={handleCloseWithSelectedDate}
                 anchorOrigin={{
                   vertical: 'center',
                   horizontal: 'center',
@@ -190,10 +190,7 @@ export const DatePicker = <T extends FieldValues>({
                   />
                 </Suspense>
                 <StyledButtons>
-                  <StyledCancelButton
-                    variant="text"
-                    onClick={() => handlePickerClose(getSelectedDate())}
-                  >
+                  <StyledCancelButton variant="text" onClick={handleCloseWithSelectedDate}>
                     {t('cancel')}
                   </StyledCancelButton>
                   <StyledButton variant="text" onClick={handlePickerSubmit(getSelectedDate())}>
