@@ -7,14 +7,6 @@ import {
   getAESKey,
   getObjectFromList,
   getParsedEncryptionFromServer,
-} from 'shared/utils';
-import { useEncryptionStorage } from 'shared/hooks';
-import {
-  decryptData,
-  Encryption,
-  getAESKey,
-  getObjectFromList,
-  getParsedEncryptionFromServer,
   logDataInDebugMode,
 } from 'shared/utils';
 import { useEncryptionStorage } from 'shared/hooks';
