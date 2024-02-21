@@ -22,7 +22,7 @@ describe('WarningPopup', () => {
     );
     expect(popup).toBeInTheDocument();
     expect(popup).toHaveTextContent(
-      'A report can not be generated until the \'Encryption Server IP Address\' and the \'Public Encryption Key\' are entered.',
+      "A report can not be generated until the 'Encryption Server IP Address' and the 'Public Encryption Key' are entered.",
     );
 
     fireEvent.click(screen.getByText('Save anyway'));

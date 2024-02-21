@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useForm, useWatch } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
 import {
@@ -17,29 +16,29 @@ import {
   SubmitDates,
 } from 'api';
 import { DateFormats } from 'shared/consts';
-import { Svg, Spinner } from 'shared/components';
-import { useAsync, useHeaderSticky } from 'shared/hooks';
-import { StyledContainer, StyledStickyHeader, StyledStickyHeadline } from 'shared/styles';
+import { Spinner } from 'shared/components';
+import { useAsync } from 'shared/hooks';
+import { StyledContainer } from 'shared/styles';
 import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Item } from 'shared/state';
+import { users } from 'redux/modules';
 
-import { StyledTextBtn } from '../RespondentData.styles';
-import { StyledContentContainer, StyledReviewContainer } from './RespondentDataReview.styles';
-import { Answer, AssessmentActivityItem } from './RespondentDataReview.types';
 import { Feedback } from './Feedback';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
+import { ReviewHeader } from './ReviewHeader';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
+import { Answer, AssessmentActivityItem } from './RespondentDataReview.types';
+import { StyledContentContainer, StyledReviewContainer } from './RespondentDataReview.styles';
 
 export const RespondentDataReview = () => {
-  const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || '';
   const selectedDateParam = searchParams.get('selectedDate');
   const containerRef = useRef<HTMLElement | null>(null);
-  const isHeaderSticky = useHeaderSticky(containerRef);
+  const prevSelectedDateRef = useRef<null | string>(null);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
@@ -55,13 +54,10 @@ export const RespondentDataReview = () => {
   const [activityItemAnswers, setActivityItemAnswers] = useState<
     DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'] | null
   >(null);
-
-  const { control } = useForm({
+  const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
+  const { control, setValue } = useForm<{ date: null | Date }>({
     defaultValues: {
-      date:
-        selectedDateParam && isValid(new Date(selectedDateParam!))
-          ? new Date(selectedDateParam!)
-          : new Date(),
+      date: null,
     },
   });
 
@@ -72,7 +68,7 @@ export const RespondentDataReview = () => {
 
   const dataTestid = 'respondents-review';
 
-  const { execute: getAppletSubmitDateList } = useAsync<
+  const { execute: getAppletSubmitDateList, isLoading: getSubmitDatesLoading } = useAsync<
     AppletSubmitDateList,
     ResponseWithObject<SubmitDates>
   >(getAppletSubmitDateListApi, ({ data }) => {
@@ -115,7 +111,7 @@ export const RespondentDataReview = () => {
     setSelectedAnswer(answer);
   };
 
-  const handleMonthChange = (date: Date) => {
+  const handleGetSubmitDates = (date: Date) => {
     if (!appletId || !respondentId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
@@ -127,6 +123,26 @@ export const RespondentDataReview = () => {
       fromDate,
       toDate,
     });
+  };
+
+  const handleGetActivities = (date?: Date | null) => {
+    const createdDate = date && format(date, DateFormats.YearMonthDay);
+    if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate)
+      return;
+
+    getReviewActivities({
+      appletId,
+      respondentId,
+      createdDate,
+    });
+
+    prevSelectedDateRef.current = createdDate;
+  };
+
+  const handleSetInitialDate = (date: Date) => {
+    setValue('date', date);
+    handleGetActivities(date);
+    handleGetSubmitDates(date);
   };
 
   useEffect(() => {
@@ -159,18 +175,27 @@ export const RespondentDataReview = () => {
   }, [appletId, answerId, selectedActivity, selectedAnswer]);
 
   useEffect(() => {
-    if (appletId && respondentId && date) {
-      getReviewActivities({
-        appletId,
-        respondentId,
-        createdDate: format(date || new Date(), DateFormats.YearMonthDay),
-      });
-    }
-  }, [date]);
+    // avoid unnecessary rerender when last activity completed date state value is undefined
+    if (lastActivityCompleted === undefined) return;
 
-  useEffect(() => {
-    handleMonthChange(date || new Date());
-  }, []);
+    const lastActivityCompletedDate = lastActivityCompleted && new Date(lastActivityCompleted);
+    const selectedDateInParam =
+      selectedDateParam && isValid(new Date(selectedDateParam)) && new Date(selectedDateParam);
+
+    if (selectedDateInParam) {
+      handleSetInitialDate(selectedDateInParam);
+
+      return;
+    }
+
+    if (lastActivityCompletedDate) {
+      handleSetInitialDate(lastActivityCompletedDate);
+
+      return;
+    }
+
+    handleSetInitialDate(new Date());
+  }, [lastActivityCompleted]);
 
   return (
     <StyledContainer>
@@ -178,12 +203,14 @@ export const RespondentDataReview = () => {
         control={control}
         selectedDate={date}
         responseDates={responseDates}
-        onMonthChange={handleMonthChange}
+        onMonthChange={handleGetSubmitDates}
         activities={activities}
         selectedActivity={selectedActivity}
         selectedAnswer={selectedAnswer}
         setSelectedActivity={setSelectedActivity}
         onSelectAnswer={handleSelectAnswer}
+        onDateChange={handleGetActivities}
+        isDatePickerLoading={getSubmitDatesLoading}
       />
       <RespondentDataReviewContext.Provider
         value={{
@@ -203,25 +230,13 @@ export const RespondentDataReview = () => {
         <StyledContentContainer>
           {isLoading && <Spinner />}
           <StyledReviewContainer ref={containerRef} data-testid={`${dataTestid}-container`}>
-            <StyledStickyHeader
-              isSticky={isHeaderSticky}
-              sx={{ justifyContent: selectedAnswer ? 'space-between' : 'flex-end' }}
-            >
-              {selectedAnswer && (
-                <StyledStickyHeadline isSticky={isHeaderSticky}>
-                  {selectedActivity?.name}
-                </StyledStickyHeadline>
-              )}
-              <StyledTextBtn
-                variant="text"
-                onClick={() => setIsFeedbackOpen(true)}
-                disabled={!selectedAnswer}
-                startIcon={<Svg id="item-outlined" width="18" height="18" />}
-                data-testid={`${dataTestid}-feedback-button`}
-              >
-                {t('feedback')}
-              </StyledTextBtn>
-            </StyledStickyHeader>
+            <ReviewHeader
+              containerRef={containerRef}
+              isAnswerSelected={!!selectedAnswer}
+              activityName={selectedActivity?.name ?? ''}
+              onButtonClick={() => setIsFeedbackOpen(true)}
+              data-testid={dataTestid}
+            />
             <Review
               isLoading={isLoading}
               selectedAnswer={selectedAnswer}

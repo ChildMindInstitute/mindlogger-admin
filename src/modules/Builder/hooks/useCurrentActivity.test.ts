@@ -34,7 +34,7 @@ describe('useCurrentActivity', () => {
   test.each`
     activityId                            | activities                     | expected                      | description
     ${undefined}                          | ${[]}                          | ${{}}                         | ${'returns empty object if there is no activityId in url'}
-    ${uuidv4()}                           | ${mockedAppletData.activities} | ${{}}                         | ${'returns empty object if activity from url doesn\'t exist'}
+    ${uuidv4()}                           | ${mockedAppletData.activities} | ${{}}                         | ${"returns empty object if activity from url doesn't exist"}
     ${mockedAppletData.activities[0].id}  | ${undefined}                   | ${{}}                         | ${'returns empty object if there are no activities in form'}
     ${mockedAppletData.activities[0].id}  | ${mockedAppletData.activities} | ${mockedExistingActivity}     | ${'returns correct activity by id'}
     ${mockedAppletData.activities[1].key} | ${mockedAppletData.activities} | ${mockedExistingKeydActivity} | ${'returns correct activity by key'}
