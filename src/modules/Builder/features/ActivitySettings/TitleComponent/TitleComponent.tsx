@@ -1,4 +1,5 @@
-import { FieldError } from 'react-hook-form';
+import { FieldError, useWatch } from 'react-hook-form';
+import { useEffect } from 'react';
 
 import {
   StyledFlexColumn,
@@ -13,8 +14,10 @@ import { TitleComponentProps } from './TitleComponent.types';
 import { StyledMark } from './TitleComponent.styles';
 
 export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
-  const { getFieldState } = useCustomFormContext();
+  const { getFieldState, trigger } = useCustomFormContext();
   const errorObject = getFieldState(name).error as unknown as Record<string, FieldError>;
+  const entitiesField = name.split('.').slice(0, -1).join('.');
+  const entities = useWatch({ name: entitiesField });
   const hasErrors = !!errorObject;
   const errorMessages = hasErrors
     ? Object.keys(errorObject).map((key) => ({
@@ -23,6 +26,10 @@ export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
       }))
     : [];
   const isShowErrors = !open && errorMessages.length > 0;
+
+  useEffect(() => {
+    trigger(name);
+  }, [entities.length]);
 
   return (
     <StyledFlexColumn sx={{ m: theme.spacing(0, 5, 0, 3), overflow: 'hidden' }}>
