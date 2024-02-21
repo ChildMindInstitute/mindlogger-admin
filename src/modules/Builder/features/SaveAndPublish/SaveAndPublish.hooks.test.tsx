@@ -93,7 +93,6 @@ describe('useSaveAndPublishSetup hook', () => {
       });
 
       await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
-
       rerender();
 
       expect((result.current as SaveAndPublishSetup).publishProcessStep).toBe(
