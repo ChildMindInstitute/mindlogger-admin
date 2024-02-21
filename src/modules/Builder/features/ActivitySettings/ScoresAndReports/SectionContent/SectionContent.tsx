@@ -65,6 +65,7 @@ export const SectionContent = ({
         name={`${name}.name`}
         label={t('sectionName')}
         data-testid={`${dataTestid}-name`}
+        withDebounce
       />
       <Box sx={{ mt: theme.spacing(2.4) }}>
         {conditionalLogic ? (

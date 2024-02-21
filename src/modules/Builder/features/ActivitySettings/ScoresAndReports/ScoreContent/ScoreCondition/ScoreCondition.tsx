@@ -100,6 +100,7 @@ export const ScoreCondition = ({
           label={t('scoreConditionName')}
           onBlur={handleConditionNameBlur}
           data-testid={`${dataTestid}-name`}
+          withDebounce
         />
         <Box sx={{ ml: theme.spacing(4.8), width: '50%' }}>
           <CopyId

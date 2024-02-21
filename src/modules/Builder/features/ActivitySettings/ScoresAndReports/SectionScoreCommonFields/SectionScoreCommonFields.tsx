@@ -87,6 +87,7 @@ export const SectionScoreCommonFields = ({
           control={control}
           editorId={`editor-${sectionId}`}
           data-testid={`${dataTestid}-show-message-text`}
+          withDebounce
         />
       )}
       <Box sx={{ m: theme.spacing(0.5, 0, 1) }}>

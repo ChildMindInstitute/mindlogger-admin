@@ -236,6 +236,7 @@ export const ScoreContent = ({
             onBlur={handleNameBlur}
             sx={{ mb: theme.spacing(4.8) }}
             data-testid={`${dataTestid}-name`}
+            withDebounce
           />
           <SelectController
             name={`${name}.calculationType`}

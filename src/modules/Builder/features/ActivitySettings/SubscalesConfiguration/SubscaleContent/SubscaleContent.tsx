@@ -55,6 +55,7 @@ export const SubscaleContent = ({
           name={`${name}.name`}
           label={t('subscaleName')}
           data-testid={`${dataTestid}-name`}
+          withDebounce
         />
         <SelectController
           name={`${name}.scoring`}
