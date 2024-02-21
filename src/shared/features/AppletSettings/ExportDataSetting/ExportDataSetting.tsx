@@ -140,12 +140,12 @@ export const ExportDataSetting = () => {
             />
           </StyledFlexTopCenter>
         )}
-        <Box sx={{ width: 'fit-content' }}>
+        <Box sx={{ textAlign: 'center' }}>
           <StyledAppletSettingsButton
             onClick={() => {
               setDataIsExporting(true);
             }}
-            variant="outlined"
+            variant="contained"
             startIcon={<Svg width="18" height="18" id="export" />}
             data-testid={dataTestid}
           >

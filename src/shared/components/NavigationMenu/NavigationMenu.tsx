@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import { Modal } from 'shared/components';
+import { StyledModalWrapper } from 'shared/styles';
+
 import { LeftBar } from './LeftBar';
 import { Container } from './Container';
 import { StyledWrapper } from './NavigationMenu.styles';
@@ -28,14 +31,24 @@ export const NavigationMenu = ({
       <LeftBar
         title={title}
         items={items}
-        hasActiveItem={hasActiveItem}
+        isCompact={hasActiveItem && !activeItem?.useModal}
         onItemClick={onSetActiveItem}
       />
-      {hasActiveItem && (
-        <Container title={t(activeItem?.label || '')} onClose={onClose}>
-          {activeItem?.component}
-        </Container>
-      )}
+      {hasActiveItem &&
+        (activeItem?.useModal ? (
+          <Modal
+            open
+            onClose={onClose}
+            title={t(activeItem?.modalTitle || '', activeItem?.modalTitleParams || {})}
+            buttonText=""
+          >
+            <StyledModalWrapper>{activeItem?.component}</StyledModalWrapper>
+          </Modal>
+        ) : (
+          <Container title={t(activeItem?.label || '')} onClose={onClose}>
+            {activeItem?.component}
+          </Container>
+        ))}
     </StyledWrapper>
   );
 };

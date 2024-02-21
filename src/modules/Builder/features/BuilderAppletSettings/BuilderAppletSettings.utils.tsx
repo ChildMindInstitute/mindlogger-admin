@@ -19,6 +19,7 @@ import { GetSettings } from './BuilderAppletSettings.types';
 const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
 export const getSettings = ({
+  appletName,
   isNewApplet,
   isPublished,
   roles,
@@ -34,6 +35,11 @@ export const getSettings = ({
         {
           icon: <Svg id="export" />,
           label: 'exportData',
+          useModal: true,
+          modalTitle: 'exportDataWithName',
+          modalTitleParams: {
+            appletName,
+          },
           component: <ExportDataSetting />,
           onClick: () => Mixpanel.track('Export Data click'),
           param: SettingParam.ExportData,

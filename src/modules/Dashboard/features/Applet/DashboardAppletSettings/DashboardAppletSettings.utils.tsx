@@ -15,7 +15,7 @@ import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
-export const getSettings = ({ isPublished, roles }: GetSettings) => {
+export const getSettings = ({ appletName, isPublished, roles }: GetSettings) => {
   const dataTestid = 'dashboard-applet-settings';
 
   return [
@@ -26,6 +26,11 @@ export const getSettings = ({ isPublished, roles }: GetSettings) => {
         {
           icon: <Svg id="export" />,
           label: 'exportData',
+          useModal: true,
+          modalTitle: 'exportDataWithName',
+          modalTitleParams: {
+            appletName,
+          },
           component: <ExportDataSetting />,
           param: SettingParam.ExportData,
           onClick: () => Mixpanel.track('Export Data click'),

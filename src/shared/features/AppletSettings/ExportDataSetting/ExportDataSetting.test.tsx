@@ -56,7 +56,7 @@ describe('ExportDataSetting', () => {
       const input = dateType.querySelector('input');
       input && fireEvent.change(input, { target: { value: exportDataType } });
 
-      fireEvent.click(screen.getByText('Download'));
+      fireEvent.click(screen.getByText('Download CSV'));
 
       await waitFor(() => expect(screen.getByTestId(`${dataTestid}-popup-password`)).toBeVisible());
     });
@@ -89,7 +89,7 @@ describe('ExportDataSetting', () => {
       fromDateInput && fireEvent.change(fromDateInput, { target: { value: addDays(date, 1) } });
       toDateInput && fireEvent.change(toDateInput, { target: { value: addDays(date, -1) } });
 
-      fireEvent.click(screen.getByText('Download'));
+      fireEvent.click(screen.getByText('Download CSV'));
 
       await waitFor(() => expect(screen.getByTestId(`${dataTestid}-popup-password`)).toBeVisible());
     });
