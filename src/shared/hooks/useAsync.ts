@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
 
+import { ApiResponseCodes } from 'api';
 import { ApiErrorResponse } from 'shared/state/Base';
 
 export const useAsync = <T, K>(
@@ -13,6 +14,7 @@ export const useAsync = <T, K>(
   const [value, setValue] = useState<AxiosResponse<K> | null>(null);
   const [error, setError] = useState<AxiosError<ApiErrorResponse> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [noPermission, setNoPermission] = useState(false);
   const deps = dependencies ?? [];
 
   const execute = useCallback(
@@ -31,6 +33,9 @@ export const useAsync = <T, K>(
         })
         .catch((error) => {
           setError(error);
+          if (error.response?.status === ApiResponseCodes.Forbidden) {
+            setNoPermission(true);
+          }
           errorCallback && errorCallback(error);
 
           throw error.response;
@@ -43,5 +48,5 @@ export const useAsync = <T, K>(
     [asyncFunction, ...deps],
   );
 
-  return { execute, value, error, isLoading, setError };
+  return { execute, value, error, isLoading, setError, noPermission, setNoPermission };
 };
