@@ -31,7 +31,11 @@ export const RecoverPassword = () => {
   }, [email, key]);
 
   if (isLoading) {
-    return <Spinner />;
+    return (
+      <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
+        <Spinner />
+      </Box>
+    );
   }
 
   if (error) {
