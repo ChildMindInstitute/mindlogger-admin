@@ -14,7 +14,6 @@ export const Banner = ({
   onClose,
   hasCloseButton = !!onClose,
   severity = 'success',
-  'data-testid': dataTestid = `${severity}-banner`,
 }: BannerProps) => {
   let timeoutId: NodeJS.Timeout | undefined;
   const [isHovering, setIsHovering] = useState(false);
@@ -47,7 +46,7 @@ export const Banner = ({
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       severity={severity}
-      data-testid={dataTestid}
+      data-testid={`${severity}-banner`}
     >
       {children}
     </Alert>
