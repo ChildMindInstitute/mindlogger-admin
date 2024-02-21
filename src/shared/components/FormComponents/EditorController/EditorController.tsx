@@ -3,7 +3,6 @@ import { FieldValues, Controller } from 'react-hook-form';
 import { ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 
 import { MediaType, UploadFileError } from 'shared/consts';
-import { concatIf } from 'shared/utils/concatIf';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
 

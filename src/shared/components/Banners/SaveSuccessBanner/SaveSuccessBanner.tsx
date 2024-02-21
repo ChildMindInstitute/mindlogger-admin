@@ -7,11 +7,7 @@ export const SaveSuccessBanner = ({ children, ...props }: BannerProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <Banner
-      duration={SAVE_SUCCESS_BANNER_DURATION}
-      severity="success"
-      {...props}
-    >
+    <Banner duration={SAVE_SUCCESS_BANNER_DURATION} severity="success" {...props}>
       {children ?? t('saveSuccess')}
     </Banner>
   );
