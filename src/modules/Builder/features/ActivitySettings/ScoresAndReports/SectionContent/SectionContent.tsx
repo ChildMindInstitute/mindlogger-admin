@@ -3,12 +3,17 @@ import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useCurrentActivity,
+  useCustomFormContext,
+  useCheckAndTriggerOnNameUniqueness,
+} from 'modules/Builder/hooks';
 import { StyledFlexColumn, theme } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
+import { isSectionReport } from 'shared/types';
 
 import { SectionContentProps } from './SectionContent.types';
 import { ConditionContent } from '../ConditionContent';
@@ -31,6 +36,14 @@ export const SectionContent = ({
   const conditionalLogic = useWatch({ name: conditionalLogicName });
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const conditionalDataTestid = `${dataTestid}-conditional`;
+  const { fieldName } = useCurrentActivity();
+  const reportsName = `${fieldName}.scoresAndReports.reports`;
+
+  useCheckAndTriggerOnNameUniqueness({
+    currentPath: name,
+    entitiesFieldPath: reportsName,
+    checkIfShouldIncludeEntity: isSectionReport,
+  });
 
   const handleAddConditionalLogic = () => {
     setValue(conditionalLogicName, defaultConditionalValue);

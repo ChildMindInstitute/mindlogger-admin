@@ -3,7 +3,11 @@ import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useCheckAndTriggerOnNameUniqueness,
+  useCurrentActivity,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
@@ -23,7 +27,7 @@ import { CalculationType } from 'shared/consts';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { SelectEvent } from 'shared/types';
+import { SelectEvent, isScoreReport } from 'shared/types';
 
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
@@ -91,6 +95,12 @@ export const ScoreContent = ({
     control,
     name: scoreConditionalsName,
     keyName: REACT_HOOK_FORM_KEY_NAME,
+  });
+
+  useCheckAndTriggerOnNameUniqueness({
+    currentPath: name,
+    entitiesFieldPath: reportsName,
+    checkIfShouldIncludeEntity: isScoreReport,
   });
 
   const removeScoreConditional = (index: number) => {
@@ -292,6 +302,7 @@ export const ScoreContent = ({
                 contentProps={{
                   name: conditionalName,
                   reportsName,
+                  scoreConditionalsName,
                   score,
                   scoreKey: `score-condition-${index}-${key}`,
                   items,

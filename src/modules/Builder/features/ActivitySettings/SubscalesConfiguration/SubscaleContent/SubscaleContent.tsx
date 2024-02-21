@@ -2,7 +2,11 @@ import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { StyledFlexColumn, StyledFlexTopStart, StyledTitleMedium, theme } from 'shared/styles';
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useCheckAndTriggerOnNameUniqueness,
+  useCurrentActivity,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 import {
   InputController,
   SelectController,
@@ -30,13 +34,18 @@ export const SubscaleContent = ({
   const { t } = useTranslation('app');
   const { control } = useCustomFormContext();
   const { fieldName = '', activity } = useCurrentActivity();
-  const subscales: SubscaleFormValue[] =
-    useWatch({ name: `${fieldName}.subscaleSetting.subscales` }) ?? [];
+  const subscalesField = `${fieldName}.subscaleSetting.subscales`;
+  const subscales: SubscaleFormValue[] = useWatch({ name: subscalesField }) ?? [];
   const items = getItemElements(
     subscaleId,
     activity?.items.filter(checkOnItemTypeAndScore),
     subscales,
   );
+
+  useCheckAndTriggerOnNameUniqueness({
+    currentPath: name,
+    entitiesFieldPath: subscalesField,
+  });
 
   return (
     <StyledFlexColumn sx={{ mt: theme.spacing(2) }}>
