@@ -72,7 +72,7 @@ export const ScheduleSetupPopup = ({
   return (
     <>
       <Modal
-        open={popupVisible}
+        open={popupVisible && !noPermission}
         onClose={handlePopupClose}
         onSubmit={handlePopupSubmit}
         title={t('individualScheduleSetup')}

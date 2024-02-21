@@ -3,7 +3,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ApiResponseCodes, DatavizActivity, getSummaryActivitiesApi } from 'api';
+import { DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { EmptyState, LinkedTabs, NoPermissionPopup, Svg } from 'shared/components';
 import { useAsync } from 'shared/hooks';
@@ -23,22 +23,17 @@ export const RespondentData = () => {
   const navigate = useNavigate();
   const { appletId, respondentId } = useParams();
   const dispatch = useAppDispatch();
-  const [noPermissionModalVisible, setNoPermissionModalVisible] = useState(false);
 
   const { ownerId } = workspaces.useData() || {};
   const respondentDataTabs = useRespondentDataTabs();
 
-  const { execute: getSummaryActivities } = useAsync(
-    getSummaryActivitiesApi,
-    (result) => {
-      setSummaryActivities(result?.data?.result || []);
-    },
-    (error) => {
-      if (error?.response?.status !== ApiResponseCodes.Forbidden) return;
-
-      setNoPermissionModalVisible(true);
-    },
-  );
+  const {
+    execute: getSummaryActivities,
+    noPermission,
+    setNoPermission,
+  } = useAsync(getSummaryActivitiesApi, (result) => {
+    setSummaryActivities(result?.data?.result || []);
+  });
 
   const [summaryActivities, setSummaryActivities] = useState<DatavizActivity[]>();
   const [selectedActivity, setSelectedActivity] = useState<DatavizActivity>();
@@ -84,6 +79,8 @@ export const RespondentData = () => {
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
+  const handleNoPermissionSubmit = () => setNoPermission(false);
+
   if (appletRoles?.[0] === Roles.Coordinator)
     return <EmptyState width="25rem">{t('noPermissions')}</EmptyState>;
 
@@ -106,11 +103,11 @@ export const RespondentData = () => {
           </FormProvider>
         </RespondentDataContext.Provider>
       </StyledBody>
-      {noPermissionModalVisible && (
+      {noPermission && (
         <NoPermissionPopup
-          open={noPermissionModalVisible}
+          open={noPermission}
           title={t('viewData')}
-          onSubmitCallback={() => setNoPermissionModalVisible(false)}
+          onSubmitCallback={handleNoPermissionSubmit}
           data-testid="respondents-summary-no-permission-popup"
         />
       )}

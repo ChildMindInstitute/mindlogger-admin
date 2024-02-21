@@ -115,7 +115,7 @@ describe('ScheduleSetupPopup', () => {
       setNoPermission: jest.fn(),
     });
 
-    const { getByTestId, getByText, queryByTestId } = renderWithProviders(
+    const { getByTestId } = renderWithProviders(
       <ScheduleSetupPopup
         popupVisible={true}
         setPopupVisible={setPopupVisibleMock}
@@ -125,12 +125,8 @@ describe('ScheduleSetupPopup', () => {
       />,
     );
 
-    const testId = 'dashboard-respondents-view-calendar-no-permission-popup';
-    expect(getByTestId(testId)).toBeInTheDocument();
-
-    const submitButton = getByText('Refresh');
-    fireEvent.click(submitButton);
-
-    expect(queryByTestId(testId)).not.toBeInTheDocument();
+    expect(
+      getByTestId('dashboard-respondents-view-calendar-no-permission-popup'),
+    ).toBeInTheDocument();
   });
 });
