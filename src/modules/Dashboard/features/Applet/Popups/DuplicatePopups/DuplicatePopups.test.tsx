@@ -4,6 +4,7 @@ import mockAxios from 'jest-mock-axios';
 import { expectBanner, renderWithProviders } from 'shared/utils';
 import { mockedApplet, mockedAppletData, mockedPassword } from 'shared/mock';
 import * as encryptionFunctions from 'shared/utils/encryption';
+import * as useAsyncModule from 'shared/hooks/useAsync';
 
 import { DuplicatePopups } from './DuplicatePopups';
 
@@ -27,6 +28,8 @@ const mockedEncryption = {
   accountId: '12345',
 };
 
+const dataTestid = 'dashboard-applets-duplicate-popup';
+
 describe('DuplicatePopups', () => {
   afterEach(() => {
     mockAxios.reset();
@@ -42,7 +45,7 @@ describe('DuplicatePopups', () => {
     });
 
     await waitFor(() => {
-      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      expect(getByTestId(`${dataTestid}-name`)).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
 
@@ -70,7 +73,7 @@ describe('DuplicatePopups', () => {
     );
 
     await waitFor(() => {
-      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      expect(getByTestId(`${dataTestid}-name`)).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
 
@@ -85,8 +88,31 @@ describe('DuplicatePopups', () => {
     });
 
     await waitFor(() => {
-      expectBanner(store, 'dashboard-applets-duplicate-popup-success-popup');
+      expectBanner(store, `${dataTestid}-success-popup`);
     });
+  });
+
+  test('renders NoPermissionPopup when noPermission is true', () => {
+    jest.spyOn(useAsyncModule, 'useAsync').mockReturnValue({
+      execute: jest.fn(),
+      value: null,
+      error: null,
+      isLoading: false,
+      setError: jest.fn(),
+      noPermission: true,
+      setNoPermission: jest.fn(),
+    });
+
+    const { getByTestId, getByText, queryByTestId } = renderWithProviders(<DuplicatePopups />, {
+      preloadedState,
+    });
+
+    expect(getByTestId(`${dataTestid}-no-permission-popup`)).toBeInTheDocument();
+
+    const submitButton = getByText('Refresh');
+    fireEvent.click(submitButton);
+
+    expect(queryByTestId(`${dataTestid}-no-permission-popup`)).not.toBeInTheDocument();
   });
 
   // TODO uncomment after useasync changes

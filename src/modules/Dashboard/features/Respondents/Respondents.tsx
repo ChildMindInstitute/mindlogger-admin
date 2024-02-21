@@ -6,7 +6,7 @@ import { Actions, Pin, Svg, Search, Row, Spinner, NoPermissionPopup } from 'shar
 import { workspaces } from 'redux/modules';
 import { useTimeAgo, useTable, useAsync, usePermissions, useEncryptionStorage } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
-import { ApiResponseCodes, getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
+import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
@@ -43,21 +43,20 @@ export const Respondents = () => {
 
   const [respondentsData, setRespondentsData] = useState<RespondentsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [noPermissionModalVisible, setNoPermissionModalVisible] = useState(false);
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: getWorkspaceRespondents } = useAsync(
+  const {
+    execute: getWorkspaceRespondents,
+    noPermission,
+    setNoPermission,
+  } = useAsync(
     getWorkspaceRespondentsApi,
     (response) => {
       setRespondentsData(response?.data || null);
     },
-    (error) => {
-      if (error?.response?.status !== ApiResponseCodes.Forbidden) return;
-
-      setNoPermissionModalVisible(true);
-    },
+    undefined,
     () => setIsLoading(false),
   );
 
@@ -288,6 +287,9 @@ export const Respondents = () => {
   const editableAppletsSmallTableRows = getAppletsSmallTable('editable');
   const schedulingAppletsSmallTableRows = getAppletsSmallTable('scheduling');
 
+  const dataTestid = 'dashboard-respondents';
+  const handleNoPermissionSubmit = () => setNoPermission(false);
+
   const renderEmptyComponent = () => {
     if (!rows?.length && !isLoading) {
       if (searchValue) {
@@ -310,7 +312,7 @@ export const Respondents = () => {
               variant="outlined"
               startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
               onClick={() => navigate(generatePath(page.appletAddUser, { appletId }))}
-              data-testid="dashboard-respondents-add"
+              data-testid={`${dataTestid}-add`}
             >
               {t('addRespondent')}
             </StyledButton>
@@ -320,7 +322,7 @@ export const Respondents = () => {
           withDebounce
           placeholder={t('searchRespondents')}
           onSearch={handleSearch}
-          data-testid="dashboard-respondents-search"
+          data-testid={`${dataTestid}-search`}
         />
         {appletId && <StyledRightBox />}
       </RespondentsTableHeader>
@@ -330,7 +332,7 @@ export const Respondents = () => {
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}
         hasColFixedWidth
-        data-testid="dashboard-respondents-table"
+        data-testid={`${dataTestid}-table`}
         {...tableProps}
       />
       {scheduleSetupPopupVisible && (
@@ -366,7 +368,7 @@ export const Respondents = () => {
           tableRows={viewableAppletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
-          data-testid="dashboard-respondents-export-data-popup"
+          data-testid={`${dataTestid}-export-data-popup`}
         />
       )}
       {editRespondentPopupVisible && (
@@ -376,12 +378,12 @@ export const Respondents = () => {
           chosenAppletData={chosenAppletData}
         />
       )}
-      {noPermissionModalVisible && (
+      {noPermission && (
         <NoPermissionPopup
-          open={noPermissionModalVisible}
+          open={noPermission}
           title={t('respondents')}
-          onSubmitCallback={() => setNoPermissionModalVisible(false)}
-          data-testid="dashboard-respondents-no-permission-popup"
+          onSubmitCallback={handleNoPermissionSubmit}
+          data-testid={`${dataTestid}-no-permission-popup`}
         />
       )}
     </StyledBody>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 
-import { Modal } from 'shared/components';
+import { Modal, NoPermissionPopup } from 'shared/components';
 import { theme, StyledModalWrapper, StyledBodyLarge, variables } from 'shared/styles';
 import { page } from 'resources';
 import { Mixpanel, getErrorMessage } from 'shared/utils';
@@ -27,7 +27,12 @@ export const ScheduleSetupPopup = ({
   const appletName = chosenAppletData?.appletDisplayName || '';
   const secretUserId = chosenAppletData?.respondentSecretId || '';
 
-  const { execute: createIndividualEvents, error } = useAsync(createIndividualEventsApi);
+  const {
+    execute: createIndividualEvents,
+    error,
+    noPermission,
+    setNoPermission,
+  } = useAsync(createIndividualEventsApi);
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
@@ -51,54 +56,74 @@ export const ScheduleSetupPopup = ({
     Mixpanel.track('View Individual calendar click');
   };
 
+  const handleNoPermissionSubmit = () => {
+    setNoPermission(false);
+    handlePopupClose();
+  };
+
   useEffect(() => {
     if (chosenAppletData?.hasIndividualSchedule) {
       handlePopupSubmit();
     }
   }, [chosenAppletData]);
 
+  const dataTestid = 'dashboard-respondents-view-calendar';
+
   return (
-    <Modal
-      open={popupVisible}
-      onClose={handlePopupClose}
-      onSubmit={handlePopupSubmit}
-      title={t('individualScheduleSetup')}
-      buttonText={showSecondScreen ? t('yes') : ''}
-      hasSecondBtn={Boolean(showSecondScreen)}
-      secondBtnText={t('back')}
-      onSecondBtnSubmit={handleBackClick}
-      disabledSecondBtn={!!appletId}
-      data-testid="dashboard-respondents-view-calendar-popup"
-    >
-      <StyledModalWrapper>
-        {showSecondScreen ? (
-          <StyledBodyLarge sx={{ marginTop: theme.spacing(-1) }}>
-            <Trans i18nKey="respondentIsAMemberOfTheDefaultSchedule">
-              Respondent
-              <strong>
-                <>{{ secretUserId }}</>
-              </strong>
-              is a member of the Default Schedule within the
-              <strong>
-                <>{{ appletName }}</>
-              </strong>
-              Applet. Do you want to set an Individual schedule for this Respondent?
-            </Trans>
-          </StyledBodyLarge>
-        ) : (
-          <>
-            <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
-              {t('selectAppletToSchedule')}
+    <>
+      <Modal
+        open={popupVisible}
+        onClose={handlePopupClose}
+        onSubmit={handlePopupSubmit}
+        title={t('individualScheduleSetup')}
+        buttonText={showSecondScreen ? t('yes') : ''}
+        hasSecondBtn={Boolean(showSecondScreen)}
+        secondBtnText={t('back')}
+        onSecondBtnSubmit={handleBackClick}
+        disabledSecondBtn={!!appletId}
+        data-testid={`${dataTestid}-popup`}
+      >
+        <StyledModalWrapper>
+          {showSecondScreen ? (
+            <StyledBodyLarge sx={{ marginTop: theme.spacing(-1) }}>
+              <Trans i18nKey="respondentIsAMemberOfTheDefaultSchedule">
+                Respondent
+                <strong>
+                  <>{{ secretUserId }}</>
+                </strong>
+                is a member of the Default Schedule within the
+                <strong>
+                  <>{{ appletName }}</>
+                </strong>
+                Applet. Do you want to set an Individual schedule for this Respondent?
+              </Trans>
             </StyledBodyLarge>
-            <AppletsSmallTable tableRows={tableRows} />
-          </>
-        )}
-        {error && (
-          <StyledBodyLarge color={variables.palette.semantic.error} sx={{ m: theme.spacing(1, 0) }}>
-            {getErrorMessage(error)}
-          </StyledBodyLarge>
-        )}
-      </StyledModalWrapper>
-    </Modal>
+          ) : (
+            <>
+              <StyledBodyLarge sx={{ margin: theme.spacing(-2.4, 0, 2.4) }}>
+                {t('selectAppletToSchedule')}
+              </StyledBodyLarge>
+              <AppletsSmallTable tableRows={tableRows} />
+            </>
+          )}
+          {error && (
+            <StyledBodyLarge
+              color={variables.palette.semantic.error}
+              sx={{ m: theme.spacing(1, 0) }}
+            >
+              {getErrorMessage(error)}
+            </StyledBodyLarge>
+          )}
+        </StyledModalWrapper>
+      </Modal>
+      {noPermission && (
+        <NoPermissionPopup
+          open={noPermission}
+          title={t('individualScheduleSetup')}
+          onSubmitCallback={handleNoPermissionSubmit}
+          data-testid={`${dataTestid}-no-permission-popup`}
+        />
+      )}
+    </>
   );
 };

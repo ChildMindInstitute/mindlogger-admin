@@ -11,6 +11,7 @@ export const NoPermissionPopup = ({
   open,
   title,
   onSubmitCallback,
+  buttonText,
   'data-testid': dataTestid,
 }: NoPermissionPopupProps) => {
   const { t } = useTranslation('app');
@@ -18,7 +19,7 @@ export const NoPermissionPopup = ({
 
   const handleSubmit = () => {
     handleNoPermissionSubmit();
-    onSubmitCallback();
+    onSubmitCallback?.();
   };
 
   return (
@@ -27,7 +28,7 @@ export const NoPermissionPopup = ({
       onClose={falseReturnFunc}
       title={title}
       onSubmit={handleSubmit}
-      buttonText={t('refresh')}
+      buttonText={buttonText ?? t('refresh')}
       hasCloseIcon={false}
       data-testid={dataTestid}
     >

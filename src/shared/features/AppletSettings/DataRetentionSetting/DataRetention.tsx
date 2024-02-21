@@ -54,11 +54,11 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   });
 
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-  const [noPermissionPopupVisible, setNoPermissionPopupVisible] = useState(false);
-  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(
-    isDirty && !isSubmitted && !noPermissionPopupVisible,
-  );
-  const { execute: saveDataRetention } = useAsync(
+  const {
+    execute: saveDataRetention,
+    noPermission,
+    setNoPermission,
+  } = useAsync(
     postAppletDataRetentionApi,
     () => {
       dispatch(
@@ -72,13 +72,13 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
       );
     },
     (error) => {
-      if (error?.response?.status === ApiResponseCodes.Forbidden) {
-        setNoPermissionPopupVisible(true);
+      if (error?.response?.status === ApiResponseCodes.Forbidden) return;
 
-        return;
-      }
       setErrorPopupVisible(true);
     },
+  );
+  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(
+    isDirty && !isSubmitted && !noPermission,
   );
 
   const watchRetentionType = watch('retentionType');
@@ -114,6 +114,8 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
       event.preventDefault();
     }
   };
+
+  const handleNoPermissionSubmit = () => setNoPermission(false);
 
   useEffect(() => {
     if (watchRetentionType === RetentionPeriods.Indefinitely) {
@@ -170,11 +172,12 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
           data-testid={`${dataTestid}-save-changes-popup`}
         />
       )}
-      {noPermissionPopupVisible && (
+      {noPermission && (
         <NoPermissionPopup
-          open={noPermissionPopupVisible}
+          open={noPermission}
           title={t('dataRetention')}
-          onSubmitCallback={() => setNoPermissionPopupVisible(false)}
+          onSubmitCallback={handleNoPermissionSubmit}
+          buttonText={isDashboard ? undefined : t('goToDashboard')}
           data-testid={`${dataTestid}-no-permission-popup`}
         />
       )}

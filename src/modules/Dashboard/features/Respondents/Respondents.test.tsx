@@ -14,6 +14,7 @@ import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import { ApiResponseCodes } from 'api';
+import * as useAsyncModule from 'shared/hooks/useAsync';
 
 import { Respondents } from './Respondents';
 
@@ -207,5 +208,31 @@ describe('Respondents component tests', () => {
         },
       );
     });
+  });
+
+  test('renders NoPermissionPopup when noPermission is true', () => {
+    jest.spyOn(useAsyncModule, 'useAsync').mockReturnValue({
+      execute: jest.fn(),
+      value: null,
+      error: null,
+      isLoading: false,
+      setError: jest.fn(),
+      noPermission: true,
+      setNoPermission: jest.fn(),
+    });
+
+    const { getByTestId, getByText, queryByTestId } = renderWithProviders(<Respondents />, {
+      preloadedState,
+      route,
+      routePath,
+    });
+
+    const testId = 'dashboard-respondents-no-permission-popup';
+    expect(getByTestId(testId)).toBeInTheDocument();
+
+    const submitButton = getByText('Refresh');
+    fireEvent.click(submitButton);
+
+    expect(queryByTestId(testId)).not.toBeInTheDocument();
   });
 });

@@ -37,7 +37,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     );
   };
 
-  const { execute, isLoading } = useAsync(
+  const { execute, isLoading, noPermission, setNoPermission } = useAsync(
     deleteAppletApi,
     () => {
       handleConfirmation();
@@ -54,11 +54,8 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
       dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
     },
     (error) => {
-      if (error?.response?.status === ApiResponseCodes.Forbidden) {
-        setActiveModal(Modals.NoPermission);
+      if (error?.response?.status === ApiResponseCodes.Forbidden) return;
 
-        return;
-      }
       setActiveModal(Modals.DeleteError);
     },
   );
@@ -75,6 +72,22 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     onCloseCallback?.();
     deletePopupClose();
   };
+
+  const handleNoPermissionSubmit = () => {
+    handleConfirmation();
+    setNoPermission(false);
+  };
+
+  if (noPermission) {
+    return (
+      <NoPermissionPopup
+        open={noPermission}
+        title={t('deleteApplet')}
+        onSubmitCallback={handleNoPermissionSubmit}
+        data-testid={`${dataTestid}-no-permission-popup`}
+      />
+    );
+  }
 
   switch (activeModal) {
     case Modals.PasswordCheck:
@@ -134,14 +147,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           </StyledModalWrapper>
         </Modal>
       );
-    case Modals.NoPermission:
-      return (
-        <NoPermissionPopup
-          open={deletePopupVisible}
-          title={t('deleteApplet')}
-          onSubmitCallback={handleConfirmation}
-          data-testid={`${dataTestid}-no-permission-popup`}
-        />
-      );
+    default:
+      return null;
   }
 };

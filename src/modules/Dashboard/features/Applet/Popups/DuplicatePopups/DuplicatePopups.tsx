@@ -39,7 +39,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
-  const [noPermissionModalVisible, setNoPermissionModalVisible] = useState(false);
   const [nameModalVisible, setNameModalVisible] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
 
@@ -81,7 +80,12 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     },
   );
 
-  const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
+  const {
+    execute: executeDuplicate,
+    isLoading: isDuplicateLoading,
+    noPermission,
+    setNoPermission,
+  } = useAsync(
     duplicateAppletApi,
     async () => {
       await setAppletPrivateKey({
@@ -94,11 +98,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     },
     (error) => {
       setPasswordModalVisible(false);
-      if (error?.response?.status === ApiResponseCodes.Forbidden) {
-        setNoPermissionModalVisible(true);
-
-        return;
-      }
+      if (error?.response?.status === ApiResponseCodes.Forbidden) return;
 
       setErrorModalVisible(true);
     },
@@ -121,9 +121,9 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
   };
 
-  const noPermissionModalClose = () => {
+  const handleNoPermissionSubmit = () => {
     duplicatePopupsClose();
-    setNoPermissionModalVisible(false);
+    setNoPermission(false);
     onCloseCallback?.();
   };
 
@@ -260,11 +260,11 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           </StyledModalWrapper>
         </Modal>
       )}
-      {noPermissionModalVisible && (
+      {noPermission && (
         <NoPermissionPopup
-          open={noPermissionModalVisible}
+          open={noPermission}
           title={t('appletDuplication')}
-          onSubmitCallback={noPermissionModalClose}
+          onSubmitCallback={handleNoPermissionSubmit}
           data-testid={`${dataTestid}-no-permission-popup`}
         />
       )}

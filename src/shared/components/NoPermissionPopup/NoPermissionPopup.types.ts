@@ -1,6 +1,7 @@
 export type NoPermissionPopupProps = {
   open: boolean;
   title: string;
-  onSubmitCallback: () => void;
+  buttonText?: string;
+  onSubmitCallback?: () => void;
   'data-testid': string;
 };

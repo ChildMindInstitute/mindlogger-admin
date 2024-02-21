@@ -8,6 +8,7 @@ import {
   mockedRespondentDetails,
   mockedRespondentId,
 } from 'shared/mock';
+import * as useAsyncModule from 'shared/hooks/useAsync';
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
 
@@ -101,5 +102,35 @@ describe('ScheduleSetupPopup', () => {
     expect(mockedUseNavigate).toBeCalledWith(
       '/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7',
     );
+  });
+
+  test('renders NoPermissionPopup when noPermission is true', async () => {
+    jest.spyOn(useAsyncModule, 'useAsync').mockReturnValue({
+      execute: jest.fn(),
+      value: null,
+      error: null,
+      isLoading: false,
+      setError: jest.fn(),
+      noPermission: true,
+      setNoPermission: jest.fn(),
+    });
+
+    const { getByTestId, getByText, queryByTestId } = renderWithProviders(
+      <ScheduleSetupPopup
+        popupVisible={true}
+        setPopupVisible={setPopupVisibleMock}
+        tableRows={tableRowsMock}
+        chosenAppletData={chosenAppletDataMock}
+        setChosenAppletData={setChosenAppletDataMock}
+      />,
+    );
+
+    const testId = 'dashboard-respondents-view-calendar-no-permission-popup';
+    expect(getByTestId(testId)).toBeInTheDocument();
+
+    const submitButton = getByText('Refresh');
+    fireEvent.click(submitButton);
+
+    expect(queryByTestId(testId)).not.toBeInTheDocument();
   });
 });

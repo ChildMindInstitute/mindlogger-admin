@@ -50,12 +50,14 @@ export const Schedule = () => {
     };
   }, [appletId, respondentId, hasAccess, ownerId]);
 
+  const handleNoPermissionSubmit = () => setIsForbidden(false);
+
   if (isForbidden) {
     return (
       <NoPermissionPopup
         open={isForbidden}
         title={t('schedule')}
-        onSubmitCallback={() => setIsForbidden(false)}
+        onSubmitCallback={handleNoPermissionSubmit}
         data-testid="schedule-no-permission-popup"
       />
     );

@@ -26,12 +26,6 @@ export const TransferOwnershipSetting = () => {
     bannerTestId: `${dataTestid}-success-banner`,
   });
 
-  const handlePopupClose = () => {
-    // setTransferOwnershipPopupVisible(false);
-    // setEmailTransferred('');
-    transferOwnershipRef.current?.resetEmail();
-  };
-
   return (
     <>
       <StyledTransferOwnershipForm>
@@ -59,7 +53,6 @@ export const TransferOwnershipSetting = () => {
         <NoPermissionPopup
           open={noPermissionPopupVisible}
           title={t('transferOwnership')}
-          onSubmitCallback={handlePopupClose}
           data-testid={`${dataTestid}-no-permission-popup`}
         />
       )}
