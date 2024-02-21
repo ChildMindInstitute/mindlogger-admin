@@ -107,12 +107,13 @@ export const ExportDataSetting = () => {
           label={t('dateRange')}
           data-testid={`${dataTestid}-dateType`}
           dropdownStyles={{
-            width: '15rem',
+            width: '30rem',
           }}
           SelectProps={{
             autoWidth: true,
           }}
           customChange={onDateTypeChange}
+          style={{ width: '100%' }}
         />
         {hasCustomDate && (
           <StyledFlexTopCenter
@@ -128,6 +129,7 @@ export const ExportDataSetting = () => {
               label={t('startDate')}
               minDate={minDate}
               data-testid={`${dataTestid}-from-date`}
+              inputSx={{ width: '100%' }}
             />
             <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
             <DatePicker
@@ -137,6 +139,7 @@ export const ExportDataSetting = () => {
               minDate={fromDate}
               label={t('endDate')}
               data-testid={`${dataTestid}-to-date`}
+              inputSx={{ width: '100%' }}
             />
           </StyledFlexTopCenter>
         )}
