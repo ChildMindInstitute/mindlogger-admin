@@ -7,52 +7,30 @@ import { popups } from 'modules/Dashboard/state';
 import { page } from 'resources';
 import { forbiddenState } from 'shared/state/ForbiddenState';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
+import { mockedAppletId } from 'shared/mock';
 
 import { useNoPermissionPopup } from './NoPermissionPopup.hooks';
 import { UseNoPermissionPopupReturn } from './NoPermissionPopup.types';
 
-// import { useNoPermissionPopup } from './useNoPermissionPopup.hooks';
-
 const mockedUseNavigate = jest.fn();
-const mockedUseLocation = jest.fn();
 const mockedUseAppDispatch = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUseNavigate,
-  useLocation: () => mockedUseLocation,
 }));
 jest.mock('redux/store', () => ({
   ...jest.requireActual('redux/store'),
   useAppDispatch: () => mockedUseAppDispatch,
 }));
 
-const state: PreloadedState<RootState> = {
+const getPreloadedState = (hasForbiddenError = true): PreloadedState<RootState> => ({
   forbiddenState: {
     data: {
-      hasForbiddenError: true,
+      hasForbiddenError,
     },
   },
-};
-
-// jest.mock('react-router-dom', () => ({
-//   useLocation: jest.fn(),
-//   useNavigate: jest.fn(),
-// }));
-
-// jest.mock('redux/store', () => ({
-//   useAppDispatch: jest.fn(),
-// }));
-//
-// jest.mock('shared/state/ForbiddenState', () => ({
-//   forbiddenState: {
-//     useData: jest.fn(),
-//   },
-// }));
-//
-// jest.mock('shared/utils/urlGenerator', () => ({
-//   checkIfDashboardAppletsUrlPassed: jest.fn(),
-// }));
+});
 
 describe('useNoPermissionPopup', () => {
   afterEach(() => {
@@ -60,7 +38,9 @@ describe('useNoPermissionPopup', () => {
   });
 
   test('should return correct values and call dispatch on handleSubmit', () => {
-    const { result } = renderHookWithProviders(useNoPermissionPopup, { preloadedState: state });
+    const { result } = renderHookWithProviders(useNoPermissionPopup, {
+      preloadedState: getPreloadedState(),
+    });
 
     const currentResult = result.current as UseNoPermissionPopupReturn;
     expect(currentResult.noAccessVisible).toBe(true);
@@ -79,36 +59,50 @@ describe('useNoPermissionPopup', () => {
     expect(mockedUseNavigate).toHaveBeenCalledWith(page.dashboardApplets);
   });
 
-  // test('should reload window when on dashboard applets page', () => {
-  //   checkIfDashboardAppletsUrlPassed.mockReturnValue(true);
-  // jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
-  //
-  //   const { result } = renderHook(() => useNoPermissionPopup());
-  //
-  //   act(() => {
-  //     result.current.handleSubmit();
-  //   });
-  //
-  //   expect(window.location.reload).toHaveBeenCalled();
-  // });
-  //
-  // test('should set noAccessVisible to true when hasForbiddenError is true', () => {
-  //   forbiddenState.useData.mockReturnValue({ hasForbiddenError: true });
-  //
-  //   const { result } = renderHook(() => useNoPermissionPopup());
-  //
-  //   expect(result.current.noAccessVisible).toBe(true);
-  // });
-  //
-  // test('should not call dispatch functions when hasForbiddenError is false', () => {
-  //   forbiddenState.useData.mockReturnValue({ hasForbiddenError: false });
-  //
-  //   const { result } = renderHook(() => useNoPermissionPopup());
-  //
-  //   act(() => {
-  //     result.current.handleSubmit();
-  //   });
-  //
-  //   expect(mockedUseAppDispatch).not.toHaveBeenCalled();
-  // });
+  test('should reload window when on dashboard applets page', () => {
+    const reloadSpy = jest.fn();
+    Object.defineProperty(window, 'location', {
+      value: { reload: reloadSpy },
+      writable: true,
+    });
+
+    const { result } = renderHookWithProviders(useNoPermissionPopup, {
+      preloadedState: getPreloadedState(),
+      route: page.dashboardApplets,
+      routePath: page.dashboardApplets,
+    });
+
+    const currentResult = result.current as UseNoPermissionPopupReturn;
+
+    act(() => {
+      currentResult.handleSubmit();
+    });
+
+    expect(reloadSpy).toHaveBeenCalled();
+    expect(mockedUseNavigate).not.toHaveBeenCalled();
+  });
+
+  test('should set noAccessVisible to false when hasForbiddenError is false', () => {
+    const { result } = renderHookWithProviders(useNoPermissionPopup, {
+      preloadedState: getPreloadedState(false),
+      route: '/dashboard/applets',
+      routePath: page.dashboardApplets,
+    });
+
+    const currentResult = result.current as UseNoPermissionPopupReturn;
+
+    expect(currentResult.noAccessVisible).toBe(false);
+  });
+
+  test('should set isBuilder to true when has builder pathname', () => {
+    const { result } = renderHookWithProviders(useNoPermissionPopup, {
+      preloadedState: getPreloadedState(),
+      route: `/builder/${mockedAppletId}/about`,
+      routePath: page.builderAppletAbout,
+    });
+
+    const currentResult = result.current as UseNoPermissionPopupReturn;
+
+    expect(currentResult.isBuilder).toBe(true);
+  });
 });
