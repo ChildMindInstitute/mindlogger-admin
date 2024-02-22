@@ -56,4 +56,16 @@ describe('Banner', () => {
     jest.advanceTimersByTime(props.duration + 1000);
     expect(mockOnClose).not.toHaveBeenCalled();
   });
+
+  test.each`
+    severity     | testId
+    ${'success'} | ${'success-banner'}
+    ${'info'}    | ${'info-banner'}
+    ${'warning'} | ${'warning-banner'}
+    ${'error'}   | ${'error-banner'}
+  `('has test ID that matches severity $severity', ({ severity, testId }) => {
+    render(<Banner {...props} severity={severity} />);
+
+    expect(screen.getByTestId(testId)).toBeInTheDocument();
+  });
 });

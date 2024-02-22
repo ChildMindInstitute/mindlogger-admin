@@ -108,8 +108,6 @@ describe('DataRetention component tests', () => {
       );
     });
 
-    await waitFor(() => {
-      expectBanner(store, `${dataTestid}-success-popup`);
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 });
