@@ -56,8 +56,6 @@ describe('DeletePopup', () => {
       target: { value: mockedPassword },
     });
     fireEvent.click(screen.getByText('Delete'));
-    await waitFor(() => {
-      expectBanner(store, `${dataTestid}-success-banner`);
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 });

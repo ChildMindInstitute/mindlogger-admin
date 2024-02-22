@@ -61,10 +61,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
       dispatch(
         banners.actions.addBanner({
           key: 'SaveSuccessBanner',
-          bannerProps: {
-            'data-testid': `${dataTestid}-success-popup`,
-            onClose: confirmNavigation,
-          },
+          bannerProps: { onClose: confirmNavigation },
         }),
       );
     },

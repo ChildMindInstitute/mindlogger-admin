@@ -1203,7 +1203,6 @@
   "variablesWarning": {
     "deleteItemReferencedByVariable": "Si vous supprimez <2> {{itemAsVariable}} </2>, cela causera l'échec de <2> {{itemsWithVariablesToRemove}} </2>",
     "isSkippable": "Les éléments ignorés ne peuvent pas contenir de variables. La variable sera automatiquement supprimée.",
-    "showAllAtOnce": "Une évaluation d'une seule page ne peut pas contenir de variables. La variable sera automatiquement supprimée.",
     "skippedItemInVariables": "Si vous ignorez <2> {{skippedItemName}} </2>, cela causera l'échec de <2> {{itemNamesWithSkippedItem}} </2>",
     "title": "Avertissement sur les variables"
   },

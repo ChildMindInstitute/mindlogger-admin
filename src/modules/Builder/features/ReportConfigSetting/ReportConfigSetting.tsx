@@ -110,10 +110,7 @@ export const ReportConfigSetting = ({
     dispatch(
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
-        bannerProps: {
-          onClose: confirmNavigation,
-          'data-testid': 'builder-applet-settings-report-config-setting-success-banner',
-        },
+        bannerProps: { onClose: confirmNavigation },
       }),
     );
   };

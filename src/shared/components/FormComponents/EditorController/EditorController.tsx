@@ -3,7 +3,6 @@ import { FieldValues, Controller } from 'react-hook-form';
 import { ExposeParam, InsertContentGenerator } from 'md-editor-rt';
 
 import { MediaType, UploadFileError } from 'shared/consts';
-import { concatIf } from 'shared/utils/concatIf';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
 
@@ -29,10 +28,7 @@ export const EditorController = <T extends FieldValues>({
       dispatch(
         banners.actions.addBanner({
           key: 'FileSizeExceededBanner',
-          bannerProps: {
-            size,
-            'data-testid': concatIf(dataTestid, '-incorrect-file-size-banner'),
-          },
+          bannerProps: { size },
         }),
       );
     },
@@ -49,7 +45,6 @@ export const EditorController = <T extends FieldValues>({
           bannerProps: {
             errorType: UploadFileError.Format,
             fileType,
-            'data-testid': concatIf(dataTestid, '-incorrect-file-format-banner'),
           },
         }),
       );

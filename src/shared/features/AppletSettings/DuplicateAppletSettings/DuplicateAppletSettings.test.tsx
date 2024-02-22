@@ -106,9 +106,7 @@ describe('DuplicateAppletSettings', () => {
         'Submit',
       ),
     );
-    await waitFor(() => {
-      expectBanner(store, 'dashboard-applets-duplicate-popup-success-popup');
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
   });

@@ -138,10 +138,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
         bannerProps: {
-          children: t('successDuplication', {
-            appletName: currentAppletName,
-          }),
-          'data-testid': 'dashboard-applets-duplicate-popup-success-popup',
+          children: t('successDuplication', { appletName: currentAppletName }),
         },
       }),
     );
