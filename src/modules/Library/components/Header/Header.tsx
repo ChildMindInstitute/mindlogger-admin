@@ -66,7 +66,7 @@ export const Header = ({
   );
 
   return (
-    <StyledHeaderContainer>
+    <StyledHeaderContainer data-testid="library-header">
       <Box>
         {isBackButtonVisible && (
           <StyledBackButton

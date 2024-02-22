@@ -84,6 +84,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
     async () => {
+      Mixpanel.track('Applet Created Successfully');
       await setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
         encryption: encryptionDataRef.current.encryption!,
@@ -119,7 +120,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     onCloseCallback?.();
     setSuccessModalVisible(false);
     duplicatePopupsClose();
-    Mixpanel.track('Applet Created Successfully');
   };
 
   const errorModalClose = () => {

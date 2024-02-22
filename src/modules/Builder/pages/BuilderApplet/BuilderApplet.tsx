@@ -68,7 +68,7 @@ export const BuilderApplet = () => {
     resolver: yupResolver(AppletSchema() as ObjectSchema<AppletFormValues>),
     mode: 'onChange',
   });
-  const { reset, control, setValue, getValues, watch } = methods;
+  const { reset, control, setValue, getValues } = methods;
 
   useEffect(() => {
     if (!isAppletLoaded) return;

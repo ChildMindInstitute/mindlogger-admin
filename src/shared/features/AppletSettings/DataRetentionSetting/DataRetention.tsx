@@ -8,7 +8,7 @@ import { InputController, SelectController } from 'shared/components/FormCompone
 import { SaveChangesPopup } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
 import { RetentionPeriods } from 'shared/types';
-import { applet } from 'shared/state';
+import { applet, banners } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 import { postAppletDataRetentionApi } from 'api';
 
@@ -23,7 +23,7 @@ import {
 import { dataRetentionSchema } from './DataRetention.schema';
 import { StyledButton, StyledContainer, StyledInputWrapper } from './DataRetention.styles';
 import { DataRetentionFormValues } from './DataRetention.types';
-import { ErrorPopup, SuccessPopup } from './Popups';
+import { ErrorPopup } from './Popups';
 
 export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   const { t } = useTranslation();
@@ -53,12 +53,21 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
     defaultValues,
   });
 
-  const [successPopupVisible, setSuccessPopupVisible] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
   const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
   const { execute: saveDataRetention } = useAsync(
     postAppletDataRetentionApi,
-    () => setSuccessPopupVisible(true),
+    () => {
+      dispatch(
+        banners.actions.addBanner({
+          key: 'SaveSuccessBanner',
+          bannerProps: {
+            'data-testid': `${dataTestid}-success-popup`,
+            onClose: confirmNavigation,
+          },
+        }),
+      );
+    },
     () => setErrorPopupVisible(true),
   );
 
@@ -83,11 +92,6 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   const handleSaveChanges = async () => {
     await handleSubmit(onSubmit)();
     await dispatch(getApplet({ appletId: id! }));
-  };
-
-  const handleCloseSuccessPopup = () => {
-    setSuccessPopupVisible(false);
-    confirmNavigation();
   };
 
   const handleCancel = () => {
@@ -145,13 +149,6 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
           setPopupVisible={setErrorPopupVisible}
           retryCallback={handleSubmit(onSubmit)}
           data-testid={`${dataTestid}-error-popup`}
-        />
-      )}
-      {successPopupVisible && (
-        <SuccessPopup
-          popupVisible={successPopupVisible}
-          onClose={handleCloseSuccessPopup}
-          data-testid={`${dataTestid}-success-popup`}
         />
       )}
       {promptVisible && (

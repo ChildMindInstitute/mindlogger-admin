@@ -6,7 +6,7 @@ import get from 'lodash.get';
 
 import { mockedMultiSelectFormValues, mockedSingleSelectFormValues } from 'shared/mock';
 import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
-import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
+import { asyncTimeout, createArray, renderWithAppletFormData, testif } from 'shared/utils';
 
 import {
   mockedItemName,
@@ -21,6 +21,7 @@ import {
   mockedAlertsTestid,
 } from '../__mocks__';
 import { ItemConfigurationSettings } from '../ItemConfiguration.types';
+import { isNoneAboveFeatureFlag } from '../OptionalItemsAndSettings/OptionalItemsAndSettings';
 
 const mockedChangeColorEvent = { hex: '#fff' };
 jest.mock('react-color', () => ({
@@ -76,6 +77,141 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       expect(addOption).toHaveTextContent('Add Option');
     });
   });
+
+  test('should not render Add None Option for Single Selection', () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.SingleSelection);
+
+    const addNoneOption = screen.queryByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    expect(addNoneOption).toBeNull();
+  });
+
+  testif(isNoneAboveFeatureFlag)('should render Add None Option for Multi Selection', () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.MultipleSelection);
+
+    const addNoneOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    expect(addNoneOption).toBeVisible();
+    expect(addNoneOption).toHaveTextContent('Add “None“ Option');
+  });
+
+  testif(isNoneAboveFeatureFlag)(
+    'should render only one None option for Multi Selection',
+    async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(),
+        formRef: ref,
+      });
+
+      setItemResponseType(ItemResponseType.MultipleSelection);
+
+      expect(
+        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+      ).toHaveLength(1);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(1);
+
+      const addNoneOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-add-none-option',
+      );
+      fireEvent.click(addNoneOption);
+
+      await waitFor(() => {
+        expect(addNoneOption).toBeDisabled();
+        expect(
+          screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+        ).toHaveLength(2);
+        expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(2);
+        const secondOption = screen.getByTestId(
+          'builder-activity-items-item-configuration-options-1-title',
+        );
+        expect(secondOption).toHaveTextContent('“None“ Option');
+      });
+
+      const removeNoneOptionButton = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-1-remove',
+      );
+      fireEvent.click(removeNoneOptionButton);
+
+      await waitFor(() => {
+        expect(addNoneOption).toBeEnabled();
+      });
+    },
+  );
+
+  testif(isNoneAboveFeatureFlag)(
+    'should keep the ordering for None option and the indexing for next Options for Multi Selection',
+    async () => {
+      const ref = createRef();
+
+      renderWithAppletFormData({
+        children: renderItemConfiguration(),
+        appletFormData: getAppletFormDataWithItem(),
+        formRef: ref,
+      });
+
+      setItemResponseType(ItemResponseType.MultipleSelection);
+
+      expect(
+        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+      ).toHaveLength(1);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(1);
+      const secondOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-0-title',
+      );
+      expect(secondOption).toHaveTextContent('Option 1');
+
+      const addNoneOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-add-none-option',
+      );
+      fireEvent.click(addNoneOption);
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+        ).toHaveLength(2);
+        expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(2);
+        const secondOption = screen.getByTestId(
+          'builder-activity-items-item-configuration-options-1-title',
+        );
+        expect(secondOption).toHaveTextContent('“None“ Option');
+      });
+
+      const addOption = screen.getByTestId('builder-activity-items-item-configuration-add-option');
+      fireEvent.click(addOption);
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+        ).toHaveLength(3);
+        expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(3);
+        const thirdOption = screen.getByTestId(
+          'builder-activity-items-item-configuration-options-2-title',
+        );
+        expect(thirdOption).toHaveTextContent('Option 2');
+      });
+    },
+  );
 
   test.each`
     responseType                          | description

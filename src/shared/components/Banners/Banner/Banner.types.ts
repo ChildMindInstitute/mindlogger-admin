@@ -6,4 +6,6 @@ export type BannerProps = {
   /** @default !!onClose */
   hasCloseButton?: boolean;
   onClose?: () => void;
-} & Pick<AlertProps, 'severity' | 'children'>;
+  'data-testid'?: string;
+} & Pick<AlertProps, 'severity' | 'children'> &
+  Record<string, unknown>; // Custom banner props

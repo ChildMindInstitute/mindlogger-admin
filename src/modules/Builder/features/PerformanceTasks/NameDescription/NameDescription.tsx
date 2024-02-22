@@ -12,6 +12,7 @@ export const NameDescription = () => {
       uiType={ToggleContainerUiType.PerformanceTask}
       title={t('nameAndDescription')}
       Content={NameDescriptionContent}
+      headerToggling
       data-testid="builder-activity-flanker-common"
     />
   );
