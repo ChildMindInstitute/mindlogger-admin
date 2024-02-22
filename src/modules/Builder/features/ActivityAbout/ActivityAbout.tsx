@@ -59,9 +59,6 @@ export const ActivityAbout = () => {
   if (hasRequiredItems) {
     allowToSkipAllItemsTooltip = t('activityHasRequiredItems');
   }
-  const activityCannotBeOnePageAssessmentTooltip = hasVariableAmongItems
-    ? t('activityCannotBeOnePageAssessment')
-    : null;
 
   const commonInputProps = {
     control,
@@ -99,18 +96,6 @@ export const ActivityAbout = () => {
   ];
 
   const checkboxes = [
-    {
-      name: `${fieldName}.showAllAtOnce`,
-      disabled: hasVariableAmongItems,
-      label: (
-        <StyledBodyLarge sx={{ position: 'relative' }}>
-          <Tooltip tooltipTitle={activityCannotBeOnePageAssessmentTooltip}>
-            <span>{t('showAllQuestionsAtOnce')}</span>
-          </Tooltip>
-        </StyledBodyLarge>
-      ),
-      'data-testid': 'builder-activity-about-show-all',
-    },
     {
       name: `${fieldName}.isSkippable`,
       disabled: hasVariableAmongItems || hasRequiredItems,

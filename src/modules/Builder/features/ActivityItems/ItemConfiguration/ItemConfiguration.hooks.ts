@@ -12,11 +12,10 @@ export const useCheckIfItemHasVariables = (itemField: string) => {
   const activityItems = watch(`${fieldName}.items`) ?? [];
   const questionField = `${itemField}.question`;
   const isSkippable = watch(`${fieldName}.isSkippable`);
-  const isShowAllAtOnce = watch(`${fieldName}.showAllAtOnce`);
   const question = watch(questionField) ?? '';
   const isQuestionIncludesVariables =
-    (isSkippable || isShowAllAtOnce) && checkIfQuestionIncludesVariables(question, activityItems);
-  const message = isSkippable ? 'variablesWarning.isSkippable' : 'variablesWarning.showAllAtOnce';
+    isSkippable && checkIfQuestionIncludesVariables(question, activityItems);
+  const message = 'variablesWarning.isSkippable';
 
   const onPopupConfirm = () => {
     setValue(questionField, question.replace(doubleBrackets, ''));

@@ -55,7 +55,6 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Date,
         icon: itemsTypeIcons[ItemResponseType.Date],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.NumberSelection,
@@ -64,12 +63,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Time,
         icon: itemsTypeIcons[ItemResponseType.Time],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.TimeRange,
         icon: itemsTypeIcons[ItemResponseType.TimeRange],
-        isMobileOnly: true,
       },
     ],
   },
@@ -135,12 +132,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Message,
         icon: itemsTypeIcons[ItemResponseType.Message],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.AudioPlayer,
         icon: itemsTypeIcons[ItemResponseType.AudioPlayer],
-        isMobileOnly: true,
       },
     ],
   },
