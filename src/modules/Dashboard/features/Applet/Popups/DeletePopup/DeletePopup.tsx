@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import {
-  EnterAppletPassword,
-  Modal,
-  NoPermissionPopup,
-  Spinner,
-  SpinnerUiType,
-} from 'shared/components';
+import { EnterAppletPassword, Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
 import { alerts, applet, banners, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
@@ -26,6 +20,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const { result } = applet.useAppletData() || {};
   const currentApplet = appletData || result;
+  // const hasForbiddenError = forbiddenState.useData()?.hasForbiddenError ?? {};
 
   const deletePopupClose = () => {
     dispatch(
@@ -37,10 +32,11 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     );
   };
 
-  const { execute, isLoading, noPermission, setNoPermission } = useAsync(
+  const { execute, isLoading } = useAsync(
     deleteAppletApi,
     () => {
       handleConfirmation();
+
       dispatch(
         banners.actions.addBanner({
           key: 'SaveSuccessBanner',
@@ -72,22 +68,6 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     onCloseCallback?.();
     deletePopupClose();
   };
-
-  const handleNoPermissionSubmit = () => {
-    handleConfirmation();
-    setNoPermission(false);
-  };
-
-  if (noPermission) {
-    return (
-      <NoPermissionPopup
-        open={noPermission}
-        title={t('deleteApplet')}
-        onSubmitCallback={handleNoPermissionSubmit}
-        data-testid={`${dataTestid}-no-permission-popup`}
-      />
-    );
-  }
 
   switch (activeModal) {
     case Modals.PasswordCheck:

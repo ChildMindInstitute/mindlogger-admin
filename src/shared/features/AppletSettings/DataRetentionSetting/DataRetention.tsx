@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { NoPermissionPopup, SaveChangesPopup } from 'shared/components';
+import { SaveChangesPopup } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
 import { RetentionPeriods } from 'shared/types';
 import { applet, banners } from 'shared/state';
@@ -32,6 +32,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getApplet } = applet.thunk;
   const { updateAppletData } = applet.actions;
+  const [noPermission, setNoPermission] = useState(false);
 
   const defaultValues = {
     retentionPeriod: appletData?.retentionPeriod || DEFAULT_RETENTION_PERIOD,
@@ -54,11 +55,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   });
 
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-  const {
-    execute: saveDataRetention,
-    noPermission,
-    setNoPermission,
-  } = useAsync(
+  const { execute: saveDataRetention } = useAsync(
     postAppletDataRetentionApi,
     () => {
       dispatch(
@@ -72,8 +69,11 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
       );
     },
     (error) => {
-      if (error?.response?.status === ApiResponseCodes.Forbidden) return;
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermission(true);
 
+        return;
+      }
       setErrorPopupVisible(true);
     },
   );
@@ -114,8 +114,6 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
       event.preventDefault();
     }
   };
-
-  const handleNoPermissionSubmit = () => setNoPermission(false);
 
   useEffect(() => {
     if (watchRetentionType === RetentionPeriods.Indefinitely) {
@@ -170,15 +168,6 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
           onCancel={handleCancel}
           onSave={handleSaveChanges}
           data-testid={`${dataTestid}-save-changes-popup`}
-        />
-      )}
-      {noPermission && (
-        <NoPermissionPopup
-          open={noPermission}
-          title={t('dataRetention')}
-          onSubmitCallback={handleNoPermissionSubmit}
-          buttonText={isDashboard ? undefined : t('goToDashboard')}
-          data-testid={`${dataTestid}-no-permission-popup`}
         />
       )}
     </>

@@ -22,7 +22,6 @@ export const renderWithProviders = (
         <Routes>
           <Route path={routePath} element={children} />
           <Route path={page.login} element={<Login />} />
-          <Route path={page.dashboardApplets} element={<></>} />
         </Routes>
       </MemoryRouter>
     </Provider>

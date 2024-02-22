@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Encryption, getEncryptionToServer, Mixpanel } from 'shared/utils';
-import { Modal, Spinner, SpinnerUiType, NoPermissionPopup } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledModalWrapper, variables } from 'shared/styles';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -80,12 +80,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     },
   );
 
-  const {
-    execute: executeDuplicate,
-    isLoading: isDuplicateLoading,
-    noPermission,
-    setNoPermission,
-  } = useAsync(
+  const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
     async () => {
       await setAppletPrivateKey({
@@ -119,12 +114,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
   const nameModalClose = () => {
     setNameModalVisible(false);
     duplicatePopupsClose();
-  };
-
-  const handleNoPermissionSubmit = () => {
-    duplicatePopupsClose();
-    setNoPermission(false);
-    onCloseCallback?.();
   };
 
   const errorModalClose = () => {
@@ -259,14 +248,6 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
             {t('errorDuplication')}
           </StyledModalWrapper>
         </Modal>
-      )}
-      {noPermission && (
-        <NoPermissionPopup
-          open={noPermission}
-          title={t('appletDuplication')}
-          onSubmitCallback={handleNoPermissionSubmit}
-          data-testid={`${dataTestid}-no-permission-popup`}
-        />
       )}
     </>
   );

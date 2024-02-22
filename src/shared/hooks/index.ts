@@ -22,4 +22,3 @@ export * from './useRespondentLabel';
 export * from './useWindowFocus';
 export * from './useMediaUpload';
 export * from './useTransferOwnership';
-export * from './useNoPermissionSubmit';

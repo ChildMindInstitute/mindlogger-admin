@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { Actions, Pin, Svg, Search, Row, Spinner, NoPermissionPopup } from 'shared/components';
+import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useTimeAgo, useTable, useAsync, usePermissions, useEncryptionStorage } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
@@ -47,11 +47,7 @@ export const Respondents = () => {
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 
-  const {
-    execute: getWorkspaceRespondents,
-    noPermission,
-    setNoPermission,
-  } = useAsync(
+  const { execute: getWorkspaceRespondents } = useAsync(
     getWorkspaceRespondentsApi,
     (response) => {
       setRespondentsData(response?.data || null);
@@ -286,9 +282,7 @@ export const Respondents = () => {
   const viewableAppletsSmallTableRows = getAppletsSmallTable('viewable');
   const editableAppletsSmallTableRows = getAppletsSmallTable('editable');
   const schedulingAppletsSmallTableRows = getAppletsSmallTable('scheduling');
-
   const dataTestid = 'dashboard-respondents';
-  const handleNoPermissionSubmit = () => setNoPermission(false);
 
   const renderEmptyComponent = () => {
     if (!rows?.length && !isLoading) {
@@ -376,14 +370,6 @@ export const Respondents = () => {
           popupVisible={editRespondentPopupVisible}
           onClose={editRespondentOnClose}
           chosenAppletData={chosenAppletData}
-        />
-      )}
-      {noPermission && (
-        <NoPermissionPopup
-          open={noPermission}
-          title={t('respondents')}
-          onSubmitCallback={handleNoPermissionSubmit}
-          data-testid={`${dataTestid}-no-permission-popup`}
         />
       )}
     </StyledBody>

@@ -1260,6 +1260,7 @@
     "button": "Proceed with new version"
   },
   "appletNameExists": "That Applet name already exists",
-  "noAccessToApplet": "No access to applet. To refresh the data, please click the button below.",
+  "noAccessTitle": "No access to applet",
+  "noAccessDescription": "To refresh the data, please click the button below.",
   "goToDashboard": "Go to Dashboard"
 }

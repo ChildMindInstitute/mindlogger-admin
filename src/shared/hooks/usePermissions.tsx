@@ -39,7 +39,6 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
 
   return {
     isForbidden,
-    setIsForbidden,
     noPermissionsComponent: <EmptyState width="25rem">{t('noPermissions')}</EmptyState>,
     isLoading,
   };

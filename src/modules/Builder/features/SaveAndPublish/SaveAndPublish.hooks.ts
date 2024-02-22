@@ -290,7 +290,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     promptVisible,
     setPromptVisible,
     isLogoutInProgress,
-  } = usePrompt(isDirty && !(isResponseStatusError && hasAccessDeniedError));
+  } = usePrompt(isDirty && !hasAccessDeniedError);
   const shouldNavigateRef = useRef(false);
   const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
@@ -314,11 +314,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
     }
     if (isResponseStatusError) {
-      if (hasAccessDeniedError) {
-        setPublishProcessStep(SaveAndPublishSteps.NoPermission);
-
-        return;
-      }
+      if (hasAccessDeniedError) return;
 
       setPublishProcessStep(SaveAndPublishSteps.Failed);
     }

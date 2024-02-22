@@ -1,5 +1,8 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
+import { forbiddenState } from 'shared/state/ForbiddenState';
+import { store } from 'redux/store';
+
 import { getCommonConfig, getRequestTokenData, refreshTokenAndReattemptRequest } from './api.utils';
 import { ApiResponseCodes, DEFAULT_CONFIG } from './api.const';
 
@@ -24,6 +27,10 @@ authApiClient.interceptors.response.use(
   async (error) => {
     if (error.response?.status === ApiResponseCodes.Unauthorized) {
       return refreshTokenAndReattemptRequest(error);
+    } else if (error.response?.status === ApiResponseCodes.Forbidden) {
+      store.dispatch(forbiddenState.actions.addForbiddenError());
+
+      return Promise.reject(error);
     } else {
       return Promise.reject(error);
     }

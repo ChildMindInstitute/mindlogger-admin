@@ -61,8 +61,6 @@ export const Description = ({ step }: DescriptionProps) => {
       return hasNotBeenSaved;
     case SaveAndPublishSteps.ReportConfigSave:
       return <StyledBodyLarge>{t('reportConfigNotSaved')}</StyledBodyLarge>;
-    case SaveAndPublishSteps.NoPermission:
-      return <StyledBodyLarge>{t('noAccessToApplet')}</StyledBodyLarge>;
     default:
       return null;
   }

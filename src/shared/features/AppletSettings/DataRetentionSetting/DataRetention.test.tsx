@@ -7,7 +7,6 @@ import { initialStateData } from 'shared/state/Base';
 import { Roles } from 'shared/consts';
 import { page } from 'resources';
 import { RetentionPeriods } from 'shared/types';
-import * as useAsyncModule from 'shared/hooks/useAsync';
 
 import { DataRetention } from './DataRetention';
 
@@ -112,33 +111,5 @@ describe('DataRetention component tests', () => {
     await waitFor(() => {
       expectBanner(store, `${dataTestid}-success-popup`);
     });
-  });
-
-  test('renders NoPermissionPopup when noPermission is true', () => {
-    jest.spyOn(useAsyncModule, 'useAsync').mockReturnValue({
-      execute: jest.fn(),
-      value: null,
-      error: null,
-      isLoading: false,
-      setError: jest.fn(),
-      noPermission: true,
-      setNoPermission: jest.fn(),
-    });
-
-    const { getByTestId, getByText, queryByTestId } = renderWithProviders(
-      <DataRetention isDashboard />,
-      {
-        preloadedState: getPreloadedState(),
-        route,
-        routePath,
-      },
-    );
-
-    expect(getByTestId(`${dataTestid}-no-permission-popup`)).toBeInTheDocument();
-
-    const submitButton = getByText('Refresh');
-    fireEvent.click(submitButton);
-
-    expect(queryByTestId(`${dataTestid}-no-permission-popup`)).not.toBeInTheDocument();
   });
 });

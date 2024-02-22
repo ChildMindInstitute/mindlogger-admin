@@ -3,36 +3,26 @@ import { useTranslation } from 'react-i18next';
 import { falseReturnFunc } from 'shared/utils';
 import { Modal } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
-import { useNoPermissionSubmit } from 'shared/hooks';
 
-import { NoPermissionPopupProps } from './NoPermissionPopup.types';
+import { useNoPermissionPopup } from './NoPermissionPopup.hooks';
 
-export const NoPermissionPopup = ({
-  open,
-  title,
-  onSubmitCallback,
-  buttonText,
-  'data-testid': dataTestid,
-}: NoPermissionPopupProps) => {
+export const NoPermissionPopup = () => {
   const { t } = useTranslation('app');
-  const handleNoPermissionSubmit = useNoPermissionSubmit();
+  const { handleSubmit, noAccessVisible, isBuilder } = useNoPermissionPopup();
 
-  const handleSubmit = () => {
-    handleNoPermissionSubmit();
-    onSubmitCallback?.();
-  };
+  if (!noAccessVisible) return null;
 
   return (
     <Modal
-      open={open}
+      open={noAccessVisible}
       onClose={falseReturnFunc}
-      title={title}
+      title={t('noAccessTitle')}
       onSubmit={handleSubmit}
-      buttonText={buttonText ?? t('refresh')}
+      buttonText={isBuilder ? t('goToDashboard') : t('refresh')}
       hasCloseIcon={false}
-      data-testid={dataTestid}
+      data-testid="no-permission-popup"
     >
-      <StyledModalWrapper>{t('noAccessToApplet')}</StyledModalWrapper>
+      <StyledModalWrapper>{t('noAccessDescription')}</StyledModalWrapper>
     </Modal>
   );
 };

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -6,7 +6,6 @@ import { applet } from 'shared/state';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { TransferOwnershipRef } from 'modules/Dashboard/features/Applet/TransferOwnership/TransferOwnership.types';
 import { useTransferOwnership } from 'shared/hooks/useTransferOwnership';
-import { NoPermissionPopup } from 'shared/components';
 
 import { StyledTransferOwnershipForm } from './TransferOwnershipSetting.styles';
 import { StyledAppletSettingsButton } from '../AppletSettings.styles';
@@ -17,7 +16,6 @@ export const TransferOwnershipSetting = () => {
   const { isSubmitted, setIsSubmitted, handleSubmit, handleSendInvitation } =
     useTransferOwnership();
   const transferOwnershipRef = useRef<TransferOwnershipRef | null>(null);
-  const [noPermissionPopupVisible, setNoPermissionPopupVisible] = useState(false);
 
   const dataTestid = 'applet-settings-transfer-ownership';
 
@@ -36,7 +34,6 @@ export const TransferOwnershipSetting = () => {
           isSubmitted={isSubmitted}
           setIsSubmitted={setIsSubmitted}
           setEmailTransferred={handleEmailTransferred}
-          setNoPermissionPopupVisible={setNoPermissionPopupVisible}
           data-testid={`${dataTestid}-form`}
         />
       </StyledTransferOwnershipForm>
@@ -49,13 +46,6 @@ export const TransferOwnershipSetting = () => {
           {t('confirm')}
         </StyledAppletSettingsButton>
       </Box>
-      {noPermissionPopupVisible && (
-        <NoPermissionPopup
-          open={noPermissionPopupVisible}
-          title={t('transferOwnership')}
-          data-testid={`${dataTestid}-no-permission-popup`}
-        />
-      )}
     </>
   );
 };

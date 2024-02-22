@@ -177,9 +177,7 @@ export const Applets = () => {
         {deletePopupVisible && (
           <DeletePopup onCloseCallback={onCloseCallback} data-testid="dashboard-applets-delete" />
         )}
-        {transferOwnershipPopupVisible && (
-          <TransferOwnershipPopup onCloseCallback={onCloseCallback} />
-        )}
+        {transferOwnershipPopupVisible && <TransferOwnershipPopup />}
         {publishConcealPopupVisible && <PublishConcealAppletPopup />}
       </AppletsContext.Provider>
     </StyledBody>

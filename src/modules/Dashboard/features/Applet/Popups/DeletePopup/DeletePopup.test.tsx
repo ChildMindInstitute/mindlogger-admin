@@ -4,7 +4,6 @@ import mockAxios from 'jest-mock-axios';
 import * as encryptionFunctions from 'shared/utils/encryption';
 import { mockedApplet, mockedPassword } from 'shared/mock';
 import { expectBanner, renderWithProviders } from 'shared/utils';
-import * as useAsyncModule from 'shared/hooks/useAsync';
 
 import { DeletePopup } from '.';
 
@@ -60,28 +59,5 @@ describe('DeletePopup', () => {
     await waitFor(() => {
       expectBanner(store, `${dataTestid}-success-banner`);
     });
-  });
-
-  test('renders NoPermissionPopup when noPermission is true', () => {
-    jest.spyOn(useAsyncModule, 'useAsync').mockReturnValue({
-      execute: jest.fn(),
-      value: null,
-      error: null,
-      isLoading: false,
-      setError: jest.fn(),
-      noPermission: true,
-      setNoPermission: jest.fn(),
-    });
-
-    const { getByTestId, getByText, queryByTestId } = renderWithProviders(
-      <DeletePopup onCloseCallback={onCloseMock} data-testid={dataTestid} />,
-    );
-
-    expect(getByTestId(`${dataTestid}-no-permission-popup`)).toBeInTheDocument();
-
-    const submitButton = getByText('Refresh');
-    fireEvent.click(submitButton);
-
-    expect(queryByTestId(`${dataTestid}-no-permission-popup`)).not.toBeInTheDocument();
   });
 });
