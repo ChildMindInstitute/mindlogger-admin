@@ -11,7 +11,9 @@ import {
   checkIfDashboardAppletsUrlPassed,
 } from 'shared/utils/urlGenerator';
 
-export const useNoPermissionPopup = () => {
+import { UseNoPermissionPopupReturn } from './NoPermissionPopup.types';
+
+export const useNoPermissionPopup = (): UseNoPermissionPopupReturn => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const hasForbiddenError = forbiddenState.useData()?.hasForbiddenError ?? {};
