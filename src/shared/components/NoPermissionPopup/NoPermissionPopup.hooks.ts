@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { alerts, applet } from 'shared/state';
+import { popups } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
@@ -12,7 +12,6 @@ import {
 } from 'shared/utils/urlGenerator';
 
 export const useNoPermissionPopup = () => {
-  const [noAccessVisible, setNoAccessVisible] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const hasForbiddenError = forbiddenState.useData()?.hasForbiddenError ?? {};
@@ -22,10 +21,10 @@ export const useNoPermissionPopup = () => {
 
   const handleSubmit = () => {
     dispatch(forbiddenState.actions.clearForbiddenError());
-    setNoAccessVisible(false);
     dispatch(applet.actions.resetApplet());
     dispatch(alerts.actions.resetAlerts());
     dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
+    dispatch(popups.actions.resetPopupsVisibility());
 
     if (isDashboardApplets) {
       window.location.reload();
@@ -36,14 +35,8 @@ export const useNoPermissionPopup = () => {
     navigate(page.dashboardApplets);
   };
 
-  useEffect(() => {
-    if (!hasForbiddenError) return;
-
-    setNoAccessVisible(true);
-  }, [hasForbiddenError]);
-
   return {
-    noAccessVisible,
+    noAccessVisible: hasForbiddenError,
     handleSubmit,
     isBuilder,
   };
