@@ -16,8 +16,6 @@ export const TransferOwnershipPopup = () => {
   const { isSubmitted, setIsSubmitted, handleSubmit, handleSendInvitation } =
     useTransferOwnership();
 
-  const dataTestid = 'dashboard-applets-transfer';
-
   const transferOwnershipPopupClose = () => {
     dispatch(
       popups.actions.setPopupVisible({
@@ -42,7 +40,7 @@ export const TransferOwnershipPopup = () => {
         title={t('transferOwnership')}
         buttonText={t('confirm')}
         width="60"
-        data-testid={`${dataTestid}-popup`}
+        data-testid="dashboard-applets-transfer-popup"
       >
         <StyledModalWrapper>
           <TransferOwnership

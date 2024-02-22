@@ -20,7 +20,6 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
   const { appletPasswordRef, submitForm } = useSetupEnterAppletPassword();
   const { result } = applet.useAppletData() || {};
   const currentApplet = appletData || result;
-  // const hasForbiddenError = forbiddenState.useData()?.hasForbiddenError ?? {};
 
   const deletePopupClose = () => {
     dispatch(
@@ -36,7 +35,6 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
     deleteAppletApi,
     () => {
       handleConfirmation();
-
       dispatch(
         banners.actions.addBanner({
           key: 'SaveSuccessBanner',

@@ -4,7 +4,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from 'react-error-boundary';
 
-// import { setupStore } from 'redux/store';
 import { store } from 'redux/store';
 import { theme } from 'shared/styles';
 import { Spinner } from 'shared/components';
@@ -21,7 +20,6 @@ const App = () => {
   }, []);
 
   return (
-    // <Provider store={setupStore()}>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
