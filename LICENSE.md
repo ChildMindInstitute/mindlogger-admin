@@ -119,5 +119,3 @@ Attribution copyright notice: **Copyright (c) 2017 MATTER Lab at the Child Mind 
 Attribution phrase: **Child Mind Institute product intended for building applications for good.**
 
 Attribution URL: **https://matter.childmind.org**
-
-Graphic image: <img width="200" src="https://github.com/ChildMindInstitute/mindlogger-admin/blob/master/CMI_logo.jpg" class="img-responsive img-centered" alt="CMI logo">
