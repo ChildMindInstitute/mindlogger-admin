@@ -97,4 +97,6 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ## License
 
-<!-- TODO: https://mindlogger.atlassian.net/browse/M2-5374 -->
+Delayed Open Source Attribution License 1.0 (DOSA-1.0)
+
+Refer to [LICENSE.md](./LICENSE.md)
