@@ -10,6 +10,7 @@ import { ScoreOrSection, ScoreReport } from 'shared/state';
 import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledErrorText, theme } from 'shared/styles';
+import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 
 import { ConditionRowProps } from './ConditionRow.types';
 import {
@@ -40,6 +41,7 @@ export const ConditionRow = ({
     setValue,
     trigger,
     formState: { errors },
+    clearErrors,
   } = useCustomFormContext();
 
   const itemsName = `${activityName}.items`;
@@ -108,6 +110,9 @@ export const ConditionRow = ({
   const handleChangeConditionType = useCallback(
     (e: SelectEvent) => {
       const conditionType = e.target.value as ConditionType;
+      if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(conditionType)) {
+        clearErrors(conditionPayloadSelectionName);
+      }
 
       if (onChangeConditionType) {
         return onChangeConditionType({
