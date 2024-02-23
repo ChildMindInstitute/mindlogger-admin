@@ -12,23 +12,18 @@ export const useTransferOwnership = () => {
     setIsSubmitted(true);
   };
 
-  const handleSendInvitation =
-    ({ callback, bannerTestId }: { callback?: () => void; bannerTestId: string }) =>
-    (email: string) => {
-      callback?.();
+  const handleSendInvitation = (callback?: () => void) => (email: string) => {
+    callback?.();
 
-      dispatch(
-        banners.actions.addBanner({
-          key: 'TransferOwnershipSuccessBanner',
-          bannerProps: {
-            email,
-            'data-testid': bannerTestId,
-          },
-        }),
-      );
+    dispatch(
+      banners.actions.addBanner({
+        key: 'TransferOwnershipSuccessBanner',
+        bannerProps: { email },
+      }),
+    );
 
-      Mixpanel.track('Invitation sent successfully');
-    };
+    Mixpanel.track('Invitation sent successfully');
+  };
 
   return {
     isSubmitted,

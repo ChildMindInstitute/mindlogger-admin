@@ -69,6 +69,7 @@ export type TableController = {
   columns: HeadCell[];
   rows: Row[] | undefined;
   orderBy: string;
+  dataTestid?: string;
 };
 
 export type AddToBuilderPopupSchemaType = {

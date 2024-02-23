@@ -19,10 +19,7 @@ export const TransferOwnershipSetting = () => {
 
   const dataTestid = 'applet-settings-transfer-ownership';
 
-  const handleEmailTransferred = handleSendInvitation({
-    callback: transferOwnershipRef.current?.resetEmail,
-    bannerTestId: `${dataTestid}-success-banner`,
-  });
+  const handleEmailTransferred = handleSendInvitation(transferOwnershipRef.current?.resetEmail);
 
   return (
     <>

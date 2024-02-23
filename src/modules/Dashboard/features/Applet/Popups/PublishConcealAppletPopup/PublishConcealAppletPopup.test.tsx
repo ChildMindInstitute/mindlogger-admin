@@ -44,9 +44,7 @@ describe('PublishConcealAppletPopup', () => {
     });
 
     fireEvent.click(screen.getByText('Yes'));
-    await waitFor(() => {
-      expectBanner(store, 'dashboard-applets-publish-success-banner');
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 
   test('should show conceal success banner', async () => {
@@ -57,8 +55,6 @@ describe('PublishConcealAppletPopup', () => {
     });
 
     fireEvent.click(screen.getByText('Yes'));
-    await waitFor(() => {
-      expectBanner(store, 'dashboard-applets-conceal-success-banner');
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 });

@@ -1,5 +1,3 @@
-import { ExpandedListTypes } from '../Legend.const';
-
 type Button = {
   icon: JSX.Element;
   action: () => void;

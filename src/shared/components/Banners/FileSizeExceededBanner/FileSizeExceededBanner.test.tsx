@@ -13,7 +13,7 @@ describe('FileSizeExceededBanner', () => {
   test('should render', () => {
     renderWithProviders(<FileSizeExceededBanner {...props} />);
 
-    expect(screen.getByTestId('file-size-exceeded-banner')).toBeInTheDocument();
+    expect(screen.getByTestId('error-banner')).toBeInTheDocument();
     expect(
       screen.getByText(`File is too big. Please upload a file less than ${props.size} B.`),
     ).toBeInTheDocument();

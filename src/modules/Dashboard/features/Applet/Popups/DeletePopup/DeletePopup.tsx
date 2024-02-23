@@ -38,10 +38,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
       dispatch(
         banners.actions.addBanner({
           key: 'SaveSuccessBanner',
-          bannerProps: {
-            children: t('appletDeletedSuccessfully'),
-            'data-testid': `${dataTestid}-success-banner`,
-          },
+          bannerProps: { children: t('appletDeletedSuccessfully') },
         }),
       );
       dispatch(alerts.actions.resetAlerts());

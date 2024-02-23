@@ -5,7 +5,7 @@ import { ReviewActivity } from 'api';
 import { Answer } from '../../RespondentDataReview.types';
 
 export type ReviewMenuItemProps = {
-  selectedDate: Date;
+  selectedDate: Date | null;
   activity: ReviewActivity;
   isSelected: boolean;
   selectedAnswer: Answer | null;

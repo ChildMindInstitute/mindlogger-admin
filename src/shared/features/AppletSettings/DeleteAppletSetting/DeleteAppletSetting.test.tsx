@@ -77,9 +77,7 @@ describe('DeleteAppletSetting', () => {
 
     fireEvent.click(screen.getByText('Delete'));
 
-    await waitFor(() => {
-      expectBanner(store, 'applet-settings-delete-applet-delete-success-banner');
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
   });

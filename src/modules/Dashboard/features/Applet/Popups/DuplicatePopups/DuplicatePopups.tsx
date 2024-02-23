@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -136,10 +136,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
         bannerProps: {
-          children: t('successDuplication', {
-            appletName: currentAppletName,
-          }),
-          'data-testid': 'dashboard-applets-duplicate-popup-success-popup',
+          children: t('successDuplication', { appletName: currentAppletName }),
         },
       }),
     );

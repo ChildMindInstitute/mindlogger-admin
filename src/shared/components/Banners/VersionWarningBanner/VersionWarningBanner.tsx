@@ -5,7 +5,7 @@ import { Banner, BannerProps } from '../Banner';
 import { VERSION_WARNING_BANNER_LINK } from './VersionWarningBanner.const';
 
 export const VersionWarningBanner = (props: BannerProps) => (
-  <Banner duration={null} severity="warning" data-testid="version-warning-banner" {...props}>
+  <Banner duration={null} severity="warning" {...props}>
     <Trans i18nKey="versionWarningBanner">
       <strong>You are using the new version of MindLogger!</strong>
       <>End users must update to the new app.</>

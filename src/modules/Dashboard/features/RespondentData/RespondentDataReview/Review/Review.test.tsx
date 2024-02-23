@@ -176,7 +176,7 @@ jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
 }));
 
 describe('Review', () => {
-  test('renders empty state when activityItemAnswers and selectedAnswer are nullable', () => {
+  test('renders empty state when activityItemAnswers and selectedAnswer are both null', () => {
     renderWithProviders(
       <Review isLoading={false} activityItemAnswers={null} selectedAnswer={null} />,
     );
@@ -185,7 +185,16 @@ describe('Review', () => {
     ).toBeInTheDocument();
   });
 
-  test('renders empty state when activityItemAnswers is null and selectedAnswer is non-nullable', () => {
+  test('renders empty state when selectedAnswer is null', () => {
+    renderWithProviders(
+      <Review isLoading={false} activityItemAnswers={activityItemAnswers} selectedAnswer={null} />,
+    );
+    expect(
+      screen.getByText('Select the date, Activity, and response time to review the response data.'),
+    ).toBeInTheDocument();
+  });
+
+  test('renders empty state when activityItemAnswers is null and selectedAnswer is not null', () => {
     renderWithProviders(
       <Review isLoading={false} activityItemAnswers={null} selectedAnswer={selectedAnswer} />,
     );
@@ -198,7 +207,7 @@ describe('Review', () => {
         data-testid={dataTestid}
         isLoading={false}
         activityItemAnswers={activityItemAnswers}
-        selectedAnswer={null}
+        selectedAnswer={selectedAnswer}
       />,
     );
 
