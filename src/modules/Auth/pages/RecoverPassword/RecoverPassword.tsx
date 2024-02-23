@@ -41,18 +41,16 @@ export const RecoverPassword = () => {
   if (error) {
     return (
       <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
-        <StyledBodyLarge variant="body1" margin="16px 0px">
-          <Box>
-            <Trans i18nKey="invalidPasswordResetLink">
-              <StyledLinkBtn
-                style={{ marginBottom: 3, fontSize: 16 }}
-                variant="text"
-                onClick={() => navigate(page.passwordReset)}
-              >
-                here
-              </StyledLinkBtn>
-            </Trans>
-          </Box>
+        <StyledBodyLarge variant="body1">
+          <Trans i18nKey="invalidPasswordResetLink">
+            <StyledLinkBtn
+              style={{ marginBottom: 3, fontSize: 16 }}
+              variant="text"
+              onClick={() => navigate(page.passwordReset)}
+            >
+              here
+            </StyledLinkBtn>
+          </Trans>
         </StyledBodyLarge>
       </Box>
     );
