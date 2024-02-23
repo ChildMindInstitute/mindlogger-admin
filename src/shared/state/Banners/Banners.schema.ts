@@ -7,6 +7,7 @@ export enum BannerType {
   SaveSuccessBanner,
   TransferOwnershipSuccessBanner,
   VersionWarningBanner,
+  PasswordResetSuccessfulBanner,
 }
 
 export type BannerPayload = {

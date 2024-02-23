@@ -10,3 +10,7 @@ export type SignUpArgs = {
 };
 
 export type ResetPassword = { email: string };
+
+export type RecoverPasswordHealthCheck = { email: string | null; key: string | null };
+
+export type ApproveRecoveryPassword = { email: string; key: string; password: string };
