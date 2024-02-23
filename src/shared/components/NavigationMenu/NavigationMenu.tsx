@@ -1,9 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Modal } from 'shared/components';
-import { StyledModalWrapper } from 'shared/styles';
-
 import { LeftBar } from './LeftBar';
 import { Container } from './Container';
 import { StyledWrapper } from './NavigationMenu.styles';
