@@ -294,6 +294,7 @@ export const setAppletEncryptionApi = (
 ) => authApiClient.post(`/applets/${appletId}/encryption`, { ...encryption }, { signal });
 
 export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const { ownerId, ...restParams } = params;
 
   return authApiClient.get('/invitations', {
