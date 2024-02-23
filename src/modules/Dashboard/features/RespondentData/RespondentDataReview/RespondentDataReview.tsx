@@ -54,7 +54,7 @@ export const RespondentDataReview = () => {
   const [activityItemAnswers, setActivityItemAnswers] = useState<
     DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'] | null
   >(null);
-  const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
+  const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
   const { control, setValue } = useForm<{ date: null | Date }>({
     defaultValues: {
       date: null,
