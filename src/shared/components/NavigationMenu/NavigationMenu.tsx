@@ -31,24 +31,14 @@ export const NavigationMenu = ({
       <LeftBar
         title={title}
         items={items}
-        isCompact={hasActiveItem && !activeItem?.useModal}
+        hasActiveItem={hasActiveItem}
         onItemClick={onSetActiveItem}
       />
-      {hasActiveItem &&
-        (activeItem?.useModal ? (
-          <Modal
-            open
-            onClose={onClose}
-            title={t(activeItem?.modalTitle || '', activeItem?.modalTitleParams || {})}
-            buttonText=""
-          >
-            <StyledModalWrapper>{activeItem?.component}</StyledModalWrapper>
-          </Modal>
-        ) : (
-          <Container title={t(activeItem?.label || '')} onClose={onClose}>
-            {activeItem?.component}
-          </Container>
-        ))}
+      {hasActiveItem && (
+        <Container title={t(activeItem?.label || '')} onClose={onClose}>
+          {activeItem?.component}
+        </Container>
+      )}
     </StyledWrapper>
   );
 };

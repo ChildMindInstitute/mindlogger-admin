@@ -16,13 +16,14 @@ import {
   StyledTitle,
 } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
+import { Actions } from '../Actions';
 
-export const LeftBar = ({ title, items, isCompact, onItemClick }: LeftBarProps) => {
+export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarProps) => {
   const { setting } = useParams();
   const { t } = useTranslation('app');
 
   const containerSxProps = {
-    width: isCompact ? '40rem' : '100%',
+    width: hasActiveItem ? '40rem' : '100%',
     flexShrink: 0,
     borderRight: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
     height: '100%',
@@ -32,13 +33,14 @@ export const LeftBar = ({ title, items, isCompact, onItemClick }: LeftBarProps) 
 
   return (
     <BuilderContainer title={t(title)} sxProps={containerSxProps}>
-      <StyledContent isCompact={isCompact}>
+      <Actions isCompact={hasActiveItem} />
+      <StyledContent isCompact={hasActiveItem}>
         {items.map(
           ({ label, items, isVisible = true }) =>
             isVisible && (
-              <StyledSettingsGroup key={label} isCompact={isCompact}>
+              <StyledSettingsGroup key={label} isCompact={hasActiveItem}>
                 <StyledTitleSmall>{t(label)}</StyledTitleSmall>
-                <StyledSettings isCompact={isCompact}>
+                <StyledSettings isCompact={hasActiveItem}>
                   {items.map(
                     ({
                       icon,
@@ -70,7 +72,7 @@ export const LeftBar = ({ title, items, isCompact, onItemClick }: LeftBarProps) 
                                   onClick,
                                 })
                               }
-                              isCompact={isCompact}
+                              isCompact={hasActiveItem}
                               isSelected={!disabled && setting === param}
                               disabled={disabled}
                               data-testid={dataTestid}

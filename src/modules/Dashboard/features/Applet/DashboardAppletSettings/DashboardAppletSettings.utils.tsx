@@ -1,7 +1,6 @@
 import { Svg } from 'shared/components/Svg';
 import { Roles } from 'shared/consts';
 import {
-  ExportDataSetting,
   DataRetention,
   EditAppletSetting,
   TransferOwnershipSetting,
@@ -16,7 +15,7 @@ import { Item as ItemNavigation } from 'shared/components/NavigationMenu';
 
 import { GetSettings } from './DashboardAppletSettings.types';
 
-export const getSettings = ({ appletName, isPublished, roles }: GetSettings): ItemNavigation[] => {
+export const getSettings = ({ isPublished, roles }: GetSettings): ItemNavigation[] => {
   const dataTestid = 'dashboard-applet-settings';
 
   return [
@@ -24,19 +23,6 @@ export const getSettings = ({ appletName, isPublished, roles }: GetSettings): It
       label: 'usersAndData',
       isVisible: isManagerOrOwner(roles?.[0]),
       items: [
-        {
-          icon: <Svg id="export" />,
-          label: 'exportData',
-          useModal: true,
-          modalTitle: 'exportDataWithName',
-          modalTitleParams: {
-            appletName,
-          },
-          component: <ExportDataSetting />,
-          param: SettingParam.ExportData,
-          onClick: () => Mixpanel.track('Export Data click'),
-          'data-testid': `${dataTestid}-export-data`,
-        },
         {
           icon: <Svg id="data-retention" />,
           label: 'dataRetention',

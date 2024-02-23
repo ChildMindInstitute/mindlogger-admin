@@ -51,7 +51,11 @@ describe('ExportDataSetting', () => {
       ${ExportDateType.LastWeek}  | ${'last week'}
       ${ExportDateType.AllTime}   | ${'all time'}
     `('$description', async ({ exportDataType }) => {
-      renderWithProviders(<ExportDataSetting />, { preloadedState, route, routePath });
+      renderWithProviders(<ExportDataSetting isOpen onClose={() => {}} />, {
+        preloadedState,
+        route,
+        routePath,
+      });
       const dateType = screen.getByTestId(`${dataTestid}-dateType`);
       const input = dateType.querySelector('input');
       input && fireEvent.change(input, { target: { value: exportDataType } });
@@ -69,7 +73,7 @@ describe('ExportDataSetting', () => {
       ${`/dashboard/${mockedAppletId}/settings/${SettingParam.ExportData}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
       ${`/builder/${mockedAppletId}/settings/${SettingParam.ExportData}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
     `('$description', async ({ route, routePath }) => {
-      renderWithProviders(<ExportDataSetting />, { preloadedState, route, routePath });
+      renderWithProviders(<ExportDataSetting isOpen onClose={() => {}} />, { preloadedState, route, routePath });
       const dateType = screen.getByTestId(`${dataTestid}-dateType`);
       expect(dateType).toBeVisible();
       expect(screen.getByTestId(dataTestid)).toBeVisible();

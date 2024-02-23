@@ -7,7 +7,6 @@ import {
   TransferOwnershipSetting,
   // ShareAppletSetting,
   DeleteAppletSetting,
-  ExportDataSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
   LiveResponseStreamingSetting,
@@ -20,7 +19,6 @@ import { GetSettings } from './BuilderAppletSettings.types';
 const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
 export const getSettings = ({
-  appletName,
   isNewApplet,
   isPublished,
   roles,
@@ -33,22 +31,6 @@ export const getSettings = ({
     {
       label: 'usersAndData',
       items: [
-        {
-          icon: <Svg id="export" />,
-          label: 'exportData',
-          useModal: true,
-          modalTitle: 'exportDataWithName',
-          modalTitleParams: {
-            appletName,
-          },
-          component: <ExportDataSetting />,
-          onClick: () => Mixpanel.track('Export Data click'),
-          param: SettingParam.ExportData,
-          disabled: isNewApplet,
-          tooltip,
-          isVisible: isManagerOrOwner(roles?.[0]),
-          'data-testid': `${dataTestid}-export-data`,
-        },
         {
           icon: <Svg id="data-retention" />,
           label: 'dataRetention',

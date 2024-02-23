@@ -179,7 +179,6 @@ export const DataExportPopup = ({
         <Modal
           open={popupVisible}
           onClose={handlePopupClose}
-          onSubmit={submitForm}
           title={t('dataExport')}
           buttonText=""
           data-testid={dataTestid}

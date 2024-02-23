@@ -10,8 +10,8 @@ import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { Svg } from 'shared/components/Svg';
 import { applet } from 'shared/state';
 import { SelectController } from 'shared/components/FormComponents';
-import { DatePicker } from 'shared/components';
-import { theme, StyledBodyLarge, StyledFlexTopCenter } from 'shared/styles';
+import { DatePicker, Modal } from 'shared/components';
+import { theme, StyledBodyLarge, StyledFlexTopCenter, StyledModalWrapper } from 'shared/styles';
 import { SelectEvent } from 'shared/types';
 import { DateType } from 'shared/components/DatePicker/DatePicker.types';
 import { getNormalizedTimezoneDate } from 'shared/utils';
@@ -24,7 +24,13 @@ import { ExportDataFormValues, ExportDateType } from './ExportDataSettings.types
 import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import { getDateTypeOptions } from './ExportDataSetting.utils';
 
-export const ExportDataSetting = () => {
+export const ExportDataSetting = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
   const { t } = useTranslation('app');
   const { result: appletData } = applet.useAppletData() ?? {};
   const [dataIsExporting, setDataIsExporting] = useState(false);
@@ -64,7 +70,7 @@ export const ExportDataSetting = () => {
     if (!date) return;
     setValue('toDate', endOfDay(date));
   };
-  const onCloseCallback = () => {
+  const onDatePickerClose = () => {
     if (toDate < fromDate) {
       setValue('toDate', addDays(fromDate, 1));
     }
@@ -97,74 +103,89 @@ export const ExportDataSetting = () => {
   };
 
   return (
-    <FormProvider {...methods}>
-      <form noValidate autoComplete="off">
-        <StyledAppletSettingsDescription>{t('exportDescription')}</StyledAppletSettingsDescription>
-        <SelectController
-          name={'dateType'}
-          control={control}
-          options={getDateTypeOptions()}
-          label={t('dateRange')}
-          data-testid={`${dataTestid}-dateType`}
-          dropdownStyles={{
-            width: '30rem',
-          }}
-          SelectProps={{
-            autoWidth: true,
-          }}
-          customChange={onDateTypeChange}
-          style={{ width: '100%' }}
-        />
-        {hasCustomDate && (
-          <StyledFlexTopCenter
-            sx={{
-              mt: theme.spacing(2.4),
-            }}
-          >
-            <DatePicker
-              {...commonProps}
-              name="fromDate"
-              onCloseCallback={onCloseCallback}
-              onSubmitCallback={onFromDateSubmit}
-              label={t('startDate')}
-              minDate={minDate}
-              data-testid={`${dataTestid}-from-date`}
-              inputSx={{ width: '100%' }}
+    <Modal
+      open={isOpen}
+      title={t('exportDataForApplet', {
+        name: appletData?.displayName,
+      })}
+      onClose={onClose}
+      buttonText=""
+    >
+      <StyledModalWrapper>
+        <FormProvider {...methods}>
+          <form noValidate autoComplete="off">
+            <StyledAppletSettingsDescription>
+              {t('exportDescription')}
+            </StyledAppletSettingsDescription>
+            <SelectController
+              name={'dateType'}
+              control={control}
+              options={getDateTypeOptions()}
+              label={t('dateRange')}
+              data-testid={`${dataTestid}-dateType`}
+              dropdownStyles={{
+                width: '30rem',
+              }}
+              SelectProps={{
+                autoWidth: true,
+              }}
+              customChange={onDateTypeChange}
+              style={{ width: '100%' }}
             />
-            <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>{t('smallTo')}</StyledBodyLarge>
-            <DatePicker
-              {...commonProps}
-              name="toDate"
-              onSubmitCallback={onToDateSubmit}
-              minDate={fromDate}
-              label={t('endDate')}
-              data-testid={`${dataTestid}-to-date`}
-              inputSx={{ width: '100%' }}
-            />
-          </StyledFlexTopCenter>
-        )}
-        <Box sx={{ textAlign: 'center' }}>
-          <StyledAppletSettingsButton
-            onClick={() => {
-              setDataIsExporting(true);
-            }}
-            variant="contained"
-            startIcon={<Svg width="18" height="18" id="export" />}
-            data-testid={dataTestid}
-          >
-            {t('download')}
-          </StyledAppletSettingsButton>
-        </Box>
-        {dataIsExporting && (
-          <DataExportPopup
-            isAppletSetting
-            popupVisible={dataIsExporting}
-            setPopupVisible={setDataIsExporting}
-            chosenAppletData={appletData ?? null}
-            data-testid={`${dataTestid}-popup`}
-          />
-        )}
-      </form>
-    </FormProvider>
+            {hasCustomDate && (
+              <StyledFlexTopCenter
+                sx={{
+                  mt: theme.spacing(2.4),
+                }}
+              >
+                <DatePicker
+                  {...commonProps}
+                  name="fromDate"
+                  onCloseCallback={onDatePickerClose}
+                  onSubmitCallback={onFromDateSubmit}
+                  label={t('startDate')}
+                  minDate={minDate}
+                  data-testid={`${dataTestid}-from-date`}
+                  inputSx={{ width: '100%' }}
+                />
+                <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
+                  {t('smallTo')}
+                </StyledBodyLarge>
+                <DatePicker
+                  {...commonProps}
+                  name="toDate"
+                  onSubmitCallback={onToDateSubmit}
+                  minDate={fromDate}
+                  label={t('endDate')}
+                  data-testid={`${dataTestid}-to-date`}
+                  inputSx={{ width: '100%' }}
+                />
+              </StyledFlexTopCenter>
+            )}
+            <Box sx={{ textAlign: 'center' }}>
+              <StyledAppletSettingsButton
+                onClick={() => {
+                  setDataIsExporting(true);
+                }}
+                variant="contained"
+                startIcon={<Svg width="18" height="18" id="export" />}
+                data-testid={dataTestid}
+              >
+                {t('downloadCSV')}
+              </StyledAppletSettingsButton>
+            </Box>
+            {dataIsExporting && (
+              <DataExportPopup
+                isAppletSetting
+                popupVisible={dataIsExporting}
+                setPopupVisible={setDataIsExporting}
+                chosenAppletData={appletData ?? null}
+                data-testid={`${dataTestid}-popup`}
+              />
+            )}
+          </form>
+        </FormProvider>
+      </StyledModalWrapper>
+    </Modal>
   );
 };

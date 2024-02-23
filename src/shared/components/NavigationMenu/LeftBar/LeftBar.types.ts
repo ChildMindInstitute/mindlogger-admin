@@ -3,6 +3,6 @@ import { Item, NavigationItem } from '../NavigationMenu.types';
 export type LeftBarProps = {
   title: string;
   items: Item[];
-  isCompact: boolean;
+  hasActiveItem: boolean;
   onItemClick: (value: NavigationItem) => void;
 };
