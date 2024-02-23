@@ -172,6 +172,7 @@ export const RespondentDataReview = () => {
         setIsLoading(false);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appletId, answerId, selectedActivity, selectedAnswer]);
 
   useEffect(() => {
@@ -195,6 +196,7 @@ export const RespondentDataReview = () => {
     }
 
     handleSetInitialDate(new Date());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastActivityCompleted]);
 
   return (
