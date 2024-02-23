@@ -1,3 +1,4 @@
+import { type AxiosResponse } from 'axios';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -82,14 +83,14 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
   const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
-    async () => {
+    async (result) => {
       await setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
         encryption: encryptionDataRef.current.encryption!,
         appletId: currentAppletId,
       });
 
-      handleDuplicateSuccess();
+      handleDuplicateSuccess(result);
     },
     () => {
       setPasswordModalVisible(false);
@@ -124,7 +125,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
   };
 
-  const handleDuplicateSuccess = () => {
+  const handleDuplicateSuccess = (result: AxiosResponse) => {
     setPasswordModalVisible(false);
 
     onCloseCallback?.();
@@ -136,7 +137,9 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
         bannerProps: {
-          children: t('successDuplication', { appletName: currentAppletName }),
+          children: t('successDuplication', {
+            appletName: result?.data?.displayName
+          }),
         },
       }),
     );
