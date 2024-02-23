@@ -26,7 +26,6 @@ import {
   AppletSubmitDateList,
   RespondentId,
   EventId,
-  RemoveRespondentAccess,
   AppletDataRetention,
   ImportSchedule,
   GetWorkspaceAppletsParams,
@@ -218,19 +217,6 @@ export const editManagerAccessApi = (
     },
     { signal },
   );
-
-export const removeRespondentAccessApi = (
-  { userId, appletIds, deleteResponses }: RemoveRespondentAccess,
-  signal?: AbortSignal,
-) =>
-  authApiClient.delete('/applets/respondent/removeAccess', {
-    signal,
-    data: {
-      userId,
-      appletIds,
-      deleteResponses,
-    },
-  });
 
 export const editSubjectApi = ({ subjectId, values }: EditSubject, signal?: AbortSignal) =>
   authApiClient.put(
