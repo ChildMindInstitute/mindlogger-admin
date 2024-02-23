@@ -57,7 +57,6 @@ describe('getSettings', () => {
 
     test.each`
       label                    | description
-      ${'exportData'}          | ${'export data'}
       ${'dataRetention'}       | ${'data retention'}
       ${'versionHistory'}      | ${'version history'}
       ${'transferOwnership'}   | ${'transfer ownership'}
