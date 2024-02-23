@@ -67,10 +67,7 @@ const preloadedState = {
         },
       },
     },
-    respondentDetails: {
-      ...initialStateData,
-      data: null,
-    },
+    respondentDetails: initialStateData,
   },
 };
 
