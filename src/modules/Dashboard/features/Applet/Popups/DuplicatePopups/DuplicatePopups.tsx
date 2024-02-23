@@ -138,7 +138,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         key: 'SaveSuccessBanner',
         bannerProps: {
           children: t('successDuplication', {
-            appletName: result?.data?.displayName
+            appletName: result?.data?.displayName,
           }),
         },
       }),
