@@ -279,9 +279,7 @@ describe('ReportConfigSetting', () => {
       );
       fireEvent.click(screen.getByTestId('report-config-password-popup-submit-button'));
 
-      await waitFor(() => {
-        expectBanner(store, 'builder-applet-settings-report-config-setting-success-banner');
-      });
+      await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
     });
 
     test('Validations', async () => {
@@ -352,7 +350,7 @@ describe('ReportConfigSetting', () => {
     );
     expect(itemName).toBeVisible();
 
-    fireEvent.mouseDown(itemName.querySelector('[role=\'button\']'));
+    fireEvent.mouseDown(itemName.querySelector("[role='button']"));
 
     const itemNameOptions = screen.getByTestId(
       `${mockedReportConfigDataTestid}-report-includes-item-name-dropdown`,

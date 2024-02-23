@@ -18,17 +18,13 @@ const emptyState: PreloadedState<RootState> = {
   },
 };
 const email = 'test@email.com';
-const bannerTestId = 'testId';
 const populatedState: PreloadedState<RootState> = {
   banners: {
     data: {
       banners: [
         {
           key: 'TransferOwnershipSuccessBanner',
-          bannerProps: {
-            email,
-            'data-testid': bannerTestId,
-          },
+          bannerProps: { email },
         },
       ],
     },
@@ -62,7 +58,7 @@ describe('useTransferOwnership', () => {
     );
   });
 
-  test('should change transferOwnershipSuccessVisible accorging to emailTransfered updates', async () => {
+  test('should show success banner when transferring ownership succeeds', async () => {
     const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
     const { result, rerender, store } = renderHookWithProviders(useTransferOwnership, {
       preloadedState: emptyState,
@@ -72,10 +68,7 @@ describe('useTransferOwnership', () => {
     expect(store.getState().banners).toEqual(emptyState.banners);
     expect(screen.queryByTestId('testId')).toBeNull();
 
-    result.current.handleSendInvitation({
-      callback: mockedCallback,
-      bannerTestId,
-    })(email);
+    result.current.handleSendInvitation(mockedCallback)(email);
 
     rerender();
 

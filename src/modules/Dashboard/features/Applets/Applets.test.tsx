@@ -257,7 +257,7 @@ describe('Applets component tests', () => {
     await waitFor(() => {
       expect(
         screen.getByText(
-          'No match was found for \'NotExistedApplet\'. Try a different search word or phrase.',
+          "No match was found for 'NotExistedApplet'. Try a different search word or phrase.",
         ),
       ).toBeInTheDocument;
     });

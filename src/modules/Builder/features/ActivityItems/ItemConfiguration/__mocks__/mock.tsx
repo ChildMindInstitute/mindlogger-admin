@@ -598,9 +598,6 @@ export const mockedItemTypes = [
 ];
 export const mockedItemTypeGroups = ['select', 'matrixSelect', 'input', 'record', 'display'];
 export const mockedItemTypesMobileOnly = [
-  'date',
-  'time',
-  'timeRange',
   'singleSelectRows',
   'multiSelectRows',
   'sliderRows',
@@ -609,6 +606,4 @@ export const mockedItemTypesMobileOnly = [
   'video',
   'geolocation',
   'audio',
-  'message',
-  'audioPlayer',
 ];

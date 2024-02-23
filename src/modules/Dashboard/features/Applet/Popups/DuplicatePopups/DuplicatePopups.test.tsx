@@ -84,9 +84,7 @@ describe('DuplicatePopups', () => {
       fireEvent.click(getByText('Submit'));
     });
 
-    await waitFor(() => {
-      expectBanner(store, 'dashboard-applets-duplicate-popup-success-popup');
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 
   // TODO uncomment after useasync changes

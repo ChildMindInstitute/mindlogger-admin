@@ -45,8 +45,6 @@ describe('EditRespondentPopup component tests', () => {
 
     fireEvent.change(screen.getByLabelText(/Nickname/i), { target: { value: '00000' } });
     fireEvent.click(screen.getByText('Save'));
-    await waitFor(() => {
-      expectBanner(store, 'dashboard-respondents-edit-popup-success-banner');
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 });

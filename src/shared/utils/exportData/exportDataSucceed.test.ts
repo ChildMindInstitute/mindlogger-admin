@@ -126,7 +126,7 @@ describe('exportDataSucceed', () => {
       'media-responses-Sat Jan 01 2000-test.zip',
     );
   });
-  test('should set \'null\' for defaultData in exportTemplate', async () => {
+  test("should set 'null' for defaultData in exportTemplate", async () => {
     const reportData = [{ id: 'test' }];
     const activityJourneyData = [{ id: 'test' }];
     jest.spyOn(prepareDataUtils, 'prepareData').mockReturnValue(
