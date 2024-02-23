@@ -54,7 +54,7 @@ export const RespondentDataReview = () => {
   const [activityItemAnswers, setActivityItemAnswers] = useState<
     DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'] | null
   >(null);
-  const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
+  const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
   const { control, setValue } = useForm<{ date: null | Date }>({
     defaultValues: {
       date: null,
@@ -172,6 +172,7 @@ export const RespondentDataReview = () => {
         setIsLoading(false);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appletId, answerId, selectedActivity, selectedAnswer]);
 
   useEffect(() => {
@@ -195,6 +196,7 @@ export const RespondentDataReview = () => {
     }
 
     handleSetInitialDate(new Date());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastActivityCompleted]);
 
   return (

@@ -26,7 +26,6 @@ import {
   AppletSubmitDateList,
   RespondentId,
   EventId,
-  RemoveRespondentAccess,
   AppletDataRetention,
   ImportSchedule,
   GetWorkspaceAppletsParams,
@@ -219,19 +218,6 @@ export const editManagerAccessApi = (
     { signal },
   );
 
-export const removeRespondentAccessApi = (
-  { userId, appletIds, deleteResponses }: RemoveRespondentAccess,
-  signal?: AbortSignal,
-) =>
-  authApiClient.delete('/applets/respondent/removeAccess', {
-    signal,
-    data: {
-      userId,
-      appletIds,
-      deleteResponses,
-    },
-  });
-
 export const editSubjectApi = ({ subjectId, values }: EditSubject, signal?: AbortSignal) =>
   authApiClient.put(
     `/subjects/${subjectId}`,
@@ -308,6 +294,7 @@ export const setAppletEncryptionApi = (
 ) => authApiClient.post(`/applets/${appletId}/encryption`, { ...encryption }, { signal });
 
 export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const { ownerId, ...restParams } = params;
 
   return authApiClient.get('/invitations', {

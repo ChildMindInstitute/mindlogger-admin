@@ -163,10 +163,6 @@ export type EditManagerAccess = {
   accesses: { appletId: string; roles: Roles[]; subjects: string[] }[];
 };
 
-export type RemoveRespondentAccess = RemoveAccess & {
-  deleteResponses: boolean;
-};
-
 export type EditSubject = SubjectId & {
   values: {
     secretUserId: string;
