@@ -21,7 +21,7 @@ export const newPasswordSchema = () => {
       passwordConfirmation: yup
         .string()
         .required(passwordConfirmationRequired)
-        .oneOf([yup.ref('password')], passwordsMustMatch),
+        .oneOf([yup.ref('password'), ''], passwordsMustMatch),
     })
     .required();
 };
