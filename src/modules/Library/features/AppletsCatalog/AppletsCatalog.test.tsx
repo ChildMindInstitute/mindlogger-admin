@@ -1,12 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as reduxHooks from 'redux/store/hooks';
 import { library } from 'redux/modules';
 import { renderWithProviders } from 'shared/utils';
-import { SEARCH_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { AppletsCatalog } from './AppletsCatalog';
 
@@ -149,12 +148,12 @@ describe('AppletsCatalog', () => {
     const searchInput = searchContainer.querySelector('input');
 
     await userEvent.type(searchInput, 'share test 1');
-    await new Promise((resolve) => setTimeout(resolve, SEARCH_DEBOUNCE_VALUE));
-
-    expect(spyGetPublishedApplets).toHaveBeenCalledWith({
-      limit: 6,
-      page: 1,
-      search: 'share test 1',
+    await waitFor(() => {
+      expect(spyGetPublishedApplets).toHaveBeenCalledWith({
+        limit: 6,
+        page: 1,
+        search: 'share test 1',
+      });
     });
 
     const cartButton = screen.getByTestId('library-cart-button');

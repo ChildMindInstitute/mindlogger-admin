@@ -2,7 +2,7 @@ import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { EditRespondentPopup } from '.';
 
@@ -43,7 +43,7 @@ describe('EditRespondentPopup component tests', () => {
   test('EditRespondentPopup should appear success text', async () => {
     jest.spyOn(mockedAxios, 'put').mockImplementation(successFakeRequest);
 
-    renderWithProviders(<EditRespondentPopup {...commonProps} />);
+    const { store } = renderWithProviders(<EditRespondentPopup {...commonProps} />);
 
     const nicknameInput = screen
       .getByTestId('dashboard-respondents-edit-popup-nickname')
@@ -53,11 +53,8 @@ describe('EditRespondentPopup component tests', () => {
 
     const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
     await userEvent.click(submitButton);
-
-    await waitFor(() =>
-      expect(
-        screen.getByText('Nickname and ID have been updated successfully.'),
-      ).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expectBanner(store, 'dashboard-respondents-edit-popup-success-banner');
+    });
   });
 });

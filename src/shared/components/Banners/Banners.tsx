@@ -1,8 +1,15 @@
 import { Collapse } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
 
-import { BannerComponents, banners } from 'shared/state/Banners';
-import { useAppDispatch } from 'redux/store';
+import { BannerPayload, banners } from 'shared/state/Banners';
+import { AppDispatch, useAppDispatch } from 'redux/store';
+
+import { BannerComponents } from './Banners.const';
+
+const handlePureClose = (dispatch: AppDispatch, { key, bannerProps }: BannerPayload) => {
+  dispatch(banners.actions.removeBanner({ key }));
+  bannerProps?.onClose?.();
+};
 
 export const Banners = () => {
   const dispatch = useAppDispatch();
@@ -10,12 +17,15 @@ export const Banners = () => {
 
   return (
     <TransitionGroup>
-      {data.banners.map(({ key }) => {
+      {data.banners.map(({ key, bannerProps }) => {
         const BannerComponent = BannerComponents[key];
 
         return (
           <Collapse key={key}>
-            <BannerComponent onClose={() => dispatch(banners.actions.removeBanner({ key }))} />
+            <BannerComponent
+              {...bannerProps}
+              onClose={() => handlePureClose(dispatch, { key, bannerProps })}
+            />
           </Collapse>
         );
       })}

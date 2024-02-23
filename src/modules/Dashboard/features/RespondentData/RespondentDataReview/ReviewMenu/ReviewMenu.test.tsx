@@ -53,6 +53,7 @@ const preloadedState = {
         result: {
           nickname: 'Mocked Respondent',
           secretUserId: '3921968c-3903-4872-8f30-a6e6a10cef36',
+          lastSeen: null,
         },
       },
     },
@@ -65,9 +66,10 @@ const selectedDate = new Date('2023-12-15');
 const onMonthChange = jest.fn();
 const setSelectedActivity = jest.fn();
 const onSelectAnswer = jest.fn();
+const onDateChange = jest.fn();
 
 const ReviewMenuComponent = () => {
-  const { control } = useForm({
+  const { control } = useForm<{ date: null | Date }>({
     defaultValues: {
       date: selectedDate,
     },
@@ -108,6 +110,8 @@ const ReviewMenuComponent = () => {
     selectedAnswer: null,
     setSelectedActivity,
     onSelectAnswer,
+    isDatePickerLoading: false,
+    onDateChange,
   };
 
   return <ReviewMenu {...props} />;
@@ -149,7 +153,7 @@ describe('ReviewMenu', () => {
   test('test change date of the month', async () => {
     renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
 
-    const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
+    const inputContainer = screen.getByTestId(`${dataTestid}-review-date`);
     expect(inputContainer).toBeInTheDocument();
 
     const input = inputContainer.querySelector('input') as HTMLInputElement;
@@ -161,7 +165,7 @@ describe('ReviewMenu', () => {
     });
 
     const datepicker = (await screen.findByTestId(
-      'respondents-review-menu-review-date-popover',
+      `${dataTestid}-review-date-popover`,
     )) as HTMLElement;
     expect(datepicker).toBeInTheDocument();
 
@@ -178,14 +182,14 @@ describe('ReviewMenu', () => {
   test('test change month', async () => {
     renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
 
-    const inputContainer = screen.getByTestId('respondents-review-menu-review-date');
+    const inputContainer = screen.getByTestId(`${dataTestid}-review-date`);
 
     await act(async () => {
       await userEvent.click(inputContainer);
     });
 
     const datepicker = (await screen.findByTestId(
-      'respondents-review-menu-review-date-popover',
+      `${dataTestid}-review-date-popover`,
     )) as HTMLElement;
     expect(datepicker).toBeInTheDocument();
 

@@ -25,6 +25,7 @@ const date = new Date('2023-12-27');
 const dataTestid = 'respondents-review';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review?selectedDate=2023-12-27`;
+const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review`;
 const routePath = page.appletRespondentDataReview;
 const preloadedState = {
   workspaces: {
@@ -62,6 +63,7 @@ const preloadedState = {
         result: {
           nickname: 'Mocked Respondent',
           secretUserId: mockedRespondentId,
+          lastSeen: '2023-12-11T08:40:41.424000',
         },
       },
     },
@@ -331,6 +333,10 @@ describe('RespondentDataReview', () => {
       expect(datepickerDaySelected).toHaveLength(1);
 
       await userEvent.click(datepickerDaySelected[0]);
+      const okButton = screen.getByText('Ok');
+      expect(okButton).toBeInTheDocument();
+
+      await userEvent.click(okButton);
 
       await waitFor(() => {
         expect(input.value).toEqual('15 Dec 2023');
@@ -405,4 +411,19 @@ describe('RespondentDataReview', () => {
     },
     JEST_TEST_TIMEOUT,
   );
+
+  test('test if default review date is equal to last activity completed date', async () => {
+    renderWithProviders(<RespondentDataReview />, {
+      preloadedState,
+      route: routeWithoutSelectedDate,
+      routePath,
+    });
+
+    const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
+    expect(inputContainer).toBeInTheDocument();
+
+    const input = inputContainer.querySelector('input') as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input.value).toEqual('11 Dec 2023');
+  });
 });

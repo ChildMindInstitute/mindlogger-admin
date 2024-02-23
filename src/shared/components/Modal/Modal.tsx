@@ -106,6 +106,7 @@ export const Modal = ({
                 variant="text"
                 onClick={onThirdBtnSubmit}
                 sx={{ ...thirdBtnStyles }}
+                data-testid={`${dataTestid}-third-button`}
               >
                 {thirdBtnText}
               </StyledButton>
@@ -118,6 +119,7 @@ export const Modal = ({
                   disabled={disabledSecondBtn}
                   onClick={onSecondBtnSubmit}
                   sx={{ marginLeft: theme.spacing(1.6), ...secondBtnStyles }}
+                  data-testid={`${dataTestid}-secondary-button`}
                 >
                   {secondBtnText}
                 </StyledButton>

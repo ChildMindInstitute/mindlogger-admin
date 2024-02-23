@@ -50,22 +50,11 @@ export const DataExportPopup = ({
   const { encryption } = chosenAppletData ?? {};
 
   const handleDataExportSubmit = async () => {
-    if (dataIsExporting) {
+    if (dataIsExporting || !appletId) {
       return;
     }
 
-    if (appletId) {
-      setDataIsExporting(true);
-
-      try {
-        await executeAllPagesOfExportData({ appletId, targetSubjectIds: subjectId });
-
-        Mixpanel.track('Export Data Successful');
-      } catch {
-        setActiveModal(Modals.ExportError);
-        setDataIsExporting(false);
-      }
-    }
+    await executeAllPagesOfExportData({ appletId, targetSubjectIds: subjectId });
   };
 
   const hasEncryptionCheck = useCheckIfHasEncryption({
@@ -80,6 +69,7 @@ export const DataExportPopup = ({
   const executeAllPagesOfExportData = useCallback(
     async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
       try {
+        setDataIsExporting(true);
         const formFromDate = getValues?.().fromDate as Date;
         const formToDate = getValues?.().toDate as Date;
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
@@ -117,14 +107,15 @@ export const DataExportPopup = ({
           }
         }
 
-        setDataIsExporting(false);
         handlePopupClose();
+        Mixpanel.track('Export Data Successful');
       } catch (e) {
         const error = e as TypeError;
         console.warn('Error while export data', error);
-        setDataIsExporting(false);
         setActiveModal(Modals.ExportError);
         await sendLogFile({ error });
+      } finally {
+        setDataIsExporting(false);
       }
     },
     [getDecryptedAnswers],
@@ -136,7 +127,6 @@ export const DataExportPopup = ({
   };
   const handleRetry = () => {
     setActiveModal(Modals.DataExport);
-    setDataIsExporting(true);
     handleDataExportSubmit();
   };
 

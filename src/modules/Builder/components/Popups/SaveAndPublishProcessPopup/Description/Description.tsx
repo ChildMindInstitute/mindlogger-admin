@@ -17,11 +17,11 @@ export const Description = ({ step }: DescriptionProps) => {
   const hasNotBeenSaved = (
     <Trans i18nKey="appletNotSavedAndPublished">
       <StyledBodyLarge sx={{ color: variables.palette.red }}>
-        Applet
+        We were not able to upload your applet
         <strong>
           <>{{ name }}</>
         </strong>
-        has not been saved and published. Please try again.
+        . Please double check your applet and try again.
       </StyledBodyLarge>
     </Trans>
   );
@@ -57,21 +57,11 @@ export const Description = ({ step }: DescriptionProps) => {
 
       return <StyledBodyLarge>{text}</StyledBodyLarge>;
     }
-    case SaveAndPublishSteps.Success:
-      return (
-        <Trans i18nKey="appletSavedAndPublished">
-          <StyledBodyLarge>
-            Applet
-            <strong>
-              <>{{ name }}</>
-            </strong>
-            has been successfully saved and published.
-          </StyledBodyLarge>
-        </Trans>
-      );
     case SaveAndPublishSteps.Failed:
       return hasNotBeenSaved;
     case SaveAndPublishSteps.ReportConfigSave:
       return <StyledBodyLarge>{t('reportConfigNotSaved')}</StyledBodyLarge>;
+    default:
+      return null;
   }
 };

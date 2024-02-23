@@ -24,10 +24,10 @@ jest.mock('shared/hooks', () => ({
 describe('useAppletPrivateKeySetter', () => {
   test.each`
     appletId          | appletPassword    | encryption          | expected                               | description
-    ${undefined}      | ${undefined}      | ${undefined}        | ${undefined}                           | ${'doesn\'t set private key if every argument missed'}
-    ${mockedAppletId} | ${''}             | ${mockedEncryption} | ${undefined}                           | ${'doesn\'t set private key if appletPassword is empty'}
-    ${undefined}      | ${mockedPassword} | ${mockedEncryption} | ${undefined}                           | ${'doesn\'t set private key if appletId is empty'}
-    ${mockedAppletId} | ${mockedPassword} | ${undefined}        | ${undefined}                           | ${'doesn\'t set private key if encryption is empty'}
+    ${undefined}      | ${undefined}      | ${undefined}        | ${undefined}                           | ${"doesn't set private key if every argument missed"}
+    ${mockedAppletId} | ${''}             | ${mockedEncryption} | ${undefined}                           | ${"doesn't set private key if appletPassword is empty"}
+    ${undefined}      | ${mockedPassword} | ${mockedEncryption} | ${undefined}                           | ${"doesn't set private key if appletId is empty"}
+    ${mockedAppletId} | ${mockedPassword} | ${undefined}        | ${undefined}                           | ${"doesn't set private key if encryption is empty"}
     ${mockedAppletId} | ${mockedPassword} | ${mockedEncryption} | ${[mockedAppletId, mockedPrivateKey2]} | ${'sets private key if everything is provided'}
   `('$description', async ({ appletId, appletPassword, encryption, expected }) => {
     const { result } = renderHook(useAppletPrivateKeySetter);

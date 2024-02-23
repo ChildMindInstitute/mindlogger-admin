@@ -8,7 +8,12 @@ import * as reportApi from 'modules/Dashboard/api/api';
 import { page } from 'resources';
 import { applet } from 'redux/modules';
 import { mockedAppletData, mockedPassword } from 'shared/mock';
-import { SettingParam, renderWithAppletFormData, renderWithProviders } from 'shared/utils';
+import {
+  SettingParam,
+  expectBanner,
+  renderWithAppletFormData,
+  renderWithProviders,
+} from 'shared/utils';
 import * as encryptionUtils from 'shared/utils/encryption';
 
 import { ReportConfigSetting } from './ReportConfigSetting';
@@ -59,7 +64,7 @@ const renderReportConfigSettingWithForm = ({
     });
   }
 
-  renderWithAppletFormData({
+  return renderWithAppletFormData({
     children: (
       <ReportConfigSetting onSubmitSuccess={() => {}} data-testid={mockedReportConfigDataTestid} />
     ),
@@ -70,8 +75,6 @@ const renderReportConfigSettingWithForm = ({
       reportPublicKey: 'key',
     }),
   });
-
-  return ref;
 };
 
 const spyVerifyReportServer = jest.spyOn(reportUtils, 'verifyReportServer');
@@ -240,7 +243,7 @@ describe('ReportConfigSetting', () => {
       jest.spyOn(encryptionUtils, 'publicEncrypt').mockReturnValue({});
       jest.spyOn(reportApi, 'postReportConfigApi').mockResolvedValue({});
 
-      renderReportConfigSettingWithForm();
+      const { store } = renderReportConfigSettingWithForm();
 
       const save = screen.getByTestId(`${mockedReportConfigDataTestid}-save`);
 
@@ -277,9 +280,7 @@ describe('ReportConfigSetting', () => {
       fireEvent.click(screen.getByTestId('report-config-password-popup-submit-button'));
 
       await waitFor(() => {
-        expect(
-          screen.getByTestId('builder-applet-settings-report-config-setting-success-popup'),
-        ).toBeVisible();
+        expectBanner(store, 'builder-applet-settings-report-config-setting-success-banner');
       });
     });
 
@@ -351,7 +352,7 @@ describe('ReportConfigSetting', () => {
     );
     expect(itemName).toBeVisible();
 
-    fireEvent.mouseDown(itemName.querySelector('[role=\'button\']'));
+    fireEvent.mouseDown(itemName.querySelector("[role='button']"));
 
     const itemNameOptions = screen.getByTestId(
       `${mockedReportConfigDataTestid}-report-includes-item-name-dropdown`,

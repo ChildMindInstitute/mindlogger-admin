@@ -54,4 +54,5 @@ export type Respondent = {
 export type RespondentDetails = {
   nickname: string;
   secretUserId: string;
+  lastSeen: string | null;
 };

@@ -34,7 +34,7 @@ export const ErrorPopup = ({
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ color: variables.palette.semantic.error }}>
-          {t('dataRetentionUpdatedFail')}
+          {t('saveError')}
         </StyledBodyLarge>
       </StyledModalWrapper>
     </Modal>

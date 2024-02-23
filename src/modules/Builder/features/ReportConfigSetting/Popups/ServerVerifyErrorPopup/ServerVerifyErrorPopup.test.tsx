@@ -16,7 +16,7 @@ describe('ServerVerifyErrorPopup', () => {
     expect(popup).toBeInTheDocument();
 
     expect(popup).toHaveTextContent(
-      'Sorry, we were unable to verify the Server. Please check the \'Encryption Server IP Address\' and the \'Public Encryption Key\' entries',
+      "Sorry, we were unable to verify the Server. Please check the 'Encryption Server IP Address' and the 'Public Encryption Key' entries",
     );
 
     fireEvent.click(screen.getByText('Ok'));

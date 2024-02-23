@@ -7,14 +7,14 @@ import { mockedAppletId, mockedEmail } from 'shared/mock';
 import { TransferOwnership } from './TransferOwnership';
 
 const mockedSetIsSubmitted = jest.fn();
-const mockedSetEmailTransfered = jest.fn();
+const mockedSetEmailTransferred = jest.fn();
 const dataTestid = 'transfer-ownership';
 
 const transferOwnershipComponent = (
   <TransferOwnership
     appletId={mockedAppletId}
     setIsSubmitted={mockedSetIsSubmitted}
-    setEmailTransfered={mockedSetEmailTransfered}
+    setEmailTransferred={mockedSetEmailTransferred}
     isSubmitted={false}
     data-testid={dataTestid}
   />
@@ -27,7 +27,7 @@ describe('TransferOwnership', () => {
 
   test('not transfers ownership on form submission with invalid email', async () => {
     render(transferOwnershipComponent);
-    userEvent.type(screen.getByLabelText(/Email/i), 'invalid@email{enter}');
+    await userEvent.type(screen.getByLabelText(/Email/i), 'invalid@email{enter}');
 
     const error = await screen.findByText('Email must be valid');
     expect(error).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe('TransferOwnership', () => {
 
   test('transfers ownership on form submission with valid email', async () => {
     render(transferOwnershipComponent);
-    userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
+    await userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
 
     await waitFor(() => {
       expect(mockAxios.post).nthCalledWith(

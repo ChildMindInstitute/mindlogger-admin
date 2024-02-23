@@ -54,11 +54,17 @@ export const Subscale = ({
       <Accordion
         title={
           <>
-            <StyledTitleBoldMedium color={variables.palette.on_surface_variant}>
+            <StyledTitleBoldMedium
+              color={variables.palette.on_surface_variant}
+              data-testid={`${dataTestid}-accordion-title-name`}
+            >
               {name}
             </StyledTitleBoldMedium>
             {subscale.score !== undefined && (
-              <StyledBodyMedium color={variables.palette.on_surface_variant}>
+              <StyledBodyMedium
+                color={variables.palette.on_surface_variant}
+                data-testid={`${dataTestid}-accordion-title-score`}
+              >
                 {t('score')}: {subscale.score}
               </StyledBodyMedium>
             )}

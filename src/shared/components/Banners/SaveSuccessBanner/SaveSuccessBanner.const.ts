@@ -1,0 +1,1 @@
+export const SAVE_SUCCESS_BANNER_DURATION = 3500;

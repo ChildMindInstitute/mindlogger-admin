@@ -18,7 +18,9 @@ export const ReviewMenu = ({
   selectedActivity,
   selectedAnswer,
   setSelectedActivity,
+  onDateChange,
   onSelectAnswer,
+  isDatePickerLoading,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const respondentLabel = useRespondentLabel(true);
@@ -41,6 +43,9 @@ export const ReviewMenu = ({
           includeDates={responseDates}
           onMonthChange={onMonthChange}
           disabled={false}
+          onSubmitCallback={onDateChange}
+          onCloseCallback={onDateChange}
+          isLoading={isDatePickerLoading}
           data-testid={`${dataTestid}-review-date`}
         />
       </StyledHeader>
