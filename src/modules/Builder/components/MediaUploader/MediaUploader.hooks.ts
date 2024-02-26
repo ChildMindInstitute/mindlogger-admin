@@ -13,8 +13,6 @@ export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
     callback: (url) => {
       const name = getMediaName(url);
 
-      console.log('uploaded true');
-
       return onUpload({ name, url, uploaded: true });
     },
   });
