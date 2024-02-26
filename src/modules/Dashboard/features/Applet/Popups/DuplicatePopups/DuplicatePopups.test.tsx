@@ -90,13 +90,13 @@ describe('DuplicatePopups', () => {
         store.getState().banners.data.banners.find((payload) => {
           const bannerContent = payload.bannerProps?.children;
           if (bannerContent) {
-            return bannerContent.toString().includes(mockedAppletData.displayName)
+            return bannerContent.toString().includes(mockedAppletData.displayName);
           }
 
           return false;
-        })
-      ).toBeDefined()
-    })
+        }),
+      ).toBeDefined();
+    });
   });
 
   // TODO uncomment after useasync changes
