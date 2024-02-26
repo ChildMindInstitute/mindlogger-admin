@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { ApiResponseCodes, postFileUploadUrlApi } from 'shared/api';
 import { useAsync } from 'shared/hooks/useAsync';
 
-import { getFormDataToUpload, uploadFileToS3 } from './useMediaUpload.utils';
+import { checkFileExists, getFormDataToUpload, uploadFileToS3 } from './useMediaUpload.utils';
 import {
   ExecuteMediaUploadProps,
   UseMediaUploadProps,
@@ -19,7 +19,18 @@ export const useMediaUpload = ({
   const [isLoading, setIsLoading] = useState(false);
   const [mediaUrl, setMediaUrl] = useState<null | string>(null);
   const [error, setError] = useState<AxiosError | null>(null);
-  const { execute: getMediaUploadUrl } = useAsync(postFileUploadUrlApi);
+
+  const handleError = (error: AxiosError) => {
+    setError(error);
+    errorCallback?.(error);
+    setIsLoading(false);
+  };
+
+  const { execute: getMediaUploadUrl } = useAsync(postFileUploadUrlApi, undefined, (error) => {
+    if (!error) return;
+
+    handleError(error);
+  });
 
   const executeMediaUpload = async ({ file, fileName }: ExecuteMediaUploadProps) => {
     try {
@@ -40,15 +51,23 @@ export const useMediaUpload = ({
       });
 
       if (uploadToS3Result?.status === ApiResponseCodes.NoContent) {
-        setMediaUrl(url);
-        callback?.(url);
+        const successCallback = () => {
+          setMediaUrl(url);
+          callback?.(url);
+          setIsLoading(false);
+        };
+
+        await checkFileExists({
+          url,
+          onSuccess: successCallback,
+          onError: handleError,
+        });
       }
     } catch (error) {
-      const errorResult = error as AxiosError;
-      setError(errorResult);
-      errorCallback?.(errorResult);
+      if (!error) return;
+
+      handleError(error as AxiosError);
     } finally {
-      setIsLoading(false);
       finallyCallback?.();
     }
   };

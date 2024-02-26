@@ -9,9 +9,11 @@ import { MediaUploaderHookProps } from './MediaUploader.types';
 export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>('');
-  const { executeMediaUpload } = useMediaUpload({
+  const { executeMediaUpload, error: uploadError } = useMediaUpload({
     callback: (url) => {
       const name = getMediaName(url);
+
+      console.log('uploaded true');
 
       return onUpload({ name, url, uploaded: true });
     },
@@ -77,5 +79,6 @@ export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
     dragEvents,
     handleChange,
     onRemove,
+    uploadError,
   };
 };

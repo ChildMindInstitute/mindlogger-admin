@@ -1,0 +1,1 @@
+export const TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET = 3000;

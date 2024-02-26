@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 
-import { postFileUploadApi } from 'api';
-import { StyledLinearProgress, StyledTitleMedium, theme } from 'shared/styles';
+import { StyledErrorText, StyledLinearProgress, StyledTitleMedium, theme } from 'shared/styles';
 import { Modal, Svg } from 'shared/components';
-import { useAsync } from 'shared/hooks/useAsync';
-import { getUploadFormData } from 'shared/utils';
 import { MLPlayer } from 'modules/Builder/components';
+import { useMediaUpload } from 'shared/hooks/useMediaUpload';
+import { getErrorMessage } from 'shared/utils/errors';
 
 import { useAudioRecorder } from './RecordAudio.hooks';
 import { RecordAudioProps } from './RecordAudio.types';
 import { StyledButtons, StyledRecordButton } from './RecordAudio.styles';
 import { formatSecondsToMinutes } from './RecordAudio.utils';
+import { RECORD_FILE_NAME } from './RecordAudio.const';
 
 export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioProps) => {
   const { t } = useTranslation('app');
@@ -24,25 +24,23 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     stopRecording,
     togglePauseResume,
     clearBlob,
-    recordingBlob,
     isRecording,
     isPaused,
     isStopped,
     recordingTime,
-  } = useAudioRecorder();
+  } = useAudioRecorder({ setFile });
 
-  const { execute: executeAudioUpload, isLoading } = useAsync(postFileUploadApi);
+  const { executeMediaUpload, isLoading, error } = useMediaUpload({
+    callback: (url) => {
+      onUpload(url);
+      onChange({ url, uploaded: true });
+    },
+  });
 
-  useEffect(() => {
-    if (isStopped && recordingBlob.length && !file) {
-      const file = new File(recordingBlob, 'record.webm', { type: 'audio/webm' });
-      setFile(file);
-    }
-  }, [isStopped, recordingBlob, file]);
-
-  const commonSvgProps = {
-    width: 16,
-    height: 16,
+  const handleUpload = async () => {
+    if (!file) return;
+    await executeMediaUpload({ file, fileName: RECORD_FILE_NAME });
+    setFile(null);
   };
 
   const handleRemove = () => {
@@ -55,26 +53,18 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     setFile(null);
   };
 
-  const handleUpload = async () => {
-    if (!file) return;
-    const body = getUploadFormData(file);
-    try {
-      const response = await executeAudioUpload(body);
-      const url = response?.data?.result?.url || '';
-      if (!url) return;
-      onUpload(url);
-      onChange({ url, uploaded: true });
-    } catch (error) {
-      console.warn(error);
-    }
+  const dataTestid = 'builder-activity-items-item-configuration-record-audio-popup';
+
+  const commonSvgProps = {
+    width: 16,
+    height: 16,
   };
 
-  const dataTestid = 'builder-activity-items-item-configuration-record-audio-popup';
   const modalProps = {
     open,
     title: t('audioPlayerRecordAudio'),
-    buttonText: audioUrl ? t('upload') : t('cancel'),
-    hasSecondBtn: !!audioUrl,
+    buttonText: audioUrl && !isLoading ? t('upload') : t('cancel'),
+    hasSecondBtn: !!audioUrl && !isLoading,
     secondBtnText: t('cancel'),
     onClose,
     onSubmit: audioUrl ? handleUpload : onClose,
@@ -82,6 +72,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     footerStyles: {
       paddingTop: theme.spacing(2.1),
     },
+    disabledSubmit: isLoading,
     'data-testid': dataTestid,
   };
 
@@ -127,6 +118,9 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
             onRemove={handleRemove}
             data-testid={`${dataTestid}-player`}
           />
+        )}
+        {error && (
+          <StyledErrorText sx={{ mt: theme.spacing(2) }}>{getErrorMessage(error)}</StyledErrorText>
         )}
       </Box>
     </Modal>

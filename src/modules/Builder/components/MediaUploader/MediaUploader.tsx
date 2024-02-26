@@ -8,9 +8,10 @@ import {
   theme,
   variables,
   StyledTitleSmall,
+  StyledErrorText,
 } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
-import { byteFormatter } from 'shared/utils';
+import { byteFormatter, getErrorMessage } from 'shared/utils';
 import { MAX_FILE_SIZE_150MB, ALLOWED_AUDIO_FILE_TYPES } from 'shared/consts';
 
 import { StyledContainer, StyledSourceContainer, StyledPreview } from './MediaUploader.styles';
@@ -28,9 +29,10 @@ export const MediaUploader = ({
   'data-testid': dataTestid,
 }: MediaUploaderProps) => {
   const { t } = useTranslation('app');
-  const { uploadInputRef, error, dragEvents, handleChange, onRemove } = useMediaUploader({
-    onUpload,
-  });
+  const { uploadInputRef, error, dragEvents, handleChange, onRemove, uploadError } =
+    useMediaUploader({
+      onUpload,
+    });
 
   return (
     <>
@@ -85,6 +87,11 @@ export const MediaUploader = ({
       )}
       {!!media && !hasPreview && (
         <MLPlayer media={media} onRemove={onRemove} data-testid={`${dataTestid}-media-player`} />
+      )}
+      {uploadError && (
+        <StyledErrorText sx={{ mt: theme.spacing(2) }}>
+          {getErrorMessage(uploadError)}
+        </StyledErrorText>
       )}
     </>
   );

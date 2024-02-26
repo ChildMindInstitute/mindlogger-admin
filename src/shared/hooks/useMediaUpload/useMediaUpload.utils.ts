@@ -1,8 +1,9 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
-import { MediaUploadFields } from 'shared/api';
+import { ApiResponseCodes, MediaUploadFields } from 'shared/api';
 
-import { FileUploadToBucket, GetFormDataToUpload } from './useMediaUpload.types';
+import { CheckFileExists, FileUploadToBucket, GetFormDataToUpload } from './useMediaUpload.types';
+import { TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET } from './useMediaUpload.const';
 
 export const uploadFileToS3 = ({ body, uploadUrl }: FileUploadToBucket) =>
   axios.post(uploadUrl, body, {
@@ -17,4 +18,22 @@ export const getFormDataToUpload = ({ file, fields }: GetFormDataToUpload) => {
   body.append('file', file);
 
   return body;
+};
+
+export const checkFileExists = async ({ url, onSuccess, onError }: CheckFileExists) => {
+  try {
+    await axios.head(url);
+    onSuccess();
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    if (axiosError.response?.status === ApiResponseCodes.Forbidden) {
+      setTimeout(() => {
+        checkFileExists({ url, onSuccess, onError });
+      }, TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET);
+
+      return;
+    }
+
+    onError(axiosError);
+  }
 };

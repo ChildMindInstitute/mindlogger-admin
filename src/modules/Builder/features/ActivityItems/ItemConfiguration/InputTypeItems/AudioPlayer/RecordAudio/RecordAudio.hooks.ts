@@ -1,15 +1,15 @@
 import { useState, useCallback } from 'react';
 
-import { RecorderControls } from './RecordAudio.types';
+import { RecorderControls, UseAudioRecorderProps } from './RecordAudio.types';
+import { RECORD_FILE_NAME } from './RecordAudio.const';
 
-export const useAudioRecorder: () => RecorderControls = () => {
+export const useAudioRecorder = ({ setFile }: UseAudioRecorderProps): RecorderControls => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isStopped, setIsStopped] = useState(true);
   const [recordingTime, setRecordingTime] = useState(0);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>();
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout>();
-  const [recordingBlob, setRecordingBlob] = useState<Blob[]>([]);
 
   const startTimer = () => {
     const interval = setInterval(() => {
@@ -23,6 +23,10 @@ export const useAudioRecorder: () => RecorderControls = () => {
     setTimerInterval(undefined);
   };
 
+  const clearBlob = () => {
+    setRecordingTime(0);
+  };
+
   const startRecording = useCallback(() => {
     if (timerInterval) return;
 
@@ -31,17 +35,19 @@ export const useAudioRecorder: () => RecorderControls = () => {
       .then((stream) => {
         setIsStopped(false);
         setIsRecording(true);
+        clearBlob();
         const recorder: MediaRecorder = new MediaRecorder(stream);
         setMediaRecorder(recorder);
         recorder.start();
         startTimer();
 
         recorder.addEventListener('dataavailable', (event) => {
-          setRecordingBlob([...recordingBlob, event.data]);
+          const file = new File([event.data], RECORD_FILE_NAME, { type: 'audio/webm' });
+          setFile(file);
         });
       })
       .catch((err) => console.warn(err));
-  }, [timerInterval]);
+  }, [timerInterval, setFile]);
 
   const togglePauseResume = () => {
     if (isPaused) {
@@ -64,17 +70,11 @@ export const useAudioRecorder: () => RecorderControls = () => {
     setIsStopped(true);
   };
 
-  const clearBlob = () => {
-    setRecordingBlob([]);
-    setRecordingTime(0);
-  };
-
   return {
     startRecording,
     stopRecording,
     togglePauseResume,
     clearBlob,
-    recordingBlob,
     isRecording,
     isPaused,
     isStopped,

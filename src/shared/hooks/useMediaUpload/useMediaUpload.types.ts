@@ -23,3 +23,9 @@ export type FileUploadToBucket = {
 };
 
 export type GetFormDataToUpload = { file: File; fields: MediaUploadFields };
+
+export type CheckFileExists = {
+  url: string;
+  onSuccess: () => void;
+  onError: (error: AxiosError) => void;
+};
