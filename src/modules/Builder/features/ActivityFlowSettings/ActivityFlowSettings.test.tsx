@@ -29,11 +29,6 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('modules/Builder/hooks', () => ({
-  useRedirectIfNoMatchedActivityFlow: jest.fn(),
-  ...jest.requireActual('modules/Builder/hooks'),
-}));
-
-jest.mock('modules/Builder/hooks', () => ({
   ...jest.requireActual('modules/Builder/hooks'),
   useCustomFormContext: jest.fn(),
   useRedirectIfNoMatchedActivityFlow: jest.fn(),
