@@ -43,7 +43,7 @@ describe('useAppletsFromCart', () => {
   test('should call postAppletsToCart if authorized with applets from storage', async () => {
     getAppletsFromStorage.mockReturnValue(mockApplets);
 
-    const { result } = renderHookWithProviders(() => useAppletsFromCart(), {
+    const { result } = renderHookWithProviders(useAppletsFromCart, {
       preloadedState: getPreloadedState({ isAuthorized: true }),
     });
 
@@ -54,7 +54,7 @@ describe('useAppletsFromCart', () => {
   test('should dispatch setAppletsFromStorage action if not authorized with applets from storage', async () => {
     getAppletsFromStorage.mockReturnValue(mockApplets);
 
-    const { result } = renderHookWithProviders(() => useAppletsFromCart(), {
+    const { result } = renderHookWithProviders(useAppletsFromCart, {
       preloadedState: getPreloadedState({ isAuthorized: false }),
     });
 
