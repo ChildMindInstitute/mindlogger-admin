@@ -8,7 +8,7 @@ import { mockedAppletId, mockedCurrentWorkspace, mockedApplet } from 'shared/moc
 import { SettingParam, renderWithProviders } from 'shared/utils';
 
 import { ExportDataSetting } from './ExportDataSetting';
-import { ExportDateType } from './ExportDataSettings.types';
+import { ExportDateType } from './ExportDataSetting.types';
 
 const route = `/dashboard/${mockedAppletId}/settings/${SettingParam.ExportData}`;
 const routePath = page.appletSettingsItem;
