@@ -71,7 +71,7 @@ describe('DuplicateAppletSettings', () => {
   test('should render and navigate to builder', async () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    mockAxios.post.mockResolvedValueOnce({ data: mockedAppletData });
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));
