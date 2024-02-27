@@ -6,6 +6,7 @@ import {
   mockedSubscaleSetting,
   mockedTotalScoresTableData,
 } from 'shared/mock';
+import { ItemResponseType } from 'shared/consts';
 
 import {
   getSubScaleScore,
@@ -15,7 +16,6 @@ import {
   getSubscales,
 } from './getSubscales';
 import { getObjectFromList } from '../getObjectFromList';
-import { ItemResponseType } from '../../consts';
 
 const itemsAndSubscales = [mockedSubscale1, mockedSubscale2];
 const itemsOnly = [mockedSubscale1];
