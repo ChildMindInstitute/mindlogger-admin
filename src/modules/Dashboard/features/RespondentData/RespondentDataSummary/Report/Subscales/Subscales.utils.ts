@@ -29,7 +29,7 @@ export const getSubscalesToRender = (
       if (!result?.[data.name]) {
         result[data.name] = nestedSubscale;
       }
-    } else {
+    } else if (activityItems[item.name]) {
       const formattedItem = formatActivityItemAnswers(activityItems[item.name], endDatetime);
       if (!result?.[data.name]?.items) {
         result[data.name] = { items: [formattedItem] };
