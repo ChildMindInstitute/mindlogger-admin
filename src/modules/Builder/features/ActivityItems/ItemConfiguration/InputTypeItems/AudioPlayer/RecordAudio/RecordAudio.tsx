@@ -30,11 +30,12 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     recordingTime,
   } = useAudioRecorder({ setFile });
 
-  const { executeMediaUpload, isLoading, error } = useMediaUpload({
+  const { executeMediaUpload, isLoading, error, stopUpload } = useMediaUpload({
     callback: (url) => {
       onUpload(url);
       onChange({ url, uploaded: true });
     },
+    onStopCallback: onClose,
   });
 
   const handleUpload = async () => {
@@ -53,6 +54,11 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     setFile(null);
   };
 
+  const handleClose = () => {
+    stopUpload();
+    onClose();
+  };
+
   const dataTestid = 'builder-activity-items-item-configuration-record-audio-popup';
 
   const commonSvgProps = {
@@ -66,13 +72,12 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     buttonText: audioUrl && !isLoading ? t('upload') : t('cancel'),
     hasSecondBtn: !!audioUrl && !isLoading,
     secondBtnText: t('cancel'),
-    onClose,
-    onSubmit: audioUrl ? handleUpload : onClose,
-    onSecondBtnSubmit: onClose,
+    onClose: handleClose,
+    onSubmit: audioUrl ? handleUpload : handleClose,
+    onSecondBtnSubmit: handleClose,
     footerStyles: {
       paddingTop: theme.spacing(2.1),
     },
-    disabledSubmit: isLoading,
     'data-testid': dataTestid,
   };
 

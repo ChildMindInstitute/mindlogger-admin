@@ -1,9 +1,9 @@
+import { act } from '@testing-library/react';
 import axios from 'axios';
 
 import { MediaUploadFields } from 'shared/api';
 
 import { uploadFileToS3, getFormDataToUpload, checkFileExists } from './useMediaUpload.utils';
-import { TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET } from './useMediaUpload.const';
 
 describe('useMediaUpload.utils', () => {
   const mockedAxios = axios.create();
@@ -60,37 +60,54 @@ describe('useMediaUpload.utils', () => {
     const url = 'https://example.com/file.mp3';
     const mockedOnSuccess = jest.fn();
     const mockedOnError = jest.fn();
+    const mockedOnStopRecursion = jest.fn();
+    const waitForTheUpdate = async () =>
+      await act(async () => {
+        await Promise.resolve();
+      });
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.clearAllTimers();
+      jest.restoreAllMocks();
+      jest.clearAllMocks();
+    });
 
     test('should call onSuccess when file exists', async () => {
       jest.spyOn(mockedAxios, 'head').mockResolvedValueOnce({ status: 200 });
 
-      await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
+      await checkFileExists({
+        url,
+        onSuccess: mockedOnSuccess,
+        onError: mockedOnError,
+        onStopRecursion: mockedOnStopRecursion,
+      });
+
+      jest.runAllTimers();
+
+      await waitForTheUpdate();
 
       expect(mockedAxios.head).toHaveBeenCalledWith(url);
       expect(mockedOnSuccess).toHaveBeenCalled();
       expect(mockedOnError).not.toHaveBeenCalled();
+      expect(mockedOnStopRecursion).not.toHaveBeenCalled();
     });
 
     test('should retry after a timeout if response status is Forbidden', async () => {
       jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
-
-      const originalSetTimeout = global.setTimeout;
-      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      global.setTimeout = jest.fn();
+      const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
 
       await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
 
+      jest.runAllTimers();
+
       expect(mockedAxios.head).toHaveBeenCalledWith(url);
-      expect(setTimeout).toHaveBeenCalledTimes(1);
-      expect(setTimeout).toHaveBeenLastCalledWith(
-        expect.any(Function),
-        TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET,
-      );
+      expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
       expect(mockedOnSuccess).not.toHaveBeenCalled();
       expect(mockedOnError).not.toHaveBeenCalled();
-
-      global.setTimeout = originalSetTimeout;
     });
 
     test('should call onError when an error occurs', async () => {
@@ -99,9 +116,29 @@ describe('useMediaUpload.utils', () => {
 
       await checkFileExists({ url, onSuccess: mockedOnSuccess, onError: mockedOnError });
 
+      jest.runAllTimers();
+
+      await waitForTheUpdate();
+
       expect(mockedAxios.head).toHaveBeenCalledWith(url);
       expect(mockedOnSuccess).not.toHaveBeenCalled();
       expect(mockedOnError).toHaveBeenCalledWith(error);
+    });
+
+    test('should clear timeout when stopChecking is called', async () => {
+      jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce({ response: { status: 403 } });
+      const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+
+      const { stopChecking } = await checkFileExists({
+        url,
+        onSuccess: mockedOnSuccess,
+        onError: mockedOnError,
+        onStopRecursion: mockedOnStopRecursion,
+      });
+
+      stopChecking();
+
+      expect(clearTimeoutSpy).toHaveBeenCalledWith(expect.any(Number));
     });
   });
 });

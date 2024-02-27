@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { AxiosError } from 'axios';
 
 import { ApiResponseCodes, postFileUploadUrlApi } from 'shared/api';
@@ -15,10 +15,12 @@ export const useMediaUpload = ({
   callback,
   errorCallback,
   finallyCallback,
+  onStopCallback,
 }: UseMediaUploadProps): UseMediaUploadReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [mediaUrl, setMediaUrl] = useState<null | string>(null);
   const [error, setError] = useState<AxiosError | null>(null);
+  const stopUploadRef = useRef(() => {});
 
   const handleError = (error: AxiosError) => {
     setError(error);
@@ -57,11 +59,13 @@ export const useMediaUpload = ({
           setIsLoading(false);
         };
 
-        await checkFileExists({
+        const { stopChecking } = await checkFileExists({
           url,
           onSuccess: successCallback,
           onError: handleError,
+          onStopRecursion: onStopCallback,
         });
+        stopUploadRef.current = stopChecking;
       }
     } catch (error) {
       if (!error) return;
@@ -77,5 +81,6 @@ export const useMediaUpload = ({
     isLoading,
     mediaUrl,
     error,
+    stopUpload: stopUploadRef.current,
   };
 };

@@ -36,6 +36,11 @@ const useMediaUploadProps = {
   finallyCallback: mockFinallyCallback,
 };
 
+const waitForTheUpdate = async () =>
+  await act(async () => {
+    await Promise.resolve();
+  });
+
 const testUploadFlow = async (result: { current: UseMediaUploadReturn }) => {
   act(() => {
     result.current.executeMediaUpload({ file, fileName });
@@ -43,15 +48,16 @@ const testUploadFlow = async (result: { current: UseMediaUploadReturn }) => {
 
   expect(result.current.isLoading).toBe(true);
 
-  // wait for the update
-  await act(async () => {
-    await Promise.resolve();
-  });
+  await waitForTheUpdate();
 
   expect(mockGetMediaUploadUrl).toHaveBeenCalledWith(fileName);
   expect(mockedAxios.post).toHaveBeenCalledWith(uploadUrl, expect.any(FormData), {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
+
+  jest.runAllTimers();
+  await waitForTheUpdate();
+
   expect(result.current.isLoading).toBe(false);
 };
 
@@ -66,6 +72,11 @@ const testErrorFlow = (result: { current: UseMediaUploadReturn }, message: strin
 describe('useMediaUpload', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
   });
 
   test('should upload file and set mediaUrl on successful upload', async () => {

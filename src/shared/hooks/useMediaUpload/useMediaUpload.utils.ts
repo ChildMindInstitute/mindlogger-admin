@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { ApiResponseCodes, MediaUploadFields } from 'shared/api';
 
 import { CheckFileExists, FileUploadToBucket, GetFormDataToUpload } from './useMediaUpload.types';
-import { TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET } from './useMediaUpload.const';
+import { COUNT_TO_STOP_RECURSION, TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET } from './useMediaUpload.const';
 
 export const uploadFileToS3 = ({ body, uploadUrl }: FileUploadToBucket) =>
   axios.post(uploadUrl, body, {
@@ -20,20 +20,44 @@ export const getFormDataToUpload = ({ file, fields }: GetFormDataToUpload) => {
   return body;
 };
 
-export const checkFileExists = async ({ url, onSuccess, onError }: CheckFileExists) => {
-  try {
-    await axios.head(url);
-    onSuccess();
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === ApiResponseCodes.Forbidden) {
-      setTimeout(() => {
-        checkFileExists({ url, onSuccess, onError });
-      }, TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET);
+export const checkFileExists = async ({
+  url,
+  onSuccess,
+  onError,
+  onStopRecursion,
+}: CheckFileExists) => {
+  let timeoutId: NodeJS.Timeout;
+  let count = 0;
+
+  const check = async () => {
+    // In case of an unpredictable situation where the file does not upload for a very long period
+    if (count === COUNT_TO_STOP_RECURSION) {
+      onStopRecursion?.();
 
       return;
     }
 
-    onError(axiosError);
-  }
+    try {
+      await axios.head(url);
+      onSuccess();
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === ApiResponseCodes.Forbidden) {
+        timeoutId = setTimeout(check, TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET);
+        count++;
+
+        return;
+      }
+
+      onError(axiosError);
+    }
+  };
+
+  timeoutId = setTimeout(check, 0);
+
+  return {
+    stopChecking: () => {
+      clearTimeout(timeoutId);
+    },
+  };
 };
