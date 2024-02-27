@@ -18,33 +18,22 @@ const items = [
 ];
 
 describe('getActiveItem', () => {
-  test('should return active item when settingPath is provided', () => {
-    const settingPath = 'item2';
+  test.each([
+    [
+      'should return active item when settingPath is provided',
+      'item2',
+      {
+        label: 'Item 2',
+        component: null,
+        icon: null,
+        param: 'item2',
+        isVisible: true,
+      },
+    ],
+    ['should return null when settingPath is not found', 'nonexistentItem', null],
+    ['should return null when settingPath is undefined', undefined, null],
+  ])('%s', (_, settingPath, expected) => {
     const activeItem = getActiveItem(items, settingPath);
-
-    expect(activeItem).toEqual({
-      label: 'Item 2',
-      component: null,
-      icon: null,
-      param: 'item2',
-      isVisible: true,
-    });
-  });
-
-  test('should return null when settingPath is not found', () => {
-    const settingPath = 'nonexistentItem';
-    const activeItem = getActiveItem(items, settingPath);
-    expect(activeItem).toBeNull();
-  });
-
-  test('should return null when items is an empty array', () => {
-    const settingPath = 'item2';
-    const activeItem = getActiveItem([], settingPath);
-    expect(activeItem).toBeNull();
-  });
-
-  test('should return null when settingPath is undefined', () => {
-    const activeItem = getActiveItem(items);
-    expect(activeItem).toBeNull();
+    expect(activeItem).toEqual(expected);
   });
 });
