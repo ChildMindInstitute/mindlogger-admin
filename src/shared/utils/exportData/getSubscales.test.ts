@@ -15,12 +15,21 @@ import {
   getSubscales,
 } from './getSubscales';
 import { getObjectFromList } from '../getObjectFromList';
+import { ItemResponseType } from '../../consts';
 
 const itemsAndSubscales = [mockedSubscale1, mockedSubscale2];
 const itemsOnly = [mockedSubscale1];
 
 const activityItems = getObjectFromList(
   mockedDecryptedAnswersWithSubscales,
+  (item) => item.activityItem.name,
+);
+const activityItemsWithoutHiddenItems = getObjectFromList(
+  mockedDecryptedAnswersWithSubscales.filter(
+    (answer) =>
+      answer.activityItem.responseType !== ItemResponseType.SingleSelection &&
+      answer.activityItem.responseType !== ItemResponseType.MultipleSelection,
+  ),
   (item) => item.activityItem.name,
 );
 const subscaleItems = [
@@ -61,6 +70,14 @@ const itemsWithOptTextExpected = {
 const itemsWithoutOptTextExpected = {
   [data.name]: { optionText: '', score: 5 },
 };
+
+const itemsWithSingleAndMultiHiddenWithOptTextExpected = {
+  [data.name]: { optionText: 'Description #1 for range 0~4', score: 3 },
+};
+const itemsWithSingleAndMultiHiddenWithoutOptTextExpected = {
+  [data.name]: { optionText: '', score: 3 },
+};
+
 const emptyItemsWithOptTextExpected = {
   [data.name]: { optionText: 'Description #1 for range 0~4', score: 0 },
 };
@@ -122,6 +139,24 @@ describe('getSubscales', () => {
       /* eslint-disable @typescript-eslint/ban-ts-comment */
       // @ts-ignore
       expect(calcScores(subscaleData, activityItems, subscaleObject, {})).toEqual(expected);
+    });
+  });
+
+  describe('calcScores with hidden items', () => {
+    test.each`
+      subscaleItems               | subscaleTableData             | expected                                               | description
+      ${subscaleItems}            | ${mockedTotalScoresTableData} | ${itemsWithSingleAndMultiHiddenWithOptTextExpected}    | ${'should return score=3'}
+      ${subscaleItems}            | ${null}                       | ${itemsWithSingleAndMultiHiddenWithoutOptTextExpected} | ${'should return score=3 without opt text'}
+      ${[]}                       | ${mockedTotalScoresTableData} | ${emptyItemsWithOptTextExpected}                       | ${'should return score=0'}
+      ${[]}                       | ${null}                       | ${emptyItemsWithoutOptTextExpected}                    | ${'should return score=0 without opt text'}
+      ${subscaleWithoutTypeItems} | ${mockedTotalScoresTableData} | ${itemsWithoutTypeExpected}                            | ${'should return score=0'}
+    `('$description', ({ subscaleItems, subscaleTableData, expected }) => {
+      const subscaleData = { ...data, subscaleTableData, items: subscaleItems };
+      /* eslint-disable @typescript-eslint/ban-ts-comment */
+      // @ts-ignore
+      expect(calcScores(subscaleData, activityItemsWithoutHiddenItems, subscaleObject, {})).toEqual(
+        expected,
+      );
     });
   });
 
