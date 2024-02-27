@@ -74,11 +74,11 @@ export const calcScores = <T>(
       return acc + calculatedNestedSubscale.score;
     }
 
-    const answer = activityItems[item.name].answer as
+    const answer = activityItems[item.name]?.answer as
       | DecryptedMultiSelectionAnswer
       | DecryptedSingleSelectionAnswer
       | DecryptedSliderAnswer;
-    const typedOptions = activityItems[item.name].activityItem
+    const typedOptions = activityItems[item.name]?.activityItem
       .responseValues as SingleAndMultipleSelectItemResponseValues & SliderItemResponseValues;
     let value = 0;
 
