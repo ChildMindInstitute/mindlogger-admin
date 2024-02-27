@@ -10,6 +10,8 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { EditItemModalProps } from './EditItemModal.types';
 
+const dataTestid = 'builder-activity-items-edit-item-popup';
+
 export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditItemModalProps) => {
   const { t } = useTranslation('app');
   const { activity } = useCurrentActivity();
@@ -37,13 +39,13 @@ export const EditItemModal = ({ open, itemFieldName, onClose, onSubmit }: EditIt
       secondBtnText={t('cancel')}
       hasSecondBtn
       submitBtnColor="error"
-      data-testid="builder-activity-items-edit-item-popup"
+      data-testid={dataTestid}
     >
       <StyledModalWrapper>
         <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
           <Trans i18nKey="editItemDescription">
             Are you sure you want to edit Item
-            <strong>
+            <strong data-testid={`${dataTestid}-item-name`}>
               <>{{ itemName }}</>
             </strong>
             ?
