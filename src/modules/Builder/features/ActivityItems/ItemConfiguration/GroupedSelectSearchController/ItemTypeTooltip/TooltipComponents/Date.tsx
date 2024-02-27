@@ -15,7 +15,7 @@ export const Date = () => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         <StyledPresentationLine>
           <Svg id="calendar" width="18" height="18" />
           <StyledDateLine>

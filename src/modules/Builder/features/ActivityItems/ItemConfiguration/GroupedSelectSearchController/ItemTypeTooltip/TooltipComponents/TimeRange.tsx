@@ -18,7 +18,7 @@ export const TimeRange = () => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         <StyledPresentationLine>
           {timeRangeIcon}
           <StyledDateLine>

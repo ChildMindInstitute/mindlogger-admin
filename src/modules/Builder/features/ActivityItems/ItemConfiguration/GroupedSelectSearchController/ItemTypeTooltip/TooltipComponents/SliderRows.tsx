@@ -11,7 +11,7 @@ export const SliderRows = () => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         <StyledFlexTopCenter sx={{ mb: theme.spacing(-1.5) }}>
           <StyledTooltipText sx={{ mr: theme.spacing(0.5) }}>{t('slider')} 1</StyledTooltipText>
           <Svg id="slider-rows-first" width="98" height="48" />

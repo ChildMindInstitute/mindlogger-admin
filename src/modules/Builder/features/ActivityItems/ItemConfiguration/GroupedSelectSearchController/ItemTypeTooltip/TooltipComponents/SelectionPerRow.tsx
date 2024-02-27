@@ -33,7 +33,7 @@ export const SelectionPerRow = ({ uiType }: SelectionProps) => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         {selectionContent.map((row, rowIndex) => (
           <StyledMatrixLine key={uniqueId()}>
             {row.map((col, colIndex) => (

@@ -17,7 +17,7 @@ export const Time = () => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         <StyledPresentationLine>
           {timeIcon}
           <StyledDateLine>

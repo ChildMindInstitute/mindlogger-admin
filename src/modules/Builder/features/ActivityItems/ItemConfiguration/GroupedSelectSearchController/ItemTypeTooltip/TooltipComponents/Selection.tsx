@@ -21,7 +21,7 @@ export const Selection = ({ uiType }: SelectionProps) => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         {createArray(3, (index) => (
           <StyledPresentationLine key={uniqueId()}>
             <Svg id={getSelectionSvgId(index, isSingleSelection)} {...commonProps} />

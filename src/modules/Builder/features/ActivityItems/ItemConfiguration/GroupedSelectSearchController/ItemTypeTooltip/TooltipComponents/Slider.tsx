@@ -10,7 +10,7 @@ export const Slider = () => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         <Svg id="slider-number" width="114" height="72" />
       </StyledPresentation>
       <StyledBodyMedium>{t('sliderHint')}.</StyledBodyMedium>

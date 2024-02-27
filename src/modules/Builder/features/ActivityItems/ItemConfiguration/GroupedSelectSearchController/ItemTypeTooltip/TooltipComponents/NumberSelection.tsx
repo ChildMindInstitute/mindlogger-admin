@@ -16,7 +16,7 @@ export const NumberSelection = () => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         <StyledNumberSelection>
           <StyledNumberSelectionLine>
             <StyledLabelLarge sx={{ mr: theme.spacing(0.5), textAlign: 'center' }}>
