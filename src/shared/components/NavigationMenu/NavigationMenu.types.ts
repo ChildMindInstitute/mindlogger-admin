@@ -3,11 +3,6 @@ import { ReactNode } from 'react';
 export type NavigationItem = {
   name?: string;
   label: string;
-  useModal?: boolean;
-  modalTitle?: string;
-  modalTitleParams?: {
-    [key: string]: string | undefined;
-  };
   component: ReactNode;
   icon: ReactNode;
   param: string;

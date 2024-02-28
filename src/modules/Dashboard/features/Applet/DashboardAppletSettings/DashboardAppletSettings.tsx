@@ -20,7 +20,6 @@ export const DashboardAppletSettings = () => {
   return appletData ? (
     <AppletSettings
       settings={getSettings({
-        appletName: appletData?.displayName,
         isPublished: appletData?.isPublished,
         roles: appletRoles,
       })}

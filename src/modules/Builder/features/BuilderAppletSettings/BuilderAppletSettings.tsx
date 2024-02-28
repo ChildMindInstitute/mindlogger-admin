@@ -34,7 +34,6 @@ export const BuilderAppletSettings = () => {
           settings={getSettings({
             isNewApplet,
             isPublished,
-            appletName: appletData?.displayName,
             roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
             onReportConfigSubmit: handleReportConfigSubmit,
           })}
