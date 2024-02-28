@@ -405,6 +405,8 @@ describe('SubscalesConfiguration', () => {
     });
 
     test('Subscale Name should be unique', async () => {
+      renderSubscales();
+
       addSubscale();
       addSubscale();
 
