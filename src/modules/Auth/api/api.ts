@@ -1,6 +1,12 @@
 import { apiClient, authApiClientWithoutRefresh } from 'shared/api/api.client';
 
-import { SignIn, SignUpArgs, ResetPassword } from './api.types';
+import {
+  ApproveRecoveryPassword,
+  RecoverPasswordHealthCheck,
+  ResetPassword,
+  SignIn,
+  SignUpArgs,
+} from './api.types';
 
 export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
   apiClient.post(
@@ -28,6 +34,23 @@ export const resetPasswordApi = ({ email }: ResetPassword, signal?: AbortSignal)
   apiClient.post(
     '/users/me/password/recover',
     { email },
+    {
+      signal,
+    },
+  );
+
+export const recoveryLinkHealthCheckApi = ({ email, key }: RecoverPasswordHealthCheck) =>
+  apiClient.get('/users/me/password/recover/healthcheck', {
+    params: { email, key },
+  });
+
+export const approveRecoveryPasswordApi = (
+  { email, key, password }: ApproveRecoveryPassword,
+  signal?: AbortSignal,
+) =>
+  apiClient.post(
+    '/users/me/password/recover/approve',
+    { email, key, password },
     {
       signal,
     },

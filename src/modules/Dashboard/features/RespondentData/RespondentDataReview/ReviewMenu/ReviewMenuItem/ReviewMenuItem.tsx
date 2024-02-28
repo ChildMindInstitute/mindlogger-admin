@@ -64,13 +64,14 @@ export const ReviewMenuItem = ({
 
     onSelectAnswer(answer);
     const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
-    navigate({
-      pathname,
-      search: createSearchParams({
-        selectedDate: format(selectedDate, DateFormats.YearMonthDay),
-        answerId: answer.answerId,
-      }).toString(),
-    });
+    selectedDate &&
+      navigate({
+        pathname,
+        search: createSearchParams({
+          selectedDate: format(selectedDate, DateFormats.YearMonthDay),
+          answerId: answer.answerId,
+        }).toString(),
+      });
   };
 
   return (

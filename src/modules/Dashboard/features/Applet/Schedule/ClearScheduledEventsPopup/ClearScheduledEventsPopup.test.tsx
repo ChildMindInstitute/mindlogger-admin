@@ -40,7 +40,7 @@ describe('ClearScheduledEventsPopup', () => {
     await waitFor(() => expect(screen.getByTestId('spinner')).toBeInTheDocument());
     await waitFor(() =>
       expect(popupText).toHaveTextContent(
-        'Scheduled events within the default schedule for Applet Displayed Applet Name have been successfully cleared.Respondents\' individual schedules (if applicable) have not changed.',
+        "Scheduled events within the default schedule for Applet Displayed Applet Name have been successfully cleared.Respondents' individual schedules (if applicable) have not changed.",
       ),
     );
   });

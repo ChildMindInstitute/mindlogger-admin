@@ -117,16 +117,16 @@ describe('ActivityAbout', () => {
     const isSkippable = screen.getByLabelText('Allow to skip all items');
     expect(isSkippable).toBeChecked();
     const isEditable = screen.getByLabelText(
-      'Disable the respondent\'s ability to change the response',
+      "Disable the respondent's ability to change the response",
     );
     expect(isEditable).toBeChecked();
     const isReviewable = screen.getByLabelText(
-      'This Activity is only displayed in the Admin panel for the reviewer to provide responses about respondent\'s data. Only single selection, multiple selection, and slider items are supported.',
+      "This Activity is only displayed in the Admin panel for the reviewer to provide responses about respondent's data. Only single selection, multiple selection, and slider items are supported.",
     );
     expect(isReviewable).not.toBeDisabled();
   });
 
-  test('shouldn\'t turn activity to reviewer one', () => {
+  test("shouldn't turn activity to reviewer one", () => {
     renderWithAppletFormData({
       children: <ActivityAbout />,
       appletFormData: mockedAppletFormData,

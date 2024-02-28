@@ -574,3 +574,5 @@ export const enum FlankerRecordFields {
 }
 
 export type ExportDataResult = { activities: ExportActivity[]; answers: ExtendedExportAnswer[] };
+
+export type ResponseValueType = AnswerDTO | undefined;
