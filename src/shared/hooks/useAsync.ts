@@ -6,7 +6,7 @@ import { ApiErrorResponse } from 'shared/state/Base';
 export const useAsync = <T, K>(
   asyncFunction: (args: T) => Promise<AxiosResponse<K>>,
   callback?: (data: AxiosResponse<K>) => void,
-  errorCallback?: (data: K | null) => void,
+  errorCallback?: (data: AxiosError<ApiErrorResponse> | null) => void,
   finallyCallback?: () => void,
   dependencies?: unknown[],
 ) => {
@@ -25,13 +25,13 @@ export const useAsync = <T, K>(
       return asyncFunction(body)
         ?.then((response) => {
           setValue(response);
-          callback && callback(response);
+          callback?.(response);
 
           return response;
         })
         .catch((error) => {
           setError(error);
-          errorCallback && errorCallback(error);
+          errorCallback?.(error);
 
           throw error.response;
         })

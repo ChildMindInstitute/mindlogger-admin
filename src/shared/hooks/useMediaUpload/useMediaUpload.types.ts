@@ -6,6 +6,7 @@ export type UseMediaUploadProps = {
   callback?: (mediaUrl: string) => void;
   errorCallback?: (error: AxiosError) => void;
   finallyCallback?: () => void;
+  onStopCallback?: () => void;
 };
 
 export type ExecuteMediaUploadProps = { file: File; fileName: string };
@@ -15,6 +16,7 @@ export type UseMediaUploadReturn = {
   executeMediaUpload: ({ file, fileName }: ExecuteMediaUploadProps) => Promise<void>;
   isLoading: boolean;
   mediaUrl: string | null;
+  stopUpload: () => void;
 };
 
 export type FileUploadToBucket = {
@@ -23,3 +25,10 @@ export type FileUploadToBucket = {
 };
 
 export type GetFormDataToUpload = { file: File; fields: MediaUploadFields };
+
+export type CheckFileExists = {
+  url: string;
+  onSuccess: () => void;
+  onError: (error: AxiosError) => void;
+  onStopRecursion?: () => void;
+};

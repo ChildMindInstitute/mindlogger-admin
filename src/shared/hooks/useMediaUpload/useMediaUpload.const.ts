@@ -1,0 +1,2 @@
+export const TIMEOUT_TO_CHECK_MEDIA_IN_BUCKET = 3000;
+export const COUNT_TO_STOP_RECURSION = 30;
