@@ -22,7 +22,7 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
-import { ScoreConditionalLogic } from 'shared/state';
+import { ScoreConditionalLogic, ScoreReport } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
@@ -97,7 +97,7 @@ export const ScoreContent = ({
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
 
-  useCheckAndTriggerOnNameUniqueness({
+  useCheckAndTriggerOnNameUniqueness<ScoreReport>({
     currentPath: name,
     entitiesFieldPath: reportsName,
     checkIfShouldIncludeEntity: isScoreReport,

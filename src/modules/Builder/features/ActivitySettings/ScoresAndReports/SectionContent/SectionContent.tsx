@@ -14,6 +14,7 @@ import { Svg } from 'shared/components/Svg';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
 import { isSectionReport } from 'shared/types';
+import { SectionReport } from 'shared/state/Applet/Applet.schema';
 
 import { SectionContentProps } from './SectionContent.types';
 import { ConditionContent } from '../ConditionContent';
@@ -39,7 +40,7 @@ export const SectionContent = ({
   const { fieldName } = useCurrentActivity();
   const reportsName = `${fieldName}.scoresAndReports.reports`;
 
-  useCheckAndTriggerOnNameUniqueness({
+  useCheckAndTriggerOnNameUniqueness<SectionReport>({
     currentPath: name,
     entitiesFieldPath: reportsName,
     checkIfShouldIncludeEntity: isSectionReport,
