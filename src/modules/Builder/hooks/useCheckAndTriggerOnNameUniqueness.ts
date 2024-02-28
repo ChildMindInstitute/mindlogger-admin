@@ -27,5 +27,13 @@ export const useCheckAndTriggerOnNameUniqueness = ({
     }, []);
 
     fieldsToTrigger.forEach((field) => trigger(field));
-  }, [nameChanged, entities?.length]);
+  }, [
+    checkIfShouldIncludeEntity,
+    entitiesFieldPath,
+    nameChanged,
+    entities?.length,
+    getFieldState,
+    getValues,
+    trigger,
+  ]);
 };

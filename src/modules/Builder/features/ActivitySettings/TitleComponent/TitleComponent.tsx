@@ -29,7 +29,7 @@ export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
 
   useEffect(() => {
     trigger(name);
-  }, [entities.length]);
+  }, [entities.length, name, trigger]);
 
   return (
     <StyledFlexColumn sx={{ m: theme.spacing(0, 5, 0, 3), overflow: 'hidden' }}>
