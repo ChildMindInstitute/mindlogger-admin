@@ -7,6 +7,8 @@ import { mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { page } from 'resources';
 import { initialStateData } from 'shared/state';
 import { Roles } from 'shared/consts';
+import { expectBanner } from 'shared/utils';
+import * as MixpanelFunc from 'shared/utils/mixpanel';
 
 import { AddUserForm } from './AddUserForm';
 import { dataTestId } from './AddUserForm.const';
@@ -122,5 +124,40 @@ describe('AddUserForm component tests', () => {
       expect(screen.getByLabelText('Respondents')).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestId}-workspace`)).toBeInTheDocument();
     });
+  });
+
+  test('should submit the form for "Add without inviting" and show success banner', async () => {
+    const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
+    mockAxios.get.mockResolvedValueOnce(getMockedWorkspaceInfo(true));
+    mockAxios.post.mockResolvedValueOnce({
+      data: {
+        result: {
+          id: 'test-shell-id',
+          appletId: mockedAppletId,
+          language: 'en',
+          creatorId: 'test-creator-id',
+          firstName: 'test-first-name',
+          lastName: 'test-last-name',
+          secretUserId: 'test-secret-id',
+          nickname: null,
+          email: null,
+        },
+      },
+    });
+    const { store } = renderComponent();
+
+    const secretIdInput = screen.getByTestId(`${dataTestId}-secret-id`).querySelector('input');
+    secretIdInput && (await userEvent.type(secretIdInput, 'test-secret-id'));
+    const firstNameInput = screen.getByTestId(`${dataTestId}-fname`).querySelector('input');
+    firstNameInput && (await userEvent.type(firstNameInput, 'test-first-name'));
+    const lastNameInput = screen.getByTestId(`${dataTestId}-lname`).querySelector('input');
+    lastNameInput && (await userEvent.type(lastNameInput, 'test-last-name'));
+
+    await userEvent.click(screen.getByTestId(`${dataTestId}-send-without-inviting`));
+
+    await waitFor(() => {
+      expectBanner(store, 'shell-account-success-banner');
+    });
+    expect(mixpanelTrack).toBeCalledWith('Shell account created successfully');
   });
 });
