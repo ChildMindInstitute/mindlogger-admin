@@ -17,7 +17,7 @@ import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFilterConditionalLogicByItem } from 'modules/Builder/hooks/useFilterConditionalLogicByItem';
 import { getItemConditionDependencies } from 'modules/Builder/features/ActivityItems/ActivityItems.utils';
 import { ItemTestFunctions } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
 
 import { GroupedSelectSearchController } from './GroupedSelectSearchController';
 import {
@@ -66,6 +66,11 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
         ];
       }, [])
     : itemsTypeOptions;
+
+  useCheckAndTriggerOnNameUniqueness({
+    currentPath: name,
+    entitiesFieldPath: `${fieldName}.items`,
+  });
 
   const handleModalSubmit = () => {
     selectChangeRef.current?.();
