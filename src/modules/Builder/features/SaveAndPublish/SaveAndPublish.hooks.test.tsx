@@ -46,9 +46,7 @@ describe('useSaveAndPublishSetup hook', () => {
 
       await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
 
-      await waitFor(() => {
-        expectBanner(store, 'dashboard-applets-save-success-banner');
-      });
+      await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
     });
 
     test('should not show a success banner if call to save fails', async () => {
@@ -68,14 +66,7 @@ describe('useSaveAndPublishSetup hook', () => {
         SaveAndPublishSteps.Failed,
       );
 
-      expect(
-        store
-          .getState()
-          .banners.data.banners.find(
-            ({ bannerProps }) =>
-              bannerProps?.['data-testid'] === 'dashboard-applets-save-success-banner',
-          ),
-      ).not.toBeDefined();
+      expectBanner(store, 'SaveSuccessBanner', false);
     });
   });
 });

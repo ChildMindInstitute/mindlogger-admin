@@ -11,7 +11,7 @@ describe('VersionWarningBanner', () => {
   test('should render', () => {
     renderWithProviders(<VersionWarningBanner />);
 
-    expect(screen.getByTestId('version-warning-banner')).toBeInTheDocument();
+    expect(screen.getByTestId('warning-banner')).toBeInTheDocument();
     expect(screen.getByText('You are using the new version of MindLogger!')).toBeInTheDocument();
   });
 

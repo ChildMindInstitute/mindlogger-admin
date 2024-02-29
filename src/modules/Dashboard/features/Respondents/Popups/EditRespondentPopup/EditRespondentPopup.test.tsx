@@ -53,8 +53,6 @@ describe('EditRespondentPopup component tests', () => {
 
     const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
     await userEvent.click(submitButton);
-    await waitFor(() => {
-      expectBanner(store, 'dashboard-respondents-edit-popup-success-banner');
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 });

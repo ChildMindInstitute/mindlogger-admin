@@ -206,7 +206,7 @@ describe('SubscalesConfiguration', () => {
     });
   });
 
-  test('Items available for selecting in Subscale', () => {
+  test('Items available for selecting in Subscale', async () => {
     renderSubscales();
 
     addSubscale();
@@ -231,10 +231,13 @@ describe('SubscalesConfiguration', () => {
     fireEvent.change(screen.getByTestId(`${mockedTestid}-1-name`).querySelector('input'), {
       target: { value: 'subscale_2' },
     });
-    expect(newItemsToSelect[0]).toHaveTextContent('Subscale: subscale_2 ()');
+    // wait for debounce callback
+    await waitFor(() => {
+      expect(newItemsToSelect[0]).toHaveTextContent('Subscale: subscale_2 ()');
+    });
   });
 
-  test('Elements Associated works correctly', () => {
+  test('Elements Associated works correctly', async () => {
     renderSubscales();
 
     addSubscale();
@@ -264,9 +267,13 @@ describe('SubscalesConfiguration', () => {
       associatedSubscale.querySelectorAll('td');
     const [associatedItemElement, associatedItemSubscale] = associatedItem.querySelectorAll('td');
 
-    expect(associatedSubscaleElement).toHaveTextContent(
-      'Subscale: subscale_2 (Item: single_text_score)',
-    );
+    // wait for debounce callback
+    await waitFor(() => {
+      expect(associatedSubscaleElement).toHaveTextContent(
+        'Subscale: subscale_2 (Item: single_text_score)',
+      );
+    });
+
     expect(associatedSubscaleSubscale).toHaveTextContent('subscale_1');
 
     expect(associatedItemElement).toHaveTextContent('Item: single_text_score');
@@ -398,7 +405,7 @@ describe('SubscalesConfiguration', () => {
     });
 
     test('Subscale Name should be unique', async () => {
-      const ref = renderSubscales();
+      renderSubscales();
 
       addSubscale();
       addSubscale();

@@ -5,9 +5,11 @@ import { useMediaUploader } from './MediaUploader.hooks';
 
 const mockOnUpload = jest.fn();
 const mockedExecuteMediaUpload = jest.fn();
+const uploadError = 'Upload failed';
 jest.mock('shared/hooks/useMediaUpload', () => ({
   useMediaUpload: () => ({
     executeMediaUpload: mockedExecuteMediaUpload,
+    error: uploadError,
   }),
 }));
 const file = new File(['file contents'], 'test.mp3', { type: 'audio/mpeg' });
@@ -91,5 +93,11 @@ describe('useMediaUploader', () => {
     result.current.dragEvents.onDrop(event);
 
     testSuccessFlow(result);
+  });
+
+  test('should return upload error if useMediaUpload returns error', async () => {
+    const { result } = renderHook(() => useMediaUploader({ onUpload: mockOnUpload }));
+
+    expect(result.current.uploadError).toBe(uploadError);
   });
 });
