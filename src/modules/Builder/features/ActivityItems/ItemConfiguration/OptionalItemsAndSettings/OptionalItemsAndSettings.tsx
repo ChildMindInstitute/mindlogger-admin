@@ -44,9 +44,6 @@ import {
   ITEMS_TO_HAVE_RESPONSE_OPTIONS_HEADER,
 } from './OptionalItemsAndSettings.const';
 
-// Feature disabled until release 1.14
-export const isNoneAboveFeatureFlag = false;
-
 export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalItemsProps>(
   ({ name }, ref) => {
     const { t } = useTranslation('app');
@@ -273,7 +270,7 @@ export const OptionalItemsAndSettings = forwardRef<OptionalItemsRef, OptionalIte
               >
                 {t('addOption')}
               </Button>
-              {isNoneAboveFeatureFlag && isMultipleSelection && (
+              {isMultipleSelection && (
                 <Button
                   onClick={() => handleAddNoneOption()}
                   variant="text"
