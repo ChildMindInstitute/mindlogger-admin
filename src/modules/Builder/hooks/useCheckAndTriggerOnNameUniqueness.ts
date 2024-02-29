@@ -12,13 +12,14 @@ export const useCheckAndTriggerOnNameUniqueness = <T = unknown>({
   entitiesFieldPath: string;
   checkIfShouldIncludeEntity?: (data: T) => boolean;
 }) => {
-  const { getValues, trigger, getFieldState } = useCustomFormContext();
-  const [nameChanged, entities] = useWatch({
+  const { trigger, getFieldState } = useCustomFormContext();
+  const [nameChanged, entities]: [string, T[]] = useWatch({
     name: [`${currentPath}.name`, entitiesFieldPath],
   });
 
   useEffect(() => {
-    const entities = (getValues(entitiesFieldPath) as T[]) ?? [];
+    if (!entities?.length) return;
+
     const fieldsToTrigger = entities.reduce((acc: string[], entity, index) => {
       const nameField = `${entitiesFieldPath}.${index}.name`;
       if (!checkIfShouldIncludeEntity(entity) || !getFieldState(nameField).error) return acc;
@@ -27,13 +28,6 @@ export const useCheckAndTriggerOnNameUniqueness = <T = unknown>({
     }, []);
 
     fieldsToTrigger.forEach((field) => trigger(field));
-  }, [
-    checkIfShouldIncludeEntity,
-    entitiesFieldPath,
-    nameChanged,
-    entities?.length,
-    getFieldState,
-    getValues,
-    trigger,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nameChanged, entities?.length]);
 };
