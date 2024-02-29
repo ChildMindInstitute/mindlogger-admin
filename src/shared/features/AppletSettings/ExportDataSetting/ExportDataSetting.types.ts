@@ -13,6 +13,6 @@ export type ExportDataFormValues = {
 };
 
 export type ExportDataSettingProps = {
-  isOpen: boolean;
-  onClose: () => void;
+  isExportSettingsOpen: boolean;
+  onExportSettingsClose: () => void;
 };

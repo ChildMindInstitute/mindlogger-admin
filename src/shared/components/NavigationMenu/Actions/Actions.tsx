@@ -10,6 +10,7 @@ import { workspaces, applet } from 'redux/modules';
 
 import { StyledSettingsGroup, StyledSettings, StyledSetting, StyledTitle } from './Actions.styles';
 import { ActionsProps } from './Actions.types';
+import { DATA_TESTID_ACTIONS_EXPORT_DATA } from './Actions.const';
 
 export const Actions = ({ isCompact }: ActionsProps) => {
   const { t } = useTranslation('app');
@@ -33,7 +34,7 @@ export const Actions = ({ isCompact }: ActionsProps) => {
             }}
             isCompact={isCompact}
             disabled={isNewApplet}
-            data-testid="builder-applet-settings-export-data"
+            data-testid={DATA_TESTID_ACTIONS_EXPORT_DATA}
           >
             <StyledFlexAllCenter>
               <Svg id="export" />
@@ -43,8 +44,8 @@ export const Actions = ({ isCompact }: ActionsProps) => {
         </span>
       </StyledSettings>
       <ExportDataSetting
-        isOpen={isExportOpen}
-        onClose={() => {
+        isExportSettingsOpen={isExportOpen}
+        onExportSettingsClose={() => {
           setIsExportOpen(false);
         }}
       />
