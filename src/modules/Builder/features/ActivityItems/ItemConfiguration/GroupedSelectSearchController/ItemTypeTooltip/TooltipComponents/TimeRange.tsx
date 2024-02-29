@@ -10,6 +10,7 @@ import {
   StyledDateLine,
   StyledPresentationLine,
 } from './TooltipComponents.styles';
+import { tooltipPresentationDataTestid } from '../ItemTypeTooltip.const';
 
 const timeRangeIcon = <Svg id="clock" width="18" height="18" />;
 
@@ -18,7 +19,7 @@ export const TimeRange = () => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid={tooltipPresentationDataTestid}>
         <StyledPresentationLine>
           {timeRangeIcon}
           <StyledDateLine>
