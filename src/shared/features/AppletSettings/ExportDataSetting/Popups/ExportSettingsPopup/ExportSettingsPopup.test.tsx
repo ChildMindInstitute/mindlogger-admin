@@ -94,7 +94,6 @@ describe('ExportSettingsPopup', () => {
     });
   });
 
-  // prettier-ignore
   describe("should appear export data popup for 'choose dates' date range", () => {
     test.each`
       route                                                                 | routePath                         | description
@@ -103,7 +102,10 @@ describe('ExportSettingsPopup', () => {
     `('$description', async ({ route, routePath }) => {
       const mockOnExport = jest.fn();
 
-      renderWithProviders(<ExportSettingsPopup isOpen onClose={mockOnClose} onExport={mockOnExport} />, { preloadedState, route, routePath });
+      renderWithProviders(
+        <ExportSettingsPopup isOpen onClose={mockOnClose} onExport={mockOnExport} />,
+        { preloadedState, route, routePath },
+      );
       const dateType = screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-dateType`);
       expect(dateType).toBeVisible();
       expect(screen.getByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).toBeVisible();
