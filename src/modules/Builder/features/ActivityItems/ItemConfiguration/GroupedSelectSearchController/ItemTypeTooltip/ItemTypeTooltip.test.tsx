@@ -6,11 +6,12 @@ import { renderWithProviders } from 'shared/utils';
 import { ItemResponseType } from 'shared/consts';
 
 import { ItemTypeTooltip } from './ItemTypeTooltip';
+import { tooltipPresentationDataTestid } from './ItemTypeTooltip.const';
 
-const renderComponent = (uiType) => {
+const renderWithExistenceCheck = (uiType) => {
   const anchorEl = document.createElement('li');
   renderWithProviders(<ItemTypeTooltip uiType={uiType} anchorEl={anchorEl} />);
-  expect(screen.getByTestId('tooltip-selection-presentation')).toBeInTheDocument();
+  expect(screen.getByTestId(tooltipPresentationDataTestid)).toBeInTheDocument();
 };
 
 const tooltipTexts = {
@@ -40,7 +41,7 @@ describe('ItemTypeTooltip', () => {
   });
 
   test.each(Object.entries(tooltipTexts))('renders %s component', (uiType, expectedText) => {
-    renderComponent(ItemResponseType[uiType as keyof typeof ItemResponseType]);
+    renderWithExistenceCheck(ItemResponseType[uiType as keyof typeof ItemResponseType]);
 
     expect(screen.getByText(expectedText)).toBeInTheDocument();
   });

@@ -12,6 +12,7 @@ import {
   StyledMatrixLineElement,
 } from './TooltipComponents.styles';
 import { SelectionProps, SelectionUiType } from './TooltipComponents.types';
+import { tooltipPresentationDataTestid } from '../ItemTypeTooltip.const';
 
 const commonProps = {
   width: '17',
@@ -33,7 +34,7 @@ export const SelectionPerRow = ({ uiType }: SelectionProps) => {
 
   return (
     <>
-      <StyledPresentation data-testid="tooltip-selection-presentation">
+      <StyledPresentation data-testid={tooltipPresentationDataTestid}>
         {selectionContent.map((row, rowIndex) => (
           <StyledMatrixLine key={uniqueId()}>
             {row.map((col, colIndex) => (

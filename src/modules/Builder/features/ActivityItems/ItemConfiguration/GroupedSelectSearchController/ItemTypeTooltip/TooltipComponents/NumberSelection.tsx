@@ -10,13 +10,14 @@ import {
   StyledNumberSelection,
   StyledNumberSelectionLine,
 } from './TooltipComponents.styles';
+import { tooltipPresentationDataTestid } from '../ItemTypeTooltip.const';
 
 export const NumberSelection = () => {
   const { t } = useTranslation();
 
   return (
     <>
-      <StyledPresentation data-testid="tooltip-selection-presentation">
+      <StyledPresentation data-testid={tooltipPresentationDataTestid}>
         <StyledNumberSelection>
           <StyledNumberSelectionLine>
             <StyledLabelLarge sx={{ mr: theme.spacing(0.5), textAlign: 'center' }}>
