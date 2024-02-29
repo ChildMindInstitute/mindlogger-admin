@@ -22,9 +22,13 @@ describe('NavigationMenu/Actions', () => {
     expect(screen.queryByTestId(DATA_TESTID_ACTIONS_EXPORT_DATA)).not.toBeInTheDocument();
   });
 
-  it('should render if user is a manager or owner', async () => {
+  test.each`
+    role             | description
+    ${Roles.Manager} | ${'manager'}
+    ${Roles.Owner}   | ${'owner'}
+  `('should render if user is $description', async ({ role }) => {
     renderWithProviders(<Actions isCompact={false} />, {
-      preloadedState: getPreloadedState(Roles.Manager),
+      preloadedState: getPreloadedState(role),
     });
 
     expect(screen.queryByTestId(DATA_TESTID_ACTIONS_EXPORT_DATA)).toBeInTheDocument();
