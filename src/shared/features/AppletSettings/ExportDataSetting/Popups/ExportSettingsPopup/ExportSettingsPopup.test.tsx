@@ -95,7 +95,7 @@ describe('ExportSettingsPopup', () => {
   });
 
   // prettier-ignore
-  describe('should appear export data popup for \'choose dates\' date range', () => {
+  describe("should appear export data popup for 'choose dates' date range", () => {
     test.each`
       route                                                                 | routePath                         | description
       ${`/dashboard/${mockedAppletId}/settings/${SettingParam.ExportData}`} | ${page.appletSettingsItem}        | ${'for dashboard'}

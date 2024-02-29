@@ -99,7 +99,7 @@ export const ExportSettingsPopup = ({ isOpen, onClose, onExport }: ExportSetting
     <Modal
       open={isOpen}
       title={t('exportDataForApplet', {
-        name: appletData?.displayName,
+        name: appletData?.displayName ?? '',
       })}
       onClose={onClose}
       buttonText=""
