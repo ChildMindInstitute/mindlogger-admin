@@ -1,11 +1,15 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
+import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
 
 import { forbiddenState } from 'shared/state/ForbiddenState';
-import { store } from 'redux/store';
 
 import { getCommonConfig, getRequestTokenData, refreshTokenAndReattemptRequest } from './api.utils';
 import { ApiResponseCodes, DEFAULT_CONFIG } from './api.const';
 
+let store: ToolkitStore;
+export const injectStoreToApiClient = (injectedStore: ToolkitStore) => {
+  store = injectedStore;
+};
 export const apiClient = axios.create(DEFAULT_CONFIG);
 export const authApiClient = axios.create(DEFAULT_CONFIG);
 export const authApiClientWithoutRefresh = axios.create(DEFAULT_CONFIG);

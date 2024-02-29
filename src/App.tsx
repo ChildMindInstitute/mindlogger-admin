@@ -10,6 +10,10 @@ import { Spinner } from 'shared/components';
 import { AppRoutes } from 'routes';
 import { ErrorFallback } from 'shared/components/ErrorFallback';
 import svgBuilder from 'shared/utils/svgBuilder';
+import { injectStoreToApiClient } from 'shared/api/api.client';
+
+// injecting store to avoid importing the store directly into other codebase files
+injectStoreToApiClient(store);
 
 const App = () => {
   useEffect(() => {
