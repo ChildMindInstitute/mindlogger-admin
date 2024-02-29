@@ -54,7 +54,7 @@ describe('DuplicatePopups', () => {
   test('should duplicate and open success modal', async () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    mockAxios.post.mockResolvedValueOnce({ data: mockedAppletData });
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));
@@ -87,6 +87,18 @@ describe('DuplicatePopups', () => {
     });
 
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+    await waitFor(() => {
+      expect(
+        store.getState().banners.data.banners.find((payload) => {
+          const bannerContent = payload.bannerProps?.children;
+          if (bannerContent) {
+            return bannerContent.toString().includes(mockedAppletData.displayName);
+          }
+
+          return false;
+        }),
+      ).toBeDefined();
+    });
   });
 
   // TODO uncomment after useasync changes

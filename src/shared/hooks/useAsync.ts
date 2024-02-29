@@ -25,13 +25,13 @@ export const useAsync = <T, K>(
       return asyncFunction(body)
         ?.then((response) => {
           setValue(response);
-          callback && callback(response);
+          callback?.(response);
 
           return response;
         })
         .catch((error) => {
           setError(error);
-          errorCallback && errorCallback(error);
+          errorCallback?.(error);
 
           throw error.response;
         })

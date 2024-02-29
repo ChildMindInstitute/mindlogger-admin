@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -15,6 +15,7 @@ import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents'
 import { Mixpanel } from 'shared/utils';
 import { variables } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
+import { banners } from 'redux/modules';
 
 import {
   StyledWelcome,
@@ -54,6 +55,26 @@ export const LoginForm = () => {
       setErrorMessage(result.payload as string);
     }
   };
+
+  useEffect(() => {
+    if (location.state?.isPasswordReset) {
+      // Shown for 5 seconds
+      dispatch(
+        banners.actions.addBanner({
+          key: 'PasswordResetSuccessfulBanner',
+        }),
+      );
+
+      // Unset the state after showing the notification, so that it doesn't show again if the user navigates back to this page
+      navigate(window.location.pathname, {
+        state: {
+          ...location.state,
+          isPasswordReset: undefined,
+        },
+        replace: true,
+      });
+    }
+  }, []);
 
   const handleCreateAccountClick = () => {
     navigate(page.signUp);
