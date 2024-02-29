@@ -18,6 +18,7 @@ export const BuilderContainer = ({
   contentSxProps,
   hasMaxWidth,
   contentClassName,
+  'data-testid': dataTestid,
 }: BuilderContainerProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const isHeaderSticky = useHeaderSticky(containerRef);
@@ -25,7 +26,12 @@ export const BuilderContainer = ({
   const HeaderComponent = Header || StyledBuilderContainerHeader;
 
   return (
-    <StyledBuilderWrapper ref={containerRef} hasMaxWidth={hasMaxWidth} sx={sxProps}>
+    <StyledBuilderWrapper
+      ref={containerRef}
+      hasMaxWidth={hasMaxWidth}
+      sx={sxProps}
+      data-testid={dataTestid}
+    >
       <HeaderComponent isSticky={isHeaderSticky} headerProps={headerProps}>
         <StyledHeadlineLarge>{title}</StyledHeadlineLarge>
       </HeaderComponent>

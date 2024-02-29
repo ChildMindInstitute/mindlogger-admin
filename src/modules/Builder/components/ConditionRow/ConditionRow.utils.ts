@@ -7,7 +7,6 @@ import {
   SingleValueCondition,
   RangeValueCondition,
   ScoreReport,
-  SliderItemResponseValues,
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
@@ -95,7 +94,7 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
     case ConditionType.GreaterThan:
       if (selectedItem?.responseType === ItemResponseType.Slider) {
         return {
-          value: (selectedItem.responseValues as SliderItemResponseValues).minValue,
+          value: selectedItem.responseValues.minValue,
         };
       }
 
@@ -103,7 +102,7 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
     case ConditionType.LessThan:
       if (selectedItem?.responseType === ItemResponseType.Slider) {
         return {
-          value: (selectedItem.responseValues as SliderItemResponseValues).maxValue,
+          value: selectedItem.responseValues.maxValue,
         };
       }
 
@@ -115,8 +114,8 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
     case ConditionType.OutsideOf:
       if (selectedItem?.responseType === ItemResponseType.Slider) {
         return {
-          minValue: (selectedItem.responseValues as SliderItemResponseValues).minValue,
-          maxValue: (selectedItem.responseValues as SliderItemResponseValues).maxValue,
+          minValue: selectedItem.responseValues.minValue,
+          maxValue: selectedItem.responseValues.maxValue,
         };
       }
 

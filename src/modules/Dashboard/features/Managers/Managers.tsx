@@ -107,14 +107,7 @@ export const Managers = () => {
   const editManagerAccessOnClose = (shouldReFetch?: boolean) => {
     setEditAccessPopupVisible(false);
     if (shouldReFetch) {
-      dispatch(
-        banners.actions.addBanner({
-          key: 'SaveSuccessBanner',
-          bannerProps: {
-            'data-testid': 'dashboard-managers-edit-access-popup-success-banner',
-          },
-        }),
-      );
+      dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
       handleReload();
     }
   };

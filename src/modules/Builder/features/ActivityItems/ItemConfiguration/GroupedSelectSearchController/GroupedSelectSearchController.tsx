@@ -27,6 +27,8 @@ import {
   handleSearchKeyDown,
 } from './GroupedSelectSearchController.utils';
 
+const dataTestid = 'builder-activity-items-item-configuration-response-type';
+
 export const GroupedSelectSearchController = <T extends FieldValues>({
   name,
   control,
@@ -67,7 +69,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   };
 
   const mobileOnly = (
-    <StyledMobileOnly>
+    <StyledMobileOnly data-testid="mobile-only-label">
       <StyledBodyMedium>{t('mobileOnly')}</StyledBodyMedium>
     </StyledMobileOnly>
   );
@@ -94,7 +96,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                 fullWidth
                 MenuProps={{
                   autoFocus: false,
-                  PaperProps: { sx: selectDropdownStyles },
+                  PaperProps: { sx: selectDropdownStyles, 'data-testid': 'popover-menu' },
                 }}
                 sx={{ pr: theme.spacing(1) }}
                 onChange={handleOnSelectChange}
@@ -122,7 +124,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                   />
                 )}
                 defaultValue=""
-                data-testid="builder-activity-items-item-configuration-response-type"
+                data-testid={dataTestid}
               >
                 <StyledListSubheader>
                   <form autoComplete="off">
@@ -139,12 +141,15 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                       InputProps={{
                         startAdornment: <Svg id="search" />,
                         endAdornment: searchTerm && (
-                          <StyledClearedButton onClick={() => setSearchTerm('')}>
+                          <StyledClearedButton
+                            onClick={() => setSearchTerm('')}
+                            data-testid="clear-button"
+                          >
                             <Svg id="close" />
                           </StyledClearedButton>
                         ),
                       }}
-                      data-testid="builder-activity-items-item-configuration-response-type-search"
+                      data-testid={`${dataTestid}-search`}
                     />
                   </form>
                 </StyledListSubheader>
@@ -164,7 +169,7 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
                         isHidden={isHidden}
                         key={groupValue}
                         value={groupValue}
-                        data-testid={`builder-activity-items-item-configuration-response-type-option-${groupValue}`}
+                        data-testid={`${dataTestid}-option-${groupValue}`}
                       >
                         <StyledFlexTopCenter>
                           <StyledFlexTopCenter sx={{ mr: theme.spacing(1.8) }}>

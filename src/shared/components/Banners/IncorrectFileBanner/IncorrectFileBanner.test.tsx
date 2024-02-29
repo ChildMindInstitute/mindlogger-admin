@@ -11,13 +11,11 @@ const props = {
   onClose: jest.fn(),
 };
 
-const dataTestid = 'incorrect-file-popup';
-
 describe('IncorrectFileBanner', () => {
   test('should render size error', () => {
-    renderWithProviders(<IncorrectFileBanner {...props} data-testid={dataTestid} />);
+    renderWithProviders(<IncorrectFileBanner {...props} />);
 
-    expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
+    expect(screen.getByTestId('error-banner')).toBeInTheDocument();
     expect(screen.getByText('Image is more than 25 MB.')).toBeInTheDocument();
   });
 
