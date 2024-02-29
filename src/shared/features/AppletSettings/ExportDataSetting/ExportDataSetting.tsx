@@ -16,14 +16,16 @@ export const ExportDataSetting = ({
 
   return (
     <>
-     {isExportSettingsOpen && <ExportSettingsPopup
-        isOpen={isExportSettingsOpen}
-        onClose={onExportSettingsClose}
-        onExport={() => {
-          setDataIsExporting(true);
-          onExportSettingsClose();
-        }}
-      />
+      {isExportSettingsOpen && (
+        <ExportSettingsPopup
+          isOpen
+          onClose={onExportSettingsClose}
+          onExport={() => {
+            setDataIsExporting(true);
+            onExportSettingsClose();
+          }}
+        />
+      )}
       {dataIsExporting && (
         <DataExportPopup
           isAppletSetting
