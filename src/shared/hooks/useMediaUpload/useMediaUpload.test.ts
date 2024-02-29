@@ -4,8 +4,7 @@ import axios from 'axios';
 import { useMediaUpload } from './useMediaUpload';
 import { UseMediaUploadReturn } from './useMediaUpload.types';
 
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockedAxios = axios.create();
 const mockGetMediaUploadUrl = jest.fn();
 jest.mock('shared/hooks/useAsync', () => ({
   useAsync: () => ({ execute: mockGetMediaUploadUrl }),
@@ -37,6 +36,11 @@ const useMediaUploadProps = {
   finallyCallback: mockFinallyCallback,
 };
 
+const waitForTheUpdate = async () =>
+  await act(async () => {
+    await Promise.resolve();
+  });
+
 const testUploadFlow = async (result: { current: UseMediaUploadReturn }) => {
   act(() => {
     result.current.executeMediaUpload({ file, fileName });
@@ -44,29 +48,43 @@ const testUploadFlow = async (result: { current: UseMediaUploadReturn }) => {
 
   expect(result.current.isLoading).toBe(true);
 
-  // wait for the update
-  await act(async () => {
-    await Promise.resolve();
-  });
+  await waitForTheUpdate();
 
   expect(mockGetMediaUploadUrl).toHaveBeenCalledWith(fileName);
   expect(mockedAxios.post).toHaveBeenCalledWith(uploadUrl, expect.any(FormData), {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
+
+  jest.runAllTimers();
+  await waitForTheUpdate();
+
   expect(result.current.isLoading).toBe(false);
+};
+
+const testErrorFlow = (result: { current: UseMediaUploadReturn }, message: string) => {
+  expect(result.current.mediaUrl).toBe(null);
+  expect(result.current.error?.message).toBe(message);
+  expect(mockCallback).not.toHaveBeenCalled();
+  expect(mockErrorCallback).toHaveBeenCalledWith(result.current.error);
+  expect(mockFinallyCallback).toHaveBeenCalled();
 };
 
 describe('useMediaUpload', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
   });
 
   test('should upload file and set mediaUrl on successful upload', async () => {
     const { result } = renderHook(() => useMediaUpload(useMediaUploadProps));
 
     mockGetMediaUploadUrl.mockResolvedValue(uploadUrlResponse);
-
-    mockedAxios.post.mockResolvedValue({ status: 204 });
+    jest.spyOn(mockedAxios, 'post').mockResolvedValueOnce({ status: 204 });
+    jest.spyOn(mockedAxios, 'head').mockResolvedValueOnce({ status: 200 });
 
     await testUploadFlow(result);
 
@@ -78,17 +96,24 @@ describe('useMediaUpload', () => {
 
   test('should handle upload failure and call errorCallback', async () => {
     const { result } = renderHook(() => useMediaUpload(useMediaUploadProps));
-
+    const message = 'Upload failed';
     mockGetMediaUploadUrl.mockResolvedValue(uploadUrlResponse);
 
-    mockedAxios.post.mockRejectedValue(new Error('Upload failed'));
+    jest.spyOn(mockedAxios, 'post').mockRejectedValueOnce(new Error(message));
 
     await testUploadFlow(result);
+    testErrorFlow(result, message);
+  });
 
-    expect(result.current.mediaUrl).toBe(null);
-    expect(result.current.error?.message).toBe('Upload failed');
-    expect(mockCallback).not.toHaveBeenCalled();
-    expect(mockErrorCallback).toHaveBeenCalledWith(result.current.error);
-    expect(mockFinallyCallback).toHaveBeenCalled();
+  test('should handle the bucket failure and call errorCallback', async () => {
+    const { result } = renderHook(() => useMediaUpload(useMediaUploadProps));
+    const message = 'Network error';
+
+    mockGetMediaUploadUrl.mockResolvedValue(uploadUrlResponse);
+    jest.spyOn(mockedAxios, 'post').mockResolvedValueOnce({ status: 204 });
+    jest.spyOn(mockedAxios, 'head').mockRejectedValueOnce(new Error(message));
+
+    await testUploadFlow(result);
+    testErrorFlow(result, message);
   });
 });

@@ -73,24 +73,30 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
       {error?.message && (
         <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error.message}</StyledBodyErrorText>
       )}
-      <UploadAudio
-        open={isUploadPopupOpened}
-        media={media}
-        onChange={setMedia}
-        onUpload={handleUploadAudio}
-        onClose={onCloseUploadPopup}
-      />
-      <RecordAudio
-        open={isRecordPopupOpened}
-        onChange={setMedia}
-        onUpload={handleUploadRecord}
-        onClose={onCloseRecordPopup}
-      />
-      <RemoveAudioPopup
-        open={isRemoveAudioPopupOpened}
-        onClose={onCloseRemoveAudioPopup}
-        onRemove={handleRemoveAudio}
-      />
+      {isUploadPopupOpened && (
+        <UploadAudio
+          open={isUploadPopupOpened}
+          media={media}
+          onChange={setMedia}
+          onUpload={handleUploadAudio}
+          onClose={onCloseUploadPopup}
+        />
+      )}
+      {isRecordPopupOpened && (
+        <RecordAudio
+          open={isRecordPopupOpened}
+          onChange={setMedia}
+          onUpload={handleUploadRecord}
+          onClose={onCloseRecordPopup}
+        />
+      )}
+      {isRemoveAudioPopupOpened && (
+        <RemoveAudioPopup
+          open={isRemoveAudioPopupOpened}
+          onClose={onCloseRemoveAudioPopup}
+          onRemove={handleRemoveAudio}
+        />
+      )}
     </Box>
   );
 };

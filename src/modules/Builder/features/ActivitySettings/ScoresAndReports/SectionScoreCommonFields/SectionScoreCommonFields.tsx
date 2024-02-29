@@ -37,6 +37,7 @@ export const SectionScoreCommonFields = ({
     const message = getValues(messageName);
     printItems ?? setValue(printItemsName, !!itemsPrint?.length);
     showMessage ?? setValue(showMessageName, !!message?.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export const SectionScoreCommonFields = ({
     }
 
     unregister(messageName, { keepValue: true });
-  }, [showMessage]);
+  }, [showMessage, messageName, register, unregister]);
 
   useEffect(() => {
     if (printItems) {
@@ -57,11 +58,11 @@ export const SectionScoreCommonFields = ({
     }
 
     unregister(itemsPrintName, { keepValue: true });
-  }, [printItems]);
+  }, [printItems, itemsPrintName, register, unregister]);
 
   useEffect(() => {
     trigger(printItemsName);
-  }, [printItems, showMessage, scoreConditionalLogic]);
+  }, [printItems, showMessage, scoreConditionalLogic, printItemsName, trigger]);
 
   return (
     <>
@@ -87,6 +88,7 @@ export const SectionScoreCommonFields = ({
           control={control}
           editorId={`editor-${sectionId}`}
           data-testid={`${dataTestid}-show-message-text`}
+          withDebounce
         />
       )}
       <Box sx={{ m: theme.spacing(0.5, 0, 1) }}>
