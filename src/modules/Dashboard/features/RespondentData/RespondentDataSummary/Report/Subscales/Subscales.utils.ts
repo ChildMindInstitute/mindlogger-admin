@@ -29,7 +29,7 @@ export const getSubscalesToRender = (
       if (!result?.[data.name]) {
         result[data.name] = nestedSubscale;
       }
-    } else {
+    } else if (activityItems[item.name]) {
       const formattedItem = formatActivityItemAnswers(activityItems[item.name], endDatetime);
       if (!result?.[data.name]?.items) {
         result[data.name] = { items: [formattedItem] };
@@ -54,7 +54,7 @@ export const getAllSubscalesToRender = (
     };
 
     for (const subscaleItem of subscale.items) {
-      if (subscaleItem.type === ElementType.Item) {
+      if (subscaleItem.type === ElementType.Item && activityItems[subscaleItem.name]) {
         const formattedItem = formatActivityItemAnswers(
           activityItems[subscaleItem.name],
           item.endDatetime,

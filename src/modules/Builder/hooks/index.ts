@@ -7,3 +7,4 @@ export * from './useFilterConditionalLogicByItem';
 export * from './useRedirectIfNoMatchedActivityItem';
 export * from './useFieldLengthError';
 export * from './useCustomFormContext';
+export * from './useCheckAndTriggerOnNameUniqueness';
