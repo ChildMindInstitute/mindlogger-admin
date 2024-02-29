@@ -16,7 +16,7 @@ export const ExportDataSetting = ({
 
   return (
     <>
-      <ExportSettingsPopup
+     {isExportSettingsOpen && <ExportSettingsPopup
         isOpen={isExportSettingsOpen}
         onClose={onExportSettingsClose}
         onExport={() => {
