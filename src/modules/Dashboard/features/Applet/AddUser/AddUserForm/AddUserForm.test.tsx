@@ -156,7 +156,7 @@ describe('AddUserForm component tests', () => {
     await userEvent.click(screen.getByTestId(`${dataTestId}-send-without-inviting`));
 
     await waitFor(() => {
-      expectBanner(store, 'shell-account-success-banner');
+      expectBanner(store, 'ShellAccountSuccessBanner');
     });
     expect(mixpanelTrack).toBeCalledWith('Shell account created successfully');
   });

@@ -98,7 +98,6 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           key: 'ShellAccountSuccessBanner',
           bannerProps: {
             id: result.data?.result?.secretUserId ?? '',
-            'data-testid': 'shell-account-success-banner',
           },
         }),
       );

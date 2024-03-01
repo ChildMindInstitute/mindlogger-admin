@@ -8,7 +8,7 @@ import { page } from 'resources';
 import { ShellAccountSuccessBanner } from './ShellAccountSuccessBanner';
 
 const mockOnClose = jest.fn();
-const dataTestid = 'shell-account-success-banner';
+const dataTestid = 'success-banner';
 const props = {
   id: 'test-id',
   onClose: mockOnClose,
@@ -22,7 +22,7 @@ jest.mock('react-router-dom', () => ({
 const route = `/dashboard/${mockedAppletId}/add-user`;
 const routePath = page.appletAddUser;
 
-describe('TransferOwnershipSuccessBanner', () => {
+describe('ShellAccountSuccessBanner', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
