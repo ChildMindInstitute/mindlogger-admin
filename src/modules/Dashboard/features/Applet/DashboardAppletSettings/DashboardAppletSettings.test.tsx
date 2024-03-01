@@ -1,38 +1,15 @@
 import { screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils';
-import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
+import { mockedAppletId } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { page } from 'resources';
-import { initialStateData } from 'shared/state';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
 
 import { DashboardAppletSettings } from './DashboardAppletSettings';
 
 const route = `/dashboard/${mockedAppletId}/settings`;
 const routePath = page.appletSettings;
-const getPreloadedState = (role = Roles.Manager, isAppletExist = true) => ({
-  workspaces: {
-    workspaces: initialStateData,
-    currentWorkspace: {
-      ...initialStateData,
-      ...mockedCurrentWorkspace,
-    },
-    roles: {
-      ...initialStateData,
-      data: {
-        [mockedAppletId]: [role],
-      },
-    },
-    applet: mockedApplet,
-    workspacesRoles: initialStateData,
-  },
-  applet: {
-    applet: {
-      ...initialStateData,
-      ...(isAppletExist ? { data: { result: mockedApplet } } : {}),
-    },
-  },
-});
 
 describe('DashboardAppletSettings component tests', () => {
   test('should render settings', () => {

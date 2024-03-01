@@ -13,7 +13,7 @@ describe('getSettings', () => {
   });
 
   describe('should return right items for section ', () => {
-    const usersAndDataItems = ['exportData', 'dataRetention'];
+    const usersAndDataItems = ['dataRetention'];
     const appletContentItems = [
       'editApplet',
       'versionHistory',
