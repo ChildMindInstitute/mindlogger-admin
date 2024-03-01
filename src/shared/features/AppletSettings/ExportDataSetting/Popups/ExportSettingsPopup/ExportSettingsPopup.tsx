@@ -13,16 +13,14 @@ import { theme, StyledBodyLarge, StyledFlexTopCenter, StyledModalWrapper } from 
 import { SelectEvent } from 'shared/types';
 import { DateType } from 'shared/components/DatePicker/DatePicker.types';
 import { getNormalizedTimezoneDate } from 'shared/utils';
-import {
-  StyledAppletSettingsButton,
-  StyledAppletSettingsDescription,
-} from 'shared/features/AppletSettings/AppletSettings.styles';
+import { StyledAppletSettingsButton } from 'shared/features/AppletSettings/AppletSettings.styles';
 
 import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
 import { exportDataSettingSchema } from '../../ExportDataSetting.schema';
 import { getDateTypeOptions } from './ExportSettingsPopup.utils';
 import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
 import { ExportDataFormValues, ExportDateType } from '../../ExportDataSetting.types';
+import { StyledExportSettingsDescription } from './ExportSettingsPopup.styles';
 
 export const ExportSettingsPopup = ({ isOpen, onClose, onExport }: ExportSettingsPopupProps) => {
   const { t } = useTranslation('app');
@@ -108,9 +106,9 @@ export const ExportSettingsPopup = ({ isOpen, onClose, onExport }: ExportSetting
       <StyledModalWrapper>
         <FormProvider {...methods}>
           <form noValidate autoComplete="off">
-            <StyledAppletSettingsDescription>
+            <StyledExportSettingsDescription>
               {t('exportDescription')}
-            </StyledAppletSettingsDescription>
+            </StyledExportSettingsDescription>
             <SelectController
               name={'dateType'}
               control={control}
