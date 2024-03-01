@@ -44,6 +44,7 @@ describe('ShellAccountSuccessBanner', () => {
 
     const closeButton = getByTitle('Close');
     fireEvent.click(closeButton);
+
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
