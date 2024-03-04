@@ -83,14 +83,14 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
   const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
-    async (result) => {
+    async (res) => {
       await setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
         encryption: encryptionDataRef.current.encryption!,
         appletId: currentAppletId,
       });
 
-      handleDuplicateSuccess(result);
+      handleDuplicateSuccess(res);
     },
     (error) => {
       setPasswordModalVisible(false);
@@ -127,7 +127,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
   };
 
-  const handleDuplicateSuccess = (result: AxiosResponse) => {
+  const handleDuplicateSuccess = (res: AxiosResponse) => {
     setPasswordModalVisible(false);
 
     onCloseCallback?.();
@@ -140,7 +140,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         key: 'SaveSuccessBanner',
         bannerProps: {
           children: t('successDuplication', {
-            appletName: result?.data?.displayName ?? '',
+            appletName: res?.data?.result?.displayName ?? '',
           }),
         },
       }),
