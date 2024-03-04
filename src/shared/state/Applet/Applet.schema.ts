@@ -754,7 +754,7 @@ export type SingleApplet = {
   activityCount?: number | null;
   streamEnabled: boolean | null;
   streamIpAddress: string | null;
-  streamPort: string | null;
+  streamPort: number | null;
 };
 
 export type AppletSchema = {

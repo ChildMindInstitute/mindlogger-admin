@@ -87,7 +87,7 @@ export type AppletFormValues = {
   activities: ActivityFormValues[];
   streamEnabled: boolean;
   streamIpAddress: string | null;
-  streamPort: string | null;
+  streamPort: number | null;
   reportServerIp?: string;
   reportPublicKey?: string;
   reportRecipients?: string[];
