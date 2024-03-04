@@ -21,7 +21,7 @@ import {
 import { getErrorMessage, Mixpanel, getRespondentName } from 'shared/utils';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
 import { useAsync } from 'shared/hooks/useAsync';
-import { users, workspaces } from 'redux/modules';
+import { users, workspaces, banners } from 'redux/modules';
 import { Svg, Tooltip } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
 import { useFormError } from 'modules/Dashboard/hooks';
@@ -92,7 +92,15 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
   );
   const { error: shellAccountError, execute: executePostAppletShellAccountApi } = useAsync(
     postAppletShellAccountApi,
-    async () => {
+    async (result) => {
+      dispatch(
+        banners.actions.addBanner({
+          key: 'ShellAccountSuccessBanner',
+          bannerProps: {
+            id: result.data?.result?.secretUserId ?? '',
+          },
+        }),
+      );
       resetForm();
       setHasCommonError(false);
       Mixpanel.track('Shell account created successfully');
@@ -199,7 +207,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
         }),
       );
     }
-  }, [ownerId]);
+  }, [ownerId, appletId, dispatch, executeGetWorkspaceInfoApi]);
 
   return (
     <>
