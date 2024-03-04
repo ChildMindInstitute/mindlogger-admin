@@ -27,6 +27,8 @@ const mockedEncryption = {
   accountId: '12345',
 };
 
+const dataTestid = 'dashboard-applets-duplicate-popup';
+
 describe('DuplicatePopups', () => {
   afterEach(() => {
     mockAxios.reset();
@@ -42,7 +44,7 @@ describe('DuplicatePopups', () => {
     });
 
     await waitFor(() => {
-      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      expect(getByTestId(`${dataTestid}-name`)).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
 
@@ -70,7 +72,7 @@ describe('DuplicatePopups', () => {
     );
 
     await waitFor(() => {
-      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      expect(getByTestId(`${dataTestid}-name`)).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
 

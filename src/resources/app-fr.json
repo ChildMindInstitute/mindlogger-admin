@@ -1273,5 +1273,7 @@
     "button": "Procéder avec la nouvelle version"
   },
   "appletNameExists": "Ce nom d'Applet existe déjà",
+  "noAccessTitle": "Pas d'accès à l'applet",
+  "noAccessDescription": "Pour rafraîchir les données, veuillez cliquer sur le bouton ci-dessous.",
   "goToDashboard": "Aller au tableau de bord"
 }

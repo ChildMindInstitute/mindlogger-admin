@@ -12,6 +12,7 @@ import { themes } from 'modules/Builder/state/Themes';
 import { reportConfig } from 'modules/Builder/state/ReportConfig';
 import { auth } from 'modules/Auth/state';
 import { workspaces } from 'shared/state/Workspaces';
+import { forbiddenState } from 'shared/state/ForbiddenState';
 
 export const rootReducer = combineReducers({
   alerts: alerts.slice.reducer,
@@ -26,4 +27,5 @@ export const rootReducer = combineReducers({
   themes: themes.slice.reducer,
   users: users.slice.reducer,
   workspaces: workspaces.slice.reducer,
+  forbiddenState: forbiddenState.slice.reducer,
 });

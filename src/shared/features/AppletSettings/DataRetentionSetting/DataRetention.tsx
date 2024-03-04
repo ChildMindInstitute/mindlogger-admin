@@ -10,7 +10,7 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { RetentionPeriods } from 'shared/types';
 import { applet, banners } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
-import { postAppletDataRetentionApi } from 'api';
+import { ApiResponseCodes, postAppletDataRetentionApi } from 'api';
 
 import { usePrompt } from '../AppletSettings.hooks';
 import { StyledAppletSettingsDescription } from '../AppletSettings.styles';
@@ -32,6 +32,7 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getApplet } = applet.thunk;
   const { updateAppletData } = applet.actions;
+  const [noPermission, setNoPermission] = useState(false);
 
   const defaultValues = {
     retentionPeriod: appletData?.retentionPeriod || DEFAULT_RETENTION_PERIOD,
@@ -54,7 +55,6 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
   });
 
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
   const { execute: saveDataRetention } = useAsync(
     postAppletDataRetentionApi,
     () => {
@@ -65,7 +65,17 @@ export const DataRetention = ({ isDashboard }: { isDashboard?: boolean }) => {
         }),
       );
     },
-    () => setErrorPopupVisible(true),
+    (error) => {
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermission(true);
+
+        return;
+      }
+      setErrorPopupVisible(true);
+    },
+  );
+  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(
+    isDirty && !isSubmitted && !noPermission,
   );
 
   const watchRetentionType = watch('retentionType');
