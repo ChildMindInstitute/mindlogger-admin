@@ -423,7 +423,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     await sendRequest(password);
   };
 
-  const showSuccessBanner = () => {
+  const showSuccessBanner = (isUpdate?: boolean) => {
     // If there is any visible banner warning the user they haven't made changes,
     // remove it before showing the success banner.
     dispatch(
@@ -436,7 +436,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
         bannerProps: {
-          children: t('appletSavedAndPublished', { name: getAppletData()?.displayName }),
+          children: t(isUpdate ? 'appletUpdated' : 'appletSavedAndPublished', {
+            name: getAppletData()?.displayName,
+          }),
           'data-testid': 'dashboard-applets-save-success-banner',
         },
       }),
@@ -482,7 +484,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (updateApplet.fulfilled.match(result)) {
       Mixpanel.track('Applet edit successful');
 
-      showSuccessBanner();
+      showSuccessBanner(true);
 
       if (shouldNavigateRef.current) {
         confirmNavigation();
