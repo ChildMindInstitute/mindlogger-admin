@@ -24,10 +24,12 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
         if (
           payload?.response?.status === ApiResponseCodes.Forbidden ||
           payload?.status === ApiResponseCodes.Forbidden ||
-          payload?.[0]?.type === ErrorResponseType.AccessDenied
+          (Array.isArray(payload) &&
+            payload.some((data) => data.type === ErrorResponseType.AccessDenied))
         ) {
           return setIsForbidden(true);
         }
+
         setIsForbidden(false);
       } catch (e) {
         getErrorMessage(e);

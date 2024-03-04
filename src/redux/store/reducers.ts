@@ -26,6 +26,6 @@ export const rootReducer = combineReducers({
   reportConfig: reportConfig.slice.reducer,
   themes: themes.slice.reducer,
   users: users.slice.reducer,
-  workspaces: workspaces?.slice.reducer,
+  workspaces: workspaces.slice.reducer,
   forbiddenState: forbiddenState.slice.reducer,
 });
