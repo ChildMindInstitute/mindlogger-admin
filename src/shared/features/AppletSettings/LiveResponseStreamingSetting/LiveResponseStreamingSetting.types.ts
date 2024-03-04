@@ -1,1 +1,1 @@
-export type OnInputChange = { value: string | null; fieldName: string };
+export type InputChangeProps = { value: string | null; fieldName: string };

@@ -9,15 +9,18 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { StyledAppletSettingsDescription } from '../AppletSettings.styles';
 import { StyledController } from './LiveResponseStreamingSetting.styles';
-import { OnInputChange } from './LiveResponseStreamingSetting.types';
+import { InputChangeProps } from './LiveResponseStreamingSetting.types';
+import {
+  dataTestid,
+  ipAddressFieldName,
+  portFieldName,
+} from './LiveResponseStreamingSetting.const';
+import { getNewValue } from './LiveResponseStreamingSetting.utils';
 
 export const LiveResponseStreamingSetting = () => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const [streamEnabled] = useWatch({ name: ['streamEnabled'] });
-  const dataTestid = 'applet-settings-live-response-streaming';
-  const ipAddressFieldName = 'streamIpAddress';
-  const portFieldName = 'streamPort';
 
   const onStreamStatusChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
@@ -27,15 +30,8 @@ export const LiveResponseStreamingSetting = () => {
     setValue(portFieldName, null);
   };
 
-  const onInputChange = ({ value, fieldName }: OnInputChange) => {
-    const getNewValue = () => {
-      if (value === '' || value === null) return null;
-      if (fieldName === portFieldName && isNaN(+value)) return value;
-      if (fieldName === portFieldName) return +value;
-
-      return value;
-    };
-    setValue(fieldName, getNewValue(), { shouldValidate: true });
+  const onInputChange = ({ value, fieldName }: InputChangeProps) => {
+    setValue(fieldName, getNewValue({ value, fieldName }), { shouldValidate: true });
   };
 
   return (
