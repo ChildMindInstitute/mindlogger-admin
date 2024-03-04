@@ -37,7 +37,7 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
         setIsLoading(false);
       }
     })();
-  }, [ownerId]);
+  }, [ownerId, asyncFunc]);
 
   return {
     isForbidden,
