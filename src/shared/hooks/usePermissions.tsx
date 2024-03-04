@@ -37,7 +37,8 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
         setIsLoading(false);
       }
     })();
-  }, [ownerId, asyncFunc]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ownerId]);
 
   return {
     isForbidden,
