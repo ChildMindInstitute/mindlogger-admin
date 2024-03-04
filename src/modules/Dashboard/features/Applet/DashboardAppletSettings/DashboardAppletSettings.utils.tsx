@@ -1,7 +1,6 @@
 import { Svg } from 'shared/components/Svg';
 import { Roles } from 'shared/consts';
 import {
-  ExportDataSetting,
   DataRetention,
   EditAppletSetting,
   TransferOwnershipSetting,
@@ -24,14 +23,6 @@ export const getSettings = ({ isPublished, roles }: GetSettings): ItemNavigation
       label: 'usersAndData',
       isVisible: isManagerOrOwner(roles?.[0]),
       items: [
-        {
-          icon: <Svg id="export" />,
-          label: 'exportData',
-          component: <ExportDataSetting />,
-          param: SettingParam.ExportData,
-          onClick: () => Mixpanel.track('Export Data click'),
-          'data-testid': `${dataTestid}-export-data`,
-        },
         {
           icon: <Svg id="data-retention" />,
           label: 'dataRetention',

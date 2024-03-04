@@ -612,6 +612,8 @@ export const getNewApplet = () => ({
   activities: [],
   activityFlows: [],
   reportEmailBody: t('reportEmailBody'),
+  streamIpAddress: null,
+  streamPort: null,
 });
 
 export const getNewActivityFlow = () => ({
