@@ -97,11 +97,11 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       const maxLabels = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-max-label`));
       minLabels.forEach((label) => {
         expect(label).toBeVisible();
-        expect(label.querySelector('label')).toHaveTextContent('Min Label');
+        expect(label.querySelector('label')).toHaveTextContent('Left Label');
       });
       maxLabels.forEach((label) => {
         expect(label).toBeVisible();
-        expect(label.querySelector('label')).toHaveTextContent('Max Label');
+        expect(label.querySelector('label')).toHaveTextContent('Right Label');
       });
 
       const sliders = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-slider`));
@@ -113,12 +113,12 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       const maxValues = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-max-value`));
       minValues.forEach((value) => {
         expect(value).toBeVisible();
-        expect(value.querySelector('label')).toHaveTextContent('Min Value');
-        expect(value.querySelector('input')).toHaveValue(isSliderRows ? 1 : 0);
+        expect(value.querySelector('label')).toHaveTextContent('Left Value');
+        expect(value.querySelector('input')).toHaveValue(0);
       });
       maxValues.forEach((value) => {
         expect(value).toBeVisible();
-        expect(value.querySelector('label')).toHaveTextContent('Max Value');
+        expect(value.querySelector('label')).toHaveTextContent('Right Value');
         expect(value.querySelector('input')).toHaveValue(isSliderRows ? 5 : 12);
       });
 
@@ -319,7 +319,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
         alert: 'text',
-        value: '5',
+        value: '4',
         sliderId: ref.current.getValues(`${mockedItemName}.responseValues.rows.0.id`),
         key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
       });
@@ -343,7 +343,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
         screen
           .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
           .querySelectorAll('li'),
-      ).toHaveLength(5);
+      ).toHaveLength(6);
 
       selectOption(0, 0);
 
@@ -354,7 +354,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
             .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
             .querySelectorAll('li'),
         ].filter((li) => !li.classList.contains('hidden-menu-item')),
-      ).toHaveLength(4);
+      ).toHaveLength(5);
     });
 
     test.each`
