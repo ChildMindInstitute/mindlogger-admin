@@ -77,9 +77,6 @@ export const SliderPanel = ({
   const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-  // const defaultMinNumberValue = isMultiple
-  //   ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
-  //   : DEFAULT_SLIDER_MIN_NUMBER;
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const validationCheck =
