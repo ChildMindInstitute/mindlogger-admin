@@ -6,6 +6,7 @@ import { Modal } from 'shared/components';
 import { MediaUploader } from 'modules/Builder/components/MediaUploader';
 
 import { UploadAudioProps } from './UploadAudio.types';
+import { uploadAudioPopupDataTestid } from './UploadAudio.const';
 
 export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: UploadAudioProps) => {
   const { t } = useTranslation('app');
@@ -18,14 +19,13 @@ export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: Upload
     onUpload();
   };
 
-  const dataTestid = 'builder-activity-items-item-configuration-upload-audio-popup';
   const modalProps = {
     buttonText: media?.uploaded ? t('upload') : t('cancel'),
     hasSecondBtn: !!media?.uploaded,
     secondBtnText: t('cancel'),
     onSubmit: media?.uploaded ? handleUpload : handleCloseWithoutChanges,
     onSecondBtnSubmit: handleCloseWithoutChanges,
-    'data-testid': dataTestid,
+    'data-testid': uploadAudioPopupDataTestid,
   };
 
   return (
@@ -33,7 +33,7 @@ export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: Upload
       <Box sx={{ ml: theme.spacing(3.2) }}>
         <StyledTitleMedium
           sx={{ mb: theme.spacing(2.4) }}
-          data-testid={`${dataTestid}-description`}
+          data-testid={`${uploadAudioPopupDataTestid}-description`}
         >
           <Trans i18nKey="dropAudio">
             Please upload file in one of the following formats: <strong>.mp3, .wav</strong>.
@@ -45,7 +45,7 @@ export const UploadAudio = ({ open, media, onUpload, onClose, onChange }: Upload
           media={media}
           hasPreview
           onUpload={onChange}
-          data-testid={`${dataTestid}-uploader`}
+          data-testid={`${uploadAudioPopupDataTestid}-uploader`}
         />
       </Box>
     </Modal>
