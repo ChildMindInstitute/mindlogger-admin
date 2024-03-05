@@ -411,7 +411,7 @@ export const mockedEmptySliderRows = {
   responseValues: {
     rows: [
       {
-        minValue: 1,
+        minValue: 0,
         maxValue: 5,
         minLabel: '',
         maxLabel: '',
@@ -419,7 +419,7 @@ export const mockedEmptySliderRows = {
         scores: undefined,
       },
       {
-        minValue: 1,
+        minValue: 0,
         maxValue: 5,
         minLabel: '',
         maxLabel: '',

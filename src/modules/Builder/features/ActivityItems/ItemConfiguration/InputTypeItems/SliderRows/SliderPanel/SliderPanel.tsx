@@ -12,7 +12,6 @@ import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
 import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
 import {
   DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MAX_NUMBER,
 } from 'modules/Builder/consts';
@@ -78,16 +77,16 @@ export const SliderPanel = ({
   const hasTickMarksLabels = get(settings, ItemConfigurationSettings.HasTickMarksLabels);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-  const defaultMinNumberValue = isMultiple
-    ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
-    : DEFAULT_SLIDER_MIN_NUMBER;
+  // const defaultMinNumberValue = isMultiple
+  //   ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
+  //   : DEFAULT_SLIDER_MIN_NUMBER;
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const validationCheck =
     minValue !== '' &&
     maxValue !== '' &&
     minValue < maxValue &&
-    minValue >= defaultMinNumberValue &&
+    minValue >= DEFAULT_SLIDER_MIN_NUMBER &&
     maxValue <= DEFAULT_SLIDER_MAX_NUMBER;
 
   const commonInputProps = {
@@ -113,14 +112,14 @@ export const SliderPanel = ({
 
   const tableColumns = validationCheck
     ? getHeadCells(minValue, maxValue)
-    : getHeadCells(defaultMinNumberValue, DEFAULT_SLIDER_MAX_VALUE);
+    : getHeadCells(DEFAULT_SLIDER_MIN_NUMBER, DEFAULT_SLIDER_MAX_VALUE);
 
   const setDefaultScoresAndAlerts = () => {
     hasScores &&
       setValue(
         scoresName,
         getDefaultSliderScores({
-          minValue: defaultMinNumberValue,
+          minValue: DEFAULT_SLIDER_MIN_NUMBER,
           maxValue: DEFAULT_SLIDER_MAX_VALUE,
         }),
       );
@@ -134,7 +133,7 @@ export const SliderPanel = ({
     if (
       value !== '' &&
       value < maxValue &&
-      value >= defaultMinNumberValue &&
+      value >= DEFAULT_SLIDER_MIN_NUMBER &&
       maxValue <= DEFAULT_SLIDER_MAX_NUMBER
     ) {
       setScoresAndAlertsChange({
@@ -154,7 +153,7 @@ export const SliderPanel = ({
     clearErrors([minValueName, maxValueName]);
     if (
       value < maxValue &&
-      value >= defaultMinNumberValue &&
+      value >= DEFAULT_SLIDER_MIN_NUMBER &&
       maxValue <= DEFAULT_SLIDER_MAX_NUMBER
     ) {
       setScoresAndAlertsChange({
@@ -177,7 +176,7 @@ export const SliderPanel = ({
       value !== '' &&
       value > minValue &&
       value <= DEFAULT_SLIDER_MAX_NUMBER &&
-      minValue >= defaultMinNumberValue
+      minValue >= DEFAULT_SLIDER_MIN_NUMBER
     ) {
       setScoresAndAlertsChange({
         maxValue: value,
@@ -197,7 +196,7 @@ export const SliderPanel = ({
     if (
       value > minValue &&
       value <= DEFAULT_SLIDER_MAX_NUMBER &&
-      minValue >= defaultMinNumberValue
+      minValue >= DEFAULT_SLIDER_MIN_NUMBER
     ) {
       setScoresAndAlertsChange({
         maxValue: value,
@@ -214,7 +213,7 @@ export const SliderPanel = ({
   const marks =
     hasTickMarks &&
     getMarks(
-      validationCheck ? minValue : defaultMinNumberValue,
+      validationCheck ? minValue : DEFAULT_SLIDER_MIN_NUMBER,
       validationCheck ? maxValue : DEFAULT_SLIDER_MAX_VALUE,
       hasTickMarksLabels,
     );
@@ -227,7 +226,7 @@ export const SliderPanel = ({
   const handleLabelChange = useFieldLengthError();
 
   const fromToHintText = t('fromToHint', {
-    min: defaultMinNumberValue,
+    min: DEFAULT_SLIDER_MIN_NUMBER,
     max: DEFAULT_SLIDER_MAX_NUMBER,
   });
 
@@ -274,7 +273,7 @@ export const SliderPanel = ({
             <InputController
               control={control}
               name={sliderMinLabelName}
-              label={t('minLabel')}
+              label={t('leftLabel')}
               onChange={(event) =>
                 handleLabelChange({
                   event,
@@ -288,7 +287,7 @@ export const SliderPanel = ({
             <InputController
               control={control}
               name={sliderMaxLabelName}
-              label={t('maxLabel')}
+              label={t('rightLabel')}
               onChange={(event) =>
                 handleLabelChange({
                   event,
@@ -302,9 +301,9 @@ export const SliderPanel = ({
           </StyledInputContainer>
           <StyledFlexTopCenter sx={{ p: theme.spacing(2.4, 0.8) }}>
             <StyledSlider
-              min={validationCheck ? minValue : defaultMinNumberValue}
+              min={validationCheck ? minValue : DEFAULT_SLIDER_MIN_NUMBER}
               max={validationCheck ? maxValue : DEFAULT_SLIDER_MAX_VALUE}
-              value={validationCheck ? minValue : defaultMinNumberValue}
+              value={validationCheck ? minValue : DEFAULT_SLIDER_MIN_NUMBER}
               marks={marks}
               disabled
               data-testid={`${dataTestid}-slider`}
@@ -321,7 +320,7 @@ export const SliderPanel = ({
               <InputController
                 {...commonInputProps}
                 name={`${sliderName}.minValue`}
-                label={t('minValue')}
+                label={t('leftValue')}
                 onChange={handleMinValueChange}
                 onArrowPress={handleMinValueArrowPress}
                 hintText={fromToHintText}
@@ -338,7 +337,7 @@ export const SliderPanel = ({
               <InputController
                 {...commonInputProps}
                 name={`${sliderName}.maxValue`}
-                label={t('maxValue')}
+                label={t('rightValue')}
                 onChange={handleMaxValueChange}
                 onArrowPress={handleMaxValueArrowPress}
                 hintText={fromToHintText}
