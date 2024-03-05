@@ -1,3 +1,1 @@
-import { StaticSectionContent } from './StaticSectionContent';
-
-export { StaticSectionContent };
+export * from './StaticSectionContent';

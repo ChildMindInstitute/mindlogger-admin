@@ -1,3 +1,1 @@
-import { StaticScoreConditionals } from './StaticScoreConditionals';
-
-export { StaticScoreConditionals };
+export * from './StaticScoreConditionals';

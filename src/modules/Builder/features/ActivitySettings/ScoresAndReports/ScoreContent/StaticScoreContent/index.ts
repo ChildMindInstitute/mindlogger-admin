@@ -1,3 +1,1 @@
-import { StaticScoreContent } from './StaticScoreContent';
-
-export { StaticScoreContent };
+export * from './StaticScoreContent';
