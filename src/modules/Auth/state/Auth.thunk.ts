@@ -6,8 +6,6 @@ import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { ApiErrorResponse } from 'shared/state/Base';
 import {
-  ApproveRecoveryPassword,
-  approveRecoveryPasswordApi,
   getUserDetailsApi,
   ResetPassword,
   resetPasswordApi,
@@ -78,21 +76,6 @@ export const resetPassword = createAsyncThunk(
       const { data } = await resetPasswordApi({ email }, signal);
 
       return { data };
-    } catch (exception) {
-      const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
-
-      return rejectWithValue(errorMessage);
-    }
-  },
-);
-
-export const recoverPassword = createAsyncThunk(
-  'auth/recoverPassword',
-  async ({ email, key, password }: ApproveRecoveryPassword, { rejectWithValue, signal }) => {
-    try {
-      await approveRecoveryPasswordApi({ email, key, password }, signal);
-
-      return { email, key };
     } catch (exception) {
       const errorMessage = getErrorMessage(exception as AxiosError<ApiErrorResponse>);
 
