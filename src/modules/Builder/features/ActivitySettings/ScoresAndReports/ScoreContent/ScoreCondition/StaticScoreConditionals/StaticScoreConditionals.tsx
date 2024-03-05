@@ -2,17 +2,13 @@ import { Skeleton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { StyledItemOption, ToggleContainerUiType } from 'modules/Builder/components';
-import { ScoreConditionalLogic } from 'redux/modules';
 import { StyledTitleMedium, theme } from 'shared/styles';
 import { getEntityKey } from 'shared/utils';
 
 import { StaticScoreCondition } from '../StaticScoreCondition/StaticScoreCondition';
+import { StaticScoreConditionalsProps } from './StaticScoreConditionals.types';
 
-export const StaticScoreConditionals = ({
-  scoreConditionals,
-}: {
-  scoreConditionals: ScoreConditionalLogic[];
-}) => {
+export const StaticScoreConditionals = ({ scoreConditionals }: StaticScoreConditionalsProps) => {
   const { t } = useTranslation('app');
 
   if (!scoreConditionals?.length) return null;
