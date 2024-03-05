@@ -19,8 +19,7 @@ export const SectionScoreCommonFields = ({
 }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, getFieldState, register, unregister, setValue, getValues, trigger } =
-    useFormContext();
+  const { control, getFieldState, setValue, getValues, trigger } = useFormContext();
 
   const showMessageName = `${name}.showMessage`;
   const printItemsName = `${name}.printItems`;
@@ -39,26 +38,6 @@ export const SectionScoreCommonFields = ({
     showMessage ?? setValue(showMessageName, !!message?.length);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (showMessage) {
-      register(messageName);
-
-      return;
-    }
-
-    unregister(messageName, { keepValue: true });
-  }, [showMessage, messageName, register, unregister]);
-
-  useEffect(() => {
-    if (printItems) {
-      register(itemsPrintName);
-
-      return;
-    }
-
-    unregister(itemsPrintName, { keepValue: true });
-  }, [printItems, itemsPrintName, register, unregister]);
 
   useEffect(() => {
     trigger(printItemsName);
