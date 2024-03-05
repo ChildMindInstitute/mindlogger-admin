@@ -4,7 +4,7 @@ import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
 
 export const useStaticContent = ({
   targetSelector,
-  isStaticActive = true,
+  isStaticActive = false,
 }: {
   targetSelector: string;
   isStaticActive?: boolean;
