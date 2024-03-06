@@ -71,7 +71,7 @@ describe('DuplicateAppletSettings', () => {
   test('should render and navigate to builder', async () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
+    mockAxios.post.mockResolvedValueOnce({ data: mockedAppletData });
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));
@@ -106,9 +106,7 @@ describe('DuplicateAppletSettings', () => {
         'Submit',
       ),
     );
-    await waitFor(() => {
-      expectBanner(store, 'dashboard-applets-duplicate-popup-success-popup');
-    });
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
   });

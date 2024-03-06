@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCheckAndTriggerOnNameUniqueness, useCustomFormContext } from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexTopCenter,
@@ -26,6 +26,7 @@ import { ChangeScoreConditionIdPopup } from './ChangeScoreConditionIdPopup';
 export const ScoreCondition = ({
   name,
   reportsName,
+  scoreConditionalsName,
   score,
   scoreKey,
   items,
@@ -39,6 +40,11 @@ export const ScoreCondition = ({
 
   const [isChangeScoreIdPopupVisible, setIsChangeScoreIdPopupVisible] = useState(false);
   const [prevScoreConditionName, setPrevScoreConditionName] = useState(conditionName);
+
+  useCheckAndTriggerOnNameUniqueness({
+    currentPath: name,
+    entitiesFieldPath: scoreConditionalsName,
+  });
 
   const handleConditionNameBlur = () => {
     if (conditionName === prevScoreConditionName) return;
@@ -94,6 +100,7 @@ export const ScoreCondition = ({
           label={t('scoreConditionName')}
           onBlur={handleConditionNameBlur}
           data-testid={`${dataTestid}-name`}
+          withDebounce
         />
         <Box sx={{ ml: theme.spacing(4.8), width: '50%' }}>
           <CopyId

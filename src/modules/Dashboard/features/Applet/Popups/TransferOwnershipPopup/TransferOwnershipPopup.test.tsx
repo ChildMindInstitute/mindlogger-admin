@@ -37,8 +37,6 @@ describe('TransferOwnershipPopup component tests', () => {
     });
     fireEvent.click(screen.getByText('Confirm'));
 
-    await waitFor(() => {
-      expectBanner(store, 'dashboard-applets-transfer-success-banner');
-    });
+    await waitFor(() => expectBanner(store, 'TransferOwnershipSuccessBanner'));
   });
 });

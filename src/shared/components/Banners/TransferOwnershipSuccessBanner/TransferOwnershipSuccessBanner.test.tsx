@@ -15,7 +15,7 @@ describe('TransferOwnershipSuccessBanner', () => {
   test('should render', () => {
     renderWithProviders(<TransferOwnershipSuccessBanner {...props} />);
 
-    expect(screen.getByTestId('transfer-ownership-success-banner')).toBeInTheDocument();
+    expect(screen.getByTestId('success-banner')).toBeInTheDocument();
     expect(
       screen.getByText(
         'Your request has been successfully sent to . Please wait for receiver to accept your request.',

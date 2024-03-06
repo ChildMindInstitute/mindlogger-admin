@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { MediaType } from 'modules/Builder/components';
 
 export type RecordAudioProps = {
@@ -12,9 +14,10 @@ export type RecorderControls = {
   stopRecording: () => void;
   togglePauseResume: () => void;
   clearBlob: () => void;
-  recordingBlob: Blob[];
   isRecording: boolean;
   isPaused: boolean;
   isStopped: boolean;
   recordingTime: number;
 };
+
+export type UseAudioRecorderProps = { setFile: Dispatch<SetStateAction<File | null>> };

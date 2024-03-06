@@ -94,7 +94,7 @@ export const Dashed = ({ uiType }: DashedProps) => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid="tooltip-selection-presentation">
         <StyledDashedWrapper>
           {isTextUiType || isDrawingUiType ? (
             getContent()[uiType]

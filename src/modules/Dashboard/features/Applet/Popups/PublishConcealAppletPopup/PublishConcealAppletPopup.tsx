@@ -53,9 +53,6 @@ export const PublishConcealAppletPopup = () => {
             </Trans>
           ),
           duration: null,
-          'data-testid': `dashboard-applets-${
-            appletData?.isPublished ? 'publish' : 'conceal'
-          }-success-banner`,
         },
       }),
     );

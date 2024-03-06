@@ -7,6 +7,7 @@ export type ScoreConditionProps = {
   score: ScoreReport;
   name: string;
   reportsName: string;
+  scoreConditionalsName: string;
   scoreKey: string;
   items: DataTableItem[];
   scoreRange: ReturnType<typeof getScoreRange>;

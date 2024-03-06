@@ -12,11 +12,7 @@ export const IncorrectFileBanner = ({ errorType, fileType, ...props }: BannerPro
   const isFormatError = errorType === UploadFileError.Format;
 
   return (
-    <Banner
-      severity="error"
-      data-testid={`incorrect-file-${isFormatError ? 'format' : 'size'}-banner`}
-      {...props}
-    >
+    <Banner severity="error" {...props}>
       {isFormatError ? (
         t(formatError[fileType as MediaType])
       ) : (

@@ -26,10 +26,7 @@ export const TransferOwnershipPopup = () => {
     );
   };
 
-  const handleEmailTransferred = handleSendInvitation({
-    callback: transferOwnershipPopupClose,
-    bannerTestId: 'dashboard-applets-transfer-success-banner',
-  });
+  const handleEmailTransferred = handleSendInvitation(transferOwnershipPopupClose);
 
   return (
     <>

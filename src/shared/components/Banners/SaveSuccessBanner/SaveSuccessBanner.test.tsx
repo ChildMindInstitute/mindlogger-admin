@@ -10,7 +10,7 @@ describe('SaveSuccessBanner', () => {
   test('should render', () => {
     renderWithProviders(<SaveSuccessBanner />);
 
-    expect(screen.getByTestId('save-success-banner')).toBeInTheDocument();
+    expect(screen.getByTestId('success-banner')).toBeInTheDocument();
     expect(screen.getByText('Changes saved')).toBeInTheDocument();
   });
 
