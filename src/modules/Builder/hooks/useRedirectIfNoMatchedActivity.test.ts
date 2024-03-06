@@ -57,8 +57,8 @@ describe('useRedirectIfNoMatchedActivity', () => {
     params                                  | activities                     | toBeCalledWith               | description
     ${mockedParamsWithActivity}             | ${mockedAppletData.activities} | ${undefined}                 | ${'doesnt redirect if activity exists'}
     ${mockedParamsNewAppletWithActivity}    | ${mockedAppletData.activities} | ${undefined}                 | ${'doesnt redirect if applet is new and activity exists'}
-    ${mockedParamsWithoutActivity}          | ${mockedAppletData.activities} | ${pathToActivities}          | ${'should redirect if activity doesn\'t exist'}
-    ${mockedParamsNewAppletWithoutActivity} | ${mockedAppletData.activities} | ${pathToActivitiesNewApplet} | ${'should redirect if applet is new and activity doesn\'t exist'}
+    ${mockedParamsWithoutActivity}          | ${mockedAppletData.activities} | ${pathToActivities}          | ${"should redirect if activity doesn't exist"}
+    ${mockedParamsNewAppletWithoutActivity} | ${mockedAppletData.activities} | ${pathToActivitiesNewApplet} | ${"should redirect if applet is new and activity doesn't exist"}
   `('$description', ({ params, activities, toBeCalledWith }) => {
     mockedUseParams.mockReturnValue(params);
     mockedGetValues.mockReturnValue(activities);

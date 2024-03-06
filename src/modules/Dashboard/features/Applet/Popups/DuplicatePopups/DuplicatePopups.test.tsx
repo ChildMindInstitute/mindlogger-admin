@@ -1,7 +1,7 @@
 import { fireEvent, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 import { mockedApplet, mockedAppletData, mockedPassword } from 'shared/mock';
 import * as encryptionFunctions from 'shared/utils/encryption';
 
@@ -27,6 +27,8 @@ const mockedEncryption = {
   accountId: '12345',
 };
 
+const dataTestid = 'dashboard-applets-duplicate-popup';
+
 describe('DuplicatePopups', () => {
   afterEach(() => {
     mockAxios.reset();
@@ -42,7 +44,7 @@ describe('DuplicatePopups', () => {
     });
 
     await waitFor(() => {
-      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      expect(getByTestId(`${dataTestid}-name`)).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
 
@@ -62,12 +64,15 @@ describe('DuplicatePopups', () => {
       }),
     );
 
-    const { getByTestId, getByLabelText, getByText } = renderWithProviders(<DuplicatePopups />, {
-      preloadedState,
-    });
+    const { getByTestId, getByLabelText, getByText, store } = renderWithProviders(
+      <DuplicatePopups />,
+      {
+        preloadedState,
+      },
+    );
 
     await waitFor(() => {
-      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      expect(getByTestId(`${dataTestid}-name`)).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
 
@@ -81,7 +86,19 @@ describe('DuplicatePopups', () => {
       fireEvent.click(getByText('Submit'));
     });
 
-    await waitFor(() => expect(getByText(/has been duplicated successfully/)).toBeInTheDocument());
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+    await waitFor(() => {
+      expect(
+        store.getState().banners.data.banners.find((payload) => {
+          const bannerContent = payload.bannerProps?.children;
+          if (bannerContent) {
+            return bannerContent.toString().includes(mockedAppletData.displayName);
+          }
+
+          return false;
+        }),
+      ).toBeDefined();
+    });
   });
 
   // TODO uncomment after useasync changes

@@ -43,10 +43,10 @@ export const BuilderApplet = () => {
     !isNewApplet;
   const { ownerId } = workspaces.useData() || {};
   const removeAppletData = useRemoveAppletData();
-  const [isFromLibrary, setIsFromLibrary] = useState(false);
   const [isAppletInitialized, setAppletInitialized] = useState(false);
-  const { data: dataFromLibrary } = location.state ?? {};
+  const { data: dataFromLibrary, isFromLibrary } = location.state ?? {};
   const hasLibraryData = isFromLibrary && !!dataFromLibrary;
+
   const isLoading =
     (!isNewApplet && loadingStatus === 'idle') ||
     loadingStatus === 'loading' ||
@@ -68,23 +68,15 @@ export const BuilderApplet = () => {
     resolver: yupResolver(AppletSchema() as ObjectSchema<AppletFormValues>),
     mode: 'onChange',
   });
-  const {
-    reset,
-    control,
-    setValue,
-    getValues,
-    formState: { isDirty },
-  } = methods;
-
-  useEffect(() => {
-    location.state?.isFromLibrary && setIsFromLibrary(true);
-  }, [location.state?.isFromLibrary]);
+  const { reset, control, setValue, getValues } = methods;
 
   useEffect(() => {
     if (!isAppletLoaded) return;
 
     (async () => {
-      await reset(getDefaultValues(appletData, defaultThemeId));
+      await reset(getDefaultValues(appletData, defaultThemeId), {
+        keepDirty: false,
+      });
 
       if (!hasLibraryData) return;
 
@@ -102,7 +94,7 @@ export const BuilderApplet = () => {
         ]),
       };
 
-      await reset(newFormValues);
+      await reset(newFormValues, { keepDefaultValues: true });
     })();
   }, [isAppletLoaded]);
 
@@ -115,7 +107,7 @@ export const BuilderApplet = () => {
           activities: prepareActivitiesFromLibrary(libraryConvertedValues.activities),
           activityFlows: prepareActivityFlowsFromLibrary(libraryConvertedValues.activityFlows),
         };
-        await reset(newFormValues);
+        await reset(newFormValues, { keepDefaultValues: true });
       })();
     }
   }, [hasLibraryData, isNewApplet]);
@@ -158,10 +150,7 @@ export const BuilderApplet = () => {
           <>
             {isLoading && <Spinner />}
             <LinkedTabs hiddenHeader={hiddenHeader} tabs={getAppletTabs(tabErrors)} isBuilder />
-            <SaveAndPublish
-              hasPrompt={isDirty || isFromLibrary}
-              setIsFromLibrary={setIsFromLibrary}
-            />
+            <SaveAndPublish />
           </>
         ) : (
           <Spinner />

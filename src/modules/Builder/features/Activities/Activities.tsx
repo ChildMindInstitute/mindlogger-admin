@@ -28,7 +28,7 @@ import { EditablePerformanceTasks } from './Activities.const';
 
 export const Activities = () => {
   const { t } = useTranslation('app');
-  const { control, getFieldState, setValue } = useCustomFormContext();
+  const { control, getFieldState, setValue, clearErrors } = useCustomFormContext();
   const navigate = useNavigate();
   const { appletId } = useParams();
   const [activityToDelete, setActivityToDelete] = useState<string>('');
@@ -102,6 +102,9 @@ export const Activities = () => {
     typeof index === 'number' ? insertActivity(index, newActivity) : appendActivity(newActivity);
 
     if (isNavigationBlocked) return;
+    if (activities?.length === 0) {
+      clearErrors('activities');
+    }
     if (newActivity.isPerformanceTask && performanceTaskType) {
       return navigateToPerformanceTask(newActivity.key, performanceTaskType);
     }

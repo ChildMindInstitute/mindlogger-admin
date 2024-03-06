@@ -25,7 +25,6 @@ import {
   defaultTextConfig,
   defaultSliderConfig,
   defaultSliderRowsConfig,
-  defaultSingleAndMultiSelectionConfig,
   defaultAudioAndVideoConfig,
   defaultAudioPlayerConfig,
   defaultSingleAndMultiSelectionRowsConfig,
@@ -36,6 +35,8 @@ import {
   defaultPhotoConfig,
   defaultGeolocationConfig,
   defaultMessageConfig,
+  defaultSingleSelectionConfig,
+  defaultMultiSelectionConfig,
 } from './OptionalItemsAndSettings.const';
 import {
   getEmptySliderOption,
@@ -92,14 +93,11 @@ export const useSettingsSetup = ({
   removeOptions,
   handleAddSliderRow,
   handleAddSingleOrMultipleRow,
-  handleRemovePalette,
-  setOptionsOpen,
 }: SettingsSetupProps) => {
   const { setValue, getValues, watch, clearErrors } = useFormContext();
 
   const settings = watch(`${name}.config`);
 
-  const hasPalette = get(settings, ItemConfigurationSettings.HasColorPalette);
   const isSkippable = get(settings, ItemConfigurationSettings.IsSkippable);
   const hasRequiredItems = checkIfItemHasRequiredOptions(settings);
 
@@ -113,13 +111,14 @@ export const useSettingsSetup = ({
 
         const responseType = getValues(`${name}.responseType`);
 
+        const isSingleSelect = responseType === ItemResponseType.SingleSelection;
+
         switch (responseType) {
           case ItemResponseType.SingleSelection:
           case ItemResponseType.MultipleSelection:
             removeOptions?.();
-            setOptionsOpen?.([]);
-            setConfig(defaultSingleAndMultiSelectionConfig);
-            handleAddOption?.(false);
+            setConfig(isSingleSelect ? defaultSingleSelectionConfig : defaultMultiSelectionConfig);
+            handleAddOption?.({ isAppendedOption: false });
             break;
           case ItemResponseType.Text:
             setConfig(defaultTextConfig);
@@ -182,10 +181,6 @@ export const useSettingsSetup = ({
       subscription.unsubscribe();
     };
   }, []);
-
-  useEffect(() => {
-    if (!hasPalette) handleRemovePalette?.();
-  }, [hasPalette]);
 
   useEffect(() => {
     if (hasRequiredItems && isSkippable) {

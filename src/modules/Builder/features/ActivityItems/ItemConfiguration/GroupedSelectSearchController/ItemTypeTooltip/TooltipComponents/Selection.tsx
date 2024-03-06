@@ -9,6 +9,7 @@ import { SelectionOption } from './SelectionOption';
 import { getSelectionSvgId } from './TooltipComponents.utils';
 import { StyledPresentation, StyledPresentationLine } from './TooltipComponents.styles';
 import { SelectionProps, SelectionUiType } from './TooltipComponents.types';
+import { tooltipPresentationDataTestid } from '../ItemTypeTooltip.const';
 
 const commonProps = {
   width: '20',
@@ -21,7 +22,7 @@ export const Selection = ({ uiType }: SelectionProps) => {
 
   return (
     <>
-      <StyledPresentation>
+      <StyledPresentation data-testid={tooltipPresentationDataTestid}>
         {createArray(3, (index) => (
           <StyledPresentationLine key={uniqueId()}>
             <Svg id={getSelectionSvgId(index, isSingleSelection)} {...commonProps} />

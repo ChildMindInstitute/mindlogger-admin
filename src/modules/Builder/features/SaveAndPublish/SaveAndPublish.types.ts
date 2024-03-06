@@ -8,11 +8,8 @@ import {
   SectionReport,
 } from 'shared/state';
 import { ActivityFormValues, ItemFormValues } from 'modules/Builder/types';
-
-export type SaveAndPublishProps = {
-  hasPrompt: boolean;
-  setIsFromLibrary: Dispatch<SetStateAction<boolean>>;
-};
+import { Encryption } from 'shared/utils';
+import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 
 export type GetItemCommonFields = {
   id?: string;
@@ -38,4 +35,20 @@ export type GetSection = {
   items: ActivityFormValues['items'];
   scores?: ScoreReport[];
   itemsObjectById: Record<string, ItemFormValues>;
+};
+
+export type SaveAndPublishSetup = {
+  isPasswordPopupOpened: boolean;
+  isPublishProcessPopupOpened: boolean;
+  publishProcessStep: SaveAndPublishSteps | undefined;
+  promptVisible: boolean;
+  appletEncryption: Encryption | undefined;
+  setIsPasswordPopupOpened: Dispatch<SetStateAction<boolean>>;
+  handleSaveAndPublishFirstClick: () => Promise<void>;
+  handleAppletPasswordSubmit: (password?: string) => Promise<void>;
+  handlePublishProcessOnClose: () => void;
+  handlePublishProcessOnRetry: () => Promise<void>;
+  handleSaveChangesDoNotSaveSubmit: () => Promise<void>;
+  handleSaveChangesSaveSubmit: () => void;
+  cancelNavigation: () => void;
 };

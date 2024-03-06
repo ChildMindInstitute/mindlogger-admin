@@ -2,8 +2,8 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { initialStateData } from 'shared/state';
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet } from 'shared/mock';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { PublishConcealAppletPopup } from '.';
 
@@ -36,25 +36,25 @@ describe('PublishConcealAppletPopup', () => {
     mockAxios.reset();
   });
 
-  test('PublishConcealAppletPopup should open success concealed modal', async () => {
+  test('should show publish success banner', async () => {
     mockAxios.post.mockResolvedValueOnce(null);
 
-    renderWithProviders(<PublishConcealAppletPopup />, {
+    const { store } = renderWithProviders(<PublishConcealAppletPopup />, {
       preloadedState: getPreloadedState(true),
     });
 
     fireEvent.click(screen.getByText('Yes'));
-    await waitFor(() => expect(screen.getByText(/concealed/)).toBeInTheDocument());
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 
-  test('PublishConcealAppletPopup should open success published modal', async () => {
+  test('should show conceal success banner', async () => {
     mockAxios.post.mockResolvedValueOnce(null);
 
-    renderWithProviders(<PublishConcealAppletPopup />, {
+    const { store } = renderWithProviders(<PublishConcealAppletPopup />, {
       preloadedState: getPreloadedState(false),
     });
 
     fireEvent.click(screen.getByText('Yes'));
-    await waitFor(() => expect(screen.getByText(/published/)).toBeInTheDocument());
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 });

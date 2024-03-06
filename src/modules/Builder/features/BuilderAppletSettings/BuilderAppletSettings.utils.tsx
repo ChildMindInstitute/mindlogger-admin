@@ -7,12 +7,12 @@ import {
   TransferOwnershipSetting,
   // ShareAppletSetting,
   DeleteAppletSetting,
-  ExportDataSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
   LiveResponseStreamingSetting,
 } from 'shared/features/AppletSettings';
 import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
+import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
 import { LorisIntegrationSetting } from './LorisIntegrationSetting';
@@ -25,7 +25,7 @@ export const getSettings = ({
   roles,
   onReportConfigSubmit,
   integrations,
-}: GetSettings) => {
+}: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
 
@@ -33,17 +33,6 @@ export const getSettings = ({
     {
       label: 'usersAndData',
       items: [
-        {
-          icon: <Svg id="export" />,
-          label: 'exportData',
-          component: <ExportDataSetting />,
-          onClick: () => Mixpanel.track('Export Data click'),
-          param: SettingParam.ExportData,
-          disabled: isNewApplet,
-          tooltip,
-          isVisible: isManagerOrOwner(roles?.[0]),
-          'data-testid': `${dataTestid}-export-data`,
-        },
         {
           icon: <Svg id="data-retention" />,
           label: 'dataRetention',
@@ -132,6 +121,7 @@ export const getSettings = ({
           disabled: isNewApplet,
           tooltip,
           'data-testid': `${dataTestid}-report-config`,
+          onClick: () => Mixpanel.track('Applet - Report Configuration Click'),
         },
       ],
     },

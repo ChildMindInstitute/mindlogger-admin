@@ -3,43 +3,14 @@
 import { screen } from '@testing-library/react';
 
 import { renderWithAppletFormData } from 'shared/utils';
-import {
-  mockedApplet,
-  mockedAppletFormData,
-  mockedAppletId,
-  mockedCurrentWorkspace,
-} from 'shared/mock';
-import { Roles } from 'shared/consts';
+import { mockedAppletFormData, mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
-import { initialStateData } from 'shared/state';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
 
 import { BuilderAppletSettings } from './BuilderAppletSettings';
 
 const route = `/builder/${mockedAppletId}/settings`;
 const routePath = page.builderAppletSettings;
-const getPreloadedState = (role = Roles.Manager, isAppletExist = true) => ({
-  workspaces: {
-    workspaces: initialStateData,
-    currentWorkspace: {
-      ...initialStateData,
-      ...mockedCurrentWorkspace,
-    },
-    roles: {
-      ...initialStateData,
-      data: {
-        [mockedAppletId]: [role],
-      },
-    },
-    applet: mockedApplet,
-    workspacesRoles: initialStateData,
-  },
-  applet: {
-    applet: {
-      ...initialStateData,
-      ...(isAppletExist ? { data: { result: mockedApplet } } : {}),
-    },
-  },
-});
 
 describe('BuilderAppletSettings', () => {
   test('should render settings', () => {

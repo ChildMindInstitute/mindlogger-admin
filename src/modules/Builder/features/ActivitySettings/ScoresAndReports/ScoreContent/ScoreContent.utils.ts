@@ -1,11 +1,18 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import i18n from 'i18n';
-import { SingleAndMultiSelectOption } from 'shared/state';
+import { ScoreConditionalLogic, SingleAndMultiSelectOption } from 'shared/state';
 import {
   ItemResponseType,
   CalculationType,
   ConditionalLogicMatch,
   ScoreReportType,
+  ConditionType,
 } from 'shared/consts';
+import {
+  DEFAULT_PAYLOAD_MAX_VALUE,
+  DEFAULT_PAYLOAD_MIN_VALUE,
+} from 'modules/Builder/components/ConditionRow/ConditionRow.const';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 import {
@@ -17,6 +24,7 @@ import {
   UpdateMessage,
   UpdateMessagesWithVariable,
   UpdateScoreConditionIds,
+  UpdateScoreConditionsPayload,
 } from './ScoreContent.types';
 import { getScoreConditionId } from './ScoreCondition';
 
@@ -78,7 +86,7 @@ const getItemScoreRange = (item: ItemsWithScore) => {
   return { maxScore, minScore };
 };
 
-export const getScoreRange = ({ items, calculationType, activity }: GetScoreRange) => {
+export const getScoreRange = ({ items = [], calculationType, activity }: GetScoreRange) => {
   let totalMinScore = 0,
     totalMaxScore = 0;
   const count = items.length;
@@ -106,9 +114,10 @@ export const getScoreRange = ({ items, calculationType, activity }: GetScoreRang
   }
 };
 
-export const getDefaultConditionalValue = (id: string, key: string) => ({
+export const getScoreConditionalDefaults = (id: string, key: string) => ({
   name: '',
   id,
+  key: uuidv4(),
   showMessage: true,
   flagScore: false,
   message: undefined,
@@ -232,5 +241,35 @@ export const updateScoreConditionIds = ({
 }: UpdateScoreConditionIds) => {
   conditions?.forEach((condition, index) => {
     setValue(`${conditionsName}.${index}.id`, getScoreConditionId(scoreId, condition.name));
+  });
+};
+
+export const updateScoreConditionsPayload = ({
+  setValue,
+  scoreConditionalsName,
+  getValues,
+  selectedItems,
+  calculationType,
+  activity,
+}: UpdateScoreConditionsPayload) => {
+  const scoreConditionals = getValues(scoreConditionalsName) as ScoreConditionalLogic[];
+  if (!scoreConditionals) return;
+
+  const newScoreRange = getScoreRange({
+    items: selectedItems,
+    calculationType,
+    activity,
+  });
+  scoreConditionals.forEach((scoreConditional, index) => {
+    scoreConditional.conditions?.forEach((condition, conditionIndex) => {
+      if (condition.type === ConditionType.Between || condition.type === ConditionType.OutsideOf) {
+        const conditionPayloadName = `${scoreConditionalsName}.${index}.conditions.${conditionIndex}.payload`;
+        const newPayload = {
+          minValue: +(newScoreRange?.minScore ?? DEFAULT_PAYLOAD_MIN_VALUE).toFixed(2),
+          maxValue: +(newScoreRange?.maxScore ?? DEFAULT_PAYLOAD_MAX_VALUE).toFixed(2),
+        };
+        setValue(conditionPayloadName, newPayload);
+      }
+    });
   });
 };

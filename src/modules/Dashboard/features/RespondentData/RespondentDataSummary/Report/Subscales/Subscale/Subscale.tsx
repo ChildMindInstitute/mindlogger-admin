@@ -20,7 +20,13 @@ import { AdditionalInformation } from '../AdditionalInformation';
 import { SubscaleProps } from './Subscale.types';
 import { StyledSubscaleContainer } from './Subscale.styles';
 
-export const Subscale = ({ isNested = false, name, subscale, versions }: SubscaleProps) => {
+export const Subscale = ({
+  isNested = false,
+  name,
+  subscale,
+  versions,
+  'data-testid': dataTestid,
+}: SubscaleProps) => {
   const { t } = useTranslation('app');
 
   const { watch } = useFormContext<SummaryFiltersForm>();
@@ -44,15 +50,21 @@ export const Subscale = ({ isNested = false, name, subscale, versions }: Subscal
   };
 
   return (
-    <StyledSubscaleContainer isNested={isNested}>
+    <StyledSubscaleContainer isNested={isNested} data-testid={dataTestid}>
       <Accordion
         title={
           <>
-            <StyledTitleBoldMedium color={variables.palette.on_surface_variant}>
+            <StyledTitleBoldMedium
+              color={variables.palette.on_surface_variant}
+              data-testid={`${dataTestid}-accordion-title-name`}
+            >
               {name}
             </StyledTitleBoldMedium>
             {subscale.score !== undefined && (
-              <StyledBodyMedium color={variables.palette.on_surface_variant}>
+              <StyledBodyMedium
+                color={variables.palette.on_surface_variant}
+                data-testid={`${dataTestid}-accordion-title-score`}
+              >
                 {t('score')}: {subscale.score}
               </StyledBodyMedium>
             )}
@@ -62,7 +74,10 @@ export const Subscale = ({ isNested = false, name, subscale, versions }: Subscal
         <Box sx={{ mt: theme.spacing(4.8) }}>
           {subscale.optionText && (
             <Box sx={{ m: theme.spacing(4.8, 0) }}>
-              <AdditionalInformation optionText={subscale.optionText} />
+              <AdditionalInformation
+                data-testid={`${dataTestid}-additional-information`}
+                optionText={subscale.optionText}
+              />
             </Box>
           )}
           {!!subscale?.items?.length &&
@@ -71,19 +86,21 @@ export const Subscale = ({ isNested = false, name, subscale, versions }: Subscal
                 <CollapsedMdText
                   text={getDictionaryText(item.activityItem.question)}
                   maxHeight={120}
+                  data-testid={`${dataTestid}-question-${index}`}
                 />
                 {renderChart(item, index)}
               </Box>
             ))}
           {!!subscale?.restScores && (
             <Box sx={{ mt: theme.spacing(4.8) }}>
-              {Object.keys(subscale?.restScores)?.map((restScore) => (
+              {Object.keys(subscale?.restScores)?.map((restScore, index) => (
                 <Fragment key={uniqueId()}>
                   <Subscale
                     isNested
                     subscale={subscale?.restScores[restScore]}
                     name={restScore}
                     versions={versions}
+                    data-testid={`${dataTestid}-nested-${index}`}
                   />
                 </Fragment>
               ))}

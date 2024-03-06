@@ -1,4 +1,4 @@
-import { MouseEventHandler, lazy, useState } from 'react';
+import { MouseEventHandler, lazy, useState, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { fr } from 'date-fns/locale';
@@ -9,6 +9,7 @@ import { Tooltip } from 'shared/components/Tooltip';
 import { StyledBodyLarge, theme } from 'shared/styles';
 
 import {
+  DatePickerFallback,
   StyledButton,
   StyledButtons,
   StyledCancelButton,
@@ -54,8 +55,8 @@ export const DatePicker = <T extends FieldValues>({
     setAnchorEl(event.currentTarget);
   };
 
-  const handlePickerClose = () => {
-    onCloseCallback?.();
+  const handlePickerClose = (date?: DateType) => {
+    onCloseCallback?.(date);
     setAnchorEl(null);
   };
   const handlePickerSubmit = (date: DateType) => () => {
@@ -64,137 +65,143 @@ export const DatePicker = <T extends FieldValues>({
   };
 
   return (
-    <Controller
-      control={control}
-      name={name}
-      render={({ field: { onChange, value }, fieldState: { error } }) => {
-        const singleDate = value as DateType;
-        const startEndingValue = value as DateArrayType;
+    <Suspense>
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, value }, fieldState: { error } }) => {
+          const singleDate = value as DateType;
+          const startEndingValue = value as DateArrayType;
 
-        const getSelectedDate = (variant?: DateVariant) => {
-          if (isStartEndingDate) {
-            if (variant === DateVariant.End) {
-              return startEndingValue[1] || null;
+          const getSelectedDate = (variant?: DateVariant) => {
+            if (isStartEndingDate) {
+              if (variant === DateVariant.End) {
+                return startEndingValue[1] || null;
+              }
+
+              return startEndingValue[0];
             }
 
-            return startEndingValue[0];
-          }
+            return singleDate;
+          };
 
-          return singleDate;
-        };
+          const getValue = () => {
+            if (value && isStartEndingDate) {
+              return [
+                getStringFromDate(startEndingValue[0]) || DATE_PLACEHOLDER,
+                getStringFromDate(startEndingValue[1]) || DATE_PLACEHOLDER,
+              ];
+            }
 
-        const getValue = () => {
-          if (value && isStartEndingDate) {
-            return [
-              getStringFromDate(startEndingValue[0]) || DATE_PLACEHOLDER,
-              getStringFromDate(startEndingValue[1]) || DATE_PLACEHOLDER,
-            ];
-          }
+            return getStringFromDate(singleDate) || '';
+          };
 
-          return getStringFromDate(singleDate) || '';
-        };
+          const textFieldProps = {
+            fullWidth: true,
+            disabled,
+            onClick: handlePickerShow,
+            className: isOpen ? 'active' : '',
+            sx: { ...inputSx },
+            error: !!error,
+            helperText: error?.message || null,
+            InputProps: {
+              endAdornment: (
+                <StyledIconBtn aria-describedby={id} disabled={disabled}>
+                  <Svg id="date" />
+                </StyledIconBtn>
+              ),
+            },
+            'data-testid': dataTestid,
+          };
 
-        const textFieldProps = {
-          fullWidth: true,
-          disabled,
-          onClick: handlePickerShow,
-          className: isOpen ? 'active' : '',
-          sx: { ...inputSx },
-          error: !!error,
-          helperText: error?.message || null,
-          InputProps: {
-            endAdornment: (
-              <StyledIconBtn aria-describedby={id} disabled={disabled}>
-                <Svg id="date" />
-              </StyledIconBtn>
-            ),
-          },
-          'data-testid': dataTestid,
-        };
+          const handleCloseWithSelectedDate = () => handlePickerClose(getSelectedDate());
 
-        return (
-          <>
-            <Tooltip tooltipTitle={tooltip}>
-              {uiType === UiType.OneDate ? (
-                <StyledTextField
-                  variant="outlined"
-                  {...textFieldProps}
-                  label={label || t('date')}
-                  value={getValue()}
-                />
-              ) : (
-                <>
+          return (
+            <>
+              <Tooltip tooltipTitle={tooltip}>
+                {uiType === UiType.OneDate ? (
                   <StyledTextField
                     variant="outlined"
                     {...textFieldProps}
-                    label={t('startDate')}
-                    value={getValue()[0] || ''}
-                    data-testid={`${dataTestid}-start`}
+                    label={label || t('date')}
+                    value={getValue()}
                   />
-                  <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
-                    {t('smallTo')}
-                  </StyledBodyLarge>
-                  <StyledTextField
-                    variant="outlined"
-                    {...textFieldProps}
-                    label={t('endDate')}
-                    value={getValue()[1] || ''}
-                    data-testid={`${dataTestid}-end`}
+                ) : (
+                  <>
+                    <StyledTextField
+                      variant="outlined"
+                      {...textFieldProps}
+                      label={t('startDate')}
+                      value={getValue()[0] || ''}
+                      data-testid={`${dataTestid}-start`}
+                    />
+                    <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
+                      {t('smallTo')}
+                    </StyledBodyLarge>
+                    <StyledTextField
+                      variant="outlined"
+                      {...textFieldProps}
+                      label={t('endDate')}
+                      value={getValue()[1] || ''}
+                      data-testid={`${dataTestid}-end`}
+                    />
+                  </>
+                )}
+              </Tooltip>
+              <StyledPopover
+                id={id}
+                open={isOpen}
+                anchorEl={anchorEl}
+                onClose={handleCloseWithSelectedDate}
+                anchorOrigin={{
+                  vertical: 'center',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                data-testid={`${dataTestid}-popover`}
+              >
+                {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
+                {value && (
+                  <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />
+                )}
+                <Suspense fallback={<DatePickerFallback />}>
+                  <ReactDatePicker
+                    locale={i18n.language === 'fr' ? fr : undefined}
+                    renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
+                    startDate={isStartEndingDate ? (getSelectedDate() as DateType) : undefined}
+                    endDate={
+                      isStartEndingDate ? (getSelectedDate(DateVariant.End) as DateType) : undefined
+                    }
+                    selectsRange={isStartEndingDate}
+                    inline
+                    selected={getSelectedDate() as DateType}
+                    disabled={disabled}
+                    onChange={(date) => onChange(date)}
+                    monthsShown={isStartEndingDate ? 2 : 1}
+                    formatWeekDay={(nameOfDay) => nameOfDay[0]}
+                    minDate={minDate === undefined ? new Date() : minDate}
+                    maxDate={maxDate === undefined ? null : maxDate}
+                    focusSelectedMonth
+                    onMonthChange={onMonthChange}
+                    includeDates={includeDates}
                   />
-                </>
-              )}
-            </Tooltip>
-            <StyledPopover
-              id={id}
-              open={isOpen}
-              anchorEl={anchorEl}
-              onClose={handlePickerClose}
-              anchorOrigin={{
-                vertical: 'center',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              data-testid={`${dataTestid}-popover`}
-            >
-              {isLoading && <Spinner uiType={SpinnerUiType.Secondary} />}
-              {value && (
-                <PopoverHeader uiType={uiType} date={value as Date | Date[]} tooltip={tooltip} />
-              )}
-              <ReactDatePicker
-                locale={i18n.language === 'fr' ? fr : undefined}
-                renderCustomHeader={(props) => <DatePickerHeader uiType={uiType} {...props} />}
-                startDate={isStartEndingDate ? (getSelectedDate() as DateType) : undefined}
-                endDate={
-                  isStartEndingDate ? (getSelectedDate(DateVariant.End) as DateType) : undefined
-                }
-                selectsRange={isStartEndingDate}
-                inline
-                selected={getSelectedDate() as DateType}
-                disabled={disabled}
-                onChange={(date) => onChange(date)}
-                monthsShown={isStartEndingDate ? 2 : 1}
-                formatWeekDay={(nameOfDay) => nameOfDay[0]}
-                minDate={minDate === undefined ? new Date() : minDate}
-                maxDate={maxDate === undefined ? null : maxDate}
-                focusSelectedMonth
-                onMonthChange={onMonthChange}
-                includeDates={includeDates}
-              />
-              <StyledButtons>
-                <StyledCancelButton variant="text" onClick={handlePickerClose}>
-                  {t('cancel')}
-                </StyledCancelButton>
-                <StyledButton variant="text" onClick={handlePickerSubmit(getSelectedDate())}>
-                  {t('ok')}
-                </StyledButton>
-              </StyledButtons>
-            </StyledPopover>
-          </>
-        );
-      }}
-    />
+                </Suspense>
+                <StyledButtons>
+                  <StyledCancelButton variant="text" onClick={handleCloseWithSelectedDate}>
+                    {t('cancel')}
+                  </StyledCancelButton>
+                  <StyledButton variant="text" onClick={handlePickerSubmit(getSelectedDate())}>
+                    {t('ok')}
+                  </StyledButton>
+                </StyledButtons>
+              </StyledPopover>
+            </>
+          );
+        }}
+      />
+    </Suspense>
   );
 };

@@ -1,22 +1,20 @@
 import { ChangeEvent, DragEvent, MouseEvent, useRef, useState } from 'react';
 
 import { AudioFileFormats, MAX_FILE_SIZE_150MB, VALID_AUDIO_FILE_TYPES } from 'shared/consts';
-import { useAsync } from 'shared/hooks/useAsync';
-import { getUploadFormData } from 'shared/utils';
-import { postFileUploadApi } from 'api';
+import { useMediaUpload } from 'shared/hooks/useMediaUpload';
+import { getMediaName } from 'shared/utils/getMediaName';
 
 import { MediaUploaderHookProps } from './MediaUploader.types';
 
 export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>('');
-  const { execute: executeMediaUpload } = useAsync(postFileUploadApi, (response) => {
-    const name = response?.config?.data?.get('file')?.name;
+  const { executeMediaUpload, error: uploadError } = useMediaUpload({
+    callback: (url) => {
+      const name = getMediaName(url);
 
-    return (
-      response?.data?.result &&
-      onUpload({ name, url: response?.data?.result.url ?? '', uploaded: true })
-    );
+      return onUpload({ name, url, uploaded: true });
+    },
   });
 
   const stopDefaults = (e: DragEvent | MouseEvent) => {
@@ -35,7 +33,8 @@ export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
       return;
     }
 
-    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop()?.toLowerCase();
     if (!VALID_AUDIO_FILE_TYPES.includes(`.${fileExtension}` as AudioFileFormats)) {
       setError('audioWrongFormat');
 
@@ -43,11 +42,8 @@ export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
     }
 
     setError('');
-
-    const body = getUploadFormData(file);
-
-    onUpload({ name: file.name, uploaded: false });
-    executeMediaUpload(body);
+    onUpload({ name: fileName, uploaded: false });
+    executeMediaUpload({ file, fileName });
   };
 
   const dragEvents = {
@@ -81,5 +77,6 @@ export const useMediaUploader = ({ onUpload }: MediaUploaderHookProps) => {
     dragEvents,
     handleChange,
     onRemove,
+    uploadError,
   };
 };

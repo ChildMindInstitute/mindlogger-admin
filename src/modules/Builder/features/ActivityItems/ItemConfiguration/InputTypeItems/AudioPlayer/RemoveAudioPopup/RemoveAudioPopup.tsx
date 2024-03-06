@@ -5,6 +5,7 @@ import { StyledTitleMedium, theme } from 'shared/styles';
 import { Modal } from 'shared/components';
 
 import { RemoveAudioPopupProps } from './RemoveAudioPopup.types';
+import { removeAudioPopupDataTestid } from './RemoveAudioPopup.const';
 
 export const RemoveAudioPopup = ({ open, onClose, onRemove }: RemoveAudioPopupProps) => {
   const { t } = useTranslation();
@@ -20,10 +21,12 @@ export const RemoveAudioPopup = ({ open, onClose, onRemove }: RemoveAudioPopupPr
       onClose={onClose}
       onSubmit={onRemove}
       onSecondBtnSubmit={onClose}
-      data-testid="builder-activity-items-item-configuration-audio-player-remove-popup"
+      data-testid={removeAudioPopupDataTestid}
     >
       <Box sx={{ ml: theme.spacing(3.2) }}>
-        <StyledTitleMedium>{t('removeAudioDescription')}</StyledTitleMedium>
+        <StyledTitleMedium data-testid={`${removeAudioPopupDataTestid}-description`}>
+          {t('removeAudioDescription')}
+        </StyledTitleMedium>
       </Box>
     </Modal>
   );

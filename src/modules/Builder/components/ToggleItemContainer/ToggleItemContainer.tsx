@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -34,24 +34,37 @@ export const ToggleItemContainer = ({
   tooltip,
   errorMessage,
   hasError,
+  headerToggling,
   'data-testid': dataTestid,
 }: ToggleItemProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(isOpenByDefault ?? true);
   const handleToggle = () => setOpen((prevState) => !prevState);
+  const handleToggleBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    handleToggle();
+  };
 
   const hasErrorMessage = !open && !!errorMessage;
   const titleErrorVisible = !open && (!!errorMessage || hasError);
+  const isHeaderClickable = headerToggling && !isOpenDisabled;
 
   return (
     <StyledItemOption uiType={uiType} data-testid={dataTestid}>
-      <StylesTitleWrapper open={open} uiType={uiType} isError={titleErrorVisible}>
+      <StylesTitleWrapper
+        open={open}
+        uiType={uiType}
+        isError={titleErrorVisible}
+        headerClickable={isHeaderClickable}
+        data-testid={`${dataTestid}-header`}
+        onClick={isHeaderClickable ? handleToggle : undefined}
+      >
         <StyledFlexTopCenter
           sx={{ flexGrow: 1, overflow: titleErrorVisible ? 'visible' : 'hidden' }}
         >
           <StyledFlexTopCenter>
             <StyledClearedButton
-              onClick={handleToggle}
+              onClick={handleToggleBtnClick}
               sx={{ p: theme.spacing(0.8) }}
               disabled={isOpenDisabled}
               data-testid={`${dataTestid}-collapse`}
@@ -59,7 +72,7 @@ export const ToggleItemContainer = ({
               <Svg id={open ? 'navigate-up' : 'navigate-down'} />
             </StyledClearedButton>
             {title && (
-              <StyledFlexColumn>
+              <StyledFlexColumn data-testid={`${dataTestid}-title`}>
                 <StyledTitleContainer hasError={!!titleErrorVisible}>
                   {titleErrorVisible && <StyledBadge variant="dot" color="error" />}
                   <StyledFlexTopCenter>

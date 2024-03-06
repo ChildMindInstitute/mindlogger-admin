@@ -39,3 +39,6 @@ export * from './logger';
 export * from './renderWithAppletFormData';
 export * from './asyncTimeout';
 export * from './renderHookWithProviders';
+export * from './getMediaName';
+export * from './expectBanner';
+export * from './testUtils';

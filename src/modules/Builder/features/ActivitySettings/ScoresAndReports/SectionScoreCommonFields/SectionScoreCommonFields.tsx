@@ -19,8 +19,7 @@ export const SectionScoreCommonFields = ({
 }: CommonFieldsProps) => {
   const { t } = useTranslation();
 
-  const { control, getFieldState, register, unregister, setValue, getValues, trigger } =
-    useFormContext();
+  const { control, getFieldState, setValue, getValues, trigger } = useFormContext();
 
   const showMessageName = `${name}.showMessage`;
   const printItemsName = `${name}.printItems`;
@@ -37,31 +36,12 @@ export const SectionScoreCommonFields = ({
     const message = getValues(messageName);
     printItems ?? setValue(printItemsName, !!itemsPrint?.length);
     showMessage ?? setValue(showMessageName, !!message?.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (showMessage) {
-      register(messageName);
-
-      return;
-    }
-
-    unregister(messageName, { keepValue: true });
-  }, [showMessage]);
-
-  useEffect(() => {
-    if (printItems) {
-      register(itemsPrintName);
-
-      return;
-    }
-
-    unregister(itemsPrintName, { keepValue: true });
-  }, [printItems]);
-
-  useEffect(() => {
     trigger(printItemsName);
-  }, [printItems, showMessage, scoreConditionalLogic]);
+  }, [printItems, showMessage, scoreConditionalLogic, printItemsName, trigger]);
 
   return (
     <>
@@ -87,6 +67,7 @@ export const SectionScoreCommonFields = ({
           control={control}
           editorId={`editor-${sectionId}`}
           data-testid={`${dataTestid}-show-message-text`}
+          withDebounce
         />
       )}
       <Box sx={{ m: theme.spacing(0.5, 0, 1) }}>

@@ -1,4 +1,8 @@
-import { parseResponseValue } from 'shared/utils/exportData/parseResponseValue';
+import {
+  isNullAnswer,
+  isTextAnswer,
+  parseResponseValue,
+} from 'shared/utils/exportData/parseResponseValue';
 import { DecryptedAnswerData, ExtendedExportAnswerWithoutEncryption } from 'shared/types';
 import { ItemResponseType } from 'shared/consts';
 
@@ -1600,6 +1604,42 @@ describe('parseResponseValue', () => {
           isEvent,
         ),
       ).toBe(expected);
+    });
+  });
+  describe('isNullAnswer', () => {
+    test.each`
+      obj             | result   | description
+      ${null}         | ${true}  | ${'returns true if null'}
+      ${{}}           | ${true}  | ${'returns true if {}'}
+      ${[]}           | ${true}  | ${'returns true if []'}
+      ${undefined}    | ${false} | ${'returns false if undefined'}
+      ${{ value: 1 }} | ${false} | ${'returns false if { value: 1 }'}
+      ${''}           | ${false} | ${'returns false if ""'}
+      ${'test'}       | ${false} | ${'returns false if "test"'}
+      ${1}            | ${false} | ${'returns false if 1'}
+      ${0}            | ${false} | ${'returns false if 0'}
+      ${true}         | ${false} | ${'returns false if true'}
+      ${false}        | ${false} | ${'returns false if false'}
+    `('$description', ({ obj, result }) => {
+      expect(isNullAnswer(obj)).toStrictEqual(result);
+    });
+  });
+  describe('isTextAnswer', () => {
+    test.each`
+      obj             | result   | description
+      ${''}           | ${true}  | ${'returns true if ""'}
+      ${'test'}       | ${true}  | ${'returns true if "test"'}
+      ${null}         | ${false} | ${'returns false if null'}
+      ${undefined}    | ${false} | ${'returns false if undefined'}
+      ${{}}           | ${false} | ${'returns false if {}'}
+      ${{ value: 1 }} | ${false} | ${'returns false if { value: 1 }'}
+      ${[]}           | ${false} | ${'returns false if []'}
+      ${1}            | ${false} | ${'returns false if 1'}
+      ${0}            | ${false} | ${'returns false if 0'}
+      ${true}         | ${false} | ${'returns false if true'}
+      ${false}        | ${false} | ${'returns false if false'}
+    `('$description', ({ obj, result }) => {
+      expect(isTextAnswer(obj)).toStrictEqual(result);
     });
   });
 });

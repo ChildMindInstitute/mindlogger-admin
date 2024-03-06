@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Modal, EnterAppletPassword, Spinner, SpinnerUiType } from 'shared/components';
+import { EnterAppletPassword, Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
-import { alerts, applet, popups } from 'redux/modules';
+import { alerts, applet, banners, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { deleteAppletApi } from 'api';
+import { ApiResponseCodes, deleteAppletApi } from 'api';
 import { StyledBodyLarge, StyledModalWrapper, theme } from 'shared/styles';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
-import { Modals, DeletePopupProps } from './DeletePopup.types';
+import { DeletePopupProps, Modals } from './DeletePopup.types';
 
 export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: DeletePopupProps) => {
   const { t } = useTranslation('app');
@@ -34,11 +34,19 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
   const { execute, isLoading } = useAsync(
     deleteAppletApi,
     () => {
-      setActiveModal(Modals.Confirmation);
+      handleConfirmation();
+      dispatch(
+        banners.actions.addBanner({
+          key: 'SaveSuccessBanner',
+          bannerProps: { children: t('appletDeletedSuccessfully') },
+        }),
+      );
       dispatch(alerts.actions.resetAlerts());
       dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
     },
-    () => {
+    (error) => {
+      if (error?.response?.status === ApiResponseCodes.Forbidden) return;
+
       setActiveModal(Modals.DeleteError);
     },
   );
@@ -89,19 +97,6 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           </>
         </Modal>
       );
-    case Modals.Confirmation:
-      return (
-        <Modal
-          open={deletePopupVisible}
-          onClose={handleConfirmation}
-          onSubmit={handleConfirmation}
-          title={t('deleteApplet')}
-          buttonText={t('ok')}
-          data-testid={`${dataTestid}-success-popup`}
-        >
-          <StyledModalWrapper>{t('appletDeletedSuccessfully')}</StyledModalWrapper>
-        </Modal>
-      );
     case Modals.DeleteError:
       return (
         <Modal
@@ -127,5 +122,7 @@ export const DeletePopup = ({ onCloseCallback, 'data-testid': dataTestid }: Dele
           </StyledModalWrapper>
         </Modal>
       );
+    default:
+      return null;
   }
 };

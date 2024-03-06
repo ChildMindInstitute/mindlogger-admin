@@ -11,6 +11,7 @@ import { UploadAudio } from '../UploadAudio';
 import { RecordAudio } from '../RecordAudio';
 import { RemoveAudioPopup } from '../RemoveAudioPopup';
 import { AudioPlayerContentProps } from './AudioPlayerContent.types';
+import { audioPlayerDataTestid } from './AudioPlayerContent.const';
 
 export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContentProps) => {
   const { t } = useTranslation('app');
@@ -49,10 +50,20 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
 
   return (
     <Box sx={{ mt: theme.spacing(1) }}>
-      <StyledTitleMedium color={variables.palette.on_surface} sx={{ mb: theme.spacing(2.4) }}>
+      <StyledTitleMedium
+        color={variables.palette.on_surface}
+        sx={{ mb: theme.spacing(2.4) }}
+        data-testid={`${audioPlayerDataTestid}-description`}
+      >
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
-      {url && <MLPlayer media={media} onRemove={() => setRemoveAudioPopupOpened(true)} />}
+      {url && (
+        <MLPlayer
+          media={media}
+          onRemove={() => setRemoveAudioPopupOpened(true)}
+          data-testid={`${audioPlayerDataTestid}-player`}
+        />
+      )}
       {!url && (
         <AddAudio
           onUploadAudio={() => setUploadPopupOpened(true)}
@@ -60,26 +71,37 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
         />
       )}
       {error?.message && (
-        <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error.message}</StyledBodyErrorText>
+        <StyledBodyErrorText
+          sx={{ mt: theme.spacing(2.4) }}
+          data-testid={`${audioPlayerDataTestid}-error`}
+        >
+          {error.message}
+        </StyledBodyErrorText>
       )}
-      <UploadAudio
-        open={isUploadPopupOpened}
-        media={media}
-        onChange={setMedia}
-        onUpload={handleUploadAudio}
-        onClose={onCloseUploadPopup}
-      />
-      <RecordAudio
-        open={isRecordPopupOpened}
-        onChange={setMedia}
-        onUpload={handleUploadRecord}
-        onClose={onCloseRecordPopup}
-      />
-      <RemoveAudioPopup
-        open={isRemoveAudioPopupOpened}
-        onClose={onCloseRemoveAudioPopup}
-        onRemove={handleRemoveAudio}
-      />
+      {isUploadPopupOpened && (
+        <UploadAudio
+          open={isUploadPopupOpened}
+          media={media}
+          onChange={setMedia}
+          onUpload={handleUploadAudio}
+          onClose={onCloseUploadPopup}
+        />
+      )}
+      {isRecordPopupOpened && (
+        <RecordAudio
+          open={isRecordPopupOpened}
+          onChange={setMedia}
+          onUpload={handleUploadRecord}
+          onClose={onCloseRecordPopup}
+        />
+      )}
+      {isRemoveAudioPopupOpened && (
+        <RemoveAudioPopup
+          open={isRemoveAudioPopupOpened}
+          onClose={onCloseRemoveAudioPopup}
+          onRemove={handleRemoveAudio}
+        />
+      )}
     </Box>
   );
 };

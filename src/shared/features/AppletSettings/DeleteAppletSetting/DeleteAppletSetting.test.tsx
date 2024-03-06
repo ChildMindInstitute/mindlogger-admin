@@ -1,10 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import userEvent from '@testing-library/user-event';
 
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { expectBanner, SettingParam, renderWithProviders } from 'shared/utils';
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
@@ -64,7 +64,11 @@ describe('DeleteAppletSetting', () => {
     jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() => ({
       getPublicKey: getPublicKeyMock,
     }));
-    renderWithProviders(<DeleteAppletSetting />, { preloadedState, route, routePath });
+    const { store } = renderWithProviders(<DeleteAppletSetting />, {
+      preloadedState,
+      route,
+      routePath,
+    });
 
     expect(screen.getByTestId('applet-settings-delete-applet-delete-button')).toBeVisible();
     expect(screen.getByTestId('applet-settings-delete-applet-delete-password-popup')).toBeVisible();
@@ -72,7 +76,8 @@ describe('DeleteAppletSetting', () => {
     await userEvent.type(screen.getByLabelText(/Password/), mockedPassword);
 
     fireEvent.click(screen.getByText('Delete'));
-    fireEvent.click(await screen.findByText('Ok'));
+
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
 
     expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
   });

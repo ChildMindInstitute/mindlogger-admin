@@ -13,6 +13,7 @@ export const Container = ({ title, onClose, children }: ActivitySettingsContaine
       flexGrow: 1,
       height: '100%',
     }}
+    data-testid="navigation-menu-container"
   >
     {children}
   </BuilderContainer>

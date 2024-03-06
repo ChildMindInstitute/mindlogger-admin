@@ -14,6 +14,7 @@ import {
   getStabilityTrackerItemsData,
 } from './getItemsData';
 import { getActivityJourneyData, getMediaData, getReportData } from './getReportAndMediaData';
+import { logDataInDebugMode } from '../logger';
 
 export const getDefaultExportData = (): AppletExportData => ({
   reportData: [],
@@ -30,6 +31,7 @@ export const prepareData = async (
   getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
 ) => {
   const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
+  logDataInDebugMode({ parsedAnswersWithoutHiddenItems: parsedAnswers });
   const remappedParsedAnswers = remapFailedAnswers(parsedAnswers);
   const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(remappedParsedAnswers);
   let acc: AppletExportData = getDefaultExportData();

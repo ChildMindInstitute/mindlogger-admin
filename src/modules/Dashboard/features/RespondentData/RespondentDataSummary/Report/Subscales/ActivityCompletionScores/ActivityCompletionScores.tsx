@@ -19,6 +19,7 @@ import { AdditionalInformation } from '../AdditionalInformation';
 import { StyledDescription } from './ActivityCompletionScores.styles';
 import { ScoresProps } from './ActivityCompletionScores.types';
 import { ReportContext } from '../../Report.context';
+import { dataTestid } from './ActivityCompletionScores.const';
 
 const StringDivider = <StyledBodyMedium sx={{ m: theme.spacing(0, 0.8) }}>∙</StyledBodyMedium>;
 
@@ -34,14 +35,14 @@ export const ActivityCompletionScores = ({
   const { setCurrentActivityCompletionData } = useContext(ReportContext);
 
   const renderChartDescription = () => (
-    <StyledDescription>
+    <StyledDescription data-testid={`${dataTestid}-header`}>
       {reviewDate && (
         <>
-          <StyledBodyMedium>
+          <StyledBodyMedium data-testid={`${dataTestid}-review-date`}>
             {t('reviewDate')}: {format(reviewDate, DateFormats.DayMonthYear)}
           </StyledBodyMedium>
           {StringDivider}
-          <StyledBodyMedium>
+          <StyledBodyMedium data-testid={`${dataTestid}-review-time`}>
             {t('time')}: {format(reviewDate, DateFormats.TimeSeconds)}
           </StyledBodyMedium>
           {StringDivider}
@@ -49,14 +50,14 @@ export const ActivityCompletionScores = ({
       )}
       {finalSubscaleScore && (
         <>
-          <StyledBodyMedium>
+          <StyledBodyMedium data-testid={`${dataTestid}-final-subscale-score`}>
             {t('finalSubscaleScore')}: {finalSubscaleScore}
           </StyledBodyMedium>
           {StringDivider}
         </>
       )}
       {frequency && (
-        <StyledBodyMedium>
+        <StyledBodyMedium data-testid={`${dataTestid}-subscale-frequency`}>
           {t('frequency')}: {frequency}
         </StyledBodyMedium>
       )}
@@ -64,7 +65,7 @@ export const ActivityCompletionScores = ({
   );
 
   return (
-    <>
+    <Box data-testid={dataTestid}>
       <StyledFlexSpaceBetween sx={{ mt: theme.spacing(6) }}>
         <StyledHeadline color={variables.palette.on_surface}>{t('subscaleScores')}</StyledHeadline>
         {showAllSubscaleResultsVisible && (
@@ -72,6 +73,7 @@ export const ActivityCompletionScores = ({
             onClick={() => setCurrentActivityCompletionData(null)}
             variant="text"
             startIcon={<Svg id="reset" width="18" height="18" />}
+            data-testid="show-all-subscale-results"
           >
             {t('showAllSubscaleResults')}
           </StyledTextBtn>
@@ -84,6 +86,6 @@ export const ActivityCompletionScores = ({
           <AdditionalInformation optionText={optionText} />
         </Box>
       )}
-    </>
+    </Box>
   );
 };

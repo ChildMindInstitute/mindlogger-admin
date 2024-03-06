@@ -3,7 +3,7 @@
 import { createRef } from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { CHANGE_DEBOUNCE_VALUE, ItemResponseType } from 'shared/consts';
+import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
 import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
 
 import {
@@ -97,11 +97,11 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       const maxLabels = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-max-label`));
       minLabels.forEach((label) => {
         expect(label).toBeVisible();
-        expect(label.querySelector('label')).toHaveTextContent('Min Label');
+        expect(label.querySelector('label')).toHaveTextContent('Left Label');
       });
       maxLabels.forEach((label) => {
         expect(label).toBeVisible();
-        expect(label.querySelector('label')).toHaveTextContent('Max Label');
+        expect(label.querySelector('label')).toHaveTextContent('Right Label');
       });
 
       const sliders = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-slider`));
@@ -113,12 +113,12 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
       const maxValues = screen.getAllByTestId(new RegExp(`${dataTestidRegex}-max-value`));
       minValues.forEach((value) => {
         expect(value).toBeVisible();
-        expect(value.querySelector('label')).toHaveTextContent('Min Value');
-        expect(value.querySelector('input')).toHaveValue(isSliderRows ? 1 : 0);
+        expect(value.querySelector('label')).toHaveTextContent('Left Value');
+        expect(value.querySelector('input')).toHaveValue(0);
       });
       maxValues.forEach((value) => {
         expect(value).toBeVisible();
-        expect(value.querySelector('label')).toHaveTextContent('Max Value');
+        expect(value.querySelector('label')).toHaveTextContent('Right Value');
         expect(value.querySelector('input')).toHaveValue(isSliderRows ? 5 : 12);
       });
 
@@ -319,7 +319,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
 
       expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
         alert: 'text',
-        value: '5',
+        value: '4',
         sliderId: ref.current.getValues(`${mockedItemName}.responseValues.rows.0.id`),
         key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
       });
@@ -343,7 +343,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
         screen
           .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
           .querySelectorAll('li'),
-      ).toHaveLength(5);
+      ).toHaveLength(6);
 
       selectOption(0, 0);
 
@@ -354,7 +354,7 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
             .getByTestId(`${mockedAlertsTestid}-1-slider-rows-value-dropdown`)
             .querySelectorAll('li'),
         ].filter((li) => !li.classList.contains('hidden-menu-item')),
-      ).toHaveLength(4);
+      ).toHaveLength(5);
     });
 
     test.each`
@@ -558,21 +558,25 @@ describe('ItemConfiguration: Slider & Slider Rows', () => {
     setting                                         | description
     ${ItemConfigurationSettings.HasTickMarks}       | ${'Slider: Show Tick Marks'}
     ${ItemConfigurationSettings.HasTickMarksLabels} | ${'Slider: Show Tick Marks Labels'}
-  `('$description', async ({ setting }) => {
-    renderSlider(ItemResponseType.Slider);
+  `(
+    '$description',
+    async ({ setting }) => {
+      renderSlider(ItemResponseType.Slider);
 
-    const isMarks = setting === ItemConfigurationSettings.HasTickMarks;
+      const isMarks = setting === ItemConfigurationSettings.HasTickMarks;
 
-    if (!isMarks) await setItemConfigSetting(ItemConfigurationSettings.HasTickMarks);
-    await setItemConfigSetting(setting);
+      if (!isMarks) await setItemConfigSetting(ItemConfigurationSettings.HasTickMarks);
+      await setItemConfigSetting(setting);
 
-    await waitFor(() => {
-      const slider = screen.getByTestId(new RegExp(`${getDataTestidRegex(false)}-slider`));
+      await waitFor(() => {
+        const slider = screen.getByTestId(new RegExp(`${getDataTestidRegex(false)}-slider`));
 
-      const expected = slider.querySelectorAll(
-        isMarks ? '.MuiSlider-mark' : '.MuiSlider-markLabel',
-      );
-      expect(expected).toHaveLength(13);
-    });
-  });
+        const expected = slider.querySelectorAll(
+          isMarks ? '.MuiSlider-mark' : '.MuiSlider-markLabel',
+        );
+        expect(expected).toHaveLength(13);
+      });
+    },
+    JEST_TEST_TIMEOUT,
+  );
 });

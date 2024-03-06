@@ -378,8 +378,15 @@ export const getActivityItems = (activity: ActivityFormValues) => {
       performanceTaskType === PerfTaskType.ABTrailsTablet);
 
   if (isPerformanceTask && performanceTaskType === PerfTaskType.Flanker) {
-    const firstPracticeItemConfig = items[FlankerItemPositions.PracticeFirst]
-      .config as FlankerConfig;
+    const flankerPracticeConfig = items[FlankerItemPositions.PracticeFirst].config as FlankerConfig;
+    const firstPracticeItemConfig = {
+      ...flankerPracticeConfig,
+      stimulusTrials: flankerPracticeConfig.stimulusTrials?.map((trial) => ({
+        ...trial,
+        ...removeReactHookFormKey(),
+      })),
+    };
+
     const firstTestItemConfig = items[FlankerItemPositions.TestFirst].config as FlankerConfig;
     const testItemCommonConfig = {
       blockType: RoundTypeEnum.Test,
@@ -396,6 +403,14 @@ export const getActivityItems = (activity: ActivityFormValues) => {
     return items?.map(({ id, ...item }, index) => {
       const itemCommonFields = getItemCommonFields({ id, item, items, conditionalLogic });
       const isLastTest = index === FlankerItemPositions.TestThird;
+
+      if (index === FlankerItemPositions.PracticeFirst) {
+        return {
+          ...item,
+          config: firstPracticeItemConfig,
+          ...itemCommonFields,
+        };
+      }
 
       if (
         index === FlankerItemPositions.PracticeSecond ||

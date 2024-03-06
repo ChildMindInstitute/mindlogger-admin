@@ -26,7 +26,7 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
       appletName,
       isSubmitted,
       setIsSubmitted,
-      setEmailTransfered,
+      setEmailTransferred,
       'data-testid': dataTestid,
     },
     ref,
@@ -49,7 +49,7 @@ export const TransferOwnership = forwardRef<TransferOwnershipRef, TransferOwners
       if (!appletId) return;
 
       await execute({ appletId, email: getValues().email });
-      setEmailTransfered(getValues().email);
+      setEmailTransferred(getValues().email);
     };
 
     useEffect(() => {

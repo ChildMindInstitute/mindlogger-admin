@@ -29,7 +29,7 @@ export const createPasswordFormSchema = () => {
       appletPasswordConfirmation: yup
         .string()
         .required(repeatPasswordRequired)
-        .oneOf([yup.ref('appletPassword')], passwordMatchError),
+        .oneOf([yup.ref('appletPassword'), ''], passwordMatchError),
     })
     .required();
 };

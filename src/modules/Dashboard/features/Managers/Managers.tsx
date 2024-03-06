@@ -4,21 +4,23 @@ import { useParams } from 'react-router-dom';
 
 import { getWorkspaceManagersApi, updateManagersPinApi } from 'api';
 import { Actions, Pin, Search, Spinner } from 'shared/components';
-import { workspaces } from 'redux/modules';
+import { banners, workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { Manager } from 'modules/Dashboard/types';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
+import { useAppDispatch } from 'redux/store';
 
-import { ManagersRemoveAccessPopup, EditAccessPopup, EditAccessSuccessPopup } from './Popups';
+import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
 import { getActions, getHeadCells, ManagersColumnsWidth } from './Managers.const';
 import { ManagersData } from './Managers.types';
 
 export const Managers = () => {
   const { t } = useTranslation('app');
+  const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const [managersData, setManagersData] = useState<ManagersData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +76,6 @@ export const Managers = () => {
   });
 
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
-  const [editAccessSuccessPopupVisible, setEditAccessSuccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
@@ -106,7 +107,7 @@ export const Managers = () => {
   const editManagerAccessOnClose = (shouldRefetch?: boolean) => {
     setEditAccessPopupVisible(false);
     if (shouldRefetch) {
-      setEditAccessSuccessPopupVisible(true);
+      dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
       handleReload();
     }
   };
@@ -221,13 +222,6 @@ export const Managers = () => {
               popupVisible={editAccessPopupVisible}
               onClose={editManagerAccessOnClose}
               user={selectedManager}
-            />
-          )}
-          {editAccessSuccessPopupVisible && (
-            <EditAccessSuccessPopup
-              open={editAccessSuccessPopupVisible}
-              onClose={() => setEditAccessSuccessPopupVisible(false)}
-              {...selectedManager}
             />
           )}
         </>

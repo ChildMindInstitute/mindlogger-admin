@@ -90,6 +90,12 @@ export type ExportAnswer = {
   scheduledDatetime?: string;
   startDatetime: string;
   endDatetime: string;
+  client?: {
+    appId: string;
+    appVersion: string;
+    width: number;
+    height: number;
+  };
 };
 
 export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &
@@ -568,3 +574,5 @@ export const enum FlankerRecordFields {
 }
 
 export type ExportDataResult = { activities: ExportActivity[]; answers: ExtendedExportAnswer[] };
+
+export type ResponseValueType = AnswerDTO | undefined;

@@ -16,6 +16,7 @@ import {
   StyledTitle,
 } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
+import { Actions } from '../Actions';
 
 export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarProps) => {
   const { setting } = useParams();
@@ -31,12 +32,21 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
   };
 
   return (
-    <BuilderContainer title={t(title)} sxProps={containerSxProps}>
+    <BuilderContainer
+      title={t(title)}
+      sxProps={containerSxProps}
+      data-testid="navigation-menu-left-bar"
+    >
+      <Actions isCompact={hasActiveItem} />
       <StyledContent isCompact={hasActiveItem}>
         {items.map(
-          ({ label, items, isVisible = true }) =>
+          ({ label, items, isVisible = true }, index) =>
             isVisible && (
-              <StyledSettingsGroup key={label} isCompact={hasActiveItem}>
+              <StyledSettingsGroup
+                key={label}
+                isCompact={hasActiveItem}
+                data-testid={`navigation-menu-left-bar-group-${index}`}
+              >
                 <StyledTitleSmall>{t(label)}</StyledTitleSmall>
                 <StyledSettings isCompact={hasActiveItem}>
                   {items.map(
@@ -78,7 +88,12 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
                               <StyledFlexAllCenter>{icon}</StyledFlexAllCenter>
                               <StyledTitle>{t(label)}</StyledTitle>
                               {hasError && (
-                                <Badge variant="dot" invisible={!hasError} color="error" />
+                                <Badge
+                                  data-testid="error-badge"
+                                  variant="dot"
+                                  invisible={!hasError}
+                                  color="error"
+                                />
                               )}
                             </StyledSetting>
                           </span>

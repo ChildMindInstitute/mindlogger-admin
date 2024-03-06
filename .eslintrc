@@ -1,51 +1,49 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["import", "prettier", "react-hooks", "@typescript-eslint"],
+  "plugins": ["import", "react-hooks", "@typescript-eslint", "unused-imports"],
   "env": {
     "node": true
   },
   "extends": [
-    "prettier",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
     "react/react-in-jsx-scope": "off",
-    "no-trailing-spaces": "error",
     "react/no-children-prop": "off",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
-    "quotes": ["error", "single"],
     "import/order": [
       "error",
-        {
-          "groups": [
-            ["external", "builtin"],
-            "internal",
-            ["sibling", "parent"],
-            "index"
-          ],
-          "pathGroups": [
-            {
-              "pattern":
-                  "@(api|assets|modules|redux|routes|shared|resources)/**",
-              "group": "internal"
-            },
-            {
-              "pattern":
-                  "@(redux|routes|resources|api|i18n)",
-              "group": "internal"
-            }
-          ],
-          "pathGroupsExcludedImportTypes": ["internal"],
-          "newlines-between": "always"
-        }
+      {
+        "groups": [
+          ["external", "builtin"],
+          "internal",
+          ["sibling", "parent"],
+          "index"
+        ],
+        "pathGroups": [
+          {
+            "pattern":
+            "@(api|assets|modules|redux|routes|shared|resources)/**",
+            "group": "internal"
+          },
+          {
+            "pattern":
+            "@(redux|routes|resources|api|i18n)",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["internal"],
+        "newlines-between": "always"
+      }
     ],
     "import/no-cycle": "error",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/exhaustive-deps": "warn",
     "constructor-super": "error",
     "no-this-before-super": "error",
     "no-useless-computed-key": "error",
@@ -72,23 +70,20 @@
     "no-nested-ternary": "error",
     "no-unneeded-ternary": "error",
     "camelcase": "off",
-    "arrow-parens": ["off", "as-needed"],
     "no-debugger": "error",
     "no-empty": "error",
-    "no-underscore-dangle": "error",
     "no-unused-labels": "error",
     "prefer-const": "error",
-    "no-unused-vars": "off",
-    "jsx-quotes": ["error", "prefer-double"],
-    "@typescript-eslint/no-unused-vars": [
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
       "warn",
-      {
-        "ignoreRestSiblings": true
-      }
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
     ],
-    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-non-null-assertion": "warn",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-duplicate-enum-values": "warn",
+    "no-extra-semi": "off",
     "padding-line-between-statements": [
       "error",
       { "blankLine": "always", "prev": "*", "next": "return" }

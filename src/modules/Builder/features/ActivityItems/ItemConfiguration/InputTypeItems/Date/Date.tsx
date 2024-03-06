@@ -8,8 +8,14 @@ import { ItemOptionContainer } from '../ItemOptionContainer';
 export const Date = () => {
   const { t } = useTranslation('app');
 
+  const dataTestid = 'builder-activity-items-item-configuration-date';
+
   return (
-    <ItemOptionContainer title={t('dateItemTitle')} description={t('dateItemDescription')}>
+    <ItemOptionContainer
+      title={t('dateItemTitle')}
+      description={t('dateItemDescription')}
+      data-testid={dataTestid}
+    >
       <StyledTextField
         disabled
         variant="outlined"
@@ -22,6 +28,7 @@ export const Date = () => {
             </StyledIconBtn>
           ),
         }}
+        data-testid={`${dataTestid}-input`}
       />
     </ItemOptionContainer>
   );

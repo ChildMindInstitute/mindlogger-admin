@@ -3,11 +3,16 @@ import { useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { useCurrentActivity, useCustomFormContext } from 'modules/Builder/hooks';
+import {
+  useCheckAndTriggerOnNameUniqueness,
+  useCurrentActivity,
+  useCustomFormContext,
+} from 'modules/Builder/hooks';
 import {
   StyledBodyLarge,
   StyledFlexColumn,
   StyledFlexTopStart,
+  StyledObserverTarget,
   StyledTitleMedium,
   StyledTitleSmall,
   theme,
@@ -18,12 +23,18 @@ import {
   TransferListController,
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
-import { ScoreConditionalLogic } from 'shared/state';
+import { ScoreConditionalLogic, ScoreReport } from 'shared/state';
 import { CalculationType } from 'shared/consts';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
-import { SelectEvent } from 'shared/types';
+import {
+  REACT_HOOK_FORM_KEY_NAME,
+  SCORE_CONDS_COUNT_TO_ACTIVATE_STATIC,
+  observerStyles,
+} from 'modules/Builder/consts';
+import { SelectEvent, isScoreReport } from 'shared/types';
+import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
+import { useStaticContent } from 'shared/hooks/useStaticContent';
 
 import { StyledButton } from '../ScoresAndReports.styles';
 import { SectionScoreHeader } from '../SectionScoreHeader';
@@ -37,15 +48,17 @@ import { EMPTY_SCORE_RANGE_LABEL, calculationTypes } from './ScoreContent.const'
 import {
   getScoreItemsColumns,
   getSelectedItemsColumns,
-  getDefaultConditionalValue,
+  getScoreConditionalDefaults,
   getIsScoreIdVariable,
   getScoreId,
   getScoreRange,
   getScoreRangeLabel,
   updateMessagesWithVariable,
   updateScoreConditionIds,
+  updateScoreConditionsPayload,
 } from './ScoreContent.utils';
 import { ScoreContentProps } from './ScoreContent.types';
+import { StaticScoreContent } from './StaticScoreContent';
 
 export const ScoreContent = ({
   name,
@@ -55,6 +68,7 @@ export const ScoreContent = ({
   items,
   tableItems,
   scoreItems,
+  isStaticActive,
 }: ScoreContentProps) => {
   const { t } = useTranslation('app');
   const { control, setValue, getValues } = useCustomFormContext();
@@ -62,6 +76,8 @@ export const ScoreContent = ({
   const [isRemoveConditionalPopupVisible, setIsRemoveConditionalPopupVisible] = useState(false);
   const [removeConditionalIndex, setIsRemoveConditionalIndex] = useState(0);
   const { fieldName, activity } = useCurrentActivity();
+  const targetSelector = getObserverSelector('report-score-content', index);
+  const { isStatic } = useStaticContent({ targetSelector, isStaticActive });
 
   const reportsName = `${fieldName}.scoresAndReports.reports`;
   const scoreConditionalsName = `${name}.conditionalLogic`;
@@ -91,6 +107,13 @@ export const ScoreContent = ({
     name: scoreConditionalsName,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
+  const conditionalsSize = scoreConditionals?.length ?? 0;
+
+  useCheckAndTriggerOnNameUniqueness<ScoreReport>({
+    currentPath: name,
+    entitiesFieldPath: reportsName,
+    checkIfShouldIncludeEntity: isScoreReport,
+  });
 
   const removeScoreConditional = (index: number) => {
     setIsRemoveConditionalPopupVisible(true);
@@ -98,7 +121,7 @@ export const ScoreContent = ({
   };
 
   const handleAddScoreConditional = () => {
-    append(getDefaultConditionalValue(scoreId, score?.key));
+    append(getScoreConditionalDefaults(scoreId, score?.key));
   };
 
   const onChangeScoreId = () => {
@@ -158,6 +181,14 @@ export const ScoreContent = ({
       scoreId: newScoreId,
       conditions: getValues(scoreConditionalsName),
     });
+    updateScoreConditionsPayload({
+      setValue,
+      getValues,
+      scoreConditionalsName,
+      selectedItems,
+      calculationType,
+      activity,
+    });
   };
 
   const handleNameBlur = () => {
@@ -191,124 +222,149 @@ export const ScoreContent = ({
     });
   };
 
-  return (
-    <StyledFlexColumn data-testid={dataTestid}>
-      <StyledFlexTopStart sx={{ mt: theme.spacing(1.6) }}>
-        <Box sx={{ mr: theme.spacing(2.4), width: '50%' }}>
-          <InputController
-            control={control}
-            key={`${name}.name`}
-            name={`${name}.name`}
-            label={t('scoreName')}
-            onBlur={handleNameBlur}
-            sx={{ mb: theme.spacing(4.8) }}
-            data-testid={`${dataTestid}-name`}
-          />
-          <SelectController
-            name={`${name}.calculationType`}
-            sx={{ mb: theme.spacing(4.8) }}
-            control={control}
-            options={calculationTypes}
-            label={t('scoreCalculationType')}
-            fullWidth
-            data-testid={`${dataTestid}-calculation-type`}
-            customChange={handleCalculationChange}
-          />
-        </Box>
-        <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
-          <CopyId title={t('scoreId')} value={scoreId} showCopy data-testid={dataTestid} />
-          <StyledTitleSmall sx={{ m: theme.spacing(2.4, 0, 1.2, 0) }}>
-            {t('rangeOfScores')}
-          </StyledTitleSmall>
-          <StyledBodyLarge
-            sx={{ mb: theme.spacing(2.4) }}
-            data-testid={`${dataTestid}-score-range`}
-          >
-            {scoreRangeLabel}
-          </StyledBodyLarge>
-        </Box>
-      </StyledFlexTopStart>
-      <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>{t('scoreItems')}</StyledTitleMedium>
-      <TransferListController
-        name={`${name}.itemsScore`}
-        items={tableItems}
-        columns={getScoreItemsColumns()}
-        selectedItemsColumns={getSelectedItemsColumns()}
-        hasSelectedSection
-        searchKey="label"
-        hasSearch
-        sxProps={{ mb: theme.spacing(2.5) }}
-        data-testid={`${dataTestid}-items-score`}
-        tooltipByDefault
-      />
-      <SectionScoreCommonFields
-        name={name}
-        sectionId={`score-${index}`}
-        data-testid={dataTestid}
-        items={items}
-      />
-      {!!scoreConditionals?.length && (
-        <>
-          <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
-            {t('scoreConditions')}
-          </StyledTitleMedium>
-          {scoreConditionals?.map((conditional: ScoreConditionalLogic, key: number) => {
-            const conditionalName = `${scoreConditionalsName}.${key}`;
-            const title = t('scoreConditional', {
-              index: key + 1,
-            });
-            const headerTitle = <Title title={title} reportFieldName={conditionalName} />;
-            const conditionalDataTestid = `${dataTestid}-conditional-${key}`;
+  const onItemsToCalculateScoreChange = (chosenItems: string[] = []) => {
+    const newSelectedItems = scoreItems?.filter(
+      (item) => chosenItems?.includes(getEntityKey(item, true)),
+    );
+    updateScoreConditionsPayload({
+      setValue,
+      getValues,
+      scoreConditionalsName,
+      selectedItems: newSelectedItems,
+      calculationType,
+      activity,
+    });
+  };
 
-            return (
-              <ToggleItemContainer
-                key={`data-score-conditional-${getEntityKey(conditional) || key}-${key}`}
-                HeaderContent={SectionScoreHeader}
-                Content={ScoreCondition}
-                contentProps={{
-                  name: conditionalName,
-                  reportsName,
-                  score,
-                  scoreKey: `score-condition-${index}-${key}`,
-                  items,
-                  scoreRange,
-                  'data-testid': conditionalDataTestid,
-                }}
-                headerContentProps={{
-                  onRemove: () => removeScoreConditional(key),
-                  title: headerTitle,
-                  name: conditionalName,
-                  'data-testid': conditionalDataTestid,
-                }}
-                uiType={ToggleContainerUiType.Score}
-                data-testid={conditionalDataTestid}
+  return (
+    <StyledFlexColumn data-testid={dataTestid} sx={{ position: 'relative' }}>
+      <StyledObserverTarget className={targetSelector} sx={observerStyles} />
+      {isStatic ? (
+        <StaticScoreContent scoreConditionals={scoreConditionals} />
+      ) : (
+        <>
+          <StyledFlexTopStart sx={{ mt: theme.spacing(1.6) }}>
+            <Box sx={{ mr: theme.spacing(2.4), width: '50%' }}>
+              <InputController
+                control={control}
+                key={`${name}.name`}
+                name={`${name}.name`}
+                label={t('scoreName')}
+                onBlur={handleNameBlur}
+                sx={{ mb: theme.spacing(4.8) }}
+                data-testid={`${dataTestid}-name`}
+                withDebounce
               />
-            );
-          })}
+              <SelectController
+                name={`${name}.calculationType`}
+                sx={{ mb: theme.spacing(4.8) }}
+                control={control}
+                options={calculationTypes}
+                label={t('scoreCalculationType')}
+                fullWidth
+                data-testid={`${dataTestid}-calculation-type`}
+                customChange={handleCalculationChange}
+              />
+            </Box>
+            <Box sx={{ ml: theme.spacing(2.4), width: '50%' }}>
+              <CopyId title={t('scoreId')} value={scoreId} showCopy data-testid={dataTestid} />
+              <StyledTitleSmall sx={{ m: theme.spacing(2.4, 0, 1.2, 0) }}>
+                {t('rangeOfScores')}
+              </StyledTitleSmall>
+              <StyledBodyLarge
+                sx={{ mb: theme.spacing(2.4) }}
+                data-testid={`${dataTestid}-score-range`}
+              >
+                {scoreRangeLabel}
+              </StyledBodyLarge>
+            </Box>
+          </StyledFlexTopStart>
+          <StyledTitleMedium sx={{ mb: theme.spacing(1.2) }}>{t('scoreItems')}</StyledTitleMedium>
+          <TransferListController
+            name={`${name}.itemsScore`}
+            items={tableItems}
+            columns={getScoreItemsColumns()}
+            selectedItemsColumns={getSelectedItemsColumns()}
+            hasSelectedSection
+            searchKey="label"
+            hasSearch
+            sxProps={{ mb: theme.spacing(2.5) }}
+            tooltipByDefault
+            onChangeSelectedCallback={onItemsToCalculateScoreChange}
+            data-testid={`${dataTestid}-items-score`}
+          />
+          <SectionScoreCommonFields
+            name={name}
+            sectionId={`score-${index}`}
+            data-testid={dataTestid}
+            items={items}
+          />
+          {!!conditionalsSize && (
+            <>
+              <StyledTitleMedium sx={{ m: theme.spacing(2.4, 0) }}>
+                {t('scoreConditions')}
+              </StyledTitleMedium>
+              {scoreConditionals?.map((conditional: ScoreConditionalLogic, key: number) => {
+                const conditionalName = `${scoreConditionalsName}.${key}`;
+                const title = t('scoreConditional', {
+                  index: key + 1,
+                });
+                const headerTitle = <Title title={title} reportFieldName={conditionalName} />;
+                const conditionalDataTestid = `${dataTestid}-conditional-${key}`;
+
+                return (
+                  <ToggleItemContainer
+                    key={`data-score-conditional-${getEntityKey(conditional) || key}-${key}`}
+                    HeaderContent={SectionScoreHeader}
+                    Content={ScoreCondition}
+                    contentProps={{
+                      name: conditionalName,
+                      reportsName,
+                      scoreConditionalsName,
+                      score,
+                      scoreKey: `score-condition-${index}-${key}`,
+                      items,
+                      scoreRange,
+                      'data-testid': conditionalDataTestid,
+                      isStaticActive: conditionalsSize > SCORE_CONDS_COUNT_TO_ACTIVATE_STATIC,
+                    }}
+                    headerContentProps={{
+                      onRemove: () => removeScoreConditional(key),
+                      title: headerTitle,
+                      name: conditionalName,
+                      'data-testid': conditionalDataTestid,
+                    }}
+                    uiType={ToggleContainerUiType.Score}
+                    data-testid={conditionalDataTestid}
+                  />
+                );
+              })}
+            </>
+          )}
+          <StyledButton
+            startIcon={<Svg id="add" width="20" height="20" />}
+            onClick={handleAddScoreConditional}
+            data-testid={`${dataTestid}-add-score-conditional`}
+          >
+            {t('addScoreCondition')}
+          </StyledButton>
+          {isChangeScoreIdPopupVisible && (
+            <ChangeScoreIdPopup
+              onClose={onCancelChangeScoreId}
+              onChange={onChangeScoreId}
+              data-testid={`${dataTestid}-change-score-id-popup`}
+            />
+          )}
+          {isRemoveConditionalPopupVisible && (
+            <RemoveConditionalLogicPopup
+              onClose={() => setIsRemoveConditionalPopupVisible(false)}
+              onRemove={() => remove(removeConditionalIndex)}
+              name={title}
+              reportFieldName={name}
+              data-testid={`${dataTestid}-remove-conditional-logic-popup`}
+            />
+          )}
         </>
-      )}
-      <StyledButton
-        startIcon={<Svg id="add" width="20" height="20" />}
-        onClick={handleAddScoreConditional}
-        data-testid={`${dataTestid}-add-score-conditional`}
-      >
-        {t('addScoreCondition')}
-      </StyledButton>
-      {isChangeScoreIdPopupVisible && (
-        <ChangeScoreIdPopup
-          onClose={onCancelChangeScoreId}
-          onChange={onChangeScoreId}
-          data-testid={`${dataTestid}-change-score-id-popup`}
-        />
-      )}
-      {isRemoveConditionalPopupVisible && (
-        <RemoveConditionalLogicPopup
-          onClose={() => setIsRemoveConditionalPopupVisible(false)}
-          onRemove={() => remove(removeConditionalIndex)}
-          name={title}
-          reportFieldName={name}
-          data-testid={`${dataTestid}-remove-conditional-logic-popup`}
-        />
       )}
     </StyledFlexColumn>
   );

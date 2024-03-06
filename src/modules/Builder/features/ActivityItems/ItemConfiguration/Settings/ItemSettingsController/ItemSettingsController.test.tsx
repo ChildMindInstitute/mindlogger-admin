@@ -2,6 +2,7 @@
 // @ts-nocheck
 import { createRef } from 'react';
 import { screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import get from 'lodash.get';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,6 +18,8 @@ import {
   mockedSliderRowsFormValues,
   mockedTextFormValues,
 } from 'shared/mock';
+import * as useCustomFormContextHook from 'modules/Builder/hooks/useCustomFormContext';
+import * as useCurrentActivityHook from 'modules/Builder/hooks/useCurrentActivity';
 
 import { ItemSettingsController } from './ItemSettingsController';
 import { ItemSettingsGroupNames } from './ItemSettingsController.const';
@@ -133,6 +136,7 @@ const mockedSliderWithNoScores = {
 
 const mockedSettingsByType = {
   [ItemResponseType.SingleSelection]: [
+    ItemConfigurationSettings.HasAutoAdvance,
     ItemConfigurationSettings.HasColorPalette,
     ItemConfigurationSettings.HasTooltips,
     ItemConfigurationSettings.HasTextInput,
@@ -358,7 +362,7 @@ describe('ItemSettingsController', () => {
     jest.clearAllMocks();
   });
 
-  test('doesn\'t render if inputType is not provided', () => {
+  test("doesn't render if inputType is not provided", () => {
     const container = renderWithAppletFormData({
       children: <ItemSettingsController itemName="" inputType="" name="" />,
     });
@@ -366,7 +370,7 @@ describe('ItemSettingsController', () => {
     expect(container.container).toBeEmptyDOMElement();
   });
 
-  test('doesn\'t render if inputType is not in enum', () => {
+  test("doesn't render if inputType is not in enum", () => {
     const container = renderWithAppletFormData({
       children: <ItemSettingsController itemName="" inputType={ItemResponseType.Flanker} name="" />,
     });
@@ -460,6 +464,7 @@ describe('ItemSettingsController', () => {
 
   test.each`
     settingKey                                             | item                            | description
+    ${ItemConfigurationSettings.HasAutoAdvance}            | ${mockedSingleSelectFormValues} | ${'Auto-advance set data in config correctly'}
     ${ItemConfigurationSettings.HasScores}                 | ${mockedSingleSelectFormValues} | ${'HasScores set data in config correctly'}
     ${ItemConfigurationSettings.HasTooltips}               | ${mockedSingleSelectFormValues} | ${'HasTooltips set data in config correctly'}
     ${ItemConfigurationSettings.HasAlerts}                 | ${mockedSingleSelectFormValues} | ${'HasAlerts set data in config correctly'}
@@ -581,6 +586,7 @@ describe('ItemSettingsController', () => {
 
   test.each`
     settingKey                                             | item                            | expected | description
+    ${ItemConfigurationSettings.HasAutoAdvance}            | ${mockedSingleSelectFormValues} | ${true}  | ${'HasAutoAdvance has tooltip'}
     ${ItemConfigurationSettings.HasScores}                 | ${mockedSingleSelectFormValues} | ${false} | ${'HasScores has no tooltip'}
     ${ItemConfigurationSettings.HasTooltips}               | ${mockedSingleSelectFormValues} | ${false} | ${'HasTooltips has no tooltip'}
     ${ItemConfigurationSettings.HasAlerts}                 | ${mockedSingleSelectFormValues} | ${true}  | ${'HasAlerts has tooltip'}
@@ -686,4 +692,50 @@ describe('ItemSettingsController', () => {
       ref.current.getValues(`activities.0.items.0.config.${ItemConfigurationSettings.HasTimer}`),
     ).toEqual(expected);
   });
+
+  test.each`
+    settingKey                                             | item
+    ${ItemConfigurationSettings.IsResponseRequired}        | ${mockedTextFormValues}
+    ${ItemConfigurationSettings.IsTextInputRequired}       | ${mockedSingleSelectFormValues}
+    ${ItemConfigurationSettings.IsCorrectAnswerRequired}   | ${mockedTextFormValues}
+    ${ItemConfigurationSettings.IsNumericalRequired}       | ${mockedTextFormValues}
+    ${ItemConfigurationSettings.HasResponseDataIdentifier} | ${mockedTextFormValues}
+  `(
+    'set activity skippable to false if $settingKey input field is checked',
+    async ({ settingKey, item }) => {
+      const mockedSetValue = jest.fn();
+      jest
+        .spyOn(useCustomFormContextHook, 'useCustomFormContext')
+        .mockReturnValue({ setValue: mockedSetValue, getValues: jest.fn() });
+      jest
+        .spyOn(useCurrentActivityHook, 'useCurrentActivity')
+        .mockReturnValue({ fieldName: 'activities.0' });
+
+      renderWithAppletFormData({
+        children: (
+          <ItemSettingsController
+            itemName="activities.0.items.0"
+            inputType={item.responseType}
+            name="activities.0.items.0.config"
+          />
+        ),
+        appletFormData: getMockedAppletFormData(item),
+      });
+
+      expandAllPanels();
+
+      if (settingKey === ItemConfigurationSettings.IsTextInputRequired) {
+        const hasTextInputSetting = screen.getByTestId(
+          `builder-activity-items-item-settings-${ItemConfigurationSettings.HasTextInput}`,
+        );
+
+        await userEvent.click(hasTextInputSetting);
+      }
+      const setting = screen.getByTestId(`builder-activity-items-item-settings-${settingKey}`);
+
+      await userEvent.click(setting);
+
+      expect(mockedSetValue).nthCalledWith(1, 'activities.0.isSkippable', false);
+    },
+  );
 });

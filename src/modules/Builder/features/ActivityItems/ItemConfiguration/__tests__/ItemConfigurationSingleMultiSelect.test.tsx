@@ -5,7 +5,7 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import get from 'lodash.get';
 
 import { mockedMultiSelectFormValues, mockedSingleSelectFormValues } from 'shared/mock';
-import { CHANGE_DEBOUNCE_VALUE, ItemResponseType } from 'shared/consts';
+import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
 import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
 
 import {
@@ -74,6 +74,135 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       const addOption = screen.getByTestId('builder-activity-items-item-configuration-add-option');
       expect(addOption).toBeVisible();
       expect(addOption).toHaveTextContent('Add Option');
+    });
+  });
+
+  test('should not render Add None Option for Single Selection', () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.SingleSelection);
+
+    const addNoneOption = screen.queryByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    expect(addNoneOption).toBeNull();
+  });
+
+  test('should render Add None Option for Multi Selection', () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.MultipleSelection);
+
+    const addNoneOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    expect(addNoneOption).toBeVisible();
+    expect(addNoneOption).toHaveTextContent('Add “None“ Option');
+  });
+
+  test('should render only one None option for Multi Selection', async () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.MultipleSelection);
+
+    expect(
+      screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+    ).toHaveLength(1);
+    expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(1);
+
+    const addNoneOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    fireEvent.click(addNoneOption);
+
+    await waitFor(() => {
+      expect(addNoneOption).toBeDisabled();
+      expect(
+        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+      ).toHaveLength(2);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(2);
+      const secondOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-1-title',
+      );
+      expect(secondOption).toHaveTextContent('“None“ Option');
+    });
+
+    const removeNoneOptionButton = screen.getByTestId(
+      'builder-activity-items-item-configuration-options-1-remove',
+    );
+    fireEvent.click(removeNoneOptionButton);
+
+    await waitFor(() => {
+      expect(addNoneOption).toBeEnabled();
+    });
+  });
+
+  test('should keep the ordering for None option and the indexing for next Options for Multi Selection', async () => {
+    const ref = createRef();
+
+    renderWithAppletFormData({
+      children: renderItemConfiguration(),
+      appletFormData: getAppletFormDataWithItem(),
+      formRef: ref,
+    });
+
+    setItemResponseType(ItemResponseType.MultipleSelection);
+
+    expect(
+      screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+    ).toHaveLength(1);
+    expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(1);
+    const secondOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-options-0-title',
+    );
+    expect(secondOption).toHaveTextContent('Option 1');
+
+    const addNoneOption = screen.getByTestId(
+      'builder-activity-items-item-configuration-add-none-option',
+    );
+    fireEvent.click(addNoneOption);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+      ).toHaveLength(2);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(2);
+      const secondOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-1-title',
+      );
+      expect(secondOption).toHaveTextContent('“None“ Option');
+    });
+
+    const addOption = screen.getByTestId('builder-activity-items-item-configuration-add-option');
+    fireEvent.click(addOption);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId(/^builder-activity-items-item-configuration-options-\d+-option$/),
+      ).toHaveLength(3);
+      expect(ref.current.getValues(`${mockedItemName}.responseValues.options`)).toHaveLength(3);
+      const thirdOption = screen.getByTestId(
+        'builder-activity-items-item-configuration-options-2-title',
+      );
+      expect(thirdOption).toHaveTextContent('Option 2');
     });
   });
 
@@ -506,40 +635,46 @@ describe('ItemConfiguration: Single Selection & Multiple Selection', () => {
       expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toBeUndefined();
     });
 
-    test('Sets correct data when changed', async () => {
-      const ref = createRef();
+    test(
+      'Sets correct data when changed',
+      async () => {
+        const ref = createRef();
 
-      renderWithAppletFormData({
-        children: renderItemConfiguration(),
-        appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
-        formRef: ref,
-      });
+        renderWithAppletFormData({
+          children: renderItemConfiguration(),
+          appletFormData: getAppletFormDataWithItem(mockedMultiSelectFormValues),
+          formRef: ref,
+        });
 
-      await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
+        await setItemConfigSetting(ItemConfigurationSettings.HasAlerts);
 
-      const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
-      fireEvent.click(addAlert);
+        const addAlert = screen.getByTestId('builder-activity-items-item-configuration-add-alert');
+        fireEvent.click(addAlert);
 
-      const alertInput = screen.getByTestId(`${mockedAlertsTestid}-1-text`).querySelector('input');
-      fireEvent.change(alertInput, { target: { value: 'text' } });
+        const alertInput = screen
+          .getByTestId(`${mockedAlertsTestid}-1-text`)
+          .querySelector('input');
+        fireEvent.change(alertInput, { target: { value: 'text' } });
 
-      await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
+        await asyncTimeout(CHANGE_DEBOUNCE_VALUE);
 
-      const optionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
-      const optionsSelectButton = optionsSelect.querySelector('[role="button"]');
-      fireEvent.mouseDown(optionsSelectButton);
+        const optionsSelect = screen.getByTestId(`${mockedAlertsTestid}-1-selection-option`);
+        const optionsSelectButton = optionsSelect.querySelector('[role="button"]');
+        fireEvent.mouseDown(optionsSelectButton);
 
-      const option = screen
-        .getByTestId(`${mockedAlertsTestid}-1-selection-option-dropdown`)
-        .querySelector('li');
-      fireEvent.click(option);
+        const option = screen
+          .getByTestId(`${mockedAlertsTestid}-1-selection-option-dropdown`)
+          .querySelector('li');
+        fireEvent.click(option);
 
-      expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
-        alert: 'text',
-        value: mockedMultiSelectFormValues.responseValues.options[0].id,
-        key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
-      });
-    });
+        expect(ref.current.getValues(`${mockedItemName}.alerts.1`)).toStrictEqual({
+          alert: 'text',
+          value: mockedMultiSelectFormValues.responseValues.options[0].id,
+          key: ref.current.getValues(`${mockedItemName}.alerts.1.key`),
+        });
+      },
+      JEST_TEST_TIMEOUT,
+    );
 
     test('Options in list are filtered if already used', async () => {
       const ref = createRef();

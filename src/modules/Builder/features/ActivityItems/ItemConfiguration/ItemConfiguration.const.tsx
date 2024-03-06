@@ -5,7 +5,6 @@ import {
   DEFAULT_SLIDER_MAX_NUMBER,
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
 } from 'modules/Builder/consts';
 
 import { ItemsOptionGroup } from './ItemConfiguration.types';
@@ -31,7 +30,6 @@ export const DEFAULT_EMPTY_SLIDER = {
 export const DEFAULT_EMPTY_SLIDER_ROWS = {
   ...DEFAULT_EMPTY_SLIDER,
   maxValue: DEFAULT_SLIDER_MAX_VALUE,
-  minValue: DEFAULT_SLIDER_ROWS_MIN_NUMBER,
   scores: DEFAULT_SLIDER_ROWS_SCORE,
   label: '',
 };
@@ -55,7 +53,6 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Date,
         icon: itemsTypeIcons[ItemResponseType.Date],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.NumberSelection,
@@ -64,12 +61,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Time,
         icon: itemsTypeIcons[ItemResponseType.Time],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.TimeRange,
         icon: itemsTypeIcons[ItemResponseType.TimeRange],
-        isMobileOnly: true,
       },
     ],
   },
@@ -135,12 +130,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.Message,
         icon: itemsTypeIcons[ItemResponseType.Message],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.AudioPlayer,
         icon: itemsTypeIcons[ItemResponseType.AudioPlayer],
-        isMobileOnly: true,
       },
     ],
   },

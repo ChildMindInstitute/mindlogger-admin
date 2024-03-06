@@ -11,11 +11,14 @@ import {
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
   DecryptedStabilityTrackerAnswerObject,
+  DecryptedTextAnswer,
   DecryptedTimeAnswer,
   ExtendedEvent,
   isMediaAnswerData,
+  ResponseValueType,
   UserActionType,
 } from 'shared/types';
+import { NULL_ANSWER } from 'shared/consts';
 
 import {
   getABTrailsCsvName,
@@ -27,12 +30,18 @@ import {
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
+export const isNullAnswer = (obj: ResponseValueType) =>
+  obj === null || (typeof obj === 'object' && Object.keys(obj).length === 0);
+
+export const isTextAnswer = (answer: ResponseValueType): answer is DecryptedTextAnswer =>
+  typeof answer === 'string';
+
 export const parseResponseValue = <T extends DecryptedAnswerData>(
   item: T,
   index: number,
   isEvent = false,
 ) => {
-  let answer: AnswerDTO | undefined;
+  let answer: ResponseValueType;
   if (!isEvent) {
     answer = item.answer;
   }
@@ -42,30 +51,32 @@ export const parseResponseValue = <T extends DecryptedAnswerData>(
 
   const answerEdited = (answer as AdditionalEdited)?.edited;
   const editedWithLabel = answerEdited ? ` | edited: ${answerEdited}` : '';
+  const responseValue = parseResponseValueRaw(item, index, answer);
 
   if (answer && typeof answer === 'object' && (answer as AdditionalTextType).text?.length) {
-    return `${parseResponseValueRaw(item, index, answer)} | text: ${
+    return `${responseValue !== '' ? `${responseValue} | ` : ''}text: ${
       (answer as AdditionalTextType).text
     }${editedWithLabel}`;
   }
 
-  return `${parseResponseValueRaw(item, index, answer)}${editedWithLabel}`;
+  return `${responseValue}${editedWithLabel}`;
 };
 
 export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
   item: T,
   index: number,
-  answer?: AnswerDTO,
+  answer: ResponseValueType,
 ) => {
+  if (isTextAnswer(answer)) return answer;
+  if (isNullAnswer(answer)) return NULL_ANSWER;
+
   const { activityItem, id: answerId } = item;
   const inputType = activityItem.responseType;
   const key =
     answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
-
   const value = getAnswerValue(answer);
 
-  if (!key) return answer || '';
-
+  if (!key || key === 'text') return '';
   if (isMediaAnswerData(item)) {
     try {
       if (!item.answer?.value) return '';

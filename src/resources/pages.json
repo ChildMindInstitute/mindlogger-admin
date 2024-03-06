@@ -2,6 +2,7 @@
   "login": "/auth",
   "signUp": "/auth/signup",
   "passwordReset": "/auth/reset-password",
+  "passwordRecovery": "/auth/password-recovery",
   "lock": "/auth/lock",
   "dashboard": "/dashboard",
   "dashboardManagers": "/dashboard/managers",

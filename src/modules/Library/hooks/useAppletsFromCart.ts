@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useAppDispatch } from 'redux/store';
+import { useAppDispatch } from 'redux/store/hooks';
 import { auth, library } from 'redux/modules';
 import { getAppletsFromStorage } from 'modules/Library/utils';
 import { STORAGE_LIBRARY_KEY } from 'modules/Library/consts';

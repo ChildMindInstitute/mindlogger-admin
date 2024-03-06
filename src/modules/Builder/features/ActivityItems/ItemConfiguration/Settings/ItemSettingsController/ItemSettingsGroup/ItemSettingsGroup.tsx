@@ -59,6 +59,7 @@ export const ItemSettingsGroup = ({
 
   const subscalesName = `${fieldName}.subscaleSetting.subscales`;
   const config = getValues(`${itemName}.config`) ?? {};
+  const activitySkippableName = `${fieldName}.isSkippable`;
 
   const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const handleTimerChange = (event: SelectEvent) => {
@@ -102,6 +103,13 @@ export const ItemSettingsGroup = ({
                 settingKey === ItemConfigurationSettings.IsCorrectAnswerRequired;
               const isScores = settingKey === ItemConfigurationSettings.HasScores;
               const isAlerts = settingKey === ItemConfigurationSettings.HasAlerts;
+              const isColorPalette = settingKey === ItemConfigurationSettings.HasColorPalette;
+              const isNumericalRequired =
+                settingKey === ItemConfigurationSettings.IsNumericalRequired;
+              const hasResponseDataIdentifier =
+                settingKey === ItemConfigurationSettings.HasResponseDataIdentifier;
+              const isResponseRequired =
+                settingKey === ItemConfigurationSettings.IsResponseRequired;
 
               const hasTextInput = get(config, ItemConfigurationSettings.HasTextInput);
               const hasResponseRequired = checkIfItemHasRequiredOptions(config);
@@ -114,6 +122,18 @@ export const ItemSettingsGroup = ({
               const sxProps = isTextInputRequired ? { ml: theme.spacing(2.4) } : {};
 
               const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+                // set activity skippable to false if any of the below input fields are checked
+                if (
+                  isCorrectAnswerRequired ||
+                  isNumericalRequired ||
+                  hasResponseDataIdentifier ||
+                  isResponseRequired ||
+                  isTextInputRequired
+                ) {
+                  const checked = event.target.checked;
+                  checked && setValue(activitySkippableName, false);
+                }
+
                 if (isTimer)
                   return onChange({
                     ...config,
@@ -122,7 +142,7 @@ export const ItemSettingsGroup = ({
                       : DEFAULT_DISABLED_TIMER_VALUE,
                   });
 
-                if (settingKey === ItemConfigurationSettings.IsResponseRequired) {
+                if (isResponseRequired) {
                   return onChange({
                     ...config,
                     [settingKey]: event.target.checked,
@@ -154,6 +174,33 @@ export const ItemSettingsGroup = ({
                     [settingKey]: checked,
                     correctAnswer: checked ? '' : undefined,
                   });
+                }
+
+                if (isColorPalette) {
+                  const hasColorPalette = event.target.checked;
+
+                  onChange({
+                    ...config,
+                    [settingKey]: hasColorPalette,
+                  });
+
+                  if (
+                    inputType === ItemResponseType.SingleSelection ||
+                    inputType === ItemResponseType.MultipleSelection
+                  ) {
+                    if (hasColorPalette) return;
+
+                    setValue(
+                      `${itemName}.responseValues.options`,
+                      getValues(`${itemName}.responseValues.options`)?.map(
+                        (option: SingleAndMultiSelectOption) => ({
+                          ...option,
+                          color: undefined,
+                        }),
+                      ),
+                    );
+                    setValue(`${itemName}.responseValues.paletteName`, undefined);
+                  }
                 }
 
                 if (isScores) {

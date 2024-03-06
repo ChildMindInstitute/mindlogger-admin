@@ -12,6 +12,7 @@ export const enum SessionStorageKeys {
   RefreshToken = 'refreshToken',
   AccessToken = 'accessToken',
   Workspace = 'workspace',
+  DebugMode = 'debugMode',
 }
 
 export { secureLocalStorage as storage };

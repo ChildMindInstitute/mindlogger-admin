@@ -1,13 +1,13 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
 import { mockedApplet, mockedPassword } from 'shared/mock';
+import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { DeletePopup } from '.';
 
-const testId = 'dashboard-applets-delete';
+const dataTestid = 'dashboard-applets-delete';
 const preloadedState = {
   popups: {
     data: {
@@ -32,14 +32,14 @@ describe('DeletePopup', () => {
   });
 
   test('DeletePopup should open the password check modal initially', async () => {
-    renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />, {
+    renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={dataTestid} />, {
       preloadedState,
     });
 
-    expect(screen.getByTestId(`${testId}-enter-password-popup-password`)).toBeInTheDocument();
+    expect(screen.getByTestId(`${dataTestid}-enter-password-popup-password`)).toBeInTheDocument();
   });
 
-  test('DeletePopup should open success modal', async () => {
+  test('DeletePopup should show success banner', async () => {
     mockAxios.delete.mockResolvedValueOnce(null);
     jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockReturnValue(
       Promise.resolve({
@@ -47,16 +47,15 @@ describe('DeletePopup', () => {
       }),
     );
 
-    renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />, {
-      preloadedState,
-    });
+    const { store } = renderWithProviders(
+      <DeletePopup onCloseCallback={onCloseMock} data-testid={dataTestid} />,
+      { preloadedState },
+    );
 
     fireEvent.change(screen.getByLabelText(/Password/), {
       target: { value: mockedPassword },
     });
     fireEvent.click(screen.getByText('Delete'));
-    await waitFor(() =>
-      expect(screen.getByText('Applet has been deleted successfully.')).toBeInTheDocument(),
-    );
+    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 });

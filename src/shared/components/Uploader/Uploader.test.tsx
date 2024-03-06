@@ -1,25 +1,28 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { initReactI18next } from 'react-i18next';
-import { AxiosResponse } from 'axios';
 
-import i18n from 'i18n';
-import { postFileUploadApi } from 'api';
+import { renderWithProviders } from 'shared/utils';
 
 import * as CropPopupUtils from '../CropPopup/CropPopup.utils';
 
 import { Uploader, UploaderProps } from '.';
 
 jest.mock('api');
-i18n.use(initReactI18next).init({
-  lng: 'en',
-  resources: {},
-});
 
-const renderComponent = (props: UploaderProps) => render(<Uploader {...props} />);
+const mockImageUrl = 'https://example.com/test-image.png';
+
+jest.mock('shared/hooks/useMediaUpload/useMediaUpload', () => ({
+  useMediaUpload: ({ callback }: { callback: (url: string) => void }) => ({
+    executeMediaUpload: jest.fn().mockImplementation(() => {
+      callback(mockImageUrl);
+    }),
+    isLoading: false,
+  }),
+}));
+
+const renderComponent = (props: UploaderProps) => renderWithProviders(<Uploader {...props} />);
 const mockSetValue = jest.fn();
 const mockGetValue = jest.fn();
-const postFileUploadApiMock = postFileUploadApi as jest.MockedFunction<typeof postFileUploadApi>;
 const mockImageFile = new File(['(⌐□_□)'], 'test-image.png', { type: 'image/png' });
 const descriptionText = 'Upload an Image';
 const uploaderProps = {
@@ -33,7 +36,7 @@ const uploaderProps = {
 
 describe('Uploader component', () => {
   beforeAll(() => {
-    global.URL.createObjectURL = jest.fn((file: Blob) => `mocked-url://${file.name}`);
+    global.URL.createObjectURL = jest.fn(() => 'mocked-url://mocked-url');
   });
 
   afterAll(() => {
@@ -56,11 +59,7 @@ describe('Uploader component', () => {
     fireEvent.change(input, { target: { files: [mockImageFile] } });
 
     expect(await screen.findByText('test-image.png')).toBeInTheDocument();
-    expect(await screen.getByTestId('image-uploader-crop-popup')).toBeInTheDocument();
-
-    postFileUploadApiMock.mockResolvedValueOnce({
-      data: { result: { url: 'https://example.com/test-image.png' } },
-    } as AxiosResponse);
+    expect(screen.getByTestId('image-uploader-crop-popup')).toBeInTheDocument();
 
     const mockCropImage = jest.spyOn(CropPopupUtils, 'cropImage');
     mockCropImage.mockImplementation(({ onReady }) => {
@@ -70,12 +69,11 @@ describe('Uploader component', () => {
 
     await userEvent.click(screen.getByText(/save/i));
 
-    expect(postFileUploadApi).toHaveBeenCalledWith(expect.any(FormData));
-    expect(mockSetValue).toHaveBeenCalledWith('https://example.com/test-image.png');
+    expect(mockSetValue).toHaveBeenCalledWith(mockImageUrl);
   });
 
   test('handles image delete', async () => {
-    const getImageValueMock = jest.fn().mockReturnValue('https://example.com/uploaded-image.jpg');
+    const getImageValueMock = jest.fn().mockReturnValue(mockImageUrl);
     renderComponent({ ...uploaderProps, getValue: getImageValueMock });
 
     const uploaderContainer = screen.getByTestId('image-uploader');
@@ -90,10 +88,11 @@ describe('Uploader component', () => {
 
     expect(await screen.getByTestId('image-uploader-remove-popup')).toBeInTheDocument();
 
-    const modalRemoveButton = screen.getByText('remove');
+    const modalRemoveButton = screen.getByText('Remove');
     await userEvent.click(modalRemoveButton);
 
     expect(await mockSetValue).toHaveBeenCalledWith('');
+    expect(await screen.findByText('Image has been removed successfully.')).toBeInTheDocument();
   });
 
   test('handles image format error', async () => {
@@ -103,7 +102,7 @@ describe('Uploader component', () => {
     fireEvent.change(input, { target: { files: [mockImageIncorrectFormat] } });
 
     expect(screen.getByText(descriptionText)).toBeInTheDocument();
-    expect(await screen.getByText('incorrectImageFormat')).toBeInTheDocument();
+    expect(await screen.findByText('Image format must be JPEG or PNG.')).toBeInTheDocument();
   });
 
   test('handles image size error', async () => {
@@ -128,6 +127,6 @@ describe('Uploader component', () => {
     fireEvent.change(input, { target: { files: [mockImageIncorrectSize] } });
 
     expect(screen.getByText(descriptionText)).toBeInTheDocument();
-    expect(await screen.getByText(/Image is more than/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Image is more than/i)).toBeInTheDocument();
   });
 });

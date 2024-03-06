@@ -37,11 +37,11 @@ export const library = {
         },
       }) => data,
     ),
-  useIsCartBtnDisabled: (): LibrarySchema['isCartBtnDisabled']['data'] =>
+  useIsAddToBuilderBtnDisabled: (): LibrarySchema['isAddToBuilderBtnDisabled']['data'] =>
     useAppSelector(
       ({
         library: {
-          isCartBtnDisabled: { data },
+          isAddToBuilderBtnDisabled: { data },
         },
       }) => data,
     ),

@@ -66,6 +66,7 @@ export enum DateFormats {
   Time = 'HH:mm',
   TimeSeconds = 'HH:mm:ss',
   YearMonthDayHoursMinutesSeconds = 'yyyy-MM-dd HH:mm:ss',
+  //prettier-ignore
   shortISO = 'yyyy-MM-dd\'T\'HH:mm:ss',
   YearMonthDay = 'yyyy-MM-dd',
   MonthDayTime = 'MMM dd, HH:mm',
@@ -319,11 +320,17 @@ export const enum ScoreReportType {
 export const URL_REGEX = /(https?:\/\/)?(www\.)?/g;
 
 export const AUTH_BOX_WIDTH = '39.2rem';
-
 export const enum AnalyticsCalendarPrefix {
   IndividualCalendar = 'IC',
   GeneralCalendar = 'GC',
 }
+
+export const DEFAULT_API_START_TIME = '00:00:00';
+export const DEFAULT_API_END_TIME = '23:59:00';
+
+export const JEST_TEST_TIMEOUT = 10000;
+
+export const NULL_ANSWER = 'value: null';
 
 export const enum Integrations {
   Loris = 'loris',

@@ -10,6 +10,8 @@ import { libraryRoutes } from 'modules/Library/routes';
 import { authRoutes } from 'modules/Auth/routes';
 import { auth } from 'redux/modules';
 import { AppletNotFoundPopup } from 'shared/components';
+import { NoPermissionPopup } from 'shared/components/NoPermissionPopup';
+import { useSessionBanners } from 'shared/hooks/useSessionBanners';
 
 import history from './history';
 
@@ -29,6 +31,8 @@ export const AppRoutes = () => {
       dispatch(auth.thunk.getUserDetails());
     }
   }, [isAuthorized, token, dispatch]);
+
+  useSessionBanners();
 
   return (
     <>
@@ -50,6 +54,7 @@ export const AppRoutes = () => {
           </Routes>
         )}
         <AppletNotFoundPopup />
+        <NoPermissionPopup />
       </Router>
     </>
   );

@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ValidationError } from 'yup';
 import { Update } from 'history';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from 'redux/store';
 import {
@@ -35,6 +36,8 @@ import {
   FlowReportFieldsPrepareType,
   getEntityReportFields,
 } from 'modules/Builder/utils/getEntityReportFields';
+import { banners } from 'shared/state/Banners';
+import { ErrorResponseType } from 'shared/types';
 
 import {
   getActivityItems,
@@ -46,6 +49,7 @@ import {
   removeActivityFlowItemExtraFields,
   removeAppletExtraFields,
 } from './SaveAndPublish.utils';
+import { SaveAndPublishSetup } from './SaveAndPublish.types';
 
 export const useAppletDataFromForm = () => {
   const { getValues } = useCustomFormContext() || {};
@@ -255,11 +259,8 @@ export const useUpdatedAppletNavigate = () => {
   };
 };
 
-export const useSaveAndPublishSetup = (
-  hasPrompt: boolean,
-  setIsFromLibrary?: Dispatch<SetStateAction<boolean>>,
-  setAppletWithoutChangesPopupVisible?: (val: boolean) => void,
-) => {
+export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
+  const { t } = useTranslation('app');
   const {
     trigger,
     formState: { dirtyFields, isDirty },
@@ -279,14 +280,19 @@ export const useSaveAndPublishSetup = (
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
   const [publishProcessStep, setPublishProcessStep] = useState<SaveAndPublishSteps>();
   const responseStatus = applet.useResponseStatus();
+  const responseError = applet.useResponseError() ?? [];
   const responseTypePrefix = applet.useResponseTypePrefix();
+  const isResponseStatusError = responseStatus === 'error';
+  const hasAccessDeniedError =
+    Array.isArray(responseError) &&
+    responseError.some((error) => error.type === ErrorResponseType.AccessDenied);
   const {
     cancelNavigation: onCancelNavigation,
     confirmNavigation,
     promptVisible,
     setPromptVisible,
     isLogoutInProgress,
-  } = usePrompt(hasPrompt);
+  } = usePrompt(isDirty && !hasAccessDeniedError);
   const shouldNavigateRef = useRef(false);
   const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
@@ -309,9 +315,12 @@ export const useSaveAndPublishSetup = (
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
       setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
     }
-    responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
-    responseStatus === 'success' && setPublishProcessStep(SaveAndPublishSteps.Success);
-  }, [responseStatus, responseTypePrefix]);
+    if (isResponseStatusError) {
+      if (hasAccessDeniedError) return;
+
+      setPublishProcessStep(SaveAndPublishSteps.Failed);
+    }
+  }, [responseStatus, responseTypePrefix, isResponseStatusError, hasAccessDeniedError]);
 
   const handleSaveChangesDoNotSaveSubmit = async () => {
     setPromptVisible(false);
@@ -404,7 +413,7 @@ export const useSaveAndPublishSetup = (
     }
 
     if (!isDirty) {
-      setAppletWithoutChangesPopupVisible?.(true);
+      dispatch(banners.actions.addBanner({ key: 'AppletWithoutChangesBanner' }));
 
       return;
     }
@@ -414,6 +423,30 @@ export const useSaveAndPublishSetup = (
 
   const handleAppletPasswordSubmit = async (password?: string) => {
     await sendRequest(password);
+  };
+
+  const showSuccessBanner = (isUpdate?: boolean) => {
+    // If there is any visible banner warning the user they haven't made changes,
+    // remove it before showing the success banner.
+    dispatch(
+      banners.actions.removeBanner({
+        key: 'AppletWithoutChangesBanner',
+      }),
+    );
+
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: {
+          children: t(isUpdate ? 'appletUpdated' : 'appletSavedAndPublished', {
+            name: getAppletData()?.displayName,
+          }),
+          'data-testid': 'dashboard-applets-save-success-banner',
+        },
+      }),
+    );
+
+    handlePublishProcessOnClose();
   };
 
   const sendRequest = async (password?: string) => {
@@ -453,7 +486,8 @@ export const useSaveAndPublishSetup = (
     if (updateApplet.fulfilled.match(result)) {
       Mixpanel.track('Applet edit successful');
 
-      setIsFromLibrary?.(false);
+      showSuccessBanner(true);
+
       if (shouldNavigateRef.current) {
         confirmNavigation();
 
@@ -468,8 +502,9 @@ export const useSaveAndPublishSetup = (
     if (createApplet.fulfilled.match(result)) {
       Mixpanel.track('Applet Created Successfully');
 
+      showSuccessBanner();
+
       const createdAppletId = result.payload.data.result?.id;
-      setIsFromLibrary?.(false);
 
       if (encryptionData && password && createdAppletId) {
         await setAppletPrivateKey({

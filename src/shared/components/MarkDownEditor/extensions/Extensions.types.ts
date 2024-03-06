@@ -11,8 +11,8 @@ export type InsertContentExtensionProps = {
 
 type MediaProps = {
   fileSizeExceeded: number;
-  setFileSizeExceeded: Dispatch<SetStateAction<number | null>>;
-  setIncorrectFormat: Dispatch<SetStateAction<MediaType | null>>;
+  setFileSizeExceeded: (size: number | null) => void;
+  setIncorrectFormat: (fileType: MediaType | null) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 };
 

@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { expectBanner, SettingParam, renderWithProviders } from 'shared/utils';
 import { page } from 'resources';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedEmail } from 'shared/mock';
 import { initialStateData } from 'shared/state';
@@ -43,12 +43,16 @@ describe('TransferOwnershipSetting', () => {
     `('$description', async ({ route, routePath }) => {
       mockAxios.post.mockResolvedValue(null);
       const dataTestid = 'applet-settings-transfer-ownership';
-      renderWithProviders(<TransferOwnershipSetting />, { preloadedState, route, routePath });
+      const { store } = renderWithProviders(<TransferOwnershipSetting />, {
+        preloadedState,
+        route,
+        routePath,
+      });
 
       expect(screen.getByTestId(`${dataTestid}-form`)).toBeVisible();
       expect(screen.getByTestId(`${dataTestid}-confirm`)).toBeVisible();
 
-      userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
+      await userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
 
       await waitFor(() => {
         expect(mockAxios.post).nthCalledWith(
@@ -59,16 +63,9 @@ describe('TransferOwnershipSetting', () => {
         );
       });
 
-      userEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
+      await userEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
 
-      const successPopup = await screen.findByTestId(`${dataTestid}-success-popup`);
-      expect(successPopup).toBeVisible();
-
-      userEvent.click(screen.getByText('Ok'));
-
-      await waitFor(() => {
-        expect(screen.queryByTestId(`${dataTestid}-success-popup`)).not.toBeInTheDocument();
-      });
+      expectBanner(store, 'TransferOwnershipSuccessBanner');
     });
   });
 });

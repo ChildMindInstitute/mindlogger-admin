@@ -35,7 +35,7 @@ export const Cart = () => {
   const isAuthorized = auth.useAuthorized();
   const { result: cartItems } = library.useCartApplets() || {};
   const loadingStatus = library.useCartAppletsStatus();
-  const isAddBtnDisabled = library.useIsCartBtnDisabled() || !cartItems?.length;
+  const isAddToBuilderBtnDisabled = library.useIsAddToBuilderBtnDisabled() || !cartItems?.length;
   const [searchValue, setSearchValue] = useState('');
   const [addToBuilderPopupVisible, setAddToBuilderPopupVisible] = useState(false);
   const [authPopupVisible, setAuthPopupVisible] = useState(false);
@@ -70,6 +70,7 @@ export const Cart = () => {
     setSearchValue(searchText);
     setPageIndex(DEFAULT_PAGE);
   };
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPageIndex(newPage + 1);
   };
@@ -99,6 +100,7 @@ export const Cart = () => {
 
       return renderedApplets;
     }, []) || [];
+
   const pagedApplets = filteredApplets.slice(
     (pageIndex - 1) * DEFAULT_APPLETS_PER_PAGE,
     pageIndex * DEFAULT_APPLETS_PER_PAGE,
@@ -110,7 +112,7 @@ export const Cart = () => {
     ) : (
       <EmptyState icon="empty-cart">
         <>
-          {t('emptyCart')}{' '}
+          {t('emptyCart')}
           <StyledLink to={page.library} data-testid="library-cart-go-to-library">
             {t('appletsCatalog')}
           </StyledLink>
@@ -130,7 +132,7 @@ export const Cart = () => {
           isBackButtonVisible
           rightButtonType={RightButtonType.Builder}
           rightButtonCallback={handleAddToBuilder}
-          isRightButtonDisabled={isAddBtnDisabled}
+          isRightButtonDisabled={isAddToBuilderBtnDisabled}
         />
         <ContentContainer>
           <StyledHeadlineLarge sx={{ marginBottom: theme.spacing(3.6) }}>
@@ -166,11 +168,7 @@ export const Cart = () => {
         </ContentContainer>
       </StyledBody>
       {authPopupVisible && (
-        <AuthPopup
-          authPopupVisible={authPopupVisible}
-          setAuthPopupVisible={setAuthPopupVisible}
-          data-testid={`${dataTestid}-auth-popup`}
-        />
+        <AuthPopup authPopupVisible={authPopupVisible} setAuthPopupVisible={setAuthPopupVisible} />
       )}
       {addToBuilderPopupVisible && (
         <AddToBuilderPopup

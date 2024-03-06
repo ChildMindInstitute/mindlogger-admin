@@ -2,6 +2,9 @@
   "name": "mindlogger-admin",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -71,6 +74,7 @@
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "react-secure-storage": "^1.3.0",
+    "react-transition-group": "^4.4.5",
     "stream-browserify": "^3.0.0",
     "typescript": "^4.9.5",
     "uuid": "^9.0.1",
@@ -81,6 +85,8 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build --project tsconfig.build.json",
+    "lint:check": "npx eslint src",
+    "lint:fix": "npx eslint src --fix",
     "test": "react-app-rewired test",
     "test:coverage": "npm run test -- --coverage --watchAll=false --colors",
     "test:junit": "npm run test -- --watchAll=false --reporters=default --reporters=jest-junit",
@@ -88,12 +94,6 @@
     "test:nowatch": "cross-env CI=true npm run test -- --colors --watchAll=false --passWithNoTests",
     "eject": "react-app-rewired eject",
     "prepare": "husky install"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "jest": {
     "globalSetup": "./global-setup.js",
@@ -138,8 +138,11 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "husky": "^8.0.3",
     "jest-junit": "^16.0.0",
     "jest-mock-axios": "^4.7.3",

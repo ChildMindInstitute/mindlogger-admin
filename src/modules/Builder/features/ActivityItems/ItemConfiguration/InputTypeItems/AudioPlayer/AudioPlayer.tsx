@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { MediaType } from 'modules/Builder/components/MediaUploader';
 import { ToggleItemContainer } from 'modules/Builder/components/ToggleItemContainer';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { getMediaName } from 'shared/utils/getMediaName';
 
 import { AudioPlayerProps } from './AudioPlayer.types';
-import { getNameByUrl } from './AudioPlayer.utils';
 import { AudioPlayerContent } from './AudioPlayerContent';
 import { AudioPlayerHeader } from './AudioPlayerHeader';
 
@@ -17,14 +17,14 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
   const urlName = `${name}.responseValues.file`;
   const url = watch(urlName);
   const [media, setMedia] = useState<MediaType | null>(
-    url ? { url, name: getNameByUrl(url) } : null,
+    url ? { url, name: getMediaName(url) } : null,
   );
 
   useEffect(() => {
     if (!url) return;
 
     trigger(urlName);
-    setMedia({ ...media, name: getNameByUrl(url) });
+    setMedia({ ...media, name: getMediaName(url) });
   }, [url]);
 
   return (
@@ -35,6 +35,7 @@ export const AudioPlayer = ({ name }: AudioPlayerProps) => {
         Content={AudioPlayerContent}
         headerContentProps={{ media }}
         contentProps={{ media, setMedia, name }}
+        data-testid="builder-activity-items-item-configuration-audio-player"
       />
     </>
   );

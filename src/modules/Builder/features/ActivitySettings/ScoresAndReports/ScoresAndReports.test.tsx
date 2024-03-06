@@ -110,7 +110,7 @@ describe('ScoreAndReports', () => {
     expect(screen.getByTestId(`${dataTestid}-section-1`)).toBeInTheDocument();
   });
 
-  test('should show server status \'connected\'', () => {
+  test("should show server status 'connected'", () => {
     renderWithAppletFormData({
       children: <ScoresAndReports />,
       appletFormData: mockedAppletFormData,

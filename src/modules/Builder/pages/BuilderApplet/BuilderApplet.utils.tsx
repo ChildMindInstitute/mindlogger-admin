@@ -83,7 +83,6 @@ import {
   DEFAULT_MIN_NUMBER,
   DEFAULT_SLIDER_MAX_NUMBER,
   DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
 } from 'modules/Builder/consts';
 
 import {
@@ -133,30 +132,44 @@ const getDuplicatedOptionsAndAlerts = (item?: ItemFormValues) => {
   };
 };
 
-export const getNewActivityItem = (item?: ItemFormValues) =>
+const getNewItemDefaultProps = () => ({
+  responseType: '',
+  name: t('newItem'),
+  question: '',
+  config: {} as Config,
+  isHidden: false,
+  allowEdit: true,
+});
+const getNewPropsForSingleAndMultiSelection = (item?: ItemFormValues) => ({
+  ...((item?.responseType === ItemResponseType.SingleSelection ||
+    item?.responseType === ItemResponseType.MultipleSelection) &&
+    getDuplicatedOptionsAndAlerts(item)),
+});
+const getNewPropsForSlider = (item?: ItemFormValues) => ({
+  ...(item?.responseType === ItemResponseType.Slider && {
+    responseValues: {
+      ...item.responseValues,
+      id: uuidv4(),
+    },
+    alerts: item?.alerts?.map((alert) => ({
+      ...alert,
+      key: uuidv4(),
+    })),
+  }),
+});
+export const getUniqueItem = (item?: ItemFormValues) =>
   ({
-    responseType: '',
-    name: t('newItem'),
-    question: '',
-    config: {} as Config,
-    isHidden: false,
-    allowEdit: true,
     ...item,
     id: undefined,
     key: uuidv4(),
-    ...((item?.responseType === ItemResponseType.SingleSelection ||
-      item?.responseType === ItemResponseType.MultipleSelection) &&
-      getDuplicatedOptionsAndAlerts(item)),
-    ...(item?.responseType === ItemResponseType.Slider && {
-      responseValues: {
-        ...item.responseValues,
-        id: uuidv4(),
-      },
-      alerts: item?.alerts?.map((alert) => ({
-        ...alert,
-        key: uuidv4(),
-      })),
-    }),
+    ...getNewPropsForSingleAndMultiSelection(item),
+    ...getNewPropsForSlider(item),
+  }) as ItemFormValues;
+
+export const getNewActivityItem = (item?: ItemFormValues) =>
+  ({
+    ...getNewItemDefaultProps(),
+    ...getUniqueItem(item),
   }) as ItemFormValues;
 
 export const getDuplicatedConditions = (
@@ -599,6 +612,8 @@ export const getNewApplet = () => ({
   activities: [],
   activityFlows: [],
   reportEmailBody: t('reportEmailBody'),
+  streamIpAddress: null,
+  streamPort: null,
 });
 
 export const getNewActivityFlow = () => ({
@@ -727,6 +742,7 @@ const getActivityItems = (items: Item[]) =>
     : [];
 
 const getActivityFlows = (activityFlows: ActivityFlow[], activities: Activity[]) =>
+  // eslint-disable-next-line unused-imports/no-unused-vars
   activityFlows.map(({ order, ...activityFlow }) => ({
     ...activityFlow,
     description: getDictionaryText(activityFlow.description),
@@ -772,6 +788,7 @@ const getActivityConditionalLogic = (items: Item[]) =>
             return {
               key: uuidv4(),
               type: condition.type,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
               itemName: getEntityKey(relatedItem ?? {}),
             };
@@ -789,7 +806,8 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?
     const payload =
       type === ScoreConditionType
         ? { value: String((condition as ScoreCondition).payload?.value) }
-        : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
+        : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
 
     return {
       ...condition,
@@ -806,7 +824,8 @@ const getSectionConditions = ({ items, conditions, scores }: GetSectionCondition
     const payload =
       type === ScoreConditionType
         ? { value: String((condition as ScoreCondition).payload?.value) }
-        : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
+        : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
 
     return {
       ...condition,
@@ -1042,7 +1061,7 @@ export const testIsReportCommonFieldsRequired = (
   context: unknown,
 ) => {
   if (isScoreReport) {
-    const conditionalLogicLength = get(context, 'from.0.value.conditionalLogic')?.length;
+    const conditionalLogicLength = (get(context, 'from.0.value.conditionalLogic') ?? [])?.length;
 
     return !!conditionalLogicLength || printItemsValue;
   }
@@ -1080,7 +1099,7 @@ export const testFunctionForTheSameVariable = (
 };
 
 export const testFunctionForNotSupportedItems = (value: string, context: yup.TestContext) => {
-  const items: Item[] = get(context, 'from.1.value.items');
+  const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
   const itemsFromVariables = items.filter((item) => variableNames.includes(item.name));
 
@@ -1088,14 +1107,14 @@ export const testFunctionForNotSupportedItems = (value: string, context: yup.Tes
 };
 
 export const testFunctionForSkippedItems = (value: string, context: yup.TestContext) => {
-  const items: Item[] = get(context, 'from.1.value.items');
+  const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
 
   return !items.some((item) => variableNames.includes(item.name) && item.config.skippableItem);
 };
 
 export const testFunctionForNotExistedItems = (value: string, context: yup.TestContext) => {
-  const items: Item[] = get(context, 'from.1.value.items');
+  const items: Item[] = get(context, 'from.1.value.items') ?? [];
   const variableNames = getTextBetweenBrackets(value);
 
   if (!variableNames.length) return true;
@@ -1154,7 +1173,6 @@ export const isNumberAtLeastOne = (value?: unknown) =>
 
 export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') => {
   const isSlider = type === 'slider';
-  const minNumber = isSlider ? DEFAULT_SLIDER_MIN_NUMBER : DEFAULT_SLIDER_ROWS_MIN_NUMBER;
 
   return {
     minValue: yup
@@ -1164,7 +1182,11 @@ export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') =>
         if (!value && value !== 0) return;
         const { maxValue } = this.parent;
 
-        return value < maxValue && value >= minNumber && value < DEFAULT_SLIDER_MAX_NUMBER;
+        return (
+          value < maxValue &&
+          (value as number) >= DEFAULT_SLIDER_MIN_NUMBER &&
+          (value as number) < DEFAULT_SLIDER_MAX_NUMBER
+        );
       }),
     maxValue: yup
       .mixed()
@@ -1173,7 +1195,11 @@ export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') =>
         if (!value && value !== 0) return;
         const { minValue } = this.parent;
 
-        return value > minValue && value > minNumber && value <= DEFAULT_SLIDER_MAX_NUMBER;
+        return (
+          value > minValue &&
+          (value as number) > DEFAULT_SLIDER_MIN_NUMBER &&
+          (value as number) <= DEFAULT_SLIDER_MAX_NUMBER
+        );
       }),
     ...(isSlider && {
       scores: yup

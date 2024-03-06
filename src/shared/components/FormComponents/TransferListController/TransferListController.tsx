@@ -27,8 +27,9 @@ export const TransferListController = <T extends FieldValues>({
   hasSearch = true,
   hasSelectedSection = true,
   tableHeadBackground,
-  'data-testid': dataTestid,
   tooltipByDefault,
+  onChangeSelectedCallback,
+  'data-testid': dataTestid,
 }: TransferListControllerProps<T>) => {
   const { t } = useTranslation('app');
 
@@ -47,14 +48,17 @@ export const TransferListController = <T extends FieldValues>({
           selectedItems ?? items?.filter((item) => value?.includes(getItemKey(item)));
 
         const handleSelect: DataTableProps['onSelect'] = (selectedKey, isSelected) => {
-          if (isSelected)
-            return onChange(value?.filter((key: string | number) => key !== selectedKey));
-
-          onChange([...(value || []), selectedKey]);
+          const newValues = isSelected
+            ? value?.filter((key: string | number) => key !== selectedKey)
+            : [...(value || []), selectedKey];
+          onChange(newValues);
+          onChangeSelectedCallback?.(newValues);
         };
 
         const handleSelectAll = (isAllSelected: boolean) => {
-          onChange(isAllSelected ? [] : items?.map((item) => getItemKey(item)));
+          const newValues = isAllSelected ? [] : items?.map((item) => getItemKey(item)) || [];
+          onChange(newValues);
+          onChangeSelectedCallback?.(newValues);
         };
 
         const isSearchable = hasSearch && search && searchKey;

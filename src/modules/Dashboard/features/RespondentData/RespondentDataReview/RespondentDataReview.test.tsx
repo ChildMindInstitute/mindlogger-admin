@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Suspense } from 'react';
-import { waitFor, screen } from '@testing-library/react';
+import { waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
@@ -26,6 +25,7 @@ const date = new Date('2023-12-27');
 const dataTestid = 'respondents-review';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review?selectedDate=2023-12-27`;
+const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review`;
 const routePath = page.appletRespondentDataReview;
 const preloadedState = {
   workspaces: {
@@ -63,6 +63,7 @@ const preloadedState = {
         result: {
           nickname: 'Mocked Respondent',
           secretUserId: mockedRespondentId,
+          lastSeen: '2023-12-11T08:40:41.424000',
         },
       },
     },
@@ -240,16 +241,11 @@ describe('RespondentDataReview', () => {
 
       dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
-      renderWithProviders(
-        <Suspense fallback={<></>}>
-          <RespondentDataReview />
-        </Suspense>,
-        {
-          preloadedState,
-          route,
-          routePath,
-        },
-      );
+      renderWithProviders(<RespondentDataReview />, {
+        preloadedState,
+        route,
+        routePath,
+      });
 
       window.HTMLElement.prototype.scrollTo = () => {};
 
@@ -299,7 +295,7 @@ describe('RespondentDataReview', () => {
       expect(activityLength).toHaveLength(1);
 
       const activity = screen.getByTestId(`${dataTestid}-menu-activity-0-select`);
-      userEvent.click(activity);
+      await userEvent.click(activity);
 
       // check that there are no timestamps in the selected activity
       const timestampLength = screen.queryAllByTestId(
@@ -315,7 +311,9 @@ describe('RespondentDataReview', () => {
       expect(input).toBeInTheDocument();
       expect(input.value).toEqual('27 Dec 2023');
 
-      userEvent.click(inputContainer);
+      await act(async () => {
+        await userEvent.click(inputContainer);
+      });
 
       const datepicker = (await screen.findByTestId(
         `${dataTestid}-menu-review-date-popover`,
@@ -330,7 +328,11 @@ describe('RespondentDataReview', () => {
       );
       expect(datepickerDaySelected).toHaveLength(1);
 
-      userEvent.click(datepickerDaySelected[0]);
+      await userEvent.click(datepickerDaySelected[0]);
+      const okButton = screen.getByText('Ok');
+      expect(okButton).toBeInTheDocument();
+
+      await userEvent.click(okButton);
 
       await waitFor(() => {
         expect(input.value).toEqual('15 Dec 2023');
@@ -356,7 +358,7 @@ describe('RespondentDataReview', () => {
       const timestamp0 = screen.getByTestId(`${dataTestid}-menu-activity-0-completion-time-0`);
       expect(timestamp0).toBeInTheDocument();
 
-      userEvent.click(timestamp0);
+      await userEvent.click(timestamp0);
 
       await waitFor(() => {
         expect(mockAxios.get).toHaveBeenNthCalledWith(
@@ -405,4 +407,19 @@ describe('RespondentDataReview', () => {
     },
     JEST_TEST_TIMEOUT,
   );
+
+  test('test if default review date is equal to last activity completed date', async () => {
+    renderWithProviders(<RespondentDataReview />, {
+      preloadedState,
+      route: routeWithoutSelectedDate,
+      routePath,
+    });
+
+    const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
+    expect(inputContainer).toBeInTheDocument();
+
+    const input = inputContainer.querySelector('input') as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input.value).toEqual('11 Dec 2023');
+  });
 });

@@ -6,13 +6,13 @@ import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { ApiErrorResponse } from 'shared/state/Base';
 import {
-  signInApi,
-  SignIn,
   getUserDetailsApi,
+  ResetPassword,
+  resetPasswordApi,
+  SignIn,
+  signInApi,
   signUpApi,
   SignUpArgs,
-  resetPasswordApi,
-  ResetPassword,
 } from 'api';
 
 export const signIn = createAsyncThunk(

@@ -9,8 +9,9 @@ import {
   postReportConfigApi,
   postActivityReportConfigApi,
   postActivityFlowReportConfigApi,
+  ApiResponseCodes,
 } from 'api';
-import { applet } from 'redux/modules';
+import { applet, banners } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { SaveChangesPopup, Svg } from 'shared/components';
 import {
@@ -60,7 +61,7 @@ import {
   StyledActivities,
 } from './ReportConfigSetting.styles';
 import { ReportConfigFormValues, ReportConfigSettingProps } from './ReportConfigSetting.types';
-import { ErrorPopup, ServerVerifyErrorPopup, SuccessPopup, WarningPopup } from './Popups';
+import { ErrorPopup, ServerVerifyErrorPopup, WarningPopup } from './Popups';
 import {
   getActivitiesOptions,
   getActivityItemsOptions,
@@ -92,7 +93,7 @@ export const ReportConfigSetting = ({
 
   const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-  const [successPopupVisible, setSuccessPopupVisible] = useState(false);
+  const [noPermissionVisible, setNoPermissionVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
@@ -101,30 +102,51 @@ export const ReportConfigSetting = ({
   const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
   const { accountId = '' } = encryptionInfoFromServer ?? {};
 
-  const { execute: postReportConfig } = useAsync(
-    postReportConfigApi,
-    () => {
-      setSuccessPopupVisible(true);
-    },
-    () => {
-      setErrorPopupVisible(true);
-    },
-  );
+  const handleSuccess = () => {
+    if (!onSubmitSuccess) return;
+
+    onSubmitSuccess(getValues());
+
+    dispatch(
+      banners.actions.addBanner({
+        key: 'SaveSuccessBanner',
+        bannerProps: { onClose: confirmNavigation },
+      }),
+    );
+  };
+
+  const { execute: postReportConfig } = useAsync(postReportConfigApi, handleSuccess, (error) => {
+    if (error?.response?.status === ApiResponseCodes.Forbidden) {
+      setNoPermissionVisible(true);
+
+      return;
+    }
+
+    setErrorPopupVisible(true);
+  });
   const { execute: postActivityReportConfig } = useAsync(
     postActivityReportConfigApi,
-    () => {
-      setSuccessPopupVisible(true);
-    },
-    () => {
+    handleSuccess,
+    (error) => {
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermissionVisible(true);
+
+        return;
+      }
+
       setErrorPopupVisible(true);
     },
   );
   const { execute: postActivityFlowReportConfig } = useAsync(
     postActivityFlowReportConfigApi,
-    () => {
-      setSuccessPopupVisible(true);
-    },
-    () => {
+    handleSuccess,
+    (error) => {
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermissionVisible(true);
+
+        return;
+      }
+
       setErrorPopupVisible(true);
     },
   );
@@ -148,7 +170,9 @@ export const ReportConfigSetting = ({
     mode: 'onSubmit',
   });
   const hasErrors = !!Object.keys(errors).length;
-  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
+  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(
+    isDirty && !isSubmitted && !noPermissionVisible,
+  );
 
   const reportRecipients = watch('reportRecipients') || [];
   const includeRespondentId = watch('reportIncludeUserId');
@@ -332,11 +356,6 @@ export const ReportConfigSetting = ({
     handleSubmit(onSubmit)();
   };
 
-  const handleSuccessPopupClose = () => {
-    setSuccessPopupVisible(false);
-    confirmNavigation();
-  };
-
   const handleCancel = () => {
     cancelNavigation();
   };
@@ -380,12 +399,6 @@ export const ReportConfigSetting = ({
     setValue('reportIncludedItemName', '');
     isActivityFlow && setValue('reportIncludedActivityName', '');
   };
-
-  useEffect(() => {
-    if (!successPopupVisible || !onSubmitSuccess) return;
-
-    onSubmitSuccess(getValues());
-  }, [successPopupVisible]);
 
   useEffect(() => {
     reset(defaultValues);
@@ -618,9 +631,6 @@ export const ReportConfigSetting = ({
           setPopupVisible={setErrorPopupVisible}
           retryCallback={handleSaveWithoutServer}
         />
-      )}
-      {successPopupVisible && (
-        <SuccessPopup popupVisible={successPopupVisible} onClose={handleSuccessPopupClose} />
       )}
       {promptVisible && (
         <SaveChangesPopup

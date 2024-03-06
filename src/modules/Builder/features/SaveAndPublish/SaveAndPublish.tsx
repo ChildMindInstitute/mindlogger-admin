@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
 import { SaveAndPublishProcessPopup } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup';
-import { AppletWithoutChangesPopup } from 'modules/Builder/components/Popups/AppletWithoutChangesPopup';
 import { SaveChangesPopup } from 'modules/Builder/components';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import {
@@ -15,12 +13,9 @@ import {
 
 import { StyledButton } from './SaveAndPublish.styles';
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';
-import { SaveAndPublishProps } from './SaveAndPublish.types';
 
-export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishProps) => {
+export const SaveAndPublish = () => {
   const { t } = useTranslation('app');
-
-  const [appletWithoutChangesPopupVisible, setAppletWithoutChangesPopupVisible] = useState(false);
 
   const {
     isPasswordPopupOpened,
@@ -36,7 +31,7 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
     handleSaveChangesDoNotSaveSubmit,
     handleSaveChangesSaveSubmit,
     cancelNavigation,
-  } = useSaveAndPublishSetup(hasPrompt, setIsFromLibrary, setAppletWithoutChangesPopupVisible);
+  } = useSaveAndPublishSetup();
   const { appletId } = useParams();
 
   const handlePasswordSubmit = (ref?: AppletPasswordRefType) => {
@@ -56,10 +51,6 @@ export const SaveAndPublish = ({ hasPrompt, setIsFromLibrary }: SaveAndPublishPr
       >
         {t('saveAndPublish')}
       </StyledButton>
-      <AppletWithoutChangesPopup
-        isPopupVisible={appletWithoutChangesPopupVisible}
-        onClose={() => setAppletWithoutChangesPopupVisible(false)}
-      />
       <AppletPasswordPopup
         appletId={appletId ?? ''}
         onClose={() => setIsPasswordPopupOpened(false)}

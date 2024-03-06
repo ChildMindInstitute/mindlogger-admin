@@ -46,5 +46,5 @@ export type CartApplets = {
 export type LibrarySchema = {
   publishedApplets: BaseSchema<PublishedApplets>;
   cartApplets: BaseSchema<CartApplets>;
-  isCartBtnDisabled: BaseSchema<boolean>;
+  isAddToBuilderBtnDisabled: BaseSchema<boolean>;
 };

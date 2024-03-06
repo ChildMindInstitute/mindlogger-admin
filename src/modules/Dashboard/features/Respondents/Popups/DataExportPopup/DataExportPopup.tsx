@@ -18,7 +18,7 @@ import { getExportDataApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
-import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSettings.types';
+import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 
 import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -52,22 +52,11 @@ export const DataExportPopup = ({
   const { encryption } = chosenAppletData ?? {};
 
   const handleDataExportSubmit = async () => {
-    if (dataIsExporting) {
+    if (dataIsExporting || !appletId) {
       return;
     }
 
-    if (appletId) {
-      setDataIsExporting(true);
-
-      try {
-        await executeAllPagesOfExportData({ appletId, respondentIds: respondentId });
-
-        Mixpanel.track('Export Data Successful');
-      } catch {
-        setActiveModal(Modals.ExportError);
-        setDataIsExporting(false);
-      }
-    }
+    await executeAllPagesOfExportData({ appletId, respondentIds: respondentId });
   };
 
   const hasEncryptionCheck = useCheckIfHasEncryption({
@@ -88,6 +77,7 @@ export const DataExportPopup = ({
       respondentIds?: string;
     }) => {
       try {
+        setDataIsExporting(true);
         const formFromDate = getValues?.().fromDate as Date;
         const formToDate = getValues?.().toDate as Date;
         const fromDate = formFromDate && format(formFromDate, DateFormats.shortISO);
@@ -125,14 +115,15 @@ export const DataExportPopup = ({
           }
         }
 
-        setDataIsExporting(false);
         handlePopupClose();
+        Mixpanel.track('Export Data Successful');
       } catch (e) {
         const error = e as TypeError;
         console.warn('Error while export data', error);
-        setDataIsExporting(false);
         setActiveModal(Modals.ExportError);
         await sendLogFile({ error });
+      } finally {
+        setDataIsExporting(false);
       }
     },
     [getDecryptedAnswers],
@@ -144,7 +135,6 @@ export const DataExportPopup = ({
   };
   const handleRetry = () => {
     setActiveModal(Modals.DataExport);
-    setDataIsExporting(true);
     handleDataExportSubmit();
   };
 
@@ -189,7 +179,6 @@ export const DataExportPopup = ({
         <Modal
           open={popupVisible}
           onClose={handlePopupClose}
-          onSubmit={submitForm}
           title={t('dataExport')}
           buttonText=""
           data-testid={dataTestid}

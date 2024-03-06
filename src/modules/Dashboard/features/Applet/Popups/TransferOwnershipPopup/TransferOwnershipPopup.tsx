@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'shared/components';
@@ -6,9 +5,7 @@ import { popups, applet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { TransferOwnership } from 'modules/Dashboard/features/Applet/TransferOwnership';
 import { StyledModalWrapper } from 'shared/styles/styledComponents';
-import { Mixpanel } from 'shared/utils';
-
-import { SuccessTransferOwnershipPopup } from '../SuccessTransferOwnershipPopup';
+import { useTransferOwnership } from 'shared/hooks/useTransferOwnership';
 
 export const TransferOwnershipPopup = () => {
   const { t } = useTranslation('app');
@@ -16,11 +13,8 @@ export const TransferOwnershipPopup = () => {
   const { transferOwnershipPopupVisible, applet: appletData } = popups.useData();
   const { result } = applet.useAppletData() || {};
   const currentApplet = appletData || result;
-
-  const [transferOwnershipSuccessVisible, setTransferOwnershipSuccessVisible] = useState(false);
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [emailTransfered, setEmailTransfered] = useState('');
+  const { isSubmitted, setIsSubmitted, handleSubmit, handleSendInvitation } =
+    useTransferOwnership();
 
   const transferOwnershipPopupClose = () => {
     dispatch(
@@ -32,21 +26,12 @@ export const TransferOwnershipPopup = () => {
     );
   };
 
-  const handleSubmit = () => {
-    setIsSubmitted(true);
-  };
-
-  useEffect(() => {
-    if (!emailTransfered) return;
-
-    setTransferOwnershipSuccessVisible(true);
-    Mixpanel.track('Invitation sent successfully');
-  }, [emailTransfered]);
+  const handleEmailTransferred = handleSendInvitation(transferOwnershipPopupClose);
 
   return (
     <>
       <Modal
-        open={transferOwnershipPopupVisible && !transferOwnershipSuccessVisible}
+        open={transferOwnershipPopupVisible}
         onClose={transferOwnershipPopupClose}
         onSubmit={handleSubmit}
         title={t('transferOwnership')}
@@ -60,16 +45,10 @@ export const TransferOwnershipPopup = () => {
             appletName={currentApplet?.displayName}
             isSubmitted={isSubmitted}
             setIsSubmitted={setIsSubmitted}
-            setEmailTransfered={setEmailTransfered}
+            setEmailTransferred={handleEmailTransferred}
           />
         </StyledModalWrapper>
       </Modal>
-      <SuccessTransferOwnershipPopup
-        email={emailTransfered}
-        transferOwnershipPopupVisible={transferOwnershipSuccessVisible}
-        closeTransferOwnershipPopup={transferOwnershipPopupClose}
-        data-testid="dashboard-applets-transfer-success-popup"
-      />
     </>
   );
 };
