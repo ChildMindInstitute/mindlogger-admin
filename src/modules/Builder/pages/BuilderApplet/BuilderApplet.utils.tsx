@@ -82,7 +82,6 @@ import {
   DEFAULT_MIN_NUMBER,
   DEFAULT_SLIDER_MAX_NUMBER,
   DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
 } from 'modules/Builder/consts';
 
 import {
@@ -612,6 +611,8 @@ export const getNewApplet = () => ({
   activities: [],
   activityFlows: [],
   reportEmailBody: t('reportEmailBody'),
+  streamIpAddress: null,
+  streamPort: null,
 });
 
 export const getNewActivityFlow = () => ({
@@ -740,6 +741,7 @@ const getActivityItems = (items: Item[]) =>
     : [];
 
 const getActivityFlows = (activityFlows: ActivityFlow[], activities: Activity[]) =>
+  // eslint-disable-next-line unused-imports/no-unused-vars
   activityFlows.map(({ order, ...activityFlow }) => ({
     ...activityFlow,
     description: getDictionaryText(activityFlow.description),
@@ -785,6 +787,7 @@ const getActivityConditionalLogic = (items: Item[]) =>
             return {
               key: uuidv4(),
               type: condition.type,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               payload: getConditionPayload(relatedItem!, condition) as keyof Condition['payload'],
               itemName: getEntityKey(relatedItem ?? {}),
             };
@@ -802,7 +805,8 @@ const getScoreConditions = (items?: Item[], conditions?: Condition[], scoreName?
     const payload =
       type === ScoreConditionType
         ? { value: String((condition as ScoreCondition).payload?.value) }
-        : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
+        : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
 
     return {
       ...condition,
@@ -819,7 +823,8 @@ const getSectionConditions = ({ items, conditions, scores }: GetSectionCondition
     const payload =
       type === ScoreConditionType
         ? { value: String((condition as ScoreCondition).payload?.value) }
-        : (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
+        : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          (getConditionPayload(relatedItem!, condition) as keyof Condition['payload']);
 
     return {
       ...condition,
@@ -1162,7 +1167,6 @@ export const isNumberAtLeastOne = (value?: unknown) =>
 
 export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') => {
   const isSlider = type === 'slider';
-  const minNumber = isSlider ? DEFAULT_SLIDER_MIN_NUMBER : DEFAULT_SLIDER_ROWS_MIN_NUMBER;
 
   return {
     minValue: yup
@@ -1174,7 +1178,7 @@ export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') =>
 
         return (
           value < maxValue &&
-          (value as number) >= minNumber &&
+          (value as number) >= DEFAULT_SLIDER_MIN_NUMBER &&
           (value as number) < DEFAULT_SLIDER_MAX_NUMBER
         );
       }),
@@ -1187,7 +1191,7 @@ export const getCommonSliderValidationProps = (type: 'slider' | 'sliderRows') =>
 
         return (
           value > minValue &&
-          (value as number) > minNumber &&
+          (value as number) > DEFAULT_SLIDER_MIN_NUMBER &&
           (value as number) <= DEFAULT_SLIDER_MAX_NUMBER
         );
       }),

@@ -15,6 +15,7 @@ import {
   StyledTooltipText,
 } from './TooltipComponents.styles';
 import { DashedProps, DashedUiType } from './TooltipComponents.types';
+import { tooltipPresentationDataTestid } from '../ItemTypeTooltip.const';
 
 export const Dashed = ({ uiType }: DashedProps) => {
   const { t } = useTranslation();
@@ -94,7 +95,7 @@ export const Dashed = ({ uiType }: DashedProps) => {
 
   return (
     <>
-      <StyledPresentation data-testid="tooltip-selection-presentation">
+      <StyledPresentation data-testid={tooltipPresentationDataTestid}>
         <StyledDashedWrapper>
           {isTextUiType || isDrawingUiType ? (
             getContent()[uiType]

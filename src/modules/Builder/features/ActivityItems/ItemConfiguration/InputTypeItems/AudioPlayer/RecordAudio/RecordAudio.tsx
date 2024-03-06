@@ -4,7 +4,7 @@ import { Box, Button } from '@mui/material';
 
 import { StyledErrorText, StyledLinearProgress, StyledTitleMedium, theme } from 'shared/styles';
 import { Modal, Svg } from 'shared/components';
-import { MLPlayer } from 'modules/Builder/components';
+import { MLPlayer } from 'modules/Builder/components/MLPlayer';
 import { useMediaUpload } from 'shared/hooks/useMediaUpload';
 import { getErrorMessage } from 'shared/utils/errors';
 
@@ -12,7 +12,7 @@ import { useAudioRecorder } from './RecordAudio.hooks';
 import { RecordAudioProps } from './RecordAudio.types';
 import { StyledButtons, StyledRecordButton } from './RecordAudio.styles';
 import { formatSecondsToMinutes } from './RecordAudio.utils';
-import { RECORD_FILE_NAME } from './RecordAudio.const';
+import { RECORD_FILE_NAME, recordAudioDataTestid } from './RecordAudio.const';
 
 export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioProps) => {
   const { t } = useTranslation('app');
@@ -59,8 +59,6 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     onClose();
   };
 
-  const dataTestid = 'builder-activity-items-item-configuration-record-audio-popup';
-
   const commonSvgProps = {
     width: 16,
     height: 16,
@@ -78,7 +76,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
     footerStyles: {
       paddingTop: theme.spacing(2.1),
     },
-    'data-testid': dataTestid,
+    'data-testid': recordAudioDataTestid,
   };
 
   return (
@@ -86,7 +84,7 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
       <Box sx={{ m: theme.spacing(0, 3.2) }}>
         <StyledTitleMedium
           sx={{ mb: theme.spacing(2.4) }}
-          data-testid={`${dataTestid}-description`}
+          data-testid={`${recordAudioDataTestid}-description`}
         >
           {t('audioPlayerRecordAudioDescription')}
         </StyledTitleMedium>
@@ -98,18 +96,20 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
                 <Svg id={isPaused || isStopped ? 'audio-filled' : 'pause'} {...commonSvgProps} />
               }
               onClick={isRecording || isPaused ? togglePauseResume : startRecording}
-              data-testid={`${dataTestid}-record`}
+              data-testid={`${recordAudioDataTestid}-record`}
             >
               {t('audioPlayerRecordStart')}
             </Button>
-            <StyledTitleMedium>{formatSecondsToMinutes(recordingTime)}</StyledTitleMedium>
+            <StyledTitleMedium data-testid={`${recordAudioDataTestid}-duration`}>
+              {formatSecondsToMinutes(recordingTime)}
+            </StyledTitleMedium>
           </StyledRecordButton>
           <Button
             variant="outlined"
             startIcon={<Svg id="audio-stop" {...commonSvgProps} />}
             onClick={handleStop}
             disabled={isStopped}
-            data-testid={`${dataTestid}-stop`}
+            data-testid={`${recordAudioDataTestid}-stop`}
           >
             {t('audioPlayerRecordStop')}
           </Button>
@@ -121,11 +121,16 @@ export const RecordAudio = ({ open, onUpload, onChange, onClose }: RecordAudioPr
             media={{ url: audioUrl }}
             hasRemoveButton={false}
             onRemove={handleRemove}
-            data-testid={`${dataTestid}-player`}
+            data-testid={`${recordAudioDataTestid}-player`}
           />
         )}
         {error && (
-          <StyledErrorText sx={{ mt: theme.spacing(2) }}>{getErrorMessage(error)}</StyledErrorText>
+          <StyledErrorText
+            sx={{ mt: theme.spacing(2) }}
+            data-testid={`${recordAudioDataTestid}-error`}
+          >
+            {getErrorMessage(error)}
+          </StyledErrorText>
         )}
       </Box>
     </Modal>

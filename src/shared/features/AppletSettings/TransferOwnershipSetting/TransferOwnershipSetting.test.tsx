@@ -52,7 +52,7 @@ describe('TransferOwnershipSetting', () => {
       expect(screen.getByTestId(`${dataTestid}-form`)).toBeVisible();
       expect(screen.getByTestId(`${dataTestid}-confirm`)).toBeVisible();
 
-      userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
+      await userEvent.type(screen.getByLabelText(/Email/i), `${mockedEmail}{enter}`);
 
       await waitFor(() => {
         expect(mockAxios.post).nthCalledWith(
@@ -63,7 +63,7 @@ describe('TransferOwnershipSetting', () => {
         );
       });
 
-      userEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
+      await userEvent.click(screen.getByTestId(`${dataTestid}-confirm`));
 
       expectBanner(store, 'TransferOwnershipSuccessBanner');
     });

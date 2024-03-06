@@ -32,7 +32,7 @@ export const RemoveOptionPopup = ({
       submitBtnColor="error"
       data-testid={dataTestid}
     >
-      <StyledModalWrapper>
+      <StyledModalWrapper data-testid={`${dataTestid}-content`}>
         <StyledBodyLarge sx={{ mb: theme.spacing(2.4) }}>
           <Trans i18nKey="deleteOptionDescription">
             Are you sure you want to delete Option

@@ -1,7 +1,9 @@
 import { waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { mockedSimpleAppletFormData } from 'shared/mock';
+import { ApiResponseCodes } from 'api';
+import { mockedApplet, mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { expectBanner, renderHookWithProviders } from 'shared/utils';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 
@@ -36,37 +38,71 @@ describe('useSaveAndPublishSetup hook', () => {
   });
 
   describe('handleSaveAndPublishFirstClick', () => {
-    test('should show a success banner if call to save succeeds', async () => {
-      mockAxios.post.mockResolvedValueOnce({ data: {} });
+    describe('creating a new applet', () => {
+      test('should show a success banner if call to save succeeds', async () => {
+        mockAxios.post.mockResolvedValueOnce({ data: {} });
 
-      const { result, store } = renderHookWithProviders(useSaveAndPublishSetup, {
-        route: '/builder/new-applet/about',
-        routePath: '/builder/new-applet/about',
+        const { result, store } = renderHookWithProviders(useSaveAndPublishSetup, {
+          route: '/builder/new-applet/about',
+          routePath: '/builder/new-applet/about',
+        });
+
+        await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+
+        await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
       });
 
-      await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+      test('should not show a success banner if call to save fails', async () => {
+        mockAxios.post.mockRejectedValueOnce({});
 
-      await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+        const { result, rerender, store } = renderHookWithProviders(useSaveAndPublishSetup, {
+          route: '/builder/new-applet/about',
+          routePath: '/builder/new-applet/about',
+        });
+
+        await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+
+        // Ensure hook internal state is updated before checking publishProcessStep
+        rerender();
+
+        expect((result.current as SaveAndPublishSetup).publishProcessStep).toBe(
+          SaveAndPublishSteps.Failed,
+        );
+
+        expectBanner(store, 'SaveSuccessBanner', false);
+      });
     });
 
-    test('should not show a success banner if call to save fails', async () => {
-      mockAxios.post.mockRejectedValueOnce({});
+    describe('updating an existing applet', () => {
+      test('should show a success banner if call to save succeeds', async () => {
+        mockAxios.put.mockResolvedValueOnce({
+          status: ApiResponseCodes.SuccessfulResponse,
+          data: {
+            result: mockedApplet,
+          },
+        });
 
-      const { result, rerender, store } = renderHookWithProviders(useSaveAndPublishSetup, {
-        route: '/builder/new-applet/about',
-        routePath: '/builder/new-applet/about',
+        const { result, store } = renderHookWithProviders(useSaveAndPublishSetup, {
+          preloadedState: getPreloadedState(),
+          route: `/builder/${mockedAppletId}/about`,
+          routePath: `/builder/:appletId/about`,
+        });
+
+        await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
+
+        await waitFor(() =>
+          expect(
+            store.getState().banners.data.banners.find((payload) => {
+              const bannerContent = payload.bannerProps?.children;
+              if (bannerContent) {
+                return bannerContent.toString().includes('updated');
+              }
+
+              return false;
+            }),
+          ).toBeDefined(),
+        );
       });
-
-      await (result.current as SaveAndPublishSetup).handleSaveAndPublishFirstClick();
-
-      // Ensure hook internal state is updated before checking publishProcessStep
-      rerender();
-
-      expect((result.current as SaveAndPublishSetup).publishProcessStep).toBe(
-        SaveAndPublishSteps.Failed,
-      );
-
-      expectBanner(store, 'SaveSuccessBanner', false);
     });
   });
 });

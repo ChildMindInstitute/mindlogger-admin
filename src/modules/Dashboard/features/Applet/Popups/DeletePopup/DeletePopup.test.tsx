@@ -7,7 +7,7 @@ import { expectBanner, renderWithProviders } from 'shared/utils';
 
 import { DeletePopup } from '.';
 
-const testId = 'dashboard-applets-delete';
+const dataTestid = 'dashboard-applets-delete';
 const preloadedState = {
   popups: {
     data: {
@@ -32,11 +32,11 @@ describe('DeletePopup', () => {
   });
 
   test('DeletePopup should open the password check modal initially', async () => {
-    renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />, {
+    renderWithProviders(<DeletePopup onCloseCallback={onCloseMock} data-testid={dataTestid} />, {
       preloadedState,
     });
 
-    expect(screen.getByTestId(`${testId}-enter-password-popup-password`)).toBeInTheDocument();
+    expect(screen.getByTestId(`${dataTestid}-enter-password-popup-password`)).toBeInTheDocument();
   });
 
   test('DeletePopup should show success banner', async () => {
@@ -48,7 +48,7 @@ describe('DeletePopup', () => {
     );
 
     const { store } = renderWithProviders(
-      <DeletePopup onCloseCallback={onCloseMock} data-testid={testId} />,
+      <DeletePopup onCloseCallback={onCloseMock} data-testid={dataTestid} />,
       { preloadedState },
     );
 

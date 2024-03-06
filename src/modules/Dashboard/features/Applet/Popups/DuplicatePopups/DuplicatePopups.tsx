@@ -13,7 +13,7 @@ import { useAsync } from 'shared/hooks/useAsync';
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { applet, auth, banners, popups } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
-import { duplicateAppletApi, getAppletUniqueNameApi } from 'api';
+import { ApiResponseCodes, duplicateAppletApi, getAppletUniqueNameApi } from 'api';
 
 import {
   AppletPasswordPopup,
@@ -83,17 +83,19 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
 
   const { execute: executeDuplicate, isLoading: isDuplicateLoading } = useAsync(
     duplicateAppletApi,
-    async (result) => {
+    async (res) => {
       await setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
         encryption: encryptionDataRef.current.encryption!,
         appletId: currentAppletId,
       });
 
-      handleDuplicateSuccess(result);
+      handleDuplicateSuccess(res);
     },
-    () => {
+    (error) => {
       setPasswordModalVisible(false);
+      if (error?.response?.status === ApiResponseCodes.Forbidden) return;
+
       setErrorModalVisible(true);
     },
     () => {
@@ -125,7 +127,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     duplicatePopupsClose();
   };
 
-  const handleDuplicateSuccess = (result: AxiosResponse) => {
+  const handleDuplicateSuccess = (res: AxiosResponse) => {
     setPasswordModalVisible(false);
 
     onCloseCallback?.();
@@ -138,7 +140,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         key: 'SaveSuccessBanner',
         bannerProps: {
           children: t('successDuplication', {
-            appletName: result?.data?.displayName ?? '',
+            appletName: res?.data?.result?.displayName ?? '',
           }),
         },
       }),
@@ -176,6 +178,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
     trigger('name');
   };
   const isLoading = isGetNameLoading || isGetNameSecondLoading;
+  const dataTestid = 'dashboard-applets-duplicate-popup';
 
   useEffect(() => {
     if (!duplicatePopupsVisible) return;
@@ -194,7 +197,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
         onSubmit={setNameHandler}
         buttonText={t('submit')}
         disabledSubmit={isLoading}
-        data-testid="dashboard-applets-duplicate-popup"
+        data-testid={dataTestid}
       >
         <>
           {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
@@ -207,7 +210,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
                 label={t('appletName')}
                 onChange={handleNameChange}
                 error={!!nameError}
-                data-testid="dashboard-applets-duplicate-popup-name"
+                data-testid={`${dataTestid}-name`}
               />
             </form>
             {nameError && (
@@ -226,7 +229,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           popupVisible={passwordModalVisible}
           submitCallback={submitCallback}
           isLoading={isDuplicateLoading}
-          data-testid="dashboard-applets-duplicate-popup-password-popup"
+          data-testid={`${dataTestid}-password-popup`}
         />
       )}
       {errorModalVisible && (
@@ -239,7 +242,7 @@ export const DuplicatePopups = ({ onCloseCallback }: { onCloseCallback?: () => v
           onSubmit={retryHandler}
           buttonText={t('tryAgain')}
           hasSecondBtn
-          data-testid="dashboard-applets-duplicate-popup-error-popup"
+          data-testid={`${dataTestid}-error-popup`}
         >
           <StyledModalWrapper sx={{ color: variables.palette.semantic.error }}>
             {t('errorDuplication')}

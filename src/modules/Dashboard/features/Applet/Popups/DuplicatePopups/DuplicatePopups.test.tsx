@@ -27,6 +27,8 @@ const mockedEncryption = {
   accountId: '12345',
 };
 
+const dataTestid = 'dashboard-applets-duplicate-popup';
+
 describe('DuplicatePopups', () => {
   afterEach(() => {
     mockAxios.reset();
@@ -42,7 +44,7 @@ describe('DuplicatePopups', () => {
     });
 
     await waitFor(() => {
-      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      expect(getByTestId(`${dataTestid}-name`)).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
 
@@ -52,7 +54,7 @@ describe('DuplicatePopups', () => {
   test('should duplicate and open success modal', async () => {
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
     mockAxios.post.mockResolvedValueOnce({ data: { result: { name: 'name' } } });
-    mockAxios.post.mockResolvedValueOnce({ data: mockedAppletData });
+    mockAxios.post.mockResolvedValueOnce({ data: { result: mockedAppletData } });
     jest
       .spyOn(encryptionFunctions, 'getEncryptionToServer')
       .mockReturnValue(Promise.resolve(mockedEncryption));
@@ -70,7 +72,7 @@ describe('DuplicatePopups', () => {
     );
 
     await waitFor(() => {
-      expect(getByTestId('dashboard-applets-duplicate-popup-name')).toBeInTheDocument();
+      expect(getByTestId(`${dataTestid}-name`)).toBeInTheDocument();
       fireEvent.click(getByText('Submit'));
     });
 

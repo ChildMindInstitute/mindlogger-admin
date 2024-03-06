@@ -36,6 +36,7 @@ import {
   getEntityReportFields,
 } from 'modules/Builder/utils/getEntityReportFields';
 import { banners } from 'shared/state/Banners';
+import { ErrorResponseType } from 'shared/types';
 
 import {
   getActivityItems,
@@ -277,14 +278,19 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
   const [isPublishProcessPopupOpened, setPublishProcessPopupOpened] = useState(false);
   const [publishProcessStep, setPublishProcessStep] = useState<SaveAndPublishSteps>();
   const responseStatus = applet.useResponseStatus();
+  const responseError = applet.useResponseError() ?? [];
   const responseTypePrefix = applet.useResponseTypePrefix();
+  const isResponseStatusError = responseStatus === 'error';
+  const hasAccessDeniedError =
+    Array.isArray(responseError) &&
+    responseError.some((error) => error.type === ErrorResponseType.AccessDenied);
   const {
     cancelNavigation: onCancelNavigation,
     confirmNavigation,
     promptVisible,
     setPromptVisible,
     isLogoutInProgress,
-  } = usePrompt(isDirty);
+  } = usePrompt(isDirty && !hasAccessDeniedError);
   const shouldNavigateRef = useRef(false);
   const appletUniqueNameRef = useRef<string | null>(null);
   const { ownerId } = workspaces.useData() || {};
@@ -307,8 +313,12 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (responseStatus === 'loading' && checkIfAppletBeingCreatedOrUpdatedRef.current) {
       setPublishProcessStep(SaveAndPublishSteps.BeingCreated);
     }
-    responseStatus === 'error' && setPublishProcessStep(SaveAndPublishSteps.Failed);
-  }, [responseStatus, responseTypePrefix]);
+    if (isResponseStatusError) {
+      if (hasAccessDeniedError) return;
+
+      setPublishProcessStep(SaveAndPublishSteps.Failed);
+    }
+  }, [responseStatus, responseTypePrefix, isResponseStatusError, hasAccessDeniedError]);
 
   const handleSaveChangesDoNotSaveSubmit = async () => {
     setPromptVisible(false);
@@ -413,7 +423,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     await sendRequest(password);
   };
 
-  const showSuccessBanner = () => {
+  const showSuccessBanner = (isUpdate?: boolean) => {
     // If there is any visible banner warning the user they haven't made changes,
     // remove it before showing the success banner.
     dispatch(
@@ -426,7 +436,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
       banners.actions.addBanner({
         key: 'SaveSuccessBanner',
         bannerProps: {
-          children: t('appletSavedAndPublished', { name: getAppletData()?.displayName }),
+          children: t(isUpdate ? 'appletUpdated' : 'appletSavedAndPublished', {
+            name: getAppletData()?.displayName,
+          }),
           'data-testid': 'dashboard-applets-save-success-banner',
         },
       }),
@@ -472,7 +484,7 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (updateApplet.fulfilled.match(result)) {
       Mixpanel.track('Applet edit successful');
 
-      showSuccessBanner();
+      showSuccessBanner(true);
 
       if (shouldNavigateRef.current) {
         confirmNavigation();
