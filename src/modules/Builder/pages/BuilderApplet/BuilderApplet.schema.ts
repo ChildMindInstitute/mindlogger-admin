@@ -47,6 +47,8 @@ import {
   ItemTestFunctions,
   alphanumericAndHyphenRegexp,
   conditionsMatch,
+  IP_ADDRESS_REGEXP,
+  PORT_REGEXP,
 } from './BuilderApplet.const';
 
 const { t } = i18n;
@@ -801,4 +803,6 @@ export const AppletSchema = () =>
     watermark: yup.string(),
     activities: yup.array().of(ActivitySchema()).min(1),
     activityFlows: yup.array().of(ActivityFlowSchema()),
+    streamIpAddress: yup.string().matches(IP_ADDRESS_REGEXP, t('invalidIpAddress')).nullable(),
+    streamPort: yup.string().matches(PORT_REGEXP, t('invalidPort')).nullable(),
   });

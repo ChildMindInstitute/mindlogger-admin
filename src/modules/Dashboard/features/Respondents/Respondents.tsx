@@ -407,6 +407,7 @@ export const Respondents = () => {
   const viewableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Viewable);
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
   const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
+  const dataTestid = 'dashboard-respondents';
 
   const renderEmptyComponent = () => {
     if (!rows?.length && !isLoading) {
@@ -430,7 +431,7 @@ export const Respondents = () => {
               variant="outlined"
               startIcon={<Svg width={18} height={18} id="respondent-outlined" />}
               onClick={() => navigate(generatePath(page.appletAddUser, { appletId }))}
-              data-testid="dashboard-respondents-add"
+              data-testid={`${dataTestid}-add`}
             >
               {t('addRespondent')}
             </StyledButton>
@@ -440,7 +441,7 @@ export const Respondents = () => {
           withDebounce
           placeholder={t('searchRespondents')}
           onSearch={handleSearch}
-          data-testid="dashboard-respondents-search"
+          data-testid={`${dataTestid}-search`}
         />
         {appletId && <StyledRightBox />}
       </RespondentsTableHeader>
@@ -450,7 +451,7 @@ export const Respondents = () => {
         emptyComponent={renderEmptyComponent()}
         count={respondentsData?.count || 0}
         hasColFixedWidth
-        data-testid="dashboard-respondents-table"
+        data-testid={`${dataTestid}-table`}
         {...tableProps}
       />
       {scheduleSetupPopupVisible && (
@@ -486,7 +487,7 @@ export const Respondents = () => {
           tableRows={viewableAppletsSmallTableRows}
           chosenAppletData={chosenAppletData}
           setChosenAppletData={setChosenAppletData}
-          data-testid="dashboard-respondents-export-data-popup"
+          data-testid={`${dataTestid}-export-data-popup`}
         />
       )}
       {editRespondentPopupVisible && (

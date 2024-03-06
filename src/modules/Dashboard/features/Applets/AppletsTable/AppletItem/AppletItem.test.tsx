@@ -2,42 +2,12 @@ import { fireEvent, waitFor, screen, act } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils';
-import {
-  mockedApplet,
-  mockedAppletId,
-  mockedCurrentWorkspace,
-  mockedOwnerId,
-  mockedPassword,
-} from 'shared/mock';
-import { initialStateData } from 'shared/state';
+import { mockedApplet, mockedAppletId, mockedOwnerId, mockedPassword } from 'shared/mock';
 import { Roles } from 'shared/consts';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
 
 import { AppletsContext } from '../../Applets.context';
 import { AppletItem } from './AppletItem';
-
-const getPreloadedState = (role = Roles.Manager) => ({
-  workspaces: {
-    workspaces: initialStateData,
-    currentWorkspace: {
-      ...initialStateData,
-      ...mockedCurrentWorkspace,
-    },
-    roles: {
-      ...initialStateData,
-      data: {
-        [mockedAppletId]: [role],
-      },
-    },
-    applet: mockedApplet,
-    workspacesRoles: initialStateData,
-  },
-  applet: {
-    applet: {
-      ...initialStateData,
-      data: { result: mockedApplet },
-    },
-  },
-});
 
 const mockReloadData = jest.fn();
 const mockHandleFolderClick = jest.fn();

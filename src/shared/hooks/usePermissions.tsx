@@ -5,6 +5,7 @@ import { workspaces } from 'redux/modules';
 import { EmptyState } from 'shared/components';
 import { getErrorMessage } from 'shared/utils';
 import { ApiResponseCodes } from 'shared/api';
+import { ErrorResponseType } from 'shared/types';
 
 export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
   const { t } = useTranslation('app');
@@ -22,10 +23,13 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
 
         if (
           payload?.response?.status === ApiResponseCodes.Forbidden ||
-          payload?.status === ApiResponseCodes.Forbidden
+          payload?.status === ApiResponseCodes.Forbidden ||
+          (Array.isArray(payload) &&
+            payload.some((data) => data.type === ErrorResponseType.AccessDenied))
         ) {
           return setIsForbidden(true);
         }
+
         setIsForbidden(false);
       } catch (e) {
         getErrorMessage(e);
@@ -33,6 +37,7 @@ export const usePermissions = (asyncFunc: () => Promise<any> | undefined) => {
         setIsLoading(false);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ownerId]);
 
   return {

@@ -4,7 +4,7 @@ import { ItemResponseType } from 'shared/consts';
 import { ItemAlert, SliderRowsItem } from 'shared/state';
 import { createArray, groupBy } from 'shared/utils';
 import { Option } from 'shared/components/FormComponents';
-import { DEFAULT_SLIDER_MAX_NUMBER, DEFAULT_SLIDER_ROWS_MIN_NUMBER } from 'modules/Builder/consts';
+import { DEFAULT_SLIDER_MIN_NUMBER, DEFAULT_SLIDER_MAX_NUMBER } from 'modules/Builder/consts';
 
 import { OptionTypes } from './Alert.types';
 
@@ -36,7 +36,10 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
 
         return [
           ...result,
-          { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id! },
+          {
+            labelKey: getOptionName(OptionTypes.Option, index, option.text),
+            value: option.id ?? '',
+          },
         ];
       }, []) || []
     );
@@ -61,7 +64,7 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
 
       return [
         ...result,
-        { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id! },
+        { labelKey: getOptionName(OptionTypes.Option, index, option.text), value: option.id ?? '' },
       ];
     }, []);
   }
@@ -70,7 +73,7 @@ export const getOptionsList = (formValues: ItemFormValues, alert: ItemAlert) => 
     return (
       responseValues?.rows?.map(({ id, label }, index) => ({
         labelKey: getOptionName(OptionTypes.Slider, index, label),
-        value: id!,
+        value: id ?? '',
       })) || []
     );
   }
@@ -130,9 +133,7 @@ export const getSliderRowsItemList = (
   const maxValueNumber =
     Number(maxValue) > DEFAULT_SLIDER_MAX_NUMBER ? DEFAULT_SLIDER_MAX_NUMBER : Number(maxValue);
   const minValueNumber =
-    Number(minValue) < DEFAULT_SLIDER_ROWS_MIN_NUMBER
-      ? DEFAULT_SLIDER_ROWS_MIN_NUMBER
-      : Number(minValue);
+    Number(minValue) < DEFAULT_SLIDER_MIN_NUMBER ? DEFAULT_SLIDER_MIN_NUMBER : Number(minValue);
 
   return createArray(maxValueNumber - minValueNumber + 1, (index) => {
     const value = `${minValueNumber + index}`;

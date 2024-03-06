@@ -5,9 +5,11 @@ import { Box } from '@mui/material';
 
 import { RecoverForm } from 'modules/Auth/features/RecoverPassword';
 import { recoveryLinkHealthCheckApi } from 'api';
-import { StyledBodyLarge, StyledLinkBtn } from 'shared/styles';
+import { StyledBodyLarge, StyledFlexAllCenter, StyledLinkBtn } from 'shared/styles';
 import { Spinner } from 'shared/components';
 import { page } from 'resources';
+
+import { recoveryPasswordDataTestid } from './RecoverPassword.const';
 
 export const RecoverPassword = () => {
   const [searchParams] = useSearchParams();
@@ -21,13 +23,19 @@ export const RecoverPassword = () => {
   const [error, setError] = useState<Error>();
 
   useEffect(() => {
-    recoveryLinkHealthCheckApi({ email, key })
-      .catch((error) => {
+    const recoveryLinkHealthCheck = async () => {
+      try {
+        await recoveryLinkHealthCheckApi({ email, key });
+      } catch (error) {
         if (error instanceof Error) {
           setError(error);
         }
-      })
-      .finally(() => setIsLoading(false));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    recoveryLinkHealthCheck();
   }, [email, key]);
 
   if (isLoading) {
@@ -40,19 +48,20 @@ export const RecoverPassword = () => {
 
   if (error) {
     return (
-      <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
-        <StyledBodyLarge variant="body1">
+      <StyledFlexAllCenter>
+        <StyledBodyLarge variant="body1" data-testid={`${recoveryPasswordDataTestid}-description`}>
           <Trans i18nKey="invalidPasswordResetLink">
             <StyledLinkBtn
               style={{ marginBottom: 3, fontSize: 16 }}
               variant="text"
               onClick={() => navigate(page.passwordReset)}
+              data-testid={`${recoveryPasswordDataTestid}-link`}
             >
               here
             </StyledLinkBtn>
           </Trans>
         </StyledBodyLarge>
-      </Box>
+      </StyledFlexAllCenter>
     );
   }
 

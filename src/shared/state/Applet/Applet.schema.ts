@@ -752,7 +752,9 @@ export type SingleApplet = {
   encryption?: Encryption;
   isPublished?: boolean;
   activityCount?: number | null;
-  streamEnabled?: boolean | null;
+  streamEnabled: boolean | null;
+  streamIpAddress: string | null;
+  streamPort: number | null;
 };
 
 export type AppletSchema = {
