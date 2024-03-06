@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { fireEvent } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
@@ -123,6 +123,6 @@ describe('LiveResponseStreamingSetting', () => {
 
     fireEvent.blur(ipAddressInput);
 
-    expect(getByText('Invalid Port')).toBeInTheDocument();
+    expect(await screen.findByText('Invalid Port')).toBeInTheDocument();
   });
 });
