@@ -92,7 +92,7 @@ describe('LiveResponseStreamingSetting', () => {
     const wrongMockedPort = '999999d';
     const ref = createRef();
 
-    const { getByTestId, getByLabelText, getByText } = renderWithAppletFormData({
+    const { getByTestId, getByLabelText, findByText } = renderWithAppletFormData({
       children: <LiveResponseStreamingSetting />,
       appletFormData: {
         streamEnabled: false,
@@ -113,7 +113,7 @@ describe('LiveResponseStreamingSetting', () => {
 
     fireEvent.blur(ipAddressInput);
 
-    expect(getByText('Invalid IP Address')).toBeInTheDocument();
+    await findByText('Invalid IP Address');
 
     const portInput = getByLabelText('Default Port');
     await userEvent.type(portInput, `${wrongMockedPort}`);
@@ -123,6 +123,6 @@ describe('LiveResponseStreamingSetting', () => {
 
     fireEvent.blur(ipAddressInput);
 
-    expect(getByText('Invalid Port')).toBeInTheDocument();
+    await findByText('Invalid Port');
   });
 });
