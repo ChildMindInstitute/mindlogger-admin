@@ -157,7 +157,7 @@ const removeReportsFields = () => ({
   ...removeReactHookFormKey(),
 });
 
-const getReportMessage = (report: ScoreReport | SectionReport | ScoreConditionalLogic) => ({
+export const getReportMessage = (report: ScoreReport | SectionReport | ScoreConditionalLogic) => ({
   message: report.showMessage ? getSanitizedContent(report.message ?? '', true) : undefined,
 });
 const getReportItemsPrint = (report: ScoreReport | SectionReport | ScoreConditionalLogic) => ({
