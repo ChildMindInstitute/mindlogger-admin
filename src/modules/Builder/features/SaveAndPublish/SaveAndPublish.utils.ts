@@ -18,7 +18,13 @@ import {
   SingleApplet,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
-import { getDictionaryObject, getEntityKey, getObjectFromList, groupBy } from 'shared/utils';
+import {
+  getDictionaryObject,
+  getEntityKey,
+  getObjectFromList,
+  getSanitizedContent,
+  groupBy,
+} from 'shared/utils';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import {
   ABTrailsItemQuestions,
@@ -152,7 +158,7 @@ const removeReportsFields = () => ({
 });
 
 const getReportMessage = (report: ScoreReport | SectionReport | ScoreConditionalLogic) => ({
-  message: report.showMessage ? report.message : undefined,
+  message: report.showMessage ? getSanitizedContent(report.message ?? '', true) : undefined,
 });
 const getReportItemsPrint = (report: ScoreReport | SectionReport | ScoreConditionalLogic) => ({
   itemsPrint: report.printItems ? report.itemsPrint : undefined,
