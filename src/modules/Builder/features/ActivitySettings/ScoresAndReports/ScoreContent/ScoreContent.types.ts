@@ -19,6 +19,7 @@ export type ScoreContentProps = {
   items: DataTableItem[];
   tableItems: DataTableItem[];
   scoreItems: ItemsWithScore[];
+  isStaticActive: boolean;
 };
 
 export type GetScoreRangeLabel = {

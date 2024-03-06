@@ -12,4 +12,5 @@ export type ScoreConditionProps = {
   items: DataTableItem[];
   scoreRange: ReturnType<typeof getScoreRange>;
   'data-testid'?: string;
+  isStaticActive: boolean;
 };
