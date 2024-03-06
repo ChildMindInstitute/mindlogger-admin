@@ -60,15 +60,15 @@ describe('RecordAudio', () => {
       recordingTime: 0,
     }));
     useMediaUploadSpy.mockImplementation(({ callback }) => ({
-        executeMediaUpload: () => {
-          callback?.('mock-url');
-        },
-        isLoading: false,
-        error: {
-          data: 'Mock Error',
-        },
-        stopUpload: jest.fn,
-      }));
+      executeMediaUpload: () => {
+        callback?.('mock-url');
+      },
+      isLoading: false,
+      error: {
+        data: 'Mock Error',
+      },
+      stopUpload: jest.fn,
+    }));
 
     renderWithProviders(
       <RecordAudio open onUpload={mockOnUpload} onChange={mockOnChange} onClose={mockOnClose} />,
@@ -94,7 +94,6 @@ describe('RecordAudio', () => {
     const player = await screen.findByTestId(`${recordAudioDataTestid}-player`);
     expect(player).toBeInTheDocument();
 
-    screen.debug();
     const error = screen.getByTestId(`${recordAudioDataTestid}-error`);
     expect(error).toBeInTheDocument();
     expect(error).toHaveTextContent('Mock Error');
@@ -123,13 +122,13 @@ describe('RecordAudio', () => {
       recordingTime: 0,
     }));
     useMediaUploadSpy.mockImplementation(({ callback }) => ({
-        executeMediaUpload: () => {
-          callback?.('mock-url');
-        },
-        isLoading: false,
-        error: null,
-        stopUpload: jest.fn,
-      }));
+      executeMediaUpload: () => {
+        callback?.('mock-url');
+      },
+      isLoading: false,
+      error: null,
+      stopUpload: jest.fn,
+    }));
 
     renderWithProviders(
       <RecordAudio open onUpload={mockOnUpload} onChange={mockOnChange} onClose={mockOnClose} />,
