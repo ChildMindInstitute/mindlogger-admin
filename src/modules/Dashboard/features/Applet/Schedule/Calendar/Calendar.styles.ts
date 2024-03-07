@@ -104,6 +104,19 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
         padding: ${({ hasMoreBtn }: { hasMoreBtn: boolean }) =>
           hasMoreBtn ? theme.spacing(1.1, 0, 2.1) : theme.spacing(1.1, 0, 0.9)};
       }
+
+      .rbc-event:not(.rbc-event-allday) {
+        max-width: 96% !important;
+      }
+    }
+  }
+
+  // handle the corner case when the event ends at 00:00 on the next day
+  .rbc-allday-cell {
+    .rbc-event:not(.rbc-event-allday) {
+      .event-bottom-section {
+        display: none;
+      }
     }
   }
 
