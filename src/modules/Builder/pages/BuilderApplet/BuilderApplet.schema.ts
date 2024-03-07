@@ -29,6 +29,7 @@ import {
   checkRawScoreRegexp,
   checkScoreRegexp,
   getCommonSliderValidationProps,
+  getConditionsMatch,
   getRegexForIndexedField,
   getSliderAlertValueValidation,
   getTestFunctionForSubscaleScore,
@@ -46,7 +47,6 @@ import {
   CONDITION_TYPES_TO_HAVE_OPTION_ID,
   ItemTestFunctions,
   alphanumericAndHyphenRegexp,
-  conditionsMatch,
   IP_ADDRESS_REGEXP,
   PORT_REGEXP,
 } from './BuilderApplet.const';
@@ -584,7 +584,7 @@ export const ScoreConditionalLogic = () =>
       .min(1, <string>t('validationMessages.atLeastOneCondition')),
     flagScore: yup.boolean(),
     ...getReportCommonFields(),
-    match: conditionsMatch,
+    match: getConditionsMatch(t('validationMessages.conditionalRule')),
   });
 
 export const ScoreSchema = () => ({
@@ -614,7 +614,7 @@ export const SectionConditionalLogic = () =>
       .array()
       .of(ConditionSchema())
       .min(1, <string>t('validationMessages.atLeastOneCondition')),
-    match: conditionsMatch,
+    match: getConditionsMatch(t('validationMessages.conditionalRule')),
   });
 
 export const TotalScoresTableDataSchema = yup
