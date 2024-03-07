@@ -1204,6 +1204,7 @@
     "atLeastOne": "Sélectionnez au moins 1 élément",
     "atLeastOneCondition": "Configurez au moins une condition",
     "atLeastOneItem": "Sélectionnez au moins 1 élément",
+    "conditionalRule": "Configurer la règle conditionnelle",
     "incorrectEmail": "L'adresse e-mail doit être valide",
     "isRequired": "{{- field}} est obligatoire",
     "isRequired_indexed": "{{- field}} {{- index}} est obligatoire",
