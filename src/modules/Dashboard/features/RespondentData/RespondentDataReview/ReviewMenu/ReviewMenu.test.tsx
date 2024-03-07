@@ -110,6 +110,7 @@ const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
     onSelectAnswer,
     isDatePickerLoading: false,
     onDateChange,
+    lastActivityCompleted: '2023-12-15T16:39:11.509095',
     ...compProps,
   };
 
@@ -158,9 +159,9 @@ describe('ReviewMenu', () => {
     });
   });
 
-  test('renders correctly when response dates are empty', async () => {
+  test('renders correctly when lastActivityCompleted is null', async () => {
     const props = {
-      responseDates: [],
+      lastActivityCompleted: null,
     };
     renderWithProviders(<ReviewMenuComponent {...props} />, {
       preloadedState,
