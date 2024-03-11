@@ -16,6 +16,7 @@ import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 
 import { ReviewMenu } from './ReviewMenu';
+import { ReviewMenuProps } from './ReviewMenu.types';
 
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
@@ -65,7 +66,7 @@ const setSelectedActivity = jest.fn();
 const onSelectAnswer = jest.fn();
 const onDateChange = jest.fn();
 
-const ReviewMenuComponent = () => {
+const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
   const { control } = useForm<{ date: null | Date }>({
     defaultValues: {
       date: selectedDate,
@@ -109,16 +110,27 @@ const ReviewMenuComponent = () => {
     onSelectAnswer,
     isDatePickerLoading: false,
     onDateChange,
+    lastActivityCompleted: '2023-12-15T16:39:11.509095',
+    ...compProps,
   };
 
   return <ReviewMenu {...props} />;
+};
+const expectReviewDateActvity = (enabled = true) => {
+  const reviewDate = screen.getByTestId(`${dataTestid}-review-date`);
+  expect(reviewDate).toBeInTheDocument();
+  const input = reviewDate.querySelector('input') as HTMLInputElement;
+  expect(input).toBeInTheDocument();
+  enabled
+    ? expect(input).not.toHaveClass('Mui-disabled')
+    : expect(input).toHaveClass('Mui-disabled');
 };
 
 describe('ReviewMenu', () => {
   test('renders component correctly, select activity, select timestamp', async () => {
     renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
     expect(screen.getByText('Review')).toBeInTheDocument();
-    expect(screen.getByTestId(`${dataTestid}-review-date`)).toBeInTheDocument();
+    expectReviewDateActvity(true);
     expect(
       screen.getByText('User: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)'),
     ).toBeInTheDocument();
@@ -145,6 +157,18 @@ describe('ReviewMenu', () => {
       answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
       createdAt: '2023-12-15T14:22:34.150182',
     });
+  });
+
+  test('renders correctly when lastActivityCompleted is null', async () => {
+    const props = {
+      lastActivityCompleted: null,
+    };
+    renderWithProviders(<ReviewMenuComponent {...props} />, {
+      preloadedState,
+      route,
+      routePath,
+    });
+    expectReviewDateActvity(false);
   });
 
   test('test change date of the month', async () => {
