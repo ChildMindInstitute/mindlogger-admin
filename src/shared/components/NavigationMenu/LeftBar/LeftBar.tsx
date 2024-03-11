@@ -16,7 +16,6 @@ import {
   StyledTitle,
 } from './LeftBar.styles';
 import { LeftBarProps } from './LeftBar.types';
-import { Actions } from '../Actions';
 
 export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarProps) => {
   const { setting } = useParams();
@@ -37,7 +36,6 @@ export const LeftBar = ({ title, items, hasActiveItem, onItemClick }: LeftBarPro
       sxProps={containerSxProps}
       data-testid="navigation-menu-left-bar"
     >
-      <Actions isCompact={hasActiveItem} />
       <StyledContent isCompact={hasActiveItem}>
         {items.map(
           ({ label, items, isVisible = true }, index) =>

@@ -352,7 +352,6 @@
   "displayedContentRequired": "Le contenu affiché est requis",
   "dontSave": "Ne pas enregistrer",
   "download": "Télécharger",
-  "downloadCSV": "Télécharger CSV",
   "downloadDescription": "<0>Téléchargez le contenu de l'Applet au format JSON.</0><1>Veuillez mettre à jour l'URL des contextes dans le schéma de l'Applet, le schéma de l'activité et changer les chemins de l'activité/élément dans les fichiers de contexte après avoir uploadé le contenu sur GitHub.</1>",
   "downloadLatestReport": "Télécharger le dernier rapport",
   "downloadSchema": "Télécharger le schéma",
@@ -415,9 +414,8 @@
   "exitingAppletHint": "Tout le contenu du panier sera ajouté au contenu de l'Applet existante",
   "export": "Exporter",
   "exportData": "Exporter les données",
-  "exportDataForApplet": "Exporter les données pour {{name}}",
   "exportDefaultSchedule": "Exporter le programme par défaut",
-  "exportDescription": "Choisissez ce que vous souhaitez inclure :",
+  "exportDescription": "Exporter les données pour la plage de dates sélectionnée",
   "exportDateRange": {
     "allTime": "Tout le temps",
     "last24h": "Dernières 24 heures",

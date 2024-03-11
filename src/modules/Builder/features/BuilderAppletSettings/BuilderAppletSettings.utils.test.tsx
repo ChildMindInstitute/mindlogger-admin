@@ -20,7 +20,7 @@ describe('getSettings', () => {
   });
 
   describe('should return right items for section ', () => {
-    const usersAndDataItems = ['dataRetention', 'liveResponseStreaming'];
+    const usersAndDataItems = ['exportData', 'dataRetention', 'liveResponseStreaming'];
     const appletContentItems = ['versionHistory', 'transferOwnership', 'deleteApplet'];
     const sharingItemsForPublished = ['concealApplet'];
     const sharingItems = ['publishApplet'];
@@ -57,6 +57,7 @@ describe('getSettings', () => {
 
     test.each`
       label                    | description
+      ${'exportData'}          | ${'export data'}
       ${'dataRetention'}       | ${'data retention'}
       ${'versionHistory'}      | ${'version history'}
       ${'transferOwnership'}   | ${'transfer ownership'}

@@ -7,6 +7,7 @@ import {
   TransferOwnershipSetting,
   // ShareAppletSetting,
   DeleteAppletSetting,
+  ExportDataSetting,
   PublishConcealAppletSetting,
   VersionHistorySetting,
   LiveResponseStreamingSetting,
@@ -31,6 +32,17 @@ export const getSettings = ({
     {
       label: 'usersAndData',
       items: [
+        {
+          icon: <Svg id="export" />,
+          label: 'exportData',
+          component: <ExportDataSetting />,
+          onClick: () => Mixpanel.track('Export Data click'),
+          param: SettingParam.ExportData,
+          disabled: isNewApplet,
+          tooltip,
+          isVisible: isManagerOrOwner(roles?.[0]),
+          'data-testid': `${dataTestid}-export-data`,
+        },
         {
           icon: <Svg id="data-retention" />,
           label: 'dataRetention',

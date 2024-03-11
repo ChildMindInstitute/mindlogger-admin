@@ -11,8 +11,3 @@ export type ExportDataFormValues = {
   fromDate: Date;
   toDate: Date;
 };
-
-export type ExportDataSettingProps = {
-  isExportSettingsOpen: boolean;
-  onExportSettingsClose: () => void;
-};

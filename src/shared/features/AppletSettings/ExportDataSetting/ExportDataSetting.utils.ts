@@ -1,6 +1,6 @@
 import i18n from 'i18n';
 
-import { ExportDateType } from '../../ExportDataSetting.types';
+import { ExportDateType } from './ExportDataSettings.types';
 
 const { t } = i18n;
 
