@@ -4,6 +4,7 @@ import { theme, variables, StyledClearedButton } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 import { LEFT_SCHEDULE_PANEL_WIDTH } from '../Schedule.const';
+import { EVENT_WEEK_MAX_WIDTH } from './Calendar.const';
 
 const TIME_GUTTER_WIDTH = '8.5rem';
 
@@ -106,7 +107,7 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       }
 
       .rbc-event:not(.rbc-event-allday) {
-        max-width: 96% !important;
+        max-width: ${EVENT_WEEK_MAX_WIDTH} !important;
       }
     }
   }
