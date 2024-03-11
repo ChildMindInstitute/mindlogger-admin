@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { StyledFlexColumn, commonEllipsisStyles, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledActivity = styled(Box, shouldForwardProp)`
@@ -25,4 +25,13 @@ export const StyledActivity = styled(Box, shouldForwardProp)`
       background-color: ${variables.palette.surface2};
     }
   `}
+`;
+
+export const StyledHeaderContainer = styled(Box, shouldForwardProp)`
+  ${commonEllipsisStyles};
+  ${({ isSticky }: { isSticky: boolean }) => !isSticky && `margin-top: ${theme.spacing(2.4)}`}
+`;
+
+export const StyleContainer = styled(StyledFlexColumn)`
+  padding: ${theme.spacing(1.6, 1.6, 4.8)};
 `;
