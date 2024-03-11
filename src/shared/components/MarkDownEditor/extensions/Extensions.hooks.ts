@@ -67,7 +67,7 @@ export const useUploadMethods = ({
     if (!inputRef.current?.files?.length) return;
 
     const file = inputRef.current.files[0];
-    if (file.size > fileSizeExceeded) {
+    if (file.size >= fileSizeExceeded) {
       return setFileSizeExceeded(fileSizeExceeded);
     }
 
