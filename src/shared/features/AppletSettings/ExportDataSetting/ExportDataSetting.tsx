@@ -1,11 +1,20 @@
 import { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { ObjectSchema } from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { applet } from 'shared/state';
+import { getNormalizedTimezoneDate } from 'shared/utils';
 
-import { ExportDataSettingProps } from './ExportDataSetting.types';
-import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettingsPopup';
+import {
+  ExportDataFormValues,
+  ExportDataSettingProps,
+  ExportDateType,
+} from './ExportDataSetting.types';
 import { DATA_TESTID_EXPORT_DATA_EXPORT_POPUP } from './ExportDataSetting.const';
+import { exportDataSettingSchema } from './ExportDataSetting.schema';
+import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettingsPopup';
 
 export const ExportDataSetting = ({
   isExportSettingsOpen,
@@ -14,8 +23,20 @@ export const ExportDataSetting = ({
   const { result: appletData } = applet.useAppletData() ?? {};
   const [dataIsExporting, setDataIsExporting] = useState(false);
 
+  const minDate = new Date(appletData?.createdAt ?? '');
+  const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
+  const methods = useForm<ExportDataFormValues>({
+    resolver: yupResolver(exportDataSettingSchema() as ObjectSchema<ExportDataFormValues>),
+    defaultValues: {
+      dateType: ExportDateType.AllTime,
+      fromDate: minDate,
+      toDate: getMaxDate(),
+    },
+    mode: 'onSubmit',
+  });
+
   return (
-    <>
+    <FormProvider {...methods}>
       {isExportSettingsOpen && (
         <ExportSettingsPopup
           isOpen
@@ -35,6 +56,6 @@ export const ExportDataSetting = ({
           data-testid={DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}
         />
       )}
-    </>
+    </FormProvider>
   );
 };
