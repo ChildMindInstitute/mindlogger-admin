@@ -107,10 +107,19 @@ describe('getUploadedTime', () => {
 });
 
 describe('getEndOfYearDate', () => {
+  beforeAll(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2000-01-01'));
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   const testCases = [
     {
       uploadedDate: new Date('2022-03-05'),
-      expected: endOfYear(new Date()),
+      expected: endOfYear(new Date('2022-03-05')),
       description: 'returns current year end date when uploadedDate is before current year',
     },
     {

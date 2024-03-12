@@ -12,13 +12,18 @@ export const ContentWithTooltip = ({
   item,
   styles = {},
   tooltipByDefault,
+  'data-testid': dataTestid = '',
 }: ContentWithTooltipProps) => {
   const { width } = useWindowSize();
   const elementRef = useRef<HTMLDivElement>(null);
   const hasTooltip = useIsTextNodeEllipsed(elementRef, [elementRef.current, width, value]);
 
   return (
-    <Tooltip placement="top" tooltipTitle={tooltipByDefault || hasTooltip ? value : undefined}>
+    <Tooltip
+      placement="top"
+      tooltipTitle={tooltipByDefault || hasTooltip ? value : undefined}
+      data-testid={dataTestid}
+    >
       <StyledCellText sx={styles} ref={elementRef}>
         {item.label || value}
       </StyledCellText>

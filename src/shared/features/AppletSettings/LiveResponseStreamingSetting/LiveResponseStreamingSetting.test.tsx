@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { createRef } from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
@@ -92,7 +92,7 @@ describe('LiveResponseStreamingSetting', () => {
     const wrongMockedPort = '999999d';
     const ref = createRef();
 
-    const { getByTestId, getByLabelText, getByText } = renderWithAppletFormData({
+    const { getByTestId, getByLabelText, findByText } = renderWithAppletFormData({
       children: <LiveResponseStreamingSetting />,
       appletFormData: {
         streamEnabled: false,
@@ -113,7 +113,8 @@ describe('LiveResponseStreamingSetting', () => {
 
     fireEvent.blur(ipAddressInput);
 
-    expect(getByText('Invalid IP Address')).toBeInTheDocument();
+    const apiAddressError = await findByText('Invalid IP Address');
+    expect(apiAddressError).toBeInTheDocument();
 
     const portInput = getByLabelText('Default Port');
     await userEvent.type(portInput, `${wrongMockedPort}`);
@@ -123,6 +124,7 @@ describe('LiveResponseStreamingSetting', () => {
 
     fireEvent.blur(ipAddressInput);
 
-    expect(await screen.findByText('Invalid Port')).toBeInTheDocument();
+    const invalidPortError = await findByText('Invalid Port');
+    expect(invalidPortError).toBeInTheDocument();
   });
 });
