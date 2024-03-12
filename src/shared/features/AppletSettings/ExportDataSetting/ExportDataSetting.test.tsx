@@ -1,4 +1,5 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { addDays, roundToNearestMinutes } from 'date-fns';
 
 import { ExportData } from 'api';
 import { initialStateData } from 'redux/modules';
@@ -11,8 +12,9 @@ import {
   DATA_TESTID_EXPORT_DATA_EXPORT_POPUP,
   DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP,
 } from './ExportDataSetting.const';
+import { ExportDateType } from './ExportDataSetting.types';
 
-const createdDate = '2023-11-14T14:43:33';
+const createdDate = '2023-11-14T14:43:33.369902';
 
 const preloadedState = {
   applet: {
@@ -71,8 +73,14 @@ describe('ExportDataSetting', () => {
     expect(mockOnClose).toHaveBeenCalled();
   });
 
-  describe('date options', () => {
-    it('should pass settings specified in settings popup to the export popup', async () => {
+  describe('should pass settings specified in settings popup to the export popup', () => {
+    test.each`
+      exportType                  | expectedFromTime            | description
+      ${ExportDateType.AllTime}   | ${new Date(createdDate)}    | ${'use applet create time and now for all time'}
+      ${ExportDateType.Last24h}   | ${addDays(new Date(), -1)}  | ${'use correct dates for last 24h'}
+      ${ExportDateType.LastWeek}  | ${addDays(new Date(), -7)}  | ${'use correct dates for last week'}
+      ${ExportDateType.LastMonth} | ${addDays(new Date(), -30)} | ${'use correct dates for last month'}
+    `('$description', async ({ exportType, expectedFromTime }) => {
       const mockOnClose = jest.fn();
 
       jest.spyOn(encryptionFunctions, 'getAppletEncryptionInfo').mockImplementation(() =>
@@ -92,6 +100,11 @@ describe('ExportDataSetting', () => {
         expect(screen.queryByTestId(DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP)).toBeInTheDocument(),
       );
 
+      const dateType = screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-dateType`);
+      expect(dateType).toBeVisible();
+      const input = dateType.querySelector('input');
+      input && fireEvent.change(input, { target: { value: exportType } });
+
       fireEvent.click(screen.getByText('Download CSV'));
 
       expect(screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_EXPORT_POPUP}-password`)).toBeVisible();
@@ -110,11 +123,20 @@ describe('ExportDataSetting', () => {
         const requestBody = mockedExportDataApi.mock.calls[0][0];
 
         expect(requestBody).toHaveProperty('appletId', mockedApplet.id);
-        expect(requestBody).toHaveProperty('fromDate', createdDate);
-
-        // We don't check an explicit value here because the `toDate` uses `new Date()`
-        // which will be different everytime the test runs
+        expect(requestBody).toHaveProperty('fromDate');
         expect(requestBody).toHaveProperty('toDate');
+
+        // When checking relative dates, round the date to the nearest
+        // 5 minute to account for the test run time.
+        expect(
+          roundToNearestMinutes(new Date(requestBody.fromDate), {
+            nearestTo: 5,
+          }),
+        ).toEqual(
+          roundToNearestMinutes(expectedFromTime, {
+            nearestTo: 5,
+          }),
+        );
       });
     });
   });
