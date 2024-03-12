@@ -12,7 +12,10 @@ import {
 import { StickyHeaderProps } from './StickyHeader.types';
 import { StyledHeaderContainer } from './StickyHeader.styles';
 
-export const StickyHeader = ({ containerRef }: StickyHeaderProps) => {
+export const StickyHeader = ({
+  containerRef,
+  'data-testid': dataTestid = '',
+}: StickyHeaderProps) => {
   const { t } = useTranslation();
   const respondentLabel = useRespondentLabel();
   const isHeaderSticky = useHeaderSticky(
@@ -20,6 +23,7 @@ export const StickyHeader = ({ containerRef }: StickyHeaderProps) => {
     OFFSET_TO_SET_STICKY / 2,
     OFFSET_TO_UNSET_STICKY / 2,
   );
+  const contentTestId = `sticky-header-content-${dataTestid}`;
 
   return (
     <StyledStickyHeader
@@ -36,6 +40,7 @@ export const StickyHeader = ({ containerRef }: StickyHeaderProps) => {
           value={respondentLabel}
           item={{ label: respondentLabel } as DataTableItem}
           styles={{ position: 'relative', padding: 0 }}
+          data-testid={contentTestId}
         />
       </StyledHeaderContainer>
     </StyledStickyHeader>
