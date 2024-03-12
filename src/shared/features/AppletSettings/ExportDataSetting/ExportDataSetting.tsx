@@ -45,6 +45,8 @@ export const ExportDataSetting = ({
             setDataIsExporting(true);
             onExportSettingsClose();
           }}
+          minDate={minDate}
+          getMaxDate={getMaxDate}
         />
       )}
       {dataIsExporting && (

@@ -1,4 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { addDays, format } from 'date-fns';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -6,7 +7,7 @@ import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { DateFormats } from 'shared/consts';
 import { mockedAppletId, mockedApplet } from 'shared/mock';
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { SettingParam, getNormalizedTimezoneDate, renderWithProviders } from 'shared/utils';
 
 import { ExportSettingsPopup } from './ExportSettingsPopup';
 import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.const';
@@ -25,6 +26,7 @@ const preloadedState = {
 };
 
 const mockOnClose = jest.fn();
+const mockOnExport = jest.fn();
 
 const FormComponent = ({ children }: { children: React.ReactNode }) => {
   const methods = useForm<ExportDataFormValues>({
@@ -39,13 +41,18 @@ const FormComponent = ({ children }: { children: React.ReactNode }) => {
   return <FormProvider {...methods}>{children}</FormProvider>;
 };
 
+const commonProps = {
+  onClose: mockOnClose,
+  onExport: mockOnExport,
+  minDate: date,
+  getMaxDate: () => getNormalizedTimezoneDate(new Date().toString()),
+};
+
 describe('ExportSettingsPopup', () => {
   it('should appear if isOpen is true', async () => {
-    const mockOnExport = jest.fn();
-
     renderWithProviders(
       <FormComponent>
-        <ExportSettingsPopup isOpen onClose={mockOnClose} onExport={mockOnExport} />
+        <ExportSettingsPopup isOpen {...commonProps} />
       </FormComponent>,
       {
         preloadedState,
@@ -58,11 +65,9 @@ describe('ExportSettingsPopup', () => {
   });
 
   it('should not appear if isOpen is false', async () => {
-    const mockOnExport = jest.fn();
-
     renderWithProviders(
       <FormComponent>
-        <ExportSettingsPopup isOpen={false} onClose={mockOnClose} onExport={mockOnExport} />
+        <ExportSettingsPopup isOpen={false} {...commonProps} />
       </FormComponent>,
       {
         preloadedState,
@@ -73,18 +78,16 @@ describe('ExportSettingsPopup', () => {
   });
 
   it('should trigger onExport if download button is clicked', async () => {
-    const mockOnExport = jest.fn();
-
     renderWithProviders(
       <FormComponent>
-        <ExportSettingsPopup isOpen onClose={mockOnClose} onExport={mockOnExport} />
+        <ExportSettingsPopup isOpen {...commonProps} />
       </FormComponent>,
       {
         preloadedState,
       },
     );
 
-    fireEvent.click(screen.getByText('Download CSV'));
+    await userEvent.click(screen.getByText('Download CSV'));
 
     expect(mockOnExport).toBeCalled();
   });
@@ -97,11 +100,9 @@ describe('ExportSettingsPopup', () => {
       ${ExportDateType.LastWeek}  | ${'last week'}
       ${ExportDateType.AllTime}   | ${'all time'}
     `('$description', async ({ exportDataType }) => {
-      const mockOnExport = jest.fn();
-
       renderWithProviders(
         <FormComponent>
-          <ExportSettingsPopup isOpen onClose={mockOnClose} onExport={mockOnExport} />
+          <ExportSettingsPopup isOpen {...commonProps} />
         </FormComponent>,
         {
           preloadedState,
@@ -111,7 +112,7 @@ describe('ExportSettingsPopup', () => {
       const input = dateType.querySelector('input');
       input && fireEvent.change(input, { target: { value: exportDataType } });
 
-      fireEvent.click(screen.getByText('Download CSV'));
+      await userEvent.click(screen.getByText('Download CSV'));
       expect(mockOnExport).toBeCalled();
     });
   });
@@ -122,11 +123,9 @@ describe('ExportSettingsPopup', () => {
       ${`/dashboard/${mockedAppletId}/settings/${SettingParam.ExportData}`} | ${page.appletSettingsItem}        | ${'for dashboard'}
       ${`/builder/${mockedAppletId}/settings/${SettingParam.ExportData}`}   | ${page.builderAppletSettingsItem} | ${'for builder'}
     `('$description', async ({ route, routePath }) => {
-      const mockOnExport = jest.fn();
-
       renderWithProviders(
         <FormComponent>
-          <ExportSettingsPopup isOpen onClose={mockOnClose} onExport={mockOnExport} />
+          <ExportSettingsPopup isOpen {...commonProps} />
         </FormComponent>,
         { preloadedState, route, routePath },
       );
@@ -149,7 +148,7 @@ describe('ExportSettingsPopup', () => {
       fromDateInput && fireEvent.change(fromDateInput, { target: { value: addDays(date, 1) } });
       toDateInput && fireEvent.change(toDateInput, { target: { value: addDays(date, -1) } });
 
-      fireEvent.click(screen.getByText('Download CSV'));
+      await userEvent.click(screen.getByText('Download CSV'));
       expect(mockOnExport).toBeCalled();
     });
   });

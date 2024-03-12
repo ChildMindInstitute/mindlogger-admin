@@ -10,7 +10,6 @@ import { DatePicker, Modal } from 'shared/components';
 import { theme, StyledBodyLarge, StyledFlexTopCenter, StyledModalWrapper } from 'shared/styles';
 import { SelectEvent } from 'shared/types';
 import { DateType } from 'shared/components/DatePicker/DatePicker.types';
-import { getNormalizedTimezoneDate } from 'shared/utils';
 import { StyledAppletSettingsButton } from 'shared/features/AppletSettings/AppletSettings.styles';
 
 import { ExportSettingsPopupProps } from './ExportSettingsPopup.types';
@@ -19,7 +18,13 @@ import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from '../../ExportDataSetting.
 import { ExportDataFormValues, ExportDateType } from '../../ExportDataSetting.types';
 import { StyledExportSettingsDescription } from './ExportSettingsPopup.styles';
 
-export const ExportSettingsPopup = ({ isOpen, onClose, onExport }: ExportSettingsPopupProps) => {
+export const ExportSettingsPopup = ({
+  isOpen,
+  onClose,
+  onExport,
+  minDate,
+  getMaxDate,
+}: ExportSettingsPopupProps) => {
   const { t } = useTranslation('app');
   const { result: appletData } = applet.useAppletData() ?? {};
 
@@ -28,9 +33,6 @@ export const ExportSettingsPopup = ({ isOpen, onClose, onExport }: ExportSetting
   const fromDate = watch('fromDate');
   const toDate = watch('toDate');
   const hasCustomDate = dateType === ExportDateType.ChooseDates;
-
-  const minDate = new Date(appletData?.createdAt ?? '');
-  const getMaxDate = () => getNormalizedTimezoneDate(new Date().toString());
 
   const commonProps = {
     maxDate: getMaxDate(),
