@@ -47,4 +47,26 @@ describe('useHeaderSticky', () => {
     fireEvent.scroll(ref.current!, { target: { scrollTop: OFFSET_TO_UNSET_STICKY - 1 } });
     expect(result.current).toBe(false);
   });
+
+  test('changes returned value if scrollTop crosses the custom offset', () => {
+    const ref = createRef<HTMLElement>();
+
+    render(<ScrollableNode ref={ref} />);
+
+    const { result } = renderHook(() =>
+      useHeaderSticky(ref, OFFSET_TO_SET_STICKY + 10, OFFSET_TO_UNSET_STICKY - 10),
+    );
+
+    fireEvent.scroll(ref.current!, { target: { scrollTop: OFFSET_TO_SET_STICKY } });
+    expect(result.current).toBe(false);
+
+    fireEvent.scroll(ref.current!, { target: { scrollTop: OFFSET_TO_SET_STICKY + 10 } });
+    expect(result.current).toBe(true);
+
+    fireEvent.scroll(ref.current!, { target: { scrollTop: OFFSET_TO_UNSET_STICKY - 1 } });
+    expect(result.current).toBe(true);
+
+    fireEvent.scroll(ref.current!, { target: { scrollTop: OFFSET_TO_UNSET_STICKY - 11 } });
+    expect(result.current).toBe(false);
+  });
 });
