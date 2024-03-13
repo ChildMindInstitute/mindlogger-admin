@@ -9,6 +9,8 @@
   "dashboardRespondents": "/dashboard/respondents",
   "dashboardApplets": "/dashboard/applets",
   "applet": "/dashboard/:appletId",
+  "appletOverview": "/dashboard/:appletId/overview",
+  "appletActivities": "/dashboard/:appletId/activities",
   "appletRespondents": "/dashboard/:appletId/respondents",
   "appletRespondentData": "/dashboard/:appletId/respondents/:respondentId/dataviz",
   "appletRespondentDataSummary": "/dashboard/:appletId/respondents/:respondentId/dataviz/summary",

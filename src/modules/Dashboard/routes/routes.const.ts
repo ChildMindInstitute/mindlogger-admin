@@ -7,6 +7,8 @@ const Managers = lazy(() => import('modules/Dashboard/features/Managers'));
 const Respondents = lazy(() => import('modules/Dashboard/features/Respondents'));
 const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
 const Schedule = lazy(() => import('modules/Dashboard/features/Applet/Schedule'));
+const Overview = lazy(() => import('modules/Dashboard/features/Applet/Overview'));
+const Activities = lazy(() => import('modules/Dashboard/features/Applet/Activities'));
 const AppletSettings = lazy(
   () => import('modules/Dashboard/features/Applet/DashboardAppletSettings'),
 );
@@ -27,6 +29,14 @@ export const mainRoutes = [
 ];
 
 export const appletRoutes = [
+  {
+    path: page.appletOverview,
+    Component: Overview,
+  },
+  {
+    path: page.appletActivities,
+    Component: Activities,
+  },
   {
     path: page.appletRespondents,
     Component: Respondents,
