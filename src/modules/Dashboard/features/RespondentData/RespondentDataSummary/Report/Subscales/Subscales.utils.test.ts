@@ -386,9 +386,7 @@ const item = {
 const allSubscalesToRenderInitial = {};
 const allSubscalesToRenderFirstSubscaleResult = {
   Subscale_SUM: {
-    restScores: {
-      multiple: {},
-    },
+    restScores: {},
     items: [
       {
         activityItem: {
@@ -517,9 +515,7 @@ const allSubscalesToRenderFirstSubscaleResult = {
 const allSubscalesToRenderFinalResult = {
   ...allSubscalesToRenderFirstSubscaleResult,
   Subscale_Average: {
-    restScores: {
-      multiple: {},
-    },
+    restScores: {},
     items: [
       {
         activityItem: {
