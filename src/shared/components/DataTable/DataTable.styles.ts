@@ -38,8 +38,10 @@ export const StyledTableCell = styled(TableCell)`
 `;
 
 export const StyledHeadCell = styled(TableCell, shouldForwardProp)`
-  &.MuiTableCell-head {
-    background-color: ${({ tableHeadBackground }: { tableHeadBackground?: string }) =>
-      tableHeadBackground ?? variables.palette.surface1};
+  && {
+    &.MuiTableCell-head {
+      background-color: ${({ tableHeadBackground }: { tableHeadBackground?: string }) =>
+        tableHeadBackground ?? variables.palette.surface1};
+    }
   }
 `;
