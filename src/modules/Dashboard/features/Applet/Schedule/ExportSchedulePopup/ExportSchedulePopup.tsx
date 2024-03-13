@@ -29,7 +29,7 @@ export const ExportSchedulePopup = ({
       data-testid={dataTestid}
     >
       <StyledModalWrapper>
-        <Box sx={{ margin: theme.spacing(-1.8, 0, 2.4) }}>
+        <Box sx={{ margin: theme.spacing(-1.8, 0, 2.4) }} data-testid={`${dataTestid}-description`}>
           {isIndividualSchedule ? (
             <Trans i18nKey="individualScheduleExport">
               The current individual schedule of respondent
@@ -49,6 +49,7 @@ export const ExportSchedulePopup = ({
           rows={scheduleTableRows}
           orderBy="activityName"
           uiType={UiType.Tertiary}
+          data-testid={`${dataTestid}-table`}
         />
       </StyledModalWrapper>
     </Modal>
