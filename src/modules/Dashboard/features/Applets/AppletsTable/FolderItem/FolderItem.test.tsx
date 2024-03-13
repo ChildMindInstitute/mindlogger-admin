@@ -56,6 +56,13 @@ const mockContext = {
   fetchData: jest.fn(),
 };
 
+const commonUseDndProps = {
+  onDragLeave: jest.fn(),
+  onDragOver: jest.fn(),
+  onDrop: jest.fn(),
+  onDragEnd: jest.fn(),
+};
+
 const getFolderItemComponent = (isEmpty = true, isNew = false) => (
   <AppletsContext.Provider value={mockContext}>
     <table>
@@ -225,12 +232,6 @@ describe('FolderItem component tests', () => {
   });
 
   test('should have correct classnames for hover and for isDragOver', async () => {
-    const commonUseDndProps = {
-      onDragLeave: jest.fn(),
-      onDragOver: jest.fn(),
-      onDrop: jest.fn(),
-      onDragEnd: jest.fn(),
-    };
     jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
       isDragOver: false,
       ...commonUseDndProps,
@@ -255,6 +256,10 @@ describe('FolderItem component tests', () => {
   });
 
   test('should not have classname for hover if folder is empty', async () => {
+    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+      isDragOver: false,
+      ...commonUseDndProps,
+    });
     const { findByTestId } = renderWithProviders(getFolderItemComponent(true));
 
     const tableRow = await findByTestId('dashboard-applets-table-folder-row');
