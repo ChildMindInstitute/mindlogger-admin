@@ -6,6 +6,7 @@ import { mockedApplet, mockedAppletId, mockedOwnerId, mockedPassword } from 'sha
 import { Roles } from 'shared/consts';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 
+import * as appletsTableHooks from '../AppletsTable.hooks';
 import { AppletsContext } from '../../Applets.context';
 import { AppletItem } from './AppletItem';
 
@@ -193,15 +194,33 @@ describe('AppletItem component tests', () => {
     });
   });
 
-  test('should have correct additional classnames', async () => {
-    const { findByTestId } = renderWithProviders(getAppletItemComponent(), {
-      preloadedState: getPreloadedState(),
+  test('should have correct classnames for hover and for isDragOver', async () => {
+    const commonUseDndProps = {
+      onDragLeave: jest.fn(),
+      onDragOver: jest.fn(),
+      onDrop: jest.fn(),
+      onDragEnd: jest.fn(),
+    };
+    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+      isDragOver: false,
+      ...commonUseDndProps,
     });
+
+    const { findByTestId, rerender } = renderWithProviders(getAppletItemComponent());
 
     const tableRow = await findByTestId('dashboard-applets-table-applet-row');
 
     expect(tableRow).toBeInTheDocument();
     expect(tableRow).toHaveClass('has-hover');
     expect(tableRow).not.toHaveClass('dragged-over');
+
+    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+      isDragOver: true,
+      ...commonUseDndProps,
+    });
+
+    rerender(getAppletItemComponent());
+
+    expect(tableRow).toHaveClass('has-hover dragged-over');
   });
 });

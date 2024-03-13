@@ -110,6 +110,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
       onDrop={(event) => onDrop(event, item)}
       onMouseEnter={() => setHasVisibleActions(true)}
       onMouseLeave={() => setHasVisibleActions(false)}
+      data-testid="dashboard-applets-table-folder-row"
     >
       <StyledTableCell
         width={AppletsColumnsWidth.Folder}
