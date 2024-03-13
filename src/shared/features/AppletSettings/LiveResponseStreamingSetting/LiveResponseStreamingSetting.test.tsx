@@ -113,7 +113,8 @@ describe('LiveResponseStreamingSetting', () => {
 
     fireEvent.blur(ipAddressInput);
 
-    await findByText('Invalid IP Address');
+    const apiAddressError = await findByText('Invalid IP Address');
+    expect(apiAddressError).toBeInTheDocument();
 
     const portInput = getByLabelText('Default Port');
     await userEvent.type(portInput, `${wrongMockedPort}`);
@@ -123,6 +124,7 @@ describe('LiveResponseStreamingSetting', () => {
 
     fireEvent.blur(ipAddressInput);
 
-    await findByText('Invalid Port');
+    const invalidPortError = await findByText('Invalid Port');
+    expect(invalidPortError).toBeInTheDocument();
   });
 });

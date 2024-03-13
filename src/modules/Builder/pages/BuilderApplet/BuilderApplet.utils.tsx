@@ -1230,3 +1230,10 @@ export const getSliderAlertValueValidation = (isContinuous: boolean) =>
 
       return isWithinInterval && maxAlertValue > minAlertValue;
     });
+
+export const getConditionsMatch = (message: string) =>
+  yup.string().when('conditions', {
+    is: (conditions: Condition[]) => conditions?.length > 0,
+    then: (schema) => schema.required(message),
+    otherwise: (schema) => schema,
+  });

@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Control } from 'react-hook-form';
 
 import { ReviewActivity } from 'api';
+import { RespondentDetails } from 'modules/Dashboard/types/Dashboard.types';
 
 import { Answer } from '../RespondentDataReview.types';
 
@@ -17,4 +18,5 @@ export type ReviewMenuProps = {
   onDateChange: (date?: Date | null) => void;
   isDatePickerLoading: boolean;
   onSelectAnswer: (answer: Answer | null) => void;
+  lastActivityCompleted?: RespondentDetails['lastSeen'];
 };

@@ -6,28 +6,28 @@ import { URL_REGEX } from 'shared/consts';
 
 const { t } = i18n;
 
+const getContentToSanitize = (content: string) => {
+  const urls = linkify.find(content, 'url');
+  if (!urls?.length) return content;
+
+  return urls.reduce(
+    (sanitizedContent, url) =>
+      sanitizedContent.replace(
+        new RegExp(url.value, 'g'),
+        url.value.replace(URL_REGEX, '').replace(/\./g, ''),
+      ),
+    content,
+  );
+};
+
 // function to remove Cross-site scripting (XSS), HTML injection, and URL
 export const getSanitizedContent = (
   content: string,
   sanitizeFromLink?: boolean,
   sanitizeFromUrl?: boolean,
-) => {
-  const getContentToSanitize = () => {
-    const urls = linkify.find(content, 'url');
-    if (!urls?.length) return content;
-
-    return urls.reduce(
-      (sanitizedContent, url) =>
-        sanitizedContent.replace(
-          new RegExp(url.value, 'g'),
-          url.value.replace(URL_REGEX, '').replace(/\./g, ''),
-        ),
-      content,
-    );
-  };
-
-  return DOMPurify.sanitize(
-    sanitizeFromUrl ? getContentToSanitize() : content,
+) =>
+  DOMPurify.sanitize(
+    sanitizeFromUrl ? getContentToSanitize(content) : content,
     sanitizeFromLink
       ? {
           FORBID_TAGS: ['a'],
@@ -39,7 +39,6 @@ export const getSanitizedContent = (
   )
     .replace(/&lt;/g, '<') // fix because DOMPurify replaces <,> symbols
     .replace(/&gt;/g, '>');
-};
 
 export const getDictionaryText = (description?: string | Record<string, string>) => {
   if (!description) return '';

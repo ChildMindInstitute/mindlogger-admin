@@ -1215,6 +1215,7 @@
     "atLeastOne": "Select at least 1 element",
     "atLeastOneCondition": "Set up at least one condition",
     "atLeastOneItem": "Select at least 1 Item",
+    "conditionalRule": "Set up conditional rule",
     "incorrectEmail": "Email must be valid",
     "isRequired": "{{- field}} is required",
     "isRequired_indexed": "{{- field}} {{- index}} is required",
