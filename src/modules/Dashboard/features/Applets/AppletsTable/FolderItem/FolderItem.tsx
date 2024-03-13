@@ -14,6 +14,7 @@ import { useAppletsDnd } from 'modules/Dashboard/features/Applets/AppletsTable/A
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
 
 import { StyledTableCell } from '../AppletsTable.styles';
+import { getTableRowClassNames } from '../AppletsTable.utils';
 import { FolderItemProps } from './FolderItem.types';
 import {
   StyledFolderIcon,
@@ -103,7 +104,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
 
   return (
     <TableRow
-      className={isDragOver ? 'dragged-over' : ''}
+      className={getTableRowClassNames({ hasHover: !!item?.foldersAppletCount, isDragOver })}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
       onDrop={(event) => onDrop(event, item)}

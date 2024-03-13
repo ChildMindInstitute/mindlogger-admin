@@ -9,28 +9,31 @@ import { UiType } from '../Table.types';
 const HEAD_ROW_HEIGHT = '5.3rem';
 
 export const StyledTableHead = styled(TableHead, shouldForwardProp)`
-  ${({ hasColFixedWidth }: { hasColFixedWidth?: boolean; uiType?: UiType }) =>
+  top: 0;
+  position: sticky;
+  z-index: ${theme.zIndex.fab};
+
+  ${({ hasColFixedWidth }: { hasColFixedWidth?: boolean; uiType?: UiType; tableHeadBg?: string }) =>
     hasColFixedWidth &&
     `
     display: block;
-    top: 0;
-    position: sticky;
     background-color: ${variables.palette.surface};
-    z-index: ${theme.zIndex.fab};
   `};
 
-  .MuiTableCell-root {
-    ${({ uiType }) => {
-      if (uiType === UiType.Secondary || uiType === UiType.Tertiary) {
-        return `background-color: ${variables.palette.surface3}`;
-      }
+  && {
+    .MuiTableCell-root {
+      ${({ uiType, tableHeadBg }) => {
+        if (uiType === UiType.Secondary || uiType === UiType.Tertiary) {
+          return `background-color: ${tableHeadBg || variables.palette.surface3}`;
+        }
 
-      if (uiType === UiType.Quaternary) {
-        return `background-color: ${variables.palette.surface1}`;
-      }
+        if (uiType === UiType.Quaternary) {
+          return `background-color: ${tableHeadBg || variables.palette.surface1}`;
+        }
 
-      return `background-color: ${variables.palette.surface}`;
-    }};
+        return `background-color: ${tableHeadBg || variables.palette.surface}`;
+      }};
+    }
   }
 `;
 

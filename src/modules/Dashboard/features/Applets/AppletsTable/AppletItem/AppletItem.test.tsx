@@ -192,4 +192,16 @@ describe('AppletItem component tests', () => {
       );
     });
   });
+
+  test('should have correct additional classnames', async () => {
+    const { findByTestId } = renderWithProviders(getAppletItemComponent(), {
+      preloadedState: getPreloadedState(),
+    });
+
+    const tableRow = await findByTestId('dashboard-applets-table-applet-row');
+
+    expect(tableRow).toBeInTheDocument();
+    expect(tableRow).toHaveClass('has-hover');
+    expect(tableRow).not.toHaveClass('dragged-over');
+  });
 });

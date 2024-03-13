@@ -18,21 +18,6 @@ export const StyledTableContainer = styled(TableContainer, shouldForwardProp)`
     background-color: transparent;
     height: 4.8rem;
   }
-
-  .MuiTableRow-root {
-    &:hover {
-      background-color: ${variables.palette.on_surface_alfa8};
-    }
-  }
-
-  .empty-state {
-    &.MuiTableRow-root {
-      &:hover {
-        cursor: default;
-        background-color: transparent;
-      }
-    }
-  }
 `;
 
 export const StyledCheckbox = styled(Checkbox)`

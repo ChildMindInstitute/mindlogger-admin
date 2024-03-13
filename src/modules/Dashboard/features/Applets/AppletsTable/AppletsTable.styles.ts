@@ -2,6 +2,7 @@ import { Box, styled, TableCell, TableContainer } from '@mui/material';
 
 import { variables, StyledFlexTopCenter } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+import { tableRowHoverColor } from 'shared/utils/colors';
 
 export const StyledTableContainer = styled(TableContainer)`
   display: flex;
@@ -20,6 +21,14 @@ export const StyledTableContainer = styled(TableContainer)`
 
   .MuiTableCell-head {
     background: ${variables.palette.surface};
+  }
+
+  && .MuiTableRow-root.has-hover {
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${tableRowHoverColor};
+    }
   }
 
   && .MuiTableRow-root.dragged-over {
