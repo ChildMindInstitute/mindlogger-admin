@@ -36,7 +36,9 @@ export const Applet = () => {
   return (
     <StyledBody>
       {isLoading && <Spinner />}
-      {appletData && <LinkedTabs hiddenHeader={hiddenHeader} tabs={appletTabs} />}
+      {appletData && (
+        <LinkedTabs hiddenHeader={hiddenHeader} tabs={appletTabs} isCentered={false} />
+      )}
     </StyledBody>
   );
 };
