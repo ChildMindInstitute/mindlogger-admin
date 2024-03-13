@@ -1,5 +1,7 @@
 import { normal } from 'color-blend';
 
+import { variables } from 'shared/styles/variables';
+
 export const convertColorToRGBA = (color: string) => {
   const div = document.createElement('div');
   div.style.backgroundColor = color;
@@ -34,3 +36,8 @@ export const blendColorsNormal = (mainColor: string, overlayColor: string) => {
     return `rgba(${r}, ${g}, ${b}, ${a})`;
   }
 };
+
+export const tableRowHoverColor = blendColorsNormal(
+  variables.palette.surface,
+  variables.palette.on_surface_alfa12,
+);

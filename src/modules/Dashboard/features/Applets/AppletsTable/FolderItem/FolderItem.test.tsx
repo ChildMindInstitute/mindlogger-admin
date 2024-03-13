@@ -6,6 +6,7 @@ import { mockedApplet, mockedAppletId, mockedCurrentWorkspace, mockedOwnerId } f
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 
+import * as appletsTableHooks from '../AppletsTable.hooks';
 import { FolderItem } from './FolderItem';
 import { AppletsContext } from '../../Applets.context';
 
@@ -53,6 +54,13 @@ const mockContext = {
   reloadData: mockReloadData,
   handleFolderClick: mockHandleFolderClick,
   fetchData: jest.fn(),
+};
+
+const commonUseDndProps = {
+  onDragLeave: jest.fn(),
+  onDragOver: jest.fn(),
+  onDrop: jest.fn(),
+  onDragEnd: jest.fn(),
 };
 
 const getFolderItemComponent = (isEmpty = true, isNew = false) => (
@@ -221,5 +229,42 @@ describe('FolderItem component tests', () => {
       { appletId: mockedAppletId, folderId: 'testId' },
       { signal: undefined },
     );
+  });
+
+  test('should have correct classnames for hover and for isDragOver', async () => {
+    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+      isDragOver: false,
+      ...commonUseDndProps,
+    });
+
+    const { findByTestId, rerender } = renderWithProviders(getFolderItemComponent(false));
+
+    const tableRow = await findByTestId('dashboard-applets-table-folder-row');
+
+    expect(tableRow).toBeInTheDocument();
+    expect(tableRow).toHaveClass('has-hover');
+    expect(tableRow).not.toHaveClass('dragged-over');
+
+    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+      isDragOver: true,
+      ...commonUseDndProps,
+    });
+
+    rerender(getFolderItemComponent(false));
+
+    expect(tableRow).toHaveClass('has-hover dragged-over');
+  });
+
+  test('should not have classname for hover if folder is empty', async () => {
+    jest.spyOn(appletsTableHooks, 'useAppletsDnd').mockReturnValue({
+      isDragOver: false,
+      ...commonUseDndProps,
+    });
+    const { findByTestId } = renderWithProviders(getFolderItemComponent(true));
+
+    const tableRow = await findByTestId('dashboard-applets-table-folder-row');
+
+    expect(tableRow).toBeInTheDocument();
+    expect(tableRow).not.toHaveClass('has-hover');
   });
 });

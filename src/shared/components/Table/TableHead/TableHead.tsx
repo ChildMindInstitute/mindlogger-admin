@@ -13,12 +13,13 @@ export const TableHead = ({
   onRequestSort,
   uiType = UiType.Primary,
   hasColFixedWidth,
+  tableHeadBg,
 }: TableHeadProps) => {
   const createSortHandler = (property: string) => (event: MouseEvent<unknown>) =>
     onRequestSort(event, property);
 
   return (
-    <StyledTableHead uiType={uiType} hasColFixedWidth={hasColFixedWidth}>
+    <StyledTableHead uiType={uiType} hasColFixedWidth={hasColFixedWidth} tableHeadBg={tableHeadBg}>
       {(uiType === UiType.Primary || uiType === UiType.Quaternary) && (
         <TableRow>
           <TableCell sx={{ flexGrow: 1 }} colSpan={headCells.length}>
