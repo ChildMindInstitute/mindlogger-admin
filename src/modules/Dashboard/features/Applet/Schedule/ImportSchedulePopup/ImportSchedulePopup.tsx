@@ -142,12 +142,7 @@ export const ImportSchedulePopup = ({
         (event) => event.frequency.toUpperCase() !== Periodicity.Always,
       );
 
-      const body = prepareImportPayload(
-        uploadedEvents,
-        scheduleExportData,
-        appletData,
-        respondentId,
-      );
+      const body = prepareImportPayload(uploadedEvents, appletData, respondentId);
       if (hasScheduledEvents) {
         respondentId
           ? await deleteIndividualScheduledEvents({

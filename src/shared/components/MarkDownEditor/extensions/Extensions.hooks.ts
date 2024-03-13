@@ -67,7 +67,7 @@ export const useUploadMethods = ({
     if (!inputRef.current?.files?.length) return;
 
     const file = inputRef.current.files[0];
-    if (file.size > fileSizeExceeded) {
+    if (file.size >= fileSizeExceeded) {
       return setFileSizeExceeded(fileSizeExceeded);
     }
 
@@ -83,6 +83,7 @@ export const useUploadMethods = ({
 
   useEffect(() => {
     setIsLoading(isLoading);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   return {

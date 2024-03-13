@@ -48,6 +48,7 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     activity_flow: flowId,
     activity_name: activityName,
     item: SPLASH_SCREEN_ITEM_NAME,
+    item_id: '',
     prompt: '',
     response: '',
     options: '',
@@ -103,6 +104,7 @@ export const getJourneyCSVObject = <T>({
     activity_flow: flowName,
     activity_name: activityName,
     item: activityItem.name,
+    item_id: activityItem.id,
     prompt: replaceItemVariableWithName({
       markdown: getDictionaryText(activityItem.question),
       items: event.items,

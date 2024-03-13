@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { StyledFlexColumn, theme, variables } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 export const StyledActivity = styled(Box, shouldForwardProp)`
@@ -25,4 +25,8 @@ export const StyledActivity = styled(Box, shouldForwardProp)`
       background-color: ${variables.palette.surface2};
     }
   `}
+`;
+
+export const StyleContainer = styled(StyledFlexColumn)`
+  padding: ${theme.spacing(1.6, 1.6, 4.8)};
 `;
