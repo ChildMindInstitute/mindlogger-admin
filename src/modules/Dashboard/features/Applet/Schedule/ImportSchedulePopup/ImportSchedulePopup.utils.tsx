@@ -118,7 +118,7 @@ export const getInvalidError = (type: ImportScheduleErrors) => {
   }
 };
 
-const getUploadedDate = (date: string | Date) => {
+export const getUploadedDate = (date: string | Date) => {
   if (date instanceof Date) {
     return date;
   }
@@ -129,7 +129,7 @@ const getUploadedDate = (date: string | Date) => {
   return date;
 };
 
-const getUploadedTime = (time: string | Date) => {
+export const getUploadedTime = (time: string | Date) => {
   if (time instanceof Date) {
     return format(time, DateFormats.Time);
   }
@@ -138,7 +138,7 @@ const getUploadedTime = (time: string | Date) => {
   return time.replace(/^[0-9]:/, (match) => `0${match}`);
 };
 
-const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) =>
+export const getFieldsToCheck = (data: ScheduleExportCsv, isUploadedSchedule: boolean) =>
   data.reduce(
     (acc: CheckFields, { activityName, frequency, startTime, endTime, notificationTime, date }) => {
       acc.activityNames.push(activityName);
@@ -236,12 +236,11 @@ export const getUploadedScheduleErrors = (
   };
 };
 
-const getEndOfYearDate = (uploadedDate: Date) =>
+export const getEndOfYearDate = (uploadedDate: Date) =>
   endOfYear(uploadedDate < new Date() ? new Date() : uploadedDate);
 
 export const prepareImportPayload = (
   uploadedEvents: UploadedEvent[],
-  scheduleExportData: ScheduleExportCsv,
   appletData?: SingleApplet,
   respondentId?: string,
 ) =>
