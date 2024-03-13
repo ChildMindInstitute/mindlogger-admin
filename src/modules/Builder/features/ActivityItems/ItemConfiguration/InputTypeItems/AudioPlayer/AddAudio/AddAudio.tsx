@@ -5,6 +5,7 @@ import { ButtonWithMenu } from 'shared/components';
 
 import { AddAudioProps } from './AddAudio.types';
 import { getMenuItems } from './AddAudio.utils';
+import { audioPlayerDataTestid } from '../AudioPlayerContent/AudioPlayerContent.const';
 
 export const AddAudio = ({ onUploadAudio, onRecordAudio }: AddAudioProps) => {
   const { t } = useTranslation('app');
@@ -22,7 +23,7 @@ export const AddAudio = ({ onUploadAudio, onRecordAudio }: AddAudioProps) => {
 
   return (
     <ButtonWithMenu
-      data-testid="builder-activity-items-item-configuration-audio-player-add"
+      data-testid={`${audioPlayerDataTestid}-add`}
       variant="outlined"
       label={t('addAudio')}
       anchorEl={anchorEl}

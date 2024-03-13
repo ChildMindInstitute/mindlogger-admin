@@ -22,7 +22,7 @@ import { useIsServerConfigured } from 'shared/hooks';
 import { ScoreOrSection, ScoreReport, SectionReport } from 'shared/state';
 import { page } from 'resources';
 import { ScoreReportType } from 'shared/consts';
-import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
+import { REACT_HOOK_FORM_KEY_NAME, REPORTS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 import { ItemFormValues } from 'modules/Builder/types';
 import { removeMarkdown } from 'modules/Builder/utils';
 
@@ -67,6 +67,7 @@ export const ScoresAndReports = () => {
     name: reportsName,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
+  const reportsSize = reports?.length ?? 0;
 
   const items = activity?.items.reduce(
     (items: Pick<ItemFormValues, 'id' | 'name' | 'question'>[], item) => {
@@ -105,10 +106,11 @@ export const ScoresAndReports = () => {
   };
 
   useEffect(() => {
-    if (reports?.length) return;
+    if (reportsSize) return;
 
     setValue(generateReportName, false);
-  }, [reports]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportsSize]);
 
   return (
     <>
@@ -133,7 +135,7 @@ export const ScoresAndReports = () => {
         )}
       </StyledBodyLarge>
       <CheckboxController
-        disabled={!reports?.length}
+        disabled={!reportsSize}
         control={control}
         key={generateReportName}
         name={generateReportName}
@@ -200,8 +202,10 @@ export const ScoresAndReports = () => {
                             contentProps={{
                               name: reportName,
                               title,
+                              index,
+                              isStaticActive: reportsSize > REPORTS_COUNT_TO_ACTIVATE_STATIC,
                               ...(isSection && { sectionId: report.id }),
-                              ...(!isSection && { index, tableItems, scoreItems }),
+                              ...(!isSection && { tableItems, scoreItems }),
                               'data-testid': reportDataTestid,
                               items,
                             }}

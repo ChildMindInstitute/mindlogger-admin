@@ -5,7 +5,6 @@ import {
   DEFAULT_SLIDER_MAX_NUMBER,
   DEFAULT_SLIDER_MAX_VALUE,
   DEFAULT_SLIDER_MIN_NUMBER,
-  DEFAULT_SLIDER_ROWS_MIN_NUMBER,
 } from 'modules/Builder/consts';
 
 import { ItemsOptionGroup } from './ItemConfiguration.types';
@@ -31,7 +30,6 @@ export const DEFAULT_EMPTY_SLIDER = {
 export const DEFAULT_EMPTY_SLIDER_ROWS = {
   ...DEFAULT_EMPTY_SLIDER,
   maxValue: DEFAULT_SLIDER_MAX_VALUE,
-  minValue: DEFAULT_SLIDER_ROWS_MIN_NUMBER,
   scores: DEFAULT_SLIDER_ROWS_SCORE,
   label: '',
 };

@@ -9,6 +9,7 @@ import {
   postReportConfigApi,
   postActivityReportConfigApi,
   postActivityFlowReportConfigApi,
+  ApiResponseCodes,
 } from 'api';
 import { applet, banners } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
@@ -92,6 +93,7 @@ export const ReportConfigSetting = ({
 
   const [isSettingsOpen, setSettingsOpen] = useState(!isServerConfigured);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
+  const [noPermissionVisible, setNoPermissionVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [warningPopupVisible, setWarningPopupVisible] = useState(false);
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
@@ -113,20 +115,38 @@ export const ReportConfigSetting = ({
     );
   };
 
-  const { execute: postReportConfig } = useAsync(postReportConfigApi, handleSuccess, () => {
+  const { execute: postReportConfig } = useAsync(postReportConfigApi, handleSuccess, (error) => {
+    if (error?.response?.status === ApiResponseCodes.Forbidden) {
+      setNoPermissionVisible(true);
+
+      return;
+    }
+
     setErrorPopupVisible(true);
   });
   const { execute: postActivityReportConfig } = useAsync(
     postActivityReportConfigApi,
     handleSuccess,
-    () => {
+    (error) => {
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermissionVisible(true);
+
+        return;
+      }
+
       setErrorPopupVisible(true);
     },
   );
   const { execute: postActivityFlowReportConfig } = useAsync(
     postActivityFlowReportConfigApi,
     handleSuccess,
-    () => {
+    (error) => {
+      if (error?.response?.status === ApiResponseCodes.Forbidden) {
+        setNoPermissionVisible(true);
+
+        return;
+      }
+
       setErrorPopupVisible(true);
     },
   );
@@ -150,7 +170,9 @@ export const ReportConfigSetting = ({
     mode: 'onSubmit',
   });
   const hasErrors = !!Object.keys(errors).length;
-  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(isDirty && !isSubmitted);
+  const { promptVisible, confirmNavigation, cancelNavigation } = usePrompt(
+    isDirty && !isSubmitted && !noPermissionVisible,
+  );
 
   const reportRecipients = watch('reportRecipients') || [];
   const includeRespondentId = watch('reportIncludeUserId');

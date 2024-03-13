@@ -54,7 +54,9 @@ export const getAllSubscalesToRender = (
     };
 
     for (const subscaleItem of subscale.items) {
-      if (subscaleItem.type === ElementType.Item && activityItems[subscaleItem.name]) {
+      if (!activityItems[subscaleItem.name]) continue;
+
+      if (subscaleItem.type === ElementType.Item) {
         const formattedItem = formatActivityItemAnswers(
           activityItems[subscaleItem.name],
           item.endDatetime,

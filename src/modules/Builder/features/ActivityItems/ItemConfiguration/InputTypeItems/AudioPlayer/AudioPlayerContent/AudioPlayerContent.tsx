@@ -11,6 +11,7 @@ import { UploadAudio } from '../UploadAudio';
 import { RecordAudio } from '../RecordAudio';
 import { RemoveAudioPopup } from '../RemoveAudioPopup';
 import { AudioPlayerContentProps } from './AudioPlayerContent.types';
+import { audioPlayerDataTestid } from './AudioPlayerContent.const';
 
 export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContentProps) => {
   const { t } = useTranslation('app');
@@ -23,7 +24,6 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
   const urlName = `${name}.responseValues.file`;
   const { error } = getFieldState(urlName);
   const url = watch(urlName);
-  const dataTestid = 'builder-activity-items-item-configuration-audio-player';
 
   const onCloseUploadPopup = () => setUploadPopupOpened(false);
   const onCloseRecordPopup = () => setRecordPopupOpened(false);
@@ -53,7 +53,7 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
       <StyledTitleMedium
         color={variables.palette.on_surface}
         sx={{ mb: theme.spacing(2.4) }}
-        data-testid={`${dataTestid}-description`}
+        data-testid={`${audioPlayerDataTestid}-description`}
       >
         {t('audioPlayerDescription')}
       </StyledTitleMedium>
@@ -61,7 +61,7 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
         <MLPlayer
           media={media}
           onRemove={() => setRemoveAudioPopupOpened(true)}
-          data-testid={`${dataTestid}-player`}
+          data-testid={`${audioPlayerDataTestid}-player`}
         />
       )}
       {!url && (
@@ -71,7 +71,12 @@ export const AudioPlayerContent = ({ media, setMedia, name }: AudioPlayerContent
         />
       )}
       {error?.message && (
-        <StyledBodyErrorText sx={{ mt: theme.spacing(2.4) }}>{error.message}</StyledBodyErrorText>
+        <StyledBodyErrorText
+          sx={{ mt: theme.spacing(2.4) }}
+          data-testid={`${audioPlayerDataTestid}-error`}
+        >
+          {error.message}
+        </StyledBodyErrorText>
       )}
       {isUploadPopupOpened && (
         <UploadAudio

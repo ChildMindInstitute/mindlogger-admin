@@ -10,7 +10,7 @@ import { ApiResponseCodes } from 'api';
 import * as reduxHooks from 'redux/store/hooks';
 import * as sharedHooks from 'shared/hooks';
 import * as libraryHooks from 'modules/Library/hooks';
-import * as сartUtils from 'modules/Library/features/Cart/Cart.utils';
+import * as cartUtils from 'modules/Library/features/Cart/Cart.utils';
 
 import { AddToBuilderPopup } from './AddToBuilderPopup';
 
@@ -126,8 +126,8 @@ jest.mock('modules/Library/hooks', () => ({
   ...jest.requireActual('modules/Library/hooks'),
 }));
 
-сartUtils.navigateToBuilder = mockNavigateToBuilder;
-сartUtils.getAddToBuilderData = () => ({
+(cartUtils as never).navigateToBuilder = mockNavigateToBuilder;
+(cartUtils as never).getAddToBuilderData = () => ({
   appletToBuilder: {},
 });
 
