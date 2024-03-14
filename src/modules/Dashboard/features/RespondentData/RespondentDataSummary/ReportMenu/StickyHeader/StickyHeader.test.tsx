@@ -5,12 +5,12 @@ import { Box } from '@mui/material';
 
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils';
-import { RespondentDetails } from 'modules/Dashboard/types';
-import { mockedRespondentDetails } from 'shared/mock';
+import { mockedRespondentId } from 'shared/mock';
+import { initialStateData } from 'shared/state';
 
 import { StickyHeader } from './StickyHeader';
 
-const getState = (respondentDetails: RespondentDetails) => ({
+const preloadedState = {
   ...getPreloadedState(),
   users: {
     allRespondents: {
@@ -18,15 +18,19 @@ const getState = (respondentDetails: RespondentDetails) => ({
         result: [],
       },
     },
-    respondentDetails: {
+    subjectDetails: {
+      ...initialStateData,
       data: {
         result: {
-          ...respondentDetails,
+          nickname: 'Mocked Respondent',
+          secretUserId: mockedRespondentId,
+          lastSeen: '2023-12-11T08:40:41.424000',
         },
       },
     },
+    respondentDetails: initialStateData,
   },
-});
+};
 
 const ScrollableNode = forwardRef(({ children }, ref) => (
   <Box sx={{ height: '400px', overflowY: 'auto' }} ref={ref}>
@@ -43,11 +47,7 @@ describe('StickyHeader', () => {
         <StickyHeader containerRef={ref} data-testid="test" />
       </ScrollableNode>,
       {
-        preloadedState: getState({
-          nickname: mockedRespondentDetails.respondentNickname,
-          secretUserId: mockedRespondentDetails.respondentSecretId,
-          lastSeen: null,
-        }),
+        preloadedState,
       },
     );
 
@@ -59,7 +59,9 @@ describe('StickyHeader', () => {
     });
     expect(title).toHaveStyle({ fontSize: '3.2rem' });
 
-    const description = getByText('User: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)');
+    const description = getByText(
+      'User: b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7 (Mocked Respondent)',
+    );
     expect(description).toBeInTheDocument();
     expect(description).toHaveStyle({ position: 'relative', padding: 0 });
   });
