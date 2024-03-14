@@ -333,3 +333,8 @@ export const JEST_TEST_TIMEOUT = 10000;
 export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
 
 export const NULL_ANSWER = 'value: null';
+
+// TODO: temporally implementation of LaunchDarkly.
+export const __FEATURE_FLAGS = {
+  AppletMultiInformant: !!process.env.REACT_APP_FEATURE_FLAG_APPLET_MULTI_INFORMANT,
+};
