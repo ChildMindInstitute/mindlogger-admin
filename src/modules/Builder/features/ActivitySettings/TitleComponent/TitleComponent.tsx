@@ -1,5 +1,5 @@
-import { FieldError, useWatch } from 'react-hook-form';
 import { useEffect } from 'react';
+import { useWatch } from 'react-hook-form';
 
 import {
   StyledFlexColumn,
@@ -12,19 +12,15 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { TitleComponentProps } from './TitleComponent.types';
 import { StyledMark } from './TitleComponent.styles';
+import { getErrorMessages } from './TitleComponent.utils';
 
 export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
   const { getFieldState, trigger } = useCustomFormContext();
-  const errorObject = getFieldState(name).error as unknown as Record<string, FieldError>;
+  const errorObject = getFieldState(name).error as Record<string, unknown>;
   const entitiesField = name.split('.').slice(0, -1).join('.');
   const entities = useWatch({ name: entitiesField }) ?? [];
   const hasErrors = !!errorObject;
-  const errorMessages = hasErrors
-    ? Object.keys(errorObject).map((key) => ({
-        message: errorObject[key].message,
-        key,
-      }))
-    : [];
+  const errorMessages = hasErrors ? getErrorMessages(errorObject) : [];
   const isShowErrors = !open && errorMessages.length > 0;
 
   useEffect(() => {
@@ -34,7 +30,7 @@ export const TitleComponent = ({ title, name, open }: TitleComponentProps) => {
 
   return (
     <StyledFlexColumn sx={{ m: theme.spacing(0, 5, 0, 3), overflow: 'hidden' }}>
-      <StyledFlexTopCenter sx={{ position: 'relative' }}>
+      <StyledFlexTopCenter>
         {hasErrors && <StyledMark />}
         {title}
       </StyledFlexTopCenter>

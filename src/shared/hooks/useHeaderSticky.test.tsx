@@ -2,6 +2,8 @@ import { MutableRefObject, createRef, forwardRef } from 'react';
 import { act, fireEvent, render, renderHook } from '@testing-library/react';
 import { Box } from '@mui/material';
 
+import { requireEntity } from 'shared/utils';
+
 import { OFFSET_TO_SET_STICKY, OFFSET_TO_UNSET_STICKY, useHeaderSticky } from './useHeaderSticky';
 
 const ScrollableNode = forwardRef((_, ref) => (
@@ -41,10 +43,34 @@ describe('useHeaderSticky', () => {
 
     const { result } = renderHook(() => useHeaderSticky(ref));
 
-    fireEvent.scroll(ref.current!, { target: { scrollTop: OFFSET_TO_SET_STICKY } });
+    const component = requireEntity(ref.current);
+    fireEvent.scroll(component, { target: { scrollTop: OFFSET_TO_SET_STICKY } });
     expect(result.current).toBe(true);
 
-    fireEvent.scroll(ref.current!, { target: { scrollTop: OFFSET_TO_UNSET_STICKY - 1 } });
+    fireEvent.scroll(component, { target: { scrollTop: OFFSET_TO_UNSET_STICKY - 1 } });
+    expect(result.current).toBe(false);
+  });
+
+  test('changes returned value if scrollTop crosses the custom offset', () => {
+    const ref = createRef<HTMLElement>();
+
+    render(<ScrollableNode ref={ref} />);
+
+    const { result } = renderHook(() =>
+      useHeaderSticky(ref, OFFSET_TO_SET_STICKY + 10, OFFSET_TO_UNSET_STICKY - 10),
+    );
+
+    const component = requireEntity(ref.current);
+    fireEvent.scroll(component, { target: { scrollTop: OFFSET_TO_SET_STICKY } });
+    expect(result.current).toBe(false);
+
+    fireEvent.scroll(component, { target: { scrollTop: OFFSET_TO_SET_STICKY + 10 } });
+    expect(result.current).toBe(true);
+
+    fireEvent.scroll(component, { target: { scrollTop: OFFSET_TO_UNSET_STICKY - 1 } });
+    expect(result.current).toBe(true);
+
+    fireEvent.scroll(component, { target: { scrollTop: OFFSET_TO_UNSET_STICKY - 11 } });
     expect(result.current).toBe(false);
   });
 });

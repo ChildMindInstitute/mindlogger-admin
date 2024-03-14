@@ -3,10 +3,10 @@ import { styled, Box } from '@mui/material';
 import { theme, variables } from 'shared/styles';
 
 export const StyledMark = styled(Box)`
-  position: absolute;
-  left: -2rem;
+  flex-shrink: 0;
   border-radius: ${variables.borderRadius.half};
-  width: ${theme.spacing(0.6)};
-  height: ${theme.spacing(0.6)};
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-right: ${theme.spacing(0.5)};
   background-color: ${variables.palette.semantic.error};
 `;

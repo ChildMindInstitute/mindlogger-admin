@@ -6,7 +6,8 @@
 
 - [ ] Tests for the changes have been added
 - [ ] Related documentation has been added / updated
-- [ ] OSS packages added to MindLogger [open source credit page](https://mindlogger.atlassian.net/jira/servicedesk/projects/MLA/knowledge/articles/340623543?spaceKey=MLA)
+- [ ] OSS packages added to MindLogger [open source credit page](https://mindlogger.atlassian.net/wiki/spaces/MINDLOGGER1/pages/263127186/Admin+Panel+Applet+Builder+Library)
+- [ ] Delivered the `fix` or `feature` branches into `develop` or `release` branches via `Squash and Merge` (to keep clean history)
 
 ### 📝 Description
 

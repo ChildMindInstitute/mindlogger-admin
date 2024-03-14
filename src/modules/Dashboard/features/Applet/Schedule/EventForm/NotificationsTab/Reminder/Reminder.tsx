@@ -99,7 +99,7 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
   };
 
   return (
-    <StyledNotificationWrapper>
+    <StyledNotificationWrapper data-testid={dataTestid}>
       <StyledLabelLarge sx={{ margin: theme.spacing(1.2, 0, 0, 1.1) }}>
         {t('reminder')}
       </StyledLabelLarge>

@@ -213,6 +213,7 @@ export const RespondentDataReview = () => {
         onSelectAnswer={handleSelectAnswer}
         onDateChange={handleGetActivities}
         isDatePickerLoading={getSubmitDatesLoading}
+        lastActivityCompleted={lastActivityCompleted}
       />
       <RespondentDataReviewContext.Provider
         value={{
