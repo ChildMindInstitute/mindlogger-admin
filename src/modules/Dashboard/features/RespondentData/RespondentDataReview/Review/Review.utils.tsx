@@ -18,6 +18,8 @@ import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
 import { TextResponseItem } from '../TextResponseItem';
 import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
+import { NumberSelectionItemAnswer } from '../RespondentDataReview.types';
+import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem/NumberSelectionResponseItem';
 
 const { t } = i18n;
 
@@ -67,6 +69,8 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
       return <SliderResponseItem {...(activityItemAnswer as SliderItemAnswer)} />;
     case ItemResponseType.Text:
       return <TextResponseItem {...(activityItemAnswer as TextItemAnswer)} />;
+    case ItemResponseType.NumberSelection:
+      return <NumberSelectionResponseItem {...(activityItemAnswer as NumberSelectionItemAnswer)} />;
     case ItemResponseType.Time: {
       const answer = activityItemAnswer.answer as DecryptedTimeAnswer;
 
