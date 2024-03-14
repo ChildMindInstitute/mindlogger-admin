@@ -197,7 +197,10 @@ export const AvailabilityTab = ({
                 data-testid={`${dataTestid}-start-time`}
               />
             </StyledTimeWrapper>
-            <StyledTimeWrapper sx={{ marginLeft: theme.spacing(2.4) }}>
+            <StyledTimeWrapper
+              data-testid={`${dataTestid}-end-time-wrapper`}
+              sx={{ marginLeft: theme.spacing(2.4) }}
+            >
               <TimePicker
                 name="endTime"
                 control={control}
