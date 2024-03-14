@@ -7,13 +7,13 @@ import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 import { usePermissions, useRemoveAppletData } from 'shared/hooks';
 
-import { useAppletTabs } from './Applet.hooks';
+import { useMultiInformantAppletTabs } from './Applet.hooks';
 
-export const Applet = () => {
+export const AppletMultiInformant = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
 
-  const appletTabs = useAppletTabs();
+  const appletTabs = useMultiInformantAppletTabs();
   const { appletId } = useParams();
 
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -36,7 +36,9 @@ export const Applet = () => {
   return (
     <StyledBody>
       {isLoading && <Spinner />}
-      {appletData && <LinkedTabs hiddenHeader={hiddenHeader} tabs={appletTabs} />}
+      {appletData && (
+        <LinkedTabs hiddenHeader={hiddenHeader} tabs={appletTabs} isCentered={false} />
+      )}
     </StyledBody>
   );
 };
