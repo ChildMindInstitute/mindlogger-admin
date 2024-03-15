@@ -12,6 +12,7 @@ export const LinkedTabs = ({
   uiType = UiType.Primary,
   hiddenHeader = false,
   isBuilder = false,
+  isCentered = true,
 }: TabsProps) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
@@ -80,9 +81,9 @@ export const LinkedTabs = ({
         uiType={uiType}
         value={tabIndex}
         TabIndicatorProps={{ children: <span /> }}
-        centered
         hiddenHeader={hiddenHeader}
         isBuilder={isBuilder}
+        isCentered={isCentered}
       >
         {!hiddenHeader && header}
       </StyledTabs>

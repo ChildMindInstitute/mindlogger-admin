@@ -335,6 +335,7 @@ export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
 export const NULL_ANSWER = 'value: null';
 
 // TODO: temporary implementation of LaunchDarkly. Will be removed when LD integration is added
+// https://mindlogger.atlassian.net/browse/M2-5835
 export const __FEATURE_FLAGS = {
   AppletMultiInformant: !!process.env.REACT_APP_FEATURE_FLAG_APPLET_MULTI_INFORMANT,
 };

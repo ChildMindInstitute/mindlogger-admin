@@ -5,8 +5,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
 import { ErrorFallback } from 'shared/components';
+import { __FEATURE_FLAGS } from 'shared/consts';
 
 import { appletRoutes, mainRoutes } from './routes.const';
+import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
@@ -38,7 +40,7 @@ export const dashboardRoutes = () => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Applet />
+            {__FEATURE_FLAGS.AppletMultiInformant ? <AppletMultiInformant /> : <Applet />}
           </ErrorBoundary>
         </PrivateRoute>
       }
