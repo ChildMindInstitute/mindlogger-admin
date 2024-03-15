@@ -334,7 +334,7 @@ export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
 
 export const NULL_ANSWER = 'value: null';
 
-// TODO: temporally implementation of LaunchDarkly.
+// TODO: temporary implementation of LaunchDarkly. Will be removed when LD integration is added
 export const __FEATURE_FLAGS = {
   AppletMultiInformant: !!process.env.REACT_APP_FEATURE_FLAG_APPLET_MULTI_INFORMANT,
 };
