@@ -30,8 +30,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
-  console.log('breadcrumbs hook rerender');
-
   const respondentLabel = useRespondentLabel();
   const { workspaceName } = workspaces.useData() ?? {};
   const { result } = applet.useAppletData() ?? {};
