@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
 import { ErrorFallback } from 'shared/components';
+import { __FEATURE_FLAGS } from 'shared/consts';
 
 import { appletRoutes, mainRoutes } from './routes.const';
 import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
@@ -16,10 +17,6 @@ const RespondentDataReview = lazy(() => import('../features/RespondentData/Respo
 const RespondentDataSummary = lazy(
   () => import('../features/RespondentData/RespondentDataSummary'),
 );
-
-// TODO: Replace this with a feature flag.
-// https://mindlogger.atlassian.net/browse/M2-5835
-const ENABLE_MULTI_INFORMANT_APPLET_MANAGEMENT = false;
 
 export const dashboardRoutes = () => (
   <Route path={page.dashboard}>
@@ -43,7 +40,7 @@ export const dashboardRoutes = () => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {ENABLE_MULTI_INFORMANT_APPLET_MANAGEMENT ? <AppletMultiInformant /> : <Applet />}
+            {__FEATURE_FLAGS.AppletMultiInformant ? <AppletMultiInformant /> : <Applet />}
           </ErrorBoundary>
         </PrivateRoute>
       }
