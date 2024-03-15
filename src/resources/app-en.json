@@ -943,6 +943,8 @@
   "retry": "Retry",
   "review": "Review",
   "reviewDate": "Review Date",
+  "responses": "Responses",
+  "responseDate": "Response Date",
   "reviewed": "Reviewed",
   "reviewedEmptyState": "No reviewer has completed the Assessment for this.",
   "reviewer": "Reviewer",

@@ -19,7 +19,7 @@ import { ReviewMenu } from './ReviewMenu';
 import { ReviewMenuProps } from './ReviewMenu.types';
 
 const mockedAnswerId = '0a7bcd14-24a3-48ed-8d6b-b059a6541ae4';
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
+const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-05&answerId=${mockedAnswerId}`;
 const routePath = page.appletRespondentDataReview;
 const preloadedState = {
   workspaces: {
@@ -116,9 +116,10 @@ const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
 
   return <ReviewMenu {...props} />;
 };
-const expectReviewDateActvity = (enabled = true) => {
+const expectReviewDateActivity = (enabled = true) => {
   const reviewDate = screen.getByTestId(`${dataTestid}-review-date`);
   expect(reviewDate).toBeInTheDocument();
+  expect(reviewDate).toHaveTextContent('Response Date');
   const input = reviewDate.querySelector('input') as HTMLInputElement;
   expect(input).toBeInTheDocument();
   enabled
@@ -129,8 +130,8 @@ const expectReviewDateActvity = (enabled = true) => {
 describe('ReviewMenu', () => {
   test('renders component correctly, select activity, select timestamp', async () => {
     renderWithProviders(<ReviewMenuComponent />, { preloadedState, route, routePath });
-    expect(screen.getByText('Review')).toBeInTheDocument();
-    expectReviewDateActvity(true);
+    expect(screen.getByText('Responses')).toBeInTheDocument();
+    expectReviewDateActivity(true);
     expect(
       screen.getByText('User: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)'),
     ).toBeInTheDocument();
@@ -168,7 +169,7 @@ describe('ReviewMenu', () => {
       route,
       routePath,
     });
-    expectReviewDateActvity(false);
+    expectReviewDateActivity(false);
   });
 
   test('test change date of the month', async () => {

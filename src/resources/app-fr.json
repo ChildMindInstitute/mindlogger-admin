@@ -942,6 +942,8 @@
   "retry": "Réessayer",
   "review": "Examiner",
   "reviewDate": "Date de l'examen",
+  "responses": "Réponses",
+  "responseDate": "Date de réponse",
   "reviewed": "Examiné",
   "reviewedEmptyState": "Aucun examinateur n'a terminé l'Évaluation pour cela.",
   "reviewer": "Examinateur",
