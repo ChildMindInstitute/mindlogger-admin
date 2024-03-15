@@ -152,10 +152,10 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('review')) {
+    if (pathname.includes('responses')) {
       newBreadcrumbs.push({
         icon: 'checkbox-outlined',
-        label: t('review'),
+        label: t('responses'),
         disabledLink: true,
       });
     }
