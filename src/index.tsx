@@ -9,12 +9,12 @@ import './i18n';
 import reportWebVitals from './reportWebVitals';
 
 Sentry.init({
-  dsn: process.env.REACT_APP_DSN,
+  dsn: process.env.REACT_APP_DSN || '',
   integrations: [
     Sentry.browserTracingIntegration({
-      tracePropagationTargets: JSON.parse(
-        process.env.REACT_APP_TRACE_PROPAGATION_TARGETS as string,
-      ),
+      tracePropagationTargets: process.env.REACT_APP_TRACE_PROPAGATION_TARGETS
+        ? JSON.parse(process.env.REACT_APP_TRACE_PROPAGATION_TARGETS)
+        : [],
     }),
     Sentry.replayIntegration({
       maskAllText: false,
