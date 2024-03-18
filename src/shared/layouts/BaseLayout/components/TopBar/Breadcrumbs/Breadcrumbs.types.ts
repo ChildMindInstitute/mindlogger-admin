@@ -1,5 +1,6 @@
 export type Breadcrumb = {
   icon?: string;
+  image?: string;
   useCustomIcon?: boolean;
   label: string;
   chip?: string;

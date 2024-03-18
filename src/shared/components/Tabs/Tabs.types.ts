@@ -26,6 +26,7 @@ export type TabsProps = {
   hiddenHeader?: boolean;
   isBuilder?: boolean;
   isCentered?: boolean;
+  deepPathCompare?: boolean;
 };
 
 export type RenderTabs = {

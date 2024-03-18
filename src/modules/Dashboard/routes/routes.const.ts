@@ -5,6 +5,15 @@ import { page } from 'resources';
 const Applets = lazy(() => import('modules/Dashboard/features/Applets'));
 const Managers = lazy(() => import('modules/Dashboard/features/Managers'));
 const Respondents = lazy(() => import('modules/Dashboard/features/Respondents'));
+const RespondentActivities = lazy(
+  () => import('modules/Dashboard/features/RespondentDetails/RespondentActivities'),
+);
+const RespondentConnections = lazy(
+  () => import('modules/Dashboard/features/RespondentDetails/RespondentConnections'),
+);
+const RespondentSchedule = lazy(
+  () => import('modules/Dashboard/features/RespondentDetails/RespondentSchedule'),
+);
 const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
 const Schedule = lazy(() => import('modules/Dashboard/features/Applet/Schedule'));
 const Overview = lazy(() => import('modules/Dashboard/features/Applet/Overview'));
@@ -64,5 +73,20 @@ export const appletRoutes = [
   {
     path: page.appletAddUser,
     Component: AddUser,
+  },
+];
+
+export const respondentDetailsRoutes = [
+  {
+    path: page.appletRespondentConnections,
+    Component: RespondentConnections,
+  },
+  {
+    path: page.appletRespondentSchedule,
+    Component: RespondentSchedule,
+  },
+  {
+    path: page.appletRespondentDetails,
+    Component: RespondentActivities,
   },
 ];

@@ -7,6 +7,7 @@ import uniqueId from 'lodash.uniqueid';
 import { applet, workspaces, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store/hooks';
 import { page } from 'resources';
+import { __FEATURE_FLAGS } from 'shared/consts';
 import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
 import { getEntityKey } from 'shared/utils/getEntityKey';
 import {
@@ -27,13 +28,14 @@ import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
+  const isMultiInformant = __FEATURE_FLAGS.AppletMultiInformant;
   const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
-  const respondentLabel = useRespondentLabel();
-  const subjectLabel = useRespondentLabel(true);
+  const respondentLabel = useRespondentLabel({ hiddeNickname: isMultiInformant });
+  const subjectLabel = useRespondentLabel({ isSubject: true });
   const { workspaceName } = workspaces.useData() ?? {};
   const { result } = applet.useAppletData() ?? {};
   const { getValues } = useFormContext() ?? {};
@@ -122,7 +124,8 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           : page.dashboardManagers,
       });
     }
-    if (pathname.includes('respondents')) {
+
+    if (pathname.includes('respondents') && !isMultiInformant) {
       newBreadcrumbs.push({
         icon: 'respondent-outlined',
         label: t('respondents'),
@@ -131,13 +134,15 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           : page.dashboardRespondents,
       });
     }
+
     if (respondentId) {
       newBreadcrumbs.push({
-        icon: 'account',
+        icon: isMultiInformant ? undefined : 'account',
         label: respondentLabel || subjectLabel,
         disabledLink: true,
       });
     }
+
     if (pathname.includes('dataviz')) {
       newBreadcrumbs.push({
         label: t('viewData'),

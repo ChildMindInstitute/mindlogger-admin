@@ -5,21 +5,19 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
 import { ErrorFallback } from 'shared/components';
+import { __FEATURE_FLAGS } from 'shared/consts';
 
-import { appletRoutes, mainRoutes } from './routes.const';
+import { appletRoutes, mainRoutes, respondentDetailsRoutes } from './routes.const';
 import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
+const RespondentDetails = lazy(() => import('../pages/RespondentDetails'));
 const RespondentData = lazy(() => import('../pages/RespondentData'));
 const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
 const RespondentDataSummary = lazy(
   () => import('../features/RespondentData/RespondentDataSummary'),
 );
-
-// TODO: Replace this with a feature flag.
-// https://mindlogger.atlassian.net/browse/M2-5835
-const ENABLE_MULTI_INFORMANT_APPLET_MANAGEMENT = false;
 
 export const dashboardRoutes = () => (
   <Route path={page.dashboard}>
@@ -43,7 +41,7 @@ export const dashboardRoutes = () => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {ENABLE_MULTI_INFORMANT_APPLET_MANAGEMENT ? <AppletMultiInformant /> : <Applet />}
+            {__FEATURE_FLAGS.AppletMultiInformant ? <AppletMultiInformant /> : <Applet />}
           </ErrorBoundary>
         </PrivateRoute>
       }
@@ -91,6 +89,29 @@ export const dashboardRoutes = () => (
           />
         </Route>
       </Route>
+    </Route>
+    <Route
+      element={
+        <PrivateRoute>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <RespondentDetails />
+          </ErrorBoundary>
+        </PrivateRoute>
+      }
+    >
+      {respondentDetailsRoutes.map(({ path, Component }) => (
+        <Route
+          key={path}
+          path={path}
+          element={
+            <PrivateRoute>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Component />
+              </ErrorBoundary>
+            </PrivateRoute>
+          }
+        />
+      ))}
     </Route>
   </Route>
 );

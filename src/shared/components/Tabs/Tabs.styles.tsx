@@ -31,7 +31,7 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
       ? 'margin: 0 auto;'
       : // If the tabs are not centered, use the same left/right spacing
         // as TabPanel so they are horizontally aligned
-        `padding: ${theme.spacing(0, TABS_HORIZONTAL_PADDING)};`};
+        `margin: 0; padding: ${theme.spacing(0, TABS_HORIZONTAL_PADDING)};`};
 
   ${({ isBuilder }) =>
     isBuilder &&
@@ -48,12 +48,13 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
   `};
 
   .MuiTabs-flexContainer {
-    justify-content: center;
+    justify-content: ${({ isCentered }) => (isCentered ? 'center' : 'start')};
     gap: 1rem;
   }
 
   .MuiTab-root {
     opacity: 1;
+    ${({ isCentered }) => (!isCentered && 'max-width: 180px;') || ''}
     color: ${variables.palette.on_surface_variant};
     text-transform: inherit;
     padding: ${({ uiType }) =>
