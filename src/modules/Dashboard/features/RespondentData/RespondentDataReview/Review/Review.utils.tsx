@@ -19,7 +19,7 @@ import { SliderResponseItem } from '../SliderResponseItem';
 import { TextResponseItem } from '../TextResponseItem';
 import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
 import { NumberSelectionItemAnswer } from '../RespondentDataReview.types';
-import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem/NumberSelectionResponseItem';
+import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem';
 
 const { t } = i18n;
 
