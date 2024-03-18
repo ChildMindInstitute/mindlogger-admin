@@ -1,5 +1,6 @@
 import { PreloadedState } from '@reduxjs/toolkit';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils';
 import { RootState } from 'redux/store';
@@ -25,7 +26,7 @@ describe('Banners', () => {
     renderWithProviders(<Banners />, { preloadedState });
 
     const button = screen.getByRole('button');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     // Wait for Collapse transition to complete
     await waitFor(() => {

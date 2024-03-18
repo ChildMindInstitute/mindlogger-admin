@@ -24,8 +24,8 @@ import { RespondentDataReview } from './RespondentDataReview';
 const date = new Date('2023-12-27');
 const dataTestid = 'respondents-review';
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review?selectedDate=2023-12-27`;
-const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review`;
+const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-27`;
+const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`;
 const routePath = page.appletRespondentDataReview;
 const preloadedState = {
   workspaces: {
@@ -415,7 +415,7 @@ describe('RespondentDataReview', () => {
       routePath,
     });
 
-    const inputContainer = screen.getByTestId(`${dataTestid}-menu-review-date`);
+    const inputContainer = await screen.findByTestId(`${dataTestid}-menu-review-date`);
     expect(inputContainer).toBeInTheDocument();
 
     const input = inputContainer.querySelector('input') as HTMLInputElement;

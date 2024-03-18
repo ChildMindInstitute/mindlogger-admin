@@ -77,7 +77,7 @@ describe('ChartTooltip', () => {
 
     fireEvent.click(reviewButton);
     expect(mockedReviewAnswerNavigate).toBeCalledWith({
-      pathname: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/review`,
+      pathname: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
       search: `selectedDate=2023-12-20&answerId=${answerId}`,
     });
 
