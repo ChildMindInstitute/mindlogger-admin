@@ -12,6 +12,7 @@
   "appletOverview": "/dashboard/:appletId/overview",
   "appletActivities": "/dashboard/:appletId/activities",
   "appletRespondents": "/dashboard/:appletId/respondents",
+  "appletParticipants": "/dashboard/:appletId/participants",
   "appletRespondentData": "/dashboard/:appletId/respondents/:respondentId/dataviz",
   "appletRespondentDataSummary": "/dashboard/:appletId/respondents/:respondentId/dataviz/summary",
   "appletRespondentDataReview": "/dashboard/:appletId/respondents/:respondentId/dataviz/review",
