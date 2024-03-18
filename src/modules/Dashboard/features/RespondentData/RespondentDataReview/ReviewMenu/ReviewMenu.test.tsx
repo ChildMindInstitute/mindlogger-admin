@@ -133,7 +133,7 @@ describe('ReviewMenu', () => {
     expect(screen.getByText('Responses')).toBeInTheDocument();
     expectReviewDateActivity(true);
     expect(
-      screen.getByText('User: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)'),
+      screen.getByText('Respondent: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)'),
     ).toBeInTheDocument();
     expect(screen.getByText('Select activity and response')).toBeInTheDocument();
 

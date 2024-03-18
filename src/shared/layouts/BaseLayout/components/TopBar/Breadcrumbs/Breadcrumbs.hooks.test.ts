@@ -111,7 +111,7 @@ const commonDataVizTest = ({ home, applet, respondents, user, viewData }) => {
   });
   expect(user).toEqual({
     icon: 'account',
-    label: 'User: secretUserId (Jane Doe)',
+    label: 'Respondent: secretUserId (Jane Doe)',
     disabledLink: true,
     key: expect.any(String),
   });

@@ -86,7 +86,7 @@ export const RespondentData = () => {
         startIcon={<Svg id="directory-up" width="18" height="18" />}
         data-testid="respondents-summary-back-to-applet"
       >
-        {t('appletPage')}
+        {t('respondents')}
       </StyledDirectoryUpButton>
       <RespondentDataContext.Provider
         value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}

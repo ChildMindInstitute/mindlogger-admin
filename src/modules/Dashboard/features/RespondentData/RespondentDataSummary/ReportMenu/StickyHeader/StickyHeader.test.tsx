@@ -59,7 +59,9 @@ describe('StickyHeader', () => {
     });
     expect(title).toHaveStyle({ fontSize: '3.2rem' });
 
-    const description = getByText('User: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)');
+    const description = getByText(
+      'Respondent: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)',
+    );
     expect(description).toBeInTheDocument();
     expect(description).toHaveStyle({ position: 'relative', padding: 0 });
   });

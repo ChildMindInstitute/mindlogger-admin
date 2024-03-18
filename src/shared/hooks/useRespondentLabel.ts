@@ -13,5 +13,5 @@ export const useRespondentLabel = () => {
 
   const respondentName = getRespondentName(secretId || '', nickname);
 
-  return `${t('user')}: ${respondentName}`;
+  return `${t('respondent')}: ${respondentName}`;
 };
