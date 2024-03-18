@@ -13,6 +13,7 @@ import {
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
   DecryptedTimeAnswer,
+  DecryptedNumberSelectionAnswer,
   ElementType,
 } from 'shared/types';
 
@@ -450,6 +451,20 @@ export const formatActivityItemAnswers = (
       return {
         activityItem: formattedActivityItem,
         answers,
+      };
+    }
+    case ItemResponseType.NumberSelection: {
+      return {
+        activityItem: formattedActivityItem,
+        answers: [
+          {
+            answer: {
+              value: (currentAnswer.answer as DecryptedNumberSelectionAnswer)?.value ?? null,
+              text: null,
+            },
+            date,
+          },
+        ],
       };
     }
     default:
