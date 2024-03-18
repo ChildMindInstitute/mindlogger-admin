@@ -386,8 +386,8 @@ describe('ResponseOptions.utils', () => {
       ${textItemProps}            | ${textItemResult}            | ${'text '}
       ${timeItemProps}            | ${timeItemResult}            | ${'time'}
     `('$description', ({ itemProps, result }) => {
-      const res = getResponseItem(itemProps);
-      expect(res?.props).toEqual(result);
+      const itemComponent = getResponseItem(itemProps);
+      expect(itemComponent?.props).toEqual(result);
     });
   });
 });
