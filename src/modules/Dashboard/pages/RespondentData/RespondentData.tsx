@@ -47,6 +47,7 @@ export const RespondentData = () => {
 
   useEffect(() => {
     methods.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedActivity]);
 
   useEffect(() => {
@@ -66,6 +67,7 @@ export const RespondentData = () => {
         respondentId,
       }),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appletId, respondentId, ownerId]);
 
   useEffect(() => {
