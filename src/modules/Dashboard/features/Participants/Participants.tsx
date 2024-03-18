@@ -80,7 +80,13 @@ export const Participants = () => {
     });
   });
 
-  const { searchValue, handleSearch, ordering: _ordering, handleReload, ...tableProps } = useTable((args) => {
+  const {
+    searchValue,
+    handleSearch,
+    ordering: _ordering,
+    handleReload,
+    ...tableProps
+  } = useTable((args) => {
     setIsLoading(true);
     const params = {
       ...args,
