@@ -74,7 +74,7 @@ export const FeedbackNote = ({
   }, [isFeedbackOpen]);
 
   return (
-    <Box data-testid={`${dataTestid}`}>
+    <Box data-testid={dataTestid}>
       <StyledNoteHeader
         onMouseEnter={() => !isEditMode && setIsVisibleActions(true)}
         onMouseLeave={() => setIsVisibleActions(false)}
