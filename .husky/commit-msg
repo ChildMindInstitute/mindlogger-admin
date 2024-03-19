@@ -1,0 +1,21 @@
+#!/bin/sh
+current_branch=$(git branch --show-current)
+
+if ! [[ $current_branch =~ ^((feature|fix|tests)/M2-[0-9])|(release|develop)+ ]]; then
+  echo "The branch name should follow the format 'fix/M2-xxx', 'feature/M2-xxx' or 'tests/M2-xxx', xxx - ticket number"
+  exit 1
+fi
+
+
+if [ -e ./commit_msg_check_flag ]; then
+    rm ./commit_msg_check_flag
+    exit 0
+fi
+
+commit_msg_file=$1
+commit_msg=$(cat $commit_msg_file)
+
+if ! [[ $commit_msg =~ ^(M2-[0-9]+:|Merge)+ ]]; then
+  echo "Сommit message should follow the format 'M2-xxx:', xxx - ticket number"
+  exit 1
+fi
