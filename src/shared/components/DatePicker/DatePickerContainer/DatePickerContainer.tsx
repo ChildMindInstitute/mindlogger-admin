@@ -1,7 +1,6 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { dataTestid } from 'shared/features/AppletSettings/LiveResponseStreamingSetting/LiveResponseStreamingSetting.const';
 
 import { StyledIconBtn, StyledTextField } from '../DatePicker.styles';
 import { DatePickerContainerProps } from './DatePickerContainer.types';
@@ -14,8 +13,10 @@ export const DatePickerContainer = ({
   inputSx,
   error,
   id,
+  dataTestid,
   handlePickerShow,
 }: DatePickerContainerProps) => {
+  const { t } = useTranslation('app');
   const textFieldProps = {
     fullWidth: true,
     disabled,

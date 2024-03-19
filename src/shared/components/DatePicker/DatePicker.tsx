@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { fr } from 'date-fns/locale';
 
-import { Svg } from 'shared/components/Svg';
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { Tooltip } from 'shared/components/Tooltip';
 import { StyledBodyLarge, theme } from 'shared/styles';
@@ -13,15 +12,15 @@ import {
   StyledButton,
   StyledButtons,
   StyledCancelButton,
-  StyledIconBtn,
   StyledPopover,
-  StyledTextField,
+  StyledSpan,
 } from './DatePicker.styles';
 import { DateType, DateArrayType, DatePickerProps, DateVariant, UiType } from './DatePicker.types';
 import { DatePickerHeader } from './DatePickerHeader';
 import { getStringFromDate } from './DatePicker.utils';
 import { DATE_PLACEHOLDER } from './DatePicker.const';
 import { PopoverHeader } from './PopoverHeader';
+import { DatePickerContainer } from './DatePickerContainer';
 
 const ReactDatePicker = lazy(() => import('react-datepicker'));
 
@@ -97,56 +96,47 @@ export const DatePicker = <T extends FieldValues>({
           };
 
           const textFieldProps = {
-            fullWidth: true,
             disabled,
-            onClick: handlePickerShow,
-            className: isOpen ? 'active' : '',
-            sx: { ...inputSx },
-            error: !!error,
-            helperText: error?.message || null,
-            InputProps: {
-              endAdornment: (
-                <StyledIconBtn aria-describedby={id} disabled={disabled}>
-                  <Svg id="date" />
-                </StyledIconBtn>
-              ),
-            },
-            'data-testid': dataTestid,
+            isOpen,
+            inputSx,
+            error,
+            id,
+            handlePickerShow,
+            dataTestid,
           };
 
           const handleCloseWithSelectedDate = () => handlePickerClose(getSelectedDate());
 
           return (
             <>
-              <Tooltip tooltipTitle={tooltip}>
-                {uiType === UiType.OneDate ? (
-                  <StyledTextField
-                    variant="outlined"
-                    {...textFieldProps}
-                    label={label || t('date')}
-                    value={getValue()}
-                  />
-                ) : (
-                  <>
-                    <StyledTextField
-                      variant="outlined"
+              <Tooltip tooltipTitle={'Test message ... '}>
+                <StyledSpan>
+                  {uiType === UiType.OneDate ? (
+                    <DatePickerContainer
                       {...textFieldProps}
-                      label={t('startDate')}
-                      value={getValue()[0] || ''}
-                      data-testid={`${dataTestid}-start`}
+                      label={label || t('date')}
+                      value={getValue()}
                     />
-                    <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
-                      {t('smallTo')}
-                    </StyledBodyLarge>
-                    <StyledTextField
-                      variant="outlined"
-                      {...textFieldProps}
-                      label={t('endDate')}
-                      value={getValue()[1] || ''}
-                      data-testid={`${dataTestid}-end`}
-                    />
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <DatePickerContainer
+                        {...textFieldProps}
+                        label={t('startDate')}
+                        value={getValue()[0] || ''}
+                        dataTestid={`${dataTestid}-start`}
+                      />
+                      <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
+                        {t('smallTo')}
+                      </StyledBodyLarge>
+                      <DatePickerContainer
+                        {...textFieldProps}
+                        label={t('endDate')}
+                        value={getValue()[1] || ''}
+                        dataTestid={`${dataTestid}-end`}
+                      />
+                    </>
+                  )}
+                </StyledSpan>
               </Tooltip>
               <StyledPopover
                 id={id}

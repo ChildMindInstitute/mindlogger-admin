@@ -9,5 +9,6 @@ export type DatePickerContainerProps = {
   label?: string;
   disabled?: boolean;
   isOpen?: boolean;
+  dataTestid?: string;
   handlePickerShow?: MouseEventHandler<HTMLDivElement>;
 } & Pick<TextFieldProps, 'value'>;
