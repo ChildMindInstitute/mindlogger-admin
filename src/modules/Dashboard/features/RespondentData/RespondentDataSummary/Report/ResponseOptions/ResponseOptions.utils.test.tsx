@@ -237,6 +237,36 @@ describe('ResponseOptions.utils', () => {
       ],
       dataTestid: 'response-option-9-0',
     };
+    const dateItemProps = {
+      ...sharedProps,
+      activityItem: {
+        id: 'bd670ac1-75a5-4c46-8b70-be664b9e19a5',
+        question: {
+          name: 'text_with_response',
+          en: 'text question',
+        },
+        responseType: 'text',
+        responseValues: null,
+        responseDataIdentifier: false,
+      },
+      answers: [
+        {
+          answer: {
+            value: 'Test',
+            text: null,
+          },
+          date: '2024-03-14T10:03:01.345000',
+        },
+        {
+          answer: {
+            value: null,
+            text: null,
+          },
+          date: '2024-03-15T18:12:57.700000',
+        },
+      ],
+      dataTestid: 'response-option-9-0',
+    };
 
     const singleSelectionItemResult = {
       ...singleSelectionItemProps,
@@ -376,6 +406,10 @@ describe('ResponseOptions.utils', () => {
       dataTestid: undefined,
       'data-testid': 'response-option-4-0-time-picker-chart',
     };
+    const dateItemResult = {
+      answers: dateItemProps.answers,
+      'data-testid': 'response-option-9-0',
+    };
 
     test.each`
       itemProps                   | result                       | description
@@ -384,6 +418,7 @@ describe('ResponseOptions.utils', () => {
       ${sliderItemProps}          | ${sliderItemResult}          | ${'slider'}
       ${numberSelectionItemProps} | ${numberSelectionItemResult} | ${'number selection'}
       ${textItemProps}            | ${textItemResult}            | ${'text '}
+      ${dateItemProps}            | ${dateItemResult}            | ${'date '}
       ${timeItemProps}            | ${timeItemResult}            | ${'time'}
     `('$description', ({ itemProps, result }) => {
       const itemComponent = getResponseItem(itemProps);

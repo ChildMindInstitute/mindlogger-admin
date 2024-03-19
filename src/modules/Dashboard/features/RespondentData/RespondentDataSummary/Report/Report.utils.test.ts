@@ -1164,6 +1164,62 @@ describe('formatActivityItemAnswers', () => {
     ],
   };
 
+  const dateProps = {
+    ...sharedProps,
+    currentAnswer: {
+      activityItem: {
+        question: {
+          en: 'date_item_skippable',
+        },
+        responseType: 'date',
+        responseValues: null,
+        config: {
+          removeBackButton: false,
+          skippableItem: true,
+          additionalResponseOption: {
+            textInputOption: false,
+            textInputRequired: false,
+          },
+          timer: 0,
+        },
+        name: 'date_item_skippable',
+        isHidden: false,
+        conditionalLogic: null,
+        allowEdit: true,
+        id: '05a5dac0-02c7-4443-99ed-2b0be9ec3807',
+        order: 5,
+      },
+      answer: {
+        value: {
+          day: 17,
+          month: 3,
+          year: 2024,
+        },
+      },
+      items: [], // skip, no need for the test
+    },
+  };
+  const dateResult = {
+    activityItem: {
+      id: '05a5dac0-02c7-4443-99ed-2b0be9ec3807',
+      name: 'date_item_skippable',
+      question: {
+        en: 'date_item_skippable',
+      },
+      responseType: 'date',
+      responseValues: null,
+    },
+    answers: [
+      {
+        answer: {
+          value: '17 Mar 2024',
+          text: null,
+        },
+        date: '2024-03-14T10:03:01.345000',
+      },
+    ],
+  };
+
   const drawingProps = {
     ...sharedProps,
     currentAnswer: {
@@ -1240,6 +1296,7 @@ describe('formatActivityItemAnswers', () => {
     ${textProps}              | ${textResult}              | ${'text'}
     ${timeProps}              | ${timeResult}              | ${'time'}
     ${numberSelectionProps}   | ${numberSelectionResult}   | ${'number selection'}
+    ${dateProps}              | ${dateResult}              | ${'date'}
     ${drawingProps}           | ${drawingResult}           | ${'drawing item'}
   `('$description', ({ props, result }) => {
     expect(formatActivityItemAnswers(props.currentAnswer, props.date)).toStrictEqual(result);
