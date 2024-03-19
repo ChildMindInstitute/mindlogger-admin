@@ -2,7 +2,7 @@ import { LDFlagValue, useFlags, useLDClient } from 'launchdarkly-react-client-sd
 
 import { FeatureSegments, FeatureFlags, FeatureFlagsKeys } from 'shared/types/featureFlags';
 
-const omitKeys = ['firstName', 'lastName', 'email'];
+import { PROHIBITED_PII_KEYS } from './useLaunchDarkly.const';
 
 /**
  * Internal wrapper for LaunchDarkly's hooks and flags.
@@ -20,7 +20,7 @@ export const useLaunchDarkly = () => {
     },
     onDone?: ((err: Error | null) => void) | undefined,
   ) => {
-    if (omitKeys.some((val) => Object.keys(context).includes(val))) {
+    if (PROHIBITED_PII_KEYS.some((val) => Object.keys(context).includes(val))) {
       throw new Error('Context contains prohibited keys');
     }
     ldClient?.identify(
