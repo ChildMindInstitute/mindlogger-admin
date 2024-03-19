@@ -17,6 +17,8 @@ export const createArrayForSlider = ({
   }));
 
 export const getDateForamttedResponse = (answer: DecryptedDateAnswer) => {
+  if (!answer?.value) return '';
+
   const day = answer.value.day;
   const month = answer.value.month - 1;
   const year = answer.value.year;
