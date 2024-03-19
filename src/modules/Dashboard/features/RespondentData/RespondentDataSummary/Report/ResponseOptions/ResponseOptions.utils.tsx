@@ -77,6 +77,7 @@ export const getResponseItem = ({
 
       return renderMultipleSelection(options);
     }
+    case ItemResponseType.Date:
     case ItemResponseType.Text:
       return <ReportTable answers={answers} data-testid={dataTestid} />;
     case ItemResponseType.Time:

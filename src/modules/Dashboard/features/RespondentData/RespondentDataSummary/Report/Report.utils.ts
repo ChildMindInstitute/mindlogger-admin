@@ -1,10 +1,12 @@
+import { format } from 'date-fns';
+
 import { AutocompleteOption } from 'shared/components/FormComponents';
-import { ItemResponseType } from 'shared/consts';
+import { DateFormats, ItemResponseType } from 'shared/consts';
 import {
   ActivitySettingsSubscale,
   SliderItemResponseValues,
 } from 'shared/state/Applet/Applet.schema';
-import { getObjectFromList } from 'shared/utils';
+import { getNormalizeTimezoneData, getObjectFromList } from 'shared/utils';
 import {
   ActivityItemAnswer,
   AnswerDTO,
@@ -14,6 +16,7 @@ import {
   DecryptedTextAnswer,
   DecryptedTimeAnswer,
   DecryptedNumberSelectionAnswer,
+  DecryptedDateAnswer,
   ElementType,
 } from 'shared/types';
 
@@ -419,6 +422,37 @@ export const formatActivityItemAnswers = (
           responseDataIdentifier: currentAnswer.activityItem.config.responseDataIdentifier,
         },
         answers,
+      };
+    }
+    case ItemResponseType.Date: {
+      if (!currentAnswer.answer) {
+        return {
+          activityItem: formattedActivityItem,
+          answers: getDefaultEmptyAnswer(date),
+        };
+      }
+
+      const answer = currentAnswer.answer as DecryptedDateAnswer;
+      const day = answer.value.day;
+      const month = answer.value.month - 1;
+      const year = answer.value.year;
+      const answerValue = new Date(year, month, day).toDateString();
+      const formattedResponse = format(
+        new Date(getNormalizeTimezoneData(answerValue).dateTime),
+        DateFormats.DayMonthYear,
+      );
+
+      return {
+        activityItem: formattedActivityItem,
+        answers: [
+          {
+            answer: {
+              value: formattedResponse,
+              text: null,
+            },
+            date,
+          },
+        ],
       };
     }
     case ItemResponseType.Time: {
