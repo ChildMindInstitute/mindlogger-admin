@@ -21,6 +21,9 @@ import {
   SortByButton,
   HeaderSectionLeft,
   HeaderSectionRight,
+  ParticipantsTable,
+  MuiCheckbox,
+  StyledCheckBox,
 } from './Participants.styles';
 import { getAppletsSmallTableRows, getHeadCells, getRespondentActions } from './Participants.utils';
 import { ParticipantsColumnsWidth } from './Participants.const';
@@ -45,7 +48,6 @@ import {
   ViewDataPopup,
 } from '../Respondents/Popups';
 import { StatusFlag } from '../Respondents/StatusFlag';
-import { ParticipantsTable } from './ParticipantsTable';
 
 export const Participants = () => {
   const { appletId } = useParams();
@@ -289,6 +291,21 @@ export const Participants = () => {
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
 
     return {
+      checkbox: {
+        content: () => (
+          <MuiCheckbox
+            checked={false}
+            icon={
+              <StyledCheckBox>
+                <Svg id="checkbox-empty-outline" height="20" width="20" />
+              </StyledCheckBox>
+            }
+            data-testid="dashboard-participants-checkbox"
+          />
+        ),
+        value: '',
+        width: ParticipantsColumnsWidth.Pin,
+      },
       pin: {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-respondents-pin" />,
         value: '',

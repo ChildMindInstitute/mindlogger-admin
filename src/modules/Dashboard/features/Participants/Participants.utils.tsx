@@ -16,6 +16,7 @@ import i18n from 'i18n';
 
 import { ChosenAppletData, GetMenuItems } from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
+import { StyledCheckBox } from './Participants.styles';
 
 export const getRespondentActions = ({
   actions: {
@@ -129,6 +130,16 @@ export const getHeadCells = (id?: string): HeadCell[] => {
   const { t } = i18n;
 
   return [
+    {
+      id: 'checkbox',
+      label: (
+        <StyledCheckBox>
+          <Svg id="checkbox-empty-outline" height="20" width="20" />
+        </StyledCheckBox>
+      ),
+      enableSort: true,
+      width: ParticipantsColumnsWidth.Pin,
+    },
     {
       id: 'pin',
       label: '',

@@ -1,10 +1,14 @@
-import { Button, styled } from '@mui/material';
+import { Button, Checkbox, styled } from '@mui/material';
 
+import { DashboardTable } from 'modules/Dashboard/components';
 import { Search } from 'shared/components';
+import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledFlexSpaceBetween, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
+
+import { ParticipantsColumnsWidth } from './Participants.const';
 
 export const ParticipantsHeader = styled(StyledFlexSpaceBetween, shouldForwardProp)`
   margin-bottom: ${theme.spacing(2.4)};
@@ -46,4 +50,37 @@ export const SortByButton = styled(StyledButton)`
 
 export const AddParticipantButton = styled(StyledButton)`
   min-width: 137px;
+`;
+
+export const StyledCheckBox = styled(StyledIcon)`
+  svg {
+    fill: ${variables.palette.outline_variant};
+  }
+`;
+
+export const MuiCheckbox = styled(Checkbox)``;
+
+export const ParticipantsTable = styled(DashboardTable)`
+  th:nth-child(1) {
+    padding-left: 24px;
+  }
+
+  td:nth-child(1) {
+    padding-left: 14px;
+  }
+
+  td,
+  th {
+    min-width: 130px;
+  }
+
+  th:nth-child(1),
+  td:nth-child(1) {
+    min-width: ${ParticipantsColumnsWidth.Pin};
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    min-width: ${ParticipantsColumnsWidth.Pin};
+  }
 `;
