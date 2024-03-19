@@ -1,7 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
 export const UNSUPPORTED_ITEMS = [
-  ItemResponseType.Date,
   ItemResponseType.Audio,
   ItemResponseType.AudioPlayer,
   ItemResponseType.Drawing,
