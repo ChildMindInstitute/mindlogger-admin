@@ -1126,6 +1126,7 @@
   "takePhoto": "Prendre une photo",
   "terms": "Conditions",
   "termsOfService": "Conditions d'utilisation",
+  "termsOfServiceAgreementRequired": "Veuillez accepter les conditions d'utilisation",
   "testInstruction": "Instructions pour la manche de test",
   "text": "Texte",
   "textHint": "Champ de saisie de texte",
