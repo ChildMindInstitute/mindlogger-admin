@@ -1,12 +1,10 @@
-import { format } from 'date-fns';
-
 import { AutocompleteOption } from 'shared/components/FormComponents';
-import { DateFormats, ItemResponseType } from 'shared/consts';
+import { ItemResponseType } from 'shared/consts';
 import {
   ActivitySettingsSubscale,
   SliderItemResponseValues,
 } from 'shared/state/Applet/Applet.schema';
-import { getNormalizeTimezoneData, getObjectFromList } from 'shared/utils';
+import { getObjectFromList } from 'shared/utils';
 import {
   ActivityItemAnswer,
   AnswerDTO,
@@ -29,6 +27,7 @@ import {
   ItemOption,
 } from './Report.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
+import { getDateForamttedResponse } from '../../RespondentData.utils';
 
 export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
   value !== null && value !== undefined;
@@ -432,22 +431,12 @@ export const formatActivityItemAnswers = (
         };
       }
 
-      const answer = currentAnswer.answer as DecryptedDateAnswer;
-      const day = answer.value.day;
-      const month = answer.value.month - 1;
-      const year = answer.value.year;
-      const answerValue = new Date(year, month, day).toDateString();
-      const formattedResponse = format(
-        new Date(getNormalizeTimezoneData(answerValue).dateTime),
-        DateFormats.DayMonthYear,
-      );
-
       return {
         activityItem: formattedActivityItem,
         answers: [
           {
             answer: {
-              value: formattedResponse,
+              value: getDateForamttedResponse(currentAnswer.answer as DecryptedDateAnswer),
               text: null,
             },
             date,

@@ -13,13 +13,15 @@ import {
   SingleSelectItemAnswer,
   SliderItemAnswer,
   TextItemAnswer,
+  NumberSelectionItemAnswer,
+  DateItemAnswer,
 } from '../RespondentDataReview.types';
 import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
 import { TextResponseItem } from '../TextResponseItem';
 import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
-import { NumberSelectionItemAnswer } from '../RespondentDataReview.types';
 import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem';
+import { DateResponseItem } from '../DateResponseItem';
 
 const { t } = i18n;
 
@@ -78,5 +80,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
         <Box data-testid={activityItemAnswer['data-testid']}>{getTimeResponseItem(answer)}</Box>
       );
     }
+    case ItemResponseType.Date:
+      return <DateResponseItem {...(activityItemAnswer as DateItemAnswer)} />;
   }
 };
