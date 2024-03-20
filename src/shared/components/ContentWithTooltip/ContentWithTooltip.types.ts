@@ -8,4 +8,5 @@ export type ContentWithTooltipProps = {
   item: DataTableItem;
   styles?: SxProps;
   tooltipByDefault?: boolean;
+  'data-testid'?: string;
 };

@@ -29,6 +29,7 @@ import { TimeGutterHeader } from './TimeGutterHeader';
 import { EventWrapper, UiType as EventWrapperUiType } from './EventWrapper';
 import { DateHeader } from './DateHeader';
 import { EventContainerWrapper } from './EventContainerWrapper';
+import { EVENT_WEEK_MAX_WIDTH } from './Calendar.const';
 
 export const getDefaultStartDate = (date: Date) => {
   const newDate = new Date();
@@ -200,7 +201,7 @@ export const eventPropGetter = (
       borderWidth: `0 0 0 ${isScheduledTimeEvent ? variables.borderWidth.xl : 0}`,
       borderColor: isScheduledTimeEvent ? scheduledColor : 'transparent',
       backgroundColor: isScheduledTimeEvent ? scheduledBackground : backgroundColor,
-      maxWidth: isScheduledTimeEvent || isDayEvent ? 'unset' : '96%',
+      maxWidth: isScheduledTimeEvent || isDayEvent ? 'unset' : EVENT_WEEK_MAX_WIDTH,
       margin: '0 auto',
     },
   };

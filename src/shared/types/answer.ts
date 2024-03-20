@@ -87,10 +87,10 @@ export type ExportAnswer = {
   activityId: string;
   flowId: null | string;
   reviewedAnswerId: null | string;
-  scheduledDatetime?: string;
-  startDatetime: string;
-  endDatetime: string;
-  client?: {
+  scheduledDatetime: string | number | null;
+  startDatetime: string | number;
+  endDatetime: string | number;
+  client?: null | {
     appId: string;
     appVersion: string;
     width: number;

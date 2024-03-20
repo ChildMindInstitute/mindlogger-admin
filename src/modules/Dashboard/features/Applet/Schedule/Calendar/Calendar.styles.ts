@@ -4,6 +4,7 @@ import { theme, variables, StyledClearedButton } from 'shared/styles';
 import { shouldForwardProp } from 'shared/utils';
 
 import { LEFT_SCHEDULE_PANEL_WIDTH } from '../Schedule.const';
+import { EVENT_WEEK_MAX_WIDTH } from './Calendar.const';
 
 const TIME_GUTTER_WIDTH = '8.5rem';
 
@@ -103,6 +104,19 @@ export const StyledCalendarWrapper = styled(Box, shouldForwardProp)`
       .rbc-row-content {
         padding: ${({ hasMoreBtn }: { hasMoreBtn: boolean }) =>
           hasMoreBtn ? theme.spacing(1.1, 0, 2.1) : theme.spacing(1.1, 0, 0.9)};
+      }
+
+      .rbc-event:not(.rbc-event-allday) {
+        max-width: ${EVENT_WEEK_MAX_WIDTH} !important;
+      }
+    }
+  }
+
+  // handle the corner case when the event ends at 00:00 on the next day
+  .rbc-allday-cell {
+    .rbc-event:not(.rbc-event-allday) {
+      .event-bottom-section {
+        display: none;
       }
     }
   }

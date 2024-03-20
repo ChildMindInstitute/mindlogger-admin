@@ -50,6 +50,7 @@ export const getReportCSVObject = <T>({
     activity_name: activityName,
     activity_flow: flowName,
     item: activityItem.name,
+    item_id: activityItem.id,
     response: parseResponseValue(item, index),
     prompt: replaceItemVariableWithName({
       markdown: getDictionaryText(activityItem.question),

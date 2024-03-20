@@ -1,7 +1,4 @@
-import * as yup from 'yup';
-
 import { ConditionType, ItemResponseType } from 'shared/consts';
-import { Condition } from 'shared/state';
 import { CorrectPress } from 'modules/Builder/types';
 
 export const CONDITION_TYPES_TO_HAVE_OPTION_ID = [
@@ -37,12 +34,6 @@ export const enum ItemTestFunctions {
   VariableReferringToSkippedItem = 'variable-referring-to-skipped-item-error',
   VariableReferringToNotExistedItem = 'variable-referring-to-not-existed-item',
 }
-
-export const conditionsMatch = yup.string().when('conditions', {
-  is: (conditions: Condition[]) => conditions?.length > 0,
-  then: (schema) => schema.required(),
-  otherwise: (schema) => schema,
-});
 
 export const themeParams = {
   ordering: 'name',
