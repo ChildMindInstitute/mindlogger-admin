@@ -96,6 +96,7 @@ export type ExportAnswer = {
     width: number;
     height: number;
   };
+  scheduledEventId?: null | string;
 };
 
 export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &
