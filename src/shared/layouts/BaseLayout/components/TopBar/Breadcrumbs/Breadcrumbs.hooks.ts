@@ -29,12 +29,13 @@ import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const isMultiInformant = __FEATURE_FLAGS.AppletMultiInformant;
-  const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();
+  const { appletId, activityId, activityFlowId, participantId, respondentId, setting } =
+    useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
-  const respondentLabel = useRespondentLabel({ hiddeNickname: isMultiInformant });
+  const respondentLabel = useRespondentLabel({ hideNickname: isMultiInformant });
   const subjectLabel = useRespondentLabel({ isSubject: true });
   const { workspaceName } = workspaces.useData() ?? {};
   const { result } = applet.useAppletData() ?? {};
@@ -135,7 +136,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (respondentId) {
+    if (participantId || respondentId) {
       newBreadcrumbs.push({
         icon: isMultiInformant ? undefined : 'account',
         label: respondentLabel || subjectLabel,
@@ -165,7 +166,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         disabledLink: true,
       });
     }
-    if (pathname.includes('schedule')) {
+    if (pathname.includes('schedule') && !isMultiInformant) {
       newBreadcrumbs.push({
         icon: 'schedule-outlined',
         label: t('schedule'),

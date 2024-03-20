@@ -5,13 +5,13 @@ import { getRespondentName } from 'shared/utils';
 
 type Parameters = {
   isSubject?: boolean;
-  hiddeNickname?: boolean;
+  hideNickname?: boolean;
 };
 
 export const useRespondentLabel = (
   parameters: Parameters = {
     isSubject: false,
-    hiddeNickname: false,
+    hideNickname: false,
   },
 ) => {
   const { t } = useTranslation('app');
@@ -23,7 +23,7 @@ export const useRespondentLabel = (
   const { secretUserId, nickname } = result || {};
 
   if (!secretUserId) return '';
-  if (parameters.hiddeNickname) return secretUserId;
+  if (parameters.hideNickname) return secretUserId;
 
   return `${t('user')}: ${getRespondentName(secretUserId, nickname)}`;
 };

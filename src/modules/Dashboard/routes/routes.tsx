@@ -7,12 +7,12 @@ import { PrivateRoute } from 'routes/PrivateRoute';
 import { ErrorFallback } from 'shared/components';
 import { __FEATURE_FLAGS } from 'shared/consts';
 
-import { appletRoutes, mainRoutes, respondentDetailsRoutes } from './routes.const';
+import { appletRoutes, mainRoutes, participantDetailsRoutes } from './routes.const';
 import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
-const RespondentDetails = lazy(() => import('../pages/RespondentDetails'));
+const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
 const RespondentData = lazy(() => import('../pages/RespondentData'));
 const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
 const RespondentDataSummary = lazy(
@@ -94,12 +94,12 @@ export const dashboardRoutes = () => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <RespondentDetails />
+            <ParticipantDetails />
           </ErrorBoundary>
         </PrivateRoute>
       }
     >
-      {respondentDetailsRoutes.map(({ path, Component }) => (
+      {participantDetailsRoutes.map(({ path, Component }) => (
         <Route
           key={path}
           path={path}

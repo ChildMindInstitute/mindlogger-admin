@@ -12,13 +12,13 @@ import { getRespondentDetails } from 'modules/Dashboard/state/Users/Users.thunk'
 import { palette } from 'shared/styles/variables/palette';
 import { page } from 'resources';
 
-import { useRespondentDetailsTabs } from './RespondentDetails.hooks';
+import { useParticipantDetailsTabs } from './ParticipantDetails.hooks';
 
 export const RespondentDetails = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const respondentTabs = useRespondentDetailsTabs();
-  const { appletId, respondentId } = useParams();
+  const respondentTabs = useParticipantDetailsTabs();
+  const { appletId, participantId } = useParams();
   const { ownerId } = workspaces.useData() || {};
   const appletLoadingStatus = applet.useResponseStatus();
   const respondentLoadingStatus = users.useRespondentStatus();
@@ -30,15 +30,15 @@ export const RespondentDetails = () => {
     if (!appletId) return;
     const { getEvents } = applets.thunk;
     dispatch(getApplet({ appletId }));
-    dispatch(getEvents({ appletId, respondentId }));
+    dispatch(getEvents({ appletId, respondentId: participantId }));
 
-    if (!respondentId || !ownerId) return;
-    dispatch(getRespondentDetails({ ownerId, appletId, respondentId }));
+    if (!participantId || !ownerId) return;
+    dispatch(getRespondentDetails({ ownerId, appletId, respondentId: participantId }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, respondentId, ownerId]);
+  }, [appletId, participantId, ownerId]);
 
   const navigateUp = () =>
     navigate(
@@ -65,8 +65,10 @@ export const RespondentDetails = () => {
       {!loading && !!respondent && (
         <>
           <Box
-            display="flex"
-            gap={1}
+            sx={{
+              display: 'flex',
+              gap: theme.spacing(1.6),
+            }}
             marginX={theme.spacing(2.4)}
             marginBottom={theme.spacing(1.2)}
           >

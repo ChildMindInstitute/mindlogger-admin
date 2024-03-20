@@ -5,14 +5,14 @@ import { page } from 'resources';
 const Applets = lazy(() => import('modules/Dashboard/features/Applets'));
 const Managers = lazy(() => import('modules/Dashboard/features/Managers'));
 const Respondents = lazy(() => import('modules/Dashboard/features/Respondents'));
-const RespondentActivities = lazy(
-  () => import('modules/Dashboard/features/RespondentDetails/RespondentActivities'),
+const ParticipantActivities = lazy(
+  () => import('modules/Dashboard/features/ParticipantDetails/ParticipantActivities'),
 );
-const RespondentConnections = lazy(
-  () => import('modules/Dashboard/features/RespondentDetails/RespondentConnections'),
+const ParticipantConnections = lazy(
+  () => import('modules/Dashboard/features/ParticipantDetails/ParticipantConnections'),
 );
-const RespondentSchedule = lazy(
-  () => import('modules/Dashboard/features/RespondentDetails/RespondentSchedule'),
+const ParticipantSchedule = lazy(
+  () => import('modules/Dashboard/features/ParticipantDetails/ParticipantSchedule'),
 );
 const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
 const Schedule = lazy(() => import('modules/Dashboard/features/Applet/Schedule'));
@@ -76,17 +76,17 @@ export const appletRoutes = [
   },
 ];
 
-export const respondentDetailsRoutes = [
+export const participantDetailsRoutes = [
   {
-    path: page.appletRespondentConnections,
-    Component: RespondentConnections,
+    path: page.appletParticipantActivities,
+    Component: ParticipantActivities,
   },
   {
-    path: page.appletRespondentSchedule,
-    Component: RespondentSchedule,
+    path: page.appletParticipantConnections,
+    Component: ParticipantConnections,
   },
   {
-    path: page.appletRespondentDetails,
-    Component: RespondentActivities,
+    path: page.appletParticipantSchedule,
+    Component: ParticipantSchedule,
   },
 ];

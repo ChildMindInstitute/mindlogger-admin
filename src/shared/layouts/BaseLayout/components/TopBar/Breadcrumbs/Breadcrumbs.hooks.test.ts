@@ -505,8 +505,8 @@ describe('useBreadcrumbs', () => {
 
   test('should generate correct breadcrumbs for respondent details using multi-informat', () => {
     __FEATURE_FLAGS.AppletMultiInformant = true;
-    const route = `/dashboard/${appletId}/respondents/${respondentId}`;
-    const routePath = page.appletRespondentDetails;
+    const route = `/dashboard/${appletId}/participants/${respondentId}`;
+    const routePath = page.appletParticipantActivities;
 
     const { result } = renderHookWithProviders(useBreadcrumbs, {
       route,
@@ -540,7 +540,7 @@ describe('useBreadcrumbs', () => {
 
     expect(result.current).toHaveLength(3);
 
-    const [home, applet, respondent] = result.current;
+    const [home, applet, participant] = result.current;
 
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
@@ -552,10 +552,67 @@ describe('useBreadcrumbs', () => {
       navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/respondents',
       useCustomIcon: true,
     });
-    expect(respondent).toEqual({
+    expect(participant).toEqual({
       disabledLink: true,
       icon: undefined,
       key: '60',
+      label: 'secretUserId',
+    });
+  });
+
+  test('should generate correct breadcrumbs for respondent details using multi-informat schedule', () => {
+    __FEATURE_FLAGS.AppletMultiInformant = true;
+    const route = `/dashboard/${appletId}/participants/${respondentId}/schedule`;
+    const routePath = page.appletParticipantSchedule;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: {
+        ...preloadedState,
+        applet: {
+          applet: {
+            data: {
+              result: {
+                displayName: 'Mocked Applet',
+              },
+            },
+          },
+        },
+        users: {
+          subjectDetails: {
+            data: null,
+          },
+          respondentDetails: {
+            data: {
+              result: {
+                nickname: 'Jane Doe',
+                secretUserId: 'secretUserId',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.current).toHaveLength(3);
+
+    const [home, applet, participant] = result.current;
+
+    expect(home).toEqual(expectedHome);
+    expect(applet).toEqual({
+      chip: undefined,
+      hasUrl: false,
+      icon: '',
+      key: '62',
+      label: 'Mocked Applet',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/respondents',
+      useCustomIcon: true,
+    });
+    expect(participant).toEqual({
+      disabledLink: true,
+      icon: undefined,
+      key: '63',
       label: 'secretUserId',
     });
   });
