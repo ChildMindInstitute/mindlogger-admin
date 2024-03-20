@@ -2,19 +2,19 @@ import { Respondent, RespondentDetail } from 'modules/Dashboard/types';
 import { MenuActionProps } from 'shared/components';
 import { Encryption } from 'shared/utils';
 
-export type RespondentActionProps = {
+export type ParticipantActionProps = {
   respondentId: string | null;
   respondentOrSubjectId: string;
   email: string | null;
 };
 
-export type RespondentsActions = {
-  scheduleSetupAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
-  userDataExportAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
-  viewDataAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
-  removeAccessAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
-  editRespondent: ({ context }: MenuActionProps<RespondentActionProps>) => void;
-  sendInvitation: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+export type ParticipantActions = {
+  scheduleSetupAction: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  userDataExportAction: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  viewDataAction: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  removeAccessAction: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  editParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  sendInvitation: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
 };
 
 export type ChosenAppletData = {
@@ -48,7 +48,7 @@ export type ParticipantsData = {
 };
 
 export type GetMenuItems = {
-  actions: RespondentsActions;
+  actions: ParticipantActions;
   filteredApplets: FilteredApplets;
   respondentId: string | null;
   respondentOrSubjectId: string;

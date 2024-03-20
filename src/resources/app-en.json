@@ -393,6 +393,7 @@
   "editItemDescription": "Are you sure you want to edit Item <1>{{itemName}}</1>?",
   "editor": "Editor",
   "editRespondent": "Edit Respondent",
+  "editParticipant": "Edit Participant",
   "editRespondents": "Edit Respondents",
   "editUser": "Edit User",
   "element": "Element",

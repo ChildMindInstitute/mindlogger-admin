@@ -25,7 +25,11 @@ import {
   ParticipantsTable,
   StyledCheckBox,
 } from './Participants.styles';
-import { getAppletsSmallTableRows, getHeadCells, getRespondentActions } from './Participants.utils';
+import {
+  getAppletsSmallTableRows,
+  getHeadCells,
+  getParticipantActions,
+} from './Participants.utils';
 import { ParticipantsColumnsWidth } from './Participants.const';
 import {
   ChosenAppletData,
@@ -35,7 +39,7 @@ import {
   HandleInviteClick,
   HandlePinClick,
   ParticipantsData,
-  RespondentActionProps,
+  ParticipantActionProps,
   SetDataForAppletPage,
 } from './Participants.types';
 // Let's fall back to the respondent pop-ups for now
@@ -153,7 +157,7 @@ export const Participants = () => {
   };
 
   const actions = {
-    scheduleSetupAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
+    scheduleSetupAction: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentId, respondentOrSubjectId } = context || {};
       if (!respondentId || !respondentOrSubjectId) return;
 
@@ -165,7 +169,7 @@ export const Participants = () => {
       });
       setScheduleSetupPopupVisible(true);
     },
-    userDataExportAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
+    userDataExportAction: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
@@ -174,7 +178,7 @@ export const Participants = () => {
       setDataExportPopupVisible(true);
       Mixpanel.track('Export Data click');
     },
-    viewDataAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
+    viewDataAction: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
@@ -201,7 +205,7 @@ export const Participants = () => {
       setRespondentKey(respondentOrSubjectId);
       setViewDataPopupVisible(true);
     },
-    removeAccessAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
+    removeAccessAction: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
@@ -212,7 +216,7 @@ export const Participants = () => {
       });
       setRemoveAccessPopupVisible(true);
     },
-    editRespondent: ({ context }: MenuActionProps<RespondentActionProps>) => {
+    editParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
@@ -220,7 +224,7 @@ export const Participants = () => {
       handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Editable });
       setEditRespondentPopupVisible(true);
     },
-    sendInvitation: ({ context }: MenuActionProps<RespondentActionProps>) => {
+    sendInvitation: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId, email = null } = context || {};
       if (!respondentOrSubjectId) return;
 
@@ -297,7 +301,7 @@ export const Participants = () => {
         width: ParticipantsColumnsWidth.Pin,
       },
       pin: {
-        content: () => <Pin isPinned={isPinned} data-testid="dashboard-respondents-pin" />,
+        content: () => <Pin isPinned={isPinned} data-testid="dashboard-participants-pin" />,
         value: '',
         onClick: () => handlePinClick({ respondentId, subjectId: details[0].subjectId }),
         width: ParticipantsColumnsWidth.Pin,
@@ -343,7 +347,7 @@ export const Participants = () => {
       actions: {
         content: () => (
           <ActionsMenu
-            menuItems={getRespondentActions({
+            menuItems={getParticipantActions({
               actions,
               filteredApplets: filteredRespondents?.[respondentOrSubjectId],
               respondentId,
@@ -354,7 +358,7 @@ export const Participants = () => {
               isViewCalendarEnabled:
                 !!respondentId && status === RespondentStatus.Invited && !isAnonymousRespondent,
             })}
-            data-testid="dashboard-respondents-table-actions"
+            data-testid="dashboard-participants-table-actions"
           />
         ),
         value: '',
@@ -429,7 +433,7 @@ export const Participants = () => {
   const viewableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Viewable);
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
   const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
-  const dataTestid = 'dashboard-respondents';
+  const dataTestid = 'dashboard-participants';
 
   const renderEmptyComponent = () => {
     if (!rows?.length && !isLoading) {

@@ -18,13 +18,13 @@ import { ChosenAppletData, GetMenuItems } from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
 import { StyledCheckBox } from './Participants.styles';
 
-export const getRespondentActions = ({
+export const getParticipantActions = ({
   actions: {
     scheduleSetupAction,
     viewDataAction,
     removeAccessAction,
     userDataExportAction,
-    editRespondent,
+    editParticipant,
     sendInvitation,
   },
   filteredApplets,
@@ -41,7 +41,7 @@ export const getRespondentActions = ({
     title: t('viewCalendar'),
     context: { respondentId, respondentOrSubjectId, email },
     isDisplayed: isViewCalendarEnabled && !!filteredApplets?.scheduling.length,
-    'data-testid': 'dashboard-respondents-view-calendar',
+    'data-testid': 'dashboard-participants-view-calendar',
   },
   {
     icon: <Svg id="data" width={22} height={22} />,
@@ -49,7 +49,7 @@ export const getRespondentActions = ({
     title: t('viewData'),
     context: { respondentId, respondentOrSubjectId, email },
     isDisplayed: !!filteredApplets?.viewable.length,
-    'data-testid': 'dashboard-respondents-view-data',
+    'data-testid': 'dashboard-participants-view-data',
   },
   {
     icon: <Svg id="export2" width={20} height={21} />,
@@ -57,15 +57,15 @@ export const getRespondentActions = ({
     title: t('exportData'),
     context: { respondentId, respondentOrSubjectId, email },
     isDisplayed: !!filteredApplets?.viewable.length,
-    'data-testid': 'dashboard-respondents-export-data',
+    'data-testid': 'dashboard-participants-export-data',
   },
   {
     icon: <Svg id="edit" width={22} height={21} />,
-    action: editRespondent,
-    title: t('editRespondent'),
+    action: editParticipant,
+    title: t('editParticipant'),
     context: { respondentId, respondentOrSubjectId, email },
     isDisplayed: !!appletId && !!filteredApplets?.editable.length,
-    'data-testid': 'dashboard-respondents-edit',
+    'data-testid': 'dashboard-participants-edit',
   },
   {
     icon: <Svg id="remove-from-folder" width={21} height={21} />,
@@ -73,7 +73,7 @@ export const getRespondentActions = ({
     title: t('sendInvitation'),
     context: { respondentId, respondentOrSubjectId, email },
     isDisplayed: isInviteEnabled && !!filteredApplets?.editable.length,
-    'data-testid': 'dashboard-respondents-invite',
+    'data-testid': 'dashboard-participants-invite',
   },
   {
     icon: <Svg id="trash" width={21} height={21} />,
@@ -82,7 +82,7 @@ export const getRespondentActions = ({
     context: { respondentId, respondentOrSubjectId, email },
     isDisplayed: !!filteredApplets?.editable.length,
     customItemColor: variables.palette.dark_error_container,
-    'data-testid': 'dashboard-respondents-remove-access',
+    'data-testid': 'dashboard-participants-remove-access',
   },
 ];
 
