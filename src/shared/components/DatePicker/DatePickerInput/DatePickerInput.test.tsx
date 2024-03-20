@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { FieldError } from 'react-hook-form';
 
-import { DatePickerContainer } from './DatePickerContainer';
+import { DatePickerInput } from './DatePickerInput';
 
-describe('DatePickerContainer', () => {
+describe('DatePickerInput', () => {
   const mockedHandlePickerShow = jest.fn();
   const sharedProps = {
     inputSx: {},
@@ -20,7 +20,7 @@ describe('DatePickerContainer', () => {
       disabled: false,
       isOpen: false,
     };
-    render(<DatePickerContainer {...textFieldProps} />);
+    render(<DatePickerInput {...textFieldProps} />);
 
     const input = screen.getByLabelText('test_label');
     expect(input).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe('DatePickerContainer', () => {
       isOpen: true,
       error: { message: 'errorMessage' } as FieldError,
     };
-    render(<DatePickerContainer {...textFieldProps} />);
+    render(<DatePickerInput {...textFieldProps} />);
 
     const input = screen.getByLabelText('test_label');
     expect(input).toBeInTheDocument();

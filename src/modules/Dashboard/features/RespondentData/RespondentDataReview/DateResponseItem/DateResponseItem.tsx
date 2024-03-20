@@ -1,4 +1,4 @@
-import { DatePickerContainer } from 'shared/components/DatePicker/DatePickerContainer';
+import { DatePickerInput } from 'shared/components/DatePicker/DatePickerInput';
 
 import { DateItemAnswer } from '../RespondentDataReview.types';
 import { getDateForamttedResponse } from '../../RespondentData.utils';
@@ -9,7 +9,7 @@ export const DateResponseItem = ({ answer }: DateItemAnswer) => {
   const value = getDateForamttedResponse(answer);
 
   return (
-    <DatePickerContainer
+    <DatePickerInput
       value={value}
       disabled
       inputSx={{

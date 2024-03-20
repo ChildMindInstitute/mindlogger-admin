@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Svg } from 'shared/components/Svg';
 
 import { StyledIconBtn, StyledTextField } from '../DatePicker.styles';
-import { DatePickerContainerProps } from './DatePickerContainer.types';
+import { DatePickerInputProps } from './DatePickerInput.types';
 
-export const DatePickerContainer = ({
+export const DatePickerInput = ({
   value,
   label,
   disabled,
@@ -15,7 +15,7 @@ export const DatePickerContainer = ({
   id,
   dataTestid,
   handlePickerShow,
-}: DatePickerContainerProps) => {
+}: DatePickerInputProps) => {
   const { t } = useTranslation('app');
   const textFieldProps = {
     fullWidth: true,

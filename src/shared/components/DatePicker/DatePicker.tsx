@@ -20,7 +20,7 @@ import { DatePickerHeader } from './DatePickerHeader';
 import { getStringFromDate } from './DatePicker.utils';
 import { DATE_PLACEHOLDER } from './DatePicker.const';
 import { PopoverHeader } from './PopoverHeader';
-import { DatePickerContainer } from './DatePickerContainer';
+import { DatePickerInput } from './DatePickerInput';
 
 const ReactDatePicker = lazy(() => import('react-datepicker'));
 
@@ -112,14 +112,14 @@ export const DatePicker = <T extends FieldValues>({
               <Tooltip tooltipTitle={'Test message ... '}>
                 <StyledSpan>
                   {uiType === UiType.OneDate ? (
-                    <DatePickerContainer
+                    <DatePickerInput
                       {...textFieldProps}
                       label={label || t('date')}
                       value={getValue()}
                     />
                   ) : (
                     <>
-                      <DatePickerContainer
+                      <DatePickerInput
                         {...textFieldProps}
                         label={t('startDate')}
                         value={getValue()[0] || ''}
@@ -128,7 +128,7 @@ export const DatePicker = <T extends FieldValues>({
                       <StyledBodyLarge sx={{ margin: theme.spacing(0, 0.8) }}>
                         {t('smallTo')}
                       </StyledBodyLarge>
-                      <DatePickerContainer
+                      <DatePickerInput
                         {...textFieldProps}
                         label={t('endDate')}
                         value={getValue()[1] || ''}
