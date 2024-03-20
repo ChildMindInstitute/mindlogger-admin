@@ -7,7 +7,6 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.Geolocation,
   ItemResponseType.Photo,
   ItemResponseType.Video,
-  ItemResponseType.TimeRange,
   ItemResponseType.MultipleSelectionPerRow,
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.SliderRows,
