@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { Checkbox } from '@mui/material';
 
 import { ActionsMenu, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
@@ -22,7 +23,6 @@ import {
   HeaderSectionLeft,
   HeaderSectionRight,
   ParticipantsTable,
-  MuiCheckbox,
   StyledCheckBox,
 } from './Participants.styles';
 import { getAppletsSmallTableRows, getHeadCells, getRespondentActions } from './Participants.utils';
@@ -34,8 +34,8 @@ import {
   FilteredParticipants,
   HandleInviteClick,
   HandlePinClick,
-  RespondentActionProps,
   ParticipantsData,
+  RespondentActionProps,
   SetDataForAppletPage,
 } from './Participants.types';
 // Let's fall back to the respondent pop-ups for now
@@ -283,7 +283,7 @@ export const Participants = () => {
     return {
       checkbox: {
         content: () => (
-          <MuiCheckbox
+          <Checkbox
             checked={false}
             icon={
               <StyledCheckBox>

@@ -1,4 +1,4 @@
-import { Button, Checkbox, styled } from '@mui/material';
+import { Button, styled } from '@mui/material';
 
 import { DashboardTable } from 'modules/Dashboard/components';
 import { Search } from 'shared/components';
@@ -57,8 +57,6 @@ export const StyledCheckBox = styled(StyledIcon)`
     fill: ${variables.palette.outline_variant};
   }
 `;
-
-export const MuiCheckbox = styled(Checkbox)``;
 
 export const ParticipantsTable = styled(DashboardTable)`
   th:nth-child(1) {
