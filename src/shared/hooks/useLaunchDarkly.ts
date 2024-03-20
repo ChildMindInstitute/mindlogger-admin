@@ -1,4 +1,4 @@
-import { LDFlagValue, useFlags, useLDClient } from 'launchdarkly-react-client-sdk';
+import { useFlags, useLDClient } from 'launchdarkly-react-client-sdk';
 
 import { FeatureSegments, FeatureFlags, FeatureFlagsKeys } from 'shared/types/featureFlags';
 
@@ -44,9 +44,9 @@ export const useLaunchDarkly = () => {
     });
   };
 
-  const featureFlags: () => Partial<Record<FeatureFlags, LDFlagValue>> = () => {
-    const keys: FeatureFlags[] = Object.keys(FeatureFlagsKeys) as (keyof typeof FeatureFlagsKeys)[];
-    const features: Partial<Record<FeatureFlags, LDFlagValue>> = {};
+  const featureFlags = () => {
+    const keys = Object.keys(FeatureFlagsKeys) as (keyof typeof FeatureFlagsKeys)[];
+    const features: FeatureFlags = {};
     keys.forEach((key) => (features[key] = flags[FeatureFlagsKeys[key]]));
 
     return features;
