@@ -97,6 +97,7 @@ export type ExportAnswer = {
     height: number;
   };
   scheduledEventId?: null | string;
+  tzOffset?: null | number;
 };
 
 export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &

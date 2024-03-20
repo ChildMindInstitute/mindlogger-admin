@@ -33,6 +33,7 @@ export const getReportCSVObject = <T>({
     reviewedAnswerId,
     legacyProfileId,
     scheduledEventId,
+    tzOffset,
   } = item;
   const responseValues = activityItem?.responseValues as SingleAndMultipleSelectItemResponseValues &
     SliderItemResponseValues;
@@ -68,5 +69,6 @@ export const getReportCSVObject = <T>({
     reviewing_id: reviewedAnswerId,
     ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
     event_id: scheduledEventId,
+    timezone_offset: tzOffset,
   };
 };
