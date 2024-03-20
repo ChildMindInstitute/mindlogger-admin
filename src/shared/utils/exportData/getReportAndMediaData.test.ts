@@ -514,6 +514,7 @@ describe('getReportAndMediaData', () => {
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.1.1',
+          event_id: null,
           timezone_offset: null,
         },
         {
@@ -539,6 +540,7 @@ describe('getReportAndMediaData', () => {
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.1.1',
+          event_id: undefined,
           timezone_offset: undefined,
         },
         {
@@ -563,6 +565,7 @@ describe('getReportAndMediaData', () => {
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.1.1',
+          event_id: undefined,
           timezone_offset: undefined,
         },
       ]);

@@ -96,6 +96,7 @@ export type ExportAnswer = {
     width: number;
     height: number;
   };
+  scheduledEventId?: null | string;
   tzOffset?: null | number;
 };
 
