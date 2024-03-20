@@ -94,6 +94,7 @@ const decryptedSingleSelection = {
   flowId: null,
   activityName: 'New Activity#1',
   subscaleSetting: null,
+  scheduledEventId: null,
 };
 const getPreparedProperties = ({
   activityItem,
@@ -138,6 +139,7 @@ const result = {
   secret_user_id: 'secretUserId',
   user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
   version: '2.0.0',
+  event_id: null,
 };
 
 describe('getJourneyCSVObject', () => {
@@ -198,6 +200,28 @@ describe('getJourneyCSVObject', () => {
     ).toStrictEqual({
       ...result,
       legacy_user_id: 'legacy-profile-id',
+    });
+  });
+
+  test('returns object with event_id', () => {
+    expect(
+      getJourneyCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            scheduledEventId: 'scheduled-event-id',
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      event_id: 'scheduled-event-id',
     });
   });
 });
