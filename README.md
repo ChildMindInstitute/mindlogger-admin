@@ -94,6 +94,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 | REACT_APP_ENV                      | no | null | Environment to run the app in (`prod` or `staging`)  |
 | REACT_APP_DEVELOP_BUILD_VERSION    | no | null | Footer app build number |
 | REACT_APP_MIXPANEL_TOKEN           | no | null | Mixpanel token |
+| REACT_APP_LAUNCHDARKLY_CLIENT_ID           | no | null | LaunchDarkly client key to choose target environment |
 
 ## License
 
