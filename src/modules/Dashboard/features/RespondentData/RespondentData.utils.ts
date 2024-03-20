@@ -19,10 +19,9 @@ export const createArrayForSlider = ({
 export const getDateForamttedResponse = (answer: DecryptedDateAnswer) => {
   if (!answer?.value) return '';
 
-  const day = answer.value.day;
-  const month = answer.value.month - 1;
-  const year = answer.value.year;
-  const answerValue = new Date(year, month, day).toDateString();
+  const { day, month, year } = answer.value;
+  const monthIndex = month - 1;
+  const answerValue = new Date(year, monthIndex, day).toDateString();
   const formattedResponse = format(
     new Date(getNormalizeTimezoneData(answerValue).dateTime),
     DateFormats.DayMonthYear,
