@@ -10,7 +10,7 @@ export const DatePickerInput = ({
   label,
   disabled,
   isOpen,
-  inputSx,
+  inputSx = {},
   error,
   id,
   dataTestid,
