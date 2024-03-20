@@ -123,7 +123,7 @@ describe('AvailabilityTab component', () => {
       renderWithProviders(<FormWrapper {...props} />);
     });
 
-    const alwaysAvailable = await screen.getByTestId(`${dataTestid}-always-available`);
+    const alwaysAvailable = await screen.findByTestId(`${dataTestid}-always-available`);
     expect(alwaysAvailable).toBeInTheDocument();
     expect(alwaysAvailable.querySelector('input')).toHaveValue('false');
 
