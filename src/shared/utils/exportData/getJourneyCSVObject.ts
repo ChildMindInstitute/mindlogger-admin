@@ -54,6 +54,7 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     options: '',
     version,
     ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
+    timezone_offset: null,
   };
 };
 
