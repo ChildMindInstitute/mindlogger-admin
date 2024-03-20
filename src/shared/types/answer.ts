@@ -96,6 +96,7 @@ export type ExportAnswer = {
     width: number;
     height: number;
   };
+  tzOffset?: null | number;
 };
 
 export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &

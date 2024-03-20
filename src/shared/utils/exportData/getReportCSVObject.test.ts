@@ -128,6 +128,7 @@ const result = {
   secret_user_id: 'secretUserId',
   userId: '835e5277-5949-4dff-817a-d85c17a3604f',
   version: '2.0.0',
+  timezone_offset: undefined,
 };
 
 describe('getReportCSVObject', () => {
@@ -188,6 +189,28 @@ describe('getReportCSVObject', () => {
     ).toStrictEqual({
       ...result,
       legacy_user_id: 'legacy-profile-id',
+    });
+  });
+
+  test('returns object with timezone_offset', () => {
+    expect(
+      getReportCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            tzOffset: -300,
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      timezone_offset: -300,
     });
   });
 });

@@ -78,6 +78,7 @@ export const getJourneyCSVObject = <T>({
     flowName,
     version,
     legacyProfileId,
+    tzOffset,
   } = event;
   if (!activityItem) return;
 
@@ -118,5 +119,6 @@ export const getJourneyCSVObject = <T>({
     }),
     version,
     ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
+    timezone_offset: tzOffset,
   };
 };
