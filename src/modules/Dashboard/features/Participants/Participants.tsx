@@ -228,19 +228,9 @@ export const Participants = () => {
     },
   };
 
-  const { execute: updateRespondentsPin } = useAsync(
-    updateRespondentsPinApi,
-    handleReload,
-    undefined,
-    () => setIsLoading(false),
-  );
+  const { execute: updateRespondentsPin } = useAsync(updateRespondentsPinApi, handleReload);
 
-  const { execute: updateSubjectsPin } = useAsync(
-    updateSubjectsPinApi,
-    handleReload,
-    undefined,
-    () => setIsLoading(false),
-  );
+  const { execute: updateSubjectsPin } = useAsync(updateSubjectsPinApi, handleReload);
 
   const handlePinClick = ({ respondentId, subjectId }: HandlePinClick) => {
     setIsLoading(true);
