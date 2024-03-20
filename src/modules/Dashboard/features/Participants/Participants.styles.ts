@@ -12,7 +12,7 @@ import { ParticipantsColumnsWidth } from './Participants.const';
 
 export const ParticipantsHeader = styled(StyledFlexSpaceBetween, shouldForwardProp)`
   margin-bottom: ${theme.spacing(2.4)};
-  min-width: 805px;
+  min-width: 80.5rem;
   font-size: ${variables.font.size.lg};
 `;
 
@@ -29,7 +29,7 @@ export const HeaderSectionRight = styled(StyledFlexTopCenter, shouldForwardProp)
 
 export const ParticipantSearchButton = styled(Search)`
   flex: 0 0 50%;
-  min-width: 320px;
+  min-width: 32rem;
 `;
 
 export const StyledButton = styled(Button)`
@@ -49,7 +49,7 @@ export const SortByButton = styled(StyledButton)`
 `;
 
 export const AddParticipantButton = styled(StyledButton)`
-  min-width: 137px;
+  min-width: 13.7rem;
 `;
 
 export const StyledCheckBox = styled(StyledIcon)`
@@ -60,16 +60,16 @@ export const StyledCheckBox = styled(StyledIcon)`
 
 export const ParticipantsTable = styled(DashboardTable)`
   th:nth-child(1) {
-    padding-left: 24px;
+    padding-left: 2.4rem;
   }
 
   td:nth-child(1) {
-    padding-left: 14px;
+    padding-left: 1.4rem;
   }
 
   td,
   th {
-    min-width: 130px;
+    min-width: 13rem;
   }
 
   th:nth-child(1),
