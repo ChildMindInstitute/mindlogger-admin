@@ -437,7 +437,7 @@ export const Participants = () => {
         return t('noMatchWasFound', { searchValue });
       }
 
-      return appletId ? t('noRespondentsForApplet') : t('noRespondents');
+      return appletId ? t('noParticipantsForApplet') : t('noParticipants');
     }
   };
 
