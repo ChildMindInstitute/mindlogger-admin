@@ -15,6 +15,7 @@ import {
   TextItemAnswer,
   NumberSelectionItemAnswer,
   DateItemAnswer,
+  TimaRangeItemAnswer,
 } from '../RespondentDataReview.types';
 import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
@@ -22,6 +23,7 @@ import { TextResponseItem } from '../TextResponseItem';
 import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
 import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem';
 import { DateResponseItem } from '../DateResponseItem';
+import { TimeRangeResponseItem } from '../TimeRangeResponseItem/TimeRangeResponseItem';
 
 const { t } = i18n;
 
@@ -80,6 +82,8 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
         <Box data-testid={activityItemAnswer['data-testid']}>{getTimeResponseItem(answer)}</Box>
       );
     }
+    case ItemResponseType.TimeRange:
+      return <TimeRangeResponseItem {...(activityItemAnswer as TimaRangeItemAnswer)} />;
     case ItemResponseType.Date:
       return <DateResponseItem {...(activityItemAnswer as DateItemAnswer)} />;
   }
