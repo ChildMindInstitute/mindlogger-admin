@@ -17,20 +17,18 @@ import { useEncryptionStorage } from 'shared/hooks';
 import { applet } from 'shared/state';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
+import {
+  getDateISO,
+  getFormattedResponses,
+  getIdentifiers,
+} from './RespondentDataSummary/Report/Report.utils';
 import { getUniqueIdentifierOptions } from './RespondentData.utils';
 import {
   RespondentsDataFormValues,
   Identifier,
   GetIdentifiersVersions,
   FetchAnswers,
-  // ActivityCompletion,
-  // FormattedResponse,
 } from './RespondentData.types';
-import {
-  getDateISO,
-  getFormattedResponses,
-  getIdentifiers,
-} from './RespondentDataSummary/Report/Report.utils';
 
 export const useRespondentDataTabs = () => {
   const { appletId, respondentId } = useParams();

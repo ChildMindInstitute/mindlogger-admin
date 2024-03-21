@@ -68,7 +68,7 @@ export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportT
     const visibleAnswers = stableSort(formattedAnswers, getComparator(order, orderBy)).slice(
       currentPage * DEFAULT_ROWS_PER_PAGE,
       currentPage * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
-    ) as TextItemAnswer[];
+    );
 
     const skippedResponse = (
       <StyledBodyMedium color={variables.palette.outline}>
