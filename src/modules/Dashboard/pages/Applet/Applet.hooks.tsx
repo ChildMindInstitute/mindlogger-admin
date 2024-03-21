@@ -92,7 +92,7 @@ export const useMultiInformantAppletTabs = () => {
       id: 'applet-respondents',
       icon: <Svg id="respondent-circle" />,
       activeIcon: <Svg id="respondent-circle-filled" />,
-      path: generatePath(page.appletRespondents, {
+      path: generatePath(page.appletParticipants, {
         appletId,
       }),
       'data-testid': 'dashboard-tab-respondents',
