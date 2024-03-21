@@ -25,6 +25,7 @@ export type TabsProps = {
   setActiveTab?: Dispatch<SetStateAction<number>>;
   hiddenHeader?: boolean;
   isBuilder?: boolean;
+  animationDurationMs?: number;
 };
 
 export type RenderTabs = {
