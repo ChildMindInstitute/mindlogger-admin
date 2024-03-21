@@ -1,4 +1,4 @@
-import { createArrayForSlider } from './RespondentData.utils';
+import { createArrayForSlider, getUniqueIdentifierOptions } from './RespondentData.utils';
 
 describe('createArrayForSlider', () => {
   test('should create an array with the correct length', () => {
@@ -19,5 +19,26 @@ describe('createArrayForSlider', () => {
   test('should create an array with a single element when minValue and maxValue are the same', () => {
     const result = createArrayForSlider({ maxValue: 2, minValue: 2 });
     expect(result).toEqual([{ value: 2, label: 2 }]);
+  });
+});
+
+describe('getUniqueIdentifierOptions', () => {
+  test('should return an empty array for an empty identifiers array', () => {
+    const result = getUniqueIdentifierOptions([]);
+    expect(result).toEqual([]);
+  });
+
+  test('should return unique identifier options', () => {
+    const identifiers = [
+      { decryptedValue: 'decryptedValue_id1', encryptedValue: 'encryptedValue_id1' },
+      { decryptedValue: 'decryptedValue_id2', encryptedValue: 'encryptedValue_id2' },
+      { decryptedValue: 'decryptedValue_id2', encryptedValue: 'encryptedValue_id2' }, // duplicate
+    ];
+
+    const result = getUniqueIdentifierOptions(identifiers);
+    expect(result).toEqual([
+      { label: 'decryptedValue_id1', id: 'decryptedValue_id1' },
+      { label: 'decryptedValue_id2', id: 'decryptedValue_id2' },
+    ]);
   });
 });

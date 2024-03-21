@@ -1,42 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
-import { EmptyState, LinkedTabs, Svg } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { EmptyState, Svg } from 'shared/components';
 import { Roles } from 'shared/consts';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { page } from 'resources';
-import { users, workspaces } from 'redux/modules';
-import { useAppDispatch } from 'redux/store';
-
-import { useRespondentDataTabs } from './RespondentData.hooks';
-import { RespondentDataContext } from './RespondentData.context';
-import { SummaryFiltersForm } from './RespondentData.types';
-import { defaultSummaryFormFiltersValues } from './RespondentData.const';
+import { workspaces } from 'redux/modules';
+import { RespondentData as RespondentDataFeature } from 'modules/Dashboard/features/RespondentData';
 
 export const RespondentData = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { appletId, respondentId } = useParams();
-  const dispatch = useAppDispatch();
-
-  const { ownerId } = workspaces.useData() || {};
-  const respondentDataTabs = useRespondentDataTabs();
-
-  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, (result) => {
-    setSummaryActivities(result?.data?.result || []);
-  });
-
-  const [summaryActivities, setSummaryActivities] = useState<DatavizActivity[]>();
-  const [selectedActivity, setSelectedActivity] = useState<DatavizActivity>();
-
-  const methods = useForm<SummaryFiltersForm>({
-    defaultValues: defaultSummaryFormFiltersValues,
-  });
+  const { appletId } = useParams();
 
   const navigateUp = () =>
     navigate(
@@ -44,31 +21,6 @@ export const RespondentData = () => {
         appletId,
       }),
     );
-
-  useEffect(() => {
-    methods.reset();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedActivity]);
-
-  useEffect(() => {
-    if (!appletId || !respondentId || !ownerId) return;
-
-    getSummaryActivities({
-      appletId,
-      respondentId,
-    });
-
-    const { getRespondentDetails } = users.thunk;
-
-    dispatch(
-      getRespondentDetails({
-        ownerId,
-        appletId,
-        respondentId,
-      }),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appletId, respondentId, ownerId]);
 
   useEffect(() => {
     Mixpanel.trackPageView('Data Viz');
@@ -90,13 +42,7 @@ export const RespondentData = () => {
       >
         {t('respondents')}
       </StyledDirectoryUpButton>
-      <RespondentDataContext.Provider
-        value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}
-      >
-        <FormProvider {...methods}>
-          <LinkedTabs tabs={respondentDataTabs} />
-        </FormProvider>
-      </RespondentDataContext.Provider>
+      <RespondentDataFeature />
     </StyledBody>
   );
 };
