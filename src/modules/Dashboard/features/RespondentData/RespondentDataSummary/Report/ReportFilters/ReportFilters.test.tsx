@@ -1,13 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { FormProvider, useForm } from 'react-hook-form';
-import { act, screen } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import mockAxios from 'jest-mock-axios';
+import * as reactHookForm from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils';
-import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
-import { defaultSummaryFormFiltersValues } from 'modules/Dashboard/pages/RespondentData/RespondentData.const';
+import { page } from 'resources';
+import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 
+import { RespondentsDataFormValues } from '../../../RespondentData.types';
+import { defaultRespondentDataFormValues } from '../../../RespondentData.const';
 import { ReportFilters } from './ReportFilters';
 
 const identifiers = [
@@ -27,24 +31,46 @@ const versions = [
 ];
 
 const dataTestid = 'respondents-summary-filters';
+const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;
+const routePath = page.appletRespondentDataSummary;
+const mockedActivity = {
+  id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
+  name: 'Activity 1',
+  isPerformanceTask: false,
+  hasAnswer: true,
+};
 
 const FormComponent = () => {
-  const methods = useForm<SummaryFiltersForm>({
+  const methods = useForm<RespondentsDataFormValues>({
     defaultValues: {
-      ...defaultSummaryFormFiltersValues,
+      ...defaultRespondentDataFormValues,
       startDate: new Date('2024-01-04'),
       endDate: new Date('2024-01-10'),
+      versions: [
+        { label: '1.0.0', id: '1.0.0' },
+        { label: '1.0.1', id: '1.0.1' },
+      ],
     },
   });
 
   return (
     <FormProvider {...methods}>
-      <ReportFilters identifiers={identifiers} versions={versions} />
+      <ReportFilters identifiers={identifiers} versions={versions} setIsLoading={jest.fn()} />
     </FormProvider>
   );
 };
 
+const mockedUseParams = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => mockedUseParams(),
+}));
+
 describe('ReportFilters', () => {
+  beforeEach(() => {
+    mockedUseParams.mockReturnValue({ appletId: mockedAppletId, respondentId: mockedRespondentId });
+  });
+
   test('renders date pickers and time pickers', async () => {
     await act(async () => {
       renderWithProviders(<FormComponent />);
@@ -112,5 +138,53 @@ describe('ReportFilters', () => {
 
     expect(startInput.value).toEqual('11 Jan 2024');
     expect(endInput.value).toEqual('12 Jan 2024');
+  });
+
+  test('fetch answers on filters change', async () => {
+    mockAxios.get.mockResolvedValueOnce({
+      data: {
+        result: [
+          {
+            userPublicKey: 'userPublicKey',
+            answer: 'answer',
+            items: [],
+            itemIds: 'itemIds',
+          },
+        ],
+      },
+    });
+    jest
+      .spyOn(reactHookForm, 'useWatch')
+      .mockReturnValue([
+        true,
+        false,
+        new Date('2024-01-04'),
+        new Date('2024-01-10'),
+        mockedActivity,
+      ]);
+
+    await act(async () => {
+      renderWithProviders(<FormComponent />, route, routePath);
+    });
+
+    await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
+
+    await waitFor(() => {
+      expect(mockAxios.get).toHaveBeenNthCalledWith(
+        1,
+        `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers`,
+        {
+          params: {
+            emptyIdentifiers: true,
+            fromDatetime: '2024-01-04T00:00:00',
+            identifiers: '',
+            respondentId: mockedRespondentId,
+            toDatetime: '2024-01-10T23:59:00',
+            versions: '1.0.0,1.0.1',
+          },
+          signal: undefined,
+        },
+      );
+    });
   });
 });

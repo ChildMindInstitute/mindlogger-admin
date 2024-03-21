@@ -1,25 +1,44 @@
+import { ChangeEvent } from 'react';
 import { Box } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
 
 import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { Switch, TagsInputController } from 'shared/components/FormComponents';
-import { getUniqueIdentifierOptions } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.utils';
+import { DatavizActivity } from 'api';
+import { AutocompleteOption } from 'shared/components/FormComponents';
 
+import { FetchAnswers } from '../../../RespondentData.types';
+import { getUniqueIdentifierOptions } from '../../../RespondentData.utils';
+import { useRespondentAnswers } from '../../../RespondentData.hooks';
 import { StyledFiltersContainer, StyledMoreFilters, StyledTimeText } from './ReportFilters.styles';
-import { ReportFiltersProps } from './ReportFilters.types';
+import {
+  FiltersChangeType,
+  OnFiltersChangeParams,
+  ReportFiltersProps,
+} from './ReportFilters.types';
 import { MIN_DATE } from './ReportFilters.const';
 
-export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFiltersProps) => {
+export const ReportFilters = ({
+  identifiers = [],
+  versions = [],
+  setIsLoading,
+}: ReportFiltersProps) => {
   const { t } = useTranslation('app');
-  const { control, watch, setValue } = useFormContext();
+  const { control, setValue } = useFormContext();
+  const { fetchAnswers } = useRespondentAnswers();
 
-  const moreFiltersVisible = watch('moreFiltersVisible');
-  const filterByIdentifier = watch('filterByIdentifier');
-  const startDate = watch('startDate');
-  const endDate = watch('endDate');
+  const [moreFiltersVisible, filterByIdentifier, startDate, endDate, activity]: [
+    boolean,
+    boolean,
+    Date,
+    Date,
+    DatavizActivity,
+  ] = useWatch({
+    name: ['moreFiltersVisible', 'filterByIdentifier', 'startDate', 'endDate', 'selectedActivity'],
+  });
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
   const identifiersOptions = getUniqueIdentifierOptions(identifiers);
@@ -29,10 +48,43 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
     setValue('moreFiltersVisible', !moreFiltersVisible);
   };
 
-  const onCloseCallback = () => {
-    if (endDate < startDate) {
-      setValue('endDate', addDays(startDate, 1));
+  const onFiltersChange = async ({
+    type,
+    startTime,
+    endTime,
+    filterByIdentifier,
+    identifier,
+    versions,
+  }: OnFiltersChangeParams) => {
+    setIsLoading(true);
+    let fetchParams: FetchAnswers = { activity };
+
+    switch (type) {
+      case FiltersChangeType.StartDate:
+        if (endDate < startDate) {
+          const newEndDate = addDays(startDate, 1);
+          setValue('endDate', newEndDate);
+          fetchParams = { ...fetchParams, endDate: newEndDate };
+        }
+        break;
+      case FiltersChangeType.Time:
+        fetchParams = { ...fetchParams, startTime, endTime };
+        break;
+      case FiltersChangeType.FilterByIdentifier:
+        fetchParams = { ...fetchParams, filterByIdentifier };
+        break;
+      case FiltersChangeType.Identifiers:
+        fetchParams = { ...fetchParams, identifier };
+        break;
+      case FiltersChangeType.Versions:
+        fetchParams = { ...fetchParams, versions };
+        break;
+      default:
+        break;
     }
+
+    await fetchAnswers(fetchParams);
+    setIsLoading(false);
   };
 
   return (
@@ -44,7 +96,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             name="startDate"
             control={control}
             inputSx={{ width: '19rem' }}
-            onCloseCallback={onCloseCallback}
+            onCloseCallback={() => onFiltersChange({ type: FiltersChangeType.StartDate })}
             label={t('startDate')}
             disabled={false}
             data-testid={`${dataTestid}-start-date`}
@@ -55,6 +107,7 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             name="endDate"
             control={control}
             inputSx={{ width: '19rem' }}
+            onCloseCallback={() => onFiltersChange({ type: FiltersChangeType.EndDate })}
             label={t('endDate')}
             disabled={false}
             data-testid={`${dataTestid}-end-date`}
@@ -67,6 +120,9 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             control={control}
             label={t('startTime')}
             wrapperSx={{ width: '13rem' }}
+            onCustomChange={(newTime: string) =>
+              onFiltersChange({ startTime: newTime, type: FiltersChangeType.Time })
+            }
             data-testid={`${dataTestid}-start-time`}
           />
           <StyledTimeText>
@@ -83,6 +139,9 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
             control={control}
             label={t('endTime')}
             wrapperSx={{ width: '13rem' }}
+            onCustomChange={(newTime: string) =>
+              onFiltersChange({ endTime: newTime, type: FiltersChangeType.Time })
+            }
             data-testid={`${dataTestid}-end-time`}
           />
           <StyledMoreFilters
@@ -103,6 +162,12 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
               name="filterByIdentifier"
               control={control}
               label={t('filterByIdentifier')}
+              onCustomChange={(event: ChangeEvent<HTMLInputElement>) =>
+                onFiltersChange({
+                  type: FiltersChangeType.FilterByIdentifier,
+                  filterByIdentifier: event.target.checked,
+                })
+              }
               data-testid={`${dataTestid}-filter-by-identifier`}
             />
           )}
@@ -118,6 +183,12 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 labelAllSelect={t('selectAll')}
                 disabled={!filterByIdentifier}
                 defaultSelectedAll
+                onCustomChange={(options: AutocompleteOption[]) =>
+                  onFiltersChange({
+                    type: FiltersChangeType.Identifiers,
+                    identifier: options,
+                  })
+                }
                 data-testid={`${dataTestid}-respondent-identifier`}
               />
             </Box>
@@ -131,6 +202,12 @@ export const ReportFilters = ({ identifiers = [], versions = [] }: ReportFilters
                 noOptionsText={t('noVersions')}
                 labelAllSelect={t('selectAll')}
                 defaultSelectedAll
+                onCustomChange={(options: AutocompleteOption[]) =>
+                  onFiltersChange({
+                    type: FiltersChangeType.Versions,
+                    versions: options,
+                  })
+                }
                 data-testid={`${dataTestid}-versions`}
               />
             </Box>
