@@ -25,11 +25,7 @@ import { StyledPanel } from 'shared/components/Tabs/TabPanel/TabPanel.style';
 
 import { useMultiInformantAppletTabs } from './Applet.hooks';
 import { StyledAppletLogo } from './Applet.styles';
-import {
-  StyledActions,
-  StyledExportButton,
-  StyledSettingsButton,
-} from './AppletMultiInformant.styles';
+import { StyledExportButton, StyledSettingsButton } from './AppletMultiInformant.styles';
 
 export const AppletMultiInformant = () => {
   const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
@@ -87,7 +83,7 @@ export const AppletMultiInformant = () => {
                 )}
               </StyledFlexTopCenter>
 
-              <StyledActions>
+              <StyledFlexTopCenter gap={theme.spacing(1)}>
                 <StyledExportButton
                   onClick={() => {
                     setIsExportOpen(true);
@@ -107,7 +103,7 @@ export const AppletMultiInformant = () => {
                 >
                   <Svg id="settings" fill={isSettingsSelected ? variables.palette.primary : ''} />
                 </StyledSettingsButton>
-              </StyledActions>
+              </StyledFlexTopCenter>
             </StyledFlexSpaceBetween>
           )}
 
