@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useLocation, useParams } from 'react-router-dom';
-import { Tooltip } from '@mui/material';
+import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
+import { Button, Tooltip } from '@mui/material';
 
 import { LinkedTabs, Spinner, Svg } from 'shared/components';
 import {
   StyledBody,
   StyledFlexSpaceBetween,
+  StyledFlexTopBaseline,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
   StyledTitleMedium,
@@ -25,7 +26,6 @@ import { StyledPanel } from 'shared/components/Tabs/TabPanel/TabPanel.style';
 
 import { useMultiInformantAppletTabs } from './Applet.hooks';
 import { StyledAppletLogo } from './Applet.styles';
-import { StyledExportButton, StyledSettingsButton } from './AppletMultiInformant.styles';
 
 export const AppletMultiInformant = () => {
   const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
@@ -83,8 +83,12 @@ export const AppletMultiInformant = () => {
                 )}
               </StyledFlexTopCenter>
 
-              <StyledFlexTopCenter gap={theme.spacing(1)}>
-                <StyledExportButton
+              <StyledFlexTopBaseline gap={theme.spacing(1)}>
+                <Button
+                  sx={{
+                    gap: theme.spacing(1),
+                    color: variables.palette.on_surface_variant,
+                  }}
                   onClick={() => {
                     setIsExportOpen(true);
                     Mixpanel.track('Export Data click');
@@ -94,16 +98,16 @@ export const AppletMultiInformant = () => {
                   <StyledTitleMedium as="span" sx={{ color: variables.palette.on_surface_variant }}>
                     {t('export')}
                   </StyledTitleMedium>
-                </StyledExportButton>
-                <StyledSettingsButton
+                </Button>
+                <Link
                   data-testid="dashboard-tab-settings"
                   to={generatePath(page.appletSettings, {
                     appletId,
                   })}
                 >
                   <Svg id="settings" fill={isSettingsSelected ? variables.palette.primary : ''} />
-                </StyledSettingsButton>
-              </StyledFlexTopCenter>
+                </Link>
+              </StyledFlexTopBaseline>
             </StyledFlexSpaceBetween>
           )}
 
