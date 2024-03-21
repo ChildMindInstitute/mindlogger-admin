@@ -47,7 +47,7 @@ export const ReviewMenuItem = ({
   const isActivityNotEmpty = !!activity?.answerDates?.length;
 
   const answerDates = activity?.answerDates?.sort((a, b) =>
-    compareAsc(new Date(a.createdAt), new Date(b.createdAt)),
+    compareAsc(new Date(a.endDatetime ?? a.createdAt), new Date(b.endDatetime ?? b.createdAt)),
   );
 
   const handleActivityClick = () => {
@@ -88,7 +88,9 @@ export const ReviewMenuItem = ({
             <Chip
               color={selectedAnswer?.answerId === answer.answerId ? 'primary' : 'secondary'}
               key={answer.answerId}
-              title={String(format(new Date(answer.createdAt), DateFormats.TimeSeconds))}
+              title={String(
+                format(new Date(answer.endDatetime ?? answer.createdAt), DateFormats.TimeSeconds),
+              )}
               onClick={() => handleAnswerClick(answer)}
               data-testid={`${dataTestid}-completion-time-${index}`}
             />
