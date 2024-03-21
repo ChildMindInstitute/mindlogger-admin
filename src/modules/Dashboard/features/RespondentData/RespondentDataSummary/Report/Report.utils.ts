@@ -27,7 +27,7 @@ import {
   ItemOption,
 } from '../../RespondentData.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
-import { getDateForamttedResponse } from '../../RespondentData.utils';
+import { getDateFormattedResponse } from '../../RespondentData.utils';
 
 export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
   value !== null && value !== undefined;
@@ -439,7 +439,7 @@ export const formatActivityItemAnswers = (
         answers: [
           {
             answer: {
-              value: getDateForamttedResponse(currentAnswer.answer as DecryptedDateAnswer),
+              value: getDateFormattedResponse(currentAnswer.answer as DecryptedDateAnswer),
               text: null,
             },
             date,

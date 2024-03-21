@@ -4,14 +4,14 @@ import { ActivityItemAnswer } from 'shared/types';
 import { SubscaleSetting } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 
-export type Answer = {
-  answer: FormattedAnswer;
-  date: string;
-};
-
 export type FormattedAnswer = {
   value: string | number | null;
   text: string | null;
+};
+
+export type Answer = {
+  answer: FormattedAnswer;
+  date: string;
 };
 
 export type ItemOption = {
@@ -20,9 +20,14 @@ export type ItemOption = {
   value: number;
 };
 
+export type NumberSelectionResponseValues = {
+  minValue: number;
+  maxValue: number;
+};
+
 export type ItemResponseValues = {
   options: ItemOption[];
-};
+} & Partial<NumberSelectionResponseValues>;
 
 export type FormattedActivityItem = {
   id: string;

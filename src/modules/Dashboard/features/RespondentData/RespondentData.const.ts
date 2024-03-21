@@ -24,7 +24,6 @@ export const defaultRespondentDataFormValues = {
 };
 
 export const UNSUPPORTED_ITEMS = [
-  ItemResponseType.Date,
   ItemResponseType.Audio,
   ItemResponseType.AudioPlayer,
   ItemResponseType.Drawing,
@@ -35,7 +34,6 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.MultipleSelectionPerRow,
   ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.SliderRows,
-  ItemResponseType.NumberSelection,
   ItemResponseType.Message,
   ItemResponseType.Flanker,
   ItemResponseType.StabilityTracker,
