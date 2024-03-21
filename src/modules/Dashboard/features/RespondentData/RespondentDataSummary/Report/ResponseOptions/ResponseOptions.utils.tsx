@@ -5,7 +5,7 @@ import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
-import { ItemOption, NumberSelectionResponseValues } from '../Report.types';
+import { ItemOption, NumberSelectionResponseValues } from '../../../RespondentData.types';
 
 export const getResponseItem = ({
   color,
