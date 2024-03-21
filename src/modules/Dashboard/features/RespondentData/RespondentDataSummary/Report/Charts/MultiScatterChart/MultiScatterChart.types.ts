@@ -5,8 +5,10 @@ import { locales } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 import {
   Answer,
-  ItemResponseValues,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+
+// TODO: move
+import { Answer, ItemOption } from '../../Report.types';
 
 export type ExtendedChartDataset = ChartDataset & {
   labels: string[];
@@ -19,7 +21,7 @@ export type MultiScatterChartProps = {
   minY: number;
   maxY: number;
   height: number;
-  responseValues: ItemResponseValues;
+  options: ItemOption[];
   responseType: ItemResponseType;
   answers: Answer[];
   versions: Version[];
@@ -28,7 +30,7 @@ export type MultiScatterChartProps = {
 
 export type OptionsProps = {
   lang: keyof typeof locales;
-  responseValues: ItemResponseValues;
+  options: ItemOption[];
   responseType: ItemResponseType;
   minY: number;
   maxY: number;

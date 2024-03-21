@@ -1,4 +1,5 @@
-import { fireEvent, waitFor, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { inputAcceptsValue } from 'shared/tests/inputAcceptsValue';
 import { renderComponentForEachTest } from 'shared/utils/renderComponentForEachTest';
@@ -6,12 +7,29 @@ import { mockedEmail, mockedPassword } from 'shared/mock';
 
 import { SignUpForm } from '.';
 
-const submitForm = (email: string, password: string, firstName: string, lastName: string) => {
-  fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: email } });
-  fireEvent.change(screen.getByLabelText(/Password/i), { target: { value: password } });
-  fireEvent.change(screen.getByLabelText(/First Name/i), { target: { value: firstName } });
-  fireEvent.change(screen.getByLabelText(/Last Name/i), { target: { value: lastName } });
-  fireEvent.click(screen.getByTestId('signup-form-signup'));
+const submitForm = async ({
+  email,
+  password,
+  firstName,
+  lastName,
+  termsOfService,
+}: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  termsOfService?: boolean;
+}) => {
+  await userEvent.type(screen.getByLabelText(/Email/i), email);
+  await userEvent.type(screen.getByLabelText(/Password/i), password);
+  await userEvent.type(screen.getByLabelText(/First Name/i), firstName);
+  await userEvent.type(screen.getByLabelText(/Last Name/i), lastName);
+
+  if (termsOfService) {
+    await userEvent.click(screen.getByTestId('signup-form-terms'));
+  }
+
+  await userEvent.click(screen.getByTestId('signup-form-signup'));
 };
 
 describe('SignUp component tests', () => {
@@ -24,25 +42,37 @@ describe('SignUp component tests', () => {
     inputAcceptsValue('Last Name', 'lname');
   });
 
-  test('should be able to disable submit button', async () => {
-    await fireEvent.click(screen.getByLabelText(/I agree to the/i));
-    expect(screen.getByTestId('signup-form-signup')).toBeEnabled();
+  test('should be able to validate SignUp form', async () => {
+    await submitForm({
+      email: 'test',
+      password: 'password',
+      firstName: 'Jane',
+      lastName: 'Doe',
+      termsOfService: true,
+    });
+    expect(await screen.findByText('Email must be valid')).toBeInTheDocument();
+
+    await submitForm({
+      email: mockedEmail,
+      password: ` ${mockedPassword}`,
+      firstName: 'Jane',
+      lastName: 'Doe',
+      termsOfService: true,
+    });
+    expect(await screen.findByText('Password must not contain spaces.')).toBeInTheDocument();
   });
 
-  test('should be able to validate SignUp form', async () => {
-    fireEvent.click(screen.getByLabelText(/I agree to the/i));
-    submitForm('test', 'password', 'fname', 'lname');
-    await waitFor(() => expect(screen.getByText('Email must be valid')).toBeInTheDocument());
+  test('should be able to validate SignUp when fields are empty', async () => {
+    await userEvent.clear(screen.getByLabelText(/Email/i));
+    await userEvent.clear(screen.getByLabelText(/Password/i));
+    await userEvent.clear(screen.getByLabelText(/First Name/i));
+    await userEvent.clear(screen.getByLabelText(/Last Name/i));
+    await userEvent.click(screen.getByTestId('signup-form-signup'));
 
-    submitForm(mockedEmail, ` ${mockedPassword}`, 'fname', 'lname');
-    await waitFor(() =>
-      expect(screen.getByText('Password must not contain spaces.')).toBeInTheDocument(),
-    );
-
-    submitForm('', '', '', '');
-    await waitFor(() => expect(screen.getByText('Email is required')).toBeInTheDocument());
-    await waitFor(() => expect(screen.getByText('Password is required')).toBeInTheDocument());
-    await waitFor(() => expect(screen.getByText('First name is required')).toBeInTheDocument());
-    await waitFor(() => expect(screen.getByText('Last name is required')).toBeInTheDocument());
+    expect(await screen.findByText('Email is required')).toBeInTheDocument();
+    expect(await screen.findByText('Password is required')).toBeInTheDocument();
+    expect(await screen.findByText('First name is required')).toBeInTheDocument();
+    expect(await screen.findByText('Last name is required')).toBeInTheDocument();
+    expect(await screen.findByText('Please agree to the Terms of Service')).toBeInTheDocument();
   });
 });

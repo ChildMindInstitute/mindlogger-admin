@@ -11,7 +11,7 @@ import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
 
 export const getOptions = ({
   lang,
-  responseValues,
+  options,
   responseType,
   minY,
   maxY,
@@ -22,7 +22,7 @@ export const getOptions = ({
   const min = minDate.getTime();
   const max = maxDate.getTime();
 
-  const mapper: Record<string, ItemOption> = responseValues.options.reduce(
+  const mapper: Record<string, ItemOption> = options.reduce(
     (acc, option) => ({
       ...acc,
       [option.value]: option,

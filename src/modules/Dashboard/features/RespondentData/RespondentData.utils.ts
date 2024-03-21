@@ -1,5 +1,9 @@
-import { createArray } from 'shared/utils';
+import { format } from 'date-fns';
+
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { DateFormats } from 'shared/consts';
+import { DecryptedDateAnswer } from 'shared/types';
+import { createArray, getNormalizeTimezoneData } from 'shared/utils';
 
 import { Identifier } from './RespondentData.types';
 
@@ -36,3 +40,17 @@ export const getUniqueIdentifierOptions = (identifiers: Identifier[]) =>
 
     return uniqueIdentifiers;
   }, []);
+
+export const getDateForamttedResponse = (answer: DecryptedDateAnswer) => {
+  if (!answer?.value) return '';
+
+  const { day, month, year } = answer.value;
+  const monthIndex = month - 1;
+  const answerValue = new Date(year, monthIndex, day).toDateString();
+  const formattedResponse = format(
+    new Date(getNormalizeTimezoneData(answerValue).dateTime),
+    DateFormats.DayMonthYear,
+  );
+
+  return formattedResponse;
+};
