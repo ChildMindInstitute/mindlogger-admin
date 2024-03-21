@@ -8,12 +8,12 @@ import { DashboardTable } from 'modules/Dashboard/components';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Order } from 'shared/types';
 import { DateFormats, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { Answer } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { getHeadCells } from './ReportTable.const';
 import { StyledTableWrapper } from './ReportTable.styles';
 import { ReportTableProps, TextItemAnswer } from './ReportTable.types';
 import { filterReportTable, getComparator, getRows, stableSort } from './ReportTable.utils';
-import { Answer } from '../Report.types';
 
 export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportTableProps) => {
   const { t } = useTranslation('app');
@@ -68,7 +68,7 @@ export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportT
     const visibleAnswers = stableSort(formattedAnswers, getComparator(order, orderBy)).slice(
       currentPage * DEFAULT_ROWS_PER_PAGE,
       currentPage * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
-    );
+    ) as TextItemAnswer[];
 
     const skippedResponse = (
       <StyledBodyMedium color={variables.palette.outline}>

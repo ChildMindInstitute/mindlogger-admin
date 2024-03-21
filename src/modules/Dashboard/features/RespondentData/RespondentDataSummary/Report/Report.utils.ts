@@ -16,14 +16,14 @@ import {
   ElementType,
 } from 'shared/types';
 
-import { Identifier } from '../RespondentDataSummary.types';
 import {
+  Identifier,
   ActivityCompletion,
   Answer,
   FormattedActivityItem,
   FormattedResponse,
   ItemOption,
-} from './Report.types';
+} from '../../RespondentData.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
 
 export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
@@ -57,6 +57,7 @@ const shiftAnswerValues = (answers: Answer[]) =>
     ...item,
     answer: {
       ...item.answer,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       value: isValueDefined(item.answer.value) ? +item.answer.value! + 1 : item.answer.value,
     },
   }));
@@ -256,7 +257,7 @@ export const compareActivityItem = (
 
       const sliderOptions = getSliderOptions(
         currResponseValues,
-        currActivityItem.activityItem.id!,
+        currActivityItem.activityItem.id ?? '',
       ).reduce((options: Record<string, ItemOption>, currentOption) => {
         if (options[currentOption.id]) return options;
 
@@ -291,7 +292,7 @@ export const formatActivityItemAnswers = (
   const currentActivityItem = currentAnswer.activityItem;
   const { id, name, question, responseType, responseValues } = currentActivityItem;
   const formattedActivityItem = {
-    id: id!,
+    id: id ?? '',
     name,
     question,
     responseType,
@@ -307,6 +308,7 @@ export const formatActivityItemAnswers = (
           options: currentAnswer.activityItem.responseValues.options.map(({ id, text, value }) => ({
             id,
             text,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             value: optionsValuesMapper[value!],
           })),
         },
@@ -345,6 +347,7 @@ export const formatActivityItemAnswers = (
           options: currentAnswer.activityItem.responseValues.options.map(({ id, text, value }) => ({
             id,
             text,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             value: optionsValuesMapper[value!],
           })),
         },
@@ -375,7 +378,7 @@ export const formatActivityItemAnswers = (
         responseValues: {
           options: getSliderOptions(
             currentAnswer.activityItem.responseValues,
-            formattedActivityItem.id!,
+            formattedActivityItem.id ?? '',
           ),
         },
       };
@@ -430,12 +433,12 @@ export const formatActivityItemAnswers = (
 
       const answer = currentAnswer.answer as DecryptedTimeAnswer;
 
-      const hours = answer?.value?.hours ?? answer?.hour;
-      const minutes = answer?.value?.minutes ?? answer?.minute;
+      const hours = answer.value?.hours ?? answer.hour ?? 0;
+      const minutes = answer.value?.minutes ?? answer.minute ?? 0;
 
       const fullDateValue = new Date(DEFAULT_DATE_MAX);
-      fullDateValue.setHours(hours!);
-      fullDateValue.setMinutes(minutes!);
+      fullDateValue.setHours(hours);
+      fullDateValue.setMinutes(minutes);
 
       const answers = [
         {
@@ -485,12 +488,14 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
       decryptedAnswer.forEach((currentAnswer) => {
         if (subscalesItems?.includes(currentAnswer.activityItem.name)) return items;
 
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const item = items[currentAnswer.activityItem.id!];
 
         if (!item) {
           const { activityItem, answers } = formatActivityItemAnswers(currentAnswer, endDatetime);
           newItems = {
             ...newItems,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             [currentAnswer.activityItem.id!]: [
               {
                 activityItem,
@@ -521,6 +526,7 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
 
           newItems = {
             ...newItems,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             [currentAnswer.activityItem.id!]: updatedItem,
           };
 
@@ -543,6 +549,7 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
 
         newItems = {
           ...newItems,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           [currentAnswer.activityItem.id!]: updatedItem,
         };
 

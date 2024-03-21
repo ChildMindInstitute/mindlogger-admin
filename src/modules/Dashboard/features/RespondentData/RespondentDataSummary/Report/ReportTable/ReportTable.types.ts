@@ -1,4 +1,4 @@
-import { Answer } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import { Answer } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type TextItemAnswer = {
   date: string;
