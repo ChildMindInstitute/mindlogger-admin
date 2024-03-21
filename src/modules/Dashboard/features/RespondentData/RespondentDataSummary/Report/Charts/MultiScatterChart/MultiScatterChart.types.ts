@@ -3,8 +3,10 @@ import { ChartDataset, ScriptableTooltipContext } from 'chart.js';
 import { Version } from 'api';
 import { locales } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
-
-import { Answer, ItemResponseValues } from '../../Report.types';
+import {
+  Answer,
+  ItemResponseValues,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type ExtendedChartDataset = ChartDataset & {
   labels: string[];

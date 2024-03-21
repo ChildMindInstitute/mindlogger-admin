@@ -3,11 +3,11 @@ import { Context } from 'chartjs-plugin-datalabels';
 
 import { variables } from 'shared/styles';
 import { ItemResponseType, locales } from 'shared/consts';
+import { ItemOption } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
 import { getTimelineStepSize, getTimeConfig, truncateString } from '../Charts.utils';
 import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
-import { ItemOption } from '../../Report.types';
 
 export const getOptions = ({
   lang,
