@@ -9,7 +9,7 @@ import { Order } from 'shared/types';
 
 import { StyledTableWrapper } from './ReportTable.styles';
 import { ReportTableProps } from './ReportTable.types';
-import { useResponseData } from './useResponseData';
+import { useResponseData } from './ReportTable.hooks';
 
 export const ReportTable = ({
   responseType,

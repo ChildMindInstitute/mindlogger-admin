@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
 import { useMemo } from 'react';
+import { format } from 'date-fns';
 
 import { DateFormats, DEFAULT_ROWS_PER_PAGE, ItemResponseType } from 'shared/consts';
 import { Order } from 'shared/types';
