@@ -43,7 +43,7 @@ export type DateItemAnswer = {
   'data-testid'?: string;
 };
 
-export type TimaRangeItemAnswer = {
+export type TimeRangeItemAnswer = {
   activityItem: TimeRangeItem;
   answer: DecryptedDateRangeAnswer;
   'data-testid'?: string;

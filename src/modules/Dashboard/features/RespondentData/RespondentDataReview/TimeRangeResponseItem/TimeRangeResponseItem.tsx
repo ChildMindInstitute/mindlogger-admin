@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { DatePickerInput } from 'shared/components/DatePicker/DatePickerInput';
 import { StyledFlexTopStart, theme } from 'shared/styles';
 
-import { TimaRangeItemAnswer } from '../RespondentDataReview.types';
+import { TimeRangeItemAnswer } from '../RespondentDataReview.types';
 import { StyledTimeWrapper } from './TimeRangeResponseItem.styles';
 import { getTimeRangeReponse } from '../../RespondentData.utils';
 
 export const TimeRangeResponseItem = ({
   answer,
   'data-testid': dataTestId,
-}: TimaRangeItemAnswer) => {
+}: TimeRangeItemAnswer) => {
   const { t } = useTranslation('app');
 
   if (!answer) return null;
