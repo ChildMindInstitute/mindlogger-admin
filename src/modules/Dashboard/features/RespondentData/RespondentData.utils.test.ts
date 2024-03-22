@@ -1,4 +1,8 @@
-import { createArrayForSlider, getDateForamttedResponse } from './RespondentData.utils';
+import {
+  createArrayForSlider,
+  getDateForamttedResponse,
+  getTimeRangeReponse,
+} from './RespondentData.utils';
 
 describe('createArrayForSlider', () => {
   test('should create an array with the correct length', () => {
@@ -29,16 +33,44 @@ describe('createArrayForSlider', () => {
         day: 17,
       },
     };
-    const invalidAnswer = {
+    const skippedAnswer = {
       value: null,
     };
+    const invalidValue = null;
     test.each`
       answer           | result           | description
       ${validAnswer}   | ${'17 Mar 2024'} | ${JSON.stringify(validAnswer)}
-      ${invalidAnswer} | ${''}            | ${'empty string'}
-      ${null}          | ${''}            | ${'empty string'}
+      ${skippedAnswer} | ${''}            | ${'empty string when skipped or hidden'}
+      ${invalidValue}  | ${''}            | ${'empty string when invalid'}
     `('should return "$result" when $description', ({ answer, result }) => {
       expect(getDateForamttedResponse(answer)).toStrictEqual(result);
+    });
+  });
+
+  describe('getTimeRangeReponse', () => {
+    const validAnswer = {
+      value: {
+        from: {
+          hour: '0',
+          minute: '0',
+        },
+        to: {
+          hour: '14',
+          minute: '00',
+        },
+      },
+    };
+    const skippedAnswer = {
+      value: null,
+    };
+    const invalidValue = null;
+    test.each`
+      answer           | result                            | description
+      ${validAnswer}   | ${{ from: '00:00', to: '14:00' }} | ${JSON.stringify(validAnswer)}
+      ${skippedAnswer} | ${{ from: '', to: '' }}           | ${'empty values when skipped or hidden'}
+      ${invalidValue}  | ${{ from: '', to: '' }}           | ${'empty values when invalid'}
+    `('should return "$result" when $description', ({ answer, result }) => {
+      expect(getTimeRangeReponse(answer)).toStrictEqual(result);
     });
   });
 });

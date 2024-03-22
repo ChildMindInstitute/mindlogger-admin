@@ -27,13 +27,22 @@ export type ReportContextType = {
   setCurrentActivityCompletionData: (value: CurrentActivityCompletionData) => void;
 };
 
-export type FormattedAnswer = {
-  value: string | number | null;
+export type SimpleAnswerValue = string | number;
+
+export type TimeRangeAnswerValue = {
+  from: string;
+  to: string;
+};
+
+export type RespondentAnswerValue = SimpleAnswerValue | TimeRangeAnswerValue;
+
+export type FormattedAnswer<T = SimpleAnswerValue> = {
+  value: T | null;
   text: string | null;
 };
 
-export type Answer = {
-  answer: FormattedAnswer;
+export type Answer<T = RespondentAnswerValue> = {
+  answer: FormattedAnswer<T>;
   date: string;
 };
 
@@ -61,8 +70,8 @@ export type FormattedActivityItem = {
   responseDataIdentifier?: boolean;
 };
 
-export type FormattedResponse = {
+export type FormattedResponse<T = RespondentAnswerValue> = {
   activityItem: FormattedActivityItem;
-  answers: Answer[];
+  answers: Answer<T>[];
   dataTestid?: string;
 };

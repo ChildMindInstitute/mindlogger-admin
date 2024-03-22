@@ -1071,6 +1071,8 @@
   "startDate": "Date de début",
   "startEndDate": "Date de début / Date de fin",
   "startTime": "Heure de début",
+  "startTimeResponse": "Heure de démarrage de la réponse",
+  "endTimeResponse": "Réponse à l'heure de fin",
   "stopSharing": "Arrêter le partage",
   "strikeThrough": "Barré",
   "subjectPreview": "Aperçu du sujet",

@@ -1,11 +1,14 @@
 import { Version } from 'api';
-import { Answer } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import {
+  Answer,
+  SimpleAnswerValue,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
 
 export type TimePickerLineChartProps = {
   color: string;
   minDate: Date;
   maxDate: Date;
-  answers: Answer[];
+  answers: Answer<SimpleAnswerValue>[];
   versions: Version[];
   'data-testid'?: string;
 };
@@ -16,7 +19,7 @@ export type TimePickerDataPointRaw = {
 };
 
 export type DataProps = {
-  answers: Answer[];
+  answers: Answer<SimpleAnswerValue>[];
   versions: Version[];
   color: string;
 };

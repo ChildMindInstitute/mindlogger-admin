@@ -17,6 +17,7 @@ import {
   DecryptedDateAnswer,
   ElementType,
 } from 'shared/types';
+import { DecryptedDateRangeAnswer } from 'shared/types/answer';
 
 import { Identifier } from '../RespondentDataSummary.types';
 import {
@@ -25,9 +26,11 @@ import {
   FormattedActivityItem,
   FormattedResponse,
   ItemOption,
+  RespondentAnswerValue,
+  SimpleAnswerValue,
 } from './Report.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
-import { getDateForamttedResponse } from '../../RespondentData.utils';
+import { getDateForamttedResponse, getTimeRangeReponse } from '../../RespondentData.utils';
 
 export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
   value !== null && value !== undefined;
@@ -55,7 +58,7 @@ export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemRespons
 
 const getSortedOptions = (options: ItemOption[]) => options.sort((a, b) => b.value - a.value);
 
-const shiftAnswerValues = (answers: Answer[]) =>
+const shiftAnswerValues = (answers: Answer<SimpleAnswerValue>[]) =>
   answers.map((item) => ({
     ...item,
     answer: {
@@ -151,18 +154,21 @@ export const compareActivityItem = (
         {},
       );
 
-      let prevAnswers: Answer[] = prevActivityItem.answers;
-      let updatedAnswers: Answer[] = [];
-      const currAnswers = answers.reduce((answers: Record<string, Answer>, curr) => {
-        const value = curr.answer.value;
+      let prevAnswers = prevActivityItem.answers as Answer<SimpleAnswerValue>[];
+      let updatedAnswers: Answer<SimpleAnswerValue>[] = [];
+      const currAnswers = (answers as Answer<SimpleAnswerValue>[]).reduce(
+        (answers: Record<string, Answer>, curr) => {
+          const value = curr.answer.value;
 
-        return value === null || value === undefined
-          ? answers
-          : {
-              ...answers,
-              [value]: curr,
-            };
-      }, {});
+          return value === null || value === undefined
+            ? answers
+            : {
+                ...answers,
+                [value]: curr,
+              };
+        },
+        {},
+      ) as Record<string, Answer<SimpleAnswerValue>>;
 
       const sortedCurrOptions = getSortedOptions(activityItem.responseValues.options);
       const updatedOptions = sortedCurrOptions.reduce(
@@ -290,7 +296,7 @@ export const compareActivityItem = (
 export const formatActivityItemAnswers = (
   currentAnswer: ActivityItemAnswer,
   date: string,
-): FormattedResponse => {
+): FormattedResponse<RespondentAnswerValue> => {
   const currentActivityItem = currentAnswer.activityItem;
   const { id, name, question, responseType, responseValues } = currentActivityItem;
   const formattedActivityItem = {
@@ -437,6 +443,27 @@ export const formatActivityItemAnswers = (
           {
             answer: {
               value: getDateForamttedResponse(currentAnswer.answer as DecryptedDateAnswer),
+              text: null,
+            },
+            date,
+          },
+        ],
+      };
+    }
+    case ItemResponseType.TimeRange: {
+      if (!currentAnswer.answer) {
+        return {
+          activityItem: formattedActivityItem,
+          answers: getDefaultEmptyAnswer(date),
+        };
+      }
+
+      return {
+        activityItem: formattedActivityItem,
+        answers: [
+          {
+            answer: {
+              value: getTimeRangeReponse(currentAnswer.answer as DecryptedDateRangeAnswer),
               text: null,
             },
             date,

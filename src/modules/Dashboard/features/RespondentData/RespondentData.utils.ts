@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 
 import { DateFormats } from 'shared/consts';
-import { DecryptedDateAnswer } from 'shared/types';
+import { DecryptedDateAnswer, DecryptedDateRangeAnswer } from 'shared/types';
 import { createArray, getNormalizeTimezoneData } from 'shared/utils';
 
 export const createArrayForSlider = ({
@@ -28,4 +28,29 @@ export const getDateForamttedResponse = (answer: DecryptedDateAnswer) => {
   );
 
   return formattedResponse;
+};
+
+export const getTimeRangeReponse = (answer?: DecryptedDateRangeAnswer) => {
+  if (!answer?.value)
+    return {
+      from: '',
+      to: '',
+    };
+
+  const dateFrom = new Date();
+  const dateTo = new Date();
+  const {
+    from: { hour: hourFrom, minute: minuteFrom },
+    to: { hour: hourTo, minute: minuteTo },
+  } = answer.value;
+
+  dateFrom.setHours(hourFrom);
+  dateFrom.setMinutes(minuteFrom);
+  dateTo.setHours(hourTo);
+  dateTo.setMinutes(minuteTo);
+
+  return {
+    from: format(dateFrom, DateFormats.Time),
+    to: format(dateTo, DateFormats.Time),
+  };
 };
