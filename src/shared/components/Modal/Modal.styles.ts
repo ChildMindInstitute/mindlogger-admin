@@ -10,7 +10,8 @@ import { ActionsAlign } from './Modal.types';
 
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {
-    background-color: ${variables.palette.surface1};
+    // Use the modalBackground variable to prevent unexpected styles for table headings inside modals.
+    background-color: ${variables.modalBackground};
     width: ${({ width }: { width?: string; height?: string }) => (width ? `${width}rem` : 'auto')};
     max-width: 100rem;
     height: ${({ height }) => height || 'auto'};

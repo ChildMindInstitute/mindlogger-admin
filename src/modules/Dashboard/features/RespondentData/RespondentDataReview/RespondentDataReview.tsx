@@ -30,7 +30,7 @@ import { ReviewMenu } from './ReviewMenu';
 import { ReviewHeader } from './ReviewHeader';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
 import { Answer, AssessmentActivityItem } from './RespondentDataReview.types';
-import { StyledContentContainer, StyledReviewContainer } from './RespondentDataReview.styles';
+import { StyledReviewContainer } from './RespondentDataReview.styles';
 
 export const RespondentDataReview = () => {
   const { appletId, respondentId } = useParams();
@@ -172,6 +172,7 @@ export const RespondentDataReview = () => {
         setIsLoading(false);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appletId, answerId, selectedActivity, selectedAnswer]);
 
   useEffect(() => {
@@ -195,6 +196,7 @@ export const RespondentDataReview = () => {
     }
 
     handleSetInitialDate(new Date());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastActivityCompleted]);
 
   return (
@@ -228,24 +230,22 @@ export const RespondentDataReview = () => {
           setItemIds,
         }}
       >
-        <StyledContentContainer>
+        <StyledReviewContainer ref={containerRef} data-testid={`${dataTestid}-container`}>
           {isLoading && <Spinner />}
-          <StyledReviewContainer ref={containerRef} data-testid={`${dataTestid}-container`}>
-            <ReviewHeader
-              containerRef={containerRef}
-              isAnswerSelected={!!selectedAnswer}
-              activityName={selectedActivity?.name ?? ''}
-              onButtonClick={() => setIsFeedbackOpen(true)}
-              data-testid={dataTestid}
-            />
-            <Review
-              isLoading={isLoading}
-              selectedAnswer={selectedAnswer}
-              activityItemAnswers={activityItemAnswers}
-              data-testid={`${dataTestid}-activity-items`}
-            />
-          </StyledReviewContainer>
-        </StyledContentContainer>
+          <ReviewHeader
+            containerRef={containerRef}
+            isAnswerSelected={!!selectedAnswer}
+            activityName={selectedActivity?.name ?? ''}
+            onButtonClick={() => setIsFeedbackOpen(true)}
+            data-testid={dataTestid}
+          />
+          <Review
+            isLoading={isLoading}
+            selectedAnswer={selectedAnswer}
+            activityItemAnswers={activityItemAnswers}
+            data-testid={`${dataTestid}-activity-items`}
+          />
+        </StyledReviewContainer>
         {selectedActivity && selectedAnswer && !isLoading && (
           <Feedback selectedActivity={selectedActivity} onClose={() => setIsFeedbackOpen(false)} />
         )}

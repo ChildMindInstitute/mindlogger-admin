@@ -76,7 +76,7 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
     answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
   const value = getAnswerValue(answer);
 
-  if (!key || key === 'text') return '';
+  if (!key) return '';
   if (isMediaAnswerData(item)) {
     try {
       if (!item.answer?.value) return '';

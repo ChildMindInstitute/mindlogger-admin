@@ -59,7 +59,7 @@ export const getModalComponents = ({
           <>
             <Box sx={{ mb: theme.spacing(2) }}>{labelsObject.upload.successDescription}</Box>
             <DataTable
-              tableHeadBackground={variables.palette.surface3}
+              tableHeadBackground={variables.modalBackground}
               columns={columnData}
               data={data}
               noDataPlaceholder={t('noElementsYet')}
@@ -85,7 +85,7 @@ export const getModalComponents = ({
           <>
             <Box sx={{ mb: theme.spacing(2) }}>{labelsObject.edit.initDescription}</Box>
             <DataTable
-              tableHeadBackground={variables.palette.surface3}
+              tableHeadBackground={variables.modalBackground}
               columns={columnData}
               data={data}
               noDataPlaceholder={t('noElementsYet')}

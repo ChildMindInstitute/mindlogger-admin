@@ -137,7 +137,13 @@ export const ManagersRemoveAccessPopup = ({
         </strong>
         {t('userHasAccess')}
       </StyledBodyLarge>
-      <Table columns={getHeadCells()} rows={rows} orderBy="name" uiType={UiType.Secondary} />
+      <Table
+        columns={getHeadCells()}
+        rows={rows}
+        orderBy="name"
+        uiType={UiType.Secondary}
+        tableHeadBg={variables.modalBackground}
+      />
     </form>
   );
 

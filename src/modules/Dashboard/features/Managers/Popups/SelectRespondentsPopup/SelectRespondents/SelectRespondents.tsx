@@ -163,6 +163,7 @@ export const SelectRespondents = ({
           orderBy={'nickname'}
           uiType={UiType.Secondary}
           emptyComponent={renderEmptyComponent()}
+          tableHeadBg={variables.modalBackground}
         />
       </form>
       <StyledBodyMedium

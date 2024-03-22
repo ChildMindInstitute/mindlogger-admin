@@ -2,6 +2,7 @@ import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils';
 
+import { RespondentDataReviewContext } from '../RespondentDataReview.context';
 import { ReviewHeader } from './ReviewHeader';
 import { ReviewHeaderProps } from './ReviewHeader.types';
 
@@ -14,6 +15,7 @@ const defaultProps = {
   onButtonClick: mockOnButtonClick,
   'data-testid': dataTestId,
 };
+
 const renderReviewHeader = (props: ReviewHeaderProps) =>
   renderWithProviders(<ReviewHeader {...props} />);
 
@@ -51,5 +53,18 @@ describe('ReviewHeader', () => {
     expect(getComputedStyle(stickyHeader).justifyContent).toBe('flex-end');
     expect(queryByText('Activity Name')).not.toBeInTheDocument();
     expect(getByTestId(`${dataTestId}-feedback-button`)).toBeDisabled();
+  });
+
+  test('does not render the Feedback button if the Feedback Panel is open', async () => {
+    const { queryByTestId, queryByText } = renderWithProviders(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      <RespondentDataReviewContext.Provider value={{ isFeedbackOpen: true }}>
+        <ReviewHeader {...defaultProps} isAnswerSelected />,
+      </RespondentDataReviewContext.Provider>,
+    );
+
+    expect(queryByText('Feedback')).not.toBeInTheDocument();
+    expect(queryByTestId(`${dataTestId}-feedback-button`)).not.toBeInTheDocument();
   });
 });
