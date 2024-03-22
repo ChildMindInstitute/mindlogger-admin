@@ -5,7 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { page } from 'resources';
 import { PrivateRoute } from 'routes/PrivateRoute';
 import { ErrorFallback } from 'shared/components';
-import { __FEATURE_FLAGS } from 'shared/consts';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { appletRoutes, mainRoutes, participantDetailsRoutes } from './routes.const';
 import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
@@ -19,7 +19,7 @@ const RespondentDataSummary = lazy(
   () => import('../features/RespondentData/RespondentDataSummary'),
 );
 
-export const dashboardRoutes = () => (
+export const dashboardRoutes = (flags: FeatureFlags) => (
   <Route path={page.dashboard}>
     <Route element={<Main />}>
       <Route index element={<Navigate to={page.dashboardApplets} replace />} />
@@ -41,7 +41,7 @@ export const dashboardRoutes = () => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {__FEATURE_FLAGS.AppletMultiInformant ? <AppletMultiInformant /> : <Applet />}
+            {flags.multiInformantFlag ? <AppletMultiInformant /> : <Applet />}
           </ErrorBoundary>
         </PrivateRoute>
       }

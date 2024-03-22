@@ -49,6 +49,10 @@ export const appletRoutes = [
     Component: Respondents,
   },
   {
+    path: page.appletParticipants,
+    Component: Participants,
+  },
+  {
     path: page.appletManagers,
     Component: Managers,
   },
