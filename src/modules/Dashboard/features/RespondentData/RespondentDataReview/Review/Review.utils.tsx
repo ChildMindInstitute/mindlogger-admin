@@ -23,7 +23,7 @@ import { TextResponseItem } from '../TextResponseItem';
 import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
 import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem';
 import { DateResponseItem } from '../DateResponseItem';
-import { TimeRangeResponseItem } from '../TimeRangeResponseItem/TimeRangeResponseItem';
+import { TimeRangeResponseItem } from '../TimeRangeResponseItem';
 
 const { t } = i18n;
 
