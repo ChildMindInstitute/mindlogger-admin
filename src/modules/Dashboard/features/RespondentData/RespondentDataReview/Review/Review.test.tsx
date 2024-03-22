@@ -131,7 +131,7 @@ const activityItemAnswers = [
   {
     activityItem: {
       question: {
-        en: 'Unsupported item: Time Range',
+        en: 'Item: Time Range',
       },
       responseType: 'timeRange',
       config: {
@@ -161,6 +161,33 @@ const activityItemAnswers = [
         },
       },
     },
+  },
+  {
+    activityItem: {
+      question: {
+        en: 'audio_player_extraText question',
+      },
+      responseType: 'audioPlayer',
+      responseValues: {
+        file: 'https://somepathtofile.mp3',
+      },
+      config: {
+        removeBackButton: false,
+        skippableItem: true,
+        additionalResponseOption: {
+          textInputOption: true,
+          textInputRequired: false,
+        },
+        playOnce: false,
+      },
+      name: 'audio_player_extraText',
+      isHidden: false,
+      conditionalLogic: null,
+      allowEdit: true,
+      id: '992b6bbf-b7ef-404c-9d2d-c997f770b3e0',
+      order: 18,
+    },
+    answer: null,
   },
 ];
 
@@ -212,12 +239,13 @@ describe('Review', () => {
     );
 
     const items = screen.queryAllByTestId(/review-items-\d+$/);
-    expect(items).toHaveLength(4);
+    expect(items).toHaveLength(5);
 
     expect(screen.getByText('Your age:')).toBeInTheDocument();
     expect(screen.getByText('How did you sleep last night?')).toBeInTheDocument();
     expect(screen.getByText('What is your name?')).toBeInTheDocument();
-    expect(screen.getByText('Unsupported item: Time Range')).toBeInTheDocument();
+    expect(screen.getByText('Item: Time Range')).toBeInTheDocument();
+    expect(screen.getByText('audio_player_extraText question')).toBeInTheDocument();
 
     // test single selection item
     const item1 = screen.getByTestId(`${dataTestid}-0`);
@@ -250,8 +278,12 @@ describe('Review', () => {
     const item3 = screen.getByTestId(`${dataTestid}-2`);
     expect(item3).toHaveTextContent('Jane Doe');
 
-    // test unsupported time range item
+    // test time range item
     const item4 = screen.getByTestId(`${dataTestid}-3`);
-    expect(item4).toHaveTextContent('This data type can’t be displayed on this page');
+    expect(item4).toHaveTextContent('Item: Time Range');
+
+    // test unsupported audio player item
+    const item5 = screen.getByTestId(`${dataTestid}-4`);
+    expect(item5).toHaveTextContent('This data type can’t be displayed on this page');
   });
 });
