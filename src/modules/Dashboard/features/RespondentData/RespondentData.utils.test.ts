@@ -1,4 +1,4 @@
-import { createArrayForSlider } from './RespondentData.utils';
+import { createArrayForSlider, getDateForamttedResponse } from './RespondentData.utils';
 
 describe('createArrayForSlider', () => {
   test('should create an array with the correct length', () => {
@@ -19,5 +19,26 @@ describe('createArrayForSlider', () => {
   test('should create an array with a single element when minValue and maxValue are the same', () => {
     const result = createArrayForSlider({ maxValue: 2, minValue: 2 });
     expect(result).toEqual([{ value: 2, label: 2 }]);
+  });
+
+  describe('getDateForamttedResponse', () => {
+    const validAnswer = {
+      value: {
+        year: 2024,
+        month: 3,
+        day: 17,
+      },
+    };
+    const invalidAnswer = {
+      value: null,
+    };
+    test.each`
+      answer           | result           | description
+      ${validAnswer}   | ${'17 Mar 2024'} | ${JSON.stringify(validAnswer)}
+      ${invalidAnswer} | ${''}            | ${'empty string'}
+      ${null}          | ${''}            | ${'empty string'}
+    `('should return "$result" when $description', ({ answer, result }) => {
+      expect(getDateForamttedResponse(answer)).toStrictEqual(result);
+    });
   });
 });

@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
@@ -5,6 +6,7 @@ import { useHeaderSticky } from 'shared/hooks';
 import { StyledStickyHeader, StyledStickyHeadline } from 'shared/styles';
 
 import { StyledTextBtn } from '../../RespondentData.styles';
+import { RespondentDataReviewContext } from '../RespondentDataReview.context';
 import { ReviewHeaderProps } from './ReviewHeader.types';
 
 export const ReviewHeader = ({
@@ -16,6 +18,7 @@ export const ReviewHeader = ({
 }: ReviewHeaderProps) => {
   const { t } = useTranslation();
   const isHeaderSticky = useHeaderSticky(containerRef);
+  const { isFeedbackOpen } = useContext(RespondentDataReviewContext);
 
   return (
     <StyledStickyHeader
@@ -26,15 +29,17 @@ export const ReviewHeader = ({
       {isAnswerSelected && (
         <StyledStickyHeadline isSticky={isHeaderSticky}>{activityName}</StyledStickyHeadline>
       )}
-      <StyledTextBtn
-        variant="text"
-        onClick={onButtonClick}
-        disabled={!isAnswerSelected}
-        startIcon={<Svg id="item-outlined" width="18" height="18" />}
-        data-testid={`${dataTestid}-feedback-button`}
-      >
-        {t('feedback')}
-      </StyledTextBtn>
+      {!isFeedbackOpen && (
+        <StyledTextBtn
+          variant="text"
+          onClick={onButtonClick}
+          disabled={!isAnswerSelected}
+          startIcon={<Svg id="item-outlined" width="18" height="18" />}
+          data-testid={`${dataTestid}-feedback-button`}
+        >
+          {t('feedback')}
+        </StyledTextBtn>
+      )}
     </StyledStickyHeader>
   );
 };

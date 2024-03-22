@@ -1,6 +1,8 @@
 import { Box, FormControlLabel, styled } from '@mui/material';
 
 import { theme, variables } from 'shared/styles';
+import { Table } from 'shared/components';
+import { tableRowHoverColor } from 'shared/utils/colors';
 
 export const StyledTableFormControlLabel = styled(FormControlLabel)`
   display: flex;
@@ -26,6 +28,14 @@ export const StyledContainer = styled(Box)`
   .Mui-checked + .MuiTypography-root {
     .option-hint {
       display: flex;
+    }
+  }
+`;
+
+export const StyledTable = styled(Table)`
+  .MuiTableBody-root .MuiTableRow-root {
+    &:hover {
+      background-color: ${tableRowHoverColor};
     }
   }
 `;

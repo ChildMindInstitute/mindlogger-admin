@@ -5,7 +5,6 @@ import { useFormContext } from 'react-hook-form';
 import uniqueId from 'lodash.uniqueid';
 
 import { applet, workspaces, SingleApplet } from 'redux/modules';
-import { useAppDispatch } from 'redux/store/hooks';
 import { page } from 'resources';
 import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
 import { getEntityKey } from 'shared/utils/getEntityKey';
@@ -29,7 +28,6 @@ import { Breadcrumb } from './Breadcrumbs.types';
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { appletId, activityId, activityFlowId, respondentId, setting } = useParams();
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
   const respondentLabel = useRespondentLabel();
@@ -50,16 +48,16 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const activityFlowLabel =
     appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
       ?.name ?? t('newActivityFlow');
-  const activitiesBreadcrumb = {
-    icon: 'checklist-outlined',
-    label: t('activities'),
-    navPath:
-      appletId && activityId
-        ? generatePath(page.builderAppletActivities, { appletId, activityId })
-        : '',
-  };
 
   return useMemo(() => {
+    const activitiesBreadcrumb = {
+      icon: 'checklist-outlined',
+      label: t('activities'),
+      navPath:
+        appletId && activityId
+          ? generatePath(page.builderAppletActivities, { appletId, activityId })
+          : '',
+    };
     const newBreadcrumbs: Breadcrumb[] = [];
     const isDashboard = pathname.includes(page.dashboard);
     const isBuilder = pathname.includes(page.builder);
@@ -153,10 +151,10 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('review')) {
+    if (pathname.includes('responses')) {
       newBreadcrumbs.push({
         icon: 'checkbox-outlined',
-        label: t('review'),
+        label: t('responses'),
         disabledLink: true,
       });
     }
@@ -213,7 +211,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
       newBreadcrumbs.push(activitiesBreadcrumb, {
         icon: 'checklist-outlined',
-        label: activityLabel!,
+        label: activityLabel ?? '',
         navPath: generatePath(page.builderAppletActivity, { appletId, activityId }),
       });
 
@@ -254,7 +252,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           }),
         },
         {
-          label: activityFlowLabel!,
+          label: activityFlowLabel ?? '',
           navPath: generatePath(page.builderAppletActivityFlowItem, { appletId, activityFlowId }),
         },
       );
@@ -283,12 +281,10 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     if (setting)
       newBreadcrumbs.push(getSettingBreadcrumbs(setting as SettingParam, appletData?.isPublished));
 
-    const updatedBreadcrumbs = [...newBreadcrumbs, ...(restCrumbs || [])].map((crumb) => ({
+    return [...newBreadcrumbs, ...(restCrumbs || [])].map((crumb) => ({
       ...crumb,
       key: uniqueId(),
     }));
-
-    return updatedBreadcrumbs;
   }, [
     t,
     workspaceName,
@@ -299,8 +295,12 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     activityLabel,
     activityFlowLabel,
     pathname,
-    dispatch,
     respondentLabel,
+    activityFlowId,
+    performanceTaskLabel,
+    respondentId,
+    restCrumbs,
+    setting,
     subjectLabel,
   ]);
 };

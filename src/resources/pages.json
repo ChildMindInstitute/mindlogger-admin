@@ -12,7 +12,7 @@
   "appletRespondents": "/dashboard/:appletId/respondents",
   "appletRespondentData": "/dashboard/:appletId/respondents/:respondentId/dataviz",
   "appletRespondentDataSummary": "/dashboard/:appletId/respondents/:respondentId/dataviz/summary",
-  "appletRespondentDataReview": "/dashboard/:appletId/respondents/:respondentId/dataviz/review",
+  "appletRespondentDataReview": "/dashboard/:appletId/respondents/:respondentId/dataviz/responses",
   "appletManagers": "/dashboard/:appletId/managers",
   "appletSchedule": "/dashboard/:appletId/schedule",
   "appletScheduleIndividual": "/dashboard/:appletId/schedule/:respondentId",

@@ -30,6 +30,7 @@ import { AppletsColumnsWidth } from 'modules/Dashboard/features/Applets/Applets.
 import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 
 import { StyledTableCell } from '../AppletsTable.styles';
+import { getTableRowClassNames } from '../AppletsTable.utils';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
 import { getAppletActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
@@ -57,6 +58,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     async () => {
       await setAppletPrivateKey({
         appletPassword: encryptionDataRef.current.password ?? '',
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         encryption: encryptionDataRef.current.encryption!,
         appletId,
       });
@@ -186,16 +188,16 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   return (
     <>
       <TableRow
-        className={isDragOver ? 'dragged-over' : ''}
+        className={getTableRowClassNames({ hasHover: true, isDragOver })}
         draggable
         onDragStart={onDragStart}
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
         onDragEnd={(event) => onDragEnd(event, item)}
         onDrop={(event) => onDrop(event, item)}
-        hover
         onMouseEnter={() => setHasVisibleActions(true)}
         onMouseLeave={() => setHasVisibleActions(false)}
+        data-testid="dashboard-applets-table-applet-row"
       >
         <StyledTableCell width={AppletsColumnsWidth.AppletName} onClick={handleAppletClick}>
           <StyledAppletName applet={item}>

@@ -29,5 +29,6 @@ export type TableProps = {
   uiType?: UiType;
   emptyComponent?: JSX.Element | string;
   className?: string;
+  tableHeadBg?: string;
   'data-testid'?: string;
 };

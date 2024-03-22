@@ -70,3 +70,5 @@ export const palette = {
     green: '#0f7b6c',
   },
 };
+
+export const modalBackground = palette.surface1;

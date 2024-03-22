@@ -43,9 +43,14 @@ export type ItemOption = {
   value: number;
 };
 
+export type NumberSelectionResponseValues = {
+  minValue: number;
+  maxValue: number;
+};
+
 export type ItemResponseValues = {
   options: ItemOption[];
-};
+} & Partial<NumberSelectionResponseValues>;
 
 export type FormattedActivityItem = {
   id: string;

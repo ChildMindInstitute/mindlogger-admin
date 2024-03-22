@@ -14,5 +14,5 @@ export const useRespondentLabel = (isSubject?: boolean) => {
 
   if (!secretUserId) return '';
 
-  return `${t('user')}: ${getRespondentName(secretUserId, nickname)}`;
+  return `${t('respondent')}: ${getRespondentName(secretUserId, nickname)}`;
 };

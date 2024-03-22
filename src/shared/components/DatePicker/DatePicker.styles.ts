@@ -225,3 +225,7 @@ export const DatePickerFallback = styled(Box)`
   min-height: 30rem;
   min-width: 30rem;
 `;
+
+export const StyledSpan = styled('span')`
+  width: 100%;
+`;

@@ -60,7 +60,7 @@ describe('StickyHeader', () => {
     expect(title).toHaveStyle({ fontSize: '3.2rem' });
 
     const description = getByText(
-      'User: b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7 (Mocked Respondent)',
+      'Respondent: b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7 (Mocked Respondent)',
     );
     expect(description).toBeInTheDocument();
     expect(description).toHaveStyle({ position: 'relative', padding: 0 });
