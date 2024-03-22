@@ -4,13 +4,22 @@ import { ActivityItemAnswer } from 'shared/types';
 import { SubscaleSetting } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 
-export type FormattedAnswer = {
-  value: string | number | null;
+export type SimpleAnswerValue = string | number;
+
+export type TimeRangeAnswerValue = {
+  from: string;
+  to: string;
+};
+
+export type RespondentAnswerValue = SimpleAnswerValue | TimeRangeAnswerValue;
+
+export type FormattedAnswer<T = SimpleAnswerValue> = {
+  value: T | null;
   text: string | null;
 };
 
-export type Answer = {
-  answer: FormattedAnswer;
+export type Answer<T = RespondentAnswerValue> = {
+  answer: FormattedAnswer<T>;
   date: string;
 };
 
@@ -52,9 +61,9 @@ export type ActivityCompletion = {
   subscaleSetting?: SubscaleSetting;
 };
 
-export type FormattedResponse = {
+export type FormattedResponse<T = RespondentAnswerValue> = {
   activityItem: FormattedActivityItem;
-  answers: Answer[];
+  answers: Answer<T>[];
   dataTestid?: string;
 };
 

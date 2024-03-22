@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { DateFormats } from 'shared/consts';
-import { DecryptedDateAnswer, ElementType } from 'shared/types';
+import { DecryptedDateAnswer, ElementType, DecryptedDateRangeAnswer } from 'shared/types';
 import { createArray, getNormalizeTimezoneData } from 'shared/utils';
 import { ActivitySettingsSubscale } from 'shared/state/Applet';
 
@@ -189,5 +189,30 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
   return {
     subscalesFrequency,
     formattedResponses,
+  };
+};
+
+export const getTimeRangeReponse = (answer?: DecryptedDateRangeAnswer) => {
+  if (!answer?.value)
+    return {
+      from: '',
+      to: '',
+    };
+
+  const dateFrom = new Date();
+  const dateTo = new Date();
+  const {
+    from: { hour: hourFrom, minute: minuteFrom },
+    to: { hour: hourTo, minute: minuteTo },
+  } = answer.value;
+
+  dateFrom.setHours(hourFrom);
+  dateFrom.setMinutes(minuteFrom);
+  dateTo.setHours(hourTo);
+  dateTo.setMinutes(minuteTo);
+
+  return {
+    from: format(dateFrom, DateFormats.Time),
+    to: format(dateTo, DateFormats.Time),
   };
 };

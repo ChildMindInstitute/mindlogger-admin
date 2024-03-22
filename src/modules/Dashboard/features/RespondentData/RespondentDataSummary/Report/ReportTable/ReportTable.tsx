@@ -1,21 +1,21 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { format } from 'date-fns';
 
 import { Search } from 'shared/components';
 import { DashboardTable } from 'modules/Dashboard/components';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { Order } from 'shared/types';
-import { DateFormats, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { Answer } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-import { getHeadCells } from './ReportTable.const';
 import { StyledTableWrapper } from './ReportTable.styles';
-import { ReportTableProps, TextItemAnswer } from './ReportTable.types';
-import { filterReportTable, getComparator, getRows, stableSort } from './ReportTable.utils';
+import { ReportTableProps } from './ReportTable.types';
+import { useResponseData } from './ReportTable.hooks';
 
-export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportTableProps) => {
+export const ReportTable = ({
+  responseType,
+  answers = [],
+  'data-testid': dataTestid,
+}: ReportTableProps) => {
   const { t } = useTranslation('app');
 
   const [page, setPage] = useState(1);
@@ -39,45 +39,24 @@ export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportT
     setOrderBy(property);
   };
 
-  const visibleRows = useMemo(() => {
-    const currentPage = page - 1;
-    const formattedAnswers = answers?.reduce(
-      (textItemAnswers: TextItemAnswer[], { answer, date: answerDate }: Answer) => {
-        const date = format(new Date(answerDate), DateFormats.DayMonthYear);
-        const time = format(new Date(answerDate), DateFormats.Time);
-
-        if (
-          !filterReportTable(`${date} ${time} ${answer.value}`, searchValue) ||
-          answer.value === undefined
-        ) {
-          return textItemAnswers;
-        }
-
-        return [
-          ...textItemAnswers,
-          {
-            date,
-            time,
-            answer: answer.value || '',
-          },
-        ];
-      },
-      [],
-    );
-
-    const visibleAnswers = stableSort(formattedAnswers, getComparator(order, orderBy)).slice(
-      currentPage * DEFAULT_ROWS_PER_PAGE,
-      currentPage * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
-    );
-
-    const skippedResponse = (
+  const skippedResponse = useMemo(
+    () => (
       <StyledBodyMedium color={variables.palette.outline}>
         {t('respondentSkippedResponse')}
       </StyledBodyMedium>
-    );
+    ),
+    [t],
+  );
 
-    return getRows(visibleAnswers, skippedResponse);
-  }, [answers, searchValue, page, order, orderBy]);
+  const { visibleRows, columns } = useResponseData({
+    responseType,
+    answers,
+    searchValue,
+    page,
+    order,
+    orderBy,
+    skippedResponse,
+  });
 
   return (
     <Box sx={{ mt: theme.spacing(2.4) }} data-testid={`${dataTestid}-table`}>
@@ -88,7 +67,7 @@ export const ReportTable = ({ answers = [], 'data-testid': dataTestid }: ReportT
           order={order}
           orderBy={orderBy}
           rows={visibleRows}
-          columns={getHeadCells()}
+          columns={columns}
           handleRequestSort={handleRequestSort}
           handleChangePage={handleChangePage}
           count={answers.length}

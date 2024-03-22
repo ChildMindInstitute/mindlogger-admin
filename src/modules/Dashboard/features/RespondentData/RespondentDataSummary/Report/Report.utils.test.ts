@@ -634,6 +634,69 @@ describe('Report utils', () => {
         },
       ],
     };
+    const timeRangeProps = {
+      ...sharedProps,
+      currentAnswer: {
+        activityItem: {
+          question: {
+            en: 'Time range question',
+          },
+          responseType: 'timeRange',
+          responseValues: null,
+          config: {
+            removeBackButton: false,
+            skippableItem: true,
+            additionalResponseOption: {
+              textInputOption: true,
+              textInputRequired: false,
+            },
+            timer: 0,
+          },
+          name: 'time_range_extraText',
+          isHidden: false,
+          conditionalLogic: null,
+          allowEdit: true,
+          id: 'b0d3bd40-745c-4b3e-bfa2-9f27a2f38e7d',
+          order: 7,
+        },
+        answer: {
+          value: {
+            from: {
+              hour: 6,
+              minute: 0,
+            },
+            to: {
+              hour: 22,
+              minute: 30,
+            },
+          },
+        },
+        items: [], // skip, no need for the test
+      },
+    };
+    const timeRangeResult = {
+      activityItem: {
+        id: 'b0d3bd40-745c-4b3e-bfa2-9f27a2f38e7d',
+        name: 'time_range_extraText',
+        question: {
+          en: 'Time range question',
+        },
+        responseType: 'timeRange',
+        responseValues: null,
+      },
+      answers: [
+        {
+          answer: {
+            text: null,
+            value: {
+              from: '06:00',
+              to: '22:30',
+            },
+          },
+          date: '2024-03-14T10:03:01.345000',
+        },
+      ],
+    };
 
     test.each`
       props                     | result                     | description
@@ -644,6 +707,7 @@ describe('Report utils', () => {
       ${timeProps}              | ${timeResult}              | ${'time'}
       ${numberSelectionProps}   | ${numberSelectionResult}   | ${'number selection'}
       ${dateProps}              | ${dateResult}              | ${'date'}
+      ${timeRangeProps}         | ${timeRangeResult}         | ${'time range'}
       ${drawingProps}           | ${drawingResult}           | ${'drawing item'}
     `('$description', ({ props, result }) => {
       expect(formatActivityItemAnswers(props.currentAnswer, props.date)).toStrictEqual(result);
