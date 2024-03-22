@@ -6,7 +6,7 @@ import { useAppDispatch } from 'redux/store';
 import { LinkedTabs, Spinner } from 'shared/components';
 import { workspaces } from 'shared/state';
 import { StyledBody, StyledHeadlineLarge, theme } from 'shared/styles';
-import { applet } from 'shared/state';
+import { applet as appletState } from 'shared/state';
 import { applets, users } from 'modules/Dashboard/state';
 import { getRespondentDetails } from 'modules/Dashboard/state/Users/Users.thunk';
 import { palette } from 'shared/styles/variables/palette';
@@ -14,23 +14,23 @@ import { page } from 'resources';
 
 import { useParticipantDetailsTabs } from './ParticipantDetails.hooks';
 
-export const RespondentDetails = () => {
+export const ParticipantDetails = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const respondentTabs = useParticipantDetailsTabs();
   const { appletId, participantId } = useParams();
   const { ownerId } = workspaces.useData() || {};
-  const appletLoadingStatus = applet.useResponseStatus();
+  const appletLoadingStatus = appletState.useResponseStatus();
   const respondentLoadingStatus = users.useRespondentStatus();
   const { useRespondent } = users;
+  const { useAppletData } = appletState;
+  const applet = useAppletData();
   const respondent = useRespondent();
-  const { getApplet } = applet.thunk;
+  const { getApplet } = appletState.thunk;
 
   useEffect(() => {
     if (!appletId) return;
-    const { getEvents } = applets.thunk;
     dispatch(getApplet({ appletId }));
-    dispatch(getEvents({ appletId, respondentId: participantId }));
 
     if (!participantId || !ownerId) return;
     dispatch(getRespondentDetails({ ownerId, appletId, respondentId: participantId }));
@@ -40,12 +40,13 @@ export const RespondentDetails = () => {
     };
   }, [appletId, participantId, ownerId]);
 
-  const navigateUp = () =>
+  const navigateUp = () => {
     navigate(
       generatePath(page.appletRespondents, {
         appletId,
       }),
     );
+  };
 
   const loading =
     appletLoadingStatus === 'loading' ||
@@ -68,9 +69,9 @@ export const RespondentDetails = () => {
             sx={{
               display: 'flex',
               gap: theme.spacing(1.6),
+              marginX: theme.spacing(2.4),
+              marginBottom: theme.spacing(1.2),
             }}
-            marginX={theme.spacing(2.4)}
-            marginBottom={theme.spacing(1.2)}
           >
             <StyledHeadlineLarge>{respondent?.result.secretUserId}</StyledHeadlineLarge>
             <StyledHeadlineLarge color={palette.outline}>
@@ -84,4 +85,4 @@ export const RespondentDetails = () => {
   );
 };
 
-export default RespondentDetails;
+export default ParticipantDetails;

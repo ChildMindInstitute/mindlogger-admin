@@ -87,6 +87,7 @@ export const LinkedTabs = ({
         hiddenHeader={hiddenHeader}
         isBuilder={isBuilder}
         isCentered={isCentered}
+        data-testid="linked-tabs"
       >
         {!hiddenHeader && header}
       </StyledTabs>
