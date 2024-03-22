@@ -9,9 +9,9 @@ import * as reactHookForm from 'react-hook-form';
 import { renderWithProviders } from 'shared/utils';
 import { page } from 'resources';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 
-import { RespondentsDataFormValues } from '../../../RespondentData.types';
-import { defaultRespondentDataFormValues } from '../../../RespondentData.const';
 import { ReportFilters } from './ReportFilters';
 
 const identifiers = [

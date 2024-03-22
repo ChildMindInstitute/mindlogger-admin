@@ -1,6 +1,5 @@
 import { Version } from 'api';
-
-import { ActivityCompletion } from '../../../RespondentData.types';
+import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type ActivityCompletedProps = {
   answers: ActivityCompletion[];

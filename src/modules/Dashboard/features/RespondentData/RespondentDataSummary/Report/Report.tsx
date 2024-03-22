@@ -18,13 +18,14 @@ import {
   Identifier,
   RespondentsDataFormValues,
 } from '../../RespondentData.types';
+import { getFormattedResponses } from '../../RespondentData.utils';
 import { ReportFilters } from './ReportFilters';
 import { StyledEmptyState, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 import { CurrentActivityCompletionData } from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
-import { getFormattedResponses, getLatestReportUrl } from './Report.utils';
+import { getLatestReportUrl } from './Report.utils';
 import { ReportContext } from './Report.context';
 import {
   LATEST_REPORT_DEFAULT_NAME,

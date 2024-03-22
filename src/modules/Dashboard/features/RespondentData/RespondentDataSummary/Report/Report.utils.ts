@@ -1,9 +1,5 @@
-import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
-import {
-  ActivitySettingsSubscale,
-  SliderItemResponseValues,
-} from 'shared/state/Applet/Applet.schema';
+import { SliderItemResponseValues } from 'shared/state/Applet/Applet.schema';
 import { getObjectFromList } from 'shared/utils';
 import {
   ActivityItemAnswer,
@@ -15,22 +11,20 @@ import {
   DecryptedTimeAnswer,
   DecryptedNumberSelectionAnswer,
   DecryptedDateAnswer,
-  ElementType,
 } from 'shared/types';
 
 import {
-  Identifier,
-  ActivityCompletion,
   Answer,
   FormattedActivityItem,
   FormattedResponse,
   ItemOption,
 } from '../../RespondentData.types';
-import { DEFAULT_DATE_MAX } from './Report.const';
 import { getDateFormattedResponse } from '../../RespondentData.utils';
+import { DEFAULT_DATE_MAX } from './Report.const';
 
-export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
-  value !== null && value !== undefined;
+export const isValueDefined = <T = string | number | (string | number)[] | null>(
+  value?: T,
+): value is NonNullable<T> => value !== null && value !== undefined;
 
 export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemResponseType) => {
   switch (responseType) {
@@ -60,8 +54,7 @@ const shiftAnswerValues = (answers: Answer[]) =>
     ...item,
     answer: {
       ...item.answer,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      value: isValueDefined(item.answer.value) ? +item.answer.value! + 1 : item.answer.value,
+      value: isValueDefined(item.answer.value) ? +item.answer.value + 1 : item.answer.value,
     },
   }));
 
@@ -74,36 +67,6 @@ const getDefaultEmptyAnswer = (date: string) => [
     date,
   },
 ];
-
-export const getDateISO = (date: Date, time: string) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
-  const [hours, minutes] = time.split(':');
-
-  const utcDate = Date.UTC(year, month, day, +hours, +minutes);
-
-  return new Date(utcDate).toISOString().split('.')[0];
-};
-
-export const getIdentifiers = (
-  filterByIdentifier = false,
-  filterIdentifiers = [] as AutocompleteOption[],
-  identifiers = [] as Identifier[],
-): string[] | undefined => {
-  if (!filterByIdentifier) return;
-
-  return identifiers.reduce(
-    (decryptedIdentifiers: string[], { encryptedValue, decryptedValue }: Identifier) => {
-      const identifier = filterIdentifiers.find(
-        (filterIdentifier) => filterIdentifier.id === decryptedValue,
-      );
-
-      return identifier ? [...decryptedIdentifiers, encryptedValue] : decryptedIdentifiers;
-    },
-    [],
-  );
-};
 
 export const getSliderOptions = (
   { minValue, maxValue }: SliderItemResponseValues,
@@ -499,110 +462,6 @@ export const formatActivityItemAnswers = (
         answers: getDefaultEmptyAnswer(date),
       };
   }
-};
-
-export const getFormattedResponses = (activityResponses: ActivityCompletion[]) => {
-  let subscalesFrequency = 0;
-  const formattedResponses = activityResponses.reduce(
-    (
-      items: Record<string, FormattedResponse[]>,
-      { decryptedAnswer, endDatetime, subscaleSetting }: ActivityCompletion,
-    ) => {
-      if (subscaleSetting?.subscales?.length) {
-        subscalesFrequency++;
-      }
-      const subscalesItems = subscaleSetting?.subscales?.reduce(
-        (items: string[], subscale: ActivitySettingsSubscale) => {
-          subscale?.items?.forEach((item) => {
-            item.type === ElementType.Item && !items.includes(item.name) && items.push(item.name);
-          });
-
-          return items;
-        },
-        [],
-      );
-
-      let newItems = { ...items };
-      decryptedAnswer.forEach((currentAnswer) => {
-        if (subscalesItems?.includes(currentAnswer.activityItem.name)) return items;
-
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const item = items[currentAnswer.activityItem.id!];
-
-        if (!item) {
-          const { activityItem, answers } = formatActivityItemAnswers(currentAnswer, endDatetime);
-          newItems = {
-            ...newItems,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            [currentAnswer.activityItem.id!]: [
-              {
-                activityItem,
-                answers,
-              },
-            ],
-          };
-
-          return;
-        }
-
-        const currResponseType = currentAnswer.activityItem.responseType;
-        const prevResponseTypes = item.reduce(
-          (types: Record<string, number>, { activityItem }, index: number) => ({
-            ...types,
-            [activityItem.responseType]: index,
-          }),
-          {},
-        );
-
-        if (!(currResponseType in prevResponseTypes)) {
-          const { activityItem, answers } = formatActivityItemAnswers(currentAnswer, endDatetime);
-          const updatedItem = [...item];
-          updatedItem.push({
-            activityItem,
-            answers,
-          });
-
-          newItems = {
-            ...newItems,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            [currentAnswer.activityItem.id!]: updatedItem,
-          };
-
-          return;
-        }
-
-        const prevActivityItem = item[prevResponseTypes[currResponseType]];
-
-        const { activityItem, answers } = compareActivityItem(
-          prevActivityItem,
-          currentAnswer,
-          endDatetime,
-        );
-
-        const updatedItem = [...item];
-        updatedItem[prevResponseTypes[currResponseType]] = {
-          activityItem,
-          answers,
-        };
-
-        newItems = {
-          ...newItems,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          [currentAnswer.activityItem.id!]: updatedItem,
-        };
-
-        return;
-      });
-
-      return newItems;
-    },
-    {},
-  );
-
-  return {
-    subscalesFrequency,
-    formattedResponses,
-  };
 };
 
 export const getLatestReportUrl = (base64Str: string) => `data:application/pdf;base64,${base64Str}`;

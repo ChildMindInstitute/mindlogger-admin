@@ -5,9 +5,9 @@ import { Box } from '@mui/material';
 import { Tooltip } from 'shared/components/Tooltip';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
+import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentData.hooks';
 
-import { useDatavizFilters } from '../../../RespondentData.hooks';
-import { RespondentsDataFormValues } from '../../../RespondentData.types';
 import { ActivityCompletedProps } from './ActivityCompleted.types';
 
 export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompletedProps) => {

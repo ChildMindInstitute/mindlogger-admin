@@ -1,11 +1,14 @@
 import { ItemResponseType } from 'shared/consts';
+import {
+  ItemOption,
+  NumberSelectionResponseValues,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { TICK_HEIGHT } from '../Charts/Charts.const';
 import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
-import { ItemOption, NumberSelectionResponseValues } from '../../../RespondentData.types';
 
 export const getResponseItem = ({
   color,

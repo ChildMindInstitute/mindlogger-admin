@@ -96,50 +96,7 @@ const mockedAnswers = [
           value: '0',
           edited: null,
         },
-        items: [
-          {
-            question: {
-              en: 'Single Selected - Mocked Item',
-            },
-            responseType: 'singleSelect',
-            responseValues: {
-              paletteName: null,
-              options: [
-                {
-                  id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
-                  text: '1',
-                  isHidden: false,
-                  value: 0,
-                },
-                {
-                  id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
-                  text: '2',
-                  isHidden: false,
-                  value: 1,
-                },
-              ],
-            },
-            config: {
-              removeBackButton: false,
-              skippableItem: true,
-              randomizeOptions: false,
-              timer: 0,
-              addScores: false,
-              setAlerts: false,
-              addTooltip: false,
-              setPalette: false,
-              additionalResponseOption: {
-                textInputOption: false,
-                textInputRequired: false,
-              },
-            },
-            name: 'ss-1',
-            isHidden: false,
-            allowEdit: true,
-            id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
-            order: 1,
-          },
-        ],
+        items: [],
       },
     ],
     endDatetime: '2024-03-18T15:13:27.485000',

@@ -4,8 +4,8 @@ import { Box } from '@mui/material';
 import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
 import { StyledErrorText, StyledStickyHeadline, theme, variables } from 'shared/styles';
+import { StyledTextBtn } from 'modules/Dashboard/features/RespondentData/RespondentData.styles';
 
-import { StyledTextBtn } from '../../../RespondentData.styles';
 import { StyledHeader } from './ReportHeader.styles';
 import { ReportHeaderProps } from './ReportHeader.types';
 

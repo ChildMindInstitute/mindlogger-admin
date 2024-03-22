@@ -2,8 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
-
-import { Identifier } from '../../../RespondentData.types';
+import { Identifier } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type ReportFiltersProps = {
   identifiers: Identifier[];

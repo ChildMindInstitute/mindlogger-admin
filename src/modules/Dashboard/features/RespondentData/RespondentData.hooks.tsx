@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 import { addDays, isAfter, isBefore } from 'date-fns';
 import { useFormContext, UseFormWatch } from 'react-hook-form';
@@ -14,14 +14,11 @@ import {
 } from 'api';
 import { decryptData, getAESKey, getDateTime, getParsedEncryptionFromServer } from 'shared/utils';
 import { useEncryptionStorage } from 'shared/hooks';
-import { applet } from 'shared/state';
+import { applet, workspaces } from 'shared/state';
+import { users } from 'modules/Dashboard/state';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
+import { useAppDispatch } from 'redux/store/hooks';
 
-import {
-  getDateISO,
-  getFormattedResponses,
-  getIdentifiers,
-} from './RespondentDataSummary/Report/Report.utils';
 import { getUniqueIdentifierOptions } from './RespondentData.utils';
 import {
   RespondentsDataFormValues,
@@ -29,34 +26,53 @@ import {
   GetIdentifiersVersions,
   FetchAnswers,
 } from './RespondentData.types';
+import { getDateISO, getIdentifiers, getFormattedResponses } from './RespondentData.utils';
 
-export const useRespondentDataTabs = () => {
+export const useRespondentDataSetup = () => {
   const { appletId, respondentId } = useParams();
+  const { ownerId } = workspaces.useData() || {};
+  const dispatch = useAppDispatch();
 
-  return [
-    {
-      labelKey: 'summary',
-      id: 'respondent-data-summary',
-      icon: <Svg id="chart" />,
-      activeIcon: <Svg id="chart" />,
-      path: generatePath(page.appletRespondentDataSummary, {
+  useEffect(() => {
+    if (!appletId || !respondentId || !ownerId) return;
+
+    const { getRespondentDetails } = users.thunk;
+
+    dispatch(
+      getRespondentDetails({
+        ownerId,
         appletId,
         respondentId,
       }),
-      'data-testid': 'respondents-summary-tab-summary',
-    },
-    {
-      labelKey: 'responses',
-      id: 'respondent-data-responses',
-      icon: <Svg id="checkbox-outlined" />,
-      activeIcon: <Svg id="checkbox-filled" />,
-      path: generatePath(page.appletRespondentDataReview, {
-        appletId,
-        respondentId,
-      }),
-      'data-testid': 'respondents-summary-tab-review',
-    },
-  ];
+    );
+  }, [appletId, respondentId, ownerId, dispatch]);
+
+  return {
+    respondentDataTabs: [
+      {
+        labelKey: 'summary',
+        id: 'respondent-data-summary',
+        icon: <Svg id="chart" />,
+        activeIcon: <Svg id="chart" />,
+        path: generatePath(page.appletRespondentDataSummary, {
+          appletId,
+          respondentId,
+        }),
+        'data-testid': 'respondents-summary-tab-summary',
+      },
+      {
+        labelKey: 'responses',
+        id: 'respondent-data-responses',
+        icon: <Svg id="checkbox-outlined" />,
+        activeIcon: <Svg id="checkbox-filled" />,
+        path: generatePath(page.appletRespondentDataReview, {
+          appletId,
+          respondentId,
+        }),
+        'data-testid': 'respondents-summary-tab-review',
+      },
+    ],
+  };
 };
 
 export const useDatavizSummaryRequests = () => {

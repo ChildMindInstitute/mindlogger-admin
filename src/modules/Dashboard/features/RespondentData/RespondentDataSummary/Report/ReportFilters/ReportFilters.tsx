@@ -9,10 +9,10 @@ import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/s
 import { Switch, TagsInputController } from 'shared/components/FormComponents';
 import { DatavizActivity } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { FetchAnswers } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { useRespondentAnswers } from 'modules/Dashboard/features/RespondentData/RespondentData.hooks';
+import { getUniqueIdentifierOptions } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
-import { FetchAnswers } from '../../../RespondentData.types';
-import { getUniqueIdentifierOptions } from '../../../RespondentData.utils';
-import { useRespondentAnswers } from '../../../RespondentData.hooks';
 import { StyledFiltersContainer, StyledMoreFilters, StyledTimeText } from './ReportFilters.styles';
 import {
   FiltersChangeType,

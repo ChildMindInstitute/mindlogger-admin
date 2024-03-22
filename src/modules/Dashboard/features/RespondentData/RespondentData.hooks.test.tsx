@@ -9,10 +9,14 @@ import {
 } from 'shared/mock';
 import { Identifier as IdentifierResponse, Version } from 'api';
 import { applet } from 'shared/state';
+import { renderHookWithProviders } from 'shared/utils';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
+import * as reduxHooks from 'redux/store/hooks';
+import { users } from 'modules/Dashboard/state';
 
 import { Identifier } from './RespondentData.types';
 import {
-  useRespondentDataTabs,
+  useRespondentDataSetup,
   useDatavizFilters,
   useDecryptedIdentifiers,
 } from './RespondentData.hooks';
@@ -40,32 +44,50 @@ const mockSummaryFiltersForm = {
 };
 
 describe('Respondent Data hooks', () => {
-  describe('useRespondentDataTabs', () => {
-    test('returns an array of tab objects', () => {
+  describe('useRespondentDataSetup', () => {
+    beforeEach(() => {
       mockedUseParams.mockReturnValue({
         appletId: mockedAppletId,
         respondentId: mockedRespondentId,
       });
-      const { result } = renderHook(useRespondentDataTabs);
+    });
 
-      expect(result.current).toEqual([
-        {
-          labelKey: 'summary',
-          id: 'respondent-data-summary',
-          icon: expect.any(Object),
-          activeIcon: expect.any(Object),
-          path: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`,
-          'data-testid': 'respondents-summary-tab-summary',
-        },
-        {
-          labelKey: 'responses',
-          id: 'respondent-data-responses',
-          icon: expect.any(Object),
-          activeIcon: expect.any(Object),
-          path: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
-          'data-testid': 'respondents-summary-tab-review',
-        },
-      ]);
+    test('returns an array of tab objects', () => {
+      const { result } = renderHookWithProviders(useRespondentDataSetup);
+
+      expect(result.current).toEqual({
+        respondentDataTabs: [
+          {
+            labelKey: 'summary',
+            id: 'respondent-data-summary',
+            icon: expect.any(Object),
+            activeIcon: expect.any(Object),
+            path: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`,
+            'data-testid': 'respondents-summary-tab-summary',
+          },
+          {
+            labelKey: 'responses',
+            id: 'respondent-data-responses',
+            icon: expect.any(Object),
+            activeIcon: expect.any(Object),
+            path: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
+            'data-testid': 'respondents-summary-tab-review',
+          },
+        ],
+      });
+    });
+
+    test('launches getRespondentDetails', () => {
+      const mockDispatch = jest.fn();
+      const mockGetRespondentDetails = jest.fn();
+      jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
+      jest.spyOn(users.thunk, 'getRespondentDetails').mockReturnValue(mockGetRespondentDetails);
+      renderHookWithProviders(useRespondentDataSetup, {
+        preloadedState: getPreloadedState(),
+      });
+
+      expect(mockDispatch).toHaveBeenCalledTimes(1);
+      expect(mockDispatch).toHaveBeenCalledWith(mockGetRespondentDetails);
     });
   });
 

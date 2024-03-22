@@ -1,8 +1,10 @@
 import { ActivityItemAnswer } from 'shared/types';
 import { ActivitySettingsSubscale } from 'shared/state';
 import { Version } from 'api';
-
-import { ActivityCompletion, FormattedResponse } from '../../../RespondentData.types';
+import {
+  ActivityCompletion,
+  FormattedResponse,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export const enum SubscalesTypes {
   Table = 'Table',
