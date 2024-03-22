@@ -124,14 +124,15 @@ export const AppletMultiInformant = () => {
               <DashboardAppletSettings />
             </StyledPanel>
           )}
+
+          <ExportDataSetting
+            isExportSettingsOpen={isExportOpen}
+            onExportSettingsClose={() => {
+              setIsExportOpen(false);
+            }}
+          />
         </>
       )}
-      <ExportDataSetting
-        isExportSettingsOpen={isExportOpen}
-        onExportSettingsClose={() => {
-          setIsExportOpen(false);
-        }}
-      />
     </StyledBody>
   );
 };
