@@ -458,6 +458,12 @@ export const formatActivityItemAnswers = (
         };
       }
 
+      console.log({
+        currentAnswer,
+        formattedActivityItem,
+        value: getTimeRangeReponse(currentAnswer.answer as DecryptedDateRangeAnswer),
+      });
+
       return {
         activityItem: formattedActivityItem,
         answers: [
