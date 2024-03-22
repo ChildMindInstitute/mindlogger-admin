@@ -1,6 +1,6 @@
 import { Order } from 'shared/types';
 
-import { TextItemAnswer } from './ReportTable.types';
+import { TextItemAnswer, TimeRangeItemAnswer } from './ReportTable.types';
 
 export const filterReportTable = (item: string | null, searchValue: string) =>
   item ? String(item).toLowerCase().includes(searchValue.toLowerCase()) : false;
@@ -38,7 +38,7 @@ export const stableSort = <T>(array: readonly T[], comparator: (a: T, b: T) => n
   return stabilized.map((el) => el[0]);
 };
 
-export const getRows = (answers: TextItemAnswer[], skippedResponse: JSX.Element) =>
+export const getSimpleTextRows = (answers: TextItemAnswer[], skippedResponse: JSX.Element) =>
   answers.map(({ date, time, answer }) => ({
     date: {
       content: () => date,
@@ -51,5 +51,25 @@ export const getRows = (answers: TextItemAnswer[], skippedResponse: JSX.Element)
     answer: {
       content: () => (answer ? answer : skippedResponse),
       value: answer || '',
+    },
+  }));
+
+export const getTimeRangeRows = (answers: TimeRangeItemAnswer[], skippedResponse: JSX.Element) =>
+  answers.map(({ date, time, from, to }) => ({
+    date: {
+      content: () => date,
+      value: date,
+    },
+    time: {
+      content: () => time,
+      value: time,
+    },
+    from: {
+      content: () => (from ? from : skippedResponse),
+      value: from || '',
+    },
+    to: {
+      content: () => (to ? to : skippedResponse),
+      value: to || '',
     },
   }));

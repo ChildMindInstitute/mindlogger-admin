@@ -5,7 +5,12 @@ import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
-import { ItemOption, NumberSelectionResponseValues } from '../Report.types';
+import {
+  Answer,
+  ItemOption,
+  NumberSelectionResponseValues,
+  SimpleAnswerValue,
+} from '../Report.types';
 
 export const getResponseItem = ({
   color,
@@ -35,7 +40,7 @@ export const getResponseItem = ({
         height={height}
         options={options}
         responseType={responseType}
-        answers={answers}
+        answers={answers as Answer<SimpleAnswerValue>[]}
         versions={versions}
         data-testid={`${dataTestid}-multi-scatter-chart`}
       />
@@ -47,7 +52,7 @@ export const getResponseItem = ({
       color={color}
       minDate={minDate}
       maxDate={maxDate}
-      answers={answers}
+      answers={answers as Answer<SimpleAnswerValue>[]}
       versions={versions}
       data-testid={`${dataTestid}-time-picker-chart`}
     />
@@ -77,9 +82,10 @@ export const getResponseItem = ({
 
       return renderMultipleSelection(options);
     }
+    case ItemResponseType.TimeRange:
     case ItemResponseType.Date:
     case ItemResponseType.Text:
-      return <ReportTable answers={answers} data-testid={dataTestid} />;
+      return <ReportTable responseType={responseType} answers={answers} data-testid={dataTestid} />;
     case ItemResponseType.Time:
       return renderTimePicker();
     default:

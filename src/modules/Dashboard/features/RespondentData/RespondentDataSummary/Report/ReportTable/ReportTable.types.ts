@@ -1,10 +1,22 @@
-import { Answer } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import {
+  Answer,
+  RespondentAnswerValue,
+  SimpleAnswerValue,
+  TimeRangeAnswerValue,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import { ItemResponseType } from 'shared/consts';
 
 export type TextItemAnswer = {
   date: string;
   time: string;
-  answer: string | number;
+  answer: SimpleAnswerValue;
 };
+export type TimeRangeItemAnswer = {
+  date: string;
+  time: string;
+} & TimeRangeAnswerValue;
+
+export type FormattedAnswers = TextItemAnswer | TimeRangeItemAnswer;
 
 export type TextAnswer = {
   answer: string;
@@ -12,6 +24,7 @@ export type TextAnswer = {
 };
 
 export type ReportTableProps = {
-  answers?: Answer[];
+  responseType: ItemResponseType;
+  answers?: Answer<RespondentAnswerValue>[];
   'data-testid'?: string;
 };
