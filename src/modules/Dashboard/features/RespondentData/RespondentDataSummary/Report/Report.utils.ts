@@ -1,9 +1,5 @@
-import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
-import {
-  ActivitySettingsSubscale,
-  SliderItemResponseValues,
-} from 'shared/state/Applet/Applet.schema';
+import { SliderItemResponseValues } from 'shared/state/Applet/Applet.schema';
 import { getObjectFromList } from 'shared/utils';
 import {
   ActivityItemAnswer,
@@ -15,25 +11,23 @@ import {
   DecryptedTimeAnswer,
   DecryptedNumberSelectionAnswer,
   DecryptedDateAnswer,
-  ElementType,
 } from 'shared/types';
 import { DecryptedDateRangeAnswer } from 'shared/types/answer';
 
-import { Identifier } from '../RespondentDataSummary.types';
 import {
-  ActivityCompletion,
   Answer,
   FormattedActivityItem,
   FormattedResponse,
   ItemOption,
   RespondentAnswerValue,
   SimpleAnswerValue,
-} from './Report.types';
+} from '../../RespondentData.types';
+import { getDateFormattedResponse, getTimeRangeReponse } from '../../RespondentData.utils';
 import { DEFAULT_DATE_MAX } from './Report.const';
-import { getDateForamttedResponse, getTimeRangeReponse } from '../../RespondentData.utils';
 
-export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
-  value !== null && value !== undefined;
+export const isValueDefined = <T = string | number | (string | number)[] | null>(
+  value?: T,
+): value is NonNullable<T> => value !== null && value !== undefined;
 
 export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemResponseType) => {
   switch (responseType) {
@@ -63,7 +57,7 @@ const shiftAnswerValues = (answers: Answer<SimpleAnswerValue>[]) =>
     ...item,
     answer: {
       ...item.answer,
-      value: isValueDefined(item.answer.value) ? +item.answer.value! + 1 : item.answer.value,
+      value: isValueDefined(item.answer.value) ? +item.answer.value + 1 : item.answer.value,
     },
   }));
 
@@ -76,36 +70,6 @@ const getDefaultEmptyAnswer = (date: string) => [
     date,
   },
 ];
-
-export const getDateISO = (date: Date, time: string) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
-  const [hours, minutes] = time.split(':');
-
-  const utcDate = Date.UTC(year, month, day, +hours, +minutes);
-
-  return new Date(utcDate).toISOString().split('.')[0];
-};
-
-export const getIdentifiers = (
-  filterByIdentifier = false,
-  filterIdentifiers = [] as AutocompleteOption[],
-  identifiers = [] as Identifier[],
-): string[] | undefined => {
-  if (!filterByIdentifier) return;
-
-  return identifiers.reduce(
-    (decryptedIdentifiers: string[], { encryptedValue, decryptedValue }: Identifier) => {
-      const identifier = filterIdentifiers.find(
-        (filterIdentifier) => filterIdentifier.id === decryptedValue,
-      );
-
-      return identifier ? [...decryptedIdentifiers, encryptedValue] : decryptedIdentifiers;
-    },
-    [],
-  );
-};
 
 export const getSliderOptions = (
   { minValue, maxValue }: SliderItemResponseValues,
@@ -265,7 +229,7 @@ export const compareActivityItem = (
 
       const sliderOptions = getSliderOptions(
         currResponseValues,
-        currActivityItem.activityItem.id!,
+        currActivityItem.activityItem.id ?? '',
       ).reduce((options: Record<string, ItemOption>, currentOption) => {
         if (options[currentOption.id]) return options;
 
@@ -300,7 +264,7 @@ export const formatActivityItemAnswers = (
   const currentActivityItem = currentAnswer.activityItem;
   const { id, name, question, responseType, responseValues } = currentActivityItem;
   const formattedActivityItem = {
-    id: id!,
+    id: id ?? '',
     name,
     question,
     responseType,
@@ -316,6 +280,7 @@ export const formatActivityItemAnswers = (
           options: currentAnswer.activityItem.responseValues.options.map(({ id, text, value }) => ({
             id,
             text,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             value: optionsValuesMapper[value!],
           })),
         },
@@ -354,6 +319,7 @@ export const formatActivityItemAnswers = (
           options: currentAnswer.activityItem.responseValues.options.map(({ id, text, value }) => ({
             id,
             text,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             value: optionsValuesMapper[value!],
           })),
         },
@@ -384,7 +350,7 @@ export const formatActivityItemAnswers = (
         responseValues: {
           options: getSliderOptions(
             currentAnswer.activityItem.responseValues,
-            formattedActivityItem.id!,
+            formattedActivityItem.id ?? '',
           ),
         },
       };
@@ -442,7 +408,7 @@ export const formatActivityItemAnswers = (
         answers: [
           {
             answer: {
-              value: getDateForamttedResponse(currentAnswer.answer as DecryptedDateAnswer),
+              value: getDateFormattedResponse(currentAnswer.answer as DecryptedDateAnswer),
               text: null,
             },
             date,
@@ -481,12 +447,12 @@ export const formatActivityItemAnswers = (
 
       const answer = currentAnswer.answer as DecryptedTimeAnswer;
 
-      const hours = answer?.value?.hours ?? answer?.hour;
-      const minutes = answer?.value?.minutes ?? answer?.minute;
+      const hours = answer.value?.hours ?? answer.hour ?? 0;
+      const minutes = answer.value?.minutes ?? answer.minute ?? 0;
 
       const fullDateValue = new Date(DEFAULT_DATE_MAX);
-      fullDateValue.setHours(hours!);
-      fullDateValue.setMinutes(minutes!);
+      fullDateValue.setHours(hours);
+      fullDateValue.setMinutes(minutes);
 
       const answers = [
         {
@@ -523,106 +489,6 @@ export const formatActivityItemAnswers = (
         answers: getDefaultEmptyAnswer(date),
       };
   }
-};
-
-export const getFormattedResponses = (activityResponses: ActivityCompletion[]) => {
-  let subscalesFrequency = 0;
-  const formattedResponses = activityResponses.reduce(
-    (
-      items: Record<string, FormattedResponse[]>,
-      { decryptedAnswer, endDatetime, subscaleSetting }: ActivityCompletion,
-    ) => {
-      if (subscaleSetting?.subscales?.length) {
-        subscalesFrequency++;
-      }
-      const subscalesItems = subscaleSetting?.subscales?.reduce(
-        (items: string[], subscale: ActivitySettingsSubscale) => {
-          subscale?.items?.forEach((item) => {
-            item.type === ElementType.Item && !items.includes(item.name) && items.push(item.name);
-          });
-
-          return items;
-        },
-        [],
-      );
-
-      let newItems = { ...items };
-      decryptedAnswer.forEach((currentAnswer) => {
-        if (subscalesItems?.includes(currentAnswer.activityItem.name)) return items;
-
-        const item = items[currentAnswer.activityItem.id!];
-
-        if (!item) {
-          const { activityItem, answers } = formatActivityItemAnswers(currentAnswer, endDatetime);
-          newItems = {
-            ...newItems,
-            [currentAnswer.activityItem.id!]: [
-              {
-                activityItem,
-                answers,
-              },
-            ],
-          };
-
-          return;
-        }
-
-        const currResponseType = currentAnswer.activityItem.responseType;
-        const prevResponseTypes = item.reduce(
-          (types: Record<string, number>, { activityItem }, index: number) => ({
-            ...types,
-            [activityItem.responseType]: index,
-          }),
-          {},
-        );
-
-        if (!(currResponseType in prevResponseTypes)) {
-          const { activityItem, answers } = formatActivityItemAnswers(currentAnswer, endDatetime);
-          const updatedItem = [...item];
-          updatedItem.push({
-            activityItem,
-            answers,
-          });
-
-          newItems = {
-            ...newItems,
-            [currentAnswer.activityItem.id!]: updatedItem,
-          };
-
-          return;
-        }
-
-        const prevActivityItem = item[prevResponseTypes[currResponseType]];
-
-        const { activityItem, answers } = compareActivityItem(
-          prevActivityItem,
-          currentAnswer,
-          endDatetime,
-        );
-
-        const updatedItem = [...item];
-        updatedItem[prevResponseTypes[currResponseType]] = {
-          activityItem,
-          answers,
-        };
-
-        newItems = {
-          ...newItems,
-          [currentAnswer.activityItem.id!]: updatedItem,
-        };
-
-        return;
-      });
-
-      return newItems;
-    },
-    {},
-  );
-
-  return {
-    subscalesFrequency,
-    formattedResponses,
-  };
 };
 
 export const getLatestReportUrl = (base64Str: string) => `data:application/pdf;base64,${base64Str}`;

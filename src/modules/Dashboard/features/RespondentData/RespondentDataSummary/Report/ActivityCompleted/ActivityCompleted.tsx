@@ -5,14 +5,14 @@ import { Box } from '@mui/material';
 import { Tooltip } from 'shared/components/Tooltip';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
-import { useDatavizFilters } from 'modules/Dashboard/hooks';
-import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
+import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentData.hooks';
 
 import { ActivityCompletedProps } from './ActivityCompleted.types';
 
 export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompletedProps) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext<SummaryFiltersForm>();
+  const { watch } = useFormContext<RespondentsDataFormValues>();
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 

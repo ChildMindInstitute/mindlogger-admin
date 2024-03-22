@@ -26,6 +26,7 @@ export const TagsInputController = <T extends FieldValues>({
   disabled,
   limitTags,
   defaultSelectedAll = false,
+  onCustomChange,
   'data-testid': dataTestid,
   ...props
 }: TagsAutocompleteControllerProps<T>) => {
@@ -38,10 +39,14 @@ export const TagsInputController = <T extends FieldValues>({
       render={({ field: { onChange, value } }) => {
         const handleToggleSelectAll = (e: MouseEvent<HTMLLabelElement>) => {
           e.preventDefault(); // prevent blur
-          onChange(options || []);
           setSelectedAll((prev) => {
-            if (!prev) onChange(options || []);
-            else onChange([]);
+            if (prev) {
+              onChange([]);
+              onCustomChange?.([]);
+            } else {
+              onChange(options || []);
+              onCustomChange?.(options || []);
+            }
 
             return !prev;
           });
@@ -55,6 +60,7 @@ export const TagsInputController = <T extends FieldValues>({
           if (reason === 'clear' || reason === 'removeOption') setSelectedAll(false);
           if (reason === 'selectOption' && value?.length === options?.length) setSelectedAll(true);
           onChange(value);
+          onCustomChange?.(value);
         };
 
         return (

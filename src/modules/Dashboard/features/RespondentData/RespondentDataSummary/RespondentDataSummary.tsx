@@ -1,32 +1,44 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useMemo, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { Spinner } from 'shared/components';
-import { useDecryptedIdentifiers } from 'modules/Dashboard/hooks';
 import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
-import { Version, getIdentifiersApi, getVersionsApi } from 'api';
-import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
-import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
+import { DatavizActivity, getSummaryActivitiesApi } from 'api';
+import { useAsync } from 'shared/hooks';
 
+import { RespondentsDataFormValues } from '../RespondentData.types';
 import { ReportMenu } from './ReportMenu';
 import { Report } from './Report';
 import { StyledReportContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
-import { Identifier } from './RespondentDataSummary.types';
-import { getEmptyState, getUniqueIdentifierOptions } from './RespondentDataSummary.utils';
+import { getEmptyState } from './RespondentDataSummary.utils';
+import { useDatavizSummaryRequests, useRespondentAnswers } from '../RespondentData.hooks';
 
 export const RespondentDataSummary = () => {
-  const { t } = useTranslation();
   const { appletId, respondentId } = useParams();
-  const { summaryActivities, selectedActivity } = useContext(RespondentDataContext);
-  const { setValue } = useFormContext<SummaryFiltersForm>();
+  const [selectedActivity, summaryActivities]: [DatavizActivity | null, DatavizActivity[]] =
+    useWatch({
+      name: ['selectedActivity', 'summaryActivities'],
+    });
+  const [isLoading, setIsLoading] = useState(false);
+  const { setValue } = useFormContext<RespondentsDataFormValues>();
+  const { getIdentifiersVersions } = useDatavizSummaryRequests();
+  const { fetchAnswers } = useRespondentAnswers();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [versions, setVersions] = useState<Version[]>([]);
-  const [identifiers, setIdentifiers] = useState<Identifier[]>([]);
+  const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, async (result) => {
+    const summaryActivities = result?.data?.result;
+    setValue('summaryActivities', summaryActivities || []);
+    if (selectedActivity) return;
 
-  const getDecryptedIdentifiers = useDecryptedIdentifiers();
+    const firstActivityWithAnswers = summaryActivities?.find((activity) => activity.hasAnswer);
+    if (!firstActivityWithAnswers) return;
+
+    setValue('selectedActivity', firstActivityWithAnswers);
+    setIsLoading(true);
+    await getIdentifiersVersions({ activity: firstActivityWithAnswers });
+    await fetchAnswers({ activity: firstActivityWithAnswers });
+    setIsLoading(false);
+  });
 
   const reportContent = useMemo(() => {
     if (selectedActivity && isLoading) return <Spinner />;
@@ -40,54 +52,28 @@ export const RespondentDataSummary = () => {
       );
     }
 
-    return <Report activity={selectedActivity!} identifiers={identifiers} versions={versions} />;
-  }, [selectedActivity, isLoading, t]);
+    return <Report />;
+  }, [isLoading, selectedActivity]);
 
   useEffect(() => {
-    const fetchFiltersData = async () => {
-      try {
-        if (
-          !appletId ||
-          !respondentId ||
-          !selectedActivity ||
-          !selectedActivity?.hasAnswer ||
-          selectedActivity?.isPerformanceTask
-        )
-          return;
+    if (!appletId || !respondentId || !!summaryActivities?.length) return;
 
-        setIsLoading(true);
-        const identifiers = await getIdentifiersApi({
-          appletId,
-          activityId: selectedActivity.id,
-          respondentId,
-        });
-        if (!getDecryptedIdentifiers) return;
-        const decryptedIdentifiers = await getDecryptedIdentifiers(identifiers.data.result);
-        const identifiersFilter = getUniqueIdentifierOptions(decryptedIdentifiers);
-        setValue('identifier', identifiersFilter);
-        setIdentifiers(decryptedIdentifiers);
-
-        const versions = await getVersionsApi({ appletId, activityId: selectedActivity.id });
-        const versionsFilter = versions.data.result?.map(({ version }) => ({
-          id: version,
-          label: version,
-        }));
-        setValue('versions', versionsFilter);
-        setVersions(versions.data.result);
-      } catch (error) {
-        console.warn(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchFiltersData();
-  }, [selectedActivity, appletId, respondentId]);
+    getSummaryActivities({
+      appletId,
+      respondentId,
+    });
+  }, [appletId, respondentId, summaryActivities, getSummaryActivities]);
 
   return (
     <StyledContainer>
       {!!summaryActivities?.length && (
         <>
-          <ReportMenu activities={summaryActivities} />
+          <ReportMenu
+            activities={summaryActivities}
+            getIdentifiersVersions={getIdentifiersVersions}
+            fetchAnswers={fetchAnswers}
+            setIsLoading={setIsLoading}
+          />
           <StyledReportContainer>{reportContent}</StyledReportContainer>
         </>
       )}
