@@ -7,7 +7,6 @@ import uniqueId from 'lodash.uniqueid';
 import { applet, workspaces, SingleApplet } from 'redux/modules';
 import { useAppDispatch } from 'redux/store/hooks';
 import { page } from 'resources';
-import { __FEATURE_FLAGS } from 'shared/consts';
 import { getSettingBreadcrumbs } from 'shared/utils/getSettingBreadcrumbs';
 import { getEntityKey } from 'shared/utils/getEntityKey';
 import {
@@ -24,18 +23,21 @@ import {
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
+import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
 
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
-  const isMultiInformant = __FEATURE_FLAGS.AppletMultiInformant;
+  const {
+    flags: { multiInformantFlag },
+  } = useLaunchDarkly();
   const { appletId, activityId, activityFlowId, participantId, respondentId, setting } =
     useParams();
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
-  const respondentLabel = useRespondentLabel({ hideNickname: isMultiInformant });
+  const respondentLabel = useRespondentLabel({ hideNickname: !!multiInformantFlag });
   const subjectLabel = useRespondentLabel({ isSubject: true });
   const { workspaceName } = workspaces.useData() ?? {};
   const { result } = applet.useAppletData() ?? {};
@@ -126,7 +128,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('respondents') && !isMultiInformant) {
+    if (pathname.includes('respondents') && !multiInformantFlag) {
       newBreadcrumbs.push({
         icon: 'respondent-outlined',
         label: t('respondents'),
@@ -138,7 +140,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
     if (participantId || respondentId) {
       newBreadcrumbs.push({
-        icon: isMultiInformant ? undefined : 'account',
+        icon: multiInformantFlag ? undefined : 'account',
         label: respondentLabel || subjectLabel,
         disabledLink: true,
       });
@@ -166,7 +168,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         disabledLink: true,
       });
     }
-    if (pathname.includes('schedule') && !isMultiInformant) {
+    if (pathname.includes('schedule') && !multiInformantFlag) {
       newBreadcrumbs.push({
         icon: 'schedule-outlined',
         label: t('schedule'),

@@ -3,7 +3,7 @@
 // @ts-nocheck
 import { page } from 'resources';
 import { renderHookWithProviders } from 'shared/utils';
-import { __FEATURE_FLAGS } from 'shared/consts';
+import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
 
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
 
@@ -79,9 +79,18 @@ jest.mock('react-hook-form', () => ({
   useFormContext: jest.fn(),
 }));
 
+jest.mock('shared/hooks/useLaunchDarkly', () => ({
+  ...jest.requireActual('shared/hooks/useLaunchDarkly'),
+  useLaunchDarkly: jest.fn(),
+}));
+
 describe('useBreadcrumbs', () => {
   beforeEach(() => {
-    __FEATURE_FLAGS.AppletMultiInformant = false;
+    jest.mocked(useLaunchDarkly).mockReturnValue({
+      flags: {
+        multiInformantFlag: false,
+      },
+    });
   });
   afterEach(() => {
     jest.restoreAllMocks();
@@ -504,7 +513,11 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for respondent details using multi-informat', () => {
-    __FEATURE_FLAGS.AppletMultiInformant = true;
+    jest.mocked(useLaunchDarkly).mockReturnValue({
+      flags: {
+        multiInformantFlag: true,
+      },
+    });
     const route = `/dashboard/${appletId}/participants/${respondentId}`;
     const routePath = page.appletParticipantActivities;
 
@@ -561,7 +574,11 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for respondent details using multi-informat schedule', () => {
-    __FEATURE_FLAGS.AppletMultiInformant = true;
+    jest.mocked(useLaunchDarkly).mockReturnValue({
+      flags: {
+        multiInformantFlag: true,
+      },
+    });
     const route = `/dashboard/${appletId}/participants/${respondentId}/schedule`;
     const routePath = page.appletParticipantSchedule;
 

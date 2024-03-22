@@ -5,6 +5,7 @@ import { page } from 'resources';
 const Applets = lazy(() => import('modules/Dashboard/features/Applets'));
 const Managers = lazy(() => import('modules/Dashboard/features/Managers'));
 const Respondents = lazy(() => import('modules/Dashboard/features/Respondents'));
+const Participants = lazy(() => import('modules/Dashboard/features/Participants'));
 const ParticipantActivities = lazy(
   () => import('modules/Dashboard/features/ParticipantActivities'),
 );

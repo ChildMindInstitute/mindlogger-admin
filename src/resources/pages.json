@@ -12,6 +12,7 @@
   "appletOverview": "/dashboard/:appletId/overview",
   "appletActivities": "/dashboard/:appletId/activities",
   "appletRespondents": "/dashboard/:appletId/respondents",
+  "appletParticipants": "/dashboard/:appletId/participants",
   "appletParticipantActivities": "/dashboard/:appletId/participants/:participantId",
   "appletParticipantConnections": "/dashboard/:appletId/participants/:participantId/connections",
   "appletParticipantSchedule": "/dashboard/:appletId/participants/:participantId/schedule",
