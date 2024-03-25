@@ -118,15 +118,5 @@ export const useMultiInformantAppletTabs = () => {
       }),
       'data-testid': 'dashboard-tab-managers',
     },
-    {
-      labelKey: 'appletSettings',
-      id: 'applet-settings',
-      icon: <Svg id="settings" />,
-      activeIcon: <Svg id="settings-filled" />,
-      path: generatePath(page.appletSettings, {
-        appletId,
-      }),
-      'data-testid': 'dashboard-tab-settings',
-    },
   ];
 };

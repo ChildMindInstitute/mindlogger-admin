@@ -14,6 +14,8 @@ export const LinkedTabs = ({
   isBuilder = false,
   isCentered = true,
   deepPathCompare = false,
+  defaultToFirstTab = true,
+  animateTabIndicator = true,
 }: TabsProps) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
@@ -22,7 +24,7 @@ export const LinkedTabs = ({
     const index = tabs?.findIndex(
       (tab) => tab.path && (deepPathCompare ? pathname === tab.path : pathname.includes(tab.path)),
     );
-    const tabIndex = index > -1 ? index : 0;
+    const tabIndex = index === -1 && defaultToFirstTab ? 0 : index;
 
     const { header, content } = tabs.reduce(
       (
@@ -76,14 +78,23 @@ export const LinkedTabs = ({
     );
 
     return { tabIndex, content, header };
-  }, [pathname, t, tabs]);
+  }, [defaultToFirstTab, deepPathCompare, hiddenHeader, pathname, t, tabs]);
 
   return (
     <>
       <StyledTabs
         uiType={uiType}
         value={tabIndex}
-        TabIndicatorProps={{ children: <span /> }}
+        TabIndicatorProps={{
+          children: <span />,
+          ...(animateTabIndicator
+            ? {}
+            : {
+                style: {
+                  transition: 'none',
+                },
+              }),
+        }}
         hiddenHeader={hiddenHeader}
         isBuilder={isBuilder}
         isCentered={isCentered}

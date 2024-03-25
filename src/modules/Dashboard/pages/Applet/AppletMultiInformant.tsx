@@ -1,18 +1,40 @@
-import { useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { generatePath, useLocation, useParams } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 
 import { LinkedTabs, Spinner, Svg } from 'shared/components';
-import { StyledBody, StyledFlexTopCenter, StyledHeadlineLarge, theme } from 'shared/styles';
+import {
+  StyledBody,
+  StyledFlexSpaceBetween,
+  StyledFlexTopCenter,
+  StyledHeadlineLarge,
+  StyledTitleMedium,
+  theme,
+  variables,
+} from 'shared/styles';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 import { usePermissions, useRemoveAppletData } from 'shared/hooks';
 import { palette } from 'shared/styles/variables/palette';
+import { page } from 'resources';
+import { Mixpanel } from 'shared/utils';
+import { ExportDataSetting } from 'shared/features/AppletSettings';
+import DashboardAppletSettings from 'modules/Dashboard/features/Applet/DashboardAppletSettings';
+import { StyledPanel } from 'shared/components/Tabs/TabPanel/TabPanel.style';
 
 import { useMultiInformantAppletTabs } from './Applet.hooks';
 import { StyledAppletLogo } from './Applet.styles';
+import {
+  StyledActions,
+  StyledExportButton,
+  StyledSettingsButton,
+} from './AppletMultiInformant.styles';
 
 export const AppletMultiInformant = () => {
+  const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
+  const { t } = useTranslation('app');
+
   const dispatch = useAppDispatch();
   const location = useLocation();
 
@@ -35,37 +57,81 @@ export const AppletMultiInformant = () => {
   if (isForbidden) return noPermissionsComponent;
 
   const isLoading = appletLoadingStatus === 'loading' || appletLoadingStatus === 'idle';
+  const isSettingsSelected = location.pathname.includes('settings');
 
   return (
     <StyledBody>
       {isLoading && <Spinner />}
       {appletData && (
         <>
-          <StyledFlexTopCenter
-            sx={{
-              m: `${theme.spacing(1.2, 3.4)}`,
-              gap: theme.spacing(1.6),
-            }}
-          >
-            {!!appletData.image && <StyledAppletLogo src={appletData.image} />}
-            <StyledHeadlineLarge>{appletData.displayName}</StyledHeadlineLarge>
-            {!!appletData?.description && (
-              <Tooltip
-                title={appletData.description as string}
-                disableFocusListener
-                disableTouchListener
-                arrow
-                placement="right-end"
-              >
-                <StyledFlexTopCenter sx={{ cursor: 'pointer', paddingX: theme.spacing(0.8) }}>
-                  <Svg id="more-info-outlined" fill={palette.outline_variant} />
-                </StyledFlexTopCenter>
-              </Tooltip>
-            )}
-          </StyledFlexTopCenter>
-          <LinkedTabs hiddenHeader={hiddenHeader} tabs={appletTabs} isCentered={false} />
+          {!hiddenHeader && (
+            <StyledFlexSpaceBetween
+              gap={theme.spacing(1.6)}
+              margin={`${theme.spacing(1.2)} ${theme.spacing(3.4)}`}
+            >
+              <StyledFlexTopCenter gap={theme.spacing(1.6)}>
+                {!!appletData.image && <StyledAppletLogo src={appletData.image} />}
+                <StyledHeadlineLarge>{appletData.displayName}</StyledHeadlineLarge>
+                {!!appletData?.description && (
+                  <Tooltip
+                    title={appletData.description as string}
+                    disableFocusListener
+                    disableTouchListener
+                    arrow
+                    placement="right-end"
+                  >
+                    <StyledFlexTopCenter sx={{ cursor: 'pointer', paddingX: theme.spacing(0.8) }}>
+                      <Svg id="more-info-outlined" fill={palette.outline_variant} />
+                    </StyledFlexTopCenter>
+                  </Tooltip>
+                )}
+              </StyledFlexTopCenter>
+
+              <StyledActions>
+                <StyledExportButton
+                  onClick={() => {
+                    setIsExportOpen(true);
+                    Mixpanel.track('Export Data click');
+                  }}
+                >
+                  <Svg id="export" width={24} height={24} />
+                  <StyledTitleMedium as="span" sx={{ color: variables.palette.on_surface_variant }}>
+                    {t('export')}
+                  </StyledTitleMedium>
+                </StyledExportButton>
+                <StyledSettingsButton
+                  data-testid="dashboard-tab-settings"
+                  to={generatePath(page.appletSettings, {
+                    appletId,
+                  })}
+                >
+                  <Svg id="settings" fill={isSettingsSelected ? variables.palette.primary : ''} />
+                </StyledSettingsButton>
+              </StyledActions>
+            </StyledFlexSpaceBetween>
+          )}
+
+          <LinkedTabs
+            animateTabIndicator={false}
+            defaultToFirstTab={false}
+            hiddenHeader={hiddenHeader}
+            isCentered={false}
+            tabs={appletTabs}
+          />
+
+          {isSettingsSelected && (
+            <StyledPanel hiddenHeader={hiddenHeader}>
+              <DashboardAppletSettings />
+            </StyledPanel>
+          )}
         </>
       )}
+      <ExportDataSetting
+        isExportSettingsOpen={isExportOpen}
+        onExportSettingsClose={() => {
+          setIsExportOpen(false);
+        }}
+      />
     </StyledBody>
   );
 };
