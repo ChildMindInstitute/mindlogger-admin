@@ -31,7 +31,7 @@ export const ReviewMenu = ({
   return (
     <StyledMenu data-testid={dataTestid}>
       <StyledHeader>
-        <StyledHeadlineLarge>{t('review')}</StyledHeadlineLarge>
+        <StyledHeadlineLarge>{t('responses')}</StyledHeadlineLarge>
         <StyledLabelLarge sx={{ marginBottom: theme.spacing(4) }}>
           {respondentLabel}
         </StyledLabelLarge>
@@ -39,7 +39,7 @@ export const ReviewMenu = ({
           name="date"
           control={control}
           uiType={DatePickerUiType.OneDate}
-          label={t('reviewDate')}
+          label={t('responseDate')}
           minDate={null}
           includeDates={responseDates}
           onMonthChange={onMonthChange}

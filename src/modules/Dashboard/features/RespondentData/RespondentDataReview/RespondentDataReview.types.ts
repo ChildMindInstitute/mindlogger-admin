@@ -1,11 +1,21 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { TextItem, SliderItem, SingleSelectItem, MultiSelectItem, Item } from 'shared/state';
+import {
+  TextItem,
+  SliderItem,
+  SingleSelectItem,
+  MultiSelectItem,
+  Item,
+  NumberSelectionItem,
+  DateItem,
+} from 'shared/state';
 import {
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
+  DecryptedNumberSelectionAnswer,
+  DecryptedDateAnswer,
 } from 'shared/types';
 
 export type Answer = {
@@ -16,6 +26,18 @@ export type Answer = {
 export type TextItemAnswer = {
   activityItem: TextItem;
   answer: DecryptedTextAnswer;
+  'data-testid'?: string;
+};
+
+export type NumberSelectionItemAnswer = {
+  activityItem: NumberSelectionItem;
+  answer: DecryptedNumberSelectionAnswer;
+  'data-testid'?: string;
+};
+
+export type DateItemAnswer = {
+  activityItem: DateItem;
+  answer: DecryptedDateAnswer;
   'data-testid'?: string;
 };
 

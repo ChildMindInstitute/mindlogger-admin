@@ -2,7 +2,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { Modal, Table, UiType } from 'shared/components';
-import { theme, StyledModalWrapper } from 'shared/styles';
+import { theme, StyledModalWrapper, variables } from 'shared/styles';
 
 import { ExportSchedulePopupProps } from './ExportSchedulePopup.types';
 import { getHeadCells } from './ExportSchedulePopup.const';
@@ -50,6 +50,7 @@ export const ExportSchedulePopup = ({
           orderBy="activityName"
           uiType={UiType.Tertiary}
           data-testid={`${dataTestid}-table`}
+          tableHeadBg={variables.modalBackground}
         />
       </StyledModalWrapper>
     </Modal>

@@ -145,19 +145,6 @@ export const theme = createTheme({
     MuiTableBody: {
       styleOverrides: {
         root: {
-          '.MuiTableRow-root:hover': {
-            backgroundColor: blendColorsNormal(
-              variables.palette.surface,
-              variables.palette.on_surface_alfa8,
-            ),
-            cursor: 'pointer',
-          },
-          '.MuiTableRow-root:active': {
-            backgroundColor: blendColorsNormal(
-              variables.palette.surface,
-              variables.palette.on_surface_alfa12,
-            ),
-          },
           '.MuiTableRow-root:last-child': {
             '.MuiTableCell-body': {
               borderBottom: 'none',

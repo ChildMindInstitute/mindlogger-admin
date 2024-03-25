@@ -19,6 +19,7 @@ import {
   getReminder,
   activityAvailabilityAtDayTest,
   reminderTimeTest,
+  getTimer,
 } from './EventForm.utils';
 import {
   DEFAULT_END_TIME,
@@ -44,6 +45,21 @@ const mockedEvent = {
   startTime: '01:00',
   endTime: '23:00',
 };
+
+describe('getTimer', () => {
+  test.each([
+    [TimerType.Timer, '07:00', '00:01', '07:00:00'],
+    [TimerType.Idle, '00:00', '00:05', '00:05:00'],
+    ['InvalidTimerType', '00:00', '00:00', undefined],
+    [TimerType.Timer, undefined, undefined, undefined],
+  ])(
+    'returns correct timer duration for type "%s"',
+    (timerType, timerDuration, idleTime, expected) => {
+      const result = getTimer(timerType, timerDuration, idleTime);
+      expect(result).toBe(expected);
+    },
+  );
+});
 
 describe('EventForm.utils', () => {
   describe('startEndTimeTest: should return', () => {

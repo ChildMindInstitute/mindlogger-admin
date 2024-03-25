@@ -6,3 +6,8 @@ export type AppletsTableProps = Omit<DashboardTableProps, 'rows'> & {
   headerContent: JSX.Element;
   handleReload: () => void;
 };
+
+export type GetTableRowClassNames = {
+  hasHover: boolean;
+  isDragOver: boolean;
+};

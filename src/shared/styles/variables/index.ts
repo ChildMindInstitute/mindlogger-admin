@@ -1,8 +1,9 @@
-import { palette } from './palette';
+import { palette, modalBackground } from './palette';
 import { font } from './font';
 
 export const variables = {
   palette,
+  modalBackground,
   font,
   borderRadius: {
     half: '50%',

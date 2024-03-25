@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import { FormControlLabelProps, Radio, RadioGroup } from '@mui/material';
 
-import { AppletImage, Table, UiType } from 'shared/components';
+import { AppletImage, UiType } from 'shared/components';
 import { RadioGroupController } from 'shared/components/FormComponents';
 import { WorkspaceImage, WorkspaceUiType } from 'shared/features/SwitchWorkspace';
 import {
@@ -28,7 +28,7 @@ import {
   Step,
   TableController,
 } from './AddToBuilderPopup.types';
-import { StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
+import { StyledTable, StyledTableFormControlLabel } from './AddToBuilderPopup.styles';
 
 const getHeadCell = ({ id, label }: { id: string; label: string }): HeadCell[] => [
   {
@@ -140,7 +140,7 @@ const getTableController = ({
     render={({ field, fieldState: { error } }) => (
       <>
         <RadioGroup {...field}>
-          <Table
+          <StyledTable
             data-testid={dataTestid}
             className={error && 'error'}
             maxHeight="32.4rem"
@@ -148,6 +148,7 @@ const getTableController = ({
             rows={rows}
             orderBy={orderBy}
             uiType={UiType.Secondary}
+            tableHeadBg={variables.modalBackground}
           />
         </RadioGroup>
         {error && <StyledErrorText marginTop={1.2}>{error?.message}</StyledErrorText>}

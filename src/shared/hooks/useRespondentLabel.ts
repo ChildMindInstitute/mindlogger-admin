@@ -25,5 +25,5 @@ export const useRespondentLabel = (
   if (!secretUserId) return '';
   if (parameters.hideNickname) return secretUserId;
 
-  return `${t('user')}: ${getRespondentName(secretUserId, nickname)}`;
+  return `${t('respondent')}: ${getRespondentName(secretUserId, nickname)}`;
 };

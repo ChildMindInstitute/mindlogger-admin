@@ -260,6 +260,7 @@ export type ReviewActivity = DatavizActivity & {
   answerDates: {
     answerId: string;
     createdAt: string;
+    endDatetime?: string;
   }[];
 };
 

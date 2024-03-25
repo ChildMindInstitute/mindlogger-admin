@@ -47,6 +47,7 @@ export const RespondentData = () => {
 
   useEffect(() => {
     methods.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedActivity]);
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export const RespondentData = () => {
         subjectId: respondentId,
       }),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appletId, respondentId, ownerId]);
 
   useEffect(() => {
@@ -84,7 +86,7 @@ export const RespondentData = () => {
         startIcon={<Svg id="directory-up" width="18" height="18" />}
         data-testid="respondents-summary-back-to-applet"
       >
-        {t('appletPage')}
+        {t('respondents')}
       </StyledDirectoryUpButton>
       <RespondentDataContext.Provider
         value={{ summaryActivities, setSummaryActivities, selectedActivity, setSelectedActivity }}

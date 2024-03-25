@@ -5,10 +5,15 @@ import { StyledClearedButton, StyledFlexColumn, theme, variables } from 'shared/
 export const StyledContainer = styled(StyledFlexColumn)`
   width: 44rem;
   height: 100%;
-  position: absolute;
-  right: 0;
-  z-index: ${theme.zIndex.drawer};
   background-color: ${variables.palette.surface1};
+  flex-shrink: 0;
+
+  ${theme.breakpoints.down('xl')} {
+    width: 40rem;
+  }
+  ${theme.breakpoints.down('lg')} {
+    width: 35rem;
+  }
 `;
 
 export const StyledButton = styled(StyledClearedButton)`

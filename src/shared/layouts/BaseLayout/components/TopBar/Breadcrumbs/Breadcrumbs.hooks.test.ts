@@ -22,6 +22,31 @@ const preloadedState = {
   },
 };
 
+const commonDatavizState = {
+  applet: {
+    applet: {
+      data: {
+        result: {
+          displayName: 'Mocked Applet',
+        },
+      },
+    },
+  },
+  users: {
+    subjectDetails: {
+      data: {
+        result: {
+          nickname: 'Jane Doe',
+          secretUserId: 'secretUserId',
+        },
+      },
+    },
+    respondentDetails: {
+      data: null,
+    },
+  },
+};
+
 const commonExpectedFirstBreadcrumb = {
   label: "WorkspaceName's Dashboard",
   navPath: '/dashboard',
@@ -72,6 +97,33 @@ const expectedNewActivityFlow = {
   label: 'New Activity Flow',
   navPath: `/builder/${appletId}/activity-flows/${activityFlowId}`,
   key: expect.any(String),
+};
+
+const commonDataVizTest = ({ home, applet, respondents, user, viewData }) => {
+  expect(home).toEqual(expectedHome);
+  expect(applet).toEqual({
+    ...expectedApplet,
+    label: 'Mocked Applet',
+    navPath: `/dashboard/${appletId}/respondents`,
+    chip: undefined,
+  });
+  expect(respondents).toEqual({
+    icon: 'respondent-outlined',
+    label: 'Respondents',
+    navPath: `/dashboard/${appletId}/respondents`,
+    key: expect.any(String),
+  });
+  expect(user).toEqual({
+    icon: 'account',
+    label: 'Respondent: secretUserId (Jane Doe)',
+    disabledLink: true,
+    key: expect.any(String),
+  });
+  expect(viewData).toEqual({
+    label: 'View Data',
+    disabledLink: true,
+    key: expect.any(String),
+  });
 };
 
 jest.mock('react-hook-form', () => ({
@@ -225,61 +277,42 @@ describe('useBreadcrumbs', () => {
       routePath,
       preloadedState: {
         ...preloadedState,
-        applet: {
-          applet: {
-            data: {
-              result: {
-                displayName: 'Mocked Applet',
-              },
-            },
-          },
-        },
-        users: {
-          subjectDetails: {
-            data: {
-              result: {
-                nickname: 'Jane Doe',
-                secretUserId: 'secretUserId',
-              },
-            },
-          },
-          respondentDetails: {
-            data: null,
-          },
-        },
+        ...commonDatavizState,
       },
     });
 
     expect(result.current).toHaveLength(6);
     const [home, applet, respondents, user, viewData, summary] = result.current;
 
-    expect(home).toEqual(expectedHome);
-    expect(applet).toEqual({
-      ...expectedApplet,
-      label: 'Mocked Applet',
-      navPath: `/dashboard/${appletId}/respondents`,
-      chip: undefined,
-    });
-    expect(respondents).toEqual({
-      icon: 'respondent-outlined',
-      label: 'Respondents',
-      navPath: `/dashboard/${appletId}/respondents`,
-      key: expect.any(String),
-    });
-    expect(user).toEqual({
-      icon: 'account',
-      label: 'User: secretUserId (Jane Doe)',
-      disabledLink: true,
-      key: expect.any(String),
-    });
-    expect(viewData).toEqual({
-      label: 'View Data',
-      disabledLink: true,
-      key: expect.any(String),
-    });
+    commonDataVizTest({ home, applet, respondents, user, viewData });
     expect(summary).toEqual({
       icon: 'chart',
       label: 'Summary',
+      disabledLink: true,
+      key: expect.any(String),
+    });
+  });
+
+  test('should generate correct breadcrumbs for applet dataviz/responses', () => {
+    const route = `/dashboard/${appletId}/respondents/${respondentId}/dataviz/responses`;
+    const routePath = page.appletRespondentDataReview;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: {
+        ...preloadedState,
+        ...commonDatavizState,
+      },
+    });
+
+    expect(result.current).toHaveLength(6);
+    const [home, applet, respondents, user, viewData, responses] = result.current;
+
+    commonDataVizTest({ home, applet, respondents, user, viewData });
+    expect(responses).toEqual({
+      icon: 'checkbox-outlined',
+      label: 'Responses',
       disabledLink: true,
       key: expect.any(String),
     });
