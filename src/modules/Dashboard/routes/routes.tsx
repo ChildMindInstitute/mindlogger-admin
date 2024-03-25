@@ -7,11 +7,12 @@ import { PrivateRoute } from 'routes/PrivateRoute';
 import { ErrorFallback } from 'shared/components';
 import { FeatureFlags } from 'shared/types/featureFlags';
 
-import { appletRoutes, mainRoutes } from './routes.const';
+import { appletRoutes, mainRoutes, participantDetailsRoutes } from './routes.const';
 import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
+const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
 const RespondentData = lazy(() => import('../pages/RespondentData'));
 const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
 const RespondentDataSummary = lazy(
@@ -88,6 +89,29 @@ export const dashboardRoutes = (flags: FeatureFlags) => (
           />
         </Route>
       </Route>
+    </Route>
+    <Route
+      element={
+        <PrivateRoute>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <ParticipantDetails />
+          </ErrorBoundary>
+        </PrivateRoute>
+      }
+    >
+      {participantDetailsRoutes.map(({ path, Component }) => (
+        <Route
+          key={path}
+          path={path}
+          element={
+            <PrivateRoute>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Component />
+              </ErrorBoundary>
+            </PrivateRoute>
+          }
+        />
+      ))}
     </Route>
   </Route>
 );

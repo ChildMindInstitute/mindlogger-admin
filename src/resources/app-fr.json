@@ -291,6 +291,7 @@
   "confirmUpdateSchedule": "Êtes-vous sûr de vouloir mettre à jour le programme par défaut de l'Applet <1>{{appletName}}</1> et de remplacer le programme actuel par les informations du fichier <1>{{fileName}}</1>?",
   "contentActions": "Sélectionner le type d'ajout",
   "continue": "Continuer",
+  "connections": "Connexions",
   "coordinator": "Coordinateur",
   "copyAppletLink": "Copier le lien de l'Applet",
   "correctAnswer": "Réponse correcte",

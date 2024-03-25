@@ -3,6 +3,7 @@
 // @ts-nocheck
 import { page } from 'resources';
 import { renderHookWithProviders } from 'shared/utils';
+import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
 
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
 
@@ -78,7 +79,19 @@ jest.mock('react-hook-form', () => ({
   useFormContext: jest.fn(),
 }));
 
+jest.mock('shared/hooks/useLaunchDarkly', () => ({
+  ...jest.requireActual('shared/hooks/useLaunchDarkly'),
+  useLaunchDarkly: jest.fn(),
+}));
+
 describe('useBreadcrumbs', () => {
+  beforeEach(() => {
+    jest.mocked(useLaunchDarkly).mockReturnValue({
+      flags: {
+        multiInformantFlag: false,
+      },
+    });
+  });
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -496,6 +509,128 @@ describe('useBreadcrumbs', () => {
       label: 'Activity Flow Settings',
       navPath: `/builder/${appletId}/activity-flows/${activityFlowId}/settings`,
       key: expect.any(String),
+    });
+  });
+
+  test('should generate correct breadcrumbs for respondent details using multi-informat', () => {
+    jest.mocked(useLaunchDarkly).mockReturnValue({
+      flags: {
+        multiInformantFlag: true,
+      },
+    });
+    const route = `/dashboard/${appletId}/participants/${respondentId}`;
+    const routePath = page.appletParticipantActivities;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: {
+        ...preloadedState,
+        applet: {
+          applet: {
+            data: {
+              result: {
+                displayName: 'Mocked Applet',
+              },
+            },
+          },
+        },
+        users: {
+          subjectDetails: {
+            data: null,
+          },
+          respondentDetails: {
+            data: {
+              result: {
+                nickname: 'Jane Doe',
+                secretUserId: 'secretUserId',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.current).toHaveLength(3);
+
+    const [home, applet, participant] = result.current;
+
+    expect(home).toEqual(expectedHome);
+    expect(applet).toEqual({
+      chip: undefined,
+      hasUrl: false,
+      icon: '',
+      key: '59',
+      label: 'Mocked Applet',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/respondents',
+      useCustomIcon: true,
+    });
+    expect(participant).toEqual({
+      disabledLink: true,
+      icon: undefined,
+      key: '60',
+      label: 'secretUserId',
+    });
+  });
+
+  test('should generate correct breadcrumbs for respondent details using multi-informat schedule', () => {
+    jest.mocked(useLaunchDarkly).mockReturnValue({
+      flags: {
+        multiInformantFlag: true,
+      },
+    });
+    const route = `/dashboard/${appletId}/participants/${respondentId}/schedule`;
+    const routePath = page.appletParticipantSchedule;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: {
+        ...preloadedState,
+        applet: {
+          applet: {
+            data: {
+              result: {
+                displayName: 'Mocked Applet',
+              },
+            },
+          },
+        },
+        users: {
+          subjectDetails: {
+            data: null,
+          },
+          respondentDetails: {
+            data: {
+              result: {
+                nickname: 'Jane Doe',
+                secretUserId: 'secretUserId',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.current).toHaveLength(3);
+
+    const [home, applet, participant] = result.current;
+
+    expect(home).toEqual(expectedHome);
+    expect(applet).toEqual({
+      chip: undefined,
+      hasUrl: false,
+      icon: '',
+      key: '62',
+      label: 'Mocked Applet',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/respondents',
+      useCustomIcon: true,
+    });
+    expect(participant).toEqual({
+      disabledLink: true,
+      icon: undefined,
+      key: '63',
+      label: 'secretUserId',
     });
   });
 });

@@ -13,12 +13,15 @@ export const LinkedTabs = ({
   hiddenHeader = false,
   isBuilder = false,
   isCentered = true,
+  deepPathCompare = false,
 }: TabsProps) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
   const { tabIndex, content, header } = useMemo(() => {
-    const index = tabs?.findIndex((tab) => tab.path && pathname.includes(tab.path));
+    const index = tabs?.findIndex(
+      (tab) => tab.path && (deepPathCompare ? pathname === tab.path : pathname.includes(tab.path)),
+    );
     const tabIndex = index > -1 ? index : 0;
 
     const { header, content } = tabs.reduce(
@@ -84,6 +87,7 @@ export const LinkedTabs = ({
         hiddenHeader={hiddenHeader}
         isBuilder={isBuilder}
         isCentered={isCentered}
+        data-testid="linked-tabs"
       >
         {!hiddenHeader && header}
       </StyledTabs>

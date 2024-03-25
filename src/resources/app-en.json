@@ -291,6 +291,7 @@
   "confirmUpdateSchedule": "Are you sure you want to update the default schedule for Applet <1>{{appletName}}</1> and replace the current schedule with information from the <1>{{fileName}}</1> file?",
   "contentActions": "Select Adding Type",
   "continue": "Continue",
+  "connections": "Connections",
   "coordinator": "Coordinator",
   "copyAppletLink": "Copy Applet Link",
   "correctAnswer": "Correct Answer",
