@@ -19,8 +19,8 @@ export const useRespondentDataTabs = () => {
       'data-testid': 'respondents-summary-tab-summary',
     },
     {
-      labelKey: 'review',
-      id: 'respondent-data-review',
+      labelKey: 'responses',
+      id: 'respondent-data-responses',
       icon: <Svg id="checkbox-outlined" />,
       activeIcon: <Svg id="checkbox-filled" />,
       path: generatePath(page.appletRespondentDataReview, {

@@ -439,7 +439,7 @@ export const getActivitiesFlows = (activities: Activity[], activityFlows: Activi
 export const addSecondsToHourMinutes = (timeStr?: string | null) =>
   timeStr ? `${timeStr}:00` : null;
 
-const getTimer = (timerType: TimerType, timerDuration: string, idleTime: string) => {
+export const getTimer = (timerType: TimerType, timerDuration: string, idleTime: string) => {
   switch (timerType) {
     case TimerType.Timer:
       return addSecondsToHourMinutes(timerDuration) || undefined;

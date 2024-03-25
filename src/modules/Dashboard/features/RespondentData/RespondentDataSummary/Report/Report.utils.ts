@@ -13,6 +13,8 @@ import {
   DecryptedSliderAnswer,
   DecryptedTextAnswer,
   DecryptedTimeAnswer,
+  DecryptedNumberSelectionAnswer,
+  DecryptedDateAnswer,
   ElementType,
 } from 'shared/types';
 
@@ -25,6 +27,7 @@ import {
   ItemOption,
 } from './Report.types';
 import { DEFAULT_DATE_MAX } from './Report.const';
+import { getDateForamttedResponse } from '../../RespondentData.utils';
 
 export const isValueDefined = (value?: string | number | (string | number)[] | null) =>
   value !== null && value !== undefined;
@@ -420,6 +423,27 @@ export const formatActivityItemAnswers = (
         answers,
       };
     }
+    case ItemResponseType.Date: {
+      if (!currentAnswer.answer) {
+        return {
+          activityItem: formattedActivityItem,
+          answers: getDefaultEmptyAnswer(date),
+        };
+      }
+
+      return {
+        activityItem: formattedActivityItem,
+        answers: [
+          {
+            answer: {
+              value: getDateForamttedResponse(currentAnswer.answer as DecryptedDateAnswer),
+              text: null,
+            },
+            date,
+          },
+        ],
+      };
+    }
     case ItemResponseType.Time: {
       if (!currentAnswer.answer) {
         return {
@@ -450,6 +474,20 @@ export const formatActivityItemAnswers = (
       return {
         activityItem: formattedActivityItem,
         answers,
+      };
+    }
+    case ItemResponseType.NumberSelection: {
+      return {
+        activityItem: formattedActivityItem,
+        answers: [
+          {
+            answer: {
+              value: (currentAnswer.answer as DecryptedNumberSelectionAnswer)?.value ?? null,
+              text: null,
+            },
+            date,
+          },
+        ],
       };
     }
     default:

@@ -19,12 +19,15 @@ const getActivityItemAnswer = (responseType: ItemResponseType) => ({
   activityItem: {
     responseType,
   },
+  answer: {},
 });
 
 const singleSelectDataTestid = 'single-select-response-item';
 const multiSelectDataTestid = 'multi-select-response-item';
 const sliderDataTestid = 'slider-response-item';
 const textDataTestid = 'text-response-item';
+const numberSelectionDataTestid = 'number-selection-response-item';
+const dateDataTestid = 'date-response-item';
 
 jest.mock('../SingleSelectResponseItem', () => ({
   __esModule: true,
@@ -48,6 +51,18 @@ jest.mock('../TextResponseItem', () => ({
   __esModule: true,
   ...jest.requireActual('../TextResponseItem'),
   TextResponseItem: () => <div data-testid={textDataTestid}></div>,
+}));
+
+jest.mock('../NumberSelectionResponseItem', () => ({
+  __esModule: true,
+  ...jest.requireActual('../NumberSelectionResponseItem'),
+  NumberSelectionResponseItem: () => <div data-testid={numberSelectionDataTestid}></div>,
+}));
+
+jest.mock('../DateResponseItem', () => ({
+  __esModule: true,
+  ...jest.requireActual('../DateResponseItem'),
+  DateResponseItem: () => <div data-testid={dateDataTestid} />,
 }));
 
 describe('getTimeResponseItem', () => {
@@ -80,6 +95,8 @@ describe('getResponseItem (supported response items), check rendering of child c
     ${ItemResponseType.MultipleSelection} | ${multiSelectDataTestid}
     ${ItemResponseType.Slider}            | ${sliderDataTestid}
     ${ItemResponseType.Text}              | ${textDataTestid}
+    ${ItemResponseType.NumberSelection}   | ${numberSelectionDataTestid}
+    ${ItemResponseType.Date}              | ${dateDataTestid}
   `('renders child component for $itemResponseType', ({ itemResponseType, expected }) => {
     renderWithProviders(getResponseItem(getActivityItemAnswer(itemResponseType)));
     expect(screen.getByTestId(expected)).toBeInTheDocument();

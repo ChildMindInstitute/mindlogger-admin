@@ -18,6 +18,7 @@ export const Table = ({
   uiType = UiType.Primary,
   emptyComponent,
   className = '',
+  tableHeadBg,
   'data-testid': dataTestid,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>('asc');
@@ -90,6 +91,7 @@ export const Table = ({
               onRequestSort={handleRequestSort}
               tableHeader={tableHeader}
               uiType={uiType}
+              tableHeadBg={tableHeadBg}
             />
             <TableBody>
               {rows

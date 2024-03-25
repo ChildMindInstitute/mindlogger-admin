@@ -31,7 +31,7 @@ describe('useRespondentLabel', () => {
     expect(result.current).toBe('');
   });
 
-  test('should construct and return the respondent label correctly (User: secret123)', () => {
+  test('should construct and return the respondent label correctly (Respondent: secret123)', () => {
     jest.spyOn(routerDom, 'useParams').mockReturnValue({ respondentId: '123' });
     const res = {
       secretUserId: 'secret123',
@@ -43,7 +43,7 @@ describe('useRespondentLabel', () => {
 
     const { result } = renderHook(useRespondentLabel);
 
-    expect(result.current).toBe('User: secret123');
+    expect(result.current).toBe('Respondent: secret123');
   });
 
   test('should construct and return the respondent label correctly for subject (User: secret123)', () => {
@@ -58,7 +58,7 @@ describe('useRespondentLabel', () => {
 
     const { result } = renderHook(() => useRespondentLabel(true));
 
-    expect(result.current).toBe('User: subject123');
+    expect(result.current).toBe('Respondent: subject123');
   });
 
   test('should construct and return the respondent label correctly (User: secret123 (John Doe))', () => {
@@ -72,6 +72,6 @@ describe('useRespondentLabel', () => {
 
     const { result } = renderHook(useRespondentLabel);
 
-    expect(result.current).toBe('User: secret123 (John Doe)');
+    expect(result.current).toBe('Respondent: secret123 (John Doe)');
   });
 });

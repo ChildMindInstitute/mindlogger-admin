@@ -350,12 +350,14 @@ export const SliderPanel = ({
                   rows={getStaticBodyRow()}
                   orderBy="0"
                   uiType={UiType.Secondary}
+                  tableHeadBg="transparent"
                 />
                 <StyledTable
                   columns={tableColumns}
                   rows={getTableRows(scores, sliderName, `${dataTestid}-scores-table`)}
                   orderBy="0"
                   uiType={UiType.Secondary}
+                  tableHeadBg="transparent"
                   data-testid={`${dataTestid}-scores-table`}
                 />
               </StyledScoresContainer>

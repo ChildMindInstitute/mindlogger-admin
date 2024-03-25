@@ -9,6 +9,13 @@ export const StyledMenu = styled(StyledFlexColumn)`
   border-right: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
   padding: ${theme.spacing(4.8, 1.6)};
   overflow-y: auto;
+
+  ${theme.breakpoints.down('xl')} {
+    width: 35rem;
+  }
+  ${theme.breakpoints.down('lg')} {
+    width: 30rem;
+  }
 `;
 
 export const StyledTextBtn = styled(Button)`
