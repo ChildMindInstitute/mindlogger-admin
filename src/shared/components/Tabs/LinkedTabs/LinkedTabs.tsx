@@ -14,6 +14,8 @@ export const LinkedTabs = ({
   isBuilder = false,
   isCentered = true,
   deepPathCompare = false,
+  defaultToFirstTab = true,
+  animateTabIndicator = true,
 }: TabsProps) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
@@ -22,7 +24,7 @@ export const LinkedTabs = ({
     const index = tabs?.findIndex(
       (tab) => tab.path && (deepPathCompare ? pathname === tab.path : pathname.includes(tab.path)),
     );
-    const tabIndex = index > -1 ? index : 0;
+    const tabIndex = index === -1 && defaultToFirstTab ? 0 : index;
 
     const { header, content } = tabs.reduce(
       (
@@ -76,14 +78,31 @@ export const LinkedTabs = ({
     );
 
     return { tabIndex, content, header };
-  }, [pathname, t, tabs]);
+  }, [defaultToFirstTab, deepPathCompare, hiddenHeader, pathname, t, tabs]);
 
   return (
     <>
       <StyledTabs
         uiType={uiType}
+        // Note: This is currently causing MUI to complain about -1 not being a
+        // valid value when the user navigates to /dashboard/[applet_id]/settings.
+        //
+        // This is a temporary issue while the settings functionality is still a
+        // separate route instead of appearing as a slideover, which will be
+        // implemented in https://mindlogger.atlassian.net/browse/M2-5987.
+        //
+        // There is a note to remove this comment in that ticket when it is worked on.
         value={tabIndex}
-        TabIndicatorProps={{ children: <span /> }}
+        TabIndicatorProps={{
+          children: <span />,
+          ...(animateTabIndicator
+            ? {}
+            : {
+                style: {
+                  transition: 'none',
+                },
+              }),
+        }}
         hiddenHeader={hiddenHeader}
         isBuilder={isBuilder}
         isCentered={isCentered}

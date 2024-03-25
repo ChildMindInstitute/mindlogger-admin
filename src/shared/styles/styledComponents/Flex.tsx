@@ -11,6 +11,11 @@ export const StyledFlexTopCenter = styled(Box)`
   align-items: center;
 `;
 
+export const StyledFlexTopBaseline = styled(Box)`
+  display: flex;
+  align-items: baseline;
+`;
+
 export const StyledFlexTopStart = styled(Box)`
   display: flex;
   align-items: flex-start;

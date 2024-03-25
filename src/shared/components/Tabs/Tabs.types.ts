@@ -27,6 +27,8 @@ export type TabsProps = {
   isBuilder?: boolean;
   isCentered?: boolean;
   deepPathCompare?: boolean;
+  defaultToFirstTab?: boolean;
+  animateTabIndicator?: boolean;
 };
 
 export type RenderTabs = {
