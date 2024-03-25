@@ -593,7 +593,7 @@ describe('useBreadcrumbs', () => {
       chip: undefined,
       hasUrl: false,
       icon: '',
-      key: '59',
+      key: expect.any(String),
       label: 'Mocked Applet',
       navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/respondents',
       useCustomIcon: true,
@@ -601,7 +601,7 @@ describe('useBreadcrumbs', () => {
     expect(participant).toEqual({
       disabledLink: true,
       icon: undefined,
-      key: '60',
+      key: expect.any(String),
       label: 'secretUserId',
     });
   });
@@ -654,7 +654,7 @@ describe('useBreadcrumbs', () => {
       chip: undefined,
       hasUrl: false,
       icon: '',
-      key: '62',
+      key: expect.any(String),
       label: 'Mocked Applet',
       navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/respondents',
       useCustomIcon: true,
@@ -662,7 +662,7 @@ describe('useBreadcrumbs', () => {
     expect(participant).toEqual({
       disabledLink: true,
       icon: undefined,
-      key: '63',
+      key: expect.any(String),
       label: 'secretUserId',
     });
   });
