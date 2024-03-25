@@ -84,6 +84,14 @@ export const LinkedTabs = ({
     <>
       <StyledTabs
         uiType={uiType}
+        // Note: This is currently causing MUI to complain about -1 not being a
+        // valid value when the user navigates to /dashboard/[applet_id]/settings.
+        //
+        // This is a temporary issue while the settings functionality is still a
+        // separate route instead of appearing as a slideover, which will be
+        // implemented in https://mindlogger.atlassian.net/browse/M2-5987.
+        //
+        // There is a note to remove this comment in that ticket when it is worked on.
         value={tabIndex}
         TabIndicatorProps={{
           children: <span />,
