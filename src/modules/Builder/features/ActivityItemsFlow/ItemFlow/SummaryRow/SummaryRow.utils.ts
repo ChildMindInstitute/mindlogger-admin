@@ -1,10 +1,9 @@
 import i18n from 'i18n';
 import { ConditionalLogicMatch } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
-import { ConditionalLogic } from 'shared/state/Applet';
 
 import { ITEMS_RESPONSE_TYPES_TO_SHOW } from './SummaryRow.const';
-import { GetItemsOptionsProps } from './SummaryRow.types';
+import { GetItemsInUsageProps, GetItemsOptionsProps } from './SummaryRow.types';
 
 const { t } = i18n;
 
@@ -32,13 +31,7 @@ export const getItemsOptions = ({ items, itemsInUsage }: GetItemsOptionsProps) =
     return optionList;
   }, []);
 
-export const getItemsInUsage = ({
-  conditionalLogic,
-  itemKey,
-}: {
-  conditionalLogic: ConditionalLogic[];
-  itemKey: string;
-}) =>
+export const getItemsInUsage = ({ conditionalLogic, itemKey }: GetItemsInUsageProps) =>
   conditionalLogic.reduce((acc, conditional) => {
     if (!conditional.itemKey || conditional.itemKey === itemKey) return acc;
 
