@@ -8,8 +8,9 @@ import { getItemsInUsage } from './SummaryRow.utils';
 
 export const useItemsInUsage = (name: string) => {
   const { fieldName } = useCurrentActivity();
-  const itemKey = useWatch({ name: `${name}.itemKey` });
-  const conditionalLogic: ConditionalLogic[] = useWatch({ name: `${fieldName}.conditionalLogic` });
+  const [itemKey, conditionalLogic]: [string, ConditionalLogic[]] = useWatch({
+    name: [`${name}.itemKey`, `${fieldName}.conditionalLogic`],
+  });
   const [itemsInUsage, setItemsInUsage] = useState(getItemsInUsage({ conditionalLogic, itemKey }));
 
   useEffect(() => {

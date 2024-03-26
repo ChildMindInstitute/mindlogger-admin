@@ -86,13 +86,13 @@ describe('SummaryRow.utils', () => {
     ];
 
     test.each`
-      conditionalLogic    | itemKey      | expectedArrayinSet      | description
+      conditionalLogic    | itemKey      | expectedArrayInSet      | description
       ${conditionalLogic} | ${'item-2'}  | ${['item-1', 'item-3']} | ${'returns items when current is chosen'}
       ${conditionalLogic} | ${undefined} | ${['item-1', 'item-3']} | ${'returns items when current is empty'}
       ${conditionalLogic} | ${'item-1'}  | ${['item-3']}           | ${'returns filtered items when overlapped'}
-    `('$description', async ({ conditionalLogic, itemKey, expectedArrayinSet }) => {
+    `('$description', async ({ conditionalLogic, itemKey, expectedArrayInSet }) => {
       expect(getItemsInUsage({ conditionalLogic, itemKey })).toStrictEqual(
-        new Set(expectedArrayinSet),
+        new Set(expectedArrayInSet),
       );
     });
   });

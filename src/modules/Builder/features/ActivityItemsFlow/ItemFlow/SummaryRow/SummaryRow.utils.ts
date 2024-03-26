@@ -1,10 +1,10 @@
 import i18n from 'i18n';
-import { ItemFormValues } from 'modules/Builder/types';
 import { ConditionalLogicMatch } from 'shared/consts';
 import { getEntityKey } from 'shared/utils';
 import { ConditionalLogic } from 'shared/state/Applet';
 
 import { ITEMS_RESPONSE_TYPES_TO_SHOW } from './SummaryRow.const';
+import { GetItemsOptionsProps } from './SummaryRow.types';
 
 const { t } = i18n;
 
@@ -19,13 +19,7 @@ export const getMatchOptions = () => [
   },
 ];
 
-export const getItemsOptions = ({
-  items,
-  itemsInUsage,
-}: {
-  items: ItemFormValues[];
-  itemsInUsage: Set<unknown>;
-}) =>
+export const getItemsOptions = ({ items, itemsInUsage }: GetItemsOptionsProps) =>
   items?.reduce((optionList: { value: string; labelKey: string }[], item) => {
     if (item.responseType && ITEMS_RESPONSE_TYPES_TO_SHOW.includes(item.responseType)) {
       const value = getEntityKey(item);
