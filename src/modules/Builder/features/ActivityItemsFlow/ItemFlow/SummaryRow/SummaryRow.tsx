@@ -14,12 +14,13 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 
 import { SummaryRowProps } from './SummaryRow.types';
 import { getItemsOptions, getMatchOptions } from './SummaryRow.utils';
+import { useItemsInUsage } from './SummaryRow.hooks';
 
 export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: SummaryRowProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
-
   const items = useWatch({ name: `${activityName}.items` });
+  const itemsInUsage = useItemsInUsage(name);
 
   const handleChangeItemKey = useCallback(
     (event: SelectEvent) => {
@@ -30,7 +31,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
       if (itemIndex !== undefined && itemIndex !== -1 && items[itemIndex]?.isHidden)
         setValue(`${activityName}.items.${itemIndex}.isHidden`, false);
     },
-    [items],
+    [items, activityName, setValue],
   );
 
   return (
@@ -49,7 +50,7 @@ export const SummaryRow = ({ name, activityName, 'data-testid': dataTestid }: Su
         <StyledSummarySelectController
           control={control}
           name={`${name}.itemKey`}
-          options={getItemsOptions(items)}
+          options={getItemsOptions({ items, itemsInUsage })}
           placeholder={t('conditionItemNamePlaceholder')}
           SelectProps={{
             renderValue: (value: unknown) => {
