@@ -8,7 +8,8 @@ import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 
-import * as respondentDataHooks from '../RespondentData.hooks';
+import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests';
+import * as useRespondentAnswersHook from './hooks/useRespondentAnswers';
 import { RespondentDataSummary } from './RespondentDataSummary';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;
@@ -133,10 +134,10 @@ describe('RespondentDataSummary component', () => {
     const mockFetchAnswers = jest.fn();
     jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([null, []]);
     jest
-      .spyOn(respondentDataHooks, 'useDatavizSummaryRequests')
+      .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
       .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });
     jest
-      .spyOn(respondentDataHooks, 'useRespondentAnswers')
+      .spyOn(useRespondentAnswersHook, 'useRespondentAnswers')
       .mockReturnValue({ fetchAnswers: mockFetchAnswers });
 
     mockAxios.get.mockResolvedValueOnce({

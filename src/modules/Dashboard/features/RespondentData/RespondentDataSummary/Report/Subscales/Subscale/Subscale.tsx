@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
 import { useTranslation } from 'react-i18next';
 
-import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentData.hooks';
+import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/hooks/useDatavizFilters';
 import { getDictionaryText } from 'shared/utils';
 import { Accordion } from 'modules/Dashboard/components';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';

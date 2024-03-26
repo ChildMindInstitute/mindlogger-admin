@@ -6,13 +6,13 @@ import { addDays } from 'date-fns';
 
 import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { Switch, TagsInputController } from 'shared/components/FormComponents';
+import { Switch, TagsAutocompleteController } from 'shared/components/FormComponents';
 import { DatavizActivity } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
-import { FetchAnswers } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
-import { useRespondentAnswers } from 'modules/Dashboard/features/RespondentData/RespondentData.hooks';
-import { getUniqueIdentifierOptions } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
+import { FetchAnswers } from '../../RespondentDataSummary.types';
+import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
+import { getUniqueIdentifierOptions } from '../../RespondentDataSummary.utils';
 import { StyledFiltersContainer, StyledMoreFilters, StyledTimeText } from './ReportFilters.styles';
 import {
   FiltersChangeType,
@@ -173,7 +173,7 @@ export const ReportFilters = ({
           )}
           <StyledFlexTopCenter sx={{ mt: theme.spacing(0.8) }}>
             <Box sx={{ width: '36rem' }}>
-              <TagsInputController
+              <TagsAutocompleteController
                 name="identifier"
                 limitTags={2}
                 label={t('respondentIdentifier')}
@@ -182,7 +182,6 @@ export const ReportFilters = ({
                 noOptionsText={t('noRespondentIdentifier')}
                 labelAllSelect={t('selectAll')}
                 disabled={!filterByIdentifier}
-                defaultSelectedAll
                 onCustomChange={(options: AutocompleteOption[]) =>
                   onFiltersChange({
                     type: FiltersChangeType.Identifiers,
@@ -193,7 +192,7 @@ export const ReportFilters = ({
               />
             </Box>
             <Box sx={{ width: '36rem', ml: theme.spacing(2.4) }}>
-              <TagsInputController
+              <TagsAutocompleteController
                 name="versions"
                 limitTags={2}
                 label={t('versions')}

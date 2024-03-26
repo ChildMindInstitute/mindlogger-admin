@@ -4,8 +4,11 @@ import {
   ActivityCompletion,
   FormattedResponse,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import {
+  compareActivityItem,
+  formatActivityItemAnswers,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.utils';
 
-import { compareActivityItem, formatActivityItemAnswers } from '../Report.utils';
 import { ActivityCompletionToRender, GroupedSubscales, SubscaleToRender } from './Subscales.types';
 
 export const getSubscalesToRender = (

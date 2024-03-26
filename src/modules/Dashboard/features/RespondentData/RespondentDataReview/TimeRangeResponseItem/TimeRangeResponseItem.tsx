@@ -5,7 +5,7 @@ import { StyledFlexTopStart, theme } from 'shared/styles';
 
 import { TimeRangeItemAnswer } from '../RespondentDataReview.types';
 import { StyledTimeWrapper } from './TimeRangeResponseItem.styles';
-import { getTimeRangeReponse } from '../../RespondentData.utils';
+import { getTimeRangeResponse } from '../../RespondentData.utils';
 
 export const TimeRangeResponseItem = ({
   answer,
@@ -15,7 +15,7 @@ export const TimeRangeResponseItem = ({
 
   if (!answer) return null;
 
-  const formattedResponse = getTimeRangeReponse(answer);
+  const formattedResponse = getTimeRangeResponse(answer);
 
   return (
     <StyledFlexTopStart data-testid={dataTestId}>

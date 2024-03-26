@@ -17,7 +17,7 @@ import {
   TagsAutocompleteControllerProps,
 } from './TagsAutocompleteController.types';
 
-export const TagsInputController = <T extends FieldValues>({
+export const TagsAutocompleteController = <T extends FieldValues>({
   name,
   control,
   options,
@@ -71,13 +71,13 @@ export const TagsInputController = <T extends FieldValues>({
             options={options || []}
             fullWidth
             disableCloseOnSelect
-            filterSelectedOptions
             isOptionEqualToValue={(option, value) => option.id === value.id}
             noOptionsText={<ListItem sx={{ pl: theme.spacing(1.3) }}>{noOptionsText}</ListItem>}
             freeSolo={false}
             value={value || []}
             onChange={handleChange}
             disabled={disabled}
+            // eslint-disable-next-line unused-imports/no-unused-vars
             renderInput={({ InputLabelProps, ...params }) => <TextField {...params} {...props} />}
             renderOption={(props, option, { selected }) => (
               <ListItem {...props}>
@@ -111,6 +111,19 @@ export const TagsInputController = <T extends FieldValues>({
                   </>
                 </Paper>
               );
+            }}
+            // ensure that the popper always stays at the bottom
+            slotProps={{
+              popper: {
+                modifiers: [
+                  {
+                    name: 'flip',
+                    options: {
+                      rootBoundary: 'document',
+                    },
+                  },
+                ],
+              },
             }}
             data-testid={dataTestid}
           />

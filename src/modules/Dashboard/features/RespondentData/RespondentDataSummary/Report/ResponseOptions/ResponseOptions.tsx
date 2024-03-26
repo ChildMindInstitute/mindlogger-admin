@@ -7,13 +7,13 @@ import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import { getDictionaryText } from 'shared/utils';
-import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentData.hooks';
 import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 import {
   RespondentsDataFormValues,
   FormattedResponse,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
+import { useDatavizFilters } from '../../hooks/useDatavizFilters';
 import { COLORS } from '../Charts/Charts.const';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
