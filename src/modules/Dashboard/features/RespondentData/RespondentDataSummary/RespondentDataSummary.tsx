@@ -7,12 +7,13 @@ import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
 import { DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { useAsync } from 'shared/hooks';
 
+import { useRespondentAnswers } from './hooks/useRespondentAnswers';
+import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
 import { RespondentsDataFormValues } from '../RespondentData.types';
 import { ReportMenu } from './ReportMenu';
 import { Report } from './Report';
 import { StyledReportContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
 import { getEmptyState } from './RespondentDataSummary.utils';
-import { useDatavizSummaryRequests, useRespondentAnswers } from '../RespondentData.hooks';
 
 export const RespondentDataSummary = () => {
   const { appletId, respondentId } = useParams();

@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { DatavizActivity } from 'api';
 
-import { FetchAnswers, GetIdentifiersVersions } from '../../RespondentData.types';
+import { FetchAnswers, GetIdentifiersVersions } from '../RespondentDataSummary.types';
 
 export type ReportMenuProps = {
   activities: DatavizActivity[];

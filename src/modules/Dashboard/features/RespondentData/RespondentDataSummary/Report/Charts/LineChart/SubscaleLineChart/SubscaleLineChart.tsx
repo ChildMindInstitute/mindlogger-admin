@@ -10,7 +10,7 @@ import { Box } from '@mui/material';
 
 import { getOptionTextApi } from 'api';
 import { pluck } from 'shared/utils';
-import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentData.hooks';
+import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/hooks/useDatavizFilters';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData';
 
 import { ChartTooltipContainer } from '../../ChartTooltipContainer';
