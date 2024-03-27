@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { MenuItem } from 'shared/components';
+import { MenuItem, MenuItemType } from 'shared/components';
 
 import { ActivityActions, ActivityActionProps } from './Activities.types';
 
@@ -26,7 +26,7 @@ export const getActivityActions = ({
     isDisplayed: true,
     'data-testid': 'dashboard-applets-activities-activity-export',
   },
-  { type: 'divider' },
+  { type: MenuItemType.Divider },
   {
     icon: <Svg id="add" />,
     action: assignActivity,

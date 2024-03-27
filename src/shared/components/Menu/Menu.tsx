@@ -6,7 +6,7 @@ import { StyledBodyLarge } from 'shared/styles/styledComponents';
 import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledMenu, StyledMenuItemContent } from './Menu.styles';
-import { MenuProps } from './Menu.types';
+import { MenuItemType, MenuProps } from './Menu.types';
 import { MenuUiType } from './Menu.const';
 
 export const Menu = <T = unknown,>({
@@ -48,7 +48,7 @@ export const Menu = <T = unknown,>({
       {menuItems.map(
         (
           {
-            type = 'normal',
+            type = MenuItemType.Normal,
             icon,
             title,
             isDisplayed = true,
@@ -80,8 +80,8 @@ export const Menu = <T = unknown,>({
             </StyledMenuItemContent>
           );
 
-          return type === 'divider' ? (
-            <Divider key={index} sx={{ flex: 1, my: 0.8 }} />
+          return type === MenuItemType.Divider ? (
+            <Divider key={index} sx={{ flex: 1, my: 0.8 }} data-testid={dataTestId} />
           ) : (
             <MenuItem
               key={index}

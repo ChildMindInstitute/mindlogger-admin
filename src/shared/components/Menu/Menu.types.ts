@@ -4,8 +4,13 @@ import { MenuUiType } from './Menu.const';
 
 export type MenuActionProps<T = unknown> = { title?: string; context?: T };
 
+export enum MenuItemType {
+  Normal,
+  Divider,
+}
+
 export type MenuItem<T = unknown> = {
-  type?: 'normal' | 'divider';
+  type?: MenuItemType;
   icon?: JSX.Element;
   title?: string;
   action?: ({ title, context }: MenuActionProps<T>) => void;
