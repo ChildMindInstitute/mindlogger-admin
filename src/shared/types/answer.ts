@@ -511,6 +511,34 @@ export const enum ElementType {
   Subscale = 'subscale',
 }
 
+export type JourneyCSVReturnProps = {
+  id: string;
+  activity_scheduled_time: string;
+  activity_start_time: string;
+  activity_end_time: string;
+  press_next_time: string;
+  press_back_time: string;
+  press_undo_time: string;
+  press_skip_time: string;
+  press_done_time: string;
+  response_option_selection_time: string;
+  secret_user_id?: string;
+  user_id?: string;
+  activity_id: string;
+  activity_flow_id: string | null;
+  activity_flow: string | null;
+  activity_name: string;
+  item: string;
+  item_id?: string;
+  prompt: string;
+  response: string;
+  options: string;
+  version?: string;
+  legacy_user_id?: string;
+  event_id?: string | null;
+  timezone_offset?: number | null;
+};
+
 export type AppletExportData = {
   reportData: ReturnType<typeof getReportCSVObject>[];
   activityJourneyData: ReturnType<typeof getJourneyCSVObject>[];
@@ -547,10 +575,12 @@ export type FlankerResponseRecord = {
 
 export type DotType = '.';
 export type NumberWithDotType = DotType | number;
+
 export const enum FlankerResponseValue {
   Left = 'L',
   Right = 'R',
 }
+
 export const enum FlankerResponseAccuracy {
   Correct = '1',
   Incorrect = '0',
