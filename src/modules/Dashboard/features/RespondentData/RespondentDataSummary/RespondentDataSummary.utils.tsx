@@ -133,7 +133,9 @@ export const getIdentifiers = (
   );
 };
 
-export const isValueDefined = (value: any) => value !== null && value !== undefined;
+export const isValueDefined = <T extends string | number | (string | number)[] | null>(
+  value?: T,
+): value is NonNullable<T> => value !== null && value !== undefined;
 
 export const isAnswerTypeCorrect = (answer: AnswerDTO, responseType: ItemResponseType) => {
   switch (responseType) {
@@ -192,9 +194,7 @@ const shiftAnswerValues = (answers: Answer<SimpleAnswerValue>[]) =>
     ...item,
     answer: {
       ...item.answer,
-      value: isValueDefined(item.answer.value)
-        ? +(item.answer.value as number) + 1
-        : item.answer.value,
+      value: isValueDefined(item.answer.value) ? +item.answer.value + 1 : item.answer.value,
     },
   }));
 
@@ -700,21 +700,26 @@ export const compareActivityItem = (
         options: updatedOptions,
       };
 
-      const updatedAnswers = Object.entries(answers).reduce((acc: any, [rowName, answer]: any) => {
-        if (!answer?.length) {
+      const updatedAnswers = Object.entries(
+        answers as Record<string, Answer<RespondentAnswerValue>[]>,
+      ).reduce(
+        (acc: Record<string, Answer<RespondentAnswerValue>[]>, [rowName, answer]) => {
+          if (!answer?.length) {
+            return acc;
+          }
+
+          if (!acc[rowName]) {
+            acc[rowName] = answer;
+
+            return acc;
+          }
+
+          acc[rowName].push(...answer);
+
           return acc;
-        }
-
-        if (!acc[rowName]) {
-          acc[rowName] = answer;
-
-          return acc;
-        }
-
-        acc[rowName].push(...answer);
-
-        return acc;
-      }, prevActivityItem.answers);
+        },
+        prevActivityItem.answers as Record<string, Answer<RespondentAnswerValue>[]>,
+      );
 
       return {
         activityItem: {
