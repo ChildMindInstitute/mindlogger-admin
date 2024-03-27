@@ -2,12 +2,12 @@ import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } f
 import { ActivityStatus } from 'shared/consts';
 import { AnswerDTO, ExtendedEvent, UserActionType } from 'shared/types';
 import { getDictionaryText } from 'shared/utils/forms';
+import { SuccessedEventDTO } from 'shared/types/answer';
 
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { convertDateStampToMs } from './convertDateStampToMs';
-import { SuccessedEventDTO } from '../../types/answer';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
 
