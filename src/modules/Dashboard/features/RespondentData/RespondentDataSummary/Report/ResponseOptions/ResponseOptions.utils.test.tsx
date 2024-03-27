@@ -21,6 +21,42 @@ describe('ResponseOptions.utils', () => {
         },
       ],
     };
+    const sharedSelectionRowResponseValues = {
+      rows: [
+        {
+          id: '315e0b97-ca13-4aa2-a1b0-45758c696bee',
+          rowName: 'Row 1',
+        },
+        {
+          id: 'fd5e90ec-0adf-4785-b82b-76adbc117a69',
+          rowName: 'Row 2',
+        },
+        {
+          id: '4841e580-e850-48e8-b147-8914dc8b2add',
+          rowName: 'Row 3',
+        },
+      ],
+      options: [
+        {
+          id: '49ed757b-56dc-409d-b0db-e4485fa2eca8',
+          text: 'Option 1',
+          image: null,
+          tooltip: null,
+        },
+        {
+          id: '06c2a948-2f49-46b9-91e6-5f530137c375',
+          text: 'Option 2',
+          image: null,
+          tooltip: null,
+        },
+        {
+          id: '57d4f628-7a84-46b5-8264-18aa5a5527fe',
+          text: 'Option 3',
+          image: null,
+          tooltip: null,
+        },
+      ],
+    };
     const singleSelectionItemProps = {
       ...sharedProps,
       activityItem: {
@@ -300,7 +336,104 @@ describe('ResponseOptions.utils', () => {
         },
       ],
     };
-
+    const singleSelectRowsItemProps = {
+      ...sharedProps,
+      activityItem: {
+        id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
+        name: 'single_select_rows_item',
+        question: {
+          en: 'Single Selection per Rows',
+        },
+        responseType: 'singleSelectRows',
+        responseValues: sharedSelectionRowResponseValues,
+      },
+      dataTestid: 'single-select-rows',
+      answers: {
+        'Row 1': [
+          {
+            answer: {
+              value: 'Option 3',
+              text: null,
+            },
+            date: '2024-03-27T15:44:46.674000',
+          },
+        ],
+        'Row 2': [
+          {
+            answer: {
+              value: 'Option 1',
+              text: null,
+            },
+            date: '2024-03-27T15:44:46.674000',
+          },
+          {
+            answer: {
+              value: 'Option 2',
+              text: null,
+            },
+            date: '2024-03-27T15:44:46.674000',
+          },
+        ],
+        'Row 3': [
+          {
+            answer: {
+              value: 'Option 2',
+              text: null,
+            },
+            date: '2024-03-27T16:06:12.610000',
+          },
+        ],
+      },
+    };
+    const multiSelectRowsItemProps = {
+      ...sharedProps,
+      activityItem: {
+        id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
+        name: 'multi_select_rows_item',
+        question: {
+          en: 'Multi Selection per Rows',
+        },
+        responseType: 'multiSelectRows',
+        responseValues: sharedSelectionRowResponseValues,
+      },
+      dataTestid: 'multi-select-rows',
+      answers: {
+        'Row 1': [
+          {
+            answer: {
+              value: 'Option 1',
+              text: null,
+            },
+            date: '2024-03-27T15:44:46.674000',
+          },
+        ],
+        'Row 2': [
+          {
+            answer: {
+              value: 'Option 1',
+              text: null,
+            },
+            date: '2024-03-27T15:44:46.674000',
+          },
+          {
+            answer: {
+              value: 'Option 3',
+              text: null,
+            },
+            date: '2024-03-27T15:44:46.674000',
+          },
+        ],
+        'Row 3': [
+          {
+            answer: {
+              value: 'Option 2',
+              text: null,
+            },
+            date: '2024-03-27T16:06:12.610000',
+          },
+        ],
+      },
+    };
     const singleSelectionItemResult = {
       ...singleSelectionItemProps,
       activityItem: undefined,
@@ -450,17 +583,31 @@ describe('ResponseOptions.utils', () => {
       answers: timeRangeItemProps.answers,
       'data-testid': 'response-option-5-0',
     };
+    const { dataTestid: singleSelectRowsDataTestid, ...singleSelectRowsItemCommonProps } =
+      singleSelectRowsItemProps;
+    const singleSelectRowsItemResult = {
+      ...singleSelectRowsItemCommonProps,
+      'data-testid': 'single-select-rows',
+    };
+    const { dataTestid: multiSelectRowsDataTestid, ...multiSelectRowsItemCommonProps } =
+      multiSelectRowsItemProps;
+    const multiSelectRowsItemResult = {
+      ...multiSelectRowsItemCommonProps,
+      'data-testid': 'multi-select-rows',
+    };
 
     test.each`
-      itemProps                   | result                       | description
-      ${singleSelectionItemProps} | ${singleSelectionItemResult} | ${'single selection'}
-      ${multiSlectionItemProps}   | ${multiSelectionItemResult}  | ${'multi selection'}
-      ${sliderItemProps}          | ${sliderItemResult}          | ${'slider'}
-      ${numberSelectionItemProps} | ${numberSelectionItemResult} | ${'number selection'}
-      ${textItemProps}            | ${textItemResult}            | ${'text '}
-      ${dateItemProps}            | ${dateItemResult}            | ${'date '}
-      ${timeItemProps}            | ${timeItemResult}            | ${'time'}
-      ${timeRangeItemProps}       | ${timeRangeItemResult}       | ${'time range'}
+      itemProps                    | result                        | description
+      ${singleSelectionItemProps}  | ${singleSelectionItemResult}  | ${'single selection'}
+      ${multiSlectionItemProps}    | ${multiSelectionItemResult}   | ${'multi selection'}
+      ${sliderItemProps}           | ${sliderItemResult}           | ${'slider'}
+      ${numberSelectionItemProps}  | ${numberSelectionItemResult}  | ${'number selection'}
+      ${textItemProps}             | ${textItemResult}             | ${'text '}
+      ${dateItemProps}             | ${dateItemResult}             | ${'date '}
+      ${timeItemProps}             | ${timeItemResult}             | ${'time'}
+      ${timeRangeItemProps}        | ${timeRangeItemResult}        | ${'time range'}
+      ${singleSelectRowsItemProps} | ${singleSelectRowsItemResult} | ${'single selection per row'}
+      ${multiSelectRowsItemProps}  | ${multiSelectRowsItemResult}  | ${'multi selection per row'}
     `('$description', ({ itemProps, result }) => {
       const itemComponent = getResponseItem(itemProps);
       expect(itemComponent?.props).toEqual(result);
