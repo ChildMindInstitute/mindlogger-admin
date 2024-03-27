@@ -12,6 +12,7 @@ export const palette = {
 
   on_surface: '#1a1c1e',
   on_surface_variant: '#42474e',
+  on_surface_variant_alpha8: 'rgba(66, 71, 78, 0.08)',
   outline: '#72777f',
   outline_variant: '#c4c9d0',
   surface_variant: '#dee3eb',

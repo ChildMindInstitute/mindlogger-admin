@@ -482,27 +482,34 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiPaper-root': {
-            backgroundColor: variables.palette.surface2,
-            borderRadius: variables.borderRadius.lg,
-            boxShadow: variables.boxShadow.light2,
+            backgroundColor: variables.palette.surface,
+            borderRadius: variables.borderRadius.md,
+            border: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+            boxShadow: variables.boxShadow.soft,
             marginTop: '0.4rem',
-            padding: '0 0.4rem',
+            padding: '0.8rem 0',
+          },
+          '.MuiList-root': {
+            padding: '0',
           },
           '.MuiMenuItem-root': {
-            borderRadius: variables.borderRadius.xxs,
-            padding: '1.6rem',
+            padding: '1.2rem 2rem',
+            transition: variables.transitions.bgColor,
+            '&.Mui-disabled': {
+              pointerEvents: 'auto',
+            },
             '&:hover': {
-              backgroundColor: variables.palette.secondary_container,
+              backgroundColor: variables.palette.on_surface_variant_alpha8,
             },
           },
           '.MuiMenuItem-root.Mui-selected': {
-            backgroundColor: variables.palette.surface_variant,
+            backgroundColor: variables.palette.on_surface_variant_alpha8,
             '&:focus': {
-              backgroundColor: variables.palette.surface_variant,
+              backgroundColor: variables.palette.on_surface_variant_alpha8,
             },
             '&:hover': {
               backgroundColor: blendColorsNormal(
-                variables.palette.surface_variant,
+                variables.palette.on_surface_variant_alpha8,
                 variables.palette.on_surface_alfa8,
               ),
             },
@@ -514,21 +521,22 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&.MuiAutocomplete-paper': {
-            backgroundColor: variables.palette.surface2,
-            borderRadius: variables.borderRadius.lg,
-            boxShadow: variables.boxShadow.light2,
+            backgroundColor: variables.palette.surface,
+            borderRadius: variables.borderRadius.md,
+            border: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+            boxShadow: variables.boxShadow.soft,
             marginTop: '0.4rem',
-            padding: '0 0.4rem',
+            padding: '0',
             '.MuiAutocomplete-option': {
-              borderRadius: variables.borderRadius.xxs,
+              transition: variables.transitions.bgColor,
               '&:hover': {
-                backgroundColor: variables.palette.secondary_container,
+                backgroundColor: variables.palette.on_surface_variant_alpha8,
               },
               '&[aria-selected="true"]': {
-                backgroundColor: variables.palette.surface_variant,
+                backgroundColor: variables.palette.on_surface_variant_alpha8,
                 '&:hover': {
                   backgroundColor: blendColorsNormal(
-                    variables.palette.surface_variant,
+                    variables.palette.on_surface_variant_alpha8,
                     variables.palette.on_surface_alfa8,
                   ),
                 },

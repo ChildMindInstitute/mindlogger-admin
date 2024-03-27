@@ -9,6 +9,9 @@ import { ActionsMenuProps } from './ActionsMenu.types';
 export const ActionsMenu = <T = unknown,>({
   menuItems,
   'data-testid': dataTestid,
+  buttonColor,
+  anchorOrigin,
+  transformOrigin,
 }: ActionsMenuProps<T>) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
@@ -22,15 +25,18 @@ export const ActionsMenu = <T = unknown,>({
         aria-haspopup="true"
         aria-expanded={openMenu ? 'true' : undefined}
         data-testid={`${dataTestid}-dots`}
+        color={buttonColor}
       >
         <Svg id="dots" width={18} height={4} />
       </StyledButton>
       {openMenu && (
         <Menu
           anchorEl={anchorEl}
+          anchorOrigin={anchorOrigin}
+          transformOrigin={transformOrigin}
           onClose={handleMenuClose}
           menuItems={menuItems}
-          uiType={MenuUiType.Tertiary}
+          uiType={MenuUiType.Secondary}
           data-testid={`${dataTestid}-menu`}
         />
       )}
