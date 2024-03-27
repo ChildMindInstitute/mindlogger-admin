@@ -9,8 +9,9 @@ import {
   isValueDefined,
   getFormattedResponses,
   getIdentifiers,
-  getOptionsMapper,
+  getSingleMultiOptionsMapper,
   formatActivityItemAnswers,
+  getSingleMultiSelectionPerRowAnswers,
 } from './Report.utils';
 
 describe('isValueDefined', () => {
@@ -1400,7 +1401,7 @@ describe('getIdentifiers', () => {
   );
 });
 
-describe('getOptionsMapper', () => {
+describe('getSingleMultiOptionsMapper', () => {
   const mockFormattedActivityItem = {
     responseValues: {
       options: [
@@ -1413,7 +1414,7 @@ describe('getOptionsMapper', () => {
   };
 
   test('returns correct index for all options', () => {
-    const result = getOptionsMapper(mockFormattedActivityItem);
+    const result = getSingleMultiOptionsMapper(mockFormattedActivityItem);
 
     expect(result).toEqual({
       1: 3,
@@ -1421,5 +1422,57 @@ describe('getOptionsMapper', () => {
       3: 1,
       4: 0,
     });
+  });
+});
+
+describe('getSingleMultiSelectionPerRowAnswers', () => {
+  const date = '2024-03-27T00:09:22.089Z';
+
+  test('should return an array with a single answer object for SingleSelectionPerRow response type', () => {
+    const responseType = ItemResponseType.SingleSelectionPerRow;
+    const currentAnswer = 'Bad';
+
+    const result = getSingleMultiSelectionPerRowAnswers({ responseType, currentAnswer, date });
+
+    expect(result).toEqual([
+      {
+        answer: {
+          value: currentAnswer,
+          text: null,
+        },
+        date,
+      },
+    ]);
+  });
+
+  test('should return an array with multiple answer objects for MultiSelectionPerRow response types', () => {
+    const responseType = ItemResponseType.MultiSelectionPerRow;
+    const currentAnswer = ['Bad', 'Normal', 'Good'];
+
+    const result = getSingleMultiSelectionPerRowAnswers({ responseType, currentAnswer, date });
+
+    expect(result).toEqual([
+      {
+        answer: {
+          value: 'Bad',
+          text: null,
+        },
+        date,
+      },
+      {
+        answer: {
+          value: 'Normal',
+          text: null,
+        },
+        date,
+      },
+      {
+        answer: {
+          value: 'Good',
+          text: null,
+        },
+        date,
+      },
+    ]);
   });
 });
