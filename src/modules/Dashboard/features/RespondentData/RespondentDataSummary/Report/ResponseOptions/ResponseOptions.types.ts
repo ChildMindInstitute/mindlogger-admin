@@ -1,11 +1,10 @@
 import { Version } from 'api';
-
 import {
   Answer,
   FormattedActivityItem,
   FormattedResponse,
   RespondentAnswerValue,
-} from '../Report.types';
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type ResponseOptionsProps = {
   responseOptions: Record<string, FormattedResponse[]>;

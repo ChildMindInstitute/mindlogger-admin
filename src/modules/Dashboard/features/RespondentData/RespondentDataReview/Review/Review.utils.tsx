@@ -34,11 +34,11 @@ export const getTimeResponseItem = (answer?: DecryptedTimeAnswer) => {
 
   const date = new Date();
 
-  const hours = answer?.value?.hours ?? answer?.hour;
-  const minutes = answer?.value?.minutes ?? answer?.minute;
+  const hours = answer?.value?.hours ?? answer?.hour ?? 0;
+  const minutes = answer?.value?.minutes ?? answer?.minute ?? 0;
 
-  date.setHours(hours!);
-  date.setMinutes(minutes!);
+  date.setHours(hours);
+  date.setMinutes(minutes);
 
   return format(date, DateFormats.Time);
 };

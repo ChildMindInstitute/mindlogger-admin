@@ -2,7 +2,7 @@ import { Version } from 'api';
 import {
   Answer,
   SimpleAnswerValue,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type TimePickerLineChartProps = {
   color: string;

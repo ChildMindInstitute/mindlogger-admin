@@ -3,7 +3,7 @@ import {
   RespondentAnswerValue,
   SimpleAnswerValue,
   TimeRangeAnswerValue,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { ItemResponseType } from 'shared/consts';
 
 export type TextItemAnswer = {
@@ -11,6 +11,7 @@ export type TextItemAnswer = {
   time: string;
   answer: SimpleAnswerValue;
 };
+
 export type TimeRangeItemAnswer = {
   date: string;
   time: string;

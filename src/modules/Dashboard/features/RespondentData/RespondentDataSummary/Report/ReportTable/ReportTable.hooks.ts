@@ -3,8 +3,12 @@ import { format } from 'date-fns';
 
 import { DateFormats, DEFAULT_ROWS_PER_PAGE, ItemResponseType } from 'shared/consts';
 import { Order } from 'shared/types';
+import {
+  Answer,
+  TimeRangeAnswerValue,
+  SimpleAnswerValue,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-import { Answer, TimeRangeAnswerValue, SimpleAnswerValue } from '../Report.types';
 import {
   FormattedAnswers,
   ReportTableProps,

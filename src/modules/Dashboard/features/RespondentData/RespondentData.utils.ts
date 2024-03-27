@@ -1,8 +1,18 @@
 import { format } from 'date-fns';
 
-import { DateFormats } from 'shared/consts';
 import { DecryptedDateAnswer, DecryptedDateRangeAnswer } from 'shared/types';
 import { createArray, getNormalizeTimezoneData } from 'shared/utils';
+import { DateFormats } from 'shared/consts';
+
+export const getDateFormattedResponse = (answer: DecryptedDateAnswer) => {
+  if (!answer?.value) return '';
+
+  const { day, month, year } = answer.value;
+  const monthIndex = month - 1;
+  const answerValue = new Date(year, monthIndex, day).toDateString();
+
+  return format(new Date(getNormalizeTimezoneData(answerValue).dateTime), DateFormats.DayMonthYear);
+};
 
 export const createArrayForSlider = ({
   maxValue,
@@ -16,21 +26,7 @@ export const createArrayForSlider = ({
     label: minValue + index,
   }));
 
-export const getDateForamttedResponse = (answer: DecryptedDateAnswer) => {
-  if (!answer?.value) return '';
-
-  const { day, month, year } = answer.value;
-  const monthIndex = month - 1;
-  const answerValue = new Date(year, monthIndex, day).toDateString();
-  const formattedResponse = format(
-    new Date(getNormalizeTimezoneData(answerValue).dateTime),
-    DateFormats.DayMonthYear,
-  );
-
-  return formattedResponse;
-};
-
-export const getTimeRangeReponse = (answer?: DecryptedDateRangeAnswer) => {
+export const getTimeRangeResponse = (answer?: DecryptedDateRangeAnswer) => {
   if (!answer?.value)
     return {
       from: '',

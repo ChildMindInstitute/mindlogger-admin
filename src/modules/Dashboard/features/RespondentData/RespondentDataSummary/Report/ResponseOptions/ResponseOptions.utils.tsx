@@ -2,19 +2,19 @@ import { Box } from '@mui/material';
 
 import { ItemResponseType } from 'shared/consts';
 import { StyledFlexColumn, StyledTitleMedium, theme } from 'shared/styles';
-
-import { TICK_HEIGHT } from '../Charts/Charts.const';
-import { MultiScatterChart } from '../Charts/MultiScatterChart';
-import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
-import { ReportTable } from '../ReportTable';
-import { GetResponseOptionsProps } from './ResponseOptions.types';
 import {
   Answer,
   ItemOption,
   NumberSelectionResponseValues,
   PerRowSelectionItemOption,
   SimpleAnswerValue,
-} from '../Report.types';
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+
+import { TICK_HEIGHT } from '../Charts/Charts.const';
+import { MultiScatterChart } from '../Charts/MultiScatterChart';
+import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
+import { ReportTable } from '../ReportTable';
+import { GetResponseOptionsProps } from './ResponseOptions.types';
 
 export const getResponseItem = ({
   color,

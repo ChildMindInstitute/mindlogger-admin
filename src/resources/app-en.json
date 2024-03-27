@@ -258,6 +258,9 @@
   "conditionTypePlaceholder": "State",
   "conditionDisabledPlaceholder": "Select Item First",
   "conditionValue": "Value",
+  "conditionalLogicValidation": {
+    "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions."
+  },
   "configure": "Configure",
   "configureServer": "Please configure the report server to download the report.",
   "configureServerForApplet": "Configure Server (for Applet)",
