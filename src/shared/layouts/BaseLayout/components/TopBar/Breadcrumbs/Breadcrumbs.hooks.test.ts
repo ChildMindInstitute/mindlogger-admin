@@ -10,7 +10,7 @@ import { useBreadcrumbs } from './Breadcrumbs.hooks';
 const appletId = '71d90215-e4ae-41c5-8c30-776e69f5378b';
 const activityId = 'd65e8a64-a023-4830-9c84-7433c4b96440';
 const activityFlowId = '18637282-e179-4c05-9a8e-b1cbe592bccb';
-const respondentId = '62c234e3-ef32-43a7-9cc1-5b0c67a9f6ca';
+const participantId = '62c234e3-ef32-43a7-9cc1-5b0c67a9f6ca';
 
 const preloadedState = {
   workspaces: {
@@ -269,7 +269,7 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for applet dataviz/summary', () => {
-    const route = `/dashboard/${appletId}/respondents/${respondentId}/dataviz/summary`;
+    const route = `/dashboard/${appletId}/respondents/${participantId}/dataviz/summary`;
     const routePath = page.appletRespondentDataSummary;
 
     const { result } = renderHookWithProviders(useBreadcrumbs, {
@@ -294,7 +294,7 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for applet dataviz/responses', () => {
-    const route = `/dashboard/${appletId}/respondents/${respondentId}/dataviz/responses`;
+    const route = `/dashboard/${appletId}/respondents/${participantId}/dataviz/responses`;
     const routePath = page.appletRespondentDataReview;
 
     const { result } = renderHookWithProviders(useBreadcrumbs, {
@@ -545,13 +545,13 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for respondent details using multi-informat', () => {
+  test('should generate correct breadcrumbs for participant details using multi-informat', () => {
     jest.mocked(useLaunchDarkly).mockReturnValue({
       flags: {
         enableMultiInformant: true,
       },
     });
-    const route = `/dashboard/${appletId}/participants/${respondentId}`;
+    const route = `/dashboard/${appletId}/participants/${participantId}`;
     const routePath = page.appletParticipantActivities;
 
     const { result } = renderHookWithProviders(useBreadcrumbs, {
@@ -606,13 +606,13 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for respondent details using multi-informat schedule', () => {
+  test('should generate correct breadcrumbs for participant details schedule using multi-informat', () => {
     jest.mocked(useLaunchDarkly).mockReturnValue({
       flags: {
         enableMultiInformant: true,
       },
     });
-    const route = `/dashboard/${appletId}/participants/${respondentId}/schedule`;
+    const route = `/dashboard/${appletId}/participants/${participantId}/schedule`;
     const routePath = page.appletParticipantSchedule;
 
     const { result } = renderHookWithProviders(useBreadcrumbs, {
@@ -664,6 +664,80 @@ describe('useBreadcrumbs', () => {
       icon: undefined,
       key: expect.any(String),
       label: 'secretUserId',
+    });
+  });
+
+  test('should generate correct breadcrumbs for participant activity details using multi-informat', () => {
+    jest.mocked(useLaunchDarkly).mockReturnValue({
+      flags: {
+        enableMultiInformant: true,
+      },
+    });
+    const route = `/dashboard/${appletId}/participants/${participantId}/activities/${activityId}`;
+    const routePath = page.appletParticipantActivityDetails;
+
+    const { result } = renderHookWithProviders(useBreadcrumbs, {
+      route,
+      routePath,
+      preloadedState: {
+        ...preloadedState,
+        applet: {
+          applet: {
+            data: {
+              result: {
+                displayName: 'Mocked Applet',
+                activities: [
+                  {
+                    id: activityId,
+                    name: 'Test Activity',
+                    image: 'https://admin.mindlogger.dev/image.png',
+                  },
+                ],
+              },
+            },
+          },
+        },
+        users: {
+          subjectDetails: {
+            data: null,
+          },
+          respondentDetails: {
+            data: {
+              result: {
+                nickname: 'Jane Doe',
+                secretUserId: 'secretUserId',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.current).toHaveLength(4);
+
+    const [home, applet, participant, activityDetails] = result.current;
+
+    expect(home).toEqual(expectedHome);
+    expect(applet).toEqual({
+      chip: undefined,
+      hasUrl: false,
+      icon: '',
+      key: expect.any(String),
+      label: 'Mocked Applet',
+      navPath: `/dashboard/${appletId}/respondents`,
+      useCustomIcon: true,
+    });
+    expect(participant).toEqual({
+      disabledLink: false,
+      icon: undefined,
+      key: expect.any(String),
+      label: 'secretUserId',
+      navPath: `/dashboard/${appletId}/participants/${participantId}`,
+    });
+    expect(activityDetails).toMatchObject({
+      disabledLink: true,
+      icon: 'https://admin.mindlogger.dev/image.png',
+      label: 'Test Activity',
     });
   });
 });

@@ -14,6 +14,7 @@
   "appletRespondents": "/dashboard/:appletId/respondents",
   "appletParticipants": "/dashboard/:appletId/participants",
   "appletParticipantActivities": "/dashboard/:appletId/participants/:participantId",
+  "appletParticipantActivityDetails": "/dashboard/:appletId/participants/:participantId/activities/:activityId",
   "appletParticipantConnections": "/dashboard/:appletId/participants/:participantId/connections",
   "appletParticipantSchedule": "/dashboard/:appletId/participants/:participantId/schedule",
   "appletRespondentData": "/dashboard/:appletId/respondents/:respondentId/dataviz",
