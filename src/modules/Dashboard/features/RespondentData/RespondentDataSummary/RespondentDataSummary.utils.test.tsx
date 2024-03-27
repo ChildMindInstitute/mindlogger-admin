@@ -7,7 +7,7 @@ import { ItemResponseType } from 'shared/consts';
 import {
   getUniqueIdentifierOptions,
   formatActivityItemAnswers,
-  getOptionsMapper,
+  getSingleMultiOptionsMapper,
   getSliderOptions,
   getEmptyState,
   getDateISO,
@@ -16,6 +16,7 @@ import {
   isAnswerTypeCorrect,
   isValueDefined,
   setDefaultFormValues,
+  getSingleMultiSelectionPerRowAnswers,
 } from './RespondentDataSummary.utils';
 import {
   DEFAULT_END_DATE,
@@ -1472,7 +1473,7 @@ describe('Respondent Data Summary utils', () => {
     });
   });
 
-  describe('getOptionsMapper', () => {
+  describe('getSingleMultiOptionsMapper', () => {
     const mockFormattedActivityItem = {
       responseValues: {
         options: [
@@ -1487,7 +1488,7 @@ describe('Respondent Data Summary utils', () => {
     test('returns correct index for all options', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const result = getOptionsMapper(mockFormattedActivityItem);
+      const result = getSingleMultiOptionsMapper(mockFormattedActivityItem);
 
       expect(result).toEqual({
         1: 3,
@@ -1535,7 +1536,7 @@ describe('getSingleMultiSelectionPerRowAnswers', () => {
   });
 
   test('should return an array with multiple answer objects for MultiSelectionPerRow response types', () => {
-    const responseType = ItemResponseType.MultiSelectionPerRow;
+    const responseType = ItemResponseType.MultipleSelectionPerRow;
     const currentAnswer = ['Bad', 'Normal', 'Good'];
 
     const result = getSingleMultiSelectionPerRowAnswers({ responseType, currentAnswer, date });
