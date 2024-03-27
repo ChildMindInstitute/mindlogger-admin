@@ -59,6 +59,7 @@ import {
   DeleteSubject,
   TargetSubjectId,
   SubjectId,
+  GetActivitiesParams,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -688,5 +689,14 @@ export const getRespondentDetailsApi = (
 
 export const getSubjectDetailsApi = ({ subjectId }: SubjectId, signal?: AbortSignal) =>
   authApiClient.get(`/subjects/${subjectId}`, {
+    signal,
+  });
+
+export const getAppletActivitiesApi = (
+  { params: { appletId, ...params } }: GetActivitiesParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/activities/applet/${appletId}`, {
+    params,
     signal,
   });

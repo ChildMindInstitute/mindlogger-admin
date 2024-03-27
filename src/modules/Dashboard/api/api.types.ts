@@ -17,6 +17,14 @@ export type GetAppletsParams = {
   };
 };
 
+export type GetActivitiesParams = {
+  params: {
+    appletId?: string;
+    hasScore?: boolean;
+    hasSubmitted?: boolean;
+  };
+};
+
 export type RespondentId = { respondentId: string };
 
 export type TargetSubjectId = { targetSubjectId: string };
