@@ -236,4 +236,28 @@ describe('getReportCSVObject', () => {
       timezone_offset: -300,
     });
   });
+
+  test('returns object with activity name and activity flow id', () => {
+    expect(
+      getReportCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            flowName: 'test flow name',
+            flowId: 'some flow ID 222',
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      activity_flow: 'test flow name',
+      activity_flow_id: 'some flow ID 222',
+    });
+  });
 });
