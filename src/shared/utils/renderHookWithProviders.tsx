@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Route, Routes, MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { renderHook } from '@testing-library/react';
@@ -16,7 +17,7 @@ export const renderHookWithProviders = (
     ...options
   }: ExtendedRenderOptions = {},
 ) => {
-  const Providers = ({ children }: { children: JSX.Element }) => (
+  const Providers = ({ children }: { children: ReactNode }) => (
     <Provider store={store}>
       <MemoryRouter initialEntries={[route]}>
         <Routes>
