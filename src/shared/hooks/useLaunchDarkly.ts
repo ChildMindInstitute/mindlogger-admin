@@ -47,7 +47,7 @@ export const useLaunchDarkly = () => {
   const featureFlags = () => {
     const keys = Object.keys(FeatureFlagsKeys) as (keyof typeof FeatureFlagsKeys)[];
     const features: FeatureFlags = {};
-    keys.forEach((key) => (features[key] = flags[FeatureFlagsKeys[key]]));
+    keys.forEach((key) => (features[key] = true)); // flags[FeatureFlagsKeys[key]]));
 
     return features;
   };

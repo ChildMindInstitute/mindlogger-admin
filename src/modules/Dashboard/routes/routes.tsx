@@ -13,6 +13,7 @@ import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
 const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
+const ParticipantActivityDetails = lazy(() => import('../pages/ParticipantActivityDetails'));
 const RespondentData = lazy(() => import('../pages/RespondentData'));
 const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
 const RespondentDataSummary = lazy(
@@ -89,6 +90,18 @@ export const dashboardRoutes = (flags: FeatureFlags) => (
           />
         </Route>
       </Route>
+    </Route>
+    <Route path={page.appletParticipantActivityDetails} element={<ParticipantActivityDetails />}>
+      <Route
+        path={page.appletParticipantActivityDetails}
+        element={
+          <PrivateRoute>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <ParticipantActivityDetails />
+            </ErrorBoundary>
+          </PrivateRoute>
+        }
+      />
     </Route>
     <Route
       element={
