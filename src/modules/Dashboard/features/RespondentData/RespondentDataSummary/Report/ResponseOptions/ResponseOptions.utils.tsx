@@ -1,12 +1,8 @@
-import { Box } from '@mui/material';
-
 import { ItemResponseType } from 'shared/consts';
-import { StyledFlexColumn, StyledTitleMedium, theme } from 'shared/styles';
 import {
   Answer,
   ItemOption,
   NumberSelectionResponseValues,
-  PerRowSelectionItemOption,
   SimpleAnswerValue,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
@@ -15,6 +11,7 @@ import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
+import { SingleSelectionPerRow } from './SingleSelectionPerRow';
 
 export const getResponseItem = ({
   color,
@@ -48,79 +45,6 @@ export const getResponseItem = ({
         versions={versions}
         data-testid={`${dataTestid}-multi-scatter-chart`}
       />
-    );
-  };
-
-  const renderTimePicker = () => (
-    <TimePickerLineChart
-      color={color}
-      minDate={minDate}
-      maxDate={maxDate}
-      answers={answers as Answer<SimpleAnswerValue>[]}
-      versions={versions}
-      data-testid={`${dataTestid}-time-picker-chart`}
-    />
-  );
-
-  const renderSingleSelectionPerRow = () => {
-    const updatedOptions = activityItem?.responseValues.options.map(({ id, text }, index) => ({
-      id,
-      text,
-      value: index,
-    }));
-
-    const optionValueMapper: Record<string, number> = (
-      activityItem?.responseValues.options as PerRowSelectionItemOption[]
-    ).reduce(
-      (acc, { text }, index) => ({
-        ...acc,
-        [text]: index,
-      }),
-      {},
-    );
-
-    return (
-      <StyledFlexColumn>
-        {activityItem?.responseValues?.rows?.map(({ rowName }, index) => {
-          const height = (activityItem?.responseValues.options.length + 1) * TICK_HEIGHT;
-
-          const updatedAnswers = (answers as Record<string, Answer<string>[]>)[rowName].map(
-            ({ answer, date }) => ({
-              date,
-              answer: {
-                value:
-                  !answer?.value || optionValueMapper[answer?.value] === undefined
-                    ? null
-                    : optionValueMapper[answer?.value],
-                text: answer.text,
-              },
-            }),
-          );
-
-          return (
-            <Box
-              key={rowName}
-              data-testid={`${dataTestid}-row-${index}`}
-              sx={{ mb: theme.spacing(4.8) }}
-            >
-              <StyledTitleMedium>{rowName}</StyledTitleMedium>
-              <MultiScatterChart
-                color={color}
-                minDate={minDate}
-                maxDate={maxDate}
-                minY={0}
-                maxY={activityItem?.responseValues.options.length - 1}
-                height={height}
-                options={updatedOptions}
-                responseType={responseType}
-                answers={updatedAnswers as Answer<string>[]}
-                versions={versions}
-                data-testid={`${dataTestid}-multi-scatter-chart`}
-              />
-            </Box>
-          );
-        })}
-      </StyledFlexColumn>
     );
   };
 
@@ -159,10 +83,29 @@ export const getResponseItem = ({
         />
       );
     case ItemResponseType.Time:
-      return renderTimePicker();
+      return (
+        <TimePickerLineChart
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          answers={answers as Answer<SimpleAnswerValue>[]}
+          versions={versions}
+          data-testid={`${dataTestid}-time-picker-chart`}
+        />
+      );
     case ItemResponseType.SingleSelectionPerRow:
     case ItemResponseType.MultipleSelectionPerRow:
-      return renderSingleSelectionPerRow();
+      return (
+        <SingleSelectionPerRow
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          activityItem={activityItem}
+          answers={answers}
+          versions={versions}
+          data-testid={dataTestid}
+        />
+      );
     default:
       <></>;
   }

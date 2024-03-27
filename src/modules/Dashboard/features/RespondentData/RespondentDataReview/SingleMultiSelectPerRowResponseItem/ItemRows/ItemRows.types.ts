@@ -6,7 +6,7 @@ import {
 
 export type ItemRowsProps = {
   responseValues: SingleAndMultipleSelectRowsResponseValues;
-  answers: DecryptedSingleSelectionPerRowAnswer | DecryptedMultiSelectionPerRowAnswer | null;
+  answer: DecryptedSingleSelectionPerRowAnswer | DecryptedMultiSelectionPerRowAnswer | null;
   isMultiple?: boolean;
   'data-testid'?: string;
 };

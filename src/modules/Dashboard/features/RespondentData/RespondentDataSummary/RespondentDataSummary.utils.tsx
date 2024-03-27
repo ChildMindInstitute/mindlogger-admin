@@ -43,6 +43,7 @@ import {
 } from '../RespondentData.const';
 import { getDateFormattedResponse, getTimeRangeResponse } from '../RespondentData.utils';
 import { DEFAULT_DATE_MAX } from './RespondentDataSummary.const';
+import { GetSingleMultiSelectionPerRowAnswers } from './RespondentDataSummary.types';
 
 export const getEmptyState = (selectedActivity: DatavizActivity | null) => {
   const { t } = i18n;
@@ -212,11 +213,7 @@ export const getSingleMultiSelectionPerRowAnswers = ({
   responseType,
   currentAnswer,
   date,
-}: {
-  responseType: ItemResponseType;
-  currentAnswer: string | string[];
-  date: string;
-}) => {
+}: GetSingleMultiSelectionPerRowAnswers) => {
   if (responseType === ItemResponseType.SingleSelectionPerRow) {
     return [
       {
@@ -472,8 +469,8 @@ export const formatActivityItemAnswers = (
           currentAnswer: string | string[],
           index: number,
         ) => {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const currentRow = formattedActivityItem?.responseValues?.rows![index];
+          if (!formattedActivityItem?.responseValues?.rows) return acc;
+          const currentRow = formattedActivityItem?.responseValues?.rows[index];
           const flattenAnswers = getSingleMultiSelectionPerRowAnswers({
             responseType: formattedActivityItem.responseType,
             currentAnswer,
@@ -676,7 +673,7 @@ export const compareActivityItem = (
         ({ text }) => text,
       );
 
-      const updatedRows = activityItem.responseValues.rows?.reduce((rows, currRow) => {
+      const updatedRows = (activityItem.responseValues.rows ?? [])?.reduce((rows, currRow) => {
         if (!prevActivityItemRows[currRow.rowName]) {
           rows.push(currRow);
         }

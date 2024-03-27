@@ -16,8 +16,4 @@ export const StyledSelectionBox = styled(StyledFlexColumn)`
   :last-child {
     padding-right: ${theme.spacing(5.8)};
   }
-
-  && .MuiSvgIcon-root {
-    color: ${variables.palette.on_surface_variant};
-  }
 `;

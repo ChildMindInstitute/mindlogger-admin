@@ -35,6 +35,7 @@ export const MultiScatterChart = ({
   responseType,
   answers,
   versions,
+  useCategory = false,
   'data-testid': dataTestid,
 }: MultiScatterChartProps) => {
   const { i18n } = useTranslation('app');
@@ -82,8 +83,9 @@ export const MultiScatterChart = ({
           options,
           responseType,
           tooltipHandler,
+          useCategory,
         })}
-        data={getData({ maxY, answers, versions, color })}
+        data={getData({ maxY, answers, versions, color, useCategory })}
         plugins={[ChartDataLabels]}
       />
     ),

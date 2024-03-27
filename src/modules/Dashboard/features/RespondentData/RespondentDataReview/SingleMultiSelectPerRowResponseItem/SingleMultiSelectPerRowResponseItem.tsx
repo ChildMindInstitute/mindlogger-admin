@@ -14,7 +14,7 @@ export const SingleMultiSelectPerRowResponseItem = ({
     <Options options={activityItem?.responseValues?.options} data-testid={dataTestid} />
     <ItemRows
       responseValues={activityItem.responseValues}
-      answers={answer}
+      answer={answer}
       isMultiple={activityItem?.responseType === ItemResponseType.MultipleSelectionPerRow}
       data-testid={dataTestid}
     />
