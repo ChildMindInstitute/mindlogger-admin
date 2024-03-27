@@ -28,7 +28,7 @@ export const SignUpForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('app');
   const navigate = useNavigate();
-  const { handleSubmit, control, watch } = useForm<SignUpData>({
+  const { handleSubmit, control } = useForm<SignUpData>({
     resolver: yupResolver(SignUpFormSchema()),
     defaultValues: {
       email: '',
@@ -39,8 +39,6 @@ export const SignUpForm = () => {
     },
   });
   const [errorMessage, setErrorMessage] = useState('');
-
-  const termsOfService = watch('termsOfService');
 
   const onSubmit = async ({ email, password, firstName, lastName }: SignUpData) => {
     setErrorMessage('');
@@ -124,12 +122,7 @@ export const SignUpForm = () => {
           data-testid="signup-form-terms"
         />
       </StyledController>
-      <StyledButton
-        variant="contained"
-        type="submit"
-        disabled={!termsOfService}
-        data-testid="signup-form-signup"
-      >
+      <StyledButton variant="contained" type="submit" data-testid="signup-form-signup">
         {t('createAccount')}
       </StyledButton>
       <StyledBackWrapper>

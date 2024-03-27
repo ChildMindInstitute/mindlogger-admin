@@ -53,7 +53,6 @@ export const StyledScoresContainer = styled(StyledFlexTopCenter)`
     }
 
     .MuiTableCell-head {
-      background: transparent;
       color: ${variables.palette.outline};
     }
 

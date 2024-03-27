@@ -31,7 +31,7 @@ export const MultiScatterChart = ({
   minY,
   maxY,
   height,
-  responseValues,
+  options,
   responseType,
   answers,
   versions,
@@ -79,7 +79,7 @@ export const MultiScatterChart = ({
           maxY,
           minDate,
           maxDate,
-          responseValues,
+          options,
           responseType,
           tooltipHandler,
         })}

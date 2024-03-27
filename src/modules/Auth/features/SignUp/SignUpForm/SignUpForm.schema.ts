@@ -11,6 +11,7 @@ export const SignUpFormSchema = () => {
   const passwordRequired = t('passwordRequired');
   const passwordMinLength = t('passwordMinLength', { chars: ACCOUNT_PASSWORD_MIN_LENGTH });
   const passwordBlankSpaces = t('passwordBlankSpaces');
+  const termsOfServiceAgreementRequired = t('termsOfServiceAgreementRequired');
 
   return yup
     .object({
@@ -22,7 +23,7 @@ export const SignUpFormSchema = () => {
         .required(passwordRequired)
         .min(ACCOUNT_PASSWORD_MIN_LENGTH, passwordMinLength)
         .matches(/^(\S+$)/, passwordBlankSpaces),
-      termsOfService: yup.boolean(),
+      termsOfService: yup.boolean().oneOf([true], termsOfServiceAgreementRequired),
     })
     .required();
 };

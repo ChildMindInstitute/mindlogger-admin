@@ -16,8 +16,8 @@ import {
   getAnswersNotesApi,
 } from 'api';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
-import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
+import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { FeedbackNote } from './FeedbackNote';
 import { NOTE_ROWS_COUNT } from './FeedbackNotes.const';
 import { StyledContainer, StyledForm, StyledNoteListContainer } from './FeedbackNotes.styles';

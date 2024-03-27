@@ -7,11 +7,11 @@ import { StyledBuilderContainerHeader } from 'shared/features';
 import { falseReturnFunc } from 'shared/utils';
 import { AppletFormValues } from 'modules/Builder/types';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { ClearFlowModal } from '../ClearFlowModal';
 import { getMenuItems } from '../ActivityFlowBuilder.utils';
 import { GetMenuItemsType } from '../ActivityFlowBuilder.types';
-import { StyledButtons } from './ActivityFlowBuilderHeader.styles';
 import { ActivityFlowBuilderHeaderProps } from './ActivityFlowBuilderHeader.types';
 
 export const ActivityFlowBuilderHeader = ({
@@ -40,7 +40,7 @@ export const ActivityFlowBuilderHeader = ({
     <>
       <StyledBuilderContainerHeader isSticky={isSticky} data-testid={`${dataTestid}-header`}>
         {children}
-        <StyledButtons data-testid={`${dataTestid}-buttons`}>
+        <StyledFlexTopCenter data-testid={`${dataTestid}-buttons`}>
           <ButtonWithMenu
             variant="outlined"
             label={t('addActivity')}
@@ -57,6 +57,7 @@ export const ActivityFlowBuilderHeader = ({
             data-testid={`${dataTestid}-add`}
           />
           <Button
+            sx={{ ml: theme.spacing(2.4) }}
             disabled={clearFlowBtnDisabled}
             variant="outlined"
             startIcon={<Svg id="cross" width={18} height={18} />}
@@ -65,7 +66,7 @@ export const ActivityFlowBuilderHeader = ({
           >
             {t('clearFlow')}
           </Button>
-        </StyledButtons>
+        </StyledFlexTopCenter>
       </StyledBuilderContainerHeader>
       {clearFlowModalVisible && (
         <ClearFlowModal

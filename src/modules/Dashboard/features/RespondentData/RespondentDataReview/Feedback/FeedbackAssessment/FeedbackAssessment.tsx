@@ -5,8 +5,8 @@ import { useFormContext } from 'react-hook-form';
 import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
 import { createAssessmentApi } from 'api';
-import { RespondentDataReviewContext } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/RespondentDataReview.context';
 
+import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { AssessmentFormItem, FeedbackForm } from '../Feedback.types';
 import { FeedbackTabs } from './FeedbackAssessment.const';
 import { StyledContainer } from './FeedbackAssessment.styles';
