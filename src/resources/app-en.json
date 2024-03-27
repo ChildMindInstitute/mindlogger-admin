@@ -678,7 +678,6 @@
   "language": "Language",
   "languageTooltip": "The language in which the email invitation will be created",
   "lastEdit": "Last Edit",
-  "lastCompleted": "Last Completed",
   "lastName": "Last Name",
   "lastNameRequired": "Last name is required",
   "latestActive": "Latest active",

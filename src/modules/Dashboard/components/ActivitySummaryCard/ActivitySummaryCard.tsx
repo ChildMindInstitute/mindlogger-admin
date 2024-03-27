@@ -18,7 +18,7 @@ export const ActivitySummaryCard = ({
   image,
   name,
   participantCount,
-  lastCompleted,
+  latestActivity,
 }: ActivitySummaryCardProps) => {
   const { t } = useTranslation('app');
 
@@ -50,7 +50,7 @@ export const ActivitySummaryCard = ({
             </StatBox>
           </StyledFlexTopStart>
 
-          <StatBox label={t('lastCompleted')}>{lastCompleted}</StatBox>
+          <StatBox label={t('latestActivity')}>{latestActivity}</StatBox>
         </StyledFlexColumn>
       </StyledFlexColumn>
     </StyledContainer>

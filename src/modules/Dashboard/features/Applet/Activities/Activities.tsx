@@ -97,7 +97,7 @@ export const Activities = () => {
       const participantCount: number | null = null;
       const compliance: number | null = null;
       const trending: 'up' | 'down' | null = null;
-      const lastCompleted: string | null = null;
+      const latestActivity: string | null = null;
 
       return {
         image: {
@@ -112,11 +112,11 @@ export const Activities = () => {
           content: () => participantCount,
           value: Number(participantCount),
         },
-        lastCompleted: {
+        latestActivity: {
           content: () =>
-            !!lastCompleted &&
-            format(new Date(String(lastCompleted)), DateFormats.MonthDayYearTime),
-          value: String(lastCompleted),
+            !!latestActivity &&
+            format(new Date(String(latestActivity)), DateFormats.MonthDayYearTime),
+          value: String(latestActivity),
         },
         compliance: {
           content: () =>
@@ -253,7 +253,7 @@ export const Activities = () => {
               actionsMenu={activity.actions.content()}
               compliance={activity.compliance.content()}
               participantCount={activity.participantCount.content()}
-              lastCompleted={activity.lastCompleted.content()}
+              latestActivity={activity.latestActivity.content()}
               data-testid={`${dataTestid}-activity-card`}
             />
           ))}
