@@ -494,6 +494,7 @@ describe('getReportAndMediaData', () => {
       expect(result).toEqual([
         {
           activity_end_time: '1689770404000',
+          activity_flow_id: null,
           activity_flow: null,
           activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
           activity_name: 'New Activity#Drawing-item2',
@@ -519,6 +520,7 @@ describe('getReportAndMediaData', () => {
         },
         {
           activity_end_time: '1689770404000',
+          activity_flow_id: null,
           activity_flow: null,
           activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
           activity_name: 'New Activity#Drawing-item2',
@@ -545,6 +547,7 @@ describe('getReportAndMediaData', () => {
         },
         {
           activity_end_time: '1689770404000',
+          activity_flow_id: null,
           activity_flow: null,
           activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
           activity_name: 'New Activity#Drawing-item2',
