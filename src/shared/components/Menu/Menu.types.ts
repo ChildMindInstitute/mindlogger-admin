@@ -5,9 +5,10 @@ import { MenuUiType } from './Menu.const';
 export type MenuActionProps<T = unknown> = { title?: string; context?: T };
 
 export type MenuItem<T = unknown> = {
+  type?: 'normal' | 'divider';
   icon?: JSX.Element;
-  title: string;
-  action: ({ title, context }: MenuActionProps<T>) => void;
+  title?: string;
+  action?: ({ title, context }: MenuActionProps<T>) => void;
   context?: T;
   isDisplayed?: boolean;
   disabled?: boolean;

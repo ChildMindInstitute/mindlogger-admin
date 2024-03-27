@@ -627,6 +627,16 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          backgroundColor: variables.palette.surface_variant,
+          height: variables.borderWidth.md,
+          border: 0,
+          margin: 0,
+        },
+      },
+    },
   },
   palette: {
     background: {

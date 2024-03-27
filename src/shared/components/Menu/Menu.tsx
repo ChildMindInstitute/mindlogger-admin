@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ListItemIcon, MenuItem } from '@mui/material';
+import { Divider, ListItemIcon, MenuItem } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
@@ -48,6 +48,7 @@ export const Menu = <T = unknown,>({
       {menuItems.map(
         (
           {
+            type = 'normal',
             icon,
             title,
             isDisplayed = true,
@@ -62,22 +63,26 @@ export const Menu = <T = unknown,>({
         ) => {
           if (!isDisplayed) return null;
           const handleMenuItemClick = () => {
-            action({ title, context });
+            action?.({ title, context });
             onClose();
           };
           const menuItemContent = (
             <StyledMenuItemContent customItemColor={customItemColor}>
               {icon && <ListItemIcon>{icon}</ListItemIcon>}
-              <StyledBodyLarge
-                color={customItemColor || variables.palette.on_surface}
-                letterSpacing="xxl"
-              >
-                {t(title)}
-              </StyledBodyLarge>
+              {!!title && (
+                <StyledBodyLarge
+                  color={customItemColor || variables.palette.on_surface}
+                  letterSpacing="xxl"
+                >
+                  {t(title)}
+                </StyledBodyLarge>
+              )}
             </StyledMenuItemContent>
           );
 
-          return (
+          return type === 'divider' ? (
+            <Divider key={index} sx={{ flex: 1, my: 0.8 }} />
+          ) : (
             <MenuItem
               key={index}
               disabled={disabled}
