@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { ListItemIcon, MenuItem } from '@mui/material';
+import { Divider, ListItemIcon, MenuItem } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
 import { Tooltip } from 'shared/components/Tooltip';
 
 import { StyledMenu, StyledMenuItemContent } from './Menu.styles';
-import { MenuProps } from './Menu.types';
+import { MenuItemType, MenuProps } from './Menu.types';
 import { MenuUiType } from './Menu.const';
 
 export const Menu = <T = unknown,>({
@@ -48,6 +48,7 @@ export const Menu = <T = unknown,>({
       {menuItems.map(
         (
           {
+            type = MenuItemType.Normal,
             icon,
             title,
             isDisplayed = true,
@@ -62,22 +63,26 @@ export const Menu = <T = unknown,>({
         ) => {
           if (!isDisplayed) return null;
           const handleMenuItemClick = () => {
-            action({ title, context });
+            action?.({ title, context });
             onClose();
           };
           const menuItemContent = (
             <StyledMenuItemContent customItemColor={customItemColor}>
               {icon && <ListItemIcon>{icon}</ListItemIcon>}
-              <StyledBodyLarge
-                color={customItemColor || variables.palette.on_surface}
-                letterSpacing="xxl"
-              >
-                {t(title)}
-              </StyledBodyLarge>
+              {!!title && (
+                <StyledBodyLarge
+                  color={customItemColor || variables.palette.on_surface}
+                  letterSpacing="xxl"
+                >
+                  {t(title)}
+                </StyledBodyLarge>
+              )}
             </StyledMenuItemContent>
           );
 
-          return (
+          return type === MenuItemType.Divider ? (
+            <Divider key={index} sx={{ flex: 1, my: 0.8 }} data-testid={dataTestId} />
+          ) : (
             <MenuItem
               key={index}
               disabled={disabled}
