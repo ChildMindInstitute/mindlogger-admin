@@ -38,4 +38,5 @@ export const StyledActivityName = styled(StyledHeadline)`
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   overflow: hidden;
+  word-wrap: break-word;
 `;

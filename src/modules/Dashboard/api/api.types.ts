@@ -19,7 +19,7 @@ export type GetAppletsParams = {
 
 export type GetActivitiesParams = {
   params: {
-    appletId?: string;
+    appletId: string;
     hasScore?: boolean;
     hasSubmitted?: boolean;
   };

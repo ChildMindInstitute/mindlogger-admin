@@ -499,17 +499,17 @@ export const theme = createTheme({
               pointerEvents: 'auto',
             },
             '&:hover': {
-              backgroundColor: variables.palette.on_surface_variant_alpha8,
+              backgroundColor: variables.palette.on_surface_variant_alfa8,
             },
           },
           '.MuiMenuItem-root.Mui-selected': {
-            backgroundColor: variables.palette.on_surface_variant_alpha8,
+            backgroundColor: variables.palette.on_surface_variant_alfa8,
             '&:focus': {
-              backgroundColor: variables.palette.on_surface_variant_alpha8,
+              backgroundColor: variables.palette.on_surface_variant_alfa8,
             },
             '&:hover': {
               backgroundColor: blendColorsNormal(
-                variables.palette.on_surface_variant_alpha8,
+                variables.palette.on_surface_variant_alfa8,
                 variables.palette.on_surface_alfa8,
               ),
             },
@@ -530,13 +530,13 @@ export const theme = createTheme({
             '.MuiAutocomplete-option': {
               transition: variables.transitions.bgColor,
               '&:hover': {
-                backgroundColor: variables.palette.on_surface_variant_alpha8,
+                backgroundColor: variables.palette.on_surface_variant_alfa8,
               },
               '&[aria-selected="true"]': {
-                backgroundColor: variables.palette.on_surface_variant_alpha8,
+                backgroundColor: variables.palette.on_surface_variant_alfa8,
                 '&:hover': {
                   backgroundColor: blendColorsNormal(
-                    variables.palette.on_surface_variant_alpha8,
+                    variables.palette.on_surface_variant_alfa8,
                     variables.palette.on_surface_alfa8,
                   ),
                 },

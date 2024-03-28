@@ -244,7 +244,7 @@ export const Activities = () => {
       </StyledFlexWrap>
 
       {!!activities.length && (
-        <StyledFlexWrap sx={{ gap: 2.4 }} data-testid={`${dataTestid}-grid`}>
+        <StyledFlexWrap sx={{ gap: 2.4, overflowY: 'auto' }} data-testid={`${dataTestid}-grid`}>
           {activities.map((activity, index) => (
             <ActivitySummaryCard
               key={index}
