@@ -220,6 +220,8 @@ export const Activities = () => {
               />
 
               <StyledButton
+                // TODO: Replace with missing `tonal` button variant as shown in Figma
+                // https://mindlogger.atlassian.net/browse/M2-6071
                 variant="outlined"
                 // TODO: Implement assign
                 // https://mindlogger.atlassian.net/browse/M2-5710
