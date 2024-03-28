@@ -21,7 +21,7 @@ export const useDatavizSummaryRequests = () => {
       const identifiers = await getIdentifiersApi({
         appletId,
         activityId: activity.id,
-        respondentId,
+        targetSubjectId: respondentId,
       });
       if (!getDecryptedIdentifiers) return;
       const decryptedIdentifiers = await getDecryptedIdentifiers(identifiers.data.result);

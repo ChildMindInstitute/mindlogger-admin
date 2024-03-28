@@ -178,7 +178,7 @@ describe('ReportFilters', () => {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-04T00:00:00',
             identifiers: '',
-            respondentId: mockedRespondentId,
+            targetSubjectId: mockedRespondentId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
           },

@@ -104,69 +104,6 @@ export const Report = () => {
     });
   };
 
-  // useEffect(() => {
-  //   const fetchAnswers = async () => {
-  //     if (!appletId || !respondentId) return;
-  //     try {
-  //       setIsLoading(true);
-  //       const { startDate, endDate, startTime, endTime, identifier, filterByIdentifier, versions } =
-  //         getValues();
-  //       const selectedIdentifiers = getIdentifiers(filterByIdentifier, identifier, identifiers);
-  //
-  //       const result = await getAnswersApi({
-  //         appletId,
-  //         activityId: activity.id,
-  //         params: {
-  //           targetSubjectId: respondentId,
-  //           fromDatetime: getDateISO(startDate, startTime),
-  //           toDatetime: getDateISO(endDate || addDays(startDate, 1), endTime),
-  //           emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,
-  //           identifiers: selectedIdentifiers,
-  //           versions: versions.map(({ id }) => id),
-  //         },
-  //       });
-  //
-  //       const encryptedAnswers = result.data.result;
-  //       const decryptedAnswers = [];
-  //
-  //       for await (const encryptedAnswer of encryptedAnswers) {
-  //         const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
-  //         const decryptedAnswer = (
-  //           await getDecryptedActivityData({
-  //             userPublicKey,
-  //             answer,
-  //             items,
-  //             itemIds,
-  //           })
-  //         ).decryptedAnswers;
-  //
-  //         decryptedAnswers.push({
-  //           decryptedAnswer,
-  //           ...rest,
-  //         });
-  //       }
-  //
-  //       // TODO: remove when backend add sorting
-  //       const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) =>
-  //         a.version.localeCompare(b.version),
-  //       );
-  //
-  //       setAnswers(sortedDecryptedAnswers);
-  //       const { subscalesFrequency, formattedResponses } =
-  //         getFormattedResponses(sortedDecryptedAnswers);
-  //
-  //       setSubscalesFrequency(subscalesFrequency);
-  //       setResponseOptions(formattedResponses);
-  //     } catch (error) {
-  //       console.warn(error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //
-  //   fetchAnswers();
-  // }, [watchFilters, appletId, respondentId]);
-
   useEffect(() => {
     const responses = currentActivityCompletionData
       ? answers?.filter(({ answerId }) => answerId === currentActivityCompletionData.answerId)

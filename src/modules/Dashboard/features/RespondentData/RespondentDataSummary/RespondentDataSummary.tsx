@@ -61,49 +61,9 @@ export const RespondentDataSummary = () => {
 
     getSummaryActivities({
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
     });
   }, [appletId, respondentId, summaryActivities, getSummaryActivities]);
-
-  // useEffect(() => {
-  //   const fetchFiltersData = async () => {
-  //     try {
-  //       if (
-  //         !appletId ||
-  //         !respondentId ||
-  //         !selectedActivity ||
-  //         !selectedActivity?.hasAnswer ||
-  //         selectedActivity?.isPerformanceTask
-  //       )
-  //         return;
-  //
-  //       setIsLoading(true);
-  //       const identifiers = await getIdentifiersApi({
-  //         appletId,
-  //         activityId: selectedActivity.id,
-  //         targetSubjectId: respondentId,
-  //       });
-  //       if (!getDecryptedIdentifiers) return;
-  //       const decryptedIdentifiers = await getDecryptedIdentifiers(identifiers.data.result);
-  //       const identifiersFilter = getUniqueIdentifierOptions(decryptedIdentifiers);
-  //       setValue('identifier', identifiersFilter);
-  //       setIdentifiers(decryptedIdentifiers);
-  //
-  //       const versions = await getVersionsApi({ appletId, activityId: selectedActivity.id });
-  //       const versionsFilter = versions.data.result?.map(({ version }) => ({
-  //         id: version,
-  //         label: version,
-  //       }));
-  //       setValue('versions', versionsFilter);
-  //       setVersions(versions.data.result);
-  //     } catch (error) {
-  //       console.warn(error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchFiltersData();
-  // }, [selectedActivity, appletId, respondentId]);
 
   return (
     <StyledContainer>

@@ -49,7 +49,7 @@ jest.mock('modules/Dashboard/hooks', () => ({
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ respondentId: mockedRespondentId, appletId: mockedAppletId }),
+  useParams: () => ({ respondentId: mockedSubjectId1, appletId: mockedAppletId }),
 }));
 
 jest.mock('./ReportMenu', () => ({

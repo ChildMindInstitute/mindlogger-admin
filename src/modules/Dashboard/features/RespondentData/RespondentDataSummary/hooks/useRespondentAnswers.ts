@@ -46,7 +46,7 @@ export const useRespondentAnswers = () => {
         appletId,
         activityId: activity.id,
         params: {
-          respondentId,
+          targetSubjectId: respondentId,
           fromDatetime: getDateISO(startDate, startTime),
           toDatetime: getDateISO(endDate || addDays(startDate, 1), endTime),
           emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,

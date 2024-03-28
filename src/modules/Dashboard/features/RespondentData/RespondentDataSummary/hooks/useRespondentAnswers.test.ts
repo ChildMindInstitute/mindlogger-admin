@@ -81,7 +81,7 @@ describe('useRespondentAnswers', () => {
             emptyIdentifiers: true,
             fromDatetime: '2024-01-12T09:00:00',
             identifiers: undefined,
-            respondentId: mockedRespondentId,
+            targetSubjectId: mockedRespondentId,
             toDatetime: '2024-01-15T17:00:00',
             versions: 'v3',
           },
