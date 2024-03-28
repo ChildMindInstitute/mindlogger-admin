@@ -14,7 +14,7 @@ import {
 import { getReportCSVObject } from 'shared/utils/exportData/getReportCSVObject';
 import { getSubscales } from 'shared/utils/exportData/getSubscales';
 import { getFileExtension, getMediaFileName } from 'shared/utils/exportData/getReportName';
-import { ItemsWithFileResponses } from 'shared/consts';
+import { ItemResponseType, ItemsWithFileResponses } from 'shared/consts';
 import { getJourneyCSVObject, getSplashScreen } from 'shared/utils/exportData/getJourneyCSVObject';
 import { getDrawingUrl, getMediaUrl } from 'shared/utils/exportData/getUrls';
 
@@ -47,7 +47,11 @@ export const getReportData = (
 ) => {
   const answers = decryptedAnswers.reduce(
     (filteredAcc, item, index) => {
-      if (item.answer === null || item.answer === undefined) return filteredAcc;
+      const shouldSkipItem =
+        item.answer === undefined ||
+        (item.answer === null &&
+          (item.activityItem.responseType as ItemResponseType) !== ItemResponseType.ABTrails);
+      if (shouldSkipItem) return filteredAcc;
 
       return filteredAcc.concat(
         getReportCSVObject({

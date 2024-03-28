@@ -244,6 +244,7 @@ export type DecryptedABTrailsValue = {
   lines: ABTrailsLine[];
   width: number;
   currentIndex: number;
+  maximumIndex?: number;
   startTime: number;
   updated: boolean;
 };
