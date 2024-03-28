@@ -36,6 +36,7 @@ export const enum SettingParam {
   ScoresAndReports = 'scores-and-reports',
   SubscalesConfiguration = 'subscales-configuration',
   LiveResponseStreaming = 'live-response-streaming',
+  LorisIntegration = 'loris-integration',
 }
 
 export const uuidRegexp =

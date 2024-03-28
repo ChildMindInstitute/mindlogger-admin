@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
 import { Svg } from 'shared/components/Svg';
-import { Roles } from 'shared/consts';
+import { Integrations, Roles } from 'shared/consts';
 import {
   DataRetention,
   TransferOwnershipSetting,
@@ -15,6 +15,7 @@ import { Mixpanel, SettingParam, isManagerOrOwner } from 'shared/utils';
 import { Item as ItemNavigation } from 'shared/components/NavigationMenu/NavigationMenu.types';
 
 import { GetSettings } from './BuilderAppletSettings.types';
+import { LorisIntegrationSetting } from './LorisIntegrationSetting';
 
 const ReportConfigSetting = lazy(() => import('modules/Builder/features/ReportConfigSetting'));
 
@@ -23,6 +24,7 @@ export const getSettings = ({
   isPublished,
   roles,
   onReportConfigSubmit,
+  integrations,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
@@ -47,6 +49,15 @@ export const getSettings = ({
           component: <LiveResponseStreamingSetting />,
           param: SettingParam.LiveResponseStreaming,
           'data-testid': `${dataTestid}-live-response-streaming`,
+        },
+        {
+          icon: <Svg id="data-collection" />,
+          label: 'loris.integration',
+          component: <LorisIntegrationSetting />,
+          param: SettingParam.LorisIntegration,
+          isVisible:
+            integrations?.some((integration) => integration === Integrations.Loris) || false,
+          'data-testid': `${dataTestid}-loris-integration`,
         },
       ],
     },
