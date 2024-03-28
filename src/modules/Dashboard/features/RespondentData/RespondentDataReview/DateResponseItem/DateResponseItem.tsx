@@ -1,12 +1,12 @@
 import { DatePickerInput } from 'shared/components/DatePicker/DatePickerInput';
 
 import { DateItemAnswer } from '../RespondentDataReview.types';
-import { getDateForamttedResponse } from '../../RespondentData.utils';
+import { getDateFormattedResponse } from '../../RespondentData.utils';
 
 export const DateResponseItem = ({ answer }: DateItemAnswer) => {
   if (!answer) return null;
 
-  const value = getDateForamttedResponse(answer);
+  const value = getDateFormattedResponse(answer);
 
   return (
     <DatePickerInput

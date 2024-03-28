@@ -4,10 +4,11 @@ import { Control } from 'react-hook-form';
 import { ReviewActivity } from 'api';
 import { RespondentDetails } from 'modules/Dashboard/types/Dashboard.types';
 
+import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { Answer } from '../RespondentDataReview.types';
 
 export type ReviewMenuProps = {
-  control: Control<{ date: Date | null }>;
+  control: Control<RespondentsDataFormValues>;
   selectedDate: Date | null;
   responseDates?: Date[];
   onMonthChange: (date: Date) => void;

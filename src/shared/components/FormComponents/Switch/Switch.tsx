@@ -12,6 +12,7 @@ export const Switch = <T extends FieldValues>({
   name,
   label,
   tooltipText,
+  onCustomChange,
   'data-testid': dataTestid,
   ...props
 }: SwitchControllerProps<T>) => (
@@ -22,7 +23,17 @@ export const Switch = <T extends FieldValues>({
       render={({ field }) => (
         <StyledFormControlLabel
           label={label}
-          control={<CustomSwitch {...props} {...field} checked={field.value} />}
+          control={
+            <CustomSwitch
+              {...props}
+              {...field}
+              onChange={(event) => {
+                field.onChange(event);
+                onCustomChange?.(event);
+              }}
+              checked={field.value}
+            />
+          }
           data-testid={dataTestid}
         />
       )}

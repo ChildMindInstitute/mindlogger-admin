@@ -409,8 +409,10 @@ export const theme = createTheme({
             },
           },
           '&.Mui-disabled': {
-            '.MuiOutlinedInput-notchedOutline': {
-              borderColor: variables.palette.on_surface_alfa12,
+            '&&': {
+              '.MuiOutlinedInput-notchedOutline': {
+                borderColor: variables.palette.on_surface_alfa12,
+              },
             },
           },
         },

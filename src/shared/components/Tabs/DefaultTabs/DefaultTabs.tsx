@@ -1,5 +1,5 @@
-import { useState, SyntheticEvent, useEffect } from 'react';
-import { Tab, Badge } from '@mui/material';
+import { useState, SyntheticEvent, useEffect, useRef } from 'react';
+import { Tab, Badge, TabsActions } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { TabPanel } from '../TabPanel';
@@ -11,11 +11,13 @@ export const DefaultTabs = ({
   activeTab = 0,
   setActiveTab,
   uiType = UiType.Primary,
+  animationDurationMs,
 }: TabsProps) => {
   const { t } = useTranslation('app');
   const [tabIndex, setTabIndex] = useState(activeTab);
+  const tabsActions = useRef<TabsActions | null>(null);
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
     setActiveTab?.(newValue);
   };
@@ -68,8 +70,17 @@ export const DefaultTabs = ({
   );
 
   useEffect(() => {
-    setTabIndex(activeTab);
-  }, [activeTab]);
+    if (!animationDurationMs || !tabsActions.current) return;
+
+    // update the underline indicator position if there is an animation in the parent component
+    const timeoutId = setTimeout(() => {
+      tabsActions.current?.updateIndicator();
+    }, animationDurationMs);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [animationDurationMs]);
 
   return (
     <>
@@ -80,6 +91,7 @@ export const DefaultTabs = ({
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
         centered
+        action={tabsActions}
       >
         {header}
       </StyledTabs>

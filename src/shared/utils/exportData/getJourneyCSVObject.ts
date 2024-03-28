@@ -1,17 +1,71 @@
 import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ActivityStatus } from 'shared/consts';
-import { AnswerDTO, ExtendedEvent, UserActionType } from 'shared/types';
+import { AnswerDTO, ExtendedEvent, JourneyCSVReturnProps, UserActionType } from 'shared/types';
 import { getDictionaryText } from 'shared/utils/forms';
+import { SuccessedEventDTO } from 'shared/types/answer';
 
 import { parseOptions } from './parseOptions';
 import { parseResponseValue } from './parseResponseValue';
 import { replaceItemVariableWithName } from './replaceItemVariableWithName';
 import { convertDateStampToMs } from './convertDateStampToMs';
-import { SuccessedEventDTO } from '../../types/answer';
 
 const getTimeByCondition = (time: string) => (condition: boolean) => (condition ? time : '');
 
 const SPLASH_SCREEN_ITEM_NAME = 'Splash Screen';
+
+export const getJourneyCSVReturn = ({
+  id,
+  activity_scheduled_time,
+  activity_start_time,
+  activity_end_time,
+  press_next_time,
+  press_back_time,
+  press_undo_time,
+  press_skip_time,
+  press_done_time,
+  response_option_selection_time,
+  secret_user_id = '',
+  user_id = '',
+  activity_id,
+  activity_flow_id = '',
+  activity_flow_name = '',
+  activity_name,
+  item,
+  item_id = '',
+  prompt,
+  response,
+  options,
+  version = '',
+  legacy_user_id,
+  event_id = '',
+  timezone_offset,
+}: JourneyCSVReturnProps) => ({
+  id,
+  activity_scheduled_time,
+  activity_start_time,
+  activity_end_time,
+  press_next_time,
+  press_back_time,
+  press_undo_time,
+  press_skip_time,
+  press_done_time,
+  response_option_selection_time,
+  secret_user_id,
+  user_id,
+  activity_id,
+  activity_flow_id,
+  activity_flow_name,
+  activity_name,
+  item,
+  item_id,
+  prompt,
+  response,
+  options,
+  version,
+  ...(legacy_user_id && { legacy_user_id }),
+  event_id,
+  timezone_offset: timezone_offset ?? '',
+});
 
 export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: ExtendedEvent) => {
   const {
@@ -23,13 +77,14 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     respondentId,
     activityId,
     activityName,
+    flowName,
     flowId,
     version,
     legacyProfileId,
   } = nextExtendedEvent;
   const getTime = getTimeByCondition(event.time.toString());
 
-  return {
+  return getJourneyCSVReturn({
     id,
     activity_scheduled_time: scheduledDatetime
       ? convertDateStampToMs(scheduledDatetime)
@@ -45,7 +100,8 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     secret_user_id: respondentSecretId,
     user_id: respondentId,
     activity_id: activityId,
-    activity_flow: flowId,
+    activity_flow_id: flowId,
+    activity_flow_name: flowName,
     activity_name: activityName,
     item: SPLASH_SCREEN_ITEM_NAME,
     item_id: '',
@@ -56,7 +112,7 @@ export const getSplashScreen = (event: SuccessedEventDTO, nextExtendedEvent: Ext
     ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
     event_id: null,
     timezone_offset: null,
-  };
+  });
 };
 
 export const getJourneyCSVObject = <T>({
@@ -78,6 +134,7 @@ export const getJourneyCSVObject = <T>({
     activityId,
     activityName,
     flowName,
+    flowId,
     version,
     legacyProfileId,
     scheduledEventId,
@@ -89,7 +146,7 @@ export const getJourneyCSVObject = <T>({
     SliderItemResponseValues;
   const getTime = getTimeByCondition(event.time.toString());
 
-  return {
+  return getJourneyCSVReturn({
     id: event.id,
     activity_scheduled_time: scheduledDatetime
       ? convertDateStampToMs(scheduledDatetime)
@@ -105,7 +162,8 @@ export const getJourneyCSVObject = <T>({
     secret_user_id: respondentSecretId,
     user_id: respondentId,
     activity_id: activityId,
-    activity_flow: flowName,
+    activity_flow_id: flowId,
+    activity_flow_name: flowName,
     activity_name: activityName,
     item: activityItem.name,
     item_id: activityItem.id,
@@ -124,5 +182,5 @@ export const getJourneyCSVObject = <T>({
     ...(legacyProfileId && { legacy_user_id: legacyProfileId }),
     event_id: scheduledEventId,
     timezone_offset: tzOffset,
-  };
+  });
 };

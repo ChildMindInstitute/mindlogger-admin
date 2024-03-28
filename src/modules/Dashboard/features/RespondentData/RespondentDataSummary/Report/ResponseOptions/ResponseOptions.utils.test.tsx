@@ -1,3 +1,5 @@
+import { ItemResponseType } from 'shared/consts';
+
 import { getResponseItem } from './ResponseOptions.utils';
 
 jest.mock('chartjs-adapter-date-fns', () => ({}));
@@ -240,32 +242,63 @@ describe('ResponseOptions.utils', () => {
     const dateItemProps = {
       ...sharedProps,
       activityItem: {
-        id: 'bd670ac1-75a5-4c46-8b70-be664b9e19a5',
+        id: '05a5dac0-02c7-4443-99ed-2b0be9ec3807',
+        name: 'date_item_skippable',
         question: {
-          name: 'text_with_response',
-          en: 'text question',
+          en: 'date_item_skippable',
         },
-        responseType: 'text',
+        responseType: 'date',
         responseValues: null,
-        responseDataIdentifier: false,
       },
+      dataTestid: 'response-option-3-0',
       answers: [
-        {
-          answer: {
-            value: 'Test',
-            text: null,
-          },
-          date: '2024-03-14T10:03:01.345000',
-        },
         {
           answer: {
             value: null,
             text: null,
           },
+          date: '2024-03-15T13:35:27.961000',
+        },
+        {
+          answer: {
+            value: '17 Mar 2024',
+            text: null,
+          },
           date: '2024-03-15T18:12:57.700000',
         },
       ],
-      dataTestid: 'response-option-9-0',
+    };
+    const timeRangeItemProps = {
+      ...sharedProps,
+      activityItem: {
+        id: 'b0d3bd40-745c-4b3e-bfa2-9f27a2f38e7d',
+        name: 'time_range_extraText',
+        question: {
+          en: 'Time range question',
+        },
+        responseType: 'timeRange',
+        responseValues: null,
+      },
+      dataTestid: 'response-option-5-0',
+      answers: [
+        {
+          answer: {
+            value: null,
+            text: null,
+          },
+          date: '2024-03-15T13:35:27.961000',
+        },
+        {
+          answer: {
+            value: {
+              from: '06:00',
+              to: '22:30',
+            },
+            text: null,
+          },
+          date: '2024-03-15T18:12:57.700000',
+        },
+      ],
     };
 
     const singleSelectionItemResult = {
@@ -397,6 +430,7 @@ describe('ResponseOptions.utils', () => {
       responseType: 'numberSelect',
     };
     const textItemResult = {
+      responseType: ItemResponseType.Text,
       answers: textItemProps.answers,
       'data-testid': 'response-option-9-0',
     };
@@ -407,8 +441,14 @@ describe('ResponseOptions.utils', () => {
       'data-testid': 'response-option-4-0-time-picker-chart',
     };
     const dateItemResult = {
+      responseType: ItemResponseType.Date,
       answers: dateItemProps.answers,
-      'data-testid': 'response-option-9-0',
+      'data-testid': 'response-option-3-0',
+    };
+    const timeRangeItemResult = {
+      responseType: ItemResponseType.TimeRange,
+      answers: timeRangeItemProps.answers,
+      'data-testid': 'response-option-5-0',
     };
 
     test.each`
@@ -420,6 +460,7 @@ describe('ResponseOptions.utils', () => {
       ${textItemProps}            | ${textItemResult}            | ${'text '}
       ${dateItemProps}            | ${dateItemResult}            | ${'date '}
       ${timeItemProps}            | ${timeItemResult}            | ${'time'}
+      ${timeRangeItemProps}       | ${timeRangeItemResult}       | ${'time range'}
     `('$description', ({ itemProps, result }) => {
       const itemComponent = getResponseItem(itemProps);
       expect(itemComponent?.props).toEqual(result);

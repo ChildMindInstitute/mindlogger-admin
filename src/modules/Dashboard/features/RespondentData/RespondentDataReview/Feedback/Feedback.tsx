@@ -13,10 +13,10 @@ import { UiType } from 'shared/components/Tabs/Tabs.types';
 
 import { RespondentDataReviewContext } from '../RespondentDataReview.context';
 import { StyledButton, StyledContainer } from './Feedback.styles';
-import { getTabs } from './Feedback.const';
 import { FeedbackForm, FeedbackProps } from './Feedback.types';
-import { getDefaultFormValues } from './Feedback.utils';
+import { getDefaultFormValues, getTabs } from './Feedback.utils';
 import { FeedbackTabs } from './FeedbackAssessment/FeedbackAssessment.const';
+import { ANIMATION_DURATION_MS } from './Feedback.const';
 
 export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   const { t } = useTranslation();
@@ -36,28 +36,33 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   );
 
   return (
-    <StyledContainer sx={{ display: isFeedbackOpen ? 'flex' : 'none' }} data-testid={dataTestid}>
-      <StyledFlexAllCenter
-        sx={{ justifyContent: 'space-between', margin: theme.spacing(3.2, 3.2, 0) }}
-      >
-        <StyledFlexTopStart>
-          <Svg id="item-outlined" width="18" height="18" />
-          <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(2) }}>
-            {t('feedback')}
-          </StyledLabelBoldLarge>
-        </StyledFlexTopStart>
-        <StyledButton onClick={onClose} data-testid={`${dataTestid}-close`}>
-          <Svg id="cross" />
-        </StyledButton>
-      </StyledFlexAllCenter>
-      <FormProvider {...methods}>
-        <Tabs
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          tabs={tabs}
-          uiType={UiType.Secondary}
-        />
-      </FormProvider>
+    <StyledContainer isOpen={isFeedbackOpen} data-testid={dataTestid}>
+      {isFeedbackOpen && (
+        <>
+          <StyledFlexAllCenter
+            sx={{ justifyContent: 'space-between', m: theme.spacing(3.2, 3.2, 0) }}
+          >
+            <StyledFlexTopStart>
+              <Svg id="item-outlined" width="18" height="18" />
+              <StyledLabelBoldLarge sx={{ marginLeft: theme.spacing(2) }}>
+                {t('feedback')}
+              </StyledLabelBoldLarge>
+            </StyledFlexTopStart>
+            <StyledButton onClick={onClose} data-testid={`${dataTestid}-close`}>
+              <Svg id="cross" />
+            </StyledButton>
+          </StyledFlexAllCenter>
+          <FormProvider {...methods}>
+            <Tabs
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              tabs={tabs}
+              uiType={UiType.Secondary}
+              animationDurationMs={ANIMATION_DURATION_MS}
+            />
+          </FormProvider>
+        </>
+      )}
     </StyledContainer>
   );
 };

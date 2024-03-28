@@ -109,10 +109,12 @@ export const SelectController = <T extends FieldValues>({
 
       return tooltip ? (
         <Tooltip key={labelKey} tooltipTitle={tooltip}>
-          {getMenuItem({
-            ...commonProps,
-            withoutKey: true,
-          })}
+          <span>
+            {getMenuItem({
+              ...commonProps,
+              withoutKey: true,
+            })}
+          </span>
         </Tooltip>
       ) : (
         getMenuItem(commonProps)

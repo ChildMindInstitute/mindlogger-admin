@@ -216,6 +216,39 @@ const mockedResponseOptions = {
       ],
     },
   ],
+  '992b6bbf-b7ef-404c-9d2d-c997f770b3e0': [
+    {
+      activityItem: {
+        id: '992b6bbf-b7ef-404c-9d2d-c997f770b3e0',
+        name: 'audio_player_extraText',
+        question: {
+          en: 'audio_player_extraText question',
+        },
+        responseType: 'audioPlayer',
+        responseValues: {
+          file: 'https://somepathtofile.mp3',
+        },
+      },
+      answers: [
+        {
+          answer: {
+            value: null,
+            text: null,
+          },
+          date: '2024-03-15T13:35:27.961000',
+        },
+        {
+          answer: {
+            value: null,
+            text: null,
+          },
+          date: '2024-03-15T18:12:57.700000',
+        },
+      ],
+      dataTestid: 'response-option-16-0',
+      wwd: 12,
+    },
+  ],
 };
 
 const questionRegExp = /response-option-\d+-\d+-question$/;
@@ -260,9 +293,10 @@ describe('ResponseOptions', () => {
     renderWithProviders(<ResponseOptions responseOptions={mockedResponseOptions} versions={[]} />);
 
     const responseOptions = screen.queryAllByTestId(/response-option-\d+-\d+$/);
-    expect(responseOptions).toHaveLength(6);
+    expect(responseOptions).toHaveLength(7);
 
-    const [singleSelect, slider, text, multiSelect, timePicker, timeRange] = responseOptions;
+    const [singleSelect, slider, text, multiSelect, timePicker, timeRange, audioPlayer] =
+      responseOptions;
 
     // single select
     const singleSelectQuestion = within(singleSelect).getByTestId(questionRegExp);
@@ -303,9 +337,13 @@ describe('ResponseOptions', () => {
     const timeRangeQuestion = within(timeRange).getByTestId(questionRegExp);
     expect(timeRangeQuestion).toHaveTextContent('Time Range Item');
 
-    const timeRangeUnsupportedText = within(timeRange).getByText(
+    // audioPlayer
+    const audioPlayerQuestion = within(audioPlayer).getByTestId(questionRegExp);
+    expect(audioPlayerQuestion).toHaveTextContent('audio_player_extraText question');
+
+    const audioPlayerUnsupportedText = within(audioPlayer).getByText(
       'This data type can’t be displayed on this page',
     );
-    expect(timeRangeUnsupportedText).toBeInTheDocument();
+    expect(audioPlayerUnsupportedText).toBeInTheDocument();
   });
 });

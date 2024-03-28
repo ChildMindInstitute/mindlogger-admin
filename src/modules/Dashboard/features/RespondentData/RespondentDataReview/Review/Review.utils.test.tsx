@@ -117,4 +117,29 @@ describe('getResponseItem (supported response items), check rendering of child c
 
     expect(screen.getByText('13:05')).toBeInTheDocument();
   });
+
+  test('renders child component for time range', () => {
+    renderWithProviders(
+      getResponseItem({
+        activityItem: {
+          responseType: ItemResponseType.TimeRange,
+        },
+        answer: {
+          value: {
+            from: {
+              hour: 7,
+              minute: 0,
+            },
+            to: {
+              hour: 17,
+              minute: 9,
+            },
+          },
+        },
+      }),
+    );
+
+    expect(screen.getByDisplayValue('07:00')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('17:09')).toBeInTheDocument();
+  });
 });

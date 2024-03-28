@@ -3,8 +3,11 @@ import { ChartDataset, ScriptableTooltipContext } from 'chart.js';
 import { Version } from 'api';
 import { locales } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
-
-import { Answer, ItemOption } from '../../Report.types';
+import {
+  Answer,
+  ItemOption,
+  SimpleAnswerValue,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type ExtendedChartDataset = ChartDataset & {
   labels: string[];
@@ -19,7 +22,7 @@ export type MultiScatterChartProps = {
   height: number;
   options: ItemOption[];
   responseType: ItemResponseType;
-  answers: Answer[];
+  answers: Answer<SimpleAnswerValue>[];
   versions: Version[];
   'data-testid'?: string;
 };
@@ -37,7 +40,7 @@ export type OptionsProps = {
 
 export type DataProps = {
   maxY: number;
-  answers: Answer[];
+  answers: Answer<SimpleAnswerValue>[];
   versions: Version[];
   color: string;
 };

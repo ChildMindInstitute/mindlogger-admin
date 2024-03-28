@@ -1,9 +1,9 @@
 import { Dict } from 'mixpanel-browser';
 
-import { isProduction, isStaging } from './env';
+import { isProduction, isStaging, isUat } from './env';
 
 const PROJECT_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
-const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging);
+const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging || isUat);
 
 export const Mixpanel = {
   async init() {

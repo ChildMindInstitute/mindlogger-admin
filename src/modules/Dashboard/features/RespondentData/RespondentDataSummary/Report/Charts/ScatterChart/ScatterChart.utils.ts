@@ -4,7 +4,7 @@ import { Context } from 'chartjs-plugin-datalabels';
 import { variables } from 'shared/styles';
 import { locales } from 'shared/consts';
 import { Version } from 'api';
-import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import { ActivityCompletion } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { getTimelineStepSize, getTimeConfig } from '../Charts.utils';
 import { POINT_RADIUS_DEFAULT } from '../Charts.const';

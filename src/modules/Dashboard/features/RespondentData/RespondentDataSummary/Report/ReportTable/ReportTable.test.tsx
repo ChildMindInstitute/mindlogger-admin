@@ -5,6 +5,7 @@ import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils';
+import { ItemResponseType } from 'shared/consts';
 
 import { ReportTable } from './ReportTable';
 
@@ -24,20 +25,50 @@ const answers = [
     date: '2024-01-09T14:13:42.383000',
   },
 ];
+const timeRangeAnswers = [
+  {
+    answer: {
+      value: {
+        from: '',
+        to: '',
+      },
+      text: null,
+    },
+    date: '2024-01-08T18:31:02.847000',
+  },
+];
 
 const ascSortedByResponse = ['First Mocked Answer', 'Second Mocked Answer'];
 
 describe('ReportFilters', () => {
   test('renders empty state for report table when no answers', async () => {
-    renderWithProviders(<ReportTable />);
+    renderWithProviders(<ReportTable responseType={ItemResponseType.Text} />);
 
     expect(
       screen.getByText("No match was found for ''. Try a different search word or phrase."),
     ).toBeInTheDocument();
   });
 
+  test('renders proper header for report when type is time range', async () => {
+    renderWithProviders(
+      <ReportTable responseType={ItemResponseType.TimeRange} answers={timeRangeAnswers} />,
+    );
+
+    // check table header
+    expect(screen.getByText('Date')).toBeInTheDocument();
+    expect(screen.getByText('Time')).toBeInTheDocument();
+    expect(screen.getByText('Start Time Response')).toBeInTheDocument();
+    expect(screen.getByText('End Time Response')).toBeInTheDocument();
+  });
+
   test('search in the table', async () => {
-    renderWithProviders(<ReportTable data-testid="response-option" answers={answers} />);
+    renderWithProviders(
+      <ReportTable
+        responseType={ItemResponseType.Text}
+        data-testid="response-option"
+        answers={answers}
+      />,
+    );
 
     // check table header
     expect(screen.getByText('Date')).toBeInTheDocument();
@@ -61,6 +92,7 @@ describe('ReportFilters', () => {
   test("filter out only 'undefined' value from the table", async () => {
     renderWithProviders(
       <ReportTable
+        responseType={ItemResponseType.Text}
         data-testid="response-option"
         answers={[
           {
@@ -89,7 +121,13 @@ describe('ReportFilters', () => {
   });
 
   test('sort in the table', async () => {
-    renderWithProviders(<ReportTable data-testid="response-option" answers={answers} />);
+    renderWithProviders(
+      <ReportTable
+        responseType={ItemResponseType.Text}
+        data-testid="response-option"
+        answers={answers}
+      />,
+    );
 
     const responseHeader = screen.getByText('Response');
     const container = await screen.findByTestId('response-option-table');

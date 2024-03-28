@@ -36,7 +36,7 @@ export const ReviewMenu = ({
           {respondentLabel}
         </StyledLabelLarge>
         <DatePicker
-          name="date"
+          name="responseDate"
           control={control}
           uiType={DatePickerUiType.OneDate}
           label={t('responseDate')}

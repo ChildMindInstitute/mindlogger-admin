@@ -12,6 +12,7 @@ export type FormAutocompleteProps = {
   noOptionsText?: string;
   limitTags?: number;
   defaultSelectedAll?: boolean;
+  onCustomChange?: (options: AutocompleteOption[]) => void;
   'data-testid'?: string;
 } & TextFieldProps;
 

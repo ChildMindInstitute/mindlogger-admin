@@ -4,17 +4,16 @@ import { Version } from 'api';
 
 import { useDatavizFilters } from './useDatavizFilters';
 
-const mockWatch = jest.fn();
-
-const mockSummaryFiltersForm = {
-  startDate: new Date('2023-01-10'),
-  endDate: new Date('2023-01-15'),
-  moreFiltersVisible: false,
-  startTime: '00:00',
-  endTime: '23:59',
-};
-
 describe('useDatavizFilters', () => {
+  const mockWatch = jest.fn();
+  const mockSummaryFiltersForm = {
+    startDate: new Date('2023-01-10'),
+    endDate: new Date('2023-01-15'),
+    moreFiltersVisible: false,
+    startTime: '00:00',
+    endTime: '23:59',
+  };
+
   test('should calculate minDate, maxDate correctly and return empty versions', () => {
     const versions: Version[] = [];
 

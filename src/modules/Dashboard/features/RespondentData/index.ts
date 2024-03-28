@@ -1,2 +1,2 @@
-export * from './RespondentDataSummary';
-export * from './RespondentDataReview';
+export * from './RespondentData';
+export * from './RespondentData.types';

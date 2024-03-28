@@ -1,16 +1,16 @@
 import { renderHook } from '@testing-library/react';
-import * as routerDom from 'react-router-dom';
 
+import { applet } from 'shared/state/Applet';
+import { mockedApplet, mockedAppletId, mockedIdentifiers, mockedPrivateKey } from 'shared/mock';
 import { Identifier as IdentifierResponse } from 'api';
-import { applet } from 'shared/state';
-import { mockedApplet, mockedIdentifiers, mockedPrivateKey } from 'shared/mock';
-import { Identifier } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.types';
 
+import { Identifier } from '../../RespondentData.types';
 import { useDecryptedIdentifiers } from './useDecryptedIdentifiers';
 
+const mockedUseParams = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
+  useParams: () => mockedUseParams(),
 }));
 
 jest.mock('shared/hooks/useEncryptionStorage', () => ({
@@ -22,7 +22,7 @@ jest.mock('shared/hooks/useEncryptionStorage', () => ({
 describe('useDecryptedIdentifiers', () => {
   test('should return null when useAppletData is null', async () => {
     jest.spyOn(applet, 'useAppletData').mockReturnValue(null);
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
+    mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const { result } = renderHook(useDecryptedIdentifiers);
 
@@ -31,7 +31,7 @@ describe('useDecryptedIdentifiers', () => {
 
   test('should return an array of identifiers for decrypted data (userPublicKey: null)', async () => {
     jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
+    mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const identifiers = [
       {
@@ -65,7 +65,7 @@ describe('useDecryptedIdentifiers', () => {
 
   test('should return an array of identifiers for encrypted data', async () => {
     jest.spyOn(applet, 'useAppletData').mockReturnValue({ result: mockedApplet });
-    jest.spyOn(routerDom, 'useParams').mockReturnValue({ appletId: 'new-applet' });
+    mockedUseParams.mockReturnValue({ appletId: mockedAppletId });
 
     const { result } = renderHook(useDecryptedIdentifiers);
     const getDecryptedIdentifiers = result.current as (

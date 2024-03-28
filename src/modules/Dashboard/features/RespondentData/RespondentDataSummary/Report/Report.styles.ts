@@ -1,17 +1,12 @@
 import { Box, styled } from '@mui/material';
 
-import { StyledFlexColumn, StyledStickyHeader, theme, variables } from 'shared/styles';
-import { shouldForwardProp } from 'shared/utils';
+import { StyledFlexColumn, theme, variables } from 'shared/styles';
 
 export const StyledReport = styled(Box)`
   width: 100%;
   height: 100%;
   overflow: auto;
   min-width: 90rem;
-`;
-
-export const StyledHeader = styled(StyledStickyHeader, shouldForwardProp)`
-  justify-content: space-between;
 `;
 
 export const StyledEmptyState = styled(StyledFlexColumn)`

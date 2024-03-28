@@ -26,11 +26,6 @@ jest.mock('../AdditionalInformation', () => ({
   ),
 }));
 
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDatavizFilters: () => ({}),
-}));
-
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),

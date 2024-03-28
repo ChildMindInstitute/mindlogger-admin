@@ -8,6 +8,7 @@ import {
   Item,
   NumberSelectionItem,
   DateItem,
+  TimeRangeItem,
 } from 'shared/state';
 import {
   DecryptedMultiSelectionAnswer,
@@ -16,6 +17,7 @@ import {
   DecryptedTextAnswer,
   DecryptedNumberSelectionAnswer,
   DecryptedDateAnswer,
+  DecryptedDateRangeAnswer,
 } from 'shared/types';
 
 export type Answer = {
@@ -38,6 +40,12 @@ export type NumberSelectionItemAnswer = {
 export type DateItemAnswer = {
   activityItem: DateItem;
   answer: DecryptedDateAnswer;
+  'data-testid'?: string;
+};
+
+export type TimeRangeItemAnswer = {
+  activityItem: TimeRangeItem;
+  answer: DecryptedDateRangeAnswer;
   'data-testid'?: string;
 };
 
