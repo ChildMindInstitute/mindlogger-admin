@@ -4,12 +4,12 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 import download from 'downloadjs';
+import * as reactHookForm from 'react-hook-form';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
 import { mockedApplet, mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { initialStateData } from 'redux/modules';
-import * as dashboardHooks from 'modules/Dashboard/hooks';
 
 import { Report } from './Report';
 
@@ -46,36 +46,89 @@ const mockedActivity = {
   isPerformanceTask: false,
   hasAnswer: true,
 };
-
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useWatch: jest.fn(),
-  useFormContext: () => ({
-    getValues: () => ({
-      startDate: new Date('2024-01-17T15:27:08.736Z'),
-      endDate: new Date('2024-01-23T15:27:08.736Z'),
-      startTime: '00:00',
-      endTime: '23:59',
-      filterByIdentifier: false,
-      identifier: [],
-      versions: [
+const mockedAnswers = [
+  {
+    answerId: 'answer-id',
+    decryptedAnswer: [
+      {
+        activityItem: {
+          question: {
+            en: 'Single Selected - Mocked Item',
+          },
+          responseType: 'singleSelect',
+          responseValues: {
+            options: [
+              {
+                id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
+                text: '1',
+                isHidden: false,
+                value: 0,
+              },
+              {
+                id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
+                text: '2',
+                isHidden: false,
+                value: 1,
+              },
+            ],
+          },
+          config: {
+            removeBackButton: false,
+            skippableItem: true,
+            randomizeOptions: false,
+            timer: 0,
+            addScores: false,
+            setAlerts: false,
+            addTooltip: false,
+            setPalette: false,
+            additionalResponseOption: {
+              textInputOption: false,
+              textInputRequired: false,
+            },
+          },
+          name: 'ss-1',
+          isHidden: false,
+          allowEdit: true,
+          id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
+          order: 1,
+        },
+        answer: {
+          value: '0',
+          edited: null,
+        },
+        items: [],
+      },
+    ],
+    endDatetime: '2024-03-18T15:13:27.485000',
+    events: '',
+    startDatetime: '2024-03-18T15:09:46.258000',
+    subscaleSetting: null,
+    version: '2.2.0',
+  },
+];
+const mockedResponseOptions = {
+  option1id: [
+    {
+      activityItem: mockedActivity,
+      answers: [
         {
-          id: '2.0.0',
-          label: '2.0.0',
+          answer: {
+            value: 1,
+            text: null,
+          },
+          date: '2024-03-18T15:13:27.485000',
         },
         {
-          id: '2.0.1',
-          label: '2.0.1',
+          answer: {
+            value: 3,
+            text: null,
+          },
+          date: '2024-03-18T15:13:53.398000',
         },
       ],
-    }),
-  }),
-}));
-
-jest.mock('modules/Dashboard/hooks', () => ({
-  ...jest.requireActual('modules/Dashboard/hooks'),
-  useDecryptedActivityData: jest.fn(),
-}));
+    },
+  ],
+};
 
 jest.mock('./ReportFilters', () => ({
   ReportFilters: () => <div data-testid="report-filters"></div>,
@@ -96,130 +149,26 @@ jest.mock('./ResponseOptions', () => ({
 jest.mock('downloadjs', () => jest.fn());
 
 describe('Report component', () => {
-  test('renders Report correctly with data', async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        result: [
-          {
-            userPublicKey: 'userPublicKey',
-            answer: 'answer',
-            items: [],
-            itemIds: 'itemIds',
-          },
-        ],
-      },
-    });
+  beforeEach(() => {
+    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: jest.fn() });
+  });
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
+  test('renders Report correctly with data', async () => {
     mockAxios.post.mockResolvedValueOnce({
       data: 'data',
     });
+    jest
+      .spyOn(reactHookForm, 'useWatch')
+      .mockReturnValue([mockedAnswers, mockedResponseOptions, 0, mockedActivity, [], []]);
 
-    const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
-      decryptedAnswers: [
-        {
-          activityItem: {
-            question: {
-              en: 'Single Selected - Mocked Item',
-            },
-            responseType: 'singleSelect',
-            responseValues: {
-              options: [
-                {
-                  id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
-                  text: '1',
-                  isHidden: false,
-                  value: 0,
-                },
-                {
-                  id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
-                  text: '2',
-                  isHidden: false,
-                  value: 1,
-                },
-              ],
-            },
-            config: {
-              removeBackButton: false,
-              skippableItem: true,
-              randomizeOptions: false,
-              timer: 0,
-              addScores: false,
-              setAlerts: false,
-              addTooltip: false,
-              setPalette: false,
-              additionalResponseOption: {
-                textInputOption: false,
-                textInputRequired: false,
-              },
-            },
-            name: 'ss-1',
-            isHidden: false,
-            allowEdit: true,
-            id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
-            order: 1,
-          },
-          answer: {
-            value: '0',
-            edited: null,
-          },
-          items: [
-            {
-              question: {
-                en: 'Single Selected - Mocked Item',
-              },
-              responseType: 'singleSelect',
-              responseValues: {
-                paletteName: null,
-                options: [
-                  {
-                    id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
-                    text: '1',
-                    isHidden: false,
-                    value: 0,
-                  },
-                  {
-                    id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
-                    text: '2',
-                    isHidden: false,
-                    value: 1,
-                  },
-                ],
-              },
-              config: {
-                removeBackButton: false,
-                skippableItem: true,
-                randomizeOptions: false,
-                timer: 0,
-                addScores: false,
-                setAlerts: false,
-                addTooltip: false,
-                setPalette: false,
-                additionalResponseOption: {
-                  textInputOption: false,
-                  textInputRequired: false,
-                },
-              },
-              name: 'ss-1',
-              isHidden: false,
-              allowEdit: true,
-              id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
-              order: 1,
-            },
-          ],
-        },
-      ],
+    renderWithProviders(<Report />, {
+      route,
+      routePath,
+      preloadedState,
     });
-
-    dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
-
-    const { rerender } = renderWithProviders(
-      <Report activity={mockedActivity} identifiers={[]} versions={[]} />,
-      {
-        route,
-        routePath,
-        preloadedState,
-      },
-    );
 
     expect(screen.getByTestId('respondents-summary-report')).toBeInTheDocument();
     expect(screen.getByText('Activity 1')).toBeInTheDocument();
@@ -227,32 +176,10 @@ describe('Report component', () => {
     expect(screen.getByText('Download Latest Report')).toBeInTheDocument();
     expect(downloadReportButton).toBeInTheDocument();
     expect(screen.getByTestId('report-filters')).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        1,
-        `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers`,
-        {
-          params: {
-            emptyIdentifiers: true,
-            fromDatetime: '2024-01-17T00:00:00',
-            identifiers: undefined,
-            targetSubjectId: mockedSubjectId1,
-            toDatetime: '2024-01-23T23:59:00',
-            versions: '2.0.0,2.0.1',
-          },
-          signal: undefined,
-        },
-      );
-    });
-
-    rerender(<Report activity={mockedActivity} identifiers={[]} versions={[]} />);
-
-    // assertions after component update
     expect(screen.getByTestId('report-activity-completed')).toBeInTheDocument();
     expect(screen.getByTestId('report-response-options')).toBeInTheDocument();
 
-    userEvent.click(downloadReportButton);
+    await userEvent.click(downloadReportButton);
 
     await waitFor(() => {
       expect(mockAxios.post).toHaveBeenNthCalledWith(
@@ -272,42 +199,13 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with no data', async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        result: null,
-      },
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, {}, [], []]);
+    renderWithProviders(<Report activity={mockedActivity} identifiers={[]} versions={[]} />, {
+      route,
+      routePath,
+      preloadedState,
     });
 
-    const { rerender } = renderWithProviders(
-      <Report activity={mockedActivity} identifiers={[]} versions={[]} />,
-      {
-        route,
-        routePath,
-        preloadedState,
-      },
-    );
-
-    await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        1,
-        `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers`,
-        {
-          params: {
-            emptyIdentifiers: true,
-            fromDatetime: '2024-01-17T00:00:00',
-            identifiers: undefined,
-            targetSubjectId: mockedSubjectId1,
-            toDatetime: '2024-01-23T23:59:00',
-            versions: '2.0.0,2.0.1',
-          },
-          signal: undefined,
-        },
-      );
-    });
-
-    rerender(<Report activity={mockedActivity} identifiers={[]} versions={[]} />);
-
-    // assertions for no data scenario
     expect(screen.getByTestId('report-empty-state')).toBeInTheDocument();
     expect(screen.getByText('No match was found. Try to adjust filters.')).toBeInTheDocument();
   });

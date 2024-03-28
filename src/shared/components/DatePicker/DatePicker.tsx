@@ -109,7 +109,7 @@ export const DatePicker = <T extends FieldValues>({
 
           return (
             <>
-              <Tooltip tooltipTitle={'Test message ... '}>
+              <Tooltip tooltipTitle={tooltip}>
                 <StyledSpan>
                   {uiType === UiType.OneDate ? (
                     <DatePickerInput
