@@ -13,6 +13,9 @@ const ParticipantConnections = lazy(
   () => import('modules/Dashboard/features/ParticipantConnections'),
 );
 const ParticipantSchedule = lazy(() => import('modules/Dashboard/features/ParticipantSchedule'));
+const ParticipantActivityDetails = lazy(
+  () => import('modules/Dashboard/pages/ParticipantActivityDetails'),
+);
 const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
 const Schedule = lazy(() => import('modules/Dashboard/features/Applet/Schedule'));
 const Overview = lazy(() => import('modules/Dashboard/features/Applet/Overview'));

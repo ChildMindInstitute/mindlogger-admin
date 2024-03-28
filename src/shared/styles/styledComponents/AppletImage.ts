@@ -19,3 +19,8 @@ export const StyledSmallAppletImgPlaceholder = styled(Box)`
   ${commonImgStyles};
   background-color: ${variables.palette.primary_container};
 `;
+
+export const StyledLogo = styled('img')({
+  width: '48px',
+  borderRadius: variables.borderRadius.xs,
+});

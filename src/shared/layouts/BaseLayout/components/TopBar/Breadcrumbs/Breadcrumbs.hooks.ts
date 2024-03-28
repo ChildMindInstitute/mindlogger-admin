@@ -43,12 +43,12 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const appletData = (getValues?.() ?? result) as SingleApplet;
   const isNewApplet = useCheckIfNewApplet();
   const appletLabel = (isNewApplet ? t('newApplet') : appletData?.displayName) ?? '';
-  const currentActivityName = appletData?.activities?.find(
+  const currentActivity = appletData?.activities?.find(
     (activity) => getEntityKey(activity) === activityId,
-  )?.name;
-  const activityLabel = currentActivityName ?? t('newActivity');
+  );
+  const activityLabel = currentActivity?.name ?? t('newActivity');
   const performanceTaskLabel =
-    currentActivityName ??
+    currentActivity?.name ??
     Object.entries(checkCurrentPerformanceTaskPage(pathname)).find(([, value]) => value)?.[0];
   const activityFlowLabel =
     appletData?.activityFlows?.find((activityFlow) => getEntityKey(activityFlow) === activityFlowId)
@@ -141,6 +141,15 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         icon: multiInformantFlag ? undefined : 'account',
         label: respondentLabel || subjectLabel,
         disabledLink: true,
+      });
+    }
+
+    if (currentActivity && multiInformantFlag) {
+      newBreadcrumbs.push({
+        icon: currentActivity?.image || '',
+        label: currentActivity?.name,
+        disabledLink: true,
+        hasUrl: !!currentActivity?.image,
       });
     }
 
