@@ -2,17 +2,19 @@
 // @ts-nocheck
 import { screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
+import * as reactHookForm from 'react-hook-form';
 
-import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
-import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
-import { mockedAppletId, mockedIdentifiers, mockedSubjectId1 } from 'shared/mock';
+import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 
+import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests';
+import * as useRespondentAnswersHook from './hooks/useRespondentAnswers';
 import { RespondentDataSummary } from './RespondentDataSummary';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
 const routePath = page.appletRespondentDataSummary;
+const mockedSetValue = jest.fn();
 
 const mockedSelectedActivity = {
   id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
@@ -31,13 +33,6 @@ const mockedSummaryActivities = [
   },
 ];
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
-  useFormContext: () => ({
-    setValue: jest.fn(),
-  }),
-}));
-
 jest.mock('modules/Dashboard/hooks', () => ({
   ...jest.requireActual('modules/Dashboard/hooks'),
   useDecryptedIdentifiers: () => () => [
@@ -52,6 +47,11 @@ jest.mock('modules/Dashboard/hooks', () => ({
   ],
 }));
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ respondentId: mockedRespondentId, appletId: mockedAppletId }),
+}));
+
 jest.mock('./ReportMenu', () => ({
   ReportMenu: () => <div data-testid="report-menu"></div>,
 }));
@@ -60,128 +60,104 @@ jest.mock('./Report', () => ({
   Report: () => <div data-testid="respondents-summary-report"></div>,
 }));
 
-const getRespondentDataSummaryComponent = ({
-  summaryActivities = mockedSummaryActivities,
-  selectedActivity,
-}) => (
-  <RespondentDataContext.Provider
-    value={{
-      summaryActivities,
-      setSummaryActivities: jest.fn,
-      selectedActivity,
-      setSelectedActivity: jest.fn,
-    }}
-  >
-    <RespondentDataSummary />
-  </RespondentDataContext.Provider>
-);
+const testEmptyState = (text: string) => {
+  expect(screen.getByTestId('report-menu')).toBeInTheDocument();
+  expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
+  expect(screen.getByText(text)).toBeInTheDocument();
+};
+
+const emptyStateCases = [
+  {
+    selectedActivity: null,
+    expectedEmptyStateMessage: 'Select the Activity to review the response data.',
+    description: 'renders RespondentDataSummary correctly for non-selected activity',
+  },
+  {
+    selectedActivity: {
+      id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
+      name: 'Activity 1',
+      isPerformanceTask: false,
+      hasAnswer: false,
+    },
+    expectedEmptyStateMessage: 'No available Data for this Activity yet',
+    description: "renders empty state component if selected activity doesn't have answers",
+  },
+  {
+    selectedActivity: {
+      id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
+      name: 'Activity 1',
+      isPerformanceTask: true,
+      hasAnswer: true,
+    },
+    expectedEmptyStateMessage: 'Data visualization for Performance Tasks not supported',
+    description: 'renders empty state component if selected activity is performance task',
+  },
+];
 
 describe('RespondentDataSummary component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: mockedSetValue });
   });
 
-  test('renders RespondentDataSummary correctly for non-selected activity', async () => {
-    renderWithProviders(
-      getRespondentDataSummaryComponent({
-        selectedActivity: undefined,
-      }),
-      {
-        route,
-        routePath,
-      },
-    );
+  test('renders correctly with selected activity and summary activities', async () => {
+    jest
+      .spyOn(reactHookForm, 'useWatch')
+      .mockReturnValue([mockedSelectedActivity, mockedSummaryActivities]);
+
+    renderWithProviders(<RespondentDataSummary />, {
+      route,
+      routePath,
+    });
 
     expect(screen.getByTestId('report-menu')).toBeInTheDocument();
-    expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
-    expect(
-      screen.getByText(/Select the Activity to review the response data./),
-    ).toBeInTheDocument();
-  });
-
-  test('renders RespondentDataSummary correctly for selected activity with successful data fetching', async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        result: mockedIdentifiers,
-      },
-    });
-
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        result: [
-          {
-            version: '2.0.0',
-            createdAt: '2024-01-13T11:07:45.837338',
-          },
-          {
-            version: '2.0.1',
-            createdAt: '2024-01-16T20:47:45.837338',
-          },
-        ],
-      },
-    });
-
-    renderWithProviders(
-      getRespondentDataSummaryComponent({
-        selectedActivity: mockedSelectedActivity,
-      }),
-      {
-        route,
-        routePath,
-      },
-    );
-
-    expect(screen.getByTestId('report-menu')).toBeInTheDocument();
-    expect(screen.queryByTestId('summary-empty-state')).not.toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        1,
-        `/answers/applet/${mockedAppletId}/summary/activities/${mockedSelectedActivity.id}/identifiers`,
-        {
-          params: {
-            targetSubjectId: mockedSubjectId1,
-          },
-          signal: undefined,
-        },
-      );
-
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        2,
-        `/answers/applet/${mockedAppletId}/summary/activities/${mockedSelectedActivity.id}/versions`,
-        {
-          signal: undefined,
-        },
-      );
-    });
-
     expect(screen.getByTestId('respondents-summary-report')).toBeInTheDocument();
   });
 
-  test('renders RespondentDataSummary correctly for selected activity with unsuccessful data fetching', async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      status: ApiResponseCodes.BadRequest,
-    });
-
-    renderWithProviders(
-      getRespondentDataSummaryComponent({
-        selectedActivity: mockedSelectedActivity,
-      }),
-      {
+  test.each(emptyStateCases)(
+    '$description',
+    async ({ selectedActivity, expectedEmptyStateMessage }) => {
+      jest
+        .spyOn(reactHookForm, 'useWatch')
+        .mockReturnValue([selectedActivity, mockedSummaryActivities]);
+      renderWithProviders(<RespondentDataSummary />, {
         route,
         routePath,
-      },
-    );
+      });
 
-    expect(screen.getByTestId('report-menu')).toBeInTheDocument();
-    expect(screen.queryByTestId('summary-empty-state')).not.toBeInTheDocument();
+      testEmptyState(expectedEmptyStateMessage);
+    },
+  );
+
+  test('renders RespondentDataSummary correctly for selected activity with successful data fetching', async () => {
+    const mockGetIdentifiersVersions = jest.fn();
+    const mockFetchAnswers = jest.fn();
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([null, []]);
+    jest
+      .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
+      .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });
+    jest
+      .spyOn(useRespondentAnswersHook, 'useRespondentAnswers')
+      .mockReturnValue({ fetchAnswers: mockFetchAnswers });
+
+    mockAxios.get.mockResolvedValueOnce({
+      data: {
+        result: mockedSummaryActivities,
+      },
+    });
+
+    renderWithProviders(<RespondentDataSummary />, {
+      route,
+      routePath,
+    });
 
     await waitFor(() => {
       expect(mockAxios.get).toHaveBeenNthCalledWith(
         1,
-        `/answers/applet/${mockedAppletId}/summary/activities/${mockedSelectedActivity.id}/identifiers`,
+        `/answers/applet/${mockedAppletId}/summary/activities`,
         {
           params: {
+            limit: 10000,
             targetSubjectId: mockedSubjectId1,
           },
           signal: undefined,
@@ -189,6 +165,11 @@ describe('RespondentDataSummary component', () => {
       );
     });
 
-    expect(screen.queryByTestId('respondents-summary-report')).not.toBeInTheDocument();
+    expect(mockedSetValue).toHaveBeenCalledWith('summaryActivities', mockedSummaryActivities);
+    expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockedSummaryActivities[0]);
+    expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({
+      activity: mockedSummaryActivities[0],
+    });
+    expect(mockFetchAnswers).toHaveBeenCalledWith({ activity: mockedSummaryActivities[0] });
   });
 });
