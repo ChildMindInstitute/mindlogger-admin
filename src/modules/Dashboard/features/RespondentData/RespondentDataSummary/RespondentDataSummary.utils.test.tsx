@@ -1456,18 +1456,199 @@ describe('Respondent Data Summary utils', () => {
         },
       ],
     };
+    const singleSelectionPerRowProps = {
+      ...sharedProps,
+      currentAnswer: {
+        activityItem: {
+          question: {
+            en: 'Single Select Rows Question.',
+          },
+          responseType: 'singleSelectRows',
+          responseValues: {
+            rows: [
+              {
+                id: 'c4995e02-c2fd-43a2-8654-c659fe2ea40a',
+                rowName: 'Work!',
+              },
+              {
+                id: '72bc51d0-dcb1-422b-ab1a-dc324b4dc3ff',
+                rowName: 'Gym/Sport',
+              },
+              {
+                id: 'f06808a5-6334-43d8-b001-d52f733d8df4',
+                rowName: 'Reading',
+              },
+              {
+                id: '265d6f7d-b8a7-4205-89c7-14cad3868df2',
+                rowName: 'Learning',
+              },
+            ],
+            options: [
+              {
+                id: 'e896b43c-7f31-477f-8c3b-0e360253acd9',
+                text: 'Morning',
+              },
+              {
+                id: 'a79b2ffb-1c4c-4814-9031-002230fe1e4c',
+                text: 'Afternoon',
+              },
+              {
+                id: '93b5b0c2-b488-4487-b8c3-6d6b3bc17e55',
+                text: 'Evening',
+              },
+            ],
+            dataMatrix: null,
+          },
+          name: 'single-select-rows',
+          id: 'd3beb2aa-5d92-4ab7-8c4d-92cebd022a9f',
+          order: 4,
+        },
+        answer: {
+          value: ['Afternoon', 'Morning', 'Evening', 'Afternoon'],
+        },
+        items: [], // skip, no need for the test
+      },
+    };
+    const singleSelectionPerRowResult = {
+      activityItem: {
+        id: 'd3beb2aa-5d92-4ab7-8c4d-92cebd022a9f',
+        name: 'single-select-rows',
+        question: { en: 'Single Select Rows Question.' },
+        responseType: 'singleSelectRows',
+        responseValues: {
+          dataMatrix: null,
+          options: [
+            {
+              id: 'e896b43c-7f31-477f-8c3b-0e360253acd9',
+              text: 'Morning',
+            },
+            {
+              id: 'a79b2ffb-1c4c-4814-9031-002230fe1e4c',
+              text: 'Afternoon',
+            },
+            {
+              id: '93b5b0c2-b488-4487-b8c3-6d6b3bc17e55',
+              text: 'Evening',
+            },
+          ],
+          rows: [
+            { id: 'c4995e02-c2fd-43a2-8654-c659fe2ea40a', rowName: 'Work!' },
+            { id: '72bc51d0-dcb1-422b-ab1a-dc324b4dc3ff', rowName: 'Gym/Sport' },
+            { id: 'f06808a5-6334-43d8-b001-d52f733d8df4', rowName: 'Reading' },
+            { id: '265d6f7d-b8a7-4205-89c7-14cad3868df2', rowName: 'Learning' },
+          ],
+        },
+      },
+      answers: {
+        'Gym/Sport': [
+          { answer: { text: null, value: 'Morning' }, date: '2024-03-14T10:03:01.345000' },
+        ],
+        Learning: [
+          { answer: { text: null, value: 'Afternoon' }, date: '2024-03-14T10:03:01.345000' },
+        ],
+        Reading: [{ answer: { text: null, value: 'Evening' }, date: '2024-03-14T10:03:01.345000' }],
+        'Work!': [
+          { answer: { text: null, value: 'Afternoon' }, date: '2024-03-14T10:03:01.345000' },
+        ],
+      },
+    };
+    const multiSelectionPerRowProps = {
+      ...sharedProps,
+      currentAnswer: {
+        activityItem: {
+          question: {
+            en: 'Multi Select Rows Question.',
+          },
+          responseType: 'multiSelectRows',
+          responseValues: {
+            rows: [
+              {
+                id: '315e0b97-ca13-4aa2-a1b0-45758c696bee',
+                rowName: 'Row 1',
+              },
+              {
+                id: 'fd5e90ec-0adf-4785-b82b-76adbc117a69',
+                rowName: 'Row 2',
+              },
+              {
+                id: '4841e580-e850-48e8-b147-8914dc8b2add',
+                rowName: 'Row 3',
+              },
+            ],
+            options: [
+              {
+                id: '49ed757b-56dc-409d-b0db-e4485fa2eca8',
+                text: 'Option 1',
+              },
+              {
+                id: '06c2a948-2f49-46b9-91e6-5f530137c375',
+                text: 'Option 2',
+              },
+              {
+                id: '57d4f628-7a84-46b5-8264-18aa5a5527fe',
+                text: 'Option 3',
+              },
+            ],
+            dataMatrix: null,
+          },
+
+          name: 'multi-select-rows',
+          id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
+          order: 5,
+        },
+        answer: {
+          value: [['Option 1', 'Option 3'], ['Option 2'], ['Option 1']],
+        },
+        items: [], // skip, no need for the test
+      },
+    };
+    const multiSelectionPerRowResult = {
+      activityItem: {
+        id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
+        name: 'multi-select-rows',
+        question: { en: 'Multi Select Rows Question.' },
+        responseType: 'multiSelectRows',
+        responseValues: {
+          dataMatrix: null,
+          options: [
+            { id: '49ed757b-56dc-409d-b0db-e4485fa2eca8', text: 'Option 1' },
+            { id: '06c2a948-2f49-46b9-91e6-5f530137c375', text: 'Option 2' },
+            { id: '57d4f628-7a84-46b5-8264-18aa5a5527fe', text: 'Option 3' },
+          ],
+          rows: [
+            { id: '315e0b97-ca13-4aa2-a1b0-45758c696bee', rowName: 'Row 1' },
+            { id: 'fd5e90ec-0adf-4785-b82b-76adbc117a69', rowName: 'Row 2' },
+            { id: '4841e580-e850-48e8-b147-8914dc8b2add', rowName: 'Row 3' },
+          ],
+        },
+      },
+      answers: {
+        'Row 1': [
+          { answer: { text: null, value: 'Option 1' }, date: '2024-03-14T10:03:01.345000' },
+          { answer: { text: null, value: 'Option 3' }, date: '2024-03-14T10:03:01.345000' },
+        ],
+        'Row 2': [
+          { answer: { text: null, value: 'Option 2' }, date: '2024-03-14T10:03:01.345000' },
+        ],
+        'Row 3': [
+          { answer: { text: null, value: 'Option 1' }, date: '2024-03-14T10:03:01.345000' },
+        ],
+      },
+    };
 
     test.each`
-      props                     | result                     | description
-      ${singleSelectionProps}   | ${singleSelectionResult}   | ${'single selection'}
-      ${multipleSelectionProps} | ${multipleSelectionResult} | ${'multi selection'}
-      ${sliderProps}            | ${sliderResult}            | ${'slider'}
-      ${textProps}              | ${textResult}              | ${'text'}
-      ${timeProps}              | ${timeResult}              | ${'time'}
-      ${numberSelectionProps}   | ${numberSelectionResult}   | ${'number selection'}
-      ${dateProps}              | ${dateResult}              | ${'date'}
-      ${timeRangeProps}         | ${timeRangeResult}         | ${'time range'}
-      ${drawingProps}           | ${drawingResult}           | ${'drawing item'}
+      props                         | result                         | description
+      ${singleSelectionProps}       | ${singleSelectionResult}       | ${'single selection'}
+      ${multipleSelectionProps}     | ${multipleSelectionResult}     | ${'multi selection'}
+      ${sliderProps}                | ${sliderResult}                | ${'slider'}
+      ${textProps}                  | ${textResult}                  | ${'text'}
+      ${timeProps}                  | ${timeResult}                  | ${'time'}
+      ${numberSelectionProps}       | ${numberSelectionResult}       | ${'number selection'}
+      ${dateProps}                  | ${dateResult}                  | ${'date'}
+      ${timeRangeProps}             | ${timeRangeResult}             | ${'time range'}
+      ${drawingProps}               | ${drawingResult}               | ${'drawing item'}
+      ${singleSelectionPerRowProps} | ${singleSelectionPerRowResult} | ${'single selection per row item'}
+      ${multiSelectionPerRowProps}  | ${multiSelectionPerRowResult}  | ${'multi selection per row item'}
     `('$description', ({ props, result }) => {
       expect(formatActivityItemAnswers(props.currentAnswer, props.date)).toStrictEqual(result);
     });
