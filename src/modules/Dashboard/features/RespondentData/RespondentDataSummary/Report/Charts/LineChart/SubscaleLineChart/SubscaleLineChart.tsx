@@ -9,9 +9,9 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { Box } from '@mui/material';
 
 import { getOptionTextApi } from 'api';
-import { useDatavizFilters } from 'modules/Dashboard/hooks';
-import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
 import { pluck } from 'shared/utils';
+import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/hooks/useDatavizFilters';
+import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData';
 
 import { ChartTooltipContainer } from '../../ChartTooltipContainer';
 import { getTicksData, legendMargin, setTooltipStyles } from '../../Charts.utils';
@@ -39,7 +39,7 @@ export const SubscaleLineChart = ({ data, versions }: SubscaleLineChartProps) =>
 
   const [tooltipData, setTooltipData] = useState<TooltipData[] | null>(null);
 
-  const { watch } = useFormContext<SummaryFiltersForm>();
+  const { watch } = useFormContext<RespondentsDataFormValues>();
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
   const responses = data.subscales.map((subscale) => subscale.activityCompletions);
