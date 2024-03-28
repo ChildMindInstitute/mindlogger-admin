@@ -526,7 +526,7 @@ export type JourneyCSVReturnProps = {
   user_id?: string;
   activity_id: string;
   activity_flow_id: string | null;
-  activity_flow: string | null;
+  activity_flow_name: string | null;
   activity_name: string;
   item: string;
   item_id?: string;

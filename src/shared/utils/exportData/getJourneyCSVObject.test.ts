@@ -120,9 +120,10 @@ const getPreparedProperties = ({
 };
 const result = {
   activity_end_time: '1689756087000',
-  activity_flow: null,
   activity_id: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
   activity_name: 'New Activity#1',
+  activity_flow_id: null,
+  activity_flow_name: null,
   activity_scheduled_time: 'not scheduled',
   activity_start_time: '1689755822000',
   id: '949f248c-1a4b-4a35-a5a2-898dfef72050',
@@ -141,7 +142,7 @@ const result = {
   user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
   version: '2.0.0',
   event_id: null,
-  timezone_offset: null,
+  timezone_offset: '',
 };
 
 describe('getJourneyCSVObject', () => {
@@ -269,7 +270,7 @@ describe('getJourneyCSVObject', () => {
     ).toStrictEqual({
       ...result,
       activity_flow_id: 'some flow ID 222',
-      activity_flow: 'test flow name',
+      activity_flow_name: 'test flow name',
     });
   });
 });
