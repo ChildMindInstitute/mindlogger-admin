@@ -24,6 +24,7 @@ export type MultiScatterChartProps = {
   responseType: ItemResponseType;
   answers: Answer<SimpleAnswerValue>[];
   versions: Version[];
+  useCategory?: boolean;
   'data-testid'?: string;
 };
 
@@ -36,6 +37,7 @@ export type OptionsProps = {
   minDate: Date;
   maxDate: Date;
   tooltipHandler: (context: ScriptableTooltipContext<'scatter'>) => void;
+  useCategory: boolean;
 };
 
 export type DataProps = {
@@ -43,4 +45,5 @@ export type DataProps = {
   answers: Answer<SimpleAnswerValue>[];
   versions: Version[];
   color: string;
+  useCategory: boolean;
 };

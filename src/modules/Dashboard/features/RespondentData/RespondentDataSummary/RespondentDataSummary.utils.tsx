@@ -26,11 +26,13 @@ import {
   ActivityCompletion,
   Answer,
   FormattedActivityItem,
+  FormattedAnswer,
   FormattedResponse,
   Identifier,
   ItemOption,
   RespondentAnswerValue,
   RespondentsDataFormValues,
+  PerRowSelectionItemOption,
   SimpleAnswerValue,
 } from '../RespondentData.types';
 import {
@@ -41,6 +43,7 @@ import {
 } from '../RespondentData.const';
 import { getDateFormattedResponse, getTimeRangeResponse } from '../RespondentData.utils';
 import { DEFAULT_DATE_MAX } from './RespondentDataSummary.const';
+import { GetSingleMultiSelectionPerRowAnswers } from './RespondentDataSummary.types';
 
 export const getEmptyState = (selectedActivity: DatavizActivity | null) => {
   const { t } = i18n;
@@ -131,7 +134,7 @@ export const getIdentifiers = (
   );
 };
 
-export const isValueDefined = <T = string | number | (string | number)[] | null,>(
+export const isValueDefined = <T extends string | number | (string | number)[] | null>(
   value?: T,
 ): value is NonNullable<T> => value !== null && value !== undefined;
 
@@ -173,8 +176,10 @@ export const getSliderOptions = (
   }));
 };
 
-export const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) => {
-  const sortedOptions = getSortedOptions(formattedActivityItem.responseValues.options);
+export const getSingleMultiOptionsMapper = (formattedActivityItem: FormattedActivityItem) => {
+  const sortedOptions = getSortedOptions(
+    formattedActivityItem.responseValues.options as ItemOption[], // options for single/multi selecion
+  );
 
   return sortedOptions.reduce(
     (options: Record<number, number>, option: ItemOption, index: number) => ({
@@ -204,6 +209,32 @@ const getDefaultEmptyAnswer = (date: string) => [
   },
 ];
 
+export const getSingleMultiSelectionPerRowAnswers = ({
+  responseType,
+  currentAnswer,
+  date,
+}: GetSingleMultiSelectionPerRowAnswers) => {
+  if (responseType === ItemResponseType.SingleSelectionPerRow) {
+    return [
+      {
+        answer: {
+          value: currentAnswer,
+          text: null,
+        },
+        date,
+      },
+    ];
+  }
+
+  return (currentAnswer as string[])?.map((value) => ({
+    answer: {
+      value,
+      text: null,
+    },
+    date,
+  }));
+};
+
 export const formatActivityItemAnswers = (
   currentAnswer: ActivityItemAnswer,
   date: string,
@@ -220,7 +251,7 @@ export const formatActivityItemAnswers = (
 
   switch (currentAnswer.activityItem.responseType) {
     case ItemResponseType.SingleSelection: {
-      const optionsValuesMapper = getOptionsMapper(formattedActivityItem);
+      const optionsValuesMapper = getSingleMultiOptionsMapper(formattedActivityItem);
       const activityItem = {
         ...formattedActivityItem,
         responseValues: {
@@ -259,7 +290,7 @@ export const formatActivityItemAnswers = (
       };
     }
     case ItemResponseType.MultipleSelection: {
-      const optionsValuesMapper = getOptionsMapper(formattedActivityItem);
+      const optionsValuesMapper = getSingleMultiOptionsMapper(formattedActivityItem);
       const activityItem = {
         ...formattedActivityItem,
         responseValues: {
@@ -430,6 +461,43 @@ export const formatActivityItemAnswers = (
         ],
       };
     }
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow: {
+      const answers = (currentAnswer.answer as FormattedAnswer<string[]>)?.value?.reduce(
+        (
+          acc: Record<string, Answer<string | string[]>[]>,
+          currentAnswer: string | string[],
+          index: number,
+        ) => {
+          if (!formattedActivityItem?.responseValues?.rows) return acc;
+          const currentRow = formattedActivityItem?.responseValues?.rows[index];
+          const flattenAnswers = getSingleMultiSelectionPerRowAnswers({
+            responseType: formattedActivityItem.responseType,
+            currentAnswer,
+            date,
+          });
+          if (!flattenAnswers?.length) {
+            return acc;
+          }
+
+          if (!acc[currentRow.rowName]) {
+            acc[currentRow.rowName] = flattenAnswers;
+
+            return acc;
+          }
+
+          acc[currentRow.rowName].push(...flattenAnswers);
+
+          return acc;
+        },
+        {},
+      );
+
+      return {
+        activityItem: formattedActivityItem,
+        answers: answers as Record<string, Answer[]>,
+      };
+    }
     default:
       return {
         activityItem: formattedActivityItem,
@@ -447,10 +515,9 @@ export const compareActivityItem = (
   switch (currActivityItem.activityItem.responseType) {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection: {
-      const prevActivityItemOptions = getObjectFromList(
-        prevActivityItem.activityItem.responseValues.options,
-      );
-      const mapperIdValue = prevActivityItem.activityItem.responseValues.options.reduce(
+      const prevItemOptions = prevActivityItem.activityItem.responseValues.options as ItemOption[];
+      const prevActivityItemOptions = getObjectFromList(prevItemOptions);
+      const mapperIdValue = prevItemOptions.reduce(
         (acc: Record<string, number>, { id, value }) => ({
           ...acc,
           [id]: value,
@@ -474,7 +541,9 @@ export const compareActivityItem = (
         {},
       ) as Record<string, Answer<SimpleAnswerValue>>;
 
-      const sortedCurrOptions = getSortedOptions(activityItem.responseValues.options);
+      const sortedCurrOptions = getSortedOptions(
+        activityItem.responseValues.options as ItemOption[],
+      );
       const updatedOptions = sortedCurrOptions.reduce(
         (options: Record<string, ItemOption>, { id, text, value }) => {
           if (!options[id]) {
@@ -570,14 +639,17 @@ export const compareActivityItem = (
       const sliderOptions = getSliderOptions(
         currResponseValues,
         currActivityItem.activityItem.id ?? '',
-      ).reduce((options: Record<string, ItemOption>, currentOption) => {
-        if (options[currentOption.id]) return options;
+      ).reduce(
+        (options: Record<string, ItemOption>, currentOption) => {
+          if (options[currentOption.id]) return options;
 
-        return {
-          ...options,
-          [currentOption.id]: currentOption,
-        };
-      }, getObjectFromList(prevResponseValues.options));
+          return {
+            ...options,
+            [currentOption.id]: currentOption,
+          };
+        },
+        getObjectFromList(prevResponseValues.options as ItemOption[]),
+      );
 
       return {
         activityItem: {
@@ -586,13 +658,78 @@ export const compareActivityItem = (
             options: Object.values(sliderOptions),
           },
         },
-        answers: [...prevActivityItem.answers, ...answers],
+        answers: [...(prevActivityItem.answers as Answer[]), ...(answers as Answer[])],
+      };
+    }
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow: {
+      const prevActivityItemRows = getObjectFromList(
+        prevActivityItem.activityItem.responseValues.rows,
+        ({ rowName }) => rowName,
+      );
+
+      const prevActivityItemOptions = getObjectFromList(
+        prevActivityItem.activityItem.responseValues.options as PerRowSelectionItemOption[],
+        ({ text }) => text,
+      );
+
+      const updatedRows = (activityItem.responseValues.rows ?? [])?.reduce((rows, currRow) => {
+        if (!prevActivityItemRows[currRow.rowName]) {
+          rows.push(currRow);
+        }
+
+        return rows;
+      }, prevActivityItem.activityItem.responseValues.rows || []);
+
+      const updatedOptions = (
+        activityItem.responseValues.options as PerRowSelectionItemOption[]
+      )?.reduce((options, currOption) => {
+        if (!prevActivityItemOptions[currOption.text]) {
+          (options as PerRowSelectionItemOption[]).push(currOption);
+        }
+
+        return options;
+      }, prevActivityItem.activityItem.responseValues.options || []);
+
+      const responseValues = {
+        ...prevActivityItem.activityItem.responseValues,
+        rows: updatedRows,
+        options: updatedOptions,
+      };
+
+      const updatedAnswers = Object.entries(
+        answers as Record<string, Answer<RespondentAnswerValue>[]>,
+      ).reduce(
+        (acc: Record<string, Answer<RespondentAnswerValue>[]>, [rowName, answer]) => {
+          if (!answer?.length) {
+            return acc;
+          }
+
+          if (!acc[rowName]) {
+            acc[rowName] = answer;
+
+            return acc;
+          }
+
+          acc[rowName].push(...answer);
+
+          return acc;
+        },
+        prevActivityItem.answers as Record<string, Answer<RespondentAnswerValue>[]>,
+      );
+
+      return {
+        activityItem: {
+          ...prevActivityItem.activityItem,
+          responseValues,
+        },
+        answers: updatedAnswers,
       };
     }
     default:
       return {
         activityItem,
-        answers: [...prevActivityItem.answers, ...answers],
+        answers: [...(prevActivityItem.answers as Answer[]), ...(answers as Answer[])],
       };
   }
 };

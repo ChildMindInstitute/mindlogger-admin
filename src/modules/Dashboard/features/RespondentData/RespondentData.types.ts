@@ -34,8 +34,24 @@ export type NumberSelectionResponseValues = {
   maxValue: number;
 };
 
+export type PerRowSelectionItemRow = {
+  id: string;
+  rowImage: string | null;
+  rowName: string;
+  tooltip: string | null;
+};
+
+export type PerRowSelectionItemOption = {
+  id: string;
+  image: string | null;
+  text: string;
+  tooltip: string | null;
+  value?: string | number | null;
+};
+
 export type ItemResponseValues = {
-  options: ItemOption[];
+  options: ItemOption[] | PerRowSelectionItemOption[];
+  rows?: PerRowSelectionItemRow[];
 } & Partial<NumberSelectionResponseValues>;
 
 export type FormattedActivityItem = {
@@ -63,7 +79,7 @@ export type ActivityCompletion = {
 
 export type FormattedResponse<T = RespondentAnswerValue> = {
   activityItem: FormattedActivityItem;
-  answers: Answer<T>[];
+  answers: Answer<T>[] | Record<string, Answer<T>[]>;
   dataTestid?: string;
 };
 

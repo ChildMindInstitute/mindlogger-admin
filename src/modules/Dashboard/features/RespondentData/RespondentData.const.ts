@@ -30,8 +30,6 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.Geolocation,
   ItemResponseType.Photo,
   ItemResponseType.Video,
-  ItemResponseType.MultipleSelectionPerRow,
-  ItemResponseType.SingleSelectionPerRow,
   ItemResponseType.SliderRows,
   ItemResponseType.Message,
   ItemResponseType.Flanker,

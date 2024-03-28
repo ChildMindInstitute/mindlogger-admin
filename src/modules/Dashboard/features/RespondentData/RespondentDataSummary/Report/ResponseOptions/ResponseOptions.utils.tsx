@@ -11,6 +11,7 @@ import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
+import { SingleSelectionPerRow } from './SingleSelectionPerRow';
 
 export const getResponseItem = ({
   color,
@@ -47,24 +48,13 @@ export const getResponseItem = ({
     );
   };
 
-  const renderTimePicker = () => (
-    <TimePickerLineChart
-      color={color}
-      minDate={minDate}
-      maxDate={maxDate}
-      answers={answers as Answer<SimpleAnswerValue>[]}
-      versions={versions}
-      data-testid={`${dataTestid}-time-picker-chart`}
-    />
-  );
-
   switch (responseType) {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
     case ItemResponseType.Slider: {
       const { options } = activityItem.responseValues;
 
-      return renderMultipleSelection(options);
+      return renderMultipleSelection(options as ItemOption[]);
     }
     case ItemResponseType.NumberSelection: {
       const { minValue, maxValue } = activityItem.responseValues as NumberSelectionResponseValues;
@@ -85,9 +75,37 @@ export const getResponseItem = ({
     case ItemResponseType.TimeRange:
     case ItemResponseType.Date:
     case ItemResponseType.Text:
-      return <ReportTable responseType={responseType} answers={answers} data-testid={dataTestid} />;
+      return (
+        <ReportTable
+          responseType={responseType}
+          answers={answers as Answer[]}
+          data-testid={dataTestid}
+        />
+      );
     case ItemResponseType.Time:
-      return renderTimePicker();
+      return (
+        <TimePickerLineChart
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          answers={answers as Answer<SimpleAnswerValue>[]}
+          versions={versions}
+          data-testid={`${dataTestid}-time-picker-chart`}
+        />
+      );
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow:
+      return (
+        <SingleSelectionPerRow
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          activityItem={activityItem}
+          answers={answers}
+          versions={versions}
+          data-testid={dataTestid}
+        />
+      );
     default:
       <></>;
   }
