@@ -25,11 +25,6 @@ export type ItemOption = {
   value: number;
 };
 
-export type NumberSelectionResponseValues = {
-  minValue: number;
-  maxValue: number;
-};
-
 export type PerRowSelectionItemRow = {
   id: string;
   rowImage: string | null;
@@ -50,8 +45,9 @@ export type SingleMultiSelectionSliderItemResponseValues = {
 };
 
 export type NumberSelectionItemResponseValues = {
-  options: ItemOption[];
-} & Partial<NumberSelectionResponseValues>;
+  minValue: number;
+  maxValue: number;
+};
 
 export type SingleMultiSelectionPerRowItemResponseValues = {
   options: PerRowSelectionItemOption[];

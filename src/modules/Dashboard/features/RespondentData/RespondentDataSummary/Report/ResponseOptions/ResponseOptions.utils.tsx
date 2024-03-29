@@ -4,7 +4,7 @@ import {
   FormattedActivityItem,
   ItemOption,
   NumberSelectionAnswer,
-  NumberSelectionResponseValues,
+  NumberSelectionItemResponseValues,
   SingleMultiSelectionPerRowAnswer,
   SingleMultiSelectionPerRowItemResponseValues,
   SingleMultiSelectionSliderAnswer,
@@ -68,7 +68,7 @@ export const getResponseItem = ({
     }
     case ItemResponseType.NumberSelection: {
       const { minValue, maxValue } = activityItemAnswer.activityItem
-        .responseValues as NumberSelectionResponseValues;
+        .responseValues as NumberSelectionItemResponseValues;
       const min = Number(minValue ?? 0);
       const max = Number(maxValue ?? 0);
       const options = Array.from({ length: max - min + 1 }, (_, i) => {
