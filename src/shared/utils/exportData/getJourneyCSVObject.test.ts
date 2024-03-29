@@ -1,5 +1,5 @@
 import { ItemFormValues } from 'modules/Builder/types';
-import { ExtendedEvent } from 'shared/types';
+import { ExtendedEvent, UserActionType } from 'shared/types';
 
 import { getObjectFromList } from '../getObjectFromList';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
@@ -61,7 +61,7 @@ const items = [singleSelectionItem];
 const decryptedSingleSelection = {
   activityItem: singleSelectionItem,
   items,
-  type: 'SET_ANSWER',
+  type: UserActionType.SetAnswer,
   screen: '62e7e2c2-9fdb-4f2f-8460-78375a657f57/ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
   time: 1689755869391,
   response: {
@@ -132,6 +132,8 @@ const result = {
   options: 'Opt1: 1 (score: 4), Opt2: 2 (score: 2)',
   prompt: 'single  ',
   press_back_time: '',
+  press_popup_confirm_time: '',
+  press_popup_no_time: '',
   press_done_time: '',
   press_next_time: '',
   press_skip_time: '',
@@ -271,6 +273,93 @@ describe('getJourneyCSVObject', () => {
       ...result,
       activity_flow_id: 'some flow ID 222',
       activity_flow_name: 'test flow name',
+    });
+  });
+
+  test.each`
+    userActionType                     | expectedResult
+    ${UserActionType.Next}             | ${{ press_next_time: '1689755869391' }}
+    ${UserActionType.SkipPopupConfirm} | ${{ press_popup_confirm_time: '1689755869391' }}
+    ${UserActionType.SkipPopupCancel}  | ${{ press_popup_no_time: '1689755869391' }}
+    ${UserActionType.Prev}             | ${{ press_back_time: '1689755869391' }}
+    ${UserActionType.Undo}             | ${{ press_undo_time: '1689755869391' }}
+    ${UserActionType.Skip}             | ${{ press_skip_time: '1689755869391' }}
+    ${UserActionType.Done}             | ${{ press_done_time: '1689755869391' }}
+  `('return object with action type=$userActionType', ({ userActionType, expectedResult }) => {
+    expect(
+      getJourneyCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            type: userActionType,
+            response: undefined,
+            answer: null,
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      ...expectedResult,
+      response: '',
+      response_option_selection_time: '',
+    });
+  });
+
+  test('returns object with next time', () => {
+    expect(
+      getJourneyCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            type: UserActionType.Next,
+            response: undefined,
+            answer: null,
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      press_next_time: '1689755869391',
+      response: '', //'value: null',
+      response_option_selection_time: '',
+    });
+  });
+
+  test('returns object with popup confirm time', () => {
+    expect(
+      getJourneyCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            type: UserActionType.SkipPopupConfirm,
+            response: undefined,
+            answer: null,
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      press_popup_confirm_time: '1689755869391',
+      response: '',
+      response_option_selection_time: '',
     });
   });
 });

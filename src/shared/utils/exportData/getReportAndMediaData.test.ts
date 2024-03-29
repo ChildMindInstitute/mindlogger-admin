@@ -155,6 +155,95 @@ describe('getReportAndMediaData', () => {
     ] as DecryptedAnswerData[];
     const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
 
+    test('should return abtrails decrypted item when an answer was skipped', () => {
+      const decryptedAbTrailsItem = {
+        activityItem: {
+          question: '',
+          responseType: 'ABTrails',
+          responseValues: null,
+          config: {
+            deviceType: 'mobile',
+            orderName: 'first',
+            tutorials: {
+              tutorials: [], // skipped for the test case
+            },
+            nodes: {
+              radius: 4.18,
+              fontSize: 5.6,
+              fontSizeBeginEnd: null,
+              beginWordLength: null,
+              endWordLength: null,
+              nodes: [], // skipped for the test case
+            },
+          },
+          name: 'ABTrails_mobile_1',
+          isHidden: false,
+          conditionalLogic: null,
+          allowEdit: false,
+          id: 'ef510597-821a-444b-bf99-ae4d3c847866',
+        },
+        answer: null,
+        id: '72b3985c-4352-4a9d-9c23-2455cc607781',
+        submitId: '7b10bb4e-19a4-437c-a284-adcd6f5559ed',
+        version: '1.1.0',
+        respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+        respondentSecretId: 'ml_test1_account@gmail.com',
+        legacyProfileId: null,
+        scheduledDatetime: null,
+        startDatetime: 1689928536,
+        endDatetime: 1689928679,
+        migratedDate: null,
+        tzOffset: null,
+        scheduledEventId: null,
+        appletHistoryId: '3c32e00a-70c8-4f97-b549-5b536e9f8719_1.1.0',
+        activityHistoryId: '160adf2b-0a69-46fd-8326-fb53ed77eb27_1.1.0',
+        flowHistoryId: null,
+        flowName: null,
+        reviewedAnswerId: null,
+        createdAt: '2023-07-21T08:38:08.324411',
+        client: null,
+        appletId: '3c32e00a-70c8-4f97-b549-5b536e9f8719',
+        activityId: '160adf2b-0a69-46fd-8326-fb53ed77eb27',
+        flowId: null,
+        items: [], // skipped for the test case
+        activityName: 'A/B Trails Mobile',
+        subscaleSetting: null,
+      };
+      const decryptedAnswers = [decryptedAbTrailsItem] as unknown as DecryptedAnswerData[];
+      const rawAnswersObject = getObjectFromList(
+        decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getReportData([], rawAnswersObject, decryptedAnswers);
+      expect(result).toEqual([
+        {
+          activity_end_time: '1689928679000',
+          activity_flow_id: '',
+          activity_flow_name: '',
+          activity_id: '160adf2b-0a69-46fd-8326-fb53ed77eb27',
+          activity_name: 'A/B Trails Mobile',
+          activity_scheduled_time: 'not scheduled',
+          activity_start_time: '1689928536000',
+          event_id: '',
+          flag: 'incomplete',
+          id: '72b3985c-4352-4a9d-9c23-2455cc607781',
+          item: 'ABTrails_mobile_1',
+          item_id: 'ef510597-821a-444b-bf99-ae4d3c847866',
+          options: '',
+          prompt: '',
+          rawScore: '',
+          response: 'value: null',
+          reviewing_id: '',
+          secret_user_id: 'ml_test1_account@gmail.com',
+          timezone_offset: '',
+          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
+          version: '1.1.0',
+        },
+      ]);
+    });
+
     test('should return filtered out array with items without empty answers', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
@@ -464,6 +553,8 @@ describe('getReportAndMediaData', () => {
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
           press_back_time: '',
+          press_popup_confirm_time: '',
+          press_popup_no_time: '',
           press_done_time: '',
           press_next_time: '',
           press_skip_time: '',
@@ -491,6 +582,8 @@ describe('getReportAndMediaData', () => {
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
           press_back_time: '',
+          press_popup_confirm_time: '',
+          press_popup_no_time: '',
           press_done_time: '1689770404752',
           press_next_time: '',
           press_skip_time: '',
@@ -542,6 +635,8 @@ describe('getReportAndMediaData', () => {
           item_id: '',
           options: '',
           press_back_time: '',
+          press_popup_confirm_time: '',
+          press_popup_no_time: '',
           press_done_time: '',
           press_next_time: '1689770402755',
           press_skip_time: '',
@@ -568,6 +663,8 @@ describe('getReportAndMediaData', () => {
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
           press_back_time: '',
+          press_popup_confirm_time: '',
+          press_popup_no_time: '',
           press_done_time: '',
           press_next_time: '',
           press_skip_time: '',
@@ -595,6 +692,8 @@ describe('getReportAndMediaData', () => {
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
           press_back_time: '',
+          press_popup_confirm_time: '',
+          press_popup_no_time: '',
           press_done_time: '1689770404752',
           press_next_time: '',
           press_skip_time: '',
