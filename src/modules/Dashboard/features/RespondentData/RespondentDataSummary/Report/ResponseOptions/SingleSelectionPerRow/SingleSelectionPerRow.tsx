@@ -1,11 +1,7 @@
 import { Box } from '@mui/material';
 
 import { StyledFlexColumn, StyledTitleMedium, theme } from 'shared/styles';
-import {
-  Answer,
-  ItemOption,
-  SimpleAnswerValue,
-} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { ItemOption } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { SingleSelectionPerRowProps } from './SingleSelectionPerRow.types';
 import { TICK_HEIGHT } from '../../Charts/Charts.const';
@@ -17,7 +13,7 @@ export const SingleSelectionPerRow = ({
   maxDate,
   activityItem,
   versions,
-  answers = [],
+  answers = {},
   dataTestid,
 }: SingleSelectionPerRowProps) => {
   const height = (activityItem?.responseValues.options?.length + 1) * TICK_HEIGHT;
@@ -40,11 +36,7 @@ export const SingleSelectionPerRow = ({
             height={height}
             options={activityItem?.responseValues.options as ItemOption[]}
             responseType={activityItem.responseType}
-            answers={
-              (answers as Record<string, Answer<SimpleAnswerValue>[]>)[
-                rowName
-              ] as Answer<SimpleAnswerValue>[]
-            }
+            answers={answers[rowName]}
             versions={versions}
             data-testid={`${dataTestid}-multi-scatter-chart`}
             useCategory

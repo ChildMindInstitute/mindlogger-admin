@@ -1,16 +1,16 @@
 import { Version } from 'api';
 import {
-  Answer,
   FormattedActivityItem,
-  RespondentAnswerValue,
+  SingleMultiSelectionPerRowAnswer,
+  SingleMultiSelectionPerRowItemResponseValues,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-export type SingleSelectionPerRowProps<T = RespondentAnswerValue> = {
+export type SingleSelectionPerRowProps = {
   color: string;
   minDate: Date;
   maxDate: Date;
-  activityItem: FormattedActivityItem;
-  answers?: Answer<T>[] | Record<string, Answer<T>[]>;
+  activityItem: FormattedActivityItem<SingleMultiSelectionPerRowItemResponseValues>;
+  answers?: SingleMultiSelectionPerRowAnswer;
   versions: Version[];
   dataTestid?: string;
 };

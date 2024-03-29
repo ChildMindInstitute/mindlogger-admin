@@ -4,21 +4,17 @@ import { ActivityItemAnswer } from 'shared/types';
 import { SubscaleSetting } from 'shared/state';
 import { ItemResponseType } from 'shared/consts';
 
-export type SimpleAnswerValue = string | number;
-
 export type TimeRangeAnswerValue = {
   from: string;
   to: string;
 };
 
-export type RespondentAnswerValue = SimpleAnswerValue | TimeRangeAnswerValue;
-
-export type FormattedAnswer<T = SimpleAnswerValue> = {
+export type FormattedAnswer<T> = {
   value: T | null;
   text: string | null;
 };
 
-export type Answer<T = RespondentAnswerValue> = {
+export type Answer<T> = {
   answer: FormattedAnswer<T>;
   date: string;
 };
@@ -49,17 +45,25 @@ export type PerRowSelectionItemOption = {
   value?: string | number | null;
 };
 
-export type ItemResponseValues = {
-  options: ItemOption[] | PerRowSelectionItemOption[];
-  rows?: PerRowSelectionItemRow[];
+export type SingleMultiSelectionSliderItemResponseValues = {
+  options: ItemOption[];
+};
+
+export type NumberSelectionItemResponseValues = {
+  options: ItemOption[];
 } & Partial<NumberSelectionResponseValues>;
 
-export type FormattedActivityItem = {
+export type SingleMultiSelectionPerRowItemResponseValues = {
+  options: PerRowSelectionItemOption[];
+  rows: PerRowSelectionItemRow[];
+};
+
+export type FormattedActivityItem<T> = {
   id: string;
   name: string;
   question: Record<string, string>;
   responseType: ItemResponseType;
-  responseValues: ItemResponseValues;
+  responseValues: T;
   responseDataIdentifier?: boolean;
 };
 
@@ -77,11 +81,45 @@ export type ActivityCompletion = {
   subscaleSetting?: SubscaleSetting;
 };
 
-export type FormattedResponse<T = RespondentAnswerValue> = {
-  activityItem: FormattedActivityItem;
-  answers: Answer<T>[] | Record<string, Answer<T>[]>;
+export type SingleMultiSelectionSliderAnswer = Answer<number>;
+export type DateAnswer = Answer<string>;
+export type TextAnswer = Answer<string>;
+export type TimeAnswer = Answer<number>;
+export type NumberSelectionAnswer = Answer<number>;
+export type TimeRangeAnswer = Answer<TimeRangeAnswerValue>;
+export type SingleMultiSelectionPerRowAnswer = Record<string, Answer<string>[]>;
+
+export type CreateFormattedReposense<I, A> = {
+  activityItem: FormattedActivityItem<I>;
+  answers: A;
   dataTestid?: string;
 };
+
+export type SingleMultiSelectionSliderFormattedResponses = CreateFormattedReposense<
+  SingleMultiSelectionSliderItemResponseValues,
+  SingleMultiSelectionSliderAnswer[]
+>;
+export type TextFormattedResponses = CreateFormattedReposense<null, TextAnswer[]>;
+export type NumberSelectionFormattedResponses = CreateFormattedReposense<
+  NumberSelectionItemResponseValues,
+  NumberSelectionAnswer[]
+>;
+export type TimeRangeFormattedResponses = CreateFormattedReposense<null, TimeRangeAnswer[]>;
+export type DateFormattedResponses = CreateFormattedReposense<null, DateAnswer[]>;
+export type TimeFormattedResponses = CreateFormattedReposense<null, TimeAnswer[]>;
+export type SingleMultiSelectionPerRowFormattedResponses = CreateFormattedReposense<
+  SingleMultiSelectionPerRowItemResponseValues,
+  SingleMultiSelectionPerRowAnswer
+>;
+
+export type FormattedResponses =
+  | SingleMultiSelectionSliderFormattedResponses
+  | TextFormattedResponses
+  | NumberSelectionFormattedResponses
+  | TimeRangeFormattedResponses
+  | DateFormattedResponses
+  | TimeFormattedResponses
+  | SingleMultiSelectionPerRowFormattedResponses;
 
 export type RespondentsDataFormValues = {
   startDate: Date;
@@ -97,7 +135,7 @@ export type RespondentsDataFormValues = {
   identifiers: Identifier[];
   apiVersions: Version[];
   answers: ActivityCompletion[];
-  responseOptions: Record<string, FormattedResponse[]> | null;
+  responseOptions: Record<string, FormattedResponses[]> | null;
   subscalesFrequency: number;
   responseDate: null | Date;
 };

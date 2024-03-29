@@ -18,6 +18,6 @@ export type GetIdentifiersVersions = {
 
 export type GetSingleMultiSelectionPerRowAnswers = {
   responseType: ItemResponseType;
-  currentAnswer: string | string[];
+  currentAnswer: string | string[] | null;
   date: string;
 };

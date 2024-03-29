@@ -1,9 +1,17 @@
 import { ItemResponseType } from 'shared/consts';
 import {
-  Answer,
+  DateAnswer,
+  FormattedActivityItem,
   ItemOption,
+  NumberSelectionAnswer,
   NumberSelectionResponseValues,
-  SimpleAnswerValue,
+  SingleMultiSelectionPerRowAnswer,
+  SingleMultiSelectionPerRowItemResponseValues,
+  SingleMultiSelectionSliderAnswer,
+  SingleMultiSelectionSliderItemResponseValues,
+  TextAnswer,
+  TimeAnswer,
+  TimeRangeAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { TICK_HEIGHT } from '../Charts/Charts.const';
@@ -17,16 +25,17 @@ export const getResponseItem = ({
   color,
   minDate,
   maxDate,
-  activityItem,
   versions,
-  answers = [],
-  dataTestid,
+  activityItemAnswer,
 }: GetResponseOptionsProps) => {
-  const responseType = activityItem.responseType;
+  const responseType = activityItemAnswer.activityItem.responseType;
 
   const renderMultipleSelection = (options: ItemOption[]) => {
+    const answers = activityItemAnswer.answers as (
+      | SingleMultiSelectionSliderAnswer
+      | NumberSelectionAnswer
+    )[];
     const height = (options.length + 1) * TICK_HEIGHT;
-
     const values = options.map(({ value }) => value);
     const minY = Math.min(...values);
     const maxY = Math.max(...values);
@@ -41,9 +50,9 @@ export const getResponseItem = ({
         height={height}
         options={options}
         responseType={responseType}
-        answers={answers as Answer<SimpleAnswerValue>[]}
+        answers={answers}
         versions={versions}
-        data-testid={`${dataTestid}-multi-scatter-chart`}
+        data-testid={`${activityItemAnswer.dataTestid}-multi-scatter-chart`}
       />
     );
   };
@@ -52,12 +61,14 @@ export const getResponseItem = ({
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
     case ItemResponseType.Slider: {
-      const { options } = activityItem.responseValues;
+      const { options } = activityItemAnswer.activityItem
+        .responseValues as SingleMultiSelectionSliderItemResponseValues;
 
-      return renderMultipleSelection(options as ItemOption[]);
+      return renderMultipleSelection(options);
     }
     case ItemResponseType.NumberSelection: {
-      const { minValue, maxValue } = activityItem.responseValues as NumberSelectionResponseValues;
+      const { minValue, maxValue } = activityItemAnswer.activityItem
+        .responseValues as NumberSelectionResponseValues;
       const min = Number(minValue ?? 0);
       const max = Number(maxValue ?? 0);
       const options = Array.from({ length: max - min + 1 }, (_, i) => {
@@ -78,8 +89,8 @@ export const getResponseItem = ({
       return (
         <ReportTable
           responseType={responseType}
-          answers={answers as Answer[]}
-          data-testid={dataTestid}
+          answers={activityItemAnswer.answers as (TimeRangeAnswer | DateAnswer | TextAnswer)[]}
+          data-testid={activityItemAnswer.dataTestid}
         />
       );
     case ItemResponseType.Time:
@@ -88,9 +99,9 @@ export const getResponseItem = ({
           color={color}
           minDate={minDate}
           maxDate={maxDate}
-          answers={answers as Answer<SimpleAnswerValue>[]}
+          answers={activityItemAnswer.answers as TimeAnswer[]}
           versions={versions}
-          data-testid={`${dataTestid}-time-picker-chart`}
+          data-testid={`${activityItemAnswer.dataTestid}-time-picker-chart`}
         />
       );
     case ItemResponseType.SingleSelectionPerRow:
@@ -100,10 +111,12 @@ export const getResponseItem = ({
           color={color}
           minDate={minDate}
           maxDate={maxDate}
-          activityItem={activityItem}
-          answers={answers}
+          activityItem={
+            activityItemAnswer.activityItem as FormattedActivityItem<SingleMultiSelectionPerRowItemResponseValues>
+          }
+          answers={activityItemAnswer.answers as SingleMultiSelectionPerRowAnswer}
           versions={versions}
-          data-testid={dataTestid}
+          data-testid={activityItemAnswer.dataTestid}
         />
       );
     default:

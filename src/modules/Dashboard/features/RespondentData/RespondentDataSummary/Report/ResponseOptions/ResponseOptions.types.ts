@@ -1,22 +1,15 @@
 import { Version } from 'api';
-import {
-  Answer,
-  FormattedActivityItem,
-  FormattedResponse,
-  RespondentAnswerValue,
-} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { FormattedResponses } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type ResponseOptionsProps = {
-  responseOptions: Record<string, FormattedResponse[]>;
+  responseOptions: Record<string, FormattedResponses[]>;
   versions: Version[];
 };
 
-export type GetResponseOptionsProps<T = RespondentAnswerValue> = {
+export type GetResponseOptionsProps = {
   color: string;
   minDate: Date;
   maxDate: Date;
-  activityItem: FormattedActivityItem;
-  answers?: Answer<T>[] | Record<string, Answer<T>[]>;
+  activityItemAnswer: FormattedResponses;
   versions: Version[];
-  dataTestid?: string;
 };

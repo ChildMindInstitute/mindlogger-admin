@@ -4,9 +4,9 @@ import { format } from 'date-fns';
 import { DateFormats, DEFAULT_ROWS_PER_PAGE, ItemResponseType } from 'shared/consts';
 import { Order } from 'shared/types';
 import {
-  Answer,
-  TimeRangeAnswerValue,
-  SimpleAnswerValue,
+  TextAnswer,
+  DateAnswer,
+  TimeRangeAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import {
@@ -36,7 +36,7 @@ type UseResponseDataProps = {
 
 export const useResponseData = ({
   responseType,
-  answers,
+  answers = [],
   searchValue,
   page,
   order,
@@ -50,12 +50,9 @@ export const useResponseData = ({
     switch (responseType) {
       case ItemResponseType.Date:
       case ItemResponseType.Text: {
-        const answerList = (answers ?? []) as unknown as Answer<SimpleAnswerValue>[];
+        const answerList = answers as (DateAnswer | TextAnswer)[];
         formattedAnswers = answerList.reduce(
-          (
-            textItemAnswers: TextItemAnswer[],
-            { answer, date: answerDate }: Answer<SimpleAnswerValue>,
-          ) => {
+          (textItemAnswers: TextItemAnswer[], { answer, date: answerDate }) => {
             const date = format(new Date(answerDate), DateFormats.DayMonthYear);
             const time = format(new Date(answerDate), DateFormats.Time);
 
@@ -89,12 +86,9 @@ export const useResponseData = ({
         return getSimpleTextRows(visibleAnswers, skippedResponse);
       }
       case ItemResponseType.TimeRange: {
-        const answerList = (answers ?? []) as unknown as Answer<TimeRangeAnswerValue>[];
+        const answerList = answers as TimeRangeAnswer[];
         formattedAnswers = answerList.reduce(
-          (
-            itemAnswers: TimeRangeItemAnswer[],
-            { answer, date: answerDate }: Answer<TimeRangeAnswerValue>,
-          ) => {
+          (itemAnswers: TimeRangeItemAnswer[], { answer, date: answerDate }) => {
             const date = format(new Date(answerDate), DateFormats.DayMonthYear);
             const time = format(new Date(answerDate), DateFormats.Time);
 
