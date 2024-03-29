@@ -1,9 +1,17 @@
 import { ItemResponseType } from 'shared/consts';
 import {
-  Answer,
+  DateAnswer,
+  FormattedActivityItem,
   ItemOption,
-  NumberSelectionResponseValues,
-  SimpleAnswerValue,
+  NumberSelectionAnswer,
+  NumberSelectionItemResponseValues,
+  SingleMultiSelectionPerRowAnswer,
+  SingleMultiSelectionPerRowItemResponseValues,
+  SingleMultiSelectionSliderAnswer,
+  SingleMultiSelectionSliderItemResponseValues,
+  TextAnswer,
+  TimeAnswer,
+  TimeRangeAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { TICK_HEIGHT } from '../Charts/Charts.const';
@@ -11,21 +19,23 @@ import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
+import { SelectionPerRow } from './SelectionPerRow';
 
 export const getResponseItem = ({
   color,
   minDate,
   maxDate,
-  activityItem,
   versions,
-  answers = [],
-  dataTestid,
+  activityItemAnswer,
 }: GetResponseOptionsProps) => {
-  const responseType = activityItem.responseType;
+  const responseType = activityItemAnswer.activityItem.responseType;
 
   const renderMultipleSelection = (options: ItemOption[]) => {
+    const answers = activityItemAnswer.answers as (
+      | SingleMultiSelectionSliderAnswer
+      | NumberSelectionAnswer
+    )[];
     const height = (options.length + 1) * TICK_HEIGHT;
-
     const values = options.map(({ value }) => value);
     const minY = Math.min(...values);
     const maxY = Math.max(...values);
@@ -40,34 +50,25 @@ export const getResponseItem = ({
         height={height}
         options={options}
         responseType={responseType}
-        answers={answers as Answer<SimpleAnswerValue>[]}
+        answers={answers}
         versions={versions}
-        data-testid={`${dataTestid}-multi-scatter-chart`}
+        data-testid={`${activityItemAnswer.dataTestid}-multi-scatter-chart`}
       />
     );
   };
-
-  const renderTimePicker = () => (
-    <TimePickerLineChart
-      color={color}
-      minDate={minDate}
-      maxDate={maxDate}
-      answers={answers as Answer<SimpleAnswerValue>[]}
-      versions={versions}
-      data-testid={`${dataTestid}-time-picker-chart`}
-    />
-  );
 
   switch (responseType) {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection:
     case ItemResponseType.Slider: {
-      const { options } = activityItem.responseValues;
+      const { options } = activityItemAnswer.activityItem
+        .responseValues as SingleMultiSelectionSliderItemResponseValues;
 
       return renderMultipleSelection(options);
     }
     case ItemResponseType.NumberSelection: {
-      const { minValue, maxValue } = activityItem.responseValues as NumberSelectionResponseValues;
+      const { minValue, maxValue } = activityItemAnswer.activityItem
+        .responseValues as NumberSelectionItemResponseValues;
       const min = Number(minValue ?? 0);
       const max = Number(maxValue ?? 0);
       const options = Array.from({ length: max - min + 1 }, (_, i) => {
@@ -85,9 +86,39 @@ export const getResponseItem = ({
     case ItemResponseType.TimeRange:
     case ItemResponseType.Date:
     case ItemResponseType.Text:
-      return <ReportTable responseType={responseType} answers={answers} data-testid={dataTestid} />;
+      return (
+        <ReportTable
+          responseType={responseType}
+          answers={activityItemAnswer.answers as (TimeRangeAnswer | DateAnswer | TextAnswer)[]}
+          data-testid={activityItemAnswer.dataTestid}
+        />
+      );
     case ItemResponseType.Time:
-      return renderTimePicker();
+      return (
+        <TimePickerLineChart
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          answers={activityItemAnswer.answers as TimeAnswer[]}
+          versions={versions}
+          data-testid={`${activityItemAnswer.dataTestid}-time-picker-chart`}
+        />
+      );
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow:
+      return (
+        <SelectionPerRow
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          activityItem={
+            activityItemAnswer.activityItem as FormattedActivityItem<SingleMultiSelectionPerRowItemResponseValues>
+          }
+          answers={activityItemAnswer.answers as SingleMultiSelectionPerRowAnswer}
+          versions={versions}
+          data-testid={activityItemAnswer.dataTestid}
+        />
+      );
     default:
       <></>;
   }
