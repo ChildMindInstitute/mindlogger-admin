@@ -19,7 +19,7 @@ import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
-import { SingleSelectionPerRow } from './SingleSelectionPerRow';
+import { SelectionPerRow } from './SelectionPerRow';
 
 export const getResponseItem = ({
   color,
@@ -107,7 +107,7 @@ export const getResponseItem = ({
     case ItemResponseType.SingleSelectionPerRow:
     case ItemResponseType.MultipleSelectionPerRow:
       return (
-        <SingleSelectionPerRow
+        <SelectionPerRow
           color={color}
           minDate={minDate}
           maxDate={maxDate}

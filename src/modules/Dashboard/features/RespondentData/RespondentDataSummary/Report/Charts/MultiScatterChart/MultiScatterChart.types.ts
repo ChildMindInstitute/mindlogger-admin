@@ -4,10 +4,10 @@ import { Version } from 'api';
 import { locales } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
 import {
-  Answer,
   ItemOption,
   NumberSelectionAnswer,
   SingleMultiSelectionSliderAnswer,
+  TextAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type ExtendedChartDataset = ChartDataset & {
@@ -23,7 +23,7 @@ export type MultiScatterChartProps = {
   height: number;
   options: ItemOption[];
   responseType: ItemResponseType;
-  answers: (SingleMultiSelectionSliderAnswer | NumberSelectionAnswer)[] | Answer<string>[];
+  answers: (SingleMultiSelectionSliderAnswer | NumberSelectionAnswer | TextAnswer)[];
   versions: Version[];
   useCategory?: boolean;
   'data-testid'?: string;
@@ -43,7 +43,7 @@ export type OptionsProps = {
 
 export type DataProps = {
   maxY: number;
-  answers: (SingleMultiSelectionSliderAnswer | NumberSelectionAnswer)[] | Answer<string>[];
+  answers: (SingleMultiSelectionSliderAnswer | NumberSelectionAnswer | TextAnswer)[];
   versions: Version[];
   color: string;
   useCategory: boolean;

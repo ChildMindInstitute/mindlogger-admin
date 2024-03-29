@@ -5,7 +5,7 @@ import {
   SingleMultiSelectionPerRowItemResponseValues,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-export type SingleSelectionPerRowProps = {
+export type SelectionPerRowProps = {
   color: string;
   minDate: Date;
   maxDate: Date;

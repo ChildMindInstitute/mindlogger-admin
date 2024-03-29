@@ -3,11 +3,11 @@ import { Box } from '@mui/material';
 import { StyledFlexColumn, StyledTitleMedium, theme } from 'shared/styles';
 import { ItemOption } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-import { SingleSelectionPerRowProps } from './SingleSelectionPerRow.types';
+import { SelectionPerRowProps } from './SelectionPerRow.types';
 import { TICK_HEIGHT } from '../../Charts/Charts.const';
 import { MultiScatterChart } from '../../Charts/MultiScatterChart';
 
-export const SingleSelectionPerRow = ({
+export const SelectionPerRow = ({
   color,
   minDate,
   maxDate,
@@ -15,7 +15,7 @@ export const SingleSelectionPerRow = ({
   versions,
   answers = {},
   dataTestid,
-}: SingleSelectionPerRowProps) => {
+}: SelectionPerRowProps) => {
   const height = (activityItem?.responseValues.options?.length + 1) * TICK_HEIGHT;
 
   return (
