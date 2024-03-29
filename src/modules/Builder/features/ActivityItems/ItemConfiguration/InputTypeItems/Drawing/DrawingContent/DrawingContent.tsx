@@ -1,22 +1,27 @@
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
+import { useWatch } from 'react-hook-form';
 
 import { Uploader } from 'shared/components';
 import { MAX_FILE_SIZE_25MB } from 'shared/consts';
-import { theme } from 'shared/styles';
+import { StyledBodyMedium, theme } from 'shared/styles';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { useCustomFormContext } from 'modules/Builder/hooks';
+import { CheckboxController } from 'shared/components/FormComponents/CheckboxController/CheckboxController';
 
 import { DrawingContentProps } from './DrawingContent.types';
 
 export const DrawingContent = ({ name }: DrawingContentProps) => {
   const { t } = useTranslation('app');
-  const { watch, setValue } = useCustomFormContext();
+  const { control, setValue } = useCustomFormContext();
 
   const drawingExampleName = `${name}.responseValues.drawingExample`;
   const drawingBackgroundName = `${name}.responseValues.drawingBackground`;
-  const drawingExample = watch(drawingExampleName);
-  const drawingBackground = watch(drawingBackgroundName);
+  const divideSpaceFlagName = `${name}.responseValues.proportion.enabled`;
+  const [drawingExample, drawingBackground] = useWatch({
+    name: [drawingExampleName, drawingBackgroundName],
+  });
   const dataTestid = 'builder-activity-items-item-configuration-drawing';
 
   const commonUploaderProps = {
@@ -55,13 +60,26 @@ export const DrawingContent = ({ name }: DrawingContentProps) => {
   ];
 
   return (
-    <Uploads
-      uploads={uploads}
-      wrapperStyles={{
-        mt: theme.spacing(2),
-        ml: theme.spacing(-4.8),
-        justifyContent: 'flex-start',
-      }}
-    />
+    <Box>
+      <Uploads
+        uploads={uploads}
+        wrapperStyles={{
+          mt: theme.spacing(2),
+          ml: theme.spacing(-4.8),
+          justifyContent: 'flex-start',
+          flexWrap: 'wrap',
+          width: 'unset',
+        }}
+      />
+      <CheckboxController
+        name={divideSpaceFlagName}
+        control={control}
+        label={<StyledBodyMedium>{t('drawingDivideFlagDescription')}</StyledBodyMedium>}
+        sxLabelProps={{
+          mt: theme.spacing(3),
+        }}
+        data-testid={`${dataTestid}-divide-content-flag`}
+      />
+    </Box>
   );
 };
