@@ -507,7 +507,7 @@ export const formatActivityItemAnswers = (
           const activityItem =
             formattedActivityItem as FormattedActivityItem<SingleMultiSelectionPerRowItemResponseValues>;
           if (!activityItem?.responseValues?.rows) return acc;
-          const currentRow = activityItem?.responseValues?.rows[index];
+          const currentRow = activityItem.responseValues.rows[index];
           const flattenAnswers = getSingleMultiSelectionPerRowAnswers({
             responseType: activityItem.responseType,
             currentAnswer,
