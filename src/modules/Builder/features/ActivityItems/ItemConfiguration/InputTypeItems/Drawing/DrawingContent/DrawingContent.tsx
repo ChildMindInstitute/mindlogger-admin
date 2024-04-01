@@ -64,8 +64,7 @@ export const DrawingContent = ({ name }: DrawingContentProps) => {
       <Uploads
         uploads={uploads}
         wrapperStyles={{
-          mt: theme.spacing(2),
-          ml: theme.spacing(-4.8),
+          m: theme.spacing(2, 0, 0, -4.8),
           justifyContent: 'flex-start',
           flexWrap: 'wrap',
           width: 'unset',
