@@ -13,6 +13,6 @@ export type GetItemsOptionsProps = {
 };
 
 export type GetItemsInUsageProps = {
-  conditionalLogic: ConditionalLogic[];
+  conditionalLogic?: ConditionalLogic[];
   itemKey: string;
 };

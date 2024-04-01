@@ -32,7 +32,7 @@ export const getItemsOptions = ({ items, itemsInUsage }: GetItemsOptionsProps) =
   }, []);
 
 export const getItemsInUsage = ({ conditionalLogic, itemKey }: GetItemsInUsageProps) =>
-  conditionalLogic.reduce((acc, conditional) => {
+  (conditionalLogic ?? []).reduce((acc, conditional) => {
     if (!conditional.itemKey || conditional.itemKey === itemKey) return acc;
 
     return acc.add(conditional.itemKey);
