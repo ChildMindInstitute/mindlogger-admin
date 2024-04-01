@@ -1,9 +1,9 @@
 import { LDFlagValue } from 'launchdarkly-react-client-sdk';
 
 // These keys use the camelCase representation of the feature flag value
-// e.g. multi-informant-feature-flag in LaunchDarky becomes multiInformantFeatureFlag
+// e.g. enable-multi-informant in LaunchDarky becomes enableMultiInformant
 export const FeatureFlagsKeys = {
-  multiInformantFlag: 'multiInformantFeatureFlag',
+  multiInformantFlag: 'enableMultiInformant',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;
