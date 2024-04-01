@@ -140,7 +140,7 @@ describe('useBreadcrumbs', () => {
   beforeEach(() => {
     jest.mocked(useLaunchDarkly).mockReturnValue({
       flags: {
-        multiInformantFlag: false,
+        enableMultiInformant: false,
       },
     });
   });
@@ -548,7 +548,7 @@ describe('useBreadcrumbs', () => {
   test('should generate correct breadcrumbs for respondent details using multi-informat', () => {
     jest.mocked(useLaunchDarkly).mockReturnValue({
       flags: {
-        multiInformantFlag: true,
+        enableMultiInformant: true,
       },
     });
     const route = `/dashboard/${appletId}/participants/${respondentId}`;
@@ -609,7 +609,7 @@ describe('useBreadcrumbs', () => {
   test('should generate correct breadcrumbs for respondent details using multi-informat schedule', () => {
     jest.mocked(useLaunchDarkly).mockReturnValue({
       flags: {
-        multiInformantFlag: true,
+        enableMultiInformant: true,
       },
     });
     const route = `/dashboard/${appletId}/participants/${respondentId}/schedule`;

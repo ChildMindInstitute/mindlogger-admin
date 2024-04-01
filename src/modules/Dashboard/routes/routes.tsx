@@ -41,7 +41,7 @@ export const dashboardRoutes = (flags: FeatureFlags) => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {flags.multiInformantFlag ? <AppletMultiInformant /> : <Applet />}
+            {flags.enableMultiInformant ? <AppletMultiInformant /> : <Applet />}
           </ErrorBoundary>
         </PrivateRoute>
       }
