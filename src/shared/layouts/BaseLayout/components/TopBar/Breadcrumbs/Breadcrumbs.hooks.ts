@@ -28,14 +28,14 @@ import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const {
-    flags: { multiInformantFlag },
+    flags: { enableMultiInformant },
   } = useLaunchDarkly();
   const { appletId, activityId, activityFlowId, participantId, respondentId, setting } =
     useParams();
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
-  const respondentLabel = useRespondentLabel({ hideNickname: !!multiInformantFlag });
+  const respondentLabel = useRespondentLabel({ hideNickname: !!enableMultiInformant });
   const subjectLabel = useRespondentLabel({ isSubject: true });
   const { workspaceName } = workspaces.useData() ?? {};
   const { result } = applet.useAppletData() ?? {};
@@ -126,7 +126,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('respondents') && !multiInformantFlag) {
+    if (pathname.includes('respondents') && !enableMultiInformant) {
       newBreadcrumbs.push({
         icon: 'respondent-outlined',
         label: t('respondents'),
@@ -138,7 +138,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
     if (participantId || respondentId) {
       newBreadcrumbs.push({
-        icon: multiInformantFlag ? undefined : 'account',
+        icon: enableMultiInformant ? undefined : 'account',
         label: respondentLabel || subjectLabel,
         disabledLink: true,
       });
@@ -166,7 +166,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         disabledLink: true,
       });
     }
-    if (pathname.includes('schedule') && !multiInformantFlag) {
+    if (pathname.includes('schedule') && !enableMultiInformant) {
       newBreadcrumbs.push({
         icon: 'schedule-outlined',
         label: t('schedule'),
