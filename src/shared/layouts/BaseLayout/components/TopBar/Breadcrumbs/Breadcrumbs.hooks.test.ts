@@ -545,7 +545,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant details using multi-informat', () => {
+  test('should generate correct breadcrumbs for participant details using multi-informant', () => {
     jest.mocked(useLaunchDarkly).mockReturnValue({
       flags: {
         enableMultiInformant: true,
@@ -606,7 +606,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant details schedule using multi-informat', () => {
+  test('should generate correct breadcrumbs for participant details schedule using multi-informant', () => {
     jest.mocked(useLaunchDarkly).mockReturnValue({
       flags: {
         enableMultiInformant: true,
@@ -667,7 +667,7 @@ describe('useBreadcrumbs', () => {
     });
   });
 
-  test('should generate correct breadcrumbs for participant activity details using multi-informat', () => {
+  test('should generate correct breadcrumbs for participant activity details using multi-informant', () => {
     jest.mocked(useLaunchDarkly).mockReturnValue({
       flags: {
         enableMultiInformant: true,
