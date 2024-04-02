@@ -13,6 +13,7 @@ import {
   MultipleSelectionPerRowItem,
   SingleAndMultiplePerRowConfig,
   SingleAndMultipleSelectRowsResponseValues,
+  SliderRowsItem,
 } from 'shared/state';
 import {
   DecryptedMultiSelectionAnswer,
@@ -24,6 +25,7 @@ import {
   DecryptedDateRangeAnswer,
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedMultiSelectionPerRowAnswer,
+  DecryptedSliderRowsAnswer,
 } from 'shared/types';
 
 export type Answer = {
@@ -76,6 +78,12 @@ export type SingleMultiSelectPerRowActivityItem = {
 export type SingleMultiSelectPerRowItemAnswer = {
   activityItem: SingleMultiSelectPerRowActivityItem;
   answer: DecryptedSingleSelectionPerRowAnswer | DecryptedMultiSelectionPerRowAnswer | null;
+  'data-testid'?: string;
+};
+
+export type SliderRowsItemAnswer = {
+  activityItem: SliderRowsItem;
+  answer: DecryptedSliderRowsAnswer | null;
   'data-testid'?: string;
 };
 
