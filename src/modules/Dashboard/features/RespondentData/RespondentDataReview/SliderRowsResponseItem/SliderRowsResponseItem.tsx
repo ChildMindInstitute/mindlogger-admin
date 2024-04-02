@@ -37,7 +37,11 @@ export const SliderRowsResponseItem = ({
           }}
         >
           <StyledTitleMedium>{row.label ?? ''}</StyledTitleMedium>
-          <SliderResponseItem activityItem={rowActivityItem} answer={answerValue} />
+          <SliderResponseItem
+            activityItem={rowActivityItem}
+            answer={answerValue}
+            data-testid={`${dataTestid}-row-${index}-slider`}
+          />
         </Box>
       );
     })}
