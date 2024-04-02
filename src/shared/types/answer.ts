@@ -520,8 +520,8 @@ export type JourneyCSVReturnProps = {
   activity_start_time: string;
   activity_end_time: string;
   press_next_time: string;
-  press_popup_confirm_time: string;
-  press_popup_no_time: string;
+  press_popup_skip_time: string;
+  press_popup_keep_time: string;
   press_back_time: string;
   press_undo_time: string;
   press_skip_time: string;

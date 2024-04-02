@@ -132,8 +132,8 @@ const result = {
   options: 'Opt1: 1 (score: 4), Opt2: 2 (score: 2)',
   prompt: 'single  ',
   press_back_time: '',
-  press_popup_confirm_time: '',
-  press_popup_no_time: '',
+  press_popup_skip_time: '',
+  press_popup_keep_time: '',
   press_done_time: '',
   press_next_time: '',
   press_skip_time: '',
@@ -279,8 +279,8 @@ describe('getJourneyCSVObject', () => {
   test.each`
     userActionType                     | expectedResult
     ${UserActionType.Next}             | ${{ press_next_time: '1689755869391' }}
-    ${UserActionType.SkipPopupConfirm} | ${{ press_popup_confirm_time: '1689755869391' }}
-    ${UserActionType.SkipPopupCancel}  | ${{ press_popup_no_time: '1689755869391' }}
+    ${UserActionType.SkipPopupConfirm} | ${{ press_popup_skip_time: '1689755869391' }}
+    ${UserActionType.SkipPopupCancel}  | ${{ press_popup_keep_time: '1689755869391' }}
     ${UserActionType.Prev}             | ${{ press_back_time: '1689755869391' }}
     ${UserActionType.Undo}             | ${{ press_undo_time: '1689755869391' }}
     ${UserActionType.Skip}             | ${{ press_skip_time: '1689755869391' }}
