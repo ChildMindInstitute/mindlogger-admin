@@ -17,7 +17,7 @@ import { getAppletActivitiesApi } from 'api';
 import { useAsync, useTable } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
 import { page } from 'resources';
-import { Activity } from 'redux/modules';
+import { Activity, workspaces } from 'redux/modules';
 import { ActivitySummaryCard } from 'modules/Dashboard/components';
 
 import { StyledButton, StyledSearch, StyledSvg } from './Activities.styles';
@@ -32,6 +32,9 @@ export const Activities = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dataTestid = 'dashboard-applet-activities';
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const workspaceRoles = workspaces.useRolesData();
+  const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
 
   const { execute: getActivities } = useAsync(
     getAppletActivitiesApi,
@@ -60,9 +63,13 @@ export const Activities = () => {
     () => ({
       editActivity: ({ context }: MenuActionProps<ActivityActionProps>) => {
         const { activityId } = context || {};
-        // TODO: Implement edit
-        // https://mindlogger.atlassian.net/browse/M2-5590
-        alert(`TODO: Edit activity (${activityId})`);
+
+        navigate(
+          generatePath(page.builderAppletActivity, {
+            appletId,
+            activityId,
+          }),
+        );
       },
       exportData: ({ context }: MenuActionProps<ActivityActionProps>) => {
         const { activityId } = context || {};
@@ -131,7 +138,7 @@ export const Activities = () => {
           content: () =>
             !!appletId && (
               <ActionsMenu
-                menuItems={getActivityActions({ actions, appletId, activityId })}
+                menuItems={getActivityActions({ actions, appletId, activityId, dataTestid, roles })}
                 data-testid={`${dataTestid}-activity-actions`}
                 buttonColor="secondary"
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
