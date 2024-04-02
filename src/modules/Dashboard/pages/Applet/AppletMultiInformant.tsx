@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
+import { Link, Outlet, generatePath, useLocation, useParams } from 'react-router-dom';
 import { Button, Tooltip } from '@mui/material';
 
 import { LinkedTabs, Spinner, Svg } from 'shared/components';
@@ -21,7 +21,6 @@ import { palette } from 'shared/styles/variables/palette';
 import { page } from 'resources';
 import { Mixpanel } from 'shared/utils';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
-import DashboardAppletSettings from 'modules/Dashboard/features/Applet/DashboardAppletSettings';
 import { StyledPanel } from 'shared/components/Tabs/TabPanel/TabPanel.style';
 
 import { useMultiInformantAppletTabs } from './Applet.hooks';
@@ -53,6 +52,8 @@ export const AppletMultiInformant = () => {
   if (isForbidden) return noPermissionsComponent;
 
   const isLoading = appletLoadingStatus === 'loading' || appletLoadingStatus === 'idle';
+
+  const isTopLevelTab = appletTabs.map((tabConfig) => tabConfig.path).includes(location.pathname);
   const isSettingsSelected = location.pathname.includes('settings');
 
   return (
@@ -112,6 +113,7 @@ export const AppletMultiInformant = () => {
           )}
 
           <LinkedTabs
+            deepPathCompare
             animateTabIndicator={false}
             defaultToFirstTab={false}
             hiddenHeader={hiddenHeader}
@@ -119,9 +121,22 @@ export const AppletMultiInformant = () => {
             tabs={appletTabs}
           />
 
-          {isSettingsSelected && (
+          {/*
+            The main `<Outlet />` for this page lives in LinkedTabs above. The outlet appears when
+            the current url matches the path config described in useMultiInformantAppletTabs.
+            This is an issue for routes like /settings and /add-user which are not top-level tabs.
+
+            Use of this extra `<Outlet />` is a temporary workaround for those routes. Both /settings
+            and /add-user are becoming modals that will NOT change the url. When that happens, we
+            should remove this.
+
+            See:
+              - https://mindlogger.atlassian.net/browse/M2-5987
+              - https://mindlogger.atlassian.net/browse/M2-5436
+          */}
+          {!isTopLevelTab && (
             <StyledPanel hiddenHeader={hiddenHeader}>
-              <DashboardAppletSettings />
+              <Outlet />
             </StyledPanel>
           )}
 
