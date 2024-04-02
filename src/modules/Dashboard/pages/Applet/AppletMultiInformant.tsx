@@ -10,6 +10,7 @@ import {
   StyledFlexTopBaseline,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
+  StyledLogo,
   StyledTitleMedium,
   theme,
   variables,
@@ -24,7 +25,6 @@ import { ExportDataSetting } from 'shared/features/AppletSettings';
 import { StyledPanel } from 'shared/components/Tabs/TabPanel/TabPanel.style';
 
 import { useMultiInformantAppletTabs } from './Applet.hooks';
-import { StyledAppletLogo } from './Applet.styles';
 
 export const AppletMultiInformant = () => {
   const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
@@ -67,7 +67,7 @@ export const AppletMultiInformant = () => {
               margin={`${theme.spacing(1.2)} ${theme.spacing(3.4)}`}
             >
               <StyledFlexTopCenter gap={theme.spacing(1.6)}>
-                {!!appletData.image && <StyledAppletLogo src={appletData.image} />}
+                {!!appletData.image && <StyledLogo src={appletData.image} />}
                 <StyledHeadlineLarge>{appletData.displayName}</StyledHeadlineLarge>
                 {!!appletData?.description && (
                   <Tooltip
