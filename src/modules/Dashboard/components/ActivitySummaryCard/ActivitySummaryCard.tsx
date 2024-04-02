@@ -19,11 +19,12 @@ export const ActivitySummaryCard = ({
   name,
   participantCount,
   latestActivity,
+  'data-testid': dataTestId,
 }: ActivitySummaryCardProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledContainer>
+    <StyledContainer data-testid={dataTestId}>
       <StyledFlexSpaceBetween>
         <StyledImageContainer>
           {!!image && <StyledImg src={image} alt={name} />}
