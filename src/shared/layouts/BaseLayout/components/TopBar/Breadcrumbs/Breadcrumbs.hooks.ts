@@ -97,12 +97,16 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     }
 
     if (appletId && (isDashboard || isBuilder)) {
+      const participantsPath = enableMultiInformant
+        ? page.appletParticipants
+        : page.appletRespondents;
+
       newBreadcrumbs.push({
         icon: appletData?.image || '',
         useCustomIcon: true,
         label: appletLabel,
         chip: isBuilder ? t('editing') : undefined,
-        navPath: generatePath(isDashboard ? page.appletRespondents : page.builderApplet, {
+        navPath: generatePath(isDashboard ? participantsPath : page.builderApplet, {
           appletId,
         }),
         hasUrl: !!appletData?.image,

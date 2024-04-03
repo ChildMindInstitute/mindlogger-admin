@@ -284,6 +284,15 @@ export const Participants = () => {
     const stringSecretIds = joinWihComma(secretIds, true);
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
 
+    const defaultOnClick = () => {
+      navigate(
+        generatePath(page.appletParticipantActivities, {
+          appletId,
+          participantId: respondentOrSubjectId,
+        }),
+      );
+    };
+
     return {
       checkbox: {
         content: () => (
@@ -310,16 +319,19 @@ export const Participants = () => {
         content: () => stringSecretIds,
         value: stringSecretIds,
         width: ParticipantsColumnsWidth.Default,
+        onClick: defaultOnClick,
       },
       nicknames: {
         content: () => stringNicknames,
         value: stringNicknames,
         width: ParticipantsColumnsWidth.Default,
+        onClick: defaultOnClick,
       },
       tags: {
         content: () => <>--</>,
         value: '',
         width: ParticipantsColumnsWidth.Default,
+        onClick: defaultOnClick,
       },
       status: {
         content: () => (
@@ -331,17 +343,20 @@ export const Participants = () => {
         ),
         value: '',
         width: ParticipantsColumnsWidth.Status,
+        onClick: defaultOnClick,
       },
       lastSeen: {
         content: () => latestActive,
         value: latestActive,
         width: ParticipantsColumnsWidth.Default,
+        onClick: defaultOnClick,
       },
       ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
           width: ParticipantsColumnsWidth.Schedule,
+          onClick: defaultOnClick,
         },
       }),
       actions: {
