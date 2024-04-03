@@ -1,6 +1,6 @@
 import { Roles } from 'shared/consts';
 
-import { isManagerOrOwner, isManagerOrOwnerOrEditor } from './checkRole';
+import { checkIfCanEdit, isManagerOrOwner, isManagerOrOwnerOrEditor } from './checkRole';
 
 describe('isManagerOrOwner', () => {
   test.each`
@@ -31,5 +31,21 @@ describe('isManagerOrOwnerOrEditor', () => {
     ${undefined}         | ${false} | ${'should be false for undefined'}
   `('$description', ({ role, expected }) => {
     expect(isManagerOrOwnerOrEditor(role)).toBe(expected);
+  });
+});
+
+describe('checkIfCanEdit', () => {
+  test.each`
+    roles                  | expected | description
+    ${[Roles.Manager]}     | ${true}  | ${'should be true for manager'}
+    ${[Roles.Editor]}      | ${true}  | ${'should be true for editor'}
+    ${[Roles.Coordinator]} | ${false} | ${'should be false for coordinator'}
+    ${[Roles.Owner]}       | ${true}  | ${'should be true for owner'}
+    ${[Roles.Respondent]}  | ${false} | ${'should be false for respondent'}
+    ${[Roles.Reviewer]}    | ${false} | ${'should be false for reviewer'}
+    ${[Roles.SuperAdmin]}  | ${true}  | ${'should be true for superadmin'}
+    ${undefined}           | ${false} | ${'should be false for undefined'}
+  `('$description', ({ roles, expected }) => {
+    expect(checkIfCanEdit(roles)).toBe(expected);
   });
 });

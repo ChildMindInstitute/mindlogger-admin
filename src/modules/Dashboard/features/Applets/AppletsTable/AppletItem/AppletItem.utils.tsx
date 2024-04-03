@@ -2,7 +2,7 @@ import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { Roles } from 'shared/consts';
-import { isManagerOrOwner } from 'shared/utils';
+import { checkIfCanEdit, isManagerOrOwner } from 'shared/utils';
 import { variables } from 'shared/styles';
 
 import { AppletActions } from './AppletItem.types';
@@ -24,11 +24,10 @@ export const getAppletActions = ({
 }: AppletActions) => {
   const { isPublished } = item;
   const isReviewer = roles?.includes(Roles.Reviewer);
-  const isEditor = roles?.includes(Roles.Editor);
   const isOwner = roles?.includes(Roles.Owner);
   const isCoordinator = roles?.includes(Roles.Coordinator);
   const isSuperAdmin = roles?.includes(Roles.SuperAdmin);
-  const commonCondition = isManagerOrOwner(roles?.[0]) || isEditor || isSuperAdmin;
+  const canEdit = checkIfCanEdit(roles);
 
   return [
     {
@@ -56,14 +55,14 @@ export const getAppletActions = ({
       icon: <Svg id="widget" />,
       action: editAction,
       title: t('editAnApplet'),
-      isDisplayed: commonCondition,
+      isDisplayed: canEdit,
       'data-testid': 'dashboard-applets-applet-edit',
     },
     {
       icon: <Svg id="duplicate" />,
       action: duplicateAction,
       title: t('duplicateApplet'),
-      isDisplayed: commonCondition,
+      isDisplayed: canEdit,
       'data-testid': 'dashboard-applets-applet-duplicate',
     },
     {
@@ -92,7 +91,7 @@ export const getAppletActions = ({
       icon: <Svg id="trash" />,
       action: deleteAction,
       title: t('deleteApplet'),
-      isDisplayed: commonCondition,
+      isDisplayed: canEdit,
       customItemColor: variables.palette.dark_error_container,
       'data-testid': 'dashboard-applets-applet-delete',
     },

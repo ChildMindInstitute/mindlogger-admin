@@ -1,5 +1,6 @@
 import { MenuActionProps } from 'shared/components';
 import { Activity } from 'redux/modules';
+import { Roles } from 'shared/consts';
 
 export type ActivityActionProps = {
   activityId: string;
@@ -18,6 +19,8 @@ export type ActivityActions = {
     assignActivity: (props: MenuActionProps<ActivityActionProps>) => void;
     takeNow: (props: MenuActionProps<ActivityActionProps>) => void;
   };
+  dataTestid: string;
   appletId: string;
   activityId: string;
+  roles?: Roles[];
 };

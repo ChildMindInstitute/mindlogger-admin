@@ -1,11 +1,14 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
 
-import { renderWithProviders } from 'shared/utils';
-import { mockedAppletData, mockedAppletId } from 'shared/mock';
 import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
+import { Roles } from 'shared/consts';
+import { mockedAppletData, mockedAppletId } from 'shared/mock';
+import { getPreloadedState } from 'shared/tests/getPreloadedState';
+import { renderWithProviders } from 'shared/utils';
 
 import { Activities } from './Activities';
 
@@ -79,5 +82,44 @@ describe('Dashboard > Applet > Activities screen', () => {
     expect(mockedUseNavigate).toHaveBeenCalledWith(
       generatePath(page.builderAppletActivities, { appletId: mockedAppletId }),
     );
+  });
+
+  describe('should show or hide edit ability depending on role', () => {
+    test.each`
+      canEdit  | role                 | description
+      ${true}  | ${Roles.Manager}     | ${'editing for Manager'}
+      ${true}  | ${Roles.SuperAdmin}  | ${'editing for SuperAdmin'}
+      ${true}  | ${Roles.Owner}       | ${'editing for Owner'}
+      ${false} | ${Roles.Coordinator} | ${'editing for Coordinator'}
+      ${true}  | ${Roles.Editor}      | ${'editing for Editor'}
+      ${false} | ${Roles.Respondent}  | ${'editing for Respondent'}
+      ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
+    `('$description', async ({ canEdit, role }) => {
+      mockAxios.get.mockResolvedValue(successfulGetAppletActivitiesMock);
+      renderWithProviders(<Activities />, {
+        preloadedState: getPreloadedState(role),
+        route,
+        routePath,
+      });
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]).toBeVisible(),
+      );
+      userEvent.click(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]);
+
+      if (canEdit) {
+        await waitFor(() => expect(screen.getByTestId(`${testId}-activity-edit`)).toBeVisible());
+
+        fireEvent.click(screen.getByTestId(`${testId}-activity-edit`));
+        expect(mockedUseNavigate).toHaveBeenCalledWith(
+          generatePath(page.builderAppletActivity, {
+            appletId: mockedAppletId,
+            activityId: mockedAppletData.activities[0].id,
+          }),
+        );
+      } else {
+        await waitFor(() => expect(screen.queryByTestId(`${testId}-activity-edit`)).toBe(null));
+      }
+    });
   });
 });
