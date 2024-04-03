@@ -6,6 +6,8 @@ export const isManagerOrOwnerOrEditor = (role?: Roles) =>
   isManagerOrOwner(role) || role === Roles.Editor;
 
 export const checkIfCanEdit = (roles?: Roles[]) =>
-  isManagerOrOwner(roles?.[0]) ||
-  roles?.includes(Roles.Editor) ||
-  roles?.includes(Roles.SuperAdmin);
+  Boolean(
+    isManagerOrOwner(roles?.[0]) ||
+      roles?.includes(Roles.Editor) ||
+      roles?.includes(Roles.SuperAdmin),
+  );
