@@ -1,4 +1,11 @@
-import { getAllSubscalesToRender } from './Subscales.utils';
+import { getObjectFromList } from 'shared/utils/getObjectFromList';
+
+import {
+  formatCurrentSubscales,
+  getAllSubscalesToRender,
+  getSubscalesToRender,
+  groupSubscales,
+} from './Subscales.utils';
 
 const activityItems = {
   single: {
@@ -654,6 +661,657 @@ describe('Subscales.utils', () => {
         // @ts-ignore
         getAllSubscalesToRender(allSubscalesToRender, item, subscale, activityItems),
       ).toStrictEqual(expected);
+    });
+  });
+
+  const activityItemsForSubscales = {
+    ss: {
+      activityItem: {
+        question: {
+          en: 'ss',
+        },
+        responseType: 'singleSelect',
+        responseValues: {
+          paletteName: null,
+          options: [
+            {
+              id: 'c7527d6b-1fde-4c3c-ae24-c3bb6f29849b',
+              text: 's2',
+              image: null,
+              score: 1,
+              tooltip: null,
+              isHidden: false,
+              color: null,
+              alert: null,
+              value: 1,
+            },
+            {
+              id: 'a93d2a96-2fdb-46c1-a105-56fe255b2f57',
+              text: 's1',
+              image: null,
+              score: 2,
+              tooltip: null,
+              isHidden: false,
+              color: null,
+              alert: null,
+              value: 0,
+            },
+          ],
+        },
+        config: {
+          removeBackButton: false,
+          skippableItem: false,
+          randomizeOptions: false,
+          timer: 0,
+          addScores: true,
+          setAlerts: false,
+          addTooltip: false,
+          setPalette: false,
+          addTokens: null,
+          additionalResponseOption: {
+            textInputOption: false,
+            textInputRequired: false,
+          },
+          autoAdvance: false,
+        },
+        name: 'ss',
+        isHidden: false,
+        conditionalLogic: null,
+        allowEdit: true,
+        id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
+        order: 1,
+      },
+      answer: {
+        value: 1,
+        text: null,
+      },
+      items: [], // skip for the test case
+    },
+    ms: {
+      activityItem: {
+        question: {
+          en: 'ms',
+        },
+        responseType: 'multiSelect',
+        responseValues: {
+          paletteName: null,
+          options: [
+            {
+              id: '2ac38764-b526-48c6-9682-698cf2ebde7e',
+              text: 'ms3',
+              image: null,
+              score: 4,
+              tooltip: null,
+              isHidden: false,
+              color: null,
+              alert: null,
+              value: 2,
+              isNoneAbove: false,
+            },
+            {
+              id: '07d19ab9-2c10-42e1-a8b1-c9a5e5bbf66b',
+              text: 'ms2',
+              image: null,
+              score: 2,
+              tooltip: null,
+              isHidden: false,
+              color: null,
+              alert: null,
+              value: 1,
+              isNoneAbove: false,
+            },
+            {
+              id: '4af1b267-6e8d-4cec-9425-cee2a80c648a',
+              text: 'ms1',
+              image: null,
+              score: 0,
+              tooltip: null,
+              isHidden: false,
+              color: null,
+              alert: null,
+              value: 0,
+              isNoneAbove: false,
+            },
+          ],
+        },
+        config: {
+          removeBackButton: false,
+          skippableItem: false,
+          randomizeOptions: false,
+          timer: 0,
+          addScores: true,
+          setAlerts: false,
+          addTooltip: false,
+          setPalette: false,
+          addTokens: null,
+          additionalResponseOption: {
+            textInputOption: false,
+            textInputRequired: false,
+          },
+        },
+        name: 'ms',
+        isHidden: false,
+        conditionalLogic: null,
+        allowEdit: true,
+        id: 'da7cc5c3-07e6-4af3-a1e9-9dbfe24c65c2',
+        order: 2,
+      },
+      answer: {
+        value: [1, 2],
+        text: null,
+      },
+      items: [], //
+    },
+    gender_screen: {
+      activityItem: {
+        question: {
+          en: 'How do you describe yourself?',
+        },
+        responseType: 'singleSelect',
+        responseValues: {
+          paletteName: null,
+          options: [
+            {
+              id: '268e7b85-de80-4897-9b9a-b187f63bb97c',
+              text: 'Male',
+              image: null,
+              score: null,
+              tooltip: null,
+              isHidden: false,
+              color: null,
+              alert: null,
+              value: 0,
+            },
+            {
+              id: 'a431d8c8-9ba0-40a0-b02a-2a62398d08f7',
+              text: 'Female',
+              image: null,
+              score: null,
+              tooltip: null,
+              isHidden: false,
+              color: null,
+              alert: null,
+              value: 1,
+            },
+          ],
+        },
+        config: {
+          removeBackButton: false,
+          skippableItem: false,
+          randomizeOptions: false,
+          timer: 0,
+          addScores: false,
+          setAlerts: false,
+          addTooltip: false,
+          setPalette: false,
+          addTokens: null,
+          additionalResponseOption: {
+            textInputOption: false,
+            textInputRequired: false,
+          },
+          autoAdvance: false,
+        },
+        name: 'gender_screen',
+        isHidden: false,
+        conditionalLogic: null,
+        allowEdit: false,
+        id: '50c8d980-b543-427a-91b0-5a0744132085',
+        order: 3,
+      },
+      answer: {
+        value: 0,
+        text: null,
+      },
+      items: [], //
+    },
+    age_screen: {
+      activityItem: {
+        question: {
+          en: 'How old are you?',
+        },
+        responseType: 'text',
+        responseValues: null,
+        config: {
+          removeBackButton: false,
+          skippableItem: false,
+          maxResponseLength: 300,
+          correctAnswerRequired: false,
+          correctAnswer: '',
+          numericalResponseRequired: false,
+          responseDataIdentifier: false,
+          responseRequired: false,
+          isIdentifier: null,
+        },
+        name: 'age_screen',
+        isHidden: false,
+        conditionalLogic: null,
+        allowEdit: false,
+        id: '0e628431-1b6f-4e73-ac8b-a918b92e571a',
+        order: 4,
+      },
+      answer: '44',
+      items: [], //
+    },
+  };
+  const endDatetime = '2024-02-13T04:01:42.008000';
+  const subscaleItemS1 = {
+    name: 's1',
+    scoring: 'sum',
+    items: [
+      {
+        name: 'ss',
+        type: 'item',
+      },
+    ],
+    subscaleTableData: [
+      {
+        score: '10',
+        rawScore: '1',
+        age: 15,
+        sex: 'M',
+        optionalText:
+          'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+      },
+      {
+        score: '20',
+        rawScore: '2',
+        age: 15,
+        sex: 'M',
+        optionalText:
+          'https://gist.githubusercontent.com/benbalter/3914310/raw/f757a33411082da23f0ad4a124b45fcdacc1b43f/Example--text.txt',
+      },
+      {
+        score: '30',
+        rawScore: '3',
+        age: 15,
+        sex: 'M',
+        optionalText: 'Markdown Text Here',
+      },
+      {
+        score: '40',
+        rawScore: '4',
+        age: 15,
+        sex: 'F',
+        optionalText: 'Good',
+      },
+      {
+        score: '50',
+        rawScore: '5',
+        age: 15,
+        sex: null,
+        optionalText: '',
+      },
+    ],
+  };
+  const subscaleItemS2 = {
+    name: 's2',
+    scoring: 'sum',
+    items: [
+      {
+        name: 'ms',
+        type: 'item',
+      },
+      {
+        name: 'ss',
+        type: 'item',
+      },
+    ],
+    subscaleTableData: null,
+  };
+  const subscaleItemS3 = {
+    name: 's3',
+    scoring: 'average',
+    items: [
+      {
+        name: 's1',
+        type: 'subscale',
+      },
+      {
+        name: 's2',
+        type: 'subscale',
+      },
+    ],
+    subscaleTableData: null,
+  };
+  const subscalesObject = getObjectFromList(
+    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    [subscaleItemS1, subscaleItemS2],
+    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    (item) => item.name,
+  );
+  const expectedResultS1 = {
+    s1: {
+      items: [
+        {
+          activityItem: {
+            id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
+            name: 'ss',
+            question: {
+              en: 'ss',
+            },
+            responseType: 'singleSelect',
+            responseValues: {
+              options: [
+                {
+                  id: 'c7527d6b-1fde-4c3c-ae24-c3bb6f29849b',
+                  text: 's2',
+                  value: 0,
+                },
+                {
+                  id: 'a93d2a96-2fdb-46c1-a105-56fe255b2f57',
+                  text: 's1',
+                  value: 1,
+                },
+              ],
+            },
+          },
+          answers: [
+            {
+              answer: {
+                value: 0,
+                text: null,
+              },
+              date: endDatetime,
+            },
+          ],
+        },
+      ],
+    },
+  };
+  const expectedResultS2 = {
+    s2: {
+      items: [
+        {
+          activityItem: {
+            id: 'da7cc5c3-07e6-4af3-a1e9-9dbfe24c65c2',
+            name: 'ms',
+            question: {
+              en: 'ms',
+            },
+            responseType: 'multiSelect',
+            responseValues: {
+              options: [
+                {
+                  id: '2ac38764-b526-48c6-9682-698cf2ebde7e',
+                  text: 'ms3',
+                  value: 0,
+                },
+                {
+                  id: '07d19ab9-2c10-42e1-a8b1-c9a5e5bbf66b',
+                  text: 'ms2',
+                  value: 1,
+                },
+                {
+                  id: '4af1b267-6e8d-4cec-9425-cee2a80c648a',
+                  text: 'ms1',
+                  value: 2,
+                },
+              ],
+            },
+          },
+          answers: [
+            {
+              answer: {
+                text: null,
+                value: 1,
+              },
+              date: endDatetime,
+            },
+            {
+              answer: {
+                text: null,
+                value: 0,
+              },
+              date: endDatetime,
+            },
+          ],
+        },
+        {
+          activityItem: {
+            id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
+            name: 'ss',
+            question: {
+              en: 'ss',
+            },
+            responseType: 'singleSelect',
+            responseValues: {
+              options: [
+                {
+                  id: 'c7527d6b-1fde-4c3c-ae24-c3bb6f29849b',
+                  text: 's2',
+                  value: 0,
+                },
+                {
+                  id: 'a93d2a96-2fdb-46c1-a105-56fe255b2f57',
+                  text: 's1',
+                  value: 1,
+                },
+              ],
+            },
+          },
+          answers: [
+            {
+              answer: {
+                text: null,
+                value: 0,
+              },
+              date: endDatetime,
+            },
+          ],
+        },
+      ],
+    },
+  };
+  const expectedResultS3 = {
+    s3: undefined,
+  };
+  describe('getSubscalesToRender', () => {
+    test.each`
+      subscale          | expectedResult      | description
+      ${subscaleItemS1} | ${expectedResultS1} | ${'returns result for subscale-1 consisted of items'}
+      ${subscaleItemS2} | ${expectedResultS2} | ${'returns result for subscale-2 consisted of items'}
+      ${subscaleItemS3} | ${expectedResultS3} | ${'returns result for subscale consisted of subscales'}
+    `('$description', ({ subscale, expectedResult }) => {
+      expect(
+        getSubscalesToRender(
+          subscale,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItemsForSubscales,
+          subscalesObject,
+          endDatetime,
+          {},
+        ),
+      ).toStrictEqual(expectedResult);
+    });
+  });
+
+  const currentSubscales = {
+    s1: {
+      ...expectedResultS1.s1,
+      score: 1,
+      optionText: '',
+      restScores: {},
+    },
+    s2: {
+      ...expectedResultS2.s2,
+      score: 7,
+      optionText: '',
+      restScores: {},
+    },
+    s3: {
+      score: 4,
+      optionText: '',
+      restScores: {
+        s1: {
+          score: 1,
+          optionText: '',
+        },
+        s2: {
+          score: 7,
+          optionText: '',
+        },
+      },
+    },
+  };
+  const expectedFormattedSubscales = {
+    ...currentSubscales,
+    s3: {
+      ...currentSubscales.s3,
+      items: [],
+    },
+  };
+  describe('formatCurrentSubscales', () => {
+    test('should return formatted subscale', () => {
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      expect(formatCurrentSubscales(currentSubscales)).toStrictEqual(expectedFormattedSubscales);
+    });
+  });
+
+  describe('groupSubscales', () => {
+    const expectedResult = {
+      s3: {
+        score: 4,
+        optionText: '',
+        restScores: {
+          s1: {
+            items: [
+              {
+                activityItem: {
+                  id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
+                  name: 'ss',
+                  question: {
+                    en: 'ss',
+                  },
+                  responseType: 'singleSelect',
+                  responseValues: {
+                    options: [
+                      {
+                        id: 'c7527d6b-1fde-4c3c-ae24-c3bb6f29849b',
+                        text: 's2',
+                        value: 0,
+                      },
+                      {
+                        id: 'a93d2a96-2fdb-46c1-a105-56fe255b2f57',
+                        text: 's1',
+                        value: 1,
+                      },
+                    ],
+                  },
+                },
+                answers: [
+                  {
+                    answer: {
+                      value: 0,
+                      text: null,
+                    },
+                    date: endDatetime,
+                  },
+                ],
+              },
+            ],
+            score: 1,
+            optionText: '',
+            restScores: {},
+          },
+          s2: {
+            items: [
+              {
+                activityItem: {
+                  id: 'da7cc5c3-07e6-4af3-a1e9-9dbfe24c65c2',
+                  name: 'ms',
+                  question: {
+                    en: 'ms',
+                  },
+                  responseType: 'multiSelect',
+                  responseValues: {
+                    options: [
+                      {
+                        id: '2ac38764-b526-48c6-9682-698cf2ebde7e',
+                        text: 'ms3',
+                        value: 0,
+                      },
+                      {
+                        id: '07d19ab9-2c10-42e1-a8b1-c9a5e5bbf66b',
+                        text: 'ms2',
+                        value: 1,
+                      },
+                      {
+                        id: '4af1b267-6e8d-4cec-9425-cee2a80c648a',
+                        text: 'ms1',
+                        value: 2,
+                      },
+                    ],
+                  },
+                },
+                answers: [
+                  {
+                    answer: {
+                      value: 1,
+                      text: null,
+                    },
+                    date: endDatetime,
+                  },
+                  {
+                    answer: {
+                      value: 0,
+                      text: null,
+                    },
+                    date: endDatetime,
+                  },
+                ],
+              },
+              {
+                activityItem: {
+                  id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
+                  name: 'ss',
+                  question: {
+                    en: 'ss',
+                  },
+                  responseType: 'singleSelect',
+                  responseValues: {
+                    options: [
+                      {
+                        id: 'c7527d6b-1fde-4c3c-ae24-c3bb6f29849b',
+                        text: 's2',
+                        value: 0,
+                      },
+                      {
+                        id: 'a93d2a96-2fdb-46c1-a105-56fe255b2f57',
+                        text: 's1',
+                        value: 1,
+                      },
+                    ],
+                  },
+                },
+                answers: [
+                  {
+                    answer: {
+                      value: 0,
+                      text: null,
+                    },
+                    date: endDatetime,
+                  },
+                ],
+              },
+            ],
+            score: 7,
+            optionText: '',
+            restScores: {},
+          },
+        },
+        items: [],
+      },
+    };
+    test('should return group subscales', () => {
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      expect(groupSubscales(expectedFormattedSubscales, expectedFormattedSubscales)).toStrictEqual(
+        expectedResult,
+      );
     });
   });
 });
