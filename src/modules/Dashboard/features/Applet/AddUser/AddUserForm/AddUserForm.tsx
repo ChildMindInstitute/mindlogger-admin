@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import {
   InputController,
   SelectController,
-  TagsInputController,
+  TagsAutocompleteController,
 } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledTitleMedium, theme } from 'shared/styles';
 import { AppletInvitationOptions, getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
@@ -121,6 +121,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
         }),
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ownerId]);
 
   const hasCommonError = useFormError({ error, setError });
@@ -156,7 +157,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           </Grid>
           {role === Roles.Reviewer && (
             <Grid item xs={4}>
-              <TagsInputController
+              <TagsAutocompleteController
                 {...commonProps}
                 name={Fields.respondents}
                 options={respondents}

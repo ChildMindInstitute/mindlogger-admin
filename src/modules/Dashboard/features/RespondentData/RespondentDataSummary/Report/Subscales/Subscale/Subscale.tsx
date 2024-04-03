@@ -4,16 +4,16 @@ import { Box } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
 import { useTranslation } from 'react-i18next';
 
-import { useDatavizFilters } from 'modules/Dashboard/hooks';
+import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/hooks/useDatavizFilters';
 import { getDictionaryText } from 'shared/utils';
 import { Accordion } from 'modules/Dashboard/components';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
-import { FormattedResponse } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.types';
+import { FormattedResponse } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { getResponseItem } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils';
 import { StyledBodyMedium, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
-import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
-import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
+import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData';
+import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 
 import { COLORS } from '../../Charts/Charts.const';
 import { AdditionalInformation } from '../AdditionalInformation';
@@ -29,7 +29,7 @@ export const Subscale = ({
 }: SubscaleProps) => {
   const { t } = useTranslation('app');
 
-  const { watch } = useFormContext<SummaryFiltersForm>();
+  const { watch } = useFormContext<RespondentsDataFormValues>();
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 

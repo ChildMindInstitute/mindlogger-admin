@@ -1,16 +1,32 @@
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { StyledBodyLarge, variables } from 'shared/styles';
-import { RespondentDataContext } from 'modules/Dashboard/pages/RespondentData/RespondentData.context';
+import { DatavizActivity } from 'api';
 
 import { StyledMenu } from '../../RespondentData.styles';
 import { StyleContainer, StyledActivity } from './ReportMenu.styles';
 import { ReportMenuProps } from './ReportMenu.types';
-import { StickyHeader } from './StickyHeader/StickyHeader';
+import { StickyHeader } from './StickyHeader';
+import { RespondentsDataFormValues } from '../../RespondentData.types';
 
-export const ReportMenu = ({ activities }: ReportMenuProps) => {
-  const { selectedActivity, setSelectedActivity } = useContext(RespondentDataContext);
+export const ReportMenu = ({
+  activities,
+  getIdentifiersVersions,
+  fetchAnswers,
+  setIsLoading,
+}: ReportMenuProps) => {
   const containerRef = useRef<HTMLElement | null>(null);
+  const { setValue } = useFormContext<RespondentsDataFormValues>();
+  const [selectedActivity] = useWatch({ name: ['selectedActivity'] });
+
+  const handleActivitySelect = async (activity: DatavizActivity) => {
+    setValue('selectedActivity', activity);
+    setIsLoading(true);
+    await getIdentifiersVersions({ activity });
+    await fetchAnswers({ activity });
+    setIsLoading(false);
+  };
 
   return (
     <StyledMenu ref={containerRef} data-testid="report-menu" sx={{ p: 0 }}>
@@ -21,7 +37,7 @@ export const ReportMenu = ({ activities }: ReportMenuProps) => {
             <StyledActivity
               key={String(activity.id)}
               isSelected={selectedActivity?.id === activity.id}
-              onClick={() => setSelectedActivity(activity)}
+              onClick={() => handleActivitySelect(activity)}
               data-testid={`respondents-summary-activity-${index}`}
             >
               <StyledBodyLarge color={variables.palette.on_surface}>
