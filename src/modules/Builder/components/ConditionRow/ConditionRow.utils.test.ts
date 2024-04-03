@@ -21,96 +21,21 @@ describe('getConditionItemType', () => {
 });
 
 describe('getPayload', () => {
-  test('returns optionValue for INCLUDES_OPTION', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.IncludesOption,
-      conditionPayload: {
-        optionValue: 'optionValue',
-      },
-    });
-    expect(payload).toEqual({ optionValue: 'optionValue' });
-  });
-
-  test('returns empty string for INCLUDES_OPTION when conditionPayload is missed', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.IncludesOption,
-    });
-    expect(payload).toEqual({ optionValue: '' });
-  });
-
-  test('returns minValue for GREATER_THAN and responseType = slider', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.GreaterThan,
-      selectedItem: {
-        responseType: ItemResponseType.Slider,
-        responseValues: { minValue: 1, maxValue: 5 },
-      },
-    });
-    expect(payload).toEqual({ value: 1 });
-  });
-
-  test('returns value for GREATER_THAN and responseType != slider', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.GreaterThan,
-      conditionPayload: {
-        value: 2,
-      },
-    });
-    expect(payload).toEqual({ value: 2 });
-  });
-
-  test('returns maxValue for LESS_THAN and responseType = slider', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.LessThan,
-      selectedItem: {
-        responseType: ItemResponseType.Slider,
-        responseValues: { minValue: 1, maxValue: 5 },
-      },
-    });
-    expect(payload).toEqual({ value: 5 });
-  });
-
-  test('returns value for LESS_THAN and responseType != slider', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.LessThan,
-      conditionPayload: {
-        value: 2,
-      },
-    });
-    expect(payload).toEqual({ value: 2 });
-  });
-
-  test('returns value for EQUAL', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.Equal,
-      conditionPayload: {
-        value: 1,
-      },
-    });
-    expect(payload).toEqual({ value: 1 });
-  });
-
-  test('returns minValue and maxValue for BETWEEN and responseType = slider', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.Between,
-      selectedItem: {
-        responseType: ItemResponseType.Slider,
-        responseValues: { minValue: 1, maxValue: 5 },
-      },
-    });
-    expect(payload).toEqual({ minValue: 1, maxValue: 5 });
-  });
-
-  test('returns default values for OUTSIDE_OF and responseType != slider', () => {
-    const payload = getPayload({
-      conditionType: ConditionType.OutsideOf,
-    });
-    expect(payload).toEqual({ maxValue: 10, minValue: 0 });
-  });
-
-  test('returns empty object for unknown condition type', () => {
-    const payload = getPayload({ conditionType: 'UnknownType' as ConditionType });
-    expect(payload).toEqual({});
+  test.each`
+    condition                                                                                                                                              | expectedPayload
+    ${{ conditionType: ConditionType.IncludesOption, conditionPayload: { optionValue: 'optionValue' } }}                                                   | ${{ optionValue: 'optionValue' }}
+    ${{ conditionType: ConditionType.IncludesOption }}                                                                                                     | ${{ optionValue: '' }}
+    ${{ conditionType: ConditionType.GreaterThan, selectedItem: { responseType: ItemResponseType.Slider, responseValues: { minValue: 1, maxValue: 5 } } }} | ${{ value: 1 }}
+    ${{ conditionType: ConditionType.GreaterThan, conditionPayload: { value: 2 } }}                                                                        | ${{ value: 2 }}
+    ${{ conditionType: ConditionType.LessThan, selectedItem: { responseType: ItemResponseType.Slider, responseValues: { minValue: 1, maxValue: 5 } } }}    | ${{ value: 5 }}
+    ${{ conditionType: ConditionType.LessThan, conditionPayload: { value: 2 } }}                                                                           | ${{ value: 2 }}
+    ${{ conditionType: ConditionType.Equal, conditionPayload: { value: 1 } }}                                                                              | ${{ value: 1 }}
+    ${{ conditionType: ConditionType.Between, selectedItem: { responseType: ItemResponseType.Slider, responseValues: { minValue: 1, maxValue: 5 } } }}     | ${{ minValue: 1, maxValue: 5 }}
+    ${{ conditionType: ConditionType.OutsideOf }}                                                                                                          | ${{ maxValue: 10, minValue: 0 }}
+    ${{ conditionType: 'UnknownType' as ConditionType }}                                                                                                   | ${{}}
+  `('returns payload for condition $condition.conditionType', ({ condition, expectedPayload }) => {
+    const payload = getPayload(condition);
+    expect(payload).toEqual(expectedPayload);
   });
 });
 
