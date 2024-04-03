@@ -976,7 +976,7 @@ describe('Subscales.utils', () => {
   const subscalesObject = getObjectFromList(
     //eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
-    [subscaleItemS1, subscaleItemS2],
+    [subscaleItemS1, subscaleItemS2, subscaleItemS3],
     //eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     (item) => item.name,
