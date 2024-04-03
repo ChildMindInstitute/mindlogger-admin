@@ -155,7 +155,7 @@ describe('getReportAndMediaData', () => {
     ] as DecryptedAnswerData[];
     const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
 
-    test('should return abtrails decrypted item when an answer was skipped', () => {
+    test('should return empty list when an ABTrails answer was skipped at once', () => {
       const decryptedAbTrailsItem = {
         activityItem: {
           question: '',
@@ -217,31 +217,7 @@ describe('getReportAndMediaData', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const result = getReportData([], rawAnswersObject, decryptedAnswers);
-      expect(result).toEqual([
-        {
-          activity_end_time: '1689928679000',
-          activity_flow_id: '',
-          activity_flow_name: '',
-          activity_id: '160adf2b-0a69-46fd-8326-fb53ed77eb27',
-          activity_name: 'A/B Trails Mobile',
-          activity_scheduled_time: 'not scheduled',
-          activity_start_time: '1689928536000',
-          event_id: '',
-          flag: 'incomplete',
-          id: '72b3985c-4352-4a9d-9c23-2455cc607781',
-          item: 'ABTrails_mobile_1',
-          item_id: 'ef510597-821a-444b-bf99-ae4d3c847866',
-          options: '',
-          prompt: '',
-          rawScore: '',
-          response: 'value: null',
-          reviewing_id: '',
-          secret_user_id: 'ml_test1_account@gmail.com',
-          timezone_offset: '',
-          userId: '835e5277-5949-4dff-817a-d85c17a3604f',
-          version: '1.1.0',
-        },
-      ]);
+      expect(result).toStrictEqual([]);
     });
 
     test('should return filtered out array with items without empty answers', () => {
