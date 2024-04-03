@@ -595,7 +595,7 @@ describe('useBreadcrumbs', () => {
       icon: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/respondents',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
       useCustomIcon: true,
     });
     expect(participant).toEqual({
@@ -656,7 +656,7 @@ describe('useBreadcrumbs', () => {
       icon: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/respondents',
+      navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
       useCustomIcon: true,
     });
     expect(participant).toEqual({
@@ -724,7 +724,7 @@ describe('useBreadcrumbs', () => {
       icon: '',
       key: expect.any(String),
       label: 'Mocked Applet',
-      navPath: `/dashboard/${appletId}/respondents`,
+      navPath: `/dashboard/${appletId}/participants`,
       useCustomIcon: true,
     });
     expect(participant).toEqual({
