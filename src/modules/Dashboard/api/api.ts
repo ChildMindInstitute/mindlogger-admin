@@ -55,6 +55,7 @@ import {
   GetRespondentDetailsParams,
   AssessmentResult,
   SubmitDates,
+  DeleteReview,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -493,6 +494,17 @@ export const createAssessmentApi = (
   authApiClient.post(
     `/answers/applet/${appletId}/answers/${answerId}/assessment`,
     { ...assessment },
+    {
+      signal,
+    },
+  );
+
+export const deleteReviewApi = (
+  { appletId, answerId, assessmentId }: DeleteReview,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(
+    `/answers/applet/${appletId}/answers/${answerId}/assessment/${assessmentId}`,
     {
       signal,
     },
