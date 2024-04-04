@@ -13,6 +13,7 @@ import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
+import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 
 import {
   AddParticipantButton,
@@ -277,7 +278,7 @@ export const Participants = () => {
       status,
       email,
     } = user;
-    const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '--';
+    const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
       appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
     const stringNicknames = joinWihComma(nicknames, true);
@@ -328,7 +329,9 @@ export const Participants = () => {
         onClick: defaultOnClick,
       },
       tags: {
-        content: () => <>--</>,
+        // TODO: Replace `null` with tag when available
+        // https://mindlogger.atlassian.net/browse/M2-5861
+        content: () => <StyledMaybeEmpty>{null}</StyledMaybeEmpty>,
         value: '',
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
@@ -341,12 +344,12 @@ export const Participants = () => {
             isInviteDisabled={!filteredRespondents?.[respondentOrSubjectId]?.editable.length}
           />
         ),
-        value: '',
+        value: status,
         width: ParticipantsColumnsWidth.Status,
         onClick: defaultOnClick,
       },
       lastSeen: {
-        content: () => latestActive,
+        content: () => <StyledMaybeEmpty>{latestActive}</StyledMaybeEmpty>,
         value: latestActive,
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
