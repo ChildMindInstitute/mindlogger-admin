@@ -76,6 +76,7 @@ export const DashboardTable = ({
                     width={row[key].width}
                     hasColFixedWidth={hasColFixedWidth}
                     sx={{ cursor: row[key].onClick ? 'pointer' : 'default' }}
+                    data-testid={`${dataTestid}-${index}-cell-${key}`}
                   >
                     {row[key].contentWithTooltip
                       ? row[key].contentWithTooltip

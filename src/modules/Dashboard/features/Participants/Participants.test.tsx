@@ -1,5 +1,6 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
+import { generatePath } from 'react-router-dom';
 
 import { renderWithProviders } from 'shared/utils';
 import {
@@ -42,6 +43,13 @@ const preloadedState = {
     },
   },
 };
+
+const mockedUseNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUseNavigate,
+}));
 
 const getMockedGetWithParticipants = (isAnonymousRespondent = false) => ({
   status: ApiResponseCodes.SuccessfulResponse,
@@ -103,6 +111,22 @@ describe('Participants component tests', () => {
       tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
       participantColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
     });
+  });
+
+  test('participant row should link to participant details page', async () => {
+    mockAxios.get.mockResolvedValue(getMockedGetWithParticipants());
+    renderWithProviders(<Participants />, { preloadedState, route, routePath });
+    const firstParticipantSecretIdCell = await waitFor(() =>
+      screen.getByTestId('dashboard-participants-table-0-cell-secretIds'),
+    );
+    fireEvent.click(firstParticipantSecretIdCell);
+
+    expect(mockedUseNavigate).toHaveBeenCalledWith(
+      generatePath(page.appletParticipantActivities, {
+        appletId: mockedAppletId,
+        participantId: mockedRespondentId,
+      }),
+    );
   });
 
   test('should pin participant', async () => {
