@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Checkbox } from '@mui/material';
 
-import { ActionsMenu, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
+import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
@@ -14,6 +14,7 @@ import { StyledBody } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
+import { AddParticipantPopup } from 'modules/Dashboard/features/Applet/Popups/AddParticipantPopup';
 
 import {
   AddParticipantButton,
@@ -52,7 +53,6 @@ import {
   SendInvitationPopup,
   ViewDataPopup,
 } from '../Respondents/Popups';
-import { StatusFlag } from '../Respondents/StatusFlag';
 
 export const Participants = () => {
   const { appletId } = useParams();
@@ -106,6 +106,7 @@ export const Participants = () => {
     return getWorkspaceRespondents(params);
   });
 
+  const [addParticipantPopupVisible, setAddParticipantPopupVisible] = useState(false);
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
@@ -248,22 +249,28 @@ export const Participants = () => {
     updateSubjectsPin({ ownerId, userId: subjectId });
   };
 
-  const editRespondentOnClose = (shouldReFetch: boolean) => {
+  const addParticipantOnClose = (shouldRefetch: boolean) => {
+    setAddParticipantPopupVisible(false);
+    setChosenAppletData(null);
+    shouldRefetch && handleReload();
+  };
+
+  const editRespondentOnClose = (shouldRefetch: boolean) => {
     setEditRespondentPopupVisible(false);
     setChosenAppletData(null);
-    shouldReFetch && handleReload();
+    shouldRefetch && handleReload();
   };
 
-  const removeRespondentAccessOnClose = (shouldReFetch?: boolean) => {
+  const removeRespondentAccessOnClose = (shouldRefetch?: boolean) => {
     setRemoveAccessPopupVisible(false);
     setChosenAppletData(null);
-    shouldReFetch && handleReload();
+    shouldRefetch && handleReload();
   };
 
-  const handleInvitationPopupClose = (shouldReFetch?: boolean) => {
+  const handleInvitationPopupClose = (shouldRefetch?: boolean) => {
     setInvitationPopupVisible(false);
     setRespondentEmail(null);
-    shouldReFetch && handleReload();
+    shouldRefetch && handleReload();
   };
 
   const formatRow = (user: Respondent): Row => {
@@ -284,6 +291,11 @@ export const Participants = () => {
     const stringNicknames = joinWihComma(nicknames, true);
     const stringSecretIds = joinWihComma(secretIds, true);
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
+    const accountType = {
+      [RespondentStatus.Invited]: t('full'),
+      [RespondentStatus.NotInvited]: t('limited'),
+      [RespondentStatus.Pending]: t('pendingInvite'),
+    }[status];
 
     const defaultOnClick = () => {
       navigate(
@@ -336,16 +348,14 @@ export const Participants = () => {
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },
-      status: {
+      accountType: {
+        // TODO: Replace with new Chip/Tag variant when available
+        // https://mindlogger.atlassian.net/browse/M2-6161
         content: () => (
-          <StatusFlag
-            status={status}
-            onInviteClick={() => handleInviteClick({ respondentOrSubjectId, email })}
-            isInviteDisabled={!filteredRespondents?.[respondentOrSubjectId]?.editable.length}
-          />
+          <Chip title={accountType} color="secondary" sxProps={{ pointerEvents: 'none', m: 0 }} />
         ),
-        value: status,
-        width: ParticipantsColumnsWidth.Status,
+        value: accountType,
+        width: ParticipantsColumnsWidth.AccountType,
         onClick: defaultOnClick,
       },
       lastSeen: {
@@ -501,7 +511,7 @@ export const Participants = () => {
           {appletId && (
             <AddParticipantButton
               variant="contained"
-              onClick={() => navigate(generatePath(page.appletAddUser, { appletId }))}
+              onClick={() => setAddParticipantPopupVisible(true)}
               data-testid={`${dataTestid}-add`}
             >
               {t('addParticipant')}
@@ -518,6 +528,13 @@ export const Participants = () => {
         data-testid={`${dataTestid}-table`}
         {...tableProps}
       />
+      {appletId && addParticipantPopupVisible && (
+        <AddParticipantPopup
+          popupVisible={addParticipantPopupVisible}
+          appletId={appletId}
+          onClose={addParticipantOnClose}
+        />
+      )}
       {scheduleSetupPopupVisible && (
         <ScheduleSetupPopup
           popupVisible={scheduleSetupPopupVisible}
