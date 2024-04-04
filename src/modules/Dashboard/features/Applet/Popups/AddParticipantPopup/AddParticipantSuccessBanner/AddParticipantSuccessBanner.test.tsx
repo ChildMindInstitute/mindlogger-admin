@@ -31,7 +31,7 @@ describe('AddParticipantSuccessBanner', () => {
 
     expect(getByTestId(dataTestid)).toBeInTheDocument();
     expect(getByText(props.id)).toBeInTheDocument();
-    expect(getByText('Created full account for')).toBeInTheDocument();
+    expect(getByText('Sent invitation to')).toBeInTheDocument();
 
     rerender(<AddParticipantSuccessBanner {...props} accountType={AccountType.Limited} />);
     expect(getByTestId(dataTestid)).toBeInTheDocument();

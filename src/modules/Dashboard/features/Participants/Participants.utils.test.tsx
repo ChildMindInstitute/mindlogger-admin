@@ -36,7 +36,7 @@ const headCellProperties = [
   'secretIds',
   'nicknames',
   'tags',
-  'status',
+  'accountType',
   'lastSeen',
   'actions',
 ];

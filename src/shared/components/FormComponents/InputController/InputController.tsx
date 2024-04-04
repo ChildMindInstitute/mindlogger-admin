@@ -17,7 +17,7 @@ export const InputController = <T extends FieldValues>({
     name={name}
     control={control}
     render={({ field: { onChange, value }, fieldState: { error, isTouched } }) => {
-      const errorMsg = hideErrorUntilTouched || isTouched ? error?.message : null;
+      const errorMsg = !hideErrorUntilTouched || isTouched ? error?.message : null;
 
       return (
         <Input
