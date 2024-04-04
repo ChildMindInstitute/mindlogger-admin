@@ -74,7 +74,7 @@ export const theme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          borderRadius: 28,
+          borderRadius: variables.borderRadius.lg2,
           boxShadow: 'none',
         },
         root: {
@@ -210,6 +210,7 @@ export const theme = createTheme({
         root: {
           lineHeight: variables.font.lineHeight.md,
           padding: '1rem 2rem',
+          minWidth: '10rem',
           borderRadius: variables.borderRadius.xxxl,
           textTransform: 'none',
           height: '4.8rem',

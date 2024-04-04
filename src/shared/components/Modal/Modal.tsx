@@ -1,7 +1,7 @@
-import { Box } from '@mui/material';
+import { Button } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import { theme, StyledModalContent } from 'shared/styles';
+import { StyledModalContent, StyledFlexTopCenter } from 'shared/styles';
 
 import { ModalProps, SubmitBtnVariant } from './Modal.types';
 import {
@@ -9,7 +9,6 @@ import {
   StyledDialogTitle,
   StyledCloseButton,
   StyledDialogActions,
-  StyledButton,
 } from './Modal.styles';
 import { Tooltip } from '../Tooltip';
 
@@ -29,6 +28,7 @@ export const Modal = ({
   secondBtnText,
   submitBtnVariant = SubmitBtnVariant.Text,
   onSecondBtnSubmit,
+  secondBtnVariant = 'text',
   disabledSecondBtn,
   sxProps,
   secondBtnStyles = {},
@@ -36,6 +36,10 @@ export const Modal = ({
   thirdBtnText,
   thirdBtnStyles = {},
   onThirdBtnSubmit,
+  hasLeftBtn = false,
+  leftBtnText,
+  leftBtnVariant = 'text',
+  onLeftBtnSubmit,
   footerStyles,
   hasActions = true,
   submitBtnTooltip,
@@ -54,7 +58,8 @@ export const Modal = ({
   const getSubmitBtn = () => {
     if (!buttonText) return;
     const button = (
-      <StyledButton
+      <Button
+        sx={{ fontWeight: 'bold' }}
         variant={submitBtnVariant}
         disabled={disabledSubmit}
         onClick={onSubmit}
@@ -62,7 +67,7 @@ export const Modal = ({
         data-testid={`${dataTestid}-submit-button`}
       >
         {buttonText}
-      </StyledButton>
+      </Button>
     );
 
     if (submitBtnTooltip) {
@@ -100,32 +105,40 @@ export const Modal = ({
         {children}
         {hasActions && (
           <StyledDialogActions actionsAlign={getActionsAlign()} sx={footerStyles}>
+            {hasLeftBtn && (
+              <Button
+                variant={leftBtnVariant}
+                onClick={onLeftBtnSubmit}
+                sx={{ mr: 'auto' }}
+                data-testid={`${dataTestid}-left-button`}
+              >
+                {leftBtnText}
+              </Button>
+            )}
             {hasThirdBtn && (
-              <StyledButton
-                fontWeight="regular"
+              <Button
                 variant="text"
                 onClick={onThirdBtnSubmit}
                 sx={{ ...thirdBtnStyles }}
                 data-testid={`${dataTestid}-third-button`}
               >
                 {thirdBtnText}
-              </StyledButton>
+              </Button>
             )}
-            <Box sx={{ display: 'flex' }}>
+            <StyledFlexTopCenter sx={{ gap: 1.6 }}>
               {hasSecondBtn && (
-                <StyledButton
-                  fontWeight="regular"
-                  variant="text"
+                <Button
+                  variant={secondBtnVariant}
                   disabled={disabledSecondBtn}
                   onClick={onSecondBtnSubmit}
-                  sx={{ marginLeft: theme.spacing(1.6), ...secondBtnStyles }}
+                  sx={{ ...secondBtnStyles }}
                   data-testid={`${dataTestid}-secondary-button`}
                 >
                   {secondBtnText}
-                </StyledButton>
+                </Button>
               )}
               {getSubmitBtn()}
-            </Box>
+            </StyledFlexTopCenter>
           </StyledDialogActions>
         )}
       </StyledModalContent>
