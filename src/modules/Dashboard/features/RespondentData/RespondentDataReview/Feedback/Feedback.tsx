@@ -21,7 +21,6 @@ import { ANIMATION_DURATION_MS } from './Feedback.const';
 export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
   const { t } = useTranslation();
   const { assessment, isFeedbackOpen } = useContext(RespondentDataReviewContext);
-  const [assessmentStep, setAssessmentStep] = useState(0);
   const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
 
   const dataTestid = 'respondents-review-feedback-menu';
@@ -30,10 +29,7 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
     defaultValues: getDefaultFormValues(assessment),
   });
 
-  const tabs = useMemo(
-    () => getTabs(selectedActivity, setActiveTab, assessment, assessmentStep, setAssessmentStep),
-    [selectedActivity, assessment, assessmentStep],
-  );
+  const tabs = useMemo(() => getTabs(selectedActivity, assessment), [selectedActivity, assessment]);
 
   return (
     <StyledContainer isOpen={isFeedbackOpen} data-testid={dataTestid}>
@@ -59,6 +55,7 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
               tabs={tabs}
               uiType={UiType.Secondary}
               animationDurationMs={ANIMATION_DURATION_MS}
+              variant="fullWidth"
             />
           </FormProvider>
         </>
