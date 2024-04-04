@@ -10,7 +10,7 @@ import { StyledHeader } from './Header.styles';
 import { HeaderProps } from './Header.types';
 
 export const Header = ({ onClickHandler, 'data-testid': dataTestid }: HeaderProps) => (
-  <StyledHeader>
+  <StyledHeader data-testid={`${dataTestid}-header`}>
     <StyledFlexTopCenter>
       <Svg id="mind-logger-logo" />
       <StyledLabelLarge sx={{ marginLeft: theme.spacing(1) }}>MindLogger</StyledLabelLarge>
