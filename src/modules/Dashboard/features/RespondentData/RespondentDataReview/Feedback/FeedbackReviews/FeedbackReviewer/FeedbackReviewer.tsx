@@ -113,7 +113,11 @@ export const FeedbackReviewer = ({
             ))}
             {reviewLength > MIN_ANSWERS_COUNT_TO_SHOW && (
               <StyledShowMoreWrapper>
-                <Button variant="text" onClick={toggleShowReviews}>
+                <Button
+                  variant="text"
+                  onClick={toggleShowReviews}
+                  data-testid={`${dataTestid}-show-more`}
+                >
                   {t(showAllAnswers ? 'showLessWithoutDots' : 'showMoreWithQuantity', {
                     quantity: reviewLength - MIN_ANSWERS_COUNT_TO_SHOW,
                   })}

@@ -24,6 +24,7 @@ export const getResponseItem = ({ activityItem, answer }: AssessmentActivityItem
         <SingleSelection
           activityItem={activityItem as SingleSelectActivityItem}
           value={(answer as DecryptedSingleSelectionAnswer).value}
+          data-testid="reviewer-single-selection-item"
           isDisabled
         />
       );
@@ -32,6 +33,7 @@ export const getResponseItem = ({ activityItem, answer }: AssessmentActivityItem
         <MultipleSelection
           activityItem={activityItem as MultiSelectActivityItem}
           value={(answer as DecryptedMultiSelectionAnswer).value}
+          data-testid="reviewer-multiple-selection-item"
           isDisabled
         />
       );
@@ -40,6 +42,7 @@ export const getResponseItem = ({ activityItem, answer }: AssessmentActivityItem
         <Slider
           activityItem={activityItem as SliderActivityItem}
           value={(answer as DecryptedSliderAnswer).value}
+          data-testid="reviewer-slider-item"
           isDisabled
         />
       );
