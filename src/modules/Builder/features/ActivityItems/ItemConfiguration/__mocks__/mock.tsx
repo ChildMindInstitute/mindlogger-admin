@@ -466,7 +466,11 @@ export const mockedEmptyDrawing = {
   isHidden: false,
   allowEdit: true,
   alerts: [],
-  responseValues: {},
+  responseValues: {
+    proportion: {
+      enabled: undefined,
+    },
+  },
 };
 export const mockedEmptyPhoto = {
   responseType: 'photo',
