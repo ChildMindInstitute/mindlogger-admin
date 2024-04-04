@@ -33,23 +33,23 @@ export const getUpdatedValues = (
       formatToNumberArray(currentItem.answers as string[]).sort(),
     );
 
-    return !isEditedBefore
-      ? defaulltValues
-      : {
+    return isEditedBefore
+      ? {
           edited: areArraysEqual ? defaultItem?.edited : new Date().getTime(),
           itemIds,
-        };
+        }
+      : defaulltValues;
   }
 
   // single selection / slider items
   const areValuesEqual = defaultItem?.answers === currentItem.answers;
 
-  return !isEditedBefore
-    ? defaulltValues
-    : {
+  return isEditedBefore
+    ? {
         edited: areValuesEqual ? defaultItem?.edited : new Date().getTime(),
         itemIds,
-      };
+      }
+    : defaulltValues;
 };
 
 export const formatAssessmentAnswers = (
