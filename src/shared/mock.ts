@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
   CalculationType,
@@ -15,7 +16,7 @@ import {
   ScoreReportType,
   SubscaleTotalScore,
 } from './consts';
-import { MultiSelectItem, SingleSelectItem } from './state';
+import { Item, MultiSelectItem, SingleSelectItem } from './state';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -2856,3 +2857,154 @@ export const mockIntersectionObserver = () => {
     return instance;
   });
 };
+
+export const assessment = [
+  {
+    activityItem: {
+      question: {
+        en: 'ms-1',
+      },
+      responseType: ItemResponseType.MultipleSelection,
+      responseValues: {
+        options: [
+          {
+            id: '9858b349-32c4-4a67-830c-4a0da038a4f6',
+            text: '1',
+            isHidden: false,
+            value: 0,
+          },
+          {
+            id: 'bed86422-dbc6-4ab9-88f6-113f08624f53',
+            text: '2',
+            isHidden: false,
+            value: 1,
+          },
+          {
+            id: '7cdc4381-af6d-4bbb-baf7-bf4fe73448d0',
+            text: '3',
+            isHidden: false,
+            value: 2,
+          },
+        ],
+      },
+      config: {
+        removeBackButton: false,
+        skippableItem: false,
+        randomizeOptions: false,
+        timer: 0,
+        addScores: false,
+        setAlerts: false,
+        addTooltip: false,
+        setPalette: false,
+        addTokens: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+      },
+      name: 'ms-1',
+      isHidden: false,
+      conditionalLogic: undefined,
+      allowEdit: true,
+      id: '1b3ad6ee-9c35-46bf-8948-0ffbcc9ca7ce',
+      order: 1,
+    },
+    answer: {
+      value: ['2'],
+      edited: null,
+    },
+    items: [
+      {
+        question: {
+          en: 'ms-1',
+        },
+        responseType: ItemResponseType.MultipleSelection,
+        responseValues: {
+          options: [
+            {
+              id: '9858b349-32c4-4a67-830c-4a0da038a4f6',
+              text: '1',
+              isHidden: false,
+              value: 0,
+            },
+            {
+              id: 'bed86422-dbc6-4ab9-88f6-113f08624f53',
+              text: '2',
+              isHidden: false,
+              value: 1,
+            },
+            {
+              id: '7cdc4381-af6d-4bbb-baf7-bf4fe73448d0',
+              text: '3',
+              isHidden: false,
+              value: 2,
+            },
+          ],
+        },
+        config: {
+          removeBackButton: false,
+          skippableItem: false,
+          randomizeOptions: false,
+          timer: 0,
+          addScores: false,
+          setAlerts: false,
+          addTooltip: false,
+          setPalette: false,
+          addTokens: null,
+          additionalResponseOption: {
+            textInputOption: false,
+            textInputRequired: false,
+          },
+        },
+        name: 'ms-1',
+        isHidden: false,
+        conditionalLogic: undefined,
+        allowEdit: true,
+        id: '1b3ad6ee-9c35-46bf-8948-0ffbcc9ca7ce',
+        order: 1,
+      },
+    ],
+  },
+] as AssessmentActivityItem[];
+
+export const assessmentVersions = [
+  '316b25bf-5136-404f-b9f0-c97f60cf8d74_1.1.0',
+  '316b25bf-5136-404f-b9f0-c97f60cf8d74_1.2.0',
+];
+
+export const itemIds = ['1b3ad6ee-9c35-46bf-8948-0ffbcc9ca7ce'];
+
+export const lastAssessment = [
+  {
+    question: {
+      en: 'slider-1',
+    },
+    responseType: ItemResponseType.Slider,
+    responseValues: {
+      minLabel: 'min',
+      maxLabel: 'max',
+      minValue: 0,
+      maxValue: 5,
+    },
+    config: {
+      removeBackButton: false,
+      skippableItem: false,
+      addScores: false,
+      setAlerts: false,
+      additionalResponseOption: {
+        textInputOption: false,
+        textInputRequired: false,
+      },
+      showTickMarks: true,
+      showTickLabels: true,
+      continuousSlider: false,
+      timer: 0,
+    },
+    name: 'slider-1',
+    isHidden: false,
+    conditionalLogic: undefined,
+    allowEdit: true,
+    id: 'd56e3695-bf8f-449f-ab1a-f395a9d9645d',
+    order: 1,
+  },
+] as Item[];
