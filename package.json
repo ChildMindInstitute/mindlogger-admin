@@ -37,6 +37,7 @@
     "i18next-browser-languagedetector": "^7.1.0",
     "javascript-time-ago": "^2.5.9",
     "jszip": "^3.10.1",
+    "launchdarkly-react-client-sdk": "^3.0.10",
     "linkifyjs": "^4.1.1",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
