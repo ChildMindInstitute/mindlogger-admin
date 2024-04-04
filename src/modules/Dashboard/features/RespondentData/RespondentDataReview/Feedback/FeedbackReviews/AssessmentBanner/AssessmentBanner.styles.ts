@@ -1,10 +1,10 @@
-import { Box, Button, Collapse, styled } from '@mui/material';
+import { Box, Collapse, styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
-import { blendColorsNormal } from 'shared/utils';
+import { StyledIconButton, theme, variables } from 'shared/styles';
+import { blendColorsNormal } from 'shared/utils/colors';
 
 export const StyledCollapse = styled(Collapse)`
-  margin: ${theme.spacing(-2.4, -2.4, -1.6)};
+  margin: ${theme.spacing(-2.4, -1.6, -1.6)};
 `;
 
 export const StyledContainer = styled(Box)`
@@ -23,18 +23,17 @@ export const StyledContainer = styled(Box)`
 
 export const StyledContent = styled(Box)`
   display: grid;
-  grid-template-columns: 2.2rem auto;
+  grid-template-columns: 2.2rem auto 3rem;
+  grid-template-rows: auto auto;
   column-gap: 1.2rem;
   grid-template-areas:
-    '. header'
-    '. text'
-    'button button';
+    '. header button'
+    '. text button';
 `;
 
-export const StyledButton = styled(Button)`
+export const StyledButton = styled(StyledIconButton)`
+  width: 3rem;
+  height: 3rem;
+  margin-top: ${theme.spacing(-0.5)};
   grid-area: button;
-  justify-self: center;
-  height: 3.4rem;
-  width: 20rem;
-  margin-top: ${theme.spacing(0.6)};
 `;

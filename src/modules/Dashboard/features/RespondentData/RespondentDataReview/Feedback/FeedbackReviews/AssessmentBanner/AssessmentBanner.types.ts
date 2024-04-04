@@ -1,4 +1,4 @@
 export type AssessmentBannerProps = {
   isBannerVisible: boolean;
-  onSelectLastVersion: () => void;
+  onClose: () => void;
 };

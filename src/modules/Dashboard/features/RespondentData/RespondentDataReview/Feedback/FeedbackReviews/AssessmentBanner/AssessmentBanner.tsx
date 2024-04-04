@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Svg } from 'shared/components';
-import { variables } from 'shared/styles';
+import { Svg } from 'shared/components/Svg';
 import { StyledLabelBoldMedium, StyledLabelMedium } from 'shared/styles/styledComponents';
 
 import {
@@ -12,10 +11,7 @@ import {
 } from './AssessmentBanner.styles';
 import { AssessmentBannerProps } from './AssessmentBanner.types';
 
-export const AssessmentBanner = ({
-  isBannerVisible,
-  onSelectLastVersion,
-}: AssessmentBannerProps) => {
+export const AssessmentBanner = ({ isBannerVisible, onClose }: AssessmentBannerProps) => {
   const { t } = useTranslation('app');
 
   return (
@@ -29,10 +25,8 @@ export const AssessmentBanner = ({
           <StyledLabelMedium sx={{ gridArea: 'text' }}>
             {t('assessmentBanner.text')}
           </StyledLabelMedium>
-          <StyledButton onClick={onSelectLastVersion} data-testid="assessment-banner-button">
-            <StyledLabelBoldMedium sx={{ color: variables.palette.primary }}>
-              {t('assessmentBanner.button')}
-            </StyledLabelBoldMedium>
+          <StyledButton onClick={onClose} data-testid="assessment-banner-button">
+            <Svg id="close" />
           </StyledButton>
         </StyledContent>
       </StyledContainer>
