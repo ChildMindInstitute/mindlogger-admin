@@ -12,6 +12,10 @@ import { CheckboxController } from 'shared/components/FormComponents/CheckboxCon
 
 import { DrawingContentProps } from './DrawingContent.types';
 
+/* 
+Disable feature until final solution in comments of M2-6037.
+Replace the local constant with LaunchDarkly feature flag if it will be confirmed as a feature
+*/
 export const makeDrawingSpaceAdjustableFeatureFlag = false;
 
 export const DrawingContent = ({ name }: DrawingContentProps) => {
