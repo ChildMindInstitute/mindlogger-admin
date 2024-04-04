@@ -70,6 +70,7 @@ export enum DateFormats {
   shortISO = 'yyyy-MM-dd\'T\'HH:mm:ss',
   YearMonthDay = 'yyyy-MM-dd',
   MonthDayTime = 'MMM dd, HH:mm',
+  MonthDayYearTime = 'MMM dd, yyyy HH:mm',
 }
 
 export const EMAIL_REGEXP = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
