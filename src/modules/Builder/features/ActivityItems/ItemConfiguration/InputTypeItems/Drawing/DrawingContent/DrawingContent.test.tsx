@@ -6,7 +6,7 @@ import { mockedAppletId, mockedActivityId, mockedAppletFormData } from 'shared/m
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { page } from 'resources';
 
-import { DrawingContent } from './DrawingContent';
+import { DrawingContent, makeDrawingSpaceAdjustableFeatureFlag } from './DrawingContent';
 
 const mockedDrawingItem = {
   question: {
@@ -63,12 +63,14 @@ describe('DrawingContent', () => {
       screen.getByTestId('builder-activity-items-item-configuration-drawing-background'),
     ).toBeInTheDocument();
 
-    const divideFlag = screen.getByTestId(
-      'builder-activity-items-item-configuration-drawing-divide-content-flag',
-    );
-    expect(divideFlag).toBeInTheDocument();
-    expect(divideFlag).toHaveTextContent(
-      'Divide the screen equally between the Drawing Example and the Drawing area',
-    );
+    if (makeDrawingSpaceAdjustableFeatureFlag) {
+      const divideFlag = screen.getByTestId(
+        'builder-activity-items-item-configuration-drawing-divide-content-flag',
+      );
+      expect(divideFlag).toBeInTheDocument();
+      expect(divideFlag).toHaveTextContent(
+        'Divide the screen equally between the Drawing Example and the Drawing area',
+      );
+    }
   });
 });
