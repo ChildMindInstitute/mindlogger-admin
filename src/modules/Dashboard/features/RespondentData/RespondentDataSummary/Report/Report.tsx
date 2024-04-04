@@ -14,7 +14,7 @@ import { applet } from 'shared/state';
 
 import {
   ActivityCompletion,
-  FormattedResponse,
+  FormattedResponses,
   Identifier,
   RespondentsDataFormValues,
 } from '../../RespondentData.types';
@@ -50,7 +50,7 @@ export const Report = () => {
     apiVersions,
   ]: [
     ActivityCompletion[],
-    Record<string, FormattedResponse[]> | null,
+    Record<string, FormattedResponses[]> | null,
     number,
     DatavizActivity,
     Identifier[],

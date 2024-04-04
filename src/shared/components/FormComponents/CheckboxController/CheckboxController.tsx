@@ -14,6 +14,7 @@ export const CheckboxController = <T extends FieldValues>({
   isInversed,
   onCustomChange,
   'data-testid': dataTestid,
+  sxLabelProps = {},
   ...checkboxProps
 }: InputControllerProps<T>) => {
   const handleCheckboxChange = (
@@ -33,7 +34,7 @@ export const CheckboxController = <T extends FieldValues>({
         <>
           <FormControlLabel
             disabled={disabled}
-            sx={{ opacity: disabled ? variables.opacity.disabled : 1 }}
+            sx={{ opacity: disabled ? variables.opacity.disabled : 1, ...sxLabelProps }}
             label={label}
             control={
               <Checkbox

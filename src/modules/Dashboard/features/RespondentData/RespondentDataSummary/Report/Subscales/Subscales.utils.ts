@@ -2,7 +2,7 @@ import { ActivitySettingsSubscale } from 'shared/state';
 import { ActivityItemAnswer, ElementType } from 'shared/types';
 import {
   ActivityCompletion,
-  FormattedResponse,
+  SingleMultiSelectionSliderFormattedResponses,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import {
   compareActivityItem,
@@ -36,7 +36,10 @@ export const getSubscalesToRender = (
         result[data.name] = nestedSubscale;
       }
     } else if (activityItems[item.name]) {
-      const formattedItem = formatActivityItemAnswers(activityItems[item.name], endDatetime);
+      const formattedItem = formatActivityItemAnswers(
+        activityItems[item.name],
+        endDatetime,
+      ) as SingleMultiSelectionSliderFormattedResponses;
       if (result?.[data.name]?.items) {
         result[data.name].items?.push(formattedItem);
       } else {
@@ -66,7 +69,7 @@ export const getAllSubscalesToRender = (
         const formattedItem = formatActivityItemAnswers(
           activityItems[subscaleItem.name],
           item.endDatetime,
-        );
+        ) as SingleMultiSelectionSliderFormattedResponses;
 
         if (allSubscalesToRender?.[subscale.name]?.items) {
           allSubscalesToRender[subscale.name].items?.push(formattedItem);
@@ -106,7 +109,7 @@ export const getAllSubscalesToRender = (
         allSubscalesToRender[subscale.name].items![itemIndex],
         activityItems[subscaleItem.name],
         item.endDatetime,
-      );
+      ) as SingleMultiSelectionSliderFormattedResponses;
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       allSubscalesToRender[subscale.name].items![itemIndex] = {
@@ -124,7 +127,10 @@ export const formatCurrentSubscales = (currentSubscales: ActivityCompletionToRen
     (formattedSubscales: ActivityCompletionToRender, subscaleName) => {
       const currItems = currentSubscales[subscaleName]?.items || [];
       const updatedItems = currItems?.reduce(
-        (items: Record<string, FormattedResponse>, formattedResponse) => {
+        (
+          items: Record<string, SingleMultiSelectionSliderFormattedResponses>,
+          formattedResponse,
+        ) => {
           const prevActivityItem = items[formattedResponse.activityItem.id];
           if (!prevActivityItem) {
             return {

@@ -125,10 +125,18 @@ export const Input = <T extends FieldValues>({
                     <StyledFlexTopCenter>
                       {getTextAdornment({ value, textAdornment, disabled })}
                       <StyledUpDown>
-                        <StyledClearedButton disabled={disabled} onClick={handleAddNumber}>
+                        <StyledClearedButton
+                          data-testid="button-arrow-up"
+                          disabled={disabled}
+                          onClick={handleAddNumber}
+                        >
                           <Svg width={18} height={18} id="navigate-up" />
                         </StyledClearedButton>
-                        <StyledClearedButton disabled={disabled} onClick={handleSubtractNumber}>
+                        <StyledClearedButton
+                          data-testid="button-arrow-down"
+                          disabled={disabled}
+                          onClick={handleSubtractNumber}
+                        >
                           <Svg width={18} height={18} id="navigate-down" />
                         </StyledClearedButton>
                       </StyledUpDown>

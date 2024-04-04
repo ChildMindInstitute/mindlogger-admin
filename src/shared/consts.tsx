@@ -292,6 +292,7 @@ export const activityJourneyHeader = [
 export const enum ActivityStatus {
   Missed = 'missed',
   Completed = 'completed',
+  Incomplete = 'incomplete',
   NotScheduled = 'not scheduled',
 }
 
