@@ -8,6 +8,7 @@ export const InputController = <T extends FieldValues>({
   control,
   error: providedError,
   isErrorVisible = true,
+  hideErrorUntilTouched = false,
   helperText,
   onChange: onCustomChange,
   ...props
@@ -15,15 +16,19 @@ export const InputController = <T extends FieldValues>({
   <Controller
     name={name}
     control={control}
-    render={({ field: { onChange, value }, fieldState: { error } }) => (
-      <Input
-        onChange={onChange}
-        value={value}
-        error={!!error || providedError}
-        helperText={isErrorVisible ? error?.message || helperText : ''}
-        onCustomChange={onCustomChange}
-        {...props}
-      />
-    )}
+    render={({ field: { onChange, value }, fieldState: { error, isTouched } }) => {
+      const errorMsg = hideErrorUntilTouched || isTouched ? error?.message : null;
+
+      return (
+        <Input
+          onChange={onChange}
+          value={value}
+          error={!!error || providedError}
+          helperText={isErrorVisible ? errorMsg || helperText : ''}
+          onCustomChange={onCustomChange}
+          {...props}
+        />
+      );
+    }}
   />
 );
