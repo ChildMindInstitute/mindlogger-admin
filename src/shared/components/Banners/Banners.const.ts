@@ -9,6 +9,7 @@ import { SaveSuccessBanner } from 'shared/components/Banners/SaveSuccessBanner';
 import { VersionWarningBanner } from 'shared/components/Banners/VersionWarningBanner';
 import { TransferOwnershipSuccessBanner } from 'shared/components/Banners/TransferOwnershipSuccessBanner';
 import { ShellAccountSuccessBanner } from 'modules/Dashboard/components/Banners';
+import { AddParticipantSuccessBanner } from 'modules/Dashboard/features/Applet/Popups/AddParticipantPopup/AddParticipantSuccessBanner';
 
 import { BannerProps } from './Banner';
 
@@ -21,4 +22,5 @@ export const BannerComponents: Record<keyof typeof BannerType, ComponentType<Ban
   VersionWarningBanner,
   TransferOwnershipSuccessBanner,
   ShellAccountSuccessBanner,
+  AddParticipantSuccessBanner,
 };
