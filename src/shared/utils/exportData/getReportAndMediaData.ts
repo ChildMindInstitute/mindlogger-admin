@@ -47,7 +47,8 @@ export const getReportData = (
 ) => {
   const answers = decryptedAnswers.reduce(
     (filteredAcc, item, index) => {
-      if (item.answer === null || item.answer === undefined) return filteredAcc;
+      const shouldSkipItem = item.answer === undefined || item.answer === null;
+      if (shouldSkipItem) return filteredAcc;
 
       return filteredAcc.concat(
         getReportCSVObject({

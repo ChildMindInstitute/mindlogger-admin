@@ -99,6 +99,13 @@ describe('parseResponseValue', () => {
       value: 4,
       text: 'description for answer',
     };
+    const singleWithAdditionalTextWithNoAnswer = {
+      text: 'single selection description',
+    };
+    const singleWithAdditionalTextAndWrongOrderAnswer = {
+      text: 'single selection description',
+      value: 7,
+    };
     const multi = {
       question: 'multi',
       responseType: 'multiSelect',
@@ -597,25 +604,27 @@ describe('parseResponseValue', () => {
       const isEvent = false;
 
       test.each`
-        activityItem        | answer                            | expected                                                                                                       | description
-        ${single}           | ${singleAnswer}                   | ${'value: 1'}                                                                                                  | ${'single select'}
-        ${single}           | ${singleWithEditionAnswer}        | ${'value: 2 | edited: time of edition'}                                                                        | ${'single select with edition'}
-        ${single}           | ${singleWithAdditionalTextAnswer} | ${'value: 4 | text: description for answer'}                                                                   | ${'single select with additional text'}
-        ${multi}            | ${multiAnswer}                    | ${'value: 1'}                                                                                                  | ${'multi select'}
-        ${slider}           | ${sliderAnswer}                   | ${'value: 5'}                                                                                                  | ${'slider'}
-        ${date}             | ${dateAnswer}                     | ${'date: 18/6/2023'}                                                                                           | ${'date'}
-        ${numberSelection}  | ${numberSelectionAnswer}          | ${'value: 5'}                                                                                                  | ${'number selection'}
-        ${time}             | ${timeAnswer}                     | ${'time: hr 13, min 19'}                                                                                       | ${'time'}
-        ${timeRange}        | ${timeRangeAnswer}                | ${'time_range: from (hr 9, min 20) / to (hr 17, min 20)'}                                                      | ${'time range'}
-        ${singleSelectRows} | ${singleSelectRowsAnswer}         | ${'row1: opt1'}                                                                                                | ${'single select rows'}
-        ${multiSelectRows}  | ${multiSelectRowsAnswer}          | ${'row1: opt1, opt1'}                                                                                          | ${'multi select rows'}
-        ${sliderRows}       | ${sliderRowsAnswer}               | ${'slider: 5'}                                                                                                 | ${'slider rows'}
-        ${text}             | ${textAnswer}                     | ${'Text'}                                                                                                      | ${'text'}
-        ${photo}            | ${photoAnswer}                    | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-photo_text.jpg'}                  | ${'photo'}
-        ${video}            | ${videoAnswer}                    | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-video_text.mp4'}                  | ${'video'}
-        ${audio}            | ${audioAnswer}                    | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-audio_text.m4a'}                  | ${'audio'}
-        ${drawing}          | ${drawingAnswer}                  | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg'}                     | ${'drawing'}
-        ${drawing}          | ${drawingAnswerWithText}          | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg | text: description'} | ${'drawing with additional text'}
+        activityItem        | answer                                         | expected                                                                                                       | description
+        ${single}           | ${singleAnswer}                                | ${'value: 1'}                                                                                                  | ${'single select'}
+        ${single}           | ${singleWithEditionAnswer}                     | ${'value: 2 | edited: time of edition'}                                                                        | ${'single select with edition'}
+        ${single}           | ${singleWithAdditionalTextAnswer}              | ${'value: 4 | text: description for answer'}                                                                   | ${'single select with additional text'}
+        ${single}           | ${singleWithAdditionalTextAndWrongOrderAnswer} | ${'value: 7 | text: single selection description'}                                                             | ${'single select with additional text with wrong property order'}
+        ${single}           | ${singleWithAdditionalTextWithNoAnswer}        | ${'text: single selection description'}                                                                        | ${'single select without answer with additional text'}
+        ${multi}            | ${multiAnswer}                                 | ${'value: 1'}                                                                                                  | ${'multi select'}
+        ${slider}           | ${sliderAnswer}                                | ${'value: 5'}                                                                                                  | ${'slider'}
+        ${date}             | ${dateAnswer}                                  | ${'date: 18/6/2023'}                                                                                           | ${'date'}
+        ${numberSelection}  | ${numberSelectionAnswer}                       | ${'value: 5'}                                                                                                  | ${'number selection'}
+        ${time}             | ${timeAnswer}                                  | ${'time: hr 13, min 19'}                                                                                       | ${'time'}
+        ${timeRange}        | ${timeRangeAnswer}                             | ${'time_range: from (hr 9, min 20) / to (hr 17, min 20)'}                                                      | ${'time range'}
+        ${singleSelectRows} | ${singleSelectRowsAnswer}                      | ${'row1: opt1'}                                                                                                | ${'single select rows'}
+        ${multiSelectRows}  | ${multiSelectRowsAnswer}                       | ${'row1: opt1, opt1'}                                                                                          | ${'multi select rows'}
+        ${sliderRows}       | ${sliderRowsAnswer}                            | ${'slider: 5'}                                                                                                 | ${'slider rows'}
+        ${text}             | ${textAnswer}                                  | ${'Text'}                                                                                                      | ${'text'}
+        ${photo}            | ${photoAnswer}                                 | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-photo_text.jpg'}                  | ${'photo'}
+        ${video}            | ${videoAnswer}                                 | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-video_text.mp4'}                  | ${'video'}
+        ${audio}            | ${audioAnswer}                                 | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-audio_text.m4a'}                  | ${'audio'}
+        ${drawing}          | ${drawingAnswer}                               | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg'}                     | ${'drawing'}
+        ${drawing}          | ${drawingAnswerWithText}                       | ${'3cf61844-e5d0-40bd-a1b6-f2d3220f68e3-835e5277-5949-4dff-817a-d85c17a3604f-drawing.svg | text: description'} | ${'drawing with additional text'}
       `('$description: "$expected"', ({ activityItem, answer, expected }) => {
         const item = {
           ...mockedSharedDecryptedAnswerData,

@@ -8,7 +8,7 @@ import { useDatavizFilters } from 'modules/Dashboard/features/RespondentData/Res
 import { getDictionaryText } from 'shared/utils';
 import { Accordion } from 'modules/Dashboard/components';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
-import { FormattedResponse } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { SingleMultiSelectionSliderFormattedResponses } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { getResponseItem } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils';
 import { StyledBodyMedium, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
@@ -33,9 +33,12 @@ export const Subscale = ({
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
-  const renderChart = ({ activityItem, answers }: FormattedResponse, index: number) => {
-    if (UNSUPPORTED_ITEMS.includes(activityItem.responseType))
-      return <UnsupportedItemResponse itemType={activityItem.responseType} />;
+  const renderChart = (
+    activityItemAnswer: SingleMultiSelectionSliderFormattedResponses,
+    index: number,
+  ) => {
+    if (UNSUPPORTED_ITEMS.includes(activityItemAnswer.activityItem.responseType))
+      return <UnsupportedItemResponse itemType={activityItemAnswer.activityItem.responseType} />;
 
     const color = COLORS[index % COLORS.length];
 
@@ -43,9 +46,8 @@ export const Subscale = ({
       color,
       minDate,
       maxDate,
-      activityItem,
+      activityItemAnswer,
       versions: filteredVersions,
-      answers,
     });
   };
 

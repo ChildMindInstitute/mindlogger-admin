@@ -324,6 +324,9 @@ export type NumberItemResponseValues = {
 export type DrawingResponseValues = {
   drawingExample: string;
   drawingBackground: string;
+  proportion: {
+    enabled: boolean;
+  } | null;
 };
 
 export type GyroscopeConfig = {

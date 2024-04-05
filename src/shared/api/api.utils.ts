@@ -26,18 +26,22 @@ export const getRequestTokenData = (config: InternalAxiosRequestConfig) => {
 export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
   try {
     const { response: errorResponse } = err;
-    const refreshToken = authStorage.getRefreshToken();
+    const oldRefreshToken = authStorage.getRefreshToken();
 
-    const { data } = await signInRefreshTokenApi({
-      refreshToken,
+    const {
+      data: { result },
+    } = await signInRefreshTokenApi({
+      refreshToken: oldRefreshToken,
     });
+    const { accessToken, refreshToken } = result ?? {};
 
     return new Promise((resolve, reject) => {
-      if (!data?.result?.accessToken) {
+      if (!accessToken || !refreshToken) {
         return reject(new Error('Access token refresh failed.'));
       }
 
-      authStorage.setAccessToken(data.result.accessToken);
+      authStorage.setAccessToken(accessToken);
+      authStorage.setRefreshToken(refreshToken);
       const originalConfig = errorResponse?.config;
 
       try {
@@ -46,7 +50,7 @@ export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
             ...originalConfig,
             headers: {
               ...(originalConfig?.headers && originalConfig.headers),
-              Authorization: `Bearer ${data.result.accessToken}`,
+              Authorization: `Bearer ${accessToken}`,
             },
             ...(originalConfig?.data && { data: JSON.parse(originalConfig.data) }),
           }),
