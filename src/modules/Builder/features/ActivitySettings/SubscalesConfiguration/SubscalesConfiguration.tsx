@@ -9,7 +9,7 @@ import { ToggleItemContainer } from 'modules/Builder/components';
 import { DataTable, DataTableItem, SwitchWithState } from 'shared/components';
 import { useRedirectIfNoMatchedActivity, useCurrentActivity } from 'modules/Builder/hooks';
 import { SubscaleTotalScore } from 'shared/consts';
-import { getEntityKey } from 'shared/utils';
+import { getEntityKey, toggleBooleanState } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { SubscaleFormValue } from 'modules/Builder/types';
 
@@ -98,7 +98,7 @@ export const SubscalesConfiguration = () => {
   };
 
   const calculateTotalScoreSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCalculateTotalScoreSwitch((prevState) => !prevState);
+    toggleBooleanState(setCalculateTotalScoreSwitch)();
     if (e.target.checked) {
       setValue(calculateTotalScoreField, calculateTotalScore ?? SubscaleTotalScore.Sum, {
         shouldDirty: true,

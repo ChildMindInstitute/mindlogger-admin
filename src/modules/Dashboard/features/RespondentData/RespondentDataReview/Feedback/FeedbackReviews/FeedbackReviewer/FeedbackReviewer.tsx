@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import { format } from 'date-fns';
 
-import { getDictionaryText } from 'shared/utils';
+import { getDictionaryText, toggleBooleanState } from 'shared/utils';
 import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyMedium,
@@ -44,7 +44,6 @@ export const FeedbackReviewer = ({
   const [numAnswersToShow, setNumAnswersToShow] = useState(MIN_ANSWERS_COUNT_TO_SHOW);
   const [removePopupVisible, setRemovePopupVisible] = useState(false);
 
-  const toggleIsOpen = () => setIsOpen((prevState) => !prevState);
   const handleRemoveButtonClick = () => setRemovePopupVisible(true);
   const handleRemoveSubmit = async () => {
     setIsOpen(false);
@@ -71,7 +70,10 @@ export const FeedbackReviewer = ({
       >
         <StyledFlexTopStart sx={{ justifyContent: 'space-between' }}>
           <StyledTitleBoldMedium>{reviewerName}</StyledTitleBoldMedium>
-          <StyledToggleButton onClick={toggleIsOpen} data-testid={`${dataTestid}-collapse`}>
+          <StyledToggleButton
+            onClick={toggleBooleanState(setIsOpen)}
+            data-testid={`${dataTestid}-collapse`}
+          >
             <Svg id={isOpen ? 'navigate-up' : 'navigate-down'} />
           </StyledToggleButton>
         </StyledFlexTopStart>

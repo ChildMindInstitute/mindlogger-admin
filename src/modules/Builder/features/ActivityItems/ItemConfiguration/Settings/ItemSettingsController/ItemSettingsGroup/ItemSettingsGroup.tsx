@@ -17,6 +17,7 @@ import {
 } from 'shared/state';
 import { SelectEvent } from 'shared/types';
 import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import {
   StyledFormControl,
@@ -60,8 +61,6 @@ export const ItemSettingsGroup = ({
   const subscalesName = `${fieldName}.subscaleSetting.subscales`;
   const config = getValues(`${itemName}.config`) ?? {};
   const activitySkippableName = `${fieldName}.isSkippable`;
-
-  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const handleTimerChange = (event: SelectEvent) => {
     setValue(
       `${name}.${ItemConfigurationSettings.HasTimer}`,
@@ -82,7 +81,7 @@ export const ItemSettingsGroup = ({
           <StyledFormLabel>{t(groupName, { context: inputType })}</StyledFormLabel>
           <StyledClearedButton
             sx={{ p: theme.spacing(1) }}
-            onClick={handleCollapse}
+            onClick={toggleBooleanState(setIsExpanded)}
             data-testid="builder-activity-items-item-settings-group-collapse"
           >
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />

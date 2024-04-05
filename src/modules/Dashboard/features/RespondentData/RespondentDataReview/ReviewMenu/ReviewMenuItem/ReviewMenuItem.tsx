@@ -12,6 +12,7 @@ import { Chip } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexWrap, theme } from 'shared/styles';
 import { page } from 'resources';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import { StyledHeader, StyledItem, StyledSvg } from './ReviewMenuItem.styles';
 import { ReviewMenuItemProps } from './ReviewMenuItem.types';
@@ -53,7 +54,7 @@ export const ReviewMenuItem = ({
   const handleActivityClick = () => {
     setSelectedActivity(activity);
     onSelectAnswer(null);
-    setIsOpen((state) => !state);
+    toggleBooleanState(setIsOpen)();
     navigate(generatePath(page.appletRespondentDataReview, { appletId, respondentId }));
   };
 

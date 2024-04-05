@@ -11,6 +11,7 @@ import {
   StyledLabelBoldLarge,
   variables,
 } from 'shared/styles';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import {
   StyledChildren,
@@ -37,7 +38,7 @@ export const ExpandedList = ({
   return isHiddenInLegend ? null : (
     <StyledCollapse data-testid={dataTestid}>
       <StyledCollapseBtn
-        onClick={() => setListVisible((prevState) => !prevState)}
+        onClick={toggleBooleanState(setListVisible)}
         data-testid={`${dataTestid}-collapse`}
       >
         <StyledFlexTopCenter sx={{ cursor: 'pointer' }}>

@@ -6,7 +6,8 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Table, UiType, Uploader, UploaderUiType } from 'shared/components';
 import { InputController } from 'shared/components/FormComponents';
 import { StyledBodySmall, StyledFlexTopCenter, theme, variables } from 'shared/styles';
-import { concatIf } from 'shared/utils';
+import { concatIf } from 'shared/utils/concatIf';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
 import { getDefaultSliderScores } from 'modules/Builder/utils/getDefaultSliderScores';
@@ -78,7 +79,6 @@ export const SliderPanel = ({
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
 
-  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
   const validationCheck =
     minValue !== '' &&
     maxValue !== '' &&
@@ -242,7 +242,7 @@ export const SliderPanel = ({
         label={label}
         index={index}
         isExpanded={isExpanded}
-        onArrowClick={handleCollapse}
+        onArrowClick={toggleBooleanState(setIsExpanded)}
         onTrashClick={onRemove}
         isMultiple={isMultiple}
       />

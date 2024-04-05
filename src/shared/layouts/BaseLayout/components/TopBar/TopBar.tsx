@@ -8,6 +8,7 @@ import { StyledBadge, StyledFlexTopCenter } from 'shared/styles';
 import { page } from 'resources';
 import { auth } from 'modules/Auth/state';
 import { alerts } from 'shared/state';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import { AccountPanel } from './AccountPanel';
 import { Breadcrumbs } from './Breadcrumbs';
@@ -34,7 +35,7 @@ export const TopBar = () => {
         {isAuthorized ? (
           <StyledBadge badgeContent={notWatched} data-testid={`${dataTestid}-badge`}>
             <StyledAvatarBtn
-              onClick={() => setVisibleAccountDrawer((prevState) => !prevState)}
+              onClick={toggleBooleanState(setVisibleAccountDrawer)}
               variant="text"
               data-testid={`${dataTestid}-badge-button`}
             >
