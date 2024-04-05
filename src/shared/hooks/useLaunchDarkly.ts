@@ -1,8 +1,6 @@
 import { useFlags, useLDClient } from 'launchdarkly-react-client-sdk';
 
-import { FeatureSegments, FeatureFlags, FeatureFlagsKeys } from 'shared/types/featureFlags';
-
-import { PROHIBITED_PII_KEYS } from './useLaunchDarkly.const';
+import { FeatureFlags, FeatureFlagsKeys } from 'shared/types/featureFlags';
 
 /**
  * Internal wrapper for LaunchDarkly's hooks and flags.
@@ -10,29 +8,6 @@ import { PROHIBITED_PII_KEYS } from './useLaunchDarkly.const';
 export const useLaunchDarkly = () => {
   const ldClient = useLDClient();
   const flags = useFlags();
-
-  const identifyLDContext = (
-    context: {
-      userId: string;
-      workspaceId?: string;
-      appletId?: string;
-      featureTests?: FeatureSegments[];
-    },
-    onDone?: ((err: Error | null) => void) | undefined,
-  ) => {
-    if (PROHIBITED_PII_KEYS.some((val) => Object.keys(context).includes(val))) {
-      throw new Error('Context contains prohibited keys');
-    }
-    ldClient?.identify(
-      {
-        ...context,
-        kind: 'authenticated-users',
-        key: `authenticated-users-${context.userId}`,
-      },
-      undefined,
-      onDone,
-    );
-  };
 
   /**
    * Resets the active context back to an anonymous user account.
@@ -52,5 +27,5 @@ export const useLaunchDarkly = () => {
     return features;
   };
 
-  return { identifyLDContext, resetLDContext, flags: featureFlags() };
+  return { resetLDContext, flags: featureFlags() };
 };

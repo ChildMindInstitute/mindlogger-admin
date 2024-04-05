@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import { ApiErrorResponse } from 'shared/state/Base';
 import { OwnerId, getWorkspaceRolesApi, getWorkspacesApi } from 'api';
 import { getApiErrorResult } from 'shared/utils/errors';
+import { LaunchDarkly } from 'shared/utils/launchDarkly';
 
 export const getWorkspaceRoles = createAsyncThunk(
   'workspace/roles',
@@ -25,6 +26,9 @@ export const getWorkspaces = createAsyncThunk(
   async (_, { rejectWithValue, signal }) => {
     try {
       const { data } = await getWorkspacesApi(signal);
+
+      const workspaceNames = data.result.map((obj: { workspaceName: string }) => obj.workspaceName);
+      LaunchDarkly.updateWorkspaces(workspaceNames);
 
       return { data };
     } catch (exception) {
