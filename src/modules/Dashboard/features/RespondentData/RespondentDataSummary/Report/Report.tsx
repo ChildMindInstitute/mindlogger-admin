@@ -164,7 +164,7 @@ export const Report = () => {
             )}
             {Boolean(!isLoading && !answers.length && !versions.length) && (
               <StyledEmptyState data-testid="report-with-empty-version-filter">
-                <Svg id="chart" width="80" height="80" />
+                <Svg id="not-found" width="80" height="80" />
                 <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
                   {t('noDataForActivityWithEmptyVersionFilter')}
                 </StyledTitleLarge>
