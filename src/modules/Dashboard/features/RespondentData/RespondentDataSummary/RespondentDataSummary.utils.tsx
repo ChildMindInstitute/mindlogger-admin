@@ -17,21 +17,39 @@ import {
   ElementType,
 } from 'shared/types';
 import { StyledTitleLarge, theme, variables } from 'shared/styles';
-import { ActivitySettingsSubscale, SliderItemResponseValues } from 'shared/state/Applet';
+import {
+  ActivitySettingsSubscale,
+  MultiSelectItem,
+  SingleSelectItem,
+  SliderItem,
+  SliderItemResponseValues,
+  TextItem,
+} from 'shared/state/Applet';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ItemResponseType } from 'shared/consts';
 import { getObjectFromList } from 'shared/utils';
 
 import {
   ActivityCompletion,
-  Answer,
   FormattedActivityItem,
-  FormattedResponse,
+  FormattedAnswer,
+  FormattedResponses,
   Identifier,
   ItemOption,
-  RespondentAnswerValue,
   RespondentsDataFormValues,
-  SimpleAnswerValue,
+  PerRowSelectionItemOption,
+  NumberSelectionFormattedResponses,
+  SingleMultiSelectionSliderFormattedResponses,
+  TimeRangeFormattedResponses,
+  SingleMultiSelectionPerRowFormattedResponses,
+  SingleMultiSelectionSliderItemResponseValues,
+  SingleMultiSelectionPerRowItemResponseValues,
+  TextAnswer,
+  TextFormattedResponses,
+  DateFormattedResponses,
+  TimeFormattedResponses,
+  SingleMultiSelectionPerRowAnswer,
+  SingleMultiSelectionSliderAnswer,
 } from '../RespondentData.types';
 import {
   DEFAULT_END_DATE,
@@ -41,6 +59,7 @@ import {
 } from '../RespondentData.const';
 import { getDateFormattedResponse, getTimeRangeResponse } from '../RespondentData.utils';
 import { DEFAULT_DATE_MAX } from './RespondentDataSummary.const';
+import { GetSingleMultiSelectionPerRowAnswers } from './RespondentDataSummary.types';
 
 export const getEmptyState = (selectedActivity: DatavizActivity | null) => {
   const { t } = i18n;
@@ -131,7 +150,7 @@ export const getIdentifiers = (
   );
 };
 
-export const isValueDefined = <T = string | number | (string | number)[] | null,>(
+export const isValueDefined = <T extends string | number | (string | number)[] | null>(
   value?: T,
 ): value is NonNullable<T> => value !== null && value !== undefined;
 
@@ -173,11 +192,13 @@ export const getSliderOptions = (
   }));
 };
 
-export const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) => {
+export const getSingleMultiOptionsMapper = (
+  formattedActivityItem: FormattedActivityItem<SingleMultiSelectionSliderItemResponseValues>,
+) => {
   const sortedOptions = getSortedOptions(formattedActivityItem.responseValues.options);
 
   return sortedOptions.reduce(
-    (options: Record<number, number>, option: ItemOption, index: number) => ({
+    (options: Record<number, number>, option, index) => ({
       ...options,
       [option.value]: index,
     }),
@@ -185,7 +206,7 @@ export const getOptionsMapper = (formattedActivityItem: FormattedActivityItem) =
   );
 };
 
-const shiftAnswerValues = (answers: Answer<SimpleAnswerValue>[]) =>
+const shiftAnswerValues = (answers: SingleMultiSelectionSliderAnswer[]) =>
   answers.map((item) => ({
     ...item,
     answer: {
@@ -204,10 +225,36 @@ const getDefaultEmptyAnswer = (date: string) => [
   },
 ];
 
+export const getSingleMultiSelectionPerRowAnswers = ({
+  responseType,
+  currentAnswer,
+  date,
+}: GetSingleMultiSelectionPerRowAnswers) => {
+  if (responseType === ItemResponseType.SingleSelectionPerRow) {
+    return [
+      {
+        answer: {
+          value: currentAnswer as string | null,
+          text: null,
+        },
+        date,
+      },
+    ];
+  }
+
+  return (currentAnswer as string[])?.map((value) => ({
+    answer: {
+      value,
+      text: null,
+    },
+    date,
+  }));
+};
+
 export const formatActivityItemAnswers = (
   currentAnswer: ActivityItemAnswer,
   date: string,
-): FormattedResponse<RespondentAnswerValue> => {
+): FormattedResponses => {
   const currentActivityItem = currentAnswer.activityItem;
   const { id, name, question, responseType, responseValues } = currentActivityItem;
   const formattedActivityItem = {
@@ -216,20 +263,24 @@ export const formatActivityItemAnswers = (
     question,
     responseType,
     responseValues,
-  } as FormattedActivityItem;
+  };
 
-  switch (currentAnswer.activityItem.responseType) {
+  switch (currentActivityItem.responseType) {
     case ItemResponseType.SingleSelection: {
-      const optionsValuesMapper = getOptionsMapper(formattedActivityItem);
+      const optionsValuesMapper = getSingleMultiOptionsMapper(
+        formattedActivityItem as FormattedActivityItem<SingleMultiSelectionSliderItemResponseValues>,
+      );
       const activityItem = {
         ...formattedActivityItem,
         responseValues: {
-          options: currentAnswer.activityItem.responseValues.options.map(({ id, text, value }) => ({
-            id,
-            text,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            value: optionsValuesMapper[value!],
-          })),
+          options: (currentActivityItem as SingleSelectItem).responseValues.options.map(
+            ({ id, text, value }) => ({
+              id,
+              text,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              value: optionsValuesMapper[value!],
+            }),
+          ),
         },
       };
 
@@ -256,19 +307,23 @@ export const formatActivityItemAnswers = (
       return {
         activityItem,
         answers,
-      };
+      } as SingleMultiSelectionSliderFormattedResponses;
     }
     case ItemResponseType.MultipleSelection: {
-      const optionsValuesMapper = getOptionsMapper(formattedActivityItem);
+      const optionsValuesMapper = getSingleMultiOptionsMapper(
+        formattedActivityItem as FormattedActivityItem<SingleMultiSelectionSliderItemResponseValues>,
+      );
       const activityItem = {
         ...formattedActivityItem,
         responseValues: {
-          options: currentAnswer.activityItem.responseValues.options.map(({ id, text, value }) => ({
-            id,
-            text,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            value: optionsValuesMapper[value!],
-          })),
+          options: (currentActivityItem as MultiSelectItem)?.responseValues.options.map(
+            ({ id, text, value }) => ({
+              id,
+              text,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              value: optionsValuesMapper[value!],
+            }),
+          ),
         },
       };
 
@@ -289,14 +344,14 @@ export const formatActivityItemAnswers = (
       return {
         activityItem,
         answers,
-      };
+      } as SingleMultiSelectionSliderFormattedResponses;
     }
     case ItemResponseType.Slider: {
       const activityItem = {
         ...formattedActivityItem,
         responseValues: {
           options: getSliderOptions(
-            currentAnswer.activityItem.responseValues,
+            (currentActivityItem as SliderItem).responseValues,
             formattedActivityItem.id ?? '',
           ),
         },
@@ -321,7 +376,7 @@ export const formatActivityItemAnswers = (
       return {
         activityItem,
         answers,
-      };
+      } as SingleMultiSelectionSliderFormattedResponses;
     }
     case ItemResponseType.Text: {
       const answers = [
@@ -332,22 +387,22 @@ export const formatActivityItemAnswers = (
           },
           date,
         },
-      ];
+      ] as TextAnswer[];
 
       return {
         activityItem: {
           ...formattedActivityItem,
-          responseDataIdentifier: currentAnswer.activityItem.config.responseDataIdentifier,
+          responseDataIdentifier: (currentActivityItem as TextItem).config.responseDataIdentifier,
         },
         answers,
-      };
+      } as TextFormattedResponses;
     }
     case ItemResponseType.Date: {
       if (!currentAnswer.answer) {
         return {
           activityItem: formattedActivityItem,
           answers: getDefaultEmptyAnswer(date),
-        };
+        } as DateFormattedResponses;
       }
 
       return {
@@ -361,14 +416,14 @@ export const formatActivityItemAnswers = (
             date,
           },
         ],
-      };
+      } as DateFormattedResponses;
     }
     case ItemResponseType.TimeRange: {
       if (!currentAnswer.answer) {
         return {
           activityItem: formattedActivityItem,
           answers: getDefaultEmptyAnswer(date),
-        };
+        } as TimeRangeFormattedResponses;
       }
 
       return {
@@ -382,14 +437,14 @@ export const formatActivityItemAnswers = (
             date,
           },
         ],
-      };
+      } as TimeRangeFormattedResponses;
     }
     case ItemResponseType.Time: {
       if (!currentAnswer.answer) {
         return {
           activityItem: formattedActivityItem,
           answers: getDefaultEmptyAnswer(date),
-        };
+        } as TimeFormattedResponses;
       }
 
       const answer = currentAnswer.answer as DecryptedTimeAnswer;
@@ -414,7 +469,7 @@ export const formatActivityItemAnswers = (
       return {
         activityItem: formattedActivityItem,
         answers,
-      };
+      } as TimeFormattedResponses;
     }
     case ItemResponseType.NumberSelection: {
       return {
@@ -428,29 +483,81 @@ export const formatActivityItemAnswers = (
             date,
           },
         ],
-      };
+      } as NumberSelectionFormattedResponses;
+    }
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow: {
+      const currAnswer = currentAnswer.answer as FormattedAnswer<
+        (string | string[] | null)[]
+      > | null;
+      if (!currAnswer) {
+        return {
+          activityItem: formattedActivityItem,
+          answers: {},
+        } as SingleMultiSelectionPerRowFormattedResponses;
+      }
+
+      const value = (currAnswer.value as (string | string[] | null)[]) ?? [];
+      const answers = value.reduce(
+        (
+          acc: SingleMultiSelectionPerRowAnswer,
+          currentAnswer: string | string[] | null,
+          index: number,
+        ) => {
+          const activityItem =
+            formattedActivityItem as FormattedActivityItem<SingleMultiSelectionPerRowItemResponseValues>;
+          if (!activityItem?.responseValues?.rows) return acc;
+          const currentRow = activityItem.responseValues.rows[index];
+          const flattenAnswers = getSingleMultiSelectionPerRowAnswers({
+            responseType: activityItem.responseType,
+            currentAnswer,
+            date,
+          });
+          if (!flattenAnswers?.length) {
+            return acc;
+          }
+
+          if (!acc[currentRow.rowName]) {
+            acc[currentRow.rowName] = flattenAnswers;
+
+            return acc;
+          }
+
+          acc[currentRow.rowName].push(...flattenAnswers);
+
+          return acc;
+        },
+        {},
+      );
+
+      return {
+        activityItem: formattedActivityItem,
+        answers,
+      } as SingleMultiSelectionPerRowFormattedResponses;
     }
     default:
       return {
         activityItem: formattedActivityItem,
         answers: getDefaultEmptyAnswer(date),
-      };
+      } as FormattedResponses;
   }
 };
 
 export const compareActivityItem = (
-  prevActivityItem: FormattedResponse,
+  prevActivityItem: FormattedResponses,
   currActivityItem: ActivityItemAnswer,
   date: string,
-) => {
-  const { activityItem, answers } = formatActivityItemAnswers(currActivityItem, date);
+): FormattedResponses => {
+  const formattedActivityItemAnswers = formatActivityItemAnswers(currActivityItem, date);
   switch (currActivityItem.activityItem.responseType) {
     case ItemResponseType.SingleSelection:
     case ItemResponseType.MultipleSelection: {
-      const prevActivityItemOptions = getObjectFromList(
-        prevActivityItem.activityItem.responseValues.options,
-      );
-      const mapperIdValue = prevActivityItem.activityItem.responseValues.options.reduce(
+      const { activityItem, answers } =
+        formattedActivityItemAnswers as SingleMultiSelectionSliderFormattedResponses;
+      const previousActivityItem = prevActivityItem as SingleMultiSelectionSliderFormattedResponses;
+      const previousItemOptions = previousActivityItem.activityItem.responseValues.options;
+      const previousActivityItemOptions = getObjectFromList(previousItemOptions);
+      const mapperIdValue = previousItemOptions.reduce(
         (acc: Record<string, number>, { id, value }) => ({
           ...acc,
           [id]: value,
@@ -458,10 +565,10 @@ export const compareActivityItem = (
         {},
       );
 
-      let prevAnswers = prevActivityItem.answers as Answer<SimpleAnswerValue>[];
-      let updatedAnswers: Answer<SimpleAnswerValue>[] = [];
-      const currAnswers = (answers as Answer<SimpleAnswerValue>[]).reduce(
-        (answers: Record<string, Answer>, curr) => {
+      let prevAnswers = previousActivityItem.answers;
+      let updatedAnswers: SingleMultiSelectionSliderAnswer[] = [];
+      const currAnswers = answers.reduce(
+        (answers: Record<number, SingleMultiSelectionSliderAnswer>, curr) => {
           const value = curr.answer.value;
 
           return value === null || value === undefined
@@ -472,73 +579,53 @@ export const compareActivityItem = (
               };
         },
         {},
-      ) as Record<string, Answer<SimpleAnswerValue>>;
+      );
 
       const sortedCurrOptions = getSortedOptions(activityItem.responseValues.options);
-      const updatedOptions = sortedCurrOptions.reduce(
-        (options: Record<string, ItemOption>, { id, text, value }) => {
-          if (!options[id]) {
-            // If there is a new option in the new version, we should display them in the same order as in the builder
-            // To add a new option at the bottom of the axis, we have to shift the values by 1 in the previous ones
-            // And also update the values in the answers
+      const updatedOptions = sortedCurrOptions.reduce((options, { id, text, value }) => {
+        if (!options[id]) {
+          // If there is a new option in the new version, we should display them in the same order as in the builder
+          // To add a new option at the bottom of the axis, we have to shift the values by 1 in the previous ones
+          // And also update the values in the answers
 
-            updatedAnswers = shiftAnswerValues(updatedAnswers);
-
-            if (currAnswers[value]) {
-              updatedAnswers.push({
-                ...currAnswers[value],
-                answer: {
-                  ...currAnswers[value].answer,
-                  value: 0,
-                },
-              });
-            }
-
-            const newOptions = Object.keys(options).reduce(
-              (updatedOptions, id) => ({
-                ...updatedOptions,
-                [id]: {
-                  ...updatedOptions[id],
-                  value: updatedOptions[id].value + 1,
-                },
-              }),
-              options,
-            );
-
-            prevAnswers = shiftAnswerValues(prevAnswers);
-
-            return {
-              ...newOptions,
-              [id]: {
-                id,
-                text,
-                value: 0,
-              },
-            };
-          }
-
-          if (mapperIdValue[id] === value) {
-            if (currAnswers[value]) {
-              updatedAnswers.push(currAnswers[value]);
-            }
-
-            return {
-              ...options,
-              [id]: {
-                ...options[id],
-                text,
-              },
-            };
-          }
+          updatedAnswers = shiftAnswerValues(updatedAnswers);
 
           if (currAnswers[value]) {
             updatedAnswers.push({
               ...currAnswers[value],
               answer: {
                 ...currAnswers[value].answer,
-                value: options[id].value,
+                value: 0,
               },
             });
+          }
+
+          const newOptions = Object.keys(options).reduce(
+            (updatedOptions, id) => ({
+              ...updatedOptions,
+              [id]: {
+                ...updatedOptions[id],
+                value: updatedOptions[id].value + 1,
+              },
+            }),
+            options,
+          );
+
+          prevAnswers = shiftAnswerValues(prevAnswers);
+
+          return {
+            ...newOptions,
+            [id]: {
+              id,
+              text,
+              value: 0,
+            },
+          };
+        }
+
+        if (mapperIdValue[id] === value) {
+          if (currAnswers[value]) {
+            updatedAnswers.push(currAnswers[value]);
           }
 
           return {
@@ -548,9 +635,26 @@ export const compareActivityItem = (
               text,
             },
           };
-        },
-        prevActivityItemOptions,
-      );
+        }
+
+        if (currAnswers[value]) {
+          updatedAnswers.push({
+            ...currAnswers[value],
+            answer: {
+              ...currAnswers[value].answer,
+              value: options[id].value,
+            },
+          });
+        }
+
+        return {
+          ...options,
+          [id]: {
+            ...options[id],
+            text,
+          },
+        };
+      }, previousActivityItemOptions);
 
       return {
         activityItem: {
@@ -564,20 +668,26 @@ export const compareActivityItem = (
       };
     }
     case ItemResponseType.Slider: {
-      const prevResponseValues = prevActivityItem.activityItem.responseValues;
+      const { activityItem, answers } =
+        formattedActivityItemAnswers as SingleMultiSelectionSliderFormattedResponses;
+      const previousActivityItem = prevActivityItem as SingleMultiSelectionSliderFormattedResponses;
+      const previousResponseValues = previousActivityItem.activityItem.responseValues;
       const currResponseValues = currActivityItem.activityItem.responseValues;
 
       const sliderOptions = getSliderOptions(
         currResponseValues,
         currActivityItem.activityItem.id ?? '',
-      ).reduce((options: Record<string, ItemOption>, currentOption) => {
-        if (options[currentOption.id]) return options;
+      ).reduce(
+        (options: Record<string, ItemOption>, currentOption) => {
+          if (options[currentOption.id]) return options;
 
-        return {
-          ...options,
-          [currentOption.id]: currentOption,
-        };
-      }, getObjectFromList(prevResponseValues.options));
+          return {
+            ...options,
+            [currentOption.id]: currentOption,
+          };
+        },
+        getObjectFromList(previousResponseValues.options as ItemOption[]),
+      );
 
       return {
         activityItem: {
@@ -586,14 +696,81 @@ export const compareActivityItem = (
             options: Object.values(sliderOptions),
           },
         },
-        answers: [...prevActivityItem.answers, ...answers],
+        answers: [...previousActivityItem.answers, ...answers],
       };
     }
-    default:
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow: {
+      const { activityItem, answers } =
+        formattedActivityItemAnswers as SingleMultiSelectionPerRowFormattedResponses;
+      const previousActivityItem = prevActivityItem as SingleMultiSelectionPerRowFormattedResponses;
+
+      const prevActivityItemRows = getObjectFromList(
+        previousActivityItem.activityItem.responseValues.rows,
+        ({ rowName }) => rowName,
+      );
+
+      const previousActivityItemOptions = getObjectFromList(
+        previousActivityItem.activityItem.responseValues.options as PerRowSelectionItemOption[],
+        ({ text }) => text,
+      );
+
+      const updatedRows = (activityItem.responseValues.rows ?? [])?.reduce((rows, currRow) => {
+        if (!prevActivityItemRows[currRow.rowName]) {
+          rows.push(currRow);
+        }
+
+        return rows;
+      }, previousActivityItem.activityItem.responseValues.rows || []);
+
+      const updatedOptions = (
+        activityItem.responseValues.options as PerRowSelectionItemOption[]
+      )?.reduce((options, currOption) => {
+        if (!previousActivityItemOptions[currOption.text]) {
+          (options as PerRowSelectionItemOption[]).push(currOption);
+        }
+
+        return options;
+      }, previousActivityItem.activityItem.responseValues.options || []);
+
+      const responseValues = {
+        ...previousActivityItem.activityItem.responseValues,
+        rows: updatedRows,
+        options: updatedOptions,
+      };
+
+      const updatedAnswers = Object.entries(answers).reduce((acc, [rowName, answer]) => {
+        if (!answer?.length) {
+          return acc;
+        }
+
+        if (!acc[rowName]) {
+          acc[rowName] = answer;
+
+          return acc;
+        }
+
+        acc[rowName].push(...answer);
+
+        return acc;
+      }, previousActivityItem.answers);
+
+      return {
+        activityItem: {
+          ...previousActivityItem.activityItem,
+          responseValues,
+        },
+        answers: updatedAnswers,
+      };
+    }
+    default: {
+      const { activityItem, answers } = formattedActivityItemAnswers;
+
       return {
         activityItem,
-        answers: [...prevActivityItem.answers, ...answers],
-      };
+        answers: [...(prevActivityItem.answers as TextAnswer[]), ...(answers as TextAnswer[])],
+      } as TextFormattedResponses;
+    }
   }
 };
 
@@ -601,7 +778,7 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
   let subscalesFrequency = 0;
   const formattedResponses = activityResponses.reduce(
     (
-      items: Record<string, FormattedResponse[]>,
+      items: Record<string, FormattedResponses[]>,
       { decryptedAnswer, endDatetime, subscaleSetting }: ActivityCompletion,
     ) => {
       if (subscaleSetting?.subscales?.length) {
@@ -626,16 +803,14 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
         const item = items[currentAnswer.activityItem.id!];
 
         if (!item) {
-          const { activityItem, answers } = formatActivityItemAnswers(currentAnswer, endDatetime);
+          const formattedActivityItemAnswers = formatActivityItemAnswers(
+            currentAnswer,
+            endDatetime,
+          );
           newItems = {
             ...newItems,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            [currentAnswer.activityItem.id!]: [
-              {
-                activityItem,
-                answers,
-              },
-            ],
+            [currentAnswer.activityItem.id!]: [formattedActivityItemAnswers],
           };
 
           return;
@@ -651,12 +826,12 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
         );
 
         if (!(currResponseType in prevResponseTypes)) {
-          const { activityItem, answers } = formatActivityItemAnswers(currentAnswer, endDatetime);
+          const formattedActivityItemAnswers = formatActivityItemAnswers(
+            currentAnswer,
+            endDatetime,
+          );
           const updatedItem = [...item];
-          updatedItem.push({
-            activityItem,
-            answers,
-          });
+          updatedItem.push(formattedActivityItemAnswers);
 
           newItems = {
             ...newItems,
@@ -669,17 +844,14 @@ export const getFormattedResponses = (activityResponses: ActivityCompletion[]) =
 
         const prevActivityItem = item[prevResponseTypes[currResponseType]];
 
-        const { activityItem, answers } = compareActivityItem(
+        const formattedActivityItemAnswers = compareActivityItem(
           prevActivityItem,
           currentAnswer,
           endDatetime,
         );
 
         const updatedItem = [...item];
-        updatedItem[prevResponseTypes[currResponseType]] = {
-          activityItem,
-          answers,
-        };
+        updatedItem[prevResponseTypes[currResponseType]] = formattedActivityItemAnswers;
 
         newItems = {
           ...newItems,

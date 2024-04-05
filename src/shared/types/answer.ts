@@ -244,6 +244,7 @@ export type DecryptedABTrailsValue = {
   lines: ABTrailsLine[];
   width: number;
   currentIndex: number;
+  maximumIndex?: number;
   startTime: number;
   updated: boolean;
 };
@@ -364,6 +365,8 @@ export const enum UserActionType {
   Done = 'DONE',
   Undo = 'UNDO',
   Skip = 'SKIP',
+  SkipPopupConfirm = 'SKIP_POPUP_CONFIRM',
+  SkipPopupCancel = 'SKIP_POPUP_CANCEL',
 }
 
 export type FailedDecryption = {
@@ -517,6 +520,8 @@ export type JourneyCSVReturnProps = {
   activity_start_time: string;
   activity_end_time: string;
   press_next_time: string;
+  press_popup_skip_time: string;
+  press_popup_keep_time: string;
   press_back_time: string;
   press_undo_time: string;
   press_skip_time: string;
