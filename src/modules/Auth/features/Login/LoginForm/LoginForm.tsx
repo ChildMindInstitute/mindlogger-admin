@@ -16,8 +16,6 @@ import { Mixpanel } from 'shared/utils';
 import { variables } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
 import { banners } from 'redux/modules';
-import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
-import { FeatureSegments } from 'shared/types/featureFlags';
 
 import {
   StyledWelcome,
@@ -40,8 +38,6 @@ export const LoginForm = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState('');
-  const { identifyLDContext } = useLaunchDarkly();
-
   const onSubmit = async (data: SignIn) => {
     setErrorMessage('');
     const { signIn } = auth.thunk;
@@ -52,19 +48,6 @@ export const LoginForm = () => {
       if (fromUrl) navigate(fromUrl);
       navigateToLibrary(navigate);
       Mixpanel.track('Login Successful');
-
-      const context = Object({
-        userId: result.payload.result.user.id,
-      });
-
-      // TODO M2-5887: Update feature flag segment detection
-      // We don't currently have any definition on how to join specific tests
-      // Check if email matches `ENV` and adds to the MultiInformant segment
-      const domains = (process.env.REACT_APP_ENABLE_MULTIINFORMANT_DOMAINS || '').split(',');
-      if (domains.some((domain) => (result.payload.result.user.email as string).includes(domain))) {
-        context['featureTests'] = [FeatureSegments.MultiInformantSegment];
-      }
-      identifyLDContext(context);
     }
 
     if (signIn.rejected.match(result)) {

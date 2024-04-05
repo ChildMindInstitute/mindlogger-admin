@@ -7,12 +7,11 @@ import { useAppDispatch } from 'redux/store';
 import { alerts, auth, workspaces } from 'redux/modules';
 import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 import { Mixpanel } from 'shared/utils/mixpanel';
-import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
+import { LaunchDarkly } from 'shared/utils/launchDarkly';
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { resetLDContext } = useLaunchDarkly();
 
   //TODO: rewrite to reset the global state data besides the data needed in lock form
   return async () => {
@@ -28,7 +27,7 @@ export const useLogout = () => {
       navigate(page.login);
       Mixpanel.track('Logout');
       Mixpanel.logout();
-      resetLDContext();
+      LaunchDarkly.logout();
     }
   };
 };

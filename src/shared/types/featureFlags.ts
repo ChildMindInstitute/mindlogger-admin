@@ -7,7 +7,3 @@ export const FeatureFlagsKeys = {
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;
-
-export const enum FeatureSegments {
-  MultiInformantSegment = 'multi-informant',
-}

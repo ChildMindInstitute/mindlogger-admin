@@ -5,6 +5,7 @@ import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { ApiErrorResponse } from 'shared/state/Base';
+import { LaunchDarkly } from 'shared/utils/launchDarkly';
 import {
   getUserDetailsApi,
   ResetPassword,
@@ -27,6 +28,7 @@ export const signIn = createAsyncThunk(
         authStorage.setAccessToken(accessToken);
 
         Mixpanel.login(data.result.user.id);
+        LaunchDarkly.login(data.result.user.id);
       }
 
       return data;
