@@ -11,6 +11,7 @@ import { StyledTitleLarge, theme, variables } from 'shared/styles';
 import { DatavizActivity, getLatestReportApi, Version } from 'api';
 import { getErrorMessage } from 'shared/utils';
 import { applet } from 'shared/state';
+import { AutocompleteOption } from 'shared/components/FormComponents';
 
 import {
   ActivityCompletion,
@@ -56,7 +57,7 @@ export const Report = () => {
     DatavizActivity,
     Identifier[],
     Version[],
-    string[],
+    AutocompleteOption[],
   ] = useWatch({
     name: [
       'answers',
