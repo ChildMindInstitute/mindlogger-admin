@@ -1,5 +1,5 @@
 import { SingleApplet } from 'shared/state/Applet';
-import { AlertListParams, FileUploadUrlResult } from 'shared/api/api.types';
+import { AlertListParams, FileUploadUrlResult, RefreshResponse } from 'shared/api/api.types';
 import { OwnerId } from 'modules/Dashboard/api/api.types';
 
 import { apiClient, authApiClient } from './api.client';
@@ -15,7 +15,7 @@ export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,
   signal?: AbortSignal,
 ) =>
-  apiClient.post(
+  apiClient.post<ResponseWithObject<RefreshResponse>>(
     '/auth/token/refresh',
     { refreshToken },
     {

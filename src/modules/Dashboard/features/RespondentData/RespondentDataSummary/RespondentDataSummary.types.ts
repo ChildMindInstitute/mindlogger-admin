@@ -1,5 +1,6 @@
 import { DatavizActivity } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { ItemResponseType } from 'shared/consts';
 
 export type FetchAnswers = {
   activity: DatavizActivity;
@@ -13,4 +14,10 @@ export type FetchAnswers = {
 
 export type GetIdentifiersVersions = {
   activity: DatavizActivity;
+};
+
+export type GetSingleMultiSelectionPerRowAnswers = {
+  responseType: ItemResponseType;
+  currentAnswer: string | string[] | null;
+  date: string;
 };

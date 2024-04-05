@@ -53,3 +53,9 @@ export type FileUploadUrlResult = {
   uploadUrl: string;
   url: string;
 };
+
+export type RefreshResponse = {
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string | null;
+};
