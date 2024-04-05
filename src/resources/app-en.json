@@ -615,6 +615,7 @@
   "invalidFileFormat": "Invalid file format or empty file. Please upload a schedule table in one of the following formats: <1>.csv, .xls, .xlsx, .ods.</1>",
   "invalidLink": "It is not possible to add invalid link",
   "invalidPasswordResetLink": "This link is invalid or expired. Please click <0>here</0> to reset your password.",
+  "invitationLanguage": "Invitation Language",
   "invitationLink": "Invitation Link",
   "is": "Is",
   "isReviewableUnsupported": "Reviewer dashboard assessment supports only Single Selection, Multiple Selection and Slider Items",

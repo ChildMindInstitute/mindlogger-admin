@@ -12,7 +12,7 @@ export const AddParticipantForm = ({
   onSubmit,
   accountType,
   control,
-  'data-testid': dataTestId,
+  'data-testid': dataTestid,
 }: AddParticipantFormProps) => {
   const { t } = useTranslation('app');
   const commonProps = {
@@ -23,7 +23,7 @@ export const AddParticipantForm = ({
   const isFullAccount = accountType === AccountType.Full;
 
   return (
-    <form onSubmit={onSubmit} noValidate>
+    <form onSubmit={onSubmit} noValidate data-testid={`${dataTestid}-form`}>
       <Grid container spacing={2.4}>
         {isFullAccount && (
           <Grid item xs={isFullAccount ? 6 : 12}>
@@ -31,7 +31,7 @@ export const AddParticipantForm = ({
               {...commonProps}
               name={Fields.email}
               label={t(Fields.email)}
-              data-testid={`${dataTestId}-email`}
+              data-testid={`${dataTestid}-email`}
             />
           </Grid>
         )}
@@ -40,7 +40,7 @@ export const AddParticipantForm = ({
             {...commonProps}
             name={Fields.secretUserId}
             label={t(Fields.secretUserId)}
-            data-testid={`${dataTestId}-secret-id`}
+            data-testid={`${dataTestid}-secret-id`}
           />
         </Grid>
         <Grid item xs={6}>
@@ -48,7 +48,7 @@ export const AddParticipantForm = ({
             {...commonProps}
             name={Fields.firstName}
             label={t(Fields.firstName)}
-            data-testid={`${dataTestId}-fname`}
+            data-testid={`${dataTestid}-fname`}
           />
         </Grid>
         <Grid item xs={6}>
@@ -56,7 +56,7 @@ export const AddParticipantForm = ({
             {...commonProps}
             name={Fields.lastName}
             label={t(Fields.lastName)}
-            data-testid={`${dataTestId}-lname`}
+            data-testid={`${dataTestid}-lname`}
           />
         </Grid>
         <Grid item xs={6}>
@@ -64,7 +64,7 @@ export const AddParticipantForm = ({
             {...commonProps}
             name={Fields.nickname}
             label={t('nickname')}
-            data-testid={`${dataTestId}-nickname`}
+            data-testid={`${dataTestid}-nickname`}
           />
         </Grid>
         <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -77,9 +77,9 @@ export const AddParticipantForm = ({
               control={control}
               name={Fields.language}
               options={Object.values(Languages).map((lang) => ({ labelKey: lang, value: lang }))}
-              label={t('language')}
+              label={t('invitationLanguage')}
               helperText={t('languageTooltip')}
-              data-testid={`${dataTestId}-lang`}
+              data-testid={`${dataTestid}-lang`}
             />
           </Grid>
         )}
