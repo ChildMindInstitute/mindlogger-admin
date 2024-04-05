@@ -45,6 +45,10 @@ export const getUserDetails = createAsyncThunk(
   async (_: void, { rejectWithValue, signal }) => {
     try {
       const { data } = await getUserDetailsApi(signal);
+      if (data?.result) {
+        // Make sure to identify session with LD, e.g. when user is already logged in
+        LaunchDarkly.login(data.result.id);
+      }
 
       return { data };
     } catch (exception) {
