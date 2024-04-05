@@ -764,6 +764,7 @@
   "noData": "No Data",
   "noDataForActivity": "No available Data for this Activity yet",
   "noDataForActivityFilters": "No match was found. Try to adjust filters.",
+  "noDataForActivityWithEmptyVersionFilter": "Select a Version to view the response data.",
   "noElementsYet": "No elements yet.",
   "noManagers": "No Managers yet.",
   "noManagersForApplet": "No Managers yet. Invite your first one by clicking the ‘Add Manager’ button above.",

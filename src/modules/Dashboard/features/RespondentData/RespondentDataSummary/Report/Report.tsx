@@ -48,6 +48,7 @@ export const Report = () => {
     selectedActivity,
     identifiers,
     apiVersions,
+    versions,
   ]: [
     ActivityCompletion[],
     Record<string, FormattedResponses[]> | null,
@@ -55,6 +56,7 @@ export const Report = () => {
     DatavizActivity,
     Identifier[],
     Version[],
+    string[],
   ] = useWatch({
     name: [
       'answers',
@@ -63,6 +65,7 @@ export const Report = () => {
       'selectedActivity',
       'identifiers',
       'apiVersions',
+      'versions',
     ],
   });
 
@@ -151,11 +154,19 @@ export const Report = () => {
                 )}
               </>
             )}
-            {!isLoading && !answers.length && (
+            {Boolean(!isLoading && !answers.length && versions.length) && (
               <StyledEmptyState data-testid="report-empty-state">
                 <Svg id="chart" width="80" height="80" />
                 <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
                   {t('noDataForActivityFilters')}
+                </StyledTitleLarge>
+              </StyledEmptyState>
+            )}
+            {Boolean(!isLoading && !answers.length && !versions.length) && (
+              <StyledEmptyState data-testid="report-with-empty-version-filter">
+                <Svg id="chart" width="80" height="80" />
+                <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
+                  {t('noDataForActivityWithEmptyVersionFilter')}
                 </StyledTitleLarge>
               </StyledEmptyState>
             )}
