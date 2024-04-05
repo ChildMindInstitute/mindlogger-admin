@@ -10,43 +10,39 @@ export const LaunchDarkly = {
     _ldClient = client;
   },
   async login(userId: string) {
-    if (_ldClient) {
-      _userId = userId;
-      this.identify({
-        userId,
-      });
-    }
+    if (!_ldClient) return;
+    _userId = userId;
+    this.identify({
+      userId,
+    });
   },
   async updateWorkspaces(workspaces: string[]) {
-    if (_userId) {
-      this.identify({
-        userId: _userId,
-        workspaces,
-      });
-    }
+    if (!_userId) return;
+    this.identify({
+      userId: _userId,
+      workspaces,
+    });
   },
   async identify(context: { userId?: string; workspaces?: string[] }) {
     if (PROHIBITED_PII_KEYS.some((val) => Object.keys(context).includes(val))) {
       throw new Error('Context contains prohibited keys');
     }
-    if (_ldClient) {
-      _ldClient?.identify(
-        {
-          ...context,
-          kind: 'admin-users',
-          key: `admin-users-${context.userId}`,
-        },
-        undefined,
-      );
-    }
+    if (!_ldClient) return;
+    _ldClient?.identify(
+      {
+        ...context,
+        kind: 'admin-users',
+        key: `admin-users-${context.userId}`,
+      },
+      undefined,
+    );
   },
   async logout() {
     _userId = '';
-    if (_ldClient) {
-      _ldClient.identify({
-        kind: 'user',
-        anonymous: true,
-      });
-    }
+    if (!_ldClient) return;
+    _ldClient.identify({
+      kind: 'user',
+      anonymous: true,
+    });
   },
 };

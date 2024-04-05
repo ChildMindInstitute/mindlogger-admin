@@ -28,9 +28,8 @@ const App = () => {
   // Retrieves the LD client after initialization to pass it to our singleton
   const ldClient = useLDClient();
   useEffect(() => {
-    if (ldClient) {
-      LaunchDarkly.init(ldClient);
-    }
+    if (!ldClient) return;
+    LaunchDarkly.init(ldClient);
   }, [ldClient]);
 
   return (
