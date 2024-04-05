@@ -21,7 +21,6 @@ export type FormInputProps = {
   minNumberValue?: number;
   maxNumberValue?: number;
   isErrorVisible?: boolean;
-  hideErrorUntilTouched?: boolean;
   restrictExceededValueLength?: boolean;
   onArrowPress?: (value: number, type: ArrowPressType) => void;
   Counter?: FC<PropsWithChildren<CounterProps>>;

@@ -18,7 +18,6 @@ export const AddParticipantForm = ({
   const commonProps = {
     fullWidth: true,
     control,
-    hideErrorUntilTouched: true,
   };
   const isFullAccount = accountType === AccountType.Full;
 
@@ -73,8 +72,7 @@ export const AddParticipantForm = ({
         {isFullAccount && (
           <Grid item xs={12}>
             <SelectController
-              fullWidth={true}
-              control={control}
+              {...commonProps}
               name={Fields.language}
               options={Object.values(Languages).map((lang) => ({ labelKey: lang, value: lang }))}
               label={t('invitationLanguage')}

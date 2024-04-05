@@ -57,7 +57,7 @@ export const AddParticipantPopup = ({
   } = useForm<AddParticipantFormValues>({
     resolver: yupResolver(AddParticipantPopupSchema()),
     defaultValues: defaults,
-    mode: 'onChange',
+    mode: 'all',
     delayError: 1000,
   });
   const accountType = useWatch({ control, name: 'accountType' });
