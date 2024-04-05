@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { waitFor, screen, fireEvent, act } from '@testing-library/react';
+import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders, waitForTheUpdate } from 'shared/utils';
 import {
   mockedApplet,
   mockedAppletId,
@@ -112,11 +112,6 @@ const renderFeedbackNotes = () =>
 const mockGetWithNotes = () => {
   mockAxios.get.mockResolvedValueOnce(mockedGetWithNotes);
 };
-
-const waitForTheUpdate = async () =>
-  await act(async () => {
-    await Promise.resolve();
-  });
 
 describe('FeedbackNotes', () => {
   test('should render array of notes', async () => {
