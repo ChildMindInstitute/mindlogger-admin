@@ -2,8 +2,7 @@ import { ItemResponseType } from 'shared/consts';
 
 import { AssessmentActivityItem } from '../RespondentDataReview.types';
 import { FeedbackNotes } from './FeedbackNotes';
-import { FeedbackAssessment } from './FeedbackAssessment';
-import { FeedbackReviewed } from './FeedbackReviewed';
+import { FeedbackReviews } from './FeedbackReviews';
 import { getDefaultValue, getTabs, getDefaultFormValues } from './Feedback.utils';
 
 describe('Feedback utils tests', () => {
@@ -83,10 +82,7 @@ describe('Feedback utils tests', () => {
 
   describe('getTabs', () => {
     const dataTestid = 'respondents-summary-feedback-tab';
-    const setActiveTab = jest.fn();
-    const setAssessmentStep = jest.fn();
     const selectedActivity = { id: '1', name: 'activity 1' };
-    const assessmentStep = 0;
     const notesTab = {
       labelKey: 'notes',
       id: 'feedback-notes',
@@ -96,50 +92,26 @@ describe('Feedback utils tests', () => {
 
     test('returns correct tabs when assessment is defined', () => {
       const assessment = [
-        { id: '1', name: 'Assessment 1' },
-        { id: '2', name: 'Assessment 2' },
+        { name: 'Assessment 1' },
+        { name: 'Assessment 2' },
       ] as unknown as AssessmentActivityItem[];
 
-      const tabs = getTabs(
-        selectedActivity,
-        setActiveTab,
-        assessment,
-        assessmentStep,
-        setAssessmentStep,
-      );
+      const tabs = getTabs(selectedActivity, assessment);
 
-      expect(tabs.length).toBe(3);
+      expect(tabs.length).toBe(2);
       expect(tabs).toEqual([
         notesTab,
         {
-          labelKey: 'assessment',
-          id: 'feedback-assessment',
-          content: (
-            <FeedbackAssessment
-              setActiveTab={setActiveTab}
-              assessmentStep={assessmentStep}
-              setAssessmentStep={setAssessmentStep}
-            />
-          ),
-          'data-testid': `${dataTestid}-assessment`,
-        },
-        {
-          labelKey: 'reviewed',
-          id: 'feedback-reviewed',
-          content: <FeedbackReviewed />,
-          'data-testid': `${dataTestid}-reviewed`,
+          labelKey: 'reviews',
+          id: 'feedback-reviews',
+          content: <FeedbackReviews />,
+          'data-testid': `${dataTestid}-reviews`,
         },
       ]);
     });
 
     test('returns correct tabs when assessment is undefined', () => {
-      const tabs = getTabs(
-        selectedActivity,
-        setActiveTab,
-        undefined,
-        assessmentStep,
-        setAssessmentStep,
-      );
+      const tabs = getTabs(selectedActivity, undefined);
 
       expect(tabs.length).toBe(1);
       expect(tabs).toEqual([notesTab]);

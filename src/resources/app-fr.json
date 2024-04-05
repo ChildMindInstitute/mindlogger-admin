@@ -946,8 +946,14 @@
   "reviewDate": "Date de l'examen",
   "responses": "Réponses",
   "responseDate": "Date de réponse",
-  "reviewed": "Examiné",
-  "reviewedEmptyState": "Aucun examinateur n'a terminé l'Évaluation pour cela.",
+  "reviews": "Critiques",
+  "me": " (Moi)",
+  "showMoreWithQuantity": "Afficher {{quantity}} de plus",
+  "showLessWithoutDots": "Afficher moins",
+  "submitted": "Soumis :",
+  "addReview": "Ajouter un avis",
+  "removeReview": "Supprimer l'avis",
+  "removeReviewDescription": "Êtes-vous sûr de vouloir supprimer vos réponses ?",
   "reviewer": "Examinateur",
   "role": "Rôle",
   "roles": "Rôles",
@@ -1079,8 +1085,6 @@
   "strikeThrough": "Barré",
   "subjectPreview": "Aperçu du sujet",
   "submit": "Soumettre",
-  "submitAssessment": "Soumettre l'évaluation",
-  "submitAssessmentDescription": "Êtes-vous sûr de vouloir soumettre l'évaluation? Seule la dernière version sera disponible dans l'onglet Examiné.",
   "subscale": "Sous-échelle",
   "subscaleHeader": "Sous-échelle {{index}} : {{name}}",
   "subscaleLookupTable": {
@@ -1279,8 +1283,7 @@
   "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet.",
   "assessmentBanner": {
     "header": "Une nouvelle version de l'évaluation est désormais disponible.",
-    "text": "Choisir de procéder avec la nouvelle version entraînera la perte des données de la complétion précédente.",
-    "button": "Procéder avec la nouvelle version"
+    "text": "Pour la consulter en utilisant la nouvelle version, veuillez supprimer votre soumission actuelle ci-dessous et procéder à la révision à nouveau."
   },
   "appletNameExists": "Ce nom d'Applet existe déjà",
   "noAccessTitle": "Pas d'accès à l'applet",

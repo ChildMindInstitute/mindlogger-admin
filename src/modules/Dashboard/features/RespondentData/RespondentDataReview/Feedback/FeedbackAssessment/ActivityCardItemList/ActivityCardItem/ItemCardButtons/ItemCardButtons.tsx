@@ -24,16 +24,21 @@ export const ItemCardButtons = ({
 
   const [hasAnswer, hasSetAnswer] = useState(hasAnswerValue(answerValue));
 
+  const { isBackVisible, isSkippable } = config;
+
   useEffect(() => {
     hasSetAnswer(hasAnswerValue(answerValue));
   }, [answerValue]);
 
   return (
     <StyledFlexTopCenter
-      sx={{ justifyContent: 'flex-end', mt: theme.spacing(1.6) }}
+      sx={{
+        justifyContent: isBackVisible ? 'space-between' : 'flex-end',
+        mt: theme.spacing(1.6),
+      }}
       data-testid={dataTestid}
     >
-      {config.isBackVisible && (
+      {isBackVisible && (
         <Button
           sx={{ minWidth: '10rem' }}
           onClick={onBackButtonClick}
@@ -45,7 +50,7 @@ export const ItemCardButtons = ({
       <Button
         sx={{ minWidth: '10rem', ml: theme.spacing(1.6) }}
         variant="contained"
-        disabled={!config.isSkippable && !hasAnswer}
+        disabled={!isSkippable && !hasAnswer}
         onClick={isSubmitVisible ? onSubmit : onNextButtonClick}
         data-testid={`${dataTestid}-${isSubmitVisible ? 'submit' : 'next'}`}
       >

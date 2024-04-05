@@ -7,6 +7,7 @@ import { theme } from 'shared/styles/theme';
 import { StyledIconButton } from 'shared/styles/styledComponents/Buttons';
 import { InputController } from 'shared/components/FormComponents/InputController';
 import { getAppletEncryptionInfo, getParsedEncryptionFromServer } from 'shared/utils/encryption';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 import { Svg } from 'shared/components/Svg';
 import { useEncryptionStorage } from 'shared/hooks/useEncryptionStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
@@ -27,7 +28,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
     const [showPassword, setShowPassword] = useState(false);
 
     const submitForm = async ({ appletPassword }: EnterAppletPasswordForm) => {
-      const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
+      const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption);
 
       if (!encryptionInfoFromServer) return;
 
@@ -74,7 +75,7 @@ export const EnterAppletPassword = forwardRef<AppletPasswordRef, EnterAppletPass
                 <StyledIconButton
                   aria-label="toggle password visibility"
                   sx={{ p: theme.spacing(0.9) }}
-                  onClick={() => setShowPassword((prevState) => !prevState)}
+                  onClick={toggleBooleanState(setShowPassword)}
                 >
                   <Svg id={showPassword ? 'visibility-off' : 'visibility-on'} />
                 </StyledIconButton>

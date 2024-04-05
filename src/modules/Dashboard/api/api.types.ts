@@ -257,8 +257,13 @@ export type ActivityAnswer = AppletId & { answerId: string; activityId: string }
 
 export type AssessmentReview = AppletId & { answerId: string };
 
+export type AssessmentId = { assessmentId: string };
+
+export type DeleteReview = AssessmentReview & AssessmentId;
+
 export type AssessmentResult = {
   answer: string | null;
+  id: string;
   itemIds: string[];
   items: Item[];
   itemsLast: Item[] | null;
@@ -275,14 +280,19 @@ export type SaveAssessment = AppletId & {
   assessmentVersionId: string;
 };
 
+export type Reviewer = {
+  firstName: string;
+  lastName: string;
+  id: string;
+};
+
 export type Review = {
+  id: string;
+  createdAt: string;
   answer: string;
   items: Item[];
   itemIds: string[];
-  reviewer: {
-    firstName: string;
-    lastName: string;
-  };
+  reviewer: Reviewer;
   reviewerPublicKey: string;
 };
 
