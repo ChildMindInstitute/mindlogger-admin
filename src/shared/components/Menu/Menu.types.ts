@@ -17,4 +17,5 @@ export type MenuProps = {
   transformOrigin?: PopoverOrigin;
   width?: string;
   uiType?: MenuUiType;
+  'data-testid'?: string;
 };
