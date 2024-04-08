@@ -25,6 +25,8 @@ export type ModalProps = {
   buttonText: string;
   children: JSX.Element | null;
   onClose: () => void;
+  /** @default onClose */
+  onBackdropClick?: (() => void) | null;
   onSubmit?: BtnSubmit;
   titleAlign?: 'left' | 'right' | 'center';
   disabledSubmit?: boolean;

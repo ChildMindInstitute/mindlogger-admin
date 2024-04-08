@@ -200,6 +200,7 @@ export const AddParticipantPopup = ({
           open={popupVisible}
           width="73.6"
           onClose={() => handleClose(false)}
+          onBackdropClick={null}
           onSubmit={handleNext}
           title={t('addParticipant')}
           buttonText={t('next')}
@@ -234,6 +235,7 @@ export const AddParticipantPopup = ({
           open={popupVisible}
           width="73.6"
           onClose={() => handleClose(false)}
+          onBackdropClick={null}
           onSubmit={handleSubmit(handleSubmitForm)}
           title={t(isFullAccount ? 'fullAccount' : 'limitedAccount')}
           buttonText={t(isFullAccount ? 'sendInvitation' : 'create')}

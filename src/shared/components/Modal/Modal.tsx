@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, ModalComponentsPropsOverrides } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
 import { StyledModalContent, StyledFlexTopCenter } from 'shared/styles';
@@ -14,6 +14,7 @@ import { Tooltip } from '../Tooltip';
 
 export const Modal = ({
   onClose,
+  onBackdropClick: onOverlayClick = onClose,
   onSubmit = () => null,
   open,
   title,
@@ -86,12 +87,15 @@ export const Modal = ({
       sx={sxProps}
       width={width}
       height={height}
-      onClose={onClose}
+      onClose={onOverlayClick ?? undefined}
       open={open}
       TransitionProps={{
         onEntered: onTransitionEntered,
       }}
       data-testid={dataTestid}
+      slotProps={{
+        backdrop: { 'data-testid': `${dataTestid}-backdrop` } as ModalComponentsPropsOverrides,
+      }}
     >
       <StyledModalContent>
         <StyledDialogTitle align={titleAlign} data-testid={`${dataTestid}-title`}>
