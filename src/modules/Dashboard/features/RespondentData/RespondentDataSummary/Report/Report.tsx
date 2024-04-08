@@ -17,6 +17,7 @@ import {
 import { DatavizActivity, getLatestReportApi, Version } from 'api';
 import { getErrorMessage } from 'shared/utils';
 import { applet } from 'shared/state';
+import { AutocompleteOption } from 'shared/components/FormComponents';
 
 import {
   ActivityCompletion,
@@ -55,6 +56,7 @@ export const Report = () => {
     selectedActivity,
     identifiers,
     apiVersions,
+    versions,
   ]: [
     ActivityCompletion[],
     Record<string, FormattedResponses[]> | null,
@@ -62,6 +64,7 @@ export const Report = () => {
     DatavizActivity,
     Identifier[],
     Version[],
+    AutocompleteOption[],
   ] = useWatch({
     name: [
       'answers',
@@ -70,6 +73,7 @@ export const Report = () => {
       'selectedActivity',
       'identifiers',
       'apiVersions',
+      'versions',
     ],
   });
 
@@ -168,7 +172,7 @@ export const Report = () => {
                   )}
                 </>
               )}
-              {!isLoading && !answers.length && (
+              {Boolean(!isLoading && !answers.length && versions.length) && (
                 <StyledEmptyState data-testid="report-empty-state">
                   <Svg id="chart" width="80" height="80" />
                   <StyledTitleLarge
@@ -176,6 +180,17 @@ export const Report = () => {
                     color={variables.palette.outline}
                   >
                     {t('noDataForActivityFilters')}
+                  </StyledTitleLarge>
+                </StyledEmptyState>
+              )}
+              {Boolean(!isLoading && !answers.length && !versions.length) && (
+                <StyledEmptyState data-testid="report-with-empty-version-filter">
+                  <Svg id="not-found" width="80" height="80" />
+                  <StyledTitleLarge
+                    sx={{ mt: theme.spacing(1.6) }}
+                    color={variables.palette.outline}
+                  >
+                    {t('noDataForActivityWithEmptyVersionFilter')}
                   </StyledTitleLarge>
                 </StyledEmptyState>
               )}

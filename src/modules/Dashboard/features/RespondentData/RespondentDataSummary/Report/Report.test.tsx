@@ -162,7 +162,15 @@ describe('Report component', () => {
     });
     jest
       .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([mockedAnswers, mockedResponseOptions, 0, mockedActivity, [], []]);
+      .mockReturnValue([
+        mockedAnswers,
+        mockedResponseOptions,
+        0,
+        mockedActivity,
+        [],
+        [],
+        ['v1', 'v2'],
+      ]);
 
     renderWithProviders(<Report />, {
       route,
@@ -199,7 +207,9 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with no data', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, mockedActivity, [], []]);
+    jest
+      .spyOn(reactHookForm, 'useWatch')
+      .mockReturnValue([[], {}, 0, mockedActivity, [], [], ['v1', 'v2']]);
     renderWithProviders(<Report />, {
       route,
       routePath,
@@ -210,12 +220,24 @@ describe('Report component', () => {
     expect(screen.getByText('No match was found. Try to adjust filters.')).toBeInTheDocument();
   });
 
+  test('renders Report correctly with empty version filter', async () => {
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, mockedActivity, [], [], []]);
+    renderWithProviders(<Report />, {
+      route,
+      routePath,
+      preloadedState,
+    });
+
+    expect(screen.getByTestId('report-with-empty-version-filter')).toBeInTheDocument();
+    expect(screen.getByText('Select a Version to view the response data.')).toBeInTheDocument();
+  });
+
   test('renders Report correctly with no answers', async () => {
     const activityMocked = {
       ...mockedActivity,
       hasAnswer: false,
     };
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, activityMocked, [], []]);
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, activityMocked, [], [], []]);
     renderWithProviders(<Report />, {
       route,
       routePath,
