@@ -138,16 +138,7 @@ export const Report = () => {
           isButtonDisabled={disabledLatestReport}
           error={latestReportError ? getErrorMessage(latestReportError) : null}
         />
-        {!selectedActivity.hasAnswer ? (
-          <StyledFlexAllCenter sx={{ height: `calc(100% - ${headerFullHeight})` }}>
-            <StyledEmptyReview data-testid="summary-empty-state">
-              <Svg id="chart" width="80" height="80" />
-              <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-                {t('noDataForActivity')}
-              </StyledTitleLarge>
-            </StyledEmptyReview>
-          </StyledFlexAllCenter>
-        ) : (
+        {selectedActivity.hasAnswer ? (
           <Box sx={{ m: theme.spacing(4.8, 6.4) }}>
             <ReportContext.Provider
               value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
@@ -196,6 +187,15 @@ export const Report = () => {
               )}
             </ReportContext.Provider>
           </Box>
+        ) : (
+          <StyledFlexAllCenter sx={{ height: `calc(100% - ${headerFullHeight})` }}>
+            <StyledEmptyReview data-testid="summary-empty-state">
+              <Svg id="chart" width="80" height="80" />
+              <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
+                {t('noDataForActivity')}
+              </StyledTitleLarge>
+            </StyledEmptyReview>
+          </StyledFlexAllCenter>
         )}
       </StyledReport>
     </>
