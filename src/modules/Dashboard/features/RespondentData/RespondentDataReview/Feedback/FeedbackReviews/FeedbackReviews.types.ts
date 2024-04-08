@@ -9,7 +9,7 @@ export type ReviewData = {
   createdAt: string;
   isCurrentUserReviewer: boolean;
   reviewer: Reviewer;
-  review: AssessmentActivityItem[];
+  review: AssessmentActivityItem[] | null;
 };
 
 export type GetFeedbackReviewsProps = { reviews: ReviewApi[]; userId: string };

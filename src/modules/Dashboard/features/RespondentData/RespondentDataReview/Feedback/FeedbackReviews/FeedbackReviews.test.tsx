@@ -210,6 +210,41 @@ const mockedGetWithReviews = (hasUserReview: boolean) => ({
   },
 });
 
+const mockedGetWithReviewsNoAnswers = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: {
+    result: [
+      {
+        createdAt: '2024-03-14T14:50:38.637755',
+        id: 'review-id',
+        reviewerPublicKey: null,
+        answer: null,
+        itemIds: ['ab383cc6-834b-45da-a0e1-fc21ca74b316', '0bd5d605-2e82-4e70-9eec-352b26b5f45d'],
+        items,
+        reviewer: {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          id: 'reviewer-id',
+        },
+      },
+      {
+        createdAt: '2024-03-15T14:55:38.637755',
+        id: 'review-id',
+        reviewerPublicKey: null,
+        answer: null,
+        itemIds: ['ab383cc6-834b-45da-a0e1-fc21ca74b3162', '0bd5d605-2e82-4e70-9eec-352b26b5f45d2'],
+        items,
+        reviewer: {
+          firstName: 'John',
+          lastName: 'Doe',
+          id: 'reviewer-id-2',
+        },
+      },
+    ],
+    count: 2,
+  },
+};
+
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   CollapsedMdText: jest.fn(() => (
@@ -432,6 +467,29 @@ describe('FeedbackReviewed', () => {
     expect(
       screen.queryByTestId('respondents-data-summary-feedback-reviewed-empty-review'),
     ).not.toBeInTheDocument();
+  });
+
+  test('should render reviews with no permission', async () => {
+    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviewsNoAnswers);
+    renderComponent(assessment, lastAssessment, false, true);
+
+    await waitFor(() => {
+      expect(mockAxios.get).nthCalledWith(
+        1,
+        `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
+        { signal: undefined },
+      );
+    });
+
+    const elementsWithTestIdSubstring = screen.queryAllByTestId(
+      /respondents-data-summary-feedback-reviewed-reviewer-\d+$/,
+    );
+    expect(elementsWithTestIdSubstring).toHaveLength(2);
+
+    const elementsWithLock = screen.queryAllByTestId(
+      /respondents-data-summary-feedback-reviewed-reviewer-\d+-lock/,
+    );
+    expect(elementsWithLock).toHaveLength(2);
   });
 
   test('should render array of reviews with review of current user', async () => {

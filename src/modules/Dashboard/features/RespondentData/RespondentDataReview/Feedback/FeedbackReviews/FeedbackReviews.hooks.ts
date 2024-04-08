@@ -10,9 +10,11 @@ export const useFeedbackReviewsData = () => {
     const reviewsData: ReviewData[] = [];
 
     for await (const review of reviews) {
-      const { reviewerPublicKey, reviewer, ...assessmentData } = review;
-      const encryptedData = {
+      const { reviewerPublicKey, reviewer, answer, ...assessmentData } = review;
+      const hasEncryptedData = !!reviewerPublicKey && !!answer;
+      const encryptedData = hasEncryptedData && {
         ...assessmentData,
+        answer,
         userPublicKey: reviewerPublicKey,
       };
 
@@ -24,8 +26,10 @@ export const useFeedbackReviewsData = () => {
         createdAt,
         isCurrentUserReviewer,
         reviewer,
-        review: (await getDecryptedActivityData(encryptedData))
-          .decryptedAnswers as AssessmentActivityItem[],
+        review: encryptedData
+          ? ((await getDecryptedActivityData(encryptedData))
+              .decryptedAnswers as AssessmentActivityItem[])
+          : null,
       };
 
       if (isCurrentUserReviewer) {
