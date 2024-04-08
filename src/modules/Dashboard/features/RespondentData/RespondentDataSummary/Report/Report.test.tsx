@@ -199,8 +199,8 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with no data', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, {}, [], []]);
-    renderWithProviders(<Report activity={mockedActivity} identifiers={[]} versions={[]} />, {
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, mockedActivity, [], []]);
+    renderWithProviders(<Report />, {
       route,
       routePath,
       preloadedState,
@@ -208,5 +208,21 @@ describe('Report component', () => {
 
     expect(screen.getByTestId('report-empty-state')).toBeInTheDocument();
     expect(screen.getByText('No match was found. Try to adjust filters.')).toBeInTheDocument();
+  });
+
+  test('renders Report correctly with no answers', async () => {
+    const activityMocked = {
+      ...mockedActivity,
+      hasAnswer: false,
+    };
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, activityMocked, [], []]);
+    renderWithProviders(<Report />, {
+      route,
+      routePath,
+      preloadedState,
+    });
+
+    expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
+    expect(screen.getByText('No available Data for this Activity yet')).toBeInTheDocument();
   });
 });

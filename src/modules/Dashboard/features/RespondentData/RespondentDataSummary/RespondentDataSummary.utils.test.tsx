@@ -50,18 +50,6 @@ describe('Respondent Data Summary utils', () => {
         screen.getByText(/Data visualization for Performance Tasks not supported/),
       ).toBeInTheDocument();
     });
-
-    test('returns JSX for activity with no data', () => {
-      const selectedActivity = {
-        hasAnswer: false,
-      };
-
-      const result = getEmptyState(selectedActivity);
-
-      render(<>{result}</>);
-
-      expect(screen.getByText(/No available Data for this Activity yet/)).toBeInTheDocument();
-    });
   });
 
   describe('getDateISO', () => {
