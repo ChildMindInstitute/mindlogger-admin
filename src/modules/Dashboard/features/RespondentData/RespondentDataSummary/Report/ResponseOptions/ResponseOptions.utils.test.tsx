@@ -462,6 +462,63 @@ describe('ResponseOptions.utils', () => {
       options: [{ id: '3157ca3a-6999-4638-991d-e89e8d0439f6', text: 'op1', value: 0 }],
       responseType: 'singleSelect',
     };
+    const sliderRowsItemProps = {
+      ...sharedProps,
+      activityItemAnswer: {
+        activityItem: {
+          id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
+          name: 'slider_rows_item',
+          question: {
+            en: 'Slider Rows',
+          },
+          responseType: 'sliderRows',
+          responseValues: {
+            rows: [
+              {
+                id: '315e0b97-ca13-4aa2-a1b0-45758c696bee',
+                label: 'Slider Row 1',
+                maxValue: 10,
+                minValue: 1,
+              },
+              {
+                id: '265d6f7d-b8a7-4205-89c7-14cad3868df2',
+                label: 'Slider Row 0',
+                maxValue: 5,
+                minValue: 0,
+              },
+            ],
+          },
+        },
+        dataTestid: 'slider-rows',
+        answers: {
+          '315e0b97-ca13-4aa2-a1b0-45758c696bee': [
+            {
+              answer: {
+                value: 8,
+                text: null,
+              },
+              date: '2024-03-27T15:44:46.674000',
+            },
+          ],
+          '265d6f7d-b8a7-4205-89c7-14cad3868df2': [
+            {
+              answer: {
+                value: 2,
+                text: null,
+              },
+              date: '2024-03-27T15:44:46.674000',
+            },
+            {
+              answer: {
+                value: 5,
+                text: null,
+              },
+              date: '2024-03-27T15:44:46.674000',
+            },
+          ],
+        },
+      },
+    };
 
     const multiSelectionItemResult = {
       ...sharedProps,
@@ -552,7 +609,6 @@ describe('ResponseOptions.utils', () => {
       'data-testid': 'response-option-5-0',
       responseType: 'timeRange',
     };
-
     const {
       activityItemAnswer: {
         activityItem: singleSelectRowsActivityItem,
@@ -565,7 +621,6 @@ describe('ResponseOptions.utils', () => {
       answers: singleSelectRowsAnswers,
       'data-testid': 'single-select-rows',
     };
-
     const {
       activityItemAnswer: {
         activityItem: multiSelectRowsActivityItem,
@@ -577,6 +632,41 @@ describe('ResponseOptions.utils', () => {
       activityItem: multiSelectRowsActivityItem,
       answers: multiSelectRowsAnswers,
       'data-testid': 'multi-select-rows',
+    };
+    const sliderRowsItemResult = {
+      ...sharedProps,
+      activityItem: {
+        id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
+        name: 'slider_rows_item',
+        question: { en: 'Slider Rows' },
+        responseType: 'sliderRows',
+        responseValues: {
+          rows: [
+            {
+              id: '315e0b97-ca13-4aa2-a1b0-45758c696bee',
+              label: 'Slider Row 1',
+              maxValue: 10,
+              minValue: 1,
+            },
+            {
+              id: '265d6f7d-b8a7-4205-89c7-14cad3868df2',
+              label: 'Slider Row 0',
+              maxValue: 5,
+              minValue: 0,
+            },
+          ],
+        },
+      },
+      answers: {
+        '265d6f7d-b8a7-4205-89c7-14cad3868df2': [
+          { answer: { text: null, value: 2 }, date: '2024-03-27T15:44:46.674000' },
+          { answer: { text: null, value: 5 }, date: '2024-03-27T15:44:46.674000' },
+        ],
+        '315e0b97-ca13-4aa2-a1b0-45758c696bee': [
+          { answer: { text: null, value: 8 }, date: '2024-03-27T15:44:46.674000' },
+        ],
+      },
+      'data-testid': 'slider-rows',
     };
 
     test.each`
@@ -591,6 +681,7 @@ describe('ResponseOptions.utils', () => {
       ${timeRangeItemProps}        | ${timeRangeItemResult}        | ${'time range'}
       ${singleSelectRowsItemProps} | ${singleSelectRowsItemResult} | ${'single selection per row'}
       ${multiSelectRowsItemProps}  | ${multiSelectRowsItemResult}  | ${'multi selection per row'}
+      ${sliderRowsItemProps}       | ${sliderRowsItemResult}       | ${'slider rows'}
     `('$description', ({ itemProps, result }) => {
       const itemComponent = getResponseItem(itemProps);
       expect(itemComponent?.props).toEqual(result);
