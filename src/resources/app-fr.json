@@ -763,6 +763,7 @@
   "noData": "Aucune Donnée",
   "noDataForActivity": "Aucune Donnée disponible pour cette Activité pour le moment",
   "noDataForActivityFilters": "Aucune correspondance trouvée. Essayez d'ajuster les filtres.",
+  "noDataForActivityWithEmptyVersionFilter": "Sélectionnez une version pour afficher les données de réponse.",
   "noElementsYet": "Aucun élément pour le moment.",
   "noManagers": "Aucun Gestionnaire pour le moment.",
   "noManagersForApplet": "Aucun Gestionnaire pour le moment. Invitez le premier en cliquant sur le bouton 'Ajouter un Gestionnaire' ci-dessus.",

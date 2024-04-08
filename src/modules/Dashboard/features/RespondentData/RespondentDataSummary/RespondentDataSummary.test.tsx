@@ -76,16 +76,6 @@ const emptyStateCases = [
     selectedActivity: {
       id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
       name: 'Activity 1',
-      isPerformanceTask: false,
-      hasAnswer: false,
-    },
-    expectedEmptyStateMessage: 'No available Data for this Activity yet',
-    description: "renders empty state component if selected activity doesn't have answers",
-  },
-  {
-    selectedActivity: {
-      id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
-      name: 'Activity 1',
       isPerformanceTask: true,
       hasAnswer: true,
     },

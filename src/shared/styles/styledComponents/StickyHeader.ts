@@ -6,9 +6,11 @@ import { StyledFlexTopCenter } from 'shared/styles/styledComponents/Flex';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 import { commonStickyStyles } from 'shared/styles/stylesConsts';
 
+export const headerFullHeight = '9.6rem';
+
 export const StyledStickyHeader = styled(StyledFlexTopCenter, shouldForwardProp)`
   ${commonStickyStyles};
   padding: ${theme.spacing(0, 6.4)};
-  min-height: ${({ isSticky }: { isSticky?: boolean }) => (isSticky ? '5.6rem' : '9.6rem')};
+  min-height: ${({ isSticky }: { isSticky?: boolean }) => (isSticky ? '5.6rem' : headerFullHeight)};
   box-shadow: ${({ isSticky }) => (isSticky ? variables.boxShadow.light0 : 'none')};
 `;

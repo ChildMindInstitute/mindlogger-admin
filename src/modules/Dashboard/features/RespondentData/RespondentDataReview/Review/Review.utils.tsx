@@ -17,6 +17,7 @@ import {
   DateItemAnswer,
   TimeRangeItemAnswer,
   SingleMultiSelectPerRowItemAnswer,
+  SliderRowsItemAnswer,
 } from '../RespondentDataReview.types';
 import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
@@ -26,6 +27,7 @@ import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem';
 import { DateResponseItem } from '../DateResponseItem';
 import { TimeRangeResponseItem } from '../TimeRangeResponseItem';
 import { SingleMultiSelectPerRowResponseItem } from '../SingleMultiSelectPerRowResponseItem';
+import { SliderRowsResponseItem } from '../SliderRowsResponseItem';
 
 const { t } = i18n;
 
@@ -95,5 +97,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
           {...(activityItemAnswer as SingleMultiSelectPerRowItemAnswer)}
         />
       );
+    case ItemResponseType.SliderRows:
+      return <SliderRowsResponseItem {...(activityItemAnswer as SliderRowsItemAnswer)} />;
   }
 };
