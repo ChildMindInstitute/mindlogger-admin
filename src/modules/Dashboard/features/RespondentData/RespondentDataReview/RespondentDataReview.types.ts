@@ -33,41 +33,37 @@ export type Answer = {
   answerId: string;
 };
 
-export type TextItemAnswer = {
-  activityItem: TextItem;
-  answer: DecryptedTextAnswer;
+export type CreateItemAnswer<I, A> = {
+  activityItem: I;
+  answer: A | null;
   'data-testid'?: string;
 };
 
-export type NumberSelectionItemAnswer = {
-  activityItem: NumberSelectionItem;
-  answer: DecryptedNumberSelectionAnswer;
-  'data-testid'?: string;
-};
-
-export type DateItemAnswer = {
-  activityItem: DateItem;
-  answer: DecryptedDateAnswer;
-  'data-testid'?: string;
-};
-
-export type TimeRangeItemAnswer = {
-  activityItem: TimeRangeItem;
-  answer: DecryptedDateRangeAnswer;
-  'data-testid'?: string;
-};
-
-export type SingleSelectPerRowItemAnswer = {
-  activityItem: MultipleSelectionPerRowItem;
-  answer: DecryptedMultiSelectionPerRowAnswer | null;
-  'data-testid'?: string;
-};
-
-export type MultiSelectPerRowItemAnswer = {
-  activityItem: MultipleSelectionPerRowItem;
-  answer: DecryptedMultiSelectionPerRowAnswer | null;
-  'data-testid'?: string;
-};
+export type SingleSelectItemAnswer = CreateItemAnswer<
+  SingleSelectActivityItem,
+  DecryptedSingleSelectionAnswer
+>;
+export type MultiSelectItemAnswer = CreateItemAnswer<
+  MultiSelectActivityItem,
+  DecryptedMultiSelectionAnswer
+>;
+export type SliderItemAnswer = CreateItemAnswer<SliderActivityItem, DecryptedSliderAnswer>;
+export type TextItemAnswer = CreateItemAnswer<TextItem, DecryptedTextAnswer>;
+export type NumberSelectionItemAnswer = CreateItemAnswer<
+  NumberSelectionItem,
+  DecryptedNumberSelectionAnswer
+>;
+export type DateItemAnswer = CreateItemAnswer<DateItem, DecryptedDateAnswer>;
+export type TimeRangeItemAnswer = CreateItemAnswer<TimeRangeItem, DecryptedDateRangeAnswer>;
+export type SingleSelectPerRowItemAnswer = CreateItemAnswer<
+  MultipleSelectionPerRowItem,
+  DecryptedMultiSelectionPerRowAnswer
+>;
+export type MultiSelectPerRowItemAnswer = CreateItemAnswer<
+  MultipleSelectionPerRowItem,
+  DecryptedMultiSelectionPerRowAnswer
+>;
+export type SliderRowsItemAnswer = CreateItemAnswer<SliderRowsItem, DecryptedSliderRowsAnswer>;
 
 export type SingleMultiSelectPerRowActivityItem = {
   responseType: ItemResponseType.SingleSelectionPerRow | ItemResponseType.MultipleSelectionPerRow;
@@ -81,12 +77,6 @@ export type SingleMultiSelectPerRowItemAnswer = {
   'data-testid'?: string;
 };
 
-export type SliderRowsItemAnswer = {
-  activityItem: SliderRowsItem;
-  answer: DecryptedSliderRowsAnswer | null;
-  'data-testid'?: string;
-};
-
 export type SliderActivityItem = SliderItem & {
   edited?: boolean;
 };
@@ -97,24 +87,6 @@ export type SingleSelectActivityItem = SingleSelectItem & {
 
 export type MultiSelectActivityItem = MultiSelectItem & {
   edited?: boolean;
-};
-
-export type SliderItemAnswer = {
-  activityItem: SliderActivityItem;
-  answer: DecryptedSliderAnswer | null;
-  'data-testid'?: string;
-};
-
-export type SingleSelectItemAnswer = {
-  activityItem: SingleSelectActivityItem;
-  answer: DecryptedSingleSelectionAnswer | null;
-  'data-testid'?: string;
-};
-
-export type MultiSelectItemAnswer = {
-  activityItem: MultiSelectActivityItem;
-  answer: DecryptedMultiSelectionAnswer | null;
-  'data-testid'?: string;
 };
 
 export type RespondentDataReviewContextType = {
