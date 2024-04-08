@@ -22,7 +22,7 @@ const AddParticipantFormTest = ({ accountType }: Pick<AddParticipantFormProps, '
 };
 
 const limitedAccountLabelNames = ['ID', 'First Name', 'Last Name', 'Nickname'];
-const onlyFullAccountLabelNames = ['Email', 'Invitation Language'];
+const onlyFullAccountLabelNames = ['Email Address', 'Invitation Language'];
 const fullAccountLabelNames = [...limitedAccountLabelNames, ...onlyFullAccountLabelNames];
 
 describe('AddParticipantForm component tests', () => {

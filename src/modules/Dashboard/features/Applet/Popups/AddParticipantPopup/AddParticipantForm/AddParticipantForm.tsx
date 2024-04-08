@@ -29,7 +29,7 @@ export const AddParticipantForm = ({
             <InputController
               {...commonProps}
               name={Fields.email}
-              label={t(Fields.email)}
+              label={t('emailAddress')}
               data-testid={`${dataTestid}-email`}
             />
           </Grid>
@@ -38,7 +38,7 @@ export const AddParticipantForm = ({
           <InputController
             {...commonProps}
             name={Fields.secretUserId}
-            label={t(Fields.secretUserId)}
+            label={t('secretUserId')}
             data-testid={`${dataTestid}-secret-id`}
           />
         </Grid>
@@ -46,7 +46,7 @@ export const AddParticipantForm = ({
           <InputController
             {...commonProps}
             name={Fields.firstName}
-            label={t(Fields.firstName)}
+            label={t('firstName')}
             data-testid={`${dataTestid}-fname`}
           />
         </Grid>
@@ -54,7 +54,7 @@ export const AddParticipantForm = ({
           <InputController
             {...commonProps}
             name={Fields.lastName}
-            label={t(Fields.lastName)}
+            label={t('lastName')}
             data-testid={`${dataTestid}-lname`}
           />
         </Grid>
