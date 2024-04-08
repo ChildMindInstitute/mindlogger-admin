@@ -72,11 +72,11 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
 
   const { activityItem, id: answerId } = item;
   const inputType = activityItem.responseType;
-  const key =
-    answer && answer === Object(answer) ? (Object.keys(answer)?.[0] as keyof AnswerDTO) : undefined;
+  const answerKeys = Object.keys(answer ?? {});
+  const key = answer && answer === Object(answer) ? (answerKeys[0] as keyof AnswerDTO) : undefined;
   const value = getAnswerValue(answer);
 
-  if (!key) return '';
+  if (!key || (key === 'text' && answerKeys.length < 2)) return '';
   if (isMediaAnswerData(item)) {
     try {
       if (!item.answer?.value) return '';
@@ -158,7 +158,19 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
       );
     case ItemResponseType.Flanker:
       return getFlankerCsvName(item);
-    default:
-      return `${key}: ${Array.isArray(value) ? joinWihComma(value as string[]) : value}`;
+    /* 
+      Item list as default case:
+      - 'singleSelect',
+      - 'multiSelect',
+      - 'slider',
+      - 'numberSelect',
+      - 'audioPlayer'
+    */
+    default: {
+      const correctedKey =
+        key === 'text' && !!Object.getOwnPropertyDescriptor(answer, 'value') ? 'value' : key;
+
+      return `${correctedKey}: ${Array.isArray(value) ? joinWihComma(value as string[]) : value}`;
+    }
   }
 };

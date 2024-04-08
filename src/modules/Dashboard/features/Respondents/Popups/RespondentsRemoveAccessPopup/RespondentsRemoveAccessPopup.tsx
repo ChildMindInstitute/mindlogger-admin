@@ -8,7 +8,7 @@ import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { removeRespondentAccessApi } from 'api';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { workspaces } from 'redux/modules';
-import { isManagerOrOwner } from 'shared/utils';
+import { isManagerOrOwner, toggleBooleanState } from 'shared/utils';
 
 import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
@@ -89,9 +89,7 @@ export const RespondentsRemoveAccessPopup = ({
               </Trans>
             </StyledBodyLarge>
           }
-          control={
-            <Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />
-          }
+          control={<Checkbox checked={removeData} onChange={toggleBooleanState(setRemoveData)} />}
           data-testid={`${dataTestid}-remove-data`}
         />
       )}

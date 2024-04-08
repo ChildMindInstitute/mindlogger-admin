@@ -1,10 +1,5 @@
 import { SingleApplet } from 'shared/state';
 
-export type ServerUrlOption = {
-  name: string;
-  value: string;
-};
-
 export type SignInRefreshTokenArgs = {
   refreshToken: string | null;
 };
@@ -52,4 +47,10 @@ export type FileUploadUrlResult = {
   fields: MediaUploadFields;
   uploadUrl: string;
   url: string;
+};
+
+export type RefreshResponse = {
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string | null;
 };

@@ -5,7 +5,6 @@ export const enum LocalStorageKeys {
   LibraryPreparedData = 'libraryPreparedData',
   IsFromLibrary = 'isFromLibrary',
   LibraryUrl = 'libraryPath',
-  ApiUrl = 'apiUrl',
 }
 
 export const enum SessionStorageKeys {

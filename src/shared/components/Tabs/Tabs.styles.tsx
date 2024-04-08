@@ -1,4 +1,4 @@
-import { Tabs, styled } from '@mui/material';
+import { Tabs, styled, TabsOwnProps } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import theme from 'shared/styles/theme';
@@ -15,8 +15,10 @@ export const StyledTabs = styled(Tabs, shouldForwardProp)`
     hiddenHeader?: boolean;
     defaultTabs?: boolean;
     isBuilder?: boolean;
+    variant?: TabsOwnProps['variant'];
   }) => (uiType === UiType.Primary ? TABS_HEIGHT : '4.8rem')};
   flex-shrink: 0;
+  margin: ${({ variant }) => variant === 'fullWidth' && theme.spacing(0, 3)};
 
   ${({ uiType }) =>
     uiType === UiType.Primary &&
