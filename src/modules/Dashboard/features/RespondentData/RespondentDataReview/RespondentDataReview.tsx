@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useForm, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
 import {
@@ -31,6 +31,7 @@ import { ReviewHeader } from './ReviewHeader';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
 import { Answer, AssessmentActivityItem } from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
+import { RespondentsDataFormValues } from '../RespondentData.types';
 
 export const RespondentDataReview = () => {
   const { appletId, respondentId } = useParams();
@@ -55,15 +56,12 @@ export const RespondentDataReview = () => {
     DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'] | null
   >(null);
   const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
-  const { control, setValue } = useForm<{ date: null | Date }>({
-    defaultValues: {
-      date: null,
-    },
-  });
 
-  const date = useWatch({
+  const { control, setValue } = useFormContext<RespondentsDataFormValues>();
+
+  const responseDate = useWatch({
     control,
-    name: 'date',
+    name: 'responseDate',
   });
 
   const dataTestid = 'respondents-review';
@@ -140,7 +138,7 @@ export const RespondentDataReview = () => {
   };
 
   const handleSetInitialDate = (date: Date) => {
-    setValue('date', date);
+    setValue('responseDate', date);
     handleGetActivities(date);
     handleGetSubmitDates(date);
   };
@@ -203,7 +201,7 @@ export const RespondentDataReview = () => {
     <StyledContainer>
       <ReviewMenu
         control={control}
-        selectedDate={date}
+        selectedDate={responseDate}
         responseDates={responseDates}
         onMonthChange={handleGetSubmitDates}
         activities={activities}

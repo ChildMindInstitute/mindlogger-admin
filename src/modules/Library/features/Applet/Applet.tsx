@@ -65,6 +65,9 @@ export const Applet = ({
   const selectedItems = selectedItemsWithId[id];
   const APPLET_DETAILS = `${page.library}/${id}`;
   const arrowSvgId = activitiesVisible ? 'navigate-up' : 'navigate-down';
+  const appletNameTestId = `${dataTestid}-applet-name`;
+  const appletVersionTestId = `${dataTestid}-applet-version`;
+  const appletDescriptionTestId = `${dataTestid}-applet-description`;
 
   const handleRemove = () => {
     setRemoveAppletPopupVisible(true);
@@ -100,11 +103,13 @@ export const Applet = ({
   const renderAppletInfoListView = () => (
     <>
       <StyledAppletName>
-        <StyledTitleBoldMedium>{getHighlightedText(displayName, search)}</StyledTitleBoldMedium>
+        <StyledTitleBoldMedium data-testid={appletNameTestId}>
+          {getHighlightedText(displayName, search)}
+        </StyledTitleBoldMedium>
         {version && (
           <>
             <StyledTitleMedium sx={{ margin: theme.spacing(0, 0.8) }}>∙</StyledTitleMedium>
-            <StyledTitleMedium>{version}</StyledTitleMedium>
+            <StyledTitleMedium data-testid={appletVersionTestId}>{version}</StyledTitleMedium>
           </>
         )}
       </StyledAppletName>
@@ -112,6 +117,7 @@ export const Applet = ({
         <StyledBodyMedium
           color={variables.palette.on_surface}
           sx={{ marginTop: theme.spacing(0.4), wordBreak: 'break-word' }}
+          data-testid={appletDescriptionTestId}
         >
           {getHighlightedText(getDictionaryText(description), search)}
         </StyledBodyMedium>
@@ -121,10 +127,13 @@ export const Applet = ({
 
   const renderAppletInfoDetailsView = () => (
     <>
-      <StyledHeadlineLarge>{displayName}</StyledHeadlineLarge>
-      {version && <StyledLabelBoldLarge>{version}</StyledLabelBoldLarge>}
+      <StyledHeadlineLarge data-testid={appletNameTestId}>{displayName}</StyledHeadlineLarge>
+      {version && (
+        <StyledLabelBoldLarge data-testid={appletVersionTestId}>{version}</StyledLabelBoldLarge>
+      )}
       {description && (
         <StyledBodyLarge
+          data-testid={appletDescriptionTestId}
           sx={{ marginTop: theme.spacing(1.4), color: variables.palette.on_surface_variant }}
         >
           {getHighlightedText(getDictionaryText(description), search)}

@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
 
 import { getDictionaryText } from 'shared/utils';
-import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';
+import { UNSUPPORTED_ITEMS } from '../../RespondentData.const';
 import { StyledEmptyReview, StyledReview, StyledWrapper } from './Review.styles';
 import { ReviewProps } from './Review.types';
 import { renderEmptyState, getResponseItem } from './Review.utils';

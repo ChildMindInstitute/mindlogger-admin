@@ -1,8 +1,10 @@
 import { ActivityItemAnswer } from 'shared/types';
 import { ActivitySettingsSubscale } from 'shared/state';
 import { Version } from 'api';
-
-import { ActivityCompletion, FormattedResponse } from '../Report.types';
+import {
+  ActivityCompletion,
+  SingleMultiSelectionSliderFormattedResponses,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export const enum SubscalesTypes {
   Table = 'Table',
@@ -47,7 +49,7 @@ export type ParsedSubscales = {
 
 export type ActivityCompletionToRender = {
   [key: string]: {
-    items?: FormattedResponse[];
+    items?: SingleMultiSelectionSliderFormattedResponses[];
     score: number;
     optionText?: string;
     restScores?: { [key: string]: { score: number; optionText: string } };
@@ -57,13 +59,13 @@ export type ActivityCompletionToRender = {
 export type SubscaleToRender = Record<
   string,
   {
-    items?: FormattedResponse[];
+    items?: SingleMultiSelectionSliderFormattedResponses[];
     restScores?: { [key: string]: { score: number; optionText: string } };
   }
 >;
 
 export type Subscale = {
-  items?: FormattedResponse[];
+  items?: SingleMultiSelectionSliderFormattedResponses[];
   score?: number;
   optionText?: string;
   restScores: Record<string, Subscale>;

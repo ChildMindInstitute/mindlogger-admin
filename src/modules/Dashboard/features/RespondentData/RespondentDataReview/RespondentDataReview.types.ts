@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { ItemResponseType } from 'shared/consts';
 import {
   TextItem,
   SliderItem,
@@ -8,6 +9,10 @@ import {
   Item,
   NumberSelectionItem,
   DateItem,
+  TimeRangeItem,
+  MultipleSelectionPerRowItem,
+  SingleAndMultiplePerRowConfig,
+  SingleAndMultipleSelectRowsResponseValues,
 } from 'shared/state';
 import {
   DecryptedMultiSelectionAnswer,
@@ -16,6 +21,9 @@ import {
   DecryptedTextAnswer,
   DecryptedNumberSelectionAnswer,
   DecryptedDateAnswer,
+  DecryptedDateRangeAnswer,
+  DecryptedSingleSelectionPerRowAnswer,
+  DecryptedMultiSelectionPerRowAnswer,
 } from 'shared/types';
 
 export type Answer = {
@@ -38,6 +46,36 @@ export type NumberSelectionItemAnswer = {
 export type DateItemAnswer = {
   activityItem: DateItem;
   answer: DecryptedDateAnswer;
+  'data-testid'?: string;
+};
+
+export type TimeRangeItemAnswer = {
+  activityItem: TimeRangeItem;
+  answer: DecryptedDateRangeAnswer;
+  'data-testid'?: string;
+};
+
+export type SingleSelectPerRowItemAnswer = {
+  activityItem: MultipleSelectionPerRowItem;
+  answer: DecryptedMultiSelectionPerRowAnswer | null;
+  'data-testid'?: string;
+};
+
+export type MultiSelectPerRowItemAnswer = {
+  activityItem: MultipleSelectionPerRowItem;
+  answer: DecryptedMultiSelectionPerRowAnswer | null;
+  'data-testid'?: string;
+};
+
+export type SingleMultiSelectPerRowActivityItem = {
+  responseType: ItemResponseType.SingleSelectionPerRow | ItemResponseType.MultipleSelectionPerRow;
+  config: SingleAndMultiplePerRowConfig;
+  responseValues: SingleAndMultipleSelectRowsResponseValues;
+};
+
+export type SingleMultiSelectPerRowItemAnswer = {
+  activityItem: SingleMultiSelectPerRowActivityItem;
+  answer: DecryptedSingleSelectionPerRowAnswer | DecryptedMultiSelectionPerRowAnswer | null;
   'data-testid'?: string;
 };
 

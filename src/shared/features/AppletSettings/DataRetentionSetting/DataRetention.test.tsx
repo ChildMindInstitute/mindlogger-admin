@@ -1,4 +1,5 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { expectBanner, SettingParam, renderWithProviders } from 'shared/utils';
@@ -97,17 +98,27 @@ describe('DataRetention component tests', () => {
     const retentionTypeInput = container.querySelector('input');
     retentionTypeInput &&
       fireEvent.change(retentionTypeInput, { target: { value: retentionType } });
-    fireEvent.click(screen.getByTestId(`${dataTestid}-save`));
+    await userEvent.click(screen.getByTestId(`${dataTestid}-save`));
 
-    await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
-        1,
-        `/applets/${mockedAppletId}/retentions`,
-        { period: retentionPeriod, retention: retentionType },
-        { signal: undefined },
-      );
+    expect(mockAxios.post).nthCalledWith(
+      1,
+      `/applets/${mockedAppletId}/retentions`,
+      { period: retentionPeriod, retention: retentionType },
+      { signal: undefined },
+    );
+    expectBanner(store, 'SaveSuccessBanner');
+  });
+
+  test('comma input testing', async () => {
+    const { container } = renderWithProviders(<DataRetention isDashboard />, {
+      preloadedState: getPreloadedState(2, RetentionPeriods.Days),
+      route,
+      routePath,
     });
+    const [retentionPeriodInput] = container.querySelectorAll('input');
 
-    await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+    expect(screen.getByTestId(`${dataTestid}-retention-period`)).toBeInTheDocument();
+    await userEvent.type(retentionPeriodInput, ',');
+    expect(retentionPeriodInput?.value).toBe('2');
   });
 });

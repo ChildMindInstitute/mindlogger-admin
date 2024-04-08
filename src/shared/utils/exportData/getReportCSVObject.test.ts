@@ -111,9 +111,10 @@ const getPreparedProperties = ({
 };
 const result = {
   activity_end_time: '1689756087000',
-  activity_flow: null,
   activity_id: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
   activity_name: 'New Activity#1',
+  activity_flow_id: '',
+  activity_flow_name: '',
   activity_scheduled_time: 'not scheduled',
   activity_start_time: '1689755822000',
   flag: 'completed',
@@ -124,12 +125,12 @@ const result = {
   prompt: 'single  ',
   rawScore: 6,
   response: 'value: 2 | text: Extra info',
-  reviewing_id: null,
+  reviewing_id: '',
   secret_user_id: 'secretUserId',
   userId: '835e5277-5949-4dff-817a-d85c17a3604f',
   version: '2.0.0',
-  event_id: undefined,
-  timezone_offset: undefined,
+  event_id: '',
+  timezone_offset: '',
 };
 
 describe('getReportCSVObject', () => {
@@ -234,6 +235,30 @@ describe('getReportCSVObject', () => {
     ).toStrictEqual({
       ...result,
       timezone_offset: -300,
+    });
+  });
+
+  test('returns object with activity name and activity flow id', () => {
+    expect(
+      getReportCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            flowName: 'test flow name',
+            flowId: 'some flow ID 222',
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      activity_flow_name: 'test flow name',
+      activity_flow_id: 'some flow ID 222',
     });
   });
 });

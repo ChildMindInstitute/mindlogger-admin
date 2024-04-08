@@ -8,7 +8,7 @@ import { Button, Grid } from '@mui/material';
 import {
   InputController,
   SelectController,
-  TagsInputController,
+  TagsAutocompleteController,
 } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledFlexTopCenter, StyledTitleMedium, theme } from 'shared/styles';
 import {
@@ -266,7 +266,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           )}
           {role === Roles.Reviewer && (
             <Grid item xs={4}>
-              <TagsInputController
+              <TagsAutocompleteController
                 {...commonProps}
                 name={Fields.respondents}
                 options={respondents}

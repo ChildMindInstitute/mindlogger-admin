@@ -554,6 +554,9 @@ export const mockedDrawingFormValues = {
   responseValues: {
     drawingExample: null,
     drawingBackground: null,
+    proportion: {
+      enabled: null,
+    },
   },
   config: {
     removeUndoButton: false,

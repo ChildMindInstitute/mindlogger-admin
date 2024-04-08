@@ -4,10 +4,8 @@ import { format, isEqual } from 'date-fns';
 
 import { DateFormats } from 'shared/consts';
 import { variables } from 'shared/styles';
-import {
-  DEFAULT_DATE_MAX,
-  DEFAULT_DATE_MIN,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.const';
+import { DEFAULT_DATE_MIN } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.const';
+import { DEFAULT_DATE_MAX } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.const';
 
 import { locales, POINT_RADIUS_DEFAULT, LABEL_WIDTH_Y } from '../../Charts.const';
 import { getTimelineStepSize, getTimeConfig } from '../../Charts.utils';
