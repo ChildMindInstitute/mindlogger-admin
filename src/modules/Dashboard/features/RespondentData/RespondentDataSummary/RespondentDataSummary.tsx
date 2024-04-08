@@ -43,7 +43,7 @@ export const RespondentDataSummary = () => {
 
   const reportContent = useMemo(() => {
     if (selectedActivity && isLoading) return <Spinner />;
-    if (!selectedActivity || !selectedActivity.hasAnswer || selectedActivity.isPerformanceTask) {
+    if (!selectedActivity || selectedActivity.isPerformanceTask) {
       return (
         <StyledFlexAllCenter sx={{ height: '100%' }}>
           <StyledEmptyReview data-testid="summary-empty-state">

@@ -84,16 +84,6 @@ export const getEmptyState = (selectedActivity: DatavizActivity | null) => {
       </>
     );
   }
-  if (!selectedActivity.hasAnswer) {
-    return (
-      <>
-        <Svg id="chart" width="80" height="80" />
-        <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-          {t('noDataForActivity')}
-        </StyledTitleLarge>
-      </>
-    );
-  }
 };
 
 export const getUniqueIdentifierOptions = (identifiers: Identifier[]) => {
