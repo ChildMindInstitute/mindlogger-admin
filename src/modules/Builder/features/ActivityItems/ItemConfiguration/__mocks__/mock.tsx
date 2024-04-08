@@ -602,8 +602,6 @@ export const mockedItemTypes = [
 ];
 export const mockedItemTypeGroups = ['select', 'matrixSelect', 'input', 'record', 'display'];
 export const mockedItemTypesMobileOnly = [
-  'singleSelectRows',
-  'multiSelectRows',
   'sliderRows',
   'drawing',
   'photo',
