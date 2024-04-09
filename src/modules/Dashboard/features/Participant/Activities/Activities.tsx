@@ -9,10 +9,12 @@ import { useAsync } from 'shared/hooks';
 import { DateFormats } from 'shared/consts';
 import { page } from 'resources';
 import { workspaces } from 'redux/modules';
-import { ActivityGrid } from 'modules/Dashboard/components/ActivityGrid/ActivityGrid';
-import { StyledSvg } from 'modules/Dashboard/components/ActivityGrid/ActivityGrid.styles';
-import { ActivityActionProps } from 'modules/Dashboard/components/ActivityGrid/ActivityGrid.types';
-import { getActivityActions } from 'modules/Dashboard/components/ActivityGrid/ActivityGrid.utils';
+import {
+  ActivityGrid,
+  StyledSvg,
+  ActivityActionProps,
+  getActivityActions,
+} from 'modules/Dashboard/components/ActivityGrid';
 
 export const Activities = () => {
   const { appletId, participantId } = useParams();

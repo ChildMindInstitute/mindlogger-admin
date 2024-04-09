@@ -2,27 +2,19 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { ButtonWithMenu, Spinner, Svg, EmptyState, Row } from 'shared/components';
+import { ButtonWithMenu, Spinner, Svg, EmptyState } from 'shared/components';
 import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { page } from 'resources';
 import { ActivitySummaryCard } from 'modules/Dashboard/components';
-import { Order } from 'shared/types';
 
 import { StyledButton } from './ActivityGrid.styles';
-
-export type ActivitiesGridProps = {
-  rows?: Row[];
-  order: Order;
-  orderBy: string;
-  isLoading: boolean;
-  'data-testid': string;
-};
+import { ActivityGridProps } from './ActivityGrid.types';
 
 export const ActivityGrid = ({
   rows,
   isLoading = false,
   'data-testid': dataTestid,
-}: ActivitiesGridProps) => {
+}: ActivityGridProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const { appletId, participantId: _participantId } = useParams();
@@ -101,7 +93,7 @@ export const ActivityGrid = ({
         )}
       </StyledFlexWrap>
 
-      {rows?.length && (
+      {!!rows?.length && (
         <StyledFlexWrap sx={{ gap: 2.4, overflowY: 'auto' }} data-testid={`${dataTestid}-grid`}>
           {rows.map((activity, index) => (
             <ActivitySummaryCard

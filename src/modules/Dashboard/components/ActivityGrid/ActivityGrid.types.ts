@@ -1,7 +1,16 @@
-import { MenuActionProps } from 'shared/components';
+import { MenuActionProps, Row } from 'shared/components';
 import { Activity } from 'redux/modules';
 import { Roles } from 'shared/consts';
 import { DatavizActivity } from 'api';
+import { Order } from 'shared/types';
+
+export type ActivityGridProps = {
+  rows?: Row[];
+  order: Order;
+  orderBy: string;
+  isLoading: boolean;
+  'data-testid': string;
+};
 
 export type ActivityActionProps = {
   activityId: string;
