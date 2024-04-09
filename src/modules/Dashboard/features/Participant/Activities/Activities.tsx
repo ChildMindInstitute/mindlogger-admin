@@ -26,9 +26,8 @@ export const Activities = () => {
 
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
-
   /**
-   * TODO:
+   * TODO M2-6223:
    * getAppletActivitiesApi returns activities for the currently logged in user (an admin/collaborator). This behavior is correct for M2-5585, as per the note:
    *  "for this ticket all activities in the applet are assigned to the user as we have not yet introduced the concept of assigning activities to users."
    * This endpoint could be updated to include a `participant_id` param and retrieve _other_ user's assigned activities
