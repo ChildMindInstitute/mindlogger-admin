@@ -1,8 +1,7 @@
-import { styled, Button, DialogTitle, Dialog, DialogActions } from '@mui/material';
+import { styled, DialogTitle, Dialog, DialogActions } from '@mui/material';
 
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
-import { FontWeight } from 'shared/styles/styledComponents/Typography';
 import { StyledClearedButton } from 'shared/styles/styledComponents/Buttons';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
@@ -22,14 +21,14 @@ export const StyledDialog = styled(Dialog)`
 
 export const StyledDialogTitle = styled(DialogTitle)`
   && {
-    padding: ${theme.spacing(2.8, 3.2, 3.4)};
+    padding: ${theme.spacing(2, 3.2, 3.4)};
   }
 `;
 
 export const StyledCloseButton = styled(StyledClearedButton)`
   position: absolute;
   top: 1.5rem;
-  right: 1.5rem;
+  right: 3.2rem;
   border-radius: ${variables.borderRadius.half};
   padding: 0.8rem;
 
@@ -42,11 +41,5 @@ export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
   justify-content: ${({ actionsAlign }: { actionsAlign?: ActionsAlign }) =>
     actionsAlign || 'flex-start'};
   margin-top: auto;
-  padding: ${theme.spacing(2.4, 2.4, 0.4)};
-`;
-
-export const StyledButton = styled(Button)`
-  font-weight: ${({ fontWeight }: { fontWeight?: FontWeight }) =>
-    fontWeight ? variables.font.weight[fontWeight] : variables.font.weight.bold};
-  padding: ${theme.spacing(1.4, 3.4)};
+  padding: ${theme.spacing(2.4, 3.2, 1.2)};
 `;

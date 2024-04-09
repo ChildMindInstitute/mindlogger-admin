@@ -71,4 +71,4 @@ export const palette = {
   },
 };
 
-export const modalBackground = palette.surface1;
+export const modalBackground = palette.surface;

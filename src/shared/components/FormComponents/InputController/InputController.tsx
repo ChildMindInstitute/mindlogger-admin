@@ -15,9 +15,10 @@ export const InputController = <T extends FieldValues>({
   <Controller
     name={name}
     control={control}
-    render={({ field: { onChange, value }, fieldState: { error } }) => (
+    render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
       <Input
         onChange={onChange}
+        onBlur={onBlur}
         value={value}
         error={!!error || providedError}
         helperText={isErrorVisible ? error?.message || helperText : ''}

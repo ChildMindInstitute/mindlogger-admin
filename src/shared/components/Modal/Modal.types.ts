@@ -1,5 +1,5 @@
 import { OverridableStringUnion } from '@mui/types';
-import { ButtonPropsColorOverrides, SxProps } from '@mui/material';
+import { ButtonProps, ButtonPropsColorOverrides, SxProps } from '@mui/material';
 import { BaseSyntheticEvent } from 'react';
 
 type BtnSubmit =
@@ -25,6 +25,8 @@ export type ModalProps = {
   buttonText: string;
   children: JSX.Element | null;
   onClose: () => void;
+  /** @default onClose */
+  onBackdropClick?: (() => void) | null;
   onSubmit?: BtnSubmit;
   titleAlign?: 'left' | 'right' | 'center';
   disabledSubmit?: boolean;
@@ -34,6 +36,7 @@ export type ModalProps = {
   submitBtnColor?: SubmitBtnColor;
   submitBtnVariant?: SubmitBtnVariant;
   secondBtnText?: string;
+  secondBtnVariant?: ButtonProps['variant'];
   onSecondBtnSubmit?: BtnSubmit;
   disabledSecondBtn?: boolean;
   sxProps?: SxProps;
@@ -42,6 +45,10 @@ export type ModalProps = {
   thirdBtnText?: string;
   thirdBtnStyles?: SxProps;
   onThirdBtnSubmit?: BtnSubmit;
+  hasLeftBtn?: boolean;
+  leftBtnText?: string;
+  leftBtnVariant?: ButtonProps['variant'];
+  onLeftBtnSubmit?: BtnSubmit;
   footerStyles?: SxProps;
   hasActions?: boolean;
   submitBtnTooltip?: string;

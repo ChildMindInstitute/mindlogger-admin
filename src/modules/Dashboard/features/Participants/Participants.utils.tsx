@@ -165,10 +165,10 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       width: ParticipantsColumnsWidth.Default,
     },
     {
-      id: 'status',
-      label: t('status'),
+      id: 'accountType',
+      label: t('accountType'),
       enableSort: true,
-      width: ParticipantsColumnsWidth.Status,
+      width: ParticipantsColumnsWidth.AccountType,
     },
     {
       id: 'lastSeen',
