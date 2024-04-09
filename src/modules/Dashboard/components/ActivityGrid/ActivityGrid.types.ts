@@ -25,7 +25,7 @@ export type ActivitiesData = {
 
 export type ActivityActions = {
   actions: ActionsObject;
-  dataTestid: string;
+  dataTestId: string;
   appletId: string;
   activityId: string;
   roles?: Roles[];
