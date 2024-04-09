@@ -1,6 +1,7 @@
+import { Box, Button } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { Link, generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { ActionsMenu, MenuActionProps, Pin, Row, Search, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
@@ -10,7 +11,7 @@ import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinA
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { StyledBody } from 'shared/styles';
+import { StyledBody, theme } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 
 import {
@@ -415,7 +416,28 @@ export const Respondents = () => {
         return t('noMatchWasFound', { searchValue });
       }
 
-      return appletId ? t('noRespondentsForApplet') : t('noRespondents');
+      return appletId ? (
+        <Box
+          component="span"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: theme.spacing(2.4),
+            placeItems: 'center',
+          }}
+        >
+          <span>{t('noRespondentsForApplet')}</span>
+          <Button
+            component={Link}
+            to={generatePath(page.appletAddUser, { appletId })}
+            variant="contained"
+          >
+            {t('addRespondent')}
+          </Button>
+        </Box>
+      ) : (
+        t('noRespondents')
+      );
     }
   };
 

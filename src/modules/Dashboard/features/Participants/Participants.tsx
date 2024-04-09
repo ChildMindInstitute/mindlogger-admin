@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Checkbox } from '@mui/material';
+import { Box, Checkbox } from '@mui/material';
 
 import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
@@ -10,7 +10,7 @@ import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinA
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { StyledBody } from 'shared/styles';
+import { StyledBody, theme } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
@@ -469,7 +469,27 @@ export const Participants = () => {
         return t('noMatchWasFound', { searchValue });
       }
 
-      return appletId ? t('noParticipantsForApplet') : t('noParticipants');
+      return appletId ? (
+        <Box
+          component="span"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: theme.spacing(2.4),
+            placeItems: 'center',
+          }}
+        >
+          <span>{t('noParticipantsForApplet')}</span>
+          <AddParticipantButton
+            onClick={() => setAddParticipantPopupVisible(true)}
+            variant="contained"
+          >
+            {t('addParticipant')}
+          </AddParticipantButton>
+        </Box>
+      ) : (
+        t('noParticipants')
+      );
     }
   };
 
