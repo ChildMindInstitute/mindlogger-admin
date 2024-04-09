@@ -287,4 +287,11 @@ describe('FeedbackReviewer', () => {
     await userEvent.click(showMoreButton);
     expect(showMoreButton).toHaveTextContent('Show 2 more');
   });
+
+  test('renders lock icon for user with no review data permission', async () => {
+    renderComponent({ review: null });
+
+    expect(screen.getByTestId(`${dataTestid}-lock`)).toBeInTheDocument();
+    expect(screen.queryByTestId(`${dataTestid}-collapse`)).not.toBeInTheDocument();
+  });
 });

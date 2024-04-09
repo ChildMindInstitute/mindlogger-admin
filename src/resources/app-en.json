@@ -1290,5 +1290,6 @@
   "appletNameExists": "That Applet name already exists",
   "noAccessTitle": "No access to applet",
   "noAccessDescription": "To refresh the data, please click the button below.",
+  "noPermissionToViewData": "You do not have permission to view this data",
   "goToDashboard": "Go to Dashboard"
 }

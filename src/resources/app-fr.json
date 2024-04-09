@@ -1289,5 +1289,6 @@
   "appletNameExists": "Ce nom d'Applet existe déjà",
   "noAccessTitle": "Pas d'accès à l'applet",
   "noAccessDescription": "Pour rafraîchir les données, veuillez cliquer sur le bouton ci-dessous.",
+  "noPermissionToViewData": "Vous n'avez pas la permission de voir ces données",
   "goToDashboard": "Aller au tableau de bord"
 }

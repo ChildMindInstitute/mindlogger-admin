@@ -289,11 +289,13 @@ export type Reviewer = {
 export type Review = {
   id: string;
   createdAt: string;
-  answer: string;
   items: Item[];
   itemIds: string[];
   reviewer: Reviewer;
-  reviewerPublicKey: string;
+  /* "null" returns in case the user does not have access to the answer
+  (a user with the role of reviewer only has access to their own review answers) */
+  answer: string | null;
+  reviewerPublicKey: string | null;
 };
 
 export type SummaryAnswers = AppletId & {
