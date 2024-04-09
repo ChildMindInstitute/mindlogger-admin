@@ -2856,6 +2856,21 @@ export const mockedAlert = {
   subjectId: mockedSubjectId1,
 };
 
+export const mockedAppletSummaryData = [
+  {
+    id: mockedAppletId,
+    name: 'Existing Activity',
+    isPerformanceTask: false,
+    hasAnswer: false,
+  },
+  {
+    id: '56a4ebe4-3d7f-485c-8293-093cabf29fa3',
+    name: 'Newly added activity',
+    isPerformanceTask: false,
+    hasAnswer: false,
+  },
+];
+
 export const mockIntersectionObserver = () => {
   global.IntersectionObserver = jest.fn((_, options = {}) => {
     const instance = {
