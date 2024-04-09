@@ -5,7 +5,7 @@ import { MenuItem, MenuItemType } from 'shared/components';
 import { isManagerOrOwner } from 'shared/utils';
 import { Roles } from 'shared/consts';
 
-import { ActivityActions, ActivityActionProps } from './Activities.types';
+import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
 
 export const getActivityActions = ({
   actions: { editActivity, exportData, assignActivity, takeNow },
