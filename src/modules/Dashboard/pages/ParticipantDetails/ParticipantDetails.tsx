@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
+import { HeaderOptions } from 'modules/Dashboard/components/HeaderOptions';
 import { useAppDispatch } from 'redux/store';
 import { LinkedTabs, Spinner } from 'shared/components';
 import { workspaces } from 'shared/state';
@@ -23,8 +24,6 @@ export const ParticipantDetails = () => {
   const appletLoadingStatus = appletState.useResponseStatus();
   const respondentLoadingStatus = users.useRespondentStatus();
   const { useRespondent } = users;
-  const { useAppletData } = appletState;
-  const applet = useAppletData();
   const respondent = useRespondent();
   const { getApplet } = appletState.thunk;
 
@@ -71,13 +70,19 @@ export const ParticipantDetails = () => {
               gap: theme.spacing(1.6),
               marginX: theme.spacing(2.4),
               marginBottom: theme.spacing(1.2),
+              placeContent: 'space-between',
             }}
           >
-            <StyledHeadlineLarge>{respondent?.result.secretUserId}</StyledHeadlineLarge>
-            <StyledHeadlineLarge color={palette.outline}>
-              {respondent?.result.nickname}
-            </StyledHeadlineLarge>
+            <Box sx={{ display: 'flex', gap: theme.spacing(1.6) }}>
+              <StyledHeadlineLarge>{respondent?.result.secretUserId}</StyledHeadlineLarge>
+              <StyledHeadlineLarge color={palette.outline}>
+                {respondent?.result.nickname}
+              </StyledHeadlineLarge>
+            </Box>
+
+            <HeaderOptions />
           </Box>
+
           <LinkedTabs tabs={respondentTabs} isCentered={false} deepPathCompare />
         </>
       )}
