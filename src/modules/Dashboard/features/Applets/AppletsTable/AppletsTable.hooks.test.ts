@@ -37,7 +37,7 @@ describe('useAppletsDnd', () => {
   test('returns initial state', () => {
     (useContext as jest.Mock).mockReturnValue(mockAppletContextValue);
 
-    const { result } = renderHook(() => useAppletsDnd());
+    const { result } = renderHook(useAppletsDnd);
     expect(result.current.isDragOver).toBe(false);
     expect(typeof result.current.onDragLeave).toBe('function');
     expect(typeof result.current.onDragOver).toBe('function');
@@ -49,7 +49,7 @@ describe('useAppletsDnd', () => {
     const onDragLeaveParams = { preventDefault: jest.fn(), persist: jest.fn() };
     (useContext as jest.Mock).mockReturnValue(mockAppletContextValue);
 
-    const { result } = renderHook(() => useAppletsDnd());
+    const { result } = renderHook(useAppletsDnd);
     act(() => {
       result.current.onDragLeave(onDragLeaveParams);
     });
@@ -60,7 +60,7 @@ describe('useAppletsDnd', () => {
     const onDragOverParams = { preventDefault: jest.fn() };
     (useContext as jest.Mock).mockReturnValue(mockAppletContextValue);
 
-    const { result } = renderHook(() => useAppletsDnd());
+    const { result } = renderHook(useAppletsDnd);
     act(() => {
       result.current.onDragOver(onDragOverParams);
     });
@@ -82,8 +82,7 @@ describe('useAppletsDnd', () => {
     });
     (useAsync as jest.Mock).mockReturnValue({ execute: mockSetFolder });
 
-    const { result } = renderHook(() => useAppletsDnd());
-
+    const { result } = renderHook(useAppletsDnd);
     await act(() => {
       result.current.onDragEnd(mockedEvent, mockApplet);
     });
@@ -111,8 +110,7 @@ describe('useAppletsDnd', () => {
     });
     (useAsync as jest.Mock).mockReturnValue({ execute: mockSetFolder });
 
-    const { result } = renderHook(() => useAppletsDnd());
-
+    const { result } = renderHook(useAppletsDnd);
     await act(async () => {
       await result.current.onDrop(mockedEvent, folder);
     });
@@ -140,8 +138,7 @@ describe('useAppletsDnd', () => {
     });
     (useAsync as jest.Mock).mockReturnValue({ execute: mockSetFolder });
 
-    const { result } = renderHook(() => useAppletsDnd());
-
+    const { result } = renderHook(useAppletsDnd);
     await act(async () => {
       await result.current.onDrop(mockedEvent, folder);
     });
