@@ -31,6 +31,10 @@ export const FeedbackReviewerHeader = ({
 }: FeedbackReviewerHeaderProps) => {
   const { t } = useTranslation('app');
   const toggleSvgId = isReviewOpen ? 'navigate-up' : 'navigate-down';
+  const submittedDate = `${t('submitted')} ${format(
+    new Date(`${createdAt}Z`),
+    DateFormats.MonthDayYearTime,
+  )}`;
 
   return (
     <>
@@ -56,10 +60,9 @@ export const FeedbackReviewerHeader = ({
           color: variables.palette.outline,
           pt: theme.spacing(0.5),
         }}
-      >{`${t('submitted')} ${format(
-        new Date(`${createdAt}Z`),
-        DateFormats.MonthDayYearTime,
-      )}`}</StyledBodyMedium>
+      >
+        {submittedDate}
+      </StyledBodyMedium>
       {onRemoveClick && (
         <StyledRemoveWrapper>
           <Button
