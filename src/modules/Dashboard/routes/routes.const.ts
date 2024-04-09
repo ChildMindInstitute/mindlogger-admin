@@ -7,12 +7,12 @@ const Managers = lazy(() => import('modules/Dashboard/features/Managers'));
 const Respondents = lazy(() => import('modules/Dashboard/features/Respondents'));
 const Participants = lazy(() => import('modules/Dashboard/features/Participants'));
 const ParticipantActivities = lazy(
-  () => import('modules/Dashboard/features/ParticipantActivities'),
+  () => import('modules/Dashboard/features/Participant/Activities'),
 );
 const ParticipantConnections = lazy(
-  () => import('modules/Dashboard/features/ParticipantConnections'),
+  () => import('modules/Dashboard/features/Participant/Connections'),
 );
-const ParticipantSchedule = lazy(() => import('modules/Dashboard/features/ParticipantSchedule'));
+const ParticipantSchedule = lazy(() => import('modules/Dashboard/features/Participant/Schedule'));
 const AddUser = lazy(() => import('modules/Dashboard/features/Applet/AddUser'));
 const Schedule = lazy(() => import('modules/Dashboard/features/Applet/Schedule'));
 const Overview = lazy(() => import('modules/Dashboard/features/Applet/Overview'));
