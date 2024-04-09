@@ -4,6 +4,7 @@ import { waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { renderWithProviders } from 'shared/utils';
 import {
@@ -178,6 +179,20 @@ const mockedGetWithResponses = {
 
 const JEST_TEST_TIMEOUT = 10000;
 
+const RespondentDataReviewWithForm = () => {
+  const methods = useForm({
+    defaultValues: {
+      responseDate: null,
+    },
+  });
+
+  return (
+    <FormProvider {...methods}>
+      <RespondentDataReview />
+    </FormProvider>
+  );
+};
+
 describe('RespondentDataReview', () => {
   test(
     'renders component correctly with all child components',
@@ -242,7 +257,7 @@ describe('RespondentDataReview', () => {
 
       dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
-      renderWithProviders(<RespondentDataReview />, {
+      renderWithProviders(<RespondentDataReviewWithForm />, {
         preloadedState,
         route,
         routePath,
@@ -391,12 +406,12 @@ describe('RespondentDataReview', () => {
 
       const feedbackMenu = screen.getByTestId(`${dataTestid}-feedback-menu`);
       expect(feedbackMenu).toBeInTheDocument();
-      expect(feedbackMenu).toHaveStyle({ display: 'none' });
+      expect(feedbackMenu).toHaveStyle({ width: 0 });
 
       await userEvent.click(feedbackButton);
 
       expect(feedbackMenu).toHaveStyle({
-        display: 'flex',
+        width: '44rem',
       });
 
       const feedbackMenuClose = screen.getByTestId(`${dataTestid}-feedback-menu-close`);
@@ -404,13 +419,13 @@ describe('RespondentDataReview', () => {
 
       await userEvent.click(feedbackMenuClose);
 
-      expect(feedbackMenu).toHaveStyle({ display: 'none' });
+      expect(feedbackMenu).toHaveStyle({ width: 0 });
     },
     JEST_TEST_TIMEOUT,
   );
 
   test('test if default review date is equal to last activity completed date', async () => {
-    renderWithProviders(<RespondentDataReview />, {
+    renderWithProviders(<RespondentDataReviewWithForm />, {
       preloadedState,
       route: routeWithoutSelectedDate,
       routePath,

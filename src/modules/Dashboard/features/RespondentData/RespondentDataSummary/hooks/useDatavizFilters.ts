@@ -2,11 +2,15 @@ import { useMemo } from 'react';
 import { UseFormWatch } from 'react-hook-form';
 import { isAfter, isBefore } from 'date-fns';
 
-import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
-import { getDateTime } from 'shared/utils';
 import { Version } from 'api';
+import { getDateTime } from 'shared/utils/getDateTime';
 
-export const useDatavizFilters = (watch: UseFormWatch<SummaryFiltersForm>, versions: Version[]) => {
+import { RespondentsDataFormValues } from '../../RespondentData.types';
+
+export const useDatavizFilters = (
+  watch: UseFormWatch<RespondentsDataFormValues>,
+  versions: Version[],
+) => {
   const { startDate, endDate, startTime, endTime } = watch();
 
   const { minDate, maxDate, filteredVersions } = useMemo(() => {
@@ -19,7 +23,7 @@ export const useDatavizFilters = (watch: UseFormWatch<SummaryFiltersForm>, versi
     );
 
     return { minDate, maxDate, filteredVersions };
-  }, [startDate, endDate, startTime, endTime]);
+  }, [startDate, endDate, startTime, endTime, versions]);
 
   return { minDate, maxDate, filteredVersions };
 };

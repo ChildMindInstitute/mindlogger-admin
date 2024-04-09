@@ -254,7 +254,8 @@ export const reportHeader = [
   'userId',
   'activity_id',
   'activity_name',
-  'activity_flow',
+  'activity_flow_id',
+  'activity_flow_name',
   'item',
   'response',
   'prompt',
@@ -278,7 +279,8 @@ export const activityJourneyHeader = [
   'secret_user_id',
   'user_id',
   'activity_id',
-  'activity_flow',
+  'activity_flow_id',
+  'activity_flow_name',
   'activity_name',
   'item',
   'prompt',
@@ -290,6 +292,7 @@ export const activityJourneyHeader = [
 export const enum ActivityStatus {
   Missed = 'missed',
   Completed = 'completed',
+  Incomplete = 'incomplete',
   NotScheduled = 'not scheduled',
 }
 

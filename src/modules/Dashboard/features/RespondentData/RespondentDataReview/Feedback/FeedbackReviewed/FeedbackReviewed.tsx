@@ -70,7 +70,7 @@ export const FeedbackReviewed = () => {
               </Fragment>
             ))
           ) : (
-            <EmptyState>{t('reviewedEmptyState')}</EmptyState>
+            <EmptyState width="auto">{t('reviewedEmptyState')}</EmptyState>
           )}
         </>
       )}

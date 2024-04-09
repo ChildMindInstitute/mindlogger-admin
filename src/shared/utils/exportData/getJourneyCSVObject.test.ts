@@ -1,5 +1,5 @@
 import { ItemFormValues } from 'modules/Builder/types';
-import { ExtendedEvent } from 'shared/types';
+import { ExtendedEvent, UserActionType } from 'shared/types';
 
 import { getObjectFromList } from '../getObjectFromList';
 import { getJourneyCSVObject } from './getJourneyCSVObject';
@@ -61,7 +61,7 @@ const items = [singleSelectionItem];
 const decryptedSingleSelection = {
   activityItem: singleSelectionItem,
   items,
-  type: 'SET_ANSWER',
+  type: UserActionType.SetAnswer,
   screen: '62e7e2c2-9fdb-4f2f-8460-78375a657f57/ea07cf9f-4fd3-42e7-b4a1-f88fb00ef629',
   time: 1689755869391,
   response: {
@@ -120,9 +120,10 @@ const getPreparedProperties = ({
 };
 const result = {
   activity_end_time: '1689756087000',
-  activity_flow: null,
   activity_id: '62e7e2c2-9fdb-4f2f-8460-78375a657f57',
   activity_name: 'New Activity#1',
+  activity_flow_id: null,
+  activity_flow_name: null,
   activity_scheduled_time: 'not scheduled',
   activity_start_time: '1689755822000',
   id: '949f248c-1a4b-4a35-a5a2-898dfef72050',
@@ -131,6 +132,8 @@ const result = {
   options: 'Opt1: 1 (score: 4), Opt2: 2 (score: 2)',
   prompt: 'single  ',
   press_back_time: '',
+  press_popup_skip_time: '',
+  press_popup_keep_time: '',
   press_done_time: '',
   press_next_time: '',
   press_skip_time: '',
@@ -141,7 +144,7 @@ const result = {
   user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
   version: '2.0.0',
   event_id: null,
-  timezone_offset: null,
+  timezone_offset: '',
 };
 
 describe('getJourneyCSVObject', () => {
@@ -246,6 +249,65 @@ describe('getJourneyCSVObject', () => {
     ).toStrictEqual({
       ...result,
       timezone_offset: -300,
+    });
+  });
+
+  test('returns object with activity name and activity flow id', () => {
+    expect(
+      getJourneyCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            flowName: 'test flow name',
+            flowId: 'some flow ID 222',
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      activity_flow_id: 'some flow ID 222',
+      activity_flow_name: 'test flow name',
+    });
+  });
+
+  test.each`
+    userActionType                     | expectedResult
+    ${UserActionType.Next}             | ${{ press_next_time: '1689755869391' }}
+    ${UserActionType.SkipPopupConfirm} | ${{ press_popup_skip_time: '1689755869391' }}
+    ${UserActionType.SkipPopupCancel}  | ${{ press_popup_keep_time: '1689755869391' }}
+    ${UserActionType.Prev}             | ${{ press_back_time: '1689755869391' }}
+    ${UserActionType.Undo}             | ${{ press_undo_time: '1689755869391' }}
+    ${UserActionType.Skip}             | ${{ press_skip_time: '1689755869391' }}
+    ${UserActionType.Done}             | ${{ press_done_time: '1689755869391' }}
+  `('return object with action type=$userActionType', ({ userActionType, expectedResult }) => {
+    expect(
+      getJourneyCSVObject({
+        ...getPreparedProperties({
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          activityItem: singleSelectionItem,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          decryptedData: {
+            ...decryptedSingleSelection,
+            type: userActionType,
+            response: undefined,
+            answer: null,
+          },
+        }),
+        index: 0,
+      }),
+    ).toStrictEqual({
+      ...result,
+      ...expectedResult,
+      response: '',
+      response_option_selection_time: '',
     });
   });
 });

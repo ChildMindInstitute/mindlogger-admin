@@ -47,7 +47,8 @@ export const getReportData = (
 ) => {
   const answers = decryptedAnswers.reduce(
     (filteredAcc, item, index) => {
-      if (item.answer === null || item.answer === undefined) return filteredAcc;
+      const shouldSkipItem = item.answer === undefined || item.answer === null;
+      if (shouldSkipItem) return filteredAcc;
 
       return filteredAcc.concat(
         getReportCSVObject({
@@ -131,6 +132,7 @@ export const getActivityJourneyData = (
   });
   let indexForABTrailsFiles = 0;
   const events = decryptedFilteredEvents.map((event, index, events) => {
+    // if Activity has splash screen image (in Builder), the first event will be added as the Splash screen item
     if (index === 0 && !decryptedAnswersObject[getEventScreen(event.screen)] && events[index + 1])
       return getSplashScreen(event, {
         ...events[index + 1],

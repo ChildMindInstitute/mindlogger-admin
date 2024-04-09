@@ -1,10 +1,14 @@
-import { ChartDataset, ScriptableTooltipContext } from 'chart.js';
+import { CartesianScaleTypeRegistry, ChartDataset, ScriptableTooltipContext } from 'chart.js';
 
 import { Version } from 'api';
 import { locales } from 'shared/consts';
 import { ItemResponseType } from 'shared/consts';
-
-import { Answer, ItemOption } from '../../Report.types';
+import {
+  ItemOption,
+  NumberSelectionAnswer,
+  SingleMultiSelectionSliderAnswer,
+  TextAnswer,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 export type ExtendedChartDataset = ChartDataset & {
   labels: string[];
@@ -19,8 +23,9 @@ export type MultiScatterChartProps = {
   height: number;
   options: ItemOption[];
   responseType: ItemResponseType;
-  answers: Answer[];
+  answers: (SingleMultiSelectionSliderAnswer | NumberSelectionAnswer | TextAnswer)[];
   versions: Version[];
+  useCategory?: boolean;
   'data-testid'?: string;
 };
 
@@ -33,11 +38,15 @@ export type OptionsProps = {
   minDate: Date;
   maxDate: Date;
   tooltipHandler: (context: ScriptableTooltipContext<'scatter'>) => void;
+  useCategory: boolean;
 };
 
 export type DataProps = {
   maxY: number;
-  answers: Answer[];
+  answers: (SingleMultiSelectionSliderAnswer | NumberSelectionAnswer | TextAnswer)[];
   versions: Version[];
   color: string;
+  useCategory: boolean;
 };
+
+export type ScalesType = keyof CartesianScaleTypeRegistry;

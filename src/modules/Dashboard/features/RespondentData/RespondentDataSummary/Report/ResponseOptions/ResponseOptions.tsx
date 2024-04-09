@@ -7,27 +7,26 @@ import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import { getDictionaryText } from 'shared/utils';
-import { useDatavizFilters } from 'modules/Dashboard/hooks';
-import { SummaryFiltersForm } from 'modules/Dashboard/pages/RespondentData/RespondentData.types';
-import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.consts';
+import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
+import {
+  RespondentsDataFormValues,
+  FormattedResponses,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
+import { useDatavizFilters } from '../../hooks/useDatavizFilters';
 import { COLORS } from '../Charts/Charts.const';
-import { FormattedResponse } from '../Report.types';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
 
 export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOptionsProps) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext<SummaryFiltersForm>();
+  const { watch } = useFormContext<RespondentsDataFormValues>();
 
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
 
-  const renderResponseOption = (
-    { activityItem, answers, dataTestid }: FormattedResponse,
-    index: number,
-  ) => {
-    if (UNSUPPORTED_ITEMS.includes(activityItem.responseType))
-      return <UnsupportedItemResponse itemType={activityItem.responseType} />;
+  const renderResponseOption = (activityItemAnswer: FormattedResponses, index: number) => {
+    if (UNSUPPORTED_ITEMS.includes(activityItemAnswer.activityItem.responseType))
+      return <UnsupportedItemResponse itemType={activityItemAnswer.activityItem.responseType} />;
 
     const color = COLORS[index % COLORS.length];
 
@@ -35,10 +34,8 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
       color,
       minDate,
       maxDate,
-      activityItem,
+      activityItemAnswer,
       versions: filteredVersions,
-      answers,
-      dataTestid,
     });
   };
 

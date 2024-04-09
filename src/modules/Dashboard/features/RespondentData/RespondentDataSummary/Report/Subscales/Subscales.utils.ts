@@ -1,8 +1,14 @@
 import { ActivitySettingsSubscale } from 'shared/state';
 import { ActivityItemAnswer, ElementType } from 'shared/types';
+import {
+  ActivityCompletion,
+  SingleMultiSelectionSliderFormattedResponses,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import {
+  compareActivityItem,
+  formatActivityItemAnswers,
+} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.utils';
 
-import { compareActivityItem, formatActivityItemAnswers } from '../Report.utils';
-import { ActivityCompletion, FormattedResponse } from '../Report.types';
 import { ActivityCompletionToRender, GroupedSubscales, SubscaleToRender } from './Subscales.types';
 
 export const getSubscalesToRender = (
@@ -30,11 +36,14 @@ export const getSubscalesToRender = (
         result[data.name] = nestedSubscale;
       }
     } else if (activityItems[item.name]) {
-      const formattedItem = formatActivityItemAnswers(activityItems[item.name], endDatetime);
-      if (!result?.[data.name]?.items) {
-        result[data.name] = { items: [formattedItem] };
-      } else {
+      const formattedItem = formatActivityItemAnswers(
+        activityItems[item.name],
+        endDatetime,
+      ) as SingleMultiSelectionSliderFormattedResponses;
+      if (result?.[data.name]?.items) {
         result[data.name].items?.push(formattedItem);
+      } else {
+        result[data.name] = { items: [formattedItem] };
       }
     }
   }
@@ -60,15 +69,15 @@ export const getAllSubscalesToRender = (
         const formattedItem = formatActivityItemAnswers(
           activityItems[subscaleItem.name],
           item.endDatetime,
-        );
+        ) as SingleMultiSelectionSliderFormattedResponses;
 
-        if (!allSubscalesToRender?.[subscale.name]?.items) {
+        if (allSubscalesToRender?.[subscale.name]?.items) {
+          allSubscalesToRender[subscale.name].items?.push(formattedItem);
+        } else {
           allSubscalesToRender[subscale.name] = {
             ...allSubscalesToRender[subscale.name],
             items: [formattedItem],
           };
-        } else {
-          allSubscalesToRender[subscale.name].items?.push(formattedItem);
         }
       } else {
         allSubscalesToRender[subscale.name] = {
@@ -96,11 +105,13 @@ export const getAllSubscalesToRender = (
       }
 
       const { activityItem, answers } = compareActivityItem(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         allSubscalesToRender[subscale.name].items![itemIndex],
         activityItems[subscaleItem.name],
         item.endDatetime,
-      );
+      ) as SingleMultiSelectionSliderFormattedResponses;
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       allSubscalesToRender[subscale.name].items![itemIndex] = {
         activityItem,
         answers,
@@ -116,7 +127,10 @@ export const formatCurrentSubscales = (currentSubscales: ActivityCompletionToRen
     (formattedSubscales: ActivityCompletionToRender, subscaleName) => {
       const currItems = currentSubscales[subscaleName]?.items || [];
       const updatedItems = currItems?.reduce(
-        (items: Record<string, FormattedResponse>, formattedResponse) => {
+        (
+          items: Record<string, SingleMultiSelectionSliderFormattedResponses>,
+          formattedResponse,
+        ) => {
           const prevActivityItem = items[formattedResponse.activityItem.id];
           if (!prevActivityItem) {
             return {

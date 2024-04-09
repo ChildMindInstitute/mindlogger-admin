@@ -266,6 +266,9 @@
   "conditionTypePlaceholder": "State",
   "conditionDisabledPlaceholder": "Select Item First",
   "conditionValue": "Value",
+  "conditionalLogicValidation": {
+    "usageInSummaryRow": "This item is already selected in another Conditional card's summary row. If multiple conditions are necessary, use the same Conditional card with ALL or ANY conditions."
+  },
   "configure": "Configure",
   "configureServer": "Please configure the report server to download the report.",
   "configureServerForApplet": "Configure Server (for Applet)",
@@ -370,6 +373,7 @@
   "drawingBackgroundDescription": "This image is optional will serve as the background for the drawing. The respondent will be able to draw on it.",
   "drawingExample": "Drawing Example",
   "drawingExampleDescription": "This image is optional and will serve as an example for the drawing. The respondent will not be able to draw on it.",
+  "drawingDivideFlagDescription": "Divide the screen equally between the Drawing Example and the Drawing area",
   "drawingHint": "Drawing task",
   "dropAudio": "Please upload file in one of the following formats: <1>.mp3, .wav</1>.",
   "dropCsvFile": "Drop <1>.csv</1> here <br/>or <3>click to browse.</3>",
@@ -1103,6 +1107,8 @@
   "startEndDate": "Start Date / End Date",
   "startTime": "Start time",
   "status": "Status",
+  "startTimeResponse": "Start Time Response",
+  "endTimeResponse": "End Time Response",
   "stopSharing": "Stop sharing",
   "strikeThrough": "StrikeThrough",
   "subjectPreview": "Subject Preview",

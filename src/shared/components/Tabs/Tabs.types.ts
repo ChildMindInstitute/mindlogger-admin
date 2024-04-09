@@ -29,6 +29,7 @@ export type TabsProps = {
   deepPathCompare?: boolean;
   defaultToFirstTab?: boolean;
   animateTabIndicator?: boolean;
+  animationDurationMs?: number;
 };
 
 export type RenderTabs = {

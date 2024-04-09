@@ -23,6 +23,7 @@ describe('getReportAndMediaData', () => {
   describe('getDecryptedAnswersObject', () => {
     const textItem = {
       activityId: 'activityId-1',
+      activityName: 'activity_name',
       activityItem: {
         id: 'itemId-1',
         name: 'itemName-1',
@@ -32,6 +33,7 @@ describe('getReportAndMediaData', () => {
     };
     const multiItem = {
       activityId: 'activityId-1',
+      activityName: 'activity_name',
       activityItem: {
         id: 'itemId-2',
         name: 'itemName-2',
@@ -41,6 +43,7 @@ describe('getReportAndMediaData', () => {
     };
     const sliderItem = {
       activityId: 'activityId-1',
+      activityName: 'activity_name',
       activityItem: {
         id: 'itemId-3',
         name: 'itemName-3',
@@ -119,6 +122,7 @@ describe('getReportAndMediaData', () => {
   describe('getReportData', () => {
     const textItem = {
       activityId: 'activityId-1',
+      activityName: 'activity_name',
       activityItem: {
         id: 'itemId-1',
         name: 'itemName-1',
@@ -151,6 +155,71 @@ describe('getReportAndMediaData', () => {
     ] as DecryptedAnswerData[];
     const rawAnswersObject = getObjectFromList(decryptedAnswers, (item) => item.activityItem.name);
 
+    test('should return empty list when an ABTrails answer was skipped at once', () => {
+      const decryptedAbTrailsItem = {
+        activityItem: {
+          question: '',
+          responseType: 'ABTrails',
+          responseValues: null,
+          config: {
+            deviceType: 'mobile',
+            orderName: 'first',
+            tutorials: {
+              tutorials: [], // skipped for the test case
+            },
+            nodes: {
+              radius: 4.18,
+              fontSize: 5.6,
+              fontSizeBeginEnd: null,
+              beginWordLength: null,
+              endWordLength: null,
+              nodes: [], // skipped for the test case
+            },
+          },
+          name: 'ABTrails_mobile_1',
+          isHidden: false,
+          conditionalLogic: null,
+          allowEdit: false,
+          id: 'ef510597-821a-444b-bf99-ae4d3c847866',
+        },
+        answer: null,
+        id: '72b3985c-4352-4a9d-9c23-2455cc607781',
+        submitId: '7b10bb4e-19a4-437c-a284-adcd6f5559ed',
+        version: '1.1.0',
+        respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+        respondentSecretId: 'ml_test1_account@gmail.com',
+        legacyProfileId: null,
+        scheduledDatetime: null,
+        startDatetime: 1689928536,
+        endDatetime: 1689928679,
+        migratedDate: null,
+        tzOffset: null,
+        scheduledEventId: null,
+        appletHistoryId: '3c32e00a-70c8-4f97-b549-5b536e9f8719_1.1.0',
+        activityHistoryId: '160adf2b-0a69-46fd-8326-fb53ed77eb27_1.1.0',
+        flowHistoryId: null,
+        flowName: null,
+        reviewedAnswerId: null,
+        createdAt: '2023-07-21T08:38:08.324411',
+        client: null,
+        appletId: '3c32e00a-70c8-4f97-b549-5b536e9f8719',
+        activityId: '160adf2b-0a69-46fd-8326-fb53ed77eb27',
+        flowId: null,
+        items: [], // skipped for the test case
+        activityName: 'A/B Trails Mobile',
+        subscaleSetting: null,
+      };
+      const decryptedAnswers = [decryptedAbTrailsItem] as unknown as DecryptedAnswerData[];
+      const rawAnswersObject = getObjectFromList(
+        decryptedAnswers,
+        (item) => item.activityItem.name,
+      );
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const result = getReportData([], rawAnswersObject, decryptedAnswers);
+      expect(result).toStrictEqual([]);
+    });
+
     test('should return filtered out array with items without empty answers', () => {
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
@@ -162,19 +231,22 @@ describe('getReportAndMediaData', () => {
           activity_start_time: 'NaN',
           activity_end_time: 'NaN',
           flag: 'completed',
-          secret_user_id: undefined,
-          userId: undefined,
+          secret_user_id: '',
+          userId: '',
           activity_id: 'activityId-1',
-          activity_name: undefined,
-          activity_flow: undefined,
+          activity_name: 'activity_name',
+          activity_flow_id: '',
+          activity_flow_name: '',
           item: 'itemName-1',
           item_id: 'itemId-1',
           response: '1',
           prompt: '',
           options: '',
-          version: undefined,
+          version: '',
           rawScore: '',
-          reviewing_id: undefined,
+          reviewing_id: '',
+          event_id: '',
+          timezone_offset: '',
         },
       ]);
     });
@@ -190,9 +262,10 @@ describe('getReportAndMediaData', () => {
       expect(result).toEqual([
         {
           activity_end_time: '1689764605250.957',
-          activity_flow: null,
           activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
           activity_name: 'New Activity#Single_Multi_Slider - Assessment',
+          activity_flow_id: '',
+          activity_flow_name: '',
           activity_scheduled_time: '1689764371123',
           activity_start_time: '1689764605250.957',
           flag: 'completed',
@@ -207,12 +280,15 @@ describe('getReportAndMediaData', () => {
           secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
           userId: '0e6d026f-b382-4022-9208-74a54768ea81',
           version: '2.1.0',
+          event_id: '',
+          timezone_offset: '',
         },
         {
           activity_end_time: '1689764605250.957',
-          activity_flow: null,
           activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
           activity_name: 'New Activity#Single_Multi_Slider - Assessment',
+          activity_flow_id: '',
+          activity_flow_name: '',
           activity_scheduled_time: '1689764371123',
           activity_start_time: '1689764605250.957',
           flag: 'completed',
@@ -227,12 +303,15 @@ describe('getReportAndMediaData', () => {
           secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
           userId: '0e6d026f-b382-4022-9208-74a54768ea81',
           version: '2.1.0',
+          event_id: '',
+          timezone_offset: '',
         },
         {
           activity_end_time: '1689764605250.957',
-          activity_flow: null,
           activity_id: '39cc3d0f-8a82-462c-946f-61dcee6cbe1a',
           activity_name: 'New Activity#Single_Multi_Slider - Assessment',
+          activity_flow_id: '',
+          activity_flow_name: '',
           activity_scheduled_time: '1689764371123',
           activity_start_time: '1689764605250.957',
           flag: 'completed',
@@ -247,6 +326,8 @@ describe('getReportAndMediaData', () => {
           secret_user_id: '[admin account] (ml_test1_account@gmail.com)',
           userId: '0e6d026f-b382-4022-9208-74a54768ea81',
           version: '2.1.0',
+          event_id: '',
+          timezone_offset: '',
         },
       ]);
     });
@@ -263,9 +344,10 @@ describe('getReportAndMediaData', () => {
           'Final SubScale Score': 5,
           'Optional text for Final SubScale Score': 'Description #2 for range 4~20',
           activity_end_time: '1698673935278',
-          activity_flow: null,
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_flow_id: '',
+          activity_flow_name: '',
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1698673918439',
           flag: 'completed',
@@ -276,18 +358,21 @@ describe('getReportAndMediaData', () => {
           prompt: 'single',
           rawScore: 9,
           response: 'value: 2',
-          reviewing_id: null,
+          reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           'ss-1': 5,
           'ss-2': 6,
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
+          event_id: '',
+          timezone_offset: '',
         },
         {
           activity_end_time: '1698673935278',
-          activity_flow: null,
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_flow_id: '',
+          activity_flow_name: '',
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1698673918439',
           flag: 'completed',
@@ -298,16 +383,19 @@ describe('getReportAndMediaData', () => {
           prompt: 'multi',
           rawScore: 4,
           response: 'value: 0',
-          reviewing_id: null,
+          reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
+          event_id: '',
+          timezone_offset: '',
         },
         {
           activity_end_time: '1698673935278',
-          activity_flow: null,
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_flow_id: '',
+          activity_flow_name: '',
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1698673918439',
           flag: 'completed',
@@ -319,16 +407,19 @@ describe('getReportAndMediaData', () => {
           prompt: 'slider',
           rawScore: 21,
           response: 'value: 2',
-          reviewing_id: null,
+          reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
+          event_id: '',
+          timezone_offset: '',
         },
         {
           activity_end_time: '1698673935278',
-          activity_flow: null,
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_flow_id: '',
+          activity_flow_name: '',
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1698673918439',
           flag: 'completed',
@@ -339,16 +430,19 @@ describe('getReportAndMediaData', () => {
           prompt: 'How do you describe yourself?',
           rawScore: '',
           response: 'value: 0',
-          reviewing_id: null,
+          reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
+          event_id: '',
+          timezone_offset: '',
         },
         {
           activity_end_time: '1698673935278',
-          activity_flow: null,
           activity_id: 'eb521f27-5ccb-4286-97ce-704793294015',
           activity_name: 'New Activity#SimpleItems-3 (No skippable)',
+          activity_flow_id: '',
+          activity_flow_name: '',
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1698673918439',
           flag: 'completed',
@@ -359,10 +453,12 @@ describe('getReportAndMediaData', () => {
           prompt: 'How old are you?',
           rawScore: '',
           response: '25',
-          reviewing_id: null,
+          reviewing_id: '',
           secret_user_id: 'respondentSecretId',
           userId: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.2.0',
+          event_id: '',
+          timezone_offset: '',
         },
       ]);
     });
@@ -422,9 +518,10 @@ describe('getReportAndMediaData', () => {
       expect(result).toEqual([
         {
           activity_end_time: '1689770404000',
-          activity_flow: null,
           activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
           activity_name: 'New Activity#Drawing-item2',
+          activity_flow_id: null,
+          activity_flow_name: null,
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
@@ -432,6 +529,8 @@ describe('getReportAndMediaData', () => {
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
           press_back_time: '',
+          press_popup_skip_time: '',
+          press_popup_keep_time: '',
           press_done_time: '',
           press_next_time: '',
           press_skip_time: '',
@@ -443,12 +542,15 @@ describe('getReportAndMediaData', () => {
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.1.1',
+          event_id: '',
+          timezone_offset: '',
         },
         {
           activity_end_time: '1689770404000',
-          activity_flow: null,
           activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
           activity_name: 'New Activity#Drawing-item2',
+          activity_flow_id: null,
+          activity_flow_name: null,
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
@@ -456,6 +558,8 @@ describe('getReportAndMediaData', () => {
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
           press_back_time: '',
+          press_popup_skip_time: '',
+          press_popup_keep_time: '',
           press_done_time: '1689770404752',
           press_next_time: '',
           press_skip_time: '',
@@ -466,6 +570,8 @@ describe('getReportAndMediaData', () => {
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.1.1',
+          event_id: '',
+          timezone_offset: '',
         },
       ]);
     });
@@ -494,9 +600,10 @@ describe('getReportAndMediaData', () => {
       expect(result).toEqual([
         {
           activity_end_time: '1689770404000',
-          activity_flow: null,
           activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
           activity_name: 'New Activity#Drawing-item2',
+          activity_flow_id: null,
+          activity_flow_name: null,
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
@@ -504,6 +611,8 @@ describe('getReportAndMediaData', () => {
           item_id: '',
           options: '',
           press_back_time: '',
+          press_popup_skip_time: '',
+          press_popup_keep_time: '',
           press_done_time: '',
           press_next_time: '1689770402755',
           press_skip_time: '',
@@ -515,13 +624,14 @@ describe('getReportAndMediaData', () => {
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.1.1',
           event_id: null,
-          timezone_offset: null,
+          timezone_offset: '',
         },
         {
           activity_end_time: '1689770404000',
-          activity_flow: null,
           activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
           activity_name: 'New Activity#Drawing-item2',
+          activity_flow_id: null,
+          activity_flow_name: null,
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
@@ -529,6 +639,8 @@ describe('getReportAndMediaData', () => {
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
           press_back_time: '',
+          press_popup_skip_time: '',
+          press_popup_keep_time: '',
           press_done_time: '',
           press_next_time: '',
           press_skip_time: '',
@@ -540,14 +652,15 @@ describe('getReportAndMediaData', () => {
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.1.1',
-          event_id: undefined,
-          timezone_offset: undefined,
+          event_id: '',
+          timezone_offset: '',
         },
         {
           activity_end_time: '1689770404000',
-          activity_flow: null,
           activity_id: '16d2c8e5-8541-4b7f-b598-6a310caee5f5',
           activity_name: 'New Activity#Drawing-item2',
+          activity_flow_id: null,
+          activity_flow_name: null,
           activity_scheduled_time: 'not scheduled',
           activity_start_time: '1689770351000',
           id: 'eabe2de0-9ea4-495b-a4d1-2966eece97f8',
@@ -555,6 +668,8 @@ describe('getReportAndMediaData', () => {
           item_id: 'e2e611df-02d5-4316-8406-c5d685b94090',
           options: '',
           press_back_time: '',
+          press_popup_skip_time: '',
+          press_popup_keep_time: '',
           press_done_time: '1689770404752',
           press_next_time: '',
           press_skip_time: '',
@@ -565,8 +680,8 @@ describe('getReportAndMediaData', () => {
           secret_user_id: 'respondentSecretId',
           user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
           version: '1.1.1',
-          event_id: undefined,
-          timezone_offset: undefined,
+          event_id: '',
+          timezone_offset: '',
         },
       ]);
     });

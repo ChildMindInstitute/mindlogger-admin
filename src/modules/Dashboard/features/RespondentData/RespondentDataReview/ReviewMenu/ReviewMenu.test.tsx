@@ -15,6 +15,7 @@ import {
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 
+import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { ReviewMenu } from './ReviewMenu';
 import { ReviewMenuProps } from './ReviewMenu.types';
 
@@ -70,9 +71,9 @@ const onSelectAnswer = jest.fn();
 const onDateChange = jest.fn();
 
 const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
-  const { control } = useForm<{ date: null | Date }>({
+  const { control } = useForm<RespondentsDataFormValues>({
     defaultValues: {
-      date: selectedDate,
+      responseDate: selectedDate,
     },
   });
 

@@ -15,6 +15,8 @@ import {
   TextItemAnswer,
   NumberSelectionItemAnswer,
   DateItemAnswer,
+  TimeRangeItemAnswer,
+  SingleMultiSelectPerRowItemAnswer,
 } from '../RespondentDataReview.types';
 import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
@@ -22,6 +24,8 @@ import { TextResponseItem } from '../TextResponseItem';
 import { MultiSelectResponseItem } from '../MultiSelectResponseItem';
 import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem';
 import { DateResponseItem } from '../DateResponseItem';
+import { TimeRangeResponseItem } from '../TimeRangeResponseItem';
+import { SingleMultiSelectPerRowResponseItem } from '../SingleMultiSelectPerRowResponseItem';
 
 const { t } = i18n;
 
@@ -30,11 +34,11 @@ export const getTimeResponseItem = (answer?: DecryptedTimeAnswer) => {
 
   const date = new Date();
 
-  const hours = answer?.value?.hours ?? answer?.hour;
-  const minutes = answer?.value?.minutes ?? answer?.minute;
+  const hours = answer?.value?.hours ?? answer?.hour ?? 0;
+  const minutes = answer?.value?.minutes ?? answer?.minute ?? 0;
 
-  date.setHours(hours!);
-  date.setMinutes(minutes!);
+  date.setHours(hours);
+  date.setMinutes(minutes);
 
   return format(date, DateFormats.Time);
 };
@@ -80,7 +84,16 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
         <Box data-testid={activityItemAnswer['data-testid']}>{getTimeResponseItem(answer)}</Box>
       );
     }
+    case ItemResponseType.TimeRange:
+      return <TimeRangeResponseItem {...(activityItemAnswer as TimeRangeItemAnswer)} />;
     case ItemResponseType.Date:
       return <DateResponseItem {...(activityItemAnswer as DateItemAnswer)} />;
+    case ItemResponseType.SingleSelectionPerRow:
+    case ItemResponseType.MultipleSelectionPerRow:
+      return (
+        <SingleMultiSelectPerRowResponseItem
+          {...(activityItemAnswer as SingleMultiSelectPerRowItemAnswer)}
+        />
+      );
   }
 };

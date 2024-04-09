@@ -28,41 +28,48 @@ const sliderDataTestid = 'slider-response-item';
 const textDataTestid = 'text-response-item';
 const numberSelectionDataTestid = 'number-selection-response-item';
 const dateDataTestid = 'date-response-item';
+const selectionPerRowDataTestid = 'selection-per-row-response-item';
 
 jest.mock('../SingleSelectResponseItem', () => ({
   __esModule: true,
   ...jest.requireActual('../SingleSelectResponseItem'),
-  SingleSelectResponseItem: () => <div data-testid={singleSelectDataTestid}></div>,
+  SingleSelectResponseItem: () => <div data-testid={singleSelectDataTestid} />,
 }));
 
 jest.mock('../MultiSelectResponseItem', () => ({
   __esModule: true,
   ...jest.requireActual('../MultiSelectResponseItem'),
-  MultiSelectResponseItem: () => <div data-testid={multiSelectDataTestid}></div>,
+  MultiSelectResponseItem: () => <div data-testid={multiSelectDataTestid} />,
 }));
 
 jest.mock('../SliderResponseItem', () => ({
   __esModule: true,
   ...jest.requireActual('../SliderResponseItem'),
-  SliderResponseItem: () => <div data-testid={sliderDataTestid}></div>,
+  SliderResponseItem: () => <div data-testid={sliderDataTestid} />,
 }));
 
 jest.mock('../TextResponseItem', () => ({
   __esModule: true,
   ...jest.requireActual('../TextResponseItem'),
-  TextResponseItem: () => <div data-testid={textDataTestid}></div>,
+  TextResponseItem: () => <div data-testid={textDataTestid} />,
 }));
 
 jest.mock('../NumberSelectionResponseItem', () => ({
   __esModule: true,
   ...jest.requireActual('../NumberSelectionResponseItem'),
-  NumberSelectionResponseItem: () => <div data-testid={numberSelectionDataTestid}></div>,
+  NumberSelectionResponseItem: () => <div data-testid={numberSelectionDataTestid} />,
 }));
 
 jest.mock('../DateResponseItem', () => ({
   __esModule: true,
   ...jest.requireActual('../DateResponseItem'),
   DateResponseItem: () => <div data-testid={dateDataTestid} />,
+}));
+
+jest.mock('../SingleMultiSelectPerRowResponseItem', () => ({
+  __esModule: true,
+  ...jest.requireActual('../SingleMultiSelectPerRowResponseItem'),
+  SingleMultiSelectPerRowResponseItem: () => <div data-testid={selectionPerRowDataTestid} />,
 }));
 
 describe('getTimeResponseItem', () => {
@@ -90,13 +97,15 @@ describe('renderEmptyState', () => {
 
 describe('getResponseItem (supported response items), check rendering of child components depending on itemResponseType ', () => {
   test.each`
-    itemResponseType                      | expected
-    ${ItemResponseType.SingleSelection}   | ${singleSelectDataTestid}
-    ${ItemResponseType.MultipleSelection} | ${multiSelectDataTestid}
-    ${ItemResponseType.Slider}            | ${sliderDataTestid}
-    ${ItemResponseType.Text}              | ${textDataTestid}
-    ${ItemResponseType.NumberSelection}   | ${numberSelectionDataTestid}
-    ${ItemResponseType.Date}              | ${dateDataTestid}
+    itemResponseType                            | expected
+    ${ItemResponseType.SingleSelection}         | ${singleSelectDataTestid}
+    ${ItemResponseType.MultipleSelection}       | ${multiSelectDataTestid}
+    ${ItemResponseType.Slider}                  | ${sliderDataTestid}
+    ${ItemResponseType.Text}                    | ${textDataTestid}
+    ${ItemResponseType.NumberSelection}         | ${numberSelectionDataTestid}
+    ${ItemResponseType.Date}                    | ${dateDataTestid}
+    ${ItemResponseType.SingleSelectionPerRow}   | ${selectionPerRowDataTestid}
+    ${ItemResponseType.MultipleSelectionPerRow} | ${selectionPerRowDataTestid}
   `('renders child component for $itemResponseType', ({ itemResponseType, expected }) => {
     renderWithProviders(getResponseItem(getActivityItemAnswer(itemResponseType)));
     expect(screen.getByTestId(expected)).toBeInTheDocument();
@@ -116,5 +125,30 @@ describe('getResponseItem (supported response items), check rendering of child c
     );
 
     expect(screen.getByText('13:05')).toBeInTheDocument();
+  });
+
+  test('renders child component for time range', () => {
+    renderWithProviders(
+      getResponseItem({
+        activityItem: {
+          responseType: ItemResponseType.TimeRange,
+        },
+        answer: {
+          value: {
+            from: {
+              hour: 7,
+              minute: 0,
+            },
+            to: {
+              hour: 17,
+              minute: 9,
+            },
+          },
+        },
+      }),
+    );
+
+    expect(screen.getByDisplayValue('07:00')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('17:09')).toBeInTheDocument();
   });
 });
