@@ -27,7 +27,7 @@ export const getSubscalesDefaults = () => ({
 });
 
 export const getItemNameInSubscale = (item: ItemFormValues) =>
-  capitalize(`${t('item_one')}: ${t(item.name)}`);
+  capitalize(`${t('item_one')}: ${item.name}`);
 
 export const getItemElementName = (item: ItemFormValues) =>
   `${getItemNameInSubscale(item)}: ${removeMarkdown(item.question)}`;

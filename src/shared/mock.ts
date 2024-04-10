@@ -1821,111 +1821,124 @@ export const mockedTotalScoresTableData = [
     optionalText: 'Description #3 for range -10~0',
   },
 ];
+export const mockedSubscaleTableData1 = [
+  {
+    score: '2',
+    rawScore: '1',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Description 1',
+  },
+  {
+    score: '4',
+    rawScore: '2',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Description 2',
+  },
+  {
+    score: '6',
+    rawScore: '3',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Markdown Text Here',
+  },
+  {
+    score: '8',
+    rawScore: '4',
+    age: 15,
+    sex: 'F',
+    optionalText: 'Good',
+  },
+  {
+    score: '10',
+    rawScore: '5',
+    age: 15,
+    sex: null,
+    optionalText: 'Awesome text',
+  },
+];
 export const mockedSubscale1 = {
+  id: 'subscale-1',
   name: 'ss-1',
   scoring: SubscaleTotalScore.Sum,
   items: [
     {
+      id: 'single-1',
       name: 'single',
       type: 'item',
+      question: 'lorem ipsum single',
     },
     {
+      id: 'multi-1',
       name: 'multi',
       type: 'item',
+      question: 'lorem ipsum multi',
     },
     {
+      id: 'slider-1',
       name: 'slider',
       type: 'item',
+      question: 'lorem ipsum slider',
     },
   ],
-  subscaleTableData: [
-    {
-      score: '2',
-      rawScore: '1',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Description 1',
-    },
-    {
-      score: '4',
-      rawScore: '2',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Description 2',
-    },
-    {
-      score: '6',
-      rawScore: '3',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Markdown Text Here',
-    },
-    {
-      score: '8',
-      rawScore: '4',
-      age: 15,
-      sex: 'F',
-      optionalText: 'Good',
-    },
-    {
-      score: '10',
-      rawScore: '5',
-      age: 15,
-      sex: null,
-      optionalText: 'Awesome text',
-    },
-  ],
+  subscaleTableData: mockedSubscaleTableData1,
 };
+export const mockedSubscaleTableData2 = [
+  {
+    score: '2',
+    rawScore: '1',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Description 1',
+  },
+  {
+    score: '4',
+    rawScore: '2',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Description 2',
+  },
+  {
+    score: '6',
+    rawScore: '3',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Markdown Text Here',
+  },
+  {
+    score: '8',
+    rawScore: '4',
+    age: 15,
+    sex: 'F',
+    optionalText: 'Good',
+  },
+  {
+    score: '10',
+    rawScore: '5',
+    age: 15,
+    sex: null,
+    optionalText: 'Awesome text',
+  },
+];
 export const mockedSubscale2 = {
+  id: 'subscale-2',
   name: 'ss-2',
   scoring: 'sum',
   items: [
     {
+      id: 'subscale-1',
       name: 'ss-1',
       type: 'subscale',
     },
     {
+      id: 'single-1',
       name: 'single',
       type: 'item',
+      question: 'lorem ipsum single',
     },
   ],
-  subscaleTableData: [
-    {
-      score: '2',
-      rawScore: '1',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Description 1',
-    },
-    {
-      score: '4',
-      rawScore: '2',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Description 2',
-    },
-    {
-      score: '6',
-      rawScore: '3',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Markdown Text Here',
-    },
-    {
-      score: '8',
-      rawScore: '4',
-      age: 15,
-      sex: 'F',
-      optionalText: 'Good',
-    },
-    {
-      score: '10',
-      rawScore: '5',
-      age: 15,
-      sex: null,
-      optionalText: 'Awesome text',
-    },
-  ],
+  subscaleTableData: mockedSubscaleTableData2,
 };
 export const mockedSubscaleSetting = {
   calculateTotalScore: SubscaleTotalScore.Sum,
