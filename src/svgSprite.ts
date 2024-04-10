@@ -1309,12 +1309,11 @@ const icons = {
 };
 
 export type Icons = keyof typeof icons;
-const iconKeys = Object.keys(icons) as Icons[];
 
 export const svgSprite = (): string => `
 <svg>
   <defs>
-    ${iconKeys.map((key) => icons[key])}
+    ${Object.values(icons).join('')}
   </defs>
 </svg>
 `;

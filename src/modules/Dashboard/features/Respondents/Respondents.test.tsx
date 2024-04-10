@@ -70,7 +70,7 @@ describe('Respondents component tests', () => {
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      expect(screen.getByText(/No Respondents yet/)).toBeInTheDocument();
+      expect(screen.getByTestId('empty-dashboard-table')).toBeInTheDocument();
     });
   });
 
