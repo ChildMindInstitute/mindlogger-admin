@@ -71,6 +71,7 @@ export enum DateFormats {
   YearMonthDay = 'yyyy-MM-dd',
   MonthDayTime = 'MMM dd, HH:mm',
   MonthDayYearTime = 'MMM dd, yyyy HH:mm',
+  MonthDayYearTimeSeconds = 'MMM dd, yyyy HH:mm:ss',
 }
 
 export const EMAIL_REGEXP = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
