@@ -16,6 +16,7 @@ export const InputController = <T extends FieldValues>({
 }: InputControllerProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // removing the ability to change added number by scrolling - M2-6130
   const handleOnWheel = () => {
     if (inputRef.current && type === 'number') {
       inputRef.current.blur();
