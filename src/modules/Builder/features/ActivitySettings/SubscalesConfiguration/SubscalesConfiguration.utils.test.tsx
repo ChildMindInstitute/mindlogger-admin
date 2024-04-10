@@ -8,6 +8,8 @@ import {
   getItemNameInSubscale,
   getSubscalesDefaults,
   getSubscaleElementName,
+  getNotUsedElements,
+  getUsedWithinSubscalesElements,
 } from './SubscalesConfiguration.utils';
 
 jest.mock('uuid', () => ({
@@ -59,7 +61,7 @@ describe('SubscalesConfiguration.utils', () => {
   };
   const itemsMap1 = getObjectFromList(mockedSubscale1.items.filter((item) => item.type === 'item'));
   const itemsMap2 = getObjectFromList(mockedSubscale2.items.filter((item) => item.type === 'item'));
-  const subscalesMap = getObjectFromList([subscale1, subscale2]); //, (item) => item.name
+  const subscalesMap = getObjectFromList([subscale1, subscale2]);
   describe('getSubscaleElementName', () => {
     test.each([
       [
@@ -196,17 +198,155 @@ describe('SubscalesConfiguration.utils', () => {
     });
   });
 
-  describe('getNotUsedElements', () => {});
+  describe('calculate usage of elements around subscales', () => {
+    const subscales = [
+      {
+        name: 'ss1',
+        scoring: 'sum',
+        items: [
+          '3a2b0214-392f-4434-80ae-598e7e1a688c',
+          'bf2c667c-c07e-4514-b9f1-ae48e7868920',
+          '3bdcab81-7b58-439a-8c2f-6a01a0cfaec6',
+        ],
+        subscaleTableData: null,
+        id: 'ec146e86-4f30-46e3-bbe1-6138864f0879',
+      },
+      {
+        name: 'ss2',
+        scoring: 'sum',
+        items: ['3a2b0214-392f-4434-80ae-598e7e1a688c'],
+        subscaleTableData: null,
+        id: 'c27070ea-236d-4056-8a14-a322607cab7b',
+      },
+      {
+        name: 'ss3',
+        scoring: 'sum',
+        items: ['bf2c667c-c07e-4514-b9f1-ae48e7868920'],
+        subscaleTableData: null,
+        id: '3bdcab81-7b58-439a-8c2f-6a01a0cfaec6',
+      },
+    ];
+    const subscalesMap = getObjectFromList(subscales);
+    const items = [
+      {
+        id: '3a2b0214-392f-4434-80ae-598e7e1a688c',
+        name: 'ss1',
+        question: 'ss1',
+        responseType: 'singleSelect',
+      },
+      {
+        id: 'bf2c667c-c07e-4514-b9f1-ae48e7868920',
+        name: 'ms1',
+        question: 'ms1',
+        responseType: 'multiSelect',
+      },
+      {
+        id: '3d2faa89-4773-4701-b69a-09247e65cbfd',
+        name: 'sl1',
+        question: 'sl1',
+        responseType: 'slider',
+      },
+    ];
+    const itemsMap = getObjectFromList(items);
+    const mergedIds = [
+      'ec146e86-4f30-46e3-bbe1-6138864f0879',
+      'c27070ea-236d-4056-8a14-a322607cab7b',
+      '3bdcab81-7b58-439a-8c2f-6a01a0cfaec6',
+      '3a2b0214-392f-4434-80ae-598e7e1a688c',
+      'bf2c667c-c07e-4514-b9f1-ae48e7868920',
+      '3d2faa89-4773-4701-b69a-09247e65cbfd',
+    ];
+    const markedUniqueElementsIds = [
+      '3d2faa89-4773-4701-b69a-09247e65cbfd',
+      'bf2c667c-c07e-4514-b9f1-ae48e7868920',
+      '3a2b0214-392f-4434-80ae-598e7e1a688c',
+    ];
+    const expectedNotUsedElements = [
+      {
+        id: 'ec146e86-4f30-46e3-bbe1-6138864f0879',
+        name: 'Subscale: ss1 (Item: ss1, Item: ms1, Subscale: ss3)',
+      },
+      {
+        id: 'c27070ea-236d-4056-8a14-a322607cab7b',
+        name: 'Subscale: ss2 (Item: ss1)',
+      },
+      {
+        id: '3bdcab81-7b58-439a-8c2f-6a01a0cfaec6',
+        name: 'Subscale: ss3 (Item: ms1)',
+      },
+    ];
+    const expectedElementsWithinSubscale = [
+      {
+        element: 'Item: ss1',
+        id: '3a2b0214-392f-4434-80ae-598e7e1a688c',
+        subscale: 'ss1, ss2',
+      },
+      {
+        element: 'Item: ms1',
+        id: 'bf2c667c-c07e-4514-b9f1-ae48e7868920',
+        subscale: 'ss1, ss3',
+      },
+      {
+        element: 'Item: sl1',
+        id: '3d2faa89-4773-4701-b69a-09247e65cbfd',
+        subscale: '',
+      },
+    ];
 
-  describe('getUsedWithinSubscalesElements', () => {});
+    describe('getNotUsedElements', () => {
+      test.each([
+        [
+          'should return not used elements',
+          subscalesMap,
+          itemsMap,
+          mergedIds,
+          markedUniqueElementsIds,
+          expectedNotUsedElements,
+        ],
+      ])('%s', (_, subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds, expectedResult) => {
+        expect(
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          getNotUsedElements(subscalesMap, itemsMap, mergedIds, markedUniqueElementsIds),
+        ).toStrictEqual(expectedResult);
+      });
+    });
 
-  describe('getColumns', () => {});
-
-  describe('getNotUsedElementsTableColumns', () => {});
-
-  describe('getAllElementsTableColumns', () => {});
-
-  describe('getSubscaleModalLabels', () => {});
-
-  describe('getAddTotalScoreModalLabels', () => {});
+    describe('getUsedWithinSubscalesElements', () => {
+      test.each([
+        [
+          'should return used element within subscale',
+          subscales,
+          subscalesMap,
+          itemsMap,
+          mergedIds,
+          markedUniqueElementsIds,
+          expectedElementsWithinSubscale,
+        ],
+      ])(
+        '%s',
+        (
+          _,
+          subscales,
+          subscalesMap,
+          itemsMap,
+          mergedIds,
+          markedUniqueElementsIds,
+          expectedResult,
+        ) => {
+          expect(
+            getUsedWithinSubscalesElements(
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              subscales,
+              subscalesMap,
+              itemsMap,
+              mergedIds,
+              markedUniqueElementsIds,
+            ),
+          ).toStrictEqual(expectedResult);
+        },
+      );
+    });
+  });
 });
