@@ -7,7 +7,7 @@ import { StyledFlexTopCenter, StyledSvgArrowContainer } from 'shared/styles';
 import { getSelectedAppletFromStorage, updateSelectedItemsInStorage } from 'modules/Library/utils';
 import { useAppDispatch } from 'redux/store';
 import { library } from 'redux/modules';
-import { getHighlightedText } from 'shared/utils';
+import { getHighlightedText, toggleBooleanState } from 'shared/utils';
 
 import { ActivityProps } from './Activity.types';
 import {
@@ -120,7 +120,7 @@ export const Activity = ({
         </StyledFlexTopCenter>
       ) : (
         <StyledActivityHeader
-          onClick={() => setActivityVisible((prevState) => !prevState)}
+          onClick={toggleBooleanState(setActivityVisible)}
           data-testid={`${dataTestid}-header`}
         >
           <StyledSvgArrowContainer>

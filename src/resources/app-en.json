@@ -764,6 +764,7 @@
   "noData": "No Data",
   "noDataForActivity": "No available Data for this Activity yet",
   "noDataForActivityFilters": "No match was found. Try to adjust filters.",
+  "noDataForActivityWithEmptyVersionFilter": "Select a Version to view the response data.",
   "noElementsYet": "No elements yet.",
   "noManagers": "No Managers yet.",
   "noManagersForApplet": "No Managers yet. Invite your first one by clicking the ‘Add Manager’ button above.",
@@ -947,8 +948,14 @@
   "reviewDate": "Review Date",
   "responses": "Responses",
   "responseDate": "Response Date",
-  "reviewed": "Reviewed",
-  "reviewedEmptyState": "No reviewer has completed the Assessment for this.",
+  "reviews": "Reviews",
+  "me": " (Me)",
+  "showMoreWithQuantity": "Show {{quantity}} more",
+  "showLessWithoutDots": "Show less",
+  "submitted": "Submitted:",
+  "addReview": "Add Review",
+  "removeReview": "Remove Review",
+  "removeReviewDescription": " Are you sure you want to remove your responses?",
   "reviewer": "Reviewer",
   "role": "Role",
   "roles": "Roles",
@@ -1080,8 +1087,6 @@
   "strikeThrough": "StrikeThrough",
   "subjectPreview": "Subject Preview",
   "submit": "Submit",
-  "submitAssessment": "Submit Assessment",
-  "submitAssessmentDescription": "Are you sure you want to submit assessment? Only the latest version will be available on the Reviewed tab.",
   "subscale": "Subscale",
   "subscaleHeader": "Subscale {{index}}: {{name}}",
   "subscaleLookupTable": {
@@ -1280,11 +1285,11 @@
   "pleaseMakeChangesToApplet": "Please make changes to update the applet.",
   "assessmentBanner": {
     "header": "A new version of the assessment is now available.",
-    "text": "Choosing to proceed with new version will result in the loss of data from the previous completion.",
-    "button": "Proceed with new version"
+    "text": "To review using the new version, please remove your current submission below and proceed with the review again."
   },
   "appletNameExists": "That Applet name already exists",
   "noAccessTitle": "No access to applet",
   "noAccessDescription": "To refresh the data, please click the button below.",
+  "noPermissionToViewData": "You do not have permission to view this data",
   "goToDashboard": "Go to Dashboard"
 }

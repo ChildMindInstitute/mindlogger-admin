@@ -1,7 +1,7 @@
-import { act } from '@testing-library/react';
 import axios from 'axios';
 
 import { MediaUploadFields } from 'shared/api';
+import { waitForTheUpdate } from 'shared/utils/testUtils';
 
 import { uploadFileToS3, getFormDataToUpload, checkFileExists } from './useMediaUpload.utils';
 
@@ -61,10 +61,6 @@ describe('useMediaUpload.utils', () => {
     const mockedOnSuccess = jest.fn();
     const mockedOnError = jest.fn();
     const mockedOnStopRecursion = jest.fn();
-    const waitForTheUpdate = async () =>
-      await act(async () => {
-        await Promise.resolve();
-      });
 
     beforeEach(() => {
       jest.useFakeTimers();

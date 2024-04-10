@@ -763,6 +763,7 @@
   "noData": "Aucune Donnée",
   "noDataForActivity": "Aucune Donnée disponible pour cette Activité pour le moment",
   "noDataForActivityFilters": "Aucune correspondance trouvée. Essayez d'ajuster les filtres.",
+  "noDataForActivityWithEmptyVersionFilter": "Sélectionnez une version pour afficher les données de réponse.",
   "noElementsYet": "Aucun élément pour le moment.",
   "noManagers": "Aucun Gestionnaire pour le moment.",
   "noManagersForApplet": "Aucun Gestionnaire pour le moment. Invitez le premier en cliquant sur le bouton 'Ajouter un Gestionnaire' ci-dessus.",
@@ -946,8 +947,14 @@
   "reviewDate": "Date de l'examen",
   "responses": "Réponses",
   "responseDate": "Date de réponse",
-  "reviewed": "Examiné",
-  "reviewedEmptyState": "Aucun examinateur n'a terminé l'Évaluation pour cela.",
+  "reviews": "Critiques",
+  "me": " (Moi)",
+  "showMoreWithQuantity": "Afficher {{quantity}} de plus",
+  "showLessWithoutDots": "Afficher moins",
+  "submitted": "Soumis :",
+  "addReview": "Ajouter un avis",
+  "removeReview": "Supprimer l'avis",
+  "removeReviewDescription": "Êtes-vous sûr de vouloir supprimer vos réponses ?",
   "reviewer": "Examinateur",
   "role": "Rôle",
   "roles": "Rôles",
@@ -1079,8 +1086,6 @@
   "strikeThrough": "Barré",
   "subjectPreview": "Aperçu du sujet",
   "submit": "Soumettre",
-  "submitAssessment": "Soumettre l'évaluation",
-  "submitAssessmentDescription": "Êtes-vous sûr de vouloir soumettre l'évaluation? Seule la dernière version sera disponible dans l'onglet Examiné.",
   "subscale": "Sous-échelle",
   "subscaleHeader": "Sous-échelle {{index}} : {{name}}",
   "subscaleLookupTable": {
@@ -1279,11 +1284,11 @@
   "pleaseMakeChangesToApplet": "Veuillez apporter des modifications pour mettre à jour l'applet.",
   "assessmentBanner": {
     "header": "Une nouvelle version de l'évaluation est désormais disponible.",
-    "text": "Choisir de procéder avec la nouvelle version entraînera la perte des données de la complétion précédente.",
-    "button": "Procéder avec la nouvelle version"
+    "text": "Pour la consulter en utilisant la nouvelle version, veuillez supprimer votre soumission actuelle ci-dessous et procéder à la révision à nouveau."
   },
   "appletNameExists": "Ce nom d'Applet existe déjà",
   "noAccessTitle": "Pas d'accès à l'applet",
   "noAccessDescription": "Pour rafraîchir les données, veuillez cliquer sur le bouton ci-dessous.",
+  "noPermissionToViewData": "Vous n'avez pas la permission de voir ces données",
   "goToDashboard": "Aller au tableau de bord"
 }

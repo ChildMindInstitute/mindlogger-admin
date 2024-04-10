@@ -9,6 +9,8 @@ import {
   SingleMultiSelectionPerRowItemResponseValues,
   SingleMultiSelectionSliderAnswer,
   SingleMultiSelectionSliderItemResponseValues,
+  SliderRowsItemResponseValues,
+  SliderRowsAnswer,
   TextAnswer,
   TimeAnswer,
   TimeRangeAnswer,
@@ -20,6 +22,7 @@ import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
 import { SelectionPerRow } from './SelectionPerRow';
+import { SliderRows } from './SliderRows';
 
 export const getResponseItem = ({
   color,
@@ -119,6 +122,21 @@ export const getResponseItem = ({
           data-testid={activityItemAnswer.dataTestid}
         />
       );
+    case ItemResponseType.SliderRows:
+      return (
+        <SliderRows
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          activityItem={
+            activityItemAnswer.activityItem as FormattedActivityItem<SliderRowsItemResponseValues>
+          }
+          answers={activityItemAnswer.answers as SliderRowsAnswer}
+          versions={versions}
+          data-testid={activityItemAnswer.dataTestid}
+        />
+      );
+
     default:
       <></>;
   }

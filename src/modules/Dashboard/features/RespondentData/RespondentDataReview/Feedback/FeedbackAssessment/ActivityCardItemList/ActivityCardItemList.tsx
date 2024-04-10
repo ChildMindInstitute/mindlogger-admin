@@ -15,7 +15,7 @@ export const ActivityCardItemList = ({
   return (
     <>
       {activityItems.map((item, index) => {
-        const isActive = index === 0;
+        const isActive = index === step;
 
         return (
           <ActivityCardItem
