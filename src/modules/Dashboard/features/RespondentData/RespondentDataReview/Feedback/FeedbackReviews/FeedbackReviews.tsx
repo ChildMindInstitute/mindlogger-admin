@@ -15,7 +15,7 @@ import { FeedbackAssessment } from '../FeedbackAssessment';
 import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { AssessmentBanner } from './AssessmentBanner';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
-import { getDefaultFormValues } from '../Feedback.utils';
+import { getDefaultFormValues } from '../utils/getDefaultValues';
 import { FeedbackForm } from '../Feedback.types';
 import { AddReview } from './AddReview';
 import { Reviews } from './Reviews';
