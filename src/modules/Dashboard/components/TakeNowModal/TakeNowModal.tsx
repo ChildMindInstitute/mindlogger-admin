@@ -6,10 +6,10 @@ import { auth, workspaces } from 'redux/modules';
 import { StyledHeadline } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { CreatedEvent, getEventsApi, getWorkspaceRespondentsApi } from 'api';
+import { getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
 
-import { EventsData, TakeNowModalProps } from './TakeNowModal.types';
+import { TakeNowModalProps } from './TakeNowModal.types';
 import {
   StyledTakeNowModalBody,
   StyledTakeNowModalContent,
@@ -23,7 +23,6 @@ import { BaseActivity } from '../ActivityGrid';
 export const useTakeNowModal = () => {
   const [activity, setActivity] = useState<BaseActivity | null>(null);
   const [participants, setParticipants] = useState<Option[]>([]);
-  const [events, setEvents] = useState<CreatedEvent[]>([]);
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
   const { appletId } = useParams();
@@ -49,16 +48,6 @@ export const useTakeNowModal = () => {
     }
   });
 
-  const { execute: getAppletEvents } = useAsync(getEventsApi, (response) => {
-    if (response?.data) {
-      const data = (response.data as EventsData).result;
-      console.log('Events:');
-      console.log(data);
-
-      setEvents(data);
-    }
-  });
-
   useEffect(() => {
     if (appletId) {
       console.log('Executing getParticipants');
@@ -69,13 +58,8 @@ export const useTakeNowModal = () => {
           limit: DEFAULT_ROWS_PER_PAGE,
         },
       });
-
-      console.log('Executing getAppletEvents');
-      getAppletEvents({
-        appletId,
-      });
     }
-  }, [appletId, ownerId, getParticipants, getAppletEvents]);
+  }, [appletId, ownerId, getParticipants]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
@@ -90,15 +74,9 @@ export const useTakeNowModal = () => {
       console.log('selectedParticipant:', selectedParticipant);
       console.log('whoIsResponding:', whoIsResponding);
 
-      const event = events.find((event) => activity && event.activityId === activity.id);
-      console.log('event:', event);
-      if (selectedParticipant && whoIsResponding && event) {
-        const entityType = event.flowId ? 'flow' : 'regular';
-
-        const url = new URL(
-          `protected/applets/${appletId}/activityId/${activity?.id}/event/${event.id}/entityType/${entityType}`,
-          `${process.env.REACT_APP_WEB_URI}/`,
-        );
+      if (selectedParticipant && whoIsResponding) {
+        const url = new URL(`protected/applets/${appletId}`, `${process.env.REACT_APP_WEB_URI}/`);
+        url.searchParams.set('startActivityOrFlow', activity?.id || '');
         url.searchParams.set('subjectId', selectedParticipant.value);
         url.searchParams.set('respondentId', whoIsResponding.value);
 
