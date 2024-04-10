@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Modal, SubmitBtnVariant } from 'shared/components';
-import { Activity, auth, workspaces } from 'redux/modules';
+import { auth, workspaces } from 'redux/modules';
 import { StyledHeadline } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
@@ -18,11 +18,12 @@ import {
 import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/ActivitySummaryCard.styles';
 import { LabeledDropdown, Option } from './LabeledDropdown/LabeledDropdown';
 import { ParticipantsData } from '../../features/Participants';
+import { BaseActivity } from '../ActivityGrid';
 
 export const useTakeNowModal = () => {
-  const [activity, setActivity] = useState<Activity | null>(null);
+  const [activity, setActivity] = useState<BaseActivity | null>(null);
   const [participants, setParticipants] = useState<Option[]>([]);
-  const [event, setEvent] = useState<CreatedEvent | null>(null);
+  const [events, setEvents] = useState<CreatedEvent[]>([]);
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
   const { appletId } = useParams();
@@ -49,15 +50,12 @@ export const useTakeNowModal = () => {
   });
 
   const { execute: getAppletEvents } = useAsync(getEventsApi, (response) => {
-    if (response?.data && activity) {
+    if (response?.data) {
       const data = (response.data as EventsData).result;
       console.log('Events:');
       console.log(data);
 
-      const event = data.find((event) => event.activityId === activity.id);
-      if (event) {
-        setEvent(event);
-      }
+      setEvents(data);
     }
   });
 
@@ -77,18 +75,23 @@ export const useTakeNowModal = () => {
         appletId,
       });
     }
-  }, [appletId, getParticipants, ownerId]);
+  }, [appletId, ownerId, getParticipants, getAppletEvents]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
       setActivity(null);
-      onClose();
+      onClose?.();
     };
 
     const [selectedParticipant, setSelectedParticipant] = useState<Option | null>(null);
     const [whoIsResponding, setWhoIsResponding] = useState<Option | null>(null);
 
     const handleSubmit = useCallback(() => {
+      console.log('selectedParticipant:', selectedParticipant);
+      console.log('whoIsResponding:', whoIsResponding);
+
+      const event = events.find((event) => activity && event.activityId === activity.id);
+      console.log('event:', event);
       if (selectedParticipant && whoIsResponding && event) {
         const entityType = event.flowId ? 'flow' : 'regular';
 
@@ -172,7 +175,7 @@ export const useTakeNowModal = () => {
     );
   };
 
-  const openTakeNowModal = (activity: Activity) => {
+  const openTakeNowModal = (activity: BaseActivity) => {
     setActivity(activity);
   };
 

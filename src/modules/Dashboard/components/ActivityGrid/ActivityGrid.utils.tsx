@@ -19,6 +19,11 @@ export const getActivityActions = ({
     roles?.includes(Roles.Editor) ||
     roles?.includes(Roles.SuperAdmin);
 
+  const canDoTakeNow =
+    isManagerOrOwner(roles?.[0]) ||
+    roles?.includes(Roles.Coordinator) ||
+    roles?.includes(Roles.SuperAdmin);
+
   return [
     {
       icon: <Svg id="edit" />,
@@ -50,7 +55,7 @@ export const getActivityActions = ({
       action: takeNow,
       title: t('takeNow'),
       context: { appletId, activityId },
-      isDisplayed: true,
+      isDisplayed: canDoTakeNow,
       'data-testid': `${dataTestId}-activity-take-now`,
     },
   ];

@@ -1,8 +1,7 @@
 import { ModalProps } from 'shared/components';
+import { CreatedEvent } from 'api';
 
-import { CreatedEvent } from '../../api';
-
-export type TakeNowModalProps = Pick<ModalProps, 'onClose'>;
+export type TakeNowModalProps = Partial<Pick<ModalProps, 'onClose'>>;
 
 export type EventsData = {
   result: CreatedEvent[];

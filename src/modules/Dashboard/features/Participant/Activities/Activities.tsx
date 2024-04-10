@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DatavizActivity, getSummaryActivitiesApi } from 'api';
@@ -10,11 +10,12 @@ export const Activities = () => {
   const [activitiesData, setActivitiesData] = useState<{
     result: DatavizActivity[];
     count: number;
-  } | null>();
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const dataTestId = 'dashboard-applet-participant-activities';
 
-  const { formatRow } = useActivityGrid(dataTestId);
+  const { formatRow, TakeNowModal } = useActivityGrid(dataTestId, activitiesData);
+
   /**
    * TODO M2-6223:
    * getAppletActivitiesApi returns activities for the currently logged in user (an admin/collaborator). This behavior is correct for M2-5585, as per the note:
@@ -53,6 +54,7 @@ export const Activities = () => {
   return (
     <ActivityGrid
       rows={activities}
+      TakeNowModal={TakeNowModal}
       order={'desc'}
       orderBy={''}
       isLoading={isLoading}

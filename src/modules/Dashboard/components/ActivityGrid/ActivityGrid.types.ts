@@ -4,8 +4,11 @@ import { Roles } from 'shared/consts';
 import { DatavizActivity } from 'api';
 import { Order } from 'shared/types';
 
+import { TakeNowModalProps } from '../TakeNowModal/TakeNowModal.types';
+
 export type ActivityGridProps = {
   rows?: Row[];
+  TakeNowModal: React.FC<TakeNowModalProps>;
   order: Order;
   orderBy: string;
   isLoading: boolean;
@@ -22,6 +25,8 @@ export type ActivitiesData = {
   result: Activity[] | DatavizActivity[];
   count: number;
 };
+
+export type BaseActivity = Partial<Activity>;
 
 export type ActivityActions = {
   actions: ActionsObject;

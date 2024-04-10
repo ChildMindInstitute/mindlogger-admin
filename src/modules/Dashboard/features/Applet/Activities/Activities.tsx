@@ -1,11 +1,11 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { getAppletActivitiesApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import {
-  ActivityGrid,
   ActivitiesData,
+  ActivityGrid,
   useActivityGrid,
 } from 'modules/Dashboard/components/ActivityGrid';
 
@@ -14,7 +14,8 @@ export const Activities = () => {
   const [activitiesData, setActivitiesData] = useState<ActivitiesData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const dataTestId = 'dashboard-applet-activities';
-  const { formatRow } = useActivityGrid(dataTestId);
+
+  const { formatRow, TakeNowModal } = useActivityGrid(dataTestId, activitiesData);
 
   const { execute: getActivities } = useAsync(
     getAppletActivitiesApi,
@@ -40,11 +41,6 @@ export const Activities = () => {
     };
   }, [appletId, getActivities]);
 
-  const activities = useMemo(
-    () => (activitiesData?.result ?? []).map((activity) => formatRow(activity)),
-    [activitiesData, formatRow],
-  );
-
   useEffect(() => {
     if (!appletId) return;
 
@@ -53,9 +49,15 @@ export const Activities = () => {
     };
   }, [appletId]);
 
+  const activities = useMemo(
+    () => (activitiesData?.result ?? []).map((activity) => formatRow(activity)),
+    [activitiesData, formatRow],
+  );
+
   return (
     <ActivityGrid
       rows={activities}
+      TakeNowModal={TakeNowModal}
       data-testid={dataTestId}
       isLoading={isLoading}
       order={'desc'}
