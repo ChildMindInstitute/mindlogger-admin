@@ -134,7 +134,7 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       id: 'checkbox',
       label: (
         <StyledCheckBox>
-          <Svg id="checkbox-empty-outline" height="20" width="20" />
+          <Svg id="checkbox-empty-outlined" height="20" width="20" />
         </StyledCheckBox>
       ),
       enableSort: true,

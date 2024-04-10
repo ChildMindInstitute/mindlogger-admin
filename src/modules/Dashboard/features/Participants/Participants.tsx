@@ -313,7 +313,7 @@ export const Participants = () => {
             checked={false}
             icon={
               <StyledCheckBox>
-                <Svg id="checkbox-empty-outline" height="20" width="20" />
+                <Svg id="checkbox-empty-outlined" height="20" width="20" />
               </StyledCheckBox>
             }
             data-testid="dashboard-participants-checkbox"

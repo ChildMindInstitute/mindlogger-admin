@@ -65,19 +65,17 @@ describe('Breadcrumbs Component', () => {
   test('should render breadcrumbs with custom icons, links, and placeholders', () => {
     const breadcrumbs = [
       {
-        icon: '',
+        image: '',
         label: "Jane Doe's Dashboard",
         navPath: '/dashboard',
       },
       {
-        icon: 'https://example.com/mocked-image.jpeg',
+        image: 'https://example.com/mocked-image.jpeg',
         useCustomIcon: true,
         label: 'Test Applet',
         navPath: '/dashboard/138304f4-79b5-4c99-81f5-abf21f9d8fa2/respondents',
-        hasUrl: true,
       },
       {
-        icon: '',
         useCustomIcon: true,
         label: 'Respondents',
         navPath: '/dashboard/138304f4-79b5-4c99-81f5-abf21f9d8fa2/respondents',
