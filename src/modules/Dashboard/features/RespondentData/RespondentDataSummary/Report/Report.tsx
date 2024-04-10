@@ -6,7 +6,7 @@ import download from 'downloadjs';
 import { useWatch, useFormContext } from 'react-hook-form';
 
 import { Spinner, Svg } from 'shared/components';
-import { useAsync } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
 import {
   StyledFlexAllCenter,
   StyledTitleLarge,
@@ -14,9 +14,9 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { DatavizActivity, getLatestReportApi, Version } from 'api';
-import { getErrorMessage } from 'shared/utils';
-import { applet } from 'shared/state';
+import { DatavizActivity, getLatestReportApi, Version } from 'modules/Dashboard/api';
+import { getErrorMessage } from 'shared/utils/errors';
+import { applet } from 'shared/state/Applet';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 
 import {
