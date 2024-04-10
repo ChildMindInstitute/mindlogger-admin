@@ -152,6 +152,10 @@ type CreateEvent = {
   } | null;
 };
 
+export type CreatedEvent = CreateEvent & {
+  id: string;
+};
+
 export type CreateEventType = AppletId & {
   body: CreateEvent;
 };
