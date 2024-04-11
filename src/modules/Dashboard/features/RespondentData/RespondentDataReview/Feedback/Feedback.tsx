@@ -14,7 +14,8 @@ import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { RespondentDataReviewContext } from '../RespondentDataReview.context';
 import { StyledButton, StyledContainer } from './Feedback.styles';
 import { FeedbackForm, FeedbackProps } from './Feedback.types';
-import { getDefaultFormValues, getTabs } from './Feedback.utils';
+import { getFeedbackTabs } from './utils/getFeedbackTabs';
+import { getDefaultFormValues } from './utils/getDefaultValues';
 import { FeedbackTabs } from './FeedbackAssessment/FeedbackAssessment.const';
 import { ANIMATION_DURATION_MS } from './Feedback.const';
 
@@ -29,7 +30,10 @@ export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
     defaultValues: getDefaultFormValues(assessment),
   });
 
-  const tabs = useMemo(() => getTabs(selectedActivity, assessment), [selectedActivity, assessment]);
+  const tabs = useMemo(
+    () => getFeedbackTabs(selectedActivity, assessment),
+    [selectedActivity, assessment],
+  );
 
   return (
     <StyledContainer isOpen={isFeedbackOpen} data-testid={dataTestid}>

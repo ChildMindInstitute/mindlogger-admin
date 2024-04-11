@@ -17,7 +17,7 @@ import { page } from 'resources';
 import { assessment, assessmentVersions, itemIds, lastAssessment } from 'shared/mock';
 import * as useEncryptedAnswersHook from 'modules/Dashboard/hooks/useEncryptedAnswers';
 
-import { getDefaultFormValues } from '../Feedback.utils';
+import { getDefaultFormValues } from '../utils/getDefaultValues';
 import { FeedbackAssessment } from './FeedbackAssessment';
 import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';

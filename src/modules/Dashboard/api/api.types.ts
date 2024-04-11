@@ -313,6 +313,7 @@ export type SummaryAnswers = AppletId & {
 
 export type Identifier = {
   identifier: string;
+  lastAnswerDate: string;
   userPublicKey: string | null;
 };
 
@@ -409,3 +410,11 @@ export type LatestReport = {
 export type Identifiers = LatestReport;
 
 export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;
+
+export type ActivityAnswerMeta = {
+  createdAt: string;
+  version: string;
+  identifier: Identifier | null;
+};
+
+export type EncryptedActivityAnswer = EncryptedAnswerSharedProps & ActivityAnswerMeta;

@@ -20,6 +20,7 @@ import {
   AppletSubmitDateList,
   ResponseWithObject,
   SubmitDates,
+  EncryptedActivityAnswer,
 } from 'api';
 import { DateFormats } from 'shared/consts';
 import { Spinner } from 'shared/components';
@@ -36,9 +37,11 @@ import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
 import { ReviewHeader } from './ReviewHeader';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
-import { Answer, AssessmentActivityItem } from './RespondentDataReview.types';
+import { Answer, AssessmentActivityItem, ActivityAnswerMeta } from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
 import { RespondentsDataFormValues } from '../RespondentData.types';
+import { ReviewDescription } from './ReviewDescription';
+import { useDecryptedIdentifiers } from '../RespondentDataSummary/hooks';
 
 export const RespondentDataReview = () => {
   const { appletId, respondentId } = useParams();
@@ -60,9 +63,11 @@ export const RespondentDataReview = () => {
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activityItemAnswers, setActivityItemAnswers] = useState<
-    DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'] | null
+    DecryptedActivityData<EncryptedActivityAnswer>['decryptedAnswers'] | null
   >(null);
+  const [activityAnswerMeta, setActivityAnswerMeta] = useState<ActivityAnswerMeta | null>(null);
   const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
+  const getDecryptedIdentifiers = useDecryptedIdentifiers();
   const navigate = useNavigate();
 
   const { control, setValue } = useFormContext<RespondentsDataFormValues>();
@@ -130,10 +135,19 @@ export const RespondentDataReview = () => {
   const getDecryptedActivityData = useDecryptedActivityData();
 
   const { execute: getActivityAnswer } = useAsync(getActivityAnswerApi, async (res) => {
-    if (!res?.data?.result) return;
+    const result = res?.data?.result;
+    if (!result) return;
 
-    const decryptedActivityData = await getDecryptedActivityData(res.data.result);
+    const decryptedActivityData = await getDecryptedActivityData(result);
     setActivityItemAnswers(decryptedActivityData.decryptedAnswers);
+
+    const { createdAt, identifier, version } = result;
+    const decryptedIdentifiers = identifier ? await getDecryptedIdentifiers?.([identifier]) : null;
+    setActivityAnswerMeta({
+      createdAt,
+      identifier: decryptedIdentifiers?.length ? decryptedIdentifiers[0].decryptedValue : null,
+      version,
+    });
   });
 
   const handleSelectAnswer = (answer: Answer | null) => {
@@ -281,6 +295,9 @@ export const RespondentDataReview = () => {
             onButtonClick={() => setIsFeedbackOpen(true)}
             data-testid={dataTestid}
           />
+          {selectedAnswer && activityAnswerMeta && !isLoading && (
+            <ReviewDescription {...activityAnswerMeta} data-testid={dataTestid} />
+          )}
           <Review
             isLoading={isLoading}
             selectedAnswer={selectedAnswer}
