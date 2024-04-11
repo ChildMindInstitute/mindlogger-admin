@@ -119,8 +119,6 @@ export const RespondentDataReview = () => {
   });
 
   const handleSelectAnswer = (answer: Answer | null) => {
-    setActivityAnswerMeta(null);
-    setActivityItemAnswers(null);
     setIsFeedbackOpen(false);
     setSelectedAnswer(answer);
   };
@@ -253,7 +251,7 @@ export const RespondentDataReview = () => {
             onButtonClick={() => setIsFeedbackOpen(true)}
             data-testid={dataTestid}
           />
-          {selectedAnswer && activityAnswerMeta && (
+          {selectedAnswer && activityAnswerMeta && !isLoading && (
             <ReviewDescription {...activityAnswerMeta} data-testid={dataTestid} />
           )}
           <Review
