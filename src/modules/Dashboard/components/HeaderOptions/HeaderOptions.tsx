@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { Link, generatePath, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { page } from 'resources';
 import { Svg } from 'shared/components';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
-import { theme, variables } from 'shared/styles';
+import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { Mixpanel } from 'shared/utils';
 
 export const HeaderOptions = () => {
@@ -25,27 +25,29 @@ export const HeaderOptions = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: theme.spacing(1), placeItems: 'baseline' }}>
+    <StyledFlexTopCenter sx={{ gap: 1 }}>
       <Button
         data-testid="header-option-export-button"
         onClick={handleOpenExport}
-        startIcon={<Svg id="export" width={24} height={24} />}
+        startIcon={<Svg id="export" width={18} height={18} />}
         sx={{ color: variables.palette.on_surface_variant }}
       >
         {t('export')}
       </Button>
 
-      <Link
-        data-testid="header-option-settings-link"
+      <IconButton
+        component={Link}
+        sx={{ width: '4.8rem', height: '4.8rem' }}
         to={generatePath(page.appletSettings, { appletId })}
+        data-testid="header-option-settings-link"
       >
         <Svg id="settings" fill={isSettingsSelected ? variables.palette.primary : ''} />
-      </Link>
+      </IconButton>
 
       <ExportDataSetting
         isExportSettingsOpen={isExportOpen}
         onExportSettingsClose={handleCloseExport}
       />
-    </Box>
+    </StyledFlexTopCenter>
   );
 };
