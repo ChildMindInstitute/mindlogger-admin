@@ -176,10 +176,10 @@ export const ReportFilters = ({
               <TagsAutocompleteController
                 name="identifier"
                 limitTags={2}
-                label={t('respondentIdentifier')}
+                label={t('responseIdentifier')}
                 options={identifiersOptions}
                 control={control}
-                noOptionsText={t('noRespondentIdentifier')}
+                noOptionsText={t('noResponseIdentifier')}
                 labelAllSelect={t('selectAll')}
                 disabled={!filterByIdentifier}
                 onCustomChange={(options: AutocompleteOption[]) =>

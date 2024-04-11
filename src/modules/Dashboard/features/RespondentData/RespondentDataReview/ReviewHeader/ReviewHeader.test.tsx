@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils';
+import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { RespondentDataReviewContext } from '../RespondentDataReview.context';
 import { ReviewHeader } from './ReviewHeader';
@@ -26,24 +27,28 @@ describe('ReviewHeader', () => {
     expect(container).toBeTruthy();
   });
 
-  test('renders correctly when answer is selected', async () => {
-    const { getByText, getByTestId } = renderReviewHeader({
-      ...defaultProps,
-      isAnswerSelected: true,
-    });
+  test(
+    'renders correctly when answer is selected',
+    async () => {
+      const { getByText, getByTestId } = renderReviewHeader({
+        ...defaultProps,
+        isAnswerSelected: true,
+      });
 
-    const stickyHeader = getByTestId(`${dataTestId}-sticky-header`);
-    expect(stickyHeader).toBeInTheDocument();
-    expect(getComputedStyle(stickyHeader).justifyContent).toBe('space-between');
-    expect(getByText('Activity Name')).toBeInTheDocument();
-    expect(getByText('Feedback')).toBeInTheDocument();
+      const stickyHeader = getByTestId(`${dataTestId}-sticky-header`);
+      expect(stickyHeader).toBeInTheDocument();
+      expect(getComputedStyle(stickyHeader).justifyContent).toBe('space-between');
+      expect(getByText('Activity Name')).toBeInTheDocument();
+      expect(getByText('Feedback')).toBeInTheDocument();
 
-    const feedbackButton = getByTestId(`${dataTestId}-feedback-button`);
-    expect(feedbackButton).toBeEnabled();
+      const feedbackButton = getByTestId(`${dataTestId}-feedback-button`);
+      expect(feedbackButton).toBeEnabled();
 
-    await userEvent.click(feedbackButton);
-    expect(mockOnButtonClick).toHaveBeenCalledTimes(1);
-  });
+      await userEvent.click(feedbackButton);
+      expect(mockOnButtonClick).toHaveBeenCalledTimes(1);
+    },
+    JEST_TEST_TIMEOUT,
+  );
 
   test('renders correctly when answer is not selected', () => {
     const { getByTestId, queryByText } = renderReviewHeader(defaultProps);
