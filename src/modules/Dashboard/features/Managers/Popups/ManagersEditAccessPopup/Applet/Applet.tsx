@@ -13,6 +13,8 @@ import { getMenuItems } from './Applet.const';
 import { AppletProps } from './Applet.types';
 import { SelectRespondentsPopup } from '../../SelectRespondentsPopup';
 
+const dataTestid = 'dashboard-managers-edit';
+
 export const Applet = ({
   applet: { id, displayName, image, roles },
   addRole,
@@ -71,6 +73,7 @@ export const Applet = ({
             menuItems={getFilteredMenuItems()}
             label={t('addRole')}
             tooltip={addRoleTooltip}
+            data-testid={`${dataTestid}-add-role`}
           />
         </StyledRow>
         {roles?.map(({ role, icon }) => (
@@ -91,7 +94,7 @@ export const Applet = ({
                     <StyledBtn
                       onClick={() => setSelectRespondentsPopupVisible(true)}
                       variant="body2"
-                      data-testid="dashboard-managers-edit-access-edit-role"
+                      data-testid={`${dataTestid}-access-edit-role`}
                     >
                       {selectedRespondents?.join(', ') || t('editRespondents')}
                     </StyledBtn>
