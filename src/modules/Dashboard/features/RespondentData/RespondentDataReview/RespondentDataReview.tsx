@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import {
+  createSearchParams,
+  generatePath,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
@@ -23,6 +29,7 @@ import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types'
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Item } from 'shared/state';
 import { users } from 'redux/modules';
+import { page } from 'resources';
 
 import { Feedback } from './Feedback';
 import { Review } from './Review';
@@ -56,6 +63,7 @@ export const RespondentDataReview = () => {
     DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'] | null
   >(null);
   const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
+  const navigate = useNavigate();
 
   const { control, setValue } = useFormContext<RespondentsDataFormValues>();
 
@@ -85,13 +93,37 @@ export const RespondentDataReview = () => {
 
       setActivities(activities);
 
-      const activity = activities.find(
-        ({ id, answerDates }) => id === selectedActivity?.id && answerDates.length,
+      const activityWithLatestAnswer = activities?.reduce(
+        (prev: null | ReviewActivity, current) => {
+          if (!current.lastAnswerDate) {
+            return prev;
+          }
+
+          if (!prev || (prev?.lastAnswerDate && prev.lastAnswerDate < current.lastAnswerDate)) {
+            return current;
+          }
+
+          return prev;
+        },
+        null,
       );
-      if (!activity) {
-        setSelectedActivity(null);
-      }
-      handleSelectAnswer(null);
+
+      console.log('activity with latest answer', activityWithLatestAnswer);
+
+      if (!activityWithLatestAnswer || !activityWithLatestAnswer.answerDates.length) return;
+
+      setSelectedActivity(activityWithLatestAnswer);
+      handleSelectAnswer(
+        activityWithLatestAnswer.answerDates[activityWithLatestAnswer.answerDates.length - 1],
+      );
+
+      // const activity = activities.find(
+      //   ({ id, answerDates }) => id === selectedActivity?.id && answerDates.length,
+      // );
+      // if (!activity) {
+      //   setSelectedActivity(null);
+      // }
+      // handleSelectAnswer(null);
     },
   );
 
@@ -105,8 +137,20 @@ export const RespondentDataReview = () => {
   });
 
   const handleSelectAnswer = (answer: Answer | null) => {
+    console.log('answer', answer);
     setIsFeedbackOpen(false);
     setSelectedAnswer(answer);
+
+    if (!responseDate || !answer) return;
+
+    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    navigate({
+      pathname,
+      search: createSearchParams({
+        selectedDate: format(responseDate, DateFormats.YearMonthDay),
+        answerId: answer.answerId,
+      }).toString(),
+    });
   };
 
   const handleGetSubmitDates = (date: Date) => {

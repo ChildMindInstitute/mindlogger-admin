@@ -31,6 +31,7 @@ import {
 export type Answer = {
   createdAt: string;
   answerId: string;
+  endDateTime?: string;
 };
 
 export type CreateItemAnswer<I, A> = {

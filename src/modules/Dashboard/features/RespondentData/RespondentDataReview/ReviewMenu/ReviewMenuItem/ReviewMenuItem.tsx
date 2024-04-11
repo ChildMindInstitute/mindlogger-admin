@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  createSearchParams,
+  // createSearchParams,
   generatePath,
   useNavigate,
   useParams,
@@ -64,15 +64,15 @@ export const ReviewMenuItem = ({
     }
 
     onSelectAnswer(answer);
-    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
-    selectedDate &&
-      navigate({
-        pathname,
-        search: createSearchParams({
-          selectedDate: format(selectedDate, DateFormats.YearMonthDay),
-          answerId: answer.answerId,
-        }).toString(),
-      });
+    // const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    // selectedDate &&
+    //   navigate({
+    //     pathname,
+    //     search: createSearchParams({
+    //       selectedDate: format(selectedDate, DateFormats.YearMonthDay),
+    //       answerId: answer.answerId,
+    //     }).toString(),
+    //   });
   };
 
   return (
