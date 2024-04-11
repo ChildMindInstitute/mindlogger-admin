@@ -46,6 +46,7 @@ const testId = 'dashboard-applet-participant-activities';
 const route = `/dashboard/${mockedAppletId}/participants/${mockedUserData.id}`;
 const routePath = page.appletParticipantActivities;
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 const mockSchema = <T extends any>(
   data: T | null = null,
   meta?: MetaSchema,
