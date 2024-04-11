@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Checkbox } from '@mui/material';
 
+import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
 import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
@@ -313,7 +314,7 @@ export const Participants = () => {
             checked={false}
             icon={
               <StyledCheckBox>
-                <Svg id="checkbox-empty-outline" height="20" width="20" />
+                <Svg id="checkbox-empty-outlined" height="20" width="20" />
               </StyledCheckBox>
             }
             data-testid="dashboard-participants-checkbox"
@@ -463,16 +464,6 @@ export const Participants = () => {
   const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
   const dataTestid = 'dashboard-participants';
 
-  const renderEmptyComponent = () => {
-    if (!rows?.length && !isLoading) {
-      if (searchValue) {
-        return t('noMatchWasFound', { searchValue });
-      }
-
-      return appletId ? t('noParticipantsForApplet') : t('noParticipants');
-    }
-  };
-
   if (isForbidden) return noPermissionsComponent;
 
   return (
@@ -522,7 +513,25 @@ export const Participants = () => {
       <ParticipantsTable
         columns={getHeadCells(appletId)}
         rows={rows}
-        emptyComponent={renderEmptyComponent()}
+        emptyComponent={
+          !rows?.length && !isLoading ? (
+            <EmptyDashboardTable searchValue={searchValue}>
+              {appletId ? (
+                <>
+                  {t('noParticipantsForApplet')}
+                  <AddParticipantButton
+                    onClick={() => setAddParticipantPopupVisible(true)}
+                    variant="contained"
+                  >
+                    {t('addParticipant')}
+                  </AddParticipantButton>
+                </>
+              ) : (
+                t('noParticipants')
+              )}
+            </EmptyDashboardTable>
+          ) : undefined
+        }
         count={respondentsData?.count || 0}
         hasColFixedWidth
         data-testid={`${dataTestid}-table`}

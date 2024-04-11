@@ -64,12 +64,11 @@ const expectedDashboard = {
 };
 
 const expectedApplet = {
-  icon: '',
+  image: '',
   useCustomIcon: true,
   label: '',
   chip: 'Editing',
   navPath: `/builder/${appletId}`,
-  hasUrl: false,
   key: expect.any(String),
 };
 const expectedActivities = {
@@ -591,8 +590,7 @@ describe('useBreadcrumbs', () => {
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       chip: undefined,
-      hasUrl: false,
-      icon: '',
+      image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
       navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
@@ -652,8 +650,7 @@ describe('useBreadcrumbs', () => {
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       chip: undefined,
-      hasUrl: false,
-      icon: '',
+      image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
       navPath: '/dashboard/71d90215-e4ae-41c5-8c30-776e69f5378b/participants',
@@ -720,8 +717,7 @@ describe('useBreadcrumbs', () => {
     expect(home).toEqual(expectedHome);
     expect(applet).toEqual({
       chip: undefined,
-      hasUrl: false,
-      icon: '',
+      image: '',
       key: expect.any(String),
       label: 'Mocked Applet',
       navPath: `/dashboard/${appletId}/participants`,
@@ -736,7 +732,7 @@ describe('useBreadcrumbs', () => {
     });
     expect(activityDetails).toMatchObject({
       disabledLink: true,
-      icon: 'https://admin.mindlogger.dev/image.png',
+      image: 'https://admin.mindlogger.dev/image.png',
       label: 'Test Activity',
     });
   });

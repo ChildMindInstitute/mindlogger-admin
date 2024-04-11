@@ -1,3 +1,5 @@
+import { Icons } from 'svgSprite';
+
 import i18n from 'i18n';
 
 import { SettingParam } from './urlGenerator';
@@ -5,7 +7,7 @@ import { SettingParam } from './urlGenerator';
 const { t } = i18n;
 
 export const getSettingBreadcrumbs = (param: SettingParam, isPublished = false) => {
-  const settingBreadcrumbs = {
+  const settingBreadcrumbs: Record<SettingParam, { icon: Icons; label: string }> = {
     [SettingParam.ExportData]: {
       icon: 'export',
       label: t('exportData'),

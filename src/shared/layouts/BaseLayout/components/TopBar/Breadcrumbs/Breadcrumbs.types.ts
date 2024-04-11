@@ -1,5 +1,7 @@
+import { Icons } from 'svgSprite';
+
 export type Breadcrumb = {
-  icon?: string;
+  icon?: Icons;
   image?: string;
   useCustomIcon?: boolean;
   label: string;
