@@ -18,12 +18,14 @@ import {
 } from 'modules/Dashboard/components/ActivityGrid';
 
 import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
+import {useLaunchDarkly} from "../../../../shared/hooks/useLaunchDarkly";
 
 export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesData | null) => {
   const navigate = useNavigate();
   const { appletId, participantId: _participantId } = useParams();
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
+  const { flags: featureFlags } = useLaunchDarkly();
 
   const { TakeNowModal, openTakeNowModal } = useTakeNowModal();
 
@@ -125,6 +127,7 @@ export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesDa
                   activityId,
                   dataTestId,
                   roles,
+                  featureFlags,
                 })}
                 data-testid={`${dataTestId}-activity-actions`}
                 buttonColor="secondary"
