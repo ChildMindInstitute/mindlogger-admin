@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { Modal, SubmitBtnVariant } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
@@ -22,6 +23,7 @@ import { ParticipantsData } from '../../features/Participants';
 import { BaseActivity } from '../ActivityGrid';
 
 export const useTakeNowModal = () => {
+  const { t } = useTranslation('app');
   const [activity, setActivity] = useState<BaseActivity | null>(null);
   const [participants, setParticipants] = useState<AutocompleteOption[]>([]);
   const [participantsAndTeamMembers, setParticipantsAndTeamMembers] = useState<
@@ -111,8 +113,8 @@ export const useTakeNowModal = () => {
       <Modal
         open={true}
         width="57"
-        title="Take Now"
-        buttonText="Start Activity"
+        title={t('takeNow')}
+        buttonText={t('startActivity')}
         onSubmit={handleSubmit}
         onClose={handleClose}
         disabledSubmit={subject === null || participant === null}
@@ -128,19 +130,19 @@ export const useTakeNowModal = () => {
           </StyledTakeNowModalHeader>
           <StyledTakeNowModalBody>
             <LabeledDropdown
-              label="Who is this activity about?"
+              label={t('takeNowModalSubjectLabel')}
               name={'subject'}
-              tooltip="This is the subject of the activity being assigned."
-              placeholder="Select from participants"
+              tooltip={t('takeNowModalSubjectTooltip')}
+              placeholder={t('takeNowModalSubjectPlaceholder')}
               value={subject}
               options={participants}
               onChange={setSubject}
             />
             <LabeledDropdown
-              label="Who is responding?"
-              name={'respondent'}
-              tooltip="This is the participant who will be completing the activity."
-              placeholder="Select from participants & team members"
+              label={t('takeNowModalParticipantLabel')}
+              name={'participant'}
+              tooltip={t('takeNowModalParticipantTooltip')}
+              placeholder={t('takeNowModalParticipantPlaceholder')}
               value={participant}
               options={participantsAndTeamMembers}
               onChange={setParticipant}
