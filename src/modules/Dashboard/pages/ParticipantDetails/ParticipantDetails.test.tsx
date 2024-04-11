@@ -66,8 +66,8 @@ describe('Participant Details page', () => {
 
     await waitFor(() => screen.getByTestId('spinner'));
 
-    expect(navigate).toHaveBeenLastCalledWith(
-      generatePath(page.appletRespondents, {
+    expect(navigate).toHaveBeenCalledWith(
+      generatePath(page.appletParticipants, {
         appletId: mockedAppletId,
       }),
     );

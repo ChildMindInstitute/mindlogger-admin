@@ -1,18 +1,19 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import mockAxios, { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
 
 import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
-import { mockedAppletData, mockedAppletId } from 'shared/mock';
+import { mockedAppletData, mockedAppletId, mockedOwnerId } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils';
 
 import { Activities } from './Activities';
+import { mockGetRequestResponses } from 'shared/tests';
 
-const successfulEmptyGetMock = {
+const successfulEmptyGetAppletActivitiesMock: HttpResponse = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
     result: {
@@ -25,13 +26,20 @@ const successfulEmptyGetMock = {
   },
 };
 
-const successfulGetAppletActivitiesMock = {
+const successfulGetAppletActivitiesMock: HttpResponse = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
     result: {
       activitiesDetails: mockedAppletData.activities,
       appletDetail: mockedAppletData,
     },
+  },
+};
+
+const successfulEmptyHttpResponseMock: HttpResponse = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: {
+    result: [],
   },
 };
 
@@ -48,34 +56,48 @@ jest.mock('react-router-dom', () => ({
 
 describe('Dashboard > Applet > Activities screen', () => {
   test('should render empty component', async () => {
-    mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
-    renderWithProviders(<Activities />, { route, routePath });
+    mockGetRequestResponses({
+      [`/activities/applet/${mockedAppletId}`]: successfulEmptyGetAppletActivitiesMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
+        successfulEmptyHttpResponseMock,
+    });
 
+    renderWithProviders(<Activities />, {
+      route,
+      routePath,
+      preloadedState: getPreloadedState(),
+    });
     await waitFor(() => {
       expect(screen.getByText('Applet has no activities')).toBeInTheDocument();
     });
   });
 
   test('should render grid with activity summary cards', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletActivitiesMock);
-    renderWithProviders(<Activities />, { route, routePath });
+    const getAppletActivitiesUrl = `/activities/applet/${mockedAppletId}`;
+
+    mockGetRequestResponses({
+      [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
+        successfulEmptyHttpResponseMock,
+    });
+    renderWithProviders(<Activities />, { route, routePath, preloadedState: getPreloadedState() });
 
     const activities = ['Existing Activity', 'Newly added activity'];
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        1,
-        `/activities/applet/${mockedAppletId}`,
-        expect.any(Object),
-      );
+      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });
 
   test('click Add Activity should navigate to Builder > Applet > Activities', async () => {
-    mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
-    renderWithProviders(<Activities />, { route, routePath });
+    mockGetRequestResponses({
+      [`/activities/applet/${mockedAppletId}`]: successfulEmptyGetAppletActivitiesMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
+        successfulEmptyHttpResponseMock,
+    });
+    renderWithProviders(<Activities />, { route, routePath, preloadedState: getPreloadedState() });
 
     fireEvent.click(screen.getByTestId(`${testId}-add-activity`));
 
@@ -95,7 +117,11 @@ describe('Dashboard > Applet > Activities screen', () => {
       ${false} | ${Roles.Respondent}  | ${'editing for Respondent'}
       ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
     `('$description', async ({ canEdit, role }) => {
-      mockAxios.get.mockResolvedValue(successfulGetAppletActivitiesMock);
+      mockGetRequestResponses({
+        [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
+        [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
+          successfulEmptyHttpResponseMock,
+      });
       renderWithProviders(<Activities />, {
         preloadedState: getPreloadedState(role),
         route,

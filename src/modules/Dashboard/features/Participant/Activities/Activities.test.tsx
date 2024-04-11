@@ -1,16 +1,25 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import mockAxios from 'jest-mock-axios';
+import mockAxios, { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
 
 import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
-import { mockedAppletSummaryData, mockedAppletId, mockedUserData } from 'shared/mock';
+import {
+  mockedAppletId,
+  mockedAppletSummaryData,
+  mockedOwnerId,
+  mockedUserData,
+} from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils';
 
 import { Activities } from './Activities';
+import { BaseSchema, MetaSchema } from '../../../../../shared/state';
+import { PreloadedState } from '@reduxjs/toolkit';
+import { RootState } from '../../../../../redux/store';
+import { mockGetRequestResponses } from '../../../../../shared/tests';
 
 const successfulEmptyGetMock = {
   status: ApiResponseCodes.SuccessfulResponse,
@@ -26,9 +35,41 @@ const successfulGetAppletActivitiesMock = {
   },
 };
 
+const successfulEmptyHttpResponseMock: HttpResponse = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: {
+    result: [],
+  },
+};
+
 const testId = 'dashboard-applet-participant-activities';
 const route = `/dashboard/${mockedAppletId}/participants/${mockedUserData.id}`;
 const routePath = page.appletParticipantActivities;
+
+const mockSchema = <T extends any>(
+  data: T | null = null,
+  meta?: MetaSchema,
+): BaseSchema<T | null> => ({
+  status: 'success',
+  requestId: 'requestId',
+  ...meta,
+  data,
+});
+
+const preloadedState: PreloadedState<RootState> = {
+  ...getPreloadedState(),
+  users: {
+    respondentDetails: mockSchema({
+      result: {
+        secretUserId: 'secretUserId',
+        nickname: 'nickname',
+        lastSeen: null,
+      },
+    }),
+    allRespondents: mockSchema(null),
+    subjectDetails: mockSchema(null),
+  },
+};
 
 const mockedUseNavigate = jest.fn();
 
@@ -40,7 +81,7 @@ jest.mock('react-router-dom', () => ({
 describe('Dashboard > Applet > Participant > Activities screen', () => {
   test('should render empty component', async () => {
     mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
-    renderWithProviders(<Activities />, { route, routePath });
+    renderWithProviders(<Activities />, { route, routePath, preloadedState });
 
     await waitFor(() => {
       expect(screen.getByText('Applet has no activities')).toBeInTheDocument();
@@ -48,18 +89,19 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
   });
 
   test('should render grid with activity summary cards', async () => {
-    mockAxios.get.mockResolvedValueOnce(successfulGetAppletActivitiesMock);
-    renderWithProviders(<Activities />, { route, routePath });
+    const getAppletActivitiesUrl = `/answers/applet/${mockedAppletId}/summary/activities`;
+    mockGetRequestResponses({
+      [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
+        successfulEmptyHttpResponseMock,
+    });
+    renderWithProviders(<Activities />, { route, routePath, preloadedState });
 
     const activities = ['Existing Activity', 'Newly added activity'];
 
     await waitFor(() => {
       expect(screen.getByTestId(`${testId}-grid`)).toBeInTheDocument();
-      expect(mockAxios.get).toHaveBeenNthCalledWith(
-        1,
-        `/answers/applet/${mockedAppletId}/summary/activities`,
-        expect.any(Object),
-      );
+      expect(mockAxios.get).toHaveBeenCalledWith(getAppletActivitiesUrl, expect.any(Object));
       activities.forEach((activity) => expect(screen.getByText(activity)).toBeInTheDocument());
     });
   });
