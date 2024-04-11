@@ -140,5 +140,5 @@ export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesDa
     [appletId, roles, defaultActions, dataTestId],
   );
 
-  return { actions: defaultActions, formatRow, TakeNowModal, openTakeNowModal };
+  return { actions: defaultActions, getActivityById, formatRow, TakeNowModal, openTakeNowModal };
 };

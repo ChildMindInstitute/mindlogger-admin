@@ -1,12 +1,21 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { useAsync } from 'shared/hooks';
-import { ActivityGrid, useActivityGrid } from 'modules/Dashboard/components/ActivityGrid';
+import {
+  ActivityActionProps,
+  ActivityGrid,
+  useActivityGrid,
+} from 'modules/Dashboard/components/ActivityGrid';
+import { MenuActionProps } from 'shared/components';
+import { OpenTakeNowModalOptions } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.types';
+import { users } from 'modules/Dashboard/state';
 
 export const Activities = () => {
   const { appletId, participantId } = useParams();
+  const respondentLoadingStatus = users.useRespondentStatus();
+  const respondent = users.useRespondent();
   const [activitiesData, setActivitiesData] = useState<{
     result: DatavizActivity[];
     count: number;
@@ -14,7 +23,16 @@ export const Activities = () => {
   const [isLoading, setIsLoading] = useState(true);
   const dataTestId = 'dashboard-applet-participant-activities';
 
-  const { formatRow, TakeNowModal } = useActivityGrid(dataTestId, activitiesData);
+  const isParticipantLoading =
+    respondentLoadingStatus === 'loading' || respondentLoadingStatus === 'idle';
+
+  const {
+    formatRow,
+    getActivityById,
+    actions: defaultActions,
+    TakeNowModal,
+    openTakeNowModal,
+  } = useActivityGrid(dataTestId, activitiesData);
 
   /**
    * TODO M2-6223:
@@ -47,7 +65,32 @@ export const Activities = () => {
   }, [appletId, participantId, getSummaryActivities]);
 
   const activities = useMemo(
-    () => (activitiesData?.result ?? []).map((activity) => formatRow(activity)),
+    () =>
+      (activitiesData?.result ?? []).map((activity) => {
+        const actions = {
+          ...defaultActions,
+          takeNow: ({ context }: MenuActionProps<ActivityActionProps>) => {
+            const { activityId } = context || { activityId: '' };
+            const activity = getActivityById(activityId);
+            if (activity) {
+              console.log('Opening modal with activity:', activity.id);
+              const options: OpenTakeNowModalOptions = {};
+
+              if (participantId && respondent) {
+                let label = respondent.result.secretUserId;
+                if (respondent.result.nickname) {
+                  label += ` (${respondent.result.nickname})`;
+                }
+                options.subject = { id: participantId, label };
+              }
+
+              openTakeNowModal(activity, options);
+            }
+          },
+        };
+
+        return formatRow(activity, actions);
+      }),
     [activitiesData, formatRow],
   );
 
@@ -57,7 +100,7 @@ export const Activities = () => {
       TakeNowModal={TakeNowModal}
       order={'desc'}
       orderBy={''}
-      isLoading={isLoading}
+      isLoading={isLoading || isParticipantLoading}
       data-testid={dataTestId}
     />
   );

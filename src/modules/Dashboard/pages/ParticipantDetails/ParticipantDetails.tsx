@@ -17,7 +17,6 @@ import { useParticipantDetailsTabs } from './ParticipantDetails.hooks';
 export const ParticipantDetails = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const respondentTabs = useParticipantDetailsTabs();
   const { appletId, participantId } = useParams();
   const { ownerId } = workspaces.useData() || {};
   const appletLoadingStatus = appletState.useResponseStatus();
@@ -26,6 +25,7 @@ export const ParticipantDetails = () => {
   const { useAppletData } = appletState;
   const applet = useAppletData();
   const respondent = useRespondent();
+  const respondentTabs = useParticipantDetailsTabs();
   const { getApplet } = appletState.thunk;
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export const ParticipantDetails = () => {
 
   const navigateUp = () => {
     navigate(
-      generatePath(page.appletRespondents, {
+      generatePath(page.appletParticipants, {
         appletId,
       }),
     );

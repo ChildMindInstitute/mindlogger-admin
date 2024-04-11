@@ -10,7 +10,7 @@ import { getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 
-import { TakeNowModalProps } from './TakeNowModal.types';
+import { OpenTakeNowModalOptions, TakeNowModalProps } from './TakeNowModal.types';
 import {
   StyledTakeNowModalBody,
   StyledTakeNowModalContent,
@@ -20,18 +20,6 @@ import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/Activity
 import { LabeledDropdown } from './LabeledDropdown/LabeledDropdown';
 import { ParticipantsData } from '../../features/Participants';
 import { BaseActivity } from '../ActivityGrid';
-
-type OpenTakeNowModalOptions = {
-  /**
-   * The ID of the subject who should be selected by default in the "Who is this activity about?" dropdown.
-   */
-  subject?: AutocompleteOption;
-
-  /**
-   * The ID of the participant who should be selected by default in the "Who is responding?" dropdown.
-   */
-  participant?: AutocompleteOption;
-};
 
 export const useTakeNowModal = () => {
   const [activity, setActivity] = useState<BaseActivity | null>(null);
