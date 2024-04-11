@@ -36,8 +36,6 @@ export const useTakeNowModal = () => {
   const { execute: getParticipants } = useAsync(getWorkspaceRespondentsApi, (response) => {
     if (response?.data) {
       const data = (response.data as ParticipantsData).result;
-      console.log('Participants:');
-      console.log(data);
       setParticipants(
         data.map((participant) => {
           const stringNicknames = joinWihComma(participant.nicknames, true);
@@ -56,7 +54,6 @@ export const useTakeNowModal = () => {
 
   useEffect(() => {
     if (appletId) {
-      console.log('Executing getParticipants');
       getParticipants({
         params: {
           ownerId,
@@ -95,9 +92,6 @@ export const useTakeNowModal = () => {
       defaultParticipant || participantsAndTeamMembers[0],
     );
     const handleSubmit = useCallback(() => {
-      console.log('selectedParticipant:', subject);
-      console.log('whoIsResponding:', participant);
-
       if (subject && participant && activity?.id) {
         const url = new URL(`protected/applets/${appletId}`, `${process.env.REACT_APP_WEB_URI}/`);
         url.searchParams.set('startActivityOrFlow', activity.id);
@@ -140,10 +134,7 @@ export const useTakeNowModal = () => {
               placeholder="Select from participants"
               value={subject}
               options={participants}
-              onChange={(option) => {
-                console.log('Selected subject:', option);
-                setSubject(option);
-              }}
+              onChange={setSubject}
             />
             <LabeledDropdown
               label="Who is responding?"
@@ -152,10 +143,7 @@ export const useTakeNowModal = () => {
               placeholder="Select from participants & team members"
               value={participant}
               options={participantsAndTeamMembers}
-              onChange={(option) => {
-                console.log('Selected participant:', option);
-                setParticipant(option);
-              }}
+              onChange={setParticipant}
             />
           </StyledTakeNowModalBody>
         </StyledTakeNowModalContent>

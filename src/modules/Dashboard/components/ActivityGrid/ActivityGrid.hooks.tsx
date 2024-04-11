@@ -66,7 +66,6 @@ export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesDa
         const { activityId } = context || { activityId: '' };
         const activity = getActivityById(activityId);
         if (activity) {
-          console.log('Opening modal with activity:', activity.id);
           openTakeNowModal(activity);
         }
       },

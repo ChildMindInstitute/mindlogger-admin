@@ -73,7 +73,6 @@ export const Activities = () => {
             const { activityId } = context || { activityId: '' };
             const activity = getActivityById(activityId);
             if (activity) {
-              console.log('Opening modal with activity:', activity.id);
               const options: OpenTakeNowModalOptions = {};
 
               if (participantId && respondent) {
