@@ -1,7 +1,6 @@
 import {
-  Answer,
-  RespondentAnswerValue,
-  SimpleAnswerValue,
+  TextAnswer,
+  TimeRangeAnswer,
   TimeRangeAnswerValue,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { ItemResponseType } from 'shared/consts';
@@ -9,7 +8,7 @@ import { ItemResponseType } from 'shared/consts';
 export type TextItemAnswer = {
   date: string;
   time: string;
-  answer: SimpleAnswerValue;
+  answer: string;
 };
 
 export type TimeRangeItemAnswer = {
@@ -19,13 +18,8 @@ export type TimeRangeItemAnswer = {
 
 export type FormattedAnswers = TextItemAnswer | TimeRangeItemAnswer;
 
-export type TextAnswer = {
-  answer: string;
-  date: string;
-};
-
 export type ReportTableProps = {
   responseType: ItemResponseType;
-  answers?: Answer<RespondentAnswerValue>[];
+  answers?: (TimeRangeAnswer | TextAnswer)[];
   'data-testid'?: string;
 };

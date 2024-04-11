@@ -5,7 +5,12 @@ import { variables } from 'shared/styles';
 import { ItemResponseType, locales } from 'shared/consts';
 import { ItemOption } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-import { DataProps, ExtendedChartDataset, OptionsProps } from './MultiScatterChart.types';
+import {
+  DataProps,
+  ExtendedChartDataset,
+  OptionsProps,
+  ScalesType,
+} from './MultiScatterChart.types';
 import { getTimelineStepSize, getTimeConfig, truncateString } from '../Charts.utils';
 import { LABEL_WIDTH_Y, POINT_RADIUS_DEFAULT } from '../Charts.const';
 
@@ -18,6 +23,7 @@ export const getOptions = ({
   minDate,
   maxDate,
   tooltipHandler,
+  useCategory,
 }: OptionsProps) => {
   const min = minDate.getTime();
   const max = maxDate.getTime();
@@ -32,6 +38,7 @@ export const getOptions = ({
 
   const timeConfig = getTimeConfig(min, max);
   const timelineStepSize = getTimelineStepSize(min, max);
+  const yAxisLabels = ['', ...options.map(({ text }) => text as string)]; // empty string is used for version tick
 
   const crossAlign =
     responseType === ItemResponseType.Slider ? ('near' as const) : ('far' as const);
@@ -52,6 +59,8 @@ export const getOptions = ({
     },
     scales: {
       y: {
+        type: (useCategory ? 'category' : undefined) as ScalesType,
+        labels: useCategory ? yAxisLabels : undefined,
         border: {
           display: false,
         },
@@ -64,9 +73,13 @@ export const getOptions = ({
           crossAlign,
           stepSize: 1,
           autoSkip: false,
-          callback: (value: string | number) => {
-            if (value === maxY + 1) return;
-            const label = mapper[value]?.text;
+          callback: (value: number | string) => {
+            if (
+              (!useCategory && value === maxY + 1) ||
+              (useCategory && yAxisLabels[value as number] === '')
+            )
+              return;
+            const label = useCategory ? yAxisLabels[value as number] : mapper[value]?.text;
 
             return label ? truncateString(label.toString()) : label;
           },
@@ -142,14 +155,14 @@ export const getOptions = ({
   };
 };
 
-export const getData = ({ maxY, answers, versions, color }: DataProps) => ({
+export const getData = ({ maxY, answers, versions, color, useCategory }: DataProps) => ({
   datasets: [
     {
       pointRadius: POINT_RADIUS_DEFAULT,
       datalabels: {
         display: false,
       },
-      data: answers.map(({ date, answer: { value } }) => ({
+      data: answers?.map(({ date, answer: { value } }) => ({
         x: new Date(date),
         y: value,
       })),
@@ -163,7 +176,10 @@ export const getData = ({ maxY, answers, versions, color }: DataProps) => ({
     {
       xAxisID: 'x2',
       labels: versions.map(({ version }) => version),
-      data: versions.map(({ createdAt }) => ({ x: new Date(createdAt), y: maxY + 1 })),
+      data: versions.map(({ createdAt }) => ({
+        x: new Date(createdAt),
+        y: useCategory ? '' : maxY + 1,
+      })),
       datalabels: {
         anchor: 'center' as const,
         align: 'right' as const,
