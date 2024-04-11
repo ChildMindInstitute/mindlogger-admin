@@ -13,6 +13,7 @@ import {
   mockedSingleSelectFormValues,
 } from 'shared/mock';
 import { getNewActivityItem } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
+import { makeDrawingSpaceAdjustableFeatureFlag } from 'modules/Builder/features/ActivityItems/ItemConfiguration/InputTypeItems/Drawing/DrawingContent';
 
 import { ItemConfiguration } from '../ItemConfiguration';
 
@@ -467,9 +468,11 @@ export const mockedEmptyDrawing = {
   allowEdit: true,
   alerts: [],
   responseValues: {
-    proportion: {
-      enabled: undefined,
-    },
+    ...(makeDrawingSpaceAdjustableFeatureFlag && {
+      proportion: {
+        enabled: undefined,
+      },
+    }),
   },
 };
 export const mockedEmptyPhoto = {

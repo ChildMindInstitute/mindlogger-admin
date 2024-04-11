@@ -12,6 +12,12 @@ import { CheckboxController } from 'shared/components/FormComponents/CheckboxCon
 
 import { DrawingContentProps } from './DrawingContent.types';
 
+/* 
+Disable feature until final solution in comments of M2-6037.
+Replace the local constant with LaunchDarkly feature flag if it will be confirmed as a feature
+*/
+export const makeDrawingSpaceAdjustableFeatureFlag = false;
+
 export const DrawingContent = ({ name }: DrawingContentProps) => {
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
@@ -70,15 +76,17 @@ export const DrawingContent = ({ name }: DrawingContentProps) => {
           width: 'unset',
         }}
       />
-      <CheckboxController
-        name={divideSpaceFlagName}
-        control={control}
-        label={<StyledBodyMedium>{t('drawingDivideFlagDescription')}</StyledBodyMedium>}
-        sxLabelProps={{
-          mt: theme.spacing(3),
-        }}
-        data-testid={`${dataTestid}-divide-content-flag`}
-      />
+      {makeDrawingSpaceAdjustableFeatureFlag && (
+        <CheckboxController
+          name={divideSpaceFlagName}
+          control={control}
+          label={<StyledBodyMedium>{t('drawingDivideFlagDescription')}</StyledBodyMedium>}
+          sxLabelProps={{
+            mt: theme.spacing(3),
+          }}
+          data-testid={`${dataTestid}-divide-content-flag`}
+        />
+      )}
     </Box>
   );
 };
