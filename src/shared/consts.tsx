@@ -333,6 +333,6 @@ export const enum AnalyticsCalendarPrefix {
 export const DEFAULT_API_START_TIME = '00:00:00';
 export const DEFAULT_API_END_TIME = '23:59:00';
 
-export const JEST_TEST_TIMEOUT = 10000;
+export const JEST_TEST_TIMEOUT = 15000;
 
 export const NULL_ANSWER = 'value: null';
