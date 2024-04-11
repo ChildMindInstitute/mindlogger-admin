@@ -13,7 +13,7 @@ import { RespondentsDataFormValues } from '../RespondentData.types';
 import { ReportMenu } from './ReportMenu';
 import { Report } from './Report';
 import { StyledReportContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
-import { getEmptyState } from './RespondentDataSummary.utils';
+import { getActivityWithLatestAnswer, getEmptyState } from './RespondentDataSummary.utils';
 
 export const RespondentDataSummary = () => {
   const { appletId, respondentId } = useParams();
@@ -27,17 +27,18 @@ export const RespondentDataSummary = () => {
   const { fetchAnswers } = useRespondentAnswers();
 
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, async (result) => {
-    const summaryActivities = result?.data?.result;
-    setValue('summaryActivities', summaryActivities || []);
+    const summaryActivities = result?.data?.result || [];
+    setValue('summaryActivities', summaryActivities);
     if (selectedActivity) return;
 
-    const firstActivityWithAnswers = summaryActivities?.find((activity) => activity.hasAnswer);
-    if (!firstActivityWithAnswers) return;
+    const activityWithLatestAnswer = getActivityWithLatestAnswer(summaryActivities);
 
-    setValue('selectedActivity', firstActivityWithAnswers);
+    if (!activityWithLatestAnswer) return;
+
+    setValue('selectedActivity', activityWithLatestAnswer);
     setIsLoading(true);
-    await getIdentifiersVersions({ activity: firstActivityWithAnswers });
-    await fetchAnswers({ activity: firstActivityWithAnswers });
+    await getIdentifiersVersions({ activity: activityWithLatestAnswer });
+    await fetchAnswers({ activity: activityWithLatestAnswer });
     setIsLoading(false);
   });
 

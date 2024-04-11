@@ -227,6 +227,7 @@ export type OwnerId = {
 export type DatavizActivity = {
   id: string;
   name: string;
+  lastAnswerDate: string | null;
   isPerformanceTask?: boolean;
   hasAnswer?: boolean;
 };
