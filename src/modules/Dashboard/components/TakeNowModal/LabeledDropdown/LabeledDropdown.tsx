@@ -1,8 +1,8 @@
-import { Box } from '@mui/material';
+import { Autocomplete, Box, TextField } from '@mui/material';
 import React from 'react';
 
 import { Tooltip } from 'shared/components';
-import { SelectController, SelectUiType } from 'shared/components/FormComponents';
+import { AutocompleteOption } from 'shared/components/FormComponents';
 import { StyledFlexColumn, StyledTitleMedium, StyledTitleTooltipIcon } from 'shared/styles';
 
 export type Option = {
@@ -15,9 +15,9 @@ export type LabeledDropdownProps = {
   name: string;
   tooltip: string;
   placeholder: string;
-  options: Option[];
-  value: Option | null;
-  onChange: (option: Option) => void;
+  options: AutocompleteOption[];
+  value: AutocompleteOption | null;
+  onChange: (option: AutocompleteOption | null) => void;
 };
 
 export const LabeledDropdown = ({
@@ -43,20 +43,16 @@ export const LabeledDropdown = ({
         </Box>
       </Tooltip>
     </Box>
-    <SelectController
-      name={name}
+    <Autocomplete
+      renderInput={(params) => {
+        const { InputLabelProps: _InputLabelProps, ...rest } = params;
+
+        return <TextField {...rest} placeholder={placeholder} name={name} />;
+      }}
       options={options}
       fullWidth={true}
-      placeholder={placeholder}
-      uiType={SelectUiType.Secondary}
-      value={value?.value || ''}
-      dropdownStyles={{ maxHeight: '29.2rem' }}
-      customChange={(e) => {
-        const selectedOption = options.find((option) => option.value === e.target.value);
-        if (selectedOption) {
-          onChange(selectedOption);
-        }
-      }}
+      value={value}
+      onChange={(_e, newValue) => onChange(newValue)}
     />
   </StyledFlexColumn>
 );

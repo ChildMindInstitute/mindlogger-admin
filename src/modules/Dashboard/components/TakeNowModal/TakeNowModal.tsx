@@ -8,6 +8,7 @@ import { useAsync } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
+import { AutocompleteOption } from 'shared/components/FormComponents';
 
 import { TakeNowModalProps } from './TakeNowModal.types';
 import {
@@ -16,13 +17,16 @@ import {
   StyledTakeNowModalHeader,
 } from './TakeNowModal.styles';
 import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/ActivitySummaryCard.styles';
-import { LabeledDropdown, Option } from './LabeledDropdown/LabeledDropdown';
+import { LabeledDropdown } from './LabeledDropdown/LabeledDropdown';
 import { ParticipantsData } from '../../features/Participants';
 import { BaseActivity } from '../ActivityGrid';
 
 export const useTakeNowModal = () => {
   const [activity, setActivity] = useState<BaseActivity | null>(null);
-  const [participants, setParticipants] = useState<Option[]>([]);
+  const [participants, setParticipants] = useState<AutocompleteOption[]>([]);
+  const [participantsAndTeamMembers, setParticipantsAndTeamMembers] = useState<
+    AutocompleteOption[]
+  >([]);
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
   const { appletId } = useParams();
@@ -36,13 +40,13 @@ export const useTakeNowModal = () => {
         data.map((participant) => {
           const stringNicknames = joinWihComma(participant.nicknames, true);
           const stringSecretIds = joinWihComma(participant.secretIds, true);
-          const value = participant.id ?? participant.details[0].subjectId;
-          let labelKey = stringSecretIds;
+          const id = participant.id ?? participant.details[0].subjectId;
+          let label = stringSecretIds;
           if (stringNicknames) {
-            labelKey = `${stringSecretIds} (${stringNicknames})`;
+            label = `${stringSecretIds} (${stringNicknames})`;
           }
 
-          return { value, labelKey };
+          return { id, label };
         }),
       );
     }
@@ -59,7 +63,24 @@ export const useTakeNowModal = () => {
         },
       });
     }
-  }, [appletId, ownerId, getParticipants]);
+
+    if (userData) {
+      // For now, the admin is the only member of this list
+      let whoIsResponding = `${userData.user.id}`;
+      if (userData.user.firstName) {
+        whoIsResponding += ` (${userData.user.firstName}`;
+        if (userData.user.lastName) {
+          whoIsResponding += ` ${userData.user.lastName[0].toUpperCase()}.`;
+        }
+        whoIsResponding += ')';
+      }
+
+      const ownerOption = { id: userData.user.id, label: whoIsResponding };
+
+      // In the future we will allow choosing from the full list of participants and team members
+      setParticipantsAndTeamMembers([ownerOption]);
+    }
+  }, [appletId, ownerId, getParticipants, userData]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
@@ -67,39 +88,26 @@ export const useTakeNowModal = () => {
       onClose?.();
     };
 
-    const [selectedParticipant, setSelectedParticipant] = useState<Option | null>(null);
-    const [whoIsResponding, setWhoIsResponding] = useState<Option | null>(null);
-
+    const [subject, setSubject] = useState<AutocompleteOption | null>(null);
+    const [participant, setParticipant] = useState<AutocompleteOption | null>(
+      participantsAndTeamMembers[0],
+    );
     const handleSubmit = useCallback(() => {
-      console.log('selectedParticipant:', selectedParticipant);
-      console.log('whoIsResponding:', whoIsResponding);
+      console.log('selectedParticipant:', subject);
+      console.log('whoIsResponding:', participant);
 
-      if (selectedParticipant && whoIsResponding) {
+      if (subject && participant && activity?.id) {
         const url = new URL(`protected/applets/${appletId}`, `${process.env.REACT_APP_WEB_URI}/`);
-        url.searchParams.set('startActivityOrFlow', activity?.id || '');
-        url.searchParams.set('subjectId', selectedParticipant.value);
-        url.searchParams.set('respondentId', whoIsResponding.value);
+        url.searchParams.set('startActivityOrFlow', activity.id);
+        url.searchParams.set('subjectId', subject.id);
+        url.searchParams.set('respondentId', participant.id);
 
         setActivity(null);
         window.open(url.toString(), '_blank');
       }
-    }, [selectedParticipant, whoIsResponding]);
+    }, [subject, participant]);
 
-    useEffect(() => {
-      if (userData) {
-        let whoIsResponding = `${userData.user.id}`;
-        if (userData.user.firstName) {
-          whoIsResponding += ` (${userData.user.firstName}`;
-          if (userData.user.lastName) {
-            whoIsResponding += ` ${userData.user.lastName[0].toUpperCase()}.`;
-          }
-          whoIsResponding += ')';
-        }
-        setWhoIsResponding({ value: userData.user.id, labelKey: whoIsResponding });
-      }
-    }, []);
-
-    if (!activity || !participants || !whoIsResponding) {
+    if (!activity || !participants || !participantsAndTeamMembers) {
       return null;
     }
 
@@ -111,7 +119,7 @@ export const useTakeNowModal = () => {
         buttonText="Start Activity"
         onSubmit={handleSubmit}
         onClose={handleClose}
-        disabledSubmit={selectedParticipant === null}
+        disabledSubmit={subject === null || participant === null}
         submitBtnVariant={SubmitBtnVariant.Contained}
         footerStyles={{ padding: '0.8rem 3.2rem 3.2rem' }}
       >
@@ -125,14 +133,14 @@ export const useTakeNowModal = () => {
           <StyledTakeNowModalBody>
             <LabeledDropdown
               label="Who is this activity about?"
-              name={'participant'}
+              name={'subject'}
               tooltip="This is the subject of the activity being assigned."
               placeholder="Select from participants"
-              value={selectedParticipant}
+              value={subject}
               options={participants}
               onChange={(option) => {
-                console.log('Selected participant:', option);
-                setSelectedParticipant(option);
+                console.log('Selected subject:', option);
+                setSubject(option);
               }}
             />
             <LabeledDropdown
@@ -140,11 +148,11 @@ export const useTakeNowModal = () => {
               name={'respondent'}
               tooltip="This is the participant who will be completing the activity."
               placeholder="Select from participants & team members"
-              options={[whoIsResponding]}
-              value={whoIsResponding}
+              value={participant}
+              options={participantsAndTeamMembers}
               onChange={(option) => {
-                console.log('Selected respondent:', option);
-                setWhoIsResponding(option);
+                console.log('Selected participant:', option);
+                setParticipant(option);
               }}
             />
           </StyledTakeNowModalBody>
