@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { Modal, SubmitBtnVariant } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
@@ -12,11 +13,7 @@ import { joinWihComma } from 'shared/utils';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 
 import { OpenTakeNowModalOptions, TakeNowModalProps } from './TakeNowModal.types';
-import {
-  StyledTakeNowModalBody,
-  StyledTakeNowModalContent,
-  StyledTakeNowModalHeader,
-} from './TakeNowModal.styles';
+import { StyledTakeNowModalContent, StyledTakeNowModalHeader } from './TakeNowModal.styles';
 import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/ActivitySummaryCard.styles';
 import { LabeledDropdown } from './LabeledDropdown/LabeledDropdown';
 import { ParticipantsData } from '../../features/Participants';
@@ -128,7 +125,7 @@ export const useTakeNowModal = () => {
             </StyledImageContainer>
             <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
           </StyledTakeNowModalHeader>
-          <StyledTakeNowModalBody>
+          <Box>
             <LabeledDropdown
               label={t('takeNowModalSubjectLabel')}
               name={'subject'}
@@ -147,7 +144,7 @@ export const useTakeNowModal = () => {
               options={participantsAndTeamMembers}
               onChange={setParticipant}
             />
-          </StyledTakeNowModalBody>
+          </Box>
         </StyledTakeNowModalContent>
       </Modal>
     );

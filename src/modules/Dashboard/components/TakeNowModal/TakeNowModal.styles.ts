@@ -14,10 +14,3 @@ export const StyledTakeNowModalHeader = styled(Box)`
   align-items: center;
   gap: 2.4rem;
 `;
-
-export const StyledTakeNowModalBody = styled(Box)``;
-
-export const StyledTakeNowModalRow = styled(Box)`
-  display: flex;
-  gap: 0.4rem;
-`;
