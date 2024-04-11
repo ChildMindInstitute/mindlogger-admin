@@ -18,7 +18,7 @@ import {
 } from 'modules/Dashboard/components/ActivityGrid';
 
 import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
-import {useLaunchDarkly} from "../../../../shared/hooks/useLaunchDarkly";
+import { useLaunchDarkly } from '../../../../shared/hooks/useLaunchDarkly';
 
 export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesData | null) => {
   const navigate = useNavigate();

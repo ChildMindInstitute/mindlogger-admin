@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios, { HttpResponse } from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
+import { PreloadedState } from '@reduxjs/toolkit';
 
 import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
@@ -17,7 +18,6 @@ import { renderWithProviders } from 'shared/utils';
 
 import { Activities } from './Activities';
 import { BaseSchema, MetaSchema } from '../../../../../shared/state';
-import { PreloadedState } from '@reduxjs/toolkit';
 import { RootState } from '../../../../../redux/store';
 import { mockGetRequestResponses } from '../../../../../shared/tests';
 

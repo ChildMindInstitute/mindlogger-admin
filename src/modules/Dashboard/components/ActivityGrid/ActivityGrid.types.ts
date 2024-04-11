@@ -5,7 +5,7 @@ import { DatavizActivity } from 'api';
 import { Order } from 'shared/types';
 
 import { TakeNowModalProps } from '../TakeNowModal/TakeNowModal.types';
-import {FeatureFlags} from "../../../../shared/types/featureFlags";
+import { FeatureFlags } from '../../../../shared/types/featureFlags';
 
 export type ActivityGridProps = {
   rows?: Row[];

@@ -9,9 +9,9 @@ import { Roles } from 'shared/consts';
 import { mockedAppletData, mockedAppletId, mockedOwnerId } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils';
+import { mockGetRequestResponses } from 'shared/tests';
 
 import { Activities } from './Activities';
-import { mockGetRequestResponses } from 'shared/tests';
 
 const successfulEmptyGetAppletActivitiesMock: HttpResponse = {
   status: ApiResponseCodes.SuccessfulResponse,
