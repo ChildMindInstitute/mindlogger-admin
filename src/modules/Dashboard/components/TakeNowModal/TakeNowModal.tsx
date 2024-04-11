@@ -21,12 +21,26 @@ import { LabeledDropdown } from './LabeledDropdown/LabeledDropdown';
 import { ParticipantsData } from '../../features/Participants';
 import { BaseActivity } from '../ActivityGrid';
 
+type OpenTakeNowModalOptions = {
+  /**
+   * The ID of the subject who should be selected by default in the "Who is this activity about?" dropdown.
+   */
+  subject?: AutocompleteOption;
+
+  /**
+   * The ID of the participant who should be selected by default in the "Who is responding?" dropdown.
+   */
+  participant?: AutocompleteOption;
+};
+
 export const useTakeNowModal = () => {
   const [activity, setActivity] = useState<BaseActivity | null>(null);
   const [participants, setParticipants] = useState<AutocompleteOption[]>([]);
   const [participantsAndTeamMembers, setParticipantsAndTeamMembers] = useState<
     AutocompleteOption[]
   >([]);
+  const [defaultSubject, setDefaultSubject] = useState<AutocompleteOption | null>(null);
+  const [defaultParticipant, setDefaultParticipant] = useState<AutocompleteOption | null>(null);
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
   const { appletId } = useParams();
@@ -88,9 +102,9 @@ export const useTakeNowModal = () => {
       onClose?.();
     };
 
-    const [subject, setSubject] = useState<AutocompleteOption | null>(null);
+    const [subject, setSubject] = useState<AutocompleteOption | null>(defaultSubject);
     const [participant, setParticipant] = useState<AutocompleteOption | null>(
-      participantsAndTeamMembers[0],
+      defaultParticipant || participantsAndTeamMembers[0],
     );
     const handleSubmit = useCallback(() => {
       console.log('selectedParticipant:', subject);
@@ -161,8 +175,10 @@ export const useTakeNowModal = () => {
     );
   };
 
-  const openTakeNowModal = (activity: BaseActivity) => {
+  const openTakeNowModal = (activity: BaseActivity, options?: OpenTakeNowModalOptions) => {
     setActivity(activity);
+    setDefaultSubject(options?.subject || null);
+    setDefaultParticipant(options?.participant || null);
   };
 
   return { TakeNowModal, openTakeNowModal };
