@@ -139,7 +139,7 @@ export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesDa
         },
       };
     },
-    [appletId, roles, defaultActions, dataTestId],
+    [appletId, roles, defaultActions, dataTestId, featureFlags],
   );
 
   return { actions: defaultActions, getActivityById, formatRow, TakeNowModal, openTakeNowModal };
