@@ -41,14 +41,6 @@ export const Activities = () => {
     };
   }, [appletId, getActivities]);
 
-  useEffect(() => {
-    if (!appletId) return;
-
-    return () => {
-      setActivitiesData(null);
-    };
-  }, [appletId]);
-
   const activities = useMemo(
     () => (activitiesData?.result ?? []).map((activity) => formatRow(activity)),
     [activitiesData, formatRow],
