@@ -2,10 +2,10 @@ import { Box } from '@mui/material';
 
 import { StyledFlexColumn, StyledTitleMedium, theme } from 'shared/styles';
 import { SliderItemResponseValues } from 'shared/state';
+import { getSliderOptions } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/utils/getSliderOptions';
 
 import { TICK_HEIGHT } from '../../Charts/Charts.const';
 import { MultiScatterChart } from '../../Charts/MultiScatterChart';
-import { getSliderOptions } from '../../../RespondentDataSummary.utils';
 import { SliderRowsProps } from './SliderRows.types';
 
 export const SliderRows = ({

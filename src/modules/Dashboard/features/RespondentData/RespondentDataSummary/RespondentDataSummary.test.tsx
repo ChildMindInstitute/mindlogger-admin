@@ -8,8 +8,8 @@ import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 
-import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests';
-import * as useRespondentAnswersHook from './hooks/useRespondentAnswers';
+import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests/useDatavizSummaryRequests';
+import * as useRespondentAnswersHook from './hooks/useRespondentAnswers/useRespondentAnswers';
 import { RespondentDataSummary } from './RespondentDataSummary';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;

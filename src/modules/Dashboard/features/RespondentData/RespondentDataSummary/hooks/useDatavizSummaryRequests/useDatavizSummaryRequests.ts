@@ -2,11 +2,11 @@ import { useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
 import { getIdentifiersApi, getVersionsApi } from 'api';
+import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-import { RespondentsDataFormValues } from '../../RespondentData.types';
-import { GetIdentifiersVersions } from '../RespondentDataSummary.types';
-import { setDefaultFormValues } from '../RespondentDataSummary.utils';
-import { useDecryptedIdentifiers } from './useDecryptedIdentifiers';
+import { GetIdentifiersVersions } from '../../RespondentDataSummary.types';
+import { useDecryptedIdentifiers } from '../useDecryptedIdentifiers';
+import { setDefaultFormValues } from './useDatavizSummaryRequests.utils';
 
 export const useDatavizSummaryRequests = () => {
   const { appletId, respondentId } = useParams();

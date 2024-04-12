@@ -2,8 +2,8 @@ import mockAxios from 'jest-mock-axios';
 
 import { mockedActivityId, mockedAppletId, mockedRespondentId } from 'shared/mock';
 
-import * as useDecryptedIdentifiersHook from './useDecryptedIdentifiers';
-import * as summaryUtils from '../RespondentDataSummary.utils';
+import * as useDecryptedIdentifiersHook from '../useDecryptedIdentifiers';
+import * as useDatavizSummaryRequestsUtils from './useDatavizSummaryRequests.utils';
 import { useDatavizSummaryRequests } from './useDatavizSummaryRequests';
 
 const mockedGetValues = jest.fn();
@@ -28,6 +28,7 @@ describe('useDatavizSummaryRequests', () => {
     name: 'Activity 1',
     isPerformanceTask: false,
     hasAnswer: true,
+    lastAnswerDate: '2023-09-26T10:10:05.162083',
   };
   const mockedDecryptedIdentifiersResult = [
     {
@@ -66,7 +67,10 @@ describe('useDatavizSummaryRequests', () => {
     mockAxios.get.mockResolvedValue({
       data: { result: mockedVersionsReturn },
     });
-    const mockedSetDefaultFormValues = jest.spyOn(summaryUtils, 'setDefaultFormValues');
+    const mockedSetDefaultFormValues = jest.spyOn(
+      useDatavizSummaryRequestsUtils,
+      'setDefaultFormValues',
+    );
     mockedSetDefaultFormValues.mockReturnValue(undefined);
 
     const { getIdentifiersVersions } = useDatavizSummaryRequests();
@@ -95,7 +99,10 @@ describe('useDatavizSummaryRequests', () => {
     if (!hasParams) {
       mockedUseParams.mockReturnValue({});
     }
-    const mockedSetDefaultFormValues = jest.spyOn(summaryUtils, 'setDefaultFormValues');
+    const mockedSetDefaultFormValues = jest.spyOn(
+      useDatavizSummaryRequestsUtils,
+      'setDefaultFormValues',
+    );
 
     const { getIdentifiersVersions } = useDatavizSummaryRequests();
     await getIdentifiersVersions({ activity: { ...mockedActivity, ...activityProps } });

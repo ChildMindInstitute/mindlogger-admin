@@ -4,10 +4,11 @@ import { useFormContext } from 'react-hook-form';
 
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getAnswersApi } from 'api';
+import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-import { RespondentsDataFormValues } from '../../RespondentData.types';
-import { getDateISO, getFormattedResponses, getIdentifiers } from '../RespondentDataSummary.utils';
-import { FetchAnswers } from '../RespondentDataSummary.types';
+import { getFormattedResponses } from '../../utils/getFormattedResponses';
+import { FetchAnswers } from '../../RespondentDataSummary.types';
+import { getDateISO, getIdentifiers } from './useRespondentAnswers.utils';
 
 export const useRespondentAnswers = () => {
   const { appletId, respondentId } = useParams();
