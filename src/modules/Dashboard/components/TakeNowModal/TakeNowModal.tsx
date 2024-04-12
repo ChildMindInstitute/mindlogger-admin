@@ -12,14 +12,18 @@ import { getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 
-import { OpenTakeNowModalOptions, TakeNowModalProps } from './TakeNowModal.types';
+import {
+  OpenTakeNowModalOptions,
+  TakeNowModalProps,
+  UseTakeNowModalProps,
+} from './TakeNowModal.types';
 import { StyledTakeNowModalContent, StyledTakeNowModalHeader } from './TakeNowModal.styles';
 import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/ActivitySummaryCard.styles';
 import { LabeledDropdown } from './LabeledDropdown/LabeledDropdown';
 import { ParticipantsData } from '../../features/Participants';
 import { BaseActivity } from '../ActivityGrid';
 
-export const useTakeNowModal = () => {
+export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
   const [activity, setActivity] = useState<BaseActivity | null>(null);
   const [participants, setParticipants] = useState<AutocompleteOption[]>([]);
@@ -117,6 +121,7 @@ export const useTakeNowModal = () => {
         disabledSubmit={subject === null || participant === null}
         submitBtnVariant={SubmitBtnVariant.Contained}
         footerStyles={{ padding: '0.8rem 3.2rem 3.2rem' }}
+        data-testid={`${dataTestId}-take-now-modal`}
       >
         <StyledTakeNowModalContent>
           <StyledTakeNowModalHeader>
@@ -134,6 +139,7 @@ export const useTakeNowModal = () => {
               value={subject}
               options={participants}
               onChange={setSubject}
+              data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
               handleSearch={async (search) => {
                 const response = await getWorkspaceRespondentsApi({
                   params: {
@@ -155,6 +161,7 @@ export const useTakeNowModal = () => {
               value={participant}
               options={participantsAndTeamMembers}
               onChange={setParticipant}
+              data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
               disabled
             />
           </Box>

@@ -1,6 +1,10 @@
 import { ModalProps } from 'shared/components';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 
+export type UseTakeNowModalProps = {
+  dataTestId: string;
+};
+
 export type TakeNowModalProps = Partial<Pick<ModalProps, 'onClose'>>;
 
 export type OpenTakeNowModalOptions = {

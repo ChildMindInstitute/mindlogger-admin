@@ -1,6 +1,5 @@
 import { Autocomplete, Box, TextField } from '@mui/material';
 import React, { useCallback, useRef, useState } from 'react';
-import { AutocompleteProps } from '@mui/material/Autocomplete/Autocomplete';
 import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
@@ -8,25 +7,7 @@ import { Tooltip } from 'shared/components';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { StyledFlexColumn, StyledTitleMedium, StyledTitleTooltipIcon } from 'shared/styles';
 
-export type Option = {
-  value: string;
-  labelKey: string;
-};
-
-export type LabeledDropdownProps = Omit<
-  AutocompleteProps<AutocompleteOption, false, false, false>,
-  'value' | 'onChange' | 'fullWidth' | 'options' | 'renderInput'
-> & {
-  label: string;
-  name: string;
-  tooltip: string;
-  placeholder: string;
-  options: AutocompleteOption[];
-  value: AutocompleteOption | null;
-  onChange: (option: AutocompleteOption | null) => void;
-  handleSearch?: (search: string) => AutocompleteOption[] | Promise<AutocompleteOption[]>;
-  debounce?: number;
-};
+import { LabeledDropdownProps } from './LabeledDropdown.types';
 
 export const LabeledDropdown = ({
   label,
