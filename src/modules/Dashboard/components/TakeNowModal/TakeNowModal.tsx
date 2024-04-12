@@ -32,22 +32,22 @@ export const useTakeNowModal = () => {
   const userData = auth.useData();
   const { appletId } = useParams();
 
+  const participantToOption = useCallback((participant: ParticipantsData['result'][0]) => {
+    const stringNicknames = joinWihComma(participant.nicknames, true);
+    const stringSecretIds = joinWihComma(participant.secretIds, true);
+    const id = participant.id ?? participant.details[0].subjectId;
+    let label = stringSecretIds;
+    if (stringNicknames) {
+      label = `${stringSecretIds} (${stringNicknames})`;
+    }
+
+    return { id, label };
+  }, []);
+
   const { execute: getParticipants } = useAsync(getWorkspaceRespondentsApi, (response) => {
     if (response?.data) {
       const data = (response.data as ParticipantsData).result;
-      setParticipants(
-        data.map((participant) => {
-          const stringNicknames = joinWihComma(participant.nicknames, true);
-          const stringSecretIds = joinWihComma(participant.secretIds, true);
-          const id = participant.id ?? participant.details[0].subjectId;
-          let label = stringSecretIds;
-          if (stringNicknames) {
-            label = `${stringSecretIds} (${stringNicknames})`;
-          }
-
-          return { id, label };
-        }),
-      );
+      setParticipants(data.map(participantToOption));
     }
   });
 
@@ -134,6 +134,18 @@ export const useTakeNowModal = () => {
               value={subject}
               options={participants}
               onChange={setSubject}
+              handleSearch={async (search) => {
+                const response = await getWorkspaceRespondentsApi({
+                  params: {
+                    ownerId,
+                    appletId,
+                    search,
+                    limit: DEFAULT_ROWS_PER_PAGE,
+                  },
+                });
+
+                return (response?.data as ParticipantsData)?.result.map(participantToOption) ?? [];
+              }}
             />
             <LabeledDropdown
               label={t('takeNowModalParticipantLabel')}
