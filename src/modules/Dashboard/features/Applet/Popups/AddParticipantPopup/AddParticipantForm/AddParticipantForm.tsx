@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { Languages } from 'api';
 import { StyledLabelLarge } from 'shared/styles';
+import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 import { AddParticipantFormProps } from './AddParticipantForm.types';
-import { AccountType, Fields } from '../AddParticipantPopup.types';
+import { Fields } from '../AddParticipantPopup.types';
 
 export const AddParticipantForm = ({
   onSubmit,

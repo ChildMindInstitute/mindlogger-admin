@@ -20,6 +20,7 @@ import { Languages, postAppletInvitationApi, postAppletShellAccountApi } from 'a
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
+import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 import {
   EMAIL_IN_USE,
@@ -33,7 +34,6 @@ import {
   AddParticipantFormValues,
   AddParticipantSteps,
   Fields,
-  AccountType,
 } from './AddParticipantPopup.types';
 import { AddParticipantForm } from './AddParticipantForm';
 

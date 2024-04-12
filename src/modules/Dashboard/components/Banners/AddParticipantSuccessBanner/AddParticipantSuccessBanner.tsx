@@ -1,8 +1,7 @@
 import { Trans } from 'react-i18next';
 
 import { Banner, BannerProps } from 'shared/components/Banners/Banner';
-
-import { AccountType } from '../AddParticipantPopup.types';
+import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 export const AddParticipantSuccessBanner = ({
   accountType = AccountType.Full,

@@ -62,7 +62,7 @@ describe('AddParticipantPopup component', () => {
     mockAxios.post.mockResolvedValueOnce({
       data: {
         result: {
-          testValues,
+          ...testValues,
           email: testEmail,
         },
       },

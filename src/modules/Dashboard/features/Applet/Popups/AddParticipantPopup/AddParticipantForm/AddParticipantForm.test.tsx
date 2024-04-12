@@ -1,8 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 
+import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
+
 import { AddParticipantForm } from './AddParticipantForm';
-import { AccountType, AddParticipantFormValues } from '../AddParticipantPopup.types';
+import { AddParticipantFormValues } from '../AddParticipantPopup.types';
 import { AddParticipantFormProps } from './AddParticipantForm.types';
 
 const mockOnSubmit = jest.fn();

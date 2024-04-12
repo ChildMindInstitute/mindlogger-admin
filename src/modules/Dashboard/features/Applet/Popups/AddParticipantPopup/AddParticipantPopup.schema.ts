@@ -3,8 +3,7 @@ import * as yup from 'yup';
 import i18n from 'i18n';
 import { EMAIL_REGEXP } from 'shared/consts';
 import { Languages } from 'api';
-
-import { AccountType } from './AddParticipantPopup.types';
+import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 export const AddParticipantPopupSchema = () => {
   const { t } = i18n;
