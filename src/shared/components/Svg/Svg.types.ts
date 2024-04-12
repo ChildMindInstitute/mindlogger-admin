@@ -1,5 +1,7 @@
+import { Icons } from 'svgSprite';
+
 export type SvgProps = {
-  id: string;
+  id: Icons;
   width?: number | string;
   height?: number | string;
   className?: string;

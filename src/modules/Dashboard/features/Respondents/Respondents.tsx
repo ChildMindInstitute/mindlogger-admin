@@ -1,7 +1,9 @@
+import { Button } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { Link, generatePath, useNavigate, useParams } from 'react-router-dom';
 
+import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
 import { ActionsMenu, MenuActionProps, Pin, Row, Search, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
@@ -409,16 +411,6 @@ export const Respondents = () => {
   const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
   const dataTestid = 'dashboard-respondents';
 
-  const renderEmptyComponent = () => {
-    if (!rows?.length && !isLoading) {
-      if (searchValue) {
-        return t('noMatchWasFound', { searchValue });
-      }
-
-      return appletId ? t('noRespondentsForApplet') : t('noRespondents');
-    }
-  };
-
   if (isForbidden) return noPermissionsComponent;
 
   return (
@@ -448,7 +440,24 @@ export const Respondents = () => {
       <DashboardTable
         columns={getHeadCells(appletId)}
         rows={rows}
-        emptyComponent={renderEmptyComponent()}
+        emptyComponent={
+          <EmptyDashboardTable isLoading={isLoading} searchValue={searchValue}>
+            {appletId ? (
+              <>
+                {t('noRespondentsForApplet')}
+                <Button
+                  component={Link}
+                  to={generatePath(page.appletAddUser, { appletId })}
+                  variant="contained"
+                >
+                  {t('addRespondent')}
+                </Button>
+              </>
+            ) : (
+              t('noRespondents')
+            )}
+          </EmptyDashboardTable>
+        }
         count={respondentsData?.count || 0}
         hasColFixedWidth
         data-testid={`${dataTestid}-table`}

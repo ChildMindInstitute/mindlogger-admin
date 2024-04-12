@@ -78,7 +78,7 @@ describe('Participants component tests', () => {
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      const result = screen.getByText(/No Participants yet/);
+      const result = screen.getByTestId('empty-dashboard-table');
       expect(result).toBeInTheDocument();
     });
   });

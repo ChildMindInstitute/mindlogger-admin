@@ -88,7 +88,7 @@ export const DashboardTable = ({
           </TableBody>
         </MuiTable>
       )}
-      {emptyComponent && <EmptyState>{emptyComponent}</EmptyState>}
+      {emptyComponent && <EmptyState icon="profile">{emptyComponent}</EmptyState>}
     </StyledTableContainer>
   );
 };

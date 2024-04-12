@@ -56,7 +56,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
   return useMemo(() => {
     const activitiesBreadcrumb = {
-      icon: 'checklist-outlined',
+      icon: 'checklist-outlined' as const,
       label: t('activities'),
       navPath:
         appletId && activityId
@@ -102,14 +102,13 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         : page.appletRespondents;
 
       newBreadcrumbs.push({
-        icon: appletData?.image || '',
         useCustomIcon: true,
+        image: appletData?.image || '',
         label: appletLabel,
         chip: isBuilder ? t('editing') : undefined,
         navPath: generatePath(isDashboard ? participantsPath : page.builderApplet, {
           appletId,
         }),
-        hasUrl: !!appletData?.image,
       });
     }
 
@@ -157,10 +156,9 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
 
     if (currentActivity && enableMultiInformant) {
       newBreadcrumbs.push({
-        icon: currentActivity?.image || '',
+        image: currentActivity?.image || '',
         label: currentActivity?.name ?? '',
         disabledLink: true,
-        hasUrl: !!currentActivity?.image,
       });
     }
 

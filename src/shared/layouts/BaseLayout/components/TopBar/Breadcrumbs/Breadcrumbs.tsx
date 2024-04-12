@@ -1,4 +1,5 @@
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
+import { Icons } from 'svgSprite';
 
 import { Svg } from 'shared/components/Svg';
 import {
@@ -23,25 +24,30 @@ import { Breadcrumb } from './Breadcrumbs.types';
 export const Breadcrumbs = () => {
   const breadcrumbsData = useBreadcrumbs();
 
-  const getIconComponent = (icon: string, hasUrl?: boolean) =>
-    hasUrl ? (
-      <StyledIconImg src={icon} alt="Icon" data-testid="breadcrumbs-item-src" />
-    ) : (
-      <Svg
-        id={icon}
-        width={BREADCRUMB_ICON_SIZE}
-        height={BREADCRUMB_ICON_SIZE}
-        data-testid="breadcrumbs-item-icon"
-      />
-    );
+  const getIconComponent = (icon?: Icons, image?: string) => {
+    if (image) {
+      return <StyledIconImg src={image} alt="Icon" data-testid="breadcrumbs-item-src" />;
+    }
 
-  const getBreadcrumbIcon = ({ icon, useCustomIcon, label, hasUrl }: Breadcrumb) => {
-    if (!icon && !useCustomIcon) return null;
+    if (icon) {
+      return (
+        <Svg
+          id={icon}
+          width={BREADCRUMB_ICON_SIZE}
+          height={BREADCRUMB_ICON_SIZE}
+          data-testid="breadcrumbs-item-icon"
+        />
+      );
+    }
+  };
+
+  const getBreadcrumbIcon = ({ icon, label, useCustomIcon, image }: Breadcrumb) => {
+    if (!icon && !image && !useCustomIcon) return null;
 
     return (
       <StyledIconWrapper>
-        {icon ? (
-          getIconComponent(icon, hasUrl)
+        {icon || image ? (
+          getIconComponent(icon, image)
         ) : (
           <StyledPlaceholder data-testid="breadcrumbs-item-placeholder">
             <StyledLabelSmall color={variables.palette.on_surface}>
@@ -59,10 +65,10 @@ export const Breadcrumbs = () => {
       data-testid="breadcrumbs"
     >
       {breadcrumbsData?.map(
-        ({ icon, useCustomIcon, label, chip, navPath, disabledLink, hasUrl, key }, index) =>
+        ({ icon, useCustomIcon, label, chip, navPath, disabledLink, image, key }, index) =>
           index === breadcrumbsData.length - 1 || disabledLink ? (
             <StyledBox key={key} data-testid="breadcrumbs-item">
-              {getBreadcrumbIcon({ icon, useCustomIcon, label, hasUrl })}
+              {getBreadcrumbIcon({ icon, useCustomIcon, label, image })}
               {disabledLink ? (
                 <StyledBodySmall color={variables.palette.on_surface_variant}>
                   {label}
@@ -73,7 +79,7 @@ export const Breadcrumbs = () => {
             </StyledBox>
           ) : (
             <StyledLink key={key} to={navPath || ''} data-testid="breadcrumbs-link">
-              {getBreadcrumbIcon({ icon, useCustomIcon, label, hasUrl })}
+              {getBreadcrumbIcon({ icon, useCustomIcon, label, image })}
               <StyledBodySmall color={variables.palette.on_surface_variant}>
                 {label}
               </StyledBodySmall>
