@@ -112,6 +112,13 @@ export const StyledLabelBoldSmall = styled(StyledLabelSmall)`
   font-weight: ${variables.font.weight.bold};
 `;
 
+export const StyledBodyLarger = styled(Typography)`
+  font-size: ${variables.font.size.lg2};
+  line-height: ${variables.font.lineHeight.xl};
+  font-weight: ${variables.font.weight.regular};
+  color: ${({ color }: StyledProps) => color || variables.palette.black};
+`;
+
 export const StyledBodyLarge = styled(Typography)`
   font-size: ${variables.font.size.lg};
   line-height: ${variables.font.lineHeight.lg};
