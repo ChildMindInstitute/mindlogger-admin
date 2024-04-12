@@ -16,8 +16,20 @@ const mockedActivity = {
 };
 
 const mockActivities = [
-  { id: 'activity-1', name: 'Activity 1', isPerformanceTask: false, hasAnswer: true },
-  { id: 'activity-2', name: 'Activity 2', isPerformanceTask: false, hasAnswer: true },
+  {
+    id: 'activity-1',
+    name: 'Activity 1',
+    isPerformanceTask: false,
+    hasAnswer: true,
+    lastAnswerDate: '2023-09-26T10:10:05.162083',
+  },
+  {
+    id: 'activity-2',
+    name: 'Activity 2',
+    isPerformanceTask: false,
+    hasAnswer: true,
+    lastAnswerDate: '2023-09-25T10:10:05.162083',
+  },
 ];
 
 const mockedSetValue = jest.fn();

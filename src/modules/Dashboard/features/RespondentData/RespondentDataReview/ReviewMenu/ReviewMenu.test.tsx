@@ -83,6 +83,7 @@ const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
       {
         id: '951145fa-3053-4428-a970-70531e383d89',
         name: 'Activity 1',
+        lastAnswerDate: '2023-09-26T12:11:46.162083',
         answerDates: [
           {
             createdAt: '2023-12-15T11:21:40.509095',
@@ -97,6 +98,7 @@ const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
       {
         id: 'ad9e1f86-3fa2-4edd-908c-832810555865',
         name: 'Activity 2',
+        lastAnswerDate: '2023-09-26T10:10:05.162083',
         answerDates: [
           {
             createdAt: '2023-12-15T16:39:11.509095',
