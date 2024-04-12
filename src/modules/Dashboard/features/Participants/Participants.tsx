@@ -253,7 +253,7 @@ export const Participants = () => {
     const secretId = joinWihComma(secretIds, true);
     // TODO: Populate participant tag/label
     // https://mindlogger.atlassian.net/browse/M2-5861
-    const tag = 'dude';
+    const tag = null;
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
     const accountType = {
       [RespondentStatus.Invited]: t('full'),
