@@ -22,7 +22,7 @@ import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
 
 export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesData | null) => {
   const navigate = useNavigate();
-  const { appletId, participantId: _participantId } = useParams();
+  const { appletId } = useParams();
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
   const { flags: featureFlags } = useLaunchDarkly();
