@@ -41,6 +41,7 @@ export const palette = {
   surface_variant_alfa8: 'rgba(222, 227, 235, 0.08)',
   white_alfa50: 'rgb(255 255 255 / 50%)',
   dark_error_container: '#93000a',
+  neutral60: '#909194',
 
   black: '#000',
   white: '#fff',
