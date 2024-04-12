@@ -143,6 +143,7 @@ export const useTakeNowModal = () => {
               value={participant}
               options={participantsAndTeamMembers}
               onChange={setParticipant}
+              disabled
             />
           </Box>
         </StyledTakeNowModalContent>
