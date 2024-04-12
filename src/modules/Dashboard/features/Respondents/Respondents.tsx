@@ -441,22 +441,24 @@ export const Respondents = () => {
         columns={getHeadCells(appletId)}
         rows={rows}
         emptyComponent={
-          <EmptyDashboardTable isLoading={isLoading} searchValue={searchValue}>
-            {appletId ? (
-              <>
-                {t('noRespondentsForApplet')}
-                <Button
-                  component={Link}
-                  to={generatePath(page.appletAddUser, { appletId })}
-                  variant="contained"
-                >
-                  {t('addRespondent')}
-                </Button>
-              </>
-            ) : (
-              t('noRespondents')
-            )}
-          </EmptyDashboardTable>
+          !rows?.length && !isLoading ? (
+            <EmptyDashboardTable isLoading={isLoading} searchValue={searchValue}>
+              {appletId ? (
+                <>
+                  {t('noRespondentsForApplet')}
+                  <Button
+                    component={Link}
+                    to={generatePath(page.appletAddUser, { appletId })}
+                    variant="contained"
+                  >
+                    {t('addRespondent')}
+                  </Button>
+                </>
+              ) : (
+                t('noRespondents')
+              )}
+            </EmptyDashboardTable>
+          ) : undefined
         }
         count={respondentsData?.count || 0}
         hasColFixedWidth
