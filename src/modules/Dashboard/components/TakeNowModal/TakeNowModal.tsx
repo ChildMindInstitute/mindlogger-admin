@@ -5,22 +5,21 @@ import { Box } from '@mui/material';
 
 import { Modal, SubmitBtnVariant } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
-import { StyledHeadline } from 'shared/styles';
+import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
 import { useAsync } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 
 import {
   OpenTakeNowModalOptions,
   TakeNowModalProps,
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
-import { StyledTakeNowModalContent, StyledTakeNowModalHeader } from './TakeNowModal.styles';
 import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/ActivitySummaryCard.styles';
 import { LabeledDropdown } from './LabeledDropdown/LabeledDropdown';
-import { ParticipantsData } from '../../features/Participants';
 import { BaseActivity } from '../ActivityGrid';
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
@@ -123,13 +122,13 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         footerStyles={{ padding: '0.8rem 3.2rem 3.2rem' }}
         data-testid={`${dataTestId}-take-now-modal`}
       >
-        <StyledTakeNowModalContent>
-          <StyledTakeNowModalHeader>
+        <StyledFlexColumn sx={{ gap: 0.8, p: theme.spacing(2.4, 3.2) }}>
+          <StyledFlexTopCenter sx={{ gap: 2.4 }}>
             <StyledImageContainer>
               {!!activity.image && <StyledImg src={activity.image} alt={activity.name} />}
             </StyledImageContainer>
             <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
-          </StyledTakeNowModalHeader>
+          </StyledFlexTopCenter>
           <Box>
             <LabeledDropdown
               label={t('takeNowModalSubjectLabel')}
@@ -165,7 +164,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               disabled
             />
           </Box>
-        </StyledTakeNowModalContent>
+        </StyledFlexColumn>
       </Modal>
     );
   };
