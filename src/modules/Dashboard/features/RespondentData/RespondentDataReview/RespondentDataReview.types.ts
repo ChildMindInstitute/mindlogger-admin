@@ -136,3 +136,8 @@ export type FormattedAssessmentAnswer = {
 export type ActivityAnswerMeta = Omit<ActivityAnswerMetaApi, 'identifier'> & {
   identifier: string | null;
 };
+
+export type SelectAnswerProps = {
+  answer: Answer | null;
+  isRouteCreated?: boolean;
+};

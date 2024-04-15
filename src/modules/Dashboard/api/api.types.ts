@@ -236,12 +236,14 @@ export type SubmitDates = {
   dates: string[];
 };
 
+export type AnswerDate = {
+  answerId: string;
+  createdAt: string;
+  endDatetime?: string;
+};
+
 export type ReviewActivity = DatavizActivity & {
-  answerDates: {
-    answerId: string;
-    createdAt: string;
-    endDatetime?: string;
-  }[];
+  answerDates: AnswerDate[];
 };
 
 export type DatavizAnswer = EncryptedAnswerSharedProps & {

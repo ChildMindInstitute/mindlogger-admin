@@ -9,9 +9,9 @@ import { useAsync } from 'shared/hooks';
 import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
 import { useRespondentAnswers } from './hooks/useRespondentAnswers';
 import { RespondentsDataFormValues } from '../RespondentData.types';
+import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 import { ReportMenu } from './ReportMenu';
 import { StyledReportContainer } from './RespondentDataSummary.styles';
-import { getActivityWithLatestAnswer } from './utils/getActivityWithLatestAnswer';
 import { ReportContent } from './ReportContent';
 
 export const RespondentDataSummary = () => {

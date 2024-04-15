@@ -158,8 +158,10 @@ describe('ReviewMenu', () => {
     const timestamp0 = screen.getByTestId(`${dataTestid}-activity-0-completion-time-1`);
     await userEvent.click(timestamp0);
     expect(onSelectAnswer).toHaveBeenCalledWith({
-      answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
-      createdAt: '2023-12-15T14:22:34.150182',
+      answer: {
+        answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
+        createdAt: '2023-12-15T14:22:34.150182',
+      },
     });
   });
 
