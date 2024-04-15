@@ -6,7 +6,6 @@ import { ButtonWithMenu, EmptyState, Spinner, Svg } from 'shared/components';
 import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { page } from 'resources';
 import { ActivitySummaryCard } from 'modules/Dashboard/components';
-import { workspaces } from 'shared/state';
 
 import { StyledButton } from './ActivityGrid.styles';
 import { ActivityGridProps } from './ActivityGrid.types';
@@ -20,9 +19,6 @@ export const ActivityGrid = ({
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const { appletId, participantId: _participantId } = useParams();
-  const workspaceRoles = workspaces.useRolesData();
-  const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const isEmpty = !rows?.length && !isLoading;
