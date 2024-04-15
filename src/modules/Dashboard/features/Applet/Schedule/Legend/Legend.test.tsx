@@ -231,6 +231,14 @@ describe('Legend', () => {
       const createEvent = screen.getByTestId(`${dataTestid}-scheduled-item-0`);
       expect(createEvent).toBeInTheDocument();
       expect(createEvent).toHaveTextContent('Create Event');
+      await userEvent.click(createEvent.firstChild);
+      expect(screen.getByTestId(`${dataTestid}-create-event-popup`)).toBeInTheDocument();
+      const createEventCloseButton = screen.getByTestId(
+        `${dataTestid}-create-event-popup-close-button`,
+      );
+      expect(createEventCloseButton).toBeInTheDocument();
+      await userEvent.click(createEventCloseButton);
+      expect(screen.queryByTestId(`${dataTestid}-create-event-popup`)).not.toBeInTheDocument();
 
       // test remove individual schedule popup
       const individualRemoveButton = screen.getByTestId(`${dataTestid}-individual-remove`);
