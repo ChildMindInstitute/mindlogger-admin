@@ -3,9 +3,9 @@ import { Activity } from 'redux/modules';
 import { Roles } from 'shared/consts';
 import { DatavizActivity } from 'api';
 import { Order } from 'shared/types';
+import { FeatureFlags } from 'shared/types/featureFlags';
 
 import { TakeNowModalProps } from '../TakeNowModal/TakeNowModal.types';
-import { FeatureFlags } from '../../../../shared/types/featureFlags';
 
 export type ActivityGridProps = {
   rows?: Row[];
