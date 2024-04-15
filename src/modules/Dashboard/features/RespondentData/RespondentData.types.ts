@@ -76,6 +76,7 @@ export type FormattedActivityItem<T> = {
   responseType: ItemResponseType;
   responseValues: T;
   responseDataIdentifier?: boolean;
+  order: number;
 };
 
 export type Identifier = {

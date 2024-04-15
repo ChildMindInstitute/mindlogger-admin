@@ -32,7 +32,7 @@ import { Subscales } from './Subscales';
 import { CurrentActivityCompletionData } from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
-import { getLatestReportUrl } from './Report.utils';
+import { getLatestReportUrl, sortResponseOptions } from './Report.utils';
 import { ReportContext } from './Report.context';
 import {
   LATEST_REPORT_DEFAULT_NAME,
@@ -159,7 +159,10 @@ export const Report = () => {
                     />
                   )}
                   {responseOptions && !!Object.values(responseOptions).length && (
-                    <ResponseOptions responseOptions={responseOptions} versions={apiVersions} />
+                    <ResponseOptions
+                      responseOptions={sortResponseOptions(responseOptions)}
+                      versions={apiVersions}
+                    />
                   )}
                 </>
               )}
