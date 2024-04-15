@@ -99,31 +99,59 @@ const legendEvents = {
 const preloadedState = {
   users: {
     allRespondents: {
-      data: [
-        {
-          id: 'c48b275d-db4b-4f79-8469-9198b45985d3',
-          nicknames: ['Jane Doe'],
-          secretIds: ['409974a6-c36f-4e10-8fe3-5e555f664c17'],
-          isAnonymousRespondent: false,
-          lastSeen: '2024-04-09T13:35:14.980000',
-          isPinned: false,
-          details: [
-            {
-              appletId: '53ce3c84-88bb-458c-ab71-10500d94c596',
-              appletDisplayName: 'Mocked Applet',
-              appletImage: '',
-              accessId: 'b3efe254-9149-4465-89c9-01ab37e3e57e',
-              respondentNickname: 'Jane Doe',
-              respondentSecretId: '409974a6-c36f-4e10-8fe3-5e555f664c17',
-              hasIndividualSchedule: true,
-              encryption: {},
-            },
-          ],
-        },
-      ],
+      data: {
+        result: [
+          {
+            id: '429fe361-478b-49f0-b681-d476eaec5c52',
+            nicknames: ['Sam Carter'],
+            secretIds: ['66947648-8eea-4106-9081-4b66117ef2e6'],
+            isAnonymousRespondent: false,
+            lastSeen: '2024-01-04T14:15:59.178000',
+            isPinned: false,
+            details: [
+              {
+                appletId: '53ce3c84-88bb-458c-ab71-10500d94c596',
+                appletDisplayName: 'Mocked Applet',
+                accessId: 'f49a8aa2-bc9c-46cc-a9b5-03f191d908a2',
+                respondentNickname: 'Sam Carter',
+                respondentSecretId: '66947648-8eea-4106-9081-4b66117ef2e6',
+                hasIndividualSchedule: false,
+                encryption: {},
+              },
+            ],
+          },
+          {
+            id: 'c48b275d-db4b-4f79-8469-9198b45985d3',
+            nicknames: ['Jane Doe'],
+            secretIds: ['409974a6-c36f-4e10-8fe3-5e555f664c17'],
+            isAnonymousRespondent: false,
+            lastSeen: '2024-04-09T13:35:14.980000',
+            isPinned: false,
+            details: [
+              {
+                appletId: '53ce3c84-88bb-458c-ab71-10500d94c596',
+                appletDisplayName: 'Mocked Applet',
+                appletImage: '',
+                accessId: 'b3efe254-9149-4465-89c9-01ab37e3e57e',
+                respondentNickname: 'Jane Doe',
+                respondentSecretId: '409974a6-c36f-4e10-8fe3-5e555f664c17',
+                hasIndividualSchedule: true,
+                encryption: {},
+              },
+            ],
+          },
+        ],
+      },
     },
   },
 };
+
+const mockUseNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockUseNavigate,
+}));
 
 jest.mock('shared/components', () => ({
   ...jest.requireActual('shared/components'),
@@ -301,6 +329,71 @@ describe('Legend', () => {
         screen.getByTestId(`${dataTestid}-individual-search-popup-close-button`),
       );
       expect(screen.queryByTestId(`${dataTestid}-individual-search-popup`)).not.toBeInTheDocument();
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test(
+    'switch form default to individual schedule',
+    async () => {
+      utils.renderWithProviders(
+        <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
+        {
+          route: defaultRoute,
+          routePath: defaultRoutePath,
+        },
+      );
+
+      expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
+      const schedule = screen.getByTestId(`${dataTestid}-schedule`);
+      expect(schedule).toBeInTheDocument();
+      expect(schedule).toHaveTextContent('Default Schedule​');
+
+      const scheduleInput = schedule.querySelector('input');
+      expect(scheduleInput).toBeInTheDocument();
+      expect(scheduleInput).toHaveValue('defaultSchedule');
+
+      await userEvent.click(schedule.firstChild?.firstChild);
+
+      const listbox = await screen.findByRole('listbox');
+      expect(listbox).toBeInTheDocument();
+      expect(listbox.querySelectorAll('li')).toHaveLength(3);
+      await userEvent.click(listbox.querySelectorAll('li')[2]);
+      expect(scheduleInput).toHaveValue('individualSchedule');
+      expect(screen.getByTestId(`${dataTestid}-individual-search`)).toBeInTheDocument();
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test(
+    'switch form individual to default schedule',
+    async () => {
+      utils.renderWithProviders(
+        <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
+        {
+          route: individualRoute,
+          routePath: individualRoutePath,
+          preloadedState,
+        },
+      );
+
+      expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
+      const schedule = screen.getByTestId(`${dataTestid}-schedule`);
+      expect(schedule).toBeInTheDocument();
+      expect(schedule).toHaveTextContent('Individual Schedule​');
+
+      const scheduleInput = schedule.querySelector('input');
+      expect(scheduleInput).toBeInTheDocument();
+      expect(scheduleInput).toHaveValue('individualSchedule');
+
+      await userEvent.click(schedule.firstChild?.firstChild);
+
+      const listbox = await screen.findByRole('listbox');
+      expect(listbox).toBeInTheDocument();
+      expect(listbox.querySelectorAll('li')).toHaveLength(3);
+      await userEvent.click(listbox.querySelectorAll('li')[1]);
+      expect(scheduleInput).toHaveValue('defaultSchedule');
+      expect(mockUseNavigate).toHaveBeenCalledWith(`/dashboard/${mockedAppletId}/schedule`);
     },
     JEST_TEST_TIMEOUT,
   );
