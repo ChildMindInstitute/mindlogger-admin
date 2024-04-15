@@ -16,12 +16,12 @@ import {
   mockedUserData,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
+import { renderWithProviders } from 'shared/utils';
 import {
   mockGetRequestResponses,
   mockSchema,
   mockSuccessfulHttpResponse,
-  renderWithProviders,
-} from 'shared/utils';
+} from 'shared/utils/axios-mocks';
 import { RootState } from 'redux/store';
 import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';

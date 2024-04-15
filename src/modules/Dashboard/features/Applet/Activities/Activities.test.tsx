@@ -15,8 +15,8 @@ import {
   mockedUserData,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { mockSchema, mockSuccessfulHttpResponse, renderWithProviders } from 'shared/utils';
-import { mockGetRequestResponses } from 'shared/utils/testUtils';
+import { renderWithProviders } from 'shared/utils';
+import { mockSchema, mockSuccessfulHttpResponse, mockGetRequestResponses } from 'shared/utils/axios-mocks';
 import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 
