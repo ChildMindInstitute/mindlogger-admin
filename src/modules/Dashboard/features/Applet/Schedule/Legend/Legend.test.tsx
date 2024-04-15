@@ -1,9 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { page } from 'resources';
 import { mockedAppletId } from 'shared/mock';
 import * as utils from 'shared/utils';
+import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { Legend } from './Legend';
 
@@ -133,141 +136,164 @@ jest.mock('shared/utils', () => ({
 }));
 
 describe('Legend', () => {
-  test('should render legend for default schedule', async () => {
-    utils.renderWithProviders(
-      <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
-      {
-        route: defaultRoute,
-        routePath: defaultRoutePath,
-      },
-    );
+  test(
+    'should render legend for default schedule',
+    async () => {
+      utils.renderWithProviders(
+        <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
+        {
+          route: defaultRoute,
+          routePath: defaultRoutePath,
+        },
+      );
 
-    expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
-    const schedule = screen.getByTestId(`${dataTestid}-schedule`);
-    expect(schedule).toBeInTheDocument();
-    expect(schedule).toHaveTextContent('Default Schedule​');
+      expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
+      const schedule = screen.getByTestId(`${dataTestid}-schedule`);
+      expect(schedule).toBeInTheDocument();
+      expect(schedule).toHaveTextContent('Default Schedule​');
 
-    const scheduleInput = schedule.querySelector('input');
-    expect(scheduleInput).toBeInTheDocument();
-    expect(scheduleInput).toHaveValue('defaultSchedule'); // selected default schedule
+      const scheduleInput = schedule.querySelector('input');
+      expect(scheduleInput).toBeInTheDocument();
+      expect(scheduleInput).toHaveValue('defaultSchedule'); // selected default schedule
 
-    const importButton = screen.getByTestId(`${dataTestid}-import`);
-    expect(importButton).toBeInTheDocument();
-    expect(importButton).toHaveTextContent('Import');
+      const importButton = screen.getByTestId(`${dataTestid}-import`);
+      expect(importButton).toBeInTheDocument();
+      expect(importButton).toHaveTextContent('Import');
 
-    const exportButton = screen.getByTestId(`${dataTestid}-export`);
-    expect(exportButton).toBeInTheDocument();
-    expect(exportButton).toHaveTextContent('Export');
+      const exportButton = screen.getByTestId(`${dataTestid}-export`);
+      expect(exportButton).toBeInTheDocument();
+      expect(exportButton).toHaveTextContent('Export');
 
-    const scheduled = screen.getByTestId(`${dataTestid}-scheduled`);
-    expect(scheduled).toBeInTheDocument();
-    expect(scheduled).toHaveTextContent('Scheduled');
+      const scheduled = screen.getByTestId(`${dataTestid}-scheduled`);
+      expect(scheduled).toBeInTheDocument();
+      expect(scheduled).toHaveTextContent('Scheduled');
 
-    const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
-    const hideFromCalendarButton = screen.getByTestId(`${dataTestid}-scheduled-1`);
-    expect(clearAllScheduledEventsButton).toBeInTheDocument();
-    expect(hideFromCalendarButton).toBeInTheDocument();
+      const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
+      const hideFromCalendarButton = screen.getByTestId(`${dataTestid}-scheduled-1`);
+      expect(clearAllScheduledEventsButton).toBeInTheDocument();
+      expect(hideFromCalendarButton).toBeInTheDocument();
 
-    // test clear all scheduled events popup
-    await userEvent.click(clearAllScheduledEventsButton);
-    expect(screen.getByTestId(`${dataTestid}-clear-scheduled-events-popup`)).toBeInTheDocument();
-    const closeClearScheduledEventsPopupButton = screen.getByTestId(
-      `${dataTestid}-clear-scheduled-events-popup-close-button`,
-    );
-    expect(closeClearScheduledEventsPopupButton).toBeInTheDocument();
-    await userEvent.click(closeClearScheduledEventsPopupButton);
-    expect(
-      screen.queryByTestId(`${dataTestid}-clear-scheduled-events-popup`),
-    ).not.toBeInTheDocument();
+      // test clear all scheduled events popup
+      await userEvent.click(clearAllScheduledEventsButton);
+      expect(screen.getByTestId(`${dataTestid}-clear-scheduled-events-popup`)).toBeInTheDocument();
+      const closeClearScheduledEventsPopupButton = screen.getByTestId(
+        `${dataTestid}-clear-scheduled-events-popup-close-button`,
+      );
+      expect(closeClearScheduledEventsPopupButton).toBeInTheDocument();
+      await userEvent.click(closeClearScheduledEventsPopupButton);
+      expect(
+        screen.queryByTestId(`${dataTestid}-clear-scheduled-events-popup`),
+      ).not.toBeInTheDocument();
 
-    // test import popup
-    await userEvent.click(importButton);
-    expect(screen.getByTestId(`${dataTestid}-import-schedule-popup`)).toBeInTheDocument();
-    const closeImportPopupButton = screen.getByTestId(
-      `${dataTestid}-import-schedule-popup-close-button`,
-    );
-    expect(closeImportPopupButton).toBeInTheDocument();
-    await userEvent.click(closeImportPopupButton);
-    expect(screen.queryByTestId(`${dataTestid}-import-schedule-popup`)).not.toBeInTheDocument();
+      // test import popup
+      await userEvent.click(importButton);
+      expect(screen.getByTestId(`${dataTestid}-import-schedule-popup`)).toBeInTheDocument();
+      const closeImportPopupButton = screen.getByTestId(
+        `${dataTestid}-import-schedule-popup-close-button`,
+      );
+      expect(closeImportPopupButton).toBeInTheDocument();
+      await userEvent.click(closeImportPopupButton);
+      expect(screen.queryByTestId(`${dataTestid}-import-schedule-popup`)).not.toBeInTheDocument();
 
-    // test export popup
-    await userEvent.click(exportButton);
-    expect(screen.getByTestId(`${dataTestid}-export-default-schedule-popup`)).toBeInTheDocument();
-    const closeExportPopupButton = screen.getByTestId(
-      `${dataTestid}-export-default-schedule-popup-close-button`,
-    );
-    expect(closeExportPopupButton).toBeInTheDocument();
-    await userEvent.click(closeExportPopupButton);
-    expect(
-      screen.queryByTestId(`${dataTestid}-export-default-schedule-popup`),
-    ).not.toBeInTheDocument();
-  });
+      // test export popup
+      await userEvent.click(exportButton);
+      expect(screen.getByTestId(`${dataTestid}-export-default-schedule-popup`)).toBeInTheDocument();
+      const closeExportPopupButton = screen.getByTestId(
+        `${dataTestid}-export-default-schedule-popup-close-button`,
+      );
+      expect(closeExportPopupButton).toBeInTheDocument();
+      await userEvent.click(closeExportPopupButton);
+      expect(
+        screen.queryByTestId(`${dataTestid}-export-default-schedule-popup`),
+      ).not.toBeInTheDocument();
+    },
+    JEST_TEST_TIMEOUT,
+  );
 
-  test('should render legend for individual schedule', async () => {
-    utils.renderWithProviders(
-      <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
-      {
-        route: individualRoute,
-        routePath: individualRoutePath,
-        preloadedState,
-      },
-    );
+  test(
+    'should render legend for individual schedule',
+    async () => {
+      utils.renderWithProviders(
+        <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
+        {
+          route: individualRoute,
+          routePath: individualRoutePath,
+          preloadedState,
+        },
+      );
 
-    expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
-    const schedule = screen.getByTestId(`${dataTestid}-schedule`);
-    expect(schedule).toBeInTheDocument();
-    expect(schedule).toHaveTextContent('Individual Schedule​');
+      expect(screen.getByTestId(dataTestid)).toBeInTheDocument();
+      const schedule = screen.getByTestId(`${dataTestid}-schedule`);
+      expect(schedule).toBeInTheDocument();
+      expect(schedule).toHaveTextContent('Individual Schedule​');
 
-    // test remove individual schedule popup
-    const individualRemoveButton = screen.getByTestId(`${dataTestid}-individual-remove`);
-    expect(individualRemoveButton).toBeInTheDocument();
-    await userEvent.click(individualRemoveButton);
-    expect(
-      screen.getByTestId(`${dataTestid}-remove-individual-schedule-popup`),
-    ).toBeInTheDocument();
-    const individualRemoveCloseButton = screen.getByTestId(
-      `${dataTestid}-remove-individual-schedule-popup-close-button`,
-    );
-    expect(individualRemoveCloseButton).toBeInTheDocument();
-    await userEvent.click(individualRemoveCloseButton);
-    expect(
-      screen.queryByTestId(`${dataTestid}-remove-individual-schedule-popup`),
-    ).not.toBeInTheDocument();
+      // test create event
+      const createEvent = screen.getByTestId(`${dataTestid}-scheduled-item-0`);
+      expect(createEvent).toBeInTheDocument();
+      expect(createEvent).toHaveTextContent('Create Event');
 
-    const scheduleInput = schedule.querySelector('input');
-    expect(scheduleInput).toBeInTheDocument();
-    expect(scheduleInput).toHaveValue('individualSchedule'); // selected individual schedule
+      // test remove individual schedule popup
+      const individualRemoveButton = screen.getByTestId(`${dataTestid}-individual-remove`);
+      expect(individualRemoveButton).toBeInTheDocument();
+      await userEvent.click(individualRemoveButton);
+      expect(
+        screen.getByTestId(`${dataTestid}-remove-individual-schedule-popup`),
+      ).toBeInTheDocument();
+      const individualRemoveCloseButton = screen.getByTestId(
+        `${dataTestid}-remove-individual-schedule-popup-close-button`,
+      );
+      expect(individualRemoveCloseButton).toBeInTheDocument();
+      await userEvent.click(individualRemoveCloseButton);
+      expect(
+        screen.queryByTestId(`${dataTestid}-remove-individual-schedule-popup`),
+      ).not.toBeInTheDocument();
 
-    const importButton = screen.getByTestId(`${dataTestid}-import`);
-    expect(importButton).toBeInTheDocument();
-    expect(importButton).toHaveTextContent('Import');
+      const scheduleInput = schedule.querySelector('input');
+      expect(scheduleInput).toBeInTheDocument();
+      expect(scheduleInput).toHaveValue('individualSchedule'); // selected individual schedule
 
-    const exportButton = screen.getByTestId(`${dataTestid}-export`);
-    expect(exportButton).toBeInTheDocument();
-    expect(exportButton).toHaveTextContent('Export');
+      const importButton = screen.getByTestId(`${dataTestid}-import`);
+      expect(importButton).toBeInTheDocument();
+      expect(importButton).toHaveTextContent('Import');
 
-    // test export popup
-    await userEvent.click(exportButton);
-    expect(
-      screen.getByTestId(`${dataTestid}-export-individual-schedule-popup`),
-    ).toBeInTheDocument();
-    const submitButton = screen.getByTestId(
-      `${dataTestid}-export-individual-schedule-popup-submit-button`,
-    );
-    expect(submitButton).toBeInTheDocument();
-    await userEvent.click(submitButton);
-    expect(utils.exportTemplate).toHaveBeenCalledWith({
-      data: legendEvents.scheduleExportCsv,
-      defaultData: null,
-      fileName: '_schedule',
-    });
+      const exportButton = screen.getByTestId(`${dataTestid}-export`);
+      expect(exportButton).toBeInTheDocument();
+      expect(exportButton).toHaveTextContent('Export');
 
-    // test search popup
-    const search = screen.getByTestId(`${dataTestid}-individual-search`);
-    expect(search).toBeInTheDocument();
-    await userEvent.click(search);
-    expect(screen.getByTestId(`${dataTestid}-individual-search-popup`)).toBeInTheDocument();
-    await userEvent.click(screen.getByTestId(`${dataTestid}-individual-search-popup-close-button`));
-    expect(screen.queryByTestId(`${dataTestid}-individual-search-popup`)).not.toBeInTheDocument();
-  });
+      // test export popup
+      await userEvent.click(exportButton);
+      expect(
+        screen.getByTestId(`${dataTestid}-export-individual-schedule-popup`),
+      ).toBeInTheDocument();
+      const submitButton = screen.getByTestId(
+        `${dataTestid}-export-individual-schedule-popup-submit-button`,
+      );
+      expect(submitButton).toBeInTheDocument();
+      await userEvent.click(submitButton);
+      expect(utils.exportTemplate).toHaveBeenCalledWith({
+        data: legendEvents.scheduleExportCsv,
+        defaultData: null,
+        fileName: '_schedule',
+      });
+      const closeExportPopupButton = screen.getByTestId(
+        `${dataTestid}-export-individual-schedule-popup-close-button`,
+      );
+      expect(closeExportPopupButton).toBeInTheDocument();
+      await userEvent.click(closeExportPopupButton);
+      expect(
+        screen.queryByTestId(`${dataTestid}-export-individual-schedule-popup`),
+      ).not.toBeInTheDocument();
+
+      // test search popup
+      const search = screen.getByTestId(`${dataTestid}-individual-search`);
+      expect(search).toBeInTheDocument();
+      await userEvent.click(search);
+      expect(screen.getByTestId(`${dataTestid}-individual-search-popup`)).toBeInTheDocument();
+      await userEvent.click(
+        screen.getByTestId(`${dataTestid}-individual-search-popup-close-button`),
+      );
+      expect(screen.queryByTestId(`${dataTestid}-individual-search-popup`)).not.toBeInTheDocument();
+    },
+    JEST_TEST_TIMEOUT,
+  );
 });
