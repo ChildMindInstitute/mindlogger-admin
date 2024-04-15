@@ -16,7 +16,11 @@ import {
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils';
-import { mockSchema, mockSuccessfulHttpResponse, mockGetRequestResponses } from 'shared/utils/axios-mocks';
+import {
+  mockSchema,
+  mockSuccessfulHttpResponse,
+  mockGetRequestResponses,
+} from 'shared/utils/axios-mocks';
 import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 
