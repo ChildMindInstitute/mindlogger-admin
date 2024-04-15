@@ -1,26 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Outlet, generatePath, useLocation, useParams } from 'react-router-dom';
-import { Button, Tooltip } from '@mui/material';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
+import { Tooltip } from '@mui/material';
 
+import { HeaderOptions } from 'modules/Dashboard/components/HeaderOptions';
 import { LinkedTabs, Spinner, Svg } from 'shared/components';
 import {
   StyledBody,
   StyledFlexSpaceBetween,
-  StyledFlexTopBaseline,
   StyledFlexTopCenter,
   StyledHeadlineLarge,
   StyledLogo,
-  StyledTitleMedium,
   theme,
-  variables,
 } from 'shared/styles';
 import { applet } from 'shared/state';
 import { useAppDispatch } from 'redux/store';
 import { usePermissions, useRemoveAppletData } from 'shared/hooks';
 import { palette } from 'shared/styles/variables/palette';
-import { page } from 'resources';
-import { Mixpanel } from 'shared/utils';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
 import { StyledPanel } from 'shared/components/Tabs/TabPanel/TabPanel.style';
 
@@ -54,7 +50,6 @@ export const AppletMultiInformant = () => {
   const isLoading = appletLoadingStatus === 'loading' || appletLoadingStatus === 'idle';
 
   const isTopLevelTab = appletTabs.map((tabConfig) => tabConfig.path).includes(location.pathname);
-  const isSettingsSelected = location.pathname.includes('settings');
 
   return (
     <StyledBody>
@@ -84,31 +79,7 @@ export const AppletMultiInformant = () => {
                 )}
               </StyledFlexTopCenter>
 
-              <StyledFlexTopBaseline gap={theme.spacing(1)}>
-                <Button
-                  sx={{
-                    gap: theme.spacing(1),
-                    color: variables.palette.on_surface_variant,
-                  }}
-                  onClick={() => {
-                    setIsExportOpen(true);
-                    Mixpanel.track('Export Data click');
-                  }}
-                >
-                  <Svg id="export" width={24} height={24} />
-                  <StyledTitleMedium as="span" sx={{ color: variables.palette.on_surface_variant }}>
-                    {t('export')}
-                  </StyledTitleMedium>
-                </Button>
-                <Link
-                  data-testid="dashboard-tab-settings"
-                  to={generatePath(page.appletSettings, {
-                    appletId,
-                  })}
-                >
-                  <Svg id="settings" fill={isSettingsSelected ? variables.palette.primary : ''} />
-                </Link>
-              </StyledFlexTopBaseline>
+              <HeaderOptions />
             </StyledFlexSpaceBetween>
           )}
 
