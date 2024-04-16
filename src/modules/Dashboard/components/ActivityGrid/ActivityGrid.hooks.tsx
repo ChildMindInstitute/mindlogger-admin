@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
 import { useCallback, useMemo } from 'react';
+import { format } from 'date-fns';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { DatavizActivity } from 'api';
