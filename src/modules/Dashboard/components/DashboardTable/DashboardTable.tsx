@@ -1,8 +1,7 @@
-import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
+import { Box, Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
 
 import {
   EmptyState,
-  TableHead,
   UiType,
   StyledTableCellContent,
   StyledTableContainer,
@@ -10,7 +9,7 @@ import {
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { DashboardTableProps } from './DashboardTable.types';
-import { StyledTableCell } from './DashboardTable.styles';
+import { StyledTableCell, StyledTableHead } from './DashboardTable.styles';
 
 export const DashboardTable = ({
   columns,
@@ -52,10 +51,11 @@ export const DashboardTable = ({
       uiType={uiType}
       hasColFixedWidth={hasColFixedWidth}
       onScroll={onScroll}
+      sx={{ height: rows?.length ? 'auto' : '100%' }}
     >
       {!!rows?.length && (
         <MuiTable stickyHeader data-testid={dataTestid}>
-          <TableHead
+          <StyledTableHead
             headCells={columns}
             order={order}
             orderBy={orderBy}
@@ -78,9 +78,13 @@ export const DashboardTable = ({
                     sx={{ cursor: row[key].onClick ? 'pointer' : 'default' }}
                     data-testid={`${dataTestid}-${index}-cell-${key}`}
                   >
-                    {row[key].contentWithTooltip
-                      ? row[key].contentWithTooltip
-                      : row[key].content(row)}
+                    <Box
+                      sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                    >
+                      {row[key].contentWithTooltip
+                        ? row[key].contentWithTooltip
+                        : row[key].content(row)}
+                    </Box>
                   </StyledTableCell>
                 ))}
               </TableRow>
