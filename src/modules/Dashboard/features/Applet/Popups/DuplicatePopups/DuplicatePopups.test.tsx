@@ -1,7 +1,8 @@
 import { fireEvent, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { expectBanner, renderWithProviders } from 'shared/utils';
+import { expectBanner } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletData, mockedPassword } from 'shared/mock';
 import * as encryptionFunctions from 'shared/utils/encryption';
 

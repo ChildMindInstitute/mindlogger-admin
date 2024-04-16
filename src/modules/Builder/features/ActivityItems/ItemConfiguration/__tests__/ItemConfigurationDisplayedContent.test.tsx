@@ -6,7 +6,8 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
 import { mockedActivityId, mockedAppletId, mockedSingleSelectFormValues } from 'shared/mock';
-import { asyncTimeout, createArray, renderWithAppletFormData } from 'shared/utils';
+import { asyncTimeout, createArray } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import {

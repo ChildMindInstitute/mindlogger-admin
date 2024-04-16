@@ -2,7 +2,7 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { Roles } from 'shared/consts';
 import { mockedManager, mockedApplet } from 'shared/mock';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Applet } from '.';
 

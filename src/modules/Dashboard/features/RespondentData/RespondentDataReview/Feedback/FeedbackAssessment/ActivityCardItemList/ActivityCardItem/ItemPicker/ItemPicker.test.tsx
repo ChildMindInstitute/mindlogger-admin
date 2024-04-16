@@ -3,7 +3,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback/Feedback.types';
 
 import { ItemPicker } from './ItemPicker';

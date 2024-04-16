@@ -27,7 +27,8 @@ import {
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
 } from 'shared/mock';
-import { createArray, getEntityKey, renderWithAppletFormData } from 'shared/utils';
+import { createArray, getEntityKey } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { getNewActivity } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ActivityItemsFlow } from './ActivityItemsFlow';

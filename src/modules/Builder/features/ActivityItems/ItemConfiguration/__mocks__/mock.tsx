@@ -5,7 +5,8 @@ import { generatePath } from 'react-router-dom';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
-import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
+import { getEntityKey } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import {
   mockedActivityId,
   mockedAppletFormData,
