@@ -227,6 +227,7 @@ export type OwnerId = {
 export type DatavizActivity = {
   id: string;
   name: string;
+  lastAnswerDate: string | null;
   isPerformanceTask?: boolean;
   hasAnswer?: boolean;
 };
@@ -235,12 +236,14 @@ export type SubmitDates = {
   dates: string[];
 };
 
+export type AnswerDate = {
+  answerId: string;
+  createdAt: string;
+  endDatetime?: string;
+};
+
 export type ReviewActivity = DatavizActivity & {
-  answerDates: {
-    answerId: string;
-    createdAt: string;
-    endDatetime?: string;
-  }[];
+  answerDates: AnswerDate[];
 };
 
 export type DatavizAnswer = EncryptedAnswerSharedProps & {

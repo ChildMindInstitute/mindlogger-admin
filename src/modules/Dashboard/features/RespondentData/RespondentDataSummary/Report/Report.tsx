@@ -25,7 +25,7 @@ import {
   Identifier,
   RespondentsDataFormValues,
 } from '../../RespondentData.types';
-import { getFormattedResponses } from '../RespondentDataSummary.utils';
+import { getFormattedResponses } from '../utils/getFormattedResponses';
 import { ReportFilters } from './ReportFilters';
 import { StyledEmptyState, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';

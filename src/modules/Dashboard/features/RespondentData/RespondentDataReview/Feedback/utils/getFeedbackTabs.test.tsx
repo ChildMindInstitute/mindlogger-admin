@@ -5,7 +5,11 @@ import { getFeedbackTabs } from './getFeedbackTabs';
 
 describe('getFeedbackTabs', () => {
   const dataTestid = 'respondents-summary-feedback-tab';
-  const selectedActivity = { id: '1', name: 'activity 1' };
+  const selectedActivity = {
+    id: '1',
+    name: 'activity 1',
+    lastAnswerDate: '2023-09-26T12:11:46.162083',
+  };
   const notesTab = {
     labelKey: 'notes',
     id: 'feedback-notes',

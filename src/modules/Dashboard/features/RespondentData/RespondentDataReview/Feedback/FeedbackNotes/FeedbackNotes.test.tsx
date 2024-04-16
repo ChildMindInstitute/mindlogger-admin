@@ -55,6 +55,7 @@ const mockedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  lastAnswerDate: '2023-09-26T12:11:46.162083',
 };
 
 const mockedGetWithNotes = {
