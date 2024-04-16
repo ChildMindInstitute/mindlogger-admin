@@ -160,7 +160,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   }, [respondentId, respondentsItems, selectedRespondent]);
 
   return schedule ? (
-    <StyledLegend>
+    <StyledLegend data-testid={dataTestid}>
       <StyledSelectRow>
         <StyledSelect>
           <SelectController

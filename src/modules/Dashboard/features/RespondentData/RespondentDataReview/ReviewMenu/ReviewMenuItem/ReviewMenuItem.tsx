@@ -1,25 +1,18 @@
 import { useEffect, useState } from 'react';
-import {
-  createSearchParams,
-  generatePath,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
-import { format, compareAsc } from 'date-fns';
+import { useSearchParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
 import { Chip } from 'shared/components';
 import { DateFormats } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexWrap, theme } from 'shared/styles';
-import { page } from 'resources';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
+import { sortAnswerDates } from '../../utils/sortAnswerDates';
 import { StyledHeader, StyledItem, StyledSvg } from './ReviewMenuItem.styles';
 import { ReviewMenuItemProps } from './ReviewMenuItem.types';
 import { Answer } from '../../RespondentDataReview.types';
 
 export const ReviewMenuItem = ({
-  selectedDate,
   activity,
   setSelectedActivity,
   isSelected,
@@ -28,34 +21,18 @@ export const ReviewMenuItem = ({
   'data-testid': dataTestid,
 }: ReviewMenuItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { appletId, respondentId } = useParams();
-  const [searchParams] = useSearchParams();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const answerId = searchParams.get('answerId');
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (selectedAnswer || !answerId) return;
-    const answerByRoute = activity.answerDates.find((answer) => answer.answerId === answerId);
-    if (answerByRoute) {
-      onSelectAnswer(answerByRoute);
-      setSelectedActivity(activity);
-      setIsOpen(true);
-    }
-  }, [answerId, selectedAnswer]);
-
-  const isActivityNotEmpty = !!activity?.answerDates?.length;
-
-  const answerDates = activity?.answerDates?.sort((a, b) =>
-    compareAsc(new Date(a.endDatetime ?? a.createdAt), new Date(b.endDatetime ?? b.createdAt)),
-  );
+  const { answerDates } = activity ?? {};
+  const isActivityNotEmpty = !!answerDates?.length;
+  const sortedAnswerDates = sortAnswerDates(answerDates);
 
   const handleActivityClick = () => {
     setSelectedActivity(activity);
-    onSelectAnswer(null);
+    onSelectAnswer({ answer: null });
     toggleBooleanState(setIsOpen)();
-    navigate(generatePath(page.appletRespondentDataReview, { appletId, respondentId }));
+    setSearchParams(undefined);
   };
 
   const handleAnswerClick = (answer: Answer) => {
@@ -63,20 +40,25 @@ export const ReviewMenuItem = ({
       setSelectedActivity(activity);
     }
 
-    onSelectAnswer(answer);
-    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
-    selectedDate &&
-      navigate({
-        pathname,
-        search: createSearchParams({
-          selectedDate: format(selectedDate, DateFormats.YearMonthDay),
-          answerId: answer.answerId,
-        }).toString(),
-      });
+    onSelectAnswer({ answer });
   };
 
+  useEffect(() => {
+    if (!answerId) return;
+
+    const answerByRoute = answerDates.find((answer) => answer.answerId === answerId);
+    if (!answerByRoute) return;
+
+    setIsOpen(true);
+
+    if (selectedAnswer) return;
+
+    onSelectAnswer({ answer: answerByRoute, isRouteCreated: true });
+    setSelectedActivity(activity);
+  }, [answerId, answerDates, selectedAnswer, setSelectedActivity, onSelectAnswer, activity]);
+
   return (
-    <StyledItem isSelected={isSelected}>
+    <StyledItem isSelected={isSelected} data-testid={`${dataTestid}-item`}>
       <StyledHeader onClick={handleActivityClick} data-testid={`${dataTestid}-select`}>
         <StyledBodyLarge sx={{ maxWidth: '80%' }}>{activity.name}</StyledBodyLarge>
         {isActivityNotEmpty && (
@@ -84,8 +66,11 @@ export const ReviewMenuItem = ({
         )}
       </StyledHeader>
       {isOpen && isActivityNotEmpty && (
-        <StyledFlexWrap sx={{ paddingTop: theme.spacing(1.6) }}>
-          {answerDates?.map((answer, index) => (
+        <StyledFlexWrap
+          sx={{ paddingTop: theme.spacing(1.6) }}
+          data-testid={`${dataTestid}-completion-wrapper`}
+        >
+          {sortedAnswerDates?.map((answer, index) => (
             <Chip
               color={selectedAnswer?.answerId === answer.answerId ? 'primary' : 'secondary'}
               key={answer.answerId}

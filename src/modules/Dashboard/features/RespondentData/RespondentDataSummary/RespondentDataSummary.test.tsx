@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import * as reactHookForm from 'react-hook-form';
@@ -8,8 +6,8 @@ import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 
-import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests';
-import * as useRespondentAnswersHook from './hooks/useRespondentAnswers';
+import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests/useDatavizSummaryRequests';
+import * as useRespondentAnswersHook from './hooks/useRespondentAnswers/useRespondentAnswers';
 import { RespondentDataSummary } from './RespondentDataSummary';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;
@@ -21,6 +19,7 @@ const mockedSelectedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  lastAnswerDate: '2023-09-26T12:11:46.162083',
 };
 
 const mockedSummaryActivities = [
@@ -30,6 +29,7 @@ const mockedSummaryActivities = [
     name: 'Activity 2',
     isPerformanceTask: false,
     hasAnswer: true,
+    lastAnswerDate: '2023-10-27T12:11:46.162083',
   },
 ];
 
@@ -87,6 +87,8 @@ const emptyStateCases = [
 describe('RespondentDataSummary component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: mockedSetValue });
   });
 
@@ -155,11 +157,12 @@ describe('RespondentDataSummary component', () => {
       );
     });
 
+    //select activity with the last answer date
     expect(mockedSetValue).toHaveBeenCalledWith('summaryActivities', mockedSummaryActivities);
-    expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockedSummaryActivities[0]);
+    expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockedSummaryActivities[1]);
     expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({
-      activity: mockedSummaryActivities[0],
+      activity: mockedSummaryActivities[1],
     });
-    expect(mockFetchAnswers).toHaveBeenCalledWith({ activity: mockedSummaryActivities[0] });
+    expect(mockFetchAnswers).toHaveBeenCalledWith({ activity: mockedSummaryActivities[1] });
   });
 });
