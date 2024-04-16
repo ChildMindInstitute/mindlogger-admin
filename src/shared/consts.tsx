@@ -35,6 +35,7 @@ export enum UploadFileError {
 
 export const SEARCH_DEBOUNCE_VALUE = 700;
 export const CHANGE_DEBOUNCE_VALUE = 500;
+export const VALIDATION_DEBOUNCE_VALUE = 1000;
 
 export const DEFAULT_MILLISECONDS_DURATION = 3000;
 export const MIN_MILLISECONDS_DURATION = 1;

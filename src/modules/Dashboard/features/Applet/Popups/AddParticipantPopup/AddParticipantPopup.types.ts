@@ -1,4 +1,5 @@
 import { Languages } from 'api';
+import { AccountType } from 'modules/Dashboard/types';
 
 export type AddParticipantPopupProps = {
   popupVisible: boolean;
@@ -6,11 +7,6 @@ export type AddParticipantPopupProps = {
   onClose?: (shouldRefetch: boolean) => void;
   'data-testid'?: string;
 };
-
-export enum AccountType {
-  Full = 'full',
-  Limited = 'limited',
-}
 
 export enum AddParticipantSteps {
   AccountType = 'accountType',

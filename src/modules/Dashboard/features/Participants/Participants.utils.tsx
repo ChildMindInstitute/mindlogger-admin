@@ -10,81 +10,82 @@ import {
   StyledFlexTopCenter,
   variables,
 } from 'shared/styles';
-import { RespondentDetail } from 'modules/Dashboard/types';
+import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
+import { MenuItemType } from 'shared/components';
 
-import { ChosenAppletData, GetMenuItems } from './Participants.types';
+import { ChosenAppletData, GetParticipantActionsProps } from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
 import { StyledCheckBox } from './Participants.styles';
 
 export const getParticipantActions = ({
-  actions: {
-    scheduleSetupAction,
-    viewDataAction,
-    removeAccessAction,
-    userDataExportAction,
-    editParticipant,
-    sendInvitation,
-  },
+  actions: { editParticipant, upgradeAccount, exportData, removeParticipant, assignActivity },
   filteredApplets,
   respondentId,
   respondentOrSubjectId,
   appletId,
   email,
-  isInviteEnabled,
-  isViewCalendarEnabled,
-}: GetMenuItems) => [
-  {
-    icon: <Svg id="calendar" width={20} height={21} />,
-    action: scheduleSetupAction,
-    title: t('viewCalendar'),
-    context: { respondentId, respondentOrSubjectId, email },
-    isDisplayed: isViewCalendarEnabled && !!filteredApplets?.scheduling.length,
-    'data-testid': 'dashboard-participants-view-calendar',
-  },
-  {
-    icon: <Svg id="data" width={22} height={22} />,
-    action: viewDataAction,
-    title: t('viewData'),
-    context: { respondentId, respondentOrSubjectId, email },
-    isDisplayed: !!filteredApplets?.viewable.length,
-    'data-testid': 'dashboard-participants-view-data',
-  },
-  {
-    icon: <Svg id="export2" width={20} height={21} />,
-    action: userDataExportAction,
-    title: t('exportData'),
-    context: { respondentId, respondentOrSubjectId, email },
-    isDisplayed: !!filteredApplets?.viewable.length,
-    'data-testid': 'dashboard-participants-export-data',
-  },
-  {
-    icon: <Svg id="edit" width={22} height={21} />,
-    action: editParticipant,
-    title: t('editParticipant'),
-    context: { respondentId, respondentOrSubjectId, email },
-    isDisplayed: !!appletId && !!filteredApplets?.editable.length,
-    'data-testid': 'dashboard-participants-edit',
-  },
-  {
-    icon: <Svg id="remove-from-folder" width={21} height={21} />,
-    action: sendInvitation,
-    title: t('sendInvitation'),
-    context: { respondentId, respondentOrSubjectId, email },
-    isDisplayed: isInviteEnabled && !!filteredApplets?.editable.length,
-    'data-testid': 'dashboard-participants-invite',
-  },
-  {
-    icon: <Svg id="trash" width={21} height={21} />,
-    action: removeAccessAction,
-    title: t('removeFromApplet'),
-    context: { respondentId, respondentOrSubjectId, email },
-    isDisplayed: !!filteredApplets?.editable.length,
-    customItemColor: variables.palette.dark_error_container,
-    'data-testid': 'dashboard-participants-remove-access',
-  },
-];
+  secretId,
+  nickname,
+  tag,
+  status,
+  dataTestid,
+}: GetParticipantActionsProps) => {
+  const context = { respondentId, respondentOrSubjectId, email, secretId, nickname, tag };
+  const isUpgradeable = status === RespondentStatus.NotInvited;
+  const isPending = status === RespondentStatus.Pending;
+  const isEditable = !!filteredApplets?.editable.length;
+  const isViewable = !!filteredApplets?.viewable.length;
+
+  return [
+    {
+      icon: <Svg id="edit" width={24} height={24} />,
+      action: editParticipant,
+      title: t('editParticipant'),
+      context,
+      isDisplayed: !!appletId && isEditable && !isPending,
+      'data-testid': `${dataTestid}-edit`,
+    },
+    {
+      icon: <Svg id="full-account" width={24} height={24} />,
+      action: upgradeAccount,
+      title: t('upgradeToFullAccount'),
+      context,
+      isDisplayed: isUpgradeable && isEditable,
+      'data-testid': `${dataTestid}-upgrade-account`,
+    },
+    {
+      icon: <Svg id="export" width={24} height={24} />,
+      action: exportData,
+      title: t('exportData'),
+      context,
+      isDisplayed: isViewable && !isPending,
+      'data-testid': `${dataTestid}-export-data`,
+    },
+    {
+      icon: <Svg id="remove-access" width={24} height={24} />,
+      action: removeParticipant,
+      title: t('removeParticipant'),
+      context,
+      isDisplayed: isEditable,
+      customItemColor: variables.palette.dark_error_container,
+      'data-testid': `${dataTestid}-remove`,
+    },
+    {
+      type: MenuItemType.Divider,
+      isDisplayed: !isPending,
+    },
+    {
+      icon: <Svg id="add-users-outlined" width={24} height={24} />,
+      action: assignActivity,
+      title: t('assignActivity'),
+      context,
+      isDisplayed: isEditable && !isPending,
+      'data-testid': `${dataTestid}-assign-activity`,
+    },
+  ];
+};
 
 export const getAppletsSmallTableRows = (
   respondentAccesses: RespondentDetail[],

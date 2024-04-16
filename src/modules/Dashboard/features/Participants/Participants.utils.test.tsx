@@ -1,8 +1,11 @@
-import { Svg } from 'shared/components';
+import { MenuItemType, Svg } from 'shared/components';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
+import { RespondentStatus } from 'modules/Dashboard/types';
 
 import { getParticipantActions, getHeadCells } from './Participants.utils';
+
+const dataTestid = 'test-id';
 
 const applets = [
   {
@@ -43,137 +46,125 @@ const headCellProperties = [
 const mockedEmail = 'test@test.com';
 const commonGetActionsProps = {
   actions: {
-    scheduleSetupAction: jest.fn(),
-    viewDataAction: jest.fn(),
-    removeAccessAction: jest.fn(),
-    userDataExportAction: jest.fn(),
     editParticipant: jest.fn(),
-    sendInvitation: jest.fn(),
+    upgradeAccount: jest.fn(),
+    exportData: jest.fn(),
+    removeParticipant: jest.fn(),
+    assignActivity: jest.fn(),
   },
   filteredApplets,
   respondentId: mockedRespondentId,
   respondentOrSubjectId: mockedRespondentId,
   appletId: mockedAppletId,
   email: mockedEmail,
+  secretId: 'test secret id',
+  nickname: 'test nickname',
+  tag: 'test tag',
 };
+
+const expectedContext = {
+  respondentId: mockedRespondentId,
+  email: mockedEmail,
+  respondentOrSubjectId: mockedRespondentId,
+  secretId: commonGetActionsProps.secretId,
+  nickname: commonGetActionsProps.nickname,
+  tag: commonGetActionsProps.tag,
+};
+const expectedActions = [
+  {
+    icon: <Svg id="edit" width={24} height={24} />,
+    action: expect.any(Function),
+    title: 'Edit Participant',
+    context: expectedContext,
+    isDisplayed: true,
+    'data-testid': `${dataTestid}-edit`,
+  },
+  {
+    icon: <Svg id="full-account" width={24} height={24} />,
+    action: expect.any(Function),
+    title: 'Upgrade to Full Account',
+    context: expectedContext,
+    isDisplayed: true,
+    'data-testid': `${dataTestid}-upgrade-account`,
+  },
+  {
+    icon: <Svg id="export" width={24} height={24} />,
+    action: expect.any(Function),
+    title: 'Export Data',
+    context: expectedContext,
+    isDisplayed: true,
+    'data-testid': `${dataTestid}-export-data`,
+  },
+  {
+    icon: <Svg id="remove-access" width={24} height={24} />,
+    action: expect.any(Function),
+    title: 'Remove Participant',
+    context: expectedContext,
+    isDisplayed: true,
+    customItemColor: variables.palette.dark_error_container,
+    'data-testid': `${dataTestid}-remove`,
+  },
+  {
+    type: MenuItemType.Divider,
+    isDisplayed: true,
+  },
+  {
+    icon: <Svg id="add-users-outlined" width={24} height={24} />,
+    action: expect.any(Function),
+    title: 'Assign Activity',
+    context: expectedContext,
+    isDisplayed: true,
+    'data-testid': `${dataTestid}-assign-activity`,
+  },
+];
 
 describe('Participants utils tests', () => {
   describe('getParticipantActions function', () => {
-    test('should return the correct actions for a participant with scheduling and viewable applets', () => {
+    test('should return the correct actions if participant has full account', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
-        isViewCalendarEnabled: true,
-        isInviteEnabled: true,
+        status: RespondentStatus.Invited,
+        dataTestid,
       });
 
-      expect(actions).toEqual([
-        {
-          icon: <Svg id="calendar" width={20} height={21} />,
-          action: expect.any(Function),
-          title: 'View Individual Calendar',
-          context: {
-            respondentId: mockedRespondentId,
-            email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
-          },
-          isDisplayed: true,
-          'data-testid': 'dashboard-participants-view-calendar',
-        },
-        {
-          icon: <Svg id="data" width={22} height={22} />,
-          action: expect.any(Function),
-          title: 'View Data',
-          context: {
-            respondentId: mockedRespondentId,
-            email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
-          },
-          isDisplayed: true,
-          'data-testid': 'dashboard-participants-view-data',
-        },
-        {
-          icon: <Svg id="export2" width={20} height={21} />,
-          action: expect.any(Function),
-          title: 'Export Data',
-          context: {
-            respondentId: mockedRespondentId,
-            email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
-          },
-          isDisplayed: true,
-          'data-testid': 'dashboard-participants-export-data',
-        },
-        {
-          icon: <Svg id="edit" width={22} height={21} />,
-          action: expect.any(Function),
-          title: 'Edit Participant',
-          context: {
-            respondentId: mockedRespondentId,
-            email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
-          },
-          isDisplayed: true,
-          'data-testid': 'dashboard-participants-edit',
-        },
-        {
-          icon: <Svg id="remove-from-folder" width={21} height={21} />,
-          action: expect.any(Function),
-          title: 'Send Invitation',
-          context: {
-            respondentId: mockedRespondentId,
-            email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
-          },
-          isDisplayed: true,
-          'data-testid': 'dashboard-participants-invite',
-        },
-        {
-          icon: <Svg id="trash" width={21} height={21} />,
-          action: expect.any(Function),
-          title: 'Remove from Applet',
-          context: {
-            respondentId: mockedRespondentId,
-            email: mockedEmail,
-            respondentOrSubjectId: mockedRespondentId,
-          },
-          isDisplayed: true,
-          customItemColor: variables.palette.dark_error_container,
-          'data-testid': 'dashboard-participants-remove-access',
-        },
-      ]);
-
-      actions.forEach((action) => expect(action.isDisplayed).toBe(true));
-    });
-
-    test('should return the correct actions if view calendar is not enabled', () => {
-      const actions = getParticipantActions({
-        ...commonGetActionsProps,
-        isInviteEnabled: true,
-        isViewCalendarEnabled: false,
-      });
-
+      const isDisplayed = [true, false, true, true, true, true];
       actions.forEach((action, index) => {
-        if (index === 0) {
-          expect(action.isDisplayed).toBe(false);
-        } else {
-          expect(action.isDisplayed).toBe(true);
-        }
+        expect(action).toEqual({
+          ...expectedActions[index],
+          isDisplayed: isDisplayed[index],
+        });
       });
     });
 
-    test('should return the correct actions if invite is not enabled', () => {
+    test('should return the correct actions if participant has limited account', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
-        isInviteEnabled: false,
-        isViewCalendarEnabled: true,
+        status: RespondentStatus.NotInvited,
+        dataTestid,
       });
 
+      const isDisplayed = [true, true, true, true, true, true];
       actions.forEach((action, index) => {
-        if (index === 4) {
-          expect(action.isDisplayed).toBe(false);
-        } else {
-          expect(action.isDisplayed).toBe(true);
-        }
+        expect(action).toEqual({
+          ...expectedActions[index],
+          isDisplayed: isDisplayed[index],
+        });
+      });
+    });
+
+    test('should return the correct actions if invite is pending', () => {
+      const actions = getParticipantActions({
+        ...commonGetActionsProps,
+        status: RespondentStatus.Pending,
+        dataTestid,
+      });
+
+      const isDisplayed = [false, false, false, true, false, false];
+      actions.forEach((action, index) => {
+        expect(action).toEqual({
+          ...expectedActions[index],
+          isDisplayed: isDisplayed[index],
+        });
       });
     });
   });

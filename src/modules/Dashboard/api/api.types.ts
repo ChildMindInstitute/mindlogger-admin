@@ -202,6 +202,7 @@ export type AppletInvitationData = AppletId & {
 export type SubjectInvitationData = AppletId &
   SubjectId & {
     email: string;
+    language?: string;
   };
 
 export type AppletShellAccountOptions = {

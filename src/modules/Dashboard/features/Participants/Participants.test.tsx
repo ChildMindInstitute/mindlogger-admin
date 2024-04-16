@@ -159,11 +159,10 @@ describe('Participants component tests', () => {
 
     await clickActionDots();
     const actionsDataTestIds = [
-      'dashboard-participants-view-calendar',
-      'dashboard-participants-view-data',
-      'dashboard-participants-export-data',
       'dashboard-participants-edit',
-      'dashboard-participants-remove-access',
+      'dashboard-participants-export-data',
+      'dashboard-participants-remove',
+      'dashboard-participants-assign-activity',
     ];
 
     await waitFor(() => {
@@ -178,12 +177,11 @@ describe('Participants component tests', () => {
     renderWithProviders(<Participants />, { preloadedState, route, routePath });
 
     await clickActionDots();
-
     const actionsDataTestIds = [
-      'dashboard-participants-view-data',
-      'dashboard-participants-export-data',
       'dashboard-participants-edit',
-      'dashboard-participants-remove-access',
+      'dashboard-participants-export-data',
+      'dashboard-participants-remove',
+      'dashboard-participants-assign-activity',
     ];
 
     await waitFor(() => {
@@ -195,12 +193,10 @@ describe('Participants component tests', () => {
 
   describe('popup should appear when click on participant action for ', () => {
     test.each`
-      actionDataTestId                          | popupDataTestId                                        | description
-      ${'dashboard-participants-view-data'}     | ${'dashboard-respondents-view-data-popup'}             | ${'view data'}
-      ${'dashboard-participants-view-calendar'} | ${'dashboard-respondents-view-calendar-popup'}         | ${'view calendar'}
-      ${'dashboard-participants-export-data'}   | ${'dashboard-participants-export-data-popup-password'} | ${'export data'}
-      ${'dashboard-participants-edit'}          | ${'dashboard-respondents-edit-popup'}                  | ${'edit participants'}
-      ${'dashboard-participants-remove-access'} | ${'dashboard-respondents-remove-access-popup'}         | ${'remove access'}
+      actionDataTestId                        | popupDataTestId                                        | description
+      ${'dashboard-participants-edit'}        | ${'dashboard-respondents-edit-popup'}                  | ${'edit participants'}
+      ${'dashboard-participants-export-data'} | ${'dashboard-participants-export-data-popup-password'} | ${'export data'}
+      ${'dashboard-participants-remove'}      | ${'dashboard-respondents-remove-access-popup'}         | ${'remove participant'}
     `('$description', async ({ actionDataTestId, popupDataTestId }) => {
       mockAxios.get.mockResolvedValue(getMockedGetWithParticipants());
       renderWithProviders(<Participants />, { preloadedState, route, routePath });
