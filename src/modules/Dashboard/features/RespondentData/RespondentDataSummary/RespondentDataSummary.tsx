@@ -30,14 +30,15 @@ export const RespondentDataSummary = () => {
     setValue('summaryActivities', summaryActivities);
     if (selectedActivity) return;
 
-    const activityWithLatestAnswer = getActivityWithLatestAnswer(summaryActivities);
+    const selectedActivityByDefault =
+      getActivityWithLatestAnswer(summaryActivities) || summaryActivities[0];
 
-    if (!activityWithLatestAnswer) return;
+    if (!selectedActivityByDefault) return;
 
-    setValue('selectedActivity', activityWithLatestAnswer);
+    setValue('selectedActivity', selectedActivityByDefault);
     setIsLoading(true);
-    await getIdentifiersVersions({ activity: activityWithLatestAnswer });
-    await fetchAnswers({ activity: activityWithLatestAnswer });
+    await getIdentifiersVersions({ activity: selectedActivityByDefault });
+    await fetchAnswers({ activity: selectedActivityByDefault });
     setIsLoading(false);
   });
 
