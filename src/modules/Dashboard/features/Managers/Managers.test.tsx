@@ -9,7 +9,6 @@ import {
   mockedOwnerId,
   mockedManager,
   mockedEmail,
-  mockedManagerId,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -93,31 +92,13 @@ describe('Managers component tests', () => {
   test('should render table with managers', async () => {
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
-    const tableColumnNames = ['First Name', 'Last Name', 'Email', 'Roles', 'Actions'];
+    const tableColumnNames = ['First Name', 'Last Name', 'Title', 'Role', 'Email'];
     const managersColumns = ['TestFirstName', 'TestLastName', mockedEmail, 'Reviewer'];
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-managers-table')).toBeInTheDocument();
       tableColumnNames.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
       managersColumns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
-    });
-  });
-
-  test('should pin manager', async () => {
-    mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
-    mockAxios.post.mockResolvedValueOnce(null);
-    renderWithProviders(<Managers />, { preloadedState, route, routePath });
-
-    const managerPin = await waitFor(() => screen.getByTestId('dashboard-managers-pin'));
-    fireEvent.click(managerPin);
-
-    await waitFor(() => {
-      expect(mockAxios.post).nthCalledWith(
-        1,
-        `/workspaces/${mockedOwnerId}/managers/${mockedManagerId}/pin`,
-        {},
-        { signal: undefined },
-      );
     });
   });
 

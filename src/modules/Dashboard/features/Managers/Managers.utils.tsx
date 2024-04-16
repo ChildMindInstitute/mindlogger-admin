@@ -1,3 +1,5 @@
+import { Checkbox } from '@mui/material';
+
 import i18n from 'i18n';
 import { Svg } from 'shared/components/Svg';
 import { HeadCell } from 'shared/types/table';
@@ -17,42 +19,61 @@ export const getHeadCells = (id?: string): HeadCell[] => {
 
   return [
     {
-      id: 'pin',
+      id: 'checkbox',
+      label: (
+        <Checkbox
+          aria-label="Check all"
+          checked={false}
+          data-testid="dashboard-managers-checkbox-header"
+          icon={
+            <Svg
+              fill={variables.palette.outline_variant2}
+              height="20"
+              id="checkbox-empty-outlined"
+              width="20"
+            />
+          }
+        />
+      ),
+      width: '8rem',
+    },
+    {
+      id: 'avatar',
       label: '',
-      enableSort: true,
-      width: ManagersColumnsWidth.Pin,
+      width: '8rem',
     },
     {
       id: 'firstName',
       label: t('firstName'),
       enableSort: true,
-      width: ManagersColumnsWidth.Default,
     },
     {
       id: 'lastName',
       label: t('lastName'),
       enableSort: true,
-      width: ManagersColumnsWidth.Default,
     },
     {
-      id: 'email',
-      label: t('email'),
-      enableSort: true,
-      width: ManagersColumnsWidth.Email,
+      id: 'title',
+      label: 'Title',
     },
     ...(id
       ? [
           {
-            id: 'roles',
-            label: t('roles'),
+            id: 'role',
+            label: t('role'),
             enableSort: true,
-            width: ManagersColumnsWidth.Default,
           },
         ]
       : []),
     {
+      id: 'email',
+      label: t('email'),
+      enableSort: true,
+    },
+    {
       id: 'actions',
-      label: t('actions'),
+      label: '',
+      width: '8rem',
     },
   ];
 };
