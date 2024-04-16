@@ -4,14 +4,23 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Checkbox } from '@mui/material';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
-import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
+import {
+  ActionsMenu,
+  Chip,
+  ChipShape,
+  MenuActionProps,
+  Pin,
+  Row,
+  Spinner,
+  Svg,
+} from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { StyledBody } from 'shared/styles';
+import { StyledBody, variables } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
@@ -27,7 +36,6 @@ import {
   HeaderSectionLeft,
   HeaderSectionRight,
   ParticipantsTable,
-  StyledCheckBox,
 } from './Participants.styles';
 import {
   getAppletsSmallTableRows,
@@ -273,9 +281,12 @@ export const Participants = () => {
           <Checkbox
             checked={false}
             icon={
-              <StyledCheckBox>
-                <Svg id="checkbox-empty-outlined" height="20" width="20" />
-              </StyledCheckBox>
+              <Svg
+                fill={variables.palette.outline_variant2}
+                height="20"
+                id="checkbox-empty-outlined"
+                width="20"
+              />
             }
             data-testid="dashboard-participants-checkbox"
           />
@@ -313,9 +324,7 @@ export const Participants = () => {
       accountType: {
         // TODO: Replace with new Chip/Tag variant when available
         // https://mindlogger.atlassian.net/browse/M2-6161
-        content: () => (
-          <Chip title={accountType} color="secondary" sxProps={{ pointerEvents: 'none', m: 0 }} />
-        ),
+        content: () => <Chip color="secondary" shape={ChipShape.Rounded} title={accountType} />,
         value: accountType,
         width: ParticipantsColumnsWidth.AccountType,
         onClick: defaultOnClick,
@@ -354,6 +363,7 @@ export const Participants = () => {
           />
         ),
         value: '',
+        width: ParticipantsColumnsWidth.Pin,
       },
     };
   };

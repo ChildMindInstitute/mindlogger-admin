@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { Checkbox } from '@mui/material';
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
@@ -17,7 +18,6 @@ import { MenuItemType } from 'shared/components';
 
 import { ChosenAppletData, GetParticipantActionsProps } from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
-import { StyledCheckBox } from './Participants.styles';
 
 export const getParticipantActions = ({
   actions: { editParticipant, upgradeAccount, exportData, removeParticipant, assignActivity },
@@ -134,9 +134,17 @@ export const getHeadCells = (id?: string): HeadCell[] => {
     {
       id: 'checkbox',
       label: (
-        <StyledCheckBox>
-          <Svg id="checkbox-empty-outlined" height="20" width="20" />
-        </StyledCheckBox>
+        <Checkbox
+          checked={false}
+          icon={
+            <Svg
+              fill={variables.palette.outline_variant2}
+              height="20"
+              id="checkbox-empty-outlined"
+              width="20"
+            />
+          }
+        />
       ),
       enableSort: true,
       width: ParticipantsColumnsWidth.Pin,
