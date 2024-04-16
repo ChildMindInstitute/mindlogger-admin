@@ -558,6 +558,7 @@ describe('Respondent Data Summary utils', () => {
               isHidden: true,
               allowEdit: true,
               id: '69a98366-8627-4c9b-9973-5c16416695b8',
+              order: 6,
             },
             answer: undefined,
           },
@@ -588,6 +589,7 @@ describe('Respondent Data Summary utils', () => {
               isHidden: false,
               allowEdit: true,
               id: '69a98366-8627-4c9b-9973-5c16416695b8',
+              order: 6,
             },
             answer: null,
           },
@@ -611,6 +613,7 @@ describe('Respondent Data Summary utils', () => {
             activityItem: {
               id: 'b3825743-f796-4551-9057-662797ccd8c3',
               name: 'Item1',
+              order: 1,
               question: { en: 'SS (updated)' },
               responseType: 'singleSelect',
               responseValues: {
@@ -631,6 +634,7 @@ describe('Respondent Data Summary utils', () => {
             activityItem: {
               id: 'dfeb5edb-d797-4b5f-be40-05fea8de4c22',
               name: 'Item2',
+              order: 2,
               question: { en: 'MS' },
               responseType: 'multiSelect',
               responseValues: {
@@ -646,6 +650,7 @@ describe('Respondent Data Summary utils', () => {
             activityItem: {
               id: 'dfeb5edb-d797-4b5f-be40-05fea8de4c22',
               name: 'Item2',
+              order: 2,
               question: { en: 'MS --> SS' },
               responseType: 'singleSelect',
               responseValues: {
@@ -667,6 +672,7 @@ describe('Respondent Data Summary utils', () => {
               responseType: 'text',
               responseDataIdentifier: false,
               responseValues: undefined,
+              order: 6,
             },
             answers: [
               { answer: { value: 'Text 1', text: null }, date: '2024-01-22T20:07:22.782000' },
@@ -685,6 +691,7 @@ describe('Respondent Data Summary utils', () => {
               question: { en: 'Time' },
               responseType: 'time',
               responseValues: null,
+              order: 4,
             },
             answers: [
               { answer: { text: null, value: 126900000 }, date: '2024-01-22T20:07:22.782000' },
@@ -698,6 +705,7 @@ describe('Respondent Data Summary utils', () => {
             activityItem: {
               id: '2613ae84-7282-46e3-98e1-344c6fcbfe53',
               name: 'Item5',
+              order: 5,
               question: { en: 'Slider' },
               responseType: 'slider',
               responseValues: {
@@ -715,6 +723,7 @@ describe('Respondent Data Summary utils', () => {
                   { id: '2613ae84-7282-46e3-98e1-344c6fcbfe53-10', text: 10, value: 10 },
                 ],
               },
+              order: 5,
             },
             answers: [
               { answer: { text: null, value: 2 }, date: '2024-01-22T20:07:22.782000' },
@@ -870,6 +879,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: 'ee6ad0fa-3a86-46db-b432-508f803022f6',
         name: 'single_extraText_and_NO_SCORES',
+        order: 1,
         question: {
           en: 'Single selection question',
         },
@@ -964,6 +974,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: 'dc621e85-3bd6-41b7-abb2-12f2c1fca248',
         name: 'multi_extraText_and_NO_SCORES',
+        order: 2,
         question: {
           en: 'Multi selection question',
         },
@@ -1043,6 +1054,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: '298b1436-3963-41c1-852b-82ebb2ab5468',
         name: 'slider_extraText_and_NO_SCORES',
+        order: 3,
         question: {
           en: 'Slider question',
         },
@@ -1128,6 +1140,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: 'bd670ac1-75a5-4c46-8b70-be664b9e19a5',
         name: 'text_with_response',
+        order: 10,
         question: {
           en: 'text question',
         },
@@ -1184,6 +1197,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: '6c50d1fa-05f1-4f18-af43-1e568ab9bb0e',
         name: 'time_extraText',
+        order: 5,
         question: {
           en: 'Time question',
         },
@@ -1238,6 +1252,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: '4bcb492b-3709-4633-935b-3b45978d0835',
         name: 'number_selection_extraText',
+        order: 4,
         question: {
           en: 'Number selection question',
         },
@@ -1297,6 +1312,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: '05a5dac0-02c7-4443-99ed-2b0be9ec3807',
         name: 'date_item_skippable',
+        order: 5,
         question: {
           en: 'date_item_skippable',
         },
@@ -1362,6 +1378,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: 'a2ff06a5-24f4-4bf9-a88a-7f9ec17e3c37',
         name: 'drawing_extraText',
+        order: 11,
         question: {
           en: 'drawing_extraText question',
         },
@@ -1425,6 +1442,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: 'b0d3bd40-745c-4b3e-bfa2-9f27a2f38e7d',
         name: 'time_range_extraText',
+        order: 7,
         question: {
           en: 'Time range question',
         },
@@ -1501,6 +1519,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: 'd3beb2aa-5d92-4ab7-8c4d-92cebd022a9f',
         name: 'single-select-rows',
+        order: 4,
         question: { en: 'Single Select Rows Question.' },
         responseType: 'singleSelectRows',
         responseValues: {
@@ -1594,6 +1613,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
         name: 'multi-select-rows',
+        order: 5,
         question: { en: 'Multi Select Rows Question.' },
         responseType: 'multiSelectRows',
         responseValues: {
@@ -1647,7 +1667,6 @@ describe('Respondent Data Summary utils', () => {
               },
             ],
           },
-
           name: 'slider-rows',
           id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
           order: 5,
@@ -1663,6 +1682,7 @@ describe('Respondent Data Summary utils', () => {
       activityItem: {
         id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
         name: 'slider-rows',
+        order: 5,
         question: { en: 'Slider Rows Question.' },
         responseType: 'sliderRows',
         responseValues: {
