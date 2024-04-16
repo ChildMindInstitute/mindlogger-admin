@@ -21,5 +21,5 @@ describe('ParticipantSnippet component', () => {
     render(<ParticipantSnippet secretId={props.secretId} />);
 
     expect(screen.getByText(props.secretId)).toBeInTheDocument();
-  })
+  });
 });
