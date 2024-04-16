@@ -3,24 +3,21 @@ import { Identifier } from 'modules/Dashboard/features/RespondentData/Respondent
 
 export const getUniqueIdentifierOptions = (identifiers: Identifier[]) => {
   const uniqueIdentifiersSet = new Set<string>();
+  const uniqueIdentifiers: AutocompleteOption[] = [];
 
-  return identifiers.reduce((uniqueIdentifiers: AutocompleteOption[], identifierItem) => {
-    if (!identifierItem) return uniqueIdentifiers;
+  identifiers.forEach((identifierItem) => {
+    if (!identifierItem) return;
 
     const { decryptedValue } = identifierItem;
 
     if (!uniqueIdentifiersSet.has(decryptedValue)) {
       uniqueIdentifiersSet.add(decryptedValue);
-
-      return [
-        ...uniqueIdentifiers,
-        {
-          label: decryptedValue,
-          id: decryptedValue,
-        },
-      ];
+      uniqueIdentifiers.push({
+        label: decryptedValue,
+        id: decryptedValue,
+      });
     }
+  });
 
-    return uniqueIdentifiers;
-  }, []);
+  return uniqueIdentifiers;
 };

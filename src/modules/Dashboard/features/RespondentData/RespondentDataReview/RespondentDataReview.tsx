@@ -105,7 +105,7 @@ export const RespondentDataReview = () => {
       if (answerId && !shouldSetLastAnswer.current) return;
       const activityWithLatestAnswer = getActivityWithLatestAnswer(activities);
 
-      if (!activityWithLatestAnswer || !activityWithLatestAnswer.answerDates.length) return;
+      if (!activityWithLatestAnswer?.answerDates.length) return;
 
       setSelectedActivity(activityWithLatestAnswer);
       const { answerDates } = activityWithLatestAnswer;
@@ -189,7 +189,7 @@ export const RespondentDataReview = () => {
     handleGetSubmitDates(date);
   };
 
-  const handleResponseDateChange = async (date?: Date | null) => {
+  const handleResponseDateChange = (date?: Date | null) => {
     shouldSetLastAnswer.current = true;
     handleGetActivities(date);
   };

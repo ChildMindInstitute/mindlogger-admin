@@ -19,13 +19,15 @@ export const getIdentifiers = (
 ): string[] | undefined => {
   if (!filterByIdentifier) return;
 
-  return identifiers.reduce(
-    (decryptedIdentifiers: string[], { encryptedValue, decryptedValue }: Identifier) => {
-      const identifier = filterIdentifiers.find(
-        (filterIdentifier) => filterIdentifier.id === decryptedValue,
-      );
+  const filterIds = new Set(filterIdentifiers.map((identifier) => identifier.id));
 
-      return identifier ? [...decryptedIdentifiers, encryptedValue] : decryptedIdentifiers;
+  return identifiers.reduce(
+    (decryptedIdentifiers: string[], { encryptedValue, decryptedValue }) => {
+      if (filterIds.has(decryptedValue)) {
+        decryptedIdentifiers.push(encryptedValue);
+      }
+
+      return decryptedIdentifiers;
     },
     [],
   );
