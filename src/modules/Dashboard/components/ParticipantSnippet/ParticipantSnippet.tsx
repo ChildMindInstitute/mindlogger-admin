@@ -1,18 +1,15 @@
-import { ElementType } from 'react';
-import { BoxTypeMap } from '@mui/system';
-
 import { Chip } from 'shared/components';
 import { StyledBodyLarger, StyledFlexTopCenter, variables } from 'shared/styles';
 
 import { ParticipantSnippetProps } from './ParticipantSnippet.types';
 
-export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultComponent']>({
+export const ParticipantSnippet = ({
   secretId,
   nickname,
   tag,
   boxProps,
   'data-testid': dataTestId,
-}: ParticipantSnippetProps<T>) => {
+}: ParticipantSnippetProps) => {
   const { sx, ...rest } = boxProps ?? {};
 
   return (

@@ -1,7 +1,8 @@
 import { ElementType } from 'react';
-import { BoxProps } from '@mui/material/Box/Box';
+import { BoxProps } from '@mui/material';
+import { BoxTypeMap } from '@mui/system';
 
-export type ParticipantSnippetProps<T extends ElementType> = {
+export type ParticipantSnippetProps<T extends ElementType = BoxTypeMap['defaultComponent']> = {
   secretId?: string | null;
   nickname?: string | null;
   tag?: string | null;
