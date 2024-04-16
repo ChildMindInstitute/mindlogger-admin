@@ -13,7 +13,7 @@ import {
 } from 'shared/components';
 import { StyledErrorText, StyledLinkBtn, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
-import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
+import { NON_UNIQUE_VALUE_MESSAGE, Roles, VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
 import { page } from 'resources';
 import { Mixpanel, getErrorMessage } from 'shared/utils';
 import { Languages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
@@ -58,7 +58,7 @@ export const AddParticipantPopup = ({
     resolver: yupResolver(AddParticipantPopupSchema()),
     defaultValues: defaults,
     mode: 'all',
-    delayError: 1000,
+    delayError: VALIDATION_DEBOUNCE_VALUE,
   });
   const accountType = useWatch({ control, name: 'accountType' });
   const isFullAccount = accountType === AccountType.Full;

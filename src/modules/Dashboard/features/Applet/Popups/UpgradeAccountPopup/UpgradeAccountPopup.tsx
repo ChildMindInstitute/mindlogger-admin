@@ -18,6 +18,7 @@ import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
 import { AccountType } from 'modules/Dashboard/types';
 import { ParticipantSnippet } from 'modules/Dashboard/components';
+import { VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { RESPONDENT_ALREADY_INVITED } from './UpgradeAccountPopup.const';
 import { UpgradeAccountPopupSchema } from './UpgradeAccountPopup.schema';
@@ -53,7 +54,7 @@ export const UpgradeAccountPopup = ({
     resolver: yupResolver(UpgradeAccountPopupSchema()),
     defaultValues,
     mode: 'all',
-    delayError: 1000,
+    delayError: VALIDATION_DEBOUNCE_VALUE,
   });
   const dispatch = useAppDispatch();
   const [hasCommonError, setHasCommonError] = useState(false);
