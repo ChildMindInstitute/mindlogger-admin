@@ -14,6 +14,7 @@ export const palette = {
   on_surface_variant: '#42474e',
   outline: '#72777f',
   outline_variant: '#c4c9d0',
+  outline_variant2: '#C2C7CF',
   surface_variant: '#dee3eb',
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
