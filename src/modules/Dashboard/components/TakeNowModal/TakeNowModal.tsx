@@ -10,7 +10,6 @@ import { useAsync } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
-import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 
 import {
@@ -19,33 +18,35 @@ import {
   UseTakeNowModalProps,
 } from './TakeNowModal.types';
 import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/ActivitySummaryCard.styles';
-import { LabeledDropdown } from './LabeledDropdown/LabeledDropdown';
+import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
+import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
   const [activity, setActivity] = useState<BaseActivity | null>(null);
-  const [participants, setParticipants] = useState<AutocompleteOption[]>([]);
+  const [participants, setParticipants] = useState<ParticipantDropdownOption[]>([]);
   const [participantsAndTeamMembers, setParticipantsAndTeamMembers] = useState<
-    AutocompleteOption[]
+    ParticipantDropdownOption[]
   >([]);
-  const [defaultSubject, setDefaultSubject] = useState<AutocompleteOption | null>(null);
-  const [defaultParticipant, setDefaultParticipant] = useState<AutocompleteOption | null>(null);
+  const [defaultSubject, setDefaultSubject] = useState<ParticipantDropdownOption | null>(null);
+  const [defaultParticipant, setDefaultParticipant] = useState<ParticipantDropdownOption | null>(
+    null,
+  );
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
   const { appletId } = useParams();
 
-  const participantToOption = useCallback((participant: ParticipantsData['result'][0]) => {
-    const stringNicknames = joinWihComma(participant.nicknames, true);
-    const stringSecretIds = joinWihComma(participant.secretIds, true);
-    const id = participant.id ?? participant.details[0].subjectId;
-    let label = stringSecretIds;
-    if (stringNicknames) {
-      label = `${stringSecretIds} (${stringNicknames})`;
-    }
+  const participantToOption = useCallback(
+    (participant: ParticipantsData['result'][0]): ParticipantDropdownOption => {
+      const stringNicknames = joinWihComma(participant.nicknames, true);
+      const stringSecretIds = joinWihComma(participant.secretIds, true);
+      const id = participant.id ?? participant.details[0].subjectId;
 
-    return { id, label };
-  }, []);
+      return { id, secretId: stringSecretIds, nickname: stringNicknames };
+    },
+    [],
+  );
 
   const { execute: getParticipants } = useAsync(getWorkspaceRespondentsApi, (response) => {
     if (response?.data) {
@@ -67,16 +68,19 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
     if (userData) {
       // For now, the admin is the only member of this list
-      let whoIsResponding = `${userData.user.id}`;
+      let ownerNickname = '';
       if (userData.user.firstName) {
-        whoIsResponding += ` (${userData.user.firstName}`;
+        ownerNickname += `${userData.user.firstName}`;
         if (userData.user.lastName) {
-          whoIsResponding += ` ${userData.user.lastName[0].toUpperCase()}.`;
+          ownerNickname += ` ${userData.user.lastName[0].toUpperCase()}.`;
         }
-        whoIsResponding += ')';
       }
 
-      const ownerOption = { id: userData.user.id, label: whoIsResponding };
+      const ownerOption: ParticipantDropdownOption = {
+        id: userData.user.id,
+        secretId: userData.user.id,
+        nickname: ownerNickname,
+      };
 
       // In the future we will allow choosing from the full list of participants and team members
       setParticipantsAndTeamMembers([ownerOption]);
@@ -89,8 +93,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       onClose?.();
     };
 
-    const [subject, setSubject] = useState<AutocompleteOption | null>(defaultSubject);
-    const [participant, setParticipant] = useState<AutocompleteOption | null>(
+    const [subject, setSubject] = useState<ParticipantDropdownOption | null>(defaultSubject);
+    const [participant, setParticipant] = useState<ParticipantDropdownOption | null>(
       defaultParticipant || participantsAndTeamMembers[0],
     );
     const handleSubmit = useCallback(() => {
@@ -130,7 +134,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
             <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
           </StyledFlexTopCenter>
           <Box>
-            <LabeledDropdown
+            <LabeledUserDropdown
               label={t('takeNowModalSubjectLabel')}
               name={'subject'}
               tooltip={t('takeNowModalSubjectTooltip')}
@@ -152,7 +156,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 return (response?.data as ParticipantsData)?.result.map(participantToOption) ?? [];
               }}
             />
-            <LabeledDropdown
+            <LabeledUserDropdown
               label={t('takeNowModalParticipantLabel')}
               name={'participant'}
               tooltip={t('takeNowModalParticipantTooltip')}

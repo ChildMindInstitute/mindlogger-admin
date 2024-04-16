@@ -76,11 +76,11 @@ export const Activities = () => {
               const options: OpenTakeNowModalOptions = {};
 
               if (participantId && respondent) {
-                let label = respondent.result.secretUserId;
-                if (respondent.result.nickname) {
-                  label += ` (${respondent.result.nickname})`;
-                }
-                options.subject = { id: participantId, label };
+                options.subject = {
+                  id: participantId,
+                  secretId: respondent.result.secretUserId,
+                  nickname: respondent.result.nickname,
+                };
               }
 
               openTakeNowModal(activity, options);

@@ -4,12 +4,12 @@ import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
 import { Tooltip } from 'shared/components';
-import { AutocompleteOption } from 'shared/components/FormComponents';
-import { StyledFlexColumn, StyledTitleMedium, StyledTitleTooltipIcon } from 'shared/styles';
+import { StyledFlexColumn, StyledTitleMedium, StyledTitleTooltipIcon, theme } from 'shared/styles';
+import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 
-import { LabeledDropdownProps } from './LabeledDropdown.types';
+import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
 
-export const LabeledDropdown = ({
+export const LabeledUserDropdown = ({
   label,
   name,
   tooltip,
@@ -20,10 +20,10 @@ export const LabeledDropdown = ({
   handleSearch,
   debounce,
   ...rest
-}: LabeledDropdownProps) => {
+}: LabeledUserDropdownProps) => {
   const { t } = useTranslation('app');
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
-  const [combinedOptions, setCombinedOptions] = useState<AutocompleteOption[]>(options);
+  const [combinedOptions, setCombinedOptions] = useState<ParticipantDropdownOption[]>(options);
   const [isSearching, setIsSearching] = useState(false);
 
   const debouncedSearchHandler = useCallback(
@@ -47,7 +47,7 @@ export const LabeledDropdown = ({
             results = await results;
           }
 
-          setCombinedOptions((prev) => unionBy(prev, results as AutocompleteOption[], 'id'));
+          setCombinedOptions((prev) => unionBy(prev, results as ParticipantDropdownOption[], 'id'));
           setIsSearching(false);
         } catch (_e) {
           // Ignored
@@ -79,6 +79,18 @@ export const LabeledDropdown = ({
           return <TextField {...rest} placeholder={placeholder} name={name} />;
         }}
         options={combinedOptions}
+        renderOption={({ children: _children, ...props }, { id: _id, ...psProps }) => (
+          <ParticipantSnippet<'li'>
+            {...psProps}
+            boxProps={{
+              sx: { p: theme.spacing(0.6, 1.6), cursor: 'pointer' },
+              ...props,
+            }}
+          />
+        )}
+        getOptionLabel={(value) =>
+          `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}`
+        }
         fullWidth={true}
         value={value}
         onChange={(_e, newValue) => onChange(newValue)}

@@ -1,5 +1,6 @@
 import { ModalProps } from 'shared/components';
-import { AutocompleteOption } from 'shared/components/FormComponents';
+
+import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
 
 export type UseTakeNowModalProps = {
   dataTestId: string;
@@ -11,10 +12,10 @@ export type OpenTakeNowModalOptions = {
   /**
    * The ID of the subject who should be selected by default in the "Who is this activity about?" dropdown.
    */
-  subject?: AutocompleteOption;
+  subject?: ParticipantDropdownOption;
 
   /**
    * The ID of the participant who should be selected by default in the "Who is responding?" dropdown.
    */
-  participant?: AutocompleteOption;
+  participant?: ParticipantDropdownOption;
 };
