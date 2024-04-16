@@ -289,7 +289,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           color: variables.palette.on_surface_variant,
-          padding: '0.6rem 1.2rem',
+          padding: '0.2rem 0.8rem',
+          height: 24,
           borderRadius: variables.borderRadius.md,
           fontSize: variables.font.size.md,
           fontWeight: variables.font.weight.regular,
@@ -305,16 +306,8 @@ export const theme = createTheme({
             },
           },
           '&.MuiChip-colorSecondary': {
-            borderWidth: variables.borderWidth.md,
-            border: `${variables.borderWidth.md} solid ${variables.palette.outline}`,
             color: variables.palette.on_surface_variant,
-            backgroundColor: 'transparent',
-            '&:hover': {
-              backgroundColor: variables.palette.on_surface_variant_alfa8,
-            },
-            a: {
-              color: variables.palette.on_surface_variant,
-            },
+            backgroundColor: variables.palette.inverse_on_surface,
           },
           '&.MuiChip-colorError': {
             borderWidth: variables.borderWidth.md,
