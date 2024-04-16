@@ -5,5 +5,6 @@ export type ParticipantSnippetProps<T extends ElementType> = {
   secretId: string;
   nickname?: string | null;
   tag?: string | null;
+  'data-testid'?: string;
   boxProps?: BoxProps<T>;
 };

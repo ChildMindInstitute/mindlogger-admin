@@ -2,7 +2,10 @@ import { AutocompleteProps } from '@mui/material/Autocomplete/Autocomplete';
 
 import { ParticipantSnippetProps } from 'modules/Dashboard/components/ParticipantSnippet';
 
-export type ParticipantDropdownOption = Omit<ParticipantSnippetProps<'li'>, 'boxProps'> & {
+export type ParticipantDropdownOption = Omit<
+  ParticipantSnippetProps<'li'>,
+  'boxProps' | 'data-testid'
+> & {
   id: string;
 };
 
