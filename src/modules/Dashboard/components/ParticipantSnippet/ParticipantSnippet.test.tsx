@@ -16,4 +16,10 @@ describe('ParticipantSnippet component', () => {
     expect(screen.getByText(props.nickname)).toBeInTheDocument();
     expect(screen.getByText(props.tag)).toBeInTheDocument();
   });
+
+  test('should render with only the secretId', () => {
+    render(<ParticipantSnippet secretId={props.secretId} />);
+
+    expect(screen.getByText(props.secretId)).toBeInTheDocument();
+  })
 });
