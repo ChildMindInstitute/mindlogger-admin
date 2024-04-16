@@ -115,13 +115,14 @@ export const formatActivityItemAnswers = (
   date: string,
 ): FormattedResponses => {
   const currentActivityItem = currentAnswer.activityItem;
-  const { id, name, question, responseType, responseValues } = currentActivityItem;
+  const { id, name, question, responseType, responseValues, order } = currentActivityItem;
   const formattedActivityItem = {
     id: id ?? '',
     name,
     question,
     responseType,
     responseValues,
+    order,
   };
 
   switch (currentActivityItem.responseType) {

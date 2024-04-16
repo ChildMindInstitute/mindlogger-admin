@@ -470,6 +470,7 @@ describe('Respondent Data Summary: getFormattedResponses', () => {
             isHidden: true,
             allowEdit: true,
             id: '69a98366-8627-4c9b-9973-5c16416695b8',
+            order: 3,
           },
           answer: undefined,
         },
@@ -500,6 +501,7 @@ describe('Respondent Data Summary: getFormattedResponses', () => {
             isHidden: false,
             allowEdit: true,
             id: '69a98366-8627-4c9b-9973-5c16416695b8',
+            order: 3,
           },
           answer: null,
         },
@@ -523,6 +525,7 @@ describe('Respondent Data Summary: getFormattedResponses', () => {
           activityItem: {
             id: 'b3825743-f796-4551-9057-662797ccd8c3',
             name: 'Item1',
+            order: 1,
             question: { en: 'SS (updated)' },
             responseType: 'singleSelect',
             responseValues: {
@@ -543,6 +546,7 @@ describe('Respondent Data Summary: getFormattedResponses', () => {
           activityItem: {
             id: 'dfeb5edb-d797-4b5f-be40-05fea8de4c22',
             name: 'Item2',
+            order: 2,
             question: { en: 'MS' },
             responseType: 'multiSelect',
             responseValues: {
@@ -558,6 +562,7 @@ describe('Respondent Data Summary: getFormattedResponses', () => {
           activityItem: {
             id: 'dfeb5edb-d797-4b5f-be40-05fea8de4c22',
             name: 'Item2',
+            order: 2,
             question: { en: 'MS --> SS' },
             responseType: 'singleSelect',
             responseValues: {
@@ -575,6 +580,7 @@ describe('Respondent Data Summary: getFormattedResponses', () => {
           activityItem: {
             id: '69a98366-8627-4c9b-9973-5c16416695b8',
             name: 'Item3',
+            order: 3,
             question: { en: 'Text' },
             responseType: 'text',
             responseDataIdentifier: false,
@@ -594,6 +600,7 @@ describe('Respondent Data Summary: getFormattedResponses', () => {
           activityItem: {
             id: '85a332c4-7e47-4d9b-aaf7-b7a01acb98c2',
             name: 'Item4',
+            order: 4,
             question: { en: 'Time' },
             responseType: 'time',
             responseValues: null,
@@ -610,6 +617,7 @@ describe('Respondent Data Summary: getFormattedResponses', () => {
           activityItem: {
             id: '2613ae84-7282-46e3-98e1-344c6fcbfe53',
             name: 'Item5',
+            order: 5,
             question: { en: 'Slider' },
             responseType: 'slider',
             responseValues: {
