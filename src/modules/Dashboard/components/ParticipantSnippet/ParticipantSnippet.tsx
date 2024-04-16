@@ -24,7 +24,7 @@ export const ParticipantSnippet = ({
         </StyledBodyLarger>
       )}
       {/*
-      TODO: add respondent tag/label (with appropriate Chip/Tag component) when available
+      TODO: add respondent tag (with appropriate Chip/Tag component) when available
       https://mindlogger.atlassian.net/browse/M2-5861
       https://mindlogger.atlassian.net/browse/M2-6161
       */}

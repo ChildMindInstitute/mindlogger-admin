@@ -251,7 +251,7 @@ export const Participants = () => {
       appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
     const nickname = joinWihComma(nicknames, true);
     const secretId = joinWihComma(secretIds, true);
-    // TODO: Populate participant tag/label
+    // TODO: Populate participant tag
     // https://mindlogger.atlassian.net/browse/M2-5861
     const tag = null;
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
@@ -292,6 +292,15 @@ export const Participants = () => {
         onClick: () => handlePinClick({ respondentId, subjectId: details[0].subjectId }),
         width: ParticipantsColumnsWidth.Pin,
       },
+      tag: {
+        // TODO: Replace `null` with tag when available
+        // https://mindlogger.atlassian.net/browse/M2-5861
+        // https://mindlogger.atlassian.net/browse/M2-6161
+        content: () => <StyledMaybeEmpty>{null}</StyledMaybeEmpty>,
+        value: '',
+        width: ParticipantsColumnsWidth.Default,
+        onClick: defaultOnClick,
+      },
       secretIds: {
         content: () => secretId,
         value: secretId,
@@ -301,14 +310,6 @@ export const Participants = () => {
       nicknames: {
         content: () => nickname,
         value: nickname,
-        width: ParticipantsColumnsWidth.Default,
-        onClick: defaultOnClick,
-      },
-      tags: {
-        // TODO: Replace `null` with tag when available
-        // https://mindlogger.atlassian.net/browse/M2-5861
-        content: () => <StyledMaybeEmpty>{null}</StyledMaybeEmpty>,
-        value: '',
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },

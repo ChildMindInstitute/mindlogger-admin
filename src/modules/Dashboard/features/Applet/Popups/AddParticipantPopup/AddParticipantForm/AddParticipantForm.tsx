@@ -67,8 +67,9 @@ export const AddParticipantForm = ({
             data-testid={`${dataTestid}-nickname`}
           />
         </Grid>
+        {/* TODO: Add tag support (https://mindlogger.atlassian.net/browse/M2-5861) */}
         <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
-          <StyledLabelLarge>TODO: Add role selector</StyledLabelLarge>
+          <StyledLabelLarge>TODO: Add tag selector</StyledLabelLarge>
         </Grid>
         {isFullAccount && (
           <Grid item xs={12}>

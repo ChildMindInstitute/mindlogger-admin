@@ -148,6 +148,12 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       width: ParticipantsColumnsWidth.Pin,
     },
     {
+      id: 'tag',
+      label: t('tag'),
+      enableSort: true,
+      width: ParticipantsColumnsWidth.Default,
+    },
+    {
       id: 'secretIds',
       label: t('secretUserId'),
       enableSort: true,
@@ -156,12 +162,6 @@ export const getHeadCells = (id?: string): HeadCell[] => {
     {
       id: 'nicknames',
       label: t('nickname'),
-      enableSort: true,
-      width: ParticipantsColumnsWidth.Default,
-    },
-    {
-      id: 'tags',
-      label: t('tag'),
       enableSort: true,
       width: ParticipantsColumnsWidth.Default,
     },
