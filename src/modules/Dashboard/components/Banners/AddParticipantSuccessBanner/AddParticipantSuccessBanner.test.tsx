@@ -1,9 +1,9 @@
 import { fireEvent } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils';
+import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 import { AddParticipantSuccessBanner } from './AddParticipantSuccessBanner';
-import { AccountType } from '../AddParticipantPopup.types';
 
 const mockOnClose = jest.fn();
 const dataTestid = 'success-banner';

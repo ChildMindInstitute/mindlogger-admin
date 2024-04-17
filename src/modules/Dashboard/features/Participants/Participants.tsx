@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Checkbox } from '@mui/material';
@@ -6,7 +6,7 @@ import { Checkbox } from '@mui/material';
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
 import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
-import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
+import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
@@ -15,7 +15,9 @@ import { StyledBody } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
-import { AddParticipantPopup } from 'modules/Dashboard/features/Applet/Popups/AddParticipantPopup';
+import { AddParticipantPopup } from 'modules/Dashboard/features/Applet/Popups';
+import { UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups/UpgradeAccountPopup';
+import { ParticipantSnippetProps } from 'modules/Dashboard/components';
 
 import {
   AddParticipantButton,
@@ -39,21 +41,14 @@ import {
   FilteredApplets,
   FilteredAppletsKey,
   FilteredParticipants,
-  HandleInviteClick,
+  HandleUpgradeAccount,
   HandlePinClick,
   ParticipantsData,
   ParticipantActionProps,
   SetDataForAppletPage,
 } from './Participants.types';
 // Let's fall back to the respondent pop-ups for now
-import {
-  DataExportPopup,
-  EditRespondentPopup,
-  RemoveRespondentPopup,
-  ScheduleSetupPopup,
-  SendInvitationPopup,
-  ViewDataPopup,
-} from '../Respondents/Popups';
+import { DataExportPopup, EditRespondentPopup, RemoveRespondentPopup } from '../Respondents/Popups';
 
 export const Participants = () => {
   const { appletId } = useParams();
@@ -108,18 +103,15 @@ export const Participants = () => {
   });
 
   const [addParticipantPopupVisible, setAddParticipantPopupVisible] = useState(false);
-  const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
-  const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentKey, setRespondentKey] = useState<null | string>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
-  const [invitationPopupVisible, setInvitationPopupVisible] = useState(false);
-  const [respondentEmail, setRespondentEmail] = useState<null | string>(null);
-
-  const { getAppletPrivateKey } = useEncryptionStorage();
-  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
+  const [upgradeAccountPopupVisible, setInvitationPopupVisible] = useState(false);
+  const [participantDetails, setParticipantDetails] = useState<null | ParticipantSnippetProps>(
+    null,
+  );
 
   const getChosenAppletData = ({
     respondentId = null,
@@ -149,9 +141,14 @@ export const Participants = () => {
     setChosenAppletData(chosenAppletData ?? null);
   };
 
-  const handleInviteClick = ({ respondentOrSubjectId, email }: HandleInviteClick) => {
+  const handleUpgradeAccount = ({
+    respondentOrSubjectId,
+    secretId,
+    nickname,
+    tag,
+  }: HandleUpgradeAccount) => {
     setRespondentKey(respondentOrSubjectId);
-    setRespondentEmail(email);
+    setParticipantDetails({ secretId, nickname, tag });
     handleSetDataForAppletPage({
       respondentOrSubjectId,
       key: FilteredAppletsKey.Editable,
@@ -160,19 +157,21 @@ export const Participants = () => {
   };
 
   const actions = {
-    scheduleSetupAction: ({ context }: MenuActionProps<ParticipantActionProps>) => {
-      const { respondentId, respondentOrSubjectId } = context || {};
-      if (!respondentId || !respondentOrSubjectId) return;
+    editParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
+      const { respondentOrSubjectId } = context || {};
+      if (!respondentOrSubjectId) return;
 
       setRespondentKey(respondentOrSubjectId);
-      handleSetDataForAppletPage({
-        respondentId,
-        respondentOrSubjectId,
-        key: FilteredAppletsKey.Scheduling,
-      });
-      setScheduleSetupPopupVisible(true);
+      handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Editable });
+      setEditRespondentPopupVisible(true);
     },
-    userDataExportAction: ({ context }: MenuActionProps<ParticipantActionProps>) => {
+    upgradeAccount: ({ context }: MenuActionProps<ParticipantActionProps>) => {
+      const { respondentOrSubjectId, secretId, nickname, tag } = context || {};
+      if (!respondentOrSubjectId || !secretId) return;
+
+      handleUpgradeAccount({ respondentOrSubjectId, secretId, nickname, tag });
+    },
+    exportData: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
@@ -181,34 +180,7 @@ export const Participants = () => {
       setDataExportPopupVisible(true);
       Mixpanel.track('Export Data click');
     },
-    viewDataAction: ({ context }: MenuActionProps<ParticipantActionProps>) => {
-      const { respondentOrSubjectId } = context || {};
-      if (!respondentOrSubjectId) return;
-
-      if (hasEncryptionCheck && appletId) {
-        const chosenAppletData = getChosenAppletData({
-          respondentOrSubjectId,
-          key: FilteredAppletsKey.Viewable,
-        });
-
-        navigate(
-          generatePath(page.appletRespondentDataSummary, {
-            appletId,
-            respondentId: chosenAppletData?.subjectId,
-          }),
-        );
-
-        return;
-      }
-
-      handleSetDataForAppletPage({
-        respondentOrSubjectId,
-        key: FilteredAppletsKey.Viewable,
-      });
-      setRespondentKey(respondentOrSubjectId);
-      setViewDataPopupVisible(true);
-    },
-    removeAccessAction: ({ context }: MenuActionProps<ParticipantActionProps>) => {
+    removeParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
 
@@ -219,19 +191,8 @@ export const Participants = () => {
       });
       setRemoveAccessPopupVisible(true);
     },
-    editParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
-      const { respondentOrSubjectId } = context || {};
-      if (!respondentOrSubjectId) return;
-
-      setRespondentKey(respondentOrSubjectId);
-      handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Editable });
-      setEditRespondentPopupVisible(true);
-    },
-    sendInvitation: ({ context }: MenuActionProps<ParticipantActionProps>) => {
-      const { respondentOrSubjectId, email = null } = context || {};
-      if (!respondentOrSubjectId) return;
-
-      handleInviteClick({ respondentOrSubjectId, email });
+    assignActivity: ({ context: _context }: MenuActionProps<ParticipantActionProps>) => {
+      alert('TODO: Assign activity');
     },
   };
 
@@ -268,9 +229,9 @@ export const Participants = () => {
     shouldRefetch && handleReload();
   };
 
-  const handleInvitationPopupClose = (shouldRefetch?: boolean) => {
+  const handleUpgradeAccountPopupClose = (shouldRefetch?: boolean) => {
     setInvitationPopupVisible(false);
-    setRespondentEmail(null);
+    setParticipantDetails(null);
     shouldRefetch && handleReload();
   };
 
@@ -282,15 +243,17 @@ export const Participants = () => {
       id: respondentId,
       details,
       isPinned,
-      isAnonymousRespondent,
       status,
       email,
     } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
       appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
-    const stringNicknames = joinWihComma(nicknames, true);
-    const stringSecretIds = joinWihComma(secretIds, true);
+    const nickname = joinWihComma(nicknames, true);
+    const secretId = joinWihComma(secretIds, true);
+    // TODO: Populate participant tag/label
+    // https://mindlogger.atlassian.net/browse/M2-5861
+    const tag = null;
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
     const accountType = {
       [RespondentStatus.Invited]: t('full'),
@@ -330,14 +293,14 @@ export const Participants = () => {
         width: ParticipantsColumnsWidth.Pin,
       },
       secretIds: {
-        content: () => stringSecretIds,
-        value: stringSecretIds,
+        content: () => secretId,
+        value: secretId,
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },
       nicknames: {
-        content: () => stringNicknames,
-        value: stringNicknames,
+        content: () => nickname,
+        value: nickname,
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },
@@ -383,11 +346,13 @@ export const Participants = () => {
               respondentOrSubjectId,
               appletId,
               email,
-              isInviteEnabled: status === RespondentStatus.NotInvited,
-              isViewCalendarEnabled:
-                !!respondentId && status === RespondentStatus.Invited && !isAnonymousRespondent,
+              secretId,
+              nickname,
+              tag,
+              status,
+              dataTestid,
             })}
-            data-testid="dashboard-participants-table-actions"
+            data-testid={`${dataTestid}-table-actions`}
           />
         ),
         value: '',
@@ -440,13 +405,6 @@ export const Participants = () => {
       [respondentsData, t],
     );
 
-  useEffect(
-    () => () => {
-      setRespondentsData(null);
-    },
-    [],
-  );
-
   const chosenRespondentsItems = respondentKey ? filteredRespondents[respondentKey] : undefined;
 
   const getAppletsSmallTable = (key: FilteredAppletsKey) =>
@@ -461,7 +419,6 @@ export const Participants = () => {
 
   const viewableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Viewable);
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
-  const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
   const dataTestid = 'dashboard-participants';
 
   if (isForbidden) return noPermissionsComponent;
@@ -544,24 +501,6 @@ export const Participants = () => {
           onClose={addParticipantOnClose}
         />
       )}
-      {scheduleSetupPopupVisible && (
-        <ScheduleSetupPopup
-          popupVisible={scheduleSetupPopupVisible}
-          setPopupVisible={setScheduleSetupPopupVisible}
-          tableRows={schedulingAppletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
-      {viewDataPopupVisible && (
-        <ViewDataPopup
-          popupVisible={viewDataPopupVisible}
-          setPopupVisible={setViewDataPopupVisible}
-          tableRows={viewableAppletsSmallTableRows}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-        />
-      )}
       {removeAccessPopupVisible && (
         <RemoveRespondentPopup
           popupVisible={removeAccessPopupVisible}
@@ -587,14 +526,15 @@ export const Participants = () => {
           chosenAppletData={chosenAppletData}
         />
       )}
-      {invitationPopupVisible && (
-        <SendInvitationPopup
-          popupVisible={invitationPopupVisible}
-          onClose={handleInvitationPopupClose}
-          email={respondentEmail}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-          tableRows={editableAppletsSmallTableRows}
+      {upgradeAccountPopupVisible && appletId && chosenAppletData && (
+        <UpgradeAccountPopup
+          popupVisible={upgradeAccountPopupVisible}
+          onClose={handleUpgradeAccountPopupClose}
+          appletId={appletId}
+          subjectId={chosenAppletData.subjectId}
+          secretId={participantDetails?.secretId}
+          nickname={participantDetails?.nickname}
+          tag={participantDetails?.tag}
         />
       )}
     </StyledBody>

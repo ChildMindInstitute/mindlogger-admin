@@ -1,8 +1,7 @@
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
-
-import { AccountType } from './AddParticipantPopup.types';
+import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 export const defaultValues = {
   accountType: AccountType.Full,

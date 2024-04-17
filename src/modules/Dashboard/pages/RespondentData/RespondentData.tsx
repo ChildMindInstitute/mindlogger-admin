@@ -8,7 +8,7 @@ import { Roles } from 'shared/consts';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { page } from 'resources';
 import { workspaces } from 'redux/modules';
-import { RespondentData as RespondentDataFeature } from 'modules/Dashboard/features/RespondentData';
+import { RespondentData as RespondentDataFeature } from 'modules/Dashboard/features/RespondentData/RespondentData';
 
 export const RespondentData = () => {
   const { t } = useTranslation();

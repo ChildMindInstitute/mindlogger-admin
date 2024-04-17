@@ -1,3 +1,4 @@
+export * from './AddParticipantPopup';
 export * from './AppletPasswordPopup';
 export * from './DeletePopup';
 export * from './DuplicatePopups';

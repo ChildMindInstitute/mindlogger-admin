@@ -1,4 +1,4 @@
-import { Respondent, RespondentDetail } from 'modules/Dashboard/types';
+import { Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { MenuActionProps } from 'shared/components';
 import { Encryption } from 'shared/utils';
 
@@ -6,15 +6,17 @@ export type ParticipantActionProps = {
   respondentId: string | null;
   respondentOrSubjectId: string;
   email: string | null;
+  secretId: string | null;
+  nickname?: string | null;
+  tag?: string | null;
 };
 
 export type ParticipantActions = {
-  scheduleSetupAction: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
-  userDataExportAction: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
-  viewDataAction: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
-  removeAccessAction: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
   editParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
-  sendInvitation: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  upgradeAccount: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  exportData: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  removeParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  assignActivity: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
 };
 
 export type ChosenAppletData = {
@@ -47,15 +49,18 @@ export type ParticipantsData = {
   count: number;
 };
 
-export type GetMenuItems = {
+export type GetParticipantActionsProps = {
   actions: ParticipantActions;
   filteredApplets: FilteredApplets;
   respondentId: string | null;
   respondentOrSubjectId: string;
   email: string | null;
+  secretId: string | null;
+  nickname?: string | null;
+  tag?: string | null;
   appletId?: string;
-  isInviteEnabled: boolean;
-  isViewCalendarEnabled: boolean;
+  status: RespondentStatus;
+  dataTestid: string;
 };
 
 export type HandlePinClick = {
@@ -69,7 +74,9 @@ export type SetDataForAppletPage = {
   key: FilteredAppletsKey;
 };
 
-export type HandleInviteClick = {
+export type HandleUpgradeAccount = {
   respondentOrSubjectId: string;
-  email: string | null;
+  secretId: string | null;
+  nickname?: string | null;
+  tag?: string | null;
 };

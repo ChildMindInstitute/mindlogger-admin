@@ -41,6 +41,7 @@ export const Modal = ({
   leftBtnText,
   leftBtnVariant = 'text',
   onLeftBtnSubmit,
+  disabledLeftBtn,
   footerStyles,
   hasActions = true,
   submitBtnTooltip,
@@ -112,6 +113,7 @@ export const Modal = ({
             {hasLeftBtn && (
               <Button
                 variant={leftBtnVariant}
+                disabled={disabledLeftBtn}
                 onClick={onLeftBtnSubmit}
                 sx={{ mr: 'auto' }}
                 data-testid={`${dataTestid}-left-button`}

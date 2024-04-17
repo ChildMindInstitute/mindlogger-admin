@@ -49,6 +49,7 @@ export type ModalProps = {
   leftBtnText?: string;
   leftBtnVariant?: ButtonProps['variant'];
   onLeftBtnSubmit?: BtnSubmit;
+  disabledLeftBtn?: boolean;
   footerStyles?: SxProps;
   hasActions?: boolean;
   submitBtnTooltip?: string;

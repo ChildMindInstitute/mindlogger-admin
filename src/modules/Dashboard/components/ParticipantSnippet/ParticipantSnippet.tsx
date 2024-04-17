@@ -10,8 +10,8 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
   secretId,
   nickname,
   tag,
-  'data-testid': dataTestId,
   boxProps,
+  'data-testid': dataTestId,
 }: ParticipantSnippetProps<T>) => {
   const { sx, ...rest } = boxProps ?? {};
 
@@ -27,10 +27,10 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
         </StyledBodyLarger>
       )}
       {/*
-    TODO: add respondent tag/label (with appropriate Chip/Tag component) when available
-    https://mindlogger.atlassian.net/browse/M2-5861
-    https://mindlogger.atlassian.net/browse/M2-6161
-    */}
+      TODO: add respondent tag/label (with appropriate Chip/Tag component) when available
+      https://mindlogger.atlassian.net/browse/M2-5861
+      https://mindlogger.atlassian.net/browse/M2-6161
+      */}
       {!!tag && (
         <Chip
           color="secondary"

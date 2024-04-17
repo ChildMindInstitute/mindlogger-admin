@@ -56,3 +56,8 @@ export type RespondentDetails = {
   secretUserId: string;
   lastSeen: string | null;
 };
+
+export enum AccountType {
+  Full = 'full',
+  Limited = 'limited',
+}

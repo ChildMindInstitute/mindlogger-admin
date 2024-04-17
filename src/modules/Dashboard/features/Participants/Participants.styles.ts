@@ -86,4 +86,9 @@ export const ParticipantsTable = styled(DashboardTable)`
   td:nth-child(6) {
     min-width: ${ParticipantsColumnsWidth.AccountType};
   }
+
+  th:last-child,
+  td:last-child {
+    min-width: ${ParticipantsColumnsWidth.Menu};
+  }
 `;
