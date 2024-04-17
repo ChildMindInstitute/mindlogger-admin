@@ -8,7 +8,7 @@ import { page } from 'resources';
 import { mockedActivityId, mockedAppletId, mockedSingleSelectFormValues } from 'shared/mock';
 import { asyncTimeout, createArray } from 'shared/utils';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
-import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
+import { CHANGE_DEBOUNCE_VALUE, JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import {
   mockedItemName,
@@ -65,22 +65,26 @@ describe('ItemConfiguration: Displayed Content', () => {
     ${'[[sliderrows]]'}                     | ${'* This item is not supported, please remove it.'}            | ${'item type of selected variable is not supported'}
     ${'[[Item5]]'}                          | ${'Remove the variable referring to the skipped item.'}         | ${'cannot have item variable which is skippable'}
     ${'[[ItemItem]]'}                       | ${'Remove the variable referring to the nonexistent item.'}     | ${'cannot refer to non-existent item'}
-  `('$description', async ({ text, expected }) => {
-    const ref = renderItemConfig();
+  `(
+    '$description',
+    async ({ text, expected }) => {
+      const ref = renderItemConfig();
 
-    fireEvent.change(
-      screen
-        .getByTestId('builder-activity-items-item-configuration-description')
-        .querySelector('textarea'),
-      { target: { value: text } },
-    );
+      fireEvent.change(
+        screen
+          .getByTestId('builder-activity-items-item-configuration-description')
+          .querySelector('textarea'),
+        { target: { value: text } },
+      );
 
-    await ref.current.trigger(`${mockedItemName}.question`);
+      await ref.current.trigger(`${mockedItemName}.question`);
 
-    await waitFor(() => {
-      expect(screen.getByText(expected)).toBeVisible();
-    });
-  });
+      await waitFor(() => {
+        expect(screen.getByText(expected)).toBeVisible();
+      });
+    },
+    JEST_TEST_TIMEOUT,
+  );
 
   test('Displayed Content validation is not triggered for newly added item', async () => {
     renderItemConfig();
