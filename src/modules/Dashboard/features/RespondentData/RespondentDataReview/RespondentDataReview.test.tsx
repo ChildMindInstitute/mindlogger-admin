@@ -338,11 +338,7 @@ describe('RespondentDataReview', () => {
       expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
 
-      expect(
-        screen.getByText(
-          'Select the date, Activity, and response time to review the response data.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByText('No available Data yet')).toBeInTheDocument();
 
       // the activity list in the review menu child component is rendered correctly
       const activityLength = screen.queryAllByTestId(
