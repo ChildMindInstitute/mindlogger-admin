@@ -45,8 +45,8 @@ export const getTimeResponseItem = (answer?: DecryptedTimeAnswer) => {
   return format(date, DateFormats.Time);
 };
 
-export const renderEmptyState = (selectedAnswer: Answer | null) => {
-  if (!selectedAnswer) {
+export const renderEmptyState = (selectedAnswer: Answer | null, isActivitySelected: boolean) => {
+  if (!isActivitySelected && !selectedAnswer) {
     return (
       <>
         <Svg id="data" width="80" height="80" />
@@ -61,7 +61,7 @@ export const renderEmptyState = (selectedAnswer: Answer | null) => {
     <>
       <Svg id="chart" width="67" height="67" />
       <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-        {t('noDataForActivity')}
+        {t('noAvailableData')}
       </StyledTitleLarge>
     </>
   );

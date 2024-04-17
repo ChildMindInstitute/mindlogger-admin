@@ -99,16 +99,15 @@ export const RespondentDataReview = () => {
     ({ data }) => {
       const activities = data?.result;
 
-      if (!activities) return;
+      if (!activities?.length) return;
       setActivities(activities);
 
       if (answerId && !shouldSetLastAnswer.current) return;
-      const activityWithLatestAnswer = getActivityWithLatestAnswer(activities);
+      const selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
+      setSelectedActivity(selectedActivityByDefault);
+      const { answerDates } = selectedActivityByDefault;
 
-      if (!activityWithLatestAnswer?.answerDates.length) return;
-
-      setSelectedActivity(activityWithLatestAnswer);
-      const { answerDates } = activityWithLatestAnswer;
+      if (!answerDates.length) return;
       const sortedAnswerDates = sortAnswerDates(answerDates);
       handleSelectAnswer({
         answer: sortedAnswerDates[answerDates.length - 1],
@@ -294,6 +293,7 @@ export const RespondentDataReview = () => {
             isLoading={isLoading}
             selectedAnswer={selectedAnswer}
             activityItemAnswers={activityItemAnswers}
+            isActivitySelected={!!selectedActivity}
             data-testid={`${dataTestid}-activity-items`}
           />
         </StyledReviewContainer>

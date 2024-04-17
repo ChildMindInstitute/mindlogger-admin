@@ -195,7 +195,7 @@ export const Report = () => {
             <StyledEmptyReview data-testid="summary-empty-state">
               <Svg id="chart" width="80" height="80" />
               <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-                {t('noDataForActivity')}
+                {t('noAvailableData')}
               </StyledTitleLarge>
             </StyledEmptyReview>
           </StyledFlexAllCenter>

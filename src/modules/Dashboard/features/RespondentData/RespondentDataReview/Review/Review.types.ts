@@ -6,5 +6,6 @@ export type ReviewProps = {
   isLoading: boolean;
   selectedAnswer: Answer | null;
   activityItemAnswers: DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'] | null;
+  isActivitySelected: boolean;
   'data-testid'?: string;
 };
