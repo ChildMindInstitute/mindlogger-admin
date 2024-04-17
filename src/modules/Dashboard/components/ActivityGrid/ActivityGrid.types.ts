@@ -1,3 +1,5 @@
+import {FC} from "react";
+
 import { MenuActionProps, Row } from 'shared/components';
 import { Activity } from 'redux/modules';
 import { Roles } from 'shared/consts';
@@ -9,7 +11,7 @@ import { TakeNowModalProps } from '../TakeNowModal/TakeNowModal.types';
 
 export type ActivityGridProps = {
   rows?: Row[];
-  TakeNowModal: React.FC<TakeNowModalProps>;
+  TakeNowModal: FC<TakeNowModalProps>;
   order: Order;
   orderBy: string;
   isLoading: boolean;
