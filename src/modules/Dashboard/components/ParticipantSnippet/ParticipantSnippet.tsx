@@ -1,5 +1,5 @@
-import { ElementType } from 'react';
 import { BoxTypeMap } from '@mui/system';
+import { ElementType } from 'react';
 
 import { Chip } from 'shared/components';
 import { StyledBodyLarger, StyledFlexTopCenter, variables } from 'shared/styles';
@@ -27,7 +27,7 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
         </StyledBodyLarger>
       )}
       {/*
-      TODO: add respondent tag/label (with appropriate Chip/Tag component) when available
+      TODO: add respondent tag (with appropriate Chip/Tag component) when available
       https://mindlogger.atlassian.net/browse/M2-5861
       https://mindlogger.atlassian.net/browse/M2-6161
       */}

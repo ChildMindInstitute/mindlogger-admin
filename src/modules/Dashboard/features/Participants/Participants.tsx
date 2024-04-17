@@ -15,9 +15,8 @@ import { StyledBody } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
-import { AddParticipantPopup } from 'modules/Dashboard/features/Applet/Popups';
-import { UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups/UpgradeAccountPopup';
-import { ParticipantSnippetProps } from 'modules/Dashboard/components';
+import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
+import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
 
 import {
   AddParticipantButton,
@@ -109,9 +108,7 @@ export const Participants = () => {
   const [respondentKey, setRespondentKey] = useState<null | string>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
   const [upgradeAccountPopupVisible, setInvitationPopupVisible] = useState(false);
-  const [participantDetails, setParticipantDetails] = useState<null | ParticipantSnippetProps>(
-    null,
-  );
+  const [participantDetails, setParticipantDetails] = useState<null | ParticipantSnippetInfo>(null);
 
   const getChosenAppletData = ({
     respondentId = null,
@@ -251,7 +248,7 @@ export const Participants = () => {
       appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
     const nickname = joinWihComma(nicknames, true);
     const secretId = joinWihComma(secretIds, true);
-    // TODO: Populate participant tag/label
+    // TODO: Populate participant tag
     // https://mindlogger.atlassian.net/browse/M2-5861
     const tag = null;
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
@@ -292,6 +289,15 @@ export const Participants = () => {
         onClick: () => handlePinClick({ respondentId, subjectId: details[0].subjectId }),
         width: ParticipantsColumnsWidth.Pin,
       },
+      tag: {
+        // TODO: Replace `null` with tag when available
+        // https://mindlogger.atlassian.net/browse/M2-5861
+        // https://mindlogger.atlassian.net/browse/M2-6161
+        content: () => <StyledMaybeEmpty>{null}</StyledMaybeEmpty>,
+        value: '',
+        width: ParticipantsColumnsWidth.Default,
+        onClick: defaultOnClick,
+      },
       secretIds: {
         content: () => secretId,
         value: secretId,
@@ -301,14 +307,6 @@ export const Participants = () => {
       nicknames: {
         content: () => nickname,
         value: nickname,
-        width: ParticipantsColumnsWidth.Default,
-        onClick: defaultOnClick,
-      },
-      tags: {
-        // TODO: Replace `null` with tag when available
-        // https://mindlogger.atlassian.net/browse/M2-5861
-        content: () => <StyledMaybeEmpty>{null}</StyledMaybeEmpty>,
-        value: '',
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },
