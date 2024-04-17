@@ -11,7 +11,8 @@ import {
   mockedCurrentWorkspace,
   mockedPassword,
 } from 'shared/mock';
-import { SettingParam, expectBanner, renderWithProviders } from 'shared/utils';
+import { SettingParam, expectBanner } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
 
 import { DuplicateAppletSettings } from './DuplicateAppletSettings';

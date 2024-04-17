@@ -4,7 +4,8 @@ import { createRef } from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
-import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
+import { asyncTimeout } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import {
   getAppletFormDataWithItem,

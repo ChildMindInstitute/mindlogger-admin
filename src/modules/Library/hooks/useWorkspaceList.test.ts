@@ -1,7 +1,7 @@
 import { waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderHookWithProviders } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useWorkspaceList } from './useWorkspaceList';
 

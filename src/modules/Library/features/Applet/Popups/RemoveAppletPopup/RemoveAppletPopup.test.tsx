@@ -1,6 +1,6 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet } from 'shared/mock';
 import { page } from 'resources';
 

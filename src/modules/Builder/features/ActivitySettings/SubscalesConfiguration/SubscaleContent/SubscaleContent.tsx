@@ -12,8 +12,9 @@ import {
   SelectController,
   TransferListController,
 } from 'shared/components/FormComponents';
-import { DataTable } from 'shared/components';
+import { DataTable } from 'shared/components/DataTable';
 import { SubscaleFormValue } from 'modules/Builder/types';
+import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
 
 import { scoreValues } from './SubscaleContent.const';
 import { SubscaleContentProps } from '../SubscalesConfiguration.types';
@@ -23,7 +24,6 @@ import {
   getNotUsedElementsTableColumns,
 } from '../SubscalesConfiguration.utils';
 import { StyledWrapper } from './SubscaleContent.styles';
-import { checkOnItemTypeAndScore } from '../../ActivitySettings.utils';
 
 export const SubscaleContent = ({
   subscaleId,

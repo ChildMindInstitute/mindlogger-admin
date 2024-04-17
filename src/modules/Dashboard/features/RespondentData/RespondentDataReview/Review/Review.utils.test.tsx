@@ -4,7 +4,7 @@ import { screen } from '@testing-library/react';
 import { format } from 'date-fns';
 
 import { DateFormats, ItemResponseType } from 'shared/consts';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { getResponseItem, getTimeResponseItem, renderEmptyState } from './Review.utils';
 

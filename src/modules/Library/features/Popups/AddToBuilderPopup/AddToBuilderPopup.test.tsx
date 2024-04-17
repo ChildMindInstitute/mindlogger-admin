@@ -4,7 +4,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { MAX_LIMIT } from 'shared/consts';
 import { ApiResponseCodes } from 'api';
 import * as reduxHooks from 'redux/store/hooks';

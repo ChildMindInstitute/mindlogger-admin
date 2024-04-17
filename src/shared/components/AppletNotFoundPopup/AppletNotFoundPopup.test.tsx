@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { fireEvent, screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { initialStateData } from 'shared/state';

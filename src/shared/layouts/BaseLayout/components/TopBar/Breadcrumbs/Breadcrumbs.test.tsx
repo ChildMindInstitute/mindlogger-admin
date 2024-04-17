@@ -3,7 +3,7 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import * as useBreadcrumbsHooks from './Breadcrumbs.hooks';
 import { Breadcrumbs } from './Breadcrumbs';

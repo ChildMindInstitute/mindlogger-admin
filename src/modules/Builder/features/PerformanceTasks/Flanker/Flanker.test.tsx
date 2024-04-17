@@ -5,7 +5,7 @@ import { generatePath } from 'react-router-dom';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import { mockedAppletFormData } from 'shared/mock';
-import { renderWithAppletFormData } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { page } from 'resources';
 
 import { Flanker } from './Flanker';

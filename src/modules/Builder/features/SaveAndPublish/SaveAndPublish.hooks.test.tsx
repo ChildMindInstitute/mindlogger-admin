@@ -4,7 +4,8 @@ import mockAxios from 'jest-mock-axios';
 import { ApiResponseCodes } from 'api';
 import { mockedApplet, mockedAppletId, mockedSimpleAppletFormData } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { expectBanner, renderHookWithProviders } from 'shared/utils';
+import { expectBanner } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { SaveAndPublishSteps } from 'modules/Builder/components/Popups/SaveAndPublishProcessPopup/SaveAndPublishProcessPopup.types';
 
 import { useSaveAndPublishSetup } from './SaveAndPublish.hooks';

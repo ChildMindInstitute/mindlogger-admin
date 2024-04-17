@@ -7,7 +7,7 @@ import download from 'downloadjs';
 import * as reactHookForm from 'react-hook-form';
 
 import { page } from 'resources';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { initialStateData } from 'redux/modules';
 

@@ -3,7 +3,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { Roles } from 'shared/consts';
 import { DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.const';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Actions } from './Actions';
 import { DATA_TESTID_ACTIONS_EXPORT_DATA } from './Actions.const';

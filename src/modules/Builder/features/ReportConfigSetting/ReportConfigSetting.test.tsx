@@ -8,12 +8,9 @@ import * as reportApi from 'modules/Dashboard/api/api';
 import { page } from 'resources';
 import { applet } from 'redux/modules';
 import { mockedAppletData, mockedPassword } from 'shared/mock';
-import {
-  SettingParam,
-  expectBanner,
-  renderWithAppletFormData,
-  renderWithProviders,
-} from 'shared/utils';
+import { SettingParam, expectBanner } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionUtils from 'shared/utils/encryption';
 
 import { ReportConfigSetting } from './ReportConfigSetting';
