@@ -57,7 +57,7 @@ export const ReportFilters = ({
     versions,
   }: OnFiltersChangeParams) => {
     setIsLoading(true);
-    let fetchParams: FetchAnswers = { activity };
+    let fetchParams: FetchAnswers = { activity, isFiltersChange: true };
 
     switch (type) {
       case FiltersChangeType.StartDate:

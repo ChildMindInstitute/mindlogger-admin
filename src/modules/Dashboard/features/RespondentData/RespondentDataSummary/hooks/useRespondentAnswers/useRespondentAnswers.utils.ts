@@ -1,5 +1,8 @@
-import { AutocompleteOption } from 'shared/components/FormComponents';
-import { Identifier } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import {
+  GetIdentifiers,
+  GetIdentifiersReturn,
+} from '../useDatavizSummaryRequests/useDatavizSummaryRequests.types';
+import { getOneWeekDateRange } from '../../utils/getOneWeekDateRange';
 
 export const getDateISO = (date: Date, time: string) => {
   const year = date.getFullYear();
@@ -12,23 +15,42 @@ export const getDateISO = (date: Date, time: string) => {
   return new Date(utcDate).toISOString().split('.')[0];
 };
 
-export const getIdentifiers = (
+export const getIdentifiers = ({
   filterByIdentifier = false,
-  filterIdentifiers = [] as AutocompleteOption[],
-  identifiers = [] as Identifier[],
-): string[] | undefined => {
-  if (!filterByIdentifier) return;
+  filterIdentifiers = [],
+  identifiers = [],
+}: GetIdentifiers): GetIdentifiersReturn => {
+  if (!filterByIdentifier || !filterIdentifiers) return null;
 
   const filterIds = new Set(filterIdentifiers.map((identifier) => identifier.id));
 
-  return identifiers.reduce(
-    (decryptedIdentifiers: string[], { encryptedValue, decryptedValue }) => {
+  const { selectedIdentifiers, answerDates } = identifiers.reduce(
+    (
+      acc: { selectedIdentifiers: string[]; answerDates: string[] },
+      { encryptedValue, decryptedValue, lastAnswerDate },
+    ) => {
       if (filterIds.has(decryptedValue)) {
-        decryptedIdentifiers.push(encryptedValue);
+        acc.selectedIdentifiers.push(encryptedValue);
+        acc.answerDates.push(lastAnswerDate);
       }
 
-      return decryptedIdentifiers;
+      return acc;
     },
-    [],
+    { selectedIdentifiers: [], answerDates: [] },
   );
+
+  const recentDate = answerDates.reduce(
+    (latest, current) => (latest > current ? latest : current),
+    '',
+  );
+
+  const { startDate, endDate } = getOneWeekDateRange(recentDate);
+
+  return {
+    selectedIdentifiers,
+    recentAnswer: {
+      startDate,
+      endDate,
+    },
+  };
 };

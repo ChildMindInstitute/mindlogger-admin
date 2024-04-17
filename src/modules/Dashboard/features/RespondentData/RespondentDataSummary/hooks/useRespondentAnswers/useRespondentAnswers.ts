@@ -3,12 +3,13 @@ import { addDays } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
 
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
-import { getAnswersApi } from 'api';
+import { getAnswersApi } from 'modules/Dashboard/api';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { getFormattedResponses } from '../../utils/getFormattedResponses';
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { getDateISO, getIdentifiers } from './useRespondentAnswers.utils';
+import { getOneWeekDateRange } from '../../utils/getOneWeekDateRange';
 
 export const useRespondentAnswers = () => {
   const { appletId, respondentId } = useParams();
@@ -22,11 +23,12 @@ export const useRespondentAnswers = () => {
     endTime: providedEndTime,
     filterByIdentifier: providedFilterByIdentifier,
     versions: providedVersions,
+    isFiltersChange = false,
   }: FetchAnswers) => {
     if (!appletId || !respondentId) return;
     try {
       const {
-        startDate,
+        startDate: formStartDate,
         endDate: formEndDate,
         startTime: formStartTime,
         endTime: formEndTime,
@@ -35,21 +37,51 @@ export const useRespondentAnswers = () => {
         versions: formVersions,
         identifiers,
       } = getValues();
-      const endDate = providedEndDate ?? formEndDate;
+      let endDate = providedEndDate ?? formEndDate;
+      let startDate = formStartDate;
       const startTime = providedStartTime ?? formStartTime;
       const endTime = providedEndTime ?? formEndTime;
       const filterByIdentifier = providedFilterByIdentifier ?? formFilterByIdentifier;
       const versions = providedVersions ?? formVersions;
 
-      const selectedIdentifiers = getIdentifiers(filterByIdentifier, identifier, identifiers);
+      const { selectedIdentifiers, recentAnswer } =
+        getIdentifiers({
+          filterByIdentifier,
+          filterIdentifiers: identifier,
+          identifiers,
+        }) ?? {};
+
+      recentAnswer?.startDate && setValue('startDate', recentAnswer.startDate);
+      recentAnswer?.endDate && setValue('endDate', recentAnswer.endDate);
+
+      if (isFiltersChange && (!filterByIdentifier || !identifier?.length)) {
+        const { startDate: rangeStartDate, endDate: rangeEndDate } = getOneWeekDateRange(
+          activity.lastAnswerDate,
+        );
+
+        if (rangeStartDate) {
+          setValue('startDate', rangeStartDate);
+          startDate = rangeStartDate;
+        }
+        if (rangeEndDate) {
+          setValue('endDate', rangeEndDate);
+          endDate = rangeEndDate;
+        }
+      }
+
+      const fromDatetime = getDateISO(recentAnswer?.startDate || startDate, startTime);
+      const toDatetime = getDateISO(
+        recentAnswer?.endDate || endDate || addDays(startDate, 1),
+        endTime,
+      );
 
       const result = await getAnswersApi({
         appletId,
         activityId: activity.id,
         params: {
           respondentId,
-          fromDatetime: getDateISO(startDate, startTime),
-          toDatetime: getDateISO(endDate || addDays(startDate, 1), endTime),
+          fromDatetime,
+          toDatetime,
           emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,
           identifiers: selectedIdentifiers,
           versions: versions.map(({ id }) => id),
