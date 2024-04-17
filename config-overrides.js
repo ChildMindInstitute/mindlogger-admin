@@ -24,10 +24,10 @@ module.exports = function override(config) {
     config.plugins.push(
       new CircularDependencyPlugin({
         exclude: /node_modules/,
-        onStart({ compilation }) {
+        onStart() {
           numCyclesDetected = 0;
         },
-        onDetected({ module: webpackModuleRecord, paths, compilation }) {
+        onDetected({ paths, compilation }) {
           numCyclesDetected++;
           compilation.warnings.push(new Error(paths.join(' -> ')));
         },
