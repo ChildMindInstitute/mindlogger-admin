@@ -2,8 +2,8 @@ import { getActivityActions } from 'modules/Dashboard/components/ActivityGrid/Ac
 import {
   ActionsObject,
   ActivityActionProps,
+  ActivityActions,
 } from 'modules/Dashboard/components/ActivityGrid/ActivityGrid.types';
-import { FeatureFlags } from 'shared/types/featureFlags';
 import { mockedActivityId, mockedAppletId } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { MenuItem } from 'shared/components';
@@ -26,11 +26,6 @@ describe('getActivityActions', () => {
     assignActivity: `${dataTestId}-activity-assign`,
     takeNow: `${dataTestId}-activity-take-now`,
   } as const;
-
-  const featureFlags: FeatureFlags = {
-    enableMultiInformant: true,
-    enableMultiInformantTakeNow: true,
-  };
 
   const expectAllMenuItemsAreReturned = (menuItems: MenuItem<ActivityActionProps>[]) => {
     expect(menuItems).toHaveLength(5);
@@ -72,14 +67,23 @@ describe('getActivityActions', () => {
     expect(menuItem.isDisplayed).toBe(isDisplayed);
   };
 
+  const defaultArgs: ActivityActions = {
+    actions,
+    dataTestId,
+    appletId: mockedAppletId,
+    activityId: mockedActivityId,
+    roles: [],
+    featureFlags: {
+      enableMultiInformant: true,
+      enableMultiInformantTakeNow: true,
+    },
+    hasParticipants: true,
+  };
+
   test('Correct menu items are displayed when no roles are provided', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [],
-      featureFlags,
     });
 
     expectAllMenuItemsAreReturned(menuItems);
@@ -91,12 +95,8 @@ describe('getActivityActions', () => {
 
   test('Correct menu items are displayed when user is a manager', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [Roles.Manager],
-      featureFlags,
     });
 
     expectAllMenuItemsAreReturned(menuItems);
@@ -108,12 +108,8 @@ describe('getActivityActions', () => {
 
   test('Correct menu items are displayed when user is a coordinator', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [Roles.Coordinator],
-      featureFlags,
     });
 
     expectAllMenuItemsAreReturned(menuItems);
@@ -125,12 +121,8 @@ describe('getActivityActions', () => {
 
   test('Correct menu items are displayed when user is an editor', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [Roles.Editor],
-      featureFlags,
     });
 
     expectAllMenuItemsAreReturned(menuItems);
@@ -142,12 +134,8 @@ describe('getActivityActions', () => {
 
   test('Correct menu items are displayed when user is a reviewer', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [Roles.Reviewer],
-      featureFlags,
     });
 
     expectAllMenuItemsAreReturned(menuItems);
@@ -159,12 +147,8 @@ describe('getActivityActions', () => {
 
   test('Correct menu items are displayed when user is a respondent', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [Roles.Respondent],
-      featureFlags,
     });
 
     expectAllMenuItemsAreReturned(menuItems);
@@ -176,12 +160,8 @@ describe('getActivityActions', () => {
 
   test('Correct menu items are displayed when user is an owner', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [Roles.Owner],
-      featureFlags,
     });
 
     expectAllMenuItemsAreReturned(menuItems);
@@ -193,12 +173,8 @@ describe('getActivityActions', () => {
 
   test('Correct menu items are displayed when user is a super admin', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [Roles.SuperAdmin],
-      featureFlags,
     });
 
     expectAllMenuItemsAreReturned(menuItems);
@@ -210,13 +186,10 @@ describe('getActivityActions', () => {
 
   test('Take Now menu item is not displayed when feature flag is disabled', () => {
     const menuItems = getActivityActions({
-      actions,
-      dataTestId,
-      appletId: mockedAppletId,
-      activityId: mockedActivityId,
+      ...defaultArgs,
       roles: [Roles.Manager],
       featureFlags: {
-        ...featureFlags,
+        ...defaultArgs.featureFlags,
         enableMultiInformantTakeNow: false,
       },
     });

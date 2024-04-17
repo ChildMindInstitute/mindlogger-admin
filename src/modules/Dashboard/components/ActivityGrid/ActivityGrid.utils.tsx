@@ -14,6 +14,7 @@ export const getActivityActions = ({
   dataTestId,
   roles,
   featureFlags,
+  hasParticipants,
 }: ActivityActions): MenuItem<ActivityActionProps>[] => {
   const canEdit =
     isManagerOrOwner(roles?.[0]) ||
@@ -22,6 +23,7 @@ export const getActivityActions = ({
 
   const canDoTakeNow =
     featureFlags.enableMultiInformantTakeNow &&
+    hasParticipants &&
     (isManagerOrOwner(roles?.[0]) ||
       roles?.includes(Roles.Coordinator) ||
       roles?.includes(Roles.SuperAdmin));

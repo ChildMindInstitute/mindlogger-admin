@@ -37,6 +37,7 @@ export type ActivityActions = {
   appletId: string;
   activityId: string;
   roles?: Roles[];
+  hasParticipants?: boolean;
   featureFlags: FeatureFlags;
 };
 

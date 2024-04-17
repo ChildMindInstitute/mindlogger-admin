@@ -128,6 +128,9 @@ export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesDa
                   dataTestId,
                   roles,
                   featureFlags,
+
+                  // TODO: Derive from participantCount
+                  hasParticipants: true,
                 })}
                 data-testid={`${dataTestId}-activity-actions`}
                 buttonColor="secondary"
