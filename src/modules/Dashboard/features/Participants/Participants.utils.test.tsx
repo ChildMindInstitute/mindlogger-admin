@@ -36,9 +36,9 @@ const filteredApplets = {
 const headCellProperties = [
   'checkbox',
   'pin',
+  'tag',
   'secretIds',
   'nicknames',
-  'tags',
   'accountType',
   'lastSeen',
   'actions',
