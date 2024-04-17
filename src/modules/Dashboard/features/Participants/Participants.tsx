@@ -15,8 +15,7 @@ import { StyledBody } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
-import { AddParticipantPopup } from 'modules/Dashboard/features/Applet/Popups';
-import { UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups/UpgradeAccountPopup';
+import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
 
 import {
