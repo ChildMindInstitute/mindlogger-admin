@@ -68,6 +68,7 @@ export const LabeledUserDropdown = ({
               id="more-info-outlined"
               width={24}
               height={24}
+              data-testid={`${rest['data-testid']}-tooltip-icon`}
             />
           </Box>
         </Tooltip>
