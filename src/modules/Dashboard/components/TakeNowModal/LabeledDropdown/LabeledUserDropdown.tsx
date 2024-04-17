@@ -50,7 +50,7 @@ export const LabeledUserDropdown = ({
           setCombinedOptions((prev) => unionBy(prev, results as ParticipantDropdownOption[], 'id'));
           setIsSearching(false);
         } catch (_e) {
-          // Ignored
+          setIsSearching(false);
         }
       }, debounce ?? 500);
     },
