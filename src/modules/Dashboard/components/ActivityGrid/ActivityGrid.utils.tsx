@@ -13,11 +13,20 @@ export const getActivityActions = ({
   activityId,
   dataTestId,
   roles,
+  featureFlags,
+  hasParticipants,
 }: ActivityActions): MenuItem<ActivityActionProps>[] => {
   const canEdit =
     isManagerOrOwner(roles?.[0]) ||
     roles?.includes(Roles.Editor) ||
     roles?.includes(Roles.SuperAdmin);
+
+  const canDoTakeNow =
+    featureFlags.enableMultiInformantTakeNow &&
+    hasParticipants &&
+    (isManagerOrOwner(roles?.[0]) ||
+      roles?.includes(Roles.Coordinator) ||
+      roles?.includes(Roles.SuperAdmin));
 
   return [
     {
@@ -50,7 +59,7 @@ export const getActivityActions = ({
       action: takeNow,
       title: t('takeNow'),
       context: { appletId, activityId },
-      isDisplayed: true,
+      isDisplayed: canDoTakeNow,
       'data-testid': `${dataTestId}-activity-take-now`,
     },
   ];

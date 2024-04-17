@@ -1,11 +1,17 @@
+import { FC } from 'react';
+
 import { MenuActionProps, Row } from 'shared/components';
 import { Activity } from 'redux/modules';
 import { Roles } from 'shared/consts';
 import { DatavizActivity } from 'api';
 import { Order } from 'shared/types';
+import { FeatureFlags } from 'shared/types/featureFlags';
+
+import { TakeNowModalProps } from '../TakeNowModal/TakeNowModal.types';
 
 export type ActivityGridProps = {
   rows?: Row[];
+  TakeNowModal: FC<TakeNowModalProps>;
   order: Order;
   orderBy: string;
   isLoading: boolean;
@@ -23,12 +29,16 @@ export type ActivitiesData = {
   count: number;
 };
 
+export type BaseActivity = Partial<Activity>;
+
 export type ActivityActions = {
   actions: ActionsObject;
   dataTestId: string;
   appletId: string;
   activityId: string;
   roles?: Roles[];
+  hasParticipants?: boolean;
+  featureFlags: FeatureFlags;
 };
 
 export type ActionsObject = {

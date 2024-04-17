@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { ButtonWithMenu, Spinner, Svg, EmptyState } from 'shared/components';
+import { ButtonWithMenu, EmptyState, Spinner, Svg } from 'shared/components';
 import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { page } from 'resources';
 import { ActivitySummaryCard } from 'modules/Dashboard/components';
@@ -11,14 +11,14 @@ import { StyledButton } from './ActivityGrid.styles';
 import { ActivityGridProps } from './ActivityGrid.types';
 
 export const ActivityGrid = ({
-  rows,
   isLoading = false,
-  'data-testid': dataTestid,
+  rows,
+  TakeNowModal,
+  'data-testid': dataTestId,
 }: ActivityGridProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const { appletId, participantId: _participantId } = useParams();
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const isEmpty = !rows?.length && !isLoading;
@@ -43,7 +43,7 @@ export const ActivityGrid = ({
                 // TODO: Implement filters
                 // https://mindlogger.atlassian.net/browse/M2-5530
                 onClick={() => alert('TODO: filters')}
-                data-testid={`${dataTestid}-filters`}
+                data-testid={`${dataTestId}-filters`}
               >
                 {t('filters')}
               </StyledButton>
@@ -62,7 +62,7 @@ export const ActivityGrid = ({
                   },
                 ]}
                 startIcon={<></>}
-                data-testid={`${dataTestid}-sort-by`}
+                data-testid={`${dataTestId}-sort-by`}
               />
             </StyledFlexTopCenter>
 
@@ -74,7 +74,7 @@ export const ActivityGrid = ({
                 // TODO: Implement assign
                 // https://mindlogger.atlassian.net/browse/M2-5710
                 onClick={() => alert('TODO: Assign activity')}
-                data-testid={`${dataTestid}-assign`}
+                data-testid={`${dataTestId}-assign`}
                 sx={{ minWidth: '10rem' }}
               >
                 {t('assign')}
@@ -83,7 +83,7 @@ export const ActivityGrid = ({
               <StyledButton
                 variant="contained"
                 onClick={() => navigate(generatePath(page.builderAppletActivities, { appletId }))}
-                data-testid={`${dataTestid}-add-activity`}
+                data-testid={`${dataTestId}-add-activity`}
                 sx={{ minWidth: '13.2rem' }}
               >
                 {t('addActivity')}
@@ -94,7 +94,7 @@ export const ActivityGrid = ({
       </StyledFlexWrap>
 
       {!!rows?.length && (
-        <StyledFlexWrap sx={{ gap: 2.4, overflowY: 'auto' }} data-testid={`${dataTestid}-grid`}>
+        <StyledFlexWrap sx={{ gap: 2.4, overflowY: 'auto' }} data-testid={`${dataTestId}-grid`}>
           {rows.map((activity, index) => (
             <ActivitySummaryCard
               key={index}
@@ -104,13 +104,14 @@ export const ActivityGrid = ({
               compliance={activity.compliance.content()}
               participantCount={activity.participantCount.content()}
               latestActivity={activity.latestActivity.content()}
-              data-testid={`${dataTestid}-activity-card`}
+              data-testid={`${dataTestId}-activity-card`}
             />
           ))}
         </StyledFlexWrap>
       )}
 
       {isEmpty && <EmptyState>{getEmptyComponent()}</EmptyState>}
+      <TakeNowModal />
     </StyledBody>
   );
 };

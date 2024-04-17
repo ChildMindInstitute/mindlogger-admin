@@ -1,20 +1,39 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { useAsync } from 'shared/hooks';
-import { ActivityGrid, useActivityGrid } from 'modules/Dashboard/components/ActivityGrid';
+import {
+  ActivityActionProps,
+  ActivityGrid,
+  useActivityGrid,
+} from 'modules/Dashboard/components/ActivityGrid';
+import { MenuActionProps } from 'shared/components';
+import { OpenTakeNowModalOptions } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.types';
+import { users } from 'modules/Dashboard/state';
 
 export const Activities = () => {
   const { appletId, participantId } = useParams();
+  const respondentLoadingStatus = users.useRespondentStatus();
+  const respondent = users.useRespondent();
   const [activitiesData, setActivitiesData] = useState<{
     result: DatavizActivity[];
     count: number;
-  } | null>();
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const dataTestId = 'dashboard-applet-participant-activities';
 
-  const { formatRow } = useActivityGrid(dataTestId);
+  const isParticipantLoading =
+    respondentLoadingStatus === 'loading' || respondentLoadingStatus === 'idle';
+
+  const {
+    formatRow,
+    getActivityById,
+    actions: defaultActions,
+    TakeNowModal,
+    openTakeNowModal,
+  } = useActivityGrid(dataTestId, activitiesData);
+
   /**
    * TODO M2-6223:
    * getAppletActivitiesApi returns activities for the currently logged in user (an admin/collaborator). This behavior is correct for M2-5585, as per the note:
@@ -46,16 +65,41 @@ export const Activities = () => {
   }, [appletId, participantId, getSummaryActivities]);
 
   const activities = useMemo(
-    () => (activitiesData?.result ?? []).map((activity) => formatRow(activity)),
+    () =>
+      (activitiesData?.result ?? []).map((activity) => {
+        const actions = {
+          ...defaultActions,
+          takeNow: ({ context }: MenuActionProps<ActivityActionProps>) => {
+            const { activityId } = context || { activityId: '' };
+            const activity = getActivityById(activityId);
+            if (activity) {
+              const options: OpenTakeNowModalOptions = {};
+
+              if (participantId && respondent) {
+                options.subject = {
+                  id: participantId,
+                  secretId: respondent.result.secretUserId,
+                  nickname: respondent.result.nickname,
+                };
+              }
+
+              openTakeNowModal(activity, options);
+            }
+          },
+        };
+
+        return formatRow(activity, actions);
+      }),
     [activitiesData, formatRow],
   );
 
   return (
     <ActivityGrid
       rows={activities}
+      TakeNowModal={TakeNowModal}
       order={'desc'}
       orderBy={''}
-      isLoading={isLoading}
+      isLoading={isLoading || isParticipantLoading}
       data-testid={dataTestId}
     />
   );

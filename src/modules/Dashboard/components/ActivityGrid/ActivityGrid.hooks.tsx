@@ -1,5 +1,5 @@
+import { useCallback, useMemo } from 'react';
 import { format } from 'date-fns';
-import { useMemo, useCallback } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { DatavizActivity } from 'api';
@@ -9,17 +9,36 @@ import { DateFormats } from 'shared/consts';
 import { StyledFlexTopCenter } from 'shared/styles';
 import { Activity, workspaces } from 'redux/modules';
 import {
-  StyledSvg,
-  ActivityActionProps,
-  getActivityActions,
   ActionsObject,
+  ActivitiesData,
+  ActivityActionProps,
+  BaseActivity,
+  getActivityActions,
+  StyledSvg,
 } from 'modules/Dashboard/components/ActivityGrid';
+import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
 
-export const useActivityGrid = (dataTestId: string) => {
+import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
+
+export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesData | null) => {
   const navigate = useNavigate();
-  const { appletId, participantId: _participantId } = useParams();
+  const { appletId } = useParams();
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
+  const { flags: featureFlags } = useLaunchDarkly();
+
+  const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId });
+
+  const getActivityById = useCallback(
+    (id: string): BaseActivity | null => {
+      if (!activitiesData) return null;
+
+      return (
+        (activitiesData.result as BaseActivity[]).find((activity) => activity.id === id) || null
+      );
+    },
+    [activitiesData],
+  );
 
   const defaultActions = useMemo(
     () => ({
@@ -46,13 +65,14 @@ export const useActivityGrid = (dataTestId: string) => {
         alert(`TODO: Assign activity (${activityId})`);
       },
       takeNow: ({ context }: MenuActionProps<ActivityActionProps>) => {
-        // TODO: Implement Take Now
-        // https://mindlogger.atlassian.net/browse/M2-5711
-        const { activityId } = context || {};
-        alert(`TODO: Take now (${activityId})`);
+        const { activityId } = context || { activityId: '' };
+        const activity = getActivityById(activityId);
+        if (activity) {
+          openTakeNowModal(activity);
+        }
       },
     }),
-    [appletId, navigate],
+    [appletId, getActivityById, navigate, openTakeNowModal],
   );
 
   const formatRow = useCallback(
@@ -107,6 +127,10 @@ export const useActivityGrid = (dataTestId: string) => {
                   activityId,
                   dataTestId,
                   roles,
+                  featureFlags,
+
+                  // TODO: Derive from participantCount
+                  hasParticipants: true,
                 })}
                 data-testid={`${dataTestId}-activity-actions`}
                 buttonColor="secondary"
@@ -118,8 +142,8 @@ export const useActivityGrid = (dataTestId: string) => {
         },
       };
     },
-    [appletId, roles, defaultActions, dataTestId],
+    [appletId, roles, defaultActions, dataTestId, featureFlags],
   );
 
-  return { actions: defaultActions, formatRow };
+  return { actions: defaultActions, getActivityById, formatRow, TakeNowModal, openTakeNowModal };
 };

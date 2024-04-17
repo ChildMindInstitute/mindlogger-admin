@@ -1,5 +1,5 @@
-import { BoxProps } from '@mui/material';
 import { ElementType } from 'react';
+import { BoxProps } from '@mui/material';
 
 export type ParticipantSnippetInfo = {
   secretId?: string | null;
