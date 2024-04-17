@@ -8,7 +8,7 @@ import { useAsync } from 'shared/hooks';
 
 import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
 import { useRespondentAnswers } from './hooks/useRespondentAnswers';
-import { getOneWeekDateRange } from './utils/getOneWeekDateRange';
+import { setDateRangeFormValues } from './utils/setDateRangeValues';
 import { RespondentsDataFormValues } from '../RespondentData.types';
 import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 import { ReportMenu } from './ReportMenu';
@@ -36,10 +36,8 @@ export const RespondentDataSummary = () => {
 
     if (!selectedActivityByDefault) return;
 
-    const { startDate, endDate } = getOneWeekDateRange(selectedActivityByDefault.lastAnswerDate);
     setValue('selectedActivity', selectedActivityByDefault);
-    startDate && setValue('startDate', startDate);
-    endDate && setValue('endDate', endDate);
+    setDateRangeFormValues(setValue, selectedActivityByDefault.lastAnswerDate);
 
     setIsLoading(true);
     await getIdentifiersVersions({ activity: selectedActivityByDefault });

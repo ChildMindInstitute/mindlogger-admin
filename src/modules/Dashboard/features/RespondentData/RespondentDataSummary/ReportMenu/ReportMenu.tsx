@@ -5,7 +5,7 @@ import { StyledBodyLarge, variables } from 'shared/styles';
 import { DatavizActivity } from 'api';
 
 import { StyledMenu } from '../../RespondentData.styles';
-import { getOneWeekDateRange } from '../utils/getOneWeekDateRange';
+import { setDateRangeFormValues } from '../utils/setDateRangeValues';
 import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { StyleContainer, StyledActivity } from './ReportMenu.styles';
 import { setDefaultFormValues } from './ReportMenu.utils';
@@ -23,10 +23,8 @@ export const ReportMenu = ({
   const [selectedActivity] = useWatch({ name: ['selectedActivity'] });
 
   const handleActivitySelect = async (activity: DatavizActivity) => {
-    const { startDate, endDate } = getOneWeekDateRange(activity.lastAnswerDate);
     setValue('selectedActivity', activity);
-    startDate && setValue('startDate', startDate);
-    endDate && setValue('endDate', endDate);
+    setDateRangeFormValues(setValue, activity.lastAnswerDate);
     setDefaultFormValues(setValue);
 
     setIsLoading(true);
