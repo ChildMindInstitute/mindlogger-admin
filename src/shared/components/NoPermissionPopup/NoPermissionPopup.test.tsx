@@ -3,7 +3,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 
 import { mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { RootState } from 'redux/store';
 
 import { NoPermissionPopup } from './NoPermissionPopup';

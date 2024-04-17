@@ -4,7 +4,7 @@ import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Periodicity } from 'modules/Dashboard/api';
 
 import { AvailabilityTab } from './AvailabilityTab';

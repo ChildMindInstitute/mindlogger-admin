@@ -7,6 +7,7 @@ import { page } from 'resources';
 import { mockedAppletId } from 'shared/mock';
 import * as utils from 'shared/utils';
 import { JEST_TEST_TIMEOUT } from 'shared/consts';
+import * as renderWithProvidersUtils from 'shared/utils/renderWithProviders';
 
 import { Legend } from './Legend';
 
@@ -167,7 +168,7 @@ describe('Legend', () => {
   test(
     'should render legend for default schedule',
     async () => {
-      utils.renderWithProviders(
+      renderWithProvidersUtils.renderWithProviders(
         <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
         {
           route: defaultRoute,
@@ -241,7 +242,7 @@ describe('Legend', () => {
   test(
     'should render legend for individual schedule',
     async () => {
-      utils.renderWithProviders(
+      renderWithProvidersUtils.renderWithProviders(
         <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
         {
           route: individualRoute,
@@ -336,7 +337,7 @@ describe('Legend', () => {
   test(
     'switch form default to individual schedule',
     async () => {
-      utils.renderWithProviders(
+      renderWithProvidersUtils.renderWithProviders(
         <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
         {
           route: defaultRoute,
@@ -368,7 +369,7 @@ describe('Legend', () => {
   test(
     'switch form individual to default schedule',
     async () => {
-      utils.renderWithProviders(
+      renderWithProvidersUtils.renderWithProviders(
         <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
         {
           route: individualRoute,

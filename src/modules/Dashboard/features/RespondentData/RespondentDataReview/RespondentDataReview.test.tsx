@@ -4,7 +4,7 @@ import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
   mockedAppletId,

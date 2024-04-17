@@ -7,7 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
 import { mockedAppletFormData } from 'shared/mock';
-import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
+import { getEntityKey } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { getNewActivityFlow } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.utils';
 
 import { ActivityFlowAbout } from './ActivityFlowAbout';

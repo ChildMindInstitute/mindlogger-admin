@@ -4,14 +4,11 @@ import { mockI18Next } from 'shared/tests';
 import { ApiResponseCodes } from 'api';
 import { Workspace, workspaces } from 'shared/state';
 import { mockedOwnerId } from 'shared/mock';
-import * as utils from 'shared/utils';
+import * as utils from 'shared/utils/errors';
 
 import { usePermissions } from './usePermissions';
 
 jest.mock('react-i18next', () => mockI18Next);
-jest.mock('shared/utils', () => ({
-  getErrorMessage: jest.fn(),
-}));
 
 describe('usePermissions hook tests', () => {
   const mockAsyncFunc = jest.fn();

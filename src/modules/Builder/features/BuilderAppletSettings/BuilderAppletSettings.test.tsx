@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 
-import { renderWithAppletFormData } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { mockedAppletFormData, mockedAppletId } from 'shared/mock';
 import { page } from 'resources';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';

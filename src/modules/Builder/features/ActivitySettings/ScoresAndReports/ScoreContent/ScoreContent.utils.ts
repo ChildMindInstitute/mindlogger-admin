@@ -26,7 +26,7 @@ import {
   UpdateScoreConditionIds,
   UpdateScoreConditionsPayload,
 } from './ScoreContent.types';
-import { getScoreConditionId } from './ScoreCondition';
+import { getScoreConditionId } from './ScoreCondition/ScoreCondition.utils';
 
 const { t } = i18n;
 

@@ -5,12 +5,14 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
-import { SaveChangesPopup } from 'shared/components';
+import { SaveChangesPopup } from 'shared/components/SaveChangesPopup';
 import { useAsync } from 'shared/hooks/useAsync';
 import { RetentionPeriods } from 'shared/types';
-import { applet, banners } from 'shared/state';
+import { applet } from 'shared/state/Applet';
+import { banners } from 'shared/state/Banners';
 import { useAppDispatch } from 'redux/store';
-import { ApiResponseCodes, postAppletDataRetentionApi } from 'api';
+import { postAppletDataRetentionApi } from 'modules/Dashboard/api';
+import { ApiResponseCodes } from 'shared/api/api.const';
 
 import { usePrompt } from '../AppletSettings.hooks';
 import { StyledAppletSettingsDescription } from '../AppletSettings.styles';

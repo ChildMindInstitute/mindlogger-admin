@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { storage, LocalStorageKeys, renderHookWithProviders } from 'shared/utils';
+import { storage, LocalStorageKeys } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useReturnToLibraryPath } from './useReturnToLibraryPath';
 

@@ -12,6 +12,7 @@ import { SubscaleTotalScore } from 'shared/consts';
 import { getEntityKey, toggleBooleanState } from 'shared/utils';
 import { TotalScoresTableDataSchema } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.schema';
 import { SubscaleFormValue } from 'modules/Builder/types';
+import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import {
@@ -37,7 +38,6 @@ import {
 import { SubscaleContentProps } from './SubscalesConfiguration.types';
 import { LookupTable } from './LookupTable';
 import { useSubscalesSystemItemsSetup } from './SubscalesConfiguration.hooks';
-import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const SubscalesConfiguration = () => {
   const { t } = useTranslation('app');

@@ -1,6 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedRespondentDetails, mockedRespondentId, mockedOwnerId } from 'shared/mock';
 
 import * as hooks from '../Popup.hooks';

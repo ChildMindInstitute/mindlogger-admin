@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { endOfYear, format } from 'date-fns';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { DateFormats } from 'shared/consts';
 
 import {
