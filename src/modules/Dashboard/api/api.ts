@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
 import { ExportDataResult } from 'shared/types';
 import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
+import { authApiClient } from 'shared/api/apiConfig';
 
 import {
   TransferOwnershipType,
