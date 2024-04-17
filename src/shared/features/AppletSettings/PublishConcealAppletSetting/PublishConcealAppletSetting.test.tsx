@@ -9,7 +9,8 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
 } from 'shared/mock';
-import { SettingParam, renderWithAppletFormData } from 'shared/utils';
+import { SettingParam } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { initialStateData } from 'redux/modules';
 import { Roles } from 'shared/consts';

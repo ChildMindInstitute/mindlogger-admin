@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { renderHookWithProviders } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import * as reduxHooks from 'redux/store/hooks';
 import * as calendarEventsModule from 'modules/Dashboard/state/CalendarEvents';
 
