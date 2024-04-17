@@ -1,5 +1,5 @@
-import {ElementType} from "react";
-import {BoxTypeMap} from "@mui/system";
+import { ElementType } from 'react';
+import { BoxTypeMap } from '@mui/system';
 
 import { Chip } from 'shared/components';
 import { StyledBodyLarger, StyledFlexTopCenter, variables } from 'shared/styles';
