@@ -1,5 +1,5 @@
 import { Languages } from 'api';
-import { ParticipantSnippetProps } from 'modules/Dashboard/components';
+import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
 
 export type UpgradeAccountPopupProps = {
   popupVisible: boolean;
@@ -7,7 +7,7 @@ export type UpgradeAccountPopupProps = {
   subjectId: string;
   onClose?: (shouldRefetch: boolean) => void;
   'data-testid'?: string;
-} & ParticipantSnippetProps;
+} & ParticipantSnippetInfo;
 
 export type UpgradeAccountFormValues = {
   email: string;

@@ -17,7 +17,7 @@ import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups/UpgradeAccountPopup';
-import { ParticipantSnippetProps } from 'modules/Dashboard/components';
+import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
 
 import {
   AddParticipantButton,
@@ -109,9 +109,7 @@ export const Participants = () => {
   const [respondentKey, setRespondentKey] = useState<null | string>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
   const [upgradeAccountPopupVisible, setInvitationPopupVisible] = useState(false);
-  const [participantDetails, setParticipantDetails] = useState<null | ParticipantSnippetProps>(
-    null,
-  );
+  const [participantDetails, setParticipantDetails] = useState<null | ParticipantSnippetInfo>(null);
 
   const getChosenAppletData = ({
     respondentId = null,
