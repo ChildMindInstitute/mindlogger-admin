@@ -29,6 +29,7 @@ const textDataTestid = 'text-response-item';
 const numberSelectionDataTestid = 'number-selection-response-item';
 const dateDataTestid = 'date-response-item';
 const selectionPerRowDataTestid = 'selection-per-row-response-item';
+const sliderRowsDataTestid = 'slider-rows-response-item';
 
 jest.mock('../SingleSelectResponseItem', () => ({
   __esModule: true,
@@ -72,6 +73,12 @@ jest.mock('../SingleMultiSelectPerRowResponseItem', () => ({
   SingleMultiSelectPerRowResponseItem: () => <div data-testid={selectionPerRowDataTestid} />,
 }));
 
+jest.mock('../SliderRowsResponseItem', () => ({
+  __esModule: true,
+  ...jest.requireActual('../SliderRowsResponseItem'),
+  SliderRowsResponseItem: () => <div data-testid={sliderRowsDataTestid} />,
+}));
+
 describe('getTimeResponseItem', () => {
   test.each`
     answer           | expected     | description
@@ -106,6 +113,7 @@ describe('getResponseItem (supported response items), check rendering of child c
     ${ItemResponseType.Date}                    | ${dateDataTestid}
     ${ItemResponseType.SingleSelectionPerRow}   | ${selectionPerRowDataTestid}
     ${ItemResponseType.MultipleSelectionPerRow} | ${selectionPerRowDataTestid}
+    ${ItemResponseType.SliderRows}              | ${sliderRowsDataTestid}
   `('renders child component for $itemResponseType', ({ itemResponseType, expected }) => {
     renderWithProviders(getResponseItem(getActivityItemAnswer(itemResponseType)));
     expect(screen.getByTestId(expected)).toBeInTheDocument();

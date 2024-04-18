@@ -57,6 +57,7 @@ export const ButtonWithMenu = ({
         menuItems={menuItems}
         width={menuListWidth}
         uiType={menuProps?.uiType}
+        data-testid={`${dataTestid}-menu`}
       />
     </>
   );

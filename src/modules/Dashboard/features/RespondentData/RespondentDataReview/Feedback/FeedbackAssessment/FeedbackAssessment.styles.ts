@@ -1,14 +1,12 @@
 import { Box, styled } from '@mui/material';
 
-import { theme } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 
 export const StyledContainer = styled(Box)`
-  position: relative;
   box-sizing: content-box;
-  height: 100%;
-  margin: ${theme.spacing(-2.4, -2.4, -1.6)};
-  padding: ${theme.spacing(2.4, 2.4, 1.6)};
-  overflow-y: auto;
+  padding: ${theme.spacing(2.4, 2.4)};
+  border-radius: ${variables.borderRadius.lg2};
+  background-color: ${variables.palette.surface};
 
   .spinner-container {
     height: calc(100% - 4.8rem);

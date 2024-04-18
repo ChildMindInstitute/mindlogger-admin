@@ -6,7 +6,7 @@ export const commonStickyStyles = `
   width: 100%;
   top: 0;
   background-color: ${variables.palette.surface};
-  z-index: ${theme.zIndex.fab};
+  z-index: ${theme.zIndex.appBar};
   transition: ${variables.transitions.all};
 `;
 

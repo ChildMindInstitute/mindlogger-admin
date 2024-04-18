@@ -50,6 +50,10 @@ import {
   TimeFormattedResponses,
   SingleMultiSelectionPerRowAnswer,
   SingleMultiSelectionSliderAnswer,
+  SliderRowsFormattedResponses,
+  SliderRowsAnswer,
+  Answer,
+  SliderRowsItemResponseValues,
 } from '../RespondentData.types';
 import {
   DEFAULT_END_DATE,
@@ -80,16 +84,6 @@ export const getEmptyState = (selectedActivity: DatavizActivity | null) => {
         <Svg id="confused" width="80" height="80" />
         <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
           {t('datavizNotSupportedForPerformanceTasks')}
-        </StyledTitleLarge>
-      </>
-    );
-  }
-  if (!selectedActivity.hasAnswer) {
-    return (
-      <>
-        <Svg id="chart" width="80" height="80" />
-        <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-          {t('noDataForActivity')}
         </StyledTitleLarge>
       </>
     );
@@ -535,6 +529,54 @@ export const formatActivityItemAnswers = (
         answers,
       } as SingleMultiSelectionPerRowFormattedResponses;
     }
+    case ItemResponseType.SliderRows: {
+      const currAnswer = currentAnswer.answer as FormattedAnswer<(number[] | null)[]> | null;
+      if (!currAnswer) {
+        return {
+          activityItem: formattedActivityItem,
+          answers: {},
+        } as SliderRowsFormattedResponses;
+      }
+
+      const value = (currAnswer.value as (number[] | null)[]) ?? [];
+      const answers = value.reduce(
+        (acc: SliderRowsAnswer, currentAnswer: number[] | null, index: number) => {
+          const activityItem =
+            formattedActivityItem as FormattedActivityItem<SliderRowsItemResponseValues>;
+          if (!activityItem?.responseValues?.rows) return acc;
+          const currentRow = activityItem.responseValues.rows[index];
+          const answer = [
+            {
+              answer: {
+                value: currentAnswer as number | null,
+                text: null,
+              },
+              date,
+            },
+          ];
+
+          if (!answer?.length) {
+            return acc;
+          }
+
+          if (!acc[currentRow.id]) {
+            acc[currentRow.id] = answer;
+
+            return acc;
+          }
+
+          acc[currentRow.id].push(...answer);
+
+          return acc;
+        },
+        {},
+      );
+
+      return {
+        activityItem: formattedActivityItem,
+        answers,
+      } as SliderRowsFormattedResponses;
+    }
     default:
       return {
         activityItem: formattedActivityItem,
@@ -759,6 +801,72 @@ export const compareActivityItem = (
         activityItem: {
           ...previousActivityItem.activityItem,
           responseValues,
+        },
+        answers: updatedAnswers,
+      };
+    }
+    case ItemResponseType.SliderRows: {
+      const { activityItem, answers } =
+        formattedActivityItemAnswers as SliderRowsFormattedResponses;
+      const previousActivityItem = prevActivityItem as SliderRowsFormattedResponses;
+      const previousResponseValues = previousActivityItem.activityItem
+        .responseValues as SliderRowsItemResponseValues;
+      const currResponseValues = currActivityItem.activityItem
+        .responseValues as SliderRowsItemResponseValues;
+
+      const previousIdRow = getObjectFromList(previousResponseValues.rows);
+
+      const updatedPreviousIdRow = currResponseValues.rows.reduce((acc, currRow) => {
+        if (!acc[currRow.id]) {
+          return {
+            ...acc,
+            [currRow.id]: currRow,
+          };
+        }
+
+        const updatedRow = {
+          ...currRow,
+          minValue:
+            currRow.minValue < acc[currRow.id].minValue
+              ? currRow.minValue
+              : acc[currRow.id].minValue,
+          maxValue:
+            currRow.maxValue > acc[currRow.id].maxValue
+              ? currRow.maxValue
+              : acc[currRow.id].maxValue,
+        };
+
+        return {
+          ...acc,
+          [currRow.id]: updatedRow,
+        };
+      }, previousIdRow);
+
+      const updatedAnswers = Object.entries(answers).reduce(
+        (acc: SliderRowsAnswer, [rowId, currAnswer]: [string, Answer<number>[]]) => {
+          if (!acc[rowId]) {
+            return {
+              ...acc,
+              [rowId]: currAnswer,
+            };
+          }
+
+          const updatedAnswers = {
+            ...acc,
+            [rowId]: [...acc[rowId], ...currAnswer],
+          };
+
+          return updatedAnswers;
+        },
+        previousActivityItem.answers,
+      );
+
+      return {
+        activityItem: {
+          ...activityItem,
+          responseValues: {
+            rows: Object.values(updatedPreviousIdRow),
+          },
         },
         answers: updatedAnswers,
       };

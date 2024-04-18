@@ -5,6 +5,7 @@ describe('removeMarkdown', () => {
     markdownString                           | expected                        | description
     ${'# Heading'}                           | ${' Heading'}                   | ${'removes hashtags'}
     ${'> Blockquote'}                        | ${' Blockquote'}                | ${'removes blockquotes'}
+    ${'| Vertical bar'}                      | ${' Vertical bar'}              | ${'removes vertical bar'}
     ${'**Bold text**'}                       | ${'Bold text'}                  | ${'removes double asterisks (bold)'}
     ${'*Italic text*'}                       | ${'Italic text'}                | ${'removes single asterisks (italic)'}
     ${'==Marked text=='}                     | ${'Marked text'}                | ${'removes double equals signs (marked)'}

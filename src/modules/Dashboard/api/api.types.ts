@@ -257,8 +257,13 @@ export type ActivityAnswer = AppletId & { answerId: string; activityId: string }
 
 export type AssessmentReview = AppletId & { answerId: string };
 
+export type AssessmentId = { assessmentId: string };
+
+export type DeleteReview = AssessmentReview & AssessmentId;
+
 export type AssessmentResult = {
   answer: string | null;
+  id: string;
   itemIds: string[];
   items: Item[];
   itemsLast: Item[] | null;
@@ -275,15 +280,22 @@ export type SaveAssessment = AppletId & {
   assessmentVersionId: string;
 };
 
+export type Reviewer = {
+  firstName: string;
+  lastName: string;
+  id: string;
+};
+
 export type Review = {
-  answer: string;
+  id: string;
+  createdAt: string;
   items: Item[];
   itemIds: string[];
-  reviewer: {
-    firstName: string;
-    lastName: string;
-  };
-  reviewerPublicKey: string;
+  reviewer: Reviewer;
+  /* "null" returns in case the user does not have access to the answer
+  (a user with the role of reviewer only has access to their own review answers) */
+  answer: string | null;
+  reviewerPublicKey: string | null;
 };
 
 export type SummaryAnswers = AppletId & {
@@ -300,6 +312,7 @@ export type SummaryAnswers = AppletId & {
 
 export type Identifier = {
   identifier: string;
+  lastAnswerDate: string;
   userPublicKey: string | null;
 };
 
@@ -396,3 +409,11 @@ export type LatestReport = {
 export type Identifiers = LatestReport;
 
 export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;
+
+export type ActivityAnswerMeta = {
+  createdAt: string;
+  version: string;
+  identifier: Identifier | null;
+};
+
+export type EncryptedActivityAnswer = EncryptedAnswerSharedProps & ActivityAnswerMeta;

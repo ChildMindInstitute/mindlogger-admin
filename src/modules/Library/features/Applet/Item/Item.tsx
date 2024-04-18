@@ -9,7 +9,7 @@ import { StyledSvgArrowContainer } from 'shared/styles';
 import { updateSelectedItemsInStorage } from 'modules/Library/utils';
 import { useAppDispatch } from 'redux/store';
 import { library } from 'redux/modules';
-import { getHighlightedText, getDictionaryText } from 'shared/utils';
+import { getHighlightedText, getDictionaryText, toggleBooleanState } from 'shared/utils';
 
 import {
   StyledItemContainer,
@@ -90,7 +90,7 @@ export const Item = ({
         )}
       />
       <StyledItemHeader
-        onClick={() => setItemVisible((prevState) => !prevState)}
+        onClick={toggleBooleanState(setItemVisible)}
         data-testid={`${dataTestid}-header`}
       >
         <StyledSvgArrowContainer>

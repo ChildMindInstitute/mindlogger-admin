@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box } from '@mui/material';
 
 import { StyledFlexTopCenter, theme, variables } from 'shared/styles';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import { StyledItem, StyledSvg } from './Accordion.styles';
 import { AccordionProps, AccordionUiType } from './Accordion.types';
@@ -14,9 +15,7 @@ export const Accordion = ({
 }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleItemExpand = () => {
-    setIsOpen((prevState) => !prevState);
-  };
+  const handleItemExpand = toggleBooleanState(setIsOpen);
 
   const isPrimaryUiType = uiType === AccordionUiType.Primary;
 

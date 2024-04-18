@@ -171,7 +171,9 @@ const mockedGetWithDates = {
 const mockedGetWithResponses = {
   data: {
     result: {
-      mockedResult: 'mockedResult',
+      createdAt: '2024-03-14T14:33:48.750000',
+      identifier: 'test-identifier',
+      version: '10.10.12',
     },
   },
 };
@@ -395,6 +397,9 @@ describe('RespondentDataReview', () => {
           },
         );
       });
+
+      // check answer description render
+      expect(screen.getByTestId(`${dataTestid}-description`)).toBeInTheDocument();
 
       // check question render
       expect(screen.getByText('Single Selected - Mocked Item')).toBeInTheDocument();

@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
+import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
   CalculationType,
@@ -15,7 +16,7 @@ import {
   ScoreReportType,
   SubscaleTotalScore,
 } from './consts';
-import { MultiSelectItem, SingleSelectItem } from './state';
+import { Item, MultiSelectItem, SingleSelectItem } from './state';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -47,11 +48,13 @@ export const mockedApplet = {
 export const mockedIdentifiers = [
   {
     identifier: '09a0bbf7994d5cf408292d7fb35dce18:e8051724b3f422950c1b0eb9c7013c72',
+    lastAnswerDate: '2023-09-26T12:11:46.162083',
     userPublicKey:
       '[99,83,75,86,39,55,67,5,130,80,210,6,175,190,123,206,33,96,133,63,143,229,120,62,139,255,211,52,58,74,103,27,152,40,181,254,157,116,86,107,213,130,86,71,39,177,8,217,203,137,20,114,144,212,8,251,124,133,155,0,1,245,158,121,202,195,121,33,193,103,119,200,86,126,28,219,195,180,20,140,146,115,52,174,44,67,26,37,232,165,216,221,165,82,156,48,230,59,250,232,6,90,159,102,170,229,165,91,86,147,129,120,34,169,229,188,47,76,20,111,189,186,100,118,226,56,149,200]',
   },
   {
     identifier: 'd0aa7af502fd96704585bee074786497:7f619511aaefa1bad1f5af6b3ef22d9b',
+    lastAnswerDate: '2023-09-27T12:00:01.162083',
     userPublicKey:
       '[99,83,75,86,39,55,67,5,130,80,210,6,175,190,123,206,33,96,133,63,143,229,120,62,139,255,211,52,58,74,103,27,152,40,181,254,157,116,86,107,213,130,86,71,39,177,8,217,203,137,20,114,144,212,8,251,124,133,155,0,1,245,158,121,202,195,121,33,193,103,119,200,86,126,28,219,195,180,20,140,146,115,52,174,44,67,26,37,232,165,216,221,165,82,156,48,230,59,250,232,6,90,159,102,170,229,165,91,86,147,129,120,34,169,229,188,47,76,20,111,189,186,100,118,226,56,149,200]',
   },
@@ -1820,111 +1823,124 @@ export const mockedTotalScoresTableData = [
     optionalText: 'Description #3 for range -10~0',
   },
 ];
+export const mockedSubscaleTableData1 = [
+  {
+    score: '2',
+    rawScore: '1',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Description 1',
+  },
+  {
+    score: '4',
+    rawScore: '2',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Description 2',
+  },
+  {
+    score: '6',
+    rawScore: '3',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Markdown Text Here',
+  },
+  {
+    score: '8',
+    rawScore: '4',
+    age: 15,
+    sex: 'F',
+    optionalText: 'Good',
+  },
+  {
+    score: '10',
+    rawScore: '5',
+    age: 15,
+    sex: null,
+    optionalText: 'Awesome text',
+  },
+];
 export const mockedSubscale1 = {
+  id: 'subscale-1',
   name: 'ss-1',
   scoring: SubscaleTotalScore.Sum,
   items: [
     {
+      id: 'single-1',
       name: 'single',
       type: 'item',
+      question: 'lorem ipsum single',
     },
     {
+      id: 'multi-1',
       name: 'multi',
       type: 'item',
+      question: 'lorem ipsum multi',
     },
     {
+      id: 'slider-1',
       name: 'slider',
       type: 'item',
+      question: 'lorem ipsum slider',
     },
   ],
-  subscaleTableData: [
-    {
-      score: '2',
-      rawScore: '1',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Description 1',
-    },
-    {
-      score: '4',
-      rawScore: '2',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Description 2',
-    },
-    {
-      score: '6',
-      rawScore: '3',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Markdown Text Here',
-    },
-    {
-      score: '8',
-      rawScore: '4',
-      age: 15,
-      sex: 'F',
-      optionalText: 'Good',
-    },
-    {
-      score: '10',
-      rawScore: '5',
-      age: 15,
-      sex: null,
-      optionalText: 'Awesome text',
-    },
-  ],
+  subscaleTableData: mockedSubscaleTableData1,
 };
+export const mockedSubscaleTableData2 = [
+  {
+    score: '2',
+    rawScore: '1',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Description 1',
+  },
+  {
+    score: '4',
+    rawScore: '2',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Description 2',
+  },
+  {
+    score: '6',
+    rawScore: '3',
+    age: 15,
+    sex: 'M',
+    optionalText: 'Markdown Text Here',
+  },
+  {
+    score: '8',
+    rawScore: '4',
+    age: 15,
+    sex: 'F',
+    optionalText: 'Good',
+  },
+  {
+    score: '10',
+    rawScore: '5',
+    age: 15,
+    sex: null,
+    optionalText: 'Awesome text',
+  },
+];
 export const mockedSubscale2 = {
+  id: 'subscale-2',
   name: 'ss-2',
   scoring: 'sum',
   items: [
     {
+      id: 'subscale-1',
       name: 'ss-1',
       type: 'subscale',
     },
     {
+      id: 'single-1',
       name: 'single',
       type: 'item',
+      question: 'lorem ipsum single',
     },
   ],
-  subscaleTableData: [
-    {
-      score: '2',
-      rawScore: '1',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Description 1',
-    },
-    {
-      score: '4',
-      rawScore: '2',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Description 2',
-    },
-    {
-      score: '6',
-      rawScore: '3',
-      age: 15,
-      sex: 'M',
-      optionalText: 'Markdown Text Here',
-    },
-    {
-      score: '8',
-      rawScore: '4',
-      age: 15,
-      sex: 'F',
-      optionalText: 'Good',
-    },
-    {
-      score: '10',
-      rawScore: '5',
-      age: 15,
-      sex: null,
-      optionalText: 'Awesome text',
-    },
-  ],
+  subscaleTableData: mockedSubscaleTableData2,
 };
 export const mockedSubscaleSetting = {
   calculateTotalScore: SubscaleTotalScore.Sum,
@@ -2859,3 +2875,154 @@ export const mockIntersectionObserver = () => {
     return instance;
   });
 };
+
+export const assessment = [
+  {
+    activityItem: {
+      question: {
+        en: 'ms-1',
+      },
+      responseType: ItemResponseType.MultipleSelection,
+      responseValues: {
+        options: [
+          {
+            id: '9858b349-32c4-4a67-830c-4a0da038a4f6',
+            text: '1',
+            isHidden: false,
+            value: 0,
+          },
+          {
+            id: 'bed86422-dbc6-4ab9-88f6-113f08624f53',
+            text: '2',
+            isHidden: false,
+            value: 1,
+          },
+          {
+            id: '7cdc4381-af6d-4bbb-baf7-bf4fe73448d0',
+            text: '3',
+            isHidden: false,
+            value: 2,
+          },
+        ],
+      },
+      config: {
+        removeBackButton: false,
+        skippableItem: false,
+        randomizeOptions: false,
+        timer: 0,
+        addScores: false,
+        setAlerts: false,
+        addTooltip: false,
+        setPalette: false,
+        addTokens: null,
+        additionalResponseOption: {
+          textInputOption: false,
+          textInputRequired: false,
+        },
+      },
+      name: 'ms-1',
+      isHidden: false,
+      conditionalLogic: undefined,
+      allowEdit: true,
+      id: '1b3ad6ee-9c35-46bf-8948-0ffbcc9ca7ce',
+      order: 1,
+    },
+    answer: {
+      value: ['2'],
+      edited: null,
+    },
+    items: [
+      {
+        question: {
+          en: 'ms-1',
+        },
+        responseType: ItemResponseType.MultipleSelection,
+        responseValues: {
+          options: [
+            {
+              id: '9858b349-32c4-4a67-830c-4a0da038a4f6',
+              text: '1',
+              isHidden: false,
+              value: 0,
+            },
+            {
+              id: 'bed86422-dbc6-4ab9-88f6-113f08624f53',
+              text: '2',
+              isHidden: false,
+              value: 1,
+            },
+            {
+              id: '7cdc4381-af6d-4bbb-baf7-bf4fe73448d0',
+              text: '3',
+              isHidden: false,
+              value: 2,
+            },
+          ],
+        },
+        config: {
+          removeBackButton: false,
+          skippableItem: false,
+          randomizeOptions: false,
+          timer: 0,
+          addScores: false,
+          setAlerts: false,
+          addTooltip: false,
+          setPalette: false,
+          addTokens: null,
+          additionalResponseOption: {
+            textInputOption: false,
+            textInputRequired: false,
+          },
+        },
+        name: 'ms-1',
+        isHidden: false,
+        conditionalLogic: undefined,
+        allowEdit: true,
+        id: '1b3ad6ee-9c35-46bf-8948-0ffbcc9ca7ce',
+        order: 1,
+      },
+    ],
+  },
+] as AssessmentActivityItem[];
+
+export const assessmentVersions = [
+  '316b25bf-5136-404f-b9f0-c97f60cf8d74_1.1.0',
+  '316b25bf-5136-404f-b9f0-c97f60cf8d74_1.2.0',
+];
+
+export const itemIds = ['1b3ad6ee-9c35-46bf-8948-0ffbcc9ca7ce'];
+
+export const lastAssessment = [
+  {
+    question: {
+      en: 'slider-1',
+    },
+    responseType: ItemResponseType.Slider,
+    responseValues: {
+      minLabel: 'min',
+      maxLabel: 'max',
+      minValue: 0,
+      maxValue: 5,
+    },
+    config: {
+      removeBackButton: false,
+      skippableItem: false,
+      addScores: false,
+      setAlerts: false,
+      additionalResponseOption: {
+        textInputOption: false,
+        textInputRequired: false,
+      },
+      showTickMarks: true,
+      showTickLabels: true,
+      continuousSlider: false,
+      timer: 0,
+    },
+    name: 'slider-1',
+    isHidden: false,
+    conditionalLogic: undefined,
+    allowEdit: true,
+    id: 'd56e3695-bf8f-449f-ab1a-f395a9d9645d',
+    order: 1,
+  },
+] as Item[];

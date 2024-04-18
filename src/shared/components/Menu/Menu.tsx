@@ -16,6 +16,7 @@ export const Menu = ({
   transformOrigin,
   width = 'auto',
   uiType = MenuUiType.Primary,
+  'data-testid': dataTestid,
 }: MenuProps) => {
   const { t } = useTranslation('app');
   const open = Boolean(anchorEl);
@@ -41,6 +42,7 @@ export const Menu = ({
         }
       }
       uiType={uiType}
+      data-testid={dataTestid}
     >
       {menuItems.map(({ icon, title, action, 'data-testid': dataTestId }, i) => (
         <MenuItem key={i} onClick={() => action(title)} data-testid={dataTestId}>

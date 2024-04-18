@@ -95,10 +95,12 @@ describe('useWorkspaceList', () => {
 
     await fetchWorkspacesData();
 
-    expect(result.current).toEqual({
-      checkIfHasAccessToWorkspace: expect.any(Function),
-      isLoading: false,
-      workspaces: workspacesResult,
+    await waitFor(() => {
+      expect(result.current).toEqual({
+        checkIfHasAccessToWorkspace: expect.any(Function),
+        isLoading: false,
+        workspaces: workspacesResult,
+      });
     });
   });
 
@@ -111,10 +113,12 @@ describe('useWorkspaceList', () => {
 
     await fetchWorkspacesData();
 
-    expect(result.current).toEqual({
-      checkIfHasAccessToWorkspace: expect.any(Function),
-      isLoading: false,
-      workspaces: [],
+    await waitFor(() => {
+      expect(result.current).toEqual({
+        checkIfHasAccessToWorkspace: expect.any(Function),
+        isLoading: false,
+        workspaces: [],
+      });
     });
   });
 });

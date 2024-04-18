@@ -33,7 +33,11 @@ export const getEncryptionToServer = async (appletPassword: string, accountId: s
   return encryption;
 };
 
-export const getParsedEncryptionFromServer = (encryption: Encryption): EncryptionParsed | null => {
+export const getParsedEncryptionFromServer = (
+  encryption?: Encryption | null,
+): EncryptionParsed | null => {
+  if (!encryption) return null;
+
   try {
     return {
       publicKey: JSON.parse(encryption.publicKey),

@@ -132,7 +132,10 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
           </StyledColInner>
         </StyledFlexTopStart>
         {isWeekdaysPeriodicity && (
-          <StyledBodyMedium sx={{ mt: theme.spacing(2) }}>
+          <StyledBodyMedium
+            data-testid={`${dataTestid}-weekdays-reminder-message`}
+            sx={{ mt: theme.spacing(2) }}
+          >
             {t('weekdaysReminderMessage')}
           </StyledBodyMedium>
         )}
