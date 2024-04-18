@@ -33,7 +33,7 @@ export const FeedbackReviews = () => {
 
   const { reset } = useFormContext<FeedbackForm>();
   const { user } = auth.useData() ?? {};
-  const { setAssessment, lastAssessment, setIsLastVersion, isBannerVisible, setIsBannerVisible } =
+  const { assessment, setAssessment, setIsLastVersion, isBannerVisible, setIsBannerVisible } =
     useContext(RespondentDataReviewContext);
   const getFeedbackReviewsData = useFeedbackReviewsData();
 
@@ -60,14 +60,15 @@ export const FeedbackReviews = () => {
   } = useAsync(deleteReviewApi);
 
   const handleSelectLastVersion = () => {
-    if (!lastAssessment?.length) return;
+    if (!assessment?.length) return;
 
     setIsLastVersion(true);
     setIsBannerVisible(false);
 
-    const updatedAssessment = lastAssessment.map((activityItem) => ({
+    const updatedAssessment = assessment?.map(({ activityItem, items }) => ({
       activityItem,
       answer: undefined,
+      items,
     })) as AssessmentActivityItem[];
     setAssessment(updatedAssessment);
     reset(getDefaultFormValues(updatedAssessment));
