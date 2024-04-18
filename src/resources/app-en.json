@@ -223,6 +223,7 @@
   "changeScoreConditionIdText": "You are referencing this score condition as a variable in the markdown. Changing the Score Condition ID will cause the variable names to update everywhere.",
   "characters": "characters",
   "chars": "chars.",
+  "checkAll": "Check all",
   "checkYourEmail": "Check your email",
   "chooseLanguage": "Choose a language",
   "clear": "Clear",

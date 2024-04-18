@@ -8,33 +8,13 @@ import { variables } from 'shared/styles';
 
 import { ManagersActions } from './Managers.types';
 
-export enum ManagersColumnsWidth {
-  Pin = '4.8rem',
-  Default = '22rem',
-  Email = '35rem',
-}
-
 export const getHeadCells = (id?: string): HeadCell[] => {
   const { t } = i18n;
 
   return [
     {
       id: 'checkbox',
-      label: (
-        <Checkbox
-          aria-label="Check all"
-          checked={false}
-          data-testid="dashboard-managers-checkbox-header"
-          icon={
-            <Svg
-              fill={variables.palette.outline_variant2}
-              height="20"
-              id="checkbox-empty-outlined"
-              width="20"
-            />
-          }
-        />
-      ),
+      label: <Checkbox aria-label={t('checkAll')} checked={false} />,
       width: '8rem',
     },
     {

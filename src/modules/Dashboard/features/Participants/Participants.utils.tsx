@@ -133,19 +133,7 @@ export const getHeadCells = (id?: string): HeadCell[] => {
   return [
     {
       id: 'checkbox',
-      label: (
-        <Checkbox
-          checked={false}
-          icon={
-            <Svg
-              fill={variables.palette.outline_variant2}
-              height="20"
-              id="checkbox-empty-outlined"
-              width="20"
-            />
-          }
-        />
-      ),
+      label: <Checkbox aria-label={t('checkAll')} checked={false} />,
       enableSort: true,
       width: ParticipantsColumnsWidth.Pin,
     },
@@ -171,32 +159,29 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       id: 'nicknames',
       label: t('nickname'),
       enableSort: true,
-      width: ParticipantsColumnsWidth.Default,
     },
     {
       id: 'accountType',
       label: t('accountType'),
       enableSort: true,
-      width: ParticipantsColumnsWidth.AccountType,
     },
     {
       id: 'lastSeen',
       label: t('latestActivity'),
       enableSort: true,
-      width: ParticipantsColumnsWidth.Default,
     },
     ...(id
       ? [
           {
             id: 'schedule',
             label: t('schedule'),
-            width: ParticipantsColumnsWidth.Schedule,
           },
         ]
       : []),
     {
       id: 'actions',
       label: '',
+      width: ParticipantsColumnsWidth.Pin,
     },
   ];
 };

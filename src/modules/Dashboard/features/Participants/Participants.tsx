@@ -20,7 +20,7 @@ import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinA
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { StyledBody, variables } from 'shared/styles';
+import { StyledBody } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
@@ -277,20 +277,7 @@ export const Participants = () => {
 
     return {
       checkbox: {
-        content: () => (
-          <Checkbox
-            checked={false}
-            icon={
-              <Svg
-                fill={variables.palette.outline_variant2}
-                height="20"
-                id="checkbox-empty-outlined"
-                width="20"
-              />
-            }
-            data-testid="dashboard-participants-checkbox"
-          />
-        ),
+        content: () => <Checkbox checked={false} data-testid="dashboard-participants-checkbox" />,
         value: '',
         width: ParticipantsColumnsWidth.Pin,
       },
@@ -318,7 +305,6 @@ export const Participants = () => {
       nicknames: {
         content: () => nickname,
         value: nickname,
-        width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },
       accountType: {
@@ -326,26 +312,24 @@ export const Participants = () => {
         // https://mindlogger.atlassian.net/browse/M2-6161
         content: () => <Chip color="secondary" shape={ChipShape.Rounded} title={accountType} />,
         value: accountType,
-        width: ParticipantsColumnsWidth.AccountType,
         onClick: defaultOnClick,
       },
       lastSeen: {
         content: () => <StyledMaybeEmpty>{latestActive}</StyledMaybeEmpty>,
         value: latestActive,
-        width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },
       ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
-          width: ParticipantsColumnsWidth.Schedule,
           onClick: defaultOnClick,
         },
       }),
       actions: {
         content: () => (
           <ActionsMenu
+            buttonColor="secondary"
             menuItems={getParticipantActions({
               actions,
               filteredApplets: filteredRespondents?.[respondentOrSubjectId],
@@ -498,7 +482,6 @@ export const Participants = () => {
           ) : undefined
         }
         count={respondentsData?.count || 0}
-        hasColFixedWidth
         data-testid={`${dataTestid}-table`}
         {...tableProps}
       />

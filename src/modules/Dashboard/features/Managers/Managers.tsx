@@ -9,13 +9,12 @@ import {
   Avatar,
   AvatarUiType,
   Chip,
-  ChipShape,
   MenuActionProps,
   Search,
   Spinner,
-  Svg,
 } from 'shared/components';
 import { banners, workspaces } from 'redux/modules';
+import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { Manager } from 'modules/Dashboard/types';
@@ -26,8 +25,8 @@ import { useAppDispatch } from 'redux/store';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
-import { getManagerActions, getHeadCells } from './Managers.utils';
 import { ManagersData } from './Managers.types';
+import { getManagerActions, getHeadCells } from './Managers.utils';
 
 export const Managers = () => {
   const { t } = useTranslation('app');
@@ -90,6 +89,17 @@ export const Managers = () => {
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
+  const actions = {
+    removeAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
+      setSelectedManager(user || null);
+      setRemoveAccessPopupVisible(true);
+    },
+    editAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
+      setSelectedManager(user || null);
+      setEditAccessPopupVisible(true);
+    },
+  };
+
   const removeManagerAccessOnClose = (step?: number) => {
     setRemoveAccessPopupVisible(false);
     step === 2 && handleReload();
@@ -113,26 +123,10 @@ export const Managers = () => {
         const renderedRoles = appletRole?.roles.map(({ role }) => (
           <Chip
             color="secondary"
-            shape={ChipShape.Rounded}
             key={role}
             title={`${role.charAt(0).toLocaleUpperCase()}${role.slice(1)}`}
           />
         ));
-        const actions = {
-          removeAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
-            setSelectedManager(user || null);
-            setRemoveAccessPopupVisible(true);
-          },
-          editAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
-            setSelectedManager(user || null);
-            setEditAccessPopupVisible(true);
-          },
-        };
-        const emptyContent = (
-          <Box component="span" sx={{ color: variables.palette.outline_variant2 }}>
-            --
-          </Box>
-        );
 
         return {
           checkbox: {
@@ -141,14 +135,6 @@ export const Managers = () => {
                 aria-label={`${firstName} ${lastName}`}
                 checked={false}
                 data-testid="dashboard-managers-checkbox"
-                icon={
-                  <Svg
-                    fill={variables.palette.outline_variant2}
-                    height="20"
-                    id="checkbox-empty-outlined"
-                    width="20"
-                  />
-                }
               />
             ),
             value: '',
@@ -173,25 +159,25 @@ export const Managers = () => {
             width: '8rem',
           },
           firstName: {
-            content: () => firstName ?? emptyContent,
+            content: () => <StyledMaybeEmpty>{firstName}</StyledMaybeEmpty>,
             value: firstName,
           },
           lastName: {
-            content: () => lastName ?? emptyContent,
+            content: () => <StyledMaybeEmpty>{lastName}</StyledMaybeEmpty>,
             value: lastName,
           },
           title: {
-            content: () => emptyContent,
+            content: () => <StyledMaybeEmpty />,
             value: '',
           },
           ...(appletId && {
             roles: {
-              content: () => <>{renderedRoles ?? emptyContent}</>,
+              content: () => <StyledMaybeEmpty>{renderedRoles}</StyledMaybeEmpty>,
               value: stringRoles,
             },
           }),
           email: {
-            content: () => email ?? emptyContent,
+            content: () => <StyledMaybeEmpty>{email}</StyledMaybeEmpty>,
             value: email,
           },
           actions: {
@@ -201,10 +187,11 @@ export const Managers = () => {
               }
 
               return (
-                <Box display="flex" justifyContent="flex-end" alignItems="center" width="100%">
+                <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-end' }}>
                   <ActionsMenu
-                    menuItems={getManagerActions(actions, filteredManager)}
+                    buttonColor="secondary"
                     data-testid="dashboard-managers-table-actions"
+                    menuItems={getManagerActions(actions, filteredManager)}
                   />
                 </Box>
               );

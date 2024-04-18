@@ -2,9 +2,11 @@ import { SelectClasses, createTheme, Theme } from '@mui/material';
 import { OverridesStyleRules } from '@mui/material/styles/overrides';
 import 'react-datepicker/dist/react-datepicker.min.css';
 
+import { Svg } from 'shared/components/Svg';
 import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
+import { getChipStyleOverrides } from 'shared/styles/utils';
 
 declare module '@mui/system/createTheme/createBreakpoints' {
   interface BreakpointOverrides {
@@ -287,48 +289,20 @@ export const theme = createTheme({
     },
     MuiChip: {
       styleOverrides: {
-        root: {
-          color: variables.palette.on_surface_variant,
-          padding: '0.2rem 0.8rem',
-          height: 24,
+        root: ({ ownerState }) => ({
           borderRadius: variables.borderRadius.md,
           fontSize: variables.font.size.md,
           fontWeight: variables.font.weight.regular,
+          gap: '0.4rem',
+          height: '2.4rem',
           lineHeight: variables.font.lineHeight.md,
-          '&.MuiChip-colorPrimary': {
-            border: 'none',
-            backgroundColor: variables.palette.secondary_container,
-            '&:hover': {
-              backgroundColor: blendColorsNormal(
-                variables.palette.secondary_container,
-                variables.palette.on_secondary_container_alfa8,
-              ),
-            },
-          },
-          '&.MuiChip-colorSecondary': {
-            color: variables.palette.on_surface_variant,
-            backgroundColor: variables.palette.inverse_on_surface,
-          },
-          '&.MuiChip-colorError': {
-            borderWidth: variables.borderWidth.md,
-            border: `${variables.borderWidth.md} solid ${variables.palette.on_error_container}`,
-            color: variables.palette.on_error_container,
-            backgroundColor: variables.palette.error_container,
-            '&:hover': {
-              backgroundColor: variables.palette.on_surface_variant_alfa8,
-            },
-            a: {
-              color: variables.palette.on_error_container,
-              textDecorationColor: variables.palette.on_error_container,
-            },
-          },
-          '.MuiChip-label': {
-            padding: 0,
-          },
-          '.MuiChip-deleteIcon': {
-            margin: '0 0 0 0.8rem',
-          },
-        },
+          padding: '0.2rem 0.8rem',
+          ...getChipStyleOverrides({ color: ownerState.color, variant: ownerState.variant }),
+
+          '.MuiChip-deleteIcon': { margin: 0 },
+          '.MuiChip-icon': { fill: 'currentColor', margin: 0 },
+          '.MuiChip-label': { padding: 0 },
+        }),
       },
     },
     MuiToggleButtonGroup: {
@@ -543,10 +517,14 @@ export const theme = createTheme({
       },
     },
     MuiCheckbox: {
+      defaultProps: {
+        icon: <Svg height="20" id="checkbox-empty-outlined" width="20" />,
+        checkedIcon: <Svg height="20" id="checkbox-filled" width="20" />,
+      },
       styleOverrides: {
-        root: {
-          color: variables.palette.primary,
-        },
+        root: ({ checked = false }) => ({
+          fill: checked ? variables.palette.primary : variables.palette.outline_variant2,
+        }),
       },
     },
     MuiSwitch: {

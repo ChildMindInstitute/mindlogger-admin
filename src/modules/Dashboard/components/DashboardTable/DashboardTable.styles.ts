@@ -1,6 +1,7 @@
 import { styled, TableCell } from '@mui/material';
 
 import { TableHead } from 'shared/components';
+import { theme } from 'shared/styles';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
@@ -23,7 +24,7 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
       `;
     }
 
-    return { paddingTop: 12, paddingBottom: 12 };
+    return { paddingTop: theme.spacing(1.2), paddingBottom: theme.spacing(1.2) };
   }}
 `;
 
