@@ -8,6 +8,7 @@ import { useAsync } from 'shared/hooks';
 
 import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
 import { useRespondentAnswers } from './hooks/useRespondentAnswers';
+import { setDateRangeFormValues } from './utils/setDateRangeValues';
 import { RespondentsDataFormValues } from '../RespondentData.types';
 import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 import { ReportMenu } from './ReportMenu';
@@ -31,11 +32,13 @@ export const RespondentDataSummary = () => {
     if (selectedActivity) return;
 
     const selectedActivityByDefault =
-      getActivityWithLatestAnswer(summaryActivities) || summaryActivities[0];
+      getActivityWithLatestAnswer(summaryActivities) || summaryActivities?.[0];
 
     if (!selectedActivityByDefault) return;
 
     setValue('selectedActivity', selectedActivityByDefault);
+    setDateRangeFormValues(setValue, selectedActivityByDefault.lastAnswerDate);
+
     setIsLoading(true);
     await getIdentifiersVersions({ activity: selectedActivityByDefault });
     await fetchAnswers({ activity: selectedActivityByDefault });
