@@ -1,8 +1,10 @@
+import { getOneWeekDateRange } from '../../utils/getOneWeekDateRange';
 import {
+  DateOrNullOrUndefined,
   GetIdentifiers,
   GetIdentifiersReturn,
-} from '../useDatavizSummaryRequests/useDatavizSummaryRequests.types';
-import { getOneWeekDateRange } from '../../utils/getOneWeekDateRange';
+  ProcessIdentifiersChange,
+} from './useRespondentAnswers.types';
 
 export const getDateISO = (date: Date, time: string) => {
   const year = date.getFullYear();
@@ -16,11 +18,11 @@ export const getDateISO = (date: Date, time: string) => {
 };
 
 export const getIdentifiers = ({
-  filterByIdentifier = false,
+  filterByIdentifier,
   filterIdentifiers = [],
   identifiers = [],
 }: GetIdentifiers): GetIdentifiersReturn => {
-  if (!filterByIdentifier || !filterIdentifiers) return null;
+  if (!filterByIdentifier) return null;
 
   const filterIds = new Set(filterIdentifiers.map((identifier) => identifier.id));
 
@@ -39,18 +41,60 @@ export const getIdentifiers = ({
     { selectedIdentifiers: [], answerDates: [] },
   );
 
-  const recentDate = answerDates.reduce(
+  const recentAnswerDateString = answerDates.reduce(
     (latest, current) => (latest > current ? latest : current),
     '',
   );
 
-  const { startDate, endDate } = getOneWeekDateRange(recentDate);
-
   return {
     selectedIdentifiers,
-    recentAnswer: {
-      startDate,
-      endDate,
-    },
+    recentAnswerDateString,
+  };
+};
+
+export const processIdentifiersChange = ({
+  isIdentifiersChange,
+  adjustStartEndDates,
+  setValue,
+  activityLastAnswerDate,
+  recentIdentifiersAnswerDate,
+}: ProcessIdentifiersChange) => {
+  if (!isIdentifiersChange) return null;
+
+  let identifierAnswerStartDate: DateOrNullOrUndefined;
+  let identifierAnswerEndDate: DateOrNullOrUndefined;
+  let activityAnswerStartDate: DateOrNullOrUndefined;
+  let activityAnswerEndDate: DateOrNullOrUndefined;
+
+  if (adjustStartEndDates) {
+    const { startDate, endDate } = getOneWeekDateRange(recentIdentifiersAnswerDate);
+    if (startDate) {
+      setValue('startDate', startDate);
+      identifierAnswerStartDate = startDate;
+    }
+
+    if (endDate) {
+      setValue('endDate', endDate);
+      identifierAnswerEndDate = endDate;
+    }
+  } else {
+    const { startDate: rangeStartDate, endDate: rangeEndDate } =
+      getOneWeekDateRange(activityLastAnswerDate);
+
+    if (rangeStartDate) {
+      setValue('startDate', rangeStartDate);
+      activityAnswerStartDate = rangeStartDate;
+    }
+    if (rangeEndDate) {
+      setValue('endDate', rangeEndDate);
+      activityAnswerEndDate = rangeEndDate;
+    }
+  }
+
+  return {
+    identifierAnswerStartDate,
+    identifierAnswerEndDate,
+    activityAnswerStartDate,
+    activityAnswerEndDate,
   };
 };

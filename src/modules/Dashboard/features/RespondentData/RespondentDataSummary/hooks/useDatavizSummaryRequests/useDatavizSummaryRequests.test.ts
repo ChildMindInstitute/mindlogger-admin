@@ -33,10 +33,12 @@ describe('useDatavizSummaryRequests', () => {
     {
       decryptedValue: 'ident_1',
       encryptedValue: 'some encrypted value 1',
+      lastAnswerDate: '2023-09-26T10:10:05.162083',
     },
     {
       decryptedValue: 'ident_2',
       encryptedValue: 'some encrypted value 2',
+      lastAnswerDate: '2023-09-26T10:10:05.162083',
     },
   ];
   const mockedVersionsReturn = [{ version: 'v1' }, { version: 'v2' }];

@@ -9,9 +9,21 @@ describe('Report Filters utils', () => {
 
     test('should return unique identifier options', () => {
       const identifiers = [
-        { decryptedValue: 'decryptedValue_id1', encryptedValue: 'encryptedValue_id1' },
-        { decryptedValue: 'decryptedValue_id2', encryptedValue: 'encryptedValue_id2' },
-        { decryptedValue: 'decryptedValue_id2', encryptedValue: 'encryptedValue_id2' }, // duplicate
+        {
+          decryptedValue: 'decryptedValue_id1',
+          encryptedValue: 'encryptedValue_id1',
+          lastAnswerDate: '2023-09-26T10:10:05.162083',
+        },
+        {
+          decryptedValue: 'decryptedValue_id2',
+          encryptedValue: 'encryptedValue_id2',
+          lastAnswerDate: '2023-09-26T10:10:05.162083',
+        },
+        {
+          decryptedValue: 'decryptedValue_id2',
+          encryptedValue: 'encryptedValue_id2',
+          lastAnswerDate: '2023-09-26T10:10:05.162083',
+        }, // duplicate
       ];
 
       const result = getUniqueIdentifierOptions(identifiers);
