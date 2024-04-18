@@ -58,7 +58,7 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
 
             <StyledFlexColumn>
               <StyledListItemButton
-                onClick={() => navigateToReviewAnswer()}
+                onClick={() => navigateToReviewAnswer(false)}
                 data-testid={`${dataTestid}-tooltip-review-button`}
               >
                 {t('review')}
