@@ -2,7 +2,7 @@ name: Update Jira Tickets
 
 on:
   release:
-    types: [published]
+    types: [created]
   # Allows running manually from the Actions tab
   workflow_dispatch:
     inputs:
