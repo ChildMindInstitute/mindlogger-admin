@@ -84,6 +84,11 @@ export type Identifier = {
   decryptedValue: string;
 };
 
+export type ReviewCount = {
+  mine: number;
+  other: number;
+};
+
 export type ActivityCompletion = {
   decryptedAnswer: ActivityItemAnswer[];
   answerId: string;
@@ -91,6 +96,7 @@ export type ActivityCompletion = {
   startDatetime: string;
   version: string;
   subscaleSetting?: SubscaleSetting;
+  reviewCount?: ReviewCount;
 };
 
 export type SingleMultiSelectionSliderAnswer = Answer<number>;

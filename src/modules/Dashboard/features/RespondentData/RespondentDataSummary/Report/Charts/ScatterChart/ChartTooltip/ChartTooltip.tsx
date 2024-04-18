@@ -11,6 +11,7 @@ import { ReportContext } from 'modules/Dashboard/features/RespondentData/Respond
 import { StyledIndent } from '../../Chart.styles';
 import { StyledListItemButton, StyledTooltip } from './ChartTooltip.styles';
 import { ChartTooltipProps, ScatterTooltipRowData } from './ChartTooltip.types';
+import { getReviewOption } from './ChartTooltip.utils';
 
 export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipProps) => {
   const { t } = useTranslation('app');
@@ -19,9 +20,10 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
 
   const { setCurrentActivityCompletionData } = useContext(ReportContext);
 
-  const { answerId, areSubscalesVisible } = (data?.raw as ScatterTooltipRowData) || {};
+  const { answerId, areSubscalesVisible, reviewCount } = (data?.raw as ScatterTooltipRowData) || {};
+  const { mine, other } = reviewCount ?? {};
 
-  const navigateToReviewAnswer = () => {
+  const navigateToReviewAnswer = (isFeedbackVisible = false) => {
     if (!data) return;
 
     const selectedDate = format(new Date(data?.parsed.x), DateFormats.YearMonthDay);
@@ -31,6 +33,7 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
       search: createSearchParams({
         selectedDate,
         answerId,
+        isFeedbackVisible: String(isFeedbackVisible),
       }).toString(),
     });
   };
@@ -55,11 +58,19 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
 
             <StyledFlexColumn>
               <StyledListItemButton
-                onClick={navigateToReviewAnswer}
+                onClick={() => navigateToReviewAnswer()}
                 data-testid={`${dataTestid}-tooltip-review-button`}
               >
                 {t('review')}
               </StyledListItemButton>
+              {!!(mine || other) && (
+                <StyledListItemButton
+                  onClick={() => navigateToReviewAnswer(true)}
+                  data-testid={`${dataTestid}-tooltip-review-count`}
+                >
+                  {getReviewOption(mine, other)}
+                </StyledListItemButton>
+              )}
               {areSubscalesVisible && (
                 <StyledListItemButton
                   onClick={showSubscaleResultHandler}
