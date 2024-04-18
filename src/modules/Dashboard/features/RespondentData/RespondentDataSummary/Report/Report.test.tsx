@@ -245,6 +245,6 @@ describe('Report component', () => {
     });
 
     expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
-    expect(screen.getByText('No available Data for this Activity yet')).toBeInTheDocument();
+    expect(screen.getByText('No available Data yet')).toBeInTheDocument();
   });
 });

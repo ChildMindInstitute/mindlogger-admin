@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as reactHookForm from 'react-hook-form';
+import { endOfDay, startOfDay, subDays } from 'date-fns';
 
 import { ReportMenu } from './ReportMenu';
 
@@ -74,6 +75,13 @@ describe('ReportMenu Component', () => {
     await userEvent.click(activityElement);
 
     expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockActivities[1]);
+
+    //set startDate end endDate to 1 week from the most recent response
+    const expectedEndDate = endOfDay(new Date('2023-09-25'));
+    const expectedStartDate = startOfDay(subDays(expectedEndDate, 6));
+    expect(mockedSetValue).toHaveBeenCalledWith('startDate', expectedStartDate);
+    expect(mockedSetValue).toHaveBeenCalledWith('endDate', expectedEndDate);
+
     expect(mockSetIsLoading).toHaveBeenCalledWith(true);
     expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({ activity: mockActivities[1] });
     expect(mockFetchAnswers).toHaveBeenCalledWith({ activity: mockActivities[1] });

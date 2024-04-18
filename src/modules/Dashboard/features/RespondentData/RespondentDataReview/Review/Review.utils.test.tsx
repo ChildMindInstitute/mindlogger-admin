@@ -13,7 +13,7 @@ const timeResponse2 = { hour: 9, minute: 15 };
 const expected = format(new Date().setHours(9, 15), DateFormats.Time);
 
 const emptyReview = 'Select the date, Activity, and response time to review the response data.';
-const noDataForActivity = 'No available Data for this Activity yet';
+const noAvailableData = 'No available Data yet';
 
 const getActivityItemAnswer = (responseType: ItemResponseType) => ({
   activityItem: {
@@ -92,10 +92,14 @@ describe('getTimeResponseItem', () => {
 });
 
 describe('renderEmptyState', () => {
+  const selectedAnswer = {
+    createdAt: '2023-07-18T08:22:04.604160',
+    answerId: 'answerId',
+  };
   test.each`
-    selectedAnswer                                                       | expected             | description
-    ${null}                                                              | ${emptyReview}       | ${'should render empty state when selectedAnswer is nullable'}
-    ${{ createdAt: '2023-07-18T08:22:04.604160', answerId: 'answerId' }} | ${noDataForActivity} | ${'should render empty state when selectedAnswer is non-nullable'}
+    selectedAnswer    | expected           | description
+    ${null}           | ${emptyReview}     | ${'should render empty state when selectedAnswer is nullable'}
+    ${selectedAnswer} | ${noAvailableData} | ${'should render empty state when selectedAnswer is non-nullable'}
   `('$description', ({ selectedAnswer, expected }) => {
     renderWithProviders(renderEmptyState(selectedAnswer));
     expect(screen.getByText(expected)).toBeInTheDocument();

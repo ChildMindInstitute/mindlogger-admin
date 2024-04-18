@@ -5,10 +5,12 @@ import { StyledBodyLarge, variables } from 'shared/styles';
 import { DatavizActivity } from 'api';
 
 import { StyledMenu } from '../../RespondentData.styles';
+import { setDateRangeFormValues } from '../utils/setDateRangeValues';
+import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { StyleContainer, StyledActivity } from './ReportMenu.styles';
+import { setDefaultFormValues } from './ReportMenu.utils';
 import { ReportMenuProps } from './ReportMenu.types';
 import { StickyHeader } from './StickyHeader';
-import { RespondentsDataFormValues } from '../../RespondentData.types';
 
 export const ReportMenu = ({
   activities,
@@ -22,6 +24,9 @@ export const ReportMenu = ({
 
   const handleActivitySelect = async (activity: DatavizActivity) => {
     setValue('selectedActivity', activity);
+    setDateRangeFormValues(setValue, activity.lastAnswerDate);
+    setDefaultFormValues(setValue);
+
     setIsLoading(true);
     await getIdentifiersVersions({ activity });
     await fetchAnswers({ activity });

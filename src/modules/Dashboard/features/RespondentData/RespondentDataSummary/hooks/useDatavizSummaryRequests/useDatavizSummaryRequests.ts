@@ -6,7 +6,6 @@ import { RespondentsDataFormValues } from 'modules/Dashboard/features/Respondent
 
 import { GetIdentifiersVersions } from '../../RespondentDataSummary.types';
 import { useDecryptedIdentifiers } from '../useDecryptedIdentifiers';
-import { setDefaultFormValues } from './useDatavizSummaryRequests.utils';
 
 export const useDatavizSummaryRequests = () => {
   const { appletId, respondentId } = useParams();
@@ -16,7 +15,6 @@ export const useDatavizSummaryRequests = () => {
   const getIdentifiersVersions = async ({ activity }: GetIdentifiersVersions) => {
     try {
       if (!appletId || !respondentId || !activity?.hasAnswer || activity?.isPerformanceTask) return;
-      setDefaultFormValues(setValue);
 
       const identifiers = await getIdentifiersApi({
         appletId,

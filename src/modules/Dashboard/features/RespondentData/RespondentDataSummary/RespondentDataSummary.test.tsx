@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import * as reactHookForm from 'react-hook-form';
+import { endOfDay, startOfDay, subDays } from 'date-fns';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -160,6 +161,13 @@ describe('RespondentDataSummary component', () => {
     //select activity with the last answer date
     expect(mockedSetValue).toHaveBeenCalledWith('summaryActivities', mockedSummaryActivities);
     expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockedSummaryActivities[1]);
+
+    //set startDate end endDate to 1 week from the most recent response
+    const expectedEndDate = endOfDay(new Date('2023-10-27'));
+    const expectedStartDate = startOfDay(subDays(expectedEndDate, 6));
+    expect(mockedSetValue).toHaveBeenCalledWith('startDate', expectedStartDate);
+    expect(mockedSetValue).toHaveBeenCalledWith('endDate', expectedEndDate);
+
     expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({
       activity: mockedSummaryActivities[1],
     });
