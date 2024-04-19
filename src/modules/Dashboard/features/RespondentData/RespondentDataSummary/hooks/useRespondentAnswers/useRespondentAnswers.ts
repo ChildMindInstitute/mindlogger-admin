@@ -65,7 +65,14 @@ export const useRespondentAnswers = () => {
           activityLastAnswerDate: activity.lastAnswerDate,
         }) ?? {};
 
+      /*The start date for filters is computed based on the following criteria:
+      1. If identifiers are selected, it's set to one week before the latest answer containing the chosen identifier(s).
+      2. If identifiers were previously selected and then deselected, it's set to one week before the latest activity answer.*/
       const startDate = identifierAnswerStartDate ?? activityAnswerStartDate ?? formStartDate;
+      /*The end date for filters is computed based on the following criteria:
+        1. If identifiers are selected, it's set to the latest answer containing the chosen identifier(s).
+        2. If identifiers were previously selected and then deselected, it's set to the latest activity answer.
+        3. If no changes were made to the identifiers, it's set to the provided date (if available) or the date from the form.*/
       const endDate =
         identifierAnswerEndDate ??
         activityAnswerEndDate ??
@@ -90,22 +97,23 @@ export const useRespondentAnswers = () => {
         },
       });
 
-      const decryptedAnswers = await Promise.all(
-        encryptedAnswers.map(async (encryptedAnswer) => {
-          const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
-          const { decryptedAnswers } = await getDecryptedActivityData({
+      const decryptedAnswers = [];
+      for await (const encryptedAnswer of encryptedAnswers) {
+        const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
+        const decryptedAnswer = (
+          await getDecryptedActivityData({
             userPublicKey,
             answer,
             items,
             itemIds,
-          });
+          })
+        ).decryptedAnswers;
 
-          return {
-            decryptedAnswer: decryptedAnswers,
-            ...rest,
-          };
-        }),
-      );
+        decryptedAnswers.push({
+          decryptedAnswer,
+          ...rest,
+        });
+      }
 
       const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) =>
         a.version.localeCompare(b.version),
