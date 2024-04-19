@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 import * as routerDom from 'react-router-dom';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 
 import { SendInvitationPopup } from './SendInvitationPopup';

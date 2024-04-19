@@ -501,7 +501,7 @@ describe('RespondentDataReview', () => {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
             limit: 10000,
-            respondentId: mockedRespondentId,
+            targetSubjectId: mockedRespondentId,
           },
           signal: undefined,
         },
