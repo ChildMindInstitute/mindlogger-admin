@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { useFormContext, useWatch } from 'react-hook-form';
+import {
+  createSearchParams,
+  generatePath,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
 import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
 import {
@@ -14,6 +20,7 @@ import {
   AppletSubmitDateList,
   ResponseWithObject,
   SubmitDates,
+  EncryptedActivityAnswer,
 } from 'api';
 import { DateFormats } from 'shared/consts';
 import { Spinner } from 'shared/components';
@@ -23,15 +30,25 @@ import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types'
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Item } from 'shared/state';
 import { users } from 'redux/modules';
+import { page } from 'resources';
 
 import { Feedback } from './Feedback';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
 import { ReviewHeader } from './ReviewHeader';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
-import { Answer, AssessmentActivityItem } from './RespondentDataReview.types';
+import {
+  Answer,
+  AssessmentActivityItem,
+  ActivityAnswerMeta,
+  SelectAnswerProps,
+} from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
 import { RespondentsDataFormValues } from '../RespondentData.types';
+import { ReviewDescription } from './ReviewDescription';
+import { useDecryptedIdentifiers } from '../RespondentDataSummary/hooks';
+import { sortAnswerDates } from './utils/sortAnswerDates';
+import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 
 export const RespondentDataReview = () => {
   const { appletId, respondentId } = useParams();
@@ -40,6 +57,8 @@ export const RespondentDataReview = () => {
   const selectedDateParam = searchParams.get('selectedDate');
   const containerRef = useRef<HTMLElement | null>(null);
   const prevSelectedDateRef = useRef<null | string>(null);
+  const shouldSetLastAnswer = useRef(false);
+
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
@@ -53,16 +72,14 @@ export const RespondentDataReview = () => {
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activityItemAnswers, setActivityItemAnswers] = useState<
-    DecryptedActivityData<EncryptedAnswerSharedProps>['decryptedAnswers'] | null
+    DecryptedActivityData<EncryptedActivityAnswer>['decryptedAnswers'] | null
   >(null);
+  const [activityAnswerMeta, setActivityAnswerMeta] = useState<ActivityAnswerMeta | null>(null);
+
   const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
-
-  const { control, setValue } = useFormContext<RespondentsDataFormValues>();
-
-  const responseDate = useWatch({
-    control,
-    name: 'responseDate',
-  });
+  const getDecryptedIdentifiers = useDecryptedIdentifiers();
+  const navigate = useNavigate();
+  const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
 
   const dataTestid = 'respondents-review';
 
@@ -81,32 +98,58 @@ export const RespondentDataReview = () => {
     getReviewActivitiesApi,
     ({ data }) => {
       const activities = data?.result;
-      if (!activities) return;
 
+      if (!activities?.length) return;
       setActivities(activities);
 
-      const activity = activities.find(
-        ({ id, answerDates }) => id === selectedActivity?.id && answerDates.length,
-      );
-      if (!activity) {
-        setSelectedActivity(null);
-      }
-      handleSelectAnswer(null);
+      if (answerId && !shouldSetLastAnswer.current) return;
+      const selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
+      setSelectedActivity(selectedActivityByDefault);
+      const { answerDates } = selectedActivityByDefault;
+
+      if (!answerDates.length) return;
+      const sortedAnswerDates = sortAnswerDates(answerDates);
+      handleSelectAnswer({
+        answer: sortedAnswerDates[answerDates.length - 1],
+      });
     },
   );
 
   const getDecryptedActivityData = useDecryptedActivityData();
 
   const { execute: getActivityAnswer } = useAsync(getActivityAnswerApi, async (res) => {
-    if (!res?.data?.result) return;
+    const result = res?.data?.result;
+    if (!result) return;
 
-    const decryptedActivityData = await getDecryptedActivityData(res.data.result);
+    const decryptedActivityData = await getDecryptedActivityData(result);
     setActivityItemAnswers(decryptedActivityData.decryptedAnswers);
+
+    const { createdAt, identifier, version } = result;
+    const decryptedIdentifiers = identifier ? await getDecryptedIdentifiers?.([identifier]) : null;
+    setActivityAnswerMeta({
+      createdAt,
+      identifier: decryptedIdentifiers?.length ? decryptedIdentifiers[0].decryptedValue : null,
+      version,
+    });
   });
 
-  const handleSelectAnswer = (answer: Answer | null) => {
+  const handleSelectAnswer = ({ answer, isRouteCreated }: SelectAnswerProps) => {
     setIsFeedbackOpen(false);
     setSelectedAnswer(answer);
+
+    if (isRouteCreated) return;
+
+    const responseDate = getValues('responseDate');
+    if (!responseDate || !answer) return;
+
+    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    navigate({
+      pathname,
+      search: createSearchParams({
+        selectedDate: format(responseDate, DateFormats.YearMonthDay),
+        answerId: answer.answerId,
+      }).toString(),
+    });
   };
 
   const handleGetSubmitDates = (date: Date) => {
@@ -125,8 +168,10 @@ export const RespondentDataReview = () => {
 
   const handleGetActivities = (date?: Date | null) => {
     const createdDate = date && format(date, DateFormats.YearMonthDay);
-    if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate)
+
+    if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate) {
       return;
+    }
 
     getReviewActivities({
       appletId,
@@ -143,8 +188,13 @@ export const RespondentDataReview = () => {
     handleGetSubmitDates(date);
   };
 
+  const handleResponseDateChange = (date?: Date | null) => {
+    shouldSetLastAnswer.current = true;
+    handleGetActivities(date);
+  };
+
   useEffect(() => {
-    if (!appletId || !selectedActivity || !selectedAnswer) return;
+    if (!appletId || !selectedActivity || !selectedAnswer || !answerId) return;
     (async () => {
       try {
         setIsLoading(true);
@@ -201,7 +251,6 @@ export const RespondentDataReview = () => {
     <StyledContainer>
       <ReviewMenu
         control={control}
-        selectedDate={responseDate}
         responseDates={responseDates}
         onMonthChange={handleGetSubmitDates}
         activities={activities}
@@ -209,7 +258,7 @@ export const RespondentDataReview = () => {
         selectedAnswer={selectedAnswer}
         setSelectedActivity={setSelectedActivity}
         onSelectAnswer={handleSelectAnswer}
-        onDateChange={handleGetActivities}
+        onDateChange={handleResponseDateChange}
         isDatePickerLoading={getSubmitDatesLoading}
         lastActivityCompleted={lastActivityCompleted}
       />
@@ -237,10 +286,14 @@ export const RespondentDataReview = () => {
             onButtonClick={() => setIsFeedbackOpen(true)}
             data-testid={dataTestid}
           />
+          {selectedAnswer && activityAnswerMeta && !isLoading && (
+            <ReviewDescription {...activityAnswerMeta} data-testid={dataTestid} />
+          )}
           <Review
             isLoading={isLoading}
             selectedAnswer={selectedAnswer}
             activityItemAnswers={activityItemAnswers}
+            isActivitySelected={!!selectedActivity}
             data-testid={`${dataTestid}-activity-items`}
           />
         </StyledReviewContainer>

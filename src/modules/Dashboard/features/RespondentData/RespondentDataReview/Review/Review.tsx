@@ -13,14 +13,20 @@ export const Review = ({
   activityItemAnswers,
   isLoading,
   selectedAnswer,
+  isActivitySelected,
   'data-testid': dataTestid,
 }: ReviewProps) => {
-  if ((!selectedAnswer && !isLoading) || !activityItemAnswers)
+  if (isLoading) return null;
+
+  if (!selectedAnswer || !activityItemAnswers) {
     return (
       <StyledWrapper>
-        <StyledEmptyReview>{renderEmptyState(selectedAnswer)}</StyledEmptyReview>
+        <StyledEmptyReview>
+          {renderEmptyState(selectedAnswer, isActivitySelected)}
+        </StyledEmptyReview>
       </StyledWrapper>
     );
+  }
 
   return (
     <StyledReview data-testid={dataTestid}>

@@ -1,5 +1,5 @@
 import { UseFormGetValues } from 'react-hook-form';
-import { addDays, addYears, eachDayOfInterval, endOfYear, getDate, getDay } from 'date-fns';
+import { addYears, endOfYear, getDate } from 'date-fns';
 import * as yup from 'yup';
 
 import i18n from 'i18n';
@@ -19,6 +19,7 @@ import {
   getNextDayComparison,
   removeSecondsFromTime,
 } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
+import { getDaysInPeriod, getWeeklyDays } from 'shared/utils/eventFormUtils';
 
 import { convertDateToYearMonthDay } from '../Schedule.utils';
 import { AvailabilityTab } from './AvailabilityTab';
@@ -38,11 +39,9 @@ import {
   EventFormValues,
   GetBetweenStartEndNextDayComparisonProps,
   GetBetweenStartEndNextDaySingleComparisonProps,
-  GetDaysInPeriod,
   GetEventFromTabs,
   GetNotificationTimeComparisonProps,
   GetNotificationsValidationProps,
-  GetWeeklyDays,
   NotificationTimeTestContext,
   SecondsManipulation,
   GetReminderTimeComparison,
@@ -553,47 +552,6 @@ export const getEventPayload = (
 
   return body;
 };
-
-export const getDaysInPeriod = ({ isCrossDayEvent, startDate, endDate }: GetDaysInPeriod) => {
-  const end = isCrossDayEvent ? addDays(endDate, 1) : endDate;
-
-  return startDate && endDate && endDate >= startDate
-    ? eachDayOfInterval({
-        start: startDate,
-        end,
-      })
-    : [];
-};
-
-export const getWeeklyDays = ({ daysInPeriod, startDate, isCrossDayEvent }: GetWeeklyDays) =>
-  daysInPeriod.reduce(
-    (
-      acc: {
-        daysArr: number[];
-        daysInfoArr: { dayNumber: number; isCrossDay: boolean }[];
-        weeklyDaysCount: number;
-      },
-      currentDate,
-    ) => {
-      const dayOfWeek = getDay(currentDate);
-
-      if (dayOfWeek === getDay(startDate)) {
-        const weeklyDayNumber = acc.weeklyDaysCount * 7;
-        acc.daysArr.push(weeklyDayNumber, ...(isCrossDayEvent ? [weeklyDayNumber + 1] : []));
-        acc.daysInfoArr.push(
-          {
-            dayNumber: weeklyDayNumber,
-            isCrossDay: false,
-          },
-          ...(isCrossDayEvent ? [{ dayNumber: weeklyDayNumber + 1, isCrossDay: true }] : []),
-        );
-        acc.weeklyDaysCount++;
-      }
-
-      return acc;
-    },
-    { daysArr: [], daysInfoArr: [], weeklyDaysCount: 0 },
-  );
 
 export const getActivityIncompleteCommonFields = (formContext: yup.TestContext<yup.AnyObject>) => {
   const startDate = formContext.from?.[1]?.value?.startDate;

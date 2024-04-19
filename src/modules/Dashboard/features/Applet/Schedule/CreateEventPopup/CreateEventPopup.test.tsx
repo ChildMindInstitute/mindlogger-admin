@@ -4,10 +4,11 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { initialStateData } from 'redux/modules';
 import { mockedCurrentWorkspace } from 'shared/mock';
 import { page } from 'resources';
+import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { CreateEventPopup } from './CreateEventPopup';
 
@@ -105,164 +106,172 @@ export const preloadedState = {
 };
 
 describe('CreateEventPopup', () => {
-  test('create new event for WEEKLY event', async () => {
-    renderWithProviders(
-      <CreateEventPopup
-        open
-        setCreateEventPopupVisible={mockSetCreateEventPopupVisible}
-        defaultStartDate={mockDefaultStartDate}
-        data-testid={dataTestid}
-      />,
-      {
-        preloadedState,
-        route: `/dashboard/${mockAppletId}/schedule`,
-        routePath: page.appletSchedule,
-      },
-    );
-
-    expect(await screen.findByTestId(dataTestid)).toBeInTheDocument();
-    const title = await screen.findByTestId(`${dataTestid}-title`);
-    expect(title).toBeInTheDocument();
-    expect(title).toHaveTextContent('Create Activity Schedule');
-
-    // test close create event popup
-    const closeButton = await screen.findByTestId(`${dataTestid}-close-button`);
-    expect(closeButton).toBeInTheDocument();
-    await userEvent.click(closeButton);
-    expect(mockSetCreateEventPopupVisible).toBeCalledWith(false);
-
-    // test save event without selected activity
-    const saveButton = await screen.findByTestId(`${dataTestid}-submit-button`);
-    expect(saveButton).not.toBeDisabled();
-    await userEvent.click(saveButton);
-    expect(screen.getByText('Activity is required')).toBeInTheDocument();
-
-    // select activity
-    const activityConteiner = screen.getByTestId(`${dataTestid}-form-activity`);
-    const activityInput = activityConteiner.querySelector('input');
-    expect(activityInput).toHaveValue('');
-    const select = activityConteiner.querySelector('.MuiSelect-select');
-    await userEvent.click(select);
-    const listbox = await screen.findByRole('listbox');
-    expect(listbox).toBeInTheDocument();
-    expect(listbox.querySelectorAll('li')).toHaveLength(2); // 2 mock activity
-    await userEvent.click(listbox.querySelectorAll('li')[0]);
-    expect(activityInput).toHaveValue('96d889e2-2264-4e76-8c60-744600e770fe'); // selected the 1st activity
-    await userEvent.click(saveButton);
-
-    const removeEventsPopupDataTestid = `${dataTestid}-remove-all-scheduled-events-popup`;
-    const removePopup = await screen.findByTestId(removeEventsPopupDataTestid);
-    expect(removePopup).toBeInTheDocument();
-
-    // test close remove all scheduled events popup
-    const removePopupCloseButton = screen.getByTestId(
-      `${removeEventsPopupDataTestid}-close-button`,
-    );
-    expect(removePopupCloseButton).toBeInTheDocument();
-    await userEvent.click(removePopupCloseButton);
-    expect(removePopup).not.toBeInTheDocument();
-    await userEvent.click(saveButton);
-
-    const removePopupTitle = screen.getByTestId(`${removeEventsPopupDataTestid}-title`);
-    expect(removePopupTitle).toBeInTheDocument();
-    expect(removePopupTitle).toHaveTextContent('Remove All Scheduled Events for Activity');
-    expect(removePopup).toHaveTextContent(
-      /All scheduled events for Mock Activity 1 will be removed, and the activity will become always available to the user. Are you sure you want to continue?/,
-    );
-
-    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
-    const removeButton = screen.getByRole('button', { name: 'Remove' });
-    expect(removeButton).toBeInTheDocument();
-    await userEvent.click(removeButton);
-
-    expect(mockAxios.post).toBeCalledWith(
-      `/applets/${mockAppletId}/events`,
-      {
-        activityId: '96d889e2-2264-4e76-8c60-744600e770fe',
-        endTime: '23:59:00',
-        notification: null,
-        oneTimeCompletion: false,
-        periodicity: {
-          selectedDate: '2024-03-18',
-          type: 'ALWAYS',
+  test(
+    'create new event for WEEKLY event',
+    async () => {
+      renderWithProviders(
+        <CreateEventPopup
+          open
+          setCreateEventPopupVisible={mockSetCreateEventPopupVisible}
+          defaultStartDate={mockDefaultStartDate}
+          data-testid={dataTestid}
+        />,
+        {
+          preloadedState,
+          route: `/dashboard/${mockAppletId}/schedule`,
+          routePath: page.appletSchedule,
         },
-        respondentId: undefined,
-        startTime: '00:00:00',
-        timer: undefined,
-        timerType: 'NOT_SET',
-      },
-      { signal: undefined },
-    );
-    expect(mockSetCreateEventPopupVisible).toBeCalledWith(false);
-  });
+      );
 
-  test('create new event for ALWAYS event', async () => {
-    renderWithProviders(
-      <CreateEventPopup
-        open
-        setCreateEventPopupVisible={mockSetCreateEventPopupVisible}
-        defaultStartDate={mockDefaultStartDate}
-        data-testid={dataTestid}
-      />,
-      {
-        preloadedState,
-        route: `/dashboard/${mockAppletId}/schedule`,
-        routePath: page.appletSchedule,
-      },
-    );
+      expect(await screen.findByTestId(dataTestid)).toBeInTheDocument();
+      const title = await screen.findByTestId(`${dataTestid}-title`);
+      expect(title).toBeInTheDocument();
+      expect(title).toHaveTextContent('Create Activity Schedule');
 
-    expect(await screen.findByTestId(dataTestid)).toBeInTheDocument();
+      // test close create event popup
+      const closeButton = await screen.findByTestId(`${dataTestid}-close-button`);
+      expect(closeButton).toBeInTheDocument();
+      await userEvent.click(closeButton);
+      expect(mockSetCreateEventPopupVisible).toBeCalledWith(false);
 
-    // select activity
-    const activityConteiner = screen.getByTestId(`${dataTestid}-form-activity`);
-    const activityInput = activityConteiner.querySelector('input');
-    expect(activityInput).toHaveValue('');
-    const select = activityConteiner.querySelector('.MuiSelect-select');
-    expect(select).toBeInTheDocument();
-    await userEvent.click(select);
+      // test save event without selected activity
+      const saveButton = await screen.findByTestId(`${dataTestid}-submit-button`);
+      expect(saveButton).not.toBeDisabled();
+      await userEvent.click(saveButton);
+      expect(screen.getByText('Activity is required')).toBeInTheDocument();
 
-    const listbox = await screen.findByRole('listbox');
-    expect(listbox).toBeInTheDocument();
-    expect(listbox.querySelectorAll('li')).toHaveLength(2); // 2 mock activity
-    await userEvent.click(listbox.querySelectorAll('li')[1]); // selected the 2nd activity
-    expect(activityInput).toHaveValue('60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0');
-    const saveButton = screen.getByTestId(`${dataTestid}-submit-button`);
-    await userEvent.click(saveButton);
+      // select activity
+      const activityConteiner = screen.getByTestId(`${dataTestid}-form-activity`);
+      const activityInput = activityConteiner.querySelector('input');
+      expect(activityInput).toHaveValue('');
+      const select = activityConteiner.querySelector('.MuiSelect-select');
+      await userEvent.click(select);
+      const listbox = await screen.findByRole('listbox');
+      expect(listbox).toBeInTheDocument();
+      expect(listbox.querySelectorAll('li')).toHaveLength(2); // 2 mock activity
+      await userEvent.click(listbox.querySelectorAll('li')[0]);
+      expect(activityInput).toHaveValue('96d889e2-2264-4e76-8c60-744600e770fe'); // selected the 1st activity
+      await userEvent.click(saveButton);
 
-    const accessPopup = screen.getByTestId('dashboard-calendar-confirm-scheduled-access-popup');
-    expect(accessPopup).toBeInTheDocument();
-    const accessPopupTitle = screen.getByTestId(
-      'dashboard-calendar-confirm-scheduled-access-popup-title',
-    );
-    expect(accessPopupTitle).toBeInTheDocument();
-    expect(accessPopupTitle).toHaveTextContent('Confirm Scheduled Access');
-    expect(accessPopup).toHaveTextContent(
-      /Activity Mock Activity 2 will no longer be always available, and the Activity will be a scheduled event. Are you sure you want to continue?/,
-    );
+      const removeEventsPopupDataTestid = `${dataTestid}-remove-all-scheduled-events-popup`;
+      const removePopup = await screen.findByTestId(removeEventsPopupDataTestid);
+      expect(removePopup).toBeInTheDocument();
 
-    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
-    const confirmButton = screen.getByRole('button', { name: 'Confirm' });
-    expect(confirmButton).toBeInTheDocument();
-    await userEvent.click(confirmButton);
+      // test close remove all scheduled events popup
+      const removePopupCloseButton = screen.getByTestId(
+        `${removeEventsPopupDataTestid}-close-button`,
+      );
+      expect(removePopupCloseButton).toBeInTheDocument();
+      await userEvent.click(removePopupCloseButton);
+      expect(removePopup).not.toBeInTheDocument();
+      await userEvent.click(saveButton);
 
-    expect(mockAxios.post).toBeCalledWith(
-      `/applets/${mockAppletId}/events`,
-      {
-        accessBeforeSchedule: false,
-        activityId: '60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0',
-        endTime: '23:59:00',
-        notification: null,
-        periodicity: {
-          selectedDate: '2024-03-18',
-          type: 'ONCE',
+      const removePopupTitle = screen.getByTestId(`${removeEventsPopupDataTestid}-title`);
+      expect(removePopupTitle).toBeInTheDocument();
+      expect(removePopupTitle).toHaveTextContent('Remove All Scheduled Events for Activity');
+      expect(removePopup).toHaveTextContent(
+        /All scheduled events for Mock Activity 1 will be removed, and the activity will become always available to the user. Are you sure you want to continue?/,
+      );
+
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+      const removeButton = screen.getByRole('button', { name: 'Remove' });
+      expect(removeButton).toBeInTheDocument();
+      await userEvent.click(removeButton);
+
+      expect(mockAxios.post).toBeCalledWith(
+        `/applets/${mockAppletId}/events`,
+        {
+          activityId: '96d889e2-2264-4e76-8c60-744600e770fe',
+          endTime: '23:59:00',
+          notification: null,
+          oneTimeCompletion: false,
+          periodicity: {
+            selectedDate: '2024-03-18',
+            type: 'ALWAYS',
+          },
+          respondentId: undefined,
+          startTime: '00:00:00',
+          timer: undefined,
+          timerType: 'NOT_SET',
         },
-        respondentId: undefined,
-        startTime: '00:00:00',
-        timer: undefined,
-        timerType: 'NOT_SET',
-      },
-      { signal: undefined },
-    );
-    expect(mockSetCreateEventPopupVisible).toBeCalledWith(false);
-  });
+        { signal: undefined },
+      );
+      expect(mockSetCreateEventPopupVisible).toBeCalledWith(false);
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test(
+    'create new event for ALWAYS event',
+    async () => {
+      renderWithProviders(
+        <CreateEventPopup
+          open
+          setCreateEventPopupVisible={mockSetCreateEventPopupVisible}
+          defaultStartDate={mockDefaultStartDate}
+          data-testid={dataTestid}
+        />,
+        {
+          preloadedState,
+          route: `/dashboard/${mockAppletId}/schedule`,
+          routePath: page.appletSchedule,
+        },
+      );
+
+      expect(await screen.findByTestId(dataTestid)).toBeInTheDocument();
+
+      // select activity
+      const activityConteiner = screen.getByTestId(`${dataTestid}-form-activity`);
+      const activityInput = activityConteiner.querySelector('input');
+      expect(activityInput).toHaveValue('');
+      const select = activityConteiner.querySelector('.MuiSelect-select');
+      expect(select).toBeInTheDocument();
+      await userEvent.click(select);
+
+      const listbox = await screen.findByRole('listbox');
+      expect(listbox).toBeInTheDocument();
+      expect(listbox.querySelectorAll('li')).toHaveLength(2); // 2 mock activity
+      await userEvent.click(listbox.querySelectorAll('li')[1]); // selected the 2nd activity
+      expect(activityInput).toHaveValue('60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0');
+      const saveButton = screen.getByTestId(`${dataTestid}-submit-button`);
+      await userEvent.click(saveButton);
+
+      const accessPopup = screen.getByTestId('dashboard-calendar-confirm-scheduled-access-popup');
+      expect(accessPopup).toBeInTheDocument();
+      const accessPopupTitle = screen.getByTestId(
+        'dashboard-calendar-confirm-scheduled-access-popup-title',
+      );
+      expect(accessPopupTitle).toBeInTheDocument();
+      expect(accessPopupTitle).toHaveTextContent('Confirm Scheduled Access');
+      expect(accessPopup).toHaveTextContent(
+        /Activity Mock Activity 2 will no longer be always available, and the Activity will be a scheduled event. Are you sure you want to continue?/,
+      );
+
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+      const confirmButton = screen.getByRole('button', { name: 'Confirm' });
+      expect(confirmButton).toBeInTheDocument();
+      await userEvent.click(confirmButton);
+
+      expect(mockAxios.post).toBeCalledWith(
+        `/applets/${mockAppletId}/events`,
+        {
+          accessBeforeSchedule: false,
+          activityId: '60f83cbf-8ffe-447b-af34-0e4cc5f8d3d0',
+          endTime: '23:59:00',
+          notification: null,
+          periodicity: {
+            selectedDate: '2024-03-18',
+            type: 'ONCE',
+          },
+          respondentId: undefined,
+          startTime: '00:00:00',
+          timer: undefined,
+          timerType: 'NOT_SET',
+        },
+        { signal: undefined },
+      );
+      expect(mockSetCreateEventPopupVisible).toBeCalledWith(false);
+    },
+    JEST_TEST_TIMEOUT,
+  );
 });

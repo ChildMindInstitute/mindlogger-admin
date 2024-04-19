@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { InputController } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyLarge, StyledClearedButton, variables, theme } from 'shared/styles';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import { CreateAppletPasswordForm, CreateAppletPasswordProps } from './CreateAppletPassword.types';
 import { createPasswordFormSchema } from './CreateAppletPassword.schema';
@@ -56,7 +57,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
               endAdornment: (
                 <StyledClearedButton
                   aria-label="toggle password visibility"
-                  onClick={() => setShowPassword((prevState) => !prevState)}
+                  onClick={toggleBooleanState(setShowPassword)}
                 >
                   <Svg id={showPassword ? 'visibility-off' : 'visibility-on'} />
                 </StyledClearedButton>
@@ -77,7 +78,7 @@ export const CreateAppletPassword = forwardRef<AppletPasswordRef, CreateAppletPa
               endAdornment: (
                 <StyledClearedButton
                   aria-label="toggle password visibility"
-                  onClick={() => setShowAppletPasswordConfirmation((prevState) => !prevState)}
+                  onClick={toggleBooleanState(setShowAppletPasswordConfirmation)}
                 >
                   <Svg id={showAppletPasswordConfirmation ? 'visibility-off' : 'visibility-on'} />
                 </StyledClearedButton>

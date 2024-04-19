@@ -3,7 +3,8 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { StyledTitleLargish, variables } from 'shared/styles';
-import { useComponentSize } from 'shared/hooks';
+import { useComponentSize } from 'shared/hooks/useComponentSize';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import { StyledBtn, StyledCollapsedContainer, StyledMdPreview } from './CollapsedMdText.styles';
 import { CollapsedMdTextProps } from './CollapsedMdText.types';
@@ -23,10 +24,6 @@ export const CollapsedMdText = ({
     setIsLarge(height > maxHeight);
   }, [height, maxHeight]);
 
-  const toggleOpen = () => {
-    setIsOpen((state) => !state);
-  };
-
   return (
     <>
       <StyledCollapsedContainer
@@ -40,7 +37,7 @@ export const CollapsedMdText = ({
         </Box>
       </StyledCollapsedContainer>
       {isLarge && (
-        <StyledBtn onClick={toggleOpen} data-testid={`${dataTestid}-collapse`}>
+        <StyledBtn onClick={toggleBooleanState(setIsOpen)} data-testid={`${dataTestid}-collapse`}>
           <StyledTitleLargish color={variables.palette.primary}>
             {t(isOpen ? 'showLess' : 'showMore')}
           </StyledTitleLargish>

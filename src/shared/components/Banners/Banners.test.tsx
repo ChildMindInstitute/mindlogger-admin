@@ -2,7 +2,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { RootState } from 'redux/store';
 
 import { Banners } from './Banners';

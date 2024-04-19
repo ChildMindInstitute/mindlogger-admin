@@ -1,7 +1,7 @@
 import { waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
-import { renderHookWithProviders } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useWorkspaceList } from './useWorkspaceList';
 
@@ -113,10 +113,12 @@ describe('useWorkspaceList', () => {
 
     await fetchWorkspacesData();
 
-    expect(result.current).toEqual({
-      checkIfHasAccessToWorkspace: expect.any(Function),
-      isLoading: false,
-      workspaces: [],
+    await waitFor(() => {
+      expect(result.current).toEqual({
+        checkIfHasAccessToWorkspace: expect.any(Function),
+        isLoading: false,
+        workspaces: [],
+      });
     });
   });
 });

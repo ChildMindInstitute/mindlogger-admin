@@ -3,7 +3,8 @@ import mockAxios from 'jest-mock-axios';
 
 import * as encryptionFunctions from 'shared/utils/encryption';
 import { mockedApplet, mockedPassword } from 'shared/mock';
-import { expectBanner, renderWithProviders } from 'shared/utils';
+import { expectBanner } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { DeletePopup } from '.';
 

@@ -4,7 +4,7 @@ import { forwardRef, createRef } from 'react';
 import { Box } from '@mui/material';
 
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedRespondentId } from 'shared/mock';
 import { initialStateData } from 'shared/state';
 

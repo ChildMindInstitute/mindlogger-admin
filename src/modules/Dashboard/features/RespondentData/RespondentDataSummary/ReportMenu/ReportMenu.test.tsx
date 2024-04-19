@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as reactHookForm from 'react-hook-form';
+import { endOfDay, startOfDay, subDays } from 'date-fns';
 
 import { ReportMenu } from './ReportMenu';
 
@@ -16,8 +17,20 @@ const mockedActivity = {
 };
 
 const mockActivities = [
-  { id: 'activity-1', name: 'Activity 1', isPerformanceTask: false, hasAnswer: true },
-  { id: 'activity-2', name: 'Activity 2', isPerformanceTask: false, hasAnswer: true },
+  {
+    id: 'activity-1',
+    name: 'Activity 1',
+    isPerformanceTask: false,
+    hasAnswer: true,
+    lastAnswerDate: '2023-09-26T10:10:05.162083',
+  },
+  {
+    id: 'activity-2',
+    name: 'Activity 2',
+    isPerformanceTask: false,
+    hasAnswer: true,
+    lastAnswerDate: '2023-09-25T10:10:05.162083',
+  },
 ];
 
 const mockedSetValue = jest.fn();
@@ -62,6 +75,13 @@ describe('ReportMenu Component', () => {
     await userEvent.click(activityElement);
 
     expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockActivities[1]);
+
+    //set startDate end endDate to 1 week from the most recent response
+    const expectedEndDate = endOfDay(new Date('2023-09-25'));
+    const expectedStartDate = startOfDay(subDays(expectedEndDate, 6));
+    expect(mockedSetValue).toHaveBeenCalledWith('startDate', expectedStartDate);
+    expect(mockedSetValue).toHaveBeenCalledWith('endDate', expectedEndDate);
+
     expect(mockSetIsLoading).toHaveBeenCalledWith(true);
     expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({ activity: mockActivities[1] });
     expect(mockFetchAnswers).toHaveBeenCalledWith({ activity: mockActivities[1] });

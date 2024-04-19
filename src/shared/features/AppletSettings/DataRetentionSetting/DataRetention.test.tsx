@@ -2,7 +2,8 @@ import { waitFor, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
-import { expectBanner, SettingParam, renderWithProviders } from 'shared/utils';
+import { expectBanner, SettingParam } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletId, mockedCurrentWorkspace } from 'shared/mock';
 import { initialStateData } from 'shared/state/Base';
 import { Roles } from 'shared/consts';

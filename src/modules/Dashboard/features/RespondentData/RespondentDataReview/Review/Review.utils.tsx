@@ -17,6 +17,7 @@ import {
   DateItemAnswer,
   TimeRangeItemAnswer,
   SingleMultiSelectPerRowItemAnswer,
+  SliderRowsItemAnswer,
 } from '../RespondentDataReview.types';
 import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
@@ -26,6 +27,7 @@ import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem';
 import { DateResponseItem } from '../DateResponseItem';
 import { TimeRangeResponseItem } from '../TimeRangeResponseItem';
 import { SingleMultiSelectPerRowResponseItem } from '../SingleMultiSelectPerRowResponseItem';
+import { SliderRowsResponseItem } from '../SliderRowsResponseItem';
 
 const { t } = i18n;
 
@@ -43,8 +45,8 @@ export const getTimeResponseItem = (answer?: DecryptedTimeAnswer) => {
   return format(date, DateFormats.Time);
 };
 
-export const renderEmptyState = (selectedAnswer: Answer | null) => {
-  if (!selectedAnswer) {
+export const renderEmptyState = (selectedAnswer: Answer | null, isActivitySelected: boolean) => {
+  if (!isActivitySelected && !selectedAnswer) {
     return (
       <>
         <Svg id="data" width="80" height="80" />
@@ -59,7 +61,7 @@ export const renderEmptyState = (selectedAnswer: Answer | null) => {
     <>
       <Svg id="chart" width="67" height="67" />
       <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-        {t('noDataForActivity')}
+        {t('noAvailableData')}
       </StyledTitleLarge>
     </>
   );
@@ -95,5 +97,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
           {...(activityItemAnswer as SingleMultiSelectPerRowItemAnswer)}
         />
       );
+    case ItemResponseType.SliderRows:
+      return <SliderRowsResponseItem {...(activityItemAnswer as SliderRowsItemAnswer)} />;
   }
 };

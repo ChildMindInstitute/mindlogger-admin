@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 
-import { renderWithAppletFormData } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import { ScoreSummaryRow } from './ScoreSummaryRow';
 

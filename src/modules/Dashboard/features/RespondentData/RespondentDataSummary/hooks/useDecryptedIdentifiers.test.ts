@@ -36,10 +36,12 @@ describe('useDecryptedIdentifiers', () => {
     const identifiers = [
       {
         identifier: 'Identifier_1',
+        lastAnswerDate: '2023-09-26T12:11:46.162083',
         userPublicKey: null,
       },
       {
         identifier: 'Identifier_2',
+        lastAnswerDate: '2023-09-27T11:11:00.162083',
         userPublicKey: null,
       },
     ];

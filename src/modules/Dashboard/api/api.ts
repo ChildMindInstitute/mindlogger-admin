@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
-import { EncryptedAnswerSharedProps, ExportDataResult } from 'shared/types';
+import { ExportDataResult } from 'shared/types';
 import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
+import { authApiClient } from 'shared/api/apiConfig';
 
 import {
   TransferOwnershipType,
@@ -59,6 +59,8 @@ import {
   DeleteSubject,
   TargetSubjectId,
   SubjectId,
+  DeleteReview,
+  EncryptedActivityAnswer,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -444,7 +446,7 @@ export const getActivityAnswerApi = (
   { appletId, answerId, activityId }: ActivityAnswer,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<ResponseWithObject<EncryptedAnswerSharedProps>>(
+  authApiClient.get<ResponseWithObject<EncryptedActivityAnswer>>(
     `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`,
     {
       params: { limit: MAX_LIMIT },
@@ -526,6 +528,17 @@ export const createAssessmentApi = (
   authApiClient.post(
     `/answers/applet/${appletId}/answers/${answerId}/assessment`,
     { ...assessment },
+    {
+      signal,
+    },
+  );
+
+export const deleteReviewApi = (
+  { appletId, answerId, assessmentId }: DeleteReview,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(
+    `/answers/applet/${appletId}/answers/${answerId}/assessment/${assessmentId}`,
     {
       signal,
     },

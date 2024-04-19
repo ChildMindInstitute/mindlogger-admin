@@ -1,15 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import * as reactHookForm from 'react-hook-form';
+import { endOfDay, startOfDay, subDays } from 'date-fns';
 
 import { page } from 'resources';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 
-import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests';
-import * as useRespondentAnswersHook from './hooks/useRespondentAnswers';
+import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests/useDatavizSummaryRequests';
+import * as useRespondentAnswersHook from './hooks/useRespondentAnswers/useRespondentAnswers';
 import { RespondentDataSummary } from './RespondentDataSummary';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
@@ -21,6 +20,7 @@ const mockedSelectedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  lastAnswerDate: '2023-09-26T12:11:46.162083',
 };
 
 const mockedSummaryActivities = [
@@ -30,6 +30,7 @@ const mockedSummaryActivities = [
     name: 'Activity 2',
     isPerformanceTask: false,
     hasAnswer: true,
+    lastAnswerDate: '2023-10-27T12:11:46.162083',
   },
 ];
 
@@ -76,16 +77,6 @@ const emptyStateCases = [
     selectedActivity: {
       id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
       name: 'Activity 1',
-      isPerformanceTask: false,
-      hasAnswer: false,
-    },
-    expectedEmptyStateMessage: 'No available Data for this Activity yet',
-    description: "renders empty state component if selected activity doesn't have answers",
-  },
-  {
-    selectedActivity: {
-      id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
-      name: 'Activity 1',
       isPerformanceTask: true,
       hasAnswer: true,
     },
@@ -97,6 +88,8 @@ const emptyStateCases = [
 describe('RespondentDataSummary component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: mockedSetValue });
   });
 
@@ -165,11 +158,19 @@ describe('RespondentDataSummary component', () => {
       );
     });
 
+    //select activity with the last answer date
     expect(mockedSetValue).toHaveBeenCalledWith('summaryActivities', mockedSummaryActivities);
-    expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockedSummaryActivities[0]);
+    expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockedSummaryActivities[1]);
+
+    //set startDate end endDate to 1 week from the most recent response
+    const expectedEndDate = endOfDay(new Date('2023-10-27'));
+    const expectedStartDate = startOfDay(subDays(expectedEndDate, 6));
+    expect(mockedSetValue).toHaveBeenCalledWith('startDate', expectedStartDate);
+    expect(mockedSetValue).toHaveBeenCalledWith('endDate', expectedEndDate);
+
     expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({
-      activity: mockedSummaryActivities[0],
+      activity: mockedSummaryActivities[1],
     });
-    expect(mockFetchAnswers).toHaveBeenCalledWith({ activity: mockedSummaryActivities[0] });
+    expect(mockFetchAnswers).toHaveBeenCalledWith({ activity: mockedSummaryActivities[1] });
   });
 });

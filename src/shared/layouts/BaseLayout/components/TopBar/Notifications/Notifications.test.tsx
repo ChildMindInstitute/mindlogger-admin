@@ -3,7 +3,7 @@
 import { screen, fireEvent } from '@testing-library/react';
 
 import { AlertsSchema } from 'redux/modules';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAlert } from 'shared/mock';
 
 import { Notifications } from './Notifications';

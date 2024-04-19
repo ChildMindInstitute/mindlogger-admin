@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { workspaces } from 'redux/modules';
-import { EmptyState } from 'shared/components';
-import { getErrorMessage } from 'shared/utils';
+import { workspaces } from 'shared/state/Workspaces';
+import { EmptyState } from 'shared/components/EmptyState';
+import { getErrorMessage } from 'shared/utils/errors';
 import { ApiResponseCodes } from 'shared/api';
 import { ErrorResponseType } from 'shared/types';
 

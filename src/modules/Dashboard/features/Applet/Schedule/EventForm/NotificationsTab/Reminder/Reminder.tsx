@@ -8,9 +8,9 @@ import { StyledBodyMedium, StyledFlexTopStart, StyledLabelLarge, theme } from 's
 import { Periodicity } from 'modules/Dashboard/api';
 import { getNextDayComparison } from 'modules/Dashboard/state/CalendarEvents/CalendarEvents.utils';
 import { SelectEvent } from 'shared/types';
+import { getDaysInPeriod, getWeeklyDays } from 'shared/utils/eventFormUtils';
 
 import { EventFormValues } from '../../EventForm.types';
-import { getDaysInPeriod, getWeeklyDays } from '../../EventForm.utils';
 import {
   DEFAULT_ACTIVITY_INCOMPLETE_VALUE,
   YEARS_TO_ADD_IF_NO_END_DATE,
@@ -132,7 +132,10 @@ export const Reminder = ({ 'data-testid': dataTestid }: ReminderProps) => {
           </StyledColInner>
         </StyledFlexTopStart>
         {isWeekdaysPeriodicity && (
-          <StyledBodyMedium sx={{ mt: theme.spacing(2) }}>
+          <StyledBodyMedium
+            data-testid={`${dataTestid}-weekdays-reminder-message`}
+            sx={{ mt: theme.spacing(2) }}
+          >
             {t('weekdaysReminderMessage')}
           </StyledBodyMedium>
         )}

@@ -1,4 +1,4 @@
-import { apiClient, authApiClientWithoutRefresh } from 'shared/api/api.client';
+import { apiClient, authApiClientWithoutRefresh } from 'shared/api/apiConfig';
 
 import {
   ApproveRecoveryPassword,

@@ -399,6 +399,7 @@ const allSubscalesToRenderFirstSubscaleResult = {
         activityItem: {
           id: 'c7c88130-7118-4c68-a18d-0e416ba859b2',
           name: 'single',
+          order: 1,
           question: {
             en: 'single',
           },
@@ -432,6 +433,7 @@ const allSubscalesToRenderFirstSubscaleResult = {
         activityItem: {
           id: '2e7a64f8-f8df-4f7c-9d15-db60b5cc3a46',
           name: 'slider',
+          order: 3,
           question: {
             en: 'slider',
           },
@@ -528,6 +530,7 @@ const allSubscalesToRenderFinalResult = {
         activityItem: {
           id: 'c7c88130-7118-4c68-a18d-0e416ba859b2',
           name: 'single',
+          order: 1,
           question: {
             en: 'single',
           },
@@ -561,6 +564,7 @@ const allSubscalesToRenderFinalResult = {
         activityItem: {
           id: '2e7a64f8-f8df-4f7c-9d15-db60b5cc3a46',
           name: 'slider',
+          order: 3,
           question: {
             en: 'slider',
           },
@@ -988,6 +992,7 @@ describe('Subscales.utils', () => {
           activityItem: {
             id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
             name: 'ss',
+            order: 1,
             question: {
               en: 'ss',
             },
@@ -1027,6 +1032,7 @@ describe('Subscales.utils', () => {
           activityItem: {
             id: 'da7cc5c3-07e6-4af3-a1e9-9dbfe24c65c2',
             name: 'ms',
+            order: 2,
             question: {
               en: 'ms',
             },
@@ -1072,6 +1078,7 @@ describe('Subscales.utils', () => {
           activityItem: {
             id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
             name: 'ss',
+            order: 1,
             question: {
               en: 'ss',
             },
@@ -1183,6 +1190,7 @@ describe('Subscales.utils', () => {
                 activityItem: {
                   id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
                   name: 'ss',
+                  order: 1,
                   question: {
                     en: 'ss',
                   },
@@ -1223,6 +1231,7 @@ describe('Subscales.utils', () => {
                 activityItem: {
                   id: 'da7cc5c3-07e6-4af3-a1e9-9dbfe24c65c2',
                   name: 'ms',
+                  order: 2,
                   question: {
                     en: 'ms',
                   },
@@ -1268,6 +1277,7 @@ describe('Subscales.utils', () => {
                 activityItem: {
                   id: 'c95f1ddc-3893-430b-afaa-eb4fc3e20c64',
                   name: 'ss',
+                  order: 1,
                   question: {
                     en: 'ss',
                   },
