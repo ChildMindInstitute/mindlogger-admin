@@ -53,6 +53,7 @@ const preloadedState = {
       ...initialStateData,
       data: {
         result: {
+          id: 'test-id',
           nickname: 'Mocked Respondent',
           secretUserId: '3921968c-3903-4872-8f30-a6e6a10cef36',
           lastSeen: null,

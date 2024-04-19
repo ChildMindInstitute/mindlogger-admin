@@ -262,7 +262,7 @@ export const Participants = () => {
       navigate(
         generatePath(page.appletParticipantActivities, {
           appletId,
-          participantId: respondentOrSubjectId,
+          participantId: details[0].subjectId,
         }),
       );
     };

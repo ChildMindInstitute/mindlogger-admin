@@ -60,4 +60,12 @@ export const users = {
         },
       }) => data,
     ),
+  useSubjectStatus: (): UsersSchema['subjectDetails']['status'] =>
+    useAppSelector(
+      ({
+        users: {
+          subjectDetails: { status },
+        },
+      }) => status,
+    ),
 };

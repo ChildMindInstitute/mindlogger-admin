@@ -9,7 +9,7 @@ import { workspaces } from 'shared/state';
 import { StyledBody, StyledHeadlineLarge } from 'shared/styles';
 import { applet as appletState } from 'shared/state';
 import { applets, users } from 'modules/Dashboard/state';
-import { getRespondentDetails } from 'modules/Dashboard/state/Users/Users.thunk';
+import { getSubjectDetails } from 'modules/Dashboard/state/Users/Users.thunk';
 import { palette } from 'shared/styles/variables/palette';
 import { page } from 'resources';
 
@@ -20,49 +20,41 @@ export const ParticipantDetails = () => {
   const navigate = useNavigate();
   const { appletId, participantId } = useParams();
   const { ownerId } = workspaces.useData() || {};
+  const { useSubject, useSubjectStatus } = users;
   const appletLoadingStatus = appletState.useResponseStatus();
-  const respondentLoadingStatus = users.useRespondentStatus();
-  const { useRespondent } = users;
-  const respondent = useRespondent();
-  const respondentTabs = useParticipantDetailsTabs();
+  const subjectLoadingStatus = useSubjectStatus();
+  const { result: subject } = useSubject() ?? {};
   const { getApplet } = appletState.thunk;
+  const respondentTabs = useParticipantDetailsTabs();
 
   useEffect(() => {
     if (!appletId) return;
     dispatch(getApplet({ appletId }));
 
     if (!participantId || !ownerId) return;
-    dispatch(getRespondentDetails({ ownerId, appletId, respondentId: participantId }));
+    dispatch(getSubjectDetails({ subjectId: participantId }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
   }, [appletId, participantId, ownerId]);
 
-  const navigateUp = () => {
-    navigate(
-      generatePath(page.appletParticipants, {
-        appletId,
-      }),
-    );
-  };
-
   const loading =
     appletLoadingStatus === 'loading' ||
     appletLoadingStatus === 'idle' ||
-    respondentLoadingStatus === 'loading' ||
-    respondentLoadingStatus === 'idle';
+    subjectLoadingStatus === 'loading' ||
+    subjectLoadingStatus === 'idle';
 
   useEffect(() => {
-    if (!loading && !respondent) {
-      navigateUp();
+    if (!loading && !subject) {
+      navigate(generatePath(page.appletParticipants, { appletId }));
     }
-  }, [loading, respondent]);
+  }, [loading, subject]);
 
   return (
     <StyledBody>
       {loading && <Spinner />}
-      {!loading && !!respondent && (
+      {!loading && !!subject && (
         <>
           <Box
             sx={{
@@ -74,10 +66,8 @@ export const ParticipantDetails = () => {
             }}
           >
             <Box sx={{ display: 'flex', gap: 1.6 }}>
-              <StyledHeadlineLarge>{respondent?.result.secretUserId}</StyledHeadlineLarge>
-              <StyledHeadlineLarge color={palette.outline}>
-                {respondent?.result.nickname}
-              </StyledHeadlineLarge>
+              <StyledHeadlineLarge>{subject?.secretUserId}</StyledHeadlineLarge>
+              <StyledHeadlineLarge color={palette.outline}>{subject?.nickname}</StyledHeadlineLarge>
             </Box>
 
             <HeaderOptions />

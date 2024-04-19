@@ -10,6 +10,7 @@ import {
   mockedOwnerId,
   mockedRespondentId,
   mockedRespondent,
+  mockedSubjectId1,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -131,7 +132,7 @@ describe('Participants component tests', () => {
     expect(mockedUseNavigate).toHaveBeenCalledWith(
       generatePath(page.appletParticipantActivities, {
         appletId: mockedAppletId,
-        participantId: mockedRespondentId,
+        participantId: mockedSubjectId1,
       }),
     );
   });

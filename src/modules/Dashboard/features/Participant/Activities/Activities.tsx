@@ -14,8 +14,8 @@ import { users } from 'modules/Dashboard/state';
 
 export const Activities = () => {
   const { appletId, participantId } = useParams();
-  const respondentLoadingStatus = users.useRespondentStatus();
-  const respondent = users.useRespondent();
+  const subjectLoadingStatus = users.useSubjectStatus();
+  const subject = users.useSubject();
   const [activitiesData, setActivitiesData] = useState<{
     result: DatavizActivity[];
     count: number;
@@ -23,8 +23,7 @@ export const Activities = () => {
   const [isLoading, setIsLoading] = useState(true);
   const dataTestId = 'dashboard-applet-participant-activities';
 
-  const isParticipantLoading =
-    respondentLoadingStatus === 'loading' || respondentLoadingStatus === 'idle';
+  const isSubjectLoading = subjectLoadingStatus === 'loading' || subjectLoadingStatus === 'idle';
 
   const {
     formatRow,
@@ -58,10 +57,7 @@ export const Activities = () => {
   useEffect(() => {
     if (!appletId || !participantId) return;
 
-    getSummaryActivities({
-      appletId,
-      targetSubjectId: participantId,
-    });
+    getSummaryActivities({ appletId, targetSubjectId: participantId });
   }, [appletId, participantId, getSummaryActivities]);
 
   const activities = useMemo(
@@ -75,11 +71,11 @@ export const Activities = () => {
             if (activity) {
               const options: OpenTakeNowModalOptions = {};
 
-              if (participantId && respondent) {
+              if (participantId && subject) {
                 options.subject = {
                   id: participantId,
-                  secretId: respondent.result.secretUserId,
-                  nickname: respondent.result.nickname,
+                  secretId: subject.result.secretUserId,
+                  nickname: subject.result.nickname,
                 };
               }
 
@@ -99,7 +95,7 @@ export const Activities = () => {
       TakeNowModal={TakeNowModal}
       order={'desc'}
       orderBy={''}
-      isLoading={isLoading || isParticipantLoading}
+      isLoading={isLoading || isSubjectLoading}
       data-testid={dataTestId}
     />
   );

@@ -52,6 +52,7 @@ export type Respondent = {
 };
 
 export type RespondentDetails = {
+  id: string;
   nickname: string;
   secretUserId: string;
   lastSeen: string | null;
