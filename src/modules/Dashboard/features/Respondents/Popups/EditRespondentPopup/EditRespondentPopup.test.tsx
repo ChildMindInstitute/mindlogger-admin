@@ -2,7 +2,8 @@ import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
-import { expectBanner, renderWithProviders } from 'shared/utils';
+import { expectBanner } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { EditRespondentPopup } from '.';
 

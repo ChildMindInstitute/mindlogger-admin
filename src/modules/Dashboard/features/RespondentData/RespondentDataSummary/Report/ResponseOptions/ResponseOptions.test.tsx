@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen, within } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ResponseOptions } from './ResponseOptions';
 

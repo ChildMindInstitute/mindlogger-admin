@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { InputControllerProps } from './InputController.types';
@@ -10,20 +11,35 @@ export const InputController = <T extends FieldValues>({
   isErrorVisible = true,
   helperText,
   onChange: onCustomChange,
+  type,
   ...props
-}: InputControllerProps<T>) => (
-  <Controller
-    name={name}
-    control={control}
-    render={({ field: { onChange, value }, fieldState: { error } }) => (
-      <Input
-        onChange={onChange}
-        value={value}
-        error={!!error || providedError}
-        helperText={isErrorVisible ? error?.message || helperText : ''}
-        onCustomChange={onCustomChange}
-        {...props}
-      />
-    )}
-  />
-);
+}: InputControllerProps<T>) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // removing the ability to change added number by scrolling - M2-6130
+  const handleOnWheel = () => {
+    if (inputRef.current && type === 'number') {
+      inputRef.current.blur();
+    }
+  };
+
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <Input
+          inputRef={inputRef}
+          type={type}
+          onChange={onChange}
+          value={value}
+          error={!!error || providedError}
+          helperText={isErrorVisible ? error?.message || helperText : ''}
+          onCustomChange={onCustomChange}
+          onWheel={handleOnWheel}
+          {...props}
+        />
+      )}
+    />
+  );
+};

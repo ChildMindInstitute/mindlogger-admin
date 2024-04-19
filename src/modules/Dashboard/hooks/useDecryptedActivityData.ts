@@ -34,7 +34,7 @@ export const useDecryptedActivityData = (
   const { appletId = '' } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
   const encryption = appletData?.encryption;
-  const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption!);
+  const encryptionInfoFromServer = getParsedEncryptionFromServer(dynamicEncryption ?? encryption);
   const { getAppletPrivateKey } = useEncryptionStorage();
 
   if (!encryptionInfoFromServer) return getEmptyDecryptedActivityData;

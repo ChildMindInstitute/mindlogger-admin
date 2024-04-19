@@ -4,7 +4,8 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import userEvent from '@testing-library/user-event';
 
-import { expectBanner, SettingParam, renderWithProviders } from 'shared/utils';
+import { expectBanner, SettingParam } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';

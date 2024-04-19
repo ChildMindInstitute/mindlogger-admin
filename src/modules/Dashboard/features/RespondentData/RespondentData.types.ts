@@ -32,6 +32,17 @@ export type PerRowSelectionItemRow = {
   tooltip: string | null;
 };
 
+export type SliderRowsRow = {
+  id: string;
+  label: string;
+  maxImage: string | null;
+  maxLabel: string | null;
+  maxValue: number;
+  minImage: string | null;
+  minLabel: string | null;
+  minValue: number;
+};
+
 export type PerRowSelectionItemOption = {
   id: string;
   image: string | null;
@@ -54,6 +65,10 @@ export type SingleMultiSelectionPerRowItemResponseValues = {
   rows: PerRowSelectionItemRow[];
 };
 
+export type SliderRowsItemResponseValues = {
+  rows: SliderRowsRow[];
+};
+
 export type FormattedActivityItem<T> = {
   id: string;
   name: string;
@@ -61,6 +76,7 @@ export type FormattedActivityItem<T> = {
   responseType: ItemResponseType;
   responseValues: T;
   responseDataIdentifier?: boolean;
+  order: number;
 };
 
 export type Identifier = {
@@ -84,6 +100,7 @@ export type TimeAnswer = Answer<number>;
 export type NumberSelectionAnswer = Answer<number>;
 export type TimeRangeAnswer = Answer<TimeRangeAnswerValue>;
 export type SingleMultiSelectionPerRowAnswer = Record<string, Answer<string>[]>;
+export type SliderRowsAnswer = Record<string, Answer<number>[]>;
 
 export type CreateFormattedReposense<I, A> = {
   activityItem: FormattedActivityItem<I>;
@@ -107,6 +124,10 @@ export type SingleMultiSelectionPerRowFormattedResponses = CreateFormattedRepose
   SingleMultiSelectionPerRowItemResponseValues,
   SingleMultiSelectionPerRowAnswer
 >;
+export type SliderRowsFormattedResponses = CreateFormattedReposense<
+  SliderRowsItemResponseValues,
+  SliderRowsAnswer
+>;
 
 export type FormattedResponses =
   | SingleMultiSelectionSliderFormattedResponses
@@ -115,7 +136,8 @@ export type FormattedResponses =
   | TimeRangeFormattedResponses
   | DateFormattedResponses
   | TimeFormattedResponses
-  | SingleMultiSelectionPerRowFormattedResponses;
+  | SingleMultiSelectionPerRowFormattedResponses
+  | SliderRowsFormattedResponses;
 
 export type RespondentsDataFormValues = {
   startDate: Date;

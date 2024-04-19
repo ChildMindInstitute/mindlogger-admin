@@ -8,7 +8,7 @@ import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
 import { deleteSubjectApi } from 'api';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { workspaces } from 'redux/modules';
-import { isManagerOrOwner } from 'shared/utils';
+import { isManagerOrOwner, toggleBooleanState } from 'shared/utils';
 
 import { AppletsSmallTable } from '../../AppletsSmallTable';
 import { RemoveRespondentPopupProps, Steps } from './RemoveRespondentPopup.types';
@@ -81,9 +81,7 @@ export const RemoveRespondentPopup = ({
               </Trans>
             </StyledBodyLarge>
           }
-          control={
-            <Checkbox checked={removeData} onChange={() => setRemoveData((prevVal) => !prevVal)} />
-          }
+          control={<Checkbox checked={removeData} onChange={toggleBooleanState(setRemoveData)} />}
           data-testid={`${dataTestid}-remove-data`}
         />
       )}

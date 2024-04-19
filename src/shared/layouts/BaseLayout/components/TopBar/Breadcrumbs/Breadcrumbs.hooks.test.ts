@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { page } from 'resources';
-import { renderHookWithProviders } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
 

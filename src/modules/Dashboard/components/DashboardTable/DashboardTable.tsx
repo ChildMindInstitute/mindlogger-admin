@@ -1,12 +1,12 @@
 import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
 
 import {
-  EmptyState,
   TableHead,
   UiType,
   StyledTableCellContent,
   StyledTableContainer,
-} from 'shared/components';
+} from 'shared/components/Table';
+import { EmptyState } from 'shared/components/EmptyState';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 
 import { DashboardTableProps } from './DashboardTable.types';

@@ -50,3 +50,18 @@ export const getTimeRangeResponse = (answer?: DecryptedDateRangeAnswer) => {
     to: format(dateTo, DateFormats.Time),
   };
 };
+
+export const getActivityWithLatestAnswer = <T extends { lastAnswerDate: string | null }>(
+  activities: T[],
+): T | null =>
+  activities?.reduce((prev: null | T, current) => {
+    if (!current.lastAnswerDate) {
+      return prev;
+    }
+
+    if (!prev || (prev?.lastAnswerDate && prev.lastAnswerDate < current.lastAnswerDate)) {
+      return current;
+    }
+
+    return prev;
+  }, null);

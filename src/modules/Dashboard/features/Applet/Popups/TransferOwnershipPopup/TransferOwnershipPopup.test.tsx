@@ -2,7 +2,8 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { mockedApplet, mockedEmail } from 'shared/mock';
-import { expectBanner, renderWithProviders } from 'shared/utils';
+import { expectBanner } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { TransferOwnershipPopup } from '.';
 

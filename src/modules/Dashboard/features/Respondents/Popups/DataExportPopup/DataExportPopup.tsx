@@ -4,7 +4,8 @@ import get from 'lodash.get';
 import { useFormContext } from 'react-hook-form';
 import { format } from 'date-fns';
 
-import { EnterAppletPassword, Modal } from 'shared/components';
+import { Modal } from 'shared/components/Modal';
+import { EnterAppletPassword } from 'shared/components/Password';
 import {
   StyledBodyLarge,
   StyledLinearProgress,

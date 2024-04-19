@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Subscales } from './Subscales';
 import { ReportContext } from '../Report.context';

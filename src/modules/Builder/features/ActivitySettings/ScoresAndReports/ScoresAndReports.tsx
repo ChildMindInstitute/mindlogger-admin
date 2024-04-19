@@ -25,6 +25,7 @@ import { ScoreReportType } from 'shared/consts';
 import { REACT_HOOK_FORM_KEY_NAME, REPORTS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 import { ItemFormValues } from 'modules/Builder/types';
 import { removeMarkdown } from 'modules/Builder/utils';
+import { checkOnItemTypeAndScore } from 'shared/utils/checkOnItemTypeAndScore';
 
 import { commonButtonProps } from '../ActivitySettings.const';
 import { SectionScoreHeader } from './SectionScoreHeader';
@@ -39,7 +40,6 @@ import { ScoreContent } from './ScoreContent';
 import { Title } from './Title';
 import { StyledConfigureBtn } from './ScoresAndReports.styles';
 import { ItemTypesToPrint } from './ScoresAndReports.const';
-import { checkOnItemTypeAndScore } from '../ActivitySettings.utils';
 
 export const ScoresAndReports = () => {
   const { t } = useTranslation('app');

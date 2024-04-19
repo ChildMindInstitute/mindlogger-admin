@@ -6,6 +6,7 @@ import { useCustomFormContext } from 'modules/Builder/hooks';
 import { Svg } from 'shared/components/Svg';
 import { StyledFlexColumn } from 'shared/styles';
 import { SingleAndMultiSelectRowOption } from 'shared/state';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import { Header } from './Header';
 import { Options } from './Options';
@@ -28,8 +29,6 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
   const settings = watch(`${name}.config`);
   const hasScores = get(settings, ItemConfigurationSettings.HasScores);
   const hasAlerts = get(settings, ItemConfigurationSettings.HasAlerts);
-
-  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
   const handleAddRow = () => {
     const newRow = getEmptySelectionItem();
@@ -58,7 +57,7 @@ export const SelectionRows = ({ name, isSingle }: SelectionRowsProps) => {
           name={name}
           isSingle={isSingle}
           isExpanded={isExpanded}
-          onArrowClick={handleCollapse}
+          onArrowClick={toggleBooleanState(setIsExpanded)}
         />
         <StyledFlexColumn>
           <Options name={name} />

@@ -4,7 +4,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { RemoveOptionPopup } from './RemoveOptionPopup';
 

@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { TabsOwnProps } from '@mui/material';
 
 export type Tab = {
   id: string;
@@ -25,6 +26,7 @@ export type TabsProps = {
   setActiveTab?: Dispatch<SetStateAction<number>>;
   hiddenHeader?: boolean;
   isBuilder?: boolean;
+  variant?: TabsOwnProps['variant'];
   animationDurationMs?: number;
 };
 

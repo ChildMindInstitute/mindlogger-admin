@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components/Svg';
-import { ExportDataSetting } from 'shared/features/AppletSettings';
+import { ExportDataSetting } from 'shared/features/AppletSettings/ExportDataSetting';
 import { useCheckIfNewApplet } from 'shared/hooks';
 import { StyledFlexAllCenter } from 'shared/styles/styledComponents/Flex';
 import { Mixpanel, isManagerOrOwner } from 'shared/utils';

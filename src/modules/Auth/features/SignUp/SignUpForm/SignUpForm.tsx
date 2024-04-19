@@ -106,7 +106,6 @@ export const SignUpForm = () => {
         />
       </StyledController>
       {errorMessage && <StyledErrorText marginTop={0}>{errorMessage}</StyledErrorText>}
-      {/* <AdvancedSettings /> */}
       <StyledController>
         <CheckboxController
           name="termsOfService"

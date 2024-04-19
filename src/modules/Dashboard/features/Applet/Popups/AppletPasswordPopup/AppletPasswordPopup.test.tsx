@@ -1,6 +1,6 @@
 import { fireEvent, waitFor, screen, act } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedEncryption, mockedPassword } from 'shared/mock';
 
 import { AppletPasswordPopup } from './AppletPasswordPopup';

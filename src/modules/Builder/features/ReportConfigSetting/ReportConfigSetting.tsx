@@ -9,8 +9,8 @@ import {
   postReportConfigApi,
   postActivityReportConfigApi,
   postActivityFlowReportConfigApi,
-  ApiResponseCodes,
-} from 'api';
+} from 'modules/Dashboard/api';
+import { ApiResponseCodes } from 'shared/api';
 import { applet, banners } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { SaveChangesPopup, Svg } from 'shared/components';
@@ -34,21 +34,21 @@ import {
   AppletPasswordPopupType,
   AppletPasswordPopupProps,
 } from 'modules/Dashboard/features/Applet/Popups';
-import { useAsync, useIsServerConfigured } from 'shared/hooks';
+import { useAsync } from 'shared/hooks/useAsync';
+import { useIsServerConfigured } from 'shared/hooks/useIsServerConfigured';
 import {
   getParsedEncryptionFromServer,
   getPrivateKey,
   publicEncrypt,
 } from 'shared/utils/encryption';
 import { getSanitizedContent } from 'shared/utils/forms';
+import { getEntityKey } from 'shared/utils/getEntityKey';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 import { reportConfig } from 'modules/Builder/state';
-import {
-  useCurrentActivity,
-  useCurrentActivityFlow,
-  useCustomFormContext,
-} from 'modules/Builder/hooks';
+import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
+import { useCurrentActivityFlow } from 'modules/Builder/hooks/useCurrentActivityFlow';
+import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
 import { TEXTAREA_ROWS_COUNT_SM } from 'shared/consts';
-import { getEntityKey } from 'shared/utils';
 import { AppletFormValues } from 'modules/Builder/types';
 import { usePrompt } from 'shared/features/AppletSettings/AppletSettings.hooks';
 import { StyledAppletSettingsButton } from 'shared/features/AppletSettings/AppletSettings.styles';
@@ -99,7 +99,7 @@ export const ReportConfigSetting = ({
   const [verifyPopupVisible, setVerifyPopupVisible] = useState(false);
   const { updateAppletData } = applet.actions;
   const encryption = appletData?.encryption;
-  const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption!);
+  const encryptionInfoFromServer = getParsedEncryptionFromServer(encryption);
   const { accountId = '' } = encryptionInfoFromServer ?? {};
 
   const handleSuccess = () => {
@@ -444,7 +444,7 @@ export const ReportConfigSetting = ({
           <Box>
             <StyledButton
               disableRipple
-              onClick={() => setSettingsOpen((prevState) => !prevState)}
+              onClick={toggleBooleanState(setSettingsOpen)}
               endIcon={
                 <StyledSvg>
                   <Svg id={isSettingsOpen ? 'navigate-up' : 'navigate-down'} />
