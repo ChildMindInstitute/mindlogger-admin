@@ -96,7 +96,7 @@ const preloadedState = {
 
 describe('EditAccessPopup component', () => {
   test('renders modal with correct content', () => {
-    renderWithProviders(<EditAccessPopup user={user} popupVisible />, {
+    renderWithProviders(<EditAccessPopup user={user} popupVisible onClose={onCloseMock} />, {
       preloadedState,
       route,
       routePath,
@@ -120,7 +120,7 @@ describe('EditAccessPopup component', () => {
   });
 
   test('submits form when save button is clicked', async () => {
-    renderWithProviders(<EditAccessPopup user={user} popupVisible />, {
+    renderWithProviders(<EditAccessPopup user={user} popupVisible onClose={onCloseMock} />, {
       preloadedState,
       route,
       routePath,
@@ -153,7 +153,7 @@ describe('EditAccessPopup component', () => {
   });
 
   test('changes the role to reviewer', async () => {
-    renderWithProviders(<EditAccessPopup user={user} popupVisible />, {
+    renderWithProviders(<EditAccessPopup user={user} popupVisible onClose={onCloseMock} />, {
       preloadedState,
       route,
       routePath,
