@@ -6,7 +6,7 @@ import { Svg } from 'shared/components/Svg';
 import { typography } from 'shared/styles/typography';
 import { variables } from 'shared/styles/variables';
 import { blendColorsNormal } from 'shared/utils/colors';
-import { getChipStyleOverrides } from 'shared/styles/utils';
+import { getChipStyleOverrides } from 'shared/styles/theme.utils';
 
 declare module '@mui/system/createTheme/createBreakpoints' {
   interface BreakpointOverrides {

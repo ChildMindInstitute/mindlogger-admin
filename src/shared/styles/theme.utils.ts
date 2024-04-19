@@ -1,6 +1,6 @@
 import { ChipOwnProps } from '@mui/material';
 
-import { variables } from '../variables';
+import { variables } from './variables';
 
 export const getChipStyleOverrides = ({
   color,
@@ -19,6 +19,9 @@ export const getChipStyleOverrides = ({
         color: variables.palette.on_surface_variant,
         [key]: variables.palette.inverse_on_surface,
 
+        // MUI applies tabindex to make Chip's focusable when they receive
+        // `onDelete` or`onClick` props. This selector (and the repeated ones
+        // below) conditionally applies hover styles _only_ to interactive chips.
         '&[tabindex="0"]:hover': {
           borderColor: variables.palette.neutral60,
           backgroundColor: variables.palette[isFilled ? 'neutral60' : 'inverse_on_surface'],

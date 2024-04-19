@@ -863,7 +863,7 @@
   "passwordSpecialChar": "At least one special character must be included.",
   "passwordsMustMatch": "Your passwords do not match",
   "pendingInvitations": "Pending Invitations",
-  "pendingInvite": "Pending Invite",
+  "pendingInvite": "Pending",
   "performanceTasks": {
     "abTrailsIpad": "A/B Trails iPad",
     "abTrailsMobile": "A/B Trails Mobile",

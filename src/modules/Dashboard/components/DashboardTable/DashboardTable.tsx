@@ -1,4 +1,4 @@
-import { Box, Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
+import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
 
 import {
   EmptyState,
@@ -7,6 +7,7 @@ import {
   StyledTableContainer,
 } from 'shared/components';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { StyledEllipsisText } from 'shared/styles';
 
 import { DashboardTableProps } from './DashboardTable.types';
 import { StyledTableCell, StyledTableHead } from './DashboardTable.styles';
@@ -78,13 +79,11 @@ export const DashboardTable = ({
                     sx={{ cursor: row[key].onClick ? 'pointer' : 'default' }}
                     data-testid={`${dataTestid}-${index}-cell-${key}`}
                   >
-                    <Box
-                      sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                    >
+                    <StyledEllipsisText>
                       {row[key].contentWithTooltip
                         ? row[key].contentWithTooltip
                         : row[key].content(row)}
-                    </Box>
+                    </StyledEllipsisText>
                   </StyledTableCell>
                 ))}
               </TableRow>

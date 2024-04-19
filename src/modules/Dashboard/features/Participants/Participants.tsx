@@ -4,16 +4,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Checkbox } from '@mui/material';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
-import {
-  ActionsMenu,
-  Chip,
-  ChipShape,
-  MenuActionProps,
-  Pin,
-  Row,
-  Spinner,
-  Svg,
-} from 'shared/components';
+import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
@@ -265,6 +256,7 @@ export const Participants = () => {
       [RespondentStatus.NotInvited]: t('limited'),
       [RespondentStatus.Pending]: t('pendingInvite'),
     }[status];
+    const isPending = status === RespondentStatus.Pending;
 
     const defaultOnClick = () => {
       navigate(
@@ -308,9 +300,13 @@ export const Participants = () => {
         onClick: defaultOnClick,
       },
       accountType: {
-        // TODO: Replace with new Chip/Tag variant when available
-        // https://mindlogger.atlassian.net/browse/M2-6161
-        content: () => <Chip color="secondary" shape={ChipShape.Rounded} title={accountType} />,
+        content: () => (
+          <Chip
+            icon={isPending ? <Svg id="email-outlined" width={18} height={18} /> : undefined}
+            color={isPending ? 'warning' : 'secondary'}
+            title={accountType}
+          />
+        ),
         value: accountType,
         onClick: defaultOnClick,
       },
