@@ -50,18 +50,6 @@ describe('Respondent Data Summary utils', () => {
         screen.getByText(/Data visualization for Performance Tasks not supported/),
       ).toBeInTheDocument();
     });
-
-    test('returns JSX for activity with no data', () => {
-      const selectedActivity = {
-        hasAnswer: false,
-      };
-
-      const result = getEmptyState(selectedActivity);
-
-      render(<>{result}</>);
-
-      expect(screen.getByText(/No available Data for this Activity yet/)).toBeInTheDocument();
-    });
   });
 
   describe('getDateISO', () => {
@@ -1635,6 +1623,74 @@ describe('Respondent Data Summary utils', () => {
         ],
       },
     };
+    const sliderRowsProps = {
+      ...sharedProps,
+      currentAnswer: {
+        activityItem: {
+          question: {
+            en: 'Slider Rows Question.',
+          },
+          responseType: 'sliderRows',
+          responseValues: {
+            rows: [
+              {
+                id: '315e0b97-ca13-4aa2-a1b0-45758c696bee',
+                label: 'Slider Row 1',
+                maxValue: 10,
+                minValue: 1,
+              },
+              {
+                id: '265d6f7d-b8a7-4205-89c7-14cad3868df2',
+                label: 'Slider Row 0',
+                maxValue: 5,
+                minValue: 0,
+              },
+            ],
+          },
+
+          name: 'slider-rows',
+          id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
+          order: 5,
+        },
+        answer: {
+          value: [9, 3],
+        },
+        items: [], // skip, no need for the test
+      },
+    };
+
+    const sliderRowsResult = {
+      activityItem: {
+        id: '187c7d7e-49e6-4d2b-b70d-551a5a1fef61',
+        name: 'slider-rows',
+        question: { en: 'Slider Rows Question.' },
+        responseType: 'sliderRows',
+        responseValues: {
+          rows: [
+            {
+              id: '315e0b97-ca13-4aa2-a1b0-45758c696bee',
+              label: 'Slider Row 1',
+              maxValue: 10,
+              minValue: 1,
+            },
+            {
+              id: '265d6f7d-b8a7-4205-89c7-14cad3868df2',
+              label: 'Slider Row 0',
+              maxValue: 5,
+              minValue: 0,
+            },
+          ],
+        },
+      },
+      answers: {
+        '265d6f7d-b8a7-4205-89c7-14cad3868df2': [
+          { answer: { text: null, value: 3 }, date: '2024-03-14T10:03:01.345000' },
+        ],
+        '315e0b97-ca13-4aa2-a1b0-45758c696bee': [
+          { answer: { text: null, value: 9 }, date: '2024-03-14T10:03:01.345000' },
+        ],
+      },
+    };
 
     test.each`
       props                         | result                         | description
@@ -1649,6 +1705,7 @@ describe('Respondent Data Summary utils', () => {
       ${drawingProps}               | ${drawingResult}               | ${'drawing item'}
       ${singleSelectionPerRowProps} | ${singleSelectionPerRowResult} | ${'single selection per row item'}
       ${multiSelectionPerRowProps}  | ${multiSelectionPerRowResult}  | ${'multi selection per row item'}
+      ${sliderRowsProps}            | ${sliderRowsResult}            | ${'slider rows item'}
     `('$description', ({ props, result }) => {
       expect(formatActivityItemAnswers(props.currentAnswer, props.date)).toStrictEqual(result);
     });

@@ -74,12 +74,10 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.SingleSelectionPerRow,
         icon: itemsTypeIcons[ItemResponseType.SingleSelectionPerRow],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.MultipleSelectionPerRow,
         icon: itemsTypeIcons[ItemResponseType.MultipleSelectionPerRow],
-        isMobileOnly: true,
       },
       {
         value: ItemResponseType.SliderRows,

@@ -1,66 +1,57 @@
-import { useState, useMemo, useContext } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useMemo, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
 import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
 import { createAssessmentApi } from 'api';
+import { getErrorMessage } from 'shared/utils/errors';
+import { StyledErrorText, StyledTitleBoldMedium, theme } from 'shared/styles';
 
 import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { AssessmentFormItem, FeedbackForm } from '../Feedback.types';
-import { FeedbackTabs } from './FeedbackAssessment.const';
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
 import { formatAssessmentAnswers, getAssessmentVersion } from './FeedbackAssessment.utils';
 import { ActivityCardItemList } from './ActivityCardItemList';
-import { SubmitAssessmentPopup } from './SubmitAssessmentPopup';
-import { AssessmentBanner } from './AssessmentBanner';
-import { getDefaultFormValues } from '../Feedback.utils';
-import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 
 export const FeedbackAssessment = ({
-  setActiveTab,
   assessmentStep,
   setAssessmentStep,
+  submitCallback,
+  setIsLoading,
+  answerId,
+  setError,
+  error,
+  userName,
 }: FeedbackAssessmentProps) => {
-  const {
-    assessment,
-    setAssessment,
-    lastAssessment,
-    assessmentVersions,
-    isLastVersion,
-    setIsLastVersion,
-    isBannerVisible,
-    setIsBannerVisible,
-    itemIds,
-    setItemIds,
-  } = useContext(RespondentDataReviewContext);
+  const { assessment, assessmentVersions, isLastVersion, itemIds, setItemIds } = useContext(
+    RespondentDataReviewContext,
+  );
   const { appletId = '' } = useParams();
-  const [searchParams] = useSearchParams();
-  const answerId = searchParams.get('answerId');
   const userData = auth.useData();
   const getEncryptedAnswers = useEncryptedAnswers();
 
   const methods = useFormContext<FeedbackForm>();
   const {
     getValues,
+    reset,
     formState: { defaultValues },
   } = methods;
-
-  const [submitAssessmentPopupVisible, setSubmitAssessmentPopupVisible] = useState(false);
 
   const { id: accountId = '' } = userData?.user || {};
 
   const toNextStep = () => {
-    setAssessmentStep(assessmentStep + 1);
+    setAssessmentStep((prevAssessmentStep) => prevAssessmentStep + 1);
   };
 
   const toPrevStep = () => {
-    setAssessmentStep(assessmentStep - 1);
+    setAssessmentStep((prevAssessmentStep) => prevAssessmentStep - 1);
   };
 
   const handleSubmitAssessment = async () => {
     try {
+      setIsLoading(true);
       const { assessmentItems } = getValues();
       const { answers, updatedItemIds } = formatAssessmentAnswers(
         defaultValues?.assessmentItems as AssessmentFormItem[],
@@ -86,8 +77,8 @@ export const FeedbackAssessment = ({
         reviewerPublicKey: accountId,
         assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
       });
-      setSubmitAssessmentPopupVisible(false);
-      methods.reset({
+
+      reset({
         newNote: '',
         assessmentItems: answers.map(({ answer, itemId }) => ({
           itemId,
@@ -95,43 +86,28 @@ export const FeedbackAssessment = ({
           edited: answer.edited,
         })),
       });
-      setActiveTab(FeedbackTabs.Reviewed);
       setAssessmentStep(0);
+
+      submitCallback();
     } catch (error) {
-      console.warn(error);
+      setError(getErrorMessage(error));
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleSelectLastVersion = () => {
-    if (!lastAssessment?.length) return;
-
-    setIsLastVersion(true);
-    setIsBannerVisible(false);
-
-    const updatedAssessment = lastAssessment.map((activityItem) => ({
-      activityItem,
-      answer: undefined,
-    })) as AssessmentActivityItem[];
-    setAssessment(updatedAssessment);
-    setAssessmentStep(0);
-    methods.reset(getDefaultFormValues(updatedAssessment));
   };
 
   const activityItems = useMemo(() => {
     if (!assessment?.length) return [];
 
-    return assessment.slice(0, assessmentStep + 1).reverse();
+    return assessment.slice(0, assessmentStep + 1);
   }, [assessment, assessmentStep]);
 
-  const isSubmitVisible = assessmentStep === assessment!.length - 1;
+  const isSubmitVisible = !!assessment && assessmentStep === assessment.length - 1;
   const isBackVisible = activityItems.length > 1;
 
   return (
-    <StyledContainer>
-      <AssessmentBanner
-        isBannerVisible={isBannerVisible}
-        onSelectLastVersion={handleSelectLastVersion}
-      />
+    <StyledContainer data-testid="respondents-data-summary-feedback-assessment">
+      <StyledTitleBoldMedium sx={{ pb: theme.spacing(1) }}>{userName}</StyledTitleBoldMedium>
       <ActivityCardItemList
         step={assessmentStep}
         activityItems={activityItems}
@@ -139,17 +115,9 @@ export const FeedbackAssessment = ({
         isSubmitVisible={isSubmitVisible}
         toNextStep={toNextStep}
         toPrevStep={toPrevStep}
-        onSubmit={() => {
-          setSubmitAssessmentPopupVisible(true);
-        }}
+        onSubmit={handleSubmitAssessment}
       />
-      {submitAssessmentPopupVisible && (
-        <SubmitAssessmentPopup
-          popupVisible={submitAssessmentPopupVisible}
-          setPopupVisible={setSubmitAssessmentPopupVisible}
-          submitAssessment={handleSubmitAssessment}
-        />
-      )}
+      {error && <StyledErrorText sx={{ m: theme.spacing(2, 0, 0) }}>{error}</StyledErrorText>}
     </StyledContainer>
   );
 };

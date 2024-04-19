@@ -65,13 +65,13 @@ describe('LeftBar component', () => {
   });
 
   test('toggles workspace drawer visibility on logo click', async () => {
-    // сheck if the workspace drawer is initially hidden
+    // check if the workspace drawer is initially hidden
     const workspaceDrawer = screen.queryByTestId('left-bar-workspaces-drawer');
     expect(workspaceDrawer).toBeNull();
 
-    // сlick on the  workspace image to toggle the visibility of the drawer
+    // click on the  workspace image to toggle the visibility of the drawer
     const workspaceImage = await screen.findByTestId('workspace-image');
-    userEvent.click(workspaceImage);
+    await userEvent.click(workspaceImage);
 
     // wait for the drawer to be visible
     await waitFor(() => {

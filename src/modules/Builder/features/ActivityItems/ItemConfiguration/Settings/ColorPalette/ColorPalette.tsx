@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
+
 import { ColorPaletteHeader } from './ColorPaletteHeader';
 import { ColorPalettePicker } from './ColorPalettePicker';
 import { StyledColorPaletteContainer } from './ColorPalette.styles';
@@ -7,8 +9,6 @@ import { ColorPaletteProps } from './ColorPalette.types';
 
 export const ColorPalette = ({ name, onRemovePalette }: ColorPaletteProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
-
-  const handleCollapse = () => setIsExpanded((prevExpanded) => !prevExpanded);
 
   return (
     <StyledColorPaletteContainer
@@ -19,7 +19,7 @@ export const ColorPalette = ({ name, onRemovePalette }: ColorPaletteProps) => {
     >
       <ColorPaletteHeader
         isExpanded={isExpanded}
-        onArrowClick={handleCollapse}
+        onArrowClick={toggleBooleanState(setIsExpanded)}
         onRemovePalette={onRemovePalette}
       />
       {isExpanded && <ColorPalettePicker name={name} />}
