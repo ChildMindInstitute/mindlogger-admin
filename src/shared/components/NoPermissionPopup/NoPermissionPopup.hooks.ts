@@ -1,11 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { alerts, applet } from 'shared/state';
+import { alerts, applet, workspaces } from 'shared/state';
 import { popups } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { LocationStateKeys } from 'shared/types';
 import { forbiddenState } from 'shared/state/ForbiddenState';
+import { Workspace, auth } from 'redux/modules';
 import {
   checkIfAppletUrlPassed,
   checkIfDashboardAppletsUrlPassed,
@@ -20,13 +22,25 @@ export const useNoPermissionPopup = (): UseNoPermissionPopupReturn => {
   const { pathname } = useLocation();
   const isDashboardApplets = checkIfDashboardAppletsUrlPassed(pathname);
   const isBuilder = checkIfAppletUrlPassed(pathname);
+  const userData = auth.useData();
+  const { id } = userData?.user || {};
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     dispatch(forbiddenState.actions.clearForbiddenError());
     dispatch(applet.actions.resetApplet());
     dispatch(alerts.actions.resetAlerts());
     dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
     dispatch(popups.actions.resetPopupsVisibility());
+    const result = await dispatch(workspaces.thunk.getWorkspaces());
+
+    if (workspaces.thunk.getWorkspaces.fulfilled.match(result)) {
+      const workspacesData = result.payload.data.result as Workspace[];
+      const workspace = workspacesData.find((item) => item.ownerId === id);
+      dispatch(workspaces.actions.setCurrentWorkspace(workspace ?? null));
+      navigate(page.dashboardApplets, { state: { [LocationStateKeys.Workspace]: workspace } });
+
+      return;
+    }
 
     if (isDashboardApplets) {
       window.location.reload();
