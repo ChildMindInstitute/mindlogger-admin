@@ -58,7 +58,9 @@ describe('AppletNotFoundPopup', () => {
 
     fireEvent.click(screen.getByText('Refresh'));
 
-    expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
+    expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets', {
+      state: { shouldNavigateWithoutPrompt: true },
+    });
   });
 
   test('should render for a builder and submit', () => {
@@ -71,7 +73,9 @@ describe('AppletNotFoundPopup', () => {
 
     fireEvent.click(screen.getByText('Go to Dashboard'));
 
-    expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets');
+    expect(mockedUseNavigate).toBeCalledWith('/dashboard/applets', {
+      state: { shouldNavigateWithoutPrompt: true },
+    });
   });
 
   test("shouldn't appear without not found error", () => {
