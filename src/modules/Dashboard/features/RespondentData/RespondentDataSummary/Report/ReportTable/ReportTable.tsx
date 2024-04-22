@@ -72,6 +72,7 @@ export const ReportTable = ({
           handleChangePage={handleChangePage}
           count={answers.length}
           emptyComponent={visibleRows.length ? undefined : emptyState}
+          maxHeight="37.5rem"
         />
       </StyledTableWrapper>
     </Box>
