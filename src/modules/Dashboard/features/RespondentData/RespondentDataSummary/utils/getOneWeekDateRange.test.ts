@@ -8,6 +8,7 @@ describe('getOneWeekDateRange', () => {
   test.each`
     dateString               | expectedStartDate | expectedEndDate | description
     ${null}                  | ${null}           | ${null}         | ${'should return null for both startDate and endDate if dateString is null'}
+    ${undefined}             | ${null}           | ${null}         | ${'should return null for both startDate and' + ' endDate if dateString is undefined'}
     ${dateString}            | ${expectedStart}  | ${expectedEnd}  | ${'should return correct startDate and endDate for a given dateString'}
     ${'invalid-date-string'} | ${null}           | ${null}         | ${'should return null for both startDate and endDate if dateString is invalid'}
   `('$description', ({ dateString, expectedStartDate, expectedEndDate }) => {

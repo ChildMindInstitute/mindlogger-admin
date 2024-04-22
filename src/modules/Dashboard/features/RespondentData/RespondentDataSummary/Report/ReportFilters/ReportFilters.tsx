@@ -71,10 +71,10 @@ export const ReportFilters = ({
         fetchParams = { ...fetchParams, startTime, endTime };
         break;
       case FiltersChangeType.FilterByIdentifier:
-        fetchParams = { ...fetchParams, filterByIdentifier };
+        fetchParams = { ...fetchParams, filterByIdentifier, isIdentifiersChange: true };
         break;
       case FiltersChangeType.Identifiers:
-        fetchParams = { ...fetchParams, identifier };
+        fetchParams = { ...fetchParams, identifier, isIdentifiersChange: true };
         break;
       case FiltersChangeType.Versions:
         fetchParams = { ...fetchParams, versions };
