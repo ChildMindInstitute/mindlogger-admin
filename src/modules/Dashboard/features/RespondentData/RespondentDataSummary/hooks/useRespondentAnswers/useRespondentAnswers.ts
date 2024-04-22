@@ -4,7 +4,10 @@ import { useFormContext } from 'react-hook-form';
 
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { getAnswersApi } from 'modules/Dashboard/api';
-import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import {
+  ActivityCompletion,
+  RespondentsDataFormValues,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { getFormattedResponses } from '../../utils/getFormattedResponses';
 import { FetchAnswers } from '../../RespondentDataSummary.types';
@@ -97,27 +100,32 @@ export const useRespondentAnswers = () => {
         },
       });
 
-      const decryptedAnswers = [];
-      for await (const encryptedAnswer of encryptedAnswers) {
-        const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
-        const decryptedAnswer = (
-          await getDecryptedActivityData({
+      const decryptedAnswers = await Promise.allSettled(
+        encryptedAnswers.map(async (encryptedAnswer) => {
+          const { userPublicKey, answer, items, itemIds, ...rest } = encryptedAnswer;
+          const { decryptedAnswers } = await getDecryptedActivityData({
             userPublicKey,
             answer,
             items,
             itemIds,
-          })
-        ).decryptedAnswers;
+          });
 
-        decryptedAnswers.push({
-          decryptedAnswer,
-          ...rest,
-        });
-      }
-
-      const sortedDecryptedAnswers = decryptedAnswers.sort((a, b) =>
-        a.version.localeCompare(b.version),
+          return {
+            decryptedAnswer: decryptedAnswers,
+            ...rest,
+          };
+        }),
       );
+
+      const sortedDecryptedAnswers = decryptedAnswers
+        .reduce((acc: ActivityCompletion[], result) => {
+          if (result.status === 'fulfilled') {
+            acc.push(result.value);
+          }
+
+          return acc;
+        }, [])
+        .sort((a, b) => a.version.localeCompare(b.version));
 
       setValue('answers', sortedDecryptedAnswers);
       const { subscalesFrequency, formattedResponses } =
