@@ -27,7 +27,7 @@ import {
   DecryptedMultiSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
 } from 'shared/types';
-import { ActivityAnswerMeta as ActivityAnswerMetaApi } from 'modules/Dashboard/api';
+import { ActivityAnswerSummary as ActivityAnswerSummaryApi } from 'modules/Dashboard/api';
 
 export type Answer = {
   createdAt: string;
@@ -133,7 +133,7 @@ export type FormattedAssessmentAnswer = {
   itemId: string;
 };
 
-export type ActivityAnswerMeta = Omit<ActivityAnswerMetaApi, 'identifier'> & {
+export type ActivityAnswerSummary = Omit<ActivityAnswerSummaryApi, 'identifier'> & {
   identifier: string | null;
 };
 

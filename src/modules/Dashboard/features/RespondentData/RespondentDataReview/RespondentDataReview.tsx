@@ -40,7 +40,7 @@ import { RespondentDataReviewContext } from './RespondentDataReview.context';
 import {
   Answer,
   AssessmentActivityItem,
-  ActivityAnswerMeta,
+  ActivityAnswerSummary,
   SelectAnswerProps,
 } from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
@@ -72,9 +72,11 @@ export const RespondentDataReview = () => {
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activityItemAnswers, setActivityItemAnswers] = useState<
-    DecryptedActivityData<EncryptedActivityAnswer>['decryptedAnswers'] | null
+    DecryptedActivityData<EncryptedActivityAnswer['answer']>['decryptedAnswers'] | null
   >(null);
-  const [activityAnswerMeta, setActivityAnswerMeta] = useState<ActivityAnswerMeta | null>(null);
+  const [activityAnswerSummary, setActivityAnswerSummary] = useState<ActivityAnswerSummary | null>(
+    null,
+  );
 
   const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
@@ -121,15 +123,17 @@ export const RespondentDataReview = () => {
     const result = res?.data?.result;
     if (!result) return;
 
-    const decryptedActivityData = await getDecryptedActivityData(result);
+    const decryptedActivityData = await getDecryptedActivityData({
+      ...result.answer,
+      items: result.activity.items,
+    });
     setActivityItemAnswers(decryptedActivityData.decryptedAnswers);
 
-    const { createdAt, identifier, version } = result;
+    const { identifier } = result.summary;
     const decryptedIdentifiers = identifier ? await getDecryptedIdentifiers?.([identifier]) : null;
-    setActivityAnswerMeta({
-      createdAt,
+    setActivityAnswerSummary({
+      ...result.summary,
       identifier: decryptedIdentifiers?.length ? decryptedIdentifiers[0].decryptedValue : null,
-      version,
     });
   });
 
@@ -286,8 +290,8 @@ export const RespondentDataReview = () => {
             onButtonClick={() => setIsFeedbackOpen(true)}
             data-testid={dataTestid}
           />
-          {selectedAnswer && activityAnswerMeta && !isLoading && (
-            <ReviewDescription {...activityAnswerMeta} data-testid={dataTestid} />
+          {selectedAnswer && activityAnswerSummary && !isLoading && (
+            <ReviewDescription {...activityAnswerSummary} data-testid={dataTestid} />
           )}
           <Review
             isLoading={isLoading}
