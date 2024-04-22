@@ -27,7 +27,6 @@ import {
   HeaderSectionLeft,
   HeaderSectionRight,
   ParticipantsTable,
-  StyledCheckBox,
 } from './Participants.styles';
 import {
   getAppletsSmallTableRows,
@@ -257,6 +256,7 @@ export const Participants = () => {
       [RespondentStatus.NotInvited]: t('limited'),
       [RespondentStatus.Pending]: t('pendingInvite'),
     }[status];
+    const isPending = status === RespondentStatus.Pending;
 
     const defaultOnClick = () => {
       navigate(
@@ -269,17 +269,7 @@ export const Participants = () => {
 
     return {
       checkbox: {
-        content: () => (
-          <Checkbox
-            checked={false}
-            icon={
-              <StyledCheckBox>
-                <Svg id="checkbox-empty-outlined" height="20" width="20" />
-              </StyledCheckBox>
-            }
-            data-testid="dashboard-participants-checkbox"
-          />
-        ),
+        content: () => <Checkbox checked={false} data-testid="dashboard-participants-checkbox" />,
         value: '',
         width: ParticipantsColumnsWidth.Pin,
       },
@@ -307,36 +297,35 @@ export const Participants = () => {
       nicknames: {
         content: () => nickname,
         value: nickname,
-        width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },
       accountType: {
-        // TODO: Replace with new Chip/Tag variant when available
-        // https://mindlogger.atlassian.net/browse/M2-6161
         content: () => (
-          <Chip title={accountType} color="secondary" sxProps={{ pointerEvents: 'none', m: 0 }} />
+          <Chip
+            icon={isPending ? <Svg id="email-outlined" width={18} height={18} /> : undefined}
+            color={isPending ? 'warning' : 'secondary'}
+            title={accountType}
+          />
         ),
         value: accountType,
-        width: ParticipantsColumnsWidth.AccountType,
         onClick: defaultOnClick,
       },
       lastSeen: {
         content: () => <StyledMaybeEmpty>{latestActive}</StyledMaybeEmpty>,
         value: latestActive,
-        width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
       },
       ...(appletId && {
         schedule: {
           content: () => schedule,
           value: schedule,
-          width: ParticipantsColumnsWidth.Schedule,
           onClick: defaultOnClick,
         },
       }),
       actions: {
         content: () => (
           <ActionsMenu
+            buttonColor="secondary"
             menuItems={getParticipantActions({
               actions,
               filteredApplets: filteredRespondents?.[respondentOrSubjectId],
@@ -354,6 +343,7 @@ export const Participants = () => {
           />
         ),
         value: '',
+        width: ParticipantsColumnsWidth.Pin,
       },
     };
   };
@@ -488,7 +478,6 @@ export const Participants = () => {
           ) : undefined
         }
         count={respondentsData?.count || 0}
-        hasColFixedWidth
         data-testid={`${dataTestid}-table`}
         {...tableProps}
       />

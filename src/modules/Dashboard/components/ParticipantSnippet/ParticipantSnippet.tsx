@@ -31,14 +31,7 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
       https://mindlogger.atlassian.net/browse/M2-5861
       https://mindlogger.atlassian.net/browse/M2-6161
       */}
-      {!!tag && (
-        <Chip
-          color="secondary"
-          title={tag}
-          sxProps={{ pointerEvents: 'none', m: 0 }}
-          data-testid={`${dataTestId}-tag`}
-        />
-      )}
+      {!!tag && <Chip color="secondary" title={tag} data-testid={`${dataTestId}-tag`} />}
     </StyledFlexTopCenter>
   );
 };

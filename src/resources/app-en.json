@@ -223,6 +223,7 @@
   "changeScoreConditionIdText": "You are referencing this score condition as a variable in the markdown. Changing the Score Condition ID will cause the variable names to update everywhere.",
   "characters": "characters",
   "chars": "chars.",
+  "checkAll": "Check all",
   "checkYourEmail": "Check your email",
   "chooseLanguage": "Choose a language",
   "clear": "Clear",
@@ -862,7 +863,7 @@
   "passwordSpecialChar": "At least one special character must be included.",
   "passwordsMustMatch": "Your passwords do not match",
   "pendingInvitations": "Pending Invitations",
-  "pendingInvite": "Pending Invite",
+  "pendingInvite": "Pending",
   "performanceTasks": {
     "abTrailsIpad": "A/B Trails iPad",
     "abTrailsMobile": "A/B Trails Mobile",

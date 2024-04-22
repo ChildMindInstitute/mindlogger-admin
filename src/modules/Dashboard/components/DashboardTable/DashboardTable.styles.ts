@@ -1,13 +1,18 @@
 import { styled, TableCell } from '@mui/material';
 
+import { TableHead } from 'shared/components';
+import { theme } from 'shared/styles';
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
 
 export const StyledTableCell = styled(TableCell, shouldForwardProp)`
-  font-size: ${variables.font.size.md};
-  line-height: ${variables.font.lineHeight.md};
+  font-size: ${variables.font.size.lg};
   letter-spacing: ${variables.font.letterSpacing.sm};
-  word-break: break-all;
+  line-height: ${variables.font.lineHeight.lg};
+
+  &&:first-of-type {
+    padding-left: 2rem;
+  }
 
   ${({ hasColFixedWidth, width }: { hasColFixedWidth?: boolean; width?: string }) => {
     if (hasColFixedWidth) {
@@ -19,8 +24,11 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
       `;
     }
 
-    return `
-      height: 4.8rem;
-    `;
+    return { paddingTop: theme.spacing(1.2), paddingBottom: theme.spacing(1.2) };
   }}
 `;
+
+export const StyledTableHead = styled(TableHead)({
+  '&& tr:nth-of-type(2) th': { padding: '1.2rem' },
+  '&& tr th:first-of-type': { paddingLeft: '2rem' },
+});

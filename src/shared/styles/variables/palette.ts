@@ -1,6 +1,7 @@
 export const palette = {
   primary: '#00639a',
   primary50: '#207cbb',
+  primary95: '#e8f2ff',
   primary_container: '#cee5ff',
   secondary: '#51606f',
   secondary60: '#8392a3',
@@ -14,6 +15,7 @@ export const palette = {
   on_surface_variant: '#42474e',
   outline: '#72777f',
   outline_variant: '#c4c9d0',
+  outline_variant2: '#c2c7cF',
   surface_variant: '#dee3eb',
   surface: '#fcfcff',
   on_secondary_container: '#0e1d2a',
@@ -42,6 +44,7 @@ export const palette = {
   white_alfa50: 'rgb(255 255 255 / 50%)',
   dark_error_container: '#93000a',
   neutral60: '#909194',
+  yellow_light: '#f5e6b3',
 
   black: '#000',
   white: '#fff',

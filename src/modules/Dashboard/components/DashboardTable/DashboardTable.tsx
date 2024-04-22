@@ -2,15 +2,15 @@ import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/ma
 
 import {
   EmptyState,
-  TableHead,
   UiType,
   StyledTableCellContent,
   StyledTableContainer,
 } from 'shared/components';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { StyledEllipsisText } from 'shared/styles';
 
 import { DashboardTableProps } from './DashboardTable.types';
-import { StyledTableCell } from './DashboardTable.styles';
+import { StyledTableCell, StyledTableHead } from './DashboardTable.styles';
 
 export const DashboardTable = ({
   columns,
@@ -52,10 +52,11 @@ export const DashboardTable = ({
       uiType={uiType}
       hasColFixedWidth={hasColFixedWidth}
       onScroll={onScroll}
+      sx={{ height: rows?.length ? 'auto' : '100%' }}
     >
       {!!rows?.length && (
         <MuiTable stickyHeader data-testid={dataTestid}>
-          <TableHead
+          <StyledTableHead
             headCells={columns}
             order={order}
             orderBy={orderBy}
@@ -78,9 +79,11 @@ export const DashboardTable = ({
                     sx={{ cursor: row[key].onClick ? 'pointer' : 'default' }}
                     data-testid={`${dataTestid}-${index}-cell-${key}`}
                   >
-                    {row[key].contentWithTooltip
-                      ? row[key].contentWithTooltip
-                      : row[key].content(row)}
+                    <StyledEllipsisText>
+                      {row[key].contentWithTooltip
+                        ? row[key].contentWithTooltip
+                        : row[key].content(row)}
+                    </StyledEllipsisText>
                   </StyledTableCell>
                 ))}
               </TableRow>

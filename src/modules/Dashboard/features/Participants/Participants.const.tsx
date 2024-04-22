@@ -1,5 +1,5 @@
 export enum ParticipantsColumnsWidth {
-  Pin = '4.8rem',
+  Pin = '8rem',
   Default = '28rem',
   Schedule = '15rem',
   AccountType = '16rem',

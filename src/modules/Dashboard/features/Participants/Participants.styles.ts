@@ -2,7 +2,6 @@ import { Button, styled } from '@mui/material';
 
 import { DashboardTable } from 'modules/Dashboard/components';
 import { Search } from 'shared/components';
-import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledFlexSpaceBetween, StyledFlexTopCenter } from 'shared/styles/styledComponents';
 import theme from 'shared/styles/theme';
 import { variables } from 'shared/styles/variables';
@@ -52,21 +51,7 @@ export const AddParticipantButton = styled(StyledButton)`
   min-width: 13.7rem;
 `;
 
-export const StyledCheckBox = styled(StyledIcon)`
-  svg {
-    fill: ${variables.palette.outline_variant};
-  }
-`;
-
 export const ParticipantsTable = styled(DashboardTable)`
-  th:nth-child(1) {
-    padding-left: 2.4rem;
-  }
-
-  td:nth-child(1) {
-    padding-left: 1.4rem;
-  }
-
   td,
   th {
     min-width: 13rem;

@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { Checkbox } from '@mui/material';
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
@@ -17,7 +18,6 @@ import { MenuItemType } from 'shared/components';
 
 import { ChosenAppletData, GetParticipantActionsProps } from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
-import { StyledCheckBox } from './Participants.styles';
 
 export const getParticipantActions = ({
   actions: { editParticipant, upgradeAccount, exportData, removeParticipant, assignActivity },
@@ -133,11 +133,7 @@ export const getHeadCells = (id?: string): HeadCell[] => {
   return [
     {
       id: 'checkbox',
-      label: (
-        <StyledCheckBox>
-          <Svg id="checkbox-empty-outlined" height="20" width="20" />
-        </StyledCheckBox>
-      ),
+      label: <Checkbox aria-label={t('checkAll')} checked={false} />,
       enableSort: true,
       width: ParticipantsColumnsWidth.Pin,
     },
@@ -163,32 +159,29 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       id: 'nicknames',
       label: t('nickname'),
       enableSort: true,
-      width: ParticipantsColumnsWidth.Default,
     },
     {
       id: 'accountType',
       label: t('accountType'),
       enableSort: true,
-      width: ParticipantsColumnsWidth.AccountType,
     },
     {
       id: 'lastSeen',
       label: t('latestActivity'),
       enableSort: true,
-      width: ParticipantsColumnsWidth.Default,
     },
     ...(id
       ? [
           {
             id: 'schedule',
             label: t('schedule'),
-            width: ParticipantsColumnsWidth.Schedule,
           },
         ]
       : []),
     {
       id: 'actions',
       label: '',
+      width: ParticipantsColumnsWidth.Pin,
     },
   ];
 };
