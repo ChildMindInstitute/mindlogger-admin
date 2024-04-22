@@ -6,6 +6,11 @@ import { Badge, Tab } from '@mui/material';
 import { StyledTabs } from '../Tabs.styles';
 import { TabPanel } from '../TabPanel';
 import { RenderTabs, TabsProps, UiType } from '../Tabs.types';
+import { TabPanelProps } from '../TabPanel/TabPanel.types';
+
+interface LinkedTabsProps extends TabsProps {
+  panelProps?: Omit<TabPanelProps, 'index' | 'value'>;
+}
 
 export const LinkedTabs = ({
   tabs,
@@ -16,7 +21,8 @@ export const LinkedTabs = ({
   deepPathCompare = false,
   defaultToFirstTab = true,
   animateTabIndicator = true,
-}: TabsProps) => {
+  panelProps,
+}: LinkedTabsProps) => {
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
@@ -67,6 +73,7 @@ export const LinkedTabs = ({
             index={index}
             isMinHeightAuto={isMinHeightAuto}
             hiddenHeader={hiddenHeader}
+            {...panelProps}
           >
             <Outlet />
           </TabPanel>,

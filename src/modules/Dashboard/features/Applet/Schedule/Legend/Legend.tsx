@@ -31,7 +31,7 @@ import {
 import { LegendProps, SelectedRespondent } from './Legend.types';
 import { useExpandedLists } from './Legend.hooks';
 
-export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
+export const Legend = ({ legendEvents, appletName, appletId, ...otherProps }: LegendProps) => {
   const { t } = useTranslation('app');
   const { respondentId } = useParams();
   const navigate = useNavigate();
@@ -160,7 +160,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   }, [respondentId, respondentsItems, selectedRespondent]);
 
   return schedule ? (
-    <StyledLegend>
+    <StyledLegend {...otherProps}>
       <StyledSelectRow>
         <StyledSelect>
           <SelectController
