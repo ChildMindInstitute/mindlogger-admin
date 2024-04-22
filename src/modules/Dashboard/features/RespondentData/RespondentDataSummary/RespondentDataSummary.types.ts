@@ -10,6 +10,7 @@ export type FetchAnswers = {
   filterByIdentifier?: boolean;
   identifier?: AutocompleteOption[];
   versions?: AutocompleteOption[];
+  isIdentifiersChange?: boolean;
 };
 
 export type GetIdentifiersVersions = {

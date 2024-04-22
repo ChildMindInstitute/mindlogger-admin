@@ -82,6 +82,7 @@ export type FormattedActivityItem<T> = {
 export type Identifier = {
   encryptedValue: string;
   decryptedValue: string;
+  lastAnswerDate: string;
 };
 
 export type ActivityCompletion = {
