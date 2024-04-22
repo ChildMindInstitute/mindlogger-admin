@@ -415,7 +415,7 @@ export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;
 
 export type ActivityAnswerSummary = {
   createdAt: string;
-  endDateTime: string;
+  endDateTime: string | null;
   version: string;
   identifier: Identifier | null;
 };
