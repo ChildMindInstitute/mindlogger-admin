@@ -210,9 +210,15 @@ const mockedGetWithDates = {
 const mockedGetWithResponses = {
   data: {
     result: {
-      createdAt: '2024-03-14T14:33:48.750000',
-      identifier: 'test-identifier',
-      version: '10.10.12',
+      activity: {
+        items,
+      },
+      answer: { id: 'answer-id' },
+      summary: {
+        createdAt: '2024-03-14T14:33:48.750000',
+        identifier: 'test-identifier',
+        version: '10.10.12',
+      },
     },
   },
 };
@@ -403,7 +409,7 @@ describe('RespondentDataReview', () => {
         // get the answer with the latest completion date
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           4,
-          `/answers/applet/${mockedAppletId}/answers/answer-id-1-2/activities/951145fa-3053-4428-a970-70531e383d89`,
+          `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-2`,
           {
             params: {
               limit: 10000,
@@ -433,7 +439,7 @@ describe('RespondentDataReview', () => {
       await waitFor(() => {
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           6,
-          `/answers/applet/${mockedAppletId}/answers/answer-id-1-1/activities/951145fa-3053-4428-a970-70531e383d89`,
+          `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-1`,
           {
             params: {
               limit: 10000,
