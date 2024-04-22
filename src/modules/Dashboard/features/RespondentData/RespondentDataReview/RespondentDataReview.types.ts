@@ -141,3 +141,8 @@ export type SelectAnswerProps = {
   answer: Answer | null;
   isRouteCreated?: boolean;
 };
+
+export const enum FeedbackTabs {
+  Notes,
+  Reviews,
+}
