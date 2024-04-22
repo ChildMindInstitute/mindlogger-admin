@@ -123,6 +123,19 @@ describe('getResponseItem (supported response items), check rendering of child c
     expect(screen.getByTestId(expected)).toBeInTheDocument();
   });
 
+  test('renders empty state', () => {
+    renderWithProviders(
+      getResponseItem({
+        activityItem: {
+          responseType: ItemResponseType.SingleSelection,
+        },
+        answer: null,
+      }),
+    );
+
+    expect(screen.getByTestId('no-response-data')).toBeInTheDocument();
+  });
+
   test('renders child component for time', () => {
     renderWithProviders(
       getResponseItem({

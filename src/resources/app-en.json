@@ -772,6 +772,7 @@
   "noMatchWasFoundShort": "No match was found for '{{searchValue}}'.",
   "noPendingInvitations": "No pending invitations",
   "noPermissions": "You have no permissions to view this tab.",
+  "noResponseData":"No response data provided.",
   "responseIdentifier": "Response Identifier",
   "noResponseIdentifier": "No response identifier yet.",
   "viewingResponsesSubmitted": "Viewing responses submitted on:",
