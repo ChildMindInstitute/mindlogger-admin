@@ -102,29 +102,29 @@ export type TimeRangeAnswer = Answer<TimeRangeAnswerValue>;
 export type SingleMultiSelectionPerRowAnswer = Record<string, Answer<string>[]>;
 export type SliderRowsAnswer = Record<string, Answer<number>[]>;
 
-export type CreateFormattedReposense<I, A> = {
+export type CreateFormattedResponses<I, A> = {
   activityItem: FormattedActivityItem<I>;
   answers: A;
   dataTestid?: string;
 };
 
-export type SingleMultiSelectionSliderFormattedResponses = CreateFormattedReposense<
+export type SingleMultiSelectionSliderFormattedResponses = CreateFormattedResponses<
   SingleMultiSelectionSliderItemResponseValues,
   SingleMultiSelectionSliderAnswer[]
 >;
-export type TextFormattedResponses = CreateFormattedReposense<null, TextAnswer[]>;
-export type NumberSelectionFormattedResponses = CreateFormattedReposense<
+export type TextFormattedResponses = CreateFormattedResponses<null, TextAnswer[]>;
+export type NumberSelectionFormattedResponses = CreateFormattedResponses<
   NumberSelectionItemResponseValues,
   NumberSelectionAnswer[]
 >;
-export type TimeRangeFormattedResponses = CreateFormattedReposense<null, TimeRangeAnswer[]>;
-export type DateFormattedResponses = CreateFormattedReposense<null, DateAnswer[]>;
-export type TimeFormattedResponses = CreateFormattedReposense<null, TimeAnswer[]>;
-export type SingleMultiSelectionPerRowFormattedResponses = CreateFormattedReposense<
+export type TimeRangeFormattedResponses = CreateFormattedResponses<null, TimeRangeAnswer[]>;
+export type DateFormattedResponses = CreateFormattedResponses<null, DateAnswer[]>;
+export type TimeFormattedResponses = CreateFormattedResponses<null, TimeAnswer[]>;
+export type SingleMultiSelectionPerRowFormattedResponses = CreateFormattedResponses<
   SingleMultiSelectionPerRowItemResponseValues,
   SingleMultiSelectionPerRowAnswer
 >;
-export type SliderRowsFormattedResponses = CreateFormattedReposense<
+export type SliderRowsFormattedResponses = CreateFormattedResponses<
   SliderRowsItemResponseValues,
   SliderRowsAnswer
 >;
