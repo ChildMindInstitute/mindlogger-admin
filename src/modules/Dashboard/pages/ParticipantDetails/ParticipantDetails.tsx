@@ -18,7 +18,7 @@ import { useParticipantDetailsTabs } from './ParticipantDetails.hooks';
 export const ParticipantDetails = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { appletId, participantId } = useParams();
+  const { appletId, subjectId } = useParams();
   const { ownerId } = workspaces.useData() || {};
   const { useSubject, useSubjectStatus } = users;
   const appletLoadingStatus = appletState.useResponseStatus();
@@ -31,13 +31,13 @@ export const ParticipantDetails = () => {
     if (!appletId) return;
     dispatch(getApplet({ appletId }));
 
-    if (!participantId || !ownerId) return;
-    dispatch(getSubjectDetails({ subjectId: participantId }));
+    if (!subjectId || !ownerId) return;
+    dispatch(getSubjectDetails({ subjectId }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, participantId, ownerId]);
+  }, [appletId, subjectId, ownerId]);
 
   const loading =
     appletLoadingStatus === 'loading' ||
@@ -73,7 +73,12 @@ export const ParticipantDetails = () => {
             <HeaderOptions />
           </Box>
 
-          <LinkedTabs tabs={respondentTabs} isCentered={false} deepPathCompare />
+          <LinkedTabs
+            panelProps={{ sx: { padding: 0 } }}
+            tabs={respondentTabs}
+            isCentered={false}
+            deepPathCompare
+          />
         </>
       )}
     </StyledBody>

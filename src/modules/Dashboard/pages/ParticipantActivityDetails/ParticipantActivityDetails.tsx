@@ -24,7 +24,7 @@ import { StyledContainer } from './ParticipantActivityDetails.styles';
 export const ParticipantActivityDetails = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { appletId, participantId, activityId } = useParams();
+  const { appletId, subjectId, activityId } = useParams();
   const { ownerId } = workspaces.useData() || {};
   const appletLoadingStatus = appletState.useResponseStatus();
   const respondentLoadingStatus = users.useRespondentStatus();
@@ -41,18 +41,18 @@ export const ParticipantActivityDetails = () => {
     if (!appletId) return;
     dispatch(getApplet({ appletId }));
 
-    if (!participantId || !ownerId) return;
-    dispatch(getRespondentDetails({ ownerId, appletId, respondentId: participantId }));
+    if (!subjectId || !ownerId) return;
+    dispatch(getRespondentDetails({ ownerId, appletId, respondentId: subjectId }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, participantId, ownerId]);
+  }, [appletId, subjectId, ownerId]);
 
   const navigateUp = () => {
     navigate(
       generatePath(page.appletParticipantActivities, {
-        participantId,
+        subjectId,
         appletId,
       }),
     );

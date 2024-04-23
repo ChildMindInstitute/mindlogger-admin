@@ -30,8 +30,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const {
     flags: { enableMultiInformant },
   } = useLaunchDarkly();
-  const { appletId, activityId, activityFlowId, participantId, respondentId, setting } =
-    useParams();
+  const { appletId, activityId, activityFlowId, respondentId, subjectId, setting } = useParams();
   const { t } = useTranslation('app');
   const { pathname } = useLocation();
 
@@ -139,7 +138,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (participantId || respondentId) {
+    if (subjectId || respondentId) {
       newBreadcrumbs.push({
         icon: enableMultiInformant ? undefined : 'account',
         label: respondentLabel || subjectLabel,
@@ -148,7 +147,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
           enableMultiInformant && !!currentActivity
             ? generatePath(page.appletParticipantActivities, {
                 appletId,
-                participantId: participantId || respondentId,
+                subjectId: subjectId || respondentId,
               })
             : undefined,
       });

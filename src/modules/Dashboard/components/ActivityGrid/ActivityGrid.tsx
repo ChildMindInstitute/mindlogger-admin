@@ -18,7 +18,7 @@ export const ActivityGrid = ({
 }: ActivityGridProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
-  const { appletId, participantId: _participantId } = useParams();
+  const { appletId } = useParams();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const isEmpty = !rows?.length && !isLoading;

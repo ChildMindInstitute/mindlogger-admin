@@ -4,7 +4,7 @@ import { page } from 'resources';
 import { Svg } from 'shared/components';
 
 export const useParticipantDetailsTabs = () => {
-  const { appletId, participantId } = useParams();
+  const { appletId, subjectId } = useParams();
 
   return [
     {
@@ -14,7 +14,7 @@ export const useParticipantDetailsTabs = () => {
       activeIcon: <Svg id="checklist-filled" />,
       path: generatePath(page.appletParticipantActivities, {
         appletId,
-        participantId,
+        subjectId,
       }),
       'data-testid': 'participant-activities',
     },
@@ -25,7 +25,7 @@ export const useParticipantDetailsTabs = () => {
       activeIcon: <Svg id="respondent-circle-filled" />,
       path: generatePath(page.appletParticipantConnections, {
         appletId,
-        participantId,
+        subjectId,
       }),
       'data-testid': 'participant-connections',
     },
@@ -36,7 +36,7 @@ export const useParticipantDetailsTabs = () => {
       activeIcon: <Svg id="schedule-filled" />,
       path: generatePath(page.appletParticipantSchedule, {
         appletId,
-        participantId,
+        subjectId,
       }),
       'data-testid': 'participant-schedule',
     },

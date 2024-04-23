@@ -15,7 +15,7 @@ import { users } from 'modules/Dashboard/state';
 import { theme } from 'shared/styles';
 
 export const Activities = () => {
-  const { appletId, participantId } = useParams();
+  const { appletId, subjectId } = useParams();
   const subjectLoadingStatus = users.useSubjectStatus();
   const subject = users.useSubject();
   const [activitiesData, setActivitiesData] = useState<{
@@ -48,7 +48,7 @@ export const Activities = () => {
   );
 
   useEffect(() => {
-    if (!appletId || !participantId) return;
+    if (!appletId) return;
 
     getActivities({
       params: {
@@ -68,9 +68,9 @@ export const Activities = () => {
             if (activity) {
               const options: OpenTakeNowModalOptions = {};
 
-              if (participantId && subject) {
+              if (subjectId && subject) {
                 options.subject = {
-                  id: participantId,
+                  id: subjectId,
                   secretId: subject.result.secretUserId,
                   nickname: subject.result.nickname,
                 };
