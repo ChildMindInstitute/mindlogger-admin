@@ -26,8 +26,12 @@ import {
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedMultiSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
+  DecryptedActivityData,
 } from 'shared/types';
-import { ActivityAnswerSummary as ActivityAnswerSummaryApi } from 'modules/Dashboard/api';
+import {
+  ActivityAnswerSummary as ActivityAnswerSummaryApi,
+  EncryptedActivityAnswer,
+} from 'modules/Dashboard/api';
 
 export type Answer = {
   createdAt: string;
@@ -141,3 +145,7 @@ export type SelectAnswerProps = {
   answer: Answer | null;
   isRouteCreated?: boolean;
 };
+
+export type ActivityItemAnswers =
+  | DecryptedActivityData<EncryptedActivityAnswer['answer']>['decryptedAnswers']
+  | null;

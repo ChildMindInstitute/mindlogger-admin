@@ -20,13 +20,12 @@ import {
   AppletSubmitDateList,
   ResponseWithObject,
   SubmitDates,
-  EncryptedActivityAnswer,
 } from 'api';
 import { DateFormats } from 'shared/consts';
 import { Spinner } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { StyledContainer } from 'shared/styles';
-import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
+import { EncryptedAnswerSharedProps } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Item } from 'shared/state';
 import { users } from 'redux/modules';
@@ -42,6 +41,7 @@ import {
   AssessmentActivityItem,
   ActivityAnswerSummary,
   SelectAnswerProps,
+  ActivityItemAnswers,
 } from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
 import { RespondentsDataFormValues } from '../RespondentData.types';
@@ -71,9 +71,7 @@ export const RespondentDataReview = () => {
   const [responseDates, setResponseDates] = useState<Date[]>();
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [activityItemAnswers, setActivityItemAnswers] = useState<
-    DecryptedActivityData<EncryptedActivityAnswer['answer']>['decryptedAnswers'] | null
-  >(null);
+  const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswers>(null);
   const [activityAnswerSummary, setActivityAnswerSummary] = useState<ActivityAnswerSummary | null>(
     null,
   );
