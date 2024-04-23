@@ -146,6 +146,11 @@ export type SelectAnswerProps = {
   isRouteCreated?: boolean;
 };
 
+export const enum FeedbackTabs {
+  Notes,
+  Reviews,
+}
+
 export type ActivityItemAnswers =
   | DecryptedActivityData<EncryptedActivityAnswer['answer']>['decryptedAnswers']
   | null;

@@ -42,6 +42,7 @@ import {
   ActivityAnswerSummary,
   SelectAnswerProps,
   ActivityItemAnswers,
+  FeedbackTabs,
 } from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
 import { RespondentsDataFormValues } from '../RespondentData.types';
@@ -55,11 +56,13 @@ export const RespondentDataReview = () => {
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || '';
   const selectedDateParam = searchParams.get('selectedDate');
+  const isFeedbackVisible = searchParams.get('isFeedbackVisible');
   const containerRef = useRef<HTMLElement | null>(null);
   const prevSelectedDateRef = useRef<null | string>(null);
   const shouldSetLastAnswer = useRef(false);
 
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [assessment, setAssessment] = useState<AssessmentActivityItem[]>([]);
@@ -213,6 +216,10 @@ export const RespondentDataReview = () => {
         setLastAssessment(itemsLast);
         setAssessmentVersions(versions);
         setIsBannerVisible(!!(itemsLast?.length && versions));
+        if (decryptedAssessment?.decryptedAnswers?.length && isFeedbackVisible) {
+          setIsFeedbackOpen(true);
+          setActiveTab(FeedbackTabs.Reviews);
+        }
       } catch (error) {
         console.warn(error);
       } finally {
@@ -300,7 +307,12 @@ export const RespondentDataReview = () => {
           />
         </StyledReviewContainer>
         {selectedActivity && selectedAnswer && !isLoading && (
-          <Feedback selectedActivity={selectedActivity} onClose={() => setIsFeedbackOpen(false)} />
+          <Feedback
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            selectedActivity={selectedActivity}
+            onClose={() => setIsFeedbackOpen(false)}
+          />
         )}
       </RespondentDataReviewContext.Provider>
     </StyledContainer>

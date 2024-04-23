@@ -23,7 +23,8 @@ import { RespondentDataReview } from './RespondentDataReview';
 const date = new Date('2023-12-27');
 const dataTestid = 'respondents-review';
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-27`;
+const route1 = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-27`;
+const route2 = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses?selectedDate=2023-12-15&answerId=answer-id-2-2&isFeedbackVisible=true`;
 const routeWithoutSelectedDate = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`;
 const routePath = page.appletRespondentDataReview;
 const preloadedState = {
@@ -239,7 +240,7 @@ const RespondentDataReviewWithForm = () => {
 
 describe('RespondentDataReview', () => {
   test(
-    'renders component correctly with all child components',
+    'renders component correctly with all child components when isFeedbackVisible param is false',
     async () => {
       mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities1);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
@@ -305,7 +306,7 @@ describe('RespondentDataReview', () => {
 
       renderWithProviders(<RespondentDataReviewWithForm />, {
         preloadedState,
-        route,
+        route: route1,
         routePath,
       });
 
@@ -483,6 +484,141 @@ describe('RespondentDataReview', () => {
       await userEvent.click(feedbackMenuClose);
 
       expect(feedbackMenu).toHaveStyle({ width: 0 });
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test(
+    'renders component correctly with all child components when isFeedbackVisible param is true',
+    async () => {
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
+      mockAxios.get.mockResolvedValueOnce({
+        data: {
+          result: {
+            createdAt: '2023-12-15T23:29:36.150182',
+          },
+        },
+      });
+      mockAxios.get.mockResolvedValueOnce({
+        data: {
+          result: {},
+        },
+      });
+
+      const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
+        decryptedAnswers: [
+          {
+            activityItem: {
+              question: {
+                en: 'Single Selected - Mocked Item',
+              },
+              responseType: 'singleSelect',
+              responseValues: {
+                options: [
+                  {
+                    id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
+                    text: '1',
+                    isHidden: false,
+                    value: 0,
+                  },
+                  {
+                    id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
+                    text: '2',
+                    isHidden: false,
+                    value: 1,
+                  },
+                ],
+              },
+              config: {
+                removeBackButton: false,
+                skippableItem: true,
+                randomizeOptions: false,
+                timer: 0,
+                addScores: false,
+                setAlerts: false,
+                addTooltip: false,
+                setPalette: false,
+                additionalResponseOption: {
+                  textInputOption: false,
+                  textInputRequired: false,
+                },
+              },
+              name: 'ss-1',
+              isHidden: false,
+              allowEdit: true,
+              id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
+              order: 1,
+            },
+            answer: {
+              value: '0',
+              edited: null,
+            },
+            items,
+          },
+        ],
+      });
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
+
+      renderWithProviders(<RespondentDataReviewWithForm />, {
+        preloadedState,
+        route: route2,
+        routePath,
+      });
+
+      window.HTMLElement.prototype.scrollTo = () => {};
+
+      await waitFor(() => {
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          1,
+          `/answers/applet/${mockedAppletId}/review/activities`,
+          {
+            params: {
+              createdDate: '2023-12-15',
+              limit: 10000,
+              respondentId: mockedRespondentId,
+            },
+            signal: undefined,
+          },
+        );
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          2,
+          `/answers/applet/${mockedAppletId}/dates`,
+          {
+            params: {
+              respondentId: mockedRespondentId,
+              fromDate: startOfMonth(date).getTime().toString(),
+              toDate: endOfMonth(date).getTime().toString(),
+            },
+            signal: undefined,
+          },
+        );
+
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          3,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/activities/2`,
+          {
+            params: {
+              limit: 10000,
+            },
+            signal: undefined,
+          },
+        );
+      });
+
+      expect(mockAxios.get).toHaveBeenNthCalledWith(
+        4,
+        `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/assessment`,
+        {
+          signal: undefined,
+        },
+      );
+
+      expect(screen.getByTestId('respondents-review-feedback-menu')).toBeInTheDocument();
     },
     JEST_TEST_TIMEOUT,
   );

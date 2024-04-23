@@ -6,9 +6,11 @@ import { ItemResponseType } from 'shared/consts';
 
 import { Feedback } from './Feedback';
 import { RespondentDataReviewContext } from '../RespondentDataReview.context';
-import { AssessmentActivityItem } from '../RespondentDataReview.types';
+import { AssessmentActivityItem, FeedbackTabs } from '../RespondentDataReview.types';
 
-const mockedOnClose = jest.fn();
+const mockActiveTab = FeedbackTabs.Notes;
+const mockSetActiveTab = jest.fn();
+const mockOnClose = jest.fn();
 const activityItem = {
   question: {
     en: 'How was a response?',
@@ -97,7 +99,12 @@ const renderComponent = (isFeedbackOpen = true) => {
     /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
     //@ts-ignore
     <RespondentDataReviewContext.Provider value={{ assessment, isFeedbackOpen }}>
-      <Feedback onClose={mockedOnClose} selectedActivity={selectedActivity} />
+      <Feedback
+        activeTab={mockActiveTab}
+        setActiveTab={mockSetActiveTab}
+        onClose={mockOnClose}
+        selectedActivity={selectedActivity}
+      />
     </RespondentDataReviewContext.Provider>,
   );
 };
@@ -121,6 +128,6 @@ describe('Feedback component', () => {
     renderComponent();
 
     await userEvent.click(screen.getByTestId('respondents-review-feedback-menu-close'));
-    expect(mockedOnClose).toHaveBeenCalledTimes(1);
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 });
