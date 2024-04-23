@@ -224,6 +224,59 @@ const mockedGetWithResponses = {
   },
 };
 
+const mockDecryptedActivityData = {
+  decryptedAnswers: [
+    {
+      activityItem: {
+        question: {
+          en: 'Single Selected - Mocked Item',
+        },
+        responseType: 'singleSelect',
+        responseValues: {
+          options: [
+            {
+              id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
+              text: '1',
+              isHidden: false,
+              value: 0,
+            },
+            {
+              id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
+              text: '2',
+              isHidden: false,
+              value: 1,
+            },
+          ],
+        },
+        config: {
+          removeBackButton: false,
+          skippableItem: true,
+          randomizeOptions: false,
+          timer: 0,
+          addScores: false,
+          setAlerts: false,
+          addTooltip: false,
+          setPalette: false,
+          additionalResponseOption: {
+            textInputOption: false,
+            textInputRequired: false,
+          },
+        },
+        name: 'ss-1',
+        isHidden: false,
+        allowEdit: true,
+        id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
+        order: 1,
+      },
+      answer: {
+        value: '0',
+        edited: null,
+      },
+      items,
+    },
+  ],
+};
+
 const RespondentDataReviewWithForm = () => {
   const methods = useForm({
     defaultValues: {
@@ -247,58 +300,7 @@ describe('RespondentDataReview', () => {
       mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities2);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
 
-      const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
-        decryptedAnswers: [
-          {
-            activityItem: {
-              question: {
-                en: 'Single Selected - Mocked Item',
-              },
-              responseType: 'singleSelect',
-              responseValues: {
-                options: [
-                  {
-                    id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
-                    text: '1',
-                    isHidden: false,
-                    value: 0,
-                  },
-                  {
-                    id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
-                    text: '2',
-                    isHidden: false,
-                    value: 1,
-                  },
-                ],
-              },
-              config: {
-                removeBackButton: false,
-                skippableItem: true,
-                randomizeOptions: false,
-                timer: 0,
-                addScores: false,
-                setAlerts: false,
-                addTooltip: false,
-                setPalette: false,
-                additionalResponseOption: {
-                  textInputOption: false,
-                  textInputRequired: false,
-                },
-              },
-              name: 'ss-1',
-              isHidden: false,
-              allowEdit: true,
-              id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
-              order: 1,
-            },
-            answer: {
-              value: '0',
-              edited: null,
-            },
-            items,
-          },
-        ],
-      });
+      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -493,71 +495,14 @@ describe('RespondentDataReview', () => {
     async () => {
       mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
       mockAxios.get.mockResolvedValueOnce(mockedGetWithDates);
-      mockAxios.get.mockResolvedValueOnce({
-        data: {
-          result: {
-            createdAt: '2023-12-15T23:29:36.150182',
-          },
-        },
-      });
+      mockAxios.get.mockResolvedValueOnce(mockedGetWithResponses);
       mockAxios.get.mockResolvedValueOnce({
         data: {
           result: {},
         },
       });
 
-      const getDecryptedActivityDataMock = jest.fn().mockReturnValue({
-        decryptedAnswers: [
-          {
-            activityItem: {
-              question: {
-                en: 'Single Selected - Mocked Item',
-              },
-              responseType: 'singleSelect',
-              responseValues: {
-                options: [
-                  {
-                    id: '484596cc-0b4e-42a9-ab9d-20d4dae97d58',
-                    text: '1',
-                    isHidden: false,
-                    value: 0,
-                  },
-                  {
-                    id: 'a6ee9b74-e1d3-47b2-8c7f-fa9a22313b19',
-                    text: '2',
-                    isHidden: false,
-                    value: 1,
-                  },
-                ],
-              },
-              config: {
-                removeBackButton: false,
-                skippableItem: true,
-                randomizeOptions: false,
-                timer: 0,
-                addScores: false,
-                setAlerts: false,
-                addTooltip: false,
-                setPalette: false,
-                additionalResponseOption: {
-                  textInputOption: false,
-                  textInputRequired: false,
-                },
-              },
-              name: 'ss-1',
-              isHidden: false,
-              allowEdit: true,
-              id: 'ab383cc6-834b-45da-a0e1-fc21ca74b316',
-              order: 1,
-            },
-            answer: {
-              value: '0',
-              edited: null,
-            },
-            items,
-          },
-        ],
-      });
+      const getDecryptedActivityDataMock = jest.fn().mockReturnValue(mockDecryptedActivityData);
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -600,7 +545,7 @@ describe('RespondentDataReview', () => {
 
         expect(mockAxios.get).toHaveBeenNthCalledWith(
           3,
-          `/answers/applet/${mockedAppletId}/answers/answer-id-2-2/activities/2`,
+          `/answers/applet/${mockedAppletId}/activities/2/answers/answer-id-2-2`,
           {
             params: {
               limit: 10000,
