@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 import { DatavizActivity, getAppletActivitiesApi } from 'api';
@@ -11,6 +12,7 @@ import {
 import { MenuActionProps } from 'shared/components';
 import { OpenTakeNowModalOptions } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.types';
 import { users } from 'modules/Dashboard/state';
+import { theme } from 'shared/styles';
 
 export const Activities = () => {
   const { appletId, participantId } = useParams();
@@ -85,14 +87,16 @@ export const Activities = () => {
   );
 
   return (
-    <ActivityGrid
-      rows={activities}
-      TakeNowModal={TakeNowModal}
-      order={'desc'}
-      orderBy={''}
-      isLoading={isLoading || isSubjectLoading}
-      data-testid={dataTestId}
-    />
+    <Box sx={{ padding: `${theme.spacing(3.2)} ${theme.spacing(1.6)}` }}>
+      <ActivityGrid
+        rows={activities}
+        TakeNowModal={TakeNowModal}
+        order="desc"
+        orderBy=""
+        isLoading={isLoading || isSubjectLoading}
+        data-testid={dataTestId}
+      />
+    </Box>
   );
 };
 
