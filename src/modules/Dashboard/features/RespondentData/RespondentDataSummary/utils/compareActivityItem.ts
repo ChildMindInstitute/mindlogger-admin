@@ -244,7 +244,7 @@ export const compareActivityItem = (
 
       return {
         activityItem: {
-          ...previousActivityItem.activityItem,
+          ...activityItem,
           responseValues,
         },
         answers: updatedAnswers,
