@@ -20,6 +20,11 @@ export const getRequestTokenData = (config: InternalAxiosRequestConfig) => {
   config.headers['Authorization'] = `bearer ${accessToken}`;
 };
 
+export const getRefreshTokenData = (config: InternalAxiosRequestConfig) => {
+  const refreshToken = authStorage.getRefreshToken();
+  config.headers['Authorization'] = `bearer ${refreshToken}`;
+};
+
 export const refreshTokenAndReattemptRequest = async (err: AxiosError) => {
   try {
     const { response: errorResponse } = err;

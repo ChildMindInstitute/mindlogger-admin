@@ -1,7 +1,7 @@
 import { AppletId } from 'shared/api';
 import { Item, SingleApplet } from 'shared/state';
 import { Roles } from 'shared/consts';
-import { RetentionPeriods, EncryptedAnswerSharedProps } from 'shared/types';
+import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
 export type GetAppletsParams = {
@@ -256,7 +256,7 @@ export type DatavizAnswer = EncryptedAnswerSharedProps & {
 
 export type Answers = AppletId & RespondentId & { createdDate?: string };
 
-export type ActivityAnswer = AppletId & { answerId: string; activityId: string };
+export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
 
 export type AssessmentReview = AppletId & { answerId: string };
 
@@ -413,10 +413,23 @@ export type Identifiers = LatestReport;
 
 export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;
 
-export type ActivityAnswerMeta = {
+export type ActivityAnswerSummary = {
   createdAt: string;
+  endDateTime: string | null;
   version: string;
   identifier: Identifier | null;
 };
 
-export type EncryptedActivityAnswer = EncryptedAnswerSharedProps & ActivityAnswerMeta;
+export type ActivityAnswer = {
+  id: string;
+  submitId: string;
+  activityHistoryId: string;
+  activityId: string | null;
+  flowHistoryId: string | null;
+};
+
+export type EncryptedActivityAnswer = {
+  activity: ExportActivity;
+  answer: Omit<EncryptedAnswerSharedProps, 'items'> & ActivityAnswer & ActivityAnswerSummary;
+  summary: ActivityAnswerSummary;
+};

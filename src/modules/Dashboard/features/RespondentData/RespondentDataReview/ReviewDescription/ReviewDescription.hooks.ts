@@ -7,12 +7,16 @@ import { ReviewDescriptionProps } from './ReviewDescription.types';
 import { EMPTY_IDENTIFIER } from './ReviewDescription.const';
 
 export const useReviewDescription = ({
+  endDateTime,
   createdAt,
   identifier,
   version,
 }: Omit<ReviewDescriptionProps, 'data-testid'>) => {
   const { t } = useTranslation();
-  const submittedDateTime = format(new Date(createdAt), DateFormats.MonthDayYearTimeSeconds);
+  const submittedDateTime = format(
+    new Date(endDateTime ?? createdAt),
+    DateFormats.MonthDayYearTimeSeconds,
+  );
 
   return [
     {
