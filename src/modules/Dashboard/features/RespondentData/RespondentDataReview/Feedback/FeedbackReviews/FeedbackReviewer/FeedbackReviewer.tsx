@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 
 import { getDictionaryText, toggleBooleanState } from 'shared/utils';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
+import { SHOW_MORE_HEIGHT } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 
 import { StyledItem, StyledReviewer, StyledShowMoreWrapper } from './FeedbackReviewer.styles';
 import { FeedbackReviewerProps } from './FeedbackReviewer.types';
@@ -72,7 +73,7 @@ export const FeedbackReviewer = ({
               >
                 <CollapsedMdText
                   text={getDictionaryText(activityItemAnswer.activityItem.question)}
-                  maxHeight={120}
+                  maxHeight={SHOW_MORE_HEIGHT}
                 />
                 {getResponseItem(activityItemAnswer)}
               </StyledItem>
