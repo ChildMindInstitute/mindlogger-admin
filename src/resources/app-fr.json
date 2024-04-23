@@ -771,6 +771,7 @@
   "noMatchWasFoundShort": "Aucune correspondance trouvée pour '{{searchValue}}'.",
   "noPendingInvitations": "Aucune invitation en attente",
   "noPermissions": "Vous n'avez pas les permissions pour voir cet onglet.",
+  "noResponseData": "Aucune donnée de réponse fournie.",
   "responseIdentifier": "Identifiant de réponse",
   "noResponseIdentifier": "Aucun identifiant de réponse pour le moment.",
   "viewingResponsesSubmitted": "Consultation des réponses soumises le :",
