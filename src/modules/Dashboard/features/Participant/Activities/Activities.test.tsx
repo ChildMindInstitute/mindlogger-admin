@@ -56,15 +56,16 @@ const routePath = page.appletParticipantActivities;
 const preloadedState: PreloadedState<RootState> = {
   ...getPreloadedState(),
   users: {
-    respondentDetails: mockSchema({
+    respondentDetails: mockSchema(null),
+    allRespondents: mockSchema(null),
+    subjectDetails: mockSchema({
       result: {
+        id: 'test-id',
         secretUserId: 'secretUserId',
         nickname: 'nickname',
         lastSeen: null,
       },
     }),
-    allRespondents: mockSchema(null),
-    subjectDetails: mockSchema(null),
   },
 };
 
@@ -142,7 +143,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
     `('$description', async ({ canEdit, role }) => {
       mockAxios.get.mockResolvedValue(successfulGetAppletActivitiesMock);
       renderWithProviders(<Activities />, {
-        preloadedState: getPreloadedState(role),
+        preloadedState: { ...preloadedState, ...getPreloadedState(role) },
         route,
         routePath,
       });
@@ -187,7 +188,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
             successfulEmptyHttpResponseMock,
         });
         renderWithProviders(<Activities />, {
-          preloadedState: getPreloadedState(role),
+          preloadedState: { ...preloadedState, ...getPreloadedState(role) },
           route,
           routePath,
         });
@@ -235,7 +236,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         });
 
         renderWithProviders(<Activities />, {
-          preloadedState: getPreloadedState(role),
+          preloadedState: { ...preloadedState, ...getPreloadedState(role) },
           route,
           routePath,
         });
@@ -298,8 +299,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         .getByTestId(`${testId}-take-now-modal-participant-dropdown`)
         .querySelector('input');
 
-      const { secretUserId, nickname } =
-        preloadedState?.users?.respondentDetails.data?.result ?? {};
+      const { secretUserId, nickname } = preloadedState?.users?.subjectDetails.data?.result ?? {};
 
       expect(subjectInputElement).toHaveValue(`${secretUserId} (${nickname})`);
 
