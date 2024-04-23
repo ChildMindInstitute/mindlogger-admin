@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { Update } from 'history';
 
 import { useCallbackPrompt, usePromptSetup } from 'shared/hooks';
+import { LocationState, LocationStateKeys } from 'shared/types';
 
 export const usePrompt = (when: boolean) => {
   const {
@@ -16,12 +17,28 @@ export const usePrompt = (when: boolean) => {
 
   const handleBlockedNavigation = useCallback(
     (nextLocation: Update) => {
-      if (!confirmedNavigation && nextLocation.location.pathname !== location.pathname) {
+      const shouldSkip =
+        nextLocation.location.pathname === location.pathname ||
+        (nextLocation.location.state as LocationState)?.[
+          LocationStateKeys.ShouldNavigateWithoutPrompt
+        ];
+      if (!confirmedNavigation && !shouldSkip) {
         setPromptVisible(true);
         setLastLocation(nextLocation);
 
         return false;
       }
+
+      setLastLocation({
+        ...nextLocation,
+        location: {
+          ...nextLocation.location,
+          state: {
+            ...(nextLocation.location.state ?? {}),
+            [LocationStateKeys.ShouldNavigateWithoutPrompt]: undefined,
+          },
+        },
+      });
 
       return true;
     },
