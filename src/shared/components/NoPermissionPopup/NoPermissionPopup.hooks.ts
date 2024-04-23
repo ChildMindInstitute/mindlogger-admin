@@ -31,9 +31,10 @@ export const useNoPermissionPopup = (): UseNoPermissionPopupReturn => {
     dispatch(alerts.actions.resetAlerts());
     dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
     dispatch(popups.actions.resetPopupsVisibility());
-    const result = await dispatch(workspaces.thunk.getWorkspaces());
+    const { getWorkspaces } = workspaces.thunk;
+    const result = await dispatch(getWorkspaces());
 
-    if (workspaces.thunk.getWorkspaces.fulfilled.match(result)) {
+    if (getWorkspaces.fulfilled.match(result)) {
       const workspacesData = result.payload.data.result as Workspace[];
       const workspace = workspacesData.find((item) => item.ownerId === id);
       dispatch(workspaces.actions.setCurrentWorkspace(workspace ?? null));
