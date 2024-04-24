@@ -3,6 +3,7 @@ import { sortItemsByOrder } from './sortItemsByOrder';
 describe('sortItemsByOrder', () => {
   test.each([
     [null, null],
+    [[], []],
     [
       [{ order: 3 }, { order: 1 }, { order: 4 }, { order: 2 }],
       [{ order: 1 }, { order: 2 }, { order: 3 }, { order: 4 }],
