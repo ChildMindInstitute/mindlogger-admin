@@ -172,6 +172,7 @@ const mockedGetWithReviews = (hasUserReview: boolean) => ({
     result: [
       {
         createdAt: '2024-03-14T14:50:38.637755',
+        updatedAt: '2024-03-14T14:50:38.637755',
         id: 'review-id',
         reviewerPublicKey: 'c48b275d-db4b-4f79-8469-9198b45985d3',
         answer:
@@ -188,6 +189,7 @@ const mockedGetWithReviews = (hasUserReview: boolean) => ({
         ? [
             {
               createdAt: '2024-03-14T14:50:38.637755',
+              updatedAt: '2024-03-14T14:50:38.637755',
               id: 'review-id-2',
               reviewerPublicKey: 'public-key',
               answer:
@@ -216,6 +218,7 @@ const mockedGetWithReviewsNoAnswers = {
     result: [
       {
         createdAt: '2024-03-14T14:50:38.637755',
+        updatedAt: '2024-03-14T14:50:38.637755',
         id: 'review-id',
         reviewerPublicKey: null,
         answer: null,
@@ -229,6 +232,7 @@ const mockedGetWithReviewsNoAnswers = {
       },
       {
         createdAt: '2024-03-15T14:55:38.637755',
+        updatedAt: '2024-03-15T14:55:38.637755',
         id: 'review-id',
         reviewerPublicKey: null,
         answer: null,
