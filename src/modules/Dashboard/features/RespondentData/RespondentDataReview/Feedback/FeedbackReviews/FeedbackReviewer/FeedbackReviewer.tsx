@@ -17,8 +17,9 @@ export const FeedbackReviewer = ({
   reviewer,
   isCurrentUserReviewer,
   reviewId,
-  createdAt,
+  updatedAt,
   onReviewerAnswersRemove,
+  onReviewEdit,
   error,
   isLoading,
   'data-testid': dataTestid,
@@ -28,8 +29,13 @@ export const FeedbackReviewer = ({
   const [showAllAnswers, setShowAllAnswers] = useState(false);
   const [numAnswersToShow, setNumAnswersToShow] = useState(MIN_ANSWERS_COUNT_TO_SHOW);
   const [removePopupVisible, setRemovePopupVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleRemoveButtonClick = () => setRemovePopupVisible(true);
+  const handleEditButtonClick = () => {
+    setIsVisible(false);
+    onReviewEdit();
+  };
   const handleRemoveSubmit = async () => {
     setIsOpen(false);
     await onReviewerAnswersRemove({ assessmentId: reviewId });
@@ -47,6 +53,8 @@ export const FeedbackReviewer = ({
     });
   };
 
+  if (!isVisible) return null;
+
   return (
     <>
       <StyledReviewer
@@ -57,8 +65,10 @@ export const FeedbackReviewer = ({
           isReviewOpen={isOpen}
           reviewerName={reviewerName}
           hasReview={!!review}
-          createdAt={createdAt}
-          onRemoveClick={isCurrentUserReviewer ? handleRemoveButtonClick : null}
+          submitDate={updatedAt}
+          hasEditAndRemove={isCurrentUserReviewer}
+          onRemoveClick={handleRemoveButtonClick}
+          onEditClick={handleEditButtonClick}
           onToggleVisibilityClick={toggleBooleanState(setIsOpen)}
           data-testid={dataTestid}
         />
