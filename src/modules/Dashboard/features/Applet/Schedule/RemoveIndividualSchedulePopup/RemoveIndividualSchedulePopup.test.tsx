@@ -37,7 +37,7 @@ const preloadedState = {
 
 const onCloseMock = jest.fn();
 const setScheduleMock = jest.fn();
-const setSelectedRespondentMock = jest.fn();
+const onSelectUserMock = jest.fn();
 
 describe('RemoveIndividualSchedulePopup', () => {
   test('should render for isEmpty false', async () => {
@@ -48,9 +48,10 @@ describe('RemoveIndividualSchedulePopup', () => {
         onClose={onCloseMock}
         name="Respondent Name"
         isEmpty={false}
+        respondentId={mockedRespondentId}
         setSchedule={setScheduleMock}
         data-testid="remove-individual-schedule-popup"
-        setSelectedRespondent={setSelectedRespondentMock}
+        onSelectUser={onSelectUserMock}
       />,
       { route, routePath, preloadedState },
     );
@@ -76,8 +77,7 @@ describe('RemoveIndividualSchedulePopup', () => {
     fireEvent.click(screen.getByText('Ok'));
 
     expect(setScheduleMock).toBeCalledWith('defaultSchedule');
-    expect(setSelectedRespondentMock).toBeCalledWith(null);
-    expect(mockedUseNavigate).toBeCalledWith(`/dashboard/${mockedAppletId}/schedule`);
+    expect(onSelectUserMock).toBeCalledWith(undefined);
     expect(onCloseMock).toBeCalled();
   });
 
@@ -90,7 +90,7 @@ describe('RemoveIndividualSchedulePopup', () => {
         isEmpty={true}
         setSchedule={setScheduleMock}
         data-testid="remove-individual-schedule-popup"
-        setSelectedRespondent={setSelectedRespondentMock}
+        onSelectUser={onSelectUserMock}
       />,
       { route, routePath, preloadedState },
     );
