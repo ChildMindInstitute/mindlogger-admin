@@ -8,7 +8,7 @@ export type SearchPopupProps = {
   setSchedule: Dispatch<SetStateAction<null | string>>;
   top?: number;
   left?: number;
-  setSelectedRespondent: Dispatch<SetStateAction<SelectedRespondent>>;
+  onSelectUser?: (id?: string) => void;
   selectedRespondent: SelectedRespondent;
   respondentsItems?: SelectedRespondent[];
   'data-testid'?: string;

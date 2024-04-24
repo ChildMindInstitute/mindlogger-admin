@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Search, Svg } from 'shared/components';
 import { theme, variables, StyledModalContent, StyledIconButton } from 'shared/styles';
-import { page } from 'resources';
 import { getRespondentName, getErrorMessage } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
 import { createIndividualEventsApi } from 'api';
@@ -32,13 +31,12 @@ export const SearchPopup = ({
   setSchedule,
   top,
   left,
-  setSelectedRespondent,
+  onSelectUser,
   selectedRespondent,
   respondentsItems,
   'data-testid': dataTestid,
 }: SearchPopupProps) => {
   const { t } = useTranslation('app');
-  const navigate = useNavigate();
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const { ownerId } = workspaces.useData() || {};
@@ -67,23 +65,22 @@ export const SearchPopup = ({
   );
 
   const handleSearchPopupClose = () => {
-    !selectedRespondent && setSchedule(ScheduleOptions.DefaultSchedule);
+    if (!selectedRespondent || !selectedRespondent.hasIndividualSchedule) {
+      setSchedule(ScheduleOptions.DefaultSchedule);
+      onSelectUser?.(undefined);
+    }
+
     setSearchPopupVisible(false);
   };
 
   const selectedRespondentHandler = (item: SelectedRespondent) => {
-    const { id: respondentId, hasIndividualSchedule } = item || {};
-    setSelectedRespondent(item);
-    if (hasIndividualSchedule) {
-      navigate(
-        generatePath(page.appletScheduleIndividual, {
-          appletId,
-          respondentId,
-        }),
-      );
-    } else {
+    const { id, hasIndividualSchedule } = item || {};
+    onSelectUser?.(id);
+
+    if (!hasIndividualSchedule) {
       setAddIndividualSchedulePopupVisible(true);
     }
+
     setSearchPopupVisible(false);
   };
 
@@ -102,19 +99,13 @@ export const SearchPopup = ({
     if (!appletId || !respondentId) return;
 
     await createIndividualEvents({ appletId, respondentId });
-    navigate(
-      generatePath(page.appletScheduleIndividual, {
-        appletId,
-        respondentId,
-      }),
-    );
+    onSelectUser?.(respondentId);
     setAddIndividualSchedulePopupVisible(false);
   };
 
   const handleAddIndividualScheduleClose = () => {
     setAddIndividualSchedulePopupVisible(false);
     setSearchPopupVisible(true);
-    setSelectedRespondent(null);
   };
 
   return (
