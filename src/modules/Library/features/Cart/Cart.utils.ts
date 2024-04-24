@@ -10,6 +10,7 @@ import {
 import { getSelectedItemsFromStorage } from 'modules/Library/utils';
 import { SelectedItem } from 'modules/Library/features/Applet';
 import { ItemResponseType, performanceTaskResponseTypes, PerfTaskType } from 'shared/consts';
+import { LocationStateKeys } from 'shared/types';
 import {
   Item,
   SingleAndMultipleSelectMatrix,
@@ -27,7 +28,7 @@ export const navigateToBuilder = (
   data: SingleApplet,
 ) => {
   navigate(generatePath(page.builderAppletAbout, { appletId }), {
-    state: { isFromLibrary: true, data },
+    state: { [LocationStateKeys.IsFromLibrary]: true, [LocationStateKeys.Data]: data },
   });
 };
 

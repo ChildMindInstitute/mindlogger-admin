@@ -7,7 +7,10 @@ import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
 import { getDictionaryText } from 'shared/utils';
-import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
+import {
+  UNSUPPORTED_ITEMS,
+  SHOW_MORE_HEIGHT,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 import {
   RespondentsDataFormValues,
   FormattedResponses,
@@ -61,7 +64,7 @@ export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOpti
             >
               <CollapsedMdText
                 text={getDictionaryText(item.activityItem.question)}
-                maxHeight={120}
+                maxHeight={SHOW_MORE_HEIGHT}
                 data-testid={`${dataTestid}-question`}
               />
               {renderResponseOption({ ...item, dataTestid }, responseOptionIndex)}
