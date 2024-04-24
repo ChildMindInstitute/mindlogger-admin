@@ -18,6 +18,11 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       width: '8rem',
     },
     {
+      id: 'pin',
+      label: '',
+      width: '3.2rem',
+    },
+    {
       id: 'avatar',
       label: '',
       width: '8rem',

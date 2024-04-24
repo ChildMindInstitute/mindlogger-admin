@@ -3,13 +3,14 @@ import { Avatar as MuiAvatar, Box, Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { getWorkspaceManagersApi } from 'api';
+import { getWorkspaceManagersApi, updateManagersPinApi } from 'api';
 import {
   ActionsMenu,
   Avatar,
   AvatarUiType,
   Chip,
   MenuActionProps,
+  Pin,
   Search,
   Spinner,
 } from 'shared/components';
@@ -89,6 +90,10 @@ export const Managers = () => {
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
+  const { execute: handlePinUpdate } = useAsync(updateManagersPinApi, handleReload, undefined, () =>
+    setIsLoading(false),
+  );
+
   const actions = {
     removeAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
       setSelectedManager(user || null);
@@ -98,6 +103,11 @@ export const Managers = () => {
       setSelectedManager(user || null);
       setEditAccessPopupVisible(true);
     },
+  };
+
+  const handlePinClick = (userId: string) => {
+    setIsLoading(true);
+    handlePinUpdate({ ownerId, userId });
   };
 
   const removeManagerAccessOnClose = (step?: number) => {
@@ -117,7 +127,7 @@ export const Managers = () => {
     () =>
       managersData?.result?.map((user) => {
         const filteredManager = filterAppletsByRoles(user);
-        const { applets, email, firstName, lastName, roles, id } = user;
+        const { applets, email, firstName, lastName, roles, id, isPinned } = user;
         const stringRoles = joinWihComma(roles);
         const appletRole = applets.find(({ id }) => id === appletId);
         const renderedRoles = appletRole?.roles.map(({ role }) => (
@@ -139,6 +149,11 @@ export const Managers = () => {
             ),
             value: '',
             width: '8rem',
+          },
+          pin: {
+            content: () => <Pin isPinned={isPinned} data-testid="dashboard-managers-pin" />,
+            value: '',
+            onClick: () => handlePinClick(id),
           },
           avatar: {
             content: () => (
