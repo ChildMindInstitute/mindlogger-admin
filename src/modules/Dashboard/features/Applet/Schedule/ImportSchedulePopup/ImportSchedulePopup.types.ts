@@ -3,6 +3,7 @@ import { ScheduleExportCsv, ScheduleExportItem } from '../Schedule.types';
 export type ImportSchedulePopupProps = {
   isIndividual?: boolean;
   appletName: string;
+  respondentId?: string;
   respondentName: string;
   open: boolean;
   onClose: () => void;
