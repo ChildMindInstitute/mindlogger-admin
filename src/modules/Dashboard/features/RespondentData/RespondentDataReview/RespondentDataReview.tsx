@@ -30,6 +30,7 @@ import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Item } from 'shared/state';
 import { users } from 'redux/modules';
 import { page } from 'resources';
+import { sortItemsByOrder } from 'shared/utils/sortItemsByOrder';
 
 import { Feedback } from './Feedback';
 import { Review } from './Review';
@@ -205,15 +206,19 @@ export const RespondentDataReview = () => {
         setIsLoading(true);
         await getActivityAnswer({ appletId, answerId, activityId: selectedActivity.id });
         const result = await getAssessmentApi({ appletId, answerId });
-        const { reviewerPublicKey, itemsLast, versions, ...assessmentData } = result.data.result;
+        const { reviewerPublicKey, itemsLast, versions, items, ...assessmentData } =
+          result.data.result;
         const encryptedData = {
           ...assessmentData,
+          // sorting in case the items received from the backend are in the wrong order
+          items: sortItemsByOrder(items),
           userPublicKey: reviewerPublicKey,
         } as EncryptedAnswerSharedProps;
         const decryptedAssessment = await getDecryptedActivityData(encryptedData);
         setItemIds(assessmentData.itemIds || []);
         setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
-        setLastAssessment(itemsLast);
+        // sorting in case the items received from the backend are in the wrong order
+        setLastAssessment(sortItemsByOrder(itemsLast));
         setAssessmentVersions(versions);
         setIsBannerVisible(!!(itemsLast?.length && versions));
         if (decryptedAssessment?.decryptedAnswers?.length && isFeedbackVisible) {
