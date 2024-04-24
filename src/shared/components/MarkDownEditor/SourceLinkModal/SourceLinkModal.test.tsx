@@ -57,7 +57,7 @@ describe('SourceLinkModal', () => {
     expect(screen.queryByTestId(`${dataTestid}-error`)).not.toBeInTheDocument();
   });
 
-  test('should render the modal link correctly with error', async () => {
+  test('should render the modal link correctly with error', () => {
     renderWithProviders(<SourceLinkModal {...props} error={'Mock error'} />);
 
     const errorElement = screen.getByTestId(`${dataTestid}-error`);
