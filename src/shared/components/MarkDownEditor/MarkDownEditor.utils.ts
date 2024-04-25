@@ -105,8 +105,8 @@ config({
 
         md.renderer.rules.image = function (tokens, idx, options, env, self) {
           const token = tokens[idx];
-          const src = token.attrGet('src');
           token.attrPush(['loading', 'lazy']);
+          const src = token.attrGet('src');
           const description = token.children?.[0]?.content;
 
           if (src && VIDEO_LINK_REGEX.test(src)) {
