@@ -359,6 +359,14 @@ export const theme = createTheme({
         },
       },
     },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          fontSize: variables.font.size.md,
+          lineHeight: variables.font.lineHeight.sm,
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
