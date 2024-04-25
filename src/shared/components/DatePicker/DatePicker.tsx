@@ -1,4 +1,4 @@
-import { MouseEventHandler, lazy, useState, Suspense } from 'react';
+import { MouseEventHandler, lazy, useState, Suspense, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, FieldValues } from 'react-hook-form';
 import { fr } from 'date-fns/locale';
@@ -43,6 +43,13 @@ export const DatePicker = <T extends FieldValues>({
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const onChangeRef = useRef<{
+    callback: (date: undefined | DateType) => void;
+    prevValue: undefined | DateType;
+  }>({
+    callback: () => void 0,
+    prevValue: void 0,
+  });
 
   const open = Boolean(anchorEl);
   const isOpen = !disabled && open;
@@ -55,7 +62,12 @@ export const DatePicker = <T extends FieldValues>({
   };
 
   const handlePickerClose = (date?: DateType) => {
+    onChangeRef.current.prevValue = date;
     onCloseCallback?.(date);
+    setAnchorEl(null);
+  };
+  const handlePickerCancel = () => {
+    onChangeRef.current.callback(onChangeRef.current.prevValue);
     setAnchorEl(null);
   };
   const handlePickerSubmit = (date: DateType) => () => {
@@ -71,6 +83,8 @@ export const DatePicker = <T extends FieldValues>({
         render={({ field: { onChange, value }, fieldState: { error } }) => {
           const singleDate = value as DateType;
           const startEndingValue = value as DateArrayType;
+          onChangeRef.current.prevValue = onChangeRef.current.prevValue ?? singleDate;
+          onChangeRef.current.callback = onChange;
 
           const getSelectedDate = (variant?: DateVariant) => {
             if (isStartEndingDate) {
@@ -167,7 +181,7 @@ export const DatePicker = <T extends FieldValues>({
                     }
                     selectsRange={isStartEndingDate}
                     inline
-                    selected={getSelectedDate() as DateType}
+                    selected={(getSelectedDate() as DateType) ?? onChangeRef.current.prevValue}
                     disabled={disabled}
                     onChange={(date) => onChange(date)}
                     monthsShown={isStartEndingDate ? 2 : 1}
@@ -180,7 +194,7 @@ export const DatePicker = <T extends FieldValues>({
                   />
                 </Suspense>
                 <StyledButtons>
-                  <StyledCancelButton variant="text" onClick={handleCloseWithSelectedDate}>
+                  <StyledCancelButton variant="text" onClick={handlePickerCancel}>
                     {t('cancel')}
                   </StyledCancelButton>
                   <StyledButton variant="text" onClick={handlePickerSubmit(getSelectedDate())}>
