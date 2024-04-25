@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 import {
   Chart as ChartJS,
   LinearScale,
@@ -16,6 +16,9 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 import { locales } from 'shared/consts';
+import { useStaticContent } from 'shared/hooks/useStaticContent';
+import { observerStyles } from 'modules/Builder/consts';
+import { StyledObserverTarget } from 'shared/styles';
 
 import { scatterChartTooltipHandler } from '../Charts.utils';
 import { ChartType, SetTooltipData } from '../Chart.types';
@@ -37,6 +40,7 @@ export const MultiScatterChart = ({
   versions,
   useCategory = false,
   'data-testid': dataTestid,
+  isStaticActive,
 }: MultiScatterChartProps) => {
   const { i18n } = useTranslation('app');
   const chartRef = useRef<ChartJSOrUndefined<'scatter', { x: Date; y: number }[], unknown> | null>(
@@ -44,6 +48,7 @@ export const MultiScatterChart = ({
   );
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const isHovered = useRef(false);
+  const { isStatic } = useStaticContent({ targetSelector: dataTestid, isStaticActive });
 
   const [tooltipData, setTooltipData] = useState<TooltipItem<'scatter'>[] | null>(null);
 
@@ -94,17 +99,24 @@ export const MultiScatterChart = ({
 
   return (
     <Box sx={{ height, position: 'relative' }} data-testid={dataTestid}>
-      {renderChart}
-      <ChartTooltipContainer
-        ref={tooltipRef}
-        onMouseEnter={() => {
-          isHovered.current = true;
-        }}
-        onMouseLeave={hideTooltip}
-        data-testid={dataTestid}
-      >
-        <ChartTooltip data={tooltipData} data-testid={dataTestid} />
-      </ChartTooltipContainer>
+      <StyledObserverTarget className={dataTestid} sx={observerStyles} />
+      {isStatic ? (
+        <Skeleton variant="rounded" height={'100%'} />
+      ) : (
+        <>
+          {renderChart}
+          <ChartTooltipContainer
+            ref={tooltipRef}
+            onMouseEnter={() => {
+              isHovered.current = true;
+            }}
+            onMouseLeave={hideTooltip}
+            data-testid={dataTestid}
+          >
+            <ChartTooltip data={tooltipData} data-testid={dataTestid} />
+          </ChartTooltipContainer>
+        </>
+      )}
     </Box>
   );
 };

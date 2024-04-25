@@ -16,3 +16,4 @@ export const observerStyles = {
 export const ITEMS_COUNT_TO_ACTIVATE_STATIC = 20;
 export const REPORTS_COUNT_TO_ACTIVATE_STATIC = 3;
 export const SCORE_CONDS_COUNT_TO_ACTIVATE_STATIC = 2;
+export const SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC = 10;

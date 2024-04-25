@@ -27,6 +27,7 @@ export type MultiScatterChartProps = {
   versions: Version[];
   useCategory?: boolean;
   'data-testid'?: string;
+  isStaticActive?: boolean;
 };
 
 export type OptionsProps = {
