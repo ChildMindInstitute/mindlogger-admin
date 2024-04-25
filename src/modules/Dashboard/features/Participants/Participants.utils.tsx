@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Checkbox } from '@mui/material';
 import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
@@ -132,15 +131,8 @@ export const getHeadCells = (id?: string): HeadCell[] => {
 
   return [
     {
-      id: 'checkbox',
-      label: <Checkbox aria-label={t('checkAll')} checked={false} />,
-      enableSort: true,
-      width: ParticipantsColumnsWidth.Pin,
-    },
-    {
       id: 'pin',
       label: '',
-      enableSort: true,
       width: ParticipantsColumnsWidth.Pin,
     },
     {

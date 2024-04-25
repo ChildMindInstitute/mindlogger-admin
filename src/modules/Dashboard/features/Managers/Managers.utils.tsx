@@ -1,5 +1,3 @@
-import { Checkbox } from '@mui/material';
-
 import i18n from 'i18n';
 import { Svg } from 'shared/components/Svg';
 import { HeadCell } from 'shared/types/table';
@@ -12,11 +10,6 @@ export const getHeadCells = (id?: string): HeadCell[] => {
   const { t } = i18n;
 
   return [
-    {
-      id: 'checkbox',
-      label: <Checkbox aria-label={t('checkAll')} checked={false} />,
-      width: '8rem',
-    },
     {
       id: 'avatar',
       label: '',
