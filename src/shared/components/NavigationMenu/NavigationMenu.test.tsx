@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { page } from 'resources';
 import { mockedAppletId } from 'shared/mock';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { NavigationMenu } from './NavigationMenu';
 import { Svg } from '../Svg';

@@ -1,7 +1,7 @@
 import { screen, fireEvent } from '@testing-library/react';
 
 import * as reduxHooks from 'redux/store/hooks';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { SaveAndPublishProcessPopup } from './SaveAndPublishProcessPopup';
 import { SaveAndPublishSteps } from './SaveAndPublishProcessPopup.types';

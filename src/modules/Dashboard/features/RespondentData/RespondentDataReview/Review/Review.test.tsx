@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Review } from './Review';
 
@@ -225,7 +225,7 @@ describe('Review', () => {
     renderWithProviders(
       <Review isLoading={false} activityItemAnswers={null} selectedAnswer={selectedAnswer} />,
     );
-    expect(screen.getByText('No available Data for this Activity yet')).toBeInTheDocument();
+    expect(screen.getByText('No available Data yet')).toBeInTheDocument();
   });
 
   test('renders component for activityItemAnswers', () => {

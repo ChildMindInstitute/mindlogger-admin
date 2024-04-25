@@ -1,12 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { waitFor, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 import mockAxios from 'jest-mock-axios';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
   mockedAppletId,
@@ -15,7 +13,7 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
-import { DateFormats, Roles } from 'shared/consts';
+import { DateFormats, Roles, JEST_TEST_TIMEOUT } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
@@ -64,7 +62,7 @@ const preloadedState = {
         result: {
           nickname: 'Mocked Respondent',
           secretUserId: mockedRespondentId,
-          lastSeen: '2023-12-11T08:40:41.424000',
+          lastSeen: '2023-12-15T23:29:36.150182',
         },
       },
     },
@@ -79,6 +77,8 @@ jest.mock('modules/Dashboard/hooks', () => ({
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   __esModule: true,
   ...jest.requireActual('modules/Dashboard/features/RespondentData/CollapsedMdText'),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   CollapsedMdText: ({ text }) => <div data-testid="mock-collapsed-md-text">{text}</div>,
 }));
 
@@ -139,20 +139,59 @@ const mockedGetWithActivities1 = {
   },
 };
 
+const activity1 = {
+  id: '951145fa-3053-4428-a970-70531e383d89',
+  name: 'Activity 1',
+  lastAnswerDate: '2023-12-15T11:22:34.150182',
+  answerDates: [
+    {
+      createdAt: '2023-12-15T11:21:40.509095',
+      answerId: 'answer-id-1-1',
+    },
+    {
+      createdAt: '2023-12-15T11:22:34.150182',
+      answerId: 'answer-id-1-2',
+    },
+  ],
+};
+
 const mockedGetWithActivities2 = {
   data: {
+    result: [activity1],
+  },
+};
+
+const mockedGetWithActivities3 = {
+  data: {
     result: [
+      activity1,
       {
-        id: '951145fa-3053-4428-a970-70531e383d89',
-        name: 'Activity 1',
+        id: '2',
+        name: 'Activity 2',
+        lastAnswerDate: '2023-12-15T23:29:36.150182',
         answerDates: [
           {
-            createdAt: '2023-12-15T11:21:40.509095',
-            answerId: 'ff9e1f86-3fa2-4edd-908c-832810555633',
+            createdAt: '2023-12-15T21:20:30.150182',
+            answerId: 'answer-id-2-1',
           },
           {
-            createdAt: '2023-12-15T11:22:34.150182',
-            answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
+            createdAt: '2023-12-15T23:29:36.150182',
+            answerId: 'answer-id-2-2',
+          },
+          {
+            createdAt: '2023-12-15T22:20:30.150182',
+            answerId: 'answer-id-2-3',
+          },
+        ],
+      },
+      {
+        id: '3',
+        name: 'Activity 3',
+        lastAnswerDate: '2023-12-15T05:10:10.111222',
+        answerDates: [
+          {
+            createdAt: '2023-12-15T05:10:10.111222',
+            answerId: 'answer-id-3-1',
           },
         ],
       },
@@ -177,8 +216,6 @@ const mockedGetWithResponses = {
     },
   },
 };
-
-const JEST_TEST_TIMEOUT = 10000;
 
 const RespondentDataReviewWithForm = () => {
   const methods = useForm({
@@ -256,6 +293,8 @@ describe('RespondentDataReview', () => {
         ],
       });
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       dashboardHooks.useDecryptedActivityData.mockReturnValue(getDecryptedActivityDataMock);
 
       renderWithProviders(<RespondentDataReviewWithForm />, {
@@ -299,11 +338,7 @@ describe('RespondentDataReview', () => {
       expect(screen.getByTestId(`${dataTestid}-container`)).toBeInTheDocument();
       expect(screen.getByTestId(`${dataTestid}-feedback-button`)).toBeInTheDocument();
 
-      expect(
-        screen.getByText(
-          'Select the date, Activity, and response time to review the response data.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByText('No available Data yet')).toBeInTheDocument();
 
       // the activity list in the review menu child component is rendered correctly
       const activityLength = screen.queryAllByTestId(
@@ -365,6 +400,24 @@ describe('RespondentDataReview', () => {
             signal: undefined,
           },
         );
+        // get the answer with the latest completion date
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          4,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-1-2/activities/951145fa-3053-4428-a970-70531e383d89`,
+          {
+            params: {
+              limit: 10000,
+            },
+            signal: undefined,
+          },
+        );
+        expect(mockAxios.get).toHaveBeenNthCalledWith(
+          5,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-1-2/assessment`,
+          {
+            signal: undefined,
+          },
+        );
       });
 
       const timestampLength2 = screen.queryAllByTestId(
@@ -379,8 +432,8 @@ describe('RespondentDataReview', () => {
 
       await waitFor(() => {
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          4,
-          `/answers/applet/${mockedAppletId}/answers/ff9e1f86-3fa2-4edd-908c-832810555633/activities/951145fa-3053-4428-a970-70531e383d89`,
+          6,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-1-1/activities/951145fa-3053-4428-a970-70531e383d89`,
           {
             params: {
               limit: 10000,
@@ -390,8 +443,8 @@ describe('RespondentDataReview', () => {
         );
 
         expect(mockAxios.get).toHaveBeenNthCalledWith(
-          5,
-          `/answers/applet/${mockedAppletId}/answers/ff9e1f86-3fa2-4edd-908c-832810555633/assessment`,
+          7,
+          `/answers/applet/${mockedAppletId}/answers/answer-id-1-1/assessment`,
           {
             signal: undefined,
           },
@@ -428,6 +481,53 @@ describe('RespondentDataReview', () => {
     JEST_TEST_TIMEOUT,
   );
 
+  test('renders component with chosen last answer date', async () => {
+    mockAxios.get.mockResolvedValueOnce(mockedGetWithActivities3);
+
+    renderWithProviders(<RespondentDataReviewWithForm />, {
+      preloadedState,
+      route: routeWithoutSelectedDate,
+      routePath,
+    });
+
+    window.HTMLElement.prototype.scrollTo = () => {};
+
+    await waitFor(() => {
+      expect(mockAxios.get).toHaveBeenNthCalledWith(
+        1,
+        `/answers/applet/${mockedAppletId}/review/activities`,
+        {
+          params: {
+            createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
+            limit: 10000,
+            respondentId: mockedRespondentId,
+          },
+          signal: undefined,
+        },
+      );
+
+      const activityLength = screen.queryAllByTestId(
+        /respondents-review-menu-activity-\d+-select$/,
+      );
+      expect(activityLength).toHaveLength(3);
+
+      const timestampLength = screen.queryAllByTestId(
+        /respondents-review-menu-activity-1-completion-time-\d+$/,
+      );
+      expect(timestampLength).toHaveLength(3);
+
+      //check inactive timestamp
+      const timestamp1 = screen.getByTestId(`${dataTestid}-menu-activity-1-completion-time-0`);
+      expect(timestamp1).toHaveClass('MuiChip-colorSecondary');
+      expect(timestamp1).toHaveTextContent('21:20:30');
+
+      //check active timestamp
+      const timestamp3 = screen.getByTestId(`${dataTestid}-menu-activity-1-completion-time-2`);
+      expect(timestamp3).toHaveClass('MuiChip-colorPrimary');
+      expect(timestamp3).toHaveTextContent('23:29:36');
+    });
+  });
+
   test('test if default review date is equal to last activity completed date', async () => {
     renderWithProviders(<RespondentDataReviewWithForm />, {
       preloadedState,
@@ -440,6 +540,6 @@ describe('RespondentDataReview', () => {
 
     const input = inputContainer.querySelector('input') as HTMLInputElement;
     expect(input).toBeInTheDocument();
-    expect(input.value).toEqual('11 Dec 2023');
+    expect(input.value).toEqual('15 Dec 2023');
   });
 });

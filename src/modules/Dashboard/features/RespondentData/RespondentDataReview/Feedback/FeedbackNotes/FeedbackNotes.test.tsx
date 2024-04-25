@@ -4,7 +4,8 @@ import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders, waitForTheUpdate } from 'shared/utils';
+import { waitForTheUpdate } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
   mockedAppletId,
@@ -55,6 +56,7 @@ const mockedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  lastAnswerDate: '2023-09-26T12:11:46.162083',
 };
 
 const mockedGetWithNotes = {

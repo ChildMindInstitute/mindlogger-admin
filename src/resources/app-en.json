@@ -762,7 +762,7 @@
   "noApplets": "No Applets yet. Create your first one by clicking the ‘Add Applet’ button above.",
   "noChanges": "No changes.",
   "noData": "No Data",
-  "noDataForActivity": "No available Data for this Activity yet",
+  "noAvailableData": "No available Data yet",
   "noDataForActivityFilters": "No match was found. Try to adjust filters.",
   "noDataForActivityWithEmptyVersionFilter": "Select a Version to view the response data.",
   "noElementsYet": "No elements yet.",

@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { useFormContext, useWatch } from 'react-hook-form';
+import {
+  createSearchParams,
+  generatePath,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
 import { endOfMonth, format, isValid, startOfMonth } from 'date-fns';
 
 import {
@@ -24,17 +30,25 @@ import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types'
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Item } from 'shared/state';
 import { users } from 'redux/modules';
+import { page } from 'resources';
 
 import { Feedback } from './Feedback';
 import { Review } from './Review';
 import { ReviewMenu } from './ReviewMenu';
 import { ReviewHeader } from './ReviewHeader';
 import { RespondentDataReviewContext } from './RespondentDataReview.context';
-import { Answer, AssessmentActivityItem, ActivityAnswerMeta } from './RespondentDataReview.types';
+import {
+  Answer,
+  AssessmentActivityItem,
+  ActivityAnswerMeta,
+  SelectAnswerProps,
+} from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
 import { RespondentsDataFormValues } from '../RespondentData.types';
 import { ReviewDescription } from './ReviewDescription';
 import { useDecryptedIdentifiers } from '../RespondentDataSummary/hooks';
+import { sortAnswerDates } from './utils/sortAnswerDates';
+import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 
 export const RespondentDataReview = () => {
   const { appletId, respondentId } = useParams();
@@ -43,6 +57,8 @@ export const RespondentDataReview = () => {
   const selectedDateParam = searchParams.get('selectedDate');
   const containerRef = useRef<HTMLElement | null>(null);
   const prevSelectedDateRef = useRef<null | string>(null);
+  const shouldSetLastAnswer = useRef(false);
+
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
@@ -59,15 +75,11 @@ export const RespondentDataReview = () => {
     DecryptedActivityData<EncryptedActivityAnswer>['decryptedAnswers'] | null
   >(null);
   const [activityAnswerMeta, setActivityAnswerMeta] = useState<ActivityAnswerMeta | null>(null);
+
   const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
-
-  const { control, setValue } = useFormContext<RespondentsDataFormValues>();
-
-  const responseDate = useWatch({
-    control,
-    name: 'responseDate',
-  });
+  const navigate = useNavigate();
+  const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
 
   const dataTestid = 'respondents-review';
 
@@ -86,17 +98,20 @@ export const RespondentDataReview = () => {
     getReviewActivitiesApi,
     ({ data }) => {
       const activities = data?.result;
-      if (!activities) return;
 
+      if (!activities?.length) return;
       setActivities(activities);
 
-      const activity = activities.find(
-        ({ id, answerDates }) => id === selectedActivity?.id && answerDates.length,
-      );
-      if (!activity) {
-        setSelectedActivity(null);
-      }
-      handleSelectAnswer(null);
+      if (answerId && !shouldSetLastAnswer.current) return;
+      const selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
+      setSelectedActivity(selectedActivityByDefault);
+      const { answerDates } = selectedActivityByDefault;
+
+      if (!answerDates.length) return;
+      const sortedAnswerDates = sortAnswerDates(answerDates);
+      handleSelectAnswer({
+        answer: sortedAnswerDates[answerDates.length - 1],
+      });
     },
   );
 
@@ -118,9 +133,23 @@ export const RespondentDataReview = () => {
     });
   });
 
-  const handleSelectAnswer = (answer: Answer | null) => {
+  const handleSelectAnswer = ({ answer, isRouteCreated }: SelectAnswerProps) => {
     setIsFeedbackOpen(false);
     setSelectedAnswer(answer);
+
+    if (isRouteCreated) return;
+
+    const responseDate = getValues('responseDate');
+    if (!responseDate || !answer) return;
+
+    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    navigate({
+      pathname,
+      search: createSearchParams({
+        selectedDate: format(responseDate, DateFormats.YearMonthDay),
+        answerId: answer.answerId,
+      }).toString(),
+    });
   };
 
   const handleGetSubmitDates = (date: Date) => {
@@ -139,8 +168,10 @@ export const RespondentDataReview = () => {
 
   const handleGetActivities = (date?: Date | null) => {
     const createdDate = date && format(date, DateFormats.YearMonthDay);
-    if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate)
+
+    if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate) {
       return;
+    }
 
     getReviewActivities({
       appletId,
@@ -157,8 +188,13 @@ export const RespondentDataReview = () => {
     handleGetSubmitDates(date);
   };
 
+  const handleResponseDateChange = (date?: Date | null) => {
+    shouldSetLastAnswer.current = true;
+    handleGetActivities(date);
+  };
+
   useEffect(() => {
-    if (!appletId || !selectedActivity || !selectedAnswer) return;
+    if (!appletId || !selectedActivity || !selectedAnswer || !answerId) return;
     (async () => {
       try {
         setIsLoading(true);
@@ -215,7 +251,6 @@ export const RespondentDataReview = () => {
     <StyledContainer>
       <ReviewMenu
         control={control}
-        selectedDate={responseDate}
         responseDates={responseDates}
         onMonthChange={handleGetSubmitDates}
         activities={activities}
@@ -223,7 +258,7 @@ export const RespondentDataReview = () => {
         selectedAnswer={selectedAnswer}
         setSelectedActivity={setSelectedActivity}
         onSelectAnswer={handleSelectAnswer}
-        onDateChange={handleGetActivities}
+        onDateChange={handleResponseDateChange}
         isDatePickerLoading={getSubmitDatesLoading}
         lastActivityCompleted={lastActivityCompleted}
       />
@@ -258,6 +293,7 @@ export const RespondentDataReview = () => {
             isLoading={isLoading}
             selectedAnswer={selectedAnswer}
             activityItemAnswers={activityItemAnswers}
+            isActivitySelected={!!selectedActivity}
             data-testid={`${dataTestid}-activity-items`}
           />
         </StyledReviewContainer>

@@ -4,7 +4,7 @@ import mockAxios from 'jest-mock-axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
   mockedAppletId,

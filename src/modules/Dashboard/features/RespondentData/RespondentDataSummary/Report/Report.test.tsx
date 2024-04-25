@@ -7,7 +7,7 @@ import download from 'downloadjs';
 import * as reactHookForm from 'react-hook-form';
 
 import { page } from 'resources';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedApplet, mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { initialStateData } from 'redux/modules';
 
@@ -245,6 +245,6 @@ describe('Report component', () => {
     });
 
     expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
-    expect(screen.getByText('No available Data for this Activity yet')).toBeInTheDocument();
+    expect(screen.getByText('No available Data yet')).toBeInTheDocument();
   });
 });

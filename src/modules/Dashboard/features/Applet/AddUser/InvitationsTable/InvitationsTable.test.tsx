@@ -10,7 +10,7 @@ import {
   mockedInvitation,
 } from 'shared/mock';
 import { DateFormats, Roles } from 'shared/consts';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
 import { initialStateData } from 'shared/state';
 

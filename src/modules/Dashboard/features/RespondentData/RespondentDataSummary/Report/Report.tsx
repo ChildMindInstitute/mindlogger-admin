@@ -25,14 +25,14 @@ import {
   Identifier,
   RespondentsDataFormValues,
 } from '../../RespondentData.types';
-import { getFormattedResponses } from '../RespondentDataSummary.utils';
+import { getFormattedResponses } from '../utils/getFormattedResponses';
 import { ReportFilters } from './ReportFilters';
 import { StyledEmptyState, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 import { CurrentActivityCompletionData } from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
-import { getLatestReportUrl } from './Report.utils';
+import { getLatestReportUrl, sortResponseOptions } from './Report.utils';
 import { ReportContext } from './Report.context';
 import {
   LATEST_REPORT_DEFAULT_NAME,
@@ -159,7 +159,10 @@ export const Report = () => {
                     />
                   )}
                   {responseOptions && !!Object.values(responseOptions).length && (
-                    <ResponseOptions responseOptions={responseOptions} versions={apiVersions} />
+                    <ResponseOptions
+                      responseOptions={sortResponseOptions(responseOptions)}
+                      versions={apiVersions}
+                    />
                   )}
                 </>
               )}
@@ -192,7 +195,7 @@ export const Report = () => {
             <StyledEmptyReview data-testid="summary-empty-state">
               <Svg id="chart" width="80" height="80" />
               <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-                {t('noDataForActivity')}
+                {t('noAvailableData')}
               </StyledTitleLarge>
             </StyledEmptyReview>
           </StyledFlexAllCenter>

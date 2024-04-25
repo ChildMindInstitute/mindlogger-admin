@@ -1,19 +1,19 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
-import { Spinner } from 'shared/components';
-import { StyledContainer, StyledFlexAllCenter } from 'shared/styles';
+import { StyledContainer } from 'shared/styles';
 import { DatavizActivity, getSummaryActivitiesApi } from 'api';
 import { useAsync } from 'shared/hooks';
 
-import { useRespondentAnswers } from './hooks/useRespondentAnswers';
 import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
+import { useRespondentAnswers } from './hooks/useRespondentAnswers';
+import { setDateRangeFormValues } from './utils/setDateRangeValues';
 import { RespondentsDataFormValues } from '../RespondentData.types';
+import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 import { ReportMenu } from './ReportMenu';
-import { Report } from './Report';
-import { StyledReportContainer, StyledEmptyReview } from './RespondentDataSummary.styles';
-import { getEmptyState } from './RespondentDataSummary.utils';
+import { StyledReportContainer } from './RespondentDataSummary.styles';
+import { ReportContent } from './ReportContent';
 
 export const RespondentDataSummary = () => {
   const { appletId, respondentId } = useParams();
@@ -27,34 +27,23 @@ export const RespondentDataSummary = () => {
   const { fetchAnswers } = useRespondentAnswers();
 
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, async (result) => {
-    const summaryActivities = result?.data?.result;
-    setValue('summaryActivities', summaryActivities || []);
+    const summaryActivities = result?.data?.result || [];
+    setValue('summaryActivities', summaryActivities);
     if (selectedActivity) return;
 
-    const firstActivityWithAnswers = summaryActivities?.find((activity) => activity.hasAnswer);
-    if (!firstActivityWithAnswers) return;
+    const selectedActivityByDefault =
+      getActivityWithLatestAnswer(summaryActivities) || summaryActivities?.[0];
 
-    setValue('selectedActivity', firstActivityWithAnswers);
+    if (!selectedActivityByDefault) return;
+
+    setValue('selectedActivity', selectedActivityByDefault);
+    setDateRangeFormValues(setValue, selectedActivityByDefault.lastAnswerDate);
+
     setIsLoading(true);
-    await getIdentifiersVersions({ activity: firstActivityWithAnswers });
-    await fetchAnswers({ activity: firstActivityWithAnswers });
+    await getIdentifiersVersions({ activity: selectedActivityByDefault });
+    await fetchAnswers({ activity: selectedActivityByDefault });
     setIsLoading(false);
   });
-
-  const reportContent = useMemo(() => {
-    if (selectedActivity && isLoading) return <Spinner />;
-    if (!selectedActivity || selectedActivity.isPerformanceTask) {
-      return (
-        <StyledFlexAllCenter sx={{ height: '100%' }}>
-          <StyledEmptyReview data-testid="summary-empty-state">
-            {getEmptyState(selectedActivity)}
-          </StyledEmptyReview>
-        </StyledFlexAllCenter>
-      );
-    }
-
-    return <Report />;
-  }, [isLoading, selectedActivity]);
 
   useEffect(() => {
     if (!appletId || !respondentId || !!summaryActivities?.length) return;
@@ -75,7 +64,9 @@ export const RespondentDataSummary = () => {
             fetchAnswers={fetchAnswers}
             setIsLoading={setIsLoading}
           />
-          <StyledReportContainer>{reportContent}</StyledReportContainer>
+          <StyledReportContainer>
+            <ReportContent selectedActivity={selectedActivity} isLoading={isLoading} />
+          </StyledReportContainer>
         </>
       )}
     </StyledContainer>

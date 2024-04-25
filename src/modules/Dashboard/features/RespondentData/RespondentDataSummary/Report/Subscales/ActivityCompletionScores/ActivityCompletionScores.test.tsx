@@ -3,7 +3,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ReportContext } from '../../Report.context';
 import { ActivityCompletionScores } from './ActivityCompletionScores';

@@ -6,7 +6,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 import { RootState } from 'redux/store';
-import { renderHookWithProviders } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 
 import { useTransferOwnership } from './useTransferOwnership';
 
