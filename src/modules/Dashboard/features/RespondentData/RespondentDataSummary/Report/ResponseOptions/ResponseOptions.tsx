@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
@@ -15,6 +16,7 @@ import {
   RespondentsDataFormValues,
   FormattedResponses,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 
 import { useDatavizFilters } from '../../hooks/useDatavizFilters';
 import { COLORS } from '../Charts/Charts.const';
@@ -24,23 +26,28 @@ import { getResponseItem } from './ResponseOptions.utils';
 export const ResponseOptions = ({ responseOptions, versions = [] }: ResponseOptionsProps) => {
   const { t } = useTranslation();
   const { watch } = useFormContext<RespondentsDataFormValues>();
-
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
+  const isStaticActive =
+    Object.values(responseOptions).length > SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC;
 
-  const renderResponseOption = (activityItemAnswer: FormattedResponses, index: number) => {
-    if (UNSUPPORTED_ITEMS.includes(activityItemAnswer.activityItem.responseType))
-      return <UnsupportedItemResponse itemType={activityItemAnswer.activityItem.responseType} />;
+  const renderResponseOption = useCallback(
+    (activityItemAnswer: FormattedResponses, index: number) => {
+      if (UNSUPPORTED_ITEMS.includes(activityItemAnswer.activityItem.responseType))
+        return <UnsupportedItemResponse itemType={activityItemAnswer.activityItem.responseType} />;
 
-    const color = COLORS[index % COLORS.length];
+      const color = COLORS[index % COLORS.length];
 
-    return getResponseItem({
-      color,
-      minDate,
-      maxDate,
-      activityItemAnswer,
-      versions: filteredVersions,
-    });
-  };
+      return getResponseItem({
+        color,
+        minDate,
+        maxDate,
+        activityItemAnswer,
+        versions: filteredVersions,
+        isStaticActive,
+      });
+    },
+    [filteredVersions, minDate, maxDate, isStaticActive],
+  );
 
   return (
     <>
