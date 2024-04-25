@@ -87,7 +87,7 @@ export const Activities = () => {
   );
 
   return (
-    <Box sx={{ padding: `${theme.spacing(3.2)} ${theme.spacing(1.6)}` }}>
+    <Box sx={{ padding: theme.spacing(3.2) }}>
       <ActivityGrid
         rows={activities}
         TakeNowModal={TakeNowModal}
