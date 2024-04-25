@@ -14,12 +14,13 @@ jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
   )),
 }));
 const mockedOnReviewAnswerRemove = jest.fn();
+const mockedOnReviewEdit = jest.fn();
 const mockedReviewer = {
   id: 'c1dbef7d-a790-42d9-ad09-e680eb76af7c',
   firstName: 'John',
   lastName: 'Doe',
 };
-const mockedCreatedAt = '2024-04-04T11:49:10.821854';
+const mockedUpdatedAt = '2024-04-04T12:49:10.821854';
 
 const mockedReview = [
   {
@@ -227,8 +228,9 @@ const renderComponent = (props?: Partial<FeedbackReviewerProps>) =>
       reviewer={mockedReviewer}
       isCurrentUserReviewer={false}
       reviewId="review-id"
-      createdAt={mockedCreatedAt}
+      updatedAt={mockedUpdatedAt}
       onReviewerAnswersRemove={mockedOnReviewAnswerRemove}
+      onReviewEdit={mockedOnReviewEdit}
       error={null}
       isLoading={false}
       data-testid={dataTestid}
@@ -241,7 +243,7 @@ describe('FeedbackReviewer', () => {
     renderComponent({ isCurrentUserReviewer: true });
 
     expect(screen.getByText('John Doe (Me)')).toBeInTheDocument();
-    expect(screen.getByText('Submitted: Apr 04, 2024 11:49')).toBeInTheDocument();
+    expect(screen.getByText('Submitted: Apr 04, 2024 12:49')).toBeInTheDocument();
     const removeButton = screen.getByTestId(`${dataTestid}-answers-remove`);
     expect(removeButton).toBeInTheDocument();
 
@@ -261,7 +263,7 @@ describe('FeedbackReviewer', () => {
     renderComponent();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Submitted: Apr 04, 2024 11:49')).toBeInTheDocument();
+    expect(screen.getByText('Submitted: Apr 04, 2024 12:49')).toBeInTheDocument();
     expect(screen.queryByTestId(`${dataTestid}-answers-remove`)).not.toBeInTheDocument();
   });
 

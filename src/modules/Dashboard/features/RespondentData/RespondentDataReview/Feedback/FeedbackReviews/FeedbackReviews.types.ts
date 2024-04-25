@@ -6,7 +6,7 @@ export type Review = EncryptedAnswerSharedProps & ReviewData;
 
 export type ReviewData = {
   reviewId: string;
-  createdAt: string;
+  updatedAt: string;
   isCurrentUserReviewer: boolean;
   reviewer: Reviewer;
   review: AssessmentActivityItem[] | null;
