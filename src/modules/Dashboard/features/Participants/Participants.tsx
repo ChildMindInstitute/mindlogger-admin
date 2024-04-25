@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Checkbox } from '@mui/material';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
 import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
@@ -268,11 +267,6 @@ export const Participants = () => {
     };
 
     return {
-      checkbox: {
-        content: () => <Checkbox checked={false} data-testid="dashboard-participants-checkbox" />,
-        value: '',
-        width: ParticipantsColumnsWidth.Pin,
-      },
       pin: {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-participants-pin" />,
         value: '',

@@ -34,7 +34,6 @@ const filteredApplets = {
   viewable: applets,
 };
 const headCellProperties = [
-  'checkbox',
   'pin',
   'tag',
   'secretIds',
@@ -172,7 +171,7 @@ describe('Participants utils tests', () => {
   describe('getHeadCells function', () => {
     test('returns the correct array of head cells without an id', () => {
       const headCells = getHeadCells();
-      expect(headCells).toHaveLength(8);
+      expect(headCells).toHaveLength(7);
       headCellProperties.forEach((property, index) => {
         expect(headCells[index]).toHaveProperty('id', property);
       });
@@ -180,9 +179,9 @@ describe('Participants utils tests', () => {
 
     test('returns the correct array of head cells with an id', () => {
       const headCells = getHeadCells(mockedAppletId);
-      expect(headCells).toHaveLength(9);
-      expect(headCells[7]).toHaveProperty('id', 'schedule');
-      expect(headCells[8]).toHaveProperty('id', 'actions');
+      expect(headCells).toHaveLength(8);
+      expect(headCells[6]).toHaveProperty('id', 'schedule');
+      expect(headCells[7]).toHaveProperty('id', 'actions');
     });
   });
 });
