@@ -454,13 +454,14 @@ describe('ResponseOptions.utils', () => {
     };
     const singleSelectionItemResult = {
       ...sharedProps,
-      answers: [{ answer: { text: null, value: 0 }, date: '2024-03-14T10:03:01.345000' }],
-      'data-testid': 'response-option-0-0-multi-scatter-chart',
-      height: 72,
-      maxY: 0,
-      minY: 0,
       options: [{ id: '3157ca3a-6999-4638-991d-e89e8d0439f6', text: 'op1', value: 0 }],
       responseType: 'singleSelect',
+      activityItemAnswer: {
+        activityItem: singleSelectionItemProps.activityItemAnswer.activityItem,
+        answers: singleSelectionItemProps.activityItemAnswer.answers,
+        dataTestid: 'response-option-0-0',
+      },
+      isStaticActive: false,
     };
     const sliderRowsItemProps = {
       ...sharedProps,
@@ -522,11 +523,12 @@ describe('ResponseOptions.utils', () => {
 
     const multiSelectionItemResult = {
       ...sharedProps,
-      answers: [{ answer: { text: null, value: 1 }, date: '2024-03-14T16:53:24.055000' }],
-      'data-testid': 'response-option-1-0-multi-scatter-chart',
-      height: 108,
-      maxY: 1,
-      minY: 0,
+      activityItemAnswer: {
+        activityItem: multiSlectionItemProps.activityItemAnswer.activityItem,
+        answers: multiSlectionItemProps.activityItemAnswer.answers,
+        dataTestid: 'response-option-1-0',
+      },
+      isStaticActive: false,
       options: [
         { id: '382eb08b-13b4-46dc-83fa-3cf63a026ea0', text: 'opt2', value: 0 },
         { id: '2e1e0598-6ed5-4448-b1fd-88447988af30', text: 'opt1', value: 1 },
@@ -535,14 +537,12 @@ describe('ResponseOptions.utils', () => {
     };
     const sliderItemResult = {
       ...sharedProps,
-      answers: [
-        { answer: { text: null, value: 6 }, date: '2024-03-14T16:53:24.055000' },
-        { answer: { text: null, value: null }, date: '2024-03-15T13:35:27.961000' },
-      ],
-      'data-testid': 'response-option-2-0-multi-scatter-chart',
-      height: 252,
-      maxY: 10,
-      minY: 5,
+      activityItemAnswer: {
+        activityItem: sliderItemProps.activityItemAnswer.activityItem,
+        answers: sliderItemProps.activityItemAnswer.answers,
+        dataTestid: 'response-option-2-0',
+      },
+      isStaticActive: false,
       options: [
         { id: '298b1436-3963-41c1-852b-82ebb2ab5468-5', text: 5, value: 5 },
         { id: '298b1436-3963-41c1-852b-82ebb2ab5468-6', text: 6, value: 6 },
@@ -555,14 +555,12 @@ describe('ResponseOptions.utils', () => {
     };
     const numberSelectionItemResult = {
       ...sharedProps,
-      answers: [
-        { answer: { text: null, value: null }, date: '2024-03-15T13:35:27.961000' },
-        { answer: { text: null, value: '10' }, date: '2024-03-15T18:12:57.700000' },
-      ],
-      'data-testid': 'response-option-3-0-multi-scatter-chart',
-      height: 288,
-      maxY: 12,
-      minY: 6,
+      activityItemAnswer: {
+        activityItem: numberSelectionItemProps.activityItemAnswer.activityItem,
+        answers: numberSelectionItemProps.activityItemAnswer.answers,
+        dataTestid: 'response-option-3-0',
+      },
+      isStaticActive: false,
       options: [
         { id: '6', text: 6, value: 6 },
         { id: '7', text: 7, value: 7 },
