@@ -1,17 +1,10 @@
 import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
 
-import {
-  Modal,
-  Spinner,
-  SubmitBtnVariant,
-  ToggleButtonGroup,
-  ToggleButtonVariants,
-} from 'shared/components';
-import { StyledErrorText, StyledLinkBtn, StyledModalWrapper } from 'shared/styles';
+import { Modal, Spinner, ToggleButtonGroup, ToggleButtonVariants } from 'shared/components';
+import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles, VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
 import { Mixpanel, getErrorMessage } from 'shared/utils';
@@ -23,7 +16,6 @@ import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
 
 import {
-  EMAIL_IN_USE,
   RESPONDENT_ALREADY_INVITED,
   defaultValues,
   toggleButtons,
@@ -158,16 +150,6 @@ export const AddParticipantPopup = ({
     setStep(AddParticipantSteps.AccountType);
   };
 
-  const emailInUse = (
-    <Trans i18nKey="emailAlreadyInUse">
-      That email is
-      <StyledLinkBtn component={Link} to={participantPath}>
-        already in use
-      </StyledLinkBtn>
-      . Please enter another one.
-    </Trans>
-  );
-
   const error = invitationError || shellAccountError;
   useFormError({
     error,
@@ -183,12 +165,7 @@ export const AddParticipantPopup = ({
       {
         fieldName: Fields.email,
         apiMessage: RESPONDENT_ALREADY_INVITED,
-        errorMessage: emailInUse,
-      },
-      {
-        fieldName: Fields.email,
-        apiMessage: EMAIL_IN_USE,
-        errorMessage: emailInUse,
+        errorMessage: t('participantAlreadyInvited'),
       },
     ],
   });
