@@ -204,7 +204,6 @@ export const AddParticipantPopup = ({
           onSubmit={handleNext}
           title={t('addParticipant')}
           buttonText={t('next')}
-          submitBtnVariant={SubmitBtnVariant.Contained}
           hasLeftBtn
           leftBtnText={t('addViaCSV')}
           leftBtnVariant="outlined"
@@ -239,7 +238,6 @@ export const AddParticipantPopup = ({
           onSubmit={handleSubmit(handleSubmitForm)}
           title={t(isFullAccount ? 'fullAccount' : 'limitedAccount')}
           buttonText={t(isFullAccount ? 'sendInvitation' : 'create')}
-          submitBtnVariant={SubmitBtnVariant.Contained}
           disabledSubmit={!isValid}
           hasSecondBtn
           // TODO: Update second button variant once 'tonal' variant added

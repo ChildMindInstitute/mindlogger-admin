@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Modal, Spinner, SubmitBtnVariant } from 'shared/components';
+import { Modal, Spinner } from 'shared/components';
 import {
   StyledBodyLarge,
   StyledErrorText,
@@ -118,7 +118,6 @@ export const UpgradeAccountPopup = ({
       onSubmit={handleSubmit(handleSubmitForm)}
       title={t('upgradeToFullAccount')}
       buttonText={t('sendInvitation')}
-      submitBtnVariant={SubmitBtnVariant.Contained}
       disabledSubmit={!isValid}
       hasLeftBtn
       leftBtnText={t('Reset')}

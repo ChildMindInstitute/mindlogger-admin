@@ -3,9 +3,14 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
-import { Modal, SubmitBtnVariant } from 'shared/components';
+import { Modal } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
-import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
+import {
+  StyledFlexColumn,
+  StyledFlexTopCenter,
+  StyledHeadline,
+  StyledModalWrapper,
+} from 'shared/styles';
 import { useAsync } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { getWorkspaceRespondentsApi } from 'api';
@@ -126,53 +131,55 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         onSubmit={handleSubmit}
         onClose={handleClose}
         disabledSubmit={subject === null || participant === null}
-        submitBtnVariant={SubmitBtnVariant.Contained}
-        footerStyles={{ padding: '0.8rem 3.2rem 3.2rem' }}
         data-testid={`${dataTestId}-take-now-modal`}
       >
-        <StyledFlexColumn sx={{ gap: 0.8, p: theme.spacing(2.4, 3.2) }}>
-          <StyledFlexTopCenter sx={{ gap: 2.4 }}>
-            <StyledImageContainer>
-              {!!activity.image && <StyledImg src={activity.image} alt={activity.name} />}
-            </StyledImageContainer>
-            <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
-          </StyledFlexTopCenter>
-          <Box>
-            <LabeledUserDropdown
-              label={t('takeNowModalSubjectLabel')}
-              name={'subject'}
-              tooltip={t('takeNowModalSubjectTooltip')}
-              placeholder={t('takeNowModalSubjectPlaceholder')}
-              value={subject}
-              options={participants}
-              onChange={setSubject}
-              data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-              handleSearch={async (search) => {
-                const response = await getWorkspaceRespondentsApi({
-                  params: {
-                    ownerId,
-                    appletId,
-                    search,
-                    limit: DEFAULT_ROWS_PER_PAGE,
-                  },
-                });
+        <StyledModalWrapper>
+          <StyledFlexColumn sx={{ gap: 0.8 }}>
+            <StyledFlexTopCenter sx={{ gap: 2.4 }}>
+              <StyledImageContainer>
+                {!!activity.image && <StyledImg src={activity.image} alt={activity.name} />}
+              </StyledImageContainer>
+              <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
+            </StyledFlexTopCenter>
+            <Box>
+              <LabeledUserDropdown
+                label={t('takeNowModalSubjectLabel')}
+                name={'subject'}
+                tooltip={t('takeNowModalSubjectTooltip')}
+                placeholder={t('takeNowModalSubjectPlaceholder')}
+                value={subject}
+                options={participants}
+                onChange={setSubject}
+                data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
+                handleSearch={async (search) => {
+                  const response = await getWorkspaceRespondentsApi({
+                    params: {
+                      ownerId,
+                      appletId,
+                      search,
+                      limit: DEFAULT_ROWS_PER_PAGE,
+                    },
+                  });
 
-                return (response?.data as ParticipantsData)?.result.map(participantToOption) ?? [];
-              }}
-            />
-            <LabeledUserDropdown
-              label={t('takeNowModalParticipantLabel')}
-              name={'participant'}
-              tooltip={t('takeNowModalParticipantTooltip')}
-              placeholder={t('takeNowModalParticipantPlaceholder')}
-              value={participant}
-              options={participantsAndTeamMembers}
-              onChange={setParticipant}
-              data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
-              disabled
-            />
-          </Box>
-        </StyledFlexColumn>
+                  return (
+                    (response?.data as ParticipantsData)?.result.map(participantToOption) ?? []
+                  );
+                }}
+              />
+              <LabeledUserDropdown
+                label={t('takeNowModalParticipantLabel')}
+                name={'participant'}
+                tooltip={t('takeNowModalParticipantTooltip')}
+                placeholder={t('takeNowModalParticipantPlaceholder')}
+                value={participant}
+                options={participantsAndTeamMembers}
+                onChange={setParticipant}
+                data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
+                disabled
+              />
+            </Box>
+          </StyledFlexColumn>
+        </StyledModalWrapper>
       </Modal>
     );
   };
