@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DatavizActivity, getSummaryActivitiesApi } from 'api';
+import { DatavizActivity, getAppletActivitiesApi } from 'api';
 import { useAsync } from 'shared/hooks';
 import {
   ActivityActionProps,
@@ -33,20 +33,11 @@ export const Activities = () => {
     openTakeNowModal,
   } = useActivityGrid(dataTestId, activitiesData);
 
-  /**
-   * TODO M2-6223:
-   * getAppletActivitiesApi returns activities for the currently logged in user (an admin/collaborator). This behavior is correct for M2-5585, as per the note:
-   *  "for this ticket all activities in the applet are assigned to the user as we have not yet introduced the concept of assigning activities to users."
-   * This endpoint could be updated to include a `participant_id` param and retrieve _other_ user's assigned activities
-   *
-   * Alternatively, we can use `getSummaryActivitiesApi` as that endpoint _does_ retrieve the target users activities
-   * However this endpoint returns a reduced response (id, name, isPerformanceTask, hasAnswer) that doesn't include all Activity metadata
-   * so it needs to be updated to include everything (id, name, image )
-   */
-  const { execute: getSummaryActivities } = useAsync(
-    getSummaryActivitiesApi,
+  // TODO M2-6223: Update this call to include a `participant_id` param
+  const { execute: getActivities } = useAsync(
+    getAppletActivitiesApi,
     (response) => {
-      const activities = response?.data.result;
+      const activities = response?.data.result.activitiesDetails;
 
       return setActivitiesData({ result: activities, count: activities.length });
     },
@@ -57,8 +48,12 @@ export const Activities = () => {
   useEffect(() => {
     if (!appletId || !participantId) return;
 
-    getSummaryActivities({ appletId, targetSubjectId: participantId });
-  }, [appletId, participantId, getSummaryActivities]);
+    getActivities({
+      params: {
+        appletId,
+      },
+    });
+  }, [appletId, getActivities]);
 
   const activities = useMemo(
     () =>

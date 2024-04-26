@@ -8,8 +8,8 @@ import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import {
+  mockedAppletData,
   mockedAppletId,
-  mockedAppletSummaryData,
   mockedOwnerId,
   mockedRespondent,
   mockedRespondent2,
@@ -28,17 +28,26 @@ import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 
 import { Activities } from './Activities';
 
-const successfulEmptyGetMock = {
+const successfulEmptyGetAppletActivitiesMock = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
-    result: [],
+    result: {
+      activitiesDetails: [],
+      appletDetail: {
+        ...mockedAppletData,
+        activities: [],
+      },
+    },
   },
 };
 
 const successfulGetAppletActivitiesMock = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
-    result: mockedAppletSummaryData,
+    result: {
+      activitiesDetails: mockedAppletData.activities,
+      appletDetail: mockedAppletData,
+    },
   },
 };
 
@@ -48,6 +57,9 @@ const successfulEmptyHttpResponseMock: HttpResponse = {
     result: [],
   },
 };
+
+const getAppletActivitiesUrl = `/activities/applet/${mockedAppletId}`;
+const getWorkspaceRespondentsUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 
 const testId = 'dashboard-applet-participant-activities';
 const route = `/dashboard/${mockedAppletId}/participants/${mockedUserData.id}`;
@@ -93,7 +105,10 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
   });
 
   test('should render empty component', async () => {
-    mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
+    mockGetRequestResponses({
+      [getAppletActivitiesUrl]: successfulEmptyGetAppletActivitiesMock,
+      [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
+    });
     renderWithProviders(<Activities />, { route, routePath, preloadedState });
 
     await waitFor(() => {
@@ -102,11 +117,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
   });
 
   test('should render grid with activity summary cards', async () => {
-    const getAppletActivitiesUrl = `/answers/applet/${mockedAppletId}/summary/activities`;
     mockGetRequestResponses({
       [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
-      [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
-        successfulEmptyHttpResponseMock,
+      [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
     });
     renderWithProviders(<Activities />, { route, routePath, preloadedState });
 
@@ -120,8 +133,11 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
   });
 
   test('click Add Activity should navigate to Builder > Applet > Activities', async () => {
-    mockAxios.get.mockResolvedValue(successfulEmptyGetMock);
-    renderWithProviders(<Activities />, { route, routePath });
+    mockGetRequestResponses({
+      [getAppletActivitiesUrl]: successfulEmptyGetAppletActivitiesMock,
+      [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
+    });
+    renderWithProviders(<Activities />, { route, routePath, preloadedState });
 
     fireEvent.click(screen.getByTestId(`${testId}-add-activity`));
 
@@ -141,7 +157,10 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       ${false} | ${Roles.Respondent}  | ${'editing for Respondent'}
       ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
     `('$description', async ({ canEdit, role }) => {
-      mockAxios.get.mockResolvedValue(successfulGetAppletActivitiesMock);
+      mockGetRequestResponses({
+        [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+        [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
+      });
       renderWithProviders(<Activities />, {
         preloadedState: { ...preloadedState, ...getPreloadedState(role) },
         route,
@@ -160,7 +179,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         expect(mockedUseNavigate).toHaveBeenCalledWith(
           generatePath(page.builderAppletActivity, {
             appletId: mockedAppletId,
-            activityId: mockedAppletSummaryData[0].id,
+            activityId: mockedAppletData.activities[0].id,
           }),
         );
       } else {
@@ -182,10 +201,8 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         ${false}     | ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
       `('$description', async ({ canDoTakeNow, role }: { canDoTakeNow: boolean; role: Roles }) => {
         mockGetRequestResponses({
-          [`/answers/applet/${mockedAppletId}/summary/activities`]:
-            successfulGetAppletActivitiesMock,
-          [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
-            successfulEmptyHttpResponseMock,
+          [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+          [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
         });
         renderWithProviders(<Activities />, {
           preloadedState: { ...preloadedState, ...getPreloadedState(role) },
@@ -222,10 +239,8 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
       `('$description', async ({ role }: { role: Roles }) => {
         mockGetRequestResponses({
-          [`/answers/applet/${mockedAppletId}/summary/activities`]:
-            successfulGetAppletActivitiesMock,
-          [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
-            successfulEmptyHttpResponseMock,
+          [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+          [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
         });
 
         mockUseLaunchDarkly.mockReturnValue({
@@ -257,9 +272,8 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       });
 
       mockGetRequestResponses({
-        [`/answers/applet/${mockedAppletId}/summary/activities`]: successfulGetAppletActivitiesMock,
-        [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
-          successfulGetAppletParticipantsMock,
+        [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
+        [getWorkspaceRespondentsUrl]: successfulGetAppletParticipantsMock,
       });
 
       renderWithProviders(<Activities />, {
