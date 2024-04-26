@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 import { DatavizActivity, getAppletActivitiesApi } from 'api';
@@ -11,9 +12,10 @@ import {
 import { MenuActionProps } from 'shared/components';
 import { OpenTakeNowModalOptions } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.types';
 import { users } from 'modules/Dashboard/state';
+import { theme } from 'shared/styles';
 
 export const Activities = () => {
-  const { appletId, participantId } = useParams();
+  const { appletId, subjectId } = useParams();
   const subjectLoadingStatus = users.useSubjectStatus();
   const subject = users.useSubject();
   const [activitiesData, setActivitiesData] = useState<{
@@ -46,7 +48,7 @@ export const Activities = () => {
   );
 
   useEffect(() => {
-    if (!appletId || !participantId) return;
+    if (!appletId) return;
 
     getActivities({
       params: {
@@ -66,9 +68,9 @@ export const Activities = () => {
             if (activity) {
               const options: OpenTakeNowModalOptions = {};
 
-              if (participantId && subject) {
+              if (subjectId && subject) {
                 options.subject = {
-                  id: participantId,
+                  id: subjectId,
                   secretId: subject.result.secretUserId,
                   nickname: subject.result.nickname,
                 };
@@ -85,14 +87,16 @@ export const Activities = () => {
   );
 
   return (
-    <ActivityGrid
-      rows={activities}
-      TakeNowModal={TakeNowModal}
-      order={'desc'}
-      orderBy={''}
-      isLoading={isLoading || isSubjectLoading}
-      data-testid={dataTestId}
-    />
+    <Box sx={{ padding: theme.spacing(3.2) }}>
+      <ActivityGrid
+        rows={activities}
+        TakeNowModal={TakeNowModal}
+        order="desc"
+        orderBy=""
+        isLoading={isLoading || isSubjectLoading}
+        data-testid={dataTestId}
+      />
+    </Box>
   );
 };
 

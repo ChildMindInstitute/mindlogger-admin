@@ -1,6 +1,6 @@
 import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { Mixpanel } from 'shared/utils/mixpanel';
@@ -19,14 +19,15 @@ export const CreateEventPopup = ({
 }: CreateEventPopupProps) => {
   const { t } = useTranslation('app');
   const eventFormRef = useRef() as RefObject<EventFormRef>;
-  const { respondentId } = useParams();
+  const [searchParams] = useSearchParams();
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleCreateEventClose = () => setCreateEventPopupVisible(false);
+  const userId = searchParams.get('user');
 
-  const isIndividualCalendar = !!respondentId;
+  const isIndividualCalendar = !!userId;
   const analyticsPrefix = isIndividualCalendar
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;

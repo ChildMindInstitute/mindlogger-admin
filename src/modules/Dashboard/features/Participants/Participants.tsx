@@ -261,7 +261,7 @@ export const Participants = () => {
       navigate(
         generatePath(page.appletParticipantActivities, {
           appletId,
-          participantId: details[0].subjectId,
+          subjectId: details[0].subjectId,
         }),
       );
     };

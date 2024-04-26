@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Modal, SubmitBtnColor, Error, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
@@ -8,7 +8,6 @@ import { removeIndividualEventsApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks/useAsync';
 import { applets, users } from 'modules/Dashboard/state';
-import { page } from 'resources';
 import { workspaces } from 'shared/state';
 
 import { RemoveIndividualScheduleProps } from './RemoveIndividualSchedulePopup.types';
@@ -21,17 +20,18 @@ export const RemoveIndividualSchedulePopup = ({
   onClose,
   name,
   isEmpty,
+  respondentId,
   setSchedule,
-  setSelectedRespondent,
+  onSelectUser,
   'data-testid': dataTestid,
 }: RemoveIndividualScheduleProps) => {
   const { t } = useTranslation();
   const [step, setStep] = useState<Steps>(0);
-  const { appletId, respondentId } = useParams();
+  const { appletId } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { getAllWorkspaceRespondents } = users.thunk;
   const { ownerId } = workspaces.useData() || {};
+
   const { execute, error, isLoading } = useAsync(removeIndividualEventsApi, () => {
     if (!appletId) return;
     dispatch(applets.thunk.getEvents({ appletId, respondentId }));
@@ -53,8 +53,7 @@ export const RemoveIndividualSchedulePopup = ({
 
   const handleRemovedScheduleClose = () => {
     setSchedule(ScheduleOptions.DefaultSchedule);
-    setSelectedRespondent(null);
-    navigate(generatePath(page.appletSchedule, { appletId }));
+    onSelectUser?.(undefined);
     onClose();
     if (!appletId || !ownerId) return;
     dispatch(

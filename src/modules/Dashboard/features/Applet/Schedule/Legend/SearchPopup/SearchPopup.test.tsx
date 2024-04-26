@@ -10,16 +10,9 @@ import { mockedCurrentWorkspace } from 'shared/mock';
 import { SearchPopup } from './SearchPopup';
 import { ScheduleOptions } from '../Legend.const';
 
-const mockedUseNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedUseNavigate,
-}));
-
 const setSearchPopupVisible = jest.fn();
 const setSchedule = jest.fn();
-const setSelectedRespondent = jest.fn();
+const onSelectUser = jest.fn();
 
 const dataTestid = 'search-popup';
 const appletId = '71d90215-e4ae-41c5-8c30-776e69f5378b';
@@ -70,7 +63,7 @@ const props = {
   open: true,
   setSearchPopupVisible,
   setSchedule,
-  setSelectedRespondent,
+  onSelectUser,
   selectedRespondent: null,
   respondentsItems,
   'data-testid': dataTestid,
@@ -139,12 +132,8 @@ describe('SearchPopup component', () => {
     const respondent = screen.getByText(/John Cooper/);
     await userEvent.click(respondent);
 
-    expect(setSelectedRespondent).toHaveBeenCalledWith(selectedRespondent1);
+    expect(onSelectUser).toHaveBeenCalledWith(selectedRespondent1.id);
     expect(setSearchPopupVisible).toHaveBeenCalledWith(false);
-
-    expect(mockedUseNavigate).toHaveBeenCalledWith(
-      `/dashboard/${appletId}/schedule/${selectedRespondent1.id}`,
-    );
   });
 
   test('selects respondent with hasIndividualSchedule = false', async () => {
@@ -180,7 +169,7 @@ describe('SearchPopup component', () => {
     const respondent = screen.getByText(/Sam Carter/);
     await userEvent.click(respondent);
 
-    expect(setSelectedRespondent).toHaveBeenCalledWith(selectedRespondent2);
+    expect(onSelectUser).toHaveBeenCalledWith(selectedRespondent2.id);
     expect(setSearchPopupVisible).toHaveBeenCalledWith(false);
 
     expect(await screen.findByTestId(inividualSchedulePopupDataTestid)).toBeInTheDocument();
@@ -190,7 +179,7 @@ describe('SearchPopup component', () => {
 
     expect(await screen.queryByTestId(inividualSchedulePopupDataTestid)).not.toBeInTheDocument();
     expect(setSearchPopupVisible).toHaveBeenCalledWith(true);
-    expect(setSelectedRespondent).toHaveBeenCalledWith(null);
+    expect(onSelectUser).toBeCalledWith(selectedRespondent2.id);
 
     await userEvent.click(respondent);
 
@@ -209,9 +198,5 @@ describe('SearchPopup component', () => {
         { signal: undefined },
       );
     });
-
-    expect(mockedUseNavigate).toHaveBeenCalledWith(
-      `/dashboard/${appletId}/schedule/${selectedRespondent2.id}`,
-    );
   });
 });

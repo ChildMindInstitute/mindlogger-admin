@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { SelectController } from 'shared/components/FormComponents';
 import { Spinner, Svg } from 'shared/components';
 import { SelectEvent } from 'shared/types';
 import { exportTemplate, getRespondentName, Mixpanel } from 'shared/utils';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
-import { page } from 'resources';
 import { users } from 'modules/Dashboard/state';
 
 import { ExportSchedulePopup } from '../ExportSchedulePopup';
@@ -31,10 +29,15 @@ import {
 import { LegendProps, SelectedRespondent } from './Legend.types';
 import { useExpandedLists } from './Legend.hooks';
 
-export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
+export const Legend = ({
+  legendEvents,
+  appletName,
+  appletId,
+  userId,
+  onSelectUser,
+  ...otherProps
+}: LegendProps) => {
   const { t } = useTranslation('app');
-  const { respondentId } = useParams();
-  const navigate = useNavigate();
   const { result: respondentsData } = users.useAllRespondentsData() || {};
   const respondentsItems = respondentsData?.reduce(
     (acc: SelectedRespondent[], { id, details, isAnonymousRespondent }) => {
@@ -57,7 +60,6 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
 
   const [schedule, setSchedule] = useState<string | null>(null);
   const [searchPopupVisible, setSearchPopupVisible] = useState(false);
-  const [selectedRespondent, setSelectedRespondent] = useState<SelectedRespondent>(null);
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
   const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
     useState(false);
@@ -66,6 +68,8 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
     useState(false);
   const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
+  const selectedRespondent =
+    respondentsItems?.find((respondent) => respondent?.id === userId) || null;
 
   const searchContainerRef = useRef<HTMLElement>(null);
 
@@ -85,16 +89,12 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const scheduleChangeHandler = async (event: SelectEvent) => {
     const { value } = event.target;
     await setSchedule(value);
+
     if (value === ScheduleOptions.IndividualSchedule) {
       setSearchPopupVisible(true);
       Mixpanel.track('View Individual calendar click');
     } else {
-      setSelectedRespondent(null);
-      navigate(
-        generatePath(page.appletSchedule, {
-          appletId,
-        }),
-      );
+      onSelectUser?.(undefined);
       Mixpanel.track('View General calendar click');
     }
   };
@@ -146,21 +146,11 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   };
 
   useEffect(() => {
-    setSchedule(
-      respondentId ? ScheduleOptions.IndividualSchedule : ScheduleOptions.DefaultSchedule,
-    );
-  }, [respondentId]);
-
-  useEffect(() => {
-    if (!respondentId || selectedRespondent) return;
-
-    const currentRespondent =
-      respondentsItems?.find((respondent) => respondent?.id === respondentId) || null;
-    setSelectedRespondent(currentRespondent);
-  }, [respondentId, respondentsItems, selectedRespondent]);
+    setSchedule(userId ? ScheduleOptions.IndividualSchedule : ScheduleOptions.DefaultSchedule);
+  }, [userId]);
 
   return schedule ? (
-    <StyledLegend>
+    <StyledLegend {...otherProps}>
       <StyledSelectRow>
         <StyledSelect>
           <SelectController
@@ -171,9 +161,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
             withChecked
             withGroups
             fullWidth
-            SelectProps={{
-              autoWidth: true,
-            }}
+            SelectProps={{ autoWidth: true }}
             data-testid={`${dataTestid}-schedule`}
           />
         </StyledSelect>
@@ -201,7 +189,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
             open={searchPopupVisible}
             setSearchPopupVisible={setSearchPopupVisible}
             setSchedule={setSchedule}
-            setSelectedRespondent={setSelectedRespondent}
+            onSelectUser={onSelectUser}
             selectedRespondent={selectedRespondent}
             respondentsItems={respondentsItems}
             data-testid={`${dataTestid}-individual-search-popup`}
@@ -255,6 +243,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           open={importSchedulePopupVisible}
           isIndividual={isIndividual}
           appletName={appletName}
+          respondentId={userId}
           respondentName={respondentName}
           onClose={() => setImportSchedulePopupVisible(false)}
           onDownloadTemplate={handleExportScheduleSubmit(!isIndividual, false)}
@@ -280,7 +269,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           isEmpty={!scheduleExportTableData.length}
           onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
           setSchedule={setSchedule}
-          setSelectedRespondent={setSelectedRespondent}
+          onSelectUser={onSelectUser}
           data-testid={`${dataTestid}-remove-individual-schedule-popup`}
         />
       )}

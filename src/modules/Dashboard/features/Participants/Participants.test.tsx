@@ -132,7 +132,7 @@ describe('Participants component tests', () => {
     expect(mockedUseNavigate).toHaveBeenCalledWith(
       generatePath(page.appletParticipantActivities, {
         appletId: mockedAppletId,
-        participantId: mockedSubjectId1,
+        subjectId: mockedSubjectId1,
       }),
     );
   });
