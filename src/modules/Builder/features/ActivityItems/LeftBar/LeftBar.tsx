@@ -18,11 +18,10 @@ import {
 import { getEntityKey, getObjectFromList } from 'shared/utils';
 import { ConditionalLogic, ScoreOrSection } from 'shared/state';
 import { BuilderContainer } from 'shared/features';
-import { ScoreReportType } from 'shared/consts';
+import { ScoreReportType, observerStyles } from 'shared/consts';
 import { DndDroppable } from 'modules/Builder/components';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { ItemFormValues } from 'modules/Builder/types';
-import { observerStyles } from 'modules/Builder/consts';
 import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
 import { useRedirectIfNoMatchedActivityItem } from 'modules/Builder/hooks/useRedirectIfNoMatchedActivityItem';
 

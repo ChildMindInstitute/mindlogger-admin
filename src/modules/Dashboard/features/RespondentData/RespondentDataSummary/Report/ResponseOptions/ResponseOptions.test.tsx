@@ -271,9 +271,9 @@ jest.mock('../Charts/LineChart/TimePickerLineChart', () => ({
   TimePickerLineChart: () => <div data-testid={timePickerLineChart} />,
 }));
 
-jest.mock('../Charts/MultiScatterChart', () => ({
+jest.mock('./MultipleSelectionChart', () => ({
   __esModule: true,
-  MultiScatterChart: () => <div data-testid={multiScatterChart} />,
+  MultipleSelectionChart: () => <div data-testid={multiScatterChart} />,
 }));
 
 jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
