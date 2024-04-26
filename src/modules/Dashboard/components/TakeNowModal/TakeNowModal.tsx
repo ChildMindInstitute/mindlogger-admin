@@ -75,7 +75,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       if (userData.user.firstName) {
         ownerNickname += `${userData.user.firstName}`;
         if (userData.user.lastName) {
-          ownerNickname += ` ${userData.user.lastName[0].toUpperCase()}.`;
+          ownerNickname += ` ${userData.user.lastName}`;
         }
       }
 

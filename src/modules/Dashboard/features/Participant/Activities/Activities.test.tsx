@@ -318,7 +318,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       expect(subjectInputElement).toHaveValue(`${secretUserId} (${nickname})`);
 
       expect(participantInputElement).toHaveValue(
-        `${mockedUserData.id} (${mockedUserData.firstName} ${mockedUserData.lastName[0]}.)`,
+        `${mockedUserData.id} (${mockedUserData.firstName} ${mockedUserData.lastName})`,
       );
     });
   });
