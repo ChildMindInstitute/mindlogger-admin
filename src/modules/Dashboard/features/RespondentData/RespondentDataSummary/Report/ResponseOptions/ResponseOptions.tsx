@@ -16,8 +16,8 @@ import {
   RespondentsDataFormValues,
   FormattedResponses,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
-import { SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 
+import { SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC } from '../../RespondentDataSummary.const';
 import { useDatavizFilters } from '../../hooks/useDatavizFilters';
 import { COLORS } from '../Charts/Charts.const';
 import { ResponseOptionsProps } from './ResponseOptions.types';

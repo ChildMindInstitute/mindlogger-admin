@@ -15,7 +15,14 @@ import {
   StyledPopover,
   StyledSpan,
 } from './DatePicker.styles';
-import { DateType, DateArrayType, DatePickerProps, DateVariant, UiType } from './DatePicker.types';
+import {
+  DateType,
+  DateArrayType,
+  DatePickerProps,
+  DateVariant,
+  UiType,
+  OnChangeRefType,
+} from './DatePicker.types';
 import { DatePickerHeader } from './DatePickerHeader';
 import { getStringFromDate } from './DatePicker.utils';
 import { DATE_PLACEHOLDER } from './DatePicker.const';
@@ -43,10 +50,7 @@ export const DatePicker = <T extends FieldValues>({
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const onChangeRef = useRef<{
-    callback: (date: undefined | DateType) => void;
-    prevValue: undefined | DateType;
-  }>({
+  const onChangeRef = useRef<OnChangeRefType>({
     callback: () => void 0,
     prevValue: void 0,
   });

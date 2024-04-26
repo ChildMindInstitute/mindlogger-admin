@@ -15,9 +15,8 @@ import { Scatter } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
-import { locales } from 'shared/consts';
+import { locales, observerStyles } from 'shared/consts';
 import { useStaticContent } from 'shared/hooks/useStaticContent';
-import { observerStyles } from 'modules/Builder/consts';
 import { StyledObserverTarget } from 'shared/styles';
 
 import { scatterChartTooltipHandler } from '../Charts.utils';
@@ -48,7 +47,8 @@ export const MultiScatterChart = ({
   );
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const isHovered = useRef(false);
-  const { isStatic } = useStaticContent({ targetSelector: dataTestid, isStaticActive });
+  const targetSelector = `${dataTestid}-target`;
+  const { isStatic } = useStaticContent({ targetSelector, isStaticActive });
 
   const [tooltipData, setTooltipData] = useState<TooltipItem<'scatter'>[] | null>(null);
 
@@ -99,7 +99,7 @@ export const MultiScatterChart = ({
 
   return (
     <Box sx={{ height, position: 'relative' }} data-testid={dataTestid}>
-      <StyledObserverTarget className={dataTestid} sx={observerStyles} />
+      <StyledObserverTarget className={targetSelector} sx={observerStyles} />
       {isStatic ? (
         <Skeleton variant="rounded" height={'100%'} />
       ) : (
