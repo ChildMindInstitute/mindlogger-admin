@@ -300,7 +300,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         .querySelector('input');
 
       expect(inputElement).toHaveValue(
-        `${mockedUserData.id} (${mockedUserData.firstName} ${mockedUserData.lastName[0]}.)`,
+        `${mockedUserData.id} (${mockedUserData.firstName} ${mockedUserData.lastName})`,
       );
     });
   });

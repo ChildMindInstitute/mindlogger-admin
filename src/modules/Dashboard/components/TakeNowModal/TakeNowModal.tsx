@@ -41,9 +41,12 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     (participant: ParticipantsData['result'][0]): ParticipantDropdownOption => {
       const stringNicknames = joinWihComma(participant.nicknames, true);
       const stringSecretIds = joinWihComma(participant.secretIds, true);
-      const id = participant.id ?? participant.details[0].subjectId;
 
-      return { id, secretId: stringSecretIds, nickname: stringNicknames };
+      return {
+        id: participant.details[0].subjectId,
+        secretId: stringSecretIds,
+        nickname: stringNicknames,
+      };
     },
     [],
   );
@@ -72,11 +75,12 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       if (userData.user.firstName) {
         ownerNickname += `${userData.user.firstName}`;
         if (userData.user.lastName) {
-          ownerNickname += ` ${userData.user.lastName[0].toUpperCase()}.`;
+          ownerNickname += ` ${userData.user.lastName}`;
         }
       }
 
       const ownerOption: ParticipantDropdownOption = {
+        // Here we use the user ID instead of the subject ID
         id: userData.user.id,
         secretId: userData.user.id,
         nickname: ownerNickname,
