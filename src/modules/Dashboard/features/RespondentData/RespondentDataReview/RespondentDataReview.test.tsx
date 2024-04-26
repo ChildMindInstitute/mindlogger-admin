@@ -525,7 +525,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: '2023-12-15',
               limit: 10000,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -536,7 +536,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
             },
