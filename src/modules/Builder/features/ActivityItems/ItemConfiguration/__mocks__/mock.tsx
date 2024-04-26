@@ -605,11 +605,4 @@ export const mockedItemTypes = [
   'audioPlayer',
 ];
 export const mockedItemTypeGroups = ['select', 'matrixSelect', 'input', 'record', 'display'];
-export const mockedItemTypesMobileOnly = [
-  'sliderRows',
-  'drawing',
-  'photo',
-  'video',
-  'geolocation',
-  'audio',
-];
+export const mockedItemTypesMobileOnly = ['drawing', 'photo', 'video', 'geolocation', 'audio'];

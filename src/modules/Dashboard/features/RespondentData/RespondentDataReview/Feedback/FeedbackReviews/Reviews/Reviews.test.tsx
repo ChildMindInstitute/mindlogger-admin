@@ -7,10 +7,11 @@ import { ReviewsProps } from './Reviews.types';
 import { ReviewData } from '../FeedbackReviews.types';
 
 const mockedOnReviewAnswerRemove = jest.fn();
+const mockedOnReviewEdit = jest.fn();
 const mockedReviewersData = [
   {
     reviewId: 'a7af3c10-6cca-4e3b-a051-86c1757e7fd9',
-    createdAt: '2024-04-04T11:49:10.821854',
+    updatedAt: '2024-04-04T12:49:10.821854',
     isCurrentUserReviewer: true,
     reviewer: {
       id: '3a765cdf-a67e-490f-a6df-a8984fe7aa5b',
@@ -21,7 +22,7 @@ const mockedReviewersData = [
   },
   {
     reviewId: 'd9e5d5fa-c0fd-43b0-8d53-426123a0cb44',
-    createdAt: '2024-03-14T14:50:38.637755',
+    updatedAt: '2024-03-14T14:50:38.637755',
     isCurrentUserReviewer: false,
     reviewer: {
       id: 'c1dbef7d-a790-42d9-ad09-e680eb76af7c',
@@ -32,7 +33,7 @@ const mockedReviewersData = [
   },
   {
     reviewId: '5937e5cb-48bc-453f-9a53-f811024b3cc7',
-    createdAt: '2024-03-14T15:09:13.934448',
+    updatedAt: '2024-03-14T16:09:13.934448',
     isCurrentUserReviewer: false,
     reviewer: {
       id: '3e26cc77-d458-4b76-bcb7-9b3e0bcda45e',
@@ -51,6 +52,7 @@ const renderComponent = (props?: Partial<ReviewsProps>) =>
       removeReviewError={null}
       removeReviewLoading={false}
       onReviewerAnswersRemove={mockedOnReviewAnswerRemove}
+      onReviewEdit={mockedOnReviewEdit}
       data-testid="reviews"
       {...props}
     />,

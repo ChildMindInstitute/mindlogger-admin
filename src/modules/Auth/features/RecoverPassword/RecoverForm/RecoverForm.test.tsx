@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { LocationStateKeys } from 'shared/types';
 
 import { RecoverForm } from './RecoverForm';
 import { recoverPasswordFormDataTestid } from './RecoverForm.const';
@@ -64,7 +65,9 @@ describe('RecoverForm', () => {
       { signal: undefined },
     );
 
-    expect(mockUseNavigate).toHaveBeenCalledWith('/auth', { state: { isPasswordReset: true } });
+    expect(mockUseNavigate).toHaveBeenCalledWith('/auth', {
+      state: { [LocationStateKeys.IsPasswordReset]: true },
+    });
   });
 
   test('test error request', async () => {

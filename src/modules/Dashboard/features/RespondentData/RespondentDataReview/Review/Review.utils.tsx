@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { DateFormats, ItemResponseType } from 'shared/consts';
 import { ActivityItemAnswer, DecryptedTimeAnswer } from 'shared/types';
 import { Svg } from 'shared/components/Svg';
-import { StyledTitleLarge, theme, variables } from 'shared/styles';
+import { StyledBodyLarge, StyledTitleLarge, theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
 import {
@@ -68,6 +68,14 @@ export const renderEmptyState = (selectedAnswer: Answer | null, isActivitySelect
 };
 
 export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
+  if (!activityItemAnswer.answer) {
+    return (
+      <StyledBodyLarge color={variables.palette.outline} data-testid="no-response-data">
+        {t('noResponseData')}
+      </StyledBodyLarge>
+    );
+  }
+
   switch (activityItemAnswer.activityItem.responseType) {
     case ItemResponseType.SingleSelection:
       return <SingleSelectResponseItem {...(activityItemAnswer as SingleSelectItemAnswer)} />;
