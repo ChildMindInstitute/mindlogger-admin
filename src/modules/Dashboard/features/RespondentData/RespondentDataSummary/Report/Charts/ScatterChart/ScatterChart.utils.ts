@@ -125,11 +125,12 @@ export const getData = (answers: ActivityCompletion[], versions: Version[]) => (
       pointRadius: POINT_RADIUS_DEFAULT,
       pointBorderColor: variables.palette.white,
       xAxisID: 'x',
-      data: answers.map(({ endDatetime, answerId, subscaleSetting }) => ({
+      data: answers.map(({ endDatetime, answerId, subscaleSetting, reviewCount }) => ({
         x: new Date(endDatetime),
         y: 0,
         answerId,
         areSubscalesVisible: !!subscaleSetting?.subscales?.length,
+        reviewCount,
       })),
       backgroundColor: variables.palette.primary,
       borderColor: variables.palette.primary,

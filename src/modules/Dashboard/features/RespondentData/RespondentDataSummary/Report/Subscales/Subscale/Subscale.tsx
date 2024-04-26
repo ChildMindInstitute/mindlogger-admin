@@ -13,7 +13,10 @@ import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentDa
 import { getResponseItem } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils';
 import { StyledBodyMedium, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData';
-import { UNSUPPORTED_ITEMS } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
+import {
+  UNSUPPORTED_ITEMS,
+  SHOW_MORE_HEIGHT,
+} from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 
 import { COLORS } from '../../Charts/Charts.const';
 import { AdditionalInformation } from '../AdditionalInformation';
@@ -87,7 +90,7 @@ export const Subscale = ({
               <Box key={`${item.activityItem.id}-${index}`} sx={{ m: theme.spacing(2.4, 0) }}>
                 <CollapsedMdText
                   text={getDictionaryText(item.activityItem.question)}
-                  maxHeight={120}
+                  maxHeight={SHOW_MORE_HEIGHT}
                   data-testid={`${dataTestid}-question-${index}`}
                 />
                 {renderChart(item, index)}

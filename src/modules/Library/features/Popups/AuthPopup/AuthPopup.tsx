@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { page } from 'resources';
 import { Modal } from 'shared/components';
 import { StyledModalWrapper } from 'shared/styles';
+import { LocationStateKeys } from 'shared/types';
 
 import { AuthPopupProps } from './AuthPopup.types';
 
@@ -13,7 +14,7 @@ export const AuthPopup = ({ authPopupVisible, setAuthPopupVisible }: AuthPopupPr
   const location = useLocation();
 
   const handleSubmit = () => {
-    navigate(page.login, { state: { from: location } });
+    navigate(page.login, { state: { [LocationStateKeys.From]: location } });
   };
 
   return (

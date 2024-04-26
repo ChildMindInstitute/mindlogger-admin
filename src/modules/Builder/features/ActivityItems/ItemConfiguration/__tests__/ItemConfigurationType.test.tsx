@@ -8,7 +8,7 @@ import {
   mockedRenderAppletFormDataActivityOptions,
   mockedSingleSelectFormValues,
 } from 'shared/mock';
-import { renderWithAppletFormData } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import {
   mockedItemName,

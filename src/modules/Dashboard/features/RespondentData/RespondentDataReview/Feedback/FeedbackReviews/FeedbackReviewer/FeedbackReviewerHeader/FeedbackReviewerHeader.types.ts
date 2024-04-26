@@ -2,8 +2,10 @@ export type FeedbackReviewerHeaderProps = {
   isReviewOpen: boolean;
   reviewerName: string;
   hasReview: boolean;
-  createdAt: string;
+  submitDate: string;
   onToggleVisibilityClick?: () => void;
-  onRemoveClick: (() => void) | null;
+  hasEditAndRemove: boolean;
+  onRemoveClick: () => void;
+  onEditClick: () => void;
   'data-testid'?: string;
 };

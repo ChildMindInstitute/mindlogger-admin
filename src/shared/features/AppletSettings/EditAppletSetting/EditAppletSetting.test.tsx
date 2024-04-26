@@ -2,7 +2,8 @@ import { fireEvent, screen } from '@testing-library/react';
 
 import { page } from 'resources';
 import { mockedAppletId } from 'shared/mock';
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { SettingParam } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { EditAppletSetting } from './EditAppletSetting';
 

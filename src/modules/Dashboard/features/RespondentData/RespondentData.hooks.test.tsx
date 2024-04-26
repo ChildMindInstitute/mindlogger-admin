@@ -1,5 +1,5 @@
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
-import { renderHookWithProviders } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import * as reduxHooks from 'redux/store/hooks';
 import { users } from 'modules/Dashboard/state';

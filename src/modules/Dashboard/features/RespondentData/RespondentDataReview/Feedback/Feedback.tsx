@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -16,13 +16,11 @@ import { StyledButton, StyledContainer } from './Feedback.styles';
 import { FeedbackForm, FeedbackProps } from './Feedback.types';
 import { getFeedbackTabs } from './utils/getFeedbackTabs';
 import { getDefaultFormValues } from './utils/getDefaultValues';
-import { FeedbackTabs } from './FeedbackAssessment/FeedbackAssessment.const';
 import { ANIMATION_DURATION_MS } from './Feedback.const';
 
-export const Feedback = ({ onClose, selectedActivity }: FeedbackProps) => {
+export const Feedback = ({ activeTab, setActiveTab, onClose, selectedActivity }: FeedbackProps) => {
   const { t } = useTranslation();
   const { assessment, isFeedbackOpen } = useContext(RespondentDataReviewContext);
-  const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
 
   const dataTestid = 'respondents-review-feedback-menu';
 

@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { ReviewDescription } from './ReviewDescription';
 import { ReviewDescriptionProps } from './ReviewDescription.types';
@@ -12,7 +12,8 @@ const mockedVersion = 'version-111.0.25';
 const renderComponent = (props?: Partial<ReviewDescriptionProps>) =>
   renderWithProviders(
     <ReviewDescription
-      createdAt="2024-03-14T14:33:48.750000"
+      endDateTime="2024-03-14T14:33:48.750000"
+      createdAt="2024-03-14T14:20:00.100000"
       identifier={mockedIdentifier}
       version={mockedVersion}
       data-testid={dataTestId}
@@ -32,6 +33,12 @@ describe('Review Description', () => {
     expect(screen.queryByText(EMPTY_IDENTIFIER)).not.toBeInTheDocument();
     expect(screen.getByText('Version:')).toBeInTheDocument();
     expect(screen.getByText(mockedVersion)).toBeInTheDocument();
+  });
+
+  test('shows createdAt date and time if endDateTime is null', () => {
+    renderComponent({ endDateTime: null });
+
+    expect(screen.getByText('Mar 14, 2024 14:20:00')).toBeInTheDocument();
   });
 
   test('renders correctly when identifier is not provided', async () => {

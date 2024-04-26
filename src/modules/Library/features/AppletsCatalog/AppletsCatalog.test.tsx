@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import * as reduxHooks from 'redux/store/hooks';
 import { library } from 'redux/modules';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { AppletsCatalog } from './AppletsCatalog';

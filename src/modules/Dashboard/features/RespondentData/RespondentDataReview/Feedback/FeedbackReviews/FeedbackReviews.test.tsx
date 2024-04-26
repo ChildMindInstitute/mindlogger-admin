@@ -4,7 +4,7 @@ import mockAxios from 'jest-mock-axios';
 import { FormProvider, useForm } from 'react-hook-form';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
   mockedAppletId,
@@ -172,6 +172,7 @@ const mockedGetWithReviews = (hasUserReview: boolean) => ({
     result: [
       {
         createdAt: '2024-03-14T14:50:38.637755',
+        updatedAt: '2024-03-14T14:50:38.637755',
         id: 'review-id',
         reviewerPublicKey: 'c48b275d-db4b-4f79-8469-9198b45985d3',
         answer:
@@ -188,6 +189,7 @@ const mockedGetWithReviews = (hasUserReview: boolean) => ({
         ? [
             {
               createdAt: '2024-03-14T14:50:38.637755',
+              updatedAt: '2024-03-14T14:50:38.637755',
               id: 'review-id-2',
               reviewerPublicKey: 'public-key',
               answer:
@@ -216,6 +218,7 @@ const mockedGetWithReviewsNoAnswers = {
     result: [
       {
         createdAt: '2024-03-14T14:50:38.637755',
+        updatedAt: '2024-03-14T14:50:38.637755',
         id: 'review-id',
         reviewerPublicKey: null,
         answer: null,
@@ -229,6 +232,7 @@ const mockedGetWithReviewsNoAnswers = {
       },
       {
         createdAt: '2024-03-15T14:55:38.637755',
+        updatedAt: '2024-03-15T14:55:38.637755',
         id: 'review-id',
         reviewerPublicKey: null,
         answer: null,
@@ -254,6 +258,7 @@ jest.mock('modules/Dashboard/features/RespondentData/CollapsedMdText', () => ({
 
 const setIsLastVersion = jest.fn();
 const setIsBannerVisible = jest.fn();
+const setAssessment = jest.fn();
 const getMockedContext = (
   assessment: AssessmentActivityItem[],
   lastAssessment: Item[],
@@ -261,7 +266,7 @@ const getMockedContext = (
   isBannerVisible: boolean,
 ) => ({
   assessment,
-  setAssessment: jest.fn(),
+  setAssessment,
   lastAssessment,
   assessmentVersions,
   isLastVersion,
@@ -492,7 +497,7 @@ describe('FeedbackReviewed', () => {
     expect(elementsWithLock).toHaveLength(2);
   });
 
-  test('should render array of reviews with review of current user', async () => {
+  test('should render array of reviews with review of current user, should delete review', async () => {
     mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews(true));
     getDecryptedActivityData();
     renderComponent(assessment, lastAssessment, false, true);
@@ -539,9 +544,49 @@ describe('FeedbackReviewed', () => {
     expect(submitPopupButton).toBeInTheDocument();
     await userEvent.click(submitPopupButton);
 
+    expect(mockAxios.delete).nthCalledWith(
+      1,
+      `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/assessment/review-id-2`,
+      { signal: undefined },
+    );
+
     //should be selected last assessment version on review delete
     expect(setIsLastVersion).toHaveBeenCalledWith(true);
     expect(setIsBannerVisible).toHaveBeenCalledWith(false);
+    //should call setAssessment with the last assessment
+    expect(setAssessment).toHaveBeenCalledWith([
+      { activityItem: lastAssessment[0], answer: undefined },
+    ]);
+
+    expect(mockAxios.get).nthCalledWith(
+      1,
+      `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
+      { signal: undefined },
+    );
+  });
+
+  test('should edit review', async () => {
+    mockAxios.get.mockResolvedValueOnce(mockedGetWithReviews(true));
+    getDecryptedActivityData();
+    renderComponent(assessment, lastAssessment, false, true);
+
+    await waitFor(() => {
+      expect(mockAxios.get).nthCalledWith(
+        1,
+        `/answers/applet/${mockedAppletId}/answers/${mockedAnswerId}/reviews`,
+        { signal: undefined },
+      );
+    });
+
+    const editButton = screen.getByTestId(
+      'respondents-data-summary-feedback-reviewed-reviewer-0-answers-edit',
+    );
+
+    expect(editButton).toBeInTheDocument();
+
+    await userEvent.click(editButton);
+
+    expect(screen.getByTestId('respondents-data-summary-feedback-assessment')).toBeInTheDocument();
   });
 
   test('should render empty state', async () => {

@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { RespondentDataReviewContext } from '../RespondentDataReview.context';

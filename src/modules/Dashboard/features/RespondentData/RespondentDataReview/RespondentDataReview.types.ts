@@ -26,12 +26,17 @@ import {
   DecryptedSingleSelectionPerRowAnswer,
   DecryptedMultiSelectionPerRowAnswer,
   DecryptedSliderRowsAnswer,
+  DecryptedActivityData,
 } from 'shared/types';
-import { ActivityAnswerMeta as ActivityAnswerMetaApi } from 'modules/Dashboard/api';
+import {
+  ActivityAnswerSummary as ActivityAnswerSummaryApi,
+  EncryptedActivityAnswer,
+} from 'modules/Dashboard/api';
 
 export type Answer = {
   createdAt: string;
   answerId: string;
+  endDateTime?: string;
 };
 
 export type CreateItemAnswer<I, A> = {
@@ -132,6 +137,20 @@ export type FormattedAssessmentAnswer = {
   itemId: string;
 };
 
-export type ActivityAnswerMeta = Omit<ActivityAnswerMetaApi, 'identifier'> & {
+export type ActivityAnswerSummary = Omit<ActivityAnswerSummaryApi, 'identifier'> & {
   identifier: string | null;
 };
+
+export type SelectAnswerProps = {
+  answer: Answer | null;
+  isRouteCreated?: boolean;
+};
+
+export const enum FeedbackTabs {
+  Notes,
+  Reviews,
+}
+
+export type ActivityItemAnswers =
+  | DecryptedActivityData<EncryptedActivityAnswer['answer']>['decryptedAnswers']
+  | null;

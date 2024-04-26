@@ -12,7 +12,7 @@ import { AutocompleteOption } from 'shared/components/FormComponents';
 
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
-import { getUniqueIdentifierOptions } from '../../RespondentDataSummary.utils';
+import { getUniqueIdentifierOptions } from './ReportFilters.utils';
 import { StyledFiltersContainer, StyledMoreFilters, StyledTimeText } from './ReportFilters.styles';
 import {
   FiltersChangeType,
@@ -71,10 +71,10 @@ export const ReportFilters = ({
         fetchParams = { ...fetchParams, startTime, endTime };
         break;
       case FiltersChangeType.FilterByIdentifier:
-        fetchParams = { ...fetchParams, filterByIdentifier };
+        fetchParams = { ...fetchParams, filterByIdentifier, isIdentifiersChange: true };
         break;
       case FiltersChangeType.Identifiers:
-        fetchParams = { ...fetchParams, identifier };
+        fetchParams = { ...fetchParams, identifier, isIdentifiersChange: true };
         break;
       case FiltersChangeType.Versions:
         fetchParams = { ...fetchParams, versions };

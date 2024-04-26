@@ -1,5 +1,5 @@
-import { ActivityAnswerMeta } from '../RespondentDataReview.types';
+import { ActivityAnswerSummary } from '../RespondentDataReview.types';
 
-export type ReviewDescriptionProps = ActivityAnswerMeta & {
+export type ReviewDescriptionProps = ActivityAnswerSummary & {
   'data-testid': string;
 };

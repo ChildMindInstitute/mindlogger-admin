@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { library } from 'redux/modules';
 import { getAppletsFromStorage } from 'modules/Library/utils';
-import { renderHookWithProviders } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import * as reduxHooks from 'redux/store/hooks';
 
 import { useAppletsFromCart } from './useAppletsFromCart';

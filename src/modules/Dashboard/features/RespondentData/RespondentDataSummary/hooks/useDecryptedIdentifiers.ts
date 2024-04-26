@@ -23,13 +23,14 @@ export const useDecryptedIdentifiers = () => {
     const identifiersResult: Identifier[] = [];
 
     for await (const identifierResponse of identifiers) {
-      const { identifier, userPublicKey } = identifierResponse;
+      const { identifier, userPublicKey, lastAnswerDate } = identifierResponse;
 
       // workaround for decrypted identifier data
       if (!userPublicKey) {
         identifiersResult.push({
           decryptedValue: identifier,
           encryptedValue: identifier,
+          lastAnswerDate,
         });
         continue;
       }
@@ -44,6 +45,7 @@ export const useDecryptedIdentifiers = () => {
         identifiersResult.push({
           decryptedValue,
           encryptedValue: identifier,
+          lastAnswerDate,
         });
       } catch {
         console.warn('Error while answer parsing');

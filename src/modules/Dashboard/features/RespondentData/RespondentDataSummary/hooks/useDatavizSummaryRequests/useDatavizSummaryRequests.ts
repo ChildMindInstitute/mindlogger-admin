@@ -2,11 +2,10 @@ import { useParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
 import { getIdentifiersApi, getVersionsApi } from 'api';
+import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-import { RespondentsDataFormValues } from '../../RespondentData.types';
-import { GetIdentifiersVersions } from '../RespondentDataSummary.types';
-import { setDefaultFormValues } from '../RespondentDataSummary.utils';
-import { useDecryptedIdentifiers } from './useDecryptedIdentifiers';
+import { GetIdentifiersVersions } from '../../RespondentDataSummary.types';
+import { useDecryptedIdentifiers } from '../useDecryptedIdentifiers';
 
 export const useDatavizSummaryRequests = () => {
   const { appletId, respondentId } = useParams();
@@ -16,7 +15,6 @@ export const useDatavizSummaryRequests = () => {
   const getIdentifiersVersions = async ({ activity }: GetIdentifiersVersions) => {
     try {
       if (!appletId || !respondentId || !activity?.hasAnswer || activity?.isPerformanceTask) return;
-      setDefaultFormValues(setValue);
 
       const identifiers = await getIdentifiersApi({
         appletId,

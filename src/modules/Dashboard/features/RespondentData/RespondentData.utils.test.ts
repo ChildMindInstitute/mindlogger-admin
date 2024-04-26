@@ -2,6 +2,7 @@ import {
   createArrayForSlider,
   getDateFormattedResponse,
   getTimeRangeResponse,
+  getActivityWithLatestAnswer,
 } from './RespondentData.utils';
 
 describe('Respondent Data utils', () => {
@@ -73,6 +74,52 @@ describe('Respondent Data utils', () => {
       ${invalidValue}  | ${{ from: '', to: '' }}           | ${'empty values when invalid'}
     `('should return "$result" when $description', ({ answer, result }) => {
       expect(getTimeRangeResponse(answer)).toStrictEqual(result);
+    });
+  });
+
+  describe('getActivityWithLatestAnswer', () => {
+    const expected1 = { id: 3, lastAnswerDate: '2024-03-20T16:45:16.011110' };
+    const activities1 = [
+      { id: 1, lastAnswerDate: '2024-02-14T16:23:15.082820' },
+      {
+        id: 2,
+        lastAnswerDate: '2024-03-20T16:44:10.099980',
+      },
+      expected1,
+      {
+        id: 4,
+        lastAnswerDate: '2024-01-20T10:40:16.011110',
+      },
+    ];
+    const expected2 = { id: 2, lastAnswerDate: '2024-03-20T16:44:10.099980' };
+    const activities2 = [
+      { id: 1, lastAnswerDate: '2024-02-14T16:23:15.082820' },
+      expected2,
+      { id: 3, lastAnswerDate: '2024-03-20T16:44:10.099980' },
+      {
+        id: 4,
+        lastAnswerDate: '2024-01-20T10:40:16.011110',
+      },
+    ];
+    const activities3 = [
+      { id: 1, lastAnswerDate: null },
+      {
+        id: 2,
+        lastAnswerDate: null,
+      },
+    ];
+    const expected4 = { id: 1, lastAnswerDate: '2024-02-14T16:23:15.082820' };
+    const activities4 = [expected4];
+
+    test.each`
+      activities     | expected     | description
+      ${[]}          | ${null}      | ${'should return null when activities array is empty'}
+      ${activities1} | ${expected1} | ${'should return the activity with the latest answer date'}
+      ${activities2} | ${expected2} | ${'should return the first activity with the latest answer date if there are multiple'}
+      ${activities3} | ${null}      | ${'should return null if all activities have null lastAnswerDate'}
+      ${activities4} | ${expected4} | ${'should return the only activity if there is only one activity with a non-null lastAnswerDate'}
+    `('$description', ({ activities, expected }) => {
+      expect(getActivityWithLatestAnswer(activities)).toEqual(expected);
     });
   });
 });

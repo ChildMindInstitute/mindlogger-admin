@@ -19,11 +19,11 @@ export const useFeedbackReviewsData = () => {
       };
 
       const isCurrentUserReviewer = reviewer.id === userId;
-      const { id, createdAt } = assessmentData;
+      const { id, updatedAt } = assessmentData;
 
       const decryptedReviewData = {
         reviewId: id,
-        createdAt,
+        updatedAt,
         isCurrentUserReviewer,
         reviewer,
         review: encryptedData

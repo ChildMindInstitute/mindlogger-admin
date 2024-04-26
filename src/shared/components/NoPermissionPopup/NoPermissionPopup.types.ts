@@ -1,5 +1,5 @@
 export type UseNoPermissionPopupReturn = {
   noAccessVisible: boolean;
-  handleSubmit: () => void;
+  handleSubmit: () => Promise<void>;
   isBuilder: boolean;
 };

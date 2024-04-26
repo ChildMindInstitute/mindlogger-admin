@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { page } from 'resources';

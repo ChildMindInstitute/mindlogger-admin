@@ -82,7 +82,6 @@ export const itemsTypeOptions: ItemsOptionGroup[] = [
       {
         value: ItemResponseType.SliderRows,
         icon: itemsTypeIcons[ItemResponseType.SliderRows],
-        isMobileOnly: true,
       },
     ],
   },

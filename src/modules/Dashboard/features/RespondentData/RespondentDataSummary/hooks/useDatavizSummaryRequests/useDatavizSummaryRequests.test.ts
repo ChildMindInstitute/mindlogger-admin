@@ -2,8 +2,7 @@ import mockAxios from 'jest-mock-axios';
 
 import { mockedActivityId, mockedAppletId, mockedRespondentId } from 'shared/mock';
 
-import * as useDecryptedIdentifiersHook from './useDecryptedIdentifiers';
-import * as summaryUtils from '../RespondentDataSummary.utils';
+import * as useDecryptedIdentifiersHook from '../useDecryptedIdentifiers';
 import { useDatavizSummaryRequests } from './useDatavizSummaryRequests';
 
 const mockedGetValues = jest.fn();
@@ -28,15 +27,18 @@ describe('useDatavizSummaryRequests', () => {
     name: 'Activity 1',
     isPerformanceTask: false,
     hasAnswer: true,
+    lastAnswerDate: '2023-09-26T10:10:05.162083',
   };
   const mockedDecryptedIdentifiersResult = [
     {
       decryptedValue: 'ident_1',
       encryptedValue: 'some encrypted value 1',
+      lastAnswerDate: '2023-09-26T10:10:05.162083',
     },
     {
       decryptedValue: 'ident_2',
       encryptedValue: 'some encrypted value 2',
+      lastAnswerDate: '2023-09-26T10:10:05.162083',
     },
   ];
   const mockedVersionsReturn = [{ version: 'v1' }, { version: 'v2' }];
@@ -66,14 +68,11 @@ describe('useDatavizSummaryRequests', () => {
     mockAxios.get.mockResolvedValue({
       data: { result: mockedVersionsReturn },
     });
-    const mockedSetDefaultFormValues = jest.spyOn(summaryUtils, 'setDefaultFormValues');
-    mockedSetDefaultFormValues.mockReturnValue(undefined);
 
     const { getIdentifiersVersions } = useDatavizSummaryRequests();
     await getIdentifiersVersions({ activity: mockedActivity });
 
     expect(mockAxios.get).toHaveBeenCalledTimes(2);
-    expect(mockedSetDefaultFormValues).toHaveBeenCalledWith(mockedSetValue);
     expect(mockedSetValue).toHaveBeenNthCalledWith(
       1,
       'identifiers',
@@ -95,12 +94,10 @@ describe('useDatavizSummaryRequests', () => {
     if (!hasParams) {
       mockedUseParams.mockReturnValue({});
     }
-    const mockedSetDefaultFormValues = jest.spyOn(summaryUtils, 'setDefaultFormValues');
 
     const { getIdentifiersVersions } = useDatavizSummaryRequests();
     await getIdentifiersVersions({ activity: { ...mockedActivity, ...activityProps } });
 
-    expect(mockedSetDefaultFormValues).not.toHaveBeenCalled();
     expect(mockAxios.get).not.toHaveBeenCalled();
     expect(mockedSetValue).not.toHaveBeenCalled();
   });

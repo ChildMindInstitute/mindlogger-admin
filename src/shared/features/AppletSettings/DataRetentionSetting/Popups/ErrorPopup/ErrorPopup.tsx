@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from 'shared/components';
+import { Modal } from 'shared/components/Modal';
 import { StyledBodyLarge, StyledModalWrapper, variables } from 'shared/styles';
 
 import { ErrorPopupProps } from './ErrorPopup.types';

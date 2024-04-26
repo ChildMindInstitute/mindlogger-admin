@@ -3,7 +3,8 @@ import mockAxios from 'jest-mock-axios';
 
 import { initialStateData } from 'shared/state';
 import { mockedApplet } from 'shared/mock';
-import { expectBanner, renderWithProviders } from 'shared/utils';
+import { expectBanner } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { PublishConcealAppletPopup } from '.';
 

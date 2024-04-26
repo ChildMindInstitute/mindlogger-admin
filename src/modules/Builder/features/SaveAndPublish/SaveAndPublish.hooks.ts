@@ -37,7 +37,7 @@ import {
   getEntityReportFields,
 } from 'modules/Builder/utils/getEntityReportFields';
 import { banners } from 'shared/state/Banners';
-import { ErrorResponseType } from 'shared/types';
+import { ErrorResponseType, LocationState, LocationStateKeys } from 'shared/types';
 
 import {
   getActivityItems,
@@ -194,7 +194,12 @@ export const usePrompt = (isFormChanged: boolean) => {
     (nextLocation: Update) => {
       const nextPathname = nextLocation.location.pathname;
 
-      const shouldSkip = !isFormChanged || isAppletRoute(nextPathname);
+      const shouldSkip =
+        !isFormChanged ||
+        isAppletRoute(nextPathname) ||
+        (nextLocation.location.state as LocationState)?.[
+          LocationStateKeys.ShouldNavigateWithoutPrompt
+        ];
 
       if (!confirmedNavigation && !shouldSkip) {
         setPromptVisible(true);
@@ -203,7 +208,16 @@ export const usePrompt = (isFormChanged: boolean) => {
         return false;
       }
 
-      setLastLocation(nextLocation);
+      setLastLocation({
+        ...nextLocation,
+        location: {
+          ...nextLocation.location,
+          state: {
+            ...(nextLocation.location.state ?? {}),
+            [LocationStateKeys.ShouldNavigateWithoutPrompt]: undefined,
+          },
+        },
+      });
       setConfirmedNavigation(true);
 
       return true;

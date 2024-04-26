@@ -33,7 +33,7 @@ export const FeedbackReviews = () => {
 
   const { reset } = useFormContext<FeedbackForm>();
   const { user } = auth.useData() ?? {};
-  const { setAssessment, lastAssessment, setIsLastVersion, isBannerVisible, setIsBannerVisible } =
+  const { lastAssessment, setAssessment, setIsLastVersion, isBannerVisible, setIsBannerVisible } =
     useContext(RespondentDataReviewContext);
   const getFeedbackReviewsData = useFeedbackReviewsData();
 
@@ -65,7 +65,7 @@ export const FeedbackReviews = () => {
     setIsLastVersion(true);
     setIsBannerVisible(false);
 
-    const updatedAssessment = lastAssessment.map((activityItem) => ({
+    const updatedAssessment = lastAssessment?.map((activityItem) => ({
       activityItem,
       answer: undefined,
     })) as AssessmentActivityItem[];
@@ -82,6 +82,10 @@ export const FeedbackReviews = () => {
     handleSelectLastVersion();
 
     getReviews({ appletId, answerId });
+  };
+
+  const handleReviewEdit = () => {
+    setShowFeedbackAssessment(true);
   };
 
   const hasCurrentUserReview = reviewersData.some(
@@ -144,6 +148,7 @@ export const FeedbackReviews = () => {
         removeReviewError={removeReviewError ? getErrorMessage(removeReviewError) : null}
         removeReviewLoading={removeReviewLoading}
         onReviewerAnswersRemove={handleReviewerAnswersRemove}
+        onReviewEdit={handleReviewEdit}
         data-testid={dataTestid}
       />
     </StyledContainer>

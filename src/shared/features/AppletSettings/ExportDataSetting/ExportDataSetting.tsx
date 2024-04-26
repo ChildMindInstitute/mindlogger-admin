@@ -3,9 +3,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
-import { applet } from 'shared/state';
-import { getNormalizedTimezoneDate } from 'shared/utils';
+import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups/DataExportPopup';
+import { applet } from 'shared/state/Applet';
+import { getNormalizedTimezoneDate } from 'shared/utils/dateTimezone';
 
 import {
   ExportDataFormValues,
