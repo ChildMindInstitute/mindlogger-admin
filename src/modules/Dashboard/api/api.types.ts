@@ -186,11 +186,12 @@ export type AppletInvitationOptions = {
   role: string;
   firstName: string;
   lastName: string;
-  nickname: string;
+  nickname?: string;
   email: string;
-  secretUserId: string;
-  workspacePrefix: string;
-  subjects: string[];
+  secretUserId?: string;
+  workspacePrefix?: string;
+  subjects?: string[];
+  title?: string;
   language: string;
 };
 
