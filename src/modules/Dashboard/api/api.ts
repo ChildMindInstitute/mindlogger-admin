@@ -33,7 +33,7 @@ import {
   ReportConfig,
   AppletVersionChanges,
   RemoveAccess,
-  ActivityAnswer,
+  ActivityAnswerParams,
   Folder,
   Applet,
   EditManagerAccess,
@@ -439,15 +439,15 @@ export const getReviewActivitiesApi = (
     signal,
   });
 
-export const getAnswerApi = ({ appletId, answerId }: ActivityAnswer, signal?: AbortSignal) =>
+export const getAnswerApi = ({ appletId, answerId }: ActivityAnswerParams, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
 
 export const getActivityAnswerApi = (
-  { appletId, answerId, activityId }: ActivityAnswer,
+  { appletId, answerId, activityId }: ActivityAnswerParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<ResponseWithObject<EncryptedActivityAnswer>>(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`,
+    `/answers/applet/${appletId}/activities/${activityId}/answers/${answerId}`,
     {
       params: { limit: MAX_LIMIT },
       signal,
@@ -455,7 +455,7 @@ export const getActivityAnswerApi = (
   );
 
 export const getAnswersNotesApi = (
-  { appletId, answerId, activityId, params }: ActivityAnswer & GetAnswersNotesParams,
+  { appletId, answerId, activityId, params }: ActivityAnswerParams & GetAnswersNotesParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get(
@@ -470,7 +470,7 @@ export const getAnswersNotesApi = (
   );
 
 export const createAnswerNoteApi = (
-  { appletId, answerId, activityId, note }: ActivityAnswer & Note,
+  { appletId, answerId, activityId, note }: ActivityAnswerParams & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
@@ -482,7 +482,7 @@ export const createAnswerNoteApi = (
   );
 
 export const editAnswerNoteApi = (
-  { appletId, answerId, noteId, activityId, note }: ActivityAnswer & NoteId & Note,
+  { appletId, answerId, noteId, activityId, note }: ActivityAnswerParams & NoteId & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.put(
@@ -494,7 +494,7 @@ export const editAnswerNoteApi = (
   );
 
 export const deleteAnswerNoteApi = (
-  { appletId, answerId, activityId, noteId }: ActivityAnswer & NoteId,
+  { appletId, answerId, activityId, noteId }: ActivityAnswerParams & NoteId,
   signal?: AbortSignal,
 ) =>
   authApiClient.delete(
