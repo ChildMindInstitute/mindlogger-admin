@@ -93,7 +93,7 @@ describe('Managers component tests', () => {
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const tableColumnNames = ['First Name', 'Last Name', 'Title', 'Role', 'Email'];
-    const managersColumns = ['TestFirstName', 'TestLastName', mockedEmail, 'Reviewer'];
+    const managersColumns = ['TestFirstName', 'TestLastName', 'PhD', 'Reviewer', mockedEmail];
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-managers-table')).toBeInTheDocument();
