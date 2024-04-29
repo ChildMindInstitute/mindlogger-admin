@@ -1,6 +1,7 @@
 export const palette = {
   primary: '#00639a',
   primary50: '#207cbb',
+  primary80: '#96ccff',
   primary95: '#e8f2ff',
   primary_container: '#cee5ff',
   secondary: '#51606f',
