@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
   Modal,
@@ -14,13 +14,13 @@ import {
 import { StyledErrorText, StyledLinkBtn, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles, VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
-import { page } from 'resources';
 import { Mixpanel, getErrorMessage } from 'shared/utils';
 import { Languages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
+import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
 
 import {
   EMAIL_IN_USE,
@@ -60,10 +60,10 @@ export const AddParticipantPopup = ({
     mode: 'all',
     delayError: VALIDATION_DEBOUNCE_VALUE,
   });
+  const participantPath = useMultiInformantParticipantPath({ appletId });
   const accountType = useWatch({ control, name: 'accountType' });
   const isFullAccount = accountType === AccountType.Full;
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [step, setStep] = useState(AddParticipantSteps.AccountType);
   const [hasCommonError, setHasCommonError] = useState(false);
 
@@ -158,13 +158,13 @@ export const AddParticipantPopup = ({
     setStep(AddParticipantSteps.AccountType);
   };
 
-  const handleRedirectClick = () => navigate(generatePath(page.appletParticipants, { appletId }));
-
   const emailInUse = (
     <Trans i18nKey="emailAlreadyInUse">
       That email is
-      <StyledLinkBtn onClick={handleRedirectClick}>already in use</StyledLinkBtn>. Please enter
-      another one.
+      <StyledLinkBtn component={Link} to={participantPath}>
+        already in use
+      </StyledLinkBtn>
+      . Please enter another one.
     </Trans>
   );
 
@@ -183,7 +183,7 @@ export const AddParticipantPopup = ({
       {
         fieldName: Fields.email,
         apiMessage: RESPONDENT_ALREADY_INVITED,
-        errorMessage: t('participantAlreadyInvited'),
+        errorMessage: emailInUse,
       },
       {
         fieldName: Fields.email,

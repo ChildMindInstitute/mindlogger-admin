@@ -14,6 +14,7 @@ import {
   AppletPasswordRefType,
 } from 'modules/Dashboard/features/Applet/Popups';
 import { page } from 'resources';
+import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
 import {
   Encryption,
   falseReturnFunc,
@@ -44,6 +45,8 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const { id: accountId } = userData?.user || {};
   const workspaceRoles = workspaces.useRolesData();
   const appletId = item.id;
+  const participantPath = useMultiInformantParticipantPath({ appletId });
+
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const encryptionDataRef = useRef<{
     encryption?: Encryption;
@@ -74,9 +77,6 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
   const [hasVisibleActions, setHasVisibleActions] = useState(false);
 
-  const APPLET_RESPONDENTS = generatePath(page.appletRespondents, {
-    appletId,
-  });
   const APPLET_SCHEDULE = generatePath(page.appletSchedule, {
     appletId,
   });
@@ -92,7 +92,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     await fetchData();
   };
 
-  const handleAppletClick = () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS));
+  const handleAppletClick = () => checkAppletEncryption(() => navigate(participantPath));
 
   const onDragStart = (event: DragEvent<HTMLTableRowElement>) => {
     event.persist();
@@ -125,7 +125,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
       await setFolder({ appletId });
       await fetchData();
     },
-    viewUsers: () => checkAppletEncryption(() => navigate(APPLET_RESPONDENTS)),
+    viewUsers: () => checkAppletEncryption(() => navigate(participantPath)),
     viewCalendar: () =>
       checkAppletEncryption(() => {
         navigate(APPLET_SCHEDULE);
