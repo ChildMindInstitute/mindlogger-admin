@@ -5,7 +5,7 @@ import { authStorage } from 'shared/utils/authStorage';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { getApiErrorResult, getErrorMessage } from 'shared/utils/errors';
 import { ApiErrorResponse } from 'shared/state/Base';
-import { LaunchDarkly } from 'shared/utils/launchDarkly';
+import { FeatureFlags } from 'shared/utils/featureFlags';
 import {
   getUserDetailsApi,
   ResetPassword,
@@ -28,7 +28,7 @@ export const signIn = createAsyncThunk(
         authStorage.setAccessToken(accessToken);
 
         Mixpanel.login(data.result.user.id);
-        LaunchDarkly.login(data.result.user.id);
+        FeatureFlags.login(data.result.user.id);
       }
 
       return data;
@@ -47,7 +47,7 @@ export const getUserDetails = createAsyncThunk(
       const { data } = await getUserDetailsApi(signal);
       if (data?.result) {
         // Make sure to identify session with LD, e.g. when user is already logged in
-        LaunchDarkly.login(data.result.id);
+        FeatureFlags.login(data.result.id);
       }
 
       return { data };

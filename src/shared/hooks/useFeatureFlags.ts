@@ -5,7 +5,7 @@ import { FeatureFlags, FeatureFlagsKeys } from 'shared/types/featureFlags';
 /**
  * Internal wrapper for LaunchDarkly's hooks and flags.
  */
-export const useLaunchDarkly = () => {
+export const useFeatureFlags = () => {
   const ldClient = useLDClient();
   const flags = useFlags();
 
@@ -27,5 +27,5 @@ export const useLaunchDarkly = () => {
     return features;
   };
 
-  return { resetLDContext, flags: featureFlags() };
+  return { resetLDContext, featureFlags: featureFlags() };
 };

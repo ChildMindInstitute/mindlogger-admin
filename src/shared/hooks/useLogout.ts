@@ -7,7 +7,7 @@ import { useAppDispatch } from 'redux/store';
 import { alerts, auth, workspaces } from 'redux/modules';
 import { deleteAccessTokenApi, deleteRefreshTokenApi } from 'modules/Auth/api';
 import { Mixpanel } from 'shared/utils/mixpanel';
-import { LaunchDarkly } from 'shared/utils/launchDarkly';
+import { FeatureFlags } from 'shared/utils/featureFlags';
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +27,7 @@ export const useLogout = () => {
       navigate(page.login);
       Mixpanel.track('Logout');
       Mixpanel.logout();
-      LaunchDarkly.logout();
+      FeatureFlags.logout();
     }
   };
 };
