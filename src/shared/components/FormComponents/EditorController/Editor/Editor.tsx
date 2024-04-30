@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import 'md-editor-rt/lib/style.css';
@@ -34,31 +34,48 @@ export const Editor = ({
   const { t } = useTranslation('app');
   const [inputValue, setInputValue] = useState(value ?? '');
   const [isLoading, setIsLoading] = useState(false);
+  const focusedRef = useRef(false);
+  const shouldSkipDebounceChange = useMemo(
+    () => !withDebounce || inputValue === value,
+    [inputValue, value, withDebounce],
+  );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleDebouncedChange = useCallback(
     debounce((value: string) => onChange(value), CHANGE_DEBOUNCE_VALUE),
     [],
   );
 
+  const handleChange = useMemo(
+    () => (withDebounce ? setInputValue : onChange),
+    [onChange, withDebounce],
+  );
+
+  const handleBlur = useCallback(() => {
+    focusedRef.current = false;
+    if (shouldSkipDebounceChange) return;
+
+    handleDebouncedChange.cancel();
+    onChange(inputValue);
+  }, [shouldSkipDebounceChange, handleDebouncedChange, inputValue, onChange]);
+
+  const handleFocus = useCallback(() => {
+    focusedRef.current = true;
+  }, []);
+
   useEffect(() => {
-    if (!withDebounce || inputValue === value) return;
+    if (shouldSkipDebounceChange) return;
 
     handleDebouncedChange(inputValue);
-  }, [inputValue, value, withDebounce]);
+  }, [shouldSkipDebounceChange, inputValue, handleDebouncedChange]);
 
   useEffect(() => {
-    if (!withDebounce) return;
+    if (focusedRef.current || shouldSkipDebounceChange) return;
 
     setInputValue(value ?? '');
     handleDebouncedChange.cancel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
-
-  const handleChange = withDebounce ? setInputValue : onChange;
-  const handleBlur = () => {
-    if (withDebounce && value !== inputValue) {
-      onChange(inputValue);
-    }
-  };
 
   return (
     <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>
@@ -70,6 +87,7 @@ export const Editor = ({
         modelValue={withDebounce ? inputValue : value ?? ''}
         onChange={handleChange}
         onBlur={handleBlur}
+        onFocus={handleFocus}
         language={LANGUAGE_BY_DEFAULT}
         disabled={disabled}
         placeholder={t('textPlaceholder')}
