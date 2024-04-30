@@ -17,7 +17,7 @@ import { isSectionReport } from 'shared/types';
 import { SectionReport } from 'shared/state/Applet/Applet.schema';
 import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
 import { useStaticContent } from 'shared/hooks/useStaticContent';
-import { observerStyles } from 'modules/Builder/consts';
+import { observerStyles } from 'shared/consts';
 
 import { SectionContentProps } from './SectionContent.types';
 import { ConditionContent } from '../ConditionContent';
