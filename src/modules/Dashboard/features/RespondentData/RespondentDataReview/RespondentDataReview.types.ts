@@ -155,7 +155,7 @@ export type ActivityItemAnswers = DecryptedActivityData<
 >['decryptedAnswers'];
 
 export type FlowActivityAnswers = {
-  activityId: string;
+  answerId: string;
   activityName: string;
   answers: ActivityItemAnswers;
 };

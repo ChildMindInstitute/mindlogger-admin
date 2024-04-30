@@ -92,16 +92,16 @@ export const useActivityAnswersAndAssessment = ({
       const decryptedFlowAnswers: FlowAnswers = [];
 
       for await (const answer of answers) {
-        const { id, name, items } = activitiesObject[answer.activityHistoryId];
+        const { name, items } = activitiesObject[answer.activityHistoryId];
         const decryptedActivityData = await getDecryptedActivityData({
           ...answer,
           items,
         });
 
         decryptedFlowAnswers.push({
-          activityId: id,
           activityName: name,
           answers: decryptedActivityData.decryptedAnswers,
+          answerId: answer.id,
         });
       }
 

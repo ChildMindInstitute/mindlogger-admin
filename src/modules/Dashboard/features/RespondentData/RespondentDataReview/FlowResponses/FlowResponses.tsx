@@ -8,8 +8,8 @@ import { StyledWrapper } from './FlowResponses.styles';
 
 export const FlowResponses = ({ flowAnswers, 'data-testid': dataTestid }: FlowResponsesProps) => (
   <Box sx={{ mt: theme.spacing(3) }}>
-    {flowAnswers.map(({ activityId, activityName, answers }, index) => (
-      <StyledWrapper key={activityId} data-testid={`${dataTestid}-${index}`}>
+    {flowAnswers.map(({ activityName, answers, answerId }, index) => (
+      <StyledWrapper key={answerId} data-testid={`${dataTestid}-${index}`}>
         <StyledHeadlineLarge sx={{ mb: theme.spacing(1) }}>{activityName}</StyledHeadlineLarge>
         <ActivityResponses activityAnswers={answers} data-testid={`${dataTestid}-items`} />
       </StyledWrapper>
