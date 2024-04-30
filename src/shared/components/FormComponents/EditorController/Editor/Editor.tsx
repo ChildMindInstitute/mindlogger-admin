@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import debounce from 'lodash.debounce';
 import 'md-editor-rt/lib/style.css';
 
 import {
@@ -11,11 +10,11 @@ import {
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
 import { getSanitizedContent } from 'shared/utils/forms';
-import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { StyledMdEditor } from './Editor.styles';
 import { getCustomIcons, getDefToolbars, getToolbars } from './Editor.utils';
 import { EditorProps } from './Editor.types';
+import { useDebounceInputLogic } from './Editor.hooks';
 
 export const Editor = ({
   editorId,
@@ -32,50 +31,12 @@ export const Editor = ({
   'data-testid': dataTestid,
 }: EditorProps) => {
   const { t } = useTranslation('app');
-  const [inputValue, setInputValue] = useState(value ?? '');
   const [isLoading, setIsLoading] = useState(false);
-  const focusedRef = useRef(false);
-  const shouldSkipDebounceChange = useMemo(
-    () => !withDebounce || inputValue === value,
-    [inputValue, value, withDebounce],
-  );
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleDebouncedChange = useCallback(
-    debounce((value: string) => onChange(value), CHANGE_DEBOUNCE_VALUE),
-    [],
-  );
-
-  const handleChange = useMemo(
-    () => (withDebounce ? setInputValue : onChange),
-    [onChange, withDebounce],
-  );
-
-  const handleBlur = useCallback(() => {
-    focusedRef.current = false;
-    if (shouldSkipDebounceChange) return;
-
-    handleDebouncedChange.cancel();
-    onChange(inputValue);
-  }, [shouldSkipDebounceChange, handleDebouncedChange, inputValue, onChange]);
-
-  const handleFocus = useCallback(() => {
-    focusedRef.current = true;
-  }, []);
-
-  useEffect(() => {
-    if (shouldSkipDebounceChange) return;
-
-    handleDebouncedChange(inputValue);
-  }, [shouldSkipDebounceChange, inputValue, handleDebouncedChange]);
-
-  useEffect(() => {
-    if (focusedRef.current || shouldSkipDebounceChange) return;
-
-    setInputValue(value ?? '');
-    handleDebouncedChange.cancel();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  const { inputValue, handleChange, handleBlur, handleFocus } = useDebounceInputLogic({
+    value,
+    onChange,
+    withDebounce,
+  });
 
   return (
     <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>
