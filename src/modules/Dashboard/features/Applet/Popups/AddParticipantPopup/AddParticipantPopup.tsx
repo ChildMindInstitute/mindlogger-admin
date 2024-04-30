@@ -6,14 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Modal, Spinner, ToggleButtonGroup, ToggleButtonVariants } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
-import { NON_UNIQUE_VALUE_MESSAGE, Roles, VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
+import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
 import { Mixpanel, getErrorMessage } from 'shared/utils';
 import { Languages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
-import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
 
 import {
   RESPONDENT_ALREADY_INVITED,
@@ -49,10 +48,8 @@ export const AddParticipantPopup = ({
   } = useForm<AddParticipantFormValues>({
     resolver: yupResolver(AddParticipantPopupSchema()),
     defaultValues: defaults,
-    mode: 'all',
-    delayError: VALIDATION_DEBOUNCE_VALUE,
+    mode: 'onBlur',
   });
-  const participantPath = useMultiInformantParticipantPath({ appletId });
   const accountType = useWatch({ control, name: 'accountType' });
   const isFullAccount = accountType === AccountType.Full;
   const dispatch = useAppDispatch();

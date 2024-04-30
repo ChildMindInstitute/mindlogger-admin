@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { EmptyState, Modal, Spinner } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
-import { Roles, VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
+import { Roles } from 'shared/consts';
 import { Mixpanel, getErrorMessage, isManagerOrOwner } from 'shared/utils';
 import { Languages, postAppletInvitationApi } from 'api';
 import { useAppDispatch } from 'redux/store';
@@ -65,8 +65,7 @@ export const AddManagerPopup = ({
   } = useForm<AddManagerFormValues>({
     resolver: yupResolver(AddManagerPopupSchema(isWorkspaceNameVisible)),
     defaultValues: defaults,
-    mode: 'all',
-    delayError: VALIDATION_DEBOUNCE_VALUE,
+    mode: 'onBlur',
   });
 
   const role = useWatch({ control, name: Fields.role });

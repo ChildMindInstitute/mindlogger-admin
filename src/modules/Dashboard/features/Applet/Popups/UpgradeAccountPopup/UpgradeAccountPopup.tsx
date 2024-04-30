@@ -18,7 +18,6 @@ import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
 import { AccountType } from 'modules/Dashboard/types';
 import { ParticipantSnippet } from 'modules/Dashboard/components';
-import { VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { RESPONDENT_ALREADY_INVITED } from './UpgradeAccountPopup.const';
 import { UpgradeAccountPopupSchema } from './UpgradeAccountPopup.schema';
@@ -53,8 +52,7 @@ export const UpgradeAccountPopup = ({
   } = useForm<UpgradeAccountFormValues>({
     resolver: yupResolver(UpgradeAccountPopupSchema()),
     defaultValues,
-    mode: 'all',
-    delayError: VALIDATION_DEBOUNCE_VALUE,
+    mode: 'onBlur',
   });
   const dispatch = useAppDispatch();
   const [hasCommonError, setHasCommonError] = useState(false);
