@@ -51,6 +51,11 @@ const successfulGetAppletActivitiesMock = {
   },
 };
 
+const successfulGetAppletMock = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: { result: mockedAppletData },
+};
+
 const successfulEmptyHttpResponseMock: HttpResponse = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
@@ -58,6 +63,7 @@ const successfulEmptyHttpResponseMock: HttpResponse = {
   },
 };
 
+const getAppletUrl = `/applets/${mockedAppletId}`;
 const getAppletActivitiesUrl = `/activities/applet/${mockedAppletId}`;
 const getWorkspaceRespondentsUrl = `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`;
 
@@ -106,6 +112,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
   test('should render empty component', async () => {
     mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
       [getAppletActivitiesUrl]: successfulEmptyGetAppletActivitiesMock,
       [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
     });
@@ -118,6 +125,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
   test('should render grid with activity summary cards', async () => {
     mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
       [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
       [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
     });
@@ -134,14 +142,15 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
   test('click Add Activity should navigate to Builder > Applet > Activities', async () => {
     mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
       [getAppletActivitiesUrl]: successfulEmptyGetAppletActivitiesMock,
       [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
     });
     renderWithProviders(<Activities />, { route, routePath, preloadedState });
 
-    fireEvent.click(screen.getByTestId(`${testId}-add-activity`));
-
-    expect(mockedUseNavigate).toHaveBeenCalledWith(
+    const addActivityLink = screen.getByTestId(`${testId}-add-activity`);
+    expect(addActivityLink).toHaveAttribute(
+      'href',
       generatePath(page.builderAppletActivities, { appletId: mockedAppletId }),
     );
   });
@@ -158,6 +167,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
     `('$description', async ({ canEdit, role }) => {
       mockGetRequestResponses({
+        [getAppletUrl]: successfulGetAppletMock,
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
         [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
       });
@@ -201,6 +211,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         ${false}     | ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
       `('$description', async ({ canDoTakeNow, role }: { canDoTakeNow: boolean; role: Roles }) => {
         mockGetRequestResponses({
+          [getAppletUrl]: successfulGetAppletMock,
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
           [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
         });
@@ -239,6 +250,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
       `('$description', async ({ role }: { role: Roles }) => {
         mockGetRequestResponses({
+          [getAppletUrl]: successfulGetAppletMock,
           [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
           [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
         });
@@ -272,6 +284,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       });
 
       mockGetRequestResponses({
+        [getAppletUrl]: successfulGetAppletMock,
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
         [getWorkspaceRespondentsUrl]: successfulGetAppletParticipantsMock,
       });
