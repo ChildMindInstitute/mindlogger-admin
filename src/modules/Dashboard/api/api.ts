@@ -57,6 +57,9 @@ import {
   SubmitDates,
   DeleteReview,
   EncryptedActivityAnswer,
+  ReviewFlow,
+  FlowAnswersParams,
+  EncryptedFlowAnswers,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -406,6 +409,19 @@ export const getReviewActivitiesApi = (
     signal,
   });
 
+export const getReviewFlowsApi = (
+  { appletId, respondentId, createdDate }: Answers,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<ReviewFlow>>(`/answers/applet/${appletId}/review/flows`, {
+    params: {
+      respondentId,
+      createdDate,
+      limit: MAX_LIMIT,
+    },
+    signal,
+  });
+
 export const getAnswerApi = ({ appletId, answerId }: ActivityAnswerParams, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
 
@@ -415,6 +431,18 @@ export const getActivityAnswerApi = (
 ) =>
   authApiClient.get<ResponseWithObject<EncryptedActivityAnswer>>(
     `/answers/applet/${appletId}/activities/${activityId}/answers/${answerId}`,
+    {
+      params: { limit: MAX_LIMIT },
+      signal,
+    },
+  );
+
+export const getFlowAnswersApi = (
+  { appletId, submitId, flowId }: FlowAnswersParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<ResponseWithObject<EncryptedFlowAnswers>>(
+    `/answers/applet/${appletId}/flows/${flowId}/submissions/${submitId}`,
     {
       params: { limit: MAX_LIMIT },
       signal,

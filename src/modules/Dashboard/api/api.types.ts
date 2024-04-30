@@ -237,12 +237,20 @@ export type SubmitDates = {
 };
 
 export type AnswerDate = {
-  answerId: string;
+  answerId?: string;
+  submitId?: string;
   createdAt: string;
   endDatetime?: string;
 };
 
 export type ReviewActivity = DatavizActivity & {
+  answerDates: AnswerDate[];
+};
+
+export type ReviewFlow = {
+  id: string;
+  name: string;
+  lastAnswerDate: string | null;
   answerDates: AnswerDate[];
 };
 
@@ -257,6 +265,8 @@ export type DatavizAnswer = EncryptedAnswerSharedProps & {
 export type Answers = AppletId & RespondentId & { createdDate?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
+
+export type FlowAnswersParams = AppletId & { submitId: string; flowId: string };
 
 export type AssessmentReview = AppletId & { answerId: string };
 
@@ -414,7 +424,7 @@ export type Identifiers = LatestReport;
 
 export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;
 
-export type ActivityAnswerSummary = {
+export type AnswerSummary = {
   createdAt: string;
   endDateTime: string | null;
   version: string;
@@ -427,10 +437,54 @@ export type ActivityAnswer = {
   activityHistoryId: string;
   activityId: string | null;
   flowHistoryId: string | null;
+  identifier: string | null;
+  createdAt: string;
+  endDateTime: string;
+};
+
+export type ActivityHistoryFull = Omit<ExportActivity, 'isPerformanceTask'> & {
+  appletId: string;
+  order: number;
 };
 
 export type EncryptedActivityAnswer = {
-  activity: ExportActivity;
-  answer: Omit<EncryptedAnswerSharedProps, 'items'> & ActivityAnswer & ActivityAnswerSummary;
-  summary: ActivityAnswerSummary;
+  activity: ActivityHistoryFull;
+  answer: Omit<EncryptedAnswerSharedProps, 'items'> &
+    ActivityAnswer &
+    Omit<AnswerSummary, 'identifier'> & {
+      identifier: string | null;
+    };
+  summary: AnswerSummary;
+};
+
+export type FlowHistory = {
+  name: string;
+  description: string | Record<string, string>;
+  isSingleReport: boolean | null;
+  hideBadge: boolean | null;
+  reportIncludedActivityName: string | null;
+  reportIncludedItemName: string | null;
+  id: string;
+  idVersion: string;
+  order: number;
+  createdAt: string;
+  activities: ActivityHistoryFull[];
+};
+
+export type FlowSubmission = {
+  submitId: string;
+  flowHistoryId: string;
+  appletId: string;
+  isCompleted: boolean | null;
+  answers: (Omit<EncryptedAnswerSharedProps, 'items'> &
+    ActivityAnswer &
+    Omit<AnswerSummary, 'identifier'> & {
+      identifier: string | null;
+    })[];
+} & Omit<AnswerSummary, 'identifier'>;
+
+export type EncryptedFlowAnswers = {
+  flow: FlowHistory;
+  submission: FlowSubmission;
+  summary: AnswerSummary;
 };
