@@ -8,11 +8,10 @@ import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { Roles, VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
 import { Mixpanel, getErrorMessage, isManagerOrOwner } from 'shared/utils';
-import { Languages, getWorkspaceInfoApi, postAppletInvitationApi } from 'api';
+import { Languages, postAppletInvitationApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners, users, workspaces } from 'redux/modules';
-import { WorkspaceInfo } from 'modules/Dashboard/types';
 
 import { USER_ALREADY_INVITED, defaultValues } from './AddManagerPopup.const';
 import { AddManagerPopupSchema } from './AddManagerPopup.schema';
@@ -23,13 +22,13 @@ export const AddManagerPopup = ({
   appletId,
   onClose,
   popupVisible,
+  workspaceInfo,
   'data-testid': dataTestid,
 }: AddManagerPopupProps) => {
   const { t, i18n } = useTranslation('app');
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
-  const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
   // Workspace Name field is only available if the workspace has no managers yet
   const isWorkspaceNameVisible = !!workspaceInfo && !workspaceInfo.hasManagers;
 
@@ -88,7 +87,6 @@ export const AddManagerPopup = ({
     execute: createInvitation,
     isLoading,
   } = useAsync(postAppletInvitationApi, async (result) => {
-    ownerId && executeGetWorkspaceInfoApi({ ownerId });
     const { firstName, lastName, title } = result.data?.result ?? {};
     dispatch(
       banners.actions.addBanner({
@@ -100,9 +98,6 @@ export const AddManagerPopup = ({
     );
     Mixpanel.track('Invitation sent successfully');
     handleClose(true);
-  });
-  const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {
-    setWorkspaceInfo(res?.data?.result || null);
   });
 
   const handleSubmitForm = (values: AddManagerFormValues) => {
@@ -143,13 +138,12 @@ export const AddManagerPopup = ({
 
     const { getAllWorkspaceRespondents } = users.thunk;
 
-    executeGetWorkspaceInfoApi({ ownerId });
     dispatch(
       getAllWorkspaceRespondents({
         params: { ownerId, appletId },
       }),
     );
-  }, [ownerId, appletId, dispatch, executeGetWorkspaceInfoApi]);
+  }, [ownerId, appletId, dispatch]);
 
   useEffect(() => {
     if (role === Roles.Reviewer) {

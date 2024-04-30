@@ -31,17 +31,18 @@ const preloadedState = {
 const dataTestId = 'test-id';
 const onCloseMock = jest.fn();
 
-const props = {
-  appletId: mockedAppletId,
-  onClose: onCloseMock,
-  popupVisible: true,
-  'data-testid': dataTestId,
-};
-
 const mockWorkspaceInfo = {
   name: 'test-workspace',
   hasManagers: false,
 };
+const props = {
+  appletId: mockedAppletId,
+  onClose: onCloseMock,
+  popupVisible: true,
+  workspaceInfo: mockWorkspaceInfo,
+  'data-testid': dataTestId,
+};
+
 const mockSubmitValues = {
   id: 'test-id',
   appletId: mockedAppletId,
@@ -63,11 +64,6 @@ describe('AddManagerPopup component', () => {
 
   test('should submit the form and show success banner', async () => {
     const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        result: mockWorkspaceInfo,
-      },
-    });
     mockAxios.post.mockResolvedValueOnce({
       data: {
         result: mockSubmitValues,
@@ -104,18 +100,10 @@ describe('AddManagerPopup component', () => {
   });
 
   test('should omit workspace name field if it has managers', async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: {
-        result: {
-          ...mockWorkspaceInfo,
-          hasManagers: true,
-        },
-      },
-    });
-
-    const { queryByTestId } = renderWithProviders(<AddManagerPopup {...props} />, {
-      preloadedState,
-    });
+    const { queryByTestId } = renderWithProviders(
+      <AddManagerPopup {...props} workspaceInfo={{ ...mockWorkspaceInfo, hasManagers: true }} />,
+      { preloadedState },
+    );
 
     await waitFor(() => {
       expect(queryByTestId(`${dataTestId}-workspace`)).toBeNull();

@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Avatar as MuiAvatar, Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { getWorkspaceManagersApi } from 'api';
+import { getWorkspaceInfoApi, getWorkspaceManagersApi } from 'api';
 import {
   ActionsMenu,
   Avatar,
@@ -17,7 +17,7 @@ import { banners, workspaces } from 'redux/modules';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
-import { Manager } from 'modules/Dashboard/types';
+import { Manager, WorkspaceInfo } from 'modules/Dashboard/types';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
@@ -32,6 +32,7 @@ export const Managers = () => {
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const [managersData, setManagersData] = useState<ManagersData | null>(null);
+  const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const dataTestId = 'dashboard-managers';
 
@@ -46,6 +47,9 @@ export const Managers = () => {
     undefined,
     () => setIsLoading(false),
   );
+  const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {
+    setWorkspaceInfo(res?.data?.result || null);
+  });
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() => {
     setIsLoading(true);
@@ -209,6 +213,12 @@ export const Managers = () => {
     }
   };
 
+  useEffect(() => {
+    if (!ownerId) return;
+
+    executeGetWorkspaceInfoApi({ ownerId });
+  }, [ownerId, executeGetWorkspaceInfoApi]);
+
   if (isForbidden) return noPermissionsComponent;
 
   return (
@@ -270,6 +280,7 @@ export const Managers = () => {
           popupVisible={addManagerPopupVisible}
           onClose={addManagerOnClose}
           appletId={appletId}
+          workspaceInfo={workspaceInfo}
         />
       )}
     </StyledBody>

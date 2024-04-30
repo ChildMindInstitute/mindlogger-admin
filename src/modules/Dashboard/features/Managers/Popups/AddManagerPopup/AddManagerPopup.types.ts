@@ -1,10 +1,12 @@
 import { Languages } from 'api';
+import { WorkspaceInfo } from 'modules/Dashboard/types';
 import { Roles } from 'shared/consts';
 
 export type AddManagerPopupProps = {
   popupVisible: boolean;
   appletId: string | null;
   onClose?: (shouldRefetch: boolean) => void;
+  workspaceInfo: WorkspaceInfo | null;
   'data-testid'?: string;
 };
 

@@ -155,8 +155,13 @@ describe('Managers component tests', () => {
       },
     };
 
+    // getWorkspaceManagersApi
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
+    // executeGetWorkspaceInfoApi
+    mockAxios.get.mockResolvedValueOnce(null);
+    // getWorkspaceManagersApi
     mockAxios.get.mockResolvedValueOnce(emptySearchGetMock);
+
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 
