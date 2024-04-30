@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Avatar as MuiAvatar, Box, Checkbox, Button } from '@mui/material';
+import { Avatar as MuiAvatar, Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -135,17 +135,6 @@ export const Managers = () => {
         ));
 
         return {
-          checkbox: {
-            content: () => (
-              <Checkbox
-                aria-label={`${firstName} ${lastName}`}
-                checked={false}
-                data-testid={`${dataTestId}-checkbox`}
-              />
-            ),
-            value: '',
-            width: '8rem',
-          },
           avatar: {
             content: () => (
               <MuiAvatar
