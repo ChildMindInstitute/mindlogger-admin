@@ -222,7 +222,7 @@ export const Managers = () => {
   if (isForbidden) return noPermissionsComponent;
 
   return (
-    <StyledBody>
+    <StyledBody sx={{ p: 3.2 }}>
       {isLoading && <Spinner />}
 
       <StyledFlexWrap sx={{ gap: 1.2, mb: 2.4 }}>
