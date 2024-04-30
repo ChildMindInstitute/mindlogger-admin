@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import debounce from 'lodash.debounce';
 import 'md-editor-rt/lib/style.css';
 
 import {
@@ -11,11 +10,11 @@ import {
 import { Spinner, SpinnerUiType } from 'shared/components/Spinner';
 import { StyledFlexColumn, StyledFlexSpaceBetween, theme } from 'shared/styles';
 import { getSanitizedContent } from 'shared/utils/forms';
-import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { StyledMdEditor } from './Editor.styles';
 import { getCustomIcons, getDefToolbars, getToolbars } from './Editor.utils';
 import { EditorProps } from './Editor.types';
+import { useDebounceInputLogic } from './Editor.hooks';
 
 export const Editor = ({
   editorId,
@@ -32,33 +31,12 @@ export const Editor = ({
   'data-testid': dataTestid,
 }: EditorProps) => {
   const { t } = useTranslation('app');
-  const [inputValue, setInputValue] = useState(value ?? '');
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleDebouncedChange = useCallback(
-    debounce((value: string) => onChange(value), CHANGE_DEBOUNCE_VALUE),
-    [],
-  );
-
-  useEffect(() => {
-    if (!withDebounce || inputValue === value) return;
-
-    handleDebouncedChange(inputValue);
-  }, [inputValue, value, withDebounce]);
-
-  useEffect(() => {
-    if (!withDebounce) return;
-
-    setInputValue(value ?? '');
-    handleDebouncedChange.cancel();
-  }, [value]);
-
-  const handleChange = withDebounce ? setInputValue : onChange;
-  const handleBlur = () => {
-    if (withDebounce && value !== inputValue) {
-      onChange(inputValue);
-    }
-  };
+  const { inputValue, handleChange, handleBlur, handleFocus } = useDebounceInputLogic({
+    value,
+    onChange,
+    withDebounce,
+  });
 
   return (
     <StyledFlexColumn sx={{ position: 'relative' }} data-testid={dataTestid}>
@@ -70,6 +48,7 @@ export const Editor = ({
         modelValue={withDebounce ? inputValue : value ?? ''}
         onChange={handleChange}
         onBlur={handleBlur}
+        onFocus={handleFocus}
         language={LANGUAGE_BY_DEFAULT}
         disabled={disabled}
         placeholder={t('textPlaceholder')}
