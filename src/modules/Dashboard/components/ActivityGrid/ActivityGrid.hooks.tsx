@@ -16,7 +16,7 @@ import {
   getActivityActions,
   StyledSvg,
 } from 'modules/Dashboard/components/ActivityGrid';
-import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
 
@@ -25,7 +25,7 @@ export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesDa
   const { appletId } = useParams();
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
-  const { flags: featureFlags } = useLaunchDarkly();
+  const { featureFlags } = useFeatureFlags();
 
   const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId });
 

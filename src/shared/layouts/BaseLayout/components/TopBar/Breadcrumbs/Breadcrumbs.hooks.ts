@@ -22,14 +22,14 @@ import {
 } from 'shared/utils/urlGenerator';
 import { useCheckIfNewApplet } from 'shared/hooks/useCheckIfNewApplet';
 import { useRespondentLabel } from 'shared/hooks/useRespondentLabel';
-import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { Breadcrumb } from './Breadcrumbs.types';
 
 export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const {
-    flags: { enableMultiInformant },
-  } = useLaunchDarkly();
+    featureFlags: { enableMultiInformant },
+  } = useFeatureFlags();
   const { appletId, activityId, activityFlowId, respondentId, subjectId, setting } = useParams();
   const { t } = useTranslation('app');
   const { pathname } = useLocation();

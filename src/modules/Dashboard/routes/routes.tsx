@@ -20,7 +20,7 @@ const RespondentDataSummary = lazy(
   () => import('../features/RespondentData/RespondentDataSummary'),
 );
 
-export const dashboardRoutes = (flags: FeatureFlags) => (
+export const dashboardRoutes = (featureFlags: FeatureFlags) => (
   <Route path={page.dashboard}>
     <Route element={<Main />}>
       <Route index element={<Navigate to={page.dashboardApplets} replace />} />
@@ -42,7 +42,7 @@ export const dashboardRoutes = (flags: FeatureFlags) => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {flags.enableMultiInformant ? <AppletMultiInformant /> : <Applet />}
+            {featureFlags.enableMultiInformant ? <AppletMultiInformant /> : <Applet />}
           </ErrorBoundary>
         </PrivateRoute>
       }

@@ -12,7 +12,7 @@ import { AppRoutes } from 'routes';
 import { ErrorFallback } from 'shared/components/ErrorFallback';
 import svgBuilder from 'shared/utils/svgBuilder';
 import { injectStoreToApiClient } from 'shared/api/api.client';
-import { LaunchDarkly } from 'shared/utils/launchDarkly';
+import { FeatureFlags } from 'shared/utils/featureFlags';
 
 // injecting store to avoid importing the store directly into other codebase files
 injectStoreToApiClient(store);
@@ -29,7 +29,7 @@ const App = () => {
   const ldClient = useLDClient();
   useEffect(() => {
     if (!ldClient) return;
-    LaunchDarkly.init(ldClient);
+    FeatureFlags.init(ldClient);
   }, [ldClient]);
 
   return (
