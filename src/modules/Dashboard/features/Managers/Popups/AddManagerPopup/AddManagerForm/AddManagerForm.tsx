@@ -49,6 +49,8 @@ export const AddManagerForm = ({
             {...commonProps}
             name={Fields.email}
             label={t('emailAddress')}
+            placeholder={t('emailAddressPlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestId}-email`}
           />
         </Grid>
@@ -57,6 +59,8 @@ export const AddManagerForm = ({
             {...commonProps}
             name={Fields.firstName}
             label={t('firstName')}
+            placeholder={t('firstNamePlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestId}-fname`}
           />
         </Grid>
@@ -65,6 +69,8 @@ export const AddManagerForm = ({
             {...commonProps}
             name={Fields.lastName}
             label={t('lastName')}
+            placeholder={t('lastNamePlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestId}-lname`}
           />
         </Grid>
@@ -73,6 +79,8 @@ export const AddManagerForm = ({
             {...commonProps}
             name={Fields.title}
             label={t('title')}
+            placeholder={t('titlePlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestId}-title`}
           />
         </Grid>
@@ -82,7 +90,8 @@ export const AddManagerForm = ({
               {...commonProps}
               name={Fields.workspaceName}
               label={t('workspaceName')}
-              data-testid={`${dataTestId}-workspace`}
+              placeholder={t('workspaceNamePlaceholder')}
+              InputLabelProps={{ shrink: true }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -94,6 +103,7 @@ export const AddManagerForm = ({
                   </InputAdornment>
                 ),
               }}
+              data-testid={`${dataTestId}-workspace`}
             />
           </Grid>
         )}
@@ -121,6 +131,7 @@ export const AddManagerForm = ({
               noOptionsText={t('noParticipants')}
               limitTagRows={3}
               placeholder={t('selectParticipants')}
+              InputLabelProps={{ shrink: true }}
               data-testid={`${dataTestId}-participants`}
             />
           </Grid>

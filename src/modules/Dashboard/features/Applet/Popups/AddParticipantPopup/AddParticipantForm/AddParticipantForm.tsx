@@ -31,6 +31,8 @@ export const AddParticipantForm = ({
               {...commonProps}
               name={Fields.email}
               label={t('emailAddress')}
+              placeholder={t('emailAddressPlaceholder')}
+              InputLabelProps={{ shrink: true }}
               data-testid={`${dataTestid}-email`}
             />
           </Grid>
@@ -40,6 +42,8 @@ export const AddParticipantForm = ({
             {...commonProps}
             name={Fields.secretUserId}
             label={t('secretUserId')}
+            placeholder={t('secretUserIdPlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestid}-secret-id`}
           />
         </Grid>
@@ -48,6 +52,8 @@ export const AddParticipantForm = ({
             {...commonProps}
             name={Fields.firstName}
             label={t('firstName')}
+            placeholder={t('firstNamePlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestid}-fname`}
           />
         </Grid>
@@ -56,6 +62,8 @@ export const AddParticipantForm = ({
             {...commonProps}
             name={Fields.lastName}
             label={t('lastName')}
+            placeholder={t('lastNamePlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestid}-lname`}
           />
         </Grid>
@@ -64,6 +72,8 @@ export const AddParticipantForm = ({
             {...commonProps}
             name={Fields.nickname}
             label={t('nickname')}
+            placeholder={t('nicknamePlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestid}-nickname`}
           />
         </Grid>
