@@ -11,28 +11,9 @@ describe('ActivityGrid', () => {
   const MockTakeNowModal = (_props: TakeNowModalProps) => <div>{mockTakeNowModalText}</div>;
   const dataTestId = 'test';
 
-  test('Shows spinner when it is loading', async () => {
-    renderWithProviders(
-      <ActivityGrid
-        isLoading={true}
-        order={'desc'}
-        orderBy={''}
-        TakeNowModal={MockTakeNowModal}
-        data-testid={dataTestId}
-      />,
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('spinner')).toBeInTheDocument();
-      expect(screen.queryByText(mockTakeNowModalText)).toBeInTheDocument();
-      expect(screen.queryByTestId(`${dataTestId}-grid`)).not.toBeInTheDocument();
-    });
-  });
-
   test('Shows no activities message when there are no activities', async () => {
     renderWithProviders(
       <ActivityGrid
-        isLoading={false}
         order={'desc'}
         orderBy={''}
         TakeNowModal={MockTakeNowModal}
@@ -82,7 +63,6 @@ describe('ActivityGrid', () => {
 
     renderWithProviders(
       <ActivityGrid
-        isLoading={false}
         rows={rows}
         order={'desc'}
         orderBy={''}

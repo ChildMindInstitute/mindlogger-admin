@@ -14,7 +14,6 @@ export type ActivityGridProps = {
   TakeNowModal: FC<TakeNowModalProps>;
   order: Order;
   orderBy: string;
-  isLoading: boolean;
   'data-testid': string;
 };
 
