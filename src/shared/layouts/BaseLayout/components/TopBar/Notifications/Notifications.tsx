@@ -14,6 +14,7 @@ import {
 } from 'shared/styles';
 import { alerts } from 'shared/state';
 import { useInfinityData } from 'shared/hooks/useInfinityData';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import { Notification, NotificationProps } from './Notification';
 import {
@@ -75,10 +76,7 @@ export const Notifications = () => {
               {`${notWatched} ${t('unread')}`}
             </StyledLabelBoldLarge>
           )}
-          <StyledCollapseBtn
-            aria-label="collapse-expand"
-            onClick={() => setShowList((prevState) => !prevState)}
-          >
+          <StyledCollapseBtn aria-label="collapse-expand" onClick={toggleBooleanState(setShowList)}>
             <Svg id={showList ? 'navigate-up' : 'navigate-down'} />
           </StyledCollapseBtn>
         </StyledFlexTopCenter>

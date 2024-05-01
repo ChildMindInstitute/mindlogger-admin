@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { TabsOwnProps } from '@mui/material';
 
 export type Tab = {
   id: string;
@@ -29,6 +30,7 @@ export type TabsProps = {
   deepPathCompare?: boolean;
   defaultToFirstTab?: boolean;
   animateTabIndicator?: boolean;
+  variant?: TabsOwnProps['variant'];
   animationDurationMs?: number;
 };
 

@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { DateFormats, ItemResponseType } from 'shared/consts';
 import { ActivityItemAnswer, DecryptedTimeAnswer } from 'shared/types';
 import { Svg } from 'shared/components/Svg';
-import { StyledTitleLarge, theme, variables } from 'shared/styles';
+import { StyledBodyLarge, StyledTitleLarge, theme, variables } from 'shared/styles';
 import i18n from 'i18n';
 
 import {
@@ -17,6 +17,7 @@ import {
   DateItemAnswer,
   TimeRangeItemAnswer,
   SingleMultiSelectPerRowItemAnswer,
+  SliderRowsItemAnswer,
 } from '../RespondentDataReview.types';
 import { SingleSelectResponseItem } from '../SingleSelectResponseItem';
 import { SliderResponseItem } from '../SliderResponseItem';
@@ -26,6 +27,7 @@ import { NumberSelectionResponseItem } from '../NumberSelectionResponseItem';
 import { DateResponseItem } from '../DateResponseItem';
 import { TimeRangeResponseItem } from '../TimeRangeResponseItem';
 import { SingleMultiSelectPerRowResponseItem } from '../SingleMultiSelectPerRowResponseItem';
+import { SliderRowsResponseItem } from '../SliderRowsResponseItem';
 
 const { t } = i18n;
 
@@ -43,8 +45,8 @@ export const getTimeResponseItem = (answer?: DecryptedTimeAnswer) => {
   return format(date, DateFormats.Time);
 };
 
-export const renderEmptyState = (selectedAnswer: Answer | null) => {
-  if (!selectedAnswer) {
+export const renderEmptyState = (selectedAnswer: Answer | null, isActivitySelected: boolean) => {
+  if (!isActivitySelected && !selectedAnswer) {
     return (
       <>
         <Svg id="data" width="80" height="80" />
@@ -59,13 +61,21 @@ export const renderEmptyState = (selectedAnswer: Answer | null) => {
     <>
       <Svg id="chart" width="67" height="67" />
       <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-        {t('noDataForActivity')}
+        {t('noAvailableData')}
       </StyledTitleLarge>
     </>
   );
 };
 
 export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
+  if (!activityItemAnswer.answer) {
+    return (
+      <StyledBodyLarge color={variables.palette.outline} data-testid="no-response-data">
+        {t('noResponseData')}
+      </StyledBodyLarge>
+    );
+  }
+
   switch (activityItemAnswer.activityItem.responseType) {
     case ItemResponseType.SingleSelection:
       return <SingleSelectResponseItem {...(activityItemAnswer as SingleSelectItemAnswer)} />;
@@ -95,5 +105,7 @@ export const getResponseItem = (activityItemAnswer: ActivityItemAnswer) => {
           {...(activityItemAnswer as SingleMultiSelectPerRowItemAnswer)}
         />
       );
+    case ItemResponseType.SliderRows:
+      return <SliderRowsResponseItem {...(activityItemAnswer as SliderRowsItemAnswer)} />;
   }
 };

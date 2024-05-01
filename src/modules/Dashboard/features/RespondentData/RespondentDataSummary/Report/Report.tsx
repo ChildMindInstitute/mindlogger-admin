@@ -6,11 +6,18 @@ import download from 'downloadjs';
 import { useWatch, useFormContext } from 'react-hook-form';
 
 import { Spinner, Svg } from 'shared/components';
-import { useAsync } from 'shared/hooks';
-import { StyledTitleLarge, theme, variables } from 'shared/styles';
-import { DatavizActivity, getLatestReportApi, Version } from 'api';
-import { getErrorMessage } from 'shared/utils';
-import { applet } from 'shared/state';
+import { useAsync } from 'shared/hooks/useAsync';
+import {
+  StyledFlexAllCenter,
+  StyledTitleLarge,
+  headerFullHeight,
+  theme,
+  variables,
+} from 'shared/styles';
+import { DatavizActivity, getLatestReportApi, Version } from 'modules/Dashboard/api';
+import { getErrorMessage } from 'shared/utils/errors';
+import { applet } from 'shared/state/Applet';
+import { AutocompleteOption } from 'shared/components/FormComponents';
 
 import {
   ActivityCompletion,
@@ -18,14 +25,14 @@ import {
   Identifier,
   RespondentsDataFormValues,
 } from '../../RespondentData.types';
-import { getFormattedResponses } from '../RespondentDataSummary.utils';
+import { getFormattedResponses } from '../utils/getFormattedResponses';
 import { ReportFilters } from './ReportFilters';
 import { StyledEmptyState, StyledReport } from './Report.styles';
 import { Subscales } from './Subscales';
 import { CurrentActivityCompletionData } from './Report.types';
 import { ActivityCompleted } from './ActivityCompleted';
 import { ResponseOptions } from './ResponseOptions';
-import { getLatestReportUrl } from './Report.utils';
+import { getLatestReportUrl, sortResponseOptions } from './Report.utils';
 import { ReportContext } from './Report.context';
 import {
   LATEST_REPORT_DEFAULT_NAME,
@@ -33,6 +40,7 @@ import {
   LATEST_REPORT_TYPE,
 } from './Report.const';
 import { ReportHeader } from './ReportHeader';
+import { StyledEmptyReview } from '../RespondentDataSummary.styles';
 
 export const Report = () => {
   const { t } = useTranslation('app');
@@ -48,6 +56,7 @@ export const Report = () => {
     selectedActivity,
     identifiers,
     apiVersions,
+    versions,
   ]: [
     ActivityCompletion[],
     Record<string, FormattedResponses[]> | null,
@@ -55,6 +64,7 @@ export const Report = () => {
     DatavizActivity,
     Identifier[],
     Version[],
+    AutocompleteOption[],
   ] = useWatch({
     name: [
       'answers',
@@ -63,6 +73,7 @@ export const Report = () => {
       'selectedActivity',
       'identifiers',
       'apiVersions',
+      'versions',
     ],
   });
 
@@ -127,40 +138,68 @@ export const Report = () => {
           isButtonDisabled={disabledLatestReport}
           error={latestReportError ? getErrorMessage(latestReportError) : null}
         />
-        <Box sx={{ m: theme.spacing(4.8, 6.4) }}>
-          <ReportContext.Provider
-            value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
-          >
-            <ReportFilters
-              identifiers={identifiers}
-              versions={apiVersions}
-              setIsLoading={setIsLoading}
-            />
-            {!isLoading && answers.length > 0 && (
-              <>
-                <ActivityCompleted answers={answers} versions={apiVersions} />
-                {!!subscalesFrequency && (
-                  <Subscales
-                    answers={answers}
-                    versions={apiVersions}
-                    subscalesFrequency={subscalesFrequency}
-                  />
-                )}
-                {responseOptions && !!Object.values(responseOptions).length && (
-                  <ResponseOptions responseOptions={responseOptions} versions={apiVersions} />
-                )}
-              </>
-            )}
-            {!isLoading && !answers.length && (
-              <StyledEmptyState data-testid="report-empty-state">
-                <Svg id="chart" width="80" height="80" />
-                <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
-                  {t('noDataForActivityFilters')}
-                </StyledTitleLarge>
-              </StyledEmptyState>
-            )}
-          </ReportContext.Provider>
-        </Box>
+        {selectedActivity.hasAnswer ? (
+          <Box sx={{ m: theme.spacing(4.8, 6.4) }}>
+            <ReportContext.Provider
+              value={{ currentActivityCompletionData, setCurrentActivityCompletionData }}
+            >
+              <ReportFilters
+                identifiers={identifiers}
+                versions={apiVersions}
+                setIsLoading={setIsLoading}
+              />
+              {!isLoading && answers.length > 0 && (
+                <>
+                  <ActivityCompleted answers={answers} versions={apiVersions} />
+                  {!!subscalesFrequency && (
+                    <Subscales
+                      answers={answers}
+                      versions={apiVersions}
+                      subscalesFrequency={subscalesFrequency}
+                    />
+                  )}
+                  {responseOptions && !!Object.values(responseOptions).length && (
+                    <ResponseOptions
+                      responseOptions={sortResponseOptions(responseOptions)}
+                      versions={apiVersions}
+                    />
+                  )}
+                </>
+              )}
+              {Boolean(!isLoading && !answers.length && versions.length) && (
+                <StyledEmptyState data-testid="report-empty-state">
+                  <Svg id="chart" width="80" height="80" />
+                  <StyledTitleLarge
+                    sx={{ mt: theme.spacing(1.6) }}
+                    color={variables.palette.outline}
+                  >
+                    {t('noDataForActivityFilters')}
+                  </StyledTitleLarge>
+                </StyledEmptyState>
+              )}
+              {Boolean(!isLoading && !answers.length && !versions.length) && (
+                <StyledEmptyState data-testid="report-with-empty-version-filter">
+                  <Svg id="not-found" width="80" height="80" />
+                  <StyledTitleLarge
+                    sx={{ mt: theme.spacing(1.6) }}
+                    color={variables.palette.outline}
+                  >
+                    {t('noDataForActivityWithEmptyVersionFilter')}
+                  </StyledTitleLarge>
+                </StyledEmptyState>
+              )}
+            </ReportContext.Provider>
+          </Box>
+        ) : (
+          <StyledFlexAllCenter sx={{ height: `calc(100% - ${headerFullHeight})` }}>
+            <StyledEmptyReview data-testid="summary-empty-state">
+              <Svg id="chart" width="80" height="80" />
+              <StyledTitleLarge sx={{ mt: theme.spacing(1.6) }} color={variables.palette.outline}>
+                {t('noAvailableData')}
+              </StyledTitleLarge>
+            </StyledEmptyReview>
+          </StyledFlexAllCenter>
+        )}
       </StyledReport>
     </>
   );

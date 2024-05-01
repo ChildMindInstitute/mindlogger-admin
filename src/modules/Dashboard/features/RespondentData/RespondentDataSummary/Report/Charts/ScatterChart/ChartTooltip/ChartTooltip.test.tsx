@@ -1,8 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { fireEvent, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { page } from 'resources';
 import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
@@ -23,6 +24,7 @@ const getProps = (areSubscalesVisible = false) => ({
       y: 0,
       answerId,
       areSubscalesVisible,
+      reviewCount: { mine: 1, others: 2 },
     },
     parsed: {
       x: date,
@@ -57,7 +59,7 @@ describe('ChartTooltip', () => {
     expect(tooltip).not.toBeInTheDocument();
   });
 
-  test('renders component correctly when areSubscalesVisible is true', () => {
+  test('renders component correctly when areSubscalesVisible is true', async () => {
     renderWithProviders(
       <ReportContext.Provider value={{ setCurrentActivityCompletionData }}>
         <ChartTooltip {...getProps(true)} />
@@ -75,10 +77,10 @@ describe('ChartTooltip', () => {
     const reviewButton = screen.getByTestId(`${dataTestid}-tooltip-review-button`);
     expect(reviewButton).toBeInTheDocument();
 
-    fireEvent.click(reviewButton);
+    await userEvent.click(reviewButton);
     expect(mockedReviewAnswerNavigate).toBeCalledWith({
       pathname: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
-      search: `selectedDate=2023-12-20&answerId=${answerId}`,
+      search: `selectedDate=2023-12-20&answerId=${answerId}&isFeedbackVisible=false`,
     });
 
     const showSubscaleResultButton = screen.getByTestId(
@@ -86,7 +88,7 @@ describe('ChartTooltip', () => {
     );
     expect(showSubscaleResultButton).toBeInTheDocument();
 
-    fireEvent.click(showSubscaleResultButton);
+    await userEvent.click(showSubscaleResultButton);
     expect(setCurrentActivityCompletionData).toHaveBeenCalledWith({
       answerId,
       date,
@@ -108,5 +110,29 @@ describe('ChartTooltip', () => {
       `${dataTestid}-tooltip-show-subscale-result-button`,
     );
     expect(showSubscaleResultButton).not.toBeInTheDocument();
+  });
+
+  test('renders component correctly when areSubscalesVisible is true and clicks on review count', async () => {
+    renderWithProviders(
+      <ReportContext.Provider value={{ setCurrentActivityCompletionData }}>
+        <ChartTooltip {...getProps(true)} />
+      </ReportContext.Provider>,
+      {
+        route,
+        routePath,
+      },
+    );
+
+    const tooltip = screen.getByTestId(`${dataTestid}-tooltip`);
+    expect(tooltip).toBeInTheDocument();
+
+    const reviewButton = screen.getByTestId(`${dataTestid}-tooltip-review-count`);
+    expect(reviewButton).toBeInTheDocument();
+
+    await userEvent.click(reviewButton);
+    expect(mockedReviewAnswerNavigate).toBeCalledWith({
+      pathname: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
+      search: `selectedDate=2023-12-20&answerId=${answerId}&isFeedbackVisible=true`,
+    });
   });
 });

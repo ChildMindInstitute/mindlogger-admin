@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
+import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
 
 export const useCheckAndTriggerOnNameUniqueness = <T = unknown>({
   currentPath,

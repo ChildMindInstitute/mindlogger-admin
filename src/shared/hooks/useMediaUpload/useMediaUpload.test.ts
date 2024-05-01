@@ -1,6 +1,8 @@
 import { renderHook, act } from '@testing-library/react';
 import axios from 'axios';
 
+import { waitForTheUpdate } from 'shared/utils/testUtils';
+
 import { useMediaUpload } from './useMediaUpload';
 import { UseMediaUploadReturn } from './useMediaUpload.types';
 
@@ -35,11 +37,6 @@ const useMediaUploadProps = {
   errorCallback: mockErrorCallback,
   finallyCallback: mockFinallyCallback,
 };
-
-const waitForTheUpdate = async () =>
-  await act(async () => {
-    await Promise.resolve();
-  });
 
 const testUploadFlow = async (result: { current: UseMediaUploadReturn }) => {
   act(() => {

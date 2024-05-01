@@ -1,6 +1,6 @@
 import { fireEvent } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { RespondentStatus } from 'modules/Dashboard/types';
 
 import { StatusFlag } from './StatusFlag';

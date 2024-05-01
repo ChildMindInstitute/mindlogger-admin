@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import get from 'lodash.get';
 import { v4 as uuidv4 } from 'uuid';
 
-import { renderWithAppletFormData } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { ItemResponseType } from 'shared/consts';
 import {
   mockedAppletFormData,

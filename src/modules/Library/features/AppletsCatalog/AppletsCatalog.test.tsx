@@ -5,7 +5,8 @@ import userEvent from '@testing-library/user-event';
 
 import * as reduxHooks from 'redux/store/hooks';
 import { library } from 'redux/modules';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { AppletsCatalog } from './AppletsCatalog';
 
@@ -111,56 +112,64 @@ describe('AppletsCatalog', () => {
     jest.spyOn(library.thunk, 'getPublishedApplets').mockReturnValue(() => {});
   });
 
-  test('renders loading spinner when applets are loading', () => {
-    const spyGetPublishedApplets = jest.spyOn(library.thunk, 'getPublishedApplets');
-    jest.spyOn(library, 'usePublishedApplets').mockReturnValue({ count: 0, result: [] });
-    jest.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('loading');
-    jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
+  test(
+    'renders loading spinner when applets are loading',
+    () => {
+      const spyGetPublishedApplets = jest.spyOn(library.thunk, 'getPublishedApplets');
+      jest.spyOn(library, 'usePublishedApplets').mockReturnValue({ count: 0, result: [] });
+      jest.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('loading');
+      jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('loading');
 
-    renderWithProviders(<AppletsCatalog />);
+      renderWithProviders(<AppletsCatalog />);
 
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    expect(spyGetPublishedApplets).toHaveBeenCalledWith({ limit: 6, page: 1, search: '' });
-  });
+      expect(screen.getByTestId('spinner')).toBeInTheDocument();
+      expect(spyGetPublishedApplets).toHaveBeenCalledWith({ limit: 6, page: 1, search: '' });
+    },
+    JEST_TEST_TIMEOUT,
+  );
 
-  test('renders applets and pagination correctly when applets are loaded', async () => {
-    const spyGetPublishedApplets = jest.spyOn(library.thunk, 'getPublishedApplets');
-    jest.spyOn(library, 'usePublishedApplets').mockReturnValue(mockPublishedApplets);
-    jest.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('idle');
-    jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
+  test(
+    'renders applets and pagination correctly when applets are loaded',
+    async () => {
+      const spyGetPublishedApplets = jest.spyOn(library.thunk, 'getPublishedApplets');
+      jest.spyOn(library, 'usePublishedApplets').mockReturnValue(mockPublishedApplets);
+      jest.spyOn(library, 'usePublishedAppletsStatus').mockReturnValue('idle');
+      jest.spyOn(library, 'useCartAppletsStatus').mockReturnValue('idle');
 
-    renderWithProviders(<AppletsCatalog />);
+      renderWithProviders(<AppletsCatalog />);
 
-    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
-    expect(spyGetPublishedApplets).toHaveBeenCalledWith({ limit: 6, page: 1, search: '' });
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      expect(spyGetPublishedApplets).toHaveBeenCalledWith({ limit: 6, page: 1, search: '' });
 
-    expect(screen.queryAllByTestId(/library-applets-\d+$/)).toHaveLength(6);
-    expect(screen.getByTestId('library-applets-pagination')).toBeInTheDocument();
+      expect(screen.queryAllByTestId(/library-applets-\d+$/)).toHaveLength(6);
+      expect(screen.getByTestId('library-applets-pagination')).toBeInTheDocument();
 
-    expect(screen.getByText('1–6 of 16'));
-    const nextPageButton = screen.getByRole('button', { name: 'Go to next page' });
-    await userEvent.click(nextPageButton);
+      expect(screen.getByText('1–6 of 16'));
+      const nextPageButton = screen.getByRole('button', { name: 'Go to next page' });
+      await userEvent.click(nextPageButton);
 
-    expect(spyGetPublishedApplets).toHaveBeenCalledWith({ limit: 6, page: 2, search: '' });
+      expect(spyGetPublishedApplets).toHaveBeenCalledWith({ limit: 6, page: 2, search: '' });
 
-    const searchContainer = screen.getByTestId('library-search');
-    expect(searchContainer).toBeInTheDocument();
-    const searchInput = searchContainer.querySelector('input');
+      const searchContainer = screen.getByTestId('library-search');
+      expect(searchContainer).toBeInTheDocument();
+      const searchInput = searchContainer.querySelector('input');
 
-    await userEvent.type(searchInput, 'share test 1');
-    await waitFor(() => {
-      expect(spyGetPublishedApplets).toHaveBeenCalledWith({
-        limit: 6,
-        page: 1,
-        search: 'share test 1',
+      await userEvent.type(searchInput, 'share test 1');
+      await waitFor(() => {
+        expect(spyGetPublishedApplets).toHaveBeenCalledWith({
+          limit: 6,
+          page: 1,
+          search: 'share test 1',
+        });
       });
-    });
 
-    const cartButton = screen.getByTestId('library-cart-button');
-    expect(cartButton).toBeInTheDocument();
+      const cartButton = screen.getByTestId('library-cart-button');
+      expect(cartButton).toBeInTheDocument();
 
-    await userEvent.click(cartButton);
+      await userEvent.click(cartButton);
 
-    expect(mockUseNavigate).toHaveBeenCalledWith('/library/cart');
-  });
+      expect(mockUseNavigate).toHaveBeenCalledWith('/library/cart');
+    },
+    JEST_TEST_TIMEOUT,
+  );
 });

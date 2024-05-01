@@ -3,7 +3,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedUserData } from 'shared/mock';
 import { auth, alerts } from 'redux/modules';
 import * as reduxHooks from 'redux/store/hooks';

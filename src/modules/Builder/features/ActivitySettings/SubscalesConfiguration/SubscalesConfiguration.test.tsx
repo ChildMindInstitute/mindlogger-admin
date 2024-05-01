@@ -26,7 +26,8 @@ import {
   mockedMultiSelectRowsActivityItem,
   mockedSingleSelectRowsActivityItem,
 } from 'shared/mock';
-import { SettingParam, isSystemItem, renderWithAppletFormData } from 'shared/utils';
+import { SettingParam, isSystemItem } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import { SubscalesConfiguration } from './SubscalesConfiguration';
 

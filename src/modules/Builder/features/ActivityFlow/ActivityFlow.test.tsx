@@ -5,7 +5,7 @@ import { generatePath } from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
-import { renderWithAppletFormData } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { mockedAppletFormData } from 'shared/mock';
 
 import { ActivityFlow } from './ActivityFlow';

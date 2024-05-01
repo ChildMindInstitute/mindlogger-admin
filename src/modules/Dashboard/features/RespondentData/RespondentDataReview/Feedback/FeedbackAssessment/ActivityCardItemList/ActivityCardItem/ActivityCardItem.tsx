@@ -1,4 +1,5 @@
 import { CollapsedMdText } from 'modules/Dashboard/features/RespondentData/CollapsedMdText';
+import { SHOW_MORE_HEIGHT } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 import { getDictionaryText } from 'shared/utils';
 
 import { ItemPicker } from './ItemPicker';
@@ -40,7 +41,7 @@ export const ActivityCardItem = ({
     >
       <CollapsedMdText
         text={getDictionaryText(activityItem.activityItem.question)}
-        maxHeight={120}
+        maxHeight={SHOW_MORE_HEIGHT}
         data-testid={`${dataTestid}-question`}
       />
       <ItemPicker

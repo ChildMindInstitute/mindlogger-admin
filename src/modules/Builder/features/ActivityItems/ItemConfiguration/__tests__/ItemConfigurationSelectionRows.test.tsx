@@ -3,8 +3,9 @@
 import { createRef } from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { CHANGE_DEBOUNCE_VALUE, ItemResponseType } from 'shared/consts';
-import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
+import { CHANGE_DEBOUNCE_VALUE, ItemResponseType, JEST_TEST_TIMEOUT } from 'shared/consts';
+import { asyncTimeout } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import {
   getAppletFormDataWithItem,
@@ -63,8 +64,6 @@ const setAlertRow = (alertIndex, rowIndex) => {
 
 const mockedDataTestid = 'builder-activity-items-item-configuration-selection-rows';
 const mockedAddRowTestid = 'builder-activity-items-item-configuration-selection-rows-add-row';
-
-const JEST_TEST_TIMEOUT = 10000;
 
 describe('Item Configuration: Single Selection Per Row/Multi Selection Per Row', () => {
   test.each`

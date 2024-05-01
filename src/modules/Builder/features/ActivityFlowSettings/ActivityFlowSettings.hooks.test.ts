@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { renderHookWithProviders } from 'shared/utils';
+import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { page } from 'resources';
 
 import { useActivityFlow } from './ActivityFlowSettings.hooks';

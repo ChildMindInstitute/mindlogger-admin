@@ -11,6 +11,7 @@ export const DefaultTabs = ({
   activeTab = 0,
   setActiveTab,
   uiType = UiType.Primary,
+  variant = 'standard',
   animationDurationMs,
 }: TabsProps) => {
   const { t } = useTranslation('app');
@@ -91,6 +92,7 @@ export const DefaultTabs = ({
         onChange={handleChange}
         TabIndicatorProps={{ children: <span /> }}
         isCentered
+        variant={variant}
         action={tabsActions}
       >
         {header}

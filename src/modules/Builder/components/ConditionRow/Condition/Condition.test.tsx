@@ -10,7 +10,8 @@ import {
   mockedSingleSelectFormValues,
   mockedSliderFormValues,
 } from 'shared/mock';
-import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
+import { getEntityKey } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { ConditionRowType } from 'modules/Builder/types';
 import { ConditionType } from 'shared/consts';
 

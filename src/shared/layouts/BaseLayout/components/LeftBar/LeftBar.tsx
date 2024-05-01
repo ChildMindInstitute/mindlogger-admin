@@ -8,8 +8,10 @@ import { StyledLabelMedium, variables } from 'shared/styles';
 import { SwitchWorkspace, WorkspaceImage } from 'shared/features/SwitchWorkspace';
 import { workspaces, auth, Workspace } from 'redux/modules';
 import { authStorage } from 'shared/utils/authStorage';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 import { Mixpanel } from 'shared/utils/mixpanel';
 import { useAppDispatch } from 'redux/store';
+import { LocationStateKeys } from 'shared/types';
 
 import { links } from './LeftBar.const';
 import { StyledDrawer, StyledDrawerItem, StyledDrawerLogo } from './LeftBar.styles';
@@ -55,14 +57,14 @@ export const LeftBar = () => {
   };
 
   const handleChangeWorkspace = (workspace: Workspace) => {
-    navigate(page.dashboard, { state: { workspace } });
+    navigate(page.dashboard, { state: { [LocationStateKeys.Workspace]: workspace } });
   };
 
   return (
     <ClickAwayListener onClickAway={() => setVisibleDrawer(false)}>
       <StyledDrawer>
         <StyledDrawerLogo
-          onClick={() => setVisibleDrawer((prevState) => !prevState)}
+          onClick={toggleBooleanState(setVisibleDrawer)}
           data-testid={`${dataTestid}-collapse`}
         >
           <WorkspaceImage workspaceName={currentWorkspaceData?.workspaceName} />

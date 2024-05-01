@@ -3,7 +3,7 @@
 import { screen } from '@testing-library/react';
 
 import { ItemResponseType } from 'shared/consts';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import {
   handleSearchKeyDown,
@@ -62,17 +62,19 @@ describe('getIsNotHaveSearchValue', () => {
 
 describe('getIsOnlyMobileValue', () => {
   test.each`
-    value                                     | expectedResult
-    ${ItemResponseType.SingleSelectionPerRow} | ${true}
-    ${ItemResponseType.Drawing}               | ${true}
-    ${ItemResponseType.Photo}                 | ${true}
-    ${ItemResponseType.Video}                 | ${true}
-    ${ItemResponseType.Geolocation}           | ${true}
-    ${ItemResponseType.Audio}                 | ${true}
-    ${ItemResponseType.SingleSelection}       | ${false}
-    ${ItemResponseType.MultipleSelection}     | ${false}
-    ${ItemResponseType.Slider}                | ${false}
-    ${ItemResponseType.Date}                  | ${false}
+    value                                       | expectedResult
+    ${ItemResponseType.SingleSelectionPerRow}   | ${false}
+    ${ItemResponseType.MultipleSelectionPerRow} | ${false}
+    ${ItemResponseType.SliderRows}              | ${false}
+    ${ItemResponseType.Drawing}                 | ${true}
+    ${ItemResponseType.Photo}                   | ${true}
+    ${ItemResponseType.Video}                   | ${true}
+    ${ItemResponseType.Geolocation}             | ${true}
+    ${ItemResponseType.Audio}                   | ${true}
+    ${ItemResponseType.SingleSelection}         | ${false}
+    ${ItemResponseType.MultipleSelection}       | ${false}
+    ${ItemResponseType.Slider}                  | ${false}
+    ${ItemResponseType.Date}                    | ${false}
   `('returns $expectedResult for value $value', ({ value, expectedResult }) => {
     const result = getIsOnlyMobileValue(value);
     expect(result).toBe(expectedResult);

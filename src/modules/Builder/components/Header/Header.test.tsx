@@ -1,7 +1,8 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { JEST_TEST_TIMEOUT } from 'shared/consts';
 
 import { Header } from './Header';
 
@@ -13,22 +14,30 @@ const mockButtons = [
 ];
 
 describe('Header', () => {
-  test('renders title and buttons', () => {
-    renderWithProviders(<Header title={mockTitle} buttons={mockButtons} />);
+  test(
+    'renders title and buttons',
+    () => {
+      renderWithProviders(<Header title={mockTitle} buttons={mockButtons} />);
 
-    expect(screen.getByText(mockTitle)).toBeInTheDocument();
+      expect(screen.getByText(mockTitle)).toBeInTheDocument();
 
-    mockButtons.forEach(({ label }) => {
-      expect(screen.getByText(label)).toBeInTheDocument();
-    });
-  });
+      mockButtons.forEach(({ label }) => {
+        expect(screen.getByText(label)).toBeInTheDocument();
+      });
+    },
+    JEST_TEST_TIMEOUT,
+  );
 
-  test('calls handleClick when button is clicked', async () => {
-    renderWithProviders(<Header title={mockTitle} buttons={mockButtons} />);
+  test(
+    'calls handleClick when button is clicked',
+    async () => {
+      renderWithProviders(<Header title={mockTitle} buttons={mockButtons} />);
 
-    for (const { label, handleClick } of mockButtons) {
-      await userEvent.click(screen.getByText(label));
-      expect(handleClick).toHaveBeenCalled();
-    }
-  });
+      for (const { label, handleClick } of mockButtons) {
+        await userEvent.click(screen.getByText(label));
+        expect(handleClick).toHaveBeenCalled();
+      }
+    },
+    JEST_TEST_TIMEOUT,
+  );
 });

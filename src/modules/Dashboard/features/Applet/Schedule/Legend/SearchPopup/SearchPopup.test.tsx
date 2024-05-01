@@ -4,7 +4,7 @@ import mockAxios from 'jest-mock-axios';
 
 import { page } from 'resources';
 import { initialStateData } from 'shared/state';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedCurrentWorkspace } from 'shared/mock';
 
 import { SearchPopup } from './SearchPopup';

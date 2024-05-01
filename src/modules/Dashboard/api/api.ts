@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { authApiClient } from 'shared/api/api.client';
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
-import { EncryptedAnswerSharedProps, ExportDataResult } from 'shared/types';
+import { ExportDataResult } from 'shared/types';
 import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
+import { authApiClient } from 'shared/api/apiConfig';
 
 import {
   TransferOwnershipType,
@@ -33,7 +33,7 @@ import {
   ReportConfig,
   AppletVersionChanges,
   RemoveAccess,
-  ActivityAnswer,
+  ActivityAnswerParams,
   Folder,
   Applet,
   EditManagerAccess,
@@ -60,6 +60,8 @@ import {
   TargetSubjectId,
   SubjectId,
   GetActivitiesParams,
+  DeleteReview,
+  EncryptedActivityAnswer,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -438,15 +440,15 @@ export const getReviewActivitiesApi = (
     signal,
   });
 
-export const getAnswerApi = ({ appletId, answerId }: ActivityAnswer, signal?: AbortSignal) =>
+export const getAnswerApi = ({ appletId, answerId }: ActivityAnswerParams, signal?: AbortSignal) =>
   authApiClient.get(`/answers/applet/${appletId}/answers/${answerId}`, { signal });
 
 export const getActivityAnswerApi = (
-  { appletId, answerId, activityId }: ActivityAnswer,
+  { appletId, answerId, activityId }: ActivityAnswerParams,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<ResponseWithObject<EncryptedAnswerSharedProps>>(
-    `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}`,
+  authApiClient.get<ResponseWithObject<EncryptedActivityAnswer>>(
+    `/answers/applet/${appletId}/activities/${activityId}/answers/${answerId}`,
     {
       params: { limit: MAX_LIMIT },
       signal,
@@ -454,7 +456,7 @@ export const getActivityAnswerApi = (
   );
 
 export const getAnswersNotesApi = (
-  { appletId, answerId, activityId, params }: ActivityAnswer & GetAnswersNotesParams,
+  { appletId, answerId, activityId, params }: ActivityAnswerParams & GetAnswersNotesParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get(
@@ -469,7 +471,7 @@ export const getAnswersNotesApi = (
   );
 
 export const createAnswerNoteApi = (
-  { appletId, answerId, activityId, note }: ActivityAnswer & Note,
+  { appletId, answerId, activityId, note }: ActivityAnswerParams & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
@@ -481,7 +483,7 @@ export const createAnswerNoteApi = (
   );
 
 export const editAnswerNoteApi = (
-  { appletId, answerId, noteId, activityId, note }: ActivityAnswer & NoteId & Note,
+  { appletId, answerId, noteId, activityId, note }: ActivityAnswerParams & NoteId & Note,
   signal?: AbortSignal,
 ) =>
   authApiClient.put(
@@ -493,7 +495,7 @@ export const editAnswerNoteApi = (
   );
 
 export const deleteAnswerNoteApi = (
-  { appletId, answerId, activityId, noteId }: ActivityAnswer & NoteId,
+  { appletId, answerId, activityId, noteId }: ActivityAnswerParams & NoteId,
   signal?: AbortSignal,
 ) =>
   authApiClient.delete(
@@ -527,6 +529,17 @@ export const createAssessmentApi = (
   authApiClient.post(
     `/answers/applet/${appletId}/answers/${answerId}/assessment`,
     { ...assessment },
+    {
+      signal,
+    },
+  );
+
+export const deleteReviewApi = (
+  { appletId, answerId, assessmentId }: DeleteReview,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(
+    `/answers/applet/${appletId}/answers/${answerId}/assessment/${assessmentId}`,
     {
       signal,
     },

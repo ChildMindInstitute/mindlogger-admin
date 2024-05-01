@@ -4,11 +4,9 @@ import {
   ActivityCompletion,
   SingleMultiSelectionSliderFormattedResponses,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
-import {
-  compareActivityItem,
-  formatActivityItemAnswers,
-} from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/RespondentDataSummary.utils';
 
+import { compareActivityItem } from '../../utils/compareActivityItem';
+import { formatActivityItemAnswers } from '../../utils/formatActivityItemAnswers';
 import { ActivityCompletionToRender, GroupedSubscales, SubscaleToRender } from './Subscales.types';
 
 export const getSubscalesToRender = (

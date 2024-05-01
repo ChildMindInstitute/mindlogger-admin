@@ -7,7 +7,8 @@ import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import { mockedAppletId, mockedCurrentWorkspace, mockedApplet } from 'shared/mock';
-import { SettingParam, renderWithProviders } from 'shared/utils';
+import { SettingParam } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { VersionHistorySetting } from './VersionHistorySetting';
 

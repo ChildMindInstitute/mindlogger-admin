@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { DatavizActivity } from 'api';
 import {
   DecryptedMultiSelectionAnswer,
@@ -5,7 +7,11 @@ import {
   DecryptedSliderAnswer,
 } from 'shared/types';
 
+import { FeedbackTabs } from '../RespondentDataReview.types';
+
 export type FeedbackProps = {
+  activeTab: FeedbackTabs;
+  setActiveTab: Dispatch<SetStateAction<FeedbackTabs>>;
   onClose: () => void;
   selectedActivity: DatavizActivity;
 };

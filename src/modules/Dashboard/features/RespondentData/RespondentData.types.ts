@@ -32,6 +32,17 @@ export type PerRowSelectionItemRow = {
   tooltip: string | null;
 };
 
+export type SliderRowsRow = {
+  id: string;
+  label: string;
+  maxImage: string | null;
+  maxLabel: string | null;
+  maxValue: number;
+  minImage: string | null;
+  minLabel: string | null;
+  minValue: number;
+};
+
 export type PerRowSelectionItemOption = {
   id: string;
   image: string | null;
@@ -54,6 +65,10 @@ export type SingleMultiSelectionPerRowItemResponseValues = {
   rows: PerRowSelectionItemRow[];
 };
 
+export type SliderRowsItemResponseValues = {
+  rows: SliderRowsRow[];
+};
+
 export type FormattedActivityItem<T> = {
   id: string;
   name: string;
@@ -61,11 +76,18 @@ export type FormattedActivityItem<T> = {
   responseType: ItemResponseType;
   responseValues: T;
   responseDataIdentifier?: boolean;
+  order: number;
 };
 
 export type Identifier = {
   encryptedValue: string;
   decryptedValue: string;
+  lastAnswerDate: string;
+};
+
+export type ReviewCount = {
+  mine: number;
+  other: number;
 };
 
 export type ActivityCompletion = {
@@ -75,6 +97,7 @@ export type ActivityCompletion = {
   startDatetime: string;
   version: string;
   subscaleSetting?: SubscaleSetting;
+  reviewCount?: ReviewCount;
 };
 
 export type SingleMultiSelectionSliderAnswer = Answer<number>;
@@ -84,28 +107,33 @@ export type TimeAnswer = Answer<number>;
 export type NumberSelectionAnswer = Answer<number>;
 export type TimeRangeAnswer = Answer<TimeRangeAnswerValue>;
 export type SingleMultiSelectionPerRowAnswer = Record<string, Answer<string>[]>;
+export type SliderRowsAnswer = Record<string, Answer<number>[]>;
 
-export type CreateFormattedReposense<I, A> = {
+export type CreateFormattedResponses<I, A> = {
   activityItem: FormattedActivityItem<I>;
   answers: A;
   dataTestid?: string;
 };
 
-export type SingleMultiSelectionSliderFormattedResponses = CreateFormattedReposense<
+export type SingleMultiSelectionSliderFormattedResponses = CreateFormattedResponses<
   SingleMultiSelectionSliderItemResponseValues,
   SingleMultiSelectionSliderAnswer[]
 >;
-export type TextFormattedResponses = CreateFormattedReposense<null, TextAnswer[]>;
-export type NumberSelectionFormattedResponses = CreateFormattedReposense<
+export type TextFormattedResponses = CreateFormattedResponses<null, TextAnswer[]>;
+export type NumberSelectionFormattedResponses = CreateFormattedResponses<
   NumberSelectionItemResponseValues,
   NumberSelectionAnswer[]
 >;
-export type TimeRangeFormattedResponses = CreateFormattedReposense<null, TimeRangeAnswer[]>;
-export type DateFormattedResponses = CreateFormattedReposense<null, DateAnswer[]>;
-export type TimeFormattedResponses = CreateFormattedReposense<null, TimeAnswer[]>;
-export type SingleMultiSelectionPerRowFormattedResponses = CreateFormattedReposense<
+export type TimeRangeFormattedResponses = CreateFormattedResponses<null, TimeRangeAnswer[]>;
+export type DateFormattedResponses = CreateFormattedResponses<null, DateAnswer[]>;
+export type TimeFormattedResponses = CreateFormattedResponses<null, TimeAnswer[]>;
+export type SingleMultiSelectionPerRowFormattedResponses = CreateFormattedResponses<
   SingleMultiSelectionPerRowItemResponseValues,
   SingleMultiSelectionPerRowAnswer
+>;
+export type SliderRowsFormattedResponses = CreateFormattedResponses<
+  SliderRowsItemResponseValues,
+  SliderRowsAnswer
 >;
 
 export type FormattedResponses =
@@ -115,7 +143,8 @@ export type FormattedResponses =
   | TimeRangeFormattedResponses
   | DateFormattedResponses
   | TimeFormattedResponses
-  | SingleMultiSelectionPerRowFormattedResponses;
+  | SingleMultiSelectionPerRowFormattedResponses
+  | SliderRowsFormattedResponses;
 
 export type RespondentsDataFormValues = {
   startDate: Date;
