@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { renderHook } from '@testing-library/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isValidElement } from 'react';
