@@ -180,6 +180,8 @@ describe('EditAccessPopup component', () => {
       ),
     ).toBeInTheDocument();
 
+    mockAxios.get.mockResolvedValue(preloadedState.users.allRespondents);
+
     const editRole = screen.getByTestId(`${dataTestid}-access-edit-role`);
     expect(editRole).toBeInTheDocument();
     expect(editRole).toHaveTextContent('Edit Respondents');

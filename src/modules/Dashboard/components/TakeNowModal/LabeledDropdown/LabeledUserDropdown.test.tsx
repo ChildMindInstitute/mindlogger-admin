@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { LabeledUserDropdown } from 'modules/Dashboard/components/TakeNowModal/LabeledDropdown/LabeledUserDropdown';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 describe('LabeledUserDropdown', () => {
   const dataTestId = 'test';

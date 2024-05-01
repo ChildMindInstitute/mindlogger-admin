@@ -1,6 +1,6 @@
 import { fireEvent } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 
 import { AddParticipantSuccessBanner } from './AddParticipantSuccessBanner';

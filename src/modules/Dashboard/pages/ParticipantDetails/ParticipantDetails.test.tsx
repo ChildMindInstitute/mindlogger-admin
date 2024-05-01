@@ -2,7 +2,7 @@ import mockAxios from 'jest-mock-axios';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedApplet, mockedRespondentId } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { page } from 'resources';

@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import ActivityGrid from 'modules/Dashboard/components/ActivityGrid/ActivityGrid';
 import { TakeNowModalProps } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.types';
 import { Row } from 'shared/components';

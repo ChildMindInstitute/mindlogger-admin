@@ -61,6 +61,7 @@ const preloadedState = {
       ...initialStateData,
       data: {
         result: {
+          id: '1',
           nickname: 'Mocked Respondent',
           secretUserId: mockedRespondentId,
           lastSeen: '2023-12-15T23:29:36.150182',
@@ -276,20 +277,6 @@ const mockDecryptedActivityData = {
       items,
     },
   ],
-};
-
-const RespondentDataReviewWithForm = () => {
-  const methods = useForm({
-    defaultValues: {
-      responseDate: null,
-    },
-  });
-
-  return (
-    <FormProvider {...methods}>
-      <RespondentDataReview />
-    </FormProvider>
-  );
 };
 
 const RespondentDataReviewWithForm = () => {

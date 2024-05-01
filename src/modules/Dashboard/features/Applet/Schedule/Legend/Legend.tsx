@@ -150,7 +150,7 @@ export const Legend = ({
   }, [userId]);
 
   return schedule ? (
-    <StyledLegend {...otherProps}>
+    <StyledLegend {...otherProps} data-testid={dataTestid}>
       <StyledSelectRow>
         <StyledSelect>
           <SelectController
