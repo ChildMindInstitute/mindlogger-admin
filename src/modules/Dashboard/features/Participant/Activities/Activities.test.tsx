@@ -23,7 +23,7 @@ import {
   mockSuccessfulHttpResponse,
 } from 'shared/utils/axios-mocks';
 import { RootState } from 'redux/store';
-import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 
 import { Activities } from './Activities';
@@ -88,16 +88,16 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUseNavigate,
 }));
 
-jest.mock('shared/hooks/useLaunchDarkly', () => ({
-  useLaunchDarkly: jest.fn(),
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
 }));
 
-const mockUseLaunchDarkly = useLaunchDarkly as jest.Mock;
+const mockUseFeatureFlags = useFeatureFlags as jest.Mock;
 
 describe('Dashboard > Applet > Participant > Activities screen', () => {
   beforeEach(() => {
-    mockUseLaunchDarkly.mockReturnValue({
-      flags: {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: {
         enableMultiInformant: true,
         enableMultiInformantTakeNow: true,
       },
@@ -243,8 +243,8 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
         });
 
-        mockUseLaunchDarkly.mockReturnValue({
-          flags: {
+        mockUseFeatureFlags.mockReturnValue({
+          featureFlags: {
             enableMultiInformant: true,
             enableMultiInformantTakeNow: false,
           },

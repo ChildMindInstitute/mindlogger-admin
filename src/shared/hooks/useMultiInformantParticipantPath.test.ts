@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 
-import * as launchDarklyHook from 'shared/hooks/useLaunchDarkly';
+import * as featureFlagsHook from 'shared/hooks/useFeatureFlags';
 import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
 
 const appletId = `applet-test-id`;
@@ -13,9 +13,9 @@ describe('useMultiInformantParticipantPath', () => {
   describe('when `enableMultiInformant` is set', () => {
     beforeEach(() => {
       jest
-        .spyOn(launchDarklyHook, 'useLaunchDarkly')
-        .mockReturnValue({ flags: { enableMultiInformant: true } } as unknown as ReturnType<
-          typeof launchDarklyHook.useLaunchDarkly
+        .spyOn(featureFlagsHook, 'useFeatureFlags')
+        .mockReturnValue({ featureFlags: { enableMultiInformant: true } } as unknown as ReturnType<
+          typeof featureFlagsHook.useFeatureFlags
         >);
     });
 
@@ -29,9 +29,9 @@ describe('useMultiInformantParticipantPath', () => {
   describe('when `enableMultiInformant` is not set', () => {
     beforeEach(() => {
       jest
-        .spyOn(launchDarklyHook, 'useLaunchDarkly')
-        .mockReturnValue({ flags: { enableMultiInformant: false } } as unknown as ReturnType<
-          typeof launchDarklyHook.useLaunchDarkly
+        .spyOn(featureFlagsHook, 'useFeatureFlags')
+        .mockReturnValue({ featureFlags: { enableMultiInformant: false } } as unknown as ReturnType<
+          typeof featureFlagsHook.useFeatureFlags
         >);
     });
 

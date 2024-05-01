@@ -1,11 +1,11 @@
 import { LDClient } from 'launchdarkly-react-client-sdk';
 
-import { PROHIBITED_PII_KEYS } from 'shared/hooks/useLaunchDarkly.const';
+import { PROHIBITED_PII_KEYS } from 'shared/hooks/useFeatureFlags.const';
 
 let _ldClient: LDClient;
 let _userId: string;
 
-export const LaunchDarkly = {
+export const FeatureFlags = {
   async init(client: LDClient) {
     _ldClient = client;
   },

@@ -1,12 +1,12 @@
 import { generatePath } from 'react-router-dom';
 
 import { page } from 'resources';
-import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 export function useMultiInformantParticipantPath(pathOptions: { appletId?: string | null }) {
   const {
-    flags: { enableMultiInformant },
-  } = useLaunchDarkly();
+    featureFlags: { enableMultiInformant },
+  } = useFeatureFlags();
 
   return generatePath(
     enableMultiInformant ? page.appletParticipants : page.appletRespondents,

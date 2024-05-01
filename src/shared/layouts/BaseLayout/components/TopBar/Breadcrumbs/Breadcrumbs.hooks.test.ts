@@ -2,8 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { page } from 'resources';
-import { useLaunchDarkly } from 'shared/hooks/useLaunchDarkly';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { useBreadcrumbs } from './Breadcrumbs.hooks';
 
@@ -130,15 +130,15 @@ jest.mock('react-hook-form', () => ({
   useFormContext: jest.fn(),
 }));
 
-jest.mock('shared/hooks/useLaunchDarkly', () => ({
-  ...jest.requireActual('shared/hooks/useLaunchDarkly'),
-  useLaunchDarkly: jest.fn(),
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  ...jest.requireActual('shared/hooks/useFeatureFlags'),
+  useFeatureFlags: jest.fn(),
 }));
 
 describe('useBreadcrumbs', () => {
   beforeEach(() => {
-    jest.mocked(useLaunchDarkly).mockReturnValue({
-      flags: {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
         enableMultiInformant: false,
       },
     });
@@ -545,8 +545,8 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for participant details using multi-informant', () => {
-    jest.mocked(useLaunchDarkly).mockReturnValue({
-      flags: {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
         enableMultiInformant: true,
       },
     });
@@ -605,8 +605,8 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for participant details schedule using multi-informant', () => {
-    jest.mocked(useLaunchDarkly).mockReturnValue({
-      flags: {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
         enableMultiInformant: true,
       },
     });
@@ -665,8 +665,8 @@ describe('useBreadcrumbs', () => {
   });
 
   test('should generate correct breadcrumbs for participant activity details using multi-informant', () => {
-    jest.mocked(useLaunchDarkly).mockReturnValue({
-      flags: {
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
         enableMultiInformant: true,
       },
     });
