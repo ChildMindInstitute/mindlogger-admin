@@ -18,7 +18,7 @@ export const AddManagerPopupSchema = (isWorkspaceNameVisible: boolean) => {
       lastName: yup.string().required(t('lastNameRequired')),
       title: yup.string(),
       language: yup.string().required().oneOf(Object.values(Languages)),
-      subjectIds: yup.array().of(yup.string()),
+      subjectIds: yup.array().of(yup.string().required()),
       workspaceName: isWorkspaceNameVisible
         ? yup.string().required(t('workspaceNameRequired'))
         : yup.string(),

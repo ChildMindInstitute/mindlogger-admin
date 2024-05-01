@@ -102,7 +102,7 @@ export const AddManagerPopup = ({
   const handleSubmitForm = (values: AddManagerFormValues) => {
     if (!appletId) return;
 
-    const { role, participants, workspaceName: workspacePrefix, ...rest } = values;
+    const { role, participants = [], workspaceName: workspacePrefix, ...rest } = values;
 
     Mixpanel.track('Invitation submitted click');
 
@@ -112,7 +112,7 @@ export const AddManagerPopup = ({
       options: {
         role,
         workspacePrefix,
-        ...(participants && { subjects: participants.map(({ id }) => id) }),
+        subjects: participants.map(({ id }) => id),
         ...rest,
       },
     });
