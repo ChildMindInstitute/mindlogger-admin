@@ -61,7 +61,7 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestid }: ChartTooltipPr
                 onClick={() => navigateToReviewAnswer(false)}
                 data-testid={`${dataTestid}-tooltip-review-button`}
               >
-                {t('review')}
+                {t('viewResponses')}
               </StyledListItemButton>
               {!!(mine || other) && (
                 <StyledListItemButton

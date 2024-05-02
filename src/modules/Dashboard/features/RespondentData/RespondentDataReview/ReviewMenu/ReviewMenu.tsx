@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
-import { DatePicker, DatePickerUiType } from 'shared/components';
+import { DatePicker, DatePickerUiType, Spinner, SpinnerUiType } from 'shared/components';
 import { useRespondentLabel } from 'shared/hooks';
 import { StyledHeadlineLarge, StyledLabelLarge, theme } from 'shared/styles';
 
@@ -14,13 +15,17 @@ export const ReviewMenu = ({
   responseDates,
   onMonthChange,
   activities,
-  selectedActivity,
+  flows,
+  selectedActivityId,
+  selectedFlowId,
   selectedAnswer,
-  setSelectedActivity,
   onDateChange,
   onSelectAnswer,
   isDatePickerLoading,
   lastActivityCompleted,
+  isActivitiesFlowsLoading,
+  onSelectActivity,
+  onSelectFlow,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
   const respondentLabel = useRespondentLabel();
@@ -49,20 +54,45 @@ export const ReviewMenu = ({
           data-testid={`${dataTestid}-review-date`}
         />
       </StyledHeader>
-      <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
-        {t('selectActivityAndResponse')}
-      </StyledLabelLarge>
-      {activities.map((activity, index) => (
-        <ReviewMenuItem
-          key={activity.id}
-          isSelected={selectedActivity?.id === activity.id}
-          activity={activity}
-          setSelectedActivity={setSelectedActivity}
-          selectedAnswer={selectedAnswer}
-          onSelectAnswer={onSelectAnswer}
-          data-testid={`${dataTestid}-activity-${index}`}
-        />
-      ))}
+      <Box sx={{ position: 'relative', minHeight: '10rem' }}>
+        {isActivitiesFlowsLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
+        {!!flows?.length && (
+          <>
+            <StyledHeadlineLarge sx={{ margin: theme.spacing(1.6) }}>
+              {t('activityFlows')}
+            </StyledHeadlineLarge>
+            {flows.map((flow, index) => (
+              <ReviewMenuItem
+                key={flow.id}
+                isSelected={selectedFlowId === flow.id}
+                item={flow}
+                onSelectItem={onSelectFlow}
+                selectedAnswer={selectedAnswer}
+                onSelectAnswer={onSelectAnswer}
+                data-testid={`${dataTestid}-flow-${index}`}
+              />
+            ))}
+          </>
+        )}
+        {!!activities?.length && (
+          <>
+            <StyledHeadlineLarge sx={{ margin: theme.spacing(1.6) }}>
+              {t('activities')}
+            </StyledHeadlineLarge>
+            {activities.map((activity, index) => (
+              <ReviewMenuItem
+                key={activity.id}
+                isSelected={selectedActivityId === activity.id}
+                item={activity}
+                onSelectItem={onSelectActivity}
+                selectedAnswer={selectedAnswer}
+                onSelectAnswer={onSelectAnswer}
+                data-testid={`${dataTestid}-activity-${index}`}
+              />
+            ))}
+          </>
+        )}
+      </Box>
     </StyledMenu>
   );
 };
