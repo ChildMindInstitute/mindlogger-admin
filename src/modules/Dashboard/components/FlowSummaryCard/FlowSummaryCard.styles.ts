@@ -1,10 +1,10 @@
-import { Box, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
-import { theme, variables } from 'shared/styles';
+import { StyledFlexSpaceBetween, theme, variables } from 'shared/styles';
 
-export const StyledRoot = styled(Box)({
-  border: `1px solid ${variables.palette.surface_variant}`,
-  borderRadius: '1.6rem',
+export const StyledRoot = styled(StyledFlexSpaceBetween)({
+  border: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+  borderRadius: variables.borderRadius.lg2,
   display: 'flex',
   gap: theme.spacing(2.4),
   overflow: 'hidden',

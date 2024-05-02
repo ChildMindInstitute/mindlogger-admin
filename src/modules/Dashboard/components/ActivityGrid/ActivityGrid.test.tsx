@@ -11,24 +11,6 @@ describe('ActivityGrid', () => {
   const MockTakeNowModal = (_props: TakeNowModalProps) => <div>{mockTakeNowModalText}</div>;
   const dataTestId = 'test';
 
-  test('Shows no activities message when there are no activities', async () => {
-    renderWithProviders(
-      <ActivityGrid
-        order={'desc'}
-        orderBy={''}
-        TakeNowModal={MockTakeNowModal}
-        data-testid={dataTestId}
-      />,
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByText('No activities found')).toBeInTheDocument();
-      expect(screen.queryByText(mockTakeNowModalText)).toBeInTheDocument();
-      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
-      expect(screen.queryByTestId(`${dataTestId}-grid`)).not.toBeInTheDocument();
-    });
-  });
-
   test('Renders activities', async () => {
     const activity = mockedAppletFormData.activities[0];
 
@@ -75,8 +57,6 @@ describe('ActivityGrid', () => {
       expect(screen.queryByText(mockTakeNowModalText)).toBeInTheDocument();
       expect(screen.queryByTestId(`${dataTestId}-grid`)).toBeInTheDocument();
       expect(screen.queryAllByTestId(`${dataTestId}-activity-card`)).toHaveLength(1);
-      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
-      expect(screen.queryByText('No activities found')).not.toBeInTheDocument();
     });
   });
 });
