@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-import { variables, StyledFlexAllCenter } from 'shared/styles';
+import { variables, StyledFlexAllCenter, headerFullHeight } from 'shared/styles';
 
 export const StyledEmptyReview = styled(StyledFlexAllCenter)`
   flex-direction: column;
@@ -14,5 +14,5 @@ export const StyledEmptyReview = styled(StyledFlexAllCenter)`
 `;
 
 export const StyledWrapper = styled(StyledFlexAllCenter)`
-  height: calc(100% - 9.6rem);
+  height: ${`calc(100% - ${headerFullHeight})`};
 `;

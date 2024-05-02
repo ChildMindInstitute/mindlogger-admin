@@ -1,6 +1,6 @@
+import { EmptyState } from './EmptyState';
 import { StyledEmptyReview, StyledWrapper } from './EmptyResponses.styles';
 import { EmptyResponsesProps } from './EmptyResponses.types';
-import { renderEmptyState } from './EmptyResponses.utils';
 
 export const EmptyResponses = ({
   hasAnswers,
@@ -16,7 +16,11 @@ export const EmptyResponses = ({
   return (
     <StyledWrapper data-testid={dataTestid}>
       <StyledEmptyReview>
-        {renderEmptyState({ isAnswerSelected, isActivityOrFlowSelected, error })}
+        <EmptyState
+          isAnswerSelected={isAnswerSelected}
+          isActivityOrFlowSelected={isActivityOrFlowSelected}
+          error={error}
+        />
       </StyledEmptyReview>
     </StyledWrapper>
   );

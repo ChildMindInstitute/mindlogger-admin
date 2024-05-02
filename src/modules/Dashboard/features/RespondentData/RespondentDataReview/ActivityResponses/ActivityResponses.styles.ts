@@ -4,12 +4,12 @@ import { theme, variables } from 'shared/styles';
 
 export const Disabled = `
     color: ${variables.palette.on_surface};
-    opacity: 0.64;
+    opacity: ${variables.opacity.halfDisabled};
 `;
 
 export const SelectedDisabled = `
     color: ${variables.palette.on_surface_variant};
-    opacity: 1;
+    opacity: ${variables.opacity.noOpacity};
 `;
 
 export const StyledReview = styled(Box)`

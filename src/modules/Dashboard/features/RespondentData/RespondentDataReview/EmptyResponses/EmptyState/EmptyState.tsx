@@ -1,16 +1,17 @@
+import { useTranslation } from 'react-i18next';
+
 import { Svg } from 'shared/components/Svg';
 import { StyledErrorText, StyledTitleLarge, theme, variables } from 'shared/styles';
-import i18n from 'i18n';
 
-import { EmptyResponsesProps } from './EmptyResponses.types';
+import { EmptyResponsesProps } from '../EmptyResponses.types';
 
-const { t } = i18n;
-
-export const renderEmptyState = ({
+export const EmptyState = ({
   isActivityOrFlowSelected,
   isAnswerSelected,
   error,
 }: Omit<EmptyResponsesProps, 'hasAnswers' | 'data-testid'>) => {
+  const { t } = useTranslation('app');
+
   if (!isActivityOrFlowSelected || !isAnswerSelected) {
     return (
       <>
@@ -21,6 +22,7 @@ export const renderEmptyState = ({
       </>
     );
   }
+
   if (error) {
     return <StyledErrorText>{error}</StyledErrorText>;
   }
