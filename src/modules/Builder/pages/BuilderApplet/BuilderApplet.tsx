@@ -9,7 +9,7 @@ import { SaveAndPublish } from 'modules/Builder/features/SaveAndPublish';
 import { LinkedTabs, Spinner } from 'shared/components';
 import { useCheckIfNewApplet, useRemoveAppletData, usePermissions } from 'shared/hooks';
 import { StyledBody } from 'shared/styles/styledComponents';
-import { applet } from 'shared/state';
+import { applet, forbiddenState } from 'shared/state';
 import { workspaces } from 'redux/modules';
 import { AppletFormValues } from 'modules/Builder/types';
 import { themes } from 'modules/Builder/state';
@@ -31,6 +31,7 @@ export const BuilderApplet = () => {
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
+  const navigatedFromBuilder = forbiddenState.useData()?.navigatedFromBuilder ?? {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getAppletWithItems } = applet.thunk;
   const { result: themesList = [] } = themes.useThemesData() || {};
@@ -54,7 +55,7 @@ export const BuilderApplet = () => {
   const defaultThemeId = getDefaultThemeId(themesList);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    appletId && ownerId && !isNewApplet
+    appletId && ownerId && !isNewApplet && !navigatedFromBuilder
       ? dispatch(getAppletWithItems({ ownerId, appletId }))
       : undefined,
   );

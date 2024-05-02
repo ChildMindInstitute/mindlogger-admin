@@ -7,4 +7,10 @@ export const reducers = {
   clearForbiddenError: (state: ForbiddenStateSchema): void => {
     state.data.hasForbiddenError = false;
   },
+  setNavigatedFromBuilder: (state: ForbiddenStateSchema): void => {
+    state.data.navigatedFromBuilder = true;
+  },
+  resetNavigatedFromBuilder: (state: ForbiddenStateSchema): void => {
+    state.data.navigatedFromBuilder = false;
+  },
 };
