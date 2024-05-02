@@ -1,14 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { renderHook } from '@testing-library/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isValidElement } from 'react';
 
 import { mockedAppletFormData } from 'shared/mock';
+import { Activity } from 'redux/modules';
 
 import { useActivityGrid } from './ActivityGrid.hooks';
 
-const { activities: mockedActivities } = mockedAppletFormData;
+const { activities: appletActivities } = mockedAppletFormData;
+const mockedActivities = appletActivities as Activity[];
 const mockedActivitiesData = {
   result: mockedActivities,
   count: mockedActivities.length,
@@ -104,7 +104,7 @@ describe('useActivityGrid', () => {
     } = renderHook(() => useActivityGrid('test', mockedActivitiesData));
 
     const activity = mockedActivities[0];
-    expect(getActivityById(activity.id)).toEqual(activity);
+    expect(getActivityById(String(activity.id))).toEqual(activity);
     expect(getActivityById('invalid-id')).toBeNull();
   });
 
@@ -121,7 +121,9 @@ describe('useActivityGrid', () => {
     } = renderHook(() => useActivityGrid('test', mockedActivitiesData));
 
     const activity = mockedActivities[0];
-    editActivity({ context: { appletId: mockedAppletFormData.id, activityId: activity.id } });
+    editActivity({
+      context: { appletId: mockedAppletFormData.id, activityId: String(activity.id) },
+    });
 
     expect(mockedNavigate).toHaveBeenCalledWith(
       `/builder/${mockedAppletFormData.id}/activities/${activity.id}`,
