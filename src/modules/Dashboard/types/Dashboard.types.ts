@@ -14,6 +14,7 @@ export type Manager = {
   id: string;
   firstName: string;
   lastName: string;
+  title: string | null;
   email: string;
   roles: Roles[];
   lastSeen: string;
@@ -62,3 +63,8 @@ export enum AccountType {
   Full = 'full',
   Limited = 'limited',
 }
+
+export type WorkspaceInfo = {
+  hasManagers: boolean;
+  name: string;
+};

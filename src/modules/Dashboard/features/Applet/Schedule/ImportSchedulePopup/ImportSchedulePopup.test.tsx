@@ -60,7 +60,7 @@ describe('ImportSchedulePopup', () => {
     expect(secondaryBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
     const submitBtn = screen.getByTestId('modalDataTestId-submit-button');
     expect(submitBtn.textContent).toBe('Continue');
-    expect(submitBtn.classList.contains('MuiButton-textError')).toBeTruthy();
+    expect(submitBtn.classList.contains('MuiButton-containedError')).toBeTruthy();
   });
 
   test('should render default schedule step=1', async () => {
@@ -76,7 +76,7 @@ describe('ImportSchedulePopup', () => {
     expect(downloadBtn.textContent).toBe('Download Template');
     expect(downloadBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
     expect(submitBtn.textContent).toBe('Import');
-    expect(submitBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
+    expect(submitBtn.classList.contains('MuiButton-containedPrimary')).toBeTruthy();
   });
 
   test('should render default schedule step=2', async () => {
@@ -97,7 +97,7 @@ describe('ImportSchedulePopup', () => {
     expect(secondaryBtn.textContent).toBe('Cancel');
     expect(secondaryBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
     expect(submitBtn.textContent).toBe('Update Schedule');
-    expect(submitBtn.classList.contains('MuiButton-textError')).toBeTruthy();
+    expect(submitBtn.classList.contains('MuiButton-containedError')).toBeTruthy();
   });
 
   test('should render individual schedule step=0', () => {
@@ -121,7 +121,7 @@ describe('ImportSchedulePopup', () => {
     expect(secondaryBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
     const submitBtn = screen.getByTestId('modalDataTestId-submit-button');
     expect(submitBtn.textContent).toBe('Continue');
-    expect(submitBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
+    expect(submitBtn.classList.contains('MuiButton-containedPrimary')).toBeTruthy();
   });
 
   test('should render individual schedule step=1', async () => {
@@ -144,7 +144,7 @@ describe('ImportSchedulePopup', () => {
     expect(downloadBtn.textContent).toBe('Download Template');
     expect(downloadBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
     expect(submitBtn.textContent).toBe('Import');
-    expect(submitBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
+    expect(submitBtn.classList.contains('MuiButton-containedPrimary')).toBeTruthy();
   });
 
   test('should render individual schedule step=2', async () => {
@@ -172,6 +172,6 @@ describe('ImportSchedulePopup', () => {
     expect(secondaryBtn.textContent).toBe('Cancel');
     expect(secondaryBtn.classList.contains('MuiButton-textPrimary')).toBeTruthy();
     expect(submitBtn.textContent).toBe('Update Schedule');
-    expect(submitBtn.classList.contains('MuiButton-textError')).toBeTruthy();
+    expect(submitBtn.classList.contains('MuiButton-containedError')).toBeTruthy();
   });
 });

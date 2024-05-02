@@ -28,4 +28,3 @@ export const toggleButtons = [
 ];
 
 export const RESPONDENT_ALREADY_INVITED = 'Respondent already invited.';
-export const EMAIL_IN_USE = 'That email is already in use for a limited account.';

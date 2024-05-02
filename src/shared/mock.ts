@@ -400,6 +400,7 @@ export const mockedManager = {
   id: mockedManagerId,
   firstName: 'TestFirstName',
   lastName: 'TestLastName',
+  title: 'PhD',
   email: mockedEmail,
   roles: [Roles.Reviewer],
   lastSeen: '2023-08-15T13:39:24.058402',

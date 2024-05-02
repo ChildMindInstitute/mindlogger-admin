@@ -10,6 +10,7 @@ export type FormAutocompleteProps = {
   options: AutocompleteOption[] | undefined;
   labelAllSelect?: string;
   noOptionsText?: string;
+  limitTagRows?: number;
   limitTags?: number;
   defaultSelectedAll?: boolean;
   onCustomChange?: (options: AutocompleteOption[]) => void;

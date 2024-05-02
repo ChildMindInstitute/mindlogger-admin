@@ -1,21 +1,15 @@
 import { useState, MouseEvent, SyntheticEvent } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
-import {
-  TextField,
-  Autocomplete,
-  Checkbox,
-  FormControlLabel,
-  Divider,
-  Paper,
-  ListItem,
-} from '@mui/material';
+import { Checkbox, FormControlLabel, Divider, Paper, ListItem, Autocomplete } from '@mui/material';
 
 import { theme } from 'shared/styles';
+import { Chip, ChipShape } from 'shared/components/Chip';
 
 import {
   AutocompleteOption,
   TagsAutocompleteControllerProps,
 } from './TagsAutocompleteController.types';
+import { StyledTagsContainer, StyledTextField } from './TagsAutocompleteController.styles';
 
 export const TagsAutocompleteController = <T extends FieldValues>({
   name,
@@ -24,6 +18,7 @@ export const TagsAutocompleteController = <T extends FieldValues>({
   labelAllSelect,
   noOptionsText,
   disabled,
+  limitTagRows,
   limitTags,
   defaultSelectedAll = false,
   onCustomChange,
@@ -78,13 +73,37 @@ export const TagsAutocompleteController = <T extends FieldValues>({
             onChange={handleChange}
             disabled={disabled}
             // eslint-disable-next-line unused-imports/no-unused-vars
-            renderInput={({ InputLabelProps, ...params }) => <TextField {...params} {...props} />}
+            renderInput={({ InputLabelProps, ...params }) => (
+              <StyledTextField limitRows={value?.length && limitTagRows} {...params} {...props} />
+            )}
             renderOption={(props, option, { selected }) => (
               <ListItem {...props}>
                 <Checkbox checked={selected} />
                 {option.label}
               </ListItem>
             )}
+            renderTags={(value, getTagProps) => {
+              const tags = value.map((option, index) => {
+                const { onDelete, ...rest } = getTagProps({ index });
+
+                return (
+                  <Chip
+                    title={option.label}
+                    canRemove
+                    onRemove={() => onDelete(null)}
+                    shape={ChipShape.Rectangular}
+                    sx={{ py: 0.5, height: 'auto' }}
+                    {...rest}
+                  />
+                );
+              });
+
+              return limitTagRows ? (
+                <StyledTagsContainer limitRows={limitTagRows}>{tags}</StyledTagsContainer>
+              ) : (
+                tags
+              );
+            }}
             PaperComponent={(paperProps) => {
               const { children, ...restPaperProps } = paperProps;
 

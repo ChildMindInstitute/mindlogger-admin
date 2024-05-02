@@ -26,6 +26,8 @@ export const UpgradeAccountForm = ({
             {...commonProps}
             name={Fields.email}
             label={t('emailAddress')}
+            placeholder={t('emailAddressPlaceholder')}
+            InputLabelProps={{ shrink: true }}
             data-testid={`${dataTestid}-email`}
           />
         </Grid>
