@@ -25,7 +25,7 @@ export const CreateEventPopup = ({
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleCreateEventClose = () => setCreateEventPopupVisible(false);
-  const userId = searchParams.get('user');
+  const userId = searchParams.get('user') ?? undefined;
 
   const isIndividualCalendar = !!userId;
   const analyticsPrefix = isIndividualCalendar
@@ -98,6 +98,7 @@ export const CreateEventPopup = ({
               defaultStartDate={defaultStartDate}
               onFormIsLoading={handleFormIsLoading}
               data-testid={`${dataTestid}-form`}
+              userId={userId}
             />
           </>
         </Modal>

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 import { Modal, Spinner, SpinnerUiType, SubmitBtnColor } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
@@ -21,9 +20,9 @@ export const ClearScheduledEventsPopup = ({
   appletId,
   isDefault = true,
   'data-testid': dataTestid,
+  userId,
 }: ClearScheduledEventsPopupProps) => {
   const { t } = useTranslation();
-  const { respondentId } = useParams();
   const dispatch = useAppDispatch();
   const [step, setStep] = useState<Steps>(0);
   const {
@@ -36,7 +35,7 @@ export const ClearScheduledEventsPopup = ({
     error: deleteIndividualScheduledError,
     isLoading: deleteIndividualScheduledLoading,
   } = useAsync(deleteIndividualEventsApi, () =>
-    dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+    dispatch(applets.thunk.getEvents({ appletId, respondentId: userId })),
   );
 
   const isLoading = deleteScheduledLoading || deleteIndividualScheduledLoading;
@@ -53,7 +52,7 @@ export const ClearScheduledEventsPopup = ({
       return await deleteScheduledEvents({ appletId });
     }
 
-    return respondentId && (await deleteIndividualScheduledEvents({ appletId, respondentId }));
+    return userId && (await deleteIndividualScheduledEvents({ appletId, respondentId: userId }));
   };
 
   const onSubmit = async () => {

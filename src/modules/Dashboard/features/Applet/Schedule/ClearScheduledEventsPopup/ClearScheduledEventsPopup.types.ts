@@ -6,6 +6,7 @@ export type ClearScheduledEventsPopupProps = {
   name?: string;
   isDefault?: boolean;
   'data-testid'?: string;
+  userId?: string;
 };
 
 export type Steps = 0 | 1;

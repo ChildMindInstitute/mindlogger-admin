@@ -256,6 +256,7 @@ export const Legend = ({
           open={clearScheduledEventsPopupVisible}
           appletName={appletName}
           appletId={appletId}
+          userId={userId}
           isDefault={!isIndividual}
           name={respondentName}
           onClose={() => setClearScheduledEventsPopupVisible(false)}
@@ -270,6 +271,7 @@ export const Legend = ({
           onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
           setSchedule={setSchedule}
           onSelectUser={onSelectUser}
+          respondentId={userId}
           data-testid={`${dataTestid}-remove-individual-schedule-popup`}
         />
       )}

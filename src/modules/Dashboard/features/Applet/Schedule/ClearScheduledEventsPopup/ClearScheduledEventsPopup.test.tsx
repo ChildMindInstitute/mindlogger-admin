@@ -49,10 +49,13 @@ describe('ClearScheduledEventsPopup', () => {
     const route = `/dashboard/${mockedAppletId}/schedule/${mockedRespondentId}`;
     const routePath = page.appletScheduleIndividual;
     mockAxios.delete.mockResolvedValueOnce(null);
-    renderWithProviders(<ClearScheduledEventsPopup {...basicProps} isDefault={false} />, {
-      route,
-      routePath,
-    });
+    renderWithProviders(
+      <ClearScheduledEventsPopup {...basicProps} isDefault={false} userId={mockedRespondentId} />,
+      {
+        route,
+        routePath,
+      },
+    );
 
     const popupText = screen.getByTestId(`${dataTestid}-text`);
     expect(popupText).toHaveTextContent(

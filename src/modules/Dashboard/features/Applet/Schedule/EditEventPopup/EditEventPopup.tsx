@@ -1,6 +1,6 @@
 import { RefObject, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { Modal, Spinner, SpinnerUiType, Svg } from 'shared/components';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -32,18 +32,20 @@ export const EditEventPopup = ({
   const [isFormChanged, setIsFormChanged] = useState(false);
   const [isClosable, setIsClosable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { appletId, respondentId } = useParams();
+  const [searchParams] = useSearchParams();
+  const { appletId } = useParams();
+  const userId = searchParams.get('user') ?? undefined;
   const dispatch = useAppDispatch();
   const dataTestid = 'dashboard-calendar-edit-event';
 
-  const isIndividualCalendar = !!respondentId;
+  const isIndividualCalendar = !!userId;
   const analyticsPrefix = isIndividualCalendar
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const { execute: removeEvent, isLoading: removeEventIsLoading } = useAsync(
     deleteEventApi,
-    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId: userId })),
   );
 
   const handleFormChanged = (isChanged: boolean) => {
@@ -154,6 +156,7 @@ export const EditEventPopup = ({
               onFormIsLoading={handleFormIsLoading}
               onFormChange={handleFormChanged}
               data-testid={`${dataTestid}-popup-form`}
+              userId={userId}
             />
           </>
         </Modal>
