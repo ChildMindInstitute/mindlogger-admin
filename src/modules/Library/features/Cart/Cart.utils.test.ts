@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { ItemResponseType, PerfTaskType } from 'shared/consts';
+import { LocationStateKeys } from 'shared/types';
 
 import {
   getSearchIncludes,
@@ -288,7 +289,7 @@ describe('getSelectedAppletData', () => {
     navigateToBuilder(navigateMock, appletId, data);
 
     expect(navigateMock).toHaveBeenCalledWith(`/builder/${appletId}/about`, {
-      state: { isFromLibrary: true, data },
+      state: { [LocationStateKeys.IsFromLibrary]: true, [LocationStateKeys.Data]: data },
     });
   });
 });

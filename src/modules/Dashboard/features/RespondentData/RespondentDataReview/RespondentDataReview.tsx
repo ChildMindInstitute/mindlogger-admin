@@ -20,17 +20,17 @@ import {
   AppletSubmitDateList,
   ResponseWithObject,
   SubmitDates,
-  EncryptedActivityAnswer,
 } from 'api';
 import { DateFormats } from 'shared/consts';
 import { Spinner } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { StyledContainer } from 'shared/styles';
-import { DecryptedActivityData, EncryptedAnswerSharedProps } from 'shared/types';
+import { EncryptedAnswerSharedProps } from 'shared/types';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 import { Item } from 'shared/state';
 import { users } from 'redux/modules';
 import { page } from 'resources';
+import { sortItemsByOrder } from 'shared/utils/sortItemsByOrder';
 
 import { Feedback } from './Feedback';
 import { Review } from './Review';
@@ -40,8 +40,10 @@ import { RespondentDataReviewContext } from './RespondentDataReview.context';
 import {
   Answer,
   AssessmentActivityItem,
-  ActivityAnswerMeta,
+  ActivityAnswerSummary,
   SelectAnswerProps,
+  ActivityItemAnswers,
+  FeedbackTabs,
 } from './RespondentDataReview.types';
 import { StyledReviewContainer } from './RespondentDataReview.styles';
 import { RespondentsDataFormValues } from '../RespondentData.types';
@@ -55,11 +57,13 @@ export const RespondentDataReview = () => {
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || '';
   const selectedDateParam = searchParams.get('selectedDate');
+  const isFeedbackVisible = searchParams.get('isFeedbackVisible');
   const containerRef = useRef<HTMLElement | null>(null);
   const prevSelectedDateRef = useRef<null | string>(null);
   const shouldSetLastAnswer = useRef(false);
 
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(FeedbackTabs.Notes);
   const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [assessment, setAssessment] = useState<AssessmentActivityItem[]>([]);
@@ -71,10 +75,10 @@ export const RespondentDataReview = () => {
   const [responseDates, setResponseDates] = useState<Date[]>();
   const [activities, setActivities] = useState<ReviewActivity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [activityItemAnswers, setActivityItemAnswers] = useState<
-    DecryptedActivityData<EncryptedActivityAnswer>['decryptedAnswers'] | null
-  >(null);
-  const [activityAnswerMeta, setActivityAnswerMeta] = useState<ActivityAnswerMeta | null>(null);
+  const [activityItemAnswers, setActivityItemAnswers] = useState<ActivityItemAnswers>(null);
+  const [activityAnswerSummary, setActivityAnswerSummary] = useState<ActivityAnswerSummary | null>(
+    null,
+  );
 
   const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
@@ -121,15 +125,17 @@ export const RespondentDataReview = () => {
     const result = res?.data?.result;
     if (!result) return;
 
-    const decryptedActivityData = await getDecryptedActivityData(result);
+    const decryptedActivityData = await getDecryptedActivityData({
+      ...result.answer,
+      items: result.activity.items,
+    });
     setActivityItemAnswers(decryptedActivityData.decryptedAnswers);
 
-    const { createdAt, identifier, version } = result;
+    const { identifier } = result.summary;
     const decryptedIdentifiers = identifier ? await getDecryptedIdentifiers?.([identifier]) : null;
-    setActivityAnswerMeta({
-      createdAt,
+    setActivityAnswerSummary({
+      ...result.summary,
       identifier: decryptedIdentifiers?.length ? decryptedIdentifiers[0].decryptedValue : null,
-      version,
     });
   });
 
@@ -200,17 +206,25 @@ export const RespondentDataReview = () => {
         setIsLoading(true);
         await getActivityAnswer({ appletId, answerId, activityId: selectedActivity.id });
         const result = await getAssessmentApi({ appletId, answerId });
-        const { reviewerPublicKey, itemsLast, versions, ...assessmentData } = result.data.result;
+        const { reviewerPublicKey, itemsLast, versions, items, ...assessmentData } =
+          result.data.result;
         const encryptedData = {
           ...assessmentData,
+          // sorting in case the items received from the backend are in the wrong order
+          items: sortItemsByOrder(items),
           userPublicKey: reviewerPublicKey,
         } as EncryptedAnswerSharedProps;
         const decryptedAssessment = await getDecryptedActivityData(encryptedData);
         setItemIds(assessmentData.itemIds || []);
         setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
-        setLastAssessment(itemsLast);
+        // sorting in case the items received from the backend are in the wrong order
+        setLastAssessment(sortItemsByOrder(itemsLast));
         setAssessmentVersions(versions);
         setIsBannerVisible(!!(itemsLast?.length && versions));
+        if (decryptedAssessment?.decryptedAnswers?.length && isFeedbackVisible) {
+          setIsFeedbackOpen(true);
+          setActiveTab(FeedbackTabs.Reviews);
+        }
       } catch (error) {
         console.warn(error);
       } finally {
@@ -286,8 +300,8 @@ export const RespondentDataReview = () => {
             onButtonClick={() => setIsFeedbackOpen(true)}
             data-testid={dataTestid}
           />
-          {selectedAnswer && activityAnswerMeta && !isLoading && (
-            <ReviewDescription {...activityAnswerMeta} data-testid={dataTestid} />
+          {selectedAnswer && activityAnswerSummary && !isLoading && (
+            <ReviewDescription {...activityAnswerSummary} data-testid={dataTestid} />
           )}
           <Review
             isLoading={isLoading}
@@ -298,7 +312,12 @@ export const RespondentDataReview = () => {
           />
         </StyledReviewContainer>
         {selectedActivity && selectedAnswer && !isLoading && (
-          <Feedback selectedActivity={selectedActivity} onClose={() => setIsFeedbackOpen(false)} />
+          <Feedback
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            selectedActivity={selectedActivity}
+            onClose={() => setIsFeedbackOpen(false)}
+          />
         )}
       </RespondentDataReviewContext.Provider>
     </StyledContainer>

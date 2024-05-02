@@ -1,65 +1,193 @@
 import { act } from '@testing-library/react';
 import { PreloadedState } from '@reduxjs/toolkit';
+import mockAxios from 'jest-mock-axios';
 
 import { RootState } from 'redux/store';
-import { alerts, applet } from 'shared/state';
-import { popups } from 'modules/Dashboard/state';
+import { AlertType } from 'shared/state';
 import { page } from 'resources';
-import { forbiddenState } from 'shared/state/ForbiddenState';
 import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
-import { mockedAppletId } from 'shared/mock';
+import { mockedAppletId, mockedApplet } from 'shared/mock';
+import { ApiResponseCodes } from 'api';
+import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { SingleApplet } from 'shared/state/Applet/Applet.schema';
+import { state as popupState } from 'modules/Dashboard/state/Popups/Popups.state';
 
 import { useNoPermissionPopup } from './NoPermissionPopup.hooks';
 import { UseNoPermissionPopupReturn } from './NoPermissionPopup.types';
 
 const mockedUseNavigate = jest.fn();
-const mockedUseAppDispatch = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUseNavigate,
 }));
-jest.mock('redux/store', () => ({
-  ...jest.requireActual('redux/store'),
-  useAppDispatch: () => mockedUseAppDispatch,
-}));
 
+const userId = 'a9990d0a-7a95-45ed-86ad-1509a9d62614';
+const workspacesData = {
+  result: [
+    {
+      ownerId: userId,
+      workspaceName: 'Test Account',
+    },
+  ],
+  count: 1,
+};
 const getPreloadedState = (hasForbiddenError = true): PreloadedState<RootState> => ({
   forbiddenState: {
     data: {
       hasForbiddenError,
     },
   },
+  workspaces: {
+    workspaces: {
+      requestId: 'workspaces-request-id',
+      status: 'success',
+      data: {
+        result: [],
+        count: 1,
+      },
+    },
+    currentWorkspace: {
+      requestId: 'currentWorkspace-request-id',
+      status: 'success',
+      data: null,
+    },
+    roles: {
+      requestId: 'roles-request-id',
+      status: 'success',
+      data: null,
+    },
+    workspacesRoles: {
+      requestId: 'workspacesRoles-request-id',
+      status: 'success',
+      data: null,
+    },
+  },
+  applet: {
+    applet: {
+      requestId: 'applet-request-id',
+      status: 'success',
+      data: {
+        result: {
+          ...(mockedApplet as SingleApplet),
+        },
+      },
+    },
+  },
+  alerts: {
+    alerts: {
+      requestId: 'alerts-request-id',
+      status: 'success',
+      data: {
+        result: [{} as AlertType],
+        count: 1,
+        notWatched: 1,
+      },
+    },
+  },
+  popups: {
+    data: {
+      applet: undefined,
+      encryption: undefined,
+      popupProps: {},
+      deletePopupVisible: false,
+      duplicatePopupsVisible: false,
+      transferOwnershipPopupVisible: false,
+      publishConcealPopupVisible: false,
+    },
+  },
+  auth: {
+    isAuthorized: true,
+    isLogoutInProgress: false,
+    authentication: {
+      requestId: 'auth-request-id',
+      status: 'success',
+      data: {
+        user: {
+          email: '',
+          firstName: '',
+          lastName: '',
+          id: userId,
+        },
+      },
+    },
+  },
 });
+
+const successfulGetAlertsMock = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: {
+    result: [],
+    notWatched: 0,
+    count: 0,
+  },
+};
 
 describe('useNoPermissionPopup', () => {
   afterEach(() => {
     jest.clearAllMocks();
+    mockAxios.reset();
   });
 
-  test('should return correct values and call dispatch on handleSubmit', () => {
-    const { result } = renderHookWithProviders(useNoPermissionPopup, {
-      preloadedState: getPreloadedState(),
+  test('should return correct values and call dispatch on handleSubmit', async () => {
+    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
+    mockAxios.get.mockResolvedValueOnce({
+      data: workspacesData,
+    });
+    const { result, store } = renderHookWithProviders(useNoPermissionPopup, {
+      preloadedState: getPreloadedState(true),
     });
 
     const currentResult = result.current as UseNoPermissionPopupReturn;
     expect(currentResult.noAccessVisible).toBe(true);
     expect(currentResult.isBuilder).toBe(false);
-
-    act(() => {
-      currentResult.handleSubmit();
+    expect(store.getState().forbiddenState.data.hasForbiddenError).toBeTruthy();
+    expect(store.getState().applet.applet.data?.result).toStrictEqual({
+      ...(mockedApplet as SingleApplet),
+    });
+    expect(store.getState().alerts.alerts.data).toStrictEqual({
+      result: [{} as AlertType],
+      count: 1,
+      notWatched: 1,
     });
 
-    expect(mockedUseAppDispatch).toHaveBeenCalledTimes(5);
-    expect(mockedUseAppDispatch).toHaveBeenCalledWith(forbiddenState.actions.clearForbiddenError());
-    expect(mockedUseAppDispatch).toHaveBeenCalledWith(applet.actions.resetApplet());
-    expect(mockedUseAppDispatch).toHaveBeenCalledWith(alerts.actions.resetAlerts());
-    expect(mockedUseAppDispatch).toHaveBeenCalledWith(expect.any(Function));
-    expect(mockedUseAppDispatch).toHaveBeenCalledWith(popups.actions.resetPopupsVisibility());
-    expect(mockedUseNavigate).toHaveBeenCalledWith(page.dashboardApplets);
+    await act(async () => {
+      await currentResult.handleSubmit();
+    });
+
+    expect(store.getState().forbiddenState.data.hasForbiddenError).toBeFalsy();
+    expect(store.getState().applet.applet.data).toBeNull();
+    expect(store.getState().alerts.alerts.data).toStrictEqual({
+      result: [],
+      count: 0,
+      notWatched: 0,
+    });
+    expect(mockAxios.get).nthCalledWith(1, `/alerts`, {
+      params: {
+        limit: DEFAULT_ROWS_PER_PAGE,
+      },
+      signal: expect.any(Object),
+    });
+    expect(store.getState().popups.data).toStrictEqual({
+      ...popupState.data,
+    });
+    expect(mockAxios.get).nthCalledWith(2, `/workspaces`, {
+      signal: expect.any(Object),
+    });
+    expect(store.getState().workspaces.currentWorkspace.data).toStrictEqual(
+      workspacesData.result[0],
+    );
+
+    expect(mockedUseNavigate).toHaveBeenCalledWith(page.dashboardApplets, {
+      state: {
+        workspace: workspacesData.result[0],
+      },
+    });
   });
 
-  test('should reload window when on dashboard applets page', () => {
+  test('should reload window when on dashboard applets page', async () => {
+    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
+    mockAxios.get.mockRejectedValueOnce(new Error('Error'));
     const reloadSpy = jest.fn();
     Object.defineProperty(window, 'location', {
       value: { reload: reloadSpy },
@@ -74,8 +202,8 @@ describe('useNoPermissionPopup', () => {
 
     const currentResult = result.current as UseNoPermissionPopupReturn;
 
-    act(() => {
-      currentResult.handleSubmit();
+    await act(async () => {
+      await currentResult.handleSubmit();
     });
 
     expect(reloadSpy).toHaveBeenCalled();

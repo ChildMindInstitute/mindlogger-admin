@@ -3,13 +3,14 @@ import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { useReviewDescription } from './ReviewDescription.hooks';
 
 describe('useReviewDescription', () => {
-  const createdAt = '2024-04-10T10:00:00';
+  const endDateTime = '2024-04-10T10:00:00';
+  const createdAt = '2024-04-10T09:00:00';
   const identifier = 'test-identifier';
   const version = '1.0';
 
   test('should return a correct array with review description objects', () => {
     const { result } = renderHookWithProviders(() =>
-      useReviewDescription({ createdAt, identifier, version }),
+      useReviewDescription({ endDateTime, createdAt, identifier, version }),
     );
 
     expect(result.current).toEqual([

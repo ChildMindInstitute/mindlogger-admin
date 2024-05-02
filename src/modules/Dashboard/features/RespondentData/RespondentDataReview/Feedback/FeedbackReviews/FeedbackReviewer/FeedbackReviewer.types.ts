@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 
-import { AssessmentId } from 'modules/Dashboard/api';
-
+import { OnReviewerAnswerRemove } from '../Reviews/Reviews.types';
 import { ReviewData } from '../FeedbackReviews.types';
 
 export type FeedbackReviewerProps = ReviewData & {
-  onReviewerAnswersRemove: ({ assessmentId }: AssessmentId) => Promise<void>;
+  onReviewerAnswersRemove: OnReviewerAnswerRemove;
+  onReviewEdit: () => void;
   error: ReactNode | null;
   isLoading: boolean;
   'data-testid'?: string;

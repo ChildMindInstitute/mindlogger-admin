@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 
 import { getDictionaryText } from 'shared/utils';
+import { SHOW_MORE_HEIGHT } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 
 import { CollapsedMdText } from '../../CollapsedMdText';
 import { UnsupportedItemResponse } from '../../UnsupportedItemResponse';
@@ -40,7 +41,7 @@ export const Review = ({
           <Box sx={{ mb: 4.8 }} key={id} data-testid={testId}>
             <CollapsedMdText
               text={getDictionaryText(question)}
-              maxHeight={120}
+              maxHeight={SHOW_MORE_HEIGHT}
               data-testid={`${testId}-question`}
             />
             {UNSUPPORTED_ITEMS.includes(responseType) ? (
