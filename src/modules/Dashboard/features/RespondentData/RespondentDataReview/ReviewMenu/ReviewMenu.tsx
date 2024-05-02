@@ -11,7 +11,6 @@ import { ReviewMenuItem } from './ReviewMenuItem';
 
 export const ReviewMenu = ({
   control,
-  selectedDate,
   responseDates,
   onMonthChange,
   activities,
@@ -56,7 +55,6 @@ export const ReviewMenu = ({
       {activities.map((activity, index) => (
         <ReviewMenuItem
           key={activity.id}
-          selectedDate={selectedDate}
           isSelected={selectedActivity?.id === activity.id}
           activity={activity}
           setSelectedActivity={setSelectedActivity}

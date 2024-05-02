@@ -4,7 +4,7 @@ import { addDays, roundToNearestMinutes } from 'date-fns';
 import { ExportData } from 'api';
 import { initialStateData } from 'redux/modules';
 import { mockedApplet, mockedPassword } from 'shared/mock';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as encryptionFunctions from 'shared/utils/encryption';
 
 import { ExportDataSetting } from './ExportDataSetting';

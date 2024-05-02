@@ -3,7 +3,7 @@
 import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { SingleSelection } from './SingleSelection';
 
@@ -45,7 +45,7 @@ const activityItem = {
 const dataTestid = 'single-select';
 const onChange = jest.fn();
 
-describe('MultipleSelection', () => {
+describe('SingleSelection', () => {
   test('renders the single selection component with images and labels', async () => {
     renderWithProviders(
       <SingleSelection onChange={onChange} data-testid={dataTestid} activityItem={activityItem} />,

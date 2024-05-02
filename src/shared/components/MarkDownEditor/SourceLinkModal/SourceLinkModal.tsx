@@ -61,7 +61,9 @@ export const SourceLinkModal = ({
           </StyledController>
         </form>
         {error && (
-          <StyledErrorText sx={{ marginTop: theme.spacing(1) }}>{t(error)}</StyledErrorText>
+          <StyledErrorText data-testid={`${dataTestid}-error`} sx={{ marginTop: theme.spacing(1) }}>
+            {t(error)}
+          </StyledErrorText>
         )}
       </StyledModalWrapper>
     </Modal>

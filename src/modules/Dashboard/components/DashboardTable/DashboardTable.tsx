@@ -1,11 +1,7 @@
 import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
 
-import {
-  EmptyState,
-  UiType,
-  StyledTableCellContent,
-  StyledTableContainer,
-} from 'shared/components';
+import { UiType, StyledTableCellContent, StyledTableContainer } from 'shared/components/Table';
+import { EmptyState } from 'shared/components/EmptyState';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledEllipsisText } from 'shared/styles';
 

@@ -2,8 +2,10 @@ import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
+import userEvent from '@testing-library/user-event';
 
-import { renderWithProviders } from 'shared/utils';
+import { waitForTheUpdate } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
   mockedAppletId,
@@ -54,13 +56,7 @@ const mockedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
-};
-const mockedGetWitEmptyhNotes = {
-  status: ApiResponseCodes.SuccessfulResponse,
-  data: {
-    result: [],
-    count: 0,
-  },
+  lastAnswerDate: '2023-09-26T12:11:46.162083',
 };
 
 const mockedGetWithNotes = {
@@ -137,12 +133,14 @@ describe('FeedbackNotes', () => {
   });
 
   test('should save new note', async () => {
-    mockAxios.get.mockResolvedValueOnce(mockedGetWitEmptyhNotes);
+    mockGetWithNotes();
     renderFeedbackNotes();
 
-    fireEvent.change(screen.getByLabelText(/Add a New Note/i), { target: { value: newNoteValue } });
-    fireEvent.click(screen.getByTestId('respondents-summary-feedback-notes-save'));
+    // wait for the isLoading process of getAnswersNotes to become false
+    await waitForTheUpdate();
 
+    await userEvent.type(screen.getByLabelText(/Add a New Note/i), newNoteValue);
+    await userEvent.click(screen.getByTestId('respondents-summary-feedback-notes-save'));
     mockAxios.post.mockResolvedValueOnce(null);
 
     await waitFor(() => {

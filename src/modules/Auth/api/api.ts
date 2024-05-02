@@ -1,4 +1,8 @@
-import { apiClient, authApiClientWithoutRefresh } from 'shared/api/api.client';
+import {
+  apiClient,
+  authApiClientWithoutRefresh,
+  authApiClientRemoveRefresh,
+} from 'shared/api/apiConfig';
 
 import {
   ApproveRecoveryPassword,
@@ -19,7 +23,7 @@ export const signInApi = ({ email, password }: SignIn, signal?: AbortSignal) =>
 
 export const deleteAccessTokenApi = () => authApiClientWithoutRefresh.post('auth/logout');
 
-export const deleteRefreshTokenApi = () => authApiClientWithoutRefresh.post('auth/logout2');
+export const deleteRefreshTokenApi = () => authApiClientRemoveRefresh.post('auth/logout2');
 
 export const signUpApi = ({ body }: SignUpArgs, signal?: AbortSignal) =>
   apiClient.post(

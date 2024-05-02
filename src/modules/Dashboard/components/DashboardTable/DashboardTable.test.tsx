@@ -1,6 +1,7 @@
 import { screen, fireEvent } from '@testing-library/react';
 
-import { createArray, renderWithProviders } from 'shared/utils';
+import { createArray } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { DashboardTable } from './DashboardTable';
 import { DashboardTableProps } from './DashboardTable.types';

@@ -86,6 +86,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
+    "start:checkCycles": "react-app-rewired start -- checkCycles",
     "build": "react-app-rewired build --project tsconfig.build.json",
     "lint:check": "npx eslint src",
     "lint:fix": "npx eslint src --fix",
@@ -137,6 +138,7 @@
     "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
+    "circular-dependency-plugin": "^5.2.2",
     "cross-env": "^7.0.3",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",

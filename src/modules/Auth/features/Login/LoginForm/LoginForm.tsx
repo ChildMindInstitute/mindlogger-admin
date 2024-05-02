@@ -15,6 +15,7 @@ import { StyledErrorText, StyledHeadline } from 'shared/styles/styledComponents'
 import { Mixpanel } from 'shared/utils';
 import { variables } from 'shared/styles';
 import { AUTH_BOX_WIDTH } from 'shared/consts';
+import { LocationStateKeys } from 'shared/types';
 import { banners } from 'redux/modules';
 
 import {
@@ -42,7 +43,7 @@ export const LoginForm = () => {
     setErrorMessage('');
     const { signIn } = auth.thunk;
     const result = await dispatch(signIn(data));
-    const fromUrl = location?.state?.from;
+    const fromUrl = location?.state?.[LocationStateKeys.From];
 
     if (signIn.fulfilled.match(result)) {
       if (fromUrl) navigate(fromUrl);
@@ -56,7 +57,7 @@ export const LoginForm = () => {
   };
 
   useEffect(() => {
-    if (location.state?.isPasswordReset) {
+    if (location.state?.[LocationStateKeys.IsPasswordReset]) {
       // Shown for 5 seconds
       dispatch(
         banners.actions.addBanner({
@@ -68,7 +69,7 @@ export const LoginForm = () => {
       navigate(window.location.pathname, {
         state: {
           ...location.state,
-          isPasswordReset: undefined,
+          [LocationStateKeys.IsPasswordReset]: undefined,
         },
         replace: true,
       });

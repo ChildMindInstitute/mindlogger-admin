@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { VersionWarningBanner } from './VersionWarningBanner';
 import { VERSION_WARNING_BANNER_LINK } from './VersionWarningBanner.const';

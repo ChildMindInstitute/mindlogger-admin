@@ -2,7 +2,6 @@ import { SingleApplet } from 'shared/state/Applet';
 import { AlertListParams, FileUploadUrlResult, RefreshResponse } from 'shared/api/api.types';
 import { OwnerId } from 'modules/Dashboard/api/api.types';
 
-import { apiClient, authApiClient } from './api.client';
 import {
   ResponseWithObject,
   SignInRefreshTokenArgs,
@@ -10,6 +9,7 @@ import {
   AppletBody,
   AppletUniqueName,
 } from './api.types';
+import { apiClient, authApiClient } from './apiConfig';
 
 export const signInRefreshTokenApi = (
   { refreshToken }: SignInRefreshTokenArgs,

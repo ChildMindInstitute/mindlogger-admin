@@ -18,7 +18,7 @@ import {
   variables,
 } from 'shared/styles';
 import { ItemResponseType } from 'shared/consts';
-import { falseReturnFunc, getEntityKey, getObjectFromList } from 'shared/utils';
+import { falseReturnFunc, getEntityKey, getObjectFromList, toggleBooleanState } from 'shared/utils';
 import { SingleAndMultiSelectOption, ConditionalLogic, ItemAlert } from 'shared/state';
 import { useCurrentActivity } from 'modules/Builder/hooks/useCurrentActivity';
 import { useFieldLengthError } from 'modules/Builder/hooks/useFieldLengthError';
@@ -88,7 +88,6 @@ export const SelectionOption = ({
     : t('textForOption', { index: optionIndex });
   const title = isNoneAbove ? t('titleForNoneOption') : `${t('option')} ${optionIndex}`;
 
-  const handleOptionToggle = () => setOptionOpen((prevState) => !prevState);
   const handlePopoverClose = () => setAnchorEl(null);
   const handleRemoveModalClose = () => setIndexToRemove(-1);
   const handleColorChange = () => {
@@ -180,7 +179,7 @@ export const SelectionOption = ({
         <StyledFlexTopCenter sx={{ justifyContent: 'space-between' }}>
           <StyledFlexTopCenter sx={{ mr: theme.spacing(1) }}>
             <StyledIconButton
-              onClick={handleOptionToggle}
+              onClick={toggleBooleanState(setOptionOpen)}
               sx={{ ml: theme.spacing(-0.8) }}
               data-testid={`${dataTestid}-collapse`}
             >

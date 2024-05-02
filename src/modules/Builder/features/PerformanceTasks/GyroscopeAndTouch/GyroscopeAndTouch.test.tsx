@@ -5,7 +5,7 @@ import { generatePath } from 'react-router-dom';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
-import { renderWithAppletFormData } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { GyroscopeOrTouch, PerfTaskType } from 'shared/consts';
 import { mockedAppletFormData } from 'shared/mock';
 

@@ -16,7 +16,7 @@ import {
   mockedUserData,
 } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockGetRequestResponses,
   mockSchema,

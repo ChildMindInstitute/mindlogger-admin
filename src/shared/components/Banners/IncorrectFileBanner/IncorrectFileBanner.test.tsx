@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { MediaType, UploadFileError } from 'shared/consts';
 
 import { IncorrectFileBanner } from './IncorrectFileBanner';

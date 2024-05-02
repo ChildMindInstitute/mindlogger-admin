@@ -125,7 +125,10 @@ export const SearchPopup = ({
                 background={variables.palette.surface2}
                 placeholder={t('searchOrSelectRespondent')}
                 endAdornment={
-                  <StyledIconButton onClick={handleSearchPopupClose}>
+                  <StyledIconButton
+                    onClick={handleSearchPopupClose}
+                    data-testid={`${dataTestid}-close-button`}
+                  >
                     <Svg id="cross" width="4rem" />
                   </StyledIconButton>
                 }

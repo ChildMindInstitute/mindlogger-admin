@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
 import { mockedAppletFormData, mockedSingleSelectFormValues } from 'shared/mock';
-import { renderWithAppletFormData } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 
 import { Activities } from './Activities';
 import { PerformanceTasks } from './Activities.types';

@@ -73,9 +73,6 @@ export const getGroupValueText = (searchTerm: string, groupValue: string) => {
 
 export const getIsOnlyMobileValue = (value: ItemResponseType): boolean =>
   [
-    ItemResponseType.SingleSelectionPerRow,
-    ItemResponseType.MultipleSelectionPerRow,
-    ItemResponseType.SliderRows,
     ItemResponseType.Drawing,
     ItemResponseType.Photo,
     ItemResponseType.Video,

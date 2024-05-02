@@ -1,5 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
+export const SHOW_MORE_HEIGHT = 380;
 export const DEFAULT_START_DATE = new Date(new Date().setDate(new Date().getDate() - 5));
 export const DEFAULT_END_DATE = new Date(new Date().setDate(new Date().getDate() + 1));
 export const DEFAULT_START_TIME = '00:00';
@@ -30,7 +31,6 @@ export const UNSUPPORTED_ITEMS = [
   ItemResponseType.Geolocation,
   ItemResponseType.Photo,
   ItemResponseType.Video,
-  ItemResponseType.SliderRows,
   ItemResponseType.Message,
   ItemResponseType.Flanker,
   ItemResponseType.StabilityTracker,

@@ -10,7 +10,7 @@ import {
   SingleAndMultiSelectOption,
   SingleValueCondition,
 } from 'shared/state';
-import { getEntityKey, getObjectFromList } from 'shared/utils';
+import { getEntityKey, getObjectFromList, toggleBooleanState } from 'shared/utils';
 import { Svg } from 'shared/components/Svg';
 import {
   StyledBodyLarge,
@@ -44,7 +44,7 @@ export const ConditionalPanel = ({ condition }: { condition?: ConditionalLogic }
       <StyledFlexTopCenter sx={{ gap: '1rem' }}>
         <StyledClearedButton
           sx={{ p: theme.spacing(1) }}
-          onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
+          onClick={toggleBooleanState(setExpanded)}
           data-testid="builder-conditional-panel-btn"
         >
           <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />

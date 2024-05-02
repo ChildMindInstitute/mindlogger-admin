@@ -3,7 +3,7 @@ import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { page } from 'resources';
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
   mockedAppletId,
@@ -87,6 +87,7 @@ const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
       {
         id: '951145fa-3053-4428-a970-70531e383d89',
         name: 'Activity 1',
+        lastAnswerDate: '2023-09-26T12:11:46.162083',
         answerDates: [
           {
             createdAt: '2023-12-15T11:21:40.509095',
@@ -101,6 +102,7 @@ const ReviewMenuComponent = (compProps: Partial<ReviewMenuProps>) => {
       {
         id: 'ad9e1f86-3fa2-4edd-908c-832810555865',
         name: 'Activity 2',
+        lastAnswerDate: '2023-09-26T10:10:05.162083',
         answerDates: [
           {
             createdAt: '2023-12-15T16:39:11.509095',
@@ -160,8 +162,10 @@ describe('ReviewMenu', () => {
     const timestamp0 = screen.getByTestId(`${dataTestid}-activity-0-completion-time-1`);
     await userEvent.click(timestamp0);
     expect(onSelectAnswer).toHaveBeenCalledWith({
-      answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
-      createdAt: '2023-12-15T14:22:34.150182',
+      answer: {
+        answerId: 'd4147952-73e2-4693-b968-3ecf2468187d',
+        createdAt: '2023-12-15T14:22:34.150182',
+      },
     });
   });
 

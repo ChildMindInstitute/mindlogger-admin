@@ -56,6 +56,10 @@ In the project directory, you can run:
     The page will reload if you make edits.\
     You will also see any lint errors in the console.
 
+- `npm start:checkCycles`
+
+    The same as `npm start`, but with cycle dependency analysis logging.
+
 - `npm run build`
 
     Builds the app for production to the `build` folder.\

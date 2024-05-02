@@ -5,7 +5,8 @@ import { generatePath } from 'react-router-dom';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { page } from 'resources';
-import { getEntityKey, renderWithAppletFormData } from 'shared/utils';
+import { getEntityKey } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import {
   mockedActivityId,
   mockedAppletFormData,
@@ -604,13 +605,4 @@ export const mockedItemTypes = [
   'audioPlayer',
 ];
 export const mockedItemTypeGroups = ['select', 'matrixSelect', 'input', 'record', 'display'];
-export const mockedItemTypesMobileOnly = [
-  'singleSelectRows',
-  'multiSelectRows',
-  'sliderRows',
-  'drawing',
-  'photo',
-  'video',
-  'geolocation',
-  'audio',
-];
+export const mockedItemTypesMobileOnly = ['drawing', 'photo', 'video', 'geolocation', 'audio'];

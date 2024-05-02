@@ -13,6 +13,7 @@ import {
   variables,
 } from 'shared/styles';
 import { Svg, Tooltip } from 'shared/components';
+import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
 import {
   StyledItemOption,
@@ -39,7 +40,7 @@ export const ToggleItemContainer = ({
 }: ToggleItemProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(isOpenByDefault ?? true);
-  const handleToggle = () => setOpen((prevState) => !prevState);
+  const handleToggle = toggleBooleanState(setOpen);
   const handleToggleBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     handleToggle();

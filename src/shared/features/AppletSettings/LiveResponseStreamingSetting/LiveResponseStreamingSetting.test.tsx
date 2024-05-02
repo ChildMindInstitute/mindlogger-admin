@@ -4,7 +4,8 @@ import { createRef } from 'react';
 import { fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { asyncTimeout, renderWithAppletFormData } from 'shared/utils';
+import { asyncTimeout } from 'shared/utils';
+import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
 import { CHANGE_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { LiveResponseStreamingSetting } from './LiveResponseStreamingSetting';

@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { screen, fireEvent } from '@testing-library/react';
 
-import { renderWithProviders } from 'shared/utils';
+import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { Languages } from 'shared/api';
 
 import { SelectLanguage } from './SelectLanguage';

@@ -16,7 +16,13 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { falseReturnFunc, getDictionaryText, getHighlightedText, Mixpanel } from 'shared/utils';
+import {
+  falseReturnFunc,
+  getDictionaryText,
+  getHighlightedText,
+  Mixpanel,
+  toggleBooleanState,
+} from 'shared/utils';
 import { page } from 'resources';
 import { useAppDispatch } from 'redux/store';
 import { auth, library } from 'redux/modules';
@@ -241,7 +247,7 @@ export const Applet = ({
               ) : (
                 <StyledExpandedButton
                   disableRipple
-                  onClick={() => setActivitiesVisible((prevState) => !prevState)}
+                  onClick={toggleBooleanState(setActivitiesVisible)}
                   startIcon={
                     <StyledSvgContainer>
                       <Svg id={arrowSvgId} />

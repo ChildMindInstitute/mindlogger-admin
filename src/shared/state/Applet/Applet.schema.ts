@@ -649,7 +649,7 @@ export type Activity = {
   scoresAndReports?: ScoresAndReports;
   subscaleSetting?: SubscaleSetting | null;
   isPerformanceTask?: boolean;
-  performanceTaskType?: PerfTaskType;
+  performanceTaskType?: PerfTaskType | null;
   createdAt?: string;
   reportIncludedItemName?: string;
   conditionalLogic?: ConditionalLogic[];

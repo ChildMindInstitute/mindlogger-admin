@@ -1,3 +1,5 @@
+import { DatavizActivity } from 'modules/Dashboard/api';
+
 type FullName = {
   firstName: string;
   lastName: string;
@@ -9,3 +11,5 @@ export type FeedbackNote = {
   note: string;
   createdAt: string;
 };
+
+export type FeedbackNotesProps = { activity: DatavizActivity };
