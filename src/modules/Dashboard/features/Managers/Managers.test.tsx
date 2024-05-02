@@ -85,7 +85,9 @@ describe('Managers component tests', () => {
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      expect(screen.getByText('You have no permissions to view this tab.')).toBeInTheDocument();
+      expect(
+        screen.getByText('You do not have permission to view this content.'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -93,7 +95,7 @@ describe('Managers component tests', () => {
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const tableColumnNames = ['First Name', 'Last Name', 'Title', 'Role', 'Email'];
-    const managersColumns = ['TestFirstName', 'TestLastName', mockedEmail, 'Reviewer'];
+    const managersColumns = ['TestFirstName', 'TestLastName', 'PhD', 'Reviewer', mockedEmail];
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-managers-table')).toBeInTheDocument();
@@ -153,8 +155,13 @@ describe('Managers component tests', () => {
       },
     };
 
+    // getWorkspaceManagersApi
     mockAxios.get.mockResolvedValueOnce(getMockedGetWithManagers());
+    // executeGetWorkspaceInfoApi
+    mockAxios.get.mockResolvedValueOnce(null);
+    // getWorkspaceManagersApi
     mockAxios.get.mockResolvedValueOnce(emptySearchGetMock);
+
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
     const mockedSearchValue = 'mockedSearchValue';
 

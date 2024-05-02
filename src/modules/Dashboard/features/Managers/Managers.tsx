@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Avatar as MuiAvatar, Box } from '@mui/material';
+import { Avatar as MuiAvatar, Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { getWorkspaceManagersApi } from 'api';
+import { getWorkspaceInfoApi, getWorkspaceManagersApi } from 'api';
 import {
   ActionsMenu,
   Avatar,
@@ -17,14 +17,13 @@ import { banners, workspaces } from 'redux/modules';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
-import { Manager } from 'modules/Dashboard/types';
+import { Manager, WorkspaceInfo } from 'modules/Dashboard/types';
 import { isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { StyledBody, variables } from 'shared/styles';
+import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 
-import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
-import { ManagersTableHeader } from './Managers.styles';
+import { AddManagerPopup, ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersData } from './Managers.types';
 import { getManagerActions, getHeadCells } from './Managers.utils';
 
@@ -33,7 +32,9 @@ export const Managers = () => {
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const [managersData, setManagersData] = useState<ManagersData | null>(null);
+  const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const dataTestId = 'dashboard-managers';
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
@@ -46,6 +47,9 @@ export const Managers = () => {
     undefined,
     () => setIsLoading(false),
   );
+  const { execute: executeGetWorkspaceInfoApi } = useAsync(getWorkspaceInfoApi, (res) => {
+    setWorkspaceInfo(res?.data?.result || null);
+  });
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() => {
     setIsLoading(true);
@@ -85,6 +89,7 @@ export const Managers = () => {
     }),
   });
 
+  const [addManagerPopupVisible, setAddManagerPopupVisible] = useState(false);
   const [editAccessPopupVisible, setEditAccessPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
@@ -100,9 +105,14 @@ export const Managers = () => {
     },
   };
 
+  const addManagerOnClose = (shouldRefetch?: boolean) => {
+    setAddManagerPopupVisible(false);
+    shouldRefetch && handleReload();
+  };
+
   const removeManagerAccessOnClose = (step?: number) => {
     setRemoveAccessPopupVisible(false);
-    step === 2 && handleReload();
+    step === 3 && handleReload();
   };
 
   const editManagerAccessOnClose = (shouldReFetch?: boolean) => {
@@ -117,7 +127,7 @@ export const Managers = () => {
     () =>
       managersData?.result?.map((user) => {
         const filteredManager = filterAppletsByRoles(user);
-        const { applets, email, firstName, lastName, roles, id } = user;
+        const { applets, email, firstName, lastName, title, roles, id } = user;
         const stringRoles = joinWihComma(roles);
         const appletRole = applets.find(({ id }) => id === appletId);
         const renderedRoles = appletRole?.roles.map(({ role }) => (
@@ -156,8 +166,8 @@ export const Managers = () => {
             value: lastName,
           },
           title: {
-            content: () => <StyledMaybeEmpty />,
-            value: '',
+            content: () => <StyledMaybeEmpty>{title}</StyledMaybeEmpty>,
+            value: title ?? '',
           },
           ...(appletId && {
             roles: {
@@ -179,7 +189,7 @@ export const Managers = () => {
                 <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-end' }}>
                   <ActionsMenu
                     buttonColor="secondary"
-                    data-testid="dashboard-managers-table-actions"
+                    data-testid={`${dataTestId}-table-actions`}
                     menuItems={getManagerActions(actions, filteredManager)}
                   />
                 </Box>
@@ -203,32 +213,48 @@ export const Managers = () => {
     }
   };
 
-  useEffect(
-    () => () => {
-      setManagersData(null);
-    },
-    [],
-  );
+  useEffect(() => {
+    if (!ownerId) return;
+
+    executeGetWorkspaceInfoApi({ ownerId });
+  }, [ownerId, executeGetWorkspaceInfoApi]);
 
   if (isForbidden) return noPermissionsComponent;
 
   return (
     <StyledBody>
       {isLoading && <Spinner />}
-      <ManagersTableHeader>
-        <Search
-          placeholder={t('searchManagers')}
-          onSearch={handleSearch}
-          data-testid="dashboard-managers-search"
-        />
-      </ManagersTableHeader>
+
+      <StyledFlexWrap sx={{ gap: 1.2, mb: 2.4 }}>
+        {/* TODO: Add sorting/filtering (https://mindlogger.atlassian.net/browse/M2-5608) */}
+
+        <StyledFlexWrap sx={{ gap: 1.2, ml: 'auto' }}>
+          <Search
+            withDebounce
+            placeholder={t('searchTeam')}
+            onSearch={handleSearch}
+            sx={{ width: '32rem' }}
+            data-testid={`${dataTestId}-search`}
+          />
+
+          {!!appletId && (
+            <Button
+              variant="contained"
+              onClick={() => setAddManagerPopupVisible(true)}
+              data-testid={`${dataTestId}-add`}
+            >
+              {t('addTeamMember')}
+            </Button>
+          )}
+        </StyledFlexWrap>
+      </StyledFlexWrap>
 
       <DashboardTable
         columns={getHeadCells(appletId)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}
-        data-testid="dashboard-managers-table"
+        data-testid={`${dataTestId}-table`}
         {...tableProps}
       />
       {selectedManager && (
@@ -248,6 +274,14 @@ export const Managers = () => {
             />
           )}
         </>
+      )}
+      {addManagerPopupVisible && appletId && (
+        <AddManagerPopup
+          popupVisible={addManagerPopupVisible}
+          onClose={addManagerOnClose}
+          appletId={appletId}
+          workspaceInfo={workspaceInfo}
+        />
       )}
     </StyledBody>
   );

@@ -1,29 +1,20 @@
 import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
 
-import {
-  Modal,
-  Spinner,
-  SubmitBtnVariant,
-  ToggleButtonGroup,
-  ToggleButtonVariants,
-} from 'shared/components';
-import { StyledErrorText, StyledLinkBtn, StyledModalWrapper } from 'shared/styles';
+import { Modal, Spinner, ToggleButtonGroup, ToggleButtonVariants } from 'shared/components';
+import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
-import { NON_UNIQUE_VALUE_MESSAGE, Roles, VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
+import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
 import { Mixpanel, getErrorMessage } from 'shared/utils';
 import { Languages, postAppletInvitationApi, postAppletShellAccountApi } from 'api';
 import { useAppDispatch } from 'redux/store';
 import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
-import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
 
 import {
-  EMAIL_IN_USE,
   RESPONDENT_ALREADY_INVITED,
   defaultValues,
   toggleButtons,
@@ -57,10 +48,8 @@ export const AddParticipantPopup = ({
   } = useForm<AddParticipantFormValues>({
     resolver: yupResolver(AddParticipantPopupSchema()),
     defaultValues: defaults,
-    mode: 'all',
-    delayError: VALIDATION_DEBOUNCE_VALUE,
+    mode: 'onBlur',
   });
-  const participantPath = useMultiInformantParticipantPath({ appletId });
   const accountType = useWatch({ control, name: 'accountType' });
   const isFullAccount = accountType === AccountType.Full;
   const dispatch = useAppDispatch();
@@ -158,16 +147,6 @@ export const AddParticipantPopup = ({
     setStep(AddParticipantSteps.AccountType);
   };
 
-  const emailInUse = (
-    <Trans i18nKey="emailAlreadyInUse">
-      That email is
-      <StyledLinkBtn component={Link} to={participantPath}>
-        already in use
-      </StyledLinkBtn>
-      . Please enter another one.
-    </Trans>
-  );
-
   const error = invitationError || shellAccountError;
   useFormError({
     error,
@@ -183,12 +162,7 @@ export const AddParticipantPopup = ({
       {
         fieldName: Fields.email,
         apiMessage: RESPONDENT_ALREADY_INVITED,
-        errorMessage: emailInUse,
-      },
-      {
-        fieldName: Fields.email,
-        apiMessage: EMAIL_IN_USE,
-        errorMessage: emailInUse,
+        errorMessage: t('participantAlreadyInvited'),
       },
     ],
   });
@@ -204,7 +178,6 @@ export const AddParticipantPopup = ({
           onSubmit={handleNext}
           title={t('addParticipant')}
           buttonText={t('next')}
-          submitBtnVariant={SubmitBtnVariant.Contained}
           hasLeftBtn
           leftBtnText={t('addViaCSV')}
           leftBtnVariant="outlined"
@@ -239,7 +212,6 @@ export const AddParticipantPopup = ({
           onSubmit={handleSubmit(handleSubmitForm)}
           title={t(isFullAccount ? 'fullAccount' : 'limitedAccount')}
           buttonText={t(isFullAccount ? 'sendInvitation' : 'create')}
-          submitBtnVariant={SubmitBtnVariant.Contained}
           disabledSubmit={!isValid}
           hasSecondBtn
           // TODO: Update second button variant once 'tonal' variant added

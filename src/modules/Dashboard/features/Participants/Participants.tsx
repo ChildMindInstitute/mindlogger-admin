@@ -3,14 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
-import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Spinner, Svg } from 'shared/components';
+import {
+  ActionsMenu,
+  Chip,
+  MenuActionProps,
+  Pin,
+  Row,
+  Search,
+  Spinner,
+  Svg,
+} from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { StyledBody } from 'shared/styles';
+import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
@@ -20,11 +29,7 @@ import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
 import {
   AddParticipantButton,
   FiltersButton,
-  ParticipantSearchButton,
-  ParticipantsHeader,
   SortByButton,
-  HeaderSectionLeft,
-  HeaderSectionRight,
   ParticipantsTable,
 } from './Participants.styles';
 import {
@@ -408,8 +413,9 @@ export const Participants = () => {
   return (
     <StyledBody>
       {isLoading && <Spinner />}
-      <ParticipantsHeader>
-        <HeaderSectionLeft>
+
+      <StyledFlexWrap sx={{ gap: 1.2, mb: 2.4 }}>
+        <StyledFlexTopCenter sx={{ gap: 1.2 }}>
           <FiltersButton
             variant="outlined"
             startIcon={
@@ -420,6 +426,7 @@ export const Participants = () => {
           >
             {t('filters')}
           </FiltersButton>
+
           <SortByButton
             variant="outlined"
             endIcon={
@@ -430,12 +437,14 @@ export const Participants = () => {
           >
             {t('sortBy')}
           </SortByButton>
-        </HeaderSectionLeft>
-        <HeaderSectionRight>
-          <ParticipantSearchButton
+        </StyledFlexTopCenter>
+
+        <StyledFlexWrap sx={{ gap: 1.2, ml: 'auto' }}>
+          <Search
             withDebounce
             placeholder={t('searchParticipants')}
             onSearch={handleSearch}
+            sx={{ width: '32rem' }}
             data-testid={`${dataTestid}-search`}
           />
           {appletId && (
@@ -447,8 +456,9 @@ export const Participants = () => {
               {t('addParticipant')}
             </AddParticipantButton>
           )}
-        </HeaderSectionRight>
-      </ParticipantsHeader>
+        </StyledFlexWrap>
+      </StyledFlexWrap>
+
       <ParticipantsTable
         columns={getHeadCells(appletId)}
         rows={rows}

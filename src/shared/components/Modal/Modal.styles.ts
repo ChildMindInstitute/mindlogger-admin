@@ -41,5 +41,5 @@ export const StyledDialogActions = styled(DialogActions, shouldForwardProp)`
   justify-content: ${({ actionsAlign }: { actionsAlign?: ActionsAlign }) =>
     actionsAlign || 'flex-start'};
   margin-top: auto;
-  padding: ${theme.spacing(2.4, 3.2, 1.2)};
+  padding: ${theme.spacing(0.8, 3.2, 3.2)};
 `;

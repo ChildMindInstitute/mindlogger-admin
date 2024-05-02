@@ -26,6 +26,7 @@ import { Svg, Tooltip } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
+import { WorkspaceInfo } from 'modules/Dashboard/types';
 
 import { StyledRow, StyledTooltip, StyledLinkBtn, StyledGridContainer } from './AddUserForm.styles';
 import {
@@ -39,7 +40,7 @@ import {
   EMAIL_IN_USE,
 } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
-import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
+import { AddUserFormProps, AddUserFormValues } from './AddUserForm.types';
 import { getUrl, getRoles } from './AddUserForm.utils';
 
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {

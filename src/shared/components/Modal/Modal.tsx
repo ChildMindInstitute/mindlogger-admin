@@ -27,7 +27,7 @@ export const Modal = ({
   hasSecondBtn = false,
   submitBtnColor = 'primary',
   secondBtnText,
-  submitBtnVariant = SubmitBtnVariant.Text,
+  submitBtnVariant = SubmitBtnVariant.Contained,
   onSecondBtnSubmit,
   secondBtnVariant = 'text',
   disabledSecondBtn,

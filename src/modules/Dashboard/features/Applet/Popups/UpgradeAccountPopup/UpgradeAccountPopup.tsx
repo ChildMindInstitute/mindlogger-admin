@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Modal, Spinner, SubmitBtnVariant } from 'shared/components';
+import { Modal, Spinner } from 'shared/components';
 import {
   StyledBodyLarge,
   StyledErrorText,
@@ -18,7 +18,6 @@ import { useAsync } from 'shared/hooks';
 import { banners } from 'redux/modules';
 import { AccountType } from 'modules/Dashboard/types';
 import { ParticipantSnippet } from 'modules/Dashboard/components';
-import { VALIDATION_DEBOUNCE_VALUE } from 'shared/consts';
 
 import { RESPONDENT_ALREADY_INVITED } from './UpgradeAccountPopup.const';
 import { UpgradeAccountPopupSchema } from './UpgradeAccountPopup.schema';
@@ -53,8 +52,7 @@ export const UpgradeAccountPopup = ({
   } = useForm<UpgradeAccountFormValues>({
     resolver: yupResolver(UpgradeAccountPopupSchema()),
     defaultValues,
-    mode: 'all',
-    delayError: VALIDATION_DEBOUNCE_VALUE,
+    mode: 'onBlur',
   });
   const dispatch = useAppDispatch();
   const [hasCommonError, setHasCommonError] = useState(false);
@@ -118,7 +116,6 @@ export const UpgradeAccountPopup = ({
       onSubmit={handleSubmit(handleSubmitForm)}
       title={t('upgradeToFullAccount')}
       buttonText={t('sendInvitation')}
-      submitBtnVariant={SubmitBtnVariant.Contained}
       disabledSubmit={!isValid}
       hasLeftBtn
       leftBtnText={t('Reset')}

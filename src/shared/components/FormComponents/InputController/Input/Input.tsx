@@ -108,7 +108,7 @@ export const Input = <T extends FieldValues>({
 
   return (
     <Tooltip tooltipTitle={tooltip}>
-      <StyledTextFieldContainer hasCounter={!!maxLength}>
+      <StyledTextFieldContainer>
         <StyledTextField
           {...textFieldProps}
           {...(withDebounce ? { inputRef } : { value: getTextFieldValue() })}

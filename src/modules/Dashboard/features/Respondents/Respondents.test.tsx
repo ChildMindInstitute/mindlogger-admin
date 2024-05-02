@@ -87,7 +87,9 @@ describe('Respondents component tests', () => {
     renderWithProviders(<Respondents />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      expect(screen.getByText('You have no permissions to view this tab.')).toBeInTheDocument();
+      expect(
+        screen.getByText('You do not have permission to view this content.'),
+      ).toBeInTheDocument();
     });
   });
 
