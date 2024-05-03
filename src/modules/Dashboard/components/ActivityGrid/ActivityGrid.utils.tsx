@@ -24,9 +24,7 @@ export const getActivityActions = ({
   const canDoTakeNow =
     featureFlags.enableMultiInformantTakeNow &&
     hasParticipants &&
-    (isManagerOrOwner(roles?.[0]) ||
-      roles?.includes(Roles.Coordinator) ||
-      roles?.includes(Roles.SuperAdmin));
+    (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
 
   return [
     {
