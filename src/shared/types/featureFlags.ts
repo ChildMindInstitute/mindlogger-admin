@@ -7,7 +7,7 @@ export const FeatureFlagsKeys = {
   enableMultiInformantTakeNow: 'enableMultiInformantTakeNow',
   // TODO: https://mindlogger.atlassian.net/browse/M2-6519 Activity Filter Sort flag cleanup
   enableActivityFilterSort: 'enableActivityFilterSort',
-  // TODO: M2-6518 Assign Activity flag cleanup
+  // TODO: https://mindlogger.atlassian.net/browse/M2-6518 Assign Activity flag cleanup
   enableActivityAssign: 'enableActivityAssign',
 };
 
