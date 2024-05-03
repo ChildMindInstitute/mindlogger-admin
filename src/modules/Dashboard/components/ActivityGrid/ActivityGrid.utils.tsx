@@ -28,6 +28,10 @@ export const getActivityActions = ({
       roles?.includes(Roles.Coordinator) ||
       roles?.includes(Roles.SuperAdmin));
 
+  const canAssignActivity = featureFlags.enableActivityAssign;
+
+  const showDivider = canDoTakeNow || canAssignActivity;
+
   return [
     {
       icon: <Svg id="edit" />,
@@ -45,13 +49,13 @@ export const getActivityActions = ({
       isDisplayed: true,
       'data-testid': `${dataTestId}-activity-export`,
     },
-    { type: MenuItemType.Divider },
+    { type: MenuItemType.Divider, isDisplayed: showDivider },
     {
       icon: <Svg id="add" />,
       action: assignActivity,
       title: t('assignActivity'),
       context: { appletId, activityId },
-      isDisplayed: true,
+      isDisplayed: canAssignActivity,
       'data-testid': `${dataTestId}-activity-assign`,
     },
     {
