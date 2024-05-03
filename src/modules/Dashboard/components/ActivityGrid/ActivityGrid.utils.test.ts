@@ -76,6 +76,8 @@ describe('getActivityActions', () => {
     featureFlags: {
       enableMultiInformant: true,
       enableMultiInformantTakeNow: true,
+      enableActivityAssign: true,
+      enableActivityFilterSort: true,
     },
     hasParticipants: true,
   };
@@ -199,5 +201,22 @@ describe('getActivityActions', () => {
     expectMenuItemIsDisplayed(menuItems, 'exportData', true);
     expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
+  });
+
+  test('Assign Activity menu item is not displayed when feature flag is disabled', () => {
+    const menuItems = getActivityActions({
+      ...defaultArgs,
+      roles: [Roles.Manager],
+      featureFlags: {
+        ...defaultArgs.featureFlags,
+        enableActivityAssign: false,
+      },
+    });
+
+    expectAllMenuItemsAreReturned(menuItems);
+    expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'exportData', true);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
   });
 });
