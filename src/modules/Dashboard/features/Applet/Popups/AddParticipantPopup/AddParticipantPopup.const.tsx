@@ -2,6 +2,7 @@ import { t } from 'i18next';
 
 import { Svg } from 'shared/components';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
+import { ParticipantTag } from 'shared/consts';
 
 export const defaultValues = {
   accountType: AccountType.Full,
@@ -10,6 +11,7 @@ export const defaultValues = {
   nickname: '',
   email: '',
   secretUserId: '',
+  tag: ParticipantTag.None,
 };
 
 export const toggleButtons = [

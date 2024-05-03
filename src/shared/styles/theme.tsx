@@ -359,6 +359,18 @@ export const theme = createTheme({
         },
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        input: {
+          '&&': {
+            height: 'auto',
+            fontSize: variables.font.size.lg,
+            lineHeight: variables.font.lineHeight.lg,
+            padding: '1.6rem',
+          },
+        },
+      },
+    },
     MuiFormHelperText: {
       styleOverrides: {
         root: {
@@ -411,10 +423,6 @@ export const theme = createTheme({
           borderWidth: variables.borderWidth.md,
           borderColor: variables.palette.outline_variant,
           color: variables.palette.black,
-          input: {
-            padding: '1.65rem 1.6rem',
-            fontSize: variables.font.size.lg,
-          },
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,

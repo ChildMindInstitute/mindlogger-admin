@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { Languages } from 'api';
-import { StyledLabelLarge } from 'shared/styles';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
+import { PARTICIPANT_TAG_ICONS, ParticipantTag } from 'shared/consts';
 
 import { AddParticipantFormProps } from './AddParticipantForm.types';
 import { Fields } from '../AddParticipantPopup.types';
@@ -77,9 +77,23 @@ export const AddParticipantForm = ({
             data-testid={`${dataTestid}-nickname`}
           />
         </Grid>
-        {/* TODO: Add tag support (https://mindlogger.atlassian.net/browse/M2-5861) */}
-        <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
-          <StyledLabelLarge>TODO: Add tag selector</StyledLabelLarge>
+        <Grid item xs={6}>
+          <SelectController
+            {...commonProps}
+            name={Fields.tag}
+            withChecked
+            options={[
+              ...Object.values(ParticipantTag).map((tag) => ({
+                labelKey: `participantTag.${tag}`,
+                value: tag,
+                icon: PARTICIPANT_TAG_ICONS[tag],
+              })),
+            ]}
+            placeholder={t('selectOne')}
+            InputLabelProps={{ shrink: true }}
+            label={t('tag')}
+            data-testid={`${dataTestid}-tag`}
+          />
         </Grid>
         {isFullAccount && (
           <Grid item xs={12}>

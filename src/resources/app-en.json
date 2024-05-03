@@ -862,8 +862,14 @@
   "outsideOf": "outside of",
   "overviewInstruction": "Overview Instruction",
   "ownerEmail": "Owner email",
-  "participants": "Participants",
   "participantAlreadyInvited": "Participant already invited",
+  "participants": "Participants",
+  "participantTag": {
+    "": "No selection",
+    "child": "Child",
+    "parent": "Parent/Guardian",
+    "teacher": "Teacher"
+  },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",
   "passwordCapitalLetter": "At least one capital letter must be included.",
@@ -1068,6 +1074,7 @@
   "sectionHeader": "Section {{index}}:",
   "sectionName": "Section name",
   "select": "Select",
+  "selectOne": "Select one…",
   "selectActivity": "Select Activity",
   "selectActivityAndResponse": "Select activity and response",
   "selectAll": "Select All",

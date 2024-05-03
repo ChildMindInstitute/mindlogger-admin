@@ -12,6 +12,10 @@ export const StyledTextField = styled(TextField)`
     }
   }
 
+  .MuiSelect-select .icon-wrapper {
+    display: none;
+  }
+
   .MuiSelect-icon {
     right: 1rem;
     top: 50%;
@@ -27,7 +31,7 @@ export const StyledTextField = styled(TextField)`
 export const StyledPlaceholder = styled(StyledBodyLarge)`
   position: absolute;
   left: 1.65rem;
-  top: 1.4rem;
+  top: 1.6rem;
   color: ${variables.palette.outline};
   white-space: nowrap;
 `;
@@ -40,6 +44,7 @@ export const StyledPlaceholderMask = styled(StyledBodyLarge)`
 `;
 
 export const StyledItem = styled(StyledFlexTopCenter, shouldForwardProp)`
+  flex: 1;
   ${({ itemDisabled, selectDisabled }: { itemDisabled: boolean; selectDisabled?: boolean }) => {
     if (itemDisabled) {
       return `

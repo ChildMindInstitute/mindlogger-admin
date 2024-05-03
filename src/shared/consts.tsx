@@ -339,3 +339,17 @@ export const JEST_TEST_TIMEOUT = 15000;
 export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
 
 export const NULL_ANSWER = 'value: null';
+
+export enum ParticipantTag {
+  None = '',
+  Child = 'child',
+  Parent = 'parent',
+  Teacher = 'teacher',
+}
+
+export const PARTICIPANT_TAG_ICONS = {
+  [ParticipantTag.None]: <Svg id="close" width={24} height={24} />,
+  [ParticipantTag.Child]: <Svg id="account" width={24} height={24} />,
+  [ParticipantTag.Parent]: <Svg id="users-outlined" width={24} height={24} />,
+  [ParticipantTag.Teacher]: <Svg id="teacher" width={24} height={24} />,
+};

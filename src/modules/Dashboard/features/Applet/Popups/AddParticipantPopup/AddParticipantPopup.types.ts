@@ -1,5 +1,6 @@
 import { Languages } from 'api';
 import { AccountType } from 'modules/Dashboard/types';
+import { ParticipantTag } from 'shared/consts';
 
 export type AddParticipantPopupProps = {
   popupVisible: boolean;
@@ -20,6 +21,7 @@ export type AddParticipantFormValues = {
   email?: string;
   nickname?: string;
   secretUserId: string;
+  tag?: ParticipantTag;
   language: Languages;
 };
 
@@ -29,5 +31,6 @@ export const Fields = {
   email: 'email',
   secretUserId: 'secretUserId',
   nickname: 'nickname',
+  tag: 'tag',
   language: 'language',
 } as const;

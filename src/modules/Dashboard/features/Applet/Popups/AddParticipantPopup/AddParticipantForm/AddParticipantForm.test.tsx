@@ -23,7 +23,7 @@ const AddParticipantFormTest = ({ accountType }: Pick<AddParticipantFormProps, '
   );
 };
 
-const limitedAccountLabelNames = ['ID', 'First Name', 'Last Name', 'Nickname'];
+const limitedAccountLabelNames = ['ID', 'First Name', 'Last Name', 'Nickname', 'Tag'];
 const onlyFullAccountLabelNames = ['Email Address', 'Invitation Language'];
 const fullAccountLabelNames = [...limitedAccountLabelNames, ...onlyFullAccountLabelNames];
 
