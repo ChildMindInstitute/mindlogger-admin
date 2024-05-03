@@ -31,7 +31,7 @@ export const BuilderApplet = () => {
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
   const isNewApplet = useCheckIfNewApplet();
-  const navigatedFromBuilder = forbiddenState.useData()?.navigatedFromBuilder ?? {};
+  const redirectedFromBuilder = forbiddenState.useData()?.redirectedFromBuilder ?? {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const { getAppletWithItems } = applet.thunk;
   const { result: themesList = [] } = themes.useThemesData() || {};
@@ -55,7 +55,7 @@ export const BuilderApplet = () => {
   const defaultThemeId = getDefaultThemeId(themesList);
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    appletId && ownerId && !isNewApplet && !navigatedFromBuilder
+    appletId && ownerId && !isNewApplet && !redirectedFromBuilder
       ? dispatch(getAppletWithItems({ ownerId, appletId }))
       : undefined,
   );

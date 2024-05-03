@@ -27,7 +27,7 @@ export const useNoPermissionPopup = (): UseNoPermissionPopupReturn => {
 
   const handleSubmit = async () => {
     dispatch(forbiddenState.actions.clearForbiddenError());
-    isBuilder && dispatch(forbiddenState.actions.setNavigatedFromBuilder());
+    isBuilder && dispatch(forbiddenState.actions.setRedirectedFromBuilder());
     dispatch(applet.actions.resetApplet());
     dispatch(alerts.actions.resetAlerts());
     dispatch(alerts.thunk.getAlerts({ limit: DEFAULT_ROWS_PER_PAGE }));
@@ -43,7 +43,7 @@ export const useNoPermissionPopup = (): UseNoPermissionPopupReturn => {
       Promise.resolve(
         navigate(page.dashboardApplets, { state: { [LocationStateKeys.Workspace]: workspace } }),
       ).then(() => {
-        isBuilder && dispatch(forbiddenState.actions.resetNavigatedFromBuilder());
+        isBuilder && dispatch(forbiddenState.actions.resetRedirectedFromBuilder());
       });
 
       return;
