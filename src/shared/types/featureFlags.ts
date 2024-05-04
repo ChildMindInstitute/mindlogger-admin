@@ -9,6 +9,8 @@ export const FeatureFlagsKeys = {
   enableActivityFilterSort: 'enableActivityFilterSort',
   // TODO: https://mindlogger.atlassian.net/browse/M2-6518 Assign Activity flag cleanup
   enableActivityAssign: 'enableActivityAssign',
+  // TODO: https://mindlogger.atlassian.net/browse/M2-6523 Participant Connections flag cleanup
+  enableParticipantConnections: 'enableParticipantConnections',
 };
 
 export type FeatureFlags = Partial<Record<keyof typeof FeatureFlagsKeys, LDFlagValue>>;
