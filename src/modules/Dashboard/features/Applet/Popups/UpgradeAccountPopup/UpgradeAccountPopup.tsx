@@ -128,7 +128,7 @@ export const UpgradeAccountPopup = ({
     >
       <StyledModalWrapper>
         {isLoading && <Spinner />}
-        <StyledFlexColumn sx={{ gap: 0.8, mb: 4 }}>
+        <StyledFlexColumn sx={{ gap: 1, mb: 4 }}>
           <ParticipantSnippet secretId={secretId} nickname={nickname} tag={tag} />
           <StyledBodyLarge>{t('upgradeDescription')}</StyledBodyLarge>
         </StyledFlexColumn>

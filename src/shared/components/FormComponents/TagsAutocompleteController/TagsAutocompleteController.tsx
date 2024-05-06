@@ -2,8 +2,9 @@ import { useState, MouseEvent, SyntheticEvent } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { Checkbox, FormControlLabel, Divider, Paper, ListItem, Autocomplete } from '@mui/material';
 
-import { theme } from 'shared/styles';
+import { theme, variables } from 'shared/styles';
 import { Chip, ChipShape } from 'shared/components/Chip';
+import { Svg } from 'shared/components/Svg';
 
 import {
   AutocompleteOption,
@@ -11,7 +12,10 @@ import {
 } from './TagsAutocompleteController.types';
 import { StyledTagsContainer, StyledTextField } from './TagsAutocompleteController.styles';
 
-export const TagsAutocompleteController = <T extends FieldValues>({
+export const TagsAutocompleteController = <
+  FormType extends FieldValues,
+  Value extends AutocompleteOption,
+>({
   name,
   control,
   options,
@@ -22,9 +26,10 @@ export const TagsAutocompleteController = <T extends FieldValues>({
   limitTags,
   defaultSelectedAll = false,
   onCustomChange,
+  renderOption,
   'data-testid': dataTestid,
-  ...props
-}: TagsAutocompleteControllerProps<T>) => {
+  textFieldProps,
+}: TagsAutocompleteControllerProps<FormType, Value>) => {
   const [selectedAll, setSelectedAll] = useState<boolean>(defaultSelectedAll);
 
   return (
@@ -39,8 +44,8 @@ export const TagsAutocompleteController = <T extends FieldValues>({
               onChange([]);
               onCustomChange?.([]);
             } else {
-              onChange(options || []);
-              onCustomChange?.(options || []);
+              onChange(options);
+              onCustomChange?.(options);
             }
 
             return !prev;
@@ -49,7 +54,7 @@ export const TagsAutocompleteController = <T extends FieldValues>({
 
         const handleChange = (
           _e: SyntheticEvent<Element, Event>,
-          value: AutocompleteOption[],
+          value: Value[],
           reason: string,
         ) => {
           if (reason === 'clear' || reason === 'removeOption') setSelectedAll(false);
@@ -63,7 +68,7 @@ export const TagsAutocompleteController = <T extends FieldValues>({
             id="autocomplete"
             multiple
             limitTags={limitTags}
-            options={options || []}
+            options={options}
             fullWidth
             disableCloseOnSelect
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -72,14 +77,25 @@ export const TagsAutocompleteController = <T extends FieldValues>({
             value={value || []}
             onChange={handleChange}
             disabled={disabled}
-            // eslint-disable-next-line unused-imports/no-unused-vars
-            renderInput={({ InputLabelProps, ...params }) => (
-              <StyledTextField limitRows={value?.length && limitTagRows} {...params} {...props} />
+            popupIcon={
+              <Svg
+                id="navigate-down"
+                width={24}
+                height={24}
+                fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
+              />
+            }
+            renderInput={({ InputLabelProps: _InputLabelProps, ...params }) => (
+              <StyledTextField
+                limitRows={value?.length && limitTagRows}
+                {...params}
+                {...textFieldProps}
+              />
             )}
-            renderOption={(props, option, { selected }) => (
+            renderOption={(props, option, state, ownerState) => (
               <ListItem {...props}>
-                <Checkbox checked={selected} />
-                {option.label}
+                <Checkbox checked={state.selected} />
+                {renderOption ? renderOption(option, state, ownerState) : option.label}
               </ListItem>
             )}
             renderTags={(value, getTagProps) => {
@@ -142,6 +158,9 @@ export const TagsAutocompleteController = <T extends FieldValues>({
                     },
                   },
                 ],
+              },
+              paper: {
+                sx: { maxHeight: '25.6rem' }, // Select All row + 4 rows
               },
             }}
             data-testid={dataTestid}

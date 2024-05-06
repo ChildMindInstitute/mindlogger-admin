@@ -3,8 +3,14 @@ import { Autocomplete, Box, TextField } from '@mui/material';
 import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
-import { Tooltip } from 'shared/components';
-import { StyledFlexColumn, StyledTitleMedium, StyledTitleTooltipIcon, theme } from 'shared/styles';
+import { Svg, Tooltip } from 'shared/components';
+import {
+  StyledFlexColumn,
+  StyledTitleMedium,
+  StyledTitleTooltipIcon,
+  theme,
+  variables,
+} from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 
 import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
@@ -19,6 +25,7 @@ export const LabeledUserDropdown = ({
   onChange,
   handleSearch,
   debounce,
+  disabled,
   ...rest
 }: LabeledUserDropdownProps) => {
   const { t } = useTranslation('app');
@@ -92,6 +99,15 @@ export const LabeledUserDropdown = ({
         )}
         getOptionLabel={(value) =>
           `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}`
+        }
+        disabled={disabled}
+        popupIcon={
+          <Svg
+            id="navigate-down"
+            width={24}
+            height={24}
+            fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
+          />
         }
         fullWidth={true}
         value={value}
