@@ -184,7 +184,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ${true}      | ${Roles.Manager}     | ${'Take Now for Manager'}
         ${true}      | ${Roles.SuperAdmin}  | ${'Take Now for SuperAdmin'}
         ${true}      | ${Roles.Owner}       | ${'Take Now for Owner'}
-        ${true}      | ${Roles.Coordinator} | ${'Take Now for Coordinator'}
+        ${false}     | ${Roles.Coordinator} | ${'Take Now for Coordinator'}
         ${false}     | ${Roles.Editor}      | ${'Take Now for Editor'}
         ${false}     | ${Roles.Respondent}  | ${'Take Now for Respondent'}
         ${false}     | ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
