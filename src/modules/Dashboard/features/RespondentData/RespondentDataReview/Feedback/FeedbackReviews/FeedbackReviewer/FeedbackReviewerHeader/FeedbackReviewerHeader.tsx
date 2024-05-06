@@ -24,15 +24,17 @@ export const FeedbackReviewerHeader = ({
   isReviewOpen,
   reviewerName,
   hasReview,
-  createdAt,
+  submitDate,
   onToggleVisibilityClick,
+  hasEditAndRemove,
   onRemoveClick,
+  onEditClick,
   'data-testid': dataTestid,
 }: FeedbackReviewerHeaderProps) => {
   const { t } = useTranslation('app');
   const toggleSvgId = isReviewOpen ? 'navigate-up' : 'navigate-down';
   const submittedDate = `${t('submitted')} ${format(
-    new Date(createdAt),
+    new Date(submitDate),
     DateFormats.MonthDayYearTime,
   )}`;
 
@@ -63,8 +65,17 @@ export const FeedbackReviewerHeader = ({
       >
         {submittedDate}
       </StyledBodyMedium>
-      {onRemoveClick && (
+      {hasEditAndRemove && (
         <StyledRemoveWrapper>
+          <Button
+            variant="text"
+            startIcon={<Svg width="18" height="18" id="edit" />}
+            onClick={onEditClick}
+            sx={{ mr: theme.spacing(0.2) }}
+            data-testid={`${dataTestid}-answers-edit`}
+          >
+            {t('edit')}
+          </Button>
           <Button
             variant="text"
             startIcon={<Svg width="18" height="18" id="trash" />}

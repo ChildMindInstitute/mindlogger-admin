@@ -11,6 +11,7 @@ export const Reviews = ({
   removeReviewError,
   removeReviewLoading,
   onReviewerAnswersRemove,
+  onReviewEdit,
   'data-testid': dataTestid,
 }: ReviewsProps) => {
   if (isLoading) return <Spinner />;
@@ -37,6 +38,7 @@ export const Reviews = ({
               }
               isLoading={isCurrentUserReviewer && removeReviewLoading}
               onReviewerAnswersRemove={onReviewerAnswersRemove}
+              onReviewEdit={onReviewEdit}
               key={reviewerData.reviewer.id}
               data-testid={`${dataTestid}-reviewer-${index}`}
             />

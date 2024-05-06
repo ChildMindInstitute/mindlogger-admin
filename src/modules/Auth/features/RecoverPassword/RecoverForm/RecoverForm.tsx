@@ -9,6 +9,7 @@ import { InputController } from 'shared/components/FormComponents';
 import { StyledErrorText, StyledHeadline, variables } from 'shared/styles';
 import { approveRecoveryPasswordApi } from 'api';
 import { getErrorMessage } from 'shared/utils';
+import { LocationStateKeys } from 'shared/types';
 
 import {
   StyledButton,
@@ -33,7 +34,7 @@ export const RecoverForm = ({ email, resetKey: key }: RecoverFormProps) => {
     try {
       await approveRecoveryPasswordApi({ email, key, password });
       navigate(page.login, {
-        state: { isPasswordReset: true },
+        state: { [LocationStateKeys.IsPasswordReset]: true },
       });
     } catch (error) {
       setErrorMessage(getErrorMessage(error));

@@ -292,6 +292,7 @@ export type Reviewer = {
 export type Review = {
   id: string;
   createdAt: string;
+  updatedAt: string;
   items: Item[];
   itemIds: string[];
   reviewer: Reviewer;

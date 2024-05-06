@@ -8,6 +8,7 @@ import { FeedbackReviewerHeader } from './FeedbackReviewerHeader';
 
 const mockedOnToggleVisibility = jest.fn();
 const mockedOnRemove = jest.fn();
+const mockedOnEdit = jest.fn();
 const dataTestid = 'reviewer-header';
 const renderComponent = (props?: Partial<FeedbackReviewerHeaderProps>) =>
   renderWithProviders(
@@ -15,24 +16,28 @@ const renderComponent = (props?: Partial<FeedbackReviewerHeaderProps>) =>
       isReviewOpen={false}
       reviewerName="John Doe"
       hasReview={true}
-      createdAt="2024-04-08T10:00:00"
+      submitDate="2024-04-08T10:00:00"
       onToggleVisibilityClick={mockedOnToggleVisibility}
       onRemoveClick={mockedOnRemove}
+      onEditClick={mockedOnEdit}
+      hasEditAndRemove={true}
       data-testid={dataTestid}
       {...props}
     />,
   );
 
 describe('FeedbackReviewerHeader', () => {
-  test('should render correctly if has review and remove button', async () => {
+  test('should render correctly if has review, remove, and edit buttons', async () => {
     renderComponent();
 
     const collapseButton = screen.getByTestId(`${dataTestid}-collapse`);
     const removeButton = screen.getByTestId(`${dataTestid}-answers-remove`);
+    const editButton = screen.getByTestId(`${dataTestid}-answers-edit`);
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(collapseButton).toBeInTheDocument();
     expect(removeButton).toBeInTheDocument();
+    expect(editButton).toBeInTheDocument();
     expect(screen.queryByTestId(`${dataTestid}-lock`)).not.toBeInTheDocument();
     expect(screen.getByText('Submitted: Apr 08, 2024 10:00')).toBeInTheDocument();
 
@@ -41,6 +46,9 @@ describe('FeedbackReviewerHeader', () => {
 
     await userEvent.click(removeButton);
     expect(mockedOnRemove).toHaveBeenCalled();
+
+    await userEvent.click(editButton);
+    expect(mockedOnEdit).toHaveBeenCalled();
   });
 
   test('renders lock icon for user with no permission to view data', async () => {
@@ -57,9 +65,10 @@ describe('FeedbackReviewerHeader', () => {
     });
   });
 
-  test('not renders remove button for if onRemoveClick is null', () => {
-    renderComponent({ onRemoveClick: null });
+  test('not renders remove and edit buttons for if hasEditAndRemove is false', () => {
+    renderComponent({ hasEditAndRemove: false });
 
     expect(screen.queryByTestId(`${dataTestid}-answers-remove`)).not.toBeInTheDocument();
+    expect(screen.queryByTestId(`${dataTestid}-answers-edit`)).not.toBeInTheDocument();
   });
 });
