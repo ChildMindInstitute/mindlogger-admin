@@ -18,7 +18,7 @@ import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
-import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
+import { DEFAULT_ROWS_PER_PAGE, PARTICIPANT_TAG_ICONS, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
@@ -55,7 +55,7 @@ import { DataExportPopup, EditRespondentPopup, RemoveRespondentPopup } from '../
 export const Participants = () => {
   const { appletId } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation('app');
+  const { t, i18n } = useTranslation('app');
   const timeAgo = useTimeAgo();
 
   const [respondentsData, setRespondentsData] = useState<ParticipantsData | null>(null);
@@ -247,13 +247,10 @@ export const Participants = () => {
       email,
     } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
-    const schedule =
-      appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
+    const schedule = appletId && details[0].hasIndividualSchedule ? t('individual') : t('default');
     const nickname = joinWihComma(nicknames, true);
     const secretId = joinWihComma(secretIds, true);
-    // TODO: Populate participant tag
-    // https://mindlogger.atlassian.net/browse/M2-5861
-    const tag = null;
+    const tag = details[0].subjectTag;
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
     const accountType = {
       [RespondentStatus.Invited]: t('full'),
@@ -279,10 +276,21 @@ export const Participants = () => {
         width: ParticipantsColumnsWidth.Pin,
       },
       tag: {
-        // TODO: Replace `null` with tag when available
-        // https://mindlogger.atlassian.net/browse/M2-5861
-        // https://mindlogger.atlassian.net/browse/M2-6161
-        content: () => <StyledMaybeEmpty>{null}</StyledMaybeEmpty>,
+        content: () => (
+          <StyledMaybeEmpty>
+            {tag && (
+              <Chip
+                icon={
+                  tag in PARTICIPANT_TAG_ICONS ? (
+                    <Svg id={PARTICIPANT_TAG_ICONS[tag]} width={18} height={18} />
+                  ) : undefined
+                }
+                color="secondary"
+                title={i18n.exists(`participantTag.${tag}`) ? t(`participantTag.${tag}`) : tag}
+              />
+            )}
+          </StyledMaybeEmpty>
+        ),
         value: '',
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,

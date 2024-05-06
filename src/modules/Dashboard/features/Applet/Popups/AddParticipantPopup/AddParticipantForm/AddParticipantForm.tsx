@@ -5,6 +5,7 @@ import { InputController, SelectController } from 'shared/components/FormCompone
 import { Languages } from 'api';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
 import { PARTICIPANT_TAG_ICONS, ParticipantTag } from 'shared/consts';
+import { Svg } from 'shared/components';
 
 import { AddParticipantFormProps } from './AddParticipantForm.types';
 import { Fields } from '../AddParticipantPopup.types';
@@ -86,7 +87,7 @@ export const AddParticipantForm = ({
               ...Object.values(ParticipantTag).map((tag) => ({
                 labelKey: `participantTag.${tag}`,
                 value: tag,
-                icon: PARTICIPANT_TAG_ICONS[tag],
+                icon: <Svg id={PARTICIPANT_TAG_ICONS[tag]} width={24} height={24} />,
               })),
             ]}
             placeholder={t('selectOne')}

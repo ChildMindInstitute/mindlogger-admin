@@ -1,4 +1,5 @@
 import { enUS, fr } from 'date-fns/locale';
+import { Icons } from 'svgSprite';
 
 import { Svg } from 'shared/components/Svg';
 
@@ -347,9 +348,9 @@ export enum ParticipantTag {
   Teacher = 'teacher',
 }
 
-export const PARTICIPANT_TAG_ICONS = {
-  [ParticipantTag.None]: <Svg id="close" width={24} height={24} />,
-  [ParticipantTag.Child]: <Svg id="account" width={24} height={24} />,
-  [ParticipantTag.Parent]: <Svg id="users-outlined" width={24} height={24} />,
-  [ParticipantTag.Teacher]: <Svg id="teacher" width={24} height={24} />,
+export const PARTICIPANT_TAG_ICONS: Record<ParticipantTag, Icons> = {
+  [ParticipantTag.None]: 'close',
+  [ParticipantTag.Child]: 'account',
+  [ParticipantTag.Parent]: 'users-outlined',
+  [ParticipantTag.Teacher]: 'teacher',
 };

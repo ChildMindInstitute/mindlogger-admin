@@ -2,16 +2,23 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
+import { Languages } from 'api';
 
 import { AddParticipantForm } from './AddParticipantForm';
 import { AddParticipantFormValues } from '../AddParticipantPopup.types';
 import { AddParticipantFormProps } from './AddParticipantForm.types';
+import { defaultValues } from '../AddParticipantPopup.const';
 
 const mockOnSubmit = jest.fn();
 const dataTestid = 'test-id';
 
 const AddParticipantFormTest = ({ accountType }: Pick<AddParticipantFormProps, 'accountType'>) => {
-  const { control } = useForm<AddParticipantFormValues>();
+  const { control } = useForm<AddParticipantFormValues>({
+    defaultValues: {
+      ...defaultValues,
+      language: Languages.EN,
+    },
+  });
 
   return (
     <AddParticipantForm

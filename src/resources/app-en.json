@@ -868,7 +868,8 @@
     "": "No selection",
     "child": "Child",
     "parent": "Parent/Guardian",
-    "teacher": "Teacher"
+    "teacher": "Teacher",
+    "owner": "Owner"
   },
   "password": "Password",
   "passwordBlankSpaces": "Password must not contain spaces.",

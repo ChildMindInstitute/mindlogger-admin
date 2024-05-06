@@ -867,7 +867,8 @@
     "": "Aucune sélection",
     "child": "Enfant",
     "parent": "Parent/Tuteur",
-    "teacher": "Enseignant"
+    "teacher": "Enseignant",
+    "owner": "Propriétaire"
   },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
