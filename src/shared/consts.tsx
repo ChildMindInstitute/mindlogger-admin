@@ -336,3 +336,9 @@ export const DEFAULT_API_END_TIME = '23:59:00';
 export const JEST_TEST_TIMEOUT = 15000;
 
 export const NULL_ANSWER = 'value: null';
+
+export const observerStyles = {
+  position: 'absolute',
+  height: 'calc(100% + 20rem)',
+  bottom: 0,
+};

@@ -12,4 +12,5 @@ export type GetResponseOptionsProps = {
   maxDate: Date;
   activityItemAnswer: FormattedResponses;
   versions: Version[];
+  isStaticActive?: boolean;
 };

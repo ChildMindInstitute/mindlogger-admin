@@ -105,6 +105,7 @@ config({
 
         md.renderer.rules.image = function (tokens, idx, options, env, self) {
           const token = tokens[idx];
+          token.attrPush(['loading', 'lazy']);
           const src = token.attrGet('src');
           const description = token.children?.[0]?.content;
 
