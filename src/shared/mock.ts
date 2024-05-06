@@ -2668,6 +2668,8 @@ export const mockedDecryptedObjectForDrawing = {
   submitId: '6b0b8017-be4c-4dfe-836e-818c03ac562e',
   version: '1.1.1',
   respondentId: '835e5277-5949-4dff-817a-d85c17a3604f',
+  sourceSubjectId: 'bba7bcd3-f245-4354-9461-b494f186dcca',
+  targetSubjectId: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
   respondentSecretId: 'respondentSecretId',
   legacyProfileId: null,
   scheduledDatetime: null,
