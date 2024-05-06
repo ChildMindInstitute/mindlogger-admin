@@ -2,9 +2,12 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import { page } from 'resources';
 import { Svg } from 'shared/components';
+import { Tab } from 'shared/components/Tabs/Tabs.types';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 export const useParticipantDetailsTabs = () => {
   const { appletId, subjectId } = useParams();
+  const { featureFlags } = useFeatureFlags();
 
   return [
     {
@@ -18,17 +21,19 @@ export const useParticipantDetailsTabs = () => {
       }),
       'data-testid': 'participant-activities',
     },
-    {
-      labelKey: 'connections',
-      id: 'participant-connections',
-      icon: <Svg id="respondent-circle" />,
-      activeIcon: <Svg id="respondent-circle-filled" />,
-      path: generatePath(page.appletParticipantConnections, {
-        appletId,
-        subjectId,
-      }),
-      'data-testid': 'participant-connections',
-    },
+    featureFlags.enableParticipantConnections
+      ? {
+          labelKey: 'connections',
+          id: 'participant-connections',
+          icon: <Svg id="respondent-circle" />,
+          activeIcon: <Svg id="respondent-circle-filled" />,
+          path: generatePath(page.appletParticipantConnections, {
+            appletId,
+            subjectId,
+          }),
+          'data-testid': 'participant-connections',
+        }
+      : undefined,
     {
       labelKey: 'schedule',
       id: 'participant-schedule',
@@ -40,5 +45,5 @@ export const useParticipantDetailsTabs = () => {
       }),
       'data-testid': 'participant-schedule',
     },
-  ];
+  ].filter(Boolean) as Tab[];
 };

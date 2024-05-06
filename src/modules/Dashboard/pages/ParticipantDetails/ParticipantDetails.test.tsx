@@ -6,6 +6,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedApplet, mockedRespondentId } from 'shared/mock';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { page } from 'resources';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import ParticipantDetails from './ParticipantDetails';
 
@@ -33,11 +34,21 @@ jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
 }));
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  ...jest.requireActual('shared/hooks/useFeatureFlags'),
+  useFeatureFlags: jest.fn(),
+}));
+
 describe('Participant Details page', () => {
   const navigate: jest.Mock = jest.fn();
 
   beforeEach(() => {
     jest.mocked(useNavigate).mockImplementation(() => navigate);
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableParticipantConnections: true,
+      },
+    });
   });
 
   afterEach(() => {
@@ -108,5 +119,23 @@ describe('Participant Details page', () => {
     });
 
     await waitFor(() => getByTestId('participant-schedule'));
+  });
+  test('should not render participant connections if the feature flag is disabled', async () => {
+    mockAxios.get.mockResolvedValue(mockedAppletResult);
+    mockAxios.get.mockResolvedValue(mockedParticipantResult);
+    jest.mocked(useFeatureFlags).mockReturnValue({
+      featureFlags: {
+        enableParticipantConnections: false,
+      },
+    });
+
+    const { queryByTestId } = renderWithProviders(<ParticipantDetails />, {
+      preloadedState: getPreloadedState(),
+      route: `${route}/connections`,
+      routePath: page.appletParticipantConnections,
+    });
+
+    const connections = queryByTestId('participant-connections');
+    expect(connections).toBeNull();
   });
 });
