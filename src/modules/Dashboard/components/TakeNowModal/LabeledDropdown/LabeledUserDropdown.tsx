@@ -80,8 +80,9 @@ export const LabeledUserDropdown = ({
           return <TextField {...rest} placeholder={placeholder} name={name} />;
         }}
         options={combinedOptions}
-        renderOption={({ children: _children, ...props }, { id: _id, ...psProps }) => (
+        renderOption={({ children: _children, ...props }, { id, ...psProps }) => (
           <ParticipantSnippet<'li'>
+            key={id}
             {...psProps}
             boxProps={{
               sx: { p: theme.spacing(0.6, 1.6), cursor: 'pointer' },

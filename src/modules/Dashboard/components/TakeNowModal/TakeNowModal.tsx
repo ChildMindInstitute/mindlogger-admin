@@ -51,6 +51,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         id: participant.details[0].subjectId,
         secretId: stringSecretIds,
         nickname: stringNicknames,
+        tag: participant.details[0].subjectTag,
       };
     },
     [],
