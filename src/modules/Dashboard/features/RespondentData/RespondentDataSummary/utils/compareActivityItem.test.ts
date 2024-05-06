@@ -8,6 +8,7 @@ import {
   handleSlider,
   handleSliderRows,
   handleSingleOrMultipleSelection,
+  handlePerRowSelection,
 } from './compareActivityItem';
 
 describe('shiftAnswerValues', () => {
@@ -102,7 +103,7 @@ describe('reduceToAnswerMap', () => {
   });
 });
 
-describe('compareActivityItem', () => {
+describe('compare activity item cases', () => {
   test('handleSingleOrMultipleSelection', () => {
     const prevActivityItem = {
       activityItem: {
@@ -400,6 +401,225 @@ describe('compareActivityItem', () => {
     });
   });
 
+  test('handlePerRowSelection', () => {
+    const previousActivityItem = {
+      activityItem: {
+        id: 'ef276f93-ec56-40a1-a42d-18d21f5df3e4',
+        name: 'Item1',
+        question: {
+          en: 'single selection per row',
+        },
+        responseType: 'singleSelectRows',
+        responseValues: {
+          type: 'singleSelectRows',
+          rows: [
+            {
+              id: 'd91e252c-e233-4644-888a-48e8eeff5b62',
+              rowName: 'row 1',
+            },
+            {
+              id: 'd91e252c-e233-4644-888a-48e8eeff5b62',
+              rowName: 'row 1 (upd)',
+            },
+            {
+              id: '914ea1e1-a334-4414-bb44-53f1e2e4c31d',
+              rowName: 'row 2',
+            },
+          ],
+          options: [
+            {
+              id: '59871f71-c8df-4fb2-80bf-e334f69097cc',
+              text: 'option 1',
+            },
+            {
+              id: '4bf7cf33-700e-4576-90a2-12f4183b2c30',
+              text: 'option 2',
+            },
+            {
+              id: 'd0d277cc-67f3-4988-943d-c2241b3bff10',
+              text: 'new option',
+            },
+          ],
+          dataMatrix: null,
+        },
+      },
+      answers: {
+        'row 1': [
+          {
+            answer: {
+              value: 'option 2',
+              text: null,
+            },
+            date: '2024-05-06T12:15:53.291000',
+          },
+        ],
+        'row 1 (upd)': [
+          {
+            answer: {
+              value: 'option 1',
+              text: null,
+            },
+            date: '2024-05-06T12:17:30.658000',
+          },
+        ],
+        'row 2': [
+          {
+            answer: {
+              value: 'new option',
+              text: null,
+            },
+            date: '2024-05-06T12:17:30.658000',
+          },
+        ],
+      },
+    };
+    const formattedActivityItemAnswers = {
+      activityItem: {
+        id: 'ef276f93-ec56-40a1-a42d-18d21f5df3e4',
+        name: 'Item1',
+        question: {
+          en: 'updated displayed content',
+        },
+        responseType: 'singleSelectRows',
+        responseValues: {
+          type: 'singleSelectRows',
+          rows: [
+            {
+              id: 'd91e252c-e233-4644-888a-48e8eeff5b62',
+              rowName: 'row 1 (upd)',
+            },
+            {
+              id: '914ea1e1-a334-4414-bb44-53f1e2e4c31d',
+              rowName: 'row 2',
+            },
+          ],
+          options: [
+            {
+              id: '59871f71-c8df-4fb2-80bf-e334f69097cc',
+              text: 'option 1',
+            },
+            {
+              id: '4bf7cf33-700e-4576-90a2-12f4183b2c30',
+              text: 'option 2',
+            },
+            {
+              id: 'd0d277cc-67f3-4988-943d-c2241b3bff10',
+              text: 'new option',
+            },
+          ],
+          dataMatrix: null,
+        },
+      },
+      answers: {
+        'row 1 (upd)': [
+          {
+            answer: {
+              value: 'option 1',
+              text: null,
+            },
+            date: '2024-05-06T12:17:30.658000',
+          },
+        ],
+        'row 2': [
+          {
+            answer: {
+              value: 'new option',
+              text: null,
+            },
+            date: '2024-05-06T12:17:30.658000',
+          },
+        ],
+      },
+    };
+
+    const result = handlePerRowSelection(previousActivityItem, formattedActivityItemAnswers);
+    expect(result).toEqual({
+      activityItem: {
+        id: 'ef276f93-ec56-40a1-a42d-18d21f5df3e4',
+        name: 'Item1',
+        question: {
+          en: 'updated displayed content',
+        },
+        responseType: 'singleSelectRows',
+        responseValues: {
+          dataMatrix: null,
+          options: [
+            {
+              id: '59871f71-c8df-4fb2-80bf-e334f69097cc',
+              text: 'option 1',
+            },
+            {
+              id: '4bf7cf33-700e-4576-90a2-12f4183b2c30',
+              text: 'option 2',
+            },
+            {
+              id: 'd0d277cc-67f3-4988-943d-c2241b3bff10',
+              text: 'new option',
+            },
+          ],
+          rows: [
+            {
+              id: 'd91e252c-e233-4644-888a-48e8eeff5b62',
+              rowName: 'row 1',
+            },
+            {
+              id: 'd91e252c-e233-4644-888a-48e8eeff5b62',
+              rowName: 'row 1 (upd)',
+            },
+            {
+              id: '914ea1e1-a334-4414-bb44-53f1e2e4c31d',
+              rowName: 'row 2',
+            },
+          ],
+          type: 'singleSelectRows',
+        },
+      },
+      answers: {
+        'row 1': [
+          {
+            answer: {
+              text: null,
+              value: 'option 2',
+            },
+            date: '2024-05-06T12:15:53.291000',
+          },
+        ],
+        'row 1 (upd)': [
+          {
+            answer: {
+              text: null,
+              value: 'option 1',
+            },
+            date: '2024-05-06T12:17:30.658000',
+          },
+          {
+            answer: {
+              text: null,
+              value: 'option 1',
+            },
+            date: '2024-05-06T12:17:30.658000',
+          },
+        ],
+        'row 2': [
+          {
+            answer: {
+              text: null,
+              value: 'new option',
+            },
+            date: '2024-05-06T12:17:30.658000',
+          },
+          {
+            answer: {
+              text: null,
+              value: 'new option',
+            },
+            date: '2024-05-06T12:17:30.658000',
+          },
+        ],
+      },
+    });
+  });
+
   test('handleSliderRows', () => {
     const prevActivityItem = {
       activityItem: {
@@ -427,7 +647,26 @@ describe('compareActivityItem', () => {
           ],
         },
       },
-      answers: {},
+      answers: {
+        '78eef744-31df-4adc-aa35-0b2d7c228d93': [
+          {
+            answer: {
+              value: 1,
+              text: null,
+            },
+            date: '2024-04-25T12:54:06.841000',
+          },
+        ],
+        '3fa58ae0-8d4f-427c-af2c-93c71e18187b': [
+          {
+            answer: {
+              value: 9,
+              text: null,
+            },
+            date: '2024-04-25T12:54:06.841000',
+          },
+        ],
+      },
     };
     const formattedActivityItemAnswers = {
       activityItem: {
@@ -459,7 +698,7 @@ describe('compareActivityItem', () => {
         '78eef744-31df-4adc-aa35-0b2d7c228d93': [
           {
             answer: {
-              value: 9,
+              value: 10,
               text: null,
             },
             date: '2024-04-26T12:54:06.841000',
@@ -503,14 +742,8 @@ describe('compareActivityItem', () => {
             },
           ],
         },
-        config: {},
         name: 'Item1',
         id: '6c1e500a-908d-4b8c-9890-ec396c257c7f',
-        order: 1,
-      },
-      answer: {
-        value: [5, 3],
-        text: null,
       },
     };
 
@@ -556,8 +789,24 @@ describe('compareActivityItem', () => {
         '35d331af-180c-43b1-83e1-7a6f34d2fd76': [
           { answer: { text: null, value: 4 }, date: '2024-04-26T12:54:06.841000' },
         ],
+        '3fa58ae0-8d4f-427c-af2c-93c71e18187b': [
+          {
+            answer: {
+              text: null,
+              value: 9,
+            },
+            date: '2024-04-25T12:54:06.841000',
+          },
+        ],
         '78eef744-31df-4adc-aa35-0b2d7c228d93': [
-          { answer: { text: null, value: 9 }, date: '2024-04-26T12:54:06.841000' },
+          { answer: { text: null, value: 1 }, date: '2024-04-25T12:54:06.841000' },
+          {
+            answer: {
+              text: null,
+              value: 10,
+            },
+            date: '2024-04-26T12:54:06.841000',
+          },
         ],
       },
     });
