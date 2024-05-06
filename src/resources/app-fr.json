@@ -611,6 +611,7 @@
   "indefinitely": "Indéfiniment",
   "individualSchedule": "Programme Individuel",
   "individual": "Individuel",
+  "individualScheduleLimited": "Les comptes limités ne peuvent pas avoir de Programme Individuel",
   "individualScheduleExport": "Le programme individuel actuel du participant <1>{{respondentName}}</1> sera exporté sous forme d'un fichier <1>.csv</1>.",
   "individualScheduleRemoved": "Programme Individuel Supprimé avec Succès",
   "individualScheduleSetup": "Configuration du Programme Individuel",
