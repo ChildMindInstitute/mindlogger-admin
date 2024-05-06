@@ -18,13 +18,13 @@ import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
-import { DEFAULT_ROWS_PER_PAGE, PARTICIPANT_TAG_ICONS, Roles } from 'shared/consts';
+import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
-import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
+import { ParticipantSnippetInfo, ParticipantTagChip } from 'modules/Dashboard/components';
 
 import {
   AddParticipantButton,
@@ -55,7 +55,7 @@ import { DataExportPopup, EditRespondentPopup, RemoveRespondentPopup } from '../
 export const Participants = () => {
   const { appletId } = useParams();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation('app');
+  const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
 
   const [respondentsData, setRespondentsData] = useState<ParticipantsData | null>(null);
@@ -278,17 +278,7 @@ export const Participants = () => {
       tag: {
         content: () => (
           <StyledMaybeEmpty>
-            {tag && (
-              <Chip
-                icon={
-                  tag in PARTICIPANT_TAG_ICONS ? (
-                    <Svg id={PARTICIPANT_TAG_ICONS[tag]} width={18} height={18} />
-                  ) : undefined
-                }
-                color="secondary"
-                title={i18n.exists(`participantTag.${tag}`) ? t(`participantTag.${tag}`) : tag}
-              />
-            )}
+            <ParticipantTagChip tag={tag} />
           </StyledMaybeEmpty>
         ),
         value: '',

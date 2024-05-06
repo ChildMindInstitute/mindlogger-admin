@@ -2,10 +2,11 @@ import { MenuItemType, Svg } from 'shared/components';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
 import { RespondentStatus } from 'modules/Dashboard/types';
+import { ParticipantTag } from 'shared/consts';
 
 import { getParticipantActions, getHeadCells } from './Participants.utils';
 
-const dataTestid = 'test-id';
+const dataTestId = 'test-id';
 
 const applets = [
   {
@@ -16,6 +17,7 @@ const applets = [
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
     subjectId: 'subj-1',
+    subjectTag: ParticipantTag.Child,
   },
   {
     appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
@@ -25,6 +27,7 @@ const applets = [
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
     subjectId: 'subj-2',
+    subjectTag: ParticipantTag.Child,
   },
 ];
 
@@ -58,7 +61,7 @@ const commonGetActionsProps = {
   email: mockedEmail,
   secretId: 'test secret id',
   nickname: 'test nickname',
-  tag: 'test tag',
+  tag: ParticipantTag.Child,
 };
 
 const expectedContext = {
@@ -76,7 +79,7 @@ const expectedActions = [
     title: 'Edit Participant',
     context: expectedContext,
     isDisplayed: true,
-    'data-testid': `${dataTestid}-edit`,
+    'data-testid': `${dataTestId}-edit`,
   },
   {
     icon: <Svg id="full-account" width={24} height={24} />,
@@ -84,7 +87,7 @@ const expectedActions = [
     title: 'Upgrade to Full Account',
     context: expectedContext,
     isDisplayed: true,
-    'data-testid': `${dataTestid}-upgrade-account`,
+    'data-testid': `${dataTestId}-upgrade-account`,
   },
   {
     icon: <Svg id="export" width={24} height={24} />,
@@ -92,7 +95,7 @@ const expectedActions = [
     title: 'Export Data',
     context: expectedContext,
     isDisplayed: true,
-    'data-testid': `${dataTestid}-export-data`,
+    'data-testid': `${dataTestId}-export-data`,
   },
   {
     icon: <Svg id="remove-access" width={24} height={24} />,
@@ -101,7 +104,7 @@ const expectedActions = [
     context: expectedContext,
     isDisplayed: true,
     customItemColor: variables.palette.dark_error_container,
-    'data-testid': `${dataTestid}-remove`,
+    'data-testid': `${dataTestId}-remove`,
   },
   {
     type: MenuItemType.Divider,
@@ -113,7 +116,7 @@ const expectedActions = [
     title: 'Assign Activity',
     context: expectedContext,
     isDisplayed: true,
-    'data-testid': `${dataTestid}-assign-activity`,
+    'data-testid': `${dataTestId}-assign-activity`,
   },
 ];
 
@@ -123,7 +126,7 @@ describe('Participants utils tests', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
         status: RespondentStatus.Invited,
-        dataTestid,
+        dataTestid: dataTestId,
       });
 
       const isDisplayed = [true, false, true, true, true, true];
@@ -139,7 +142,7 @@ describe('Participants utils tests', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
         status: RespondentStatus.NotInvited,
-        dataTestid,
+        dataTestid: dataTestId,
       });
 
       const isDisplayed = [true, true, true, true, true, true];
@@ -155,7 +158,7 @@ describe('Participants utils tests', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
         status: RespondentStatus.Pending,
-        dataTestid,
+        dataTestid: dataTestId,
       });
 
       const isDisplayed = [false, false, false, true, false, false];
