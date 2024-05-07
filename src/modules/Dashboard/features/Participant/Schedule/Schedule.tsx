@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Box } from '@mui/material';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Calendar } from 'modules/Dashboard/features/Applet/Schedule/Calendar';
 import { Legend } from 'modules/Dashboard/features/Applet/Schedule/Legend';
@@ -13,7 +13,6 @@ import { useAppDispatch } from 'redux/store';
 import { Respondent } from 'modules/Dashboard/types';
 
 export const ParticipantSchedule = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const { appletId } = useParams();
   const { getAllWorkspaceRespondents } = users.thunk;
   const { getEvents } = applets.thunk;
@@ -25,30 +24,20 @@ export const ParticipantSchedule = () => {
   const dispatch = useAppDispatch();
   const preparedEvents = usePreparedEvents(appletData);
   const subjectLoadingStatus = users.useSubjectStatus();
-  const userId = searchParams.get('user') ?? undefined;
   const isLoading =
     allRespondentsLoadingStatus === 'idle' ||
     allRespondentsLoadingStatus === 'loading' ||
     subjectLoadingStatus === 'idle' ||
     subjectLoadingStatus === 'loading';
-  const initialSelectedRespondent = useMemo(
+  const selectedRespondent = useMemo(
     () =>
       respondentsData?.find(({ secretIds }) =>
         subjectData ? secretIds.includes(subjectData?.secretUserId) : false,
       ) ?? ({} as Respondent),
     [respondentsData, subjectData],
   );
-
-  useEffect(() => {
-    if (initialSelectedRespondent) {
-      const { details, id } = initialSelectedRespondent;
-      const hasIndividualSchedule = details ? details[0].hasIndividualSchedule : false;
-      setSearchParams(hasIndividualSchedule && id ? { user: id } : {});
-    }
-    // `setSearchParams` is not memoized and would cause this hook to re-run
-    // across renders, despite `initialSelectedRespondent` not changing.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialSelectedRespondent]);
+  const { details, id: userId } = selectedRespondent ?? {};
+  const hasIndividualSchedule = details ? details[0].hasIndividualSchedule : false;
 
   useEffect(() => {
     if (!appletId || !ownerId) return;
@@ -59,12 +48,19 @@ export const ParticipantSchedule = () => {
   useEffect(() => {
     if (!appletId) return;
 
-    dispatch(getEvents({ appletId, respondentId: userId }));
+    const shouldFetchUserEvents = hasIndividualSchedule && !!userId;
+
+    dispatch(
+      getEvents({
+        appletId,
+        respondentId: shouldFetchUserEvents ? userId : undefined,
+      }),
+    );
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, dispatch, getEvents, userId]);
+  }, [appletId, dispatch, getEvents, hasIndividualSchedule, userId]);
 
   return (
     <Box
@@ -78,17 +74,17 @@ export const ParticipantSchedule = () => {
           <Legend
             appletId={appletId ?? 'Unknown applet ID'}
             appletName={appletData?.displayName ?? 'Unknown applet'}
+            canCreateIndividualSchedule={!!userId}
+            hasIndividualSchedule={hasIndividualSchedule}
             legendEvents={preparedEvents}
-            onSelectUser={(user) => {
-              setSearchParams(user ? { user } : {});
-            }}
-            userId={userId}
+            showScheduleToggle
+            userId={userId ?? undefined}
             sx={{
               borderRight: `${theme.spacing(0.1)} solid ${variables.palette.surface_variant}`,
               width: theme.spacing(32),
             }}
           />
-          <Calendar />
+          <Calendar userId={userId ?? undefined} />
         </>
       )}
     </Box>
