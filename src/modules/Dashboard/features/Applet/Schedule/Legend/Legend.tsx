@@ -1,40 +1,32 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { SelectController } from 'shared/components/FormComponents';
-import { Spinner, Svg } from 'shared/components';
-import { SelectEvent } from 'shared/types';
+import { Svg } from 'shared/components';
 import { exportTemplate, getRespondentName, Mixpanel } from 'shared/utils';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
 import { users } from 'modules/Dashboard/state';
+import { StyledFlexColumn, StyledFlexTopCenter, variables } from 'shared/styles';
 
 import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ImportSchedulePopup } from '../ImportSchedulePopup';
 import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
-import { RemoveIndividualSchedulePopup } from '../RemoveIndividualSchedulePopup';
 import { CreateEventPopup } from '../CreateEventPopup';
 import { ExpandedList } from './ExpandedList';
-import { SearchPopup } from './SearchPopup';
-import { Search } from './Search';
-import { ScheduleOptions, scheduleOptions, defaultExportHeader } from './Legend.const';
-import {
-  StyledBtn,
-  StyledLegend,
-  StyledBtnsRow,
-  StyledSelect,
-  StyledSearchContainer,
-  StyledSelectRow,
-  StyledIconBtn,
-} from './Legend.styles';
+import { defaultExportHeader } from './Legend.const';
+import { StyledLegend } from './Legend.styles';
 import { LegendProps, SelectedRespondent } from './Legend.types';
 import { useExpandedLists } from './Legend.hooks';
+import { ScheduleToggle } from './ScheduleToggle';
 
 export const Legend = ({
-  legendEvents,
-  appletName,
   appletId,
+  appletName,
+  canCreateIndividualSchedule = false,
+  hasIndividualSchedule = false,
+  legendEvents,
   userId,
-  onSelectUser,
+  showScheduleToggle = false,
   ...otherProps
 }: LegendProps) => {
   const { t } = useTranslation('app');
@@ -58,26 +50,18 @@ export const Legend = ({
     [],
   );
 
-  const [schedule, setSchedule] = useState<string | null>(null);
-  const [searchPopupVisible, setSearchPopupVisible] = useState(false);
   const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
   const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
     useState(false);
   const [importSchedulePopupVisible, setImportSchedulePopupVisible] = useState(false);
   const [clearScheduledEventsPopupVisible, setClearScheduledEventsPopupVisible] = useState(false);
-  const [removeIndividualSchedulePopupVisible, setRemoveIndividualSchedulePopupVisible] =
-    useState(false);
   const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
   const selectedRespondent =
     respondentsItems?.find((respondent) => respondent?.id === userId) || null;
 
-  const searchContainerRef = useRef<HTMLElement>(null);
-
   const { scheduleExportTableData = [], scheduleExportCsv = [] } = legendEvents ?? {};
-  const boundingBox = searchContainerRef?.current?.getBoundingClientRect();
-  const isIndividual = schedule === ScheduleOptions.IndividualSchedule;
   const dataTestid = 'dashboard-calendar-schedule-legend';
-  const analyticsPrefix = isIndividual
+  const analyticsPrefix = hasIndividualSchedule
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
@@ -85,19 +69,6 @@ export const Legend = ({
     selectedRespondent?.secretId || '',
     selectedRespondent?.nickname,
   );
-
-  const scheduleChangeHandler = async (event: SelectEvent) => {
-    const { value } = event.target;
-    await setSchedule(value);
-
-    if (value === ScheduleOptions.IndividualSchedule) {
-      setSearchPopupVisible(true);
-      Mixpanel.track('View Individual calendar click');
-    } else {
-      onSelectUser?.(undefined);
-      Mixpanel.track('View General calendar click');
-    }
-  };
 
   const clearAllScheduledEventsAction = () => {
     setClearScheduledEventsPopupVisible(true);
@@ -114,7 +85,7 @@ export const Legend = ({
   );
 
   const exportScheduleHandler = () => {
-    if (isIndividual) {
+    if (hasIndividualSchedule) {
       setExportIndividualSchedulePopupVisible(true);
     } else {
       setExportDefaultSchedulePopupVisible(true);
@@ -145,67 +116,50 @@ export const Legend = ({
     Mixpanel.track(`${analyticsPrefix} Schedule Import click`);
   };
 
-  useEffect(() => {
-    setSchedule(userId ? ScheduleOptions.IndividualSchedule : ScheduleOptions.DefaultSchedule);
-  }, [userId]);
-
-  return schedule ? (
+  return (
     <StyledLegend {...otherProps} data-testid={dataTestid}>
-      <StyledSelectRow>
-        <StyledSelect>
-          <SelectController
-            name="schedule"
-            value={schedule}
-            customChange={scheduleChangeHandler}
-            options={scheduleOptions}
-            withChecked
-            withGroups
-            fullWidth
-            SelectProps={{ autoWidth: true }}
+      <StyledFlexColumn sx={{ gap: 1.8, pb: 0.8 }}>
+        <StyledFlexTopCenter sx={{ placeContent: 'space-between' }}>
+          <Box
+            component="p"
             data-testid={`${dataTestid}-schedule`}
-          />
-        </StyledSelect>
-        {isIndividual && (
-          <StyledIconBtn
-            onClick={() => setRemoveIndividualSchedulePopupVisible(true)}
-            data-testid={`${dataTestid}-individual-remove`}
+            sx={{ fontSize: variables.font.size.xl, m: 0 }}
           >
-            <Svg id="trash" />
-          </StyledIconBtn>
-        )}
-      </StyledSelectRow>
-      {isIndividual && (
-        <>
-          <StyledSearchContainer
-            ref={searchContainerRef}
-            onClick={() => setSearchPopupVisible(true)}
-            data-testid={`${dataTestid}-individual-search`}
+            {hasIndividualSchedule ? t('individualSchedule') : t('defaultSchedule')}
+          </Box>
+
+          {showScheduleToggle && (
+            <ScheduleToggle
+              appletId={appletId}
+              data-testid={`${dataTestid}-schedule-toggle`}
+              disabled={!canCreateIndividualSchedule}
+              isEmpty={!!scheduleExportTableData.length}
+              isIndividual={hasIndividualSchedule}
+              userId={userId}
+              userName={respondentName}
+            />
+          )}
+        </StyledFlexTopCenter>
+
+        <StyledFlexTopCenter sx={{ gap: 0.4, placeContent: 'flex-end' }}>
+          <Button
+            startIcon={<Svg fill="currentColor" width={18} height={18} id="export" />}
+            onClick={handleImportClick}
+            data-testid={`${dataTestid}-import`}
           >
-            <Search selectedRespondent={selectedRespondent} placeholder={t('selectRespondent')} />
-          </StyledSearchContainer>
-          <SearchPopup
-            top={boundingBox?.top}
-            left={boundingBox?.left}
-            open={searchPopupVisible}
-            setSearchPopupVisible={setSearchPopupVisible}
-            setSchedule={setSchedule}
-            onSelectUser={onSelectUser}
-            selectedRespondent={selectedRespondent}
-            respondentsItems={respondentsItems}
-            data-testid={`${dataTestid}-individual-search-popup`}
-          />
-        </>
-      )}
-      <StyledBtnsRow>
-        <StyledBtn onClick={handleImportClick} data-testid={`${dataTestid}-import`}>
-          <Svg width={18} height={18} id="export" />
-          {t('import')}
-        </StyledBtn>
-        <StyledBtn onClick={exportScheduleHandler} data-testid={`${dataTestid}-export`}>
-          <Svg width={18} height={18} id="export2" />
-          {t('export')}
-        </StyledBtn>
-      </StyledBtnsRow>
+            {t('import')}
+          </Button>
+
+          <Button
+            startIcon={<Svg fill="currentColor" width={18} height={18} id="export2" />}
+            onClick={exportScheduleHandler}
+            data-testid={`${dataTestid}-export`}
+          >
+            {t('export')}
+          </Button>
+        </StyledFlexTopCenter>
+      </StyledFlexColumn>
+
       {expandedLists?.map(
         ({ buttons, items, title, allAvailableScheduled, isHiddenInLegend, type }) => (
           <ExpandedList
@@ -241,12 +195,12 @@ export const Legend = ({
       {importSchedulePopupVisible && (
         <ImportSchedulePopup
           open={importSchedulePopupVisible}
-          isIndividual={isIndividual}
+          isIndividual={hasIndividualSchedule}
           appletName={appletName}
           respondentId={userId}
           respondentName={respondentName}
           onClose={() => setImportSchedulePopupVisible(false)}
-          onDownloadTemplate={handleExportScheduleSubmit(!isIndividual, false)}
+          onDownloadTemplate={handleExportScheduleSubmit(!hasIndividualSchedule, false)}
           scheduleExportData={scheduleExportCsv}
           data-testid={`${dataTestid}-import-schedule-popup`}
         />
@@ -256,31 +210,20 @@ export const Legend = ({
           open={clearScheduledEventsPopupVisible}
           appletName={appletName}
           appletId={appletId}
-          isDefault={!isIndividual}
+          isDefault={!hasIndividualSchedule}
           name={respondentName}
           onClose={() => setClearScheduledEventsPopupVisible(false)}
           data-testid={`${dataTestid}-clear-scheduled-events-popup`}
         />
       )}
-      {removeIndividualSchedulePopupVisible && (
-        <RemoveIndividualSchedulePopup
-          open={removeIndividualSchedulePopupVisible}
-          name={respondentName}
-          isEmpty={!scheduleExportTableData.length}
-          onClose={() => setRemoveIndividualSchedulePopupVisible(false)}
-          setSchedule={setSchedule}
-          onSelectUser={onSelectUser}
-          data-testid={`${dataTestid}-remove-individual-schedule-popup`}
-        />
-      )}
+
       <CreateEventPopup
+        data-testid={`${dataTestid}-create-event-popup`}
+        defaultStartDate={new Date()}
         open={createEventPopupVisible}
         setCreateEventPopupVisible={setCreateEventPopupVisible}
-        defaultStartDate={new Date()}
-        data-testid={`${dataTestid}-create-event-popup`}
+        userId={userId}
       />
     </StyledLegend>
-  ) : (
-    <Spinner />
   );
 };
