@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { usePermissions } from 'shared/hooks';
 import { applet, workspaces } from 'shared/state';
@@ -17,8 +17,6 @@ import { checkIfHasAccessToSchedule } from './Schedule.utils';
 export const Schedule = () => {
   const dispatch = useAppDispatch();
   const { appletId } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const userId = searchParams.get('user') ?? undefined;
   const { result: appletData } = applet.useAppletData() ?? {};
   const { data: workspaceRoles } = workspaces.useRolesData() ?? {};
   const { ownerId } = workspaces.useData() || {};
@@ -39,15 +37,12 @@ export const Schedule = () => {
   useEffect(() => {
     if (!appletId || !hasAccess) return;
     const { getEvents } = applets.thunk;
-    dispatch(getEvents({ appletId, respondentId: userId }));
-
-    if (!userId || !ownerId) return;
-    dispatch(getRespondentDetails({ ownerId, appletId, respondentId: userId }));
+    dispatch(getEvents({ appletId }));
 
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, dispatch, getRespondentDetails, hasAccess, ownerId, userId]);
+  }, [appletId, dispatch, getRespondentDetails, hasAccess, ownerId]);
 
   if (isForbidden || !hasAccess) return noPermissionsComponent;
 
@@ -62,10 +57,6 @@ export const Schedule = () => {
           appletId={appletId || ''}
           appletName={appletData?.displayName || ''}
           legendEvents={preparedEvents}
-          onSelectUser={(user) => {
-            setSearchParams(user ? { user } : {});
-          }}
-          userId={userId ?? undefined}
         />
       </StyledLeftPanel>
       <Calendar />
