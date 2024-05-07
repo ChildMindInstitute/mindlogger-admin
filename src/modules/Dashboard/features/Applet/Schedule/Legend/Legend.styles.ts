@@ -8,6 +8,7 @@ export const StyledLegend = styled(Box)`
 `;
 
 export const StyledIndicator = styled(Box)`
+  flex-shrink: 0;
   width: 2rem;
   height: 2rem;
   position: relative;
