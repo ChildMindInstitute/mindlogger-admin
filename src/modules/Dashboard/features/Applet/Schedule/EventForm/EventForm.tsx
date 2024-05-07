@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useParams } from 'react-router-dom';
 import { ObjectSchema } from 'yup';
 
 import { Option, SelectController } from 'shared/components/FormComponents';
@@ -40,20 +39,20 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       onFormIsLoading,
       onFormChange,
       'data-testid': dataTestid,
+      userId,
     },
     ref,
   ) => {
     const [activitiesOrFlows, setActivitiesOrFlows] = useState<null | Option[]>(null);
     const { t } = useTranslation('app');
     const dispatch = useAppDispatch();
-    const { respondentId } = useParams();
     const appletData = applet.useAppletData();
     const { ownerId } = workspaces.useData() || {};
     const appletId = appletData?.result.id;
     const defaultValues = getDefaultValues(defaultStartDate, editedEvent);
     const eventsData = calendarEvents.useCreateEventsData() || [];
 
-    const isIndividualCalendar = !!respondentId;
+    const isIndividualCalendar = !!userId;
     const analyticsPrefix = isIndividualCalendar
       ? AnalyticsCalendarPrefix.IndividualCalendar
       : AnalyticsCalendarPrefix.GeneralCalendar;
@@ -101,8 +100,8 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
 
     const getEvents = () => {
       if (!appletId) return;
-      dispatch(applets.thunk.getEvents({ appletId, respondentId }));
-      if (respondentId && ownerId && eventsData.length === 0) {
+      dispatch(applets.thunk.getEvents({ appletId, respondentId: userId }));
+      if (userId && ownerId && eventsData.length === 0) {
         dispatch(
           users.thunk.getAllWorkspaceRespondents({
             params: {
@@ -147,10 +146,15 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       if (!appletId) {
         return;
       }
-      const body = getEventPayload(defaultStartDate, getValues, respondentId);
+      const body = getEventPayload(defaultStartDate, getValues, userId);
 
       if (editedEvent) {
-        const { activityId, flowId, respondentId, ...updateEventBody } = body;
+        const {
+          activityId: _activityId,
+          flowId: _flowId,
+          respondentId: _respondentId,
+          ...updateEventBody
+        } = body;
         await updateEvent({
           appletId,
           eventId: editedEvent.eventId,
