@@ -19,6 +19,7 @@ const getPreloadedState = (hasForbiddenError = true): PreloadedState<RootState> 
   forbiddenState: {
     data: {
       hasForbiddenError,
+      redirectedFromBuilder: false,
     },
   },
 });
