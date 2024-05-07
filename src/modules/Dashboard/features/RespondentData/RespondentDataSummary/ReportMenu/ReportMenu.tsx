@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { StyledBodyLarge, variables } from 'shared/styles';
+import { StyledBodyLarge, StyledHeadlineLarge, theme, variables } from 'shared/styles';
 import { DatavizActivity } from 'api';
 
 import { StyledMenu } from '../../RespondentData.styles';
@@ -18,6 +19,7 @@ export const ReportMenu = ({
   fetchAnswers,
   setIsLoading,
 }: ReportMenuProps) => {
+  const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const { setValue } = useFormContext<RespondentsDataFormValues>();
   const [selectedActivity] = useWatch({ name: ['selectedActivity'] });
@@ -37,20 +39,25 @@ export const ReportMenu = ({
     <StyledMenu ref={containerRef} data-testid="report-menu" sx={{ p: 0 }}>
       <StickyHeader containerRef={containerRef} />
       {activities?.length && (
-        <StyleContainer>
-          {activities?.map((activity, index) => (
-            <StyledActivity
-              key={String(activity.id)}
-              isSelected={selectedActivity?.id === activity.id}
-              onClick={() => handleActivitySelect(activity)}
-              data-testid={`respondents-summary-activity-${index}`}
-            >
-              <StyledBodyLarge color={variables.palette.on_surface}>
-                {activity.name}
-              </StyledBodyLarge>
-            </StyledActivity>
-          ))}
-        </StyleContainer>
+        <>
+          <StyledHeadlineLarge sx={{ color: variables.palette.on_surface, p: theme.spacing(0, 4) }}>
+            {t('activities')}
+          </StyledHeadlineLarge>
+          <StyleContainer>
+            {activities?.map((activity, index) => (
+              <StyledActivity
+                key={String(activity.id)}
+                isSelected={selectedActivity?.id === activity.id}
+                onClick={() => handleActivitySelect(activity)}
+                data-testid={`respondents-summary-activity-${index}`}
+              >
+                <StyledBodyLarge color={variables.palette.on_surface}>
+                  {activity.name}
+                </StyledBodyLarge>
+              </StyledActivity>
+            ))}
+          </StyleContainer>
+        </>
       )}
     </StyledMenu>
   );
