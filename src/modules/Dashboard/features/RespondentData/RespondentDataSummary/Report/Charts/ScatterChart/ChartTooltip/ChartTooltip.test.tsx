@@ -125,7 +125,7 @@ describe('ChartTooltip', () => {
 
     const tooltip = screen.getByTestId(`${dataTestid}-tooltip`);
     expect(tooltip).toBeInTheDocument();
-    expect(within(tooltip).getByText('View responses')).toBeInTheDocument();
+    expect(within(tooltip).getByText('View response')).toBeInTheDocument();
 
     const reviewButton = screen.getByTestId(`${dataTestid}-tooltip-review-count`);
     expect(reviewButton).toBeInTheDocument();
