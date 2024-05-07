@@ -948,7 +948,7 @@
   "responseOptionsTooltip": "The respondent completed the Activity at these times",
   "retainData": "Retain Data",
   "retry": "Retry",
-  "viewResponses": "View responses",
+  "viewResponse": "View response",
   "reviewOnlyOthers_one": "See {{count}} review",
   "reviewOnlyOthers_other": "See {{count}} reviews",
   "reviewOnlyI": "See {{count}} review (mine)",

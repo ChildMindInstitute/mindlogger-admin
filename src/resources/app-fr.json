@@ -947,7 +947,7 @@
   "responseOptionsTooltip": "Le participant a terminé l'activité à ces heures",
   "retainData": "Conserver les données",
   "retry": "Réessayer",
-  "viewResponses": "Voir les réponses",
+  "viewResponse": "Voir la réponse",
   "reviewOnlyOthers_one": "Voir {{count}} critique",
   "reviewOnlyOthers_other": "Voir {{count}} critiques",
   "reviewOnlyI": "Voir {{count}} critique (mes)",
