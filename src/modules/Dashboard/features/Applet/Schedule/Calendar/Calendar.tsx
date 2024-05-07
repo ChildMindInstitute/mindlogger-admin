@@ -25,7 +25,7 @@ import {
   getHasWrapperMoreBtn,
 } from './Calendar.utils';
 import { StyledAddBtn, StyledCalendarWrapper } from './Calendar.styles';
-import { AllDayEventsVisible, CalendarViews, OnViewFunc } from './Calendar.types';
+import { AllDayEventsVisible, CalendarProps, CalendarViews, OnViewFunc } from './Calendar.types';
 
 const dateFnsLocalize = dateFnsLocalizer({
   format,
@@ -35,7 +35,7 @@ const dateFnsLocalize = dateFnsLocalizer({
   locales,
 });
 
-export const Calendar = () => {
+export const Calendar = ({ userId }: CalendarProps) => {
   const dispatch = useAppDispatch();
   const [activeView, setActiveView] = useState<CalendarViews>(CalendarViews.Month);
   const [date, setDate] = useState<Date>(new Date());
@@ -180,6 +180,7 @@ export const Calendar = () => {
           setCreateEventPopupVisible={setCreateEventPopupVisible}
           defaultStartDate={defaultStartDate}
           data-testid={`${dataTestId}-create-event-popup`}
+          userId={userId}
         />
       )}
       {editedEvent && (
