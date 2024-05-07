@@ -36,6 +36,7 @@ const getPreloadedState = (hasForbiddenError = true): PreloadedState<RootState> 
   forbiddenState: {
     data: {
       hasForbiddenError,
+      redirectedFromBuilder: false,
     },
   },
   workspaces: {
@@ -222,8 +223,8 @@ describe('useNoPermissionPopup', () => {
     expect(currentResult.noAccessVisible).toBe(false);
   });
 
-  test('should set isBuilder to true when has builder pathname', () => {
-    const { result } = renderHookWithProviders(useNoPermissionPopup, {
+  test('should set redirectedFromBuilder global state to true, and isBuilder to true when has builder pathname', async () => {
+    const { result, store } = renderHookWithProviders(useNoPermissionPopup, {
       preloadedState: getPreloadedState(),
       route: `/builder/${mockedAppletId}/about`,
       routePath: page.builderAppletAbout,
@@ -232,5 +233,28 @@ describe('useNoPermissionPopup', () => {
     const currentResult = result.current as UseNoPermissionPopupReturn;
 
     expect(currentResult.isBuilder).toBe(true);
+
+    await act(async () => {
+      await currentResult.handleSubmit();
+    });
+
+    expect(store.getState().forbiddenState.data.redirectedFromBuilder).toBeTruthy();
+
+    // set redirectedFromBuilder to false after setting the workspace and navigating to the dashboard
+    mockAxios.get.mockResolvedValueOnce(successfulGetAlertsMock);
+    mockAxios.get.mockResolvedValueOnce({
+      data: workspacesData,
+    });
+
+    await act(async () => {
+      await currentResult.handleSubmit();
+    });
+
+    expect(mockedUseNavigate).toHaveBeenCalledWith(page.dashboardApplets, {
+      state: {
+        workspace: workspacesData.result[0],
+      },
+    });
+    expect(store.getState().forbiddenState.data.redirectedFromBuilder).toBeFalsy();
   });
 });
