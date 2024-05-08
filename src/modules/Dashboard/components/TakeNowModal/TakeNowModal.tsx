@@ -144,6 +144,17 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
             </StyledFlexTopCenter>
             <Box>
               <LabeledUserDropdown
+                  label={t('takeNowModalParticipantLabel')}
+                  name={'participant'}
+                  tooltip={t('takeNowModalParticipantTooltip')}
+                  placeholder={t('takeNowModalParticipantPlaceholder')}
+                  value={participant}
+                  options={participantsAndTeamMembers}
+                  onChange={setParticipant}
+                  data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
+                  disabled
+              />
+              <LabeledUserDropdown
                 label={t('takeNowModalSubjectLabel')}
                 name={'subject'}
                 tooltip={t('takeNowModalSubjectTooltip')}
@@ -166,17 +177,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                     (response?.data as ParticipantsData)?.result.map(participantToOption) ?? []
                   );
                 }}
-              />
-              <LabeledUserDropdown
-                label={t('takeNowModalParticipantLabel')}
-                name={'participant'}
-                tooltip={t('takeNowModalParticipantTooltip')}
-                placeholder={t('takeNowModalParticipantPlaceholder')}
-                value={participant}
-                options={participantsAndTeamMembers}
-                onChange={setParticipant}
-                data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
-                disabled
               />
             </Box>
           </StyledFlexColumn>
