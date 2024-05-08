@@ -12,11 +12,12 @@ import {
 import { MenuActionProps, Spinner } from 'shared/components';
 import { FlowGrid } from 'modules/Dashboard/components/FlowGrid';
 import { OpenTakeNowModalOptions } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.types';
-import { ActivitiesToolbar } from 'modules/Dashboard/features/Applet/Activities/ActivitiesToolbar';
 import { ActivitiesSectionHeader } from 'modules/Dashboard/features/Applet/Activities/ActivitiesSectionHeader';
 import { users } from 'modules/Dashboard/state';
 import { Activity, ActivityFlow } from 'redux/modules';
 import { StyledFlexColumn } from 'shared/styles';
+
+import { ParticipantActivitiesToolbar } from './ParticipantActivitiesToolbar';
 
 const dataTestId = 'dashboard-applet-participant-activities';
 
@@ -102,7 +103,11 @@ export const Activities = () => {
     <StyledFlexColumn sx={{ gap: 2.4, maxHeight: '100%' }}>
       {isLoading && <Spinner />}
 
-      <ActivitiesToolbar appletId={appletId} data-testid={dataTestId} sx={{ px: 3.2, pt: 3.2 }} />
+      <ParticipantActivitiesToolbar
+        appletId={appletId}
+        data-testid={dataTestId}
+        sx={{ px: 3.2, pt: 3.2 }}
+      />
 
       {showContent && (
         <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2 }}>

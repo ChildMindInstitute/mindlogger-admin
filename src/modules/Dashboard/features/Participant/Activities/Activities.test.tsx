@@ -140,21 +140,6 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
     });
   });
 
-  test('click Add Activity should navigate to Builder > Applet > Activities', async () => {
-    mockGetRequestResponses({
-      [getAppletUrl]: successfulGetAppletMock,
-      [getAppletActivitiesUrl]: successfulEmptyGetAppletActivitiesMock,
-      [getWorkspaceRespondentsUrl]: successfulEmptyHttpResponseMock,
-    });
-    renderWithProviders(<Activities />, { route, routePath, preloadedState });
-
-    const addActivityLink = screen.getByTestId(`${testId}-add-activity`);
-    expect(addActivityLink).toHaveAttribute(
-      'href',
-      generatePath(page.builderAppletActivities, { appletId: mockedAppletId }),
-    );
-  });
-
   describe('should show or hide edit ability depending on role', () => {
     test.each`
       canEdit  | role                 | description
