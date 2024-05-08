@@ -12,7 +12,7 @@ export type LabeledUserDropdownProps = Omit<
 > & {
   label: string;
   name: string;
-  tooltip: string;
+  tooltip?: string;
   placeholder: string;
   options: ParticipantDropdownOption[];
   value: ParticipantDropdownOption | null;

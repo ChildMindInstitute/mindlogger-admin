@@ -1218,7 +1218,6 @@
   "takeNow": "Take Now",
   "takeNowModalParticipantLabel": "Who is responding?",
   "takeNowModalParticipantPlaceholder": "Select from participants & team members",
-  "takeNowModalParticipantTooltip": "This is the participant who will be completing the activity.",
   "takeNowModalSubjectLabel": "Who is this activity about?",
   "takeNowModalSubjectPlaceholder": "Select from participants",
   "takeNowModalSubjectTooltip": "This is the subject of the activity being assigned.",

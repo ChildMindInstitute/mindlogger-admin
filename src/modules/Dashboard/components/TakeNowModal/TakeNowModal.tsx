@@ -146,7 +146,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               <LabeledUserDropdown
                   label={t('takeNowModalParticipantLabel')}
                   name={'participant'}
-                  tooltip={t('takeNowModalParticipantTooltip')}
                   placeholder={t('takeNowModalParticipantPlaceholder')}
                   value={participant}
                   options={participantsAndTeamMembers}
@@ -157,7 +156,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               <LabeledUserDropdown
                 label={t('takeNowModalSubjectLabel')}
                 name={'subject'}
-                tooltip={t('takeNowModalSubjectTooltip')}
                 placeholder={t('takeNowModalSubjectPlaceholder')}
                 value={subject}
                 options={participants}

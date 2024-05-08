@@ -14,6 +14,7 @@ import {
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 
 import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
+import { RenderIf } from '../../../../../shared/components/RenderIf/RenderIf';
 
 export const LabeledUserDropdown = ({
   label,
@@ -68,17 +69,19 @@ export const LabeledUserDropdown = ({
     <StyledFlexColumn sx={{ gap: 1.6, marginTop: 2.4 }}>
       <Box sx={{ display: 'flex', gap: 0.4 }}>
         <StyledTitleMedium fontWeight="bold">{label}</StyledTitleMedium>
-        <Tooltip tooltipTitle={tooltip}>
-          <Box sx={{ height: 24 }}>
-            <StyledTitleTooltipIcon
-              sx={{ marginLeft: 0 }}
-              id="more-info-outlined"
-              width={24}
-              height={24}
-              data-testid={`${rest['data-testid']}-tooltip-icon`}
-            />
-          </Box>
-        </Tooltip>
+        <RenderIf condition={!!tooltip}>
+          <Tooltip tooltipTitle={tooltip}>
+            <Box sx={{ height: 24 }}>
+              <StyledTitleTooltipIcon
+                sx={{ marginLeft: 0 }}
+                id="more-info-outlined"
+                width={24}
+                height={24}
+                data-testid={`${rest['data-testid']}-tooltip-icon`}
+              />
+            </Box>
+          </Tooltip>
+        </RenderIf>
       </Box>
       <Autocomplete
         renderInput={(params) => {
