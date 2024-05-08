@@ -1,8 +1,8 @@
 import { Roles } from 'shared/consts';
 
-import { hasPermissionToViewData } from './RespondentData.utils';
+import { hasPermissionToViewData } from './ParticipantActivity.utils';
 
-describe('RespondentData.utils', () => {
+describe('ParticipantActivityDetails.utils', () => {
   test.each([
     [[Roles.SuperAdmin], true],
     [[Roles.Owner], true],

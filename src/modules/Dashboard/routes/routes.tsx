@@ -7,18 +7,18 @@ import { PrivateRoute } from 'routes/PrivateRoute';
 import { ErrorFallback } from 'shared/components';
 import { FeatureFlags } from 'shared/types/featureFlags';
 
-import { appletRoutes, mainRoutes, participantDetailsRoutes } from './routes.const';
+import {
+  appletRoutes,
+  mainRoutes,
+  participantDetailsRoutes,
+  participantActivityDetailsRoutes,
+} from './routes.const';
 import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
 const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
-const ParticipantActivityDetails = lazy(() => import('../pages/ParticipantActivityDetails'));
-const RespondentData = lazy(() => import('../pages/RespondentData'));
-const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
-const RespondentDataSummary = lazy(
-  () => import('../features/RespondentData/RespondentDataSummary'),
-);
+const ParticipantActivity = lazy(() => import('../features/ParticipantActivity'));
 
 export const dashboardRoutes = (featureFlags: FeatureFlags) => (
   <Route path={page.dashboard}>
@@ -60,48 +60,6 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
           }
         />
       ))}
-      <Route element={<RespondentData />}>
-        <Route
-          path={page.appletRespondentData}
-          element={<Navigate to={page.appletRespondentDataSummary} />}
-        />
-        <Route path={page.appletRespondentDataSummary} element={<RespondentDataSummary />}>
-          <Route
-            path={page.appletRespondentDataSummary}
-            element={
-              <PrivateRoute>
-                <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <RespondentDataSummary />
-                </ErrorBoundary>
-              </PrivateRoute>
-            }
-          />
-        </Route>
-        <Route path={page.appletRespondentDataReview} element={<RespondentDataReview />}>
-          <Route
-            path={page.appletRespondentDataReview}
-            element={
-              <PrivateRoute>
-                <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <RespondentDataReview />
-                </ErrorBoundary>
-              </PrivateRoute>
-            }
-          />
-        </Route>
-      </Route>
-    </Route>
-    <Route path={page.appletParticipantActivityDetails} element={<ParticipantActivityDetails />}>
-      <Route
-        path={page.appletParticipantActivityDetails}
-        element={
-          <PrivateRoute>
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <ParticipantActivityDetails />
-            </ErrorBoundary>
-          </PrivateRoute>
-        }
-      />
     </Route>
     <Route
       element={
@@ -113,6 +71,29 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
       }
     >
       {participantDetailsRoutes.map(({ path, Component }) => (
+        <Route
+          key={path}
+          path={path}
+          element={
+            <PrivateRoute>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Component />
+              </ErrorBoundary>
+            </PrivateRoute>
+          }
+        />
+      ))}
+    </Route>
+    <Route
+      element={
+        <PrivateRoute>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <ParticipantActivity />
+          </ErrorBoundary>
+        </PrivateRoute>
+      }
+    >
+      {participantActivityDetailsRoutes.map(({ path, Component }) => (
         <Route
           key={path}
           path={path}

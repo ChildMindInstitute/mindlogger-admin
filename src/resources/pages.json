@@ -15,6 +15,8 @@
   "appletParticipants": "/dashboard/:appletId/participants",
   "appletParticipantActivities": "/dashboard/:appletId/participants/:subjectId",
   "appletParticipantActivityDetails": "/dashboard/:appletId/participants/:subjectId/activities/:activityId",
+  "appletParticipantActivityDetailsDataSummary": "/dashboard/:appletId/participants/:subjectId/activities/:activityId/summary",
+  "appletParticipantActivityDetailsDataReview": "/dashboard/:appletId/participants/:subjectId/activities/:activityId/responses",
   "appletParticipantConnections": "/dashboard/:appletId/participants/:subjectId/connections",
   "appletParticipantSchedule": "/dashboard/:appletId/participants/:subjectId/schedule",
   "appletRespondentData": "/dashboard/:appletId/respondents/:respondentId/dataviz",

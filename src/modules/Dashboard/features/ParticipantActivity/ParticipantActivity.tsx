@@ -2,16 +2,15 @@ import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { StyledBody, StyledDirectoryUpButton } from 'shared/styles/styledComponents';
 import { EmptyState, Svg } from 'shared/components';
-import { Mixpanel } from 'shared/utils/mixpanel';
+import { workspaces } from 'shared/state';
+import { StyledBody, StyledDirectoryUpButton } from 'shared/styles';
 import { page } from 'resources';
-import { workspaces } from 'redux/modules';
-import { RespondentData as RespondentDataFeature } from 'modules/Dashboard/features/RespondentData';
+import { Mixpanel } from 'shared/utils';
 
-import { hasPermissionToViewData } from './RespondentData.utils';
+import { hasPermissionToViewData } from './ParticipantActivity.utils';
 
-export const RespondentData = () => {
+export const ParticipantActivity = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { appletId } = useParams();
@@ -41,9 +40,10 @@ export const RespondentData = () => {
         startIcon={<Svg id="directory-up" width="18" height="18" />}
         data-testid="respondents-summary-back-to-applet"
       >
-        {t('respondents')}
+        {t('back')}
       </StyledDirectoryUpButton>
-      <RespondentDataFeature />
     </StyledBody>
   );
 };
+
+export default ParticipantActivity;
