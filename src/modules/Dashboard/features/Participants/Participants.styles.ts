@@ -1,27 +1,10 @@
 import { Button, styled } from '@mui/material';
 
 import { DashboardTable } from 'modules/Dashboard/components';
-import { variables } from 'shared/styles/variables';
 
 import { ParticipantsColumnsWidth } from './Participants.const';
 
-export const StyledButton = styled(Button)`
-  && {
-    svg {
-      fill: ${variables.palette.on_surface_variant};
-    }
-  }
-`;
-
-export const FiltersButton = styled(StyledButton)`
-  color: ${variables.palette.on_surface_variant};
-`;
-
-export const SortByButton = styled(StyledButton)`
-  color: ${variables.palette.on_surface_variant};
-`;
-
-export const AddParticipantButton = styled(StyledButton)`
+export const AddParticipantButton = styled(Button)`
   min-width: 15.3rem;
 `;
 

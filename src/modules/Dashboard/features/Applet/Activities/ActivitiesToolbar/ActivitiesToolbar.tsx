@@ -68,9 +68,7 @@ export const ActivitiesToolbar = ({
                   alert('TODO: Assign activity');
                 }}
                 sx={{ minWidth: theme.spacing(10) }}
-                // TODO: Replace with missing `tonal` button variant as shown in Figma
-                // https://mindlogger.atlassian.net/browse/M2-6071
-                variant="outlined"
+                variant="tonal"
               >
                 {t('assign')}
               </Button>
