@@ -343,9 +343,9 @@ export const NULL_ANSWER = 'value: null';
 
 export enum ParticipantTag {
   None = '',
-  Child = 'child',
-  Parent = 'parent',
-  Teacher = 'teacher',
+  Child = 'Child',
+  Parent = 'Parent',
+  Teacher = 'Teacher',
 }
 
 export const PARTICIPANT_TAG_ICONS: Record<ParticipantTag, Icons> = {

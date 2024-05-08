@@ -865,10 +865,9 @@
   "participants": "Participants",
   "participantTag": {
     "": "Aucune sélection",
-    "child": "Enfant",
-    "parent": "Parent/Tuteur",
-    "teacher": "Enseignant",
-    "owner": "Propriétaire"
+    "Child": "Enfant",
+    "Parent": "Parent/Tuteur",
+    "Teacher": "Enseignant"
   },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
