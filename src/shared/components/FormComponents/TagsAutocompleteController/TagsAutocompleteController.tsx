@@ -124,7 +124,10 @@ export const TagsAutocompleteController = <
               const { children, ...restPaperProps } = paperProps;
 
               return (
-                <Paper {...restPaperProps}>
+                <Paper
+                  {...restPaperProps}
+                  sx={{ maxHeight: '25.6rem' }} // Select All row + 4 rows
+                >
                   <>
                     {options?.length ? (
                       <ListItem
@@ -158,9 +161,6 @@ export const TagsAutocompleteController = <
                     },
                   },
                 ],
-              },
-              paper: {
-                sx: { maxHeight: '25.6rem' }, // Select All row + 4 rows
               },
             }}
             data-testid={dataTestid}

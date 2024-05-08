@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { PARTICIPANT_TAG_ICONS } from 'shared/consts';
 import { Chip, Svg } from 'shared/components';
 
-import { ParticipantTagProps } from './ParticipantTagChip.types';
+import { ParticipantTagChipProps } from './ParticipantTagChip.types';
 
-export const ParticipantTagChip = ({ tag }: ParticipantTagProps) => {
+export const ParticipantTagChip = ({ tag }: ParticipantTagChipProps) => {
   const { i18n, t } = useTranslation();
 
   if (!tag) return null;

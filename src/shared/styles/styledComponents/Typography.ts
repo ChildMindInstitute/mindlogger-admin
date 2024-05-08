@@ -150,6 +150,4 @@ export const ellipsisTextCss = css`
   white-space: nowrap;
 `;
 
-export const StyledEllipsisText = styled(Typography)`
-  ${ellipsisTextCss}
-`;
+export const StyledEllipsisText = styled(Typography)(ellipsisTextCss);
