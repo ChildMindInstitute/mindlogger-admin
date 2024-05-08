@@ -144,7 +144,6 @@ const result = {
   response_option_selection_time: '1689755869391',
   secret_user_id: 'secretUserId',
   user_id: '835e5277-5949-4dff-817a-d85c17a3604f',
-  respondent_id: '835e5277-5949-4dff-817a-d85c17a3604f',
   source_subject_id: 'bba7bcd3-f245-4354-9461-b494f186dcca',
   target_subject_id: '116d59c1-2bb5-405b-8503-cb6c1e6b7620',
   version: '2.0.0',

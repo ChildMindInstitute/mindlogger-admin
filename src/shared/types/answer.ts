@@ -531,7 +531,6 @@ export type JourneyCSVReturnProps = {
   response_option_selection_time: string;
   secret_user_id?: string;
   user_id: string | null;
-  respondent_id: string | null;
   source_subject_id: string | null;
   target_subject_id: string | null;
   activity_id: string;

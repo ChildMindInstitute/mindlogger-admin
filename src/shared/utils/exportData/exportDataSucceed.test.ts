@@ -88,7 +88,6 @@ describe('exportDataSucceed', () => {
         'response_option_selection_time',
         'secret_user_id',
         'user_id',
-        'respondent_id',
         'source_subject_id',
         'target_subject_id',
         'activity_id',
