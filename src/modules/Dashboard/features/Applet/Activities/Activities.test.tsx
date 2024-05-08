@@ -49,6 +49,12 @@ const successfulGetAppletActivitiesMock: HttpResponse = {
   },
 };
 
+const getAppletUrl = `/applets/${mockedAppletId}`;
+const successfulGetAppletMock = {
+  status: ApiResponseCodes.SuccessfulResponse,
+  data: { result: mockedAppletData },
+};
+
 const successfulEmptyHttpResponseMock: HttpResponse = {
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
@@ -85,6 +91,7 @@ describe('Dashboard > Applet > Activities screen', () => {
 
   test('should render empty component', async () => {
     mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
       [`/activities/applet/${mockedAppletId}`]: successfulEmptyGetAppletActivitiesMock,
       [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
         successfulEmptyHttpResponseMock,
@@ -104,6 +111,7 @@ describe('Dashboard > Applet > Activities screen', () => {
     const getAppletActivitiesUrl = `/activities/applet/${mockedAppletId}`;
 
     mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
       [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
       [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
         successfulEmptyHttpResponseMock,
@@ -121,15 +129,16 @@ describe('Dashboard > Applet > Activities screen', () => {
 
   test('click Add Activity should navigate to Builder > Applet > Activities', async () => {
     mockGetRequestResponses({
+      [getAppletUrl]: successfulGetAppletMock,
       [`/activities/applet/${mockedAppletId}`]: successfulEmptyGetAppletActivitiesMock,
       [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
         successfulEmptyHttpResponseMock,
     });
     renderWithProviders(<Activities />, { route, routePath, preloadedState: getPreloadedState() });
 
-    fireEvent.click(screen.getByTestId(`${testId}-add-activity`));
-
-    expect(mockedUseNavigate).toHaveBeenCalledWith(
+    const addActivityLink = screen.getByTestId(`${testId}-add-activity`);
+    expect(addActivityLink).toHaveAttribute(
+      'href',
       generatePath(page.builderAppletActivities, { appletId: mockedAppletId }),
     );
   });
@@ -146,6 +155,7 @@ describe('Dashboard > Applet > Activities screen', () => {
       ${false} | ${Roles.Reviewer}    | ${'editing for Reviewer'}
     `('$description', async ({ canEdit, role }) => {
       mockGetRequestResponses({
+        [getAppletUrl]: successfulGetAppletMock,
         [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
         [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
           successfulEmptyHttpResponseMock,
@@ -190,6 +200,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ${false}     | ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
       `('$description', async ({ canDoTakeNow, role }: { canDoTakeNow: boolean; role: Roles }) => {
         mockGetRequestResponses({
+          [getAppletUrl]: successfulGetAppletMock,
           [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
           [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
             successfulEmptyHttpResponseMock,
@@ -229,6 +240,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         ${Roles.Reviewer}    | ${'Take Now for Reviewer'}
       `('$description', async ({ role }: { role: Roles }) => {
         mockGetRequestResponses({
+          [getAppletUrl]: successfulGetAppletMock,
           [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
           [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
             successfulEmptyHttpResponseMock,
@@ -263,6 +275,7 @@ describe('Dashboard > Applet > Activities screen', () => {
       });
 
       mockGetRequestResponses({
+        [getAppletUrl]: successfulGetAppletMock,
         [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
         [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
           successfulGetAppletParticipantsMock,

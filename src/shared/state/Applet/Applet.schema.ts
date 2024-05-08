@@ -38,7 +38,7 @@ export type ActivityFlow = {
   isSingleReport?: boolean;
   hideBadge?: boolean;
   order?: number;
-  activityIds?: number[];
+  activityIds?: string[];
   items?: ActivityFlowItem[];
   isHidden?: boolean;
   createdAt?: string;
