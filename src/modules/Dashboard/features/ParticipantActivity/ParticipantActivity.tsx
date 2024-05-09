@@ -9,6 +9,7 @@ import { page } from 'resources';
 import { Mixpanel } from 'shared/utils';
 
 import { hasPermissionToViewData } from './ParticipantActivity.utils';
+import ParticipantActivityDetails from './Details';
 
 export const ParticipantActivity = () => {
   const { t } = useTranslation();
@@ -42,6 +43,7 @@ export const ParticipantActivity = () => {
       >
         {t('back')}
       </StyledDirectoryUpButton>
+      <ParticipantActivityDetails />
     </StyledBody>
   );
 };
