@@ -8,14 +8,17 @@ import {
   variables,
 } from 'shared/styles';
 
-export const StyledContainer = styled(StyledFlexSpaceBetween)`
-  flex-direction: column;
-  padding: ${theme.spacing(2.4)};
-  width: 30.6rem;
-  height: 44rem;
-  border: ${variables.borderWidth.md} solid ${variables.palette.surface_variant};
-  border-radius: ${variables.borderRadius.lg2};
-`;
+export const StyledContainer = styled(StyledFlexSpaceBetween)(
+  ({ showStats = false }: { showStats?: boolean }) => ({
+    flexDirection: 'column',
+    gap: theme.spacing(3.2),
+    padding: theme.spacing(2.4),
+    width: '30.6rem',
+    height: showStats ? '44rem' : undefined,
+    border: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+    borderRadius: variables.borderRadius.lg2,
+  }),
+);
 
 export const StyledImageContainer = styled(StyledFlexAllCenter)`
   min-width: 8rem;

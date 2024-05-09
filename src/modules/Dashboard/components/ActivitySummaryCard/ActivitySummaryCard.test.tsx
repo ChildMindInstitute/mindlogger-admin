@@ -16,14 +16,28 @@ const props = {
 };
 
 describe('ActivitySummaryCard', () => {
-  test('should render activity summary card props', () => {
-    render(<ActivitySummaryCard {...props} />);
+  describe('When `showStats is `true`', () => {
+    test('should render activity summary card props', () => {
+      render(<ActivitySummaryCard showStats {...props} />);
 
-    expect(screen.queryByText(props.compliance)).toBeInTheDocument();
-    expect(screen.queryByAltText(props.name)).toBeInTheDocument();
-    expect(screen.queryByText(props.name)).toBeInTheDocument();
-    expect(screen.queryByText(props.participantCount)).toBeInTheDocument();
-    expect(screen.queryByText(props.latestActivity)).toBeInTheDocument();
+      expect(screen.queryByAltText(props.name)).toBeInTheDocument();
+      expect(screen.queryByText(props.name)).toBeInTheDocument();
+      expect(screen.queryByText(props.compliance)).toBeInTheDocument();
+      expect(screen.queryByText(props.participantCount)).toBeInTheDocument();
+      expect(screen.queryByText(props.latestActivity)).toBeInTheDocument();
+    });
+  });
+
+  describe('When `showStats is `true`', () => {
+    test('should render activity summary card props', () => {
+      render(<ActivitySummaryCard showStats={false} {...props} />);
+
+      expect(screen.queryByAltText(props.name)).toBeInTheDocument();
+      expect(screen.queryByText(props.name)).toBeInTheDocument();
+      expect(screen.queryByText(props.compliance)).not.toBeInTheDocument();
+      expect(screen.queryByText(props.participantCount)).not.toBeInTheDocument();
+      expect(screen.queryByText(props.latestActivity)).not.toBeInTheDocument();
+    });
   });
 
   test('should render actions menu and run action handler when clicked', () => {

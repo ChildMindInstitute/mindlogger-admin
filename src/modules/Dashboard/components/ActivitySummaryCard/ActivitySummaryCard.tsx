@@ -20,6 +20,7 @@ export const ActivitySummaryCard = ({
   name,
   participantCount,
   latestActivity,
+  showStats = false,
   'data-testid': dataTestId,
   onClick,
 }: ActivitySummaryCardProps) => {
@@ -46,21 +47,25 @@ export const ActivitySummaryCard = ({
           <StyledActivityName>{name}</StyledActivityName>
         </StyledFlexColumn>
 
-        <Divider />
+        {showStats && (
+          <>
+            <Divider />
 
-        <StyledFlexColumn sx={{ gap: 1.6 }}>
-          <StyledFlexTopStart sx={{ gap: 2.4 }}>
-            <StatBox label={t('participants')} sx={{ flex: 1 }}>
-              {participantCount}
-            </StatBox>
+            <StyledFlexColumn sx={{ gap: 1.6 }}>
+              <StyledFlexTopStart sx={{ gap: 2.4 }}>
+                <StatBox label={t('participants')} sx={{ flex: 1 }}>
+                  {participantCount}
+                </StatBox>
 
-            <StatBox label={t('compliance')} sx={{ flex: 1 }}>
-              {compliance}
-            </StatBox>
-          </StyledFlexTopStart>
+                <StatBox label={t('compliance')} sx={{ flex: 1 }}>
+                  {compliance}
+                </StatBox>
+              </StyledFlexTopStart>
 
-          <StatBox label={t('latestActivity')}>{latestActivity}</StatBox>
-        </StyledFlexColumn>
+              <StatBox label={t('latestActivity')}>{latestActivity}</StatBox>
+            </StyledFlexColumn>
+          </>
+        )}
       </StyledFlexColumn>
     </StyledContainer>
   );
