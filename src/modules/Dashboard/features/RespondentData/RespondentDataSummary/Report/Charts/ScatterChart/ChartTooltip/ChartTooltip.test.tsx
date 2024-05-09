@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
@@ -24,7 +24,7 @@ const getProps = (areSubscalesVisible = false) => ({
       y: 0,
       answerId,
       areSubscalesVisible,
-      reviewCount: { mine: 1, others: 2 },
+      reviewCount: { mine: 1, other: 2 },
     },
     parsed: {
       x: date,
@@ -125,9 +125,11 @@ describe('ChartTooltip', () => {
 
     const tooltip = screen.getByTestId(`${dataTestid}-tooltip`);
     expect(tooltip).toBeInTheDocument();
+    expect(within(tooltip).getByText('View response')).toBeInTheDocument();
 
     const reviewButton = screen.getByTestId(`${dataTestid}-tooltip-review-count`);
     expect(reviewButton).toBeInTheDocument();
+    expect(within(reviewButton).getByText('See 3 reviews (mine & 2 others)')).toBeInTheDocument();
 
     await userEvent.click(reviewButton);
     expect(mockedReviewAnswerNavigate).toBeCalledWith({

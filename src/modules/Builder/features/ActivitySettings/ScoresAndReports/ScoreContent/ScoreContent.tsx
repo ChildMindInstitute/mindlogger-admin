@@ -24,13 +24,12 @@ import {
 } from 'shared/components/FormComponents';
 import { Svg } from 'shared/components/Svg';
 import { ScoreConditionalLogic, ScoreReport } from 'shared/state';
-import { CalculationType } from 'shared/consts';
+import { CalculationType, observerStyles } from 'shared/consts';
 import { ToggleContainerUiType, ToggleItemContainer } from 'modules/Builder/components';
 import { getEntityKey } from 'shared/utils';
 import {
   REACT_HOOK_FORM_KEY_NAME,
   SCORE_CONDS_COUNT_TO_ACTIVATE_STATIC,
-  observerStyles,
 } from 'modules/Builder/consts';
 import { SelectEvent, isScoreReport } from 'shared/types';
 import { getObserverSelector } from 'modules/Builder/utils/getObserverSelector';
