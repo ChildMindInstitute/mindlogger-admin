@@ -9,6 +9,6 @@ export const getReviewOption = (mine?: number, other?: number) => {
   } else if (!mine && other) {
     return t('reviewOnlyOthers', { count: other });
   } else if (mine && other) {
-    return t('reviewIAndOthers', { other, reviews: mine + other });
+    return t('reviewIAndOthers', { count: other, reviews: mine + other });
   }
 };

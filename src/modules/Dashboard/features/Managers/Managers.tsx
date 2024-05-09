@@ -101,7 +101,7 @@ export const Managers = () => {
 
   const removeManagerAccessOnClose = (step?: number) => {
     setRemoveAccessPopupVisible(false);
-    step === 2 && handleReload();
+    step === 3 && handleReload();
   };
 
   const editManagerAccessOnClose = (shouldRefetch?: boolean) => {
