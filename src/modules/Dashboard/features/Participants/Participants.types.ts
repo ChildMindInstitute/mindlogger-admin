@@ -62,6 +62,7 @@ export type GetParticipantActionsProps = {
   appletId?: string;
   status: RespondentStatus;
   dataTestid: string;
+  showAssignActivity?: boolean;
 };
 
 export type HandlePinClick = {

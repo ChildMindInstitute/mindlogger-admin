@@ -110,7 +110,7 @@ export const Activities = () => {
       />
 
       {showContent && (
-        <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2 }}>
+        <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2, pt: 0 }}>
           {!!flows?.length && (
             <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
               <ActivitiesSectionHeader title={t('flows')} count={flows?.length ?? 0} />

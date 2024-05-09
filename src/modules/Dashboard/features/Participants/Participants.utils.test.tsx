@@ -62,6 +62,7 @@ const commonGetActionsProps = {
   secretId: 'test secret id',
   nickname: 'test nickname',
   tag: 'Child' as ParticipantTag,
+  showAssignActivity: true,
 };
 
 const expectedContext = {

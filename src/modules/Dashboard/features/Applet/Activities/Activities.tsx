@@ -62,10 +62,10 @@ export const Activities = () => {
     <StyledFlexColumn sx={{ gap: 2.4, height: '100%' }}>
       {isLoading && <Spinner />}
 
-      <ActivitiesToolbar appletId={appletId} data-testid={dataTestId} sx={{ px: 3.2, pt: 3.2 }} />
+      <ActivitiesToolbar appletId={appletId} data-testid={dataTestId} sx={{ p: 3.2, pb: 0 }} />
 
       {showContent && (
-        <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2 }}>
+        <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2, pt: 0 }}>
           {!!flows?.length && (
             <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
               <ActivitiesSectionHeader title={t('flows')} count={flows?.length ?? 0} />

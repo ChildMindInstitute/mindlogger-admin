@@ -30,6 +30,7 @@ export const getParticipantActions = ({
   tag,
   status,
   dataTestid,
+  showAssignActivity = false,
 }: GetParticipantActionsProps) => {
   const context = { respondentId, respondentOrSubjectId, email, secretId, nickname, tag };
   const isUpgradeable = status === RespondentStatus.NotInvited;
@@ -73,14 +74,14 @@ export const getParticipantActions = ({
     },
     {
       type: MenuItemType.Divider,
-      isDisplayed: !isPending,
+      isDisplayed: showAssignActivity && !isPending,
     },
     {
       icon: <Svg id="add-users-outlined" width={24} height={24} />,
       action: assignActivity,
       title: t('assignActivity'),
       context,
-      isDisplayed: isEditable && !isPending,
+      isDisplayed: showAssignActivity && isEditable && !isPending,
       'data-testid': `${dataTestid}-assign-activity`,
     },
   ];
@@ -145,7 +146,7 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       id: 'secretIds',
       label: t('secretUserId'),
       enableSort: true,
-      width: ParticipantsColumnsWidth.Default,
+      maxWidth: ParticipantsColumnsWidth.Id,
     },
     {
       id: 'nicknames',

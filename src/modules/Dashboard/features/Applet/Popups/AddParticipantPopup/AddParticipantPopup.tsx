@@ -179,9 +179,6 @@ export const AddParticipantPopup = ({
           title={t('addParticipant')}
           buttonText={t('next')}
           hasLeftBtn
-          leftBtnText={t('addViaCSV')}
-          leftBtnVariant="outlined"
-          onLeftBtnSubmit={handleAddViaCSV}
           data-testid={dataTestid}
         >
           <StyledModalWrapper>

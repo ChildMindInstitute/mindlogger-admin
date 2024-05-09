@@ -34,7 +34,7 @@ export const TableHead = ({
         </TableRow>
       )}
       <TableRow>
-        {headCells.map(({ id, label, align, enableSort, width }) => (
+        {headCells.map(({ id, label, align, enableSort, maxWidth, width }) => (
           <StyledTableCell
             uiType={uiType}
             key={id}
@@ -42,6 +42,7 @@ export const TableHead = ({
             align={align}
             sortDirection={orderBy === id ? order : false}
             hasColFixedWidth={hasColFixedWidth}
+            sx={{ maxWidth }}
           >
             {enableSort ? (
               <TableSortLabel
