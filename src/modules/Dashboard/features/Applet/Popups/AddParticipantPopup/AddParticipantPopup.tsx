@@ -214,10 +214,8 @@ export const AddParticipantPopup = ({
           buttonText={t(isFullAccount ? 'sendInvitation' : 'create')}
           disabledSubmit={!isValid}
           hasSecondBtn
-          // TODO: Update second button variant once 'tonal' variant added
-          // https://mindlogger.atlassian.net/browse/M2-6071
           secondBtnText={t('Reset')}
-          secondBtnVariant="outlined"
+          secondBtnVariant="tonal"
           onSecondBtnSubmit={resetForm}
           disabledSecondBtn={!isDirty}
           hasLeftBtn

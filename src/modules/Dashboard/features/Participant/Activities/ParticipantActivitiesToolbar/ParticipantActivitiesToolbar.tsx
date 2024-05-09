@@ -1,21 +1,19 @@
 import { useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Link, generatePath } from 'react-router-dom';
 
-import { page } from 'resources';
-import { ButtonWithMenu, Svg } from 'shared/components';
+import { ButtonWithMenu, Search, Svg } from 'shared/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { StyledFlexTopCenter, StyledFlexWrap, theme } from 'shared/styles';
 
-import { ActivitiesToolbarProps } from './ActivitiesToolbar.types';
+import { ParticipantActivitiesToolbarProps } from './ParticipantActivitiesToolbar.types';
 
-export const ActivitiesToolbar = ({
+export const ParticipantActivitiesToolbar = ({
   appletId,
   'data-testid': dataTestId,
   sx,
   ...otherProps
-}: ActivitiesToolbarProps) => {
+}: ParticipantActivitiesToolbarProps) => {
   const { t } = useTranslation('app');
   const { featureFlags } = useFeatureFlags();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -48,7 +46,7 @@ export const ActivitiesToolbar = ({
                 menuItems={[
                   {
                     title: 'TODO: Sort options',
-                    action: () => alert('TODO: Sort options'),
+                    action: () => {},
                   },
                 ]}
                 setAnchorEl={setAnchorEl}
@@ -59,6 +57,13 @@ export const ActivitiesToolbar = ({
           )}
 
           <StyledFlexWrap sx={{ gap: 1.2 }}>
+            <Search
+              data-testid={`${dataTestId}-search`}
+              placeholder={t('searchActivities')}
+              sx={{ width: '32rem' }}
+              withDebounce
+            />
+
             {featureFlags.enableActivityAssign && (
               <Button
                 data-testid={`${dataTestId}-assign`}
@@ -68,21 +73,11 @@ export const ActivitiesToolbar = ({
                   alert('TODO: Assign activity');
                 }}
                 sx={{ minWidth: theme.spacing(10) }}
-                variant="tonal"
+                variant="contained"
               >
-                {t('assign')}
+                {t('assignActivity')}
               </Button>
             )}
-
-            <Button
-              component={Link}
-              to={generatePath(page.builderAppletActivities, { appletId })}
-              variant="contained"
-              data-testid={`${dataTestId}-add-activity`}
-              sx={{ minWidth: theme.spacing(13.2) }}
-            >
-              {t('addActivity')}
-            </Button>
           </StyledFlexWrap>
         </>
       )}

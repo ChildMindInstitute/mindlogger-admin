@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
 import {
   ActionsMenu,
+  ButtonWithMenu,
   Chip,
   MenuActionProps,
   Pin,
@@ -21,17 +23,11 @@ import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
-import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
 
-import {
-  AddParticipantButton,
-  FiltersButton,
-  SortByButton,
-  ParticipantsTable,
-} from './Participants.styles';
+import { AddParticipantButton, ParticipantsTable } from './Participants.styles';
 import {
   getAppletsSmallTableRows,
   getHeadCells,
@@ -104,6 +100,7 @@ export const Participants = () => {
     return getWorkspaceRespondents(params);
   });
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addParticipantPopupVisible, setAddParticipantPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
@@ -416,27 +413,18 @@ export const Participants = () => {
 
       <StyledFlexWrap sx={{ gap: 1.2, mb: 2.4 }}>
         <StyledFlexTopCenter sx={{ gap: 1.2 }}>
-          <FiltersButton
-            variant="outlined"
-            startIcon={
-              <StyledIcon>
-                <Svg id="slider-rows" height="24" width="24" />
-              </StyledIcon>
-            }
-          >
+          <Button variant="outlined" startIcon={<Svg id="slider-rows" height={18} width={18} />}>
             {t('filters')}
-          </FiltersButton>
+          </Button>
 
-          <SortByButton
+          <ButtonWithMenu
+            anchorEl={anchorEl}
+            label={t('sortBy')}
+            menuItems={[]}
+            setAnchorEl={setAnchorEl}
+            startIcon={<></>}
             variant="outlined"
-            endIcon={
-              <StyledIcon>
-                <Svg id="dropdown-down-outlined" height="24" width="24" />
-              </StyledIcon>
-            }
-          >
-            {t('sortBy')}
-          </SortByButton>
+          />
         </StyledFlexTopCenter>
 
         <StyledFlexWrap sx={{ gap: 1.2, ml: 'auto' }}>

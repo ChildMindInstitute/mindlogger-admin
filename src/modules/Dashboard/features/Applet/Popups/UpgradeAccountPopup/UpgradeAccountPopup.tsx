@@ -119,9 +119,7 @@ export const UpgradeAccountPopup = ({
       disabledSubmit={!isValid}
       hasLeftBtn
       leftBtnText={t('Reset')}
-      // TODO: Update left button variant once 'tonal' variant added
-      // https://mindlogger.atlassian.net/browse/M2-6071
-      leftBtnVariant="outlined"
+      leftBtnVariant="tonal"
       onLeftBtnSubmit={resetForm}
       disabledLeftBtn={!isDirty}
       data-testid={`${dataTestid}-account-form`}
