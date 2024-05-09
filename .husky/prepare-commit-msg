@@ -1,9 +1,0 @@
-#!/bin/sh
-commit_source=$2
-
-if [ "${commit_source}" = merge ]; then
-    if [ ! -e ./commit_msg_check_flag ]; then
-        echo "1" > ./commit_msg_check_flag
-    fi
-    exit 0
-fi
