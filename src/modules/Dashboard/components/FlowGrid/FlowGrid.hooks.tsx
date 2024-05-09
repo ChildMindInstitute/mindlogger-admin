@@ -11,6 +11,8 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { isManagerOrOwner } from 'shared/utils';
 import { RespondentDetails } from 'modules/Dashboard/types';
 
+import { OpenTakeNowModalOptions } from '../TakeNowModal/TakeNowModal.types';
+
 type FlowsMenuActionParams = MenuActionProps<{ appletId?: string; flowId?: string }>;
 
 export function useFlowGridMenu({
@@ -79,8 +81,14 @@ export function useFlowGridMenu({
         'data-testid': `${testId}-flow-take-now`,
         action: () => {
           if (flow) {
-            const options = subject
-              ? { subject: { ...subject, secretId: subject.secretUserId } }
+            const options: OpenTakeNowModalOptions | undefined = subject
+              ? {
+                  targetSubject: {
+                    ...subject,
+                    secretId: subject.secretUserId,
+                    userId: subject.userId,
+                  },
+                }
               : undefined;
             // TODO: Fix this type :(
             openTakeNowModal(flow as unknown as Partial<Activity>, options);
@@ -89,10 +97,10 @@ export function useFlowGridMenu({
         context: { appletId, flowId: flow?.id },
         icon: <Svg id="play-outline" />,
         isDisplayed: canDoTakeNow,
-        title: t('takeNow'),
+        title: t('takeNow.menuItem'),
       },
     ],
-    [appletId, canDoTakeNow, canEdit, navigate, openTakeNowModal, t, testId],
+    [appletId, canDoTakeNow, canEdit, navigate, openTakeNowModal, subject, t, testId],
   );
 
   return {

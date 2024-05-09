@@ -1,17 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal } from 'shared/components';
-import { auth, workspaces } from 'redux/modules';
-import {
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-  StyledHeadline,
-  StyledModalWrapper,
-} from 'shared/styles';
-import { useAsync } from 'shared/hooks';
+import { auth, users, workspaces } from 'redux/modules';
+import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
@@ -26,29 +20,25 @@ import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/Activity
 import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
 import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
+import { useAppDispatch } from '../../../../redux/store';
+import { RenderIf } from '../../../../shared/components/RenderIf/RenderIf';
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
-  const [activity, setActivity] = useState<BaseActivity | null>(null);
-  const [participants, setParticipants] = useState<ParticipantDropdownOption[]>([]);
-  const [participantsAndTeamMembers, setParticipantsAndTeamMembers] = useState<
-    ParticipantDropdownOption[]
-  >([]);
-  const [defaultSubject, setDefaultSubject] = useState<ParticipantDropdownOption | null>(null);
-  const [defaultParticipant, setDefaultParticipant] = useState<ParticipantDropdownOption | null>(
-    null,
-  );
-  const { ownerId } = workspaces.useData() || {};
-  const userData = auth.useData();
-  const { appletId } = useParams();
+  const dispatch = useAppDispatch();
+  const respondentsData = users.useAllRespondentsData();
+  const respondentsStatus = users.useAllRespondentsStatus();
 
   const participantToOption = useCallback(
     (participant: ParticipantsData['result'][0]): ParticipantDropdownOption => {
       const stringNicknames = joinWihComma(participant.nicknames, true);
       const stringSecretIds = joinWihComma(participant.secretIds, true);
 
+      console.log(participant.details[0].subjectId, participant.email);
+
       return {
         id: participant.details[0].subjectId,
+        userId: participant.id,
         secretId: stringSecretIds,
         nickname: stringNicknames,
         tag: participant.details[0].subjectTag,
@@ -57,45 +47,82 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     [],
   );
 
-  const { execute: getParticipants } = useAsync(getWorkspaceRespondentsApi, (response) => {
-    if (response?.data) {
-      const data = (response.data as ParticipantsData).result;
-      setParticipants(data.map(participantToOption));
-    }
-  });
+  const sortByTeamTag = useCallback(
+    (a: ParticipantDropdownOption, b: ParticipantDropdownOption): number => {
+      if (a.tag === 'Team' && b.tag !== 'Team') {
+        return -1;
+      }
+      if (a.tag !== 'Team' && b.tag === 'Team') {
+        return 1;
+      }
+
+      return 0;
+    },
+    [],
+  );
+
+  const filterFullAccounts = useCallback(
+    (option: ParticipantDropdownOption): boolean => !!option.userId,
+    [],
+  );
+
+  const [activity, setActivity] = useState<BaseActivity | null>(null);
+
+  const optionsData = respondentsData?.result.map(participantToOption).sort(sortByTeamTag) ?? [];
+  const [participants, setParticipants] = useState<ParticipantDropdownOption[]>(optionsData);
+  const [participantsAndTeamMembers, setParticipantsAndTeamMembers] =
+    useState<ParticipantDropdownOption[]>(optionsData);
+  const [fullAccountsAndTeamMembers, setFullAccountsAndTeamMembers] = useState<
+    ParticipantDropdownOption[]
+  >(optionsData.filter(filterFullAccounts));
+
+  const [defaultTargetSubject, setDefaultTargetSubject] =
+    useState<ParticipantDropdownOption | null>(null);
+  const [defaultSourceSubject, setDefaultSourceSubject] =
+    useState<ParticipantDropdownOption | null>(null);
+
+  const { ownerId } = workspaces.useData() || {};
+  const userData = auth.useData();
+  const { appletId } = useParams();
 
   useEffect(() => {
     if (appletId) {
-      getParticipants({
-        params: {
-          ownerId,
-          appletId,
-          limit: DEFAULT_ROWS_PER_PAGE,
-        },
-      });
-    }
+      if (respondentsStatus === 'idle' || respondentsStatus === 'error') {
+        const { getAllWorkspaceRespondents } = users.thunk;
+        dispatch(
+          getAllWorkspaceRespondents({
+            params: { ownerId, appletId },
+          }),
+        );
+      } else if (respondentsStatus === 'success' && respondentsData) {
+        const options = respondentsData.result.map(participantToOption).sort(sortByTeamTag);
+        setParticipants(options);
+        setParticipantsAndTeamMembers(options);
+        setFullAccountsAndTeamMembers(options.filter(filterFullAccounts));
 
-    if (userData) {
-      // For now, the admin is the only member of this list
-      let ownerNickname = '';
-      if (userData.user.firstName) {
-        ownerNickname += `${userData.user.firstName}`;
-        if (userData.user.lastName) {
-          ownerNickname += ` ${userData.user.lastName}`;
+        // Default to the current admin, if possible
+        if (userData) {
+          const ownerRespondent = respondentsData.result.find((r) => r.id === userData.user.id);
+          if (ownerRespondent) {
+            const ownerOption = options.find(
+              (option) => option.id === ownerRespondent.details[0].subjectId,
+            );
+            if (ownerOption) {
+              setDefaultSourceSubject(ownerOption);
+            }
+          }
         }
       }
-
-      const ownerOption: ParticipantDropdownOption = {
-        // Here we use the user ID instead of the subject ID
-        id: userData.user.id,
-        secretId: userData.user.id,
-        nickname: ownerNickname,
-      };
-
-      // In the future we will allow choosing from the full list of participants and team members
-      setParticipantsAndTeamMembers([ownerOption]);
     }
-  }, [appletId, ownerId, getParticipants, userData]);
+  }, [
+    appletId,
+    dispatch,
+    ownerId,
+    userData,
+    respondentsStatus,
+    respondentsData,
+    participantToOption,
+  ]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
@@ -103,21 +130,55 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       onClose?.();
     };
 
-    const [subject, setSubject] = useState<ParticipantDropdownOption | null>(defaultSubject);
-    const [participant, setParticipant] = useState<ParticipantDropdownOption | null>(
-      defaultParticipant || participantsAndTeamMembers[0],
+    const [targetSubject, setTargetSubject] = useState<ParticipantDropdownOption | null>(
+      defaultTargetSubject,
     );
+    const [sourceSubject, setSourceSubject] = useState<ParticipantDropdownOption | null>(
+      defaultSourceSubject,
+    );
+    const [isSelfReporting, setIsSelfReporting] = useState<boolean>(true);
+    const [loggedInUser, setLoggedInUser] = useState<ParticipantDropdownOption | null>(
+      defaultSourceSubject?.userId ? defaultSourceSubject : null,
+    );
+
     const handleSubmit = useCallback(() => {
-      if (subject && participant && activity?.id) {
+      if (targetSubject && sourceSubject && (isSelfReporting || loggedInUser) && activity?.id) {
         const url = new URL(`protected/applets/${appletId}`, `${process.env.REACT_APP_WEB_URI}/`);
         url.searchParams.set('startActivityOrFlow', activity.id);
-        url.searchParams.set('subjectId', subject.id);
-        url.searchParams.set('respondentId', participant.id);
+        url.searchParams.set('sourceSubjectId', sourceSubject.id);
+        url.searchParams.set('targetSubjectId', targetSubject.id);
+
+        // This conditional shouldn't be necessary, but TS is unable to propagate the type information from
+        // (isSelfReporting || loggedInUser), so we have to check them again (or use the forbidden non-null assertion)
+        if (isSelfReporting && sourceSubject.userId) {
+          url.searchParams.set('respondentId', sourceSubject.userId);
+        } else if (!isSelfReporting && loggedInUser && loggedInUser.userId) {
+          url.searchParams.set('respondentId', loggedInUser.userId);
+        }
+
+        // TODO: Remove once the web app is updated to process `targetSubjectId` instead of `subjectId`
+        url.searchParams.set('subjectId', targetSubject.id);
 
         setActivity(null);
         window.open(url.toString(), '_blank');
       }
-    }, [subject, participant]);
+    }, [targetSubject, sourceSubject, loggedInUser, isSelfReporting]);
+
+    const handleSearch = useCallback(
+      async (search: string): Promise<ParticipantDropdownOption[]> => {
+        const response = await getWorkspaceRespondentsApi({
+          params: {
+            ownerId,
+            appletId,
+            search,
+            limit: DEFAULT_ROWS_PER_PAGE,
+          },
+        });
+
+        return (response?.data as ParticipantsData)?.result.map(participantToOption) ?? [];
+      },
+      [],
+    );
 
     if (!activity || !participants || !participantsAndTeamMembers) {
       return null;
@@ -127,66 +188,93 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       <Modal
         open={true}
         width="57"
-        title={t('takeNow')}
+        title={t('takeNow.modal.title')}
         buttonText={t('startActivity')}
         onSubmit={handleSubmit}
         onClose={handleClose}
-        disabledSubmit={subject === null || participant === null}
+        disabledSubmit={
+          targetSubject === null ||
+          sourceSubject === null ||
+          (!isSelfReporting && loggedInUser === null)
+        }
         data-testid={`${dataTestId}-take-now-modal`}
       >
-        <StyledModalWrapper>
-          <StyledFlexColumn sx={{ gap: 0.8 }}>
-            <StyledFlexTopCenter sx={{ gap: 2.4 }}>
-              <StyledImageContainer>
-                {!!activity.image && <StyledImg src={activity.image} alt={activity.name} />}
-              </StyledImageContainer>
-              <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
-            </StyledFlexTopCenter>
-            <Box>
-              <LabeledUserDropdown
-                  label={t('takeNowModalParticipantLabel')}
+        <StyledFlexColumn sx={{ gap: 3.2, padding: theme.spacing(1.6, 3.2, 2.4) }}>
+          <StyledFlexTopCenter gap={2.4}>
+            <StyledImageContainer>
+              {!!activity.image && <StyledImg src={activity.image} alt={activity.name} />}
+            </StyledImageContainer>
+            <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
+          </StyledFlexTopCenter>
+          <StyledFlexColumn gap={2.4}>
+            <StyledFlexColumn gap={0.8}>
+              <StyledFlexColumn gap={0.4}>
+                <LabeledUserDropdown
+                  label={t('takeNow.modal.sourceSubjectLabel')}
                   name={'participant'}
-                  placeholder={t('takeNowModalParticipantPlaceholder')}
-                  value={participant}
+                  placeholder={t('takeNow.modal.sourceSubjectPlaceholder')}
+                  value={sourceSubject}
                   options={participantsAndTeamMembers}
-                  onChange={setParticipant}
+                  onChange={(option) => {
+                    setSourceSubject(option);
+                    if (option) {
+                      setIsSelfReporting(!!option.userId);
+                    }
+                  }}
                   data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
-                  disabled
-              />
-              <LabeledUserDropdown
-                label={t('takeNowModalSubjectLabel')}
-                name={'subject'}
-                placeholder={t('takeNowModalSubjectPlaceholder')}
-                value={subject}
-                options={participants}
-                onChange={setSubject}
-                data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-                handleSearch={async (search) => {
-                  const response = await getWorkspaceRespondentsApi({
-                    params: {
-                      ownerId,
-                      appletId,
-                      search,
-                      limit: DEFAULT_ROWS_PER_PAGE,
-                    },
-                  });
-
-                  return (
-                    (response?.data as ParticipantsData)?.result.map(participantToOption) ?? []
-                  );
-                }}
-              />
-            </Box>
+                  canShowWarningMessage={true}
+                  showGroups={true}
+                />
+                <FormControlLabel
+                  control={<Checkbox sx={{ margin: 0, width: 48, height: 48 }} />}
+                  sx={{ gap: 0.4 }}
+                  checked={isSelfReporting}
+                  onChange={(_e, checked) => setIsSelfReporting(checked)}
+                  disabled={!sourceSubject?.userId}
+                  label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
+                />
+              </StyledFlexColumn>
+              <RenderIf condition={!isSelfReporting}>
+                <LabeledUserDropdown
+                  label={t('takeNow.modal.loggedInUserLabel')}
+                  name={'loggedInUser'}
+                  sx={{ gap: 1, pl: 5.2 }}
+                  placeholder={t('takeNow.modal.loggedInUserPlaceholder')}
+                  value={loggedInUser}
+                  options={fullAccountsAndTeamMembers}
+                  onChange={setLoggedInUser}
+                  data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
+                  handleSearch={handleSearch}
+                  showGroups={true}
+                />
+              </RenderIf>
+            </StyledFlexColumn>
+            <LabeledUserDropdown
+              label={t('takeNow.modal.targetSubjectLabel')}
+              name={'subject'}
+              placeholder={t('takeNow.modal.targetSubjectPlaceholder')}
+              value={targetSubject}
+              options={participants}
+              onChange={setTargetSubject}
+              data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
+              handleSearch={handleSearch}
+            />
           </StyledFlexColumn>
-        </StyledModalWrapper>
+        </StyledFlexColumn>
       </Modal>
     );
   };
 
   const openTakeNowModal = (activity: BaseActivity, options?: OpenTakeNowModalOptions) => {
     setActivity(activity);
-    setDefaultSubject(options?.subject || null);
-    setDefaultParticipant(options?.participant || null);
+
+    if (options?.targetSubject) {
+      setDefaultTargetSubject(options.targetSubject);
+    }
+
+    if (options?.sourceSubject) {
+      setDefaultSourceSubject(options.sourceSubject);
+    }
   };
 
   return { TakeNowModal, openTakeNowModal };

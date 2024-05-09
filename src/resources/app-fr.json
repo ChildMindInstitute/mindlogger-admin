@@ -1214,13 +1214,25 @@
   "tag": "Étiqueter",
   "takeMeToTheResponseData": "Montrez-moi les données de réponse",
   "takePhoto": "Prendre une photo",
-  "takeNow": "Prendre maintenant",
-  "takeNowModalParticipantLabel": "Qui apportera les réponses?",
-  "takeNowModalParticipantPlaceholder": "Sélectionnez parmi les participants et les membres de l'équipe",
-  "takeNowModalSubjectLabel": "De qui s’adressent les réponses?",
-  "takeNowModalSubjectPlaceholder": "Sélectionnez parmi les participants",
-  "takeNowModalSubjectTooltip": "C’est le sujet de l’activité assignée.",
-  "takeNowNotFound": "Pas trouvé",
+  "takeNow": {
+    "menuItem": "Prendre maintenant",
+    "modal": {
+      "title": "Prendre maintenant",
+      "sourceSubjectLabel": "Qui apportera les réponses?",
+      "sourceSubjectPlaceholder": "Sélectionnez parmi les participants et les membres de l'équipe",
+      "sourceSubjectCheckboxLabel": "Cette personne saisira ses propres réponses",
+      "targetSubjectLabel": "De qui s’adressent les réponses?",
+      "targetSubjectPlaceholder": "Sélectionnez parmi les participants",
+      "loggedInUserLabel": "Qui saisira les réponses ?",
+      "loggedInUserPlaceholder": "Sélectionnez parmi les participants et les membres de l'équipe",
+      "dropdown": {
+        "limitedAccountWarning": "Le participant sélectionné dispose d'un compte limité et ne peut pas saisir ses propres réponses. Veuillez sélectionner un répondant pour continuer.",
+        "teamMemberGrouping": "Membres de l'équipe",
+        "participantGrouping": "Participants",
+        "notFound": "Pas trouvé"
+      }
+    }
+  },
   "teamMemberAlreadyInvited": "Le membre de l'équipe a déjà été invité",
   "terms": "Conditions",
   "termsOfService": "Conditions d'utilisation",

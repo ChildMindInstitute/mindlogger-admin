@@ -1215,13 +1215,25 @@
   "tag": "Tag",
   "takeMeToTheResponseData": "Take me to the response data",
   "takePhoto": "Take Photo",
-  "takeNow": "Take Now",
-  "takeNowModalParticipantLabel": "Who will be providing the responses?",
-  "takeNowModalParticipantPlaceholder": "Select from participants & team members",
-  "takeNowModalSubjectLabel": "Who are the responses about?",
-  "takeNowModalSubjectPlaceholder": "Select from participants",
-  "takeNowModalSubjectTooltip": "This is the subject of the activity being assigned.",
-  "takeNowNotFound": "Not Found",
+  "takeNow": {
+    "menuItem": "Take Now",
+    "modal": {
+      "title": "Take Now",
+      "sourceSubjectLabel": "Who will be providing the responses?",
+      "sourceSubjectPlaceholder": "Select from participants & team members",
+      "sourceSubjectCheckboxLabel": "This person will be inputting their own responses",
+      "targetSubjectLabel": "Who are the responses about?",
+      "targetSubjectPlaceholder": "Select from participants",
+      "loggedInUserLabel": "Who will be inputting the responses?",
+      "loggedInUserPlaceholder": "Select from participants & team members",
+      "dropdown": {
+        "limitedAccountWarning": "The selected participant has a Limited Account and is unable to input their own answers. Please select a respondent to continue.",
+        "teamMemberGrouping": "Team Members",
+        "participantGrouping": "Participants",
+        "notFound": "Not Found"
+      }
+    }
+  },
   "teamMemberAlreadyInvited": "Team member already invited",
   "terms": "Terms",
   "termsOfService": "Terms of Service",

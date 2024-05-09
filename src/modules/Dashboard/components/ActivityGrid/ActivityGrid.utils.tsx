@@ -59,7 +59,7 @@ export const getActivityActions = ({
     {
       icon: <Svg id="play-outline" />,
       action: takeNow,
-      title: t('takeNow'),
+      title: t('takeNow.menuItem'),
       context: { appletId, activityId },
       isDisplayed: canDoTakeNow,
       'data-testid': `${dataTestId}-activity-take-now`,

@@ -83,6 +83,7 @@ const preloadedState: PreloadedState<RootState> = {
         nickname: 'nickname',
         lastSeen: null,
         tag: 'Child' as ParticipantTag,
+        userId: null,
       },
     }),
   },
