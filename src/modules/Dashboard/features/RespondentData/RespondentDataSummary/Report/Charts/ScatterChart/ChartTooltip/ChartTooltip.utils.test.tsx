@@ -21,7 +21,7 @@ describe('getReviewOption', () => {
     [
       1,
       2,
-      t('reviewIAndOthers', { other: 2, reviews: 3 }),
+      t('reviewIAndOthers', { count: 2, reviews: 3 }),
       'returns correct translation for both mine and other reviews',
     ],
   ])('correctly processes mine: %i, other: %i', (mine, other, expected) => {

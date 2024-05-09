@@ -3,9 +3,10 @@ import { Box } from '@mui/material';
 import { Spinner } from 'shared/components';
 import { getEntityKey } from 'shared/utils';
 import { StyledObserverTarget } from 'shared/styles';
+import { observerStyles } from 'shared/consts';
 import { useDataPreloader } from 'modules/Builder/hooks/useDataPreloader';
 import { useCurrentActivity } from 'modules/Builder/hooks';
-import { ITEMS_COUNT_TO_ACTIVATE_STATIC, observerStyles } from 'modules/Builder/consts';
+import { ITEMS_COUNT_TO_ACTIVATE_STATIC } from 'modules/Builder/consts';
 
 import { DraggableItemsProps } from './DraggableItems.types';
 import { DRAGGABLE_ITEMS_LIST_CLASS, DRAGGABLE_ITEMS_END_ITEM_CLASS } from './DraggableItems.const';

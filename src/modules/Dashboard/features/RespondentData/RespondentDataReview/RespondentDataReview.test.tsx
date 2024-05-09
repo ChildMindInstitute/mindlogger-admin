@@ -430,6 +430,11 @@ describe('RespondentDataReview', () => {
         );
       });
 
+      // check that the Feedback Reviews tab is not open
+      expect(
+        screen.queryByTestId('respondents-data-summary-feedback-reviewed'),
+      ).not.toBeInTheDocument();
+
       const timestampLength2 = screen.queryAllByTestId(
         /respondents-review-menu-activity-0-completion-time-\d+$/,
       );
@@ -564,7 +569,8 @@ describe('RespondentDataReview', () => {
         },
       );
 
-      expect(screen.getByTestId('respondents-review-feedback-menu')).toBeInTheDocument();
+      // check that the Feedback Reviews tab is open
+      expect(screen.getByTestId('respondents-data-summary-feedback-reviewed')).toBeInTheDocument();
     },
     JEST_TEST_TIMEOUT,
   );
