@@ -6,7 +6,7 @@ export const useStaticContent = ({
   targetSelector,
   isStaticActive = false,
 }: {
-  targetSelector: string;
+  targetSelector?: string;
   isStaticActive?: boolean;
 }) => {
   const [isStatic, setStatic] = useState(isStaticActive);
@@ -15,7 +15,7 @@ export const useStaticContent = ({
     targetSelector: `.${targetSelector}`,
     onAppear: () => setStatic(false),
     onHide: () => setStatic(true),
-    isActive: isStaticActive,
+    isActive: isStaticActive && !!targetSelector,
   });
 
   useEffect(() => {
