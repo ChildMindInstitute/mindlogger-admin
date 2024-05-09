@@ -280,6 +280,8 @@ export const activityJourneyHeader = [
   'response_option_selection_time',
   'secret_user_id',
   'user_id',
+  'source_subject_id',
+  'target_subject_id',
   'activity_id',
   'activity_flow_id',
   'activity_flow_name',
