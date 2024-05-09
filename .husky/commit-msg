@@ -1,7 +1,0 @@
-#!/bin/sh
-current_branch=$(git branch --show-current)
-
-if ! [[ $current_branch =~ ^((feature|fix|tests)/M2-[0-9])|(release|develop)+ ]]; then
-  echo "The branch name should follow the format 'fix/M2-xxx', 'feature/M2-xxx' or 'tests/M2-xxx', xxx - ticket number"
-  exit 1
-fi
