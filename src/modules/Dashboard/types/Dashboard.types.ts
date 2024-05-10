@@ -31,7 +31,7 @@ export type RespondentDetail = {
   respondentSecretId: string;
   hasIndividualSchedule: boolean;
   subjectId: string;
-  subjectTag: ParticipantTag | null;
+  subjectTag?: ParticipantTag | null;
 };
 
 export enum RespondentStatus {
