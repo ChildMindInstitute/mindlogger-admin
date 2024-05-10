@@ -17,7 +17,7 @@ export const getChipStyleOverrides = ({
     case 'secondary':
       return {
         color: variables.palette.on_surface_variant,
-        [key]: variables.palette.inverse_on_surface,
+        [key]: variables.palette.on_surface_variant_alfa8,
 
         // MUI applies tabindex to make Chip's focusable when they receive
         // `onDelete` or`onClick` props. This selector (and the repeated ones

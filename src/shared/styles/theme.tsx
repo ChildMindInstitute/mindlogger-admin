@@ -467,6 +467,18 @@ export const theme = createTheme({
         },
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        input: {
+          '&&': {
+            height: 'auto',
+            fontSize: variables.font.size.lg,
+            lineHeight: variables.font.lineHeight.lg,
+            padding: '1.6rem',
+          },
+        },
+      },
+    },
     MuiFormHelperText: {
       styleOverrides: {
         root: {
@@ -519,10 +531,6 @@ export const theme = createTheme({
           borderWidth: variables.borderWidth.md,
           borderColor: variables.palette.outline_variant,
           color: variables.palette.black,
-          input: {
-            padding: '1.65rem 1.6rem',
-            fontSize: variables.font.size.lg,
-          },
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: variables.palette.primary50,
@@ -615,6 +623,8 @@ export const theme = createTheme({
             padding: '0',
             '.MuiAutocomplete-option': {
               transition: variables.transitions.bgColor,
+              padding: '0.5rem 1.6rem',
+              minHeight: '4.8rem',
               '&:hover': {
                 backgroundColor: variables.palette.on_surface_variant_alfa8,
               },
@@ -628,17 +638,25 @@ export const theme = createTheme({
                 },
               },
             },
+            '.MuiFormControlLabel-root': {
+              marginLeft: '-1.2rem',
+            },
+            '.MuiCheckbox-root': {
+              marginLeft: '-0.4rem',
+            },
           },
         },
       },
     },
     MuiCheckbox: {
       defaultProps: {
-        icon: <Svg height="20" id="checkbox-empty-outlined" width="20" />,
-        checkedIcon: <Svg height="20" id="checkbox-filled" width="20" />,
+        icon: <Svg id="checkbox-empty-outlined" width={24} height={24} />,
+        checkedIcon: <Svg id="checkbox-filled" width={24} height={24} />,
       },
       styleOverrides: {
         root: ({ checked = false }) => ({
+          padding: theme.spacing(0.7),
+          marginRight: theme.spacing(0.8),
           fill: checked ? variables.palette.primary : variables.palette.outline_variant2,
         }),
       },

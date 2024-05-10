@@ -25,7 +25,7 @@ import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
-import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
+import { ParticipantSnippetInfo, ParticipantTagChip } from 'modules/Dashboard/components';
 
 import { AddParticipantButton, ParticipantsTable } from './Participants.styles';
 import {
@@ -244,13 +244,10 @@ export const Participants = () => {
       email,
     } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
-    const schedule =
-      appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
+    const schedule = appletId && details[0].hasIndividualSchedule ? t('individual') : t('default');
     const nickname = joinWihComma(nicknames, true);
     const secretId = joinWihComma(secretIds, true);
-    // TODO: Populate participant tag
-    // https://mindlogger.atlassian.net/browse/M2-5861
-    const tag = null;
+    const tag = details[0].subjectTag;
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
     const accountType = {
       [RespondentStatus.Invited]: t('full'),
@@ -276,10 +273,11 @@ export const Participants = () => {
         width: ParticipantsColumnsWidth.Pin,
       },
       tag: {
-        // TODO: Replace `null` with tag when available
-        // https://mindlogger.atlassian.net/browse/M2-5861
-        // https://mindlogger.atlassian.net/browse/M2-6161
-        content: () => <StyledMaybeEmpty>{null}</StyledMaybeEmpty>,
+        content: () => (
+          <StyledMaybeEmpty>
+            <ParticipantTagChip tag={tag} />
+          </StyledMaybeEmpty>
+        ),
         value: '',
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,

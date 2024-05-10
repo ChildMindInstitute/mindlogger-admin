@@ -13,6 +13,7 @@ import {
   CalculationType,
   ConditionalLogicMatch,
   ItemResponseType,
+  ParticipantTag,
   Roles,
   ScoreReportType,
   SubscaleTotalScore,
@@ -104,10 +105,11 @@ export const mockedRespondentDetails = {
   appletImage: '',
   accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   respondentNickname: 'Mocked Respondent',
-  respondentSecretId: '3921968c-3903-4872-8f30-a6e6a10cef36',
+  respondentSecretId: 'mockedSecretId',
   hasIndividualSchedule: false,
   encryption: mockedEncryption,
   subjectId: mockedSubjectId1,
+  subjectTag: ParticipantTag.Child,
 };
 export const mockedRespondent = {
   id: mockedRespondentId,
@@ -142,10 +144,11 @@ export const mockedRespondent2 = {
       appletImage: '',
       accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
       respondentNickname: 'Test Respondent',
-      respondentSecretId: '39ff968c-3903-4872-8f30-a6e6a10cef36',
+      respondentSecretId: 'testSecretId',
       hasIndividualSchedule: false,
       encryption: mockedEncryption,
       subjectId: mockedSubjectId2,
+      subjectTag: ParticipantTag.Child,
     },
   ],
 };

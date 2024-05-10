@@ -1,5 +1,6 @@
 import { Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { MenuActionProps } from 'shared/components';
+import { ParticipantTag } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 
 export type ParticipantActionProps = {
@@ -8,7 +9,7 @@ export type ParticipantActionProps = {
   email: string | null;
   secretId: string | null;
   nickname?: string | null;
-  tag?: string | null;
+  tag?: ParticipantTag | null;
 };
 
 export type ParticipantActions = {
@@ -57,7 +58,7 @@ export type GetParticipantActionsProps = {
   email: string | null;
   secretId: string | null;
   nickname?: string | null;
-  tag?: string | null;
+  tag?: ParticipantTag | null;
   appletId?: string;
   status: RespondentStatus;
   dataTestid: string;
@@ -78,5 +79,5 @@ export type HandleUpgradeAccount = {
   respondentOrSubjectId: string;
   secretId: string | null;
   nickname?: string | null;
-  tag?: string | null;
+  tag?: ParticipantTag | null;
 };

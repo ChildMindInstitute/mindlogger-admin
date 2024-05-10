@@ -1,4 +1,4 @@
-import { styled, Typography } from '@mui/material';
+import { styled, Typography, css } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { shouldForwardProp } from 'shared/utils/shouldForwardProp';
@@ -144,8 +144,10 @@ export const StyledBodySmall = styled(Typography)`
   letter-spacing: ${variables.font.letterSpacing.xl};
 `;
 
-export const StyledEllipsisText = styled(Typography)`
+export const ellipsisTextCss = css`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 `;
+
+export const StyledEllipsisText = styled(Typography)(ellipsisTextCss);

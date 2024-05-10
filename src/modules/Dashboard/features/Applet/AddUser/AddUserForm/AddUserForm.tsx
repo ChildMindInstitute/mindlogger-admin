@@ -270,12 +270,10 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
               <TagsAutocompleteController
                 {...commonProps}
                 name={Fields.respondents}
-                options={respondents}
-                label={t('respondents')}
+                options={respondents ?? []}
+                textFieldProps={{ label: t('respondents') }}
                 labelAllSelect={t('all')}
-                noOptionsText={
-                  respondents?.length ? t('noRespondentsToSelect') : t('noRespondentsYet')
-                }
+                noOptionsText={respondents ? t('noRespondentsToSelect') : t('noRespondentsYet')}
                 data-testid={`${dataTestId}-respondents`}
               />
             </Grid>

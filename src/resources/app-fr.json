@@ -863,6 +863,12 @@
   "ownerEmail": "E-mail du propriétaire",
   "participantAlreadyInvited": "Participant déjà invité",
   "participants": "Participants",
+  "participantTag": {
+    "": "Aucune sélection",
+    "Child": "Enfant",
+    "Parent": "Parent/Tuteur",
+    "Teacher": "Enseignant"
+  },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",
   "passwordCapitalLetter": "Au moins une lettre majuscule doit être incluse.",
@@ -1066,6 +1072,7 @@
   "sectionHeader": "Section {{index}} :",
   "sectionName": "Nom de la Section",
   "select": "Sélectionner",
+  "selectOne": "Sélectionner un…",
   "selectActivity": "Sélectionner une Activité",
   "selectActivityAndResponse": "Sélectionner une activité et une réponse",
   "selectAll": "Sélectionner tout",

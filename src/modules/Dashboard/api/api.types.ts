@@ -183,16 +183,17 @@ export type DeleteSubject = SubjectId & {
 };
 
 export type AppletInvitationOptions = {
-  role: string;
+  email: string;
   firstName: string;
+  language: string;
   lastName: string;
   nickname?: string;
-  email: string;
+  role: string;
   secretUserId?: string;
-  workspacePrefix?: string;
   subjects?: string[];
+  tag?: string;
   title?: string;
-  language: string;
+  workspacePrefix?: string;
 };
 
 export type AppletInvitationData = AppletId & {
@@ -207,12 +208,13 @@ export type SubjectInvitationData = AppletId &
   };
 
 export type AppletShellAccountOptions = {
-  secretUserId: string;
-  firstName: string;
-  lastName: string;
-  language: string;
   email: string | null;
+  firstName: string;
+  language: string;
+  lastName: string;
   nickname?: string;
+  secretUserId: string;
+  tag?: string;
 };
 
 export type AppletShellAccountData = AppletId & {

@@ -1,4 +1,4 @@
-import { Roles } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 
 export type ManagerApplet = {
   id: string;
@@ -31,6 +31,7 @@ export type RespondentDetail = {
   respondentSecretId: string;
   hasIndividualSchedule: boolean;
   subjectId: string;
+  subjectTag: ParticipantTag | null;
 };
 
 export enum RespondentStatus {

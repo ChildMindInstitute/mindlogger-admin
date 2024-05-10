@@ -1,10 +1,11 @@
 import { BoxTypeMap } from '@mui/system';
 import { ElementType } from 'react';
 
-import { Chip } from 'shared/components';
-import { StyledBodyLarger, StyledFlexTopCenter, variables } from 'shared/styles';
+import { StyledFlexTopCenter, variables } from 'shared/styles';
+import { ParticipantTagChip } from 'modules/Dashboard/components';
 
 import { ParticipantSnippetProps } from './ParticipantSnippet.types';
+import { StyledText } from './ParticipantSnippet.styles';
 
 export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultComponent']>({
   secretId,
@@ -17,21 +18,13 @@ export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultCo
 
   return (
     <StyledFlexTopCenter sx={{ gap: 0.8, ...sx }} {...rest} data-testid={dataTestId}>
-      <StyledBodyLarger data-testid={`${dataTestId}-secretId`}>{secretId}</StyledBodyLarger>
+      <StyledText data-testid={`${dataTestId}-secretId`}>{secretId}</StyledText>
       {!!nickname && (
-        <StyledBodyLarger
-          color={variables.palette.neutral60}
-          data-testid={`${dataTestId}-nickname`}
-        >
+        <StyledText color={variables.palette.neutral60} data-testid={`${dataTestId}-nickname`}>
           {nickname}
-        </StyledBodyLarger>
+        </StyledText>
       )}
-      {/*
-      TODO: add respondent tag (with appropriate Chip/Tag component) when available
-      https://mindlogger.atlassian.net/browse/M2-5861
-      https://mindlogger.atlassian.net/browse/M2-6161
-      */}
-      {!!tag && <Chip color="secondary" title={tag} data-testid={`${dataTestId}-tag`} />}
+      <ParticipantTagChip tag={tag} data-testid={`${dataTestId}-tag`} />
     </StyledFlexTopCenter>
   );
 };

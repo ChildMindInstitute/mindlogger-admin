@@ -35,3 +35,8 @@ export const StyledFlexSpaceBetween = styled(Box)`
   display: flex;
   justify-content: space-between;
 `;
+
+export const StyledFlexEnd = styled(Box)`
+  display: flex;
+  justify-content: flex-end;
+`;
