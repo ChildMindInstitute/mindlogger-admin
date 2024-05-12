@@ -1,6 +1,7 @@
 export const palette = {
   primary: '#00639a',
   primary50: '#207cbb',
+  primary80: '#96ccff',
   primary95: '#e8f2ff',
   primary_container: '#cee5ff',
   secondary: '#51606f',
@@ -40,6 +41,7 @@ export const palette = {
   contained_btn_focus: '#1f79ab',
   disabled: '#979799',
   light_alfa8: 'rgba(255, 255, 255, 0.08)',
+  light_alfa12: 'rgba(255, 255, 255, 0.12)',
   surface_variant_alfa8: 'rgba(222, 227, 235, 0.08)',
   white_alfa50: 'rgb(255 255 255 / 50%)',
   dark_error_container: '#93000a',

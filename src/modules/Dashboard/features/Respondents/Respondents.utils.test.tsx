@@ -1,6 +1,7 @@
 import { Svg } from 'shared/components';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
+import { ParticipantTag } from 'shared/consts';
 
 import { getRespondentActions, getHeadCells } from './Respondents.utils';
 
@@ -13,6 +14,7 @@ const applets = [
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
     subjectId: 'subj-1',
+    subjectTag: ParticipantTag.Child,
   },
   {
     appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
@@ -22,6 +24,7 @@ const applets = [
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
     subjectId: 'subj-2',
+    subjectTag: ParticipantTag.Child,
   },
 ];
 

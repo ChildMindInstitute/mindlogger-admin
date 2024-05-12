@@ -35,15 +35,18 @@ export const AddManagerPopup = ({
   const { ownerId } = workspaces.useData() || {};
   const respondentsData = users.useAllRespondentsData();
   const participants = (respondentsData?.result ?? []).map(({ details }) => {
-    const { respondentSecretId, respondentNickname, subjectId } = details[0];
+    const {
+      subjectId,
+      respondentSecretId: secretId,
+      respondentNickname: nickname,
+      subjectTag: tag,
+    } = details[0];
 
     return {
       subjectId,
-      secretId: respondentSecretId,
-      nickname: respondentNickname,
-      // TODO: Populate tag
-      // https://mindlogger.atlassian.net/browse/M2-5861
-      tag: null,
+      secretId,
+      nickname,
+      tag,
     };
   });
 
@@ -194,9 +197,7 @@ export const AddManagerPopup = ({
       disabledSubmit={!isValid}
       hasLeftBtn
       leftBtnText={t('Reset')}
-      // TODO: Update second button variant once 'tonal' variant added
-      // https://mindlogger.atlassian.net/browse/M2-6071
-      leftBtnVariant="outlined"
+      leftBtnVariant="tonal"
       onLeftBtnSubmit={resetForm}
       disabledLeftBtn={!isDirty}
       data-testid={`${dataTestid}-add-manager-popup`}

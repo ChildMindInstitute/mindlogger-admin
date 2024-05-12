@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { mockedRespondent, mockedRespondent2 } from 'shared/mock';
-import { Roles } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 
 import { AddManagerForm } from './AddManagerForm';
 import { AddManagerFormValues } from '../AddManagerPopup.types';
@@ -20,9 +20,7 @@ const mockedParticipants = [mockedRespondent, mockedRespondent2].map(({ details 
     subjectId,
     secretId: respondentSecretId,
     nickname: respondentNickname,
-    // TODO: Populate tag
-    // https://mindlogger.atlassian.net/browse/M2-5861
-    tag: null,
+    tag: ParticipantTag.Child,
   };
 });
 

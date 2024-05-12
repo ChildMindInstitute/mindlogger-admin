@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
 import {
   ActionsMenu,
+  ButtonWithMenu,
   Chip,
   MenuActionProps,
   Pin,
@@ -21,17 +23,11 @@ import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
-import { StyledIcon } from 'shared/components/Search/Search.styles';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
-import { ParticipantSnippetInfo } from 'modules/Dashboard/components';
+import { ParticipantSnippetInfo, ParticipantTagChip } from 'modules/Dashboard/components';
 
-import {
-  AddParticipantButton,
-  FiltersButton,
-  SortByButton,
-  ParticipantsTable,
-} from './Participants.styles';
+import { AddParticipantButton, ParticipantsTable } from './Participants.styles';
 import {
   getAppletsSmallTableRows,
   getHeadCells,
@@ -104,6 +100,7 @@ export const Participants = () => {
     return getWorkspaceRespondents(params);
   });
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addParticipantPopupVisible, setAddParticipantPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
@@ -247,13 +244,10 @@ export const Participants = () => {
       email,
     } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
-    const schedule =
-      appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
+    const schedule = appletId && details[0].hasIndividualSchedule ? t('individual') : t('default');
     const nickname = joinWihComma(nicknames, true);
     const secretId = joinWihComma(secretIds, true);
-    // TODO: Populate participant tag
-    // https://mindlogger.atlassian.net/browse/M2-5861
-    const tag = null;
+    const tag = details[0].subjectTag;
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
     const accountType = {
       [RespondentStatus.Invited]: t('full'),
@@ -279,10 +273,11 @@ export const Participants = () => {
         width: ParticipantsColumnsWidth.Pin,
       },
       tag: {
-        // TODO: Replace `null` with tag when available
-        // https://mindlogger.atlassian.net/browse/M2-5861
-        // https://mindlogger.atlassian.net/browse/M2-6161
-        content: () => <StyledMaybeEmpty>{null}</StyledMaybeEmpty>,
+        content: () => (
+          <StyledMaybeEmpty>
+            <ParticipantTagChip tag={tag} />
+          </StyledMaybeEmpty>
+        ),
         value: '',
         width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
@@ -411,32 +406,23 @@ export const Participants = () => {
   if (isForbidden) return noPermissionsComponent;
 
   return (
-    <StyledBody>
+    <StyledBody sx={{ p: 3.2 }}>
       {isLoading && <Spinner />}
 
       <StyledFlexWrap sx={{ gap: 1.2, mb: 2.4 }}>
         <StyledFlexTopCenter sx={{ gap: 1.2 }}>
-          <FiltersButton
-            variant="outlined"
-            startIcon={
-              <StyledIcon>
-                <Svg id="slider-rows" height="24" width="24" />
-              </StyledIcon>
-            }
-          >
+          <Button variant="outlined" startIcon={<Svg id="slider-rows" height={18} width={18} />}>
             {t('filters')}
-          </FiltersButton>
+          </Button>
 
-          <SortByButton
+          <ButtonWithMenu
+            anchorEl={anchorEl}
+            label={t('sortBy')}
+            menuItems={[]}
+            setAnchorEl={setAnchorEl}
+            startIcon={<></>}
             variant="outlined"
-            endIcon={
-              <StyledIcon>
-                <Svg id="dropdown-down-outlined" height="24" width="24" />
-              </StyledIcon>
-            }
-          >
-            {t('sortBy')}
-          </SortByButton>
+          />
         </StyledFlexTopCenter>
 
         <StyledFlexWrap sx={{ gap: 1.2, ml: 'auto' }}>

@@ -1,6 +1,7 @@
 import { Grid, InputAdornment } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
+import { useState } from 'react';
 
 import {
   InputController,
@@ -12,6 +13,7 @@ import { Roles } from 'shared/consts';
 import { getRespondentName } from 'shared/utils';
 import { Svg, Tooltip } from 'shared/components';
 import { StyledFlexAllCenter } from 'shared/styles';
+import { ParticipantSnippet } from 'modules/Dashboard/components';
 
 import { AddManagerFormProps } from './AddManagerForm.types';
 import { Fields } from '../AddManagerPopup.types';
@@ -26,6 +28,7 @@ export const AddManagerForm = ({
   'data-testid': dataTestId,
 }: AddManagerFormProps) => {
   const { t } = useTranslation('app');
+  const [participantsHasFocus, setParticipantsHasFocus] = useState(false);
   const commonProps = {
     fullWidth: true,
     control,
@@ -122,16 +125,26 @@ export const AddManagerForm = ({
             <TagsAutocompleteController
               {...commonProps}
               name={Fields.participants}
-              options={appletParticipants.map(({ subjectId, secretId, nickname }) => ({
+              options={appletParticipants.map(({ subjectId, secretId, nickname, tag }) => ({
                 id: subjectId,
                 label: getRespondentName(secretId ?? '', nickname),
+                secretId,
+                nickname,
+                tag,
               }))}
-              label={t('thisReviewerCanView')}
+              renderOption={({ id, ...props }) => <ParticipantSnippet key={id} {...props} />}
+              textFieldProps={{
+                label: t('thisReviewerCanView'),
+                placeholder: participantsHasFocus
+                  ? t('searchParticipants')
+                  : t('selectParticipants'),
+                InputLabelProps: { shrink: true },
+                onFocus: () => setParticipantsHasFocus(true),
+                onBlur: () => setParticipantsHasFocus(false),
+              }}
               labelAllSelect={`${t('selectAll')} (${appletParticipants.length})`}
               noOptionsText={t('noParticipants')}
               limitTagRows={3}
-              placeholder={t('selectParticipants')}
-              InputLabelProps={{ shrink: true }}
               data-testid={`${dataTestId}-participants`}
             />
           </Grid>

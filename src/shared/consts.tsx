@@ -1,4 +1,5 @@
 import { enUS, fr } from 'date-fns/locale';
+import { Icons } from 'svgSprite';
 
 import { Svg } from 'shared/components/Svg';
 
@@ -280,6 +281,8 @@ export const activityJourneyHeader = [
   'response_option_selection_time',
   'secret_user_id',
   'user_id',
+  'source_subject_id',
+  'target_subject_id',
   'activity_id',
   'activity_flow_id',
   'activity_flow_name',
@@ -339,3 +342,17 @@ export const JEST_TEST_TIMEOUT = 15000;
 export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
 
 export const NULL_ANSWER = 'value: null';
+
+export enum ParticipantTag {
+  None = '',
+  Child = 'Child',
+  Parent = 'Parent',
+  Teacher = 'Teacher',
+}
+
+export const PARTICIPANT_TAG_ICONS: Record<ParticipantTag, Icons> = {
+  [ParticipantTag.None]: 'close',
+  [ParticipantTag.Child]: 'account',
+  [ParticipantTag.Parent]: 'users-outlined',
+  [ParticipantTag.Teacher]: 'teacher',
+};

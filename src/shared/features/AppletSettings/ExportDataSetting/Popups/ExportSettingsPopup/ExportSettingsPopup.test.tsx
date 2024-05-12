@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { addDays, format } from 'date-fns';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FieldValues, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
 
 import { initialStateData } from 'redux/modules';
 import { page } from 'resources';
@@ -29,7 +29,12 @@ const preloadedState = {
 const mockOnClose = jest.fn();
 const mockOnExport = jest.fn();
 
-const FormComponent = ({ children }: { children: React.ReactNode }) => {
+type FormComponentProps = {
+  children: React.ReactNode;
+  getForm?: <T extends FieldValues>(form: UseFormReturn<T>) => void;
+};
+
+const FormComponent = ({ children, getForm }: FormComponentProps) => {
   const methods = useForm<ExportDataFormValues>({
     defaultValues: {
       dateType: ExportDateType.AllTime,
@@ -38,6 +43,8 @@ const FormComponent = ({ children }: { children: React.ReactNode }) => {
     },
     mode: 'onSubmit',
   });
+
+  getForm?.(methods);
 
   return <FormProvider {...methods}>{children}</FormProvider>;
 };
@@ -115,6 +122,61 @@ describe('ExportSettingsPopup', () => {
 
       await userEvent.click(screen.getByText('Download CSV'));
       expect(mockOnExport).toBeCalled();
+    });
+  });
+
+  describe('should update the toDate for every date range export', () => {
+    let spy: jest.SpyInstance<Date>;
+    let mockDate: (dateString: string) => void;
+
+    beforeEach(() => {
+      const origDateConstructor = global.Date;
+      spy = jest.spyOn(global, 'Date');
+      mockDate = (dateString) => spy.mockImplementation(() => new origDateConstructor(dateString));
+    });
+
+    afterEach(() => {
+      spy.mockRestore();
+    });
+
+    test.each`
+      exportDataType              | description
+      ${ExportDateType.Last24h}   | ${'last 24h'}
+      ${ExportDateType.LastMonth} | ${'last month'}
+      ${ExportDateType.LastWeek}  | ${'last week'}
+      ${ExportDateType.AllTime}   | ${'all time'}
+    `('$description', async ({ exportDataType }) => {
+      mockDate('2024-05-07T00:00:00Z');
+
+      const toDates: Set<string> = new Set();
+      renderWithProviders(
+        <FormComponent
+          getForm={(form) => {
+            const date = form.getValues().toDate.toString();
+            toDates.add(date);
+          }}
+        >
+          <ExportSettingsPopup isOpen {...commonProps} />
+        </FormComponent>,
+        {
+          preloadedState,
+        },
+      );
+      const dateType = screen.getByTestId(`${DATA_TESTID_EXPORT_DATA_SETTINGS_POPUP}-dateType`);
+      const input = dateType.querySelector('input');
+      input && fireEvent.change(input, { target: { value: exportDataType } });
+
+      const downloadBtn = screen.getByText('Download CSV');
+
+      await userEvent.click(downloadBtn);
+
+      // 5 minutes later
+      mockDate('2024-05-07T00:05:00Z');
+
+      await userEvent.click(downloadBtn);
+
+      // The toDate should've been updated after the second click
+      expect(toDates.size).toEqual(2);
     });
   });
 

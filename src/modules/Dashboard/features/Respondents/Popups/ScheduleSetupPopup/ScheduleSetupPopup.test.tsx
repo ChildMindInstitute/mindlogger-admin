@@ -64,7 +64,7 @@ describe('ScheduleSetupPopup', () => {
     const popup = screen.getByTestId('dashboard-respondents-view-calendar-popup');
     expect(popup).toBeInTheDocument();
     expect(popup).toHaveTextContent(
-      'Respondent 3921968c-3903-4872-8f30-a6e6a10cef36 is a member of the Default Schedule within the Mocked Applet Applet. Do you want to set an Individual schedule for this Respondent?',
+      'Respondent mockedSecretId is a member of the Default Schedule within the Mocked Applet Applet. Do you want to set an Individual schedule for this Respondent?',
     );
 
     fireEvent.click(screen.getByText('Yes'));

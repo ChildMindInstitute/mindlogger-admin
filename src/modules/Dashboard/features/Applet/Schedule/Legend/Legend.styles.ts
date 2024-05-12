@@ -18,12 +18,6 @@ export const StyledSelect = styled(Box)`
     padding-left: 0;
   }
 
-  .MuiBox-root {
-    .icon-wrapper {
-      display: none;
-    }
-  }
-
   .MuiSelect-icon {
     right: 0.1rem;
     top: auto;

@@ -6,6 +6,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { ParticipantTag } from 'shared/consts';
 
 import { UpgradeAccountPopup } from './UpgradeAccountPopup';
 
@@ -19,7 +20,7 @@ const props = {
   subjectId: mockedSubjectId1,
   secretId: 'test secret id',
   nickname: 'test nickname',
-  tag: 'test tag',
+  tag: ParticipantTag.Child,
   'data-testid': dataTestid,
 };
 

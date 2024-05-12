@@ -1,8 +1,9 @@
 import { TextField, styled } from '@mui/material';
 
 import { StyledFlexWrap } from 'shared/styles';
+import { shouldForwardProp } from 'shared/utils';
 
-export const StyledTagsContainer = styled(StyledFlexWrap)`
+export const StyledTagsContainer = styled(StyledFlexWrap, shouldForwardProp)`
   ${({ limitRows }: { limitRows?: number }) =>
     limitRows
       ? `
@@ -12,7 +13,9 @@ export const StyledTagsContainer = styled(StyledFlexWrap)`
       : ''}
 `;
 
-export const StyledTextField = styled(TextField)`
+export const StyledTextField = styled(TextField, {
+  shouldForwardProp: (prop) => prop !== 'limitRows',
+})`
   ${({ limitRows }: { limitRows?: number }) =>
     limitRows
       ? `

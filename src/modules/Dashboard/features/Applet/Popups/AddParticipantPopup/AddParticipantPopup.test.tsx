@@ -1,4 +1,4 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'jest-mock-axios';
 
@@ -6,17 +6,18 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId } from 'shared/mock';
 import { expectBanner } from 'shared/utils';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
+import { ParticipantTag } from 'shared/consts';
 
 import { AddParticipantPopup } from './AddParticipantPopup';
 
-const dataTestid = 'test-id';
+const dataTestId = 'test-id';
 const onCloseMock = jest.fn();
 
 const props = {
   onClose: onCloseMock,
   popupVisible: true,
   appletId: mockedAppletId,
-  'data-testid': dataTestid,
+  'data-testid': dataTestId,
 };
 
 const testEmail = 'test@email.com';
@@ -29,6 +30,7 @@ const testValues = {
   firstName: 'test-first-name',
   lastName: 'test-last-name',
   secretUserId: 'test-secret-id',
+  tag: ParticipantTag.Child,
   nickname: null,
 };
 
@@ -75,14 +77,18 @@ describe('AddParticipantPopup component', () => {
     fireEvent.click(getByText('Full Account'));
     fireEvent.click(getByText('Next'));
 
-    const emailInput = getByTestId(`${dataTestid}-email`).querySelector('input');
+    const emailInput = getByTestId(`${dataTestId}-email`).querySelector('input');
     emailInput && (await userEvent.type(emailInput, testEmail));
-    const secretIdInput = getByTestId(`${dataTestid}-secret-id`).querySelector('input');
+    const secretIdInput = getByTestId(`${dataTestId}-secret-id`).querySelector('input');
     secretIdInput && (await userEvent.type(secretIdInput, testValues.secretUserId));
-    const firstNameInput = getByTestId(`${dataTestid}-fname`).querySelector('input');
+    const firstNameInput = getByTestId(`${dataTestId}-fname`).querySelector('input');
     firstNameInput && (await userEvent.type(firstNameInput, testValues.firstName));
-    const lastNameInput = getByTestId(`${dataTestid}-lname`).querySelector('input');
+    const lastNameInput = getByTestId(`${dataTestId}-lname`).querySelector('input');
     lastNameInput && (await userEvent.type(lastNameInput, testValues.lastName));
+    const tagSelectButton = within(getByTestId(`${dataTestId}-tag`)).getByRole('button');
+    await userEvent.click(tagSelectButton);
+    const roleOptions = await screen.findByRole('listbox', { name: 'Tag' });
+    await userEvent.click(within(roleOptions).getByText('Child'));
 
     await userEvent.click(getByText('Send Invitation'));
 
@@ -107,12 +113,16 @@ describe('AddParticipantPopup component', () => {
     fireEvent.click(getByText('Limited Account'));
     fireEvent.click(getByText('Next'));
 
-    const secretIdInput = getByTestId(`${dataTestid}-secret-id`).querySelector('input');
+    const secretIdInput = getByTestId(`${dataTestId}-secret-id`).querySelector('input');
     secretIdInput && (await userEvent.type(secretIdInput, testValues.secretUserId));
-    const firstNameInput = getByTestId(`${dataTestid}-fname`).querySelector('input');
+    const firstNameInput = getByTestId(`${dataTestId}-fname`).querySelector('input');
     firstNameInput && (await userEvent.type(firstNameInput, testValues.firstName));
-    const lastNameInput = getByTestId(`${dataTestid}-lname`).querySelector('input');
+    const lastNameInput = getByTestId(`${dataTestId}-lname`).querySelector('input');
     lastNameInput && (await userEvent.type(lastNameInput, testValues.lastName));
+    const tagSelectButton = within(getByTestId(`${dataTestId}-tag`)).getByRole('button');
+    await userEvent.click(tagSelectButton);
+    const roleOptions = await screen.findByRole('listbox', { name: 'Tag' });
+    await userEvent.click(within(roleOptions).getByText('Child'));
 
     await userEvent.click(getByText('Create'));
 

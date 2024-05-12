@@ -84,6 +84,7 @@ export const AppletMultiInformant = () => {
           )}
 
           <LinkedTabs
+            panelProps={{ sx: { padding: 0 } }}
             deepPathCompare
             animateTabIndicator={false}
             defaultToFirstTab={false}

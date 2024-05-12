@@ -8,8 +8,8 @@ import {
   mockedAppletId,
   mockedCurrentWorkspace,
   mockedOwnerId,
-  mockedRespondentId,
   mockedRespondent,
+  mockedRespondentId,
   mockedSubjectId1,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
@@ -114,7 +114,7 @@ describe('Participants component tests', () => {
       'Latest Activity',
       'Schedule',
     ];
-    const participantColumns = ['mockedSecretId', 'Mocked Respondent', 'Schedule'];
+    const participantColumns = ['mockedSecretId', 'Mocked Respondent', 'Schedule', 'Child'];
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard-participants-table')).toBeInTheDocument();
