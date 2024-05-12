@@ -32,3 +32,8 @@ type DatePicker = {
 } & TextFieldProps;
 
 export type DatePickerProps<T extends FieldValues> = DatePicker & UseControllerProps<T>;
+
+export type OnChangeRefType = {
+  callback: (date: undefined | DateType) => void;
+  prevValue: undefined | DateType;
+};

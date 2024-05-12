@@ -29,3 +29,5 @@ export type GetDefToolbars = {
   setIncorrectFormat: (fileType: MediaType | null) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 };
+
+export type UseDebounceInputLogicProps = Pick<EditorProps, 'value' | 'onChange' | 'withDebounce'>;

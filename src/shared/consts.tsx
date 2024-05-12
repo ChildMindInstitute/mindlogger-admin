@@ -356,3 +356,9 @@ export const PARTICIPANT_TAG_ICONS: Record<ParticipantTag, Icons> = {
   [ParticipantTag.Parent]: 'users-outlined',
   [ParticipantTag.Teacher]: 'teacher',
 };
+
+export const observerStyles = {
+  position: 'absolute',
+  height: 'calc(100% + 20rem)',
+  bottom: 0,
+};

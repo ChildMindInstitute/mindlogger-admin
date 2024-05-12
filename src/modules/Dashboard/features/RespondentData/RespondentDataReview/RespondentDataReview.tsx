@@ -57,7 +57,7 @@ export const RespondentDataReview = () => {
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || '';
   const selectedDateParam = searchParams.get('selectedDate');
-  const isFeedbackVisible = searchParams.get('isFeedbackVisible');
+  const isFeedbackVisible = searchParams.get('isFeedbackVisible') === 'true';
   const containerRef = useRef<HTMLElement | null>(null);
   const prevSelectedDateRef = useRef<null | string>(null);
   const shouldSetLastAnswer = useRef(false);

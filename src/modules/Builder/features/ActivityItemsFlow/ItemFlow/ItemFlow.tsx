@@ -13,7 +13,7 @@ import {
 } from 'shared/styles';
 import { useIntersectionObserver } from 'shared/hooks';
 import { Condition } from 'shared/state';
-import { observerStyles } from 'modules/Builder/consts';
+import { observerStyles } from 'shared/consts';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { toggleBooleanState } from 'shared/utils/toggleBooleanState';
 
