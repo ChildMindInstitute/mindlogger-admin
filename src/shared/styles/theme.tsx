@@ -644,6 +644,9 @@ export const theme = createTheme({
             '.MuiCheckbox-root': {
               marginLeft: '-0.4rem',
             },
+            '.MuiAutocomplete-listbox': {
+              maxHeight: '20.8rem', // 4 rows
+            },
           },
         },
       },
