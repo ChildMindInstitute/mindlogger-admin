@@ -67,7 +67,7 @@ export const EditRespondentPopup = ({
       values: {
         secretUserId: secretUserId.trim(),
         nickname: nickname?.trim(),
-        ...(tag ? { tag } : {}),
+        ...(tag && { tag }),
       },
       subjectId,
     });
@@ -84,15 +84,16 @@ export const EditRespondentPopup = ({
   return (
     <Modal
       open={popupVisible}
-      onClose={onCloseHandler}
+      onClose={() => onCloseHandler(false)}
       onSubmit={handleSubmit(submitForm)}
       disabledSubmit={isLoading}
       title={t('editParticipant')}
       buttonText={t('save')}
-      hasSecondBtn
-      onSecondBtnSubmit={onCloseHandler}
-      secondBtnText={t('cancel')}
+      hasLeftBtn
+      onLeftBtnSubmit={() => onCloseHandler(false)}
+      leftBtnText={t('cancel')}
       data-testid={dataTestid}
+      width="56"
     >
       <>
         {isLoading && <Spinner uiType={SpinnerUiType.Secondary} noBackground />}
