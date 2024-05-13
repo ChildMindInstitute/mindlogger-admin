@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import { useAppDispatch } from 'redux/store';
 import { Chip, ChipShape, EmptyState, LinkedTabs, Spinner, Svg } from 'shared/components';
@@ -22,10 +23,11 @@ import { page } from 'resources';
 import { getEntityKey } from 'shared/utils';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData';
 import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
-import { HeaderOptions } from 'modules/Dashboard/components/HeaderOptions';
+import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 
+import { HeaderOptions } from './HeaderOptions';
 import { useParticipantActivityDetailsTabs } from './ParticipantActivityDetails.hooks';
-import { StyledContainer } from '../ParticipantActivity.styles';
+import { StyledButton } from './ParticipantActivityDetails.styles';
 import { hasPermissionToViewData } from '../ParticipantActivity.utils';
 
 export const ParticipantActivityDetails = () => {
@@ -38,6 +40,7 @@ export const ParticipantActivityDetails = () => {
   });
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
+  const dataTestId = 'activity-details';
 
   const { ownerId } = workspaces.useData() || {};
   const { useAppletData } = appletState;
@@ -50,6 +53,7 @@ export const ParticipantActivityDetails = () => {
   const subjectLoadingStatus = useSubjectStatus();
   const { result: subject } = useSubject() ?? {};
   const activityDetailsTabs = useParticipantActivityDetailsTabs();
+  const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId });
 
   useEffect(() => {
     if (!appletId) return;
@@ -74,6 +78,24 @@ export const ParticipantActivityDetails = () => {
     );
   };
 
+  const handleTakeNow = () => {
+    if (currentActivity && subject) {
+      openTakeNowModal(currentActivity, {
+        subject: {
+          id: subject.id,
+          secretId: subject.secretUserId,
+          nickname: subject.nickname,
+        },
+      });
+    }
+  };
+
+  const handleAssignActivity = () => {
+    // TODO: Implement assign
+    // https://mindlogger.atlassian.net/browse/M2-5710
+    alert(`TODO: Assign activity (${activityId})`);
+  };
+
   const loading = subjectLoadingStatus === 'loading' || subjectLoadingStatus === 'idle';
   const canViewData = hasPermissionToViewData(appletRoles);
 
@@ -82,20 +104,24 @@ export const ParticipantActivityDetails = () => {
       {loading && <Spinner />}
       {!loading && !!currentActivity && (
         <>
-          <StyledContainer
-            onClick={() => navigateUp()}
-            sx={{ cursor: 'pointer', color: palette.on_surface_variant }}
+          <Box
+            sx={{
+              gap: theme.spacing(0.8),
+              margin: theme.spacing(1.2, 3.2, 3.2),
+            }}
           >
-            <Svg id="arrow-navigate-left" width="2.4rem" height="2.4rem" />
-            <StyledBodyLarge sx={{ px: 1, color: palette.on_surface_variant }}>
-              {t('back')}
-            </StyledBodyLarge>
-          </StyledContainer>
+            <StyledButton onClick={navigateUp}>
+              <Svg id="arrow-navigate-left" width="2.4rem" height="2.4rem" />
+              <StyledBodyLarge sx={{ px: 1, color: palette.on_surface_variant }}>
+                {t('back')}
+              </StyledBodyLarge>
+            </StyledButton>
+          </Box>
 
           <StyledFlexSpaceBetween
             sx={{
               gap: theme.spacing(1.6),
-              margin: theme.spacing(0, 2.4, 0.8),
+              margin: theme.spacing(0, 3.2, 0.8),
             }}
           >
             <StyledFlexTopCenter
@@ -116,7 +142,13 @@ export const ParticipantActivityDetails = () => {
               />
             </StyledFlexTopCenter>
 
-            <HeaderOptions />
+            {canViewData && (
+              <HeaderOptions
+                dataTestid={dataTestId}
+                onTakeNow={handleTakeNow}
+                onAssignActivity={handleAssignActivity}
+              />
+            )}
           </StyledFlexSpaceBetween>
 
           {canViewData ? (
@@ -124,6 +156,7 @@ export const ParticipantActivityDetails = () => {
           ) : (
             <EmptyState width="25rem">{t('noPermissions')}</EmptyState>
           )}
+          <TakeNowModal />
         </>
       )}
     </FormProvider>
