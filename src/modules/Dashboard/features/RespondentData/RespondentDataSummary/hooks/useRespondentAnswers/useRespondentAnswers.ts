@@ -14,7 +14,7 @@ import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { getDateISO, getIdentifiers, processIdentifiersChange } from './useRespondentAnswers.utils';
 
 export const useRespondentAnswers = () => {
-  const { appletId, subjectId } = useParams();
+  const { appletId, respondentId: _respondentId, subjectId } = useParams();
   const getDecryptedActivityData = useDecryptedActivityData();
   const { getValues, setValue } = useFormContext<RespondentsDataFormValues>();
 
@@ -28,7 +28,9 @@ export const useRespondentAnswers = () => {
     versions: providedVersions,
     isIdentifiersChange = false,
   }: FetchAnswers) => {
-    if (!appletId || !subjectId) return;
+    const respondentId = _respondentId || subjectId;
+
+    if (!appletId || !respondentId) return;
 
     try {
       const {
@@ -91,7 +93,7 @@ export const useRespondentAnswers = () => {
         appletId,
         activityId: activity.id,
         params: {
-          targetSubjectId: subjectId,
+          targetSubjectId: respondentId,
           fromDatetime,
           toDatetime,
           emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,

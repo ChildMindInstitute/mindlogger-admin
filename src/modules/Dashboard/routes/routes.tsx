@@ -17,6 +17,11 @@ import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
+const RespondentData = lazy(() => import('../pages/RespondentData'));
+const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
+const RespondentDataSummary = lazy(
+  () => import('../features/RespondentData/RespondentDataSummary'),
+);
 const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
 const ParticipantActivity = lazy(() => import('../features/ParticipantActivity'));
 
@@ -60,6 +65,36 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
           }
         />
       ))}
+      <Route element={<RespondentData />}>
+        <Route
+          path={page.appletRespondentData}
+          element={<Navigate to={page.appletRespondentDataSummary} />}
+        />
+        <Route path={page.appletRespondentDataSummary} element={<RespondentDataSummary />}>
+          <Route
+            path={page.appletRespondentDataSummary}
+            element={
+              <PrivateRoute>
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <RespondentDataSummary />
+                </ErrorBoundary>
+              </PrivateRoute>
+            }
+          />
+        </Route>
+        <Route path={page.appletRespondentDataReview} element={<RespondentDataReview />}>
+          <Route
+            path={page.appletRespondentDataReview}
+            element={
+              <PrivateRoute>
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <RespondentDataReview />
+                </ErrorBoundary>
+              </PrivateRoute>
+            }
+          />
+        </Route>
+      </Route>
     </Route>
     <Route
       element={

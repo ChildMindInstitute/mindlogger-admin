@@ -34,7 +34,7 @@ export const ParticipantActivityDetails = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { appletId, subjectId, activityId } = useParams();
+  const { appletId, respondentId, subjectId: _subjectId, activityId } = useParams();
   const methods = useForm<RespondentsDataFormValues>({
     defaultValues: defaultRespondentDataFormValues,
   });
@@ -54,6 +54,7 @@ export const ParticipantActivityDetails = () => {
   const { result: subject } = useSubject() ?? {};
   const activityDetailsTabs = useParticipantActivityDetailsTabs();
   const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId });
+  const subjectId = respondentId || _subjectId;
 
   useEffect(() => {
     if (!appletId) return;
