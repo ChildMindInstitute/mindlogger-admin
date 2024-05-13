@@ -241,9 +241,6 @@ export const getScoresAndReports = (activity: ActivityFormValues) => {
 
 const mapItemResponseValues = (item: ItemFormValues) => {
   const { responseType, responseValues, alerts, config } = item;
-  console.log({
-    responseValues,
-  });
 
   const hasAlerts = get(config, ItemConfigurationSettings.HasAlerts);
 
