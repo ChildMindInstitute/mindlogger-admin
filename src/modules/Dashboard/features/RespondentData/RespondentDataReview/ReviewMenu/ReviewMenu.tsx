@@ -49,9 +49,7 @@ export const ReviewMenu = ({
           data-testid={`${dataTestid}-review-date`}
         />
       </StyledHeader>
-      <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
-        {t('selectActivityAndResponse')}
-      </StyledLabelLarge>
+      <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>{t('selectResponse')}</StyledLabelLarge>
       {activities.map((activity, index) => (
         <ReviewMenuItem
           key={activity.id}

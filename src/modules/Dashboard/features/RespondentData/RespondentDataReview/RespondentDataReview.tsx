@@ -53,7 +53,7 @@ import { sortAnswerDates } from './utils/sortAnswerDates';
 import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 
 export const RespondentDataReview = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, respondentId: _respondentId, subjectId, activityId } = useParams();
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || '';
   const selectedDateParam = searchParams.get('selectedDate');
@@ -86,6 +86,7 @@ export const RespondentDataReview = () => {
   const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
 
   const dataTestid = 'respondents-review';
+  const respondentId = _respondentId || subjectId;
 
   const { execute: getAppletSubmitDateList, isLoading: getSubmitDatesLoading } = useAsync<
     AppletSubmitDateList,
@@ -104,11 +105,20 @@ export const RespondentDataReview = () => {
       const activities = data?.result;
 
       if (!activities?.length) return;
-      setActivities(activities);
 
-      if (answerId && !shouldSetLastAnswer.current) return;
-      const selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
-      setSelectedActivity(selectedActivityByDefault);
+      let selectedActivityByDefault;
+      if (activityId) {
+        selectedActivityByDefault = activities.filter((e) => e.id === activityId)[0];
+        setActivities([selectedActivityByDefault]);
+        setSelectedActivity(selectedActivityByDefault);
+      } else {
+        setActivities(activities);
+        if (answerId && !shouldSetLastAnswer.current) return;
+        selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
+
+        setSelectedActivity(selectedActivityByDefault);
+      }
+
       const { answerDates } = selectedActivityByDefault;
 
       if (!answerDates.length) return;
@@ -148,7 +158,17 @@ export const RespondentDataReview = () => {
     const responseDate = getValues('responseDate');
     if (!responseDate || !answer) return;
 
-    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    let pathname;
+    if (activityId) {
+      pathname = generatePath(page.appletParticipantActivityDetailsDataReview, {
+        appletId,
+        activityId,
+        subjectId: respondentId,
+      });
+    } else {
+      pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    }
+
     navigate({
       pathname,
       search: createSearchParams({

@@ -44,9 +44,10 @@ import { StyledEmptyReview } from '../RespondentDataSummary.styles';
 
 export const Report = () => {
   const { t } = useTranslation('app');
-  const { appletId, respondentId } = useParams();
+  const { appletId, respondentId: _respondentId, subjectId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
   const { result: appletData } = applet.useAppletData() ?? {};
+  const respondentId = _respondentId || subjectId;
 
   const { setValue } = useFormContext<RespondentsDataFormValues>();
   const [

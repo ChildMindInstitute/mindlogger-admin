@@ -1080,6 +1080,7 @@
   "selectOne": "Select one…",
   "selectActivity": "Select Activity",
   "selectActivityAndResponse": "Select activity and response",
+  "selectResponse": "Select response",
   "selectAll": "Select All",
   "selectApplet": "Select Applet",
   "selectAppletDescription": "All selected content will be added to an Applet which you select additionally to the existing content in it.",

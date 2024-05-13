@@ -1,5 +1,5 @@
-export const ParticipantActivityResponses = () => (
-  <div data-testid="participant-activity-responses">Responses tab</div>
-);
+import RespondentDataReview from '../../RespondentData/RespondentDataReview';
+
+export const ParticipantActivityResponses = () => <RespondentDataReview />;
 
 export default ParticipantActivityResponses;
