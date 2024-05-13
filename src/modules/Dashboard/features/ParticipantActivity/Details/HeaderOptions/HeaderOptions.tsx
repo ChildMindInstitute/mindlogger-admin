@@ -6,6 +6,7 @@ import { Svg } from 'shared/components';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { Mixpanel } from 'shared/utils';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ActionButton } from '../ParticipantActivityDetails.styles';
 import { HeaderOptionsProps } from './HeaderOptions.types';
@@ -13,6 +14,7 @@ import { HeaderOptionsProps } from './HeaderOptions.types';
 export const HeaderOptions = ({ dataTestid, onTakeNow, onAssignActivity }: HeaderOptionsProps) => {
   const [isExportOpen, setIsExportOpen] = useState(false);
   const { t } = useTranslation('app');
+  const { featureFlags } = useFeatureFlags();
 
   const handleOpenExport = () => {
     setIsExportOpen(true);
@@ -38,13 +40,15 @@ export const HeaderOptions = ({ dataTestid, onTakeNow, onAssignActivity }: Heade
         isExportSettingsOpen={isExportOpen}
         onExportSettingsClose={handleCloseExport}
       />
-      <ActionButton
-        onClick={onAssignActivity}
-        data-testid={`${dataTestid}-assign-activity`}
-        sx={{ backgroundColor: variables.palette.secondary_container }}
-      >
-        {t('assign')}
-      </ActionButton>
+      {featureFlags.enableActivityAssign && (
+        <ActionButton
+          onClick={onAssignActivity}
+          data-testid={`${dataTestid}-assign-activity`}
+          sx={{ backgroundColor: variables.palette.secondary_container }}
+        >
+          {t('assign')}
+        </ActionButton>
+      )}
       <ActionButton
         variant="contained"
         onClick={onTakeNow}
