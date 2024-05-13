@@ -867,7 +867,8 @@
     "": "Aucune sélection",
     "Child": "Enfant",
     "Parent": "Parent/Tuteur",
-    "Teacher": "Enseignant"
+    "Teacher": "Enseignant",
+    "Team": "Équipe"
   },
   "password": "Mot de passe",
   "passwordBlankSpaces": "Le mot de passe ne doit pas contenir d'espaces.",

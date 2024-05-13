@@ -14,7 +14,7 @@ const applets = [
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
     subjectId: 'subj-1',
-    subjectTag: ParticipantTag.Child,
+    subjectTag: 'Child' as ParticipantTag,
   },
   {
     appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
@@ -24,7 +24,7 @@ const applets = [
     respondentSecretId: 'janedoe',
     hasIndividualSchedule: false,
     subjectId: 'subj-2',
-    subjectTag: ParticipantTag.Child,
+    subjectTag: 'Child' as ParticipantTag,
   },
 ];
 

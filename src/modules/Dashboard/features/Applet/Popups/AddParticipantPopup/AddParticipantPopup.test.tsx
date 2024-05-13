@@ -30,7 +30,7 @@ const testValues = {
   firstName: 'test-first-name',
   lastName: 'test-last-name',
   secretUserId: 'test-secret-id',
-  tag: ParticipantTag.Child,
+  tag: 'Child' as ParticipantTag,
   nickname: null,
 };
 

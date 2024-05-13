@@ -7,7 +7,7 @@ import { ParticipantTagChip } from './ParticipantTagChip';
 
 describe('ParticipantTagChip', () => {
   test('renders the translated tag name', () => {
-    const tag = ParticipantTag.Child;
+    const tag: ParticipantTag = 'Child';
     const { getByText } = render(<ParticipantTagChip tag={tag} />);
     expect(getByText('Child')).toBeInTheDocument();
   });
@@ -19,7 +19,7 @@ describe('ParticipantTagChip', () => {
   });
 
   test('returns nothing if tag is falsy', () => {
-    const { container, rerender } = render(<ParticipantTagChip tag={ParticipantTag.None} />);
+    const { container, rerender } = render(<ParticipantTagChip tag="" />);
     expect(container).toBeEmptyDOMElement();
 
     rerender(<ParticipantTagChip tag={null} />);

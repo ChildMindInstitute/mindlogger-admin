@@ -343,16 +343,16 @@ export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
 
 export const NULL_ANSWER = 'value: null';
 
-export enum ParticipantTag {
-  None = '',
-  Child = 'Child',
-  Parent = 'Parent',
-  Teacher = 'Teacher',
-}
+export const USER_SELECTABLE_PARTICIPANT_TAGS = ['', 'Child', 'Parent', 'Teacher'] as const;
+export type UserSelectableParticipantTag = (typeof USER_SELECTABLE_PARTICIPANT_TAGS)[number];
+
+export const PARTICIPANT_TAGS = [...USER_SELECTABLE_PARTICIPANT_TAGS, 'Team'] as const;
+export type ParticipantTag = (typeof PARTICIPANT_TAGS)[number];
 
 export const PARTICIPANT_TAG_ICONS: Record<ParticipantTag, Icons> = {
-  [ParticipantTag.None]: 'close',
-  [ParticipantTag.Child]: 'account',
-  [ParticipantTag.Parent]: 'users-outlined',
-  [ParticipantTag.Teacher]: 'teacher',
+  '': 'close',
+  Child: 'account',
+  Parent: 'users-outlined',
+  Teacher: 'teacher',
+  Team: 'team-outlined',
 };

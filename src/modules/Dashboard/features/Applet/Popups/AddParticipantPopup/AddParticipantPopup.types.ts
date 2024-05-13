@@ -1,6 +1,6 @@
 import { Languages } from 'api';
 import { AccountType } from 'modules/Dashboard/types';
-import { ParticipantTag } from 'shared/consts';
+import { UserSelectableParticipantTag } from 'shared/consts';
 
 export type AddParticipantPopupProps = {
   popupVisible: boolean;
@@ -21,7 +21,7 @@ export type AddParticipantFormValues = {
   email?: string;
   nickname?: string;
   secretUserId: string;
-  tag?: ParticipantTag;
+  tag?: UserSelectableParticipantTag;
   language: Languages;
 };
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { InputController, SelectController } from 'shared/components/FormComponents';
 import { Languages } from 'api';
 import { AccountType } from 'modules/Dashboard/types/Dashboard.types';
-import { PARTICIPANT_TAG_ICONS, ParticipantTag } from 'shared/consts';
+import { PARTICIPANT_TAG_ICONS, USER_SELECTABLE_PARTICIPANT_TAGS } from 'shared/consts';
 import { Svg } from 'shared/components';
 
 import { AddParticipantFormProps } from './AddParticipantForm.types';
@@ -84,7 +84,7 @@ export const AddParticipantForm = ({
             name={Fields.tag}
             withChecked
             options={[
-              ...Object.values(ParticipantTag).map((tag) => ({
+              ...USER_SELECTABLE_PARTICIPANT_TAGS.map((tag) => ({
                 labelKey: `participantTag.${tag}`,
                 value: tag,
                 icon: <Svg id={PARTICIPANT_TAG_ICONS[tag]} width={24} height={24} />,

@@ -109,7 +109,7 @@ export const mockedRespondentDetails = {
   hasIndividualSchedule: false,
   encryption: mockedEncryption,
   subjectId: mockedSubjectId1,
-  subjectTag: ParticipantTag.Child,
+  subjectTag: 'Child' as ParticipantTag,
 };
 export const mockedRespondent = {
   id: mockedRespondentId,
@@ -148,7 +148,7 @@ export const mockedRespondent2 = {
       hasIndividualSchedule: false,
       encryption: mockedEncryption,
       subjectId: mockedSubjectId2,
-      subjectTag: ParticipantTag.Child,
+      subjectTag: 'Child' as ParticipantTag,
     },
   ],
 };
