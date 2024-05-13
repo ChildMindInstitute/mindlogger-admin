@@ -14,7 +14,10 @@ export const ActionsMenu = <T = unknown,>({
   transformOrigin,
 }: ActionsMenuProps<T>) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const handleMenuOpen = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+  };
   const handleMenuClose = () => setAnchorEl(null);
   const openMenu = Boolean(anchorEl);
 

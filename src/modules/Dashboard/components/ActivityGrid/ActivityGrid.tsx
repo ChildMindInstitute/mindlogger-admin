@@ -41,6 +41,7 @@ export const ActivityGrid = ({
               participantCount={activity.participantCount.content()}
               latestActivity={activity.latestActivity.content()}
               data-testid={`${dataTestId}-activity-card`}
+              activityId={String(activity.id.value)}
             />
           ))}
         </StyledFlexWrap>

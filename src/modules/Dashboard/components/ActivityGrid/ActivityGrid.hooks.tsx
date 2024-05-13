@@ -90,6 +90,10 @@ export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesDa
       const latestActivity: string | null = null;
 
       return {
+        id: {
+          content: () => activityId,
+          value: activityId,
+        },
         image: {
           content: () => image,
           value: image,
