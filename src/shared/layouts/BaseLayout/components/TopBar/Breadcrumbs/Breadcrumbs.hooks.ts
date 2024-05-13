@@ -171,7 +171,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('summary')) {
+    if (pathname.includes('summary') && !enableMultiInformant) {
       newBreadcrumbs.push({
         icon: 'chart',
         label: t('summary'),
@@ -179,7 +179,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
       });
     }
 
-    if (pathname.includes('responses')) {
+    if (pathname.includes('responses') && !enableMultiInformant) {
       newBreadcrumbs.push({
         icon: 'checkbox-outlined',
         label: t('responses'),

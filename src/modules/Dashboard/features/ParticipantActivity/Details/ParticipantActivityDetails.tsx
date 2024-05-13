@@ -1,12 +1,19 @@
 import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from 'redux/store';
-import { LinkedTabs, Spinner, Svg } from 'shared/components';
+import { Chip, ChipShape, EmptyState, LinkedTabs, Spinner, Svg } from 'shared/components';
 import { workspaces } from 'shared/state';
-import { StyledFlexTopCenter, StyledLogo, StyledHeadlineLarge, theme } from 'shared/styles';
+import {
+  StyledFlexTopCenter,
+  StyledLogo,
+  StyledHeadlineLarge,
+  theme,
+  StyledBodyLarge,
+  StyledFlexSpaceBetween,
+} from 'shared/styles';
 import { applet as appletState } from 'shared/state';
 import { applets, users } from 'modules/Dashboard/state';
 import { getRespondentDetails, getSubjectDetails } from 'modules/Dashboard/state/Users/Users.thunk';
@@ -19,14 +26,18 @@ import { HeaderOptions } from 'modules/Dashboard/components/HeaderOptions';
 
 import { useParticipantActivityDetailsTabs } from './ParticipantActivityDetails.hooks';
 import { StyledContainer } from '../ParticipantActivity.styles';
+import { hasPermissionToViewData } from '../ParticipantActivity.utils';
 
 export const ParticipantActivityDetails = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { appletId, subjectId, activityId } = useParams();
   const methods = useForm<RespondentsDataFormValues>({
     defaultValues: defaultRespondentDataFormValues,
   });
+  const rolesData = workspaces.useRolesData();
+  const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 
   const { ownerId } = workspaces.useData() || {};
   const { useAppletData } = appletState;
@@ -64,58 +75,55 @@ export const ParticipantActivityDetails = () => {
   };
 
   const loading = subjectLoadingStatus === 'loading' || subjectLoadingStatus === 'idle';
-
-  useEffect(() => {
-    if (!loading && !currentActivity) navigateUp();
-  }, [loading, currentActivity]);
+  const canViewData = hasPermissionToViewData(appletRoles);
 
   return (
     <FormProvider {...methods}>
       {loading && <Spinner />}
       {!loading && !!currentActivity && (
         <>
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1.6,
-              marginBottom: 1.2,
-              marginX: 2.4,
-              placeContent: 'space-between',
-            }}
+          <StyledContainer
+            onClick={() => navigateUp()}
+            sx={{ cursor: 'pointer', color: palette.on_surface_variant }}
           >
-            <Box sx={{ display: 'flex', gap: 1.6 }}>
-              <StyledHeadlineLarge>{subject?.secretUserId}</StyledHeadlineLarge>
-              <StyledHeadlineLarge color={palette.outline}>{subject?.nickname}</StyledHeadlineLarge>
-            </Box>
-
-            <HeaderOptions />
-          </Box>
-
-          <StyledContainer>
-            <StyledFlexTopCenter
-              onClick={() => navigateUp()}
-              sx={{ cursor: 'pointer', color: palette.on_surface_variant }}
-            >
-              <Svg id="arrow-navigate-left" width="2.4rem" height="2.4rem" />
-            </StyledFlexTopCenter>
+            <Svg id="arrow-navigate-left" width="2.4rem" height="2.4rem" />
+            <StyledBodyLarge sx={{ px: 1, color: palette.on_surface_variant }}>
+              {t('back')}
+            </StyledBodyLarge>
           </StyledContainer>
-          <StyledFlexTopCenter
+
+          <StyledFlexSpaceBetween
             sx={{
               gap: theme.spacing(1.6),
-              marginX: theme.spacing(3.2),
+              margin: theme.spacing(0, 2.4, 0.8),
             }}
           >
-            {!!currentActivity?.image && <StyledLogo src={currentActivity.image} />}
-            <StyledHeadlineLarge color={palette.on_surface}>
-              {currentActivity?.name}
-            </StyledHeadlineLarge>
-          </StyledFlexTopCenter>
-          <LinkedTabs
-            panelProps={{ sx: { padding: 0 } }}
-            tabs={activityDetailsTabs}
-            isCentered={false}
-            deepPathCompare
-          />
+            <StyledFlexTopCenter
+              sx={{
+                gap: theme.spacing(1.6),
+              }}
+            >
+              {!!currentActivity?.image && <StyledLogo src={currentActivity.image} />}
+              <StyledHeadlineLarge color={palette.on_surface}>
+                {currentActivity?.name}
+              </StyledHeadlineLarge>
+              <Chip
+                icon={<Svg id="respondent-circle" width={18} height={18} />}
+                color={'secondary'}
+                shape={ChipShape.Rectangular}
+                sx={{ py: 0.5, height: 'auto', px: 1, alignItems: 'end' }}
+                title={subject?.secretUserId || ''}
+              />
+            </StyledFlexTopCenter>
+
+            <HeaderOptions />
+          </StyledFlexSpaceBetween>
+
+          {canViewData ? (
+            <LinkedTabs tabs={activityDetailsTabs} isCentered={false} deepPathCompare />
+          ) : (
+            <EmptyState width="25rem">{t('noPermissions')}</EmptyState>
+          )}
         </>
       )}
     </FormProvider>
