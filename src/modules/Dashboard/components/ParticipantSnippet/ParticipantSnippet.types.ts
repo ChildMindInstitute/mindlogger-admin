@@ -1,4 +1,4 @@
-import { ElementType } from 'react';
+import { ElementType, ReactNode } from 'react';
 import { BoxProps } from '@mui/material';
 
 import { ParticipantTag } from 'shared/consts';
@@ -9,7 +9,14 @@ export type ParticipantSnippetInfo = {
   tag?: ParticipantTag | null;
 };
 
+export enum ParticipantSnippetVariant {
+  Default = 'Default',
+  Large = 'Large',
+}
+
 export type ParticipantSnippetProps<T extends ElementType> = ParticipantSnippetInfo & {
   boxProps?: BoxProps<T>;
+  rightContent?: ReactNode;
+  variant?: ParticipantSnippetVariant;
   'data-testid'?: string;
 };

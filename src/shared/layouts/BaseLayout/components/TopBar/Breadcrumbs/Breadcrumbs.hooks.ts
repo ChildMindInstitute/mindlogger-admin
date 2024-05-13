@@ -35,7 +35,10 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { pathname } = useLocation();
 
   const respondentLabel = useRespondentLabel({ hideNickname: !!enableMultiInformant });
-  const subjectLabel = useRespondentLabel({ isSubject: true });
+  const subjectLabel = useRespondentLabel({
+    hideNickname: !!enableMultiInformant,
+    isSubject: true,
+  });
   const { workspaceName } = workspaces.useData() ?? {};
   const { result } = applet.useAppletData() ?? {};
   const { getValues } = useFormContext() ?? {};

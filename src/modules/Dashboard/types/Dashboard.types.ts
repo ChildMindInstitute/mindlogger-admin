@@ -58,6 +58,7 @@ export type RespondentDetails = {
   nickname: string;
   secretUserId: string;
   lastSeen: string | null;
+  tag?: ParticipantTag | null;
 };
 
 export enum AccountType {

@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 
 import { HeaderOptions } from 'modules/Dashboard/components/HeaderOptions';
 import { useAppDispatch } from 'redux/store';
 import { LinkedTabs, Spinner } from 'shared/components';
 import { workspaces } from 'shared/state';
-import { StyledBody, StyledHeadlineLarge } from 'shared/styles';
+import { StyledBody } from 'shared/styles';
 import { applet as appletState } from 'shared/state';
 import { applets, users } from 'modules/Dashboard/state';
 import { getSubjectDetails } from 'modules/Dashboard/state/Users/Users.thunk';
-import { palette } from 'shared/styles/variables/palette';
 import { page } from 'resources';
+import { ParticipantSnippet, ParticipantSnippetVariant } from 'modules/Dashboard/components';
 
 import { useParticipantDetailsTabs } from './ParticipantDetails.hooks';
 
@@ -56,25 +55,17 @@ export const ParticipantDetails = () => {
       {loading && <Spinner />}
       {!loading && !!subject && (
         <>
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1.6,
-              marginBottom: 1.2,
-              marginX: 2.4,
-              placeContent: 'space-between',
-            }}
-          >
-            <Box sx={{ display: 'flex', gap: 1.6 }}>
-              <StyledHeadlineLarge>{subject?.secretUserId}</StyledHeadlineLarge>
-              <StyledHeadlineLarge color={palette.outline}>{subject?.nickname}</StyledHeadlineLarge>
-            </Box>
-
-            <HeaderOptions />
-          </Box>
+          <ParticipantSnippet
+            variant={ParticipantSnippetVariant.Large}
+            secretId={subject.secretUserId}
+            nickname={subject.nickname}
+            rightContent={<HeaderOptions />}
+            tag={subject.tag}
+            boxProps={{ sx: { mb: 1.2, mx: 2.4 } }}
+          />
 
           <LinkedTabs
-            panelProps={{ sx: { padding: 0 } }}
+            panelProps={{ sx: { p: 0 } }}
             tabs={respondentTabs}
             isCentered={false}
             deepPathCompare
