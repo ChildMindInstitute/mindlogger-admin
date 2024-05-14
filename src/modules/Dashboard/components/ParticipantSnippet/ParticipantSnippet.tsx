@@ -4,27 +4,39 @@ import { ElementType } from 'react';
 import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { ParticipantTagChip } from 'modules/Dashboard/components';
 
-import { ParticipantSnippetProps } from './ParticipantSnippet.types';
-import { StyledText } from './ParticipantSnippet.styles';
+import { ParticipantSnippetProps, ParticipantSnippetVariant } from './ParticipantSnippet.types';
+import { StyledText, StyledTextLarge } from './ParticipantSnippet.styles';
 
 export const ParticipantSnippet = <T extends ElementType = BoxTypeMap['defaultComponent']>({
+  rightContent: children,
   secretId,
   nickname,
   tag,
   boxProps,
+  variant = ParticipantSnippetVariant.Default,
   'data-testid': dataTestId,
 }: ParticipantSnippetProps<T>) => {
   const { sx, ...rest } = boxProps ?? {};
+  const isDefaultVariant = variant === ParticipantSnippetVariant.Default;
+  const TextComponent = isDefaultVariant ? StyledText : StyledTextLarge;
 
   return (
-    <StyledFlexTopCenter sx={{ gap: 0.8, ...sx }} {...rest} data-testid={dataTestId}>
-      <StyledText data-testid={`${dataTestId}-secretId`}>{secretId}</StyledText>
+    <StyledFlexTopCenter
+      sx={{ gap: isDefaultVariant ? 0.8 : 1.6, ...sx }}
+      {...rest}
+      data-testid={dataTestId}
+    >
+      <TextComponent data-testid={`${dataTestId}-secretId`}>{secretId}</TextComponent>
       {!!nickname && (
-        <StyledText color={variables.palette.neutral60} data-testid={`${dataTestId}-nickname`}>
+        <TextComponent
+          color={variables.palette[isDefaultVariant ? 'neutral60' : 'outline']}
+          data-testid={`${dataTestId}-nickname`}
+        >
           {nickname}
-        </StyledText>
+        </TextComponent>
       )}
       <ParticipantTagChip tag={tag} data-testid={`${dataTestId}-tag`} />
+      {children}
     </StyledFlexTopCenter>
   );
 };

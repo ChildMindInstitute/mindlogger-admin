@@ -25,7 +25,7 @@ export const HeaderOptions = () => {
   };
 
   return (
-    <StyledFlexTopCenter sx={{ gap: 1 }}>
+    <StyledFlexTopCenter sx={{ gap: 1, ml: 'auto' }}>
       <Button
         data-testid="header-option-export-button"
         onClick={handleOpenExport}

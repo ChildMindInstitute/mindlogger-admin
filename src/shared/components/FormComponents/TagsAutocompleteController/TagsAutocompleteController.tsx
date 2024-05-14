@@ -124,10 +124,7 @@ export const TagsAutocompleteController = <
               const { children, ...restPaperProps } = paperProps;
 
               return (
-                <Paper
-                  {...restPaperProps}
-                  sx={{ maxHeight: '25.6rem' }} // Select All row + 4 rows
-                >
+                <Paper {...restPaperProps}>
                   <>
                     {options?.length ? (
                       <ListItem

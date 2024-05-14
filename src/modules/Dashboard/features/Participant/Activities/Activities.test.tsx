@@ -6,7 +6,7 @@ import { PreloadedState } from '@reduxjs/toolkit';
 
 import { ApiResponseCodes } from 'api';
 import { page } from 'resources';
-import { Roles } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 import {
   mockedAppletData,
   mockedAppletId,
@@ -82,6 +82,7 @@ const preloadedState: PreloadedState<RootState> = {
         secretUserId: 'secretUserId',
         nickname: 'nickname',
         lastSeen: null,
+        tag: 'Child' as ParticipantTag,
       },
     }),
   },

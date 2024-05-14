@@ -20,7 +20,7 @@ const props = {
   subjectId: mockedSubjectId1,
   secretId: 'test secret id',
   nickname: 'test nickname',
-  tag: ParticipantTag.Child,
+  tag: 'Child' as ParticipantTag,
   'data-testid': dataTestid,
 };
 

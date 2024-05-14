@@ -8,7 +8,7 @@ const dataTestid = 'test-id';
 const props = {
   secretId: 'test secret id',
   nickname: 'test nickname',
-  tag: ParticipantTag.Child,
+  tag: 'Child' as ParticipantTag,
   'data-testid': dataTestid,
 };
 

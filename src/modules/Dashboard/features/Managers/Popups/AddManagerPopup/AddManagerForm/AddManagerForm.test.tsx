@@ -20,7 +20,7 @@ const mockedParticipants = [mockedRespondent, mockedRespondent2].map(({ details 
     subjectId,
     secretId: respondentSecretId,
     nickname: respondentNickname,
-    tag: ParticipantTag.Child,
+    tag: 'Child' as ParticipantTag,
   };
 });
 
