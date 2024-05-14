@@ -9,4 +9,5 @@ export type ActivitySummaryCardProps = Pick<Activity, 'name' | 'image'> & {
   participantCount?: ReactNode;
   latestActivity?: ReactNode;
   'data-testid'?: string;
+  onClick?: (activityId: string) => void;
 };
