@@ -22,6 +22,7 @@ export const EditEventPopup = ({
   editedEvent,
   setEditEventPopupVisible,
   defaultStartDate,
+  userId,
 }: EditEventPopupProps) => {
   const { t } = useTranslation('app');
   const eventFormRef = useRef() as RefObject<EventFormRef>;
@@ -32,18 +33,18 @@ export const EditEventPopup = ({
   const [isFormChanged, setIsFormChanged] = useState(false);
   const [isClosable, setIsClosable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { appletId, respondentId } = useParams();
+  const { appletId } = useParams();
   const dispatch = useAppDispatch();
   const dataTestid = 'dashboard-calendar-edit-event';
 
-  const isIndividualCalendar = !!respondentId;
+  const isIndividualCalendar = !!userId;
   const analyticsPrefix = isIndividualCalendar
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
   const { execute: removeEvent, isLoading: removeEventIsLoading } = useAsync(
     deleteEventApi,
-    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId })),
+    () => appletId && dispatch(applets.thunk.getEvents({ appletId, respondentId: userId })),
   );
 
   const handleFormChanged = (isChanged: boolean) => {
@@ -154,6 +155,7 @@ export const EditEventPopup = ({
               onFormIsLoading={handleFormIsLoading}
               onFormChange={handleFormChanged}
               data-testid={`${dataTestid}-popup-form`}
+              userId={userId}
             />
           </>
         </Modal>
