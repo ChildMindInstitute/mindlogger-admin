@@ -26,6 +26,8 @@ import {
   AddParticipantSteps,
   Fields,
 } from './AddParticipantPopup.types';
+import { PublicLinkPopup } from './PublicLinkPopup';
+import { PublicLinkToggle } from './PublicLinkToggle';
 import { AddParticipantForm } from './AddParticipantForm';
 
 export const AddParticipantPopup = ({
@@ -55,6 +57,9 @@ export const AddParticipantPopup = ({
   const dispatch = useAppDispatch();
   const [step, setStep] = useState(AddParticipantSteps.AccountType);
   const [hasCommonError, setHasCommonError] = useState(false);
+  const [publicLinkDialogOpen, setPublicLinkDialogOpen] = useState(false);
+  const [hasPublicLink, setHasPublicLink] = useState(false);
+  const [refetchOnClose, setRefetchOnClose] = useState(false);
 
   const handleClose = (shouldRefetch = false) => {
     resetForm();
@@ -166,32 +171,55 @@ export const AddParticipantPopup = ({
   switch (step) {
     case AddParticipantSteps.AccountType:
       return (
-        <Modal
-          open={popupVisible}
-          width="73.6"
-          onClose={() => handleClose(false)}
-          onBackdropClick={null}
-          onSubmit={handleNext}
-          title={t('addParticipant')}
-          buttonText={t('next')}
-          data-testid={dataTestid}
-        >
-          <StyledModalWrapper>
-            <Controller
-              name="accountType"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <ToggleButtonGroup
-                  toggleButtons={toggleButtons}
-                  variant={ToggleButtonVariants.Large}
-                  activeButton={value}
-                  setActiveButton={onChange}
-                  data-testid={`${dataTestid}-account-type`}
-                />
-              )}
-            />
-          </StyledModalWrapper>
-        </Modal>
+        <>
+          <Modal
+            open={popupVisible && !publicLinkDialogOpen}
+            width="73.6"
+            onClose={() => handleClose(refetchOnClose)}
+            onBackdropClick={null}
+            onSubmit={handleNext}
+            title={t('addParticipant')}
+            buttonText={t('next')}
+            data-testid={dataTestid}
+          >
+            <StyledModalWrapper sx={{ display: 'flex', flexDirection: 'column', gap: 2.6 }}>
+              <Controller
+                name="accountType"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <ToggleButtonGroup
+                    toggleButtons={toggleButtons}
+                    variant={ToggleButtonVariants.Large}
+                    activeButton={value}
+                    setActiveButton={onChange}
+                    data-testid={`${dataTestid}-account-type`}
+                  />
+                )}
+              />
+
+              <PublicLinkToggle
+                appletId={appletId}
+                onConfirmPublicLink={(hasLink = false) => {
+                  setPublicLinkDialogOpen(true);
+                  setHasPublicLink(hasLink);
+                }}
+              />
+            </StyledModalWrapper>
+          </Modal>
+
+          <PublicLinkPopup
+            appletId={appletId}
+            hasPublicLink={hasPublicLink}
+            open={publicLinkDialogOpen}
+            onClose={(shouldRefetch = false) => {
+              setPublicLinkDialogOpen(false);
+
+              if (!refetchOnClose) {
+                setRefetchOnClose(shouldRefetch);
+              }
+            }}
+          />
+        </>
       );
 
     case AddParticipantSteps.AccountForm:
@@ -199,7 +227,7 @@ export const AddParticipantPopup = ({
         <Modal
           open={popupVisible}
           width="73.6"
-          onClose={() => handleClose(false)}
+          onClose={() => handleClose(refetchOnClose)}
           onBackdropClick={null}
           onSubmit={handleSubmit(handleSubmitForm)}
           title={t(isFullAccount ? 'fullAccount' : 'limitedAccount')}
