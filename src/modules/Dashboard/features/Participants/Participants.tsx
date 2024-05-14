@@ -1,12 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
 import {
   ActionsMenu,
-  ButtonWithMenu,
   Chip,
   MenuActionProps,
   Pin,
@@ -21,11 +19,12 @@ import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinA
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
-import { StyledBody, StyledFlexTopCenter, StyledFlexWrap } from 'shared/styles';
+import { StyledBody, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { ParticipantSnippetInfo, ParticipantTagChip } from 'modules/Dashboard/components';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { AddParticipantButton, ParticipantsTable } from './Participants.styles';
 import {
@@ -53,6 +52,7 @@ export const Participants = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
+  const { featureFlags } = useFeatureFlags();
 
   const [respondentsData, setRespondentsData] = useState<ParticipantsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -100,7 +100,6 @@ export const Participants = () => {
     return getWorkspaceRespondents(params);
   });
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addParticipantPopupVisible, setAddParticipantPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
@@ -285,8 +284,8 @@ export const Participants = () => {
       secretIds: {
         content: () => secretId,
         value: secretId,
-        width: ParticipantsColumnsWidth.Default,
         onClick: defaultOnClick,
+        maxWidth: ParticipantsColumnsWidth.Id,
       },
       nicknames: {
         content: () => nickname,
@@ -332,6 +331,7 @@ export const Participants = () => {
               tag,
               status,
               dataTestid,
+              showAssignActivity: featureFlags.enableActivityAssign,
             })}
             data-testid={`${dataTestid}-table-actions`}
           />
@@ -410,21 +410,6 @@ export const Participants = () => {
       {isLoading && <Spinner />}
 
       <StyledFlexWrap sx={{ gap: 1.2, mb: 2.4 }}>
-        <StyledFlexTopCenter sx={{ gap: 1.2 }}>
-          <Button variant="outlined" startIcon={<Svg id="slider-rows" height={18} width={18} />}>
-            {t('filters')}
-          </Button>
-
-          <ButtonWithMenu
-            anchorEl={anchorEl}
-            label={t('sortBy')}
-            menuItems={[]}
-            setAnchorEl={setAnchorEl}
-            startIcon={<></>}
-            variant="outlined"
-          />
-        </StyledFlexTopCenter>
-
         <StyledFlexWrap sx={{ gap: 1.2, ml: 'auto' }}>
           <Search
             withDebounce

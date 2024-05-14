@@ -6,6 +6,7 @@ export type RowContent = Cell & {
   content: (item?: Row) => ReactNode;
   value: string | number | boolean;
   onClick?: () => void;
+  maxWidth?: string;
   width?: string;
   contentWithTooltip?: ReactNode;
 };

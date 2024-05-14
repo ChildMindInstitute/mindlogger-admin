@@ -101,7 +101,7 @@ export const Table = ({
                   <TableRow key={`row-${index}`} data-testid="table-row">
                     {Object.keys(row)?.map((key) => (
                       <TableCell
-                        sx={{ height: '4.8rem' }}
+                        sx={{ height: '4.8rem', maxWidth: row[key].maxWidth }}
                         onClick={row[key].onClick}
                         scope="row"
                         key={key}

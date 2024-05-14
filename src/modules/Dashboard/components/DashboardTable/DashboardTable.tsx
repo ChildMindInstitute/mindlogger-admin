@@ -72,7 +72,10 @@ export const DashboardTable = ({
                     align={row[key].align}
                     width={row[key].width}
                     hasColFixedWidth={hasColFixedWidth}
-                    sx={{ cursor: row[key].onClick ? 'pointer' : 'default' }}
+                    sx={{
+                      cursor: row[key].onClick ? 'pointer' : 'default',
+                      maxWidth: row[key].maxWidth,
+                    }}
                     data-testid={`${dataTestid}-${index}-cell-${key}`}
                   >
                     <StyledEllipsisText>

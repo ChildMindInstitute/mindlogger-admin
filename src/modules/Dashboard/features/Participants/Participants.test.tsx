@@ -2,6 +2,7 @@ import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import { generatePath } from 'react-router-dom';
 
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import {
   mockedApplet,
@@ -52,6 +53,12 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUseNavigate,
 }));
 
+jest.mock('shared/hooks/useFeatureFlags', () => ({
+  useFeatureFlags: jest.fn(),
+}));
+
+const mockUseFeatureFlags = useFeatureFlags as jest.Mock;
+
 const getMockedGetWithParticipants = (isAnonymousRespondent = false) => ({
   status: ApiResponseCodes.SuccessfulResponse,
   data: {
@@ -70,6 +77,12 @@ const clickActionDots = async () => {
 };
 
 describe('Participants component tests', () => {
+  beforeEach(() => {
+    mockUseFeatureFlags.mockReturnValue({
+      featureFlags: { enableActivityAssign: true },
+    });
+  });
+
   test('should render empty table', async () => {
     const successfulGetMock = {
       status: ApiResponseCodes.SuccessfulResponse,
