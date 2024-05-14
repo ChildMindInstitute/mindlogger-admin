@@ -62,10 +62,6 @@ export const AddParticipantPopup = ({
     onClose?.(shouldRefetch);
   };
 
-  const handleAddViaCSV = () => {
-    alert('TODO: Add via CSV');
-  };
-
   const resetForm = () => reset({ ...defaults, accountType });
 
   const {
@@ -178,7 +174,6 @@ export const AddParticipantPopup = ({
           onSubmit={handleNext}
           title={t('addParticipant')}
           buttonText={t('next')}
-          hasLeftBtn
           data-testid={dataTestid}
         >
           <StyledModalWrapper>
