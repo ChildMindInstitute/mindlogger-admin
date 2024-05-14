@@ -33,8 +33,14 @@ export const FeedbackReviews = () => {
 
   const { reset } = useFormContext<FeedbackForm>();
   const { user } = auth.useData() ?? {};
-  const { lastAssessment, setAssessment, setIsLastVersion, isBannerVisible, setIsBannerVisible } =
-    useContext(RespondentDataReviewContext);
+  const {
+    assessment,
+    lastAssessment,
+    setAssessment,
+    setIsLastVersion,
+    isBannerVisible,
+    setIsBannerVisible,
+  } = useContext(RespondentDataReviewContext);
   const getFeedbackReviewsData = useFeedbackReviewsData();
 
   const userName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}${t('me')}`;
@@ -59,9 +65,13 @@ export const FeedbackReviews = () => {
     error: removeReviewError,
   } = useAsync(deleteReviewApi);
 
-  const handleSelectLastVersion = () => {
-    if (!lastAssessment?.length) return;
+  const updateAssessment = (updatedAssessment: AssessmentActivityItem[]) => {
+    setAssessment(updatedAssessment);
+    reset(getDefaultFormValues(updatedAssessment));
+    setAssessmentStep(0);
+  };
 
+  const handleSelectLastVersion = () => {
     setIsLastVersion(true);
     setIsBannerVisible(false);
 
@@ -69,9 +79,7 @@ export const FeedbackReviews = () => {
       activityItem,
       answer: undefined,
     })) as AssessmentActivityItem[];
-    setAssessment(updatedAssessment);
-    reset(getDefaultFormValues(updatedAssessment));
-    setAssessmentStep(0);
+    updateAssessment(updatedAssessment);
   };
 
   const handleAssessmentBannerClose = () => setIsBannerVisible(false);
@@ -79,8 +87,17 @@ export const FeedbackReviews = () => {
   const handleReviewerAnswersRemove = async ({ assessmentId }: AssessmentId) => {
     if (!appletId || !answerId) return;
     await removeReview({ appletId, answerId, assessmentId });
-    handleSelectLastVersion();
 
+    if (lastAssessment?.length) {
+      handleSelectLastVersion();
+    } else {
+      const updatedAssessment = assessment?.map(({ activityItem, items }) => ({
+        activityItem,
+        answer: undefined,
+        items,
+      })) as AssessmentActivityItem[];
+      updateAssessment(updatedAssessment);
+    }
     getReviews({ appletId, answerId });
   };
 
@@ -115,7 +132,7 @@ export const FeedbackReviews = () => {
   }, [handleGetReviews]);
 
   return (
-    <StyledContainer>
+    <StyledContainer data-testid={dataTestid}>
       {isAssessmentBannerVisible && (
         <AssessmentBanner
           isBannerVisible={isAssessmentBannerVisible}

@@ -356,3 +356,9 @@ export const PARTICIPANT_TAG_ICONS: Record<ParticipantTag, Icons> = {
   Teacher: 'teacher',
   Team: 'team-outlined',
 };
+
+export const observerStyles = {
+  position: 'absolute',
+  height: 'calc(100% + 20rem)',
+  bottom: 0,
+};

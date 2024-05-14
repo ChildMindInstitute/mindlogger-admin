@@ -16,7 +16,7 @@ import { CheckboxController, InputController } from 'shared/components/FormCompo
 import { Tooltip } from 'shared/components/Tooltip';
 import { ConditionRowType } from 'modules/Builder/types';
 import { useStaticContent } from 'shared/hooks/useStaticContent';
-import { observerStyles } from 'modules/Builder/consts';
+import { observerStyles } from 'shared/consts';
 
 import { ScoreConditionProps } from './ScoreCondition.types';
 import { ConditionContent } from '../../ConditionContent';

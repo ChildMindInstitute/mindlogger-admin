@@ -3,11 +3,9 @@ import {
   DateAnswer,
   FormattedActivityItem,
   ItemOption,
-  NumberSelectionAnswer,
   NumberSelectionItemResponseValues,
   SingleMultiSelectionPerRowAnswer,
   SingleMultiSelectionPerRowItemResponseValues,
-  SingleMultiSelectionSliderAnswer,
   SingleMultiSelectionSliderItemResponseValues,
   SliderRowsItemResponseValues,
   SliderRowsAnswer,
@@ -16,13 +14,12 @@ import {
   TimeRangeAnswer,
 } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
-import { TICK_HEIGHT } from '../Charts/Charts.const';
-import { MultiScatterChart } from '../Charts/MultiScatterChart';
 import { TimePickerLineChart } from '../Charts/LineChart/TimePickerLineChart';
 import { ReportTable } from '../ReportTable';
 import { GetResponseOptionsProps } from './ResponseOptions.types';
 import { SelectionPerRow } from './SelectionPerRow';
 import { SliderRows } from './SliderRows';
+import { MultipleSelectionChart } from './MultipleSelectionChart';
 
 export const getResponseItem = ({
   color,
@@ -30,35 +27,9 @@ export const getResponseItem = ({
   maxDate,
   versions,
   activityItemAnswer,
+  isStaticActive = false,
 }: GetResponseOptionsProps) => {
   const responseType = activityItemAnswer.activityItem.responseType;
-
-  const renderMultipleSelection = (options: ItemOption[]) => {
-    const answers = activityItemAnswer.answers as (
-      | SingleMultiSelectionSliderAnswer
-      | NumberSelectionAnswer
-    )[];
-    const height = (options.length + 1) * TICK_HEIGHT;
-    const values = options.map(({ value }) => value);
-    const minY = Math.min(...values);
-    const maxY = Math.max(...values);
-
-    return (
-      <MultiScatterChart
-        color={color}
-        minDate={minDate}
-        maxDate={maxDate}
-        minY={minY}
-        maxY={maxY}
-        height={height}
-        options={options}
-        responseType={responseType}
-        answers={answers}
-        versions={versions}
-        data-testid={`${activityItemAnswer.dataTestid}-multi-scatter-chart`}
-      />
-    );
-  };
 
   switch (responseType) {
     case ItemResponseType.SingleSelection:
@@ -67,7 +38,18 @@ export const getResponseItem = ({
       const { options } = activityItemAnswer.activityItem
         .responseValues as SingleMultiSelectionSliderItemResponseValues;
 
-      return renderMultipleSelection(options);
+      return (
+        <MultipleSelectionChart
+          responseType={responseType}
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          activityItemAnswer={activityItemAnswer}
+          versions={versions}
+          options={options}
+          isStaticActive={isStaticActive}
+        />
+      );
     }
     case ItemResponseType.NumberSelection: {
       const { minValue, maxValue } = activityItemAnswer.activityItem
@@ -84,7 +66,18 @@ export const getResponseItem = ({
         } as ItemOption;
       });
 
-      return renderMultipleSelection(options);
+      return (
+        <MultipleSelectionChart
+          responseType={responseType}
+          color={color}
+          minDate={minDate}
+          maxDate={maxDate}
+          activityItemAnswer={activityItemAnswer}
+          versions={versions}
+          options={options}
+          isStaticActive={isStaticActive}
+        />
+      );
     }
     case ItemResponseType.TimeRange:
     case ItemResponseType.Date:
