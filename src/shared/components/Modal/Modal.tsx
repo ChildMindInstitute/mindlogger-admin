@@ -1,9 +1,9 @@
 import { Button, ModalComponentsPropsOverrides } from '@mui/material';
 
 import { Svg } from 'shared/components/Svg';
-import { StyledModalContent, StyledFlexTopCenter } from 'shared/styles';
+import { StyledModalContent, StyledFlexTopCenter, StyledFlexSpaceBetween } from 'shared/styles';
 
-import { ModalProps, SubmitBtnVariant } from './Modal.types';
+import { ModalProps } from './Modal.types';
 import {
   StyledDialog,
   StyledDialogTitle,
@@ -27,7 +27,7 @@ export const Modal = ({
   hasSecondBtn = false,
   submitBtnColor = 'primary',
   secondBtnText,
-  submitBtnVariant = SubmitBtnVariant.Contained,
+  submitBtnVariant = 'contained',
   onSecondBtnSubmit,
   secondBtnVariant = 'text',
   disabledSecondBtn,
@@ -47,6 +47,7 @@ export const Modal = ({
   submitBtnTooltip,
   onTransitionEntered,
   hasCloseIcon = true,
+  footer,
   'data-testid': dataTestid,
 }: ModalProps) => {
   const getActionsAlign = () => {
@@ -108,6 +109,11 @@ export const Modal = ({
           )}
         </StyledDialogTitle>
         {children}
+        {footer && (
+          <StyledFlexSpaceBetween sx={{ gap: 1.6, px: 3.2, pt: 3.6, pb: 2.4 }}>
+            {footer}
+          </StyledFlexSpaceBetween>
+        )}
         {hasActions && (
           <StyledDialogActions actionsAlign={getActionsAlign()} sx={footerStyles}>
             {hasLeftBtn && (
