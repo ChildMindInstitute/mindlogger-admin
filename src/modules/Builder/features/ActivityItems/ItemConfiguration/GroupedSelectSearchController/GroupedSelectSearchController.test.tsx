@@ -42,12 +42,14 @@ const options = [
 ];
 
 const FormComponent = () => {
-  const { control } = useForm();
+  const { control, setValue } = useForm();
 
   const props = {
     control,
     name: 'responseType',
     options,
+    setValue,
+    fieldName: 'activity.0.item.0',
     checkIfSelectChangePopupIsVisible: jest.fn(),
   };
 
