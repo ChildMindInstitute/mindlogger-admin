@@ -7,7 +7,7 @@ import { users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store/hooks';
 
 export const useRespondentDataSetup = () => {
-  const { appletId, subjectId } = useParams();
+  const { appletId, subjectId, activityId = '' } = useParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -29,10 +29,16 @@ export const useRespondentDataSetup = () => {
         id: 'respondent-data-summary',
         icon: <Svg id="chart" />,
         activeIcon: <Svg id="chart" />,
-        path: generatePath(page.appletParticipantDataSummary, {
-          appletId,
-          subjectId,
-        }),
+        path: generatePath(
+          activityId
+            ? page.appletParticipantActivityDetailsDataSummary
+            : page.appletParticipantDataSummary,
+          {
+            appletId,
+            subjectId,
+            activityId,
+          },
+        ),
         'data-testid': 'respondents-summary-tab-summary',
       },
       {
@@ -40,10 +46,16 @@ export const useRespondentDataSetup = () => {
         id: 'respondent-data-responses',
         icon: <Svg id="checkbox-outlined" />,
         activeIcon: <Svg id="checkbox-filled" />,
-        path: generatePath(page.appletParticipantDataReview, {
-          appletId,
-          subjectId,
-        }),
+        path: generatePath(
+          activityId
+            ? page.appletParticipantActivityDetailsDataReview
+            : page.appletParticipantDataReview,
+          {
+            appletId,
+            subjectId,
+            activityId,
+          },
+        ),
         'data-testid': 'respondents-summary-tab-review',
       },
     ],

@@ -16,7 +16,9 @@ import { StyledReportContainer } from './RespondentDataSummary.styles';
 import { ReportContent } from './ReportContent';
 
 export const RespondentDataSummary = () => {
-  const { appletId, subjectId } = useParams();
+  const { appletId, subjectId, activityId = '' } = useParams();
+  const viewSingleActivity = !!activityId;
+
   const [selectedActivity, summaryActivities]: [DatavizActivity | null, DatavizActivity[]] =
     useWatch({
       name: ['selectedActivity', 'summaryActivities'],
@@ -31,8 +33,9 @@ export const RespondentDataSummary = () => {
     setValue('summaryActivities', summaryActivities);
     if (selectedActivity) return;
 
-    const selectedActivityByDefault =
-      getActivityWithLatestAnswer(summaryActivities) || summaryActivities?.[0];
+    const selectedActivityByDefault = viewSingleActivity
+      ? summaryActivities?.find((e) => e.id === activityId)
+      : getActivityWithLatestAnswer(summaryActivities) || summaryActivities?.[0];
 
     if (!selectedActivityByDefault) return;
 
@@ -58,12 +61,14 @@ export const RespondentDataSummary = () => {
     <StyledContainer>
       {!!summaryActivities?.length && (
         <>
-          <ReportMenu
-            activities={summaryActivities}
-            getIdentifiersVersions={getIdentifiersVersions}
-            fetchAnswers={fetchAnswers}
-            setIsLoading={setIsLoading}
-          />
+          {!viewSingleActivity && (
+            <ReportMenu
+              activities={summaryActivities}
+              getIdentifiersVersions={getIdentifiersVersions}
+              fetchAnswers={fetchAnswers}
+              setIsLoading={setIsLoading}
+            />
+          )}
           <StyledReportContainer>
             <ReportContent selectedActivity={selectedActivity} isLoading={isLoading} />
           </StyledReportContainer>

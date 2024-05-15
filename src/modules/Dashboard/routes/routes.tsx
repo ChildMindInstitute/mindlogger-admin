@@ -23,7 +23,6 @@ const RespondentDataSummary = lazy(
   () => import('../features/RespondentData/RespondentDataSummary'),
 );
 const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
-const ParticipantActivity = lazy(() => import('../features/ParticipantActivity'));
 
 export const dashboardRoutes = (featureFlags: FeatureFlags) => (
   <Route path={page.dashboard}>
@@ -123,7 +122,7 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
       element={
         <PrivateRoute>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <ParticipantActivity />
+            <RespondentData />
           </ErrorBoundary>
         </PrivateRoute>
       }
