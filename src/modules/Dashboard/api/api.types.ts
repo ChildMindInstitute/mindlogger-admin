@@ -1,6 +1,6 @@
 import { AppletId } from 'shared/api';
 import { Item, SingleApplet } from 'shared/state';
-import { Roles } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
 
@@ -175,6 +175,7 @@ export type EditSubject = SubjectId & {
   values: {
     secretUserId: string;
     nickname?: string;
+    tag?: ParticipantTag;
   };
 };
 

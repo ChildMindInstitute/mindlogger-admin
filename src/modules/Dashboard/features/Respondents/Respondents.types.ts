@@ -1,6 +1,7 @@
 import { Respondent, RespondentDetail } from 'modules/Dashboard/types';
 import { Encryption } from 'shared/utils';
 import { MenuActionProps } from 'shared/components';
+import { ParticipantTag } from 'shared/consts';
 
 export type RespondentActionProps = {
   respondentId: string | null;
@@ -28,6 +29,7 @@ export type ChosenAppletData = {
   encryption?: Encryption;
   ownerId: string;
   subjectId: string;
+  subjectTag?: ParticipantTag | null;
 };
 
 export enum FilteredAppletsKey {

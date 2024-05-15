@@ -8,7 +8,7 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { EditRespondentPopup } from '.';
 
 const onCloseMock = jest.fn();
-const successFakeRequest = () => new Promise((res) => res(null));
+const successFakeRequest = jest.fn();
 
 const chosenAppletData = {
   appletId: '12312',
@@ -17,7 +17,8 @@ const chosenAppletData = {
   respondentNickname: 'respondentNickname',
   ownerId: '1',
   subjectId: 'subj-1',
-};
+  subjectTag: 'Child',
+} as const;
 
 const commonProps = {
   onClose: onCloseMock,
@@ -25,8 +26,13 @@ const commonProps = {
   chosenAppletData,
 };
 
+const mockedAxios = axios.create();
+
 describe('EditRespondentPopup component tests', () => {
-  const mockedAxios = axios.create();
+  beforeEach(() => {
+    successFakeRequest.mockReturnValue(new Promise((res) => res(null)));
+    jest.spyOn(mockedAxios, 'put').mockImplementation(successFakeRequest);
+  });
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -38,12 +44,11 @@ describe('EditRespondentPopup component tests', () => {
     await waitFor(() => {
       expect(screen.getByDisplayValue(chosenAppletData.respondentSecretId)).toBeInTheDocument();
       expect(screen.getByDisplayValue(chosenAppletData.respondentNickname)).toBeInTheDocument();
+      expect(screen.getByDisplayValue(chosenAppletData.subjectTag)).toBeInTheDocument();
     });
   });
 
   test('EditRespondentPopup should appear success text', async () => {
-    jest.spyOn(mockedAxios, 'put').mockImplementation(successFakeRequest);
-
     const { store } = renderWithProviders(<EditRespondentPopup {...commonProps} />);
 
     const nicknameInput = screen
@@ -55,5 +60,63 @@ describe('EditRespondentPopup component tests', () => {
     const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
     await userEvent.click(submitButton);
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
+  });
+
+  describe("When the given subjectʼs tag is 'Team'", () => {
+    beforeEach(() => {
+      renderWithProviders(
+        <EditRespondentPopup
+          {...commonProps}
+          chosenAppletData={{ ...chosenAppletData, subjectTag: 'Team' }}
+        />,
+      );
+    });
+
+    test('It disables tag selection', () => {
+      const selection = screen.queryByTestId('dashboard-respondents-edit-popup-tag');
+      // Query for deeply nested child, as MUI Select is not a native HTML
+      // <select>, and the testId is only applied to root element.
+      const toggleBttn = selection?.querySelector('[aria-haspopup="listbox"][role="button"]');
+
+      expect(selection).toBeInTheDocument();
+      expect(toggleBttn).toHaveAttribute('aria-disabled');
+    });
+  });
+
+  describe("When the given subjectʼs tag is not 'Team'", () => {
+    beforeEach(() => {
+      renderWithProviders(<EditRespondentPopup {...commonProps} />);
+    });
+
+    test('It enables tag selection', () => {
+      const selection = screen.queryByTestId('dashboard-respondents-edit-popup-tag');
+
+      expect(selection).toBeInTheDocument();
+      expect(selection).not.toHaveProperty('disabled');
+    });
+
+    test('It accepts changes to the subjectʼs tag value', async () => {
+      const selection = screen.getByTestId('dashboard-respondents-edit-popup-tag');
+      const toggleBttn = selection.querySelector('[aria-haspopup="listbox"][role="button"]');
+      const submitBttn = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
+
+      await userEvent.click(toggleBttn as HTMLElement);
+
+      const dropdown = screen.queryByTestId('dashboard-respondents-edit-popup-tag-dropdown');
+      const dropdownOption = dropdown?.querySelector(`[data-value='Parent']`);
+
+      await userEvent.click(dropdownOption as HTMLElement);
+      await userEvent.click(submitBttn);
+
+      expect(successFakeRequest).toBeCalledWith(
+        `/subjects/${chosenAppletData.subjectId}`,
+        {
+          nickname: chosenAppletData.respondentNickname,
+          secretUserId: chosenAppletData.respondentSecretId,
+          tag: 'Parent',
+        },
+        { signal: undefined },
+      );
+    });
   });
 });

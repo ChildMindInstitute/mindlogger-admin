@@ -31,6 +31,7 @@ export type ChosenAppletData = {
   encryption?: Encryption;
   ownerId: string;
   subjectId: string;
+  subjectTag?: ParticipantTag | null;
 };
 
 export enum FilteredAppletsKey {
