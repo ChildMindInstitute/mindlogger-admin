@@ -1,8 +1,9 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { LinkedTabs } from 'shared/components';
+import { EmptyState, LinkedTabs } from 'shared/components';
 import { applet as appletState } from 'shared/state';
 import { users, workspaces } from 'redux/modules';
 import { getEntityKey } from 'shared/utils';
@@ -14,6 +15,7 @@ import { defaultRespondentDataFormValues } from './RespondentData.const';
 import { RespondentDataHeader } from './RespondentDataHeader';
 
 export const RespondentData = () => {
+  const { t } = useTranslation('app');
   const { appletId, activityId } = useParams();
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
@@ -45,7 +47,11 @@ export const RespondentData = () => {
         />
       )}
 
-      <LinkedTabs tabs={respondentDataTabs} isCentered={false} />
+      {canViewData ? (
+        <LinkedTabs tabs={respondentDataTabs} isCentered={false} />
+      ) : (
+        <EmptyState width="25rem">{t('noPermissions')}</EmptyState>
+      )}
     </FormProvider>
   );
 };

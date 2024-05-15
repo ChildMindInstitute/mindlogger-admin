@@ -14,12 +14,14 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Mixpanel } from 'shared/utils';
+import { Mixpanel, isManagerOrOwner } from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { workspaces } from 'redux/modules';
 import { page } from 'resources';
 import { palette } from 'shared/styles/variables/palette';
+import { Roles } from 'shared/consts';
+import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
 
 import { ActionButton, StyledButton } from '../RespondentData.styles';
 import { RespondentDataHeaderProps } from './RespondentDataHeader.types';
@@ -36,7 +38,7 @@ export const RespondentDataHeader = ({
   const dataTestId = 'respondent-data-header';
 
   const rolesData = workspaces.useRolesData();
-  const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
+  const roles = appletId ? rolesData?.data?.[appletId] : undefined;
 
   const [isExportOpen, setIsExportOpen] = useState(false);
   const { TakeNowModal, openTakeNowModal } = useTakeNowModal({ dataTestId });
@@ -74,6 +76,12 @@ export const RespondentDataHeader = ({
   const handleCloseExport = () => {
     setIsExportOpen(false);
   };
+
+  const canDoTakeNow =
+    featureFlags.enableMultiInformantTakeNow &&
+    (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
+
+  const canViewData = hasPermissionToViewData(roles);
 
   const headerElements = {
     name: activity ? activity.name : applet.displayName,
@@ -119,43 +127,45 @@ export const RespondentDataHeader = ({
             title={subject?.secretUserId || ''}
           />
         </StyledFlexTopCenter>
-        <StyledFlexTopCenter sx={{ gap: 1 }}>
-          <Button
-            data-testid="header-option-export-button"
-            onClick={handleOpenExport}
-            startIcon={<Svg id="export" width={18} height={18} />}
-            sx={{ color: variables.palette.on_surface_variant }}
-          >
-            {t('export')}
-          </Button>
+        {canViewData && (
+          <StyledFlexTopCenter sx={{ gap: 1 }}>
+            <Button
+              data-testid="header-option-export-button"
+              onClick={handleOpenExport}
+              startIcon={<Svg id="export" width={18} height={18} />}
+              sx={{ color: variables.palette.on_surface_variant }}
+            >
+              {t('export')}
+            </Button>
 
-          <ExportDataSetting
-            isExportSettingsOpen={isExportOpen}
-            onExportSettingsClose={handleCloseExport}
-          />
-          {featureFlags.enableActivityAssign && (
-            <ActionButton
-              onClick={handleAssignActivity}
-              data-testid={`${dataTestid}-assign-activity`}
-              sx={{ backgroundColor: variables.palette.secondary_container }}
-            >
-              {t('assign')}
-            </ActionButton>
-          )}
-          {activity && (
-            <ActionButton
-              variant="contained"
-              onClick={handleTakeNow}
-              data-testid={`${dataTestid}-take-now`}
-              sx={{
-                backgroundColor: variables.palette.primary,
-                color: variables.palette.white,
-              }}
-            >
-              {t('takeNow')}
-            </ActionButton>
-          )}
-        </StyledFlexTopCenter>
+            <ExportDataSetting
+              isExportSettingsOpen={isExportOpen}
+              onExportSettingsClose={handleCloseExport}
+            />
+            {featureFlags.enableActivityAssign && (
+              <ActionButton
+                onClick={handleAssignActivity}
+                data-testid={`${dataTestid}-assign-activity`}
+                sx={{ backgroundColor: variables.palette.secondary_container }}
+              >
+                {t('assign')}
+              </ActionButton>
+            )}
+            {activity && canDoTakeNow && (
+              <ActionButton
+                variant="contained"
+                onClick={handleTakeNow}
+                data-testid={`${dataTestid}-take-now`}
+                sx={{
+                  backgroundColor: variables.palette.primary,
+                  color: variables.palette.white,
+                }}
+              >
+                {t('takeNow')}
+              </ActionButton>
+            )}
+          </StyledFlexTopCenter>
+        )}
       </StyledFlexSpaceBetween>
       <TakeNowModal />
     </>
