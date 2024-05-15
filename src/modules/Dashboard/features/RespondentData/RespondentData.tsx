@@ -14,7 +14,7 @@ import { defaultRespondentDataFormValues } from './RespondentData.const';
 import { RespondentDataHeader } from './RespondentDataHeader';
 
 export const RespondentData = () => {
-  const { appletId, activityId = '' } = useParams();
+  const { appletId, activityId } = useParams();
   const rolesData = workspaces.useRolesData();
   const appletRoles = appletId ? rolesData?.data?.[appletId] : undefined;
 

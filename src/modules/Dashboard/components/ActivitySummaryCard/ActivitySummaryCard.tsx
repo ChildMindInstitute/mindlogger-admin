@@ -3,6 +3,7 @@ import { Divider } from '@mui/material';
 
 import { StyledFlexColumn, StyledFlexSpaceBetween, StyledFlexTopStart } from 'shared/styles';
 
+import { ActivitySummaryCardProps } from './ActivitySummaryCard.types';
 import { StatBox } from './StatBox';
 import {
   StyledActivityName,
@@ -10,7 +11,6 @@ import {
   StyledImageContainer,
   StyledImg,
 } from './ActivitySummaryCard.styles';
-import { ActivitySummaryCardProps } from './ActivitySummaryCard.types';
 
 export const ActivitySummaryCard = ({
   activityId,

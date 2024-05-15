@@ -16,7 +16,7 @@ import { StyledReportContainer } from './RespondentDataSummary.styles';
 import { ReportContent } from './ReportContent';
 
 export const RespondentDataSummary = () => {
-  const { appletId, subjectId, activityId = '' } = useParams();
+  const { appletId, subjectId, activityId } = useParams();
   const viewSingleActivity = !!activityId;
 
   const [selectedActivity, summaryActivities]: [DatavizActivity | null, DatavizActivity[]] =

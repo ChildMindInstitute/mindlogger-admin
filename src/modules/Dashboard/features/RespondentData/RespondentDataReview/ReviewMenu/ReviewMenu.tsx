@@ -28,7 +28,6 @@ export const ReviewMenu = ({
   const respondentLabel = useRespondentLabel({ isSubject: true });
 
   const dataTestid = 'respondents-review-menu';
-  const activityDetails = !!activityId;
 
   return (
     <StyledMenu data-testid={dataTestid}>
@@ -53,7 +52,7 @@ export const ReviewMenu = ({
         />
       </StyledHeader>
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
-        {activityDetails ? t('selectResponse') : t('selectActivityAndResponse')}
+        {activityId ? t('selectResponse') : t('selectActivityAndResponse')}
       </StyledLabelLarge>
       {activities.map((activity, index) => (
         <ReviewMenuItem

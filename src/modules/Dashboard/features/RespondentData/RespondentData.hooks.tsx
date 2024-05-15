@@ -7,7 +7,7 @@ import { users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store/hooks';
 
 export const useRespondentDataSetup = () => {
-  const { appletId, subjectId, activityId = '' } = useParams();
+  const { appletId, subjectId, activityId } = useParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {

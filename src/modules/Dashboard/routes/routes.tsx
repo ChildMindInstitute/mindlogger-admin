@@ -17,12 +17,12 @@ import { AppletMultiInformant } from '../pages/Applet/AppletMultiInformant';
 
 const Main = lazy(() => import('../pages/Main'));
 const Applet = lazy(() => import('../pages/Applet'));
+const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
 const RespondentData = lazy(() => import('../pages/RespondentData'));
 const RespondentDataReview = lazy(() => import('../features/RespondentData/RespondentDataReview'));
 const RespondentDataSummary = lazy(
   () => import('../features/RespondentData/RespondentDataSummary'),
 );
-const ParticipantDetails = lazy(() => import('../pages/ParticipantDetails'));
 
 export const dashboardRoutes = (featureFlags: FeatureFlags) => (
   <Route path={page.dashboard}>

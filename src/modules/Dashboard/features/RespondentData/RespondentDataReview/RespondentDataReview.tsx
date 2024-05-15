@@ -157,16 +157,12 @@ export const RespondentDataReview = () => {
     const responseDate = getValues('responseDate');
     if (!responseDate || !answer) return;
 
-    let pathname;
-    if (activityId) {
-      pathname = generatePath(page.appletParticipantActivityDetailsDataReview, {
-        appletId,
-        activityId,
-        subjectId,
-      });
-    } else {
-      pathname = generatePath(page.appletParticipantDataReview, { appletId, subjectId });
-    }
+    const pathname = generatePath(
+      activityId
+        ? page.appletParticipantActivityDetailsDataReview
+        : page.appletParticipantDataReview,
+      { appletId, subjectId, activityId },
+    );
 
     navigate({
       pathname,
