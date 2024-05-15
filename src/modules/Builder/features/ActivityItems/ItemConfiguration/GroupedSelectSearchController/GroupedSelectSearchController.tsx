@@ -6,7 +6,7 @@ import { FormControl, FormHelperText, InputLabel, TextField } from '@mui/materia
 import { Svg } from 'shared/components/Svg';
 import { StyledBodyMedium, StyledClearedButton, StyledFlexTopCenter, theme } from 'shared/styles';
 import { falseReturnFunc } from 'shared/utils';
-import { itemsTypeIcons } from 'shared/consts';
+import { ItemResponseType, itemsTypeIcons } from 'shared/consts';
 import { ItemResponseTypeNoPerfTasks } from 'modules/Builder/types';
 
 import { GroupedSelectControllerProps } from './GroupedSelectSearchController.types';
@@ -33,6 +33,8 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
   name,
   control,
   options,
+  setValue,
+  fieldName,
   checkIfSelectChangePopupIsVisible,
 }: GroupedSelectControllerProps<T>) => {
   const { t } = useTranslation('app');
@@ -68,6 +70,12 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
     handleTooltipClose();
   };
 
+  const processItemType = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value !== ItemResponseType.Drawing) return;
+
+    setValue(`${fieldName}.responseValues.proportion.enabled`, true);
+  };
+
   const mobileOnly = (
     <StyledMobileOnly data-testid="mobile-only-label">
       <StyledBodyMedium>{t('mobileOnly')}</StyledBodyMedium>
@@ -82,11 +90,16 @@ export const GroupedSelectSearchController = <T extends FieldValues>({
         render={({ field: { onChange, value }, fieldState: { error } }) => {
           const handleOnSelectChange = (...props: unknown[]) => {
             if (checkIfSelectChangePopupIsVisible) {
-              checkIfSelectChangePopupIsVisible(() => onChange(...props));
+              checkIfSelectChangePopupIsVisible(() => {
+                onChange(...props);
+                processItemType(props[0] as ChangeEvent<HTMLInputElement>);
+              });
 
               return;
             }
+
             onChange(...props);
+            processItemType(props[0] as ChangeEvent<HTMLInputElement>);
           };
 
           return (
