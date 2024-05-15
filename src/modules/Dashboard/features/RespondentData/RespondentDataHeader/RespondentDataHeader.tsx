@@ -78,6 +78,7 @@ export const RespondentDataHeader = ({
   };
 
   const canDoTakeNow =
+    activity &&
     featureFlags.enableMultiInformantTakeNow &&
     (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
 
@@ -151,7 +152,7 @@ export const RespondentDataHeader = ({
                 {t('assign')}
               </ActionButton>
             )}
-            {activity && canDoTakeNow && (
+            {canDoTakeNow && (
               <ActionButton
                 variant="contained"
                 onClick={handleTakeNow}
@@ -167,7 +168,7 @@ export const RespondentDataHeader = ({
           </StyledFlexTopCenter>
         )}
       </StyledFlexSpaceBetween>
-      <TakeNowModal />
+      {canDoTakeNow && <TakeNowModal />}
     </>
   );
 };
