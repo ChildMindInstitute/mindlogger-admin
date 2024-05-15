@@ -8,19 +8,18 @@ import { GetIdentifiersVersions } from '../../RespondentDataSummary.types';
 import { useDecryptedIdentifiers } from '../useDecryptedIdentifiers';
 
 export const useDatavizSummaryRequests = () => {
-  const { appletId, respondentId: _respondentId, subjectId } = useParams();
+  const { appletId, subjectId } = useParams();
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
   const { setValue } = useFormContext<RespondentsDataFormValues>();
-  const respondentId = _respondentId || subjectId;
 
   const getIdentifiersVersions = async ({ activity }: GetIdentifiersVersions) => {
     try {
-      if (!appletId || !respondentId || !activity?.hasAnswer || activity?.isPerformanceTask) return;
+      if (!appletId || !subjectId || !activity?.hasAnswer || activity?.isPerformanceTask) return;
 
       const identifiers = await getIdentifiersApi({
         appletId,
         activityId: activity.id,
-        targetSubjectId: respondentId,
+        targetSubjectId: subjectId,
       });
       if (!getDecryptedIdentifiers) return;
       const decryptedIdentifiers = await getDecryptedIdentifiers(identifiers.data.result);

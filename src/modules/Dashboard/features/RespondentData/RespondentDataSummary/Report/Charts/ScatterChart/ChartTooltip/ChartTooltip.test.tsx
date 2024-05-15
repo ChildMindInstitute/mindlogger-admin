@@ -10,8 +10,8 @@ import { ReportContext } from 'modules/Dashboard/features/RespondentData/Respond
 
 import { ChartTooltip } from './ChartTooltip';
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;
-const routePath = page.appletRespondentDataSummary;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/summary`;
+const routePath = page.appletParticipantDataSummary;
 
 const dataTestid = 'scatter-chart';
 const answerId = '773d904e-15a0-4702-b53b-d3f3e2d8be71';
@@ -79,7 +79,7 @@ describe('ChartTooltip', () => {
 
     await userEvent.click(reviewButton);
     expect(mockedReviewAnswerNavigate).toBeCalledWith({
-      pathname: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
+      pathname: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`,
       search: `selectedDate=2023-12-20&answerId=${answerId}&isFeedbackVisible=false`,
     });
 
@@ -133,7 +133,7 @@ describe('ChartTooltip', () => {
 
     await userEvent.click(reviewButton);
     expect(mockedReviewAnswerNavigate).toBeCalledWith({
-      pathname: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
+      pathname: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`,
       search: `selectedDate=2023-12-20&answerId=${answerId}&isFeedbackVisible=true`,
     });
   });

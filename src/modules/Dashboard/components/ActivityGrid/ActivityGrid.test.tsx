@@ -16,6 +16,10 @@ describe('ActivityGrid', () => {
 
     const rows: Row[] = [
       {
+        id: {
+          content: () => '',
+          value: '',
+        },
         image: {
           content: () => '',
           value: '',

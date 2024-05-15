@@ -7,20 +7,20 @@ import { users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store/hooks';
 
 export const useRespondentDataSetup = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId } = useParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!respondentId) return;
+    if (!subjectId) return;
 
     const { getSubjectDetails } = users.thunk;
 
     dispatch(
       getSubjectDetails({
-        subjectId: respondentId,
+        subjectId,
       }),
     );
-  }, [respondentId, dispatch]);
+  }, [subjectId, dispatch]);
 
   return {
     respondentDataTabs: [
@@ -29,9 +29,9 @@ export const useRespondentDataSetup = () => {
         id: 'respondent-data-summary',
         icon: <Svg id="chart" />,
         activeIcon: <Svg id="chart" />,
-        path: generatePath(page.appletRespondentDataSummary, {
+        path: generatePath(page.appletParticipantDataSummary, {
           appletId,
-          respondentId,
+          subjectId,
         }),
         'data-testid': 'respondents-summary-tab-summary',
       },
@@ -40,9 +40,9 @@ export const useRespondentDataSetup = () => {
         id: 'respondent-data-responses',
         icon: <Svg id="checkbox-outlined" />,
         activeIcon: <Svg id="checkbox-filled" />,
-        path: generatePath(page.appletRespondentDataReview, {
+        path: generatePath(page.appletParticipantDataReview, {
           appletId,
-          respondentId,
+          subjectId,
         }),
         'data-testid': 'respondents-summary-tab-review',
       },

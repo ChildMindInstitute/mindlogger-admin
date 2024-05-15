@@ -53,7 +53,7 @@ import { sortAnswerDates } from './utils/sortAnswerDates';
 import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 
 export const RespondentDataReview = () => {
-  const { appletId, respondentId: _respondentId, subjectId, activityId } = useParams();
+  const { appletId, subjectId, activityId } = useParams();
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || '';
   const selectedDateParam = searchParams.get('selectedDate');
@@ -86,7 +86,6 @@ export const RespondentDataReview = () => {
   const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
 
   const dataTestid = 'respondents-review';
-  const respondentId = _respondentId || subjectId;
 
   const { execute: getAppletSubmitDateList, isLoading: getSubmitDatesLoading } = useAsync<
     AppletSubmitDateList,
@@ -163,10 +162,10 @@ export const RespondentDataReview = () => {
       pathname = generatePath(page.appletParticipantActivityDetailsDataReview, {
         appletId,
         activityId,
-        subjectId: respondentId,
+        subjectId,
       });
     } else {
-      pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+      pathname = generatePath(page.appletParticipantDataReview, { appletId, subjectId });
     }
 
     navigate({
@@ -179,14 +178,14 @@ export const RespondentDataReview = () => {
   };
 
   const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
 
     getAppletSubmitDateList({
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
       fromDate,
       toDate,
     });
@@ -195,13 +194,13 @@ export const RespondentDataReview = () => {
   const handleGetActivities = (date?: Date | null) => {
     const createdDate = date && format(date, DateFormats.YearMonthDay);
 
-    if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate) {
+    if (!appletId || !subjectId || !createdDate || prevSelectedDateRef.current === createdDate) {
       return;
     }
 
     getReviewActivities({
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
       createdDate,
     });
 

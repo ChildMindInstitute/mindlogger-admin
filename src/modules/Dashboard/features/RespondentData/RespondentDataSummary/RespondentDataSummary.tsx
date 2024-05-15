@@ -16,7 +16,7 @@ import { StyledReportContainer } from './RespondentDataSummary.styles';
 import { ReportContent } from './ReportContent';
 
 export const RespondentDataSummary = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId } = useParams();
   const [selectedActivity, summaryActivities]: [DatavizActivity | null, DatavizActivity[]] =
     useWatch({
       name: ['selectedActivity', 'summaryActivities'],
@@ -46,13 +46,13 @@ export const RespondentDataSummary = () => {
   });
 
   useEffect(() => {
-    if (!appletId || !respondentId || !!summaryActivities?.length) return;
+    if (!appletId || !subjectId || !!summaryActivities?.length) return;
 
     getSummaryActivities({
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
     });
-  }, [appletId, respondentId, summaryActivities, getSummaryActivities]);
+  }, [appletId, subjectId, summaryActivities, getSummaryActivities]);
 
   return (
     <StyledContainer>

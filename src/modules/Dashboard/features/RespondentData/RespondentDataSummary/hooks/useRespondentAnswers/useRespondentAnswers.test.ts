@@ -116,7 +116,7 @@ describe('useRespondentAnswers', () => {
   beforeEach(() => {
     mockedUseParams.mockReturnValue({
       appletId: mockedAppletId,
-      respondentId: mockedRespondentId,
+      subjectId: mockedRespondentId,
     });
   });
 

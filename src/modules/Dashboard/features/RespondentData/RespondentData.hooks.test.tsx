@@ -17,7 +17,7 @@ describe('Respondent Data hooks', () => {
     beforeEach(() => {
       mockedUseParams.mockReturnValue({
         appletId: mockedAppletId,
-        respondentId: mockedRespondentId,
+        subjectId: mockedRespondentId,
       });
     });
 
@@ -31,7 +31,7 @@ describe('Respondent Data hooks', () => {
             id: 'respondent-data-summary',
             icon: expect.any(Object),
             activeIcon: expect.any(Object),
-            path: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`,
+            path: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/summary`,
             'data-testid': 'respondents-summary-tab-summary',
           },
           {
@@ -39,7 +39,7 @@ describe('Respondent Data hooks', () => {
             id: 'respondent-data-responses',
             icon: expect.any(Object),
             activeIcon: expect.any(Object),
-            path: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
+            path: `/dashboard/${mockedAppletId}/participants/${mockedRespondentId}/dataviz/responses`,
             'data-testid': 'respondents-summary-tab-review',
           },
         ],

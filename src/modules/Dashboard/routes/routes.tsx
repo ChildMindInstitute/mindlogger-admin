@@ -68,11 +68,11 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
       <Route element={<RespondentData />}>
         <Route
           path={page.appletRespondentData}
-          element={<Navigate to={page.appletRespondentDataSummary} />}
+          element={<Navigate to={page.appletParticipantDataSummary} />}
         />
-        <Route path={page.appletRespondentDataSummary} element={<RespondentDataSummary />}>
+        <Route path={page.appletParticipantDataSummary} element={<RespondentDataSummary />}>
           <Route
-            path={page.appletRespondentDataSummary}
+            path={page.appletParticipantDataSummary}
             element={
               <PrivateRoute>
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -82,9 +82,9 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
             }
           />
         </Route>
-        <Route path={page.appletRespondentDataReview} element={<RespondentDataReview />}>
+        <Route path={page.appletParticipantDataReview} element={<RespondentDataReview />}>
           <Route
-            path={page.appletRespondentDataReview}
+            path={page.appletParticipantDataReview}
             element={
               <PrivateRoute>
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
