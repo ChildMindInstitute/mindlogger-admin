@@ -5,22 +5,29 @@ import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
 import { users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store/hooks';
+import { applet as appletState } from 'shared/state';
 
 export const useRespondentDataSetup = () => {
   const { appletId, subjectId, activityId } = useParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!subjectId) return;
+    if (!subjectId || !appletId) return;
 
     const { getSubjectDetails } = users.thunk;
+    const { getApplet } = appletState.thunk;
+    dispatch(
+      getApplet({
+        appletId,
+      }),
+    );
 
     dispatch(
       getSubjectDetails({
         subjectId,
       }),
     );
-  }, [subjectId, dispatch]);
+  }, [appletId, subjectId, dispatch]);
 
   return {
     respondentDataTabs: [
