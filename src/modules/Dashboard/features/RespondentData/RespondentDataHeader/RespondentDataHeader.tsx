@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 
 import { Chip, ChipShape, Svg } from 'shared/components';
 import { ExportDataSetting } from 'shared/features/AppletSettings';
 import {
-  StyledBodyLarge,
   StyledFlexSpaceBetween,
   StyledFlexTopCenter,
+  StyledFlexTopStart,
   StyledHeadlineLarge,
   StyledLogo,
   theme,
@@ -22,8 +22,9 @@ import { page } from 'resources';
 import { palette } from 'shared/styles/variables/palette';
 import { Roles } from 'shared/consts';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
+import { NavigationEyebrow } from 'shared/components/NavigationEyebrow';
 
-import { ActionButton, StyledButton } from '../RespondentData.styles';
+import { ActionButton } from '../RespondentData.styles';
 import { RespondentDataHeaderProps } from './RespondentDataHeader.types';
 
 export const RespondentDataHeader = ({
@@ -46,8 +47,9 @@ export const RespondentDataHeader = ({
 
   const navigateUp = () =>
     navigate(
-      generatePath(page.appletParticipants, {
+      generatePath(activity ? page.appletParticipantActivities : page.appletParticipants, {
         appletId,
+        subjectId: subject.id,
       }),
     );
 
@@ -91,19 +93,13 @@ export const RespondentDataHeader = ({
 
   return (
     <>
-      <Box
+      <StyledFlexTopStart
         sx={{
-          gap: theme.spacing(0.8),
           margin: theme.spacing(1.2, 3.2, 3.2),
         }}
       >
-        <StyledButton onClick={navigateUp}>
-          <Svg id="arrow-navigate-left" width="2.4rem" height="2.4rem" />
-          <StyledBodyLarge sx={{ px: 1, color: palette.on_surface_variant }}>
-            {t('back')}
-          </StyledBodyLarge>
-        </StyledButton>
-      </Box>
+        <NavigationEyebrow title={t('back')} subtitle={'Test'} onClick={navigateUp} />
+      </StyledFlexTopStart>
 
       <StyledFlexSpaceBetween
         sx={{
