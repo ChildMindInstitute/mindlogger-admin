@@ -98,7 +98,7 @@ export const RespondentDataHeader = ({
           margin: theme.spacing(1.2, 3.2, 3.2),
         }}
       >
-        <NavigationEyebrow title={t('back')} subtitle={'Test'} onClick={navigateUp} />
+        <NavigationEyebrow title={t('back')} onClick={navigateUp} />
       </StyledFlexTopStart>
 
       <StyledFlexSpaceBetween

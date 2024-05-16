@@ -4,7 +4,6 @@ import { variables } from 'shared/styles/variables';
 import { StyledClearedButton, theme } from 'shared/styles';
 
 export const StyledButton = styled(StyledClearedButton)`
-  cursor: pointer;
   gap: ${theme.spacing(0.8)};
   padding: ${theme.spacing(0)};
 
