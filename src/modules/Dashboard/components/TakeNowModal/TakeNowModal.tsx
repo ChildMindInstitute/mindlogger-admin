@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
@@ -6,10 +6,14 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 import { Modal } from 'shared/components';
 import { auth, users, workspaces } from 'redux/modules';
 import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { getWorkspaceRespondentsApi } from 'api';
+import { DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts';
+import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
+import { useAppDispatch } from 'redux/store';
+import { RenderIf } from 'shared/components';
+import { useAsync } from 'shared/hooks';
+import { ManagersData } from 'modules/Dashboard/features';
 
 import {
   OpenTakeNowModalOptions,
@@ -20,14 +24,18 @@ import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/Activity
 import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
 import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
-import { useAppDispatch } from '../../../../redux/store';
-import { RenderIf } from '../../../../shared/components/RenderIf/RenderIf';
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
   const dispatch = useAppDispatch();
   const respondentsData = users.useAllRespondentsData();
   const respondentsStatus = users.useAllRespondentsStatus();
+
+  const [managersData, setManagersData] = useState<ManagersData | null>(null);
+
+  const { execute: getWorkspaceManagers } = useAsync(getWorkspaceManagersApi, (response) => {
+    setManagersData(response?.data || null);
+  });
 
   const participantToOption = useCallback(
     (participant: ParticipantsData['result'][0]): ParticipantDropdownOption => {
@@ -59,9 +67,19 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     [],
   );
 
+  const allowedRoles = useMemo(() => ['super_admin', 'owner', 'manager'], []);
+  const allowedTeamMembers = useMemo(
+    () =>
+      (managersData?.result ?? []).filter((manager) =>
+        manager.roles.some((role) => allowedRoles.includes(role)),
+      ),
+    [managersData, allowedRoles],
+  );
+
   const filterTeamMembers = useCallback(
-    (option: ParticipantDropdownOption): boolean => !!option.userId && option.tag === 'Team',
-    [],
+    (option: ParticipantDropdownOption): boolean =>
+      allowedTeamMembers.some((manager) => manager.id === option.userId),
+    [allowedTeamMembers],
   );
 
   const [activity, setActivity] = useState<BaseActivity | null>(null);
@@ -111,6 +129,14 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           }
         }
       }
+
+      getWorkspaceManagers({
+        params: {
+          ownerId,
+          limit: MAX_LIMIT,
+          ...(appletId && { appletId }),
+        },
+      });
     }
   }, [
     appletId,
