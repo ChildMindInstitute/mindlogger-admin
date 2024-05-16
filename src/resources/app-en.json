@@ -1225,7 +1225,7 @@
       "targetSubjectLabel": "Who are the responses about?",
       "targetSubjectPlaceholder": "Select from participants",
       "loggedInUserLabel": "Who will be inputting the responses?",
-      "loggedInUserPlaceholder": "Select from participants and team members",
+      "loggedInUserPlaceholder": "Select from team members",
       "dropdown": {
         "limitedAccountWarning": "The selected participant has a Limited Account and is unable to input their own answers. Please select a respondent to continue.",
         "teamMemberGrouping": "Team Members",
