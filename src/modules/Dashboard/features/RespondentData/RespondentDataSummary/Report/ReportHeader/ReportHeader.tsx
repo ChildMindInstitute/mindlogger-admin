@@ -21,7 +21,7 @@ export const ReportHeader = ({
         </StyledStickyHeadline>
       )}
       {/*TODO: implement Download Latest Report (Combined) for Flow after back-end is ready*/}
-      <DownloadReport id={id} isFlow={isFlow} />
+      <DownloadReport id={id} isFlow={isFlow} data-testid={`${dataTestId}-download-report`} />
     </StyledHeader>
   );
 };

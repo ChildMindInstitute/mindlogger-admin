@@ -7,8 +7,8 @@ import { addDays } from 'date-fns';
 import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { Switch, TagsAutocompleteController } from 'shared/components/FormComponents';
-import { DatavizActivity } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
+import { ActivityOrFlow } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
@@ -30,14 +30,14 @@ export const ReportFilters = ({
   const { control, setValue } = useFormContext();
   const { fetchAnswers } = useRespondentAnswers();
 
-  const [moreFiltersVisible, filterByIdentifier, startDate, endDate, activity]: [
+  const [moreFiltersVisible, filterByIdentifier, startDate, endDate, selectedEntity]: [
     boolean,
     boolean,
     Date,
     Date,
-    DatavizActivity,
+    ActivityOrFlow,
   ] = useWatch({
-    name: ['moreFiltersVisible', 'filterByIdentifier', 'startDate', 'endDate', 'selectedActivity'],
+    name: ['moreFiltersVisible', 'filterByIdentifier', 'startDate', 'endDate', 'selectedEntity'],
   });
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
@@ -57,7 +57,7 @@ export const ReportFilters = ({
     versions,
   }: OnFiltersChangeParams) => {
     setIsLoading(true);
-    let fetchParams: FetchAnswers = { activity };
+    let fetchParams: FetchAnswers = { entity: selectedEntity };
 
     switch (type) {
       case FiltersChangeType.StartDate:
