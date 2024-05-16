@@ -45,7 +45,7 @@ export const ReviewMenuItem = ({
   };
 
   useEffect(() => {
-    if (!answerId) return;
+    if (!answerId && !submitId) return;
 
     const answerByRoute = answerDates.find(
       (answer) => answer.answerId === answerId || answer.submitId === submitId,
