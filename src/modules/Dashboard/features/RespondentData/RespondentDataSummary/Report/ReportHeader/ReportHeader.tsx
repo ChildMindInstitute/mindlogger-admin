@@ -1,45 +1,27 @@
-import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
-
-import { Svg, Tooltip } from 'shared/components';
 import { useHeaderSticky } from 'shared/hooks';
-import { StyledErrorText, StyledStickyHeadline, theme, variables } from 'shared/styles';
-import { StyledTextBtn } from 'modules/Dashboard/features/RespondentData/RespondentData.styles';
+import { StyledStickyHeadline, variables } from 'shared/styles';
 
 import { StyledHeader } from './ReportHeader.styles';
 import { ReportHeaderProps } from './ReportHeader.types';
+import { DownloadReport } from '../DownloadReport';
 
 export const ReportHeader = ({
   containerRef,
-  onButtonClick,
-  activityName,
-  isButtonDisabled,
-  error,
+  selectedEntity,
+  'data-testid': dataTestId,
 }: ReportHeaderProps) => {
-  const { t } = useTranslation('app');
   const isHeaderSticky = useHeaderSticky(containerRef);
+  const { name = '', id = '', isFlow = false } = selectedEntity ?? {};
 
   return (
-    <StyledHeader isSticky={isHeaderSticky}>
-      <StyledStickyHeadline isSticky={isHeaderSticky} color={variables.palette.on_surface}>
-        {activityName}
-      </StyledStickyHeadline>
-      <Box>
-        <Tooltip tooltipTitle={t('configureServer')}>
-          <span>
-            <StyledTextBtn
-              onClick={onButtonClick}
-              variant="text"
-              startIcon={<Svg id="export" width="18" height="18" />}
-              disabled={isButtonDisabled}
-              data-testid="respondents-summary-download-report"
-            >
-              {t('downloadLatestReport')}
-            </StyledTextBtn>
-          </span>
-        </Tooltip>
-        {error && <StyledErrorText sx={{ mt: theme.spacing(0.8) }}>{error}</StyledErrorText>}
-      </Box>
+    <StyledHeader data-testid={dataTestId} isSticky={isHeaderSticky}>
+      {name && (
+        <StyledStickyHeadline isSticky={isHeaderSticky} color={variables.palette.on_surface}>
+          {name}
+        </StyledStickyHeadline>
+      )}
+      {/*TODO: implement Download Latest Report (Combined) for Flow after back-end is ready*/}
+      <DownloadReport id={id} isFlow={isFlow} />
     </StyledHeader>
   );
 };
