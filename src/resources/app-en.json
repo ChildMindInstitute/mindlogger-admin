@@ -1220,7 +1220,7 @@
     "modal": {
       "title": "Take Now",
       "sourceSubjectLabel": "Who will be providing the responses?",
-      "sourceSubjectPlaceholder": "Select from participants and team members",
+      "sourceSubjectPlaceholder": "Select from team members and participants",
       "sourceSubjectCheckboxLabel": "This person will be inputting their own responses",
       "targetSubjectLabel": "Who are the responses about?",
       "targetSubjectPlaceholder": "Select from participants",

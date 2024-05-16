@@ -1219,7 +1219,7 @@
     "modal": {
       "title": "Prendre maintenant",
       "sourceSubjectLabel": "Qui apportera les réponses?",
-      "sourceSubjectPlaceholder": "Sélectionnez parmi les participants et les membres de l'équipe",
+      "sourceSubjectPlaceholder": "Sélectionnez parmi les membres de l'équipe et les participants",
       "sourceSubjectCheckboxLabel": "Cette personne saisira ses propres réponses",
       "targetSubjectLabel": "De qui s’adressent les réponses?",
       "targetSubjectPlaceholder": "Sélectionnez parmi les participants",
