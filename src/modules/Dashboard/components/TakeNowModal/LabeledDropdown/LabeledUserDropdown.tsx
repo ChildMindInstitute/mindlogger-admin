@@ -102,8 +102,8 @@ export const LabeledUserDropdown = ({
         }}
         sx={{
           '& .MuiInputBase-root': {
-            borderBottomLeftRadius: shouldShowWarningMessage ? 0 : 0.5,
-            borderBottomRightRadius: shouldShowWarningMessage ? 0 : 0.5,
+            borderBottomLeftRadius: shouldShowWarningMessage ? 0 : 5,
+            borderBottomRightRadius: shouldShowWarningMessage ? 0 : 5,
           },
         }}
         options={combinedOptions}
