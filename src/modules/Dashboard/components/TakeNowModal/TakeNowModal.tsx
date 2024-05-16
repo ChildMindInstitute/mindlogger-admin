@@ -34,8 +34,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       const stringNicknames = joinWihComma(participant.nicknames, true);
       const stringSecretIds = joinWihComma(participant.secretIds, true);
 
-      console.log(participant.details[0].subjectId, participant.email);
-
       return {
         id: participant.details[0].subjectId,
         userId: participant.id,
