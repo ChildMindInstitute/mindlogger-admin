@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { Autocomplete, Box, TextField } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, TextField } from '@mui/material';
 import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
@@ -15,10 +15,9 @@ import {
   variables,
 } from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
+import { RenderIf } from 'shared/components';
 
 import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
-import { RenderIf } from '../../../../../shared/components/RenderIf/RenderIf';
-import { palette } from '../../../../../shared/styles/variables/palette';
 
 export const LabeledUserDropdown = ({
   label,
@@ -77,7 +76,7 @@ export const LabeledUserDropdown = ({
   return (
     <StyledFlexColumn sx={{ gap: 1.6, ...sx }}>
       <Box sx={{ display: 'flex', gap: 0.4 }}>
-        <StyledTitleMedium sx={{ fontWeight: 700, color: palette.on_surface }}>
+        <StyledTitleMedium sx={{ fontWeight: 700, color: variables.palette.on_surface }}>
           {label}
         </StyledTitleMedium>
         <RenderIf condition={!!tooltip}>
@@ -95,7 +94,7 @@ export const LabeledUserDropdown = ({
         </RenderIf>
       </Box>
       <Autocomplete
-        renderInput={(params) => {
+        renderInput={(params: AutocompleteRenderInputParams) => {
           const { InputLabelProps: _InputLabelProps, ...rest } = params;
 
           return <TextField {...rest} placeholder={placeholder} name={name} />;
@@ -116,7 +115,7 @@ export const LabeledUserDropdown = ({
                 p: theme.spacing(0.6, 1.6),
                 cursor: 'pointer',
                 ':last-child': {
-                  borderBottom: `${variables.borderWidth.md} solid ${palette.surface_variant}`,
+                  borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
                 },
               },
               ...props,
@@ -142,11 +141,8 @@ export const LabeledUserDropdown = ({
                 sx={{
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  color: palette.on_surface_variant,
+                  color: variables.palette.on_surface_variant,
                   p: theme.spacing(1.6, 1.6, 0.4),
-                  // position: 'sticky',
-                  // top: -8,
-                  // background: palette.surface,
                 }}
               >
                 {group}
