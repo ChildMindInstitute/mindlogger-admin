@@ -26,6 +26,10 @@ export const ReportMenu = ({
 
   const handleSelectEntity = async (entity: ActivityOrFlow) => {
     setValue('selectedEntity', entity);
+
+    const { hasAnswer, isPerformanceTask } = entity;
+    if (!hasAnswer || isPerformanceTask) return;
+
     setDateRangeFormValues(setValue, entity.lastAnswerDate);
     setDefaultFormValues(setValue);
 

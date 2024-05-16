@@ -39,6 +39,20 @@ const mockActivities = [
     hasAnswer: true,
     lastAnswerDate: '2023-09-25T10:10:05.162083',
   },
+  {
+    id: 'activity-3',
+    name: 'Activity 3',
+    isPerformanceTask: true,
+    hasAnswer: true,
+    lastAnswerDate: '2023-09-25T10:10:05.162083',
+  },
+  {
+    id: 'activity-4',
+    name: 'Activity 4',
+    isPerformanceTask: false,
+    hasAnswer: false,
+    lastAnswerDate: '2023-09-25T10:10:05.162083',
+  },
 ];
 
 const mockFlows = [
@@ -79,7 +93,7 @@ const testActivities = () => {
   expect(screen.getByText('Activity 2')).toBeInTheDocument();
 
   const activityElements = screen.getAllByTestId(/^respondents-summary-activity/);
-  expect(activityElements.length).toBe(2);
+  expect(activityElements.length).toBe(4);
 };
 
 describe('ReportMenu Component', () => {
@@ -162,5 +176,39 @@ describe('ReportMenu Component', () => {
     expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({ entity: chosenFlow });
     expect(mockFetchAnswers).toHaveBeenCalledWith({ entity: chosenFlow });
     expect(mockSetIsLoading).toHaveBeenCalledWith(false);
+  });
+
+  test('invokes set selected entity when item with no answers is clicked', async () => {
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([mockedActivity]);
+    renderReportMenu();
+
+    const activityElement = screen.getByTestId('respondents-summary-activity-3');
+    await userEvent.click(activityElement);
+
+    const chosenActivity = {
+      ...mockActivities[3],
+      isFlow: false,
+    };
+    expect(mockedSetValue).toHaveBeenCalledWith('selectedEntity', chosenActivity);
+    expect(mockSetIsLoading).not.toHaveBeenCalled();
+    expect(mockGetIdentifiersVersions).not.toHaveBeenCalled();
+    expect(mockFetchAnswers).not.toHaveBeenCalled();
+  });
+
+  test('invokes set selected entity when item, which is performance task is clicked ', async () => {
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([mockedActivity]);
+    renderReportMenu();
+
+    const activityElement = screen.getByTestId('respondents-summary-activity-2');
+    await userEvent.click(activityElement);
+
+    const chosenActivity = {
+      ...mockActivities[2],
+      isFlow: false,
+    };
+    expect(mockedSetValue).toHaveBeenCalledWith('selectedEntity', chosenActivity);
+    expect(mockSetIsLoading).not.toHaveBeenCalled();
+    expect(mockGetIdentifiersVersions).not.toHaveBeenCalled();
+    expect(mockFetchAnswers).not.toHaveBeenCalled();
   });
 });

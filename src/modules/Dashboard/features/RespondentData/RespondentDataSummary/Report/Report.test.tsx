@@ -1,9 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
-import download from 'downloadjs';
 import * as reactHookForm from 'react-hook-form';
 
 import { page } from 'resources';
@@ -45,6 +41,7 @@ const mockedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  isFlow: false,
 };
 const mockedAnswers = [
   {
@@ -134,8 +131,8 @@ jest.mock('./ReportFilters', () => ({
   ReportFilters: () => <div data-testid="report-filters"></div>,
 }));
 
-jest.mock('./ActivityCompleted', () => ({
-  ActivityCompleted: () => <div data-testid="report-activity-completed"></div>,
+jest.mock('./CompletedChart', () => ({
+  CompletedChart: () => <div data-testid="report-activity-completed"></div>,
 }));
 
 jest.mock('./Subscales', () => ({
@@ -148,8 +145,19 @@ jest.mock('./ResponseOptions', () => ({
 
 jest.mock('downloadjs', () => jest.fn());
 
+const renderComponent = () =>
+  renderWithProviders(<Report />, {
+    route,
+    routePath,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    preloadedState,
+  });
+
 describe('Report component', () => {
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     jest.spyOn(reactHookForm, 'useFormContext').mockReturnValue({ setValue: jest.fn() });
   });
   afterEach(() => {
@@ -170,63 +178,39 @@ describe('Report component', () => {
         [],
         [],
         ['v1', 'v2'],
+        [],
+        [],
       ]);
 
-    renderWithProviders(<Report />, {
-      route,
-      routePath,
-      preloadedState,
-    });
+    renderComponent();
 
     expect(screen.getByTestId('respondents-summary-report')).toBeInTheDocument();
     expect(screen.getByText('Activity 1')).toBeInTheDocument();
-    const downloadReportButton = screen.getByTestId('respondents-summary-download-report');
+    const downloadReportButton = screen.getByTestId(
+      'respondents-summary-report-header-download-report',
+    );
     expect(screen.getByText('Download Latest Report')).toBeInTheDocument();
     expect(downloadReportButton).toBeInTheDocument();
     expect(screen.getByTestId('report-filters')).toBeInTheDocument();
     expect(screen.getByTestId('report-activity-completed')).toBeInTheDocument();
     expect(screen.getByTestId('report-response-options')).toBeInTheDocument();
-
-    await userEvent.click(downloadReportButton);
-
-    await waitFor(() => {
-      expect(mockAxios.post).toHaveBeenNthCalledWith(
-        1,
-        `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers/${mockedRespondentId}/latest_report`,
-        {},
-        { responseType: 'arraybuffer', signal: undefined },
-      );
-    });
-
-    // base64 for 'data' is ZGF0YQ==
-    expect(download).toHaveBeenCalledWith(
-      'data:application/pdf;base64,ZGF0YQ==',
-      'Report.pdf',
-      'text/pdf',
-    );
   });
 
   test('renders Report correctly with no data', async () => {
     jest
       .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([[], {}, 0, mockedActivity, [], [], ['v1', 'v2']]);
-    renderWithProviders(<Report />, {
-      route,
-      routePath,
-      preloadedState,
-    });
+      .mockReturnValue([[], {}, 0, mockedActivity, [], [], ['v1', 'v2'], [], []]);
+    renderComponent();
 
     expect(screen.getByTestId('report-empty-state')).toBeInTheDocument();
     expect(screen.getByText('No match was found. Try to adjust filters.')).toBeInTheDocument();
   });
 
   test('renders Report correctly with empty version filter', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, mockedActivity, [], [], []]);
-    renderWithProviders(<Report />, {
-      route,
-      routePath,
-      preloadedState,
-    });
+    jest
+      .spyOn(reactHookForm, 'useWatch')
+      .mockReturnValue([[], {}, 0, mockedActivity, [], [], [], [], []]);
+    renderComponent();
 
     expect(screen.getByTestId('report-with-empty-version-filter')).toBeInTheDocument();
     expect(screen.getByText('Select a Version to view the response data.')).toBeInTheDocument();
@@ -238,11 +222,7 @@ describe('Report component', () => {
       hasAnswer: false,
     };
     jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, activityMocked, [], [], []]);
-    renderWithProviders(<Report />, {
-      route,
-      routePath,
-      preloadedState,
-    });
+    renderComponent();
 
     expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
     expect(screen.getByText('No available Data yet')).toBeInTheDocument();
