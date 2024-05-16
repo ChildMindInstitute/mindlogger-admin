@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { Autocomplete, AutocompleteRenderInputParams, TextField } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, TextField, Box } from '@mui/material';
 import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
@@ -71,7 +71,7 @@ export const LabeledUserDropdown = ({
     [debounce, handleSearch],
   );
 
-  const shouldShowWarningMessage = !!canShowWarningMessage && value && !value.userId;
+  const shouldShowWarningMessage = !!canShowWarningMessage && !!value && !value.userId;
 
   return (
     <StyledFlexColumn sx={{ gap: 1.6, ...sx }}>
@@ -101,14 +101,20 @@ export const LabeledUserDropdown = ({
         }}
         sx={{
           '& .MuiInputBase-root': {
-            borderBottomLeftRadius: shouldShowWarningMessage ? 0 : 5,
-            borderBottomRightRadius: shouldShowWarningMessage ? 0 : 5,
+            borderBottomLeftRadius: shouldShowWarningMessage ? 0 : variables.borderRadius.sm,
+            borderBottomRightRadius: shouldShowWarningMessage ? 0 : variables.borderRadius.sm,
           },
         }}
         options={combinedOptions}
-        renderOption={({ children: _children, ...props }, { id, ...psProps }) => (
+        renderOption={(
+          { children: _children, ...props },
+          { id, tag, secretId, nickname, ...psProps },
+        ) => (
           <ParticipantSnippet<'li'>
             key={id}
+            tag={tag}
+            secretId={tag === 'Team' ? nickname : secretId}
+            nickname={tag === 'Team' ? null : nickname}
             {...psProps}
             boxProps={{
               sx: {
@@ -151,9 +157,15 @@ export const LabeledUserDropdown = ({
             </li>
           );
         }}
-        getOptionLabel={(value) =>
-          `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}`
-        }
+        getOptionLabel={(value) => {
+          if (value.tag === 'Team') {
+            return `${value.nickname} (${value.tag})`;
+          }
+
+          return `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}${
+            value.tag ? ` (${value.tag})` : ''
+          }`;
+        }}
         disabled={disabled}
         popupIcon={
           <Svg
