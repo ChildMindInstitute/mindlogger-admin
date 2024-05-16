@@ -92,6 +92,7 @@ const selectedActivity = {
     },
   ],
   lastAnswerDate: '2024-03-14T14:50:38.637755',
+  hasAnswer: true,
 };
 
 const renderComponent = (isFeedbackOpen = true) => {

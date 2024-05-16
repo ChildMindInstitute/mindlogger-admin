@@ -9,6 +9,7 @@ describe('getFeedbackTabs', () => {
     id: '1',
     name: 'activity 1',
     lastAnswerDate: '2023-09-26T12:11:46.162083',
+    answerDates: [],
   };
   const notesTab = {
     labelKey: 'notes',

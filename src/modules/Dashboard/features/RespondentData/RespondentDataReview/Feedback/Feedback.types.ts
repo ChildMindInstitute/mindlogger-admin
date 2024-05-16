@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { DatavizActivity } from 'api';
+import { ReviewActivity } from 'api';
 import {
   DecryptedMultiSelectionAnswer,
   DecryptedSingleSelectionAnswer,
@@ -13,7 +13,7 @@ export type FeedbackProps = {
   activeTab: FeedbackTabs;
   setActiveTab: Dispatch<SetStateAction<FeedbackTabs>>;
   onClose: () => void;
-  selectedActivity: DatavizActivity;
+  selectedActivity: ReviewActivity;
 };
 
 export type AssessmentFormItem = {
