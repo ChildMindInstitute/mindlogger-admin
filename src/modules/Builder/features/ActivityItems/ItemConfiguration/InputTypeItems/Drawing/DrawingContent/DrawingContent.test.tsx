@@ -69,7 +69,7 @@ describe('DrawingContent', () => {
       );
       expect(divideFlag).toBeInTheDocument();
       expect(divideFlag).toHaveTextContent(
-        'Evenly Distribute the Drawing Example and Drawing Canvas Height',
+        'Evenly Distribute the Drawing Example and Drawing Canvas Area',
       );
       expect(
         screen.getByText(
