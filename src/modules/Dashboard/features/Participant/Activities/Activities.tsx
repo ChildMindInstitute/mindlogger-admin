@@ -1,9 +1,9 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { getAppletActivitiesApi, getAppletApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { useAsync, useEncryptionStorage } from 'shared/hooks';
 import {
   ActivityActionProps,
   ActivityGrid,
@@ -16,8 +16,10 @@ import { ActivitiesSectionHeader } from 'modules/Dashboard/features/Applet/Activ
 import { users } from 'modules/Dashboard/state';
 import { Activity, ActivityFlow } from 'redux/modules';
 import { StyledFlexColumn } from 'shared/styles';
+import { page } from 'resources';
 
 import { ParticipantActivitiesToolbar } from './ParticipantActivitiesToolbar';
+import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
 
 const dataTestId = 'dashboard-applet-participant-activities';
 
@@ -26,6 +28,11 @@ export const Activities = () => {
   const { t } = useTranslation('app');
   const subjectLoadingStatus = users.useSubjectStatus();
   const subject = users.useSubject();
+  const navigate = useNavigate();
+  const { getAppletPrivateKey } = useEncryptionStorage();
+  const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
+  const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
+  const [selectedActivityId, setSelectedActivityId] = useState<string | undefined>();
 
   // TODO M2-6223: Update these calls to include a `subject_id` param
   const {
@@ -99,6 +106,29 @@ export const Activities = () => {
     [activities, formatRow],
   );
 
+  const onClickItemHandler = (activityId: string) => {
+    if (!subjectId || !appletId) return;
+    setSelectedActivityId(activityId);
+
+    if (!hasEncryptionCheck) {
+      setViewDataPopupVisible(true);
+
+      return;
+    }
+    navigateToData(activityId);
+  };
+
+  const navigateToData = (activityId?: string) => {
+    if (!subjectId || !appletId || !activityId) return;
+    navigate(
+      generatePath(page.appletParticipantActivityDetailsDataSummary, {
+        appletId,
+        subjectId,
+        activityId,
+      }),
+    );
+  };
+
   return (
     <StyledFlexColumn sx={{ gap: 2.4, maxHeight: '100%' }}>
       {isLoading && <Spinner />}
@@ -133,7 +163,19 @@ export const Activities = () => {
               data-testid={dataTestId}
               order="desc"
               orderBy=""
+              onClickItem={onClickItemHandler}
             />
+            {viewDataPopupVisible && (
+              <UnlockAppletPopup
+                appletId={appletId || ''}
+                popupVisible={viewDataPopupVisible}
+                setPopupVisible={(value) => {
+                  setViewDataPopupVisible(value);
+                  setSelectedActivityId(undefined);
+                }}
+                onSubmitHandler={() => navigateToData(selectedActivityId)}
+              />
+            )}
           </StyledFlexColumn>
         </StyledFlexColumn>
       )}

@@ -174,9 +174,9 @@ export const Respondents = () => {
         });
 
         navigate(
-          generatePath(page.appletRespondentDataSummary, {
+          generatePath(page.appletParticipantDataSummary, {
             appletId,
-            respondentId: chosenAppletData?.subjectId,
+            subjectId: chosenAppletData?.subjectId,
           }),
         );
 

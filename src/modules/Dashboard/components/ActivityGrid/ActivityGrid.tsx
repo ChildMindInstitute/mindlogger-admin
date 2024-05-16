@@ -11,6 +11,7 @@ export const ActivityGrid = ({
   rows,
   TakeNowModal,
   'data-testid': dataTestId,
+  onClickItem,
 }: ActivityGridProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams();
@@ -41,6 +42,8 @@ export const ActivityGrid = ({
               participantCount={activity.participantCount.content()}
               latestActivity={activity.latestActivity.content()}
               data-testid={`${dataTestId}-activity-card`}
+              activityId={String(activity.id.value)}
+              onClick={onClickItem}
             />
           ))}
         </StyledFlexWrap>

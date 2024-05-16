@@ -20,6 +20,12 @@ const Activities = lazy(() => import('modules/Dashboard/features/Applet/Activiti
 const AppletSettings = lazy(
   () => import('modules/Dashboard/features/Applet/DashboardAppletSettings'),
 );
+const RespondentDataSummary = lazy(
+  () => import('modules/Dashboard/features/RespondentData/RespondentDataSummary'),
+);
+const RespondentDataReview = lazy(
+  () => import('modules/Dashboard/features/RespondentData/RespondentDataReview'),
+);
 
 export const mainRoutes = [
   {
@@ -91,5 +97,16 @@ export const participantDetailsRoutes = [
   {
     path: page.appletParticipantSchedule,
     Component: ParticipantSchedule,
+  },
+];
+
+export const participantActivityDetailsRoutes = [
+  {
+    path: page.appletParticipantActivityDetailsDataSummary,
+    Component: RespondentDataSummary,
+  },
+  {
+    path: page.appletParticipantActivityDetailsDataReview,
+    Component: RespondentDataReview,
   },
 ];

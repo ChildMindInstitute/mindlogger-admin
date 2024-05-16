@@ -44,7 +44,7 @@ import { StyledEmptyReview } from '../RespondentDataSummary.styles';
 
 export const Report = () => {
   const { t } = useTranslation('app');
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId } = useParams();
   const containerRef = useRef<HTMLElement | null>(null);
   const { result: appletData } = applet.useAppletData() ?? {};
 
@@ -106,12 +106,12 @@ export const Report = () => {
   });
 
   const downloadLatestReportHandler = async () => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
 
     getLatestReport({
       appletId,
       activityId: selectedActivity.id,
-      subjectId: respondentId,
+      subjectId,
     });
   };
 

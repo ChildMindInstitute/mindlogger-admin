@@ -4,15 +4,16 @@ import { Divider } from '@mui/material';
 import { StyledFlexColumn, StyledFlexSpaceBetween, StyledFlexTopStart } from 'shared/styles';
 
 import { ActivitySummaryCardProps } from './ActivitySummaryCard.types';
+import { StatBox } from './StatBox';
 import {
   StyledActivityName,
   StyledContainer,
   StyledImageContainer,
   StyledImg,
 } from './ActivitySummaryCard.styles';
-import { StatBox } from './StatBox';
 
 export const ActivitySummaryCard = ({
+  activityId,
   actionsMenu,
   compliance,
   image,
@@ -20,11 +21,18 @@ export const ActivitySummaryCard = ({
   participantCount,
   latestActivity,
   'data-testid': dataTestId,
+  onClick,
 }: ActivitySummaryCardProps) => {
   const { t } = useTranslation('app');
 
   return (
-    <StyledContainer data-testid={dataTestId}>
+    <StyledContainer
+      data-testid={dataTestId}
+      onClick={onClick ? () => onClick(activityId || '') : undefined}
+      sx={{
+        cursor: onClick ? 'pointer' : 'default',
+      }}
+    >
       <StyledFlexSpaceBetween>
         <StyledImageContainer>
           {!!image && <StyledImg src={image} alt={name} />}

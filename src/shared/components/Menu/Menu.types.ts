@@ -24,7 +24,7 @@ export type MenuItem<T = unknown> = {
 
 export type MenuProps<T> = {
   anchorEl: null | HTMLElement;
-  onClose: () => void;
+  onClose: (event?: object) => void;
   menuItems: MenuItem<T>[];
   anchorOrigin?: PopoverOrigin;
   transformOrigin?: PopoverOrigin;

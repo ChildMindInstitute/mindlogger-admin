@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { DatePicker, DatePickerUiType } from 'shared/components';
 import { useRespondentLabel } from 'shared/hooks';
@@ -23,6 +24,7 @@ export const ReviewMenu = ({
   lastActivityCompleted,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
+  const { activityId } = useParams();
   const respondentLabel = useRespondentLabel({ isSubject: true });
 
   const dataTestid = 'respondents-review-menu';
@@ -50,7 +52,7 @@ export const ReviewMenu = ({
         />
       </StyledHeader>
       <StyledLabelLarge sx={{ margin: theme.spacing(1.6) }}>
-        {t('selectActivityAndResponse')}
+        {activityId ? t('selectResponse') : t('selectActivityAndResponse')}
       </StyledLabelLarge>
       {activities.map((activity, index) => (
         <ReviewMenuItem

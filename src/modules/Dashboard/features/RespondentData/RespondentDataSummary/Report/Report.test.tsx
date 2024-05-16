@@ -37,8 +37,8 @@ const preloadedState = {
   },
 };
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
-const routePath = page.appletRespondentDataSummary;
+const route = `/dashboard/${mockedAppletId}/participants/${mockedSubjectId1}/dataviz/summary`;
+const routePath = page.appletParticipantDataSummary;
 
 const mockedActivity = {
   id: 'd65e8a64-a023-4830-9c84-7433c4b96440',

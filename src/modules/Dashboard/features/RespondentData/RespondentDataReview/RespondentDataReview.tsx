@@ -53,7 +53,7 @@ import { sortAnswerDates } from './utils/sortAnswerDates';
 import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 
 export const RespondentDataReview = () => {
-  const { appletId, respondentId } = useParams();
+  const { appletId, subjectId, activityId } = useParams();
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId') || '';
   const selectedDateParam = searchParams.get('selectedDate');
@@ -104,11 +104,20 @@ export const RespondentDataReview = () => {
       const activities = data?.result;
 
       if (!activities?.length) return;
-      setActivities(activities);
 
-      if (answerId && !shouldSetLastAnswer.current) return;
-      const selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
-      setSelectedActivity(selectedActivityByDefault);
+      let selectedActivityByDefault;
+      if (activityId) {
+        selectedActivityByDefault = activities.filter((e) => e.id === activityId)[0];
+        setActivities([selectedActivityByDefault]);
+        setSelectedActivity(selectedActivityByDefault);
+      } else {
+        setActivities(activities);
+        if (answerId && !shouldSetLastAnswer.current) return;
+        selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
+
+        setSelectedActivity(selectedActivityByDefault);
+      }
+
       const { answerDates } = selectedActivityByDefault;
 
       if (!answerDates.length) return;
@@ -148,7 +157,13 @@ export const RespondentDataReview = () => {
     const responseDate = getValues('responseDate');
     if (!responseDate || !answer) return;
 
-    const pathname = generatePath(page.appletRespondentDataReview, { appletId, respondentId });
+    const pathname = generatePath(
+      activityId
+        ? page.appletParticipantActivityDetailsDataReview
+        : page.appletParticipantDataReview,
+      { appletId, subjectId, activityId },
+    );
+
     navigate({
       pathname,
       search: createSearchParams({
@@ -159,14 +174,14 @@ export const RespondentDataReview = () => {
   };
 
   const handleGetSubmitDates = (date: Date) => {
-    if (!appletId || !respondentId) return;
+    if (!appletId || !subjectId) return;
 
     const fromDate = startOfMonth(date).getTime().toString();
     const toDate = endOfMonth(date).getTime().toString();
 
     getAppletSubmitDateList({
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
       fromDate,
       toDate,
     });
@@ -175,13 +190,13 @@ export const RespondentDataReview = () => {
   const handleGetActivities = (date?: Date | null) => {
     const createdDate = date && format(date, DateFormats.YearMonthDay);
 
-    if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate) {
+    if (!appletId || !subjectId || !createdDate || prevSelectedDateRef.current === createdDate) {
       return;
     }
 
     getReviewActivities({
       appletId,
-      targetSubjectId: respondentId,
+      targetSubjectId: subjectId,
       createdDate,
     });
 
