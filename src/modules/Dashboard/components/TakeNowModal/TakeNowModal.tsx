@@ -61,8 +61,8 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     [],
   );
 
-  const filterFullAccounts = useCallback(
-    (option: ParticipantDropdownOption): boolean => !!option.userId,
+  const filterTeamMembers = useCallback(
+    (option: ParticipantDropdownOption): boolean => !!option.userId && option.tag === 'Team',
     [],
   );
 
@@ -72,9 +72,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const [participants, setParticipants] = useState<ParticipantDropdownOption[]>(optionsData);
   const [participantsAndTeamMembers, setParticipantsAndTeamMembers] =
     useState<ParticipantDropdownOption[]>(optionsData);
-  const [fullAccountsAndTeamMembers, setFullAccountsAndTeamMembers] = useState<
-    ParticipantDropdownOption[]
-  >(optionsData.filter(filterFullAccounts));
+  const [teamMembers, setTeamMembers] = useState<ParticipantDropdownOption[]>(
+    optionsData.filter(filterTeamMembers),
+  );
 
   const [defaultTargetSubject, setDefaultTargetSubject] =
     useState<ParticipantDropdownOption | null>(null);
@@ -98,7 +98,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         const options = respondentsData.result.map(participantToOption).sort(sortByTeamTag);
         setParticipants(options);
         setParticipantsAndTeamMembers(options);
-        setFullAccountsAndTeamMembers(options.filter(filterFullAccounts));
+        setTeamMembers(options.filter(filterTeamMembers));
 
         // Default to the current admin, if possible
         if (userData) {
@@ -241,7 +241,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 1, pl: 5.2 }}
                   placeholder={t('takeNow.modal.loggedInUserPlaceholder')}
                   value={loggedInUser}
-                  options={fullAccountsAndTeamMembers}
+                  options={teamMembers}
                   onChange={setLoggedInUser}
                   data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
                   handleSearch={handleSearch}
