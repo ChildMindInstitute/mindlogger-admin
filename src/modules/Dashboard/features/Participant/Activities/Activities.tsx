@@ -94,6 +94,7 @@ export const Activities = () => {
                   userId: subject.result.userId,
                   secretId: subject.result.secretUserId,
                   nickname: subject.result.nickname,
+                  tag: subject.result.tag,
                 };
               }
 
