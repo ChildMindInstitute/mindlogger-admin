@@ -297,7 +297,7 @@ export const Participants = () => {
         onClick: () => handlePinClick({ respondentId, subjectId: details[0].subjectId }),
         width: ParticipantsColumnsWidth.Pin,
       },
-      tag: {
+      tags: {
         content: () => (
           <StyledMaybeEmpty>
             <ParticipantTagChip tag={tag} />
@@ -459,7 +459,7 @@ export const Participants = () => {
       </StyledFlexWrap>
 
       <ParticipantsTable
-        columns={getHeadCells(appletId)}
+        columns={getHeadCells(respondentsData?.orderingFields, appletId)}
         rows={rows}
         emptyComponent={
           !rows?.length && !isLoading ? (

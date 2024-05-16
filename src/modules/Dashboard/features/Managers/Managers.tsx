@@ -253,7 +253,7 @@ export const Managers = () => {
       </StyledFlexWrap>
 
       <DashboardTable
-        columns={getHeadCells(appletId)}
+        columns={getHeadCells(managersData?.orderingFields, appletId)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}

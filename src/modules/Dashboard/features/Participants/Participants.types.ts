@@ -49,6 +49,7 @@ export type FilteredParticipants = {
 export type ParticipantsData = {
   result: Respondent[];
   count: number;
+  orderingFields?: string[];
 };
 
 export type GetParticipantActionsProps = {

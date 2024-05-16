@@ -184,7 +184,7 @@ describe('Participants utils tests', () => {
     });
 
     test('returns the correct array of head cells with an id', () => {
-      const headCells = getHeadCells(mockedAppletId);
+      const headCells = getHeadCells(undefined, mockedAppletId);
       expect(headCells).toHaveLength(8);
       expect(headCells[6]).toHaveProperty('id', 'schedule');
       expect(headCells[7]).toHaveProperty('id', 'actions');
