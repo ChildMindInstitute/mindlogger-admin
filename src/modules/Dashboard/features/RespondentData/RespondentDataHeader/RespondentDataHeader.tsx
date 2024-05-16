@@ -24,7 +24,6 @@ import { Roles } from 'shared/consts';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
 import { NavigationEyebrow } from 'shared/components/NavigationEyebrow';
 
-import { ActionButton } from '../RespondentData.styles';
 import { RespondentDataHeaderProps } from './RespondentDataHeader.types';
 
 export const RespondentDataHeader = ({
@@ -127,6 +126,7 @@ export const RespondentDataHeader = ({
         {canViewData && (
           <StyledFlexTopCenter sx={{ gap: 1 }}>
             <Button
+              variant="text"
               data-testid={`${dataTestid}-export-button`}
               onClick={handleOpenExport}
               startIcon={<Svg id="export" width={18} height={18} />}
@@ -140,26 +140,22 @@ export const RespondentDataHeader = ({
               onExportSettingsClose={handleCloseExport}
             />
             {featureFlags.enableActivityAssign && (
-              <ActionButton
+              <Button
+                variant="tonal"
                 onClick={handleAssignActivity}
                 data-testid={`${dataTestid}-assign-activity`}
-                sx={{ backgroundColor: variables.palette.secondary_container }}
               >
                 {t('assign')}
-              </ActionButton>
+              </Button>
             )}
             {canDoTakeNow && (
-              <ActionButton
+              <Button
                 variant="contained"
                 onClick={handleTakeNow}
                 data-testid={`${dataTestid}-take-now`}
-                sx={{
-                  backgroundColor: variables.palette.primary,
-                  color: variables.palette.white,
-                }}
               >
                 {t('takeNow')}
-              </ActionButton>
+              </Button>
             )}
           </StyledFlexTopCenter>
         )}
