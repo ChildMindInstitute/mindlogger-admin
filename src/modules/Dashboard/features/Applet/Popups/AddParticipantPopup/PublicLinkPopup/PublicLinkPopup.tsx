@@ -20,8 +20,8 @@ export const PublicLinkPopup = ({
     execute: createPublicLink,
     isLoading: createIsLoading,
     error: createError,
-  } = useAsync(postAppletPublicLinkApi, ({ data }) => {
-    if (data?.result) {
+  } = useAsync(postAppletPublicLinkApi, (res) => {
+    if (res?.data?.result) {
       onClose?.(true);
     }
   });
@@ -29,8 +29,8 @@ export const PublicLinkPopup = ({
     execute: deletePublicLink,
     isLoading: deleteIsLoading,
     error: deleteError,
-  } = useAsync(deleteAppletPublicLinkApi, ({ status }) => {
-    if (status === 204) {
+  } = useAsync(deleteAppletPublicLinkApi, (res) => {
+    if (res?.status === 204) {
       onClose?.();
     }
   });
