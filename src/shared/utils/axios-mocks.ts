@@ -36,7 +36,7 @@ export const mockSuccessfulHttpResponse = <T extends unknown>(data: T): HttpResp
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const mockSchema = <T extends unknown>(
   data: T | null = null,
-  meta?: MetaSchema,
+  meta?: Partial<MetaSchema>,
 ): BaseSchema<T | null> => ({
   status: 'success',
   requestId: 'requestId',

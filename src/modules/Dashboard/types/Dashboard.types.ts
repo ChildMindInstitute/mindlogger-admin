@@ -1,4 +1,5 @@
 import { ParticipantTag, Roles } from 'shared/consts';
+import {Encryption} from "shared/utils";
 
 export type ManagerApplet = {
   id: string;
@@ -8,6 +9,7 @@ export type ManagerApplet = {
     accessId?: string;
     role: Roles;
   }[];
+  encryption?: Encryption;
 };
 
 export type Manager = {
