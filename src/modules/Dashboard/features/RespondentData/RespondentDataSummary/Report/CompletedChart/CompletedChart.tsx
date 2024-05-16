@@ -8,9 +8,14 @@ import { ScatterChart } from 'modules/Dashboard/features/RespondentData/Responde
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { useDatavizFilters } from '../../hooks/useDatavizFilters';
-import { ActivityCompletedProps } from './ActivityCompleted.types';
+import { CompletedChartProps } from './CompletedChart.types';
 
-export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompletedProps) => {
+export const CompletedChart = ({
+  completions = [],
+  versions = [],
+  isFlow,
+  'data-testid': dataTestId,
+}: CompletedChartProps) => {
   const { t } = useTranslation();
   const { watch } = useFormContext<RespondentsDataFormValues>();
 
@@ -18,10 +23,15 @@ export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompl
 
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>
-      <StyledHeadline sx={{ mb: theme.spacing(2), color: variables.palette.on_surface }}>
-        {t('activityCompleted')}
-        <Tooltip tooltipTitle={t('theRespondentCompletedTheActivity')}>
-          <span>
+      <StyledHeadline
+        sx={{ mb: theme.spacing(2), color: variables.palette.on_surface }}
+        data-testid={`${dataTestId}-headline`}
+      >
+        {t(isFlow ? 'activityFlowCompleted' : 'activityCompleted')}
+        <Tooltip
+          tooltipTitle={t(isFlow ? 'respondentCompletedFlow' : 'respondentCompletedActivity')}
+        >
+          <span data-testid={`${dataTestId}-tooltip`}>
             <StyledTitleTooltipIcon id="more-info-outlined" width={16} height={16} />
           </span>
         </Tooltip>
@@ -29,8 +39,9 @@ export const ActivityCompleted = ({ answers = [], versions = [] }: ActivityCompl
       <ScatterChart
         minDate={minDate}
         maxDate={maxDate}
-        answers={answers}
+        completions={completions}
         versions={filteredVersions}
+        data-testid={`${dataTestId}-scatter-chart`}
       />
     </Box>
   );

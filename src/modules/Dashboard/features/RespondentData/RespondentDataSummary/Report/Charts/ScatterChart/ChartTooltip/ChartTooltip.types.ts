@@ -10,7 +10,8 @@ export type ChartTooltipProps = {
 export type ScatterTooltipRowData = {
   x: string;
   y: number;
-  answerId: string;
+  id: string;
   areSubscalesVisible: boolean;
+  isFlow: boolean;
   reviewCount?: ReviewCount;
 };

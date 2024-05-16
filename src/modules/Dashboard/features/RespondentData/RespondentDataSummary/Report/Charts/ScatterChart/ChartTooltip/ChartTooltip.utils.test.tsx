@@ -5,7 +5,12 @@ import { getReviewOption } from './ChartTooltip.utils';
 describe('getReviewOption', () => {
   test.each([
     // [mine, other, expected]
-    [0, 0, null, 'returns null when both mine and other are 0'],
+    [
+      0,
+      0,
+      t('leaveReview'),
+      'returns correct translation for leave review when both mine and other are 0',
+    ],
     [
       1,
       0,
