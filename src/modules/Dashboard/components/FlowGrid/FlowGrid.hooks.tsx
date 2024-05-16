@@ -71,9 +71,9 @@ export function useFlowGridMenu({
       { type: MenuItemType.Divider },
       {
         'data-testid': `${testId}-flow-assign`,
-        disabled: true,
         icon: <Svg id="add" />,
         title: t('assignActivity'),
+        isDisplayed: featureFlags.enableActivityAssign,
       },
       {
         'data-testid': `${testId}-flow-take-now`,
