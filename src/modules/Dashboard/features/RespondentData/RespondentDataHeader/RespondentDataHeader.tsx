@@ -127,7 +127,7 @@ export const RespondentDataHeader = ({
         {canViewData && (
           <StyledFlexTopCenter sx={{ gap: 1 }}>
             <Button
-              data-testid="header-option-export-button"
+              data-testid={`${dataTestid}-export-button`}
               onClick={handleOpenExport}
               startIcon={<Svg id="export" width={18} height={18} />}
               sx={{ color: variables.palette.on_surface_variant }}

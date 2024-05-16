@@ -81,7 +81,7 @@ export const Notification = ({
     navigate(
       generatePath(page.appletParticipantDataSummary, {
         appletId,
-        respondentId: subjectId,
+        subjectId,
       }),
     );
   };

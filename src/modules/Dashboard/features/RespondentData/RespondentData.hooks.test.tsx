@@ -3,6 +3,7 @@ import { renderHookWithProviders } from 'shared/utils/renderHookWithProviders';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import * as reduxHooks from 'redux/store/hooks';
 import { users } from 'modules/Dashboard/state';
+import { applet as appletState } from 'shared/state';
 
 import { useRespondentDataSetup } from './RespondentData.hooks';
 
@@ -49,14 +50,17 @@ describe('Respondent Data hooks', () => {
     test('launches getSubjectDetails', () => {
       const mockDispatch = jest.fn();
       const mockGetSubjectDetails = jest.fn();
+      const mockGetAppletData = jest.fn();
       jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
       jest.spyOn(users.thunk, 'getSubjectDetails').mockReturnValue(mockGetSubjectDetails);
+      jest.spyOn(appletState.thunk, 'getApplet').mockReturnValue(mockGetAppletData);
       renderHookWithProviders(useRespondentDataSetup, {
         preloadedState: getPreloadedState(),
       });
 
-      expect(mockDispatch).toHaveBeenCalledTimes(1);
+      expect(mockDispatch).toHaveBeenCalledTimes(2);
       expect(mockDispatch).toHaveBeenCalledWith(mockGetSubjectDetails);
+      expect(mockDispatch).toHaveBeenCalledWith(mockGetAppletData);
     });
   });
 });
