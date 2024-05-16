@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Divider, ListItemIcon, MenuItem } from '@mui/material';
+import {MouseEvent} from "react";
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
@@ -62,7 +63,8 @@ export const Menu = <T = unknown,>({
           index,
         ) => {
           if (!isDisplayed) return null;
-          const handleMenuItemClick = () => {
+          const handleMenuItemClick = (event?: object) => {
+            (event as MouseEvent<HTMLElement>)?.stopPropagation();
             action?.({ title, context });
             onClose();
           };
