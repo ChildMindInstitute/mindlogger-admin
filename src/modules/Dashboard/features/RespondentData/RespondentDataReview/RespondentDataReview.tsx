@@ -88,6 +88,7 @@ export const RespondentDataReview = () => {
     setSelectedFlow,
   } = useReviewActivitiesAndFlows({
     answerId,
+    submitId,
     appletId,
     respondentId,
     shouldSetLastAnswer: shouldSetLastAnswer.current,
