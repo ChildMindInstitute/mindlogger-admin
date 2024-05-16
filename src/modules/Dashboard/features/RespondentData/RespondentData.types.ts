@@ -1,4 +1,4 @@
-import { DatavizActivity, Version } from 'api';
+import { DatavizEntity, Version } from 'api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ActivityItemAnswer } from 'shared/types';
 import { SubscaleSetting } from 'shared/state';
@@ -94,9 +94,9 @@ export type ActivityCompletion = {
   decryptedAnswer: ActivityItemAnswer[];
   answerId: string;
   endDatetime: string;
-  startDatetime: string;
+  startDatetime?: string;
   version: string;
-  subscaleSetting?: SubscaleSetting;
+  subscaleSetting: SubscaleSetting;
   reviewCount?: ReviewCount;
 };
 
@@ -146,6 +146,32 @@ export type FormattedResponses =
   | SingleMultiSelectionPerRowFormattedResponses
   | SliderRowsFormattedResponses;
 
+export type ActivityOrFlow = DatavizEntity & { isFlow: boolean };
+
+export type ResponseOption = Record<string, FormattedResponses[]>;
+
+export type FlowActivityAnswers = {
+  activityId: string;
+  activityName: string;
+  isPerformanceTask: boolean;
+  answers: ActivityCompletion[];
+};
+
+export type EncryptedFlowSubmission = {
+  submitId: string;
+  createdAt: string;
+  endDatetime: string | null;
+};
+
+export type FlowResponses = {
+  activityId: string;
+  activityName: string;
+  isPerformanceTask: boolean;
+  answers: ActivityCompletion[];
+  responseOptions: ResponseOption | null;
+  subscalesFrequency: number;
+};
+
 export type RespondentsDataFormValues = {
   startDate: Date;
   endDate: Date;
@@ -155,12 +181,15 @@ export type RespondentsDataFormValues = {
   filterByIdentifier?: boolean;
   identifier?: AutocompleteOption[];
   versions: AutocompleteOption[];
-  summaryActivities: DatavizActivity[];
-  selectedActivity: DatavizActivity | null;
+  summaryActivities: DatavizEntity[];
+  summaryFlows: DatavizEntity[];
+  selectedEntity: ActivityOrFlow | null;
   identifiers: Identifier[];
   apiVersions: Version[];
   answers: ActivityCompletion[];
-  responseOptions: Record<string, FormattedResponses[]> | null;
+  flowSubmissions: EncryptedFlowSubmission[];
+  flowResponses: FlowResponses[];
+  responseOptions: ResponseOption | null;
   subscalesFrequency: number;
   responseDate: null | Date;
 };

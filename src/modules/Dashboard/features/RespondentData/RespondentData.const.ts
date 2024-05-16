@@ -15,12 +15,15 @@ export const defaultRespondentDataFormValues = {
   identifier: [],
   versions: [],
   summaryActivities: [],
-  selectedActivity: null,
+  summaryFlows: [],
+  selectedEntity: null,
   identifiers: [],
   apiVersions: [],
   answers: [],
   responseOptions: null,
   subscalesFrequency: 0,
+  flowSubmissions: [],
+  flowResponses: [],
   responseDate: null,
 };
 
