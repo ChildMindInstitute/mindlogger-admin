@@ -121,13 +121,12 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
         navPath: page.dashboardApplets,
       });
     }
-    if (pathname.includes('managers')) {
+
+    if (pathname.includes('managers') && !appletId) {
       newBreadcrumbs.push({
         icon: 'manager-outlined',
         label: t('managers'),
-        navPath: appletId
-          ? generatePath(page.appletManagers, { appletId })
-          : page.dashboardManagers,
+        navPath: page.dashboardManagers,
       });
     }
 
