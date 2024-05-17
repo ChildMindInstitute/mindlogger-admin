@@ -89,7 +89,6 @@ describe('useDownloadReport', () => {
   );
 
   test('handles download report for Activity', async () => {
-    // const mockedDownload = jest.spyOn(downloadJs, 'default').mockImplementation(() => {});
     mockAxios.post.mockResolvedValueOnce({
       data: 'reportData',
       headers: { 'content-disposition': 'attachment; filename=report.pdf' },

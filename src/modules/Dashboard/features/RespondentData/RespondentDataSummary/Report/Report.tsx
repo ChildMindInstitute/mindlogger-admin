@@ -11,22 +11,12 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Version } from 'modules/Dashboard/api';
-import { AutocompleteOption } from 'shared/components/FormComponents';
 
-import {
-  ActivityCompletion,
-  ActivityOrFlow,
-  FlowSubmission,
-  FlowResponses,
-  FormattedResponses,
-  Identifier,
-  RespondentsDataFormValues,
-} from '../../RespondentData.types';
+import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { getFormattedResponses } from '../utils/getFormattedResponses';
 import { ReportFilters } from './ReportFilters';
 import { StyledReport } from './Report.styles';
-import { CurrentActivityCompletionData } from './Report.types';
+import { CurrentActivityCompletionData, ReportValues } from './Report.types';
 import { CompletedChart } from './CompletedChart';
 import { getCompletions } from './Report.utils';
 import { ReportContext } from './Report.context';
@@ -50,17 +40,7 @@ export const Report = () => {
     versions,
     flowSubmissions,
     flowResponses,
-  ]: [
-    ActivityCompletion[],
-    Record<string, FormattedResponses[]> | null,
-    number,
-    ActivityOrFlow,
-    Identifier[],
-    Version[],
-    AutocompleteOption[],
-    FlowSubmission[],
-    FlowResponses[],
-  ] = useWatch({
+  ]: ReportValues = useWatch({
     name: [
       'answers',
       'responseOptions',

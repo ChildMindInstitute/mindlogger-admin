@@ -17,7 +17,6 @@ const answerId = 'some-answer-id';
 const flowSubmitId = 'some-submit-id';
 const date = 1703089235000; // Dec 20 2023, 16:20:35
 
-// const getProps = (areSubscalesVisible = false) => ({
 const getProps = (props?: Partial<ScatterTooltipRowData>) => ({
   data: {
     raw: {

@@ -9,6 +9,7 @@ import * as reactHookForm from 'react-hook-form';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { MAX_LIMIT } from 'shared/consts';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 
@@ -189,7 +190,7 @@ describe('ReportFilters', () => {
             respondentId: mockedRespondentId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
-            limit: 10000,
+            limit: MAX_LIMIT,
           },
           signal: undefined,
         },
@@ -218,7 +219,7 @@ describe('ReportFilters', () => {
             respondentId: mockedRespondentId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
-            limit: 10000,
+            limit: MAX_LIMIT,
           },
           signal: undefined,
         },

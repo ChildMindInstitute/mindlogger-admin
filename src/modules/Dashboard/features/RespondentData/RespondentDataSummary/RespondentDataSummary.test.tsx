@@ -6,6 +6,7 @@ import { endOfDay, startOfDay, subDays } from 'date-fns';
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { MAX_LIMIT } from 'shared/consts';
 
 import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests/useDatavizSummaryRequests';
 import * as useRespondentAnswersHook from './hooks/useRespondentAnswers/useRespondentAnswers';
@@ -171,7 +172,7 @@ describe('RespondentDataSummary component', () => {
         `/answers/applet/${mockedAppletId}/summary/flows`,
         {
           params: {
-            limit: 10000,
+            limit: MAX_LIMIT,
             respondentId: mockedRespondentId,
           },
           signal: undefined,
@@ -182,7 +183,7 @@ describe('RespondentDataSummary component', () => {
         `/answers/applet/${mockedAppletId}/summary/activities`,
         {
           params: {
-            limit: 10000,
+            limit: MAX_LIMIT,
             respondentId: mockedRespondentId,
           },
           signal: undefined,

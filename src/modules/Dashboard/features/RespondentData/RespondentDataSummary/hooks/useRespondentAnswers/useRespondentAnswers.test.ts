@@ -5,6 +5,7 @@ import { endOfDay, startOfDay, subDays } from 'date-fns';
 import { mockedActivityId, mockedAppletId, mockedRespondentId } from 'shared/mock';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
 import { ActivityOrFlow } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { MAX_LIMIT } from 'shared/consts';
 
 import { useRespondentAnswers } from './useRespondentAnswers';
 
@@ -48,7 +49,7 @@ const testIdentifierDatesChange = async () => {
           respondentId: mockedRespondentId,
           toDatetime: '2024-04-12T23:59:00',
           versions: 'v3',
-          limit: 10000,
+          limit: MAX_LIMIT,
         },
         signal: undefined,
       },
@@ -270,7 +271,7 @@ describe('useRespondentAnswers', () => {
             respondentId: mockedRespondentId,
             toDatetime: '2024-01-15T17:00:00',
             versions: 'v3',
-            limit: 10000,
+            limit: MAX_LIMIT,
           },
           signal: undefined,
         },
@@ -312,7 +313,7 @@ describe('useRespondentAnswers', () => {
             respondentId: mockedRespondentId,
             toDatetime: '2024-01-15T17:00:00',
             versions: 'v3',
-            limit: 10000,
+            limit: MAX_LIMIT,
           },
           signal: undefined,
         },
@@ -402,7 +403,7 @@ describe('useRespondentAnswers', () => {
             respondentId: mockedRespondentId,
             toDatetime: '2024-01-18T23:59:00',
             versions: 'v3',
-            limit: 10000,
+            limit: MAX_LIMIT,
           },
           signal: undefined,
         },
