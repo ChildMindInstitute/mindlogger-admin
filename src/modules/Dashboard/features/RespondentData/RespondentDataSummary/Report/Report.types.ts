@@ -1,8 +1,4 @@
-import {
-  ActivityCompletion,
-  EncryptedFlowSubmission,
-  ReviewCount,
-} from '../../RespondentData.types';
+import { ActivityCompletion, FlowSubmission, ReviewCount } from '../../RespondentData.types';
 
 export type CurrentActivityCompletionData = { answerId: string; date?: number } | null;
 
@@ -21,6 +17,6 @@ export type Completion = {
 
 export type GetCompletions = {
   isFlow: boolean;
-  flowSubmissions: EncryptedFlowSubmission[];
+  flowSubmissions: FlowSubmission[];
   answers: ActivityCompletion[];
 };

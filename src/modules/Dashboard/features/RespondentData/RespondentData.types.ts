@@ -157,7 +157,7 @@ export type FlowActivityAnswers = {
   answers: ActivityCompletion[];
 };
 
-export type EncryptedFlowSubmission = {
+export type FlowSubmission = {
   submitId: string;
   createdAt: string;
   endDatetime: string | null;
@@ -187,7 +187,7 @@ export type RespondentsDataFormValues = {
   identifiers: Identifier[];
   apiVersions: Version[];
   answers: ActivityCompletion[];
-  flowSubmissions: EncryptedFlowSubmission[];
+  flowSubmissions: FlowSubmission[];
   flowResponses: FlowResponses[];
   responseOptions: ResponseOption | null;
   subscalesFrequency: number;

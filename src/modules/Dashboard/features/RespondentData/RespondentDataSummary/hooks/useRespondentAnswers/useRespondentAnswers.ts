@@ -11,7 +11,7 @@ import {
 } from 'modules/Dashboard/api';
 import {
   ActivityCompletion,
-  EncryptedFlowSubmission,
+  FlowSubmission,
   FlowActivityAnswers,
   RespondentsDataFormValues,
   FlowResponses,
@@ -136,7 +136,7 @@ export const useRespondentAnswers = () => {
           params,
         });
 
-        const flowSubmissions: EncryptedFlowSubmission[] = [];
+        const flowSubmissions: FlowSubmission[] = [];
         const activityAnswersMap: Map<string, FlowActivityAnswers> = new Map();
 
         for await (const {

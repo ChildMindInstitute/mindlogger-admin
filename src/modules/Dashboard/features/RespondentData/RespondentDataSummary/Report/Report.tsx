@@ -17,7 +17,7 @@ import { AutocompleteOption } from 'shared/components/FormComponents';
 import {
   ActivityCompletion,
   ActivityOrFlow,
-  EncryptedFlowSubmission,
+  FlowSubmission,
   FlowResponses,
   FormattedResponses,
   Identifier,
@@ -58,7 +58,7 @@ export const Report = () => {
     Identifier[],
     Version[],
     AutocompleteOption[],
-    EncryptedFlowSubmission[],
+    FlowSubmission[],
     FlowResponses[],
   ] = useWatch({
     name: [
