@@ -88,7 +88,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "start:checkCycles": "react-app-rewiredstart -- checkCycles",
-    "build": "CI=false NODE_OPTIONS=--max-old-space-size=3072 react-app-rewired build --project tsconfig.build.json",
+    "build": "CI=false react-app-rewired build --project tsconfig.build.json",
     "lint:check": "npx eslint src",
     "lint:fix": "npx eslint src --fix",
     "test": "react-app-rewired test",
