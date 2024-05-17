@@ -85,12 +85,12 @@
     "yup": "^1.3.1"
   },
   "scripts": {
-    "start": "react-app-rewired --max-old-space-size=3072 start",
-    "start:checkCycles": "react-app-rewired --max-old-space-size=3072 start -- checkCycles",
-    "build": "react-app-rewired --max-old-space-size=3072 build --project tsconfig.build.json",
+    "start": "react-app-rewired start",
+    "start:checkCycles": "react-app-rewired start -- checkCycles",
+    "build": "react-app-rewired build --project tsconfig.build.json",
     "lint:check": "npx eslint src",
     "lint:fix": "npx eslint src --fix",
-    "test": "react-app-rewired --max-old-space-size=3072 test",
+    "test": "react-app-rewired test",
     "test:coverage": "npm run test -- --coverage --watchAll=false --colors",
     "test:junit": "npm run test -- --watchAll=false --reporters=default --reporters=jest-junit",
     "test:related": "sh test-related.sh",
