@@ -42,6 +42,9 @@ import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl, getRoles } from './AddUserForm.utils';
 
+// Flag for adjustments needed to merge the shell-account branch into the develop branch for next PROD updates
+const showAddWithoutInvitation = false;
+
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
   const { appletId } = useParams();
   const dispatch = useAppDispatch();
@@ -240,7 +243,11 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
             <InputController
               {...commonProps}
               name={Fields.email}
-              label={isRespondentRole ? t('respondentEmail') : t(Fields.email)}
+              label={
+                isRespondentRole && showAddWithoutInvitation
+                  ? t('respondentEmail')
+                  : t(Fields.email)
+              }
               data-testid={`${dataTestId}-email`}
             />
           </Grid>
@@ -318,7 +325,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           >
             {t('sendInvitation')}
           </Button>
-          {isRespondentRole ? (
+          {isRespondentRole && showAddWithoutInvitation ? (
             <StyledFlexTopCenter>
               <Button
                 type="submit"
