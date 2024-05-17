@@ -306,11 +306,22 @@ const mapItemResponseValues = (item: ItemFormValues) => {
   if (
     responseType === ItemResponseType.Audio ||
     responseType === ItemResponseType.AudioPlayer ||
-    responseType === ItemResponseType.NumberSelection ||
-    responseType === ItemResponseType.Drawing
+    responseType === ItemResponseType.NumberSelection
   )
     return {
       ...responseValues,
+      options: undefined,
+    };
+
+  if (responseType === ItemResponseType.Drawing)
+    return {
+      ...responseValues,
+      ...(responseValues.proportion && {
+        proportion: {
+          ...responseValues.proportion,
+          enabled: Boolean(responseValues.proportion.enabled),
+        },
+      }),
       options: undefined,
     };
 

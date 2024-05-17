@@ -94,7 +94,7 @@ export const ManagersRemoveAccessPopup = ({
     },
   }));
 
-  const onCLoseHandler = () => onClose(step);
+  const onCloseHandler = () => onClose(step);
 
   const { execute, error, setError } = useAsync(
     removeManagerAccessApi,
@@ -119,7 +119,7 @@ export const ManagersRemoveAccessPopup = ({
         });
         break;
       default:
-        onCLoseHandler();
+        onCloseHandler();
 
         return;
     }
@@ -290,10 +290,10 @@ export const ManagersRemoveAccessPopup = ({
   return (
     <Modal
       open={popupVisible}
-      onClose={onCLoseHandler}
+      onClose={onCloseHandler}
       onSubmit={onSubmit}
       title={t('removeAccess')}
-      hasSecondBtn={step < 3}
+      hasSecondBtn={(appletId ? step > 1 : step > 0) && step < 3}
       secondBtnText={t('back')}
       disabledSecondBtn={!!appletId}
       onSecondBtnSubmit={decrementStep}
