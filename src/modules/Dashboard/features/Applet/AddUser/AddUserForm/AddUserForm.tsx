@@ -37,13 +37,11 @@ import {
   SubmitBtnType,
   RESPONDENT_ALREADY_INVITED,
   EMAIL_IN_USE,
+  showAddWithoutInvitation,
 } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
 import { getUrl, getRoles } from './AddUserForm.utils';
-
-// Flag for adjustments needed to merge the shell-account branch into the develop branch for next PROD updates
-const showAddWithoutInvitation = false;
 
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
   const { appletId } = useParams();
