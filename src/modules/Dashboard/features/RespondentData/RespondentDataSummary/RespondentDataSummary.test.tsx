@@ -6,6 +6,7 @@ import { endOfDay, startOfDay, subDays } from 'date-fns';
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { MAX_LIMIT } from 'shared/consts';
 
 import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests/useDatavizSummaryRequests';
 import * as useRespondentAnswersHook from './hooks/useRespondentAnswers/useRespondentAnswers';
@@ -31,6 +32,21 @@ const mockedSummaryActivities = [
     isPerformanceTask: false,
     hasAnswer: true,
     lastAnswerDate: '2023-10-27T12:11:46.162083',
+  },
+];
+
+const mockedSummaryFlows = [
+  {
+    id: 'flow-id-1',
+    name: 'Flow 1',
+    hasAnswer: true,
+    lastAnswerDate: '2023-10-27T12:11:46.162083',
+  },
+  {
+    id: 'flow-id-2',
+    name: 'Flow 2',
+    hasAnswer: false,
+    lastAnswerDate: null,
   },
 ];
 
@@ -69,16 +85,17 @@ const testEmptyState = (text: string) => {
 
 const emptyStateCases = [
   {
-    selectedActivity: null,
-    expectedEmptyStateMessage: 'Select the Activity to review the response data.',
+    selectedEntity: null,
+    expectedEmptyStateMessage: 'Select the Activity or Activity Flow to review the response data.',
     description: 'renders RespondentDataSummary correctly for non-selected activity',
   },
   {
-    selectedActivity: {
+    selectedEntity: {
       id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
       name: 'Activity 1',
       isPerformanceTask: true,
       hasAnswer: true,
+      isFlow: false,
     },
     expectedEmptyStateMessage: 'Data visualization for Performance Tasks not supported',
     description: 'renders empty state component if selected activity is performance task',
@@ -96,7 +113,7 @@ describe('RespondentDataSummary component', () => {
   test('renders correctly with selected activity and summary activities', async () => {
     jest
       .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([mockedSelectedActivity, mockedSummaryActivities]);
+      .mockReturnValue([mockedSelectedActivity, mockedSummaryActivities, []]);
 
     renderWithProviders(<RespondentDataSummary />, {
       route,
@@ -109,10 +126,10 @@ describe('RespondentDataSummary component', () => {
 
   test.each(emptyStateCases)(
     '$description',
-    async ({ selectedActivity, expectedEmptyStateMessage }) => {
+    async ({ selectedEntity, expectedEmptyStateMessage }) => {
       jest
         .spyOn(reactHookForm, 'useWatch')
-        .mockReturnValue([selectedActivity, mockedSummaryActivities]);
+        .mockReturnValue([selectedEntity, mockedSummaryActivities, mockedSummaryFlows]);
       renderWithProviders(<RespondentDataSummary />, {
         route,
         routePath,
@@ -125,7 +142,7 @@ describe('RespondentDataSummary component', () => {
   test('renders RespondentDataSummary correctly for selected activity with successful data fetching', async () => {
     const mockGetIdentifiersVersions = jest.fn();
     const mockFetchAnswers = jest.fn();
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([null, []]);
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([null, [], []]);
     jest
       .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
       .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });
@@ -133,6 +150,11 @@ describe('RespondentDataSummary component', () => {
       .spyOn(useRespondentAnswersHook, 'useRespondentAnswers')
       .mockReturnValue({ fetchAnswers: mockFetchAnswers });
 
+    mockAxios.get.mockResolvedValueOnce({
+      data: {
+        result: mockedSummaryFlows,
+      },
+    });
     mockAxios.get.mockResolvedValueOnce({
       data: {
         result: mockedSummaryActivities,
@@ -147,10 +169,21 @@ describe('RespondentDataSummary component', () => {
     await waitFor(() => {
       expect(mockAxios.get).toHaveBeenNthCalledWith(
         1,
+        `/answers/applet/${mockedAppletId}/summary/flows`,
+        {
+          params: {
+            limit: MAX_LIMIT,
+            respondentId: mockedRespondentId,
+          },
+          signal: undefined,
+        },
+      );
+      expect(mockAxios.get).toHaveBeenNthCalledWith(
+        2,
         `/answers/applet/${mockedAppletId}/summary/activities`,
         {
           params: {
-            limit: 10000,
+            limit: MAX_LIMIT,
             respondentId: mockedRespondentId,
           },
           signal: undefined,
@@ -158,9 +191,16 @@ describe('RespondentDataSummary component', () => {
       );
     });
 
-    //select activity with the last answer date
+    //set activities and flows
+    expect(mockedSetValue).toHaveBeenCalledWith('summaryFlows', mockedSummaryFlows);
     expect(mockedSetValue).toHaveBeenCalledWith('summaryActivities', mockedSummaryActivities);
-    expect(mockedSetValue).toHaveBeenCalledWith('selectedActivity', mockedSummaryActivities[1]);
+
+    //select activity with the last answer date
+    const selectedActivity = {
+      ...mockedSummaryActivities[1],
+      isFlow: false,
+    };
+    expect(mockedSetValue).toHaveBeenCalledWith('selectedEntity', selectedActivity);
 
     //set startDate end endDate to 1 week from the most recent response
     const expectedEndDate = endOfDay(new Date('2023-10-27'));
@@ -169,8 +209,8 @@ describe('RespondentDataSummary component', () => {
     expect(mockedSetValue).toHaveBeenCalledWith('endDate', expectedEndDate);
 
     expect(mockGetIdentifiersVersions).toHaveBeenCalledWith({
-      activity: mockedSummaryActivities[1],
+      entity: selectedActivity,
     });
-    expect(mockFetchAnswers).toHaveBeenCalledWith({ activity: mockedSummaryActivities[1] });
+    expect(mockFetchAnswers).toHaveBeenCalledWith({ entity: selectedActivity });
   });
 });

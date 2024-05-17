@@ -1,11 +1,11 @@
-import { DatavizActivity } from 'modules/Dashboard/api';
+import { ReviewActivity } from 'modules/Dashboard/api';
 
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 import { FeedbackNotes } from '../FeedbackNotes';
 import { FeedbackReviews } from '../FeedbackReviews';
 
 export const getFeedbackTabs = (
-  selectedActivity: DatavizActivity,
+  selectedActivity: ReviewActivity,
   assessment: AssessmentActivityItem[] | undefined,
 ) => {
   const dataTestid = 'respondents-summary-feedback-tab';

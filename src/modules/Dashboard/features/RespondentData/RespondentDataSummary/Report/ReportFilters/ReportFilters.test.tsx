@@ -9,6 +9,7 @@ import * as reactHookForm from 'react-hook-form';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import { page } from 'resources';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { MAX_LIMIT } from 'shared/consts';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 
@@ -38,6 +39,14 @@ const mockedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  isFlow: false,
+};
+
+const mockedFlow = {
+  id: 'flow-id',
+  name: 'Flow 1',
+  hasAnswer: true,
+  isFlow: true,
 };
 
 const FormComponent = () => {
@@ -175,12 +184,42 @@ describe('ReportFilters', () => {
         `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers`,
         {
           params: {
-            emptyIdentifiers: true,
+            emptyIdentifiers: false,
             fromDatetime: '2024-01-04T00:00:00',
             identifiers: '',
             respondentId: mockedRespondentId,
             toDatetime: '2024-01-10T23:59:00',
             versions: '1.0.0,1.0.1',
+            limit: MAX_LIMIT,
+          },
+          signal: undefined,
+        },
+      );
+    });
+  });
+
+  test('fetch answers on filters change when the entity is Flow', async () => {
+    jest
+      .spyOn(reactHookForm, 'useWatch')
+      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10'), mockedFlow]);
+
+    renderWithProviders(<FormComponent />, route, routePath);
+
+    await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
+
+    await waitFor(() => {
+      expect(mockAxios.get).toHaveBeenNthCalledWith(
+        1,
+        `/answers/applet/${mockedAppletId}/flows/${mockedFlow.id}/submissions`,
+        {
+          params: {
+            emptyIdentifiers: false,
+            fromDatetime: '2024-01-04T00:00:00',
+            identifiers: '',
+            respondentId: mockedRespondentId,
+            toDatetime: '2024-01-10T23:59:00',
+            versions: '1.0.0,1.0.1',
+            limit: MAX_LIMIT,
           },
           signal: undefined,
         },

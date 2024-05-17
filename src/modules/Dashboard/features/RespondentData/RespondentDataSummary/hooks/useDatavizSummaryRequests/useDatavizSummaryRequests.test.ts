@@ -28,6 +28,14 @@ describe('useDatavizSummaryRequests', () => {
     isPerformanceTask: false,
     hasAnswer: true,
     lastAnswerDate: '2023-09-26T10:10:05.162083',
+    isFlow: false,
+  };
+  const mockedFlow = {
+    id: 'some-flow-id',
+    name: 'Flow 1',
+    hasAnswer: true,
+    lastAnswerDate: '2023-09-26T10:10:05.162083',
+    isFlow: true,
   };
   const mockedDecryptedIdentifiersResult = [
     {
@@ -61,17 +69,7 @@ describe('useDatavizSummaryRequests', () => {
     jest.resetAllMocks();
   });
 
-  test('should call APIs and set form values', async () => {
-    mockAxios.get.mockResolvedValue({
-      data: { result: 'some data' },
-    });
-    mockAxios.get.mockResolvedValue({
-      data: { result: mockedVersionsReturn },
-    });
-
-    const { getIdentifiersVersions } = useDatavizSummaryRequests();
-    await getIdentifiersVersions({ activity: mockedActivity });
-
+  const testApiCallsAndSetValues = () => {
     expect(mockAxios.get).toHaveBeenCalledTimes(2);
     expect(mockedSetValue).toHaveBeenNthCalledWith(
       1,
@@ -83,6 +81,34 @@ describe('useDatavizSummaryRequests', () => {
       { id: 'v2', label: 'v2' },
     ]);
     expect(mockedSetValue).toHaveBeenNthCalledWith(3, 'apiVersions', mockedVersionsReturn);
+  };
+
+  test('should call APIs and set form values for Activity', async () => {
+    mockAxios.get.mockResolvedValue({
+      data: { result: 'some data' },
+    });
+    mockAxios.get.mockResolvedValue({
+      data: { result: mockedVersionsReturn },
+    });
+
+    const { getIdentifiersVersions } = useDatavizSummaryRequests();
+    await getIdentifiersVersions({ entity: mockedFlow });
+
+    testApiCallsAndSetValues();
+  });
+
+  test('should call APIs and set form values for Flow', async () => {
+    mockAxios.get.mockResolvedValue({
+      data: { result: 'some data' },
+    });
+    mockAxios.get.mockResolvedValue({
+      data: { result: mockedVersionsReturn },
+    });
+
+    const { getIdentifiersVersions } = useDatavizSummaryRequests();
+    await getIdentifiersVersions({ entity: mockedActivity });
+
+    testApiCallsAndSetValues();
   });
 
   test.each`
@@ -96,7 +122,7 @@ describe('useDatavizSummaryRequests', () => {
     }
 
     const { getIdentifiersVersions } = useDatavizSummaryRequests();
-    await getIdentifiersVersions({ activity: { ...mockedActivity, ...activityProps } });
+    await getIdentifiersVersions({ entity: { ...mockedActivity, ...activityProps } });
 
     expect(mockAxios.get).not.toHaveBeenCalled();
     expect(mockedSetValue).not.toHaveBeenCalled();
@@ -106,7 +132,7 @@ describe('useDatavizSummaryRequests', () => {
     mockAxios.get.mockRejectedValue(new Error('API Error'));
 
     const { getIdentifiersVersions } = useDatavizSummaryRequests();
-    await getIdentifiersVersions({ activity: mockedActivity });
+    await getIdentifiersVersions({ entity: mockedActivity });
 
     expect(mockAxios.get).toHaveBeenCalled();
     expect(console.warn).toHaveBeenCalled();

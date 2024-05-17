@@ -1,5 +1,5 @@
-import { AppletId } from 'shared/api';
-import { Item, SingleApplet } from 'shared/state';
+import { ActivityId, AppletId } from 'shared/api';
+import { Item, SingleApplet, SubscaleSetting } from 'shared/state';
 import { Roles } from 'shared/consts';
 import { RetentionPeriods, EncryptedAnswerSharedProps, ExportActivity } from 'shared/types';
 import { Encryption } from 'shared/utils';
@@ -19,6 +19,8 @@ export type GetAppletsParams = {
 export type RespondentId = { respondentId: string };
 
 export type FolderId = { folderId: string };
+
+export type FlowId = { flowId: string };
 
 export type Event = {
   data: {
@@ -224,12 +226,12 @@ export type OwnerId = {
   ownerId: string;
 };
 
-export type DatavizActivity = {
+export type DatavizEntity = {
   id: string;
   name: string;
+  hasAnswer: boolean;
   lastAnswerDate: string | null;
   isPerformanceTask?: boolean;
-  hasAnswer?: boolean;
 };
 
 export type SubmitDates = {
@@ -243,7 +245,7 @@ export type AnswerDate = {
   endDatetime?: string;
 };
 
-export type ReviewActivity = DatavizActivity & {
+export type ReviewActivity = Omit<DatavizEntity, 'hasAnswer' | 'isPerformanceTask'> & {
   answerDates: AnswerDate[];
 };
 
@@ -254,11 +256,12 @@ export type ReviewFlow = {
   answerDates: AnswerDate[];
 };
 
-export type DatavizAnswer = EncryptedAnswerSharedProps & {
+export type EncryptedActivityAnswers = EncryptedAnswerSharedProps & {
   answerId: string;
   endDatetime: string;
   events: string;
-  startDatetime: string;
+  startDatetime?: string;
+  subscaleSetting: SubscaleSetting;
   version: string;
 };
 
@@ -266,7 +269,7 @@ export type Answers = AppletId & RespondentId & { createdDate?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
 
-export type FlowAnswersParams = AppletId & { submitId: string; flowId: string };
+export type FlowAnswersParams = AppletId & FlowId & { submitId: string };
 
 export type AssessmentReview = AppletId & { answerId: string };
 
@@ -312,8 +315,7 @@ export type Review = {
   reviewerPublicKey: string | null;
 };
 
-export type SummaryAnswers = AppletId & {
-  activityId: string;
+export type GetAnswersParams = {
   params: {
     respondentId: string;
     fromDatetime: string;
@@ -323,6 +325,10 @@ export type SummaryAnswers = AppletId & {
     versions?: string[];
   };
 };
+
+export type SummaryActivityAnswersParams = AppletId & ActivityId & GetAnswersParams;
+
+export type SummaryFlowAnswersParams = AppletId & FlowId & GetAnswersParams;
 
 export type Identifier = {
   identifier: string;
@@ -414,19 +420,21 @@ export type Version = {
   createdAt: string;
 };
 
-export type LatestReport = {
-  appletId: string;
-  activityId: string;
-  respondentId: string;
-};
+export type GetLatestReportParams = AppletId & ActivityId & RespondentId;
 
-export type Identifiers = LatestReport;
+export type GetActivityIdentifiersParams = GetLatestReportParams;
+
+export type GetFlowIdentifiersParams = AppletId & RespondentId & FlowId;
+
+export type GetActivityVersionsParams = AppletId & ActivityId;
+
+export type GetFlowVersionsParams = AppletId & FlowId;
 
 export type GetRespondentDetailsParams = OwnerId & AppletId & RespondentId;
 
 export type AnswerSummary = {
   createdAt: string;
-  endDateTime: string | null;
+  endDatetime: string | null;
   version: string;
   identifier: Identifier | null;
 };
@@ -439,12 +447,13 @@ export type ActivityAnswer = {
   flowHistoryId: string | null;
   identifier: string | null;
   createdAt: string;
-  endDateTime: string;
+  endDatetime: string;
 };
 
-export type ActivityHistoryFull = Omit<ExportActivity, 'isPerformanceTask'> & {
+export type ActivityHistoryFull = Omit<ExportActivity, 'isPerformanceTask' | 'subscaleSetting'> & {
   appletId: string;
   order: number;
+  subscaleSetting: SubscaleSetting;
 };
 
 export type EncryptedActivityAnswer = {
@@ -481,7 +490,13 @@ export type FlowSubmission = {
     Omit<AnswerSummary, 'identifier'> & {
       identifier: string | null;
     })[];
+  endDatetime: string | null;
 } & Omit<AnswerSummary, 'identifier'>;
+
+export type EncryptedFlowsAnswers = {
+  flows: FlowHistory[];
+  submissions: FlowSubmission[];
+};
 
 export type EncryptedFlowAnswers = {
   flow: FlowHistory;

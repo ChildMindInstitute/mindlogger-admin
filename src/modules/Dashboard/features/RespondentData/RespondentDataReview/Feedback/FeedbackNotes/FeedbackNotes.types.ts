@@ -1,4 +1,4 @@
-import { DatavizActivity } from 'modules/Dashboard/api';
+import { ReviewActivity } from 'modules/Dashboard/api';
 
 type FullName = {
   firstName: string;
@@ -12,4 +12,4 @@ export type FeedbackNote = {
   createdAt: string;
 };
 
-export type FeedbackNotesProps = { activity: DatavizActivity };
+export type FeedbackNotesProps = { activity: ReviewActivity };

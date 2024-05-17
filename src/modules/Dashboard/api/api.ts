@@ -41,17 +41,13 @@ import {
   EditManagerAccess,
   ExportData,
   SaveAssessment,
-  DatavizActivity,
   Version,
-  SummaryAnswers,
-  DatavizAnswer,
+  EncryptedActivityAnswers,
   Identifier,
   ReviewActivity,
   Review,
   AssessmentReview,
   AppletName,
-  LatestReport,
-  Identifiers,
   GetRespondentDetailsParams,
   AssessmentResult,
   SubmitDates,
@@ -60,6 +56,15 @@ import {
   ReviewFlow,
   FlowAnswersParams,
   EncryptedFlowAnswers,
+  DatavizEntity,
+  GetFlowIdentifiersParams,
+  GetFlowVersionsParams,
+  GetActivityIdentifiersParams,
+  GetActivityVersionsParams,
+  SummaryActivityAnswersParams,
+  SummaryFlowAnswersParams,
+  GetLatestReportParams,
+  EncryptedFlowsAnswers,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -276,7 +281,7 @@ export const setAppletEncryptionApi = (
 ) => authApiClient.post(`/applets/${appletId}/encryption`, { ...encryption }, { signal });
 
 export const getInvitationsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
-  const { ownerId, ...restParams } = params;
+  const { ownerId: _ownerId, ...restParams } = params;
 
   return authApiClient.get('/invitations', {
     params: restParams,
@@ -548,7 +553,7 @@ export const getSummaryActivitiesApi = (
   { appletId, respondentId }: AppletId & RespondentId,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<DatavizActivity>>(`/answers/applet/${appletId}/summary/activities`, {
+  authApiClient.get<Response<DatavizEntity>>(`/answers/applet/${appletId}/summary/activities`, {
     params: {
       respondentId,
       limit: MAX_LIMIT,
@@ -556,8 +561,20 @@ export const getSummaryActivitiesApi = (
     signal,
   });
 
-export const getIdentifiersApi = (
-  { appletId, activityId, respondentId }: Identifiers,
+export const getSummaryFlowsApi = (
+  { appletId, respondentId }: AppletId & RespondentId,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<DatavizEntity>>(`/answers/applet/${appletId}/summary/flows`, {
+    params: {
+      respondentId,
+      limit: MAX_LIMIT,
+    },
+    signal,
+  });
+
+export const getActivityIdentifiersApi = (
+  { appletId, activityId, respondentId }: GetActivityIdentifiersParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Identifier>>(
@@ -570,8 +587,22 @@ export const getIdentifiersApi = (
     },
   );
 
-export const getVersionsApi = (
-  { appletId, activityId }: AppletId & { activityId: string },
+export const getFlowIdentifiersApi = (
+  { appletId, flowId, respondentId }: GetFlowIdentifiersParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<Identifier>>(
+    `/answers/applet/${appletId}/flows/${flowId}/identifiers`,
+    {
+      params: {
+        respondentId,
+      },
+      signal,
+    },
+  );
+
+export const getActivityVersionsApi = (
+  { appletId, activityId }: GetActivityVersionsParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Version>>(
@@ -581,8 +612,16 @@ export const getVersionsApi = (
     },
   );
 
+export const getFlowVersionsApi = (
+  { appletId, flowId }: GetFlowVersionsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<Version>>(`/answers/applet/${appletId}/flows/${flowId}/versions`, {
+    signal,
+  });
+
 export const getLatestReportApi = (
-  { appletId, activityId, respondentId }: LatestReport,
+  { appletId, activityId, respondentId }: GetLatestReportParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
@@ -594,17 +633,39 @@ export const getLatestReportApi = (
     },
   );
 
-export const getAnswersApi = (
-  { appletId, activityId, params: { identifiers, versions, ...params } }: SummaryAnswers,
+export const getActivityAnswersApi = (
+  {
+    appletId,
+    activityId,
+    params: { identifiers, versions, ...params },
+  }: SummaryActivityAnswersParams,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<DatavizAnswer>>(
+  authApiClient.get<Response<EncryptedActivityAnswers>>(
     `/answers/applet/${appletId}/activities/${activityId}/answers`,
     {
       params: {
         ...params,
         identifiers: identifiers?.join(','),
         versions: versions?.join(','),
+        limit: MAX_LIMIT,
+      },
+      signal,
+    },
+  );
+
+export const getSummaryFlowAnswersApi = (
+  { appletId, flowId, params: { identifiers, versions, ...params } }: SummaryFlowAnswersParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<ResponseWithObject<EncryptedFlowsAnswers>>(
+    `/answers/applet/${appletId}/flows/${flowId}/submissions`,
+    {
+      params: {
+        ...params,
+        identifiers: identifiers?.join(','),
+        versions: versions?.join(','),
+        limit: MAX_LIMIT,
       },
       signal,
     },

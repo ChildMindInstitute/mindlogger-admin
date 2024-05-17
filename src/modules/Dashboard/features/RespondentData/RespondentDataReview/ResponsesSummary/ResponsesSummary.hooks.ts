@@ -7,14 +7,14 @@ import { ResponsesSummaryProps } from './ResponsesSummary.types';
 import { EMPTY_IDENTIFIER } from './ResponsesSummary.const';
 
 export const useResponsesSummary = ({
-  endDateTime,
+  endDatetime,
   createdAt,
   identifier,
   version,
 }: Omit<ResponsesSummaryProps, 'data-testid'>) => {
   const { t } = useTranslation();
   const submittedDateTime = format(
-    new Date(endDateTime ?? createdAt),
+    new Date(endDatetime ?? createdAt),
     DateFormats.MonthDayYearTimeSeconds,
   );
 

@@ -16,6 +16,7 @@ import { ReviewActivitiesAndFlowsProps } from './useReviewActivitiesAndFlows.typ
 
 export const useReviewActivitiesAndFlows = ({
   answerId,
+  submitId,
   appletId,
   shouldSetLastAnswer,
   handleSelectAnswer,
@@ -35,7 +36,7 @@ export const useReviewActivitiesAndFlows = ({
       if (!activities?.length) return;
       setActivities(activities);
 
-      if (answerId && !shouldSetLastAnswer) return;
+      if ((answerId || submitId) && !shouldSetLastAnswer) return;
       const selectedActivityByDefault = getActivityWithLatestAnswer(activities) || activities[0];
       setSelectedActivity(selectedActivityByDefault);
       const { answerDates } = selectedActivityByDefault;

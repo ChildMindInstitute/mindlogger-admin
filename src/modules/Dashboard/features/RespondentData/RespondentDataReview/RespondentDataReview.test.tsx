@@ -13,7 +13,7 @@ import {
   mockedRespondent2,
   mockedRespondentId,
 } from 'shared/mock';
-import { DateFormats, Roles, JEST_TEST_TIMEOUT } from 'shared/consts';
+import { DateFormats, Roles, JEST_TEST_TIMEOUT, MAX_LIMIT } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 import { page } from 'resources';
 import * as dashboardHooks from 'modules/Dashboard/hooks';
@@ -351,7 +351,7 @@ describe('RespondentDataReview', () => {
           {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
-              limit: 10000,
+              limit: MAX_LIMIT,
               respondentId: mockedRespondentId,
             },
             signal: undefined,
@@ -364,7 +364,7 @@ describe('RespondentDataReview', () => {
           {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
-              limit: 10000,
+              limit: MAX_LIMIT,
               respondentId: mockedRespondentId,
             },
             signal: undefined,
@@ -451,7 +451,7 @@ describe('RespondentDataReview', () => {
           {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
-              limit: 10000,
+              limit: MAX_LIMIT,
               respondentId: mockedRespondentId,
             },
             signal: undefined,
@@ -464,7 +464,7 @@ describe('RespondentDataReview', () => {
           {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
-              limit: 10000,
+              limit: MAX_LIMIT,
               respondentId: mockedRespondentId,
             },
             signal: undefined,
@@ -476,7 +476,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-2`,
           {
             params: {
-              limit: 10000,
+              limit: MAX_LIMIT,
             },
             signal: undefined,
           },
@@ -512,7 +512,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/activities/951145fa-3053-4428-a970-70531e383d89/answers/answer-id-1-1`,
           {
             params: {
-              limit: 10000,
+              limit: MAX_LIMIT,
             },
             signal: undefined,
           },
@@ -591,7 +591,7 @@ describe('RespondentDataReview', () => {
           {
             params: {
               createdDate: '2023-12-15',
-              limit: 10000,
+              limit: MAX_LIMIT,
               respondentId: mockedRespondentId,
             },
             signal: undefined,
@@ -604,7 +604,7 @@ describe('RespondentDataReview', () => {
           {
             params: {
               createdDate: '2023-12-15',
-              limit: 10000,
+              limit: MAX_LIMIT,
               respondentId: mockedRespondentId,
             },
             signal: undefined,
@@ -629,7 +629,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/activities/2/answers/answer-id-2-2`,
           {
             params: {
-              limit: 10000,
+              limit: MAX_LIMIT,
             },
             signal: undefined,
           },
@@ -669,7 +669,7 @@ describe('RespondentDataReview', () => {
         {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
-            limit: 10000,
+            limit: MAX_LIMIT,
             respondentId: mockedRespondentId,
           },
           signal: undefined,
@@ -682,7 +682,7 @@ describe('RespondentDataReview', () => {
         {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
-            limit: 10000,
+            limit: MAX_LIMIT,
             respondentId: mockedRespondentId,
           },
           signal: undefined,

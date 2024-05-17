@@ -54,9 +54,8 @@ const preloadedState = {
 const mockedActivity = {
   id: '268af284-5b46-45c9-927f-cb641e973093',
   name: 'Activity 1',
-  isPerformanceTask: false,
-  hasAnswer: true,
   lastAnswerDate: '2023-09-26T12:11:46.162083',
+  answerDates: [],
 };
 
 const mockedGetWithNotes = {

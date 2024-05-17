@@ -83,7 +83,7 @@ export const useActivityAnswersAndAssessment = ({
       if (!result) return;
 
       const { flow, submission, summary } = result;
-      const { answers, createdAt, endDateTime } = submission;
+      const { answers, createdAt, endDatetime } = submission;
 
       const activitiesObject = getObjectFromList(
         flow.activities,
@@ -114,7 +114,7 @@ export const useActivityAnswersAndAssessment = ({
       setResponsesSummary({
         version,
         createdAt,
-        endDateTime,
+        endDatetime,
         identifier: decryptedIdentifiers?.length ? decryptedIdentifiers[0].decryptedValue : null,
       });
     },
@@ -133,7 +133,7 @@ export const useActivityAnswersAndAssessment = ({
       setIsLoading(true);
       if (flowId && submitId) {
         await getFlowAnswers({ appletId, flowId, submitId });
-        // TODO: add flow assessment implementation after backend is ready
+        // TODO: add flow assessment implementation after backend is ready (BE task M2-6584)
       }
       if (activityId && answerId) {
         await getActivityAnswer({ appletId, answerId, activityId });

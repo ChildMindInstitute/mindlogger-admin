@@ -12,7 +12,7 @@ const mockedVersion = 'version-111.0.25';
 const renderComponent = (props?: Partial<ResponsesSummaryProps>) =>
   renderWithProviders(
     <ResponsesSummary
-      endDateTime="2024-03-14T14:33:48.750000"
+      endDatetime="2024-03-14T14:33:48.750000"
       createdAt="2024-03-14T14:20:00.100000"
       identifier={mockedIdentifier}
       version={mockedVersion}
@@ -35,8 +35,8 @@ describe('Responses Summary', () => {
     expect(screen.getByText(mockedVersion)).toBeInTheDocument();
   });
 
-  test('shows createdAt date and time if endDateTime is null', () => {
-    renderComponent({ endDateTime: null });
+  test('shows createdAt date and time if endDatetime is null', () => {
+    renderComponent({ endDatetime: null });
 
     expect(screen.getByText('Mar 14, 2024 14:20:00')).toBeInTheDocument();
   });
