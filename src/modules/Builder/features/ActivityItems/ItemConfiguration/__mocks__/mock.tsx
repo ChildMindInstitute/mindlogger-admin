@@ -471,7 +471,7 @@ export const mockedEmptyDrawing = {
   responseValues: {
     ...(makeDrawingSpaceAdjustableFeatureFlag && {
       proportion: {
-        enabled: undefined,
+        enabled: true,
       },
     }),
   },

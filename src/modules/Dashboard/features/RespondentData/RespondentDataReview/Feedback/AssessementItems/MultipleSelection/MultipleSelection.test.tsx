@@ -36,6 +36,12 @@ const activityItem = {
         tooltip: null,
         value: 2,
       },
+      {
+        id: 'b78d2f1d-357e-4724-a0f2-203582c299b1',
+        text: 'None',
+        value: 3,
+        isNoneAbove: true,
+      },
     ],
   },
   name: 'Item1',
@@ -63,7 +69,7 @@ describe('MultipleSelection', () => {
       expect(multiSelect).toBeInTheDocument();
 
       const options = screen.getAllByTestId(/^multi-select-option-\d+$/);
-      expect(options).toHaveLength(3);
+      expect(options).toHaveLength(4);
 
       const images = screen.getAllByTestId(/^multi-select-image-\d+$/);
       expect(images).toHaveLength(2);
@@ -90,7 +96,52 @@ describe('MultipleSelection', () => {
 
       // check click
       await userEvent.click(options[1]);
-      expect(onChange).toHaveBeenCalled();
+      expect(onChange).toHaveBeenCalledWith(['1']);
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test(
+    "renders the multiple selection component, select 'none' option",
+    async () => {
+      renderWithProviders(
+        <MultipleSelection
+          onChange={onChange}
+          data-testid={dataTestid}
+          activityItem={activityItem}
+          value={['1', '2']}
+        />,
+      );
+
+      const options = screen.getAllByTestId(/^multi-select-option-\d+$/);
+      expect(options).toHaveLength(4);
+
+      // click 'none' option
+      await userEvent.click(options[3]);
+
+      // selected option is "none", all other preselected options are reset
+      expect(onChange).toHaveBeenCalledWith(['3']);
+    },
+    JEST_TEST_TIMEOUT,
+  );
+
+  test(
+    "renders the multiple selection component with the 'none' option preselected",
+    async () => {
+      renderWithProviders(
+        <MultipleSelection
+          onChange={onChange}
+          data-testid={dataTestid}
+          activityItem={activityItem}
+          value={['3']} // "none" is preselected
+        />,
+      );
+
+      const options = screen.getAllByTestId(/^multi-select-option-\d+$/);
+      expect(options).toHaveLength(4);
+
+      await userEvent.click(options[1]); // select option 2
+      expect(onChange).toHaveBeenCalledWith(['1']); // "none" option is reset
     },
     JEST_TEST_TIMEOUT,
   );
