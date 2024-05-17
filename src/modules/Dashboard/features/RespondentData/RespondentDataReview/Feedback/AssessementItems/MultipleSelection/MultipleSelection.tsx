@@ -20,11 +20,33 @@ export const MultipleSelection = ({
   ...checkboxProps
 }: MultipleSelectionProps) => {
   const options = activityItem.responseValues.options;
+  const noneValue = options.find((option) => option.isNoneAbove)?.value;
+
+  const handleCheckboxChange = (optionValue: string) => {
+    if (!onChange) return;
+
+    let updatedValues = [...value];
+    const isNoneValue = noneValue !== undefined && +optionValue === noneValue;
+    const isNoneSelected = noneValue !== undefined && value.includes(String(noneValue));
+
+    if (isNoneValue) {
+      updatedValues = isNoneSelected ? [] : [optionValue];
+    } else if (isNoneSelected || updatedValues.includes(optionValue)) {
+      updatedValues = isNoneSelected
+        ? [optionValue]
+        : updatedValues.filter((val) => val !== optionValue);
+    } else {
+      updatedValues.push(optionValue);
+    }
+
+    onChange(updatedValues);
+  };
 
   return (
     <StyledFlexColumn data-testid={dataTestid}>
       {options.map((option, index) => {
         const optionValue = String(option.value!);
+        const isChecked = value?.includes(optionValue);
 
         return (
           <StyledFormControlLabel
@@ -60,14 +82,8 @@ export const MultipleSelection = ({
             control={
               <Checkbox
                 {...checkboxProps}
-                checked={value?.includes(optionValue)}
-                onChange={() => {
-                  if (!value?.includes(optionValue)) {
-                    return onChange && onChange([...value, optionValue]);
-                  }
-                  const updatedOptions = value.filter((value) => String(value) !== optionValue);
-                  onChange && onChange(updatedOptions);
-                }}
+                checked={isChecked}
+                onChange={() => handleCheckboxChange(optionValue)}
               />
             }
           />
