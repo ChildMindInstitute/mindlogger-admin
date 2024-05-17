@@ -39,7 +39,7 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
   const [isEditItemPopupVisible, setIsEditItemPopupVisible] = useState(false);
   const selectChangeRef = useRef<undefined | (() => void)>();
 
-  const { control, getFieldState } = useCustomFormContext();
+  const { control, getFieldState, setValue } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const { message, isPopupVisible, onPopupConfirm } = useCheckIfItemHasVariables(name);
 
@@ -121,6 +121,8 @@ export const ItemConfiguration = ({ name, onClose }: ItemConfigurationProps) => 
               options={availableItemsTypeOptions}
               checkIfSelectChangePopupIsVisible={checkIfSelectChangePopupIsVisible}
               control={control}
+              setValue={setValue}
+              fieldName={name}
               data-testid="builder-activity-items-item-configuration-response-type"
             />
             <StyledBodyMedium
