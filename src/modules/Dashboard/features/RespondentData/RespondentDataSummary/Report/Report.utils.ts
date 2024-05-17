@@ -11,7 +11,7 @@ export const getCompletions = ({
         endDatetime: endDatetime ?? createdAt,
         areSubscalesVisible: false,
         isFlow,
-        // TODO: add review count support for Flows
+        // TODO: add review count support for Flows (BE task M2-6584)
       }))
     : answers.map(({ answerId, endDatetime, subscaleSetting, reviewCount }) => ({
         id: answerId,

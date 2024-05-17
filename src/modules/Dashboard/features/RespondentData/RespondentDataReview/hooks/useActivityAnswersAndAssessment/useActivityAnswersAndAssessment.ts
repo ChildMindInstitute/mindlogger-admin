@@ -133,7 +133,7 @@ export const useActivityAnswersAndAssessment = ({
       setIsLoading(true);
       if (flowId && submitId) {
         await getFlowAnswers({ appletId, flowId, submitId });
-        // TODO: add flow assessment implementation after backend is ready
+        // TODO: add flow assessment implementation after backend is ready (BE task M2-6584)
       }
       if (activityId && answerId) {
         await getActivityAnswer({ appletId, answerId, activityId });
