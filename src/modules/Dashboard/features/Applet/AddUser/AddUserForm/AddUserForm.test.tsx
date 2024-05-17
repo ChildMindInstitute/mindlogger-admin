@@ -10,8 +10,9 @@ import { Roles } from 'shared/consts';
 import { expectBanner } from 'shared/utils';
 import * as MixpanelFunc from 'shared/utils/mixpanel';
 
+import { showAddWithoutInvitation } from '../AddUser';
 import { AddUserForm } from './AddUserForm';
-import { dataTestId, showAddWithoutInvitation } from './AddUserForm.const';
+import { dataTestId } from './AddUserForm.const';
 
 const route = `/dashboard/${mockedAppletId}/add-user`;
 const routePath = page.appletAddUser;

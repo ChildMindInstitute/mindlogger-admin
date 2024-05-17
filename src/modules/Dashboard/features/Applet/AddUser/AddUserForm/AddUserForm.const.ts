@@ -3,9 +3,6 @@ import { Languages } from 'shared/api';
 
 import { Field } from './AddUserForm.types';
 
-// Flag for adjustments needed to merge the shell-account branch into the develop branch for next PROD updates
-export const showAddWithoutInvitation = false;
-
 export const Fields = {
   firstName: 'firstName',
   lastName: 'lastName',

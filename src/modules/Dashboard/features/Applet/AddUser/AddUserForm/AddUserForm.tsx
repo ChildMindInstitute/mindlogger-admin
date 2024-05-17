@@ -27,6 +27,7 @@ import { useAppDispatch } from 'redux/store';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { page } from 'resources';
 
+import { showAddWithoutInvitation } from '../AddUser';
 import { StyledRow, StyledTooltip, StyledLinkBtn, StyledGridContainer } from './AddUserForm.styles';
 import {
   dataTestId,
@@ -37,7 +38,6 @@ import {
   SubmitBtnType,
   RESPONDENT_ALREADY_INVITED,
   EMAIL_IN_USE,
-  showAddWithoutInvitation,
 } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, AddUserFormValues, WorkspaceInfo } from './AddUserForm.types';
