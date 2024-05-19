@@ -175,7 +175,6 @@ export const LabeledUserDropdown = ({
             fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
           />
         }
-        isOptionEqualToValue={(option, value) => value.id === option.id}
         fullWidth={true}
         value={value}
         onChange={(_e, newValue) => onChange(newValue)}
