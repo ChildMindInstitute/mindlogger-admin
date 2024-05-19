@@ -86,7 +86,6 @@ export function useFlowGridMenu({
                   targetSubject: {
                     ...subject,
                     secretId: subject.secretUserId,
-                    userId: subject.userId,
                   },
                 }
               : undefined;

@@ -62,12 +62,7 @@ describe('LabeledUserDropdown', () => {
   });
 
   test('Uses value if provided', () => {
-    const testValue = {
-      id: 'id',
-      nickname: 'nickname',
-      secretId: 'secretId',
-      isLimitedAccount: true,
-    };
+    const testValue = { id: 'id', nickname: 'nickname', secretId: 'secretId' };
 
     const { queryByDisplayValue } = renderWithProviders(
       <LabeledUserDropdown
@@ -88,7 +83,7 @@ describe('LabeledUserDropdown', () => {
   });
 
   test('Renders value correctly without nickname', () => {
-    const testValue = { id: 'id', secretId: 'secretId', isLimitedAccount: true };
+    const testValue = { id: 'id', secretId: 'secretId' };
 
     const { queryByDisplayValue } = renderWithProviders(
       <LabeledUserDropdown

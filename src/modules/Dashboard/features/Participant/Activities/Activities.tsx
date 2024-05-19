@@ -91,7 +91,6 @@ export const Activities = () => {
               if (subjectId && subject) {
                 options.targetSubject = {
                   id: subjectId,
-                  userId: subject.result.userId,
                   secretId: subject.result.secretUserId,
                   nickname: subject.result.nickname,
                   tag: subject.result.tag,

@@ -44,7 +44,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
       return {
         id: participant.details[0].subjectId,
-        userId: participant.id,
         secretId: stringSecretIds,
         nickname: stringNicknames,
         tag: participant.details[0].subjectTag,
@@ -77,8 +76,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   );
 
   const filterTeamMembers = useCallback(
-    (option: ParticipantDropdownOption): boolean =>
-      allowedTeamMembers.some((manager) => manager.id === option.userId),
+    (option: ParticipantDropdownOption): boolean => true,
     [allowedTeamMembers],
   );
 
@@ -161,9 +159,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       defaultSourceSubject,
     );
     const [isSelfReporting, setIsSelfReporting] = useState<boolean>(true);
-    const [loggedInUser, setLoggedInUser] = useState<ParticipantDropdownOption | null>(
-      defaultSourceSubject?.userId ? defaultSourceSubject : null,
-    );
+    const [loggedInUser, setLoggedInUser] = useState<ParticipantDropdownOption | null>(null);
 
     const handleSubmit = useCallback(() => {
       if (targetSubject && sourceSubject && (isSelfReporting || loggedInUser) && activity?.id) {
@@ -171,14 +167,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         url.searchParams.set('startActivityOrFlow', activity.id);
         url.searchParams.set('sourceSubjectId', sourceSubject.id);
         url.searchParams.set('targetSubjectId', targetSubject.id);
-
-        // This conditional shouldn't be necessary, but TS is unable to propagate the type information from
-        // (isSelfReporting || loggedInUser), so we have to check them again (or use the forbidden non-null assertion)
-        if (isSelfReporting && sourceSubject.userId) {
-          url.searchParams.set('respondentId', sourceSubject.userId);
-        } else if (!isSelfReporting && loggedInUser && loggedInUser.userId) {
-          url.searchParams.set('respondentId', loggedInUser.userId);
-        }
 
         // TODO: Remove once the web app is updated to process `targetSubjectId` instead of `subjectId`
         url.searchParams.set('subjectId', targetSubject.id);
@@ -236,25 +224,24 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 <LabeledUserDropdown
                   label={t('takeNow.modal.sourceSubjectLabel')}
                   name={'participant'}
+                  tooltip=""
                   placeholder={t('takeNow.modal.sourceSubjectPlaceholder')}
                   value={sourceSubject}
                   options={participantsAndTeamMembers}
                   onChange={(option) => {
                     setSourceSubject(option);
                     if (option) {
-                      setIsSelfReporting(!!option.userId);
+                      setIsSelfReporting(true);
                     }
                   }}
                   data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
-                  canShowWarningMessage={true}
-                  showGroups={true}
                 />
                 <FormControlLabel
                   control={<Checkbox sx={{ margin: 0, width: 48, height: 48 }} />}
                   sx={{ gap: 0.4 }}
                   checked={isSelfReporting}
                   onChange={(_e, checked) => setIsSelfReporting(checked)}
-                  disabled={!sourceSubject?.userId}
+                  disabled={false}
                   label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
                 />
               </StyledFlexColumn>
@@ -262,6 +249,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                 <LabeledUserDropdown
                   label={t('takeNow.modal.loggedInUserLabel')}
                   name={'loggedInUser'}
+                  tooltip=""
                   sx={{ gap: 1, pl: 5.2 }}
                   placeholder={t('takeNow.modal.loggedInUserPlaceholder')}
                   value={loggedInUser}
@@ -269,13 +257,13 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   onChange={setLoggedInUser}
                   data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
                   handleSearch={handleSearch}
-                  showGroups={true}
                 />
               </RenderIf>
             </StyledFlexColumn>
             <LabeledUserDropdown
               label={t('takeNow.modal.targetSubjectLabel')}
               name={'subject'}
+              tooltip=""
               placeholder={t('takeNow.modal.targetSubjectPlaceholder')}
               value={targetSubject}
               options={participants}

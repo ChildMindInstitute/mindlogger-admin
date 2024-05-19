@@ -57,7 +57,6 @@ export const RespondentDataHeader = ({
     openTakeNowModal(activity, {
       targetSubject: {
         id: subject.id,
-        userId: subject.userId,
         secretId: subject.secretUserId,
         nickname: subject.nickname,
       },
