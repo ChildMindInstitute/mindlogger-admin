@@ -82,15 +82,24 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     [allowedTeamMembers],
   );
 
+  const filterParticipants = useCallback(
+    (option: ParticipantDropdownOption): boolean => option.tag !== 'Team',
+    [],
+  );
+
   const [activity, setActivity] = useState<BaseActivity | null>(null);
 
   const optionsData = respondentsData?.result.map(participantToOption).sort(sortByTeamTag) ?? [];
-  const [participants, setParticipants] = useState<ParticipantDropdownOption[]>(optionsData);
-  const [participantsAndTeamMembers, setParticipantsAndTeamMembers] =
-    useState<ParticipantDropdownOption[]>(optionsData);
+
+  const [participants, setParticipants] = useState<ParticipantDropdownOption[]>(
+    optionsData.filter(filterParticipants),
+  );
   const [teamMembers, setTeamMembers] = useState<ParticipantDropdownOption[]>(
     optionsData.filter(filterTeamMembers),
   );
+  const [participantsAndTeamMembers, setParticipantsAndTeamMembers] = useState<
+    ParticipantDropdownOption[]
+  >([...teamMembers, ...participants]);
 
   const [defaultTargetSubject, setDefaultTargetSubject] =
     useState<ParticipantDropdownOption | null>(null);
@@ -112,9 +121,13 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         );
       } else if (respondentsStatus === 'success' && respondentsData) {
         const options = respondentsData.result.map(participantToOption).sort(sortByTeamTag);
-        setParticipants(options);
-        setParticipantsAndTeamMembers(options);
-        setTeamMembers(options.filter(filterTeamMembers));
+
+        const teamMembers = options.filter(filterTeamMembers);
+        const participants = options.filter(filterParticipants);
+
+        setTeamMembers(teamMembers);
+        setParticipants(participants);
+        setParticipantsAndTeamMembers([...teamMembers, ...participants]);
 
         // Default to the current admin, if possible
         if (userData) {
@@ -242,7 +255,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   onChange={(option) => {
                     setSourceSubject(option);
                     if (option) {
-                      setIsSelfReporting(!!option.userId);
+                      setIsSelfReporting(option.tag === 'Team');
                     }
                   }}
                   data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
@@ -254,7 +267,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 0.4 }}
                   checked={isSelfReporting}
                   onChange={(_e, checked) => setIsSelfReporting(checked)}
-                  disabled={!sourceSubject?.userId}
+                  disabled={true}
                   label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
                 />
               </StyledFlexColumn>

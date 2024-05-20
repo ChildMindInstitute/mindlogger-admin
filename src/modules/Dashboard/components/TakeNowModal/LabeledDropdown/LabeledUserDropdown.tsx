@@ -71,7 +71,7 @@ export const LabeledUserDropdown = ({
     [debounce, handleSearch],
   );
 
-  const shouldShowWarningMessage = !!canShowWarningMessage && !!value && !value.userId;
+  const shouldShowWarningMessage = !!canShowWarningMessage && !!value && value.tag !== 'Team';
 
   return (
     <StyledFlexColumn sx={{ gap: 1.6, ...sx }}>

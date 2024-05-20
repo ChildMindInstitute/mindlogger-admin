@@ -1227,7 +1227,7 @@
       "loggedInUserLabel": "Who will be inputting the responses?",
       "loggedInUserPlaceholder": "Select from team members",
       "dropdown": {
-        "limitedAccountWarning": "The selected participant has a Limited Account and is unable to input their own answers. Please select a respondent to continue.",
+        "limitedAccountWarning": "The selected participant is unable to input their own answers. Please select a team member to continue.",
         "teamMemberGrouping": "Team Members",
         "participantGrouping": "Participants",
         "notFound": "Not Found"
