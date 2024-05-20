@@ -1,5 +1,4 @@
 import { AutocompleteProps } from '@mui/material/Autocomplete/Autocomplete';
-import { SxProps, Theme } from '@mui/system';
 
 import { ParticipantSnippetInfo } from 'modules/Dashboard/components/ParticipantSnippet';
 
@@ -29,6 +28,5 @@ export type LabeledUserDropdownProps = Omit<
   debounce?: number;
   canShowWarningMessage?: boolean;
   'data-testid'?: string;
-  sx?: SxProps<Theme>;
   showGroups?: boolean;
 };
