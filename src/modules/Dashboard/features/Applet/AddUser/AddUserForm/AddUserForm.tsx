@@ -20,10 +20,10 @@ import { Svg, Tooltip } from 'shared/components';
 import { useAppDispatch } from 'redux/store';
 
 import { StyledButton, StyledRow, StyledResetButton, StyledTooltip } from './AddUserForm.styles';
-import { Fields, fields, defaultValues, langs, getRoles } from './AddUserForm.const';
+import { Fields, fields, defaultValues, langs } from './AddUserForm.const';
 import { AddUserSchema } from './AddUserForm.schema';
 import { AddUserFormProps, FormValues, WorkspaceInfo } from './AddUserForm.types';
-import { getUrl } from './AddUserForm.utils';
+import { getUrl, getRoles } from './AddUserForm.utils';
 import { useFormError } from './AddUserForm.hooks';
 
 export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) => {
