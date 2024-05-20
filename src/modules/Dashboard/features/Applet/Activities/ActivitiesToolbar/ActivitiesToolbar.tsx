@@ -21,7 +21,7 @@ export const ActivitiesToolbar = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   return (
-    <StyledFlexWrap sx={{ gap: 1.2, placeContent: 'space-between', ...sx }} {...otherProps}>
+    <StyledFlexWrap sx={{ gap: 1.2, ...sx }} {...otherProps}>
       {appletId && (
         <>
           {featureFlags.enableActivityFilterSort && (
@@ -58,7 +58,7 @@ export const ActivitiesToolbar = ({
             </StyledFlexTopCenter>
           )}
 
-          <StyledFlexWrap sx={{ gap: 1.2 }}>
+          <StyledFlexWrap sx={{ ml: 'auto', gap: 1.2 }}>
             {featureFlags.enableActivityAssign && (
               <Button
                 data-testid={`${dataTestId}-assign`}
