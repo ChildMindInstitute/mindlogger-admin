@@ -13,9 +13,13 @@ import {
 import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
-import { MenuItemType } from 'shared/components';
+import { MenuItem, MenuItemType } from 'shared/components';
 
-import { ChosenAppletData, GetParticipantActionsProps } from './Participants.types';
+import {
+  ChosenAppletData,
+  GetParticipantActionsProps,
+  ParticipantActionProps,
+} from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
 
 export const getParticipantActions = ({
@@ -31,7 +35,7 @@ export const getParticipantActions = ({
   status,
   dataTestid,
   showAssignActivity = false,
-}: GetParticipantActionsProps) => {
+}: GetParticipantActionsProps): MenuItem<ParticipantActionProps>[] => {
   const context = { respondentId, respondentOrSubjectId, email, secretId, nickname, tag };
   const isUpgradeable = status === RespondentStatus.NotInvited;
   const isPending = status === RespondentStatus.Pending;
