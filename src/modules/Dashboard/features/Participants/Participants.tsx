@@ -11,7 +11,6 @@ import {
   Row,
   Search,
   Spinner,
-  Svg,
 } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
@@ -309,13 +308,7 @@ export const Participants = () => {
         onClick: defaultOnClick,
       },
       accountType: {
-        content: () => (
-          <Chip
-            icon={isPending ? <Svg id="email-outlined" width={18} height={18} /> : undefined}
-            color={isPending ? 'warning' : 'secondary'}
-            title={accountType}
-          />
-        ),
+        content: () => <Chip color={isPending ? 'warning' : 'secondary'} title={accountType} />,
         value: accountType,
         onClick: defaultOnClick,
       },
