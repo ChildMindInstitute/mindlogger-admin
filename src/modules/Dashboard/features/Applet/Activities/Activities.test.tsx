@@ -350,8 +350,16 @@ describe('Dashboard > Applet > Activities screen', () => {
       mockGetRequestResponses({
         [getAppletUrl]: successfulGetAppletMock,
         [`/activities/applet/${mockedAppletId}`]: successfulGetAppletActivitiesMock,
-        [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]:
-          successfulGetAppletParticipantsMock,
+        [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`]: (params) => {
+          if (params.userId === mockedOwnerRespondent.id) {
+            return mockSuccessfulHttpResponse<ParticipantsData>({
+              result: [mockedOwnerRespondent],
+              count: 1,
+            });
+          }
+
+          return successfulGetAppletParticipantsMock;
+        },
         [`/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/managers`]:
           successfulGetAppletManagersMock,
       });

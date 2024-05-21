@@ -342,7 +342,16 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       mockGetRequestResponses({
         [getAppletUrl]: successfulGetAppletMock,
         [getAppletActivitiesUrl]: successfulGetAppletActivitiesMock,
-        [getWorkspaceRespondentsUrl]: successfulGetAppletParticipantsMock,
+        [getWorkspaceRespondentsUrl]: (params) => {
+          if (params.userId === mockedOwnerRespondent.id) {
+            return mockSuccessfulHttpResponse<ParticipantsData>({
+              result: [mockedOwnerRespondent],
+              count: 1,
+            });
+          }
+
+          return successfulGetAppletParticipantsMock;
+        },
         [getWorkspaceManagersUrl]: successfulGetAppletManagersMock,
       });
 

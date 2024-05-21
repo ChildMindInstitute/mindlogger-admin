@@ -4,16 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal } from 'shared/components';
-import { auth, users, workspaces } from 'redux/modules';
+import { auth, workspaces } from 'redux/modules';
 import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
-import { DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts';
+import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { useAppDispatch } from 'redux/store';
 import { RenderIf } from 'shared/components';
 import { useAsync } from 'shared/hooks';
-import { ManagersData } from 'modules/Dashboard/features';
 
 import {
   OpenTakeNowModalOptions,
@@ -24,142 +22,133 @@ import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/Activity
 import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
 import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
+import { Manager, Respondent } from '../../types';
+
+const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
+  Roles.SuperAdmin,
+  Roles.Owner,
+  Roles.Manager,
+] as const;
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
-  const dispatch = useAppDispatch();
-  const respondentsData = users.useAllRespondentsData();
-  const respondentsStatus = users.useAllRespondentsStatus();
-
-  const [managersData, setManagersData] = useState<ManagersData | null>(null);
-
-  const { execute: getWorkspaceManagers } = useAsync(getWorkspaceManagersApi, (response) => {
-    setManagersData(response?.data || null);
-  });
-
-  const participantToOption = useCallback(
-    (participant: ParticipantsData['result'][0]): ParticipantDropdownOption => {
-      const stringNicknames = joinWihComma(participant.nicknames, true);
-      const stringSecretIds = joinWihComma(participant.secretIds, true);
-
-      return {
-        id: participant.details[0].subjectId,
-        userId: participant.id,
-        secretId: stringSecretIds,
-        nickname: stringNicknames,
-        tag: participant.details[0].subjectTag,
-      };
-    },
-    [],
-  );
-
-  const sortByTeamTag = useCallback(
-    (a: ParticipantDropdownOption, b: ParticipantDropdownOption): number => {
-      if (a.tag === 'Team' && b.tag !== 'Team') {
-        return -1;
-      }
-      if (a.tag !== 'Team' && b.tag === 'Team') {
-        return 1;
-      }
-
-      return 0;
-    },
-    [],
-  );
-
-  const allowedRoles = useMemo(() => ['super_admin', 'owner', 'manager'], []);
-  const allowedTeamMembers = useMemo(
-    () =>
-      (managersData?.result ?? []).filter((manager) =>
-        manager.roles.some((role) => allowedRoles.includes(role)),
-      ),
-    [managersData, allowedRoles],
-  );
-
-  const filterTeamMembers = useCallback(
-    (option: ParticipantDropdownOption): boolean =>
-      allowedTeamMembers.some((manager) => manager.id === option.userId),
-    [allowedTeamMembers],
-  );
-
-  const filterParticipants = useCallback(
-    (option: ParticipantDropdownOption): boolean => option.tag !== 'Team',
-    [],
-  );
+  const { ownerId } = workspaces.useData() || {};
+  const userData = auth.useData();
+  const { appletId } = useParams();
 
   const [activity, setActivity] = useState<BaseActivity | null>(null);
-
-  const optionsData = respondentsData?.result.map(participantToOption).sort(sortByTeamTag) ?? [];
-
-  const [participants, setParticipants] = useState<ParticipantDropdownOption[]>(
-    optionsData.filter(filterParticipants),
-  );
-  const [teamMembers, setTeamMembers] = useState<ParticipantDropdownOption[]>(
-    optionsData.filter(filterTeamMembers),
-  );
-  const [participantsAndTeamMembers, setParticipantsAndTeamMembers] = useState<
-    ParticipantDropdownOption[]
-  >([...teamMembers, ...participants]);
-
+  const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
+  const [allTeamMembers, setAllTeamMembers] = useState<Manager[]>([]);
   const [defaultTargetSubject, setDefaultTargetSubject] =
     useState<ParticipantDropdownOption | null>(null);
   const [defaultSourceSubject, setDefaultSourceSubject] =
     useState<ParticipantDropdownOption | null>(null);
 
-  const { ownerId } = workspaces.useData() || {};
-  const userData = auth.useData();
-  const { appletId } = useParams();
+  const participantToOption = useMemo(
+    () =>
+      (participant: Respondent): ParticipantDropdownOption => {
+        const stringNicknames = joinWihComma(participant.nicknames, true);
+        const stringSecretIds = joinWihComma(participant.secretIds, true);
+
+        return {
+          id: participant.details[0].subjectId,
+          userId: participant.id,
+          secretId: stringSecretIds,
+          nickname: stringNicknames,
+          tag: participant.details[0].subjectTag,
+        };
+      },
+    [],
+  );
+
+  const { execute: fetchParticipants } = useAsync(getWorkspaceRespondentsApi, (response) => {
+    if (response?.data) {
+      const options = (response.data as ParticipantsData).result.map(participantToOption);
+
+      setAllParticipants(options);
+    }
+  });
+
+  const { execute: fetchManagers } = useAsync(getWorkspaceManagersApi, (response) => {
+    setAllTeamMembers(response?.data?.result || []);
+  });
+
+  const { execute: fetchLoggedInTeamMember } = useAsync(getWorkspaceRespondentsApi, (response) => {
+    if (response?.data) {
+      const loggedInTeamMember = participantToOption((response.data as ParticipantsData).result[0]);
+      setDefaultSourceSubject(loggedInTeamMember);
+      setAllParticipants((prev) => {
+        if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
+          return prev;
+        }
+
+        return [loggedInTeamMember, ...prev];
+      });
+    }
+  });
+
+  const allowedTeamMembers = useMemo(
+    () =>
+      allTeamMembers.filter((manager) =>
+        manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
+      ),
+    [allTeamMembers],
+  );
+
+  const participantsOnly = useMemo(
+    () => allParticipants.filter((participant) => participant.tag !== 'Team'),
+    [allParticipants],
+  );
+
+  const teamMembersOnly = useMemo(
+    () =>
+      allParticipants.filter(
+        (participant) =>
+          participant.tag === 'Team' &&
+          allowedTeamMembers.some((manager) => manager.id === participant.userId),
+      ),
+    [allParticipants, allowedTeamMembers],
+  );
+
+  const participantsAndTeamMembers = useMemo(
+    () => [...teamMembersOnly, ...participantsOnly],
+    [participantsOnly, teamMembersOnly],
+  );
 
   useEffect(() => {
     if (appletId) {
-      if (respondentsStatus === 'idle' || respondentsStatus === 'error') {
-        const { getAllWorkspaceRespondents } = users.thunk;
-        dispatch(
-          getAllWorkspaceRespondents({
-            params: { ownerId, appletId },
-          }),
-        );
-      } else if (respondentsStatus === 'success' && respondentsData) {
-        const options = respondentsData.result.map(participantToOption).sort(sortByTeamTag);
-
-        const teamMembers = options.filter(filterTeamMembers);
-        const participants = options.filter(filterParticipants);
-
-        setTeamMembers(teamMembers);
-        setParticipants(participants);
-        setParticipantsAndTeamMembers([...teamMembers, ...participants]);
-
-        // Default to the current admin, if possible
-        if (userData) {
-          const ownerRespondent = respondentsData.result.find((r) => r.id === userData.user.id);
-          if (ownerRespondent) {
-            const ownerOption = options.find(
-              (option) => option.id === ownerRespondent.details[0].subjectId,
-            );
-            if (ownerOption) {
-              setDefaultSourceSubject(ownerOption);
-            }
-          }
-        }
+      if (allParticipants.length === 0) {
+        fetchParticipants({
+          params: {
+            ownerId,
+            appletId,
+            limit: 100,
+          },
+        });
       }
 
-      getWorkspaceManagers({
-        params: {
-          ownerId,
-          limit: MAX_LIMIT,
-          ...(appletId && { appletId }),
-        },
-      });
+      if (allParticipants.length > 0 && allTeamMembers.length === 0) {
+        fetchManagers({
+          params: {
+            ownerId,
+            appletId,
+            limit: 100,
+          },
+        });
+      }
+
+      if (userData && defaultSourceSubject === null) {
+        fetchLoggedInTeamMember({
+          params: {
+            ownerId,
+            appletId,
+            userId: userData.user.id,
+            limit: 1,
+          },
+        });
+      }
     }
-  }, [
-    appletId,
-    dispatch,
-    ownerId,
-    userData,
-    respondentsStatus,
-    respondentsData,
-    participantToOption,
-  ]);
+  }, [appletId, ownerId, userData, allParticipants, allTeamMembers, defaultSourceSubject]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
@@ -217,7 +206,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       [],
     );
 
-    if (!activity || !participants || !participantsAndTeamMembers) {
+    if (!activity || !allParticipants || !participantsAndTeamMembers) {
       return null;
     }
 
@@ -278,7 +267,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   sx={{ gap: 1, pl: 5.2 }}
                   placeholder={t('takeNow.modal.loggedInUserPlaceholder')}
                   value={loggedInUser}
-                  options={teamMembers}
+                  options={teamMembersOnly}
                   onChange={setLoggedInUser}
                   data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
                   handleSearch={handleSearch}
