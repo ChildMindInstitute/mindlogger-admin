@@ -62,31 +62,42 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     [],
   );
 
-  const { execute: fetchParticipants } = useAsync(getWorkspaceRespondentsApi, (response) => {
-    if (response?.data) {
-      const options = (response.data as ParticipantsData).result.map(participantToOption);
+  const { execute: fetchParticipants, isLoading: isFetchingParticipants } = useAsync(
+    getWorkspaceRespondentsApi,
+    (response) => {
+      if (response?.data) {
+        const options = (response.data as ParticipantsData).result.map(participantToOption);
 
-      setAllParticipants(options);
-    }
-  });
+        setAllParticipants(options);
+      }
+    },
+  );
 
-  const { execute: fetchManagers } = useAsync(getWorkspaceManagersApi, (response) => {
-    setAllTeamMembers(response?.data?.result || []);
-  });
+  const { execute: fetchManagers, isLoading: isFetchingManagers } = useAsync(
+    getWorkspaceManagersApi,
+    (response) => {
+      setAllTeamMembers(response?.data?.result || []);
+    },
+  );
 
-  const { execute: fetchLoggedInTeamMember } = useAsync(getWorkspaceRespondentsApi, (response) => {
-    if (response?.data) {
-      const loggedInTeamMember = participantToOption((response.data as ParticipantsData).result[0]);
-      setDefaultSourceSubject(loggedInTeamMember);
-      setAllParticipants((prev) => {
-        if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
-          return prev;
-        }
+  const { execute: fetchLoggedInTeamMember, isLoading: isFetchingLoggedInTeamMember } = useAsync(
+    getWorkspaceRespondentsApi,
+    (response) => {
+      if (response?.data) {
+        const loggedInTeamMember = participantToOption(
+          (response.data as ParticipantsData).result[0],
+        );
+        setDefaultSourceSubject(loggedInTeamMember);
+        setAllParticipants((prev) => {
+          if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
+            return prev;
+          }
 
-        return [loggedInTeamMember, ...prev];
-      });
-    }
-  });
+          return [loggedInTeamMember, ...prev];
+        });
+      }
+    },
+  );
 
   const allowedTeamMembers = useMemo(
     () =>
@@ -118,7 +129,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
 
   useEffect(() => {
     if (appletId) {
-      if (allParticipants.length === 0) {
+      if (allParticipants.length === 0 && !isFetchingParticipants) {
         fetchParticipants({
           params: {
             ownerId,
@@ -126,9 +137,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
             limit: 100,
           },
         });
-      }
-
-      if (allParticipants.length > 0 && allTeamMembers.length === 0) {
+      } else if (allParticipants.length > 0 && allTeamMembers.length === 0 && !isFetchingManagers) {
         fetchManagers({
           params: {
             ownerId,
@@ -138,7 +147,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         });
       }
 
-      if (userData && defaultSourceSubject === null) {
+      if (userData && defaultSourceSubject === null && !isFetchingLoggedInTeamMember) {
         fetchLoggedInTeamMember({
           params: {
             ownerId,
@@ -149,7 +158,20 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
         });
       }
     }
-  }, [appletId, ownerId, userData, allParticipants, allTeamMembers, defaultSourceSubject]);
+  }, [
+    appletId,
+    ownerId,
+    userData,
+    allParticipants,
+    allTeamMembers,
+    defaultSourceSubject,
+    isFetchingParticipants,
+    isFetchingManagers,
+    isFetchingLoggedInTeamMember,
+    fetchParticipants,
+    fetchManagers,
+    fetchLoggedInTeamMember,
+  ]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
