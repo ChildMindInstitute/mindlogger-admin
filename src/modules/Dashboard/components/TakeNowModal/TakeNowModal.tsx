@@ -3,14 +3,13 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
-import { Modal } from 'shared/components';
+import { Modal, RenderIf } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
 import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
-import { RenderIf } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 
 import {
@@ -29,6 +28,8 @@ const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
   Roles.Owner,
   Roles.Manager,
 ] as const;
+
+type SearchType = 'team' | 'participant';
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
@@ -191,17 +192,57 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     }, [targetSubject, sourceSubject, loggedInUser, isSelfReporting]);
 
     const handleSearch = useCallback(
-      async (search: string): Promise<ParticipantDropdownOption[]> => {
-        const response = await getWorkspaceRespondentsApi({
-          params: {
-            ownerId,
-            appletId,
-            search,
-            limit: DEFAULT_ROWS_PER_PAGE,
-          },
-        });
+      async (
+        query: string,
+        types: [SearchType, ...SearchType[]],
+      ): Promise<ParticipantDropdownOption[]> => {
+        const requests = [];
 
-        return (response?.data as ParticipantsData)?.result.map(participantToOption) ?? [];
+        if (types.includes('team')) {
+          requests.push(
+            getWorkspaceManagersApi({
+              params: {
+                ownerId,
+                appletId,
+                search: query,
+                limit: DEFAULT_ROWS_PER_PAGE,
+              },
+            }),
+          );
+        }
+
+        if (types.includes('participant')) {
+          requests.push(
+            getWorkspaceRespondentsApi({
+              params: {
+                ownerId,
+                appletId,
+                search: query,
+                limit: DEFAULT_ROWS_PER_PAGE,
+              },
+            }),
+          );
+        }
+
+        const [teamMemberResponse, participantsResponse] = await Promise.all(requests);
+
+        // Filter the search results by allowed team members
+        const allowedTeamMembersSearchResults =
+          (teamMemberResponse?.data?.result as Manager[]).filter((manager) =>
+            manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
+          ) ?? [];
+
+        const participantsSearchResults =
+          (participantsResponse?.data?.result as Respondent[]) ?? [];
+
+        // If there are team members in the search results, we only want to show them if they are allowed
+        return participantsSearchResults
+          .map(participantToOption)
+          .filter(
+            (participant) =>
+              participant.tag !== 'Team' ||
+              allowedTeamMembersSearchResults.some((manager) => manager.id === participant.userId),
+          );
       },
       [],
     );
@@ -248,6 +289,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                     }
                   }}
                   data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
+                  handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
                   canShowWarningMessage={true}
                   showGroups={true}
                 />
@@ -270,7 +312,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   options={teamMembersOnly}
                   onChange={setLoggedInUser}
                   data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-                  handleSearch={handleSearch}
+                  handleSearch={(query) => handleSearch(query, ['team'])}
                   showGroups={true}
                 />
               </RenderIf>
@@ -283,7 +325,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               options={participantsAndTeamMembers}
               onChange={setTargetSubject}
               data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-              handleSearch={handleSearch}
+              handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
             />
           </StyledFlexColumn>
         </StyledFlexColumn>
