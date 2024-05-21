@@ -291,7 +291,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
               name={'subject'}
               placeholder={t('takeNow.modal.targetSubjectPlaceholder')}
               value={targetSubject}
-              options={participants}
+              options={participantsAndTeamMembers}
               onChange={setTargetSubject}
               data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
               handleSearch={handleSearch}
