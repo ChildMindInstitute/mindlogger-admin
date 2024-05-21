@@ -30,6 +30,13 @@ import {
 import { joinWihComma } from '../joinWihComma';
 import { getAnswerValue } from '../getAnswerValue';
 
+const getTimeRangeValue = (
+  data: DecryptedDateRangeAnswer['value']['from'] | DecryptedDateRangeAnswer['value']['to'],
+  hasFallback = false,
+) =>
+  `hr ${hasFallback ? data?.hour ?? 0 : data?.hour}, min ${
+    hasFallback ? data?.minute ?? 0 : data?.minute
+  }`;
 export const isNullAnswer = (obj: ResponseValueType) =>
   obj === null || (typeof obj === 'object' && Object.keys(obj).length === 0);
 
@@ -91,11 +98,18 @@ export const parseResponseValueRaw = <T extends DecryptedAnswerData>(
   }
 
   switch (inputType) {
-    case ItemResponseType.TimeRange:
-      return `time_range: from (hr ${(value as DecryptedDateRangeAnswer['value'])?.from
-        ?.hour}, min ${(value as DecryptedDateRangeAnswer['value'])?.from?.minute}) / to (hr ${
-        (value as DecryptedDateRangeAnswer['value'])?.to?.hour ?? 0
-      }, min ${(value as DecryptedDateRangeAnswer['value'])?.to?.minute ?? 0})`;
+    case ItemResponseType.TimeRange: {
+      const prefix = 'time_range: ';
+      const typedValue = value as DecryptedDateRangeAnswer['value'];
+      const from = typedValue?.from;
+      const to = typedValue?.to;
+
+      if (from === null && to === null) return `${prefix}from (empty) / to (empty)`;
+      if (from === null) return `${prefix}from (empty) / to (${getTimeRangeValue(to)})`;
+      if (to === null) return `${prefix}from (${getTimeRangeValue(from)}) / to (empty)`;
+
+      return `${prefix}from (${getTimeRangeValue(from)}) / to (${getTimeRangeValue(to, true)})`;
+    }
     case ItemResponseType.Date: {
       const { day, month, year } = value as DecryptedDateAnswer['value'];
       const calculatedMonth = item?.migratedDate ? month + 1 : month; // for migrated date + 1
