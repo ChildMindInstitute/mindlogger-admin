@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
-import { Modal, RenderIf } from 'shared/components';
+import { Modal } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
 import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
@@ -324,7 +324,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
                 />
               </StyledFlexColumn>
-              <RenderIf condition={!isSelfReporting}>
+              {!isSelfReporting && (
                 <LabeledUserDropdown
                   label={t('takeNow.modal.loggedInUserLabel')}
                   name={'loggedInUser'}
@@ -337,7 +337,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
                   handleSearch={(query) => handleSearch(query, ['team'])}
                   showGroups={true}
                 />
-              </RenderIf>
+              )}
             </StyledFlexColumn>
             <LabeledUserDropdown
               label={t('takeNow.modal.targetSubjectLabel')}

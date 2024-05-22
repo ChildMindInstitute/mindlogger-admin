@@ -13,7 +13,6 @@ import {
   variables,
 } from 'shared/styles';
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
-import { RenderIf } from 'shared/components';
 
 import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
 import { StyledGroupLabel, StyledWarningMessageContainer } from './LabeledUserDropdown.styles';
@@ -90,7 +89,7 @@ export const LabeledUserDropdown = ({
         <StyledTitleMedium sx={{ fontWeight: 700, color: variables.palette.on_surface }}>
           {label}
         </StyledTitleMedium>
-        <RenderIf condition={!!tooltip}>
+        {!!tooltip && (
           <Tooltip tooltipTitle={tooltip}>
             <Box sx={{ height: 24 }}>
               <StyledTitleTooltipIcon
@@ -102,7 +101,7 @@ export const LabeledUserDropdown = ({
               />
             </Box>
           </Tooltip>
-        </RenderIf>
+        )}
       </Box>
       <Autocomplete
         renderInput={(params: AutocompleteRenderInputParams) => {
@@ -187,14 +186,14 @@ export const LabeledUserDropdown = ({
         onInputChange={(_e, search) => debouncedSearchHandler(search)}
         {...rest}
       />
-      <RenderIf condition={shouldShowWarningMessage}>
+      {shouldShowWarningMessage && (
         <StyledWarningMessageContainer>
           <Box width={24} height={24}>
             <Svg id={'supervisor-account'} fill={variables.palette.on_surface_variant} />
           </Box>
           <StyledBodyMedium>{t('takeNow.modal.dropdown.limitedAccountWarning')}</StyledBodyMedium>
         </StyledWarningMessageContainer>
-      </RenderIf>
+      )}
     </StyledFlexColumn>
   );
 };
