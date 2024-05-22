@@ -1216,6 +1216,7 @@
   "takePhoto": "Prendre une photo",
   "takeNow": {
     "menuItem": "Prendre maintenant",
+    "buttonLabel": "Prendre maintenant",
     "modal": {
       "title": "Prendre maintenant",
       "sourceSubjectLabel": "Qui apportera les réponses?",

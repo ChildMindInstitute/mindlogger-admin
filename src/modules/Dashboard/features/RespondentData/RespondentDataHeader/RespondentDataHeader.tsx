@@ -155,7 +155,7 @@ export const RespondentDataHeader = ({
                 onClick={handleTakeNow}
                 data-testid={`${dataTestid}-take-now`}
               >
-                {t('takeNow')}
+                {t('takeNow.buttonLabel')}
               </Button>
             )}
           </StyledFlexTopCenter>
