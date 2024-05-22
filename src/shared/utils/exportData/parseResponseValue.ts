@@ -33,10 +33,12 @@ import { getAnswerValue } from '../getAnswerValue';
 const getTimeRangeValue = (
   data: DecryptedDateRangeAnswer['value']['from'] | DecryptedDateRangeAnswer['value']['to'],
   hasFallback = false,
-) =>
-  `hr ${hasFallback ? data?.hour ?? 0 : data?.hour}, min ${
-    hasFallback ? data?.minute ?? 0 : data?.minute
-  }`;
+) => {
+  const hour = hasFallback ? data?.hour ?? 0 : data?.hour;
+  const minute = hasFallback ? data?.minute ?? 0 : data?.minute;
+
+  return `hr ${hour}, min ${minute}`;
+};
 export const isNullAnswer = (obj: ResponseValueType) =>
   obj === null || (typeof obj === 'object' && Object.keys(obj).length === 0);
 
