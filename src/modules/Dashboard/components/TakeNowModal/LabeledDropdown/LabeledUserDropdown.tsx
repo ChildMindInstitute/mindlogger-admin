@@ -73,6 +73,18 @@ export const LabeledUserDropdown = ({
 
   const shouldShowWarningMessage = !!canShowWarningMessage && !!value && value.tag !== 'Team';
 
+  let groupBy: LabeledUserDropdownProps['groupBy'];
+
+  if (showGroups) {
+    groupBy = (option: ParticipantDropdownOption) => {
+      if (option.tag !== 'Team') {
+        return t('takeNow.modal.dropdown.participantGrouping');
+      } else {
+        return t('takeNow.modal.dropdown.teamMemberGrouping');
+      }
+    };
+  }
+
   return (
     <StyledFlexColumn sx={{ gap: 1.6, ...sx }}>
       <Box sx={{ display: 'flex', gap: 0.4 }}>
@@ -129,15 +141,7 @@ export const LabeledUserDropdown = ({
           />
         )}
         isOptionEqualToValue={(option, value) => option.id === value.id}
-        groupBy={(option: ParticipantDropdownOption) => {
-          if (!showGroups) return undefined;
-
-          if (option.tag !== 'Team') {
-            return t('takeNow.modal.dropdown.participantGrouping');
-          } else {
-            return t('takeNow.modal.dropdown.teamMemberGrouping');
-          }
-        }}
+        groupBy={groupBy}
         renderGroup={(params) => {
           const { key, group, children } = params;
 
