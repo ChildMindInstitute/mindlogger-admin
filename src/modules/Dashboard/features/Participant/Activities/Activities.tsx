@@ -18,7 +18,6 @@ import { Activity, ActivityFlow } from 'redux/modules';
 import { StyledFlexColumn } from 'shared/styles';
 import { page } from 'resources';
 
-import { ParticipantActivitiesToolbar } from './ParticipantActivitiesToolbar';
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
 
 const dataTestId = 'dashboard-applet-participant-activities';
@@ -133,14 +132,19 @@ export const Activities = () => {
     <StyledFlexColumn sx={{ gap: 2.4, maxHeight: '100%' }}>
       {isLoading && <Spinner />}
 
-      <ParticipantActivitiesToolbar
-        appletId={appletId}
-        data-testid={dataTestId}
-        sx={{ px: 3.2, pt: 3.2 }}
-      />
+      {/*
+        TODO: Re-enable when implementing toolbar functionality.
+        To be implemented in  M2-5530, M2-5445, and M2-5710.
+
+        <ParticipantActivitiesToolbar
+          appletId={appletId}
+          data-testid={dataTestId}
+          sx={{ px: 3.2, pt: 3.2 }}
+        />
+      */}
 
       {showContent && (
-        <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2, pt: 0 }}>
+        <StyledFlexColumn sx={{ gap: 4.8, overflow: 'auto', p: 3.2 }}>
           {!!flows?.length && (
             <StyledFlexColumn component="section" sx={{ gap: 1.6 }}>
               <ActivitiesSectionHeader title={t('flows')} count={flows?.length ?? 0} />
