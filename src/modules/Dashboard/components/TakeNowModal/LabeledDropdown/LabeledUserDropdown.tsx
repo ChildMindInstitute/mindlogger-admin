@@ -7,8 +7,6 @@ import { Svg, Tooltip } from 'shared/components';
 import {
   StyledBodyMedium,
   StyledFlexColumn,
-  StyledFlexTopCenter,
-  StyledLabelBoldLarge,
   StyledTitleMedium,
   StyledTitleTooltipIcon,
   theme,
@@ -18,6 +16,7 @@ import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnip
 import { RenderIf } from 'shared/components';
 
 import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
+import { StyledGroupLabel, StyledWarningMessageContainer } from './LabeledUserDropdown.styles';
 
 export const LabeledUserDropdown = ({
   label,
@@ -152,17 +151,10 @@ export const LabeledUserDropdown = ({
                 },
               }}
             >
-              <StyledLabelBoldLarge
-                sx={{
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  color: variables.palette.on_surface_variant,
-                  p: theme.spacing(1.6, 1.6, 0.4),
-                }}
-              >
-                {group}
-              </StyledLabelBoldLarge>
-              <ul style={{ padding: 0 }}>{children}</ul>
+              <StyledGroupLabel>{group}</StyledGroupLabel>
+              <Box component="ul" sx={{ p: 0 }}>
+                {children}
+              </Box>
             </Box>
           );
         }}
@@ -196,21 +188,12 @@ export const LabeledUserDropdown = ({
         {...rest}
       />
       <RenderIf condition={shouldShowWarningMessage}>
-        <StyledFlexTopCenter
-          sx={{
-            gap: 1.6,
-            backgroundColor: variables.palette.yellow_light,
-            p: theme.spacing(0.8, 1.6),
-            mt: -1.6,
-            borderBottomLeftRadius: variables.borderRadius.sm,
-            borderBottomRightRadius: variables.borderRadius.sm,
-          }}
-        >
+        <StyledWarningMessageContainer>
           <Box width={24} height={24}>
             <Svg id={'supervisor-account'} fill={variables.palette.on_surface_variant} />
           </Box>
           <StyledBodyMedium>{t('takeNow.modal.dropdown.limitedAccountWarning')}</StyledBodyMedium>
-        </StyledFlexTopCenter>
+        </StyledWarningMessageContainer>
       </RenderIf>
     </StyledFlexColumn>
   );
