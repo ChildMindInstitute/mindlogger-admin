@@ -132,9 +132,6 @@ export const LabeledUserDropdown = ({
               sx: {
                 p: theme.spacing(0.6, 1.6),
                 cursor: 'pointer',
-                ':last-child': {
-                  borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
-                },
               },
               ...props,
             }}
@@ -146,7 +143,15 @@ export const LabeledUserDropdown = ({
           const { key, group, children } = params;
 
           return (
-            <li key={key}>
+            <Box
+              component="li"
+              key={key}
+              sx={{
+                '&:not(:last-child)': {
+                  borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+                },
+              }}
+            >
               <StyledLabelBoldLarge
                 sx={{
                   overflow: 'hidden',
@@ -158,7 +163,7 @@ export const LabeledUserDropdown = ({
                 {group}
               </StyledLabelBoldLarge>
               <ul style={{ padding: 0 }}>{children}</ul>
-            </li>
+            </Box>
           );
         }}
         getOptionLabel={(value) => {
