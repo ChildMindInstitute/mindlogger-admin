@@ -25,10 +25,10 @@ import {
 } from 'shared/utils/axios-mocks';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
+import { RespondentStatus } from 'modules/Dashboard/types';
+import { ManagersData } from 'modules/Dashboard/features/Managers';
 
 import { Activities } from './Activities';
-import { RespondentStatus } from '../../../types';
-import { ManagersData } from '../../Managers';
 
 const successfulEmptyGetAppletActivitiesMock: HttpResponse = {
   status: ApiResponseCodes.SuccessfulResponse,
