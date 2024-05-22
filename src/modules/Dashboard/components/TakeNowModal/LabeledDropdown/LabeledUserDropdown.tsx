@@ -193,6 +193,8 @@ export const LabeledUserDropdown = ({
             backgroundColor: variables.palette.yellow_light,
             p: theme.spacing(0.8, 1.6),
             mt: -1.6,
+            borderBottomLeftRadius: variables.borderRadius.sm,
+            borderBottomRightRadius: variables.borderRadius.sm,
           }}
         >
           <Box width={24} height={24}>
