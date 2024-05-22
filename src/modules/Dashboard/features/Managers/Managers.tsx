@@ -215,9 +215,10 @@ export const Managers = () => {
 
   useEffect(() => {
     if (!ownerId) return;
+    if (!appletId) return;
 
     executeGetWorkspaceInfoApi({ ownerId });
-  }, [ownerId, executeGetWorkspaceInfoApi]);
+  }, [ownerId, appletId, executeGetWorkspaceInfoApi]);
 
   if (isForbidden) return noPermissionsComponent;
 
