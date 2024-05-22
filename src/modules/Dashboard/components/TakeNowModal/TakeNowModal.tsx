@@ -45,22 +45,18 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const [defaultSourceSubject, setDefaultSourceSubject] =
     useState<ParticipantDropdownOption | null>(null);
 
-  const participantToOption = useMemo(
-    () =>
-      (participant: Respondent): ParticipantDropdownOption => {
-        const stringNicknames = joinWihComma(participant.nicknames, true);
-        const stringSecretIds = joinWihComma(participant.secretIds, true);
+  const participantToOption = useCallback((participant: Respondent): ParticipantDropdownOption => {
+    const stringNicknames = joinWihComma(participant.nicknames, true);
+    const stringSecretIds = joinWihComma(participant.secretIds, true);
 
-        return {
-          id: participant.details[0].subjectId,
-          userId: participant.id,
-          secretId: stringSecretIds,
-          nickname: stringNicknames,
-          tag: participant.details[0].subjectTag,
-        };
-      },
-    [],
-  );
+    return {
+      id: participant.details[0].subjectId,
+      userId: participant.id,
+      secretId: stringSecretIds,
+      nickname: stringNicknames,
+      tag: participant.details[0].subjectTag,
+    };
+  }, []);
 
   const { execute: fetchParticipants, isLoading: isFetchingParticipants } = useAsync(
     getWorkspaceRespondentsApi,
