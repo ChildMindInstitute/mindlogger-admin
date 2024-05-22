@@ -177,6 +177,13 @@ export const getCustomIcons = () => ({
       </StyledPageFullscreenIcon>
     ),
   },
+  suoxiao: {
+    component: () => (
+      <StyledPageFullscreenIcon>
+        <Svg id="md-editor-pageFullscreen" />
+      </StyledPageFullscreenIcon>
+    ),
+  },
   coding: {
     component: () => (
       <StyledIcon>
