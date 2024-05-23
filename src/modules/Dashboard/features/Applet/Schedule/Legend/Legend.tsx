@@ -40,7 +40,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     (acc: SelectedRespondent[], { id, details, isAnonymousRespondent }) => {
       const { respondentSecretId, hasIndividualSchedule, respondentNickname } = details?.[0] || {};
 
-      if (!isAnonymousRespondent) {
+      if (!isAnonymousRespondent && id) {
         acc.push({
           icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
           id,

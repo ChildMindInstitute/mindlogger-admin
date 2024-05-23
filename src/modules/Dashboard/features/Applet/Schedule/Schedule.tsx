@@ -30,7 +30,7 @@ export const Schedule = () => {
   const { isForbidden, noPermissionsComponent } = usePermissions(() =>
     dispatch(
       getAllWorkspaceRespondents({
-        params: { ownerId, appletId },
+        params: { ownerId, appletId, shell: false },
       }),
     ),
   );

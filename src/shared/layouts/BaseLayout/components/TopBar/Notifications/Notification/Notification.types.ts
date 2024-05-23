@@ -15,7 +15,7 @@ export type NotificationProps = {
   message: string;
   timeAgo: string;
   isWatched: boolean;
-  respondentId: string;
+  subjectId: string;
   encryption: Encryption;
   alert: AlertType;
 };
