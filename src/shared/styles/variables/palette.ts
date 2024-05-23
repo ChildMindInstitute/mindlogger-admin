@@ -46,6 +46,7 @@ export const palette = {
   white_alfa50: 'rgb(255 255 255 / 50%)',
   dark_error_container: '#93000a',
   neutral60: '#909194',
+  neutral90: '#e2e2e5',
   yellow_light: '#f5e6b3',
 
   black: '#000',
