@@ -160,6 +160,17 @@
   "appletNotFoundPopupText": "Applet non trouvé ; il se peut qu'il ait été supprimé. Pour actualiser les données, veuillez cliquer sur le bouton ci-dessous.",
   "appletNotFoundPopupTitle": "Applet non trouvé",
   "appletNotSavedAndPublished": "<0>Nous n'avons pas pu télécharger votre applet <1>{{name}}</1>. Veuillez vérifier votre applet et réessayer.</0>",
+  "appletOverview": {
+    "columnActivity": "Activité",
+    "columnRespondent": "Participant",
+    "columnSubject": "Sujet",
+    "columnSubmissionDate": "Date de soumission",
+    "labelSelf": "Soi",
+    "noDataYet": "Aucune donnée pour l'instant",
+    "statParticipants": "Participants",
+    "statSubmissions": "Soumissions",
+    "titleRecentSubmissions": "Soumissions récentes"
+  },
   "appletPasswordRequirementsError": "Le mot de passe ne répond pas aux exigences de sécurité.",
   "appletRequired": "Veuillez sélectionner l'applet pour continuer.",
   "applets": "Applets",
