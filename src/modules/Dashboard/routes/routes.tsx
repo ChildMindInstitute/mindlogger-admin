@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate, NavigateProps, Route, generatePath, useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { page } from 'resources';
@@ -23,6 +23,13 @@ const RespondentDataReview = lazy(() => import('../features/RespondentData/Respo
 const RespondentDataSummary = lazy(
   () => import('../features/RespondentData/RespondentDataSummary'),
 );
+
+const RedirectWithParams = ({ to, ...otherProps }: NavigateProps) => {
+  const params = useParams();
+  const redirectWithParams = generatePath(to as string, params);
+
+  return <Navigate to={redirectWithParams} {...otherProps} />;
+};
 
 export const dashboardRoutes = (featureFlags: FeatureFlags) => (
   <Route path={page.dashboard}>
@@ -51,19 +58,31 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
         </PrivateRoute>
       }
     >
-      {appletRoutes.map(({ path, Component }) => (
-        <Route
-          key={path}
-          path={path}
-          element={
-            <PrivateRoute>
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Component />
-              </ErrorBoundary>
-            </PrivateRoute>
-          }
-        />
-      ))}
+      {appletRoutes.map(({ path, Component }) => {
+        if (featureFlags?.enableMultiInformant && path === page.appletRespondents) {
+          return (
+            <Route
+              key={path}
+              path={path}
+              element={<RedirectWithParams to={page.appletParticipants} replace />}
+            />
+          );
+        }
+
+        return (
+          <Route
+            key={path}
+            path={path}
+            element={
+              <PrivateRoute>
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <Component />
+                </ErrorBoundary>
+              </PrivateRoute>
+            }
+          />
+        );
+      })}
       <Route element={<RespondentData />}>
         <Route
           path={page.appletRespondentData}
