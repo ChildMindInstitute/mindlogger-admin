@@ -298,6 +298,27 @@ export type Answers = AppletId & TargetSubjectId & { createdDate?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
 
+export interface GetAppletSubmissionsParams extends AppletId {
+  page?: number;
+  limit?: number;
+}
+export interface GetAppletSubmissionsResponse {
+  participantsCount?: number;
+  submissions: {
+    activityName: string;
+    appletId: string;
+    createdAt: string;
+    sourceSubjectId: string;
+    sourceNickname?: string | null;
+    sourceSubjectTag?: ParticipantTag | null;
+    targetSubjectId: string;
+    targetNickname?: string | null;
+    targetSubjectTag?: ParticipantTag | null;
+    updatedAt: string;
+  }[];
+  submissionsCount?: number;
+}
+
 export type AssessmentReview = AppletId & { answerId: string };
 
 export type AssessmentId = { assessmentId: string };

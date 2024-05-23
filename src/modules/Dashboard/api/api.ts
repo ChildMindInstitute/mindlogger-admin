@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { AppletId, ActivityId, ActivityFlowId, Response, ResponseWithObject } from 'shared/api';
 import { ExportDataResult } from 'shared/types';
-import { MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
+import { DEFAULT_ROWS_PER_PAGE as SHARED_DEFAULT_ROWS_PER_PAGE, MAX_LIMIT } from 'shared/consts'; // TODO: replace MAX_LIMIT with infinity scroll
 import { authApiClient } from 'shared/api/apiConfig';
 
 import {
@@ -63,6 +63,8 @@ import {
   DeleteReview,
   EncryptedActivityAnswer,
   GetWorkspaceRespondentsParams,
+  GetAppletSubmissionsParams,
+  GetAppletSubmissionsResponse,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -458,6 +460,15 @@ export const getActivityAnswerApi = (
       signal,
     },
   );
+
+export const getAppletSubmissionsApi = (
+  { appletId, page = 1, limit = SHARED_DEFAULT_ROWS_PER_PAGE }: GetAppletSubmissionsParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get(`/answers/applet/${appletId}/submissions`, {
+    params: { page, limit: Math.min(limit, MAX_LIMIT) },
+    signal,
+  }) as Promise<AxiosResponse<GetAppletSubmissionsResponse>>;
 
 export const getAnswersNotesApi = (
   { appletId, answerId, activityId, params }: ActivityAnswerParams & GetAnswersNotesParams,
