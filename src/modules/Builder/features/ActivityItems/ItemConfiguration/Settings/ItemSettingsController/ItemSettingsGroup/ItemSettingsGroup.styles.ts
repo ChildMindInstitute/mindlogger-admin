@@ -43,6 +43,7 @@ export const StyledSettingInfoIcon = styled(Svg)`
 `;
 
 export const StyledItemSettingsGroupHeader = styled(StyledFlexTopCenter)`
+  cursor: pointer;
   padding-right: ${theme.spacing(1.5)};
   justify-content: space-between;
   width: 100%;
@@ -66,6 +67,7 @@ export const StyledFormControl = styled(FormControl)`
 `;
 
 export const StyledFormLabel = styled(FormLabel)`
+  cursor: pointer;
   color: ${variables.palette.on_surface};
 
   &.Mui-focused {

@@ -35,19 +35,27 @@ export const getTimeRangeResponse = (answer?: DecryptedDateRangeAnswer) => {
 
   const dateFrom = new Date();
   const dateTo = new Date();
-  const {
-    from: { hour: hourFrom, minute: minuteFrom },
-    to: { hour: hourTo, minute: minuteTo },
-  } = answer.value;
+  let hourFrom: number;
+  let minuteFrom: number;
+  let hourTo: number;
+  let minuteTo: number;
 
-  dateFrom.setHours(hourFrom);
-  dateFrom.setMinutes(minuteFrom);
-  dateTo.setHours(hourTo);
-  dateTo.setMinutes(minuteTo);
+  if (answer.value.from) {
+    hourFrom = answer.value.from.hour;
+    minuteFrom = answer.value.from.minute;
+    dateFrom.setHours(hourFrom);
+    dateFrom.setMinutes(minuteFrom);
+  }
+  if (answer.value.to) {
+    hourTo = answer.value.to.hour;
+    minuteTo = answer.value.to.minute;
+    dateTo.setHours(hourTo);
+    dateTo.setMinutes(minuteTo);
+  }
 
   return {
-    from: format(dateFrom, DateFormats.Time),
-    to: format(dateTo, DateFormats.Time),
+    from: answer.value.from ? format(dateFrom, DateFormats.Time) : '',
+    to: answer.value.to ? format(dateTo, DateFormats.Time) : '',
   };
 };
 
