@@ -25,7 +25,9 @@ export const Applet = ({
 }: AppletProps) => {
   const { t } = useTranslation('app');
 
-  const selectedRespondents = roles?.flatMap(({ reviewerSubjects }) => reviewerSubjects ?? []);
+  const selectedRespondents = roles?.flatMap(
+    ({ reviewerRespondents }) => reviewerRespondents ?? [],
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectRespondentsPopupVisible, setSelectRespondentsPopupVisible] = useState(false);
   const isPristineRef = useRef(true);

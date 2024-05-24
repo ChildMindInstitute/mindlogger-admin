@@ -1,8 +1,8 @@
-import { MenuActionProps, MenuItem } from 'shared/components/Menu';
+import { MenuItem } from 'shared/components/Menu/Menu.types';
 import { Roles } from 'shared/consts';
 
 export const getMenuItems = (addRole: (title: Roles) => void): MenuItem[] => {
-  const action = ({ title }: MenuActionProps) => {
+  const action = (title?: string) => {
     title && addRole(title as Roles);
   };
 

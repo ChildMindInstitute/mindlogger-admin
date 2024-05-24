@@ -14,11 +14,6 @@ export type SubmitBtnColor = OverridableStringUnion<
   ButtonPropsColorOverrides
 >;
 
-export enum SubmitBtnVariant {
-  Text = 'text',
-  Contained = 'contained',
-}
-
 export type ModalProps = {
   open: boolean;
   title: string;
@@ -32,7 +27,6 @@ export type ModalProps = {
   height?: string;
   hasSecondBtn?: boolean;
   submitBtnColor?: SubmitBtnColor;
-  submitBtnVariant?: SubmitBtnVariant;
   secondBtnText?: string;
   onSecondBtnSubmit?: BtnSubmit;
   disabledSecondBtn?: boolean;

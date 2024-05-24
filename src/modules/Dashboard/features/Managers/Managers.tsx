@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { getWorkspaceManagersApi, updateManagersPinApi } from 'api';
-import { ActionsMenu, MenuActionProps, Pin, Search, Spinner } from 'shared/components';
+import { Actions, Pin, Search, Spinner } from 'shared/components';
 import { banners, workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
@@ -15,7 +15,7 @@ import { useAppDispatch } from 'redux/store';
 
 import { ManagersRemoveAccessPopup, EditAccessPopup } from './Popups';
 import { ManagersTableHeader } from './Managers.styles';
-import { getManagerActions, getHeadCells, ManagersColumnsWidth } from './Managers.utils';
+import { getActions, getHeadCells, ManagersColumnsWidth } from './Managers.const';
 import { ManagersData } from './Managers.types';
 
 export const Managers = () => {
@@ -84,12 +84,12 @@ export const Managers = () => {
   );
 
   const actions = {
-    removeAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
-      setSelectedManager(user || null);
+    removeAccessAction: (user: Manager) => {
+      setSelectedManager(user);
       setRemoveAccessPopupVisible(true);
     },
-    editAccessAction: ({ context: user }: MenuActionProps<Manager>) => {
-      setSelectedManager(user || null);
+    editAccessAction: (user: Manager) => {
+      setSelectedManager(user);
       setEditAccessPopupVisible(true);
     },
   };
@@ -104,9 +104,9 @@ export const Managers = () => {
     step === 3 && handleReload();
   };
 
-  const editManagerAccessOnClose = (shouldReFetch?: boolean) => {
+  const editManagerAccessOnClose = (shouldRefetch?: boolean) => {
     setEditAccessPopupVisible(false);
-    if (shouldReFetch) {
+    if (shouldRefetch) {
       dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
       handleReload();
     }
@@ -129,12 +129,12 @@ export const Managers = () => {
           firstName: {
             content: () => firstName,
             value: firstName,
-            width: ManagersColumnsWidth.Default,
+            width: ManagersColumnsWidth.FirstName,
           },
           lastName: {
             content: () => lastName,
             value: lastName,
-            width: ManagersColumnsWidth.Default,
+            width: ManagersColumnsWidth.LastName,
           },
           email: {
             content: () => email,
@@ -145,18 +145,20 @@ export const Managers = () => {
             roles: {
               content: () => stringRoles,
               value: stringRoles,
-              width: ManagersColumnsWidth.Default,
+              width: ManagersColumnsWidth.Roles,
             },
           }),
           actions: {
-            content: () => {
+            content: (_, hasVisibleActions) => {
               if (ownerId === id || !filteredManager?.applets?.length) {
                 return;
               }
 
               return (
-                <ActionsMenu
-                  menuItems={getManagerActions(actions, filteredManager)}
+                <Actions
+                  items={getActions(actions)}
+                  context={filteredManager}
+                  visibleByDefault={hasVisibleActions}
                   data-testid="dashboard-managers-table-actions"
                 />
               );

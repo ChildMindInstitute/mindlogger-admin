@@ -28,7 +28,7 @@ export const getAlertFormValue = (alertMessage: string): AlertType | null => {
       message: alert.message,
       createdAt: alert.created_at,
       answerId: alert.answer_id,
-      subjectId: alert.subject_id,
+      respondentId: alert.respondent_id,
       workspace: alert.workspace,
       encryption: {
         publicKey: alert.encryption.public_key,

@@ -10,7 +10,7 @@ export type WebsocketAlertType = {
   message: string;
   created_at: string;
   answer_id: string;
-  subject_id: string;
+  respondent_id: string;
   workspace: string;
   encryption: {
     public_key: string;

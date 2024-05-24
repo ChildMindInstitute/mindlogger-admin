@@ -32,16 +32,13 @@ const commonDatavizState = {
     },
   },
   users: {
-    subjectDetails: {
+    respondentDetails: {
       data: {
         result: {
           nickname: 'Jane Doe',
           secretUserId: 'secretUserId',
         },
       },
-    },
-    respondentDetails: {
-      data: null,
     },
   },
 };

@@ -1,9 +1,8 @@
 import { Manager } from 'modules/Dashboard/types';
-import { MenuActionProps } from 'shared/components';
 
 export type ManagersActions = {
-  removeAccessAction: ({ context }: MenuActionProps<Manager>) => void;
-  editAccessAction: ({ context }: MenuActionProps<Manager>) => void;
+  removeAccessAction: (user: Manager) => void;
+  editAccessAction: (user: Manager) => void;
 };
 
 export type ManagersData = {

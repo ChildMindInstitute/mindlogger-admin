@@ -1,4 +1,4 @@
-import { useContext, useState, DragEvent } from 'react';
+import { useContext, useState } from 'react';
 
 import { AppletsContext } from 'modules/Dashboard/features/Applets/Applets.context';
 import { AppletContextType } from 'modules/Dashboard/features/Applets/Applets.types';
@@ -12,25 +12,28 @@ export const useAppletsDnd = () => {
 
   const [isDragOver, setIsDragOver] = useState(false);
 
-  const onDragLeave = (event: DragEvent<HTMLTableRowElement>) => {
+  const onDragLeave = (event: React.DragEvent<HTMLTableRowElement>) => {
     event.persist();
     event.preventDefault();
     setIsDragOver(false);
   };
 
-  const onDragOver = (event: DragEvent<HTMLTableRowElement>) => {
+  const onDragOver = (event: React.DragEvent<HTMLTableRowElement>) => {
     event.preventDefault();
     setIsDragOver(true);
   };
 
-  const onDragEnd = async (event: DragEvent<HTMLTableRowElement>, applet: Applet) => {
+  const onDragEnd = async (event: React.DragEvent<HTMLTableRowElement>, applet: Applet) => {
     if (event.dataTransfer?.dropEffect === 'none' && applet.parentId) {
       await setFolder({ appletId: applet.id });
-      fetchData();
+      await fetchData();
     }
   };
 
-  const onDrop = async (event: DragEvent<HTMLTableRowElement>, droppedItem: Folder | Applet) => {
+  const onDrop = async (
+    event: React.DragEvent<HTMLTableRowElement>,
+    droppedItem: Folder | Applet,
+  ) => {
     onDragLeave(event);
 
     const draggedId = event.dataTransfer.getData('text');
@@ -49,9 +52,8 @@ export const useAppletsDnd = () => {
 
     if (!wasInFolder && isMovingToFolder) {
       await setFolder({ folderId: folder.id, appletId: draggedItem.id });
-      fetchData();
 
-      return;
+      return await fetchData();
     }
 
     if (isMovingToFolder && wasInFolder) {
@@ -59,15 +61,14 @@ export const useAppletsDnd = () => {
 
       if (previousFolder.id === folder.id) return;
       await setFolder({ folderId: folder.id, appletId: draggedItem.id });
-      fetchData();
 
-      return;
+      return await fetchData();
     }
 
     if (!wasInFolder) return;
 
     await setFolder({ appletId: draggedItem.id });
-    fetchData();
+    await fetchData();
   };
 
   return { isDragOver, onDragLeave, onDragOver, onDrop, onDragEnd };

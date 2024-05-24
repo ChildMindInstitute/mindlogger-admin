@@ -52,13 +52,6 @@ const getMockedGetWithManagers = (isOwner = false) => ({
   },
 });
 
-const clickActionDots = async () => {
-  const actionsDots = await waitFor(() =>
-    screen.getByTestId('dashboard-managers-table-actions-dots'),
-  );
-  fireEvent.click(actionsDots);
-};
-
 describe('Managers component tests', () => {
   test('should render empty table', async () => {
     const successfulGetMock = {
@@ -121,11 +114,14 @@ describe('Managers component tests', () => {
     });
   });
 
-  test('should appear managers actions for reviewer', async () => {
+  test('should appear managers actions on manager hover for reviewer', async () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithManagers());
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
-    await clickActionDots();
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-managers-table-actions-dots'),
+    );
+    fireEvent.mouseEnter(actionsDots);
     const actionsDataTestIds = ['dashboard-managers-edit-user', 'dashboard-managers-remove-access'];
 
     await waitFor(() => {
@@ -135,7 +131,7 @@ describe('Managers component tests', () => {
     });
   });
 
-  test('should not appear managers actions for owner', async () => {
+  test('should not appear managers actions on manager hover for owner', async () => {
     mockAxios.get.mockResolvedValue(getMockedGetWithManagers(true));
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
@@ -153,7 +149,10 @@ describe('Managers component tests', () => {
       mockAxios.get.mockResolvedValue(getMockedGetWithManagers());
       renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
-      await clickActionDots();
+      const actionsDots = await waitFor(() =>
+        screen.getByTestId('dashboard-managers-table-actions-dots'),
+      );
+      fireEvent.mouseEnter(actionsDots);
       const action = await waitFor(() => screen.getByTestId(actionDataTestId));
       fireEvent.click(action);
 

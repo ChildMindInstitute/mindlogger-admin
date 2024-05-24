@@ -50,7 +50,7 @@ export const RespondentDataSummary = () => {
 
     getSummaryActivities({
       appletId,
-      targetSubjectId: respondentId,
+      respondentId,
     });
   }, [appletId, respondentId, summaryActivities, getSummaryActivities]);
 

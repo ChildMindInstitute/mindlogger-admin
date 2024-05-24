@@ -16,9 +16,6 @@ import { InvitationsTable } from './InvitationsTable';
 import { LinkGenerator } from './LinkGenerator';
 import { Invitations } from './AddUser.types';
 
-// Flag for adjustments needed to merge the shell-account branch into the develop branch for next PROD updates
-export const showAddWithoutInvitation = false;
-
 export const AddUser = () => {
   const { appletId } = useParams();
   const { t } = useTranslation('app');

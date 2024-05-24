@@ -3,11 +3,10 @@ import { t } from 'i18next';
 import { Svg } from 'shared/components/Svg';
 import { Roles } from 'shared/consts';
 import { isManagerOrOwner } from 'shared/utils';
-import { variables } from 'shared/styles';
 
-import { AppletActions } from './AppletItem.types';
+import { Actions } from './AppletItem.types';
 
-export const getAppletActions = ({
+export const getActions = ({
   actions: {
     removeFromFolder,
     viewUsers,
@@ -21,7 +20,7 @@ export const getAppletActions = ({
   },
   item,
   roles,
-}: AppletActions) => {
+}: Actions) => {
   const { isPublished } = item;
   const isReviewer = roles?.includes(Roles.Reviewer);
   const isEditor = roles?.includes(Roles.Editor);
@@ -34,42 +33,49 @@ export const getAppletActions = ({
     {
       icon: <Svg id="remove-from-folder" />,
       action: removeFromFolder,
-      title: t('removeFromFolder'),
+      tooltipTitle: t('removeFromFolder'),
       isDisplayed: !!item.parentId,
       'data-testid': 'dashboard-applets-applet-remove-from-folder',
     },
     {
       icon: <Svg id="users" />,
       action: viewUsers,
-      title: t('viewUsers'),
+      tooltipTitle: t('viewUsers'),
       isDisplayed: isManagerOrOwner(roles?.[0]) || isReviewer || isCoordinator || isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-view-users',
     },
     {
       icon: <Svg id="calendar" />,
       action: viewCalendar,
-      title: t('viewGeneralCalendar'),
+      tooltipTitle: t('viewGeneralCalendar'),
       isDisplayed: isManagerOrOwner(roles?.[0]) || isCoordinator || isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-view-calendar',
     },
     {
       icon: <Svg id="widget" />,
       action: editAction,
-      title: t('editAnApplet'),
+      tooltipTitle: t('editAnApplet'),
       isDisplayed: commonCondition,
       'data-testid': 'dashboard-applets-applet-edit',
     },
     {
       icon: <Svg id="duplicate" />,
       action: duplicateAction,
-      title: t('duplicateApplet'),
+      tooltipTitle: t('duplicateApplet'),
       isDisplayed: commonCondition,
       'data-testid': 'dashboard-applets-applet-duplicate',
     },
     {
+      icon: <Svg id="trash" />,
+      action: deleteAction,
+      tooltipTitle: t('deleteApplet'),
+      isDisplayed: commonCondition,
+      'data-testid': 'dashboard-applets-applet-delete',
+    },
+    {
       icon: <Svg id="switch-account" />,
       action: transferOwnership,
-      title: t('transferOwnership'),
+      tooltipTitle: t('transferOwnership'),
       isDisplayed: isOwner || isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-transfer',
     },
@@ -78,23 +84,15 @@ export const getAppletActions = ({
     // {
     //   icon: <Svg id="share" />,
     //   action: shareAppletAction,
-    //   title: t('shareWithTheLibrary'),
+    //   tooltipTitle: t('shareWithTheLibrary'),
     //   'data-testid': 'dashboard-applets-applet-share',
     // },
     {
       icon: <Svg id={isPublished ? 'conceal' : 'publish'} width="18" height="18" />,
       action: publishAppletAction,
-      title: t(isPublished ? 'conceal' : 'publish'),
+      tooltipTitle: t(isPublished ? 'conceal' : 'publish'),
       isDisplayed: !item.isFolder && isSuperAdmin,
       'data-testid': 'dashboard-applets-applet-publish-conceal',
-    },
-    {
-      icon: <Svg id="trash" />,
-      action: deleteAction,
-      title: t('deleteApplet'),
-      isDisplayed: commonCondition,
-      customItemColor: variables.palette.dark_error_container,
-      'data-testid': 'dashboard-applets-applet-delete',
     },
   ];
 };

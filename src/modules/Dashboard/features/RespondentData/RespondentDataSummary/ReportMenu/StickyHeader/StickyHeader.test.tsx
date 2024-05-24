@@ -5,12 +5,12 @@ import { Box } from '@mui/material';
 
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedRespondentId } from 'shared/mock';
-import { initialStateData } from 'shared/state';
+import { RespondentDetails } from 'modules/Dashboard/types';
+import { mockedRespondentDetails } from 'shared/mock';
 
 import { StickyHeader } from './StickyHeader';
 
-const preloadedState = {
+const getState = (respondentDetails: RespondentDetails) => ({
   ...getPreloadedState(),
   users: {
     allRespondents: {
@@ -18,19 +18,15 @@ const preloadedState = {
         result: [],
       },
     },
-    subjectDetails: {
-      ...initialStateData,
+    respondentDetails: {
       data: {
         result: {
-          nickname: 'Mocked Respondent',
-          secretUserId: mockedRespondentId,
-          lastSeen: '2023-12-11T08:40:41.424000',
+          ...respondentDetails,
         },
       },
     },
-    respondentDetails: initialStateData,
   },
-};
+});
 
 const ScrollableNode = forwardRef(({ children }, ref) => (
   <Box sx={{ height: '400px', overflowY: 'auto' }} ref={ref}>
@@ -47,7 +43,11 @@ describe('StickyHeader', () => {
         <StickyHeader containerRef={ref} data-testid="test" />
       </ScrollableNode>,
       {
-        preloadedState,
+        preloadedState: getState({
+          nickname: mockedRespondentDetails.respondentNickname,
+          secretUserId: mockedRespondentDetails.respondentSecretId,
+          lastSeen: null,
+        }),
       },
     );
 
@@ -60,7 +60,7 @@ describe('StickyHeader', () => {
     expect(title).toHaveStyle({ fontSize: '3.2rem' });
 
     const description = getByText(
-      'Respondent: b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7 (Mocked Respondent)',
+      'Respondent: 3921968c-3903-4872-8f30-a6e6a10cef36 (Mocked Respondent)',
     );
     expect(description).toBeInTheDocument();
     expect(description).toHaveStyle({ position: 'relative', padding: 0 });

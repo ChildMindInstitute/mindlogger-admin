@@ -1,17 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { ActionsMenu, MenuActionProps, Pin, Row, Search, Spinner, Svg } from 'shared/components';
+import { Actions, Pin, Svg, Search, Row, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
-import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
+import { useTimeAgo, useTable, useAsync, usePermissions, useEncryptionStorage } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
-import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
+import { getWorkspaceRespondentsApi, updateRespondentsPinApi } from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
-import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
+import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
-import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
+import { Respondent } from 'modules/Dashboard/types';
 
 import {
   RespondentsTableHeader,
@@ -19,28 +19,21 @@ import {
   StyledLeftBox,
   StyledRightBox,
 } from './Respondents.styles';
-import { getAppletsSmallTableRows, getHeadCells, getRespondentActions } from './Respondents.utils';
-import { RespondentsColumnsWidth } from './Respondents.const';
+import { getActions, getAppletsSmallTableRows } from './Respondents.utils';
+import { getHeadCells, RespondentsColumnsWidth } from './Respondents.const';
 import {
   ChosenAppletData,
   FilteredApplets,
-  FilteredAppletsKey,
   FilteredRespondents,
-  HandleInviteClick,
-  HandlePinClick,
-  RespondentActionProps,
   RespondentsData,
-  SetDataForAppletPage,
 } from './Respondents.types';
 import {
   DataExportPopup,
-  EditRespondentPopup,
-  RemoveRespondentPopup,
   ScheduleSetupPopup,
-  SendInvitationPopup,
   ViewDataPopup,
+  RespondentsRemoveAccessPopup,
+  EditRespondentPopup,
 } from './Popups';
-import { StatusFlag } from './StatusFlag';
 
 export const Respondents = () => {
   const { appletId } = useParams();
@@ -95,123 +88,54 @@ export const Respondents = () => {
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
   const [respondentKey, setRespondentKey] = useState<null | string>(null);
   const [chosenAppletData, setChosenAppletData] = useState<null | ChosenAppletData>(null);
-  const [invitationPopupVisible, setInvitationPopupVisible] = useState(false);
-  const [respondentEmail, setRespondentEmail] = useState<null | string>(null);
 
   const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
 
-  const getChosenAppletData = ({
-    respondentId = null,
-    respondentOrSubjectId,
-    key,
-  }: SetDataForAppletPage) => {
-    if (!ownerId) return;
-    const respondentAccess = filteredRespondents[respondentOrSubjectId]?.[key]?.[0];
-
-    return (
-      respondentAccess && {
+  const handleSetDataForAppletPage = (respondentId: string, key: keyof FilteredApplets) => {
+    if (respondentId && appletId && ownerId) {
+      const respondentAccess = filteredRespondents[respondentId]?.[key]?.[0];
+      const chosenAppletData = respondentAccess && {
         ...respondentAccess,
         respondentId,
         ownerId,
-      }
-    );
-  };
-
-  const handleSetDataForAppletPage = ({
-    respondentId = null,
-    respondentOrSubjectId,
-    key,
-  }: SetDataForAppletPage) => {
-    if (!appletId) return;
-
-    const chosenAppletData = getChosenAppletData({ respondentId, respondentOrSubjectId, key });
-    setChosenAppletData(chosenAppletData ?? null);
-  };
-
-  const handleInviteClick = ({ respondentOrSubjectId, email }: HandleInviteClick) => {
-    setRespondentKey(respondentOrSubjectId);
-    setRespondentEmail(email);
-    handleSetDataForAppletPage({
-      respondentOrSubjectId,
-      key: FilteredAppletsKey.Editable,
-    });
-    setInvitationPopupVisible(true);
+      };
+      setChosenAppletData(chosenAppletData ?? null);
+    }
   };
 
   const actions = {
-    scheduleSetupAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
-      const { respondentId, respondentOrSubjectId } = context || {};
-      if (!respondentId || !respondentOrSubjectId) return;
-
-      setRespondentKey(respondentOrSubjectId);
-      handleSetDataForAppletPage({
-        respondentId,
-        respondentOrSubjectId,
-        key: FilteredAppletsKey.Scheduling,
-      });
+    scheduleSetupAction: (respondentId: string) => {
+      setRespondentKey(respondentId);
+      handleSetDataForAppletPage(respondentId, 'scheduling');
       setScheduleSetupPopupVisible(true);
     },
-    userDataExportAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
-      const { respondentOrSubjectId } = context || {};
-      if (!respondentOrSubjectId) return;
-
-      setRespondentKey(respondentOrSubjectId);
-      handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Viewable });
+    userDataExportAction: (respondentId: string) => {
+      setRespondentKey(respondentId);
+      handleSetDataForAppletPage(respondentId, 'viewable');
       setDataExportPopupVisible(true);
       Mixpanel.track('Export Data click');
     },
-    viewDataAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
-      const { respondentOrSubjectId } = context || {};
-      if (!respondentOrSubjectId) return;
-
+    viewDataAction: (respondentId: string) => {
       if (hasEncryptionCheck && appletId) {
-        const chosenAppletData = getChosenAppletData({
-          respondentOrSubjectId,
-          key: FilteredAppletsKey.Viewable,
-        });
-
-        navigate(
-          generatePath(page.appletRespondentDataSummary, {
-            appletId,
-            respondentId: chosenAppletData?.subjectId,
-          }),
-        );
+        respondentId &&
+          navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
 
         return;
       }
-
-      handleSetDataForAppletPage({
-        respondentOrSubjectId,
-        key: FilteredAppletsKey.Viewable,
-      });
-      setRespondentKey(respondentOrSubjectId);
+      handleSetDataForAppletPage(respondentId, 'viewable');
+      setRespondentKey(respondentId);
       setViewDataPopupVisible(true);
     },
-    removeAccessAction: ({ context }: MenuActionProps<RespondentActionProps>) => {
-      const { respondentOrSubjectId } = context || {};
-      if (!respondentOrSubjectId) return;
-
-      setRespondentKey(respondentOrSubjectId);
-      handleSetDataForAppletPage({
-        respondentOrSubjectId,
-        key: FilteredAppletsKey.Editable,
-      });
+    removeAccessAction: (respondentId: string) => {
+      setRespondentKey(respondentId);
+      handleSetDataForAppletPage(respondentId, 'editable');
       setRemoveAccessPopupVisible(true);
     },
-    editRespondent: ({ context }: MenuActionProps<RespondentActionProps>) => {
-      const { respondentOrSubjectId } = context || {};
-      if (!respondentOrSubjectId) return;
-
-      setRespondentKey(respondentOrSubjectId);
-      handleSetDataForAppletPage({ respondentOrSubjectId, key: FilteredAppletsKey.Editable });
+    editRespondent: (respondentId: string) => {
+      setRespondentKey(respondentId);
+      handleSetDataForAppletPage(respondentId, 'editable');
       setEditRespondentPopupVisible(true);
-    },
-    sendInvitation: ({ context }: MenuActionProps<RespondentActionProps>) => {
-      const { respondentOrSubjectId, email = null } = context || {};
-      if (!respondentOrSubjectId) return;
-
-      handleInviteClick({ respondentOrSubjectId, email });
     },
   };
 
@@ -222,66 +146,38 @@ export const Respondents = () => {
     () => setIsLoading(false),
   );
 
-  const { execute: updateSubjectsPin } = useAsync(
-    updateSubjectsPinApi,
-    handleReload,
-    undefined,
-    () => setIsLoading(false),
-  );
-
-  const handlePinClick = ({ respondentId, subjectId }: HandlePinClick) => {
+  const handlePinClick = (userId: string) => {
     setIsLoading(true);
-    if (respondentId) {
-      updateRespondentsPin({ ownerId, userId: respondentId });
-
-      return;
-    }
-
-    updateSubjectsPin({ ownerId, userId: subjectId });
+    updateRespondentsPin({ ownerId, userId });
   };
 
-  const editRespondentOnClose = (shouldReFetch: boolean) => {
+  const editRespondentOnClose = (shouldRefetch: boolean) => {
     setEditRespondentPopupVisible(false);
     setChosenAppletData(null);
-    shouldReFetch && handleReload();
+    shouldRefetch && handleReload();
   };
 
-  const removeRespondentAccessOnClose = (shouldReFetch?: boolean) => {
+  const removeRespondentAccessOnClose = (shouldRefetch?: boolean) => {
     setRemoveAccessPopupVisible(false);
     setChosenAppletData(null);
-    shouldReFetch && handleReload();
-  };
-
-  const handleInvitationPopupClose = (shouldReFetch?: boolean) => {
-    setInvitationPopupVisible(false);
-    setRespondentEmail(null);
-    shouldReFetch && handleReload();
+    shouldRefetch && handleReload();
   };
 
   const formatRow = (user: Respondent): Row => {
-    const {
-      secretIds,
-      nicknames,
-      lastSeen,
-      id: respondentId,
-      details,
-      isPinned,
-      isAnonymousRespondent,
-      status,
-      email,
-    } = user;
+    const { secretIds, nicknames, lastSeen, id, details, isPinned, isAnonymousRespondent } = user;
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule =
-      appletId && details?.[0]?.hasIndividualSchedule ? t('individual') : t('default');
+      appletId && details?.[0]?.hasIndividualSchedule
+        ? t('individualSchedule')
+        : t('defaultSchedule');
     const stringNicknames = joinWihComma(nicknames, true);
     const stringSecretIds = joinWihComma(secretIds, true);
-    const respondentOrSubjectId = respondentId ?? details[0].subjectId;
 
     return {
       pin: {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-respondents-pin" />,
         value: '',
-        onClick: () => handlePinClick({ respondentId, subjectId: details[0].subjectId }),
+        onClick: () => handlePinClick(id),
         width: RespondentsColumnsWidth.Pin,
       },
       secretIds: {
@@ -303,35 +199,15 @@ export const Respondents = () => {
         schedule: {
           content: () => schedule,
           value: schedule,
-          width: RespondentsColumnsWidth.Schedule,
+          width: RespondentsColumnsWidth.Default,
         },
       }),
-      status: {
-        content: () =>
-          status !== RespondentStatus.Invited && (
-            <StatusFlag
-              status={status}
-              onInviteClick={() => handleInviteClick({ respondentOrSubjectId, email })}
-              isInviteDisabled={!filteredRespondents?.[respondentOrSubjectId]?.editable.length}
-            />
-          ),
-        value: '',
-        width: RespondentsColumnsWidth.Status,
-      },
       actions: {
-        content: () => (
-          <ActionsMenu
-            menuItems={getRespondentActions({
-              actions,
-              filteredApplets: filteredRespondents?.[respondentOrSubjectId],
-              respondentId,
-              respondentOrSubjectId,
-              appletId,
-              email,
-              isInviteEnabled: status === RespondentStatus.NotInvited,
-              isViewCalendarEnabled:
-                !!respondentId && status === RespondentStatus.Invited && !isAnonymousRespondent,
-            })}
+        content: (_, hasVisibleActions) => (
+          <Actions
+            items={getActions(actions, filteredRespondents?.[id], isAnonymousRespondent, appletId)}
+            context={id}
+            visibleByDefault={hasVisibleActions}
             data-testid="dashboard-respondents-table-actions"
           />
         ),
@@ -374,8 +250,7 @@ export const Respondents = () => {
       () =>
         respondentsData?.result?.reduce(
           (acc: { filteredRespondents: FilteredRespondents; rows: Row[] }, user) => {
-            const respondentOrSubjectId = user.id ?? user.details[0].subjectId;
-            acc.filteredRespondents[respondentOrSubjectId] = filterRespondentApplets(user);
+            acc.filteredRespondents[user.id] = filterRespondentApplets(user);
             acc.rows.push(formatRow(user));
 
             return acc;
@@ -394,7 +269,7 @@ export const Respondents = () => {
 
   const chosenRespondentsItems = respondentKey ? filteredRespondents[respondentKey] : undefined;
 
-  const getAppletsSmallTable = (key: FilteredAppletsKey) =>
+  const getAppletsSmallTable = (key: keyof FilteredApplets) =>
     chosenRespondentsItems?.[key] && ownerId && respondentKey
       ? getAppletsSmallTableRows(
           chosenRespondentsItems[key],
@@ -404,9 +279,9 @@ export const Respondents = () => {
         )
       : undefined;
 
-  const viewableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Viewable);
-  const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
-  const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
+  const viewableAppletsSmallTableRows = getAppletsSmallTable('viewable');
+  const editableAppletsSmallTableRows = getAppletsSmallTable('editable');
+  const schedulingAppletsSmallTableRows = getAppletsSmallTable('scheduling');
   const dataTestid = 'dashboard-respondents';
 
   const renderEmptyComponent = () => {
@@ -473,7 +348,7 @@ export const Respondents = () => {
         />
       )}
       {removeAccessPopupVisible && (
-        <RemoveRespondentPopup
+        <RespondentsRemoveAccessPopup
           popupVisible={removeAccessPopupVisible}
           onClose={removeRespondentAccessOnClose}
           chosenAppletData={chosenAppletData}
@@ -495,16 +370,6 @@ export const Respondents = () => {
           popupVisible={editRespondentPopupVisible}
           onClose={editRespondentOnClose}
           chosenAppletData={chosenAppletData}
-        />
-      )}
-      {invitationPopupVisible && (
-        <SendInvitationPopup
-          popupVisible={invitationPopupVisible}
-          onClose={handleInvitationPopupClose}
-          email={respondentEmail}
-          chosenAppletData={chosenAppletData}
-          setChosenAppletData={setChosenAppletData}
-          tableRows={editableAppletsSmallTableRows}
         />
       )}
     </StyledBody>

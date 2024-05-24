@@ -30,5 +30,4 @@ export * from './ContentWithTooltip';
 export * from './NavigationMenu';
 export * from './AppletNotFoundPopup';
 export * from './ErrorFallback';
-export * from './ActionsMenu';
 export * from './NoPermissionPopup';
