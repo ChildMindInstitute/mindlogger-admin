@@ -335,6 +335,8 @@ export const DEFAULT_API_END_TIME = '23:59:00';
 
 export const JEST_TEST_TIMEOUT = 15000;
 
+export const NON_UNIQUE_VALUE_MESSAGE = 'Non-unique value.';
+
 export const NULL_ANSWER = 'value: null';
 
 export const observerStyles = {

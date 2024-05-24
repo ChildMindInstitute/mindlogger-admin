@@ -111,7 +111,7 @@ export const Report = () => {
     getLatestReport({
       appletId,
       activityId: selectedActivity.id,
-      respondentId,
+      subjectId: respondentId,
     });
   };
 
