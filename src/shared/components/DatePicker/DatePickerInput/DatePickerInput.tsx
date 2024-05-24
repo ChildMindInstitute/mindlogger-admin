@@ -10,6 +10,7 @@ export const DatePickerInput = ({
   label,
   disabled,
   isOpen,
+  inputWrapperSx = {},
   inputSx = {},
   error,
   id,
@@ -24,7 +25,7 @@ export const DatePickerInput = ({
     disabled,
     onClick: handlePickerShow,
     className: isOpen ? 'active' : '',
-    sx: { ...inputSx },
+    sx: { ...inputWrapperSx },
     error: !!error,
     helperText: error?.message || null,
     InputProps: {
@@ -33,9 +34,7 @@ export const DatePickerInput = ({
           <Svg id="date" />
         </StyledIconBtn>
       ),
-      sx: {
-        height: '4rem',
-      },
+      sx: { ...inputSx },
     },
     placeholder,
     'data-testid': dataTestid,

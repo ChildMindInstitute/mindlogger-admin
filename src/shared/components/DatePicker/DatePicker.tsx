@@ -35,7 +35,8 @@ export const DatePicker = <T extends FieldValues>({
   control,
   name,
   uiType = UiType.OneDate,
-  inputSx = {},
+  inputWrapperSx = {},
+  inputSx,
   label,
   includeDates,
   minDate,
@@ -118,6 +119,7 @@ export const DatePicker = <T extends FieldValues>({
           const textFieldProps = {
             disabled,
             isOpen,
+            inputWrapperSx,
             inputSx,
             error,
             id,
