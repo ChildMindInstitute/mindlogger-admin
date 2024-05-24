@@ -1,16 +1,16 @@
+import { TableCellProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { Cell, HeadCell } from 'shared/types/table';
 
-export type CellContent = Cell & {
+export interface CellContent extends Omit<TableCellProps, 'content'>, Cell {
   content?: (item?: Row) => ReactNode;
-  value: string | number | boolean;
-  onClick?: () => void;
-  maxWidth?: string;
-  width?: string;
   contentWithTooltip?: ReactNode;
   isHidden?: boolean;
-};
+  maxWidth?: string;
+  value: string | number | boolean;
+  width?: string;
+}
 
 export type Row = {
   [name: string]: CellContent;
