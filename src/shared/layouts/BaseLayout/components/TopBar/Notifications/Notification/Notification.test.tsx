@@ -3,7 +3,7 @@
 import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { mockedAlert, mockedSubjectId1 } from 'shared/mock';
+import { mockedAlert } from 'shared/mock';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
 import * as useEncryptionStorageFunc from 'shared/hooks/useEncryptionStorage';
 
@@ -122,7 +122,7 @@ describe('Notification', () => {
     await userEvent.click(button);
 
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/respondents/${mockedSubjectId1}/dataviz/summary`,
+      '/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/respondents/b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7/dataviz/summary',
     );
   });
 });

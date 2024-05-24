@@ -91,7 +91,7 @@ export const useRespondentAnswers = () => {
         appletId,
         activityId: activity.id,
         params: {
-          targetSubjectId: respondentId,
+          respondentId,
           fromDatetime,
           toDatetime,
           emptyIdentifiers: !filterByIdentifier || !selectedIdentifiers?.length,

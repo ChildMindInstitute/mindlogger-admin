@@ -45,7 +45,7 @@ const activityItem = {
 const dataTestid = 'single-select';
 const onChange = jest.fn();
 
-describe('SingleSelection', () => {
+describe('MultipleSelection', () => {
   test('renders the single selection component with images and labels', async () => {
     renderWithProviders(
       <SingleSelection onChange={onChange} data-testid={dataTestid} activityItem={activityItem} />,

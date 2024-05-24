@@ -23,7 +23,7 @@ export const ReviewMenu = ({
   lastActivityCompleted,
 }: ReviewMenuProps) => {
   const { t } = useTranslation();
-  const respondentLabel = useRespondentLabel(true);
+  const respondentLabel = useRespondentLabel();
 
   const dataTestid = 'respondents-review-menu';
 

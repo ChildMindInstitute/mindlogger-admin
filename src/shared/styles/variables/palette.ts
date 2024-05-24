@@ -40,7 +40,6 @@ export const palette = {
   light_alfa8: 'rgba(255, 255, 255, 0.08)',
   surface_variant_alfa8: 'rgba(222, 227, 235, 0.08)',
   white_alfa50: 'rgb(255 255 255 / 50%)',
-  dark_error_container: '#93000a',
 
   black: '#000',
   white: '#fff',

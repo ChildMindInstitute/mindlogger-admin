@@ -5,21 +5,22 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal, EnterAppletPassword } from 'shared/components';
 import { StyledModalWrapper, StyledBodyLarge, theme } from 'shared/styles';
-import { deleteSubjectApi } from 'api';
+import { removeRespondentAccessApi } from 'api';
 import { useSetupEnterAppletPassword, useAsync } from 'shared/hooks';
 import { workspaces } from 'redux/modules';
 import { isManagerOrOwner, toggleBooleanState } from 'shared/utils';
 
+import { ChosenAppletData } from '../../Respondents.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { RemoveRespondentPopupProps, Steps } from './RemoveRespondentPopup.types';
-import { getScreens } from './RemoveRespondentPopup.utils';
+import { RespondentAccessPopupProps, Steps } from './RespondentsRemoveAccessPopup.types';
+import { getScreens } from './RespondentAccessPopup.utils';
 
-export const RemoveRespondentPopup = ({
+export const RespondentsRemoveAccessPopup = ({
   popupVisible,
   tableRows,
   chosenAppletData,
   onClose,
-}: RemoveRespondentPopupProps) => {
+}: RespondentAccessPopupProps) => {
   const { t } = useTranslation('app');
   const { appletId } = useParams() || {};
   const rolesData = workspaces.useRolesData();
@@ -32,13 +33,21 @@ export const RemoveRespondentPopup = ({
   const [step, setStep] = useState<Steps>(0);
   const [removeData, setRemoveData] = useState(false);
 
-  const { execute: handleSubjectDelete, error } = useAsync(deleteSubjectApi);
+  const { execute: handleAccessRemove, error } = useAsync(removeRespondentAccessApi);
 
   const isRemoved = !error;
   const isFirstStepWithAppletId = !!appletId && step === 1;
   const dataTestid = 'dashboard-respondents-remove-access-popup';
 
   const onCloseHandler = () => onClose();
+
+  useEffect(() => {
+    if (chosenAppletData) {
+      setAppletName(chosenAppletData?.appletDisplayName || '');
+      setRespondentName(chosenAppletData?.respondentSecretId || '');
+      setStep(1);
+    }
+  }, [chosenAppletData]);
 
   const firstScreen = (
     <>
@@ -53,15 +62,15 @@ export const RemoveRespondentPopup = ({
     <>
       <StyledBodyLarge sx={{ marginBottom: theme.spacing(2.4) }}>
         <Trans i18nKey="removeRespondentAccess">
-          You are about to remove
+          You are about to remove Respondent
           <b>
             <>{{ respondentName }}’s</>
           </b>
-          from Applet
+          access to the
           <b>
             <>{{ appletName }}</>
           </b>
-          .
+          Applet.
         </Trans>
       </StyledBodyLarge>
       {isManagerOrOwner(appletRoles?.[0]) && (
@@ -69,7 +78,7 @@ export const RemoveRespondentPopup = ({
           label={
             <StyledBodyLarge>
               <Trans i18nKey="removeRespondentData">
-                Also remove
+                Also remove Respondent
                 <b>
                   <>{{ respondentName }}</>
                 </b>
@@ -77,7 +86,6 @@ export const RemoveRespondentPopup = ({
                 <b>
                   <>{{ appletName }}</>
                 </b>
-                .
               </Trans>
             </StyledBodyLarge>
           }
@@ -106,13 +114,14 @@ export const RemoveRespondentPopup = ({
   );
 
   const removeAccess = async () => {
-    const { subjectId } = chosenAppletData || {};
-    if (!subjectId) return;
-
-    await handleSubjectDelete({
-      subjectId,
-      deleteAnswers: removeData,
-    });
+    const { appletId, respondentId: userId } = chosenAppletData as ChosenAppletData;
+    userId &&
+      appletId &&
+      (await handleAccessRemove({
+        userId,
+        appletIds: [appletId],
+        deleteResponses: removeData,
+      }));
   };
 
   const screens = getScreens({
@@ -149,14 +158,6 @@ export const RemoveRespondentPopup = ({
     if (isLastScreen || isAppletPwdScreen) return;
     getStep('next');
   };
-
-  useEffect(() => {
-    if (chosenAppletData) {
-      setAppletName(chosenAppletData?.appletDisplayName || '');
-      setRespondentName(chosenAppletData?.respondentSecretId || '');
-      setStep(1);
-    }
-  }, [chosenAppletData]);
 
   return (
     <Modal

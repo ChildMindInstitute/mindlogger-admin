@@ -29,12 +29,12 @@ export const SelectRespondentsPopup = ({
   const respondents = useMemo(
     () =>
       respondentsData?.result?.reduce(
-        (acc: Respondent[], { nicknames, secretIds, isAnonymousRespondent, details }) => {
+        (acc: Respondent[], { nicknames, secretIds, id, isAnonymousRespondent }) => {
           if (!isAnonymousRespondent) {
             acc.push({
               nickname: nicknames[0],
               secretId: secretIds[0],
-              id: details[0].subjectId,
+              id,
             });
           }
 

@@ -14,7 +14,7 @@ export type AlertType = {
   message: string;
   createdAt: string;
   answerId: string;
-  subjectId: string;
+  respondentId: string;
   workspace: string;
   encryption: Encryption;
 };

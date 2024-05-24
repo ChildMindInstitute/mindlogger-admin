@@ -48,9 +48,6 @@ const preloadedState = {
     },
     respondentDetails: {
       ...initialStateData,
-    },
-    subjectDetails: {
-      ...initialStateData,
       data: {
         result: {
           nickname: 'Mocked Respondent',

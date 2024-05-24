@@ -57,7 +57,7 @@ const preloadedState = {
         count: 2,
       },
     },
-    subjectDetails: {
+    respondentDetails: {
       ...initialStateData,
       data: {
         result: {
@@ -67,7 +67,6 @@ const preloadedState = {
         },
       },
     },
-    respondentDetails: initialStateData,
   },
 };
 
@@ -323,7 +322,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
               limit: 10000,
-              targetSubjectId: mockedRespondentId,
+              respondentId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -334,7 +333,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
-              targetSubjectId: mockedRespondentId,
+              respondentId: mockedRespondentId,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
             },
@@ -405,7 +404,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
               limit: 10000,
-              targetSubjectId: mockedRespondentId,
+              respondentId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -530,7 +529,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: '2023-12-15',
               limit: 10000,
-              targetSubjectId: mockedRespondentId,
+              respondentId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -541,7 +540,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
-              targetSubjectId: mockedRespondentId,
+              respondentId: mockedRespondentId,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
             },
@@ -594,7 +593,7 @@ describe('RespondentDataReview', () => {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
             limit: 10000,
-            targetSubjectId: mockedRespondentId,
+            respondentId: mockedRespondentId,
           },
           signal: undefined,
         },

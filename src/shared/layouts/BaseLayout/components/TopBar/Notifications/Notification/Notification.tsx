@@ -42,7 +42,7 @@ export const Notification = ({
   message,
   timeAgo,
   isWatched,
-  subjectId,
+  respondentId,
   encryption,
   alert,
 }: NotificationProps) => {
@@ -81,7 +81,7 @@ export const Notification = ({
     navigate(
       generatePath(page.appletRespondentDataSummary, {
         appletId,
-        respondentId: subjectId,
+        respondentId,
       }),
     );
   };

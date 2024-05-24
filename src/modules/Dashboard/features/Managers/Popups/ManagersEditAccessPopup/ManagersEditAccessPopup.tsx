@@ -41,7 +41,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
     applets.reduce((acc: string[], applet) => {
       const reviewerRole = applet.roles.find(({ role }) => role === Roles.Reviewer);
 
-      if (reviewerRole && !reviewerRole?.reviewerSubjects?.length) acc.push(applet.displayName);
+      if (reviewerRole && !reviewerRole?.reviewerRespondents?.length) acc.push(applet.displayName);
 
       return acc;
     }, []);
@@ -73,7 +73,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
     updateAppletHandler(id, (roles) =>
       roles.map((role) => ({
         ...role,
-        ...(role.role === Roles.Reviewer && { reviewerSubjects: respondents }),
+        ...(role.role === Roles.Reviewer && { reviewerRespondents: respondents }),
       })),
     );
 
@@ -84,7 +84,7 @@ export const EditAccessPopup = ({ onClose, popupVisible, user }: EditAccessPopup
       const accesses = applets.map(({ id, roles }) => ({
         appletId: id,
         roles: roles.map(({ role }) => role),
-        subjects: roles.flatMap(({ reviewerSubjects }) => reviewerSubjects ?? []),
+        respondents: roles.flatMap(({ reviewerRespondents }) => reviewerRespondents ?? []),
       }));
 
       if (!ownerId || !accesses.length || accesses.some(({ roles }) => !roles.length)) {

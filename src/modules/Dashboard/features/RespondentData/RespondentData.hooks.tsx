@@ -3,24 +3,28 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
 import { page } from 'resources';
+import { workspaces } from 'shared/state';
 import { users } from 'modules/Dashboard/state';
 import { useAppDispatch } from 'redux/store/hooks';
 
 export const useRespondentDataSetup = () => {
   const { appletId, respondentId } = useParams();
+  const { ownerId } = workspaces.useData() || {};
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!respondentId) return;
+    if (!appletId || !respondentId || !ownerId) return;
 
-    const { getSubjectDetails } = users.thunk;
+    const { getRespondentDetails } = users.thunk;
 
     dispatch(
-      getSubjectDetails({
-        subjectId: respondentId,
+      getRespondentDetails({
+        ownerId,
+        appletId,
+        respondentId,
       }),
     );
-  }, [respondentId, dispatch]);
+  }, [appletId, respondentId, ownerId, dispatch]);
 
   return {
     respondentDataTabs: [

@@ -21,9 +21,9 @@ import { getPageAmount } from 'modules/Dashboard/api/api.utils';
 import { DateFormats } from 'shared/consts';
 import { ExportDataFormValues } from 'shared/features/AppletSettings/ExportDataSetting/ExportDataSetting.types';
 
-import { DataExportPopupProps, ExecuteAllPagesOfExportData, Modals } from './DataExportPopup.types';
+import { DataExportPopupProps, Modals } from './DataExportPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../Popups.hooks';
+import { useCheckIfHasEncryption } from '../Popup.hooks';
 import { ChosenAppletData } from '../../Respondents.types';
 import { getExportDataSuffix } from './DataExportPopup.utils';
 
@@ -47,7 +47,9 @@ export const DataExportPopup = ({
   });
 
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
-  const subjectId = isAppletSetting ? undefined : (chosenAppletData as ChosenAppletData)?.subjectId;
+  const respondentId = !isAppletSetting
+    ? (chosenAppletData as ChosenAppletData)?.respondentId
+    : undefined;
   const { encryption } = chosenAppletData ?? {};
 
   const handleDataExportSubmit = async () => {
@@ -55,7 +57,7 @@ export const DataExportPopup = ({
       return;
     }
 
-    await executeAllPagesOfExportData({ appletId, targetSubjectIds: subjectId });
+    await executeAllPagesOfExportData({ appletId, respondentIds: respondentId });
   };
 
   const hasEncryptionCheck = useCheckIfHasEncryption({
@@ -68,7 +70,13 @@ export const DataExportPopup = ({
   const getDecryptedAnswers = useDecryptedActivityData(appletId, encryption);
 
   const executeAllPagesOfExportData = useCallback(
-    async ({ appletId, targetSubjectIds }: ExecuteAllPagesOfExportData) => {
+    async ({
+      appletId,
+      respondentIds: respondentId,
+    }: {
+      appletId: string;
+      respondentIds?: string;
+    }) => {
       try {
         setDataIsExporting(true);
         const formFromDate = getValues?.().fromDate as Date;
@@ -77,7 +85,7 @@ export const DataExportPopup = ({
         const toDate = formToDate && format(formToDate, DateFormats.shortISO);
         const body = {
           appletId,
-          targetSubjectIds,
+          respondentIds: respondentId,
           fromDate,
           toDate,
         };

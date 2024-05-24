@@ -127,14 +127,14 @@ describe('ExportDataSetting', () => {
         expect(requestBody).toHaveProperty('toDate');
 
         // When checking relative dates, round the date to the nearest
-        // 10 minute to account for the test run time.
+        // 5 minute to account for the test run time.
         expect(
           roundToNearestMinutes(new Date(requestBody.fromDate), {
-            nearestTo: 10,
+            nearestTo: 5,
           }),
         ).toEqual(
           roundToNearestMinutes(expectedFromTime, {
-            nearestTo: 10,
+            nearestTo: 5,
           }),
         );
       });

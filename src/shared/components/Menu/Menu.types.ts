@@ -2,24 +2,17 @@ import { PopoverOrigin } from '@mui/material';
 
 import { MenuUiType } from './Menu.const';
 
-export type MenuActionProps<T = unknown> = { title?: string; context?: T };
-
-export type MenuItem<T = unknown> = {
+export type MenuItem = {
   icon?: JSX.Element;
   title: string;
-  action: ({ title, context }: MenuActionProps<T>) => void;
-  context?: T;
-  isDisplayed?: boolean;
-  disabled?: boolean;
-  tooltip?: string;
-  customItemColor?: string;
+  action: (title?: string) => void;
   'data-testid'?: string;
 };
 
-export type MenuProps<T> = {
+export type MenuProps = {
   anchorEl: null | HTMLElement;
   onClose: () => void;
-  menuItems: MenuItem<T>[];
+  menuItems: MenuItem[];
   anchorOrigin?: PopoverOrigin;
   transformOrigin?: PopoverOrigin;
   width?: string;

@@ -8,7 +8,7 @@ import { page } from 'resources';
 
 import { ViewDataPopupProps } from './ViewDataPopup.types';
 import { AppletsSmallTable } from '../../AppletsSmallTable';
-import { useCheckIfHasEncryption } from '../Popups.hooks';
+import { useCheckIfHasEncryption } from '../Popup.hooks';
 
 export const ViewDataPopup = ({
   popupVisible,
@@ -28,10 +28,8 @@ export const ViewDataPopup = ({
 
   const handleSubmitCallback = () => {
     if (chosenAppletData) {
-      const { appletId, subjectId } = chosenAppletData;
-      navigate(
-        generatePath(page.appletRespondentDataSummary, { appletId, respondentId: subjectId }),
-      );
+      const { appletId, respondentId } = chosenAppletData;
+      navigate(generatePath(page.appletRespondentDataSummary, { appletId, respondentId }));
     }
 
     handlePopupClose();

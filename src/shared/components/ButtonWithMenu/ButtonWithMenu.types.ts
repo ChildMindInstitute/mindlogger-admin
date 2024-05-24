@@ -9,7 +9,7 @@ export type ButtonWithMenuProps = {
   variant?: 'text' | 'outlined';
   disabled?: boolean;
   menuListWidth?: string;
-  menuProps?: Partial<MenuProps<unknown>>;
+  menuProps?: Partial<MenuProps>;
   'data-testid'?: string;
   tooltip?: null | string;
 };

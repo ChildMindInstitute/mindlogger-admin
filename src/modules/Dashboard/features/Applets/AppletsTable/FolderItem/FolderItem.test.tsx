@@ -73,13 +73,6 @@ const getFolderItemComponent = (isEmpty = true, isNew = false) => (
   </AppletsContext.Provider>
 );
 
-const clickActionDots = async () => {
-  const actionsDots = await waitFor(() =>
-    screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
-  );
-  fireEvent.click(actionsDots);
-};
-
 describe('FolderItem component tests', () => {
   test('should render folder row', () => {
     renderWithProviders(getFolderItemComponent(), { preloadedState });
@@ -88,10 +81,13 @@ describe('FolderItem component tests', () => {
     expect(screen.getByText('displayedName')).toBeInTheDocument();
   });
 
-  test('should appear actions on actions button click', async () => {
+  test('should appear actions on row hover', async () => {
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
-    await clickActionDots();
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
+    );
+    fireEvent.mouseEnter(actionsDots);
     const actionsDataTestIds = [
       'dashboard-applets-folder-rename',
       'dashboard-applets-folder-delete',
@@ -102,13 +98,17 @@ describe('FolderItem component tests', () => {
         expect(screen.getByTestId(dataTestId)).toBeInTheDocument(),
       );
     });
+    fireEvent.mouseLeave(actionsDots);
   });
 
   test('should delete empty folder', async () => {
     mockAxios.delete.mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
-    await clickActionDots();
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
+    );
+    fireEvent.mouseEnter(actionsDots);
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-delete'));
 
     await waitFor(() => {
@@ -123,7 +123,10 @@ describe('FolderItem component tests', () => {
     mockAxios.delete.mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(true, true), { preloadedState });
 
-    await clickActionDots();
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
+    );
+    fireEvent.mouseEnter(actionsDots);
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-delete'));
 
     await waitFor(() => {
@@ -134,15 +137,18 @@ describe('FolderItem component tests', () => {
     });
   });
 
-  test('should not have possibility to delete folder with applets', async () => {
+  test('shouldnt have possibility to delete folder with applets', async () => {
     renderWithProviders(getFolderItemComponent(false), { preloadedState });
 
-    await clickActionDots();
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
+    );
+    fireEvent.mouseEnter(actionsDots);
 
     const deleteButton = screen.getByTestId('dashboard-applets-folder-delete');
-    expect(deleteButton).toHaveClass('Mui-disabled');
-    const deleteButtonChild = deleteButton.firstElementChild;
-    deleteButtonChild && fireEvent.mouseEnter(deleteButtonChild);
+    expect(deleteButton).toBeDisabled();
+
+    fireEvent.mouseEnter(deleteButton);
 
     await waitFor(() => {
       expect(
@@ -157,7 +163,10 @@ describe('FolderItem component tests', () => {
     mockAxios.put.mockResolvedValueOnce(null);
     renderWithProviders(getFolderItemComponent(), { preloadedState });
 
-    await clickActionDots();
+    const actionsDots = await waitFor(() =>
+      screen.getByTestId('dashboard-applets-table-folder-actions-dots'),
+    );
+    fireEvent.mouseEnter(actionsDots);
     fireEvent.click(screen.getByTestId('dashboard-applets-folder-rename'));
 
     const input = screen.getByPlaceholderText('New Folder') as HTMLInputElement;
@@ -188,7 +197,7 @@ describe('FolderItem component tests', () => {
     expect(mockHandleFolderClick).toBeCalled();
   });
 
-  test('should not expand empty folder', () => {
+  test('shouldnt expand empty folder', () => {
     renderWithProviders(getFolderItemComponent(), { preloadedState });
     fireEvent.click(screen.getByText('displayedName'));
 
@@ -198,7 +207,7 @@ describe('FolderItem component tests', () => {
   test('should save new folder', async () => {
     renderWithProviders(getFolderItemComponent(false, true), { preloadedState });
     const input = screen.getByPlaceholderText('New Folder');
-    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', keyCode: 13, charCode: 13 });
+    fireEvent.blur(input);
 
     await waitFor(() => {
       expect(mockAxios.post).toBeCalled();

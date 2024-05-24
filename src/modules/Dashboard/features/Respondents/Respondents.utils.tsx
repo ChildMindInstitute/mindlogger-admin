@@ -8,79 +8,56 @@ import {
   StyledBodyMedium,
   StyledLabelLarge,
   StyledFlexTopCenter,
-  variables,
 } from 'shared/styles';
 import { RespondentDetail } from 'modules/Dashboard/types';
-import { HeadCell } from 'shared/types';
-import i18n from 'i18n';
 
-import { ChosenAppletData, GetMenuItems } from './Respondents.types';
-import { RespondentsColumnsWidth } from './Respondents.const';
+import { RespondentsActions, ChosenAppletData, FilteredApplets } from './Respondents.types';
 
-export const getRespondentActions = ({
-  actions: {
+export const getActions = (
+  {
     scheduleSetupAction,
     viewDataAction,
     removeAccessAction,
     userDataExportAction,
     editRespondent,
-    sendInvitation,
-  },
-  filteredApplets,
-  respondentId,
-  respondentOrSubjectId,
-  appletId,
-  email,
-  isInviteEnabled,
-  isViewCalendarEnabled,
-}: GetMenuItems) => [
+  }: RespondentsActions,
+  filteredApplets: FilteredApplets,
+  isAnonymousRespondent: boolean,
+  appletId?: string,
+) => [
   {
-    icon: <Svg id="calendar" width={20} height={21} />,
+    icon: <Svg id="user-calendar" width={20} height={21} />,
     action: scheduleSetupAction,
-    title: t('viewCalendar'),
-    context: { respondentId, respondentOrSubjectId, email },
-    isDisplayed: isViewCalendarEnabled && !!filteredApplets?.scheduling.length,
+    tooltipTitle: t('viewCalendar'),
+    isDisplayed: !isAnonymousRespondent && !!filteredApplets?.scheduling.length,
     'data-testid': 'dashboard-respondents-view-calendar',
   },
   {
     icon: <Svg id="data" width={22} height={22} />,
     action: viewDataAction,
-    title: t('viewData'),
-    context: { respondentId, respondentOrSubjectId, email },
+    tooltipTitle: t('viewData'),
     isDisplayed: !!filteredApplets?.viewable.length,
     'data-testid': 'dashboard-respondents-view-data',
   },
   {
-    icon: <Svg id="export2" width={20} height={21} />,
+    icon: <Svg id="export" width={18} height={20} />,
     action: userDataExportAction,
-    title: t('exportData'),
-    context: { respondentId, respondentOrSubjectId, email },
+    tooltipTitle: t('exportData'),
     isDisplayed: !!filteredApplets?.viewable.length,
     'data-testid': 'dashboard-respondents-export-data',
   },
   {
-    icon: <Svg id="edit" width={22} height={21} />,
+    icon: <Svg id="edit-user" width={21} height={19} />,
     action: editRespondent,
-    title: t('editRespondent'),
-    context: { respondentId, respondentOrSubjectId, email },
+    tooltipTitle: t('editRespondent'),
     isDisplayed: !!appletId && !!filteredApplets?.editable.length,
     'data-testid': 'dashboard-respondents-edit',
   },
   {
-    icon: <Svg id="remove-from-folder" width={21} height={21} />,
-    action: sendInvitation,
-    title: t('sendInvitation'),
-    context: { respondentId, respondentOrSubjectId, email },
-    isDisplayed: isInviteEnabled && !!filteredApplets?.editable.length,
-    'data-testid': 'dashboard-respondents-invite',
-  },
-  {
-    icon: <Svg id="trash" width={21} height={21} />,
+    icon: <Svg id="remove-access" />,
     action: removeAccessAction,
-    title: t('removeFromApplet'),
-    context: { respondentId, respondentOrSubjectId, email },
+    tooltipTitle: t('removeAccess'),
     isDisplayed: !!filteredApplets?.editable.length,
-    customItemColor: variables.palette.dark_error_container,
     'data-testid': 'dashboard-respondents-remove-access',
   },
 ];
@@ -124,48 +101,3 @@ export const getAppletsSmallTableRows = (
       },
     };
   });
-
-export const getHeadCells = (id?: string): HeadCell[] => {
-  const { t } = i18n;
-
-  return [
-    {
-      id: 'pin',
-      label: '',
-      enableSort: true,
-      width: RespondentsColumnsWidth.Pin,
-    },
-    {
-      id: 'secretIds',
-      label: t('secretUserId'),
-      enableSort: true,
-      width: RespondentsColumnsWidth.Default,
-    },
-    {
-      id: 'nicknames',
-      label: t('nickname'),
-      enableSort: true,
-      width: RespondentsColumnsWidth.Default,
-    },
-    {
-      id: 'lastSeen',
-      label: t('lastActive'),
-      enableSort: true,
-      width: RespondentsColumnsWidth.Default,
-    },
-    ...(id
-      ? [
-          {
-            id: 'schedule',
-            label: t('schedule'),
-            width: RespondentsColumnsWidth.Schedule,
-          },
-        ]
-      : []),
-    { id: 'status', label: '', width: RespondentsColumnsWidth.Status },
-    {
-      id: 'actions',
-      label: t('actions'),
-    },
-  ];
-};

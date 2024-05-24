@@ -20,8 +20,3 @@ export const enum Modals {
   ExportError = 'exportError',
   PasswordCheck = 'passwordCheck',
 }
-
-export type ExecuteAllPagesOfExportData = {
-  appletId: string;
-  targetSubjectIds?: string;
-};

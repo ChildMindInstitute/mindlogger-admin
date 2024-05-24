@@ -8,7 +8,7 @@ import { Applet } from '.';
 
 const mockApplet = {
   ...mockedApplet,
-  roles: [{ role: Roles.Reviewer, reviewerSubjects: ['User1', 'User2'] }],
+  roles: [{ role: Roles.Reviewer, reviewerRespondents: ['User1', 'User2'] }],
 };
 
 const addRoleMock = jest.fn();
@@ -60,7 +60,7 @@ describe('Applet', () => {
       {
         role: Roles.Manager,
         accessId: 'accessId',
-        reviewerSubjects: [],
+        reviewerRespondents: [],
       },
     ]);
     const addButton = screen.getByText('Add Role');
