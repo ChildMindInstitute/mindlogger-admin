@@ -2,6 +2,8 @@ import { FieldValues, UseControllerProps } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
 import { SxProps } from '@mui/material';
 
+import { DatePickerInputProps } from './DatePickerInput/DatePickerInput.types';
+
 export type DateType = Date | null;
 export type DateArrayType = DateType[];
 
@@ -29,7 +31,8 @@ type DatePicker = {
   isLoading?: boolean;
   tooltip?: string;
   'data-testid'?: string;
-} & TextFieldProps;
+} & TextFieldProps &
+  Pick<DatePickerInputProps, 'placeholder' | 'hideLabel'>;
 
 export type DatePickerProps<T extends FieldValues> = DatePicker & UseControllerProps<T>;
 

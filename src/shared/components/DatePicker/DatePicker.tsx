@@ -47,6 +47,8 @@ export const DatePicker = <T extends FieldValues>({
   isLoading,
   tooltip,
   'data-testid': dataTestid,
+  placeholder = '',
+  hideLabel = false,
 }: DatePickerProps<T>) => {
   const { t, i18n } = useTranslation('app');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -121,6 +123,8 @@ export const DatePicker = <T extends FieldValues>({
             id,
             handlePickerShow,
             dataTestid,
+            placeholder,
+            hideLabel,
           };
 
           const handleCloseWithSelectedDate = () => handlePickerClose(getSelectedDate());

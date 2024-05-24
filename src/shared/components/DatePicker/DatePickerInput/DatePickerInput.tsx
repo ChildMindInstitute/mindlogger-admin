@@ -15,6 +15,8 @@ export const DatePickerInput = ({
   id,
   dataTestid,
   handlePickerShow,
+  placeholder = '',
+  hideLabel = false,
 }: DatePickerInputProps) => {
   const { t } = useTranslation('app');
   const textFieldProps = {
@@ -31,7 +33,11 @@ export const DatePickerInput = ({
           <Svg id="date" />
         </StyledIconBtn>
       ),
+      sx: {
+        height: '4rem',
+      },
     },
+    placeholder,
     'data-testid': dataTestid,
   };
 
@@ -39,7 +45,7 @@ export const DatePickerInput = ({
     <StyledTextField
       variant="outlined"
       {...textFieldProps}
-      label={label || t('date')}
+      label={hideLabel ? '' : label || t('date')}
       value={value}
     />
   );
