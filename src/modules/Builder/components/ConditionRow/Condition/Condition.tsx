@@ -16,7 +16,7 @@ import { ConditionRowType } from 'modules/Builder/types';
 import { DatePicker } from 'shared/components';
 
 import { StyledCondition, StyledInputController, StyledSelectController } from './Condition.styles';
-import { ConditionProps } from './Condition.types';
+import { ConditionProps, ConditionItem } from './Condition.types';
 import { ConditionItemType } from './Condition.const';
 import {
   getConditionMinMaxRangeValues,
@@ -26,6 +26,7 @@ import {
 } from './Condition.utils';
 
 export const SwitchCondition = ({
+  selectedItem,
   itemType,
   numberValueName,
   minValueName,
@@ -33,6 +34,7 @@ export const SwitchCondition = ({
   state,
   dataTestid,
 }: {
+  selectedItem?: ConditionItem;
   itemType?: ConditionItemType;
   dataTestid: ConditionProps['data-testid'];
 } & Pick<ConditionProps, 'numberValueName' | 'minValueName' | 'maxValueName' | 'state'>) => {
