@@ -1,11 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { useWatch } from 'react-hook-form';
+import { addDays } from 'date-fns';
 
-import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
+import {
+  StyledTitleMedium,
+  StyledClearedButton,
+  theme,
+  StyledBodyLarge,
+  StyledFlexTopCenter,
+} from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { ConditionRowType } from 'modules/Builder/types';
+import { DatePicker } from 'shared/components';
 
 import { StyledCondition, StyledInputController, StyledSelectController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
@@ -36,10 +44,11 @@ export const Condition = ({
   'data-testid': dataTestid,
 }: ConditionProps) => {
   const { t } = useTranslation('app');
-  const { control } = useCustomFormContext();
+  const { control, setValue } = useCustomFormContext();
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 
+  const isItemDate = selectedItem?.type === ConditionItemType.Date;
   const isItemSlider = selectedItem?.type === ConditionItemType.Slider;
   const isItemScore = selectedItem?.type === ConditionItemType.Score;
   const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
@@ -53,6 +62,10 @@ export const Condition = ({
   const isNumberValueShown =
     (isItemSlider || isItemScore) && !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = (isItemSlider || isItemScore) && !isNumberValueShown;
+
+  const isDateValueShown = isItemDate && !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
+  const isRangeDateShown = isItemDate && CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
+
   const { minNumber, maxNumber } = getConditionMinMaxValues({
     item: selectedItem,
     state,
@@ -66,6 +79,26 @@ export const Condition = ({
     minValue,
     maxValue,
   });
+
+  const commonDateInputProps = {
+    control,
+    placeholder: t('datePlaceholder'),
+    hideLabel: true,
+    inputWrapperSx: {
+      minWidth: '18rem',
+      width: '18rem',
+    },
+    inputSx: {
+      height: '4rem',
+    },
+  };
+
+  const onCloseStartDateCallback = () => {
+    if (!minValue || !maxValue) return;
+    if (maxValue < minValue) {
+      setValue(maxValueName, addDays(minValue, 1));
+    }
+  };
 
   return (
     <StyledCondition data-testid={dataTestid}>
@@ -146,6 +179,35 @@ export const Condition = ({
             data-testid={`${dataTestid}-max-value`}
           />
         </>
+      )}
+      {isDateValueShown && (
+        <StyledFlexTopCenter>
+          <DatePicker
+            name={numberValueName}
+            onCloseCallback={onCloseStartDateCallback}
+            data-testid={`${dataTestid}-date-value`}
+            {...commonDateInputProps}
+          />
+        </StyledFlexTopCenter>
+      )}
+      {isRangeDateShown && (
+        <StyledFlexTopCenter>
+          <DatePicker
+            name={minValueName}
+            key={`min-date-value-${isRangeValueShown}`}
+            onCloseCallback={onCloseStartDateCallback}
+            data-testid={`${dataTestid}-start-date-value`}
+            {...commonDateInputProps}
+          />
+          <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
+          <DatePicker
+            name={maxValueName}
+            key={`max-date-value-${isRangeValueShown}`}
+            minDate={minValue as Date}
+            data-testid={`${dataTestid}-end-date-value`}
+            {...commonDateInputProps}
+          />
+        </StyledFlexTopCenter>
       )}
       {isRemoveVisible && (
         <StyledClearedButton
