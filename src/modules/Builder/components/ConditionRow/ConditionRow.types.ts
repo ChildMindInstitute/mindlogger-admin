@@ -24,6 +24,7 @@ export type ConditionRowProps = {
   autoTrigger?: boolean;
   showError?: boolean;
   'data-testid'?: string;
+  isItemFlow?: boolean;
 };
 
 export type OptionListItem = { labelKey: string; value: string; type: ConditionItemType };

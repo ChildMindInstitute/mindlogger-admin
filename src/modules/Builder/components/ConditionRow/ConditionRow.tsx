@@ -35,6 +35,7 @@ export const ConditionRow = ({
   autoTrigger,
   showError = true,
   'data-testid': dataTestid,
+  isItemFlow = false,
 }: ConditionRowProps) => {
   const { t } = useTranslation('app');
   const {
@@ -74,9 +75,9 @@ export const ConditionRow = ({
   const selectedScore =
     scores?.find((score: ScoreReport) => getEntityKey(score, false) === scoreKey) ?? {};
   const options = {
-    [ConditionRowType.Item]: getItemOptions(items, type),
+    [ConditionRowType.Item]: getItemOptions(items, type, isItemFlow),
     [ConditionRowType.Section]: [
-      ...getItemOptions(items, type),
+      ...getItemOptions(items, type, isItemFlow),
       ...((scores?.length && getScoreOptions(scores)) || []),
       ...((scores?.length && getScoreConditionalsOptions(scores)) || []),
     ],

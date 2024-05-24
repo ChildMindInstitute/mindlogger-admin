@@ -11,6 +11,7 @@ export const getStateOptions = (type?: ConditionItemType) => {
   switch (type) {
     case ConditionItemType.Score:
     case ConditionItemType.Slider:
+    case ConditionItemType.Date:
       return [
         { value: ConditionType.GreaterThan, labelKey: t('greaterThan') },
         { value: ConditionType.LessThan, labelKey: t('lessThan') },
