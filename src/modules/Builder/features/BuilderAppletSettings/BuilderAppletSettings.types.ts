@@ -1,4 +1,4 @@
-import { Integrations, Roles } from 'shared/consts';
+import { Roles } from 'shared/consts';
 import { ReportConfigFormValues } from 'modules/Builder/features/ReportConfigSetting';
 
 export type GetSettings = {
@@ -6,5 +6,5 @@ export type GetSettings = {
   isPublished?: boolean;
   roles?: Roles[];
   onReportConfigSubmit: (values: Partial<ReportConfigFormValues>) => void;
-  integrations?: Integrations[];
+  enableLorisIntegration?: boolean;
 };

@@ -1,7 +1,8 @@
 import { lazy } from 'react';
 
 import { Svg } from 'shared/components/Svg';
-import { Integrations, Roles } from 'shared/consts';
+// eslint-disable-next-line unused-imports/no-unused-imports
+import { Integrations, Roles } from 'shared/consts'; // TODO: remove integrations type
 import {
   DataRetention,
   TransferOwnershipSetting,
@@ -24,7 +25,7 @@ export const getSettings = ({
   isPublished,
   roles,
   onReportConfigSubmit,
-  integrations,
+  enableLorisIntegration,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
@@ -55,8 +56,7 @@ export const getSettings = ({
           label: 'loris.integration',
           component: <LorisIntegrationSetting />,
           param: SettingParam.LorisIntegration,
-          isVisible:
-            integrations?.some((integration) => integration === Integrations.Loris) || false,
+          isVisible: enableLorisIntegration,
           'data-testid': `${dataTestid}-loris-integration`,
         },
       ],
