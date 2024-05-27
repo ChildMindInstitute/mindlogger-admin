@@ -14,7 +14,7 @@ import {
   AppletPasswordRefType,
 } from 'modules/Dashboard/features/Applet/Popups';
 import { page } from 'resources';
-import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
+import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import {
   Encryption,
   falseReturnFunc,
@@ -45,7 +45,13 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const { id: accountId } = userData?.user || {};
   const workspaceRoles = workspaces.useRolesData();
   const appletId = item.id;
-  const participantPath = useMultiInformantParticipantPath({ appletId });
+  const {
+    featureFlags: { enableMultiInformant },
+  } = useFeatureFlags();
+  const participantPath = generatePath(
+    enableMultiInformant ? page.appletOverview : page.appletRespondents,
+    { appletId },
+  );
 
   const setAppletPrivateKey = useAppletPrivateKeySetter();
   const encryptionDataRef = useRef<{
@@ -75,7 +81,7 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
   const { isDragOver, onDragLeave, onDragOver, onDrop, onDragEnd } = useAppletsDnd();
   const [sharePopupVisible, setSharePopupVisible] = useState(false);
   const [passwordPopupVisible, setPasswordPopupVisible] = useState(false);
-  const [hasVisibleActions, setHasVisibleActions] = useState(false);
+  const [_, setHasVisibleActions] = useState(false);
 
   const APPLET_SCHEDULE = generatePath(page.appletSchedule, {
     appletId,
