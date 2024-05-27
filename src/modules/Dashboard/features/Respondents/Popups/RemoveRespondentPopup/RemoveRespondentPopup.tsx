@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Checkbox, FormControlLabel } from '@mui/material';
@@ -32,7 +32,28 @@ export const RemoveRespondentPopup = ({
   const [step, setStep] = useState<Steps>(0);
   const [removeData, setRemoveData] = useState(false);
 
-  const { execute: handleSubjectDelete, error } = useAsync(deleteSubjectApi);
+  const isLastScreen = (removeData && step === 4) || (!removeData && step === 3);
+  const isDeleteScreen = (removeData && step === 3) || (!removeData && step === 2);
+  const isAppletPwdScreen = removeData && step === 2;
+  const isLastScreenRef = useRef(isLastScreen);
+
+  const getStep = (type: 'next' | 'prev') =>
+    setStep((prevStep) => {
+      const newStep = type === 'next' ? prevStep + 1 : prevStep - 1;
+
+      return newStep as Steps;
+    });
+  const deleteSubjectCallback = () => {
+    if (isLastScreenRef.current) return;
+
+    return getStep('next');
+  };
+
+  const {
+    execute: handleSubjectDelete,
+    error,
+    isLoading,
+  } = useAsync(deleteSubjectApi, deleteSubjectCallback, deleteSubjectCallback);
 
   const isRemoved = !error;
   const isFirstStepWithAppletId = !!appletId && step === 1;
@@ -88,13 +109,6 @@ export const RemoveRespondentPopup = ({
     </>
   );
 
-  const getStep = (type: 'next' | 'prev') =>
-    setStep((prevStep) => {
-      const newStep = type === 'next' ? prevStep + 1 : prevStep - 1;
-
-      return newStep as Steps;
-    });
-
   const thirdExtScreen = (
     <EnterAppletPassword
       ref={appletPasswordRef}
@@ -141,12 +155,9 @@ export const RemoveRespondentPopup = ({
     }
   };
 
-  const isLastScreen = (removeData && step === 4) || (!removeData && step === 3);
-  const isAppletPwdScreen = removeData && step === 2;
-
   const submitForm = () => {
     screens[step].submitForm?.();
-    if (isLastScreen || isAppletPwdScreen) return;
+    if (isLastScreen || isAppletPwdScreen || isDeleteScreen) return;
     getStep('next');
   };
 
@@ -158,6 +169,10 @@ export const RemoveRespondentPopup = ({
     }
   }, [chosenAppletData]);
 
+  useEffect(() => {
+    isLastScreenRef.current = isLastScreen;
+  }, [isLastScreen]);
+
   return (
     <Modal
       open={popupVisible}
@@ -168,7 +183,7 @@ export const RemoveRespondentPopup = ({
       hasSecondBtn={screens[step].hasSecondBtn}
       onSecondBtnSubmit={onSecondBtnSubmit}
       secondBtnText={t(isFirstStepWithAppletId ? 'cancel' : 'back')}
-      disabledSubmit={disabledSubmit}
+      disabledSubmit={disabledSubmit || isLoading}
       submitBtnColor={screens[step]?.submitBtnColor}
       data-testid={dataTestid}
     >
