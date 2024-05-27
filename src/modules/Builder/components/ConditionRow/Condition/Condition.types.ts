@@ -30,3 +30,9 @@ export type ConditionProps = {
   type: ConditionRowType;
   'data-testid'?: string;
 };
+
+export type SwitchConditionProps = {
+  selectedItem?: ConditionItem;
+  itemType?: ConditionItemType;
+  dataTestid: ConditionProps['data-testid'];
+} & Pick<ConditionProps, 'numberValueName' | 'minValueName' | 'maxValueName' | 'state'>;
