@@ -84,7 +84,7 @@ export const ParticipantSchedule = () => {
               width: theme.spacing(32),
             }}
           />
-          <Calendar userId={userId ?? undefined} />
+          <Calendar userId={hasIndividualSchedule && userId ? userId : undefined} />
         </>
       )}
     </Box>

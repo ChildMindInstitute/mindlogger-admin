@@ -215,7 +215,7 @@ export const Legend = ({
           name={respondentName}
           onClose={() => setClearScheduledEventsPopupVisible(false)}
           open={clearScheduledEventsPopupVisible}
-          userId={userId}
+          userId={hasIndividualSchedule && userId ? userId : undefined}
         />
       )}
 
@@ -224,7 +224,7 @@ export const Legend = ({
         defaultStartDate={new Date()}
         open={createEventPopupVisible}
         setCreateEventPopupVisible={setCreateEventPopupVisible}
-        userId={userId}
+        userId={hasIndividualSchedule && userId ? userId : undefined}
       />
     </StyledLegend>
   );
