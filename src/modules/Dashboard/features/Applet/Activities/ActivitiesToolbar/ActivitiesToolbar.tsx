@@ -7,6 +7,8 @@ import { page } from 'resources';
 import { ButtonWithMenu, Svg } from 'shared/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { StyledFlexTopCenter, StyledFlexWrap, theme } from 'shared/styles';
+import { checkIfCanEdit } from 'shared/utils';
+import { workspaces } from 'shared/state';
 
 import { ActivitiesToolbarProps } from './ActivitiesToolbar.types';
 
@@ -19,6 +21,10 @@ export const ActivitiesToolbar = ({
   const { t } = useTranslation('app');
   const { featureFlags } = useFeatureFlags();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const workspaceRoles = workspaces.useRolesData();
+  const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
+
+  const canEditApplet = checkIfCanEdit(roles);
 
   return (
     <StyledFlexWrap sx={{ gap: 1.2, ...sx }} {...otherProps}>
@@ -74,15 +80,17 @@ export const ActivitiesToolbar = ({
               </Button>
             )}
 
-            <Button
-              component={Link}
-              to={generatePath(page.builderAppletActivities, { appletId })}
-              variant="contained"
-              data-testid={`${dataTestId}-add-activity`}
-              sx={{ minWidth: theme.spacing(13.2) }}
-            >
-              {t('addActivity')}
-            </Button>
+            {canEditApplet && (
+              <Button
+                component={Link}
+                to={generatePath(page.builderAppletActivities, { appletId })}
+                variant="contained"
+                data-testid={`${dataTestId}-add-activity`}
+                sx={{ minWidth: theme.spacing(13.2) }}
+              >
+                {t('addActivity')}
+              </Button>
+            )}
           </StyledFlexWrap>
         </>
       )}
