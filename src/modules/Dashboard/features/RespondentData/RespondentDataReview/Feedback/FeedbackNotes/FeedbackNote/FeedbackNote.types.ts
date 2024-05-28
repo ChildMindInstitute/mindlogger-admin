@@ -1,4 +1,4 @@
-import { FeedbackNote } from '../FeedbackNotes.types';
+import { FeedbackNote } from 'modules/Dashboard/api';
 
 export type FeedbackNoteProps = {
   note: FeedbackNote;

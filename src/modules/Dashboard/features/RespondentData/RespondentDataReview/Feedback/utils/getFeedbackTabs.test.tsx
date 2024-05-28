@@ -5,16 +5,14 @@ import { getFeedbackTabs } from './getFeedbackTabs';
 
 describe('getFeedbackTabs', () => {
   const dataTestid = 'respondents-summary-feedback-tab';
-  const selectedActivity = {
+  const selectedEntity = {
     id: '1',
-    name: 'activity 1',
-    lastAnswerDate: '2023-09-26T12:11:46.162083',
-    answerDates: [],
+    isFlow: false,
   };
   const notesTab = {
     labelKey: 'notes',
     id: 'feedback-notes',
-    content: <FeedbackNotes activity={selectedActivity} />,
+    content: <FeedbackNotes entity={selectedEntity} />,
     'data-testid': `${dataTestid}-notes`,
   };
 
@@ -24,7 +22,7 @@ describe('getFeedbackTabs', () => {
       { name: 'Assessment 2' },
     ] as unknown as AssessmentActivityItem[];
 
-    const tabs = getFeedbackTabs(selectedActivity, assessment);
+    const tabs = getFeedbackTabs(selectedEntity, assessment);
 
     expect(tabs.length).toBe(2);
     expect(tabs).toEqual([
@@ -39,7 +37,7 @@ describe('getFeedbackTabs', () => {
   });
 
   test('returns correct tabs when assessment is undefined', () => {
-    const tabs = getFeedbackTabs(selectedActivity, undefined);
+    const tabs = getFeedbackTabs(selectedEntity, undefined);
 
     expect(tabs.length).toBe(1);
     expect(tabs).toEqual([notesTab]);

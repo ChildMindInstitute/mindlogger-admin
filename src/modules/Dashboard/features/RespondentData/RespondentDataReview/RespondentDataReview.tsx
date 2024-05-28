@@ -297,12 +297,14 @@ export const RespondentDataReview = () => {
             </>
           )}
         </StyledReviewContainer>
-        {/*TODO: Add notes and assessment support for ActivityFlow after the backend is ready (BE tasks M2-6584, M2-6585)*/}
-        {selectedActivity && selectedAnswer && !isLoading && (
+        {isActivityOrFlowSelected && selectedAnswer && !isLoading && (
           <Feedback
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            selectedActivity={selectedActivity}
+            selectedEntity={{
+              id: selectedActivity?.id || selectedFlow?.id || '',
+              isFlow: !!selectedFlow,
+            }}
             onClose={() => setIsFeedbackOpen(false)}
           />
         )}

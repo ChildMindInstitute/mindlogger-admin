@@ -1,11 +1,10 @@
-import { ReviewActivity } from 'modules/Dashboard/api';
-
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
 import { FeedbackNotes } from '../FeedbackNotes';
 import { FeedbackReviews } from '../FeedbackReviews';
+import { SelectedEntity } from '../Feedback.types';
 
 export const getFeedbackTabs = (
-  selectedActivity: ReviewActivity,
+  selectedEntity: SelectedEntity,
   assessment: AssessmentActivityItem[] | undefined,
 ) => {
   const dataTestid = 'respondents-summary-feedback-tab';
@@ -14,7 +13,7 @@ export const getFeedbackTabs = (
     {
       labelKey: 'notes',
       id: 'feedback-notes',
-      content: <FeedbackNotes activity={selectedActivity} />,
+      content: <FeedbackNotes entity={selectedEntity} />,
       'data-testid': `${dataTestid}-notes`,
     },
     ...(assessment?.length
