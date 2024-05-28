@@ -11,3 +11,10 @@ export const checkIfCanEdit = (roles?: Roles[]) =>
       roles?.includes(Roles.Editor) ||
       roles?.includes(Roles.SuperAdmin),
   );
+
+export const checkIfCanAccessData = (roles?: Roles[]) =>
+  Boolean(
+    isManagerOrOwner(roles?.[0]) ||
+      roles?.includes(Roles.SuperAdmin) ||
+      roles?.includes(Roles.Reviewer),
+  );
