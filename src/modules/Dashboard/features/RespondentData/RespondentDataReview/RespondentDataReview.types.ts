@@ -32,8 +32,7 @@ import {
   AnswerDate,
   AnswerSummary as AnswerSummaryApi,
   EncryptedActivityAnswer,
-  ReviewActivity,
-  ReviewFlow,
+  ReviewEntity,
 } from 'modules/Dashboard/api';
 
 export type CreateItemAnswer<I, A> = {
@@ -162,4 +161,4 @@ export type FlowActivityAnswers = {
 
 export type FlowAnswers = FlowActivityAnswers[];
 
-export type OnSelectActivityOrFlow = (item: ReviewActivity | ReviewFlow | null) => void;
+export type OnSelectActivityOrFlow = (item: ReviewEntity | null) => void;
