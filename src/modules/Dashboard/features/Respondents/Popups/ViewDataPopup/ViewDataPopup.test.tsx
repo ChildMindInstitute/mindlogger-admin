@@ -1,9 +1,14 @@
 import { fireEvent, screen } from '@testing-library/react';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedRespondentDetails, mockedRespondentId, mockedOwnerId } from 'shared/mock';
+import {
+  mockedRespondentDetails,
+  mockedRespondentId,
+  mockedOwnerId,
+  mockedSubjectId1,
+} from 'shared/mock';
 
-import * as hooks from '../Popup.hooks';
+import * as hooks from '../Popups.hooks';
 import { ViewDataPopup } from './ViewDataPopup';
 
 const setChosenAppletDataMock = jest.fn();
@@ -12,6 +17,7 @@ const chosenAppletDataMock = {
   ...mockedRespondentDetails,
   respondentId: mockedRespondentId,
   ownerId: mockedOwnerId,
+  subjectId: mockedSubjectId1,
 };
 const tableRowsMock = [
   {

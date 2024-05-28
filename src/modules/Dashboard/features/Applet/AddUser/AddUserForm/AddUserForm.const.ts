@@ -1,11 +1,7 @@
 import { Roles } from 'shared/consts';
+import { Languages } from 'shared/api';
 
 import { Field } from './AddUserForm.types';
-
-export const Langs = {
-  fr: 'fr',
-  en: 'en',
-} as const;
 
 export const Fields = {
   firstName: 'firstName',
@@ -19,18 +15,18 @@ export const Fields = {
   language: 'language',
 } as const;
 
-export const langs = [
+export const languages = [
   {
-    labelKey: Langs.fr,
-    value: Langs.fr,
+    labelKey: Languages.FR,
+    value: Languages.FR,
   },
   {
-    labelKey: Langs.en,
-    value: Langs.en,
+    labelKey: Languages.EN,
+    value: Languages.EN,
   },
 ];
 
-export const fields: Field[] = [
+export const nameFields: Field[] = [
   {
     name: Fields.firstName,
     'data-testid': 'dashboard-add-users-fname',
@@ -39,11 +35,12 @@ export const fields: Field[] = [
     name: Fields.lastName,
     'data-testid': 'dashboard-add-users-lname',
   },
-  {
-    name: Fields.email,
-    'data-testid': 'dashboard-add-users-email',
-  },
 ];
+
+export enum SubmitBtnType {
+  WithInvitation = 'withInvitation',
+  WithoutInvitation = 'withoutInvitation',
+}
 
 export const defaultValues = {
   firstName: '',
@@ -52,5 +49,11 @@ export const defaultValues = {
   email: '',
   secretUserId: '',
   role: Roles.Respondent,
-  language: Langs.en,
+  language: Languages.EN,
+  submitBtnType: SubmitBtnType.WithInvitation,
 };
+
+export const dataTestId = 'dashboard-add-users';
+
+export const RESPONDENT_ALREADY_INVITED = 'Respondent already invited.';
+export const EMAIL_IN_USE = 'That email is already in use for shell account.';
