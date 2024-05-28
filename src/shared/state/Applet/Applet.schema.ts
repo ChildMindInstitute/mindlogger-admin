@@ -409,23 +409,23 @@ export type OptionCondition = BaseCondition & {
   };
 };
 
-export type SingleValueCondition = BaseCondition & {
+export type SingleValueCondition<T = number> = BaseCondition & {
   payload: {
-    value: number;
+    value: T;
   };
 };
 
-export type RangeValueCondition = BaseCondition & {
+export type RangeValueCondition<T = number> = BaseCondition & {
   payload: {
-    minValue: number;
-    maxValue: number;
+    minValue: T;
+    maxValue: T;
   };
 };
 
-export type Condition =
+export type Condition<T = number> =
   | OptionCondition
-  | SingleValueCondition
-  | RangeValueCondition
+  | SingleValueCondition<T>
+  | RangeValueCondition<T>
   | ScoreCondition;
 
 export type ConditionalLogic = {
