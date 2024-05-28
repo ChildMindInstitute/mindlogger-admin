@@ -20,7 +20,7 @@ import {
   CreateEventType,
   OwnerId,
   Answers,
-  GetAnswersNotesParams,
+  GetNotesParams,
   NoteId,
   Note,
   AppletSubmitDateList,
@@ -44,7 +44,6 @@ import {
   Version,
   EncryptedActivityAnswers,
   Identifier,
-  ReviewActivity,
   Review,
   AssessmentReview,
   AppletName,
@@ -53,7 +52,7 @@ import {
   SubmitDates,
   DeleteReview,
   EncryptedActivityAnswer,
-  ReviewFlow,
+  ReviewEntity,
   FlowAnswersParams,
   EncryptedFlowAnswers,
   DatavizEntity,
@@ -65,6 +64,7 @@ import {
   SummaryFlowAnswersParams,
   GetLatestReportParams,
   EncryptedFlowsAnswers,
+  FeedbackNote,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -405,7 +405,7 @@ export const getReviewActivitiesApi = (
   { appletId, respondentId, createdDate }: Answers,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<ReviewActivity>>(`/answers/applet/${appletId}/review/activities`, {
+  authApiClient.get<Response<ReviewEntity>>(`/answers/applet/${appletId}/review/activities`, {
     params: {
       respondentId,
       createdDate,
@@ -418,7 +418,7 @@ export const getReviewFlowsApi = (
   { appletId, respondentId, createdDate }: Answers,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get<Response<ReviewFlow>>(`/answers/applet/${appletId}/review/flows`, {
+  authApiClient.get<Response<ReviewEntity>>(`/answers/applet/${appletId}/review/flows`, {
     params: {
       respondentId,
       createdDate,
@@ -455,11 +455,26 @@ export const getFlowAnswersApi = (
   );
 
 export const getAnswersNotesApi = (
-  { appletId, answerId, activityId, params }: ActivityAnswerParams & GetAnswersNotesParams,
+  { appletId, answerId, activityId, params }: ActivityAnswerParams & GetNotesParams,
   signal?: AbortSignal,
 ) =>
-  authApiClient.get(
+  authApiClient.get<Response<FeedbackNote>>(
     `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes`,
+    {
+      params: {
+        ...params,
+        limit: MAX_LIMIT,
+      },
+      signal,
+    },
+  );
+
+export const getFlowNotesApi = (
+  { appletId, submitId, flowId, params }: FlowAnswersParams & GetNotesParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<FeedbackNote>>(
+    `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes`,
     {
       params: {
         ...params,
@@ -481,6 +496,18 @@ export const createAnswerNoteApi = (
     },
   );
 
+export const createFlowNoteApi = (
+  { appletId, submitId, flowId, note }: FlowAnswersParams & Note,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes`,
+    { note },
+    {
+      signal,
+    },
+  );
+
 export const editAnswerNoteApi = (
   { appletId, answerId, noteId, activityId, note }: ActivityAnswerParams & NoteId & Note,
   signal?: AbortSignal,
@@ -493,12 +520,35 @@ export const editAnswerNoteApi = (
     },
   );
 
+export const editFlowNoteApi = (
+  { appletId, flowId, noteId, submitId, note }: FlowAnswersParams & NoteId & Note,
+  signal?: AbortSignal,
+) =>
+  authApiClient.put(
+    `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes/${noteId}`,
+    { note },
+    {
+      signal,
+    },
+  );
+
 export const deleteAnswerNoteApi = (
   { appletId, answerId, activityId, noteId }: ActivityAnswerParams & NoteId,
   signal?: AbortSignal,
 ) =>
   authApiClient.delete(
     `/answers/applet/${appletId}/answers/${answerId}/activities/${activityId}/notes/${noteId}`,
+    {
+      signal,
+    },
+  );
+
+export const deleteFlowNoteApi = (
+  { appletId, flowId, noteId, submitId }: FlowAnswersParams & NoteId,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(
+    `/answers/applet/${appletId}/submissions/${submitId}/flows/${flowId}/notes/${noteId}`,
     {
       signal,
     },
