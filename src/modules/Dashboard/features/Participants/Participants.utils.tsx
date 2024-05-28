@@ -14,7 +14,7 @@ import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
 import { MenuItemType } from 'shared/components';
-import { checkIfCanEdit } from 'shared/utils';
+import { checkIfCanAccessData, checkIfCanEdit } from 'shared/utils';
 
 import { ChosenAppletData, GetParticipantActionsProps } from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
@@ -40,6 +40,8 @@ export const getParticipantActions = ({
   const isEditable = !!filteredApplets?.editable.length;
   const isViewable = !!filteredApplets?.viewable.length;
   const canEdit = checkIfCanEdit(roles) && isViewable && !isPending;
+  const canAccessData = checkIfCanAccessData(roles) && isViewable && !isPending;
+  const showDivider = (isEditable || isUpgradeable || canAccessData) && canEdit;
 
   return [
     {
@@ -63,7 +65,7 @@ export const getParticipantActions = ({
       action: exportData,
       title: t('exportData'),
       context,
-      isDisplayed: canEdit,
+      isDisplayed: canAccessData,
       'data-testid': `${dataTestid}-export-data`,
     },
     {
@@ -77,7 +79,7 @@ export const getParticipantActions = ({
     },
     {
       type: MenuItemType.Divider,
-      isDisplayed: showAssignActivity && !isPending,
+      isDisplayed: showAssignActivity && !isPending && showDivider,
     },
     {
       icon: <Svg id="add-users-outlined" width={24} height={24} />,
