@@ -3,6 +3,7 @@ export const enum ConditionItemType {
   SingleSelection = 'singleSelection',
   MultiSelection = 'multiSelection',
   Date = 'date',
+  NumberSelection = 'numberSelection',
   Score = 'score',
   ScoreCondition = 'scoreCondition',
 }

@@ -29,7 +29,8 @@ export const SwitchCondition = ({
 
   switch (itemType) {
     case ConditionItemType.Score:
-    case ConditionItemType.Slider: {
+    case ConditionItemType.Slider:
+    case ConditionItemType.NumberSelection: {
       const isNumberValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
       const isRangeValueShown = !isNumberValueShown;
 

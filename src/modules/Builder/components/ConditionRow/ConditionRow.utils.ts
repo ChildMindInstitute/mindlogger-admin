@@ -25,6 +25,8 @@ export const getConditionItemType = (item: ItemFormValues) => {
       return ConditionItemType.MultiSelection;
     case ItemResponseType.Date:
       return ConditionItemType.Date;
+    case ItemResponseType.NumberSelection:
+      return ConditionItemType.NumberSelection;
     default:
       return ConditionItemType.SingleSelection;
   }
@@ -35,7 +37,11 @@ const scoreItemTypes = [
   ItemResponseType.SingleSelection,
   ItemResponseType.MultipleSelection,
 ];
-const itemFlowItemTypes = [...scoreItemTypes, ItemResponseType.Date];
+const itemFlowItemTypes = [
+  ...scoreItemTypes,
+  ItemResponseType.Date,
+  ItemResponseType.NumberSelection,
+];
 const checkIfShouldBeIncluded = (responseType: ItemResponseType, isItemFlow = false) =>
   (isItemFlow ? itemFlowItemTypes : scoreItemTypes).some((value) => value === responseType);
 
@@ -103,27 +109,52 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
         optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };
     case ConditionType.GreaterThan:
-      if (selectedItem?.responseType === ItemResponseType.Slider) {
+      if (
+        selectedItem?.responseType === ItemResponseType.Slider ||
+        selectedItem?.responseType === ItemResponseType.NumberSelection
+      ) {
         return {
           value: selectedItem.responseValues.minValue,
+        };
+      }
+      if (selectedItem?.responseType === ItemResponseType.Date) {
+        return {
+          value: null,
         };
       }
 
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.LessThan:
-      if (selectedItem?.responseType === ItemResponseType.Slider) {
+      if (
+        selectedItem?.responseType === ItemResponseType.Slider ||
+        selectedItem?.responseType === ItemResponseType.NumberSelection
+      ) {
         return {
           value: selectedItem.responseValues.maxValue,
+        };
+      }
+      if (selectedItem?.responseType === ItemResponseType.Date) {
+        return {
+          value: null,
         };
       }
 
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.Equal:
     case ConditionType.NotEqual:
+      if (selectedItem?.responseType === ItemResponseType.Date) {
+        return {
+          value: null, // update with getDefaultPayload(isNullUsedAsDefault) + trigger validation
+        };
+      }
+
       return getDefaultPayload(conditionPayload as SingleValueCondition['payload']);
     case ConditionType.Between:
     case ConditionType.OutsideOf:
-      if (selectedItem?.responseType === ItemResponseType.Slider) {
+      if (
+        selectedItem?.responseType === ItemResponseType.Slider ||
+        selectedItem?.responseType === ItemResponseType.NumberSelection
+      ) {
         return {
           minValue: selectedItem.responseValues.minValue,
           maxValue: selectedItem.responseValues.maxValue,
