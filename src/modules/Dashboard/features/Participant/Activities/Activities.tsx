@@ -17,6 +17,8 @@ import { users } from 'modules/Dashboard/state';
 import { Activity, ActivityFlow } from 'redux/modules';
 import { StyledFlexColumn } from 'shared/styles';
 import { page } from 'resources';
+import { workspaces } from 'shared/state';
+import { checkIfCanAccessData } from 'shared/utils';
 
 import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
 
@@ -32,6 +34,8 @@ export const Activities = () => {
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [selectedActivityId, setSelectedActivityId] = useState<string | undefined>();
+  const workspaceRoles = workspaces.useRolesData();
+  const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
 
   // TODO M2-6223: Update these calls to include a `subject_id` param
   const {
@@ -107,6 +111,8 @@ export const Activities = () => {
     [activities, formatRow],
   );
 
+  const canAccessData = checkIfCanAccessData(roles);
+
   const onClickItemHandler = (activityId: string) => {
     if (!subjectId || !appletId) return;
     setSelectedActivityId(activityId);
@@ -128,6 +134,12 @@ export const Activities = () => {
         activityId,
       }),
     );
+  };
+
+  const getClickHandler = () => {
+    if (!subjectId || !appletId || !canAccessData) return undefined;
+
+    return onClickItemHandler;
   };
 
   return (
@@ -169,7 +181,7 @@ export const Activities = () => {
               data-testid={dataTestId}
               order="desc"
               orderBy=""
-              onClickItem={onClickItemHandler}
+              onClickItem={getClickHandler()}
             />
             {viewDataPopupVisible && (
               <UnlockAppletPopup
