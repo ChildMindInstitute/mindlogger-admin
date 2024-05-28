@@ -5,7 +5,7 @@ import theme from 'shared/styles/theme';
 import { StyledFlexColumn } from './Flex';
 
 export const StyledModalWrapper = styled(Box)`
-  padding: ${theme.spacing(1.6, 3.2, 2.4)};
+  padding: ${theme.spacing(2.4, 3.2)};
 `;
 
 export const StyledModalContent = styled(StyledFlexColumn)`
