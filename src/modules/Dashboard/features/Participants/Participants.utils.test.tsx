@@ -95,7 +95,7 @@ const expectedActions = [
     action: expect.any(Function),
     title: 'Export Data',
     context: expectedContext,
-    isDisplayed: true,
+    isDisplayed: false,
     'data-testid': `${dataTestId}-export-data`,
   },
   {
@@ -130,7 +130,7 @@ describe('Participants utils tests', () => {
         dataTestid: dataTestId,
       });
 
-      const isDisplayed = [true, false, true, true, true, true];
+      const isDisplayed = [true, false, false, true, true, true];
       actions.forEach((action, index) => {
         expect(action).toEqual({
           ...expectedActions[index],
@@ -146,7 +146,7 @@ describe('Participants utils tests', () => {
         dataTestid: dataTestId,
       });
 
-      const isDisplayed = [true, true, true, true, true, true];
+      const isDisplayed = [true, true, false, true, true, true];
       actions.forEach((action, index) => {
         expect(action).toEqual({
           ...expectedActions[index],
