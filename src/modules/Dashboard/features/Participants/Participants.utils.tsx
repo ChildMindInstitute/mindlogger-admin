@@ -14,6 +14,7 @@ import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
 import { MenuItemType } from 'shared/components';
+import { checkIfCanEdit } from 'shared/utils';
 
 import { ChosenAppletData, GetParticipantActionsProps } from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
@@ -31,12 +32,14 @@ export const getParticipantActions = ({
   status,
   dataTestid,
   showAssignActivity = false,
+  roles,
 }: GetParticipantActionsProps) => {
   const context = { respondentId, respondentOrSubjectId, email, secretId, nickname, tag };
   const isUpgradeable = status === RespondentStatus.NotInvited;
   const isPending = status === RespondentStatus.Pending;
   const isEditable = !!filteredApplets?.editable.length;
   const isViewable = !!filteredApplets?.viewable.length;
+  const canEdit = checkIfCanEdit(roles) && isViewable && !isPending;
 
   return [
     {
@@ -60,7 +63,7 @@ export const getParticipantActions = ({
       action: exportData,
       title: t('exportData'),
       context,
-      isDisplayed: isViewable && !isPending,
+      isDisplayed: canEdit,
       'data-testid': `${dataTestid}-export-data`,
     },
     {

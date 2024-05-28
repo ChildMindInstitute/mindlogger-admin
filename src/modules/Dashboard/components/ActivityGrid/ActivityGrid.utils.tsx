@@ -2,7 +2,7 @@ import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { MenuItem, MenuItemType } from 'shared/components';
-import { isManagerOrOwner } from 'shared/utils';
+import { checkIfCanAccessData, checkIfCanEdit, isManagerOrOwner } from 'shared/utils';
 import { Roles } from 'shared/consts';
 
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
@@ -16,10 +16,8 @@ export const getActivityActions = ({
   featureFlags,
   hasParticipants,
 }: ActivityActions): MenuItem<ActivityActionProps>[] => {
-  const canEdit =
-    isManagerOrOwner(roles?.[0]) ||
-    roles?.includes(Roles.Editor) ||
-    roles?.includes(Roles.SuperAdmin);
+  const canEdit = checkIfCanEdit(roles);
+  const canAccessData = checkIfCanAccessData(roles);
 
   const canDoTakeNow =
     featureFlags.enableMultiInformantTakeNow &&
@@ -28,7 +26,7 @@ export const getActivityActions = ({
 
   const canAssignActivity = featureFlags.enableActivityAssign;
 
-  const showDivider = canDoTakeNow || canAssignActivity;
+  const showDivider = (canEdit || canAccessData) && (canDoTakeNow || canAssignActivity);
 
   return [
     {
@@ -44,7 +42,7 @@ export const getActivityActions = ({
       action: exportData,
       title: t('exportData'),
       context: { appletId, activityId },
-      isDisplayed: true,
+      isDisplayed: canAccessData,
       'data-testid': `${dataTestId}-activity-export`,
     },
     { type: MenuItemType.Divider, isDisplayed: showDivider },

@@ -58,6 +58,7 @@ export const Participants = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const rolesData = workspaces.useRolesData();
+  const roles = appletId ? rolesData?.data?.[appletId] : undefined;
   const { ownerId } = workspaces.useData() || {};
 
   const { execute: getWorkspaceRespondents } = useAsync(
@@ -332,6 +333,7 @@ export const Participants = () => {
               status,
               dataTestid,
               showAssignActivity: featureFlags.enableActivityAssign,
+              roles,
             })}
             data-testid={`${dataTestid}-table-actions`}
           />
@@ -402,6 +404,8 @@ export const Participants = () => {
   const viewableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Viewable);
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
   const dataTestid = 'dashboard-participants';
+  const canAddParticipant =
+    appletId && (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.Coordinator));
 
   if (isForbidden) return noPermissionsComponent;
 
@@ -418,7 +422,7 @@ export const Participants = () => {
             sx={{ width: '32rem' }}
             data-testid={`${dataTestid}-search`}
           />
-          {appletId && (
+          {canAddParticipant && (
             <AddParticipantButton
               variant="contained"
               onClick={() => setAddParticipantPopupVisible(true)}
