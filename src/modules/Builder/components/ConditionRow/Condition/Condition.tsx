@@ -126,6 +126,7 @@ export const SwitchCondition = ({
                 name={numberValueName}
                 onCloseCallback={onCloseStartDateCallback}
                 data-testid={`${dataTestid}-date-value`}
+                skipMinDate
                 {...commonDateInputProps}
               />
             </StyledFlexTopCenter>
@@ -137,6 +138,7 @@ export const SwitchCondition = ({
                 key={`min-date-value-${isRangeDateShown}`}
                 onCloseCallback={onCloseStartDateCallback}
                 data-testid={`${dataTestid}-start-date-value`}
+                skipMinDate
                 {...commonDateInputProps}
               />
               <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>

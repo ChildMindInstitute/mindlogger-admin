@@ -27,6 +27,7 @@ type DatePicker = {
   isLoading?: boolean;
   tooltip?: string;
   'data-testid'?: string;
+  skipMinDate?: boolean;
 } & TextFieldProps &
   Pick<
     DatePickerInputProps,
