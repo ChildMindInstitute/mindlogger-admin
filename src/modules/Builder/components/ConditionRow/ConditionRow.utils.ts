@@ -23,18 +23,29 @@ export const getConditionItemType = (item: ItemFormValues) => {
       return ConditionItemType.SingleSelection;
     case ItemResponseType.MultipleSelection:
       return ConditionItemType.MultiSelection;
+    case ItemResponseType.Date:
+      return ConditionItemType.Date;
     default:
       return ConditionItemType.SingleSelection;
   }
 };
 
-export const getItemOptions = (items: ItemFormValues[], conditionRowType: ConditionRowType) =>
+const scoreItemTypes = [
+  ItemResponseType.Slider,
+  ItemResponseType.SingleSelection,
+  ItemResponseType.MultipleSelection,
+];
+const itemFlowItemTypes = [...scoreItemTypes, ItemResponseType.Date];
+const checkIfShouldBeIncluded = (responseType: ItemResponseType, isItemFlow = false) =>
+  (isItemFlow ? itemFlowItemTypes : scoreItemTypes).some((value) => value === responseType);
+
+export const getItemOptions = (
+  items: ItemFormValues[],
+  conditionRowType: ConditionRowType,
+  isItemFlow = false,
+) =>
   items?.reduce((optionList: OptionListItem[], item) => {
-    if (
-      item.responseType === ItemResponseType.Slider ||
-      item.responseType === ItemResponseType.SingleSelection ||
-      item.responseType === ItemResponseType.MultipleSelection
-    ) {
+    if (checkIfShouldBeIncluded(item.responseType, isItemFlow)) {
       return [
         ...optionList,
         {
@@ -116,6 +127,12 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
         return {
           minValue: selectedItem.responseValues.minValue,
           maxValue: selectedItem.responseValues.maxValue,
+        };
+      }
+      if (selectedItem?.responseType === ItemResponseType.Date) {
+        return {
+          minValue: null,
+          maxValue: null,
         };
       }
 

@@ -1,21 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { useWatch } from 'react-hook-form';
 
 import { StyledTitleMedium, StyledClearedButton, theme } from 'shared/styles';
 import { Svg } from 'shared/components/Svg';
-import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { ConditionRowType } from 'modules/Builder/types';
 
-import { StyledCondition, StyledInputController, StyledSelectController } from './Condition.styles';
+import { StyledCondition, StyledSelectController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
 import { ConditionItemType } from './Condition.const';
-import {
-  getConditionMinMaxRangeValues,
-  getConditionMinMaxValues,
-  getScoreConditionOptions,
-  getStateOptions,
-} from './Condition.utils';
+import { getScoreConditionOptions, getStateOptions } from './Condition.utils';
+import { SwitchCondition } from './SwitchCondition';
 
 export const Condition = ({
   itemName,
@@ -40,8 +34,6 @@ export const Condition = ({
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
 
-  const isItemSlider = selectedItem?.type === ConditionItemType.Slider;
-  const isItemScore = selectedItem?.type === ConditionItemType.Score;
   const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
   const isRowTypeItem = type === ConditionRowType.Item;
   const isRowTypeScore = type === ConditionRowType.Score;
@@ -50,22 +42,19 @@ export const Condition = ({
     selectedItem?.type === ConditionItemType.MultiSelection ||
     isItemScoreCondition;
   const isValueSelectShown = !selectedItem || isItemSelect;
-  const isNumberValueShown =
-    (isItemSlider || isItemScore) && !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
-  const isRangeValueShown = (isItemSlider || isItemScore) && !isNumberValueShown;
-  const { minNumber, maxNumber } = getConditionMinMaxValues({
-    item: selectedItem,
-    state,
-  });
-  const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
+
   const isValueSelectDisabled = !isItemScoreCondition && !valueOptions?.length;
   const isStateSelectDisabled = !selectedItem?.type;
 
-  const { leftRange, rightRange } = getConditionMinMaxRangeValues({
-    item: selectedItem,
-    minValue,
-    maxValue,
-  });
+  const switchConditionProps = {
+    itemType: selectedItem?.type,
+    selectedItem,
+    numberValueName,
+    minValueName,
+    maxValueName,
+    state,
+    dataTestid,
+  };
 
   return (
     <StyledCondition data-testid={dataTestid}>
@@ -115,38 +104,7 @@ export const Condition = ({
           disabled={isValueSelectDisabled}
         />
       )}
-      {isNumberValueShown && (
-        <StyledInputController
-          type="number"
-          control={control}
-          name={numberValueName}
-          minNumberValue={minNumber}
-          maxNumberValue={maxNumber}
-          data-testid={`${dataTestid}-slider-value`}
-        />
-      )}
-      {isRangeValueShown && (
-        <>
-          <StyledInputController
-            key={`min-value-${isRangeValueShown}`}
-            type="number"
-            control={control}
-            name={minValueName}
-            minNumberValue={leftRange.minNumber}
-            maxNumberValue={leftRange.maxNumber}
-            data-testid={`${dataTestid}-min-value`}
-          />
-          <StyledInputController
-            key={`max-value-${isRangeValueShown}`}
-            type="number"
-            control={control}
-            name={maxValueName}
-            minNumberValue={rightRange.minNumber}
-            maxNumberValue={rightRange.maxNumber}
-            data-testid={`${dataTestid}-max-value`}
-          />
-        </>
-      )}
+      <SwitchCondition {...switchConditionProps} />
       {isRemoveVisible && (
         <StyledClearedButton
           sx={{ p: theme.spacing(1) }}

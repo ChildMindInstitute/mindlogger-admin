@@ -70,6 +70,7 @@ const mockedAppletWithAllItemTypes = {
 const mockedOrderedConditionNameItems = [
   mockedSingleActivityItem,
   mockedMultiActivityItem,
+  mockedDateActivityItem,
   mockedSliderActivityItem,
 ];
 const mockedOrderedSummaryItemItems = [
@@ -228,7 +229,7 @@ describe('Activity Items Flow', () => {
     expect(screen.getByTestId(`${mockedTestid}-0-summary-item`)).toBeVisible();
   });
 
-  test('Condition Item: only SingleSelect/MultiSelect/Slider are available', () => {
+  test('Condition Item: only SingleSelect/MultiSelect/Slider/Date are available', () => {
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
@@ -240,7 +241,7 @@ describe('Activity Items Flow', () => {
     expect(nameDropdown).toBeVisible();
 
     const items = nameDropdown.querySelectorAll('li');
-    expect(items).toHaveLength(3);
+    expect(items).toHaveLength(4);
 
     items.forEach((item, index) => {
       expect(item).toHaveAttribute('data-value', mockedOrderedConditionNameItems[index].id);

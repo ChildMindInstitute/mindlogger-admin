@@ -11,11 +11,13 @@ import {
   Item,
   ItemAlert,
   OptionCondition,
+  RangeValueCondition,
   ScoreConditionalLogic,
   ScoreReport,
   SectionReport,
   SingleAndMultipleSelectItemResponseValues,
   SingleApplet,
+  SingleValueCondition,
 } from 'shared/state';
 import { ConditionType, ItemResponseType, PerfTaskType } from 'shared/consts';
 import {
@@ -37,6 +39,7 @@ import {
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
 import { findRelatedScore } from 'modules/Builder/utils';
 import { ElementType, isScoreReport, isSectionReport } from 'shared/types';
+import { formatToNumberDate } from 'shared/utils/dateFormat';
 
 import { ItemConfigurationSettings } from '../ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import {
@@ -347,9 +350,41 @@ const mapItemResponseValues = (item: ItemFormValues) => {
   return null;
 };
 
+export const processConditionPayload = (
+  itemType: ItemFormValues['responseType'],
+  condition: Condition,
+) => {
+  switch (itemType) {
+    case ItemResponseType.Date: {
+      const conditionData = condition as Condition<Date>;
+      const conditionType = conditionData.type as ConditionType;
+      if ([ConditionType.Between, ConditionType.OutsideOf].includes(conditionType)) {
+        const conditionPayload = conditionData.payload as RangeValueCondition<Date>['payload'];
+        const minValue = formatToNumberDate(conditionPayload.minValue);
+        const maxValue = formatToNumberDate(conditionPayload.maxValue);
+
+        return {
+          ...conditionData.payload,
+          minValue,
+          maxValue,
+        };
+      }
+
+      const conditionPayload = conditionData.payload as SingleValueCondition<Date>['payload'];
+      const value = formatToNumberDate(conditionPayload.value);
+
+      return {
+        value,
+      };
+    }
+    default:
+      return condition.payload;
+  }
+};
+
 export const getConditionPayload = (item: ItemFormValues, condition: Condition) => {
   if (!CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(condition.type as ConditionType)) {
-    return condition.payload;
+    return processConditionPayload(item.responseType, condition);
   }
 
   const options = (item.responseValues as SingleAndMultipleSelectItemResponseValues)?.options;

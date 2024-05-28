@@ -55,6 +55,7 @@ export const ItemFlowContent = ({
           autoTrigger={!!itemKey}
           data-testid={`${dataTestid}-condition-${index}`}
           showError={false}
+          isItemFlow
         />
       ))}
       <SummaryRow
