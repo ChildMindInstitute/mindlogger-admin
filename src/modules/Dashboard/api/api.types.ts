@@ -277,6 +277,11 @@ export type ReviewFlow = {
   answerDates: AnswerDate[];
 };
 
+export type ReviewCount = {
+  mine: number;
+  other: number;
+};
+
 export type EncryptedActivityAnswers = EncryptedAnswerSharedProps & {
   answerId: string;
   endDatetime: string;
@@ -284,6 +289,7 @@ export type EncryptedActivityAnswers = EncryptedAnswerSharedProps & {
   startDatetime?: string;
   subscaleSetting: SubscaleSetting;
   version: string;
+  reviewCount?: ReviewCount;
 };
 
 export type Answers = AppletId & TargetSubjectId & { createdDate?: string };
@@ -513,6 +519,7 @@ export type FlowSubmission = {
       identifier: string | null;
     })[];
   endDatetime: string | null;
+  reviewCount?: ReviewCount;
 } & Omit<AnswerSummary, 'identifier'>;
 
 export type EncryptedFlowsAnswers = {

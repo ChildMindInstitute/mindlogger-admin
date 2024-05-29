@@ -1,10 +1,13 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { PreloadedState } from '@reduxjs/toolkit';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedApplet, mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { page } from 'resources';
 import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
+import { RootState } from 'redux/store';
+import { initialStateData } from 'shared/state';
 
 import { ChartTooltip } from './ChartTooltip';
 import { ChartTooltipProps, ScatterTooltipRowData } from './ChartTooltip.types';
@@ -45,7 +48,19 @@ jest.mock('react-router-dom', () => ({
 
 const setCurrentActivityCompletionData = jest.fn();
 
-const renderComponent = (props?: Partial<ChartTooltipProps>) =>
+const getPreloadedState = (hasAssessment = false) => ({
+  applet: {
+    applet: {
+      ...initialStateData,
+      data: { result: mockedApplet, appletMeta: { hasAssessment } },
+    },
+  },
+});
+
+const renderComponent = (
+  props?: Partial<ChartTooltipProps>,
+  preloadedState?: PreloadedState<RootState>,
+) =>
   renderWithProviders(
     <ReportContext.Provider
       value={{ setCurrentActivityCompletionData, currentActivityCompletionData: null }}
@@ -55,6 +70,7 @@ const renderComponent = (props?: Partial<ChartTooltipProps>) =>
     {
       route,
       routePath,
+      preloadedState,
     },
   );
 
@@ -64,6 +80,23 @@ const viewResponseButtonClick = async () => {
   expect(viewResponseButton).toBeInTheDocument();
 
   await userEvent.click(viewResponseButton);
+};
+
+const testPositiveFlowWithNavigate = async (text: string, search: string) => {
+  const tooltip = screen.getByTestId(`${dataTestid}-tooltip`);
+  expect(tooltip).toBeInTheDocument();
+  expect(within(tooltip).getByText('View response')).toBeInTheDocument();
+
+  const reviewButton = screen.getByTestId(`${dataTestid}-tooltip-review-count`);
+  expect(reviewButton).toBeInTheDocument();
+  expect(within(reviewButton).getByText(text)).toBeInTheDocument();
+
+  await userEvent.click(reviewButton);
+
+  expect(mockedNavigate).toBeCalledWith({
+    pathname: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
+    search,
+  });
 };
 
 describe('ChartTooltip', () => {
@@ -133,24 +166,54 @@ describe('ChartTooltip', () => {
     expect(showSubscaleResultButton).not.toBeInTheDocument();
   });
 
-  test('renders component and navigates correctly to Assessment Reviews with provided review count', async () => {
+  test('renders component and navigates correctly to Assessment Reviews with hasAssessment="true" and no reviews', async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    renderComponent(getProps());
+    renderComponent(getProps({ reviewCount: { mine: 0, other: 0 } }), getPreloadedState(true));
 
-    const tooltip = screen.getByTestId(`${dataTestid}-tooltip`);
-    expect(tooltip).toBeInTheDocument();
-    expect(within(tooltip).getByText('View response')).toBeInTheDocument();
+    await testPositiveFlowWithNavigate(
+      'Leave a review',
+      `selectedDate=2023-12-20&answerId=${answerId}&isFeedbackVisible=true`,
+    );
+  });
 
-    const reviewButton = screen.getByTestId(`${dataTestid}-tooltip-review-count`);
-    expect(reviewButton).toBeInTheDocument();
-    expect(within(reviewButton).getByText('See 3 reviews (mine & 2 others)')).toBeInTheDocument();
+  test('renders component and navigates correctly to Assessment Reviews with hasAssessment="true" and no reviews for Flow', async () => {
+    renderComponent(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      getProps({
+        isFlow: true,
+        id: flowSubmitId,
+        reviewCount: { mine: 0, other: 0 },
+      }),
+      getPreloadedState(true),
+    );
 
-    await userEvent.click(reviewButton);
+    await testPositiveFlowWithNavigate(
+      'Leave a review',
+      `selectedDate=2023-12-20&submitId=${flowSubmitId}&isFeedbackVisible=true`,
+    );
+  });
 
-    expect(mockedNavigate).toBeCalledWith({
-      pathname: `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/responses`,
-      search: `selectedDate=2023-12-20&answerId=${answerId}&isFeedbackVisible=true`,
-    });
+  test('renders component and navigates correctly to Assessment Reviews with hasAssessment="true" and provided review count', async () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    renderComponent(getProps(), getPreloadedState(true));
+
+    await testPositiveFlowWithNavigate(
+      'See 3 reviews (mine & 2 others)',
+      `selectedDate=2023-12-20&answerId=${answerId}&isFeedbackVisible=true`,
+    );
+  });
+
+  test('renders component and navigates correctly to Assessment Reviews with hasAssessment="true" and provided review count for Flow', async () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    renderComponent(getProps({ isFlow: true, id: flowSubmitId }), getPreloadedState(true));
+
+    await testPositiveFlowWithNavigate(
+      'See 3 reviews (mine & 2 others)',
+      `selectedDate=2023-12-20&submitId=${flowSubmitId}&isFeedbackVisible=true`,
+    );
   });
 });

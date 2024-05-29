@@ -1,4 +1,4 @@
-import { DatavizEntity, Version } from 'api';
+import { DatavizEntity, Version, ReviewCount } from 'modules/Dashboard/api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ActivityItemAnswer } from 'shared/types';
 import { SubscaleSetting } from 'shared/state';
@@ -85,11 +85,6 @@ export type Identifier = {
   lastAnswerDate: string;
 };
 
-export type ReviewCount = {
-  mine: number;
-  other: number;
-};
-
 export type ActivityCompletion = {
   decryptedAnswer: ActivityItemAnswer[];
   answerId: string;
@@ -161,6 +156,7 @@ export type FlowSubmission = {
   submitId: string;
   createdAt: string;
   endDatetime: string | null;
+  reviewCount?: ReviewCount;
 };
 
 export type FlowResponses = {

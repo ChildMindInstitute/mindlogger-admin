@@ -7,6 +7,7 @@ import { StyledBodySmall, StyledFlexColumn, theme, variables } from 'shared/styl
 import { DateFormats } from 'shared/consts';
 import { page } from 'resources';
 import { ReportContext } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Report.context';
+import { applet } from 'shared/state/Applet';
 
 import { StyledIndent } from '../../Chart.styles';
 import { StyledListItemButton, StyledTooltip } from './ChartTooltip.styles';
@@ -17,6 +18,7 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestId }: ChartTooltipPr
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletId, respondentId } = useParams();
+  const { appletMeta } = applet.useAppletData() ?? {};
 
   const { setCurrentActivityCompletionData } = useContext(ReportContext);
 
@@ -64,9 +66,7 @@ export const ChartTooltip = ({ data, 'data-testid': dataTestId }: ChartTooltipPr
               >
                 {t('viewResponse')}
               </StyledListItemButton>
-              {/*TODO: Add "Leave a review" option for Activity (Flow) Completion if reviewers assessment exists
-               when back-end is ready (ticket: M2-6626)*/}
-              {!!(mine || other) && (
+              {appletMeta?.hasAssessment && (
                 <StyledListItemButton
                   onClick={() => navigateToReviewAnswer(true)}
                   data-testid={`${dataTestId}-tooltip-review-count`}
