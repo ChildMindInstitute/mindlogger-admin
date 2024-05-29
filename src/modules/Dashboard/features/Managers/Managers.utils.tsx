@@ -18,12 +18,12 @@ export const getHeadCells = (sortableColumns?: string[], appletId?: string): Hea
     {
       id: 'firstName',
       label: t('firstName'),
-      enableSort: sortableColumns?.includes('firstName') ?? true,
+      enableSort: sortableColumns?.includes('firstName') ?? false,
     },
     {
       id: 'lastName',
       label: t('lastName'),
-      enableSort: sortableColumns?.includes('lastName') ?? true,
+      enableSort: sortableColumns?.includes('lastName') ?? false,
     },
     {
       id: 'title',
@@ -41,7 +41,7 @@ export const getHeadCells = (sortableColumns?: string[], appletId?: string): Hea
     {
       id: 'email',
       label: t('email'),
-      enableSort: sortableColumns?.includes('email') ?? true,
+      enableSort: sortableColumns?.includes('email') ?? false,
     },
     {
       id: 'actions',

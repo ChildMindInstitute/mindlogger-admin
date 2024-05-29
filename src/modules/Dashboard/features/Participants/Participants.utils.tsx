@@ -159,7 +159,7 @@ export const getHeadCells = (sortableColumns?: string[], appletId?: string): Hea
     {
       id: 'nicknames',
       label: t('nickname'),
-      enableSort: sortableColumns?.includes('nicknames') ?? true,
+      enableSort: sortableColumns?.includes('nicknames') ?? false,
     },
     {
       id: 'status',
@@ -169,7 +169,7 @@ export const getHeadCells = (sortableColumns?: string[], appletId?: string): Hea
     {
       id: 'lastSeen',
       label: t('latestActivity'),
-      enableSort: sortableColumns?.includes('lastSeen') ?? true,
+      enableSort: sortableColumns?.includes('lastSeen') ?? false,
     },
     ...(appletId
       ? [
