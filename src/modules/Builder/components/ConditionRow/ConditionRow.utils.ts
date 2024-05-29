@@ -27,6 +27,8 @@ export const getConditionItemType = (item: ItemFormValues) => {
       return ConditionItemType.Date;
     case ItemResponseType.NumberSelection:
       return ConditionItemType.NumberSelection;
+    case ItemResponseType.Time:
+      return ConditionItemType.Time;
     default:
       return ConditionItemType.SingleSelection;
   }
@@ -41,6 +43,7 @@ const itemFlowItemTypes = [
   ...scoreItemTypes,
   ItemResponseType.Date,
   ItemResponseType.NumberSelection,
+  ItemResponseType.Time,
 ];
 const checkIfShouldBeIncluded = (responseType: ItemResponseType, isItemFlow = false) =>
   (isItemFlow ? itemFlowItemTypes : scoreItemTypes).some((value) => value === responseType);
@@ -100,7 +103,8 @@ const getDefaultPayload = (
   type?: ItemResponseType,
 ) => {
   let defaultValue: null | number = DEFAULT_PAYLOAD_MIN_VALUE;
-  if (type && type === ItemResponseType.Date) defaultValue = null;
+  if (type && (type === ItemResponseType.Date || type === ItemResponseType.Time))
+    defaultValue = null;
 
   return {
     value: conditionPayload?.value ?? defaultValue,
@@ -158,6 +162,12 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
         return {
           minValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.minValue ?? null,
           maxValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
+        };
+      }
+      if (responseType === ItemResponseType.Time) {
+        return {
+          minValue: null,
+          maxValue: null,
         };
       }
 

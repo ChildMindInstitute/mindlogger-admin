@@ -3,14 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { addDays } from 'date-fns';
 
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { DatePicker } from 'shared/components';
+import { DatePicker, TimePicker } from 'shared/components';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { ConditionItemType } from '../Condition.const';
-import { StyledInputController } from './SwitchCondition.styles';
+import { StyledInputController, StyledTimeRow } from './SwitchCondition.styles';
 import { SwitchConditionProps } from './SwitchCondition.types';
 import { getConditionMinMaxValues, getConditionMinMaxRangeValues } from './SwitchCondition.utils';
+import { commonInputSx, commonInputWrapperSx } from './SwitchCondition.const';
 
 export const SwitchCondition = ({
   selectedItem,
@@ -24,6 +25,8 @@ export const SwitchCondition = ({
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
+  const isSingleValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
+  const isRangeValueShown = !isSingleValueShown;
 
   if (!itemType) return null;
 
@@ -31,9 +34,6 @@ export const SwitchCondition = ({
     case ConditionItemType.Score:
     case ConditionItemType.Slider:
     case ConditionItemType.NumberSelection: {
-      const isNumberValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
-      const isRangeValueShown = !isNumberValueShown;
-
       const { minNumber, maxNumber } = getConditionMinMaxValues({
         item: selectedItem,
         state,
@@ -47,7 +47,7 @@ export const SwitchCondition = ({
 
       return (
         <>
-          {isNumberValueShown && (
+          {isSingleValueShown && (
             <StyledInputController
               type="number"
               control={control}
@@ -83,19 +83,17 @@ export const SwitchCondition = ({
       );
     }
     case ConditionItemType.Date: {
-      const isDateValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
-      const isRangeDateShown = CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
-
       const commonDateInputProps = {
         control,
         placeholder: t('datePlaceholder'),
         hideLabel: true,
         inputWrapperSx: {
+          ...commonInputWrapperSx,
           minWidth: '18rem',
           width: '18rem',
         },
         inputSx: {
-          height: '4rem',
+          ...commonInputSx,
         },
       };
 
@@ -108,7 +106,7 @@ export const SwitchCondition = ({
 
       return (
         <>
-          {isDateValueShown && (
+          {isSingleValueShown && (
             <StyledFlexTopCenter>
               <DatePicker
                 name={numberValueName}
@@ -119,11 +117,11 @@ export const SwitchCondition = ({
               />
             </StyledFlexTopCenter>
           )}
-          {isRangeDateShown && (
+          {isRangeValueShown && (
             <StyledFlexTopCenter>
               <DatePicker
                 name={minValueName}
-                key={`min-date-value-${isRangeDateShown}`}
+                key={`min-date-value-${isRangeValueShown}`}
                 onCloseCallback={onCloseStartDateCallback}
                 data-testid={`${dataTestid}-start-date-value`}
                 skipMinDate
@@ -132,12 +130,54 @@ export const SwitchCondition = ({
               <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
               <DatePicker
                 name={maxValueName}
-                key={`max-date-value-${isRangeDateShown}`}
+                key={`max-date-value-${isRangeValueShown}`}
                 minDate={minValue as Date}
                 data-testid={`${dataTestid}-end-date-value`}
                 {...commonDateInputProps}
               />
             </StyledFlexTopCenter>
+          )}
+        </>
+      );
+    }
+    case ConditionItemType.Time: {
+      const commonTimePickerProps = {
+        control,
+        placeholder: t('timePlaceholder'),
+        label: '',
+        wrapperSx: {
+          ...commonInputWrapperSx,
+          minWidth: '14rem',
+          width: '14rem',
+        },
+        inputSx: {
+          ...commonInputSx,
+        },
+      };
+
+      return (
+        <>
+          {isSingleValueShown && (
+            <TimePicker
+              {...commonTimePickerProps}
+              name={numberValueName}
+              data-testid={`${dataTestid}-time`}
+            />
+          )}
+          {isRangeValueShown && (
+            <StyledTimeRow>
+              <TimePicker
+                {...commonTimePickerProps}
+                name={minValueName}
+                data-testid={`${dataTestid}-start-time`}
+              />
+              <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
+              <TimePicker
+                {...commonTimePickerProps}
+                name={maxValueName}
+                data-testid={`${dataTestid}-end-time`}
+              />
+            </StyledTimeRow>
           )}
         </>
       );

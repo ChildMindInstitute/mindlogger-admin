@@ -1,7 +1,7 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import { InputController } from 'shared/components/FormComponents';
-import { variables, theme } from 'shared/styles';
+import { variables, theme, StyledFlexTopCenter } from 'shared/styles';
 
 export const StyledInputController = styled(InputController)`
   width: 8rem;
@@ -30,4 +30,12 @@ export const StyledInputController = styled(InputController)`
   .MuiOutlinedInput-notchedOutline {
     border-color: ${variables.palette.outline};
   }
+`;
+
+export const StyledTimeRow = styled(StyledFlexTopCenter)`
+  justify-content: space-between;
+`;
+
+export const StyledTimeWrapper = styled(Box)`
+  width: 20rem;
 `;
