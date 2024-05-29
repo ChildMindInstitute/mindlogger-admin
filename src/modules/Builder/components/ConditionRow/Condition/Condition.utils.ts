@@ -10,6 +10,7 @@ export const getStateOptions = (type?: ConditionItemType) => {
     case ConditionItemType.Score:
     case ConditionItemType.Slider:
     case ConditionItemType.Date:
+    case ConditionItemType.NumberSelection:
       return [
         { value: ConditionType.GreaterThan, labelKey: t('greaterThan') },
         { value: ConditionType.LessThan, labelKey: t('lessThan') },

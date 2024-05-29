@@ -1,4 +1,4 @@
-import { SliderItemResponseValues } from 'shared/state';
+import { NumberItemResponseValues, SliderItemResponseValues } from 'shared/state';
 import { ConditionType } from 'shared/consts';
 
 import { DEFAULT_NUMBER_MIN_VALUE, ConditionItemType } from '../Condition.const';
@@ -15,18 +15,25 @@ export const getConditionMinMaxValues = ({
   item?: ConditionItem;
   state: ConditionType;
 }) => {
-  if (!item?.type) return getDefaultMinMaxValues(state);
+  if (!item?.type || !item.responseValues) return getDefaultMinMaxValues(state);
 
   switch (item.type) {
-    case ConditionItemType.Slider:
+    case ConditionItemType.Slider: {
+      const responseValues = item.responseValues as SliderItemResponseValues;
+
       return {
-        minNumber: state
-          ? +(item.responseValues! as SliderItemResponseValues).minValue
-          : DEFAULT_NUMBER_MIN_VALUE,
-        maxNumber: state
-          ? +(item.responseValues! as SliderItemResponseValues).maxValue
-          : Number.MAX_SAFE_INTEGER,
+        minNumber: state ? +responseValues.minValue : DEFAULT_NUMBER_MIN_VALUE,
+        maxNumber: state ? +responseValues.maxValue : Number.MAX_SAFE_INTEGER,
       };
+    }
+    case ConditionItemType.NumberSelection: {
+      const responseValues = item.responseValues as NumberItemResponseValues;
+
+      return {
+        minNumber: state ? responseValues.minValue : DEFAULT_NUMBER_MIN_VALUE,
+        maxNumber: state ? responseValues.maxValue : Number.MAX_SAFE_INTEGER,
+      };
+    }
     default:
       return getDefaultMinMaxValues(state);
   }
@@ -51,20 +58,37 @@ export const getConditionMinMaxRangeValues = ({
   minValue: number;
   maxValue: number;
 }) => {
-  if (!item?.type) return getDefaultMinMaxRangeValues();
+  if (!item?.type || !item.responseValues) return getDefaultMinMaxRangeValues();
 
   switch (item.type) {
-    case ConditionItemType.Slider:
+    case ConditionItemType.Slider: {
+      const responseValues = item.responseValues as SliderItemResponseValues;
+
       return {
         leftRange: {
-          minNumber: +(item.responseValues! as SliderItemResponseValues).minValue,
+          minNumber: +responseValues.minValue,
           maxNumber: maxValue,
         },
         rightRange: {
           minNumber: minValue,
-          maxNumber: +(item.responseValues! as SliderItemResponseValues).maxValue,
+          maxNumber: +responseValues.maxValue,
         },
       };
+    }
+    case ConditionItemType.NumberSelection: {
+      const responseValues = item.responseValues as NumberItemResponseValues;
+
+      return {
+        leftRange: {
+          minNumber: responseValues.minValue,
+          maxNumber: maxValue,
+        },
+        rightRange: {
+          minNumber: minValue,
+          maxNumber: responseValues.maxValue,
+        },
+      };
+    }
     default:
       return getDefaultMinMaxRangeValues();
   }
