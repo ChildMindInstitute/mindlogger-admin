@@ -166,11 +166,11 @@ export type DecryptedMediaAnswer = AdditionalTextType & {
 
 export type DecryptedDateRangeAnswer = AdditionalTextType & {
   value: {
-    from: {
+    from: null | {
       hour: number;
       minute: number;
     };
-    to: {
+    to: null | {
       hour: number;
       minute: number;
     };

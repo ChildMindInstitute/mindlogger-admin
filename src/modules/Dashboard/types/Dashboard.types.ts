@@ -29,11 +29,17 @@ export type RespondentDetail = {
   respondentNickname: string;
   respondentSecretId: string;
   hasIndividualSchedule: boolean;
+  subjectId: string;
 };
 
+export enum RespondentStatus {
+  Invited = 'invited',
+  NotInvited = 'not_invited',
+  Pending = 'pending',
+}
+
 export type Respondent = {
-  id: string;
-  accessId: string;
+  id: string | null;
   nicknames: string[];
   role: Roles;
   secretIds: string[];
@@ -41,6 +47,8 @@ export type Respondent = {
   isPinned?: boolean;
   details: RespondentDetail[];
   isAnonymousRespondent: boolean;
+  email: string | null;
+  status: RespondentStatus;
 };
 
 export type RespondentDetails = {

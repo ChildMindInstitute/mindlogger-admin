@@ -25,6 +25,7 @@ export const variables = {
   },
   opacity: {
     noOpacity: 1,
+    hover: 0.85,
     halfDisabled: 0.64,
     disabled: 0.38,
   },

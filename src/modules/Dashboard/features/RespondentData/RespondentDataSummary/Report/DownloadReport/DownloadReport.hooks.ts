@@ -48,7 +48,7 @@ export const useDownloadReport = ({ id, isFlow }: Omit<DownloadReportProps, 'dat
     getActivityReport({
       appletId,
       activityId: id,
-      respondentId,
+      subjectId: respondentId,
     });
   };
 
