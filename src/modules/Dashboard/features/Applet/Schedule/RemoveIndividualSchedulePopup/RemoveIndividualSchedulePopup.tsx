@@ -59,7 +59,7 @@ export const RemoveIndividualSchedulePopup = ({
     if (!appletId || !ownerId) return;
     dispatch(
       getAllWorkspaceRespondents({
-        params: { ownerId, appletId },
+        params: { ownerId, appletId, shell: false },
       }),
     );
   };

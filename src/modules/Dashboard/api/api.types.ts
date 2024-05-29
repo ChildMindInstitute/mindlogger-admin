@@ -13,10 +13,15 @@ export type GetAppletsParams = {
     ordering?: string;
     roles?: string;
     appletId?: string;
+    shell?: boolean;
   };
 };
 
 export type RespondentId = { respondentId: string };
+
+export type TargetSubjectId = { targetSubjectId: string };
+
+export type SubjectId = { subjectId: string };
 
 export type FolderId = { folderId: string };
 
@@ -157,21 +162,18 @@ export type RemoveAccess = {
 export type EditManagerAccess = {
   userId: string;
   ownerId: string;
-  accesses: { appletId: string; roles: Roles[]; respondents: string[] }[];
+  accesses: { appletId: string; roles: Roles[]; subjects: string[] }[];
 };
 
-export type RemoveRespondentAccess = RemoveAccess & {
-  deleteResponses: boolean;
-};
-
-export type EditRespondent = {
-  ownerId: string;
-  respondentId: string;
-  appletId: string;
+export type EditSubject = SubjectId & {
   values: {
     secretUserId: string;
     nickname?: string;
   };
+};
+
+export type DeleteSubject = SubjectId & {
+  deleteAnswers: boolean;
 };
 
 export type AppletInvitationOptions = {
@@ -182,12 +184,31 @@ export type AppletInvitationOptions = {
   email: string;
   secretUserId: string;
   workspacePrefix: string;
-  respondents: string[];
+  subjects: string[];
+  language: string;
 };
 
 export type AppletInvitationData = AppletId & {
   url: string;
   options: AppletInvitationOptions;
+};
+
+export type SubjectInvitationData = AppletId &
+  SubjectId & {
+    email: string;
+  };
+
+export type AppletShellAccountOptions = {
+  secretUserId: string;
+  firstName: string;
+  lastName: string;
+  language: string;
+  email: string | null;
+  nickname?: string;
+};
+
+export type AppletShellAccountData = AppletId & {
+  options: AppletShellAccountOptions;
 };
 
 export type DuplicateApplet = AppletId & {
@@ -265,7 +286,7 @@ export type EncryptedActivityAnswers = EncryptedAnswerSharedProps & {
   version: string;
 };
 
-export type Answers = AppletId & RespondentId & { createdDate?: string };
+export type Answers = AppletId & TargetSubjectId & { createdDate?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
 
@@ -316,8 +337,7 @@ export type Review = {
 };
 
 export type GetAnswersParams = {
-  params: {
-    respondentId: string;
+  params: TargetSubjectId & {
     fromDatetime: string;
     toDatetime: string;
     emptyIdentifiers: boolean;
@@ -350,7 +370,7 @@ export type GetAnswersNotesParams = {
 };
 
 export type AppletSubmitDateList = AppletId &
-  RespondentId & {
+  TargetSubjectId & {
     fromDate: string;
     toDate: string;
   };
@@ -389,6 +409,7 @@ export type AppletVersionChanges = AppletId & { version: string };
 
 export type ExportData = AppletId & {
   respondentIds?: string;
+  targetSubjectIds?: string;
   page?: number;
   limit?: number;
   fromDate?: string;
@@ -420,11 +441,12 @@ export type Version = {
   createdAt: string;
 };
 
-export type GetLatestReportParams = AppletId & ActivityId & RespondentId;
+export type GetLatestReportParams = AppletId & ActivityId & SubjectId;
 
-export type GetActivityIdentifiersParams = GetLatestReportParams;
+export type GetActivityIdentifiersParams = Omit<GetLatestReportParams, 'subjectId'> &
+  TargetSubjectId;
 
-export type GetFlowIdentifiersParams = AppletId & RespondentId & FlowId;
+export type GetFlowIdentifiersParams = AppletId & TargetSubjectId & FlowId;
 
 export type GetActivityVersionsParams = AppletId & ActivityId;
 

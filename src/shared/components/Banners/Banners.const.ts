@@ -8,6 +8,7 @@ import { IncorrectFileBanner } from 'shared/components/Banners/IncorrectFileBann
 import { SaveSuccessBanner } from 'shared/components/Banners/SaveSuccessBanner';
 import { VersionWarningBanner } from 'shared/components/Banners/VersionWarningBanner';
 import { TransferOwnershipSuccessBanner } from 'shared/components/Banners/TransferOwnershipSuccessBanner';
+import { ShellAccountSuccessBanner } from 'modules/Dashboard/components/Banners';
 
 import { BannerProps } from './Banner';
 
@@ -19,4 +20,5 @@ export const BannerComponents: Record<keyof typeof BannerType, ComponentType<Ban
   SaveSuccessBanner,
   VersionWarningBanner,
   TransferOwnershipSuccessBanner,
+  ShellAccountSuccessBanner,
 };

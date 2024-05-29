@@ -1120,7 +1120,6 @@ export const testFunctionForSubscaleAge = (field: string, value?: number | strin
   typeof value === 'number' || value ? +value > 0 : true;
 
 export const checkScoreRegexp = /^-?\d+\.?\d{0,5}$/;
-export const checkRawScoreRegexp = /^-?\d+$/;
 
 export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: string) => {
   if (!value) return false;

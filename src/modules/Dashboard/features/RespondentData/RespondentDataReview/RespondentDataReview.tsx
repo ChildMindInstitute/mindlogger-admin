@@ -121,7 +121,7 @@ export const RespondentDataReview = () => {
     containerRef,
   });
 
-  const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
+  const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
   const navigate = useNavigate();
   const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
 
@@ -146,11 +146,27 @@ export const RespondentDataReview = () => {
 
     getAppletSubmitDateList({
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
       fromDate,
       toDate,
     });
   };
+
+  // const handleGetActivities = (date?: Date | null) => {
+  //   const createdDate = date && format(date, DateFormats.YearMonthDay);
+  //
+  //   if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate) {
+  //     return;
+  //   }
+  //
+  //   getReviewActivities({
+  //     appletId,
+  //     targetSubjectId: respondentId,
+  //     createdDate,
+  //   });
+  //
+  //   prevSelectedDateRef.current = createdDate;
+  // };
 
   const handleSetInitialDate = (date: Date) => {
     setValue('responseDate', date);

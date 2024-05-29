@@ -26,7 +26,6 @@ import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItem
 import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
 
 import {
-  checkRawScoreRegexp,
   checkScoreRegexp,
   getCommonSliderValidationProps,
   getConditionsMatch,
@@ -443,19 +442,16 @@ export const GyroscopeAndTouchSchema = () =>
     })
     .required();
 
-const rawScoreSchema = yup
+const scoreSchema = yup
   .string()
   .required()
-  .test('subscale-rawScore-validator', getTestFunctionForSubscaleScore(checkRawScoreRegexp));
+  .test('subscale-score-validator', getTestFunctionForSubscaleScore(checkScoreRegexp));
 const optionalTextSchema = yup.string().nullable();
 const SubscaleTableDataItemSchema = () =>
   yup
     .object({
-      score: yup
-        .string()
-        .required()
-        .test('subscale-score-validator', getTestFunctionForSubscaleScore(checkScoreRegexp)),
-      rawScore: rawScoreSchema,
+      score: scoreSchema,
+      rawScore: scoreSchema,
       age: yup
         .string()
         .nullable()
@@ -472,7 +468,7 @@ const SubscaleTableDataItemSchema = () =>
 const TotalScoreTableDataItemSchema = () =>
   yup
     .object({
-      rawScore: rawScoreSchema,
+      rawScore: scoreSchema,
       optionalText: optionalTextSchema,
     })
     .noUnknown();

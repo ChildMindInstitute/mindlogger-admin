@@ -22,7 +22,7 @@ export const RespondentDataSummary = () => {
 
     return {
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
     };
   }, [appletId, respondentId]);
   const [selectedEntity, summaryActivities, summaryFlows]: [

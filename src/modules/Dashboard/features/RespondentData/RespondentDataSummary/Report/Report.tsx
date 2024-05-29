@@ -80,6 +80,16 @@ export const Report = () => {
 
   const dataTestId = 'respondents-summary-report';
 
+  // const downloadLatestReportHandler = async () => {
+  //   if (!appletId || !respondentId) return;
+  //
+  //   getLatestReport({
+  //     appletId,
+  //     activityId: selectedActivity.id,
+  //     subjectId: respondentId,
+  //   });
+  // };
+
   useEffect(() => {
     const responses = currentActivityCompletionData
       ? answers?.filter(({ answerId }) => answerId === currentActivityCompletionData.answerId)
