@@ -1,6 +1,6 @@
 import { TooltipItem } from 'chart.js';
 
-import { ReviewCount } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
+import { ReviewCount } from 'modules/Dashboard/api';
 
 export type ChartTooltipProps = {
   data: TooltipItem<'scatter'> | null;

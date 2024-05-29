@@ -145,6 +145,7 @@ export const useRespondentAnswers = () => {
           submitId,
           endDatetime,
           createdAt,
+          reviewCount,
         } of encryptedFlowSubmissions.submissions) {
           const currentFlow = encryptedFlowSubmissions.flows.find(
             (flow) => flow.idVersion === flowHistoryId,
@@ -185,6 +186,7 @@ export const useRespondentAnswers = () => {
             submitId,
             endDatetime,
             createdAt,
+            reviewCount,
           });
         }
 

@@ -60,7 +60,6 @@ export const Report = () => {
 
   const { isFlow, hasAnswer } = selectedEntity;
 
-  // TODO: add reviewCount for Flows when back-end is ready (backend task M2-6584)
   const completions = getCompletions({ isFlow, flowSubmissions, answers });
 
   const showNoDataForFilters =
