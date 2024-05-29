@@ -4,11 +4,25 @@ import { useTranslation } from 'react-i18next';
 import { Link, generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
-import { ActionsMenu, MenuActionProps, Pin, Row, Search, Spinner, Svg } from 'shared/components';
+import {
+  ActionsMenu,
+  Chip,
+  MenuActionProps,
+  Pin,
+  Row,
+  Search,
+  Spinner,
+  Svg,
+} from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, useEncryptionStorage, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { DashboardTable } from 'modules/Dashboard/components';
-import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
+import {
+  GetAppletsParams,
+  getWorkspaceRespondentsApi,
+  updateRespondentsPinApi,
+  updateSubjectsPinApi,
+} from 'api';
 import { page } from 'resources';
 import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
@@ -42,7 +56,6 @@ import {
   SendInvitationPopup,
   ViewDataPopup,
 } from './Popups';
-import { StatusFlag } from './StatusFlag';
 
 export const Respondents = () => {
   const { appletId } = useParams();
@@ -56,7 +69,7 @@ export const Respondents = () => {
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
 
-  const { execute: getWorkspaceRespondents } = useAsync(
+  const { execute } = useAsync(
     getWorkspaceRespondentsApi,
     (response) => {
       setRespondentsData(response?.data || null);
@@ -65,30 +78,33 @@ export const Respondents = () => {
     () => setIsLoading(false),
   );
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+  const getWorkspaceRespondents = (args?: GetAppletsParams) => {
     setIsLoading(true);
 
-    return getWorkspaceRespondents({
+    // Always sort by pinned first
+    const ordering = ['-isPinned'];
+    ordering.push(args?.params.ordering ?? '+tags,+secretIds');
+
+    return execute({
+      ...args,
       params: {
         ownerId,
         limit: DEFAULT_ROWS_PER_PAGE,
         ...(appletId && { appletId }),
+        ...args?.params,
+        ordering: ordering.join(','),
       },
     });
-  });
+  };
 
-  const { searchValue, handleSearch, ordering, handleReload, ...tableProps } = useTable((args) => {
-    setIsLoading(true);
-    const params = {
-      ...args,
-      params: {
-        ...args.params,
-        ...(appletId && { appletId }),
-      },
-    };
+  const { isForbidden, noPermissionsComponent } = usePermissions(getWorkspaceRespondents);
 
-    return getWorkspaceRespondents(params);
-  });
+  const { searchValue, handleSearch, handleReload, ...tableProps } = useTable(
+    getWorkspaceRespondents,
+    DEFAULT_ROWS_PER_PAGE,
+    'tags',
+    'asc',
+  );
 
   const [scheduleSetupPopupVisible, setScheduleSetupPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
@@ -278,6 +294,12 @@ export const Respondents = () => {
     const stringNicknames = joinWihComma(nicknames, true);
     const stringSecretIds = joinWihComma(secretIds, true);
     const respondentOrSubjectId = respondentId ?? details[0].subjectId;
+    const accountType = {
+      [RespondentStatus.Invited]: t('full'),
+      [RespondentStatus.NotInvited]: t('limited'),
+      [RespondentStatus.Pending]: t('pendingInvite'),
+    }[status];
+    const isPending = status === RespondentStatus.Pending;
 
     return {
       pin: {
@@ -309,14 +331,13 @@ export const Respondents = () => {
         },
       }),
       status: {
-        content: () =>
-          status !== RespondentStatus.Invited && (
-            <StatusFlag
-              status={status}
-              onInviteClick={() => handleInviteClick({ respondentOrSubjectId, email })}
-              isInviteDisabled={!filteredRespondents?.[respondentOrSubjectId]?.editable.length}
-            />
-          ),
+        content: () => (
+          <Chip
+            icon={isPending ? <Svg id="email-outlined" width={18} height={18} /> : undefined}
+            color={isPending ? 'warning' : 'secondary'}
+            title={accountType}
+          />
+        ),
         value: '',
         width: RespondentsColumnsWidth.Status,
       },
@@ -438,7 +459,7 @@ export const Respondents = () => {
         {appletId && <StyledRightBox />}
       </RespondentsTableHeader>
       <DashboardTable
-        columns={getHeadCells(appletId)}
+        columns={getHeadCells(respondentsData?.orderingFields, appletId)}
         rows={rows}
         emptyComponent={
           !rows?.length && !isLoading ? (
