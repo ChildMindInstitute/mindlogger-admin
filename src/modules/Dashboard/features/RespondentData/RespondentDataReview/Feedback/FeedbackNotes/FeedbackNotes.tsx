@@ -18,13 +18,14 @@ import { StyledContainer, StyledNoteListContainer } from './FeedbackNotes.styles
 import { FeedbackNote as FeedbackNoteType, FeedbackNotesProps } from './FeedbackNotes.types';
 import { FeedbackNotesForm } from './FeedbackNotesForm';
 
-export const FeedbackNotes = ({ activity }: FeedbackNotesProps) => {
+export const FeedbackNotes = ({ entity }: FeedbackNotesProps) => {
   const [notes, setNotes] = useState<FeedbackNoteType[]>([]);
   const appletId = useParams()?.appletId || '';
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId');
   const containerRef = useRef<HTMLElement | null>(null);
   const dataTestid = 'respondents-summary-feedback-notes';
+  const activityId = entity?.isFlow && entity?.id;
 
   const { isFeedbackOpen } = useContext(RespondentDataReviewContext);
   const { setValue, handleSubmit } = useFormContext<FeedbackForm>();
@@ -57,7 +58,6 @@ export const FeedbackNotes = ({ activity }: FeedbackNotesProps) => {
   );
 
   const isLoading = notesLoading || editNoteLoading || deleteNoteLoading || createNoteLoading;
-  const activityId = activity?.id ?? '';
 
   const handleNoteEdit = (updatedNote: Pick<FeedbackNoteType, 'id' | 'note'>) => {
     if (!appletId || !answerId || !activityId) return;

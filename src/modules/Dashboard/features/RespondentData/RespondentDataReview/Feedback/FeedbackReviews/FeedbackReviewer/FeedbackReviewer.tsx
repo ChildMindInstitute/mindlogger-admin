@@ -39,7 +39,7 @@ export const FeedbackReviewer = ({
   };
   const handleRemoveSubmit = async () => {
     setIsOpen(false);
-    await onReviewerAnswersRemove({ assessmentId: reviewId });
+    await onReviewerAnswersRemove(reviewId);
     setRemovePopupVisible(false);
   };
   const reviewerName = `${reviewer.firstName} ${reviewer.lastName}${

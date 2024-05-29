@@ -76,23 +76,10 @@ const assessment = [
   },
 ] as unknown as AssessmentActivityItem[];
 
-const selectedActivity = {
+const selectedEntity = {
   id: '48bcf241-a596-4ada-940e-1e220205421f',
   name: 'Activity__3',
-  answerDates: [
-    {
-      createdAt: '2024-03-14T14:28:05.537594',
-      answerId: '74519a16-0869-462f-82a5-96beae11fd20',
-      endDatetime: '2024-03-14T14:28:04.822000',
-    },
-    {
-      createdAt: '2024-03-14T14:50:38.637755',
-      answerId: 'fa9bbea4-7a08-4e27-9fb4-0cc4980e327d',
-      endDatetime: '2024-03-14T14:50:38.637755',
-    },
-  ],
-  lastAnswerDate: '2024-03-14T14:50:38.637755',
-  hasAnswer: true,
+  isFlow: false,
 };
 
 const renderComponent = (isFeedbackOpen = true) => {
@@ -104,7 +91,7 @@ const renderComponent = (isFeedbackOpen = true) => {
         activeTab={mockActiveTab}
         setActiveTab={mockSetActiveTab}
         onClose={mockOnClose}
-        selectedActivity={selectedActivity}
+        selectedEntity={selectedEntity}
       />
     </RespondentDataReviewContext.Provider>,
   );

@@ -1,10 +1,10 @@
 import { useMemo, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
 import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
-import { createAssessmentApi } from 'api';
+import { createAssessmentApi, createFlowAssessmentApi } from 'api';
 import { getErrorMessage } from 'shared/utils/errors';
 import { StyledErrorText, StyledTitleBoldMedium, theme } from 'shared/styles';
 
@@ -20,7 +20,6 @@ export const FeedbackAssessment = ({
   setAssessmentStep,
   submitCallback,
   setIsLoading,
-  answerId,
   setError,
   error,
   userName,
@@ -29,6 +28,9 @@ export const FeedbackAssessment = ({
     RespondentDataReviewContext,
   );
   const { appletId = '' } = useParams();
+  const [searchParams] = useSearchParams();
+  const answerId = searchParams.get('answerId') || null;
+  const submitId = searchParams.get('submitId') || null;
   const userData = auth.useData();
   const getEncryptedAnswers = useEncryptedAnswers();
 
@@ -65,18 +67,29 @@ export const FeedbackAssessment = ({
 
       const answer = await getEncryptedAnswers(answersToEncrypt);
 
-      if (!appletId || !answerId) return;
+      if (!appletId) return;
 
       setItemIds(updatedItemIds);
 
-      await createAssessmentApi({
-        appletId,
-        answerId,
-        answer,
-        itemIds: updatedItemIds || [],
-        reviewerPublicKey: accountId,
-        assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
-      });
+      if (answerId) {
+        await createAssessmentApi({
+          appletId,
+          answerId,
+          answer,
+          itemIds: updatedItemIds || [],
+          reviewerPublicKey: accountId,
+          assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
+        });
+      } else if (submitId) {
+        await createFlowAssessmentApi({
+          appletId,
+          submitId,
+          answer,
+          itemIds: updatedItemIds || [],
+          reviewerPublicKey: accountId,
+          assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
+        });
+      }
 
       reset({
         newNote: '',

@@ -65,6 +65,7 @@ import {
   SummaryFlowAnswersParams,
   GetLatestReportParams,
   EncryptedFlowsAnswers,
+  FlowAssessmentReview,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -521,12 +522,35 @@ export const getAssessmentApi = ({ appletId, answerId }: AssessmentReview, signa
     },
   );
 
+export const getFlowAssessmentApi = (
+  { appletId, submitId }: FlowAssessmentReview,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<ResponseWithObject<AssessmentResult>>(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessments`,
+    {
+      signal,
+    },
+  );
+
 export const createAssessmentApi = (
   { appletId, answerId, ...assessment }: SaveAssessment,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     `/answers/applet/${appletId}/answers/${answerId}/assessment`,
+    { ...assessment },
+    {
+      signal,
+    },
+  );
+
+export const createFlowAssessmentApi = (
+  { appletId, submitId, ...assessment }: any,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessments`,
     { ...assessment },
     {
       signal,
@@ -544,10 +568,29 @@ export const deleteReviewApi = (
     },
   );
 
+export const deleteFlowReviewApi = (
+  { appletId, submitId, assessmentId }: any,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessment/${assessmentId}`,
+    {
+      signal,
+    },
+  );
+
 export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?: AbortSignal) =>
   authApiClient.get<Response<Review>>(`/answers/applet/${appletId}/answers/${answerId}/reviews`, {
     signal,
   });
+
+export const getFlowReviewsApi = ({ appletId, submitId }: any, signal?: AbortSignal) =>
+  authApiClient.get<Response<Review>>(
+    `/answers/applet/${appletId}/submissions/${submitId}/reviews`,
+    {
+      signal,
+    },
+  );
 
 export const getSummaryActivitiesApi = (
   { appletId, respondentId }: AppletId & RespondentId,

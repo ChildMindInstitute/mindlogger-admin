@@ -1,16 +1,12 @@
-import { AssessmentId } from 'modules/Dashboard/api';
-
 import { ReviewData } from '../FeedbackReviews.types';
-
-export type OnReviewerAnswerRemove = ({ assessmentId }: AssessmentId) => Promise<void>;
 
 export type ReviewsProps = {
   isLoading: boolean;
-  reviewsError: string | null;
-  reviewersData: ReviewData[];
+  reviewError: string | null;
+  reviewerData: ReviewData[];
   removeReviewError: string | null;
   removeReviewLoading: boolean;
-  onReviewerAnswersRemove: OnReviewerAnswerRemove;
+  onReviewerAnswersRemove: (assessmentId: string) => Promise<void>;
   onReviewEdit: () => void;
   'data-testid'?: string;
 };

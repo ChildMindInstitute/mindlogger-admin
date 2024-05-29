@@ -47,8 +47,8 @@ const renderComponent = (props?: Partial<ReviewsProps>) =>
   renderWithProviders(
     <Reviews
       isLoading={false}
-      reviewsError={null}
-      reviewersData={mockedReviewersData}
+      reviewError={null}
+      reviewerData={mockedReviewersData}
       removeReviewError={null}
       removeReviewLoading={false}
       onReviewerAnswersRemove={mockedOnReviewAnswerRemove}
@@ -67,7 +67,7 @@ describe('Reviews', () => {
 
   test('should render error text when reviewsError is present', () => {
     const errorMessage = 'Error message';
-    renderComponent({ reviewsError: errorMessage });
+    renderComponent({ reviewError: errorMessage });
 
     expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
@@ -84,7 +84,7 @@ describe('Reviews', () => {
   });
 
   test('should return null if no reviewersData', () => {
-    const { container } = renderComponent({ reviewersData: [] });
+    const { container } = renderComponent({ reviewerData: [] });
 
     expect(container.firstChild).toBeNull();
   });

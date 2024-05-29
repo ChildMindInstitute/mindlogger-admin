@@ -1,4 +1,4 @@
-import { ReviewActivity } from 'modules/Dashboard/api';
+import { SelectedEntity } from '../Feedback.types';
 
 type FullName = {
   firstName: string;
@@ -12,4 +12,4 @@ export type FeedbackNote = {
   createdAt: string;
 };
 
-export type FeedbackNotesProps = { activity: ReviewActivity };
+export type FeedbackNotesProps = { entity: SelectedEntity };

@@ -273,6 +273,8 @@ export type FlowAnswersParams = AppletId & FlowId & { submitId: string };
 
 export type AssessmentReview = AppletId & { answerId: string };
 
+export type FlowAssessmentReview = AppletId & { submitId: string };
+
 export type AssessmentId = { assessmentId: string };
 
 export type DeleteReview = AssessmentReview & AssessmentId;

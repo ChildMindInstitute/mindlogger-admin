@@ -119,7 +119,6 @@ const getFeedbackAssessmentComponent = ({
         setAssessmentStep={mockedSetAssessmentStep}
         submitCallback={mockedSubmitCallback}
         setIsLoading={mockedSetIsLoading}
-        answerId="some-answer-id"
         setError={mockedSetError}
         userName={mockedUserName}
         error={null}

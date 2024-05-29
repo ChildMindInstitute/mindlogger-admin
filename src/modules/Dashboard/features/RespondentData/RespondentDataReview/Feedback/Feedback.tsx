@@ -18,7 +18,7 @@ import { getFeedbackTabs } from './utils/getFeedbackTabs';
 import { getDefaultFormValues } from './utils/getDefaultValues';
 import { ANIMATION_DURATION_MS } from './Feedback.const';
 
-export const Feedback = ({ activeTab, setActiveTab, onClose, selectedActivity }: FeedbackProps) => {
+export const Feedback = ({ activeTab, setActiveTab, onClose, selectedEntity }: FeedbackProps) => {
   const { t } = useTranslation();
   const { assessment, isFeedbackOpen } = useContext(RespondentDataReviewContext);
 
@@ -29,8 +29,9 @@ export const Feedback = ({ activeTab, setActiveTab, onClose, selectedActivity }:
   });
 
   const tabs = useMemo(
-    () => getFeedbackTabs(selectedActivity, assessment),
-    [selectedActivity, assessment],
+    () => getFeedbackTabs({ selectedEntity, assessment }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedEntity.id, selectedEntity.isFlow, assessment],
   );
 
   return (

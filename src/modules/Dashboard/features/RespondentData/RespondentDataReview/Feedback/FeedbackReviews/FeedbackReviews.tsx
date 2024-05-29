@@ -1,111 +1,51 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 
-import { useAsync } from 'shared/hooks/useAsync';
-import { AssessmentId, deleteReviewApi, getReviewsApi } from 'modules/Dashboard/api';
-import { getErrorMessage } from 'shared/utils/errors';
 import { auth } from 'modules/Auth/state';
 
 import { StyledContainer } from './FeedbackReviews.styles';
-import { ReviewData } from './FeedbackReviews.types';
-import { useFeedbackReviewsData } from './FeedbackReviews.hooks';
+import { useFeedbackReviews } from './hooks/useFeedbackReviews';
 import { FeedbackAssessment } from '../FeedbackAssessment';
-import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 import { AssessmentBanner } from './AssessmentBanner';
-import { AssessmentActivityItem } from '../../RespondentDataReview.types';
-import { getDefaultFormValues } from '../utils/getDefaultValues';
-import { FeedbackForm } from '../Feedback.types';
 import { AddReview } from './AddReview';
 import { Reviews } from './Reviews';
+import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
 
 export const FeedbackReviews = () => {
   const { t } = useTranslation('app');
-  const { appletId } = useParams();
+  const { appletId } = useParams<{ appletId: string }>();
   const [searchParams] = useSearchParams();
-  const answerId = searchParams.get('answerId');
-  const [reviewersData, setReviewersData] = useState<ReviewData[]>([]);
+  const answerId = searchParams.get('answerId') || null;
+  const submitId = searchParams.get('submitId') || null;
+
   const [assessmentStep, setAssessmentStep] = useState(0);
   const [submitAssessmentLoading, setSubmitAssessmentLoading] = useState(false);
   const [submitAssessmentError, setSubmitAssessmentError] = useState<string | null>(null);
   const [showFeedbackAssessment, setShowFeedbackAssessment] = useState(false);
 
-  const { reset } = useFormContext<FeedbackForm>();
   const { user } = auth.useData() ?? {};
+
+  const { isBannerVisible, setIsBannerVisible } = useContext(RespondentDataReviewContext);
+
   const {
-    assessment,
-    lastAssessment,
-    setAssessment,
-    setIsLastVersion,
-    isBannerVisible,
-    setIsBannerVisible,
-  } = useContext(RespondentDataReviewContext);
-  const getFeedbackReviewsData = useFeedbackReviewsData();
+    reviewerData,
+    reviewsLoading,
+    reviewError,
+    removeReviewLoading,
+    removeReviewError,
+    handleGetReviews,
+    handleReviewerAnswersRemove,
+  } = useFeedbackReviews({ appletId, answerId, submitId, user });
 
   const userName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}${t('me')}`;
   const dataTestid = 'respondents-data-summary-feedback-reviewed';
-
-  const {
-    execute: getReviews,
-    isLoading: reviewsLoading,
-    error: reviewsError,
-  } = useAsync(getReviewsApi, async (result) => {
-    const reviewsData = await getFeedbackReviewsData({
-      reviews: result?.data?.result ?? [],
-      userId: user?.id ?? '',
-    });
-
-    setReviewersData(reviewsData);
-  });
-
-  const {
-    execute: removeReview,
-    isLoading: removeReviewLoading,
-    error: removeReviewError,
-  } = useAsync(deleteReviewApi);
-
-  const updateAssessment = (updatedAssessment: AssessmentActivityItem[]) => {
-    setAssessment(updatedAssessment);
-    reset(getDefaultFormValues(updatedAssessment));
-    setAssessmentStep(0);
-  };
-
-  const handleSelectLastVersion = () => {
-    setIsLastVersion(true);
-    setIsBannerVisible(false);
-
-    const updatedAssessment = lastAssessment?.map((activityItem) => ({
-      activityItem,
-      answer: undefined,
-    })) as AssessmentActivityItem[];
-    updateAssessment(updatedAssessment);
-  };
-
-  const handleAssessmentBannerClose = () => setIsBannerVisible(false);
-
-  const handleReviewerAnswersRemove = async ({ assessmentId }: AssessmentId) => {
-    if (!appletId || !answerId) return;
-    await removeReview({ appletId, answerId, assessmentId });
-
-    if (lastAssessment?.length) {
-      handleSelectLastVersion();
-    } else {
-      const updatedAssessment = assessment?.map(({ activityItem, items }) => ({
-        activityItem,
-        answer: undefined,
-        items,
-      })) as AssessmentActivityItem[];
-      updateAssessment(updatedAssessment);
-    }
-    getReviews({ appletId, answerId });
-  };
 
   const handleReviewEdit = () => {
     setShowFeedbackAssessment(true);
   };
 
-  const hasCurrentUserReview = reviewersData.some(
+  const hasCurrentUserReview = reviewerData.some(
     ({ isCurrentUserReviewer }) => isCurrentUserReviewer,
   );
   const isLoading = reviewsLoading || submitAssessmentLoading;
@@ -115,12 +55,6 @@ export const FeedbackReviews = () => {
     isBannerVisible && !isAddReviewVisible && !isFeedbackAssessmentVisible;
 
   const handleAddReviewClick = () => setShowFeedbackAssessment(true);
-
-  const handleGetReviews = useCallback(() => {
-    if (!appletId || !answerId) return;
-
-    getReviews({ appletId, answerId });
-  }, [answerId, appletId, getReviews]);
 
   const submitAssessmentCallback = () => {
     setShowFeedbackAssessment(false);
@@ -136,7 +70,7 @@ export const FeedbackReviews = () => {
       {isAssessmentBannerVisible && (
         <AssessmentBanner
           isBannerVisible={isAssessmentBannerVisible}
-          onClose={handleAssessmentBannerClose}
+          onClose={() => setIsBannerVisible(false)}
         />
       )}
       {isAddReviewVisible && (
@@ -152,7 +86,6 @@ export const FeedbackReviews = () => {
           setAssessmentStep={setAssessmentStep}
           submitCallback={submitAssessmentCallback}
           setIsLoading={setSubmitAssessmentLoading}
-          answerId={answerId}
           setError={setSubmitAssessmentError}
           error={submitAssessmentError}
           userName={userName}
@@ -160,9 +93,9 @@ export const FeedbackReviews = () => {
       )}
       <Reviews
         isLoading={isLoading}
-        reviewsError={reviewsError ? getErrorMessage(reviewsError) : null}
-        reviewersData={reviewersData}
-        removeReviewError={removeReviewError ? getErrorMessage(removeReviewError) : null}
+        reviewError={reviewError}
+        reviewerData={reviewerData}
+        removeReviewError={removeReviewError}
         removeReviewLoading={removeReviewLoading}
         onReviewerAnswersRemove={handleReviewerAnswersRemove}
         onReviewEdit={handleReviewEdit}
