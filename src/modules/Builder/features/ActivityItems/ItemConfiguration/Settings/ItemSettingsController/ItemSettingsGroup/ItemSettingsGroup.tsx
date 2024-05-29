@@ -81,7 +81,6 @@ export const ItemSettingsGroup = ({
           <StyledFormLabel>{t(groupName, { context: inputType })}</StyledFormLabel>
           <StyledClearedButton
             sx={{ p: theme.spacing(1) }}
-            onClick={toggleBooleanState(setIsExpanded)}
             data-testid="builder-activity-items-item-settings-group-collapse"
           >
             <Svg id={isExpanded ? 'navigate-up' : 'navigate-down'} />
