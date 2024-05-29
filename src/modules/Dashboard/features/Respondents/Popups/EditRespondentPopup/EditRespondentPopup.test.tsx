@@ -1,4 +1,5 @@
-import { waitFor, screen, fireEvent } from '@testing-library/react';
+import { waitFor, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
 import { expectBanner } from 'shared/utils';
@@ -15,6 +16,7 @@ const chosenAppletData = {
   respondentId: '12312',
   respondentNickname: 'respondentNickname',
   ownerId: '1',
+  subjectId: 'subj-1',
 };
 
 const commonProps = {
@@ -40,12 +42,18 @@ describe('EditRespondentPopup component tests', () => {
   });
 
   test('EditRespondentPopup should appear success text', async () => {
-    jest.spyOn(mockedAxios, 'post').mockImplementation(successFakeRequest);
+    jest.spyOn(mockedAxios, 'put').mockImplementation(successFakeRequest);
 
     const { store } = renderWithProviders(<EditRespondentPopup {...commonProps} />);
 
-    fireEvent.change(screen.getByLabelText(/Nickname/i), { target: { value: '00000' } });
-    fireEvent.click(screen.getByText('Save'));
+    const nicknameInput = screen
+      .getByTestId('dashboard-respondents-edit-popup-nickname')
+      .querySelector('input') as HTMLInputElement;
+    await userEvent.clear(nicknameInput);
+    await userEvent.type(nicknameInput, 'john');
+
+    const submitButton = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
+    await userEvent.click(submitButton);
     await waitFor(() => expectBanner(store, 'SaveSuccessBanner'));
   });
 });

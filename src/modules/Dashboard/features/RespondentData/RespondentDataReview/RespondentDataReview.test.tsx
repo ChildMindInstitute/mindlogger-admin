@@ -57,7 +57,7 @@ const preloadedState = {
         count: 2,
       },
     },
-    respondentDetails: {
+    subjectDetails: {
       ...initialStateData,
       data: {
         result: {
@@ -67,6 +67,7 @@ const preloadedState = {
         },
       },
     },
+    respondentDetails: initialStateData,
   },
 };
 
@@ -352,7 +353,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -365,7 +366,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(date, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -376,7 +377,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
             },
@@ -452,7 +453,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -465,7 +466,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: format(selectedDate, DateFormats.YearMonthDay),
               limit: MAX_LIMIT,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -592,7 +593,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: '2023-12-15',
               limit: MAX_LIMIT,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -605,7 +606,7 @@ describe('RespondentDataReview', () => {
             params: {
               createdDate: '2023-12-15',
               limit: MAX_LIMIT,
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
             },
             signal: undefined,
           },
@@ -616,7 +617,7 @@ describe('RespondentDataReview', () => {
           `/answers/applet/${mockedAppletId}/dates`,
           {
             params: {
-              respondentId: mockedRespondentId,
+              targetSubjectId: mockedRespondentId,
               fromDate: startOfMonth(date).getTime().toString(),
               toDate: endOfMonth(date).getTime().toString(),
             },
@@ -670,7 +671,7 @@ describe('RespondentDataReview', () => {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
             limit: MAX_LIMIT,
-            respondentId: mockedRespondentId,
+            targetSubjectId: mockedRespondentId,
           },
           signal: undefined,
         },
@@ -683,7 +684,7 @@ describe('RespondentDataReview', () => {
           params: {
             createdDate: format(new Date('2023-12-15'), DateFormats.YearMonthDay),
             limit: MAX_LIMIT,
-            respondentId: mockedRespondentId,
+            targetSubjectId: mockedRespondentId,
           },
           signal: undefined,
         },

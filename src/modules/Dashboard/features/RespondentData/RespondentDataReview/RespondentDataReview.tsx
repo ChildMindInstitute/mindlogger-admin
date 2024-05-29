@@ -121,7 +121,7 @@ export const RespondentDataReview = () => {
     containerRef,
   });
 
-  const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
+  const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
   const navigate = useNavigate();
   const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
 
@@ -146,7 +146,7 @@ export const RespondentDataReview = () => {
 
     getAppletSubmitDateList({
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
       fromDate,
       toDate,
     });

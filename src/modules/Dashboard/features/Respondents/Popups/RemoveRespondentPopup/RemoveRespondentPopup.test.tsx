@@ -2,10 +2,10 @@ import { waitFor, screen, fireEvent } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedAppletId } from 'shared/mock';
+import { mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { page } from 'resources';
 
-import { RespondentsRemoveAccessPopup } from '.';
+import { RemoveRespondentPopup } from '.';
 
 const route = `/dashboard/${mockedAppletId}/respondents`;
 const routePath = page.appletRespondents;
@@ -16,6 +16,7 @@ const chosenAppletData = {
   respondentNickname: 'respondentNickname',
   ownerId: '1',
   appletDisplayName: 'ApplletName',
+  subjectId: mockedSubjectId1,
 };
 
 const onCloseMock = jest.fn();
@@ -45,15 +46,13 @@ const commonProps = {
   ],
 };
 
-describe('RespondentsRemoveAccessPopup component tests', () => {
+describe('RemoveRespondentPopup component tests', () => {
   afterEach(() => {
     mockAxios.reset();
   });
 
-  test('RespondentsRemoveAccessPopup should open with applets list', async () => {
-    renderWithProviders(
-      <RespondentsRemoveAccessPopup {...{ ...commonProps, chosenAppletData: null }} />,
-    );
+  test('RemoveRespondentPopup should open with applets list', async () => {
+    renderWithProviders(<RemoveRespondentPopup {...{ ...commonProps, chosenAppletData: null }} />);
 
     await waitFor(() => {
       expect(
@@ -63,15 +62,16 @@ describe('RespondentsRemoveAccessPopup component tests', () => {
     });
   });
 
-  test('RespondentsRemoveAccessPopup should remove access with appletId', async () => {
+  test('RemoveRespondentPopup should remove access with appletId', async () => {
     mockAxios.post.mockResolvedValueOnce(null);
+    mockAxios.delete.mockResolvedValueOnce(null);
 
-    renderWithProviders(<RespondentsRemoveAccessPopup {...commonProps} />, {
+    renderWithProviders(<RemoveRespondentPopup {...commonProps} />, {
       route,
       routePath,
     });
 
-    fireEvent.click(screen.getAllByText('Remove Access')[1]);
+    fireEvent.click(screen.getAllByText('Remove from Applet')[1]);
     fireEvent.click(screen.getByText('Yes, Remove'));
     await waitFor(() => {
       expect(screen.getByText(chosenAppletData.appletDisplayName)).toBeInTheDocument();

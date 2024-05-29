@@ -44,7 +44,7 @@ export const useDatavizSummaryRequests = () => {
         const identifiers = await getFlowIdentifiersApi({
           appletId,
           flowId,
-          respondentId,
+          targetSubjectId: respondentId,
         });
         await setIdentifiers(identifiers.data.result);
 
@@ -60,7 +60,7 @@ export const useDatavizSummaryRequests = () => {
       const identifiers = await getActivityIdentifiersApi({
         appletId,
         activityId,
-        respondentId,
+        targetSubjectId: respondentId,
       });
       await setIdentifiers(identifiers.data.result);
 
