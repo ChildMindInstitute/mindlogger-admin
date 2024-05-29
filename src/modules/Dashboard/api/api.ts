@@ -65,7 +65,9 @@ import {
   SummaryFlowAnswersParams,
   GetLatestReportParams,
   EncryptedFlowsAnswers,
-  FlowAssessmentReview,
+  SaveFlowAssessment,
+  DeleteFlowReview,
+  AssessmentFlowReview,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -523,7 +525,7 @@ export const getAssessmentApi = ({ appletId, answerId }: AssessmentReview, signa
   );
 
 export const getFlowAssessmentApi = (
-  { appletId, submitId }: FlowAssessmentReview,
+  { appletId, submitId }: AssessmentFlowReview,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<ResponseWithObject<AssessmentResult>>(
@@ -546,7 +548,7 @@ export const createAssessmentApi = (
   );
 
 export const createFlowAssessmentApi = (
-  { appletId, submitId, ...assessment }: any,
+  { appletId, submitId, ...assessment }: SaveFlowAssessment,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
@@ -569,7 +571,7 @@ export const deleteReviewApi = (
   );
 
 export const deleteFlowReviewApi = (
-  { appletId, submitId, assessmentId }: any,
+  { appletId, submitId, assessmentId }: DeleteFlowReview,
   signal?: AbortSignal,
 ) =>
   authApiClient.delete(
@@ -584,7 +586,10 @@ export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?:
     signal,
   });
 
-export const getFlowReviewsApi = ({ appletId, submitId }: any, signal?: AbortSignal) =>
+export const getFlowReviewsApi = (
+  { appletId, submitId }: AssessmentFlowReview,
+  signal?: AbortSignal,
+) =>
   authApiClient.get<Response<Review>>(
     `/answers/applet/${appletId}/submissions/${submitId}/reviews`,
     {

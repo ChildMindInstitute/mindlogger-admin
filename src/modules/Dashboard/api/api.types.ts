@@ -265,19 +265,23 @@ export type EncryptedActivityAnswers = EncryptedAnswerSharedProps & {
   version: string;
 };
 
+export type SubmitId = { submitId: string };
+
 export type Answers = AppletId & RespondentId & { createdDate?: string };
 
 export type ActivityAnswerParams = AppletId & { answerId: string; activityId: string };
 
-export type FlowAnswersParams = AppletId & FlowId & { submitId: string };
+export type FlowAnswersParams = AppletId & FlowId & SubmitId;
 
 export type AssessmentReview = AppletId & { answerId: string };
 
-export type FlowAssessmentReview = AppletId & { submitId: string };
+export type AssessmentFlowReview = AppletId & SubmitId;
 
 export type AssessmentId = { assessmentId: string };
 
 export type DeleteReview = AssessmentReview & AssessmentId;
+
+export type DeleteFlowReview = AppletId & AssessmentId & SubmitId;
 
 export type AssessmentResult = {
   answer: string | null;
@@ -297,6 +301,14 @@ export type SaveAssessment = AppletId & {
   reviewerPublicKey: string;
   assessmentVersionId: string;
 };
+
+export type SaveFlowAssessment = AppletId &
+  SubmitId & {
+    answer: string;
+    itemIds: string[];
+    reviewerPublicKey: string;
+    assessmentVersionId: string;
+  };
 
 export type Reviewer = {
   firstName: string;
