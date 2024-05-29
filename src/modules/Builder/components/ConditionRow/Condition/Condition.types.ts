@@ -1,7 +1,11 @@
 import { ConditionType } from 'shared/consts';
 import { SelectEvent } from 'shared/types';
 import { ConditionRowType } from 'modules/Builder/types';
-import { SingleAndMultipleSelectItemResponseValues, SliderItemResponseValues } from 'shared/state';
+import {
+  NumberItemResponseValues,
+  SingleAndMultipleSelectItemResponseValues,
+  SliderItemResponseValues,
+} from 'shared/state';
 
 import { ConditionItemType } from './Condition.const';
 
@@ -9,7 +13,10 @@ export type ConditionItem = {
   type: ConditionItemType;
   value: string;
   labelKey: string;
-  responseValues?: SingleAndMultipleSelectItemResponseValues | SliderItemResponseValues;
+  responseValues?:
+    | SingleAndMultipleSelectItemResponseValues
+    | SliderItemResponseValues
+    | NumberItemResponseValues;
 };
 
 export type ConditionProps = {

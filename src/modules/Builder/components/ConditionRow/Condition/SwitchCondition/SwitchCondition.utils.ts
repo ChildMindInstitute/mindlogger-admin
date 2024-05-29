@@ -15,11 +15,11 @@ export const getConditionMinMaxValues = ({
   item?: ConditionItem;
   state: ConditionType;
 }) => {
-  if (!item?.type) return getDefaultMinMaxValues(state);
+  if (!item?.type || !item.responseValues) return getDefaultMinMaxValues(state);
 
   switch (item.type) {
     case ConditionItemType.Slider: {
-      const responseValues = item.responseValues! as SliderItemResponseValues;
+      const responseValues = item.responseValues as SliderItemResponseValues;
 
       return {
         minNumber: state ? +responseValues.minValue : DEFAULT_NUMBER_MIN_VALUE,
@@ -27,7 +27,7 @@ export const getConditionMinMaxValues = ({
       };
     }
     case ConditionItemType.NumberSelection: {
-      const responseValues = item.responseValues! as NumberItemResponseValues;
+      const responseValues = item.responseValues as NumberItemResponseValues;
 
       return {
         minNumber: state ? responseValues.minValue : DEFAULT_NUMBER_MIN_VALUE,
@@ -58,11 +58,11 @@ export const getConditionMinMaxRangeValues = ({
   minValue: number;
   maxValue: number;
 }) => {
-  if (!item?.type) return getDefaultMinMaxRangeValues();
+  if (!item?.type || !item.responseValues) return getDefaultMinMaxRangeValues();
 
   switch (item.type) {
     case ConditionItemType.Slider: {
-      const responseValues = item.responseValues! as SliderItemResponseValues;
+      const responseValues = item.responseValues as SliderItemResponseValues;
 
       return {
         leftRange: {
@@ -76,7 +76,7 @@ export const getConditionMinMaxRangeValues = ({
       };
     }
     case ConditionItemType.NumberSelection: {
-      const responseValues = item.responseValues! as NumberItemResponseValues;
+      const responseValues = item.responseValues as NumberItemResponseValues;
 
       return {
         leftRange: {
