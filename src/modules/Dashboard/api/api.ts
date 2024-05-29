@@ -620,14 +620,14 @@ export const getActivityIdentifiersApi = (
   );
 
 export const getFlowIdentifiersApi = (
-  { appletId, flowId, respondentId }: GetFlowIdentifiersParams,
+  { appletId, flowId, targetSubjectId }: GetFlowIdentifiersParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.get<Response<Identifier>>(
     `/answers/applet/${appletId}/flows/${flowId}/identifiers`,
     {
       params: {
-        respondentId,
+        targetSubjectId,
       },
       signal,
     },
