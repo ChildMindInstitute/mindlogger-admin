@@ -771,7 +771,7 @@ export type AppletMeta = {
 export type AppletSchema = {
   applet: BaseSchema<{
     result: SingleApplet;
-    respondentMeta: RespondentMeta;
-    appletMeta: AppletMeta;
+    respondentMeta?: RespondentMeta;
+    appletMeta?: AppletMeta;
   } | null>;
 };
