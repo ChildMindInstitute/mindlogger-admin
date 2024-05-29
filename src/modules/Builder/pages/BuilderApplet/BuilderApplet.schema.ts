@@ -8,6 +8,8 @@ import {
   getMaxLengthValidationError,
 } from 'shared/utils';
 import {
+  CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
+  CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
   MAX_LENGTH_OF_TEST,
@@ -504,6 +506,15 @@ export const ConditionSchema = () =>
       if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
         return schema.shape({
           optionValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+        });
+      if (CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type))
+        return schema.shape({
+          value: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+        });
+      if (CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type))
+        return schema.shape({
+          minValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+          maxValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
         });
 
       return schema;
