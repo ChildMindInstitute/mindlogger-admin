@@ -169,9 +169,7 @@ export const getHeadCells = (sortableColumns?: string[], appletId?: string): Hea
     {
       id: 'lastSeen',
       label: t('latestActivity'),
-      // API cannot currently sort by participants' latest activity because that field is
-      // populated post-pagination. Sorting by this column is disabled until that can be fixed.
-      enableSort: false,
+      enableSort: sortableColumns?.includes('lastSeen') ?? true,
     },
     ...(appletId
       ? [
