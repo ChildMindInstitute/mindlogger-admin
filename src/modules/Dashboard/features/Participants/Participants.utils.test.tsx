@@ -2,7 +2,7 @@ import { MenuItemType, Svg } from 'shared/components';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
 import { RespondentStatus } from 'modules/Dashboard/types';
-import { ParticipantTag } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 
 import { getParticipantActions, getHeadCells } from './Participants.utils';
 
@@ -128,9 +128,10 @@ describe('Participants utils tests', () => {
         ...commonGetActionsProps,
         status: RespondentStatus.Invited,
         dataTestid: dataTestId,
+        roles: [Roles.Manager],
       });
 
-      const isDisplayed = [true, false, false, true, true, true];
+      const isDisplayed = [true, false, true, true, true, true];
       actions.forEach((action, index) => {
         expect(action).toEqual({
           ...expectedActions[index],
@@ -144,9 +145,10 @@ describe('Participants utils tests', () => {
         ...commonGetActionsProps,
         status: RespondentStatus.NotInvited,
         dataTestid: dataTestId,
+        roles: [Roles.Manager],
       });
 
-      const isDisplayed = [true, true, false, true, true, true];
+      const isDisplayed = [true, true, true, true, true, true];
       actions.forEach((action, index) => {
         expect(action).toEqual({
           ...expectedActions[index],
