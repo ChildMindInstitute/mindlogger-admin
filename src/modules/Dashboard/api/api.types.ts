@@ -17,6 +17,12 @@ export type GetAppletsParams = {
   };
 };
 
+export type GetWorkspaceRespondentsParams = GetAppletsParams & {
+  params: {
+    userId?: string;
+  };
+};
+
 export type GetActivitiesParams = {
   params: {
     appletId: string;

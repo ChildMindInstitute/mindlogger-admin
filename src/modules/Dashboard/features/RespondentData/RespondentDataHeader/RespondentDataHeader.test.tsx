@@ -1,10 +1,17 @@
 import { screen } from '@testing-library/react';
 
-import { mockedApplet, mockedAppletData, mockedRespondent, mockedAppletId } from 'shared/mock';
+import {
+  mockedApplet,
+  mockedAppletData,
+  mockedRespondent,
+  mockedAppletId,
+  mockedRespondentId,
+} from 'shared/mock';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { Roles } from 'shared/consts';
 import { getPreloadedState } from 'shared/tests/getPreloadedState';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
+import { RespondentDetails } from 'modules/Dashboard/types';
 
 import { RespondentDataHeader } from './RespondentDataHeader';
 
@@ -25,9 +32,10 @@ jest.mock('shared/hooks/useFeatureFlags', () => ({
 
 const mockUseFeatureFlags = useFeatureFlags as jest.Mock;
 
-const mockedSubject = {
+const mockedSubject: RespondentDetails = {
   nickname: mockedRespondent.nicknames[0],
   secretUserId: mockedRespondent.secretIds[0],
+  userId: mockedRespondentId,
   ...mockedRespondent,
 };
 

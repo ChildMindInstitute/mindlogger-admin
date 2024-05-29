@@ -55,8 +55,9 @@ export const RespondentDataHeader = ({
   const handleTakeNow = () => {
     if (!activity) return;
     openTakeNowModal(activity, {
-      subject: {
+      targetSubject: {
         id: subject.id,
+        userId: subject.userId,
         secretId: subject.secretUserId,
         nickname: subject.nickname,
       },
@@ -154,7 +155,7 @@ export const RespondentDataHeader = ({
                 onClick={handleTakeNow}
                 data-testid={`${dataTestid}-take-now`}
               >
-                {t('takeNow')}
+                {t('takeNow.buttonLabel')}
               </Button>
             )}
           </StyledFlexTopCenter>
