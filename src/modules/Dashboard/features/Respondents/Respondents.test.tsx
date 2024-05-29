@@ -195,13 +195,14 @@ describe('Respondents component tests', () => {
     searchInput && fireEvent.change(searchInput, { target: { value: mockedSearchValue } });
 
     await waitFor(() => {
-      expect(mockAxios.get).toBeCalledWith(
+      expect(mockAxios.get).toHaveBeenLastCalledWith(
         `/workspaces/${mockedOwnerId}/applets/${mockedAppletId}/respondents`,
         {
           params: {
             limit: 20,
             page: 1,
             search: mockedSearchValue,
+            ordering: '-isPinned,+tags',
           },
           signal: undefined,
         },

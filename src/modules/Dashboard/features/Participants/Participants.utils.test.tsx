@@ -38,10 +38,10 @@ const filteredApplets = {
 };
 const headCellProperties = [
   'pin',
-  'tag',
+  'tags',
   'secretIds',
   'nicknames',
-  'accountType',
+  'status',
   'lastSeen',
   'actions',
 ];
