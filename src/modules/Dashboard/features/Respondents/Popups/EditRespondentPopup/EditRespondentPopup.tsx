@@ -7,7 +7,7 @@ import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
 import { InputController } from 'shared/components/FormComponents';
 import { useAsync } from 'shared/hooks/useAsync';
-import { editRespondentApi } from 'api';
+import { editSubjectApi } from 'api';
 import { falseReturnFunc, getErrorMessage } from 'shared/utils';
 import { useAppDispatch } from 'redux/store';
 import { banners } from 'redux/modules';
@@ -40,7 +40,7 @@ export const EditRespondentPopup = ({
     isLoading,
     error,
   } = useAsync(
-    editRespondentApi,
+    editSubjectApi,
     () => {
       onCloseHandler(true);
       dispatch(banners.actions.addBanner({ key: 'SaveSuccessBanner' }));
@@ -55,16 +55,14 @@ export const EditRespondentPopup = ({
     if (!chosenAppletData) return;
 
     const { secretUserId, nickname } = getValues();
-    const { appletId, ownerId, respondentId } = chosenAppletData;
+    const { subjectId } = chosenAppletData;
 
     editRespondent({
       values: {
         secretUserId: secretUserId.trim(),
         nickname: nickname?.trim(),
       },
-      appletId,
-      ownerId,
-      respondentId,
+      subjectId,
     });
   };
 
@@ -75,9 +73,9 @@ export const EditRespondentPopup = ({
   };
 
   useEffect(() => {
-    const { respondentNickname = '', respondentSecretId = '' } = chosenAppletData || {};
+    const { respondentNickname, respondentSecretId = '' } = chosenAppletData || {};
     setValue('secretUserId', respondentSecretId);
-    setValue('nickname', respondentNickname);
+    setValue('nickname', respondentNickname || '');
   }, [chosenAppletData]);
 
   const hasServerError = error && isServerErrorVisible;

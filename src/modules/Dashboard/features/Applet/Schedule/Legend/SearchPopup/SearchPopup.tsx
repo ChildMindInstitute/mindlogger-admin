@@ -53,7 +53,7 @@ export const SearchPopup = ({
     ownerId &&
       dispatch(
         users.thunk.getAllWorkspaceRespondents({
-          params: { ownerId, appletId },
+          params: { ownerId, appletId, shell: false },
         }),
       );
   });

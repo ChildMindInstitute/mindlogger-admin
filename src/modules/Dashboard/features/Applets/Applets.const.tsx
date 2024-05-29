@@ -7,9 +7,9 @@ import { getBuilderAppletUrl, Mixpanel, Path } from 'shared/utils';
 import { page } from 'resources';
 
 export enum AppletsColumnsWidth {
-  AppletName = '40rem',
-  LastEdit = '20rem',
-  Folder = '60rem',
+  AppletName = '60rem',
+  LastEdit = '30rem',
+  Folder = '90rem',
 }
 
 export const getHeadCells = (): HeadCell[] => [

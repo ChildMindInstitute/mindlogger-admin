@@ -119,7 +119,7 @@ export const useRespondentAnswers = () => {
       const toDatetime = getDateISO(endDate, endTime);
 
       const params = {
-        respondentId,
+        targetSubjectId: respondentId,
         fromDatetime,
         toDatetime,
         emptyIdentifiers: !filterByIdentifier,

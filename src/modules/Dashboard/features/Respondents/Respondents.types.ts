@@ -1,12 +1,20 @@
 import { Respondent, RespondentDetail } from 'modules/Dashboard/types';
 import { Encryption } from 'shared/utils';
+import { MenuActionProps } from 'shared/components';
+
+export type RespondentActionProps = {
+  respondentId: string | null;
+  respondentOrSubjectId: string;
+  email: string | null;
+};
 
 export type RespondentsActions = {
-  scheduleSetupAction: (value: string) => void;
-  userDataExportAction: (value: string) => void;
-  viewDataAction: (value: string) => void;
-  removeAccessAction: (value: string) => void;
-  editRespondent: (value: string) => void;
+  scheduleSetupAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  userDataExportAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  viewDataAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  removeAccessAction: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  editRespondent: ({ context }: MenuActionProps<RespondentActionProps>) => void;
+  sendInvitation: ({ context }: MenuActionProps<RespondentActionProps>) => void;
 };
 
 export type ChosenAppletData = {
@@ -15,17 +23,20 @@ export type ChosenAppletData = {
   appletImg?: string;
   respondentSecretId?: string;
   hasIndividualSchedule?: boolean;
-  respondentId: string;
-  respondentNickname?: string;
+  respondentId: string | null;
+  respondentNickname?: string | null;
   encryption?: Encryption;
   ownerId: string;
+  subjectId: string;
 };
 
-export type FilteredApplets = {
-  scheduling: RespondentDetail[];
-  editable: RespondentDetail[];
-  viewable: RespondentDetail[];
-};
+export enum FilteredAppletsKey {
+  Scheduling = 'scheduling',
+  Editable = 'editable',
+  Viewable = 'viewable',
+}
+
+export type FilteredApplets = Record<FilteredAppletsKey, RespondentDetail[]>;
 
 export type FilteredRespondents = {
   [key: string]: FilteredApplets;
@@ -34,4 +45,31 @@ export type FilteredRespondents = {
 export type RespondentsData = {
   result: Respondent[];
   count: number;
+};
+
+export type GetMenuItems = {
+  actions: RespondentsActions;
+  filteredApplets: FilteredApplets;
+  respondentId: string | null;
+  respondentOrSubjectId: string;
+  email: string | null;
+  appletId?: string;
+  isInviteEnabled: boolean;
+  isViewCalendarEnabled: boolean;
+};
+
+export type HandlePinClick = {
+  respondentId: string | null;
+  subjectId: string;
+};
+
+export type SetDataForAppletPage = {
+  respondentOrSubjectId: string;
+  respondentId?: string | null;
+  key: FilteredAppletsKey;
+};
+
+export type HandleInviteClick = {
+  respondentOrSubjectId: string;
+  email: string | null;
 };

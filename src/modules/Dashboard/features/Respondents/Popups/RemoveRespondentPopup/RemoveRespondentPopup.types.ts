@@ -1,11 +1,11 @@
 import { Row, SubmitBtnColor } from 'shared/components';
 import { ChosenAppletData } from 'modules/Dashboard/features/Respondents/Respondents.types';
 
-export type RespondentAccessPopupProps = {
+export type RemoveRespondentPopupProps = {
   popupVisible: boolean;
   tableRows: Row[] | undefined;
   chosenAppletData: ChosenAppletData | null;
-  onClose: (shouldRefetch?: boolean) => void;
+  onClose: (shouldReFetch?: boolean) => void;
 };
 
 export type GetScreen = (respondentName: string, appletName: string) => JSX.Element;
@@ -22,7 +22,7 @@ export type ScreensParams = {
   isRemoved: boolean;
   submitPassword: () => void;
   removeAccess: () => void;
-  onClose: (shouldRefetch?: boolean) => void;
+  onClose: (shouldReFetch?: boolean) => void;
 };
 
 export type Screen = {
