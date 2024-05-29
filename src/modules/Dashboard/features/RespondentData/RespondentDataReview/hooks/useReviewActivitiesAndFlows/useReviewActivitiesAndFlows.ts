@@ -68,7 +68,7 @@ export const useReviewActivitiesAndFlows = ({
 
     const requestBody = {
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
       createdDate,
     };
 

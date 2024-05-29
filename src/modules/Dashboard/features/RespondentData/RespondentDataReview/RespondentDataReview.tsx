@@ -152,22 +152,6 @@ export const RespondentDataReview = () => {
     });
   };
 
-  // const handleGetActivities = (date?: Date | null) => {
-  //   const createdDate = date && format(date, DateFormats.YearMonthDay);
-  //
-  //   if (!appletId || !respondentId || !createdDate || prevSelectedDateRef.current === createdDate) {
-  //     return;
-  //   }
-  //
-  //   getReviewActivities({
-  //     appletId,
-  //     targetSubjectId: respondentId,
-  //     createdDate,
-  //   });
-  //
-  //   prevSelectedDateRef.current = createdDate;
-  // };
-
   const handleSetInitialDate = (date: Date) => {
     setValue('responseDate', date);
     handleGetActivitiesAndFlows(date);
