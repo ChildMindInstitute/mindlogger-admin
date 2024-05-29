@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { addDays } from 'date-fns';
+import { addDays, setHours, setMinutes, addMinutes } from 'date-fns';
 
-import { useCustomFormContext } from 'modules/Builder/hooks';
-import { DatePicker, TimePicker } from 'shared/components';
+import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
+import { DatePicker } from 'shared/components/DatePicker';
+import { TimePicker } from 'shared/components/TimePicker';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexTopCenter, theme } from 'shared/styles';
 
@@ -11,7 +13,14 @@ import { ConditionItemType } from '../Condition.const';
 import { StyledInputController, StyledTimeRow } from './SwitchCondition.styles';
 import { SwitchConditionProps } from './SwitchCondition.types';
 import { getConditionMinMaxValues, getConditionMinMaxRangeValues } from './SwitchCondition.utils';
-import { commonInputSx, commonInputWrapperSx } from './SwitchCondition.const';
+import {
+  commonInputSx,
+  commonInputWrapperSx,
+  maxHours,
+  maxMinutes,
+  maxTime,
+  minTime,
+} from './SwitchCondition.const';
 
 export const SwitchCondition = ({
   selectedItem,
@@ -25,6 +34,7 @@ export const SwitchCondition = ({
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
+  const [minEndTime, setMinEndTime] = useState(minTime);
   const isSingleValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = !isSingleValueShown;
 
@@ -110,7 +120,6 @@ export const SwitchCondition = ({
             <StyledFlexTopCenter>
               <DatePicker
                 name={numberValueName}
-                onCloseCallback={onCloseStartDateCallback}
                 data-testid={`${dataTestid}-date-value`}
                 skipMinDate
                 {...commonDateInputProps}
@@ -153,6 +162,29 @@ export const SwitchCondition = ({
         inputSx: {
           ...commonInputSx,
         },
+        timeIntervals: 1,
+      };
+      const onStartTimeChange = (time: string) => {
+        if (!time) return;
+
+        const [startTimeHours, startTimeMinutes] = time.split(':');
+        const resultDate = setHours(
+          setMinutes(new Date(), Number(startTimeMinutes)),
+          Number(startTimeHours),
+        );
+        setMinEndTime(resultDate);
+
+        if (maxValue && time && maxValue < time) {
+          if (Number(startTimeHours) === maxHours && Number(startTimeMinutes) === maxMinutes) {
+            setValue(maxValueName, time);
+
+            return;
+          }
+          const endTimeDate = addMinutes(resultDate, 1);
+          const endTimeHours = endTimeDate.getHours();
+          const endTimeMinutes = endTimeDate.getMinutes();
+          setValue(maxValueName, `${endTimeHours}:${endTimeMinutes}`);
+        }
       };
 
       return (
@@ -168,12 +200,15 @@ export const SwitchCondition = ({
             <StyledTimeRow>
               <TimePicker
                 {...commonTimePickerProps}
+                onCustomChange={onStartTimeChange}
                 name={minValueName}
                 data-testid={`${dataTestid}-start-time`}
               />
               <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
               <TimePicker
                 {...commonTimePickerProps}
+                minTime={minEndTime}
+                maxTime={maxTime}
                 name={maxValueName}
                 data-testid={`${dataTestid}-end-time`}
               />
