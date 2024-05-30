@@ -22,6 +22,8 @@ export const TimePicker = <T extends FieldValues>({
   maxTime,
   onCustomChange,
   'data-testid': dataTestid,
+  placeholder,
+  inputSx = {},
 }: TimePickerProps<T>) => (
   <Controller
     control={control}
@@ -49,6 +51,7 @@ export const TimePicker = <T extends FieldValues>({
               timeFormat={format}
               minTime={minTime}
               maxTime={maxTime}
+              placeholderText={placeholder}
               customInput={
                 <TextField
                   variant="outlined"
@@ -61,6 +64,7 @@ export const TimePicker = <T extends FieldValues>({
                         <Svg id="clock" />
                       </StyledIcon>
                     ),
+                    sx: { ...inputSx },
                   }}
                 />
               }

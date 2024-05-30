@@ -1166,6 +1166,7 @@
   "timeHint": "Sélection de l'heure au format HH:MM",
   "timeIsShownInUTC": "L'heure est<br />affichée en UTC",
   "timeNotificationsError": "L'heure sélectionnée dans l'onglet Notifications est en dehors de la plage horaire de disponibilité de l'activité. Veuillez mettre à jour.",
+  "timePlaceholder": "HH:MM",
   "activityIncompleteError": "Le rappel sélectionné dans l'onglet Notifications est en dehors du temps de disponibilité de l'Activité. Veuillez mettre à jour",
   "weekdaysReminderMessage": "Remarque: Le système n'enverra pas de rappels le week-end, car l'activité est limitée aux jours de semaine.",
   "activityIsUnavailable": "L'activité n'est pas disponible ce jour",
