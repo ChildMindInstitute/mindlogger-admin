@@ -17,7 +17,13 @@ import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
-import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
+import {
+  checkIfCanManageParticipants,
+  getDateInUserTimezone,
+  isManagerOrOwner,
+  joinWihComma,
+  Mixpanel,
+} from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
@@ -404,8 +410,7 @@ export const Participants = () => {
   const viewableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Viewable);
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
   const dataTestid = 'dashboard-participants';
-  const canAddParticipant =
-    appletId && (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.Coordinator));
+  const canAddParticipant = appletId && checkIfCanManageParticipants(roles);
 
   if (isForbidden) return noPermissionsComponent;
 
@@ -440,18 +445,14 @@ export const Participants = () => {
         emptyComponent={
           !rows?.length && !isLoading ? (
             <EmptyDashboardTable searchValue={searchValue}>
-              {appletId ? (
-                <>
-                  {t('noParticipantsForApplet')}
-                  <AddParticipantButton
-                    onClick={() => setAddParticipantPopupVisible(true)}
-                    variant="contained"
-                  >
-                    {t('addParticipant')}
-                  </AddParticipantButton>
-                </>
-              ) : (
-                t('noParticipants')
+              {t('noParticipantsForApplet')}
+              {canAddParticipant && (
+                <AddParticipantButton
+                  onClick={() => setAddParticipantPopupVisible(true)}
+                  variant="contained"
+                >
+                  {t('addParticipant')}
+                </AddParticipantButton>
               )}
             </EmptyDashboardTable>
           ) : undefined
