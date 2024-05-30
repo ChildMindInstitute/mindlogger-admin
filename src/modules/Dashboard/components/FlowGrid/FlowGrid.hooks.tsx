@@ -64,6 +64,9 @@ export function useFlowGridMenu({
         title: t('editFlow'),
       },
       {
+        // TODO: Implement export data
+        // https://mindlogger.atlassian.net/browse/M2-6039
+        // https://mindlogger.atlassian.net/browse/M2-6736
         'data-testid': `${testId}-flow-export`,
         disabled: true,
         icon: <Svg id="export" />,
@@ -72,6 +75,8 @@ export function useFlowGridMenu({
       },
       { type: MenuItemType.Divider, isDisplayed: showDivider },
       {
+        // TODO: Implement assign
+        // https://mindlogger.atlassian.net/browse/M2-5710
         'data-testid': `${testId}-flow-assign`,
         icon: <Svg id="add" />,
         title: t('assignActivity'),
