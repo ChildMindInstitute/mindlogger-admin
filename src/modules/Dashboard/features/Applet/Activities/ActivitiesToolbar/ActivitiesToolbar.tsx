@@ -7,7 +7,7 @@ import { page } from 'resources';
 import { ButtonWithMenu, Svg } from 'shared/components';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { StyledFlexTopCenter, StyledFlexWrap, theme } from 'shared/styles';
-import { checkIfCanEdit } from 'shared/utils';
+import { checkIfCanEdit, checkIfCanManageParticipants } from 'shared/utils';
 import { workspaces } from 'shared/state';
 
 import { ActivitiesToolbarProps } from './ActivitiesToolbar.types';
@@ -24,6 +24,8 @@ export const ActivitiesToolbar = ({
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
   const canEditApplet = checkIfCanEdit(roles);
+  const canAssignActivity =
+    checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
 
   return (
     <StyledFlexWrap sx={{ gap: 1.2, ...sx }} {...otherProps}>
@@ -63,34 +65,36 @@ export const ActivitiesToolbar = ({
             </StyledFlexTopCenter>
           )}
 
-          <StyledFlexWrap sx={{ ml: 'auto', gap: 1.2 }}>
-            {featureFlags.enableActivityAssign && (
-              <Button
-                data-testid={`${dataTestId}-assign`}
-                onClick={() => {
-                  // TODO: Implement assign
-                  // https://mindlogger.atlassian.net/browse/M2-5710
-                  alert('TODO: Assign activity');
-                }}
-                sx={{ minWidth: theme.spacing(10) }}
-                variant="tonal"
-              >
-                {t('assign')}
-              </Button>
-            )}
+          {(canAssignActivity || canEditApplet) && (
+            <StyledFlexWrap sx={{ ml: 'auto', gap: 1.2 }}>
+              {canAssignActivity && (
+                <Button
+                  data-testid={`${dataTestId}-assign`}
+                  onClick={() => {
+                    // TODO: Implement assign
+                    // https://mindlogger.atlassian.net/browse/M2-5710
+                    alert('TODO: Assign activity');
+                  }}
+                  sx={{ minWidth: theme.spacing(10) }}
+                  variant="tonal"
+                >
+                  {t('assign')}
+                </Button>
+              )}
 
-            {canEditApplet && (
-              <Button
-                component={Link}
-                to={generatePath(page.builderAppletActivities, { appletId })}
-                variant="contained"
-                data-testid={`${dataTestId}-add-activity`}
-                sx={{ minWidth: theme.spacing(13.2) }}
-              >
-                {t('addActivity')}
-              </Button>
-            )}
-          </StyledFlexWrap>
+              {canEditApplet && (
+                <Button
+                  component={Link}
+                  to={generatePath(page.builderAppletActivities, { appletId })}
+                  variant="contained"
+                  data-testid={`${dataTestId}-add-activity`}
+                  sx={{ minWidth: theme.spacing(13.2) }}
+                >
+                  {t('addActivity')}
+                </Button>
+              )}
+            </StyledFlexWrap>
+          )}
         </>
       )}
     </StyledFlexWrap>

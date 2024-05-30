@@ -2,7 +2,12 @@ import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { MenuItem, MenuItemType } from 'shared/components';
-import { checkIfCanAccessData, checkIfCanEdit, checkIfCanTakeNow } from 'shared/utils';
+import {
+  checkIfCanAccessData,
+  checkIfCanEdit,
+  checkIfCanManageParticipants,
+  checkIfCanTakeNow,
+} from 'shared/utils';
 
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
 
@@ -17,12 +22,10 @@ export const getActivityActions = ({
 }: ActivityActions): MenuItem<ActivityActionProps>[] => {
   const canEdit = checkIfCanEdit(roles);
   const canAccessData = checkIfCanAccessData(roles);
-
   const canDoTakeNow =
     featureFlags.enableMultiInformantTakeNow && hasParticipants && checkIfCanTakeNow(roles);
-
-  const canAssignActivity = featureFlags.enableActivityAssign;
-
+  const canAssignActivity =
+    checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
   const showDivider = (canEdit || canAccessData) && (canDoTakeNow || canAssignActivity);
 
   return [
