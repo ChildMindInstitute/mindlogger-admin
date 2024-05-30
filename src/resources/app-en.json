@@ -167,8 +167,10 @@
     "columnSubmissionDate": "Submission date",
     "labelSelf": "Self",
     "noDataYet": "No data yet",
-    "statParticipants": "Participants",
-    "statSubmissions": "Submissions",
+    "statParticipants": "Total Participants",
+    "statParticipantsTooltip": "Number of participants involved in this applet (all-time).",
+    "statSubmissions": "Total Submissions",
+    "statSubmissionsTooltip": "Number of submissions for this applet (all-time).",
     "titleRecentSubmissions": "Recent submissions"
   },
   "appletPasswordRequirementsError": "Password does not meet the password requirements.",

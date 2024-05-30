@@ -1,9 +1,8 @@
 import { BoxProps } from '@mui/material';
-import { Icons } from 'svgSprite';
 
 export interface StatProps extends BoxProps {
   label?: React.ReactNode;
-  icon: Icons;
+  tooltip?: string;
   value?: React.ReactNode;
 }
 

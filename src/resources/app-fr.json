@@ -167,8 +167,10 @@
     "columnSubmissionDate": "Date de soumission",
     "labelSelf": "Soi",
     "noDataYet": "Aucune donnée pour l'instant",
-    "statParticipants": "Participants",
-    "statSubmissions": "Soumissions",
+    "statParticipants": "Total des participants",
+    "statParticipantsTooltip": "Nombre de participants impliqués dans cette applet (tous les temps).",
+    "statSubmissions": "Total des soumissions",
+    "statSubmissionsTooltip": "Nombre de soumissions pour cette applet (tous les temps).",
     "titleRecentSubmissions": "Soumissions récentes"
   },
   "appletPasswordRequirementsError": "Le mot de passe ne répond pas aux exigences de sécurité.",

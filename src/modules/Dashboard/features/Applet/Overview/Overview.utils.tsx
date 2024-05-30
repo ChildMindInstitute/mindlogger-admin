@@ -1,5 +1,5 @@
 import { PropsOf } from '@emotion/react';
-import { IconButton } from '@mui/material';
+import { Button } from '@mui/material';
 import { formatDistanceStrict } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
 
@@ -7,9 +7,9 @@ import i18n from 'i18n';
 import { GetAppletSubmissionsResponse, Languages } from 'api';
 import { ParticipantSnippet } from 'modules/Dashboard/components';
 import { QuickStats } from 'modules/Dashboard/features/Applet/Overview/QuickStats';
-import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
-import { StyledFlexAllCenter, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { Svg } from 'shared/components';
+import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
+import { StyledFlexAllCenter, theme, variables } from 'shared/styles';
 
 const locales = { en: enUS, fr };
 
@@ -26,21 +26,22 @@ export function mapResponseToQuickStatProps(
   return {
     stats: [
       {
-        label: i18n.t('appletOverview.statParticipants'),
-        icon: 'profile' as const,
-        value: (
-          <StyledFlexTopCenter component="span" sx={{ gap: 1.6 }}>
-            {(participantsCount ?? 0).toLocaleString(i18n.language)}
-
-            <IconButton onClick={commonProps.onPressAddParticipant}>
-              <Svg aria-label={i18n.t('addParticipant')} id="add" width={20} height={20} />
-            </IconButton>
-          </StyledFlexTopCenter>
+        children: (
+          <Button
+            onClick={commonProps.onPressAddParticipant}
+            sx={{ minWidth: 'unset', p: 1.4, placeSelf: 'center' }}
+            variant="tonal"
+          >
+            <Svg aria-label={i18n.t('addParticipant')} id="add" width={20} height={20} />
+          </Button>
         ),
+        label: i18n.t('appletOverview.statParticipants'),
+        tooltip: i18n.t('appletOverview.statParticipantsTooltip'),
+        value: (participantsCount ?? 0).toLocaleString(i18n.language),
       },
       {
         label: i18n.t('appletOverview.statSubmissions'),
-        icon: 'fileCheck' as const,
+        tooltip: i18n.t('appletOverview.statSubmissionsTooltip'),
         value: (submissionsCount ?? 0).toLocaleString(i18n.language),
       },
     ],

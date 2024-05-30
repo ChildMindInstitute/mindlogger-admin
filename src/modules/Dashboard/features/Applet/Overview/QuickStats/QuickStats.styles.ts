@@ -6,10 +6,10 @@ import { theme, variables } from 'shared/styles';
 export const StyledRoot = styled(Box)({
   borderRadius: variables.borderRadius.lg2,
   boxShadow: variables.boxShadow.soft2,
-  display: 'flex',
+  display: 'grid',
   gap: theme.spacing(6.4),
   margin: 0,
-  padding: theme.spacing(2, 2.4),
+  padding: theme.spacing(1.8, 3.2),
   position: 'relative',
 
   '& li:nth-of-type(n + 2):before': {
