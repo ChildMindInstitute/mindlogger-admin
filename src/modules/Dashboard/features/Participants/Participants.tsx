@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
 import {
@@ -56,6 +56,8 @@ import { DataExportPopup, EditRespondentPopup, RemoveRespondentPopup } from '../
 
 export const Participants = () => {
   const { appletId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const showAddParticipant = !!searchParams.get('showAddParticipant');
   const navigate = useNavigate();
   const { t } = useTranslation('app');
   const timeAgo = useTimeAgo();
@@ -68,6 +70,21 @@ export const Participants = () => {
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
   const { ownerId } = workspaces.useData() || {};
   const canViewParticipants = checkIfCanViewParticipants(roles);
+
+  const handleToggleAddParticipant = () => {
+    setSearchParams(
+      (params) => {
+        if (showAddParticipant) {
+          params.delete('showAddParticipant');
+
+          return params;
+        }
+
+        return { ...params, showAddParticipant: true };
+      },
+      { replace: true },
+    );
+  };
 
   const { execute: getWorkspaceRespondents } = useAsync(
     getWorkspaceRespondentsApi,
@@ -110,7 +127,6 @@ export const Participants = () => {
     return getWorkspaceRespondents(params);
   });
 
-  const [addParticipantPopupVisible, setAddParticipantPopupVisible] = useState(false);
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
   const [editRespondentPopupVisible, setEditRespondentPopupVisible] = useState(false);
@@ -218,7 +234,7 @@ export const Participants = () => {
   };
 
   const addParticipantOnClose = (shouldRefetch: boolean) => {
-    setAddParticipantPopupVisible(false);
+    handleToggleAddParticipant();
     setChosenAppletData(null);
     shouldRefetch && handleReload();
   };
@@ -433,7 +449,7 @@ export const Participants = () => {
           {canAddParticipant && (
             <AddParticipantButton
               variant="contained"
-              onClick={() => setAddParticipantPopupVisible(true)}
+              onClick={handleToggleAddParticipant}
               data-testid={`${dataTestid}-add`}
             >
               {t('addParticipant')}
@@ -450,10 +466,7 @@ export const Participants = () => {
             <EmptyDashboardTable searchValue={searchValue}>
               {t('noParticipantsForApplet')}
               {canAddParticipant && (
-                <AddParticipantButton
-                  onClick={() => setAddParticipantPopupVisible(true)}
-                  variant="contained"
-                >
+                <AddParticipantButton onClick={handleToggleAddParticipant} variant="contained">
                   {t('addParticipant')}
                 </AddParticipantButton>
               )}
@@ -464,9 +477,9 @@ export const Participants = () => {
         data-testid={`${dataTestid}-table`}
         {...tableProps}
       />
-      {appletId && addParticipantPopupVisible && (
+      {appletId && showAddParticipant && (
         <AddParticipantPopup
-          popupVisible={addParticipantPopupVisible}
+          popupVisible={showAddParticipant}
           appletId={appletId}
           onClose={addParticipantOnClose}
         />

@@ -1,5 +1,13 @@
 import { lazy } from 'react';
-import { Navigate, NavigateProps, Route, generatePath, useParams } from 'react-router-dom';
+import {
+  createSearchParams,
+  Navigate,
+  NavigateProps,
+  Route,
+  generatePath,
+  useParams,
+  URLSearchParamsInit,
+} from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { page } from 'resources';
@@ -24,11 +32,21 @@ const RespondentDataSummary = lazy(
   () => import('../features/RespondentData/RespondentDataSummary'),
 );
 
-const RedirectWithParams = ({ to, ...otherProps }: NavigateProps) => {
-  const params = useParams();
-  const redirectWithParams = generatePath(to as string, params);
+const RedirectWithParams = ({
+  to,
+  searchParams = {},
+  ...otherProps
+}: NavigateProps & { searchParams?: URLSearchParamsInit }) => {
+  const existingParams = useParams();
+  const redirectWithParams = generatePath(to as string, { ...existingParams });
+  const parsedSearchParams = createSearchParams(searchParams).toString();
 
-  return <Navigate to={redirectWithParams} {...otherProps} />;
+  return (
+    <Navigate
+      to={`${redirectWithParams}${parsedSearchParams ? `?${parsedSearchParams}` : ''}`}
+      {...otherProps}
+    />
+  );
 };
 
 export const dashboardRoutes = (featureFlags: FeatureFlags) => (
@@ -59,14 +77,32 @@ export const dashboardRoutes = (featureFlags: FeatureFlags) => (
       }
     >
       {appletRoutes.map(({ path, Component }) => {
-        if (featureFlags?.enableMultiInformant && path === page.appletRespondents) {
-          return (
-            <Route
-              key={path}
-              path={path}
-              element={<RedirectWithParams to={page.appletParticipants} replace />}
-            />
-          );
+        if (featureFlags?.enableMultiInformant) {
+          if (path === page.appletRespondents) {
+            return (
+              <Route
+                key={path}
+                path={path}
+                element={<RedirectWithParams to={page.appletParticipants} replace />}
+              />
+            );
+          }
+
+          if (path === page.appletAddUser) {
+            return (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <RedirectWithParams
+                    to={page.appletParticipants}
+                    replace
+                    searchParams={{ showAddParticipant: 'true' }}
+                  />
+                }
+              />
+            );
+          }
         }
 
         return (
