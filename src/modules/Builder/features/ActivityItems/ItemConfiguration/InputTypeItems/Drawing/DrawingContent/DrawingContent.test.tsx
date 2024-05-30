@@ -69,8 +69,13 @@ describe('DrawingContent', () => {
       );
       expect(divideFlag).toBeInTheDocument();
       expect(divideFlag).toHaveTextContent(
-        'Divide the screen equally between the Drawing Example and the Drawing area',
+        'Evenly Distribute the Drawing Example and Drawing Canvas Area',
       );
+      expect(
+        screen.getByText(
+          'The Drawing Example image and square Drawing Canvas will each take up approximately half of the display. In situations where the original Drawing Example image fits completely inside the space allotted, the image will retain its original dimensions.',
+        ),
+      ).toBeInTheDocument();
     }
   });
 });

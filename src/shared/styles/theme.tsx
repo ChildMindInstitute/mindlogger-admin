@@ -71,6 +71,12 @@ export const theme = createTheme({
           backgroundColor: variables.palette.outline,
           borderRadius: variables.borderRadius.xxxl,
         },
+        '.md-editor-dropdown': {
+          zIndex: theme.zIndex.modal - 1,
+        },
+        '.md-editor-dropdown-hidden': {
+          zIndex: -(theme.zIndex.modal - 1),
+        },
       }),
     },
     MuiDialog: {

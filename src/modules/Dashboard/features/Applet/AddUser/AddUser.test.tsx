@@ -11,7 +11,7 @@ import { AddUser } from './AddUser';
 
 const route = `/dashboard/${mockedAppletId}/add-user`;
 const routePath = page.appletAddUser;
-const preloadedState = {
+const getPreloadedState = (roles: Roles[]) => ({
   workspaces: {
     workspaces: initialStateData,
     currentWorkspace: {
@@ -21,12 +21,12 @@ const preloadedState = {
     roles: {
       ...initialStateData,
       data: {
-        [mockedAppletId]: [Roles.Manager],
+        [mockedAppletId]: roles,
       },
     },
     workspacesRoles: initialStateData,
   },
-};
+});
 const mockedInvitations = [
   {
     meta: {
@@ -62,7 +62,7 @@ describe('AddUser component tests', () => {
     });
 
     renderWithProviders(<AddUser />, {
-      preloadedState,
+      preloadedState: getPreloadedState([Roles.Manager]),
       route,
       routePath,
     });
@@ -86,5 +86,17 @@ describe('AddUser component tests', () => {
       expect(screen.getByTestId('dashboard-add-users-table')).toBeInTheDocument();
       expect(screen.getByText(invitation.firstName)).toBeInTheDocument();
     });
+  });
+
+  test('AddUser for Reviewer role (no permissions)', async () => {
+    renderWithProviders(<AddUser />, {
+      preloadedState: getPreloadedState([Roles.Reviewer]),
+      route,
+      routePath,
+    });
+
+    expect(
+      screen.getByText('You do not have permission to view this content.'),
+    ).toBeInTheDocument();
   });
 });

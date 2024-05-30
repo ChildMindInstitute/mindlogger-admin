@@ -4,11 +4,12 @@ import { useWatch } from 'react-hook-form';
 
 import { Uploader } from 'shared/components';
 import { MAX_FILE_SIZE_25MB } from 'shared/consts';
-import { StyledBodyMedium, theme } from 'shared/styles';
+import { StyledBodyLarge, StyledTitleBoldSmall, theme } from 'shared/styles';
 import { byteFormatter } from 'shared/utils';
 import { Uploads } from 'modules/Builder/components';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { CheckboxController } from 'shared/components/FormComponents/CheckboxController/CheckboxController';
+import { variables } from 'shared/styles/variables/index';
 
 import { DrawingContentProps } from './DrawingContent.types';
 
@@ -16,7 +17,7 @@ import { DrawingContentProps } from './DrawingContent.types';
 Disable feature until final solution in comments of M2-6037.
 Replace the local constant with LaunchDarkly feature flag if it will be confirmed as a feature
 */
-export const makeDrawingSpaceAdjustableFeatureFlag = false;
+export const makeDrawingSpaceAdjustableFeatureFlag = true;
 
 export const DrawingContent = ({ name }: DrawingContentProps) => {
   const { t } = useTranslation('app');
@@ -77,15 +78,24 @@ export const DrawingContent = ({ name }: DrawingContentProps) => {
         }}
       />
       {makeDrawingSpaceAdjustableFeatureFlag && (
-        <CheckboxController
-          name={divideSpaceFlagName}
-          control={control}
-          label={<StyledBodyMedium>{t('drawingDivideFlagDescription')}</StyledBodyMedium>}
-          sxLabelProps={{
-            mt: theme.spacing(3),
-          }}
-          data-testid={`${dataTestid}-divide-content-flag`}
-        />
+        <>
+          <CheckboxController
+            name={divideSpaceFlagName}
+            control={control}
+            label={<StyledTitleBoldSmall>{t('drawingDivideFlagDescription')}</StyledTitleBoldSmall>}
+            sxLabelProps={{
+              m: theme.spacing(3, 0, 1),
+              flexDirection: 'row-reverse',
+              marginLeft: 0,
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+            data-testid={`${dataTestid}-divide-content-flag`}
+          />
+          <StyledBodyLarge color={variables.palette.on_surface}>
+            {t('drawingDivideFlagText')}
+          </StyledBodyLarge>
+        </>
       )}
     </Box>
   );
