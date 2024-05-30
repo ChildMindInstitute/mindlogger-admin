@@ -23,12 +23,14 @@ export const ActionsMenu = <T = unknown,>({
     setAnchorEl(null);
   };
   const openMenu = Boolean(anchorEl);
-  const hasMenuItems = useMemo(() => {
-    // Hides the ActionMenu if all the actions include .isDisplayed === false
-    const displayedMenuItems = menuItems.filter((item) => 'isDisplayed' in item).length;
-    if (displayedMenuItems) {
-      return menuItems.filter((item) => item.isDisplayed === true).length > 0;
-    }
+const hasMenuItems = useMemo(() => {
+  // Check if there are any items with the 'isDisplayed' property
+  const hasDisplayedProperty = menuItems.some((item) => 'isDisplayed' in item);
+
+  // If there are items with 'isDisplayed' property, check if any of them are displayed
+  if (hasDisplayedProperty) {
+    return menuItems.some((item) => item.isDisplayed);
+  }```
 
     // And keeps compatibility with items that don't have this property
     return true;
