@@ -266,14 +266,7 @@ export type AnswerDate = {
   endDatetime?: string;
 };
 
-export type ReviewActivity = Omit<DatavizEntity, 'hasAnswer' | 'isPerformanceTask'> & {
-  answerDates: AnswerDate[];
-};
-
-export type ReviewFlow = {
-  id: string;
-  name: string;
-  lastAnswerDate: string | null;
+export type ReviewEntity = Omit<DatavizEntity, 'hasAnswer' | 'isPerformanceTask'> & {
   answerDates: AnswerDate[];
 };
 
@@ -366,7 +359,7 @@ export type NoteId = { noteId: string };
 
 export type Note = { note: string };
 
-export type GetAnswersNotesParams = {
+export type GetNotesParams = {
   params: {
     search?: string;
     page?: number;
@@ -531,4 +524,16 @@ export type EncryptedFlowAnswers = {
   flow: FlowHistory;
   submission: FlowSubmission;
   summary: AnswerSummary;
+};
+
+type FullName = {
+  firstName: string;
+  lastName: string;
+};
+
+export type FeedbackNote = {
+  id: string;
+  user: FullName;
+  note: string;
+  createdAt: string;
 };

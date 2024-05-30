@@ -2,12 +2,7 @@ import { useRef, useState } from 'react';
 import { format } from 'date-fns';
 
 import { useAsync } from 'shared/hooks/useAsync';
-import {
-  getReviewActivitiesApi,
-  getReviewFlowsApi,
-  ReviewActivity,
-  ReviewFlow,
-} from 'modules/Dashboard/api';
+import { getReviewActivitiesApi, getReviewFlowsApi, ReviewEntity } from 'modules/Dashboard/api';
 import { DateFormats } from 'shared/consts';
 import { getActivityWithLatestAnswer } from 'modules/Dashboard/features/RespondentData/RespondentData.utils';
 
@@ -23,10 +18,10 @@ export const useReviewActivitiesAndFlows = ({
   respondentId,
 }: ReviewActivitiesAndFlowsProps) => {
   const prevSelectedDateRef = useRef<null | string>(null);
-  const [activities, setActivities] = useState<ReviewActivity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<ReviewActivity | null>(null);
-  const [flows, setFlows] = useState<ReviewFlow[]>([]);
-  const [selectedFlow, setSelectedFlow] = useState<ReviewFlow | null>(null);
+  const [activities, setActivities] = useState<ReviewEntity[]>([]);
+  const [selectedActivity, setSelectedActivity] = useState<ReviewEntity | null>(null);
+  const [flows, setFlows] = useState<ReviewEntity[]>([]);
+  const [selectedFlow, setSelectedFlow] = useState<ReviewEntity | null>(null);
 
   const { execute: getReviewActivities, isLoading: getActivitiesLoading } = useAsync(
     getReviewActivitiesApi,
