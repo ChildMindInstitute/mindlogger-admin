@@ -186,7 +186,7 @@ describe('RespondentDataHeader component tests', () => {
       ${false}         | ${Roles.Coordinator} | ${'editing for Coordinator'}
       ${false}         | ${Roles.Editor}      | ${'editing for Editor'}
       ${false}         | ${Roles.Respondent}  | ${'editing for Respondent'}
-      ${true}          | ${Roles.Reviewer}    | ${'editing for Reviewer'}
+      ${false}         | ${Roles.Reviewer}    | ${'editing for Reviewer'}
     `('$description', async ({ canPerformAction, role }) => {
       renderWithProviders(
         <RespondentDataHeader

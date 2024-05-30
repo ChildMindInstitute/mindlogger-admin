@@ -144,7 +144,7 @@ describe('getActivityActions', () => {
     expectMenuItemIsDisplayed(menuItems, 'editActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'exportData', true);
     expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
-    expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
+    expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
   test('Correct menu items are displayed when user is a respondent', () => {
