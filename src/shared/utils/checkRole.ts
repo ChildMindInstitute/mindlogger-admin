@@ -17,9 +17,6 @@ export const checkIfCanAccessData = (roles?: Roles[]) =>
 export const checkIfCanManageParticipants = (roles?: Roles[]) =>
   Boolean(checkIfFullAccess(roles) || roles?.includes(Roles.Coordinator));
 
-export const checkIfCanTakeNow = (roles?: Roles[]) =>
-  Boolean(checkIfFullAccess(roles) || roles?.includes(Roles.Reviewer));
-
 export const checkIfCanViewParticipants = (roles?: Roles[]) =>
   Boolean(
     checkIfFullAccess(roles) ||

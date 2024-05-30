@@ -11,7 +11,7 @@ import {
   checkIfCanAccessData,
   checkIfCanEdit,
   checkIfCanManageParticipants,
-  checkIfCanTakeNow,
+  checkIfFullAccess,
 } from 'shared/utils';
 import { RespondentDetails } from 'modules/Dashboard/types';
 
@@ -39,7 +39,7 @@ export function useFlowGridMenu({
 
   const canEdit = checkIfCanEdit(roles);
   const canDoTakeNow =
-    checkIfCanTakeNow(roles) && featureFlags.enableMultiInformantTakeNow && hasParticipants;
+    checkIfFullAccess(roles) && featureFlags.enableMultiInformantTakeNow && hasParticipants;
   const canAccessData = checkIfCanAccessData(roles);
   const canAssign = checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
   const showDivider = (canEdit || canAccessData) && (canAssign || canDoTakeNow);

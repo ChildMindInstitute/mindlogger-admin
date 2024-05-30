@@ -4,7 +4,6 @@ import {
   checkIfCanAccessData,
   checkIfCanEdit,
   checkIfCanManageParticipants,
-  checkIfCanTakeNow,
   isManagerOrOwner,
   isManagerOrOwnerOrEditor,
 } from './checkRole';
@@ -86,21 +85,5 @@ describe('checkIfCanManageParticipants', () => {
     ${undefined}           | ${false} | ${'should be false for undefined'}
   `('$description', ({ roles, expected }) => {
     expect(checkIfCanManageParticipants(roles)).toBe(expected);
-  });
-});
-
-describe('checkIfCanTakeNow', () => {
-  test.each`
-    roles                  | expected | description
-    ${[Roles.Manager]}     | ${true}  | ${'should be true for manager'}
-    ${[Roles.Editor]}      | ${false} | ${'should be false for editor'}
-    ${[Roles.Coordinator]} | ${false} | ${'should be false for coordinator'}
-    ${[Roles.Owner]}       | ${true}  | ${'should be true for owner'}
-    ${[Roles.Respondent]}  | ${false} | ${'should be false for respondent'}
-    ${[Roles.Reviewer]}    | ${true}  | ${'should be true for reviewer'}
-    ${[Roles.SuperAdmin]}  | ${true}  | ${'should be true for superadmin'}
-    ${undefined}           | ${false} | ${'should be false for undefined'}
-  `('$description', ({ roles, expected }) => {
-    expect(checkIfCanTakeNow(roles)).toBe(expected);
   });
 });

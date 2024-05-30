@@ -14,7 +14,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Mixpanel, checkIfCanTakeNow } from 'shared/utils';
+import { Mixpanel, checkIfFullAccess } from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { workspaces } from 'redux/modules';
@@ -79,7 +79,7 @@ export const RespondentDataHeader = ({
   };
 
   const canDoTakeNow =
-    activity && featureFlags.enableMultiInformantTakeNow && checkIfCanTakeNow(roles);
+    activity && featureFlags.enableMultiInformantTakeNow && checkIfFullAccess(roles);
 
   const canViewData = hasPermissionToViewData(roles);
 

@@ -6,7 +6,7 @@ import {
   checkIfCanAccessData,
   checkIfCanEdit,
   checkIfCanManageParticipants,
-  checkIfCanTakeNow,
+  checkIfFullAccess,
 } from 'shared/utils';
 
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
@@ -23,7 +23,7 @@ export const getActivityActions = ({
   const canEdit = checkIfCanEdit(roles);
   const canAccessData = checkIfCanAccessData(roles);
   const canDoTakeNow =
-    featureFlags.enableMultiInformantTakeNow && hasParticipants && checkIfCanTakeNow(roles);
+    featureFlags.enableMultiInformantTakeNow && hasParticipants && checkIfFullAccess(roles);
   const canAssignActivity =
     checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
   const showDivider = (canEdit || canAccessData) && (canDoTakeNow || canAssignActivity);
