@@ -8,7 +8,7 @@ import { auth, workspaces } from 'redux/modules';
 import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
-import { checkIfFullAccess, checkIfCanViewParticipants, joinWihComma } from 'shared/utils';
+import { checkIfFullAccess, joinWihComma } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync } from 'shared/hooks';
 
@@ -46,7 +46,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     useState<ParticipantDropdownOption | null>(null);
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
-  const canViewParticipants = checkIfCanViewParticipants(roles);
   const canTakeNow = checkIfFullAccess(roles);
 
   const participantToOption = useCallback((participant: Respondent): ParticipantDropdownOption => {
@@ -172,7 +171,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     fetchParticipants,
     fetchManagers,
     fetchLoggedInTeamMember,
-    canViewParticipants,
     canTakeNow,
   ]);
 
