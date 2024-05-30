@@ -34,14 +34,13 @@ export function useFlowGridMenu({
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
 
   const canEdit = checkIfCanEdit(roles);
-
   const canDoTakeNow =
     featureFlags.enableMultiInformantTakeNow &&
     hasParticipants &&
     (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
-
   const canAccessData = checkIfCanAccessData(roles);
-  const showDivider = (canEdit || canAccessData) && (featureFlags.enableActivityAssign || canDoTakeNow);
+  const showDivider =
+    (canEdit || canAccessData) && (featureFlags.enableActivityAssign || canDoTakeNow);
 
   const getActionsMenu = useCallback(
     ({ flow }: { flow?: ActivityFlow }) => [

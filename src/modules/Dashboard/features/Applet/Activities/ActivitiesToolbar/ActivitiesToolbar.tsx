@@ -23,7 +23,6 @@ export const ActivitiesToolbar = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
-
   const canEditApplet = checkIfCanEdit(roles);
 
   return (
