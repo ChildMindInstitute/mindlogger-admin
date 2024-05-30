@@ -1,6 +1,6 @@
 import { Control } from 'react-hook-form';
 
-import { ReviewActivity, ReviewFlow, AnswerDate } from 'modules/Dashboard/api';
+import { AnswerDate, ReviewEntity } from 'modules/Dashboard/api';
 import { RespondentDetails } from 'modules/Dashboard/types/Dashboard.types';
 
 import { RespondentsDataFormValues } from '../../RespondentData.types';
@@ -10,8 +10,8 @@ export type ReviewMenuProps = {
   control: Control<RespondentsDataFormValues>;
   responseDates?: Date[];
   onMonthChange: (date: Date) => void;
-  activities: ReviewActivity[];
-  flows: ReviewFlow[] | null;
+  activities: ReviewEntity[];
+  flows: ReviewEntity[] | null;
   selectedAnswer: AnswerDate | null;
   selectedActivityId?: string;
   selectedFlowId?: string;

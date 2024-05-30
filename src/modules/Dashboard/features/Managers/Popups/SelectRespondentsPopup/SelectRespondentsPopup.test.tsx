@@ -9,7 +9,7 @@ import {
   mockedManager,
   mockedRespondent,
   mockedRespondent2,
-  mockedRespondentId,
+  mockedSubjectId1,
 } from 'shared/mock';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
@@ -45,6 +45,9 @@ const preloadedState = {
     respondentDetails: {
       ...initialStateData,
     },
+    subjectDetails: {
+      ...initialStateData,
+    },
   },
 };
 
@@ -54,7 +57,7 @@ const getPopup = (withSelectedRespondents = true) => (
     appletName="testName"
     appletId={mockedAppletId}
     user={mockedManager}
-    selectedRespondents={withSelectedRespondents ? [mockedRespondentId] : []}
+    selectedRespondents={withSelectedRespondents ? [mockedSubjectId1] : []}
     selectRespondentsPopupVisible={true}
     onClose={mockedCloseFn}
   />
@@ -104,7 +107,7 @@ describe('SelectRespondentsPopup component tests', () => {
     fireEvent.click(screen.getByText('Confirm'));
 
     await waitFor(() => {
-      expect(mockedCloseFn).toBeCalledWith([mockedRespondentId]);
+      expect(mockedCloseFn).toBeCalledWith([mockedSubjectId1]);
     });
   });
 

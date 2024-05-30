@@ -1,5 +1,5 @@
 import { AutocompleteOption } from 'shared/components/FormComponents';
-import { Version } from 'modules/Dashboard/api';
+import { Version, ReviewCount } from 'modules/Dashboard/api';
 
 import {
   ActivityCompletion,
@@ -8,7 +8,6 @@ import {
   FlowSubmission,
   FormattedResponses,
   Identifier,
-  ReviewCount,
 } from '../../RespondentData.types';
 
 export type CurrentActivityCompletionData = { answerId: string; date?: number } | null;
@@ -22,8 +21,8 @@ export type Completion = {
   id: string;
   endDatetime: string;
   areSubscalesVisible: boolean;
-  reviewCount?: ReviewCount;
   isFlow: boolean;
+  reviewCount?: ReviewCount;
 };
 
 export type GetCompletions = {

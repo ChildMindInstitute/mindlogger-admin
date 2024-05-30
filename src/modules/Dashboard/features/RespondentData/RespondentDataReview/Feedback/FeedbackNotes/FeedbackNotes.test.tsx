@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { waitFor, screen, fireEvent } from '@testing-library/react';
+import { waitFor, screen } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import userEvent from '@testing-library/user-event';
 
@@ -151,27 +151,26 @@ const testNoteCreation = async (apiCallRoute: string) => {
 };
 
 const testNoteEditing = async (apiCallRoute: string) => {
-  await waitFor(() => {
+  await waitFor(async () => {
     const hiddenEditAction = screen.queryByTestId(`${noteTestId}-0-edit`);
 
     expect(hiddenEditAction).toBeNull();
 
     const noteHeader = screen.queryByTestId(`${noteTestId}-0-header`) as HTMLElement;
-    fireEvent.mouseEnter(noteHeader);
+    await userEvent.hover(noteHeader);
     const visibleEditAction = screen.queryByTestId(`${noteTestId}-0-edit`) as HTMLElement;
 
     expect(visibleEditAction).toBeInTheDocument();
 
-    fireEvent.click(visibleEditAction);
+    await userEvent.click(visibleEditAction);
   });
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const noteContainer = screen.queryByTestId(`${noteTestId}-0-text`) as HTMLElement;
     const textarea = noteContainer.querySelector('textarea') as HTMLElement;
-    fireEvent.change(textarea, {
-      target: { value: newNoteValue },
-    });
-    fireEvent.click(screen.getByTestId(`${noteTestId}-0-save`));
+    await userEvent.clear(textarea);
+    await userEvent.type(textarea, newNoteValue);
+    await userEvent.click(screen.getByTestId(`${noteTestId}-0-save`));
     mockAxios.post.mockResolvedValueOnce(null);
   });
 
@@ -188,11 +187,17 @@ const testNoteEditing = async (apiCallRoute: string) => {
 };
 
 const testNoteRemoving = async (apiCallRoute: string) => {
-  await waitFor(() => {
+  await waitFor(async () => {
     const noteHeader = screen.queryByTestId(`${noteTestId}-0-header`) as HTMLElement;
-    fireEvent.mouseEnter(noteHeader);
+
+    expect(noteHeader).toBeInTheDocument();
+
+    await userEvent.hover(noteHeader);
     const visibleRemoveAction = screen.queryByTestId(`${noteTestId}-0-remove`) as HTMLElement;
-    fireEvent.click(visibleRemoveAction);
+
+    expect(visibleRemoveAction).toBeInTheDocument();
+
+    await userEvent.click(visibleRemoveAction);
   });
 
   mockAxios.post.mockResolvedValueOnce(null);

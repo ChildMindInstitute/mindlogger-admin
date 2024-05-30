@@ -1,5 +1,6 @@
 export type Invitation = {
-  secretUserId?: string;
+  secretUserId: string | null;
+  nickname: string | null;
   firstName: string;
   lastName: string;
   role: string;
@@ -7,8 +8,7 @@ export type Invitation = {
   createdAt: string;
   key: string;
   meta: {
-    secret_user_id?: string;
-    nickname?: string;
+    subject_id?: string;
   };
 };
 
