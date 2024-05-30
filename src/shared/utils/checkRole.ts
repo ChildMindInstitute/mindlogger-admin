@@ -18,3 +18,17 @@ export const checkIfCanAccessData = (roles?: Roles[]) =>
       roles?.includes(Roles.SuperAdmin) ||
       roles?.includes(Roles.Reviewer),
   );
+
+export const checkIfCanManageParticipants = (roles?: Roles[]) =>
+  Boolean(
+    isManagerOrOwner(roles?.[0]) ||
+      roles?.includes(Roles.SuperAdmin) ||
+      roles?.includes(Roles.Coordinator),
+  );
+
+export const checkIfCanTakeNow = (roles?: Roles[]) =>
+  Boolean(
+    isManagerOrOwner(roles?.[0]) ||
+      roles?.includes(Roles.SuperAdmin) ||
+      roles?.includes(Roles.Reviewer),
+  );

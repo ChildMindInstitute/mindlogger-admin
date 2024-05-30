@@ -6,9 +6,13 @@ import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeN
 import { Activity, ActivityFlow, workspaces } from 'redux/modules';
 import { page } from 'resources';
 import { MenuActionProps, MenuItemType, Svg } from 'shared/components';
-import { Roles } from 'shared/consts';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { checkIfCanAccessData, checkIfCanEdit, isManagerOrOwner } from 'shared/utils';
+import {
+  checkIfCanAccessData,
+  checkIfCanEdit,
+  checkIfCanManageParticipants,
+  checkIfCanTakeNow,
+} from 'shared/utils';
 import { RespondentDetails } from 'modules/Dashboard/types';
 
 import { OpenTakeNowModalOptions } from '../TakeNowModal/TakeNowModal.types';
@@ -35,12 +39,10 @@ export function useFlowGridMenu({
 
   const canEdit = checkIfCanEdit(roles);
   const canDoTakeNow =
-    featureFlags.enableMultiInformantTakeNow &&
-    hasParticipants &&
-    (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
+    checkIfCanTakeNow(roles) && featureFlags.enableMultiInformantTakeNow && hasParticipants;
   const canAccessData = checkIfCanAccessData(roles);
-  const showDivider =
-    (canEdit || canAccessData) && (featureFlags.enableActivityAssign || canDoTakeNow);
+  const canAssign = checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
+  const showDivider = (canEdit || canAccessData) && (canAssign || canDoTakeNow);
 
   const getActionsMenu = useCallback(
     ({ flow }: { flow?: ActivityFlow }) => [
@@ -73,7 +75,7 @@ export function useFlowGridMenu({
         'data-testid': `${testId}-flow-assign`,
         icon: <Svg id="add" />,
         title: t('assignActivity'),
-        isDisplayed: featureFlags.enableActivityAssign,
+        isDisplayed: canAssign,
       },
       {
         'data-testid': `${testId}-flow-take-now`,
