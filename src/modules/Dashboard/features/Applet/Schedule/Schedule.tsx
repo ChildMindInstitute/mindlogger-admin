@@ -26,13 +26,15 @@ export const Schedule = () => {
   const preparedEvents = usePreparedEvents(appletData);
   const hasAccess = appletId ? checkIfHasAccessToSchedule(workspaceRoles?.[appletId]) : false;
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() =>
-    dispatch(
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!appletId || !hasAccess) return;
+
+    return dispatch(
       getAllWorkspaceRespondents({
         params: { ownerId, appletId, shell: false },
       }),
-    ),
-  );
+    );
+  });
 
   useEffect(() => {
     if (!appletId || !hasAccess) return;

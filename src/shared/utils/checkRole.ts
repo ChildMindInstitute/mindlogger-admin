@@ -2,33 +2,27 @@ import { Roles } from 'shared/consts';
 
 export const isManagerOrOwner = (role?: Roles) => role === Roles.Manager || role === Roles.Owner;
 
+export const checkIfFullAccess = (roles?: Roles[]) =>
+  Boolean(isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
+
 export const isManagerOrOwnerOrEditor = (role?: Roles) =>
   isManagerOrOwner(role) || role === Roles.Editor;
 
 export const checkIfCanEdit = (roles?: Roles[]) =>
-  Boolean(
-    isManagerOrOwner(roles?.[0]) ||
-      roles?.includes(Roles.Editor) ||
-      roles?.includes(Roles.SuperAdmin),
-  );
+  Boolean(checkIfFullAccess(roles) || roles?.includes(Roles.Editor));
 
 export const checkIfCanAccessData = (roles?: Roles[]) =>
-  Boolean(
-    isManagerOrOwner(roles?.[0]) ||
-      roles?.includes(Roles.SuperAdmin) ||
-      roles?.includes(Roles.Reviewer),
-  );
+  Boolean(checkIfFullAccess(roles) || roles?.includes(Roles.Reviewer));
 
 export const checkIfCanManageParticipants = (roles?: Roles[]) =>
-  Boolean(
-    isManagerOrOwner(roles?.[0]) ||
-      roles?.includes(Roles.SuperAdmin) ||
-      roles?.includes(Roles.Coordinator),
-  );
+  Boolean(checkIfFullAccess(roles) || roles?.includes(Roles.Coordinator));
 
 export const checkIfCanTakeNow = (roles?: Roles[]) =>
+  Boolean(checkIfFullAccess(roles) || roles?.includes(Roles.Reviewer));
+
+export const checkIfCanViewParticipants = (roles?: Roles[]) =>
   Boolean(
-    isManagerOrOwner(roles?.[0]) ||
-      roles?.includes(Roles.SuperAdmin) ||
-      roles?.includes(Roles.Reviewer),
+    checkIfFullAccess(roles) ||
+      roles?.includes(Roles.Reviewer) ||
+      roles?.includes(Roles.Coordinator),
   );

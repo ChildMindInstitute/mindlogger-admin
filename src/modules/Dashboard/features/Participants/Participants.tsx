@@ -19,6 +19,7 @@ import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinA
 import { page } from 'resources';
 import {
   checkIfCanManageParticipants,
+  checkIfCanViewParticipants,
   getDateInUserTimezone,
   isManagerOrOwner,
   joinWihComma,
@@ -66,6 +67,7 @@ export const Participants = () => {
   const rolesData = workspaces.useRolesData();
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
   const { ownerId } = workspaces.useData() || {};
+  const canViewParticipants = checkIfCanViewParticipants(roles);
 
   const { execute: getWorkspaceRespondents } = useAsync(
     getWorkspaceRespondentsApi,
@@ -77,6 +79,7 @@ export const Participants = () => {
   );
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!canViewParticipants) return;
     setIsLoading(true);
 
     return getWorkspaceRespondents({
@@ -412,7 +415,7 @@ export const Participants = () => {
   const dataTestid = 'dashboard-participants';
   const canAddParticipant = appletId && checkIfCanManageParticipants(roles);
 
-  if (isForbidden) return noPermissionsComponent;
+  if (isForbidden || !canViewParticipants) return noPermissionsComponent;
 
   return (
     <StyledBody sx={{ p: 3.2 }}>
