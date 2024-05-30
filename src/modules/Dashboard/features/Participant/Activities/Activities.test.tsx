@@ -176,7 +176,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
       if (actionDots && canEdit) {
-        userEvent.click(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]);
+        userEvent.click(actionDots);
         await waitFor(() => expect(screen.getByTestId(`${testId}-activity-edit`)).toBeVisible());
 
         fireEvent.click(screen.getByTestId(`${testId}-activity-edit`));
@@ -218,7 +218,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
         const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
         if (actionDots && canDoTakeNow) {
-          userEvent.click(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]);
+          userEvent.click(actionDots);
           await waitFor(() =>
             expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible(),
           );
@@ -263,7 +263,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
         const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
         if (actionDots) {
-          await userEvent.click(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]);
+          await userEvent.click(actionDots);
           await waitFor(() =>
             expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBe(null),
           );
