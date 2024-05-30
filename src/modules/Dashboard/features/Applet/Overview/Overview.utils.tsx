@@ -4,7 +4,7 @@ import { formatDistanceStrict } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
 
 import i18n from 'i18n';
-import { GetAppletSubmissionsResponse } from 'api';
+import { GetAppletSubmissionsResponse, Languages } from 'api';
 import { ParticipantSnippet } from 'modules/Dashboard/components';
 import { QuickStats } from 'modules/Dashboard/features/Applet/Overview/QuickStats';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
@@ -123,7 +123,7 @@ export function mapResponseToSubmissionsTableProps({
                         new Date(),
                         {
                           addSuffix: true,
-                          locale: locales[i18n.language as keyof typeof locales],
+                          locale: locales[i18n.language as Languages],
                         },
                       )}
                     </StyledMaybeEmpty>

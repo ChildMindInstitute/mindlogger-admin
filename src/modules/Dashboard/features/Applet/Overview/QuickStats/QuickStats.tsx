@@ -15,7 +15,7 @@ export const QuickStats = ({ stats = [], ...otherProps }: QuickStatsProps) => (
         sx={{ gap: 1.2, flexGrow: 1, position: 'relative', ...sx }}
         {...otherStatProps}
       >
-        <Svg height="24" fill={variables.palette.outline_variant} id={icon} width="24" />
+        <Svg height="24" fill={variables.palette.on_surface_variant} id={icon} width="24" />
 
         <Box component="p" sx={{ color: variables.palette.on_surface_variant, m: 0 }}>
           {label}

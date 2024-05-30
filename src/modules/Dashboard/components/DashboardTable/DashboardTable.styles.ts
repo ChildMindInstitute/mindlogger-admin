@@ -9,6 +9,7 @@ export const StyledTableCell = styled(TableCell, shouldForwardProp)`
   font-size: ${variables.font.size.lg};
   letter-spacing: ${variables.font.letterSpacing.sm};
   line-height: ${variables.font.lineHeight.lg};
+  height: ${theme.spacing(6.4)};
 
   &&:first-of-type {
     padding-left: 2rem;

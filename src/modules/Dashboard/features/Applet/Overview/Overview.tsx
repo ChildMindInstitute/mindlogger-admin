@@ -72,7 +72,7 @@ export const Overview = () => {
             />
           </StyledFlexColumn>
 
-          {appletId && (
+          {appletId && addPopupOpen && (
             <AddParticipantPopup
               appletId={appletId}
               popupVisible={addPopupOpen}

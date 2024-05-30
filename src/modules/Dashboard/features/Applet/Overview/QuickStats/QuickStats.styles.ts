@@ -5,7 +5,7 @@ import { theme, variables } from 'shared/styles';
 
 export const StyledRoot = styled(Box)({
   borderRadius: variables.borderRadius.lg2,
-  boxShadow: '0px 0px 16px 0px #00000014',
+  boxShadow: variables.boxShadow.soft2,
   display: 'flex',
   gap: theme.spacing(6.4),
   margin: 0,
