@@ -114,7 +114,6 @@ export const Activities = () => {
   const canAccessData = checkIfCanAccessData(roles);
 
   const onClickItemHandler = (activityId: string) => {
-    if (!subjectId || !appletId) return;
     setSelectedActivityId(activityId);
 
     if (!hasEncryptionCheck) {
