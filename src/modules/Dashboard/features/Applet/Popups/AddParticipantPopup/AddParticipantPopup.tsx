@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Modal, Spinner, ToggleButtonGroup, ToggleButtonVariants } from 'shared/components';
-import { StyledErrorText, StyledModalWrapper } from 'shared/styles';
+import { StyledErrorText, StyledFlexEnd, StyledModalWrapper } from 'shared/styles';
 import { useFormError } from 'modules/Dashboard/hooks';
 import { NON_UNIQUE_VALUE_MESSAGE, Roles } from 'shared/consts';
 import { Mixpanel, getErrorMessage } from 'shared/utils';
@@ -173,13 +174,19 @@ export const AddParticipantPopup = ({
       return (
         <>
           <Modal
+            hasActions={false}
             open={popupVisible && !publicLinkDialogOpen}
             width="73.6"
             onClose={() => handleClose(refetchOnClose)}
             onBackdropClick={null}
-            onSubmit={handleNext}
+            footer={
+              <StyledFlexEnd sx={{ width: '100%' }}>
+                <Button onClick={handleNext} variant="contained">
+                  {t('next')}
+                </Button>
+              </StyledFlexEnd>
+            }
             title={t('addParticipant')}
-            buttonText={t('next')}
             data-testid={dataTestid}
           >
             <StyledModalWrapper sx={{ display: 'flex', flexDirection: 'column', gap: 2.6 }}>
