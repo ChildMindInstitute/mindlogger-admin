@@ -108,12 +108,15 @@ export const Modal = ({
             </StyledCloseButton>
           )}
         </StyledDialogTitle>
+
         {children}
+
         {footer && (
-          <StyledFlexSpaceBetween sx={{ gap: 1.6, px: 3.2, pt: 3.6, pb: 2.4 }}>
+          <StyledFlexSpaceBetween sx={{ gap: 1.6, px: 3.2, py: 2.4, ...footerStyles }}>
             {footer}
           </StyledFlexSpaceBetween>
         )}
+
         {hasActions && (
           <StyledDialogActions actionsAlign={getActionsAlign()} sx={footerStyles}>
             {hasLeftBtn && (

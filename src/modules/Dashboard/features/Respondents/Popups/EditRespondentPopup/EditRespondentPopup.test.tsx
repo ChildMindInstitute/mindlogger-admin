@@ -76,10 +76,10 @@ describe('EditRespondentPopup component tests', () => {
       const selection = screen.queryByTestId('dashboard-respondents-edit-popup-tag');
       // Query for deeply nested child, as MUI Select is not a native HTML
       // <select>, and the testId is only applied to root element.
-      const toggleBttn = selection?.querySelector('[aria-haspopup="listbox"][role="button"]');
+      const toggleBtn = selection?.querySelector('[aria-haspopup="listbox"][role="button"]');
 
       expect(selection).toBeInTheDocument();
-      expect(toggleBttn).toHaveAttribute('aria-disabled');
+      expect(toggleBtn).toHaveAttribute('aria-disabled');
     });
   });
 
@@ -97,16 +97,16 @@ describe('EditRespondentPopup component tests', () => {
 
     test('It accepts changes to the subjectʼs tag value', async () => {
       const selection = screen.getByTestId('dashboard-respondents-edit-popup-tag');
-      const toggleBttn = selection.querySelector('[aria-haspopup="listbox"][role="button"]');
-      const submitBttn = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
+      const toggleBtn = selection.querySelector('[aria-haspopup="listbox"][role="button"]');
+      const submitBtn = screen.getByTestId('dashboard-respondents-edit-popup-submit-button');
 
-      await userEvent.click(toggleBttn as HTMLElement);
+      await userEvent.click(toggleBtn as HTMLElement);
 
       const dropdown = screen.queryByTestId('dashboard-respondents-edit-popup-tag-dropdown');
       const dropdownOption = dropdown?.querySelector(`[data-value='Parent']`);
 
       await userEvent.click(dropdownOption as HTMLElement);
-      await userEvent.click(submitBttn);
+      await userEvent.click(submitBtn);
 
       expect(successFakeRequest).toBeCalledWith(
         `/subjects/${chosenAppletData.subjectId}`,

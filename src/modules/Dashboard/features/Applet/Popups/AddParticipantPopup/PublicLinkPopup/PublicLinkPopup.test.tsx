@@ -31,15 +31,15 @@ describe('PublicLinkPopup', () => {
     });
 
     test('It renders in the correct state', async () => {
-      expect(screen.queryByTestId(`${testId}-delete-bttn`)).toBeInTheDocument();
-      expect(screen.queryByTestId(`${testId}-no-account-bttn`)).not.toBeInTheDocument();
-      expect(screen.queryByTestId(`${testId}-account-bttn`)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(`${testId}-delete-btn`)).toBeInTheDocument();
+      expect(screen.queryByTestId(`${testId}-no-account-btn`)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(`${testId}-account-btn`)).not.toBeInTheDocument();
     });
 
     test('Calls the deletePublicLink endpoint', async () => {
-      const deleteBttn = screen.getByTestId(`${testId}-delete-bttn`);
+      const deleteBtn = screen.getByTestId(`${testId}-delete-btn`);
 
-      await userEvent.click(deleteBttn);
+      await userEvent.click(deleteBtn);
 
       expect(fakeRequest).toBeCalledWith(`/applets/${commonProps.appletId}/access_link`, {
         signal: undefined,
@@ -56,16 +56,16 @@ describe('PublicLinkPopup', () => {
     });
 
     test('It renders in the correct state', async () => {
-      expect(screen.queryByTestId(`${testId}-delete-bttn`)).not.toBeInTheDocument();
-      expect(screen.queryByTestId(`${testId}-no-account-bttn`)).toBeInTheDocument();
-      expect(screen.queryByTestId(`${testId}-account-bttn`)).toBeInTheDocument();
+      expect(screen.queryByTestId(`${testId}-delete-btn`)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(`${testId}-no-account-btn`)).toBeInTheDocument();
+      expect(screen.queryByTestId(`${testId}-account-btn`)).toBeInTheDocument();
     });
 
     describe('When pressing the "account required" button', () => {
       test('Calls the deletePublicLink endpoint', async () => {
-        const createBttn = screen.getByTestId(`${testId}-account-bttn`);
+        const createBtn = screen.getByTestId(`${testId}-account-btn`);
 
-        await userEvent.click(createBttn);
+        await userEvent.click(createBtn);
 
         expect(fakeRequest).toBeCalledWith(
           `/applets/${commonProps.appletId}/access_link`,
@@ -77,9 +77,9 @@ describe('PublicLinkPopup', () => {
 
     describe('When pressing the "no account required" button', () => {
       test('Calls the deletePublicLink endpoint', async () => {
-        const createBttn = screen.getByTestId(`${testId}-no-account-bttn`);
+        const createBtn = screen.getByTestId(`${testId}-no-account-btn`);
 
-        await userEvent.click(createBttn);
+        await userEvent.click(createBtn);
 
         expect(fakeRequest).toBeCalledWith(
           `/applets/${commonProps.appletId}/access_link`,

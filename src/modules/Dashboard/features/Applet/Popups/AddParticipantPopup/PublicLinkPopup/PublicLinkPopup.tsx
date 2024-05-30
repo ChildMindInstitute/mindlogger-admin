@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { deleteAppletPublicLinkApi, postAppletPublicLinkApi } from 'api';
 import { Modal, Spinner } from 'shared/components';
 import { useAsync } from 'shared/hooks';
-import { StyledBodyLarge, StyledFlexAllCenter, StyledFlexColumn } from 'shared/styles';
+import { StyledBodyLarge, StyledFlexAllCenter, StyledModalWrapper } from 'shared/styles';
 
 import { PublicLinkPopupProps } from './PublicLinkPopup.types';
 
@@ -57,7 +57,7 @@ export const PublicLinkPopup = ({
           {hasPublicLink ? (
             <Button
               color="error"
-              data-testId={dataTestId && `${dataTestId}-delete-bttn`}
+              data-testId={dataTestId && `${dataTestId}-delete-btn`}
               onClick={handleDeletePublicLink}
               variant="contained"
             >
@@ -66,7 +66,7 @@ export const PublicLinkPopup = ({
           ) : (
             <>
               <Button
-                data-testId={dataTestId && `${dataTestId}-no-account-bttn`}
+                data-testId={dataTestId && `${dataTestId}-no-account-btn`}
                 disabled={isLoading}
                 onClick={() => {
                   handleCreatePublicLink(false);
@@ -77,7 +77,7 @@ export const PublicLinkPopup = ({
               </Button>
 
               <Button
-                data-testId={dataTestId && `${dataTestId}-account-bttn`}
+                data-testId={dataTestId && `${dataTestId}-account-btn`}
                 disabled={isLoading}
                 onClick={() => {
                   handleCreatePublicLink(true);
@@ -95,7 +95,7 @@ export const PublicLinkPopup = ({
       title={hasPublicLink ? t('deletePublicLink') : t('publicLinkCreate')}
       {...otherProps}
     >
-      <StyledFlexColumn sx={{ gap: 1.6, px: 3.2 }}>
+      <StyledModalWrapper sx={{ flexDirection: 'column', gap: 1.6 }}>
         <StyledBodyLarge>
           {hasPublicLink ? t('publicLinkDeleteDescription') : t('publicLinkCreateDescription')}
         </StyledBodyLarge>
@@ -107,7 +107,7 @@ export const PublicLinkPopup = ({
         )}
 
         {isLoading && <Spinner />}
-      </StyledFlexColumn>
+      </StyledModalWrapper>
     </Modal>
   );
 };
