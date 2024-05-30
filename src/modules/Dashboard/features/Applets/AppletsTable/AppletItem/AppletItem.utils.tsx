@@ -54,7 +54,7 @@ export const getAppletActions = ({
     {
       icon: <Svg id="widget" />,
       action: editAction,
-      title: t('editAnApplet'),
+      title: t('editApplet'),
       isDisplayed: canEdit,
       'data-testid': 'dashboard-applets-applet-edit',
     },

@@ -1,8 +1,11 @@
-import { screen } from '@testing-library/react';
+import { PreloadedState } from '@reduxjs/toolkit';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 
-import { mockedAppletId } from 'shared/mock';
+import { preloadedState } from 'modules/Dashboard/features/Applet/Schedule/CreateEventPopup/CreateEventPopup.test';
 import * as renderWithProvidersUtils from 'shared/utils/renderWithProviders';
+import { RootState } from 'redux/store';
 
 import { Legend } from './Legend';
 import { PreparedEvents } from '../Schedule.types';
@@ -97,6 +100,8 @@ jest.mock('shared/components', () => ({
 }));
 
 describe('Legend', () => {
+  const mockedAppletId = preloadedState.applet.applet.data.result.id;
+
   describe('Renders the appropriate controls', () => {
     beforeEach(() => {
       renderWithProvidersUtils.renderWithProviders(
@@ -120,24 +125,6 @@ describe('Legend', () => {
       await userEvent.click(closeImportPopupButton);
 
       expect(screen.queryByTestId(`${dataTestid}-import-schedule-popup`)).not.toBeInTheDocument();
-    });
-
-    test("Should show the 'Clear all scheduled events' button", async () => {
-      const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
-
-      await userEvent.click(clearAllScheduledEventsButton);
-
-      expect(screen.getByTestId(`${dataTestid}-clear-scheduled-events-popup`)).toBeInTheDocument();
-
-      const closeClearScheduledEventsPopupButton = screen.getByTestId(
-        `${dataTestid}-clear-scheduled-events-popup-close-button`,
-      );
-
-      await userEvent.click(closeClearScheduledEventsPopupButton);
-
-      expect(
-        screen.queryByTestId(`${dataTestid}-clear-scheduled-events-popup`),
-      ).not.toBeInTheDocument();
     });
 
     test("Should show the 'Export' button", async () => {
@@ -222,7 +209,15 @@ describe('Legend', () => {
   });
 
   describe('When showing the default schedule ', () => {
+    const mockedAxios = axios.create();
+    const mockedActivityId = preloadedState.calendarEvents.createEventsData.data.find(
+      ({ isAlwaysAvailable }) => !!isAlwaysAvailable,
+    )?.activityOrFlowId;
+    let mockRequest: jest.Mock;
+
     beforeEach(() => {
+      mockRequest = jest.fn().mockReturnValue(new Promise((res) => res(null)));
+
       renderWithProvidersUtils.renderWithProviders(
         <Legend
           appletId={mockedAppletId}
@@ -232,6 +227,49 @@ describe('Legend', () => {
           showScheduleToggle
           userId={testUserId}
         />,
+        { preloadedState } as { preloadedState: PreloadedState<RootState> },
+      );
+    });
+
+    test('Should Clear all scheduled events for the default schedule', async () => {
+      jest.spyOn(mockedAxios, 'delete').mockImplementation(mockRequest);
+      const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
+
+      await userEvent.click(clearAllScheduledEventsButton);
+
+      const submitBttn = screen.getByTestId(
+        `${dataTestid}-clear-scheduled-events-popup-submit-button`,
+      );
+
+      await userEvent.click(submitBttn);
+
+      expect(mockRequest).toBeCalledWith(`/applets/${mockedAppletId}/events`, expect.anything());
+    });
+
+    test('Creates events for the default schedule', async () => {
+      jest.spyOn(mockedAxios, 'post').mockImplementation(mockRequest);
+      const triggrBttn = screen.getByTestId(`${dataTestid}-scheduled-item-0`)
+        .firstChild as unknown as Element;
+
+      await userEvent.click(triggrBttn);
+
+      const muiInput = screen.getByTestId(`${dataTestid}-create-event-popup-form-activity`);
+      const nativeInput = muiInput.querySelector('input') as unknown as Element;
+      const submitBttn = screen.getByTestId(`${dataTestid}-create-event-popup-submit-button`);
+
+      await fireEvent.change(nativeInput, { target: { value: mockedActivityId } });
+      await userEvent.click(submitBttn);
+
+      const confirmBttn = screen.getByTestId(
+        'dashboard-calendar-confirm-scheduled-access-popup-submit-button',
+      );
+
+      await userEvent.click(confirmBttn);
+
+      expect(mockRequest).toBeCalledWith(
+        `/applets/${mockedAppletId}/events`,
+        expect.objectContaining({ activityId: mockedActivityId, respondentId: undefined }),
+        expect.anything(),
       );
     });
 
@@ -271,7 +309,14 @@ describe('Legend', () => {
   });
 
   describe('When showing an individual schedule', () => {
+    const mockedAxios = axios.create();
+    const mockedActivityId = preloadedState.calendarEvents.createEventsData.data.find(
+      ({ isAlwaysAvailable }) => !!isAlwaysAvailable,
+    )?.activityOrFlowId;
+    let mockRequest: jest.Mock;
+
     beforeEach(() => {
+      mockRequest = jest.fn().mockReturnValue(new Promise((res) => res(null)));
       renderWithProvidersUtils.renderWithProviders(
         <Legend
           appletId={mockedAppletId}
@@ -282,6 +327,52 @@ describe('Legend', () => {
           showScheduleToggle
           userId={testUserId}
         />,
+        { preloadedState } as { preloadedState: PreloadedState<RootState> },
+      );
+    });
+
+    test('Should Clear all scheduled events for the default schedule', async () => {
+      jest.spyOn(mockedAxios, 'delete').mockImplementation(mockRequest);
+      const clearAllScheduledEventsButton = screen.getByTestId(`${dataTestid}-scheduled-0`);
+
+      await userEvent.click(clearAllScheduledEventsButton);
+
+      const submitBttn = screen.getByTestId(
+        `${dataTestid}-clear-scheduled-events-popup-submit-button`,
+      );
+
+      await userEvent.click(submitBttn);
+
+      expect(mockRequest).toBeCalledWith(
+        `/applets/${mockedAppletId}/events/delete_individual/${testUserId}`,
+        expect.anything(),
+      );
+    });
+
+    test('Creates events for the individual schedule', async () => {
+      jest.spyOn(mockedAxios, 'post').mockImplementation(mockRequest);
+      const triggrBttn = screen.getByTestId(`${dataTestid}-scheduled-item-0`)
+        .firstChild as unknown as Element;
+
+      await userEvent.click(triggrBttn);
+
+      const muiInput = screen.getByTestId(`${dataTestid}-create-event-popup-form-activity`);
+      const nativeInput = muiInput.querySelector('input') as unknown as Element;
+      const submitBttn = screen.getByTestId(`${dataTestid}-create-event-popup-submit-button`);
+
+      await fireEvent.change(nativeInput, { target: { value: mockedActivityId } });
+      await userEvent.click(submitBttn);
+
+      const confirmBttn = screen.getByTestId(
+        'dashboard-calendar-confirm-scheduled-access-popup-submit-button',
+      );
+
+      await userEvent.click(confirmBttn);
+
+      expect(mockRequest).toBeCalledWith(
+        `/applets/${mockedAppletId}/events`,
+        expect.objectContaining({ activityId: mockedActivityId, respondentId: testUserId }),
+        expect.anything(),
       );
     });
 

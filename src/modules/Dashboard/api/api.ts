@@ -62,6 +62,7 @@ import {
   GetActivitiesParams,
   DeleteReview,
   EncryptedActivityAnswer,
+  GetWorkspaceRespondentsParams,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
 
@@ -115,7 +116,10 @@ export const getWorkspaceManagersApi = ({ params }: GetAppletsParams, signal?: A
   );
 };
 
-export const getWorkspaceRespondentsApi = ({ params }: GetAppletsParams, signal?: AbortSignal) => {
+export const getWorkspaceRespondentsApi = (
+  { params }: GetWorkspaceRespondentsParams,
+  signal?: AbortSignal,
+) => {
   const { ownerId, appletId, ...restParams } = params;
 
   return authApiClient.get(

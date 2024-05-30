@@ -10,12 +10,12 @@ export type TakeNowModalProps = Partial<Pick<ModalProps, 'onClose'>>;
 
 export type OpenTakeNowModalOptions = {
   /**
-   * The ID of the subject who should be selected by default in the "Who is this activity about?" dropdown.
+   * The ID of the subject who should be selected by default in the "Who are the responses about?" dropdown.
    */
-  subject?: ParticipantDropdownOption;
+  targetSubject?: ParticipantDropdownOption;
 
   /**
-   * The ID of the participant who should be selected by default in the "Who is responding?" dropdown.
+   * The ID of the participant who should be selected by default in the "Who will be providing the responses?" dropdown.
    */
-  participant?: ParticipantDropdownOption;
+  sourceSubject?: ParticipantDropdownOption;
 };

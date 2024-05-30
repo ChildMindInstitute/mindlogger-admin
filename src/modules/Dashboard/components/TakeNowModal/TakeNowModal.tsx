@@ -1,21 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Modal } from 'shared/components';
 import { auth, workspaces } from 'redux/modules';
-import {
-  StyledFlexColumn,
-  StyledFlexTopCenter,
-  StyledHeadline,
-  StyledModalWrapper,
-} from 'shared/styles';
-import { useAsync } from 'shared/hooks';
-import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
-import { getWorkspaceRespondentsApi } from 'api';
+import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
+import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
+import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
 import { joinWihComma } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
+import { useAsync } from 'shared/hooks';
 
 import {
   OpenTakeNowModalOptions,
@@ -26,76 +21,153 @@ import { StyledImageContainer, StyledImg } from '../ActivitySummaryCard/Activity
 import { LabeledUserDropdown } from './LabeledDropdown/LabeledUserDropdown';
 import { BaseActivity } from '../ActivityGrid';
 import { ParticipantDropdownOption } from './LabeledDropdown/LabeledUserDropdown.types';
+import { Manager, Respondent } from '../../types';
+
+const ALLOWED_TEAM_MEMBER_ROLES: readonly Roles[] = [
+  Roles.SuperAdmin,
+  Roles.Owner,
+  Roles.Manager,
+] as const;
+
+type SearchType = 'team' | 'participant';
 
 export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   const { t } = useTranslation('app');
-  const [activity, setActivity] = useState<BaseActivity | null>(null);
-  const [participants, setParticipants] = useState<ParticipantDropdownOption[]>([]);
-  const [participantsAndTeamMembers, setParticipantsAndTeamMembers] = useState<
-    ParticipantDropdownOption[]
-  >([]);
-  const [defaultSubject, setDefaultSubject] = useState<ParticipantDropdownOption | null>(null);
-  const [defaultParticipant, setDefaultParticipant] = useState<ParticipantDropdownOption | null>(
-    null,
-  );
   const { ownerId } = workspaces.useData() || {};
   const userData = auth.useData();
   const { appletId } = useParams();
 
-  const participantToOption = useCallback(
-    (participant: ParticipantsData['result'][0]): ParticipantDropdownOption => {
-      const stringNicknames = joinWihComma(participant.nicknames, true);
-      const stringSecretIds = joinWihComma(participant.secretIds, true);
+  const [activity, setActivity] = useState<BaseActivity | null>(null);
+  const [allParticipants, setAllParticipants] = useState<ParticipantDropdownOption[]>([]);
+  const [allTeamMembers, setAllTeamMembers] = useState<Manager[]>([]);
+  const [defaultTargetSubject, setDefaultTargetSubject] =
+    useState<ParticipantDropdownOption | null>(null);
+  const [defaultSourceSubject, setDefaultSourceSubject] =
+    useState<ParticipantDropdownOption | null>(null);
 
-      return {
-        id: participant.details[0].subjectId,
-        secretId: stringSecretIds,
-        nickname: stringNicknames,
-        tag: participant.details[0].subjectTag,
-      };
+  const participantToOption = useCallback((participant: Respondent): ParticipantDropdownOption => {
+    const stringNicknames = joinWihComma(participant.nicknames, true);
+    const stringSecretIds = joinWihComma(participant.secretIds, true);
+
+    return {
+      id: participant.details[0].subjectId,
+      userId: participant.id,
+      secretId: stringSecretIds,
+      nickname: stringNicknames,
+      tag: participant.details[0].subjectTag,
+    };
+  }, []);
+
+  const { execute: fetchParticipants, isLoading: isFetchingParticipants } = useAsync(
+    getWorkspaceRespondentsApi,
+    (response) => {
+      if (response?.data) {
+        const options = (response.data as ParticipantsData).result.map(participantToOption);
+
+        setAllParticipants(options);
+      }
     },
-    [],
   );
 
-  const { execute: getParticipants } = useAsync(getWorkspaceRespondentsApi, (response) => {
-    if (response?.data) {
-      const data = (response.data as ParticipantsData).result;
-      setParticipants(data.map(participantToOption));
-    }
-  });
+  const { execute: fetchManagers, isLoading: isFetchingManagers } = useAsync(
+    getWorkspaceManagersApi,
+    (response) => {
+      setAllTeamMembers(response?.data?.result || []);
+    },
+  );
+
+  const { execute: fetchLoggedInTeamMember, isLoading: isFetchingLoggedInTeamMember } = useAsync(
+    getWorkspaceRespondentsApi,
+    (response) => {
+      if (response?.data) {
+        const loggedInTeamMember = participantToOption(
+          (response.data as ParticipantsData).result[0],
+        );
+        setDefaultSourceSubject(loggedInTeamMember);
+        setAllParticipants((prev) => {
+          if (prev.some((participant) => participant.id === loggedInTeamMember.id)) {
+            return prev;
+          }
+
+          return [loggedInTeamMember, ...prev];
+        });
+      }
+    },
+  );
+
+  const allowedTeamMembers = useMemo(
+    () =>
+      allTeamMembers.filter((manager) =>
+        manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
+      ),
+    [allTeamMembers],
+  );
+
+  const participantsOnly = useMemo(
+    () => allParticipants.filter((participant) => participant.tag !== 'Team'),
+    [allParticipants],
+  );
+
+  const teamMembersOnly = useMemo(
+    () =>
+      allParticipants.filter(
+        (participant) =>
+          participant.tag === 'Team' &&
+          allowedTeamMembers.some((manager) => manager.id === participant.userId),
+      ),
+    [allParticipants, allowedTeamMembers],
+  );
+
+  const participantsAndTeamMembers = useMemo(
+    () => [...teamMembersOnly, ...participantsOnly],
+    [participantsOnly, teamMembersOnly],
+  );
 
   useEffect(() => {
     if (appletId) {
-      getParticipants({
-        params: {
-          ownerId,
-          appletId,
-          limit: DEFAULT_ROWS_PER_PAGE,
-        },
-      });
-    }
-
-    if (userData) {
-      // For now, the admin is the only member of this list
-      let ownerNickname = '';
-      if (userData.user.firstName) {
-        ownerNickname += `${userData.user.firstName}`;
-        if (userData.user.lastName) {
-          ownerNickname += ` ${userData.user.lastName}`;
-        }
+      if (allParticipants.length === 0 && !isFetchingParticipants) {
+        fetchParticipants({
+          params: {
+            ownerId,
+            appletId,
+            limit: 100,
+          },
+        });
+      } else if (allParticipants.length > 0 && allTeamMembers.length === 0 && !isFetchingManagers) {
+        fetchManagers({
+          params: {
+            ownerId,
+            appletId,
+            limit: 100,
+          },
+        });
       }
 
-      const ownerOption: ParticipantDropdownOption = {
-        // Here we use the user ID instead of the subject ID
-        id: userData.user.id,
-        secretId: userData.user.id,
-        nickname: ownerNickname,
-      };
-
-      // In the future we will allow choosing from the full list of participants and team members
-      setParticipantsAndTeamMembers([ownerOption]);
+      if (userData && defaultSourceSubject === null && !isFetchingLoggedInTeamMember) {
+        fetchLoggedInTeamMember({
+          params: {
+            ownerId,
+            appletId,
+            userId: userData.user.id,
+            limit: 1,
+          },
+        });
+      }
     }
-  }, [appletId, ownerId, getParticipants, userData]);
+  }, [
+    appletId,
+    ownerId,
+    userData,
+    allParticipants,
+    allTeamMembers,
+    defaultSourceSubject,
+    isFetchingParticipants,
+    isFetchingManagers,
+    isFetchingLoggedInTeamMember,
+    fetchParticipants,
+    fetchManagers,
+    fetchLoggedInTeamMember,
+  ]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {
     const handleClose = () => {
@@ -103,23 +175,97 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       onClose?.();
     };
 
-    const [subject, setSubject] = useState<ParticipantDropdownOption | null>(defaultSubject);
-    const [participant, setParticipant] = useState<ParticipantDropdownOption | null>(
-      defaultParticipant || participantsAndTeamMembers[0],
+    const [targetSubject, setTargetSubject] = useState<ParticipantDropdownOption | null>(
+      defaultTargetSubject,
     );
+    const [sourceSubject, setSourceSubject] = useState<ParticipantDropdownOption | null>(
+      defaultSourceSubject,
+    );
+    const [isSelfReporting, setIsSelfReporting] = useState<boolean>(true);
+    const [loggedInUser, setLoggedInUser] = useState<ParticipantDropdownOption | null>(
+      defaultSourceSubject?.userId ? defaultSourceSubject : null,
+    );
+
     const handleSubmit = useCallback(() => {
-      if (subject && participant && activity?.id) {
+      if (targetSubject && sourceSubject && (isSelfReporting || loggedInUser) && activity?.id) {
         const url = new URL(`protected/applets/${appletId}`, `${process.env.REACT_APP_WEB_URI}/`);
         url.searchParams.set('startActivityOrFlow', activity.id);
-        url.searchParams.set('subjectId', subject.id);
-        url.searchParams.set('respondentId', participant.id);
+        url.searchParams.set('sourceSubjectId', sourceSubject.id);
+        url.searchParams.set('targetSubjectId', targetSubject.id);
+
+        // This conditional shouldn't be necessary, but TS is unable to propagate the type information from
+        // (isSelfReporting || loggedInUser), so we have to check them again (or use the forbidden non-null assertion)
+        if (isSelfReporting && sourceSubject.userId) {
+          url.searchParams.set('respondentId', sourceSubject.userId);
+        } else if (!isSelfReporting && loggedInUser && loggedInUser.userId) {
+          url.searchParams.set('respondentId', loggedInUser.userId);
+        }
+
+        // TODO: Remove once the web app is updated to process `targetSubjectId` instead of `subjectId`
+        url.searchParams.set('subjectId', targetSubject.id);
 
         setActivity(null);
         window.open(url.toString(), '_blank');
       }
-    }, [subject, participant]);
+    }, [targetSubject, sourceSubject, loggedInUser, isSelfReporting]);
 
-    if (!activity || !participants || !participantsAndTeamMembers) {
+    const handleSearch = useCallback(
+      async (
+        query: string,
+        types: [SearchType, ...SearchType[]],
+      ): Promise<ParticipantDropdownOption[]> => {
+        const requests = [];
+
+        if (types.includes('team')) {
+          requests.push(
+            getWorkspaceManagersApi({
+              params: {
+                ownerId,
+                appletId,
+                search: query,
+                limit: DEFAULT_ROWS_PER_PAGE,
+              },
+            }),
+          );
+        }
+
+        if (types.includes('participant')) {
+          requests.push(
+            getWorkspaceRespondentsApi({
+              params: {
+                ownerId,
+                appletId,
+                search: query,
+                limit: DEFAULT_ROWS_PER_PAGE,
+              },
+            }),
+          );
+        }
+
+        const [teamMemberResponse, participantsResponse] = await Promise.all(requests);
+
+        // Filter the search results by allowed team members
+        const allowedTeamMembersSearchResults =
+          (teamMemberResponse?.data?.result as Manager[]).filter((manager) =>
+            manager.roles.some((role) => ALLOWED_TEAM_MEMBER_ROLES.includes(role)),
+          ) ?? [];
+
+        const participantsSearchResults =
+          (participantsResponse?.data?.result as Respondent[]) ?? [];
+
+        // If there are team members in the search results, we only want to show them if they are allowed
+        return participantsSearchResults
+          .map(participantToOption)
+          .filter(
+            (participant) =>
+              participant.tag !== 'Team' ||
+              allowedTeamMembersSearchResults.some((manager) => manager.id === participant.userId),
+          );
+      },
+      [],
+    );
+
+    if (!activity || !allParticipants || !participantsAndTeamMembers) {
       return null;
     }
 
@@ -127,68 +273,94 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
       <Modal
         open={true}
         width="57"
-        title={t('takeNow')}
+        title={t('takeNow.modal.title')}
         buttonText={t('startActivity')}
         onSubmit={handleSubmit}
         onClose={handleClose}
-        disabledSubmit={subject === null || participant === null}
+        disabledSubmit={
+          targetSubject === null ||
+          sourceSubject === null ||
+          (!isSelfReporting && loggedInUser === null)
+        }
         data-testid={`${dataTestId}-take-now-modal`}
       >
-        <StyledModalWrapper>
-          <StyledFlexColumn sx={{ gap: 0.8 }}>
-            <StyledFlexTopCenter sx={{ gap: 2.4 }}>
-              <StyledImageContainer>
-                {!!activity.image && <StyledImg src={activity.image} alt={activity.name} />}
-              </StyledImageContainer>
-              <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
-            </StyledFlexTopCenter>
-            <Box>
-              <LabeledUserDropdown
-                label={t('takeNowModalSubjectLabel')}
-                name={'subject'}
-                tooltip={t('takeNowModalSubjectTooltip')}
-                placeholder={t('takeNowModalSubjectPlaceholder')}
-                value={subject}
-                options={participants}
-                onChange={setSubject}
-                data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
-                handleSearch={async (search) => {
-                  const response = await getWorkspaceRespondentsApi({
-                    params: {
-                      ownerId,
-                      appletId,
-                      search,
-                      limit: DEFAULT_ROWS_PER_PAGE,
-                    },
-                  });
-
-                  return (
-                    (response?.data as ParticipantsData)?.result.map(participantToOption) ?? []
-                  );
-                }}
-              />
-              <LabeledUserDropdown
-                label={t('takeNowModalParticipantLabel')}
-                name={'participant'}
-                tooltip={t('takeNowModalParticipantTooltip')}
-                placeholder={t('takeNowModalParticipantPlaceholder')}
-                value={participant}
-                options={participantsAndTeamMembers}
-                onChange={setParticipant}
-                data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
-                disabled
-              />
-            </Box>
+        <StyledFlexColumn sx={{ gap: 3.2, padding: theme.spacing(1.6, 3.2, 2.4) }}>
+          <StyledFlexTopCenter gap={2.4}>
+            <StyledImageContainer>
+              {!!activity.image && <StyledImg src={activity.image} alt={activity.name} />}
+            </StyledImageContainer>
+            <StyledHeadline sx={{ flexGrow: 1 }}>{activity.name}</StyledHeadline>
+          </StyledFlexTopCenter>
+          <StyledFlexColumn gap={2.4}>
+            <StyledFlexColumn gap={0.8}>
+              <StyledFlexColumn gap={0.4}>
+                <LabeledUserDropdown
+                  label={t('takeNow.modal.sourceSubjectLabel')}
+                  name={'participant'}
+                  placeholder={t('takeNow.modal.sourceSubjectPlaceholder')}
+                  value={sourceSubject}
+                  options={participantsAndTeamMembers}
+                  onChange={(option) => {
+                    setSourceSubject(option);
+                    if (option) {
+                      setIsSelfReporting(option.tag === 'Team');
+                    }
+                  }}
+                  data-testid={`${dataTestId}-take-now-modal-participant-dropdown`}
+                  handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
+                  canShowWarningMessage={true}
+                  showGroups={true}
+                />
+                <FormControlLabel
+                  control={<Checkbox sx={{ margin: 0, width: 48, height: 48 }} />}
+                  sx={{ gap: 0.4 }}
+                  checked={isSelfReporting}
+                  onChange={(_e, checked) => setIsSelfReporting(checked)}
+                  disabled={sourceSubject?.tag !== 'Team'}
+                  label={t('takeNow.modal.sourceSubjectCheckboxLabel')}
+                />
+              </StyledFlexColumn>
+              {!isSelfReporting && (
+                <LabeledUserDropdown
+                  label={t('takeNow.modal.loggedInUserLabel')}
+                  name={'loggedInUser'}
+                  sx={{ gap: 1, pl: 5.2 }}
+                  placeholder={t('takeNow.modal.loggedInUserPlaceholder')}
+                  value={loggedInUser}
+                  options={teamMembersOnly}
+                  onChange={setLoggedInUser}
+                  data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
+                  handleSearch={(query) => handleSearch(query, ['team'])}
+                  showGroups={true}
+                />
+              )}
+            </StyledFlexColumn>
+            <LabeledUserDropdown
+              label={t('takeNow.modal.targetSubjectLabel')}
+              name={'subject'}
+              placeholder={t('takeNow.modal.targetSubjectPlaceholder')}
+              value={targetSubject}
+              options={participantsAndTeamMembers}
+              onChange={setTargetSubject}
+              data-testid={`${dataTestId}-take-now-modal-subject-dropdown`}
+              handleSearch={(query) => handleSearch(query, ['team', 'participant'])}
+            />
           </StyledFlexColumn>
-        </StyledModalWrapper>
+        </StyledFlexColumn>
       </Modal>
     );
   };
 
   const openTakeNowModal = (activity: BaseActivity, options?: OpenTakeNowModalOptions) => {
     setActivity(activity);
-    setDefaultSubject(options?.subject || null);
-    setDefaultParticipant(options?.participant || null);
+
+    if (options?.targetSubject) {
+      setDefaultTargetSubject(options.targetSubject);
+    }
+
+    if (options?.sourceSubject) {
+      setDefaultSourceSubject(options.sourceSubject);
+    }
   };
 
   return { TakeNowModal, openTakeNowModal };

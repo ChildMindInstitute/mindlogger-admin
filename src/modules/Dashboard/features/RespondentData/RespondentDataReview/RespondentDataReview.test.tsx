@@ -66,6 +66,7 @@ const preloadedState = {
           secretUserId: mockedRespondentId,
           lastSeen: '2023-12-15T23:29:36.150182',
           tag: 'Child' as ParticipantTag,
+          userId: mockedRespondentId,
         },
       },
     },

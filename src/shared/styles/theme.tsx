@@ -273,25 +273,33 @@ export const theme = createTheme({
           props: { variant: 'text' },
           style: {
             background: 'transparent',
-            color: variables.palette.primary,
             fontWeight: variables.font.weight.regular,
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
             },
 
+            '&:not(.MuiButton-textError)': {
+              color: variables.palette.primary,
+
+              '&:not(.Mui-disabled)': {
+                '&:hover': {
+                  backgroundColor: variables.palette.primary_alfa8,
+                },
+
+                '&:focus, &:active': {
+                  backgroundColor: variables.palette.primary_alfa12,
+                },
+              },
+            },
+
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.primary_alfa8,
                 borderColor: variables.palette.outline,
               },
 
               '&:focus': {
                 borderColor: 'currentColor',
-              },
-
-              '&:focus, &:active': {
-                backgroundColor: variables.palette.primary_alfa12,
               },
             },
           },

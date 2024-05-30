@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Modal, Spinner, SpinnerUiType, SubmitBtnVariant } from 'shared/components';
+import { Modal, Spinner, SpinnerUiType } from 'shared/components';
 import { StyledBodyLarge, StyledModalWrapper, theme, variables } from 'shared/styles';
 import { getErrorMessage, Mixpanel } from 'shared/utils';
 import { useAsync } from 'shared/hooks/useAsync';
@@ -80,7 +80,6 @@ export const SendInvitationPopup = ({
       title={getTitle()}
       buttonText={showSecondScreen ? t('sendInvitation') : ''}
       disabledSubmit={isLoading}
-      submitBtnVariant={SubmitBtnVariant.Contained}
       data-testid={dataTestId}
     >
       <>

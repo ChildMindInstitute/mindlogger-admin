@@ -8,11 +8,19 @@ import { ApiResponseCodes } from '../api';
  * to reset it afterward
  * @param responses A object keyed by URL and containing their respective HttpResponse values
  */
-export const mockGetRequestResponses = (responses: Record<string, HttpResponse>): void => {
+export const mockGetRequestResponses = (
+  responses: Record<string, HttpResponse | ((params: Record<string, string>) => HttpResponse)>,
+): void => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  mockAxios.get.mockImplementation((url) => {
+  mockAxios.get.mockImplementation((url: string, options?: { params: Record<string, string> }) => {
     if (url && responses[url]) {
+      const response = responses[url];
+
+      if (typeof response === 'function') {
+        return Promise.resolve(response(options?.params ?? {}));
+      }
+
       return Promise.resolve(responses[url]);
     } else {
       return Promise.reject(`No response provided for ${url}`);
@@ -36,7 +44,7 @@ export const mockSuccessfulHttpResponse = <T extends unknown>(data: T): HttpResp
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const mockSchema = <T extends unknown>(
   data: T | null = null,
-  meta?: MetaSchema,
+  meta?: Partial<MetaSchema>,
 ): BaseSchema<T | null> => ({
   status: 'success',
   requestId: 'requestId',

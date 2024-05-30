@@ -1,10 +1,11 @@
 import { useCallback, useRef, useState } from 'react';
-import { Autocomplete, Box, TextField } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, TextField, Box } from '@mui/material';
 import unionBy from 'lodash/unionBy';
 import { useTranslation } from 'react-i18next';
 
 import { Svg, Tooltip } from 'shared/components';
 import {
+  StyledBodyMedium,
   StyledFlexColumn,
   StyledTitleMedium,
   StyledTitleTooltipIcon,
@@ -14,6 +15,7 @@ import {
 import { ParticipantSnippet } from 'modules/Dashboard/components/ParticipantSnippet';
 
 import { LabeledUserDropdownProps, ParticipantDropdownOption } from './LabeledUserDropdown.types';
+import { StyledGroupLabel, StyledWarningMessageContainer } from './LabeledUserDropdown.styles';
 
 export const LabeledUserDropdown = ({
   label,
@@ -26,6 +28,9 @@ export const LabeledUserDropdown = ({
   handleSearch,
   debounce,
   disabled,
+  canShowWarningMessage,
+  sx,
+  showGroups,
   ...rest
 }: LabeledUserDropdownProps) => {
   const { t } = useTranslation('app');
@@ -64,42 +69,103 @@ export const LabeledUserDropdown = ({
     [debounce, handleSearch],
   );
 
+  const shouldShowWarningMessage = !!canShowWarningMessage && !!value && value.tag !== 'Team';
+
+  let groupBy: LabeledUserDropdownProps['groupBy'];
+
+  if (showGroups) {
+    groupBy = (option: ParticipantDropdownOption) => {
+      if (option.tag !== 'Team') {
+        return t('takeNow.modal.dropdown.participantGrouping');
+      } else {
+        return t('takeNow.modal.dropdown.teamMemberGrouping');
+      }
+    };
+  }
+
   return (
-    <StyledFlexColumn sx={{ gap: 1.6, marginTop: 2.4 }}>
+    <StyledFlexColumn sx={{ gap: 1.6, ...sx }}>
       <Box sx={{ display: 'flex', gap: 0.4 }}>
-        <StyledTitleMedium fontWeight="bold">{label}</StyledTitleMedium>
-        <Tooltip tooltipTitle={tooltip}>
-          <Box sx={{ height: 24 }}>
-            <StyledTitleTooltipIcon
-              sx={{ marginLeft: 0 }}
-              id="more-info-outlined"
-              width={24}
-              height={24}
-              data-testid={`${rest['data-testid']}-tooltip-icon`}
-            />
-          </Box>
-        </Tooltip>
+        <StyledTitleMedium sx={{ fontWeight: 700, color: variables.palette.on_surface }}>
+          {label}
+        </StyledTitleMedium>
+        {!!tooltip && (
+          <Tooltip tooltipTitle={tooltip}>
+            <Box sx={{ height: 24 }}>
+              <StyledTitleTooltipIcon
+                sx={{ marginLeft: 0 }}
+                id="more-info-outlined"
+                width={24}
+                height={24}
+                data-testid={`${rest['data-testid']}-tooltip-icon`}
+              />
+            </Box>
+          </Tooltip>
+        )}
       </Box>
       <Autocomplete
-        renderInput={(params) => {
+        renderInput={(params: AutocompleteRenderInputParams) => {
           const { InputLabelProps: _InputLabelProps, ...rest } = params;
 
           return <TextField {...rest} placeholder={placeholder} name={name} />;
         }}
+        sx={{
+          '& .MuiInputBase-root': {
+            borderBottomLeftRadius: shouldShowWarningMessage ? 0 : variables.borderRadius.sm,
+            borderBottomRightRadius: shouldShowWarningMessage ? 0 : variables.borderRadius.sm,
+          },
+        }}
         options={combinedOptions}
-        renderOption={({ children: _children, ...props }, { id, ...psProps }) => (
+        renderOption={(
+          { children: _children, ...props },
+          { id, tag, secretId, nickname, ...psProps },
+        ) => (
           <ParticipantSnippet<'li'>
             key={id}
+            tag={tag}
+            secretId={tag === 'Team' ? nickname : secretId}
+            nickname={tag === 'Team' ? null : nickname}
             {...psProps}
             boxProps={{
-              sx: { p: theme.spacing(0.6, 1.6), cursor: 'pointer' },
+              sx: {
+                p: theme.spacing(0.6, 1.6),
+                cursor: 'pointer',
+              },
               ...props,
             }}
           />
         )}
-        getOptionLabel={(value) =>
-          `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}`
-        }
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+        groupBy={groupBy}
+        renderGroup={(params) => {
+          const { key, group, children } = params;
+
+          return (
+            <Box
+              component="li"
+              key={key}
+              sx={{
+                '&:not(:last-child)': {
+                  borderBottom: `${variables.borderWidth.md} solid ${variables.palette.surface_variant}`,
+                },
+              }}
+            >
+              <StyledGroupLabel>{group}</StyledGroupLabel>
+              <Box component="ul" sx={{ p: 0 }}>
+                {children}
+              </Box>
+            </Box>
+          );
+        }}
+        getOptionLabel={(value) => {
+          if (value.tag === 'Team') {
+            return `${value.nickname} (${value.tag})`;
+          }
+
+          return `${value.secretId}${value.nickname ? ` (${value.nickname})` : ''}${
+            value.tag ? ` (${value.tag})` : ''
+          }`;
+        }}
         disabled={disabled}
         popupIcon={
           <Svg
@@ -109,7 +175,6 @@ export const LabeledUserDropdown = ({
             fill={variables.palette[disabled ? 'on_surface_alfa38' : 'on_surface_variant']}
           />
         }
-        isOptionEqualToValue={(option, value) => value.id === option.id}
         fullWidth={true}
         value={value}
         onChange={(_e, newValue) => onChange(newValue)}
@@ -117,10 +182,18 @@ export const LabeledUserDropdown = ({
         handleHomeEndKeys
         loading={isSearching}
         loadingText={t('loadingEllipsis')}
-        noOptionsText={t('takeNowNotFound')}
+        noOptionsText={t('takeNow.modal.dropdown.notFound')}
         onInputChange={(_e, search) => debouncedSearchHandler(search)}
         {...rest}
       />
+      {shouldShowWarningMessage && (
+        <StyledWarningMessageContainer>
+          <Box width={24} height={24}>
+            <Svg id={'supervisor-account'} fill={variables.palette.on_surface_variant} />
+          </Box>
+          <StyledBodyMedium>{t('takeNow.modal.dropdown.limitedAccountWarning')}</StyledBodyMedium>
+        </StyledWarningMessageContainer>
+      )}
     </StyledFlexColumn>
   );
 };
