@@ -41,7 +41,7 @@ export function useFlowGridMenu({
     (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
 
   const canAccessData = checkIfCanAccessData(roles);
-  const showDivider = (canEdit || canAccessData) && canDoTakeNow;
+  const showDivider = (canEdit || canAccessData) && (featureFlags.enableActivityAssign || canDoTakeNow);
 
   const getActionsMenu = useCallback(
     ({ flow }: { flow?: ActivityFlow }) => [
