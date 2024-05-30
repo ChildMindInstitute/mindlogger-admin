@@ -11,7 +11,8 @@ export const commonInputSx = {
   height: '3.6rem',
 };
 
-export const maxHours = 23;
-export const maxMinutes = 59;
-export const minTime = setHours(setMinutes(new Date(), 0), 0);
-export const maxTime = setHours(setMinutes(new Date(), maxMinutes), maxHours);
+export const MAX_HOURS = 23;
+export const MAX_MINUTES = 59;
+export const MIN_TIME = setHours(setMinutes(new Date(), 0), 0);
+export const MAX_TIME = setHours(setMinutes(new Date(), MAX_MINUTES), MAX_HOURS);
+export const TIME_INTERVALS = 1;

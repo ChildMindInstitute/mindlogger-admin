@@ -16,10 +16,11 @@ import { getConditionMinMaxValues, getConditionMinMaxRangeValues } from './Switc
 import {
   commonInputSx,
   commonInputWrapperSx,
-  maxHours,
-  maxMinutes,
-  maxTime,
-  minTime,
+  MAX_HOURS,
+  MAX_MINUTES,
+  MAX_TIME,
+  MIN_TIME,
+  TIME_INTERVALS,
 } from './SwitchCondition.const';
 
 export const SwitchCondition = ({
@@ -34,7 +35,7 @@ export const SwitchCondition = ({
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
-  const [minEndTime, setMinEndTime] = useState(minTime);
+  const [minEndTime, setMinEndTime] = useState(MIN_TIME);
   const isSingleValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = !isSingleValueShown;
 
@@ -162,7 +163,7 @@ export const SwitchCondition = ({
         inputSx: {
           ...commonInputSx,
         },
-        timeIntervals: 1,
+        timeIntervals: TIME_INTERVALS,
       };
       const onStartTimeChange = (time: string) => {
         if (!time) return;
@@ -175,7 +176,7 @@ export const SwitchCondition = ({
         setMinEndTime(resultDate);
 
         if (maxValue && time && maxValue < time) {
-          if (Number(startTimeHours) === maxHours && Number(startTimeMinutes) === maxMinutes) {
+          if (Number(startTimeHours) === MAX_HOURS && Number(startTimeMinutes) === MAX_MINUTES) {
             setValue(maxValueName, time);
 
             return;
@@ -208,7 +209,7 @@ export const SwitchCondition = ({
               <TimePicker
                 {...commonTimePickerProps}
                 minTime={minEndTime}
-                maxTime={maxTime}
+                maxTime={MAX_TIME}
                 name={maxValueName}
                 data-testid={`${dataTestid}-end-time`}
               />
