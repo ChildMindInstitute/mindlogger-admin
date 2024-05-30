@@ -1,6 +1,6 @@
 import { OverridableStringUnion } from '@mui/types';
 import { ButtonProps, ButtonPropsColorOverrides, SxProps } from '@mui/material';
-import { BaseSyntheticEvent } from 'react';
+import React, { BaseSyntheticEvent } from 'react';
 
 type BtnSubmit =
   | ((e?: BaseSyntheticEvent | undefined) => Promise<void>)
@@ -14,17 +14,12 @@ export type SubmitBtnColor = OverridableStringUnion<
   ButtonPropsColorOverrides
 >;
 
-export enum SubmitBtnVariant {
-  Text = 'text',
-  Contained = 'contained',
-}
-
 export type ModalProps = {
   open: boolean;
   title: string;
-  buttonText: string;
+  buttonText?: string;
   children: JSX.Element | null;
-  onClose: () => void;
+  onClose?: () => void;
   /** @default onClose */
   onBackdropClick?: (() => void) | null;
   onSubmit?: BtnSubmit;
@@ -34,7 +29,7 @@ export type ModalProps = {
   height?: string;
   hasSecondBtn?: boolean;
   submitBtnColor?: SubmitBtnColor;
-  submitBtnVariant?: SubmitBtnVariant;
+  submitBtnVariant?: ButtonProps['variant'];
   secondBtnText?: string;
   secondBtnVariant?: ButtonProps['variant'];
   onSecondBtnSubmit?: BtnSubmit;
@@ -51,6 +46,7 @@ export type ModalProps = {
   onLeftBtnSubmit?: BtnSubmit;
   disabledLeftBtn?: boolean;
   footerStyles?: SxProps;
+  footer?: React.ReactNode;
   hasActions?: boolean;
   submitBtnTooltip?: string;
   onTransitionEntered?: (node: HTMLElement, isAppearing: boolean) => void;
