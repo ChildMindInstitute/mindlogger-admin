@@ -49,8 +49,8 @@ const renderComponent = (props?: Partial<ReviewsProps>) =>
       isLoading={false}
       reviewError={null}
       reviewerData={mockedReviewersData}
-      removeReviewError={null}
-      removeReviewLoading={false}
+      removeReviewsError={null}
+      removeReviewsLoading={false}
       onReviewerAnswersRemove={mockedOnReviewAnswerRemove}
       onReviewEdit={mockedOnReviewEdit}
       data-testid="reviews"

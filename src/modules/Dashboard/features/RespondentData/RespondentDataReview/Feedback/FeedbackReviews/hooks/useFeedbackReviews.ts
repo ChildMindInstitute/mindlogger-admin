@@ -11,36 +11,17 @@ import { getErrorMessage } from 'shared/utils/errors';
 
 import { useFeedbackReviewsData } from './useFeedbackReviewsData';
 import { ReviewData } from '../FeedbackReviews.types';
-
-type UseFeedbackReviewsParams = {
-  appletId: string | undefined;
-  answerId: string | null;
-  submitId: string | null;
-  user: { id: string; firstName: string; lastName: string } | undefined;
-};
-
-type UseFeedbackReviewsReturn = {
-  reviewerData: ReviewData[];
-  reviewsLoading: boolean;
-  reviewsFlowLoading: boolean;
-  reviewError: string | null;
-  reviewsFlowError: string | null;
-  removeReviewLoading: boolean;
-  removeReviewError: string | null;
-  removeReviewsFlowError: string | null;
-  handleGetReviews: () => Promise<void>;
-  handleReviewerAnswersRemove: (assessmentId: string) => Promise<void>;
-};
+import { UseFeedbackReviewsParams } from './useFeedbackReviews.types';
 
 export const useFeedbackReviews = ({
   appletId,
   answerId,
   submitId,
   user,
-}: UseFeedbackReviewsParams): UseFeedbackReviewsReturn => {
-  const [reviewerData, setreviewerData] = useState<ReviewData[]>([]);
-  const [removeReviewLoading, setremoveReviewLoading] = useState<boolean>(false);
-  const [removeReviewError, setremoveReviewError] = useState<string | null>(null);
+}: UseFeedbackReviewsParams) => {
+  const [reviewerData, setReviewerData] = useState<ReviewData[]>([]);
+  const [removeReviewsLoading, setRemoveReviewsLoading] = useState<boolean>(false);
+  const [removeReviewsError, setRemoveReviewsError] = useState<string | null>(null);
   const [removeReviewsFlowLoading, setRemoveReviewsFlowLoading] = useState<boolean>(false);
   const [removeReviewsFlowError, setRemoveReviewsFlowError] = useState<string | null>(null);
 
@@ -51,7 +32,7 @@ export const useFeedbackReviews = ({
       reviews: result?.data?.result ?? [],
       userId: user?.id ?? '',
     });
-    setreviewerData(reviewsData);
+    setReviewerData(reviewsData);
   });
 
   const getFlowReviewsAsync = useAsync(getFlowReviewsApi, async (result) => {
@@ -59,7 +40,7 @@ export const useFeedbackReviews = ({
       reviews: result?.data?.result ?? [],
       userId: user?.id ?? '',
     });
-    setreviewerData(reviewsData);
+    setReviewerData(reviewsData);
   });
 
   const { execute: getReviews, isLoading: reviewsLoading, error: reviewError } = getReviewsAsync;
@@ -81,21 +62,28 @@ export const useFeedbackReviews = ({
 
   const handleReviewerAnswersRemove = async (assessmentId: string) => {
     if (!appletId) return;
+    if (answerId) {
+      try {
+        setRemoveReviewsLoading(true);
+        setRemoveReviewsError(null);
 
-    setremoveReviewLoading(true);
-    setremoveReviewError(null);
-
-    try {
-      if (answerId) {
         await deleteReviewApi({ appletId, answerId, assessmentId });
-      } else if (submitId) {
-        await deleteFlowReviewApi({ appletId, submitId, assessmentId });
+      } catch (error) {
+        setRemoveReviewsError(getErrorMessage(error));
+      } finally {
+        setRemoveReviewsLoading(false);
       }
-      await handleGetReviews();
-    } catch (error) {
-      setremoveReviewError(getErrorMessage(error));
-    } finally {
-      setremoveReviewLoading(false);
+    } else if (submitId) {
+      try {
+        setRemoveReviewsFlowLoading(true);
+        setRemoveReviewsFlowError(null);
+
+        await deleteFlowReviewApi({ appletId, submitId, assessmentId });
+      } catch (error) {
+        setRemoveReviewsFlowError(getErrorMessage(error));
+      } finally {
+        setRemoveReviewsFlowLoading(false);
+      }
     }
   };
 
@@ -103,10 +91,11 @@ export const useFeedbackReviews = ({
     reviewerData,
     reviewsLoading,
     reviewsFlowLoading,
-    reviewError: reviewError ? getErrorMessage(reviewError) : null,
-    reviewsFlowError: reviewsFlowError ? getErrorMessage(reviewsFlowError) : null,
-    removeReviewLoading,
-    removeReviewError: removeReviewError ? getErrorMessage(removeReviewError) : null,
+    reviewsError: reviewError ? getErrorMessage(reviewError) : null,
+    reviewsFlowsError: reviewsFlowError ? getErrorMessage(reviewsFlowError) : null,
+    removeReviewsLoading,
+    removeReviewsFlowLoading,
+    removeReviewsError: removeReviewsError ? getErrorMessage(removeReviewsError) : null,
     removeReviewsFlowError: removeReviewsFlowError ? getErrorMessage(removeReviewsFlowError) : null,
     handleGetReviews,
     handleReviewerAnswersRemove,

@@ -8,8 +8,8 @@ export const Reviews = ({
   isLoading,
   reviewError,
   reviewerData,
-  removeReviewError,
-  removeReviewLoading,
+  removeReviewsError,
+  removeReviewsLoading,
   onReviewerAnswersRemove,
   onReviewEdit,
   'data-testid': dataTestid,
@@ -30,13 +30,13 @@ export const Reviews = ({
             <FeedbackReviewer
               {...reviewerData}
               error={
-                isCurrentUserReviewer && removeReviewError ? (
+                isCurrentUserReviewer && removeReviewsError ? (
                   <StyledErrorText sx={{ mt: theme.spacing(2) }}>
-                    {removeReviewError}
+                    {removeReviewsError}
                   </StyledErrorText>
                 ) : null
               }
-              isLoading={isCurrentUserReviewer && removeReviewLoading}
+              isLoading={isCurrentUserReviewer && removeReviewsLoading}
               onReviewerAnswersRemove={onReviewerAnswersRemove}
               onReviewEdit={onReviewEdit}
               key={reviewerData.reviewer.id}

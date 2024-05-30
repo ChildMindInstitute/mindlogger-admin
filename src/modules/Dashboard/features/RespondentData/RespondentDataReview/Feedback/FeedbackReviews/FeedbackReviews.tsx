@@ -31,9 +31,9 @@ export const FeedbackReviews = () => {
   const {
     reviewerData,
     reviewsLoading,
-    reviewError,
-    removeReviewLoading,
-    removeReviewError,
+    reviewsError,
+    removeReviewsLoading,
+    removeReviewsError,
     handleGetReviews,
     handleReviewerAnswersRemove,
   } = useFeedbackReviews({ appletId, answerId, submitId, user });
@@ -93,10 +93,10 @@ export const FeedbackReviews = () => {
       )}
       <Reviews
         isLoading={isLoading}
-        reviewError={reviewError}
+        reviewError={reviewsError}
         reviewerData={reviewerData}
-        removeReviewError={removeReviewError}
-        removeReviewLoading={removeReviewLoading}
+        removeReviewsError={removeReviewsError}
+        removeReviewsLoading={removeReviewsLoading}
         onReviewerAnswersRemove={handleReviewerAnswersRemove}
         onReviewEdit={handleReviewEdit}
         data-testid={dataTestid}
