@@ -164,7 +164,7 @@ describe('Participants utils tests', () => {
         dataTestid: dataTestId,
       });
 
-      const isDisplayed = [false, false, false, true, false, false];
+      const isDisplayed = [false, false, false, false, false, false];
       actions.forEach((action, index) => {
         expect(action).toEqual({
           ...expectedActions[index],

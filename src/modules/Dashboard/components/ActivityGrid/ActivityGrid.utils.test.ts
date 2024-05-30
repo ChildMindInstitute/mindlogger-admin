@@ -91,7 +91,7 @@ describe('getActivityActions', () => {
     expectAllMenuItemsAreReturned(menuItems);
     expectMenuItemIsDisplayed(menuItems, 'editActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'exportData', false);
-    expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
@@ -130,7 +130,7 @@ describe('getActivityActions', () => {
     expectAllMenuItemsAreReturned(menuItems);
     expectMenuItemIsDisplayed(menuItems, 'editActivity', true);
     expectMenuItemIsDisplayed(menuItems, 'exportData', false);
-    expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
@@ -143,8 +143,8 @@ describe('getActivityActions', () => {
     expectAllMenuItemsAreReturned(menuItems);
     expectMenuItemIsDisplayed(menuItems, 'editActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'exportData', true);
-    expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
-    expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
+    expectMenuItemIsDisplayed(menuItems, 'takeNow', true);
   });
 
   test('Correct menu items are displayed when user is a respondent', () => {
@@ -156,7 +156,7 @@ describe('getActivityActions', () => {
     expectAllMenuItemsAreReturned(menuItems);
     expectMenuItemIsDisplayed(menuItems, 'editActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'exportData', false);
-    expectMenuItemIsDisplayed(menuItems, 'assignActivity', true);
+    expectMenuItemIsDisplayed(menuItems, 'assignActivity', false);
     expectMenuItemIsDisplayed(menuItems, 'takeNow', false);
   });
 
