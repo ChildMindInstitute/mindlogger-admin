@@ -81,6 +81,9 @@ export const getParticipantActions = ({
   status,
   dataTestid,
   invitation,
+  firstName,
+  lastName,
+  subjectCreatedAt,
   showAssignActivity = false,
 }: GetParticipantActionsProps): MenuItem<ParticipantActionProps>[] => {
   const context = {
@@ -106,15 +109,27 @@ export const getParticipantActions = ({
 
   const hasInvitation = !!invitation;
 
-  if (hasInvitation) {
-    if (invitation.firstName && invitation.lastName) {
-      const fullName = `${i18n.t('fullName')}: ${invitation.firstName} ${invitation.lastName}`;
-      title += title.length > 0 ? '\n' : '';
-      title += fullName;
-    }
+  if (hasInvitation && invitation.firstName && invitation.lastName) {
+    const fullName = `${i18n.t('fullName')}: ${invitation.firstName} ${invitation.lastName}`;
+    title += title.length > 0 ? '\n' : '';
+    title += fullName;
+  } else if (!hasInvitation && firstName && lastName) {
+    const fullName = `${i18n.t('fullName')}: ${firstName} ${lastName}`;
+    title += title.length > 0 ? '\n' : '';
+    title += fullName;
+  }
 
+  if (hasInvitation) {
     const invitationDate = `${i18n.t('invitationDate')}: ${format(
       new Date(invitation.createdAt),
+      DateFormats.MonthDayYearTime,
+    )}`;
+
+    title += title.length > 0 ? '\n' : '';
+    title += `${invitationDate}`;
+  } else if (subjectCreatedAt) {
+    const invitationDate = `${i18n.t('invitationDate')}: ${format(
+      new Date(subjectCreatedAt),
       DateFormats.MonthDayYearTime,
     )}`;
 

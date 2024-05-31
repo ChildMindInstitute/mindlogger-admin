@@ -65,6 +65,9 @@ export type GetParticipantActionsProps = {
   invitation: Invitation | null;
   secretId: string | null;
   nickname?: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  subjectCreatedAt: string | null;
   tag?: ParticipantTag | null;
   appletId?: string;
   status: RespondentStatus;

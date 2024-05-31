@@ -36,6 +36,9 @@ export type RespondentDetail = {
   hasIndividualSchedule: boolean;
   subjectId: string;
   subjectTag?: ParticipantTag | null;
+  subjectFirstName: string;
+  subjectLastName: string;
+  subjectCreatedAt: string;
   invitation: Invitation | null;
 };
 

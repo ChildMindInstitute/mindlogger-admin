@@ -350,6 +350,9 @@ export const Participants = () => {
               dataTestid,
               showAssignActivity: featureFlags.enableActivityAssign,
               invitation: detail.invitation,
+              firstName: detail.subjectFirstName,
+              lastName: detail.subjectLastName,
+              subjectCreatedAt: detail.subjectCreatedAt,
             })}
             data-testid={`${dataTestid}-table-actions`}
           />
