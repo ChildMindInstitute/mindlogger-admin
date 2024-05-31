@@ -26,6 +26,9 @@ describe('Participants utils tests', () => {
         hasIndividualSchedule: false,
         subjectId: 'subj-1',
         subjectTag: 'Child' as ParticipantTag,
+        subjectFirstName: 'Jane',
+        subjectLastName: 'Doe',
+        subjectCreatedAt: '2021-10-01T00:00:00.000Z',
         invitation: null,
       },
       {
@@ -37,6 +40,9 @@ describe('Participants utils tests', () => {
         hasIndividualSchedule: false,
         subjectId: 'subj-2',
         subjectTag: 'Child' as ParticipantTag,
+        subjectFirstName: 'Jane',
+        subjectLastName: 'Doe',
+        subjectCreatedAt: '2021-10-01T00:00:00.000Z',
         invitation: null,
       },
     ];
@@ -69,6 +75,9 @@ describe('Participants utils tests', () => {
       tag: 'Child' as ParticipantTag,
       showAssignActivity: true,
       invitation: null,
+      firstName: 'Jane',
+      lastName: 'Doe',
+      subjectCreatedAt: '2021-10-01T00:00:00.000Z',
       status: RespondentStatus.Invited,
       dataTestid: dataTestId,
     };
@@ -236,31 +245,27 @@ describe('Participants utils tests', () => {
     test('should return the correct actions if participant has limited account', () => {
       const actions = getParticipantActions({
         ...commonGetActionsProps,
+        email: null,
         status: RespondentStatus.NotInvited,
         dataTestid: dataTestId,
       });
       const displayedActions = actions.filter((action) => action.isDisplayed);
 
       expect(displayedActions).toEqual([
-        summaryAction({ email: mockedEmail }),
+        summaryAction({ fullName: 'Jane Doe', invitationDate: 'Oct 01, 2021, 00:00' }),
         {
           type: MenuItemType.Divider,
           isDisplayed: true,
         },
-        copyEmailAddressAction(),
+        editParticipantAction({ context: { email: null } }),
+        upgradeToFullAccountAction({ context: { email: null } }),
+        exportDataAction({ context: { email: null } }),
+        removeParticipantAction({ context: { email: null } }),
         {
           type: MenuItemType.Divider,
           isDisplayed: true,
         },
-        editParticipantAction(),
-        upgradeToFullAccountAction(),
-        exportDataAction(),
-        removeParticipantAction(),
-        {
-          type: MenuItemType.Divider,
-          isDisplayed: true,
-        },
-        assignActivityAction(),
+        assignActivityAction({ context: { email: null } }),
       ]);
     });
 
