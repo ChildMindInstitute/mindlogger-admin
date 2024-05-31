@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Divider, ListItemIcon, MenuItem } from '@mui/material';
+import {Box, Divider, ListItemIcon, MenuItem} from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
@@ -104,24 +104,9 @@ export const Menu = <T = unknown,>({
               );
             case MenuItemType.Info:
               return (
-                <MenuItem
-                  key={index}
-                  data-testid={dataTestId}
-                  onClick={undefined}
-                  disableTouchRipple
-                  disableRipple
-                  sx={{
-                    '&&': {
-                      cursor: 'default',
-                      userSelect: 'text',
-                      ':hover': {
-                        backgroundColor: 'inherit',
-                      },
-                    },
-                  }}
-                >
+                <Box data-testid={dataTestId} key={index} sx={{ px: 2, py: 1.2 }}>
                   {menuItemContent}
-                </MenuItem>
+                </Box>
               );
             case MenuItemType.Divider:
               return <Divider key={index} sx={{ flex: 1, my: 0.8 }} data-testid={dataTestId} />;
