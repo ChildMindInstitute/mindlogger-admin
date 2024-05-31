@@ -201,9 +201,6 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
           url.searchParams.set('respondentId', loggedInUser.userId);
         }
 
-        // TODO: Remove once the web app is updated to process `targetSubjectId` instead of `subjectId`
-        url.searchParams.set('subjectId', targetSubject.id);
-
         setActivity(null);
         window.open(url.toString(), '_blank');
       }
