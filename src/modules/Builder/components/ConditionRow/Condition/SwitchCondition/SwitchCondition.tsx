@@ -1,43 +1,51 @@
-import { useState } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { addDays, setHours, setMinutes, addMinutes } from 'date-fns';
+import { addDays } from 'date-fns';
 
 import { useCustomFormContext } from 'modules/Builder/hooks/useCustomFormContext';
 import { DatePicker } from 'shared/components/DatePicker';
-import { TimePicker } from 'shared/components/TimePicker';
 import { CONDITION_TYPES_TO_HAVE_RANGE_VALUE } from 'shared/consts';
 import { StyledBodyLarge, StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { ConditionItemType } from '../Condition.const';
-import { StyledInputController, StyledTimeRow } from './SwitchCondition.styles';
+import { StyledInputController } from './SwitchCondition.styles';
 import { SwitchConditionProps } from './SwitchCondition.types';
-import { getConditionMinMaxValues, getConditionMinMaxRangeValues } from './SwitchCondition.utils';
 import {
-  commonInputSx,
-  commonInputWrapperSx,
-  MAX_HOURS,
-  MAX_MINUTES,
-  MAX_TIME,
-  MIN_TIME,
-  TIME_INTERVALS,
-} from './SwitchCondition.const';
+  getConditionMinMaxValues,
+  getConditionMinMaxRangeValues,
+  getTimeRangeOptions,
+} from './SwitchCondition.utils';
+import { commonInputSx, commonInputWrapperSx } from './SwitchCondition.const';
+import { TimeCondition } from './TimeCondition';
+import { StyledSelectController } from '../Condition.styles';
 
 export const SwitchCondition = ({
   selectedItem,
   itemType,
-  numberValueName,
-  minValueName,
-  maxValueName,
+  payloadName,
   state,
   dataTestid,
+  isValueSelectDisabled,
 }: SwitchConditionProps) => {
+  const numberValueName = `${payloadName}.value`;
+  const minValueName = `${payloadName}.minValue`;
+  const maxValueName = `${payloadName}.maxValue`;
+  const typeName = `${payloadName}.type`;
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
-  const [minEndTime, setMinEndTime] = useState(MIN_TIME);
   const isSingleValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = !isSingleValueShown;
+
+  const commonTimeConditionProps = {
+    numberValueName,
+    minValueName,
+    maxValueName,
+    maxValue,
+    isSingleValueShown,
+    isRangeValueShown,
+    dataTestid,
+  };
 
   if (!itemType) return null;
 
@@ -151,73 +159,25 @@ export const SwitchCondition = ({
       );
     }
     case ConditionItemType.Time: {
-      const commonTimePickerProps = {
-        control,
-        placeholder: t('timePlaceholder'),
-        label: '',
-        wrapperSx: {
-          ...commonInputWrapperSx,
-          minWidth: '14rem',
-          width: '14rem',
-        },
-        inputSx: {
-          ...commonInputSx,
-        },
-        timeIntervals: TIME_INTERVALS,
-      };
-      const onStartTimeChange = (time: string) => {
-        if (!time) return;
-
-        const [startTimeHours, startTimeMinutes] = time.split(':');
-        const resultDate = setHours(
-          setMinutes(new Date(), Number(startTimeMinutes)),
-          Number(startTimeHours),
-        );
-        setMinEndTime(resultDate);
-
-        if (maxValue && time && maxValue < time) {
-          if (Number(startTimeHours) === MAX_HOURS && Number(startTimeMinutes) === MAX_MINUTES) {
-            setValue(maxValueName, time);
-
-            return;
-          }
-          const endTimeDate = addMinutes(resultDate, 1);
-          const endTimeHours = endTimeDate.getHours();
-          const endTimeMinutes = endTimeDate.getMinutes();
-          setValue(maxValueName, `${endTimeHours}:${endTimeMinutes}`);
-        }
-      };
-
+      return <TimeCondition {...commonTimeConditionProps} />;
+    }
+    case ConditionItemType.TimeRange:
       return (
         <>
-          {isSingleValueShown && (
-            <TimePicker
-              {...commonTimePickerProps}
-              name={numberValueName}
-              data-testid={`${dataTestid}-time`}
-            />
-          )}
-          {isRangeValueShown && (
-            <StyledTimeRow>
-              <TimePicker
-                {...commonTimePickerProps}
-                onCustomChange={onStartTimeChange}
-                name={minValueName}
-                data-testid={`${dataTestid}-start-time`}
-              />
-              <StyledBodyLarge sx={{ m: theme.spacing(0, 0.4) }}>{t('and')}</StyledBodyLarge>
-              <TimePicker
-                {...commonTimePickerProps}
-                minTime={minEndTime}
-                maxTime={MAX_TIME}
-                name={maxValueName}
-                data-testid={`${dataTestid}-end-time`}
-              />
-            </StyledTimeRow>
-          )}
+          <StyledSelectController
+            control={control}
+            name={typeName}
+            options={getTimeRangeOptions()}
+            placeholder={
+              isValueSelectDisabled ? t('conditionDisabledPlaceholder') : t('Start Time / End Time')
+            }
+            isLabelNeedTranslation={false}
+            data-testid={`${dataTestid}-payload-type-value`}
+            disabled={isValueSelectDisabled}
+          />
+          <TimeCondition {...commonTimeConditionProps} />
         </>
       );
-    }
     default:
       return null;
   }

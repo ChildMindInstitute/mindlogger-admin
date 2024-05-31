@@ -5,4 +5,5 @@ export type SwitchConditionProps = {
   selectedItem?: ConditionItem;
   itemType?: ConditionItemType;
   dataTestid: ConditionProps['data-testid'];
-} & Pick<ConditionProps, 'numberValueName' | 'minValueName' | 'maxValueName' | 'state'>;
+  isValueSelectDisabled: boolean;
+} & Pick<ConditionProps, 'payloadName' | 'state'>;

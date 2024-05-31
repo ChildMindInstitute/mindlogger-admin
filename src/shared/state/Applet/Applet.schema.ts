@@ -422,10 +422,22 @@ export type RangeValueCondition<T = number> = BaseCondition & {
   };
 };
 
+export const enum TimeRangeConditionType {
+  StartTime = 'startTime',
+  EndTime = 'endTime',
+}
+export type TimeRangeValueCondition<T = Date> = BaseCondition &
+  RangeValueCondition<T> & {
+    payload: {
+      type: TimeRangeConditionType;
+    };
+  };
+
 export type Condition<T = number> =
   | OptionCondition
   | SingleValueCondition<T>
   | RangeValueCondition<T>
+  | TimeRangeValueCondition
   | ScoreCondition;
 
 export type ConditionalLogic = {
