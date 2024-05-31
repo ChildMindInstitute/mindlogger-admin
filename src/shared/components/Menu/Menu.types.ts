@@ -7,6 +7,7 @@ export type MenuActionProps<T = unknown> = { title?: string; context?: T };
 export enum MenuItemType {
   Normal,
   Divider,
+  Info,
 }
 
 export type MenuItem<T = unknown> = {

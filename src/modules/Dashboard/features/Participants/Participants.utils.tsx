@@ -140,7 +140,7 @@ export const getParticipantActions = ({
   const hasTitle = title.length > 0;
 
   return cleanUpDividers([
-    { title, isDisplayed: hasTitle },
+    { type: MenuItemType.Info, title, isDisplayed: hasTitle },
     {
       type: MenuItemType.Divider,
       isDisplayed: hasTitle,

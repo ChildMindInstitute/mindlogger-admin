@@ -126,6 +126,7 @@ describe('Participants utils tests', () => {
       }
 
       return {
+        type: MenuItemType.Info,
         title,
         isDisplayed: options?.isDisplayed ?? true,
       };
