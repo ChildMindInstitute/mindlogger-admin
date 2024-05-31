@@ -37,6 +37,7 @@ const mockedSubject: RespondentDetails = {
   secretUserId: mockedRespondent.secretIds[0],
   userId: mockedRespondentId,
   ...mockedRespondent,
+  id: mockedRespondentId,
 };
 
 const mockedActivity = {

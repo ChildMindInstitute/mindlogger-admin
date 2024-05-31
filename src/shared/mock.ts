@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
-import { RespondentStatus } from 'modules/Dashboard/types';
+import { Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -100,7 +100,7 @@ export const mockedCurrentWorkspace = {
 };
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
 export const mockedSubjectId1 = 'subject-id-987';
-export const mockedRespondentDetails = {
+export const mockedRespondentDetails: RespondentDetail = {
   appletId: mockedAppletId,
   appletDisplayName: 'Mocked Applet',
   appletImage: '',
@@ -111,9 +111,12 @@ export const mockedRespondentDetails = {
   encryption: mockedEncryption,
   subjectId: mockedSubjectId1,
   subjectTag: 'Child' as ParticipantTag,
+  subjectFirstName: 'John',
+  subjectLastName: 'Doe',
+  subjectCreatedAt: '2023-09-26T12:11:46.162083',
   invitation: null,
 };
-export const mockedRespondent = {
+export const mockedRespondent: Respondent = {
   id: mockedRespondentId,
   nicknames: ['Mocked Respondent'],
   secretIds: ['mockedSecretId'],
@@ -128,7 +131,7 @@ export const mockedRespondent = {
 };
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
 export const mockedSubjectId2 = 'subject-id-123';
-export const mockedRespondent2 = {
+export const mockedRespondent2: Respondent = {
   id: mockedRespondentId2,
   nicknames: ['Test Respondent'],
   secretIds: ['testSecretId'],
@@ -151,6 +154,9 @@ export const mockedRespondent2 = {
       encryption: mockedEncryption,
       subjectId: mockedSubjectId2,
       subjectTag: 'Child' as ParticipantTag,
+      subjectFirstName: 'John',
+      subjectLastName: 'Doe',
+      subjectCreatedAt: '2023-09-26T12:11:46.162083',
       invitation: null,
     },
   ],

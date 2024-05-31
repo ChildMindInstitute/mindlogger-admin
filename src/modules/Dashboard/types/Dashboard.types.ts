@@ -34,6 +34,7 @@ export type RespondentDetail = {
   respondentNickname: string;
   respondentSecretId: string;
   hasIndividualSchedule: boolean;
+  encryption?: Encryption;
   subjectId: string;
   subjectTag?: ParticipantTag | null;
   subjectFirstName: string;
