@@ -14,13 +14,12 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { Mixpanel, isManagerOrOwner } from 'shared/utils';
+import { Mixpanel, checkIfFullAccess } from 'shared/utils';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal';
 import { workspaces } from 'redux/modules';
 import { page } from 'resources';
 import { palette } from 'shared/styles/variables/palette';
-import { Roles } from 'shared/consts';
 import { hasPermissionToViewData } from 'modules/Dashboard/pages/RespondentData/RespondentData.utils';
 import { NavigationEyebrow } from 'shared/components/NavigationEyebrow';
 
@@ -80,9 +79,7 @@ export const RespondentDataHeader = ({
   };
 
   const canDoTakeNow =
-    activity &&
-    featureFlags.enableMultiInformantTakeNow &&
-    (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
+    activity && featureFlags.enableMultiInformantTakeNow && checkIfFullAccess(roles);
 
   const canViewData = hasPermissionToViewData(roles);
 

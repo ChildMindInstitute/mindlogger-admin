@@ -11,12 +11,15 @@ import { Spinner } from 'shared/components';
 import { theme, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
 import { Respondent } from 'modules/Dashboard/types';
+import { usePermissions } from 'shared/hooks';
+import { checkIfHasAccessToSchedule } from 'modules/Dashboard/features/Applet/Schedule/Schedule.utils';
 
 export const ParticipantSchedule = () => {
   const { appletId } = useParams();
   const { getAllWorkspaceRespondents } = users.thunk;
   const { getEvents } = applets.thunk;
   const { ownerId } = workspaces.useData() || {};
+  const { data: workspaceRoles } = workspaces.useRolesData() ?? {};
   const { result: appletData } = applet.useAppletData() ?? {};
   const { result: respondentsData } = users.useAllRespondentsData() || {};
   const { result: subjectData } = users.useSubject() ?? {};
@@ -38,15 +41,22 @@ export const ParticipantSchedule = () => {
   );
   const { details, id: userId } = selectedRespondent ?? {};
   const hasIndividualSchedule = details ? details[0].hasIndividualSchedule : false;
+  const hasAccess = appletId ? checkIfHasAccessToSchedule(workspaceRoles?.[appletId]) : false;
 
   useEffect(() => {
-    if (!appletId || !ownerId) return;
+    if (!appletId || !ownerId || !hasAccess) return;
 
     dispatch(getAllWorkspaceRespondents({ params: { ownerId, appletId, shell: false } }));
-  }, [appletId, dispatch, getAllWorkspaceRespondents, ownerId]);
+  }, [appletId, dispatch, getAllWorkspaceRespondents, hasAccess, ownerId]);
+
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!appletId || !ownerId || !hasAccess) return;
+
+    return dispatch(getAllWorkspaceRespondents({ params: { ownerId, appletId, shell: false } }));
+  });
 
   useEffect(() => {
-    if (!appletId) return;
+    if (!appletId || !hasAccess) return;
 
     const shouldFetchUserEvents = hasIndividualSchedule && !!userId;
 
@@ -60,7 +70,9 @@ export const ParticipantSchedule = () => {
     return () => {
       dispatch(applets.actions.resetEventsData());
     };
-  }, [appletId, dispatch, getEvents, hasIndividualSchedule, userId]);
+  }, [appletId, dispatch, getEvents, hasAccess, hasIndividualSchedule, userId]);
+
+  if (isForbidden || !hasAccess) return noPermissionsComponent;
 
   return (
     <Box

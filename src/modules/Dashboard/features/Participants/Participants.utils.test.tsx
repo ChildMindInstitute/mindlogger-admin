@@ -2,7 +2,7 @@ import { MenuItemType, Svg } from 'shared/components';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
 import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
-import { ParticipantTag } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 
 import { getParticipantActions, getHeadCells, cleanUpDividers } from './Participants.utils';
 import {
@@ -219,6 +219,7 @@ describe('Participants utils tests', () => {
         ...commonGetActionsProps,
         status: RespondentStatus.Invited,
         dataTestid: dataTestId,
+        roles: [Roles.Manager],
         invitation: approvedInvitation,
       });
       const displayedActions = actions.filter((action) => action.isDisplayed);
@@ -250,6 +251,7 @@ describe('Participants utils tests', () => {
         email: null,
         status: RespondentStatus.NotInvited,
         dataTestid: dataTestId,
+        roles: [Roles.Manager],
       });
       const displayedActions = actions.filter((action) => action.isDisplayed);
 
@@ -295,6 +297,7 @@ describe('Participants utils tests', () => {
         status: RespondentStatus.Pending,
         dataTestid: dataTestId,
         invitation: pendingInvitation,
+        roles: [Roles.Manager],
       });
       const displayedActions = actions.filter((action) => action.isDisplayed);
 

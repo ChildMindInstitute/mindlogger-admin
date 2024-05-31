@@ -8,7 +8,7 @@ import { auth, workspaces } from 'redux/modules';
 import { StyledFlexColumn, StyledFlexTopCenter, StyledHeadline, theme } from 'shared/styles';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { getWorkspaceManagersApi, getWorkspaceRespondentsApi } from 'api';
-import { joinWihComma } from 'shared/utils';
+import { checkIfFullAccess, joinWihComma } from 'shared/utils';
 import { ParticipantsData } from 'modules/Dashboard/features/Participants';
 import { useAsync } from 'shared/hooks';
 
@@ -44,6 +44,9 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     useState<ParticipantDropdownOption | null>(null);
   const [defaultSourceSubject, setDefaultSourceSubject] =
     useState<ParticipantDropdownOption | null>(null);
+  const workspaceRoles = workspaces.useRolesData();
+  const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
+  const canTakeNow = checkIfFullAccess(roles);
 
   const participantToOption = useCallback((participant: Respondent): ParticipantDropdownOption => {
     const stringNicknames = joinWihComma(participant.nicknames, true);
@@ -124,6 +127,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
   );
 
   useEffect(() => {
+    if (!canTakeNow) return;
     if (appletId) {
       if (allParticipants.length === 0 && !isFetchingParticipants) {
         fetchParticipants({
@@ -167,6 +171,7 @@ export const useTakeNowModal = ({ dataTestId }: UseTakeNowModalProps) => {
     fetchParticipants,
     fetchManagers,
     fetchLoggedInTeamMember,
+    canTakeNow,
   ]);
 
   const TakeNowModal = ({ onClose }: TakeNowModalProps) => {

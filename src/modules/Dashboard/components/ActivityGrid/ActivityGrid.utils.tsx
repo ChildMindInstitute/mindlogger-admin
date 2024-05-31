@@ -2,8 +2,12 @@ import { t } from 'i18next';
 
 import { Svg } from 'shared/components/Svg';
 import { MenuItem, MenuItemType } from 'shared/components';
-import { isManagerOrOwner } from 'shared/utils';
-import { Roles } from 'shared/consts';
+import {
+  checkIfCanAccessData,
+  checkIfCanEdit,
+  checkIfCanManageParticipants,
+  checkIfFullAccess,
+} from 'shared/utils';
 
 import { ActivityActions, ActivityActionProps } from './ActivityGrid.types';
 
@@ -16,19 +20,13 @@ export const getActivityActions = ({
   featureFlags,
   hasParticipants,
 }: ActivityActions): MenuItem<ActivityActionProps>[] => {
-  const canEdit =
-    isManagerOrOwner(roles?.[0]) ||
-    roles?.includes(Roles.Editor) ||
-    roles?.includes(Roles.SuperAdmin);
-
+  const canEdit = checkIfCanEdit(roles);
+  const canAccessData = checkIfCanAccessData(roles);
   const canDoTakeNow =
-    featureFlags.enableMultiInformantTakeNow &&
-    hasParticipants &&
-    (isManagerOrOwner(roles?.[0]) || roles?.includes(Roles.SuperAdmin));
-
-  const canAssignActivity = featureFlags.enableActivityAssign;
-
-  const showDivider = canDoTakeNow || canAssignActivity;
+    featureFlags.enableMultiInformantTakeNow && hasParticipants && checkIfFullAccess(roles);
+  const canAssignActivity =
+    checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
+  const showDivider = (canEdit || canAccessData) && (canDoTakeNow || canAssignActivity);
 
   return [
     {
@@ -44,7 +42,7 @@ export const getActivityActions = ({
       action: exportData,
       title: t('exportData'),
       context: { appletId, activityId },
-      isDisplayed: true,
+      isDisplayed: canAccessData,
       'data-testid': `${dataTestId}-activity-export`,
     },
     { type: MenuItemType.Divider, isDisplayed: showDivider },

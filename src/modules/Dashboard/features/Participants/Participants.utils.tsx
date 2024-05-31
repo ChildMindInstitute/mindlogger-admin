@@ -15,6 +15,7 @@ import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
 import { MenuItem, MenuItemType } from 'shared/components';
+import { checkIfCanAccessData, checkIfCanManageParticipants } from 'shared/utils';
 import { DateFormats } from 'shared/consts';
 
 import {
@@ -80,12 +81,13 @@ export const getParticipantActions = ({
   tag,
   status,
   dataTestid,
+  showAssignActivity = false,
+  roles,
   invitation,
   firstName,
   lastName,
   subjectCreatedAt,
-  showAssignActivity = false,
-}: GetParticipantActionsProps): MenuItem<ParticipantActionProps>[] => {
+}: GetParticipantActionsProps) => {
   const context = {
     respondentId,
     respondentOrSubjectId,
@@ -95,10 +97,16 @@ export const getParticipantActions = ({
     tag,
     invitation,
   };
+  const canManageParticipants = checkIfCanManageParticipants(roles);
   const isUpgradeable = status === RespondentStatus.NotInvited;
   const isPending = status === RespondentStatus.Pending;
-  const isEditable = !!filteredApplets?.editable.length;
+  const isEditable = canManageParticipants && !!filteredApplets?.editable.length;
   const isViewable = !!filteredApplets?.viewable.length;
+  const showEdit = !!appletId && isEditable && !isPending;
+  const showUpgrade = isUpgradeable && isEditable;
+  const showExport = checkIfCanAccessData(roles) && isViewable && !isPending;
+  const showAssign = canManageParticipants && showAssignActivity && isEditable && !isPending;
+  const showDivider = (showEdit || showUpgrade || showExport) && showAssign;
 
   let title = '';
   const emailAddress = email || invitation?.email;
@@ -170,7 +178,7 @@ export const getParticipantActions = ({
       action: editParticipant,
       title: t('editParticipant'),
       context,
-      isDisplayed: !!appletId && isEditable && !isPending,
+      isDisplayed: showEdit,
       'data-testid': `${dataTestid}-edit`,
     },
     {
@@ -178,7 +186,7 @@ export const getParticipantActions = ({
       action: upgradeAccount,
       title: t('upgradeToFullAccount'),
       context,
-      isDisplayed: isUpgradeable && isEditable,
+      isDisplayed: showUpgrade,
       'data-testid': `${dataTestid}-upgrade-account`,
     },
     {
@@ -186,7 +194,7 @@ export const getParticipantActions = ({
       action: exportData,
       title: t('exportData'),
       context,
-      isDisplayed: isViewable && !isPending,
+      isDisplayed: showExport,
       'data-testid': `${dataTestid}-export-data`,
     },
     {
@@ -200,14 +208,14 @@ export const getParticipantActions = ({
     },
     {
       type: MenuItemType.Divider,
-      isDisplayed: showAssignActivity && !isPending,
+      isDisplayed: showDivider,
     },
     {
       icon: <Svg id="add-users-outlined" width={24} height={24} />,
       action: assignActivity,
       title: t('assignActivity'),
       context,
-      isDisplayed: showAssignActivity && isEditable && !isPending,
+      isDisplayed: showAssign,
       'data-testid': `${dataTestid}-assign-activity`,
     },
   ]);

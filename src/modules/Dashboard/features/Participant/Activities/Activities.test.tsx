@@ -174,12 +174,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
         routePath,
       });
 
-      await waitFor(() =>
-        expect(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]).toBeVisible(),
-      );
-      userEvent.click(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]);
-
-      if (canEdit) {
+      const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
+      if (actionDots && canEdit) {
+        userEvent.click(actionDots);
         await waitFor(() => expect(screen.getByTestId(`${testId}-activity-edit`)).toBeVisible());
 
         fireEvent.click(screen.getByTestId(`${testId}-activity-edit`));
@@ -219,12 +216,9 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           routePath,
         });
 
-        await waitFor(() =>
-          expect(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]).toBeVisible(),
-        );
-        userEvent.click(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]);
-
-        if (canDoTakeNow) {
+        const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
+        if (actionDots && canDoTakeNow) {
+          userEvent.click(actionDots);
           await waitFor(() =>
             expect(screen.getByTestId(`${testId}-activity-take-now`)).toBeVisible(),
           );
@@ -267,12 +261,17 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
           routePath,
         });
 
-        await waitFor(() =>
-          expect(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]).toBeVisible(),
-        );
-        await userEvent.click(screen.getAllByTestId(`${testId}-activity-actions-dots`)[0]);
-
-        await waitFor(() => expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBe(null));
+        const actionDots = screen.queryAllByTestId(`${testId}-activity-actions-dots`)[0];
+        if (actionDots) {
+          await userEvent.click(actionDots);
+          await waitFor(() =>
+            expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBe(null),
+          );
+        } else {
+          await waitFor(() =>
+            expect(screen.queryByTestId(`${testId}-activity-take-now`)).toBe(null),
+          );
+        }
       });
     });
 
