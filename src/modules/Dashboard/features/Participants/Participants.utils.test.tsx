@@ -318,6 +318,7 @@ describe('Participants utils tests', () => {
           isDisplayed: true,
         },
         copyInvitationLinkAction({ context: { invitation: pendingInvitation } }),
+        removeParticipantAction({ context: { invitation: pendingInvitation } }),
       ]);
     });
   });

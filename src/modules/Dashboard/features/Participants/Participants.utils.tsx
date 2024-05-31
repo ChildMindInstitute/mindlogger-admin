@@ -194,7 +194,7 @@ export const getParticipantActions = ({
       action: removeParticipant,
       title: t('removeParticipant'),
       context,
-      isDisplayed: isEditable && !isPending,
+      isDisplayed: isEditable,
       customItemColor: variables.palette.dark_error_container,
       'data-testid': `${dataTestid}-remove`,
     },
