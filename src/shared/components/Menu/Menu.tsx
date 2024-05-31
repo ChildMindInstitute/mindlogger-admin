@@ -75,6 +75,7 @@ export const Menu = <T = unknown,>({
                 <StyledBodyLarge
                   color={customItemColor || variables.palette.on_surface}
                   letterSpacing="xxl"
+                  whiteSpace="pre-line"
                 >
                   {t(title)}
                 </StyledBodyLarge>

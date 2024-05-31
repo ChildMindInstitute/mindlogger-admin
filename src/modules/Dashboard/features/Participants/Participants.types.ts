@@ -3,6 +3,8 @@ import { MenuActionProps } from 'shared/components';
 import { ParticipantTag } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 
+import { Invitation } from '../Applet/AddUser/AddUser.types';
+
 export type ParticipantActionProps = {
   respondentId: string | null;
   respondentOrSubjectId: string;
@@ -10,6 +12,7 @@ export type ParticipantActionProps = {
   secretId: string | null;
   nickname?: string | null;
   tag?: ParticipantTag | null;
+  invitation: Invitation | null;
 };
 
 export type ParticipantActions = {
@@ -18,6 +21,8 @@ export type ParticipantActions = {
   exportData: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
   removeParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
   assignActivity: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  copyEmailAddress: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
+  copyInvitationLink: ({ context }: MenuActionProps<ParticipantActionProps>) => void;
 };
 
 export type ChosenAppletData = {
@@ -57,6 +62,7 @@ export type GetParticipantActionsProps = {
   respondentId: string | null;
   respondentOrSubjectId: string;
   email: string | null;
+  invitation: Invitation | null;
   secretId: string | null;
   nickname?: string | null;
   tag?: ParticipantTag | null;

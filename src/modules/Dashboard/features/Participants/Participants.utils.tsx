@@ -1,19 +1,21 @@
 import { Dispatch, SetStateAction } from 'react';
 import { t } from 'i18next';
+import { format } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
 import {
+  StyledBodyMedium,
+  StyledFlexTopCenter,
+  StyledLabelLarge,
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
-  StyledBodyMedium,
-  StyledLabelLarge,
-  StyledFlexTopCenter,
   variables,
 } from 'shared/styles';
 import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
 import { MenuItem, MenuItemType } from 'shared/components';
+import { DateFormats } from 'shared/consts';
 
 import {
   ChosenAppletData,
@@ -22,8 +24,52 @@ import {
 } from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
 
+/**
+ * Remove dividers that are not between normal displayed menu items
+ */
+export function cleanUpDividers(
+  items: MenuItem<ParticipantActionProps>[],
+): MenuItem<ParticipantActionProps>[] {
+  let foundDisplayed = false;
+  let prevDivider = false;
+  let lastDisplayedIndex = -1;
+
+  const result: MenuItem<ParticipantActionProps>[] = items.map((item, i) => {
+    if (item.isDisplayed) {
+      if (item.type === MenuItemType.Divider) {
+        if (!foundDisplayed || prevDivider) {
+          item.isDisplayed = false;
+        }
+
+        prevDivider = true;
+      } else {
+        foundDisplayed = true;
+        prevDivider = false;
+      }
+
+      lastDisplayedIndex = i;
+    }
+
+    return item;
+  });
+
+  if (result.at(lastDisplayedIndex)?.type === MenuItemType.Divider) {
+    result[lastDisplayedIndex].isDisplayed = false;
+  }
+
+  return result;
+}
+
 export const getParticipantActions = ({
-  actions: { editParticipant, upgradeAccount, exportData, removeParticipant, assignActivity },
+  actions: {
+    editParticipant,
+    upgradeAccount,
+    exportData,
+    removeParticipant,
+    assignActivity,
+    copyEmailAddress,
+    copyInvitationLink,
+  },
   filteredApplets,
   respondentId,
   respondentOrSubjectId,
@@ -34,15 +80,76 @@ export const getParticipantActions = ({
   tag,
   status,
   dataTestid,
+  invitation,
   showAssignActivity = false,
 }: GetParticipantActionsProps): MenuItem<ParticipantActionProps>[] => {
-  const context = { respondentId, respondentOrSubjectId, email, secretId, nickname, tag };
+  const context = {
+    respondentId,
+    respondentOrSubjectId,
+    email,
+    secretId,
+    nickname,
+    tag,
+    invitation,
+  };
   const isUpgradeable = status === RespondentStatus.NotInvited;
   const isPending = status === RespondentStatus.Pending;
   const isEditable = !!filteredApplets?.editable.length;
   const isViewable = !!filteredApplets?.viewable.length;
 
-  return [
+  let title = '';
+  const emailAddress = email || invitation?.email;
+
+  if (emailAddress) {
+    title += `${i18n.t('email')}: ${emailAddress}`;
+  }
+
+  const hasInvitation = !!invitation;
+
+  if (hasInvitation) {
+    if (invitation.firstName && invitation.lastName) {
+      const fullName = `${i18n.t('fullName')}: ${invitation.firstName} ${invitation.lastName}`;
+      title += title.length > 0 ? '\n' : '';
+      title += fullName;
+    }
+
+    const invitationDate = `${i18n.t('invitationDate')}: ${format(
+      new Date(invitation.createdAt),
+      DateFormats.MonthDayYearTime,
+    )}`;
+
+    title += title.length > 0 ? '\n' : '';
+    title += `${invitationDate}`;
+  }
+
+  const hasTitle = title.length > 0;
+
+  return cleanUpDividers([
+    { title, isDisplayed: hasTitle },
+    {
+      type: MenuItemType.Divider,
+      isDisplayed: hasTitle,
+    },
+    {
+      icon: <Svg id="duplicate" width={24} height={24} />,
+      action: copyEmailAddress,
+      title: t('copyEmailAddress'),
+      context,
+      isDisplayed: !!emailAddress,
+      'data-testid': `${dataTestid}-copy-email`,
+    },
+    {
+      type: MenuItemType.Divider,
+      isDisplayed: !!emailAddress,
+    },
+    {
+      icon: <Svg id="format-link" width={24} height={24} />,
+      action: copyInvitationLink,
+      title: t('copyInvitationLink'),
+      context,
+      isDisplayed: hasInvitation && isPending,
+      'data-testid': `${dataTestid}-copy-invitation-link`,
+    },
     {
       icon: <Svg id="edit" width={24} height={24} />,
       action: editParticipant,
@@ -72,7 +179,7 @@ export const getParticipantActions = ({
       action: removeParticipant,
       title: t('removeParticipant'),
       context,
-      isDisplayed: isEditable,
+      isDisplayed: isEditable && !isPending,
       customItemColor: variables.palette.dark_error_container,
       'data-testid': `${dataTestid}-remove`,
     },
@@ -88,7 +195,7 @@ export const getParticipantActions = ({
       isDisplayed: showAssignActivity && isEditable && !isPending,
       'data-testid': `${dataTestid}-assign-activity`,
     },
-  ];
+  ]);
 };
 
 export const getAppletsSmallTableRows = (
