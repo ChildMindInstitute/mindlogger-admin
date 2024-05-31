@@ -53,9 +53,6 @@ export const ConditionRow = ({
   const conditionTypeName = `${conditionName}.type`;
   const conditionPayloadName = `${conditionName}.payload`;
   const conditionPayloadSelectionName = `${conditionPayloadName}.optionValue`;
-  const conditionPayloadValueName = `${conditionPayloadName}.value`;
-  const conditionPayloadMinValueName = `${conditionPayloadName}.minValue`;
-  const conditionPayloadMaxValueName = `${conditionPayloadName}.maxValue`;
 
   const [conditions, items, reports, conditionItem, conditionType, conditionPayload] = useWatch({
     name: [
@@ -152,9 +149,7 @@ export const ConditionRow = ({
         itemName={conditionItemName}
         stateName={conditionTypeName}
         optionValueName={conditionPayloadSelectionName}
-        numberValueName={conditionPayloadValueName}
-        minValueName={conditionPayloadMinValueName}
-        maxValueName={conditionPayloadMaxValueName}
+        payloadName={conditionPayloadName}
         itemOptions={itemOptions}
         valueOptions={valueOptions}
         item={conditionItem}

@@ -5,6 +5,7 @@ export const enum ConditionItemType {
   Date = 'date',
   NumberSelection = 'numberSelection',
   Time = 'time',
+  TimeRange = 'timeRange',
   Score = 'score',
   ScoreCondition = 'scoreCondition',
 }

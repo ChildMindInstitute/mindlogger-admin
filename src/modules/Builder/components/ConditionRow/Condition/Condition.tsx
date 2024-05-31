@@ -15,9 +15,7 @@ export const Condition = ({
   itemName,
   stateName,
   optionValueName,
-  numberValueName,
-  minValueName,
-  maxValueName,
+  payloadName,
   itemOptions,
   valueOptions,
   item,
@@ -29,6 +27,7 @@ export const Condition = ({
   type,
   'data-testid': dataTestid,
 }: ConditionProps) => {
+  const numberValueName = `${payloadName}.value`;
   const { t } = useTranslation('app');
   const { control } = useCustomFormContext();
 
@@ -49,11 +48,10 @@ export const Condition = ({
   const switchConditionProps = {
     itemType: selectedItem?.type,
     selectedItem,
-    numberValueName,
-    minValueName,
-    maxValueName,
+    payloadName,
     state,
     dataTestid,
+    isValueSelectDisabled: !selectedItem,
   };
 
   return (
@@ -80,7 +78,6 @@ export const Condition = ({
         isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-name`}
       />
-      {!isRowTypeItem && <StyledTitleMedium>{t('is')}</StyledTitleMedium>}
       <StyledSelectController
         control={control}
         name={stateName}
