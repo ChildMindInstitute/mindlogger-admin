@@ -150,12 +150,12 @@ export const getParticipantActions = ({
       action: copyEmailAddress,
       title: t('copyEmailAddress'),
       context,
-      isDisplayed: !!emailAddress,
+      isDisplayed: !!emailAddress && status !== RespondentStatus.Invited,
       'data-testid': `${dataTestid}-copy-email`,
     },
     {
       type: MenuItemType.Divider,
-      isDisplayed: !!emailAddress,
+      isDisplayed: !!emailAddress && status !== RespondentStatus.Invited,
     },
     {
       icon: <Svg id="format-link" width={24} height={24} />,

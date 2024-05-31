@@ -232,11 +232,6 @@ describe('Participants utils tests', () => {
           type: MenuItemType.Divider,
           isDisplayed: true,
         },
-        copyEmailAddressAction({ context: { invitation: approvedInvitation } }),
-        {
-          type: MenuItemType.Divider,
-          isDisplayed: true,
-        },
         editParticipantAction({ context: { invitation: approvedInvitation } }),
         exportDataAction({ context: { invitation: approvedInvitation } }),
         removeParticipantAction({ context: { invitation: approvedInvitation } }),
