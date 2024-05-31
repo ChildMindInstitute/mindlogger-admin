@@ -18,7 +18,7 @@ import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { useAsync, usePermissions, useTable } from 'shared/hooks';
 import { DashboardTable, DashboardTableProps } from 'modules/Dashboard/components';
 import { Manager, WorkspaceInfo } from 'modules/Dashboard/types';
-import { isManagerOrOwner, joinWihComma } from 'shared/utils';
+import { checkIfFullAccess, isManagerOrOwner, joinWihComma } from 'shared/utils';
 import { Roles, DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
 import { StyledBody, StyledFlexWrap, variables } from 'shared/styles';
 import { useAppDispatch } from 'redux/store';
@@ -38,6 +38,8 @@ export const Managers = () => {
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
+  const roles = appletId ? rolesData?.data?.[appletId] : undefined;
+  const canViewTeam = checkIfFullAccess(roles);
 
   const { execute: getWorkspaceManagers } = useAsync(
     getWorkspaceManagersApi,
@@ -52,6 +54,7 @@ export const Managers = () => {
   });
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!canViewTeam) return;
     setIsLoading(true);
 
     return getWorkspaceManagers({
@@ -214,13 +217,12 @@ export const Managers = () => {
   };
 
   useEffect(() => {
-    if (!ownerId) return;
-    if (!appletId) return;
+    if (!ownerId || !appletId) return;
 
     executeGetWorkspaceInfoApi({ ownerId });
   }, [ownerId, appletId, executeGetWorkspaceInfoApi]);
 
-  if (isForbidden) return noPermissionsComponent;
+  if (isForbidden || !canViewTeam) return noPermissionsComponent;
 
   return (
     <StyledBody sx={{ p: 3.2 }}>

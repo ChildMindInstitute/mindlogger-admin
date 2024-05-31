@@ -2,7 +2,7 @@ import { MenuItemType, Svg } from 'shared/components';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
 import { RespondentStatus } from 'modules/Dashboard/types';
-import { ParticipantTag } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 
 import { getParticipantActions, getHeadCells } from './Participants.utils';
 
@@ -95,7 +95,7 @@ const expectedActions = [
     action: expect.any(Function),
     title: 'Export Data',
     context: expectedContext,
-    isDisplayed: true,
+    isDisplayed: false,
     'data-testid': `${dataTestId}-export-data`,
   },
   {
@@ -128,6 +128,7 @@ describe('Participants utils tests', () => {
         ...commonGetActionsProps,
         status: RespondentStatus.Invited,
         dataTestid: dataTestId,
+        roles: [Roles.Manager],
       });
 
       const isDisplayed = [true, false, true, true, true, true];
@@ -144,6 +145,7 @@ describe('Participants utils tests', () => {
         ...commonGetActionsProps,
         status: RespondentStatus.NotInvited,
         dataTestid: dataTestId,
+        roles: [Roles.Manager],
       });
 
       const isDisplayed = [true, true, true, true, true, true];
@@ -162,7 +164,7 @@ describe('Participants utils tests', () => {
         dataTestid: dataTestId,
       });
 
-      const isDisplayed = [false, false, false, true, false, false];
+      const isDisplayed = [false, false, false, false, false, false];
       actions.forEach((action, index) => {
         expect(action).toEqual({
           ...expectedActions[index],

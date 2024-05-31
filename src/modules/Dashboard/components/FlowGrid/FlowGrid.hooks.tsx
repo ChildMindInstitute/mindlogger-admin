@@ -6,9 +6,13 @@ import { useTakeNowModal } from 'modules/Dashboard/components/TakeNowModal/TakeN
 import { Activity, ActivityFlow, workspaces } from 'redux/modules';
 import { page } from 'resources';
 import { MenuActionProps, MenuItemType, Svg } from 'shared/components';
-import { Roles } from 'shared/consts';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
-import { isManagerOrOwner } from 'shared/utils';
+import {
+  checkIfCanAccessData,
+  checkIfCanEdit,
+  checkIfCanManageParticipants,
+  checkIfFullAccess,
+} from 'shared/utils';
 import { RespondentDetails } from 'modules/Dashboard/types';
 
 import { OpenTakeNowModalOptions } from '../TakeNowModal/TakeNowModal.types';
@@ -33,17 +37,12 @@ export function useFlowGridMenu({
   const workspaceRoles = workspaces.useRolesData();
   const roles = appletId ? workspaceRoles?.data?.[appletId] : undefined;
 
-  const canEdit =
-    isManagerOrOwner(roles?.[0]) ||
-    roles?.includes(Roles.Editor) ||
-    roles?.includes(Roles.SuperAdmin);
-
+  const canEdit = checkIfCanEdit(roles);
   const canDoTakeNow =
-    featureFlags.enableMultiInformantTakeNow &&
-    hasParticipants &&
-    (isManagerOrOwner(roles?.[0]) ||
-      roles?.includes(Roles.Coordinator) ||
-      roles?.includes(Roles.SuperAdmin));
+    checkIfFullAccess(roles) && featureFlags.enableMultiInformantTakeNow && hasParticipants;
+  const canAccessData = checkIfCanAccessData(roles);
+  const canAssign = checkIfCanManageParticipants(roles) && featureFlags.enableActivityAssign;
+  const showDivider = (canEdit || canAccessData) && (canAssign || canDoTakeNow);
 
   const getActionsMenu = useCallback(
     ({ flow }: { flow?: ActivityFlow }) => [
@@ -65,17 +64,23 @@ export function useFlowGridMenu({
         title: t('editFlow'),
       },
       {
+        // TODO: Implement export data
+        // https://mindlogger.atlassian.net/browse/M2-6039
+        // https://mindlogger.atlassian.net/browse/M2-6736
         'data-testid': `${testId}-flow-export`,
         disabled: true,
         icon: <Svg id="export" />,
         title: t('exportData'),
+        isDisplayed: canAccessData,
       },
-      { type: MenuItemType.Divider },
+      { type: MenuItemType.Divider, isDisplayed: showDivider },
       {
+        // TODO: Implement assign
+        // https://mindlogger.atlassian.net/browse/M2-5710
         'data-testid': `${testId}-flow-assign`,
         icon: <Svg id="add" />,
         title: t('assignActivity'),
-        isDisplayed: featureFlags.enableActivityAssign,
+        isDisplayed: canAssign,
       },
       {
         'data-testid': `${testId}-flow-take-now`,

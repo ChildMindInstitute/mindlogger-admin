@@ -1,6 +1,6 @@
 import { Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { MenuActionProps } from 'shared/components';
-import { ParticipantTag } from 'shared/consts';
+import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 
 export type ParticipantActionProps = {
@@ -64,6 +64,7 @@ export type GetParticipantActionsProps = {
   status: RespondentStatus;
   dataTestid: string;
   showAssignActivity?: boolean;
+  roles?: Roles[];
 };
 
 export type HandlePinClick = {

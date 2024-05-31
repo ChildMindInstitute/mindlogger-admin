@@ -17,7 +17,14 @@ import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
 import { page } from 'resources';
-import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
+import {
+  checkIfCanManageParticipants,
+  checkIfCanViewParticipants,
+  getDateInUserTimezone,
+  isManagerOrOwner,
+  joinWihComma,
+  Mixpanel,
+} from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexWrap } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
@@ -60,7 +67,9 @@ export const Participants = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const rolesData = workspaces.useRolesData();
+  const roles = appletId ? rolesData?.data?.[appletId] : undefined;
   const { ownerId } = workspaces.useData() || {};
+  const canViewParticipants = checkIfCanViewParticipants(roles);
 
   const handleToggleAddParticipant = () => {
     setSearchParams(
@@ -87,6 +96,7 @@ export const Participants = () => {
   );
 
   const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!canViewParticipants) return;
     setIsLoading(true);
 
     return getWorkspaceRespondents({
@@ -348,6 +358,7 @@ export const Participants = () => {
               status,
               dataTestid,
               showAssignActivity: featureFlags.enableActivityAssign,
+              roles,
             })}
             data-testid={`${dataTestid}-table-actions`}
           />
@@ -418,8 +429,9 @@ export const Participants = () => {
   const viewableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Viewable);
   const editableAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Editable);
   const dataTestid = 'dashboard-participants';
+  const canAddParticipant = appletId && checkIfCanManageParticipants(roles);
 
-  if (isForbidden) return noPermissionsComponent;
+  if (isForbidden || !canViewParticipants) return noPermissionsComponent;
 
   return (
     <StyledBody sx={{ p: 3.2 }}>
@@ -434,7 +446,7 @@ export const Participants = () => {
             sx={{ width: '32rem' }}
             data-testid={`${dataTestid}-search`}
           />
-          {appletId && (
+          {canAddParticipant && (
             <AddParticipantButton
               variant="contained"
               onClick={handleToggleAddParticipant}
@@ -452,15 +464,11 @@ export const Participants = () => {
         emptyComponent={
           !rows?.length && !isLoading ? (
             <EmptyDashboardTable searchValue={searchValue}>
-              {appletId ? (
-                <>
-                  {t('noParticipantsForApplet')}
-                  <AddParticipantButton onClick={handleToggleAddParticipant} variant="contained">
-                    {t('addParticipant')}
-                  </AddParticipantButton>
-                </>
-              ) : (
-                t('noParticipants')
+              {t('noParticipantsForApplet')}
+              {canAddParticipant && (
+                <AddParticipantButton onClick={handleToggleAddParticipant} variant="contained">
+                  {t('addParticipant')}
+                </AddParticipantButton>
               )}
             </EmptyDashboardTable>
           ) : undefined
