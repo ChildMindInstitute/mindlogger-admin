@@ -101,6 +101,7 @@ describe('Participants utils tests', () => {
       email?: string;
       fullName?: string;
       invitationDate?: string;
+      dateAdded?: string;
       isDisplayed?: boolean;
     }) => {
       let title = '';
@@ -117,6 +118,11 @@ describe('Participants utils tests', () => {
       if (options.invitationDate) {
         title += title.length > 0 ? '\n' : '';
         title += `Invitation Date: ${options.invitationDate}`;
+      }
+
+      if (options.dateAdded) {
+        title += title.length > 0 ? '\n' : '';
+        title += `Date Added: ${options.dateAdded}`;
       }
 
       return {
@@ -252,7 +258,7 @@ describe('Participants utils tests', () => {
       const displayedActions = actions.filter((action) => action.isDisplayed);
 
       expect(displayedActions).toEqual([
-        summaryAction({ fullName: 'Jane Doe', invitationDate: 'Oct 01, 2021, 00:00' }),
+        summaryAction({ fullName: 'Jane Doe', dateAdded: 'Oct 01, 2021, 00:00' }),
         {
           type: MenuItemType.Divider,
           isDisplayed: true,

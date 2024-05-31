@@ -128,7 +128,7 @@ export const getParticipantActions = ({
     title += title.length > 0 ? '\n' : '';
     title += `${invitationDate}`;
   } else if (subjectCreatedAt) {
-    const invitationDate = `${i18n.t('invitationDate')}: ${format(
+    const invitationDate = `${i18n.t('dateAdded')}: ${format(
       new Date(subjectCreatedAt),
       DateFormats.MonthDayYearTime,
     )}`;

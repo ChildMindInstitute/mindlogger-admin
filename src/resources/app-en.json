@@ -633,6 +633,7 @@
   "invalidLink": "It is not possible to add invalid link",
   "invalidPasswordResetLink": "This link is invalid or expired. Please click <0>here</0> to reset your password.",
   "invitationDate": "Invitation Date",
+  "dateAdded": "Date Added",
   "invitationLanguage": "Invitation Language",
   "invitationLink": "Invitation Link",
   "is": "Is",
