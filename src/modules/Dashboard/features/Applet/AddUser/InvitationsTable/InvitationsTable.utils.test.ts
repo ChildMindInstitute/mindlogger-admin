@@ -1,8 +1,8 @@
 import { mockI18Next } from 'shared/tests';
+import { mockedAppletId } from 'shared/mock';
 
 import { getHeadCells, getInvitationsTableRows } from './InvitationsTable.utils';
 import { Invitations } from '../AddUser.types';
-import { mockedAppletId } from '../../../../../../shared/mock';
 
 jest.mock('react-i18next', () => mockI18Next);
 
