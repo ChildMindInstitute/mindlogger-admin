@@ -19,6 +19,7 @@ import {
   SubscaleTotalScore,
 } from './consts';
 import { Item, MultiSelectItem, SingleSelectItem } from './state';
+import { Invitations } from '../modules/Dashboard/features/Applet/AddUser/AddUser.types';
 
 export const mockedEmail = 'test@gmail.com';
 export const mockedPassword = '123456!Qwe';
@@ -110,6 +111,7 @@ export const mockedRespondentDetails = {
   encryption: mockedEncryption,
   subjectId: mockedSubjectId1,
   subjectTag: 'Child' as ParticipantTag,
+  invitation: null,
 };
 export const mockedRespondent = {
   id: mockedRespondentId,
@@ -149,6 +151,7 @@ export const mockedRespondent2 = {
       encryption: mockedEncryption,
       subjectId: mockedSubjectId2,
       subjectTag: 'Child' as ParticipantTag,
+      invitation: null,
     },
   ],
 };
@@ -630,7 +633,7 @@ export const mockedSliderRowsFormValues = {
   order: 8,
 };
 
-export const mockedInvitation = {
+export const mockedInvitation: Invitations = {
   result: [
     {
       email: mockedEmail,

@@ -1,6 +1,8 @@
 import { mockI18Next } from 'shared/tests';
 
 import { getHeadCells, getInvitationsTableRows } from './InvitationsTable.utils';
+import { Invitations } from '../AddUser.types';
+import { mockedAppletId } from '../../../../../../shared/mock';
 
 jest.mock('react-i18next', () => mockI18Next);
 
@@ -33,9 +35,12 @@ describe('InvitationsTable.utils', () => {
 
   describe('getInvitationsTableRows', () => {
     test('should return an array of rows based on the input invitations', () => {
-      const invitations = {
+      const invitations: Invitations = {
         result: [
           {
+            appletId: mockedAppletId,
+            appletName: 'Mocked Applet',
+            status: 'approved',
             meta: { subject_id: '123' },
             firstName: 'John',
             lastName: 'Doe',
@@ -45,6 +50,8 @@ describe('InvitationsTable.utils', () => {
             createdAt: '2022-01-01T12:00:00',
             secretUserId: 'secret-id',
             nickname: 'test-nickname',
+            tag: null,
+            title: null,
           },
         ],
         count: 1,

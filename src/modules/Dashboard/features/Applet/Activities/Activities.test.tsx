@@ -306,6 +306,7 @@ describe('Dashboard > Applet > Activities screen', () => {
             encryption: mockedApplet.encryption,
             subjectId: 'owner-subject-id-123',
             subjectTag: 'Team' as ParticipantTag,
+            invitation: null,
           },
         ],
         status: RespondentStatus.Invited,
