@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import {Box, Divider, ListItemIcon, MenuItem} from '@mui/material';
+import { Box, Divider, ListItemIcon, MenuItem } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
