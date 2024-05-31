@@ -1,142 +1,236 @@
 import { MenuItemType, Svg } from 'shared/components';
 import { mockedAppletId, mockedRespondentId } from 'shared/mock';
 import { variables } from 'shared/styles';
-import { RespondentStatus } from 'modules/Dashboard/types';
+import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { ParticipantTag } from 'shared/consts';
 
-import { getParticipantActions, getHeadCells } from './Participants.utils';
-
-const dataTestId = 'test-id';
-
-const applets = [
-  {
-    appletId: 'fbc90304-3fc9-4a71-a85f-aa7944278107',
-    appletDisplayName: 'Applet 1',
-    accessId: '8ee2c3ba-513a-4d1e-913d-fb69f0333ea4',
-    respondentNickname: 'Jane Doe',
-    respondentSecretId: 'janedoe',
-    hasIndividualSchedule: false,
-    subjectId: 'subj-1',
-    subjectTag: 'Child' as ParticipantTag,
-  },
-  {
-    appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
-    appletDisplayName: 'Applet 2',
-    accessId: '115cd54d-17f0-43f4-8469-9f1802e2da5b',
-    respondentNickname: 'Jane Doe',
-    respondentSecretId: 'janedoe',
-    hasIndividualSchedule: false,
-    subjectId: 'subj-2',
-    subjectTag: 'Child' as ParticipantTag,
-  },
-];
-
-const filteredApplets = {
-  scheduling: applets,
-  editable: applets,
-  viewable: applets,
-};
-const headCellProperties = [
-  'pin',
-  'tag',
-  'secretIds',
-  'nicknames',
-  'accountType',
-  'lastSeen',
-  'actions',
-];
-const mockedEmail = 'test@test.com';
-const commonGetActionsProps = {
-  actions: {
-    editParticipant: jest.fn(),
-    upgradeAccount: jest.fn(),
-    exportData: jest.fn(),
-    removeParticipant: jest.fn(),
-    assignActivity: jest.fn(),
-  },
-  filteredApplets,
-  respondentId: mockedRespondentId,
-  respondentOrSubjectId: mockedRespondentId,
-  appletId: mockedAppletId,
-  email: mockedEmail,
-  secretId: 'test secret id',
-  nickname: 'test nickname',
-  tag: 'Child' as ParticipantTag,
-  showAssignActivity: true,
-};
-
-const expectedContext = {
-  respondentId: mockedRespondentId,
-  email: mockedEmail,
-  respondentOrSubjectId: mockedRespondentId,
-  secretId: commonGetActionsProps.secretId,
-  nickname: commonGetActionsProps.nickname,
-  tag: commonGetActionsProps.tag,
-};
-const expectedActions = [
-  {
-    icon: <Svg id="edit" width={24} height={24} />,
-    action: expect.any(Function),
-    title: 'Edit Participant',
-    context: expectedContext,
-    isDisplayed: true,
-    'data-testid': `${dataTestId}-edit`,
-  },
-  {
-    icon: <Svg id="full-account" width={24} height={24} />,
-    action: expect.any(Function),
-    title: 'Upgrade to Full Account',
-    context: expectedContext,
-    isDisplayed: true,
-    'data-testid': `${dataTestId}-upgrade-account`,
-  },
-  {
-    icon: <Svg id="export" width={24} height={24} />,
-    action: expect.any(Function),
-    title: 'Export Data',
-    context: expectedContext,
-    isDisplayed: true,
-    'data-testid': `${dataTestId}-export-data`,
-  },
-  {
-    icon: <Svg id="remove-access" width={24} height={24} />,
-    action: expect.any(Function),
-    title: 'Remove Participant',
-    context: expectedContext,
-    isDisplayed: true,
-    customItemColor: variables.palette.dark_error_container,
-    'data-testid': `${dataTestId}-remove`,
-  },
-  {
-    type: MenuItemType.Divider,
-    isDisplayed: true,
-  },
-  {
-    icon: <Svg id="add-users-outlined" width={24} height={24} />,
-    action: expect.any(Function),
-    title: 'Assign Activity',
-    context: expectedContext,
-    isDisplayed: true,
-    'data-testid': `${dataTestId}-assign-activity`,
-  },
-];
+import { getParticipantActions, getHeadCells, cleanUpDividers } from './Participants.utils';
+import {
+  FilteredApplets,
+  GetParticipantActionsProps,
+  ParticipantActionProps,
+} from './Participants.types';
+import { Invitation } from '../Applet/AddUser/AddUser.types';
 
 describe('Participants utils tests', () => {
   describe('getParticipantActions function', () => {
+    const dataTestId = 'test-id';
+
+    const applets: RespondentDetail[] = [
+      {
+        appletId: 'fbc90304-3fc9-4a71-a85f-aa7944278107',
+        appletDisplayName: 'Applet 1',
+        accessId: '8ee2c3ba-513a-4d1e-913d-fb69f0333ea4',
+        respondentNickname: 'Jane Doe',
+        respondentSecretId: 'janedoe',
+        hasIndividualSchedule: false,
+        subjectId: 'subj-1',
+        subjectTag: 'Child' as ParticipantTag,
+        invitation: null,
+      },
+      {
+        appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
+        appletDisplayName: 'Applet 2',
+        accessId: '115cd54d-17f0-43f4-8469-9f1802e2da5b',
+        respondentNickname: 'Jane Doe',
+        respondentSecretId: 'janedoe',
+        hasIndividualSchedule: false,
+        subjectId: 'subj-2',
+        subjectTag: 'Child' as ParticipantTag,
+        invitation: null,
+      },
+    ];
+
+    const filteredApplets: FilteredApplets = {
+      scheduling: applets,
+      editable: applets,
+      viewable: applets,
+    };
+
+    const mockedEmail = 'test@test.com';
+
+    const commonGetActionsProps: GetParticipantActionsProps = {
+      actions: {
+        editParticipant: jest.fn(),
+        upgradeAccount: jest.fn(),
+        exportData: jest.fn(),
+        removeParticipant: jest.fn(),
+        assignActivity: jest.fn(),
+        copyEmailAddress: jest.fn(),
+        copyInvitationLink: jest.fn(),
+      },
+      filteredApplets,
+      respondentId: mockedRespondentId,
+      respondentOrSubjectId: mockedRespondentId,
+      appletId: mockedAppletId,
+      email: mockedEmail,
+      secretId: 'test secret id',
+      nickname: 'test nickname',
+      tag: 'Child' as ParticipantTag,
+      showAssignActivity: true,
+      invitation: null,
+      status: RespondentStatus.Invited,
+      dataTestid: dataTestId,
+    };
+
+    const expectedContext: ParticipantActionProps = {
+      respondentId: mockedRespondentId,
+      email: mockedEmail,
+      respondentOrSubjectId: mockedRespondentId,
+      secretId: commonGetActionsProps.secretId,
+      nickname: commonGetActionsProps.nickname,
+      tag: commonGetActionsProps.tag,
+      invitation: null,
+    };
+
+    type MenuActionOptions = {
+      isDisplayed?: boolean;
+      context?: Partial<ParticipantActionProps>;
+    };
+
+    const summaryAction = (options: {
+      email?: string;
+      fullName?: string;
+      invitationDate?: string;
+      isDisplayed?: boolean;
+    }) => {
+      let title = '';
+
+      if (options.email) {
+        title = `Email: ${options.email}`;
+      }
+
+      if (options.fullName) {
+        title += title.length > 0 ? '\n' : '';
+        title += `Full Name: ${options.fullName}`;
+      }
+
+      if (options.invitationDate) {
+        title += title.length > 0 ? '\n' : '';
+        title += `Invitation Date: ${options.invitationDate}`;
+      }
+
+      return {
+        title,
+        isDisplayed: options?.isDisplayed ?? true,
+      };
+    };
+
+    const copyEmailAddressAction = (options?: MenuActionOptions) => ({
+      icon: <Svg id="duplicate" width={24} height={24} />,
+      action: expect.any(Function),
+      title: 'Copy Email Address',
+      context: { ...expectedContext, ...options?.context },
+      isDisplayed: options?.isDisplayed ?? true,
+      'data-testid': `${dataTestId}-copy-email`,
+    });
+
+    const copyInvitationLinkAction = (options?: MenuActionOptions) => ({
+      icon: <Svg id="format-link" width={24} height={24} />,
+      action: expect.any(Function),
+      title: 'Copy Invitation Link',
+      context: { ...expectedContext, ...options?.context },
+      isDisplayed: options?.isDisplayed ?? true,
+      'data-testid': `${dataTestId}-copy-invitation-link`,
+    });
+
+    const editParticipantAction = (options?: MenuActionOptions) => ({
+      icon: <Svg id="edit" width={24} height={24} />,
+      action: expect.any(Function),
+      title: 'Edit Participant',
+      context: { ...expectedContext, ...options?.context },
+      isDisplayed: options?.isDisplayed ?? true,
+      'data-testid': `${dataTestId}-edit`,
+    });
+
+    const upgradeToFullAccountAction = (options?: MenuActionOptions) => ({
+      icon: <Svg id="full-account" width={24} height={24} />,
+      action: expect.any(Function),
+      title: 'Upgrade to Full Account',
+      context: { ...expectedContext, ...options?.context },
+      isDisplayed: options?.isDisplayed ?? true,
+      'data-testid': `${dataTestId}-upgrade-account`,
+    });
+
+    const exportDataAction = (options?: MenuActionOptions) => ({
+      icon: <Svg id="export" width={24} height={24} />,
+      action: expect.any(Function),
+      title: 'Export Data',
+      context: { ...expectedContext, ...options?.context },
+      isDisplayed: options?.isDisplayed ?? true,
+      'data-testid': `${dataTestId}-export-data`,
+    });
+
+    const removeParticipantAction = (options?: MenuActionOptions) => ({
+      icon: <Svg id="remove-access" width={24} height={24} />,
+      action: expect.any(Function),
+      title: 'Remove Participant',
+      context: { ...expectedContext, ...options?.context },
+      isDisplayed: options?.isDisplayed ?? true,
+      customItemColor: variables.palette.dark_error_container,
+      'data-testid': `${dataTestId}-remove`,
+    });
+
+    const assignActivityAction = (options?: MenuActionOptions) => ({
+      icon: <Svg id="add-users-outlined" width={24} height={24} />,
+      action: expect.any(Function),
+      title: 'Assign Activity',
+      context: { ...expectedContext, ...options?.context },
+      isDisplayed: options?.isDisplayed ?? true,
+      'data-testid': `${dataTestId}-assign-activity`,
+    });
+
     test('should return the correct actions if participant has full account', () => {
+      const approvedInvitation: Invitation = {
+        email: mockedEmail,
+        appletId: applets[0].appletId,
+        appletName: applets[0].appletDisplayName,
+        key: '3a028213-4708-41b2-9dc2-c656ae4273a7',
+        status: 'approved',
+        createdAt: '2021-10-01T00:00:00.000Z',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        nickname: commonGetActionsProps.nickname as string,
+        role: commonGetActionsProps.tag as ParticipantTag,
+        secretUserId: commonGetActionsProps.secretId,
+        meta: {
+          subject_id: 'ba1f11c8-df12-43f2-bc01-2c3df232fb48',
+        },
+        tag: `${commonGetActionsProps.tag}`,
+        title: null,
+      };
       const actions = getParticipantActions({
         ...commonGetActionsProps,
         status: RespondentStatus.Invited,
         dataTestid: dataTestId,
+        invitation: approvedInvitation,
       });
+      const displayedActions = actions.filter((action) => action.isDisplayed);
 
-      const isDisplayed = [true, false, true, true, true, true];
-      actions.forEach((action, index) => {
-        expect(action).toEqual({
-          ...expectedActions[index],
-          isDisplayed: isDisplayed[index],
-        });
-      });
+      expect(displayedActions).toEqual([
+        summaryAction({
+          email: mockedEmail,
+          fullName: 'Jane Doe',
+          invitationDate: 'Oct 01, 2021, 00:00',
+        }),
+        {
+          type: MenuItemType.Divider,
+          isDisplayed: true,
+        },
+        copyEmailAddressAction({ context: { invitation: approvedInvitation } }),
+        {
+          type: MenuItemType.Divider,
+          isDisplayed: true,
+        },
+        editParticipantAction({ context: { invitation: approvedInvitation } }),
+        exportDataAction({ context: { invitation: approvedInvitation } }),
+        removeParticipantAction({ context: { invitation: approvedInvitation } }),
+        {
+          type: MenuItemType.Divider,
+          isDisplayed: true,
+        },
+        assignActivityAction({ context: { invitation: approvedInvitation } }),
+      ]);
     });
 
     test('should return the correct actions if participant has limited account', () => {
@@ -145,34 +239,89 @@ describe('Participants utils tests', () => {
         status: RespondentStatus.NotInvited,
         dataTestid: dataTestId,
       });
+      const displayedActions = actions.filter((action) => action.isDisplayed);
 
-      const isDisplayed = [true, true, true, true, true, true];
-      actions.forEach((action, index) => {
-        expect(action).toEqual({
-          ...expectedActions[index],
-          isDisplayed: isDisplayed[index],
-        });
-      });
+      expect(displayedActions).toEqual([
+        summaryAction({ email: mockedEmail }),
+        {
+          type: MenuItemType.Divider,
+          isDisplayed: true,
+        },
+        copyEmailAddressAction(),
+        {
+          type: MenuItemType.Divider,
+          isDisplayed: true,
+        },
+        editParticipantAction(),
+        upgradeToFullAccountAction(),
+        exportDataAction(),
+        removeParticipantAction(),
+        {
+          type: MenuItemType.Divider,
+          isDisplayed: true,
+        },
+        assignActivityAction(),
+      ]);
     });
 
     test('should return the correct actions if invite is pending', () => {
+      const pendingInvitation: Invitation = {
+        email: mockedEmail,
+        appletId: applets[0].appletId,
+        appletName: applets[0].appletDisplayName,
+        key: '3a028213-4708-41b2-9dc2-c656ae4273a7',
+        status: 'pending',
+        createdAt: '2021-10-01T00:00:00.000Z',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        nickname: commonGetActionsProps.nickname as string,
+        role: commonGetActionsProps.tag as ParticipantTag,
+        secretUserId: commonGetActionsProps.secretId,
+        meta: {
+          subject_id: 'ba1f11c8-df12-43f2-bc01-2c3df232fb48',
+        },
+        tag: `${commonGetActionsProps.tag}`,
+        title: null,
+      };
       const actions = getParticipantActions({
         ...commonGetActionsProps,
         status: RespondentStatus.Pending,
         dataTestid: dataTestId,
+        invitation: pendingInvitation,
       });
+      const displayedActions = actions.filter((action) => action.isDisplayed);
 
-      const isDisplayed = [false, false, false, true, false, false];
-      actions.forEach((action, index) => {
-        expect(action).toEqual({
-          ...expectedActions[index],
-          isDisplayed: isDisplayed[index],
-        });
-      });
+      expect(displayedActions).toEqual([
+        summaryAction({
+          email: mockedEmail,
+          fullName: 'Jane Doe',
+          invitationDate: 'Oct 01, 2021, 00:00',
+        }),
+        {
+          type: MenuItemType.Divider,
+          isDisplayed: true,
+        },
+        copyEmailAddressAction({ context: { invitation: pendingInvitation } }),
+        {
+          type: MenuItemType.Divider,
+          isDisplayed: true,
+        },
+        copyInvitationLinkAction({ context: { invitation: pendingInvitation } }),
+      ]);
     });
   });
 
   describe('getHeadCells function', () => {
+    const headCellProperties = [
+      'pin',
+      'tag',
+      'secretIds',
+      'nicknames',
+      'accountType',
+      'lastSeen',
+      'actions',
+    ];
+
     test('returns the correct array of head cells without an id', () => {
       const headCells = getHeadCells();
       expect(headCells).toHaveLength(7);
@@ -186,6 +335,34 @@ describe('Participants utils tests', () => {
       expect(headCells).toHaveLength(8);
       expect(headCells[6]).toHaveProperty('id', 'schedule');
       expect(headCells[7]).toHaveProperty('id', 'actions');
+    });
+  });
+
+  describe('cleanUpDividers function', () => {
+    test('should hide dividers not between items', () => {
+      const items = [
+        { type: MenuItemType.Normal, isDisplayed: false },
+        { type: MenuItemType.Divider, isDisplayed: true }, // Should be hidden
+        { type: MenuItemType.Normal, isDisplayed: true },
+        { type: MenuItemType.Divider, isDisplayed: true },
+        { type: MenuItemType.Normal, isDisplayed: false },
+        { type: MenuItemType.Divider, isDisplayed: true }, // Should be hidden
+        { type: MenuItemType.Normal, isDisplayed: true },
+        { type: MenuItemType.Divider, isDisplayed: true }, // Should be hidden
+        { type: MenuItemType.Normal, isDisplayed: false },
+      ];
+      const result = cleanUpDividers(items);
+      expect(result).toEqual([
+        { type: MenuItemType.Normal, isDisplayed: false },
+        { type: MenuItemType.Divider, isDisplayed: false },
+        { type: MenuItemType.Normal, isDisplayed: true },
+        { type: MenuItemType.Divider, isDisplayed: true },
+        { type: MenuItemType.Normal, isDisplayed: false },
+        { type: MenuItemType.Divider, isDisplayed: false },
+        { type: MenuItemType.Normal, isDisplayed: true },
+        { type: MenuItemType.Divider, isDisplayed: false },
+        { type: MenuItemType.Normal, isDisplayed: false },
+      ]);
     });
   });
 });
