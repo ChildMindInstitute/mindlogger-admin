@@ -78,8 +78,8 @@ const mockContextValue = {
   setIsBannerVisible: jest.fn(),
 };
 
-const renderUseFeedbackReviewsHook = (useFeeedbackReviewsProps) =>
-  renderHook(() => useFeedbackReviews(useFeeedbackReviewsProps), {
+const renderUseFeedbackReviewsHook = (useFeedbackReviewsProps) =>
+  renderHook(() => useFeedbackReviews(useFeedbackReviewsProps), {
     wrapper: ({ children }) => (
       <RespondentDataReviewContext.Provider value={mockContextValue}>
         {children}
