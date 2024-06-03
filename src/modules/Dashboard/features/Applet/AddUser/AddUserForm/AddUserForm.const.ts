@@ -19,33 +19,6 @@ export const Fields = {
   language: 'language',
 } as const;
 
-export const getRoles = (roles?: Roles[]) => [
-  {
-    labelKey: Roles.Respondent,
-    value: Roles.Respondent,
-  },
-  ...(!roles?.includes(Roles.Coordinator)
-    ? [
-        {
-          labelKey: Roles.Manager,
-          value: Roles.Manager,
-        },
-        {
-          labelKey: Roles.Coordinator,
-          value: Roles.Coordinator,
-        },
-        {
-          labelKey: Roles.Editor,
-          value: Roles.Editor,
-        },
-      ]
-    : []),
-  {
-    labelKey: Roles.Reviewer,
-    value: Roles.Reviewer,
-  },
-];
-
 export const langs = [
   {
     labelKey: Langs.fr,
