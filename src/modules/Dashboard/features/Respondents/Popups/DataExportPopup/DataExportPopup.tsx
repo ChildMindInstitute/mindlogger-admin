@@ -28,6 +28,7 @@ import { ChosenAppletData } from '../../Respondents.types';
 import { getExportDataSuffix } from './DataExportPopup.utils';
 
 export const DataExportPopup = ({
+  filters = {},
   popupVisible,
   isAppletSetting,
   setPopupVisible,
@@ -88,6 +89,7 @@ export const DataExportPopup = ({
         await exportDataSucceed({
           getDecryptedAnswers,
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
+          filters,
         })(firstPageData);
 
         if (pageLimit > 1) {
@@ -104,6 +106,7 @@ export const DataExportPopup = ({
             await exportDataSucceed({
               getDecryptedAnswers,
               suffix: getExportDataSuffix(page),
+              filters,
             })(nextPageData);
           }
         }
