@@ -78,7 +78,7 @@ const mockContextValue = {
   setIsBannerVisible: jest.fn(),
 };
 
-const renderUseFeeedbackReviewsHook = (useFeeedbackReviewsProps) =>
+const renderUseFeedbackReviewsHook = (useFeeedbackReviewsProps) =>
   renderHook(() => useFeedbackReviews(useFeeedbackReviewsProps), {
     wrapper: ({ children }) => (
       <RespondentDataReviewContext.Provider value={mockContextValue}>
@@ -151,7 +151,7 @@ describe('useFeedbackReviews', () => {
     (getReviewsApi as jest.Mock).mockResolvedValue(mockReviewsResult);
     mockFetchReviewsData.mockResolvedValue([{ reviewId: 1, reviewer: 'test' }]);
 
-    const { result } = renderUseFeeedbackReviewsHook({
+    const { result } = renderUseFeedbackReviewsHook({
       appletId: 'testAppletId',
       answerId: 'testAnswerId',
       submitId: null,
@@ -181,7 +181,7 @@ describe('useFeedbackReviews', () => {
     (getReviewsApi as jest.Mock).mockResolvedValue({ data: { result: [] } });
     mockFetchReviewsData.mockResolvedValue([]);
 
-    const { result } = renderUseFeeedbackReviewsHook({
+    const { result } = renderUseFeedbackReviewsHook({
       appletId: 'testAppletId',
       answerId: 'testAnswerId',
       submitId: null,
@@ -211,7 +211,7 @@ describe('useFeedbackReviews', () => {
     (getFlowReviewsApi as jest.Mock).mockResolvedValue({ data: { result: [] } });
     mockFetchReviewsData.mockResolvedValue([]);
 
-    const { result } = renderUseFeeedbackReviewsHook({
+    const { result } = renderUseFeedbackReviewsHook({
       appletId: 'testAppletId',
       answerId: null,
       submitId: 'submitId',
