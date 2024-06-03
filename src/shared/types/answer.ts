@@ -87,6 +87,7 @@ export type ExportAnswer = {
   activityId: string;
   flowId: null | string;
   reviewedAnswerId: null | string;
+  reviewedFlowSubmissionId: string | null;
   scheduledDatetime: string | number | null;
   startDatetime: string | number;
   endDatetime: string | number;
@@ -98,6 +99,7 @@ export type ExportAnswer = {
   };
   scheduledEventId?: null | string;
   tzOffset?: null | number;
+  submitId: string;
 };
 
 export type ExtendedExportAnswer<A = string, E = string> = ExportAnswer &
