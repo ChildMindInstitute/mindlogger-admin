@@ -6,6 +6,7 @@ import {
   getActivityAnswerApi,
   getAssessmentApi,
   getFlowAnswersApi,
+  getFlowAssessmentApi,
 } from 'modules/Dashboard/api';
 import { sortItemsByOrder } from 'shared/utils/sortItemsByOrder';
 import { getErrorMessage } from 'shared/utils/errors';
@@ -131,37 +132,40 @@ export const useActivityAnswersAndAssessment = ({
 
     try {
       setIsLoading(true);
+      let assessmentResult;
       if (flowId && submitId) {
         await getFlowAnswers({ appletId, flowId, submitId });
-        // TODO: add flow assessment implementation after backend is ready (BE task M2-6584)
-      }
-      if (activityId && answerId) {
+        const reponse = await getFlowAssessmentApi({ appletId, submitId });
+        assessmentResult = reponse?.data?.result;
+      } else if (activityId && answerId) {
         await getActivityAnswer({ appletId, answerId, activityId });
+        const reponse = await getAssessmentApi({ appletId, answerId });
+        assessmentResult = reponse?.data?.result;
+      }
 
-        const {
-          data: { result: assessmentResult },
-        } = await getAssessmentApi({ appletId, answerId });
-        const { reviewerPublicKey, itemsLast, versions, items, ...assessmentData } =
-          assessmentResult;
-        const encryptedData = {
-          ...assessmentData,
-          // sorting in case the items received from the backend are in the wrong order
-          items: sortItemsByOrder(items),
-          userPublicKey: reviewerPublicKey,
-        } as EncryptedAnswerSharedProps;
-        const decryptedAssessment = await getDecryptedActivityData(encryptedData);
-        setItemIds(assessmentData.itemIds || []);
-        setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
+      if (!assessmentResult) {
+        return setIsLoading(false);
+      }
 
+      const { reviewerPublicKey, itemsLast, versions, items, ...assessmentData } = assessmentResult;
+      const encryptedData = {
+        ...assessmentData,
         // sorting in case the items received from the backend are in the wrong order
-        setLastAssessment(sortItemsByOrder(itemsLast));
-        setAssessmentVersions(versions);
-        setIsBannerVisible(!!(itemsLast?.length && versions));
+        items: sortItemsByOrder(items),
+        userPublicKey: reviewerPublicKey,
+      } as EncryptedAnswerSharedProps;
+      const decryptedAssessment = await getDecryptedActivityData(encryptedData);
+      setItemIds(assessmentData.itemIds || []);
+      setAssessment(decryptedAssessment.decryptedAnswers as AssessmentActivityItem[]);
 
-        if (decryptedAssessment?.decryptedAnswers?.length && isFeedbackVisible) {
-          setIsFeedbackOpen(true);
-          setActiveTab(FeedbackTabs.Reviews);
-        }
+      // sorting in case the items received from the backend are in the wrong order
+      setLastAssessment(sortItemsByOrder(itemsLast));
+      setAssessmentVersions(versions);
+      setIsBannerVisible(!!(itemsLast?.length && versions));
+
+      if (decryptedAssessment?.decryptedAnswers?.length && isFeedbackVisible) {
+        setIsFeedbackOpen(true);
+        setActiveTab(FeedbackTabs.Reviews);
       }
     } catch (error) {
       setAssessmentError(getErrorMessage(error));

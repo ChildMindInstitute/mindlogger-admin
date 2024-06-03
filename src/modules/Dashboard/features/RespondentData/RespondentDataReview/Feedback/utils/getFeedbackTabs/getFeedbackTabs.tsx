@@ -1,12 +1,8 @@
-import { AssessmentActivityItem } from '../../RespondentDataReview.types';
-import { FeedbackNotes } from '../FeedbackNotes';
-import { FeedbackReviews } from '../FeedbackReviews';
-import { SelectedEntity } from '../Feedback.types';
+import { FeedbackNotes } from '../../FeedbackNotes';
+import { FeedbackReviews } from '../../FeedbackReviews';
+import { GetFeedbackTabs } from './getFeedbackTabs.types';
 
-export const getFeedbackTabs = (
-  selectedEntity: SelectedEntity,
-  assessment: AssessmentActivityItem[] | undefined,
-) => {
+export const getFeedbackTabs = ({ selectedEntity, assessment }: GetFeedbackTabs) => {
   const dataTestid = 'respondents-summary-feedback-tab';
 
   return [

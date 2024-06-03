@@ -14,8 +14,7 @@ import { UiType } from 'shared/components/Tabs/Tabs.types';
 import { RespondentDataReviewContext } from '../RespondentDataReview.context';
 import { StyledButton, StyledContainer } from './Feedback.styles';
 import { FeedbackForm, FeedbackProps } from './Feedback.types';
-import { getFeedbackTabs } from './utils/getFeedbackTabs';
-import { getDefaultFormValues } from './utils/getDefaultValues';
+import { getFeedbackTabs, getDefaultFormValues } from './utils';
 import { ANIMATION_DURATION_MS } from './Feedback.const';
 
 export const Feedback = ({ activeTab, setActiveTab, onClose, selectedEntity }: FeedbackProps) => {
@@ -29,7 +28,7 @@ export const Feedback = ({ activeTab, setActiveTab, onClose, selectedEntity }: F
   });
 
   const tabs = useMemo(
-    () => getFeedbackTabs(selectedEntity, assessment),
+    () => getFeedbackTabs({ selectedEntity, assessment }),
     [selectedEntity, assessment],
   );
 

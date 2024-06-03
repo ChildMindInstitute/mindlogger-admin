@@ -1,6 +1,6 @@
-import { AssessmentActivityItem } from '../../RespondentDataReview.types';
-import { FeedbackNotes } from '../FeedbackNotes';
-import { FeedbackReviews } from '../FeedbackReviews';
+import { AssessmentActivityItem } from '../../../RespondentDataReview.types';
+import { FeedbackNotes } from '../../FeedbackNotes';
+import { FeedbackReviews } from '../../FeedbackReviews';
 import { getFeedbackTabs } from './getFeedbackTabs';
 
 describe('getFeedbackTabs', () => {
@@ -22,7 +22,7 @@ describe('getFeedbackTabs', () => {
       { name: 'Assessment 2' },
     ] as unknown as AssessmentActivityItem[];
 
-    const tabs = getFeedbackTabs(selectedEntity, assessment);
+    const tabs = getFeedbackTabs({ selectedEntity, assessment });
 
     expect(tabs.length).toBe(2);
     expect(tabs).toEqual([
@@ -37,7 +37,7 @@ describe('getFeedbackTabs', () => {
   });
 
   test('returns correct tabs when assessment is undefined', () => {
-    const tabs = getFeedbackTabs(selectedEntity, undefined);
+    const tabs = getFeedbackTabs({ selectedEntity, assessment: undefined });
 
     expect(tabs.length).toBe(1);
     expect(tabs).toEqual([notesTab]);

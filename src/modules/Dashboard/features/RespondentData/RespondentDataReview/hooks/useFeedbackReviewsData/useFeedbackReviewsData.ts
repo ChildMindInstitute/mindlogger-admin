@@ -1,14 +1,19 @@
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
 import { AssessmentActivityItem } from '../../RespondentDataReview.types';
-import { GetFeedbackReviewsProps, ReviewData } from './FeedbackReviews.types';
+import {
+  GetFeedbackReviewsProps,
+  ReviewData,
+} from '../../Feedback/FeedbackReviews/FeedbackReviews.types';
 
 export const useFeedbackReviewsData = () => {
   const getDecryptedActivityData = useDecryptedActivityData();
 
-  return async ({ reviews, userId }: GetFeedbackReviewsProps) => {
+  const fetchReviewsData = async ({
+    reviews,
+    userId,
+  }: GetFeedbackReviewsProps): Promise<ReviewData[]> => {
     const reviewsData: ReviewData[] = [];
-
     for await (const review of reviews) {
       const { reviewerPublicKey, reviewer, answer, ...assessmentData } = review;
       const hasEncryptedData = !!reviewerPublicKey && !!answer;
@@ -41,4 +46,6 @@ export const useFeedbackReviewsData = () => {
 
     return reviewsData;
   };
+
+  return { fetchReviewsData };
 };

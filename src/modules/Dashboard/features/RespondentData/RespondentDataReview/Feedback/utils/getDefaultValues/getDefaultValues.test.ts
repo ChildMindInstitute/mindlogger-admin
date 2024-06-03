@@ -1,6 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
-import { AssessmentActivityItem } from '../../RespondentDataReview.types';
+import { AssessmentActivityItem } from '../../../RespondentDataReview.types';
 import { getDefaultValue, getDefaultFormValues } from './getDefaultValues';
 
 describe('getDefaultValue', () => {

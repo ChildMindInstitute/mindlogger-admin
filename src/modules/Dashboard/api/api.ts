@@ -68,6 +68,9 @@ import {
   SummaryFlowAnswersParams,
   GetLatestReportParams,
   EncryptedFlowsAnswers,
+  SaveFlowAssessmentParams,
+  DeleteFlowReviewParams,
+  AssessmentFlowReviewParams,
   FeedbackNote,
 } from './api.types';
 import { DEFAULT_ROWS_PER_PAGE } from './api.const';
@@ -603,12 +606,35 @@ export const getAssessmentApi = ({ appletId, answerId }: AssessmentReview, signa
     },
   );
 
+export const getFlowAssessmentApi = (
+  { appletId, submitId }: AssessmentFlowReviewParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<ResponseWithObject<AssessmentResult>>(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessments`,
+    {
+      signal,
+    },
+  );
+
 export const createAssessmentApi = (
   { appletId, answerId, ...assessment }: SaveAssessment,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
     `/answers/applet/${appletId}/answers/${answerId}/assessment`,
+    { ...assessment },
+    {
+      signal,
+    },
+  );
+
+export const createFlowAssessmentApi = (
+  { appletId, submitId, ...assessment }: SaveFlowAssessmentParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.post(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessments`,
     { ...assessment },
     {
       signal,
@@ -626,10 +652,32 @@ export const deleteReviewApi = (
     },
   );
 
+export const deleteFlowReviewApi = (
+  { appletId, submitId, assessmentId }: DeleteFlowReviewParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.delete(
+    `/answers/applet/${appletId}/submissions/${submitId}/assessments/${assessmentId}`,
+    {
+      signal,
+    },
+  );
+
 export const getReviewsApi = ({ appletId, answerId }: AssessmentReview, signal?: AbortSignal) =>
   authApiClient.get<Response<Review>>(`/answers/applet/${appletId}/answers/${answerId}/reviews`, {
     signal,
   });
+
+export const getFlowReviewsApi = (
+  { appletId, submitId }: AssessmentFlowReviewParams,
+  signal?: AbortSignal,
+) =>
+  authApiClient.get<Response<Review>>(
+    `/answers/applet/${appletId}/submissions/${submitId}/reviews`,
+    {
+      signal,
+    },
+  );
 
 export const getSummaryActivitiesApi = (
   { appletId, targetSubjectId }: AppletId & TargetSubjectId,

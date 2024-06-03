@@ -8,7 +8,10 @@ import {
 
 import { FeedbackTabs } from '../RespondentDataReview.types';
 
-export type SelectedEntity = { id: string; isFlow: boolean };
+export type SelectedEntity = {
+  id: string;
+  isFlow: boolean;
+};
 
 export type FeedbackProps = {
   activeTab: FeedbackTabs;
