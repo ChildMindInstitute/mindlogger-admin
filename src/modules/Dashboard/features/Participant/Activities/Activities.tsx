@@ -175,8 +175,8 @@ export const Activities = () => {
               <ActivitiesSectionHeader title={t('flows')} count={flows?.length ?? 0} />
 
               <FlowGrid
-                appletId={appletId}
                 activities={flowActivities}
+                applet={appletData}
                 flows={flows}
                 subject={subject?.result}
               />

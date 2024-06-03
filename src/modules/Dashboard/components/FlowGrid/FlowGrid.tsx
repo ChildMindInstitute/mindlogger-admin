@@ -1,21 +1,30 @@
-import { StyledFlexColumn } from 'shared/styles';
+import { useCallback, useState } from 'react';
+
 import { FlowSummaryCard } from 'modules/Dashboard/components/FlowSummaryCard';
+import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { Activity } from 'redux/modules';
+import { StyledFlexColumn } from 'shared/styles';
 
 import { FlowGridProps } from './FlowGrid.types';
 import { useFlowGridMenu } from './FlowGrid.hooks';
 
 export const FlowGrid = ({
-  appletId,
+  applet,
   activities = [],
   flows = [],
   subject,
   ...otherProps
 }: FlowGridProps) => {
+  const [showExportPopup, setShowExportPopup] = useState(false);
+  const [flowId, setFlowId] = useState<string>();
   const { getActionsMenu, TakeNowModal } = useFlowGridMenu({
-    appletId,
+    appletId: applet?.id,
     hasParticipants: true,
     subject,
+    onClickExportData: useCallback((flowId: string) => {
+      setFlowId(flowId);
+      setShowExportPopup(true);
+    }, []),
   });
 
   return (
@@ -42,6 +51,19 @@ export const FlowGrid = ({
       </StyledFlexColumn>
 
       <TakeNowModal />
+
+      {showExportPopup && (
+        <DataExportPopup
+          chosenAppletData={applet ?? null}
+          filters={{ flowId, targetSubjectId: subject?.id }}
+          isAppletSetting
+          popupVisible={showExportPopup}
+          setPopupVisible={() => {
+            setShowExportPopup(false);
+            setFlowId(undefined);
+          }}
+        />
+      )}
     </>
   );
 };

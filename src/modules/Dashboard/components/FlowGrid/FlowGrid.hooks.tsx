@@ -24,10 +24,12 @@ export function useFlowGridMenu({
   hasParticipants = false,
   testId = '',
   subject,
+  onClickExportData,
 }: {
   appletId?: string;
   hasParticipants?: boolean;
   testId?: string;
+  onClickExportData?: (flowId: string) => void;
   subject?: RespondentDetails;
 }) {
   const { t } = useTranslation('app');
@@ -64,11 +66,13 @@ export function useFlowGridMenu({
         title: t('editFlow'),
       },
       {
-        // TODO: Implement export data
-        // https://mindlogger.atlassian.net/browse/M2-6039
-        // https://mindlogger.atlassian.net/browse/M2-6736
         'data-testid': `${testId}-flow-export`,
-        disabled: true,
+        action: () => {
+          if (flow?.id) {
+            onClickExportData?.(flow?.id);
+          }
+        },
+        disabled: !flow?.id,
         icon: <Svg id="export" />,
         title: t('exportData'),
         isDisplayed: canAccessData,
@@ -105,7 +109,20 @@ export function useFlowGridMenu({
         title: t('takeNow.menuItem'),
       },
     ],
-    [appletId, canDoTakeNow, canEdit, navigate, openTakeNowModal, subject, t, testId],
+    [
+      appletId,
+      canAccessData,
+      canAssign,
+      canDoTakeNow,
+      canEdit,
+      navigate,
+      onClickExportData,
+      openTakeNowModal,
+      showDivider,
+      subject,
+      t,
+      testId,
+    ],
   );
 
   return {
