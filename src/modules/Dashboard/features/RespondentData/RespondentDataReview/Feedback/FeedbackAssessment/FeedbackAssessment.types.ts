@@ -9,3 +9,14 @@ export type FeedbackAssessmentProps = {
   userName: string;
   error: string | null;
 };
+
+export type CreateAssessment = {
+  appletId: string;
+  answerId?: string | null;
+  submitId?: string | null;
+  answer: string;
+  updatedItemIds?: string[];
+  accountId: string;
+  isLastVersion: boolean;
+  assessmentVersions: string[];
+};

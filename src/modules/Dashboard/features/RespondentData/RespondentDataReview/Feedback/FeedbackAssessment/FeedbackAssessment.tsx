@@ -4,7 +4,6 @@ import { useFormContext } from 'react-hook-form';
 
 import { auth } from 'redux/modules';
 import { useEncryptedAnswers } from 'modules/Dashboard/hooks';
-import { createAssessmentApi, createFlowAssessmentApi } from 'api';
 import { getErrorMessage } from 'shared/utils/errors';
 import { StyledErrorText, StyledTitleBoldMedium, theme } from 'shared/styles';
 
@@ -12,7 +11,7 @@ import { RespondentDataReviewContext } from '../../RespondentDataReview.context'
 import { AssessmentFormItem, FeedbackForm } from '../Feedback.types';
 import { StyledContainer } from './FeedbackAssessment.styles';
 import { FeedbackAssessmentProps } from './FeedbackAssessment.types';
-import { formatAssessmentAnswers, getAssessmentVersion } from './FeedbackAssessment.utils';
+import { createAssessment, formatAssessmentAnswers } from './FeedbackAssessment.utils';
 import { ActivityCardItemList } from './ActivityCardItemList';
 
 export const FeedbackAssessment = ({
@@ -71,25 +70,16 @@ export const FeedbackAssessment = ({
 
       setItemIds(updatedItemIds);
 
-      if (answerId) {
-        await createAssessmentApi({
-          appletId,
-          answerId,
-          answer,
-          itemIds: updatedItemIds || [],
-          reviewerPublicKey: accountId,
-          assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
-        });
-      } else if (submitId) {
-        await createFlowAssessmentApi({
-          appletId,
-          submitId,
-          answer,
-          itemIds: updatedItemIds || [],
-          reviewerPublicKey: accountId,
-          assessmentVersionId: getAssessmentVersion(isLastVersion, assessmentVersions),
-        });
-      }
+      await createAssessment({
+        appletId,
+        answerId,
+        submitId,
+        answer,
+        updatedItemIds,
+        accountId,
+        isLastVersion,
+        assessmentVersions,
+      });
 
       reset({
         newNote: '',

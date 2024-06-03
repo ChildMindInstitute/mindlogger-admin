@@ -1,16 +1,15 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { auth } from 'modules/Auth/state';
 
-import { StyledContainer } from './FeedbackReviews.styles';
-import { useFeedbackReviews } from './hooks/useFeedbackReviews';
+import { useFeedbackReviews } from '../../hooks/useFeedbackReviews/useFeedbackReviews';
 import { FeedbackAssessment } from '../FeedbackAssessment';
 import { AssessmentBanner } from './AssessmentBanner';
 import { AddReview } from './AddReview';
 import { Reviews } from './Reviews';
-import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
+import { StyledContainer } from './FeedbackReviews.styles';
 
 export const FeedbackReviews = () => {
   const { t } = useTranslation('app');
@@ -26,17 +25,17 @@ export const FeedbackReviews = () => {
 
   const { user } = auth.useData() ?? {};
 
-  const { isBannerVisible, setIsBannerVisible } = useContext(RespondentDataReviewContext);
-
   const {
-    reviewerData,
+    isBannerVisible,
+    setIsBannerVisible,
+    reviewersData,
     reviewsLoading,
     reviewsError,
     removeReviewsLoading,
-    removeReviewsError,
+    removeReviewError,
     handleGetReviews,
     handleReviewerAnswersRemove,
-  } = useFeedbackReviews({ appletId, answerId, submitId, user });
+  } = useFeedbackReviews({ appletId, answerId, submitId, user, setAssessmentStep });
 
   const userName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}${t('me')}`;
   const dataTestid = 'respondents-data-summary-feedback-reviewed';
@@ -45,7 +44,7 @@ export const FeedbackReviews = () => {
     setShowFeedbackAssessment(true);
   };
 
-  const hasCurrentUserReview = reviewerData.some(
+  const hasCurrentUserReview = reviewersData.some(
     ({ isCurrentUserReviewer }) => isCurrentUserReviewer,
   );
   const isLoading = reviewsLoading || submitAssessmentLoading;
@@ -93,9 +92,9 @@ export const FeedbackReviews = () => {
       )}
       <Reviews
         isLoading={isLoading}
-        reviewError={reviewsError}
-        reviewerData={reviewerData}
-        removeReviewsError={removeReviewsError}
+        reviewsError={reviewsError}
+        reviewersData={reviewersData}
+        removeReviewError={removeReviewError}
         removeReviewsLoading={removeReviewsLoading}
         onReviewerAnswersRemove={handleReviewerAnswersRemove}
         onReviewEdit={handleReviewEdit}

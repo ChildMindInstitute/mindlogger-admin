@@ -6,9 +6,9 @@ import { ReviewsProps } from './Reviews.types';
 
 export const Reviews = ({
   isLoading,
-  reviewError,
-  reviewerData,
-  removeReviewsError,
+  reviewsError,
+  reviewersData,
+  removeReviewError,
   removeReviewsLoading,
   onReviewerAnswersRemove,
   onReviewEdit,
@@ -16,23 +16,23 @@ export const Reviews = ({
 }: ReviewsProps) => {
   if (isLoading) return <Spinner />;
 
-  if (reviewError) {
-    return <StyledErrorText sx={{ mt: theme.spacing(2) }}>{reviewError}</StyledErrorText>;
+  if (reviewsError) {
+    return <StyledErrorText sx={{ mt: theme.spacing(2) }}>{reviewsError}</StyledErrorText>;
   }
 
-  if (reviewerData.length) {
+  if (reviewersData.length) {
     return (
       <>
-        {reviewerData.map((reviewerData, index) => {
+        {reviewersData.map((reviewerData, index) => {
           const isCurrentUserReviewer = reviewerData.isCurrentUserReviewer;
 
           return (
             <FeedbackReviewer
               {...reviewerData}
               error={
-                isCurrentUserReviewer && removeReviewsError ? (
+                isCurrentUserReviewer && removeReviewError ? (
                   <StyledErrorText sx={{ mt: theme.spacing(2) }}>
-                    {removeReviewsError}
+                    {removeReviewError}
                   </StyledErrorText>
                 ) : null
               }

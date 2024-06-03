@@ -1,6 +1,6 @@
-import { AssessmentActivityItem } from '../../RespondentDataReview.types';
-import { FeedbackNotes } from '../FeedbackNotes';
-import { FeedbackReviews } from '../FeedbackReviews';
+import { AssessmentActivityItem } from '../../../RespondentDataReview.types';
+import { FeedbackNotes } from '../../FeedbackNotes';
+import { FeedbackReviews } from '../../FeedbackReviews';
 import { getFeedbackTabs } from './getFeedbackTabs';
 
 describe('getFeedbackTabs', () => {

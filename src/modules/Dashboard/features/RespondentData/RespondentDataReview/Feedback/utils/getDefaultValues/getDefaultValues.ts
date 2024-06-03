@@ -1,6 +1,6 @@
 import { ItemResponseType } from 'shared/consts';
 
-import { AssessmentActivityItem } from '../../RespondentDataReview.types';
+import { AssessmentActivityItem } from '../../../RespondentDataReview.types';
 
 export const getDefaultValue = (responseType: ItemResponseType): string | number[] | null => {
   switch (responseType) {

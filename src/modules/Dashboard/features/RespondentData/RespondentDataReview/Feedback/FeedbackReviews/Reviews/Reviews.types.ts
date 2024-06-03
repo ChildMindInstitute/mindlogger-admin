@@ -1,12 +1,13 @@
+import { OnReviewerAnswersRemove } from '../FeedbackReviewer/FeedbackReviewer.types';
 import { ReviewData } from '../FeedbackReviews.types';
 
 export type ReviewsProps = {
   isLoading: boolean;
-  reviewError: string | null;
-  reviewerData: ReviewData[];
-  removeReviewsError: string | null;
+  reviewsError: string | null;
+  reviewersData: ReviewData[];
+  removeReviewError: string | null;
   removeReviewsLoading: boolean;
-  onReviewerAnswersRemove: (assessmentId: string) => Promise<void>;
+  onReviewerAnswersRemove: OnReviewerAnswersRemove;
   onReviewEdit: () => void;
   'data-testid'?: string;
 };

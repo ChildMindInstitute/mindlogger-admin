@@ -295,13 +295,13 @@ export type FlowAnswersParams = AppletId & FlowId & SubmitId;
 
 export type AssessmentReview = AppletId & { answerId: string };
 
-export type AssessmentFlowReview = AppletId & SubmitId;
+export type AssessmentFlowReviewParams = AppletId & SubmitId;
 
 export type AssessmentId = { assessmentId: string };
 
 export type DeleteReview = AssessmentReview & AssessmentId;
 
-export type DeleteFlowReview = AppletId & AssessmentId & SubmitId;
+export type DeleteFlowReviewParams = AppletId & AssessmentId & SubmitId;
 
 export type AssessmentResult = {
   answer: string | null;
@@ -322,7 +322,7 @@ export type SaveAssessment = AppletId & {
   assessmentVersionId: string;
 };
 
-export type SaveFlowAssessment = AppletId &
+export type SaveFlowAssessmentParams = AppletId &
   SubmitId & {
     answer: string;
     itemIds: string[];

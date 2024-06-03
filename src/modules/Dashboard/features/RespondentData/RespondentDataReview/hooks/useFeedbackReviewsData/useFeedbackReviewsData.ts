@@ -1,7 +1,10 @@
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
 
-import { GetFeedbackReviewsProps, ReviewData } from '../FeedbackReviews.types';
-import { AssessmentActivityItem } from '../../../RespondentDataReview.types';
+import { AssessmentActivityItem } from '../../RespondentDataReview.types';
+import {
+  GetFeedbackReviewsProps,
+  ReviewData,
+} from '../../Feedback/FeedbackReviews/FeedbackReviews.types';
 
 export const useFeedbackReviewsData = () => {
   const getDecryptedActivityData = useDecryptedActivityData();

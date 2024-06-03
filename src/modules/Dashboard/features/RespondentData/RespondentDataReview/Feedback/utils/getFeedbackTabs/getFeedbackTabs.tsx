@@ -1,5 +1,5 @@
-import { FeedbackNotes } from '../FeedbackNotes';
-import { FeedbackReviews } from '../FeedbackReviews';
+import { FeedbackNotes } from '../../FeedbackNotes';
+import { FeedbackReviews } from '../../FeedbackReviews';
 import { GetFeedbackTabs } from './getFeedbackTabs.types';
 
 export const getFeedbackTabs = ({ selectedEntity, assessment }: GetFeedbackTabs) => {
