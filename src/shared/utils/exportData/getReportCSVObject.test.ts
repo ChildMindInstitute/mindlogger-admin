@@ -79,7 +79,7 @@ const decryptedSingleSelection = {
   flowHistoryId: null,
   flowName: null,
   reviewedAnswerId: null,
-  reviewedFlowSubmissionId: null,
+  reviewedFlowSubmitId: null,
   createdAt: '2023-07-19T08:41:37.130943',
   client: null,
   appletId: '7aa07032-93f5-41aa-a4e1-b24d92405bc0',
@@ -287,7 +287,7 @@ describe('getReportCSVObject', () => {
     });
   });
 
-  test('returns object with reviewing_id if reviewedFlowSubmissionId provided', () => {
+  test('returns object with reviewing_id if reviewedFlowSubmitId provided', () => {
     expect(
       getReportCSVObject({
         ...getPreparedProperties({
@@ -298,7 +298,7 @@ describe('getReportCSVObject', () => {
           //@ts-ignore
           decryptedData: {
             ...decryptedSingleSelection,
-            reviewedFlowSubmissionId: 'some-submission-id',
+            reviewedFlowSubmitId: 'some-submission-id',
           },
         }),
         index: 0,
@@ -309,7 +309,7 @@ describe('getReportCSVObject', () => {
     });
   });
 
-  test('returns object with empty activity_flow_submission_id if flowId and reviewedFlowSubmissionId provided', () => {
+  test('returns object with empty activity_flow_submission_id if flowId and reviewedFlowSubmitId provided', () => {
     expect(
       getReportCSVObject({
         ...getPreparedProperties({
@@ -322,7 +322,7 @@ describe('getReportCSVObject', () => {
             ...decryptedSingleSelection,
             flowName: 'test flow name',
             flowId: 'some flow ID 222',
-            reviewedFlowSubmissionId: 'some-submission-id',
+            reviewedFlowSubmitId: 'some-submission-id',
           },
         }),
         index: 0,

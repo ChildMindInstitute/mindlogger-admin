@@ -87,7 +87,7 @@ export type ExportAnswer = {
   activityId: string;
   flowId: null | string;
   reviewedAnswerId: null | string;
-  reviewedFlowSubmissionId: string | null;
+  reviewedFlowSubmitId: string | null;
   scheduledDatetime: string | number | null;
   startDatetime: string | number;
   endDatetime: string | number;
@@ -518,6 +518,7 @@ export const enum ElementType {
 
 export type JourneyCSVReturnProps = {
   id: string;
+  activity_flow_submission_id: string;
   activity_scheduled_time: string;
   activity_start_time: string;
   activity_end_time: string;
