@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
@@ -13,8 +13,10 @@ import { MenuActionProps, Spinner } from 'shared/components';
 import { FlowGrid } from 'modules/Dashboard/components/FlowGrid';
 import { OpenTakeNowModalOptions } from 'modules/Dashboard/components/TakeNowModal/TakeNowModal.types';
 import { ActivitiesSectionHeader } from 'modules/Dashboard/features/Applet/Activities/ActivitiesSectionHeader';
+import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { users } from 'modules/Dashboard/state';
 import { Activity, ActivityFlow } from 'redux/modules';
+import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
 import { page } from 'resources';
 import { workspaces } from 'shared/state';
@@ -25,6 +27,7 @@ import { UnlockAppletPopup } from '../../Respondents/Popups/UnlockAppletPopup';
 const dataTestId = 'dashboard-applet-participant-activities';
 
 export const Activities = () => {
+  const { result: appletData } = applet.useAppletData() ?? {};
   const { appletId, subjectId } = useParams();
   const { t } = useTranslation('app');
   const subjectLoadingStatus = users.useSubjectStatus();
@@ -32,6 +35,8 @@ export const Activities = () => {
   const navigate = useNavigate();
   const { getAppletPrivateKey } = useEncryptionStorage();
   const hasEncryptionCheck = !!getAppletPrivateKey(appletId ?? '');
+  const [activityId, setActivityId] = useState<string>();
+  const [showExportPopup, setShowExportPopup] = useState(false);
   const [viewDataPopupVisible, setViewDataPopupVisible] = useState(false);
   const [selectedActivityId, setSelectedActivityId] = useState<string | undefined>();
   const workspaceRoles = workspaces.useRolesData();
@@ -65,7 +70,14 @@ export const Activities = () => {
     actions: defaultActions,
     TakeNowModal,
     openTakeNowModal,
-  } = useActivityGrid(dataTestId, { result: activities, count: activities.length });
+  } = useActivityGrid(
+    dataTestId,
+    { result: activities, count: activities.length },
+    useCallback((activityId: string) => {
+      setActivityId(activityId);
+      setShowExportPopup(true);
+    }, []),
+  );
 
   const isLoadingSubject = subjectLoadingStatus === 'loading' || subjectLoadingStatus === 'idle';
   const isLoading = isLoadingActivities || isLoadingFlows || isLoadingSubject;
@@ -191,6 +203,19 @@ export const Activities = () => {
                   setSelectedActivityId(undefined);
                 }}
                 onSubmitHandler={() => navigateToData(selectedActivityId)}
+              />
+            )}
+
+            {showExportPopup && (
+              <DataExportPopup
+                chosenAppletData={appletData ?? null}
+                filters={{ activityId, targetSubjectId: subjectId }}
+                isAppletSetting
+                popupVisible={showExportPopup}
+                setPopupVisible={() => {
+                  setShowExportPopup(false);
+                  setActivityId(undefined);
+                }}
               />
             )}
           </StyledFlexColumn>

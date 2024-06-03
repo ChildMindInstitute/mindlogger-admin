@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -6,8 +6,10 @@ import { getAppletActivitiesApi, getAppletApi } from 'api';
 import { Spinner } from 'shared/components';
 import { useAsync } from 'shared/hooks';
 import { ActivityGrid, useActivityGrid } from 'modules/Dashboard/components/ActivityGrid';
+import { DataExportPopup } from 'modules/Dashboard/features/Respondents/Popups';
 import { FlowGrid } from 'modules/Dashboard/components/FlowGrid';
 import { Activity, ActivityFlow } from 'redux/modules';
+import { applet } from 'shared/state/Applet';
 import { StyledFlexColumn } from 'shared/styles';
 
 import { ActivitiesSectionHeader } from './ActivitiesSectionHeader';
@@ -16,6 +18,7 @@ import { ActivitiesToolbar } from './ActivitiesToolbar';
 const dataTestId = 'dashboard-applet-activities';
 
 export const Activities = () => {
+  const { result: appletData } = applet.useAppletData() ?? {};
   const { appletId } = useParams();
   const { t } = useTranslation('app');
   const {
@@ -38,10 +41,19 @@ export const Activities = () => {
     () => (activitiesResponse ?? previousActivitiesResponse)?.data?.result?.activitiesDetails ?? [],
     [activitiesResponse, previousActivitiesResponse],
   );
-  const { formatRow, TakeNowModal } = useActivityGrid(dataTestId, {
-    result: activities,
-    count: activities.length,
-  });
+  const [activityId, setActivityId] = useState<string>();
+  const [showExportPopup, setShowExportPopup] = useState(false);
+  const { formatRow, TakeNowModal } = useActivityGrid(
+    dataTestId,
+    {
+      result: activities,
+      count: activities.length,
+    },
+    useCallback((activityId: string) => {
+      setActivityId(activityId);
+      setShowExportPopup(true);
+    }, []),
+  );
   const formattedActivities = useMemo(
     () => activities.map((activity) => formatRow(activity)),
     [activities, formatRow],
@@ -89,6 +101,19 @@ export const Activities = () => {
             />
           </StyledFlexColumn>
         </StyledFlexColumn>
+      )}
+
+      {showExportPopup && (
+        <DataExportPopup
+          chosenAppletData={appletData ?? null}
+          filters={{ activityId }}
+          isAppletSetting
+          popupVisible={showExportPopup}
+          setPopupVisible={() => {
+            setShowExportPopup(false);
+            setActivityId(undefined);
+          }}
+        />
       )}
     </StyledFlexColumn>
   );
