@@ -16,6 +16,12 @@ import {
 import { getActivityJourneyData, getMediaData, getReportData } from './getReportAndMediaData';
 import { logDataInDebugMode } from '../logger';
 
+export interface ExportDataFilters {
+  activityId?: string;
+  flowId?: string;
+  targetSubjectId?: string;
+}
+
 export const getDefaultExportData = (): AppletExportData => ({
   reportData: [],
   activityJourneyData: [],
@@ -26,13 +32,32 @@ export const getDefaultExportData = (): AppletExportData => ({
   flankerItemsData: [],
 });
 
+export const getParsedAnswersFilterFn = (filters?: ExportDataFilters) => {
+  const filterKeys = Object.keys(filters ?? {}) as (keyof typeof filters)[];
+
+  return ({ decryptedAnswers }: Awaited<ReturnType<typeof getParsedAnswers>>[number]) =>
+    decryptedAnswers.some((decryptedAnswers) =>
+      filterKeys.reduce((acc, filterKey) => {
+        if (acc === false) {
+          return acc;
+        }
+
+        const filterValue = filters?.[filterKey];
+
+        return !filterValue ? acc : decryptedAnswers[filterKey] === filterValue;
+      }, true),
+    );
+};
+
 export const prepareData = async (
   data: ExportDataResult,
   getDecryptedAnswers: ReturnType<typeof useDecryptedActivityData>,
+  filters?: ExportDataFilters,
 ) => {
   const parsedAnswers = await getParsedAnswers(data, getDecryptedAnswers);
   logDataInDebugMode({ parsedAnswersWithoutHiddenItems: parsedAnswers });
-  const remappedParsedAnswers = remapFailedAnswers(parsedAnswers);
+  const filteredParsedAnswers = parsedAnswers.filter(getParsedAnswersFilterFn(filters));
+  const remappedParsedAnswers = remapFailedAnswers(filteredParsedAnswers);
   const parsedAnswersWithPublicUrls = await getAnswersWithPublicUrls(remappedParsedAnswers);
   let acc: AppletExportData = getDefaultExportData();
 
