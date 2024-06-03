@@ -247,6 +247,7 @@ export const JOURNEY_REPORT_NAME = 'activity_user_journey';
 
 export const reportHeader = [
   'id',
+  'activity_flow_submission_id',
   'activity_scheduled_time',
   'activity_start_time',
   'activity_end_time',
