@@ -269,6 +269,7 @@ export const reportHeader = [
 
 export const activityJourneyHeader = [
   'id',
+  'activity_flow_submission_id',
   'activity_scheduled_time',
   'activity_start_time',
   'activity_end_time',

@@ -2685,6 +2685,7 @@ export const mockedDecryptedObjectForDrawing = {
   items: [mockedDrawingSettings],
   activityName: 'New Activity#Drawing-item2',
   subscaleSetting: null,
+  submitId: 'some-submit-id',
 };
 export const mockedDecryptedEventsForDrawing = [
   {
