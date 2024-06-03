@@ -28,6 +28,7 @@ import { useFormError } from 'modules/Dashboard/hooks';
 import { useMultiInformantParticipantPath } from 'shared/hooks/useMultiInformantParticipantPath';
 import { WorkspaceInfo } from 'modules/Dashboard/types';
 
+import { showAddWithoutInvitation } from '../AddUser';
 import { StyledRow, StyledTooltip, StyledLinkBtn, StyledGridContainer } from './AddUserForm.styles';
 import {
   dataTestId,
@@ -241,7 +242,11 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
             <InputController
               {...commonProps}
               name={Fields.email}
-              label={isRespondentRole ? t('respondentEmail') : t(Fields.email)}
+              label={
+                isRespondentRole && showAddWithoutInvitation
+                  ? t('respondentEmail')
+                  : t(Fields.email)
+              }
               data-testid={`${dataTestId}-email`}
             />
           </Grid>
@@ -317,7 +322,7 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
           >
             {t('sendInvitation')}
           </Button>
-          {isRespondentRole ? (
+          {isRespondentRole && showAddWithoutInvitation ? (
             <StyledFlexTopCenter>
               <Button
                 type="submit"

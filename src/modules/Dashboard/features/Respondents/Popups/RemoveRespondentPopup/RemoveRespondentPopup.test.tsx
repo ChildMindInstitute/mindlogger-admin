@@ -64,6 +64,7 @@ describe('RemoveRespondentPopup component tests', () => {
 
   test('RemoveRespondentPopup should remove access with appletId', async () => {
     mockAxios.post.mockResolvedValueOnce(null);
+    mockAxios.delete.mockResolvedValueOnce(null);
 
     renderWithProviders(<RemoveRespondentPopup {...commonProps} />, {
       route,

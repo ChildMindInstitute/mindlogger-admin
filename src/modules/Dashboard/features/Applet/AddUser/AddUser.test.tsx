@@ -7,7 +7,7 @@ import { page } from 'resources';
 import { Roles } from 'shared/consts';
 import { initialStateData } from 'shared/state';
 
-import { AddUser } from './AddUser';
+import { AddUser, showAddWithoutInvitation } from './AddUser';
 
 const route = `/dashboard/${mockedAppletId}/add-user`;
 const routePath = page.appletAddUser;
@@ -75,9 +75,14 @@ describe('AddUser component tests', () => {
     fireEvent.change(screen.getByLabelText('Last Name'), {
       target: { value: invitation.lastName },
     });
-    fireEvent.change(screen.getByLabelText('Email (only required for invitation)'), {
-      target: { value: invitation.email },
-    });
+    fireEvent.change(
+      screen.getByLabelText(
+        showAddWithoutInvitation ? 'Email (only required for invitation)' : 'Email',
+      ),
+      {
+        target: { value: invitation.email },
+      },
+    );
     fireEvent.change(screen.getByLabelText('ID'), {
       target: { value: invitation.meta.secret_user_id },
     });
