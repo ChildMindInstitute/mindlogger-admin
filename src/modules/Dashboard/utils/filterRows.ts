@@ -1,4 +1,4 @@
-import { RowContent } from 'shared/components';
+import { CellContent } from 'shared/components';
 
-export const filterRows = (item: RowContent, searchValue: string) =>
+export const filterRows = (item: CellContent, searchValue: string) =>
   item?.value.toString().toLowerCase().includes(searchValue.toLowerCase());

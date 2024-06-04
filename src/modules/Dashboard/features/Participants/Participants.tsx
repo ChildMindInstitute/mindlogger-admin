@@ -303,6 +303,10 @@ export const Participants = () => {
     };
 
     return {
+      id: {
+        value: respondentOrSubjectId,
+        isHidden: true,
+      },
       pin: {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-participants-pin" />,
         value: '',
@@ -473,6 +477,7 @@ export const Participants = () => {
       <ParticipantsTable
         columns={getHeadCells(respondentsData?.orderingFields, appletId)}
         rows={rows}
+        keyExtractor={({ id }) => `row-${id.value}`}
         emptyComponent={
           !rows?.length && !isLoading ? (
             <EmptyDashboardTable searchValue={searchValue}>

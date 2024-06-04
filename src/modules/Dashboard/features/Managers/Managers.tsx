@@ -149,6 +149,10 @@ export const Managers = () => {
         ));
 
         return {
+          id: {
+            value: id,
+            isHidden: true,
+          },
           avatar: {
             content: () => (
               <MuiAvatar
@@ -264,6 +268,7 @@ export const Managers = () => {
       <DashboardTable
         columns={getHeadCells(managersData?.orderingFields, appletId)}
         rows={rows}
+        keyExtractor={({ id }) => `row-${id.value}`}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}
         data-testid={`${dataTestId}-table`}

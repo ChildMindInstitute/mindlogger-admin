@@ -13,6 +13,7 @@ import { Row, TableProps, UiType } from './Table.types';
 export const Table = ({
   columns,
   rows,
+  keyExtractor = (item: Row, index: number) => `row-${index}`,
   orderBy: orderByProp,
   maxHeight = '100%',
   uiType = UiType.Primary,
@@ -98,19 +99,21 @@ export const Table = ({
                 ?.sort(getComparator(order, orderBy))
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
-                  <TableRow key={`row-${index}`} data-testid="table-row">
-                    {Object.keys(row)?.map((key) => (
-                      <TableCell
-                        sx={{ height: '4.8rem', maxWidth: row[key].maxWidth }}
-                        onClick={row[key].onClick}
-                        scope="row"
-                        key={key}
-                        align={row[key].align}
-                        width={row[key].width}
-                      >
-                        {row[key].content(row)}
-                      </TableCell>
-                    ))}
+                  <TableRow key={keyExtractor(row, index)} data-testid="table-row">
+                    {Object.keys(row)?.map((key) =>
+                      row[key].isHidden ? null : (
+                        <TableCell
+                          sx={{ height: '4.8rem', maxWidth: row[key].maxWidth }}
+                          onClick={row[key].onClick}
+                          scope="row"
+                          key={key}
+                          align={row[key].align}
+                          width={row[key].width}
+                        >
+                          {row[key].content?.(row)}
+                        </TableCell>
+                      ),
+                    )}
                   </TableRow>
                 ))}
             </TableBody>

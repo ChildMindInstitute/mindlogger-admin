@@ -2,17 +2,18 @@ import { ReactNode } from 'react';
 
 import { Cell, HeadCell } from 'shared/types/table';
 
-export type RowContent = Cell & {
-  content: (item?: Row) => ReactNode;
+export type CellContent = Cell & {
+  content?: (item?: Row) => ReactNode;
   value: string | number | boolean;
   onClick?: () => void;
   maxWidth?: string;
   width?: string;
   contentWithTooltip?: ReactNode;
+  isHidden?: boolean;
 };
 
 export type Row = {
-  [name: string]: RowContent;
+  [name: string]: CellContent;
 };
 
 export enum UiType {
@@ -25,6 +26,7 @@ export enum UiType {
 export type TableProps = {
   columns: HeadCell[];
   rows: Row[] | undefined;
+  keyExtractor?: (row: Row, index: number) => string;
   orderBy: string;
   maxHeight?: string;
   uiType?: UiType;

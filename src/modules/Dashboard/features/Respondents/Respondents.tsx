@@ -317,6 +317,10 @@ export const Respondents = () => {
     const isPending = status === RespondentStatus.Pending;
 
     return {
+      id: {
+        value: respondentOrSubjectId,
+        isHidden: true,
+      },
       pin: {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-respondents-pin" />,
         value: '',
@@ -478,6 +482,7 @@ export const Respondents = () => {
       <DashboardTable
         columns={getHeadCells(respondentsData?.orderingFields, appletId)}
         rows={rows}
+        keyExtractor={({ id }) => `row-${id.value}`}
         emptyComponent={
           !rows?.length && !isLoading ? (
             <EmptyDashboardTable isLoading={isLoading} searchValue={searchValue}>
