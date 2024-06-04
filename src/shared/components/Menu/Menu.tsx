@@ -104,7 +104,7 @@ export const Menu = <T = unknown,>({
               );
             case MenuItemType.Info:
               return (
-                <Box data-testid={dataTestId} key={index} sx={{ px: 2, py: 1.2 }}>
+                <Box data-testid={dataTestId} key={index} sx={{ px: 1.6, py: 0.8 }}>
                   {menuItemContent}
                 </Box>
               );
