@@ -329,7 +329,6 @@ describe('Participants utils tests', () => {
       'secretIds',
       'nicknames',
       'status',
-      'accountType',
       'lastSeen',
       'actions',
     ];
