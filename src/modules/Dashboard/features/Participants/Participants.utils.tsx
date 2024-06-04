@@ -1,26 +1,76 @@
 import { Dispatch, SetStateAction } from 'react';
 import { t } from 'i18next';
+import { format } from 'date-fns';
 
 import { Svg } from 'shared/components/Svg';
 import {
+  StyledBodyMedium,
+  StyledFlexTopCenter,
+  StyledLabelLarge,
   StyledSmallAppletImg,
   StyledSmallAppletImgPlaceholder,
-  StyledBodyMedium,
-  StyledLabelLarge,
-  StyledFlexTopCenter,
   variables,
 } from 'shared/styles';
 import { RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
 import { HeadCell } from 'shared/types';
 import i18n from 'i18n';
-import { MenuItemType } from 'shared/components';
+import { MenuItem, MenuItemType } from 'shared/components';
 import { checkIfCanAccessData, checkIfCanManageParticipants } from 'shared/utils';
+import { DateFormats } from 'shared/consts';
 
-import { ChosenAppletData, GetParticipantActionsProps } from './Participants.types';
+import {
+  ChosenAppletData,
+  GetParticipantActionsProps,
+  ParticipantActionProps,
+} from './Participants.types';
 import { ParticipantsColumnsWidth } from './Participants.const';
 
+/**
+ * Remove dividers that are not between normal displayed menu items
+ */
+export function cleanUpDividers(
+  items: MenuItem<ParticipantActionProps>[],
+): MenuItem<ParticipantActionProps>[] {
+  let foundDisplayed = false;
+  let prevDivider = false;
+  let lastDisplayedIndex = -1;
+
+  const result: MenuItem<ParticipantActionProps>[] = items.map((item, i) => {
+    if (item.isDisplayed) {
+      if (item.type === MenuItemType.Divider) {
+        if (!foundDisplayed || prevDivider) {
+          item.isDisplayed = false;
+        }
+
+        prevDivider = true;
+      } else {
+        foundDisplayed = true;
+        prevDivider = false;
+      }
+
+      lastDisplayedIndex = i;
+    }
+
+    return item;
+  });
+
+  if (result.at(lastDisplayedIndex)?.type === MenuItemType.Divider) {
+    result[lastDisplayedIndex].isDisplayed = false;
+  }
+
+  return result;
+}
+
 export const getParticipantActions = ({
-  actions: { editParticipant, upgradeAccount, exportData, removeParticipant, assignActivity },
+  actions: {
+    editParticipant,
+    upgradeAccount,
+    exportData,
+    removeParticipant,
+    assignActivity,
+    copyEmailAddress,
+    copyInvitationLink,
+  },
   filteredApplets,
   respondentId,
   respondentOrSubjectId,
@@ -33,8 +83,20 @@ export const getParticipantActions = ({
   dataTestid,
   showAssignActivity = false,
   roles,
+  invitation,
+  firstName,
+  lastName,
+  subjectCreatedAt,
 }: GetParticipantActionsProps) => {
-  const context = { respondentId, respondentOrSubjectId, email, secretId, nickname, tag };
+  const context = {
+    respondentId,
+    respondentOrSubjectId,
+    email,
+    secretId,
+    nickname,
+    tag,
+    invitation,
+  };
   const canManageParticipants = checkIfCanManageParticipants(roles);
   const isUpgradeable = status === RespondentStatus.NotInvited;
   const isPending = status === RespondentStatus.Pending;
@@ -46,7 +108,70 @@ export const getParticipantActions = ({
   const showAssign = canManageParticipants && showAssignActivity && isEditable && !isPending;
   const showDivider = (showEdit || showUpgrade || showExport) && showAssign;
 
-  return [
+  const titleArr: string[] = [];
+  const emailAddress = email || invitation?.email;
+
+  if (emailAddress) {
+    titleArr.push(`${i18n.t('email')}: ${emailAddress}`);
+  }
+
+  const hasInvitation = !!invitation;
+
+  if (hasInvitation) {
+    if (invitation.firstName && invitation.lastName) {
+      titleArr.push(`${i18n.t('fullName')}: ${invitation.firstName} ${invitation.lastName}`);
+    }
+
+    titleArr.push(
+      `${i18n.t('invitationDate')}: ${format(
+        new Date(invitation.createdAt),
+        DateFormats.MonthDayYearTime,
+      )}`,
+    );
+  } else {
+    if (firstName && lastName) {
+      titleArr.push(`${i18n.t('fullName')}: ${firstName} ${lastName}`);
+    }
+
+    if (subjectCreatedAt) {
+      titleArr.push(
+        `${i18n.t('dateAdded')}: ${format(
+          new Date(subjectCreatedAt),
+          DateFormats.MonthDayYearTime,
+        )}`,
+      );
+    }
+  }
+
+  const title = titleArr.join('\n');
+  const hasTitle = titleArr.length > 0;
+
+  return cleanUpDividers([
+    { type: MenuItemType.Info, title, isDisplayed: hasTitle },
+    {
+      type: MenuItemType.Divider,
+      isDisplayed: hasTitle,
+    },
+    {
+      icon: <Svg id="duplicate" width={24} height={24} />,
+      action: copyEmailAddress,
+      title: t('copyEmailAddress'),
+      context,
+      isDisplayed: !!emailAddress && status !== RespondentStatus.Invited,
+      'data-testid': `${dataTestid}-copy-email`,
+    },
+    {
+      type: MenuItemType.Divider,
+      isDisplayed: !!emailAddress && status !== RespondentStatus.Invited,
+    },
+    {
+      icon: <Svg id="format-link" width={24} height={24} />,
+      action: copyInvitationLink,
+      title: t('copyInvitationLink'),
+      context,
+      isDisplayed: hasInvitation && isPending,
+      'data-testid': `${dataTestid}-copy-invitation-link`,
+    },
     {
       icon: <Svg id="edit" width={24} height={24} />,
       action: editParticipant,
@@ -92,7 +217,7 @@ export const getParticipantActions = ({
       isDisplayed: showAssign,
       'data-testid': `${dataTestid}-assign-activity`,
     },
-  ];
+  ]);
 };
 
 export const getAppletsSmallTableRows = (

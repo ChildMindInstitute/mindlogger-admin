@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Divider, ListItemIcon, MenuItem } from '@mui/material';
+import { Box, Divider, ListItemIcon, MenuItem } from '@mui/material';
 
 import { variables } from 'shared/styles/variables';
 import { StyledBodyLarge } from 'shared/styles/styledComponents';
@@ -68,36 +68,49 @@ export const Menu = <T = unknown,>({
             action?.({ title, context });
             onClose();
           };
+
+          const TooltipWrapper = ({ children }: { children: JSX.Element }) =>
+            tooltip ? <Tooltip tooltipTitle={tooltip}>{children}</Tooltip> : children;
+
           const menuItemContent = (
-            <StyledMenuItemContent customItemColor={customItemColor}>
-              {icon && <ListItemIcon>{icon}</ListItemIcon>}
-              {!!title && (
-                <StyledBodyLarge
-                  color={customItemColor || variables.palette.on_surface}
-                  letterSpacing="xxl"
-                >
-                  {t(title)}
-                </StyledBodyLarge>
-              )}
-            </StyledMenuItemContent>
+            <TooltipWrapper>
+              <StyledMenuItemContent customItemColor={customItemColor}>
+                {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                {!!title && (
+                  <StyledBodyLarge
+                    color={customItemColor || variables.palette.on_surface}
+                    letterSpacing="xxl"
+                    whiteSpace="pre-line"
+                  >
+                    {t(title)}
+                  </StyledBodyLarge>
+                )}
+              </StyledMenuItemContent>
+            </TooltipWrapper>
           );
 
-          return type === MenuItemType.Divider ? (
-            <Divider key={index} sx={{ flex: 1, my: 0.8 }} data-testid={dataTestId} />
-          ) : (
-            <MenuItem
-              key={index}
-              disabled={disabled}
-              onClick={disabled ? undefined : handleMenuItemClick}
-              data-testid={dataTestId}
-            >
-              {tooltip ? (
-                <Tooltip tooltipTitle={tooltip}>{menuItemContent}</Tooltip>
-              ) : (
-                menuItemContent
-              )}
-            </MenuItem>
-          );
+          switch (type) {
+            case MenuItemType.Normal:
+            default:
+              return (
+                <MenuItem
+                  key={index}
+                  data-testid={dataTestId}
+                  disabled={disabled}
+                  onClick={disabled ? undefined : handleMenuItemClick}
+                >
+                  {menuItemContent}
+                </MenuItem>
+              );
+            case MenuItemType.Info:
+              return (
+                <Box data-testid={dataTestId} key={index} sx={{ px: 1.6, py: 0.8 }}>
+                  {menuItemContent}
+                </Box>
+              );
+            case MenuItemType.Divider:
+              return <Divider key={index} sx={{ flex: 1, my: 0.8 }} data-testid={dataTestId} />;
+          }
         },
       )}
     </StyledMenu>

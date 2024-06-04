@@ -3,16 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboardTable';
-import {
-  ActionsMenu,
-  Chip,
-  MenuActionProps,
-  Pin,
-  Row,
-  Search,
-  Spinner,
-  Svg,
-} from 'shared/components';
+import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Search, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
 import {
@@ -55,6 +46,7 @@ import {
   ParticipantsData,
   ParticipantActionProps,
   SetDataForAppletPage,
+  ParticipantActions,
 } from './Participants.types';
 // Let's fall back to the respondent pop-ups for now
 import { DataExportPopup, EditRespondentPopup, RemoveRespondentPopup } from '../Respondents/Popups';
@@ -183,7 +175,7 @@ export const Participants = () => {
     setInvitationPopupVisible(true);
   };
 
-  const actions = {
+  const actions: ParticipantActions = {
     editParticipant: ({ context }: MenuActionProps<ParticipantActionProps>) => {
       const { respondentOrSubjectId } = context || {};
       if (!respondentOrSubjectId) return;
@@ -220,6 +212,19 @@ export const Participants = () => {
     },
     assignActivity: ({ context: _context }: MenuActionProps<ParticipantActionProps>) => {
       alert('TODO: Assign activity');
+    },
+    copyEmailAddress: ({ context }: MenuActionProps<ParticipantActionProps>) => {
+      const { email, invitation } = context || {};
+      if (!email || !invitation?.email) return;
+
+      navigator.clipboard.writeText(email || invitation.email);
+    },
+    copyInvitationLink: ({ context }: MenuActionProps<ParticipantActionProps>) => {
+      const { invitation } = context || {};
+      if (!invitation?.key) return;
+
+      const url = new URL(`invitation/${invitation.key}`, `${process.env.REACT_APP_WEB_URI}/`);
+      navigator.clipboard.writeText(url.toString());
     },
   };
 
@@ -273,12 +278,14 @@ export const Participants = () => {
       status,
       email,
     } = user;
+
+    const detail = details.find((detail) => detail.appletId === appletId) ?? details[0];
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
-    const schedule = appletId && details[0].hasIndividualSchedule ? t('individual') : t('default');
+    const schedule = appletId && detail.hasIndividualSchedule ? t('individual') : t('default');
     const nickname = joinWihComma(nicknames, true);
     const secretId = joinWihComma(secretIds, true);
-    const tag = details[0].subjectTag;
-    const respondentOrSubjectId = respondentId ?? details[0].subjectId;
+    const tag = detail.subjectTag;
+    const respondentOrSubjectId = respondentId ?? detail.subjectId;
     const accountType = {
       [RespondentStatus.Invited]: t('full'),
       [RespondentStatus.NotInvited]: t('limited'),
@@ -290,7 +297,7 @@ export const Participants = () => {
       navigate(
         generatePath(page.appletParticipantActivities, {
           appletId,
-          subjectId: details[0].subjectId,
+          subjectId: detail.subjectId,
         }),
       );
     };
@@ -299,7 +306,7 @@ export const Participants = () => {
       pin: {
         content: () => <Pin isPinned={isPinned} data-testid="dashboard-participants-pin" />,
         value: '',
-        onClick: () => handlePinClick({ respondentId, subjectId: details[0].subjectId }),
+        onClick: () => handlePinClick({ respondentId, subjectId: detail.subjectId }),
         width: ParticipantsColumnsWidth.Pin,
       },
       tags: {
@@ -324,13 +331,7 @@ export const Participants = () => {
         onClick: defaultOnClick,
       },
       accountType: {
-        content: () => (
-          <Chip
-            icon={isPending ? <Svg id="email-outlined" width={18} height={18} /> : undefined}
-            color={isPending ? 'warning' : 'secondary'}
-            title={accountType}
-          />
-        ),
+        content: () => <Chip color={isPending ? 'warning' : 'secondary'} title={accountType} />,
         value: accountType,
         onClick: defaultOnClick,
       },
@@ -364,6 +365,10 @@ export const Participants = () => {
               dataTestid,
               showAssignActivity: featureFlags.enableActivityAssign,
               roles,
+              invitation: detail.invitation,
+              firstName: detail.subjectFirstName,
+              lastName: detail.subjectLastName,
+              subjectCreatedAt: detail.subjectCreatedAt,
             })}
             data-testid={`${dataTestid}-table-actions`}
           />
@@ -408,7 +413,9 @@ export const Participants = () => {
       () =>
         respondentsData?.result?.reduce(
           (acc: { filteredRespondents: FilteredParticipants; rows: Row[] }, user) => {
-            const respondentOrSubjectId = user.id ?? user.details[0].subjectId;
+            const detail =
+              user.details.find((detail) => detail.appletId === appletId) ?? user.details[0];
+            const respondentOrSubjectId = user.id ?? detail.subjectId;
             acc.filteredRespondents[respondentOrSubjectId] = filterRespondentApplets(user);
             acc.rows.push(formatRow(user));
 

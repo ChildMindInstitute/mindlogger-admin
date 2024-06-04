@@ -1,6 +1,8 @@
 import { ParticipantTag, Roles } from 'shared/consts';
 import { Encryption } from 'shared/utils';
 
+import { Invitation } from '../features/Applet/AddUser/AddUser.types';
+
 export type ManagerApplet = {
   id: string;
   displayName: string;
@@ -32,8 +34,13 @@ export type RespondentDetail = {
   respondentNickname: string;
   respondentSecretId: string;
   hasIndividualSchedule: boolean;
+  encryption?: Encryption;
   subjectId: string;
   subjectTag?: ParticipantTag | null;
+  subjectFirstName: string;
+  subjectLastName: string;
+  subjectCreatedAt: string;
+  invitation: Invitation | null;
 };
 
 export enum RespondentStatus {

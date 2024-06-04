@@ -15,6 +15,10 @@ const applets = [
     hasIndividualSchedule: false,
     subjectId: 'subj-1',
     subjectTag: 'Child' as ParticipantTag,
+    subjectFirstName: 'John',
+    subjectLastName: 'Doe',
+    subjectCreatedAt: '2023-09-26T12:11:46.162083',
+    invitation: null,
   },
   {
     appletId: 'b7db8ff7-6d0b-40fd-8dfc-93f96e7ad788',
@@ -25,6 +29,10 @@ const applets = [
     hasIndividualSchedule: false,
     subjectId: 'subj-2',
     subjectTag: 'Child' as ParticipantTag,
+    subjectFirstName: 'John',
+    subjectLastName: 'Doe',
+    subjectCreatedAt: '2023-09-26T12:11:46.162083',
+    invitation: null,
   },
 ];
 
