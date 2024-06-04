@@ -47,6 +47,7 @@ export type FilteredRespondents = {
 export type RespondentsData = {
   result: Respondent[];
   count: number;
+  orderingFields: string[];
 };
 
 export type GetMenuItems = {

@@ -9,4 +9,5 @@ export type ManagersActions = {
 export type ManagersData = {
   result: Manager[];
   count: number;
+  orderingFields?: string[];
 };
