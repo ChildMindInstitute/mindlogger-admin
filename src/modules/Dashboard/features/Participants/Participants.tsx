@@ -18,7 +18,7 @@ import {
 } from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody, StyledFlexWrap } from 'shared/styles';
-import { Respondent, RespondentDetail, RespondentStatus } from 'modules/Dashboard/types';
+import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { AddParticipantPopup, UpgradeAccountPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { ParticipantSnippetInfo, ParticipantTagChip } from 'modules/Dashboard/components';
@@ -274,7 +274,7 @@ export const Participants = () => {
       email,
     } = user;
 
-    const detail = details.find((detail) => detail.appletId === appletId) as RespondentDetail;
+    const detail = details.find((detail) => detail.appletId === appletId) ?? details[0];
     const latestActive = lastSeen ? timeAgo.format(getDateInUserTimezone(lastSeen)) : '';
     const schedule = appletId && detail.hasIndividualSchedule ? t('individual') : t('default');
     const nickname = joinWihComma(nicknames, true);
@@ -408,9 +408,8 @@ export const Participants = () => {
       () =>
         respondentsData?.result?.reduce(
           (acc: { filteredRespondents: FilteredParticipants; rows: Row[] }, user) => {
-            const detail = user.details.find(
-              (detail) => detail.appletId === appletId,
-            ) as RespondentDetail;
+            const detail =
+              user.details.find((detail) => detail.appletId === appletId) ?? user.details[0];
             const respondentOrSubjectId = user.id ?? detail.subjectId;
             acc.filteredRespondents[respondentOrSubjectId] = filterRespondentApplets(user);
             acc.rows.push(formatRow(user));
