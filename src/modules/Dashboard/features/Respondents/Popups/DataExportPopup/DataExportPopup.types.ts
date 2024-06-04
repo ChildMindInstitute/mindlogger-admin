@@ -2,10 +2,12 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { Row } from 'shared/components';
 import { SingleApplet } from 'shared/state';
+import { ExportDataFilters } from 'shared/utils';
 
 import { ChosenAppletData } from '../../Respondents.types';
 
 export type DataExportPopupProps = {
+  filters?: ExportDataFilters;
   popupVisible: boolean;
   isAppletSetting?: boolean;
   setPopupVisible: Dispatch<SetStateAction<boolean>>;

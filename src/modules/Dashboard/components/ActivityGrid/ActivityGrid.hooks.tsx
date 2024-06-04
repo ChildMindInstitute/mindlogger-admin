@@ -20,7 +20,11 @@ import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { useTakeNowModal } from '../TakeNowModal/TakeNowModal';
 
-export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesData | null) => {
+export const useActivityGrid = (
+  dataTestId: string,
+  activitiesData: ActivitiesData | null,
+  onClickExportData?: (activityId: string) => void,
+) => {
   const navigate = useNavigate();
   const { appletId } = useParams();
   const workspaceRoles = workspaces.useRolesData();
@@ -53,10 +57,9 @@ export const useActivityGrid = (dataTestId: string, activitiesData: ActivitiesDa
         );
       },
       exportData: ({ context }: MenuActionProps<ActivityActionProps>) => {
-        const { activityId } = context || {};
-        // TODO: Implement export data
-        // https://mindlogger.atlassian.net/browse/M2-6039
-        alert(`TODO: Export data (${activityId})`);
+        if (context?.activityId) {
+          onClickExportData?.(context?.activityId);
+        }
       },
       assignActivity: ({ context }: MenuActionProps<ActivityActionProps>) => {
         const { activityId } = context || {};

@@ -47,6 +47,7 @@ describe('exportDataSucceed', () => {
     expect(prepareDataUtils.prepareData).toHaveBeenCalledWith(
       mockedExportData,
       mockedGetDecryptedAnswers,
+      undefined,
     );
     expect(exportTemplateUtils.exportTemplate).toHaveBeenCalledTimes(2);
     expect(exportTemplateUtils.exportTemplate).toHaveBeenNthCalledWith(1, {
