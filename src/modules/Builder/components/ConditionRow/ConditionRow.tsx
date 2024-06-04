@@ -148,7 +148,6 @@ export const ConditionRow = ({
       <Condition
         itemName={conditionItemName}
         stateName={conditionTypeName}
-        optionValueName={conditionPayloadSelectionName}
         payloadName={conditionPayloadName}
         itemOptions={itemOptions}
         valueOptions={valueOptions}

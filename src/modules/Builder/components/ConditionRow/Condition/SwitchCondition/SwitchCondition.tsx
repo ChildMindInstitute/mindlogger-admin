@@ -18,6 +18,7 @@ import {
 import { commonInputSx, commonInputWrapperSx } from './SwitchCondition.const';
 import { TimeCondition } from './TimeCondition';
 import { StyledSelectController } from '../Condition.styles';
+import { getScoreConditionOptions } from '../Condition.utils';
 
 export const SwitchCondition = ({
   selectedItem,
@@ -25,9 +26,10 @@ export const SwitchCondition = ({
   payloadName,
   state,
   dataTestid,
-  isValueSelectDisabled,
   children,
+  valueOptions,
 }: SwitchConditionProps) => {
+  const optionValueName = `${payloadName}.optionValue`;
   const numberValueName = `${payloadName}.value`;
   const minValueName = `${payloadName}.minValue`;
   const maxValueName = `${payloadName}.maxValue`;
@@ -35,8 +37,11 @@ export const SwitchCondition = ({
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
+
   const isSingleValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = !isSingleValueShown;
+  const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
+  const isItemSelected = !!selectedItem;
 
   const commonTimeConditionProps = {
     numberValueName,
@@ -51,6 +56,26 @@ export const SwitchCondition = ({
   if (!itemType) return null;
 
   switch (itemType) {
+    case ConditionItemType.SingleSelection:
+    case ConditionItemType.MultiSelection:
+    case ConditionItemType.ScoreCondition: {
+      const isValueSelectDisabled = !isItemScoreCondition && !valueOptions?.length;
+
+      return (
+        <>
+          {children}
+          <StyledSelectController
+            control={control}
+            name={isItemScoreCondition ? numberValueName : optionValueName}
+            options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
+            placeholder={isValueSelectDisabled ? t('conditionDisabledPlaceholder') : t('value')}
+            isLabelNeedTranslation={false}
+            data-testid={`${dataTestid}-selection-value`}
+            disabled={isValueSelectDisabled}
+          />
+        </>
+      );
+    }
     case ConditionItemType.Score:
     case ConditionItemType.Slider:
     case ConditionItemType.NumberSelection: {
@@ -177,11 +202,11 @@ export const SwitchCondition = ({
             name={typeName}
             options={getTimeRangeOptions()}
             placeholder={
-              isValueSelectDisabled ? t('conditionDisabledPlaceholder') : t('Start Time / End Time')
+              !isItemSelected ? t('conditionDisabledPlaceholder') : t('Start Time / End Time')
             }
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-type-value`}
-            disabled={isValueSelectDisabled}
+            disabled={!isItemSelected}
           />
           {children}
           <TimeCondition {...commonTimeConditionProps} />

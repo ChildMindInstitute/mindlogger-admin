@@ -22,7 +22,6 @@ export type ConditionItem = {
 export type ConditionProps = {
   itemName: string;
   stateName: string;
-  optionValueName: string;
   payloadName: string;
   itemOptions: ConditionItem[];
   valueOptions: { value: string; labelKey: string }[];
