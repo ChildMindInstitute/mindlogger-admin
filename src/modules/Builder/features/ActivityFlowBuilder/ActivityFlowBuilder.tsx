@@ -8,7 +8,6 @@ import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautifu
 
 import { Menu } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
-import { getObjectFromList } from 'shared/utils';
 import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
 import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
 import { useRedirectIfNoMatchedActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
@@ -20,6 +19,7 @@ import {
   getActivityFlowIndex,
   getFlowBuilderActions,
   getMenuItems,
+  getNonReviewableActivities,
 } from './ActivityFlowBuilder.utils';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
 import { GetMenuItemsType } from './ActivityFlowBuilder.types';
@@ -52,7 +52,9 @@ export const ActivityFlowBuilder = () => {
     name: `${activityFlowName}.items`,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
-  const activities: AppletFormValues['activities'] = watch('activities');
+  const formActivities: AppletFormValues['activities'] = watch('activities');
+  // remove Reviewer Assessment Activity from Activities list
+  const { activities, activitiesIdsObjects } = getNonReviewableActivities(formActivities);
   const dataTestid = 'builder-activity-flows-builder';
 
   const handleFlowActivityDuplicate = (index: number) => {
@@ -120,8 +122,6 @@ export const ActivityFlowBuilder = () => {
     move(source.index, destination.index);
   };
 
-  const activitiesIdsObjects = getObjectFromList(activities);
-
   useRedirectIfNoMatchedActivityFlow();
 
   return (
@@ -129,6 +129,7 @@ export const ActivityFlowBuilder = () => {
       title={t('activityFlowBuilder')}
       Header={ActivityFlowBuilderHeader}
       headerProps={{
+        activities,
         clearFlowBtnDisabled: activityFlowItems?.length === 0,
         onAddFlowActivity: handleFlowActivityAdd,
         onClearFlow: handleClearFlow,

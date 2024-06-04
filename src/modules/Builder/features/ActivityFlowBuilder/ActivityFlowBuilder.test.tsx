@@ -3,6 +3,7 @@
 import { createRef } from 'react';
 import { generatePath } from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { v4 as uuidv4 } from 'uuid';
 
 import { page } from 'resources';
@@ -13,7 +14,7 @@ import { ActivityFlowBuilder } from './ActivityFlowBuilder';
 
 const mockedActivityFlowBuilderTestid = 'builder-activity-flows-builder';
 
-const mockedAppletFormDataWithTwoActivites = {
+const mockedAppletFormDataWithTwoActivities = {
   ...mockedAppletFormData,
   activities: [
     mockedAppletFormData.activities[0],
@@ -25,7 +26,20 @@ const mockedAppletFormDataWithTwoActivites = {
   ],
 };
 
-const renderActivityFlowBuilder = (formData = mockedAppletFormDataWithTwoActivites) => {
+const mockedAppletFormDataWithReviewableActivity = {
+  ...mockedAppletFormData,
+  activities: [
+    mockedAppletFormData.activities[0],
+    {
+      ...mockedAppletFormData.activities[0],
+      id: uuidv4(),
+      name: 'Another Activity',
+      isReviewable: true,
+    },
+  ],
+};
+
+const renderActivityFlowBuilder = (formData = mockedAppletFormDataWithTwoActivities) => {
   const ref = createRef();
 
   renderWithAppletFormData({
@@ -98,7 +112,7 @@ describe('Activity Flow Builder', () => {
       ref.current.getValues('activityFlows.0.items.0'),
       {
         key: ref.current.getValues('activityFlows.0.items.1.key'),
-        activityKey: mockedAppletFormDataWithTwoActivites.activities[1].id,
+        activityKey: mockedAppletFormDataWithTwoActivities.activities[1].id,
       },
     ]);
   });
@@ -147,7 +161,7 @@ describe('Activity Flow Builder', () => {
 
       await waitFor(() => {
         expect(ref.current.getValues('activityFlows.0.items.1.activityKey')).toEqual(
-          mockedAppletFormDataWithTwoActivites.activities[0].id,
+          mockedAppletFormDataWithTwoActivities.activities[0].id,
         );
       });
     });
@@ -169,9 +183,9 @@ describe('Activity Flow Builder', () => {
         'New Activity',
       );
       expect(ref.current.getValues('activityFlows.0.items')).toEqual([
-        mockedAppletFormDataWithTwoActivites.activityFlows[0].items[0],
+        mockedAppletFormDataWithTwoActivities.activityFlows[0].items[0],
         {
-          activityKey: mockedAppletFormDataWithTwoActivites.activityFlows[0].items[0].activityKey,
+          activityKey: mockedAppletFormDataWithTwoActivities.activityFlows[0].items[0].activityKey,
           key: ref.current.getValues('activityFlows.0.items.1.key'),
         },
       ]);
@@ -201,5 +215,34 @@ describe('Activity Flow Builder', () => {
         expect(ref.current.getValues('activityFlows.0.items')).toEqual([]);
       });
     });
+  });
+
+  test('Ensures no reviewable activities remain when adding/replacing an activity)', async () => {
+    renderActivityFlowBuilder(mockedAppletFormDataWithReviewableActivity);
+
+    const addActivity = screen.getByTestId(`${mockedActivityFlowBuilderTestid}-add`);
+    await userEvent.click(addActivity);
+
+    const activitiesInAddActivity = screen.getAllByTestId(
+      new RegExp(`^${mockedActivityFlowBuilderTestid}-add-activity-\\d+$`),
+    );
+    expect(activitiesInAddActivity).toHaveLength(1);
+    expect(screen.queryByText('Another Activity')).not.toBeInTheDocument();
+
+    const selectActivity = screen.getByTestId(`${mockedActivityFlowBuilderTestid}-add-activity-0`);
+    await userEvent.click(selectActivity);
+
+    await waitFor(() => {
+      const addedActivity = screen.getByTestId(`${mockedActivityFlowBuilderTestid}-flow-0`);
+      expect(addedActivity).toBeVisible();
+      expect(addedActivity).toHaveTextContent('New Activity');
+    });
+
+    await userEvent.click(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-flow-0-replace`));
+    const activitiesInReplaceActivity = screen.getAllByTestId(
+      new RegExp(`^${mockedActivityFlowBuilderTestid}-add-activity-\\d+$`),
+    );
+    expect(activitiesInReplaceActivity).toHaveLength(1);
+    expect(screen.queryByText('Another Activity')).not.toBeInTheDocument();
   });
 });
