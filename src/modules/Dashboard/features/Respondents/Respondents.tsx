@@ -24,7 +24,13 @@ import {
   updateSubjectsPinApi,
 } from 'api';
 import { page } from 'resources';
-import { getDateInUserTimezone, isManagerOrOwner, joinWihComma, Mixpanel } from 'shared/utils';
+import {
+  checkIfCanViewParticipants,
+  getDateInUserTimezone,
+  isManagerOrOwner,
+  joinWihComma,
+  Mixpanel,
+} from 'shared/utils';
 import { DEFAULT_ROWS_PER_PAGE, Roles } from 'shared/consts';
 import { StyledBody } from 'shared/styles';
 import { Respondent, RespondentStatus } from 'modules/Dashboard/types';
@@ -64,10 +70,15 @@ export const Respondents = () => {
   const timeAgo = useTimeAgo();
 
   const [respondentsData, setRespondentsData] = useState<RespondentsData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
+  const roles =
+    appletId && rolesData?.data
+      ? rolesData?.data?.[appletId]
+      : [...new Set(Object.values(rolesData.data || []).flat())];
+  const canViewParticipants = checkIfCanViewParticipants(roles);
 
   const { execute } = useAsync(
     getWorkspaceRespondentsApi,
@@ -97,7 +108,11 @@ export const Respondents = () => {
     });
   };
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(getWorkspaceRespondents);
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!canViewParticipants) return;
+
+    return getWorkspaceRespondents();
+  });
 
   const { searchValue, handleSearch, handleReload, ...tableProps } = useTable(
     getWorkspaceRespondents,
@@ -432,7 +447,9 @@ export const Respondents = () => {
   const schedulingAppletsSmallTableRows = getAppletsSmallTable(FilteredAppletsKey.Scheduling);
   const dataTestid = 'dashboard-respondents';
 
-  if (isForbidden) return noPermissionsComponent;
+  // If there are no roles available we're looking at our own empty workspace
+  const showsForbiddenComponent = isForbidden || (roles.length && !canViewParticipants);
+  if (showsForbiddenComponent) return noPermissionsComponent;
 
   return (
     <StyledBody>
