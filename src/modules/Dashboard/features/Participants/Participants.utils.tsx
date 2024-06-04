@@ -108,44 +108,43 @@ export const getParticipantActions = ({
   const showAssign = canManageParticipants && showAssignActivity && isEditable && !isPending;
   const showDivider = (showEdit || showUpgrade || showExport) && showAssign;
 
-  let title = '';
+  const titleArr: string[] = [];
   const emailAddress = email || invitation?.email;
 
   if (emailAddress) {
-    title += `${i18n.t('email')}: ${emailAddress}`;
+    titleArr.push(`${i18n.t('email')}: ${emailAddress}`);
   }
 
   const hasInvitation = !!invitation;
 
-  if (hasInvitation && invitation.firstName && invitation.lastName) {
-    const fullName = `${i18n.t('fullName')}: ${invitation.firstName} ${invitation.lastName}`;
-    title += title.length > 0 ? '\n' : '';
-    title += fullName;
-  } else if (!hasInvitation && firstName && lastName) {
-    const fullName = `${i18n.t('fullName')}: ${firstName} ${lastName}`;
-    title += title.length > 0 ? '\n' : '';
-    title += fullName;
-  }
-
   if (hasInvitation) {
-    const invitationDate = `${i18n.t('invitationDate')}: ${format(
-      new Date(invitation.createdAt),
-      DateFormats.MonthDayYearTime,
-    )}`;
+    if (invitation.firstName && invitation.lastName) {
+      titleArr.push(`${i18n.t('fullName')}: ${invitation.firstName} ${invitation.lastName}`);
+    }
 
-    title += title.length > 0 ? '\n' : '';
-    title += `${invitationDate}`;
-  } else if (subjectCreatedAt) {
-    const invitationDate = `${i18n.t('dateAdded')}: ${format(
-      new Date(subjectCreatedAt),
-      DateFormats.MonthDayYearTime,
-    )}`;
+    titleArr.push(
+      `${i18n.t('invitationDate')}: ${format(
+        new Date(invitation.createdAt),
+        DateFormats.MonthDayYearTime,
+      )}`,
+    );
+  } else {
+    if (firstName && lastName) {
+      titleArr.push(`${i18n.t('fullName')}: ${firstName} ${lastName}`);
+    }
 
-    title += title.length > 0 ? '\n' : '';
-    title += `${invitationDate}`;
+    if (subjectCreatedAt) {
+      titleArr.push(
+        `${i18n.t('dateAdded')}: ${format(
+          new Date(subjectCreatedAt),
+          DateFormats.MonthDayYearTime,
+        )}`,
+      );
+    }
   }
 
-  const hasTitle = title.length > 0;
+  const title = titleArr.join('\n');
+  const hasTitle = titleArr.length > 0;
 
   return cleanUpDividers([
     { type: MenuItemType.Info, title, isDisplayed: hasTitle },
