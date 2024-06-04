@@ -67,11 +67,38 @@ describe('Respondent Data utils', () => {
       value: null,
     };
     const invalidValue = null;
+    const emptyValueToNull = {
+      value: {
+        from: {
+          hour: '0',
+          minute: '0',
+        },
+        to: null,
+      },
+    };
+    const emptyValueFromNull = {
+      value: {
+        from: null,
+        to: {
+          hour: '14',
+          minute: '00',
+        },
+      },
+    };
+    const emptyValueFromNullToNull = {
+      value: {
+        from: null,
+        to: null,
+      },
+    };
     test.each`
-      answer           | result                            | description
-      ${validAnswer}   | ${{ from: '00:00', to: '14:00' }} | ${JSON.stringify(validAnswer)}
-      ${skippedAnswer} | ${{ from: '', to: '' }}           | ${'empty values when skipped or hidden'}
-      ${invalidValue}  | ${{ from: '', to: '' }}           | ${'empty values when invalid'}
+      answer                      | result                            | description
+      ${validAnswer}              | ${{ from: '00:00', to: '14:00' }} | ${JSON.stringify(validAnswer)}
+      ${skippedAnswer}            | ${{ from: '', to: '' }}           | ${'empty values when skipped or hidden'}
+      ${invalidValue}             | ${{ from: '', to: '' }}           | ${'empty values when invalid'}
+      ${emptyValueToNull}         | ${{ from: '00:00', to: '' }}      | ${'partially filled in when "to" is null'}
+      ${emptyValueFromNull}       | ${{ from: '', to: '14:00' }}      | ${'partially filled in when "from" is null'}
+      ${emptyValueFromNullToNull} | ${{ from: '', to: '' }}           | ${'empty values when "from" and "to" are null'}
     `('should return "$result" when $description', ({ answer, result }) => {
       expect(getTimeRangeResponse(answer)).toStrictEqual(result);
     });
