@@ -33,12 +33,15 @@ export const Managers = () => {
   const { appletId } = useParams();
   const [managersData, setManagersData] = useState<ManagersData | null>(null);
   const [workspaceInfo, setWorkspaceInfo] = useState<WorkspaceInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const dataTestId = 'dashboard-managers';
 
   const rolesData = workspaces.useRolesData();
   const { ownerId } = workspaces.useData() || {};
-  const roles = appletId ? rolesData?.data?.[appletId] : undefined;
+  const roles =
+    appletId && rolesData?.data
+      ? rolesData?.data?.[appletId]
+      : [...new Set(Object.values(rolesData.data || []).flat())];
   const canViewTeam = checkIfFullAccess(roles);
 
   const { execute } = useAsync(
@@ -226,7 +229,9 @@ export const Managers = () => {
     executeGetWorkspaceInfoApi({ ownerId });
   }, [ownerId, appletId, executeGetWorkspaceInfoApi]);
 
-  if (isForbidden || !canViewTeam) return noPermissionsComponent;
+  // If there are no roles available we're looking at our own empty workspace
+  const showsForbiddenComponent = isForbidden || (roles.length && !canViewTeam);
+  if (showsForbiddenComponent) return noPermissionsComponent;
 
   return (
     <StyledBody sx={{ p: 3.2 }}>
