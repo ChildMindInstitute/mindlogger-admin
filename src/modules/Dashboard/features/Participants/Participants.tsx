@@ -6,7 +6,12 @@ import { EmptyDashboardTable } from 'modules/Dashboard/components/EmptyDashboard
 import { ActionsMenu, Chip, MenuActionProps, Pin, Row, Search, Spinner } from 'shared/components';
 import { workspaces } from 'redux/modules';
 import { useAsync, usePermissions, useTable, useTimeAgo } from 'shared/hooks';
-import { getWorkspaceRespondentsApi, updateRespondentsPinApi, updateSubjectsPinApi } from 'api';
+import {
+  GetAppletsParams,
+  getWorkspaceRespondentsApi,
+  updateRespondentsPinApi,
+  updateSubjectsPinApi,
+} from 'api';
 import { page } from 'resources';
 import {
   checkIfCanManageParticipants,
@@ -78,7 +83,7 @@ export const Participants = () => {
     );
   };
 
-  const { execute: getWorkspaceRespondents } = useAsync(
+  const { execute } = useAsync(
     getWorkspaceRespondentsApi,
     (response) => {
       setRespondentsData(response?.data || null);
@@ -87,37 +92,37 @@ export const Participants = () => {
     () => setIsLoading(false),
   );
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
-    if (!canViewParticipants) return;
+  const getWorkspaceRespondents = (args?: GetAppletsParams) => {
     setIsLoading(true);
 
-    return getWorkspaceRespondents({
+    // Always sort by pinned first
+    const ordering = ['-isPinned'];
+    ordering.push(args?.params.ordering ?? '+tags,+secretIds');
+
+    return execute({
+      ...args,
       params: {
         ownerId,
         limit: DEFAULT_ROWS_PER_PAGE,
         ...(appletId && { appletId }),
+        ...args?.params,
+        ordering: ordering.join(','),
       },
     });
+  };
+
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!canViewParticipants) return;
+
+    return getWorkspaceRespondents();
   });
 
-  const {
-    searchValue,
-    handleSearch,
-    ordering: _ordering,
-    handleReload,
-    ...tableProps
-  } = useTable((args) => {
-    setIsLoading(true);
-    const params = {
-      ...args,
-      params: {
-        ...args.params,
-        ...(appletId && { appletId }),
-      },
-    };
-
-    return getWorkspaceRespondents(params);
-  });
+  const { searchValue, handleSearch, handleReload, ...tableProps } = useTable(
+    getWorkspaceRespondents,
+    DEFAULT_ROWS_PER_PAGE,
+    'tags',
+    'asc',
+  );
 
   const [dataExportPopupVisible, setDataExportPopupVisible] = useState(false);
   const [removeAccessPopupVisible, setRemoveAccessPopupVisible] = useState(false);
@@ -304,7 +309,7 @@ export const Participants = () => {
         onClick: () => handlePinClick({ respondentId, subjectId: detail.subjectId }),
         width: ParticipantsColumnsWidth.Pin,
       },
-      tag: {
+      tags: {
         content: () => (
           <StyledMaybeEmpty>
             <ParticipantTagChip tag={tag} />
@@ -466,7 +471,7 @@ export const Participants = () => {
       </StyledFlexWrap>
 
       <ParticipantsTable
-        columns={getHeadCells(appletId)}
+        columns={getHeadCells(respondentsData?.orderingFields, appletId)}
         rows={rows}
         emptyComponent={
           !rows?.length && !isLoading ? (

@@ -16,11 +16,13 @@ const defaultParams = {
 export const useTable = (
   asyncFunc: (params: GetAppletsParams) => Promise<unknown>,
   limit = DEFAULT_ROWS_PER_PAGE,
+  defaultOrderBy = defaultParams.orderBy,
+  defaultOrder = defaultParams.order,
 ) => {
   const [searchValue, setSearchValue] = useState(defaultParams.searchValue);
   const [page, setPage] = useState(defaultParams.page);
-  const [orderBy, setOrderBy] = useState(defaultParams.orderBy);
-  const [order, setOrder] = useState(defaultParams.order);
+  const [orderBy, setOrderBy] = useState(defaultOrderBy);
+  const [order, setOrder] = useState(defaultOrder);
 
   const ordering = formattedOrder(orderBy, order);
 
@@ -81,8 +83,8 @@ export const useTable = (
     if (ownerId) {
       setPage(defaultParams.page);
       setSearchValue(defaultParams.searchValue);
-      setOrder(defaultParams.order);
-      setOrderBy(defaultParams.orderBy);
+      setOrder(defaultOrder);
+      setOrderBy(defaultOrderBy);
     }
   }, [ownerId]);
 

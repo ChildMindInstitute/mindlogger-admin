@@ -3,7 +3,7 @@ import { Avatar as MuiAvatar, Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { getWorkspaceInfoApi, getWorkspaceManagersApi } from 'api';
+import { GetAppletsParams, getWorkspaceInfoApi, getWorkspaceManagersApi } from 'api';
 import {
   ActionsMenu,
   Avatar,
@@ -41,7 +41,7 @@ export const Managers = () => {
   const roles = appletId ? rolesData?.data?.[appletId] : undefined;
   const canViewTeam = checkIfFullAccess(roles);
 
-  const { execute: getWorkspaceManagers } = useAsync(
+  const { execute } = useAsync(
     getWorkspaceManagersApi,
     (response) => {
       setManagersData(response?.data || null);
@@ -53,31 +53,35 @@ export const Managers = () => {
     setWorkspaceInfo(res?.data?.result || null);
   });
 
-  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
-    if (!canViewTeam) return;
+  const getWorkspaceManagers = (args?: GetAppletsParams) => {
     setIsLoading(true);
 
-    return getWorkspaceManagers({
+    const ordering = args?.params.ordering ?? '+lastName,+firstName';
+
+    return execute({
+      ...args,
       params: {
         ownerId,
         limit: DEFAULT_ROWS_PER_PAGE,
         ...(appletId && { appletId }),
+        ...args?.params,
+        ordering,
       },
     });
+  };
+
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (!canViewTeam) return;
+
+    return getWorkspaceManagers();
   });
 
-  const { searchValue, handleSearch, handleReload, ...tableProps } = useTable((args) => {
-    setIsLoading(true);
-    const params = {
-      ...args,
-      params: {
-        ...args.params,
-        ...(appletId && { appletId }),
-      },
-    };
-
-    return getWorkspaceManagers(params);
-  });
+  const { searchValue, handleSearch, handleReload, ...tableProps } = useTable(
+    getWorkspaceManagers,
+    DEFAULT_ROWS_PER_PAGE,
+    'lastName',
+    'asc',
+  );
 
   const filterAppletsByRoles = (user: Manager) => ({
     ...user,
@@ -253,7 +257,7 @@ export const Managers = () => {
       </StyledFlexWrap>
 
       <DashboardTable
-        columns={getHeadCells(appletId)}
+        columns={getHeadCells(managersData?.orderingFields, appletId)}
         rows={rows}
         emptyComponent={renderEmptyComponent()}
         count={managersData?.count || 0}

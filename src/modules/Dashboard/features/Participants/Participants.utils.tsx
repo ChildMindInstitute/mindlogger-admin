@@ -260,7 +260,7 @@ export const getAppletsSmallTableRows = (
     };
   });
 
-export const getHeadCells = (id?: string): HeadCell[] => {
+export const getHeadCells = (sortableColumns?: string[], appletId?: string): HeadCell[] => {
   const { t } = i18n;
 
   return [
@@ -270,33 +270,33 @@ export const getHeadCells = (id?: string): HeadCell[] => {
       width: ParticipantsColumnsWidth.Pin,
     },
     {
-      id: 'tag',
+      id: 'tags',
       label: t('tag'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('tags') ?? true,
       width: ParticipantsColumnsWidth.Default,
     },
     {
       id: 'secretIds',
       label: t('secretUserId'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('secretIds') ?? true,
       maxWidth: ParticipantsColumnsWidth.Id,
     },
     {
       id: 'nicknames',
       label: t('nickname'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('nicknames') ?? false,
     },
     {
-      id: 'accountType',
+      id: 'status',
       label: t('accountType'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('status') ?? true,
     },
     {
       id: 'lastSeen',
       label: t('latestActivity'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('lastSeen') ?? false,
     },
-    ...(id
+    ...(appletId
       ? [
           {
             id: 'schedule',

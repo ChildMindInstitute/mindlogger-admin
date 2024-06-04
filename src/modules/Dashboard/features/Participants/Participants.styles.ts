@@ -14,18 +14,18 @@ export const ParticipantsTable = styled(DashboardTable)`
     min-width: 13rem;
   }
 
-  th:nth-child(1),
-  td:nth-child(1) {
+  th:nth-of-type(1),
+  td:nth-of-type(1) {
     min-width: ${ParticipantsColumnsWidth.Pin};
   }
 
-  th:nth-child(2),
-  td:nth-child(2) {
+  th:nth-of-type(2),
+  td:nth-of-type(2) {
     min-width: ${ParticipantsColumnsWidth.Pin};
   }
 
-  th:nth-child(6),
-  td:nth-child(6) {
+  th:nth-of-type(6),
+  td:nth-of-type(6) {
     min-width: ${ParticipantsColumnsWidth.AccountType};
   }
 

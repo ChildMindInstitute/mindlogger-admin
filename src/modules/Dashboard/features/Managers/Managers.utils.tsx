@@ -6,7 +6,7 @@ import { variables } from 'shared/styles';
 
 import { ManagersActions } from './Managers.types';
 
-export const getHeadCells = (id?: string): HeadCell[] => {
+export const getHeadCells = (sortableColumns?: string[], appletId?: string): HeadCell[] => {
   const { t } = i18n;
 
   return [
@@ -18,30 +18,30 @@ export const getHeadCells = (id?: string): HeadCell[] => {
     {
       id: 'firstName',
       label: t('firstName'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('firstName') ?? false,
     },
     {
       id: 'lastName',
       label: t('lastName'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('lastName') ?? false,
     },
     {
       id: 'title',
       label: 'Title',
     },
-    ...(id
+    ...(appletId
       ? [
           {
-            id: 'role',
+            id: 'roles',
             label: t('role'),
-            enableSort: true,
+            enableSort: sortableColumns?.includes('roles') ?? true,
           },
         ]
       : []),
     {
       id: 'email',
       label: t('email'),
-      enableSort: true,
+      enableSort: sortableColumns?.includes('email') ?? false,
     },
     {
       id: 'actions',
