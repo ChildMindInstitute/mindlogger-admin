@@ -27,6 +27,7 @@ import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
 
+import { ItemFormValues } from '../../types/Builder.types';
 import {
   checkScoreRegexp,
   getCommonSliderValidationProps,
@@ -498,24 +499,53 @@ export const SubscaleSchema = () =>
     })
     .required();
 
+const conditionValueSchema = yup.string().required(getIsRequiredValidateMessage('conditionValue'));
 export const ConditionSchema = () =>
   yup.object({
     itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
     type: yup.string().required(getIsRequiredValidateMessage('conditionType')),
-    payload: yup.object({}).when('type', ([type], schema) => {
+    payload: yup.object({}).when('type', ([type], schema, options) => {
+      const itemId = get(options, 'from.0.value.itemName');
+      const items: ItemFormValues[] = get(options, 'from.2.value.items', []);
+      const foundItem = items.find((item) => getEntityKey(item) === itemId);
+      const isTimeRange = foundItem?.responseType === ItemResponseType.TimeRange;
+
+      if (!type && isTimeRange) {
+        return schema.shape({
+          type: conditionValueSchema,
+        });
+      }
       if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
         return schema.shape({
-          optionValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+          optionValue: conditionValueSchema,
         });
-      if (CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type))
-        return schema.shape({
-          value: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+      if (CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type)) {
+        const baseSchema = schema.shape({
+          value: conditionValueSchema,
         });
-      if (CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type))
-        return schema.shape({
-          minValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
-          maxValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+        if (isTimeRange)
+          return baseSchema.concat(
+            yup.object({
+              type: conditionValueSchema,
+            }),
+          );
+
+        return baseSchema;
+      }
+      if (CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type)) {
+        const baseSchema = schema.shape({
+          minValue: conditionValueSchema,
+          maxValue: conditionValueSchema,
         });
+        if (isTimeRange)
+          return baseSchema.concat(
+            yup.object({
+              type: conditionValueSchema,
+            }),
+          );
+
+        return baseSchema;
+      }
 
       return schema;
     }),
