@@ -26,6 +26,7 @@ export const SwitchCondition = ({
   state,
   dataTestid,
   isValueSelectDisabled,
+  children,
 }: SwitchConditionProps) => {
   const numberValueName = `${payloadName}.value`;
   const minValueName = `${payloadName}.minValue`;
@@ -66,6 +67,7 @@ export const SwitchCondition = ({
 
       return (
         <>
+          {children}
           {isSingleValueShown && (
             <StyledInputController
               type="number"
@@ -125,6 +127,7 @@ export const SwitchCondition = ({
 
       return (
         <>
+          {children}
           {isSingleValueShown && (
             <StyledFlexTopCenter>
               <DatePicker
@@ -159,7 +162,12 @@ export const SwitchCondition = ({
       );
     }
     case ConditionItemType.Time: {
-      return <TimeCondition {...commonTimeConditionProps} />;
+      return (
+        <>
+          {children}
+          <TimeCondition {...commonTimeConditionProps} />
+        </>
+      );
     }
     case ConditionItemType.TimeRange:
       return (
@@ -175,6 +183,7 @@ export const SwitchCondition = ({
             data-testid={`${dataTestid}-payload-type-value`}
             disabled={isValueSelectDisabled}
           />
+          {children}
           <TimeCondition {...commonTimeConditionProps} />
         </>
       );
