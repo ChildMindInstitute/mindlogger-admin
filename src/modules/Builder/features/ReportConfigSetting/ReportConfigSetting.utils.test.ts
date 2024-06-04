@@ -52,8 +52,14 @@ describe('getActivityItemsOptions', () => {
 });
 
 describe('verifyReportServer', () => {
+  const originalFetch = global.fetch;
+
   beforeAll(() => {
     global.fetch = jest.fn();
+  });
+
+  afterAll(() => {
+    global.fetch = originalFetch;
   });
 
   afterAll(() => {
@@ -81,8 +87,14 @@ describe('verifyReportServer', () => {
 });
 
 describe('setPasswordReportServer', () => {
+  const originalFetch = global.fetch;
+
   beforeAll(() => {
     global.fetch = jest.fn();
+  });
+
+  afterAll(() => {
+    global.fetch = originalFetch;
   });
 
   afterAll(() => {
