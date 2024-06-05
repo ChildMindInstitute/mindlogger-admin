@@ -751,11 +751,13 @@ export const getFlowVersionsApi = (
   });
 
 export const getLatestReportApi = (
-  { appletId, activityId, subjectId }: GetLatestReportParams,
+  { appletId, activityId, flowId, subjectId }: GetLatestReportParams,
   signal?: AbortSignal,
 ) =>
   authApiClient.post(
-    `/answers/applet/${appletId}/activities/${activityId}/subjects/${subjectId}/latest_report`,
+    `/answers/applet/${appletId}/${
+      activityId ? `activities/${activityId}` : `flows/${flowId}`
+    }/subjects/${subjectId}/latest_report`,
     {},
     {
       responseType: 'arraybuffer',
