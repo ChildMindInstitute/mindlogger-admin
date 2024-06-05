@@ -20,7 +20,6 @@ export const ReportHeader = ({
           {name}
         </StyledStickyHeadline>
       )}
-      {/*TODO: implement Download Latest Report (Combined) for Flow after back-end is ready (M2-5692)*/}
       <DownloadReport id={id} isFlow={isFlow} data-testid={`${dataTestId}-download-report`} />
     </StyledHeader>
   );
