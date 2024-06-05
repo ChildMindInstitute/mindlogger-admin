@@ -75,6 +75,9 @@ const mockedOrderedConditionNameItems = [
   mockedSliderActivityItem,
   mockedTimeRangeActivityItem,
   mockedNumberSelectActivityItem,
+  mockedNumberSelectActivityItem,
+  mockedMultiSelectRowsActivityItem,
+  mockedSingleSelectRowsActivityItem,
 ];
 const mockedOrderedSummaryItemItems = [
   mockedSingleActivityItem,
@@ -244,7 +247,7 @@ describe('Activity Items Flow', () => {
     expect(nameDropdown).toBeVisible();
 
     const items = nameDropdown.querySelectorAll('li');
-    expect(items).toHaveLength(7);
+    expect(items).toHaveLength(9);
 
     items.forEach((item, index) => {
       expect(item).toHaveAttribute('data-value', mockedOrderedConditionNameItems[index].id);
