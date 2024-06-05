@@ -91,9 +91,7 @@ const mockedNames = {
   itemName: `${mockedConditionName}.itemName`,
   stateName: `${mockedConditionName}.type`,
   optionValueName: `${mockedConditionName}.payload.optionValue`,
-  numberValueName: `${mockedConditionName}.payload.value`,
-  minValueName: `${mockedConditionName}.payload.minValue`,
-  maxValueName: `${mockedConditionName}.payload.maxValue`,
+  payloadName: `${mockedConditionName}.payload`,
 };
 const mockedPropsForEditingCondition = {
   ...mockedNames,

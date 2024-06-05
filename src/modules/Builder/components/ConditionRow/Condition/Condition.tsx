@@ -7,17 +7,14 @@ import { ConditionRowType } from 'modules/Builder/types';
 
 import { StyledCondition, StyledSelectController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
-import { ConditionItemType } from './Condition.const';
 import { getScoreConditionOptions, getStateOptions } from './Condition.utils';
 import { SwitchCondition } from './SwitchCondition';
+import { ConditionItemType } from './Condition.const';
 
 export const Condition = ({
   itemName,
   stateName,
-  optionValueName,
-  numberValueName,
-  minValueName,
-  maxValueName,
+  payloadName,
   itemOptions,
   valueOptions,
   item,
@@ -33,27 +30,21 @@ export const Condition = ({
   const { control } = useCustomFormContext();
 
   const selectedItem = itemOptions?.find(({ value }) => value === item);
-
-  const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
   const isRowTypeItem = type === ConditionRowType.Item;
   const isRowTypeScore = type === ConditionRowType.Score;
-  const isItemSelect =
-    selectedItem?.type === ConditionItemType.SingleSelection ||
-    selectedItem?.type === ConditionItemType.MultiSelection ||
-    isItemScoreCondition;
-  const isValueSelectShown = !selectedItem || isItemSelect;
-
-  const isValueSelectDisabled = !isItemScoreCondition && !valueOptions?.length;
   const isStateSelectDisabled = !selectedItem?.type;
+
+  const optionValueName = `${payloadName}.optionValue`;
+  const numberValueName = `${payloadName}.value`;
+  const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
 
   const switchConditionProps = {
     itemType: selectedItem?.type,
     selectedItem,
-    numberValueName,
-    minValueName,
-    maxValueName,
+    payloadName,
     state,
     dataTestid,
+    valueOptions,
   };
 
   return (
@@ -80,31 +71,45 @@ export const Condition = ({
         isLabelNeedTranslation={false}
         data-testid={`${dataTestid}-name`}
       />
-      {!isRowTypeItem && <StyledTitleMedium>{t('is')}</StyledTitleMedium>}
-      <StyledSelectController
-        control={control}
-        name={stateName}
-        options={getStateOptions(selectedItem?.type)}
-        placeholder={
-          isStateSelectDisabled ? t('conditionDisabledPlaceholder') : t('conditionTypePlaceholder')
-        }
-        customChange={onStateChange}
-        isLabelNeedTranslation={false}
-        data-testid={`${dataTestid}-type`}
-        disabled={isStateSelectDisabled}
-      />
-      {isValueSelectShown && (
+      <SwitchCondition {...switchConditionProps}>
         <StyledSelectController
           control={control}
-          name={isItemScoreCondition ? numberValueName : optionValueName}
-          options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
-          placeholder={isValueSelectDisabled ? t('conditionDisabledPlaceholder') : t('value')}
+          name={stateName}
+          options={getStateOptions(selectedItem?.type)}
+          placeholder={
+            isStateSelectDisabled
+              ? t('conditionDisabledPlaceholder')
+              : t('conditionTypePlaceholder')
+          }
+          customChange={onStateChange}
           isLabelNeedTranslation={false}
-          data-testid={`${dataTestid}-selection-value`}
-          disabled={isValueSelectDisabled}
+          data-testid={`${dataTestid}-type`}
+          disabled={isStateSelectDisabled}
         />
+      </SwitchCondition>
+      {isStateSelectDisabled && (
+        <>
+          <StyledSelectController
+            control={control}
+            name={stateName}
+            options={getStateOptions(selectedItem?.type)}
+            placeholder={t('conditionDisabledPlaceholder')}
+            customChange={onStateChange}
+            isLabelNeedTranslation={false}
+            data-testid={`${dataTestid}-type`}
+            disabled
+          />
+          <StyledSelectController
+            control={control}
+            name={isItemScoreCondition ? numberValueName : optionValueName}
+            options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
+            placeholder={t('conditionDisabledPlaceholder')}
+            isLabelNeedTranslation={false}
+            data-testid={`${dataTestid}-selection-value`}
+            disabled
+          />
+        </>
       )}
-      <SwitchCondition {...switchConditionProps} />
       {isRemoveVisible && (
         <StyledClearedButton
           sx={{ p: theme.spacing(1) }}

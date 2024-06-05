@@ -12,6 +12,7 @@ export const getStateOptions = (type?: ConditionItemType) => {
     case ConditionItemType.Date:
     case ConditionItemType.NumberSelection:
     case ConditionItemType.Time:
+    case ConditionItemType.TimeRange:
       return [
         { value: ConditionType.GreaterThan, labelKey: t('greaterThan') },
         { value: ConditionType.LessThan, labelKey: t('lessThan') },

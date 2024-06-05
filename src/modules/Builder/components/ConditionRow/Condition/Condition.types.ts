@@ -22,10 +22,7 @@ export type ConditionItem = {
 export type ConditionProps = {
   itemName: string;
   stateName: string;
-  optionValueName: string;
-  numberValueName: string;
-  minValueName: string;
-  maxValueName: string;
+  payloadName: string;
   itemOptions: ConditionItem[];
   valueOptions: { value: string; labelKey: string }[];
   item: string;

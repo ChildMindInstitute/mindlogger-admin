@@ -1,8 +1,15 @@
-import { NumberItemResponseValues, SliderItemResponseValues } from 'shared/state';
+import i18n from 'i18n';
+import {
+  NumberItemResponseValues,
+  SliderItemResponseValues,
+  TimeRangeConditionType,
+} from 'shared/state';
 import { ConditionType } from 'shared/consts';
 
 import { DEFAULT_NUMBER_MIN_VALUE, ConditionItemType } from '../Condition.const';
 import { ConditionItem } from '../Condition.types';
+
+const { t } = i18n;
 
 const getDefaultMinMaxValues = (state: ConditionType) => ({
   minNumber: state ? Number.MIN_SAFE_INTEGER : DEFAULT_NUMBER_MIN_VALUE,
@@ -93,3 +100,8 @@ export const getConditionMinMaxRangeValues = ({
       return getDefaultMinMaxRangeValues();
   }
 };
+
+export const getTimeRangeOptions = () => [
+  { value: TimeRangeConditionType.StartTime, labelKey: t('startTime') },
+  { value: TimeRangeConditionType.EndTime, labelKey: t('endTime') },
+];
