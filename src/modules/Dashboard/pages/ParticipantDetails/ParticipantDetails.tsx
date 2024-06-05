@@ -59,7 +59,7 @@ export const ParticipantDetails = () => {
             variant={ParticipantSnippetVariant.Large}
             secretId={subject.secretUserId}
             nickname={subject.nickname}
-            rightContent={<HeaderOptions />}
+            rightContent={<HeaderOptions exportFilters={{ targetSubjectId: subjectId }} />}
             tag={subject.tag}
             boxProps={{ sx: { mb: 1.2, mx: 2.4 } }}
           />

@@ -10,7 +10,9 @@ import { StyledFlexTopCenter, variables } from 'shared/styles';
 import { Mixpanel, checkIfCanAccessData, checkIfCanEdit } from 'shared/utils';
 import { workspaces } from 'shared/state';
 
-export const HeaderOptions = () => {
+import { HeaderOptionsProps } from './HeaderOptions.types';
+
+export const HeaderOptions = ({ exportFilters, sx, ...otherProps }: HeaderOptionsProps) => {
   const [isExportOpen, setIsExportOpen] = useState(false);
   const { t } = useTranslation('app');
   const { appletId } = useParams();
@@ -31,7 +33,7 @@ export const HeaderOptions = () => {
   const canEdit = checkIfCanEdit(roles);
 
   return canEdit || canAccessData ? (
-    <StyledFlexTopCenter sx={{ gap: 1, ml: 'auto' }}>
+    <StyledFlexTopCenter sx={{ gap: 1, ml: 'auto', ...sx }} {...otherProps}>
       {canAccessData && (
         <Button
           data-testid="header-option-export-button"
@@ -57,6 +59,7 @@ export const HeaderOptions = () => {
       <ExportDataSetting
         isExportSettingsOpen={isExportOpen}
         onExportSettingsClose={handleCloseExport}
+        filters={exportFilters}
       />
     </StyledFlexTopCenter>
   ) : null;
