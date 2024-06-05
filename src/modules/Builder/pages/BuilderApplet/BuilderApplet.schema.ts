@@ -500,7 +500,7 @@ export const SubscaleSchema = () =>
     .required();
 
 const conditionValueSchema = yup.string().required(getIsRequiredValidateMessage('conditionValue'));
-export const ConditionSchema = () =>
+export const ItemFlowConditionSchema = () =>
   yup.object({
     itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
     type: yup.string().required(getIsRequiredValidateMessage('conditionType')),
@@ -551,6 +551,31 @@ export const ConditionSchema = () =>
     }),
   });
 
+export const ConditionSchema = () =>
+  yup.object({
+    itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
+    type: yup.string().required(getIsRequiredValidateMessage('conditionType')),
+    payload: yup.object({}).when('type', ([type], schema) => {
+      if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
+        return schema.shape({
+          optionValue: conditionValueSchema,
+        });
+      if (CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type)) {
+        return schema.shape({
+          value: conditionValueSchema,
+        });
+      }
+      if (CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type)) {
+        return schema.shape({
+          minValue: conditionValueSchema,
+          maxValue: conditionValueSchema,
+        });
+      }
+
+      return schema;
+    }),
+  });
+
 export const ConditionalLogicSchema = () =>
   yup.object({
     match: yup.string().required(getIsRequiredValidateMessage('conditionMatch')),
@@ -572,7 +597,7 @@ export const ConditionalLogicSchema = () =>
           );
         },
       ),
-    conditions: yup.array().of(ConditionSchema()),
+    conditions: yup.array().of(ItemFlowConditionSchema()),
   });
 
 const getReportCommonFields = (isScoreReport = false) => ({
