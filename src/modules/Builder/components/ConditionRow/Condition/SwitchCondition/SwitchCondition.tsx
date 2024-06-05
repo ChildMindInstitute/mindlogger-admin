@@ -14,34 +14,34 @@ import {
   getConditionMinMaxValues,
   getConditionMinMaxRangeValues,
   getTimeRangeOptions,
+  getRowOptions,
 } from './SwitchCondition.utils';
 import { commonInputSx, commonInputWrapperSx } from './SwitchCondition.const';
 import { TimeCondition } from './TimeCondition';
 import { StyledSelectController } from '../Condition.styles';
-import { getScoreConditionOptions } from '../Condition.utils';
+import { SingleMultiScoreCondition } from './SingleMultiScoreCondition';
 
 export const SwitchCondition = ({
   selectedItem,
-  itemType,
   payloadName,
   state,
   dataTestid,
   children,
   valueOptions,
 }: SwitchConditionProps) => {
-  const optionValueName = `${payloadName}.optionValue`;
   const numberValueName = `${payloadName}.value`;
   const minValueName = `${payloadName}.minValue`;
   const maxValueName = `${payloadName}.maxValue`;
   const typeName = `${payloadName}.type`;
+  const rowIndexName = `${payloadName}.rowIndex`;
   const { t } = useTranslation('app');
   const { control, setValue } = useCustomFormContext();
   const [minValue, maxValue] = useWatch({ name: [minValueName, maxValueName] });
 
   const isSingleValueShown = !CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(state);
   const isRangeValueShown = !isSingleValueShown;
-  const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
   const isItemSelected = !!selectedItem;
+  const itemType = selectedItem?.type;
 
   const commonTimeConditionProps = {
     numberValueName,
@@ -59,20 +59,38 @@ export const SwitchCondition = ({
     case ConditionItemType.SingleSelection:
     case ConditionItemType.MultiSelection:
     case ConditionItemType.ScoreCondition: {
-      const isValueSelectDisabled = !isItemScoreCondition && !valueOptions?.length;
+      const props = {
+        children,
+        selectedItem,
+        payloadName,
+        valueOptions,
+        dataTestid,
+      };
+
+      return <SingleMultiScoreCondition {...props} />;
+    }
+    case ConditionItemType.SingleSelectionPerRow:
+    case ConditionItemType.MultipleSelectionPerRow: {
+      const props = {
+        children,
+        selectedItem,
+        payloadName,
+        valueOptions,
+        dataTestid,
+      };
 
       return (
         <>
-          {children}
           <StyledSelectController
             control={control}
-            name={isItemScoreCondition ? numberValueName : optionValueName}
-            options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
-            placeholder={isValueSelectDisabled ? t('conditionDisabledPlaceholder') : t('value')}
+            name={rowIndexName}
+            options={getRowOptions(selectedItem.responseValues.rows)}
+            placeholder={!isItemSelected ? t('conditionDisabledPlaceholder') : `${t('row')}`}
             isLabelNeedTranslation={false}
-            data-testid={`${dataTestid}-selection-value`}
-            disabled={isValueSelectDisabled}
+            data-testid={`${dataTestid}-payload-rowIndex`}
+            disabled={!isItemSelected}
           />
+          <SingleMultiScoreCondition {...props} />
         </>
       );
     }
@@ -201,9 +219,7 @@ export const SwitchCondition = ({
             control={control}
             name={typeName}
             options={getTimeRangeOptions()}
-            placeholder={
-              !isItemSelected ? t('conditionDisabledPlaceholder') : t('Start Time / End Time')
-            }
+            placeholder={!isItemSelected ? t('conditionDisabledPlaceholder') : t('startEndDate')}
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-payload-type-value`}
             disabled={!isItemSelected}

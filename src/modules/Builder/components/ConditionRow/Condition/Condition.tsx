@@ -39,7 +39,6 @@ export const Condition = ({
   const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
 
   const switchConditionProps = {
-    itemType: selectedItem?.type,
     selectedItem,
     payloadName,
     state,
