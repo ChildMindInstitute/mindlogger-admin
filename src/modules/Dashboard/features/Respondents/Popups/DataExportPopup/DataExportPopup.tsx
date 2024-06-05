@@ -13,7 +13,7 @@ import {
   theme,
   variables,
 } from 'shared/styles';
-import { exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
+import { ExportDataFilters, exportDataSucceed, Mixpanel, sendLogFile } from 'shared/utils';
 import { useSetupEnterAppletPassword } from 'shared/hooks';
 import { getExportDataApi } from 'api';
 import { useDecryptedActivityData } from 'modules/Dashboard/hooks';
@@ -51,13 +51,17 @@ export const DataExportPopup = ({
   const appletId = get(chosenAppletData, isAppletSetting ? 'id' : 'appletId');
   const subjectId = isAppletSetting ? undefined : (chosenAppletData as ChosenAppletData)?.subjectId;
   const { encryption } = chosenAppletData ?? {};
+  const { targetSubjectId: subjectIdFilter, ...otherFilters } = filters ?? {};
 
   const handleDataExportSubmit = async () => {
     if (dataIsExporting || dataExportingRef.current || !appletId) {
       return;
     }
 
-    await executeAllPagesOfExportData({ appletId, targetSubjectIds: subjectId });
+    await executeAllPagesOfExportData({
+      appletId,
+      targetSubjectIds: subjectId ?? subjectIdFilter,
+    });
   };
 
   const hasEncryptionCheck = useCheckIfHasEncryption({
@@ -94,7 +98,7 @@ export const DataExportPopup = ({
         await exportDataSucceed({
           getDecryptedAnswers,
           suffix: pageLimit > 1 ? getExportDataSuffix(1) : '',
-          filters,
+          filters: otherFilters as ExportDataFilters,
         })(firstPageData);
 
         if (pageLimit > 1) {
