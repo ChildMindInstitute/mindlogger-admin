@@ -16,13 +16,16 @@ jest.mock('react-router-dom', () => ({
 jest.mock('downloadjs');
 
 const activityId = 'activity-id';
+const flowId = 'flow-id';
 
 export const getMockedApplet = ({
   generateReport,
   reportPublicKey,
+  isSingleReport,
 }: {
   generateReport?: boolean;
   reportPublicKey?: string | null;
+  isSingleReport?: boolean;
 }) => ({
   displayName: 'Test Applet',
   reportPublicKey,
@@ -38,6 +41,13 @@ export const getMockedApplet = ({
       },
     },
   ],
+  activityFlows: [
+    {
+      name: 'Flow 1',
+      id: flowId,
+      isSingleReport,
+    },
+  ],
 });
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -47,6 +57,37 @@ export const getPreloadedState = (applet) => ({
     applet: { data: { result: applet } },
   },
 });
+
+const testDownloadReport = async (result: { current: unknown }, isFlow: boolean) => {
+  mockAxios.post.mockResolvedValueOnce({
+    data: 'reportData',
+    headers: { 'content-disposition': 'attachment; filename=report.pdf' },
+  });
+
+  const currentResult = result.current as ReturnType<typeof useDownloadReport>;
+  expect(currentResult.downloadReportError).toBeNull();
+  expect(currentResult.isDownloadReportDisabled).toBe(false);
+  expect(currentResult.isDownloadReportLoading).toBe(false);
+
+  act(() => {
+    currentResult.downloadReportHandler();
+  });
+
+  await waitFor(() => {
+    expect(mockAxios.post).toBeCalledWith(
+      `/answers/applet/${mockedAppletId}/${
+        isFlow ? `flows/${flowId}` : `activities/${activityId}`
+      }/subjects/${mockedRespondentId}/latest_report`,
+      {},
+      { responseType: 'arraybuffer', signal: undefined },
+    );
+    expect(download).toHaveBeenCalledWith(
+      'data:application/pdf;base64,cmVwb3J0RGF0YQ==',
+      'Report.pdf',
+      'text/pdf',
+    );
+  });
+};
 
 describe('useDownloadReport', () => {
   beforeEach(() => {
@@ -60,39 +101,39 @@ describe('useDownloadReport', () => {
   });
 
   test.each`
-    generateReport | reportPublicKey | expected
-    ${true}        | ${null}         | ${true}
-    ${true}        | ${''}           | ${true}
-    ${true}        | ${undefined}    | ${true}
-    ${true}        | ${'public-key'} | ${false}
-    ${false}       | ${null}         | ${true}
-    ${false}       | ${''}           | ${true}
-    ${false}       | ${undefined}    | ${true}
-    ${false}       | ${'public-key'} | ${true}
+    isFlow   | generateReport | reportPublicKey | isSingleReport | isDownloadDisabled
+    ${false} | ${true}        | ${null}         | ${undefined}   | ${true}
+    ${false} | ${true}        | ${''}           | ${undefined}   | ${true}
+    ${false} | ${true}        | ${undefined}    | ${undefined}   | ${true}
+    ${false} | ${true}        | ${'public-key'} | ${undefined}   | ${false}
+    ${false} | ${false}       | ${null}         | ${undefined}   | ${true}
+    ${false} | ${false}       | ${''}           | ${undefined}   | ${true}
+    ${false} | ${false}       | ${undefined}    | ${undefined}   | ${true}
+    ${false} | ${false}       | ${'public-key'} | ${undefined}   | ${true}
+    ${true}  | ${true}        | ${'public-key'} | ${true}        | ${false}
+    ${true}  | ${false}       | ${'public-key'} | ${true}        | ${true}
   `(
-    `returns isDownloadReportDisabled=$expected, when generateReport=$generateReport and reportPublicKey=$reportPublicKey`,
-    ({ generateReport, reportPublicKey, expected }) => {
+    `returns isDownloadReportDisabled=$isDownloadDisabled, when isFlow=$isFlow, generateReport=$generateReport, reportPublicKey=$reportPublicKey, and isSingleReport=$isSingleReport`,
+    ({ isFlow, generateReport, reportPublicKey, isSingleReport, isDownloadDisabled }) => {
       const { result } = renderHookWithProviders(
-        () => useDownloadReport({ id: activityId, isFlow: false }),
+        () => useDownloadReport({ id: isFlow ? flowId : activityId, isFlow }),
         {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          preloadedState: getPreloadedState(getMockedApplet({ generateReport, reportPublicKey })),
+          preloadedState: getPreloadedState(
+            getMockedApplet({ generateReport, reportPublicKey, isSingleReport }),
+          ),
         },
       );
 
       const currentResult = result.current as ReturnType<typeof useDownloadReport>;
-      expect(currentResult.isDownloadReportDisabled).toBe(expected);
+      expect(currentResult.isDownloadReportDisabled).toBe(isDownloadDisabled);
       expect(currentResult.isDownloadReportLoading).toBe(false);
       expect(currentResult.downloadReportError).toBe(null);
     },
   );
 
   test('handles download report for Activity', async () => {
-    mockAxios.post.mockResolvedValueOnce({
-      data: 'reportData',
-      headers: { 'content-disposition': 'attachment; filename=report.pdf' },
-    });
     const { result } = renderHookWithProviders(
       () => useDownloadReport({ id: activityId, isFlow: false }),
       {
@@ -104,21 +145,25 @@ describe('useDownloadReport', () => {
       },
     );
 
-    const currentResult = result.current as ReturnType<typeof useDownloadReport>;
-    expect(currentResult.downloadReportError).toBeNull();
-    expect(currentResult.isDownloadReportDisabled).toBe(false);
-    expect(currentResult.isDownloadReportLoading).toBe(false);
+    await testDownloadReport(result, false);
+  });
 
-    act(() => {
-      currentResult.downloadReportHandler();
-    });
+  test('handles download report for Flow', async () => {
+    const { result } = renderHookWithProviders(
+      () => useDownloadReport({ id: flowId, isFlow: true }),
+      {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        preloadedState: getPreloadedState(
+          getMockedApplet({
+            generateReport: true,
+            reportPublicKey: 'some-key',
+            isSingleReport: true,
+          }),
+        ),
+      },
+    );
 
-    await waitFor(() => {
-      expect(download).toHaveBeenCalledWith(
-        'data:application/pdf;base64,cmVwb3J0RGF0YQ==',
-        'Report.pdf',
-        'text/pdf',
-      );
-    });
+    await testDownloadReport(result, true);
   });
 });
