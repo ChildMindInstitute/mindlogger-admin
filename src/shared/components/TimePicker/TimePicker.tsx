@@ -52,6 +52,7 @@ export const TimePicker = <T extends FieldValues>({
               minTime={minTime}
               maxTime={maxTime}
               placeholderText={placeholder}
+              autoComplete="off"
               customInput={
                 <TextField
                   variant="outlined"
