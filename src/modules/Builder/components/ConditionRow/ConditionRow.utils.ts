@@ -8,6 +8,7 @@ import {
   RangeValueCondition,
   ScoreReport,
   TimeRangeValueCondition,
+  SingleMultiSelectionPerRowCondition,
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
@@ -32,6 +33,10 @@ export const getConditionItemType = (item: ItemFormValues) => {
       return ConditionItemType.Time;
     case ItemResponseType.TimeRange:
       return ConditionItemType.TimeRange;
+    case ItemResponseType.SingleSelectionPerRow:
+      return ConditionItemType.SingleSelectionPerRow;
+    case ItemResponseType.MultipleSelectionPerRow:
+      return ConditionItemType.MultipleSelectionPerRow;
     default:
       return ConditionItemType.SingleSelection;
   }
@@ -48,6 +53,8 @@ const itemFlowItemTypes = [
   ItemResponseType.NumberSelection,
   ItemResponseType.Time,
   ItemResponseType.TimeRange,
+  ItemResponseType.SingleSelectionPerRow,
+  ItemResponseType.MultipleSelectionPerRow,
 ];
 const checkIfShouldBeIncluded = (responseType: ItemResponseType, isItemFlow = false) =>
   (isItemFlow ? itemFlowItemTypes : scoreItemTypes).some((value) => value === responseType);
@@ -128,6 +135,18 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
     case ConditionType.NotIncludesOption:
     case ConditionType.EqualToOption:
     case ConditionType.NotEqualToOption:
+      if (
+        responseType === ItemResponseType.SingleSelectionPerRow ||
+        responseType === ItemResponseType.MultipleSelectionPerRow
+      ) {
+        return {
+          optionValue:
+            (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.optionValue ?? '',
+          rowIndex:
+            (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.rowIndex ?? '',
+        };
+      }
+
       return {
         optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };

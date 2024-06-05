@@ -6,6 +6,8 @@ export const enum ConditionItemType {
   NumberSelection = 'numberSelection',
   Time = 'time',
   TimeRange = 'timeRange',
+  SingleSelectionPerRow = 'singleSelectRows',
+  MultipleSelectionPerRow = 'multiSelectRows',
   Score = 'score',
   ScoreCondition = 'scoreCondition',
 }

@@ -408,6 +408,12 @@ export type OptionCondition = BaseCondition & {
     optionValue: string | number;
   };
 };
+export type SingleMultiSelectionPerRowCondition = BaseCondition &
+  OptionCondition & {
+    payload: {
+      rowIndex: number;
+    };
+  };
 
 export type SingleValueCondition<T = number> = BaseCondition & {
   payload: {
@@ -438,6 +444,7 @@ export type Condition<T = number> =
   | SingleValueCondition<T>
   | RangeValueCondition<T>
   | TimeRangeValueCondition
+  | SingleMultiSelectionPerRowCondition
   | ScoreCondition;
 
 export type ConditionalLogic = {
