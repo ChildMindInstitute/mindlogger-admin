@@ -23,6 +23,11 @@ const actionsContentFn = jest.fn();
 
 const getMockRows = (arrayLength = 15) =>
   createArray(arrayLength, (index) => ({
+    id: {
+      content: () => `id-should-be-hidden-${index}`,
+      value: `${index}`,
+      isHidden: true,
+    },
     firstName: {
       content: () => `John${index}`,
       value: `john-${index}`,
@@ -71,7 +76,7 @@ describe('DashboardTable component tests', () => {
     expect(screen.getByText('empty component')).toBeInTheDocument();
   });
 
-  test('should render table with rows', () => {
+  test('should render table with rows with only visible columns', () => {
     renderWithProviders(getTable());
 
     const columns = ['First Name', 'Last Name'];
@@ -80,6 +85,7 @@ describe('DashboardTable component tests', () => {
     expect(screen.getByTestId(mockDataTestId)).toBeInTheDocument();
     columns.forEach((column) => expect(screen.getByText(column)).toBeInTheDocument());
     row.forEach((rowItem) => expect(screen.getByText(rowItem)).toBeInTheDocument());
+    expect(screen.queryByText('id-should-be-hidden-1')).not.toBeInTheDocument();
   });
 
   test('should request table sort', () => {

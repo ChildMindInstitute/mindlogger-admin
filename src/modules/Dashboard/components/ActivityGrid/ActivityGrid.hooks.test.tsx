@@ -88,12 +88,12 @@ describe('useActivityGrid', () => {
       },
     });
 
-    expect(row.image.content()).toEqual('');
-    expect(row.name.content()).toEqual(activity.name);
-    expect(row.participantCount.content()).toBeNull();
-    expect(row.latestActivity.content()).toEqual(false);
-    expect(row.compliance.content()).toEqual(false);
-    expect(isValidElement(row.actions.content())).toEqual(true);
+    expect(row.image.content?.()).toEqual('');
+    expect(row.name.content?.()).toEqual(activity.name);
+    expect(row.participantCount.content?.()).toBeNull();
+    expect(row.latestActivity.content?.()).toEqual(false);
+    expect(row.compliance.content?.()).toEqual(false);
+    expect(isValidElement(row.actions.content?.())).toEqual(true);
   });
 
   test('getActivityById should return correct activity', () => {

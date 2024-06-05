@@ -9,6 +9,7 @@ export type DashboardTableProps = {
   className?: string;
   columns: HeadCell[];
   rows?: Row[];
+  keyExtractor?: (item: Row, index: number) => string;
   order: Order;
   orderBy: string;
   handleRequestSort: (event: MouseEvent<unknown>, property: string) => void;

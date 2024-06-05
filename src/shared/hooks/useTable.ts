@@ -1,4 +1,4 @@
-import { useState, useEffect, MouseEvent } from 'react';
+import { useState, useEffect, MouseEvent, useRef, useMemo } from 'react';
 
 import { Order } from 'shared/types';
 import { workspaces } from 'redux/modules';
@@ -28,15 +28,24 @@ export const useTable = (
 
   const { ownerId } = workspaces.useData() || {};
 
-  const params = {
-    ownerId,
-    limit,
-    search: searchValue,
-    page,
-    ...(ordering && { ordering }),
-  };
+  const params = useMemo(
+    () => ({
+      ownerId,
+      limit,
+      search: searchValue,
+      page,
+      ...(ordering && { ordering }),
+    }),
+    [ownerId, limit, searchValue, page, ordering],
+  );
 
-  const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
+  // Ref required to eliminate closure reference errors and reduce redundant rerenders
+  const paramsRef = useRef(params);
+  useEffect(() => {
+    paramsRef.current = params;
+  }, [params]);
+
+  const handleRequestSort = (_event: MouseEvent<unknown>, property: string) => {
     const isAsc = order === 'asc' && orderBy === property;
     const orderValue = isAsc ? 'desc' : 'asc';
 
@@ -45,19 +54,19 @@ export const useTable = (
 
     asyncFunc({
       params: {
-        ...params,
+        ...paramsRef.current,
         ordering: formattedOrder(property, orderValue),
       },
     });
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     const nextPage = newPage + 1;
     setPage(nextPage);
 
     asyncFunc({
       params: {
-        ...params,
+        ...paramsRef.current,
         page: nextPage,
       },
     });
@@ -68,7 +77,7 @@ export const useTable = (
     setPage(defaultParams.page);
     asyncFunc({
       params: {
-        ...params,
+        ...paramsRef.current,
         page: defaultParams.page,
         search: value,
       },
@@ -76,7 +85,7 @@ export const useTable = (
   };
 
   const handleReload = () => {
-    asyncFunc({ params });
+    asyncFunc({ params: paramsRef.current });
   };
 
   useEffect(() => {
