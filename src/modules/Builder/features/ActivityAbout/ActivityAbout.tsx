@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -42,13 +43,25 @@ export const ActivityAbout = () => {
 
   useRedirectIfNoMatchedActivity();
 
-  const { control, setValue, watch } = useCustomFormContext();
+  const { control, setValue } = useCustomFormContext();
   const { fieldName, activity } = useCurrentActivity();
   const hasVariableAmongItems = useCheckIfItemsHaveVariables();
   const hasRequiredItems = useCheckIfItemsHaveRequiredItems();
 
-  const activityItems = watch(`${fieldName}.items`);
-  const activityFlows: ActivityFlowFormValues[] = watch('activityFlows');
+  const [activityItems, activityFlows, activityImage, splashScreen]: [
+    ItemFormValues[],
+    ActivityFlowFormValues[],
+    string,
+    string,
+  ] = useWatch({
+    name: [
+      `${fieldName}.items`,
+      'activityFlows',
+      `${fieldName}.image`,
+      `${fieldName}.splashScreen`,
+    ],
+  });
+
   const hasUnsupportedReviewableItemTypes = activityItems?.some(
     (item: ItemFormValues) =>
       ![...itemsForReviewableActivity, ''].includes(item.responseType as ItemResponseType),
@@ -76,7 +89,7 @@ export const ActivityAbout = () => {
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue(`${fieldName}.image`, val)}
-          getValue={() => watch(`${fieldName}.image`)}
+          getValue={() => activityImage}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
           data-testid="builder-activity-about-image"
         />
@@ -89,7 +102,7 @@ export const ActivityAbout = () => {
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue(`${fieldName}.splashScreen`, val)}
-          getValue={() => watch(`${fieldName}.splashScreen`)}
+          getValue={() => splashScreen}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
           cropRatio={CropRatio.SplashScreen}
           data-testid="builder-activity-about-splash-screen"
@@ -99,9 +112,9 @@ export const ActivityAbout = () => {
   ];
 
   const handleIsReviewableChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked) return;
+    if (!event.target.checked || !activity) return;
 
-    const activityKey = getEntityKey(activity || {});
+    const activityKey = getEntityKey(activity);
 
     const newActivityFlows = getUpdatedActivityFlows(activityFlows, activityKey);
     setValue('activityFlows', newActivityFlows);

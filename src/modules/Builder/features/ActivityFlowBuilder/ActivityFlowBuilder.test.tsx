@@ -218,14 +218,14 @@ describe('Activity Flow Builder', () => {
   });
 
   test('Ensures no reviewable activities remain when adding/replacing an activity)', async () => {
+    const addActivityRegexp = new RegExp(`^${mockedActivityFlowBuilderTestid}-add-activity-\\d+$`);
+
     renderActivityFlowBuilder(mockedAppletFormDataWithReviewableActivity);
 
     const addActivity = screen.getByTestId(`${mockedActivityFlowBuilderTestid}-add`);
     await userEvent.click(addActivity);
 
-    const activitiesInAddActivity = screen.getAllByTestId(
-      new RegExp(`^${mockedActivityFlowBuilderTestid}-add-activity-\\d+$`),
-    );
+    const activitiesInAddActivity = screen.getAllByTestId(addActivityRegexp);
     expect(activitiesInAddActivity).toHaveLength(1);
     expect(screen.queryByText('Another Activity')).not.toBeInTheDocument();
 
@@ -239,9 +239,7 @@ describe('Activity Flow Builder', () => {
     });
 
     await userEvent.click(screen.getByTestId(`${mockedActivityFlowBuilderTestid}-flow-0-replace`));
-    const activitiesInReplaceActivity = screen.getAllByTestId(
-      new RegExp(`^${mockedActivityFlowBuilderTestid}-add-activity-\\d+$`),
-    );
+    const activitiesInReplaceActivity = screen.getAllByTestId(addActivityRegexp);
     expect(activitiesInReplaceActivity).toHaveLength(1);
     expect(screen.queryByText('Another Activity')).not.toBeInTheDocument();
   });
