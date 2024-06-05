@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useMemo } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray } from 'react-hook-form';
@@ -54,7 +54,10 @@ export const ActivityFlowBuilder = () => {
   });
   const formActivities: AppletFormValues['activities'] = watch('activities');
   // remove Reviewer Assessment Activity from Activities list
-  const { activities, activitiesIdsObjects } = getNonReviewableActivities(formActivities);
+  const { activities, activitiesIdsObjects } = useMemo(
+    () => getNonReviewableActivities(formActivities),
+    [formActivities],
+  );
   const dataTestid = 'builder-activity-flows-builder';
 
   const handleFlowActivityDuplicate = (index: number) => {
