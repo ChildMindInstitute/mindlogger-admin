@@ -7,8 +7,9 @@ import { ConditionRowType } from 'modules/Builder/types';
 
 import { StyledCondition, StyledSelectController } from './Condition.styles';
 import { ConditionProps } from './Condition.types';
-import { getStateOptions } from './Condition.utils';
+import { getScoreConditionOptions, getStateOptions } from './Condition.utils';
 import { SwitchCondition } from './SwitchCondition';
+import { ConditionItemType } from './Condition.const';
 
 export const Condition = ({
   itemName,
@@ -32,6 +33,10 @@ export const Condition = ({
   const isRowTypeItem = type === ConditionRowType.Item;
   const isRowTypeScore = type === ConditionRowType.Score;
   const isStateSelectDisabled = !selectedItem?.type;
+
+  const optionValueName = `${payloadName}.optionValue`;
+  const numberValueName = `${payloadName}.value`;
+  const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
 
   const switchConditionProps = {
     itemType: selectedItem?.type,
@@ -86,17 +91,18 @@ export const Condition = ({
         <>
           <StyledSelectController
             control={control}
-            name={''}
-            options={[]}
+            name={stateName}
+            options={getStateOptions(selectedItem?.type)}
             placeholder={t('conditionDisabledPlaceholder')}
+            customChange={onStateChange}
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-type`}
             disabled
           />
           <StyledSelectController
             control={control}
-            name={''}
-            options={[]}
+            name={isItemScoreCondition ? numberValueName : optionValueName}
+            options={isItemScoreCondition ? getScoreConditionOptions() : valueOptions}
             placeholder={t('conditionDisabledPlaceholder')}
             isLabelNeedTranslation={false}
             data-testid={`${dataTestid}-selection-value`}
