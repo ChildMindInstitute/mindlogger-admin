@@ -17,6 +17,7 @@ import { exportDataSettingSchema } from './ExportDataSetting.schema';
 import { ExportSettingsPopup } from './Popups/ExportSettingsPopup/ExportSettingsPopup';
 
 export const ExportDataSetting = ({
+  filters,
   isExportSettingsOpen,
   onExportSettingsClose,
 }: ExportDataSettingProps) => {
@@ -51,6 +52,7 @@ export const ExportDataSetting = ({
       )}
       {dataIsExporting && (
         <DataExportPopup
+          filters={filters}
           isAppletSetting
           popupVisible={dataIsExporting}
           setPopupVisible={setDataIsExporting}
