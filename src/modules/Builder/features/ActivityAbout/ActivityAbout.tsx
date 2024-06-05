@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -18,14 +19,15 @@ import {
   MAX_NAME_LENGTH,
   TEXTAREA_ROWS_COUNT_SM,
 } from 'shared/consts';
-import { byteFormatter } from 'shared/utils';
+import { byteFormatter, getEntityKey } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
-import { ItemFormValues } from 'modules/Builder/types';
+import { ActivityFlowFormValues, ItemFormValues } from 'modules/Builder/types';
 import {
   useRedirectIfNoMatchedActivity,
   useCurrentActivity,
   useCustomFormContext,
 } from 'modules/Builder/hooks';
+import { getUpdatedActivityFlows } from 'modules/Builder/utils';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
@@ -41,11 +43,12 @@ export const ActivityAbout = () => {
   useRedirectIfNoMatchedActivity();
 
   const { control, setValue, watch } = useCustomFormContext();
-  const { fieldName } = useCurrentActivity();
+  const { fieldName, activity } = useCurrentActivity();
   const hasVariableAmongItems = useCheckIfItemsHaveVariables();
   const hasRequiredItems = useCheckIfItemsHaveRequiredItems();
 
   const activityItems = watch(`${fieldName}.items`);
+  const activityFlows: ActivityFlowFormValues[] = watch('activityFlows');
   const hasUnsupportedReviewableItemTypes = activityItems?.some(
     (item: ItemFormValues) =>
       ![...itemsForReviewableActivity, ''].includes(item.responseType as ItemResponseType),
@@ -95,6 +98,15 @@ export const ActivityAbout = () => {
     },
   ];
 
+  const handleIsReviewableChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.checked) return;
+
+    const activityKey = getEntityKey(activity || {});
+
+    const newActivityFlows = getUpdatedActivityFlows(activityFlows, activityKey);
+    setValue('activityFlows', newActivityFlows);
+  };
+
   const checkboxes = [
     {
       name: `${fieldName}.isSkippable`,
@@ -129,6 +141,7 @@ export const ActivityAbout = () => {
           </Tooltip>
         </StyledBodyLarge>
       ),
+      onCustomChange: handleIsReviewableChange,
       'data-testid': 'builder-activity-about-reviewable',
     },
   ];
@@ -166,17 +179,20 @@ export const ActivityAbout = () => {
         {t('itemLevelSettings')}
       </StyledTitleMedium>
       <StyledFlexColumn>
-        {checkboxes.map(({ name, label, isInversed, disabled, 'data-testid': dataTestid }) => (
-          <CheckboxController
-            key={name}
-            control={control}
-            name={name}
-            label={label}
-            disabled={disabled}
-            isInversed={isInversed}
-            data-testid={dataTestid}
-          />
-        ))}
+        {checkboxes.map(
+          ({ name, label, isInversed, disabled, 'data-testid': dataTestid, onCustomChange }) => (
+            <CheckboxController
+              key={name}
+              control={control}
+              name={name}
+              label={label}
+              disabled={disabled}
+              isInversed={isInversed}
+              onCustomChange={onCustomChange}
+              data-testid={dataTestid}
+            />
+          ),
+        )}
       </StyledFlexColumn>
     </BuilderContainer>
   );
