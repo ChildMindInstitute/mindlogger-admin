@@ -7,6 +7,7 @@ import {
   SingleValueCondition,
   RangeValueCondition,
   ScoreReport,
+  TimeRangeValueCondition,
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
@@ -166,23 +167,19 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
           maxValue: selectedItem?.responseValues.maxValue,
         };
       }
-      if (responseType === ItemResponseType.Date) {
+      if (responseType === ItemResponseType.Date || responseType === ItemResponseType.Time) {
         return {
           minValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.minValue ?? null,
           maxValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
         };
       }
-      if (responseType === ItemResponseType.Time) {
-        return {
-          minValue: null,
-          maxValue: null,
-        };
-      }
       if (responseType === ItemResponseType.TimeRange) {
         return {
-          minValue: null,
-          maxValue: null,
-          type: null,
+          minValue:
+            (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.minValue ?? null,
+          maxValue:
+            (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.maxValue ?? null,
+          type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
         };
       }
 
