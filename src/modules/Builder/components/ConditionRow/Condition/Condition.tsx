@@ -91,7 +91,7 @@ export const Condition = ({
           <StyledSelectController
             control={control}
             name={stateName}
-            options={getStateOptions(selectedItem?.type)}
+            options={getStateOptions()}
             placeholder={t('conditionDisabledPlaceholder')}
             customChange={onStateChange}
             isLabelNeedTranslation={false}
