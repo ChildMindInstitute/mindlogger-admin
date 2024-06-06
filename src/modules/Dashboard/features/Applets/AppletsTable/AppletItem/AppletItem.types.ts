@@ -1,7 +1,7 @@
 import { Applet } from 'api';
 import { Roles } from 'shared/consts';
 
-export type Actions = {
+export type AppletActions = {
   actions: {
     removeFromFolder: () => void;
     viewUsers: () => void;
@@ -11,7 +11,7 @@ export type Actions = {
     transferOwnership: () => void;
     shareAppletAction: () => void;
     publishAppletAction: () => void;
-    editAction: (item: Applet) => void;
+    editAction: () => void;
   };
   item: Applet;
   roles?: Roles[];

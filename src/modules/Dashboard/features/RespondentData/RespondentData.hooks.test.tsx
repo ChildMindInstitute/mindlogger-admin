@@ -46,17 +46,17 @@ describe('Respondent Data hooks', () => {
       });
     });
 
-    test('launches getRespondentDetails', () => {
+    test('launches getSubjectDetails', () => {
       const mockDispatch = jest.fn();
-      const mockGetRespondentDetails = jest.fn();
+      const mockGetSubjectDetails = jest.fn();
       jest.spyOn(reduxHooks, 'useAppDispatch').mockReturnValue(mockDispatch);
-      jest.spyOn(users.thunk, 'getRespondentDetails').mockReturnValue(mockGetRespondentDetails);
+      jest.spyOn(users.thunk, 'getSubjectDetails').mockReturnValue(mockGetSubjectDetails);
       renderHookWithProviders(useRespondentDataSetup, {
         preloadedState: getPreloadedState(),
       });
 
       expect(mockDispatch).toHaveBeenCalledTimes(1);
-      expect(mockDispatch).toHaveBeenCalledWith(mockGetRespondentDetails);
+      expect(mockDispatch).toHaveBeenCalledWith(mockGetSubjectDetails);
     });
   });
 });

@@ -8,7 +8,7 @@ import * as reactHookForm from 'react-hook-form';
 
 import { page } from 'resources';
 import { renderWithProviders } from 'shared/utils/renderWithProviders';
-import { mockedApplet, mockedAppletId, mockedRespondentId } from 'shared/mock';
+import { mockedApplet, mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { initialStateData } from 'redux/modules';
 
 import { Report } from './Report';
@@ -37,7 +37,7 @@ const preloadedState = {
   },
 };
 
-const route = `/dashboard/${mockedAppletId}/respondents/${mockedRespondentId}/dataviz/summary`;
+const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
 const routePath = page.appletRespondentDataSummary;
 
 const mockedActivity = {
@@ -192,7 +192,7 @@ describe('Report component', () => {
     await waitFor(() => {
       expect(mockAxios.post).toHaveBeenNthCalledWith(
         1,
-        `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/answers/${mockedRespondentId}/latest_report`,
+        `/answers/applet/${mockedAppletId}/activities/${mockedActivity.id}/subjects/${mockedSubjectId1}/latest_report`,
         {},
         { responseType: 'arraybuffer', signal: undefined },
       );

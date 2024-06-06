@@ -108,6 +108,7 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
             params: {
               ownerId,
               appletId,
+              shell: false,
             },
           }),
         );
