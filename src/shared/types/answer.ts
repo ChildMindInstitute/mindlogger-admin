@@ -79,7 +79,9 @@ export type ExportAnswer = {
   subscaleSetting: SubscaleSetting | null;
   respondentId: string | null;
   sourceSubjectId: string | null;
+  sourceSecretId: string | null;
   targetSubjectId: string | null;
+  targetSecretId: string | null;
   respondentSecretId?: string;
   activityHistoryId: string;
   flowHistoryId: null | string;

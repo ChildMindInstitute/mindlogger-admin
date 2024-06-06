@@ -59,7 +59,7 @@ export const getStabilityTrackerItemsData = async (
       ? <DecryptedStabilityTrackerAnswerObject>answer
       : (answer.value as DecryptedStabilityTrackerAnswerObject);
     data.push({
-      name: getStabilityTrackerCsvName(item.id, stabilityTrackerValue.phaseType),
+      name: getStabilityTrackerCsvName(item, stabilityTrackerValue.phaseType),
       data: await convertJsonToCsv(getStabilityRecords(stabilityTrackerValue.value)),
     });
   }
@@ -80,7 +80,7 @@ export const getABTrailsItemsData = async (
 
     const abTrackerValue = (item.answer as DecryptedABTrailsAnswer).value;
     data.push({
-      name: getABTrailsCsvName(index, item.id),
+      name: getABTrailsCsvName(index, item),
       data: await convertJsonToCsv(
         getABTrailsRecords(abTrackerValue.lines, abTrackerValue.width || 100),
       ),
