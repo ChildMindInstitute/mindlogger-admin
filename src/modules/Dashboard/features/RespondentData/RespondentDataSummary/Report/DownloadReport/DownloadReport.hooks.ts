@@ -18,14 +18,23 @@ export const useDownloadReport = ({ id, isFlow }: Omit<DownloadReportProps, 'dat
   const { appletId, respondentId } = useParams();
   const { result: appletData } = applet.useAppletData() ?? {};
 
-  const currentActivity = appletData?.activities.find((activity) => activity.id === id);
-  const isDownloadReportDisabled =
-    !currentActivity?.scoresAndReports?.generateReport || !appletData?.reportPublicKey;
+  const currentActivity = isFlow
+    ? null
+    : appletData?.activities.find((activity) => activity.id === id);
+  const currentFlow = isFlow ? appletData?.activityFlows?.find((flow) => flow.id === id) : null;
+  const hasReportPublicKey = !!appletData?.reportPublicKey;
+  const canGenerateReport = isFlow
+    ? !!(
+        currentFlow?.isSingleReport &&
+        appletData?.activities.some((activity) => activity?.scoresAndReports?.generateReport)
+      )
+    : !!currentActivity?.scoresAndReports?.generateReport;
+  const isDownloadReportDisabled = !(hasReportPublicKey && canGenerateReport);
 
   const {
-    execute: getActivityReport,
-    isLoading: isActivityReportLoading,
-    error: activityReportError,
+    execute: getReport,
+    isLoading: isDownloadReportLoading,
+    error: reportError,
   } = useAsync(getLatestReportApi, (response) => {
     const data = response?.data;
     const headers = response?.headers;
@@ -43,19 +52,19 @@ export const useDownloadReport = ({ id, isFlow }: Omit<DownloadReportProps, 'dat
   });
 
   const downloadReportHandler = async () => {
-    if (!appletId || !respondentId || isFlow) return;
+    if (!appletId || !respondentId) return;
 
-    getActivityReport({
+    getReport({
       appletId,
-      activityId: id,
+      ...(isFlow ? { flowId: id } : { activityId: id }),
       subjectId: respondentId,
     });
   };
 
   return {
-    downloadReportError: activityReportError ? getErrorMessage(activityReportError) : null,
+    downloadReportError: reportError ? getErrorMessage(reportError) : null,
     isDownloadReportDisabled,
     downloadReportHandler,
-    isDownloadReportLoading: isActivityReportLoading,
+    isDownloadReportLoading,
   };
 };

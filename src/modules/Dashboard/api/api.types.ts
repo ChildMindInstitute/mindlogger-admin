@@ -454,7 +454,7 @@ export type Version = {
   createdAt: string;
 };
 
-export type GetLatestReportParams = AppletId & ActivityId & SubjectId;
+export type GetLatestReportParams = AppletId & SubjectId & { activityId?: string; flowId?: string };
 
 export type GetActivityIdentifiersParams = Omit<GetLatestReportParams, 'subjectId'> &
   TargetSubjectId;
