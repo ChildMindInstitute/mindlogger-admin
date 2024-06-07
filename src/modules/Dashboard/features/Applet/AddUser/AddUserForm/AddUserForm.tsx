@@ -88,7 +88,9 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
       ownerId && executeGetWorkspaceInfoApi({ ownerId });
       resetForm();
       setHasCommonError(false);
-      Mixpanel.track('Invitation sent successfully');
+      Mixpanel.track('Invitation sent successfully', {
+        'Applet ID': appletId,
+      });
     },
   );
   const { error: shellAccountError, execute: executePostAppletShellAccountApi } = useAsync(
@@ -112,7 +114,9 @@ export const AddUserForm = ({ getInvitationsHandler, roles }: AddUserFormProps) 
   });
 
   const onSubmit = (values: AddUserFormValues) => {
-    Mixpanel.track('Invitation submitted click');
+    Mixpanel.track('Invitation submitted click', {
+      'Applet ID': appletId,
+    });
     if (!appletId) return;
     const { submitBtnType, role, email, respondents, ...restValues } = values;
 
