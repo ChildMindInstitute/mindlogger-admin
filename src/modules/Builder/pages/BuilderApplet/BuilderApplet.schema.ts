@@ -509,26 +509,36 @@ export const ItemFlowConditionSchema = () =>
       const items: ItemFormValues[] = get(options, 'from.2.value.items', []);
       const foundItem = items.find((item) => getEntityKey(item) === itemId);
       const isTimeRange = foundItem?.responseType === ItemResponseType.TimeRange;
+      const isSingleSelectionPerRow =
+        foundItem?.responseType === ItemResponseType.SingleSelectionPerRow;
+      const isMultipleSelectionPerRow =
+        foundItem?.responseType === ItemResponseType.MultipleSelectionPerRow;
+      const typeShapeObject = { type: conditionValueSchema };
+      const rowIndexShapeObject = { rowIndex: conditionValueSchema };
 
-      if (!type && isTimeRange) {
-        return schema.shape({
-          type: conditionValueSchema,
-        });
+      if (!type) {
+        if (isTimeRange) {
+          return schema.shape(typeShapeObject);
+        }
+        if (isSingleSelectionPerRow || isMultipleSelectionPerRow) {
+          return schema.shape(rowIndexShapeObject);
+        }
       }
-      if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
-        return schema.shape({
+      if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type)) {
+        const baseSchema = schema.shape({
           optionValue: conditionValueSchema,
         });
+        if (isSingleSelectionPerRow || isMultipleSelectionPerRow) {
+          return baseSchema.concat(yup.object(rowIndexShapeObject));
+        }
+
+        return baseSchema;
+      }
       if (CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type)) {
         const baseSchema = schema.shape({
           value: conditionValueSchema,
         });
-        if (isTimeRange)
-          return baseSchema.concat(
-            yup.object({
-              type: conditionValueSchema,
-            }),
-          );
+        if (isTimeRange) return baseSchema.concat(yup.object(typeShapeObject));
 
         return baseSchema;
       }
@@ -537,12 +547,7 @@ export const ItemFlowConditionSchema = () =>
           minValue: conditionValueSchema,
           maxValue: conditionValueSchema,
         });
-        if (isTimeRange)
-          return baseSchema.concat(
-            yup.object({
-              type: conditionValueSchema,
-            }),
-          );
+        if (isTimeRange) return baseSchema.concat(yup.object(typeShapeObject));
 
         return baseSchema;
       }

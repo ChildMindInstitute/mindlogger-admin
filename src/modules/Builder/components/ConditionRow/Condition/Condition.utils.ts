@@ -22,11 +22,13 @@ export const getStateOptions = (type?: ConditionItemType) => {
         { value: ConditionType.OutsideOf, labelKey: t('outsideOf') },
       ];
     case ConditionItemType.SingleSelection:
+    case ConditionItemType.SingleSelectionPerRow:
       return [
         { value: ConditionType.EqualToOption, labelKey: t('equalToOption') },
         { value: ConditionType.NotEqualToOption, labelKey: t('notEqualToOption') },
       ];
     case ConditionItemType.MultiSelection:
+    case ConditionItemType.MultipleSelectionPerRow:
       return [
         { value: ConditionType.IncludesOption, labelKey: t('includesOption') },
         { value: ConditionType.NotIncludesOption, labelKey: t('notIncludesOption') },

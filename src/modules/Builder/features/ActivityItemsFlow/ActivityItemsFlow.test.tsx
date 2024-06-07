@@ -75,6 +75,8 @@ const mockedOrderedConditionNameItems = [
   mockedSliderActivityItem,
   mockedTimeRangeActivityItem,
   mockedNumberSelectActivityItem,
+  mockedMultiSelectRowsActivityItem,
+  mockedSingleSelectRowsActivityItem,
 ];
 const mockedOrderedSummaryItemItems = [
   mockedSingleActivityItem,
@@ -232,7 +234,7 @@ describe('Activity Items Flow', () => {
     expect(screen.getByTestId(`${mockedTestid}-0-summary-item`)).toBeVisible();
   });
 
-  test('Condition Item: only SingleSelect/MultiSelect/Slider/Date are available', () => {
+  test('Condition Item: all items except SliderRows/Audio/Video/Photo/AudioPlayer/Drawing/Message are available', () => {
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));
@@ -244,7 +246,7 @@ describe('Activity Items Flow', () => {
     expect(nameDropdown).toBeVisible();
 
     const items = nameDropdown.querySelectorAll('li');
-    expect(items).toHaveLength(7);
+    expect(items).toHaveLength(9);
 
     items.forEach((item, index) => {
       expect(item).toHaveAttribute('data-value', mockedOrderedConditionNameItems[index].id);
@@ -252,7 +254,7 @@ describe('Activity Items Flow', () => {
     });
   });
 
-  test('Summary Item: only SingleSelect/MultiSelect/Slider/Text/Time/TimeRange are available', () => {
+  test('Summary Item: all items are available', () => {
     renderActivityItemsFlow(mockedAppletWithAllItemTypes);
 
     fireEvent.click(screen.getByTestId(`${mockedTestid}-add`));

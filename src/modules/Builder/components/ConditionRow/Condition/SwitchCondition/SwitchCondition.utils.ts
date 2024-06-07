@@ -1,13 +1,19 @@
 import i18n from 'i18n';
 import {
   NumberItemResponseValues,
+  SingleAndMultipleSelectRowsResponseValues,
   SliderItemResponseValues,
   TimeRangeConditionType,
 } from 'shared/state';
 import { ConditionType } from 'shared/consts';
+import { Option } from 'shared/components/FormComponents/SelectController/SelectController.types';
 
 import { DEFAULT_NUMBER_MIN_VALUE, ConditionItemType } from '../Condition.const';
-import { ConditionItem } from '../Condition.types';
+import {
+  NumberSelectionConditionItem,
+  ScoreConditionItem,
+  SliderConditionItem,
+} from '../Condition.types';
 
 const { t } = i18n;
 
@@ -19,10 +25,10 @@ export const getConditionMinMaxValues = ({
   item,
   state,
 }: {
-  item?: ConditionItem;
+  item?: SliderConditionItem | NumberSelectionConditionItem | ScoreConditionItem;
   state: ConditionType;
 }) => {
-  if (!item?.type || !item.responseValues) return getDefaultMinMaxValues(state);
+  if (!item?.type || item.type === ConditionItemType.Score) return getDefaultMinMaxValues(state);
 
   switch (item.type) {
     case ConditionItemType.Slider: {
@@ -61,11 +67,11 @@ export const getConditionMinMaxRangeValues = ({
   minValue,
   maxValue,
 }: {
-  item?: ConditionItem;
+  item?: SliderConditionItem | NumberSelectionConditionItem | ScoreConditionItem;
   minValue: number;
   maxValue: number;
 }) => {
-  if (!item?.type || !item.responseValues) return getDefaultMinMaxRangeValues();
+  if (!item?.type || item.type === ConditionItemType.Score) return getDefaultMinMaxRangeValues();
 
   switch (item.type) {
     case ConditionItemType.Slider: {
@@ -105,3 +111,9 @@ export const getTimeRangeOptions = () => [
   { value: TimeRangeConditionType.StartTime, labelKey: t('startTime') },
   { value: TimeRangeConditionType.EndTime, labelKey: t('endTime') },
 ];
+
+export const getRowOptions = (rows: SingleAndMultipleSelectRowsResponseValues['rows']): Option[] =>
+  (rows ?? []).map((row) => ({
+    value: row.id,
+    labelKey: `${t('row')}: ${row.rowName}`,
+  }));

@@ -39,7 +39,6 @@ export const Condition = ({
   const isItemScoreCondition = selectedItem?.type === ConditionItemType.ScoreCondition;
 
   const switchConditionProps = {
-    itemType: selectedItem?.type,
     selectedItem,
     payloadName,
     state,
@@ -92,7 +91,7 @@ export const Condition = ({
           <StyledSelectController
             control={control}
             name={stateName}
-            options={getStateOptions(selectedItem?.type)}
+            options={getStateOptions()}
             placeholder={t('conditionDisabledPlaceholder')}
             customChange={onStateChange}
             isLabelNeedTranslation={false}

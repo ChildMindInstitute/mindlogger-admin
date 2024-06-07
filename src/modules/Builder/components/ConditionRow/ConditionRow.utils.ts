@@ -7,6 +7,8 @@ import {
   SingleValueCondition,
   RangeValueCondition,
   ScoreReport,
+  TimeRangeValueCondition,
+  SingleMultiSelectionPerRowCondition,
 } from 'shared/state';
 
 import { DEFAULT_PAYLOAD_MIN_VALUE, DEFAULT_PAYLOAD_MAX_VALUE } from './ConditionRow.const';
@@ -31,6 +33,10 @@ export const getConditionItemType = (item: ItemFormValues) => {
       return ConditionItemType.Time;
     case ItemResponseType.TimeRange:
       return ConditionItemType.TimeRange;
+    case ItemResponseType.SingleSelectionPerRow:
+      return ConditionItemType.SingleSelectionPerRow;
+    case ItemResponseType.MultipleSelectionPerRow:
+      return ConditionItemType.MultipleSelectionPerRow;
     default:
       return ConditionItemType.SingleSelection;
   }
@@ -47,6 +53,8 @@ const itemFlowItemTypes = [
   ItemResponseType.NumberSelection,
   ItemResponseType.Time,
   ItemResponseType.TimeRange,
+  ItemResponseType.SingleSelectionPerRow,
+  ItemResponseType.MultipleSelectionPerRow,
 ];
 const checkIfShouldBeIncluded = (responseType: ItemResponseType, isItemFlow = false) =>
   (isItemFlow ? itemFlowItemTypes : scoreItemTypes).some((value) => value === responseType);
@@ -102,20 +110,19 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
   );
 
 const getDefaultPayload = (
-  conditionPayload: SingleValueCondition['payload'],
+  conditionPayload: SingleValueCondition['payload'] | TimeRangeValueCondition['payload'],
   type?: ItemResponseType,
 ) => {
   let defaultValue: null | number = DEFAULT_PAYLOAD_MIN_VALUE;
-  if (
-    type &&
-    (type === ItemResponseType.Date ||
-      type === ItemResponseType.Time ||
-      type === ItemResponseType.TimeRange)
-  )
-    defaultValue = null;
+  if (type === ItemResponseType.TimeRange)
+    return {
+      value: (conditionPayload as SingleValueCondition['payload'])?.value ?? null,
+      type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
+    };
+  if (type === ItemResponseType.Date || type === ItemResponseType.Time) defaultValue = null;
 
   return {
-    value: conditionPayload?.value ?? defaultValue,
+    value: (conditionPayload as SingleValueCondition['payload'])?.value ?? defaultValue,
   };
 };
 
@@ -127,6 +134,18 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
     case ConditionType.NotIncludesOption:
     case ConditionType.EqualToOption:
     case ConditionType.NotEqualToOption:
+      if (
+        responseType === ItemResponseType.SingleSelectionPerRow ||
+        responseType === ItemResponseType.MultipleSelectionPerRow
+      ) {
+        return {
+          optionValue:
+            (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.optionValue ?? '',
+          rowIndex:
+            (conditionPayload as SingleMultiSelectionPerRowCondition['payload'])?.rowIndex ?? '',
+        };
+      }
+
       return {
         optionValue: (conditionPayload as OptionCondition['payload'])?.optionValue ?? '',
       };
@@ -166,23 +185,19 @@ export const getPayload = ({ conditionType, conditionPayload, selectedItem }: Ge
           maxValue: selectedItem?.responseValues.maxValue,
         };
       }
-      if (responseType === ItemResponseType.Date) {
+      if (responseType === ItemResponseType.Date || responseType === ItemResponseType.Time) {
         return {
           minValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.minValue ?? null,
           maxValue: (conditionPayload as RangeValueCondition<Date>['payload'])?.maxValue ?? null,
         };
       }
-      if (responseType === ItemResponseType.Time) {
-        return {
-          minValue: null,
-          maxValue: null,
-        };
-      }
       if (responseType === ItemResponseType.TimeRange) {
         return {
-          minValue: null,
-          maxValue: null,
-          type: null,
+          minValue:
+            (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.minValue ?? null,
+          maxValue:
+            (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.maxValue ?? null,
+          type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
         };
       }
 
