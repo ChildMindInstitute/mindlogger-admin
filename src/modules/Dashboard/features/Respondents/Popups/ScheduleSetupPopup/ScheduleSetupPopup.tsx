@@ -48,7 +48,9 @@ export const ScheduleSetupPopup = ({
         respondentId,
       }),
     );
-    Mixpanel.track('View Individual calendar click');
+    Mixpanel.track('View Individual calendar click', {
+      'Applet ID': appletId,
+    });
   };
 
   useEffect(() => {

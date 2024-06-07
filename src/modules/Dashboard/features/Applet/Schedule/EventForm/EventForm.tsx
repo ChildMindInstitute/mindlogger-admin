@@ -160,7 +160,9 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
         await createEvent({ appletId, body });
       }
 
-      Mixpanel.track(`${analyticsPrefix} Schedule successful`);
+      Mixpanel.track(`${analyticsPrefix} Schedule successful`, {
+        'Applet ID': appletId,
+      });
     };
 
     const submitForm = async () => {

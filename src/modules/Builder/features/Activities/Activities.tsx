@@ -74,7 +74,9 @@ export const Activities = () => {
     );
   const handleModalClose = () => setActivityToDelete('');
   const handleActivityAdd = (props: ActivityAddProps) => {
-    Mixpanel.track('Add Activity click');
+    Mixpanel.track('Add Activity click', {
+      'Applet ID': appletId,
+    });
     const {
       index,
       performanceTaskName,
@@ -137,7 +139,9 @@ export const Activities = () => {
   };
 
   const handleEditActivity = (index: number) => {
-    Mixpanel.track('Activity edit click');
+    Mixpanel.track('Activity edit click', {
+      'Applet ID': appletId,
+    });
     const activityToEdit = activities[index];
     const activityKey = getActivityKey(activityToEdit);
     if (activityToEdit.isPerformanceTask && activityToEdit.performanceTaskType) {
