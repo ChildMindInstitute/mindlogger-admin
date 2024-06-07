@@ -295,7 +295,6 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
         setCreateEventPopupVisible={setCreateEventPopupVisible}
         defaultStartDate={new Date()}
         data-testid={`${dataTestid}-create-event-popup`}
-        appletId={appletId}
       />
     </StyledLegend>
   ) : (
