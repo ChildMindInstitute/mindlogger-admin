@@ -500,9 +500,6 @@ export const SubscaleSchema = () =>
     .required();
 
 const conditionValueSchema = yup.string().required(getIsRequiredValidateMessage('conditionValue'));
-const conditionRowIndexSchema = yup
-  .number()
-  .required(getIsRequiredValidateMessage('conditionValue'));
 export const ItemFlowConditionSchema = () =>
   yup.object({
     itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
@@ -517,7 +514,7 @@ export const ItemFlowConditionSchema = () =>
       const isMultipleSelectionPerRow =
         foundItem?.responseType === ItemResponseType.MultipleSelectionPerRow;
       const typeShapeObject = { type: conditionValueSchema };
-      const rowIndexShapeObject = { rowIndex: conditionRowIndexSchema };
+      const rowIndexShapeObject = { rowIndex: conditionValueSchema };
 
       if (!type) {
         if (isTimeRange) {

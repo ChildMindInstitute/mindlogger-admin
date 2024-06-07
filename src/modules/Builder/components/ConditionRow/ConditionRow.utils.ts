@@ -110,20 +110,19 @@ export const getScoreConditionalsOptions = (scores: ScoreReport[]) =>
   );
 
 const getDefaultPayload = (
-  conditionPayload: SingleValueCondition['payload'],
+  conditionPayload: SingleValueCondition['payload'] | TimeRangeValueCondition['payload'],
   type?: ItemResponseType,
 ) => {
   let defaultValue: null | number = DEFAULT_PAYLOAD_MIN_VALUE;
-  if (
-    type &&
-    (type === ItemResponseType.Date ||
-      type === ItemResponseType.Time ||
-      type === ItemResponseType.TimeRange)
-  )
-    defaultValue = null;
+  if (type === ItemResponseType.TimeRange)
+    return {
+      value: (conditionPayload as SingleValueCondition['payload'])?.value ?? null,
+      type: (conditionPayload as TimeRangeValueCondition<Date>['payload'])?.type ?? null,
+    };
+  if (type === ItemResponseType.Date || type === ItemResponseType.Time) defaultValue = null;
 
   return {
-    value: conditionPayload?.value ?? defaultValue,
+    value: (conditionPayload as SingleValueCondition['payload'])?.value ?? defaultValue,
   };
 };
 
