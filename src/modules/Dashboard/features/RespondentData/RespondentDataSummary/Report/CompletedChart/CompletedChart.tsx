@@ -1,11 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { Tooltip } from 'shared/components/Tooltip';
 import { StyledHeadline, StyledTitleTooltipIcon, theme, variables } from 'shared/styles';
 import { ScatterChart } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/Charts';
-import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { useDatavizFilters } from '../../hooks/useDatavizFilters';
 import { CompletedChartProps } from './CompletedChart.types';
@@ -17,9 +15,7 @@ export const CompletedChart = ({
   'data-testid': dataTestId,
 }: CompletedChartProps) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext<RespondentsDataFormValues>();
-
-  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(versions);
 
   return (
     <Box sx={{ mb: theme.spacing(6.4) }}>

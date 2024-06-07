@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 import uniqueId from 'lodash.uniqueid';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +11,6 @@ import { SingleMultiSelectionSliderFormattedResponses } from 'modules/Dashboard/
 import { UnsupportedItemResponse } from 'modules/Dashboard/features/RespondentData/UnsupportedItemResponse';
 import { getResponseItem } from 'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils';
 import { StyledBodyMedium, StyledTitleBoldMedium, theme, variables } from 'shared/styles';
-import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData';
 import {
   UNSUPPORTED_ITEMS,
   SHOW_MORE_HEIGHT,
@@ -31,10 +29,7 @@ export const Subscale = ({
   'data-testid': dataTestid,
 }: SubscaleProps) => {
   const { t } = useTranslation('app');
-
-  const { watch } = useFormContext<RespondentsDataFormValues>();
-
-  const { minDate, maxDate, filteredVersions } = useDatavizFilters(watch, versions);
+  const { minDate, maxDate, filteredVersions } = useDatavizFilters(versions);
 
   const renderChart = (
     activityItemAnswer: SingleMultiSelectionSliderFormattedResponses,
