@@ -8,17 +8,6 @@ import { renderWithProviders } from 'shared/utils/renderWithProviders';
 
 import { Subscale } from './Subscale';
 
-// jest.mock('react-hook-form', () => ({
-//   ...jest.requireActual('react-hook-form'),
-//   // useWatch: () => jest.fn(),
-//   useWatch: jest
-//     .fn()
-//     .mockReturnValue([new Date('2023-01-01'), new Date('2023-12-31'), '08:00', '17:00']),
-//   // useFormContext: () => ({
-//   //   watch: () => jest.fn(),
-//   // }),
-// }));
-
 jest.mock(
   'modules/Dashboard/features/RespondentData/RespondentDataSummary/Report/ResponseOptions/ResponseOptions.utils',
   () => ({
