@@ -14,7 +14,8 @@ export const SelectionPerRow = ({
   activityItem,
   versions,
   answers = {},
-  dataTestid,
+  isStaticActive,
+  'data-testid': dataTestid,
 }: SelectionPerRowProps) => {
   const height = (activityItem?.responseValues.options?.length + 1) * TICK_HEIGHT;
 
@@ -38,8 +39,9 @@ export const SelectionPerRow = ({
             responseType={activityItem.responseType}
             answers={answers[rowName]}
             versions={versions}
-            data-testid={`${dataTestid}-multi-scatter-chart`}
             useCategory
+            isStaticActive={isStaticActive}
+            data-testid={`${dataTestid}-select-per-row-${index}-multi-scatter-chart`}
           />
         </Box>
       ))}
