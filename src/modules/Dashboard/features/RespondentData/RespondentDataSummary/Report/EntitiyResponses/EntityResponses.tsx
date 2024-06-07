@@ -14,11 +14,12 @@ export const EntityResponses = ({
   if (isFlow) {
     return (
       <>
-        {flowResponses.map(({ activityId, ...rest }) => (
+        {flowResponses.map(({ activityId, ...rest }, index) => (
           <FlowActivityResponses
             key={activityId}
             activityId={activityId}
             versions={versions}
+            flowResponsesIndex={index + 1}
             data-testid={`${dataTestId}-flow`}
             {...rest}
           />

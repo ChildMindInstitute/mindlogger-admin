@@ -15,6 +15,7 @@ export const FlowActivityResponses = ({
   versions,
   subscalesFrequency,
   responseOptions,
+  flowResponsesIndex,
   'data-testid': dataTestId,
 }: FlowResponsesProps) => (
   <StyledFlowWrapper data-testid={dataTestId}>
@@ -34,6 +35,7 @@ export const FlowActivityResponses = ({
         versions={versions}
         subscalesFrequency={subscalesFrequency}
         responseOptions={responseOptions}
+        flowResponsesIndex={flowResponsesIndex}
         data-testid={`${dataTestId}-activity`}
       />
     )}
