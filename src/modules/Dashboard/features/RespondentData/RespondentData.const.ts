@@ -25,6 +25,7 @@ export const defaultRespondentDataFormValues = {
   flowSubmissions: [],
   flowResponses: [],
   responseDate: null,
+  flowResponseOptionsCount: 0,
 };
 
 export const UNSUPPORTED_ITEMS = [

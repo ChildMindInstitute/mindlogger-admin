@@ -188,4 +188,5 @@ export type RespondentsDataFormValues = {
   responseOptions: ResponseOption | null;
   subscalesFrequency: number;
   responseDate: null | Date;
+  flowResponseOptionsCount: number;
 };

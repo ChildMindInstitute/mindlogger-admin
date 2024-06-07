@@ -190,9 +190,12 @@ export const useRespondentAnswers = () => {
           });
         }
 
+        let responseOptionsCount = 0;
+
         const flowResponses: FlowResponses[] = Array.from(activityAnswersMap.values()).map(
           (item) => {
             const { subscalesFrequency, formattedResponses } = getFormattedResponses(item.answers);
+            responseOptionsCount += Object.values(formattedResponses).length;
 
             return {
               ...item,
@@ -204,6 +207,7 @@ export const useRespondentAnswers = () => {
 
         setValue('flowSubmissions', flowSubmissions);
         setValue('flowResponses', flowResponses);
+        setValue('flowResponseOptionsCount', responseOptionsCount);
 
         return;
       }
