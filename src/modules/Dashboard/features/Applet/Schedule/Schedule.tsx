@@ -13,6 +13,7 @@ import { Legend } from './Legend';
 import { StyledLeftPanel, StyledSchedule } from './Schedule.styles';
 import { usePreparedEvents } from './Schedule.hooks';
 import { checkIfHasAccessToSchedule } from './Schedule.utils';
+import { ScheduleProvider } from './ScheduleProvider';
 
 export const Schedule = () => {
   const dispatch = useAppDispatch();
@@ -53,15 +54,14 @@ export const Schedule = () => {
       <Spinner />
     </StyledBody>
   ) : (
-    <StyledSchedule>
-      <StyledLeftPanel>
-        <Legend
-          appletId={appletId || ''}
-          appletName={appletData?.displayName || ''}
-          legendEvents={preparedEvents}
-        />
-      </StyledLeftPanel>
-      <Calendar />
-    </StyledSchedule>
+    <ScheduleProvider appletId={appletId} appletName={appletData?.displayName}>
+      <StyledSchedule>
+        <StyledLeftPanel>
+          <Legend legendEvents={preparedEvents} />
+        </StyledLeftPanel>
+
+        <Calendar />
+      </StyledSchedule>
+    </ScheduleProvider>
   );
 };

@@ -9,6 +9,7 @@ import { RootState } from 'redux/store';
 
 import { Legend } from './Legend';
 import { PreparedEvents } from '../Schedule.types';
+import { ScheduleProvider } from '../ScheduleProvider';
 
 const dataTestid = 'dashboard-calendar-schedule-legend';
 const testUserId = 'test-user-id';
@@ -104,9 +105,7 @@ describe('Legend', () => {
 
   describe('Renders the appropriate controls', () => {
     beforeEach(() => {
-      renderWithProvidersUtils.renderWithProviders(
-        <Legend legendEvents={legendEvents} appletName="Mock applet" appletId={mockedAppletId} />,
-      );
+      renderWithProvidersUtils.renderWithProviders(<Legend legendEvents={legendEvents} />);
     });
 
     test("Should show the 'Import' button", async () => {
@@ -137,13 +136,7 @@ describe('Legend', () => {
   describe('When `showScheduleToggle` is false', () => {
     beforeEach(() => {
       renderWithProvidersUtils.renderWithProviders(
-        <Legend
-          legendEvents={legendEvents}
-          appletName="Mock applet"
-          appletId={mockedAppletId}
-          userId={testUserId}
-          showScheduleToggle={false}
-        />,
+        <Legend legendEvents={legendEvents} showScheduleToggle={false} />,
       );
     });
 
@@ -156,13 +149,7 @@ describe('Legend', () => {
   describe('When `showScheduleToggle` is true', () => {
     test('Should show the schedule toggle', () => {
       renderWithProvidersUtils.renderWithProviders(
-        <Legend
-          legendEvents={legendEvents}
-          appletName="Mock applet"
-          appletId={mockedAppletId}
-          userId={testUserId}
-          showScheduleToggle
-        />,
+        <Legend legendEvents={legendEvents} showScheduleToggle />,
       );
 
       const toggle = screen.queryByTestId(`${dataTestid}-schedule-toggle`);
@@ -172,14 +159,13 @@ describe('Legend', () => {
     describe('when `canCreateIndividualSchedule` is false', () => {
       test('The schedule toggle is disabled', () => {
         renderWithProvidersUtils.renderWithProviders(
-          <Legend
-            legendEvents={legendEvents}
-            appletName="Mock applet"
+          <ScheduleProvider
             appletId={mockedAppletId}
-            userId={testUserId}
-            showScheduleToggle
-            canCreateIndividualSchedule={false}
-          />,
+            appletName="Mock applet"
+            data-testid={dataTestid}
+          >
+            <Legend legendEvents={legendEvents} showScheduleToggle />
+          </ScheduleProvider>,
         );
 
         const toggle = screen.queryByTestId(`${dataTestid}-schedule-toggle`);
@@ -191,14 +177,14 @@ describe('Legend', () => {
     describe('when `canCreateIndividualSchedule` is true', () => {
       test('The schedule toggle is enabled', () => {
         renderWithProvidersUtils.renderWithProviders(
-          <Legend
-            legendEvents={legendEvents}
-            appletName="Mock applet"
+          <ScheduleProvider
             appletId={mockedAppletId}
+            appletName="Mock applet"
+            data-testid={dataTestid}
             userId={testUserId}
-            showScheduleToggle
-            canCreateIndividualSchedule
-          />,
+          >
+            <Legend legendEvents={legendEvents} showScheduleToggle />
+          </ScheduleProvider>,
         );
 
         const toggle = screen.queryByTestId(`${dataTestid}-schedule-toggle`);
@@ -219,14 +205,14 @@ describe('Legend', () => {
       mockRequest = jest.fn().mockReturnValue(new Promise((res) => res(null)));
 
       renderWithProvidersUtils.renderWithProviders(
-        <Legend
+        <ScheduleProvider
           appletId={mockedAppletId}
           appletName="Mock applet"
-          canCreateIndividualSchedule
-          legendEvents={legendEvents}
-          showScheduleToggle
+          data-testid={dataTestid}
           userId={testUserId}
-        />,
+        >
+          <Legend legendEvents={legendEvents} showScheduleToggle />
+        </ScheduleProvider>,
         { preloadedState } as { preloadedState: PreloadedState<RootState> },
       );
     });
@@ -318,15 +304,16 @@ describe('Legend', () => {
     beforeEach(() => {
       mockRequest = jest.fn().mockReturnValue(new Promise((res) => res(null)));
       renderWithProvidersUtils.renderWithProviders(
-        <Legend
+        <ScheduleProvider
           appletId={mockedAppletId}
           appletName="Mock applet"
           canCreateIndividualSchedule
+          data-testid={dataTestid}
           hasIndividualSchedule
-          legendEvents={legendEvents}
-          showScheduleToggle
           userId={testUserId}
-        />,
+        >
+          <Legend legendEvents={legendEvents} showScheduleToggle />
+        </ScheduleProvider>,
         { preloadedState } as { preloadedState: PreloadedState<RootState> },
       );
     });

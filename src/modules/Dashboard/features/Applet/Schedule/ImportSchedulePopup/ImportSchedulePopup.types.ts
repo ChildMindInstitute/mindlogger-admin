@@ -4,7 +4,7 @@ export type ImportSchedulePopupProps = {
   isIndividual?: boolean;
   appletName: string;
   respondentId?: string;
-  respondentName: string;
+  respondentName?: string;
   open: boolean;
   onClose: () => void;
   onDownloadTemplate: () => void;

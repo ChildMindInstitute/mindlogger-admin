@@ -3,61 +3,40 @@ import { Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import { Svg } from 'shared/components';
-import { exportTemplate, getRespondentName, Mixpanel } from 'shared/utils';
+import { exportTemplate, Mixpanel } from 'shared/utils';
 import { AnalyticsCalendarPrefix } from 'shared/consts';
-import { users } from 'modules/Dashboard/state';
 import { StyledFlexColumn, StyledFlexTopCenter, variables } from 'shared/styles';
 
 import { ExportSchedulePopup } from '../ExportSchedulePopup';
 import { ImportSchedulePopup } from '../ImportSchedulePopup';
-import { ClearScheduledEventsPopup } from '../ClearScheduledEventsPopup';
-import { CreateEventPopup } from '../CreateEventPopup';
 import { ExpandedList } from './ExpandedList';
 import { defaultExportHeader } from './Legend.const';
 import { StyledLegend } from './Legend.styles';
-import { LegendProps, SelectedRespondent } from './Legend.types';
+import { LegendProps } from './Legend.types';
 import { useExpandedLists } from './Legend.hooks';
 import { ScheduleToggle } from './ScheduleToggle';
+import { useSchedule } from '../ScheduleProvider/ScheduleProvider.hooks';
 
 export const Legend = ({
-  appletId,
-  appletName,
-  canCreateIndividualSchedule = false,
-  hasIndividualSchedule = false,
   legendEvents,
-  userId,
   showScheduleToggle = false,
   ...otherProps
 }: LegendProps) => {
   const { t } = useTranslation('app');
-  const { result: respondentsData } = users.useAllRespondentsData() || {};
-  const respondentsItems = respondentsData?.reduce(
-    (acc: SelectedRespondent[], { id, details, isAnonymousRespondent }) => {
-      const { respondentSecretId, hasIndividualSchedule, respondentNickname } = details?.[0] || {};
-
-      if (!isAnonymousRespondent && id) {
-        acc.push({
-          icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
-          id,
-          secretId: respondentSecretId,
-          nickname: respondentNickname,
-          hasIndividualSchedule,
-        });
-      }
-
-      return acc;
-    },
-    [],
-  );
-
-  const [exportDefaultSchedulePopupVisible, setExportDefaultSchedulePopupVisible] = useState(false);
-  const [exportIndividualSchedulePopupVisible, setExportIndividualSchedulePopupVisible] =
-    useState(false);
+  const [showExportSchedulePopup, setShowExportSchedulePopup] = useState(false);
   const [importSchedulePopupVisible, setImportSchedulePopupVisible] = useState(false);
-  const [clearScheduledEventsPopupVisible, setClearScheduledEventsPopupVisible] = useState(false);
-  const [createEventPopupVisible, setCreateEventPopupVisible] = useState(false);
-  const selectedRespondent =
-    respondentsItems?.find((respondent) => respondent?.id === userId) || null;
+  const {
+    appletId,
+    appletName,
+    canCreateIndividualSchedule,
+    hasIndividualSchedule,
+    onClickClearEvents,
+    onClickCreateEvent,
+    participantName,
+    participantSecretId,
+    userId,
+  } = useSchedule();
+  const expandedLists = useExpandedLists(legendEvents, onClickClearEvents, onClickCreateEvent);
 
   const { scheduleExportTableData = [], scheduleExportCsv = [] } = legendEvents ?? {};
   const dataTestid = 'dashboard-calendar-schedule-legend';
@@ -65,37 +44,10 @@ export const Legend = ({
     ? AnalyticsCalendarPrefix.IndividualCalendar
     : AnalyticsCalendarPrefix.GeneralCalendar;
 
-  const respondentName = getRespondentName(
-    selectedRespondent?.secretId || '',
-    selectedRespondent?.nickname,
-  );
-
-  const clearAllScheduledEventsAction = () => {
-    setClearScheduledEventsPopupVisible(true);
-  };
-
-  const onCreateActivitySchedule = () => {
-    setCreateEventPopupVisible(true);
-  };
-
-  const expandedLists = useExpandedLists(
-    legendEvents,
-    clearAllScheduledEventsAction,
-    onCreateActivitySchedule,
-  );
-
-  const exportScheduleHandler = () => {
-    if (hasIndividualSchedule) {
-      setExportIndividualSchedulePopupVisible(true);
-    } else {
-      setExportDefaultSchedulePopupVisible(true);
-    }
-  };
-
   const handleExportScheduleSubmit = (isDefault: boolean, isExport: boolean) => async () => {
     const getFileName = () => {
       if (isExport) {
-        return `${isDefault ? appletName : selectedRespondent?.secretId || ''}_schedule`;
+        return `${isDefault ? appletName : participantSecretId || ''}_schedule`;
       }
 
       return `${isDefault ? 'default' : 'individual'}_schedule_template`;
@@ -107,7 +59,7 @@ export const Legend = ({
       defaultData: scheduleExportCsv.length > 0 ? null : defaultExportHeader,
     });
 
-    isExport && setExportDefaultSchedulePopupVisible(false);
+    isExport && setShowExportSchedulePopup(false);
   };
 
   const handleImportClick = () => {
@@ -136,7 +88,7 @@ export const Legend = ({
               isEmpty={!!scheduleExportTableData.length}
               isIndividual={hasIndividualSchedule}
               userId={userId}
-              userName={respondentName}
+              userName={participantName}
             />
           )}
         </StyledFlexTopCenter>
@@ -153,7 +105,9 @@ export const Legend = ({
 
           <Button
             startIcon={<Svg fill="currentColor" width={18} height={18} id="export2" />}
-            onClick={exportScheduleHandler}
+            onClick={() => {
+              setShowExportSchedulePopup(true);
+            }}
             data-testid={`${dataTestid}-export`}
             variant="text"
           >
@@ -175,57 +129,35 @@ export const Legend = ({
           />
         ),
       )}
-      {exportDefaultSchedulePopupVisible && (
+
+      {showExportSchedulePopup && (
         <ExportSchedulePopup
-          open={exportDefaultSchedulePopupVisible}
-          onClose={() => setExportDefaultSchedulePopupVisible(false)}
-          onSubmit={handleExportScheduleSubmit(true, true)}
+          data-testid={`${dataTestid}-export-${
+            hasIndividualSchedule ? 'individual' : 'default'
+          }-schedule-popup`}
+          onClose={() => {
+            setShowExportSchedulePopup(false);
+          }}
+          onSubmit={handleExportScheduleSubmit(!hasIndividualSchedule, true)}
+          open={showExportSchedulePopup}
+          respondentName={participantName}
           scheduleTableRows={scheduleExportTableData}
-          data-testid={`${dataTestid}-export-default-schedule-popup`}
         />
       )}
-      {exportIndividualSchedulePopupVisible && (
-        <ExportSchedulePopup
-          open={exportIndividualSchedulePopupVisible}
-          onClose={() => setExportIndividualSchedulePopupVisible(false)}
-          onSubmit={handleExportScheduleSubmit(false, true)}
-          respondentName={respondentName}
-          scheduleTableRows={scheduleExportTableData}
-          data-testid={`${dataTestid}-export-individual-schedule-popup`}
-        />
-      )}
+
       {importSchedulePopupVisible && (
         <ImportSchedulePopup
           open={importSchedulePopupVisible}
           isIndividual={hasIndividualSchedule}
           appletName={appletName}
           respondentId={userId}
-          respondentName={respondentName}
+          respondentName={participantName}
           onClose={() => setImportSchedulePopupVisible(false)}
           onDownloadTemplate={handleExportScheduleSubmit(!hasIndividualSchedule, false)}
           scheduleExportData={scheduleExportCsv}
           data-testid={`${dataTestid}-import-schedule-popup`}
         />
       )}
-      {clearScheduledEventsPopupVisible && (
-        <ClearScheduledEventsPopup
-          appletId={appletId}
-          appletName={appletName}
-          data-testid={`${dataTestid}-clear-scheduled-events-popup`}
-          name={respondentName}
-          onClose={() => setClearScheduledEventsPopupVisible(false)}
-          open={clearScheduledEventsPopupVisible}
-          userId={hasIndividualSchedule && userId ? userId : undefined}
-        />
-      )}
-
-      <CreateEventPopup
-        data-testid={`${dataTestid}-create-event-popup`}
-        defaultStartDate={new Date()}
-        open={createEventPopupVisible}
-        setCreateEventPopupVisible={setCreateEventPopupVisible}
-        userId={hasIndividualSchedule && userId ? userId : undefined}
-      />
     </StyledLegend>
   );
 };

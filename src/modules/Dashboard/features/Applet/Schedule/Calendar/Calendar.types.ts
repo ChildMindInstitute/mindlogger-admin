@@ -43,7 +43,3 @@ export type GetCalendarComponents = {
   isAllDayEventsVisible: AllDayEventsVisible;
   setIsAllDayEventsVisible: Dispatch<SetStateAction<AllDayEventsVisible>>;
 };
-
-export interface CalendarProps {
-  userId?: string;
-}

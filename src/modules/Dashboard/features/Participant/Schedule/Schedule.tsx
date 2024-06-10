@@ -13,6 +13,8 @@ import { useAppDispatch } from 'redux/store';
 import { Respondent } from 'modules/Dashboard/types';
 import { usePermissions } from 'shared/hooks';
 import { checkIfHasAccessToSchedule } from 'modules/Dashboard/features/Applet/Schedule/Schedule.utils';
+import { ScheduleProvider } from 'modules/Dashboard/features/Applet/Schedule/ScheduleProvider';
+import { getRespondentName } from 'shared/utils';
 
 export const ParticipantSchedule = () => {
   const { appletId } = useParams();
@@ -40,8 +42,10 @@ export const ParticipantSchedule = () => {
     [respondentsData, subjectData],
   );
   const { details, id: userId } = selectedRespondent ?? {};
-  const hasIndividualSchedule = details ? details[0].hasIndividualSchedule : false;
+  const respondentDetails = details?.[0] ?? {};
+  const { respondentSecretId, hasIndividualSchedule, respondentNickname } = respondentDetails;
   const hasAccess = appletId ? checkIfHasAccessToSchedule(workspaceRoles?.[appletId]) : false;
+  const respondentName = getRespondentName(respondentSecretId || '', respondentNickname);
 
   useEffect(() => {
     if (!appletId || !ownerId || !hasAccess) return;
@@ -82,22 +86,26 @@ export const ParticipantSchedule = () => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
+        <ScheduleProvider
+          appletId={appletId ?? 'Unknown applet ID'}
+          appletName={appletData?.displayName ?? 'Unknown applet'}
+          canCreateIndividualSchedule={!!userId}
+          hasIndividualSchedule={hasIndividualSchedule}
+          showEditDefaultConfirmation={!hasIndividualSchedule}
+          userId={userId ?? undefined}
+          participantName={respondentName}
+          participantSecretId={respondentSecretId}
+        >
           <Legend
-            appletId={appletId ?? 'Unknown applet ID'}
-            appletName={appletData?.displayName ?? 'Unknown applet'}
-            canCreateIndividualSchedule={!!userId}
-            hasIndividualSchedule={hasIndividualSchedule}
             legendEvents={preparedEvents}
             showScheduleToggle
-            userId={userId ?? undefined}
             sx={{
               borderRight: `${theme.spacing(0.1)} solid ${variables.palette.surface_variant}`,
               width: theme.spacing(32),
             }}
           />
-          <Calendar userId={hasIndividualSchedule && userId ? userId : undefined} />
-        </>
+          <Calendar />
+        </ScheduleProvider>
       )}
     </Box>
   );
