@@ -150,7 +150,12 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
       const body = getEventPayload(defaultStartDate, getValues, respondentId);
 
       if (editedEvent) {
-        const { activityId, flowId, respondentId, ...updateEventBody } = body;
+        const {
+          activityId: _activityId,
+          flowId: _flowId,
+          respondentId: _respondentId,
+          ...updateEventBody
+        } = body;
         await updateEvent({
           appletId,
           eventId: editedEvent.eventId,
@@ -218,29 +223,36 @@ export const EventForm = forwardRef<EventFormRef, EventFormProps>(
         ?.labelKey;
 
       activityName && setActivityName(activityName);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activityOrFlowId, activitiesOrFlows]);
 
     useEffect(() => {
       if (onFormChange) {
         onFormChange(isDirty);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isDirty]);
 
     useEffect(() => {
       onFormIsLoading(isLoading);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading]);
 
     useEffect(() => {
       setValue('removeWarning', removeWarning);
-    }, [eventsData, activityOrFlowId, alwaysAvailable]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [eventsData, activityOrFlowId, alwaysAvailable, setValue]);
 
     useEffect(() => {
       trigger(['startTime', 'endTime', 'notifications', 'reminder']);
-    }, [startTime, endTime]);
+    }, [startTime, endTime, trigger]);
 
     useEffect(() => {
-      if (!hasAlwaysAvailableOption) setValue('alwaysAvailable', false);
-    }, [hasAlwaysAvailableOption]);
+      if (!hasAlwaysAvailableOption) {
+        setValue('alwaysAvailable', false);
+        setValue('periodicity', Periodicity.Once);
+      }
+    }, [hasAlwaysAvailableOption, setValue]);
 
     return (
       <FormProvider {...methods}>
