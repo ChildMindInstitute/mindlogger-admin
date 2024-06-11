@@ -19,7 +19,7 @@ export const CreateEventPopup = ({
 }: CreateEventPopupProps) => {
   const { t } = useTranslation('app');
   const eventFormRef = useRef() as RefObject<EventFormRef>;
-  const { respondentId } = useParams();
+  const { respondentId, appletId } = useParams();
   const [currentActivityName, setCurrentActivityName] = useState('');
   const [removeAllScheduledPopupVisible, setRemoveAllScheduledPopupVisible] = useState(false);
   const [removeAlwaysAvailablePopupVisible, setRemoveAlwaysAvailablePopupVisible] = useState(false);
@@ -36,7 +36,9 @@ export const CreateEventPopup = ({
       eventFormRef.current.submitForm();
     }
 
-    Mixpanel.track(`${analyticsPrefix} Schedule save click`);
+    Mixpanel.track(`${analyticsPrefix} Schedule save click`, {
+      'Applet ID': appletId,
+    });
   };
 
   const handleRemoveAlwaysAvailableClose = () => {

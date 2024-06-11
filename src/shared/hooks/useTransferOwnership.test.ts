@@ -30,10 +30,11 @@ const populatedState: PreloadedState<RootState> = {
     },
   },
 };
+const appletId = 'appletId';
 
 describe('useTransferOwnership', () => {
   test('should return initial values', () => {
-    const { result } = renderHookWithProviders(useTransferOwnership);
+    const { result } = renderHookWithProviders(() => useTransferOwnership(appletId));
 
     expect(result.current).toStrictEqual({
       isSubmitted: false,
@@ -44,7 +45,7 @@ describe('useTransferOwnership', () => {
   });
 
   test('should change isSubmitted to true if handleSubmit triggered', async () => {
-    const { result } = renderHookWithProviders(useTransferOwnership);
+    const { result } = renderHookWithProviders(() => useTransferOwnership(appletId));
 
     result.current?.handleSubmit?.();
 
@@ -60,9 +61,12 @@ describe('useTransferOwnership', () => {
 
   test('should show success banner when transferring ownership succeeds', async () => {
     const mixpanelTrack = jest.spyOn(MixpanelFunc.Mixpanel, 'track');
-    const { result, rerender, store } = renderHookWithProviders(useTransferOwnership, {
-      preloadedState: emptyState,
-    });
+    const { result, rerender, store } = renderHookWithProviders(
+      () => useTransferOwnership(appletId),
+      {
+        preloadedState: emptyState,
+      },
+    );
     const mockedCallback = jest.fn();
 
     expect(store.getState().banners).toEqual(emptyState.banners);
@@ -74,6 +78,8 @@ describe('useTransferOwnership', () => {
 
     expect(store.getState().banners).toEqual(populatedState.banners);
     expect(mockedCallback).toBeCalled();
-    expect(mixpanelTrack).toBeCalledWith('Invitation sent successfully');
+    expect(mixpanelTrack).toBeCalledWith('Invitation sent successfully', {
+      'Applet ID': 'appletId',
+    });
   });
 });

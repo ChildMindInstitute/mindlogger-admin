@@ -3,9 +3,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Svg } from 'shared/components/Svg';
 import { ItemType } from 'modules/Builder/components';
-import { ActivityFlowFormValues } from 'modules/Builder/types';
+import { ActivityFlowFormValues, ActivityFormValues } from 'modules/Builder/types';
+import { getEntityKey } from 'shared/utils/getEntityKey';
 
-import { GetFlowBuilderActions, GetMenuItems, GetMenuItemsType } from './ActivityFlowBuilder.types';
+import {
+  GetFlowBuilderActions,
+  GetMenuItems,
+  GetMenuItemsType,
+  NonReviewableActivities,
+} from './ActivityFlowBuilder.types';
 
 const checkOnIdOrKey = (checkId: string) => (entity: ActivityFlowFormValues) =>
   (entity.id || entity.key) === checkId;
@@ -61,3 +67,17 @@ export const getFlowBuilderActions = ({
     'data-testid': `${dataTestid}-remove`,
   },
 ];
+
+export const getNonReviewableActivities = (activities: ActivityFormValues[]) =>
+  activities.reduce(
+    (acc: NonReviewableActivities, activity) => {
+      if (!activity.isReviewable) {
+        const key = getEntityKey(activity);
+        acc.activities.push(activity);
+        acc.activitiesIdsObjects[key] = activity;
+      }
+
+      return acc;
+    },
+    { activities: [], activitiesIdsObjects: {} },
+  );

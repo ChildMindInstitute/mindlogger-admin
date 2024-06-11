@@ -3,6 +3,7 @@
 import { createRef } from 'react';
 import { generatePath } from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { page } from 'resources';
 import { renderWithAppletFormData } from 'shared/utils/renderWithAppletFormData';
@@ -14,6 +15,16 @@ const mockedFlowTestid = 'builder-activity-flows-flow';
 
 const mockedAppletFormDataWithNoFlows = {
   ...mockedAppletFormData,
+  activityFlows: [],
+};
+
+const mockedDataWithReviewableActivity = {
+  ...mockedAppletFormData,
+  activities: [
+    { ...mockedAppletFormData.activities[0], id: 'no-reviewable-id-1' },
+    { ...mockedAppletFormData.activities[0], id: 'no-reviewable-id-2' },
+    { ...mockedAppletFormData.activities[0], isReviewable: true, id: 'reviewable-id' },
+  ],
   activityFlows: [],
 };
 
@@ -162,5 +173,24 @@ describe('ActivityFlow', () => {
 
     expect(ref.current.getValues('activityFlows.0.isHidden')).toEqual(true);
     expect(screen.getByTestId(`${mockedFlowTestid}-0-hide`)).toBeVisible();
+  });
+
+  test('Ensures no reviewable activities remain when adding Activity Flow', async () => {
+    const ref = renderActivityFlow(mockedDataWithReviewableActivity);
+
+    await userEvent.click(screen.getByTestId('builder-activity-flows-add'));
+
+    expect(mockedUseNavigate).toBeCalledWith(
+      `/builder/${mockedAppletFormData.id}/activity-flows/${ref.current.getValues(
+        'activityFlows.0.key',
+      )}`,
+    );
+
+    const activityFlowData = ref.current.getValues('activityFlows.0');
+
+    // activity with isReviewable='true' is not added to the Flow
+    expect(activityFlowData.items).toHaveLength(2);
+    expect(activityFlowData.items[0].activityKey).toBe('no-reviewable-id-1');
+    expect(activityFlowData.items[1].activityKey).toBe('no-reviewable-id-2');
   });
 });

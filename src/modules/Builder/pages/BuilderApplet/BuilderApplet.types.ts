@@ -1,4 +1,4 @@
-import { Condition, Item, ScoreReport } from 'shared/state';
+import { Activity, ActivityFlow, Condition, Item, ScoreReport } from 'shared/state';
 
 import { flankerItems, getABTrailsItems, getGyroscopeOrTouchItems } from './BuilderApplet.utils';
 
@@ -18,3 +18,9 @@ type FlankerItemsType = typeof flankerItems;
 type GyroscopeOrTouchItemsType = ReturnType<typeof getGyroscopeOrTouchItems>;
 type ABTrailsItemsType = ReturnType<typeof getABTrailsItems>;
 export type PerformanceTaskItems = FlankerItemsType | GyroscopeOrTouchItemsType | ABTrailsItemsType;
+
+export type GetActivityFlows = {
+  activityFlows: ActivityFlow[];
+  activities: Activity[];
+  nonReviewableKeys: string[];
+};
