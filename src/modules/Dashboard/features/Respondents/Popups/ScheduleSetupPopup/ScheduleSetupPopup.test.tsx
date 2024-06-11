@@ -77,7 +77,7 @@ describe('ScheduleSetupPopup', () => {
     );
     await waitFor(() =>
       expect(mockedUseNavigate).toBeCalledWith(
-        `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedRespondentId}`,
+        `/dashboard/${mockedAppletId}/participants/${mockedSubjectId1}/schedule`,
       ),
     );
   });
@@ -100,7 +100,7 @@ describe('ScheduleSetupPopup', () => {
 
     expect(setChosenAppletDataMock).toBeCalledWith(chosenAppletDataMock);
     expect(mockedUseNavigate).toBeCalledWith(
-      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedRespondentId}`,
+      `/dashboard/${mockedAppletId}/participants/${mockedSubjectId1}/schedule`,
     );
   });
 });

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Trans } from 'react-i18next';
@@ -23,39 +23,49 @@ export const ScheduleSetupPopup = ({
   const { t } = useTranslation('app');
   const navigate = useNavigate();
   const { appletId } = useParams();
+  const {
+    appletId: chosenAppletId,
+    appletDisplayName,
+    respondentSecretId,
+    respondentId,
+    hasIndividualSchedule,
+    subjectId,
+  } = chosenAppletData || {};
   const showSecondScreen = chosenAppletData && !chosenAppletData.hasIndividualSchedule;
-  const appletName = chosenAppletData?.appletDisplayName || '';
-  const secretUserId = chosenAppletData?.respondentSecretId || '';
-
   const { execute: createIndividualEvents, error } = useAsync(createIndividualEventsApi);
 
   const handlePopupClose = () => {
     setChosenAppletData(null);
     setPopupVisible(false);
   };
+
   const handleBackClick = () => setChosenAppletData(null);
 
-  const handlePopupSubmit = async () => {
-    const { appletId, respondentId, hasIndividualSchedule } = chosenAppletData || {};
-    if (!appletId || !respondentId) return;
+  const handlePopupSubmit = useCallback(async () => {
+    if (!chosenAppletId || !respondentId) return;
+
     if (!hasIndividualSchedule) {
-      await createIndividualEvents({ appletId, respondentId });
+      await createIndividualEvents({ appletId: chosenAppletId, respondentId });
     }
+
     setPopupVisible(false);
-    navigate(
-      generatePath(page.appletScheduleIndividual, {
-        appletId,
-        respondentId,
-      }),
-    );
+    navigate(generatePath(page.appletParticipantSchedule, { appletId: chosenAppletId, subjectId }));
     Mixpanel.track('View Individual calendar click');
-  };
+  }, [
+    chosenAppletId,
+    createIndividualEvents,
+    hasIndividualSchedule,
+    navigate,
+    respondentId,
+    setPopupVisible,
+    subjectId,
+  ]);
 
   useEffect(() => {
-    if (chosenAppletData?.hasIndividualSchedule) {
+    if (hasIndividualSchedule) {
       handlePopupSubmit();
     }
-  }, [chosenAppletData]);
+  }, [handlePopupSubmit, hasIndividualSchedule]);
 
   return (
     <Modal
@@ -73,17 +83,12 @@ export const ScheduleSetupPopup = ({
       <StyledModalWrapper>
         {showSecondScreen ? (
           <StyledBodyLarge sx={{ marginTop: theme.spacing(-1) }}>
-            <Trans i18nKey="respondentIsAMemberOfTheDefaultSchedule">
-              Respondent
-              <strong>
-                <>{{ secretUserId }}</>
-              </strong>
-              is a member of the Default Schedule within the
-              <strong>
-                <>{{ appletName }}</>
-              </strong>
-              Applet. Do you want to set an Individual schedule for this Respondent?
-            </Trans>
+            <Trans
+              components={{ 1: <strong />, 3: <strong /> }}
+              i18nKey="respondentIsAMemberOfTheDefaultSchedule"
+              t={t}
+              values={{ appletName: appletDisplayName, secretUserId: respondentSecretId }}
+            />
           </StyledBodyLarge>
         ) : (
           <>
