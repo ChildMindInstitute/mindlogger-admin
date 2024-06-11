@@ -1,14 +1,6 @@
-import { AutocompleteOption } from 'shared/components/FormComponents';
-import { Version, ReviewCount } from 'modules/Dashboard/api';
+import { ReviewCount } from 'modules/Dashboard/api';
 
-import {
-  ActivityCompletion,
-  ActivityOrFlow,
-  FlowResponses,
-  FlowSubmission,
-  FormattedResponses,
-  Identifier,
-} from '../../RespondentData.types';
+import { ActivityCompletion, FlowSubmission } from '../../RespondentData.types';
 
 export type CurrentActivityCompletionData = { answerId: string; date?: number } | null;
 
@@ -30,15 +22,3 @@ export type GetCompletions = {
   flowSubmissions: FlowSubmission[];
   answers: ActivityCompletion[];
 };
-
-export type ReportValues = [
-  ActivityCompletion[],
-  Record<string, FormattedResponses[]> | null,
-  number,
-  ActivityOrFlow,
-  Identifier[],
-  Version[],
-  AutocompleteOption[],
-  FlowSubmission[],
-  FlowResponses[],
-];

@@ -12,7 +12,12 @@ export const ActivityResponses = ({
 }: ActivityResponsesProps) => (
   <>
     {!!subscalesFrequency && (
-      <Subscales answers={answers} versions={versions} subscalesFrequency={subscalesFrequency} />
+      <Subscales
+        answers={answers}
+        versions={versions}
+        subscalesFrequency={subscalesFrequency}
+        flowResponsesIndex={flowResponsesIndex}
+      />
     )}
     {responseOptions && !!Object.values(responseOptions).length && (
       <ResponseOptions

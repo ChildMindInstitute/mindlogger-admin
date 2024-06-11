@@ -24,6 +24,7 @@ export type SubscalesProps = {
   answers: ActivityCompletion[];
   versions: Version[];
   subscalesFrequency: number;
+  flowResponsesIndex?: number;
 };
 
 export type ParsedSubscale = {

@@ -26,6 +26,7 @@ export const Subscale = ({
   name,
   subscale,
   versions,
+  flowResponsesIndex,
   'data-testid': dataTestid,
 }: SubscaleProps) => {
   const { t } = useTranslation('app');
@@ -81,16 +82,22 @@ export const Subscale = ({
             </Box>
           )}
           {!!subscale?.items?.length &&
-            subscale?.items?.map((item, index: number) => (
-              <Box key={`${item.activityItem.id}-${index}`} sx={{ m: theme.spacing(2.4, 0) }}>
-                <CollapsedMdText
-                  text={getDictionaryText(item.activityItem.question)}
-                  maxHeight={SHOW_MORE_HEIGHT}
-                  data-testid={`${dataTestid}-question-${index}`}
-                />
-                {renderChart(item, index)}
-              </Box>
-            ))}
+            subscale?.items?.map((item, index: number) => {
+              const itemTestid = `${dataTestid}-item-${
+                flowResponsesIndex ? `${flowResponsesIndex}-` : ''
+              }${index}`;
+
+              return (
+                <Box key={`${item.activityItem.id}-${index}`} sx={{ m: theme.spacing(2.4, 0) }}>
+                  <CollapsedMdText
+                    text={getDictionaryText(item.activityItem.question)}
+                    maxHeight={SHOW_MORE_HEIGHT}
+                    data-testid={`${dataTestid}-question-${index}`}
+                  />
+                  {renderChart({ ...item, dataTestid: itemTestid }, index)}
+                </Box>
+              );
+            })}
           {!!subscale?.restScores && (
             <Box sx={{ mt: theme.spacing(4.8) }}>
               {Object.keys(subscale?.restScores)?.map((restScore, index) => (
