@@ -1,3 +1,5 @@
+import { ChangeEvent } from 'react';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -18,14 +20,15 @@ import {
   MAX_NAME_LENGTH,
   TEXTAREA_ROWS_COUNT_SM,
 } from 'shared/consts';
-import { byteFormatter } from 'shared/utils';
+import { byteFormatter, getEntityKey } from 'shared/utils';
 import { BuilderContainer } from 'shared/features';
-import { ItemFormValues } from 'modules/Builder/types';
+import { ActivityFlowFormValues, ItemFormValues } from 'modules/Builder/types';
 import {
   useRedirectIfNoMatchedActivity,
   useCurrentActivity,
   useCustomFormContext,
 } from 'modules/Builder/hooks';
+import { getUpdatedActivityFlows } from 'modules/Builder/utils';
 
 import { Uploads } from '../../components';
 import { StyledContainer } from './ActivityAbout.styles';
@@ -40,12 +43,25 @@ export const ActivityAbout = () => {
 
   useRedirectIfNoMatchedActivity();
 
-  const { control, setValue, watch } = useCustomFormContext();
-  const { fieldName } = useCurrentActivity();
+  const { control, setValue } = useCustomFormContext();
+  const { fieldName, activity } = useCurrentActivity();
   const hasVariableAmongItems = useCheckIfItemsHaveVariables();
   const hasRequiredItems = useCheckIfItemsHaveRequiredItems();
 
-  const activityItems = watch(`${fieldName}.items`);
+  const [activityItems, activityFlows, activityImage, splashScreen]: [
+    ItemFormValues[],
+    ActivityFlowFormValues[],
+    string,
+    string,
+  ] = useWatch({
+    name: [
+      `${fieldName}.items`,
+      'activityFlows',
+      `${fieldName}.image`,
+      `${fieldName}.splashScreen`,
+    ],
+  });
+
   const hasUnsupportedReviewableItemTypes = activityItems?.some(
     (item: ItemFormValues) =>
       ![...itemsForReviewableActivity, ''].includes(item.responseType as ItemResponseType),
@@ -73,7 +89,7 @@ export const ActivityAbout = () => {
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue(`${fieldName}.image`, val)}
-          getValue={() => watch(`${fieldName}.image`)}
+          getValue={() => activityImage}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
           data-testid="builder-activity-about-image"
         />
@@ -86,7 +102,7 @@ export const ActivityAbout = () => {
         <Uploader
           {...commonUploaderProps}
           setValue={(val: string) => setValue(`${fieldName}.splashScreen`, val)}
-          getValue={() => watch(`${fieldName}.splashScreen`)}
+          getValue={() => splashScreen}
           description={t('uploadImg', { size: byteFormatter(MAX_FILE_SIZE_25MB) })}
           cropRatio={CropRatio.SplashScreen}
           data-testid="builder-activity-about-splash-screen"
@@ -94,6 +110,15 @@ export const ActivityAbout = () => {
       ),
     },
   ];
+
+  const handleIsReviewableChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.checked || !activity) return;
+
+    const activityKey = getEntityKey(activity);
+
+    const newActivityFlows = getUpdatedActivityFlows(activityFlows, activityKey);
+    setValue('activityFlows', newActivityFlows);
+  };
 
   const checkboxes = [
     {
@@ -129,6 +154,7 @@ export const ActivityAbout = () => {
           </Tooltip>
         </StyledBodyLarge>
       ),
+      onCustomChange: handleIsReviewableChange,
       'data-testid': 'builder-activity-about-reviewable',
     },
   ];
@@ -166,17 +192,20 @@ export const ActivityAbout = () => {
         {t('itemLevelSettings')}
       </StyledTitleMedium>
       <StyledFlexColumn>
-        {checkboxes.map(({ name, label, isInversed, disabled, 'data-testid': dataTestid }) => (
-          <CheckboxController
-            key={name}
-            control={control}
-            name={name}
-            label={label}
-            disabled={disabled}
-            isInversed={isInversed}
-            data-testid={dataTestid}
-          />
-        ))}
+        {checkboxes.map(
+          ({ name, label, isInversed, disabled, 'data-testid': dataTestid, onCustomChange }) => (
+            <CheckboxController
+              key={name}
+              control={control}
+              name={name}
+              label={label}
+              disabled={disabled}
+              isInversed={isInversed}
+              onCustomChange={onCustomChange}
+              data-testid={dataTestid}
+            />
+          ),
+        )}
       </StyledFlexColumn>
     </BuilderContainer>
   );

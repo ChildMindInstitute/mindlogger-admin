@@ -7,7 +7,7 @@ import { useAsync, useTimeAgo } from 'shared/hooks';
 import { useAppDispatch } from 'redux/store';
 import { auth, popups, workspaces } from 'redux/modules';
 import { StyledBodyMedium, theme } from 'shared/styles';
-import { Pin, Actions, AppletImage } from 'shared/components';
+import { Pin, AppletImage, ActionsMenu } from 'shared/components';
 import {
   AppletPasswordPopup,
   AppletPasswordPopupType,
@@ -32,7 +32,7 @@ import { useAppletPrivateKeySetter } from 'modules/Builder/hooks';
 import { StyledTableCell } from '../AppletsTable.styles';
 import { getTableRowClassNames } from '../AppletsTable.utils';
 import { StyledAppletName, StyledPinContainer } from './AppletItem.styles';
-import { getActions, hasOwnerRole } from './AppletItem.utils';
+import { getAppletActions, hasOwnerRole } from './AppletItem.utils';
 import { AppletItemProps } from './AppletItem.types';
 
 export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
@@ -112,7 +112,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     });
     await fetchData();
     setPasswordPopupVisible(false);
-    Mixpanel.track('Applet Created Successfully');
+    Mixpanel.track('Applet Created Successfully', {
+      'Applet ID': appletId,
+    });
   };
 
   const checkAppletEncryption = (callback: () => void) =>
@@ -129,7 +131,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
     viewCalendar: () =>
       checkAppletEncryption(() => {
         navigate(APPLET_SCHEDULE);
-        Mixpanel.track('View General calendar click');
+        Mixpanel.track('View General calendar click', {
+          'Applet ID': appletId,
+        });
       }),
     deleteAction: () =>
       checkAppletEncryption(() =>
@@ -181,7 +185,9 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
         if (item.isFolder) return;
 
         navigate(getBuilderAppletUrl(appletId));
-        Mixpanel.track('Applet edit click');
+        Mixpanel.track('Applet edit click', {
+          'Applet ID': appletId,
+        });
       }),
   };
 
@@ -223,10 +229,8 @@ export const AppletItem = ({ item, onPublish }: AppletItemProps) => {
           </StyledBodyMedium>
         </StyledTableCell>
         <StyledTableCell>
-          <Actions
-            items={getActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
-            context={item}
-            visibleByDefault={hasVisibleActions}
+          <ActionsMenu
+            menuItems={getAppletActions({ actions, item, roles: workspaceRoles?.data?.[appletId] })}
             data-testid="dashboard-applets-table-applet-actions"
           />
         </StyledTableCell>

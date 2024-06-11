@@ -11,6 +11,7 @@ export type GetEntityReportFields<T, K> = {
   activities?: T;
   activityItems?: K;
   type: FlowReportFieldsPrepareType;
+  nonReviewableKeys?: string[];
 };
 
 export const getEntityReportFields = <
@@ -27,6 +28,7 @@ export const getEntityReportFields = <
   activities,
   activityItems,
   type,
+  nonReviewableKeys,
 }: GetEntityReportFields<T, K>) => {
   const isKeyToName = type === FlowReportFieldsPrepareType.KeyToName;
   let reportIncludedActivityName = '';
@@ -37,6 +39,16 @@ export const getEntityReportFields = <
     activities?.find(
       (activity) => (isKeyToName ? getEntityKey(activity) : activity.name) === reportActivity,
     );
+
+  if (
+    !isKeyToName &&
+    selectedReportActivity &&
+    nonReviewableKeys &&
+    !nonReviewableKeys.includes(getEntityKey(selectedReportActivity))
+  ) {
+    return { reportIncludedActivityName: '', reportIncludedItemName: '' };
+  }
+
   if (selectedReportActivity) {
     reportIncludedActivityName = isKeyToName
       ? selectedReportActivity.name

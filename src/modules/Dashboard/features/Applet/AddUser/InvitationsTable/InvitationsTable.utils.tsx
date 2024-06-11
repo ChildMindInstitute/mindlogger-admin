@@ -54,47 +54,49 @@ export const getInvitationsTableRows = ({
   handleTooltipClose,
   openTooltipIndex,
 }: GetInvitationsTableRows) =>
-  invitations?.result.map(({ meta, firstName, lastName, role, email, key, createdAt }, index) => {
-    const capitalizedRole = capitalize(role);
-    const invitationLink = `${process.env.REACT_APP_WEB_URI || ''}/invitation/${key}`;
+  invitations?.result.map(
+    ({ secretUserId, firstName, lastName, role, email, key, createdAt }, index) => {
+      const capitalizedRole = capitalize(role);
+      const invitationLink = `${process.env.REACT_APP_WEB_URI || ''}/invitation/${key}`;
 
-    return {
-      secretUserId: {
-        content: () => meta?.secret_user_id ?? '',
-        value: meta?.secret_user_id ?? '',
-      },
-      firstName: {
-        content: () => firstName,
-        value: firstName,
-      },
-      lastName: {
-        content: () => lastName,
-        value: lastName,
-      },
-      role: {
-        content: () => capitalizedRole,
-        value: capitalizedRole,
-      },
-      email: {
-        content: () => email,
-        value: email,
-      },
-      invitationLink: {
-        content: () => invitationLink,
-        value: key,
-        onClick: () => setOpenTooltipIndex(index),
-        contentWithTooltip: (
-          <InvitationWithTooltip
-            open={openTooltipIndex === index}
-            onClose={handleTooltipClose}
-            invitationLink={invitationLink}
-          />
-        ),
-      },
-      dateTimeInvited: {
-        content: () =>
-          `${format(new Date(`${createdAt}Z`), DateFormats.YearMonthDayHoursMinutesSeconds)}`,
-        value: createdAt,
-      },
-    };
-  });
+      return {
+        secretUserId: {
+          content: () => secretUserId ?? '',
+          value: secretUserId ?? '',
+        },
+        firstName: {
+          content: () => firstName,
+          value: firstName,
+        },
+        lastName: {
+          content: () => lastName,
+          value: lastName,
+        },
+        role: {
+          content: () => capitalizedRole,
+          value: capitalizedRole,
+        },
+        email: {
+          content: () => email,
+          value: email,
+        },
+        invitationLink: {
+          content: () => invitationLink,
+          value: key,
+          onClick: () => setOpenTooltipIndex(index),
+          contentWithTooltip: (
+            <InvitationWithTooltip
+              open={openTooltipIndex === index}
+              onClose={handleTooltipClose}
+              invitationLink={invitationLink}
+            />
+          ),
+        },
+        dateTimeInvited: {
+          content: () =>
+            `${format(new Date(`${createdAt}Z`), DateFormats.YearMonthDayHoursMinutesSeconds)}`,
+          value: createdAt,
+        },
+      };
+    },
+  );

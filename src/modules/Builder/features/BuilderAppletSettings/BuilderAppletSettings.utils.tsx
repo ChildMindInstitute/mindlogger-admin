@@ -24,6 +24,7 @@ export const getSettings = ({
   isPublished,
   roles,
   onReportConfigSubmit,
+  appletId,
   integrations,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
@@ -121,7 +122,10 @@ export const getSettings = ({
           disabled: isNewApplet,
           tooltip,
           'data-testid': `${dataTestid}-report-config`,
-          onClick: () => Mixpanel.track('Applet - Report Configuration Click'),
+          onClick: () =>
+            Mixpanel.track('Applet - Report Configuration Click', {
+              'Applet ID': appletId,
+            }),
         },
       ],
     },

@@ -14,4 +14,5 @@ export type GetActivitySettings = {
   activityFieldName?: string;
   activity?: ActivityFormValues;
   settingsErrors: { hasActivityReportsErrors: boolean; hasActivitySubscalesErrors: boolean };
+  appletId?: string;
 };

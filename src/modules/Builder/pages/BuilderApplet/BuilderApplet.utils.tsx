@@ -10,7 +10,6 @@ import { Svg } from 'shared/components/Svg';
 import { Theme } from 'modules/Builder/api';
 import {
   Activity,
-  ActivityFlow,
   Condition,
   ConditionalLogic,
   Config,
@@ -55,6 +54,7 @@ import {
 import {
   ABTrailsItemQuestions,
   ActivityFlowFormValues,
+  ActivityFlowItem,
   ActivityFormValues,
   AppletFormValues,
   CorrectPress,
@@ -92,7 +92,12 @@ import {
   ordinalStrings,
   SAMPLE_SIZE,
 } from './BuilderApplet.const';
-import { GetSectionConditions, GetMessageItem, PerformanceTaskItems } from './BuilderApplet.types';
+import {
+  GetSectionConditions,
+  GetMessageItem,
+  PerformanceTaskItems,
+  GetActivityFlows,
+} from './BuilderApplet.types';
 
 const { t } = i18n;
 
@@ -741,21 +746,34 @@ const getActivityItems = (items: Item[]) =>
       )
     : [];
 
-const getActivityFlows = (activityFlows: ActivityFlow[], activities: Activity[]) =>
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  activityFlows.map(({ order, ...activityFlow }) => ({
+const getActivityFlows = ({ activityFlows, activities, nonReviewableKeys }: GetActivityFlows) =>
+  activityFlows.map(({ order: _order, ...activityFlow }) => ({
     ...activityFlow,
     description: getDictionaryText(activityFlow.description),
-    items: activityFlow.items?.map(({ id, activityId, activityKey, key }) => ({
-      id,
-      key,
-      activityKey: activityKey || activityId || '',
-    })),
+    items: activityFlow.items?.reduce(
+      (acc: ActivityFlowItem[], { id, activityId, activityKey, key }) => {
+        const calculatedActivityKey = activityKey || activityId;
+
+        // remove Reviewer Assessment Activity from previously saved Flow Items list
+        if (nonReviewableKeys.includes(calculatedActivityKey)) {
+          acc.push({
+            id,
+            key,
+            activityKey: calculatedActivityKey || '',
+          });
+        }
+
+        return acc;
+      },
+      [],
+    ),
     ...getEntityReportFields({
       reportActivity: activityFlow.reportIncludedActivityName ?? '',
       reportItem: activityFlow.reportIncludedItemName ?? '',
       activities,
       type: FlowReportFieldsPrepareType.NameToKey,
+      // remove Reviewer Assessment Activity from previously saved Report Config for Activity Flow
+      nonReviewableKeys,
     }),
   }));
 
@@ -972,8 +990,45 @@ const getActivitySubscaleSetting = (
   };
 };
 
+export const getActivities = (appletActivities: Activity[]) =>
+  appletActivities.reduce(
+    (
+      acc: {
+        activities: ActivityFormValues[];
+        nonReviewableKeys: string[];
+      },
+      activity,
+    ) => {
+      if (!activity.isReviewable) {
+        acc.nonReviewableKeys.push(getEntityKey(activity));
+      }
+      const items = getActivityItems(activity.items);
+
+      acc.activities.push({
+        ...activity,
+        description: getDictionaryText(activity.description),
+        items,
+        ...getEntityReportFields({
+          reportItem: activity.reportIncludedItemName,
+          activityItems: activity.items,
+          type: FlowReportFieldsPrepareType.NameToKey,
+        }),
+        conditionalLogic: getActivityConditionalLogic(activity.items),
+        scoresAndReports: getScoresAndReports(activity),
+        ...(activity.subscaleSetting && {
+          subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, items),
+        }),
+      } as ActivityFormValues);
+
+      return acc;
+    },
+    { activities: [], nonReviewableKeys: [] },
+  );
+
 export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: string) => {
   if (!appletData) return getNewApplet();
+
+  const { activities, nonReviewableKeys } = getActivities(appletData.activities || []);
 
   const hasLorisIntegration =
     appletData.integrations?.some((integration) => integration === Integrations.Loris) || false;
@@ -983,28 +1038,12 @@ export const getDefaultValues = (appletData?: SingleApplet, defaultThemeId?: str
     description: getDictionaryText(appletData.description),
     about: getDictionaryText(appletData.about),
     themeId: appletData.themeId ?? defaultThemeId ?? '',
-    activities: appletData.activities
-      ? appletData.activities.map((activity) => {
-          const items = getActivityItems(activity.items);
-
-          return {
-            ...activity,
-            description: getDictionaryText(activity.description),
-            items,
-            ...getEntityReportFields({
-              reportItem: activity.reportIncludedItemName,
-              activityItems: activity.items,
-              type: FlowReportFieldsPrepareType.NameToKey,
-            }),
-            conditionalLogic: getActivityConditionalLogic(activity.items),
-            scoresAndReports: getScoresAndReports(activity),
-            ...(activity.subscaleSetting && {
-              subscaleSetting: getActivitySubscaleSetting(activity.subscaleSetting, items),
-            }),
-          } as ActivityFormValues;
-        })
-      : [],
-    activityFlows: getActivityFlows(appletData.activityFlows, appletData.activities),
+    activities,
+    activityFlows: getActivityFlows({
+      activityFlows: appletData.activityFlows,
+      activities: appletData.activities,
+      nonReviewableKeys,
+    }),
     streamEnabled: !!appletData.streamEnabled,
     lorisIntegration: hasLorisIntegration,
     integrations: appletData.integrations,
@@ -1126,7 +1165,6 @@ export const testFunctionForSubscaleAge = (field: string, value?: number | strin
   typeof value === 'number' || value ? +value > 0 : true;
 
 export const checkScoreRegexp = /^-?\d+\.?\d{0,5}$/;
-export const checkRawScoreRegexp = /^-?\d+$/;
 
 export const getTestFunctionForSubscaleScore = (regexp: RegExp) => (value?: string) => {
   if (!value) return false;
