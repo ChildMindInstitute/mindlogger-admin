@@ -64,30 +64,33 @@ export const DashboardTable = ({
           />
           <TableBody>
             {rows.map((row, index) => (
-              <TableRow key={keyExtractor(row, index)}>
-                {Object.keys(row)?.map((key) =>
-                  row[key].isHidden ? null : (
+              <TableRow key={`row-${index}`}>
+                {Object.keys(row)?.map((key) => {
+                  if (row[key].isHidden) {
+                    return null;
+                  }
+
+                  const { contentWithTooltip, content, maxWidth, sx, ...otherProps } = row[key];
+
+                  return (
                     <StyledTableCell
-                      onClick={row[key].onClick}
                       scope="row"
                       key={key}
-                      align={row[key].align}
-                      width={row[key].width}
+                      {...otherProps}
                       hasColFixedWidth={hasColFixedWidth}
                       sx={{
-                        cursor: row[key].onClick ? 'pointer' : 'default',
-                        maxWidth: row[key].maxWidth,
+                        cursor: otherProps.onClick ? 'pointer' : 'default',
+                        maxWidth,
+                        ...sx,
                       }}
                       data-testid={`${dataTestid}-${index}-cell-${key}`}
                     >
-                      <StyledEllipsisText>
-                        {row[key].contentWithTooltip
-                          ? row[key].contentWithTooltip
-                          : row[key].content?.(row)}
+                      <StyledEllipsisText as="div">
+                        {contentWithTooltip ? contentWithTooltip : content?.(row)}
                       </StyledEllipsisText>
                     </StyledTableCell>
-                  ),
-                )}
+                  );
+                })}
               </TableRow>
             ))}
           </TableBody>

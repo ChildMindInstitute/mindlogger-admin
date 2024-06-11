@@ -42,6 +42,7 @@ export const variables = {
     dark4: '0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.3)',
     dark5: '0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px rgba(0, 0, 0, 0.3)',
     soft: '0 0 8px rgba(0, 0, 0, 0.08)',
+    soft2: '0 0 16px rgba(0, 0, 0, 0.08)',
   },
   transitions: {
     all: 'all 0.3s',
