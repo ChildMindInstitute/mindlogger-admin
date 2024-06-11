@@ -8,6 +8,9 @@ import { mockedApplet, mockedAppletId, mockedSubjectId1 } from 'shared/mock';
 import { initialStateData } from 'redux/modules';
 
 import { Report } from './Report';
+import { DataSummaryContext } from '../DataSummaryContext/DataSummaryContext.context';
+import { DataSummaryContextType } from '../DataSummaryContext/DataSummaryContext.types';
+import { ActivityCompletion, ResponseOption } from '../../RespondentData.types';
 
 const preloadedState = {
   applet: {
@@ -42,6 +45,7 @@ const mockedActivity = {
   isPerformanceTask: false,
   hasAnswer: true,
   isFlow: false,
+  lastAnswerDate: '',
 };
 const mockedAnswers = [
   {
@@ -145,14 +149,30 @@ jest.mock('./ResponseOptions', () => ({
 
 jest.mock('downloadjs', () => jest.fn());
 
-const renderComponent = () =>
-  renderWithProviders(<Report />, {
-    route,
-    routePath,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    preloadedState,
-  });
+const renderComponent = (context: Partial<DataSummaryContextType>) =>
+  renderWithProviders(
+    <DataSummaryContext.Provider
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      value={{
+        setResponseOptions: jest.fn(),
+        setSubscalesFrequency: jest.fn(),
+        answers: [],
+        flowSubmissions: [],
+        responseOptions: {},
+        ...context,
+      }}
+    >
+      <Report />
+    </DataSummaryContext.Provider>,
+    {
+      route,
+      routePath,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      preloadedState,
+    },
+  );
 
 describe('Report component', () => {
   beforeEach(() => {
@@ -168,21 +188,14 @@ describe('Report component', () => {
     mockAxios.post.mockResolvedValueOnce({
       data: 'data',
     });
-    jest
-      .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([
-        mockedAnswers,
-        mockedResponseOptions,
-        0,
-        mockedActivity,
-        [],
-        [],
-        ['v1', 'v2'],
-        [],
-        [],
-      ]);
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
 
-    renderComponent();
+    renderComponent({
+      answers: mockedAnswers as unknown as ActivityCompletion[],
+      responseOptions: mockedResponseOptions as unknown as ResponseOption,
+      selectedEntity: mockedActivity,
+      flowSubmissions: [],
+    });
 
     expect(screen.getByTestId('respondents-summary-report')).toBeInTheDocument();
     expect(screen.getByText('Activity 1')).toBeInTheDocument();
@@ -197,20 +210,22 @@ describe('Report component', () => {
   });
 
   test('renders Report correctly with no data', async () => {
-    jest
-      .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([[], {}, 0, mockedActivity, [], [], ['v1', 'v2'], [], []]);
-    renderComponent();
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue(['v1', 'v2']);
+
+    renderComponent({
+      selectedEntity: mockedActivity,
+    });
 
     expect(screen.getByTestId('report-empty-state')).toBeInTheDocument();
     expect(screen.getByText('No match was found. Try to adjust filters.')).toBeInTheDocument();
   });
 
   test('renders Report correctly with empty version filter', async () => {
-    jest
-      .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([[], {}, 0, mockedActivity, [], [], [], [], []]);
-    renderComponent();
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+
+    renderComponent({
+      selectedEntity: mockedActivity,
+    });
 
     expect(screen.getByTestId('report-with-empty-version-filter')).toBeInTheDocument();
     expect(screen.getByText('Select a Version to view the response data.')).toBeInTheDocument();
@@ -221,8 +236,10 @@ describe('Report component', () => {
       ...mockedActivity,
       hasAnswer: false,
     };
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([[], {}, 0, activityMocked, [], [], []]);
-    renderComponent();
+    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([]);
+    renderComponent({
+      selectedEntity: activityMocked,
+    });
 
     expect(screen.getByTestId('summary-empty-state')).toBeInTheDocument();
     expect(screen.getByText('No available Data yet')).toBeInTheDocument();

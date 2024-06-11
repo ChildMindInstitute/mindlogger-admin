@@ -1,12 +1,16 @@
 import mockAxios from 'jest-mock-axios';
+import { renderHook } from '@testing-library/react';
 
 import { mockedActivityId, mockedAppletId, mockedRespondentId } from 'shared/mock';
 
 import * as useDecryptedIdentifiersHook from '../useDecryptedIdentifiers';
 import { useDatavizSummaryRequests } from './useDatavizSummaryRequests';
+import { DataSummaryContext } from '../../DataSummaryContext/DataSummaryContext.context';
 
 const mockedGetValues = jest.fn();
 const mockedSetValue = jest.fn();
+const mockedSetIdentifiers = jest.fn();
+const mockedSetVersions = jest.fn();
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
   useFormContext: () => ({
@@ -20,6 +24,27 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => mockedUseParams(),
 }));
+
+const renderHookWithContext = () => {
+  const {
+    result: { current },
+  } = renderHook(() => useDatavizSummaryRequests(), {
+    wrapper: ({ children }) => (
+      <DataSummaryContext.Provider
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        value={{
+          setIdentifiers: mockedSetIdentifiers,
+          setApiVersions: mockedSetVersions,
+        }}
+      >
+        {children}
+      </DataSummaryContext.Provider>
+    ),
+  });
+
+  return current;
+};
 
 describe('useDatavizSummaryRequests', () => {
   const mockedActivity = {
@@ -71,16 +96,12 @@ describe('useDatavizSummaryRequests', () => {
 
   const testApiCallsAndSetValues = () => {
     expect(mockAxios.get).toHaveBeenCalledTimes(2);
-    expect(mockedSetValue).toHaveBeenNthCalledWith(
-      1,
-      'identifiers',
-      mockedDecryptedIdentifiersResult,
-    );
-    expect(mockedSetValue).toHaveBeenNthCalledWith(2, 'versions', [
+    expect(mockedSetIdentifiers).toHaveBeenCalledWith(mockedDecryptedIdentifiersResult);
+    expect(mockedSetValue).toHaveBeenCalledWith('versions', [
       { id: 'v1', label: 'v1' },
       { id: 'v2', label: 'v2' },
     ]);
-    expect(mockedSetValue).toHaveBeenNthCalledWith(3, 'apiVersions', mockedVersionsReturn);
+    expect(mockedSetVersions).toHaveBeenCalledWith(mockedVersionsReturn);
   };
 
   test('should call APIs and set form values for Activity', async () => {
@@ -91,8 +112,10 @@ describe('useDatavizSummaryRequests', () => {
       data: { result: mockedVersionsReturn },
     });
 
-    const { getIdentifiersVersions } = useDatavizSummaryRequests();
-    await getIdentifiersVersions({ entity: mockedFlow });
+    const { getIdentifiersVersions } = renderHookWithContext();
+    await getIdentifiersVersions({
+      entity: mockedFlow,
+    });
 
     testApiCallsAndSetValues();
   });
@@ -105,7 +128,7 @@ describe('useDatavizSummaryRequests', () => {
       data: { result: mockedVersionsReturn },
     });
 
-    const { getIdentifiersVersions } = useDatavizSummaryRequests();
+    const { getIdentifiersVersions } = renderHookWithContext();
     await getIdentifiersVersions({ entity: mockedActivity });
 
     testApiCallsAndSetValues();
@@ -121,7 +144,7 @@ describe('useDatavizSummaryRequests', () => {
       mockedUseParams.mockReturnValue({});
     }
 
-    const { getIdentifiersVersions } = useDatavizSummaryRequests();
+    const { getIdentifiersVersions } = renderHookWithContext();
     await getIdentifiersVersions({ entity: { ...mockedActivity, ...activityProps } });
 
     expect(mockAxios.get).not.toHaveBeenCalled();
@@ -131,7 +154,7 @@ describe('useDatavizSummaryRequests', () => {
   test('should handle errors gracefully', async () => {
     mockAxios.get.mockRejectedValue(new Error('API Error'));
 
-    const { getIdentifiersVersions } = useDatavizSummaryRequests();
+    const { getIdentifiersVersions } = renderHookWithContext();
     await getIdentifiersVersions({ entity: mockedActivity });
 
     expect(mockAxios.get).toHaveBeenCalled();

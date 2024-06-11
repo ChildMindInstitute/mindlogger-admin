@@ -10,7 +10,9 @@ import { MAX_LIMIT } from 'shared/consts';
 
 import * as useDatavizSummaryRequestsHook from './hooks/useDatavizSummaryRequests/useDatavizSummaryRequests';
 import * as useRespondentAnswersHook from './hooks/useRespondentAnswers/useRespondentAnswers';
-import { RespondentDataSummary } from './RespondentDataSummary';
+import { InnerRespondentDataSummary } from './RespondentDataSummary';
+import { DataSummaryContext } from './DataSummaryContext/DataSummaryContext.context';
+import { DataSummaryContextType } from './DataSummaryContext/DataSummaryContext.types';
 
 const route = `/dashboard/${mockedAppletId}/respondents/${mockedSubjectId1}/dataviz/summary`;
 const routePath = page.appletRespondentDataSummary;
@@ -22,10 +24,11 @@ const mockedSelectedActivity = {
   isPerformanceTask: false,
   hasAnswer: true,
   lastAnswerDate: '2023-09-26T12:11:46.162083',
+  isFlow: false,
 };
 
 const mockedSummaryActivities = [
-  mockedSelectedActivity,
+  { ...mockedSelectedActivity, isFlow: undefined },
   {
     id: '8013d09f-c48d-4aa0-a1e9-1eb3f3061bec',
     name: 'Activity 2',
@@ -94,6 +97,7 @@ const emptyStateCases = [
       id: 'd65e8a64-a023-4830-9c84-7433c4b96440',
       name: 'Activity 1',
       isPerformanceTask: true,
+      lastAnswerDate: '',
       hasAnswer: true,
       isFlow: false,
     },
@@ -101,6 +105,19 @@ const emptyStateCases = [
     description: 'renders empty state component if selected activity is performance task',
   },
 ];
+
+const renderComponent = (context: Partial<DataSummaryContextType>) =>
+  renderWithProviders(
+    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    <DataSummaryContext.Provider value={context}>
+      <InnerRespondentDataSummary />
+    </DataSummaryContext.Provider>,
+    {
+      route,
+      routePath,
+    },
+  );
 
 describe('RespondentDataSummary component', () => {
   beforeEach(() => {
@@ -111,13 +128,10 @@ describe('RespondentDataSummary component', () => {
   });
 
   test('renders correctly with selected activity and summary activities', async () => {
-    jest
-      .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([mockedSelectedActivity, mockedSummaryActivities, []]);
-
-    renderWithProviders(<RespondentDataSummary />, {
-      route,
-      routePath,
+    renderComponent({
+      selectedEntity: mockedSelectedActivity,
+      summaryActivities: mockedSummaryActivities,
+      summaryFlows: [],
     });
 
     expect(screen.getByTestId('report-menu')).toBeInTheDocument();
@@ -127,12 +141,10 @@ describe('RespondentDataSummary component', () => {
   test.each(emptyStateCases)(
     '$description',
     async ({ selectedEntity, expectedEmptyStateMessage }) => {
-      jest
-        .spyOn(reactHookForm, 'useWatch')
-        .mockReturnValue([selectedEntity, mockedSummaryActivities, mockedSummaryFlows]);
-      renderWithProviders(<RespondentDataSummary />, {
-        route,
-        routePath,
+      renderComponent({
+        selectedEntity,
+        summaryActivities: mockedSummaryActivities,
+        summaryFlows: mockedSummaryFlows,
       });
 
       testEmptyState(expectedEmptyStateMessage);
@@ -142,7 +154,9 @@ describe('RespondentDataSummary component', () => {
   test('renders RespondentDataSummary correctly for selected activity with successful data fetching', async () => {
     const mockGetIdentifiersVersions = jest.fn();
     const mockFetchAnswers = jest.fn();
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([null, [], []]);
+    const mockedSetSummaryActivities = jest.fn();
+    const mockedSetSummaryFlows = jest.fn();
+    const mockedSetSelectedEntity = jest.fn();
     jest
       .spyOn(useDatavizSummaryRequestsHook, 'useDatavizSummaryRequests')
       .mockReturnValue({ getIdentifiersVersions: mockGetIdentifiersVersions });
@@ -161,9 +175,13 @@ describe('RespondentDataSummary component', () => {
       },
     });
 
-    renderWithProviders(<RespondentDataSummary />, {
-      route,
-      routePath,
+    renderComponent({
+      selectedEntity: null,
+      summaryActivities: [],
+      summaryFlows: [],
+      setSummaryActivities: mockedSetSummaryActivities,
+      setSummaryFlows: mockedSetSummaryFlows,
+      setSelectedEntity: mockedSetSelectedEntity,
     });
 
     await waitFor(() => {
@@ -192,15 +210,15 @@ describe('RespondentDataSummary component', () => {
     });
 
     //set activities and flows
-    expect(mockedSetValue).toHaveBeenCalledWith('summaryFlows', mockedSummaryFlows);
-    expect(mockedSetValue).toHaveBeenCalledWith('summaryActivities', mockedSummaryActivities);
+    expect(mockedSetSummaryFlows).toHaveBeenCalledWith(mockedSummaryFlows);
+    expect(mockedSetSummaryActivities).toHaveBeenCalledWith(mockedSummaryActivities);
 
     //select activity with the last answer date
     const selectedActivity = {
       ...mockedSummaryActivities[1],
       isFlow: false,
     };
-    expect(mockedSetValue).toHaveBeenCalledWith('selectedEntity', selectedActivity);
+    expect(mockedSetSelectedEntity).toHaveBeenCalledWith(selectedActivity);
 
     //set startDate end endDate to 1 week from the most recent response
     const expectedEndDate = endOfDay(new Date('2023-10-27'));

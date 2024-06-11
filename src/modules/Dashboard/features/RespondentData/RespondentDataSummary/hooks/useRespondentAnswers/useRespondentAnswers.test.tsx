@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
 import { endOfDay, startOfDay, subDays } from 'date-fns';
 
@@ -8,6 +8,7 @@ import { ActivityOrFlow } from 'modules/Dashboard/features/RespondentData/Respon
 import { MAX_LIMIT } from 'shared/consts';
 
 import { useRespondentAnswers } from './useRespondentAnswers';
+import { DataSummaryContext } from '../../DataSummaryContext/DataSummaryContext.context';
 
 const mockedUseParams = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -30,6 +31,61 @@ jest.mock('modules/Dashboard/hooks', () => ({
   useDecryptedActivityData: jest.fn(),
 }));
 
+const mockedSetFlowSubmissions = jest.fn();
+const mockedSetFlowResponses = jest.fn();
+const mockedSetFlowResponseOptionsCount = jest.fn();
+const mockedSetAnswers = jest.fn();
+const mockedSetResponseOptions = jest.fn();
+const mockedSetSubscalesFrequency = jest.fn();
+const identifiers = [
+  {
+    decryptedValue: 'ident_1',
+    encryptedValue: 'encrypted_ident_1',
+    lastAnswerDate: '2024-01-18T15:10:53.311000',
+  },
+  {
+    decryptedValue: 'ident_2',
+    encryptedValue: 'encrypted_ident_2',
+    lastAnswerDate: '2024-02-18T15:13:00.338000',
+  },
+  {
+    decryptedValue: 'ident_2',
+    encryptedValue: 'encrypted_ident_2_1',
+    lastAnswerDate: '2024-04-12T13:35:41.847000',
+  },
+  {
+    decryptedValue: 'ident_3',
+    encryptedValue: 'encrypted_ident_3',
+    lastAnswerDate: '2024-03-01T12:13:53.378000',
+  },
+];
+
+const renderHookWithContext = () => {
+  const {
+    result: { current },
+  } = renderHook(() => useRespondentAnswers(), {
+    wrapper: ({ children }) => (
+      <DataSummaryContext.Provider
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        value={{
+          setFlowSubmissions: mockedSetFlowSubmissions,
+          setFlowResponses: mockedSetFlowResponses,
+          setFlowResponseOptionsCount: mockedSetFlowResponseOptionsCount,
+          setAnswers: mockedSetAnswers,
+          setResponseOptions: mockedSetResponseOptions,
+          setSubscalesFrequency: mockedSetSubscalesFrequency,
+          identifiers,
+        }}
+      >
+        {children}
+      </DataSummaryContext.Provider>
+    ),
+  });
+
+  return current;
+};
+
 const testIdentifierDatesChange = async () => {
   expect(mockedGetValues).toHaveBeenCalled();
   const endDate = endOfDay(new Date('2024-04-12'));
@@ -44,10 +100,10 @@ const testIdentifierDatesChange = async () => {
       {
         params: {
           emptyIdentifiers: false,
-          fromDatetime: '2024-04-06T00:00:00',
+          fromDatetime: '2024-04-06T09:00:00',
           identifiers: 'encrypted_ident_1,encrypted_ident_2,encrypted_ident_2_1',
           targetSubjectId: mockedRespondentId,
-          toDatetime: '2024-04-12T23:59:00',
+          toDatetime: '2024-04-12T17:00:00',
           versions: 'v3',
           limit: MAX_LIMIT,
         },
@@ -98,34 +154,6 @@ describe('useRespondentAnswers', () => {
     filterByIdentifier: true,
     versions: [{ id: 'v1' }, { id: 'v2' }],
     identifier: '',
-    identifiers: [],
-  };
-  const mockedGetValuesReturnWithIdentifier = {
-    ...mockedGetValuesReturn,
-    startTime: '00:00',
-    endTime: '23:59',
-    identifiers: [
-      {
-        decryptedValue: 'ident_1',
-        encryptedValue: 'encrypted_ident_1',
-        lastAnswerDate: '2024-01-18T15:10:53.311000',
-      },
-      {
-        decryptedValue: 'ident_2',
-        encryptedValue: 'encrypted_ident_2',
-        lastAnswerDate: '2024-02-18T15:13:00.338000',
-      },
-      {
-        decryptedValue: 'ident_2',
-        encryptedValue: 'encrypted_ident_2_1',
-        lastAnswerDate: '2024-04-12T13:35:41.847000',
-      },
-      {
-        decryptedValue: 'ident_3',
-        encryptedValue: 'encrypted_ident_3',
-        lastAnswerDate: '2024-03-01T12:13:53.378000',
-      },
-    ],
   };
 
   const encryptedFlowSubmissions = {
@@ -255,7 +283,7 @@ describe('useRespondentAnswers', () => {
       data: { result: [{ version: 'v1' }, { version: 'v2' }] },
     });
 
-    const { fetchAnswers } = useRespondentAnswers();
+    const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFetchParams);
 
     expect(mockedGetValues).toHaveBeenCalled();
@@ -278,12 +306,12 @@ describe('useRespondentAnswers', () => {
       );
     });
 
-    expect(mockedSetValue).toHaveBeenNthCalledWith(1, 'answers', [
+    expect(mockedSetAnswers).toHaveBeenCalledWith([
       { decryptedAnswer: [], version: 'v1' },
       { decryptedAnswer: [], version: 'v2' },
     ]);
-    expect(mockedSetValue).toHaveBeenNthCalledWith(2, 'responseOptions', {});
-    expect(mockedSetValue).toHaveBeenNthCalledWith(3, 'subscalesFrequency', 0);
+    expect(mockedSetResponseOptions).toHaveBeenCalledWith({});
+    expect(mockedSetSubscalesFrequency).toHaveBeenCalledWith(0);
   });
 
   test('should fetch answers and update form values on successful API call for Activity Flow', async () => {
@@ -297,7 +325,7 @@ describe('useRespondentAnswers', () => {
       data: { result: encryptedFlowSubmissions },
     });
 
-    const { fetchAnswers } = useRespondentAnswers();
+    const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFlowFetchParams);
 
     expect(mockedGetValues).toHaveBeenCalled();
@@ -320,14 +348,14 @@ describe('useRespondentAnswers', () => {
       );
     });
 
-    expect(mockedSetValue).toHaveBeenNthCalledWith(1, 'flowSubmissions', [
+    expect(mockedSetFlowSubmissions).toHaveBeenCalledWith([
       {
         createdAt: '2024-04-26T10:37:17.554576',
         endDatetime: '2024-04-26T10:37:17.280000',
         submitId: 'ff052cfc-3d56-4a76-b10b-e5be34f6a27f',
       },
     ]);
-    expect(mockedSetValue).toHaveBeenNthCalledWith(2, 'flowResponses', [
+    expect(mockedSetFlowResponses).toHaveBeenCalledWith([
       {
         activityId: '618e0577-6f99-45d9-a73b-398d8bbabaf5',
         activityName: 'Activity__1',
@@ -361,8 +389,8 @@ describe('useRespondentAnswers', () => {
   });
 
   test('should update startDate, endDate to recent chosen identifier answer date (identifier provided with function params)', async () => {
-    mockedGetValues.mockReturnValue(mockedGetValuesReturnWithIdentifier);
-    const { fetchAnswers } = useRespondentAnswers();
+    mockedGetValues.mockReturnValue(mockedGetValuesReturn);
+    const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFetchParamsWithIdentifier);
 
     await testIdentifierDatesChange();
@@ -370,19 +398,19 @@ describe('useRespondentAnswers', () => {
 
   test('should update startDate, endDate to recent chosen identifier answer date (identifier provided as form value)', async () => {
     mockedGetValues.mockReturnValue({
-      ...mockedGetValuesReturnWithIdentifier,
+      ...mockedGetValuesReturn,
       identifier: mockedIdentifier,
     });
-    const { fetchAnswers } = useRespondentAnswers();
+    const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers({ ...mockedFetchParamsWithIdentifier, identifier: undefined });
 
     await testIdentifierDatesChange();
   });
 
   test('should update startDate, endDate to activity last answer date, if filterByIdentifier was changed to false', async () => {
-    mockedGetValues.mockReturnValue(mockedGetValuesReturnWithIdentifier);
+    mockedGetValues.mockReturnValue(mockedGetValuesReturn);
 
-    const { fetchAnswers } = useRespondentAnswers();
+    const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers({ ...mockedFetchParamsWithIdentifier, filterByIdentifier: false });
 
     expect(mockedGetValues).toHaveBeenCalled();
@@ -398,10 +426,10 @@ describe('useRespondentAnswers', () => {
         {
           params: {
             emptyIdentifiers: true,
-            fromDatetime: '2024-01-12T00:00:00',
+            fromDatetime: '2024-01-12T09:00:00',
             identifiers: undefined,
             targetSubjectId: mockedRespondentId,
-            toDatetime: '2024-01-18T23:59:00',
+            toDatetime: '2024-01-18T17:00:00',
             versions: 'v3',
             limit: MAX_LIMIT,
           },
@@ -414,7 +442,7 @@ describe('useRespondentAnswers', () => {
   test('should not fetch answers when appletId or respondentId is missing', async () => {
     mockedUseParams.mockReturnValue({});
 
-    const { fetchAnswers } = useRespondentAnswers();
+    const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFetchParams);
 
     expect(mockedGetValues).not.toHaveBeenCalled();
@@ -426,7 +454,7 @@ describe('useRespondentAnswers', () => {
     mockedGetValues.mockReturnValue(mockedGetValuesReturn);
     mockAxios.get.mockRejectedValue(new Error('API Error'));
 
-    const { fetchAnswers } = useRespondentAnswers();
+    const { fetchAnswers } = renderHookWithContext();
     await fetchAnswers(mockedFetchParams);
 
     expect(mockAxios.get).toHaveBeenCalled();
