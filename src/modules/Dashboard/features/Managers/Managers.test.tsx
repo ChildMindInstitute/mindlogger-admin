@@ -68,7 +68,7 @@ describe('Managers component tests', () => {
     renderWithProviders(<Managers />, { preloadedState, route, routePath });
 
     await waitFor(() => {
-      expect(screen.getByText(/No Managers yet/)).toBeInTheDocument();
+      expect(screen.getByText(/No Team Members yet/)).toBeInTheDocument();
     });
   });
 
