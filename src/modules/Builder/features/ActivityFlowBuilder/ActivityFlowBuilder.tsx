@@ -1,16 +1,19 @@
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useMemo } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { DragDropContext, Draggable, DragDropContextProps } from 'react-beautiful-dnd';
 
 import { Menu } from 'shared/components';
 import { BuilderContainer } from 'shared/features';
-import { getObjectFromList } from 'shared/utils';
 import { Item, ItemUiType, DndDroppable } from 'modules/Builder/components';
-import { ActivityFlowItem, AppletFormValues } from 'modules/Builder/types';
+import {
+  ActivityFlowFormValues,
+  ActivityFlowItem,
+  ActivityFormValues,
+} from 'modules/Builder/types';
 import { useRedirectIfNoMatchedActivityFlow, useCustomFormContext } from 'modules/Builder/hooks';
 import { REACT_HOOK_FORM_KEY_NAME } from 'modules/Builder/consts';
 import { StyledTitleMedium, theme, variables } from 'shared/styles';
@@ -20,6 +23,7 @@ import {
   getActivityFlowIndex,
   getFlowBuilderActions,
   getMenuItems,
+  getNonReviewableActivities,
 } from './ActivityFlowBuilder.utils';
 import { ActivityFlowBuilderHeader } from './ActivityFlowBuilderHeader';
 import { GetMenuItemsType } from './ActivityFlowBuilder.types';
@@ -34,9 +38,10 @@ export const ActivityFlowBuilder = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [flowActivityToUpdateIndex, setFlowActivityToUpdateIndex] = useState<number | null>(null);
   const { t } = useTranslation('app');
-  const { control, watch, setValue } = useCustomFormContext();
+  const { control, setValue } = useCustomFormContext();
   const { activityFlowId } = useParams();
-  const activityFlows: AppletFormValues['activityFlows'] = watch('activityFlows');
+  const [formActivities, activityFlows]: [ActivityFormValues[], ActivityFlowFormValues[]] =
+    useWatch({ name: ['activities', 'activityFlows'] });
   const activityFlowIndex = getActivityFlowIndex(activityFlows, activityFlowId || '');
   const currentActivityFlow = activityFlows[activityFlowIndex];
   const activityFlowName = `activityFlows.${activityFlowIndex}`;
@@ -52,7 +57,11 @@ export const ActivityFlowBuilder = () => {
     name: `${activityFlowName}.items`,
     keyName: REACT_HOOK_FORM_KEY_NAME,
   });
-  const activities: AppletFormValues['activities'] = watch('activities');
+  // remove Reviewer Assessment Activity from Activities list
+  const { activities, activitiesIdsObjects } = useMemo(
+    () => getNonReviewableActivities(formActivities),
+    [formActivities],
+  );
   const dataTestid = 'builder-activity-flows-builder';
 
   const handleFlowActivityDuplicate = (index: number) => {
@@ -120,8 +129,6 @@ export const ActivityFlowBuilder = () => {
     move(source.index, destination.index);
   };
 
-  const activitiesIdsObjects = getObjectFromList(activities);
-
   useRedirectIfNoMatchedActivityFlow();
 
   return (
@@ -129,6 +136,7 @@ export const ActivityFlowBuilder = () => {
       title={t('activityFlowBuilder')}
       Header={ActivityFlowBuilderHeader}
       headerProps={{
+        activities,
         clearFlowBtnDisabled: activityFlowItems?.length === 0,
         onAddFlowActivity: handleFlowActivityAdd,
         onClearFlow: handleClearFlow,

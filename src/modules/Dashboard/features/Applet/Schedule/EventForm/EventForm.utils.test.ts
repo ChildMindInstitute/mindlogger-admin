@@ -196,7 +196,7 @@ describe('EventForm.utils', () => {
         timerType: TimerType.NotSet,
         timerDuration: DEFAULT_TIMER_DURATION,
         idleTime: DEFAULT_IDLE_TIME,
-        periodicity: Periodicity.Once,
+        periodicity: Periodicity.Always,
         notifications: [],
         reminder: null,
         removeWarning: {},

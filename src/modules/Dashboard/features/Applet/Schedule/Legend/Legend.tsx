@@ -40,7 +40,7 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     (acc: SelectedRespondent[], { id, details, isAnonymousRespondent }) => {
       const { respondentSecretId, hasIndividualSchedule, respondentNickname } = details?.[0] || {};
 
-      if (!isAnonymousRespondent) {
+      if (!isAnonymousRespondent && id) {
         acc.push({
           icon: hasIndividualSchedule ? <Svg id="user-calendar" /> : null,
           id,
@@ -87,7 +87,9 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
     await setSchedule(value);
     if (value === ScheduleOptions.IndividualSchedule) {
       setSearchPopupVisible(true);
-      Mixpanel.track('View Individual calendar click');
+      Mixpanel.track('View Individual calendar click', {
+        'Applet ID': appletId,
+      });
     } else {
       setSelectedRespondent(null);
       navigate(
@@ -95,7 +97,9 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
           appletId,
         }),
       );
-      Mixpanel.track('View General calendar click');
+      Mixpanel.track('View General calendar click', {
+        'Applet ID': appletId,
+      });
     }
   };
 
@@ -142,7 +146,9 @@ export const Legend = ({ legendEvents, appletName, appletId }: LegendProps) => {
   const handleImportClick = () => {
     setImportSchedulePopupVisible(true);
 
-    Mixpanel.track(`${analyticsPrefix} Schedule Import click`);
+    Mixpanel.track(`${analyticsPrefix} Schedule Import click`, {
+      'Applet ID': appletId,
+    });
   };
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import {
   mockedOwnerId,
   mockedRespondentDetails,
   mockedRespondentId,
+  mockedSubjectId1,
 } from 'shared/mock';
 
 import { ScheduleSetupPopup } from './ScheduleSetupPopup';
@@ -17,6 +18,7 @@ const chosenAppletDataMock = {
   ...mockedRespondentDetails,
   respondentId: mockedRespondentId,
   ownerId: mockedOwnerId,
+  subjectId: mockedSubjectId1,
 };
 
 const tableRowsMock = [
@@ -75,11 +77,10 @@ describe('ScheduleSetupPopup', () => {
     );
     await waitFor(() =>
       expect(mockedUseNavigate).toBeCalledWith(
-        '/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7',
+        `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedRespondentId}`,
       ),
     );
   });
-
   test('should render table of applets', () => {
     renderWithProviders(
       <ScheduleSetupPopup
@@ -99,7 +100,7 @@ describe('ScheduleSetupPopup', () => {
 
     expect(setChosenAppletDataMock).toBeCalledWith(chosenAppletDataMock);
     expect(mockedUseNavigate).toBeCalledWith(
-      '/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7',
+      `/dashboard/2e46fa32-ea7c-4a76-b49b-1c97d795bb9a/schedule/${mockedRespondentId}`,
     );
   });
 });

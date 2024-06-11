@@ -31,6 +31,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
   const { pathname } = useLocation();
 
   const respondentLabel = useRespondentLabel();
+  const subjectLabel = useRespondentLabel(true);
   const { workspaceName } = workspaces.useData() ?? {};
   const { result } = applet.useAppletData() ?? {};
   const { getValues } = useFormContext() ?? {};
@@ -131,7 +132,7 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     if (respondentId) {
       newBreadcrumbs.push({
         icon: 'account',
-        label: respondentLabel,
+        label: respondentLabel || subjectLabel,
         disabledLink: true,
       });
     }
@@ -300,5 +301,6 @@ export const useBreadcrumbs = (restCrumbs?: Breadcrumb[]) => {
     respondentId,
     restCrumbs,
     setting,
+    subjectLabel,
   ]);
 };
