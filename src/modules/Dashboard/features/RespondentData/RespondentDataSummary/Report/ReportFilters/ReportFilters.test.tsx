@@ -13,6 +13,7 @@ import { MAX_LIMIT } from 'shared/consts';
 import { RespondentsDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 import { defaultRespondentDataFormValues } from 'modules/Dashboard/features/RespondentData/RespondentData.const';
 
+import { DataSummaryContext } from '../../DataSummaryContext/DataSummaryContext.context';
 import { ReportFilters } from './ReportFilters';
 
 const identifiers = [
@@ -114,7 +115,11 @@ describe('ReportFilters', () => {
 
   test('check if the startDate is greater than the endDate, then the endDate should be updated', async () => {
     await act(async () => {
-      renderWithProviders(<FormComponent />);
+      renderWithProviders(
+        <DataSummaryContext.Provider value={{ selectedEntity: mockedActivity }}>
+          <FormComponent />
+        </DataSummaryContext.Provider>,
+      );
     });
 
     const startDatePicker = screen.getByTestId(`${dataTestid}-start-date`);
@@ -164,16 +169,16 @@ describe('ReportFilters', () => {
     });
     jest
       .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([
-        true,
-        false,
-        new Date('2024-01-04'),
-        new Date('2024-01-10'),
-        mockedActivity,
-      ]);
+      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
 
     await act(async () => {
-      renderWithProviders(<FormComponent />, route, routePath);
+      renderWithProviders(
+        <DataSummaryContext.Provider value={{ selectedEntity: mockedActivity }}>
+          <FormComponent />
+        </DataSummaryContext.Provider>,
+        route,
+        routePath,
+      );
     });
 
     await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
@@ -201,9 +206,15 @@ describe('ReportFilters', () => {
   test('fetch answers on filters change when the entity is Flow', async () => {
     jest
       .spyOn(reactHookForm, 'useWatch')
-      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10'), mockedFlow]);
+      .mockReturnValue([true, false, new Date('2024-01-04'), new Date('2024-01-10')]);
 
-    renderWithProviders(<FormComponent />, route, routePath);
+    renderWithProviders(
+      <DataSummaryContext.Provider value={{ selectedEntity: mockedFlow }}>
+        <FormComponent />
+      </DataSummaryContext.Provider>,
+      route,
+      routePath,
+    );
 
     await userEvent.click(screen.getByTestId(`${dataTestid}-filter-by-identifier`));
 

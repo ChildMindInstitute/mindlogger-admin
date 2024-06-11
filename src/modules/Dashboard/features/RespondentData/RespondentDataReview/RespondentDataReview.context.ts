@@ -1,17 +1,19 @@
 import { createContext } from 'react';
 
+import { nullReturnFunc } from 'shared/utils';
+
 import { RespondentDataReviewContextType } from './RespondentDataReview.types';
 
 export const RespondentDataReviewContext = createContext<RespondentDataReviewContextType>({
   assessment: undefined,
-  setAssessment: () => null,
+  setAssessment: nullReturnFunc,
   lastAssessment: null,
   assessmentVersions: [],
   isLastVersion: false,
-  setIsLastVersion: () => null,
+  setIsLastVersion: nullReturnFunc,
   isBannerVisible: false,
-  setIsBannerVisible: () => null,
+  setIsBannerVisible: nullReturnFunc,
   itemIds: [],
-  setItemIds: () => null,
+  setItemIds: nullReturnFunc,
   isFeedbackOpen: false,
 });

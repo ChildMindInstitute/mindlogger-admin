@@ -5,6 +5,8 @@ import { endOfDay, startOfDay, subDays } from 'date-fns';
 
 import { ReportMenu } from './ReportMenu';
 import { ReportMenuProps } from './ReportMenu.types';
+import { DataSummaryContext } from '../DataSummaryContext/DataSummaryContext.context';
+import { DataSummaryContextType } from '../DataSummaryContext/DataSummaryContext.types';
 
 jest.mock('shared/hooks/useRespondentLabel', () => ({
   useRespondentLabel: () => 'user: Jane Doe',
@@ -15,6 +17,8 @@ const mockedActivity = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  lastAnswerDate: '',
+  isFlow: false,
 };
 
 const mockedFlow = {
@@ -22,6 +26,8 @@ const mockedFlow = {
   name: 'Activity 1',
   isPerformanceTask: false,
   hasAnswer: true,
+  lastAnswerDate: '',
+  isFlow: true,
 };
 
 const mockActivities = [
@@ -74,17 +80,31 @@ const mockedSetValue = jest.fn();
 const mockSetIsLoading = jest.fn();
 const mockGetIdentifiersVersions = jest.fn();
 const mockFetchAnswers = jest.fn();
+const mockedSetSelectedEntity = jest.fn();
 
-const renderReportMenu = (props?: Partial<ReportMenuProps>) =>
+const renderReportMenu = (
+  props?: Partial<ReportMenuProps>,
+  context?: Partial<DataSummaryContextType>,
+) =>
   render(
-    <ReportMenu
-      activities={mockActivities}
-      flows={[]}
-      getIdentifiersVersions={mockGetIdentifiersVersions}
-      fetchAnswers={mockFetchAnswers}
-      setIsLoading={mockSetIsLoading}
-      {...props}
-    />,
+    <DataSummaryContext.Provider
+      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      value={{
+        setSelectedEntity: mockedSetSelectedEntity,
+        ...context,
+      }}
+    >
+      <ReportMenu
+        activities={mockActivities}
+        flows={[]}
+        getIdentifiersVersions={mockGetIdentifiersVersions}
+        fetchAnswers={mockFetchAnswers}
+        setIsLoading={mockSetIsLoading}
+        {...props}
+      />
+      ,
+    </DataSummaryContext.Provider>,
   );
 
 const testActivities = () => {
@@ -104,8 +124,7 @@ describe('ReportMenu Component', () => {
   });
 
   test('renders the component with activities and empty flows', () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([mockedActivity]);
-    renderReportMenu();
+    renderReportMenu(undefined, { selectedEntity: mockedActivity });
 
     testActivities();
     const preselectedActivity = screen.getByTestId('respondents-summary-activity-1');
@@ -115,8 +134,7 @@ describe('ReportMenu Component', () => {
   });
 
   test('renders the component with activities and flows', () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([mockedActivity]);
-    renderReportMenu({ flows: mockFlows });
+    renderReportMenu({ flows: mockFlows }, { selectedEntity: mockedActivity });
 
     testActivities();
 
@@ -129,8 +147,7 @@ describe('ReportMenu Component', () => {
   });
 
   test('invokes set selected entity when an Activity is clicked', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([mockedActivity]);
-    renderReportMenu();
+    renderReportMenu(undefined, { selectedEntity: mockedActivity });
 
     const activityElement = screen.getByTestId('respondents-summary-activity-1');
     await userEvent.click(activityElement);
@@ -139,7 +156,7 @@ describe('ReportMenu Component', () => {
       ...mockActivities[1],
       isFlow: false,
     };
-    expect(mockedSetValue).toHaveBeenCalledWith('selectedEntity', chosenActivity);
+    expect(mockedSetSelectedEntity).toHaveBeenCalledWith(chosenActivity);
 
     //set startDate end endDate to 1 week from the most recent response
     const expectedEndDate = endOfDay(new Date('2023-09-25'));
@@ -154,8 +171,7 @@ describe('ReportMenu Component', () => {
   });
 
   test('invokes set selected entity when Flow is clicked', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([mockedFlow]);
-    renderReportMenu({ flows: mockFlows });
+    renderReportMenu({ flows: mockFlows }, { selectedEntity: mockedFlow });
 
     const flowElement = screen.getByTestId('respondents-summary-flow-0');
     await userEvent.click(flowElement);
@@ -164,7 +180,7 @@ describe('ReportMenu Component', () => {
       ...mockFlows[0],
       isFlow: true,
     };
-    expect(mockedSetValue).toHaveBeenCalledWith('selectedEntity', chosenFlow);
+    expect(mockedSetSelectedEntity).toHaveBeenCalledWith(chosenFlow);
 
     //set startDate end endDate to 1 week from the most recent response
     const expectedEndDate = endOfDay(new Date('2023-09-26'));
@@ -179,8 +195,7 @@ describe('ReportMenu Component', () => {
   });
 
   test('invokes set selected entity when item with no answers is clicked', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([mockedActivity]);
-    renderReportMenu();
+    renderReportMenu(undefined, { selectedEntity: mockedActivity });
 
     const activityElement = screen.getByTestId('respondents-summary-activity-3');
     await userEvent.click(activityElement);
@@ -189,15 +204,14 @@ describe('ReportMenu Component', () => {
       ...mockActivities[3],
       isFlow: false,
     };
-    expect(mockedSetValue).toHaveBeenCalledWith('selectedEntity', chosenActivity);
+    expect(mockedSetSelectedEntity).toHaveBeenCalledWith(chosenActivity);
     expect(mockSetIsLoading).not.toHaveBeenCalled();
     expect(mockGetIdentifiersVersions).not.toHaveBeenCalled();
     expect(mockFetchAnswers).not.toHaveBeenCalled();
   });
 
   test('invokes set selected entity when item, which is performance task is clicked ', async () => {
-    jest.spyOn(reactHookForm, 'useWatch').mockReturnValue([mockedActivity]);
-    renderReportMenu();
+    renderReportMenu(undefined, { selectedEntity: mockedActivity });
 
     const activityElement = screen.getByTestId('respondents-summary-activity-2');
     await userEvent.click(activityElement);
@@ -206,7 +220,7 @@ describe('ReportMenu Component', () => {
       ...mockActivities[2],
       isFlow: false,
     };
-    expect(mockedSetValue).toHaveBeenCalledWith('selectedEntity', chosenActivity);
+    expect(mockedSetSelectedEntity).toHaveBeenCalledWith(chosenActivity);
     expect(mockSetIsLoading).not.toHaveBeenCalled();
     expect(mockGetIdentifiersVersions).not.toHaveBeenCalled();
     expect(mockFetchAnswers).not.toHaveBeenCalled();

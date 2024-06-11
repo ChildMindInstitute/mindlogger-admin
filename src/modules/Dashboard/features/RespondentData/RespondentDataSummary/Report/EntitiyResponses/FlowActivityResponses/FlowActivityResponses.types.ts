@@ -12,5 +12,6 @@ export type FlowResponsesProps = {
   versions: Version[];
   subscalesFrequency: number;
   responseOptions: Record<string, FormattedResponses[]> | null;
+  flowResponsesIndex: number;
   'data-testid': string;
 };

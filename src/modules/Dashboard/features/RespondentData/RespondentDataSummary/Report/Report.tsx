@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { useWatch, useFormContext } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import { Spinner, Svg } from 'shared/components';
 import {
@@ -11,12 +11,12 @@ import {
   theme,
   variables,
 } from 'shared/styles';
+import { AutocompleteOption } from 'shared/components/FormComponents';
 
-import { RespondentsDataFormValues } from '../../RespondentData.types';
 import { getFormattedResponses } from '../utils/getFormattedResponses';
 import { ReportFilters } from './ReportFilters';
 import { StyledReport } from './Report.styles';
-import { CurrentActivityCompletionData, ReportValues } from './Report.types';
+import { CurrentActivityCompletionData } from './Report.types';
 import { CompletedChart } from './CompletedChart';
 import { getCompletions } from './Report.utils';
 import { ReportContext } from './Report.context';
@@ -24,41 +24,33 @@ import { StyledEmptyReview } from '../RespondentDataSummary.styles';
 import { ReportHeader } from './ReportHeader';
 import { NoData } from './NoData';
 import { EntityResponses } from './EntitiyResponses';
+import { useDataSummaryContext } from '../DataSummaryContext';
 
 export const Report = () => {
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
-
-  const { setValue } = useFormContext<RespondentsDataFormValues>();
-  const [
+  const {
+    selectedEntity,
     answers,
     responseOptions,
+    setResponseOptions,
     subscalesFrequency,
-    selectedEntity,
-    identifiers,
-    apiVersions,
-    versions,
+    setSubscalesFrequency,
     flowSubmissions,
     flowResponses,
-  ]: ReportValues = useWatch({
-    name: [
-      'answers',
-      'responseOptions',
-      'subscalesFrequency',
-      'selectedEntity',
-      'identifiers',
-      'apiVersions',
-      'versions',
-      'flowSubmissions',
-      'flowResponses',
-    ],
+    identifiers,
+    apiVersions,
+  } = useDataSummaryContext();
+
+  const versions: AutocompleteOption[] = useWatch({
+    name: 'versions',
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentActivityCompletionData, setCurrentActivityCompletionData] =
     useState<CurrentActivityCompletionData>(null);
 
-  const { isFlow, hasAnswer } = selectedEntity;
+  const { isFlow = false, hasAnswer = false } = selectedEntity ?? {};
 
   const completions = getCompletions({ isFlow, flowSubmissions, answers });
 
@@ -86,8 +78,8 @@ export const Report = () => {
 
     const { subscalesFrequency, formattedResponses } = getFormattedResponses(responses);
 
-    setValue('subscalesFrequency', subscalesFrequency);
-    setValue('responseOptions', formattedResponses);
+    setResponseOptions(formattedResponses);
+    setSubscalesFrequency(subscalesFrequency);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentActivityCompletionData]);
 

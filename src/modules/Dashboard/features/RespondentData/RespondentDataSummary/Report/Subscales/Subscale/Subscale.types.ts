@@ -8,5 +8,6 @@ export type SubscaleProps = {
   subscale: Subscale;
   versions: Version[];
   isActivityCompletionSelected?: boolean;
+  flowResponsesIndex?: number;
   'data-testid'?: string;
 };

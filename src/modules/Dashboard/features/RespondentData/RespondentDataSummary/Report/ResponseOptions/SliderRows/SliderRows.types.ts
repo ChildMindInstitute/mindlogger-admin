@@ -12,5 +12,6 @@ export type SliderRowsProps = {
   activityItem: FormattedActivityItem<SliderRowsItemResponseValues>;
   answers?: SliderRowsAnswer;
   versions: Version[];
-  dataTestid?: string;
+  isStaticActive?: boolean;
+  'data-testid'?: string;
 };

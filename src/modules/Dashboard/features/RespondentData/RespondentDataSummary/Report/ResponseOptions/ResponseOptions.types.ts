@@ -4,6 +4,7 @@ import { FormattedResponses } from 'modules/Dashboard/features/RespondentData/Re
 export type ResponseOptionsProps = {
   responseOptions: Record<string, FormattedResponses[]>;
   versions: Version[];
+  flowResponsesIndex?: number;
 };
 
 export type GetResponseOptionsProps = {

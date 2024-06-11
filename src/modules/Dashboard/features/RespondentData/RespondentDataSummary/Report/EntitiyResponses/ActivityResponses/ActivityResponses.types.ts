@@ -9,4 +9,5 @@ export type ActivityResponsesProps = {
   versions: Version[];
   subscalesFrequency: number;
   responseOptions: Record<string, FormattedResponses[]> | null;
+  flowResponsesIndex?: number;
 };

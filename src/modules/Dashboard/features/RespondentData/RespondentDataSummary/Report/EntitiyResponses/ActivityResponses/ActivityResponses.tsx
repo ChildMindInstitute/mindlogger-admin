@@ -8,13 +8,23 @@ export const ActivityResponses = ({
   versions,
   subscalesFrequency,
   responseOptions,
+  flowResponsesIndex,
 }: ActivityResponsesProps) => (
   <>
     {!!subscalesFrequency && (
-      <Subscales answers={answers} versions={versions} subscalesFrequency={subscalesFrequency} />
+      <Subscales
+        answers={answers}
+        versions={versions}
+        subscalesFrequency={subscalesFrequency}
+        flowResponsesIndex={flowResponsesIndex}
+      />
     )}
     {responseOptions && !!Object.values(responseOptions).length && (
-      <ResponseOptions responseOptions={sortResponseOptions(responseOptions)} versions={versions} />
+      <ResponseOptions
+        responseOptions={sortResponseOptions(responseOptions)}
+        versions={versions}
+        flowResponsesIndex={flowResponsesIndex}
+      />
     )}
   </>
 );
