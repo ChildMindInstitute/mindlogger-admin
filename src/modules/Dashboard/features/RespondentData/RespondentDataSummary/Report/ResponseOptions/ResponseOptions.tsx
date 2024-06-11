@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
@@ -19,6 +18,7 @@ import { useDatavizFilters } from '../../hooks/useDatavizFilters';
 import { COLORS } from '../Charts/Charts.const';
 import { ResponseOptionsProps } from './ResponseOptions.types';
 import { getResponseItem } from './ResponseOptions.utils';
+import { useDataSummaryContext } from '../../DataSummaryContext';
 
 export const ResponseOptions = ({
   responseOptions,
@@ -26,7 +26,7 @@ export const ResponseOptions = ({
   flowResponsesIndex,
 }: ResponseOptionsProps) => {
   const { t } = useTranslation();
-  const flowResponseOptionsCount: number = useWatch({ name: 'flowResponseOptionsCount' });
+  const { flowResponseOptionsCount } = useDataSummaryContext();
   const { minDate, maxDate, filteredVersions } = useDatavizFilters(versions);
   const isStaticActive =
     Object.values(responseOptions).length > SUMMARY_ITEMS_COUNT_TO_ACTIVATE_STATIC ||

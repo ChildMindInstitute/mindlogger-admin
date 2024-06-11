@@ -8,7 +8,6 @@ import { DatePicker, TimePicker } from 'shared/components';
 import { StyledBodyLarge, StyledFlexTopCenter, theme, variables } from 'shared/styles';
 import { Switch, TagsAutocompleteController } from 'shared/components/FormComponents';
 import { AutocompleteOption } from 'shared/components/FormComponents';
-import { ActivityOrFlow } from 'modules/Dashboard/features/RespondentData/RespondentData.types';
 
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { useRespondentAnswers } from '../../hooks/useRespondentAnswers';
@@ -20,6 +19,7 @@ import {
   ReportFiltersProps,
 } from './ReportFilters.types';
 import { MIN_DATE } from './ReportFilters.const';
+import { useDataSummaryContext } from '../../DataSummaryContext';
 
 export const ReportFilters = ({
   identifiers = [],
@@ -29,15 +29,15 @@ export const ReportFilters = ({
   const { t } = useTranslation('app');
   const { control, setValue } = useFormContext();
   const { fetchAnswers } = useRespondentAnswers();
+  const { selectedEntity } = useDataSummaryContext();
 
-  const [moreFiltersVisible, filterByIdentifier, startDate, endDate, selectedEntity]: [
+  const [moreFiltersVisible, filterByIdentifier, startDate, endDate]: [
     boolean,
     boolean,
     Date,
     Date,
-    ActivityOrFlow,
   ] = useWatch({
-    name: ['moreFiltersVisible', 'filterByIdentifier', 'startDate', 'endDate', 'selectedEntity'],
+    name: ['moreFiltersVisible', 'filterByIdentifier', 'startDate', 'endDate'],
   });
 
   const versionsOptions = versions.map(({ version }) => ({ label: version, id: version }));
@@ -56,6 +56,8 @@ export const ReportFilters = ({
     identifier,
     versions,
   }: OnFiltersChangeParams) => {
+    if (!selectedEntity) return;
+
     setIsLoading(true);
     let fetchParams: FetchAnswers = { entity: selectedEntity };
 

@@ -1,22 +1,31 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { StyledContainer } from 'shared/styles';
-import { DatavizEntity, getSummaryActivitiesApi, getSummaryFlowsApi } from 'api';
+import { getSummaryActivitiesApi, getSummaryFlowsApi } from 'modules/Dashboard/api';
 import { useAsync } from 'shared/hooks';
 
 import { useDatavizSummaryRequests } from './hooks/useDatavizSummaryRequests';
 import { useRespondentAnswers } from './hooks/useRespondentAnswers';
 import { setDateRangeFormValues } from './utils/setDateRangeValues';
-import { ActivityOrFlow, RespondentsDataFormValues } from '../RespondentData.types';
+import { RespondentsDataFormValues } from '../RespondentData.types';
 import { getActivityWithLatestAnswer } from '../RespondentData.utils';
 import { ReportMenu } from './ReportMenu';
 import { StyledReportContainer } from './RespondentDataSummary.styles';
 import { ReportContent } from './ReportContent';
+import { DataSummaryContextProvider, useDataSummaryContext } from './DataSummaryContext';
 
-export const RespondentDataSummary = () => {
+export const InnerRespondentDataSummary = () => {
   const { appletId, respondentId } = useParams();
+  const {
+    summaryActivities,
+    setSummaryActivities,
+    summaryFlows,
+    setSummaryFlows,
+    selectedEntity,
+    setSelectedEntity,
+  } = useDataSummaryContext();
   const requestBody = useMemo(() => {
     if (!appletId || !respondentId) return null;
 
@@ -25,13 +34,6 @@ export const RespondentDataSummary = () => {
       targetSubjectId: respondentId,
     };
   }, [appletId, respondentId]);
-  const [selectedEntity, summaryActivities, summaryFlows]: [
-    ActivityOrFlow | null,
-    DatavizEntity[],
-    DatavizEntity[],
-  ] = useWatch({
-    name: ['selectedEntity', 'summaryActivities', 'summaryFlows'],
-  });
   const [isLoading, setIsLoading] = useState(false);
   const { setValue } = useFormContext<RespondentsDataFormValues>();
   const { getIdentifiersVersions } = useDatavizSummaryRequests();
@@ -42,7 +44,7 @@ export const RespondentDataSummary = () => {
 
   const { execute: getSummaryActivities } = useAsync(getSummaryActivitiesApi, async (result) => {
     const summaryActivities = result?.data?.result || [];
-    setValue('summaryActivities', summaryActivities);
+    setSummaryActivities(summaryActivities);
     if (selectedEntity) return;
 
     const selectedActivityByDefault = {
@@ -52,7 +54,7 @@ export const RespondentDataSummary = () => {
 
     if (!selectedActivityByDefault) return;
 
-    setValue('selectedEntity', selectedActivityByDefault);
+    setSelectedEntity(selectedActivityByDefault);
     setDateRangeFormValues(setValue, selectedActivityByDefault.lastAnswerDate);
 
     setIsLoading(true);
@@ -63,7 +65,7 @@ export const RespondentDataSummary = () => {
 
   const { execute: getSummaryFlows } = useAsync(getSummaryFlowsApi, async (result) => {
     const summaryFlows = result?.data?.result || [];
-    setValue('summaryFlows', summaryFlows);
+    setSummaryFlows(summaryFlows);
   });
 
   useEffect(() => {
@@ -97,3 +99,9 @@ export const RespondentDataSummary = () => {
     </StyledContainer>
   );
 };
+
+export const RespondentDataSummary = () => (
+  <DataSummaryContextProvider>
+    <InnerRespondentDataSummary />
+  </DataSummaryContextProvider>
+);

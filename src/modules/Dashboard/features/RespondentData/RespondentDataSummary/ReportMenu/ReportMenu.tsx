@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { StyledBodyLarge, variables } from 'shared/styles';
@@ -11,6 +11,7 @@ import { StyledContainer, StyledItem, StyledTitle } from './ReportMenu.styles';
 import { setDefaultFormValues } from './ReportMenu.utils';
 import { ReportMenuProps } from './ReportMenu.types';
 import { StickyHeader } from './StickyHeader';
+import { useDataSummaryContext } from '../DataSummaryContext';
 
 export const ReportMenu = ({
   activities,
@@ -22,10 +23,10 @@ export const ReportMenu = ({
   const { t } = useTranslation('app');
   const containerRef = useRef<HTMLElement | null>(null);
   const { setValue } = useFormContext<RespondentsDataFormValues>();
-  const [selectedEntity] = useWatch({ name: ['selectedEntity'] });
+  const { selectedEntity, setSelectedEntity } = useDataSummaryContext();
 
   const handleSelectEntity = async (entity: ActivityOrFlow) => {
-    setValue('selectedEntity', entity);
+    setSelectedEntity(entity);
 
     const { hasAnswer, isPerformanceTask } = entity;
     if (!hasAnswer || isPerformanceTask) return;

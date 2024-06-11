@@ -13,17 +13,19 @@ import { RespondentsDataFormValues } from 'modules/Dashboard/features/Respondent
 
 import { GetIdentifiersVersions } from '../../RespondentDataSummary.types';
 import { useDecryptedIdentifiers } from '../useDecryptedIdentifiers';
+import { useDataSummaryContext } from '../../DataSummaryContext';
 
 export const useDatavizSummaryRequests = () => {
   const { appletId, respondentId } = useParams();
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
   const { setValue } = useFormContext<RespondentsDataFormValues>();
+  const { setIdentifiers, setApiVersions } = useDataSummaryContext();
 
-  const setIdentifiers = async (identifiers: Identifier[]) => {
+  const setDecryptedIdentifiers = async (identifiers: Identifier[]) => {
     if (!getDecryptedIdentifiers) return;
 
     const decryptedIdentifiers = await getDecryptedIdentifiers(identifiers);
-    setValue('identifiers', decryptedIdentifiers);
+    setIdentifiers(decryptedIdentifiers);
   };
 
   const setVersions = (versions: Version[]) => {
@@ -32,7 +34,7 @@ export const useDatavizSummaryRequests = () => {
       label: version,
     }));
     setValue('versions', versionsFilter);
-    setValue('apiVersions', versions);
+    setApiVersions(versions);
   };
 
   const getIdentifiersVersions = async ({ entity }: GetIdentifiersVersions) => {
@@ -46,7 +48,7 @@ export const useDatavizSummaryRequests = () => {
           flowId,
           targetSubjectId: respondentId,
         });
-        await setIdentifiers(identifiers.data.result);
+        await setDecryptedIdentifiers(identifiers.data.result);
 
         const versions = await getFlowVersionsApi({ appletId, flowId });
         setVersions(versions.data.result);
@@ -62,7 +64,7 @@ export const useDatavizSummaryRequests = () => {
         activityId,
         targetSubjectId: respondentId,
       });
-      await setIdentifiers(identifiers.data.result);
+      await setDecryptedIdentifiers(identifiers.data.result);
 
       const versions = await getActivityVersionsApi({ appletId, activityId });
       setVersions(versions.data.result);

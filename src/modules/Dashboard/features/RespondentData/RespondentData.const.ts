@@ -14,18 +14,7 @@ export const defaultRespondentDataFormValues = {
   filterByIdentifier: false,
   identifier: [],
   versions: [],
-  summaryActivities: [],
-  summaryFlows: [],
-  selectedEntity: null,
-  identifiers: [],
-  apiVersions: [],
-  answers: [],
-  responseOptions: null,
-  subscalesFrequency: 0,
-  flowSubmissions: [],
-  flowResponses: [],
   responseDate: null,
-  flowResponseOptionsCount: 0,
 };
 
 export const UNSUPPORTED_ITEMS = [

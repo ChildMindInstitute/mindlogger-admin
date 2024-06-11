@@ -1,4 +1,4 @@
-import { DatavizEntity, Version, ReviewCount } from 'modules/Dashboard/api';
+import { DatavizEntity, ReviewCount } from 'modules/Dashboard/api';
 import { AutocompleteOption } from 'shared/components/FormComponents';
 import { ActivityItemAnswer } from 'shared/types';
 import { SubscaleSetting } from 'shared/state';
@@ -177,16 +177,5 @@ export type RespondentsDataFormValues = {
   filterByIdentifier?: boolean;
   identifier?: AutocompleteOption[];
   versions: AutocompleteOption[];
-  summaryActivities: DatavizEntity[];
-  summaryFlows: DatavizEntity[];
-  selectedEntity: ActivityOrFlow | null;
-  identifiers: Identifier[];
-  apiVersions: Version[];
-  answers: ActivityCompletion[];
-  flowSubmissions: FlowSubmission[];
-  flowResponses: FlowResponses[];
-  responseOptions: ResponseOption | null;
-  subscalesFrequency: number;
   responseDate: null | Date;
-  flowResponseOptionsCount: number;
 };

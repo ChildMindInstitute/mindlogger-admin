@@ -21,11 +21,21 @@ import { getObjectFromList } from 'shared/utils/getObjectFromList';
 import { getFormattedResponses } from '../../utils/getFormattedResponses';
 import { FetchAnswers } from '../../RespondentDataSummary.types';
 import { getDateISO, getIdentifiers, processIdentifiersChange } from './useRespondentAnswers.utils';
+import { useDataSummaryContext } from '../../DataSummaryContext';
 
 export const useRespondentAnswers = () => {
   const { appletId, respondentId } = useParams();
   const getDecryptedActivityData = useDecryptedActivityData();
   const { getValues, setValue } = useFormContext<RespondentsDataFormValues>();
+  const {
+    setAnswers,
+    setResponseOptions,
+    setSubscalesFrequency,
+    setFlowResponses,
+    setFlowSubmissions,
+    setFlowResponseOptionsCount,
+    identifiers,
+  } = useDataSummaryContext();
 
   const getActivityDecryptedAnswers = async (encryptedAnswers: EncryptedActivityAnswers[]) => {
     const decryptedAnswers = await Promise.allSettled(
@@ -77,7 +87,6 @@ export const useRespondentAnswers = () => {
         identifier: formIdentifier,
         filterByIdentifier: formFilterByIdentifier,
         versions: formVersions,
-        identifiers,
       } = getValues();
       const startTime = providedStartTime ?? formStartTime;
       const endTime = providedEndTime ?? formEndTime;
@@ -205,9 +214,9 @@ export const useRespondentAnswers = () => {
           },
         );
 
-        setValue('flowSubmissions', flowSubmissions);
-        setValue('flowResponses', flowResponses);
-        setValue('flowResponseOptionsCount', responseOptionsCount);
+        setFlowSubmissions(flowSubmissions);
+        setFlowResponses(flowResponses);
+        setFlowResponseOptionsCount(responseOptionsCount);
 
         return;
       }
@@ -221,11 +230,11 @@ export const useRespondentAnswers = () => {
       });
 
       const decryptedAnswers = await getActivityDecryptedAnswers(encryptedAnswers);
-      setValue('answers', decryptedAnswers);
+      setAnswers(decryptedAnswers);
 
       const { subscalesFrequency, formattedResponses } = getFormattedResponses(decryptedAnswers);
-      setValue('responseOptions', formattedResponses);
-      setValue('subscalesFrequency', subscalesFrequency);
+      setResponseOptions(formattedResponses);
+      setSubscalesFrequency(subscalesFrequency);
     } catch (error) {
       console.warn(error);
     }
