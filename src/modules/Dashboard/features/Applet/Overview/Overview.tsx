@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { GetAppletSubmissionsResponse, getAppletSubmissionsApi } from 'api';
 import { DashboardTable } from 'modules/Dashboard/components';
 import { AddParticipantPopup } from 'modules/Dashboard/features/Applet/Popups';
 import { QuickStats } from 'modules/Dashboard/features/Applet/Overview/QuickStats';
 import { Spinner } from 'shared/components';
 import { StyledFlexColumn, StyledTitleLarge } from 'shared/styles';
-import { GetAppletSubmissionsResponse, getAppletSubmissionsApi } from 'api';
-import { useAsync } from 'shared/hooks';
+import { workspaces } from 'redux/modules';
+import { useAsync, usePermissions } from 'shared/hooks';
 import { DEFAULT_ROWS_PER_PAGE } from 'shared/consts';
+import { checkIfCanAccessData } from 'shared/utils';
 
 import { mapResponseToQuickStatProps, mapResponseToSubmissionsTableProps } from './Overview.utils';
 import { StyledRoot } from './Overview.styles';
@@ -20,6 +22,7 @@ export const Overview = () => {
   const [addPopupOpen, setAddPopupOpen] = useState(false);
   const [page, setPage] = useState(1);
   const { appletId } = useParams();
+  const { data: workspaceRolesData } = workspaces.useRolesData();
   const { execute, isLoading, previousValue, value } = useAsync(getAppletSubmissionsApi);
   const { t } = useTranslation('app');
   const { data } = value ?? previousValue ?? {};
@@ -27,6 +30,13 @@ export const Overview = () => {
     () => mapResponseToSubmissionsTableProps(data ?? ({} as GetAppletSubmissionsResponse)),
     [data],
   );
+  const roles = appletId ? workspaceRolesData?.[appletId] : undefined;
+  const canAccessData = checkIfCanAccessData(roles);
+  const { isForbidden, noPermissionsComponent } = usePermissions(() => {
+    if (appletId && canAccessData) {
+      return execute({ appletId, page, limit });
+    }
+  });
   const showContent = !isLoading || (isLoading && data);
 
   const handlePopupClose = (shouldRefetch = false) => {
@@ -37,11 +47,9 @@ export const Overview = () => {
     }
   };
 
-  useEffect(() => {
-    if (appletId) {
-      execute({ appletId, page, limit });
-    }
-  }, [appletId, execute, page]);
+  if (isForbidden || !canAccessData) {
+    return noPermissionsComponent;
+  }
 
   return (
     <StyledRoot>
