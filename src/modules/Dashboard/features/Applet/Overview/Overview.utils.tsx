@@ -2,6 +2,7 @@ import { PropsOf } from '@emotion/react';
 import { Button } from '@mui/material';
 import { formatDistanceStrict } from 'date-fns';
 import { enUS, fr } from 'date-fns/locale';
+import { generatePath } from 'react-router-dom';
 
 import i18n from 'i18n';
 import { GetAppletSubmissionsResponse, Languages } from 'api';
@@ -10,6 +11,7 @@ import { QuickStats } from 'modules/Dashboard/features/Applet/Overview/QuickStat
 import { Svg } from 'shared/components';
 import { StyledMaybeEmpty } from 'shared/styles/styledComponents/MaybeEmpty';
 import { StyledFlexAllCenter, theme, variables } from 'shared/styles';
+import { page } from 'resources';
 
 const locales = { en: enUS, fr };
 
@@ -48,10 +50,14 @@ export function mapResponseToQuickStatProps(
   };
 }
 
-export function mapResponseToSubmissionsTableProps({
-  submissions = [],
-  submissionsCount = 0,
-}: GetAppletSubmissionsResponse) {
+export function mapResponseToSubmissionsTableProps(
+  { submissions = [], submissionsCount = 0 }: GetAppletSubmissionsResponse,
+  {
+    onViewSubmission,
+  }: {
+    onViewSubmission: (params: { path: string }) => void;
+  },
+) {
   return {
     'data-testid': 'recent-submissions',
     columns: [
@@ -68,6 +74,8 @@ export function mapResponseToSubmissionsTableProps({
       submissions.length > 0
         ? submissions.map(
             ({
+              appletId,
+              activityId,
               activityName,
               createdAt,
               sourceSubjectId,
@@ -78,13 +86,23 @@ export function mapResponseToSubmissionsTableProps({
               targetSubjectTag,
             }) => {
               const createdAtDate = new Date(createdAt);
+              const path = generatePath(page.appletParticipantActivityDetailsDataSummary, {
+                activityId,
+                appletId,
+                subjectId: targetSubjectId,
+              });
+              const handleClick = () => {
+                onViewSubmission({ path });
+              };
 
               return {
                 activity: {
+                  onClick: handleClick,
                   content: () => <StyledMaybeEmpty>{activityName}</StyledMaybeEmpty>,
                   value: true,
                 },
                 respondent: {
+                  onClick: handleClick,
                   content: () => (
                     <StyledMaybeEmpty>
                       <ParticipantSnippet
@@ -98,6 +116,7 @@ export function mapResponseToSubmissionsTableProps({
                   value: true,
                 },
                 subject: {
+                  onClick: handleClick,
                   content: () => (
                     <StyledMaybeEmpty>
                       {sourceSubjectId === targetSubjectId ? (
@@ -115,6 +134,7 @@ export function mapResponseToSubmissionsTableProps({
                   value: true,
                 },
                 submissionDate: {
+                  onClick: handleClick,
                   content: () => (
                     <StyledMaybeEmpty>
                       {formatDistanceStrict(

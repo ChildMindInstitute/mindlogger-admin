@@ -305,14 +305,15 @@ export interface GetAppletSubmissionsParams extends AppletId {
 export interface GetAppletSubmissionsResponse {
   participantsCount?: number;
   submissions: {
+    activityId: string;
     activityName: string;
     appletId: string;
     createdAt: string;
-    sourceSubjectId: string;
     sourceNickname?: string | null;
+    sourceSubjectId: string;
     sourceSubjectTag?: ParticipantTag | null;
-    targetSubjectId: string;
     targetNickname?: string | null;
+    targetSubjectId: string;
     targetSubjectTag?: ParticipantTag | null;
     updatedAt: string;
   }[];
