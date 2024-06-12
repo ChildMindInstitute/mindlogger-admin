@@ -23,7 +23,7 @@ export const ReportTable = ({
   const [orderBy, setOrderBy] = useState('');
   const [searchValue, setSearchValue] = useState('');
 
-  const emptyState = t('noMatchWasFound', { searchValue });
+  const emptyState = searchValue ? t('noMatchWasFound', { searchValue }) : t('noData');
 
   const handleSearch = (searchValue: string) => {
     setPage(1);

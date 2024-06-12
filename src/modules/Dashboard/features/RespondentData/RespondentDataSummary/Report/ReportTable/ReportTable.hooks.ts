@@ -44,7 +44,12 @@ export const useResponseData = ({
   skippedResponse,
 }: UseResponseDataProps) => {
   const [count, setCount] = useState(answers.length);
+
   const visibleRows = useMemo(() => {
+    if (!answers.length) {
+      return [];
+    }
+
     const currentPage = page - 1;
     let formattedAnswers: FormattedAnswers[];
 
