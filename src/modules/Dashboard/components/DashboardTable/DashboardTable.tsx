@@ -64,7 +64,7 @@ export const DashboardTable = ({
           />
           <TableBody>
             {rows.map((row, index) => (
-              <TableRow key={`row-${index}`}>
+              <TableRow key={keyExtractor(row, index)}>
                 {Object.keys(row)?.map((key) => {
                   if (row[key].isHidden) {
                     return null;
