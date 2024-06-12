@@ -208,6 +208,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
     if (!conditionToCreateCalendarEvents) return;
 
     dispatch(calendarEvents.actions.createCalendarEvents({ events: calendarEventsArr }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendarEventsArr]);
 
   useEffect(() => {
@@ -224,6 +225,7 @@ export const usePreparedEvents = (appletData?: SingleApplet): PreparedEvents | n
         );
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventsDataArr]);
 
   return {
