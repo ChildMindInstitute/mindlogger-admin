@@ -510,7 +510,7 @@ export const ConditionSchema = () =>
     }),
   });
 
-export const ConditionalLogicSchema = () =>
+export const ConditionalLogicSchema = (enableItemFlowExtendedItems: boolean) =>
   yup.object({
     match: yup.string().required(getIsRequiredValidateMessage('conditionMatch')),
     itemKey: yup
@@ -699,7 +699,7 @@ export const ScoreOrSectionSchema = () =>
     }),
   });
 
-export const ActivitySchema = () =>
+export const ActivitySchema = (enableItemFlowExtendedItems: boolean) =>
   yup.object({
     name: yup
       .string()
@@ -745,7 +745,7 @@ export const ActivitySchema = () =>
         totalScoresTableData: yup.array().of(TotalScoreTableDataItemSchema()).nullable(),
       })
       .nullable(),
-    conditionalLogic: yup.array().of(ConditionalLogicSchema()),
+    conditionalLogic: yup.array().of(ConditionalLogicSchema(enableItemFlowExtendedItems)),
     scoresAndReports: yup
       .object({
         generateReport: yup.boolean(),
@@ -789,7 +789,7 @@ export const ActivityFlowSchema = () =>
     })
     .required();
 
-export const AppletSchema = () =>
+export const AppletSchema = (enableItemFlowExtendedItems: boolean) =>
   yup.object({
     displayName: yup.string().required(getIsRequiredValidateMessage('appletName')),
     description: yup.string(),
@@ -797,7 +797,7 @@ export const AppletSchema = () =>
     about: yup.string(),
     image: yup.string(),
     watermark: yup.string(),
-    activities: yup.array().of(ActivitySchema()).min(1),
+    activities: yup.array().of(ActivitySchema(enableItemFlowExtendedItems)).min(1),
     activityFlows: yup.array().of(ActivityFlowSchema()),
     streamIpAddress: yup.string().matches(IP_ADDRESS_REGEXP, t('invalidIpAddress')).nullable(),
     streamPort: yup.string().matches(PORT_REGEXP, t('invalidPort')).nullable(),

@@ -1,7 +1,7 @@
 import { FieldError } from 'react-hook-form';
 
 import i18n from 'i18n';
-import { VALIDATED_ITEMS_COUNT } from 'modules/Builder/components/ConditionRow/ConditionRow.const';
+import { VALIDATED_ITEMS_COUNT } from 'modules/Builder/components/ConditionRow_old/ConditionRow.const';
 
 const { t } = i18n;
 

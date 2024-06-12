@@ -11,7 +11,6 @@ import { ConditionRowType, ItemFormValues } from 'modules/Builder/types';
 import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledErrorText, theme } from 'shared/styles';
 import { CONDITION_TYPES_TO_HAVE_OPTION_ID } from 'modules/Builder/pages/BuilderApplet/BuilderApplet.const';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ConditionRowProps } from './ConditionRow.types';
 import {
@@ -44,8 +43,6 @@ export const ConditionRow = ({
     formState: { errors },
     clearErrors,
   } = useCustomFormContext();
-  const { featureFlags } = useFeatureFlags();
-  console.log(featureFlags); //TODO: enableItemFlowExtendedItems
 
   const itemsName = `${activityName}.items`;
   const reportsName = `${activityName}.scoresAndReports.reports`;

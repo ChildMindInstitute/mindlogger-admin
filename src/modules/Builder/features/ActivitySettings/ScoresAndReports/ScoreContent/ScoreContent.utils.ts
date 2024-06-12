@@ -12,7 +12,7 @@ import {
 import {
   DEFAULT_PAYLOAD_MAX_VALUE,
   DEFAULT_PAYLOAD_MIN_VALUE,
-} from 'modules/Builder/components/ConditionRow/ConditionRow.const';
+} from 'modules/Builder/components/ConditionRow_old/ConditionRow.const';
 
 import { ForbiddenScoreIdSymbols, scoreIdBase } from './ScoreContent.const';
 import {
