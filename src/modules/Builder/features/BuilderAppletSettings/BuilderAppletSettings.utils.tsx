@@ -1,8 +1,7 @@
 import { lazy } from 'react';
 
 import { Svg } from 'shared/components/Svg';
-// eslint-disable-next-line unused-imports/no-unused-imports
-import { Integrations, Roles } from 'shared/consts'; // TODO: remove integrations type
+import { Roles } from 'shared/consts';
 import {
   DataRetention,
   TransferOwnershipSetting,

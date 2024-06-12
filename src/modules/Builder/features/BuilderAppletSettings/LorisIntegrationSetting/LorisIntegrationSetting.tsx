@@ -8,7 +8,6 @@ import { CheckboxController } from 'shared/components/FormComponents';
 import { StyledBodyLarge, StyledFlexTopCenter, theme } from 'shared/styles';
 import { StyledAppletSettingsDescription } from 'shared/features/AppletSettings/AppletSettings.styles';
 import { useIsServerConfigured } from 'shared/hooks';
-// import { Integrations } from 'shared/consts';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { UploadDataPopup } from './UploadDataPopup';

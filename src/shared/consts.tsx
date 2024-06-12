@@ -344,7 +344,3 @@ export const observerStyles = {
   height: 'calc(100% + 20rem)',
   bottom: 0,
 };
-
-export const enum Integrations {
-  Loris = 'loris',
-}

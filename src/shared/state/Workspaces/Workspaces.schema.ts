@@ -1,4 +1,4 @@
-import { Integrations, Roles } from 'shared/consts';
+import { Roles } from 'shared/consts';
 
 import { BaseSchema } from '../Base';
 
@@ -6,7 +6,6 @@ export type Workspace = {
   ownerId: string;
   workspaceName: string;
   image?: string;
-  integrations?: Integrations[];
 };
 
 export type AppletRoles = Record<string, Roles[]>;
