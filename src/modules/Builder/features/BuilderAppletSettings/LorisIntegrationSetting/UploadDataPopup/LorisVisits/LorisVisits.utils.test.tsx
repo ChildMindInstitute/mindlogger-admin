@@ -6,7 +6,7 @@ describe('getHeadCells', () => {
     expect(headCells).toEqual([
       { id: 'activityName', label: 'Activity Name', enableSort: false },
       { id: 'completed', label: 'Completed', enableSort: false },
-      { id: 'secretUserId', label: 'Secret User ID', enableSort: false },
+      { id: 'secretUserId', label: 'ID', enableSort: false },
       { id: 'lorisVisits', label: 'LORIS Visits', enableSort: false },
     ]);
   });
