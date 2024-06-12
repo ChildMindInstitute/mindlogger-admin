@@ -155,9 +155,8 @@ export const ScheduleProvider = ({
         <EditEventPopup
           open={showEditEventPopup}
           editedEvent={selectedEvent}
-          setEditEventPopupVisible={() => {
-            setShowEditEventPopup(false);
-            setSelectedEvent(undefined);
+          setEditEventPopupVisible={(value) => {
+            setShowEditEventPopup(value);
           }}
           defaultStartDate={startDate}
           userId={hasIndividualSchedule && userId ? userId : undefined}
