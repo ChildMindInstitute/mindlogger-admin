@@ -4,7 +4,7 @@ import { unstable_HistoryRouter as Router, Navigate, Route, Routes } from 'react
 import { useAppDispatch } from 'redux/store';
 import { page } from 'resources';
 import { authStorage } from 'shared/utils';
-import { dashboardRoutes, dashboardRoutes } from 'modules/Dashboard/routes';
+import { dashboardRoutes } from 'modules/Dashboard/routes';
 import { builderRoutes } from 'modules/Builder/routes';
 import { libraryRoutes } from 'modules/Library/routes';
 import { authRoutes } from 'modules/Auth/routes';
