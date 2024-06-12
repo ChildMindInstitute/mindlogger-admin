@@ -1,6 +1,6 @@
 import { OverridableStringUnion } from '@mui/types';
 import { ButtonProps, ButtonPropsColorOverrides, SxProps } from '@mui/material';
-import React, { BaseSyntheticEvent } from 'react';
+import { BaseSyntheticEvent } from 'react';
 
 type BtnSubmit =
   | ((e?: BaseSyntheticEvent | undefined) => Promise<void>)
@@ -16,9 +16,9 @@ export type SubmitBtnColor = OverridableStringUnion<
 
 export type ModalProps = {
   open: boolean;
-  title: string;
+  title: React.ReactNode;
   buttonText?: string;
-  children: JSX.Element | null;
+  children: React.ReactNode;
   onClose?: () => void;
   /** @default onClose */
   onBackdropClick?: (() => void) | null;

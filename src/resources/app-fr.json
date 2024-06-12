@@ -313,6 +313,15 @@
   "confirmRemoveRespondentAccessAndData": "Êtes-vous sûr de vouloir retirer <1>{{respondentName}}</1> et toutes leurs données de réponse de l'Applet <3>{{appletName}}</3> ?",
   "confirmRemoveScheduledEvent": "Êtes-vous sûr de vouloir supprimer cet événement programmé pour <1>{{activityName}}</1>?",
   "confirmScheduledAccess": "Confirmer l'accès programmé",
+  "confirmUpdateDefaultSchedule": {
+    "createIndividualSchedule": "Créer un programme individuel",
+    "onDefaultSchedule": "<0>{{respondentName}}</0> est dans le programme par défaut. La mise à jour du programme par défaut affectera ce programme pour tous les participants.",
+    "thisParticipant": "Ce participant",
+    "title": "Actuellement en utilisant le programme par défaut",
+    "updateDefaultSchedule": "Modifier programme par défaut",
+    "updateOrCreate": "Souhaitez-vous modifier le programme par défaut ou créer un programme individuel pour ce participant?",
+    "updateDefault": "Êtes-vous sûr de vouloir modifier le programme par défaut?"
+  },
   "confirmUpdateIndividualSchedule": "Êtes-vous sûr de vouloir mettre à jour le programme individuel du participant <1>{{respondentName}}</1> pour l'Applet <3>{{appletName}}</3> et de remplacer le programme actuel par les informations du fichier <5>{{fileName}}</5>?",
   "confirmUpdateSchedule": "Êtes-vous sûr de vouloir mettre à jour le programme par défaut de l'Applet <1>{{appletName}}</1> et de remplacer le programme actuel par les informations du fichier <1>{{fileName}}</1>?",
   "contentActions": "Sélectionner le type d'ajout",

@@ -313,6 +313,15 @@
   "confirmRemoveRespondentAccessAndData": "Are you sure you want to to remove <1>{{respondentName}}</1> and all of their response data from Applet <3>{{appletName}}</3>?",
   "confirmRemoveScheduledEvent": "Are you sure you want to remove this scheduled event for <1>{{activityName}}</1>?",
   "confirmScheduledAccess": "Confirm Scheduled Access",
+  "confirmUpdateDefaultSchedule": {
+    "createIndividualSchedule": "Create Individual Schedule",
+    "onDefaultSchedule": "<0>{{respondentName}}</0> is on the Default Schedule. Updating the Default Schedule will affect this schedule for all participants.",
+    "thisParticipant": "This participant",
+    "title": "Currently using Default Schedule",
+    "updateDefaultSchedule": "Update Default Schedule",
+    "updateOrCreate": "Do you want to update the Default Schedule, or create an Individual Schedule for this participant?",
+    "updateDefault": "Are you sure you want to update the Default Schedule?"
+  },
   "confirmUpdateIndividualSchedule": "Are you sure you want to update the individual schedule for respondent <1>{{respondentName}}</1> for Applet <3>{{appletName}}</3> and replace the current schedule with information from the <5>{{fileName}}</5> file?",
   "confirmUpdateSchedule": "Are you sure you want to update the default schedule for Applet <1>{{appletName}}</1> and replace the current schedule with information from the <1>{{fileName}}</1> file?",
   "contentActions": "Select Adding Type",
