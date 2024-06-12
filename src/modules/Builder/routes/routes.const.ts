@@ -10,6 +10,7 @@ const ActivityFlowAbout = lazy(() => import('modules/Builder/features/ActivityFl
 const ActivityFlow = lazy(() => import('modules/Builder/features/ActivityFlow'));
 const ActivityFlowBuilder = lazy(() => import('modules/Builder/features/ActivityFlowBuilder'));
 const ActivityItemsFlowOld = lazy(() => import('modules/Builder/features/ActivityItemsFlow_old'));
+const ActivityItemsFlow = lazy(() => import('modules/Builder/features/ActivityItemsFlow'));
 const Flanker = lazy(() => import('modules/Builder/features/PerformanceTasks/Flanker'));
 const GyroscopeAndTouch = lazy(
   () => import('modules/Builder/features/PerformanceTasks/GyroscopeAndTouch'),
@@ -23,7 +24,10 @@ export const appletRoutes = [
 
 export const appletActivityRoutes = (enableItemFlowExtendedItems: boolean) => [
   { path: Path.About, Component: ActivityAbout },
-  { path: Path.ItemsFlow, Component: ActivityItemsFlowOld },
+  {
+    path: Path.ItemsFlow,
+    Component: enableItemFlowExtendedItems ? ActivityItemsFlow : ActivityItemsFlowOld,
+  },
 ];
 
 export const appletActivityFlowRoutes = [

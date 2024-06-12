@@ -5,7 +5,7 @@ import { Svg } from 'shared/components/Svg';
 import { Condition, RangeValueCondition } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { ConditionType } from 'shared/consts';
-import { ConditionRowOld } from 'modules/Builder/components';
+import { ConditionRow, ConditionRowOld } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
@@ -80,7 +80,19 @@ export const ConditionContent = ({
   return (
     <>
       {conditions?.map((condition: Condition, index: number) =>
-        featureFlags.enableItemFlowExtendedItems ? null : (
+        featureFlags.enableItemFlowExtendedItems ? (
+          <ConditionRow
+            key={`score-condition-${getEntityKey(condition) || index}-${index}`}
+            name={name}
+            activityName={fieldName}
+            index={index}
+            type={type}
+            scoreKey={type === ConditionRowType.Score ? score?.key : ''}
+            onRemove={() => removeCondition(index)}
+            onChangeConditionType={handleChangeConditionType}
+            data-testid={`${dataTestid}-condition-${index}`}
+          />
+        ) : (
           <ConditionRowOld
             key={`score-condition-${getEntityKey(condition) || index}-${index}`}
             name={name}
