@@ -16,8 +16,9 @@ export const getRoles = (roles?: Roles[]) => [
     labelKey: Roles.Respondent,
     value: Roles.Respondent,
   },
-  ...(!roles?.includes(Roles.Coordinator)
-    ? [
+  ...(roles?.includes(Roles.Coordinator)
+    ? []
+    : [
         {
           labelKey: Roles.Manager,
           value: Roles.Manager,
@@ -30,8 +31,7 @@ export const getRoles = (roles?: Roles[]) => [
           labelKey: Roles.Editor,
           value: Roles.Editor,
         },
-      ]
-    : []),
+      ]),
   {
     labelKey: Roles.Reviewer,
     value: Roles.Reviewer,

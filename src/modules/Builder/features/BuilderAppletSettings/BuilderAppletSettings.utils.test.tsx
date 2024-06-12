@@ -3,6 +3,7 @@ import { Roles } from 'shared/consts';
 import { getSettings } from './BuilderAppletSettings.utils';
 
 const onReportConfigSubmitMock = jest.fn();
+const appletId = 'appletId';
 
 describe('getSettings', () => {
   const roles = [Roles.Owner, Roles.Manager];
@@ -15,6 +16,7 @@ describe('getSettings', () => {
         isPublished: true,
         roles,
         onReportConfigSubmit: onReportConfigSubmitMock,
+        appletId,
       }).map((section) => section.label),
     ).toStrictEqual(sections);
   });
@@ -38,6 +40,7 @@ describe('getSettings', () => {
           isPublished,
           roles,
           onReportConfigSubmit: onReportConfigSubmitMock,
+          appletId,
         })
           .find((section) => section.label === sectionLabel)
           ?.items.map((item) => item.label),
@@ -51,6 +54,7 @@ describe('getSettings', () => {
       isPublished: true,
       roles,
       onReportConfigSubmit: onReportConfigSubmitMock,
+      appletId,
     })
       .map((setting) => setting.items)
       .flat();
@@ -85,6 +89,7 @@ describe('getSettings', () => {
           isPublished: true,
           roles,
           onReportConfigSubmit: onReportConfigSubmitMock,
+          appletId,
         }).find((section) => section.label === 'sharing')?.isVisible,
       ).toBe(isVisible);
     });

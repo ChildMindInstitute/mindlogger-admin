@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Condition } from 'shared/state';
 import { StyledBodyLarge, theme, variables } from 'shared/styles';
-import { ConditionRow } from 'modules/Builder/components';
+import { ConditionRowOld } from 'modules/Builder/components';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { createArray } from 'shared/utils';
-import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { StaticConditionRow } from './StaticConditionRow';
 import { ItemFlowContentProps } from './ItemFlowContent.types';
@@ -22,7 +21,6 @@ export const ItemFlowContent = ({
   const { t } = useTranslation('app');
   const { getFieldState, watch } = useFormContext();
   const { fieldName } = useCurrentActivity();
-  const { featureFlags } = useFeatureFlags();
 
   const conditions = watch(`${name}.conditions`);
   const itemKey = watch(`${name}.itemKey`);
@@ -47,20 +45,18 @@ export const ItemFlowContent = ({
 
   return (
     <StyledItemFlowContent>
-      {conditions?.map((condition: Condition, index: number) =>
-        featureFlags.enableItemFlowExtendedItems ? null : (
-          <ConditionRow
-            key={`item-flow-condition-${condition.key}`}
-            name={name}
-            activityName={fieldName}
-            index={index}
-            onRemove={() => onRemove(index)}
-            autoTrigger={!!itemKey}
-            data-testid={`${dataTestid}-condition-${index}`}
-            showError={false}
-          />
-        ),
-      )}
+      {conditions?.map((condition: Condition, index: number) => (
+        <ConditionRowOld
+          key={`item-flow-condition-${condition.key}`}
+          name={name}
+          activityName={fieldName}
+          index={index}
+          onRemove={() => onRemove(index)}
+          autoTrigger={!!itemKey}
+          data-testid={`${dataTestid}-condition-${index}`}
+          showError={false}
+        />
+      ))}
       <SummaryRow
         key={`item-flow-condition-${itemKey}`}
         name={name}

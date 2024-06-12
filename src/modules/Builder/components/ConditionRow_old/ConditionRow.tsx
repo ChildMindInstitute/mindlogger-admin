@@ -24,7 +24,7 @@ import {
 import { Condition, ConditionItem } from './Condition';
 import { VALIDATED_ITEMS_COUNT } from './ConditionRow.const';
 
-export const ConditionRow = ({
+export const ConditionRowOld = ({
   name,
   activityName,
   index,

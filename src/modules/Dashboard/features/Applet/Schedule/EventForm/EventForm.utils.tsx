@@ -379,7 +379,9 @@ export const getDefaultValues = (defaultStartDate: Date, editedEvent?: CalendarE
   );
   const startTime = eventStartTime ?? DEFAULT_START_TIME;
   const endTime = eventEndTime ?? DEFAULT_END_TIME;
-  const periodicity = editedEvent?.periodicity || Periodicity.Once;
+  const periodicity = editedEvent
+    ? editedEvent.periodicity || Periodicity.Once
+    : Periodicity.Always;
   const oneTimeCompletion = eventOneTimeCompletion || false;
   const accessBeforeSchedule = eventAccessBeforeSchedule ?? false;
   const timerType = eventTimerType || TimerType.NotSet;

@@ -5,7 +5,7 @@ import { Svg } from 'shared/components/Svg';
 import { Condition, RangeValueCondition } from 'shared/state';
 import { getEntityKey } from 'shared/utils';
 import { ConditionType } from 'shared/consts';
-import { ConditionRow } from 'modules/Builder/components';
+import { ConditionRowOld } from 'modules/Builder/components';
 import { ConditionRowType } from 'modules/Builder/types';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
@@ -81,7 +81,7 @@ export const ConditionContent = ({
     <>
       {conditions?.map((condition: Condition, index: number) =>
         featureFlags.enableItemFlowExtendedItems ? null : (
-          <ConditionRow
+          <ConditionRowOld
             key={`score-condition-${getEntityKey(condition) || index}-${index}`}
             name={name}
             activityName={fieldName}

@@ -8,6 +8,8 @@ import {
   getMaxLengthValidationError,
 } from 'shared/utils';
 import {
+  CONDITION_TYPES_TO_HAVE_RANGE_VALUE,
+  CONDITION_TYPES_TO_HAVE_SINGLE_VALUE,
   ItemResponseType,
   MAX_DESCRIPTION_LENGTH,
   MAX_LENGTH_OF_TEST,
@@ -25,6 +27,7 @@ import { Condition, Config, Item, ScoreOrSection } from 'shared/state';
 import { ItemConfigurationSettings } from 'modules/Builder/features/ActivityItems/ItemConfiguration/ItemConfiguration.types';
 import { DEFAULT_NUMBER_SELECT_MIN_VALUE } from 'modules/Builder/consts';
 
+import { ItemFormValues } from '../../types/Builder.types';
 import {
   checkScoreRegexp,
   getCommonSliderValidationProps,
@@ -496,6 +499,63 @@ export const SubscaleSchema = () =>
     })
     .required();
 
+const conditionValueSchema = yup.string().required(getIsRequiredValidateMessage('conditionValue'));
+export const ItemFlowConditionSchema = () =>
+  yup.object({
+    itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
+    type: yup.string().required(getIsRequiredValidateMessage('conditionType')),
+    payload: yup.object({}).when('type', ([type], schema, options) => {
+      const itemId = get(options, 'from.0.value.itemName');
+      const items: ItemFormValues[] = get(options, 'from.2.value.items', []);
+      const foundItem = items.find((item) => getEntityKey(item) === itemId);
+      const isTimeRange = foundItem?.responseType === ItemResponseType.TimeRange;
+      const isSingleSelectionPerRow =
+        foundItem?.responseType === ItemResponseType.SingleSelectionPerRow;
+      const isMultipleSelectionPerRow =
+        foundItem?.responseType === ItemResponseType.MultipleSelectionPerRow;
+      const typeShapeObject = { type: conditionValueSchema };
+      const rowIndexShapeObject = { rowIndex: conditionValueSchema };
+
+      if (!type) {
+        if (isTimeRange) {
+          return schema.shape(typeShapeObject);
+        }
+        if (isSingleSelectionPerRow || isMultipleSelectionPerRow) {
+          return schema.shape(rowIndexShapeObject);
+        }
+      }
+      if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type)) {
+        const baseSchema = schema.shape({
+          optionValue: conditionValueSchema,
+        });
+        if (isSingleSelectionPerRow || isMultipleSelectionPerRow) {
+          return baseSchema.concat(yup.object(rowIndexShapeObject));
+        }
+
+        return baseSchema;
+      }
+      if (CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type)) {
+        const baseSchema = schema.shape({
+          value: conditionValueSchema,
+        });
+        if (isTimeRange) return baseSchema.concat(yup.object(typeShapeObject));
+
+        return baseSchema;
+      }
+      if (CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type)) {
+        const baseSchema = schema.shape({
+          minValue: conditionValueSchema,
+          maxValue: conditionValueSchema,
+        });
+        if (isTimeRange) return baseSchema.concat(yup.object(typeShapeObject));
+
+        return baseSchema;
+      }
+
+      return schema;
+    }),
+  });
+
 export const ConditionSchema = () =>
   yup.object({
     itemName: yup.string().required(getIsRequiredValidateMessage('conditionItem')),
@@ -503,8 +563,19 @@ export const ConditionSchema = () =>
     payload: yup.object({}).when('type', ([type], schema) => {
       if (!type || CONDITION_TYPES_TO_HAVE_OPTION_ID.includes(type))
         return schema.shape({
-          optionValue: yup.string().required(getIsRequiredValidateMessage('conditionValue')),
+          optionValue: conditionValueSchema,
         });
+      if (CONDITION_TYPES_TO_HAVE_SINGLE_VALUE.includes(type)) {
+        return schema.shape({
+          value: conditionValueSchema,
+        });
+      }
+      if (CONDITION_TYPES_TO_HAVE_RANGE_VALUE.includes(type)) {
+        return schema.shape({
+          minValue: conditionValueSchema,
+          maxValue: conditionValueSchema,
+        });
+      }
 
       return schema;
     }),
@@ -531,7 +602,7 @@ export const ConditionalLogicSchema = (enableItemFlowExtendedItems: boolean) =>
           );
         },
       ),
-    conditions: yup.array().of(ConditionSchema()),
+    conditions: yup.array().of(ItemFlowConditionSchema()),
   });
 
 const getReportCommonFields = (isScoreReport = false) => ({

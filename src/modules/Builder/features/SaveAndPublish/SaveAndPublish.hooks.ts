@@ -360,7 +360,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     shouldNavigateRef.current = true;
     setPromptVisible(false);
     handleSaveAndPublishFirstClick();
-    Mixpanel.track('Applet Save click');
+    Mixpanel.track('Applet Save click', {
+      'Applet ID': appletId,
+    });
 
     if (isLogoutInProgress) {
       dispatch(auth.actions.endLogout());
@@ -410,7 +412,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
 
     setPublishProcessPopupOpened(false);
 
-    Mixpanel.track('Applet Save click');
+    Mixpanel.track('Applet Save click', {
+      'Applet ID': appletId,
+    });
 
     await sendRequestWithPasswordCheck();
   };
@@ -499,7 +503,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     if (!result) return;
 
     if (updateApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet edit successful');
+      Mixpanel.track('Applet edit successful', {
+        'Applet ID': appletId,
+      });
 
       showSuccessBanner(true);
 
@@ -515,7 +521,9 @@ export const useSaveAndPublishSetup = (): SaveAndPublishSetup => {
     }
 
     if (createApplet.fulfilled.match(result)) {
-      Mixpanel.track('Applet Created Successfully');
+      Mixpanel.track('Applet Created Successfully', {
+        'Applet ID': appletId,
+      });
 
       showSuccessBanner();
 

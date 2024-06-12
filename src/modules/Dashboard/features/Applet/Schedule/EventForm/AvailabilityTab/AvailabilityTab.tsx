@@ -149,7 +149,7 @@ export const AvailabilityTab = ({
     if (startTime === DEFAULT_START_TIME) {
       setValue('accessBeforeSchedule', false);
     }
-  }, [startTime]);
+  }, [startTime, setValue]);
 
   return (
     <>

@@ -90,7 +90,9 @@ export const Applet = ({
       dispatch(library.actions.setAppletsFromStorage(updatedAppletsData));
     }
 
-    Mixpanel.track('Add to Basket click');
+    Mixpanel.track('Add to Basket click', {
+      'Applet ID': id,
+    });
   };
 
   const updatedActivities = useMemo(() => {
