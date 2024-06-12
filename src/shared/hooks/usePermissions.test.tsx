@@ -24,6 +24,25 @@ describe('usePermissions hook tests', () => {
     });
   });
 
+  test('should re-call asyncFn when dependencies change', async () => {
+    jest.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
+    let testDeps = [0];
+    const { rerender } = renderHook(() => usePermissions(mockAsyncFunc, testDeps));
+
+    rerender();
+
+    await waitFor(() => {
+      expect(mockAsyncFunc).toBeCalledTimes(1);
+    });
+
+    testDeps = [1];
+    rerender();
+
+    await waitFor(() => {
+      expect(mockAsyncFunc).toBeCalledTimes(2);
+    });
+  });
+
   test('should not be forbidden for successful response', async () => {
     jest.spyOn(workspaces, 'useData').mockReturnValue({ ownerId: mockedOwnerId } as Workspace);
     mockAsyncFunc.mockResolvedValue({

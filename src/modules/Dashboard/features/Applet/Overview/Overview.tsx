@@ -36,7 +36,7 @@ export const Overview = () => {
     if (appletId && canAccessData) {
       return execute({ appletId, page, limit });
     }
-  });
+  }, [page, limit, appletId]);
   const showContent = !isLoading || (isLoading && data);
 
   const handlePopupClose = (shouldRefetch = false) => {
