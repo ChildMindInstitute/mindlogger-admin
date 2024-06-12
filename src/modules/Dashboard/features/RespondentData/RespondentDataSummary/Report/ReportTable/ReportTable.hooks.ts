@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
 
 import { DateFormats, DEFAULT_ROWS_PER_PAGE, ItemResponseType } from 'shared/consts';
@@ -43,6 +43,7 @@ export const useResponseData = ({
   orderBy,
   skippedResponse,
 }: UseResponseDataProps) => {
+  const [count, setCount] = useState(answers.length);
   const visibleRows = useMemo(() => {
     const currentPage = page - 1;
     let formattedAnswers: FormattedAnswers[];
@@ -74,6 +75,8 @@ export const useResponseData = ({
           },
           [],
         );
+
+        setCount(formattedAnswers.length);
 
         const visibleAnswers = stableSort(
           formattedAnswers as TextItemAnswer[],
@@ -115,6 +118,8 @@ export const useResponseData = ({
           [],
         );
 
+        setCount(formattedAnswers.length);
+
         const visibleAnswers = stableSort(
           formattedAnswers as TimeRangeItemAnswer[],
           getComparator(order, orderBy),
@@ -145,6 +150,7 @@ export const useResponseData = ({
   }, [responseType]);
 
   return {
+    count,
     visibleRows,
     columns,
   };
