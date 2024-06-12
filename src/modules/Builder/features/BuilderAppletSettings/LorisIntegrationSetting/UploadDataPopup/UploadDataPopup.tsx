@@ -36,7 +36,7 @@ export const UploadDataPopup = ({
   const handleAcceptAgreement = useCallback(() => {
     if (!appletId) return;
 
-    setStep((prevStep) => prevStep + 1);
+    setStep(Steps.Visits);
   }, [appletId, setStep]);
 
   const handleSubmitVisits = useCallback(() => {

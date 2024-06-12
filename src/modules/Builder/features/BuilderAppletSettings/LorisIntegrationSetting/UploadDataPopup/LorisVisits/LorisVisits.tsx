@@ -19,7 +19,6 @@ export const LorisVisits = ({ onSetIsLoading, setStep }: LorisVisitsProps) => {
   const [visitsList, setVisitsList] = useState<string[]>([]);
 
   const { t } = useTranslation();
-
   const { control, reset } = useFormContext();
 
   useEffect(() => {

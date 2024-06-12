@@ -12,7 +12,7 @@ export const StyledTable = styled(Table)`
   .controller-placeholder {
     top: 0;
     left: 0;
-    padding: 0.65rem 1.2rem;
+    padding: ${theme.spacing(0.65, 1.2)};
     font-size: ${variables.font.size.md};
   }
 `;
