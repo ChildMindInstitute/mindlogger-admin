@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { users } from 'redux/modules';
 import { getRespondentName } from 'shared/utils';
 
-export const useRespondentLabel = () => {
+export const useRespondentLabel = (isSubject?: boolean) => {
   const { t } = useTranslation('app');
-  const { result } = users.useRespondent() || {};
-  const secretId = result?.secretUserId;
-  const nickname = result?.nickname;
+  const { useRespondent, useSubject } = users;
+  const subjectResult = useSubject();
+  const respondentResult = useRespondent();
 
-  if (!secretId) return '';
+  const result = isSubject ? subjectResult?.result : respondentResult?.result;
+  const { secretUserId, nickname } = result || {};
 
-  const respondentName = getRespondentName(secretId || '', nickname);
+  if (!secretUserId) return '';
 
-  return `${t('respondent')}: ${respondentName}`;
+  return `${t('respondent')}: ${getRespondentName(secretUserId, nickname)}`;
 };

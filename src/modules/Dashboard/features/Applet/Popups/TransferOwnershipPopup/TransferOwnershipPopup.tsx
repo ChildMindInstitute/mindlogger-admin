@@ -13,8 +13,9 @@ export const TransferOwnershipPopup = () => {
   const { transferOwnershipPopupVisible, applet: appletData } = popups.useData();
   const { result } = applet.useAppletData() || {};
   const currentApplet = appletData || result;
-  const { isSubmitted, setIsSubmitted, handleSubmit, handleSendInvitation } =
-    useTransferOwnership();
+  const { isSubmitted, setIsSubmitted, handleSubmit, handleSendInvitation } = useTransferOwnership(
+    currentApplet?.id,
+  );
 
   const transferOwnershipPopupClose = () => {
     dispatch(

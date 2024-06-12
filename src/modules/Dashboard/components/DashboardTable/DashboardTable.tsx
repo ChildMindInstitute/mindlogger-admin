@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Table as MuiTable, TableBody, TablePagination, TableRow } from '@mui/material';
 
 import {
@@ -45,7 +44,6 @@ export const DashboardTable = ({
       />
     </StyledTableCellContent>
   );
-  const [hoveredRowIndex, setHoveredRowIndex] = useState(-1);
 
   return (
     <StyledTableContainer
@@ -68,11 +66,7 @@ export const DashboardTable = ({
           />
           <TableBody>
             {rows.map((row, index) => (
-              <TableRow
-                key={`row-${index}`}
-                onMouseEnter={() => setHoveredRowIndex(index)}
-                onMouseLeave={() => setHoveredRowIndex(-1)}
-              >
+              <TableRow key={`row-${index}`}>
                 {Object.keys(row)?.map((key) => (
                   <StyledTableCell
                     onClick={row[key].onClick}
@@ -85,7 +79,7 @@ export const DashboardTable = ({
                   >
                     {row[key].contentWithTooltip
                       ? row[key].contentWithTooltip
-                      : row[key].content(row, hoveredRowIndex === index)}
+                      : row[key].content(row)}
                   </StyledTableCell>
                 ))}
               </TableRow>

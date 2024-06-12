@@ -44,7 +44,10 @@ export const useAppletTabs = () => {
       id: 'applet-schedule',
       icon: <Svg id="schedule-outlined" />,
       activeIcon: <Svg id="schedule-filled" />,
-      onClick: () => Mixpanel.track('View General calendar click'),
+      onClick: () =>
+        Mixpanel.track('View General calendar click', {
+          'Applet ID': appletId,
+        }),
       path: generatePath(page.appletSchedule, {
         appletId,
       }),

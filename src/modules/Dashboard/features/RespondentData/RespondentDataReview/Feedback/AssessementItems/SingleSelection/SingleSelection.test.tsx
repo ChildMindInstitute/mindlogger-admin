@@ -45,7 +45,7 @@ const activityItem = {
 const dataTestid = 'single-select';
 const onChange = jest.fn();
 
-describe('MultipleSelection', () => {
+describe('SingleSelection', () => {
   test('renders the single selection component with images and labels', async () => {
     renderWithProviders(
       <SingleSelection onChange={onChange} data-testid={dataTestid} activityItem={activityItem} />,
@@ -67,13 +67,13 @@ describe('MultipleSelection', () => {
     const tooltips = screen.queryAllByTestId(/^single-select-tooltip-\d+$/);
     expect(tooltips).toHaveLength(0);
 
-    userEvent.hover(screen.getByTestId('single-select-more-info-0'));
+    await userEvent.hover(screen.getByTestId('single-select-more-info-0'));
 
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toBeInTheDocument();
     expect(tooltip).toHaveTextContent('Tooltip 1');
 
-    userEvent.unhover(screen.getByTestId('single-select-more-info-0'));
+    await userEvent.unhover(screen.getByTestId('single-select-more-info-0'));
 
     await waitFor(() => {
       const tooltip = screen.queryByRole('tooltip');

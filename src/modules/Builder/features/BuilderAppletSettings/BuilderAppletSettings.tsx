@@ -39,6 +39,7 @@ export const BuilderAppletSettings = () => {
             roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
             onReportConfigSubmit: handleReportConfigSubmit,
             enableLorisIntegration: featureFlags.enableLorisIntegration,
+            appletId: appletData?.id,
           })}
         />
       )}

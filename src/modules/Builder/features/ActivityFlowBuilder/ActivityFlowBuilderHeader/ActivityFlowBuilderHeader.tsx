@@ -5,8 +5,6 @@ import { Button } from '@mui/material';
 import { Svg, ButtonWithMenu } from 'shared/components';
 import { StyledBuilderContainerHeader } from 'shared/features';
 import { falseReturnFunc } from 'shared/utils';
-import { AppletFormValues } from 'modules/Builder/types';
-import { useCustomFormContext } from 'modules/Builder/hooks';
 import { StyledFlexTopCenter, theme } from 'shared/styles';
 
 import { ClearFlowModal } from '../ClearFlowModal';
@@ -20,11 +18,10 @@ export const ActivityFlowBuilderHeader = ({
   headerProps,
 }: ActivityFlowBuilderHeaderProps) => {
   const { t } = useTranslation('app');
-  const { watch } = useCustomFormContext();
-  const activities: AppletFormValues['activities'] = watch('activities');
   const [clearFlowModalVisible, setClearFlowModalVisible] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const {
+    activities = [],
     clearFlowBtnDisabled = false,
     onAddFlowActivity = falseReturnFunc,
     onClearFlow = falseReturnFunc,

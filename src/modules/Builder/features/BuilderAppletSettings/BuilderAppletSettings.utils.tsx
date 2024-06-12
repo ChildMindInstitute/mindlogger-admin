@@ -26,6 +26,7 @@ export const getSettings = ({
   roles,
   onReportConfigSubmit,
   enableLorisIntegration,
+  appletId,
 }: GetSettings): ItemNavigation[] => {
   const tooltip = isNewApplet ? 'saveAndPublishFirst' : undefined;
   const dataTestid = 'builder-applet-settings';
@@ -121,7 +122,10 @@ export const getSettings = ({
           disabled: isNewApplet,
           tooltip,
           'data-testid': `${dataTestid}-report-config`,
-          onClick: () => Mixpanel.track('Applet - Report Configuration Click'),
+          onClick: () =>
+            Mixpanel.track('Applet - Report Configuration Click', {
+              'Applet ID': appletId,
+            }),
         },
       ],
     },

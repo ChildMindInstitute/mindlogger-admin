@@ -302,6 +302,30 @@ describe('parseResponseValue', () => {
         },
       },
     };
+    const timeRangeWithToNullAnswer = {
+      value: {
+        from: {
+          hour: 9,
+          minute: 20,
+        },
+        to: null,
+      },
+    };
+    const timeRangeWithFromNullAnswer = {
+      value: {
+        from: null,
+        to: {
+          hour: 17,
+          minute: 20,
+        },
+      },
+    };
+    const timeRangeWithFromNullToNullAnswer = {
+      value: {
+        from: null,
+        to: null,
+      },
+    };
     const singleSelectRows = {
       question: 'single_row_score',
       responseType: 'singleSelectRows',
@@ -616,6 +640,9 @@ describe('parseResponseValue', () => {
         ${numberSelection}  | ${numberSelectionAnswer}                       | ${'value: 5'}                                                                                                  | ${'number selection'}
         ${time}             | ${timeAnswer}                                  | ${'time: hr 13, min 19'}                                                                                       | ${'time'}
         ${timeRange}        | ${timeRangeAnswer}                             | ${'time_range: from (hr 9, min 20) / to (hr 17, min 20)'}                                                      | ${'time range'}
+        ${timeRange}        | ${timeRangeWithToNullAnswer}                   | ${'time_range: from (hr 9, min 20) / to (empty)'}                                                              | ${'time range, to is skipped'}
+        ${timeRange}        | ${timeRangeWithFromNullAnswer}                 | ${'time_range: from (empty) / to (hr 17, min 20)'}                                                             | ${'time range, from is skipped'}
+        ${timeRange}        | ${timeRangeWithFromNullToNullAnswer}           | ${'time_range: from (empty) / to (empty)'}                                                                     | ${'time range, to and from are skipped'}
         ${singleSelectRows} | ${singleSelectRowsAnswer}                      | ${'row1: opt1'}                                                                                                | ${'single select rows'}
         ${multiSelectRows}  | ${multiSelectRowsAnswer}                       | ${'row1: opt1, opt1'}                                                                                          | ${'multi select rows'}
         ${sliderRows}       | ${sliderRowsAnswer}                            | ${'slider: 5'}                                                                                                 | ${'slider rows'}

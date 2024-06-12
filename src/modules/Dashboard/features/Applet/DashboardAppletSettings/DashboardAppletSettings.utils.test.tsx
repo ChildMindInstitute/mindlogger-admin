@@ -2,14 +2,16 @@ import { Roles } from 'shared/consts';
 
 import { getSettings } from './DashboardAppletSettings.utils';
 
+const appletId = 'appletId';
+
 describe('getSettings', () => {
   const roles = [Roles.Owner, Roles.Manager];
 
   test('should return right section', () => {
     const sections = ['usersAndData', 'appletContent', 'sharing'];
-    expect(getSettings({ isPublished: true, roles }).map((section) => section.label)).toStrictEqual(
-      sections,
-    );
+    expect(
+      getSettings({ isPublished: true, roles, appletId }).map((section) => section.label),
+    ).toStrictEqual(sections);
   });
 
   describe('should return right items for section ', () => {
@@ -32,7 +34,7 @@ describe('getSettings', () => {
       ${false}    | ${'sharing'}       | ${sharingItems}             | ${'sharing with isPublished false'}
     `('$description', ({ isPublished, sectionLabel, items }) => {
       expect(
-        getSettings({ isPublished, roles })
+        getSettings({ isPublished, roles, appletId })
           .find((section) => section.label === sectionLabel)
           ?.items.map((item) => item.label),
       ).toStrictEqual(items);
@@ -50,8 +52,9 @@ describe('getSettings', () => {
       ${true}   | ${'sharing'}      | ${Roles.SuperAdmin}    | ${'sharing for SuperAdmin'}
     `('$description', ({ isVisible, sectionLabel, roles }) => {
       expect(
-        getSettings({ isPublished: true, roles }).find((section) => section.label === sectionLabel)
-          ?.isVisible,
+        getSettings({ isPublished: true, roles, appletId }).find(
+          (section) => section.label === sectionLabel,
+        )?.isVisible,
       ).toBe(isVisible);
     });
   });
