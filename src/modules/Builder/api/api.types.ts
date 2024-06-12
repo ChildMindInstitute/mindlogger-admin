@@ -21,3 +21,14 @@ export type Theme = {
 };
 
 export type Themes = Theme[];
+
+export type LorisActivity = {
+  activityName: string;
+  completedDate: string;
+  secretUserId: string;
+  visit?: string;
+};
+
+export type LorisUsersVisits = {
+  [userId: string]: LorisActivity[];
+};

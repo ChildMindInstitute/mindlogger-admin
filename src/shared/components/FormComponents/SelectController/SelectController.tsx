@@ -80,6 +80,7 @@ export const SelectController = <T extends FieldValues>({
       value={value as string}
       disabled={itemDisabled}
       className={hidden ? 'hidden-menu-item' : ''}
+      data-testid={dataTestid}
     >
       <StyledItem itemDisabled={itemDisabled} selectDisabled={disabled}>
         {icon && (
@@ -98,7 +99,7 @@ export const SelectController = <T extends FieldValues>({
   );
 
   const renderOptions = (options?: Option[]) =>
-    options?.map(({ labelKey, value, icon, disabled = false, tooltip, hidden }) => {
+    options?.map(({ labelKey, value, icon, disabled = false, tooltip, hidden }, index) => {
       const commonProps = {
         labelKey,
         value,
@@ -113,6 +114,7 @@ export const SelectController = <T extends FieldValues>({
             {getMenuItem({
               ...commonProps,
               withoutKey: true,
+              index,
             })}
           </span>
         </Tooltip>
@@ -149,7 +151,7 @@ export const SelectController = <T extends FieldValues>({
       {placeholder && !selectValue && (
         <>
           <StyledPlaceholderMask>{placeholder}</StyledPlaceholderMask>
-          <StyledPlaceholder>{placeholder}</StyledPlaceholder>
+          <StyledPlaceholder className="controller-placeholder">{placeholder}</StyledPlaceholder>
         </>
       )}
 

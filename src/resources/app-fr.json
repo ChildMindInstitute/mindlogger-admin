@@ -694,7 +694,11 @@
     "uploadPublicData": "Télécharger des données publiques dans LORIS",
     "reportServerTooltip": "Configurez d'abord le serveur dans l'onglet Configuration du rapport",
     "publishTooltip": "Enregistrez et publiez l'applet d'abord",
-    "agreementText": "Je consens à décrypter les données des répondants et à les télécharger dans LORIS sous un format non chiffré. Seules les données des activités complétées par les répondants consentants seront téléchargées.",
+    "agreementText": "Je consens à déchiffrer les données des répondants et à les télécharger sur LORIS en format non chiffré.\nSeules les données des activités terminées par les répondants ayant donné leur consentement seront téléchargées.",
+    "agree": "Je consens",
+    "completed": "Terminé",
+    "visits": "Visites LORIS",
+    "visitsDescription": "Please check if predefined Visit values are correct: ",
     "successMessage": "Si de nouvelles données ont été collectées, elles ont été téléchargées avec succès."
   },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
