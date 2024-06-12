@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Applet } from 'api';
 import { page } from 'resources';
 import { ItemFormValuesCommonType } from 'modules/Builder/types';
+import { RespondentStatus } from 'modules/Dashboard/types';
 import { AssessmentActivityItem } from 'modules/Dashboard/features/RespondentData/RespondentDataReview';
 
 import {
@@ -96,6 +97,7 @@ export const mockedCurrentWorkspace = {
   },
 };
 export const mockedRespondentId = 'b60a142d-2b7f-4328-841c-dbhjhj4afcf1c7';
+export const mockedSubjectId1 = 'subject-id-987';
 export const mockedRespondentDetails = {
   appletId: mockedAppletId,
   appletDisplayName: 'Mocked Applet',
@@ -105,6 +107,7 @@ export const mockedRespondentDetails = {
   respondentSecretId: '3921968c-3903-4872-8f30-a6e6a10cef36',
   hasIndividualSchedule: false,
   encryption: mockedEncryption,
+  subjectId: mockedSubjectId1,
 };
 export const mockedRespondent = {
   id: mockedRespondentId,
@@ -116,8 +119,11 @@ export const mockedRespondent = {
   accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   role: Roles.Respondent,
   details: [mockedRespondentDetails],
+  status: RespondentStatus.Invited,
+  email: 'resp1@mail.com',
 };
 export const mockedRespondentId2 = 'b60a142d-2b7f-4328-841c-ddsdddj4afcf1c7';
+export const mockedSubjectId2 = 'subject-id-123';
 export const mockedRespondent2 = {
   id: mockedRespondentId2,
   nicknames: ['Test Respondent'],
@@ -127,6 +133,8 @@ export const mockedRespondent2 = {
   isPinned: false,
   accessId: 'aebf08ab-c781-4229-a625-271838ebdff4',
   role: Roles.Respondent,
+  status: RespondentStatus.Invited,
+  email: 'resp2@mail.com',
   details: [
     {
       appletId: mockedAppletId,
@@ -137,6 +145,7 @@ export const mockedRespondent2 = {
       respondentSecretId: '39ff968c-3903-4872-8f30-a6e6a10cef36',
       hasIndividualSchedule: false,
       encryption: mockedEncryption,
+      subjectId: mockedSubjectId2,
     },
   ],
 };
@@ -407,7 +416,7 @@ export const mockedManager = {
         {
           accessId: '17ba7d95-f766-42ae-9ce6-2f8fcc3l24a',
           role: Roles.Reviewer,
-          reviewerRespondents: [mockedRespondentId],
+          reviewerSubjects: [mockedSubjectId1],
         },
       ],
       encryption: mockedEncryption,
@@ -629,6 +638,8 @@ export const mockedInvitation = {
       firstName: 'Jane',
       lastName: 'Doe',
       createdAt: '2023-11-02T08:37:13.652256',
+      secretUserId: null,
+      nickname: null,
       meta: {},
     },
   ],
@@ -815,6 +826,7 @@ export const mockedAppletFormData = {
           ],
         },
       ],
+      isReviewable: false,
     },
   ],
   activityFlows: [
@@ -2858,7 +2870,7 @@ export const mockedAlert = {
   image:
     'https://media-dev.cmiml.net/mindlogger/391962851007982489/4490a3c1-904b-441c-87a9-4683fe2983fa/1.jpg',
   workspace: 'Test ML',
-  respondentId: mockedRespondentId,
+  subjectId: mockedSubjectId1,
 };
 
 export const mockIntersectionObserver = () => {

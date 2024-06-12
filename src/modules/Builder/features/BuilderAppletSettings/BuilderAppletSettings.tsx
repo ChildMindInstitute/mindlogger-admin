@@ -38,6 +38,7 @@ export const BuilderAppletSettings = () => {
             roles: appletData?.id ? workspaceRoles?.data?.[appletData.id] : undefined,
             onReportConfigSubmit: handleReportConfigSubmit,
             integrations,
+            appletId: appletData?.id,
           })}
         />
       )}

@@ -22,6 +22,7 @@ export const DashboardAppletSettings = () => {
       settings={getSettings({
         isPublished: appletData?.isPublished,
         roles: appletRoles,
+        appletId: appletData?.id,
       })}
       data-testid="dashboard-applet-settings"
     />

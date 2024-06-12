@@ -80,7 +80,7 @@ export const RespondentDataReview = () => {
     null,
   );
 
-  const { lastSeen: lastActivityCompleted } = users.useRespondent()?.result || {};
+  const { lastSeen: lastActivityCompleted } = users.useSubject()?.result || {};
   const getDecryptedIdentifiers = useDecryptedIdentifiers();
   const navigate = useNavigate();
   const { control, setValue, getValues } = useFormContext<RespondentsDataFormValues>();
@@ -166,7 +166,7 @@ export const RespondentDataReview = () => {
 
     getAppletSubmitDateList({
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
       fromDate,
       toDate,
     });
@@ -181,7 +181,7 @@ export const RespondentDataReview = () => {
 
     getReviewActivities({
       appletId,
-      respondentId,
+      targetSubjectId: respondentId,
       createdDate,
     });
 

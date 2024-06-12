@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Svg } from 'shared/components/Svg';
 import { ExportDataSetting } from 'shared/features/AppletSettings/ExportDataSetting';
@@ -13,6 +14,7 @@ import { ActionsProps } from './Actions.types';
 import { DATA_TESTID_ACTIONS_EXPORT_DATA } from './Actions.const';
 
 export const Actions = ({ isCompact }: ActionsProps) => {
+  const { appletId } = useParams();
   const { t } = useTranslation('app');
   const isNewApplet = useCheckIfNewApplet();
   const { result: appletData } = applet.useAppletData() ?? {};
@@ -30,7 +32,9 @@ export const Actions = ({ isCompact }: ActionsProps) => {
           <StyledSetting
             onClick={() => {
               setIsExportOpen(true);
-              Mixpanel.track('Export Data click');
+              Mixpanel.track('Export Data click', {
+                'Applet ID': appletData?.id ?? appletId,
+              });
             }}
             isCompact={isCompact}
             disabled={isNewApplet}

@@ -7,4 +7,5 @@ export type GetSettings = {
   roles?: Roles[];
   onReportConfigSubmit: (values: Partial<ReportConfigFormValues>) => void;
   integrations?: Integrations[];
+  appletId?: string;
 };

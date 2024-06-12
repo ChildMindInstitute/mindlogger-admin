@@ -4,7 +4,7 @@ import { banners } from 'redux/modules';
 import { useAppDispatch } from 'redux/store';
 import { Mixpanel } from 'shared/utils/mixpanel';
 
-export const useTransferOwnership = () => {
+export const useTransferOwnership = (appletId?: string) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -22,7 +22,9 @@ export const useTransferOwnership = () => {
       }),
     );
 
-    Mixpanel.track('Invitation sent successfully');
+    Mixpanel.track('Invitation sent successfully', {
+      'Applet ID': appletId,
+    });
   };
 
   return {
