@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import * as Sentry from '@sentry/react';
+import { asyncWithLDProvider } from 'launchdarkly-react-client-sdk';
 
 import { Mixpanel } from 'shared/utils/mixpanel';
 
@@ -28,11 +29,17 @@ Sentry.init({
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
+const LDProvider = await asyncWithLDProvider({
+  clientSideID: process.env.REACT_APP_LAUNCHDARKLY_CLIENT_ID || '',
+});
+
 Mixpanel.init();
 
 root.render(
   <React.StrictMode>
-    <App />
+    <LDProvider>
+      <App />
+    </LDProvider>
   </React.StrictMode>,
 );
 

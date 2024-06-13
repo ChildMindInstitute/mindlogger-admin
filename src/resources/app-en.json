@@ -690,6 +690,16 @@
   "defaultPort": "Default Port",
   "invalidIpAddress": "Invalid IP Address",
   "invalidPort": "Invalid Port",
+  "loris": {
+    "integration": "LORIS Integration",
+    "description": "Enabling the activation of data collection will subsequently provide you with the option to initiate the upload of data from completed Activities by consented respondents into LORIS for utilization and contextualization. Please note that only Respondents who have agreed to make their responses public will have access to complete the Activities in this Applet.",
+    "activateDataCollection": "Activate data collection",
+    "uploadPublicData": "Upload public data into LORIS",
+    "reportServerTooltip": "Configure the Server first on the Report Configuration tab",
+    "publishTooltip": "Save & publish the Applet first",
+    "agreementText": "I agree to decrypt the Respondents' data and upload it to LORIS in an unencrypted format. Only the data from completed Activities by consented Respondents will be uploaded.",
+    "successMessage": "If any new data has been collected, it has been uploaded successfully."
+  },
   "lockDescription": "You have been inactive for 15 minutes.<br/> Log In to proceed.",
   "login": "Log In",
   "loginLink": "Login",

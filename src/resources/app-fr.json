@@ -689,6 +689,16 @@
   "defaultIpAddress": "Adresse IP par défaut",
   "defaultPort": "Port par défaut",
   "invalidIpAddress": "Adresse IP invalide",
+  "loris": {
+    "integration": "Intégration LORIS",
+    "description": "Activer la collecte de données permettra ensuite de vous offrir la possibilité d'initier le téléchargement des données provenant des activités terminées par les répondants consentants dans LORIS, dans le but de les utiliser et de les contextualiser. Veuillez noter que seuls les répondants ayant accepté de rendre leurs réponses publiques auront accès aux activités complètes dans cette applet.",
+    "activateDataCollection": "Activer la collecte de données",
+    "uploadPublicData": "Télécharger des données publiques dans LORIS",
+    "reportServerTooltip": "Configurez d'abord le serveur dans l'onglet Configuration du rapport",
+    "publishTooltip": "Enregistrez et publiez l'applet d'abord",
+    "agreementText": "Je consens à décrypter les données des répondants et à les télécharger dans LORIS sous un format non chiffré. Seules les données des activités complétées par les répondants consentants seront téléchargées.",
+    "successMessage": "Si de nouvelles données ont été collectées, elles ont été téléchargées avec succès."
+  },
   "lockDescription": "Vous êtes resté inactif pendant 15 minutes.<br/> Connectez-vous pour continuer.",
   "login": "Se Connecter",
   "loginLink": "Connexion",

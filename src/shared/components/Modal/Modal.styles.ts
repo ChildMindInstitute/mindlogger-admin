@@ -22,6 +22,7 @@ export const StyledDialog = styled(Dialog)`
 
 export const StyledDialogTitle = styled(DialogTitle)`
   && {
+    color: ${variables.palette.on_surface};
     padding: ${theme.spacing(2.8, 3.2, 3.4)};
   }
 `;
