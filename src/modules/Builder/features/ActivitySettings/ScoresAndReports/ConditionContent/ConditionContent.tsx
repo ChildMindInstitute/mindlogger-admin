@@ -10,12 +10,12 @@ import { ConditionRowType } from 'modules/Builder/types';
 import { StyledBodyMedium, theme, variables } from 'shared/styles';
 import { useCurrentActivity } from 'modules/Builder/hooks';
 import { useCustomFormContext } from 'modules/Builder/hooks';
-import { OnChangeConditionType } from 'modules/Builder/components/ConditionRow_old/ConditionRow.types';
-import { getPayload } from 'modules/Builder/components/ConditionRow_old/ConditionRow.utils';
+import { OnChangeConditionType } from 'modules/Builder/components/ConditionRow/ConditionRow.types';
+import { getPayload } from 'modules/Builder/components/ConditionRow/ConditionRow.utils';
 import {
   DEFAULT_PAYLOAD_MAX_VALUE,
   DEFAULT_PAYLOAD_MIN_VALUE,
-} from 'modules/Builder/components/ConditionRow_old/ConditionRow.const';
+} from 'modules/Builder/components/ConditionRow/ConditionRow.const';
 import { useFeatureFlags } from 'shared/hooks/useFeatureFlags';
 
 import { ConditionContentProps } from './ConditionContent.types';

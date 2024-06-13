@@ -10,11 +10,9 @@ import { Option } from 'shared/components/FormComponents/SelectController/Select
 
 import { DEFAULT_NUMBER_MIN_VALUE, ConditionItemType } from '../Condition.const';
 import {
-  NumberSelectionConditionItem,
-  ScoreConditionItem,
-  SliderConditionItem,
-} from '../Condition.types';
-import { GetConditionMinMaxRangeValuesProps } from './SwitchCondition.types';
+  GetConditionMinMaxRangeValuesProps,
+  GetConditionMinMaxValuesProps,
+} from './SwitchCondition.types';
 
 const { t } = i18n;
 
@@ -22,13 +20,7 @@ const getDefaultMinMaxValues = (state: ConditionType) => ({
   minNumber: state ? Number.MIN_SAFE_INTEGER : DEFAULT_NUMBER_MIN_VALUE,
   maxNumber: undefined,
 });
-export const getConditionMinMaxValues = ({
-  item,
-  state,
-}: {
-  item?: SliderConditionItem | NumberSelectionConditionItem | ScoreConditionItem;
-  state: ConditionType;
-}) => {
+export const getConditionMinMaxValues = ({ item, state }: GetConditionMinMaxValuesProps) => {
   if (!item?.type || item.type === ConditionItemType.Score) return getDefaultMinMaxValues(state);
 
   switch (item.type) {

@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import { ConditionType } from 'shared/consts';
+
 import {
   ConditionItem,
   ConditionProps,
@@ -18,4 +20,9 @@ export type GetConditionMinMaxRangeValuesProps = {
   item?: SliderConditionItem | NumberSelectionConditionItem | ScoreConditionItem;
   minValue: number;
   maxValue: number;
+};
+
+export type GetConditionMinMaxValuesProps = {
+  item?: SliderConditionItem | NumberSelectionConditionItem | ScoreConditionItem;
+  state: ConditionType;
 };
