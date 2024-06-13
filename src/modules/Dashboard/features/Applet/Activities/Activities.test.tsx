@@ -280,7 +280,7 @@ describe('Dashboard > Applet > Activities screen', () => {
       });
     });
 
-    test('should pre-populate admin in Take Now modal', async () => {
+    test('should not pre-populate admin in Take Now modal', async () => {
       const mockedOwnerRespondent = {
         id: mockedUserData.id,
         nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
@@ -395,9 +395,7 @@ describe('Dashboard > Applet > Activities screen', () => {
         .getByTestId(`${testId}-take-now-modal-participant-dropdown`)
         .querySelector('input');
 
-      expect(inputElement).toHaveValue(
-        `${mockedUserData.firstName} ${mockedUserData.lastName} (Team)`,
-      );
+      expect(inputElement).toHaveValue('');
     });
   });
 });

@@ -275,7 +275,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
       });
     });
 
-    test('should pre-populate admin and participant in Take Now modal', async () => {
+    test('should pre-populate participant in Take Now modal', async () => {
       const mockedOwnerRespondent = {
         id: mockedUserData.id,
         nicknames: [`${mockedUserData.firstName} ${mockedUserData.lastName}`],
@@ -400,9 +400,7 @@ describe('Dashboard > Applet > Participant > Activities screen', () => {
 
       expect(subjectInputElement).toHaveValue(`${secretUserId} (${nickname}) (${tag})`);
 
-      expect(participantInputElement).toHaveValue(
-        `${mockedUserData.firstName} ${mockedUserData.lastName} (Team)`,
-      );
+      expect(participantInputElement).toHaveValue('');
     });
   });
 });
