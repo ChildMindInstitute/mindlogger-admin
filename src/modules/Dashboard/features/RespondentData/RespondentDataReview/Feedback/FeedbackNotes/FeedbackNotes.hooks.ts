@@ -3,39 +3,34 @@ import { useFormContext } from 'react-hook-form';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import { useAsync } from 'shared/hooks/useAsync';
-import {
-  createAnswerNoteApi,
-  deleteAnswerNoteApi,
-  editAnswerNoteApi,
-  getAnswersNotesApi,
-  getFlowNotesApi,
-  deleteFlowNoteApi,
-  editFlowNoteApi,
-  createFlowNoteApi,
-  FeedbackNote as FeedbackNoteType,
-} from 'modules/Dashboard/api';
+import { getNotesApi, createNoteApi, editNoteApi, deleteNoteApi } from 'modules/Dashboard/api';
 import { FeedbackForm } from 'modules/Dashboard/features/RespondentData/RespondentDataReview/Feedback';
+import { auth } from 'modules/Auth/state';
 
 import { RespondentDataReviewContext } from '../../RespondentDataReview.context';
-import { FeedbackNotesProps } from './FeedbackNotes.types';
+import { FeedbackNotesProps, Note } from './FeedbackNotes.types';
 
 export const useFeedbackNotes = ({ entity: { id, isFlow } }: FeedbackNotesProps) => {
-  const [notes, setNotes] = useState<FeedbackNoteType[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const { appletId = '' } = useParams();
   const [searchParams] = useSearchParams();
   const answerId = searchParams.get('answerId');
   const submitId = searchParams.get('submitId');
+  const { user } = auth.useData() ?? {};
 
   const { isFeedbackOpen } = useContext(RespondentDataReviewContext);
   const { setValue, handleSubmit } = useFormContext<FeedbackForm>();
 
-  const { execute: getAnswersNotes, isLoading: notesLoading } = useAsync(
-    getAnswersNotesApi,
-    (res) => res?.data?.result && setNotes(res.data.result),
-  );
-  const { execute: getFlowNotes, isLoading: flowNotesLoading } = useAsync(
-    getFlowNotesApi,
-    (res) => res?.data?.result && setNotes(res.data.result),
+  const { execute: getNotes, isLoading: getNotesLoading } = useAsync(
+    getNotesApi,
+    (res) =>
+      res?.data?.result &&
+      setNotes(
+        res.data.result.map((note) => ({
+          ...note,
+          isCurrentUserNote: user?.id === note.user.id,
+        })),
+      ),
   );
 
   const updateListOfNotes = useCallback(() => {
@@ -44,57 +39,33 @@ export const useFeedbackNotes = ({ entity: { id, isFlow } }: FeedbackNotesProps)
     const commonParams = { appletId, params: {} };
 
     if (isFlow && submitId) {
-      getFlowNotes({ ...commonParams, submitId, flowId: id });
-
-      return;
+      getNotes({ ...commonParams, submitId, flowId: id });
+    } else if (answerId) {
+      getNotes({ ...commonParams, answerId, activityId: id });
     }
-
-    if (!answerId) return;
-
-    getAnswersNotes({ ...commonParams, answerId, activityId: id });
-  }, [appletId, id, isFlow, submitId, answerId, getFlowNotes, getAnswersNotes]);
+  }, [appletId, id, isFlow, submitId, answerId, getNotes]);
 
   const handleUpdateNote = () => {
     setValue('newNote', '');
     updateListOfNotes();
   };
 
-  const { execute: createAnswerNote, isLoading: createNoteLoading } = useAsync(
-    createAnswerNoteApi,
+  const { execute: createNote, isLoading: createNoteLoading } = useAsync(
+    createNoteApi,
     handleUpdateNote,
   );
-  const { execute: createFlowNote, isLoading: createFlowNoteLoading } = useAsync(
-    createFlowNoteApi,
-    handleUpdateNote,
-  );
-  const { execute: editAnswerNote, isLoading: editNoteLoading } = useAsync(
-    editAnswerNoteApi,
+  const { execute: editNote, isLoading: editNoteLoading } = useAsync(
+    editNoteApi,
     updateListOfNotes,
   );
-  const { execute: editFlowNote, isLoading: editFlowNoteLoading } = useAsync(
-    editFlowNoteApi,
-    updateListOfNotes,
-  );
-  const { execute: deleteAnswerNote, isLoading: deleteNoteLoading } = useAsync(
-    deleteAnswerNoteApi,
-    updateListOfNotes,
-  );
-  const { execute: deleteFlowNote, isLoading: deleteFlowNoteLoading } = useAsync(
-    deleteFlowNoteApi,
+  const { execute: deleteNote, isLoading: deleteNoteLoading } = useAsync(
+    deleteNoteApi,
     updateListOfNotes,
   );
 
-  const isLoading =
-    notesLoading ||
-    flowNotesLoading ||
-    editNoteLoading ||
-    editFlowNoteLoading ||
-    deleteNoteLoading ||
-    deleteFlowNoteLoading ||
-    createNoteLoading ||
-    createFlowNoteLoading;
+  const isLoading = getNotesLoading || editNoteLoading || deleteNoteLoading || createNoteLoading;
 
-  const handleNoteEdit = (updatedNote: Pick<FeedbackNoteType, 'id' | 'note'>) => {
+  const handleNoteEdit = (updatedNote: Pick<Note, 'id' | 'note'>) => {
     if (!appletId || !id) return;
 
     const commonParams = {
@@ -104,18 +75,14 @@ export const useFeedbackNotes = ({ entity: { id, isFlow } }: FeedbackNotesProps)
     };
 
     if (isFlow && submitId) {
-      editFlowNote({ ...commonParams, submitId, flowId: id });
-
-      return;
+      editNote({ ...commonParams, submitId, flowId: id });
+    } else if (answerId) {
+      editNote({
+        ...commonParams,
+        answerId,
+        activityId: id,
+      });
     }
-
-    if (!answerId) return;
-
-    editAnswerNote({
-      ...commonParams,
-      answerId,
-      activityId: id,
-    });
   };
 
   const handleNoteDelete = (noteId: string) => {
@@ -124,14 +91,10 @@ export const useFeedbackNotes = ({ entity: { id, isFlow } }: FeedbackNotesProps)
     const commonParams = { appletId, noteId };
 
     if (isFlow && submitId) {
-      deleteFlowNote({ ...commonParams, submitId, flowId: id });
-
-      return;
+      deleteNote({ ...commonParams, submitId, flowId: id });
+    } else if (answerId) {
+      deleteNote({ ...commonParams, answerId, activityId: id });
     }
-
-    if (!answerId) return;
-
-    deleteAnswerNote({ ...commonParams, answerId, activityId: id });
   };
 
   const addNewNote = ({ newNote }: FeedbackForm) => {
@@ -140,14 +103,10 @@ export const useFeedbackNotes = ({ entity: { id, isFlow } }: FeedbackNotesProps)
     const commonParams = { appletId, note: newNote };
 
     if (isFlow && submitId) {
-      createFlowNote({ ...commonParams, submitId, flowId: id });
-
-      return;
+      createNote({ ...commonParams, submitId, flowId: id });
+    } else if (answerId) {
+      createNote({ ...commonParams, answerId, activityId: id });
     }
-
-    if (!answerId) return;
-
-    createAnswerNote({ ...commonParams, answerId, activityId: id });
   };
 
   useEffect(() => {
